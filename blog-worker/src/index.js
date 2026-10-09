@@ -27,11 +27,11 @@ function metaDescription(md, max = 155) {
 }
 
 // Anthropic Messages API. JSON istenen çağrılarda yanıttaki ilk "{" ile son "}" arası ayrıştırılır.
-async function claude(env, model, prompt, { json = false, maxTokens = 2048, temperature = 0.7 } = {}) {
+async function claude(env, model, prompt, { json = false, maxTokens = 2048 } = {}) {
   const r = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
     headers: { "content-type": "application/json", "x-api-key": env.ANTHROPIC_API_KEY, "anthropic-version": "2023-06-01" },
-    body: JSON.stringify({ model, max_tokens: maxTokens, temperature, messages: [{ role: "user", content: prompt }] }),
+    body: JSON.stringify({ model, max_tokens: maxTokens, messages: [{ role: "user", content: prompt }] }),
   });
   if (!r.ok) throw new Error(`Claude ${model} ${r.status}: ${(await r.text()).slice(0, 300)}`);
   const d = await r.json();
@@ -64,7 +64,7 @@ Son yazılar (bunları ya da çok benzerlerini TEKRARLAMA):
 ${recent || "- (yok)"}
 
 Yalnızca şu JSON'u döndür: {"topic": "Türkçe başlık, en fazla 60 karakter", "category": "kategorilerden biri", "slug": "basliktan-kisa-slug"}`;
-  const t = await claude(env, cfg.topicModel, prompt, { json: true, temperature: 0.9 });
+  const t = await claude(env, cfg.topicModel, prompt, { json: true });
   if (!t.topic) throw new Error("Konu üretilemedi: " + JSON.stringify(t));
   if (!CATEGORIES.includes(t.category)) t.category = "Rehber";
   return t;
@@ -84,7 +84,7 @@ Kurallar:
 - Son bölüm "## Sonuç" olsun ve ${cfg.brand} ile iletişime geçmeye davet eden kısa bir çağrıyla bitsin.
 - Uydurma istatistik, kaynak ya da müşteri adı verme; genel ifadeler kullan.
 - Yalnızca makale metnini döndür.`;
-  let md = await claude(env, cfg.writeModel, prompt, { maxTokens: 16000, temperature: 0.7 });
+  let md = await claude(env, cfg.writeModel, prompt, { maxTokens: 16000 });
   md = md.replace(/^```(?:markdown)?\s*|\s*```$/g, "").replace(/^#\s+.*\n+/, "").trim();
   if (md.split(/\s+/).length < 800) throw new Error(`Makale çok kısa (${md.split(/\s+/).length} kelime)`);
   return md;
