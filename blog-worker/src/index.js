@@ -100,7 +100,7 @@ async function pickImage(env, topic, index) {
     const photos = (await r.json()).photos.filter(p => !used.has(p.src.large));
     if (photos.length) {
       const p = photos[Math.floor(Math.random() * photos.length)];
-      return { url: p.src.large, alt: p.alt || topic.topic };
+      return { url: p.src.large, alt: topic.topic }; // Pexels açıklaması İngilizce, Türkçe başlık kullanılır
     }
   }
   throw new Error("Uygun Pexels görseli yok");
