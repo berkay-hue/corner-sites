@@ -63,7 +63,7 @@ Mevcut kategori dağılımı: ${JSON.stringify(counts)} (az işlenen kategoriye 
 Son yazılar (bunları ya da çok benzerlerini TEKRARLAMA):
 ${recent || "- (yok)"}
 
-Yalnızca şu JSON'u döndür: {"topic": "Türkçe başlık, en fazla 60 karakter", "category": "kategorilerden biri", "slug": "basliktan-kisa-slug"}`;
+Yalnızca şu JSON'u döndür: {"topic": "Türkçe başlık, en fazla 60 karakter", "category": "kategorilerden biri", "slug": "basliktan-kisa-slug", "description": "Türkçe meta açıklama, 140-155 karakter, tam cümle", "imageQuery": "konuyu anlatan 2-4 kelimelik İngilizce stok fotoğraf araması (somut sahne: ofis, ekip, ekran, toplantı; kelime oyunu yok)"}`;
   const t = await claude(env, cfg.topicModel, prompt, { json: true });
   if (!t.topic) throw new Error("Konu üretilemedi: " + JSON.stringify(t));
   if (!CATEGORIES.includes(t.category)) t.category = "Rehber";
@@ -92,7 +92,7 @@ Kurallar:
 
 async function pickImage(env, topic, index) {
   const used = new Set(index.map(p => p.image));
-  const q = topic.topic.split(/\s+/).slice(0, 3).join(" ") + " business technology";
+  const q = topic.imageQuery || topic.topic.split(/\s+/).slice(0, 3).join(" ") + " business technology";
   for (const query of [q, "business technology"]) {
     const r = await fetch(`https://api.pexels.com/v1/search?query=${encodeURIComponent(query)}&per_page=15&orientation=landscape`,
       { headers: { authorization: env.PEXELS_API_KEY } });
@@ -144,7 +144,7 @@ export async function generate(env, cfg) {
   const body = await writeArticle(env, cfg, topic);
   const img = await pickImage(env, topic, index);
   const today = new Date(Date.now() + 3 * 3600e3).toISOString().slice(0, 10); // TR saati
-  const fm = { title: topic.topic, description: metaDescription(body), date: today, category: topic.category, image: img.url, imageAlt: img.alt };
+  const fm = { title: topic.topic, description: (topic.description || "").length >= 80 && topic.description.length <= 170 ? topic.description : metaDescription(body), date: today, category: topic.category, image: img.url, imageAlt: img.alt };
   const md = `---\n${Object.entries(fm).map(([k, v]) => `${k}: ${JSON.stringify(v)}`).join("\n")}\n---\n\n${body}\n`;
   return { topic, slug, fm, body, md };
 }
