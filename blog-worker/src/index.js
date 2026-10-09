@@ -135,20 +135,26 @@ async function notify(env, text) {
   }).catch(() => {});
 }
 
+// Bir site için yazı üretir: { topic, slug, fm, body, md }. Commit etmez.
+export async function generate(env, cfg) {
+  const index = await loadIndex(cfg);
+  const topic = await pickTopic(env, cfg, index);
+  const slug = slugify(topic.slug || topic.topic) || slugify(topic.topic);
+  if (index.some(p => p.slug === slug)) throw new Error(`Slug zaten var: ${slug}`);
+  const body = await writeArticle(env, cfg, topic);
+  const img = await pickImage(env, topic, index);
+  const today = new Date(Date.now() + 3 * 3600e3).toISOString().slice(0, 10); // TR saati
+  const fm = { title: topic.topic, description: metaDescription(body), date: today, category: topic.category, image: img.url, imageAlt: img.alt };
+  const md = `---\n${Object.entries(fm).map(([k, v]) => `${k}: ${JSON.stringify(v)}`).join("\n")}\n---\n\n${body}\n`;
+  return { topic, slug, fm, body, md };
+}
+
 export async function run(env, { dryRun = false } = {}) {
   const sites = JSON.parse(env.SITES);
   const out = [];
   for (const cfg of sites) {
     try {
-      const index = await loadIndex(cfg);
-      const topic = await pickTopic(env, cfg, index);
-      const slug = slugify(topic.slug || topic.topic) || slugify(topic.topic);
-      if (index.some(p => p.slug === slug)) throw new Error(`Slug zaten var: ${slug}`);
-      const body = await writeArticle(env, cfg, topic);
-      const img = await pickImage(env, topic, index);
-      const today = new Date(Date.now() + 3 * 3600e3).toISOString().slice(0, 10); // TR saati
-      const fm = { title: topic.topic, description: metaDescription(body), date: today, category: topic.category, image: img.url, imageAlt: img.alt };
-      const md = `---\n${Object.entries(fm).map(([k, v]) => `${k}: ${JSON.stringify(v)}`).join("\n")}\n---\n\n${body}\n`;
+      const { topic, slug, fm, body, md } = await generate(env, cfg);
       if (dryRun) { out.push({ site: cfg.siteUrl, slug, fm, words: body.split(/\s+/).length, preview: body.slice(0, 400) }); continue; }
       const c = await commitPost(env, cfg, slug, md, `blog: ${topic.topic}`);
       const postUrl = `${cfg.siteUrl}/blog/${c.path.split("/").pop().replace(/\.md$/, "")}`;
