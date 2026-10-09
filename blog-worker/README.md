@@ -3,17 +3,18 @@
 n8n'deki "Cornergroup Blog Generator" akışının ücretsiz karşılığı. Her gün 12:00'de (TR) bir yazı üretir.
 
 1. Yayındaki `/_blog-index.json` okunur: mevcut slug'lar, son 10 başlık, kategori dağılımı ve kullanılmış görseller.
-2. **Gemini 2.5 Flash** konuyu seçer ve JSON döndürür: `{topic, category, slug}`.
-3. **Gemini 2.5 Pro** makaleyi markdown olarak yazar. Eski "Bölüm 1:" iskeleti kullanılmaz.
+2. **Claude Haiku** konuyu seçer ve JSON döndürür: `{topic, category, slug}`.
+3. **Claude Opus** makaleyi markdown olarak yazar. Eski "Bölüm 1:" iskeleti kullanılmaz.
 4. **Pexels**'ten daha önce kullanılmamış yatay bir görsel seçilir.
-5. Yazı `content/cornergroup.co/blog/<slug>.md` olarak GitHub'a commit edilir. Cloudflare Pages yeniden build alır ve yazı birkaç dakikada yayına çıkar. Liste, sitemap ve "Load More" kendiliğinden güncellenir.
+5. Yazı `content/cornergroup.co/blog/<slug>.md` olarak `berkay-hue/corner-sites` deposuna commit edilir. GitHub Action (`.github/workflows/blog-deploy.yml`) siteyi build edip Cloudflare Pages'e yükler; yazı 2-3 dakikada yayına çıkar. Liste, sitemap ve "Load More" kendiliğinden güncellenir.
 6. İstenirse Telegram bildirimi gönderilir.
 
 Airtable, Render ve Framer artık gerekmiyor. Kaynak, GitHub'daki md dosyaları.
 
 ## Maliyet
 - Cloudflare Workers ücretsiz planı: Cron dahil, günde 100k istek.
-- Gemini API ücretsiz katmanı: günde 1 yazı limitlerin çok altında kalır.
+- Claude API: günde 1 yazı (Haiku konu + Opus makale), kullanım başına ücretlendirilir.
+- GitHub Actions: özel depoda ayda 2000 dakika ücretsiz; her deploy ~2 dk.
 - Pexels ücretsiz.
 
 ## Kurulum (canlıya alırken, Berkay yapacak)
@@ -21,7 +22,7 @@ Airtable, Render ve Framer artık gerekmiyor. Kaynak, GitHub'daki md dosyaları.
 cd blog-worker
 npm install
 npx wrangler login
-npx wrangler secret put GEMINI_API_KEY      # YENİ anahtar (eskisi n8n JSON'unda açıkta kaldı)
+npx wrangler secret put ANTHROPIC_API_KEY   # console.anthropic.com > API Keys
 npx wrangler secret put PEXELS_API_KEY      # YENİ anahtar
 npx wrangler secret put GITHUB_TOKEN        # fine-grained token: yalnızca bu repo, Contents: Read & Write
 npx wrangler secret put RUN_KEY             # elle tetikleme için rastgele uzun bir parola
@@ -30,7 +31,7 @@ npx wrangler secret put TELEGRAM_BOT_TOKEN
 npx wrangler secret put TELEGRAM_CHAT_ID
 npx wrangler deploy
 ```
-`wrangler.toml` içindeki `repo` değeri, sitelerin push edileceği GitHub deposu olmalı.
+GitHub deposunda (Settings > Secrets > Actions) `CLOUDFLARE_API_TOKEN` olmalı: Cloudflare > My Profile > API Tokens > "Cloudflare Pages: Edit" yetkili token. `CLOUDFLARE_ACCOUNT_ID` eklendi.
 
 ## Test
 - Önizleme (commit etmez): `https://corner-blog-writer.<hesap>.workers.dev/run?key=<RUN_KEY>&dry=1`
