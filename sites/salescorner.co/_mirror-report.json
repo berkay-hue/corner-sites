@@ -1,0 +1,330 @@
+{
+  "origin": "https://salescorner.co",
+  "pages": [
+    {
+      "url": "https://salescorner.co/",
+      "file": "index.html",
+      "status": 200,
+      "finalUrl": "https://salescorner.co/",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://salescorner.co/login",
+      "file": "login.html",
+      "status": 200,
+      "finalUrl": "https://salescorner.co/login",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": [
+          "1440:Navigation timeout of 60000 ms exceeded",
+          "1440:Navigation timeout of 60000 ms exceeded",
+          "1440:Navigation timeout of 60000 ms exceeded"
+        ]
+      }
+    },
+    {
+      "url": "https://salescorner.co/linkedin-post",
+      "file": "linkedin-post.html",
+      "status": 200,
+      "finalUrl": "https://salescorner.co/linkedin-post",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": [
+          "1440:Navigation timeout of 60000 ms exceeded",
+          "1440:Navigation timeout of 60000 ms exceeded",
+          "1440:Navigation timeout of 60000 ms exceeded"
+        ]
+      }
+    },
+    {
+      "url": "https://salescorner.co/web-keyword",
+      "file": "web-keyword.html",
+      "status": 200,
+      "finalUrl": "https://salescorner.co/web-keyword",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": [
+          "1440:Navigation timeout of 60000 ms exceeded",
+          "1440:Navigation timeout of 60000 ms exceeded",
+          "1440:Navigation timeout of 60000 ms exceeded"
+        ]
+      }
+    },
+    {
+      "url": "https://salescorner.co/linkedin-callback",
+      "file": "linkedin-callback.html",
+      "status": 200,
+      "finalUrl": "https://salescorner.co/linkedin-callback",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": [
+          "1440:Navigation timeout of 60000 ms exceeded",
+          "1440:Navigation timeout of 60000 ms exceeded",
+          "1440:Navigation timeout of 60000 ms exceeded"
+        ]
+      }
+    },
+    {
+      "url": "https://salescorner.co/keyword-html",
+      "file": "keyword-html.html",
+      "status": 200,
+      "finalUrl": "https://salescorner.co/keyword-html",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": [
+          "1440:newPage zaman aşımı",
+          "1440:Navigation timeout of 60000 ms exceeded",
+          "1440:Navigation timeout of 60000 ms exceeded"
+        ]
+      }
+    },
+    {
+      "url": "https://salescorner.co/haftalik-rapor",
+      "file": "haftalik-rapor.html",
+      "status": 200,
+      "finalUrl": "https://salescorner.co/haftalik-rapor",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": [
+          "1440:Protocol error (Emulation.setTouchEmulationEnabled): Session",
+          "1440:Navigation timeout of 60000 ms exceeded",
+          "1440:Navigation timeout of 60000 ms exceeded"
+        ]
+      }
+    },
+    {
+      "url": "https://salescorner.co/sekans-yazari",
+      "file": "sekans-yazari.html",
+      "status": 200,
+      "finalUrl": "https://salescorner.co/sekans-yazari",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": [
+          "1440:Protocol error (Target.createTarget): Target closed",
+          "1440:Navigation timeout of 60000 ms exceeded",
+          "1440:Navigation timeout of 60000 ms exceeded"
+        ]
+      }
+    },
+    {
+      "url": "https://salescorner.co/rakip-analizi",
+      "file": "rakip-analizi.html",
+      "status": 200,
+      "finalUrl": "https://salescorner.co/rakip-analizi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": [
+          "1440:Protocol error (Emulation.setTouchEmulationEnabled): Session",
+          "1440:Navigation timeout of 60000 ms exceeded",
+          "1440:Navigation timeout of 60000 ms exceeded"
+        ]
+      }
+    },
+    {
+      "url": "https://salescorner.co/cv-analiz",
+      "file": "cv-analiz.html",
+      "status": 200,
+      "finalUrl": "https://salescorner.co/cv-analiz",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": [
+          "1440:Navigation timeout of 60000 ms exceeded",
+          "1440:Navigation timeout of 60000 ms exceeded",
+          "1440:newPage zaman aşımı"
+        ]
+      }
+    },
+    {
+      "url": "https://salescorner.co/seo-robotu",
+      "file": "seo-robotu.html",
+      "status": 200,
+      "finalUrl": "https://salescorner.co/seo-robotu",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": [
+          "1440:Navigation timeout of 60000 ms exceeded",
+          "1440:Navigation timeout of 60000 ms exceeded",
+          "1440:newPage zaman aşımı"
+        ]
+      }
+    },
+    {
+      "url": "https://salescorner.co/dashboard",
+      "file": "dashboard.html",
+      "status": 200,
+      "finalUrl": "https://salescorner.co/dashboard",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": [
+          "1440:Navigation timeout of 60000 ms exceeded",
+          "1440:Navigation timeout of 60000 ms exceeded",
+          "1440:newPage zaman aşımı"
+        ]
+      }
+    },
+    {
+      "url": "https://salescorner.co/gorsel-ekleme",
+      "file": "gorsel-ekleme.html",
+      "status": 200,
+      "finalUrl": "https://salescorner.co/gorsel-ekleme",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": [
+          "1440:Navigation timeout of 60000 ms exceeded",
+          "1440:Navigation timeout of 60000 ms exceeded",
+          "1440:newPage zaman aşımı"
+        ]
+      }
+    },
+    {
+      "url": "https://salescorner.co/page-6",
+      "file": "page-6.html",
+      "status": 200,
+      "finalUrl": "https://salescorner.co/page-6",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://salescorner.co/page-5",
+      "file": "page-5.html",
+      "status": 200,
+      "finalUrl": "https://salescorner.co/page-5",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://salescorner.co/kolajmaker",
+      "file": "kolajmaker.html",
+      "status": 200,
+      "finalUrl": "https://salescorner.co/kolajmaker",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": [
+          "1440:Navigating frame was detached",
+          "1440:Navigation timeout of 60000 ms exceeded",
+          "1440:Navigation timeout of 60000 ms exceeded"
+        ]
+      }
+    },
+    {
+      "url": "https://salescorner.co/briefing",
+      "file": "briefing.html",
+      "status": 200,
+      "finalUrl": "https://salescorner.co/briefing",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": [
+          "1440:Navigating frame was detached",
+          "1440:Navigation timeout of 60000 ms exceeded",
+          "1440:Navigation timeout of 60000 ms exceeded"
+        ]
+      }
+    },
+    {
+      "url": "https://salescorner.co/404",
+      "file": "404.html",
+      "status": 404,
+      "finalUrl": "https://salescorner.co/404",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://salescorner.co/iletisim",
+      "file": "iletisim.html",
+      "status": 200,
+      "finalUrl": "https://salescorner.co/iletisim",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 7,
+        "filled": 7,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://salescorner.co/__bu-sayfa-yok-404",
+      "file": "404.html",
+      "status": 404,
+      "finalUrl": "https://salescorner.co/__bu-sayfa-yok-404",
+      "expectStatus": 404,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    }
+  ],
+  "keptScripts": [
+    "document.body.style.overscrollBehavior = \"none\";",
+    "(()=>{function P(e,t){if(!e.startsWith(\"/\")||!t.startsWith(\"/\"))throw new Error(",
+    "",
+    "typeof document<\"u\"&&(window.process={...window.process,env:{...window.process?.",
+    "https://challenges.cloudflare.com/turnstile/v0/api.js",
+    "\n  gtag('event', 'conversion', {\n      'send_to': 'AW-17132829941/7TecCKOW1NaAEP",
+    "\n  import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'\n\n  cons"
+  ]
+}

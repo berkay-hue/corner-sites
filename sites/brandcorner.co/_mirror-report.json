@@ -1,0 +1,91 @@
+{
+ "origin": "https://www.brandcorner.co",
+ "pages": [
+  "/",
+  "/features",
+  "/pricing",
+  "/about",
+  "/contact",
+  "/solutions/brands",
+  "/solutions/influencers",
+  "/solutions/agencies",
+  "/integrations",
+  "/security",
+  "/careers",
+  "/press",
+  "/terms",
+  "/privacy",
+  "/cookies",
+  "/gdpr"
+ ],
+ "report": [
+  {
+   "path": "/",
+   "status": 200
+  },
+  {
+   "path": "/features",
+   "status": 200
+  },
+  {
+   "path": "/pricing",
+   "status": 200
+  },
+  {
+   "path": "/about",
+   "status": 404
+  },
+  {
+   "path": "/contact",
+   "status": 404
+  },
+  {
+   "path": "/solutions/brands",
+   "status": 200
+  },
+  {
+   "path": "/solutions/influencers",
+   "status": 200
+  },
+  {
+   "path": "/solutions/agencies",
+   "status": 200
+  },
+  {
+   "path": "/integrations",
+   "status": 404
+  },
+  {
+   "path": "/security",
+   "status": 404
+  },
+  {
+   "path": "/careers",
+   "status": 404
+  },
+  {
+   "path": "/press",
+   "status": 404
+  },
+  {
+   "path": "/terms",
+   "status": 404
+  },
+  {
+   "path": "/privacy",
+   "status": 404
+  },
+  {
+   "path": "/cookies",
+   "status": 404
+  },
+  {
+   "path": "/gdpr",
+   "status": 404
+  },
+  {
+   "path": "/_next/static/media/",
+   "status": 404
+  }
+ ]
+}

@@ -1,0 +1,4216 @@
+{
+  "origin": "https://saascorner.co",
+  "pages": [
+    {
+      "url": "https://saascorner.co/kvk",
+      "file": "kvk.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/kvk",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/cerez-politikasi",
+      "file": "cerez-politikasi.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/cerez-politikasi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/",
+      "file": "index.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog",
+      "file": "blog.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/aydinlatma-metni/ticari-iletisim",
+      "file": "aydinlatma-metni/ticari-iletisim.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/aydinlatma-metni/ticari-iletisim",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/kvkk-basvuru-formu",
+      "file": "kvkk-basvuru-formu.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/kvkk-basvuru-formu",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi",
+      "file": "bilgi-merkezi.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/kullanim-kosullari",
+      "file": "kullanim-kosullari.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/kullanim-kosullari",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/iletisim",
+      "file": "iletisim.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/iletisim",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 9,
+        "filled": 9,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/gizlilik-politikasi",
+      "file": "gizlilik-politikasi.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/gizlilik-politikasi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/basarili-partner-ekosistemi-olusturmanin-7-kurali-2",
+      "file": "bilgi-merkezi/basarili-partner-ekosistemi-olusturmanin-7-kurali-2.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/basarili-partner-ekosistemi-olusturmanin-7-kurali-2",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/saas-sirketlerinde-veri-guvenligi-ve-compliance",
+      "file": "bilgi-merkezi/saas-sirketlerinde-veri-guvenligi-ve-compliance.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/saas-sirketlerinde-veri-guvenligi-ve-compliance",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/basarili-partner-ekosistemi-olusturmanin-7-kurali",
+      "file": "bilgi-merkezi/basarili-partner-ekosistemi-olusturmanin-7-kurali.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/basarili-partner-ekosistemi-olusturmanin-7-kurali",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/urun-odakli-buyumede-satisin-rolu-saas-sirketleri-i-cin-yeni-bir-perspektif",
+      "file": "bilgi-merkezi/urun-odakli-buyumede-satisin-rolu-saas-sirketleri-i-cin-yeni-bir-perspektif.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/urun-odakli-buyumede-satisin-rolu-saas-sirketleri-i-cin-yeni-bir-perspektif",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/yapay-zeka-destekli-satis-b2b-saas-donusumunun-anahtari",
+      "file": "bilgi-merkezi/yapay-zeka-destekli-satis-b2b-saas-donusumunun-anahtari.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/yapay-zeka-destekli-satis-b2b-saas-donusumunun-anahtari",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/b2b-saas-sirketlerinde-musteri-elde-tutma-stratejileri-2026",
+      "file": "bilgi-merkezi/b2b-saas-sirketlerinde-musteri-elde-tutma-stratejileri-2026.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/b2b-saas-sirketlerinde-musteri-elde-tutma-stratejileri-2026",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/yapay-zeka-destekli-urun-gelistirme-saas-sirketleri-i-cin-yeni-ufuklar",
+      "file": "bilgi-merkezi/yapay-zeka-destekli-urun-gelistirme-saas-sirketleri-i-cin-yeni-ufuklar.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/yapay-zeka-destekli-urun-gelistirme-saas-sirketleri-i-cin-yeni-ufuklar",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/api-odakli-partnerlikler-b2b-saas-ta-entegrasyon-ekosistemini-guclendirmek",
+      "file": "bilgi-merkezi/api-odakli-partnerlikler-b2b-saas-ta-entegrasyon-ekosistemini-guclendirmek.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/api-odakli-partnerlikler-b2b-saas-ta-entegrasyon-ekosistemini-guclendirmek",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/b2b-saas-sirketlerinde-musteri-elde-tutma-stratejileri-2026-2",
+      "file": "bilgi-merkezi/b2b-saas-sirketlerinde-musteri-elde-tutma-stratejileri-2026-2.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/b2b-saas-sirketlerinde-musteri-elde-tutma-stratejileri-2026-2",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/saas-metrikleri-rehberi-mrr-arr-cac-ltv-ve-daha-fazlasi",
+      "file": "bilgi-merkezi/saas-metrikleri-rehberi-mrr-arr-cac-ltv-ve-daha-fazlasi.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/saas-metrikleri-rehberi-mrr-arr-cac-ltv-ve-daha-fazlasi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/lead-kalitesi-odakli-crm-stratejileri",
+      "file": "bilgi-merkezi/lead-kalitesi-odakli-crm-stratejileri.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/lead-kalitesi-odakli-crm-stratejileri",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/crm-de-etik-yapay-zeka-musteri-deneyimi-ve-guven-i-nsasi-2026",
+      "file": "bilgi-merkezi/crm-de-etik-yapay-zeka-musteri-deneyimi-ve-guven-i-nsasi-2026.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/crm-de-etik-yapay-zeka-musteri-deneyimi-ve-guven-i-nsasi-2026",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/2027-partner-ekosistemi-3o-code-ve-conversational-ai",
+      "file": "bilgi-merkezi/2027-partner-ekosistemi-3o-code-ve-conversational-ai.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/2027-partner-ekosistemi-3o-code-ve-conversational-ai",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/modern-da-saas-horizontal-saas-self-service-analizi",
+      "file": "bilgi-merkezi/modern-da-saas-horizontal-saas-self-service-analizi.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/modern-da-saas-horizontal-saas-self-service-analizi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/saas-entegrasyon-2027-standartlari-ve-en-i-yi-uygulamalar",
+      "file": "bilgi-merkezi/saas-entegrasyon-2027-standartlari-ve-en-i-yi-uygulamalar.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/saas-entegrasyon-2027-standartlari-ve-en-i-yi-uygulamalar",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/b2b-satista-chatbot-kullanimi-yeni-nesil-rehberi",
+      "file": "bilgi-merkezi/b2b-satista-chatbot-kullanimi-yeni-nesil-rehberi.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/b2b-satista-chatbot-kullanimi-yeni-nesil-rehberi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/b2b-satis-qualification-entegre-yaklasim",
+      "file": "bilgi-merkezi/b2b-satis-qualification-entegre-yaklasim.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/b2b-satis-qualification-entegre-yaklasim",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/b2b-satis-follow-up-entegre-yaklasim",
+      "file": "bilgi-merkezi/b2b-satis-follow-up-entegre-yaklasim.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/b2b-satis-follow-up-entegre-yaklasim",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/musteri-deneyimi-donusumunde-composable-crm-in-rolu-2026-trendleri",
+      "file": "bilgi-merkezi/musteri-deneyimi-donusumunde-composable-crm-in-rolu-2026-trendleri.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/musteri-deneyimi-donusumunde-composable-crm-in-rolu-2026-trendleri",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/agency-ortakliklarinda-kullanici-deneyimi-ve-basari",
+      "file": "bilgi-merkezi/agency-ortakliklarinda-kullanici-deneyimi-ve-basari.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/agency-ortakliklarinda-kullanici-deneyimi-ve-basari",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/usage-based-tabanli-saas-7e-zaman-ve-7asil-kullanilir",
+      "file": "bilgi-merkezi/usage-based-tabanli-saas-7e-zaman-ve-7asil-kullanilir.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/usage-based-tabanli-saas-7e-zaman-ve-7asil-kullanilir",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/salesforce-vs-freshsales-hangisi-2027-da-daha-i-yi",
+      "file": "bilgi-merkezi/salesforce-vs-freshsales-hangisi-2027-da-daha-i-yi.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/salesforce-vs-freshsales-hangisi-2027-da-daha-i-yi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/saas-sirketlerinde-surdurulebilirlik-yesil-teknoloji-ve-operasyonel-verimlilik",
+      "file": "bilgi-merkezi/saas-sirketlerinde-surdurulebilirlik-yesil-teknoloji-ve-operasyonel-verimlilik.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/saas-sirketlerinde-surdurulebilirlik-yesil-teknoloji-ve-operasyonel-verimlilik",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/salesforce-vs-zendesk-sell-hangisi-yeni-8esil-da-daha-i-yi",
+      "file": "bilgi-merkezi/salesforce-vs-zendesk-sell-hangisi-yeni-8esil-da-daha-i-yi.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/salesforce-vs-zendesk-sell-hangisi-yeni-8esil-da-daha-i-yi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/b2b-satis-discovery-musteri-merkezli-yaklasim",
+      "file": "bilgi-merkezi/b2b-satis-discovery-musteri-merkezli-yaklasim.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/b2b-satis-discovery-musteri-merkezli-yaklasim",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/agency-ortakliklarinda-guvenlik-ve-basari",
+      "file": "bilgi-merkezi/agency-ortakliklarinda-guvenlik-ve-basari.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/agency-ortakliklarinda-guvenlik-ve-basari",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/composable-saas-i-sletmeler-i-cin-esneklik-ve-olceklenebilirlik-stratejileri",
+      "file": "bilgi-merkezi/composable-saas-i-sletmeler-i-cin-esneklik-ve-olceklenebilirlik-stratejileri.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/composable-saas-i-sletmeler-i-cin-esneklik-ve-olceklenebilirlik-stratejileri",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/crm-de-lead-scoring-seffaflik-saglamak",
+      "file": "bilgi-merkezi/crm-de-lead-scoring-seffaflik-saglamak.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/crm-de-lead-scoring-seffaflik-saglamak",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/pipedrive-vs-microsoft-dynamics-hangisi-yeni-3esil-da-daha-i-yi",
+      "file": "bilgi-merkezi/pipedrive-vs-microsoft-dynamics-hangisi-yeni-3esil-da-daha-i-yi.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/pipedrive-vs-microsoft-dynamics-hangisi-yeni-3esil-da-daha-i-yi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/b2b-satis-lead-9urturing-veri-odakli-yaklasim",
+      "file": "bilgi-merkezi/b2b-satis-lead-9urturing-veri-odakli-yaklasim.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/b2b-satis-lead-9urturing-veri-odakli-yaklasim",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/saas-reporting-gelistirmede-api-first-stratejisi",
+      "file": "bilgi-merkezi/saas-reporting-gelistirmede-api-first-stratejisi.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/saas-reporting-gelistirmede-api-first-stratejisi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/crm-ile-qualification-otomasyonu-modern-rehberi",
+      "file": "bilgi-merkezi/crm-ile-qualification-otomasyonu-modern-rehberi.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/crm-ile-qualification-otomasyonu-modern-rehberi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/saas-api-entegrasyonu-gelistirmede-microservices-stratejisi",
+      "file": "bilgi-merkezi/saas-api-entegrasyonu-gelistirmede-microservices-stratejisi.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/saas-api-entegrasyonu-gelistirmede-microservices-stratejisi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/dikey-saas-nis-pazarlarda-derinlesen-deger-ve-buyume-stratejileri-2026",
+      "file": "bilgi-merkezi/dikey-saas-nis-pazarlarda-derinlesen-deger-ve-buyume-stratejileri-2026.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/dikey-saas-nis-pazarlarda-derinlesen-deger-ve-buyume-stratejileri-2026",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/ecosystem-selling-saas-sirketleri-i-cin-ortak-deger-yaratma-stratejileri-2026",
+      "file": "bilgi-merkezi/ecosystem-selling-saas-sirketleri-i-cin-ortak-deger-yaratma-stratejileri-2026.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/ecosystem-selling-saas-sirketleri-i-cin-ortak-deger-yaratma-stratejileri-2026",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/saglik-teknolojileri-sektorunde-satis-trendleri-2027",
+      "file": "bilgi-merkezi/saglik-teknolojileri-sektorunde-satis-trendleri-2027.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/saglik-teknolojileri-sektorunde-satis-trendleri-2027",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/saas-lead-scoring-gelistirmede-mobile-first-stratejisi",
+      "file": "bilgi-merkezi/saas-lead-scoring-gelistirmede-mobile-first-stratejisi.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/saas-lead-scoring-gelistirmede-mobile-first-stratejisi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/egitim-teknolojileri-sektorunde-satis-trendleri-modern",
+      "file": "bilgi-merkezi/egitim-teknolojileri-sektorunde-satis-trendleri-modern.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/egitim-teknolojileri-sektorunde-satis-trendleri-modern",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/saas-finops-bulut-maliyetlerini-optimize-ederek-karliligi-artirma-stratejileri-2026",
+      "file": "bilgi-merkezi/saas-finops-bulut-maliyetlerini-optimize-ederek-karliligi-artirma-stratejileri-2026.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/saas-finops-bulut-maliyetlerini-optimize-ederek-karliligi-artirma-stratejileri-2026",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/b2b-satis-onboarding-veri-odakli-yaklasim",
+      "file": "bilgi-merkezi/b2b-satis-onboarding-veri-odakli-yaklasim.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/b2b-satis-onboarding-veri-odakli-yaklasim",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/partner-enablement-in-gelecegi-saas-sirketleri-i-cin-yapay-zeka-destekli-stratejiler-2026",
+      "file": "bilgi-merkezi/partner-enablement-in-gelecegi-saas-sirketleri-i-cin-yapay-zeka-destekli-stratejiler-2026.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/partner-enablement-in-gelecegi-saas-sirketleri-i-cin-yapay-zeka-destekli-stratejiler-2026",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/partner-pazarlamasi-b2b-saas-icin-ortak-buyume-stratejileri-ve-2026-trendleri",
+      "file": "bilgi-merkezi/partner-pazarlamasi-b2b-saas-icin-ortak-buyume-stratejileri-ve-2026-trendleri.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/partner-pazarlamasi-b2b-saas-icin-ortak-buyume-stratejileri-ve-2026-trendleri",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/saas-urunlerinde-yapay-zeka-yardimcilari-kullanici-verimliligini-artirma-stratejileri-2026",
+      "file": "bilgi-merkezi/saas-urunlerinde-yapay-zeka-yardimcilari-kullanici-verimliligini-artirma-stratejileri-2026.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/saas-urunlerinde-yapay-zeka-yardimcilari-kullanici-verimliligini-artirma-stratejileri-2026",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/pipedrive-vs-copper-hangisi-modern-da-daha-i-yi",
+      "file": "bilgi-merkezi/pipedrive-vs-copper-hangisi-modern-da-daha-i-yi.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/pipedrive-vs-copper-hangisi-modern-da-daha-i-yi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/monday-sales-vs-zendesk-sell-hangisi-2026-da-daha-i-yi",
+      "file": "bilgi-merkezi/monday-sales-vs-zendesk-sell-hangisi-2026-da-daha-i-yi.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/monday-sales-vs-zendesk-sell-hangisi-2026-da-daha-i-yi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/reseller-programi-2027-baslangic-rehberi",
+      "file": "bilgi-merkezi/reseller-programi-2027-baslangic-rehberi.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/reseller-programi-2027-baslangic-rehberi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/partner-kanalindan-elde-edilen-roi-yi-maksimize-etme-saas-sirketleri-i-cin-stratejiler",
+      "file": "bilgi-merkezi/partner-kanalindan-elde-edilen-roi-yi-maksimize-etme-saas-sirketleri-i-cin-stratejiler.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/partner-kanalindan-elde-edilen-roi-yi-maksimize-etme-saas-sirketleri-i-cin-stratejiler",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/yeni-6esil-partner-ekosistemi-ai-integration-ve-predictive-analytics",
+      "file": "bilgi-merkezi/yeni-6esil-partner-ekosistemi-ai-integration-ve-predictive-analytics.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/yeni-6esil-partner-ekosistemi-ai-integration-ve-predictive-analytics",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/2027-crm-trendleri-chatbot-ve-ai-destekli-tahminleme",
+      "file": "bilgi-merkezi/2027-crm-trendleri-chatbot-ve-ai-destekli-tahminleme.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/2027-crm-trendleri-chatbot-ve-ai-destekli-tahminleme",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/saas-mobile-access-gelistirmede-microservices-stratejisi",
+      "file": "bilgi-merkezi/saas-mobile-access-gelistirmede-microservices-stratejisi.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/saas-mobile-access-gelistirmede-microservices-stratejisi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/yapay-zeka-destekli-partner-secimi-ve-uyum-surecleri-saas-sirketleri-i-cin-yeni-nesil-stratejiler",
+      "file": "bilgi-merkezi/yapay-zeka-destekli-partner-secimi-ve-uyum-surecleri-saas-sirketleri-i-cin-yeni-nesil-stratejiler.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/yapay-zeka-destekli-partner-secimi-ve-uyum-surecleri-saas-sirketleri-i-cin-yeni-nesil-stratejiler",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/crm-ve-musteri-geri-bildirim-dongusu-urun-gelistirmeyi-besleyen-stratejiler",
+      "file": "bilgi-merkezi/crm-ve-musteri-geri-bildirim-dongusu-urun-gelistirmeyi-besleyen-stratejiler.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/crm-ve-musteri-geri-bildirim-dongusu-urun-gelistirmeyi-besleyen-stratejiler",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/enablement-ile-partner-olceklenebilirlik-maksimize-etmek",
+      "file": "bilgi-merkezi/enablement-ile-partner-olceklenebilirlik-maksimize-etmek.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/enablement-ile-partner-olceklenebilirlik-maksimize-etmek",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/2026-da-saas-horizontal-saas-8o-code-ve-firsatlar",
+      "file": "bilgi-merkezi/2026-da-saas-horizontal-saas-8o-code-ve-firsatlar.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/2026-da-saas-horizontal-saas-8o-code-ve-firsatlar",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/kazanma-orani-artirmak-i-cin-8-strateji",
+      "file": "bilgi-merkezi/kazanma-orani-artirmak-i-cin-8-strateji.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/kazanma-orani-artirmak-i-cin-8-strateji",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/topluluk-odakli-buyume-b2b-saas-satis-ekipleri-i-cin-yeni-bir-yaklasim-2026",
+      "file": "bilgi-merkezi/topluluk-odakli-buyume-b2b-saas-satis-ekipleri-i-cin-yeni-bir-yaklasim-2026.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/topluluk-odakli-buyume-b2b-saas-satis-ekipleri-i-cin-yeni-bir-yaklasim-2026",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/crm-ile-saas-musteri-onboarding-ini-donusturme-verimlilik-ve-erken-deger-yaratma",
+      "file": "bilgi-merkezi/crm-ile-saas-musteri-onboarding-ini-donusturme-verimlilik-ve-erken-deger-yaratma.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/crm-ile-saas-musteri-onboarding-ini-donusturme-verimlilik-ve-erken-deger-yaratma",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/saas-kullanici-deneyimi-yeni-7esil-standartlari-ve-en-i-yi-uygulamalar",
+      "file": "bilgi-merkezi/saas-kullanici-deneyimi-yeni-7esil-standartlari-ve-en-i-yi-uygulamalar.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/saas-kullanici-deneyimi-yeni-7esil-standartlari-ve-en-i-yi-uygulamalar",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/musteri-memnuniyeti-den-musteri-memnuniyeti2-e-saas-lead-7urturing-yolculugu-2",
+      "file": "bilgi-merkezi/musteri-memnuniyeti-den-musteri-memnuniyeti2-e-saas-lead-7urturing-yolculugu-2.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/musteri-memnuniyeti-den-musteri-memnuniyeti2-e-saas-lead-7urturing-yolculugu-2",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/b2b-satis-discovery-musteri-merkezli-yaklasim-2",
+      "file": "bilgi-merkezi/b2b-satis-discovery-musteri-merkezli-yaklasim-2.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/b2b-satis-discovery-musteri-merkezli-yaklasim-2",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/b2b-saas-ta-satis-ekibi-motivasyonu-2026-nin-yeni-nesil-odullendirme-modelleri",
+      "file": "bilgi-merkezi/b2b-saas-ta-satis-ekibi-motivasyonu-2026-nin-yeni-nesil-odullendirme-modelleri.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/b2b-saas-ta-satis-ekibi-motivasyonu-2026-nin-yeni-nesil-odullendirme-modelleri",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/musteri-memnuniyeti-den-musteri-memnuniyeti2-e-saas-follow-up-yolculugu-2",
+      "file": "bilgi-merkezi/musteri-memnuniyeti-den-musteri-memnuniyeti2-e-saas-follow-up-yolculugu-2.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/musteri-memnuniyeti-den-musteri-memnuniyeti2-e-saas-follow-up-yolculugu-2",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/b2b-saas-i-cin-low-code-no-code-gelistirme-sureclerini-ve-operasyonlari-hizlandirma",
+      "file": "bilgi-merkezi/b2b-saas-i-cin-low-code-no-code-gelistirme-sureclerini-ve-operasyonlari-hizlandirma.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/b2b-saas-i-cin-low-code-no-code-gelistirme-sureclerini-ve-operasyonlari-hizlandirma",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/pipeline-degeri-artirmak-i-cin-8-strateji",
+      "file": "bilgi-merkezi/pipeline-degeri-artirmak-i-cin-8-strateji.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/pipeline-degeri-artirmak-i-cin-8-strateji",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/b2b-satista-veri-analitigi-kullanimi-gelecekteki-rehberi",
+      "file": "bilgi-merkezi/b2b-satista-veri-analitigi-kullanimi-gelecekteki-rehberi.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/b2b-satista-veri-analitigi-kullanimi-gelecekteki-rehberi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/agency-ortakliklarinda-performans-ve-basari",
+      "file": "bilgi-merkezi/agency-ortakliklarinda-performans-ve-basari.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/agency-ortakliklarinda-performans-ve-basari",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/b2b-satis-onboarding-proaktif-yaklasim",
+      "file": "bilgi-merkezi/b2b-satis-onboarding-proaktif-yaklasim.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/b2b-satis-onboarding-proaktif-yaklasim",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/musteri-memnuniyeti-den-musteri-memnuniyeti2-e-saas-follow-up-yolculugu",
+      "file": "bilgi-merkezi/musteri-memnuniyeti-den-musteri-memnuniyeti2-e-saas-follow-up-yolculugu.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/musteri-memnuniyeti-den-musteri-memnuniyeti2-e-saas-follow-up-yolculugu",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/b2b-satis-qualification-agile-yaklasim",
+      "file": "bilgi-merkezi/b2b-satis-qualification-agile-yaklasim.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/b2b-satis-qualification-agile-yaklasim",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/crm-ile-gelir-operasyonlari-revops-b2b-saas-buyume-ve-verimlilik-stratejileri-2026",
+      "file": "bilgi-merkezi/crm-ile-gelir-operasyonlari-revops-b2b-saas-buyume-ve-verimlilik-stratejileri-2026.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/crm-ile-gelir-operasyonlari-revops-b2b-saas-buyume-ve-verimlilik-stratejileri-2026",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/channel-partner-programi-2027-baslangic-rehberi",
+      "file": "bilgi-merkezi/channel-partner-programi-2027-baslangic-rehberi.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/channel-partner-programi-2027-baslangic-rehberi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/crm-merkezli-tek-musteri-gorunumu-b2b-saas-ta-buyume-ve-kisisellestirme-stratejileri-2026",
+      "file": "bilgi-merkezi/crm-merkezli-tek-musteri-gorunumu-b2b-saas-ta-buyume-ve-kisisellestirme-stratejileri-2026.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/crm-merkezli-tek-musteri-gorunumu-b2b-saas-ta-buyume-ve-kisisellestirme-stratejileri-2026",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/gelecegin-crm-i-musteri-i-htiyaclarini-tahmin-ederek-proaktif-satis-stratejileri-2026",
+      "file": "bilgi-merkezi/gelecegin-crm-i-musteri-i-htiyaclarini-tahmin-ederek-proaktif-satis-stratejileri-2026.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/gelecegin-crm-i-musteri-i-htiyaclarini-tahmin-ederek-proaktif-satis-stratejileri-2026",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/saas-mobile-access-gelistirmede-modular-stratejisi",
+      "file": "bilgi-merkezi/saas-mobile-access-gelistirmede-modular-stratejisi.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/saas-mobile-access-gelistirmede-modular-stratejisi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/lojistik-sektorunde-satis-trendleri-2026",
+      "file": "bilgi-merkezi/lojistik-sektorunde-satis-trendleri-2026.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/lojistik-sektorunde-satis-trendleri-2026",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/referral-ortakliklarinda-performans-ve-basari",
+      "file": "bilgi-merkezi/referral-ortakliklarinda-performans-ve-basari.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/referral-ortakliklarinda-performans-ve-basari",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/pipeline-degeri-den-pipeline-degeri2-e-saas-follow-up-yolculugu",
+      "file": "bilgi-merkezi/pipeline-degeri-den-pipeline-degeri2-e-saas-follow-up-yolculugu.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/pipeline-degeri-den-pipeline-degeri2-e-saas-follow-up-yolculugu",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/surdurulebilir-partner-ekosistemleri-b2b-saas-ta-deger-yaratimi-ve-uzun-vadeli-buyume-2026",
+      "file": "bilgi-merkezi/surdurulebilir-partner-ekosistemleri-b2b-saas-ta-deger-yaratimi-ve-uzun-vadeli-buyume-2026.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/surdurulebilir-partner-ekosistemleri-b2b-saas-ta-deger-yaratimi-ve-uzun-vadeli-buyume-2026",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/crm-de-api-entegrasyonu-otomasyon-saglamak",
+      "file": "bilgi-merkezi/crm-de-api-entegrasyonu-otomasyon-saglamak.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/crm-de-api-entegrasyonu-otomasyon-saglamak",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/b2b-satista-chatbot-kullanimi-gelecekteki-rehberi",
+      "file": "bilgi-merkezi/b2b-satista-chatbot-kullanimi-gelecekteki-rehberi.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/b2b-satista-chatbot-kullanimi-gelecekteki-rehberi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/modern-crm-trendleri-yapay-zeka-ve-conversational-ai",
+      "file": "bilgi-merkezi/modern-crm-trendleri-yapay-zeka-ve-conversational-ai.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/modern-crm-trendleri-yapay-zeka-ve-conversational-ai",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/saas-pipeline-management-gelistirmede-api-first-stratejisi",
+      "file": "bilgi-merkezi/saas-pipeline-management-gelistirmede-api-first-stratejisi.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/saas-pipeline-management-gelistirmede-api-first-stratejisi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/referral-programi-yeni-6esil-baslangic-rehberi",
+      "file": "bilgi-merkezi/referral-programi-yeni-6esil-baslangic-rehberi.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/referral-programi-yeni-6esil-baslangic-rehberi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/crm-in-b2b-saas-ta-musteri-kaybini-onlemedeki-gucu-proaktif-yapay-zeka-stratejileri-2026",
+      "file": "bilgi-merkezi/crm-in-b2b-saas-ta-musteri-kaybini-onlemedeki-gucu-proaktif-yapay-zeka-stratejileri-2026.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/crm-in-b2b-saas-ta-musteri-kaybini-onlemedeki-gucu-proaktif-yapay-zeka-stratejileri-2026",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/donusum-orani-artirmak-i-cin-9-strateji",
+      "file": "bilgi-merkezi/donusum-orani-artirmak-i-cin-9-strateji.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/donusum-orani-artirmak-i-cin-9-strateji",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/saas-guvenlik-2027-standartlari-ve-en-i-yi-uygulamalar",
+      "file": "bilgi-merkezi/saas-guvenlik-2027-standartlari-ve-en-i-yi-uygulamalar.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/saas-guvenlik-2027-standartlari-ve-en-i-yi-uygulamalar",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/referral-programi-2027-baslangic-rehberi",
+      "file": "bilgi-merkezi/referral-programi-2027-baslangic-rehberi.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/referral-programi-2027-baslangic-rehberi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/referral-ortakliklarinda-olceklenebilirlik-ve-basari",
+      "file": "bilgi-merkezi/referral-ortakliklarinda-olceklenebilirlik-ve-basari.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/referral-ortakliklarinda-olceklenebilirlik-ve-basari",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/saas-partner-programlarinda-etkili-egitim-ve-sertifikasyon-stratejileri-2026",
+      "file": "bilgi-merkezi/saas-partner-programlarinda-etkili-egitim-ve-sertifikasyon-stratejileri-2026.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/saas-partner-programlarinda-etkili-egitim-ve-sertifikasyon-stratejileri-2026",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/b2b-saas-partner-programlarinda-gamification-i-s-ortaklarinin-katilimini-artirma-yollari-2026",
+      "file": "bilgi-merkezi/b2b-saas-partner-programlarinda-gamification-i-s-ortaklarinin-katilimini-artirma-yollari-2026.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/b2b-saas-partner-programlarinda-gamification-i-s-ortaklarinin-katilimini-artirma-yollari-2026",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/strategic-alliance-programi-2027-baslangic-rehberi",
+      "file": "bilgi-merkezi/strategic-alliance-programi-2027-baslangic-rehberi.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/strategic-alliance-programi-2027-baslangic-rehberi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/b2b-satista-machine-learning-kullanimi-yeni-6esil-rehberi",
+      "file": "bilgi-merkezi/b2b-satista-machine-learning-kullanimi-yeni-6esil-rehberi.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/b2b-satista-machine-learning-kullanimi-yeni-6esil-rehberi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/b2b-satis-onboarding-musteri-merkezli-yaklasim",
+      "file": "bilgi-merkezi/b2b-satis-onboarding-musteri-merkezli-yaklasim.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/b2b-satis-onboarding-musteri-merkezli-yaklasim",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/gelecekteki-da-saas-horizontal-saas-embedded-analytics-ve-firsatlar",
+      "file": "bilgi-merkezi/gelecekteki-da-saas-horizontal-saas-embedded-analytics-ve-firsatlar.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/gelecekteki-da-saas-horizontal-saas-embedded-analytics-ve-firsatlar",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/b2b-satis-lead-8urturing-musteri-merkezli-yaklasim",
+      "file": "bilgi-merkezi/b2b-satis-lead-8urturing-musteri-merkezli-yaklasim.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/b2b-satis-lead-8urturing-musteri-merkezli-yaklasim",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/saas-kullanici-deneyimi-2027-standartlari-ve-en-i-yi-uygulamalar",
+      "file": "bilgi-merkezi/saas-kullanici-deneyimi-2027-standartlari-ve-en-i-yi-uygulamalar.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/saas-kullanici-deneyimi-2027-standartlari-ve-en-i-yi-uygulamalar",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/crm-ile-discovery-otomasyonu-2027-rehberi",
+      "file": "bilgi-merkezi/crm-ile-discovery-otomasyonu-2027-rehberi.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/crm-ile-discovery-otomasyonu-2027-rehberi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/referral-programi-yeni-9esil-baslangic-rehberi-2",
+      "file": "bilgi-merkezi/referral-programi-yeni-9esil-baslangic-rehberi-2.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/referral-programi-yeni-9esil-baslangic-rehberi-2",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/crm-de-mobile-access-seffaflik-saglamak",
+      "file": "bilgi-merkezi/crm-de-mobile-access-seffaflik-saglamak.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/crm-de-mobile-access-seffaflik-saglamak",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/revenue-share-ile-partner-seffaflik-maksimize-etmek",
+      "file": "bilgi-merkezi/revenue-share-ile-partner-seffaflik-maksimize-etmek.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/revenue-share-ile-partner-seffaflik-maksimize-etmek",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/saas-partner-onboarding-sureclerini-otomatiklestirmek-basari-i-cin-temel-stratejiler-2026",
+      "file": "bilgi-merkezi/saas-partner-onboarding-sureclerini-otomatiklestirmek-basari-i-cin-temel-stratejiler-2026.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/saas-partner-onboarding-sureclerini-otomatiklestirmek-basari-i-cin-temel-stratejiler-2026",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/crm-ve-veri-gizliligi-yonetimi-yeni-nesil-regulasyonlara-uyum-ve-guven-olusturma-2026",
+      "file": "bilgi-merkezi/crm-ve-veri-gizliligi-yonetimi-yeni-nesil-regulasyonlara-uyum-ve-guven-olusturma-2026.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/crm-ve-veri-gizliligi-yonetimi-yeni-nesil-regulasyonlara-uyum-ve-guven-olusturma-2026",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/saas-urunlerinde-uretken-yapay-zeka-donusturucu-ozellikler-ve-stratejik-entegrasyon-2026",
+      "file": "bilgi-merkezi/saas-urunlerinde-uretken-yapay-zeka-donusturucu-ozellikler-ve-stratejik-entegrasyon-2026.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/saas-urunlerinde-uretken-yapay-zeka-donusturucu-ozellikler-ve-stratejik-entegrasyon-2026",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/yeni-7esil-da-saas-enterprise-saas-ai-integration-ve-firsatlar",
+      "file": "bilgi-merkezi/yeni-7esil-da-saas-enterprise-saas-ai-integration-ve-firsatlar.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/yeni-7esil-da-saas-enterprise-saas-ai-integration-ve-firsatlar",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/crm-de-duygusal-yapay-zeka-musteri-duygu-analiziyle-kisisellestirme-2026",
+      "file": "bilgi-merkezi/crm-de-duygusal-yapay-zeka-musteri-duygu-analiziyle-kisisellestirme-2026.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/crm-de-duygusal-yapay-zeka-musteri-duygu-analiziyle-kisisellestirme-2026",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/b2b-satista-veri-analitigi-kullanimi-yeni-5esil-rehberi",
+      "file": "bilgi-merkezi/b2b-satista-veri-analitigi-kullanimi-yeni-5esil-rehberi.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/b2b-satista-veri-analitigi-kullanimi-yeni-5esil-rehberi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/platform-tabanli-saas-7e-zaman-ve-7asil-kullanilir",
+      "file": "bilgi-merkezi/platform-tabanli-saas-7e-zaman-ve-7asil-kullanilir.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/platform-tabanli-saas-7e-zaman-ve-7asil-kullanilir",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/b2b-satis-lead-10urturing-entegre-yaklasim",
+      "file": "bilgi-merkezi/b2b-satis-lead-10urturing-entegre-yaklasim.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/b2b-satis-lead-10urturing-entegre-yaklasim",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/lead-kalitesi-den-lead-kalitesi2-e-saas-qualification-yolculugu",
+      "file": "bilgi-merkezi/lead-kalitesi-den-lead-kalitesi2-e-saas-qualification-yolculugu.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/lead-kalitesi-den-lead-kalitesi2-e-saas-qualification-yolculugu",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/donusum-orani-den-donusum-orani2-e-saas-qualification-yolculugu",
+      "file": "bilgi-merkezi/donusum-orani-den-donusum-orani2-e-saas-qualification-yolculugu.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/donusum-orani-den-donusum-orani2-e-saas-qualification-yolculugu",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/crm-ile-discovery-otomasyonu-yeni-8esil-rehberi",
+      "file": "bilgi-merkezi/crm-ile-discovery-otomasyonu-yeni-8esil-rehberi.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/crm-ile-discovery-otomasyonu-yeni-8esil-rehberi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/tiered-program-ile-partner-roi-maksimize-etmek",
+      "file": "bilgi-merkezi/tiered-program-ile-partner-roi-maksimize-etmek.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/tiered-program-ile-partner-roi-maksimize-etmek",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/co-marketing-stratejileri-b2b-saas-partnerlerinin-birlikte-buyumesi-icin-yenilikci-yaklasimlar-2026",
+      "file": "bilgi-merkezi/co-marketing-stratejileri-b2b-saas-partnerlerinin-birlikte-buyumesi-icin-yenilikci-yaklasimlar-2026.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/co-marketing-stratejileri-b2b-saas-partnerlerinin-birlikte-buyumesi-icin-yenilikci-yaklasimlar-2026",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/b2b-satista-chatbot-kullanimi-gelecekteki-rehberi-2",
+      "file": "bilgi-merkezi/b2b-satista-chatbot-kullanimi-gelecekteki-rehberi-2.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/b2b-satista-chatbot-kullanimi-gelecekteki-rehberi-2",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/b2b-satis-follow-up-agile-yaklasim",
+      "file": "bilgi-merkezi/b2b-satis-follow-up-agile-yaklasim.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/b2b-satis-follow-up-agile-yaklasim",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/gelecekteki-da-saas-smb-saas-ai-integration-ve-firsatlar",
+      "file": "bilgi-merkezi/gelecekteki-da-saas-smb-saas-ai-integration-ve-firsatlar.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/gelecekteki-da-saas-smb-saas-ai-integration-ve-firsatlar",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/partner-kazanma-orani-artirmak-i-cin-9-yontem",
+      "file": "bilgi-merkezi/partner-kazanma-orani-artirmak-i-cin-9-yontem.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/partner-kazanma-orani-artirmak-i-cin-9-yontem",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/monday-sales-vs-copper-hangisi-modern-da-daha-i-yi",
+      "file": "bilgi-merkezi/monday-sales-vs-copper-hangisi-modern-da-daha-i-yi.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/monday-sales-vs-copper-hangisi-modern-da-daha-i-yi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/reseller-programi-2027-baslangic-rehberi-2",
+      "file": "bilgi-merkezi/reseller-programi-2027-baslangic-rehberi-2.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/reseller-programi-2027-baslangic-rehberi-2",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/saas-urunlerinde-hiper-kisisellestirilmis-deneyimler-yapay-zeka-ile-kullanici-bagliligini-artirma-2026",
+      "file": "bilgi-merkezi/saas-urunlerinde-hiper-kisisellestirilmis-deneyimler-yapay-zeka-ile-kullanici-bagliligini-artirma-2026.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/saas-urunlerinde-hiper-kisisellestirilmis-deneyimler-yapay-zeka-ile-kullanici-bagliligini-artirma-2026",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/bilgi-merkezi/ortak-urun-gelistirme-saas-partnerliklerinde-yenilikci-modeller-ve-birlikte-yaratim-2027",
+      "file": "bilgi-merkezi/ortak-urun-gelistirme-saas-partnerliklerinde-yenilikci-modeller-ve-birlikte-yaratim-2027.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/bilgi-merkezi/ortak-urun-gelistirme-saas-partnerliklerinde-yenilikci-modeller-ve-birlikte-yaratim-2027",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 2,
+        "filled": 2,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/sat%C4%B1%C5%9Fta-i%CC%87lk-90-g%C3%BCn-%C3%A7o%C4%9Fu-%C5%9Firketin-fark-etmeden-harcad%C4%B1%C4%9F%C4%B1-zaman",
+      "file": "blog/satışta-i̇lk-90-gün-çoğu-şirketin-fark-etmeden-harcadığı-zaman.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/sat%C4%B1%C5%9Fta-i%CC%87lk-90-g%C3%BCn-%C3%A7o%C4%9Fu-%C5%9Firketin-fark-etmeden-harcad%C4%B1%C4%9F%C4%B1-zaman",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/sat%C4%B1%C5%9F-kapand%C4%B1%C4%9F%C4%B1nda-i%CC%87%C5%9F-bitmez-as%C4%B1l-i%CC%87%C5%9F-ba%C5%9Flar",
+      "file": "blog/satış-kapandığında-i̇ş-bitmez-asıl-i̇ş-başlar.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/sat%C4%B1%C5%9F-kapand%C4%B1%C4%9F%C4%B1nda-i%CC%87%C5%9F-bitmez-as%C4%B1l-i%CC%87%C5%9F-ba%C5%9Flar",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/b%C3%BCy%C3%BCyen-%C5%9Firketlerin-sessiz-ortakl%C4%B1%C4%9F%C4%B1-outsource-sat%C4%B1%C5%9F",
+      "file": "blog/büyüyen-şirketlerin-sessiz-ortaklığı-outsource-satış.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/b%C3%BCy%C3%BCyen-%C5%9Firketlerin-sessiz-ortakl%C4%B1%C4%9F%C4%B1-outsource-sat%C4%B1%C5%9F",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/sat%C4%B1%C5%9F-g%C3%B6r%C3%BC%C5%9Fmesi-ayarlamak-ile-sat%C4%B1%C5%9F-g%C3%B6r%C3%BC%C5%9Fmesini-kazanmak-aras%C4%B1ndaki-u%C3%A7urum",
+      "file": "blog/satış-görüşmesi-ayarlamak-ile-satış-görüşmesini-kazanmak-arasındaki-uçurum.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/sat%C4%B1%C5%9F-g%C3%B6r%C3%BC%C5%9Fmesi-ayarlamak-ile-sat%C4%B1%C5%9F-g%C3%B6r%C3%BC%C5%9Fmesini-kazanmak-aras%C4%B1ndaki-u%C3%A7urum",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/herkese-satmaya-%C3%A7al%C4%B1%C5%9Fmak-kimseye-satamaman%C4%B1n-en-k%C4%B1sa-yolu",
+      "file": "blog/herkese-satmaya-çalışmak-kimseye-satamamanın-en-kısa-yolu.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/herkese-satmaya-%C3%A7al%C4%B1%C5%9Fmak-kimseye-satamaman%C4%B1n-en-k%C4%B1sa-yolu",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/so%C4%9Fuk-e-posta-%C3%B6ld%C3%BC-m%C3%BC-hay%C4%B1r-sadece-de%C4%9Fi%C5%9Fti",
+      "file": "blog/soğuk-e-posta-öldü-mü-hayır-sadece-değişti.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/so%C4%9Fuk-e-posta-%C3%B6ld%C3%BC-m%C3%BC-hay%C4%B1r-sadece-de%C4%9Fi%C5%9Fti",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/sat%C4%B1%C5%9Fta-en-hafife-al%C4%B1nan-silah-zamanlama",
+      "file": "blog/satışta-en-hafife-alınan-silah-zamanlama.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/sat%C4%B1%C5%9Fta-en-hafife-al%C4%B1nan-silah-zamanlama",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/m%C3%BC%C5%9Fteri-sizi-neden-se%C3%A7medi-cevap-d%C3%BC%C5%9F%C3%BCnd%C3%BC%C4%9F%C3%BCn%C3%BCzden-farkl%C4%B1",
+      "file": "blog/müşteri-sizi-neden-seçmedi-cevap-düşündüğünüzden-farklı.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/m%C3%BC%C5%9Fteri-sizi-neden-se%C3%A7medi-cevap-d%C3%BC%C5%9F%C3%BCnd%C3%BC%C4%9F%C3%BCn%C3%BCzden-farkl%C4%B1",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/sat%C4%B1%C5%9Fta-en-pahal%C4%B1-%C5%9Fey-bilmedi%C4%9Finizi-bilmemektir",
+      "file": "blog/satışta-en-pahalı-şey-bilmediğinizi-bilmemektir.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/sat%C4%B1%C5%9Fta-en-pahal%C4%B1-%C5%9Fey-bilmedi%C4%9Finizi-bilmemektir",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/linkedin-de-herkes-var-ama-%C3%A7ok-az%C4%B1-sat%C4%B1%C5%9F-yap%C4%B1yor",
+      "file": "blog/linkedin-de-herkes-var-ama-çok-azı-satış-yapıyor.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/linkedin-de-herkes-var-ama-%C3%A7ok-az%C4%B1-sat%C4%B1%C5%9F-yap%C4%B1yor",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/b2b-de-i%CC%87lk-i%CC%87zlenim-bir-e-postan%C4%B1n-i%CC%87lk-%C3%BC%C3%A7-saniyesi-her-%C5%9Feyi-belirler",
+      "file": "blog/b2b-de-i̇lk-i̇zlenim-bir-e-postanın-i̇lk-üç-saniyesi-her-şeyi-belirler.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/b2b-de-i%CC%87lk-i%CC%87zlenim-bir-e-postan%C4%B1n-i%CC%87lk-%C3%BC%C3%A7-saniyesi-her-%C5%9Feyi-belirler",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/sat%C4%B1%C5%9F-ekibi-neden-t%C3%BCkenip-gider",
+      "file": "blog/satış-ekibi-neden-tükenip-gider.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/sat%C4%B1%C5%9F-ekibi-neden-t%C3%BCkenip-gider",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/sdr-vs.-tam-zamanl%C4%B1-sat%C4%B1%C5%9F-personeli",
+      "file": "blog/sdr-vs.-tam-zamanlı-satış-personeli.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/sdr-vs.-tam-zamanl%C4%B1-sat%C4%B1%C5%9F-personeli",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/yeni-bir-pazara-girerken-%C5%9Firketlerin-yapt%C4%B1%C4%9F%C4%B1-4-b%C3%BCy%C3%BCk-hata",
+      "file": "blog/yeni-bir-pazara-girerken-şirketlerin-yaptığı-4-büyük-hata.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/yeni-bir-pazara-girerken-%C5%9Firketlerin-yapt%C4%B1%C4%9F%C4%B1-4-b%C3%BCy%C3%BCk-hata",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/outbound-sat%C4%B1%C5%9F-nedir-b2b-%C5%9Firketler-i%CC%87%C3%A7in-nitelikli-g%C3%B6r%C3%BC%C5%9Fme-alman%C4%B1n-yolu",
+      "file": "blog/outbound-satış-nedir-b2b-şirketler-i̇çin-nitelikli-görüşme-almanın-yolu.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/outbound-sat%C4%B1%C5%9F-nedir-b2b-%C5%9Firketler-i%CC%87%C3%A7in-nitelikli-g%C3%B6r%C3%BC%C5%9Fme-alman%C4%B1n-yolu",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/b2b%E2%80%99de-uykusuz-gecelerin-%C3%A7%C4%B1kt%C4%B1s%C4%B1-lead-generation-operasyonunu-otomati%C4%9Fe-ba%C4%9Flamak",
+      "file": "blog/b2b’de-uykusuz-gecelerin-çıktısı-lead-generation-operasyonunu-otomatiğe-bağlamak.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/b2b%E2%80%99de-uykusuz-gecelerin-%C3%A7%C4%B1kt%C4%B1s%C4%B1-lead-generation-operasyonunu-otomati%C4%9Fe-ba%C4%9Flamak",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/saas-operasyonlar%C4%B1nda-gizli-kahraman-sadelesmenin-gucu",
+      "file": "blog/saas-operasyonlarında-gizli-kahraman-sadelesmenin-gucu.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/saas-operasyonlar%C4%B1nda-gizli-kahraman-sadelesmenin-gucu",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/tek-kisi-maliyetine-4-kisilik-uzman-satis-kadrosu-satis-operasyonunuzda-verimlilik-devrimi",
+      "file": "blog/tek-kisi-maliyetine-4-kisilik-uzman-satis-kadrosu-satis-operasyonunuzda-verimlilik-devrimi.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/tek-kisi-maliyetine-4-kisilik-uzman-satis-kadrosu-satis-operasyonunuzda-verimlilik-devrimi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/b2b-operasyonlar%C4%B1nda-mesguliyet-yanilsamasi-35-sayfalik-raporu-5-dakikada-cikarmak",
+      "file": "blog/b2b-operasyonlarında-mesguliyet-yanilsamasi-35-sayfalik-raporu-5-dakikada-cikarmak.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/b2b-operasyonlar%C4%B1nda-mesguliyet-yanilsamasi-35-sayfalik-raporu-5-dakikada-cikarmak",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/b2b-satista-gorunmez-bariyerleri-asmak-dijital-otorite-cagi",
+      "file": "blog/b2b-satista-gorunmez-bariyerleri-asmak-dijital-otorite-cagi.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/b2b-satista-gorunmez-bariyerleri-asmak-dijital-otorite-cagi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/b2b-de-basari-teklifin-otesindeki-dijital-guvendir.-saas-corner-ile-stratejik-aginizi-kurun",
+      "file": "blog/b2b-de-basari-teklifin-otesindeki-dijital-guvendir.-saas-corner-ile-stratejik-aginizi-kurun.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/b2b-de-basari-teklifin-otesindeki-dijital-guvendir.-saas-corner-ile-stratejik-aginizi-kurun",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/b2b-i%CC%87letisiminde-yeni-standart-dijital-guven-ve-stratejik-gorunurluk",
+      "file": "blog/b2b-i̇letisiminde-yeni-standart-dijital-guven-ve-stratejik-gorunurluk.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/b2b-i%CC%87letisiminde-yeni-standart-dijital-guven-ve-stratejik-gorunurluk",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/genc-ve-dinamik-satis-ekiplerini-yonetmenin-yeni-kurallari",
+      "file": "blog/genc-ve-dinamik-satis-ekiplerini-yonetmenin-yeni-kurallari.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/genc-ve-dinamik-satis-ekiplerini-yonetmenin-yeni-kurallari",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/i%CC%87ceride-sdr-ekibi-kurmanin-gizli-maliyetleri-2026%E2%80%99da-neden-ajans-modeli-kazaniyor",
+      "file": "blog/i̇ceride-sdr-ekibi-kurmanin-gizli-maliyetleri-2026’da-neden-ajans-modeli-kazaniyor.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/i%CC%87ceride-sdr-ekibi-kurmanin-gizli-maliyetleri-2026%E2%80%99da-neden-ajans-modeli-kazaniyor",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/lead-generation-saas-corner-ile-nitelikli-musterileri-elde-etmenin-yollari",
+      "file": "blog/lead-generation-saas-corner-ile-nitelikli-musterileri-elde-etmenin-yollari.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/lead-generation-saas-corner-ile-nitelikli-musterileri-elde-etmenin-yollari",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/lead-generation-nedir",
+      "file": "blog/lead-generation-nedir.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/lead-generation-nedir",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/2026-da-b2b-satisin-yeni-denklemi-neden-bir-sdr-ajansiyla-calismalisiniz",
+      "file": "blog/2026-da-b2b-satisin-yeni-denklemi-neden-bir-sdr-ajansiyla-calismalisiniz.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/2026-da-b2b-satisin-yeni-denklemi-neden-bir-sdr-ajansiyla-calismalisiniz",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/sosyal-medya-yonetimi-ile-markanizi-nasil-buyutebilirsiniz",
+      "file": "blog/sosyal-medya-yonetimi-ile-markanizi-nasil-buyutebilirsiniz.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/sosyal-medya-yonetimi-ile-markanizi-nasil-buyutebilirsiniz",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/social-media-corner-ile-sosyal-medya-yonetimini-kolaylastirin",
+      "file": "blog/social-media-corner-ile-sosyal-medya-yonetimini-kolaylastirin.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/social-media-corner-ile-sosyal-medya-yonetimini-kolaylastirin",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/saas-corner-olarak-be1-lead-generation-destegi",
+      "file": "blog/saas-corner-olarak-be1-lead-generation-destegi.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/saas-corner-olarak-be1-lead-generation-destegi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/saas-corner-neoemsan-lead-generation-destegi",
+      "file": "blog/saas-corner-neoemsan-lead-generation-destegi.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/saas-corner-neoemsan-lead-generation-destegi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/be1-ile-sap-erp-cozumu-ile-isletme-surecinizi-optimiz-edin",
+      "file": "blog/be1-ile-sap-erp-cozumu-ile-isletme-surecinizi-optimiz-edin.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/be1-ile-sap-erp-cozumu-ile-isletme-surecinizi-optimiz-edin",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/erp-cozumleri-ile-isletme-yonetimini-hizlandirirsiniz",
+      "file": "blog/erp-cozumleri-ile-isletme-yonetimini-hizlandirirsiniz.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/erp-cozumleri-ile-isletme-yonetimini-hizlandirirsiniz",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/crm-integrasyonu-ile-satis-surecinizi-hizlandirin",
+      "file": "blog/crm-integrasyonu-ile-satis-surecinizi-hizlandirin.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/crm-integrasyonu-ile-satis-surecinizi-hizlandirin",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/saas-sirketlerinde-satis-otomasyonu-isletmenizi-hizlandirir",
+      "file": "blog/saas-sirketlerinde-satis-otomasyonu-isletmenizi-hizlandirir.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/saas-sirketlerinde-satis-otomasyonu-isletmenizi-hizlandirir",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/sales-consulting",
+      "file": "blog/sales-consulting.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/sales-consulting",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/linkedin-ve-satis",
+      "file": "blog/linkedin-ve-satis.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/linkedin-ve-satis",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/lead-generation-ile-nitelikli-musteri-kazanin",
+      "file": "blog/lead-generation-ile-nitelikli-musteri-kazanin.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/lead-generation-ile-nitelikli-musteri-kazanin",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/ai-in-satis",
+      "file": "blog/ai-in-satis.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/ai-in-satis",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/kisisellestirilmis-emails",
+      "file": "blog/kisisellestirilmis-emails.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/kisisellestirilmis-emails",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/satis-dis-kaynak-kullanimi-faydalari",
+      "file": "blog/satis-dis-kaynak-kullanimi-faydalari.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/satis-dis-kaynak-kullanimi-faydalari",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/satis-dis-kaynak-kullanimi-maliyet-optimizasyonu",
+      "file": "blog/satis-dis-kaynak-kullanimi-maliyet-optimizasyonu.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/satis-dis-kaynak-kullanimi-maliyet-optimizasyonu",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/veri-odakli-satis-analiz-ve-icgoru",
+      "file": "blog/veri-odakli-satis-analiz-ve-icgoru.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/veri-odakli-satis-analiz-ve-icgoru",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/satis-otomasyonu-verimlilik",
+      "file": "blog/satis-otomasyonu-verimlilik.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/satis-otomasyonu-verimlilik",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/donusum-orani-optimizasyonu",
+      "file": "blog/donusum-orani-optimizasyonu.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/donusum-orani-optimizasyonu",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/b2b-satis-onboarding-musteri-merkezli-yaklasim",
+      "file": "blog/b2b-satis-onboarding-musteri-merkezli-yaklasim.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/b2b-satis-onboarding-musteri-merkezli-yaklasim",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/b2b-satis-lead-nurturing-musteri-merkezli-yaklasim",
+      "file": "blog/b2b-satis-lead-nurturing-musteri-merkezli-yaklasim.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/b2b-satis-lead-nurturing-musteri-merkezli-yaklasim",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/saas-kullanici-deneyimi-2027-standartlari-ve-en-i-yi-uygulamalar",
+      "file": "blog/saas-kullanici-deneyimi-2027-standartlari-ve-en-i-yi-uygulamalar.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/saas-kullanici-deneyimi-2027-standartlari-ve-en-i-yi-uygulamalar",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/lead-kalitesi-den-lead-kalitesi-e-saas-qualification-yolculugu",
+      "file": "blog/lead-kalitesi-den-lead-kalitesi-e-saas-qualification-yolculugu.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/lead-kalitesi-den-lead-kalitesi-e-saas-qualification-yolculugu",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/crm-ile-discovery-otomasyonu-yeni-nesil-rehberi",
+      "file": "blog/crm-ile-discovery-otomasyonu-yeni-nesil-rehberi.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/crm-ile-discovery-otomasyonu-yeni-nesil-rehberi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/musteri-memnuniyeti-odakli-crm-stratejileri",
+      "file": "blog/musteri-memnuniyeti-odakli-crm-stratejileri.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/musteri-memnuniyeti-odakli-crm-stratejileri",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/gelecekteki-crm-trendleri-chatbot-ve-predictive-analytics",
+      "file": "blog/gelecekteki-crm-trendleri-chatbot-ve-predictive-analytics.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/gelecekteki-crm-trendleri-chatbot-ve-predictive-analytics",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/zoho-crm-ile-satis-donusum-orani-i-yilestirme",
+      "file": "blog/zoho-crm-ile-satis-donusum-orani-i-yilestirme.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/zoho-crm-ile-satis-donusum-orani-i-yilestirme",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/b2b-satis-lead-nurturing-entegre-yaklasim",
+      "file": "blog/b2b-satis-lead-nurturing-entegre-yaklasim.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/b2b-satis-lead-nurturing-entegre-yaklasim",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/donusum-orani-odakli-crm-stratejileri",
+      "file": "blog/donusum-orani-odakli-crm-stratejileri.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/donusum-orani-odakli-crm-stratejileri",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/donusum-orani-den-donusum-orani-e-saas-qualification-yolculugu",
+      "file": "blog/donusum-orani-den-donusum-orani-e-saas-qualification-yolculugu.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/donusum-orani-den-donusum-orani-e-saas-qualification-yolculugu",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/yeni-nesil-da-saas-enterprise-saas-ai-integration-ve-firsatlar",
+      "file": "blog/yeni-nesil-da-saas-enterprise-saas-ai-integration-ve-firsatlar.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/yeni-nesil-da-saas-enterprise-saas-ai-integration-ve-firsatlar",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/saas-urunlerinde-uretken-yapay-zeka-donusturucu-ozellikler-ve-stratejik-entegrasyon-2026",
+      "file": "blog/saas-urunlerinde-uretken-yapay-zeka-donusturucu-ozellikler-ve-stratejik-entegrasyon-2026.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/saas-urunlerinde-uretken-yapay-zeka-donusturucu-ozellikler-ve-stratejik-entegrasyon-2026",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/pipedrive-vs-insightly-hangisi-2026-da-daha-i-yi",
+      "file": "blog/pipedrive-vs-insightly-hangisi-2026-da-daha-i-yi.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/pipedrive-vs-insightly-hangisi-2026-da-daha-i-yi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/zoho-crm-ile-satis-kazanma-orani-i-yilestirme",
+      "file": "blog/zoho-crm-ile-satis-kazanma-orani-i-yilestirme.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/zoho-crm-ile-satis-kazanma-orani-i-yilestirme",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/2026-crm-trendleri-machine-learning-ve-conversational-ai",
+      "file": "blog/2026-crm-trendleri-machine-learning-ve-conversational-ai.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/2026-crm-trendleri-machine-learning-ve-conversational-ai",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/b2b-satis-qualification-entegre-yaklasim",
+      "file": "blog/b2b-satis-qualification-entegre-yaklasim.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/b2b-satis-qualification-entegre-yaklasim",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/salesforce-ile-satis-pipeline-degeri-i-yilestirme",
+      "file": "blog/salesforce-ile-satis-pipeline-degeri-i-yilestirme.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/salesforce-ile-satis-pipeline-degeri-i-yilestirme",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/hubspot-ile-satis-donusum-orani-i-yilestirme",
+      "file": "blog/hubspot-ile-satis-donusum-orani-i-yilestirme.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/hubspot-ile-satis-donusum-orani-i-yilestirme",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/channel-partner-programi-2026-baslangic-rehberi",
+      "file": "blog/channel-partner-programi-2026-baslangic-rehberi.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/channel-partner-programi-2026-baslangic-rehberi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/b2b-satista-chatbot-kullanimi-2026-rehberi",
+      "file": "blog/b2b-satista-chatbot-kullanimi-2026-rehberi.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/b2b-satista-chatbot-kullanimi-2026-rehberi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/partner-led-buyume-saas-ta-ortaklarin-liderliginde-buyume-stratejileri-2026",
+      "file": "blog/partner-led-buyume-saas-ta-ortaklarin-liderliginde-buyume-stratejileri-2026.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/partner-led-buyume-saas-ta-ortaklarin-liderliginde-buyume-stratejileri-2026",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/lead-kalitesi-den-lead-kalitesi-e-saas-lead-nurturing-yolculugu",
+      "file": "blog/lead-kalitesi-den-lead-kalitesi-e-saas-lead-nurturing-yolculugu.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/lead-kalitesi-den-lead-kalitesi-e-saas-lead-nurturing-yolculugu",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/partner-yasam-dongusu-otomasyonu-2026-da-buyumeyi-hizlandirma-stratejileri",
+      "file": "blog/partner-yasam-dongusu-otomasyonu-2026-da-buyumeyi-hizlandirma-stratejileri.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/partner-yasam-dongusu-otomasyonu-2026-da-buyumeyi-hizlandirma-stratejileri",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/crm-ile-discovery-otomasyonu-gelecekteki-rehberi",
+      "file": "blog/crm-ile-discovery-otomasyonu-gelecekteki-rehberi.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/crm-ile-discovery-otomasyonu-gelecekteki-rehberi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/2026-crm-trendleri-veri-analitigi-ve-ai-destekli-tahminleme",
+      "file": "blog/2026-crm-trendleri-veri-analitigi-ve-ai-destekli-tahminleme.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/2026-crm-trendleri-veri-analitigi-ve-ai-destekli-tahminleme",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/saas-ta-topluluk-odakli-buyume-kullanicilari-urun-elcilerine-donusturme-stratejileri-2026",
+      "file": "blog/saas-ta-topluluk-odakli-buyume-kullanicilari-urun-elcilerine-donusturme-stratejileri-2026.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/saas-ta-topluluk-odakli-buyume-kullanicilari-urun-elcilerine-donusturme-stratejileri-2026",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/technology-ortakliklarinda-kullanici-deneyimi-ve-basari",
+      "file": "blog/technology-ortakliklarinda-kullanici-deneyimi-ve-basari.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/technology-ortakliklarinda-kullanici-deneyimi-ve-basari",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/saas-partnerliklerinde-veri-governance-guven-ve-uyum-2026",
+      "file": "blog/saas-partnerliklerinde-veri-governance-guven-ve-uyum-2026.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/saas-partnerliklerinde-veri-governance-guven-ve-uyum-2026",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/crm-ile-musteri-basarisi-proaktif-deger-yaratma-ve-hesap-buyutme",
+      "file": "blog/crm-ile-musteri-basarisi-proaktif-deger-yaratma-ve-hesap-buyutme.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/crm-ile-musteri-basarisi-proaktif-deger-yaratma-ve-hesap-buyutme",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/partnerlerden-urun-yol-haritasina-degerli-geri-bildirimler",
+      "file": "blog/partnerlerden-urun-yol-haritasina-degerli-geri-bildirimler.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/partnerlerden-urun-yol-haritasina-degerli-geri-bildirimler",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/saas-vendor-yonetimi-coklu-aboneliklerde-maliyet-ve-guvenlik-optimizasyonu",
+      "file": "blog/saas-vendor-yonetimi-coklu-aboneliklerde-maliyet-ve-guvenlik-optimizasyonu.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/saas-vendor-yonetimi-coklu-aboneliklerde-maliyet-ve-guvenlik-optimizasyonu",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/b2b-saas-i-cin-crm-veri-kalitesi-stratejik-bir-bakis",
+      "file": "blog/b2b-saas-i-cin-crm-veri-kalitesi-stratejik-bir-bakis.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/b2b-saas-i-cin-crm-veri-kalitesi-stratejik-bir-bakis",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/crm-de-calisan-deneyimi-ekip-katilimiyla-verimliligi-artirma",
+      "file": "blog/crm-de-calisan-deneyimi-ekip-katilimiyla-verimliligi-artirma.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/crm-de-calisan-deneyimi-ekip-katilimiyla-verimliligi-artirma",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/crm-ve-abm-stratejileri-senkronize-ederek-buyumeyi-hizlandirma",
+      "file": "blog/crm-ve-abm-stratejileri-senkronize-ederek-buyumeyi-hizlandirma.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/crm-ve-abm-stratejileri-senkronize-ederek-buyumeyi-hizlandirma",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/kullanim-tabanli-fiyatlamada-crm-veri-odakli-buyume-2026",
+      "file": "blog/kullanim-tabanli-fiyatlamada-crm-veri-odakli-buyume-2026.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/kullanim-tabanli-fiyatlamada-crm-veri-odakli-buyume-2026",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/crm-in-urun-odakli-buyume-plg-stratejilerindeki-rolu",
+      "file": "blog/crm-in-urun-odakli-buyume-plg-stratejilerindeki-rolu.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/crm-in-urun-odakli-buyume-plg-stratejilerindeki-rolu",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/crm-in-urun-adaptasyonunu-hizlandirmadaki-rolu-saas-ta-deger-yaratimi-ve-genisleme-stratejileri-2026",
+      "file": "blog/crm-in-urun-adaptasyonunu-hizlandirmadaki-rolu-saas-ta-deger-yaratimi-ve-genisleme-stratejileri-2026.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/crm-in-urun-adaptasyonunu-hizlandirmadaki-rolu-saas-ta-deger-yaratimi-ve-genisleme-stratejileri-2026",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/yapay-zeka-caginda-b2b-saas-satis-i-nsan-faktoru-ve-kritik-beceriler-2026",
+      "file": "blog/yapay-zeka-caginda-b2b-saas-satis-i-nsan-faktoru-ve-kritik-beceriler-2026.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/yapay-zeka-caginda-b2b-saas-satis-i-nsan-faktoru-ve-kritik-beceriler-2026",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/karmasik-b2b-satista-crm-paydas-haritalama-ve-i-liski-stratejileri",
+      "file": "blog/karmasik-b2b-satista-crm-paydas-haritalama-ve-i-liski-stratejileri.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/karmasik-b2b-satista-crm-paydas-haritalama-ve-i-liski-stratejileri",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/b2b-saas-satis-koclugu-ekipleri-zirveye-tasiyan-stratejiler-2026",
+      "file": "blog/b2b-saas-satis-koclugu-ekipleri-zirveye-tasiyan-stratejiler-2026.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/b2b-saas-satis-koclugu-ekipleri-zirveye-tasiyan-stratejiler-2026",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/satis-ekipleri-crm-i-neden-sevmiyor-benimsenmeyi-artirmanin-5-stratejisi",
+      "file": "blog/satis-ekipleri-crm-i-neden-sevmiyor-benimsenmeyi-artirmanin-5-stratejisi.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/satis-ekipleri-crm-i-neden-sevmiyor-benimsenmeyi-artirmanin-5-stratejisi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/b2b-saas-satista-alici-odakli-yaklasim-musteri-yolculugunu-kolaylastirma",
+      "file": "blog/b2b-saas-satista-alici-odakli-yaklasim-musteri-yolculugunu-kolaylastirma.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/b2b-saas-satista-alici-odakli-yaklasim-musteri-yolculugunu-kolaylastirma",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/crm-ve-prm-entegrasyonu-b2b-saas-ta-kanal-satisini-guclendirme",
+      "file": "blog/crm-ve-prm-entegrasyonu-b2b-saas-ta-kanal-satisini-guclendirme.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/crm-ve-prm-entegrasyonu-b2b-saas-ta-kanal-satisini-guclendirme",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/saas-birlesme-ve-satin-almalar-m-a-2026-da-deger-yaratma-ve-stratejik-cikis-yollari",
+      "file": "blog/saas-birlesme-ve-satin-almalar-m-a-2026-da-deger-yaratma-ve-stratejik-cikis-yollari.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/saas-birlesme-ve-satin-almalar-m-a-2026-da-deger-yaratma-ve-stratejik-cikis-yollari",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/b2b-saas-satista-hikaye-anlaticiligi-degeri-duygularla-bulusturma-2026",
+      "file": "blog/b2b-saas-satista-hikaye-anlaticiligi-degeri-duygularla-bulusturma-2026.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/b2b-saas-satista-hikaye-anlaticiligi-degeri-duygularla-bulusturma-2026",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/partner-aglarinda-esg-ve-yesil-girisimler-b2b-saas-ta-surdurulebilir-buyume",
+      "file": "blog/partner-aglarinda-esg-ve-yesil-girisimler-b2b-saas-ta-surdurulebilir-buyume.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/partner-aglarinda-esg-ve-yesil-girisimler-b2b-saas-ta-surdurulebilir-buyume",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/crm-b2b-saas-ta-departmanlar-arasi-uyum-ve-stratejik-karar-merkezi",
+      "file": "blog/crm-b2b-saas-ta-departmanlar-arasi-uyum-ve-stratejik-karar-merkezi.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/crm-b2b-saas-ta-departmanlar-arasi-uyum-ve-stratejik-karar-merkezi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/b2b-saas-satista-davranissal-ekonomi-karar-alma-sureclerini-anlamak",
+      "file": "blog/b2b-saas-satista-davranissal-ekonomi-karar-alma-sureclerini-anlamak.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/b2b-saas-satista-davranissal-ekonomi-karar-alma-sureclerini-anlamak",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/saas-gelir-akisini-yeniden-tanimlamak-veriyi-urune-donusturme-2026",
+      "file": "blog/saas-gelir-akisini-yeniden-tanimlamak-veriyi-urune-donusturme-2026.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/saas-gelir-akisini-yeniden-tanimlamak-veriyi-urune-donusturme-2026",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/partner-basarisini-gelirin-otesinde-olcmek-b2b-saas-holistik-metrikler",
+      "file": "blog/partner-basarisini-gelirin-otesinde-olcmek-b2b-saas-holistik-metrikler.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/partner-basarisini-gelirin-otesinde-olcmek-b2b-saas-holistik-metrikler",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/crm-ve-kolektif-musteri-zekasi-b2b-saas-ta-stratejiler",
+      "file": "blog/crm-ve-kolektif-musteri-zekasi-b2b-saas-ta-stratejiler.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/crm-ve-kolektif-musteri-zekasi-b2b-saas-ta-stratejiler",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/b2b-micro-saas-nislerde-bagimsiz-buyume-stratejileri-2026",
+      "file": "blog/b2b-micro-saas-nislerde-bagimsiz-buyume-stratejileri-2026.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/b2b-micro-saas-nislerde-bagimsiz-buyume-stratejileri-2026",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/b2b-saas-satis-operasyonlari-veri-odakli-buyumenin-dinamosu",
+      "file": "blog/b2b-saas-satis-operasyonlari-veri-odakli-buyumenin-dinamosu.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/b2b-saas-satis-operasyonlari-veri-odakli-buyumenin-dinamosu",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/b2b-saas-m-a-da-crm-in-stratejik-rolu-kesintisiz-musteri-deneyimi",
+      "file": "blog/b2b-saas-m-a-da-crm-in-stratejik-rolu-kesintisiz-musteri-deneyimi.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/b2b-saas-m-a-da-crm-in-stratejik-rolu-kesintisiz-musteri-deneyimi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/b2b-sirketleri-i-cin-saas-sprawl-yonetimi-gorunmez-maliyetleri-ortaya-cikarin",
+      "file": "blog/b2b-sirketleri-i-cin-saas-sprawl-yonetimi-gorunmez-maliyetleri-ortaya-cikarin.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/b2b-sirketleri-i-cin-saas-sprawl-yonetimi-gorunmez-maliyetleri-ortaya-cikarin",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/b2b-saas-satis-playbooklari-basariyi-standartlastirma-2026",
+      "file": "blog/b2b-saas-satis-playbooklari-basariyi-standartlastirma-2026.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/b2b-saas-satis-playbooklari-basariyi-standartlastirma-2026",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/b2b-saas-sirketlerinde-partner-first-kulturu-i-csel-donusum-ve-basari",
+      "file": "blog/b2b-saas-sirketlerinde-partner-first-kulturu-i-csel-donusum-ve-basari.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/b2b-saas-sirketlerinde-partner-first-kulturu-i-csel-donusum-ve-basari",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/crm-ile-b2b-saas-fiyatlandirma-stratejileri-deger-bazli-modeller-kurmak",
+      "file": "blog/crm-ile-b2b-saas-fiyatlandirma-stratejileri-deger-bazli-modeller-kurmak.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/crm-ile-b2b-saas-fiyatlandirma-stratejileri-deger-bazli-modeller-kurmak",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/b2b-saas-satis-ekipleri-i-cin-veri-okuryazarligi-karar-alma-sureclerini-guclendirme",
+      "file": "blog/b2b-saas-satis-ekipleri-i-cin-veri-okuryazarligi-karar-alma-sureclerini-guclendirme.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/b2b-saas-satis-ekipleri-i-cin-veri-okuryazarligi-karar-alma-sureclerini-guclendirme",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/saas-ta-olceklenebilir-kultur-hizli-buyumede-degerleri-korumak-2026",
+      "file": "blog/saas-ta-olceklenebilir-kultur-hizli-buyumede-degerleri-korumak-2026.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/saas-ta-olceklenebilir-kultur-hizli-buyumede-degerleri-korumak-2026",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/b2b-saas-ta-plg-ve-partner-gucu-birlikte-buyume-stratejileri",
+      "file": "blog/b2b-saas-ta-plg-ve-partner-gucu-birlikte-buyume-stratejileri.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/b2b-saas-ta-plg-ve-partner-gucu-birlikte-buyume-stratejileri",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/b2b-saas-ta-crm-ile-musteri-onay-yonetimi-etik-kisisellesme-2026",
+      "file": "blog/b2b-saas-ta-crm-ile-musteri-onay-yonetimi-etik-kisisellesme-2026.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/b2b-saas-ta-crm-ile-musteri-onay-yonetimi-etik-kisisellesme-2026",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/b2b-saas-ta-deger-odakli-satis-musteri-sonuclarina-odaklanma",
+      "file": "blog/b2b-saas-ta-deger-odakli-satis-musteri-sonuclarina-odaklanma.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/b2b-saas-ta-deger-odakli-satis-musteri-sonuclarina-odaklanma",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/saas-urunlerinde-etik-yapay-zeka-guven-i-nsasi-ve-sorumlu-i-novasyon-2026",
+      "file": "blog/saas-urunlerinde-etik-yapay-zeka-guven-i-nsasi-ve-sorumlu-i-novasyon-2026.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/saas-urunlerinde-etik-yapay-zeka-guven-i-nsasi-ve-sorumlu-i-novasyon-2026",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/b2b-saas-ta-partner-ekosistem-olgunluk-modeli-stratejik-buyume-asamalari",
+      "file": "blog/b2b-saas-ta-partner-ekosistem-olgunluk-modeli-stratejik-buyume-asamalari.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/b2b-saas-ta-partner-ekosistem-olgunluk-modeli-stratejik-buyume-asamalari",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/crm-ile-musteri-sagligi-skorlari-b2b-saas-ta-churn-onleme-2026",
+      "file": "blog/crm-ile-musteri-sagligi-skorlari-b2b-saas-ta-churn-onleme-2026.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/crm-ile-musteri-sagligi-skorlari-b2b-saas-ta-churn-onleme-2026",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/b2b-saas-ta-gelistirici-deneyimi-devex-verimli-urun-gelistirmenin-anahtari",
+      "file": "blog/b2b-saas-ta-gelistirici-deneyimi-devex-verimli-urun-gelistirmenin-anahtari.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/b2b-saas-ta-gelistirici-deneyimi-devex-verimli-urun-gelistirmenin-anahtari",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/b2b-saas-satista-dark-funnel-i-aydinlatmak-gorunmez-alici-yolculugunu-yakalama",
+      "file": "blog/b2b-saas-satista-dark-funnel-i-aydinlatmak-gorunmez-alici-yolculugunu-yakalama.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/b2b-saas-satista-dark-funnel-i-aydinlatmak-gorunmez-alici-yolculugunu-yakalama",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/dinamik-saas-partnerlikleri-i-cin-hukuki-cerceveler-2026",
+      "file": "blog/dinamik-saas-partnerlikleri-i-cin-hukuki-cerceveler-2026.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/dinamik-saas-partnerlikleri-i-cin-hukuki-cerceveler-2026",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/b2b-saas-ta-crm-ile-mikro-segmentasyon-gizli-buyume-firsatlarini-kesfetmek",
+      "file": "blog/b2b-saas-ta-crm-ile-mikro-segmentasyon-gizli-buyume-firsatlarini-kesfetmek.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/b2b-saas-ta-crm-ile-mikro-segmentasyon-gizli-buyume-firsatlarini-kesfetmek",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/b2b-saas-satista-empatinin-gucu-yapay-zeka-caginda-i-nsan-baglantisi",
+      "file": "blog/b2b-saas-satista-empatinin-gucu-yapay-zeka-caginda-i-nsan-baglantisi.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/b2b-saas-satista-empatinin-gucu-yapay-zeka-caginda-i-nsan-baglantisi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/b2b-saas-ta-gomulu-finans-yeni-nesil-deger-ve-buyume-stratejileri",
+      "file": "blog/b2b-saas-ta-gomulu-finans-yeni-nesil-deger-ve-buyume-stratejileri.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/b2b-saas-ta-gomulu-finans-yeni-nesil-deger-ve-buyume-stratejileri",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/partnerops-saas-ta-kanal-buyumesini-otomatiklestiren-stratejiler",
+      "file": "blog/partnerops-saas-ta-kanal-buyumesini-otomatiklestiren-stratejiler.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/partnerops-saas-ta-kanal-buyumesini-otomatiklestiren-stratejiler",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/crm-in-b2b-saas-ta-urun-yol-haritasi-gelisimine-etkisi-veri-odakli-kararlar",
+      "file": "blog/crm-in-b2b-saas-ta-urun-yol-haritasi-gelisimine-etkisi-veri-odakli-kararlar.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/crm-in-b2b-saas-ta-urun-yol-haritasi-gelisimine-etkisi-veri-odakli-kararlar",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/b2b-saas-satista-buyer-enablement-otonom-alici-i-cin-stratejiler",
+      "file": "blog/b2b-saas-satista-buyer-enablement-otonom-alici-i-cin-stratejiler.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/b2b-saas-satista-buyer-enablement-otonom-alici-i-cin-stratejiler",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/saas-ta-aciklanabilir-yapay-zeka-guven-ve-benimsenmenin-anahtari",
+      "file": "blog/saas-ta-aciklanabilir-yapay-zeka-guven-ve-benimsenmenin-anahtari.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/saas-ta-aciklanabilir-yapay-zeka-guven-ve-benimsenmenin-anahtari",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/i-s-ortakligi-ile-urun-i-novasyonu-b2b-saas-ta-yeni-deger-yaratimi-2026",
+      "file": "blog/i-s-ortakligi-ile-urun-i-novasyonu-b2b-saas-ta-yeni-deger-yaratimi-2026.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/i-s-ortakligi-ile-urun-i-novasyonu-b2b-saas-ta-yeni-deger-yaratimi-2026",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/crm-ile-dijital-musteri-i-kizleri-b2b-saas-ta-proaktif-buyume",
+      "file": "blog/crm-ile-dijital-musteri-i-kizleri-b2b-saas-ta-proaktif-buyume.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/crm-ile-dijital-musteri-i-kizleri-b2b-saas-ta-proaktif-buyume",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/headless-saas-mimarisi-b2b-de-esneklik-ve-olceklenebilirlik-stratejileri",
+      "file": "blog/headless-saas-mimarisi-b2b-de-esneklik-ve-olceklenebilirlik-stratejileri.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/headless-saas-mimarisi-b2b-de-esneklik-ve-olceklenebilirlik-stratejileri",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/b2b-saas-satista-musteri-adaptasyonu-deger-yolculugunda-satisin-rolu",
+      "file": "blog/b2b-saas-satista-musteri-adaptasyonu-deger-yolculugunda-satisin-rolu.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/b2b-saas-satista-musteri-adaptasyonu-deger-yolculugunda-satisin-rolu",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/crm-in-b2b-saas-ta-abonelik-yonetimini-donusturmesi-2026-nin-stratejileri",
+      "file": "blog/crm-in-b2b-saas-ta-abonelik-yonetimini-donusturmesi-2026-nin-stratejileri.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/crm-in-b2b-saas-ta-abonelik-yonetimini-donusturmesi-2026-nin-stratejileri",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/saas-data-mesh-ve-data-fabric-b2b-i-cin-yeni-nesil-veri-yonetisimi-2026",
+      "file": "blog/saas-data-mesh-ve-data-fabric-b2b-i-cin-yeni-nesil-veri-yonetisimi-2026.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/saas-data-mesh-ve-data-fabric-b2b-i-cin-yeni-nesil-veri-yonetisimi-2026",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/b2b-saas-partnerleri-i-cin-ortak-calisma-platformlari",
+      "file": "blog/b2b-saas-partnerleri-i-cin-ortak-calisma-platformlari.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/b2b-saas-partnerleri-i-cin-ortak-calisma-platformlari",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/b2b-saas-satis-profesyonelleri-i-cin-kisisel-markalasma-2026-nin-etkili-stratejileri",
+      "file": "blog/b2b-saas-satis-profesyonelleri-i-cin-kisisel-markalasma-2026-nin-etkili-stratejileri.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/b2b-saas-satis-profesyonelleri-i-cin-kisisel-markalasma-2026-nin-etkili-stratejileri",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/b2b-saas-ta-urun-pazar-uyumu-surekli-dogrulama-ve-olceklenme-stratejileri",
+      "file": "blog/b2b-saas-ta-urun-pazar-uyumu-surekli-dogrulama-ve-olceklenme-stratejileri.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/b2b-saas-ta-urun-pazar-uyumu-surekli-dogrulama-ve-olceklenme-stratejileri",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/hibrit-satista-crm-uzaktan-ekipleri-guclendirme",
+      "file": "blog/hibrit-satista-crm-uzaktan-ekipleri-guclendirme.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/hibrit-satista-crm-uzaktan-ekipleri-guclendirme",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/b2b-saas-satis-gamification-ekip-performansi-ve-bagliligi-2026",
+      "file": "blog/b2b-saas-satis-gamification-ekip-performansi-ve-bagliligi-2026.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/b2b-saas-satis-gamification-ekip-performansi-ve-bagliligi-2026",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/saas-partnerlari-i-cin-teknolojiye-adaptasyon-gelecek-stratejileri",
+      "file": "blog/saas-partnerlari-i-cin-teknolojiye-adaptasyon-gelecek-stratejileri.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/saas-partnerlari-i-cin-teknolojiye-adaptasyon-gelecek-stratejileri",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/crm-ve-i-nsan-merkezli-ai-b2b-saas-ta-etik-karar-destegi-2026",
+      "file": "blog/crm-ve-i-nsan-merkezli-ai-b2b-saas-ta-etik-karar-destegi-2026.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/crm-ve-i-nsan-merkezli-ai-b2b-saas-ta-etik-karar-destegi-2026",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/b2b-saas-ta-satis-yetenegi-cekme-ve-tutma-2026-stratejileri",
+      "file": "blog/b2b-saas-ta-satis-yetenegi-cekme-ve-tutma-2026-stratejileri.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/b2b-saas-ta-satis-yetenegi-cekme-ve-tutma-2026-stratejileri",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/b2b-saas-ta-kanal-catismalarini-yonetmek-partner-basarisinin-sirri",
+      "file": "blog/b2b-saas-ta-kanal-catismalarini-yonetmek-partner-basarisinin-sirri.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/b2b-saas-ta-kanal-catismalarini-yonetmek-partner-basarisinin-sirri",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/crm-ile-b2b-saas-ta-deger-gerceklestirme-roi-yi-kanitlama",
+      "file": "blog/crm-ile-b2b-saas-ta-deger-gerceklestirme-roi-yi-kanitlama.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/crm-ile-b2b-saas-ta-deger-gerceklestirme-roi-yi-kanitlama",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/satis-ekiplerinin-gelecegi-ai-ve-dinamik-b2b-saas-rolleri",
+      "file": "blog/satis-ekiplerinin-gelecegi-ai-ve-dinamik-b2b-saas-rolleri.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/satis-ekiplerinin-gelecegi-ai-ve-dinamik-b2b-saas-rolleri",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/b2b-saas-ta-urun-gelistirmede-etik-yapay-zeka-testleri",
+      "file": "blog/b2b-saas-ta-urun-gelistirmede-etik-yapay-zeka-testleri.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/b2b-saas-ta-urun-gelistirmede-etik-yapay-zeka-testleri",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/partner-kaybini-onlemek-tahminsel-analitikle-saas-ortakliklari-2026",
+      "file": "blog/partner-kaybini-onlemek-tahminsel-analitikle-saas-ortakliklari-2026.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/partner-kaybini-onlemek-tahminsel-analitikle-saas-ortakliklari-2026",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/b2b-saas-ta-crm-ile-pazar-i-stihbarati-rekabet-avantaji-yaratmanin-yollari",
+      "file": "blog/b2b-saas-ta-crm-ile-pazar-i-stihbarati-rekabet-avantaji-yaratmanin-yollari.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/b2b-saas-ta-crm-ile-pazar-i-stihbarati-rekabet-avantaji-yaratmanin-yollari",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/saas-urun-gelistirme-dagitik-ekipler-i-cin-2026-pratikleri",
+      "file": "blog/saas-urun-gelistirme-dagitik-ekipler-i-cin-2026-pratikleri.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/saas-urun-gelistirme-dagitik-ekipler-i-cin-2026-pratikleri",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/b2b-saas-satista-niyet-verisi-proaktif-musteri-yakalama",
+      "file": "blog/b2b-saas-satista-niyet-verisi-proaktif-musteri-yakalama.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/b2b-saas-satista-niyet-verisi-proaktif-musteri-yakalama",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/partner-yasam-boyu-degeri-pltv-optimizasyonu-saas-ta-kalici-ortakliklar",
+      "file": "blog/partner-yasam-boyu-degeri-pltv-optimizasyonu-saas-ta-kalici-ortakliklar.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/partner-yasam-boyu-degeri-pltv-optimizasyonu-saas-ta-kalici-ortakliklar",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/b2b-saas-musterilerinin-coklu-saas-ekosistemini-crm-ile-yonetmek-2026",
+      "file": "blog/b2b-saas-musterilerinin-coklu-saas-ekosistemini-crm-ile-yonetmek-2026.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/b2b-saas-musterilerinin-coklu-saas-ekosistemini-crm-ile-yonetmek-2026",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/b2b-saas-satis-ekipleri-i-cin-akilli-satis-egitimi-yapay-zeka-destekli-kisisellestirilmis-gelisim-2026",
+      "file": "blog/b2b-saas-satis-ekipleri-i-cin-akilli-satis-egitimi-yapay-zeka-destekli-kisisellestirilmis-gelisim-2026.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/b2b-saas-satis-ekipleri-i-cin-akilli-satis-egitimi-yapay-zeka-destekli-kisisellestirilmis-gelisim-2026",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/b2b-saas-ta-vendor-lock-in-acik-platform-stratejileri-2026",
+      "file": "blog/b2b-saas-ta-vendor-lock-in-acik-platform-stratejileri-2026.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/b2b-saas-ta-vendor-lock-in-acik-platform-stratejileri-2026",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/saas-tan-saap-ye-gecis-i-c-yetenekleri-urune-donusturme-stratejileri-2026",
+      "file": "blog/saas-tan-saap-ye-gecis-i-c-yetenekleri-urune-donusturme-stratejileri-2026.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/saas-tan-saap-ye-gecis-i-c-yetenekleri-urune-donusturme-stratejileri-2026",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/partner-ekosistemlerinde-etik-yapay-zeka-guven-ve-seffaflik",
+      "file": "blog/partner-ekosistemlerinde-etik-yapay-zeka-guven-ve-seffaflik.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/partner-ekosistemlerinde-etik-yapay-zeka-guven-ve-seffaflik",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/composable-crm-in-otesi-b2b-saas-ta-hiperotomasyonun-merkezi",
+      "file": "blog/composable-crm-in-otesi-b2b-saas-ta-hiperotomasyonun-merkezi.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/composable-crm-in-otesi-b2b-saas-ta-hiperotomasyonun-merkezi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/b2b-saas-satista-zihinsel-saglik-tukenmislige-karsi-esneklik",
+      "file": "blog/b2b-saas-satista-zihinsel-saglik-tukenmislige-karsi-esneklik.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/b2b-saas-satista-zihinsel-saglik-tukenmislige-karsi-esneklik",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/b2b-saas-ta-partnerlerin-musteri-degeri-ve-tutumundaki-rolu-2026",
+      "file": "blog/b2b-saas-ta-partnerlerin-musteri-degeri-ve-tutumundaki-rolu-2026.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/b2b-saas-ta-partnerlerin-musteri-degeri-ve-tutumundaki-rolu-2026",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/gomulu-saas-in-yukselisi-her-uygulamaya-akilli-guc-katmak",
+      "file": "blog/gomulu-saas-in-yukselisi-her-uygulamaya-akilli-guc-katmak.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/gomulu-saas-in-yukselisi-her-uygulamaya-akilli-guc-katmak",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/crm-ve-veri-etigi-seffaf-musteri-i-liskileri",
+      "file": "blog/crm-ve-veri-etigi-seffaf-musteri-i-liskileri.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/crm-ve-veri-etigi-seffaf-musteri-i-liskileri",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/b2b-saas-satista-i-tibar-yonetimi-guven-ve-guvenilirlik",
+      "file": "blog/b2b-saas-satista-i-tibar-yonetimi-guven-ve-guvenilirlik.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/b2b-saas-satista-i-tibar-yonetimi-guven-ve-guvenilirlik",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/crm-ile-i-nsan-ai-i-s-birligi-b2b-saas-ta-ekip-verimliligini-zirveye-tasima",
+      "file": "blog/crm-ile-i-nsan-ai-i-s-birligi-b2b-saas-ta-ekip-verimliligini-zirveye-tasima.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/crm-ile-i-nsan-ai-i-s-birligi-b2b-saas-ta-ekip-verimliligini-zirveye-tasima",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/b2b-saas-ta-devrel-teknoloji-partnerliklerini-guclendirme",
+      "file": "blog/b2b-saas-ta-devrel-teknoloji-partnerliklerini-guclendirme.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/b2b-saas-ta-devrel-teknoloji-partnerliklerini-guclendirme",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/saas-tedarik-zinciri-riski-bagimliliklari-yonetme-ve-2026-stratejileri",
+      "file": "blog/saas-tedarik-zinciri-riski-bagimliliklari-yonetme-ve-2026-stratejileri.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/saas-tedarik-zinciri-riski-bagimliliklari-yonetme-ve-2026-stratejileri",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/saas-partner-programlarinda-davranissal-ekonomi-motivasyon-ve-baglilik",
+      "file": "blog/saas-partner-programlarinda-davranissal-ekonomi-motivasyon-ve-baglilik.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/saas-partner-programlarinda-davranissal-ekonomi-motivasyon-ve-baglilik",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/b2b-saas-satista-dijital-deal-odalari-alici-odakli-donusum",
+      "file": "blog/b2b-saas-satista-dijital-deal-odalari-alici-odakli-donusum.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/b2b-saas-satista-dijital-deal-odalari-alici-odakli-donusum",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/b2b-saas-ta-kullanici-psikolojisi-aliskanlik-yaratma-ve-urun-bagliligi",
+      "file": "blog/b2b-saas-ta-kullanici-psikolojisi-aliskanlik-yaratma-ve-urun-bagliligi.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/b2b-saas-ta-kullanici-psikolojisi-aliskanlik-yaratma-ve-urun-bagliligi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/crm-ile-i-c-surec-orkestrasyonu-b2b-saas-operasyonel-mukemmellik",
+      "file": "blog/crm-ile-i-c-surec-orkestrasyonu-b2b-saas-operasyonel-mukemmellik.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/crm-ile-i-c-surec-orkestrasyonu-b2b-saas-operasyonel-mukemmellik",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/b2b-saas-satista-churn-onleyici-nitelikli-musteri-bulmak",
+      "file": "blog/b2b-saas-satista-churn-onleyici-nitelikli-musteri-bulmak.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/b2b-saas-satista-churn-onleyici-nitelikli-musteri-bulmak",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/b2b-saas-ta-partnerlerin-musteri-basarisindaki-rolu-adaptasyon-ve-buyume",
+      "file": "blog/b2b-saas-ta-partnerlerin-musteri-basarisindaki-rolu-adaptasyon-ve-buyume.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/b2b-saas-ta-partnerlerin-musteri-basarisindaki-rolu-adaptasyon-ve-buyume",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/saas-urunlerinde-adaptif-mimari-surekli-ogrenen-platformlar",
+      "file": "blog/saas-urunlerinde-adaptif-mimari-surekli-ogrenen-platformlar.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/saas-urunlerinde-adaptif-mimari-surekli-ogrenen-platformlar",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/crm-ile-b2b-saas-ta-adaptif-musteri-deneyimi-dinamik-kisisellestirme",
+      "file": "blog/crm-ile-b2b-saas-ta-adaptif-musteri-deneyimi-dinamik-kisisellestirme.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/crm-ile-b2b-saas-ta-adaptif-musteri-deneyimi-dinamik-kisisellestirme",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/ai-destekli-b2b-saas-satis-tahminlemesi-2026-ve-otesi",
+      "file": "blog/ai-destekli-b2b-saas-satis-tahminlemesi-2026-ve-otesi.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/ai-destekli-b2b-saas-satis-tahminlemesi-2026-ve-otesi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/saas-partnerlari-entegratorluge-evrim-ve-kendi-ip-nizi-olusturma",
+      "file": "blog/saas-partnerlari-entegratorluge-evrim-ve-kendi-ip-nizi-olusturma.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/saas-partnerlari-entegratorluge-evrim-ve-kendi-ip-nizi-olusturma",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/saas-urununden-platforma-gecis-buyume-ve-ekosistem-gucu-2026",
+      "file": "blog/saas-urununden-platforma-gecis-buyume-ve-ekosistem-gucu-2026.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/saas-urununden-platforma-gecis-buyume-ve-ekosistem-gucu-2026",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/saas-portfoy-satisi-coklu-urunlerle-buyume-stratejileri",
+      "file": "blog/saas-portfoy-satisi-coklu-urunlerle-buyume-stratejileri.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/saas-portfoy-satisi-coklu-urunlerle-buyume-stratejileri",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/crm-ile-on-saha-ekiplerini-donusturme-proaktif-musteri-deneyimi",
+      "file": "blog/crm-ile-on-saha-ekiplerini-donusturme-proaktif-musteri-deneyimi.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/crm-ile-on-saha-ekiplerini-donusturme-proaktif-musteri-deneyimi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/b2b-saas-ta-partner-basarisi-yonetimi-psm-ortakliklari-derinlestirme",
+      "file": "blog/b2b-saas-ta-partner-basarisi-yonetimi-psm-ortakliklari-derinlestirme.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/b2b-saas-ta-partner-basarisi-yonetimi-psm-ortakliklari-derinlestirme",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/gelecegin-b2b-saas-i-merkeziyetsiz-teknolojilerle-guven-ve-i-novasyon",
+      "file": "blog/gelecegin-b2b-saas-i-merkeziyetsiz-teknolojilerle-guven-ve-i-novasyon.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/gelecegin-b2b-saas-i-merkeziyetsiz-teknolojilerle-guven-ve-i-novasyon",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/b2b-saas-ta-nis-pazarlara-ozel-satis-stratejileri-derinlesmenin-sirri",
+      "file": "blog/b2b-saas-ta-nis-pazarlara-ozel-satis-stratejileri-derinlesmenin-sirri.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/b2b-saas-ta-nis-pazarlara-ozel-satis-stratejileri-derinlesmenin-sirri",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/crm-ile-urun-kullanim-verilerini-buyumeye-donusturmek",
+      "file": "blog/crm-ile-urun-kullanim-verilerini-buyumeye-donusturmek.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/crm-ile-urun-kullanim-verilerini-buyumeye-donusturmek",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/partner-ekosistemlerinde-yetenek-stratejisi-saas-uzmanlari-yetistirmek",
+      "file": "blog/partner-ekosistemlerinde-yetenek-stratejisi-saas-uzmanlari-yetistirmek.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/partner-ekosistemlerinde-yetenek-stratejisi-saas-uzmanlari-yetistirmek",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/saas-teknik-borc-yonetimi-olceklenebilirlik-ve-i-novasyon-rehberi",
+      "file": "blog/saas-teknik-borc-yonetimi-olceklenebilirlik-ve-i-novasyon-rehberi.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/saas-teknik-borc-yonetimi-olceklenebilirlik-ve-i-novasyon-rehberi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/b2b-saas-satista-otonom-ai-ajanlari-gelecegin-satis-gucu",
+      "file": "blog/b2b-saas-satista-otonom-ai-ajanlari-gelecegin-satis-gucu.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/b2b-saas-satista-otonom-ai-ajanlari-gelecegin-satis-gucu",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/crm-ile-proaktif-karar-destegi-b2b-satista-preskriptif-analitik",
+      "file": "blog/crm-ile-proaktif-karar-destegi-b2b-satista-preskriptif-analitik.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/crm-ile-proaktif-karar-destegi-b2b-satista-preskriptif-analitik",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/saas-ile-stratejik-yetenek-gelisimi-b2b-de-yeni-roller",
+      "file": "blog/saas-ile-stratejik-yetenek-gelisimi-b2b-de-yeni-roller.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/saas-ile-stratejik-yetenek-gelisimi-b2b-de-yeni-roller",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/b2b-saas-ta-partner-ekosistem-direnci-degisen-pazar-kosullarina-uyum-stratejileri",
+      "file": "blog/b2b-saas-ta-partner-ekosistem-direnci-degisen-pazar-kosullarina-uyum-stratejileri.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/b2b-saas-ta-partner-ekosistem-direnci-degisen-pazar-kosullarina-uyum-stratejileri",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/b2b-saas-ta-davranissal-crm-musteri-kararlarini-etkileme-sanati",
+      "file": "blog/b2b-saas-ta-davranissal-crm-musteri-kararlarini-etkileme-sanati.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/b2b-saas-ta-davranissal-crm-musteri-kararlarini-etkileme-sanati",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/pql-odakli-satis-b2b-saas-ta-urun-kullanimini-gelire-cevirme-sanati-2026",
+      "file": "blog/pql-odakli-satis-b2b-saas-ta-urun-kullanimini-gelire-cevirme-sanati-2026.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/pql-odakli-satis-b2b-saas-ta-urun-kullanimini-gelire-cevirme-sanati-2026",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/partnerlere-ozel-veri-analitigi-b2b-saas-ta-buyume-rehberi",
+      "file": "blog/partnerlere-ozel-veri-analitigi-b2b-saas-ta-buyume-rehberi.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/partnerlere-ozel-veri-analitigi-b2b-saas-ta-buyume-rehberi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/saas-urunlerinde-surdurulebilirlik-yesil-yazilim-ve-etik-tasarim",
+      "file": "blog/saas-urunlerinde-surdurulebilirlik-yesil-yazilim-ve-etik-tasarim.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/saas-urunlerinde-surdurulebilirlik-yesil-yazilim-ve-etik-tasarim",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/crm-ile-b2b-saas-ta-musteri-deger-ortakligi-kazanim-stratejileri",
+      "file": "blog/crm-ile-b2b-saas-ta-musteri-deger-ortakligi-kazanim-stratejileri.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/crm-ile-b2b-saas-ta-musteri-deger-ortakligi-kazanim-stratejileri",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/b2b-saas-satista-guven-i-nsasi-etik-ve-seffaf-stratejiler",
+      "file": "blog/b2b-saas-satista-guven-i-nsasi-etik-ve-seffaf-stratejiler.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/b2b-saas-satista-guven-i-nsasi-etik-ve-seffaf-stratejiler",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/partner-ekosistem-haritalamasi-b2b-saas-ta-stratejik-bosluk-analizi",
+      "file": "blog/partner-ekosistem-haritalamasi-b2b-saas-ta-stratejik-bosluk-analizi.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/partner-ekosistem-haritalamasi-b2b-saas-ta-stratejik-bosluk-analizi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/crm-ile-surekli-ogrenen-b2b-saas-organizasyonu-2026-stratejileri",
+      "file": "blog/crm-ile-surekli-ogrenen-b2b-saas-organizasyonu-2026-stratejileri.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/crm-ile-surekli-ogrenen-b2b-saas-organizasyonu-2026-stratejileri",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/blog/yapay-zeka-yerlisi-saas-urun-mimarisi-akilli-tasarim-stratejileri",
+      "file": "blog/yapay-zeka-yerlisi-saas-urun-mimarisi-akilli-tasarim-stratejileri.html",
+      "status": 200,
+      "finalUrl": "https://saascorner.co/blog/yapay-zeka-yerlisi-saas-urun-mimarisi-akilli-tasarim-stratejileri",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://saascorner.co/__bu-sayfa-yok-404",
+      "file": "404.html",
+      "status": 404,
+      "finalUrl": "https://saascorner.co/__bu-sayfa-yok-404",
+      "expectStatus": 404,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [
+          "count 0/1"
+        ],
+        "errors": []
+      }
+    }
+  ],
+  "keptScripts": [
+    "\r\nwindow.dataLayer = window.dataLayer || [];\r\nfunction gtag(){dataLayer.push(arg",
+    "\r\n\t  window.dataLayer = window.dataLayer || [];\r\n\t  function gtag(){window.dataL",
+    "(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':\r\nnew Date().getTime()",
+    "https://www.googletagmanager.com/gtag/js?id=G-3KXNMDMNEX",
+    "",
+    "typeof document<\"u\"&&(window.process={...window.process,env:{...window.process?.",
+    "\r\n(function () {\r\n  var box = document.getElementById('scCookie');\r\n  if (!box) ",
+    "\n  gtag('event', 'conversion', {\n      'send_to': 'AW-17132829941/7TecCKOW1NaAEP"
+  ]
+}

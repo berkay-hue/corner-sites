@@ -1,0 +1,796 @@
+{
+  "summary": {
+    "pages": 19,
+    "nonOk": [
+      [
+        "https://salescorner.co/404",
+        404
+      ]
+    ],
+    "missingLocal": [],
+    "diffs": [
+      [
+        "https://salescorner.co/iletisim",
+        [
+          "title",
+          "description",
+          "ogTitle",
+          "h1",
+          "h2"
+        ]
+      ],
+      [
+        "https://salescorner.co/linkedin-callback",
+        [
+          "robots"
+        ]
+      ],
+      [
+        "https://salescorner.co/web-keyword",
+        [
+          "robots"
+        ]
+      ],
+      [
+        "https://salescorner.co/404",
+        [
+          "canonical",
+          "robots"
+        ]
+      ],
+      [
+        "https://salescorner.co/keyword-html",
+        [
+          "robots"
+        ]
+      ],
+      [
+        "https://salescorner.co/login",
+        [
+          "robots"
+        ]
+      ],
+      [
+        "https://salescorner.co/linkedin-post",
+        [
+          "robots"
+        ]
+      ],
+      [
+        "https://salescorner.co/",
+        [
+          "title",
+          "description",
+          "ogTitle",
+          "ld"
+        ]
+      ],
+      [
+        "https://salescorner.co/rakip-analizi",
+        [
+          "robots"
+        ]
+      ],
+      [
+        "https://salescorner.co/haftalik-rapor",
+        [
+          "robots"
+        ]
+      ],
+      [
+        "https://salescorner.co/sekans-yazari",
+        [
+          "robots"
+        ]
+      ],
+      [
+        "https://salescorner.co/seo-robotu",
+        [
+          "robots"
+        ]
+      ],
+      [
+        "https://salescorner.co/cv-analiz",
+        [
+          "robots"
+        ]
+      ],
+      [
+        "https://salescorner.co/dashboard",
+        [
+          "robots"
+        ]
+      ],
+      [
+        "https://salescorner.co/gorsel-ekleme",
+        [
+          "robots"
+        ]
+      ],
+      [
+        "https://salescorner.co/kolajmaker",
+        [
+          "robots"
+        ]
+      ],
+      [
+        "https://salescorner.co/briefing",
+        [
+          "robots"
+        ]
+      ],
+      [
+        "https://salescorner.co/page-5",
+        [
+          "robots"
+        ]
+      ],
+      [
+        "https://salescorner.co/page-6",
+        [
+          "robots"
+        ]
+      ]
+    ],
+    "noH1": 8,
+    "multiH1": 0,
+    "titleOver60": 19,
+    "descMissing": 0,
+    "descOver160": 19,
+    "dupTitles": 1,
+    "dupDescriptions": [
+      18
+    ],
+    "canonicalMismatch": [],
+    "noLd": 19,
+    "noindex": []
+  },
+  "rows": [
+    {
+      "url": "https://salescorner.co/iletisim",
+      "status": 200,
+      "live": {
+        "title": "İletişim Sales Corner | Dış Kaynaklı Satış & Pazarlama Partneriniz",
+        "description": "Sales Corner ekibiyle iletişime geçin. B2B satış, outsourced lead generation, CRM entegrasyonu ve pazarlama çözümleri hakkında bilgi alın. İşletmenizin büyümesi için hemen bize ulaşın.",
+        "canonical": "https://salescorner.co/iletisim",
+        "robots": "max-image-preview:large",
+        "ogTitle": "İletişim Sales Corner | Dış Kaynaklı Satış & Pazarlama Partneriniz",
+        "ogImage": "QsZeR1PwkpsroRGMVChksNhoE.png",
+        "h1": [],
+        "h2": 1,
+        "ld": [],
+        "words": 56
+      },
+      "local": {
+        "title": "İletişim | Sales Corner",
+        "description": "Sales Corner ekibiyle iletişime geçin: B2B satış, outsourced lead generation, CRM entegrasyonu ve pazarlama çözümleri hakkında bilgi alın.",
+        "canonical": "https://salescorner.co/iletisim",
+        "robots": "max-image-preview:large",
+        "ogTitle": "İletişim | Sales Corner",
+        "ogImage": "QsZeR1PwkpsroRGMVChksNhoE.png",
+        "h1": [
+          "Bizimle iletişime geçin!"
+        ],
+        "h2": 0,
+        "ld": [],
+        "words": 56
+      },
+      "diff": [
+        "title",
+        "description",
+        "ogTitle",
+        "h1",
+        "h2"
+      ]
+    },
+    {
+      "url": "https://salescorner.co/linkedin-callback",
+      "status": 200,
+      "live": {
+        "title": "Sales Corner | Veri Odaklı Satış ve Lead Generation Uzmanları",
+        "description": "Sales Corner, markaların satış süreçlerini veriyle güçlendiren, otomasyon ve strateji temelli bir büyüme yaklaşımı sunar. Hedef pazar araştırmasından toplantı planlamasına, lead generation’dan CRM entegrasyonuna kadar tüm süreci uçtan uca yönetir.",
+        "canonical": "https://salescorner.co/linkedin-callback",
+        "robots": "max-image-preview:large",
+        "ogTitle": "Sales Corner | Veri Odaklı Satış ve Lead Generation Uzmanları",
+        "ogImage": "QsZeR1PwkpsroRGMVChksNhoE.png",
+        "h1": [],
+        "h2": 1,
+        "ld": [],
+        "words": 2
+      },
+      "local": {
+        "title": "Sales Corner | Veri Odaklı Satış ve Lead Generation Uzmanları",
+        "description": "Sales Corner, markaların satış süreçlerini veriyle güçlendiren, otomasyon ve strateji temelli bir büyüme yaklaşımı sunar. Hedef pazar araştırmasından toplantı planlamasına, lead generation’dan CRM entegrasyonuna kadar tüm süreci uçtan uca yönetir.",
+        "canonical": "https://salescorner.co/linkedin-callback",
+        "robots": "noindex, nofollow",
+        "ogTitle": "Sales Corner | Veri Odaklı Satış ve Lead Generation Uzmanları",
+        "ogImage": "QsZeR1PwkpsroRGMVChksNhoE.png",
+        "h1": [],
+        "h2": 1,
+        "ld": [],
+        "words": 2
+      },
+      "diff": [
+        "robots"
+      ]
+    },
+    {
+      "url": "https://salescorner.co/web-keyword",
+      "status": 200,
+      "live": {
+        "title": "Sales Corner | Veri Odaklı Satış ve Lead Generation Uzmanları",
+        "description": "Sales Corner, markaların satış süreçlerini veriyle güçlendiren, otomasyon ve strateji temelli bir büyüme yaklaşımı sunar. Hedef pazar araştırmasından toplantı planlamasına, lead generation’dan CRM entegrasyonuna kadar tüm süreci uçtan uca yönetir.",
+        "canonical": "https://salescorner.co/web-keyword",
+        "robots": "max-image-preview:large",
+        "ogTitle": "Sales Corner | Veri Odaklı Satış ve Lead Generation Uzmanları",
+        "ogImage": "QsZeR1PwkpsroRGMVChksNhoE.png",
+        "h1": [
+          "🎯Web Keyword Scanner Pro"
+        ],
+        "h2": 0,
+        "ld": [],
+        "words": 63
+      },
+      "local": {
+        "title": "Sales Corner | Veri Odaklı Satış ve Lead Generation Uzmanları",
+        "description": "Sales Corner, markaların satış süreçlerini veriyle güçlendiren, otomasyon ve strateji temelli bir büyüme yaklaşımı sunar. Hedef pazar araştırmasından toplantı planlamasına, lead generation’dan CRM entegrasyonuna kadar tüm süreci uçtan uca yönetir.",
+        "canonical": "https://salescorner.co/web-keyword",
+        "robots": "noindex, nofollow",
+        "ogTitle": "Sales Corner | Veri Odaklı Satış ve Lead Generation Uzmanları",
+        "ogImage": "QsZeR1PwkpsroRGMVChksNhoE.png",
+        "h1": [
+          "🎯Web Keyword Scanner Pro"
+        ],
+        "h2": 0,
+        "ld": [],
+        "words": 63
+      },
+      "diff": [
+        "robots"
+      ]
+    },
+    {
+      "url": "https://salescorner.co/404",
+      "status": 404,
+      "live": {
+        "title": "Sales Corner | Veri Odaklı Satış ve Lead Generation Uzmanları",
+        "description": "Sales Corner, markaların satış süreçlerini veriyle güçlendiren, otomasyon ve strateji temelli bir büyüme yaklaşımı sunar. Hedef pazar araştırmasından toplantı planlamasına, lead generation’dan CRM entegrasyonuna kadar tüm süreci uçtan uca yönetir.",
+        "canonical": "https://salescorner.co/404",
+        "robots": "max-image-preview:large",
+        "ogTitle": "Sales Corner | Veri Odaklı Satış ve Lead Generation Uzmanları",
+        "ogImage": "QsZeR1PwkpsroRGMVChksNhoE.png",
+        "h1": [
+          "404"
+        ],
+        "h2": 0,
+        "ld": [],
+        "words": 3
+      },
+      "local": {
+        "title": "Sales Corner | Veri Odaklı Satış ve Lead Generation Uzmanları",
+        "description": "Sales Corner, markaların satış süreçlerini veriyle güçlendiren, otomasyon ve strateji temelli bir büyüme yaklaşımı sunar. Hedef pazar araştırmasından toplantı planlamasına, lead generation’dan CRM entegrasyonuna kadar tüm süreci uçtan uca yönetir.",
+        "canonical": "",
+        "robots": "noindex",
+        "ogTitle": "Sales Corner | Veri Odaklı Satış ve Lead Generation Uzmanları",
+        "ogImage": "QsZeR1PwkpsroRGMVChksNhoE.png",
+        "h1": [
+          "404"
+        ],
+        "h2": 0,
+        "ld": [],
+        "words": 3
+      },
+      "diff": [
+        "canonical",
+        "robots"
+      ]
+    },
+    {
+      "url": "https://salescorner.co/keyword-html",
+      "status": 200,
+      "live": {
+        "title": "Sales Corner | Veri Odaklı Satış ve Lead Generation Uzmanları",
+        "description": "Sales Corner, markaların satış süreçlerini veriyle güçlendiren, otomasyon ve strateji temelli bir büyüme yaklaşımı sunar. Hedef pazar araştırmasından toplantı planlamasına, lead generation’dan CRM entegrasyonuna kadar tüm süreci uçtan uca yönetir.",
+        "canonical": "https://salescorner.co/keyword-html",
+        "robots": "max-image-preview:large",
+        "ogTitle": "Sales Corner | Veri Odaklı Satış ve Lead Generation Uzmanları",
+        "ogImage": "QsZeR1PwkpsroRGMVChksNhoE.png",
+        "h1": [
+          "🔍 Smart Keyword Checker"
+        ],
+        "h2": 0,
+        "ld": [],
+        "words": 67
+      },
+      "local": {
+        "title": "Sales Corner | Veri Odaklı Satış ve Lead Generation Uzmanları",
+        "description": "Sales Corner, markaların satış süreçlerini veriyle güçlendiren, otomasyon ve strateji temelli bir büyüme yaklaşımı sunar. Hedef pazar araştırmasından toplantı planlamasına, lead generation’dan CRM entegrasyonuna kadar tüm süreci uçtan uca yönetir.",
+        "canonical": "https://salescorner.co/keyword-html",
+        "robots": "noindex, nofollow",
+        "ogTitle": "Sales Corner | Veri Odaklı Satış ve Lead Generation Uzmanları",
+        "ogImage": "QsZeR1PwkpsroRGMVChksNhoE.png",
+        "h1": [
+          "🔍 Smart Keyword Checker"
+        ],
+        "h2": 0,
+        "ld": [],
+        "words": 67
+      },
+      "diff": [
+        "robots"
+      ]
+    },
+    {
+      "url": "https://salescorner.co/login",
+      "status": 200,
+      "live": {
+        "title": "Sales Corner | Veri Odaklı Satış ve Lead Generation Uzmanları",
+        "description": "Sales Corner, markaların satış süreçlerini veriyle güçlendiren, otomasyon ve strateji temelli bir büyüme yaklaşımı sunar. Hedef pazar araştırmasından toplantı planlamasına, lead generation’dan CRM entegrasyonuna kadar tüm süreci uçtan uca yönetir.",
+        "canonical": "https://salescorner.co/login",
+        "robots": "max-image-preview:large",
+        "ogTitle": "Sales Corner | Veri Odaklı Satış ve Lead Generation Uzmanları",
+        "ogImage": "QsZeR1PwkpsroRGMVChksNhoE.png",
+        "h1": [
+          "Hoş Geldiniz"
+        ],
+        "h2": 0,
+        "ld": [],
+        "words": 12
+      },
+      "local": {
+        "title": "Sales Corner | Veri Odaklı Satış ve Lead Generation Uzmanları",
+        "description": "Sales Corner, markaların satış süreçlerini veriyle güçlendiren, otomasyon ve strateji temelli bir büyüme yaklaşımı sunar. Hedef pazar araştırmasından toplantı planlamasına, lead generation’dan CRM entegrasyonuna kadar tüm süreci uçtan uca yönetir.",
+        "canonical": "https://salescorner.co/login",
+        "robots": "noindex, nofollow",
+        "ogTitle": "Sales Corner | Veri Odaklı Satış ve Lead Generation Uzmanları",
+        "ogImage": "QsZeR1PwkpsroRGMVChksNhoE.png",
+        "h1": [
+          "Hoş Geldiniz"
+        ],
+        "h2": 0,
+        "ld": [],
+        "words": 12
+      },
+      "diff": [
+        "robots"
+      ]
+    },
+    {
+      "url": "https://salescorner.co/linkedin-post",
+      "status": 200,
+      "live": {
+        "title": "Sales Corner | Veri Odaklı Satış ve Lead Generation Uzmanları",
+        "description": "Sales Corner, markaların satış süreçlerini veriyle güçlendiren, otomasyon ve strateji temelli bir büyüme yaklaşımı sunar. Hedef pazar araştırmasından toplantı planlamasına, lead generation’dan CRM entegrasyonuna kadar tüm süreci uçtan uca yönetir.",
+        "canonical": "https://salescorner.co/linkedin-post",
+        "robots": "max-image-preview:large",
+        "ogTitle": "Sales Corner | Veri Odaklı Satış ve Lead Generation Uzmanları",
+        "ogImage": "QsZeR1PwkpsroRGMVChksNhoE.png",
+        "h1": [
+          "🎨 LinkedIn Görsel Oluşturucu Pro"
+        ],
+        "h2": 0,
+        "ld": [],
+        "words": 107
+      },
+      "local": {
+        "title": "Sales Corner | Veri Odaklı Satış ve Lead Generation Uzmanları",
+        "description": "Sales Corner, markaların satış süreçlerini veriyle güçlendiren, otomasyon ve strateji temelli bir büyüme yaklaşımı sunar. Hedef pazar araştırmasından toplantı planlamasına, lead generation’dan CRM entegrasyonuna kadar tüm süreci uçtan uca yönetir.",
+        "canonical": "https://salescorner.co/linkedin-post",
+        "robots": "noindex, nofollow",
+        "ogTitle": "Sales Corner | Veri Odaklı Satış ve Lead Generation Uzmanları",
+        "ogImage": "QsZeR1PwkpsroRGMVChksNhoE.png",
+        "h1": [
+          "🎨 LinkedIn Görsel Oluşturucu Pro"
+        ],
+        "h2": 0,
+        "ld": [],
+        "words": 107
+      },
+      "diff": [
+        "robots"
+      ]
+    },
+    {
+      "url": "https://salescorner.co/",
+      "status": 200,
+      "live": {
+        "title": "Sales Corner | Veri Odaklı Satış ve Lead Generation Uzmanları",
+        "description": "Sales Corner, markaların satış süreçlerini veriyle güçlendiren, otomasyon ve strateji temelli bir büyüme yaklaşımı sunar. Hedef pazar araştırmasından toplantı planlamasına, lead generation’dan CRM entegrasyonuna kadar tüm süreci uçtan uca yönetir.",
+        "canonical": "https://salescorner.co/",
+        "robots": "max-image-preview:large",
+        "ogTitle": "Sales Corner | Veri Odaklı Satış ve Lead Generation Uzmanları",
+        "ogImage": "QsZeR1PwkpsroRGMVChksNhoE.png",
+        "h1": [
+          "Satışı otomatikleştir,ekibini büyüt."
+        ],
+        "h2": 5,
+        "ld": [],
+        "words": 615
+      },
+      "local": {
+        "title": "Sales Corner | Veri Odaklı B2B Satış ve Lead Generation",
+        "description": "Sales Corner; hedef pazar araştırması, lead generation, toplantı planlama ve CRM entegrasyonuyla B2B satış sürecinizi veri ve otomasyonla uçtan uca yönetir.",
+        "canonical": "https://salescorner.co/",
+        "robots": "max-image-preview:large",
+        "ogTitle": "Sales Corner | Veri Odaklı B2B Satış ve Lead Generation",
+        "ogImage": "QsZeR1PwkpsroRGMVChksNhoE.png",
+        "h1": [
+          "Satışı otomatikleştir,ekibini büyüt."
+        ],
+        "h2": 5,
+        "ld": [
+          "Organization",
+          "WebSite"
+        ],
+        "words": 615
+      },
+      "diff": [
+        "title",
+        "description",
+        "ogTitle",
+        "ld"
+      ]
+    },
+    {
+      "url": "https://salescorner.co/rakip-analizi",
+      "status": 200,
+      "live": {
+        "title": "Sales Corner | Veri Odaklı Satış ve Lead Generation Uzmanları",
+        "description": "Sales Corner, markaların satış süreçlerini veriyle güçlendiren, otomasyon ve strateji temelli bir büyüme yaklaşımı sunar. Hedef pazar araştırmasından toplantı planlamasına, lead generation’dan CRM entegrasyonuna kadar tüm süreci uçtan uca yönetir.",
+        "canonical": "https://salescorner.co/rakip-analizi",
+        "robots": "max-image-preview:large",
+        "ogTitle": "Sales Corner | Veri Odaklı Satış ve Lead Generation Uzmanları",
+        "ogImage": "QsZeR1PwkpsroRGMVChksNhoE.png",
+        "h1": [
+          "Akıllı Rakip Analizi"
+        ],
+        "h2": 0,
+        "ld": [],
+        "words": 35
+      },
+      "local": {
+        "title": "Sales Corner | Veri Odaklı Satış ve Lead Generation Uzmanları",
+        "description": "Sales Corner, markaların satış süreçlerini veriyle güçlendiren, otomasyon ve strateji temelli bir büyüme yaklaşımı sunar. Hedef pazar araştırmasından toplantı planlamasına, lead generation’dan CRM entegrasyonuna kadar tüm süreci uçtan uca yönetir.",
+        "canonical": "https://salescorner.co/rakip-analizi",
+        "robots": "noindex, nofollow",
+        "ogTitle": "Sales Corner | Veri Odaklı Satış ve Lead Generation Uzmanları",
+        "ogImage": "QsZeR1PwkpsroRGMVChksNhoE.png",
+        "h1": [
+          "Akıllı Rakip Analizi"
+        ],
+        "h2": 0,
+        "ld": [],
+        "words": 35
+      },
+      "diff": [
+        "robots"
+      ]
+    },
+    {
+      "url": "https://salescorner.co/haftalik-rapor",
+      "status": 200,
+      "live": {
+        "title": "Sales Corner | Veri Odaklı Satış ve Lead Generation Uzmanları",
+        "description": "Sales Corner, markaların satış süreçlerini veriyle güçlendiren, otomasyon ve strateji temelli bir büyüme yaklaşımı sunar. Hedef pazar araştırmasından toplantı planlamasına, lead generation’dan CRM entegrasyonuna kadar tüm süreci uçtan uca yönetir.",
+        "canonical": "https://salescorner.co/haftalik-rapor",
+        "robots": "max-image-preview:large",
+        "ogTitle": "Sales Corner | Veri Odaklı Satış ve Lead Generation Uzmanları",
+        "ogImage": "QsZeR1PwkpsroRGMVChksNhoE.png",
+        "h1": [],
+        "h2": 0,
+        "ld": [],
+        "words": 43
+      },
+      "local": {
+        "title": "Sales Corner | Veri Odaklı Satış ve Lead Generation Uzmanları",
+        "description": "Sales Corner, markaların satış süreçlerini veriyle güçlendiren, otomasyon ve strateji temelli bir büyüme yaklaşımı sunar. Hedef pazar araştırmasından toplantı planlamasına, lead generation’dan CRM entegrasyonuna kadar tüm süreci uçtan uca yönetir.",
+        "canonical": "https://salescorner.co/haftalik-rapor",
+        "robots": "noindex, nofollow",
+        "ogTitle": "Sales Corner | Veri Odaklı Satış ve Lead Generation Uzmanları",
+        "ogImage": "QsZeR1PwkpsroRGMVChksNhoE.png",
+        "h1": [],
+        "h2": 0,
+        "ld": [],
+        "words": 43
+      },
+      "diff": [
+        "robots"
+      ]
+    },
+    {
+      "url": "https://salescorner.co/sekans-yazari",
+      "status": 200,
+      "live": {
+        "title": "Sales Corner | Veri Odaklı Satış ve Lead Generation Uzmanları",
+        "description": "Sales Corner, markaların satış süreçlerini veriyle güçlendiren, otomasyon ve strateji temelli bir büyüme yaklaşımı sunar. Hedef pazar araştırmasından toplantı planlamasına, lead generation’dan CRM entegrasyonuna kadar tüm süreci uçtan uca yönetir.",
+        "canonical": "https://salescorner.co/sekans-yazari",
+        "robots": "max-image-preview:large",
+        "ogTitle": "Sales Corner | Veri Odaklı Satış ve Lead Generation Uzmanları",
+        "ogImage": "QsZeR1PwkpsroRGMVChksNhoE.png",
+        "h1": [
+          "Sekans Yazımı"
+        ],
+        "h2": 0,
+        "ld": [],
+        "words": 44
+      },
+      "local": {
+        "title": "Sales Corner | Veri Odaklı Satış ve Lead Generation Uzmanları",
+        "description": "Sales Corner, markaların satış süreçlerini veriyle güçlendiren, otomasyon ve strateji temelli bir büyüme yaklaşımı sunar. Hedef pazar araştırmasından toplantı planlamasına, lead generation’dan CRM entegrasyonuna kadar tüm süreci uçtan uca yönetir.",
+        "canonical": "https://salescorner.co/sekans-yazari",
+        "robots": "noindex, nofollow",
+        "ogTitle": "Sales Corner | Veri Odaklı Satış ve Lead Generation Uzmanları",
+        "ogImage": "QsZeR1PwkpsroRGMVChksNhoE.png",
+        "h1": [
+          "Sekans Yazımı"
+        ],
+        "h2": 0,
+        "ld": [],
+        "words": 44
+      },
+      "diff": [
+        "robots"
+      ]
+    },
+    {
+      "url": "https://salescorner.co/seo-robotu",
+      "status": 200,
+      "live": {
+        "title": "Sales Corner | Veri Odaklı Satış ve Lead Generation Uzmanları",
+        "description": "Sales Corner, markaların satış süreçlerini veriyle güçlendiren, otomasyon ve strateji temelli bir büyüme yaklaşımı sunar. Hedef pazar araştırmasından toplantı planlamasına, lead generation’dan CRM entegrasyonuna kadar tüm süreci uçtan uca yönetir.",
+        "canonical": "https://salescorner.co/seo-robotu",
+        "robots": "max-image-preview:large",
+        "ogTitle": "Sales Corner | Veri Odaklı Satış ve Lead Generation Uzmanları",
+        "ogImage": "QsZeR1PwkpsroRGMVChksNhoE.png",
+        "h1": [
+          "SEO Analiz & İçerik Üretici"
+        ],
+        "h2": 0,
+        "ld": [],
+        "words": 47
+      },
+      "local": {
+        "title": "Sales Corner | Veri Odaklı Satış ve Lead Generation Uzmanları",
+        "description": "Sales Corner, markaların satış süreçlerini veriyle güçlendiren, otomasyon ve strateji temelli bir büyüme yaklaşımı sunar. Hedef pazar araştırmasından toplantı planlamasına, lead generation’dan CRM entegrasyonuna kadar tüm süreci uçtan uca yönetir.",
+        "canonical": "https://salescorner.co/seo-robotu",
+        "robots": "noindex, nofollow",
+        "ogTitle": "Sales Corner | Veri Odaklı Satış ve Lead Generation Uzmanları",
+        "ogImage": "QsZeR1PwkpsroRGMVChksNhoE.png",
+        "h1": [
+          "SEO Analiz & İçerik Üretici"
+        ],
+        "h2": 0,
+        "ld": [],
+        "words": 47
+      },
+      "diff": [
+        "robots"
+      ]
+    },
+    {
+      "url": "https://salescorner.co/cv-analiz",
+      "status": 200,
+      "live": {
+        "title": "Sales Corner | Veri Odaklı Satış ve Lead Generation Uzmanları",
+        "description": "Sales Corner, markaların satış süreçlerini veriyle güçlendiren, otomasyon ve strateji temelli bir büyüme yaklaşımı sunar. Hedef pazar araştırmasından toplantı planlamasına, lead generation’dan CRM entegrasyonuna kadar tüm süreci uçtan uca yönetir.",
+        "canonical": "https://salescorner.co/cv-analiz",
+        "robots": "max-image-preview:large",
+        "ogTitle": "Sales Corner | Veri Odaklı Satış ve Lead Generation Uzmanları",
+        "ogImage": "QsZeR1PwkpsroRGMVChksNhoE.png",
+        "h1": [],
+        "h2": 0,
+        "ld": [],
+        "words": 27
+      },
+      "local": {
+        "title": "Sales Corner | Veri Odaklı Satış ve Lead Generation Uzmanları",
+        "description": "Sales Corner, markaların satış süreçlerini veriyle güçlendiren, otomasyon ve strateji temelli bir büyüme yaklaşımı sunar. Hedef pazar araştırmasından toplantı planlamasına, lead generation’dan CRM entegrasyonuna kadar tüm süreci uçtan uca yönetir.",
+        "canonical": "https://salescorner.co/cv-analiz",
+        "robots": "noindex, nofollow",
+        "ogTitle": "Sales Corner | Veri Odaklı Satış ve Lead Generation Uzmanları",
+        "ogImage": "QsZeR1PwkpsroRGMVChksNhoE.png",
+        "h1": [],
+        "h2": 0,
+        "ld": [],
+        "words": 27
+      },
+      "diff": [
+        "robots"
+      ]
+    },
+    {
+      "url": "https://salescorner.co/dashboard",
+      "status": 200,
+      "live": {
+        "title": "Sales Corner | Veri Odaklı Satış ve Lead Generation Uzmanları",
+        "description": "Sales Corner, markaların satış süreçlerini veriyle güçlendiren, otomasyon ve strateji temelli bir büyüme yaklaşımı sunar. Hedef pazar araştırmasından toplantı planlamasına, lead generation’dan CRM entegrasyonuna kadar tüm süreci uçtan uca yönetir.",
+        "canonical": "https://salescorner.co/dashboard",
+        "robots": "max-image-preview:large",
+        "ogTitle": "Sales Corner | Veri Odaklı Satış ve Lead Generation Uzmanları",
+        "ogImage": "QsZeR1PwkpsroRGMVChksNhoE.png",
+        "h1": [
+          "12 Otomasyon Modülü.Sıfır Manuel İş."
+        ],
+        "h2": 0,
+        "ld": [],
+        "words": 347
+      },
+      "local": {
+        "title": "Sales Corner | Veri Odaklı Satış ve Lead Generation Uzmanları",
+        "description": "Sales Corner, markaların satış süreçlerini veriyle güçlendiren, otomasyon ve strateji temelli bir büyüme yaklaşımı sunar. Hedef pazar araştırmasından toplantı planlamasına, lead generation’dan CRM entegrasyonuna kadar tüm süreci uçtan uca yönetir.",
+        "canonical": "https://salescorner.co/dashboard",
+        "robots": "noindex, nofollow",
+        "ogTitle": "Sales Corner | Veri Odaklı Satış ve Lead Generation Uzmanları",
+        "ogImage": "QsZeR1PwkpsroRGMVChksNhoE.png",
+        "h1": [
+          "12 Otomasyon Modülü.Sıfır Manuel İş."
+        ],
+        "h2": 0,
+        "ld": [],
+        "words": 347
+      },
+      "diff": [
+        "robots"
+      ]
+    },
+    {
+      "url": "https://salescorner.co/gorsel-ekleme",
+      "status": 200,
+      "live": {
+        "title": "Sales Corner | Veri Odaklı Satış ve Lead Generation Uzmanları",
+        "description": "Sales Corner, markaların satış süreçlerini veriyle güçlendiren, otomasyon ve strateji temelli bir büyüme yaklaşımı sunar. Hedef pazar araştırmasından toplantı planlamasına, lead generation’dan CRM entegrasyonuna kadar tüm süreci uçtan uca yönetir.",
+        "canonical": "https://salescorner.co/gorsel-ekleme",
+        "robots": "max-image-preview:large",
+        "ogTitle": "Sales Corner | Veri Odaklı Satış ve Lead Generation Uzmanları",
+        "ogImage": "QsZeR1PwkpsroRGMVChksNhoE.png",
+        "h1": [],
+        "h2": 0,
+        "ld": [],
+        "words": 20
+      },
+      "local": {
+        "title": "Sales Corner | Veri Odaklı Satış ve Lead Generation Uzmanları",
+        "description": "Sales Corner, markaların satış süreçlerini veriyle güçlendiren, otomasyon ve strateji temelli bir büyüme yaklaşımı sunar. Hedef pazar araştırmasından toplantı planlamasına, lead generation’dan CRM entegrasyonuna kadar tüm süreci uçtan uca yönetir.",
+        "canonical": "https://salescorner.co/gorsel-ekleme",
+        "robots": "noindex, nofollow",
+        "ogTitle": "Sales Corner | Veri Odaklı Satış ve Lead Generation Uzmanları",
+        "ogImage": "QsZeR1PwkpsroRGMVChksNhoE.png",
+        "h1": [],
+        "h2": 0,
+        "ld": [],
+        "words": 20
+      },
+      "diff": [
+        "robots"
+      ]
+    },
+    {
+      "url": "https://salescorner.co/kolajmaker",
+      "status": 200,
+      "live": {
+        "title": "Sales Corner | Veri Odaklı Satış ve Lead Generation Uzmanları",
+        "description": "Sales Corner, markaların satış süreçlerini veriyle güçlendiren, otomasyon ve strateji temelli bir büyüme yaklaşımı sunar. Hedef pazar araştırmasından toplantı planlamasına, lead generation’dan CRM entegrasyonuna kadar tüm süreci uçtan uca yönetir.",
+        "canonical": "https://salescorner.co/kolajmaker",
+        "robots": "max-image-preview:large",
+        "ogTitle": "Sales Corner | Veri Odaklı Satış ve Lead Generation Uzmanları",
+        "ogImage": "QsZeR1PwkpsroRGMVChksNhoE.png",
+        "h1": [
+          "🖼 LinkedIn Kolaj Oluşturucu"
+        ],
+        "h2": 0,
+        "ld": [],
+        "words": 88
+      },
+      "local": {
+        "title": "Sales Corner | Veri Odaklı Satış ve Lead Generation Uzmanları",
+        "description": "Sales Corner, markaların satış süreçlerini veriyle güçlendiren, otomasyon ve strateji temelli bir büyüme yaklaşımı sunar. Hedef pazar araştırmasından toplantı planlamasına, lead generation’dan CRM entegrasyonuna kadar tüm süreci uçtan uca yönetir.",
+        "canonical": "https://salescorner.co/kolajmaker",
+        "robots": "noindex, nofollow",
+        "ogTitle": "Sales Corner | Veri Odaklı Satış ve Lead Generation Uzmanları",
+        "ogImage": "QsZeR1PwkpsroRGMVChksNhoE.png",
+        "h1": [
+          "🖼 LinkedIn Kolaj Oluşturucu"
+        ],
+        "h2": 0,
+        "ld": [],
+        "words": 88
+      },
+      "diff": [
+        "robots"
+      ]
+    },
+    {
+      "url": "https://salescorner.co/briefing",
+      "status": 200,
+      "live": {
+        "title": "Sales Corner | Veri Odaklı Satış ve Lead Generation Uzmanları",
+        "description": "Sales Corner, markaların satış süreçlerini veriyle güçlendiren, otomasyon ve strateji temelli bir büyüme yaklaşımı sunar. Hedef pazar araştırmasından toplantı planlamasına, lead generation’dan CRM entegrasyonuna kadar tüm süreci uçtan uca yönetir.",
+        "canonical": "https://salescorner.co/briefing",
+        "robots": "max-image-preview:large",
+        "ogTitle": "Sales Corner | Veri Odaklı Satış ve Lead Generation Uzmanları",
+        "ogImage": "QsZeR1PwkpsroRGMVChksNhoE.png",
+        "h1": [],
+        "h2": 1,
+        "ld": [],
+        "words": 49
+      },
+      "local": {
+        "title": "Sales Corner | Veri Odaklı Satış ve Lead Generation Uzmanları",
+        "description": "Sales Corner, markaların satış süreçlerini veriyle güçlendiren, otomasyon ve strateji temelli bir büyüme yaklaşımı sunar. Hedef pazar araştırmasından toplantı planlamasına, lead generation’dan CRM entegrasyonuna kadar tüm süreci uçtan uca yönetir.",
+        "canonical": "https://salescorner.co/briefing",
+        "robots": "noindex, nofollow",
+        "ogTitle": "Sales Corner | Veri Odaklı Satış ve Lead Generation Uzmanları",
+        "ogImage": "QsZeR1PwkpsroRGMVChksNhoE.png",
+        "h1": [],
+        "h2": 1,
+        "ld": [],
+        "words": 49
+      },
+      "diff": [
+        "robots"
+      ]
+    },
+    {
+      "url": "https://salescorner.co/page-5",
+      "status": 200,
+      "live": {
+        "title": "Sales Corner | Veri Odaklı Satış ve Lead Generation Uzmanları",
+        "description": "Sales Corner, markaların satış süreçlerini veriyle güçlendiren, otomasyon ve strateji temelli bir büyüme yaklaşımı sunar. Hedef pazar araştırmasından toplantı planlamasına, lead generation’dan CRM entegrasyonuna kadar tüm süreci uçtan uca yönetir.",
+        "canonical": "https://salescorner.co/page-5",
+        "robots": "max-image-preview:large",
+        "ogTitle": "Sales Corner | Veri Odaklı Satış ve Lead Generation Uzmanları",
+        "ogImage": "QsZeR1PwkpsroRGMVChksNhoE.png",
+        "h1": [],
+        "h2": 0,
+        "ld": [],
+        "words": 0
+      },
+      "local": {
+        "title": "Sales Corner | Veri Odaklı Satış ve Lead Generation Uzmanları",
+        "description": "Sales Corner, markaların satış süreçlerini veriyle güçlendiren, otomasyon ve strateji temelli bir büyüme yaklaşımı sunar. Hedef pazar araştırmasından toplantı planlamasına, lead generation’dan CRM entegrasyonuna kadar tüm süreci uçtan uca yönetir.",
+        "canonical": "https://salescorner.co/page-5",
+        "robots": "noindex, nofollow",
+        "ogTitle": "Sales Corner | Veri Odaklı Satış ve Lead Generation Uzmanları",
+        "ogImage": "QsZeR1PwkpsroRGMVChksNhoE.png",
+        "h1": [],
+        "h2": 0,
+        "ld": [],
+        "words": 0
+      },
+      "diff": [
+        "robots"
+      ]
+    },
+    {
+      "url": "https://salescorner.co/page-6",
+      "status": 200,
+      "live": {
+        "title": "Sales Corner | Veri Odaklı Satış ve Lead Generation Uzmanları",
+        "description": "Sales Corner, markaların satış süreçlerini veriyle güçlendiren, otomasyon ve strateji temelli bir büyüme yaklaşımı sunar. Hedef pazar araştırmasından toplantı planlamasına, lead generation’dan CRM entegrasyonuna kadar tüm süreci uçtan uca yönetir.",
+        "canonical": "https://salescorner.co/page-6",
+        "robots": "max-image-preview:large",
+        "ogTitle": "Sales Corner | Veri Odaklı Satış ve Lead Generation Uzmanları",
+        "ogImage": "QsZeR1PwkpsroRGMVChksNhoE.png",
+        "h1": [],
+        "h2": 0,
+        "ld": [],
+        "words": 1
+      },
+      "local": {
+        "title": "Sales Corner | Veri Odaklı Satış ve Lead Generation Uzmanları",
+        "description": "Sales Corner, markaların satış süreçlerini veriyle güçlendiren, otomasyon ve strateji temelli bir büyüme yaklaşımı sunar. Hedef pazar araştırmasından toplantı planlamasına, lead generation’dan CRM entegrasyonuna kadar tüm süreci uçtan uca yönetir.",
+        "canonical": "https://salescorner.co/page-6",
+        "robots": "noindex, nofollow",
+        "ogTitle": "Sales Corner | Veri Odaklı Satış ve Lead Generation Uzmanları",
+        "ogImage": "QsZeR1PwkpsroRGMVChksNhoE.png",
+        "h1": [],
+        "h2": 0,
+        "ld": [],
+        "words": 1
+      },
+      "diff": [
+        "robots"
+      ]
+    }
+  ]
+}

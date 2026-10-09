@@ -1,0 +1,320 @@
+{
+  "origin": "https://socialmediacorner.co",
+  "pages": [
+    {
+      "url": "https://socialmediacorner.co/blog/lead-generation-saas-corner-ile-nitelikli-musterileri-elde-etmenin-yollari",
+      "file": "blog/lead-generation-saas-corner-ile-nitelikli-musterileri-elde-etmenin-yollari.html",
+      "status": 200,
+      "finalUrl": "https://socialmediacorner.co/blog/lead-generation-saas-corner-ile-nitelikli-musterileri-elde-etmenin-yollari",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://socialmediacorner.co/blog",
+      "file": "blog.html",
+      "status": 200,
+      "finalUrl": "https://socialmediacorner.co/blog",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://socialmediacorner.co/",
+      "file": "index.html",
+      "status": 200,
+      "finalUrl": "https://socialmediacorner.co/",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 126,
+        "filled": 126,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://socialmediacorner.co/ileti%C5%9Fim",
+      "file": "iletişim.html",
+      "status": 200,
+      "finalUrl": "https://socialmediacorner.co/ileti%C5%9Fim",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 35,
+        "filled": 35,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://socialmediacorner.co/blog/sosyal-medya-yonetimi-ile-markanizi-nasil-buyutebilirsiniz",
+      "file": "blog/sosyal-medya-yonetimi-ile-markanizi-nasil-buyutebilirsiniz.html",
+      "status": 200,
+      "finalUrl": "https://socialmediacorner.co/blog/sosyal-medya-yonetimi-ile-markanizi-nasil-buyutebilirsiniz",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://socialmediacorner.co/blog/social-media-corner-ile-sosyal-medya-yonetimini-kolaylastirin",
+      "file": "blog/social-media-corner-ile-sosyal-medya-yonetimini-kolaylastirin.html",
+      "status": 200,
+      "finalUrl": "https://socialmediacorner.co/blog/social-media-corner-ile-sosyal-medya-yonetimini-kolaylastirin",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://socialmediacorner.co/blog/saas-corner-neoemsan-lead-generation-destegi",
+      "file": "blog/saas-corner-neoemsan-lead-generation-destegi.html",
+      "status": 200,
+      "finalUrl": "https://socialmediacorner.co/blog/saas-corner-neoemsan-lead-generation-destegi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://socialmediacorner.co/blog/saas-corner-ile-guclu-lead-generation-stratejileri",
+      "file": "blog/saas-corner-ile-guclu-lead-generation-stratejileri.html",
+      "status": 200,
+      "finalUrl": "https://socialmediacorner.co/blog/saas-corner-ile-guclu-lead-generation-stratejileri",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://socialmediacorner.co/blog/saas-corner-olarak-be1-lead-generation-destegi",
+      "file": "blog/saas-corner-olarak-be1-lead-generation-destegi.html",
+      "status": 200,
+      "finalUrl": "https://socialmediacorner.co/blog/saas-corner-olarak-be1-lead-generation-destegi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://socialmediacorner.co/blog/crm-integrasyonu-ile-satis-surecinizi-hizlandirin",
+      "file": "blog/crm-integrasyonu-ile-satis-surecinizi-hizlandirin.html",
+      "status": 200,
+      "finalUrl": "https://socialmediacorner.co/blog/crm-integrasyonu-ile-satis-surecinizi-hizlandirin",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://socialmediacorner.co/blog/be1-ile-sap-erp-cozumu-ile-isletme-surecinizi-optimiz-edin",
+      "file": "blog/be1-ile-sap-erp-cozumu-ile-isletme-surecinizi-optimiz-edin.html",
+      "status": 200,
+      "finalUrl": "https://socialmediacorner.co/blog/be1-ile-sap-erp-cozumu-ile-isletme-surecinizi-optimiz-edin",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://socialmediacorner.co/blog/erp-cozumleri-ile-isletme-yonetimini-hizlandirirsiniz",
+      "file": "blog/erp-cozumleri-ile-isletme-yonetimini-hizlandirirsiniz.html",
+      "status": 200,
+      "finalUrl": "https://socialmediacorner.co/blog/erp-cozumleri-ile-isletme-yonetimini-hizlandirirsiniz",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://socialmediacorner.co/blog/saas-sirketlerinde-satis-otomasyonu-isletmenizi-hizlandirir",
+      "file": "blog/saas-sirketlerinde-satis-otomasyonu-isletmenizi-hizlandirir.html",
+      "status": 200,
+      "finalUrl": "https://socialmediacorner.co/blog/saas-sirketlerinde-satis-otomasyonu-isletmenizi-hizlandirir",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://socialmediacorner.co/blog/sales-consulting",
+      "file": "blog/sales-consulting.html",
+      "status": 200,
+      "finalUrl": "https://socialmediacorner.co/blog/sales-consulting",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://socialmediacorner.co/blog/lead-generation-ile-nitelikli-musteri-kazanin",
+      "file": "blog/lead-generation-ile-nitelikli-musteri-kazanin.html",
+      "status": 200,
+      "finalUrl": "https://socialmediacorner.co/blog/lead-generation-ile-nitelikli-musteri-kazanin",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://socialmediacorner.co/blog/linkedin-ve-satis",
+      "file": "blog/linkedin-ve-satis.html",
+      "status": 200,
+      "finalUrl": "https://socialmediacorner.co/blog/linkedin-ve-satis",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://socialmediacorner.co/blog/ai-in-satis",
+      "file": "blog/ai-in-satis.html",
+      "status": 200,
+      "finalUrl": "https://socialmediacorner.co/blog/ai-in-satis",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://socialmediacorner.co/blog/satis-dis-kaynak-kullanimi-faydalari",
+      "file": "blog/satis-dis-kaynak-kullanimi-faydalari.html",
+      "status": 200,
+      "finalUrl": "https://socialmediacorner.co/blog/satis-dis-kaynak-kullanimi-faydalari",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://socialmediacorner.co/blog/satis-dis-kaynak-kullanimi-maliyet-optimizasyonu",
+      "file": "blog/satis-dis-kaynak-kullanimi-maliyet-optimizasyonu.html",
+      "status": 200,
+      "finalUrl": "https://socialmediacorner.co/blog/satis-dis-kaynak-kullanimi-maliyet-optimizasyonu",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://socialmediacorner.co/blog/kisisellestirilmis-emails",
+      "file": "blog/kisisellestirilmis-emails.html",
+      "status": 200,
+      "finalUrl": "https://socialmediacorner.co/blog/kisisellestirilmis-emails",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://socialmediacorner.co/blog/veri-odakli-satis-analiz-ve-icgoru",
+      "file": "blog/veri-odakli-satis-analiz-ve-icgoru.html",
+      "status": 200,
+      "finalUrl": "https://socialmediacorner.co/blog/veri-odakli-satis-analiz-ve-icgoru",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://socialmediacorner.co/blog/donusum-orani-optimizasyonu",
+      "file": "blog/donusum-orani-optimizasyonu.html",
+      "status": 200,
+      "finalUrl": "https://socialmediacorner.co/blog/donusum-orani-optimizasyonu",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://socialmediacorner.co/blog/satis-otomasyonu-verimlilik",
+      "file": "blog/satis-otomasyonu-verimlilik.html",
+      "status": 200,
+      "finalUrl": "https://socialmediacorner.co/blog/satis-otomasyonu-verimlilik",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 6,
+        "filled": 6,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://socialmediacorner.co/__bu-sayfa-yok-404",
+      "file": "404.html",
+      "status": 404,
+      "finalUrl": "https://socialmediacorner.co/__bu-sayfa-yok-404",
+      "expectStatus": 404,
+      "hydrate": {
+        "empty": 10,
+        "filled": 10,
+        "mismatch": [],
+        "errors": []
+      }
+    }
+  ],
+  "keptScripts": [
+    ""
+  ]
+}

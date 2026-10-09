@@ -1,0 +1,449 @@
+{
+  "summary": {
+    "pages": 10,
+    "nonOk": [],
+    "missingLocal": [],
+    "diffs": [
+      [
+        "https://www.yalcinberkay.com.tr/blog/adapting-to-the-new-b2b-sales-landscape",
+        [
+          "title",
+          "description",
+          "ogTitle",
+          "ld"
+        ]
+      ],
+      [
+        "https://www.yalcinberkay.com.tr/blog/b2b-buying-shifts-toward-digital",
+        [
+          "title",
+          "description",
+          "ogTitle",
+          "ld"
+        ]
+      ],
+      [
+        "https://www.yalcinberkay.com.tr/blog/the-importance-of-financial-literacy-in-turkey",
+        [
+          "title",
+          "description",
+          "ogTitle",
+          "ld"
+        ]
+      ],
+      [
+        "https://www.yalcinberkay.com.tr/",
+        [
+          "h1",
+          "h2",
+          "ld"
+        ]
+      ],
+      [
+        "https://www.yalcinberkay.com.tr/blog/the-power-of-customer-feedback-in-b2b",
+        [
+          "title",
+          "description",
+          "ogTitle",
+          "ld"
+        ]
+      ],
+      [
+        "https://www.yalcinberkay.com.tr/blog/from-civil-engineering-to-sales-a-journey-of-self-discovery",
+        [
+          "title",
+          "description",
+          "ogTitle",
+          "ld"
+        ]
+      ]
+    ],
+    "noH1": 0,
+    "multiH1": 1,
+    "titleOver60": 1,
+    "descMissing": 0,
+    "descOver160": 0,
+    "dupTitles": 0,
+    "dupDescriptions": [
+      5
+    ],
+    "canonicalMismatch": [],
+    "noLd": 10,
+    "noindex": []
+  },
+  "rows": [
+    {
+      "url": "https://www.yalcinberkay.com.tr/experience",
+      "status": 200,
+      "live": {
+        "title": "Berkay YALÇIN | Experience",
+        "description": "My Experience",
+        "canonical": "https://www.yalcinberkay.com.tr/experience",
+        "robots": "max-image-preview:large",
+        "ogTitle": "Berkay YALÇIN | Experience",
+        "ogImage": "yaO2oRoUboEyRi1HXwHDHwBe1Q.webp",
+        "h1": [
+          "12 YEARS OFEXPERIENCE"
+        ],
+        "h2": 1,
+        "ld": [],
+        "words": 769
+      },
+      "local": {
+        "title": "Berkay YALÇIN | Experience",
+        "description": "My Experience",
+        "canonical": "https://www.yalcinberkay.com.tr/experience",
+        "robots": "max-image-preview:large",
+        "ogTitle": "Berkay YALÇIN | Experience",
+        "ogImage": "yaO2oRoUboEyRi1HXwHDHwBe1Q.webp",
+        "h1": [
+          "12 YEARS OFEXPERIENCE"
+        ],
+        "h2": 1,
+        "ld": [],
+        "words": 757
+      },
+      "diff": []
+    },
+    {
+      "url": "https://www.yalcinberkay.com.tr/projects",
+      "status": 200,
+      "live": {
+        "title": "Berkay YALÇIN | Projects",
+        "description": "My Projects.",
+        "canonical": "https://www.yalcinberkay.com.tr/projects",
+        "robots": "max-image-preview:large",
+        "ogTitle": "Berkay YALÇIN | Projects",
+        "ogImage": "yaO2oRoUboEyRi1HXwHDHwBe1Q.webp",
+        "h1": [
+          "FEATUREDPROJECTS"
+        ],
+        "h2": 1,
+        "ld": [],
+        "words": 175
+      },
+      "local": {
+        "title": "Berkay YALÇIN | Projects",
+        "description": "My Projects.",
+        "canonical": "https://www.yalcinberkay.com.tr/projects",
+        "robots": "max-image-preview:large",
+        "ogTitle": "Berkay YALÇIN | Projects",
+        "ogImage": "yaO2oRoUboEyRi1HXwHDHwBe1Q.webp",
+        "h1": [
+          "FEATUREDPROJECTS"
+        ],
+        "h2": 1,
+        "ld": [],
+        "words": 163
+      },
+      "diff": []
+    },
+    {
+      "url": "https://www.yalcinberkay.com.tr/blog",
+      "status": 200,
+      "live": {
+        "title": "Berkay YALÇIN | Blogs",
+        "description": "Blog from Berkay YALÇIN.",
+        "canonical": "https://www.yalcinberkay.com.tr/blog",
+        "robots": "max-image-preview:large",
+        "ogTitle": "Berkay YALÇIN | Blogs",
+        "ogImage": "yaO2oRoUboEyRi1HXwHDHwBe1Q.webp",
+        "h1": [
+          "DESIGNTHOUGHTS"
+        ],
+        "h2": 1,
+        "ld": [],
+        "words": 1111
+      },
+      "local": {
+        "title": "Berkay YALÇIN | Blogs",
+        "description": "Blog from Berkay YALÇIN.",
+        "canonical": "https://www.yalcinberkay.com.tr/blog",
+        "robots": "max-image-preview:large",
+        "ogTitle": "Berkay YALÇIN | Blogs",
+        "ogImage": "yaO2oRoUboEyRi1HXwHDHwBe1Q.webp",
+        "h1": [
+          "DESIGNTHOUGHTS"
+        ],
+        "h2": 1,
+        "ld": [],
+        "words": 1099
+      },
+      "diff": []
+    },
+    {
+      "url": "https://www.yalcinberkay.com.tr/blog/adapting-to-the-new-b2b-sales-landscape",
+      "status": 200,
+      "live": {
+        "title": "Adapting to the New B2B Sales Landscape - Sawad",
+        "description": "My experiences",
+        "canonical": "https://www.yalcinberkay.com.tr/blog/adapting-to-the-new-b2b-sales-landscape",
+        "robots": "max-image-preview:large",
+        "ogTitle": "Adapting to the New B2B Sales Landscape - Sawad",
+        "ogImage": "yaO2oRoUboEyRi1HXwHDHwBe1Q.webp",
+        "h1": [
+          "Adapting to the New B2B Sales Landscape"
+        ],
+        "h2": 1,
+        "ld": [],
+        "words": 326
+      },
+      "local": {
+        "title": "Adapting to the New B2B Sales Landscape - Berkay YALÇIN",
+        "description": "Navigating the new B2B landscape? Buyers are shying away from sales chats, says Gartner. Here's how you can adapt:",
+        "canonical": "https://www.yalcinberkay.com.tr/blog/adapting-to-the-new-b2b-sales-landscape",
+        "robots": "max-image-preview:large",
+        "ogTitle": "Adapting to the New B2B Sales Landscape - Berkay YALÇIN",
+        "ogImage": "yaO2oRoUboEyRi1HXwHDHwBe1Q.webp",
+        "h1": [
+          "Adapting to the New B2B Sales Landscape"
+        ],
+        "h2": 1,
+        "ld": [
+          "BlogPosting"
+        ],
+        "words": 314
+      },
+      "diff": [
+        "title",
+        "description",
+        "ogTitle",
+        "ld"
+      ]
+    },
+    {
+      "url": "https://www.yalcinberkay.com.tr/blog/b2b-buying-shifts-toward-digital",
+      "status": 200,
+      "live": {
+        "title": "B2B Buying Shifts Toward Digital! - Sawad",
+        "description": "My experiences",
+        "canonical": "https://www.yalcinberkay.com.tr/blog/b2b-buying-shifts-toward-digital",
+        "robots": "max-image-preview:large",
+        "ogTitle": "B2B Buying Shifts Toward Digital! - Sawad",
+        "ogImage": "yaO2oRoUboEyRi1HXwHDHwBe1Q.webp",
+        "h1": [
+          "B2B Buying Shifts Toward Digital!"
+        ],
+        "h2": 1,
+        "ld": [],
+        "words": 236
+      },
+      "local": {
+        "title": "B2B Buying Shifts Toward Digital! - Berkay YALÇIN",
+        "description": "Pivotree Inc. and Spryker's latest report reveals a seismic shift in B2B buying behaviors, emphasizing a massive move towards digital platforms.",
+        "canonical": "https://www.yalcinberkay.com.tr/blog/b2b-buying-shifts-toward-digital",
+        "robots": "max-image-preview:large",
+        "ogTitle": "B2B Buying Shifts Toward Digital! - Berkay YALÇIN",
+        "ogImage": "yaO2oRoUboEyRi1HXwHDHwBe1Q.webp",
+        "h1": [
+          "B2B Buying Shifts Toward Digital!"
+        ],
+        "h2": 1,
+        "ld": [
+          "BlogPosting"
+        ],
+        "words": 224
+      },
+      "diff": [
+        "title",
+        "description",
+        "ogTitle",
+        "ld"
+      ]
+    },
+    {
+      "url": "https://www.yalcinberkay.com.tr/blog/the-importance-of-financial-literacy-in-turkey",
+      "status": 200,
+      "live": {
+        "title": "The Importance of Financial Literacy in Turkey - Sawad",
+        "description": "My experiences",
+        "canonical": "https://www.yalcinberkay.com.tr/blog/the-importance-of-financial-literacy-in-turkey",
+        "robots": "max-image-preview:large",
+        "ogTitle": "The Importance of Financial Literacy in Turkey - Sawad",
+        "ogImage": "yaO2oRoUboEyRi1HXwHDHwBe1Q.webp",
+        "h1": [
+          "The Importance of Financial Literacy in Turkey"
+        ],
+        "h2": 1,
+        "ld": [],
+        "words": 259
+      },
+      "local": {
+        "title": "The Importance of Financial Literacy in Turkey - Berkay YALÇIN",
+        "description": "Financial literacy isn't just about understanding numbers; it's about making informed decisions that shape our future.",
+        "canonical": "https://www.yalcinberkay.com.tr/blog/the-importance-of-financial-literacy-in-turkey",
+        "robots": "max-image-preview:large",
+        "ogTitle": "The Importance of Financial Literacy in Turkey - Berkay YALÇIN",
+        "ogImage": "yaO2oRoUboEyRi1HXwHDHwBe1Q.webp",
+        "h1": [
+          "The Importance of Financial Literacy in Turkey"
+        ],
+        "h2": 1,
+        "ld": [
+          "BlogPosting"
+        ],
+        "words": 247
+      },
+      "diff": [
+        "title",
+        "description",
+        "ogTitle",
+        "ld"
+      ]
+    },
+    {
+      "url": "https://www.yalcinberkay.com.tr/tools",
+      "status": 200,
+      "live": {
+        "title": "Berkay YALÇIN | Tools",
+        "description": "I have worked for these tools.",
+        "canonical": "https://www.yalcinberkay.com.tr/tools",
+        "robots": "max-image-preview:large",
+        "ogTitle": "Berkay YALÇIN | Tools",
+        "ogImage": "yaO2oRoUboEyRi1HXwHDHwBe1Q.webp",
+        "h1": [
+          "PREMIUMTOOLS"
+        ],
+        "h2": 1,
+        "ld": [],
+        "words": 148
+      },
+      "local": {
+        "title": "Berkay YALÇIN | Tools",
+        "description": "I have worked for these tools.",
+        "canonical": "https://www.yalcinberkay.com.tr/tools",
+        "robots": "max-image-preview:large",
+        "ogTitle": "Berkay YALÇIN | Tools",
+        "ogImage": "yaO2oRoUboEyRi1HXwHDHwBe1Q.webp",
+        "h1": [
+          "PREMIUMTOOLS"
+        ],
+        "h2": 1,
+        "ld": [],
+        "words": 136
+      },
+      "diff": []
+    },
+    {
+      "url": "https://www.yalcinberkay.com.tr/",
+      "status": 200,
+      "live": {
+        "title": "Berkay YALÇIN",
+        "description": "Founder of SAAS Corner",
+        "canonical": "https://www.yalcinberkay.com.tr/",
+        "robots": "max-image-preview:large",
+        "ogTitle": "Berkay YALÇIN",
+        "ogImage": "yaO2oRoUboEyRi1HXwHDHwBe1Q.webp",
+        "h1": [
+          "SALES CONSULTANT",
+          "7 YEARS OFEXPERIENCE"
+        ],
+        "h2": 4,
+        "ld": [],
+        "words": 1692
+      },
+      "local": {
+        "title": "Berkay YALÇIN",
+        "description": "Founder of SAAS Corner",
+        "canonical": "https://www.yalcinberkay.com.tr/",
+        "robots": "max-image-preview:large",
+        "ogTitle": "Berkay YALÇIN",
+        "ogImage": "yaO2oRoUboEyRi1HXwHDHwBe1Q.webp",
+        "h1": [
+          "SALES CONSULTANT"
+        ],
+        "h2": 5,
+        "ld": [
+          "Person",
+          "WebSite"
+        ],
+        "words": 1676
+      },
+      "diff": [
+        "h1",
+        "h2",
+        "ld"
+      ]
+    },
+    {
+      "url": "https://www.yalcinberkay.com.tr/blog/the-power-of-customer-feedback-in-b2b",
+      "status": 200,
+      "live": {
+        "title": "The Power of Customer Feedback in B2B - Sawad",
+        "description": "My experiences",
+        "canonical": "https://www.yalcinberkay.com.tr/blog/the-power-of-customer-feedback-in-b2b",
+        "robots": "max-image-preview:large",
+        "ogTitle": "The Power of Customer Feedback in B2B - Sawad",
+        "ogImage": "yaO2oRoUboEyRi1HXwHDHwBe1Q.webp",
+        "h1": [
+          "The Power of Customer Feedback in B2B"
+        ],
+        "h2": 1,
+        "ld": [],
+        "words": 256
+      },
+      "local": {
+        "title": "The Power of Customer Feedback in B2B - Berkay YALÇIN",
+        "description": "🚀 Harnessing customer feedback isn't just a trend; it's a game-changer in the B2B world. Here's a quick rundown on making the most of it:",
+        "canonical": "https://www.yalcinberkay.com.tr/blog/the-power-of-customer-feedback-in-b2b",
+        "robots": "max-image-preview:large",
+        "ogTitle": "The Power of Customer Feedback in B2B - Berkay YALÇIN",
+        "ogImage": "yaO2oRoUboEyRi1HXwHDHwBe1Q.webp",
+        "h1": [
+          "The Power of Customer Feedback in B2B"
+        ],
+        "h2": 1,
+        "ld": [
+          "BlogPosting"
+        ],
+        "words": 244
+      },
+      "diff": [
+        "title",
+        "description",
+        "ogTitle",
+        "ld"
+      ]
+    },
+    {
+      "url": "https://www.yalcinberkay.com.tr/blog/from-civil-engineering-to-sales-a-journey-of-self-discovery",
+      "status": 200,
+      "live": {
+        "title": "From Civil Engineering to Sales: A Journey of Self-Discovery - Sawad",
+        "description": "My experiences",
+        "canonical": "https://www.yalcinberkay.com.tr/blog/from-civil-engineering-to-sales-a-journey-of-self-discovery",
+        "robots": "max-image-preview:large",
+        "ogTitle": "From Civil Engineering to Sales: A Journey of Self-Discovery - Sawad",
+        "ogImage": "yaO2oRoUboEyRi1HXwHDHwBe1Q.webp",
+        "h1": [
+          "From Civil Engineering to Sales: A Journey of Self-Discovery"
+        ],
+        "h2": 1,
+        "ld": [],
+        "words": 352
+      },
+      "local": {
+        "title": "From Civil Engineering to Sales - Berkay YALÇIN",
+        "description": "As a university student, I embarked on a path in Civil Engineering, initially envisioning a future in Architecture for my MBA.",
+        "canonical": "https://www.yalcinberkay.com.tr/blog/from-civil-engineering-to-sales-a-journey-of-self-discovery",
+        "robots": "max-image-preview:large",
+        "ogTitle": "From Civil Engineering to Sales: A Journey of Self-Discovery - Berkay YALÇIN",
+        "ogImage": "yaO2oRoUboEyRi1HXwHDHwBe1Q.webp",
+        "h1": [
+          "From Civil Engineering to Sales: A Journey of Self-Discovery"
+        ],
+        "h2": 1,
+        "ld": [
+          "BlogPosting"
+        ],
+        "words": 340
+      },
+      "diff": [
+        "title",
+        "description",
+        "ogTitle",
+        "ld"
+      ]
+    }
+  ]
+}

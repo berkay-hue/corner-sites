@@ -1,0 +1,25 @@
+name = "corner-blog-writer"
+main = "src/index.js"
+compatibility_date = "2026-09-01"
+
+# Her gün 09:00 UTC = 12:00 Türkiye (n8n ile aynı saat)
+[triggers]
+crons = ["0 9 * * *"]
+
+[vars]
+# Blogu olan her site için bir kayıt. repo/branch: yazıların commit edildiği GitHub deposu (push'ta Action build + deploy yapar).
+SITES = '''[
+  {
+    "siteUrl": "https://cornergroup.co",
+    "brand": "Corner Group",
+    "repo": "berkay-hue/corner-sites",
+    "branch": "main",
+    "contentDir": "content/cornergroup.co/blog",
+    "topicModel": "claude-haiku-5-5",
+    "writeModel": "claude-opus-5-5"
+  }
+]'''
+
+# Secret'lar (wrangler secret put ...), dosyaya YAZILMAZ:
+#   ANTHROPIC_API_KEY, PEXELS_API_KEY, GITHUB_TOKEN, RUN_KEY
+#   opsiyonel: TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID

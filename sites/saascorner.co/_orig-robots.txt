@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://saascorner.co/sitemap.xml

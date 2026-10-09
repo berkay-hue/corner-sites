@@ -1,0 +1,39 @@
+# content/<host>/blog altına yeni yazı gelince (blog-worker commit'i ya da elle) siteyi build edip Cloudflare Pages'e yükler.
+# Secret'lar: CLOUDFLARE_API_TOKEN (Pages: Edit), CLOUDFLARE_ACCOUNT_ID
+name: blog-deploy
+on:
+  push:
+    branches: [main]
+    paths: ["content/**", "templates/**", "tools/**", "sites/**"]
+  workflow_dispatch:
+    inputs:
+      host: { description: "Site (örn. cornergroup.co)", required: true, default: "cornergroup.co" }
+concurrency: { group: blog-deploy, cancel-in-progress: false }
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 2 }
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm, cache-dependency-path: tools/package-lock.json }
+      - run: npm ci
+        working-directory: tools
+      - name: Değişen siteler
+        id: hosts
+        run: |
+          if [ -n "${{ inputs.host }}" ]; then echo "list=${{ inputs.host }}" >> "$GITHUB_OUTPUT"; exit 0; fi
+          list=$(git diff --name-only HEAD~1 HEAD | grep -E '^(content|templates|sites)/' | cut -d/ -f2 | sort -u | tr '\n' ' ')
+          echo "list=$list" >> "$GITHUB_OUTPUT"
+      - name: Build + deploy
+        if: steps.hosts.outputs.list != ''
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          for host in ${{ steps.hosts.outputs.list }}; do
+            [ -d "sites/$host" ] || continue
+            if [ -d "content/$host/blog" ]; then node tools/build-blog.mjs build "$host"; fi
+            node tools/dist.mjs "$host"
+            (cd tools && npx wrangler pages deploy "../dist/$host" --project-name "web-${host%%.*}" --branch main --commit-dirty=true)
+          done

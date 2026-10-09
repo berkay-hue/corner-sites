@@ -1,0 +1,140 @@
+{
+  "origin": "https://www.yalcinberkay.com.tr",
+  "pages": [
+    {
+      "url": "https://www.yalcinberkay.com.tr/projects",
+      "file": "projects.html",
+      "status": 200,
+      "finalUrl": "https://www.yalcinberkay.com.tr/projects",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 28,
+        "filled": 28,
+        "mismatch": []
+      }
+    },
+    {
+      "url": "https://www.yalcinberkay.com.tr/tools",
+      "file": "tools.html",
+      "status": 200,
+      "finalUrl": "https://www.yalcinberkay.com.tr/tools",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 18,
+        "filled": 18,
+        "mismatch": []
+      }
+    },
+    {
+      "url": "https://www.yalcinberkay.com.tr/experience",
+      "file": "experience.html",
+      "status": 200,
+      "finalUrl": "https://www.yalcinberkay.com.tr/experience",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 26,
+        "filled": 26,
+        "mismatch": []
+      }
+    },
+    {
+      "url": "https://www.yalcinberkay.com.tr/",
+      "file": "index.html",
+      "status": 200,
+      "finalUrl": "https://www.yalcinberkay.com.tr/",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 59,
+        "filled": 59,
+        "mismatch": []
+      }
+    },
+    {
+      "url": "https://www.yalcinberkay.com.tr/blog/b2b-buying-shifts-toward-digital",
+      "file": "blog/b2b-buying-shifts-toward-digital.html",
+      "status": 200,
+      "finalUrl": "https://www.yalcinberkay.com.tr/blog/b2b-buying-shifts-toward-digital",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 22,
+        "filled": 22,
+        "mismatch": []
+      }
+    },
+    {
+      "url": "https://www.yalcinberkay.com.tr/blog",
+      "file": "blog.html",
+      "status": 200,
+      "finalUrl": "https://www.yalcinberkay.com.tr/blog",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 28,
+        "filled": 28,
+        "mismatch": []
+      }
+    },
+    {
+      "url": "https://www.yalcinberkay.com.tr/blog/the-importance-of-financial-literacy-in-turkey",
+      "file": "blog/the-importance-of-financial-literacy-in-turkey.html",
+      "status": 200,
+      "finalUrl": "https://www.yalcinberkay.com.tr/blog/the-importance-of-financial-literacy-in-turkey",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 22,
+        "filled": 22,
+        "mismatch": []
+      }
+    },
+    {
+      "url": "https://www.yalcinberkay.com.tr/blog/adapting-to-the-new-b2b-sales-landscape",
+      "file": "blog/adapting-to-the-new-b2b-sales-landscape.html",
+      "status": 200,
+      "finalUrl": "https://www.yalcinberkay.com.tr/blog/adapting-to-the-new-b2b-sales-landscape",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 22,
+        "filled": 22,
+        "mismatch": []
+      }
+    },
+    {
+      "url": "https://www.yalcinberkay.com.tr/blog/the-power-of-customer-feedback-in-b2b",
+      "file": "blog/the-power-of-customer-feedback-in-b2b.html",
+      "status": 200,
+      "finalUrl": "https://www.yalcinberkay.com.tr/blog/the-power-of-customer-feedback-in-b2b",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 22,
+        "filled": 22,
+        "mismatch": []
+      }
+    },
+    {
+      "url": "https://www.yalcinberkay.com.tr/blog/from-civil-engineering-to-sales-a-journey-of-self-discovery",
+      "file": "blog/from-civil-engineering-to-sales-a-journey-of-self-discovery.html",
+      "status": 200,
+      "finalUrl": "https://www.yalcinberkay.com.tr/blog/from-civil-engineering-to-sales-a-journey-of-self-discovery",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 22,
+        "filled": 22,
+        "mismatch": []
+      }
+    },
+    {
+      "url": "https://www.yalcinberkay.com.tr/__bu-sayfa-yok-404",
+      "file": "404.html",
+      "status": 404,
+      "finalUrl": "https://www.yalcinberkay.com.tr/__bu-sayfa-yok-404",
+      "expectStatus": 404,
+      "hydrate": {
+        "empty": 5,
+        "filled": 5,
+        "mismatch": []
+      }
+    }
+  ],
+  "keptScripts": [
+    ""
+  ]
+}

@@ -1,0 +1,1803 @@
+{
+  "origin": "https://cornergroup.co",
+  "pages": [
+    {
+      "url": "https://cornergroup.co/blog/agency-lead-qualification-ile-kobi-musteri-vakasi",
+      "file": "blog/agency-lead-qualification-ile-kobi-musteri-vakasi.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/agency-lead-qualification-ile-kobi-musteri-vakasi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/iletisim",
+      "file": "iletisim.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/iletisim",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/modern-da-turkey-boutique-ve-i-hracat-firsatlari",
+      "file": "blog/modern-da-turkey-boutique-ve-i-hracat-firsatlari.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/modern-da-turkey-boutique-ve-i-hracat-firsatlari",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/",
+      "file": "index.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/otomasyon-in-b2b-hizmet-sektorune-etkisi-2027",
+      "file": "blog/otomasyon-in-b2b-hizmet-sektorune-etkisi-2027.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/otomasyon-in-b2b-hizmet-sektorune-etkisi-2027",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog",
+      "file": "blog.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/modern-b2b-pazarlama-trendleri-self-service-ve-ai-destekli-tahminleme",
+      "file": "blog/modern-b2b-pazarlama-trendleri-self-service-ve-ai-destekli-tahminleme.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/modern-b2b-pazarlama-trendleri-self-service-ve-ai-destekli-tahminleme",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/linkedin-organik-i-cerikte-chatgpt-5-prompt-stratejisi",
+      "file": "blog/linkedin-organik-i-cerikte-chatgpt-5-prompt-stratejisi.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/linkedin-organik-i-cerikte-chatgpt-5-prompt-stratejisi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/b2b-marka-konumlandirma-stratejisi-5-adimda-basarili-bir-yol-haritasi",
+      "file": "blog/b2b-marka-konumlandirma-stratejisi-5-adimda-basarili-bir-yol-haritasi.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/b2b-marka-konumlandirma-stratejisi-5-adimda-basarili-bir-yol-haritasi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/n8n-ile-b2b-i-s-akislari-satis-ve-pazarlama-otomasyonunda-pratik-cozumler",
+      "file": "blog/n8n-ile-b2b-i-s-akislari-satis-ve-pazarlama-otomasyonunda-pratik-cozumler.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/n8n-ile-b2b-i-s-akislari-satis-ve-pazarlama-otomasyonunda-pratik-cozumler",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/ai-destekli-satista-yapilan-yaygin-hatalar-satis-akisinizi-nasil-optimize-edersiniz",
+      "file": "blog/ai-destekli-satista-yapilan-yaygin-hatalar-satis-akisinizi-nasil-optimize-edersiniz.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/ai-destekli-satista-yapilan-yaygin-hatalar-satis-akisinizi-nasil-optimize-edersiniz",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/ai-ile-b2b-marka-hikayesi-olusturma-dijital-cagda-etkili-anlatim-rehberi",
+      "file": "blog/ai-ile-b2b-marka-hikayesi-olusturma-dijital-cagda-etkili-anlatim-rehberi.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/ai-ile-b2b-marka-hikayesi-olusturma-dijital-cagda-etkili-anlatim-rehberi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/ai-destekli-crm-veri-yonetiminde-7-yaygin-hata",
+      "file": "blog/ai-destekli-crm-veri-yonetiminde-7-yaygin-hata.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/ai-destekli-crm-veri-yonetiminde-7-yaygin-hata",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/n8n-ile-crm-veri-senkronizasyonu-ve-raporlama-otomasyonu-rehberi",
+      "file": "blog/n8n-ile-crm-veri-senkronizasyonu-ve-raporlama-otomasyonu-rehberi.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/n8n-ile-crm-veri-senkronizasyonu-ve-raporlama-otomasyonu-rehberi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/b2b-crm-kullaniminda-yaygin-hatalar-veri-hijyeni-ve-raporlama-i-puclari",
+      "file": "blog/b2b-crm-kullaniminda-yaygin-hatalar-veri-hijyeni-ve-raporlama-i-puclari.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/b2b-crm-kullaniminda-yaygin-hatalar-veri-hijyeni-ve-raporlama-i-puclari",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/challenger-satis-metodolojisi-b2b-uzmanlari-i-cin-kapsamli-rehber",
+      "file": "blog/challenger-satis-metodolojisi-b2b-uzmanlari-i-cin-kapsamli-rehber.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/challenger-satis-metodolojisi-b2b-uzmanlari-i-cin-kapsamli-rehber",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/coklu-marka-portfoyu-yonetimi-buyume-stratejileri-vaka-analizi",
+      "file": "blog/coklu-marka-portfoyu-yonetimi-buyume-stratejileri-vaka-analizi.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/coklu-marka-portfoyu-yonetimi-buyume-stratejileri-vaka-analizi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/yapay-zeka-destekli-b2b-instagram-i-cerik-stratejileri-etkilesimi-artirma",
+      "file": "blog/yapay-zeka-destekli-b2b-instagram-i-cerik-stratejileri-etkilesimi-artirma.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/yapay-zeka-destekli-b2b-instagram-i-cerik-stratejileri-etkilesimi-artirma",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/chatgpt-ile-b2b-satis-metinleri-olusturma-prompt-muhendisligi-i-puclari",
+      "file": "blog/chatgpt-ile-b2b-satis-metinleri-olusturma-prompt-muhendisligi-i-puclari.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/chatgpt-ile-b2b-satis-metinleri-olusturma-prompt-muhendisligi-i-puclari",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/ai-ile-b2b-i-cerik-dagitimi-otomasyonu-marka-gorunurlugunu-artirma",
+      "file": "blog/ai-ile-b2b-i-cerik-dagitimi-otomasyonu-marka-gorunurlugunu-artirma.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/ai-ile-b2b-i-cerik-dagitimi-otomasyonu-marka-gorunurlugunu-artirma",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/buyuk-olcekli-b2b-crm-gecis-sureci-basarili-bir-kurulumun-vaka-analizi",
+      "file": "blog/buyuk-olcekli-b2b-crm-gecis-sureci-basarili-bir-kurulumun-vaka-analizi.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/buyuk-olcekli-b2b-crm-gecis-sureci-basarili-bir-kurulumun-vaka-analizi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/b2b-influencer-marketing-trendleri-gelecegin-i-sbirligi-modelleri",
+      "file": "blog/b2b-influencer-marketing-trendleri-gelecegin-i-sbirligi-modelleri.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/b2b-influencer-marketing-trendleri-gelecegin-i-sbirligi-modelleri",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/b2b-employer-branding-yetenekleri-cekme-ve-tutma-stratejileri",
+      "file": "blog/b2b-employer-branding-yetenekleri-cekme-ve-tutma-stratejileri.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/b2b-employer-branding-yetenekleri-cekme-ve-tutma-stratejileri",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/ai-ile-b2b-sosyal-medya-i-cerik-takvimi-otomasyonu",
+      "file": "blog/ai-ile-b2b-sosyal-medya-i-cerik-takvimi-otomasyonu.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/ai-ile-b2b-sosyal-medya-i-cerik-takvimi-otomasyonu",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/b2b-holdinglerde-i-c-i-letisim-coklu-marka-ekosisteminde-stratejik-yaklasimlar",
+      "file": "blog/b2b-holdinglerde-i-c-i-letisim-coklu-marka-ekosisteminde-stratejik-yaklasimlar.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/b2b-holdinglerde-i-c-i-letisim-coklu-marka-ekosisteminde-stratejik-yaklasimlar",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/b2b-demo-optimizasyonu-donusum-oranlarini-artiran-temel-stratejiler",
+      "file": "blog/b2b-demo-optimizasyonu-donusum-oranlarini-artiran-temel-stratejiler.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/b2b-demo-optimizasyonu-donusum-oranlarini-artiran-temel-stratejiler",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/i-hracatci-ureticiler-i-cin-linkedin-outreach-potansiyel-musteri-bulma-stratejileri",
+      "file": "blog/i-hracatci-ureticiler-i-cin-linkedin-outreach-potansiyel-musteri-bulma-stratejileri.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/i-hracatci-ureticiler-i-cin-linkedin-outreach-potansiyel-musteri-bulma-stratejileri",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/b2b-mikro-influencerlar-niche-pazarlarda-etkili-i-s-birlikleri-kurma",
+      "file": "blog/b2b-mikro-influencerlar-niche-pazarlarda-etkili-i-s-birlikleri-kurma.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/b2b-mikro-influencerlar-niche-pazarlarda-etkili-i-s-birlikleri-kurma",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/b2b-lead-generation-i-deal-musteri-profili-icp-ve-mql-tanimlama-rehberi",
+      "file": "blog/b2b-lead-generation-i-deal-musteri-profili-icp-ve-mql-tanimlama-rehberi.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/b2b-lead-generation-i-deal-musteri-profili-icp-ve-mql-tanimlama-rehberi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/b2b-saas-ta-abm-ile-yuksek-degerli-lead-elde-etme-basarili-bir-vaka-calismasi",
+      "file": "blog/b2b-saas-ta-abm-ile-yuksek-degerli-lead-elde-etme-basarili-bir-vaka-calismasi.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/b2b-saas-ta-abm-ile-yuksek-degerli-lead-elde-etme-basarili-bir-vaka-calismasi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/yapay-zeka-ile-b2b-kisa-video-otomasyonu-i-cerik-stratejileri",
+      "file": "blog/yapay-zeka-ile-b2b-kisa-video-otomasyonu-i-cerik-stratejileri.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/yapay-zeka-ile-b2b-kisa-video-otomasyonu-i-cerik-stratejileri",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/ai-destekli-b2b-i-cerik-trendleri-marka-i-letisimini-yeniden-sekillendirme",
+      "file": "blog/ai-destekli-b2b-i-cerik-trendleri-marka-i-letisimini-yeniden-sekillendirme.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/ai-destekli-b2b-i-cerik-trendleri-marka-i-letisimini-yeniden-sekillendirme",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/spin-satis-metodolojisi-b2b-de-etkili-sorularla-satisi-kapatma-rehberi",
+      "file": "blog/spin-satis-metodolojisi-b2b-de-etkili-sorularla-satisi-kapatma-rehberi.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/spin-satis-metodolojisi-b2b-de-etkili-sorularla-satisi-kapatma-rehberi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/ai-ile-b2b-linkedin-i-cerik-uretimi-otomatik-paylasim-ve-etkilesim-stratejileri",
+      "file": "blog/ai-ile-b2b-linkedin-i-cerik-uretimi-otomatik-paylasim-ve-etkilesim-stratejileri.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/ai-ile-b2b-linkedin-i-cerik-uretimi-otomatik-paylasim-ve-etkilesim-stratejileri",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/niche-b2b-pazarinda-marka-toplulugu-buyutme-basarili-bir-vaka-analizi",
+      "file": "blog/niche-b2b-pazarinda-marka-toplulugu-buyutme-basarili-bir-vaka-analizi.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/niche-b2b-pazarinda-marka-toplulugu-buyutme-basarili-bir-vaka-analizi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/n8n-ile-b2b-saas-musteri-onboarding-otomasyon-vaka-calismasi",
+      "file": "blog/n8n-ile-b2b-saas-musteri-onboarding-otomasyon-vaka-calismasi.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/n8n-ile-b2b-saas-musteri-onboarding-otomasyon-vaka-calismasi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/ai-destekli-satis-tahminleme-b2b-satis-akisinizi-gelecege-tasiyin",
+      "file": "blog/ai-destekli-satis-tahminleme-b2b-satis-akisinizi-gelecege-tasiyin.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/ai-destekli-satis-tahminleme-b2b-satis-akisinizi-gelecege-tasiyin",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/b2b-satis-akisinizi-sifirdan-olusturma-basariya-giden-adim-adim-rehber",
+      "file": "blog/b2b-satis-akisinizi-sifirdan-olusturma-basariya-giden-adim-adim-rehber.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/b2b-satis-akisinizi-sifirdan-olusturma-basariya-giden-adim-adim-rehber",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/marka-yonetiminde-n8n-ile-i-cerik-onay-sureclerini-otomatiklestirme-rehberi",
+      "file": "blog/marka-yonetiminde-n8n-ile-i-cerik-onay-sureclerini-otomatiklestirme-rehberi.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/marka-yonetiminde-n8n-ile-i-cerik-onay-sureclerini-otomatiklestirme-rehberi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/b2b-satis-demo-sonrasi-takip-stratejileri-donusumu-artiran-adimlar",
+      "file": "blog/b2b-satis-demo-sonrasi-takip-stratejileri-donusumu-artiran-adimlar.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/b2b-satis-demo-sonrasi-takip-stratejileri-donusumu-artiran-adimlar",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/gelecekte-b2b-sosyal-medya-ai-destekli-kisisellestirme-ve-topluluk-yonetimi-trendleri",
+      "file": "blog/gelecekte-b2b-sosyal-medya-ai-destekli-kisisellestirme-ve-topluluk-yonetimi-trendleri.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/gelecekte-b2b-sosyal-medya-ai-destekli-kisisellestirme-ve-topluluk-yonetimi-trendleri",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/b2b-crm-de-ai-destekli-yeni-nesil-trendler",
+      "file": "blog/b2b-crm-de-ai-destekli-yeni-nesil-trendler.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/b2b-crm-de-ai-destekli-yeni-nesil-trendler",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/yapay-zeka-destekli-b2b-marka-performansi-olcumu-stratejik-yaklasimlar",
+      "file": "blog/yapay-zeka-destekli-b2b-marka-performansi-olcumu-stratejik-yaklasimlar.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/yapay-zeka-destekli-b2b-marka-performansi-olcumu-stratejik-yaklasimlar",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/yapay-zeka-ile-crm-verilerini-otomatik-temizleme-ve-zenginlestirme-rehberi",
+      "file": "blog/yapay-zeka-ile-crm-verilerini-otomatik-temizleme-ve-zenginlestirme-rehberi.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/yapay-zeka-ile-crm-verilerini-otomatik-temizleme-ve-zenginlestirme-rehberi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/ai-ile-b2b-lead-skorlama-potansiyel-musteri-degerini-artirma-rehberi",
+      "file": "blog/ai-ile-b2b-lead-skorlama-potansiyel-musteri-degerini-artirma-rehberi.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/ai-ile-b2b-lead-skorlama-potansiyel-musteri-degerini-artirma-rehberi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/b2b-sosyal-medyada-calisan-savunuculugu-marka-elcileriyle-erisimi-artirma-trendleri",
+      "file": "blog/b2b-sosyal-medyada-calisan-savunuculugu-marka-elcileriyle-erisimi-artirma-trendleri.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/b2b-sosyal-medyada-calisan-savunuculugu-marka-elcileriyle-erisimi-artirma-trendleri",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/b2b-markalari-i-cin-ai-destekli-kullanici-i-cerigi-stratejileri",
+      "file": "blog/b2b-markalari-i-cin-ai-destekli-kullanici-i-cerigi-stratejileri.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/b2b-markalari-i-cin-ai-destekli-kullanici-i-cerigi-stratejileri",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/ai-ile-b2b-sosyal-dinleme-ve-rakip-analizi-otomasyonu-rehberi",
+      "file": "blog/ai-ile-b2b-sosyal-dinleme-ve-rakip-analizi-otomasyonu-rehberi.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/ai-ile-b2b-sosyal-dinleme-ve-rakip-analizi-otomasyonu-rehberi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/yapay-zeka-destekli-crm-ile-satis-pipeline-optimizasyonu-basarili-bir-vaka-calismasi",
+      "file": "blog/yapay-zeka-destekli-crm-ile-satis-pipeline-optimizasyonu-basarili-bir-vaka-calismasi.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/yapay-zeka-destekli-crm-ile-satis-pipeline-optimizasyonu-basarili-bir-vaka-calismasi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/n8n-ile-satis-sonrasi-b2b-musteri-takip-surecleri-otomasyonu",
+      "file": "blog/n8n-ile-satis-sonrasi-b2b-musteri-takip-surecleri-otomasyonu.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/n8n-ile-satis-sonrasi-b2b-musteri-takip-surecleri-otomasyonu",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/b2b-marka-konumlandirma-hatalari-basari-i-cin-kacinilmasi-gereken-5-adim",
+      "file": "blog/b2b-marka-konumlandirma-hatalari-basari-i-cin-kacinilmasi-gereken-5-adim.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/b2b-marka-konumlandirma-hatalari-basari-i-cin-kacinilmasi-gereken-5-adim",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/n8n-ile-b2b-lead-zenginlestirme-otomasyonu-rehberi-verimliligi-artirin",
+      "file": "blog/n8n-ile-b2b-lead-zenginlestirme-otomasyonu-rehberi-verimliligi-artirin.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/n8n-ile-b2b-lead-zenginlestirme-otomasyonu-rehberi-verimliligi-artirin",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/b2b-satista-yapay-zeka-destekli-ajanlar-ve-gelecegin-satis-ekipleri",
+      "file": "blog/b2b-satista-yapay-zeka-destekli-ajanlar-ve-gelecegin-satis-ekipleri.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/b2b-satista-yapay-zeka-destekli-ajanlar-ve-gelecegin-satis-ekipleri",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/b2b-saas-lead-generation-hatalari-cozum-rehberi",
+      "file": "blog/b2b-saas-lead-generation-hatalari-cozum-rehberi.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/b2b-saas-lead-generation-hatalari-cozum-rehberi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/ai-ile-b2b-soguk-e-postada-lead-kalifikasyonu-otomasyonu-daha-akilli-yaklasim",
+      "file": "blog/ai-ile-b2b-soguk-e-postada-lead-kalifikasyonu-otomasyonu-daha-akilli-yaklasim.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/ai-ile-b2b-soguk-e-postada-lead-kalifikasyonu-otomasyonu-daha-akilli-yaklasim",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/musteri-geri-bildirimini-b2b-buyume-stratejisine-donusturme",
+      "file": "blog/musteri-geri-bildirimini-b2b-buyume-stratejisine-donusturme.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/musteri-geri-bildirimini-b2b-buyume-stratejisine-donusturme",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/b2b-linkedin-organik-erisim-stratejileri-algoritma-ve-i-cerik-i-puclari",
+      "file": "blog/b2b-linkedin-organik-erisim-stratejileri-algoritma-ve-i-cerik-i-puclari.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/b2b-linkedin-organik-erisim-stratejileri-algoritma-ve-i-cerik-i-puclari",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/yapay-zeka-ile-b2b-marka-hikayesi-yaratimi-basarili-bir-kurulum-vaka-calismasi",
+      "file": "blog/yapay-zeka-ile-b2b-marka-hikayesi-yaratimi-basarili-bir-kurulum-vaka-calismasi.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/yapay-zeka-ile-b2b-marka-hikayesi-yaratimi-basarili-bir-kurulum-vaka-calismasi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/n8n-ile-b2b-outbound-kampanyalarinda-hiper-kisisellestirme-otomasyonu",
+      "file": "blog/n8n-ile-b2b-outbound-kampanyalarinda-hiper-kisisellestirme-otomasyonu.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/n8n-ile-b2b-outbound-kampanyalarinda-hiper-kisisellestirme-otomasyonu",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/b2b-markalari-i-cin-duygusal-hikaye-anlaticiligi-stratejileri",
+      "file": "blog/b2b-markalari-i-cin-duygusal-hikaye-anlaticiligi-stratejileri.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/b2b-markalari-i-cin-duygusal-hikaye-anlaticiligi-stratejileri",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/b2b-linkedin-organik-erisim-50-artis-vaka-calismasi",
+      "file": "blog/b2b-linkedin-organik-erisim-50-artis-vaka-calismasi.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/b2b-linkedin-organik-erisim-50-artis-vaka-calismasi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/b2b-kisa-video-trendleri-gelecegin-pazarlama-stratejileri",
+      "file": "blog/b2b-kisa-video-trendleri-gelecegin-pazarlama-stratejileri.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/b2b-kisa-video-trendleri-gelecegin-pazarlama-stratejileri",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/ai-destekli-deger-satisi-b2b-satis-ekiplerinde-roi-artisi-vaka-calismasi",
+      "file": "blog/ai-destekli-deger-satisi-b2b-satis-ekiplerinde-roi-artisi-vaka-calismasi.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/ai-destekli-deger-satisi-b2b-satis-ekiplerinde-roi-artisi-vaka-calismasi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/ai-destekli-satis-metodolojileri-b2b-satis-ekipleri-i-cin-yeni-yaklasimlar",
+      "file": "blog/ai-destekli-satis-metodolojileri-b2b-satis-ekipleri-i-cin-yeni-yaklasimlar.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/ai-destekli-satis-metodolojileri-b2b-satis-ekipleri-i-cin-yeni-yaklasimlar",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/b2b-satis-playbooku-olusturma-ekibinizin-performansini-yukseltin",
+      "file": "blog/b2b-satis-playbooku-olusturma-ekibinizin-performansini-yukseltin.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/b2b-satis-playbooku-olusturma-ekibinizin-performansini-yukseltin",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/yapay-zeka-destekli-churn-tahminleme-b2b-saas-ta-yeni-trendler-ve-stratejiler",
+      "file": "blog/yapay-zeka-destekli-churn-tahminleme-b2b-saas-ta-yeni-trendler-ve-stratejiler.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/yapay-zeka-destekli-churn-tahminleme-b2b-saas-ta-yeni-trendler-ve-stratejiler",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/b2b-holdinglerde-coklu-marka-ekosisteminde-pazarlama-otomasyonu-stratejileri",
+      "file": "blog/b2b-holdinglerde-coklu-marka-ekosisteminde-pazarlama-otomasyonu-stratejileri.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/b2b-holdinglerde-coklu-marka-ekosisteminde-pazarlama-otomasyonu-stratejileri",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/b2b-soguk-e-postada-a-b-testi-ile-donusum-oranlarini-artirma-rehberi",
+      "file": "blog/b2b-soguk-e-postada-a-b-testi-ile-donusum-oranlarini-artirma-rehberi.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/b2b-soguk-e-postada-a-b-testi-ile-donusum-oranlarini-artirma-rehberi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/b2b-instagram-da-gorsel-hikaye-anlatimiyla-etkilesimi-artirma-bir-vaka-analizi",
+      "file": "blog/b2b-instagram-da-gorsel-hikaye-anlatimiyla-etkilesimi-artirma-bir-vaka-analizi.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/b2b-instagram-da-gorsel-hikaye-anlatimiyla-etkilesimi-artirma-bir-vaka-analizi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/ai-destekli-b2b-marka-i-tibar-yonetimi-trendleri",
+      "file": "blog/ai-destekli-b2b-marka-i-tibar-yonetimi-trendleri.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/ai-destekli-b2b-marka-i-tibar-yonetimi-trendleri",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/b2b-saas-ta-ucretsiz-deneme-doneminden-musteri-donusumunu-artirma-vaka-analizi",
+      "file": "blog/b2b-saas-ta-ucretsiz-deneme-doneminden-musteri-donusumunu-artirma-vaka-analizi.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/b2b-saas-ta-ucretsiz-deneme-doneminden-musteri-donusumunu-artirma-vaka-analizi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/b2b-satis-verilerini-kullanarak-stratejik-kararlar-alma-basari-i-cin-rehber",
+      "file": "blog/b2b-satis-verilerini-kullanarak-stratejik-kararlar-alma-basari-i-cin-rehber.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/b2b-satis-verilerini-kullanarak-stratejik-kararlar-alma-basari-i-cin-rehber",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/b2b-satis-kesif-gorusmelerinde-yapilan-5-yaygin-hata-ve-cozumleri",
+      "file": "blog/b2b-satis-kesif-gorusmelerinde-yapilan-5-yaygin-hata-ve-cozumleri.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/b2b-satis-kesif-gorusmelerinde-yapilan-5-yaygin-hata-ve-cozumleri",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/n8n-ile-b2b-sosyal-medyada-otomatik-paylasim-stratejileri",
+      "file": "blog/n8n-ile-b2b-sosyal-medyada-otomatik-paylasim-stratejileri.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/n8n-ile-b2b-sosyal-medyada-otomatik-paylasim-stratejileri",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/yapay-zeka-ile-b2b-sosyal-medya-i-cerik-stratejileri-rehberi",
+      "file": "blog/yapay-zeka-ile-b2b-sosyal-medya-i-cerik-stratejileri-rehberi.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/yapay-zeka-ile-b2b-sosyal-medya-i-cerik-stratejileri-rehberi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/b2b-saas-fiyatlandirma-stratejileri-deger-bazli-model-kurulum-rehberi",
+      "file": "blog/b2b-saas-fiyatlandirma-stratejileri-deger-bazli-model-kurulum-rehberi.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/b2b-saas-fiyatlandirma-stratejileri-deger-bazli-model-kurulum-rehberi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/ai-in-b2b-satista-etik-sinirlari-seffaflik-ve-guven-dengesi",
+      "file": "blog/ai-in-b2b-satista-etik-sinirlari-seffaflik-ve-guven-dengesi.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/ai-in-b2b-satista-etik-sinirlari-seffaflik-ve-guven-dengesi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/b2b-sosyal-medya-roi-olcumu-yatirim-getirisini-kanitlama-rehberi",
+      "file": "blog/b2b-sosyal-medya-roi-olcumu-yatirim-getirisini-kanitlama-rehberi.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/b2b-sosyal-medya-roi-olcumu-yatirim-getirisini-kanitlama-rehberi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/b2b-de-kisa-video-ile-satis-akisini-hizlandirma-bir-basari-oykusu",
+      "file": "blog/b2b-de-kisa-video-ile-satis-akisini-hizlandirma-bir-basari-oykusu.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/b2b-de-kisa-video-ile-satis-akisini-hizlandirma-bir-basari-oykusu",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/ai-ile-b2b-linkedin-reklamlarinda-hedefleme-optimizasyonu",
+      "file": "blog/ai-ile-b2b-linkedin-reklamlarinda-hedefleme-optimizasyonu.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/ai-ile-b2b-linkedin-reklamlarinda-hedefleme-optimizasyonu",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/b2b-linkedin-de-dusunce-liderligi-markaniz-i-cin-etkili-stratejiler",
+      "file": "blog/b2b-linkedin-de-dusunce-liderligi-markaniz-i-cin-etkili-stratejiler.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/b2b-linkedin-de-dusunce-liderligi-markaniz-i-cin-etkili-stratejiler",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/n8n-ile-b2b-rakip-analizi-otomasyonu-pazarlama-stratejilerinizi-guclendirin",
+      "file": "blog/n8n-ile-b2b-rakip-analizi-otomasyonu-pazarlama-stratejilerinizi-guclendirin.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/n8n-ile-b2b-rakip-analizi-otomasyonu-pazarlama-stratejilerinizi-guclendirin",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/b2b-i-cin-kisa-video-stratejileri-etkili-i-cerik-olusturma-rehberi",
+      "file": "blog/b2b-i-cin-kisa-video-stratejileri-etkili-i-cerik-olusturma-rehberi.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/b2b-i-cin-kisa-video-stratejileri-etkili-i-cerik-olusturma-rehberi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/ai-destekli-satis-koclugu-b2b-ekiplerinin-performansini-nasil-yukseltir",
+      "file": "blog/ai-destekli-satis-koclugu-b2b-ekiplerinin-performansini-nasil-yukseltir.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/ai-destekli-satis-koclugu-b2b-ekiplerinin-performansini-nasil-yukseltir",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/ai-ile-b2b-marka-sesi-cok-kanalli-i-letisimde-tutarlilik-rehberi",
+      "file": "blog/ai-ile-b2b-marka-sesi-cok-kanalli-i-letisimde-tutarlilik-rehberi.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/ai-ile-b2b-marka-sesi-cok-kanalli-i-letisimde-tutarlilik-rehberi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/b2b-tiktok-trendleri-kurumsal-markalar-i-cin-yaratici-kisa-video-stratejileri",
+      "file": "blog/b2b-tiktok-trendleri-kurumsal-markalar-i-cin-yaratici-kisa-video-stratejileri.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/b2b-tiktok-trendleri-kurumsal-markalar-i-cin-yaratici-kisa-video-stratejileri",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/ai-ile-b2b-satis-hunisi-i-cin-kisisellestirilmis-i-cerik-otomasyonu-rehberi",
+      "file": "blog/ai-ile-b2b-satis-hunisi-i-cin-kisisellestirilmis-i-cerik-otomasyonu-rehberi.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/ai-ile-b2b-satis-hunisi-i-cin-kisisellestirilmis-i-cerik-otomasyonu-rehberi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/cok-markali-holdingde-crm-veri-kalitesi-basarili-bir-vaka-calismasi",
+      "file": "blog/cok-markali-holdingde-crm-veri-kalitesi-basarili-bir-vaka-calismasi.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/cok-markali-holdingde-crm-veri-kalitesi-basarili-bir-vaka-calismasi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/n8n-ile-b2b-musteri-basarisi-sureclerini-otomatiklestirme-rehberi",
+      "file": "blog/n8n-ile-b2b-musteri-basarisi-sureclerini-otomatiklestirme-rehberi.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/n8n-ile-b2b-musteri-basarisi-sureclerini-otomatiklestirme-rehberi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/b2b-etkinlik-pazarlamasinda-n8n-ile-otomasyon-basarili-bir-vaka-calismasi",
+      "file": "blog/b2b-etkinlik-pazarlamasinda-n8n-ile-otomasyon-basarili-bir-vaka-calismasi.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/b2b-etkinlik-pazarlamasinda-n8n-ile-otomasyon-basarili-bir-vaka-calismasi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/ai-destekli-linkedin-etkilesim-stratejileri-bir-b2b-basari-vaka-calismasi",
+      "file": "blog/ai-destekli-linkedin-etkilesim-stratejileri-bir-b2b-basari-vaka-calismasi.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/ai-destekli-linkedin-etkilesim-stratejileri-bir-b2b-basari-vaka-calismasi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/b2b-crm-ve-pazarlama-otomasyonu-entegrasyonu-kesintisiz-i-s-akislari-rehberi",
+      "file": "blog/b2b-crm-ve-pazarlama-otomasyonu-entegrasyonu-kesintisiz-i-s-akislari-rehberi.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/b2b-crm-ve-pazarlama-otomasyonu-entegrasyonu-kesintisiz-i-s-akislari-rehberi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/b2b-satis-ekipleri-i-cin-etkili-satis-enablement-programi-olusturma",
+      "file": "blog/b2b-satis-ekipleri-i-cin-etkili-satis-enablement-programi-olusturma.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/b2b-satis-ekipleri-i-cin-etkili-satis-enablement-programi-olusturma",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/yapay-zeka-destekli-b2b-sosyal-medya-analitigi-performans-olcumunde-yeni-donem",
+      "file": "blog/yapay-zeka-destekli-b2b-sosyal-medya-analitigi-performans-olcumunde-yeni-donem.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/yapay-zeka-destekli-b2b-sosyal-medya-analitigi-performans-olcumunde-yeni-donem",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/b2b-kisa-video-stratejilerinde-7-yaygin-hata-ve-cozum-rehberi",
+      "file": "blog/b2b-kisa-video-stratejilerinde-7-yaygin-hata-ve-cozum-rehberi.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/b2b-kisa-video-stratejilerinde-7-yaygin-hata-ve-cozum-rehberi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/cok-markali-b2b-holdinglerde-marka-kimligi-tutarliligi-entegrasyon-vaka-analizi",
+      "file": "blog/cok-markali-b2b-holdinglerde-marka-kimligi-tutarliligi-entegrasyon-vaka-analizi.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/cok-markali-b2b-holdinglerde-marka-kimligi-tutarliligi-entegrasyon-vaka-analizi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/b2b-pazarlama-icin-chatgpt-prompt-muhendisliginde-yeni-trendler",
+      "file": "blog/b2b-pazarlama-icin-chatgpt-prompt-muhendisliginde-yeni-trendler.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/b2b-pazarlama-icin-chatgpt-prompt-muhendisliginde-yeni-trendler",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/cok-markali-holdinglerde-merkezi-crm-stratejileri-veri-butunlugu-rehberi",
+      "file": "blog/cok-markali-holdinglerde-merkezi-crm-stratejileri-veri-butunlugu-rehberi.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/cok-markali-holdinglerde-merkezi-crm-stratejileri-veri-butunlugu-rehberi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/b2b-marka-degeri-yaratimi-rehberi-surdurulebilirlik-odakli-yaklasimlar",
+      "file": "blog/b2b-marka-degeri-yaratimi-rehberi-surdurulebilirlik-odakli-yaklasimlar.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/b2b-marka-degeri-yaratimi-rehberi-surdurulebilirlik-odakli-yaklasimlar",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/b2b-saas-ta-ai-destekli-urun-odakli-buyume-benimseme-stratejileri",
+      "file": "blog/b2b-saas-ta-ai-destekli-urun-odakli-buyume-benimseme-stratejileri.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/b2b-saas-ta-ai-destekli-urun-odakli-buyume-benimseme-stratejileri",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/b2b-satis-uzmanlari-i-cin-ai-ile-kisisel-linkedin-markasi-rehberi",
+      "file": "blog/b2b-satis-uzmanlari-i-cin-ai-ile-kisisel-linkedin-markasi-rehberi.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/b2b-satis-uzmanlari-i-cin-ai-ile-kisisel-linkedin-markasi-rehberi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/b2b-instagram-reels-ta-ai-ile-basari-bir-vaka-calismasi",
+      "file": "blog/b2b-instagram-reels-ta-ai-ile-basari-bir-vaka-calismasi.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/b2b-instagram-reels-ta-ai-ile-basari-bir-vaka-calismasi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/b2b-satis-egitiminde-ai-devrimi-kisisellestirilmis-ogrenme-yollari-trendleri",
+      "file": "blog/b2b-satis-egitiminde-ai-devrimi-kisisellestirilmis-ogrenme-yollari-trendleri.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/b2b-satis-egitiminde-ai-devrimi-kisisellestirilmis-ogrenme-yollari-trendleri",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/b2b-marka-sadakati-olusturma-uzun-vadeli-i-liskiler-i-cin-temel-stratejiler",
+      "file": "blog/b2b-marka-sadakati-olusturma-uzun-vadeli-i-liskiler-i-cin-temel-stratejiler.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/b2b-marka-sadakati-olusturma-uzun-vadeli-i-liskiler-i-cin-temel-stratejiler",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/b2b-instagram-reels-ile-lead-olusturma-n8n-destekli-otomasyon-rehberi",
+      "file": "blog/b2b-instagram-reels-ile-lead-olusturma-n8n-destekli-otomasyon-rehberi.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/b2b-instagram-reels-ile-lead-olusturma-n8n-destekli-otomasyon-rehberi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/ai-ile-b2b-linkedin-reklam-metinleri-optimizasyonu-donusumu-artiran-i-puclari",
+      "file": "blog/ai-ile-b2b-linkedin-reklam-metinleri-optimizasyonu-donusumu-artiran-i-puclari.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/ai-ile-b2b-linkedin-reklam-metinleri-optimizasyonu-donusumu-artiran-i-puclari",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/b2b-pazarlama-otomasyonu-kurulumunda-7-kritik-hata-ve-cozum-rehberi",
+      "file": "blog/b2b-pazarlama-otomasyonu-kurulumunda-7-kritik-hata-ve-cozum-rehberi.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/b2b-pazarlama-otomasyonu-kurulumunda-7-kritik-hata-ve-cozum-rehberi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/b2b-satista-sanal-ve-artirilmis-gerceklik-gelecegin-i-letisim-trendleri",
+      "file": "blog/b2b-satista-sanal-ve-artirilmis-gerceklik-gelecegin-i-letisim-trendleri.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/b2b-satista-sanal-ve-artirilmis-gerceklik-gelecegin-i-letisim-trendleri",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/ai-destekli-b2b-satin-alma-davranislari-gelecegin-trendleri",
+      "file": "blog/ai-destekli-b2b-satin-alma-davranislari-gelecegin-trendleri.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/ai-destekli-b2b-satin-alma-davranislari-gelecegin-trendleri",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/cok-markali-holdinglerde-basarili-capraz-satis-stratejileri-bir-vaka-calismasi",
+      "file": "blog/cok-markali-holdinglerde-basarili-capraz-satis-stratejileri-bir-vaka-calismasi.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/cok-markali-holdinglerde-basarili-capraz-satis-stratejileri-bir-vaka-calismasi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/b2b-saas-ta-niche-pazar-outreach-ile-yuksek-donusum-basarili-bir-vaka-calismasi",
+      "file": "blog/b2b-saas-ta-niche-pazar-outreach-ile-yuksek-donusum-basarili-bir-vaka-calismasi.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/b2b-saas-ta-niche-pazar-outreach-ile-yuksek-donusum-basarili-bir-vaka-calismasi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/yapay-zeka-ile-b2b-tiktok-trendlerini-otomatik-takip-etme-ve-i-cerik-fikirleri-uretme",
+      "file": "blog/yapay-zeka-ile-b2b-tiktok-trendlerini-otomatik-takip-etme-ve-i-cerik-fikirleri-uretme.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/yapay-zeka-ile-b2b-tiktok-trendlerini-otomatik-takip-etme-ve-i-cerik-fikirleri-uretme",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/n8n-ile-linkedin-kisisel-profil-otomasyonu-aginizi-ve-etkilesiminizi-artirin",
+      "file": "blog/n8n-ile-linkedin-kisisel-profil-otomasyonu-aginizi-ve-etkilesiminizi-artirin.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/n8n-ile-linkedin-kisisel-profil-otomasyonu-aginizi-ve-etkilesiminizi-artirin",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/b2b-influencer-pazarlamasi-etkili-stratejiler-ve-olcumleme-rehberi",
+      "file": "blog/b2b-influencer-pazarlamasi-etkili-stratejiler-ve-olcumleme-rehberi.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/b2b-influencer-pazarlamasi-etkili-stratejiler-ve-olcumleme-rehberi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/b2b-podcast-pazarlamasinda-ai-i-cerik-uretimi-ve-dinleyici-erisimi-stratejileri",
+      "file": "blog/b2b-podcast-pazarlamasinda-ai-i-cerik-uretimi-ve-dinleyici-erisimi-stratejileri.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/b2b-podcast-pazarlamasinda-ai-i-cerik-uretimi-ve-dinleyici-erisimi-stratejileri",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/b2b-linkedin-etkilesimini-artirma-yorum-ve-dm-stratejileri-rehberi",
+      "file": "blog/b2b-linkedin-etkilesimini-artirma-yorum-ve-dm-stratejileri-rehberi.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/b2b-linkedin-etkilesimini-artirma-yorum-ve-dm-stratejileri-rehberi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/b2b-satis-sureclerinde-en-sik-yapilan-7-hata-ve-cozum-yollari",
+      "file": "blog/b2b-satis-sureclerinde-en-sik-yapilan-7-hata-ve-cozum-yollari.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/b2b-satis-sureclerinde-en-sik-yapilan-7-hata-ve-cozum-yollari",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/modern-b2b-musterisinin-beklentileri-seffaflik-ve-kisisellestirme-trendleri",
+      "file": "blog/modern-b2b-musterisinin-beklentileri-seffaflik-ve-kisisellestirme-trendleri.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/modern-b2b-musterisinin-beklentileri-seffaflik-ve-kisisellestirme-trendleri",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/bir-b2b-markasinin-i-sveren-markasi-donusumu-yetenekleri-cekme-ve-tutmada-basari-oykusu",
+      "file": "blog/bir-b2b-markasinin-i-sveren-markasi-donusumu-yetenekleri-cekme-ve-tutmada-basari-oykusu.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/bir-b2b-markasinin-i-sveren-markasi-donusumu-yetenekleri-cekme-ve-tutmada-basari-oykusu",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/ai-ile-b2b-crm-kayit-yonetimi-otomasyonu-veri-girisini-ve-dogrulugu-artirma",
+      "file": "blog/ai-ile-b2b-crm-kayit-yonetimi-otomasyonu-veri-girisini-ve-dogrulugu-artirma.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/ai-ile-b2b-crm-kayit-yonetimi-otomasyonu-veri-girisini-ve-dogrulugu-artirma",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/crm-verileriyle-musteri-geri-bildirimini-otomatik-toplama-ve-analiz-etme",
+      "file": "blog/crm-verileriyle-musteri-geri-bildirimini-otomatik-toplama-ve-analiz-etme.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/crm-verileriyle-musteri-geri-bildirimini-otomatik-toplama-ve-analiz-etme",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/b2b-crm-secimi-zoho-vs-pipedrive-kapsamli-karsilastirma-rehberi",
+      "file": "blog/b2b-crm-secimi-zoho-vs-pipedrive-kapsamli-karsilastirma-rehberi.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/b2b-crm-secimi-zoho-vs-pipedrive-kapsamli-karsilastirma-rehberi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/coklu-markali-holdinglerde-n8n-ile-pazarlama-otomasyonu-rehberi",
+      "file": "blog/coklu-markali-holdinglerde-n8n-ile-pazarlama-otomasyonu-rehberi.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/coklu-markali-holdinglerde-n8n-ile-pazarlama-otomasyonu-rehberi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/n8n-ile-b2b-crm-de-riskli-musteri-tespiti-otomasyonu",
+      "file": "blog/n8n-ile-b2b-crm-de-riskli-musteri-tespiti-otomasyonu.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/n8n-ile-b2b-crm-de-riskli-musteri-tespiti-otomasyonu",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/coklu-marka-e-ticaretinde-crm-entegrasyonu-basari-rehberi",
+      "file": "blog/coklu-marka-e-ticaretinde-crm-entegrasyonu-basari-rehberi.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/coklu-marka-e-ticaretinde-crm-entegrasyonu-basari-rehberi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/b2b-influencer-pazarlamasinda-yapilan-5-kritik-hata-ve-basari-i-cin-cozumler",
+      "file": "blog/b2b-influencer-pazarlamasinda-yapilan-5-kritik-hata-ve-basari-i-cin-cozumler.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/b2b-influencer-pazarlamasinda-yapilan-5-kritik-hata-ve-basari-i-cin-cozumler",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/b2b-linkedin-de-dusunce-liderligi-ile-marka-bilinirligi-artisi-basarili-bir-vaka-calismasi",
+      "file": "blog/b2b-linkedin-de-dusunce-liderligi-ile-marka-bilinirligi-artisi-basarili-bir-vaka-calismasi.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/b2b-linkedin-de-dusunce-liderligi-ile-marka-bilinirligi-artisi-basarili-bir-vaka-calismasi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/n8n-ile-otomatik-linkedin-outbound-100-yeni-lead-ve-15-toplanti-vaka-analizi",
+      "file": "blog/n8n-ile-otomatik-linkedin-outbound-100-yeni-lead-ve-15-toplanti-vaka-analizi.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/n8n-ile-otomatik-linkedin-outbound-100-yeni-lead-ve-15-toplanti-vaka-analizi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/ai-ile-b2b-linkedin-outreach-mesajlarini-kisisellestirme-rehberi",
+      "file": "blog/ai-ile-b2b-linkedin-outreach-mesajlarini-kisisellestirme-rehberi.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/ai-ile-b2b-linkedin-outreach-mesajlarini-kisisellestirme-rehberi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/b2b-satista-yapay-zeka-destekli-karar-alma-gelecegin-satis-liderleri-nasil-hazirlaniyor",
+      "file": "blog/b2b-satista-yapay-zeka-destekli-karar-alma-gelecegin-satis-liderleri-nasil-hazirlaniyor.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/b2b-satista-yapay-zeka-destekli-karar-alma-gelecegin-satis-liderleri-nasil-hazirlaniyor",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/surdurulebilirlik-raporlamasinda-b2b-markalarin-yeni-i-letisim-trendleri",
+      "file": "blog/surdurulebilirlik-raporlamasinda-b2b-markalarin-yeni-i-letisim-trendleri.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/surdurulebilirlik-raporlamasinda-b2b-markalarin-yeni-i-letisim-trendleri",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/b2b-etkinliklerde-ai-ile-kisisellestirme-rehberi",
+      "file": "blog/b2b-etkinliklerde-ai-ile-kisisellestirme-rehberi.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/b2b-etkinliklerde-ai-ile-kisisellestirme-rehberi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/ai-ile-marka-hikayesi-anlatiminda-yeni-trendler-otantikligi-dijital-cagda-koruma",
+      "file": "blog/ai-ile-marka-hikayesi-anlatiminda-yeni-trendler-otantikligi-dijital-cagda-koruma.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/ai-ile-marka-hikayesi-anlatiminda-yeni-trendler-otantikligi-dijital-cagda-koruma",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/ai-ile-b2b-satis-hunisinde-anlasma-risklerini-tespit-etme-proaktif-yonetim-rehberi",
+      "file": "blog/ai-ile-b2b-satis-hunisinde-anlasma-risklerini-tespit-etme-proaktif-yonetim-rehberi.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/ai-ile-b2b-satis-hunisinde-anlasma-risklerini-tespit-etme-proaktif-yonetim-rehberi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/b2b-saas-ta-ai-ile-outbound-satis-verimliligi-basarili-bir-vaka-calismasi",
+      "file": "blog/b2b-saas-ta-ai-ile-outbound-satis-verimliligi-basarili-bir-vaka-calismasi.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/b2b-saas-ta-ai-ile-outbound-satis-verimliligi-basarili-bir-vaka-calismasi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/ai-ile-b2b-linkedin-gorsel-i-cerik-trendleri-algoritmayi-anlamak",
+      "file": "blog/ai-ile-b2b-linkedin-gorsel-i-cerik-trendleri-algoritmayi-anlamak.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/ai-ile-b2b-linkedin-gorsel-i-cerik-trendleri-algoritmayi-anlamak",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/b2b-linkedin-organik-erisimde-ai-destekli-i-cerik-hatalari-ve-cozumleri",
+      "file": "blog/b2b-linkedin-organik-erisimde-ai-destekli-i-cerik-hatalari-ve-cozumleri.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/b2b-linkedin-organik-erisimde-ai-destekli-i-cerik-hatalari-ve-cozumleri",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    },
+    {
+      "url": "https://cornergroup.co/blog/n8n-ile-b2b-satis-ekibi-i-letisiminde-otomasyon-verimlilik-rehberi",
+      "file": "blog/n8n-ile-b2b-satis-ekibi-i-letisiminde-otomasyon-verimlilik-rehberi.html",
+      "status": 200,
+      "finalUrl": "https://cornergroup.co/blog/n8n-ile-b2b-satis-ekibi-i-letisiminde-otomasyon-verimlilik-rehberi",
+      "expectStatus": 200,
+      "hydrate": {
+        "empty": 0,
+        "filled": 0,
+        "mismatch": [],
+        "errors": []
+      }
+    }
+  ],
+  "keptScripts": [
+    "",
+    "typeof document<\"u\"&&(window.process={...window.process,env:{...window.process?."
+  ]
+}
