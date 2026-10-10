@@ -143,8 +143,11 @@ function eachRegion(html, name, fn) {
   while ((r = region(html, name, from))) { const before = html.length; html = fn(html, r); from = r.end + (html.length - before); }
   return html;
 }
+// Yazar her sitede kişi (E-E-A-T): kişisel sitedeki Person düğümüne @id ile bağlanır
+const AUTHOR = { "@type": "Person", "@id": "https://www.yalcinberkay.com.tr/#person", name: "Berkay Yalçın", url: "https://www.yalcinberkay.com.tr",
+  sameAs: ["https://www.linkedin.com/in/berkayyalcin2/"] };
 const swapImg = (tag, p, lazy) => tag.replace(/\s(srcset|sizes)="[^"]*"/g, "").replace(/\ssrc="[^"]*"/, ` src="${esc(p.fm.image)}"${lazy ? ' loading="lazy"' : ""}`)
-  .replace(/\salt(="[^"]*")?(?=[\s>])/, ` alt="${esc(p.fm.imageAlt || p.fm.title)}"`);
+  .replace(/\salt(="[^"]*")?(?=[\s>])/, "").replace(/^<img\b/, `<img alt="${esc(p.fm.imageAlt || p.fm.title)}"`);
 const readTime = body => `${Math.max(1, Math.round(body.split(/\s+/).length / 220))}${cfg.lang === "en" ? " min read" : " dk okuma"}`;
 const L = cfg.lang === "en" ? { related: "Related Posts", home: "Home" } : { related: "İlgili Yazılar", home: "Ana Sayfa" };
 
@@ -210,7 +213,7 @@ function renderPost(tpl, post, next, related) {
   const ld = [{
     "@context": "https://schema.org", "@type": "BlogPosting", headline: fm.title.slice(0, 110), description: fm.description,
     image: [img], datePublished: fm.date, dateModified: fm.updated || fm.date, mainEntityOfPage: url, inLanguage: cfg.lang,
-    author: { "@type": "Organization", name: cfg.author, url: cfg.origin },
+    author: AUTHOR,
     publisher: { "@type": "Organization", name: cfg.brand, url: cfg.origin },
   }, {
     "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [[L.home, cfg.origin + "/"], ["Blog", cfg.origin + "/blog"], [fm.title, url]]
