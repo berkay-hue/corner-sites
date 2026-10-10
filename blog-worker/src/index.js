@@ -37,9 +37,14 @@ async function claude(env, model, prompt, { json = false, maxTokens = 2048 } = {
   const d = await r.json();
   const text = (d.content || []).filter(b => b.type === "text").map(b => b.text).join("");
   if (!text) throw new Error(`Claude ${model} boş yanıt: ${JSON.stringify(d).slice(0, 300)}`);
-  if (d.stop_reason === "max_tokens") throw new Error(`Claude ${model} yanıtı yarıda kesildi (max_tokens)`);
-  if (!json) return text;
-  return JSON.parse(text.slice(text.indexOf("{"), text.lastIndexOf("}") + 1));
+  const cut = d.stop_reason === "max_tokens";
+  if (!json) {
+    if (cut) throw new Error(`Claude ${model} yanıtı yarıda kesildi (max_tokens)`);
+    return text;
+  }
+  // JSON tamamlandıysa ardından gelen açıklama kesilmiş olsa da kullanılır
+  try { return JSON.parse(text.slice(text.indexOf("{"), text.lastIndexOf("}") + 1)); }
+  catch (e) { throw new Error(`Claude ${model} ${cut ? "yanıtı yarıda kesildi (max_tokens)" : "geçersiz JSON"}: ${text.slice(0, 200)}`); }
 }
 
 async function loadIndex(cfg) {
@@ -64,7 +69,7 @@ Son yazılar (bunları ya da çok benzerlerini TEKRARLAMA):
 ${recent || "- (yok)"}
 
 Yalnızca şu JSON'u döndür: {"topic": "Türkçe başlık, en fazla 60 karakter", "category": "kategorilerden biri", "slug": "basliktan-kisa-slug", "description": "Türkçe meta açıklama, 140-155 karakter, tam cümle", "imageQuery": "konuyu anlatan 2-4 kelimelik İngilizce stok fotoğraf araması (somut sahne: ofis, ekip, ekran, toplantı; kelime oyunu yok)"}`;
-  const t = await claude(env, cfg.topicModel, prompt, { json: true });
+  const t = await claude(env, cfg.topicModel, prompt, { json: true, maxTokens: 4096 });
   if (!t.topic) throw new Error("Konu üretilemedi: " + JSON.stringify(t));
   if (!CATEGORIES.includes(t.category)) t.category = "Rehber";
   return t;
