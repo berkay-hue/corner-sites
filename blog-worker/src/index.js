@@ -28,20 +28,16 @@ async function claude(env, model, prompt, { json = false, maxTokens = 2048 } = {
     body: JSON.stringify({ model, max_tokens: maxTokens, stream: true, messages: [{ role: "user", content: prompt }] }),
   });
   if (!r.ok) throw new Error(`Claude ${model} ${r.status}: ${(await r.text()).slice(0, 300)}`);
-  let text = "", stop = null, buf = "";
+  // Ücretsiz plandaki CPU sınırı için olay başına JSON.parse yerine tek seferde çözülür
   const dec = new TextDecoder();
-  for await (const chunk of r.body) {
-    buf += dec.decode(chunk, { stream: true });
-    let i;
-    while ((i = buf.indexOf("\n")) >= 0) {
-      const line = buf.slice(0, i).trim(); buf = buf.slice(i + 1);
-      if (!line.startsWith("data:")) continue;
-      const ev = JSON.parse(line.slice(5));
-      if (ev.type === "content_block_delta" && ev.delta?.type === "text_delta") text += ev.delta.text;
-      else if (ev.type === "message_delta") stop = ev.delta?.stop_reason ?? stop;
-      else if (ev.type === "error") throw new Error(`Claude ${model} akış hatası: ${JSON.stringify(ev.error).slice(0, 300)}`);
-    }
-  }
+  let raw = "";
+  for await (const chunk of r.body) raw += dec.decode(chunk, { stream: true });
+  raw += dec.decode();
+  if (raw.includes('"type":"error"')) throw new Error(`Claude ${model} akış hatası: ${raw.slice(raw.indexOf('"type":"error"'), raw.indexOf('"type":"error"') + 300)}`);
+  const lits = [];
+  for (const m of raw.matchAll(/"type":"text_delta","text":("(?:[^"\\]|\\.)*")/g)) lits.push(m[1]);
+  const text = JSON.parse(`[${lits.join(",")}]`).join("");
+  const stop = (raw.match(/"stop_reason":"(\w+)"/) || [])[1];
   if (!text) throw new Error(`Claude ${model} boş yanıt`);
   const cut = stop === "max_tokens";
   if (!json) {
@@ -162,7 +158,7 @@ async function gh(env, cfg, path, init = {}) {
   return r.status === 404 ? null : r.json();
 }
 
-const b64 = s => { const b = new TextEncoder().encode(s); let bin = ""; for (const x of b) bin += String.fromCharCode(x); return btoa(bin); };
+const b64 = s => { const b = new TextEncoder().encode(s); let bin = ""; for (let i = 0; i < b.length; i += 0x8000) bin += String.fromCharCode.apply(null, b.subarray(i, i + 0x8000)); return btoa(bin); };
 
 async function commitPost(env, cfg, slug, content, message) {
   let path = `${cfg.contentDir}/${slug}.md`;
