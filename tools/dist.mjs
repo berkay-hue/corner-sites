@@ -71,7 +71,10 @@ if (!(await has(join(OUT, "sitemap.xml")))) {
 }
 // llms.txt (llmstxt.org): yapay zekâ aramaları için site özeti, sitemap'teki sayfalardan üretilir
 const NAMES = { "yalcinberkay.com.tr": "Berkay Yalçın" };
-const SECTIONS = { blog: "Blog", "bilgi-merkezi": "Bilgi Merkezi", solutions: "Çözümler", "aydinlatma-metni": "Yasal" };
+const EN = /<html[^>]*\slang="en/i.test(index);
+const SECTIONS = EN ? { blog: "Blog", industries: "Industries", solutions: "Solutions" }
+  : { blog: "Blog", "bilgi-merkezi": "Bilgi Merkezi", solutions: "Çözümler", sektor: "Sektörler", "aydinlatma-metni": "Yasal" };
+const PAGES = EN ? "Pages" : "Sayfalar";
 const unesc = s => s.replace(/&amp;/g, "&").replace(/&quot;/g, '"').replace(/&#x27;|&#39;/g, "'").replace(/&lt;/g, "<").replace(/&gt;/g, ">").trim();
 const meta = (html, re) => unesc(html.match(re)?.[1] || "");
 const homeTitle = meta(index, /<title>([^<]*)/);
@@ -88,12 +91,12 @@ for (const loc of [...(await readFile(join(OUT, "sitemap.xml"), "utf8")).matchAl
   const title = meta(html, /<title>([^<]*)/).replace(BRAND_PRE, "").replace(BRAND_SUF, "").trim() || p;
   const desc = meta(html, /<meta name="description" content="([^"]*)"/);
   const seg = p.includes("/") ? p.split("/")[0] : "";
-  const key = SECTIONS[seg] || (seg ? seg[0].toUpperCase() + seg.slice(1) : "Sayfalar");
+  const key = SECTIONS[seg] || (seg ? seg[0].toUpperCase() + seg.slice(1) : PAGES);
   if (!groups.has(key)) groups.set(key, []);
   groups.get(key).push(`- [${title.replace(/[[\]]/g, "")}](${loc})${desc ? ": " + desc : ""}`);
 }
-const order = [...groups.keys()].sort((a, b) => (b === "Sayfalar") - (a === "Sayfalar"));
-await writeFile(join(OUT, "llms.txt"), `# ${name}\n\n> ${meta(index, /<meta name="description" content="([^"]*)"/)}\n\n- [Ana sayfa](${origin}/)\n- [Sitemap](${origin}/sitemap.xml)\n` +
+const order = [...groups.keys()].sort((a, b) => (b === PAGES) - (a === PAGES));
+await writeFile(join(OUT, "llms.txt"), `# ${name}\n\n> ${meta(index, /<meta name="description" content="([^"]*)"/)}\n\n- [${EN ? "Home" : "Ana sayfa"}](${origin}/)\n- [Sitemap](${origin}/sitemap.xml)\n` +
   order.map(k => `\n## ${k}\n\n${groups.get(k).join("\n")}\n`).join(""));
 
 await writeFile(join(OUT, "robots.txt"), `User-agent: *\nAllow: /\n\nSitemap: ${origin}/sitemap.xml\n`);
