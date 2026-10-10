@@ -18,17 +18,17 @@
 <meta name="twitter:description" content="">
 <meta name="twitter:image" content="https://raw.githubusercontent.com/berkay-hue/saascorner-assets/main/sales_corner-removebg-preview.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Inter+Tight:wght@600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#07070b;--surface:#111118;--line:#23232d;--text:#f4f4f7;--muted:#a1a1b0;--accent:#a78bfa;--grad:linear-gradient(90deg,#8b5cf6,#60a5fa 55%,#22d3ee)}
+:root{--bg:#05060a;--surface:#111118;--line:#23232d;--text:#f4f4f7;--muted:#a1a1b0;--accent:#a78bfa;--grad:linear-gradient(135deg,#7c5cff,#22d3ee)}
 *{box-sizing:border-box}html{-webkit-text-size-adjust:100%}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.7 "Inter",system-ui,-apple-system,sans-serif}
 a{color:inherit}img{max-width:100%;display:block}
-.wrap{max-width:1140px;margin:0 auto;padding:0 20px}
+.wrap{max-width:1280px;margin:0 auto;padding:0 20px}
 header.top{position:sticky;top:0;z-index:10;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
 header.top .wrap{display:flex;align-items:center;gap:24px;height:68px}
 header.top nav{display:flex;gap:22px;margin-left:auto;font-size:15px}header.top nav a{text-decoration:none;color:var(--muted)}header.top nav a:hover,header.top nav a[aria-current]{color:var(--text)}
 .btn{display:inline-block;background:var(--grad);color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:10px 18px;border-radius:10px;white-space:nowrap}
-h1,h2,h3,h5{font-family:"Inter","Inter",system-ui,sans-serif;line-height:1.2}
+h1,h2,h3,h5{font-family:"Inter Tight","Inter",system-ui,sans-serif;line-height:1.2}
 .hero{padding:64px 0 28px}.hero h1{font-size:clamp(30px,4.6vw,52px);margin:.2em 0 .3em;letter-spacing:-.02em}.hero p{color:var(--muted);font-size:18px;max-width:680px;margin:0}
 .eyebrow{display:inline-block;font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:24px;padding:24px 0 80px}
@@ -46,13 +46,13 @@ article h1{font-size:clamp(28px,4vw,44px);margin:.4em 0 .4em;letter-spacing:-.01
 .post-body{font-size:17.5px}.post-body p{margin:0 0 1.1em}.post-body a{color:var(--accent)}.post-body strong{color:var(--text)}
 .cta{margin:48px 0 0;padding:28px;border-radius:16px;border:1px solid var(--line);background:var(--surface)}.cta h3{margin:0 0 .3em;font-size:22px}.cta p{color:var(--muted);margin:0 0 1em}
 .next{margin-top:28px;font-weight:600}.next a{color:var(--accent);text-decoration:none}
-footer.bot{border-top:1px solid var(--line);color:var(--muted);font-size:14px;padding:32px 0 40px}footer.bot .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:space-between}footer.bot nav{display:flex;flex-wrap:wrap;gap:8px 18px}footer.bot a{text-decoration:none}footer.bot a:hover{color:var(--text)}
-@media(max-width:760px){header.top nav a:not(.keep){display:none}header.top .btn{padding:8px 12px;font-size:14px}header.top .wrap{gap:12px}.hero{padding:40px 0 16px}}
+footer.bot{margin-top:40px;border-top:1px solid rgba(255,255,255,.06);background:rgba(0,0,0,.2);color:var(--muted);font-size:14px;padding:56px 0 30px}footer.bot a{text-decoration:none;color:var(--muted)}footer.bot a:hover{color:var(--text)}.fgrid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:32px}.fgrid>div>a{display:block;margin-bottom:10px;font-size:13px}.fgrid p{margin:14px 0 0;max-width:320px;line-height:1.6}.fh{color:var(--text);font-weight:600;font-size:14px;margin-bottom:14px}.logo{height:36px;width:auto;mix-blend-mode:screen}.fbot{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:space-between;margin-top:40px;padding-top:24px;border-top:1px solid rgba(255,255,255,.06);font-size:13px}.fbot nav{display:flex;flex-wrap:wrap;gap:8px 18px}
+@media(max-width:760px){.fgrid{grid-template-columns:1fr 1fr}.fgrid>div:first-child{grid-column:1/-1}header.top nav a:not(.keep){display:none}header.top .btn{padding:8px 12px;font-size:14px}header.top .wrap{gap:12px}.hero{padding:40px 0 16px}}
 </style>
 </head>
 <body>
-<header class="top"><div class="wrap"><a href="/" aria-label="Sales Corner"><img src="https://raw.githubusercontent.com/berkay-hue/saascorner-assets/main/sales_corner-removebg-preview.png" alt="Sales Corner" height="34" style="height:34px;width:auto"></a>
-<nav><a href="/">Ana Sayfa</a><a href="/#otomasyonlar">Otomasyonlar</a><a href="/blog" class="keep" aria-current="page">Blog</a></nav><a class="btn" href="/iletisim">Görüşme planla</a></div></header>
+<header class="top"><div class="wrap"><a href="/" aria-label="Sales Corner"><img src="https://raw.githubusercontent.com/berkay-hue/saascorner-assets/main/sales_corner-removebg-preview.png" alt="Sales Corner" height="36" class="logo"></a>
+<nav><a href="/#otomasyonlar">Otomasyonlar</a><a href="/#mimari">Mimari</a><a href="/#custom">Custom</a><a href="/#tech">Tech Stack</a><a href="/blog" class="keep">Blog</a></nav><a class="btn" href="/iletisim">Görüşme planla</a></div></header>
 <main><article>
 <a class="back" href="/blog">← Tüm yazılar</a>
 <div data-framer-name="Category" class="tag" style="margin-top:22px"><p></p></div>
@@ -63,6 +63,12 @@ footer.bot{border-top:1px solid var(--line);color:var(--muted);font-size:14px;pa
 <div class="cta"><h3>Satış süreçlerinizi otomatikleştirelim</h3><p>Lead bulmaktan teklif yazımına kadar tüm akışı birlikte kuralım.</p><a class="btn" href="/iletisim">Görüşme planla</a></div>
 <div data-framer-name="Next" class="next">Sonraki yazı: <a href="./x">x</a></div>
 </article></main>
-<footer class="bot"><div class="wrap"><div>© Sales Corner · Tüm hakları saklıdır.</div><nav aria-label="Corner Group şirketleri"><a href="https://saascorner.co">SAAS Corner</a><a href="https://socialmediacorner.co">Social Media Corner</a><a href="https://www.brandcorner.co">Brand Corner</a><a href="https://cornergroup.co">Corner Group</a></nav></div></footer>
+<footer class="bot"><div class="wrap fgrid">
+<div><a href="/" aria-label="Sales Corner"><img class="logo" src="https://raw.githubusercontent.com/berkay-hue/saascorner-assets/main/sales_corner-removebg-preview.png" alt="Sales Corner" height="36"></a><p>AI + n8n ile B2B satış süreçlerini otomatikleştiriyoruz. Lead generation'dan satış analizine kadar her şey.</p></div>
+<div><div class="fh">Otomasyonlar</div><a href="/#otomasyonlar">Live Sales Coach</a><a href="/#otomasyonlar">Conversation IQ</a><a href="/#otomasyonlar">Briefing Studio</a><a href="/#otomasyonlar">Rakip Radarı</a><a href="/#otomasyonlar">Content Engine</a></div>
+<div><div class="fh">Şirket</div><a href="/#mimari">Mimari</a><a href="/#custom">Custom çözüm</a><a href="/#tech">Tech stack</a><a href="/blog">Blog</a><a href="/iletisim">İletişim</a></div>
+<div><div class="fh">İletişim</div><a href="mailto:info@saascorner.co">info@saascorner.co</a><a href="/iletisim">Görüşme planla →</a></div>
+</div>
+<div class="wrap fbot"><div>© Sales Corner · Tüm hakları saklıdır.</div><nav aria-label="Corner Group şirketleri"><a href="https://saascorner.co">SAAS Corner</a><a href="https://socialmediacorner.co">Social Media Corner</a><a href="https://www.brandcorner.co">Brand Corner</a><a href="https://cornergroup.co">Corner Group</a></nav></div></footer>
 </body>
 </html>
