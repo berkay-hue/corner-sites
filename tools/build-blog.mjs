@@ -144,7 +144,7 @@ function eachRegion(html, name, fn) {
   return html;
 }
 // Yazar her sitede kişi (E-E-A-T): kişisel sitedeki Person düğümüne @id ile bağlanır
-const AUTHOR = { "@type": "Person", "@id": "https://www.yalcinberkay.com.tr/#person", name: "Berkay Yalçın", url: "https://www.yalcinberkay.com.tr",
+const AUTHOR = { "@type": "Person", "@id": "https://www.yalcinberkay.com.tr/#person", name: "Berkay Yalçın", url: "https://www.yalcinberkay.com.tr", jobTitle: "Founder & B2B Sales Consultant",
   sameAs: ["https://www.linkedin.com/in/berkayyalcin2/"] };
 const swapImg = (tag, p, lazy) => tag.replace(/\s(srcset|sizes)="[^"]*"/g, "").replace(/\ssrc="[^"]*"/, ` src="${esc(p.fm.image)}"${lazy ? ' loading="lazy"' : ""}`)
   .replace(/\salt(="[^"]*")?(?=[\s>])/, "").replace(/^<img\b/, `<img alt="${esc(p.fm.imageAlt || p.fm.title)}"`);

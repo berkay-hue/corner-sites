@@ -40,7 +40,7 @@ const RULES = {
     origin: "https://www.yalcinberkay.com.tr",
     person: {
       "@type": "Person", "@id": "https://www.yalcinberkay.com.tr/#person", name: "Berkay YALÇIN",
-      url: "https://www.yalcinberkay.com.tr/", jobTitle: "Sales Consultant",
+      url: "https://www.yalcinberkay.com.tr/", jobTitle: "Founder & B2B Sales Consultant",
       worksFor: { "@type": "Organization", name: "SAAS Corner", url: "https://saascorner.co" },
       sameAs: ["https://linkedin.com/in/berkayyalcin2", "https://www.instagram.com/beerkayyalcin"],
     },
