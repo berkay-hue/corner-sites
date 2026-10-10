@@ -68,7 +68,7 @@ SITES = '''[
   },
   {
     "siteUrl": "https://www.brandcorner.co",
-    "hour": 12,
+    "hour": null,
     "lang": "en",
     "brand": "Brand Corner",
     "focus": "Influencer marketing for brands and agencies: finding and vetting creators, campaign planning, creator partnerships, UGC, measuring influencer ROI, brand positioning and social commerce",
