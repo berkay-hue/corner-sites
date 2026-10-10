@@ -2,10 +2,9 @@ name = "corner-blog-writer"
 main = "src/index.js"
 compatibility_date = "2026-09-01"
 
-# Her saat başı 06-11 UTC çalışır; o saatte "hour" alanı eşleşen site yazılır (siteler aynı anda değil, sırayla).
-# 07 UTC = 10:00 TR, 08 = 11:00, 09 = 12:00
+# Cron kapalı: günlük yazıyı GitHub Actions üretir (blog-daily.yml). Worker yalnız elle /run için kalır.
 [triggers]
-crons = ["0 6-11 * * *"]
+crons = []  # günlük yazı artık .github/workflows/blog-daily.yml (CPU sınırı 1102)
 
 [vars]
 # Blogu olan her site için bir kayıt. repo/branch: yazıların commit edildiği GitHub deposu (push'ta Action build + deploy yapar).

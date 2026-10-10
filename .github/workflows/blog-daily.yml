@@ -1,0 +1,51 @@
+# Günlük blog yazısı: tools/blog-daily.mjs yazıyı üretir, burada commit edilir ve blog-deploy tetiklenir.
+# 07 UTC = 10:00 TR saascorner, 08 = socialmediacorner, 09 = cornergroup (wrangler.toml SITES "hour").
+# Secret'lar: ANTHROPIC_API_KEY, PEXELS_API_KEY, (opsiyonel) TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID
+name: blog-daily
+on:
+  schedule:
+    - cron: "0 7 * * *"
+    - cron: "0 8 * * *"
+    - cron: "0 9 * * *"
+  workflow_dispatch:
+    inputs:
+      site: { description: "Site (örn. saascorner.co)", required: true, default: "saascorner.co" }
+      dry: { description: "Önizleme (commit etmez)", type: boolean, default: false }
+permissions: { contents: write, actions: write }
+concurrency: { group: blog-daily, cancel-in-progress: false }
+jobs:
+  write:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - name: Yazı üret
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          SCHEDULE: ${{ github.event.schedule }}
+          SITE: ${{ inputs.site }}
+          DRY: ${{ inputs.dry }}
+        run: |
+          if [ -n "$SITE" ]; then
+            node tools/blog-daily.mjs --site "$SITE" $([ "$DRY" = "true" ] && echo --dry)
+          else
+            # Gecikmeli başlasa da saati cron satırından al
+            node tools/blog-daily.mjs --hour "$(echo "$SCHEDULE" | cut -d' ' -f2)"
+          fi
+      - name: Commit + deploy
+        if: always() && inputs.dry != true
+        env: { GH_TOKEN: "${{ github.token }}" }
+        run: |
+          git add content
+          git diff --cached --quiet && { echo "Yeni yazı yok"; exit 0; }
+          hosts=$(git diff --cached --name-only | cut -d/ -f2 | sort -u)
+          git -c user.name="Corner Blog Bot" -c user.email="blog-bot@users.noreply.github.com" \
+            commit -q -m "blog: $(git diff --cached --name-only | xargs -n1 basename | sed 's/\.md$//' | paste -sd, -)"
+          git pull -q --rebase && git push -q
+          # GITHUB_TOKEN push'u başka workflow tetiklemez; deploy elle tetiklenir
+          for h in $hosts; do gh workflow run blog-deploy.yml -f host="$h"; done
