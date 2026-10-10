@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
     inputs:
       host: { description: "Site (örn. cornergroup.co)", required: true, default: "cornergroup.co" }
-concurrency: { group: blog-deploy, cancel-in-progress: false }
+concurrency: { group: "blog-deploy-${{ inputs.host || github.ref }}", cancel-in-progress: false }
 jobs:
   deploy:
     runs-on: ubuntu-latest
