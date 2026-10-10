@@ -159,6 +159,8 @@ export async function run(env, { dryRun = false } = {}) {
   const out = [];
   for (const cfg of sites) {
     try {
+      // Claude'a para harcamadan önce yazma izni denenir: referanssız blob zararsızdır, GitHub temizler
+      if (!dryRun) await gh(env, cfg, "/git/blobs", { method: "POST", body: JSON.stringify({ content: "izin-testi", encoding: "utf-8" }) });
       const { topic, slug, fm, body, md } = await generate(env, cfg);
       if (dryRun) { out.push({ site: cfg.siteUrl, slug, fm, words: body.split(/\s+/).length, preview: body.slice(0, 400) }); continue; }
       const c = await commitPost(env, cfg, slug, md, `blog: ${topic.topic}`);
