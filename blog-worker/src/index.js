@@ -1,16 +1,9 @@
-// Günlük blog yazarı (n8n "Cornergroup Blog Generator" karşılığı).
-// Akış: yayındaki _blog-index.json -> konu (Claude Haiku, JSON) -> makale (Claude Opus, markdown)
+// Günlük blog yazarı (n8n "Cornergroup Blog Generator" karşılığı), SITES'taki her site için günde bir yazı.
+// Akış: yayındaki _blog-index.json -> konu (Claude Haiku, JSON) -> makale (Claude Opus, markdown, iç linkli)
 //       -> Pexels görseli -> content/<host>/blog/<slug>.md GitHub'a commit
 //       -> GitHub Action (.github/workflows/blog-deploy.yml) build alıp Pages'e yükler.
 // Secret'lar: ANTHROPIC_API_KEY, PEXELS_API_KEY, GITHUB_TOKEN, (opsiyonel) TELEGRAM_BOT_TOKEN + TELEGRAM_CHAT_ID
 
-const CATEGORIES = ["Strateji", "Otomasyon", "Vaka Çalışması", "Trendler", "Rehber"];
-const BRANDS = `- SAAS Corner: outbound satış, lead generation, B2B prospecting
-- Sales Corner: satış metodolojileri, satış otomasyonu, pipeline yönetimi
-- CRM Corner: HubSpot, Pipedrive, Zoho kurulum ve optimizasyonu
-- Brand Corner: influencer pazarlama, marka konumlandırma
-- Social Media Corner: LinkedIn ve Instagram stratejileri
-- Ortak: yapay zeka, n8n otomasyonları, çok markalı büyüme yönetimi`;
 const TOPIC_TYPES = "araç karşılaştırması, yapay zeka uygulaması, sektör rehberi, vaka çalışması, trend analizi, süreç anlatımı, sık yapılan hatalar";
 
 const slugify = s => s.toLocaleLowerCase("tr")
@@ -52,34 +45,67 @@ async function loadIndex(cfg) {
   return r.ok ? r.json() : [];
 }
 
-async function pickTopic(env, cfg, index) {
-  const counts = Object.fromEntries(CATEGORIES.map(c => [c, 0]));
-  index.forEach(p => { if (p.category in counts) counts[p.category]++; });
-  const recent = [...index].sort((a, b) => (b.date || "").localeCompare(a.date || "")).slice(0, 10).map(p => `- ${p.title}`).join("\n");
-  const prompt = `Sen ${cfg.brand} için B2B içerik stratejistisin. Bugün yayınlanacak tek bir blog yazısı konusu seç.
+const byDate = index => [...index].sort((a, b) => (b.date || "").localeCompare(a.date || ""));
 
-Markalar ve odakları:
-${BRANDS}
+// Konuya en yakın mevcut yazılar (başlık/kategori kelime örtüşmesi); iç link adayı olarak yazara verilir
+const words = s => new Set(slugify(s || "").split("-").filter(w => w.length > 3));
+function relatedPosts(index, topic, n = 25) {
+  const t = words(topic.topic + " " + topic.category);
+  return byDate(index)
+    .map((p, i) => ({ p, score: [...words(p.title)].filter(w => t.has(w)).length * 3 + (p.category === topic.category ? 2 : 0) - i / 1000 }))
+    .sort((a, b) => b.score - a.score).slice(0, n).map(x => x.p);
+}
+
+// Yalnızca var olan sayfalara giden linkler kalır; uydurma ya da dış linkler düz metne çevrilir
+function cleanLinks(md, cfg, index) {
+  const ok = new Set([...index.map(p => `/blog/${p.slug}`), ...(cfg.pages || []).map(p => p.path), ...(cfg.sisters || [])]);
+  let kept = 0;
+  const out = md.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, (m, text, href) => {
+    const h = href.replace(cfg.siteUrl, "").replace(/\/+$/, "") || "/";
+    if (ok.has(h) || ok.has(href.replace(/\/+$/, ""))) { kept++; return `[${text}](${ok.has(h) ? h : href.replace(/\/+$/, "")})`; }
+    return text;
+  });
+  return { md: out, links: kept };
+}
+
+async function pickTopic(env, cfg, index) {
+  const cats = cfg.categories;
+  const counts = Object.fromEntries(cats.map(c => [c, 0]));
+  index.forEach(p => { if (p.category in counts) counts[p.category]++; });
+  const titles = byDate(index).slice(0, 250).map(p => `- ${p.title}`).join("\n");
+  const prompt = `Sen ${cfg.brand} (${cfg.siteUrl}) için B2B içerik stratejistisin. Bugün yayınlanacak tek bir blog yazısı konusu seç.
+
+Sitenin odağı: ${cfg.focus}
 
 Konu türleri: ${TOPIC_TYPES}
-Kategoriler: ${CATEGORIES.join(", ")}
-Mevcut kategori dağılımı: ${JSON.stringify(counts)} (az işlenen kategoriye ve markaya öncelik ver)
+Kategoriler: ${cats.join(", ")}
+Mevcut kategori dağılımı: ${JSON.stringify(counts)} (az işlenen kategoriye öncelik ver)
+Konu, Türkiye'deki B2B karar vericilerin Google'da gerçekten arayacağı somut bir soruya ya da probleme cevap versin.
 
-Son yazılar (bunları ya da çok benzerlerini TEKRARLAMA):
-${recent || "- (yok)"}
+Sitedeki mevcut yazılar (bunları ya da çok benzerlerini TEKRARLAMA):
+${titles || "- (yok)"}
 
 Yalnızca şu JSON'u döndür: {"topic": "Türkçe başlık, en fazla 60 karakter", "category": "kategorilerden biri", "slug": "basliktan-kisa-slug", "description": "Türkçe meta açıklama, 140-155 karakter, tam cümle", "imageQuery": "konuyu anlatan 2-4 kelimelik İngilizce stok fotoğraf araması (somut sahne: ofis, ekip, ekran, toplantı; kelime oyunu yok)"}`;
   const t = await claude(env, cfg.topicModel, prompt, { json: true, maxTokens: 4096 });
   if (!t.topic) throw new Error("Konu üretilemedi: " + JSON.stringify(t));
-  if (!CATEGORIES.includes(t.category)) t.category = "Rehber";
+  if (!cats.includes(t.category)) t.category = cats[0];
   return t;
 }
 
-async function writeArticle(env, cfg, topic) {
+async function writeArticle(env, cfg, topic, index) {
+  const related = relatedPosts(index, topic).map(p => `- [${p.title}](/blog/${p.slug})`).join("\n");
+  const pages = (cfg.pages || []).map(p => `- [${p.label}](${p.path})`).concat((cfg.sisters || []).map(u => `- ${u}`)).join("\n");
   const prompt = `${cfg.brand} adına profesyonel, özgün bir B2B blog makalesi yaz.
 
 Başlık: ${topic.topic}
 Kategori: ${topic.category}
+Sitenin odağı: ${cfg.focus}
+
+İç link verilebilecek mevcut yazılar:
+${related || "- (yok)"}
+
+Site sayfaları ve kardeş siteler:
+${pages}
 
 Kurallar:
 - Türkçe, en az 2000 kelime, somut örnekler, adımlar ve rakamlarla.
@@ -88,11 +114,14 @@ Kurallar:
 - "Giriş:", "Bölüm 1:", "Makale Başlığı:" gibi iskelet etiketleri KULLANMA.
 - Son bölüm "## Sonuç" olsun ve ${cfg.brand} ile iletişime geçmeye davet eden kısa bir çağrıyla bitsin.
 - Uydurma istatistik, kaynak ya da müşteri adı verme; genel ifadeler kullan.
+- Metnin içine, konuyla gerçekten ilgili olduğu yerlerde yukarıdaki listeden 3-5 iç link ver: [anlamlı bağlam metni](/blog/slug). Bağlantı metni "buraya tıklayın" değil, hedef yazının konusunu anlatan doğal bir ifade olsun. Aynı yazıya bir kez link ver.
+- Sonuç bölümündeki çağrıda site sayfalarından birine (ör. iletişim) link ver.
+- Listede olmayan hiçbir URL'ye link verme, dış link verme.
 - Yalnızca makale metnini döndür.`;
   let md = await claude(env, cfg.writeModel, prompt, { maxTokens: 16000 });
   md = md.replace(/^```(?:markdown)?\s*|\s*```$/g, "").replace(/^#\s+.*\n+/, "").trim();
   if (md.split(/\s+/).length < 800) throw new Error(`Makale çok kısa (${md.split(/\s+/).length} kelime)`);
-  return md;
+  return cleanLinks(md, cfg, index);
 }
 
 async function pickImage(env, topic, index) {
@@ -146,26 +175,27 @@ export async function generate(env, cfg) {
   const topic = await pickTopic(env, cfg, index);
   const slug = slugify(topic.slug || topic.topic) || slugify(topic.topic);
   if (index.some(p => p.slug === slug)) throw new Error(`Slug zaten var: ${slug}`);
-  const body = await writeArticle(env, cfg, topic);
+  const { md: body, links } = await writeArticle(env, cfg, topic, index);
   const img = await pickImage(env, topic, index);
   const today = new Date(Date.now() + 3 * 3600e3).toISOString().slice(0, 10); // TR saati
   const fm = { title: topic.topic, description: (topic.description || "").length >= 80 && topic.description.length <= 170 ? topic.description : metaDescription(body), date: today, category: topic.category, image: img.url, imageAlt: img.alt };
   const md = `---\n${Object.entries(fm).map(([k, v]) => `${k}: ${JSON.stringify(v)}`).join("\n")}\n---\n\n${body}\n`;
-  return { topic, slug, fm, body, md };
+  return { topic, slug, fm, body, md, links };
 }
 
-export async function run(env, { dryRun = false } = {}) {
-  const sites = JSON.parse(env.SITES);
+// site: yalnız o host (ör. "saascorner.co"); hour: cron saatinde "hour" alanı eşleşen siteler
+export async function run(env, { dryRun = false, site, hour } = {}) {
+  const sites = JSON.parse(env.SITES).filter(c => (!site || new URL(c.siteUrl).host === site) && (hour === undefined || c.hour === hour));
   const out = [];
   for (const cfg of sites) {
     try {
       // Claude'a para harcamadan önce yazma izni denenir: referanssız blob zararsızdır, GitHub temizler
       if (!dryRun) await gh(env, cfg, "/git/blobs", { method: "POST", body: JSON.stringify({ content: "izin-testi", encoding: "utf-8" }) });
-      const { topic, slug, fm, body, md } = await generate(env, cfg);
-      if (dryRun) { out.push({ site: cfg.siteUrl, slug, fm, words: body.split(/\s+/).length, preview: body.slice(0, 400) }); continue; }
+      const { topic, slug, fm, body, md, links } = await generate(env, cfg);
+      if (dryRun) { out.push({ site: cfg.siteUrl, slug, fm, words: body.split(/\s+/).length, links, preview: body.slice(0, 400) }); continue; }
       const c = await commitPost(env, cfg, slug, md, `blog: ${topic.topic}`);
       const postUrl = `${cfg.siteUrl}/blog/${c.path.split("/").pop().replace(/\.md$/, "")}`;
-      out.push({ site: cfg.siteUrl, path: c.path, postUrl });
+      out.push({ site: cfg.siteUrl, path: c.path, postUrl, links });
       await notify(env, `✅ Yeni blog (${topic.category}): ${topic.topic}\n${postUrl}\n(yayına çıkması 2-3 dakika sürer)`);
     } catch (e) {
       out.push({ site: cfg.siteUrl, error: e.message });
@@ -176,11 +206,14 @@ export async function run(env, { dryRun = false } = {}) {
 }
 
 export default {
-  async scheduled(_event, env, ctx) { ctx.waitUntil(run(env).then(r => console.log(JSON.stringify(r)))); },
-  // Elle tetikleme: GET /run?key=<RUN_KEY>[&dry=1]  (dry=1 commit etmez, önizleme döner)
+  async scheduled(event, env, ctx) {
+    const hour = new Date(event.scheduledTime).getUTCHours();
+    ctx.waitUntil(run(env, { hour }).then(r => r.length && console.log(JSON.stringify(r))));
+  },
+  // Elle tetikleme: GET /run?key=<RUN_KEY>[&site=saascorner.co][&dry=1]  (dry=1 commit etmez, önizleme döner)
   async fetch(req, env) {
     const u = new URL(req.url);
     if (u.pathname !== "/run" || !env.RUN_KEY || u.searchParams.get("key") !== env.RUN_KEY) return new Response("Not found", { status: 404 });
-    return Response.json(await run(env, { dryRun: u.searchParams.get("dry") === "1" }));
+    return Response.json(await run(env, { dryRun: u.searchParams.get("dry") === "1", site: u.searchParams.get("site") || undefined }));
   },
 };

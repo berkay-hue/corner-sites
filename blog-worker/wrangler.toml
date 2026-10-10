@@ -2,21 +2,47 @@ name = "corner-blog-writer"
 main = "src/index.js"
 compatibility_date = "2026-09-01"
 
-# Her gün 09:00 UTC = 12:00 Türkiye (n8n ile aynı saat)
+# Her saat başı 06-11 UTC çalışır; o saatte "hour" alanı eşleşen site yazılır (siteler aynı anda değil, sırayla).
+# 07 UTC = 10:00 TR, 08 = 11:00, 09 = 12:00
 [triggers]
-crons = ["0 9 * * *"]
+crons = ["0 6-11 * * *"]
 
 [vars]
 # Blogu olan her site için bir kayıt. repo/branch: yazıların commit edildiği GitHub deposu (push'ta Action build + deploy yapar).
+# pages: yazıda iç link verilebilecek site sayfaları. sisters: link verilebilecek kardeş siteler.
 SITES = '''[
   {
+    "siteUrl": "https://saascorner.co",
+    "hour": 7,
+    "brand": "SAAS Corner",
+    "focus": "B2B SaaS şirketleri için outbound satış, lead generation, B2B prospecting, CRM kurulumu ve kullanımı, satış ekibi yönetimi, SaaS büyüme ve partner ekosistemleri",
+    "categories": ["CRM", "Satış", "Lead Generation", "SaaS Büyüme", "Partner Ekosistemi", "Pazarlama"],
+    "pages": [{ "path": "/", "label": "SAAS Corner hizmetleri" }, { "path": "/iletisim", "label": "iletişim" }, { "path": "/bilgi-merkezi", "label": "bilgi merkezi" }],
+    "sisters": ["https://cornergroup.co", "https://socialmediacorner.co"],
+    "repo": "berkay-hue/corner-sites", "branch": "main", "contentDir": "content/saascorner.co/blog",
+    "topicModel": "claude-haiku-5-5", "writeModel": "claude-opus-5-5"
+  },
+  {
+    "siteUrl": "https://socialmediacorner.co",
+    "hour": 8,
+    "brand": "Social Media Corner",
+    "focus": "B2B şirketler için LinkedIn ve Instagram stratejileri, kurumsal sosyal medya yönetimi, içerik planlama, sosyal satış (social selling), reklam kampanyaları ve sosyal medya ölçümlemesi",
+    "categories": ["LinkedIn", "Instagram", "İçerik Stratejisi", "Sosyal Satış", "Reklam", "Ölçümleme"],
+    "pages": [{ "path": "/", "label": "Social Media Corner hizmetleri" }, { "path": "/iletişim", "label": "iletişim" }],
+    "sisters": ["https://cornergroup.co", "https://saascorner.co"],
+    "repo": "berkay-hue/corner-sites", "branch": "main", "contentDir": "content/socialmediacorner.co/blog",
+    "topicModel": "claude-haiku-5-5", "writeModel": "claude-opus-5-5"
+  },
+  {
     "siteUrl": "https://cornergroup.co",
+    "hour": 9,
     "brand": "Corner Group",
-    "repo": "berkay-hue/corner-sites",
-    "branch": "main",
-    "contentDir": "content/cornergroup.co/blog",
-    "topicModel": "claude-haiku-5-5",
-    "writeModel": "claude-opus-5-5"
+    "focus": "Corner Group markaları: SAAS Corner (outbound satış, lead generation), Sales Corner (satış metodolojileri, pipeline), CRM Corner (HubSpot, Pipedrive, Zoho), Brand Corner (influencer pazarlama, marka konumlandırma), Social Media Corner (LinkedIn, Instagram); ortak konular: yapay zeka, n8n otomasyonları, çok markalı büyüme",
+    "categories": ["Strateji", "Otomasyon", "Vaka Çalışması", "Trendler", "Rehber"],
+    "pages": [{ "path": "/", "label": "Corner Group" }, { "path": "/iletisim", "label": "iletişim" }],
+    "sisters": ["https://saascorner.co", "https://socialmediacorner.co"],
+    "repo": "berkay-hue/corner-sites", "branch": "main", "contentDir": "content/cornergroup.co/blog",
+    "topicModel": "claude-haiku-5-5", "writeModel": "claude-opus-5-5"
   }
 ]'''
 
