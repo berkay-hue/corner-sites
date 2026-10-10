@@ -24,14 +24,29 @@ function elementEnd(html, start) {
   while ((m = re.exec(html))) { depth += m[0][1] === "/" ? -1 : 1; if (!depth) return m.index + m[0].length; }
   throw new Error("kapanmayan etiket");
 }
-function region(html, name) {
-  const i = html.indexOf(`data-framer-name="${name}"`);
+// spec: "Ad" (data-framer-name), "Ad#1" (n. eşleşme, 0'dan), ".sınıf" (class="sınıf" ile başlayan div)
+function region(html, spec, from = 0) {
+  if (!spec) return null;
+  let [name, nth] = spec.split("#"); nth = +nth || 0;
+  const needle = name.startsWith(".") ? `<div class="${name.slice(1)}"` : `data-framer-name="${name}"`;
+  let i = from - 1;
+  do { i = html.indexOf(needle, i + 1); } while (i >= 0 && nth-- > 0);
   if (i < 0) return null;
-  const start = html.lastIndexOf("<", i), end = elementEnd(html, start);
+  const start = name.startsWith(".") ? i : html.lastIndexOf("<", i), end = elementEnd(html, start);
   const openEnd = html.indexOf(">", i) + 1;
   return { start, end, openEnd, innerEnd: html.lastIndexOf("</", end - 1), outer: html.slice(start, end), inner: html.slice(openEnd, html.lastIndexOf("</", end - 1)) };
 }
 const setInner = (html, r, inner) => html.slice(0, r.openEnd) + inner + html.slice(r.innerEnd);
+const RG = { title: "Title", date: "PublishedAt", banner: "Banner", category: "Category", content: "Content", next: "Next", ...cfg.regions };
+const setP = (inner, text) => inner.replace(/(<p\b[^>]*>)[\s\S]*?(<\/p>)/, (_, a, b) => a + esc(text) + b);
+const regionText = (html, spec) => { const r = region(html, spec); return r ? fixMojibake(parseHTML(`<div>${r.inner}</div>`).document.querySelector("div").textContent.trim()).replace(/\s+/g, " ") : ""; };
+const TR_MONTHS = ["ocak", "şubat", "mart", "nisan", "mayıs", "haziran", "temmuz", "ağustos", "eylül", "ekim", "kasım", "aralık"];
+function parseDate(inner) {
+  const iso = inner.match(/datetime="(\d{4}-\d\d-\d\d)/); if (iso) return iso[1];
+  const m = inner.replace(/<[^>]+>/g, " ").toLocaleLowerCase("tr").match(/(\d{1,2})\s+(\p{L}+)\s+(\d{4})/u);
+  const mi = m ? TR_MONTHS.indexOf(m[2]) : -1;
+  return mi < 0 ? null : `${m[3]}-${String(mi + 1).padStart(2, "0")}-${m[1].padStart(2, "0")}`;
+}
 const setMeta = (html, key, val) => html.replace(new RegExp(`(<meta (?:name|property)="${key}" content=")[^"]*(")`), `$1${esc(val)}$2`);
 
 // --- Front matter
@@ -93,30 +108,49 @@ async function importSite() {
     const html = await readFile(join(SITE, "blog", f), "utf8");
     if (!html.includes("data-framer-root")) { bad.push(f); continue; }
     if (isBuilt(html)) { built++; continue; } // bizim build çıktımız: içerik md'de zaten
-    const { document } = parseHTML(region(html, "Title").outer + region(html, "Banner").outer + (region(html, "Category")?.outer || ""));
-    const title = fixPlaceholders(fixMojibake(document.querySelector("h1").textContent.trim())).replace(/\s+/g, " ");
-    const date = (region(html, "PublishedAt").inner.match(/datetime="([^"]+)"/) || [])[1]?.slice(0, 10);
-    const image = document.querySelector('[data-framer-name="Banner"] img')?.getAttribute("src") || "";
-    const category = fixMojibake(document.querySelector('[data-framer-name="Category"]')?.textContent.trim() || "");
-    const body = htmlToMd(region(html, "Content").inner);
-    const firstP = body.split("\n\n").find(b => !/^(#|-|\d+\.)/.test(b)) || title;
-    const fm = { title, description: metaDescription(firstP.replace(/\*+|\[|\]\([^)]*\)/g, "")), date, category, image, imageAlt: title };
+    const title = fixPlaceholders(regionText(html, RG.title));
+    const date = parseDate(region(html, RG.date)?.inner || "");
+    if (!title || !date) { bad.push(f); continue; }
+    const bannerImg = (region(html, RG.banner)?.inner.match(/<img\b[^>]*>/) || [""])[0];
+    const image = fixMojibake(bannerImg.match(/\ssrc="([^"]*)"/)?.[1] || "");
+    const imageAlt = fixMojibake(bannerImg.match(/\salt="([^"]+)"/)?.[1] || title);
+    const category = regionText(html, RG.category);
+    const body = htmlToMd(region(html, RG.content).inner);
+    const summary = regionText(html, RG.summary);
+    const firstP = (summary && summary !== title ? summary : null) || body.split("\n\n").find(b => !/^(#|-|\d+\.)/.test(b)) || title;
+    const fm = { title, description: metaDescription(firstP.replace(/\*+|\[|\]\([^)]*\)/g, "")), date, category, image, imageAlt };
     await writeFile(join(CONTENT, f.replace(/\.html$/, ".md")), toMd(fm, body));
-    if (!tplSaved && region(html, "Next")) { await writeFile(join(TPL, "post.html"), html); tplSaved = true; }
+    if (!tplSaved && (!RG.next || region(html, RG.next))) { await writeFile(join(TPL, "post.html"), html); tplSaved = true; }
     n++;
   }
   const list = await readFile(join(SITE, "blog.html"), "utf8");
   if (isBuilt(list)) console.warn("blog.html build çıktısı, liste şablonu korunuyor");
   else if (list.includes(cfg.cardSelector)) await writeFile(join(TPL, "blog.html"), list);
   else console.warn("UYARI: blog.html'de kart yok (boş SSR?), liste şablonu kaydedilmedi");
-  console.log(`import: ${n} yazı, build çıktısı: ${built}, atlanan (boş SSR): ${bad.length}`, bad.slice(0, 5));
+  console.log(`import: ${n} yazı, build çıktısı: ${built}, atlanan (boş SSR/eksik alan): ${bad.length}`, bad.slice(0, 5));
 }
 
 // --- Build
-const fmtDate = d => new Date(d + "T00:00:00Z").toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" }).replace("Sept", "Sep");
+const fmtDate = d => new Date(d + "T00:00:00Z").toLocaleDateString(cfg.dateLocale || "en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" }).replace("Sept", "Sep");
 const POST_CSS = `<style data-sk-post>.sk-post h2{font-size:clamp(22px,2.4vw,28px);line-height:1.25;font-weight:600;margin:1.6em 0 .5em}.sk-post h3{font-size:20px;font-weight:600;margin:1.3em 0 .4em}.sk-post ul,.sk-post ol{padding-left:1.3em;margin:.4em 0 1.1em}.sk-post li{margin:.35em 0}.sk-post blockquote{border-left:3px solid currentColor;margin:1.2em 0;padding:.2em 0 .2em 1em;opacity:.85}.sk-post a{text-decoration:underline}</style>`;
 
-function renderPost(tpl, post, next) {
+// Bir bölgenin tüm eşleşmelerini sırayla dönüştür (ör. her ssr-variant'taki banner)
+function eachRegion(html, name, fn) {
+  let from = 0, r;
+  while ((r = region(html, name, from))) { const before = html.length; html = fn(html, r); from = r.end + (html.length - before); }
+  return html;
+}
+const swapImg = (tag, p, lazy) => tag.replace(/\s(srcset|sizes)="[^"]*"/g, "").replace(/\ssrc="[^"]*"/, ` src="${esc(p.fm.image)}"${lazy ? ' loading="lazy"' : ""}`)
+  .replace(/\salt(="[^"]*")?(?=[\s>])/, ` alt="${esc(p.fm.imageAlt || p.fm.title)}"`);
+const L = cfg.lang === "en" ? { related: "Related Posts", home: "Home" } : { related: "İlgili Yazılar", home: "Ana Sayfa" };
+
+// Aynı kategoriden başlayıp tarihe en yakın yazılar
+function relatedFor(post, posts, n = 4) {
+  const t = Date.parse(post.fm.date), d = p => Math.abs(Date.parse(p.fm.date) - t);
+  return posts.filter(p => p !== post).sort((a, b) => ((b.fm.category === post.fm.category) - (a.fm.category === post.fm.category)) || d(a) - d(b)).slice(0, n);
+}
+
+function renderPost(tpl, post, next, related) {
   const { fm, slug } = post;
   const url = `${cfg.origin}/blog/${slug}`;
   const img = fm.image.startsWith("http") ? fm.image : cfg.origin + fm.image;
@@ -132,58 +166,94 @@ function renderPost(tpl, post, next) {
   h = setMeta(h, "og:type", "article");
   h = h.replace(/<meta name="framer-search-index[^>]*>\s*/g, "");
 
-  let r = region(h, "Title"); h = setInner(h, r, r.inner.replace(/(<h1[^>]*>)[\s\S]*?(<\/h1>)/, `$1${esc(fm.title)}$2`));
-  r = region(h, "PublishedAt"); h = setInner(h, r, r.inner.replace(/<time[^>]*>[^<]*<\/time>/, `<time datetime="${fm.date}T00:00:00.000Z">${fmtDate(fm.date)}</time>`));
-  r = region(h, "Banner"); h = setInner(h, r, r.inner.replace(/<img\b[^>]*>/, tag => tag
-    .replace(/\s(srcset|sizes)="[^"]*"/g, "").replace(/\ssrc="[^"]*"/, ` src="${esc(fm.image)}"`)
-    .replace(/\salt(="[^"]*")?(?=[\s>])/, ` alt="${esc(fm.imageAlt || fm.title)}"`)));
-  r = region(h, "Category"); if (r) h = setInner(h, r, r.inner.replace(/(<p[^>]*>)[^<]*(<\/p>)/, `$1${esc(fm.category || "")}$2`));
-  const body = markdown(post.body)
+  let r = region(h, RG.title); h = setInner(h, r, r.inner.replace(/(<h1[^>]*>)[\s\S]*?(<\/h1>)/, `$1${esc(fm.title)}$2`));
+  r = region(h, RG.date); h = setInner(h, r, /<time\b/.test(r.inner)
+    ? r.inner.replace(/<time[^>]*>[^<]*<\/time>/, `<time datetime="${fm.date}T00:00:00.000Z">${fmtDate(fm.date)}</time>`)
+    : setP(r.inner, fmtDate(fm.date)));
+  h = eachRegion(h, RG.banner, (h, r) => setInner(h, r, r.inner.replace(/<img\b[^>]*>/, tag => swapImg(tag, post))));
+  r = region(h, RG.category); if (r) h = setInner(h, r, r.inner.replace(/(<p[^>]*>)[^<]*(<\/p>)/, `$1${esc(fm.category || "")}$2`));
+  r = region(h, RG.summary); if (r) h = setInner(h, r, setP(r.inner, fm.description));
+  const relMd = related.length ? `\n\n## ${L.related}\n\n` + related.map(p => `- [${p.fm.title.replace(/[[\]]/g, "")}](/blog/${p.slug})`).join("\n") : "";
+  const body = markdown(post.body + relMd)
     .replace(/<(p|li|h2|h3|h4)>/g, (_, t) => `<${t} dir="auto" class="${cfg.pClass}">`)
     .replace(/<blockquote><p dir="auto" class="[^"]*">/g, `<blockquote><p dir="auto" class="${cfg.pClass}">`);
-  r = region(h, "Content"); h = setInner(h, r, body);
-  h = h.replace(`data-framer-name="Content"`, `data-framer-name="Content" data-sk-content`).replace(/(<div class=")([^"]*)("[^>]*data-sk-content)/, "$1$2 sk-post$3");
-  r = region(h, "Next");
+  r = region(h, RG.content); h = setInner(h, r, body);
+  h = h.replace(`data-framer-name="${RG.content}"`, `data-framer-name="${RG.content}" data-sk-content`).replace(/(<div class=")([^"]*)("[^>]*data-sk-content)/, "$1$2 sk-post$3");
+  r = region(h, RG.next);
   if (r) h = next
     ? setInner(h, r, r.inner.replace(/(<a\b[^>]*href=")[^"]*("[^>]*>)[\s\S]*?(<\/a>)/, `$1./${next.slug}$2${esc(next.fm.title)} ›$3`))
     : h.slice(0, r.start) + h.slice(r.end);
-  const ld = {
+  // Şablondaki "son yazılar" kartları: her farklı eski hedef bir ilgili yazıya eşlenir
+  if (cfg.relatedCards) {
+    const map = new Map();
+    h = h.replace(/<a\b[^>]*\shref="\.\/([^"]+)"[^>]*>/g, (tag, old) => {
+      if (!map.has(old)) map.set(old, related[map.size % Math.max(related.length, 1)]);
+      return tag;
+    });
+    let from = 0, m; const re = /<a\b[^>]*\shref="\.\/([^"]+)"[^>]*>/g;
+    while ((re.lastIndex = from, m = re.exec(h))) {
+      const p = map.get(m[1]); const end = elementEnd(h, m.index);
+      if (!p) { from = end; continue; }
+      let c = h.slice(m.index, end).replace(`href="./${m[1]}"`, `href="./${p.slug}"`).replace(/<img\b[^>]*>/, tag => swapImg(tag, p, true));
+      let rr = region(c, "Heading"); if (rr) c = setInner(c, rr, setP(rr.inner, p.fm.title));
+      rr = region(c, "Subheading"); if (rr && rr.inner.replace(/<[^>]+>/g, "").trim()) c = setInner(c, rr, setP(rr.inner, p.fm.category || ""));
+      h = h.slice(0, m.index) + c + h.slice(end); from = m.index + c.length;
+    }
+  }
+  const ld = [{
     "@context": "https://schema.org", "@type": "BlogPosting", headline: fm.title.slice(0, 110), description: fm.description,
     image: [img], datePublished: fm.date, dateModified: fm.updated || fm.date, mainEntityOfPage: url, inLanguage: cfg.lang,
     author: { "@type": "Organization", name: cfg.author, url: cfg.origin },
     publisher: { "@type": "Organization", name: cfg.brand, url: cfg.origin },
-  };
+  }, {
+    "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [[L.home, cfg.origin + "/"], ["Blog", cfg.origin + "/blog"], [fm.title, url]]
+      .map(([name, item], i) => ({ "@type": "ListItem", position: i + 1, name, item })),
+  }];
   h = h.replace(/<style data-sk-post>[\s\S]*?<\/style>/, "").replace(/<script type="application\/ld\+json" data-sk-post>[\s\S]*?<\/script>/, "");
   return h.replace("</head>", `${POST_CSS}<script type="application/ld+json" data-sk-post>${JSON.stringify(ld).replace(/</g, "\\u003c")}</script></head>`);
 }
 
 function renderList(tpl, posts) {
-  const first = tpl.indexOf(`<div class="${cfg.cardSelector}"`);
-  const wrapStart = tpl.lastIndexOf('<div class="ssr-variant">', first);
-  const cardTpl = tpl.slice(wrapStart, elementEnd(tpl, wrapStart));
-  // Tüm mevcut kart sarmalayıcılarını kaldır (+ çevresindeki <!--$--> yorumları)
-  let h = tpl, idx, slots = [];
-  const slotRe = new RegExp(`<div class="ssr-variant[^"]*"(?: hidden)?><div class="${cfg.cardSelector}"`);
-  while ((idx = h.search(slotRe)) >= 0) {
-    let s = idx, e = elementEnd(h, idx);
-    if (h.slice(s - 8, s) === "<!--$-->" && h.slice(e, e + 9) === "<!--/$-->") { s -= 8; e += 9; }
-    slots.push(s); h = h.slice(0, s) + "\u0000" + h.slice(e);
+  // Kart yuvası: kart kabı, doğrudan bir ssr-variant içindeyse o sarmalayıcı
+  const needle = `<div class="${cfg.cardSelector}"`;
+  let h = tpl, idx; const variants = [];
+  let groupKeys = null, seen = new Set();
+  while ((idx = h.indexOf(needle)) >= 0) {
+    const w = h.lastIndexOf('<div class="ssr-variant', idx);
+    const s = w >= 0 && /^<div class="ssr-variant[^"]*"(?: hidden)?>$/.test(h.slice(w, idx)) ? w : idx;
+    const e = elementEnd(h, s), slot = h.slice(s, e), key = slot.slice(0, slot.indexOf(">"));
+    if (!groupKeys) { if (seen.has(key)) groupKeys = seen; else { seen.add(key); variants.push(slot); } }
+    h = h.slice(0, s) + "\u0000" + h.slice(e);
   }
-  const cards = posts.map((p, i) => {
-    let c = cardTpl.replace(/(data-framer-name="Blog Card" href=")[^"]*/, `$1./blog/${p.slug}`)
-      .replace(/<img\b[^>]*>/, tag => tag.replace(/\s(srcset|sizes)="[^"]*"/g, "").replace(/\ssrc="[^"]*"/, ` src="${esc(p.fm.image)}" loading="lazy"`).replace(/\salt(="[^"]*")?(?=[\s>])/, ` alt="${esc(p.fm.imageAlt || p.fm.title)}"`));
-    let r = region(c, "Tag"); if (r) c = setInner(c, r, r.inner.replace(/(<p[^>]*>)[^<]*(<\/p>)/, `$1${esc(p.fm.category || "Blog")}$2`));
-    c = c.replace(/(<h5[^>]*>)[\s\S]*?(<\/h5>)/, `$1${esc(p.fm.title)}$2`);
-    r = region(c, "date &amp; author"); if (r) c = setInner(c, r, r.inner.replace(/(<p[^>]*>)[^<]*(<\/p>)/, `$1${fmtDate(p.fm.date)}$2`));
-    if (i >= cfg.perPage) c = c.replace('<div class="ssr-variant">', '<div class="ssr-variant sk-more" hidden>');
-    return `<!--$-->${c}<!--/$-->`;
-  }).join("");
-  h = h.replace("\u0000", () => cards).replace(/\u0000/g, "");
+  const fill = (c, p) => {
+    c = c.replace(/(<a\b[^>]*\shref=")\.\/[^"]*/, `$1./blog/${p.slug}`).replace(/<img\b[^>]*>/, tag => swapImg(tag, p, true));
+    for (const n of ["Tag", "Subheading"]) {
+      const r = region(c, n); if (r && r.inner.replace(/<[^>]+>/g, "").trim()) c = setInner(c, r, setP(r.inner, p.fm.category || "Blog"));
+    }
+    if (/<h5\b/.test(c)) c = c.replace(/(<h5[^>]*>)[\s\S]*?(<\/h5>)/, `$1${esc(p.fm.title)}$2`);
+    else { const r = region(c, "Heading"); if (r) c = setInner(c, r, setP(r.inner, p.fm.title)); }
+    const r = region(c, "date &amp; author"); if (r) c = setInner(c, r, r.inner.replace(/(<p[^>]*>)[^<]*(<\/p>)/, `$1${fmtDate(p.fm.date)}$2`));
+    return c;
+  };
+  const cards = posts.map((p, i) => "<!--$-->" + variants.map(v => {
+    const c = fill(v, p);
+    return cfg.perPage && i >= cfg.perPage ? c.replace(/^<div class="([^"]*)"/, '<div class="$1 sk-more" hidden') : c;
+  }).join("") + "<!--/$-->").join("");
+  // Öne çıkan (hero) alanı en yeni yazıya — kartlardan önce, aynı slug kartı ezmesin
+  if (cfg.listHero && posts[0]) {
+    const p = posts[0], hero = cfg.listHero;
+    h = h.split(`href="${hero.href}"`).join(`href="./blog/${p.slug}"`);
+    h = eachRegion(h, hero.title, (h, r) => setInner(h, r, r.inner.replace(/(<h1[^>]*>)[\s\S]*?(<\/h1>)/, `$1${esc(p.fm.title)}$2`)));
+    h = eachRegion(h, hero.text, (h, r) => setInner(h, r, setP(r.inner, p.fm.description)));
+  }
+  let first = true;
+  h = h.replace(/(?:<!--\$-->)?\u0000+(?:<!--\/\$-->)?/g, () => first ? (first = false, cards) : "");
+  h = h.replace(/<script data-sk-list>[\s\S]*?<\/script>/, "").replace(/<style data-sk-list>[\s\S]*?<\/style>/, "");
+  if (!cfg.perPage) return h;
   const js = `<script>addEventListener("DOMContentLoaded",()=>{const b=[...document.querySelectorAll("button")].find(x=>/Load More/i.test(x.textContent));if(!b)return;const up=()=>{if(!document.querySelector(".sk-more[hidden]"))b.style.display="none"};up();b.addEventListener("click",()=>{[...document.querySelectorAll(".sk-more[hidden]")].slice(0,${cfg.perPage}).forEach(e=>e.hidden=false);up()})})</script>`;
   // .ssr-variant{display:contents} hidden niteliğini ezer
   const css = `<style data-sk-list>.sk-more[hidden]{display:none!important}</style>`;
-  return h.replace(/<script data-sk-list>[\s\S]*?<\/script>/, "").replace(/<style data-sk-list>[\s\S]*?<\/style>/, "")
-    .replace("</head>", css + "</head>").replace("</body>", js.replace("<script>", "<script data-sk-list>") + "</body>");
+  return h.replace("</head>", css + "</head>").replace("</body>", js.replace("<script>", "<script data-sk-list>") + "</body>");
 }
 
 async function buildSite() {
@@ -193,18 +263,19 @@ async function buildSite() {
   for (const f of (await readdir(CONTENT)).filter(f => f.endsWith(".md"))) {
     const { fm, body } = parseMd(await readFile(join(CONTENT, f), "utf8"));
     if (fm.draft) continue;
+    if (!fm.image && cfg.defaultImage) fm.image = cfg.defaultImage;
     posts.push({ slug: f.replace(/\.md$/, ""), fm, body });
   }
   posts.sort((a, b) => b.fm.date.localeCompare(a.fm.date) || a.slug.localeCompare(b.slug));
   await mkdir(join(SITE, "blog"), { recursive: true });
-  for (const [i, p] of posts.entries()) await writeFile(join(SITE, "blog", p.slug + ".html"), renderPost(tplPost, p, posts[i + 1] || posts[0]));
+  for (const [i, p] of posts.entries()) await writeFile(join(SITE, "blog", p.slug + ".html"), renderPost(tplPost, p, posts[i + 1] || posts[0], relatedFor(p, posts)));
   if (tplList) await writeFile(join(SITE, "blog.html"), renderList(tplList, posts));
-  // Worker'ın konu seçimi için özet
+  // Worker'ın konu seçimi ve iç linkleme için özet
   await writeFile(join(SITE, "_blog-index.json"), JSON.stringify(posts.map(p => ({ slug: p.slug, title: p.fm.title, category: p.fm.category, date: p.fm.date, image: p.fm.image }))));
   // Sitemap: blog dışı sayfalar orijinalden, yazılar içerikten
   const orig = await readFile(join(SITE, "_orig-sitemap.xml"), "utf8").catch(() => "");
   const keep = [...orig.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m => m[1].trim()).filter(u => !/\/blog\/./.test(new URL(u).pathname));
-  const urls = [...keep.map(u => `<url><loc>${u}</loc></url>`), ...posts.map(p => `<url><loc>${cfg.origin}/blog/${p.slug}</loc><lastmod>${p.fm.updated || p.fm.date}</lastmod></url>`)];
+  const urls = [...keep.map(u => `<url><loc>${u}</loc></url>`), ...posts.map(p => `<url><loc>${cfg.origin}/blog/${encodeURIComponent(p.slug)}</loc><lastmod>${p.fm.updated || p.fm.date}</lastmod></url>`)];
   await writeFile(join(SITE, "sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.join("\n")}\n</urlset>\n`);
   console.log(`build: ${posts.length} yazı${tplList ? " + liste" : ""}, sitemap ${urls.length} url`);
 }
