@@ -24,13 +24,26 @@ async function claude(env, model, prompt, { json = false, maxTokens = 2048 } = {
   const r = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
     headers: { "content-type": "application/json", "x-api-key": env.ANTHROPIC_API_KEY, "anthropic-version": "2023-06-01" },
-    body: JSON.stringify({ model, max_tokens: maxTokens, messages: [{ role: "user", content: prompt }] }),
+    // Uzun yazılar 100 sn'yi aşınca akışsız istek 524 ile düşüyor; akış bağlantıyı açık tutar
+    body: JSON.stringify({ model, max_tokens: maxTokens, stream: true, messages: [{ role: "user", content: prompt }] }),
   });
   if (!r.ok) throw new Error(`Claude ${model} ${r.status}: ${(await r.text()).slice(0, 300)}`);
-  const d = await r.json();
-  const text = (d.content || []).filter(b => b.type === "text").map(b => b.text).join("");
-  if (!text) throw new Error(`Claude ${model} boş yanıt: ${JSON.stringify(d).slice(0, 300)}`);
-  const cut = d.stop_reason === "max_tokens";
+  let text = "", stop = null, buf = "";
+  const dec = new TextDecoder();
+  for await (const chunk of r.body) {
+    buf += dec.decode(chunk, { stream: true });
+    let i;
+    while ((i = buf.indexOf("\n")) >= 0) {
+      const line = buf.slice(0, i).trim(); buf = buf.slice(i + 1);
+      if (!line.startsWith("data:")) continue;
+      const ev = JSON.parse(line.slice(5));
+      if (ev.type === "content_block_delta" && ev.delta?.type === "text_delta") text += ev.delta.text;
+      else if (ev.type === "message_delta") stop = ev.delta?.stop_reason ?? stop;
+      else if (ev.type === "error") throw new Error(`Claude ${model} akış hatası: ${JSON.stringify(ev.error).slice(0, 300)}`);
+    }
+  }
+  if (!text) throw new Error(`Claude ${model} boş yanıt`);
+  const cut = stop === "max_tokens";
   if (!json) {
     if (cut) throw new Error(`Claude ${model} yanıtı yarıda kesildi (max_tokens)`);
     return text;
