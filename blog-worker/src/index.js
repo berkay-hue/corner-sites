@@ -5,6 +5,20 @@
 // Secret'lar: ANTHROPIC_API_KEY, PEXELS_API_KEY, GITHUB_TOKEN, (opsiyonel) TELEGRAM_BOT_TOKEN + TELEGRAM_CHAT_ID
 
 const TOPIC_TYPES = "araç karşılaştırması, yapay zeka uygulaması, sektör rehberi, vaka çalışması, trend analizi, süreç anlatımı, sık yapılan hatalar";
+const TOPIC_TYPES_EN = "tool comparison, applied AI, industry guide, case study, trend analysis, process walkthrough, common mistakes";
+
+// Grup siteleri arasında çapraz link: her yazı, kendi sitesi hariç bu listeden link verebilir
+const GROUP = [
+  { url: "https://saascorner.co", tr: "SAAS Corner: B2B SaaS için outbound satış ve lead generation hizmeti", en: "SAAS Corner: outbound sales and lead generation for B2B SaaS" },
+  { url: "https://salescorner.co", tr: "Sales Corner: veri odaklı B2B satış ve lead generation", en: "Sales Corner: data-driven B2B sales and lead generation" },
+  { url: "https://socialmediacorner.co", tr: "Social Media Corner: B2B LinkedIn ve Instagram yönetimi", en: "Social Media Corner: B2B LinkedIn and Instagram management" },
+  { url: "https://www.brandcorner.co", tr: "Brand Corner: influencer pazarlama platformu", en: "Brand Corner: influencer marketing platform" },
+  { url: "https://cornergroup.co", tr: "Corner Group: grubun çatı şirketi, strateji ve otomasyon", en: "Corner Group: the group's parent company, strategy and automation" },
+  { url: "https://www.yalcinberkay.com.tr", tr: "Berkay Yalçın: grubun kurucusunun kişisel blogu", en: "Berkay Yalçın: personal blog of the group's founder" },
+];
+// Apollo referans linki: yalnızca prospecting / lead verisi / outbound konularında, en fazla bir kez
+export const APOLLO = "https://get.apollo.io/679irkzm35ya";
+const sisters = cfg => GROUP.filter(g => new URL(g.url).host.replace(/^www\./, "") !== new URL(cfg.siteUrl).host.replace(/^www\./, ""));
 
 const slugify = s => s.toLocaleLowerCase("tr")
   .replace(/ı/g, "i").replace(/ğ/g, "g").replace(/ü/g, "u").replace(/ş/g, "s").replace(/ö/g, "o").replace(/ç/g, "c")
@@ -67,9 +81,10 @@ function relatedPosts(index, topic, n = 25) {
 
 // Yalnızca var olan sayfalara giden linkler kalır; uydurma ya da dış linkler düz metne çevrilir
 function cleanLinks(md, cfg, index) {
-  const ok = new Set([...index.map(p => `/blog/${p.slug}`), ...(cfg.pages || []).map(p => p.path), ...(cfg.sisters || [])]);
-  let kept = 0;
+  const ok = new Set([...index.map(p => `/blog/${p.slug}`), ...(cfg.pages || []).map(p => p.path), ...sisters(cfg).map(g => g.url), APOLLO]);
+  let kept = 0, apollo = 0;
   const out = md.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, (m, text, href) => {
+    if (href.replace(/\/+$/, "") === APOLLO && apollo++) return text;
     const h = href.replace(cfg.siteUrl, "").replace(/\/+$/, "") || "/";
     if (ok.has(h) || ok.has(href.replace(/\/+$/, ""))) { kept++; return `[${text}](${ok.has(h) ? h : href.replace(/\/+$/, "")})`; }
     return text;
@@ -82,7 +97,19 @@ async function pickTopic(env, cfg, index) {
   const counts = Object.fromEntries(cats.map(c => [c, 0]));
   index.forEach(p => { if (p.category in counts) counts[p.category]++; });
   const titles = byDate(index).slice(0, 250).map(p => `- ${p.title}`).join("\n");
-  const prompt = `Sen ${cfg.brand} (${cfg.siteUrl}) için B2B içerik stratejistisin. Bugün yayınlanacak tek bir blog yazısı konusu seç.
+  const prompt = cfg.lang === "en" ? `You are the content strategist for ${cfg.brand} (${cfg.siteUrl}). Pick a single blog post topic to publish today.
+
+Site focus: ${cfg.focus}
+
+Topic types: ${TOPIC_TYPES_EN}
+Categories: ${cats.join(", ")}
+Current category counts: ${JSON.stringify(counts)} (prefer the least covered category)
+The topic must answer a concrete question or problem that B2B decision makers actually search for on Google.
+
+Existing posts on the site (do NOT repeat these or anything very similar):
+${titles || "- (none)"}
+
+Return only this JSON: {"topic": "English title, max 60 characters", "category": "one of the categories", "slug": "short-slug-from-title", "description": "English meta description, 140-155 characters, full sentence", "imageQuery": "2-4 word English stock photo search describing the topic (a concrete scene: office, team, screen, meeting; no wordplay)"}` : `Sen ${cfg.brand} (${cfg.siteUrl}) için B2B içerik stratejistisin. Bugün yayınlanacak tek bir blog yazısı konusu seç.
 
 Sitenin odağı: ${cfg.focus}
 
@@ -103,8 +130,39 @@ Yalnızca şu JSON'u döndür: {"topic": "Türkçe başlık, en fazla 60 karakte
 
 async function writeArticle(env, cfg, topic, index) {
   const related = relatedPosts(index, topic).map(p => `- [${p.title}](/blog/${p.slug})`).join("\n");
-  const pages = (cfg.pages || []).map(p => `- [${p.label}](${p.path})`).concat((cfg.sisters || []).map(u => `- ${u}`)).join("\n");
-  const prompt = `${cfg.brand} adına profesyonel, özgün bir B2B blog makalesi yaz.
+  const en = cfg.lang === "en";
+  const pages = (cfg.pages || []).map(p => `- [${p.label}](${p.path})`).join("\n");
+  const group = sisters(cfg).map(g => `- [${en ? g.en : g.tr}](${g.url})`).join("\n");
+  const prompt = en ? `Write a professional, original blog article for ${cfg.brand}.
+
+Title: ${topic.topic}
+Category: ${topic.category}
+Site focus: ${cfg.focus}${cfg.voice ? `\nVoice: ${cfg.voice}` : ""}
+
+Existing posts you may link to:
+${related || "- (none)"}
+
+Site pages:
+${pages}
+
+Sister companies in the group:
+${group}
+
+Apollo.io referral link: ${APOLLO}
+
+Rules:
+- English, at least 1500 words, with concrete examples, steps and numbers.
+- Use Markdown: subheadings "## " and if needed "### ", lists "- " or "1. ", emphasis **bold**.
+- Do NOT write the title (H1); start directly with a 1-2 paragraph introduction.
+- Do NOT use scaffolding labels such as "Introduction:", "Section 1:", "Article title:".
+- The last section is "## Conclusion" and ends with a short invitation to get in touch.
+- Do not invent statistics, sources or customer names; use general statements.
+- Where genuinely relevant, add 2-4 internal links from the list above: [meaningful anchor text](/blog/slug). Anchor text describes the target post, never "click here". Link each post at most once.
+- Where it fits naturally, link 1-2 sister companies from the list with descriptive anchor text (e.g. lead generation -> SAAS Corner, LinkedIn -> Social Media Corner, influencers -> Brand Corner). Do not force it.
+- Only if the topic involves prospecting, B2B contact data, lead lists or outbound email, you may link the Apollo.io referral link ONCE with natural anchor text (e.g. [Apollo.io](${APOLLO})). Otherwise do not mention it.
+- In the conclusion's call to action, link one of the site pages (e.g. contact).
+- Do not link to any URL that is not in these lists.
+- Return only the article text.` : `${cfg.brand} adına profesyonel, özgün bir B2B blog makalesi yaz.
 
 Başlık: ${topic.topic}
 Kategori: ${topic.category}
@@ -113,8 +171,13 @@ Sitenin odağı: ${cfg.focus}
 İç link verilebilecek mevcut yazılar:
 ${related || "- (yok)"}
 
-Site sayfaları ve kardeş siteler:
+Site sayfaları:
 ${pages}
+
+Gruptaki kardeş şirketler:
+${group}
+
+Apollo.io referans linki: ${APOLLO}
 
 Kurallar:
 - Türkçe, en az 2000 kelime, somut örnekler, adımlar ve rakamlarla.
@@ -125,11 +188,13 @@ Kurallar:
 - Uydurma istatistik, kaynak ya da müşteri adı verme; genel ifadeler kullan.
 - Metnin içine, konuyla gerçekten ilgili olduğu yerlerde yukarıdaki listeden 3-5 iç link ver: [anlamlı bağlam metni](/blog/slug). Bağlantı metni "buraya tıklayın" değil, hedef yazının konusunu anlatan doğal bir ifade olsun. Aynı yazıya bir kez link ver.
 - Sonuç bölümündeki çağrıda site sayfalarından birine (ör. iletişim) link ver.
-- Listede olmayan hiçbir URL'ye link verme, dış link verme.
+- Konuyla doğal olarak örtüşen yerlerde listeden 1-2 kardeş şirkete açıklayıcı bağlantı metniyle link ver (ör. lead generation -> SAAS Corner, LinkedIn -> Social Media Corner, influencer -> Brand Corner). Zorlama.
+- Yalnızca konu prospecting, B2B iletişim verisi, lead listesi ya da outbound e-posta ile ilgiliyse Apollo.io referans linkini doğal bir metinle EN FAZLA BİR KEZ ver (ör. [Apollo.io](${APOLLO})). Aksi halde hiç anma.
+- Bu listelerde olmayan hiçbir URL'ye link verme.
 - Yalnızca makale metnini döndür.`;
   let md = await claude(env, cfg.writeModel, prompt, { maxTokens: 16000 });
   md = md.replace(/^```(?:markdown)?\s*|\s*```$/g, "").replace(/^#\s+.*\n+/, "").trim();
-  if (md.split(/\s+/).length < 800) throw new Error(`Makale çok kısa (${md.split(/\s+/).length} kelime)`);
+  if (md.split(/\s+/).length < (en ? 700 : 800)) throw new Error(`Makale çok kısa (${md.split(/\s+/).length} kelime)`);
   return cleanLinks(md, cfg, index);
 }
 
@@ -194,7 +259,7 @@ export async function generate(env, cfg) {
 
 // site: yalnız o host (ör. "saascorner.co"); hour: cron saatinde "hour" alanı eşleşen siteler
 export async function run(env, { dryRun = false, site, hour } = {}) {
-  const sites = JSON.parse(env.SITES).filter(c => (!site || new URL(c.siteUrl).host === site) && (hour === undefined || c.hour === hour));
+  const sites = JSON.parse(env.SITES).filter(c => (!site || site.split(",").some(x => new URL(c.siteUrl).host.replace(/^www\./, "") === x.trim().replace(/^www\./, ""))) && (hour === undefined || c.hour === hour));
   const out = [];
   for (const cfg of sites) {
     try {

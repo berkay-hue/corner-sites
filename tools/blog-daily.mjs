@@ -17,7 +17,7 @@ const dry = process.argv.includes("--dry");
 
 const toml = fs.readFileSync(path.join(root, "blog-worker/wrangler.toml"), "utf8");
 const sites = JSON.parse(toml.match(/SITES = '''([\s\S]*?)'''/)[1])
-  .filter(c => (!site || new URL(c.siteUrl).host === site) && (site || hour === undefined || c.hour === hour));
+  .filter(c => (!site || site.split(",").some(x => new URL(c.siteUrl).host.replace(/^www\./, "") === x.trim().replace(/^www\./, ""))) && (site || hour === undefined || c.hour === hour));
 if (!sites.length) { console.log(`Bu çalıştırmada site yok (hour=${hour}, site=${site})`); process.exit(0); }
 
 const env = { ...process.env };

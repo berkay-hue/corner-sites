@@ -36,4 +36,26 @@ export default {
     dateLocale: "tr-TR",
     regions: { title: "Heading", category: "Published 20 Jan 2024", date: "Published 20 Jan 2024#1", summary: "Supporting text", banner: ".framer-2smd5o", content: "Content", next: null },
   },
+  "yalcinberkay.com.tr": {
+    origin: "https://www.yalcinberkay.com.tr",
+    brand: "Berkay Yalçın",
+    titleSuffix: " - Berkay YALÇIN",
+    author: "Berkay Yalçın",
+    pClass: "framer-text framer-styles-preset-1cwyh61",
+    cardSelector: "framer-1yrd82k-container",
+    lang: "en",
+    dateLocale: "en-US",
+    regions: { title: ".framer-7c4ms5", date: ".framer-ti2qwe", readTime: ".framer-3521xc", banner: ".framer-1c7evgq", content: ".framer-v57om2", category: null, next: null },
+    cardFields: { title: ".framer-1yrd82k-container", summary: ".framer-rry5oh", date: ".framer-1cyi7cp", readTime: ".framer-1ol8k15" },
+  },
+  "salescorner.co": {
+    origin: "https://salescorner.co", brand: "Sales Corner", titleSuffix: " | Sales Corner", author: "Sales Corner",
+    pClass: "sk-p", cardSelector: "sk-card", lang: "tr", dateLocale: "tr-TR",
+    regions: { readTime: "ReadTime" }, cardFields: { summary: ".sk-sum", readTime: ".sk-rt" },
+  },
+  "brandcorner.co": {
+    origin: "https://www.brandcorner.co", brand: "Brand Corner", titleSuffix: " | Brand Corner", author: "Brand Corner",
+    pClass: "sk-p", cardSelector: "sk-card", lang: "en", dateLocale: "en-US",
+    regions: { readTime: "ReadTime" }, cardFields: { summary: ".sk-sum", readTime: ".sk-rt" },
+  },
 };

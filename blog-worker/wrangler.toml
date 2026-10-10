@@ -42,6 +42,41 @@ SITES = '''[
     "sisters": ["https://saascorner.co", "https://socialmediacorner.co"],
     "repo": "berkay-hue/corner-sites", "branch": "main", "contentDir": "content/cornergroup.co/blog",
     "topicModel": "claude-haiku-5-5", "writeModel": "claude-opus-5-5"
+  },
+  {
+    "siteUrl": "https://www.yalcinberkay.com.tr",
+    "hour": 10,
+    "lang": "en",
+    "brand": "Berkay Yalçın",
+    "focus": "Personal blog of Berkay Yalçın, founder of Corner Group: B2B sales leadership, building outbound teams, founder lessons, career growth in sales, AI in sales, and doing business in Turkey",
+    "categories": ["Sales Leadership", "Founder Notes", "B2B Sales", "Career", "AI & Automation"],
+    "pages": [{ "path": "/", "label": "Berkay Yalçın" }],
+    "sisters": [],
+    "repo": "berkay-hue/corner-sites", "branch": "main", "contentDir": "content/yalcinberkay.com.tr/blog",
+    "topicModel": "claude-haiku-5-5", "writeModel": "claude-opus-5-5"
+  },
+  {
+    "siteUrl": "https://salescorner.co",
+    "hour": 11,
+    "brand": "Sales Corner",
+    "focus": "Yapay zeka destekli satış otomasyonu, B2B lead generation, outbound iş akışları, satış verisi ve zenginleştirme, e-posta dizileri, pipeline yönetimi ve satış metodolojileri",
+    "categories": ["Satış", "Satış Otomasyonu", "Lead Generation", "Outbound", "Yapay Zeka", "Pipeline"],
+    "pages": [{ "path": "/", "label": "Sales Corner otomasyonları" }, { "path": "/iletisim", "label": "görüşme planla" }],
+    "sisters": [],
+    "repo": "berkay-hue/corner-sites", "branch": "main", "contentDir": "content/salescorner.co/blog",
+    "topicModel": "claude-haiku-5-5", "writeModel": "claude-opus-5-5"
+  },
+  {
+    "siteUrl": "https://www.brandcorner.co",
+    "hour": 12,
+    "lang": "en",
+    "brand": "Brand Corner",
+    "focus": "Influencer marketing for brands and agencies: finding and vetting creators, campaign planning, creator partnerships, UGC, measuring influencer ROI, brand positioning and social commerce",
+    "categories": ["Influencer Marketing", "Creator Partnerships", "Campaigns", "Measurement", "Brand Growth"],
+    "pages": [{ "path": "/", "label": "Brand Corner" }, { "path": "/features", "label": "features" }, { "path": "/pricing", "label": "pricing" }, { "path": "/contact", "label": "contact" }],
+    "sisters": [],
+    "repo": "berkay-hue/corner-sites", "branch": "main", "contentDir": "content/brandcorner.co/blog",
+    "topicModel": "claude-haiku-5-5", "writeModel": "claude-opus-5-5"
   }
 ]'''
 

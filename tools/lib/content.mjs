@@ -51,7 +51,7 @@ function inline(s) {
     .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
     .replace(/(^|[^*])\*([^*\s][^*]*?)\*(?!\*)/g, "$1<em>$2</em>")
     .replace(/\[([^\]]+)\]\(((?:https?:\/\/|\/)[^)\s]+)\)/g, (_, t, u) =>
-      `<a href="${u}"${u.startsWith("/") ? "" : ' target="_blank" rel="noopener"'}>${t}</a>`);
+      `<a href="${u}"${u.startsWith("/") ? "" : ` target="_blank" rel="${u.startsWith("https://get.apollo.io/") ? "sponsored nofollow noopener" : "noopener"}"`}>${t}</a>`);
 }
 export function markdown(md) {
   const out = []; let list = null, para = [];

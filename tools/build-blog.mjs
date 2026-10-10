@@ -41,11 +41,14 @@ const RG = { title: "Title", date: "PublishedAt", banner: "Banner", category: "C
 const setP = (inner, text) => inner.replace(/(<p\b[^>]*>)[\s\S]*?(<\/p>)/, (_, a, b) => a + esc(text) + b);
 const regionText = (html, spec) => { const r = region(html, spec); return r ? fixMojibake(parseHTML(`<div>${r.inner}</div>`).document.querySelector("div").textContent.trim()).replace(/\s+/g, " ") : ""; };
 const TR_MONTHS = ["ocak", "şubat", "mart", "nisan", "mayıs", "haziran", "temmuz", "ağustos", "eylül", "ekim", "kasım", "aralık"];
+const EN_MONTHS = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
 function parseDate(inner) {
   const iso = inner.match(/datetime="(\d{4}-\d\d-\d\d)/); if (iso) return iso[1];
-  const m = inner.replace(/<[^>]+>/g, " ").toLocaleLowerCase("tr").match(/(\d{1,2})\s+(\p{L}+)\s+(\d{4})/u);
-  const mi = m ? TR_MONTHS.indexOf(m[2]) : -1;
-  return mi < 0 ? null : `${m[3]}-${String(mi + 1).padStart(2, "0")}-${m[1].padStart(2, "0")}`;
+  const text = inner.replace(/<[^>]+>/g, " ").toLocaleLowerCase("tr");
+  let m = text.match(/(\d{1,2})\s+(\p{L}+)\s+(\d{4})/u), d, mon, y;
+  if (m) [, d, mon, y] = m; else if ((m = text.match(/(\p{L}+)\s+(\d{1,2}),?\s+(\d{4})/u))) [, mon, d, y] = m; // "Feb 8, 2024"
+  const mi = mon ? Math.max(TR_MONTHS.indexOf(mon), EN_MONTHS.indexOf(mon.slice(0, 3))) : -1;
+  return mi < 0 ? null : `${y}-${String(mi + 1).padStart(2, "0")}-${d.padStart(2, "0")}`;
 }
 const setMeta = (html, key, val) => html.replace(new RegExp(`(<meta (?:name|property)="${key}" content=")[^"]*(")`), `$1${esc(val)}$2`);
 
@@ -142,6 +145,7 @@ function eachRegion(html, name, fn) {
 }
 const swapImg = (tag, p, lazy) => tag.replace(/\s(srcset|sizes)="[^"]*"/g, "").replace(/\ssrc="[^"]*"/, ` src="${esc(p.fm.image)}"${lazy ? ' loading="lazy"' : ""}`)
   .replace(/\salt(="[^"]*")?(?=[\s>])/, ` alt="${esc(p.fm.imageAlt || p.fm.title)}"`);
+const readTime = body => `${Math.max(1, Math.round(body.split(/\s+/).length / 220))}${cfg.lang === "en" ? " min read" : " dk okuma"}`;
 const L = cfg.lang === "en" ? { related: "Related Posts", home: "Home" } : { related: "İlgili Yazılar", home: "Ana Sayfa" };
 
 // Aynı kategoriden başlayıp tarihe en yakın yazılar
@@ -173,12 +177,15 @@ function renderPost(tpl, post, next, related) {
   h = eachRegion(h, RG.banner, (h, r) => setInner(h, r, r.inner.replace(/<img\b[^>]*>/, tag => swapImg(tag, post))));
   r = region(h, RG.category); if (r) h = setInner(h, r, r.inner.replace(/(<p[^>]*>)[^<]*(<\/p>)/, `$1${esc(fm.category || "")}$2`));
   r = region(h, RG.summary); if (r) h = setInner(h, r, setP(r.inner, fm.description));
+  r = region(h, RG.readTime); if (r) h = setInner(h, r, setP(r.inner, readTime(post.body)));
   const relMd = related.length ? `\n\n## ${L.related}\n\n` + related.map(p => `- [${p.fm.title.replace(/[[\]]/g, "")}](/blog/${p.slug})`).join("\n") : "";
   const body = markdown(post.body + relMd)
     .replace(/<(p|li|h2|h3|h4)>/g, (_, t) => `<${t} dir="auto" class="${cfg.pClass}">`)
     .replace(/<blockquote><p dir="auto" class="[^"]*">/g, `<blockquote><p dir="auto" class="${cfg.pClass}">`);
   r = region(h, RG.content); h = setInner(h, r, body);
-  h = h.replace(`data-framer-name="${RG.content}"`, `data-framer-name="${RG.content}" data-sk-content`).replace(/(<div class=")([^"]*)("[^>]*data-sk-content)/, "$1$2 sk-post$3");
+  h = RG.content.startsWith(".")
+    ? h.replace(`<div class="${RG.content.slice(1)}"`, `<div class="${RG.content.slice(1)} sk-post" data-sk-content`)
+    : h.replace(`data-framer-name="${RG.content}"`, `data-framer-name="${RG.content}" data-sk-content`).replace(/(<div class=")([^"]*)("[^>]*data-sk-content)/, "$1$2 sk-post$3");
   r = region(h, RG.next);
   if (r) h = next
     ? setInner(h, r, r.inner.replace(/(<a\b[^>]*href=")[^"]*("[^>]*>)[\s\S]*?(<\/a>)/, `$1./${next.slug}$2${esc(next.fm.title)} ›$3`))
@@ -233,6 +240,12 @@ function renderList(tpl, posts) {
     if (/<h5\b/.test(c)) c = c.replace(/(<h5[^>]*>)[\s\S]*?(<\/h5>)/, `$1${esc(p.fm.title)}$2`);
     else { const r = region(c, "Heading"); if (r) c = setInner(c, r, setP(r.inner, p.fm.title)); }
     const r = region(c, "date &amp; author"); if (r) c = setInner(c, r, r.inner.replace(/(<p[^>]*>)[^<]*(<\/p>)/, `$1${fmtDate(p.fm.date)}$2`));
+    // Sınıfla tanımlı kart alanları (ör. yalcinberkay: h3 başlık, özet, tarih, okuma süresi)
+    const F = cfg.cardFields || {};
+    let f = region(c, F.title); if (f) c = setInner(c, f, f.inner.replace(/(<h\d[^>]*>)[\s\S]*?(<\/h\d>)/, `$1${esc(p.fm.title)}$2`));
+    for (const [k, v] of [["summary", p.fm.description], ["date", fmtDate(p.fm.date)], ["readTime", readTime(p.body)]]) {
+      f = region(c, F[k]); if (f) c = setInner(c, f, setP(f.inner, v));
+    }
     return c;
   };
   const cards = posts.map((p, i) => "<!--$-->" + variants.map(v => {
@@ -275,6 +288,7 @@ async function buildSite() {
   // Sitemap: blog dışı sayfalar orijinalden, yazılar içerikten
   const orig = await readFile(join(SITE, "_orig-sitemap.xml"), "utf8").catch(() => "");
   const keep = [...orig.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m => m[1].trim()).filter(u => !/\/blog\/./.test(new URL(u).pathname));
+  if (!keep.some(u => new URL(u).pathname === "/blog")) keep.push(`${cfg.origin}/blog`);
   const urls = [...keep.map(u => `<url><loc>${u}</loc></url>`), ...posts.map(p => `<url><loc>${cfg.origin}/blog/${encodeURIComponent(p.slug)}</loc><lastmod>${p.fm.updated || p.fm.date}</lastmod></url>`)];
   await writeFile(join(SITE, "sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.join("\n")}\n</urlset>\n`);
   console.log(`build: ${posts.length} yazı${tplList ? " + liste" : ""}, sitemap ${urls.length} url`);
