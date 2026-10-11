@@ -90,7 +90,8 @@ for (const loc of [...(await readFile(join(OUT, "sitemap.xml"), "utf8")).matchAl
   // Marka ön/son ekleri atılır: "Berkay YALÇIN | X", "X - Corner Group | Satış & Otomasyon", "X | SAAS Corner Blog"
   const title = meta(html, /<title>([^<]*)/).replace(BRAND_PRE, "").replace(BRAND_SUF, "").trim() || p;
   const desc = meta(html, /<meta name="description" content="([^"]*)"/);
-  const seg = p.includes("/") ? p.split("/")[0] : "";
+  // Dil kök sayfası (/en/, /tr/) da kendi dil bölümüne girer
+  const seg = p.includes("/") || /^(tr|en)$/.test(p) ? p.split("/")[0] : "";
   const key = SECTIONS[seg] || (seg ? seg[0].toUpperCase() + seg.slice(1) : PAGES);
   if (!groups.has(key)) groups.set(key, []);
   groups.get(key).push(`- [${title.replace(/[[\]]/g, "")}](${loc})${desc ? ": " + desc : ""}`);
