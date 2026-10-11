@@ -67,8 +67,21 @@ ${trMd}`, { maxTokens: 12000 });
   fs.writeFileSync(path.join(dir, `${slug}.md`), `---\n${Object.entries(fm).map(([k, v]) => `${k}: ${JSON.stringify(v)}`).join("\n")}\n---\n\n${body}\n`);
   // TR yazı da eşini bilsin (dil anahtarı + hreflang)
   const trFile = path.join(trDir, `${trSlug}.md`);
-  fs.writeFileSync(trFile, fs.readFileSync(trFile, "utf8").replace(/\n---\n/, `\nalt: ${JSON.stringify(slug)}\n---\n`));
+  fs.writeFileSync(trFile, fs.readFileSync(trFile, "utf8").replace(/^([\s\S]*?)\n---\n/, (m, head) => `${head.replace(/\nalt: .*/, "")}\nalt: ${JSON.stringify(slug)}\n---\n`));
   return `${site}${t.prefix}/blog/${slug}`;
+}
+
+// Çeviri başarısız olsa da TR yazı yayına çıkar, iş kırmızıya düşmez. Eşi zaten varsa tekrar çevrilmez.
+async function translateAll(cfg, trFile) {
+  const trSlug = path.basename(trFile, ".md"), postUrl = `${cfg.siteUrl}/blog/${trSlug}`;
+  for (const [lang, t] of Object.entries(cfg.translate || {})) {
+    const tdir = path.join(root, t.contentDir);
+    const twin = fs.existsSync(tdir) && fs.readdirSync(tdir).filter(f => f.endsWith(".md"))
+      .find(f => fs.readFileSync(path.join(tdir, f), "utf8").includes(`\nalt: ${JSON.stringify(trSlug)}\n`));
+    if (twin) { console.log(`${lang}: eşi zaten var (${twin}), çevrilmedi`); continue; }
+    try { console.log(`${lang}: ${await translatePost(cfg, lang, t, trSlug, fs.readFileSync(trFile, "utf8"))}`); }
+    catch (e) { console.error(`${cfg.siteUrl} ${lang} çevirisi: ${e.message}`); await notify(`⚠️ ${lang.toUpperCase()} çeviri yazılamadı (${postUrl}): ${e.message}`); }
+  }
 }
 
 let failed = 0;
@@ -78,7 +91,12 @@ for (const cfg of sites) {
     // Aynı gün ikinci yazı olmasın (elle tetikleme / gecikmeli cron tekrarında)
     const done = fs.existsSync(dir) && fs.readdirSync(dir).filter(f => f.endsWith(".md"))
       .find(f => fs.readFileSync(path.join(dir, f), "utf8").includes(`\ndate: "${today}"`));
-    if (done && !site) { console.log(`${cfg.siteUrl}: bugün zaten yazı var (${done}), atlandı`); continue; }
+    if (done && !site) {
+      console.log(`${cfg.siteUrl}: bugün zaten yazı var (${done}), atlandı`);
+      // Önceki çalıştırmada çeviri düştüyse telafide tamamlanır
+      if (!dry) await translateAll(cfg, path.join(dir, done));
+      continue;
+    }
 
     const { topic, slug, fm, body, md, links } = await generate(env, cfg);
     if (dry) { console.log(JSON.stringify({ site: cfg.siteUrl, slug, fm, words: body.split(/\s+/).length, links, preview: body.slice(0, 400) }, null, 1)); continue; }
@@ -89,11 +107,7 @@ for (const cfg of sites) {
     const postUrl = `${cfg.siteUrl}/blog/${path.basename(file, ".md")}`;
     console.log(`${postUrl} (${body.split(/\s+/).length} kelime, ${links?.length ?? 0} iç link)`);
     await notify(`✅ Yeni blog (${topic.category}): ${topic.topic}\n${postUrl}\n(yayına çıkması 2-3 dakika sürer)`);
-    // Çeviri başarısız olsa da TR yazı yayına çıkar
-    for (const [lang, t] of Object.entries(cfg.translate || {})) {
-      try { console.log(`${lang}: ${await translatePost(cfg, lang, t, path.basename(file, ".md"), md)}`); }
-      catch (e) { console.error(`${cfg.siteUrl} ${lang} çevirisi: ${e.message}`); await notify(`⚠️ ${lang.toUpperCase()} çeviri yazılamadı (${postUrl}): ${e.message}`); }
-    }
+    await translateAll(cfg, file);
   } catch (e) {
     failed++;
     console.error(`${cfg.siteUrl}: ${e.message}`);
