@@ -20,7 +20,7 @@ const GROUP = [
 export const APOLLO = "https://get.apollo.io/679irkzm35ya";
 const sisters = cfg => GROUP.filter(g => new URL(g.url).host.replace(/^www\./, "") !== new URL(cfg.siteUrl).host.replace(/^www\./, ""));
 
-const slugify = s => s.toLocaleLowerCase("tr")
+export const slugify = s => s.toLocaleLowerCase("tr")
   .replace(/ı/g, "i").replace(/ğ/g, "g").replace(/ü/g, "u").replace(/ş/g, "s").replace(/ö/g, "o").replace(/ç/g, "c")
   .normalize("NFKD").replace(/[̀-ͯ]/g, "")
   .replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 80).replace(/-+$/, "");
@@ -34,7 +34,7 @@ function metaDescription(md, max = 155) {
 }
 
 // Anthropic Messages API. JSON istenen çağrılarda yanıttaki ilk "{" ile son "}" arası ayrıştırılır.
-async function claude(env, model, prompt, { json = false, maxTokens = 2048 } = {}) {
+export async function claude(env, model, prompt, { json = false, maxTokens = 2048 } = {}) {
   const r = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
     headers: { "content-type": "application/json", "x-api-key": env.ANTHROPIC_API_KEY, "anthropic-version": "2023-06-01" },

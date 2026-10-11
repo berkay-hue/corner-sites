@@ -1,15 +1,17 @@
 # Günlük blog yazısı: tools/blog-daily.mjs yazıyı üretir, burada commit edilir ve blog-deploy tetiklenir.
-# 07 UTC = 10:00 TR saascorner, 08 = socialmediacorner, 09 = cornergroup, 10 = yalcinberkay (EN), 11 = salescorner, 12 = yalcinberkay /tr (TR, ayrı konu) (wrangler.toml SITES "hour"). brandcorner kapalı (hour: null; domain Vercel'de).
+# Saat başından 17 dk sonra (yoğun saat başı cron'ları düşüyor). 07 UTC = 10:00 TR saascorner, 08 = socialmediacorner, 09 = cornergroup, 10 = yalcinberkay (EN), 11 = salescorner, 12 = yalcinberkay /tr (TR, ayrı konu) (wrangler.toml SITES "hour"). brandcorner kapalı (hour: null; domain Vercel'de).
 # Secret'lar: ANTHROPIC_API_KEY, PEXELS_API_KEY, (opsiyonel) TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID
 name: blog-daily
 on:
   schedule:
-    - cron: "0 7 * * *"
-    - cron: "0 8 * * *"
-    - cron: "0 9 * * *"
-    - cron: "0 10 * * *"
-    - cron: "0 11 * * *"
-    - cron: "0 12 * * *"
+    - cron: "17 7 * * *"
+    - cron: "17 8 * * *"
+    - cron: "17 9 * * *"
+    - cron: "17 10 * * *"
+    - cron: "17 11 * * *"
+    - cron: "17 12 * * *"
+    # Telafi: GitHub saat başı cron'larını sık düşürüyor/geciktiriyor; bugün yazısı olmayan siteler 18:43 TR'de yazılır
+    - cron: "43 15 * * *"
   workflow_dispatch:
     inputs:
       site: { description: "Site(ler), virgülle (örn. saascorner.co,salescorner.co)", required: true, default: "saascorner.co" }
@@ -36,6 +38,8 @@ jobs:
         run: |
           if [ -n "$SITE" ]; then
             node tools/blog-daily.mjs --site "$SITE" $([ "$DRY" = "true" ] && echo --dry)
+          elif [ "$SCHEDULE" = "43 15 * * *" ]; then
+            node tools/blog-daily.mjs --catchup
           else
             # Gecikmeli başlasa da saati cron satırından al
             node tools/blog-daily.mjs --hour "$(echo "$SCHEDULE" | cut -d' ' -f2)"
