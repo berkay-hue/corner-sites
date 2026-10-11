@@ -77,6 +77,7 @@ SITES = '''[
     "pages": [{ "path": "/", "label": "Sales Corner otomasyonları" }, { "path": "/iletisim", "label": "görüşme planla" }],
     "sisters": [],
     "repo": "berkay-hue/corner-sites", "branch": "main", "contentDir": "content/salescorner.co/blog",
+    "translate": { "en": { "contentDir": "content/salescorner.co/en/blog", "prefix": "/en", "links": { "/iletisim": "/en/iletisim", "/blog": "/en/blog", "/": "/en/" } } },
     "topicModel": "claude-haiku-5-5", "writeModel": "claude-opus-5-5"
   },
   {
