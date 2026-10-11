@@ -12,9 +12,11 @@ import { fixMojibake, fixPlaceholders, unscaffold, markdown, metaDescription, es
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const [cmd, host] = process.argv.slice(2);
-const cfg = CONFIG[host];
+const BASE_CFG = CONFIG[host];
+let cfg = BASE_CFG, BASE = ""; // BASE: dil varyantının yol öneki (ör. "/tr"); varyantsız sitelerde ""
 if (!cfg || !["import", "build"].includes(cmd)) { console.error("usage: build-blog.mjs import|build <host>"); process.exit(1); }
-const SITE = join(ROOT, "sites", host), CONTENT = join(ROOT, "content", host, "blog"), TPL = join(ROOT, "templates", host);
+const SITE = join(ROOT, "sites", host), TPL = join(ROOT, "templates", host);
+let CONTENT = join(ROOT, "content", host, "blog");
 
 // --- HTML parça yardımcıları (yeniden serileştirmeden, kaynak metin üzerinde)
 function elementEnd(html, start) {
@@ -149,7 +151,7 @@ const AUTHOR = { "@type": "Person", "@id": "https://www.yalcinberkay.com.tr/#per
 const swapImg = (tag, p, lazy) => tag.replace(/\s(srcset|sizes)="[^"]*"/g, "").replace(/\ssrc="[^"]*"/, ` src="${esc(p.fm.image)}"${lazy ? ' loading="lazy"' : ""}`)
   .replace(/\salt(="[^"]*")?(?=[\s>])/, "").replace(/^<img\b/, `<img alt="${esc(p.fm.imageAlt || p.fm.title)}"`);
 const readTime = body => `${Math.max(1, Math.round(body.split(/\s+/).length / 220))}${cfg.lang === "en" ? " min read" : " dk okuma"}`;
-const L = cfg.lang === "en" ? { related: "Related Posts", home: "Home" } : { related: "İlgili Yazılar", home: "Ana Sayfa" };
+const L = () => cfg.lang === "en" ? { related: "Related Posts", home: "Home" } : { related: "İlgili Yazılar", home: "Ana Sayfa" };
 
 // Aynı kategoriden başlayıp tarihe en yakın yazılar
 function relatedFor(post, posts, n = 4) {
@@ -159,7 +161,7 @@ function relatedFor(post, posts, n = 4) {
 
 function renderPost(tpl, post, next, related) {
   const { fm, slug } = post;
-  const url = `${cfg.origin}/blog/${slug}`;
+  const url = `${cfg.origin}${BASE}/blog/${slug}`;
   const img = fm.image.startsWith("http") ? fm.image : cfg.origin + fm.image;
   // <title> 60 karakteri aşmasın: tam başlık, ya da iki noktadan önceki kısım, ya da kelime sınırında kısaltma
   const head = fm.title.split(/[:?!]/)[0].trim();
@@ -181,7 +183,7 @@ function renderPost(tpl, post, next, related) {
   r = region(h, RG.category); if (r) h = setInner(h, r, r.inner.replace(/(<p[^>]*>)[^<]*(<\/p>)/, `$1${esc(fm.category || "")}$2`));
   r = region(h, RG.summary); if (r) h = setInner(h, r, setP(r.inner, fm.description));
   r = region(h, RG.readTime); if (r) h = setInner(h, r, setP(r.inner, readTime(post.body)));
-  const relMd = related.length ? `\n\n## ${L.related}\n\n` + related.map(p => `- [${p.fm.title.replace(/[[\]]/g, "")}](/blog/${p.slug})`).join("\n") : "";
+  const relMd = related.length ? `\n\n## ${L().related}\n\n` + related.map(p => `- [${p.fm.title.replace(/[[\]]/g, "")}](${BASE}/blog/${p.slug})`).join("\n") : "";
   const body = markdown(post.body + relMd)
     .replace(/<(p|li|h2|h3|h4)>/g, (_, t) => `<${t} dir="auto" class="${cfg.pClass}">`)
     .replace(/<blockquote><p dir="auto" class="[^"]*">/g, `<blockquote><p dir="auto" class="${cfg.pClass}">`);
@@ -216,7 +218,7 @@ function renderPost(tpl, post, next, related) {
     author: AUTHOR,
     publisher: { "@type": "Organization", name: cfg.brand, url: cfg.origin },
   }, {
-    "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [[L.home, cfg.origin + "/"], ["Blog", cfg.origin + "/blog"], [fm.title, url]]
+    "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [[L().home, cfg.origin + BASE + "/"], ["Blog", cfg.origin + BASE + "/blog"], [fm.title, url]]
       .map(([name, item], i) => ({ "@type": "ListItem", position: i + 1, name, item })),
   }];
   h = h.replace(/<style data-sk-post>[\s\S]*?<\/style>/, "").replace(/<script type="application\/ld\+json" data-sk-post>[\s\S]*?<\/script>/, "");
@@ -272,29 +274,86 @@ function renderList(tpl, posts) {
   return h.replace("</head>", css + "</head>").replace("</body>", js.replace("<script>", "<script data-sk-list>") + "</body>");
 }
 
-async function buildSite() {
-  const tplPost = await readFile(join(TPL, "post.html"), "utf8");
-  const tplList = await readFile(join(TPL, "blog.html"), "utf8").catch(() => null);
+// --- Dil varyantları (cfg.variants, ör. yalcinberkay /tr/blog): hreflang + og:locale + dil anahtarı.
+// Varyantı olmayan sitelerin çıktısı değişmez.
+const LANG_CSS = `<style data-sk-lang>.sk-lang{position:fixed;left:16px;bottom:16px;z-index:50;display:flex;align-items:center;gap:2px;padding:4px;border-radius:999px;background:rgba(21,19,18,.88);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);font:600 12px/1 Inter,system-ui,sans-serif;letter-spacing:.04em}.sk-lang a{display:block;padding:7px 10px;border-radius:999px;color:rgb(153,143,143);text-decoration:none}.sk-lang a:hover{color:#fff}.sk-lang a[aria-current]{background:rgb(244,108,56);color:#fff}</style>`;
+const LOCALE = { en: "en_US", tr: "tr_TR" }, LABEL = { en: "English", tr: "Türkçe" };
+// links: { dil: yol } — toggle hedefleri; alts: eşleşmiş çeviriler (yoksa hreflang yazılmaz, yalnız og:locale)
+function setLang(h, lang, links, alts) {
+  h = h.replace(/<link rel="alternate" hreflang="[^"]*" href="[^"]*">/g, "").replace(/<meta property="og:locale(:alternate)?" content="[^"]*">/g, "")
+    .replace(/<style data-sk-lang>[\s\S]*?<\/style>/g, "").replace(/<div class="sk-lang" data-sk-lang>[\s\S]*?<\/div>/g, "");
+  let extra = `<meta property="og:locale" content="${LOCALE[lang]}">`;
+  if (alts) {
+    extra = Object.entries(alts).map(([l, p]) => `<link rel="alternate" hreflang="${l}" href="${BASE_CFG.origin}${p}">`).join("") +
+      `<link rel="alternate" hreflang="x-default" href="${BASE_CFG.origin}${alts[BASE_CFG.lang]}">` + extra +
+      Object.keys(alts).filter(l => l !== lang).map(l => `<meta property="og:locale:alternate" content="${LOCALE[l]}">`).join("");
+  }
+  h = h.replace(/(<link rel="canonical" href="[^"]*">)/, `$1${extra}`);
+  const box = `<div class="sk-lang" data-sk-lang>${Object.entries(links).map(([l, p]) => `<a href="${p}" hreflang="${l}" lang="${l}"${l === lang ? ' aria-current="page"' : ""} aria-label="${LABEL[l]}">${l.toUpperCase()}</a>`).join("")}</div>`;
+  return h.replace("</head>", LANG_CSS + "</head>").replace(/<\/body>/i, box + "</body>");
+}
+
+async function loadPosts(dir, prefix) {
   const posts = [];
-  for (const f of (await readdir(CONTENT)).filter(f => f.endsWith(".md"))) {
-    const { fm, body } = parseMd(await readFile(join(CONTENT, f), "utf8"));
+  for (const f of (await readdir(dir)).filter(f => f.endsWith(".md"))) {
+    const { fm, body } = parseMd(await readFile(join(dir, f), "utf8"));
     if (fm.draft) continue;
     if (!fm.image && cfg.defaultImage) fm.image = cfg.defaultImage;
-    posts.push({ slug: f.replace(/\.md$/, ""), fm, body });
+    // Yazar/worker iç linkleri /blog/slug yazar; varyantta kendi dilindeki yazılara gider
+    posts.push({ slug: f.replace(/\.md$/, ""), fm, body: prefix ? body.replace(/\]\(\/blog\//g, `](${prefix}/blog/`) : body });
   }
-  posts.sort((a, b) => b.fm.date.localeCompare(a.fm.date) || a.slug.localeCompare(b.slug));
-  await mkdir(join(SITE, "blog"), { recursive: true });
-  for (const [i, p] of posts.entries()) await writeFile(join(SITE, "blog", p.slug + ".html"), renderPost(tplPost, p, posts[i + 1] || posts[0], relatedFor(p, posts)));
-  if (tplList) await writeFile(join(SITE, "blog.html"), renderList(tplList, posts));
-  // Worker'ın konu seçimi ve iç linkleme için özet
-  await writeFile(join(SITE, "_blog-index.json"), JSON.stringify(posts.map(p => ({ slug: p.slug, title: p.fm.title, category: p.fm.category, date: p.fm.date, image: p.fm.image }))));
-  // Sitemap: blog dışı sayfalar orijinalden, yazılar içerikten
-  const orig = await readFile(join(SITE, "_orig-sitemap.xml"), "utf8").catch(() => "");
-  const keep = [...orig.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m => m[1].trim()).filter(u => !/\/blog\/./.test(new URL(u).pathname));
-  if (!keep.some(u => new URL(u).pathname === "/blog")) keep.push(`${cfg.origin}/blog`);
-  const urls = [...keep.map(u => `<url><loc>${u}</loc></url>`), ...posts.map(p => `<url><loc>${cfg.origin}/blog/${encodeURIComponent(p.slug)}</loc><lastmod>${p.fm.updated || p.fm.date}</lastmod></url>`)];
+  return posts.sort((a, b) => b.fm.date.localeCompare(a.fm.date) || a.slug.localeCompare(b.slug));
+}
+
+async function buildSite() {
+  // Ana dil + varyantlar: [anahtar, cfg, içerik klasörü, yol öneki, şablon soneki]
+  const langs = [["", BASE_CFG, CONTENT, "", ""], ...Object.entries(BASE_CFG.variants || {}).map(([k, v]) => [k, { ...BASE_CFG, ...v }, join(ROOT, "content", host, k, "blog"), v.prefix, "-" + k])];
+  const sets = [];
+  for (const [k, c, dir, prefix, sfx] of langs) { cfg = c; sets.push({ k, c, dir, prefix, sfx, posts: await loadPosts(dir, prefix) }); }
+  // Çeviri eşleri: front matter "alt" (karşı dildeki slug), iki yönden de okunur; hreflang her iki sayfada karşılıklı
+  const alts = new Map();
+  for (const v of sets.slice(1)) {
+    const base = sets[0], bs = new Map(base.posts.map(p => [p.slug, p])), vs = new Map(v.posts.map(p => [p.slug, p]));
+    const pairs = new Map();
+    for (const p of base.posts) if (vs.has(p.fm.alt)) pairs.set(p.slug, p.fm.alt);
+    for (const p of v.posts) if (bs.has(p.fm.alt)) {
+      if (pairs.has(p.fm.alt) && pairs.get(p.fm.alt) !== p.slug) console.warn(`UYARI: alt çakışması ${p.fm.alt} <-> ${p.slug}`);
+      else pairs.set(p.fm.alt, p.slug);
+    }
+    for (const [a, b] of pairs) {
+      const o = { [base.c.lang]: `/blog/${a}`, [v.c.lang]: `${v.prefix}/blog/${b}` };
+      alts.set(bs.get(a), o); alts.set(vs.get(b), o);
+    }
+  }
+  const index = sets.map(s => [s.c.lang, `${s.prefix}/blog`]);
+  const urls = [];
+  for (const [n, { c, prefix, sfx, posts }] of sets.entries()) {
+    cfg = c; BASE = prefix;
+    const out = join(SITE, ...(prefix ? [prefix.slice(1)] : []));
+    const tplPost = await readFile(join(TPL, `post${sfx}.html`), "utf8");
+    const tplList = await readFile(join(TPL, `blog${sfx}.html`), "utf8").catch(() => null);
+    const lang = (h, p) => sets.length < 2 ? h : setLang(h, c.lang, Object.fromEntries(index.map(([l, i]) => [l, alts.get(p)?.[l] || (l === c.lang && p ? `${prefix}/blog/${p.slug}` : i)])), p ? alts.get(p) : Object.fromEntries(index));
+    await mkdir(join(out, "blog"), { recursive: true });
+    for (const [i, p] of posts.entries()) await writeFile(join(out, "blog", p.slug + ".html"), lang(renderPost(tplPost, p, posts[i + 1] || posts[0], relatedFor(p, posts)), p));
+    if (tplList) {
+      let h = renderList(tplList, posts);
+      if (prefix) h = setMeta(h, "og:url", `${c.origin}${prefix}/blog`).replace(/(<link rel="canonical" href=")[^"]*/, `$1${c.origin}${prefix}/blog`);
+      await writeFile(join(out, "blog.html"), lang(h, null));
+    }
+    // Worker'ın konu seçimi ve iç linkleme için özet
+    await writeFile(join(out, "_blog-index.json"), JSON.stringify(posts.map(p => ({ slug: p.slug, title: p.fm.title, category: p.fm.category, date: p.fm.date, image: p.fm.image }))));
+    // Sitemap: blog dışı sayfalar orijinalden, yazılar içerikten
+    if (!n) {
+      const orig = await readFile(join(SITE, "_orig-sitemap.xml"), "utf8").catch(() => "");
+      const keep = [...orig.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m => m[1].trim()).filter(u => !/\/blog\/./.test(new URL(u).pathname) && !sets.slice(1).some(s => new URL(u).pathname === `${s.prefix}/blog`));
+      if (!keep.some(u => new URL(u).pathname === "/blog")) keep.push(`${cfg.origin}/blog`);
+      urls.push(...keep.map(u => `<url><loc>${u}</loc></url>`));
+    } else urls.push(`<url><loc>${cfg.origin}${prefix}/blog</loc></url>`);
+    urls.push(...posts.map(p => `<url><loc>${cfg.origin}${prefix}/blog/${encodeURIComponent(p.slug)}</loc><lastmod>${p.fm.updated || p.fm.date}</lastmod></url>`));
+    console.log(`build${prefix ? " " + prefix : ""}: ${posts.length} yazı${tplList ? " + liste" : ""}${alts.size ? `, ${[...alts.keys()].filter(p => posts.includes(p)).length} çeviri eşi` : ""}`);
+  }
   await writeFile(join(SITE, "sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.join("\n")}\n</urlset>\n`);
-  console.log(`build: ${posts.length} yazı${tplList ? " + liste" : ""}, sitemap ${urls.length} url`);
+  console.log(`sitemap ${urls.length} url`);
 }
 
 await (cmd === "import" ? importSite() : buildSite());
