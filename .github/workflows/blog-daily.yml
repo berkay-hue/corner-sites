@@ -55,8 +55,10 @@ jobs:
           git diff --cached --quiet && { echo "Yeni yazı yok"; exit 0; }
           hosts=$(git diff --cached --name-only | cut -d/ -f2 | sort -u)
           git commit -q -m "blog: $(git diff --cached --name-only | xargs -n1 basename | sed 's/\.md$//' | paste -sd, -)"
-          # ayrı satırlar: hata olursa adım düşer (&& zinciri set -e'yi atlatıyordu)
-          git pull -q --rebase
-          git push -q
+          # main eşzamanlı ilerleyebilir: 5 deneme, hepsi düşerse adım kırmızı olur
+          for i in 1 2 3 4 5; do
+            git pull -q --rebase && git push -q && break
+            [ "$i" = 5 ] && exit 1; sleep $((i * 5))
+          done
           # GITHUB_TOKEN push'u başka workflow tetiklemez; deploy elle tetiklenir
           for h in $hosts; do gh workflow run blog-deploy.yml -f host="$h"; done
