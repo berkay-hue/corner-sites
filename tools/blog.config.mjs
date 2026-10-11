@@ -45,6 +45,7 @@ export default {
     cardSelector: "framer-1yrd82k-container",
     lang: "en",
     dateLocale: "en-US",
+    variants: { tr: { lang: "tr", dateLocale: "tr-TR", prefix: "/tr" } },
     regions: { title: ".framer-7c4ms5", date: ".framer-ti2qwe", readTime: ".framer-3521xc", banner: ".framer-1c7evgq", content: ".framer-v57om2", category: null, next: null },
     cardFields: { title: ".framer-1yrd82k-container", summary: ".framer-rry5oh", date: ".framer-1cyi7cp", readTime: ".framer-1ol8k15" },
   },

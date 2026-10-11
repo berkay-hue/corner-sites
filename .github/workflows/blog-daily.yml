@@ -1,5 +1,5 @@
 # Günlük blog yazısı: tools/blog-daily.mjs yazıyı üretir, burada commit edilir ve blog-deploy tetiklenir.
-# 07 UTC = 10:00 TR saascorner, 08 = socialmediacorner, 09 = cornergroup, 10 = yalcinberkay, 11 = salescorner (wrangler.toml SITES "hour"). brandcorner kapalı (hour: null; domain Vercel'de).
+# 07 UTC = 10:00 TR saascorner, 08 = socialmediacorner, 09 = cornergroup, 10 = yalcinberkay (EN), 11 = salescorner, 12 = yalcinberkay /tr (TR, ayrı konu) (wrangler.toml SITES "hour"). brandcorner kapalı (hour: null; domain Vercel'de).
 # Secret'lar: ANTHROPIC_API_KEY, PEXELS_API_KEY, (opsiyonel) TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID
 name: blog-daily
 on:
@@ -9,6 +9,7 @@ on:
     - cron: "0 9 * * *"
     - cron: "0 10 * * *"
     - cron: "0 11 * * *"
+    - cron: "0 12 * * *"
   workflow_dispatch:
     inputs:
       site: { description: "Site(ler), virgülle (örn. saascorner.co,salescorner.co)", required: true, default: "saascorner.co" }

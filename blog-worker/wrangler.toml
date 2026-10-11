@@ -56,6 +56,18 @@ SITES = '''[
     "topicModel": "claude-haiku-5-5", "writeModel": "claude-opus-5-5"
   },
   {
+    "siteUrl": "https://www.yalcinberkay.com.tr/tr",
+    "hour": 12,
+    "lang": "tr",
+    "brand": "Berkay Yalçın",
+    "focus": "Berkay Yalçın'ın Türkçe kişisel blogu: B2B satış, outbound satış ekibi kurma, prospecting, CRM kurulumu ve satış operasyonları, satış liderliği ve satışta kariyer (İngilizce blogun çevirisi değil, ayrı konular)",
+    "categories": ["B2B Satış", "Outbound", "CRM", "Satış Liderliği", "Kariyer"],
+    "pages": [{ "path": "/tr", "label": "Berkay Yalçın" }, { "path": "/tr/experience", "label": "deneyim" }],
+    "sisters": [],
+    "repo": "berkay-hue/corner-sites", "branch": "main", "contentDir": "content/yalcinberkay.com.tr/tr/blog",
+    "topicModel": "claude-haiku-5-5", "writeModel": "claude-opus-5-5"
+  },
+  {
     "siteUrl": "https://salescorner.co",
     "hour": 11,
     "brand": "Sales Corner",
