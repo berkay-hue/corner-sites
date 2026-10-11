@@ -35,6 +35,9 @@ export default {
     lang: "tr",
     dateLocale: "tr-TR",
     regions: { title: "Heading", category: "Published 20 Jan 2024", date: "Published 20 Jan 2024#1", summary: "Supporting text", banner: ".framer-2smd5o", content: "Content", next: null },
+    variants: { en: { lang: "en", dateLocale: "en-US", prefix: "/en" } },
+    // /en/ ve ana sayfalardaki TR/EN anahtarıyla aynı görünüm
+    langCss: `<style data-sk-lang>.sk-lang{position:fixed;left:16px;bottom:16px;z-index:50;display:flex;align-items:center;gap:2px;padding:4px;border-radius:999px;background:rgba(14,28,41,.88);border:1px solid rgba(255,255,255,.14);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);font:600 12px/1 "Manrope",system-ui,sans-serif;letter-spacing:.04em}.sk-lang a,.sk-lang span{display:block;padding:7px 10px;border-radius:999px;color:#c3cbd6;text-decoration:none}.sk-lang a:hover{color:#fff}.sk-lang [aria-current]{background:#774be5;color:#fff}</style>`,
   },
   "yalcinberkay.com.tr": {
     origin: "https://www.yalcinberkay.com.tr",
