@@ -73,7 +73,7 @@ if (!(await has(join(OUT, "sitemap.xml")))) {
 const NAMES = { "yalcinberkay.com.tr": "Berkay Yalçın" };
 const EN = /<html[^>]*\slang="en/i.test(index);
 const SECTIONS = EN ? { blog: "Blog", industries: "Industries", solutions: "Solutions", tr: "Türkçe" }
-  : { blog: "Blog", "bilgi-merkezi": "Bilgi Merkezi", solutions: "Çözümler", sektor: "Sektörler", "aydinlatma-metni": "Yasal" };
+  : { blog: "Blog", "bilgi-merkezi": "Bilgi Merkezi", solutions: "Çözümler", sektor: "Sektörler", "aydinlatma-metni": "Yasal", en: "English" };
 const PAGES = EN ? "Pages" : "Sayfalar";
 const unesc = s => s.replace(/&amp;/g, "&").replace(/&quot;/g, '"').replace(/&#x27;|&#39;/g, "'").replace(/&lt;/g, "<").replace(/&gt;/g, ">").trim();
 const meta = (html, re) => unesc(html.match(re)?.[1] || "");
