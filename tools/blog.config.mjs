@@ -23,6 +23,9 @@ export default {
     regions: { title: "Heading", category: "Published 20 Jan 2024", date: "Published 20 Jan 2024#1", summary: "Supporting text", banner: ".framer-1exfs49", content: "Content", next: null },
     relatedCards: true, // yazı altındaki "Son Bloglar" kartları
     listHero: { title: "Navigating Remote Work: Tips for Boosting Productivity", text: "Supporting text", href: "./blog/lead-generation-saas-corner-ile-nitelikli-musterileri-elde-etmenin-yollari" },
+    variants: { en: { lang: "en", dateLocale: "en-US", prefix: "/en" } },
+    // /en/ ve ana sayfalardaki TR/EN anahtarıyla aynı görünüm
+    langCss: `<style data-sk-lang>.sk-lang{position:fixed;left:16px;bottom:16px;z-index:60;display:flex;gap:2px;padding:3px;border-radius:999px;background:rgba(10,15,13,.82);border:1px solid rgba(255,255,255,.14);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);font:600 12px/1 Inter,system-ui,-apple-system,sans-serif;letter-spacing:.04em}.sk-lang a{display:block;padding:7px 10px;border-radius:999px;color:#e8eee9;text-decoration:none}.sk-lang a:hover{background:rgba(255,255,255,.08)}.sk-lang a[aria-current]{background:#ffb71b;color:#0a0f0d}</style>`,
   },
   "socialmediacorner.co": {
     origin: "https://socialmediacorner.co",
