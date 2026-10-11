@@ -276,6 +276,7 @@ function renderList(tpl, posts) {
 
 // --- Dil varyantları (cfg.variants, ör. yalcinberkay /tr/blog): hreflang + og:locale + dil anahtarı.
 // Varyantı olmayan sitelerin çıktısı değişmez.
+// Anahtarın görünümü sitenin ana sayfalarıyla aynı olsun diye cfg.langCss ile değiştirilebilir.
 const LANG_CSS = `<style data-sk-lang>.sk-lang{position:fixed;left:16px;bottom:16px;z-index:50;display:flex;align-items:center;gap:2px;padding:4px;border-radius:999px;background:rgba(21,19,18,.88);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);font:600 12px/1 Inter,system-ui,sans-serif;letter-spacing:.04em}.sk-lang a{display:block;padding:7px 10px;border-radius:999px;color:rgb(153,143,143);text-decoration:none}.sk-lang a:hover{color:#fff}.sk-lang a[aria-current]{background:rgb(244,108,56);color:#fff}</style>`;
 const LOCALE = { en: "en_US", tr: "tr_TR" }, LABEL = { en: "English", tr: "Türkçe" };
 // links: { dil: yol } — toggle hedefleri; alts: eşleşmiş çeviriler (yoksa hreflang yazılmaz, yalnız og:locale)
@@ -290,7 +291,7 @@ function setLang(h, lang, links, alts) {
   }
   h = h.replace(/(<link rel="canonical" href="[^"]*">)/, `$1${extra}`);
   const box = `<div class="sk-lang" data-sk-lang>${Object.entries(links).map(([l, p]) => `<a href="${p}" hreflang="${l}" lang="${l}"${l === lang ? ' aria-current="page"' : ""} aria-label="${LABEL[l]}">${l.toUpperCase()}</a>`).join("")}</div>`;
-  return h.replace("</head>", LANG_CSS + "</head>").replace(/<\/body>/i, box + "</body>");
+  return h.replace("</head>", (BASE_CFG.langCss || LANG_CSS) + "</head>").replace(/<\/body>/i, box + "</body>");
 }
 
 async function loadPosts(dir, prefix) {
