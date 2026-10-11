@@ -42,6 +42,7 @@ SITES = '''[
     "pages": [{ "path": "/", "label": "Corner Group" }, { "path": "/iletisim", "label": "iletişim" }],
     "sisters": ["https://saascorner.co", "https://socialmediacorner.co"],
     "repo": "berkay-hue/corner-sites", "branch": "main", "contentDir": "content/cornergroup.co/blog",
+    "translate": { "en": { "contentDir": "content/cornergroup.co/en/blog", "prefix": "/en", "links": { "/iletisim": "/en/contact", "/sektor/saas": "/en/industries/saas", "/sektor/uretim-ihracat": "/en/industries/manufacturing-export", "/sektor/e-ticaret": "/en/industries/e-commerce", "/blog": "/en/blog", "/": "/en/" } } },
     "topicModel": "claude-haiku-5-5", "writeModel": "claude-opus-5-5"
   },
   {

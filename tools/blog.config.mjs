@@ -9,6 +9,9 @@ export default {
     cardSelector: "framer-re40qv-container", // liste kartının dış kapsayıcısı
     perPage: 9,
     lang: "tr",
+    variants: { en: { lang: "en", dateLocale: "en-US", prefix: "/en" } },
+    // /en/ sayfalarındaki TR/EN anahtarıyla (cg-lang) aynı görünüm
+    langCss: `<style data-sk-lang>.sk-lang{position:fixed;left:16px;bottom:16px;z-index:50;display:inline-flex;align-items:center;gap:2px;padding:3px;border:1px solid rgba(255,255,255,0.1);background:rgba(10,10,10,.88);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-radius:8px;font:600 11px/1 "JetBrains Mono",ui-monospace,monospace;letter-spacing:.04em}.sk-lang a,.sk-lang span{display:block;color:#999;text-decoration:none;padding:6px 7px;border-radius:6px;transition:color .15s,background .15s}.sk-lang a:hover{color:#fff}.sk-lang [aria-current]{background:#FFB71B;color:#000}</style>`,
   },
   "saascorner.co": {
     origin: "https://saascorner.co",
