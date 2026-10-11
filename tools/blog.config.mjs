@@ -53,6 +53,9 @@ export default {
     origin: "https://salescorner.co", brand: "Sales Corner", titleSuffix: " | Sales Corner", author: "Sales Corner",
     pClass: "sk-p", cardSelector: "sk-card", lang: "tr", dateLocale: "tr-TR",
     regions: { readTime: "ReadTime" }, cardFields: { summary: ".sk-sum", readTime: ".sk-rt" },
+    variants: { en: { lang: "en", dateLocale: "en-US", prefix: "/en" } },
+    // /en/ ve ana sayfalardaki TR/EN anahtarıyla aynı görünüm
+    langCss: `<style data-sk-lang>.sk-lang{position:fixed;left:16px;bottom:16px;z-index:50;display:flex;gap:2px;padding:4px;border-radius:999px;background:rgba(10,10,15,.88);border:1px solid rgba(255,255,255,.14);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);font:600 12px/1 Inter,system-ui,sans-serif;letter-spacing:.04em}.sk-lang a{display:block;padding:7px 10px;border-radius:999px;color:rgb(160,160,175);text-decoration:none}.sk-lang a:hover{color:#fff}.sk-lang a[aria-current]{background:linear-gradient(135deg,rgb(124,92,255),rgb(34,211,238));color:#fff}</style>`,
   },
   "brandcorner.co": {
     origin: "https://www.brandcorner.co", brand: "Brand Corner", titleSuffix: " | Brand Corner", author: "Brand Corner",
