@@ -72,7 +72,7 @@ if (!(await has(join(OUT, "sitemap.xml")))) {
 // llms.txt (llmstxt.org): yapay zekâ aramaları için site özeti, sitemap'teki sayfalardan üretilir
 const NAMES = { "yalcinberkay.com.tr": "Berkay Yalçın" };
 const EN = /<html[^>]*\slang="en/i.test(index);
-const SECTIONS = EN ? { blog: "Blog", industries: "Industries", solutions: "Solutions" }
+const SECTIONS = EN ? { blog: "Blog", industries: "Industries", solutions: "Solutions", tr: "Türkçe" }
   : { blog: "Blog", "bilgi-merkezi": "Bilgi Merkezi", solutions: "Çözümler", sektor: "Sektörler", "aydinlatma-metni": "Yasal" };
 const PAGES = EN ? "Pages" : "Sayfalar";
 const unesc = s => s.replace(/&amp;/g, "&").replace(/&quot;/g, '"').replace(/&#x27;|&#39;/g, "'").replace(/&lt;/g, "<").replace(/&gt;/g, ">").trim();
