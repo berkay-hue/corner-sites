@@ -18,7 +18,7 @@ MAIL_TO = "berkay@saascorner.co"
 MAIL_FROM = "form@cornergroup.co"
 RAKIP_START = "https://smcorner.app.n8n.cloud/webhook/rakip-analizi-pro-v5"
 RAKIP_STATUS = "https://smcorner.app.n8n.cloud/webhook/rakip-analizi-status"
-ALLOWED_HOSTS ="saascorner.co,cornergroup.co,socialmediacorner.co,salescorner.co,yalcinberkay.com.tr,brandcorner.co"
+ALLOWED_HOSTS ="saascorner.co,cornergroup.co,socialmediacorner.co,salescorner.co,yalcinberkay.com.tr,brandcorner.co,wishceo.com"
 
 # cornergroup.co'da Email Routing açık, berkay@saascorner.co doğrulanmış hedef adres
 [[send_email]]
