@@ -21,11 +21,11 @@ permissions: { contents: write, actions: write }
 concurrency: { group: blog-daily, cancel-in-progress: false }
 jobs:
   write:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with: { node-version: 22 }
       - name: Yazı üret
         env:
@@ -46,7 +46,8 @@ jobs:
             node tools/blog-daily.mjs --hour "$(echo "$SCHEDULE" | cut -d' ' -f2)"
           fi
       - name: Commit + deploy
-        if: always() && inputs.dry != true
+        # Yazı adımı hata verse de üretilen yazı commit edilir; iptal edilen çalışma commit atmaz
+        if: ${{ !cancelled() && inputs.dry != true }}
         env: { GH_TOKEN: "${{ github.token }}" }
         run: |
           # pull --rebase de commit yazar; kimlik tüm git komutları için gerekli
