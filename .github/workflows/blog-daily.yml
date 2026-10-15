@@ -1,5 +1,5 @@
 # Günlük blog yazısı: tools/blog-daily.mjs yazıyı üretir, burada commit edilir ve blog-deploy tetiklenir.
-# Saat başından 17 dk sonra (yoğun saat başı cron'ları düşüyor). 07 UTC = 10:00 TR saascorner, 08 = socialmediacorner, 09 = cornergroup, 10 = yalcinberkay (EN), 11 = salescorner, 12 = yalcinberkay /tr (TR, ayrı konu), 13 = wishceo (16:00 TR), 14 = brandcorner (domain hâlâ Vercel'de; yazılar web-brandcorner.pages.dev'de) (wrangler.toml SITES "hour"). Kural: her site her gün yazı.
+# Saat başından 17 dk sonra (yoğun saat başı cron'ları düşüyor). 07 UTC = 10:00 TR saascorner, 08 = socialmediacorner, 09 = cornergroup, 10 = yalcinberkay (EN), 11 = salescorner, 12 = yalcinberkay /tr (TR, ayrı konu), 13 = wishceo (16:00 TR), brandcorner şimdilik kapalı (hour: null; Berkay bekletiyor) (wrangler.toml SITES "hour"). Kural: her site her gün yazı.
 # Secret'lar: ANTHROPIC_API_KEY, PEXELS_API_KEY, (opsiyonel) TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID
 name: blog-daily
 on:
@@ -11,7 +11,6 @@ on:
     - cron: "17 11 * * *"
     - cron: "17 12 * * *"
     - cron: "17 13 * * *"
-    - cron: "17 14 * * *"
     # Telafi: GitHub saat başı cron'larını sık düşürüyor/geciktiriyor; bugün yazısı olmayan siteler 18:43 TR'de yazılır
     - cron: "43 15 * * *"
   workflow_dispatch:
