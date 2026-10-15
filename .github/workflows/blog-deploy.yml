@@ -11,19 +11,30 @@ on:
 concurrency: { group: "blog-deploy-${{ inputs.host || github.ref }}", cancel-in-progress: false }
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
-        with: { fetch-depth: 2 }
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+        with: { fetch-depth: 0 }
+      - uses: actions/setup-node@v5
         with: { node-version: 22, cache: npm, cache-dependency-path: tools/package-lock.json }
       - run: npm ci
         working-directory: tools
       - name: Değişen siteler
         id: hosts
+        env: { BEFORE: "${{ github.event.before }}" }
         run: |
           if [ -n "${{ inputs.host }}" ]; then echo "list=${{ inputs.host }}" >> "$GITHUB_OUTPUT"; exit 0; fi
-          list=$(git diff --name-only HEAD~1 HEAD | grep -E '^(content|templates|sites)/' | cut -d/ -f2 | sort -u | tr '\n' ' ')
+          # Push birden çok commit getirebilir: aralık before..sha. before sıfırsa (yeni dal) ya da geçmişte yoksa (force push) HEAD~1
+          base=HEAD~1
+          if [ -n "${BEFORE//0/}" ] && git cat-file -e "$BEFORE^{commit}" 2>/dev/null; then base=$BEFORE; fi
+          changed=$(git diff --name-only "$base" "$GITHUB_SHA")
+          # tools/ ve templates/ build'i etkiler: bütün siteler yeniden yüklenir
+          if echo "$changed" | grep -qE '^(tools|templates)/'; then
+            list=$(ls -d sites/*/ | cut -d/ -f2 | tr '\n' ' ')
+          else
+            list=$(echo "$changed" | grep -E '^(content|sites)/' | cut -d/ -f2 | sort -u | tr '\n' ' ')
+          fi
+          echo "base=$base list=$list"
           echo "list=$list" >> "$GITHUB_OUTPUT"
       - name: Build + deploy
         if: steps.hosts.outputs.list != ''
