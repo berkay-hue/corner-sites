@@ -166,6 +166,9 @@ Kurallar:
 - Yatırım, borsa, finans, sağlık ya da hukuk tavsiyesi verme.
 - Markdown: ara başlıklar "## " ve gerekirse "### ", düz listeler "- " veya "1. ", vurgu **kalın**. Tablo, HTML ve iç içe liste KULLANMA. Alıntı gerekirse tek satır "> ".
 - Başlığı (H1) YAZMA; doğrudan 1-2 paragraflık bir girişle başla. "Giriş:", "Bölüm 1:" gibi iskelet etiketleri KULLANMA.
+- İlk paragrafın ilk 2-3 cümlesi başlıktaki soruya/konuya doğrudan, tek başına alıntılanabilecek net bir cevap versin (arama motorları ve yapay zekâ asistanları bu kısmı alıntılar).
+- Ara başlıkların bir kısmını, okurun gerçekten soracağı soru biçiminde yaz (ör. "## Kriz anında ilk ne yapılır?").
+- Son paragraftan önce "## Sık sorulan sorular" bölümü ekle: 3 soru, her biri "### Soru?" başlığı ve altında 2-3 cümlelik net, kendi başına anlaşılır cevap.
 - Konuyla gerçekten ilgili yerlerde yukarıdaki yazılardan 2-4 iç link ver: [anlamlı bağlam metni](/blog/slug). Aynı yazıya bir kez link ver.
 - "İlgili yazılar" listesi EKLEME (site kendisi ekler).
 - Son paragraf okuru bugünün vakasını oynamaya davet etsin ve [Bugünün vakasını oyna](/#oyun) linkiyle bitsin.
@@ -192,6 +195,9 @@ Rules:
 - Use Markdown: subheadings "## " and if needed "### ", lists "- " or "1. ", emphasis **bold**.
 - Do NOT write the title (H1); start directly with a 1-2 paragraph introduction.
 - Do NOT use scaffolding labels such as "Introduction:", "Section 1:", "Article title:".
+- The first 2-3 sentences of the introduction must directly answer the title's question/topic in a self-contained, quotable way (search engines and AI assistants quote this part).
+- Phrase some subheadings as the questions a reader would actually ask (e.g. "## How much does it cost?").
+- Right before the conclusion add a "## FAQ" section: 3-4 questions, each as "### Question?" followed by a clear, self-contained 2-3 sentence answer.
 - The last section is "## Conclusion" and ends with a short invitation to get in touch.
 - Do not invent statistics, sources or customer names; use general statements.
 - Where genuinely relevant, add 2-4 internal links from the list above: [meaningful anchor text](/blog/slug). Anchor text describes the target post, never "click here". Link each post at most once.
@@ -221,6 +227,9 @@ Kurallar:
 - Markdown kullan: ara başlıklar "## " ve gerekirse "### ", listeler "- " veya "1. ", vurgu **kalın**.
 - Başlığı (H1) YAZMA; doğrudan 1-2 paragraflık bir girişle başla.
 - "Giriş:", "Bölüm 1:", "Makale Başlığı:" gibi iskelet etiketleri KULLANMA.
+- Girişin ilk 2-3 cümlesi başlıktaki soruya/konuya doğrudan, tek başına alıntılanabilecek net bir cevap versin (arama motorları ve yapay zekâ asistanları bu kısmı alıntılar).
+- Ara başlıkların bir kısmını, okurun gerçekten soracağı soru biçiminde yaz (ör. "## Maliyeti ne kadar?").
+- Sonuç bölümünden hemen önce "## Sık sorulan sorular" bölümü ekle: 3-4 soru, her biri "### Soru?" başlığı ve altında 2-3 cümlelik net, kendi başına anlaşılır cevap.
 - Son bölüm "## Sonuç" olsun ve ${cfg.brand} ile iletişime geçmeye davet eden kısa bir çağrıyla bitsin.
 - Uydurma istatistik, kaynak ya da müşteri adı verme; genel ifadeler kullan.
 - Metnin içine, konuyla gerçekten ilgili olduğu yerlerde yukarıdaki listeden 3-5 iç link ver: [anlamlı bağlam metni](/blog/slug). Bağlantı metni "buraya tıklayın" değil, hedef yazının konusunu anlatan doğal bir ifade olsun. Aynı yazıya bir kez link ver.

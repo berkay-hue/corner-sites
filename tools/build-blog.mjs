@@ -159,6 +159,14 @@ function relatedFor(post, posts, n = 4) {
   return posts.filter(p => p !== post).sort((a, b) => ((b.fm.category === post.fm.category) - (a.fm.category === post.fm.category)) || d(a) - d(b)).slice(0, n);
 }
 
+// "## Sık sorulan sorular" / "## FAQ" bölümündeki "### Soru?" + cevap çiftleri (FAQPage JSON-LD için)
+function faqItems(md) {
+  const m = md.match(/^## (?:Sık sorulan sorular|SSS|FAQ|Frequently asked questions)\s*$([\s\S]*?)(?=^## |(?![\s\S]))/im);
+  if (!m) return [];
+  const plain = t => t.replace(/!?\[([^\]]*)\]\([^)]*\)/g, "$1").replace(/[*_`>]/g, "").replace(/\s+/g, " ").trim();
+  return m[1].split(/^### /m).slice(1).map(b => { const [q, ...rest] = b.split("\n"); return [plain(q), plain(rest.join("\n"))]; }).filter(([q, a]) => q && a);
+}
+
 function renderPost(tpl, post, next, related) {
   const { fm, slug } = post;
   const url = `${cfg.origin}${BASE}/blog/${slug}`;
@@ -221,6 +229,8 @@ function renderPost(tpl, post, next, related) {
     "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [[L().home, cfg.origin + BASE + "/"], ["Blog", cfg.origin + BASE + "/blog"], [fm.title, url]]
       .map(([name, item], i) => ({ "@type": "ListItem", position: i + 1, name, item })),
   }];
+  const faq = faqItems(post.body);
+  if (faq.length) ld.push({ "@context": "https://schema.org", "@type": "FAQPage", mainEntity: faq.map(([q, a]) => ({ "@type": "Question", name: q, acceptedAnswer: { "@type": "Answer", text: a } })) });
   h = h.replace(/<style data-sk-post>[\s\S]*?<\/style>/, "").replace(/<script type="application\/ld\+json" data-sk-post>[\s\S]*?<\/script>/, "");
   return h.replace("</head>", `${POST_CSS}<script type="application/ld+json" data-sk-post>${JSON.stringify(ld).replace(/</g, "\\u003c")}</script></head>`);
 }
