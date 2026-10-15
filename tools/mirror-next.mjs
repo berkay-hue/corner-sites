@@ -9,7 +9,8 @@ const pages = new Set(["/"]), queue = ["/"], assets = new Set(), done = new Set(
 const ASSET = /\.(js|css|woff2?|ttf|otf|png|jpe?g|gif|webp|avif|svg|ico|mp4|webm|json|txt|xml|pdf)$/i;
 
 const save = async (p, body) => { const f = join(outDir, p); await mkdir(dirname(f), { recursive: true }); await writeFile(f, body); };
-const refs = s => [...s.matchAll(/(?:href|src|srcSet|srcset|content)="([^"]+)"|url\(\s*["']?([^"')]+)|["'`](\/_next\/[^"'`\s?#]+)/g)]
+// RSC verisindeki kaçışlı yollar (\"/_next/x.js\") sondaki \ olmadan alınır; yoksa "x.js\" diye kopya dosya iner
+const refs = s => [...s.matchAll(/(?:href|src|srcSet|srcset|content)="([^"]+)"|url\(\s*["']?([^"')]+)|["'`](\/_next\/[^"'`\s?#\\]+)/g)]
   .flatMap(m => (m[1] || m[2] || m[3]).split(",").map(x => x.trim().split(/\s+/)[0]))
   .map(u => u.startsWith(origin) ? u.slice(origin.length) || "/" : u)
   .filter(u => u.startsWith("/") && !u.startsWith("//"))

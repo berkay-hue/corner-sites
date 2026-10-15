@@ -103,17 +103,7 @@ await writeFile(join(OUT, "llms.txt"), `# ${name}\n\n> ${meta(index, /<meta name
   order.map(k => `\n## ${k}\n\n${groups.get(k).join("\n")}\n`).join(""));
 
 await writeFile(join(OUT, "robots.txt"), `User-agent: *\nAllow: /\n\nSitemap: ${origin}/sitemap.xml\n`);
-// Kendi _headers'ı olan site (ör. CSP) onu korur; yalnızca llms.txt ve pages.dev noindex eklenir
-if (await has(join(SRC, "_headers"))) await writeFile(join(OUT, "_headers"), (await readFile(join(SRC, "_headers"), "utf8")).trimEnd() + `
-
-/llms.txt
-  Content-Type: text/plain; charset=utf-8
-
-# Test adresi (*.pages.dev) indekslenmez: kopya içerik olmasın. Gerçek alan adını etkilemez.
-https://:project.pages.dev/*
-  X-Robots-Tag: noindex
-`);
-else await writeFile(join(OUT, "_headers"), `/_a/*
+const DEFAULTS = `/_a/*
   Cache-Control: public, max-age=31536000, immutable
 
 /_fru/*
@@ -132,5 +122,11 @@ else await writeFile(join(OUT, "_headers"), `/_a/*
 # Test adresi (*.pages.dev) indekslenmez: kopya içerik olmasın. Gerçek alan adını etkilemez.
 https://:project.pages.dev/*
   X-Robots-Tag: noindex
-`);
+`;
+// Kendi _headers'ı olan site (ör. CSP) onu korur; varsayılanlardan yalnızca sitenin tanımlamadığı yolların blokları sona eklenir
+// (aynı yol iki kez yazılırsa Pages aynı başlığı virgülle birleştirir: "nosniff, nosniff")
+const own = (await readFile(join(SRC, "_headers"), "utf8").catch(() => "")).trimEnd();
+const ownPaths = new Set(own.split("\n").filter(l => /^[^\s#]/.test(l)).map(l => l.trim()));
+const blocks = DEFAULTS.split("\n\n").filter(b => !ownPaths.has(b.split("\n").find(l => !l.startsWith("#"))));
+await writeFile(join(OUT, "_headers"), [own, ...blocks].filter(Boolean).join("\n\n"));
 console.log(`dist: ${host} -> dist/${host} (origin ${origin})`);

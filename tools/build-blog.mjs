@@ -17,6 +17,8 @@ let cfg = BASE_CFG, BASE = ""; // BASE: dil varyantının yol öneki (ör. "/tr"
 if (!cfg || !["import", "build"].includes(cmd)) { console.error("usage: build-blog.mjs import|build <host>"); process.exit(1); }
 const SITE = join(ROOT, "sites", host), TPL = join(ROOT, "templates", host);
 let CONTENT = join(ROOT, "content", host, "blog");
+// Ana sayfa Organization'ı "#org" kimliğiyle tanımlıyorsa (seo.mjs) yazıların publisher'ı aynı varlığa bağlanır
+const ORG_ID = (await readFile(join(SITE, "index.html"), "utf8").catch(() => "")).includes(`"@id":"${cfg.origin}/#org"`) ? cfg.origin + "/#org" : null;
 
 // --- HTML parça yardımcıları (yeniden serileştirmeden, kaynak metin üzerinde)
 function elementEnd(html, start) {
@@ -224,7 +226,7 @@ function renderPost(tpl, post, next, related) {
     "@context": "https://schema.org", "@type": "BlogPosting", headline: fm.title.slice(0, 110), description: fm.description,
     image: [img], datePublished: fm.date, dateModified: fm.updated || fm.date, mainEntityOfPage: url, inLanguage: cfg.lang,
     author: AUTHOR,
-    publisher: { "@type": "Organization", name: cfg.brand, url: cfg.origin },
+    publisher: { "@type": "Organization", ...(ORG_ID && { "@id": ORG_ID }), name: cfg.brand, url: cfg.origin },
   }, {
     "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [[L().home, cfg.origin + BASE + "/"], ["Blog", cfg.origin + BASE + "/blog"], [fm.title, url]]
       .map(([name, item], i) => ({ "@type": "ListItem", position: i + 1, name, item })),
@@ -353,13 +355,15 @@ async function buildSite() {
     }
     // Worker'ın konu seçimi ve iç linkleme için özet
     await writeFile(join(out, "_blog-index.json"), JSON.stringify(posts.map(p => ({ slug: p.slug, title: p.fm.title, category: p.fm.category, date: p.fm.date, image: p.fm.image }))));
-    // Sitemap: blog dışı sayfalar orijinalden, yazılar içerikten
+    // Sitemap: blog dışı sayfalar orijinalden, yazılar içerikten; /blog'un lastmod'u en yeni yazının tarihi
+    const lastmod = posts.map(p => p.fm.updated || p.fm.date).filter(Boolean).sort().at(-1);
+    const lm = lastmod ? `<lastmod>${lastmod}</lastmod>` : "";
     if (!n) {
       const orig = await readFile(join(SITE, "_orig-sitemap.xml"), "utf8").catch(() => "");
       const keep = [...orig.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m => m[1].trim()).filter(u => !/\/blog\/./.test(new URL(u).pathname) && !sets.slice(1).some(s => new URL(u).pathname === `${s.prefix}/blog`));
       if (!keep.some(u => new URL(u).pathname === "/blog")) keep.push(`${cfg.origin}/blog`);
-      urls.push(...keep.map(u => `<url><loc>${u}</loc></url>`));
-    } else urls.push(`<url><loc>${cfg.origin}${prefix}/blog</loc></url>`);
+      urls.push(...keep.map(u => `<url><loc>${u}</loc>${new URL(u).pathname === "/blog" ? lm : ""}</url>`));
+    } else urls.push(`<url><loc>${cfg.origin}${prefix}/blog</loc>${lm}</url>`);
     urls.push(...posts.map(p => `<url><loc>${cfg.origin}${prefix}/blog/${encodeURIComponent(p.slug)}</loc><lastmod>${p.fm.updated || p.fm.date}</lastmod></url>`));
     console.log(`build${prefix ? " " + prefix : ""}: ${posts.length} yazı${tplList ? " + liste" : ""}${alts.size ? `, ${[...alts.keys()].filter(p => posts.includes(p)).length} çeviri eşi` : ""}`);
   }
