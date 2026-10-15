@@ -9,8 +9,9 @@ Claude Code sidebar'ındaki **"Corner Sites"** grubunda her site için ayrı bir
 | Corner Sites B | socialmediacorner.co | 08 | tr |
 | Corner Sites C | cornergroup.co | 09 | tr |
 | Corner Sites D | salescorner.co | 11 | tr |
-| Corner Sites E | yalcinberkay.com.tr | 10 | en |
+| Corner Sites E | yalcinberkay.com.tr | 10 (en), 12 (`/tr`) | en, tr |
 | Corner Sites F | brandcorner.co | kapalı (`hour: null`) | en |
+| Corner Sites G | wishceo.com | 13 | tr |
 
 ## Yeni şerit açma
 
@@ -38,4 +39,5 @@ Kurallar:
 
 - **brandcorner.co (F):** Günlük yazılar kapalı. Domain'in DNS kaydı GoDaddy'de ve Vercel'e yönleniyor. Bu yüzden yazılar şimdilik sadece web-brandcorner.pages.dev adresinde görünüyor.
 - **yalcinberkay.com.tr (E):** Kanonik adres `https://www.yalcinberkay.com.tr`. Yazılar İngilizce.
+- **wishceo.com (G):** Tüketici oyunu (`audience: "consumer"`). Yazılarda `GROUP` firma linkleri ve Apollo linki yok. Yayın sadece corner-sites main + CI ile yapılır, Cloudflare dashboard'dan elle yükleme yapılmaz. `app.js` değişince index.html'deki `?v=` numarasını artır.
 - **Firmalar arası linkler:** blog-worker/src/index.js içindeki `GROUP` listesinde tanımlı. Apollo referans linki her yazıda en fazla bir kez geçer ve sadece prospecting/outbound konularında kullanılır.
