@@ -93,6 +93,21 @@ SITES = '''[
     "sisters": [],
     "repo": "berkay-hue/corner-sites", "branch": "main", "contentDir": "content/brandcorner.co/blog",
     "topicModel": "claude-haiku-5-5", "writeModel": "claude-opus-5-5"
+  },
+  {
+    "siteUrl": "https://wishceo.com",
+    "hour": 13,
+    "brand": "WishCEO",
+    "audience": "consumer",
+    "images": false,
+    "defaultImage": "/og.png",
+    "focus": "Genel okur için CEO gibi karar verme: kriz anında liderlik, bilişsel yanılgılar, strateji kavramları ve kurgusal şirketlerin karar anları",
+    "voice": "Sakin, net ve meraklı; bir editörün okura sohbet eder gibi anlatması. Ders verir gibi değil, düşündürür gibi.",
+    "categories": ["Karar Verme", "Kriz Liderliği", "Kavramlar", "Kurgusal Vaka"],
+    "pages": [{ "path": "/#oyun", "label": "Bugünün vakasını oyna" }, { "path": "/", "label": "WishCEO ana sayfa" }],
+    "sisters": [],
+    "repo": "berkay-hue/corner-sites", "branch": "main", "contentDir": "content/wishceo.com/blog",
+    "topicModel": "claude-haiku-5-5", "writeModel": "claude-opus-5-5"
   }
 ]'''
 

@@ -26,6 +26,8 @@ for await (const f of allHtml(OUT)) {
   // Framer runtime'ı taşınan uygulama sayfaları (tools/framer-app.mjs) formlarını kendisi yönetir
   if (!html.includes("<form") || html.includes("data-sk-forms") || html.includes("/_fru/sites/")) continue;
   html = html.replace(/<form>(?=[\s\S]{0,3000}rakip1\.com)/g, "<form data-sk-noform>");
+  // Bütün formları kendi işini yapan sayfaya (data-sk-noform) istemci eklenmez; satır içi script CSP'ye takılır
+  if ((html.match(/<form\b/g) || []).length === (html.match(/<form\b[^>]*data-sk-noform/g) || []).length) continue;
   await writeFile(f, html.replace(/<\/body>/i, FORMS + "</body>"));
 }
 
@@ -70,7 +72,7 @@ if (!(await has(join(OUT, "sitemap.xml")))) {
   await writeFile(join(OUT, "sitemap.xml"), xml);
 }
 // llms.txt (llmstxt.org): yapay zekâ aramaları için site özeti, sitemap'teki sayfalardan üretilir
-const NAMES = { "yalcinberkay.com.tr": "Berkay Yalçın" };
+const NAMES = { "yalcinberkay.com.tr": "Berkay Yalçın", "wishceo.com": "WishCEO" };
 const EN = /<html[^>]*\slang="en/i.test(index);
 const SECTIONS = EN ? { blog: "Blog", industries: "Industries", solutions: "Solutions", tr: "Türkçe" }
   : { blog: "Blog", "bilgi-merkezi": "Bilgi Merkezi", solutions: "Çözümler", sektor: "Sektörler", "aydinlatma-metni": "Yasal", en: "English" };
@@ -80,7 +82,7 @@ const meta = (html, re) => unesc(html.match(re)?.[1] || "");
 const homeTitle = meta(index, /<title>([^<]*)/);
 const name = NAMES[host] || homeTitle.split(/\s+[|–-]\s+/)[0];
 const brands = [...new Set([name, homeTitle.split(/\s+[|–-]\s+/)[0]].filter(Boolean))].map(b => b.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|");
-const BRAND_PRE = new RegExp(`^(${brands})\\s+[|–-]\\s+`, "iu"), BRAND_SUF = new RegExp(`\\s+[|–-]\\s+(${brands}).*$`, "iu");
+const BRAND_PRE = new RegExp(`^(${brands})\\s+[|–·-]\\s+`, "iu"), BRAND_SUF = new RegExp(`\\s+[|–·-]\\s+(${brands}).*$`, "iu");
 const groups = new Map();
 for (const loc of [...(await readFile(join(OUT, "sitemap.xml"), "utf8")).matchAll(/<loc>([^<]+)<\/loc>/g)].map(m => m[1].trim())) {
   const p = decodeURI(new URL(loc).pathname).replace(/^\/|\/$/g, "");
@@ -101,7 +103,17 @@ await writeFile(join(OUT, "llms.txt"), `# ${name}\n\n> ${meta(index, /<meta name
   order.map(k => `\n## ${k}\n\n${groups.get(k).join("\n")}\n`).join(""));
 
 await writeFile(join(OUT, "robots.txt"), `User-agent: *\nAllow: /\n\nSitemap: ${origin}/sitemap.xml\n`);
-await writeFile(join(OUT, "_headers"), `/_a/*
+// Kendi _headers'ı olan site (ör. CSP) onu korur; yalnızca llms.txt ve pages.dev noindex eklenir
+if (await has(join(SRC, "_headers"))) await writeFile(join(OUT, "_headers"), (await readFile(join(SRC, "_headers"), "utf8")).trimEnd() + `
+
+/llms.txt
+  Content-Type: text/plain; charset=utf-8
+
+# Test adresi (*.pages.dev) indekslenmez: kopya içerik olmasın. Gerçek alan adını etkilemez.
+https://:project.pages.dev/*
+  X-Robots-Tag: noindex
+`);
+else await writeFile(join(OUT, "_headers"), `/_a/*
   Cache-Control: public, max-age=31536000, immutable
 
 /_fru/*

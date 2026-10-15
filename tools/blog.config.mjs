@@ -71,4 +71,10 @@ export default {
     pClass: "sk-p", cardSelector: "sk-card", lang: "en", dateLocale: "en-US",
     regions: { readTime: "ReadTime" }, cardFields: { summary: ".sk-sum", readTime: ".sk-rt" },
   },
+  "wishceo.com": {
+    origin: "https://wishceo.com", brand: "WishCEO", titleSuffix: " | WishCEO", author: "WishCEO",
+    pClass: "sk-p", cardSelector: "sk-card", defaultImage: "/og.png", lang: "tr", dateLocale: "tr-TR",
+    regions: { readTime: "ReadTime", summary: "Summary" },
+    cardFields: { title: ".sk-ttl", summary: ".sk-sum", date: ".sk-date", readTime: ".sk-rt" },
+  },
 };

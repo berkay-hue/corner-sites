@@ -18,7 +18,9 @@ const GROUP = [
 ];
 // Apollo referans linki: yalnızca prospecting / lead verisi / outbound konularında, en fazla bir kez
 export const APOLLO = "https://get.apollo.io/679irkzm35ya";
-const sisters = cfg => GROUP.filter(g => new URL(g.url).host.replace(/^www\./, "") !== new URL(cfg.siteUrl).host.replace(/^www\./, ""));
+// Tüketici siteleri (audience: "consumer", ör. wishceo.com) grup/B2B linki vermez
+const consumer = cfg => cfg.audience === "consumer";
+const sisters = cfg => consumer(cfg) ? [] : GROUP.filter(g => new URL(g.url).host.replace(/^www\./, "") !== new URL(cfg.siteUrl).host.replace(/^www\./, ""));
 
 export const slugify = s => s.toLocaleLowerCase("tr")
   .replace(/ı/g, "i").replace(/ğ/g, "g").replace(/ü/g, "u").replace(/ş/g, "s").replace(/ö/g, "o").replace(/ç/g, "c")
@@ -81,7 +83,7 @@ function relatedPosts(index, topic, n = 25) {
 
 // Yalnızca var olan sayfalara giden linkler kalır; uydurma ya da dış linkler düz metne çevrilir
 function cleanLinks(md, cfg, index) {
-  const ok = new Set([...index.map(p => `/blog/${p.slug}`), ...(cfg.pages || []).map(p => p.path), ...sisters(cfg).map(g => g.url), APOLLO]);
+  const ok = new Set([...index.map(p => `/blog/${p.slug}`), ...(cfg.pages || []).map(p => p.path), ...sisters(cfg).map(g => g.url), ...(consumer(cfg) ? [] : [APOLLO])]);
   let kept = 0, apollo = 0;
   const out = md.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, (m, text, href) => {
     if (href.replace(/\/+$/, "") === APOLLO && apollo++) return text;
@@ -97,7 +99,19 @@ async function pickTopic(env, cfg, index) {
   const counts = Object.fromEntries(cats.map(c => [c, 0]));
   index.forEach(p => { if (p.category in counts) counts[p.category]++; });
   const titles = byDate(index).slice(0, 250).map(p => `- ${p.title}`).join("\n");
-  const prompt = cfg.lang === "en" ? `You are the content strategist for ${cfg.brand} (${cfg.siteUrl}). Pick a single blog post topic to publish today.
+  const prompt = consumer(cfg) ? `Sen ${cfg.brand} (${cfg.siteUrl}) için içerik editörüsün. ${cfg.brand}, her gün kurgusal bir şirket krizinde CEO kararı verdiren bir oyun. Blog genel okura yazılır: iş hayatına meraklı öğrenciler, çalışanlar, yöneticiler. Bugün yayınlanacak tek bir blog yazısı konusu seç.
+
+Sitenin odağı: ${cfg.focus}
+
+Konu türleri: bir karar verme kavramı ya da bilişsel yanılgı, kriz anında liderlik, strateji kavramı, kurgusal bir şirketin karar anı (vaka), sık yapılan karar hataları
+Kategoriler: ${cats.join(", ")}
+Mevcut kategori dağılımı: ${JSON.stringify(counts)} (az işlenen kategoriye öncelik ver)
+Konu, merak eden bir okurun Google'da arayacağı bir soruya cevap versin. Gerçek şirket ya da kişi adı, yatırım, borsa, sağlık ya da hukuk tavsiyesi konusu SEÇME.
+
+Sitedeki mevcut yazılar (bunları ya da çok benzerlerini TEKRARLAMA):
+${titles || "- (yok)"}
+
+Yalnızca şu JSON'u döndür: {"topic": "Türkçe başlık, en fazla 50 karakter", "category": "kategorilerden biri", "slug": "basliktan-kisa-slug", "description": "Türkçe meta açıklama, 140-155 karakter, tam cümle"}` : cfg.lang === "en" ? `You are the content strategist for ${cfg.brand} (${cfg.siteUrl}). Pick a single blog post topic to publish today.
 
 Site focus: ${cfg.focus}
 
@@ -133,7 +147,30 @@ async function writeArticle(env, cfg, topic, index) {
   const en = cfg.lang === "en";
   const pages = (cfg.pages || []).map(p => `- [${p.label}](${p.path})`).join("\n");
   const group = sisters(cfg).map(g => `- [${en ? g.en : g.tr}](${g.url})`).join("\n");
-  const prompt = en ? `Write a professional, original blog article for ${cfg.brand}.
+  const prompt = consumer(cfg) ? `${cfg.brand} blogu için özgün bir yazı yaz. ${cfg.brand}, her gün kurgusal bir şirket krizinde okuru CEO koltuğuna oturtan bir karar oyunu.
+
+Başlık: ${topic.topic}
+Kategori: ${topic.category}
+Sitenin odağı: ${cfg.focus}${cfg.voice ? `\nÜslup: ${cfg.voice}` : ""}
+
+İç link verilebilecek mevcut yazılar:
+${related || "- (yok)"}
+
+Site sayfaları:
+${pages}
+
+Kurallar:
+- Türkçe, okura "sen" diye hitap eden sade bir dil, 900-1400 kelime. Klişe ve dolgu cümle yok ("günümüzün hızla değişen dünyasında", "sonuç olarak şunu söyleyebiliriz" gibi).
+- Örnekler yalnızca KURGUSAL şirket ve kişilerle anlatılsın. Gerçek şirket, marka, kişi adı ya da gerçeğini çağrıştıran benzer ad KULLANMA.
+- Uydurma istatistik, araştırma, alıntı ya da kaynak verme. Kavramları genel ifadelerle anlat.
+- Yatırım, borsa, finans, sağlık ya da hukuk tavsiyesi verme.
+- Markdown: ara başlıklar "## " ve gerekirse "### ", düz listeler "- " veya "1. ", vurgu **kalın**. Tablo, HTML ve iç içe liste KULLANMA. Alıntı gerekirse tek satır "> ".
+- Başlığı (H1) YAZMA; doğrudan 1-2 paragraflık bir girişle başla. "Giriş:", "Bölüm 1:" gibi iskelet etiketleri KULLANMA.
+- Konuyla gerçekten ilgili yerlerde yukarıdaki yazılardan 2-4 iç link ver: [anlamlı bağlam metni](/blog/slug). Aynı yazıya bir kez link ver.
+- "İlgili yazılar" listesi EKLEME (site kendisi ekler).
+- Son paragraf okuru bugünün vakasını oynamaya davet etsin ve [Bugünün vakasını oyna](/#oyun) linkiyle bitsin.
+- Bu listelerde olmayan hiçbir URL'ye link verme.
+- Yalnızca yazı metnini döndür.` : en ? `Write a professional, original blog article for ${cfg.brand}.
 
 Title: ${topic.topic}
 Category: ${topic.category}
@@ -194,7 +231,7 @@ Kurallar:
 - Yalnızca makale metnini döndür.`;
   let md = await claude(env, cfg.writeModel, prompt, { maxTokens: 16000 });
   md = md.replace(/^```(?:markdown)?\s*|\s*```$/g, "").replace(/^#\s+.*\n+/, "").trim();
-  if (md.split(/\s+/).length < (en ? 700 : 800)) throw new Error(`Makale çok kısa (${md.split(/\s+/).length} kelime)`);
+  if (md.split(/\s+/).length < (en || consumer(cfg) ? 700 : 800)) throw new Error(`Makale çok kısa (${md.split(/\s+/).length} kelime)`);
   return cleanLinks(md, cfg, index);
 }
 
@@ -250,7 +287,8 @@ export async function generate(env, cfg) {
   const slug = slugify(topic.slug || topic.topic) || slugify(topic.topic);
   if (index.some(p => p.slug === slug)) throw new Error(`Slug zaten var: ${slug}`);
   const { md: body, links } = await writeArticle(env, cfg, topic, index);
-  const img = await pickImage(env, topic, index);
+  // images: false olan site Pexels kullanmaz; şablon varsayılan görseli (blog.config defaultImage) gösterir
+  const img = cfg.images === false ? { url: cfg.defaultImage || "/og.png", alt: topic.topic } : await pickImage(env, topic, index);
   const today = new Date(Date.now() + 3 * 3600e3).toISOString().slice(0, 10); // TR saati
   const fm = { title: topic.topic, description: (topic.description || "").length >= 80 && topic.description.length <= 170 ? topic.description : metaDescription(body), date: today, category: topic.category, image: img.url, imageAlt: img.alt };
   const md = `---\n${Object.entries(fm).map(([k, v]) => `${k}: ${JSON.stringify(v)}`).join("\n")}\n---\n\n${body}\n`;
