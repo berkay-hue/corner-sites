@@ -1,0 +1,10 @@
+# brandcorner.co: Bu dosya varken dist.mjs varsayılan kuralları (/_next/static önbelleği, nosniff, Referrer-Policy) EKLEMEZ; o yüzden burada tekrar ediliyor.
+# llms.txt Content-Type ve *.pages.dev noindex kurallarını dist.mjs sona kendisi ekler. /_a ve /_fru bu sitede yok.
+# HSTS bilinçli olarak ertelendi; buraya eklemeyin. script-src'li CSP eklemeyin (satır içi script'ler + forms-client kırılır).
+
+/_next/static/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
