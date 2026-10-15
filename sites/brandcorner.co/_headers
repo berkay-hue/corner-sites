@@ -1,5 +1,5 @@
-# brandcorner.co: Bu dosya varken dist.mjs varsayılan kuralları (/_next/static önbelleği, nosniff, Referrer-Policy) EKLEMEZ; o yüzden burada tekrar ediliyor.
-# llms.txt Content-Type ve *.pages.dev noindex kurallarını dist.mjs sona kendisi ekler. /_a ve /_fru bu sitede yok.
+# brandcorner.co: dist.mjs varsayılan bloklardan yalnızca burada tanımlanmayan yolları sona ekler (/_a, /_fru, llms.txt, *.pages.dev noindex).
+# Burada tanımlanan yol (/_next/static/*, /*) varsayılan bloğun yerini alır; aşağıdakiler şu an varsayılanlarla aynı. Yeni başlık ilgili bloğa yazılır.
 # HSTS bilinçli olarak ertelendi; buraya eklemeyin. script-src'li CSP eklemeyin (satır içi script'ler + forms-client kırılır).
 
 /_next/static/*
