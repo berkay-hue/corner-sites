@@ -38,7 +38,7 @@ Tarih: 2026-10-10 · Şerit: F · Kapsam: `sites/brandcorner.co`, `templates/bra
 |---|---|
 | / | Organization + WebSite (seo.mjs, `data-sk-seo`) |
 | /features, /solutions/* | WebPage + BreadcrumbList |
-| /pricing | WebPage + BreadcrumbList + **FAQPage** (sayfadaki 5 SSS, görünen metinle aynı) |
+| /pricing | WebPage + BreadcrumbList + **FAQPage** (5 SSS). **Düzeltme (2026-10-15):** Sorular HTML'de var, 5 cevabın hiçbiri yok. Radix accordion panelleri HTML'de kapalı ve boş; cevap metinleri yalnızca JS chunk'ında (`6298d546504883f0.js`). Yani işaretlenen içerik sayfada görünmüyor. Öneri: FAQPage node'u kaldırılsın (Berkay onayı bekleniyor). |
 | /blog | Blog + BreadcrumbList |
 | /blog/* | BlogPosting + BreadcrumbList (build-blog.mjs) |
 
@@ -57,7 +57,7 @@ Tarih: 2026-10-10 · Şerit: F · Kapsam: `sites/brandcorner.co`, `templates/bra
 ### GEO
 - `llms.txt` var (dist.mjs üretiyor). Ancak site İngilizce olduğu halde başlıklar Türkçe ("Ana sayfa", "Sayfalar", "Çözümler"). Ayrıntı aşağıda, Ana'ya bölümünde.
 - Organization bilgisi zayıf: logo, sameAs (sosyal profiller) ve iletişim bilgisi yok.
-- "Brand Corner nedir / kimin için / fiyatı ne" sorularına doğrudan cevap veren kısa blokları yok. Pricing'deki SSS artık FAQPage ile işaretli.
+- "Brand Corner nedir / kimin için / fiyatı ne" sorularına doğrudan cevap veren kısa blokları yok. Pricing'deki SSS FAQPage ile işaretli, ama cevaplar HTML'de yok (bkz. JSON-LD tablosundaki düzeltme).
 - Blog yazılarında yazar şu an Organization; kişi yazar (Person) yok.
 
 ## Aşama 2: Bu PR'daki değişiklikler
