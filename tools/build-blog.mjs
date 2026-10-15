@@ -159,12 +159,12 @@ function relatedFor(post, posts, n = 4) {
   return posts.filter(p => p !== post).sort((a, b) => ((b.fm.category === post.fm.category) - (a.fm.category === post.fm.category)) || d(a) - d(b)).slice(0, n);
 }
 
-// "## Sık sorulan sorular" / "## FAQ" bölümündeki "### Soru?" + cevap çiftleri (FAQPage JSON-LD için)
+// "## Sık sorulan sorular" / "## FAQ" bölümündeki "### Soru?" + cevabın ilk paragrafı (FAQPage JSON-LD için; SSS'den sonra gelen kapanış paragrafı karışmasın)
 function faqItems(md) {
   const m = md.match(/^## (?:Sık sorulan sorular|SSS|FAQ|Frequently asked questions)\s*$([\s\S]*?)(?=^## |(?![\s\S]))/im);
   if (!m) return [];
   const plain = t => t.replace(/!?\[([^\]]*)\]\([^)]*\)/g, "$1").replace(/[*_`>]/g, "").replace(/\s+/g, " ").trim();
-  return m[1].split(/^### /m).slice(1).map(b => { const [q, ...rest] = b.split("\n"); return [plain(q), plain(rest.join("\n"))]; }).filter(([q, a]) => q && a);
+  return m[1].split(/^### /m).slice(1).map(b => { const [q, ...rest] = b.split("\n"); return [plain(q), plain(rest.join("\n").trim().split(/\n\s*\n/)[0])]; }).filter(([q, a]) => q && a);
 }
 
 function renderPost(tpl, post, next, related) {
