@@ -4,7 +4,7 @@ description: "Fırsat maliyeti nedir? Bir seçimi yaparken vazgeçilen en iyi al
 date: "2026-10-16"
 category: "Kavramlar"
 image: "/og.png"
-imageAlt: "Fırsat Maliyeti Nedir? Görünmeyen Bedel"
+imageAlt: "WishCEO kapak kartı “Şirket batıyor. CEO sensin.” — fırsat maliyeti yazısı"
 ---
 
 Fırsat maliyeti, bir seçeneği seçtiğinde vazgeçtiğin en iyi alternatifin sana kazandırabileceği değerdir. Hiçbir faturada yazmaz, hiçbir tabloda ayrı bir satırı yoktur. Yine de verdiğin her kararın gerçek fiyatının önemli bir kısmını oluşturur. Bir şeye "evet" dediğinde, aynı kaynakla yapabileceğin başka bir şeye de sessizce "hayır" demiş olursun.

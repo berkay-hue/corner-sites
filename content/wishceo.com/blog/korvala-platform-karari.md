@@ -67,7 +67,7 @@ Bu yol bugünü korur, yarını kaybettirir. Ucuz telefon pazarı da birkaç yı
 
 Dört seçeneği yan yana koyunca tek bir gerilim ortaya çıkıyor. Bir uçta kontrol var: kendi sistemin, kendi kuralların. Öbür uçta erişim var: hazır kullanıcılar, hazır uygulamalar.
 
-C kontrolü seçer, erişimi kaybeder. A erişimi seçer, kontrolü bırakır. B ikisinin arasında bir yer arar: tamamen senin olmayan ama sana özel ilgi gösteren bir sistem. D ise soruyu hiç sormamayı seçer.
+C kontrolü seçer, erişimi kaybeder. A erişimi seçer, kontrolü bırakır. B ikisinin arasında bir yer arar: tamamen senin olmayan ama sana özel ilgi gösteren bir sistem. D ise soruyu hiç sormamayı seçer. Hangisini seçersen seç, bedeli vazgeçtiğin en iyi öbür yoldur; buna [fırsat maliyeti](/blog/firsat-maliyeti-nedir) deniyor.
 
 Zirvedeki bir şirket için kontrol çok cazip gelir. Yıllarca kuralları sen koymuşsun. Başkasının kurduğu pazarda tezgâh açmak gurur kırıcı görünür. Ama müşteri senin gururunu görmüyor, cebindeki telefonun neler yapabildiğine bakıyor.
 
