@@ -16,3 +16,9 @@ Peki bu neden Türkiye'de bizim için önemli? 🔍 Finansal Okuryazarlık: Raka
 - Türkiye'nin ekonomik yapısı finansal eğitimi özellikle önemli kılıyor.
 - Temel odak alanları: kişisel ve hane bütçesini yönetmek, yatırım seçeneklerini ve risklerini anlamak, krediyi akıllıca kullanmak.
 - Finansal okuryazarlığı yüksek bir toplum daha güçlü ve dayanıklı bir ekonomi kurar.
+
+## Sık sorulan sorular
+
+### Finansal okuryazarlık Türkiye'de neden önemli?
+
+Finansal okuryazarlık Türkiye'de önemlidir çünkü kendine özgü ekonomik yapımız hem zorluklar hem de fırsatlar sunar. Finansal kavramları anlamak daha iyi kişisel kararlar almayı sağlar, belirsizliklere hazırlar ve daha güçlü, dayanıklı bir ekonomiye katkı sunar.

@@ -17,3 +17,13 @@ Yeni B2B ortamında yolunuzu mu arıyorsunuz? Gartner'a göre alıcılar satış
 - Pazarlamadan ve outbound'dan gelen lead'lere aynı şekilde yaklaşın ve tek, kesintisiz bir alıcı yolculuğu kurun.
 - Video, SSS ve rehber gibi self-servis içerikler, alıcıların kendi koşullarında daha hızlı karar vermesine yardımcı olur.
 - Müşterilerden, etkileyicilerden ve topluluklardan gelen ağızdan ağıza iletişim reklamlardan daha ikna edicidir.
+
+## Sık sorulan sorular
+
+### Alıcılar satış görüşmelerinden kaçınırken B2B satışçılar nasıl uyum sağlamalı?
+
+B2B satışçılar soğuk aramalara güvenmek yerine ürün kullanımı ve web sitesi ziyaretleri gibi sinyalleri izlemeli ve ilginin en yüksek olduğu anda iletişime geçmeli. Ücretsiz ya da temel ürün paketleri ile video, SSS ve rehber gibi self-servis içerikler de alıcıların değeri görüp kendi koşullarında karar vermesini sağlar.
+
+### B2B satışta ağızdan ağıza iletişim neden önemlidir?
+
+Ağızdan ağıza iletişim önemlidir çünkü müşterilerden, etkileyicilerden ve topluluk üyelerinden gelen gerçek hikâyeler reklamdan daha ikna edicidir. Başkalarının paylaştığı samimi deneyimler, satışçı daha teklif sunmadan güvenilirlik oluşturur.

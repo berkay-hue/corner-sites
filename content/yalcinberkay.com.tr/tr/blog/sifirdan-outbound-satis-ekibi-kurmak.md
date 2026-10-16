@@ -230,3 +230,21 @@ Sıfırdan outbound satış ekibi kurmak, doğru kararları doğru sırayla alma
 Bunların hiçbiri göz alıcı değil, ama birikerek büyür. Bu şekilde kurulan bir ekip her çeyrekte daha iyi hâle gelir, çünkü her görüşme, her yanıt ve her kaybedilen anlaşma sisteme geri besleme olarak döner.
 
 İlk outbound ekibinizi kuruyorsanız ya da beklentiyi karşılamayan bir ekibi yeniden yapılandırıyorsanız, fikir alışverişi yapmaktan her zaman memnuniyet duyarım. [Ana sayfam](/tr) üzerinden ulaşıp sürecin neresinde olduğunuzu anlatabilirsiniz.
+
+## Sık sorulan sorular
+
+### Outbound satış ekibi kurmadan önce ne kadar süre test yapılmalı?
+
+İlk satışçıyı işe almadan önce outbound'u 6-8 hafta boyunca kendiniz doğrulamalısınız. Bunun için 200 şirket ve her birinde 2-3 karar verici seçip e-posta, LinkedIn ve telefondan oluşan 3 haftalık bir sekans yürütebilirsiniz. Bu testten hiçbir sonuç çıkmazsa sorun genellikle kanalda değil, segmentte ya da mesajdadır.
+
+### İlk outbound ekibine kaç satışçı alınmalı?
+
+İlk aşamada tek kişi yerine aynı anda iki satışçı almak gerekir. Tek satışçıyla kötü bir ayın kişiden mi, bölgeden mi yoksa süreçten mi kaynaklandığını anlayamazsınız; iki kişiyle ise performansı karşılaştırabilirsiniz. Adaylarda koçluğa açıklık, dayanıklılık ve merak aranmalı, ekip 4-6 satışçıya ulaştığında da bir yönetici eklenmelidir.
+
+### Kaç satışçıya ihtiyacım olduğunu nasıl hesaplarım?
+
+Gelir hedefinden geriye doğru giderek bir kapasite hesabı yapabilirsiniz. Örneğin 600 bin € hedef ve 20 bin € ortalama anlaşma büyüklüğü 30 anlaşma demektir; %25 kapanış oranıyla 120 fırsata, %50 dönüşümle 240 toplantıya, yani ayda yaklaşık 20 toplantıya ihtiyaç doğar. Tam hıza ulaşmış bir satışçı ayda 10 nitelikli toplantı ayarlayabiliyorsa bu, iki satışçıya, hızlanma süresi hesaba katıldığında ise pratikte üç kişiye karşılık gelir.
+
+### Outbound'un işe yarayıp yaramadığını anlamak ne kadar sürer?
+
+Outbound'u adil biçimde değerlendirmek genellikle bir ya da iki tam satış döngüsü gerektirir. Yeni satışçılar 30-60-90 günlük bir planla işe alışır; 31-60. günler arasında kotanın yarısı ile üçte ikisi, 61-90. günler arasında ise tam kota hedeflenir. Bu nedenle ilk haftaların sonuçlarına bakarak karar vermek yanıltıcı olabilir.

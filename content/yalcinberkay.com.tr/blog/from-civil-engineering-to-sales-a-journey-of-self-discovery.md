@@ -16,3 +16,9 @@ As a university student, I embarked on a path in Civil Engineering, initially en
 - Joining AIESEC to gain international experience became a turning point and a journey of self-discovery.
 - Enjoying communication and working with people led him to move from engineering into a career in sales.
 - Career paths are rarely linear; being open to change helps you find work that fits your strengths.
+
+## FAQ
+
+### Why did Berkay move from civil engineering to sales?
+
+He realised during his studies that civil engineering was not his calling, and joining AIESEC showed him how much he enjoyed communicating and connecting with people. That discovery led him to leave engineering behind and pursue a career in sales.
