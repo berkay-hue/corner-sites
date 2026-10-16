@@ -388,7 +388,7 @@
           r: "Bağımsızlık biter ve bedelin yarısı alıcının hissesine bağlı kalır. Yine de ortaklar için güçlü bir çıkıştı: aynı yılın sonunda hisse 11 doların altındaydı." },
         { k: "B", t: "Masada kal: rakamın düşük olduğunu söyle, birkaç dolar daha iste ve anlaşmayı hızla bitir.", s: 85, tag: "cerrah",
           r: "Hem değeri zorlarsın hem anlaşmayı kaçırmazsın. Alıcının fiyatı biraz yükseltmeye hazır olduğu sonradan ortaya çıktı; kilit nokta farkı makul tutmaktı." },
-        { k: "C", t: "Zaman kazan: başka alıcıları masaya çağır, arama lideriyle bir ortaklık seçeneğini de konuş.", s: 45, tag: "kumar",
+        { k: "C", t: "Zaman kazan: başka alıcıları masaya çağır, arama lideriyle bir ortaklık seçeneğini de konuş.", s: 45, tag: "kalkan",
           r: "Rakip bir teklif fiyatı yükseltebilir, gelmezse yalnızca zaman kaybedersin. Arama lideriyle ortaklık ise alıcıyı ürkütür ve rekabet soruları doğurur." },
         { k: "D", t: "Reddet: teklif şirketin değerinin çok altında. Bağımsız kal, kendi dönüşüm planını uygula.", s: 35, tag: "kumar",
           r: "Kurucunun gözünden anlaşılır: hisse iki yıl önce 43 dolardı. Ama dönüşümün sonuç vermesi yıllar alacaktı ve ne piyasa ne de alıcı o kadar sabırlıydı." }
@@ -463,12 +463,529 @@
     }
   ];
 
+  var S004 = [
+    {
+      area: "Kriz yönetimi",
+      place: ["ABD", " · Haziran 1993"],
+      company: "Kelvara",
+      title: "Kutudaki şırınga",
+      body: [
+        "Kelvara, Amerika’nın en büyük iki kola markasından biri. Ülkede yaklaşık 140 dolum tesisi var; bir dolum hattı dakikada 1.600 kutu dolduruyor ve her kutu bir saniyeden kısa süre açık kalıyor.",
+        "9 Haziran 1993’te ülkenin kuzeybatısında yaşlı bir çift, diyet kola kutusunun içinde bir şırınga bulduklarını söylüyor. Haber televizyona çıkınca başka eyaletlerden de benzer iddialar gelmeye başlıyor. Gazeteler, on yıl kadar önce zehirlenen ürünleri yüzünden bütün ürünlerini raftan çeken ilaç şirketini hatırlatıyor.",
+        "Düzenleyici kurum soruşturma başlattı. Şu ana kadar kimse yaralanmadı ama bir hafta içinde iddialar on’dan fazla eyalete yayıldı. Kelvara’nın Kuzey Amerika içecek işinin başındasın; birkaç gün içinde karar vermen gerekiyor."
+      ],
+      stats: [["Dolum tesisi", "~140"], ["Hat hızı", "1.600 kutu/dk"], ["Kutunun açık kaldığı süre", "1 sn’den az"]],
+      ask: "Kelvara’nın içecek işinin başındasın. Ne yaparsın?",
+      opts: [
+        { k: "A", t: "Bütün ülkede ürünü raflardan topla; güven geri gelene kadar satışı durdur.", s: 30, tag: "cerrah",
+          r: "İlaç şirketi için işe yaramıştı, çünkü o ürünler gerçekten zehirlenmişti. Burada toplama “bir sorun var” demek olur; yüz milyonlarca dolara mal olur ve taklit iddiaları durdurmaz." },
+        { k: "B", t: "İddiaların sahte olduğunu söyle, iddia sahiplerini dolandırıcılıkla suçlayıp dava aç; “kusursuz üretim” reklamları yayınla.", s: 35, tag: "kumar",
+          r: "Haklı çıksan bile müşterilerini yalancılıkla suçlayan şirket olursun. İddialardan biri gerçek çıkarsa marka bir daha toparlanamaz." },
+        { k: "C", t: "Ürünü toplama ama her şeyi aç: dolum hattının görüntülerini televizyonlara ver, her gün açıklama yap, düzenleyiciyle aynı mesajı birlikte ver.", s: 90, tag: "kalkan",
+          r: "Gerçek bir vaka çıkarsa çok ağır olur. Ama herkes kendi gözüyle görür: bu hızda çalışan kapalı bir hatta bir kutuya şırınga girmesi neredeyse imkânsız." },
+        { k: "D", t: "Sessiz kal, konuşmayı düzenleyiciye bırak; reklamları duraklat ve fırtınanın geçmesini bekle.", s: 20, tag: "kasa",
+          r: "Boşluğu söylentiler doldurur. Sessizlik suçu kabul etmek gibi okunur ve iddialar çoğalmaya devam eder." }
+      ],
+      real: {
+        who: "Douglas Penhallow",
+        role: "Kelvara’nın Kuzey Amerika içecek işinin başkanı",
+        k: "C",
+        text: [
+          "Penhallow ürün toplamadı. Dolum hatlarının görüntüleri haber kanallarına verildi; şirket her gün düzenleyiciyle aynı mesajı verdi. 17 Haziran’da düzenleyicinin başkanı iddiaların dayanaksız göründüğünü açıkladı ve o akşam Penhallow’la birlikte bir haber programına çıktı.",
+          "200’den fazla müfettiş iddiaları inceledi. Bir mağaza kamerası, bir kadının şırıngayı kutuya kendisinin soktuğunu gösterdi. İddialar en az 24 eyaletten gelmişti; 18 Haziran’a kadar 10 eyalette en az 12 kişi tutuklandı, sayı sonradan 55 civarına çıktı.",
+          "19–20 Haziran’da gazetelere verilen ilanda “Kelvara duyurmaktan mutluluk duyar… hiçbir şey.” yazıyordu. Hisse yaklaşık 1 dolar düşüp 35 dolar civarına indi, sonra toparlandı. Krizin maliyeti 25 milyon dolar civarında kaldı; Temmuz’daki yaklaşık 10 milyon dolarlık kupon kampanyasıyla şirket son beş yılın en iyi yazını geçirdi."
+        ]
+      },
+      sources: [
+        { t: "Düzenleyicinin başkanı kurcalama iddialarından şüphe ediyor", pub: "The New York Times", year: "1993", lang: "en",
+          url: "https://www.nytimes.com/1993/06/17/us/us-official-has-doubts-about-pepsi-tampering.html" },
+        { t: "Sahte kurcalama ihbarları ve tutuklamalar", pub: "The Christian Science Monitor", year: "1993", lang: "en",
+          url: "https://www.csmonitor.com/1993/0618/18091.html" },
+        { t: "Tutuklamalar artıyor", pub: "UPI", year: "1993", lang: "en",
+          url: "https://www.upi.com/Archives/1993/06/18/Arrests-mount-in-Pepsi-tampering-hoax/7910740376000" },
+        { t: "Güvenlik kamerası görüntüsü sahtekârlığı doğruluyor", pub: "UPI", year: "1993", lang: "en",
+          url: "https://www.upi.com/Archives/1993/06/18/Pepsi-says-videotape-backs-its-claim-of-hoax/9933740376000/" },
+        { t: "Krizi doğru yönetmek", pub: "BusinessWeek", year: "1993", lang: "en",
+          url: "https://www.bloomberg.com/news/articles/1993-07-04/the-right-moves-baby" }
+      ]
+    },
+    {
+      area: "Finansman",
+      place: ["ABD", " · Kasım 2006"],
+      company: "Brayton Motors",
+      title: "Logoyu bile rehin ver",
+      body: [
+        "Brayton, yüz yılı aşkın geçmişi olan bir Amerikan otomobil devi; kurucu ailenin hâlâ sözü geçiyor. Kârının büyük kısmı büyük ve çok yakıt tüketen araçlardan geliyor. Pazar payı yıllardır eriyor ve 2006’nın şirket tarihindeki en büyük zararla kapanması bekleniyor.",
+        "Eylül’de dışarıdan yeni bir CEO geldi. Yeniden yapılanma planı fabrika kapatmak, on binlerce kişilik kadroyu küçültmek ve yeni modeller geliştirmek için yıllarca milyarlarca dolar yakacak. Kredi şu an ucuz ve bol; ama Brayton’un notu zaten yatırım derecesinin altında ve bu pencere kapanabilir.",
+        "Bankalar büyük bir kredi vermeye hazır; karşılığında neredeyse her şeyi teminat istiyorlar: fabrikaları, finans şirketini, markaları, hatta logoyu. Brayton’un finans direktörüsün; planı yönetim kuruluna sen sunacaksın."
+      ],
+      stats: [["Hedeflenen kredi", "~18 milyar $"], ["Teminat", "Neredeyse her şey"], ["Kredi notu", "Yatırım derecesinin altında"]],
+      ask: "Brayton’un finans direktörüsün. Ne önerirsin?",
+      opts: [
+        { k: "A", t: "Kredi ucuzken alabildiğin en büyük krediyi şimdi al; karşılığında fabrikaları, finans şirketindeki payı, markaları ve logoyu rehin ver.", s: 90, tag: "kumar",
+          r: "Şirketin neredeyse tamamını ipotek etmek demek; işler kötü giderse elinde bir şey kalmaz. Ama kimseden yardım istemeden yıllarca dayanacak nakdi şimdiden kasaya koyarsın." },
+        { k: "B", t: "Nakit bitmeden mahkeme korumasına başvur; borçları ve sözleşmeleri baştan yapılandır.", s: 30, tag: "cerrah",
+          r: "Kâğıt üzerinde temiz bir başlangıç. Ama alıcılar garantinin ve yedek parçanın akıbetinden korkar, satışlar çöker ve şirketin kontrolü mahkemeye geçer." },
+        { k: "C", t: "Önce lüks markaları sat; elde edilen parayla yeniden yapılanmayı finanse et, ana şirketi rehin verme.", s: 45, tag: "kalkan",
+          r: "Bu markalar sonunda zaten satıldı. Ama hepsini birden ve hızla satmak zor; gelecek para da yıllarca sürecek yeniden yapılanmayı karşılamaya yetmez." },
+        { k: "D", t: "Bekle: önce maliyetleri kes, sonuçlar düzelince daha ucuza borçlan.", s: 20, tag: "kasa",
+          r: "Bir yıl sonra kredi piyasaları kapandı. Bekleyenler için geriye tek kapı kaldı: devletin kapısı." }
+      ],
+      real: {
+        who: "Glen Hadley",
+        role: "Brayton’un finans direktörü",
+        k: "A",
+        text: [
+          "Plan, yeni CEO gelmeden önce hazine ekibinde başlamıştı. 27 Kasım 2006’da yaklaşık 18 milyar dolarlık finansman duyuruldu; yeni CEO planı yaklaşık 520 bankacıya kendisi anlattı. Aralık’ta toplam 23,5 milyar dolarla kapandı: 18,5 milyar teminatlı kredi, 5 milyar dönüştürülebilir tahvil.",
+          "Teminat olarak ABD’deki ana fabrikalar, logo dahil fikri mülkiyet, finans şirketindeki ve İsveçli lüks markadaki paylar verildi. 2006, 12,7 milyar dolarlık rekor zararla kapandı. Lüks markalar 2007, 2008 ve 2010’da satıldı.",
+          "2008’de iki büyük rakip devlet yardımı aldı ve mahkeme korumasına girdi; Brayton ikisine de ihtiyaç duymadı. 2009’u 2,7 milyar dolar kârla kapattı. 2012 baharında notu yeniden yatırım derecesine çıktı; teminatlar ve logo serbest bırakıldı."
+        ]
+      },
+      sources: [
+        { t: "Finansman planının duyurusu", pub: "ABD SEC (8-K)", year: "2006", lang: "en",
+          url: "https://www.sec.gov/Archives/edgar/data/0000037996/000114036106017026/ex99.htm" },
+        { t: "Teminatların serbest bırakılması", pub: "ABD SEC (8-K)", year: "2012", lang: "en",
+          url: "https://www.sec.gov/Archives/edgar/data/0000037996/000003799612000025/collateralrelease8-k.htm" },
+        { t: "Devlet yardımı almadan dönüş", pub: "NBC News / CNBC", year: "2010", lang: "en",
+          url: "https://www.nbcnews.com/id/wbna40010150" },
+        { t: "Planı tasarlayan finans direktörü", pub: "Fortune", year: "2011", lang: "en",
+          url: "https://fortune.com/2011/05/25/fords-forgotten-man/" },
+        { t: "Kredi notu yeniden yatırım derecesinde", pub: "NPR", year: "2012", lang: "en",
+          url: "https://www.npr.org/transcripts/151339982" }
+      ]
+    },
+    {
+      area: "Kalite",
+      place: ["Almanya", " · Ekim 1997"],
+      company: "Steinhaal Automobil · Velto",
+      title: "Ani manevrada devrildi",
+      body: [
+        "Steinhaal, köklü bir Alman lüks otomobil üreticisi. Velto, markanın ilk küçük şehir arabası: kısa, yüksek ve içi geniş; markayı gençlere ve ilk kez lüks araba alacaklara açmak için tasarlandı. Satışa yeni çıktı ve siparişler güçlü.",
+        "21 Ekim 1997’de İsveçli bir otomobil dergisi, yola fırlayan bir hayvandan kaçmayı taklit eden sert bir şerit değiştirme testinde Velto’yu yaklaşık 60 km/sa hızla devirdi. İçindekiler hafif yaralandı; görüntüler bütün Avrupa’ya yayıldı.",
+        "Şirketin ilk açıklaması testin “aşırı” olduğuydu. Ama basın ve müşteriler tek bir şey soruyor: bu araba güvenli mi? Steinhaal’in yönetim kurulunda otomobil biriminin başındasın; birkaç hafta içinde karar vermen gerekiyor."
+      ],
+      stats: [["Test hızı", "~60 km/sa"], ["Model", "Satışa yeni çıktı"], ["Şirketin ilk tepkisi", "“Aşırı test”"]],
+      ask: "Steinhaal’in otomobil biriminin başındasın. Ne yaparsın?",
+      opts: [
+        { k: "A", t: "Testin gerçek sürüşü yansıtmadığını açıkla; arabayı savun ve satışa devam et.", s: 15, tag: "kasa",
+          r: "Kısa vadede satışlar sürer. Ama güvenlik sorununu inkâr eden lüks bir marka en değerli şeyini, güveni harcar; her yeni haber inkârı daha da zayıflatır." },
+        { k: "B", t: "Teslimatları durdur; denge kontrol sistemini ücretsiz ve standart yap, süspansiyonu ve lastikleri değiştir, satılmış arabaları da geri çağırıp güncelle.", s: 90, tag: "cerrah",
+          r: "Aylarca teslimat yapamazsın, yüz milyonlarca marka mal olur ve hatayı herkesin önünde kabul edersin. Ama sorunu kökünden çözer, tartışmayı bir güvenlik sözüne çevirirsin." },
+        { k: "C", t: "Satışa devam et ama her müşteriye ücretsiz kontrol, onarım ve iade hakkı sun.", s: 45, tag: "kalkan",
+          r: "Müşteriye karşı nazik bir adım. Ama araba değişmeden satılmaya devam eder; ikinci bir devrilme olursa savunacak hiçbir şeyin kalmaz." },
+        { k: "D", t: "Yalnızca lastikleri ve süspansiyonu değiştir; bağımsız bir kurumun testini tekrarlatıp arabanın güvenli olduğunu kanıtla.", s: 30, tag: "kumar",
+          r: "Ucuz ve hızlı. Ama bütün itibarını tek bir teste bağlarsın; araba yeniden zorlanıp devrilirse bu kez savunman da kalmaz." }
+      ],
+      real: {
+        who: "Klaus Wendermann",
+        role: "Steinhaal’in otomobil biriminin başı; kararı yönetim kuruluyla aldı",
+        k: "B",
+        text: [
+          "Savunma tutmadı ve şirket yön değiştirdi. 11 Kasım 1997’de 12 haftalık teslimat durdurması açıklandı: denge kontrol sistemi bütün Velto’larda ücretsiz ve standart olacak, süspansiyon ve lastikler değişecek, teslim edilmiş arabalar da güncellenecekti.",
+          "Denge kontrol sistemli ilk Velto’lar 9 Şubat 1998’de fabrikadan çıktı. Krizin maliyeti yüz milyonlarca markı buldu. Yeniden tanıtım reklamlarında ünlü bir tenis yıldızı oynadı.",
+          "1999’dan itibaren denge kontrol sistemi markanın bütün modellerinde standart oldu. Velto ve onu izleyen kuşaklar 4 milyondan fazla sattı. Avrupa Birliği sistemi 2011’den itibaren yeni modellerde zorunlu kıldı."
+        ]
+      },
+      sources: [
+        { t: "Devrilme testinin 20. yılı", pub: "Autohaus / dpa", year: "2017", lang: "de",
+          url: "https://www.autohaus.de/nachrichten/autohersteller/mercedes-benz-20-jahre-elchtest-der-a-klasse-2723080" },
+        { t: "Krizden 25 yıl sonra", pub: "Schwäbische Zeitung / dpa", year: "2022", lang: "de",
+          url: "https://www.schwaebische.de/panorama/25-jahre-nach-elchtest-rolle-rueckwaerts-bei-mercedes-benz-7881" },
+        { t: "Düşüş ve yeniden yükseliş", pub: "web.de", year: "2017", lang: "de",
+          url: "https://web.de/magazine/auto/elchtest-desaster-rueckblick-sturz-aufstieg-a-klasse-32665542" },
+        { t: "Denge kontrol sisteminin 25 yılı", pub: "Autohaus", year: "2020", lang: "de",
+          url: "https://www.autohaus.de/nachrichten/autohersteller/25-jahre-esp-vom-elch-retter-zum-alleskoenner-2702232" },
+        { t: "Denge kontrol sisteminin tarihi", pub: "Tedarikçinin basın sayfası", year: "", lang: "en",
+          url: "https://www.bosch-presse.de/pressportal/de/en/staying-on-track-211904.html" }
+      ]
+    },
+    {
+      area: "Liderlik",
+      place: ["Japonya", " · Ocak 2014"],
+      company: "Kagemori",
+      title: "Kimseyi kovmadan",
+      body: [
+        "Kagemori, yüz yılı aşkın geçmişi olan bir Japon oyun şirketi. Hem konsollarını hem oyunlarını kendisi yapıyor; dünyaca ünlü karakterleri yalnızca kendi cihazlarında oynanabiliyor.",
+        "Yeni ev konsolu tutmadı. 17 Ocak 2014’te şirket yıllık tahminini sert biçimde düşürdü: satış 920 milyar yenden 590 milyar yene, konsol satışı 9 milyondan 2,8 milyona indi. 100 milyar yen faaliyet kârı beklenirken 35 milyar yen faaliyet zararı öngörülüyor; bu üst üste üçüncü faaliyet zararı olacak. Temettü 260 yenden 100 yene düşüyor.",
+        "Yatırımcılar ve analistler istifadan, akıllı telefonlara geçmekten, işten çıkarmalardan söz ediyor. Kagemori’nin başkanısın; ay sonundaki sonuç toplantısında ne yapacağını açıklayacaksın."
+      ],
+      stats: [["Satış tahmini", "920 → 590 milyar ¥"], ["Faaliyet sonucu", "+100 → −35 milyar ¥"], ["Konsol hedefi", "9 → 2,8 milyon"]],
+      ask: "Kagemori’nin başkanısın. Bu başarısızlığın hesabını nasıl verirsin?",
+      opts: [
+        { k: "A", t: "Şirketi yeniden yapılandır: maliyetleri kes, kadroyu küçült, yatırımcılara kararlılık göster.", s: 25, tag: "cerrah",
+          r: "Yatırımcılar alkışlayabilir. Ama şirketin asıl sermayesi oyun ekipleri; korkmuş bir ekip bir sonraki büyük oyunu yapamaz." },
+        { k: "B", t: "Ünlü karakterleri hemen akıllı telefonlara taşı; yeni gelir kapısını bugünden aç.", s: 40, tag: "kumar",
+          r: "Hızlı gelir getirebilir. Ama donanımla yazılımı birlikte yapan modelden vazgeçmek ve bir sonraki konsolun değerini baştan düşürmek demek." },
+        { k: "C", t: "Konsolun fiyatını sert indir, stokları erit, platformdan erkenden çık.", s: 20, tag: "kasa",
+          r: "Zarar derinleşir; konsolu yeni almış oyuncular ve oyun yapan şirketler yüzüstü bırakıldığını hisseder. Bir sonraki konsol şüpheyle doğar." },
+        { k: "D", t: "Kimseyi çıkarma. Kendi maaşını yarıya indir, öteki yöneticilerinkini %20–30 kes, hisse geri al; şirketin modelini koru.", s: 85, tag: "kalkan",
+          r: "Sembolik bir adım; zararı kapatmaz. Ama sorumluluğu en tepeden üstlenir ve oyunları yapan ekibi korur." }
+      ],
+      real: {
+        who: "Haruki Tsuboi",
+        role: "Kagemori’nin başkanı",
+        k: "D",
+        text: [
+          "29 Ocak 2014’te yönetim kurulu Şubat–Haziran dönemi için maaşları kesti: Tsuboi’ninki %50, iki üst yöneticininki %30, öteki yönetim kurulu üyelerininki %20 azaldı. 125 milyar yene kadar hisse geri alımı açıklandı. Tsuboi istifayı hiç düşünmediğini, kesintinin “bir şekilde sorumluluk almak” olduğunu söyledi; adım sembolikti.",
+          "Önceki yaz hissedarlar toplantısında işten çıkarmaların moral bozacağını ve iyi oyun yapmayı zorlaştıracağını anlatmıştı. 2011’de el konsolunun zayıf başlangıcından sonra da maaşını yarıya indirmişti.",
+          "Mart 2014’te biten mali yıl 46,4 milyar yen faaliyet zararıyla kapandı; ertesi yıl şirket 24,8 milyar yen faaliyet kârına döndü. Mart 2015’te bir mobil oyun şirketiyle yaklaşık 22’şer milyar yenlik karşılıklı hisse takasıyla ortaklık kuruldu ve Kagemori akıllı telefon oyunlarına girdi."
+        ]
+      },
+      sources: [
+        { t: "Yıllık tahminin düşürülmesi", pub: "Şirketin kurumsal sitesi", year: "2014", lang: "en",
+          url: "https://www.nintendo.co.jp/ir/pdf/2014/140117e.pdf" },
+        { t: "Sonuç toplantısında soru-cevap", pub: "Şirketin kurumsal sitesi", year: "2014", lang: "en",
+          url: "https://www.nintendo.co.jp/ir/en/events/140130qa/02.html" },
+        { t: "Hissedar toplantısı: neden işten çıkarma yok", pub: "Şirketin kurumsal sitesi", year: "2013", lang: "en",
+          url: "https://www.nintendo.co.jp/ir/en/stock/meeting/130627qa/03.html" },
+        { t: "Yöneticilere maaş indirimi", pub: "NBC News", year: "2014", lang: "en",
+          url: "https://www.nbcnews.com/tech/video-games/dismal-wii-u-sales-prompt-pay-cuts-nintendo-execs-n18881" },
+        { t: "Başkan baskı altında", pub: "Bloomberg", year: "2014", lang: "en",
+          url: "https://www.bloomberg.com/news/articles/2014-01-21/nintendo-s-iwata-under-fire-after-failing-to-meet-wii-u-pledge" },
+        { t: "Kâra dönüş", pub: "Şirketin kurumsal sitesi", year: "2015", lang: "en",
+          url: "https://www.nintendo.co.jp/ir/pdf/2015/150507e.pdf" },
+        { t: "Mobil oyun ortaklığı", pub: "Şirketin kurumsal sitesi", year: "2015", lang: "en",
+          url: "https://www.nintendo.co.jp/ir/pdf/2015/150317e.pdf" }
+      ]
+    }
+  ];
+
+  var S005 = [
+    {
+      area: "Pazarlama",
+      place: ["ABD", " · Aralık 2008"],
+      company: "Morivo Motors",
+      title: "İşini kaybedersen geri al",
+      body: [
+        "Morivo, Amerika’da uzun yıllar “ucuz ama sıradan” diye bilinmiş bir Koreli otomobil markası. Son yıllarda kalite ve uzun garantiyle itibar kazandı ama pazar payı hâlâ yaklaşık %3.",
+        "Finans krizi derinleşiyor. Otomobil satışları bir yıl öncesine göre üçte bir civarında düşüyor; büyük Amerikan üreticiler devletten destek istiyor. Rakipler indirim ve sıfır faiz yarışında. Ama asıl sorun fiyat değil: insanlar parası olsa bile işini kaybetme korkusuyla yeni araba almıyor.",
+        "Ocak’ta yeni bir kampanya başlayacak, Şubat başında da yılın en çok izlenen maç yayınında reklam alanın var. Morivo’nun Amerika şirketinin vekil CEO’susun; pazarlama ve finans ekiplerin masaya birkaç fikir getirdi."
+      ],
+      stats: [["Pazar payı", "~%3"], ["Sektör satışları", "Üçte bir düşüşte"], ["Müşterinin korkusu", "İşsiz kalmak"]],
+      ask: "Morivo’nun Amerika şirketinin başındasın. Kriz kışında ne yaparsın?",
+      opts: [
+        { k: "A", t: "Reklam ve pazarlama bütçesini kıs, stokları erit; kriz geçene kadar nakdi koru.", s: 20, tag: "kasa",
+          r: "Nakit korunur ama korku dolu bir pazarda sessiz kalan marka unutulur. O kış birçok üretici reklamı kıstı; boşalan alanı cesur davrananlar doldurdu." },
+        { k: "B", t: "Müşteriye söz ver: arabayı aldıktan sonraki bir yıl içinde işini kaybedersen arabayı geri ver, kalan borcun bir kısmını biz üstlenelim.", s: 90, tag: "kumar",
+          r: "Riskin fiyatını kimse tam bilemez: işsizlik hızla artarsa iade edilen arabalar sana döner. Ama müşterinin asıl korkusunu doğrudan hedefler. Sonradan iade edilen araba sayısı yüzlerle sınırlı kaldı." },
+        { k: "C", t: "Ödeme güvencesi sun: işini kaybeden müşterinin taksitlerini birkaç ay boyunca şirket ödesin.", s: 65, tag: "kalkan",
+          r: "Ölçülü, hesaplanabilir bir güvence ve insanlara iyi bir mesaj. Ama büyük rakipler de benzerini sundu; seni kalabalıktan ayırmaz." },
+        { k: "D", t: "Satış hedefini ve üretimi hemen düşür, bayilere giden arabaları azalt; krize küçülerek gir.", s: 40, tag: "cerrah",
+          r: "Stok ve maliyet kontrolü sağlam bir refleks. Ama talep çökerken yalnızca küçülmek, pazar payını korumak değil rakiplere bırakmak demek." }
+      ],
+      real: {
+        who: "Dean Halloway",
+        role: "Morivo’nun Amerika şirketinin vekil CEO’su",
+        k: "B",
+        text: [
+          "Halloway’in ekibi pazarlama ve finans biriminden gelen fikri 37 günde onaylattı. 2 Ocak 2009’da duyurulan güvenceye göre yeni araba alan ya da kiralayan müşteri, bir yıl içinde elinde olmayan bir nedenle işini kaybederse, en az iki taksit ödemiş olmak şartıyla arabayı geri verebiliyordu. Kalan borçla arabanın değeri arasındaki farkın 7.500 dolara kadarını şirket üstleniyordu.",
+          "Kampanya Şubat başındaki maç yayınında ülke çapına yayıldı; aynı ay güvenceye, işini kaybeden müşterinin 90 günlük taksitini şirketin ödediği bir ek geldi. Sektör satışları Ocak’ta yaklaşık %37 düşerken Morivo’nun satışı %14 arttı.",
+          "Morivo 2009’u satışlarını %8 artırarak kapattı; sektör %21 küçüldü, pazar payı %3,0’dan %4,2’ye çıktı. Yıl boyunca geri verilen araba 100’ü bulmadı, program boyunca yaklaşık 350’de kaldı. Güvence Mart 2011’de sona erdi."
+        ]
+      },
+      sources: [
+        { t: "İşini kaybeden müşteriye arabayı geri verme hakkı", pub: "NPR", year: "2009", lang: "en",
+          url: "https://www.npr.org/2009/01/06/99053277/for-struggling-car-owners-hyundai-offers-lifeline" },
+        { t: "Güvencenin duyurusu", pub: "Şirketin haber odası", year: "2009", lang: "en",
+          url: "https://www.hyundainews.com/releases/338" },
+        { t: "İşten çıkarılana güvence veren şirketler", pub: "CNBC", year: "2009", lang: "en",
+          url: "https://www.cnbc.com/2009/03/31/getting-laid-off-theyve-got-you-covered.html" },
+        { t: "Bir yıl sonra: güvence satışları nasıl etkiledi?", pub: "NPR", year: "2010", lang: "en",
+          url: "https://www.npr.org/transcripts/122372379" }
+      ]
+    },
+    {
+      area: "Kalite",
+      place: ["ABD", " · Haziran 2007"],
+      company: "Calder Interactive · Orvia 2",
+      title: "Üç kırmızı ışık",
+      body: [
+        "Calder dünyanın en büyük yazılım şirketlerinden biri. Oyun konsolu Orvia 2, en büyük rakibinden bir yıl önce piyasaya çıktı ve 11,6 milyon adede ulaştı. Konsol, şirketin oturma odasına girme stratejisinin merkezinde.",
+        "Ama oyuncu forumları tek bir görüntüyle dolu: güç düğmesinin çevresinde yanan üç kırmızı ışık. Konsol açılmıyor. Tamir merkezleri tıkanmış; garantisi biten müşteri onarım için yaklaşık 140 dolar ödüyor. Garanti Amerika’da bir yıl, Avrupa’da iki yıl.",
+        "Şirket arıza oranını açıklamıyor ama bağımsız tahminler çok yüksek. Mali yıl 30 Haziran’da kapanıyor. Eğlence ve cihazlar biriminin başındasın; çeyrek kapanmadan bir karar vermen gerekiyor."
+      ],
+      stats: [["Satılan konsol", "11,6 milyon"], ["Ücretli onarım", "~140 $"], ["Garanti (ABD)", "1 yıl"]],
+      ask: "Calder’in eğlence biriminin başındasın. Ne yaparsın?",
+      opts: [
+        { k: "A", t: "Mevcut garantiyle devam et; tamir sürecini hızlandır, kamuoyuna açıklamayı sınırlı tut.", s: 15, tag: "kasa",
+          r: "Bu çeyreği korur. Ama forumlar büyüdükçe her yeni kırmızı ışık markanın hanesine yazılır; ilk kuşak oyuncuyu kaybetmek konsolu kaybetmektir." },
+        { k: "B", t: "Sessizce yeni bir donanım revizyonuna geç: yeni üretim sağlam olsun, eldeki konsolları kendi seyrine bırak.", s: 25, tag: "kumar",
+          r: "Gelecek satışları kurtarabilir ama milyonlarca müşteriyi kendi kaderine bırakır. Arıza sürdükçe ilk alıcılar en yüksek sesli eleştirmenlerin olur." },
+        { k: "C", t: "Bu arıza için garantiyi satın alımdan itibaren üç yıla çıkar, ödenmiş onarım ücretlerini iade et, bedeli bu çeyrekte tek seferde yaz.", s: 85, tag: "kalkan",
+          r: "Bir milyar doları aşan bir gider demek. Ama oyuncuya “sorun bizde, bedeli de biz ödüyoruz” dersin ve belirsizliği tek hamlede kapatırsın." },
+        { k: "D", t: "Satışı durdur, bütün konsolları geri çağır; tasarımı düzeltene kadar rafları boşalt.", s: 30, tag: "cerrah",
+          r: "Sorunu kökten ele alır gibi görünür. Ama milyonlarca cihazı toplamak çok ağır, yılbaşı sezonu rakibe kalır ve sorunsuz cihazları da toplamış olursun." }
+      ],
+      real: {
+        who: "Ian Fairley",
+        role: "Calder’in eğlence ve cihazlar biriminin başkanı",
+        k: "C",
+        text: [
+          "Fairley 5 Temmuz 2007’de üç kırmızı ışık arızası için garantiyi dünya genelinde satın alma tarihinden itibaren üç yıla çıkardığını açıkladı. Onarım ve kargo ücretsiz oldu, daha önce para ödeyerek tamir ettirenlere ücretleri iade edildi. Açıklamada müşterilerden açıkça özür diledi.",
+          "Bedeli ağırdı: biten çeyreğe 1,05–1,15 milyar dolarlık vergi öncesi gider yazıldı. Şirket arıza oranını hiçbir zaman açıklamadı; bağımsız bir garanti şirketinin 2009 araştırmasına göre konsolların yaklaşık dörtte biri ilk iki yılda arızalanmıştı.",
+          "Konsol yeni donanım revizyonlarıyla on yılı aşkın süre satıldı ve 80 milyonu aştı; üretimi 2016’da sona erdi."
+        ]
+      },
+      sources: [
+        { t: "Garantinin üç yıla çıkarıldığı duyuru", pub: "Şirketin haber odası", year: "2007", lang: "en",
+          url: "https://news.microsoft.com/source/2007/07/05/microsoft-expands-xbox-360-warranty-coverage/" },
+        { t: "Bağımsız araştırma: konsolların arıza oranları", pub: "The Register", year: "2009", lang: "en",
+          url: "https://www.theregister.com/2009/09/03/squaretrade_console_failure_report_sept_09/" },
+        { t: "Konsolun üretimi on yıl sonra sona erdi", pub: "Fortune", year: "2016", lang: "en",
+          url: "https://fortune.com/2016/04/20/microsoft-quits-xbox-360-production/" },
+        { t: "Konsolun on yılı", pub: "Şirketin haber sitesi", year: "2016", lang: "en",
+          url: "https://news.xbox.com/en-us/2016/04/20/xbox-360-celebrating-10-years/" }
+      ]
+    },
+    {
+      area: "Sahiplik",
+      place: ["Fransa", " · Ekim 2010"],
+      company: "Maison Corvelle",
+      title: "Kapıdaki lüks devi",
+      body: [
+        "Corvelle 170 yılı aşkın geçmişi olan bir lüks evi: el yapımı çantalar, eyerler, ipek eşarplar. Şirket borsada ama hisselerin yaklaşık %75’i kurucunun torunlarından oluşan kalabalık bir ailede. Son sözü ailenin kontrol ettiği bir ortaklık söylüyor.",
+        "23 Ekim 2010, bir cumartesi. Dünyanın en büyük lüks grubu Altemont, Corvelle’in %14,2’sine sahip olduğunu açıklıyor; üç gün sonra oran %17,1’e çıkıyor. Payı 2008’den beri, bildirim eşiği olan %5’in altında kalan ve sonradan hisseye çevrilebilen türev sözleşmelerle bankalar üzerinden topladığı ortaya çıkıyor.",
+        "Altemont teklif vermeyeceğini, kontrol ya da yönetim kurulunda koltuk istemediğini söylüyor. Hisse pazartesi %15 yükseliyor; geniş ailede payını satmayı düşünenler olabilir. Corvelle’in aileden olmayan yöneticisisin; kararı aile konseyiyle birlikte vereceksin."
+      ],
+      stats: [["Altemont’un payı", "%17,1"], ["Ailenin payı", "~%75"], ["İlk işlem günü", "+%15"]],
+      ask: "Corvelle’in başındasın. Altemont’a karşı ne yaparsın?",
+      opts: [
+        { k: "A", t: "Savaşma: Altemont’u pasif bir yatırımcı olarak kabul et, pahalı davalardan ve yeni yapılardan kaçın.", s: 25, tag: "kasa",
+          r: "Kısa vadede masrafsız. Ama %17 ile başlayan bir ortak, payını satmak isteyen tek bir aile koluyla çoğunluğa yaklaşabilir." },
+        { k: "B", t: "Dost bir yatırımcı bul: ona büyük bir pay satarak Altemont’u dengele.", s: 40, tag: "kumar",
+          r: "Altemont’u dengeler ama bağımsızlığı bu kez başka biriyle bölüşürsün; yeni ortağın yarın ne isteyeceği de belli değil." },
+        { k: "C", t: "Altemont’a payını geri satması için yüksek bir fiyat öner, gerekirse borçlan; sorunu tek hamlede kes.", s: 30, tag: "cerrah",
+          r: "Sorunu keser ama bedeli sen belirlemezsin: Altemont satmak zorunda değil ve fiyatı istediği kadar yükseltebilir. Borç da bağımsızlığı başka yoldan zayıflatır." },
+        { k: "D", t: "Aileyi kilitle: payların yarısından fazlasını uzun yıllar satılamayan ortak bir aile şirketine koy, kalanlarda önalım hakkı al; pay toplama yöntemini de düzenleyiciye taşı.", s: 90, tag: "kalkan",
+          r: "Yavaş ve hukuki açıdan yorucu bir yol; aileyi tek ses olmaya zorlar. Ama kontrolü kalıcı olarak güvenceye alır ve Altemont’un payını bir pazarlık kozuna çevirir." }
+      ],
+      real: {
+        who: "Philippe Morvand",
+        role: "Corvelle’in yöneticisi; kararı aile konseyiyle aldı",
+        k: "D",
+        text: [
+          "Aile önce safları sıkılaştırdı ve birlikte hareket edeceğini açıkladı. 5 Aralık 2010’da, payların yarısından fazlasını uzun yıllar satılamayacak ortak bir aile şirketinde toplama ve kalan paylarda önalım hakkı kurma planını duyurdu. Düzenleyici Ocak 2011’de zorunlu satın alma teklifinden muafiyet verdi; yapı Aralık 2011’de işler hâle geldi.",
+          "Morvand, Altemont’un pay toplama yöntemini düzenleyiciye taşıdı; 2012’de suç duyurusunda bulundular, Altemont karşı dava açtı. Haziran 2013’te piyasa düzenleyicisi, pay toplamayı piyasaya zamanında bildirmediği için Altemont’a 8 milyon avro ceza verdi. Düzenleyiciye göre Altemont payın önemli kısmını açıklama günündeki fiyatın yarısından da ucuza almıştı.",
+          "Eylül 2014’te ticaret mahkemesi başkanının arabuluculuğuyla barış geldi. Altemont, o güne kadar yaklaşık %23’e çıkmış Corvelle payının tamamını kendi hissedarlarına dağıttı ve beş yıl boyunca Corvelle hissesi almamayı kabul etti. Aile şirketi bugün payların yarısından fazlasını elinde tutuyor."
+        ]
+      },
+      sources: [
+        { t: "Lüks grubun sürpriz pay açıklaması", pub: "Taipei Times / AFP", year: "2010", lang: "en",
+          url: "https://www.taipeitimes.com/News/biz/archives/2010/10/25/2003486824" },
+        { t: "Aile holdingi kurma kararı", pub: "Şirketin düzenleyiciye bildirimi", year: "2010", lang: "en",
+          url: "https://echanges.dila.gouv.fr/OPENDATA/AMF/CNS/2010/12/FCCNS100286_20101206.pdf" },
+        { t: "Piyasa düzenleyicisinin 8 milyon avroluk ceza kararı", pub: "AMF (Fransa piyasa düzenleyicisi)", year: "2013", lang: "fr",
+          url: "https://www.amf-france.org/sites/institutionnel/files/sanction/decision_sanction/SAN-2013-15%20-%20Decision%20de%20la%20Commission%20des%20sanctions%20du%2025%20juin%202013%20a%20l'egard%20de%20la%20societe%20LVMH%20Moet%20Hennessy%20Louis%20Vuitton.pdf" },
+        { t: "İki grubun barış anlaşması", pub: "Lüks grubun basın sayfası", year: "2014", lang: "en",
+          url: "https://www.lvmh.com/en/publications/lvmh-and-hermes-mend-relations" },
+        { t: "Lüks devlerinin anlaşmalı ayrılığı", pub: "Business Standard / Reuters", year: "2014", lang: "en",
+          url: "https://www.business-standard.com/amp/article/companies/uber-posh-handbag-war-ends-as-luxe-titans-divorce-amicably-114090400015_1.html" }
+      ]
+    }
+  ];
+
+  var S006 = [
+    {
+      area: "İletişim",
+      place: ["Birleşik Krallık", " · Şubat 2018"],
+      company: "Haverly’s Chicken",
+      title: "Tavuksuz tavukçu",
+      body: [
+        "Haverly’s, kızarmış tavuğuyla bilinen küresel bir fast food zinciri. Birleşik Krallık’ta yaklaşık 900 restoranı var ve menünün neredeyse tamamı her gün gelen taze tavuğa dayanıyor.",
+        "14 Şubat 2018’de dağıtım yeni bir lojistik firmasına ve tek bir merkez depoya geçti. Birkaç gün içinde sistem çöktü: tavuk restoranlara ulaşmıyor. 19 Şubat’ta 562 restoran kapalı; sosyal medya zincirle dalga geçiyor.",
+        "Tam toparlanmanın haftalar sürebileceği söyleniyor ve bir şey söylemen gerekiyor. Haverly’s’in Birleşik Krallık genel müdürüsün; pazarlama ekibin masaya birkaç seçenek getirdi."
+      ],
+      stats: [["Restoran", "~900"], ["Kapalı (19 Şubat)", "562"], ["Dağıtım", "Tek depo"]],
+      ask: "Haverly’s’in Birleşik Krallık işinin başındasın. Kamuoyuna ne dersin?",
+      opts: [
+        { k: "A", t: "Ulusal gazetelere kendinle dalga geçen bir özür ilanı ver: boş bir tavuk kovası, üzerindeki marka harflerinin yeri değiştirilip kaba bir sözü andıran bir kelimeye çevrilmiş.", s: 85, tag: "kumar",
+          r: "Hafife alındığı, aileleri ve bayileri kızdırabileceği düşünülebilir. Ama alay edilen bir markanın en iyi cevabı şakayı önce kendisinin yapmasıdır; özür hem dürüst hem akılda kalıcı olur." },
+        { k: "B", t: "Yeni lojistik sözleşmesini bitir, eski dağıtıcıya dön; sorun çözülene kadar konuşma, çözünce açıklama yap.", s: 45, tag: "cerrah",
+          r: "Eski dağıtıcı sonradan kısmen geri çağrıldı; yani işin operasyon tarafı doğru. Ama sessiz kaldığın her gün şaka seninle ilgili yapılmaya devam eder." },
+        { k: "C", t: "Resmî bir açıklamayla suçu lojistik firmasına yükle; açık kalan restoranlarda menüyü daralt.", s: 20, tag: "kasa",
+          r: "Teknik olarak doğru olabilir ama müşteri kapalı kapıda lojistik firmasının değil senin logonu görüyor. Suçu başkasına atmak alayı öfkeye çevirir." },
+        { k: "D", t: "Çalışanlara ve bayilere gelir güvencesi ver, ciddi bir kurumsal özür yayımla, tüm reklamları durdur.", s: 55, tag: "kalkan",
+          r: "Çalışanları ve bayileri korumak doğru bir adım. Ama sıradan bir kurumsal özür gürültüde kaybolur ve alayı durdurmaz." }
+      ],
+      real: {
+        who: "Clare Whitmore",
+        role: "Haverly’s’in Birleşik Krallık ve İrlanda genel müdürü; ilanı pazarlama ekibiyle hazırladı",
+        k: "A",
+        text: [
+          "23 Şubat’ta iki ulusal gazetede bir ilan çıktı: boş bir tavuk kovası, üzerindeki harflerin yeri değiştirilmiş. Altındaki kısa metin, tavuksuz bir tavuk restoranının pek de ideal olmadığını kabul ediyor, özür diliyor ve müşterilere, çalışanlara ve bayilere teşekkür ediyordu.",
+          "İlan kısa sürede dünyaya yayıldı ve sonradan reklamcılığın büyük ödüllerini aldı. 23 Şubat’ta restoranların yaklaşık 700’ü açılmıştı; 8 Mart’ta %97’den fazlası hizmetteydi. Aynı gün eski dağıtıcı, kuzeydeki 350’ye kadar restoran için yeniden devreye alındı.",
+          "Şirket resmî bir maliyet açıklamadı; basın kaybı günde yaklaşık 1 milyon sterlin olarak tahmin etti. Tam toparlanma yaklaşık üç hafta sürdü, ama marka bu krizden alay konusu olarak değil, iyi bir özrün örneği olarak çıktı."
+        ]
+      },
+      sources: [
+        { t: "Yüzlerce restoran tavuksuz kaldı", pub: "Fortune", year: "2018", lang: "en",
+          url: "https://fortune.com/2018/02/19/kfc-closed-chicken-shortage/" },
+        { t: "Esprili özür", pub: "CNBC", year: "2018", lang: "en",
+          url: "https://www.cnbc.com/2018/02/23/kfc-issues-tongue-in-cheek-apology-after-uk-chicken-shortage-causes-restaurant-closures.html" },
+        { t: "Tavuk bitince kapanan restoranlar", pub: "CBS News / AP", year: "2018", lang: "en",
+          url: "https://www.cbsnews.com/news/kfc-out-of-chicken-united-kingdom-ireland-fried-chicken-restaurants/" },
+        { t: "Özür ilanı", pub: "Marketing Week", year: "2018", lang: "en",
+          url: "https://www.marketingweek.com/kfc-print-advert-to-apologise-for-chicken-shortage/" },
+        { t: "Eski dağıtıcı geri çağrıldı", pub: "Restaurant Online", year: "2018", lang: "en",
+          url: "https://www.restaurantonline.co.uk/Article/2018/03/08/KFC-renews-contract-with-Bidvest-Logistics/" },
+        { t: "İlanın ödül kaydı", pub: "The One Show", year: "2018", lang: "en",
+          url: "https://www.oneclub.org/awards/theoneshow/-award/34056/fck/" }
+      ]
+    },
+    {
+      area: "Strateji",
+      place: ["ABD", " · Temmuz 1993"],
+      company: "Halvorsen Systems",
+      title: "Parçalara bölünen dev",
+      body: [
+        "Halvorsen, dünyanın en büyük bilgisayar şirketi; büyük kurumların ana bilgisayarlarını o kuruyor ve işletiyor. Ama kişisel bilgisayarlar ve küçük sunucular pazarı değiştirdi. Şirket 1992’de 4,97 milyar dolar zarar etti; 1985’te 406 bin olan çalışan sayısı hızla eriyor.",
+        "Önceki yönetim şirketi, satılabilecek ya da halka açılabilecek bir düzineden fazla yarı bağımsız birime bölmeye başladı. Bankacılar parçalara ayırmayı değer yaratmanın en hızlı yolu olarak görüyor. Ana bilgisayar fiyatların yüksek, rakipler daha ucuz.",
+        "Nisan’da şirketin tarihinde ilk kez dışarıdan bir CEO geldi: sen. Mühendis değilsin; daha önce tüketim ürünleri ve finans şirketleri yönettin. Analistler büyük bir vizyon bekliyor ve ikinci çeyrek sonuçları bu ay açıklanacak."
+      ],
+      stats: [["1992 zararı", "4,97 milyar $"], ["Çalışan (1985 zirvesi)", "406 bin"], ["Bağımsız birim", "Bir düzineden fazla"]],
+      ask: "Halvorsen’in yeni CEO’susun. Şirketin geleceği için ne yaparsın?",
+      opts: [
+        { k: "A", t: "Bölünmeyi tamamla: birimleri ayrı şirketler olarak halka aç ya da sat; her biri kendi pazarında çevikleşsin.", s: 35, tag: "cerrah",
+          r: "Bankacıların sevdiği, kısa vadede değer gösteren bir yol. Ama büyük müşteriler parçaların değil, birlikte çalışan tek bir bütünün peşinde; bölündüğünde bunu kimse sunamaz." },
+        { k: "B", t: "Büyük bir vizyon ilan et: ana bilgisayardan çık, tüm gücünü kişisel bilgisayarlara ve tüketici pazarına ver.", s: 30, tag: "kumar",
+          r: "En büyük nakit kaynağını bırakıp kalabalık, kârı düşük ve zaten geride olduğun bir pazara koşarsın. Vizyon kâğıtta güzel durur ama kasayı boşaltır." },
+        { k: "C", t: "Şirketi bütün tut: müşteriler her şeyi birleştirecek tek bir ortak istiyor. Maliyetleri tek seferde ve sert biçimde kes, ana bilgisayar fiyatlarını düşür.", s: 85, tag: "kalkan",
+          r: "Bankacıların tavsiyesinin tam tersi; ağır bir zarar yazar, on binlerce kişiyle yollarını ayırırsın. Ama her parçayı birleştirebilen tek şirket olmak, parçaların toplamından daha değerli olabilir." },
+        { k: "D", t: "Ana bilgisayar marjlarını koru; işten çıkarmaları yıllara yayarak sessizce yap.", s: 20, tag: "kasa",
+          r: "Kısa vadede kâr tablosu iyi görünür. Ama daha ucuz rakipler müşterileri almaya devam eder; yavaş kanama tek bir derin kesikten pahalıya patlar." }
+      ],
+      real: {
+        who: "Richard Ansell",
+        role: "Halvorsen’in CEO’su",
+        k: "C",
+        text: [
+          "27 Temmuz 1993’te Halvorsen ikinci çeyrekte 8,04 milyar dolar zarar açıkladı; içinde 8,9 milyar dolarlık yeniden yapılanma gideri vardı. 1993’te ayrılan yaklaşık 50 bin kişinin üstüne 1994 sonuna kadar 35 bin kişi daha ayrılacaktı; çeyreklik temettü 54 sentten 25 sente indi. Ansell aynı gün “şirketin şu anda en son ihtiyacı olan şey bir vizyon” dedi.",
+          "Bölünme planını rafa kaldırdı; şirketi bir arada tutmak, sonradan kendi deyişiyle “ilk stratejik kararı” oldu. Ana bilgisayar fiyatları düşürüldü ve şirket, başka üreticilerin parçalarını da birleştiren hizmet işine yöneldi; bu iş 1995–96’da hız kazandı.",
+          "Halvorsen 1993’ü 8,10 milyar dolar zararla kapattı; yıl sonunda çalışan sayısı yaklaşık 255 bindi. 1994’te 64,05 milyar dolar gelirle 3,02 milyar dolar kâra döndü."
+        ]
+      },
+      sources: [
+        { t: "Dışarıdan gelen ilk CEO", pub: "Şirketin kurumsal sitesi", year: "", lang: "en",
+          url: "https://www.ibm.com/history/louis-gerstner" },
+        { t: "1994 faaliyet raporu", pub: "Şirketin kurumsal sitesi", year: "1995", lang: "en",
+          url: "https://www.ibm.com/investor/att/pdf/IBM_Annual_Report_1994.pdf" },
+        { t: "Yeniden yapılanma 8 milyar dolarlık zarar getirdi", pub: "Deseret News / AP", year: "1993", lang: "en",
+          url: "https://www.deseret.com/1993/7/27/19058142/ibm-restructuring-leads-to-a-loss-of-8-billion/" },
+        { t: "Rekor zarar", pub: "Tampa Bay Times", year: "1993", lang: "en",
+          url: "https://www.tampabay.com/archive/1993/07/28/ibm-reports-record-loss/" },
+        { t: "Şirketi 90’larda toparlayan yöneticinin ardından", pub: "The Boston Globe / NYT", year: "2025", lang: "en",
+          url: "https://www.bostonglobe.com/2025/12/29/metro/louis-v-gerstner-who-revived-faltering-ibm-90s-dies-83/" },
+        { t: "Dönüşüm vaka çalışması", pub: "Harvard Business School", year: "2000", lang: "en",
+          url: "https://store.hbr.org/product/ibm-corp-turnaround/600098" }
+      ]
+    },
+    {
+      area: "Marka",
+      place: ["ABD", " · Şubat 2008"],
+      company: "Ristaldi Coffee",
+      title: "Üç saatliğine kepenk",
+      body: [
+        "Ristaldi, bir mahalle kahvecisi olarak başlayıp dünyanın en büyük kahve zincirine dönüştü. İnsanların evle iş arasında oturup iyi kahve içtiği bir yer olmayı vaat ediyordu.",
+        "Ama hızlı büyüme bedelini ödetiyor: mağazalar kalabalık, otomatik makineler hızı artırdı ama tezgâhtaki ustalık kayboldu, kahvenin tadı sıradanlaştı. Ucuz rakipler kapıda; Ocak 2008’de büyük bir hamburger zinciri menüsüne espresso bazlı içecekler ekledi.",
+        "Şirketi büyüten eski CEO olarak 7 Ocak 2008’de yeniden başa döndün. Çalışanların ve müşterilerin gözü ilk hamlende; markanın neden sıradanlaştığına bir cevap vermen gerekiyor."
+      ],
+      stats: [["Şirket mağazası (ABD)", "~7.100"], ["Barista", "~135.000"], ["CEO’nun dönüşü", "7 Ocak 2008"]],
+      ask: "Ristaldi’nin başına geri döndün. Markayı nasıl toparlarsın?",
+      opts: [
+        { k: "A", t: "Fiyat savaşına gir: indirimler ve ucuz menüyle yeni rakiplere müşteri kaptırma.", s: 25, tag: "kasa",
+          r: "Kısa vadede müşteri getirebilir. Ama pahalı ve özel olmakla bilinen bir markanın ucuzla yarışması, asıl sorunu, yani sıradanlaşmayı derinleştirir." },
+        { k: "B", t: "Zarar eden mağazaları kapat, yeni açılışları dondur; önce büyümeyi durdur.", s: 50, tag: "cerrah",
+          r: "Aylar sonra yüzlerce mağaza gerçekten kapandı; bu gerekliydi. Ama yalnızca küçülmek, ürünün neden kötüleştiği sorusuna cevap vermez." },
+        { k: "C", t: "Baristaları sessizce, vardiya vardiya ve mesai dışında yeniden eğit; dışarıya hiçbir şey belli etme.", s: 45, tag: "kalkan",
+          r: "Mağazalar açık kalır, risk yoktur. Ama değişim yavaş yayılır ve ne çalışana ne de müşteriye bir şeylerin değiştiğini hissettirir." },
+        { k: "D", t: "Ülkedeki tüm şirket mağazalarını aynı akşam birkaç saatliğine kapat; herkese aynı anda espresso eğitimi ver ve bunu açıkça duyur.", s: 85, tag: "kumar",
+          r: "Milyonlarca dolarlık satış kaybı, rakiplere bedava reklam ve “demek kahveniz kötüymüş” diye okunma riski. Ama çalışanlara ve müşterilere işin özüne döndüğünü tek hamlede gösterir." }
+      ],
+      real: {
+        who: "Martin Ebersole",
+        role: "Ristaldi’yi küçük bir kahveciden dev zincire büyüten eski CEO; Ocak 2008’de geri döndü",
+        k: "D",
+        text: [
+          "26 Şubat 2008 Salı günü yerel saatle 17.30’da Ristaldi’nin ülkedeki yaklaşık 7.100 şirket mağazası üç saatliğine kapandı; yaklaşık 135.000 çalışan aynı anda espresso eğitimi aldı. Lisanslı mağazalar açık kaldı.",
+          "Basın satış kaybını 2–4 milyon dolar olarak tahmin etti; Ebersole sonradan kitabında rakamın yaklaşık 6 milyon dolar olduğunu yazdı. Aynı akşam büyük bir çörek zinciri küçük boy latte ve espresso içeceklerini 99 sente sattı.",
+          "Eğitim tek başına yetmedi: 1 Temmuz 2008’de ülkede yaklaşık 600 mağazanın (daha önce duyurulan 100 kadarı dahil) kapanacağı açıklandı, yaklaşık 12.000 pozisyon etkilendi. Ama 2010 mali yılında şirket rekor kırdı: gelir 10,7 milyar dolar oldu, net kâr bir önceki yılın 390,8 milyon dolarından 945,6 milyon dolara çıktı."
+        ]
+      },
+      sources: [
+        { t: "Baristalar kahve yapmayı yeniden öğreniyor", pub: "NPR", year: "2008", lang: "en",
+          url: "https://www.npr.org/2008/02/27/54932288/starbucks-baristas-relearn-art-of-coffee-making" },
+        { t: "Eski CEO yeniden başa dönüyor", pub: "NBC News / AP", year: "2008", lang: "en",
+          url: "https://www.nbcnews.com/id/wbna22544023" },
+        { t: "600 mağaza kapanıyor", pub: "ABC News", year: "2008", lang: "en",
+          url: "https://abcnews.go.com/Business/story?id=5288740" },
+        { t: "CEO’nun kitabından bir bölüm", pub: "NPR / VPM", year: "2011", lang: "en",
+          url: "https://www.vpm.org/npr-news/2011-03-25/excerpt-onward" },
+        { t: "Mağaza kapanışlarının resmî duyurusu", pub: "ABD SEC (8-K)", year: "2008", lang: "en",
+          url: "https://www.sec.gov/Archives/edgar/data/829224/000095013408012236/v41893exv99w1.htm" },
+        { t: "Rakibin 99 sentlik latte kampanyası", pub: "Franchising.com", year: "2008", lang: "en",
+          url: "https://www.franchising.com/news/20080225_dunkin_donuts_invites_coffee_lovers_to_enjoy_latte.html" },
+        { t: "Markanın yeniden doğuşu", pub: "Harvard Business School", year: "2014", lang: "en",
+          url: "https://www.library.hbs.edu/working-knowledge/starbucks-reinvented" }
+      ]
+    },
+    {
+      area: "Gıda güvenliği",
+      place: ["Hindistan", " · Haziran 2015"],
+      company: "Brunnhof · Ramiko",
+      title: "İki dakikalık erişte",
+      body: [
+        "Ramiko, İsviçreli gıda devi Brunnhof’un Hindistan’daki en büyük markası: iki dakikada pişen hazır erişte. Pazarın yaklaşık dörtte üçü onun; bir kuşak bu erişteyle büyüdü.",
+        "Mayıs 2015’te bir eyaletin gıda müfettişleri, numunelerde 2,5 ppm sınırına karşı 17,2 ppm kurşun bulduklarını açıkladı. “MSG eklenmemiştir” yazan paketlerde de MSG bulunduğu söylendi. Eyaletler birbiri ardına satışı yasaklıyor.",
+        "Şirket testlerin yanlış olduğunu, ürünün güvenli olduğunu savunuyor ama yasakların sayısı artıyor. Brunnhof’un Hindistan şirketinin başındasın; 4 Haziran akşamı karar vermen gerekiyor."
+      ],
+      stats: [["Pazar payı", "~%75–80"], ["Kurşun (ölçülen / sınır)", "17,2 / 2,5 ppm"], ["Çeşit", "9"]],
+      ask: "Ramiko’nun Hindistan işinin başındasın. Ne yaparsın?",
+      opts: [
+        { k: "A", t: "Testlere itiraz etmeye devam et, yasak olmayan eyaletlerde satışı sürdür; geri çekmek suçu kabul etmek olur.", s: 20, tag: "kasa",
+          r: "Mayıs boyunca şirketin tutumu buydu ve yavaş bulundu. Her yeni yasak güveni biraz daha aşındırır; satış sürse de her raf yeni bir manşet riski taşır." },
+        { k: "B", t: "Ürünün güvenli olduğunu söylemeye devam ederek tüm ülkede raflardan çek; testlere mahkemede itiraz et.", s: 85, tag: "cerrah",
+          r: "Milyarlarca rupilik ürün imha edilir, pazar payın aylarca sıfıra yakın kalır. Ama tartışma raftan mahkemeye taşınır ve tüketicinin sağlığını riske atmadığını gösterirsin." },
+        { k: "C", t: "Yalnızca yasak getiren eyaletlerde ürünü topla; yetkililerle tam iş birliği yap, yeni testler iste.", s: 45, tag: "kalkan",
+          r: "Ölçülü ve iş birliğine açık görünür. Ama yasaklar yayılırken her eyalette ayrı bir kriz yaşarsın; tüketici de “orada tehlikeliyse burada neden değil?” diye sorar." },
+        { k: "D", t: "Mahkemeyle uğraşma: tarifi değiştir, yeni adla ve yeni ambalajla hızla yeniden piyasaya çık.", s: 30, tag: "kumar",
+          r: "Hızlı görünür ama sorunu kabul etmek gibi okunur; yıllarca biriken marka adını da çöpe atarsın. Düzenleyiciyle hesaplaşma bitmez, yalnızca ertelenir." }
+      ],
+      real: {
+        who: "Laurent Esmond",
+        role: "Brunnhof’un Hindistan şirketinin genel müdürü; kararı merkezle birlikte aldı",
+        k: "B",
+        text: [
+          "4 Haziran gecesi şirket, ürünün güvenli olduğunu yineleyerek erişteyi tüm ülkede raflardan çektiğini açıkladı. Ertesi gün ülkenin gıda düzenleyicisi 9 çeşidin tamamının toplanmasını ve üretimin durdurulmasını emretti; Brunnhof’un küresel CEO’su başkentte basın toplantısı yaptı. Şirketin Haziran’daki tahminine göre maliyet yaklaşık 3,2 milyar rupiydi: 2,1 milyarı mağazalardaki, 1,1 milyarı fabrikalardaki ürün.",
+          "Şirket yasağı mahkemeye taşıdı. 13 Ağustos 2015’te yüksek mahkeme, şirkete adil bir savunma hakkı tanınmadığı ve testlerin akredite olmayan laboratuvarlarda yapıldığı gerekçesiyle yasağı kaldırdı; satışa dönüş üç laboratuvarda yapılacak yeni testlere bağlandı. Bu arada 1 Ağustos’ta Hindistan şirketinin başına yeni bir genel müdür gelmişti.",
+          "Ramiko 9 Kasım 2015’te raflara döndü. Pazar payı yaklaşık beş ay sıfıra yakın kaldı; Mayıs 2016’da yaklaşık %50’ye çıktı, Ağustos 2016’da liderliği geri aldı ve Ekim 2016’da %57’ye ulaştı."
+        ]
+      },
+      sources: [
+        { t: "Erişte “güvensiz ve tehlikeli” ilan edildi", pub: "Al Jazeera", year: "2015", lang: "en",
+          url: "https://www.aljazeera.com/economy/2015/6/5/indian-maggi-instant-noodles-unsafe-and-hazardous" },
+        { t: "Şirket erişteyi raflardan çekiyor", pub: "Fortune / Reuters", year: "2015", lang: "en",
+          url: "https://fortune.com/2015/06/05/nestle-maggi-noodles-india-lead-health-scare-msg/" },
+        { t: "Toplanan ürünün maliyeti", pub: "FoodNavigator", year: "2015", lang: "en",
+          url: "https://www.foodnavigator.com/Article/2015/06/16/Nestle-estimates-cost-of-withdrawn-Maggi-stock/" },
+        { t: "Mahkeme yasağı kaldırdı", pub: "Down To Earth", year: "2015", lang: "en",
+          url: "https://www.downtoearth.org.in/amp/story/food/temporary-relief-for-nestle-india-after-bombay-high-court-sets-aside-maggi-ban-50720" },
+        { t: "Erişte raflara döndü", pub: "Business Standard", year: "2015", lang: "en",
+          url: "https://www.business-standard.com/article/companies/maggi-returns-to-shop-shelves-115110900801_1.html" },
+        { t: "Pazar payında toparlanma", pub: "Business Today", year: "2016", lang: "en",
+          url: "https://www.businesstoday.in/latest/corporate/story/maggi-makes-a-comeback-wins-market-share-on-sustained-recovery-68477-2016-10-20" }
+      ]
+    }
+  ];
+
   // ---------- sayılar ----------
   // date: sayının açıldığı gün (Türkiye saati); ileri tarihli sayılar o gün kendiliğinden açılır
   var ISSUES = [
     { no: "001", date: "2026-10-15", cases: S001 },
     { no: "002", date: "2026-10-16", cases: S002 },
-    { no: "003", date: "2026-10-19", cases: S003 }
+    { no: "003", date: "2026-10-19", cases: S003 },
+    { no: "004", date: "2026-10-26", cases: S004 },
+    { no: "005", date: "2026-11-02", cases: S005 },
+    { no: "006", date: "2026-11-09", cases: S006 }
   ];
   function todayTR() {
     try {
