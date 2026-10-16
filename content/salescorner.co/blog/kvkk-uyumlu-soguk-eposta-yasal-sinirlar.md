@@ -202,3 +202,17 @@ Bu altyapıyı içeride kurmak yerine outbound operasyonunun tamamını dışar�
 KVKK'ya uygun soğuk e-posta, outbound'u yavaşlatan bir engel değildir. Doğru kurgulandığında daha temiz listeler, daha isabetli hedefleme ve daha az şikâyet anlamına gelir. Özetle: Ticari ileti mevzuatı tarafında tacir/esnaf istisnasının sınırlarını bilin ve ret hakkını eksiksiz uygulayın. KVKK tarafında ise hukuki sebebinizi belgeleyin, ilk e-postada aydınlatma yapın, yalnızca gerekli veriyi işleyin, araçlarınızın yurt dışı aktarım durumunu kontrol edin ve saklama sürelerinize uyun.
 
 Bu adımların büyük kısmı, doğru kurulmuş otomasyonlarla insan hatasına bırakılmadan yürütülebilir. Suppression kontrolleri, ret işleme, aydınlatma footer'ları ve periyodik imha bunların başında gelir. Outbound süreçlerinizi hem verimli hem de uyumlu hâle getirmek için [Sales Corner ile bir görüşme planlayın](/iletisim), iş akışınızı birlikte değerlendirelim.
+
+## Sık sorulan sorular
+
+### B2B soğuk e-posta göndermek için önceden onay gerekir mi?
+Tacir ve esnafa gönderilen ticari iletilerde önceden onay şartı aranmaz, ancak alıcının ret hakkı her zaman saklıdır. Bu istisna yalnızca ticari ileti mevzuatıyla ilgilidir; KVKK kapsamındaki yükümlülükler devam eder.
+
+### Kurumsal e-posta adresleri kişisel veri sayılır mı?
+Ad ve soyad içeren kurumsal adresler, örneğin ayse.yilmaz@sirket.com, kişisel veridir. info@ veya satis@ gibi genel adresler ise belirli bir kişiyi tanımlamadıkları sürece genellikle kişisel veri sayılmaz.
+
+### Ret talebi ne kadar sürede işlenmelidir?
+Ret bildirildiğinde gönderim en geç üç iş günü içinde durdurulmalıdır. Kişi tüm dizilerden ve gelecekteki listelerden çıkarılmalı, tekrar e-posta gönderilmemesi için bir suppression listesi tutulmalıdır.
+
+### KVKK kapsamında hangi hukuki sebebe dayanılır?
+Soğuk e-postada genellikle iki hukuki sebep öne çıkar: alenileştirme ve meşru menfaat. Alenileştirmeye yalnızca verinin alenileştirilme amacıyla uyumlu kullanımlarda dayanılabilir; meşru menfaat için ise yazılı ve belgelenmiş bir denge testi yapılmalıdır.

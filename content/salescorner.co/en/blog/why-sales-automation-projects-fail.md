@@ -190,3 +190,17 @@ In some cases, a company's priority is filling the pipeline quickly rather than 
 Most sales automation projects fail not because of technology, but because of vague goals, undefined processes, dirty data, unowned systems, and a team that doesn't buy in. Automation is a powerful multiplier, but it only works when it's built on a solid foundation. Starting with a small, measurable problem, preparing the process and data in advance, involving the team in the design, and assigning an owner to every workflow are what separate successful projects from failed ones.
 
 If you have a half-finished automation project of your own, or you want to start a new one on the right foundation, we can assess your current process together. [Schedule a call with the Sales Corner team](/en/iletisim) to build an automation roadmap tailored to your sales processes.
+
+## FAQ
+
+### Why do sales automation projects fail?
+They usually fail because of design, not the tool: vague goals, undefined processes, dirty data and systems with no owner. Automation is a multiplier; a process that sends 50 wrong emails a week can turn into 2,000 wrong emails once automated.
+
+### What should you do before automating?
+Run the process manually with written rules for at least two to three weeks before automating it. Write down the trigger, owner, expected time and output for each step; a rule that can be applied consistently by hand transfers cleanly to automation.
+
+### How should you start an automation project?
+Start with a single, measurable problem, such as cutting first response time from 2 days to under 4 hours. Measure the baseline first and move forward in 2–4 week phases.
+
+### How do you keep automations from breaking over time?
+Give every workflow an owner, short documentation and error alerts. Run a monthly health check, and tie accounts and API keys to company accounts rather than personal ones.

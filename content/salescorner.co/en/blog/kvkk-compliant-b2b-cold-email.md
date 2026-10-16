@@ -202,3 +202,17 @@ If you'd rather have your entire outbound operation managed externally instead o
 KVKK-compliant cold email isn't an obstacle that slows outbound down. When set up correctly, it means cleaner lists, more precise targeting and fewer complaints. In short: on the commercial message side, know the limits of the merchant/tradesperson exemption and fully honor the right to opt out. On the KVKK side, document your legal basis, provide notice in the first email, process only the data you need, check your tools' cross-border transfer status and stick to your retention periods.
 
 Most of these steps can be run through well-built automations without leaving them to human error. Suppression checks, opt-out handling, privacy notice footers and periodic disposal top the list. To make your outbound processes both efficient and compliant, [schedule a call with Sales Corner](/en/iletisim) and let's review your workflow together.
+
+## FAQ
+
+### Do you need prior consent to send B2B cold email in Turkey?
+No prior consent is required for commercial messages sent to merchants and tradespeople, but the recipient's right to opt out always remains. This exemption only concerns commercial messaging law; obligations under KVKK still apply.
+
+### Are corporate email addresses personal data?
+Corporate addresses that contain a person's name, such as ayse.yilmaz@sirket.com, are personal data. Generic addresses like info@ or sales@ are generally not, as long as they don't identify a specific person.
+
+### How quickly must opt-out requests be processed?
+Sending must stop within three business days of an opt-out. The person should be removed from all sequences and future lists, and a suppression list should be kept so they are never emailed again.
+
+### What legal basis under KVKK applies to cold email?
+Two legal bases usually come into play: data made public by the data subject and legitimate interest. Publicly available data can only be relied on for uses compatible with the purpose for which it was made public, and legitimate interest requires a written, documented balancing test.

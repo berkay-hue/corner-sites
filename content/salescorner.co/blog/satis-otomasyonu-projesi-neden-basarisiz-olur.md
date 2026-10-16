@@ -190,3 +190,17 @@ Bazı durumlarda şirketin önceliği, otomasyon altyapısını sıfırdan kurma
 Satış otomasyonu projelerinin çoğu teknoloji yüzünden değil; belirsiz hedefler, tanımsız süreçler, kirli veri, sahipsiz sistemler ve ekibin benimsememesi yüzünden başarısız olur. Otomasyon güçlü bir çarpandır, ama yalnızca sağlam bir temelin üzerine kurulduğunda işe yarar. Küçük ve ölçülebilir bir problemle başlamak, süreci ve veriyi önceden hazırlamak, ekibi tasarıma dahil etmek ve her iş akışına bir sahip atamak, başarılı ve başarısız projeler arasındaki farkı belirler.
 
 Sizin de yarım kalmış bir otomasyon projeniz varsa ya da yenisine doğru temelle başlamak istiyorsanız, mevcut sürecinizi birlikte değerlendirebiliriz. Satış süreçlerinize uygun bir otomasyon yol haritası çıkarmak için [Sales Corner ekibiyle görüşme planlayın](/iletisim).
+
+## Sık sorulan sorular
+
+### Satış otomasyonu projeleri neden başarısız olur?
+Başarısızlığın nedeni çoğu zaman araç değil, tasarımdır: belirsiz hedefler, tanımlanmamış süreçler, kirli veri ve sahipsiz sistemler. Otomasyon bir çarpandır; haftada 50 yanlış e-posta gönderen bir süreç otomasyonla 2.000 yanlış e-postaya dönüşebilir.
+
+### Otomasyona geçmeden önce ne yapılmalı?
+Süreç otomasyondan önce en az iki-üç hafta boyunca manuel olarak, yazılı kurallarla işletilmelidir. Her adım için tetikleyici, sorumlu, beklenen süre ve çıktı yazılı hâle getirilmelidir; manuel olarak tutarlı uygulanabilen bir kural otomasyona da sorunsuz aktarılır.
+
+### Bir otomasyon projesine nasıl başlanmalı?
+Tek ve ölçülebilir bir problemle başlanmalıdır; örneğin ilk yanıt süresini 2 günden 4 saatin altına indirmek. Başlangıç değeri önceden ölçülmeli ve proje 2–4 haftalık aşamalar hâlinde ilerletilmelidir.
+
+### Otomasyonların zamanla bozulması nasıl önlenir?
+Her akışın bir sahibi, kısa bir dokümantasyonu ve hata bildirimleri olmalıdır. Akışlar aylık sağlık kontrolünden geçirilmeli, hesaplar ve API anahtarları bireysel değil kurumsal hesaplara bağlanmalıdır.

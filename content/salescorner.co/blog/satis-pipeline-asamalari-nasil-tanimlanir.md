@@ -228,3 +228,17 @@ Bu metrikleri aylık olarak temsilci bazında da inceleyin. Bir temsilcinin demo
 Satış pipeline aşamalarını tanımlamak, bir CRM ayarı değil, **satış sürecinizin omurgasını tasarlamaktır**. Her aşamanın alıcı eylemine dayalı giriş ve çıkış kriterleri, net bir sorumlusu, gerçek verilere dayanan bir olasılığı ve maksimum bekleme süresi olmalıdır. İş modelinize göre 5-7 aşamayla başlayın. Outbound SaaS, kurumsal hizmet ve KOBİ satışı için gördüğünüz gibi aşamalar farklılaşabilir, ancak ilkeler aynıdır: doğrulanabilirlik, sadelik ve düzenli gözden geçirme.
 
 Aşamalarınız netleştiğinde, yapay zeka ve otomasyon pipeline'ınızı manuel bir takip listesinden kendi kendini güncelleyen bir sisteme dönüştürebilir. Pipeline yapınızı birlikte değerlendirmek ve ekibinize uygun otomasyon akışlarını konuşmak için [Sales Corner ekibiyle bir görüşme planlayın](/iletisim).
+
+## Sık sorulan sorular
+
+### Satış pipeline'ında kaç aşama olmalı?
+Çoğu B2B ekibi için Kazanıldı ve Kaybedildi hariç 5 ile 7 aşama idealdir. Üçten az aşama yeterli görünürlük sağlamaz, dokuzdan fazlası ise temsilcileri CRM güncellemekten bıktırır.
+
+### İyi tanımlanmış bir pipeline aşamasında neler olmalı?
+Her aşamanın beş bileşeni olmalıdır: giriş kriteri, çıkış kriteri, sorumlu, olasılık ve azami süre. Giriş kriteri, satış temsilcisinin değil alıcının yaptığı bir eyleme dayanmalıdır.
+
+### Satış hunisi ile pipeline arasındaki fark nedir?
+Huni "kaç?" sorusunu, pipeline ise "hangisi, nerede, ne zaman?" sorusunu yanıtlar. Huni hacim üzerinden dönüşüm modelidir; pipeline ise her bir fırsatın operasyonel görünümüdür.
+
+### Aşama olasılıkları nasıl belirlenir?
+Başlangıçta tahmini olasılıklar kullanılır ve bir çeyrek sonra gerçekleşen sonuçlarla karşılaştırılır. Örneğin bir aşamadaki 30 fırsattan 7'si kazanıldıysa gerçek oran %40 değil yaklaşık %23'tür; bu durumda genellikle aşamanın kriterleri sıkılaştırılır.
