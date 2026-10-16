@@ -219,7 +219,9 @@ const RULES = {
     origin: "https://socialmediacorner.co",
     brand: "Social Media Corner",
     fix(html, page) {
-      const R = this, url = R.origin + (page === "/" ? "/" : page);
+      const R = this;
+      // Blog yazıları (TR/EN) build-blog.mjs ile üretilir: başlık ve LD'lerine dokunulmaz
+      if (/^\/(?:en\/)?blog\//.test(page)) return html;
       const setTitle = t => html.replace(/<title>[^<]*<\/title>/, `<title>${t.replace(/&/g, "&amp;").replace(/</g, "&lt;")}</title>`);
       const metas = kind => [new RegExp(`(<meta name="${kind}" content=")([^"]*)(")`), new RegExp(`(<meta property="og:${kind}" content=")([^"]*)(")`), new RegExp(`(<meta name="twitter:${kind}" content=")([^"]*)(")`)];
       // Ana sayfada ikinci H1 -> h2 (aynı sınıflar, görünüm değişmez)
@@ -232,36 +234,18 @@ const RULES = {
       // 160'tan uzun açıklamalar
       for (const re of metas("description")) html = html.replace(re, (m, a, v, b) => v.length > 160 ? a + attr(metaDescription(text(v))) + b : m);
 
-      html = html.replace(/<script type="application\/ld\+json" data-sk-seo>[\s\S]*?<\/script>/g, "");
-      const org = { "@type": "Organization", "@id": R.origin + "/#org", name: R.brand, url: R.origin + "/", logo: R.origin + "/_a/fr/images/HZ5MjnQL4L5dlgs5jDednLyCI0.png" };
-      const ld = [];
-      if (page === "/") ld.push({ "@context": "https://schema.org", "@graph": [org, { "@type": "WebSite", "@id": R.origin + "/#website", url: R.origin + "/", name: R.brand, publisher: { "@id": org["@id"] }, inLanguage: "tr-TR" }] });
-
-      if (page.startsWith("/blog/")) {
-        // Yazı başlığı hero'daki Heading içinde h3 (breakpoint varyantı başına bir kopya, yalnızca biri görünür) -> h1
-        // ("Son Bloglar" gibi bölüm başlıkları da Heading adını taşır: yalnızca ilk başlığın metniyle aynı olanlar)
-        html = html.replace(/(data-framer-name="Heading"[^>]*>)<h1([^>]*)>([\s\S]*?)<\/h1>/g, "$1<h3$2>$3</h3>");
-        const first = html.match(/data-framer-name="Heading"[^>]*><h3[^>]*>([\s\S]*?)<\/h3>/)?.[1];
-        html = html.replace(/(data-framer-name="Heading"[^>]*>)<h3([^>]*)>([\s\S]*?)<\/h3>/g, (m, a, b, c) => c === first ? `${a}<h1${b}>${c}</h1>` : m);
-        const h1 = text(html.match(/<h1[^>]*>([\s\S]*?)<\/h1>/)?.[1] || "");
-        const sfx = ` | ${R.brand}`, head = h1.split(/[:?!]/)[0].trim();
-        const title = [h1 + sfx, h1, head + sfx, head].find(t => t.length <= 60) || metaDescription(h1, 60).replace(/…$/, "");
-        html = setTitle(title);
-        for (const re of metas("title")) html = setMeta(html, re, h1);
-        html = html.replace(/(<meta property="og:type" content=")website(")/, "$1article$2");
-        const AY = ["ocak", "şubat", "mart", "nisan", "mayıs", "haziran", "temmuz", "ağustos", "eylül", "ekim", "kasım", "aralık"];
-        const dm = html.match(/data-framer-name="Published[^"]*"[^>]*><p[^>]*>(\d{1,2}) ([A-Za-zÇĞİÖŞÜçğıöşü]+) (\d{4})<\/p>/);
-        const mi = dm ? AY.indexOf(dm[2].toLocaleLowerCase("tr")) : -1;
-        const date = mi >= 0 ? `${dm[3]}-${String(mi + 1).padStart(2, "0")}-${dm[1].padStart(2, "0")}` : undefined;
-        const image = html.match(/<meta property="og:image" content="([^"]*)"/)?.[1];
-        const desc = text(html.match(/<meta name="description" content="([^"]*)"/)?.[1] || "");
-        ld.push({
-          "@context": "https://schema.org", "@type": "BlogPosting", headline: h1, description: desc, inLanguage: "tr-TR",
-          ...(image && { image }), ...(date && { datePublished: date, dateModified: date }),
-          author: org, publisher: org, mainEntityOfPage: url, url,
-        });
+      // Sayfadaki data-sk-seo LD elle zenginleştirilmiş (#77: founder, parentOrganization, contactPoint): varsa korunur.
+      // Yoksa (taze ayna) aynı @id'lerle aynı graph üretilir; yeniden ayna alındığında #77 geri gitmez
+      if (page === "/" && !html.includes('data-sk-seo>')) {
+        const email = "info@socialmediacorner.co";
+        const org = {
+          "@type": "Organization", "@id": R.origin + "/#org", name: R.brand, url: R.origin + "/", logo: R.origin + "/_a/fr/images/HZ5MjnQL4L5dlgs5jDednLyCI0.png", email,
+          founder: { "@type": "Person", "@id": "https://www.yalcinberkay.com.tr/#person", name: "Berkay Yalçın", url: "https://www.yalcinberkay.com.tr/" },
+          parentOrganization: { "@type": "Organization", name: "SAAS Corner", url: "https://saascorner.co", sameAs: ["https://www.linkedin.com/company/saascorner/", "https://www.instagram.com/saascorner.co/", "https://www.trustpilot.com/review/saascorner.co"] },
+          contactPoint: { "@type": "ContactPoint", contactType: "customer service", email, availableLanguage: ["tr", "en"] },
+        };
+        html = html.replace("</head>", ldTag({ "@context": "https://schema.org", "@graph": [org, { "@type": "WebSite", "@id": R.origin + "/#website", url: R.origin + "/", name: R.brand, publisher: { "@id": org["@id"] }, inLanguage: "tr-TR" }] }) + "</head>");
       }
-      if (ld.length) html = html.replace("</head>", ld.map(ldTag).join("") + "</head>");
       return html;
     },
   },
