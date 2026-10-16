@@ -4,6 +4,8 @@
 //       -> GitHub Action (.github/workflows/blog-deploy.yml) build alıp Pages'e yükler.
 // Secret'lar: ANTHROPIC_API_KEY, PEXELS_API_KEY, GITHUB_TOKEN, (opsiyonel) TELEGRAM_BOT_TOKEN + TELEGRAM_CHAT_ID
 
+import { faqItems } from "../../tools/lib/content.mjs";
+
 const TOPIC_TYPES = "araç karşılaştırması, yapay zeka uygulaması, sektör rehberi, vaka çalışması, trend analizi, süreç anlatımı, sık yapılan hatalar";
 const TOPIC_TYPES_EN = "tool comparison, applied AI, industry guide, case study, trend analysis, process walkthrough, common mistakes";
 
@@ -238,9 +240,18 @@ Kurallar:
 - Yalnızca konu prospecting, B2B iletişim verisi, lead listesi ya da outbound e-posta ile ilgiliyse Apollo.io referans linkini doğal bir metinle EN FAZLA BİR KEZ ver (ör. [Apollo.io](${APOLLO})). Aksi halde hiç anma.
 - Bu listelerde olmayan hiçbir URL'ye link verme.
 - Yalnızca makale metnini döndür.`;
-  let md = await claude(env, cfg.writeModel, prompt, { maxTokens: 16000 });
-  md = md.replace(/^```(?:markdown)?\s*|\s*```$/g, "").replace(/^#\s+.*\n+/, "").trim();
-  if (md.split(/\s+/).length < (en || consumer(cfg) ? 700 : 800)) throw new Error(`Makale çok kısa (${md.split(/\s+/).length} kelime)`);
+  const write = async () => {
+    const md = (await claude(env, cfg.writeModel, prompt, { maxTokens: 16000 }))
+      .replace(/^```(?:markdown)?\s*|\s*```$/g, "").replace(/^#\s+.*\n+/, "").trim();
+    if (md.split(/\s+/).length < (en || consumer(cfg) ? 700 : 800)) throw new Error(`Makale çok kısa (${md.split(/\s+/).length} kelime)`);
+    return md;
+  };
+  // SSS bölümü FAQPage JSON-LD'nin kaynağı (SEO+GEO); eksik gelirse bir kez yeniden yazdır, yine eksikse yayımlama.
+  const minFaq = consumer(cfg) ? 2 : 3;
+  let md = await write();
+  if (faqItems(md).length < minFaq) md = await write();
+  const n = faqItems(md).length;
+  if (n < minFaq) throw new Error(`SSS bölümü eksik (${n} soru, en az ${minFaq})`);
   return cleanLinks(md, cfg, index);
 }
 
