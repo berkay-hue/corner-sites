@@ -51,7 +51,7 @@ Kullanıcı psikolojisi teorilerini uygulamaya koyduktan sonra, bunların işe y
 
 Alt Başlık 4.2: Niteliksel Geri Bildirim ve Sürekli İyileştirme Döngüsü
 
-Sayısal veriler "ne" olduğunu söylerken, niteliksel geri bildirimler "neden" olduğunu açıklar. Kullanıcılarınla doğrudan konuşmak, onların motivasyonlarını, hayal kırıklıklarını ve hedeflerini anlamanın en iyi yoludur. Kullanıcı görüşmeleri, anketler ve kullanılabilirlik testleri gibi yöntemler, rakamların arkasındaki hikayeyi ortaya çıkarır. Özellikle, Net Tavsiye Skoru (NPS) anketleri, kullanıcı sadakatini ölçmek için basit ama güçlü bir yöntemdir. Ancak sadece puanı sormakla kalmamalı, "Bu puanı neden verdiniz?" sorusuyla derinlemesine içgörü toplamalısın. Bain & Company'nin araştırmasına göre, Net Tavsiye Skoru'nda sadece yüzde 5'lik bir artış, şirket krlılığını yüzde 25 ile yüzde 95 arasında artırabiliyor. En önemli adım ise bu geri bildirimleri bir iyileştirme döngüsüne sokmaktır. Kullanıcılardan gelen bir öneriyi hayata geçirdiğinde, bunu onlara mutlaka bildir. "Geri bildiriminiz sayesinde X özelliğini geliştirdik" şeklinde bir e-posta veya uygulama içi mesaj, kullanıcıların dinlendiğini hissetmesini sağlar ve ürünle aralarındaki duygusal bağı güçlendirir. Bu, kullanıcı psikolojisi ve müşteri ilişkileri yönetiminin mükemmel bir birleşimidir.
+Sayısal veriler "ne" olduğunu söylerken, niteliksel geri bildirimler "neden" olduğunu açıklar. Kullanıcılarınla doğrudan konuşmak, onların motivasyonlarını, hayal kırıklıklarını ve hedeflerini anlamanın en iyi yoludur. Kullanıcı görüşmeleri, anketler ve kullanılabilirlik testleri gibi yöntemler, rakamların arkasındaki hikayeyi ortaya çıkarır. Özellikle, Net Tavsiye Skoru (NPS) anketleri, kullanıcı sadakatini ölçmek için basit ama güçlü bir yöntemdir. Ancak sadece puanı sormakla kalmamalı, "Bu puanı neden verdiniz?" sorusuyla derinlemesine içgörü toplamalısın. Bain & Company'nin araştırmasına göre, Net Tavsiye Skoru'nda sadece yüzde 5'lik bir artış, şirket kârlılığını yüzde 25 ile yüzde 95 arasında artırabiliyor. En önemli adım ise bu geri bildirimleri bir iyileştirme döngüsüne sokmaktır. Kullanıcılardan gelen bir öneriyi hayata geçirdiğinde, bunu onlara mutlaka bildir. "Geri bildiriminiz sayesinde X özelliğini geliştirdik" şeklinde bir e-posta veya uygulama içi mesaj, kullanıcıların dinlendiğini hissetmesini sağlar ve ürünle aralarındaki duygusal bağı güçlendirir. Bu, kullanıcı psikolojisi ve müşteri ilişkileri yönetiminin mükemmel bir birleşimidir.
 
 ### Uzman Tavsiyesi
 
@@ -66,3 +66,21 @@ Sayısal veriler "ne" olduğunu söylerken, niteliksel geri bildirimler "neden" 
 ## Sonuç
 
 B2B SaaS'ta başarı, sadece kod satırları veya karmaşık özelliklerle değil, insan davranışını derinlemesine anlamakla elde edilir. Kullanıcı psikolojisi, ürününü bir elektronik tablodaki bir satırdan, kullanıcılarının iş günlerinin vazgeçilmez bir parçasına dönüştüren köprüdür. Müşteri kaybını azaltmak ve sürdürülebilir bir büyüme sağlamak için, kullanıcılarının zihinsel modellerine, motivasyonlarına ve alışkanlık döngülerine odaklanmalısın. Unutma, en iyi ürünler sadece bir sorunu çözmekle kalmaz, aynı zamanda kullanıcılarına kendilerini yetkin, verimli ve başarılı hissettirir. Şimdi kendi ürününü bu gözle analiz etme zamanı: Kullanıcıların için hangi psikolojik kancaları kullanıyorsun ve onların iş hayatında kalıcı bir alışkanlık yaratmak için neler yapabilirsin?
+
+## Sık sorulan sorular
+
+### Kanca Modeli nedir ve hangi adımlardan oluşur?
+
+Kanca Modeli, Nir Eyal'in "Hooked" kitabında popülerleştirdiği ve kullanıcıların bir ürünü nasıl alışkanlık haline getirdiğini açıklayan bir çerçevedir. Model dört adımdan oluşur: kullanıcıyı harekete geçiren tetikleyici, ödül beklentisiyle yapılan basit eylem, öngörülemez olduğu için tekrar gelmeyi teşvik eden değişken ödül ve kullanıcının ürüne zaman, veri veya emek harcadığı yatırım. Asana'da görev bildirimi tetikleyici, görevi tamamlamak eylem, beliren tek boynuzlu at animasyonu ise değişken ödüldür.
+
+### B2B kullanıcı psikolojisi B2C'den nasıl ayrılır?
+
+B2B'de satın alma kararı genellikle mantıksal ve rasyonel bir süreç sonunda verilir ve kararı veren kişi ile ürünü her gün kullanan kişi farklı olabilir. Örneğin bir direktör bütçe ve yatırım getirisine bakarak CRM satın alırken, satış uzmanı yazılımı günlük iş akışındaki verimlilik için kullanır. Bu yüzden B2B SaaS'ta hem karar vericinin mantığına hem de son kullanıcının günlük alışkanlıklarına hitap etmen gerekir.
+
+### Kayıptan kaçınma ilkesi ürün bağlılığını nasıl artırır?
+
+İnsanlar kaybetmenin acısından kazanmanın mutluluğundan daha çok etkilendiği için, ürüne veri giren ve ayarları özelleştiren kullanıcılar bu yatırımı kaybetmek istemez. Tüm fatura geçmişini ve raporlarını barındıran bir muhasebe yazılımı, başka bir araca geçişi zahmetli hale getirdiği için vazgeçilmez olur. Bu bağlılığı kurarken bilişsel yükü düşük tutmak, yani kullanıcıyı adım adım yönlendiren sade bir tasarım sunmak da önemlidir.
+
+### Kullanıcı psikolojisi stratejilerinin işe yarayıp yaramadığını nasıl ölçersin?
+
+Davranışsal analitik araçlarıyla nicel veriyi, kullanıcı görüşmeleri ve anketlerle de niteliksel geri bildirimi birlikte izleyerek ölçersin. Mixpanel, Amplitude veya Heap gibi araçlarla özellik benimseme oranını, görev tamamlama süresini ve DAU/MAU oranını takip edebilirsin. NPS anketlerinde puanın yanında "Bu puanı neden verdiniz?" diye sormak ve gelen önerileri hayata geçirdiğinde kullanıcıya bildirmek, iyileştirme döngüsünü tamamlar.

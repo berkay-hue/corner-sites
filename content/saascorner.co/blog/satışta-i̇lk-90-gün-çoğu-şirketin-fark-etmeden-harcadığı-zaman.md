@@ -7,7 +7,7 @@ image: "/_a/fr/images/rdh04yJHYqbfcb5vboo5TSPVWQ_0d4c0f1a.jpg"
 imageAlt: "Satışta İlk 90 Gün: Çoğu Şirketin Fark Etmeden Harcadığı Zaman"
 ---
 
-**İlk 90 gün neden bu kadar kritik?**
+## İlk 90 gün neden bu kadar kritik?
 
 Çünkü alışkanlıklar bu sürede kurulur.
 
@@ -17,7 +17,7 @@ Yanlış alışkanlıklar yerleştikten sonra değiştirmek çok daha zordur. Ç
 
 Başlangıç her zaman en kolay değişim anıdır. Bu fırsat iyi değerlendirilmezse bedeli ilerleyen aylarda ödenir.
 
-**Birinci ay: Temeli doğru atmak**
+## Birinci ay: Temeli doğru atmak
 
 İlk ayın en büyük tuzağı çok hızlı hareket etme isteğidir.
 
@@ -27,7 +27,7 @@ Birinci ay aslında sorular ayıdır. Kime ulaşılacak, hangi mesajla, hangi ka
 
 Temeli sağlam atan şirketler ikinci ayda çok daha hızlı ilerler.
 
-**İkinci ay: Test etmek ve dinlemek**
+## İkinci ay: Test etmek ve dinlemek
 
 Strateji kağıtta ne kadar mantıklı görünürse görünsün, gerçek piyasada karşılık bulup bulmadığını ancak test ederek anlamak mümkündür.
 
@@ -37,7 +37,7 @@ Bu sorular sadece merak değil, stratejiyi şekillendiren geri bildirimlerdir. D
 
 Test etmeden ilerlemek ise veri üretmeden yürümektir. Ve veri olmadan yapılan her düzeltme başka bir tahmindir.
 
-**Üçüncü ay: Oturmak ve ölçeklenmek**
+## Üçüncü ay: Oturmak ve ölçeklenmek
 
 İlk iki ayda öğrenilenlerin hayata geçirildiği dönemdir.
 
@@ -47,7 +47,7 @@ Hangi mesaj işe yarıyor, o mesaj standart hale getirilir. Hangi kanal daha ver
 
 Ama eğer ilk iki ay deneme yanılmayla geçtiyse üçüncü ay hâlâ temeli aramakla geçer. Ve bu gecikmenin maliyeti hem para hem zamandır.
 
-**Sabırsızlık ilk 90 günü mahveder**
+## Sabırsızlık ilk 90 günü mahveder
 
 Satışta sabırsızlık evrensel bir hastalıktır.
 
@@ -57,7 +57,7 @@ Oysa hiçbir strateji sekiz haftada yeterince test edilemez. Özellikle B2B sat�
 
 Sabırsızlık stratejileri öldürmez. Stratejilerin hayata geçmesini engeller. Ve her değiştirilmiş strateji sıfırdan başlamak anlamına gelir.
 
-**İlk 90 günü harcamamak için ne gerekir?**
+## İlk 90 günü harcamamak için ne gerekir?
 
 Net bir plan ve o plana bağlı kalmak.
 
@@ -65,10 +65,28 @@ Net bir plan ve o plana bağlı kalmak.
 
 Bunun yanında gerçekçi beklentiler de şarttır. İlk 90 günde büyük kapanmalar beklenmez. Öğrenme, test etme ve sistem kurma beklenir. Bu zihniyetle başlayan şirketler dördüncü ayda çok daha güçlü bir noktada olur.
 
-**Zamanın maliyeti görünmez ama gerçektir**
+## Zamanın maliyeti görünmez ama gerçektir
 
 Kaybedilen her ay bir rakama dönüştürülebilir.
 
 Eğer aylık hedef on görüşmeyse ve bu hedefe ulaşmak üç ay yerine altı ay sürüyorsa ortada üç aylık kayıp vardır. Bu kayıp maaş bordrosunda görünmez, gider tablosunda yer almaz. Ama büyüme hızında, pazar payında ve rekabet pozisyonunda hissedilir.
 
 Zamanı doğru kullanmak en ucuz büyüme stratejisidir. Çünkü harcanan zamanın geri dönüşü yoktur.
+
+## Sık sorulan sorular
+
+### Yeni bir satış operasyonunun ilk ayında nelere odaklanılmalı?
+
+İlk ayın en büyük tuzağı hemen e-posta gönderip hemen sonuç bekleme isteğidir. Bu dönem aslında kime, hangi mesajla, hangi kanaldan ve hangi sırayla ulaşılacağı sorularının cevaplandığı bir sorular ayıdır. Araştırma, pazar analizi ve rakip incelemesiyle sağlam atılan temel, sonraki aylarda çok daha hızlı ilerlemeyi sağlar.
+
+### Satış stratejisini test ederken nelere bakılmalı?
+
+Mesajlar gönderilip yanıtlar izlendikçe hangi konu satırının daha fazla açıldığına, hangi sektörden daha hızlı yanıt geldiğine ve hangi itirazın tekrar tekrar çıktığına bakılmalıdır. Bu sorular stratejiyi şekillendiren geri bildirimlerdir. Test etmeden ilerlemek veri üretmeden yürümek demektir ve veri olmadan yapılan her düzeltme yalnızca başka bir tahmindir.
+
+### Satış stratejisini çok sık değiştirmenin zararı nedir?
+
+Sabırsızlıkla birkaç hafta içinde strateji değiştirmek, hiçbir yaklaşımın yeterince test edilmesine izin vermez. Özellikle B2B satışta karar döngüleri uzundur ve güven inşası zaman alır. Her değiştirilen strateji sıfırdan başlamak anlamına geldiği için sabırsızlık stratejilerin hayata geçmesini engeller.
+
+### İlk 90 günlük satış planında neler yer almalı?
+
+Planda kime ulaşılacağı, hangi mesajla, hangi araçlarla, hangi sırayla ulaşılacağı ve başarının nasıl ölçüleceği net olmalıdır. Bu cevaplar baştan netleşmezse ilk 90 gün onları aramakla geçer. Ayrıca bu dönemde büyük kapanmalar değil, öğrenme, test etme ve sistem kurma beklenmelidir.

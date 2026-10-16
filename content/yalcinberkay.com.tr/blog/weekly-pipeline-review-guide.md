@@ -2,10 +2,13 @@
 title: "How to Run a Weekly Pipeline Review That Works"
 description: "A walkthrough for running a weekly B2B pipeline review, covering the agenda, the metrics that matter, and the mistakes that waste your team's time."
 date: "2026-10-12"
+updated: "2026-10-16"
 category: "B2B Sales"
 image: "https://images.pexels.com/photos/8424512/pexels-photo-8424512.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
-imageAlt: "How to Run a Weekly Pipeline Review That Works"
+imageAlt: "Team meeting at a conference table with a bar chart on the screen behind them"
 ---
+
+A weekly pipeline review works when it changes what people do next week. It needs clear stage definitions, a CRM updated before the meeting, a tight agenda, evidence-based questions and written commitments that carry into the following week. Keep it separate from your forecast call and deal coaching, and give the most airtime to the deals that matter most.
 
 Most sales teams hold a weekly pipeline review. Few get much out of it. The usual version is a status meeting: reps read deal names from the CRM, the manager nods, someone says "they're very interested," and everyone leaves knowing roughly what they knew an hour earlier. The forecast slips anyway. The same deals sit in "Proposal Sent" for six weeks. Reps start treating the meeting as an interrogation to survive.
 
@@ -185,3 +188,21 @@ I've also found that AI tools now help with preparation: summarizing call notes,
 A weekly pipeline review that works isn't complicated. It needs clear stage definitions, a CRM that's updated before the meeting, a tight agenda, evidence-based questions, and written commitments that carry into the following week. Separate it from your forecast call and your deal coaching. Give the most airtime to the deals and problems that matter most. Make it safe to close dead deals. Over a few months, you'll find your forecast gets more accurate, your reps get sharper, and the meeting becomes something people value rather than endure.
 
 If you're building or rebuilding a sales process and want to compare notes on pipeline management, outbound, or scaling a B2B team, I'd be glad to hear from you. You can reach me through [my personal site](/).
+
+## FAQ
+
+### How long should a weekly pipeline review meeting be?
+
+For a team of four to eight reps, 60 minutes is enough if you stay disciplined. Larger teams should split into pods or run 1:1 reviews plus a shorter team session. A founder selling alone or with one or two reps can compress it into 30 minutes every Friday using the same questions.
+
+### How much pipeline coverage does a B2B sales team need?
+
+Many teams use roughly 3x coverage as a rule of thumb, but the right multiple depends on your historical win rate. With a win rate of around one in three, a €300,000 quarterly target needs about €900,000 in qualified pipeline. With a win rate around 30%, you need closer to 3.3x coverage against what's left of the target.
+
+### What is the difference between a pipeline review and a forecast call?
+
+A pipeline review looks at the whole funnel, including early-stage health and coverage for next quarter, while a forecast call looks only at late-stage deals and what will close this month or quarter. Deal coaching is a third, separate conversation that goes deep on one specific opportunity. Keeping the three apart makes each meeting shorter and sharper.
+
+### When should a sales rep close a deal as lost?
+
+A deal with no meaningful buyer activity in 21 or more days should either get a specific re-engagement plan or be closed as lost. A close date pushed twice is a pattern, and three pushes usually means the deal isn't real in this timeframe. Reps should be able to close deals as lost without penalty, because a smaller, honest pipeline is worth far more than a bloated one.

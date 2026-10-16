@@ -2,10 +2,13 @@
 title: "Satış Temsilcisi Mülakatında Sorulması Gereken 10 Soru"
 description: "Satış temsilcisi mülakatında adayın prospecting, itiraz yönetimi ve CRM disiplinini ölçen soruları ve iyi cevapların ayırt edici işaretlerini anlatıyoruz."
 date: "2026-10-15"
+updated: "2026-10-16"
 category: "Kariyer"
 image: "https://images.pexels.com/photos/5439379/pexels-photo-5439379.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
-imageAlt: "Satış Temsilcisi Mülakatında Sorulması Gereken 10 Soru"
+imageAlt: "Masada özgeçmiş tutan görüşmeciyle konuşan bir aday"
 ---
+
+Satış temsilcisi mülakatı, adayın ne kadar iyi konuştuğunu değil, ne kadar iyi satış yapabileceğini ölçmelidir. Bu yüzden sorular geçmiş performansı, günlük disiplini, discovery ve itiraz yönetimini, CRM alışkanlıklarını, yazılı iletişimi, koçluk alınabilirliği ve motivasyonu sınamalı. Neyi ölçtüğünüzü önceden belirleyin, cevapları puanlayın ve kararı hislere değil verilere dayandırın.
 
 Satış temsilcisi işe alımı, bir satış liderinin verdiği en pahalı kararlardan biridir. Yanlış kişiyi işe aldığınızda kaybettiğiniz şey yalnızca maaş değildir. Onboarding'e ayırdığınız haftalar, bu sürede temas edilemeyen potansiyel müşteriler, yanlış konumlandırılmış ilk görüşmeler ve ekibin geri kalanının motivasyonu da bu kayba dahildir. B2B'de satış döngüsü zaten uzun olduğu için yanlış bir işe alımın etkisini çoğu zaman ancak 4-6 ay sonra fark edersiniz. O noktada da hem zaman hem fırsat gitmiştir.
 
@@ -246,3 +249,21 @@ Satış temsilcisi mülakatı, adayın ne kadar iyi konuştuğunu değil, ne kad
 Unutmayın: En iyi satışçılar her soruya mükemmel cevap verenler değil, hatalarını açıkça kabul eden, geri bildirimi hızla uygulayan ve her gün aynı disiplinle sahaya çıkanlardır. Mülakat sürecinizi bu özellikleri ortaya çıkaracak şekilde kurarsanız, yanlış işe alım riskini ciddi şekilde azaltırsınız.
 
 Satış ekibinizi kurarken işe alım sürecinizi yapılandırmak ya da mülakat çerçevenizi birlikte gözden geçirmek isterseniz, [Berkay Yalçın](/tr) sayfası üzerinden benimle iletişime geçebilirsiniz.
+
+## Sık sorulan sorular
+
+### Satış temsilcisi mülakatında hangi yetkinlikler değerlendirilmeli?
+
+Mülakattan önce disiplin, merak ve keşif becerisi, dayanıklılık, koçluğa açıklık ve iletişim gibi 4-5 temel yetkinlik belirlenmelidir. Her mülakatçı bu yetkinlikleri 1-4 arası bir ölçekle ve diğerlerinden bağımsız olarak puanlamalıdır. Kritik bir yetkinlikte 1 alan aday elenir; koçluğa açıklık ve disiplinin en az 3, diğer yetkinliklerin ortalamasının da 3 veya üzeri olması beklenir.
+
+### Satış temsilcisi mülakat süreci ne kadar sürmeli?
+
+Tüm süreç toplamda 2-3 hafta içinde tamamlanmalıdır; 6 haftaya uzayan süreçlerde adaylar kaybedilir. Bunun için 20-30 dakikalık bir ön görüşme, 45-60 dakikalık bir yetkinlik mülakatı, 45 dakikalık bir pratik aşama ve 15 dakikalık bir referans kontrolünden oluşan bir yapı yeterlidir.
+
+### Mülakatta adayın koçluğa açık olup olmadığı nasıl anlaşılır?
+
+Bunu anlamanın en iyi yolu, rol çalışmasından sonra adaya tek bir net geri bildirim verip kısa bir tekrar istemektir. Adayın bu geri bildirimi ikinci denemede ne kadar uyguladığı, koçluğa açıklığı hakkında geçmişe dair anlattıklarından daha fazlasını gösterir. Rol çalışmasında zayıf kalan alanlar da aday işe alınırsa ilk 90 günlük gelişim planına aktarılabilir.
+
+### Satış deneyimi olmayan bir aday işe alınabilir mi?
+
+Evet, farklı geçmişlerden gelen adaylara açık olmak önerilir. Mühendislikten, öğretmenlikten ya da hizmet sektöründen satışa bilinçli bir geçiş yapan insanlar çoğu zaman en motive ve en yapılandırılmış satışçılar olur. Doğru motivasyon çoğu zaman sektör deneyiminden daha belirleyicidir ve "neden satış, neden şimdi, neden biz" sorusu bu motivasyonu anlamaya yardımcı olur.

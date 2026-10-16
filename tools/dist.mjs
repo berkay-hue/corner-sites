@@ -3,6 +3,7 @@
 // Pages build komutu: node tools/build-blog.mjs build <host> (blogu olan sitelerde) && node tools/dist.mjs <host>
 import { cp, readFile, writeFile, access, mkdir, readdir } from "node:fs/promises";
 import { join, basename, relative } from "node:path";
+import CONFIG from "./blog.config.mjs";
 
 const host = process.argv[2];
 const root = join(import.meta.dirname, "..");
@@ -71,9 +72,29 @@ if (!(await has(join(OUT, "sitemap.xml")))) {
   }
   await writeFile(join(OUT, "sitemap.xml"), xml);
 }
+// lastmod yalnızca içerik değişikliğinden gelir: yazıda BlogPosting dateModified, blog listesinde en yeni yazı,
+// statik sayfada elle tutulan _orig-sitemap değeri. Başka kaynaklı lastmod (araç commit'i, dosya tarihi) silinir.
+{
+  const ld = h => [...h.matchAll(/<script type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g)].flatMap(m => { try { const j = JSON.parse(m[1]); return Array.isArray(j) ? j : j["@graph"] || [j]; } catch { return []; } });
+  const origLm = new Set([...orig.matchAll(/<url>([\s\S]*?)<\/url>/g)].map(m => `${m[1].match(/<loc>([^<]+)/)?.[1].trim()} ${m[1].match(/<lastmod>([^<]+)/)?.[1].trim()}`));
+  let xml = await readFile(join(OUT, "sitemap.xml"), "utf8");
+  const fixed = [];
+  for (const b of xml.match(/<url>[\s\S]*?<\/url>/g) || []) {
+    const lm = b.match(/<lastmod>([^<]+)<\/lastmod>/)?.[1].trim(), loc = b.match(/<loc>([^<]+)/)[1].trim();
+    const p = decodeURI(new URL(loc).pathname).replace(/^\/|\/$/g, "");
+    if (!lm || origLm.has(`${loc} ${lm}`) || /^(?:(?:tr|en)\/)?blog$/.test(p)) continue;
+    const f = (await has(join(OUT, p + ".html"))) ? join(OUT, p + ".html") : join(OUT, p, "index.html");
+    const mod = ld(await readFile(f, "utf8").catch(() => "")).find(n => n["@type"] === "BlogPosting")?.dateModified;
+    if (mod === lm) continue;
+    xml = xml.replace(b, b.replace(/<lastmod>[^<]*<\/lastmod>/, mod ? `<lastmod>${mod}</lastmod>` : ""));
+    fixed.push(`/${p}: ${lm} -> ${mod || "yok"}`);
+  }
+  if (fixed.length) { console.log("lastmod düzeltildi:", fixed); await writeFile(join(OUT, "sitemap.xml"), xml); }
+}
 // llms.txt (llmstxt.org): yapay zekâ aramaları için site özeti, sitemap'teki sayfalardan üretilir
 const NAMES = { "yalcinberkay.com.tr": "Berkay Yalçın", "wishceo.com": "WishCEO" };
-const EN = /<html[^>]*\slang="en/i.test(index);
+// Dil blog.config'ten; blogu olmayan sitede html lang
+const EN = (CONFIG[host]?.lang || index.match(/<html[^>]*\slang="([^"]*)"/i)?.[1] || "").startsWith("en");
 const SECTIONS = EN ? { blog: "Blog", industries: "Industries", solutions: "Solutions", tr: "Türkçe" }
   : { blog: "Blog", "bilgi-merkezi": "Bilgi Merkezi", solutions: "Çözümler", sektor: "Sektörler", "aydinlatma-metni": "Yasal", en: "English" };
 const PAGES = EN ? "Pages" : "Sayfalar";
@@ -92,8 +113,8 @@ for (const loc of [...(await readFile(join(OUT, "sitemap.xml"), "utf8")).matchAl
   // Marka ön/son ekleri atılır: "Berkay YALÇIN | X", "X - Corner Group | Satış & Otomasyon", "X | SAAS Corner Blog"
   const title = meta(html, /<title>([^<]*)/).replace(BRAND_PRE, "").replace(BRAND_SUF, "").trim() || p;
   const desc = meta(html, /<meta name="description" content="([^"]*)"/);
-  // Dil kök sayfası (/en/, /tr/) da kendi dil bölümüne girer
-  const seg = p.includes("/") || /^(tr|en)$/.test(p) ? p.split("/")[0] : "";
+  // Blog listesi ve yazılar (dil önekliler dahil) tek Blog bölümünde; dil kök sayfası (/en/, /tr/) kendi dil bölümüne girer
+  const seg = /^(?:(?:tr|en)\/)?blog(?:\/|$)/.test(p) ? "blog" : p.includes("/") || /^(tr|en)$/.test(p) ? p.split("/")[0] : "";
   const key = SECTIONS[seg] || (seg ? seg[0].toUpperCase() + seg.slice(1) : PAGES);
   if (!groups.has(key)) groups.set(key, []);
   groups.get(key).push(`- [${title.replace(/[[\]]/g, "")}](${loc})${desc ? ": " + desc : ""}`);

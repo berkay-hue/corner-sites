@@ -66,3 +66,21 @@ B2B SaaS dünyasının en bilinen başarı hikayelerinden biri olan Slack, büy�
 ## Sonuç
 
 B2B SaaS'ta başarılı bir ürün yol haritası oluşturmak, falcılık yapmak veya en yüksek sesle bağıran müşteriyi dinlemek değildir. Başarının anahtarı, sistematik olarak toplanan ve objektif olarak analiz edilen verilerde yatar. CRM sistemin, bu sürecin kalbidir. Satış görüşmelerinden destek taleplerine kadar her müşteri etkileşimi, yol haritanı aydınlatacak değerli bir ipucu barındırır. CRM ve ürün yol haritası arasındaki bu güçlü bağı kurarak, kaynaklarını doğru yere yönlendirir, müşteri memnuniyetini artırır ve rakiplerinin bir adım önüne geçersin. Artık CRM'ine sadece bir satış aracı olarak bakmayı bırak. Bugün, onu ürün stratejinin merkezi haline getirmek için ilk adımı at ve içinde yatan veri hazinesini keşfetmeye başla.
+
+## Sık sorulan sorular
+
+### Kaybedilen satış fırsatları ürün yol haritasına nasıl yön verir?
+
+Satış ekibi, potansiyel müşterilerin neden seni seçmediğini ilk ağızdan öğrenir ve bu bilgiler genellikle CRM'deki notlarda veya "kaybetme nedeni" alanlarında saklanır. Kaybedilen anlaşmaların önemli bir kısmı bir rakipteki belirli bir özellik yüzünden kaçırılıyorsa, o özellik yol haritan için acil bir öncelik haline gelmelidir. Kazanılan anlaşmaları analiz etmek de hangi özelliklerinin en güçlü satış argümanı olduğunu ortaya çıkarır.
+
+### Özellik istekleri arasında öncelik nasıl belirlenir?
+
+Bunun için etki ve sıklık analizini kullanabilirsin: sıklık, bir özelliği kaç farklı müşterinin istediğini; etki ise o özelliğin getireceği potansiyel geliri veya stratejik değeri gösterir. Çok sayıda küçük müşterinin istediği bir özellik ilk bakışta önemli görünse de, az sayıda büyük kurumsal müşterinin istediği bir özellik daha yüksek gelir potansiyeli taşıyabilir. CRM'de şirket büyüklüğü ve anlaşma değeri gibi verileri özellik talepleriyle birleştiren raporlar bu analizi kolaylaştırır.
+
+### CRM'i Jira gibi proje yönetimi araçlarıyla entegre etmenin faydası nedir?
+
+Entegrasyon sayesinde bir satış temsilcisi CRM'de bir fırsata özellik isteği etiketi eklediğinde, Jira'da otomatik olarak bir görev kartı oluşturulabilir. Bu kart müşterinin adı, şirket büyüklüğü ve potansiyel anlaşma değeri gibi CRM verileriyle birlikte ürün ekibinin önüne düşer. Böylece veri akışı hızlanır, insan hatası azalır ve ürün yöneticileri zamanlarını veri toplamak yerine analize ayırabilir.
+
+### Satış, pazarlama ve müşteri başarısı ekipleri yol haritası sürecine nasıl katkı sağlar?
+
+Satış ekibi görüşmelerde duyduğu özellik taleplerini CRM'deki kişi veya fırsat kartına etiketleyerek bilginin kaybolmasını önler. Pazarlama ekibi bu verileri yeni özelliklerin lansman kampanyalarını doğru kitleye göre şekillendirmek için kullanır. Müşteri başarısı ekibi ise kullanıcıların zorlandığı noktaları CRM'e kaydederek ürün ekibinin öncelik listesini doğrudan etkiler ve sürekli bir geri bildirim döngüsü oluşturur.

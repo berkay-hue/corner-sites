@@ -78,3 +78,21 @@ Dört. Başarıyı ölçmek için net anahtar performans göstergeleri (KPI) bel
 ## Sonuç
 
 Günümüz rekabetçi B2B SaaS pazarında, kanal satışları artık bir yan gelir kapısı değil, büyümenin ana motorlarından biridir. Ancak bu motorun verimli çalışması, doğru yağlama ve senkronizasyon gerektirir. CRM ve PRM entegrasyonu, işte bu senkronizasyonu sağlayan, modern kanal satış stratejisinin vazgeçilmez bir parçasıdır. Bu entegrasyon, bir teknoloji projesinden çok daha fazlasıdır; veri silolarını yıkan, ekipler arası iş birliğini artıran, şeffaflık yaratan ve hem iş ortağı hem de müşteri deneyimini kökten iyileştiren bir iş dönüşümüdür. Artık ertelemeyi bırak. Mevcut sistemlerini ve süreçlerini bugün değerlendir, hedeflerini netleştir ve B2B SaaS şirketini geleceğe taşımak için CRM ve PRM entegrasyonu yolculuğuna ilk adımı at.
+
+## Sık sorulan sorular
+
+### Entegrasyon kanal çatışmasını nasıl önler?
+
+Entegrasyon, iş ortağının kaydettiği potansiyel müşteriyi CRM'de o iş ortağına kilitleyerek kanal çatışmasını önlemeye yardımcı olur. Bu kilit, belirli bir süre boyunca doğrudan satış ekibinin aynı müşteriyle temas kurmasını engeller. Böylece satış temsilcisinin, bir iş ortağının uzun süredir ilgilendiği şirkete soğuk arama yapması gibi durumlar azalır. Bu şeffaflık adil bir oyun alanı yaratır ve iş ortağının güvenini korur.
+
+### İş ortakları entegre sistemden nasıl fayda sağlar?
+
+İş ortakları, kendi getirdikleri fırsatların durumunu gerçek zamanlı olarak görebildikleri için fayda sağlar. PRM portalı üzerinden fırsatın CRM'de hangi aşamada olduğunu, ne zaman kapanmasının beklendiğini ve tahmini komisyonlarını takip edebilirler. Bu şeffaflık, sürekli durum sorma ihtiyacını azaltır ve iş ortağına güven verir. Güçlü teknolojik destek alan iş ortakları daha sadık ve verimli birer satış gücüne dönüşebilir.
+
+### CRM ve PRM arasında veri senkronizasyon kuralları nasıl belirlenmeli?
+
+Önce iki sistem arasında hangi veri alanlarının paylaşılacağına karar vermelisin. Potansiyel müşteri bilgileri, şirket adı, iletişim kişisi, fırsat büyüklüğü ve satış aşaması genellikle ilk senkronize edilen alanlardır. Ardından tek doğru kaynak ilkesini belirlemelisin. Genellikle müşteri verileri için CRM, iş ortağı verileri için ise PRM ana kaynak olur. Gerçek zamanlı senkronizasyon ideal olsa da sistem performansını etkileyebileceği için saatlik veya günlük senkronizasyon da tercih edilebilir.
+
+### Yerel entegrasyon mu yoksa API tabanlı entegrasyon mu seçilmeli?
+
+Seçim, şirketinin teknik kapasitesine, bütçene ve büyüme hedeflerine bağlıdır. Yerel entegrasyonlar kurulumu daha hızlı ve kolay hale getirir. API tabanlı özel entegrasyonlar daha fazla esneklik ve özelleştirme imkanı sunar ancak daha fazla teknik kaynak gerektirir. Bazı durumlarda üçüncü parti bir ara katman yazılımı da kullanılabilir. Önemli olan, seçtiğin çözümün veri akışını sorunsuz, güvenli ve ölçeklenebilir şekilde sağlamasıdır.

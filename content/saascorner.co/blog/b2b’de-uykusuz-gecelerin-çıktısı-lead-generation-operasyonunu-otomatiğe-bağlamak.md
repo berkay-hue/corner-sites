@@ -33,3 +33,21 @@ SAAS Corner olarak sunduğumuz bu yapı, bir "cool feature" koleksiyonu değil; 
 Üretmek, sadece satmaktan daha iyi hissettirdi. Satış operasyonunuzu bir "istihbarat merkezi"ne dönüştürmek ve bu 8 modülün saha sonuçlarını görmek için hazırladığımız proje sunumunu mutlaka inceleyin.
 
 ** Detayları konuşmak için bir mesaj uzağınızdayım. 👇**
+
+## Sık sorulan sorular
+
+### Lead generation sürecindeki asıl sorun nedir?
+
+Asıl sorun adayı bulmak değil, o adayı bulana kadar geçen manuel hantallıktır. Saatlerce araştırma yapıp sonunda yanlış kapıyı çalmak satışçı için büyük bir zaman kaybıdır. İnsan hatasından kaynaklanan yanlış veriler ve gözden kaçan fırsatlar da vakit ve motivasyon kaybettirebilir. Bu nedenle SAAS Corner, lead generation operasyonunu otonom modüllere devretti.
+
+### Hedef şirketin teknoloji yığınını tespit etmek neden önemlidir?
+
+Sadece gerçekten ihtiyacı olan nitelikli adayları belirlemeye yardımcı olduğu için önemlidir. Keyword Scanner modülü hedef şirketlerin web sitelerini tarayarak hangi teknolojileri kullandıklarını hızla tespit eder. Böylece ürününüze uygun olmayan şirketlere vakit harcama riski azalır. Satış ekibi enerjisini doğru kontaklara yönlendirebilir.
+
+### Potansiyel müşterinin satın alma niyeti nasıl erken yakalanır?
+
+Web sitelerindeki kritik değişimleri izleyerek erken yakalanabilir. Keyword HTML modülü bu değişimleri takip ederek satın alma niyetini henüz oluşma aşamasında fark etmeyi hedefler. Böylece sadece kime değil, ne zaman ulaşmanız gerektiğini de bilirsiniz. Doğru zamanlama, ilk temasın daha anlamlı olmasına katkı sağlar.
+
+### Kişiselleştirilmiş mesaj dizileri neden kullanılmalı?
+
+Spam algısını kırıp profesyonel bir otorite inşa etmeye yardımcı oldukları için kullanılmalıdır. Lead generation sadece bir e-posta göndermek değil, o e-postanın arkasındaki güveni inşa etmektir. Sekans Yazarı ve LinkedIn Creator modülleri, hedef kitleyle en aktif olduğu anlarda insan dokunuşuna yakın metinlerle etkileşime geçer. Bu yaklaşım soğuk temasların daha doğal karşılanmasını sağlayabilir.

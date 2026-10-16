@@ -68,3 +68,21 @@ Beş. Müşteriye sunduğun seçenekleri basitleştir. Özellikle teklif aşamas
 ## Sonuç
 
 B2B SaaS satışı, rakamlar ve özelliklerden çok daha fazlasıdır; temelinde insandan insana bir etkileşimdir. Müşteri adaylarının karar alma süreçleri, mantıksal analizler kadar, hatta bazen daha fazla, psikolojik eğilimler ve bilişsel yanılgılar tarafından şekillendirilir. B2B SaaS satışta davranışsal ekonomi ilkelerini anlamak ve uygulamak, sana rakiplerinin sahip olmadığı bir avantaj sağlar. Çıpalama, kayıptan kaçınma, sosyal kanıt ve çerçeveleme gibi kavramları stratejine entegre ederek, tekliflerini daha ikna edici hale getirebilir, satış döngülerini kısaltabilir ve daha güçlü müşteri ilişkileri kurabilirsin. Artık B2B alıcısını sadece bir unvan veya bir şirket olarak değil, kendi korkuları, hedefleri ve psikolojisi olan bir insan olarak görmenin zamanı geldi. Bu bilimsel kanıtlara dayalı ilkeleri bugün satış yaklaşımına dahil etmeye başla ve sonuçları kendin gör.
+
+## Sık sorulan sorular
+
+### B2B alıcıları tamamen rasyonel karar verir mi?
+
+Hayır; teknik özellikleri, fiyatı ve entegrasyonları incelerler ama kararı verenler kariyerini ve itibarını düşünen insanlardır. Alıcı çözümün şirkete faydası kadar bu kararın kendi kariyerine nasıl yansıyacağını ve ne kadar risk aldığını da tartar. Bu yüzden satış sürecinde ürünün mantıksal faydalarının yanında alıcının kişisel kaygılarını da ele alman gerekir.
+
+### Kayıptan kaçınma ilkesi ücretsiz denemenin sonunda nasıl kullanılır?
+
+Deneme süresi biten kullanıcıya kazanacaklarından çok kaybedeceklerini hatırlatan bir mesaj göndererek kullanılır. Örneğin abonelik çağrısı yerine yarın hangi özelliklere erişiminin kapanacağını vurgulayabilirsin. Bu mesaj kullanıcının deneme süresince iş akışına kattığı özellikleri kaybetme kaygısını harekete geçirir.
+
+### Çerçeveleme etkisi fiyat algısını nasıl değiştirir?
+
+Aynı bilgiyi farklı bir dille sunmak algılanan maliyeti düşürebilir. Yıllık bir abonelik ücretini aylık ya da günlük bir tutar olarak göstermek ilk bakıştaki yüksek fiyat izlenimini azaltır. Yatırımın geri dönüşünü anlatırken de olumlu ya da kayıp odaklı bir çerçeve seçmek alıcının tepkisini etkiler.
+
+### Statüko yanlılığı müşteri kaybını azaltmaya nasıl yardımcı olur?
+
+İnsanlar mevcut durumlarını değiştirmekten kaçındığı için geçişin zorluklarını hatırlatmak müşteriyi tutmana yardımcı olabilir. Müşterin rakipten daha ucuz bir teklif aldığında yalnızca fiyata odaklanma. Personeli yeniden eğitme zamanı, verileri taşımanın karmaşıklığı ve iş akışlarının bozulma riski gibi gizli maliyetleri anlat. Müşterinin ürününle zaten elde ettiği değeri ve kurduğu entegrasyonları da vurgula.

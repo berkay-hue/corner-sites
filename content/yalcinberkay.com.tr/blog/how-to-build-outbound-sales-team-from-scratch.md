@@ -2,15 +2,18 @@
 title: "How to Build an Outbound Sales Team from Scratch"
 description: "A practical walkthrough for B2B founders on hiring, structuring, and ramping an outbound sales team, with roles, metrics, and early mistakes to avoid."
 date: "2026-10-10"
+updated: "2026-10-16"
 category: "Sales Leadership"
 image: "https://images.pexels.com/photos/7693103/pexels-photo-7693103.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
-imageAlt: "How to Build an Outbound Sales Team from Scratch"
+imageAlt: "How to build an outbound sales team – cover image"
 alt: "sifirdan-outbound-satis-ekibi-kurmak"
 ---
 
+To build an outbound sales team from scratch, validate outbound yourself for 6 to 8 weeks before hiring, then define a narrow ICP a rep can apply in 30 seconds. Hire two coachable, resilient reps at once, give them clean data, a lean tool stack and a 30-60-90 day plan, and base targets on capacity math.
+
 Most companies don't fail at outbound because the idea is wrong. They fail because they hire two reps, hand them a laptop and a vague target list, and expect pipeline to appear within a month. When it doesn't, leadership decides that "outbound doesn't work for us." I've seen this pattern many times, and I've made versions of the same mistake myself while building sales teams across Corner Group.
 
-Building an outbound sales team from scratch is less about hiring talented people and more about creating a system those people can succeed inside. That system includes a clear ideal customer profile, a tested message, clean data, a repeatable process, realistic capacity math, and a manager who coaches every week. This article walks through how I approach it step by step, with the numbers and decisions that matter most in the first six to twelve months.
+Building an outbound sales team from scratch is less about hiring talented people and more about creating a system those people can succeed inside. That system includes a clear ideal customer profile, a tested message, clean data, a repeatable process, realistic capacity math, and a manager who coaches every week and runs a [weekly pipeline review](/blog/weekly-pipeline-review-guide). This article walks through how I approach it step by step, with the numbers and decisions that matter most in the first six to twelve months.
 
 ## Key Takeaways
 
@@ -22,7 +25,7 @@ Building an outbound sales team from scratch is less about hiring talented peopl
 
 ## Step 1: Prove Outbound Works Before You Hire Anyone
 
-The most expensive way to learn whether outbound works for your business is to hire a team and find out. The cheapest way is for a founder or senior seller to run it personally for 6 to 8 weeks.
+The most expensive way to learn whether outbound works for your business is to hire a team and find out. The cheapest way is for a founder or senior seller to run it personally for 6 to 8 weeks (more on timing in [when a founder should hire the first sales rep](/blog/when-should-founder-hire-first-sales-rep)).
 
 Before your first hire, you should be able to answer these questions from real experience rather than assumptions:
 
@@ -230,3 +233,21 @@ Building an outbound sales team from scratch comes down to sequencing the right 
 None of this is glamorous, but it compounds. A team built this way gets better every quarter, because every call, reply and lost deal feeds back into the system.
 
 If you're building your first outbound team, or rebuilding one that hasn't delivered, I'm always happy to compare notes. Feel free to reach out through [my homepage](/) and tell me where you are in the process.
+
+## FAQ
+
+### How long should a founder test outbound before hiring the first sales rep?
+
+A founder or senior seller should run outbound personally for 6 to 8 weeks before hiring anyone. A simple test is to pick 200 accounts in one segment, identify 2 to 3 decision-makers per account, and run a three-week sequence combining email, LinkedIn and phone. If that produces a handful of real conversations and at least one or two opportunities, you have a signal worth scaling.
+
+### Should I hire one or two outbound sales reps first?
+
+Hire two reps at the same time rather than one. With a single rep, you can never tell whether a bad month comes from the person, the territory or the process. With two, you have a comparison point and avoid drawing conclusions from one person's results.
+
+### When should an outbound team split into SDR and AE roles?
+
+Introduce the SDR/AE split only when the data shows reps are spending too much time prospecting and not enough time closing, or the other way around. Full-cycle reps work well when deal sizes are moderate, sales cycles are short and you have fewer than four or five sellers. When you do split, a common starting ratio is one SDR supporting two AEs, depending on how many meetings each AE can handle per week.
+
+### How many outbound reps do I need to hit a revenue target?
+
+Work backwards from revenue using capacity math. In an illustrative example, €600,000 in new annual revenue at an average deal size of €20,000 means 30 deals, 120 opportunities and 240 meetings, or about 20 meetings per month. If one ramped rep books 10 qualified meetings per month, you need two fully ramped reps for meetings alone, which in practice means hiring three, or two plus a strong closer.

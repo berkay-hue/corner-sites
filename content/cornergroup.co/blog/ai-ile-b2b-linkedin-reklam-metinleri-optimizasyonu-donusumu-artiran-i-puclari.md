@@ -21,7 +21,9 @@ Yapay Zeka Öncesi ve Sonrası Düşünce Yapısı: Geleneksel Yaklaşım: Pazar
 
 Yapay zeka ile iletişim kurma becerisi, yani "prompt mühendisliği", 21. yüzyılın en kritik pazarlama yetkinliklerinden biridir. İyi bir prompt, yapay zekaya ne istediğinizi net bir şekilde anlatır ve onu yaratıcı ama hedefe yönelik çıktılar üretmeye yönlendirir. Kötü bir prompt ise jenerik, ruhsuz ve etkisiz metinlerle sonuçlanır. İşte B2B LinkedIn reklamları için yapay zekadan en iyi verimi almanızı sağlayacak temel kurallar:
 
-## Hedef Kitle Personasını Atomlarına Ayırın Yapay zekaya "İK Direktörleri için reklam metni yaz" demek yetersizdir
+## Hedef Kitle Personasını Atomlarına Ayırın
+
+Yapay zekaya "İK Direktörleri için reklam metni yaz" demek yetersizdir.
 
 Bu, okyanusa olta atmak gibidir. Bunun yerine, personanızı derinlemesine tanımlamanız gerekir.
 
@@ -29,7 +31,9 @@ Bu, okyanusa olta atmak gibidir. Bunun yerine, personanızı derinlemesine tanı
 
 Bu detay seviyesi, yapay zekanın empati kurmasını ve Ayşe'nin dünyasına özgü bir dil kullanmasını sağlar.
 
-## Marka Sesini ve Tonunu DNA'sı Gibi Tanımlayın Markanızın bir kişiliği olmalıdır
+## Marka Sesini ve Tonunu DNA'sı Gibi Tanımlayın
+
+Markanızın bir kişiliği olmalıdır.
 
 Yapay zeka, bu kişiliği taklit etme konusunda inanılmaz derecede yeteneklidir, yeter ki siz ona doğru direktifleri verin.
 
@@ -37,7 +41,9 @@ Yapay zeka, bu kişiliği taklit etme konusunda inanılmaz derecede yeteneklidir
 
 Bu, yapay zekanın sadece ne söyleyeceğini değil, nasıl söyleyeceğini de anlamasını sağlar. Brand Corner'da yürüttüğümüz içerik üreticisi kampanyalarında, markanın sesini içerik üreticisinin kendi tonuyla harmanlamak kritik bir başarı faktörüdür. Aynı prensip, yapay zeka için de geçerlidir.
 
-## Dönüşüm Hedefini ve Sürtünme Noktalarını Belirtin Yapay zekanın, metnin okuyucuyu hangi eyleme yönlendirmesi gerektiğini bilmesi gerekir
+## Dönüşüm Hedefini ve Sürtünme Noktalarını Belirtin
+
+Yapay zekanın, metnin okuyucuyu hangi eyleme yönlendirmesi gerektiğini bilmesi gerekir.
 
 Bu eylem ne kadar net olursa, metin o kadar etkili olur.
 
@@ -45,7 +51,9 @@ Bu eylem ne kadar net olursa, metin o kadar etkili olur.
 
 Bu yaklaşım, SAAS Corner'ın potansiyel müşteri yaratma hunilerinde kullandığı mikro-dönüşüm optimizasyonu mantığını yapay zekaya öğretir.
 
-## Değer Önerisini Formülize Edin B2B alıcıları "ne yaptığınızla" değil, "onlar için ne yaptığınızla" ilgilenir
+## Değer Önerisini Formülize Edin
+
+B2B alıcıları "ne yaptığınızla" değil, "onlar için ne yaptığınızla" ilgilenir.
 
 Değer önerinizi yapay zekaya net bir şekilde formülize ederek vermelisiniz.
 
@@ -90,3 +98,21 @@ LinkedIn'de B2B reklamcılığı, artık en yaratıcı metni yazma yarışması 
 Corner Group olarak bizim yaklaşımımız, bu sürücü rolünü üstlenmektir. Yapay zekayı, SAAS Corner'ın müşteri bulma uzmanlığından, Sales Corner'ın otomasyon gücünden, CRM Corner'ın entegrasyon kabiliyetinden ve Brand & Social Media Corner'ın marka ve içerik vizyonundan gelen bütünsel bir veri akışıyla besliyoruz.
 
 **Sizin için çıkarım şudur:** Yapay zekayı bir metin yazarı asistanı olarak görmekten vazgeçin. Onu, stratejik ortağınız olarak konumlandırın. Ona en derin pazar bilgilerinizi, en detaylı müşteri personalarınızı ve en somut iş hedeflerinizi verin. Onu test edin, ölçün ve geri bildirimlerle sürekli olarak daha akıllı hale getirin. Unutmayın, geleceğin kazanan B2B markaları, en iyi yapay zekaya sahip olanlar değil, yapay zekayı en iyi stratejiyle yönlendirenler olacaktır. Dönüşüm, teknolojinin değil, o teknolojiyi yöneten vizyonun bir sonucudur.
+
+## Sık sorulan sorular
+
+### Yapay zekaya verilen prompt neden bu kadar detaylı olmalı?
+
+Çünkü yapay zekanın çıktısının kalitesi, ona verilen girdinin kalitesiyle doğru orantılıdır: çöp girerse, çöp çıkar. "İK Direktörleri için bir reklam metni yaz" gibi yetersiz bir komut yerine, personanın zorluklarını, motivasyonunu ve endişelerini anlatan bir prompt gerekir. Örneğin manuel performans değerlendirmeleri yüzünden ayda en az 20 saat kaybeden bir İK Direktörünü tarif etmek, yapay zekanın empati kurmasını ve o kişiye özgü bir dil kullanmasını sağlar.
+
+### Reklam metinlerinde hangi negatif kısıtlamalar kullanılabilir?
+
+Negatif kısıtlamalar, yapay zekaya neyi yapmaması gerektiğini söyleyerek metni klişelerden arındırır. Örneğin "oyunun kurallarını değiştiren", "çığır açan" veya "sihirli" gibi pazarlama ifadeleri yasaklanabilir ve metnin 150 kelimeyi geçmemesi istenebilir. Raporu indirtmeyi hedefleyen bir metinde ise "ücretsiz" kelimesi yerine "özel erişim" gibi ifadeler tercih edilebilir.
+
+### Başlık ve CTA alternatifleri nasıl üretilmeli?
+
+Başlıklar için yapay zekadan merak, aciliyet, sosyal kanıt, fayda odaklılık ve korku/kaçınma gibi psikolojik tetikleyicileri kullanan 10 farklı alternatif istenebilir. Bu başlıklar aynı ana metin ve görselle test edilerek hangi kancanın işe yaradığı görülür. CTA tarafında ise genellikle en az etkili olan "Daha Fazla Bilgi Edinin" yerine "Analize Erişin" veya "Raporumu Gönder" gibi değere odaklı 5 farklı seçenek üretilebilir.
+
+### Tıklama oranı yüksek bir metin neden her zaman başarılı sayılmaz?
+
+CTR ve CPC önemlidir ama gelen müşteri adaylarının nitelikli olup olmadığını göstermez. CRM'deki görüşme kalitesi verisi, "zaman kazanın" temalı metinlerin yüksek tıklama almasına rağmen düşük kaliteli lead getirdiğini ortaya koyabilir. Buna karşılık "stratejik etki" temalı metinler daha düşük tıklama oranına rağmen C-level pozisyonlardan nitelikli görüşmeler sağlayabilir, bu yüzden yeni varyasyonlar bu temaya yoğunlaştırılır.

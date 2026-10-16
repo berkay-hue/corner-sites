@@ -70,3 +70,21 @@ Eğer hala pazarlama ekibini ürettiği MQL sayısına göre, satış ekibini is
 B2B SaaS satış dünyası geri dönülmez bir şekilde değişti. Alıcılar artık kontrolü tamamen eline almış durumda ve satın alma yolculuklarının büyük bir kısmını görünmez bir alanda, yani karanlık hunide tamamlıyor. Bu yeni gerçekliğe direnmek yerine onu kucaklamak, büyümenin anahtarıdır. Geleneksel MQL odaklı modelleri terk edip talep yaratmaya, niyet verisini kullanmaya, değerli içerikler sunmaya ve satış ile pazarlamayı tek bir gelir motoru olarak çalıştırmaya odaklanmalısın. Karanlık huniyi bir tehdit olarak değil, en değerli müşterilerinle daha anlamlı bir ilişki kurmak için bir fırsat olarak gör. Onları takip etmeye çalışmak yerine, onların seni bulmasını sağla. Bugün bu stratejileri uygulamaya başlayarak, rakiplerin hala karanlıkta el yordamıyla ilerlerken sen görünmez alıcı yolculuğunu aydınlatabilirsin.
 
 **İlgili sayfa:** SAAS Corner'ın bu alandaki hizmetini [B2B SaaS şirketleri için lead generation ve outsourced SDR](/sektor/b2b-saas) sayfasında bulabilirsiniz.
+
+## Sık sorulan sorular
+
+### Geleneksel MQL odaklı modeller karanlık hunide neden yetersiz kalır?
+
+Geleneksel modeller e-posta açma, bağlantı tıklama veya form doldurma gibi ölçülebilir temas noktalarına dayanır. Oysa gerçekten satın alma niyeti olan alıcılar genellikle anonim kalmayı tercih eder ve bu izleri bırakmaktan kaçınır. Sonuçta pazarlama çok sayıda MQL üretse bile bunlar satın almaya hazır olmayabilir, gerçekten sıcak fırsatlar ise görünmez kalır.
+
+### Niyet verisi (intent data) nedir ve nasıl kullanılır?
+
+Niyet verisi, bir şirketin veya kişinin belirli bir konu ya da ürün hakkında aktif olarak araştırma yaptığını gösteren dijital ayak izleridir. Bombora veya G2 gibi üçüncü parti platformlar, hedef hesaptaki çalışanların ilgili makaleleri okuması veya rakip fiyatlandırma sayfalarını ziyaret etmesi gibi sinyalleri senin siten dışında da yakalayabilir. Bu bilgiyle o hesaptaki kişilere özel reklam gösterebilir ve doğru zamanda doğru mesajla ulaşabilirsin.
+
+### Kendi bildirimli atıf (self-reported attribution) nasıl uygulanır?
+
+En basit yöntem, demo talep veya kayıt formuna "Bizi nereden duydunuz?" gibi açık uçlu bir soru eklemektir. Dijital atıf modelleri bir podcast ya da arkadaş tavsiyesiyle gelen ziyaretçiyi sadece doğrudan trafik olarak etiketlerken, müşterinin kendi cevabı hangi kanalların gerçekten talep yarattığını gösterir. Bu bilgiyle pazarlama bütçeni MQL üreten kanallardan talep yaratan kanallara kaydırabilirsin.
+
+### Karanlık huni çağında satış ve pazarlama başarısı hangi metriklerle ölçülmeli?
+
+MQL sayısı veya yapılan arama sayısı gibi hacim metrikleri yerine kalite ve gelir odaklı metriklere odaklanmalısın. Satış hattı hızı, gerçekten satın alma potansiyeli olan kişilerle yapılan nitelikli demo sayısı ve pazarlamanın yarattığı ya da etkilediği gelir bu metriklerin başında gelir. Pazarlama ve satış hedeflerini doğrudan gelir hedeflerine bağlamak, tüm ekibi görünmez alıcıları bulmaya teşvik eder.

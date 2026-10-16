@@ -213,3 +213,21 @@ Bu metrikleri aylık olarak satış toplantılarında gözden geçirmek, kanalı
 WhatsApp, B2B satış takibinde hız ve yakınlık sağlayan güçlü bir kanaldır. Ancak bu gücü sürdürülebilir kılan şey mesajların sayısı değil, arkasındaki onay disiplinidir. Mesaj türünü doğru sınıflandırmak, tacir istisnasının sınırlarını bilmek, onayları kanal ve marka bazında toplayıp İYS'ye işlemek, ret bildirimlerini otomatik olarak yakalamak ve gönderimi CRM'deki onay verisine bağlamak, hem yasal riski hem de müşteri ilişkisindeki yıpranmayı en aza indirir. Doğru kurulduğunda uyum, satış hızını yavaşlatan bir yük olmaktan çıkar ve güvenilir, ölçeklenebilir bir takip sisteminin temeli haline gelir.
 
 WhatsApp takip süreçlerinizi CRM ve n8n otomasyonlarıyla uyumlu bir yapıya kavuşturmak, onay yönetimini birden fazla marka arasında merkezileştirmek ya da outbound stratejinizi bu çerçevede yeniden kurgulamak istiyorsanız [Corner Group ekibiyle iletişime geçin](/iletisim). Satış ekibinizin ihtiyaçlarına uygun yol haritasını birlikte oluşturalım.
+
+## Sık sorulan sorular
+
+### B2B'de WhatsApp'tan tanıtım mesajı göndermek için onay gerekir mi?
+
+Tacir ve esnaf istisnası önceden onay şartını kaldırsa da bu, "B2B'de onay gerekmez" anlamına gelmez. Alıcının ret hakkı her zaman geçerlidir, gönderimden önce İYS'de ret kaydı olup olmadığını kontrol etmeniz beklenir ve bir yöneticinin şahsi cep numarası tüzel kişiliğe ait iletişim adresi sayılmayabilir. Uygulamada en güvenli yaklaşım, kişiye ait cep telefonlarına giden her tanıtım amaçlı WhatsApp mesajı için açık ve kayıt altına alınmış onay almaktır.
+
+### Toplantı hatırlatması veya teklif mesajı için onay almak gerekir mi?
+
+Hayır, planlanmış bir toplantının hatırlatılması, talep edilen teklifin iletilmesi, sözleşme veya fatura bildirimi ve destek yanıtları gibi bilgilendirme mesajları ticari ileti onayı gerektirmez. Ancak bu mesajlara tanıtım içeriği eklendiği anda mesaj ticari ileti niteliği kazanabilir. Yarınki toplantıyı hatırlatırken yeni bir modüldeki indirimi duyurmak, mesajı artık salt bilgilendirme olmaktan çıkarır.
+
+### E-posta onayı WhatsApp mesajları için de geçerli mi?
+
+Hayır, İYS'de onaylar arama, mesaj (SMS ve anlık mesajlaşma) ve e-posta kanalları için ayrı ayrı tutulur ve e-posta onayı WhatsApp için onay anlamına gelmez. Topladığınız onayları belirlenen süreler içinde İYS'ye yüklemeniz gerekir, aksi halde uyuşmazlık durumunda bu onaylar sizi korumayabilir. Çok markalı yapılarda onay ayrıca marka bazlıdır; bir markaya verilen WhatsApp onayı gruptaki başka bir marka için geçerli değildir.
+
+### Alıcı ret verdiğinde gönderim ne kadar sürede durdurulmalı?
+
+Ret bildirimi alındıktan sonra ileti gönderimi üç iş günü içinde durdurulmalıdır. Alıcı ret hakkını sizin sunduğunuz kanaldan ya da doğrudan İYS üzerinden kullanabildiği için her sabah İYS'deki değişiklikleri CRM ile karşılaştırmak gerekir. Gelen mesajlarda "RET", "İSTEMİYORUM" veya "DUR" gibi ifadeler algılandığında kaydı otomatik olarak ret durumuna çeken, İYS'ye bildiren ve kişiyi aktif sekanslardan çıkaran bir n8n akışı bu kuralı manuel takibe bırakmaz.

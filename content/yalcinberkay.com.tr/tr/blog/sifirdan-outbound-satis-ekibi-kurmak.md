@@ -2,15 +2,18 @@
 title: "Sıfırdan Outbound Satış Ekibi Nasıl Kurulur?"
 description: "B2B kurucuları için outbound satış ekibini işe alma, yapılandırma ve hızlandırma üzerine pratik bir rehber: roller, metrikler ve erken dönemde kaçınılması gereken hatalar."
 date: "2026-10-10"
+updated: "2026-10-16"
 category: "Satış Liderliği"
 image: "https://images.pexels.com/photos/7693103/pexels-photo-7693103.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
-imageAlt: "Sıfırdan Outbound Satış Ekibi Nasıl Kurulur?"
+imageAlt: "Outbound satış ekibi kurmak – kapak görseli"
 alt: "how-to-build-outbound-sales-team-from-scratch"
 ---
 
+Sıfırdan outbound satış ekibi kurmak için işe alımdan önce outbound'u 6-8 hafta boyunca kendiniz doğrulayın ve bir satışçının 30 saniyede uygulayabileceği dar bir ICP tanımlayın. Koçluğa açık, dayanıklı iki satışçıyı aynı anda işe alın; onlara temiz veri, sade bir araç seti ve 30-60-90 günlük bir plan verin, gelir hedeflerini kapasite hesabına dayandırın.
+
 Çoğu şirket outbound'da fikir yanlış olduğu için başarısız olmaz. İki satışçı işe alıp ellerine bir dizüstü bilgisayar ve belirsiz bir hedef liste verdikleri, bir ay içinde pipeline oluşmasını bekledikleri için başarısız olurlar. Pipeline oluşmayınca da yönetim "outbound bizde işe yaramıyor" kararına varır. Bu tabloyu defalarca gördüm; Corner Group bünyesinde satış ekipleri kurarken aynı hatanın farklı versiyonlarını kendim de yaptım.
 
-Sıfırdan outbound satış ekibi kurmak, yetenekli insanları işe almaktan çok bu insanların içinde başarılı olabileceği bir sistem kurmakla ilgilidir. Bu sistem; net bir ideal müşteri profili, test edilmiş bir mesaj, temiz veri, tekrarlanabilir bir süreç, gerçekçi kapasite hesabı ve her hafta koçluk yapan bir yönetici içerir. Bu yazıda, ilk altı ila on iki ayda en çok önem taşıyan rakamlar ve kararlarla birlikte bu işe adım adım nasıl yaklaştığımı anlatıyorum.
+Sıfırdan outbound satış ekibi kurmak, yetenekli insanları işe almaktan çok bu insanların içinde başarılı olabileceği bir sistem kurmakla ilgilidir. Bu sistem; net bir ideal müşteri profili, test edilmiş bir mesaj, temiz veri, tekrarlanabilir bir süreç, gerçekçi kapasite hesabı ve her hafta koçluk yapan bir yönetici içerir. Buradaki ICP ve mesaj çalışması, [soğuk e-postada yanıt oranını artırmanın](/blog/soguk-eposta-yanit-orani-nasil-artirilir) da temelidir. Bu yazıda, ilk altı ila on iki ayda en çok önem taşıyan rakamlar ve kararlarla birlikte bu işe adım adım nasıl yaklaştığımı anlatıyorum.
 
 ## Önemli Çıkarımlar
 
@@ -22,7 +25,7 @@ Sıfırdan outbound satış ekibi kurmak, yetenekli insanları işe almaktan ço
 
 ## Adım 1: Kimseyi İşe Almadan Önce Outbound'un İşe Yaradığını Kanıtlayın
 
-Outbound'un işinize uygun olup olmadığını öğrenmenin en pahalı yolu bir ekip kurup sonucu beklemektir. En ucuz yolu ise bir kurucunun ya da kıdemli bir satışçının bunu 6-8 hafta boyunca bizzat yürütmesidir.
+Outbound'un işinize uygun olup olmadığını öğrenmenin en pahalı yolu bir ekip kurup sonucu beklemektir. En ucuz yolu ise bir kurucunun ya da kıdemli bir satışçının bunu 6-8 hafta boyunca bizzat yürütmesidir. İlk satışçıyı işe alırken [mülakatta sorulacak sorular](/blog/satis-temsilcisi-mulakat-sorulari) da bu deneyimden beslenmeli.
 
 İlk işe alımınızdan önce şu soruları varsayımlarla değil, gerçek deneyimle yanıtlayabiliyor olmalısınız:
 
@@ -230,3 +233,21 @@ Sıfırdan outbound satış ekibi kurmak, doğru kararları doğru sırayla alma
 Bunların hiçbiri göz alıcı değil, ama birikerek büyür. Bu şekilde kurulan bir ekip her çeyrekte daha iyi hâle gelir, çünkü her görüşme, her yanıt ve her kaybedilen anlaşma sisteme geri besleme olarak döner.
 
 İlk outbound ekibinizi kuruyorsanız ya da beklentiyi karşılamayan bir ekibi yeniden yapılandırıyorsanız, fikir alışverişi yapmaktan her zaman memnuniyet duyarım. [Ana sayfam](/tr) üzerinden ulaşıp sürecin neresinde olduğunuzu anlatabilirsiniz.
+
+## Sık sorulan sorular
+
+### Outbound satış ekibi kurmadan önce ne kadar süre test yapılmalı?
+
+İlk satışçıyı işe almadan önce outbound'u 6-8 hafta boyunca kendiniz doğrulamalısınız. Bunun için 200 şirket ve her birinde 2-3 karar verici seçip e-posta, LinkedIn ve telefondan oluşan 3 haftalık bir sekans yürütebilirsiniz. Bu testten hiçbir sonuç çıkmazsa sorun genellikle kanalda değil, segmentte ya da mesajdadır.
+
+### İlk outbound ekibine kaç satışçı alınmalı?
+
+İlk aşamada tek kişi yerine aynı anda iki satışçı almak gerekir. Tek satışçıyla kötü bir ayın kişiden mi, bölgeden mi yoksa süreçten mi kaynaklandığını anlayamazsınız; iki kişiyle ise performansı karşılaştırabilirsiniz. Adaylarda koçluğa açıklık, dayanıklılık ve merak aranmalı, ekip 4-6 satışçıya ulaştığında da bir yönetici eklenmelidir.
+
+### Kaç satışçıya ihtiyacım olduğunu nasıl hesaplarım?
+
+Gelir hedefinden geriye doğru giderek bir kapasite hesabı yapabilirsiniz. Örneğin 600 bin € hedef ve 20 bin € ortalama anlaşma büyüklüğü 30 anlaşma demektir; %25 kapanış oranıyla 120 fırsata, %50 dönüşümle 240 toplantıya, yani ayda yaklaşık 20 toplantıya ihtiyaç doğar. Tam hıza ulaşmış bir satışçı ayda 10 nitelikli toplantı ayarlayabiliyorsa bu, iki satışçıya, hızlanma süresi hesaba katıldığında ise pratikte üç kişiye karşılık gelir.
+
+### Outbound'un işe yarayıp yaramadığını anlamak ne kadar sürer?
+
+Outbound'u adil biçimde değerlendirmek genellikle bir ya da iki tam satış döngüsü gerektirir. Yeni satışçılar 30-60-90 günlük bir planla işe alışır; 31-60. günler arasında kotanın yarısı ile üçte ikisi, 61-90. günler arasında ise tam kota hedeflenir. Bu nedenle ilk haftaların sonuçlarına bakarak karar vermek yanıltıcı olabilir.

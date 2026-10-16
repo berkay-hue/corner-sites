@@ -106,3 +106,21 @@ Yapay zeka, özellikle müşteri verilerini kullanırken önemli etik soruları 
 ## Sonuç
 
 2026 yılına gelindiğinde, CRM'den bahsederken artık sadece bir yazılımdan değil, şirketin kalbinde yer alan akıllı bir motordan bahsediyor olacağız. Machine Learning ve Conversational AI tarafından desteklenen bu yeni nesil CRM'ler, müşteri ilişkilerini yönetmenin ötesine geçerek bu ilişkileri proaktif bir şekilde şekillendirecek, optimize edecek ve kişiselleştirecektir. Bu dönüşüm, bir gecede olmayacak; veri altyapısı, teknoloji seçimi, insan kaynağı ve etik yaklaşımlar üzerine inşa edilecek stratejik bir yolculuktur. Bu yolculuğa bugünden başlayan şirketler, geleceğin müşteri beklentilerini karşılamakla kalmayacak, aynı zamanda pazarlarında sürdürülebilir bir rekabet avantajı elde ederek lider konumuna yükseleceklerdir. CRM'in geleceği zeki, konuşkan ve öngörülüdür. Bu geleceğe hazır olmak, bugünden atılacak doğru adımlara bağlıdır.
+
+## Sık sorulan sorular
+
+### Machine Learning destekli bir CRM geleneksel CRM'den nasıl ayrılır?
+
+Machine Learning destekli bir CRM geçmiş verilerden öğrenerek geleceğe dönük tahminler üretebilir. Geleneksel CRM'ler genellikle bir müşterinin ne satın aldığını kaydeden reaktif sistemlerdir. ML destekli bir CRM ise müşterinin bir sonraki adımda ne satın alabileceğini, ayrılma riski taşıyıp taşımadığını ya da hangi mesaja daha iyi yanıt verebileceğini öngörebilir.
+
+### Tahmine dayalı lead puanlaması kural tabanlı puanlamadan nasıl ayrılır?
+
+Tahmine dayalı puanlama, elle belirlenen kurallar yerine geçmişte müşteriye dönüşmüş adayların özelliklerinden öğrenen bir modele dayanır. Kural tabanlı sistemler e-posta açma ya da fiyatlandırma sayfası ziyareti gibi eylemlere sabit puanlar verir ve değişkenlerin etkileşimini genellikle göz ardı eder. ML modeli ise demografik bilgiler, gezinme rotası ve indirilen içerikler gibi verileri birlikte değerlendirerek her adaya dinamik bir satın alma olasılığı puanı atayabilir.
+
+### Machine Learning ve Conversational AI birlikte nasıl çalışır?
+
+Machine Learning, Conversational AI'ın beyni gibi çalışırken Conversational AI bu zekanın sesi ve yüzü haline gelir. ML, botun her etkileşimden öğrenmesini ve CRM verilerine dayanarak kişiselleştirilmiş diyaloglar kurmasını sağlayabilir. Bot aracılığıyla toplanan sorular ve sorunlar da ML modelleri için yeni eğitim verisine dönüşerek kendi kendini besleyen bir geri bildirim döngüsü oluşturur.
+
+### Şirketler yapay zeka destekli CRM'e nasıl hazırlanabilir?
+
+Hazırlığın ilk adımı veri kalitesi ve yönetişimini sağlamaktır, çünkü yapay zeka modelleri beslendikleri veriler kadar iyidir. Müşteri verilerinin tek bir merkezi platformda birleştirilmesi, temizlenmesi ve standartlaştırılması önerilir. Ardından mevcut altyapıya uygun teknolojinin seçilmesi, ekiplerin eğitilmesi ve şeffaflık ile önyargı denetimini içeren etik kuralların belirlenmesi geçişi kolaylaştırabilir.

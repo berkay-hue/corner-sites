@@ -2,11 +2,14 @@
 title: "B2B Şirketler İçin Instagram Stratejisi Nasıl Kurulur?"
 description: "B2B şirketler Instagram'da hangi hedefleri koymalı, hangi içerikleri paylaşmalı ve başarıyı nasıl ölçmeli? Türkiye'deki örneklerle adım adım rehber."
 date: "2026-10-15"
+updated: "2026-10-16"
 category: "Instagram"
 image: "https://images.pexels.com/photos/6476786/pexels-photo-6476786.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
 imageAlt: "B2B Şirketler İçin Instagram Stratejisi Nasıl Kurulur?"
 alt: "b2b-instagram-strategy"
 ---
+
+B2B şirketler için Instagram stratejisi; ölçülebilir hedefler koyup karar vericileri haritalayarak, profili optimize edip eğitici, sahne arkası, insan ve müşteri başarısı odaklı içerik sütunları belirleyerek kurulur. Instagram burada LinkedIn'in yerine geçmez; reklam, DM ile sosyal satış ve düzenli ölçümle satış sürecini destekleyen tamamlayıcı bir kanal olur.
 
 Instagram uzun süre B2C markalarının alanı olarak görüldü: moda, yemek, seyahat, kozmetik. B2B şirketlerin büyük bölümü ise "Bizim müşterimiz Instagram'da değil" diyerek bu kanalı ya tamamen boş bıraktı ya da yılda birkaç bayram kutlamasıyla idare etti. Oysa satın alma kararlarını veren insanlar, mesai bitince telefonlarını kapatıp ortadan kaybolmuyor. Bir fabrikanın satın alma müdürü, bir yazılım şirketinin CTO'su ya da bir lojistik firmasının operasyon direktörü de akşam Instagram'da vakit geçiriyor. Fark şu: Bu kişilere ulaşmanın yolu, B2C markalarının kullandığı yöntemlerden oldukça farklı.
 
@@ -227,4 +230,24 @@ Instagram, B2B şirketler için artık "olsa iyi olur" bir kanal değil. Doğru 
 
 Unutmayın, Instagram'da sonuçlar bir gecede gelmez. İlk 90 gün temel kurmak ve öğrenmekle geçer. Asıl kazanım, tutarlılığın birikerek markanıza kazandırdığı güvenden doğar.
 
+Sektörünüze özel yaklaşımı görmek için [e-ticaret için sosyal medya yönetimi](/sektor/e-ticaret) ve [restoran ve kafe sosyal medya yönetimi](/sektor/restoran-kafe) sayfalarımıza da göz atabilirsiniz.
+
 B2B şirketiniz için Instagram ve LinkedIn'i birlikte ele alan, ölçülebilir hedeflere dayalı bir sosyal medya stratejisi kurmak istiyorsanız Social Media Corner ekibi olarak yanınızdayız. Hedeflerinizi konuşmak ve size özel bir yol haritası oluşturmak için [bizimle iletişime geçin](/iletisim).
+
+## Sık sorulan sorular
+
+### B2B şirketler için Instagram gerekli mi?
+
+Evet, doğru kurgulandığında Instagram B2B şirketler için güven inşa eden, işveren markasını güçlendiren ve LinkedIn stratejisini tamamlayan güçlü bir kanaldır. Amaç Instagram'ı LinkedIn'in yerine koymak değil, satış sürecini destekleyen tamamlayıcı bir kanala dönüştürmektir.
+
+### B2B şirketler Instagram'da haftada kaç paylaşım yapmalı?
+
+Çoğu B2B şirket için haftada 3-4 gönderi ve hafta içi her gün birkaç hikâye iyi bir başlangıçtır. Haftalık planda en az bir Reels, bir carousel ve birkaç hikâye bulunmasını hedefleyin.
+
+### B2B Instagram hesabında hangi içerik türleri paylaşılmalı?
+
+B2B şirketler için işe yarayan beş temel içerik sütunu eğitici içerikler, sahne arkası, insanlar ve kültür, müşteri başarıları ve sektör gündemidir. Başlangıç için yaklaşık %35 eğitici, %20 sahne arkası, %20 insanlar ve kültür, %15 müşteri başarıları ve %10 sektör gündemi iyi bir referans dağılımdır.
+
+### B2B'de Instagram reklamları LinkedIn reklamlarının yerini tutar mı?
+
+Hayır, Instagram'da LinkedIn'deki gibi unvan, şirket büyüklüğü veya sektör bazlı hassas hedefleme bulunmadığı için iki kanal birbirini tamamlar. Instagram reklamlarını hunin üst ve orta aşamasında, LinkedIn reklamlarını ise hassas hedefleme gerektiren aşamalarda kullanmak mantıklıdır.

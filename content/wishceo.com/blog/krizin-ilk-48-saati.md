@@ -4,14 +4,14 @@ description: "Rafta zehir var, bilgi eksik, zaman dar. Soranol vakasından krizi
 date: "2026-10-15"
 category: "Kriz Liderliği"
 image: "/og.png"
-imageAlt: "Krizin İlk 48 Saati: Bilgi Yokken Karar Vermek"
+imageAlt: "WishCEO kapak kartı “Şirket batıyor. CEO sensin.” — Soranol krizinin ilk 48 saati yazısı"
 ---
 
-Kriz ilk geldiğinde elinde neredeyse hiçbir şey olmaz. Telefon susmaz, herkes senden bir cevap bekler ve o cevabın dayanacağı bilgilerin yarısı henüz ortada yoktur. Beklersen zaman kaybedersin. Acele edersen yanlış adım atabilirsin. İlk 48 saati zor yapan şey tam olarak bu.
+Krizin ilk 48 saatinde bilgi eksikken iyi karar, "Yanılırsam ne olur?" diye sorup geri dönüşü olmayan zararı önleyen adımı önce atmaktır. Kriz ilk geldiğinde elinde neredeyse hiçbir şey olmaz. Telefon susmaz, herkes senden bir cevap bekler ve o cevabın dayanacağı bilgilerin yarısı henüz ortada yoktur. Beklersen zaman kaybedersin. Acele edersen yanlış adım atabilirsin. İlk 48 saati zor yapan şey tam olarak bu.
 
 Bu yazıda WishCEO'nun ilk dosyasını açıyoruz: "Rafta zehir var". Hartwell & Hartwell'in ağrı kesicisi Soranol üzerinden üç soruya bakacağız: bilgi eksikken nasıl karar verilir, insanların güvenliği satışlarla çatıştığında ne olur, sarsılan güven geri kazanılabilir mi?
 
-> Bu yazı "Rafta zehir var" vakasının sonucunu anlatıyor. Önce kendin karar vermek istersen [vakayı oyna](/#oyun).
+> Bu yazı "Rafta zehir var" vakasının sonucunu anlatıyor. Önce kendin karar vermek istersen [vakayı oyna](/?s=001#oyun).
 
 ## Dosyada ne vardı
 
@@ -94,6 +94,24 @@ Oyunda bu vakanın puanları şöyle: ülke çapında toplatma 95, yalnızca Chi
 Bu vakada gerçek CEO'nun kararı en yüksek puanı alıyor, ama her vakada böyle olmuyor. [Korvala'nın platform kararı](/blog/korvala-platform-karari) tersine bir örnek: orada gerçek CEO'nun seçimi, masadaki başka bir seçenekten daha düşük puan alıyor.
 
 WishCEO'da kararları puanlıyoruz, insanları değil. 35 puanlık seçimi yapan biri kötü yönetici olmaz. O seçimin neden zayıf kaldığını görmek, bir sonraki krizde daha iyi bir soru sormanı sağlar.
+
+## Sık sorulan sorular
+
+### Krizin ilk 48 saatinde ne yapılmalı?
+
+Eksik bilginin tamamlanmasını beklemeden "Yanılırsam ne olur?" diye sor ve geri dönüşü olmayan zararı önleyen adımı önce at. İnsanlara ne yapmaları gerektiğini tek cümleyle söyle, ne bildiğini ve ne bilmediğini ayrı ayrı anlat.
+
+### Bilgi eksikken kriz kararı nasıl verilir?
+
+Soruyu "Ne biliyorum?" yerine "Yanılırsam ne olur?" diye değiştir ve iki olası hatayı yan yana koy. Soranol vakasında fazla toplatmanın bedeli paraydı, eksik toplatmanın bedeli ise bir ölüm daha olabilirdi; birinin telafisi var, ötekinin yok.
+
+### Soranol vakasında şirket ne yaptı?
+
+Hartwell & Hartwell'in CEO'su Edward Hallam ülkedeki bütün Soranol kapsüllerini raflardan çekti: yaklaşık 31 milyon şişe, yaklaşık 100 milyon dolar. Halka kapsülleri kullanmamasını ve tabletle değiştirmesini söyledi; iki ay içinde Soranol üç katmanlı mühürlü yeni ambalajla rafa döndü.
+
+### Krizden sonra müşteri güveni nasıl geri kazanılır?
+
+Güven, sorunun kaynağına dokunan somut bir değişiklikle geri gelir. Soranol'un yeni mühürlü ambalajı, birinin şişeyi açıp içine bir şey koyabilmesi açığını doğrudan hedefliyordu; pazar payı %7 civarına düştükten sonra bir yıl içinde büyük ölçüde geri geldi.
 
 ## Sıra sende
 

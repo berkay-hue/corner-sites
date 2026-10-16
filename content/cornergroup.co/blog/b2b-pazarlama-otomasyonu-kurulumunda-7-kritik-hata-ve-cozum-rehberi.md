@@ -84,3 +84,21 @@ Pazarlama otomasyonu, boş bir boru hattı gibidir. İçinden bir şey akıtmazs
 Corner Group olarak, beş farklı markamızın kesişiminde edindiğimiz tecrübe bize şunu net bir şekilde öğretti: Pazarlama otomasyonu, "satın al ve kur" tipi bir çözüm değildir. Bu, strateji, teknoloji, içerik ve insan unsurlarını bir araya getiren yaşayan, nefes alan bir organizmadır. Başarılı bir kurulum; iş hedeflerini anlamakla başlar, sistemleri akıllıca entegre etmekle devam eder, insan dokunuşunu kaybetmeden süreçleri otomatize eder, kaliteli içerikle beslenir ve en önemlisi, iş sonuçlarına odaklanan doğru metriklerle sürekli olarak ölçülür ve optimize edilir.
 
 Bu yedi kritik hatadan kaçınmak, sizi sadece başarısız bir yatırımdan kurtarmakla kalmaz, aynı zamanda şirketiniz için öngörülebilir, ölçeklenebilir ve sürdürülebilir bir büyüme motoru inşa etmenizi sağlar. Teknoloji sadece bir başlangıç noktasıdır. Gerçek dönüşüm, bu teknolojiyi bir büyüme holdinginin stratejik ve bütünsel bakış açısıyla yönettiğinizde başlar.
+
+## Sık sorulan sorular
+
+### Pazarlama otomasyonu kurulumunda en yaygın hata nedir?
+
+En yaygın ve en maliyetli hata, stratejiyi belirlemeden önce teknolojiyi satın almaktır. Bu durumda süreçler ve hedefler aracın kısıtlarına göre şekillenir, lisansı ödenen yazılımın potansiyelinin yalnızca yüzde onu kullanılabilir. Önce iş hedefleri, ideal müşteri profili ve müşteri yolculuğu netleştirilmeli, araç seçimi bunlara göre yapılmalıdır.
+
+### Pazarlama otomasyonunun CRM ile entegre olması neden önemli?
+
+Entegrasyon olmadan pazarlama ve satış ekipleri müşterinin bütünsel resmini göremez ve eksik bilgiyle karar verir. Bu da mevcut bir müşteriye yeni müşteri kazanım e-postası göndermek gibi itibar zedeleyen hatalara yol açar. CRM merkezde olmalı ve senkronizasyon iki yönlü kurulmalıdır ki satıştaki statü değişiklikleri pazarlama akışlarına da yansısın.
+
+### Lead scoring modeli nasıl kurgulanmalı?
+
+Lead scoring, form bilgilerine dayanan açık puanlama ile dijital davranışa dayanan gizli puanlamayı birleştirmelidir. Örneğin C-level yönetici +20, fiyatlandırma sayfası ziyareti +10, kariyer sayfası ziyareti -20 puan olarak değerlendirilebilir. Yazıdaki örnek eşiklere göre 26-70 puan MQL, 71 ve üzeri SQL sayılır ve model satış geri bildirimleriyle düzenli olarak revize edilir.
+
+### Otomasyonun başarısı hangi metriklerle ölçülmeli?
+
+Başarı, açılma oranı gibi gösteriş metrikleriyle değil, gelire bağlı metriklerle ölçülmelidir. Pazarlama kaynaklı gelir, pazarlama etkileşimli gelir, müşteri edinme maliyeti (CAC), LTV/CAC oranı ve satış döngüsü uzunluğu bu metriklerin başında gelir. Sağlıklı bir B2B iş modelinde LTV/CAC oranının 3:1 veya daha yüksek olması hedeflenir.

@@ -264,3 +264,21 @@ LinkedIn reklamları B2B SaaS'ta değer sağlar mı? Kısa cevap: **Doğru koşu
 Yüksek ACV'li, net bir ICP'ye sahip ve satış ekibiyle pazarlaması aynı hedef hesap listesinde buluşan bir SaaS şirketi için LinkedIn hem talep yaratır hem de outbound verimliliğini artırır. Düşük ACV'li, self-servis bir ürün için ise bütçeyi başka kanallara ayırmak çoğu zaman daha kârlıdır. Kararı lead başına maliyete göre değil, CRM'de izlenen pipeline ve gelir katkısına göre verin. Testi de en az bir çeyrek boyunca, yapılandırılmış bir planla yürütün.
 
 LinkedIn reklamlarınızı outbound satış süreçleriniz ve CRM altyapınızla entegre ederek ölçülebilir bir büyüme kanalına dönüştürmek istiyorsanız, SAAS Corner ekibi olarak size yardımcı olmaya hazırız. Mevcut durumunuzu birlikte değerlendirmek için [bizimle iletişime geçin](/iletisim).
+
+## Sık sorulan sorular
+
+### LinkedIn reklamları hangi B2B SaaS şirketleri için uygun değildir?
+
+Düşük yıllık sözleşme değerine sahip ve tamamen self-servis satılan ürünler için LinkedIn reklamları genellikle uygun değildir. Yüksek birim maliyetler bu tür ürünlerde müşteri kazanım maliyetini (CAC) sürdürülemez bir seviyeye taşıyabilir. Netleşmemiş bir ICP, reklamdan gelen lead'i takip edecek satış kapasitesinin olmaması ve çok küçük bir bütçe de kanalın değer üretmesini zorlaştırır.
+
+### LinkedIn reklamlarını değerlendirirken lead başına maliyete bakmak yeterli mi?
+
+Hayır, asıl soru hangi kanaldan gelen lead'in daha fazla gelir ürettiğidir. LinkedIn'den gelen lead'ler hedefleme sayesinde ICP'ye daha yakın olabilir ve daha yüksek bir fırsata dönüşme oranına sahip olabilir. Bunu görebilmenin tek yolu, lead'i CRM'de kapanan anlaşmaya kadar izlemektir.
+
+### LinkedIn reklamları outbound satışa nasıl katkı sağlar?
+
+LinkedIn reklamları, SDR'lar ilk teması kurmadan önce hedef hesaplardaki karar vericilere markanızı tanıtarak outbound'u ısıtır. Hedef hesap listenizi LinkedIn'e yükleyip ilk temastan iki ila dört hafta önce reklam göstermeye başladığınızda, soğuk e-posta ya da arama geldiğinde karşı taraf markanızı tanıyor olur. Etkisini ölçmek için hedef listeyi rastgele iki gruba ayırıp yalnızca birine reklam gösterebilir ve iki grubun yanıt, toplantı ve fırsata dönüşme oranlarını karşılaştırabilirsiniz.
+
+### LinkedIn reklamlarını ne kadar süre test etmek gerekir?
+
+Yapılandırılmış bir 90 günlük test dönemi önerilir. Bu süre çoğu B2B SaaS ürünü için ilk sinyalleri görmeye yeter ancak tam satış döngüsünü kapsamayabilir, bu yüzden değerlendirme öncü göstergeler üzerinden yapılmalıdır. Satış döngüsü üç ila altı ay süren bir üründe iki haftalık kampanya sonucuna göre karar vermek sık yapılan bir hatadır.

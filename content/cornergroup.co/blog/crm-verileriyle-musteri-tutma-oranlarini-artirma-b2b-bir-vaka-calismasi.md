@@ -63,17 +63,17 @@ Risk Sinyallerini Tanımlamak ve Otomatik Uyarı Sistemleri Kurmak Sağlık puan
 
 **Otomasyonun Rolü:** Bu tetikleyicilerden herhangi biri aktive olduğunda, CRM Corner'ın kurduğu otomasyon devreye girdi. Sistem, anında ilgili müşteri yöneticisine bir Slack bildirimi ve e-posta göndererek durumu özetledi ve bir sonraki adımı öneren bir "eylem planı" (playbook) linki paylaştı. Bu, manuel takibin getireceği insan hatası riskini ortadan kaldırdı ve müdahale hızını katbekat artırdı.
 
-## Kişiselleştirilmiş İletişim Akışları ile Değer Yaratmak Müşteri tutma, sadece sorun çıktığında müdahale etmek değildir
+## Kişiselleştirilmiş İletişim Akışları ile Değer Yaratmak
 
-Sürekli olarak değer sunarak ve ilişkiyi canlı tutarak proaktif bir şekilde inşa edilir.
+Müşteri tutma, sadece sorun çıktığında müdahale etmek değildir. Sürekli olarak değer sunarak ve ilişkiyi canlı tutarak proaktif bir şekilde inşa edilir.
 
 **Segmentasyona Dayalı İletişim:** Müşterileri sadece sağlık puanlarına göre değil, aynı zamanda sektörlerine, şirket büyüklüklerine ve ürünü kullanma amaçlarına göre de segmentlere ayırdık. Bu sayede, bir finans şirketine gönderilen vaka çalışması ile bir üretim şirketine gönderilen içerik farklılaştı. Brand Corner ekibimiz, her segment için özel içerikler üreterek bu süreci destekledi.
 
 **Otomatik Ama İnsancıl Dokunuşlar:** Sales Corner'ın otomasyon yeteneklerini kullanarak, belirli kilometre taşlarına ulaşan müşterilere otomatik tebrik e-postaları gönderdik. Örneğin, "Tebrikler, yazılımımızı kullanarak 1000. işleminizi tamamladınız! İşte bu özelliği daha verimli kullanmanız için üç ipucu." Bu tür küçük ama kişisel dokunuşlar, müşterinin sadece bir numara olmadığını hissetmesini sağladı.
 
-## Geri Bildirim Döngülerini Sistematik Hale Getirmek Müşteriyi dinlemek, en etkili müşteri tutma aracıdır
+## Geri Bildirim Döngülerini Sistematik Hale Getirmek
 
-Bu süreci tesadüflere bırakmak yerine, sistematik hale getirdik.
+Müşteriyi dinlemek, en etkili müşteri tutma aracıdır. Bu süreci tesadüflere bırakmak yerine, sistematik hale getirdik.
 
 **Yaşam Döngüsü Anketleri:** Müşteri yolculuğunun kritik anlarında (örneğin, ilk 90 günün sonunda, büyük bir destek talebi kapandıktan sonra) kısa ve hedefe yönelik NPS veya CSAT (Müşteri Memnuniyet Puanı) anketleri gönderildi.
 
@@ -110,3 +110,21 @@ Innovatech A.Ş. vaka çalışması, Corner Group olarak farklı sektörlerdeki 
 ## Sonuç
 
 Innovatech A.Ş.'nin dönüşüm hikayesi, CRM verilerinin doğru bir strateji ve entegre bir yaklaşımla nasıl güçlü bir büyüme motoruna dönüştürülebileceğinin canlı bir kanıtıdır. Müşteri kaybı oranlarını düşürmek, sadece bir metriği iyileştirmekten çok daha fazlasıdır; bu, şirket kültürünü reaktif bir yapıdan proaktif bir yapıya, departman odaklılıktan müşteri odaklılığa ve varsayımlardan veri odaklı karar almaya evriltmektir. Corner Group olarak, SAAS Corner'dan CRM Corner'a, Sales Corner'dan Brand Corner'a uzanan geniş uzmanlık yelpazemizle, B2B şirketlerine sadece araçlar değil, bu zihinsel ve stratejik dönüşümü gerçekleştirecek bütünsel bir yol haritası sunuyoruz. Çünkü biliyoruz ki 21. yüzyılda sürdürülebilir başarının anahtarı, en pahalı reklam kampanyalarında veya en agresif satış taktiklerinde değil, mevcut müşterilerinizin verilerinde gizlidir. O veriyi dinlemeyi, anlamayı ve ona göre hareket etmeyi başaranlar, geleceğin kazananları olacaktır.
+
+## Sık sorulan sorular
+
+### CRM verileriyle müşteri kaybı ne kadar azaltılabilir?
+
+Innovatech A.Ş. vakasında yıllık %22 olan müşteri kaybı oranı, ilk 12 ayın sonunda %11'e, 18. ayın sonunda ise %8'e geriledi. Bu, %63'lük bir iyileşme anlamına geliyordu. Aynı süreçte ortalama müşteri yaşam boyu değeri %45, mevcut müşterilerden elde edilen ek gelir %25 arttı. Müşteri yöneticisi başına düşen verimli etkileşim sayısı da %30 yükseldi.
+
+### Müşteri sağlık puanı hangi verilerden oluşur?
+
+Müşteri sağlık puanı, farklı kaynaklardan gelen davranış verilerinin ağırlıklandırılmasıyla hesaplanan 1-100 arası bir skordur. Vakadaki modelde oturum sıklığı %20, anahtar özelliklerin benimsenmesi %30, NPS %15, stratejik toplantılar %10 ve fatura ödeme düzeni %10 ağırlık taşıyordu. Destek talepleri ise -%15 ile negatif ağırlıkla hesaba katılıyordu. Sonuç, yeşil, sarı ve kırmızı renk kodlarıyla gösteriliyordu.
+
+### Sessiz müşteri kaybının erken uyarı sinyalleri nelerdir?
+
+Sessiz kaybın en güçlü sinyalleri, kullanımdaki düşüşler, ödeme gecikmeleri ve karar vericideki değişikliklerdir. Vakada son 60 günde kritik bir özelliği hiç kullanmayan ve son 3 ayda en az iki faturasını geciktiren müşterilerin %70'inin bir sonraki yenileme döneminde ayrıldığı görüldü. Bir özelliğin 15 gün boyunca kullanılmaması, şampiyonun şirketten ayrılması veya rakip karşılaştırma sayfasının ziyaret edilmesi de otomatik uyarı tetikliyordu.
+
+### Müşteri kaybı riski tespit edildiğinde ekip nasıl harekete geçmeli?
+
+Risk tespit edildiğinde ilgili müşteri yöneticisine otomatik bir uyarı gitmeli ve önceden tanımlanmış bir eylem planı devreye girmelidir. Vakada sağlık puanı 40'a düşen bir müşteri için yöneticiye 24 saat içinde proaktif iletişim kurması gerektiğini bildiren bir görev oluşturuluyordu. Uyarılar Slack ve e-posta üzerinden iletiliyor, her risk sinyali için önceden tanımlanmış eylem planları uygulanıyordu.

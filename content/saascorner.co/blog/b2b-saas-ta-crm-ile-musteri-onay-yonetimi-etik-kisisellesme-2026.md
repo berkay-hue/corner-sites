@@ -88,3 +88,21 @@ Alt Başlık 6.2: Veri Mahremiyeti Portalları ve Radikal Şeffaflık
 ## Sonuç
 
 B2B SaaS dünyasında rekabetin giderek arttığı bir dönemde, müşteri onay yönetimi artık göz ardı edilebilecek teknik bir detay değil, iş stratejinin merkezinde yer alması gereken bir unsurdur. Konuyu yalnızca yasal bir yükümlülük olarak görmek, büyük bir fırsatı kaçırmak anlamına gelir. CRM'ini temel alarak kuracağın şeffaf, etik ve müşteri odaklı bir onay yönetimi sistemi, seni cezalardan korumanın çok ötesine geçer. Müşteri güvenini inşa eder, marka itibarını güçlendirir ve pazarlama çabalarının yatırım getirisini artırır. 2026'ya giden yolda kazananlar, müşterilerinin verilerine ve tercihlerine en çok saygı duyanlar olacak. CRM'ini bir uyumluluk aracından, bir güven inşa etme motoruna dönüştürmenin tam zamanı.
+
+## Sık sorulan sorular
+
+### Müşteri onay yönetimi yalnızca yasal bir zorunluluk mu?
+
+KVKK ve GDPR gibi düzenlemelere uyum başlangıç çizgisidir, varış noktası değil. Müşterilerine verilerini neden ve nasıl istediğini şeffafça açıklayıp kontrolü onlara verdiğinde bir güven ilişkisi kurarsın. Kişiselleştirme müşteri verisi olmadan yapılamadığı ve müşteriler verilerini yalnızca güvendikleri şirketlerle paylaştığı için onay yönetimi uzun vadeli bir yatırımdır.
+
+### Granüler onay nedir ve neden önemlidir?
+
+Granüler onay, müşteriye her şeyi kabul etme ya da hiçbirini kabul etmeme seçeneği yerine iletişim türlerine göre ayrı ayrı onay verme imkânı sunmaktır. CRM üzerinde bir tercih merkezi oluşturarak müşterinin sektör raporları, ürün güncellemeleri, webinar davetleri veya özel promosyonlar gibi konulardan hangilerini almak istediğini seçmesini sağlayabilirsin. Bu sayede gönderdiğin her iletişim daha değerli olur ve onay verisine dayalı akıllı segmentler kurabilirsin.
+
+### CRM'de onay takibi için hangi özel alanlar oluşturulmalı?
+
+Temel alanlar pazarlama iletişim onayı, onay tarihi, onay kaynağı ve onay kanıtıdır. Granüler yönetim için bülten, ürün güncellemesi ve etkinlik onayı gibi ayrı onay kutusu alanları da ekleyebilirsin. Bu yapılandırma her müşterinin onay durumunu net, izlenebilir ve raporlanabilir hale getirir ve olası bir yasal denetimde büyük kolaylık sağlar.
+
+### Onay yönetiminde en sık yapılan hatalar nelerdir?
+
+En yaygın hatalardan biri önceden işaretlenmiş kutular, gizlenmiş abonelikten ayrılma bağlantıları veya anlaşılmaz hukuki dil gibi karanlık desenler kullanmaktır; bu taktikler müşteri güvenini temelden sarsar. Diğer hata ise onayı bir kez alıp unutmaktır, oysa müşterinin tercihleri zamanla değişebilir. Çözüm, onay kutularını varsayılan olarak işaretsiz bırakmak, sade bir dil kullanmak ve her e-postaya tercihleri yönetme bağlantısı eklemektir.

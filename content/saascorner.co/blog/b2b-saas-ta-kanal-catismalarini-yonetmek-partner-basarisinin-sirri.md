@@ -68,3 +68,21 @@ Kanal çatışmalarını yönetmek sadece mevcut sorunları çözmek değil, ayn
 ## Sonuç
 
 B2B SaaS'ta kanal çatışmalarını yönetmek, bir defalık bir görev değil, sürekli dikkat ve iyileştirme gerektiren dinamik bir süreçtir. Çatışma, büyümenin doğal bir yan ürünü olabilir, ancak kontrol altına alınmadığında en başarılı partner programlarını bile rayından çıkarabilir. Başarının anahtarı, reaktif olmaktan çıkıp proaktif bir yaklaşım benimsemektir. Net kurallar belirlemek, şeffaf sistemler kurmak, teknolojiden yararlanmak ve en önemlisi partnerlerinle güvene dayalı bir ilişki inşa etmek, bu zorluğun üstesinden gelmeni sağlayacaktır. Unutma, partnerlerin rakiplerin değil, büyüme yolculuğundaki en önemli müttefiklerindir. Onların başarısı, senin başarındır. Bu makalede paylaşılan stratejileri uygulayarak kanal çatışmasını bir tehdit olmaktan çıkarıp, tüm satış kanallarının uyum içinde çalıştığı, sürdürülebilir bir büyüme motoruna dönüştürebilirsin.
+
+## Sık sorulan sorular
+
+### Kanal çatışması nedir?
+
+Kanal çatışması, bir yazılım sağlayıcısının iki veya daha fazla satış kanalının aynı müşteri için rekabet etmesidir. Bu kanallar doğrudan satış ekibin, distribütörler, çözüm ortakları, aracı satıcılar veya e-ticaret siten olabilir. En sık görülen türü, doğrudan satış ekibiyle partner kanalı arasındaki gerilimdir.
+
+### Anlaşma kayıt (deal registration) sistemi nasıl çalışır?
+
+Partner, üzerinde çalıştığı potansiyel müşteriyi sisteme kaydeder ve sistem bu müşterinin daha önce başka biri tarafından kaydedilip kaydedilmediğini kontrol eder. Müşteri daha önce kaydedilmemişse anlaşma belirli bir süre için o partnere atanır. Bu süre boyunca başka bir partner veya iç satış ekibi o müşteriye teklif sunamaz, böylece partner emeğinin karşılığını alacağından emin olur.
+
+### Katılım kuralları belgesinde neler yer almalı?
+
+Bu belge, hangi müşteri tipinin hangi kanala ait olduğunu ve bir anlaşmanın ne zaman partner tarafından bulunmuş sayılacağını net şekilde tanımlamalıdır. Kaydedilen bir anlaşmanın ne kadar süre korunacağı, ortak satışlarda komisyonun nasıl paylaşılacağı ve anlaşmazlıklarda kimin hakemlik yapacağı da açıkça yazılmalıdır. Belgeyi partner sözleşmesinin bir parçası yapıp herkesin erişebileceği bir yerde tutmak belirsizlikleri ortadan kaldırır.
+
+### PRM yazılımı kanal çatışmalarını nasıl azaltır?
+
+PRM yazılımı, anlaşma kaydını otomatikleştirerek çift kayıt kontrolünü anında yapar ve süreci insan hatasından arındırır. Ayrıca potansiyel müşterileri partnerlerin uzmanlık alanı, coğrafi konumu veya performansına göre adil şekilde dağıtır. Katılım kuralları ve fiyat listeleri gibi belgeleri tek bir portalda topladığı için tüm partnerler her zaman güncel bilgiye erişir.

@@ -70,3 +70,21 @@ Partner ekosistem haritalaması ve ardından gelen ortaklık faaliyetlerinin ba�
 Partner ekosistem haritalaması, B2B SaaS şirketleri için artık bir lüks değil, stratejik bir zorunluluktur. Rastgele ve tepkisel ortaklıklar devri sona erdi. Pazarını, rakiplerini ve en önemlisi müşterinin dünyasını anlamak için veriye dayalı, proaktif bir yaklaşım benimsemelisin. Bu makalede ele aldığımız adımları izleyerek, kendi ekosistem haritanı oluşturabilir, stratejik boşlukları tespit edebilir ve bu boşlukları dolduracak doğru ortakları önceliklendirebilirsin. Unutma, en başarılı SaaS şirketleri tek başına savaşanlar değil, etraflarında güçlü bir ortak ağı örenlerdir. Bugün haritanı çizmeye başla ve şirketinin gizli kalmış büyüme potansiyelini ortaya çıkar.
 
 **İlgili sayfa:** SAAS Corner'ın bu alandaki hizmetini [SaaS partnerleri ve entegratörler için outbound satış](/sektor/saas-partner-ekosistemi) sayfasında bulabilirsiniz.
+
+## Sık sorulan sorular
+
+### B2B SaaS ekosisteminde hangi partner kategorileri bulunur?
+
+B2B SaaS ekosistemleri genellikle teknoloji ortakları, kanal ortakları ve stratejik ortaklar olmak üzere üç ana kategoriye ayrılır. Teknoloji ortakları ürününle entegre olan veya olabilecek yazılımlardır; kanal ortakları ise ürününü satan, pazarlayan veya müşterilere kurulum hizmeti veren aracılardır. Stratejik ortaklar, benzer bir hedef kitleye sahip olan ancak rakip olmayan, genellikle daha büyük ve marka bilinirliği yüksek şirketlerdir.
+
+### Partner ekosistem haritası için veriler nereden toplanır?
+
+Veriler tek bir yerden değil, birden fazla kaynaktan toplanmalıdır. İlk olarak kendi CRM verilerini inceleyip müşterilerinin hangi araçları kullandığını ve satış ekibinin hangi entegrasyon taleplerini duyduğunu görmelisin. Ardından rakiplerinin partner ve entegrasyon sayfalarını, G2 ve Capterra gibi inceleme sitelerini ve LinkedIn gibi profesyonel ağları tarayabilirsin. Topladığın tüm verileri basit bir elektronik tabloda veya Airtable gibi bir veritabanı aracında merkezileştirmek, görselleştirme adımı için kritik öneme sahiptir.
+
+### Potansiyel ortaklar nasıl önceliklendirilir?
+
+Potansiyel ortakları Erişim, Uygunluk ve Gelir Potansiyeli kriterlerine göre puanlayarak önceliklendirebilirsin. Her kritere 1'den 5'e kadar bir puan vererek basit bir skorlama matrisi oluşturursun. Üç kriterde de yüksek puan alan bir ortak en yüksek önceliğe sahip olmalıdır; böylece enerjini en yüksek getiriyi sağlayacak ortaklıklara odaklarsın.
+
+### Partner ekosisteminin başarısı hangi metriklerle ölçülür?
+
+Başarıyı ölçmenin temel metrikleri partner kaynaklı gelir ve partner etkili gelirdir. Partner kaynaklı gelir doğrudan bir ortağın yönlendirmesi veya satışıyla gelen geliri, partner etkili gelir ise bir ortağın satış sürecinin herhangi bir aşamasında dokunduğu tüm gelirleri kapsar. Bunlara ek olarak ortak kampanyalardan gelen nitelikli potansiyel müşteri sayısını, entegrasyon benimseme oranını ve ortaklar aracılığıyla kazanılan müşterilerin yaşam boyu değerini takip etmelisin. Yalnızca kurulan ortaklık sayısını izlemek yeterli değildir.

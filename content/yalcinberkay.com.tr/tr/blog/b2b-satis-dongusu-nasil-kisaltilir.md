@@ -2,10 +2,13 @@
 title: "B2B Satış Döngüsü Nasıl Kısaltılır? 7 Pratik Yöntem"
 description: "Türkiye'de B2B satış döngüsünü uzatan darboğazları, satın alma komitesinin rolünü ve süreci hızlandırmanın somut, uygulanabilir yollarını ele alıyoruz."
 date: "2026-10-14"
+updated: "2026-10-16"
 category: "B2B Satış"
 image: "https://images.pexels.com/photos/8730986/pexels-photo-8730986.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
-imageAlt: "B2B Satış Döngüsü Nasıl Kısaltılır? 7 Pratik Yöntem"
+imageAlt: "Toplantı masasında belgeleri inceleyen ve not alan iş insanları"
 ---
+
+B2B satış döngüsünü kısaltmak için müşterinin yavaşlığına değil, satış sürecindeki belirsizliklere odaklanın. Doğru müşteriyle konuşun, karar vericileri erkenden masaya getirin, her adımı ortak bir plana bağlayın, satın alma sürtünmesini önceden kaldırın, güveni içerikle hızlandırın, darboğazları veriyle bulun ve aciliyeti statükonun maliyetiyle yaratın. Bu yedi yöntem birlikte uygulandığında döngü kısalır.
 
 B2B satışta en sık duyduğum şikâyetlerden biri şu: "Fırsat iyiydi, müşteri ilgiliydi ama karar bir türlü çıkmadı." Aylarca süren toplantılar, "bütçe dönemini bekleyelim" cevapları ve bir anda sessizliğe gömülen e-posta zincirleri tanıdık geliyorsa yalnız değilsiniz. Uzun satış döngüsü yalnızca sabrı tüketmez. Nakit akışını bozar, tahmin doğruluğunu düşürür ve satış ekibinin aynı anda taşıyabileceği fırsat sayısını sınırlar. 90 günde kapanabilecek bir anlaşmanın 180 güne yayılması, ekibin o yıl taşıyabileceği fırsat sayısını fiilen yarıya indirmek demektir.
 
@@ -214,3 +217,21 @@ B2B satış döngüsü, çoğu zaman sanıldığı gibi müşterinin yavaşlığ
 En önemli tavsiyem şu: Bugün CRM'inizi açın ve fırsatlarınızın en uzun hangi aşamada beklediğine bakın. İlk iyileştirmeyi oradan başlatın.
 
 Satış döngünüzü analiz etmek, outbound sürecinizi kurmak ya da satış operasyonlarınızı daha verimli hale getirmek için fikir alışverişi yapmak isterseniz, [Berkay Yalçın](/tr) sayfası üzerinden benimle iletişime geçebilirsiniz.
+
+## Sık sorulan sorular
+
+### B2B satış döngüsü neden uzar?
+
+B2B satış döngüsü genellikle dört nedenle uzar: uygun olmayan müşteri, tek bir kişiye bağımlılık, belirsiz süreç ve gizli engeller. Döngünün 90 günden 180 güne çıkması, ekibin taşıyabileceği fırsat sayısını fiilen yarıya indirir. Bu yüzden döngüyü kısaltmak, yalnızca hız değil satış kapasitesi meselesidir.
+
+### Satış döngüsünü kısaltmak için indirim vermek işe yarar mı?
+
+İndirim kısa vadede işe yarayabilir, ancak döngüyü kalıcı olarak kısaltmanın doğru yolu değildir. Müşteriyi indirim beklemeye alıştırarak sonraki dönemlerde döngüyü daha da uzatır ve kâr marjınızı eritir. Gerçek aciliyet, müşterinin hiçbir şey yapmamanın bedelini görmesinden doğar; örneğin 5 kişinin haftada 6 saat kaybetmesi ayda yaklaşık 120 saat demektir.
+
+### Ortak eylem planı satış döngüsünü nasıl kısaltır?
+
+Ortak eylem planı, alıcıyla birlikte hedef tarihten geriye doğru planlama yaparak sürecin her adımını iki taraf için de görünür hale getirir. Sözleşme ve onay sürecini en geç ikinci görüşmede sormak ve öğrendiklerinizi plana en baştan koymak sürprizleri önler. Sözleşme taslağını demo sonrasında paylaşmak da teknik değerlendirme ile hukuki incelemenin paralel ilerlemesini sağlar ve tek başına birkaç haftalık kazanç getirebilir.
+
+### Satış döngüsünün hangi aşamada tıkandığını nasıl anlarım?
+
+Tıkanma noktasını bulmanın yolu, CRM'de her aşamanın süresini ölçmektir. Bir fırsat herhangi bir aşamada ortalama sürenin 1,5 katından uzun kaldığında uyarı, 14 gün boyunca hiçbir aktivite olmadığında risk işareti oluşturulabilir. Her fırsat için bir sonraki adım alanını zorunlu tutmak da duran fırsatların erkenden fark edilmesini sağlar.

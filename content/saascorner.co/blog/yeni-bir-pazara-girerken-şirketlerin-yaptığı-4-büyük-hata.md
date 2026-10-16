@@ -66,3 +66,21 @@ Yeni bir pazara girmek zor değil, doğru hazırlanmadan girmek zordur.
 Pazar araştırmasını atlamak, yerel dinamikleri görmezden gelmek, tek kanala sıkışmak ve erken pes etmek bu sürecin en sık görülen tuzaklarıdır. Her biri önlenebilirdir.
 
 Doğru strateji, doğru araçlar ve doğru ekiple yeni bir pazar, yük değil büyüme fırsatına dönüşür.
+
+## Sık sorulan sorular
+
+### Yeni bir pazara girmeden önce hangi soruları yanıtlamalısınız?
+
+Bu pazardaki ideal müşterinizin kim olduğunu, rakiplerin ne yaptığını, hangi kanalların işe yaradığını ve fiyat hassasiyetinin nasıl olduğunu yanıtlamalısınız. Bir pazarda işe yarayan ürün, aynı mesajla başka bir pazarda karşılık bulmayabilir. Satın alma alışkanlıkları, karar alma süreçleri ve rekabet ortamı pazardan pazara değişir. Bu soruları atlamak, hangi yöne gidildiğini bilmeden hız yapmaya benzer.
+
+### Yerel dinamikler satış iletişimini nasıl etkiler?
+
+Yerel dinamikler, e-postaların tonundan kullanılan referanslara ve toplantıların nasıl başlatıldığına kadar iletişimin her adımını etkiler. Bu yalnızca dil bariyerini değil, kültürel kodları da kapsar. Aynı dili konuşan ülkeler arasında bile iletişim tarzı açısından ciddi farklar olabilir. Doğrudan ve net olmayı seven bir kültürde ilişki kurarak satış beklemek sonuçsuz kalabilir.
+
+### Yeni bir pazarda neden birden fazla kanal kullanılmalı?
+
+Yeni bir pazarda henüz bilinirliğiniz olmadığı için birden fazla temas noktası oluşturmanız gerekir. E-posta, LinkedIn, soğuk arama ve içerik üretimi birlikte çalıştığında görünürlük artabilir ve potansiyel müşteri sizinle farklı anlarda farklı kanallardan karşılaşır. Tek kanala odaklanmak riski artırır. Kanal çeşitliliği ise veri üretir ve o pazarda hangi kanalın daha iyi çalıştığını gösterir.
+
+### Yeni bir pazarda sonuç almak için ne kadar beklemelisiniz?
+
+İlk bir ila iki ayı veri toplama ve strateji ayarlama dönemi olarak görmelisiniz. Asıl momentum genellikle bu dönemin ardından gelir. Birkaç haftalık bir denemeden sonra geri çekilmek çoğu zaman yanlış bir karardır. O noktada süreç henüz oturmamış, mesajlar test edilmemiş ve doğru kişilere ulaşılıp ulaşılmadığı netleşmemiş olur.

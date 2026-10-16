@@ -62,3 +62,21 @@ Satışçılar zayıf olduğu için değil, içinde bulundukları sistem onları
 Net bir strateji, işleyen bir altyapı, görünen kazanımlar, büyüme fırsatı ve sürdürülebilir bir tempo olmadığında en yetenekli kişi bile zamanla erir. Bunu engellemek ise işe alımdan çok önce başlar: kurulmadan önce ne tür bir ortam inşa edildiğiyle başlar.
 
 Yüksek çalışan devrinden yakınan şirketlerin büyük çoğunluğu aslında bir insan problemi değil, bir sistem ve kültür problemi yaşıyor.
+
+## Sık sorulan sorular
+
+### Satış ekibine yalnızca hedef vermek neden yetersiz kalır?
+
+Hedef bir yön gösterir ama oraya nasıl ulaşılacağını söylemez. Bu durumda satışçı stratejiyi kendisi bulmak, uygulamak ve sonuç üretmek zorunda kalır. Buna CRM güncellemek, rapor hazırlamak ve toplantılara girmek de eklenince kişi ne ürettiğini değil, ne kadar yorulduğunu hissetmeye başlayabilir. Bu yorgunluk zamanla motivasyonu sessizce eritebilir.
+
+### Satışlar gelmediğinde hangi soruyu sormalısınız?
+
+Kişinin yeterince iyi olup olmadığını değil, başarılı olması için gereken her şeye sahip olup olmadığını sormalısınız. Mesajın doğru kurgulanıp kurgulanmadığını, hedef kitlenin net tanımlanıp tanımlanmadığını ve araçların düzgün çalışıp çalışmadığını kontrol edin. Takip sürecinin sistematik olup olmadığına ve geri bildirim mekanizmasının işleyip işlemediğine de bakın. Bu soruların cevabı olumsuzken başarısızlığı kişiye yüklemek, aynı döngünün bir sonraki çalışanla tekrarlanmasına yol açabilir.
+
+### Sessiz istifa satış ekiplerinde nasıl ortaya çıkar?
+
+Sessiz istifa, kişi masasında oturmaya devam etse de zihinsel olarak işten çoktan ayrılmasıyla ortaya çıkar. Satış işi doğası gereği reddedilmeyle doludur ve bunu bilen bir yönetim anlayışı yoksa kişi sürekli başarısızlık içindeymiş gibi hissedebilir. Küçük kazanımlar kutlanmadığında her kaybedilen fırsat daha ağır gelir. Bu durum fark edildiğinde çoğu zaman çok geç kalınmış olur.
+
+### Sürekli kriz modunda çalışmak satış ekibini nasıl etkiler?
+
+Sürekli kriz modu kısa vadede hız gibi görünse de uzun vadede ekibin enerjisini tüketir. Her şeyin öncelikli olduğu ve hedeflerin sık sık yeniden şekillendiği bir ortamda kişi zamanla verimsizleşebilir, hata yapmaya başlayabilir ve işi anlamlı bulmaktan çıkabilir. Bu nedenle temponun yönetilmesi de liderlik sorumluluğunun bir parçasıdır. Sürdürülebilir bir tempo, ekibin uzun süre verimli çalışabilmesine yardımcı olur.

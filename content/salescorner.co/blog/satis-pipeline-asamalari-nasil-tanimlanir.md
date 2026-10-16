@@ -2,11 +2,13 @@
 title: "Satış Pipeline Aşamaları Nasıl Tanımlanır? Örnekler"
 description: "B2B satış ekipleri için pipeline aşamalarını nasıl tanımlayacağınızı, her aşamanın çıkış kriterlerini ve sık yapılan hataları örneklerle anlatıyoruz."
 date: "2026-10-12"
+updated: "2026-10-16"
 category: "Pipeline"
 image: "https://images.pexels.com/photos/8555771/pexels-photo-8555771.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
 imageAlt: "Satış Pipeline Aşamaları Nasıl Tanımlanır? Örnekler"
 alt: "how-to-define-sales-pipeline-stages"
 ---
+Satış pipeline aşamaları, satıcının ne yaptığına göre değil, alıcının satın alma yolculuğunda attığı doğrulanabilir adımlara göre tanımlanır. Her aşamanın giriş ve çıkış kriteri, sorumlusu, kapanış olasılığı ve maksimum bekleme süresi olmalıdır. Çoğu B2B ekibi için Kazanıldı ve Kaybedildi hariç beş ile yedi aşama yeterlidir.
 
 Pek çok B2B satış ekibinde CRM'e girdiğinizde aynı tabloyla karşılaşırsınız: "Görüşüldü", "İlgileniyor", "Sıcak", "Teklif gönderilecek" gibi belirsiz aşamalar ve aylardır aynı sütunda bekleyen yüzlerce fırsat. Satış müdürü haftalık toplantıda tahmin ister, temsilciler ise "bu ay kapanır gibi" diye cevap verir. Sorun genellikle ekipte değil, **pipeline aşamalarının hiç net tanımlanmamış olmasındadır**.
 
@@ -97,7 +99,7 @@ Ortalama yıllık sözleşme değeri orta seviyede olan ve satış döngüsü 30
 - **Olasılık:** %10
 - **Maksimum süre:** 10 gün. Toplantı ertelenip yeniden planlanmazsa fırsat "yeniden canlandırma" dizisine alınır.
 
-Bu aşamanın beslenmesi büyük ölçüde e-posta kalitesine bağlıdır. Kişiselleştirilmiş mesajlar üzerine detaylı bir çalışma için [yapay zekayla soğuk e-posta yazma rehberimize](/blog/yapay-zekayla-soguk-eposta-nasil-yazilir) göz atabilirsiniz.
+Bu aşamanın beslenmesi büyük ölçüde e-posta kalitesine bağlıdır. Kişiselleştirilmiş mesajlar üzerine detaylı bir çalışma için [yapay zekayla soğuk e-posta yazma rehberimize](/blog/yapay-zekayla-soguk-eposta-nasil-yazilir) göz atabilirsiniz. Dizileri ürün kaynağınızdan otomatik üretmek için [Sekans Yazarı aracımızı](/sekans-yazari) da deneyebilirsiniz.
 
 ### Aşama 2: Keşif Tamamlandı
 
@@ -207,9 +209,9 @@ Net tanımlanmış aşamalar, otomasyonun en verimli çalıştığı alandır. K
 - **Veri zenginleştirme:** Yeni bir fırsat oluşturulduğunda şirketin çalışan sayısı, sektörü ve teknoloji yığını otomatik olarak doldurulur. Böylece ICP uyumu aşama girişinde kontrol edilebilir.
 - **Kayıp sonrası yeniden canlandırma:** "Zamanlama" nedeniyle kaybedilen fırsatlar, 90 gün sonra otomatik olarak kişiselleştirilmiş bir e-posta dizisine alınır.
 
-Bu tür iş akışlarını kodlama bilgisi gerektirmeden kurmak için n8n gibi araçlar oldukça uygundur. CRM, takvim, e-posta ve yapay zeka modellerini birbirine bağlayan senaryoları [n8n ile B2B satış otomasyonu başlangıç rehberimizde](/blog/n8n-ile-b2b-satis-otomasyonu-rehberi) adım adım anlattık. Hazır kurulmuş, ekibinize göre uyarlanmış akışlar arıyorsanız [Sales Corner otomasyonlarını](/) inceleyebilirsiniz.
+Bu tür iş akışlarını kodlama bilgisi gerektirmeden kurmak için n8n gibi araçlar oldukça uygundur. CRM, takvim, e-posta ve yapay zeka modellerini birbirine bağlayan senaryoları [n8n ile B2B satış otomasyonu başlangıç rehberimizde](/blog/n8n-ile-b2b-satis-otomasyonu-rehberi) adım adım anlattık. Hazır kurulmuş, ekibinize göre uyarlanmış akışlar arıyorsanız [Sales Corner otomasyonlarını](/) inceleyebilirsiniz. Fırsat görüşme aşamasına geçtiğinde, [Toplantı Briefing aracı](/briefing) firma ve katılımcı araştırmasını görüşme öncesinde hazır eder.
 
-Otomasyonun önemli bir uyarısı var: **Kötü tanımlanmış bir süreci otomatikleştirmek, kötü sonuçları sadece hızlandırır.** Önce aşamaları ve kriterleri netleştirin, birkaç hafta manuel olarak uygulayın, sonra otomatikleştirin.
+Otomasyonun önemli bir uyarısı var: **Kötü tanımlanmış bir süreci otomatikleştirmek, kötü sonuçları sadece hızlandırır.** Önce aşamaları ve kriterleri netleştirin, birkaç hafta manuel olarak uygulayın, sonra otomatikleştirin. Bu sırayı atlayan projelerin neden tökezlediğini [satış otomasyonu projelerinin neden başarısız olduğunu anlattığımız yazıda](/blog/satis-otomasyonu-projesi-neden-basarisiz-olur) ele aldık.
 
 ## İzlemeniz Gereken Temel Pipeline Metrikleri
 
@@ -228,3 +230,17 @@ Bu metrikleri aylık olarak temsilci bazında da inceleyin. Bir temsilcinin demo
 Satış pipeline aşamalarını tanımlamak, bir CRM ayarı değil, **satış sürecinizin omurgasını tasarlamaktır**. Her aşamanın alıcı eylemine dayalı giriş ve çıkış kriterleri, net bir sorumlusu, gerçek verilere dayanan bir olasılığı ve maksimum bekleme süresi olmalıdır. İş modelinize göre 5-7 aşamayla başlayın. Outbound SaaS, kurumsal hizmet ve KOBİ satışı için gördüğünüz gibi aşamalar farklılaşabilir, ancak ilkeler aynıdır: doğrulanabilirlik, sadelik ve düzenli gözden geçirme.
 
 Aşamalarınız netleştiğinde, yapay zeka ve otomasyon pipeline'ınızı manuel bir takip listesinden kendi kendini güncelleyen bir sisteme dönüştürebilir. Pipeline yapınızı birlikte değerlendirmek ve ekibinize uygun otomasyon akışlarını konuşmak için [Sales Corner ekibiyle bir görüşme planlayın](/iletisim).
+
+## Sık sorulan sorular
+
+### Satış pipeline'ında kaç aşama olmalı?
+Çoğu B2B ekibi için Kazanıldı ve Kaybedildi hariç 5 ile 7 aşama idealdir. Üçten az aşama yeterli görünürlük sağlamaz, dokuzdan fazlası ise temsilcileri CRM güncellemekten bıktırır.
+
+### İyi tanımlanmış bir pipeline aşamasında neler olmalı?
+Her aşamanın beş bileşeni olmalıdır: giriş kriteri, çıkış kriteri, sorumlu, olasılık ve azami süre. Giriş kriteri, satış temsilcisinin değil alıcının yaptığı bir eyleme dayanmalıdır.
+
+### Satış hunisi ile pipeline arasındaki fark nedir?
+Huni "kaç?" sorusunu, pipeline ise "hangisi, nerede, ne zaman?" sorusunu yanıtlar. Huni hacim üzerinden dönüşüm modelidir; pipeline ise her bir fırsatın operasyonel görünümüdür.
+
+### Aşama olasılıkları nasıl belirlenir?
+Başlangıçta tahmini olasılıklar kullanılır ve bir çeyrek sonra gerçekleşen sonuçlarla karşılaştırılır. Örneğin bir aşamadaki 30 fırsattan 7'si kazanıldıysa gerçek oran %40 değil yaklaşık %23'tür; bu durumda genellikle aşamanın kriterleri sıkılaştırılır.

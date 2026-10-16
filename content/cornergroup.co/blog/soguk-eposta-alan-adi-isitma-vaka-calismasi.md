@@ -225,3 +225,21 @@ Soğuk e-posta alan adı ısıtma, outbound satışın en az konuşulan ama en b
 Isıtma bir kez yapılıp biten bir iş değil, kampanya boyunca sürdürülen bir disiplindir. Bu disiplini oturtan ekipler, e-postalarının gelen kutusuna ulaştığından emin olarak asıl işe, yani doğru kişilere doğru teklifi sunmaya odaklanabilir.
 
 Outbound altyapınızı sıfırdan kurmak, mevcut deliverability sorunlarınızı çözmek ya da e-posta kampanyalarınızı yapay zeka ve n8n otomasyonlarıyla ölçeklemek istiyorsanız, [Corner Group ekibiyle iletişime geçin](/iletisim). Mevcut durumunuzu birlikte inceleyip size özel bir yol haritası çıkaralım.
+
+## Sık sorulan sorular
+
+### Soğuk e-posta şirketin ana alan adından gönderilmeli mi?
+
+Hayır, soğuk e-posta ana alan adından tamamen ayrılmalı ve ikincil alan adlarına taşınmalıdır. Ana alan adını kullanmak bütün e-posta itibarını tek sepete koymak demektir; outbound kaynaklı her şikâyet ve geri dönüş, fatura ve destek gibi operasyonel iletişimi de etkiler. Vakadaki müşteride mevcut müşterilere giden bazı fatura ve destek e-postaları spam'e düşüyordu ve soğuk gönderim ana alan adından çekildikten sonra bu sorun ortadan kalktı.
+
+### Yeni bir alan adıyla soğuk gönderime ne zaman başlanmalı?
+
+Yeni posta kutularıyla ilk iki hafta yalnızca ısıtma yapılmalı, soğuk gönderime üçüncü haftada başlanmalıdır. Uygulanan 4 haftalık planda ilk hafta günlük 5 ile 10, ikinci hafta 15 ile 25 ısıtma e-postası gönderildi. Üçüncü haftada kutu başına günlük 10 ile 15 soğuk e-posta, en iyi uyum skoruna sahip küçük bir segmente gönderildi. Dördüncü haftadan itibaren soğuk gönderim kutu başına günlük 30 ile 40 seviyesine çıkarıldı.
+
+### Kampanyalar başladıktan sonra alan adı ısıtma durdurulmalı mı?
+
+Hayır, ısıtma kampanya boyunca hiç kapatılmamalıdır. Pek çok ekip ısıtmayı birkaç haftalık bir hazırlık dönemi olarak görüp kampanya başlayınca durdurur, oysa ısıtma itibarı kampanya boyunca dengeleyen sürekli bir tampon işlevi görür. Vakada sabit operasyon aşamasında da ısıtma günlük 15 ile 20 e-posta seviyesinde sürdürüldü. Bir kutuda sorun görüldüğünde de önerilen müdahale, soğuk gönderimi 48 saat durdurup ısıtmayı sürdürmekti.
+
+### Soğuk e-posta için hangi DNS kayıtları yapılandırılmalı?
+
+Her gönderim alan adında SPF, DKIM ve DMARC kayıtları eksiksiz yapılandırılmalıdır, çünkü Gmail ve Yahoo'nun 2024'te devreye aldığı toplu gönderici kuralları bu üçlüyü fiilen zorunlu hale getirdi. SPF yalnızca gerçekten kullanılan sağlayıcı ve aracı kapsamalı, DKIM hem e-posta sağlayıcısı hem gönderim aracı için ayrı tanımlanmalıdır. DMARC "p=none" ile başlayıp raporlar doğrulandıktan sonra "quarantine" politikasına geçirilebilir. Buna ek olarak özel bir izleme alan adı ve yanıt alabilmek için MX kayıtları da gerekir.

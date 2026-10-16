@@ -2,11 +2,13 @@
 title: "KVKK-Compliant B2B Cold Email: The Legal Boundaries"
 description: "Learn how B2B cold email can comply with KVKK and Turkish commercial electronic message rules, with examples of legitimate interest and opt-out options."
 date: "2026-10-13"
+updated: "2026-10-16"
 category: "Outbound"
 image: "https://images.pexels.com/photos/1181370/pexels-photo-1181370.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
 imageAlt: "KVKK-Compliant B2B Cold Email: The Legal Boundaries"
 alt: "kvkk-uyumlu-soguk-eposta-yasal-sinirlar"
 ---
+A KVKK-compliant B2B cold email has to satisfy two sets of rules. Turkish commercial electronic message rules don't require prior consent for messages to merchants and tradespeople, but the right to opt out always applies. KVKK requires a legal basis for processing personal data, usually legitimate interest or data made public, and a clear notice in the first email.
 
 For B2B sales teams in Turkey, cold email remains one of the most scalable outbound channels. But the answer to "Am I allowed to email this person?" doesn't come from a single law. It sits across two separate but overlapping regulations: **Law No. 6698 on the Protection of Personal Data (KVKK)** and **Law No. 6563 on the Regulation of Electronic Commerce**, along with the commercial electronic message rules issued under it. Many teams confuse the two. They assume that measures taken for one also satisfy the other, or they operate on half-truths like "B2B doesn't require consent."
 
@@ -68,7 +70,7 @@ KVKK permits data processing for the legitimate interests of the data controller
 - **What is the person's reasonable expectation?** An operations manager can reasonably expect to receive software offers related to their work. Sending the same person offers related to their hobbies goes beyond that expectation.
 - **How are the person's rights protected?** Safeguards such as an opt-out option, a privacy notice and a fast deletion process tip the balance in your favor.
 
-Putting this assessment in writing in a one-page document for each campaign significantly strengthens your position in the event of a complaint or an investigation by the Board.
+Putting this assessment in writing in a one-page document for each campaign strengthens your position in the event of a complaint or an investigation by the Board.
 
 ## The Duty to Inform: What to Include in the First Email
 
@@ -94,7 +96,7 @@ At a minimum, your privacy notice should include:
 - To whom the data may be transferred (including CRM, email infrastructure and enrichment providers)
 - The data subject's rights under Article 11 of KVKK and how to submit a request
 
-If you use AI to personalize your message copy, we recommend adding this notice as a fixed footer to the prompt structures described in [our guide to writing cold emails with AI](/blog/how-to-write-cold-emails-with-ai). That way, you can be sure the notice appears in every variation.
+If you use AI to personalize your message copy, we recommend adding this notice as a fixed footer to the prompt structures described in [our guide to writing cold emails with AI](/blog/how-to-write-cold-emails-with-ai). That way, you can be sure the notice appears in every variation. If you generate sequences with our [Sequence Writer tool](/sekans-yazari), keep the same footer fixed in every step.
 
 ## Opt-Out Rights, İYS and Deadlines
 
@@ -119,7 +121,7 @@ The issue outbound teams overlook most is that the tools they use are themselves
 - Does it offer a data processing agreement (DPA)?
 - In which country are the data stored on servers?
 
-For example, large B2B contact databases like [Apollo.io](https://get.apollo.io/679irkzm35ya) greatly speed up segment-based list building and contact verification. However, the responsibility for using the data the tool provides is yours. You decide which fields you export, how long you keep them and whom you send to.
+For example, large B2B contact databases like [Apollo.io](https://get.apollo.io/679irkzm35ya) greatly speed up segment-based list building and contact verification. However, the responsibility for using the data the tool provides is yours. You decide which fields you export, how long you keep them and whom you send to. Collecting signals from companies' public websites without touching personal data at all (for example with our [Web Keyword Scanner](/web-keyword)) is a safer first step from a data minimization standpoint.
 
 ### Cross-Border Transfers
 
@@ -202,3 +204,17 @@ If you'd rather have your entire outbound operation managed externally instead o
 KVKK-compliant cold email isn't an obstacle that slows outbound down. When set up correctly, it means cleaner lists, more precise targeting and fewer complaints. In short: on the commercial message side, know the limits of the merchant/tradesperson exemption and fully honor the right to opt out. On the KVKK side, document your legal basis, provide notice in the first email, process only the data you need, check your tools' cross-border transfer status and stick to your retention periods.
 
 Most of these steps can be run through well-built automations without leaving them to human error. Suppression checks, opt-out handling, privacy notice footers and periodic disposal top the list. To make your outbound processes both efficient and compliant, [schedule a call with Sales Corner](/en/iletisim) and let's review your workflow together.
+
+## FAQ
+
+### Do you need prior consent to send B2B cold email in Turkey?
+No prior consent is required for commercial messages sent to merchants and tradespeople, but the recipient's right to opt out always remains. This exemption only concerns commercial messaging law; obligations under KVKK still apply.
+
+### Are corporate email addresses personal data?
+Corporate addresses that contain a person's name, such as ayse.yilmaz@sirket.com, are personal data. Generic addresses like info@ or sales@ are generally not, as long as they don't identify a specific person.
+
+### How quickly must opt-out requests be processed?
+Sending must stop within three business days of an opt-out. The person should be removed from all sequences and future lists, and a suppression list should be kept so they are never emailed again.
+
+### What legal basis under KVKK applies to cold email?
+Two legal bases usually come into play: data made public by the data subject and legitimate interest. Publicly available data can only be relied on for uses compatible with the purpose for which it was made public, and legitimate interest requires a written, documented balancing test.

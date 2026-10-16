@@ -47,13 +47,17 @@ Bu bütünsel model, Teknoloji A.Ş.'nin LinkedIn'e bakışını temelden deği�
 
 Stratejik çerçevemizi oluşturduktan sonra, 90 günlük yoğun bir uygulama sürecine girdik. Bu süreçte, organik erişimde %50'lik artışı ve daha fazlasını getiren beş temel kuralı hayata geçirdik. Bu kurallar, Corner Group'un farklı markalarının uzmanlıklarının sahada nasıl birleştiğinin somut örnekleridir.
 
-Kurucudan Çalışana Kişisel Marka Aktivasyonu (The CEO & Employee Advocacy Protocol) LinkedIn algoritmasının insanları önceliklendirdiğini biliyorduk. Bu nedenle ilk ve en önemli hamlemiz, spot ışıklarını şirket sayfasından alıp şirketin insanlarına, özellikle de liderlerine çevirmek oldu.
+### Kurucudan Çalışana Kişisel Marka Aktivasyonu (The CEO & Employee Advocacy Protocol)
+
+LinkedIn algoritmasının insanları önceliklendirdiğini biliyorduk. Bu nedenle ilk ve en önemli hamlemiz, spot ışıklarını şirket sayfasından alıp şirketin insanlarına, özellikle de liderlerine çevirmek oldu.
 
 **CEO ve Liderlik Programı:** Brand Corner ekibimiz, CEO ve iki kilit yönetici ile birebir çalışarak onların kişisel marka sütunlarını belirledi. Her lider için üç ana içerik teması (örneğin; CEO için "Geleceğin Teknolojileri ve Liderlik", Satış Direktörü için "B2B Satış Psikolojisi ve Müzakere", Teknoloji Direktörü için "Verimlilik ve Sistem Mimarisi") oluşturuldu. Bu temalar etrafında, haftalık olarak fikirlerini ve deneyimlerini paylaştıkları, otantik ve "ben" dilini kullanan içerikler hazırlandı. Bu içerikler, asla bir ürün satmaya çalışmadı; bunun yerine, sektöre bir bakış açısı sunarak, bir tartışma başlatarak veya bir soruna farklı bir çözüm önererek otorite inşa etti. CEO'nun kişisel hesabından paylaştığı bir "Başarısızlıklarımızdan aldığımız 3 ders" gönderisi, o zamana kadar şirket sayfasının aldığı toplam etkileşimin iki katını tek başına aldı. Çünkü insanlar, parlak logolardan çok, samimi hikayelere bağlanır.
 
 **Çalışan Savunuculuğu (Employee Advocacy):** Sadece liderlerle yetinmedik. Şirketin en büyük ve en güvenilir pazarlama varlığının kendi çalışanları olduğunu biliyorduk. Social Media Corner, tüm çalışanlar için basit bir "LinkedIn Paylaşım Kılavuzu" hazırladı. Ayrıca, her hafta önemli şirket içeriklerini ve liderlerin gönderilerini içeren, çalışanların kolayca kendi ağlarında paylaşabilecekleri veya yorum yapabilecekleri bir e-posta bülteni oluşturduk. Çalışanları, gönderiyi sadece "paylaş" butonuyla değil, "Bu projede yer almaktan gurur duyuyorum çünkü..." veya "CEO'muzun bu noktasına kesinlikle katılıyorum, özellikle..." gibi kendi kişisel yorumlarını ekleyerek paylaşmaya teşvik ettik. Bu basit taktik, her bir gönderinin erişimini anında katladı.
 
-Değer Odaklı İçerik Matrisi (The Value-Centric Content Matrix) "Biz" odaklı içerik tuzağından çıkmak için, SAAS Corner'ın ICP analizlerine dayanan dört sütunlu bir içerik matrisi geliştirdik. Artık her içerik, bu dört kategoriden birine hizmet etmek zorundaydı.
+### Değer Odaklı İçerik Matrisi (The Value-Centric Content Matrix)
+
+"Biz" odaklı içerik tuzağından çıkmak için, SAAS Corner'ın ICP analizlerine dayanan dört sütunlu bir içerik matrisi geliştirdik. Artık her içerik, bu dört kategoriden birine hizmet etmek zorundaydı.
 
 **Ağrı Noktası İçerikleri:** ICP'nin günlük iş hayatında karşılaştığı somut sorunlara odaklandık. "Veri raporlamasında saatlerinizi mi harcıyorsunuz?", "Satış ekibiniz niteliksiz müşteri adaylarıyla mı boğuşuyor?" gibi doğrudan onların dilinden konuşan içerikler ürettik. Bu içerikler, ürünümüzden hiç bahsetmeden, sadece sorunu tanımlıyor ve çözüm için genel stratejiler sunuyordu. Amaç, "Bu şirket beni anlıyor" dedirtmekti.
 
@@ -63,13 +67,15 @@ Değer Odaklı İçerik Matrisi (The Value-Centric Content Matrix) "Biz" odaklı
 
 **Otorite ve Veri İçerikleri:** Sektördeki uzmanlığımızı kanıtlamak için, orijinal araştırma, mini raporlar, anket sonuçları ve derinlemesine analizler içeren içerikler ürettik. Örneğin, 200 B2B satış yöneticisiyle yaptığımız bir anketin sonuçlarını infografiklerle paylaştık. Bu tür içerikler, en çok paylaşılan ve en çok "otorite" puanı kazandıran içerikler oldu.
 
-"Sıfırıncı Yorum" ve Etkileşim Döngüsü Stratejisi (The "Comment Zero" and Engagement Loop Strategy) LinkedIn algoritmasının bir gönderinin kaderini ilk bir saat içinde belirlediğini biliyorduk. Bu kritik zaman dilimini lehimize çevirmek için agresif bir etkileşim stratejisi uyguladık.
+### "Sıfırıncı Yorum" ve Etkileşim Döngüsü Stratejisi (The "Comment Zero" and Engagement Loop Strategy)
+
+LinkedIn algoritmasının bir gönderinin kaderini ilk bir saat içinde belirlediğini biliyorduk. Bu kritik zaman dilimini lehimize çevirmek için agresif bir etkileşim stratejisi uyguladık.
 
 **Sıfırıncı Yorum (Comment Zero):** Her gönderi yayınlanır yayınlanmaz, gönderiyi yapan kişi (CEO, yönetici veya şirket sayfası) tarafından ilk yorum atıldı. Bu yorum, asla "Umarım beğenirsiniz" gibi pasif bir ifade değildi. Gönderideki konuyu derinleştiren bir soru soruyor veya ek bir bilgi veriyordu. Örneğin, "Gönderide bahsettiğim üçüncü madde, özellikle X sektöründeki firmalar için kritik. Sizin bu konudaki deneyiminiz nedir?" gibi. Bu, sohbeti daha en başından başlatıyor ve algoritma'ya "Bu içerik değerli ve tartışmaya açık" sinyalini gönderiyordu.
 
 **Etkileşim Döngüsü:** Birisi gönderiye yorum yaptığında, bu bizim için bir döngü başlatma fırsatıydı. Sadece "Teşekkürler" demek yerine, yorum yapana bir soruyla karşılık verdik. Eğer yorumda başka bir kişiden veya şirketten bahsedildiyse, o kişiyi veya şirketi sohbete etiketleyerek dahil ettik. Bu, basit bir gönderiyi, birden fazla katılımcının olduğu bir mini foruma dönüştürdü. Her yeni yorum ve yanıt, gönderinin erişimini geometrik olarak artırdı.
 
-## Veri Senkronizasyonu
+### Veri Senkronizasyonu
 
 LinkedIn'den CRM'e Kusursuz Akış (Data Synchronization: The Flawless Flow from LinkedIn to CRM) Bu kural, Corner Group'un entegre yaklaşımının en somut çıktısıydı ve Teknoloji A.Ş. için oyunun kurallarını değiştirdi. CRM Corner ve Sales Corner'ın ortak projesiyle, pazarlama ve satış arasındaki duvarı tamamen yıktık.
 
@@ -77,7 +83,7 @@ LinkedIn'den CRM'e Kusursuz Akış (Data Synchronization: The Flawless Flow from
 
 **Bağlam Odaklı Satış:** Bu entegrasyon sayesinde, satış ekibi artık potansiyel müşterilere "soğuk" bir şekilde ulaşmıyordu. Bir satış temsilcisi, bir adayı aradığında veya mesaj attığında, "Merhaba, geçen hafta CEO'muzun yapay zeka hakkındaki gönderisine yaptığınız harika yorumu gördüm. Özellikle X konusundaki görüşünüz çok değerliydi. Bu konuda şirketinizin yaşadığı zorlukları konuşmak için kısa bir zamanınız olur mu?" diyebiliyordu. Bu, görüşme oranlarını ve kalitesini dramatik bir şekilde artırdı.
 
-## Holding Metodolojisi
+### Holding Metodolojisi
 
 Çapraz Fonksiyonel Raporlama ve Optimizasyon Son kural, tüm bu çabaların sürdürülebilir ve geliştirilebilir olmasını sağlayan geri bildirim döngüsüydü. Her Cuma, tüm Corner Group marka temsilcileri ve Teknoloji A.Ş. pazarlama/satış liderleri 30 dakikalık bir "Büyüme Toplantısı" yaptı.
 

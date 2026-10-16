@@ -1,6 +1,6 @@
 # brandcorner.co: dist.mjs varsayılan bloklardan yalnızca burada tanımlanmayan yolları sona ekler (/_a, /_fru, llms.txt, *.pages.dev noindex).
-# Burada tanımlanan yol (/_next/static/*, /*) varsayılan bloğun yerini alır; aşağıdakiler şu an varsayılanlarla aynı. Yeni başlık ilgili bloğa yazılır.
-# HSTS bilinçli olarak ertelendi; buraya eklemeyin. script-src'li CSP eklemeyin (satır içi script'ler + forms-client kırılır).
+# Burada tanımlanan yol (/_next/static/*, /*) varsayılan bloğun yerini alır; /_next/static/* varsayılanla aynı. Yeni başlık ilgili bloğa yazılır.
+# HSTS: kademeli 86400→2592000→31536000, preload yok. script-src'li CSP eklemeyin (satır içi script'ler + forms-client kırılır); CSP yalnızca frame-ancestors.
 
 /_next/static/*
   Cache-Control: public, max-age=31536000, immutable
@@ -8,3 +8,7 @@
 /*
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
+  Strict-Transport-Security: max-age=86400
+  X-Frame-Options: SAMEORIGIN
+  Content-Security-Policy: frame-ancestors 'self'
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), browsing-topics=()

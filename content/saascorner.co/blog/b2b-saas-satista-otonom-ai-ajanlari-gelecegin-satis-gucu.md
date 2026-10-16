@@ -68,3 +68,21 @@ Otonom AI ajanları teknolojisini ekibine entegre etmek heyecan verici olsa da, 
 ## Sonuç
 
 B2B SaaS satış dünyası, geri döndürülemez bir şekilde değişiyor ve otonom AI ajanları bu değişimin merkezinde yer alıyor. Artık birer bilim kurgu unsuru olmaktan çıkıp, verimliliği artıran, kişiselleştirmeyi ölçeklendiren ve satış ekiplerine rekabet avantajı sağlayan somut araçlara dönüştüler. Bu teknoloji, satış profesyonellerini ortadan kaldırmak için değil, onların potansiyelini en üst düzeye çıkarmak için var. Tekrarlayan ve zaman alan görevleri devralarak, ekibinin en değerli varlığı olan insan zekasını ve empatisini stratejik ilişkilere ve anlaşmaları kapatmaya odaklamasını sağlar. Bu dönüşüme seyirci kalmak, geride kalmak demektir. Satış süreçlerini yeniden düşünme, otonom AI ajanları potansiyelini keşfetme ve geleceğin satış gücünü bugünden inşa etme zamanı geldi.
+
+## Sık sorulan sorular
+
+### Otonom AI ajanı ile sohbet robotu arasındaki fark nedir?
+
+Sohbet robotu yalnızca önceden programlanmış sorulara cevap verirken, otonom AI ajanı kendi başına karar alabilen, öğrenebilen ve çok adımlı görevleri insan müdahalesi olmadan yürütebilen bir sistemdir. Otonom bir ajan interneti tarayabilir, potansiyel müşteri listeleri oluşturabilir, kişiselleştirilmiş e-postalar yazabilir ve demo toplantısı ayarlayabilir. Onları zaman alan ama stratejik düşünme gerektirmeyen görevleri devralan dijital stajyerler gibi düşünebilirsin.
+
+### Otonom AI ajanları müşteri adayı bulmada nasıl kullanılır?
+
+Otonom AI ajanları, sektör, şirket büyüklüğü, unvan ve kullanılan teknoloji gibi kriterlere göre web sitelerini ve sosyal medya platformlarını tarayarak potansiyel müşteri listeleri oluşturur. Bununla kalmaz, yeni bir finansman turu veya açılan bir iş ilanı gibi sinyalleri fark ederek adayların ne kadar sıcak olduğunu değerlendirir ve önceliklendirir. Böylece satış ekibin enerjisini doğru adaylara odaklar.
+
+### Otonom AI ajanları sadece yeni satışlarda mı işe yarar?
+
+Hayır, otonom AI ajanları mevcut müşterilerin elde tutulmasında da kullanılabilir. Bir ajan giriş sıklığı, kullanılan özellikler ve destek talepleri gibi kullanım verilerini sürekli analiz ederek kullanımda ani düşüş gördüğünde uyarı oluşturabilir ve müşteri başarı yöneticisi için proaktif bir e-posta taslağı hazırlayabilir. Bu da ajanların kullanımının satış hattının en başıyla sınırlı olmadığını gösterir.
+
+### Otonom AI ajanlarını satış ekibine entegre etmeye nereden başlamalısın?
+
+İşe en büyük sorununun nerede olduğunu belirleyerek, örneğin müşteri adayı bulmada mı yoksa takip süreçlerinde mi zorlandığını netleştirerek başlamalısın. Ardından bir veya iki temsilciyle küçük bir pilot proje yürütmeli, ekibini eğitmeli ve demo planlama sayısı, yanıt oranları gibi net metriklerle başarıyı ölçmelisin. Kritik noktalarda veya aday gerçekten ilgi gösterdiğinde süreci bir insana devredecek kurallar koymak da önemlidir.

@@ -176,3 +176,21 @@ SaaS'ta büyüme, huninin tepesini olabildiğince çok adayla doldurmakla ilgili
 Kalite Karesi çerçevesi (Uygunluk, Niyet, Etkileşim), müşteri adaylarınıza bütünsel bir bakış açısı sunar. Bu, bir adayı "evet" veya "hayır" diye etiketleyen basit bir filtreden çok daha fazlasıdır. Bu, şirketinizin büyüme stratejisine yön veren bir pusuladır. Hangi pazarlara odaklanmanız gerektiğini, hangi pazarlama mesajlarının yankı uyandırdığını ve satış sürecinizin nerede tıkandığını size gösteren bir zeka sistemidir.
 
 Lead kalitesinden kalite karesine olan bu yolculuk, bir gecede tamamlanacak bir proje değildir. Bu, teknoloji, süreç ve kültürün bir araya geldiği, sürekli öğrenme ve optimizasyon gerektiren bir taahhüttür. Ancak bu yolculuğa çıkan SaaS şirketleri, sadece daha verimli satış ve pazarlama operasyonları inşa etmekle kalmaz, aynı zamanda daha mutlu müşteriler, daha düşük churn oranları ve en nihayetinde daha öngörülebilir ve sürdürülebilir bir büyüme motoru yaratırlar. Huninizi doldurmayı bırakın; huninizi akıllandırmaya başlayın. Gerçek büyüme orada gizlidir.
+
+## Sık sorulan sorular
+
+### SaaS'ta lead nitelendirme neden bu kadar kritiktir?
+
+Lead nitelendirme bir adayın satış ekibinin zamanına değip değmediğini belirler ve SaaS'ta müşteri yaşam boyu değeri nedeniyle kritik önem taşır. Yanlış müşteri churn'e, aşırı yüklenen bir destek ekibine ve yanlış yöne giden bir ürün yol haritasına yol açabilir. Zayıf nitelendirme ayrıca satış zamanını ve pazarlama bütçesini boşa harcayabilir.
+
+### BANT modern B2B SaaS satışında neden yetersiz kalabilir?
+
+BANT bugünün satın alma süreçlerini tam yansıtmadığı için yetersiz kalabilir. Bütçeyi erken sormak yanıltıcı olabilir ve karar genellikle tek bir kişi yerine bir satın alma komitesi ve iç savunucular tarafından şekillenir. Ayrıca ihtiyaç durağan kabul edilir ve zaman çizelgesi çoğu zaman belirsizdir.
+
+### Kalite Karesi çerçevesi lead'leri nasıl değerlendirir?
+
+Kalite Karesi lead'leri uyum, niyet ve etkileşim boyutlarında puanlar. Uyum ideal müşteri profiline dayanır, niyet ise lead skorlaması ve zamanla azalan skorlarla ölçülür. Etkileşim de demo talebi, doğrudan iletişim, sohbette ayrıntılı sorular veya aktif deneme kullanımı gibi iki yönlü diyaloğu ifade eder.
+
+### Pazarlama ve satış ekipleri lead kalitesi konusunda nasıl uyum sağlayabilir?
+
+Her iki ekibin sorumluluklarını tanımlayan bir SLA ve düzenli bir geri bildirim döngüsü uyumu güçlendirebilir. Bu döngüde satış ekibi lead'leri neden kabul ettiğini veya reddettiğini pazarlamaya bildirir. Kazanılan ve kaybedilen anlaşmaların analiz edilip modelin düzenli olarak gözden geçirilmesi de nitelendirmeyi zamanla iyileştirebilir.

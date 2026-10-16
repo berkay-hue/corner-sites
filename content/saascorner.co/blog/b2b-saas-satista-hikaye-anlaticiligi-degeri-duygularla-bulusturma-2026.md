@@ -80,3 +80,21 @@ Satış sürecinde "bütçemiz kısıtlı", "şu an önceliğimiz değil" veya "
 ## Sonuç
 
 Sonuç olarak, 2026'ya doğru ilerlerken B2B SaaS satış dünyası daha da rekabetçi hale gelecek. Bu ortamda sadece iyi bir ürüne sahip olmak yeterli olmayacak. Başarı, bu ürünün değerini müşterinin kalbine ve zihnine işleyebilenlerde olacak. B2B SaaS satışta hikaye anlatıcılığı, bu köprüyü kurmanın en güçlü aracıdır. Özellik listelerinin ve teknik jargonların ötesine geçerek, müşterinin gerçek sorunlarına dokunan, onlara bir dönüşüm vaat eden ve bu vaadi somut kanıtlarla destekleyen hikayeler, satış döngülerini kısaltır, müşteri sadakatini artırır ve seni rakiplerinden kalıcı olarak ayırır. Unutma, insanlar özellikleri satın almaz; daha iyi bir gelecek vizyonunu satın alırlar. Şimdi satış sunumlarını gözden geçirme ve ilk güçlü müşteri hikayeni oluşturmaya başlama zamanı. Anlatacağın hikaye, bir sonraki büyük anlaşmanın anahtarı olabilir.
+
+## Sık sorulan sorular
+
+### Satış hikayesinin kahramanı kim olmalıdır?
+
+Satış hikayesinin kahramanı her zaman müşteridir. Şirketi ya da ürünü kahraman yapmak müşteriyi pasif bir izleyici konumuna iter. Müşterinin zorlukları, hedefleri ve mücadelesi hikayenin merkezinde durmalıdır. Ürünün ise kahramana yolculuğunda yardım eden bir rehber ya da ona güç veren bir araç olarak yer alır.
+
+### Pixar hikaye yapısı satışa nasıl uyarlanır?
+
+Pixar yapısı "bir zamanlar", "her gün", "bir gün" ve "bu yüzden" adımlarıyla ilerleyen bir anlatı olarak satışa uyarlanır. Önce müşterinin sektöründen bir şirketle sahneyi kurarsın. Ardından her gün yaşanan acı noktasını anlatırsın. Çözümün sahneye çıktığı an hikayenin dönüm noktasıdır. Son adımda bu çözümün getirdiği sonucu gösterirsin.
+
+### Demo sunumunda hikaye anlatımı nasıl kullanılır?
+
+Demoyu menüleri sırayla gezen bir özellik turu yerine bir kahramanın yolculuğu olarak kurgulayabilirsin. Müşterinin ekibinden bir personayı kahraman olarak seç ve onun bir gününü anlat. Önce yaşadığı sorunu, ardından ürününün bu sorunu nasıl çözdüğünü göster. Bu yaklaşım müşterinin kafasını karıştırmak yerine değeri somut hale getirir.
+
+### Müşteri hikayeleri kütüphanesi nasıl oluşturulur?
+
+Farklı sektörlerden ve farklı sorunlardan gelen müşteri başarı hikayelerini satış ekibinin kolayca erişebileceği bir havuzda toplayarak oluşturulur. Her hikayeyi sorun, çözüm ve sonuç formatında özetlemek kullanımını kolaylaştırır. Hangi hikayelerin müşterilerde daha çok yankı uyandırdığını takip edip havuzu geri bildirimlere göre sürekli geliştirebilirsin.

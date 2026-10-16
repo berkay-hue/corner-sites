@@ -74,3 +74,21 @@ Bir chatbot'u kurup unutmak, yapılabilecek en büyük hatadır. "Yayına al" d�
 ## Sonuç
 
 B2B satışın geleceği, insan zekası ile yapay zekanın stratejik bir ortaklığı üzerine kuruludur. 2026'ya giden yolda, chatbot'lar artık web sitelerine eklenen basit bir eklenti değil, satış ve pazarlama stratejilerinin merkezinde yer alan, gelir artırıcı ve verimlilik odaklı bir güç merkezi olacaktır. Potansiyel müşterileri 7/24 karşılayan, onları akıllıca nitelendiren, kişiselleştirilmiş bir deneyim sunan ve satış ekiplerini sadece en sıcak fırsatlarla buluşturan bir dijital asistan, rekabette geride kalmayı göze alamayacağınız bir avantajdır. Bu rehberde belirtilen yetenekleri ve stratejik uygulama kurallarını benimseyerek, şirketiniz için sadece bir sohbet robotu değil, gerçek bir dijital satış motoru inşa edebilirsiniz. Hazırlıklara bugün başlayın, çünkü 2026'nın satış dünyasında, en akıllı ve en hızlı olan kazanacak.
+
+## Sık sorulan sorular
+
+### Satış chatbot'u potansiyel müşterileri nasıl niteliklendirir?
+
+BANT gibi bir metodolojiye dayalı yapılandırılmış sorular sorarak niteliklendirir. Bütçe, yetki, ihtiyaç ve zaman çizelgesine dair yanıtları anında analiz edip potansiyel müşteriye bir lead skoru atayabilir. Bu bilgiyi gerçek zamanlı olarak CRM'e kaydeder. Yüksek skorlu bir lead tespit ettiğinde ilgili satış temsilcisini bilgilendirebilir veya doğrudan takvimine bir demo toplantısı ekleyebilir.
+
+### Chatbot'tan satış temsilcisine devir teslim nasıl yapılmalı?
+
+Chatbot, niteliklendirme sırasında topladığı tüm bilgileri bir özet halinde CRM kaydına ve toplantı davetine eklemelidir. Müşterinin ihtiyaçları, bütçesi ve karşılaştığı zorluklar bu özetin parçası olmalıdır. Böylece satış temsilcisi toplantıya müşterinin geçmişini bilerek girer ve konuşmaya sıfırdan başlamak zorunda kalmaz. Hangi durumda ve hangi bilgilerle konuşmanın canlı bir temsilciye aktarılacağını satış ve pazarlama ekipleriyle birlikte önceden tanımlamanız gerekir.
+
+### Chatbot'ta kullanıcılara insana ulaşma seçeneği sunulmalı mı?
+
+Evet; "Canlı bir temsilciyle konuş" gibi seçenekler sohbet arayüzünde her zaman görünür ve erişilebilir olmalıdır. En akıllı chatbot bile her soruyu yanıtlayamaz ya da her karmaşık durumu çözemez. Kullanıcıyı bir insana ulaşmak için karmaşık menülerde dolaştırmak, olumlu başlayan bir deneyimi olumsuza çevirebilir. Otomasyonun amacı insan etkileşimini ortadan kaldırmak değil, onu daha değerli kılmaktır.
+
+### Chatbot yayına alındıktan sonra nasıl optimize edilir?
+
+Performansı sürekli izleyerek ve testler yaparak optimize edilir. Hangi konuşma akışlarının en çok dönüşüm sağladığını, kullanıcıların nerede sohbeti terk ettiğini ve hangi soruların chatbot'u zorladığını analitik panelden takip edebilirsiniz. Farklı karşılama mesajlarını, soruları ve eylem çağrılarını A/B testleriyle deneyebilirsiniz. Müşteri geri bildirimlerini toplamak da chatbot'un zamanla daha iyi hale gelmesine yardımcı olur.

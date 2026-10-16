@@ -2,13 +2,16 @@
 title: "From Civil Engineering to Sales: A Journey of Self-Discovery"
 description: "As a university student, I embarked on a path in Civil Engineering, initially envisioning a future in Architecture for my MBA."
 date: "2023-12-27"
+updated: "2026-10-16"
 category: ""
 image: "/_a/fr/images/9wxS1nppeHDlraHjxaqcJWKf6Y.jpeg"
-imageAlt: "From Civil Engineering to Sales: A Journey of Self-Discovery"
+imageAlt: "Illustrated graphic: “Every 3 years, 91% of Millennials leap into new job adventures”, with a sketch of one climber helping another up a slope"
 alt: "insaat-muhendisliginden-satisa-kendini-kesfetme-yolculugu"
 ---
 
-As a university student, I embarked on a path in Civil Engineering, initially envisioning a future in Architecture for my MBA. However, as I delved deeper into my studies, I realized civil engineering wasn't my calling. This moment of uncertainty led me to AIESEC, a decision initially motivated by the desire to gain international experience. Little did I know, this journey with AIESEC would change my life forever. It was more than just an opportunity to go abroad; it became a voyage of self-discovery. I found myself thoroughly enjoying interactions with people, thriving in environments that required communication and connection. This realization was a pivotal moment for me, sparking a transformation in my career goals. I shifted gears, moving away from engineering to pursue a career in sales. This wasn't just a job change; it was a transition towards a role that resonated with my newfound passion and skills. My story is a testament to the evolving career mindset among younger generations. We're not just job-hopping; we're in pursuit of what truly drives us, even if it means exploring uncharted territories. Like many of my peers, I've learned that career paths aren't always linear. They're a journey of self-discovery, growth, and adaptation. Embracing change, I've found a career that aligns with my passions and strengths, and I encourage others to be open to the possibilities their own journeys might reveal.
+I moved from civil engineering to sales after realising engineering was not my calling and discovering, through AIESEC, that I enjoy communication and working with people. My lesson: career paths are rarely linear, so stay open to change.
+
+As a university student, I embarked on a path in Civil Engineering, initially envisioning a future in Architecture for my MBA. However, as I delved deeper into my studies, I realized civil engineering wasn't my calling. This moment of uncertainty led me to AIESEC, a decision initially motivated by the desire to gain international experience. Little did I know, this journey with AIESEC would change my life forever. I found myself thoroughly enjoying interactions with people, thriving in environments that required communication and connection. This realization was a pivotal moment for me, sparking a transformation in my career goals. I shifted gears, moving away from engineering to pursue a career in sales, starting where many sellers do before [moving from SDR to Account Executive](/blog/move-from-sdr-to-account-executive) (if you wonder how AI fits into that first role, see [can AI replace your SDRs?](/blog/can-ai-replace-your-sdrs)). This wasn't just a job change; it was a transition towards a role that resonated with my newfound passion and skills. My story is a testament to the evolving career mindset among younger generations. We're not just job-hopping; we're in pursuit of what truly drives us, even if it means exploring uncharted territories. Embracing change, I've found a career that aligns with my passions and strengths, and I encourage others to be open to the possibilities their own journeys might reveal.
 
 ## Key Takeaways
 
@@ -16,3 +19,17 @@ As a university student, I embarked on a path in Civil Engineering, initially en
 - Joining AIESEC to gain international experience became a turning point and a journey of self-discovery.
 - Enjoying communication and working with people led him to move from engineering into a career in sales.
 - Career paths are rarely linear; being open to change helps you find work that fits your strengths.
+
+## FAQ
+
+### Why did Berkay move from civil engineering to sales?
+
+He realised during his studies that civil engineering was not his calling, and joining AIESEC showed him how much he enjoyed communicating and connecting with people. That discovery led him to leave engineering behind and pursue a career in sales.
+
+### What role did AIESEC play in Berkay's career change?
+
+Berkay joined AIESEC to gain international experience, and it became a turning point. There he discovered how much he enjoyed interacting with people and that he thrived in environments that required communication and connection.
+
+### What is the main lesson from Berkay's career change?
+
+Career paths are rarely linear. Being open to change and exploring new areas helps you find work that fits your passions and strengths.

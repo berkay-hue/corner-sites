@@ -2,10 +2,13 @@
 title: "How to Price B2B Services for Turkish Companies"
 description: "Pricing B2B services in Turkey means balancing lira inflation, USD-linked budgets, and local buying habits. Here is how to set rates that hold up."
 date: "2026-10-15"
+updated: "2026-10-16"
 category: "Founder Notes"
 image: "https://images.pexels.com/photos/7693692/pexels-photo-7693692.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
-imageAlt: "How to Price B2B Services for Turkish Companies"
+imageAlt: "Three colleagues reviewing printed charts and figures around a table with a laptop"
 ---
+
+To price B2B services for Turkish companies, build a pricing system rather than chase one perfect number. Know your real cost floor, choose your currency deliberately, and prefer hybrid models that cover costs while showing confidence in results. Leave honest room for negotiation, protect your margin with payment terms and indexation, and revisit your prices regularly.
 
 Pricing is the decision most founders get wrong the longest. When I started selling B2B services in Turkey, I treated price as a number I picked once, put in a proposal, and defended. It took me a few painful quarters to learn that in this market, price is a system. It includes the currency you quote in, the payment terms you accept, how you handle inflation, how much room you leave for negotiation, and how you structure risk between you and the client.
 
@@ -162,3 +165,21 @@ Pricing B2B services for Turkish companies is not about finding one perfect numb
 Most importantly, revisit your pricing regularly. In this market, what worked last year probably needs adjusting this year.
 
 If you are building a service business in Turkey and want to talk through pricing, packaging, or how to structure your first proposals, feel free to [get in touch with me through my website](/). I am always happy to exchange notes with fellow founders.
+
+## FAQ
+
+### Should you quote B2B services in Turkish lira or US dollars?
+
+Match the currency of your price to the currency of your costs as closely as possible. Quoting in USD or EUR protects you from lira depreciation, but some Turkish clients, particularly SMEs without foreign currency revenue, resist it, and the rules on foreign-currency contracts have changed over time, so check with your accountant or lawyer first. If your costs are mixed, a hybrid often works well, such as a lira base fee with indexation plus a dollar-denominated pass-through for software.
+
+### What is the best pricing model for B2B services in Turkey?
+
+For most Turkish clients, a hybrid model works best: a base fee that covers your cost floor plus a small margin, with a performance component on top. The base protects your team and cash flow, while the variable part shows confidence and aligns incentives. Define a qualified outcome in the contract, cap the variable component so the client can budget, and set a minimum term of usually three to six months.
+
+### How do you protect service contracts from inflation in Turkey?
+
+Protect your contracts with indexation clauses and tight payment terms. Add an indexation clause to contracts longer than three months, agreeing upfront on the reference (official inflation, exchange rate or a fixed percentage) and the adjustment frequency. Invoice retainers in advance, adjust the price upward if a client insists on 90-day terms, and recalculate your cost floor every quarter.
+
+### How should you handle discount requests from Turkish buyers?
+
+Expect discount requests and build honest negotiation room into your proposal instead of making your first number your final one. Offer three tiers, trade any discount for something in return such as a longer commitment or upfront payment, and discount the first period rather than the ongoing price. Know your walk-away number before the meeting and write it down, because founders who decide in the room usually concede too much.

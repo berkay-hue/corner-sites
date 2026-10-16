@@ -2,11 +2,14 @@
 title: "B2B İçin LinkedIn İçerik Takvimi Nasıl Hazırlanır?"
 description: "B2B şirketler için LinkedIn içerik takvimi nasıl hazırlanır? Konu seçimi, içerik türleri, paylaşım sıklığı ve aylık ölçüm adımlarını örneklerle anlatıyoruz."
 date: "2026-10-14"
+updated: "2026-10-16"
 category: "LinkedIn"
 image: "https://images.pexels.com/photos/15635238/pexels-photo-15635238.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
 imageAlt: "B2B İçin LinkedIn İçerik Takvimi Nasıl Hazırlanır?"
 alt: "b2b-linkedin-content-calendar"
 ---
+
+B2B için LinkedIn içerik takvimi; önce hedef ve KPI'lar netleştirilip hedef kitle haritalanarak, ardından içerik sütunları, formatlar, yayın sıklığı ve onay süreci belirlenerek hazırlanır. Takvim, organik içerikle reklamları birlikte planlar ve her ay performans verisine göre güncellenir.
 
 LinkedIn'de düzenli içerik paylaşan B2B şirketlerle ara sıra "bir şey paylaşalım" diyen şirketler arasındaki fark birkaç ay içinde netleşir. Düzenli paylaşan markalar karar vericilerin zihninde yer edinir, satış ekipleri görüşmelere daha sıcak bir zeminde başlar ve şirket sayfası potansiyel müşteriler için bir referans noktasına dönüşür. Plansız paylaşım yapan markalar ise her hafta "bu hafta ne paylaşsak?" sorusuyla vakit kaybeder. Bu tutarsızlık hem algoritmada hem de hedef kitlenin algısında görünür hale gelir.
 
@@ -254,4 +257,24 @@ Bu hatalardan kaçınmak, LinkedIn'i markanızın büyüme motorlarından birine
 
 B2B şirketler için LinkedIn içerik takvimi, rastgele paylaşımları stratejik bir büyüme sistemine dönüştüren temel araçtır. Net hedefler belirlemek, satın alma komitesindeki her personayı tanımak, dengeli içerik sütunları oluşturmak, format çeşitliliği sağlamak ve şirket sayfasıyla çalışan profillerini birlikte planlamak bu sistemin yapı taşlarıdır. Organik içerikleri reklam kampanyalarıyla entegre ettiğinizde ve her ay verilerle takviminizi güncellediğinizde, LinkedIn yalnızca bir görünürlük kanalı olmaktan çıkar. Satış ekibinizi destekleyen ve nitelikli fırsatlar yaratan bir platforma dönüşür.
 
+SaaS ve teknoloji şirketlerine özel çalışma modelimizi [SaaS için sosyal medya yönetimi](/sektor/saas) sayfasında bulabilirsiniz. LinkedIn planınıza Instagram'ı da eklemek isterseniz [B2B şirketler için Instagram stratejisi](/blog/b2b-sirketler-icin-instagram-stratejisi) rehberimiz iyi bir devam noktasıdır.
+
 Bu süreci sıfırdan kurmak ya da mevcut LinkedIn stratejinizi daha verimli hale getirmek istiyorsanız Social Media Corner olarak yanınızdayız. İçerik planlamadan üretime, yönetici profillerinin yönetiminden reklam kampanyalarına ve ölçümlemeye kadar tüm süreci sizinle birlikte kurgulayabiliriz. Markanıza özel bir LinkedIn içerik takvimi için [bizimle iletişime geçin](/iletisim).
+
+## Sık sorulan sorular
+
+### B2B şirketler LinkedIn'de haftada kaç paylaşım yapmalı?
+
+B2B şirketler için şirket sayfasında haftada 3-5 paylaşım çoğu durumda sürdürülebilir ve etkili bir aralıktır. Kaynaklarınız sınırlıysa haftada 2-3 kaliteli gönderiyle başlayıp sıklığı zamanla artırmak daha iyidir.
+
+### LinkedIn içerik takviminde içerik sütunları nasıl dağıtılmalı?
+
+Örnek bir dağılım yaklaşık %35 eğitici içerik, %20 düşünce liderliği, %20 sosyal kanıt, %15 kurum kültürü ve %10 ürün tanıtımıdır. Doğrudan satış odaklı içerikler toplam paylaşımın küçük bir kısmını oluşturmalıdır.
+
+### LinkedIn'de paylaşım için en iyi saat hangisi?
+
+Evrensel bir en iyi saat yoktur; doğru cevap sizin verilerinizdedir. İlk dört hafta farklı gün ve saatlerde paylaşıp en iyi iki-üç zaman dilimini belirleyin ve bu testi her çeyrek tekrarlayın.
+
+### İçerik takvimi yalnızca şirket sayfası için mi hazırlanmalı?
+
+Hayır, kişisel profiller genellikle şirket sayfalarından çok daha yüksek organik erişim aldığı için takvime yönetici, satış ekibi ve çalışan savunuculuğu katmanları da eklenmelidir.

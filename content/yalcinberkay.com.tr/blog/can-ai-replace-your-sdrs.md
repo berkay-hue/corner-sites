@@ -2,10 +2,13 @@
 title: "Can AI Replace Your SDRs? A Practical Answer"
 description: "Thinking about replacing SDRs with AI agents? Here is where automation works in B2B outbound, where humans still win, and how to decide for your team."
 date: "2026-10-11"
+updated: "2026-10-16"
 category: "AI & Automation"
 image: "https://images.pexels.com/photos/17485350/pexels-photo-17485350.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
-imageAlt: "Can AI Replace Your SDRs? A Practical Answer"
+imageAlt: "Hands typing on a laptop showing an online store page at a white desk"
 ---
+
+Can AI replace your SDRs? Not completely, and not yet. AI can take over a large share of SDR tasks, such as research, enrichment, first drafts and inbox management. But starting conversations with strangers, earning their trust and spotting real opportunities is still human work. Let AI handle the repetitive work and reinvest the saved time in conversations.
 
 Every few weeks a founder asks me some version of the same question: "Should I still hire SDRs, or can AI do the job now?" Usually they've just seen a demo where an AI agent researches a prospect, writes a personalized email, and books a meeting without a human touching anything. It looks magical, and if you're watching your burn rate, it's tempting to conclude that the SDR role is finished.
 
@@ -140,3 +143,21 @@ So, can AI replace your SDRs? Not completely, and not yet. It can replace a big 
 But the core of the SDR function, starting conversations with strangers, earning a few minutes of their trust, and figuring out whether there's a real opportunity, is still deeply human. The winning approach is to tier your accounts, let AI handle the repetitive work, and reinvest the saved time into the conversations that actually create pipeline.
 
 If you're rethinking your outbound setup or trying to figure out where AI fits in your sales team, I'd be happy to exchange ideas. Feel free to [reach out to me through my site](/) and let's talk.
+
+## FAQ
+
+### Which SDR tasks can AI automate today?
+
+AI can already handle research at scale, data enrichment and list building, first drafts of messaging, and inbox triage. In these areas it is often better than a junior rep, for example scanning hundreds of accounts for triggers in the time a human properly researches 20 to 30. Roughly half of a typical SDR's tasks are repetitive, rules-based and data-heavy, which is where automation fits best.
+
+### Can an AI agent fully replace an SDR team?
+
+Not completely, and not yet. AI can replace a large share of SDR tasks, but live conversations, nuanced qualification, trust and strategic judgment are still deeply human. Companies that replace all their SDRs with a fully autonomous AI agent typically see volume go up, reply rates go down and domain reputation suffer, and six months later they are rebuilding the team from scratch.
+
+### How should work be split between AI and SDRs in outbound?
+
+Tier your accounts and give each part of the work a clear owner. Tier 1 (the top 50 to 100 accounts) is fully human-led, Tier 2 uses AI drafts that a human edits, and Tier 3 runs AI-led sequences with tight guardrails, with any positive reply going immediately to a human. AI owns signal detection, enrichment, scoring, drafting, reply classification and CRM logging, while SDRs own conversations, qualification, Tier 1 outreach, final message approval and handoffs.
+
+### How do I start introducing AI into my SDR team?
+
+Start by having each SDR track their time for two weeks, then automate the most painful, lowest-risk task first, which is usually research or data enrichment. For the first 60 days, no AI-generated message should go out without human review. Measure positive reply rate, meetings booked, meetings held and how many meetings become real opportunities, and decide in advance where the freed time goes.

@@ -47,7 +47,7 @@ Preskriptif analitiğin arkasındaki teknoloji, makine öğrenmesi ve yapay zeka
 
 ## B2B Satışta CRM ile Proaktif Karar Desteğinin Gücü
 
-Teoriyi bir kenara bırakıp pratiğe odaklandığımızda, CRM ile proaktif karar desteği sistemlerinin B2B satış metrikleri üzerinde ne kadar dönüştürücü bir etkiye sahip olduğunu net bir şekilde görebiliriz. Bu sadece satış temsilcilerinin hayatını kolaylaştırmakla kalmaz, aynı zamanda ciro, krlılık ve müşteri sadakati gibi temel iş hedeflerine doğrudan katkıda bulunur. Şirketler artık karanlıkta el yordamıyla ilerlemek yerine, verinin aydınlattığı bir yolda kendilerinden emin adımlarla yürüyorlar. Bu bölümde, preskriptif analitiğin sağladığı somut faydaları gerçek dünya senaryolarıyla inceleyeceğiz.
+Teoriyi bir kenara bırakıp pratiğe odaklandığımızda, CRM ile proaktif karar desteği sistemlerinin B2B satış metrikleri üzerinde ne kadar dönüştürücü bir etkiye sahip olduğunu net bir şekilde görebiliriz. Bu sadece satış temsilcilerinin hayatını kolaylaştırmakla kalmaz, aynı zamanda ciro, kârlılık ve müşteri sadakati gibi temel iş hedeflerine doğrudan katkıda bulunur. Şirketler artık karanlıkta el yordamıyla ilerlemek yerine, verinin aydınlattığı bir yolda kendilerinden emin adımlarla yürüyorlar. Bu bölümde, preskriptif analitiğin sağladığı somut faydaları gerçek dünya senaryolarıyla inceleyeceğiz.
 
 Alt Başlık 3.1: Satış Fırsatlarını Akıllıca Önceliklendirme
 
@@ -94,3 +94,21 @@ Preskriptif analitik sistemleri, geri bildirimle beslenir ve zamanla daha akıll
 ## Sonuç
 
 B2B satış dünyasında ayakta kalmak artık sadece çok çalışmakla değil, akıllı çalışmakla mümkün. Sezgilerin ve deneyimin hala değerli olduğu bu arenada, veriye dayalı öngörü ve yönlendirme rekabette belirleyici bir avantaj sağlıyor. CRM ile proaktif karar desteği, satış ekiplerinin reaktif bir yangın söndürme modundan çıkıp stratejik bir fırsat avcılığı moduna geçmesini sağlıyor. Bu, CRM sistemini bir dijital kartvizitlik olarak görmekten vazgeçip, onu her gün satış temsilcisine en doğru adımı fısıldayan bir akıl hocasına dönüştürmektir. Preskriptif analitik artık uzak bir gelecek vizyonu değil, günümüzün rekabetçi pazarında başarılı olmak için bir zorunluluktur. Şimdi kendine şu soruyu sorma zamanı: Sen ve ekibin, geleceği sadece tahmin etmekle mi yetineceksiniz, yoksa onu şekillendirmeye hazır mısınız?
+
+## Sık sorulan sorular
+
+### Öngörücü analitik ile preskriptif analitik arasındaki fark nedir?
+
+Öngörücü analitik gelecekte ne olacağını tahmin ederken, preskriptif analitik istenen sonuca ulaşmak için atılması gereken en iyi adımları önerir. Öngörücü analitik bir müşterinin sözleşmesini yenilemeyebileceğini söyler ama ne yapman gerektiğini söylemez. Preskriptif analitik ise bu belirsizliği ortadan kaldırıp sana somut bir eylem planı sunar.
+
+### Analitiğin aşamaları nelerdir?
+
+Analitik, tanımlayıcı, teşhis edici, öngörücü ve preskriptif olmak üzere birbirinin üzerine inşa edilen aşamalardan oluşur. Tanımlayıcı analitik geçmişte ne olduğunu, teşhis edici analitik bunun neden olduğunu, öngörücü analitik ise gelecekte ne olacağını yanıtlar. Preskriptif analitik ise istenen sonuca ulaşmak için ne yapman gerektiğini söyleyerek bu yolculuğu tamamlar.
+
+### Preskriptif analitik için CRM veri kalitesi neden bu kadar önemli?
+
+CRM verisi preskriptif analitik motorunun yakıtıdır ve veri kalitesi ne kadar yüksekse motorun ürettiği öneriler de o kadar isabetli olur. Eksik, yanlış veya güncel olmayan verilerle çalışan bir algoritma yanlış ve yanıltıcı öneriler üretir. Bu yüzden mevcut verileri temizlemeli, yinelenen kayıtları birleştirmeli ve ekibinde veri girişini sürekli bir standart haline getirmelisin.
+
+### Satış ekibinin preskriptif analitik sistemini benimsemesi nasıl sağlanır?
+
+Satış ekibinin sistemi benimsemesi için onu gözetleyen bir araç değil, daha fazla satış yapmalarına yardımcı olan akıllı bir asistan olarak görmeleri gerekir. Eğitimde sadece nasıl kullanılacağını değil, aracın zamanlarını nasıl daha verimli kullanmalarını ve en iyi fırsatlara odaklanmalarını sağlayacağını somut örneklerle anlatmalısın. Başlangıçtaki direnci kırmak için açık fikirli birkaç satış temsilcisini şampiyon olarak belirleyip başarı hikayelerini ekiple paylaşabilirsin.

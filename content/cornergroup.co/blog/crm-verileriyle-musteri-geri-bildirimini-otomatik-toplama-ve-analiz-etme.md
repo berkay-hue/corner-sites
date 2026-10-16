@@ -25,7 +25,9 @@ B2B dünyası, uzun satış döngüleri, karmaşık karar alma süreçleri ve y�
 
 Otomatik bir geri bildirim sistemi kurmak, rastgele anketler göndermekten çok daha fazlasıdır. Bu, müşteri yolculuğunu derinlemesine anlamayı ve bu yolculuktaki kritik temas noktalarını belirleyerek anlamlı bir diyalog başlatmayı gerektiren stratejik bir süreçtir. Başarılı bir sistem, üç temel kural üzerine inşa edilir: doğru an, doğru soru ve doğru kanal.
 
-## Doğru Anları Belirlemek (Akıllı Tetikleyiciler) Geri bildirimin değeri, bağlamından gelir
+### Doğru Anları Belirlemek (Akıllı Tetikleyiciler)
+
+Geri bildirimin değeri, bağlamından gelir.
 
 Müşteriye satış sürecinden memnun olup olmadığını, sözleşme imzaladıktan altı ay sonra sormak anlamsızdır. Akıllı tetikleyiciler, CRM'deki verilere dayanarak, müşteri yolculuğundaki belirli olaylar gerçekleştiğinde geri bildirim taleplerini otomatik olarak başlatır. Bu, geri bildirimin hem taze hem de ilgili olmasını sağlar.
 
@@ -39,7 +41,9 @@ Müşteriye satış sürecinden memnun olup olmadığını, sözleşme imzaladı
 
 **Sözleşme Yenileme Öncesi:** Sözleşme yenileme tarihinden 90 gün önce, müşterinin genel memnuniyetini ve gelecekteki niyetlerini ölçen bir "Net Tavsiye Skoru (NPS)" anketi, potansiyel churn risklerini önceden belirlemenize ve gerekli önlemleri almanıza olanak tanır.
 
-## Doğru Soruları Sormak (Metriklerin Ötesinde) Farklı anlar, farklı sorular gerektirir
+### Doğru Soruları Sormak (Metriklerin Ötesinde)
+
+Farklı anlar, farklı sorular gerektirir.
 
 Amacınız, sadece bir skor elde etmek değil, o skorun arkasındaki "neden"i anlamaktır.
 
@@ -51,7 +55,9 @@ Müşteri Efor Skoru (CES - Customer Effort Score): "Sorununuzu çözmek için n
 
 **Açık Uçlu Sorular:** Otomatik analizin gücü, artık açık uçlu soruların getirdiği nitel verileri de ölçeklenebilir bir şekilde işleyebilmemizdir. "Ürünümüzde tek bir şeyi değiştirebilseydiniz, bu ne olurdu?" veya "Bizimle çalışmanın en sevdiğiniz yanı nedir?" gibi sorular, pazarlama mesajlarından ürün yol haritasına kadar her şeyi besleyecek ham maddeler sunar.
 
-## Doğru Kanalları Kullanmak (Müşteriye Ulaşmak) Müşterilerinizle nerede ve nasıl iletişim kurduğunuz, katılım oranlarını doğrudan etkiler
+### Doğru Kanalları Kullanmak (Müşteriye Ulaşmak)
+
+Müşterilerinizle nerede ve nasıl iletişim kurduğunuz, katılım oranlarını doğrudan etkiler.
 
 Tek bir kanala bağlı kalmak yerine, çok kanallı bir yaklaşım benimsemek gerekir.
 
@@ -120,3 +126,21 @@ Corner Group olarak benimsediğimiz holding perspektifi, bize iş dünyasındaki
 Bu sistem, SAAS Corner'ın daha nitelikli potansiyel müşteriler bulmasını sağlar, çünkü pazarlama artık gerçek müşteri ihtiyaçlarına dayalı mesajlar üretir. Sales Corner'ın daha etkili satış yapmasını ve müşteri kaybını önlemesini sağlar, çünkü ekipler riskleri ve fırsatları gerçek zamanlı olarak görür. CRM Corner, bu sistemin teknik altyapısını kurarak veri akışının kusursuz olmasını garantiler. Brand Corner ve Social Media Corner ise müşterinin pozitif sesini alıp tüm pazara yansıtarak bir itibar ve güven çemberi oluşturur.
 
 Sonuç olarak, B2B pazarında sürdürülebilir bir rekabet avantajı yaratmak, artık sadece daha iyi bir ürün veya daha agresif bir satış ekibine sahip olmakla ilgili değildir. Bu avantaj, müşteriyi dinleme, anlama ve organizasyonun her bir parçasını bu anlayış etrafında hizalama yeteneğinden gelir. CRM verileriyle desteklenen otomatik bir geri bildirim döngüsü, bu yeteneği reaktif bir çabadan, proaktif, ölçeklenebilir ve akıllı bir büyüme motoruna dönüştürür. Gelecek, sadece müşterilerini dinleyenlerin değil, tüm operasyonlarını müşterilerinin sesi üzerine inşa eden şirketlerin olacaktır.
+
+## Sık sorulan sorular
+
+### Müşteri geri bildirimi hangi anlarda otomatik olarak istenmelidir?
+
+Müşteri geri bildirimi, CRM'deki belirli olaylara bağlanan akıllı tetikleyicilerle müşteri yolculuğunun kritik anlarında istenmelidir. Örneğin bir fırsat "Kazanıldı" olarak işaretlendiğinde satış süreci anketi, kurulum veya entegrasyondan 7 gün sonra CES anketi, bir destek talebi kapandığında hemen CSAT anketi gönderilebilir. Sözleşme yenilemesinden 90 gün önce gönderilen NPS anketi de riskli müşterilerin zamanında fark edilmesini sağlar.
+
+### NPS, CSAT ve CES arasındaki fark nedir?
+
+NPS, CSAT ve CES farklı soruları yanıtlayan ve farklı anlarda kullanılan üç ayrı geri bildirim metriğidir. NPS 0-10 ölçeğinde müşterinin markayı tavsiye etme olasılığını, CSAT 1-5 ölçeğinde belirli bir etkileşimden duyulan memnuniyeti, CES ise müşterinin bir işi tamamlamak için ne kadar çaba harcadığını ölçer. NPS sorusunun ardından "Bu puanı vermenizin en önemli nedeni nedir?" gibi açık uçlu bir soru sormak, puanın arkasındaki nedeni ortaya çıkarır.
+
+### Geri bildirim anketleri CRM ile nasıl entegre edilir?
+
+Geri bildirim anketleri, anket araçlarının ve destek platformlarının CRM'e bağlanmasıyla entegre edilir. Typeform, SurveyMonkey veya Qualtrics gibi araçlar Salesforce, HubSpot veya Zoho gibi CRM'lere, Zendesk, Intercom veya Freshdesk gibi destek platformları da aynı müşteri kaydına bağlanabilir. Böylece her yanıt, müşterinin geçmişi ve değeriyle birlikte tek bir yerde değerlendirilir.
+
+### Olumsuz geri bildirim geldiğinde otomatik olarak ne yapılmalıdır?
+
+Olumsuz geri bildirim geldiğinde CRM'de ilgili müşteri temsilcisine otomatik olarak bir görev oluşturulabilir. Duygu analizi negatif yorumları otomatik olarak etiketler, risk sinyali taşıyan müşteriler için de hesap yöneticisine derhal bildirim gönderilebilir. Aksiyonun önceliği ise müşterinin değerine göre belirlenir; 10 yıllık bir müşterinin verdiği 6 puanlık NPS, yeni ve küçük bir müşterinin aynı puanına göre çok daha acil müdahale gerektirir.

@@ -168,3 +168,21 @@ Compliance and performance usually pull in the same direction. A narrower, more 
 Cold outbound is not prohibited in Turkey, but it isn't unregulated either. KVKK governs how data is collected and processed, while Law 6563 governs through which channel and under what conditions a message is sent. Base your targeting on documented legitimate interest. Prefer corporate channels. Provide a transparent privacy notice in the first message. Process opt-out requests within three business days, or better yet, the same day. Complete the standard contract process for foreign tools. A team that takes these steps both reduces its legal risk and builds a higher-quality pipeline.
 
 If you want to make your outbound processes KVKK-compliant, redesign your automations or build a shared compliance infrastructure for your multi-brand structure, the Corner Group team is ready to help. [Reach out via our contact page](/en/contact) and let's assess your process together.
+
+## FAQ
+
+### Do you need prior consent to send B2B cold emails in Turkey?
+
+No prior consent is required for commercial electronic messages sent to tradespeople and merchants, but the recipient's right to opt out always remains intact. This merchant exception may apply when the message is sent to a company, or to an authorized person acting on its behalf, at a corporate address. Sending a message to an employee's personal address, targeting them as an individual consumer, falls outside this scope. Communication with employees at corporate addresses remains a gray area, so assess your risk with legal counsel.
+
+### Which legal basis under KVKK can cold outbound rely on?
+
+The most suitable basis for cold outbound is the legitimate interest exception in Article 5/2-f of KVKK, because there is no explicit consent before first contact. Legitimate interest is not an automatic permission; it requires a written balancing test that weighs whether your interest is specific, whether the processing is proportionate and what the person can reasonably expect. Data being public on LinkedIn or a company website is not enough on its own, because data made public is interpreted as limited to the purpose for which it was made public.
+
+### How quickly must you stop messaging someone who opts out?
+
+You must stop sending messages within three business days of receiving an opt-out. In automated sequences this deadline is easy to miss if a scheduled follow-up step is not stopped. That is why you need a central suppression list that every opted-out address goes on and that all tools check before sending. Article 11 requests, such as asking for data to be deleted or corrected, must be answered within 30 days at the latest.
+
+### What does KVKK require when you use CRM and outbound tools hosted abroad?
+
+Uploading data about people in Turkey to tools hosted abroad is a cross-border transfer of personal data and falls under the new Article 9 rules that took effect on June 1, 2024. The most practical route is to sign the standard contracts published by the Board and notify the Authority within five business days of signing. Exceptions for incidental transfers are meant for cases that are not regular or ongoing, so relying on them for a continuously running CRM or outbound tool is not appropriate.

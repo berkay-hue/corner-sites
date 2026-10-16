@@ -68,3 +68,21 @@ Yapay zeka kararlarının iş süreçlerini doğrudan etkilediği bir dünyada, 
 ## Sonuç
 
 Yapay zeka yerlisi SaaS ürün mimarisi oluşturmak, mevcut bir ürüne yapay zeka sosu eklemekten çok daha fazlasıdır. Bu, veri akışını, hesaplama kaynaklarını, model yaşam döngüsünü ve kullanıcı deneyimini en temelden yeniden düşünmeyi gerektiren köklü bir zihniyet değişimidir. Geleneksel SaaS ürünleri belirli görevleri yerine getirirken, yapay zeka yerlisi ürünler öğrenir, adapte olur ve zamanla daha değerli hale gelir. Veriyi merkeze alan, MLOps prensiplerini benimseyen, ölçeklenebilir ve etik bir mimari kurarak sadece bugünün değil, yarının da rekabetçi pazarında ayakta kalabilirsin. Artık harekete geçme zamanı. Mevcut ürün mimarini gözden geçir ve yapay zekayı bir özellik olarak değil, işinin temel taşı olarak konumlandırmak için ilk adımı at.
+
+## Sık sorulan sorular
+
+### Yapay zeka yerlisi mimari geleneksel SaaS mimarisinden nasıl ayrılır?
+
+Temel fark, yapay zekanın sonradan eklenen izole bir servis değil, sistemin kalbi olmasıdır. Geleneksel mimarilerde veri genellikle bir işlemin sonucu olarak depolanırken, yapay zeka yerlisi mimaride veri sistemin yakıtıdır. Tüm veri akışları, karar mekanizmaları ve kullanıcı etkileşimleri makine öğrenmesi modellerini beslemek ve onların çıktılarıyla zenginleşmek üzere tasarlanır.
+
+### Yapay zeka yerlisi bir üründe MLOps neden gereklidir?
+
+MLOps gereklidir çünkü yapay zeka yerlisi bir ürün statik modellerle çalışamaz. Modellerin sürekli yeni verilerle eğitilmesi, performanslarının izlenmesi ve gerektiğinde güncellenmesi gerekir; MLOps hattı da geliştirme, eğitim, dağıtım ve izleme süreçlerini otomatikleştirir. Mimaride bu bileşene yer vermezsen ürünün zamanla akıllanmak yerine güncelliğini yitirir ve performans kaybeder.
+
+### Yapay zeka işlemlerinin maliyeti nasıl kontrol altında tutulur?
+
+Maliyetleri mimari ve model düzeyinde optimizasyonla kontrol altında tutabilirsin. Mikroservis yaklaşımı yalnızca yoğun talep gören servisi bağımsız olarak ölçeklendirmeni, sunucusuz bilişim ise yalnızca kodun çalıştığı süre kadar ödeme yapmanı sağlar. Donanım tarafında model eğitimi için güçlü GPU'lar, tahmin işlemleri için daha uygun maliyetli CPU'lar tercih edilebilir; niceleme ve budama gibi tekniklerle de modelin boyutu ve karmaşıklığı azaltılabilir.
+
+### Yapay zeka kararlarına kullanıcı güveni nasıl sağlanır?
+
+Kullanıcı güveni, mimariye açıklanabilir yapay zeka prensiplerini dahil ederek sağlanır. Bu, modelin verdiği kararların arkasındaki mantığı basit ve anlaşılır biçimde sunan mekanizmalar tasarlamak demektir. Ayrıca veri gizliliği ve model yanlılığı gibi etik konular mimari düzeyde ele alınmalı, veri toplama ve eğitim süreçlerinde adalet algoritmaları kullanılmalıdır.

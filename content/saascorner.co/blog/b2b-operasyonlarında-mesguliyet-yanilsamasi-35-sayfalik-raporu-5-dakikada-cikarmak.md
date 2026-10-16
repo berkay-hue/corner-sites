@@ -22,3 +22,21 @@ Bizim için otomasyon bir "şov" aracı değil, sarsılmaz bir temeldir. **Strat
 İçerik üretiminden teknik SEO analizine, rakip takibinden sekans yazımına kadar her süreci arka planda tıkır tıkır işleyen modüllere devrediyoruz. Çünkü biliyoruz ki; operasyonel netlik sağlanmadan atılan her adım, boşa harcanan zamandır.
 
 **Sonuç olarak;** Pazarlama ağzıyla süslenmiş vaatlerle değil, 5 dakikada önünüze gelen 35 sayfalık hatasız raporlarla büyüyoruz. Manuel iş yükünü sıfıra indiren bu sistemin teknik detaylarını ve modüllerimizi incelemek için proje sunumumuzu mutlaka gözden geçirin.
+
+## Sık sorulan sorular
+
+### B2B operasyonlarında meşguliyet yanılsaması nedir?
+
+Meşguliyet yanılsaması, ekibin yoğun çalıştığı halde zamanının büyük kısmını büyümeye katkı sağlamayan manuel işlere harcamasıdır. Elle hazırlanan raporlar ve tekrarlayan operasyonel görevler ekibi meşgul gösterebilir ama genellikle büyümeyi yavaşlatır. Bu işlerin otomasyona devredilmesi, ekibin enerjisini daha stratejik çalışmalara yönlendirebilir.
+
+### Otonom sistemler raporlama sürecini nasıl değiştirebilir?
+
+Otonom sistemler, tablolardaki ham verileri otomatik olarak derinlemesine raporlara ve yönetim sunumlarına dönüştürebilir. Böylece ekibin saatlerini alan manuel rapor hazırlığı büyük ölçüde ortadan kalkabilir. Ekip de zamanını raporu hazırlamak yerine rapordan çıkan sonuçlara göre aksiyon almaya ayırabilir.
+
+### Stratejik Verimlilik Piramidi neyi anlatır?
+
+Stratejik Verimlilik Piramidi, otomasyonu temele koyarak ekibin zamanını en değerli işlere ayırmasını anlatan bir yaklaşımdır. İçerik üretimi, teknik SEO, rakip takibi ve sekans yazımı gibi tekrarlayan işler modüllere devredilir. Ekip ise doğru kişilere ulaşmak ve ilişki kurmak gibi insan dokunuşu gerektiren işlere odaklanabilir.
+
+### SAAS Corner modülleri hangi operasyonel işlerde destek sağlar?
+
+SAAS Corner modülleri raporlama, hedef şirketlerin teknoloji altyapısına dair teknik istihbarat ve aday değerlendirme gibi işlerde destek sağlayabilir. CV Analiz modülü adayların nesnel kriterlere göre puanlanmasına yardımcı olur. İçerik, teknik SEO, rakip takibi ve sekans yazımı da modüller aracılığıyla otomatikleştirilebilir.

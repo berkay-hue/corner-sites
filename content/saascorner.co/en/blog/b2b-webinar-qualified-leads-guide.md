@@ -252,3 +252,21 @@ A single webinar produces a content pool you can use for weeks:
 When designed correctly, a B2B webinar is one of the most efficient ways to generate qualified leads, but that efficiency doesn't happen on its own. Success starts with a clear ICP and a shared definition of a "qualified lead," continues with a problem-focused topic and a well-designed registration form, gains strength through targeted promotion and intent signals from the live session, and finally turns into revenue through fast, segmented follow-up. When you treat a webinar not as a content event but as an end-to-end sales and marketing operation, you start talking about pipeline and revenue instead of registration numbers.
 
 If you'd like to build your webinar program together with outbound prospecting, CRM integration and sales follow-up, the SAAS Corner team would be happy to help. [Get in touch with us](/en/contact) to discuss your target audience and current processes.
+
+## FAQ
+
+### How do you measure whether a B2B webinar generated qualified leads?
+
+Measure a webinar further down the funnel rather than by registration count, since registrations and attendance are only starting metrics. Track the ICP match rate of registrants, attendance rate, average watch time, engagement rate, leads handed off to sales, first meetings held, pipeline value created, and cost per opportunity. Comparing cost per opportunity with your other channels shows where webinars fit in your channel mix.
+
+### What should a webinar registration form ask?
+
+A webinar registration form should collect first and last name, business email, company name, title or role, company size, and one qualifying question. That qualifying question asks where the registrant is with the topic right now, with options such as researching, looking for a solution, or looking to replace their current solution. A manager who selects looking to replace their current solution should go on the sales team's priority list even if they never attend.
+
+### How quickly should sales follow up after a webinar?
+
+Hot leads, such as demo requests and high scorers, should get a personal email or phone call from a sales rep within 24 hours. Most of the value a webinar generates is either won or lost in the 48 hours after the session ends. An email arriving a week after the webinar cools down a hot lead.
+
+### Which intent signals should you capture during a live webinar?
+
+Capture attendance duration, poll responses, questions asked, and closing actions such as demo or meeting requests. An attendee who stays for more than 70% of the session is at a very different level of interest than one who leaves in the first 10 minutes. Assigning a sales or SDR team member as moderator lets them note signals in the chat in real time.

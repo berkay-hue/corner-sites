@@ -62,3 +62,21 @@ Sürdürülebilir marka değeri yaratmak, sabır ve tutarlılık gerektiren uzun
 ## Sonuç
 
 B2B marka değeri, pazarlama departmanının bir kontrol listesindeki maddelerden biri değildir; şirketin en tepesinden en alt birimine kadar herkesin sahiplenmesi gereken, yaşayan ve nefes alan bir stratejidir. Corner Group olarak biz, bu değerin ancak müşteri bulma (SAAS Corner), satış otomasyonu (Sales Corner), sistem entegrasyonu (CRM Corner) ve otantik marka iletişimi (Brand Corner & Social Media Corner) gibi kritik fonksiyonların kusursuz bir uyum içinde çalışmasıyla sürdürülebilir bir şekilde inşa edilebileceğini biliyoruz. Sürdürülebilirlik odaklı bir marka, sadece bugünün hedeflerine ulaşmanızı sağlamaz; aynı zamanda yarının pazarında lider olmanızın, en iyi yetenekleri çekmenizin ve her türlü ekonomik koşulda ayakta kalmanızın teminatıdır. Bu, geçici taktiklerden stratejik vizyona, anlık kazançlardan kalıcı değere geçişi temsil eder. Markanıza yaptığınız yatırım, geleceğinize yaptığınız en akıllıca yatırımdır.
+
+## Sık sorulan sorular
+
+### B2B'de sürdürülebilir marka değeri neleri kapsar?
+
+Sürdürülebilir marka değeri; itibar, müşteri sadakati, fiyatlandırma gücü ve yetenekli çalışanları çekebilme kabiliyetinin toplamıdır. Logo ya da kısa vadeli kampanyalarla değil, uzun vadede tutarlı biçimde inşa edilen güvenle oluşur. Bu nedenle markanın neyi sattığından çok neden var olduğu, yani amacı belirleyici hale gelir.
+
+### Marka değeri yatırımının getirisi nasıl ölçülür?
+
+En temel ölçüt, müşteri yaşam boyu değerinin (CLV) müşteri edinme maliyetine (CAC) oranıdır ve CLV'nin CAC'nin en az üç katı olması hedeflenir. Buna ek olarak NPS ile müşterilerin markayı tavsiye etme eğilimi, CSAT ile de memnuniyet düzeyi izlenir. Marka bilinirliği ise anketler, sosyal dinleme ve odak gruplarıyla takip edilebilir.
+
+### Net konumlandırma için nereden başlamak gerekir?
+
+Net konumlandırma, ideal müşteri profilini (ICP) doğru tanımlamakla başlar. Kime hizmet ettiğinizi bilmeden, hangi sorunu çözdüğünüzü ve rakiplerden neden farklı olduğunuzu anlatmak zorlaşır. Müşteri odaklı bir yaklaşım bu tanımı somut deneyimlere dönüştürür ve zamanla müşteri yaşam boyu değerini yükseltir.
+
+### Güçlü bir marka uzun vadede şirkete ne kazandırır?
+
+Güçlü bir marka, şirkete fiyatlandırma gücü ve yetenekli çalışanları çekme avantajı kazandırır. Ayrıca piyasa dalgalanmalarına karşı daha dayanıklı olmayı sağlar ve stratejik iş birliklerinin kapısını açar. Bu etkiler birikerek markayı kısa vadeli bir pazarlama harcaması olmaktan çıkarıp kalıcı bir şirket varlığına dönüştürür.

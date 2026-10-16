@@ -29,9 +29,9 @@ Uygulama Örneği (Sales Corner & SAAS Corner): "Aşağıdaki görevi adım adı
 
 Bu mega-prompt, pazar araştırmasından metin yazarlığına kadar dört farklı görevi tek bir komutta birleştirir. Sales Corner ekiplerinin her bir potansiyel müşteri için manuel olarak saatlerce yapacağı işi saniyelere indirgerken, SAAS Corner'ın belirlediği ideal müşteri profiline tam olarak uyan bir iletişim stratejisi oluşturur.
 
-## Rol Yapma (Role-Playing) ve Perspektif Değişimi Simülasyonları B2B satış ve pazarlamanın özü, müşterinin zihnine girebilmektir
+## Rol Yapma (Role-Playing) ve Perspektif Değişimi Simülasyonları
 
-Rol yapma promptları, ChatGPT'yi belirli bir role bürünmeye zorlayarak bu süreci simüle etmenizi sağlar. Bu, sadece içerik üretmek için değil, aynı zamanda strateji geliştirmek, itirazları öngörmek ve değer önermesini keskinleştirmek için de paha biçilmezdir.
+B2B satış ve pazarlamanın özü, müşterinin zihnine girebilmektir. Rol yapma promptları, ChatGPT'yi belirli bir role bürünmeye zorlayarak bu süreci simüle etmenizi sağlar. Bu, sadece içerik üretmek için değil, aynı zamanda strateji geliştirmek, itirazları öngörmek ve değer önermesini keskinleştirmek için de paha biçilmezdir.
 
 Uygulama Örneği (Sales Corner & Brand Corner): "Bir simülasyon başlatıyoruz. Sen, 20 yıldır üretim sektöründe çalışan, teknolojiye şüpheyle yaklaşan ve bütçe kısıtlamaları konusunda son derece hassas olan bir Fabrika Operasyon Direktörüsün. Ben ise sana yeni bir üretim verimliliği yazılımı satmaya çalışan bir satış temsilcisiyim. Sana ürünümüzün 'gerçek zamanlı veri analizi' özelliğini anlattığımda, bana soracağın en zor üç soruyu ve en temel üç itirazını listele. Cevaplarını, bu role uygun olarak doğrudan ve biraz da alaycı bir tonda yaz."
 
@@ -76,3 +76,21 @@ Brand Corner ve Social Media Corner için: Tersine mühendislik, içerik stratej
 B2B dünyasında ChatGPT ve benzeri yapay zeka araçlarını kullanmak artık bir seçenek değil, bir zorunluluktur. Ancak asıl rekabet avantajı, bu araçları kimin kullandığından değil, kimin "nasıl" kullandığından gelecektir. Prompt mühendisliği, teknik bir beceri olmanın ötesine geçerek, pazar dinamiklerini anlama, müşteri psikolojisine nüfuz etme ve veriye dayalı kararlar alma yeteneğini içeren temel bir stratejik yetkinlik haline gelmiştir. Mega-promptlar, rol yapma simülasyonları, bağlamsal zenginleştirme, tersine mühendislik ve zincirleme düşünce gibi trendler, bu yeni dönemin yapı taşlarıdır.
 
 Corner Group olarak, büyümenin silolarda değil, entegrasyonda yattığına inanıyoruz. Müşteri bulmaktan (SAAS Corner) satışı otomatikleştirmeye (Sales Corner), tüm bu süreci akıllı verilerle beslemekten (CRM Corner) ve marka hikayesini en etkili şekilde anlatmaya (Brand Corner & Social Media Corner) kadar, prompt mühendisliği bu entegrasyonun sinir sistemini oluşturuyor. Geleceğin başarılı B2B şirketleri, yapay zekaya sadece görev verenler değil, onunla stratejik diyalog kurabilenler olacaktır. Bu diyaloğun dilini öğrenmek ve ustalaşmak, sürdürülebilir büyümenin yeni kodudur.
+
+## Sık sorulan sorular
+
+### B2B pazarlamada prompt mühendisliği nasıl değişiyor?
+
+Prompt mühendisliği, "yaz", "özetle" veya "listele" gibi tek adımlı komutlardan bağlam içeren stratejik bir diyaloğa dönüşüyor. Etkili bir prompt artık persona, hedef, kısıtlamalar ve bağlam bilgisini birlikte içeriyor. Bu sayede yapay zekadan genel geçer değil, markaya ve hedef kitleye özgü çıktılar almak mümkün oluyor.
+
+### Mega-prompt nedir ve ne işe yarar?
+
+Mega-prompt, birden fazla adımı tek bir komutta birleştiren bir prompt mimarisidir. Örneğin analizden başlayıp en fazla 150 kelimelik bir LinkedIn mesajıyla biten dört adımlı bir görev tek seferde tanımlanabilir. Böylece model her adımda önceki çıktıyı kullanır ve daha tutarlı, uygulamaya hazır bir sonuç üretir.
+
+### Rol yapma promptları satış hazırlığına nasıl katkı sağlar?
+
+Rol yapma promptları, müşterinin bakış açısını simüle ederek satış görüşmelerine önceden hazırlanmayı sağlar. Örneğin modelden 20 yıllık deneyime sahip, şüpheci bir fabrika operasyon direktörü gibi davranması istenebilir. Model bu rolde üç soru ve üç itiraz sıraladığında ekip, gerçek görüşmede karşılaşacağı tepkilere daha hazırlıklı olur.
+
+### Chain-of-Thought yaklaşımı hangi durumlarda kullanılır?
+
+Chain-of-Thought, modelin bir problemi adım adım düşünerek çözmesi istendiğinde kullanılır. Pazar payını yüzde 5 artırmak gibi stratejik ve çok değişkenli hedeflerde, modelin ara adımları açıkça gerekçelendirmesi daha sağlıklı sonuçlar verir. Bu yöntem, çıktının mantığını görmeyi ve gerektiğinde müdahale etmeyi de kolaylaştırır.

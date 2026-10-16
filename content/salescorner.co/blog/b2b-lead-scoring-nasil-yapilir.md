@@ -2,11 +2,13 @@
 title: "B2B Lead Scoring Nasıl Yapılır? Adım Adım Model"
 description: "B2B lead scoring modeli nasıl kurulur? Puanlama kriterleri, örnek tablo ve CRM'de uygulama adımlarıyla Türkiye'deki satış ekipleri için pratik rehber."
 date: "2026-10-14"
+updated: "2026-10-16"
 category: "Lead Generation"
 image: "https://images.pexels.com/photos/7876672/pexels-photo-7876672.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
 imageAlt: "B2B Lead Scoring Nasıl Yapılır? Adım Adım Model"
 alt: "b2b-lead-scoring-model"
 ---
+B2B lead scoring, her lead'e iki ayrı puan verilerek yapılır: şirketinize ne kadar uyduğunu gösteren fit skoru (sektör, şirket büyüklüğü, unvan) ve satın almaya ne kadar yakın olduğunu gösteren engagement skoru (e-posta yanıtı, site ziyareti, demo talebi). Puanlar eşik değerlerle gruplara ayrılır, CRM'de otomatikleştirilir ve gerçek sonuçlarla düzenli olarak kalibre edilir.
 
 B2B satış ekiplerinin çoğu aynı sorunu yaşar: pipeline'da yüzlerce lead vardır ama satış temsilcilerinin günü sınırlıdır. Kime önce dönülecek, hangi lead'e bir hafta sonra yeniden temas edilecek, hangisi listeden tamamen çıkarılacak? Bu kararlar "içgüdüyle" verildiğinde en iyi fırsatlar soğur, ekip enerjisini satın alma niyeti olmayan kişilere harcar. **Lead scoring** bu kaosu sistematik bir önceliklendirmeye dönüştürür. Her lead'e, şirketinize ne kadar uygun olduğunu ve satın almaya ne kadar yakın olduğunu gösteren bir puan verir.
 
@@ -181,13 +183,13 @@ Puanlar tek başına bir şey ifade etmez. Önemli olan her puan aralığının 
 - Fit skoru 70 ve üzeri: yüksek fit
 - Engagement skoru 50 ve üzeri: yüksek engagement
 
-B grubundaki lead'ler, outbound ekiplerin en büyük fırsatıdır. Doğru şirkettirler ama henüz sizi tanımamaktadırlar. Bu gruba gönderilecek mesajların kalitesi dönüşümü doğrudan belirler. [Yapay zekayla soğuk e-posta yazmayı anlattığımız yazıda](/blog/yapay-zekayla-soguk-eposta-nasil-yazilir) bu lead'ler için ölçeklenebilir ama kişisel mesajların nasıl hazırlanacağını detaylıca ele aldık.
+B grubundaki lead'ler, outbound ekiplerin en büyük fırsatıdır. Doğru şirkettirler ama henüz sizi tanımamaktadırlar. Bu gruba gönderilecek mesajların kalitesi dönüşümü doğrudan belirler. [Yapay zekayla soğuk e-posta yazmayı anlattığımız yazıda](/blog/yapay-zekayla-soguk-eposta-nasil-yazilir) bu lead'ler için ölçeklenebilir ama kişisel mesajların nasıl hazırlanacağını detaylıca ele aldık. Bu dizileri ürün videonuz, PDF dokümanınız veya web sitenizden otomatik üretmek için [Sekans Yazarı aracını](/sekans-yazari) kullanabilirsiniz.
 
 ## Adım 7: Veri Zenginleştirmeyle Modeli Besleyin
 
 Fit skorunun doğruluğu, elinizdeki verinin eksiksizliğine bağlıdır. Bir form doldurulduğunda genellikle yalnızca ad, e-posta ve şirket adı gelir. Sektör, çalışan sayısı, unvan ve teknoloji bilgisi eksik kalır. Bu eksik alanlar sıfır puan alırsa iyi bir lead haksız yere düşük skorlanır.
 
-Bu sorunu çözmek için veri zenginleştirme araçları kullanılır. Lead CRM'e girdiği anda e-posta alan adından şirket bilgileri, kişinin adından ve şirketinden unvan ve kıdem bilgileri otomatik olarak çekilir. Örneğin [Apollo.io](https://get.apollo.io/679irkzm35ya) gibi B2B veri platformları hem yeni lead listesi oluşturmak hem de mevcut kayıtları firmografik verilerle zenginleştirmek için yaygın olarak kullanılır.
+Bu sorunu çözmek için veri zenginleştirme araçları kullanılır. Lead CRM'e girdiği anda e-posta alan adından şirket bilgileri, kişinin adından ve şirketinden unvan ve kıdem bilgileri otomatik olarak çekilir. Örneğin [Apollo.io](https://get.apollo.io/679irkzm35ya) gibi B2B veri platformları hem yeni lead listesi oluşturmak hem de mevcut kayıtları firmografik verilerle zenginleştirmek için yaygın olarak kullanılır. Hedef şirketlerin web sitelerinde belirli ürün veya teknoloji sinyallerini toplu olarak aramak isterseniz [Web Keyword Scanner aracımız](/web-keyword) da fit skoruna veri sağlayabilir.
 
 Zenginleştirme yaparken iki noktaya dikkat edin:
 
@@ -291,3 +293,17 @@ Lead scoring projelerinin başarısız olmasının nedenleri genellikle benzerdi
 İyi bir B2B lead scoring modeli karmaşık olmak zorunda değildir. Önemli olan ideal müşterinizi gerçek verilerle tanımlamak, fit ve engagement'ı ayrı ölçmek, negatif puanlama ve eskime kurallarıyla modeli dengede tutmak ve her skor grubunu net bir aksiyona bağlamaktır. Bu yazıda anlattığımız dokuz adımı izleyerek birkaç hafta içinde çalışan bir ilk versiyon kurabilir, ardından aylık metrikler ve satış ekibinden gelen geri bildirimlerle modeli sürekli iyileştirebilirsiniz.
 
 Sonuçta lead scoring, satış ekibinizin en değerli kaynağı olan zamanı doğru lead'lere yönlendirmenin en etkili yollarından biridir. Veri zenginleştirme, otomatik skor hesaplama ve skora bağlı outbound akışlarını kurmak için desteğe ihtiyacınız varsa Sales Corner ekibi olarak yardımcı olmaktan memnuniyet duyarız. Mevcut sürecinizi birlikte değerlendirmek için [bizimle bir görüşme planlayın](/iletisim).
+
+## Sık sorulan sorular
+
+### B2B lead scoring nedir?
+Lead scoring, potansiyel müşterilere belirli kriterlere göre sayısal puan atayarak satış ekibinin önceliklendirme yapmasını sağlayan bir yöntemdir. B2B'de iyi bir model iki boyutu ayrı ölçer: lead'in ideal müşteri profiline ne kadar uyduğunu gösteren fit skoru ve ne kadar etkileşime girdiğini gösteren engagement skoru.
+
+### Fit ve engagement skorları neden ayrı tutulmalı?
+Tek bir toplam skor, "doğru şirket ama ilgisiz" ile "yanlış şirket ama çok ilgili" lead'leri aynı puanda gösterebileceği için ayrı tutulmalıdır. İki skor ayrı kalınca 2x2 bir aksiyon matrisi kurulur: yüksek fit ve yüksek engagement'lı lead'ler 24 saat içinde satış temsilcisine devredilir, yüksek fit ama düşük engagement'lı lead'ler kişiselleştirilmiş outbound dizisine alınır.
+
+### Lead scoring modeli kurmak için ne kadar veri gerekir?
+Büyük bir veri setine gerek yoktur; 30–50 kazanılmış anlaşma bile güçlü örüntüleri ortaya çıkarmaya yeter. Son 12–24 ayda kazanılan ve kaybedilen fırsatlar analiz edilerek hangi kriterlerin satın alma olasılığını gerçekten artırdığı belirlenir.
+
+### Puan eskimesi (decay) nasıl uygulanır?
+Engagement puanları etkileşimsiz geçen süreye göre düşürülür: örneğin 30 gün etkileşim yoksa %25, 60 günde %50 düşer, 90 günün sonunda engagement skoru sıfırlanır. Fit skoru ise genellikle eskimez; yalnızca kişi şirket değiştirdiğinde yeniden hesaplanır.

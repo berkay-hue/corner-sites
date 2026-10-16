@@ -2,13 +2,16 @@
 title: "B2B Buying Shifts Toward Digital!"
 description: "Pivotree Inc. and Spryker's latest report reveals a seismic shift in B2B buying behaviors, emphasizing a massive move towards digital platforms."
 date: "2024-01-11"
+updated: "2026-10-16"
 category: ""
 image: "/_a/fr/images/anrKOY1RANgRyFfJRJx3prfg4.jpeg"
-imageAlt: "B2B Buying Shifts Toward Digital!"
+imageAlt: "Illustrated graphic: “90% increase in digital B2B demand over the past two years”, with a sketch of two briefcases linked by circular arrows"
 alt: "b2b-satin-alma-dijitale-kayiyor"
 ---
 
-Pivotree Inc. and Spryker's latest report reveals a seismic shift in B2B buying behaviors, emphasizing a massive move towards digital platforms. Surveying 100 B2B leaders across the U.S. and Canada, the report uncovers a crucial fact - while digital demand skyrockets, 33% of businesses still struggle to offer satisfactory digital buying experiences. Pivotree's CEO, Bill Di Nardo, stresses the urgency for businesses to adapt to these new digital norms. The key? Embracing strategies from consumer eCommerce, such as personalized journeys and marketplace experiences. Spryker's Co-founder, Boris Lokschin, points to AI as a major force in reshaping B2B commerce, driving efficiency and innovation. Expect a more customer-centric B2B world, blending innovative technologies and strategies to meet the digital era's demands.
+B2B buying is shifting toward digital, but many companies are not ready yet: a Pivotree and Spryker survey of 100 B2B leaders in the U.S. and Canada found that 33% of businesses still struggle to offer a satisfactory digital buying experience. Consumer eCommerce ideas and AI are shaping how B2B companies respond.
+
+Commenting on the Pivotree Inc. and Spryker report, Pivotree's CEO, Bill Di Nardo, stresses the urgency for businesses to adapt to these new digital norms. The key? Embracing strategies from consumer eCommerce, such as personalized journeys and marketplace experiences. Spryker's Co-founder, Boris Lokschin, points to AI as a major force in reshaping B2B commerce, driving efficiency and innovation. Expect a more customer-centric B2B world (see [how sellers can adapt to it](/blog/adapting-to-the-new-b2b-sales-landscape) and [why customer feedback matters](/blog/the-power-of-customer-feedback-in-b2b)), blending innovative technologies and strategies to meet the digital era's demands.
 
 ## Key Takeaways
 
@@ -16,3 +19,17 @@ Pivotree Inc. and Spryker's latest report reveals a seismic shift in B2B buying 
 - Digital buying demand is rising fast, yet 33% of businesses still struggle to offer a satisfactory digital buying experience.
 - Consumer eCommerce ideas such as personalized journeys and marketplaces are moving into B2B.
 - AI is expected to be a major driver of efficiency and innovation in B2B commerce.
+
+## FAQ
+
+### How many B2B businesses struggle with digital buying experiences?
+
+According to the Pivotree and Spryker report, 33% of businesses still struggle to offer a satisfactory digital buying experience. The finding comes from a survey of 100 B2B leaders in the U.S. and Canada, even as digital demand rises fast.
+
+### How can B2B companies improve their digital buying experience?
+
+B2B companies can borrow strategies from consumer eCommerce, such as personalized customer journeys and marketplace experiences. The report also points to AI as a major force for efficiency and innovation in B2B commerce.
+
+### What role will AI play in B2B commerce?
+
+Spryker co-founder Boris Lokschin points to AI as a major force reshaping B2B commerce, driving efficiency and innovation. Combined with strategies borrowed from consumer eCommerce, it points toward a more customer-centric B2B world.

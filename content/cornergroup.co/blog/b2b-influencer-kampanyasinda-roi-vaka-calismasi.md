@@ -230,3 +230,21 @@ Bu vaka çalışmasının temel mesajı şu: B2B influencer pazarlaması ölçü
 Vakadaki temsili rakamlar da önemli bir noktayı gösteriyor: En çok trafiği getiren isim her zaman en çok satışı getiren isim değildir. Kitleyle derin ve güvene dayalı ilişki kuran, karar vericilere doğru formatta ulaşan iş birlikleri, B2B'de çoğu zaman en yüksek getiriyi sağlar.
 
 Kendi sektörünüzde doğru influencer'ları belirlemek, ölçülebilir bir kampanya kurgulamak ve yatırımınızın getirisini yönetiminize net rakamlarla sunmak istiyorsanız, **Corner Group** ekibiyle iletişime geçin. Hedeflerinizi birlikte netleştirelim ve size özel, sonuç odaklı bir B2B influencer stratejisi oluşturalım.
+
+## Sık sorulan sorular
+
+### B2B influencer kampanyasında ROI nasıl hesaplanır?
+
+Kısa vadeli ROI, brüt kârdan toplam maliyet çıkarılıp sonuç maliyete bölünerek hesaplanır; gelir yerine brüt kâr kullanmak daha gerçekçi bir tablo verir. Vakanın temsili rakamlarında 9 satıştan 1.620.000 TL gelir elde edildi ve %70 marjla brüt kâr 1.134.000 TL oldu. 600.000 TL toplam maliyetle kısa vadeli ROI yaklaşık %89 olarak hesaplandı.
+
+### Influencer kampanyasının toplam maliyetine hangi kalemler dahil edilmeli?
+
+Toplam maliyete influencer ücretinin yanı sıra prodüksiyon, ücretli destekleme ve ölçüm, proje yönetimi ile iç ekip zamanı da dahil edilmelidir. Vakanın temsili rakamlarında influencer ücretleri 360.000 TL, prodüksiyon 90.000 TL, ücretli destekleme 100.000 TL ve ölçüm ile iç zaman 50.000 TL tuttu. Böylece altı aylık toplam bütçe 600.000 TL oldu.
+
+### Karanlık sosyal etkisi influencer ölçümünü neden zorlaştırır?
+
+Etkinin büyük bölümü karanlık sosyal (dark social) alanda gerçekleştiği için son tıklama atfı müşteri yolculuğunu gözden kaçırır. Bir karar verici podcast'i dinleyip ekibine mesajla iletebilir, iki hafta sonra markayı arayıp doğrudan siteye girebilir. Bu nedenle UTM linkleri, özel açılış sayfaları, kodlar, zorunlu "Bizi nereden duydunuz?" alanı ve CRM entegrasyonu birlikte kullanılmalıdır.
+
+### En çok trafik getiren influencer en çok satışı da getirir mi?
+
+Hayır, en çok trafiği getiren isim her zaman en çok satışı getiren isim değildir. Vakanın temsili rakamlarında A danışmanı 4.100 ziyaret ve 2 satış getirirken podcast sunucusu 1.200 ziyaretle 4 satış sağladı. Kitleyle derin ve güvene dayalı ilişki kuran, karar vericilere doğru formatta ulaşan iş birlikleri B2B'de çoğu zaman en yüksek getiriyi sağlar.

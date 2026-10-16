@@ -2,11 +2,13 @@
 title: "KVKK'ya Uygun B2B Soğuk E-Posta: Yasal Sınırlar"
 description: "B2B soğuk e-postada KVKK ve ticari elektronik ileti kurallarına nasıl uyulacağını, meşru menfaat ve açık ret seçeneklerini örneklerle anlatıyoruz."
 date: "2026-10-13"
+updated: "2026-10-16"
 category: "Outbound"
 image: "https://images.pexels.com/photos/1181370/pexels-photo-1181370.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
 imageAlt: "KVKK'ya Uygun B2B Soğuk E-Posta: Yasal Sınırlar"
 alt: "kvkk-compliant-b2b-cold-email"
 ---
+KVKK'ya uygun B2B soğuk e-posta için iki düzenlemeye birlikte uymanız gerekir. Ticari ileti mevzuatı, tacir ve esnafa gönderilen iletilerde önceden onay aramaz ama ret hakkı her zaman saklıdır. KVKK ise kişisel veriyi hangi hukuki sebeple, çoğunlukla meşru menfaat ya da alenileştirmeyle, işlediğinizi belirlemenizi ve ilk e-postada alıcıyı aydınlatmanızı ister.
 
 Türkiye'de B2B satış ekipleri için soğuk e-posta hâlâ en ölçeklenebilir outbound kanallarından biri. Ancak "Bu kişiye e-posta atabilir miyim?" sorusunun cevabı tek bir kanunda değil, birbirine temas eden iki ayrı düzenlemede yatıyor: **6698 sayılı Kişisel Verilerin Korunması Kanunu (KVKK)** ve **6563 sayılı Elektronik Ticaretin Düzenlenmesi Hakkında Kanun** ile bu kanuna bağlı ticari elektronik ileti mevzuatı. Pek çok ekip bu ikisini karıştırıyor. Biri için alınan önlemin diğerini de karşıladığını düşünüyor ya da "B2B'de izin gerekmez" gibi yarım doğrularla hareket ediyor.
 
@@ -68,7 +70,7 @@ KVKK, ilgili kişinin temel hak ve özgürlüklerine zarar vermemek kaydıyla, v
 - **Kişinin makul beklentisi nedir?** Bir operasyon yöneticisi, işiyle ilgili yazılım teklifleri almayı makul ölçüde bekleyebilir. Aynı kişiye hobileriyle ilgili teklif göndermek bu beklentiyi aşar.
 - **Kişinin hakları nasıl korunuyor?** Ret imkânı, aydınlatma metni ve hızlı silme süreci gibi güvenceler dengeyi sizden yana çevirir.
 
-Bu değerlendirmeyi her kampanya için tek sayfalık bir dokümanda yazılı hâle getirmek, olası bir şikâyet veya Kurul incelemesinde elinizi ciddi ölçüde güçlendirir.
+Bu değerlendirmeyi her kampanya için tek sayfalık bir dokümanda yazılı hâle getirmek, olası bir şikâyet veya Kurul incelemesinde elinizi güçlendirir.
 
 ## Aydınlatma Yükümlülüğü: İlk E-Postada Ne Yazmalı?
 
@@ -94,7 +96,7 @@ Aydınlatma metninizde en azından şunlar yer almalıdır:
 - Verinin kimlere aktarılabileceği (CRM, e-posta altyapısı, zenginleştirme sağlayıcıları dahil)
 - İlgili kişinin KVKK 11. maddedeki hakları ve başvuru yöntemi
 
-Mesaj metnini kişiselleştirirken yapay zekadan yararlanıyorsanız, [yapay zekayla soğuk e-posta yazma rehberimizde](/blog/yapay-zekayla-soguk-eposta-nasil-yazilir) anlattığımız prompt yapılarına bu bilgilendirme notunu sabit bir footer olarak eklemenizi öneririz. Böylece her varyasyonda notun yer aldığından emin olursunuz.
+Mesaj metnini kişiselleştirirken yapay zekadan yararlanıyorsanız, [yapay zekayla soğuk e-posta yazma rehberimizde](/blog/yapay-zekayla-soguk-eposta-nasil-yazilir) anlattığımız prompt yapılarına bu bilgilendirme notunu sabit bir footer olarak eklemenizi öneririz. Dizileri [Sekans Yazarı aracımızla](/sekans-yazari) üretiyorsanız aynı footer'ı her adımda sabit tutmayı unutmayın. Böylece her varyasyonda notun yer aldığından emin olursunuz.
 
 ## Ret Hakkı, İYS ve Süreler
 
@@ -119,7 +121,7 @@ Outbound ekiplerinin en çok gözden kaçırdığı konu, kullandıkları araçl
 - Veri işleme sözleşmesi (DPA) sunuyor mu?
 - Veriler hangi ülkedeki sunucularda saklanıyor?
 
-Örneğin [Apollo.io](https://get.apollo.io/679irkzm35ya) gibi geniş B2B iletişim veritabanları, segment bazlı liste oluşturmayı ve iletişim bilgisi doğrulamayı oldukça hızlandırır. Ancak aracın sunduğu veriyi kullanma sorumluluğu size aittir. Hangi alanları dışarı aktardığınızı, ne kadar süre sakladığınızı ve kime gönderim yaptığınızı siz belirlersiniz.
+Örneğin [Apollo.io](https://get.apollo.io/679irkzm35ya) gibi geniş B2B iletişim veritabanları, segment bazlı liste oluşturmayı ve iletişim bilgisi doğrulamayı oldukça hızlandırır. Ancak aracın sunduğu veriyi kullanma sorumluluğu size aittir. Hangi alanları dışarı aktardığınızı, ne kadar süre sakladığınızı ve kime gönderim yaptığınızı siz belirlersiniz. Kişi verisine hiç dokunmadan şirketlerin kamuya açık web sitelerinden sinyal toplamak (örneğin [Web Keyword Scanner](/web-keyword) ile) ise veri minimizasyonu açısından daha güvenli bir ilk adımdır.
 
 ### Yurt Dışına Aktarım
 
@@ -202,3 +204,17 @@ Bu altyapıyı içeride kurmak yerine outbound operasyonunun tamamını dışar�
 KVKK'ya uygun soğuk e-posta, outbound'u yavaşlatan bir engel değildir. Doğru kurgulandığında daha temiz listeler, daha isabetli hedefleme ve daha az şikâyet anlamına gelir. Özetle: Ticari ileti mevzuatı tarafında tacir/esnaf istisnasının sınırlarını bilin ve ret hakkını eksiksiz uygulayın. KVKK tarafında ise hukuki sebebinizi belgeleyin, ilk e-postada aydınlatma yapın, yalnızca gerekli veriyi işleyin, araçlarınızın yurt dışı aktarım durumunu kontrol edin ve saklama sürelerinize uyun.
 
 Bu adımların büyük kısmı, doğru kurulmuş otomasyonlarla insan hatasına bırakılmadan yürütülebilir. Suppression kontrolleri, ret işleme, aydınlatma footer'ları ve periyodik imha bunların başında gelir. Outbound süreçlerinizi hem verimli hem de uyumlu hâle getirmek için [Sales Corner ile bir görüşme planlayın](/iletisim), iş akışınızı birlikte değerlendirelim.
+
+## Sık sorulan sorular
+
+### B2B soğuk e-posta göndermek için önceden onay gerekir mi?
+Tacir ve esnafa gönderilen ticari iletilerde önceden onay şartı aranmaz, ancak alıcının ret hakkı her zaman saklıdır. Bu istisna yalnızca ticari ileti mevzuatıyla ilgilidir; KVKK kapsamındaki yükümlülükler devam eder.
+
+### Kurumsal e-posta adresleri kişisel veri sayılır mı?
+Ad ve soyad içeren kurumsal adresler, örneğin ayse.yilmaz@sirket.com, kişisel veridir. info@ veya satis@ gibi genel adresler ise belirli bir kişiyi tanımlamadıkları sürece genellikle kişisel veri sayılmaz.
+
+### Ret talebi ne kadar sürede işlenmelidir?
+Ret bildirildiğinde gönderim en geç üç iş günü içinde durdurulmalıdır. Kişi tüm dizilerden ve gelecekteki listelerden çıkarılmalı, tekrar e-posta gönderilmemesi için bir suppression listesi tutulmalıdır.
+
+### KVKK kapsamında hangi hukuki sebebe dayanılır?
+Soğuk e-postada genellikle iki hukuki sebep öne çıkar: alenileştirme ve meşru menfaat. Alenileştirmeye yalnızca verinin alenileştirilme amacıyla uyumlu kullanımlarda dayanılabilir; meşru menfaat için ise yazılı ve belgelenmiş bir denge testi yapılmalıdır.

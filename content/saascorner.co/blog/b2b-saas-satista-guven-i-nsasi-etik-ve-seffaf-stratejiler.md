@@ -67,6 +67,24 @@ Güven, özellikle işler ters gittiğinde test edilir. Yazılımda bir sorun mu
 
 ## Sonuç
 
-B2B SaaS satışta güven inşası, tek seferlik bir görev veya bir satış tekniği değildir; bu, tüm şirket kültürüne yayılması gereken bir felsefedir. Şeffaf fiyatlandırmadan ürünün sınırlarını dürüstçe kabul etmeye, danışman rolünü benimsemekten satış sonrası vaatleri yerine getirmeye kadar her adım, bu güven temelini sağlamlaştırır. Rekabetin arttığı ve alıcıların her zamankinden daha bilinçli olduğu bu pazarda, etik ve şeffaf stratejiler seni sadece rakiplerinden ayırmakla kalmaz, aynı zamanda daha sadık, daha krlı ve uzun ömürlü müşteri ilişkileri kurmanı sağlar. Bugün, satış sürecindeki bir adımı daha şeffaf hale getirerek işe başla. Bu küçük değişiklik, uzun vadede en büyük rekabet avantajın olabilir.
+B2B SaaS satışta güven inşası, tek seferlik bir görev veya bir satış tekniği değildir; bu, tüm şirket kültürüne yayılması gereken bir felsefedir. Şeffaf fiyatlandırmadan ürünün sınırlarını dürüstçe kabul etmeye, danışman rolünü benimsemekten satış sonrası vaatleri yerine getirmeye kadar her adım, bu güven temelini sağlamlaştırır. Rekabetin arttığı ve alıcıların her zamankinden daha bilinçli olduğu bu pazarda, etik ve şeffaf stratejiler seni sadece rakiplerinden ayırmakla kalmaz, aynı zamanda daha sadık, daha kârlı ve uzun ömürlü müşteri ilişkileri kurmanı sağlar. Bugün, satış sürecindeki bir adımı daha şeffaf hale getirerek işe başla. Bu küçük değişiklik, uzun vadede en büyük rekabet avantajın olabilir.
 
 **İlgili sayfa:** SAAS Corner'ın bu alandaki hizmetini [B2B SaaS şirketleri için lead generation ve outsourced SDR](/sektor/b2b-saas) sayfasında bulabilirsiniz.
+
+## Sık sorulan sorular
+
+### Fiyatlandırmada şeffaflık güveni nasıl etkiler?
+
+Fiyatları gizlemek sürecin en başında bir güvensizlik tohumu eker, şeffaflık ise güvenin temelini oluşturur. Gizli maliyetler ve karmaşık sözleşmeler B2B alıcılarının en büyük hayal kırıklıklarındandır. Bu yüzden her paketin neleri kapsadığını ve neleri kapsamadığını açıkça belirtmelisin.
+
+### Ürünün yapamadığı şeyleri söylemek satışı kaybettirir mi?
+
+Bazen bir satışı kaybettirebilir, ama uzun vadede itibar ve güven kazandırır. Ürünün yapamayacağı şeyleri gizlersen müşteri yazılımı kullanmaya başladığında bu eksiklikleri fark eder ve kandırılmış hisseder. Ürünün sınırlarını dürüstçe kabul etmek ve gerekirse başka bir çözüme yönlendirmek seni güvenilir bir danışman konumuna taşır.
+
+### Olumsuz yorumlara nasıl yaklaşmalısın?
+
+Olumsuz yorumları birer fırsat olarak görmeli ve onlara profesyonelce yanıt vermelisin. Potansiyel müşteriler senin söylediklerinden çok mevcut müşterilerinin söylediklerine güvenir. Bu yüzden G2, Capterra gibi bağımsız platformlarda müşterilerini dürüst yorum bırakmaya teşvik etmek önemlidir.
+
+### Satış sonrasında güveni nasıl korursun?
+
+Satış sonrasında verdiğin vaatleri yerine getirerek ve işler ters gittiğinde proaktif iletişim kurarak güveni korursun. Bir sorun yaşandığında sessiz kalmak veya sorunu küçümsemek müşterinin güvenini anında yok eder. İmzadan sonraki ilk 30 gün içinde eğitim, kurulum ve ilk kontrol toplantısını gösteren net bir plan sunmak da belirsizliği azaltır.

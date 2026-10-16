@@ -68,3 +68,21 @@ Bir hafta yoğun çalışıp sonra aylarca suskunluk LinkedIn'in çalışma biç
 Platform tutarlılığı ödüllendirir. Düzenli içerik, düzenli etkileşim, düzenli bağlantı kurma. Bunların hepsi bir araya geldiğinde bir süre sonra şirketin adı insanların aklında yer etmeye başlar. Satın almaya hazır biri karar anında sizi hatırlar çünkü siz zaten oradasınızdır.
 
 Bu birikimi oluşturmak zaman alır. Ama oluştuğunda çok az şey bu kadar güçlü bir satış varlığı yaratır.
+
+## Sık sorulan sorular
+
+### LinkedIn profil başlığına ne yazılmalı?
+
+Profil başlığına unvanınızı değil, karşı taraf için ne yapabileceğinizi anlatan bir değer önerisi yazılmalıdır. Profilinizi ziyaret eden kişinin ilk baktığı yer başlık kısmıdır ve yalnızca unvan içeren bir başlık sizi o kişiye anlatmaz. Başlığı, özet bölümünü ve deneyim kısmını sizi hiç tanımayan birinin gözüyle okuyun. Ne yaptığınız belirsiz kalıyorsa profil henüz bir satış aracına dönüşmemiştir.
+
+### Bağlantı isteği kabul edildikten hemen sonra tanıtım mesajı atılmalı mı?
+
+Hayır; bağlantı kabul edilir edilmez atılan uzun bir tanıtım mesajı çoğu zaman kapatılır ve bir daha açılmaz. LinkedIn'de ilişki önce gelir, satış sonra. Bağlantı kurduğunuz kişinin paylaşımlarına değer katan yorumlar yazmak ve bir süre görünür olmak, sonraki mesajın çok daha farklı karşılanmasını sağlayabilir. Tanıdık bir isimden gelen mesaj, yabancı bir isimden gelen mesajla aynı tepkiyi almaz.
+
+### Etkili bir LinkedIn mesajı nasıl olmalı?
+
+Etkili bir LinkedIn mesajı kısa ve net olmalı, karşı tarafın durumunu bildiğinizi göstermelidir. Alıcının sektörünü, şirketinin büyüme aşamasını ve muhtemelen yaşadığı sorunu bilerek yazılan mesaj toplu gönderilen bir şablondan çok farklı karşılanır. Ne istediğiniz net olmalı ve mesajın karşı taraf için anlamı ilk birkaç cümlede anlaşılmalıdır. Uzun paragraflar, şirket tanıtımları ve hemen toplantı talepleri bu kanalda genellikle işe yaramaz.
+
+### LinkedIn'de hangi veriler takip edilmeli?
+
+Kabul edilen bağlantı isteklerini, yanıt alan mesajları, en fazla etkileşim yaratan içerikleri ve profilinizi ziyaret edenlerin sektörlerini takip etmelisiniz. Bu verilerin önemli bir kısmı LinkedIn'in kendi analitiğinde mevcuttur. Ancak birçok şirket bu verilere hiç bakmaz. Neyin işe yarayıp neyin yaramadığını anlamadan yapılan her deneme sıfırdan başlamak anlamına gelir. Bu yüzden veriler düzenli okunmalı ve strateji buna göre şekillenmelidir.

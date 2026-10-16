@@ -2,11 +2,14 @@
 title: "How to Write a LinkedIn Cold Sales Message: Examples"
 description: "A step-by-step guide for B2B sales teams on writing LinkedIn cold connection requests and follow-up messages, with examples that boost reply rates."
 date: "2026-10-13"
+updated: "2026-10-16"
 category: "Social Selling"
 image: "https://images.pexels.com/photos/6147022/pexels-photo-6147022.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
 imageAlt: "How to Write a LinkedIn Cold Sales Message: Examples"
 alt: "linkedin-soguk-satis-mesaji-nasil-yazilir"
 ---
+
+An effective LinkedIn cold sales message is written after you narrow your ideal customer profile, optimize your own profile and warm up the buyer: it's short, personalized and ends with no more than one question. If there's no reply, you run a follow-up sequence that adds value and measure results to keep improving your messages.
 
 For B2B sales teams, LinkedIn is one of the few platforms where you can reach decision-makers directly. But that ease of access creates a problem of its own: every day, a procurement manager's or CTO's inbox fills up with dozens of near-identical messages. Messages that open with "Hi, I came across your company and believe we could add value" usually get deleted unread. Sending cold messages on LinkedIn isn't the problem. The problem is copy-paste messages sent without any regard for the buyer's perspective.
 
@@ -256,4 +259,24 @@ Writing a cold sales message on LinkedIn is less about finding the right words a
 
 Remember: cold messaging is only one part of your social selling strategy. The credibility of your corporate profile, the consistency of your content and the targeting of your ads directly affect whether your message gets read.
 
+For a steady content flow that supports your messages, read our [B2B LinkedIn content calendar](/blog/b2b-linkedin-content-calendar) guide, and see how we work with software companies on the [social media management for SaaS](/en/industries/saas) page.
+
 If you'd like to set up your social selling process on LinkedIn, align your profiles and content with that process, or review your current messaging strategy together, [get in touch with the Social Media Corner team](/en/contact). Let's build a roadmap that reaches your target audience together.
+
+## FAQ
+
+### How long should a LinkedIn cold sales message be?
+
+Aim to keep your first post-connection message between 50 and 120 words. A message that fits on a single mobile screen, uses one- or two-sentence paragraphs and ends with no more than one question has an advantage in being read and answered.
+
+### What are the parts of an effective LinkedIn cold message?
+
+A good cold message is usually made up of five parts: context, an observation or insight, a value proposition, optional proof and a low-friction call to action. You don't need all of them in every message, but this structure gives you a framework to write from.
+
+### How many times should you follow up if you don't get a reply?
+
+A planned follow-up sequence can run as a first message on day 0, a short reminder on day 3-4, a value-adding follow-up on day 7-8 and a closing message on day 14. Following up more than four or five times crosses the line between persistence and annoyance.
+
+### Should you pitch in a connection request note?
+
+No, the purpose of a connection request note isn't to sell but to give a reason for accepting the connection. The character limit for this note is quite low, at around 300 characters.

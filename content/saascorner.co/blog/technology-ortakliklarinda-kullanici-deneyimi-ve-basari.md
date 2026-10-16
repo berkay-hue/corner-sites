@@ -128,3 +128,21 @@ Kullanıcı bir sorunla karşılaştığında, A şirketi onu B şirketine, B ş
 ## Sonuç
 
 Teknoloji ortaklıkları, SaaS şirketleri için muazzam bir büyüme potansiyeli sunar. Ancak bu potansiyeli gerçeğe dönüştürmenin anahtarı, kod satırlarında veya gelir paylaşım tablolarında değil, son kullanıcının ekranında ve zihninde yatar. Kullanıcı deneyimi, bir ortaklığın başarısı için bir "eklenti" veya "olsa iyi olur" denecek bir lüks değildir; başarının ta kendisidir. Sürtünmeyi ortadan kaldıran, güven inşa eden ve gerçek değer sunan birleşik bir deneyim yarattığınızda, sadece iki ürünü birbirine bağlamış olmazsınız. Müşterilerinizin sadakatini kazanan, onları markanızın elçileri haline getiren ve pazarda sizi bir adım öne taşıyan kalıcı bir değer yaratmış olursunuz. Unutmayın, en iyi entegrasyonlar, kullanıcıların iki ayrı ürün kullandığını unuttuğu, sadece işlerini daha kolay ve daha hızlı hallettiklerini fark ettiği entegrasyonlardır. Bu hedefe odaklandığınızda, ortaklıklarınız sadece teknik olarak değil, gerçek dünyada da başarılı olacaktır.
+
+## Sık sorulan sorular
+
+### Ortağınızın ürünündeki kötü bir deneyim markanızı nasıl etkiler?
+
+Ortağınızın ürünündeki kötü bir deneyim doğrudan sizin markanıza da zarar verebilir. Kullanıcılarınıza bir entegrasyon önerdiğinizde o ürüne kendi markanızla kefil olmuş olursunuz. Yetkilendirme ekranları, veri senkronizasyonu ya da hata mesajları kafa karıştırıcı veya yavaşsa kullanıcı bu deneyimi sizin ürününüzle ilişkilendirir. Bu nedenle ortaklık deneyimi, marka itibarını korumak için kritik bir yatırımdır.
+
+### Bir teknoloji ortaklığında hangi başarı metrikleri tanımlanmalı?
+
+Gelir ve yeni müşteri gibi iş metriklerinin yanında kullanıcı odaklı metrikler de tanımlanmalıdır. Entegrasyonu tamamlayan kullanıcı oranı, entegrasyon sonrası aktif kullanım sıklığı ve destek taleplerindeki azalma bu metriklere örnektir. Bu metrikleri en baştan belirlemek, iki ekibin de aynı hedefe odaklanmasını sağlar. Lansmandan sonra bu metrikleri paylaşılan bir analitik panosunda izlemek de iyileştirme alanlarını görünür kılar.
+
+### Entegrasyonda bir sorun çıktığında kullanıcıya nasıl bilgi verilmeli?
+
+Teknik jargon yerine ne olduğunu ve kullanıcının ne yapabileceğini anlatan insan dostu mesajlar gösterilmelidir. Bağlantının kontrol edilmesini ya da yetkilendirmenin yenilenmesini öneren açık bir mesaj, anlamsız bir hata kodundan çok daha faydalıdır. Uzun süren senkronizasyon gibi işlemlerde ilerleme çubukları ve onay mesajları belirsizliği azaltır. Veri erişimi için izin istenirken bu iznin neden gerektiğini açıkça belirtmek de güveni güçlendirir.
+
+### İki şirket arasında destek sorumluluğu nasıl belirlenmeli?
+
+Lansmandan önce hangi sorundan kimin sorumlu olduğunu tanımlayan net bir destek protokolü oluşturulmalıdır. Destek ekibiniz sorunun kaynağının sizin ürününüz, ortağın ürünü ya da entegrasyon katmanı olup olmadığını hızlıca teşhis edebilmelidir. Paylaşılan bir bilgi tabanı ve ortak bir iletişim kanalı iki ekibin tutarlı bilgi vermesine yardımcı olur. Kullanıcıya tek bir iletişim noktası sunmak, şirketlerin topu birbirine attığı sinir bozucu durumun önüne geçebilir.

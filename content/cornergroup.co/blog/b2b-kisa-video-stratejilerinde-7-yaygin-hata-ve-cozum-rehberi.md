@@ -13,7 +13,7 @@ Dijital pazarlamanın dinamik ve rekabetçi arenasında, kısa video formatları
 
 Kısa video başarısı, viral bir videodan veya yüksek takipçi sayısından ibaret değildir. B2B dünyasında başarı, doğrudan iş hedeflerine hizmet eden, ölçülebilir sonuçlar üreten ve marka itibarını güçlendiren stratejik bir yaklaşımla mümkündür. Ne yazık ki, birçok şirket bu yolculuğa temel stratejik adımları atlamadan, sadece trende ayak uydurma telaşıyla başlıyor. Bu bölümde, en temel seviyede yapılan ve tüm stratejinin çökmesine neden olan vizyon ve planlama hatalarını ele alacağız.
 
-## Platformu Değil, İçeriği Önceliklendirmek Hatanın Tanımı
+## Platformu Değil, İçeriği Önceliklendirmek
 
 En sık rastlanan hatalardan biri, tek bir video içeriği üretip bunu hiçbir değişiklik yapmadan tüm sosyal medya platformlarına (LinkedIn, Instagram, TikTok, YouTube Shorts) yaymaktır. Bu "tek beden herkese uyar" yaklaşımı, her platformun kendine özgü kültürünü, algoritmasını ve kullanıcı beklentisini tamamen göz ardı eder. LinkedIn'de profesyonel bir tonda paylaşılan bir vaka analizi videosu, TikTok'un hızlı, eğlenceli ve otantik doğasına uyum sağlamayacak, hatta itici bulunacaktır.
 
@@ -21,7 +21,7 @@ En sık rastlanan hatalardan biri, tek bir video içeriği üretip bunu hiçbir 
 
 **Çözüm Rehberi:** Platform Odaklı İçerik Matrisi Oluşturun. Platform Önceliklendirmesi: Hedef kitlenizin en aktif olduğu bir veya iki platformu ana odak noktası olarak belirleyin. Her platformda var olmaya çalışmak yerine, en yüksek potansiyele sahip olanlarda derinleşin. İçerik Sütunları Belirleme: Ana mesajınızı veya konunuzu belirleyin. Örneğin, "Veri Güvenliği Çözümleri". Bu ana konuyu her platformun diline tercüme edin. LinkedIn İçin: "Veri İhlallerini Önlemede C-Level Yöneticilerin Bilmesi Gereken 3 Kritik Adım" başlıklı, uzman görüşü içeren, ciddi ve bilgilendirici bir video. TikTok İçin: "Ofisteki en büyük siber güvenlik hatası!" senaryosunu canlandıran, hızlı kurgulu, eğitici ama eğlenceli bir video. Alt metinde ise çözümünüze dair bir ipucu. Instagram Reels İçin: Veri güvenliğinin önemini vurgulayan, görsel olarak çekici, infografik tarzı animasyonlu ve trend bir müzik eşliğinde sunulan bir video. Bu yaklaşım, aynı temel mesajı farklı kitlelere, onların beklentilerine uygun formatlarda sunarak maksimum rezonans ve etki yaratmanızı sağlar. Brand Corner deneyimimiz, bu tür uyarlamaların marka algısını güçlendirdiğini ve içeriğin "platforma özel" hissedilmesini sağladığını göstermektedir.
 
-## Satış Odaklı Olmak, Değer Sunmamak Hatanın Tanımı
+## Satış Odaklı Olmak, Değer Sunmamak
 
 B2B şirketlerinin kısa video içeriğine yaklaşımında görülen en büyük yanılgılardan biri, her videoyu bir satış konuşmasına dönüştürme eğilimidir. "En iyi CRM yazılımı bizde!", "Hizmetimizi hemen satın alın!" gibi doğrudan satış mesajları içeren videolar, potansiyel müşterileri yakalamak yerine onları uzaklaştırır. Bu, bir network etkinliğinde yeni tanıştığınız birine anında ürün satmaya çalışmakla eşdeğerdir ve aynı derecede başarısız olur.
 
@@ -33,7 +33,7 @@ B2B şirketlerinin kısa video içeriğine yaklaşımında görülen en büyük 
 
 Harika bir strateji, zayıf bir uygulama ile değersiz hale gelebilir. B2B kısa video dünyasında operasyonel mükemmellik, içeriğin doğru kişilere ulaşmasını, etkisinin ölçülmesini ve elde edilen verilerin iş süreçlerine entegre edilmesini gerektirir. Bu bölümde, "yapıyor olmak için yapmak" zihniyetinden kaynaklanan ve yatırım getirisini (ROI) baltalayan yaygın uygulama ve ölçümleme hatalarını inceleyeceğiz.
 
-## Ölçümleme ve ROI Yoksunluğu Hatanın Tanımı
+## Ölçümleme ve ROI Yoksunluğu
 
 "Bir video paylaştık, 5000 izlenme ve 100 beğeni aldı. Harika!" Bu düşünce, B2B pazarlamasındaki en tehlikeli tuzaklardan biridir. Beğeni, yorum ve izlenme gibi "vanity metrics" (gösteriş metrikleri), marka bilinirliği için bir gösterge olabilse de, iş sonuçlarına doğrudan etkilerini kanıtlamazlar. Stratejinin başarısını bu yüzeysel metriklere dayandırmak, bütçenin nereye harcandığını ve hangi aktivitelerin gerçekten gelir getirdiğini bilmeden karanlıkta ilerlemektir.
 
@@ -41,7 +41,7 @@ Harika bir strateji, zayıf bir uygulama ile değersiz hale gelebilir. B2B kısa
 
 **Çözüm Rehberi:** Bütünsel Performans Takip Sistemi Kurulumu. Hedefe Göre KPI Belirleme: Kampanyaya başlamadan önce ana hedefi netleştirin ve buna uygun anahtar performans göstergelerini (KPI) atayın. Marka Bilinirliği Hedefi: KPI'lar -> Erişim, Görüntülenme, Marka Adı Aramalarındaki Artış, Paylaşım Oranı. Potansiyel Müşteri Yaratma Hedefi: KPI'lar -> Videodaki linke tıklama oranı (CTR), Landing page dönüşüm oranı, Form doldurma sayısı, MQL (Pazarlama Nitelikli Potansiyel Müşteri) maliyeti. Satış Hunisine Etki Hedefi: KPI'lar -> Video ile etkileşen kişilerin satış döngüsündeki ilerleme hızı, Anlaşma kazanma oranına etkisi. Teknolojik Entegrasyon: Bu metrikleri takip etmek için doğru araçları kullanın. UTM Parametreleri: Videolarınıza eklediğiniz tüm linklerde UTM kodları kullanarak trafiğin kaynağını Google Analytics gibi araçlarda net bir şekilde izleyin. CRM Entegrasyonu: CRM Corner'ın uzmanlık alanı tam olarak budur. Bir kullanıcı videonuzdaki link üzerinden sitenize gelip form doldurduğunda, bu bilgi otomatik olarak CRM sistemine "Kaynak: LinkedIn Video Kampanyası" olarak işlenmelidir. Bu, o potansiyel müşterinin tüm yolculuğunu takip etmenizi ve videonun satışa olan etkisini yıllar sonra bile görmenizi sağlar. Piksel ve Retargeting: Web sitenize yerleştireceğiniz pikseller sayesinde, videonuzu izleyen veya linkinize tıklayan kişilere daha sonra özel reklamlar (örneğin bir vaka analizi veya webinar daveti) gösterebilirsiniz. Bu sistemli yaklaşım, kısa video çabalarınızı soyut bir "içerik pazarlaması" faaliyetinden, sonuçları net bir şekilde görülebilen, optimize edilebilen ve ölçeklendirilebilen bir büyüme motoruna dönüştürür.
 
-## CEO ve Kilit Liderleri Sürece Dahil Etmemek Hatanın Tanımı
+## CEO ve Kilit Liderleri Sürece Dahil Etmemek
 
 B2B kısa video içerikleri genellikle pazarlama departmanındaki daha genç veya orta seviye çalışanlar tarafından üretilir. Bu içerikler teknik olarak doğru ve görsel olarak çekici olsa da, genellikle en önemli unsuru kaçırırlar: Otorite ve Güven. B2B dünyasında insanlar logolardan değil, insanlardan satın alır. Özellikle de güvendikleri, saygı duydukları ve sektör lideri olarak gördükleri insanlardan. CEO, CTO, Satış Direktörü gibi kilit liderlerin bu süreçten tamamen dışlanması, markanın en değerli varlıklarından birini kullanmamak demektir.
 
@@ -53,7 +53,7 @@ B2B kısa video içerikleri genellikle pazarlama departmanındaki daha genç vey
 
 Başarılı bir B2B büyüme stratejisi, silolar halinde çalışmaz. Pazarlama, satış, müşteri hizmetleri ve marka yönetimi birbiriyle konuşmalıdır. Kısa video da bu denklemin dışında değildir. Sadece farkındalık yaratma aracı olarak görüldüğünde potansiyelinin çok altında kalır. Bu bölümde, müşteri yolculuğunu ve iş birliği ekosistemini göz ardı eden, bütünsel bakış açısından yoksun hataları masaya yatıracağız.
 
-## Müşteri Yolculuğunu Göz Ardı Etmek Hatanın Tanımı
+## Müşteri Yolculuğunu Göz Ardı Etmek
 
 Birçok B2B şirketi, tüm kısa video içeriklerini müşteri yolculuğunun sadece en başına, yani "Farkındalık" (Awareness) aşamasına odaklar. "Sektördeki 3 büyük trend" veya "X nedir?" gibi genel konuları işleyen videolar üretirler. Bu videolar yeni kitlelere ulaşmak için önemli olsa da, potansiyel bir müşteri markanızla tanıştıktan sonra onu neyle besleyeceksiniz? Yolculuğun "Değerlendirme" (Consideration) ve "Karar" (Decision) aşamalarına yönelik içeriklerin eksikliği, huninin ortasında büyük bir boşluk yaratır ve ilgilenen potansiyel müşterilerin rakiplere kaymasına neden olur.
 
@@ -61,7 +61,7 @@ Birçok B2B şirketi, tüm kısa video içeriklerini müşteri yolculuğunun sad
 
 **Çözüm Rehberi:** Müşteri Yolculuğuna Göre İçerik Haritalama. Farkındalık (Top of Funnel - ToFu): Geniş bir kitleye hitap eden, problemi ve fırsatları tanımlayan içerikler. Örnekler: "Veri analitiğinde en sık yapılan 5 hata", "E-ticaret siteleri için 2024'ün en önemli SEO trendi", "Uzaktan çalışan ekiplerde verimliliği artıran şaşırtıcı bir yöntem". Bu videolar, "Nasıl yapılır?", "Nedir?" gibi sorulara cevap verir. Değerlendirme (Middle of Funnel - MoFu): Markanızı ve çözümünüzü tanıtan, uzmanlığınızı ve yaklaşımınızı gösteren içerikler. Örnekler: "Bizim CRM yazılımımız, satış ekibinizin bu 3 sorununu nasıl çözüyor?", "Proje yönetim metodolojimizin arkasındaki felsefe", "Rakiplerimizden farklı olarak biz, müşteri desteğine nasıl yaklaşıyoruz?". Bu videolar, çözümünüzün faydalarını ve benzersiz değer önerisini vurgular. Karar (Bottom of Funnel - BoFu): Güven inşa eden, son şüpheleri ortadan kaldıran ve satın alma kararını kolaylaştıran içerikler. Örnekler: "X müşterimiz, bizimle çalıştıktan 6 ay sonra operasyonel verimliliğini %30 nasıl artırdı? (Kısa Müşteri Başarı Hikayesi)", "Kurulum sürecimiz ne kadar kolay? Adım adım gösterim.", "CEO'muzdan mesaj: Neden bizimle çalışmalısınız?". Bu videolar, sosyal kanıt (social proof) ve güvenilirlik üzerine odaklanır. Bu içerikleri CRM Corner uzmanlığıyla otomasyon akışlarına entegre etmek, stratejinin gücünü katlar. Örneğin, bir ToFu videosundaki linke tıklayan bir kişiye, bir hafta sonra MoFu içeriği gösteren bir retargeting reklamı sunmak veya e-posta ile göndermek, onu yolculukta bir sonraki adıma akıllıca taşır.
 
-## İçerik Üreticisi İş Birliklerini B2C Gibi Düşünmek Hatanın Tanımı
+## İçerik Üreticisi İş Birliklerini B2C Gibi Düşünmek
 
 Influencer pazarlaması B2B'ye de sıçradı, ancak birçok marka bu alanda B2C'den kalma alışkanlıklarla hareket ediyor. Yüksek takipçi sayılı, genel "iş dünyası" veya "motivasyon" konuşmacılarıyla iş birliği yapmak, genellikle yüzeysel ve etkisiz sonuçlar doğurur. B2B'de hedef kitle son derece niş ve bilgilidir. Bir siber güvenlik yazılımı satan şirketin, bir yaşam koçu influencer ile çalışması, markanın ciddiyetine ve kredibilitesine zarar verebilir.
 
@@ -69,7 +69,7 @@ Influencer pazarlaması B2B'ye de sıçradı, ancak birçok marka bu alanda B2C'
 
 **Çözüm Rehberi:** Niş Uzman ve Mikro-Influencer Stratejisi. Doğru Profili Tanımlayın: İdeal iş birliği yapacağınız kişinin profilini çıkarın. Bu kişi bir sektör analisti, deneyimli bir mühendis, bir üniversite profesörü veya belirli bir yazılım üzerine uzmanlaşmış bir danışman olabilir. Takipçi sayısı 5.000 olabilir, ama bu 5.000 kişi sizin tam olarak hedeflediğiniz kitle ise bu çok değerlidir. Bulma ve Değerlendirme: Bu kişileri LinkedIn'de, sektörel forumlarda, podcast'lerde ve konferans konuşmacıları arasında arayın. İçeriklerinin kalitesini, kitlesiyle olan etkileşimini ve sizin marka değerlerinizle uyumunu analiz edin. İş Birliği Modelleri: Ortak İçerik Üretimi: Uzmanla birlikte bir webinar düzenleyip, bu webinar'dan kısa video kesitleri üretmek. Ürün İncelemesi: Uzmana ürününüze bir süreliğine ücretsiz erişim verip, dürüst ve şeffaf bir şekilde deneyimlerini paylaşmasını istemek. Marka Elçiliği: Uzun vadeli bir ilişki kurarak, onun sizin markanızın bir nevi "dış ses"i olmasını sağlamak. Önemli olan, bu iş birliğinin reklam gibi değil, otantik bir tavsiye gibi görünmesidir. Brand Corner, bu tür ilişkileri kurarken şeffaflığın ve karşılıklı değer yaratmanın esas olduğunu vurgular. Uzmanın kendi kitlesine olan sorumluluğunu korumasına izin vermek, iş birliğinin inandırıcılığını artırır.
 
-## Otomasyon ve Entegrasyon Gücünü Kullanmamak Hatanın Tanımı
+## Otomasyon ve Entegrasyon Gücünü Kullanmamak
 
 Son hata, önceki altı hatanın çözümlerini bir araya getiren ve tüm stratejiyi ölçeklenebilir kılan kritik bir unsuru gözden kaçırmaktır: Sistem entegrasyonu. Videoları manuel olarak yayınlamak, gelen yorumları ve mesajları tek tek takip etmeye çalışmak, lead formlarından gelen bilgileri elle CRM'e girmek... Bu manuel süreçler, küçük ölçekte bile verimsizdir ve strateji büyüdükçe sürdürülemez hale gelir. Bu, güçlü bir motoru olan bir arabayı iterek hareket ettirmeye çalışmaya benzer.
 
@@ -80,3 +80,21 @@ Son hata, önceki altı hatanın çözümlerini bir araya getiren ve tüm strate
 ## Sonuç
 
 Corner Group olarak, B2B büyümesini tek bir kanala veya taktiğe indirgenemeyecek kadar karmaşık ve çok katmanlı bir süreç olarak görüyoruz. Kısa video, doğru kullanıldığında bu sürecin en güçlü katalizörlerinden biri olabilir. Ancak bu rehberde detaylandırdığımız gibi, başarı; platform dinamiklerini anlamaktan, satış yerine değer sunmaktan, her adımı ölçmekten, liderleri sürece dahil etmekten, tüm müşteri yolculuğunu düşünmekten, doğru uzmanlarla iş birliği yapmaktan ve tüm bu çabaları entegre bir teknoloji altyapısıyla desteklemekten geçer. Bu yedi hata, aslında yedi büyük fırsat alanını temsil etmektedir. Bu hatalardan kaçınmak ve sunduğumuz çözümleri uygulamak, kısa video çabalarınızı rastgele denemeler olmaktan çıkarıp, şirketinizin büyüme hedeflerine doğrudan hizmet eden, öngörülebilir ve güçlü bir stratejiye dönüştürecektir. Unutmayın, B2B'de en iyi video, en çok izlenen değil, doğru kişiyi harekete geçiren videodur.
+
+## Sık sorulan sorular
+
+### B2B kısa videolarında değer ve satış içeriği nasıl dengelenmeli?
+
+80/20 kuralına göre içeriklerin yüzde 80'i değer sunmalı, yüzde 20'si satış ve marka odaklı olmalıdır. Değer içerikleri hedef kitlenin zorluklarına, sıkıntılı noktalarına ve hedeflerine odaklanır; ürününüzden hiç bahsetmese bile değerlidir. Eğitici rehber videoları, sektör liderleriyle kısa röportajlar ve fark edilmemiş bir problemi gösteren içerikler bu grubun örnekleridir.
+
+### Kısa video performansı izlenme ve beğeni yerine hangi metriklerle ölçülmeli?
+
+Başarı, kampanyanın ana hedefine göre belirlenen KPI'larla ölçülmelidir. Potansiyel müşteri hedefi için tıklama oranı, landing page dönüşüm oranı, form doldurma sayısı ve MQL maliyeti izlenirken, satış hunisine etki için anlaşma kazanma oranına bakılır. UTM parametreleri ve CRM entegrasyonu, trafiğin ve leadlerin hangi videodan geldiğini net biçimde gösterir.
+
+### Zamanı kısıtlı yöneticiler video içeriğine nasıl dahil edilebilir?
+
+En pratik yöntem, ayda bir kez 2 saatlik toplu çekim seansı düzenlemektir. Bu seansta 8-10 farklı video çekilerek 2 aylık içerik tek seferde üretilebilir. Teleprompter ile önceden belirlenmiş anahtar noktaları okumak doğaçlama stresini azaltır, soru-cevap formatı ise daha samimi ve sohbet havasında içerikler ortaya çıkarır.
+
+### B2B'de içerik üreticisi iş birliği için nasıl bir profil seçilmeli?
+
+B2B'de doğru iş ortağı geniş kitleli bir influencer değil, hedef kitlenin güvendiği bir sektör uzmanı veya niş içerik üreticisidir. Takipçi sayısı 5.000 olabilir, ancak bu kişiler tam olarak hedeflediğiniz kitleyse iş birliği çok değerlidir. Ortak webinar, dürüst ürün incelemesi ve uzun vadeli marka elçiliği bu alandaki başlıca iş birliği modelleridir.

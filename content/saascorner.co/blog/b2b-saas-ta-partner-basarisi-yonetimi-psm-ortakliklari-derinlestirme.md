@@ -66,3 +66,21 @@ Partnerlerinin ürününü doğru bir şekilde konumlandırıp satabilmesi için
 ## Sonuç
 
 Sonuç olarak, B2B SaaS dünyasında sürdürülebilir büyüme, sadece harika bir ürüne sahip olmakla değil, aynı zamanda bu ürünü pazara ulaştıran güçlü bir ekosistem kurmakla mümkündür. Partner Başarısı Yönetimi, bu ekosistemin temelini oluşturan stratejik bir disiplindir. Ortaklıkları basit birer satış kanalı olarak görmekten vazgeçip, onları işinin bir uzantısı olarak kabul ettiğinde, potansiyelini katlayarak artırırsın. Unutma, partnerlerin başarısı, doğrudan senin başarındır. Onların eğitimine, araçlarına ve motivasyonuna yatırım yapmak, uzun vadede kendi şirketine yaptığın en karlı yatırımlardan biri olacaktır. Şimdi harekete geçme zamanı. Mevcut partner programını gözden geçir, zayıf noktaları belirle ve proaktif bir Partner Başarısı Yönetimi yaklaşımı benimseyerek ortaklıklarını gerçek bir büyüme motoruna dönüştür.
+
+## Sık sorulan sorular
+
+### Partner Başarısı Yönetimi geleneksel partner yönetiminden nasıl ayrılır?
+
+Geleneksel partner yönetimi reaktiftir, Partner Başarısı Yönetimi ise tamamen proaktiftir. Geleneksel yaklaşım bir sorun çıktığında müdahale eder veya periyodik performans toplantılarıyla yetinirken, PSM partnerin zorlanabileceği noktaları önceden tahmin eder, gerekli kaynakları sunar ve hedeflere birlikte çalışarak ulaşmayı amaçlar. Böylece ortaklık bir işlemden bir ilişkiye dönüşür.
+
+### Partner performansını ölçmek için hangi metrikler takip edilmeli?
+
+Yalnızca üretilen gelire değil, partnerin oluşturduğu satış hattı değerine, anlaşma kayıt sayısına, ortalama anlaşma büyüklüğüne, satış döngüsü uzunluğuna ve getirdiği müşterilerin memnuniyetine de bakmalısın. Sadece gelir rakamına odaklanırsan az sayıda ama büyük ve stratejik anlaşmalar getiren bir partnerin değerini gözden kaçırabilirsin. Bu verileri bir partner portalında şeffaf şekilde paylaşmak güveni artırır ve partnerleri motive eder.
+
+### Ortak pazarlama ve ortak satış partnerlere ne kazandırır?
+
+Ortak pazarlama ve ortak satış, partnerini pazarlama ve satış süreçlerinde yalnız bırakmadan birlikte sonuç üretmeni sağlar. Ortak webinar, e-kitap veya etkinlik gibi faaliyetler her iki tarafın hedef kitlesini genişletirken, ortak satışta partnerin sektör uzmanlığı senin ürün bilginle birleşir ve özellikle karmaşık kurumsal anlaşmalarda kapanış olasılığı artar. Bu faaliyetler için ortak bütçe ayırmak ve sorumlulukları net belirlemek kritiktir.
+
+### PRM yazılımı ne işe yarar?
+
+PRM yazılımı, partnerlerle ilgili tüm süreçleri otomatize edip tek bir yerde toplayan bir platformdur. Anlaşma kaydı, pazarlama ve eğitim içerikleri kütüphanesi, performans paneli ve komisyon yönetimi gibi özellikler sunar. Partnerin bulduğu potansiyel müşteriyi sisteme kaydedip süreci takip edebilmesi, kendi satış ekibinle partnerin aynı müşteriye gitmesi anlamına gelen kanal çatışmasını da önler.

@@ -45,7 +45,9 @@ Bu özellikler, n8n'i B2B şirketleri için sadece bir "görev otomasyon" aracı
 
 Şimdi teoriyi pratiğe dökelim ve Corner Group'un farklı markalarının uzmanlık alanlarını birleştiren bütünsel bir n8n iş akışı (workflow) tasarlayalım. Amacımız, farklı sistemlerden gelen sinyalleri toplayan, bu sinyallere göre bir risk puanı hesaplayan ve ilgili ekipleri proaktif olarak harekete geçiren bir otomasyon kurmaktır.
 
-## Stratejik Veri Noktalarının ve Risk Metriklerinin Tanımlanması Otomasyonun başarısı, doğru metrikleri izlemeye bağlıdır
+## Stratejik Veri Noktalarının ve Risk Metriklerinin Tanımlanması
+
+Otomasyonun başarısı, doğru metrikleri izlemeye bağlıdır.
 
 İlk adım, hangi davranışların ve olayların potansiyel bir riske işaret ettiğini belirlemektir.
 
@@ -55,7 +57,9 @@ Platform Kullanım Verileri (SAAS Corner Perspektifi): Müşterinin ürününüz
 
 Finansal ve Sözleşme Verileri (Sales Corner & Finans Perspektifi): Parasal konular ve sözleşme detayları en somut risk göstergelerindendir. - Geciken Faturalar: Faturanın son ödeme tarihini 15 günden fazla geçirmesi. (+35 Puan) - Plan Düşürme (Downgrade) Talebi: Müşterinin mevcut hizmet paketini daha düşük bir pakete geçirmek istemesi. (+50 Puan) - Yaklaşan Sözleşme Yenileme Tarihi: Sözleşmenin bitimine 90 günden az kalması ve yukarıdaki diğer risk sinyallerinin varlığı. (Bu tek başına bir risk değil, bir çarpan etkisidir.)
 
-## n8n İş Akışı Mimarisi: Veri Toplama, İşleme ve Puanlama Bu metrikleri belirledikten sonra, n8n üzerinde görsel iş akışını oluşturabiliriz
+## n8n İş Akışı Mimarisi: Veri Toplama, İşleme ve Puanlama
+
+Bu metrikleri belirledikten sonra, n8n üzerinde görsel iş akışını oluşturabiliriz.
 
 ## Tetikleyici (Trigger)
 
@@ -81,7 +85,9 @@ item.riskScore = riskScore; return item;
 
 Hesaplanan `riskScore`'a göre bir sonraki adımı belirlemek için "IF" node'u kullanırız. Örneğin, bir eşik değer belirleriz: `if riskScore > 60`. Eğer puan bu eşiği aşıyorsa, müşteri "Yüksek Riskli" olarak kabul edilir ve aksiyon adımları tetiklenir.
 
-## Proaktif Aksiyonların Otomatikleştirilmesi Risk tespit edildikten sonra, otomasyonun en değerli kısmı olan otomatik aksiyonlar devreye girer
+## Proaktif Aksiyonların Otomatikleştirilmesi
+
+Risk tespit edildikten sonra, otomasyonun en değerli kısmı olan otomatik aksiyonlar devreye girer.
 
 **Aksiyon 1:** İç Bildirim Sistemi: "Slack" veya "Microsoft Teams" node'u kullanılır. Müşteriden sorumlu olan Müşteri Başarı Yöneticisi'nin (CSM) kanalına veya kişisel hesabına anında bir bildirim gönderilir. Bu bildirim, sadece bir uyarı değil, karar almayı kolaylaştıracak zengin bir özet içermelidir: "DİKKAT: Yüksek Riskli Müşteri Tespit Edildi! Müşteri: [Müşteri Adı] Risk Puanı: [85] Sebepler: - Son 7 günde platform kullanımı %70 azaldı. - Son faturası 18 gündür gecikmede. - Anahtar yetkili [İsim Soyisim] LinkedIn profili güncellendi (Başka bir şirkete geçmiş olabilir - bu ileri seviye bir entegrasyon örneğidir). CRM Linki: [Müşterinin CRM profiline direkt link]"
 
@@ -104,3 +110,21 @@ Brand Corner & Social Media Corner ve İçerik Stratejisi: Otomasyonla toplanan 
 ## Sonuç
 
 B2B'de Geleceğe Hazır Bir Büyüme Mimarisi n8n ile B2B CRM'de riskli müşteri tespiti otomasyonu kurmak, sadece bir teknoloji entegrasyonu projesi değildir; bu, şirket kültürünü reaktif ve sezgisel bir yapıdan, proaktif ve veriye dayalı bir yapıya dönüştüren stratejik bir yatırımdır. Bu yaklaşım, müşteri kaybını önlemenin ötesinde, müşteri ilişkilerini derinleştirir, operasyonel verimliliği artırır ve tüm departmanlar arasında veri odaklı bir iş birliği kültürü oluşturur. Corner Group olarak, büyümenin farklı disiplinlerin birbiriyle konuştuğu, entegre ve akıllı sistemler üzerine inşa edildiğine inanıyoruz. Müşteri kazanımından satış otomasyonuna, sistem entegrasyonundan marka iletişimine kadar tüm bu parçalar, n8n gibi esnek otomasyon platformları aracılığıyla bir araya geldiğinde, ortaya sadece hayatta kalan değil, aynı zamanda pazarında liderlik eden, geleceğe hazır bir B2B organizasyonu çıkar. Veriyi anlayan, dinleyen ve ona göre hareket eden şirketler, yarının kazananları olacaktır.
+
+## Sık sorulan sorular
+
+### B2B'de riskli müşterileri erken tespit etmek neden bu kadar önemli?
+
+Çünkü yeni bir müşteri kazanmak, mevcut bir müşteriyi elde tutmaktan 5 ila 25 kat daha maliyetlidir. Kaybedilen müşteriyle birlikte onu kazanmak için harcanan Müşteri Edinme Maliyeti (CAC) de boşa gider. Riskli müşteriler ayrıca destek ekibine ve müşteri başarı yöneticilerine orantısız yük bindirir. Bu yüzden sinyalleri henüz zayıfken yakalamak, kaybı proaktif olarak yönetmeyi sağlar.
+
+### Müşteri risk puanı hangi sinyallere göre hesaplanır?
+
+Risk puanı, her sinyale ağırlık verilerek hesaplanır. Örneğin son 7 gündeki ortalama günlük giriş sayısı önceki 30 güne göre %50'den fazla düştüyse +15, anahtar özellik kullanımı azaldıysa +25, aktif kullanıcı sayısı düştüyse +20, olumsuz geri bildirim varsa +30 puan eklenir. Anahtar yetkilinin (champion) ayrılması +40, son ödeme tarihini 15 günden fazla geçen fatura +35, plan düşürme talebi ise +50 puan getirir; sözleşme yenilemesine 90 günden az kalması çarpan etkisi yapar.
+
+### n8n'deki riskli müşteri tespit iş akışı nasıl çalışır?
+
+İş akışı, her gün sabah 05:00'te çalışan bir Schedule tetikleyicisiyle başlar. HubSpot veya Salesforce'tan müşteri listesi çekilir, ürün kullanımı Mixpanel veya Amplitude'dan HTTP Request ile, destek verisi Zendesk veya Intercom'dan, ödeme verisi Stripe veya Braintree'den toplanır. Function node'u riskScore değerini hesaplar ve IF node'u riskScore 60'ı aştığında müşteriyi riskli olarak işaretler.
+
+### Riskli müşteri tespit edildiğinde hangi aksiyonlar otomatik devreye girer?
+
+İlgili müşteri başarı yöneticisine Slack veya Teams üzerinden anında uyarı gönderilir. CRM'deki "Müşteri Sağlık Durumu" alanı güncellenir ve müşteriyle 24 saat içinde iletişime geçilmesi için bir görev oluşturulur. Tespit edilen her müşteri ayrıca zaman damgası, risk puanı ve sebepleriyle Google Sheets veya Airtable'a kaydedilir; bu veri seti risk modelini iyileştirmek için kullanılır.

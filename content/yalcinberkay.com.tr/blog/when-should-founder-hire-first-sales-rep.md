@@ -2,10 +2,13 @@
 title: "When Should a Founder Hire Their First Sales Rep?"
 description: "Founder-led selling only scales so far. Learn which revenue signals mean it's time to hire your first sales rep, and what to fix first."
 date: "2026-10-13"
+updated: "2026-10-16"
 category: "Founder Notes"
 image: "https://images.pexels.com/photos/6016350/pexels-photo-6016350.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
-imageAlt: "When Should a Founder Hire Their First Sales Rep?"
+imageAlt: "Two people at a desk with a hand-drawn sales growth chart, a laptop and a phone"
 ---
+
+Hire your first sales rep when you have proven that selling works, not when you are tired of selling. You should know who buys and why, be able to write the process down, show the numbers, and see that your own capacity has become the limit on growth. Before that point, a rep is a costly experiment.
 
 Every founder I talk to reaches the same moment. Sales calls fill your calendar, product decisions wait in Slack, investors want updates, and you start thinking: *"I need to hire a salesperson so I can get back to building the company."* The instinct is understandable. But hiring your first sales rep at the wrong time is one of the most expensive mistakes an early-stage B2B company can make. You lose money and months. Worse, you can come away believing that "sales doesn't work for us" when the real problem was timing and preparation.
 
@@ -150,3 +153,21 @@ The right time to hire your first sales rep isn't when you're tired of selling. 
 So keep selling until the patterns are clear. Then document everything, do the math honestly, and hire a builder rather than a manager. Stay close for the first 90 days. Get those pieces right, and your first sales hire can become the foundation of a real sales team.
 
 If you're weighing this decision right now and want to compare notes, I'd be happy to hear from you. You can learn more about me and get in touch through [my personal site](/).
+
+## FAQ
+
+### How many customers should you have before hiring your first salesperson?
+
+As a practical minimum, you should have at least 10 paying customers from outside your personal network before hiring your first sales rep. Ideally, you've closed 10–20 deals with a consistent pattern: similar company size, similar buyer title, similar pain point and similar sales cycle length. This isn't a magic number, but it's roughly what you need to spot patterns a rep can repeat.
+
+### Should a startup's first sales hire be an SDR, an AE or a VP of Sales?
+
+For most early B2B companies, the best first sales hire is a full-cycle account executive with startup DNA who can prospect, qualify, demo and close. A VP of Sales is excellent at scaling a team that already exists, but most are not excited to build the process by hand. A pure SDR only books meetings, so if the founder still has to close every deal, you've only moved the bottleneck.
+
+### How long does it take a new sales rep to ramp up?
+
+For a 30–60 day sales cycle, expect three to six months before a new rep reaches full productivity. That's why you should be able to fund the role for at least two quarters before expecting it to break even. If the hire has to pay for itself in 60 days, the pressure will distort everything.
+
+### How much revenue should a first sales rep bring in?
+
+A common rule of thumb is that a fully ramped rep should bring in new annual revenue of roughly three to five times their fully loaded cost. For example, a rep costing about $100,000 a year fully loaded should add $300,000–$500,000 in new ARR, or roughly two to three deals per month at a $12,000 contract value. If the math only works under perfect assumptions, wait; if it works under conservative assumptions, move forward.

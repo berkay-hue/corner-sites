@@ -25,3 +25,21 @@ Modern satış süreçleri; veri analizi, içerik stratejisi, teknik entegrasyon
 Sunduğumuz bu 4 kişilik uzman kadro, sadece insan gücüyle değil, aynı zamanda **Apollo.io, Zapier, Hubspot ve Salesforce** gibi güçlü otomasyon araçlarını iş süreçlerinize entegre ederek çalışır. Otomasyon kurgularımız sayesinde manuel işlemleri azaltıp hata payını düşürerek operasyon hızınızı artırıyoruz.
 
 Üstelik bu iş birliğinde riskleriniz de minimize edilmiştir. Klasik bir çalışan maaşını her koşulda alırken, biz şeffaf bir performans modeli sunuyoruz: Eğer nitelikli görüşme sayısı hedeflerimize ulaşmazsa, geri ödeme yaparak iş ortağımızın hakkını koruyoruz. Daha düşük maliyetle, daha yüksek verim elde etmek ve satış süreçlerinizi optimize ederek sürdürülebilir bir büyüme yakalamak için profesyonel ekibimizle yanınızdayız.
+
+## Sık sorulan sorular
+
+### Şirket içinde SDR istihdam etmek neden maliyetli ve riskli olabilir?
+
+Şirket içinde SDR istihdam etmek, eğitim sürecinde de maaş ödenmesi ve operasyonun tek bir kişinin yeteneklerine bağlı kalması nedeniyle maliyetli ve riskli olabilir. Tek bir çalışan genellikle yalnızca kendi bildiği yöntemlerle çalıştığı için hata payı artabilir. Modern satış süreçlerinin gerektirdiği tüm becerileri tek kişide bulmak da oldukça zordur.
+
+### Uzman satış kadrosunda hangi roller yer alır?
+
+Kadroda SDR, sekans yazarı, raporlama sorumlusu ve kontrol direktörü rolleri yer alır. SDR ideal müşteri profiline uygun adaylarla ilk teması kurarken, sekans yazarı hedef kitleye özel e-posta sekanslarını tasarlayıp test eder. Raporlama sorumlusu metrikleri takip ederek analiz raporları hazırlar, kontrol direktörü ise süreçlerin tutarlılığını denetler.
+
+### Uzman satış ekibi hangi araçlarla çalışır?
+
+Ekip, otomasyon araçlarını iş süreçlerinize entegre ederek çalışır. Otomasyon kurguları manuel işlemleri azaltabilir, hata payını düşürebilir ve operasyonun hızını artırabilir. Böylece insan gücü ile teknoloji aynı süreçte birlikte kullanılabilir.
+
+### Nitelikli görüşme hedeflerine ulaşılamazsa ne olur?
+
+SAAS Corner, nitelikli görüşme hedeflerine ulaşılamadığı durumlar için geri ödemeye dayalı şeffaf bir performans modeli sunar. Klasik bir çalışan maaşını her koşulda alırken, bu model iş ortağının riskini azaltmayı amaçlar. Bu yaklaşım, daha düşük maliyetle daha yüksek verim hedefleyen bir iş birliği sunmaya odaklanır.

@@ -2,11 +2,14 @@
 title: "B2B Sosyal Medya ROI'si Nasıl Ölçülür?"
 description: "B2B şirketler sosyal medya yatırımının geri dönüşünü nasıl ölçer? Lead, pipeline ve maliyet metriklerini, UTM ve CRM kurgusuyla adım adım anlatıyoruz."
 date: "2026-10-12"
+updated: "2026-10-16"
 category: "Ölçümleme"
 image: "https://images.pexels.com/photos/6476254/pexels-photo-6476254.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
 imageAlt: "B2B Sosyal Medya ROI'si Nasıl Ölçülür?"
 alt: "measure-b2b-social-media-roi"
 ---
+
+B2B sosyal medya ROI'si, sosyal medyanın getirdiği geliri tüm maliyet kalemleriyle (personel, içerik, reklam ve araçlar) karşılaştırarak ölçülür. Bunun için UTM ve CRM ile takip altyapısı kurulur, bir atıf modeli seçilir, beyan edilen atıf eklenir ve beğeni yerine lead ile pipeline etkisine bakılır.
 
 B2B şirketlerde sosyal medya bütçesi konuşulurken yönetim kurulunun sorduğu soru hemen hemen hep aynıdır: "Bu yatırım bize ne kazandırıyor?" Beğeni, takipçi ve gösterim sayıları bu soruyu yanıtlamaya yetmez. Satış döngüsü aylar süren, satın alma kararını birden fazla kişinin verdiği ve tek bir sözleşmenin yüksek tutarlara ulaştığı bir yapıda, sosyal medyanın gelire katkısını göstermek ayrı bir ölçümleme disiplini ister.
 
@@ -225,4 +228,24 @@ Bu hataların çoğu, dağınık araçlar ve elle yürütülen süreçlerden kay
 
 B2B sosyal medya ROI'sini ölçmek, doğru formülü bilmekten çok doğru altyapıyı ve disiplini kurmakla ilgilidir. Tüm maliyetleri dürüstçe hesaplamak, takip sistemlerini CRM'e bağlamak, tutarlı bir atıf modeli kullanmak ve yazılım verisini müşterinin beyanıyla desteklemek, sosyal medyanın gelire katkısını savunulabilir biçimde ortaya koyar. LinkedIn'de hedef kitle kalitesine, Instagram'da huni üst ve orta aşamalarına, sosyal satışta ise konuşmaların fırsata dönüşmesine odaklanmak, her kanalı kendi rolüne uygun ölçmenizi sağlar.
 
+Ölçümleme önceliklerinin sektöre göre nasıl değiştiğini [SaaS için](/sektor/saas) ve [e-ticaret için sosyal medya yönetimi](/sektor/e-ticaret) sayfalarımızda inceleyebilirsiniz. Instagram tarafındaki hedef ve metrikler için [B2B Instagram stratejisi](/blog/b2b-sirketler-icin-instagram-stratejisi) rehberimiz de yol gösterici olacaktır.
+
 Sosyal medya yatırımlarınızın gerçekte ne kazandırdığını görmek, ölçümleme altyapınızı kurmak veya LinkedIn ve Instagram stratejinizi gelir odaklı hâle getirmek istiyorsanız, Social Media Corner ekibi olarak yardımcı olmaya hazırız. Mevcut durumunuzu birlikte değerlendirmek için [bizimle iletişime geçin](/iletisim).
+
+## Sık sorulan sorular
+
+### B2B sosyal medya ROI'si nasıl hesaplanır?
+
+Sosyal medya ROI'si, sosyal medyadan elde edilen gelirden sosyal medya yatırımının çıkarılıp sonucun yatırıma bölünmesi ve 100 ile çarpılmasıyla hesaplanır. Gerçekçi bir hesap için maliyete yalnızca reklam harcaması değil; personel, araç ve yazılım, ajans veya danışmanlık ve içerik üretim maliyetleri de dahil edilmelidir.
+
+### B2B'de sosyal medya ROI'sini ölçmek neden zordur?
+
+B2B'de uzun satış döngüleri, çoklu karar vericiler, analitik araçlarda görünmeyen karanlık sosyal paylaşımlar ve çevrim dışı dönüşümler sosyal medyanın etkisini başka kanallarla iç içe geçirir. Bu ölçümü imkânsız kılmaz, ancak tek bir rakam yerine birbirini tamamlayan birden fazla göstergeyi birlikte okumayı gerektirir.
+
+### B2B sosyal medya ölçümünde hangi atıf modeli kullanılmalı?
+
+Mükemmel bir model yoktur; önemli olan bir model seçmek, raporlarda açıkça belirtmek ve tutarlı biçimde kullanmaktır. İlk dokunuş ve W-şekilli gibi iki farklı modelle aynı veriye bakmak, sosyal medyanın hem başlatıcı hem destekleyici rolünü görmenizi sağlar.
+
+### Karanlık sosyal (dark social) etkisi nasıl ölçülür?
+
+Karanlık sosyal sorununun en pratik çözümü müşteriye doğrudan sormaktır. Demo formunuza zorunlu ve serbest metinli bir "Bizi nereden duydunuz?" alanı ekleyin.

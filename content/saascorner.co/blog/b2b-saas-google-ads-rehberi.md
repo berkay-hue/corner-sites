@@ -206,3 +206,21 @@ B2B SaaS için Google Ads bir "aç ve bekle" kanalı değildir. Doğru kurulduğ
 Kendi rakamlarınızla tersine bütçe hesabını yapın, ölçüm altyapısını kampanyadan önce kurun ve kararlarınızı tıklama değil nitelikli fırsat verisine göre verin. Bu üç ilke, ilk 90 günde Google Ads'in sizin için çalışan bir kanal olup olmadığını net şekilde görmenizi sağlar.
 
 Google Ads hesabınızı B2B SaaS satış sürecinize uygun şekilde kurmak ya da mevcut kampanyalarınızın gerçek pipeline katkısını ölçmek istiyorsanız, [SAAS Corner ekibiyle iletişime geçin](/iletisim). Birlikte bütçenizi satış hedeflerinize bağlayan bir yol haritası çıkaralım.
+
+## Sık sorulan sorular
+
+### B2B SaaS'ta Google Ads başarısı hangi metrikle ölçülmeli?
+
+Esas ölçü nitelikli fırsat başı maliyet ve kazanılan müşteri başı maliyettir. Tıklama başı maliyet ya da form başı maliyet üzerinden başarıyı ölçmek yanıltıcıdır. Bu yüzden ölçümün CRM'deki satış aşamalarına kadar uzanması gerekir.
+
+### Google Ads kurulumuna nereden başlanmalı?
+
+Kampanyalardan önce ölçüm altyapısı kurulmalıdır. Formlara gizli alanlar ekleyerek GCLID ve UTM parametrelerini CRM'e taşımak ve KVKK uyumlu bir çerez onay yönetimi kurmak bu adımın parçasıdır. Ardından CRM ile offline dönüşüm bağlantısı kurularak nitelikli fırsat ve kazanılan müşteri bilgisi Google Ads'e geri gönderilir.
+
+### Yeni bir Google Ads hesabında hangi teklif stratejisiyle başlanmalı?
+
+Yeni bir hesapta doğrudan Hedef EBM stratejisiyle başlamak yerine aşamalı bir yol izlenmelidir. İlk 2-4 hafta Manuel TBM ya da Tıklamaları en üst düzeye çıkar stratejisiyle veri toplanır, yeterli dönüşüm biriktiğinde Dönüşümleri en üst düzeye çıkar stratejisine geçilir. Offline dönüşümler düzenli akmaya başladığında ise Hedef EBM ya da değer bazlı teklif stratejisine geçilir.
+
+### Google Ads sonuçlarını değerlendirmek için ne kadar beklemek gerekir?
+
+Karar vermeden önce öğrenme dönemini ve satış döngüsünü hesaba katmak gerekir. İlk 4 ila 8 hafta, sistem veri toplarken maliyetler genellikle hedefin üzerinde seyreder. Satış döngüsü 60 günse, 30 günlük veriyle kanal hakkında kesin karar vermek yanıltıcıdır.

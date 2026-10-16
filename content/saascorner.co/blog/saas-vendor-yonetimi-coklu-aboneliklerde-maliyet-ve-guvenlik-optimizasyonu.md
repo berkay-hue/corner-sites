@@ -68,3 +68,21 @@ Alt Başlık 4.2: Otomasyon ve Yönetim Platformlarının Stratejik Rolü
 ## Sonuç
 
 SaaS araçları, doğru yönetildiğinde işletmeler için güçlü birer kaldıraçtır. Ancak kontrolsüz bırakıldığında, bütçeni tüketen ve güvenlik açıkları yaratan bir karmaşaya dönüşebilirler. Başarılı bir SaaS vendor yönetimi, reaktif bir sorun çözme yaklaşımından proaktif bir stratejiye geçmektir. Bu, sadece maliyetleri düşürmekle kalmaz, aynı zamanda veri güvenliğini güçlendirir, operasyonel verimliliği artırır ve teknoloji yatırımlarından maksimum değeri almanı sağlar. Bu makalede ele alınan adımları izleyerek, şirketinin SaaS portföyü üzerindeki kontrolü yeniden ele alabilirsin. İlk adım olarak bugün mevcut aboneliklerini listelemeye başla. Bu basit eylem, optimizasyon yolculuğunun en önemli başlangıcı olacaktır. Unutma, yönetemediğin hiçbir şeyi optimize edemezsin.
+
+## Sık sorulan sorular
+
+### Kullanılmayan SaaS lisanslarını nasıl tespit edebilirim?
+
+Düzenli bir SaaS denetimi yaparak tüm aboneliklerini listele ve her aracın son birkaç aydaki kullanıcı aktivitesini incele. Çoğu SaaS platformu bu kullanım raporlarını yönetici panelinde sunar. Hiç giriş yapmamış ya da çok az aktivite gösteren kullanıcıların lisanslarını geri alabilir veya onları daha düşük seviyeli bir plana geçirebilirsin. Lisanslar çoğu zaman çalışan ayrıldığında ya da proje bittiğinde unutulduğu için bu kontrolü düzenli tekrarlamak israfı azaltır.
+
+### SaaS sözleşme yenilemesine ne zaman hazırlanmaya başlamalıyım?
+
+Sözleşmenin bitiminden en az üç ay önce hazırlığa başlamalısın. SaaS sözleşmeleri genellikle otomatik yenilendiği için hazırlıksız kalırsan fiyatı ve koşulları yeniden müzakere etme fırsatını kaçırabilirsin. Bu sürede aracın kullanım verilerini topla, vadedilen yatırım getirisini sağlayıp sağlamadığını değerlendir ve daha uygun maliyetli alternatifleri araştır. Somut verilere dayanan bu hazırlık, pazarlık masasında elini güçlendirir.
+
+### Yeni bir SaaS tedarikçisinin güvenliğini nasıl değerlendirmeliyim?
+
+Pazarlama vaatlerine güvenmek yerine tedarikçinin güvenlik ve uyumluluk standartlarını somut kanıtlarla doğrulamalısın. Uluslararası kabul görmüş güvenlik sertifikalarına sahip olup olmadığını, verileri hem beklemede hem de aktarım halinde şifreleyip şifrelemediğini ve GDPR ya da KVKK gibi veri koruma yasalarına uyumunu sor. Bir ihlal durumundaki müdahale ve bildirim prosedürlerini de öğren. Bu konularda şeffaf olmayan bir tedarikçi potansiyel bir kırmızı bayraktır.
+
+### Merkezi SaaS envanterinde hangi bilgiler yer almalı?
+
+Envanterde her uygulamanın adı, temel işlevi, abonelik sahibi olan departman veya kişi, maliyeti, lisans sayısı, sözleşme yenileme tarihi ve tedarikçinin iletişim bilgileri yer almalı. Başlangıç için basit bir elektronik tablo bile işe yarayabilir. Bilgileri finans departmanının harcama raporlarından, departman yöneticileriyle görüşmelerden veya ağ trafiğini izleyen araçlardan toplayabilirsin. Envanter oluşturulduktan sonra her uygulamaya, kullanımından ve yenileme kararından sorumlu bir sahip atamak gerekir.
