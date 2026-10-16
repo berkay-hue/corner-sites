@@ -68,3 +68,21 @@ PQL Odaklı Satış, bir kere kurup unutabileceğin bir sistem değildir. Bu, s�
 ## Sonuç
 
 Geleneksel satış yöntemlerinin geçerliliğini yitirdiği bu yeni SaaS çağında, PQL Odaklı Satış sadece bir seçenek değil, bir zorunluluk haline gelmektedir. Kullanıcı davranışlarını merkeze alan bu model, satış çabalarını tahmin yürütmekten çıkarıp veri odaklı bir bilime dönüştürür. Bu, sadece daha yüksek dönüşüm oranları ve daha kısa satış döngüleri anlamına gelmez; aynı zamanda müşterilerin için çok daha iyi bir deneyim sunar. Çünkü onlara ihtiyaç duymadıkları bir şeyi satmaya çalışmak yerine, zaten sevdikleri bir üründen daha fazla değer elde etmelerine yardımcı olursun. 2026'ya giden yolda rekabette öne geçmek istiyorsan, ürün kullanımını gelire çevirme sanatında ustalaşmalısın. Şimdi harekete geçme ve şirketinin büyüme motorunu ateşleyecek PQL stratejisini kurgulamaya başlama zamanı.
+
+## Sık sorulan sorular
+
+### MQL ile PQL arasındaki fark nedir?
+
+MQL, e-kitap indirmek, webinara katılmak veya form doldurmak gibi içerik etkileşimleriyle etiketlenen bir adaydır; PQL ise ürünü aktif olarak kullanan ve satın alma potansiyeli yüksek davranışlar sergileyen bir kullanıcıdır. İçerik tüketmek satın almaya hazır olmak anlamına gelmediği için PQL, gerçek satın alma niyetini çok daha net ortaya koyar.
+
+### PQL tetikleyicileri nasıl belirlenir?
+
+PQL tetikleyicileri, en sadık ve başarılı müşterilerinin ürün içinde ortak olarak gerçekleştirdiği eylemlere bakılarak belirlenir. Bu süreçte hem kullanım derinliğine, yani belirli bir özelliğin kaç kez kullanıldığına, hem de kullanım genişliğine, yani kaç farklı özelliğin denendiğine odaklanmalısın.
+
+### PQL'leri izlemek için hangi araçlar gerekir?
+
+Mixpanel, Amplitude veya Heap gibi bir ürün analitik aracı ile Salesforce veya HubSpot gibi bir CRM sisteminin entegre çalışması gerekir. Analitik araç PQL kriterlerini karşılayan kullanıcıları otomatik olarak tespit eder, CRM entegrasyonu da bu durumda satış temsilcisine anında bildirim gönderilmesini sağlar.
+
+### PQL odaklı satışın başarısı hangi metriklerle ölçülür?
+
+PQL'den müşteriye dönüşüm oranı, ortalama satış döngüsü süresi, müşteri yaşam boyu değeri (LTV) ve genişleme geliri temel metriklerdir. Bunlar arasında PQL'den müşteriye dönüşüm oranı stratejinin etkinliğinin en net göstergesidir ve oran düşükse PQL tanımını veya satış ekibinin yaklaşımını gözden geçirmen gerekebilir.
