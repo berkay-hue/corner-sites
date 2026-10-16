@@ -174,6 +174,7 @@ function renderPost(tpl, post, next, related) {
   for (const k of ["og:title", "twitter:title"]) h = setMeta(h, k, fm.title);
   for (const k of ["description", "og:description", "twitter:description"]) h = setMeta(h, k, fm.description);
   for (const k of ["og:image", "twitter:image"]) h = setMeta(h, k, img);
+  for (const k of ["og:image:alt", "twitter:image:alt"]) h = setMeta(h, k, fm.imageAlt || fm.title);
   h = setMeta(h, "og:url", url).replace(/(<link rel="canonical" href=")[^"]*/, `$1${url}`);
   h = setMeta(h, "og:type", "article");
   h = h.replace(/<meta name="framer-search-index[^>]*>\s*/g, "");
