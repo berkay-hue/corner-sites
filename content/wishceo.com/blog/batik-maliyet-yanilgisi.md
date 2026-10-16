@@ -4,7 +4,7 @@ description: "Zaten harcanmış para, zaman ve itibar yeni kararını nasıl boz
 date: "2026-10-15"
 category: "Kavramlar"
 image: "/og.png"
-imageAlt: "Batık Maliyet Yanılgısı: “Bırakamayız” Refleksi"
+imageAlt: "WishCEO kapak kartı “Şirket batıyor. CEO sensin.”: harcanmış para ve zaman yüzünden bırakılamayan bir projede devam etme kararı"
 ---
 
 Batık maliyet yanılgısı, geri gelmeyecek geçmiş harcamaların gelecekle ilgili bir kararı yönlendirmesidir. Bir toplantı düşün. Masada yıllardır süren bir proje var. Bütçe defalarca aşıldı, takvim birkaç kez kaydı, ortada hâlâ ödeme yapan tek bir müşteri yok. Biri çekinerek soruyor: "Bunu durdursak mı?" Odadaki en kıdemli kişi hemen cevap veriyor: "Bu kadar para yatırdık, şimdi mi bırakacağız?"
