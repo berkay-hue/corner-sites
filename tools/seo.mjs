@@ -138,7 +138,7 @@ const RULES = {
       };
     })(),
     // Bunlardan biri gövdede kalırsa koşu durur: ayna yenilenip işaretler kayarsa iddialar sessizce geri gelmesin
-    CLAIMS: /500\+|10,000\+|50\+ agencies|\$5M|50,000\+|98%|2\.4K|89%|\$45K|\+340%|TechCorp|ModaBrand|FoodCo|TravelGo|StyleHub|Sarah|Alex Rivera|Maria Garcia|TechStart|FoodExpress|Mike R\.|Emma L\.|\$12,500|\$8,200|\$10,800|\$45,200|\$4,250|\$1,500|125K|12K followers|4\.8%|24\/7|thousands of|hundreds of|© 2025|Join leading/,
+    CLAIMS: /500\+|10,000\+|50\+ agencies|\$5M|50,000\+|98%|2\.4K|89%|\$45K|\+340%|TechCorp|ModaBrand|FoodCo|TravelGo|StyleHub|Sarah|Alex Rivera|Maria Garcia|TechStart|FoodExpress|Mike R\.|Emma L\.|\$12,500|\$8,200|\$10,800|\$45,200|\$4,250|\$1,500|125K|12K followers|4\.8%|24\/7|thousands of|hundreds of|© 2025|Join leading|Industry Leaders|10\.000\+|50\.000\+|₺\d+M|%98|7\/24|binlerce|yüzlerce|Sektör Lider/,
     body(b, page) {
       const T = this.BODY[page] || {};
       const drop = (i, what) => {  // i'deki açılış etiketini eşi olan kapanışla birlikte siler
@@ -190,6 +190,9 @@ const RULES = {
       // Favicon ve 1200×630 paylaşım görseli: dosyalar sites/brandcorner.co'ya konunca devreye girer
       if (existsSync(join(SITE, "icon.png")) && !html.includes('rel="icon"'))
         html = html.replace("</head>", `<link rel="icon" href="/icon.png" type="image/png"/><link rel="apple-touch-icon" href="/icon.png"/></head>`);
+      // Footer'daki 4 sosyal ikon href="#" (hesap yok): gövdeye dokunmadan (#418) head CSS ile gizlenir
+      if (/<a\b[^>]*href="#"/.test(html) && !html.includes('footer a[href="#"]'))
+        html = html.replace("</head>", `<style data-sk-seo>footer a[href="#"]{display:none}</style></head>`);
       if (existsSync(join(SITE, "og.png"))) {
         html = html.replace(/(<meta (?:property="og:image"|name="twitter:image") content=")[^"]*(")/g, `$1${R.origin}/og.png$2`);
         if (!html.includes('property="og:image:width"'))
@@ -383,6 +386,7 @@ const RULES = {
 // v0/Next istemci bileşenlerinin gövdesi JS chunk'ında: HTML'e eklenen öğe chunk'ta da olmalı, yoksa hydration #418 verir.
 // /_next/static/* immutable önbellekli: yamalı chunk içerik özetli yeni adla yazılır, HTML ve RSC referansları ona çevrilir; eski dosya kalır.
 // edits sırayla uygulanır: [from, to]; from ya tek eşleşen metin ya da {from, until}: tek eşleşen from'dan sonraki ilk until'e kadar (until kalır)
+// Yamalanmış chunk'ın edits'i değişirse sayfalar önceki çıktının adını gösterir: o ad was'a eklenir (yeni ad hiçbir sayfada yoksa koşu durur)
 // Gövdeyi silinen bileşenler "return null" olur; aynı değişiklik RULES["brandcorner.co"].BODY ile SSR HTML'de de yapılır.
 const DICT = [  // i18n sözlüğü (EN + TR); 6 sayfanın ve 404'ün chunk'ında aynı kopya
   ['"hero.trust.brands":"Trusted by 500+ brands"', '"hero.trust.brands":"For brands"'],
@@ -397,6 +401,19 @@ const DICT = [  // i18n sözlüğü (EN + TR); 6 sayfanın ve 404'ün chunk'ınd
   ['"footer.copyright":"© 2025 Brand Corner. Tüm hakları saklıdır."', '"footer.copyright":"© Brand Corner. Tüm hakları saklıdır."'],
   ['"cta.subheadline":"Join thousands of brands, influencers, and agencies growing with Brand Corner."', '"cta.subheadline":"Brands, influencers, and agencies can grow with Brand Corner."'],
   ['"cta.subheadline":"Brand Corner ile büyüyen binlerce marka, influencer ve ajansa katılın."', '"cta.subheadline":"Markalar, influencer\'lar ve ajanslar Brand Corner ile büyüyebilir."'],
+  // PR-G: SocialProofSection "return null" olduğundan görünmüyor; sözlükte de iddia kalmasın
+  ['"socialProof.headline":"Trusted by Industry Leaders"', '"socialProof.headline":"Built for brands, influencers, and agencies"'],
+  ['"socialProof.brands":"500+ Brands"', '"socialProof.brands":"Brands"'],
+  ['"socialProof.influencers":"10,000+ Influencers"', '"socialProof.influencers":"Influencers"'],
+  ['"socialProof.revenue":"$5M+ Revenue Generated"', '"socialProof.revenue":"Revenue"'],
+  ['"socialProof.campaigns":"50,000+ Successful Campaigns"', '"socialProof.campaigns":"Campaigns"'],
+  ['"socialProof.satisfaction":"98% Satisfaction Rate"', '"socialProof.satisfaction":"Satisfaction"'],
+  ['"socialProof.headline":"Sektör Liderlerinin Tercihi"', '"socialProof.headline":"Markalar, influencer\'lar ve ajanslar için"'],
+  ['"socialProof.brands":"500+ Marka"', '"socialProof.brands":"Markalar"'],
+  ['"socialProof.influencers":"10,000+ Influencer"', '"socialProof.influencers":"Influencer\'lar"'],
+  ['"socialProof.revenue":"₺50M+ Gelir Oluşturuldu"', '"socialProof.revenue":"Gelir"'],
+  ['"socialProof.campaigns":"50,000+ Başarılı Kampanya"', '"socialProof.campaigns":"Kampanyalar"'],
+  ['"socialProof.satisfaction":"%98 Memnuniyet Oranı"', '"socialProof.satisfaction":"Memnuniyet"'],
 ];
 const statGrid = v => ({ from: `,(0,${v}.jsxs)("div",{className:"mt-10 grid grid-cols-3 gap-6",children:[`, until: `]}),(0,${v}.jsxs)("div",{className:"relative"` });
 const CHUNK_PATCHES = {
@@ -404,8 +421,8 @@ const CHUNK_PATCHES = {
     // e34ca4a footer Company listesine Blog ekledi (6 sayfa); i18n sözlüklerinde footer.blog zaten var
     { chunk: "fbb4735ac8b2897c", edits: [['{href:"/press",label:e("footer.press")},', '{href:"/press",label:e("footer.press")},{href:"/blog",label:e("footer.blog")},']] },
     // PR-F: doğrulanamayan sayaçlar, logo şeridi, yorumlar, başarı hikâyeleri ve mockup tutarları
-    { chunk: "411b1b9d3b6df8ca", edits: DICT },
-    { chunk: "763536697d8b15ea", edits: DICT },
+    { chunk: "411b1b9d3b6df8ca", was: ["7cc019c396358bc9"], edits: DICT },
+    { chunk: "763536697d8b15ea", was: ["021182790b26378c"], edits: DICT },
     { chunk: "e4b281dafb09dd8b", edits: [  // ana sayfa
       [{ from: ',(0,s.jsxs)("div",{className:"mt-16 border-t border-border pt-8 lg:mt-24"', until: ']})]})}e.s(["HeroSection"' }, ""],  // "Trusted by 500+" + logo şeridi
       [{ from: 'function l(){let{t:e,language:l}=(0,t.useLanguage)(),i=[{value:"500+"', until: 'e.s(["SocialProofSection",()=>l])' }, "function l(){return null}"],
@@ -470,15 +487,21 @@ const renames = [];
 for (const p of CHUNK_PATCHES[host] || []) {
   const dir = join(SITE, "_next/static/chunks"), src = await readFile(join(dir, p.chunk + ".js"), "utf8");
   const out = p.edits.reduce((s, [from, to]) => splice(s, from, to, p.chunk), src), name = createHash("sha256").update(out).digest("hex").slice(0, 16);
+  const left = rule.CLAIMS && out.match(rule.CLAIMS);  // EN + TR sözlük dahil yamalı chunk'ta da iddia kalmasın
+  if (left) throw new Error(`${p.chunk}: doğrulanamayan iddia kaldı: ${left[0]}`);
   if (!existsSync(join(dir, name + ".js"))) await writeFile(join(dir, name + ".js"), out);
-  renames.push([`/_next/static/chunks/${p.chunk}.js`, `/_next/static/chunks/${name}.js`]);
+  for (const old of [p.chunk, ...(p.was || [])]) renames.push([`/_next/static/chunks/${old}.js`, `/_next/static/chunks/${name}.js`]);
 }
 let n = 0;
+const used = new Set();
 for await (const f of walk(SITE)) {
   const page = "/" + relative(SITE, f).replace(/\.html$/, "").replace(/^index$/, "");  // index -> "/"
   const before = await readFile(f, "utf8");
   let after = rule.fix(before, page);
   for (const [a, b] of renames) after = after.replaceAll(a, b);
+  for (const [, b] of renames) if (after.includes(b)) used.add(b);
   if (after !== before) { await writeFile(f, after); n++; }
 }
-console.log(`seo: ${host} ${n} dosya güncellendi${renames.length ? `, ${renames.length} chunk yamalandı` : ""}`);
+const unused = [...new Set(renames.map(([, b]) => b))].filter(b => !used.has(b));
+if (unused.length) throw new Error(`yamalı chunk hiçbir sayfada yok (önceki adı was'a ekle): ${unused.join(", ")}`);
+console.log(`seo: ${host} ${n} dosya güncellendi${(CHUNK_PATCHES[host] || []).length ? `, ${CHUNK_PATCHES[host].length} chunk yamalandı` : ""}`);
