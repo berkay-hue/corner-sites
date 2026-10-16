@@ -15,7 +15,7 @@ Hangisi daha iyi karar verdi?
 
 İçgüdün Murat'ı gösterir. Kazanan o, demek ki bir şeyi doğru yaptı. Ama kararlara tek tek bakınca tablo tersine döner. Selin öğrenilebilecek her şeyi öğrendi ve kötü ihtimale karşı yedek bıraktı. Murat zar attı ve zar iyi geldi. Mesele bu ikisini, kararın kalitesiyle sonucun kalitesini, birbirinden ayırabilmek.
 
-> Bu yazı Soranol ve Korvala vakalarının sonucunu anlatıyor. Önce kendin karar vermek istersen [vakaları oyna](/#oyun).
+> Bu yazı Soranol ve Korvala vakalarının sonucunu anlatıyor. Önce kendin karar vermek istersen [vakaları oyna](/?s=001#oyun).
 
 ## Sonuç, kararın tek tanığı değil
 

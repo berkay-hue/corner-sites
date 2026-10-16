@@ -68,3 +68,21 @@ ESG performansını ölçmek kadar, bu verileri şeffaf bir şekilde paylaşmak 
 ## Sonuç
 
 Partner ağlarında ESG ve yeşil girişimler, B2B SaaS şirketleri için artık bir seçenek değil, sürdürülebilir büyümenin temel taşıdır. Değişen yatırımcı beklentileri, bilinçlenen kurumsal müşteriler ve artan rekabet, bizi sadece kendi operasyonlarımızı değil, tüm iş ekosistemimizi yeniden düşünmeye zorluyor. Sürdürülebilir bir partner programı oluşturmak; marka itibarını güçlendirir, riskleri azaltır, en iyi yetenekleri ve iş ortaklarını çeker ve nihayetinde kârlılığı artırır. Bu yolculuk, sözleşmelere birkaç madde eklemekten çok daha fazlasını gerektirir; ortak bir vizyon yaratmayı, partnerleri eğitim ve teşviklerle desteklemeyi ve ilerlemeyi şeffaf bir şekilde ölçmeyi içerir. Bugün partner stratejini bu yeni gerçeklik ışığında gözden geçirerek, sadece şirketinin geleceğini değil, aynı zamanda daha yaşanabilir bir dünyanın geleceğini de inşa etmeye başlayabilirsin. Harekete geçme zamanı şimdi.
+
+## Sık sorulan sorular
+
+### Yeşil kodlama partner ekosistemine nasıl katkı sağlar?
+
+Yeşil kodlama, yazılımın daha verimli çalışmasını sağlayarak ekosistemin toplam enerji tüketimini azaltabilir. Optimize edilmemiş kod gereksiz yere işlemci gücü ve enerji tüketir. Bu prensipleri geliştirme süreçlerine dahil edip partnerlerinle paylaştığında, onların altyapı maliyetlerinin düşmesine de katkı sağlayabilirsin. Partnerlerini yenilenebilir enerji hedefleri olan bulut sağlayıcılarını kullanmaya yönlendirmek de bu çabayı destekler.
+
+### Partnerleri ESG hedeflerine teşvik etmek için finansal olmayan hangi yöntemler kullanılabilir?
+
+Başarılı partnerleri ödüllerle tanıyabilir ve onlara özel bir rozet kullanma hakkı verebilirsin. Örneğin, yılın sürdürülebilir partnerini seçip web sitende, sosyal medyada ve etkinliklerde öne çıkarabilirsin. Bu tanınma partnerin marka itibarını güçlendirir. Hedefleri tutturan partnerlere verilen bir yeşil partner rozeti de potansiyel müşteriler için bir güven sinyali olabilir ve partnerler arasında olumlu bir rekabet yaratabilir.
+
+### Partnerlerin ESG performansı hangi metriklerle ölçülebilir?
+
+ESG performansını çevresel, sosyal ve yönetişim başlıkları altında gruplanan net metriklerle ölçebilirsin. Çevresel tarafta karbon emisyonlarındaki azalma, yenilenebilir enerji kullanımı ve atık geri dönüşümü izlenebilir. Sosyal tarafta çalışan memnuniyeti, yönetimdeki çeşitlilik ve gönüllülük programlarına katılım takip edilebilir. Yönetişim tarafında ise tamamlanan veri güvenliği eğitimleri, etik ihlal bildirimleri ve yönetim kurulundaki bağımsız üyeler gibi göstergeler kullanılabilir.
+
+### Partner ekosisteminin ESG performansı nasıl raporlanmalı?
+
+Performansı yıllık bir partner ekosistemi sürdürülebilirlik raporuyla şeffaf biçimde paylaşmalısın. Bu raporda metriklerdeki ilerlemeyi, başarılı partnerlerin hikayelerini ve gelecek yılın hedeflerini anlatabilirsin. İletişimi e-bültenler, webinarlar ve toplantılarla yıl boyunca sürdürmek de önemlidir. Ulaşılamayan hedefleri ve nedenlerini dürüstçe açıklamak, paydaşların gözündeki güvenilirliğini artırabilir.

@@ -42,3 +42,21 @@ Ancak ürün netleşmiş, hedef kitle tanımlanmış ve artık ölçekleme zaman
 **Asıl soru şudur : **Satış probleminizi bir eleman alarak mı çözmeye çalışıyorsunuz, yoksa bir sistem kurarak mı?
 
 İkisi çok farklı sorulardır ve verdikleri cevaplar da çok farklı sonuçlar doğurur.
+
+## Sık sorulan sorular
+
+### Yeni işe alınan bir satışçı neden geç üretken hale gelir?
+
+Bu yavaşlık genellikle kişinin yetersizliğinden değil, sistemin yokluğundan kaynaklanır. İlk haftalar tanışma toplantılarına, ürün eğitimine ve CRM'e alışmaya gider. Bir ay geçtiğinde henüz ilk görüşme bile alınmamış olabilir. Bu süre boyunca kişi maaş alır ama henüz üretken değildir.
+
+### Tam zamanlı satış personelinin maaş dışındaki maliyetleri nelerdir?
+
+Maaş dışındaki maliyetler işe alım süreci, eğitim süresi, araç lisansları, CRM kurulumu ve sekans yazımına harcanan zamandır. İşe alım süreci tek başına ortalama iki ila üç ay sürebilir. Performansın oturması için geçen süre de bu tabloya eklenir. Satış personeli işten ayrılırsa süreç sıfırlanır ve her şey başa döner.
+
+### SDR modelinde hangi roller birlikte çalışır?
+
+SDR modelinde potansiyel müşteri araştırması yapan, mesajları yazıp test eden, veriyi okuyup raporlayan ve tüm süreci yöneten roller birlikte çalışır. Bu yapı tek bir kişiye değil, birbirine bağlı rollerin işleyişine dayanır. Tek bir kişiden bu işlerin hepsini aynı anda beklemek onu başarısızlığa sürükleyebilir. Yapı dışarıdan alındığında kurulum süresi kısalır ve şirket kendi asıl işine odaklanmaya devam edebilir.
+
+### Ürün-pazar uyumunu test eden bir şirket için SDR modeli uygun mudur?
+
+Hayır; ürün-pazar uyumunu henüz test eden bir şirket için içeriden bir satışçı daha mantıklı olabilir. Bu aşamada satış sürecini bizzat anlamak ve öğrenme sürecini yakından yaşamak değerlidir. Ürün netleştiğinde, hedef kitle tanımlandığında ve ölçekleme zamanı geldiğinde ise tek kişiyle büyümeye çalışmak frene basmaya benzer. O noktada ölçeklenebilir bir SDR yapısı daha uygun hale gelir.

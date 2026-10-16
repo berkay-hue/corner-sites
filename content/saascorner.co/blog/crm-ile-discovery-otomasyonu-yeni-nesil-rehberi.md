@@ -154,3 +154,21 @@ Veri Kalitesi Sorunları (Çöp İçeri, Çöp Dışarı): Otomasyon sisteminiz,
 ## Sonuç
 
 Geleceğin satış ekibi, en çok arama yapan veya en çok e-posta gönderen ekip olmayacak. Geleceğin başarılı satış ekibi, müşterisini en derinlemesine anlayan, en doğru zamanda en doğru mesajla ulaşan ve zamanını en verimli şekilde kullanan ekip olacaktır. CRM merkezli discovery otomasyonu, bu geleceğe giden en net yoldur. Bu strateji, satış temsilcilerinizi idari yüklerden kurtarıp onları tekrar asıl işleri olan ilişki kurma ve problem çözme sanatına odaklar. Süreci otomatikleştirmek, insani dokunuşu ortadan kaldırmak değil, tam aksine o dokunuşun en değerli ve en etkili olacağı anları yaratmak için zemin hazırlamaktır. Potansiyel müşterilerinizin dijital ayak izlerini takip ederek, davranışlarını analiz ederek ve onlarla akıllı etkileşimler kurarak, satış huninizin en üstünü bilimsel bir hassasiyetle yönetebilirsiniz. Bu, sadece bir verimlilik artışı değil, aynı zamanda müşteri deneyiminde bir devrimdir. Çünkü günün sonunda en iyi discovery, müşterinin size bir şeyler "sattığınızı" değil, onun sorununu gerçekten "anladığınızı" hissettiği andır. Ve otomasyon, bu anı ölçeklenebilir bir şekilde yaratmanın yeni nesil anahtarıdır.
+
+## Sık sorulan sorular
+
+### Discovery otomasyonu nedir?
+
+Discovery otomasyonu, keşif sürecinin tekrarlayan, zaman alıcı ve veri toplama odaklı kısımlarının teknoloji ve veri kullanılarak otomatikleştirilmesidir. Amacı satış temsilcisini süreçten çıkarmak değil, onu daha stratejik bir role taşımaktır. Otomasyon temel bilgileri toplayıp adayları puanlayarak en nitelikli olanları zengin bir veri profiliyle temsilciye iletebilir.
+
+### CRM discovery otomasyonunda neden merkezi bir rol oynar?
+
+CRM, farklı araçlardan gelen verileri tek bir gerçeklik kaynağında birleştirdiği için otomasyonun kalbi kabul edilir. Entegrasyon yetenekleri, eğer-o-zaman mantığına dayalı iş akışları ve raporlama özellikleri sayesinde süreci yönetebilir. CRM olmadan kullanılan araçlar genellikle dağınık ve koordinasyonsuz kalır.
+
+### Yeni nesil lead puanlaması geleneksel lead puanlamasından nasıl ayrılır?
+
+Yeni nesil lead puanlaması, her dijital davranışı satın alma niyetini ne kadar güçlü yansıttığına göre ağırlıklandırır. Geleneksel puanlama genellikle demografik bilgilere ve e-posta açma gibi basit eylemlere dayanır. Yeni yaklaşım ayrıca kariyer sayfası ziyareti gibi alıcı olmadığını gösteren davranışlara negatif puan vererek satış ekibinin zamanını korumayı hedefler.
+
+### Discovery otomasyonunda kaçınılması gereken tuzaklar nelerdir?
+
+En önemli tuzaklar aşırı otomasyon, veri kalitesi sorunları ve teknoloji entegrasyon karmaşasıdır. Aşırı otomasyon adayın bir robotla konuştuğunu hissetmesine yol açabileceği için hibrit bir model ve zamanında insana devir önerilir. Düzenli veri temizliği ve entegrasyon yetenekleri güçlü araçların seçilmesi de sistemin güvenilirliğini korumaya yardımcı olabilir.

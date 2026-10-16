@@ -120,3 +120,21 @@ Satış Hunisi (Funnel) Görselleştirmesi
 ## Sonuç
 
 Zoho CRM, sadece bir yazılım değil, bir iş dönüşüm aracıdır. Satış dönüşüm oranlarını iyileştirmek, tek bir sihirli değnekle başarılabilecek bir görev değildir; bu, müşteri adaylarını yakalamaktan anlaşmayı kapatmaya ve sonrasında performansı analiz etmeye kadar uzanan tüm sürecin optimize edilmesini gerektiren stratejik bir çabadır. Zoho CRM, bu sürecin her bir adımında size kontrol, otomasyon ve içgörü sunar. Müşteri adayı yönetimini otomatikleştirerek hiçbir fırsatın kaçırılmamasını sağlar. Müşteri adayı puanlaması ile ekibinizin enerjisini doğru yere odaklamasına yardımcı olur. Blueprint ile satış sürecinizi standardize ederek tutarlılık ve kaliteyi artırır. İş akışları ve yapay zeka ile iletişimi ve takibi güçlendirir. Son olarak, güçlü raporlama araçlarıyla size sürekli iyileştirme için gerekli verileri sunar. Unutmayın ki, günümüzün rekabetçi B2B pazarında, en iyi ürüne veya hizmete sahip olmak tek başına yeterli değildir. Bu ürün veya hizmeti müşteriye ulaştıran satış sürecinizin de en az ürününüz kadar verimli, akıllı ve optimize edilmiş olması gerekir. Zoho CRM, bu optimizasyonu gerçekleştirmek için ihtiyacınız olan stratejik ortaktır.
+
+## Sık sorulan sorular
+
+### Satış dönüşüm oranı nedir?
+
+Satış dönüşüm oranı, kapanan anlaşmaların toplam müşteri adayı sayısına oranıdır. Bu oran, satış ve pazarlama çabalarının ne kadar etkili olduğunu gösteren temel bir metrik olarak kullanılabilir. Zoho CRM, bu oranı izlemek ve iyileştirmek için gereken verileri tek bir yerde toplayabilir.
+
+### Dönüşüm oranını düşüren başlıca sorunlar nelerdir?
+
+Dönüşüm oranını genellikle dağınık veriler, tanımlanmamış satış süreçleri ve ekipler arası iletişim kopuklukları düşürür. Farklı yerlerde tutulan müşteri bilgileri fırsatların gözden kaçmasına yol açabilir. Standart bir süreç olmadığında her temsilci farklı ilerleyebilir ve sonuçlar tutarsızlaşabilir.
+
+### Zoho CRM'de müşteri adayı puanlaması nasıl çalışır?
+
+Müşteri adayı puanlaması, adaylara demografik özelliklerine ve davranışlarına göre otomatik puan atar. Unvan, şirket büyüklüğü veya sektör gibi bilgilerle web sitesi ziyareti ve form doldurma gibi etkileşimler birlikte değerlendirilebilir. Belirli bir eşiği aşan adaylar sıcak olarak işaretlenip satış ekibine öncelikli olarak yönlendirilebilir.
+
+### Blueprint dönüşüm oranına nasıl katkı sağlar?
+
+Blueprint, satış sürecinizi standartlaştırarak her fırsatın aynı adımlarla yönetilmesine yardımcı olur. Aşamalar arasında geçiş için zorunlu alanlar ve otomatik eylemler tanımlanabilir. Bu sayede önemli adımların atlanması önlenebilir ve süreç daha öngörülebilir hale gelebilir.

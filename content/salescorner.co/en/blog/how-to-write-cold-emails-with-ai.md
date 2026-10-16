@@ -53,7 +53,7 @@ If a language model has only "First name, Last name, Company" to work with, it d
 
 Keep this data in a table (Google Sheets, Airtable or your CRM), with a separate column for each field per record. Then you can run AI row by row to generate a "personalization note" for each record. For example, you can give the model the company's website copy and open job postings and ask: "In one sentence, write the most likely problem this company is facing on the sales side right now."
 
-Running these flows as automated workflows instead of building them by hand is the most reliable way to process hundreds of records consistently. This is exactly where [Sales Corner automations](/en/) come in: they combine data collection, enrichment, AI personalization and the handoff to your email tool into a single workflow. For example, our [Sequence Writer tool](/sekans-yazari) turns your product video, PDF or website into a multi-step outreach sequence, and the [Web Keyword Scanner](/web-keyword) can scan target companies' websites for signals in bulk.
+Running these flows as automated workflows instead of building them by hand is the most reliable way to process hundreds of records consistently. This is exactly where [Sales Corner automations](/en/) come in: they combine data collection, enrichment, AI personalization and the handoff to your email tool into a single workflow. If you want to build these flows yourself, our [beginner's guide to B2B sales automation with n8n](/blog/b2b-sales-automation-with-n8n-guide) is a good starting point. For example, our [Sequence Writer tool](/sekans-yazari) turns your product video, PDF or website into a multi-step outreach sequence, and the [Web Keyword Scanner](/web-keyword) can scan target companies' websites for signals in bulk.
 
 ## How to Build a Good Cold Email Prompt
 
@@ -175,7 +175,7 @@ The most common mistakes when writing cold emails with AI are:
 - **Excessive length:** Unconstrained AI output easily exceeds 200 words. For cold email, a 50-125 word range is healthier in most cases.
 - **Too many goals in one email:** Asking for a demo, sharing content and inviting to a webinar all at once. Every email should have a single call to action.
 - **Leaving the AI tone as is:** Text that's overly formal, overly enthusiastic or full of clichés. Expand your banned phrase list over time.
-- **Ignoring data privacy:** When processing personal data, comply with GDPR, KVKK and the relevant regulations in your target market. Also give recipients a way to opt out of further contact in your emails.
+- **Ignoring data privacy:** When processing personal data, comply with GDPR, KVKK and the relevant regulations in your target market. Also give recipients a way to opt out of further contact in your emails. For details, see our [guide to KVKK-compliant B2B cold email](/blog/kvkk-compliant-b2b-cold-email).
 
 ## Measurement and Iteration
 
@@ -184,7 +184,7 @@ One of the biggest advantages of working with AI is that the cost of testing dro
 - **Delivery rate and bounce rate:** Indicators of infrastructure and list health.
 - **Reply rate:** The overall pulling power of the message.
 - **Positive reply rate:** The real measure of success. This metric separates out "not interested" replies.
-- **Conversion to meetings and pipeline contribution:** The campaign's impact on actual business results.
+- **Conversion to meetings and pipeline contribution:** The campaign's impact on actual business results. Tracking this requires [clearly defined pipeline stages](/blog/how-to-define-sales-pipeline-stages).
 
 Don't rely on open rate alone. Because of privacy features and automatic image loading, this metric is becoming less and less reliable.
 
@@ -194,7 +194,7 @@ Another powerful practice is classifying replies with AI. Sorting incoming repli
 
 ## Conclusion
 
-Writing cold emails with AI is much more than opening a tool and saying "write me an email". Successful results rest on a clearly defined audience, clean and enriched data, well-crafted prompts, a sensible email sequence and a disciplined measurement loop. When these pieces fall into place, AI can lighten your sales team's research and writing load. And it lets you deliver messages that are meaningful in each recipient's own context to hundreds, even thousands of people at scale.
+Writing cold emails with AI is much more than opening a tool and saying "write me an email". Successful results rest on a clearly defined audience, clean and enriched data, well-crafted prompts, a sensible email sequence and a disciplined measurement loop. When these pieces fall into place, AI can lighten your sales team's research and writing load. And it can help you deliver messages that are meaningful in each recipient's own context to hundreds, even thousands of people at scale.
 
 Remember: strategy and the value proposition come from you; scale and personalization come from AI. Never remove human oversight from the process entirely.
 

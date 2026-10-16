@@ -21,7 +21,7 @@ Yapay zekanın B2B satış süreçlerine entegrasyonu, bir lüksten stratejik bi
 
 Corner Group olarak, teknolojinin sadece bir araç olduğuna ve asıl amacın sürdürülebilir, güvene dayalı iş ilişkileri kurmak olduğuna inanıyoruz. Bu felsefeyle, B2B satışta yapay zeka kullanımına yönelik etik bir çerçeve oluşturduk. Bu çerçeve, verimlilikten ödün vermeden, şeffaflığı ve müşteri güvenini merkeze alan dört temel kural üzerine inşa edilmiştir.
 
-## Veri Mahremiyetinde Radikal Şeffaflık
+### Veri Mahremiyetinde Radikal Şeffaflık
 
 Her şey veriyle başlar ve biter. Yapay zekanın etik kullanımı, en temelinde, verinin nasıl toplandığı, işlendiği ve kullanıldığı konusunda mutlak bir şeffaflık gerektirir. Bu, yasal düzenlemelere (KVKK, GDPR vb.) uymanın çok ötesinde, proaktif bir güven beyanıdır.
 
@@ -29,7 +29,7 @@ Her şey veriyle başlar ve biter. Yapay zekanın etik kullanımı, en temelinde
 
 **Amaç Sınırlaması İlkesi:** Toplanan veriler, sadece belirtilen amaçlar doğrultusunda kullanılmalıdır. Bir müşteriden ürün demosu için alınan iletişim bilgileri, onun rızası olmadan başka bir ürünün pazarlama listesine eklenmemelidir. CRM Corner'ın entegrasyon uzmanlığı burada devreye girer; farklı sistemlerdeki verilerin, belirlenmiş rıza ve amaç sınırları içinde kalmasını sağlayacak teknik altyapıyı kurmak kritik öneme sahiptir. Verinin yaşam döngüsü boyunca etik kurallara uygunluğunu denetleyen sistemler kurmak, bir seçenek değil, bir zorunluluktur.
 
-## Algoritmanın Kara Kutusunu Aydınlatma Sorumluluğu
+### Algoritmanın Kara Kutusunu Aydınlatma Sorumluluğu
 
 Yapay zekanın en büyük eleştirilerinden biri, kararlarını nasıl verdiğinin anlaşılamamasıdır. B2B satış gibi insan ilişkilerinin kritik olduğu bir alanda, bu belirsizlik kabul edilemez. Satış ekiplerinin, kullandıkları araçlara güvenmesi gerekir ve bu güven, ancak anlayışla mümkündür.
 
@@ -37,7 +37,7 @@ Yapay zekanın en büyük eleştirilerinden biri, kararlarını nasıl verdiğin
 
 **İnsan Denetimi ve Son Karar Yetkisi:** Yapay zeka, güçlü bir yardımcı pilot olmalıdır, ancak uçağı her zaman insan pilot kullanmalıdır. Otomatikleştirilmiş e-posta dizileri veya müşteri adayı atamaları gibi kritik süreçlerde, her zaman bir insanın müdahale etme, kararı geçersiz kılma veya süreci durdurma yetkisi olmalıdır. Algoritma bir öneride bulunabilir, ancak nihai kararı ve sorumluluğu her zaman deneyimli bir satış profesyoneli üstlenmelidir. Bu, teknolojinin insan zekasını ve sezgisini ikame etmesi değil, onu güçlendirmesi gerektiği anlamına gelir.
 
-## Yapay Zeka Varlığının Dürüstçe Bildirimi
+### Yapay Zeka Varlığının Dürüstçe Bildirimi
 
 Müşteri ile olan etkileşimlerde, karşı tarafın bir insanla mı yoksa bir yapay zeka ile mi konuştuğunu bilme hakkı vardır. Bu dürüstlük, ilişkinin temelini oluşturur ve aldatma hissini en başından ortadan kaldırır.
 
@@ -45,7 +45,7 @@ Müşteri ile olan etkileşimlerde, karşı tarafın bir insanla mı yoksa bir y
 
 **Değer Odaklı Konumlandırma:** Yapay zekayı bir maliyet düşürme aracı olarak değil, müşteriye daha hızlı ve daha etkili hizmet sunmanın bir yolu olarak konumlandırın. "Size 7/24 anında yanıt verebilmek için yapay zeka destekli bir asistan kullanıyoruz. Eğer konuyu bir uzmanın değerlendirmesi gerekirse, sizi hemen doğru kişiye yönlendireceğim." mesajı, teknolojinin müşteri yararına kullanıldığını gösterir. Bu yaklaşım, Social Media Corner ve Brand Corner'ın savunduğu otantik iletişim ilkeleriyle de birebir örtüşmektedir.
 
-## Algoritmik Önyargının Aktif Olarak Denetlenmesi
+### Algoritmik Önyargının Aktif Olarak Denetlenmesi
 
 Yapay zeka modelleri, eğitildikleri verilerdeki önyargıları öğrenir ve büyütür. Eğer geçmiş satış verilerinizde farkında olmadan belirli bir demografiyi veya şirket türünü kayıran bir eğilim varsa, AI bu eğilimi bir kural olarak benimseyebilir ve adil olmayan bir filtreleme yapabilir.
 

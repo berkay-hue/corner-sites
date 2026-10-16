@@ -158,3 +158,21 @@ B2B satış döngüleri uzundur. Bir aday 6 ay boyunca sizden hiçbir şey almay
 ## Sonuç
 
 B2B SaaS dünyasında potansiyel müşteri besleme (lead nurturing), pazarlama otomasyonuyla gönderilen birkaç e-postadan çok daha fazlasıdır. Bu, bir felsefe, bir kültür ve şirketin büyüme motorunu ateşleyen stratejik bir yaklaşımdır. Pazarlama, satış ve müşteri başarısı departmanlarının ortak bir hedef doğrultusunda, veriye dayalı ve empati odaklı bir şekilde çalıştığı entegre bir model, sadece potansiyel müşterileri satışa dönüştürmekle kalmaz, aynı zamanda daha sadık, daha karlı ve markanızın en büyük savunucusu olacak uzun vadeli müşteri ilişkilerinin temelini atar. Unutmayın, B2B'de insanlar şirketlerden değil, güvendikleri insanlardan satın alır. Entegre bir nurturing stratejisi, şirketinizin her temas noktasında bu güveni inşa etmenin en sürdürülebilir yoludur.
+
+## Sık sorulan sorular
+
+### Entegre lead nurturing yaklaşımı nedir?
+
+Entegre lead nurturing, pazarlama, satış ve müşteri başarısı ekiplerinin potansiyel müşteriyi birlikte beslediği bir modeldir. Geleneksel modelde nurturing büyük ölçüde pazarlamanın sorumluluğundadır ve bu silolu yapı müşteri deneyiminde kopukluklara yol açabilir. Entegre modelde ise aday departmanlar arasında pürüzsüzce geçer ve her aşamada tutarlı bir deneyim yaşar.
+
+### Müşteri başarısı ekibi lead nurturing sürecine nasıl katkı sağlar?
+
+Müşteri başarısı ekibi, mevcut müşterilerden edindiği bilgilerle ideal müşteri profilinin rafine edilmesine yardımcı olur. Memnun müşterileri belirleyerek vaka çalışmaları ve referanslar gibi ikna edici içeriklerin üretilmesini sağlayabilir. Müşterilerin en sık sorduğu sorular ve yaşadığı zorluklar da yeni nurturing içerikleri için değerli bir fikir kaynağıdır.
+
+### Lead nurturing'de en sık yapılan hatalar nelerdir?
+
+En sık yapılan hatalar sürekli satış yapmaya çalışmak, herkese tek tip mesaj göndermek, sabırsız davranmak ve başarıyı ölçmemektir. Her iletişimin bir satış teklifiyle bitmesi adayları genellikle kısa sürede soğutur. Segmentasyon yapmamak ve A/B testleriyle optimizasyon yapmamak da stratejinin etkisini azaltabilir.
+
+### Satış ve pazarlama ekipleri arasındaki hizalanma nasıl sağlanır?
+
+Hizalanma genellikle yazılı bir hizmet seviyesi anlaşması, düzenli toplantılar ve ortak hedeflerle sağlanır. Hizmet seviyesi anlaşması, pazarlamanın ne kalitede aday sağlayacağını ve satışın bu adaylara nasıl ulaşacağını tanımlar. Pazarlamanın başarısının yalnızca lead sayısıyla değil, bu lead'lerden gelen satış geliriyle ölçülmesi de iki ekibi ortak hedefe bağlayabilir.

@@ -170,3 +170,21 @@ Süreçlerinizi otomatikleştirdiniz, ancak partnerleriniz bu süreçleri kafa k
 Partner ekosistemleri, B2B SaaS şirketleri için artık bir yan proje değil, büyümenin ana arteridir. 2026'ya giden yolda, bu ekosistemleri manuel süreçlerle yönetmeye devam edenler, rakiplerinin hızına ve verimliliğine yetişemeyerek geride kalacaklar. Partner yaşam döngüsü otomasyonu, artık bir seçenek değil, sürdürülebilir ve ölçeklenebilir büyüme için bir zorunluluktur.
 
 Doğru strateji, akıllı teknoloji yığını ve partner deneyimini merkeze alan bir yaklaşımla, partner programınızı reaktif bir maliyet merkezinden, öngörülebilir gelir üreten proaktif bir büyüme motoruna dönüştürebilirsiniz. Otomasyon, partner yöneticilerinizi idari yükten kurtarıp stratejik danışmanlara dönüştürür. Partnerlerinize, başarılı olmaları için ihtiyaç duydukları araçları ve desteği sürtünmesiz bir şekilde sunar. En önemlisi, size işinizi ölçeklendirmek için gereken tutarlılığı, veriyi ve verimliliği sağlar. 2026'nın pazar liderleri, partnerliklerin gücünü en etkili şekilde kullananlar olacaktır ve bu gücün kilidini açan anahtar, akıllı otomasyondur. Geleceği beklemeyin, onu bugünden inşa etmeye başlayın.
+
+## Sık sorulan sorular
+
+### Partner başvuruları otomatik olarak nasıl değerlendirilebilir?
+
+"Partner Olun" sayfasına verileri doğrudan PRM sistemine gönderen akıllı bir form ekleyerek başvuruları otomatik değerlendirebilirsiniz. Bu form şirket büyüklüğü, endüstri uzmanlığı ve coğrafi konum gibi kriterlere göre ön puanlama yapabilir. Düşük puanlı başvurular nazik bir ret e-postası alırken yüksek puanlılar partner yöneticisinin panosuna incelenmek üzere düşer. Böylece ekibiniz zamanını en uygun adaylara ayırabilir.
+
+### Pasifleşen partnerleri yeniden kazanmak için ne yapılmalı?
+
+Belirli bir süre lead kaydetmeyen veya portala giriş yapmayan partnerleri otomatik olarak tespit edip bir yeniden etkileşim e-posta sekansına dahil etmelisiniz. Bu sekans onlara özel yeni eğitimler, teşvikler ya da kısa bir anket sunabilir. Yapay zeka modelleri de giriş sıklığının azalması gibi sinyalleri izleyerek ayrılma riski taşıyan partnerleri önceden işaretleyebilir. Bu sayede partner yöneticiniz geç kalmadan müdahale edebilir.
+
+### Otomasyon partnerlerle kişisel teması tamamen ortadan kaldırmalı mı?
+
+Hayır; otomasyon idari ve tekrar eden görevler için kullanılmalı, ilişkiler robotlaştırılmamalıdır. Tüm iletişimi otomatik e-postalara indirgemek partnerleri yabancılaştırabilir ve programa bağlılıklarını azaltabilir. Otomasyonun kazandırdığı zaman, en değerli partnerlerle stratejik görüşmelere ve ortak iş planlarına ayrılmalıdır. Özellikle onboarding'in ilk aşamalarında ve önemli kilometre taşlarında kişisel temas kritik önem taşır.
+
+### Partner programında hangi metriklere odaklanılmalı?
+
+Faaliyet metrikleri yerine partner kaynaklı gelir, boru hattı değeri ve kazanma oranı gibi sonuç metriklerine odaklanılmalıdır. Kaydedilen partner sayısı gibi yüzeysel göstergeler yanıltıcı olabilir. Çok sayıda pasif partnerdense az sayıda aktif ve gelir getiren partner çok daha değerlidir. Otomasyon sistemleri de büyümeye doğrudan etki eden bu sonuçları izleyecek ve raporlayacak şekilde yapılandırılmalıdır.

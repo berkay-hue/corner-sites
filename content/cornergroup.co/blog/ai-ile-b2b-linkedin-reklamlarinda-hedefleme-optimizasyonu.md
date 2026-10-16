@@ -27,9 +27,9 @@ LinkedIn, profesyonel verinin altın madeni olmaya devam ediyor. Ancak bu madend
 
 Yapay zekayı LinkedIn reklamcılığında etkin kullanmak, sadece bir "AI aracı satın al" düğmesine basmaktan ibaret değildir. Bu, veriyi, teknolojiyi ve stratejiyi bir araya getiren bir mimari inşa etmektir. Corner Group olarak, bu mimariyi dört temel kural üzerine inşa ediyoruz.
 
-## İdeal Müşteri Profilinin (ICP) Evrimi
+### İdeal Müşteri Profilinin (ICP) Evrimi
 
-### Davranışsal Arketip Modellemesi
+#### Davranışsal Arketip Modellemesi
 
 İdeal Müşteri Profili (ICP), B2B pazarlamanın temel taşıdır. Ancak geleneksel ICP, demografik ve firmografik verilere (sektör, şirket büyüklüğü, coğrafya) dayanır ve statiktir. AI ise bizi "Davranışsal Arketipler" kavramına taşır. Bu, sadece kim olduklarına değil, ne yaptıklarına, neyle ilgilendiklerine ve neye ihtiyaç duyduklarına göre tanımlanan dinamik alıcı gruplarıdır.
 
@@ -37,7 +37,7 @@ Yapay zekayı LinkedIn reklamcılığında etkin kullanmak, sadece bir "AI arac�
 
 **Corner Group Perspektifi:** Brand Corner ve Social Media Corner ekiplerimiz, bu arketiplerin hangi içerik türlerine ve sosyal medya tartışmalarına ilgi gösterdiğini analiz eder. Böylece, sadece doğru kişiyi bulmakla kalmaz, aynı zamanda onlara tam olarak duymak istedikleri mesajı içeren, rezonans yaratacak içeriklerle (örneğin, veri sızıntısını önlemeye yönelik bir vaka çalışması) ulaşırız. Bu, reklamın bir kesintiden çok, değerli bir bilgi kaynağı gibi algılanmasını sağlar.
 
-## Tahmine Dayalı Analitik (Predictive Analytics) ile Geleceğin Müşterilerini Keşfetme
+### Tahmine Dayalı Analitik (Predictive Analytics) ile Geleceğin Müşterilerini Keşfetme
 
 En iyi müşterileriniz kimler? Onları müşteri yapan ortak özellikler nelerdi? Tahmine dayalı analitik, bu soruların cevabını mevcut müşteri verilerinizde arar ve gelecekteki en iyi müşterilerinizin kim olacağını yüksek bir doğrulukla tahmin eder.
 
@@ -45,7 +45,7 @@ En iyi müşterileriniz kimler? Onları müşteri yapan ortak özellikler nelerd
 
 **Corner Group Perspektifi:** Bu sürecin kalbinde CRM Corner yatar. Eğer CRM veriniz kirli, eksik veya düzensizse, AI'ın öğreneceği model de hatalı olacaktır ("çöp girer, çöp çıkar"). CRM Corner, sistem entegrasyonu ve veri hijyeni sağlayarak, AI modelinin besleneceği verinin en yüksek kalitede olmasını garanti eder. SAAS Corner ise bu tahmine dayalı listeleri, ürün-pazar uyumu en yüksek potansiyel müşterileri bulmak için kullanarak, satış döngüsünü önemli ölçüde kısaltır.
 
-## Dinamik Kitle Segmentasyonu ve Hiper-Kişiselleştirme
+### Dinamik Kitle Segmentasyonu ve Hiper-Kişiselleştirme
 
 Geleneksel pazarlamada, bir kampanya için birkaç kitle segmenti oluşturur ve onlara genel mesajlar göndeririz. AI, bu yaklaşımı tamamen ortadan kaldırır. Artık kampanyanın ortasında bile kitleleri gerçek zamanlı davranışlarına göre dinamik olarak yeniden segmentlere ayırabiliriz.
 
@@ -53,7 +53,7 @@ Geleneksel pazarlamada, bir kampanya için birkaç kitle segmenti oluşturur ve 
 
 **Corner Group Perspektifi:** Bu dinamik yaklaşım, Sales Corner'ın otomasyon stratejileriyle mükemmel bir uyum içindedir. LinkedIn'de belirli bir reklamla etkileşime giren bir potansiyel müşteri, Sales Corner tarafından yönetilen bir e-posta sekansına otomatik olarak eklenebilir. Bu e-posta, kişinin LinkedIn'de etkileşimde bulunduğu içerikle doğrudan ilgili olur. Örneğin, "LinkedIn'de verimlilik artışı videomuzla ilgilendiğinizi gördük. İşte bu konuda daha detaylı bir teknik doküman..." gibi bir başlangıç, soğuk bir e-postadan çok daha etkilidir ve dönüşüm oranlarını dramatik şekilde artırır.
 
-## Akıllı Bütçe Optimizasyonu ve Frekans Yönetimi
+### Akıllı Bütçe Optimizasyonu ve Frekans Yönetimi
 
 AI, sadece kime ulaşacağınızı değil, aynı zamanda ne kadar harcayacağınızı ve ne zaman harcayacağınızı da optimize eder. Geleneksel kampanyalarda bütçe, genellikle kampanya başında manuel olarak segmentlere dağıtılır ve performansı izlemek için analistlere ihtiyaç duyulur.
 

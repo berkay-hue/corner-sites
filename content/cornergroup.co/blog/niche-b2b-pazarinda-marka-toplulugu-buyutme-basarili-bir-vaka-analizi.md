@@ -67,23 +67,33 @@ Topluluk odaklı büyüme stratejisi, sabır gerektiren bir yatırımdı. İlk a
 
 CyberVanguard'ın dönüşüm hikayesi, niche B2B pazarlarında büyümek isteyen tüm şirketler için değerli ve evrensel dersler içermektedir. Corner Group olarak bu süreçten çıkardığımız beş temel kural, benzer bir başarıyı hedefleyen liderler için bir pusula niteliğindedir.
 
-## Sabır Stratejik Bir Erdemdir Topluluk inşa etmek, bir çeyreklik hedeflere sığdırılacak bir proje değildir
+### Sabır Stratejik Bir Erdemdir
+
+Topluluk inşa etmek, bir çeyreklik hedeflere sığdırılacak bir proje değildir
 
 Bir bahçe yetiştirmek gibidir; tohumları ekmek, düzenli olarak sulamak, yabani otları temizlemek ve büyümesi için zaman tanımak gerekir. İlk aylarda somut satış rakamları yerine etkileşim, üye artışı ve güven metriklerine odaklanmak kritik öneme sahiptir. Yönetim katının bu vizyonu benimsemesi ve sürece uzun vadeli bir yatırım olarak bakması, projenin başarısı için ön koşuldur.
 
-## Değer Vermek, Değer İstemekten Önce Gelir Başarılı toplulukların temelinde cömertlik yatar
+### Değer Vermek, Değer İstemekten Önce Gelir
+
+Başarılı toplulukların temelinde cömertlik yatar
 
 Sürekli olarak ürününüzü veya hizmetinizi öne çıkarmak, üyeleri kaçırır. Öncelik, topluluk üyelerinin sorunlarını çözmek, onlara yeni bir bakış açısı kazandırmak ve kariyerlerinde ilerlemelerine yardımcı olmaktır. Ünlü 90/10 kuralı burada da geçerlidir: zamanınızın ve içeriğinizin yüzde 90'ını topluluğa değer katmaya, sadece yüzde 10'unu ticari bir fayda elde etmeye ayırın. Verdiğiniz değer o kadar büyük olmalı ki, bir şey istediğinizde insanlar size yardımcı olmaktan mutluluk duymalıdır.
 
-## Teknoloji Amaç Değil, Stratejinin Hizmetkarıdır CRM, pazarlama otomasyonu, analiz araçları.
+### Teknoloji Amaç Değil, Stratejinin Hizmetkarıdır
+
+CRM, pazarlama otomasyonu, analiz araçları.
 
 Bunlar, topluluk stratejisini daha verimli ve ölçeklenebilir kılmak için kullanılan güçlü araçlardır. Ancak asla stratejinin kendisi değillerdir. Önce insan odaklı ilişki ve güven stratejisi belirlenmeli, ardından bu stratejiyi en iyi şekilde destekleyecek teknoloji altyapısı kurgulanmalıdır. Teknoloji, insan bağının yerini almak için değil, o bağı güçlendirmek ve daha fazla insana ulaştırmak için vardır.
 
-## Orijinallik En Güçlü Otoritedir Kurumsal, cilalı ve ruhsuz bir dil, topluluk ortamında anında reddedilir
+### Orijinallik En Güçlü Otoritedir
+
+Kurumsal, cilalı ve ruhsuz bir dil, topluluk ortamında anında reddedilir
 
 İnsanlar, gerçek uzmanlarla, gerçek deneyimlerle ve samimi bir dille bağ kurar. CyberVanguard'ın başarısının sırlarından biri, mühendislerinin doğrudan topluluktaki teknik tartışmalara katılması, hatalarını ve öğrendiklerini şeffafça paylaşmasıydı. Kendi sesinizi, kendi uzmanlığınızı ve kendi kültürünüzü yansıtan özgün bir iletişim tarzı, en pahalı reklam kampanyasından daha güçlü bir otorite inşa eder.
 
-## Entegrasyon İzolasyondan Daima Üstündür Bu vaka çalışmasının en temel dersi budur
+### Entegrasyon İzolasyondan Daima Üstündür
+
+Bu vaka çalışmasının en temel dersi budur
 
 Pazarlama, satış, marka ve teknoloji departmanları kendi silolarında çalıştığında, CyberVanguard'ın eski halinde olduğu gibi verimsiz ve etkisiz bir yapı ortaya çıkar. Başarı, Brand Corner'ın yarattığı içeriğin Social Media Corner tarafından topluluğa sunulması, SAAS Corner'ın oradaki sinyalleri yakalaması, Sales Corner'ın bu sinyalleri beslemesi ve CRM Corner'ın tüm bu süreci birbirine bağlamasıyla mümkün oldu. Büyüme, bir departmanın değil, tüm organizasyonun entegre bir şekilde aynı hedefe odaklandığı bir holding zihniyetinin sonucudur.
 

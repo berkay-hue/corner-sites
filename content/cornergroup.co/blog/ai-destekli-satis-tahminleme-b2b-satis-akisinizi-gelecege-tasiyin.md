@@ -55,21 +55,29 @@ Corner Group çatısı altında farklı B2B büyüme dikeylerini yönetirken, te
 
 Teknolojiyi satın almak kolaydır; onu stratejik bir avantaja dönüştürmek ise bir sanat ve bilimdir. Bütünsel B2B büyüme holdingi olarak edindiğimiz deneyimler, başarılı bir AI tahminleme implementasyonunun teknolojiyle değil, strateji, süreç ve insanla başladığını göstermektedir. İşte bu yolda size rehberlik edecek beş temel kural:
 
-## Veri Kalitesi ve Bütünlüğü Her Şeydir (CRM Corner Perspektifi) AI modelleri, onlara verdiğiniz veri kadar akıllıdır
+### Veri Kalitesi ve Bütünlüğü Her Şeydir (CRM Corner Perspektifi)
+
+AI modelleri, onlara verdiğiniz veri kadar akıllıdır
 
 "Çöp girerse, çöp çıkar" (Garbage in, garbage out) prensibi burada mutlak bir gerçektir. Başarılı bir projenin temeli, temiz, tutarlı, eksiksiz ve entegre bir veri setidir. Bu noktada CRM Corner'ın uzmanlık alanı olan sistem entegrasyonu ve veri hijyeni kritik rol oynar. Sürece başlamadan önce kendinize şu soruları sormalısınız: CRM sistemimizdeki veriler güncel ve doğru mu? Müşteri kayıtlarında yinelenen (duplicate) veriler var mı? Satış, pazarlama ve hizmet platformlarımız birbiriyle konuşuyor mu? Tüm departmanların kullandığı ortak bir "gerçeklik kaynağı" (single source of truth) var mı? Veri giriş standartlarınız net mi? Bu temel adımları atmadan en gelişmiş AI aracını bile kursanız, sonuçlar yanıltıcı ve güvenilmez olacaktır. Veri altyapınıza yapacağınız yatırım, AI projenizin başarısı için yapacağınız en önemli yatırımdır.
 
-## Doğru Metrikleri ve KPI'ları Belirleyin (Sales Corner & SAAS Corner Perspektifi) "Satışları tahminlemek" çok genel bir hedeftir
+### Doğru Metrikleri ve KPI'ları Belirleyin (Sales Corner & SAAS Corner Perspektifi)
+
+"Satışları tahminlemek" çok genel bir hedeftir
 
 Başarıyı ölçebilmek için neyi tahminlemek istediğinizi net bir şekilde tanımlamanız gerekir. Hedefiniz, bir sonraki çeyreğin toplam gelirini mi tahminlemek? Yoksa her bir satış temsilcisinin kotasına ulaşıp ulaşamayacağını mı? Belki de belirli bir ürün grubunun satış hacmini veya yeni kazanılan müşteri sayısını (SAAS Corner için kritik bir metrik) öngörmek istiyorsunuz. Belirleyeceğiniz temel performans göstergeleri (KPI'lar), AI modelinizin hangi verilere odaklanacağını ve nasıl optimize edileceğini belirleyecektir. Örneğin, anlaşma kapanma oranını (win rate) tahminlemek istiyorsanız, modelinize geçmişteki kazanılan ve kaybedilen anlaşmalarla ilgili zengin bir veri seti sağlamanız gerekir. Bu hedefleri en baştan netleştirmek, projenin kapsamını belirler ve başarıyı ölçülebilir kılar.
 
-## Teknolojiyi Değil, Stratejiyi Merkeze Alın Piyasada çok sayıda AI destekli satış aracı bulunmaktadır
+### Teknolojiyi Değil, Stratejiyi Merkeze Alın
+
+Piyasada çok sayıda AI destekli satış aracı bulunmaktadır
 
 En popüler veya en pahalı aracı seçmek yerine, sizin iş hedeflerinize ve mevcut süreçlerinize en uygun olanı seçmek esastır. Teknoloji, stratejinizin bir uygulayıcısı olmalıdır, stratejinin kendisi değil. Seçim sürecinde şu soruları göz önünde bulundurun: Bu araç, mevcut CRM ve diğer sistemlerimizle kolayca entegre olabiliyor mu? Kullanıcı arayüzü satış ekibimizin kolayca adapte olabileceği kadar sezgisel mi? Modelin hangi faktörlere dayanarak tahmin yaptığını (açıklanabilirlik) ne ölçüde görebiliyoruz? Sağlayıcı, implementasyon ve sonrası için ne tür bir destek sunuyor? Unutmayın, en iyi teknoloji, iş akışlarınıza sorunsuzca entegre olan ve ekipleriniz tarafından benimsenen teknolojidir.
 
 Satış ve Pazarlama Ekiplerini Sürece Dahil Edin (Bütünsel Holding Yaklaşımı) AI, satış temsilcilerinin yerini almak için değil, onları daha akıllı ve daha etkili kılmak için vardır. Ancak, eğer ekibiniz bu yeni sisteme güvenmez, onu bir "büyük birader" gibi görür veya nasıl kullanacağını anlamazsa, proje başarısız olmaya mahkumdur. Bu nedenle, implementasyon sürecinin en başından itibaren satış ve pazarlama ekiplerini dahil etmek hayati önem taşır. Onlara sistemin nasıl çalıştığını, kendilerine ne gibi faydalar sağlayacağını (örneğin, hangi müşteriye odaklanmaları gerektiğini söyleyerek zaman kazandıracağını) anlatın. Onların geri bildirimlerini dinleyin ve endişelerini ciddiye alın. Eğitimler düzenleyin ve başarılı kullanım örneklerini (early adopters) ödüllendirin. AI'ın tahminleri ile temsilcilerin sahadaki sezgilerini birleştiren bir kültür yaratmak, en doğru sonuçları doğuracaktır.
 
-## Sürekli Öğrenme ve İterasyon Kültürü Yaratın AI destekli tahminleme, bir kere kurup unutacağınız bir sistem değildir
+### Sürekli Öğrenme ve İterasyon Kültürü Yaratın
+
+AI destekli tahminleme, bir kere kurup unutacağınız bir sistem değildir
 
 Canlı bir organizma gibi, sürekli beslenmeye, izlenmeye ve ayarlanmaya ihtiyaç duyar. Modelin tahminlerinin gerçek sonuçlarla ne kadar örtüştüğünü düzenli olarak takip edin. Modelin performansında zamanla bir düşüş olursa, bunun nedenini araştırın. Belki de pazar koşulları değişmiştir veya yeni bir rakip denklemi bozmuştur. Bu durumda, modelin yeni verilerle yeniden eğitilmesi gerekebilir. Bu, bir "başarısızlık" değil, sistemin doğasıdır. AI'dan en yüksek verimi almak, sürekli bir test etme, öğrenme ve iyileştirme (iterasyon) döngüsünü benimsemeyi gerektirir. Bu, sadece bir teknoloji yönetimi değil, aynı zamanda bir kültür değişimidir.
 

@@ -70,3 +70,21 @@ Stratejik aşamadaki bir ekosistem, kendi kendini besleyen bir değer döngüsü
 B2B SaaS'ta sürdürülebilir büyüme, artık sadece kendi çabalarınla ulaşabileceğin bir hedef değil. Pazar liderleri, büyümeyi bir takım sporu olarak görüyor ve bu takımın en değerli oyuncuları iş ortaklarıdır. Partner Ekosistem Olgunluk Modeli, bu yolculukta sana rehberlik eden bir pusuladır. Reaktif başlangıçlardan stratejik bir ekosistem liderliğine uzanan bu dört aşamalı yol, sabır, yatırım ve vizyon gerektirir. Unutma ki bu bir gecede tamamlanacak bir proje değil, şirketin büyüme stratejisinin merkezine yerleşmesi gereken sürekli bir evrim sürecidir. Kendi şirketinin bu modelin neresinde olduğunu bugün analiz ederek, gelecekteki stratejik büyümenin temellerini atmaya başlayabilirsin. Ekosistemini inşa etmeye başla, çünkü geleceğin kazananları en iyi ürüne sahip olanlar değil, en güçlü ekosisteme sahip olanlar olacak.
 
 **İlgili sayfa:** SAAS Corner'ın bu alandaki hizmetini [SaaS partnerleri ve entegratörler için outbound satış](/sektor/saas-partner-ekosistemi) sayfasında bulabilirsiniz.
+
+## Sık sorulan sorular
+
+### Reaktif partner aşamasından çıkma zamanının geldiği nasıl anlaşılır?
+
+İlk sinyal, gelen ortaklık taleplerinin artık manuel olarak yönetilemeyecek kadar çoğalmasıdır. Mevcut ortakların pazarlama materyalleri, teknik destek veya ortak satış süreçleri gibi konularda daha fazla destek istemesi de mevcut yapının yetersiz kaldığını gösterir. En önemli sinyal ise bu kanaldan gelen gelirin potansiyelini fark etmen ve bu alana yatırım yapmanın finansal olarak mantıklı hale gelmesidir.
+
+### Proaktif aşamada partner programının başarısı hangi metriklerle ölçülmeli?
+
+Bu aşamada yalnızca ortaklardan gelen gelire odaklanmak yanıltıcı olabilir, çünkü ortaklıklar zaman ve güven üzerine kurulur ve sonuçların gelmesi aylar sürebilir. Bunun yerine aktive edilen ortak sayısı, ortakların kaydettiği potansiyel müşteri değeri ve ortakların katıldığı ortak pazarlama etkinliklerinin sayısı gibi öncü göstergeleri takip etmek daha sağlıklıdır. Ortaklarla düzenli iletişim kurmak ve geri bildirimlerini dinlemek de programı doğru yönde geliştirmeye yardımcı olur.
+
+### PRM yazılımı partner programını ölçeklendirmede ne işe yarar?
+
+İş ortağı ilişki yönetimi yazılımları, ortakların işe alımından eğitimine, potansiyel müşteri yönetiminden komisyon ödemelerine kadar tüm süreci otomatikleştirir. Böylece iş ortaklığı ekibi zamanını birebir ilişki yönetimi yerine stratejik görevlere ayırabilir. Bu aşamada ortaklara ürün eğitiminin yanında nasıl satış ve pazarlama yapacaklarını öğreten sertifika programları, ortak webinarları ve özel pazarlama fonları da devreye girer.
+
+### Stratejik aşamadaki bir ekosistem nasıl kendi kendini besler?
+
+Şirket, ortaklarının üzerine inşa edebileceği güçlü ve açık bir platformu API'ler aracılığıyla sunar ve bu platform yeni teknoloji ortaklarını ve geliştiricileri çeker. Onların geliştirdiği uygulama ve çözümler daha fazla müşteriyi platforma getirir, artan müşteri tabanı da daha fazla ortağı ekosisteme katılmaya teşvik eder. Salesforce'un AppExchange'i bu kartopu etkisinin canlı bir örneğidir.

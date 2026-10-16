@@ -25,7 +25,7 @@ B2B dünyası, uzun satış döngüleri, karmaşık karar alma süreçleri ve y�
 
 Otomatik bir geri bildirim sistemi kurmak, rastgele anketler göndermekten çok daha fazlasıdır. Bu, müşteri yolculuğunu derinlemesine anlamayı ve bu yolculuktaki kritik temas noktalarını belirleyerek anlamlı bir diyalog başlatmayı gerektiren stratejik bir süreçtir. Başarılı bir sistem, üç temel kural üzerine inşa edilir: doğru an, doğru soru ve doğru kanal.
 
-## Doğru Anları Belirlemek (Akıllı Tetikleyiciler)
+### Doğru Anları Belirlemek (Akıllı Tetikleyiciler)
 
 Geri bildirimin değeri, bağlamından gelir.
 
@@ -41,7 +41,7 @@ Müşteriye satış sürecinden memnun olup olmadığını, sözleşme imzaladı
 
 **Sözleşme Yenileme Öncesi:** Sözleşme yenileme tarihinden 90 gün önce, müşterinin genel memnuniyetini ve gelecekteki niyetlerini ölçen bir "Net Tavsiye Skoru (NPS)" anketi, potansiyel churn risklerini önceden belirlemenize ve gerekli önlemleri almanıza olanak tanır.
 
-## Doğru Soruları Sormak (Metriklerin Ötesinde)
+### Doğru Soruları Sormak (Metriklerin Ötesinde)
 
 Farklı anlar, farklı sorular gerektirir.
 
@@ -55,7 +55,7 @@ Müşteri Efor Skoru (CES - Customer Effort Score): "Sorununuzu çözmek için n
 
 **Açık Uçlu Sorular:** Otomatik analizin gücü, artık açık uçlu soruların getirdiği nitel verileri de ölçeklenebilir bir şekilde işleyebilmemizdir. "Ürünümüzde tek bir şeyi değiştirebilseydiniz, bu ne olurdu?" veya "Bizimle çalışmanın en sevdiğiniz yanı nedir?" gibi sorular, pazarlama mesajlarından ürün yol haritasına kadar her şeyi besleyecek ham maddeler sunar.
 
-## Doğru Kanalları Kullanmak (Müşteriye Ulaşmak)
+### Doğru Kanalları Kullanmak (Müşteriye Ulaşmak)
 
 Müşterilerinizle nerede ve nasıl iletişim kurduğunuz, katılım oranlarını doğrudan etkiler.
 

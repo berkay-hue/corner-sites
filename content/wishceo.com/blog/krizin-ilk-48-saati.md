@@ -11,7 +11,7 @@ Krizin ilk 48 saatinde bilgi eksikken iyi karar, "Yanılırsam ne olur?" diye so
 
 Bu yazıda WishCEO'nun ilk dosyasını açıyoruz: "Rafta zehir var". Hartwell & Hartwell'in ağrı kesicisi Soranol üzerinden üç soruya bakacağız: bilgi eksikken nasıl karar verilir, insanların güvenliği satışlarla çatıştığında ne olur, sarsılan güven geri kazanılabilir mi?
 
-> Bu yazı "Rafta zehir var" vakasının sonucunu anlatıyor. Önce kendin karar vermek istersen [vakayı oyna](/#oyun).
+> Bu yazı "Rafta zehir var" vakasının sonucunu anlatıyor. Önce kendin karar vermek istersen [vakayı oyna](/?s=001#oyun).
 
 ## Dosyada ne vardı
 

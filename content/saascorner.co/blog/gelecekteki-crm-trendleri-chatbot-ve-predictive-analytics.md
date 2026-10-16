@@ -80,3 +80,21 @@ Yeni bir potansiyel müşteri (Aday B) web sitesine gelir. Tahmine dayalı müş
 ## Sonuç
 
 Geleceğin CRM'i, bir veri tabanından çok daha fazlasıdır; proaktif, öngörülü ve akıllı bir büyüme motorudur. Chatbotlar ve tahmine dayalı analitik, bu dönüşümün merkezinde yer alan iki temel güçtür. Chatbotlar, operasyonel verimliliği artırarak ve 7/24 anında hizmet sunarak müşteri etkileşimlerini otomatikleştirirken, tahmine dayalı analitik, bu etkileşimlere stratejik bir zeka katmanı ekler. Bu iki teknoloji birleştiğinde, işletmeler artık sadece müşteri taleplerine yanıt vermekle kalmaz, aynı zamanda müşteri ihtiyaçlarını önceden tahmin edebilir, riskleri proaktif olarak yönetebilir ve fırsatları herkesten önce yakalayabilirler. Bu yeni nesil CRM yaklaşımını benimseyen şirketler, sadece maliyetleri düşürmekle ve verimliliği artırmakla kalmayacak, aynı zamanda rakiplerinin sunamadığı düzeyde kişiselleştirilmiş ve akıllı bir müşteri deneyimi sunarak pazarda sürdürülebilir bir rekabet avantajı elde edeceklerdir. Gelecek geldi ve müşteri ilişkilerini yönetme şeklimizi sonsuza dek değiştiriyor.
+
+## Sık sorulan sorular
+
+### CRM'e entegre bir chatbot satış ekibine nasıl yardımcı olur?
+
+CRM'e entegre bir chatbot ön nitelendirme sorularını sorup cevapları CRM alanlarına kaydederek lead toplama sürecini otomatikleştirebilir. Gerekirse adayı anında doğru satış temsilcisine atayabilir ve toplantı planlayabilir. Ayrıca günün her saatinde anlık yanıt verip basit destek taleplerini karşılayabilir.
+
+### Tahmine dayalı analitik churn riskini nasıl tespit eder?
+
+Tahmine dayalı analitik, kullanımın düşmesi, destek taleplerinin artması, gecikmiş ödemeler veya kullanılmayan özellikler gibi sinyallerden bir churn risk skoru üretir. Skor belirlenen eşiği aştığında CRM müşteri başarı ekibini uyarır. Böylece ekip müşteri ayrılmadan önce proaktif olarak müdahale edebilir.
+
+### Tahminsel lead skorlaması nasıl çalışır?
+
+Tahminsel lead skorlaması geçmişte dönüşen lead'lerin özelliklerini analiz ederek bir başarı profili çıkarır. Yeni lead'ler bu profile ne kadar benzediklerine göre skorlanır. Böylece satış ekibi genellikle dönüşme olasılığı daha yüksek adaylara odaklanabilir.
+
+### Chatbot ve tahmine dayalı analitik birlikte nasıl çalışır?
+
+Tahmine dayalı analitik beyin, chatbot ise kollar ve bacaklar gibi çalışarak birbirini tamamlar. Analitik bir riski ve nedenini tespit ettiğinde CRM bir iş akışını tetikleyebilir. Ardından chatbot müşteriye proaktif olarak ulaşarak sorunu büyümeden ele alabilir.

@@ -68,3 +68,21 @@ Alıcı odaklı bir stratejinin başarısını ölçmek için geleneksel satış
 ## Sonuç
 
 B2B SaaS dünyasında rekabet her geçen gün artarken, eski usul satış yöntemlerine tutunmak artık sürdürülebilir bir strateji değil. Başarının anahtarı, ürünü değil, alıcıyı merkeze koymaktan geçiyor. B2B SaaS satışta alıcı odaklı yaklaşım, sadece bir taktik değişikliği değil, bir zihniyet dönüşümüdür. Bu, alıcıya bir hedef olarak değil, çözülmesi gereken bir problemi olan bir ortak olarak bakmaktır. Onların yolculuğunu anlamak, her adımda onlara rehberlik etmek ve gerçek bir değer sunmak, sadece satışları artırmakla kalmaz, aynı zamanda kalıcı ve karlı müşteri ilişkileri inşa eder. Bugün, satış sürecini alıcının gözünden değerlendirerek ilk adımı at. Onların yolunu kolaylaştırdığında, kendi başarı yolunu da aydınlatmış olacaksın.
+
+## Sık sorulan sorular
+
+### İdeal müşteri profili ile alıcı personası arasındaki fark nedir?
+
+İdeal müşteri profili hedeflenen şirketleri tanımlar. Alıcı personası ise bu şirketlerde kararı veren ya da etkileyen kişileri anlatır. Profil şirket büyüklüğü, sektör, coğrafi konum ve bütçe gibi somut verilere dayanır. Persona ise yarı kurgusal bir temsildir ve kişinin hedeflerini, zorluklarını, motivasyonlarını ve bilgi arama alışkanlıklarını içerir. İkisini birlikte kullanmak doğru mesajı doğru kişiye iletmeni kolaylaştırır.
+
+### Danışmanlık satışında nasıl sorular sormak gerekir?
+
+Genel sorular yerine alıcının işine, hedeflerine ve engellerine odaklanan spesifik sorular sormak gerekir. "Size nasıl yardımcı olabilirim?" demek yerine mevcut süreçte en çok zaman alan işleri ya da bu çeyrekteki en önemli hedefi sormak gerçek ihtiyaçları ortaya çıkarır. Görüşme bir monolog değil, bir diyalog olmalıdır. Alıcının sorununu iyi anladığını gösterdiğinde ürününü o soruna özel bir çözüm olarak konumlandırabilirsin.
+
+### Alıcı odaklı stratejinin başarısını hangi metrikler gösterir?
+
+Aktivite sayıları yerine alıcı deneyiminin kalitesini ve iş sonuçlarını yansıtan metrikler daha doğru bir tablo çizer. Satış döngüsü uzunluğu, anlaşma kazanma oranı ve müşteri yaşam boyu değerinin müşteri edinme maliyetine oranı bunların başında gelir. Yalnızca arama ya da e-posta adedine bakmak resmin bütününü görmeyi engeller.
+
+### Kaybedilen anlaşmalardan sonra müşteriden geri bildirim istemek gerekir mi?
+
+Evet; hem kazandığın hem de kaybettiğin anlaşmalardan sonra geri bildirim istemen önerilir. Müşterinin neden sizi seçtiğini ya da seçmediğini ve süreçte neyin daha iyi yapılabileceğini sormak alıcı yolculuğundaki kör noktaları aydınlatır. Bu bilgiler stratejini sürekli iyileştirmen için değerli bir kaynaktır.

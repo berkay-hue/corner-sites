@@ -11,7 +11,7 @@ Kaybedilen bir müşteri adayı görünür. Kapanmayan bir teklif hissedilir. Am
 
 Bunları görmek zordur çünkü yokluğun sesi çıkmaz.
 
-**Neyi kaybettiğinizi bilmiyorsanız kaybetmeye devam edersiniz**
+## Neyi kaybettiğinizi bilmiyorsanız kaybetmeye devam edersiniz
 
 Çoğu şirket satış performansını kazanılan işler üzerinden ölçer.
 
@@ -21,7 +21,7 @@ Hiç ulaşılmayan ama ulaşılabilecek kaç potansiyel müşteri var? İlk mesa
 
 Bu sorular rahatsız edicidir. Ama cevapları olmadan strateji değil, tahmin üzerine yürünür.
 
-**Süreç yoksa her seferinde sıfırdan başlanır**
+## Süreç yoksa her seferinde sıfırdan başlanır
 
 Satışta tutarsızlık belki de en az konuşulan ama en fazla zarar veren sorundur.
 
@@ -31,7 +31,7 @@ Süreç belgelendiğinde ne işe yaradığı görülür. Görüldüğünde tekra
 
 Bireysel yetenek ile sistem arasındaki fark burada ortaya çıkar. Yetenekli biri gidince her şeyi götürür. Sistem bırakılan birinde kalır.
 
-**Hızlı hareket etmek ile doğru hareket etmek aynı şey değildir**
+## Hızlı hareket etmek ile doğru hareket etmek aynı şey değildir
 
 Satışta hız önemlidir. Ama hız yönü olmadan sadece enerji tüketir.
 
@@ -41,7 +41,7 @@ Yanlış kitleye doğru mesajla gitmek, doğru kitleye yanlış mesajla gitmek k
 
 Bu soruları sormak yavaşlamak değildir. Aksine hızlanmanın önündeki en büyük engeli kaldırmaktır.
 
-**Rakipler sizi izliyor, siz kendinizi izliyor musunuz?**
+## Rakipler sizi izliyor, siz kendinizi izliyor musunuz?
 
 Pazar durmuyor. Rakipler yeni araçlar kullanıyor, yeni pazarlara giriyor, mesajlarını test ediyor ve sistemlerini geliştiriyor.
 
@@ -49,7 +49,7 @@ Bu yarışta ayakta kalmak için dışarıya bakmak kadar içeriye bakmak da ger
 
 Bu sorular sizi rakiplerden bir adım önde tutmaz ama geride bırakmaz da. Geride kalanlar ise çoğunlukla bu soruları hiç sormayanlardır.
 
-**Kör nokta her zaman başkasının gördüğü yerdir**
+## Kör nokta her zaman başkasının gördüğü yerdir
 
 İşin içindeyken görmek zordur. Her şey mantıklı görünür çünkü her şey alışkanlıkla yapılmaktadır.
 
@@ -57,7 +57,7 @@ Dışarıdan bakan bir göz bazen aylardır fark edilmeyen bir sorunu ilk bakı�
 
 Bu yüzden en iyi satış ekipleri bile zaman zaman dışarıdan perspektif alır. Sadece doğrulama için değil, görmedikleri şeyleri görmek için.
 
-**Bilmek yetmez, zamanında bilmek gerekir**
+## Bilmek yetmez, zamanında bilmek gerekir
 
 Satışta pişmanlıkların büyük çoğunluğu "keşke daha önce fark etseydik" cümlesiyle biter.
 
@@ -66,3 +66,21 @@ Keşke o müşteri segmentine daha erken odaklanseydık. Keşke o mesajı daha �
 Zamanında alınan bir karar, geç alınan mükemmel bir karardan her zaman daha değerlidir. Satışta pencereler açılır ve kapanır. Aynı fırsat ikinci kez aynı koşullarda gelmez.
 
 Bilmediğinizi bilmek rahatsız edicidir. Ama bilmediğinizi bilmemek çok daha pahalıya patlar.
+
+## Sık sorulan sorular
+
+### Satış performansını sadece kazanılan işlerle ölçmek neden yetersizdir?
+
+Kazanılan işler görünür, ama hiç ulaşılmayan potansiyel müşteriler, takip edilmediği için soğuyan görüşmeler ve yanlış kişiyle yapılan toplantılar görünmez. Asıl soru, kazanılabilecek ama kaybedilen kaç fırsat olduğudur. Bu soruların cevapları olmadan strateji değil, tahmin üzerine yürünür.
+
+### Satış sürecini belgelemek neden önemlidir?
+
+Müşteri adayına nasıl ulaşıldığı kişiden kişiye değişiyorsa ve takip standart değilse ortada bir süreç yoktur; neyin neden işe yaradığı da hiçbir zaman anlaşılmaz. Süreç belgelendiğinde işe yarayan görülür, tekrar edilir ve ölçeklenir. Yetenekli bir satışçı ayrıldığında bilgiyi de götürür, ama kurulmuş bir sistem şirkette kalır.
+
+### Satışta hızlı hareket etmek her zaman avantaj mıdır?
+
+Hız önemlidir ama yönü olmayan hız sadece enerji tüketir. Yanlış kitleye doğru mesajla gitmek de doğru kitleye yanlış mesajla gitmek de sonuçsuz kalır. Atılan adımların doğru yöne gidip gitmediğini ve hangi veriye dayandığını sorgulamak yavaşlamak değil, hızlanmanın önündeki engeli kaldırmaktır.
+
+### Satış ekipleri neden dışarıdan bir perspektif almalı?
+
+İşin içindeyken her şey alışkanlıkla yapıldığı için mantıklı görünür ve kör noktalar fark edilmez. Dışarıdan bakan bir göz, aylardır gözden kaçan bir sorunu ilk bakışta görebilir. Bu yüzden en iyi satış ekipleri bile yalnızca doğrulama için değil, göremedikleri şeyleri görmek için dış perspektife başvurur.

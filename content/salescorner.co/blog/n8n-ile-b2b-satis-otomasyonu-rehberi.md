@@ -32,9 +32,9 @@ Her şeyi aynı anda otomatikleştirmeye çalışmak, otomasyon projelerinin en 
 2. **Veri zenginleştirme:** Kayıttaki şirket alan adından sektör, çalışan sayısı ve konum gibi bilgileri tamamlamak.
 3. **Lead yönlendirme:** Bölgeye, şirket büyüklüğüne ya da ürüne göre lead'i doğru temsilciye atamak ve Slack/Teams üzerinden bildirmek.
 4. **Takip hatırlatmaları:** Belirli bir süre aksiyon alınmayan fırsatlar için temsilciye görev açmak.
-5. **Raporlama:** Haftalık pipeline özetini CRM'den çekip yöneticiye e-posta veya mesaj olarak göndermek.
+5. **Raporlama:** Haftalık pipeline özetini CRM'den çekip yöneticiye e-posta veya mesaj olarak göndermek. Bu raporun anlamlı olması için [pipeline aşamalarının net tanımlanmış olması](/blog/satis-pipeline-asamalari-nasil-tanimlanir) gerekir.
 
-Bu beş akış kurulduğunda temsilcilerin manuel veri girişi genellikle azalır ve hiçbir lead "unutulmuş" olarak kalmaz.
+Bu beş akış kurulduğunda temsilcilerin manuel veri girişi genellikle azalır ve lead'lerin unutulma riski azalır.
 
 ## Sağlam Bir Satış Workflow'unun 5 Katmanı
 
@@ -42,7 +42,7 @@ Sales Corner'da kurduğumuz her satış otomasyonunu beş katmanlı bir mimariyl
 
 1. **Tetikleyici:** Akışı başlatan olay. Webhook, zamanlanmış görev ya da bir uygulamadaki değişiklik olabilir.
 2. **Veri zenginleştirme:** Gelen kaydın eksik alanlarını tamamlamak. Sonraki adımların karar kalitesi bu katmana bağlıdır.
-3. **AI katmanı:** Lead'i sınıflandırmak, öncelik puanı vermek ya da kişiselleştirilmiş bir taslak üretmek gibi yorum gerektiren işler.
+3. **AI katmanı:** Lead'i sınıflandırmak, öncelik puanı vermek (puanlama modelini [B2B lead scoring rehberimizde](/blog/b2b-lead-scoring-nasil-yapilir) anlattık) ya da kişiselleştirilmiş bir taslak üretmek gibi yorum gerektiren işler.
 4. **Aksiyon:** CRM'i güncellemek, e-posta taslağı oluşturmak, görev açmak, bildirim göndermek.
 5. **Loglama:** Her çalıştırmanın sonucunu kaydetmek. Bir şey ters gittiğinde neyin, ne zaman, neden olduğunu görebilmek için şart.
 
@@ -69,11 +69,13 @@ Yapay zeka satış otomasyonunu güçlendirir, ancak kontrolsüz bırakıldığ�
 - **Yapılandırılmış çıktı isteyin.** Modelden serbest metin yerine belirli alanları olan JSON isteyin; böylece sonraki node'lar çıktıyı güvenle işleyebilir.
 - **Kararı sınırlayın.** Modelin seçebileceği değerleri baştan tanımlayın ("sıcak", "ılık", "soğuk" gibi). Açık uçlu kararlar tutarsızlık üretir.
 - **Müşteriye giden metinlerde insan onayı tutun.** AI'ın yazdığı e-postayı doğrudan göndermek yerine CRM'de taslak olarak bırakın; temsilci gözden geçirip göndersin.
-- **Gerekli veriyi gönderin, fazlasını değil.** Modele yalnızca görev için gereken alanları iletin; kişisel verileri gereksiz yere paylaşmayın.
+- **Gerekli veriyi gönderin, fazlasını değil.** Modele yalnızca görev için gereken alanları iletin; kişisel verileri gereksiz yere paylaşmayın. Soğuk e-postada kişisel verinin yasal sınırları için [KVKK rehberimize](/blog/kvkk-uyumlu-soguk-eposta-yasal-sinirlar) bakabilirsiniz.
 
 Yapay zekanın soğuk e-posta yazımında nasıl kullanılacağını ayrıntılı merak ediyorsanız [yapay zekayla soğuk e-posta yazma rehberimize](/blog/yapay-zekayla-soguk-eposta-nasil-yazilir) göz atabilirsiniz. n8n ve yapay zekayla çalışan hazır bir örnek görmek isterseniz [Sekans Yazarı aracımız](/sekans-yazari) video, PDF veya web sitesinden outreach dizisi üretiyor.
 
 ## Sık Yapılan Hatalar
+
+Aşağıdaki hataların daha geniş bir resmini [satış otomasyonu projelerinin neden başarısız olduğunu anlattığımız yazıda](/blog/satis-otomasyonu-projesi-neden-basarisiz-olur) bulabilirsiniz.
 
 - **Hata yönetimini atlamak:** Bir API geçici olarak yanıt vermediğinde akış sessizce durur. Her kritik akışa bir hata akışı (error workflow) bağlayın ve başarısız çalıştırmalar için bildirim alın.
 - **Mükerrer kayıtları kontrol etmemek:** CRM'e yazmadan önce e-posta veya alan adına göre arama yapmazsanız aynı kişi birden fazla kez oluşturulur.
