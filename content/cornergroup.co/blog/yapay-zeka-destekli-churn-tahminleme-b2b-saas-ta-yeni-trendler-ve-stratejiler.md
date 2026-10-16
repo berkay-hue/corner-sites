@@ -35,7 +35,9 @@ Geri Bildirim ve Duygu Verileri (Feedback and Sentiment Data): Anket yanıtları
 
 Bu verilerin tamamının CRM gibi merkezi bir platformda entegre edilmesi, "tek bir gerçek kaynağı" (single source of truth) oluşturur ve modelin bütüncül bir analiz yapmasını sağlar.
 
-## Model Seçimi, Eğitim ve Tahminleme Veriler toplandıktan sonra, makine öğrenmesi modelleri bu verilerle eğitilir
+## Model Seçimi, Eğitim ve Tahminleme
+
+Veriler toplandıktan sonra, makine öğrenmesi modelleri bu verilerle eğitilir.
 
 Bu süreçte, geçmişte churn etmiş ve etmemiş müşterilerin verileri kullanılarak modele "churn davranışının" neye benzediği öğretilir. Çeşitli algoritmalar kullanılabilir:
 
@@ -63,22 +65,48 @@ Brand Corner & Social Media Corner Perspektifi: Müşteri Deneyimini ve Marka Sa
 
 Yapay zeka destekli churn tahminleme projesine başlamak heyecan verici olabilir, ancak başarı, teknolojinin kendisinden çok, onu nasıl uyguladığınıza bağlıdır. İşte bu yolda dikkat edilmesi gereken kritik kurallar:
 
-## Veri Kalitesi Her Şeydir (Garbage In, Garbage Out) Bu kural, yapay zeka dünyasının en temel ilkesidir
+## Veri Kalitesi Her Şeydir (Garbage In, Garbage Out)
+
+Bu kural, yapay zeka dünyasının en temel ilkesidir.
 
 Modelinize eksik, hatalı veya tutarsız veriler sunarsanız, alacağınız tahminler de aynı derecede güvenilmez olacaktır. Projeye başlamadan önce bir veri denetimi yapın. Verileriniz standart bir formatta mı? Eksik alanlar var mı? Farklı sistemlerdeki aynı müşteri için tutarlı kimlikler kullanılıyor mu? CRM Corner'ın da vurguladığı gibi, veri temizleme ve yönetişim süreçlerine yatırım yapmak, projenin uzun vadeli başarısı için bir ön koşuldur.
 
-## Sadece Tahmin Etmek Yetmez, Aksiyon Almak Gerekir Bir müşterinin churn riskinin %85 olduğunu bilmek tek başına bir şey ifade etmez
+## Sadece Tahmin Etmek Yetmez, Aksiyon Almak Gerekir
+
+Bir müşterinin churn riskinin %85 olduğunu bilmek tek başına bir şey ifade etmez.
 
 Asıl değer, bu bilgiyle ne yaptığınızda ortaya çıkar. Her risk seviyesi için önceden tanımlanmış bir "oyun kitabı" (playbook) oluşturun. Örneğin: %50-70 Risk (Sarı Alarm): Otomatik bir e-posta dizisi başlatarak müşteriye az kullandığı ama değerli olabilecek özellikleri hatırlatın. Bilgi bankanızdan ilgili makaleleri gönderin. %70-85 Risk (Turuncu Alarm): Müşteri başarı yöneticisine (CSM) otomatik bir görev atayın. CSM, müşteriyi arayarak bir "sağlık kontrolü" görüşmesi planlasın ve yaşadığı zorlukları anlamaya çalışsın. %85+ Risk (Kırmızı Alarm): CSM ve bir üst düzey yönetici birlikte devreye girsin. Müşteriye özel bir indirim, ek eğitim veya bir yol haritası görüşmesi teklif edilebilir. Bu aksiyon planları olmadan, churn skoru sadece panonuzda yanıp sönen bir rakamdan ibaret kalır.
 
-## İnsan Dokunuşunu Unutmayın B2B ilişkileri, özellikle kurumsal segmentte, otomasyonun tek başına çözemeyeceği kadar karmaşık ve kişiseldir
+## İnsan Dokunuşunu Unutmayın
+
+B2B ilişkileri, özellikle kurumsal segmentte, otomasyonun tek başına çözemeyeceği kadar karmaşık ve kişiseldir.
 
 Yapay zeka, hangi müşteriye ne zaman odaklanmanız gerektiğini söyleyen inanılmaz güçlü bir sinyal mekanizmasıdır. Ancak müdahaleyi yapacak olan, ilişkiyi kuracak olan, müşterinin derdini dinleyip empati kuracak olan insandır. Sales Corner'ın satış otomasyonu felsefesinde olduğu gibi, teknoloji, insanları daha stratejik ve değerli işlere odaklanmaları için özgürleştirmelidir. Otomasyon, CSM'inizin vaktini "Kimi arasam?" sorusuyla harcamasını engeller, böylece tüm enerjisini "Bu müşteriye nasıl yardımcı olabilirim?" sorusuna yöneltebilir.
 
-## Sürekli İyileştirme ve Modelin Yeniden Eğitimi Pazar koşulları, rakip ürünler, müşteri beklentileri ve kendi ürününüz sürekli değişir
+## Sürekli İyileştirme ve Modelin Yeniden Eğitimi
+
+Pazar koşulları, rakip ürünler, müşteri beklentileri ve kendi ürününüz sürekli değişir.
 
 Bu nedenle, churn tahminleme modeliniz statik kalamaz. Dün churn'e neden olan bir faktör, bugün önemini yitirmiş olabilir. Modelin performansını düzenli olarak izleyin ve belirli aralıklarla (örneğin her üç ayda bir) yeni verilerle yeniden eğitin. Bu, modelin doğruluğunu korumasını ve değişen pazar dinamiklerine adapte olmasını sağlar. Bu, tek seferlik bir proje değil, sürekli devam eden bir optimizasyon sürecidir.
 
 ## Sonuç
 
 Geleceğin Büyüme Stratejisi: Veri Odaklı Müşteri Sadakati Yapay zeka destekli churn tahminleme, B2B SaaS şirketleri için bir lüks veya teknik bir oyuncak olmaktan çıkmış, rekabette ayakta kalmanın ve sürdürülebilir büyümenin temel bir bileşeni haline gelmiştir. Bu teknoloji, müşteri kaybını reaktif bir şekilde analiz etme dönemini kapatarak, proaktif, öngörüye dayalı ve stratejik bir müşteri ilişkileri yönetimi çağını başlatmıştır. Corner Group olarak bizim için bu, sadece bir müşteriyi elde tutmaktan çok daha fazlasını ifade ediyor. Bu, pazarlama (SAAS Corner), satış (Sales Corner), sistem altyapısı (CRM Corner) ve marka iletişimi (Brand Corner & Social Media Corner) gibi farklı disiplinleri ortak bir veri ve amaç etrafında birleştiren bütüncül bir büyüme felsefesidir. Doğru veriyi toplayıp, doğru aksiyon planlarını oluşturduğunuzda, churn tahmini sadece kayıpları önleyen bir savunma kalkanı değil, aynı zamanda en değerli müşterilerinizi belirleyip onlarla olan ilişkinizi derinleştiren, ürün yol haritanızı şekillendiren ve pazarlama stratejinizi optimize eden bir büyüme motoruna dönüşür. Geleceğin başarılı B2B şirketleri, en iyi ürüne sahip olanlar değil, müşterilerini en iyi anlayan ve bu anlayışı her kararının merkezine koyanlar olacaktır. Yapay zeka, bu anlayışa ulaşmanın en güçlü anahtarıdır.
+
+## Sık sorulan sorular
+
+### Geleneksel churn analizi yöntemleri neden yetersiz kalıyor?
+
+Geleneksel yöntemler reaktif oldukları için yetersiz kalır; bir müşterinin bir aydır giriş yapmadığını fark ettiğinizde ilişkiyi kurtarmak için genellikle çok geç kalınmıştır. NPS gibi anketlerin yanıt oranları düşüktür ve müşterinin niyetini ölçerken gerçek davranışını tam olarak yakalayamaz. Ayrıca pazarlama, satış ve destek verileri silolar halinde tutulduğunda müşteri yolculuğunun bütüncül resmi ortaya çıkmaz ve kritik sinyaller gözden kaçırılır.
+
+### Churn tahminleme modeli için hangi veriler toplanmalı?
+
+Etkili bir churn modeli için dört ana kategoride veri toplanmalıdır: kullanım verileri, etkileşim verileri, firmografik ve sözleşme verileri ile geri bildirim ve duygu verileri. Hangi özelliklerin kullanıldığı, destek taleplerinin sıklığı ve niteliği, abonelik planı ve ödeme geçmişi ile NPS skorları bu verilere örnektir. Bu verilerin tamamının CRM gibi merkezi bir platformda entegre edilmesi, tek bir gerçek kaynağı oluşturur ve modelin bütüncül analiz yapmasını sağlar.
+
+### Churn riski skoruna göre hangi aksiyonlar alınmalı?
+
+Her risk seviyesi için önceden tanımlanmış bir oyun kitabı oluşturulmalıdır. %50-70 riskte otomatik bir e-posta dizisiyle müşteriye az kullandığı ama değerli olabilecek özellikler hatırlatılır, %70-85 riskte müşteri başarı yöneticisine bir sağlık kontrolü görüşmesi için görev atanır. %85 üzeri riskte ise CSM ve bir üst düzey yönetici birlikte devreye girer; müşteriye özel indirim, ek eğitim veya yol haritası görüşmesi teklif edilebilir.
+
+### Churn tahminleme modeli ne sıklıkla yeniden eğitilmeli?
+
+Churn tahminleme modeli belirli aralıklarla, örneğin her üç ayda bir, yeni verilerle yeniden eğitilmelidir. Pazar koşulları, rakip ürünler, müşteri beklentileri ve ürünün kendisi sürekli değiştiği için dün churn'e neden olan bir faktör bugün önemini yitirmiş olabilir. Modelin performansını düzenli olarak izlemek, doğruluğunu korumasını ve değişen pazar dinamiklerine adapte olmasını sağlar.

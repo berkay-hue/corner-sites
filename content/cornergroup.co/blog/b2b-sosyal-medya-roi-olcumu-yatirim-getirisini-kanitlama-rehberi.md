@@ -53,26 +53,54 @@ Metrikleri bilmek yeterli değildir. Asıl güç, bu metrikleri üreten, izleyen
 
 Topladığınız tüm bu verileri, karar alıcıların anlayacağı ve değer vereceği bir formatta sunmak, en az verileri toplamak kadar önemlidir. Raporunuz bir veri yığını değil, bir başarı hikayesi anlatmalıdır.
 
-## Yönetici Özeti (En Başa Koyun) Yöneticilerin zamanı kısıtlıdır
+## Yönetici Özeti (En Başa Koyun)
+
+Yöneticilerin zamanı kısıtlıdır.
 
 En başa, en önemli sonuçları koyun. - "Bu çeyrekte sosyal medya faaliyetlerine X TL yatırım yaptık." - "Bu yatırım, doğrudan Y adet SQL ve Z TL tutarında satış hattı (pipeline) değeri yarattı." - "Sosyal medya kaynaklı kapanan anlaşmaların toplam değeri K TL oldu, bu da L:1 oranında bir yatırım getirisi anlamına geliyor." - "Ayrıca, marka bilinirliğimizde %M'lik bir artış gözlemledik."
 
-## Performans Panosu (Dashboard) Anahtar metrikleri görsel olarak çekici ve kolay anlaşılır bir panoda sunun
+## Performans Panosu (Dashboard)
+
+Anahtar metrikleri görsel olarak çekici ve kolay anlaşılır bir panoda sunun.
 
 - Toplam Harcama - Üretilen MQL Sayısı - MQL'den SQL'e Dönüşüm Oranı - Müşteri Edinme Maliyeti (CAC) - Sosyal Medya Kaynaklı Gelir - LTV/CAC Oranı
 
-## Huni Analizi Sosyal medyanın yarattığı değeri adım adım gösterin
+## Huni Analizi
+
+Sosyal medyanın yarattığı değeri adım adım gösterin.
 
 - Gösterim -> Etkileşim -> Web Sitesi Ziyareti -> Potansiyel Müşteri (Lead) -> MQL -> SQL -> Anlaşma - Her aşama arasındaki dönüşüm oranlarını belirtin. Bu, sistemdeki darboğazları tespit etmenize de yardımcı olur. "Web sitemize çok trafik çekiyoruz ama potansiyel müşteri formunu doldurma oranımız düşük, bu nedenle açılış sayfasını optimize etmeliyiz" gibi eyleme geçirilebilir içgörüler sunun.
 
-## İçerik ve Kampanya Performansı Hangi içeriklerin ve kampanyaların en iyi sonuçları verdiğini gösterin
+## İçerik ve Kampanya Performansı
+
+Hangi içeriklerin ve kampanyaların en iyi sonuçları verdiğini gösterin.
 
 - En Çok MQL Getiren Gönderiler/İçerikler - En Düşük CPL'e Sahip Reklam Kampanyaları - En Yüksek Etkileşimi Alan Konular Bu bölüm, gelecekteki içerik stratejinizi neyin şekillendirmesi gerektiğini gösterir.
 
-## Öğrenimler ve Sonraki Adımlar Raporu sadece geçmişi anlatarak bitirmeyin
+## Öğrenimler ve Sonraki Adımlar
+
+Raporu sadece geçmişi anlatarak bitirmeyin.
 
 Geleceğe yönelik stratejik bir vizyon sunun. - "Öğrenim: Video içeriklerimiz, e-kitaplara göre %30 daha yüksek dönüşüm oranı sağlıyor." - "Sonraki Adım: Gelecek çeyrekte içerik bütçemizin %15'ini video prodüksiyonuna kaydıracağız." - "Öğrenim: CEO'muzun kişisel hesabından yapılan paylaşımlar, kurumsal hesaba göre 3 kat daha fazla etkileşim alıyor." - "Sonraki Adım: Yönetici yetkinliğini artırma (executive branding) programı başlatacağız."
 
 ## Sonuç
 
 B2B sosyal medya ROI'ı, tek bir gönderinin anlık satışa dönüşmesini beklemekle ilgili değildir. Bu, sabır, strateji ve en önemlisi entegrasyon gerektiren bir süreçtir. Potansiyel bir müşterinin zihninde bir fikir tohumu ekmekten, o tohumun filizlenip bir satış fırsatına dönüşmesini izlemeye ve nihayetinde şirketinize gelir olarak dönen meyvesini toplamaya kadar uzanan bütünsel bir yolculuktur. Corner Group olarak, bu yolculuğun her adımında, farklı uzmanlıklara sahip markalarımızın sinerjisiyle hareket ediyoruz. Social Media Corner'ın yarattığı farkındalık, CRM Corner'ın sistemlerinde izlenir, SAAS Corner'ın metodolojileriyle niteliklendirilir ve Sales Corner'ın otomasyonuyla beslenir. Yatırım getirisini kanıtlamak, sadece pazarlama departmanının bir görevi değil, tüm büyüme organizasyonunun ortak bir başarısıdır. Doğru zihniyet, entegre bir ekosistem ve veriye dayalı bir raporlama kültürüyle, sosyal medyayı yönetim kurulunuzun gözünde bir soru işaretinden, şirketinizin en değerli büyüme varlıklarından birine dönüştürebilirsiniz.
+
+## Sık sorulan sorular
+
+### B2B sosyal medyada ROI neden doğrudan satışla ölçülemez?
+
+B2B sosyal medyada ROI doğrudan satışla ölçülemez, çünkü B2B satış döngüleri uzun, karmaşık ve ilişki temellidir ve alıcı yolculuğu nadiren düz bir çizgi izler. Bir potansiyel müşteri önce LinkedIn'de bir video izleyip haftalar sonra blog yazısı okuyabilir ve en sonunda doğrudan web sitesine gelerek demo talep edebilir. Geleneksel son tıklama atıf modelleri, bu yolculuktaki ilk temas noktası olan sosyal medyanın değerini tamamen göz ardı eder.
+
+### B2B sosyal medya ROI'ı için hangi metrikler takip edilmeli?
+
+Metrikler, huninin her aşamasına karşılık gelen bir hiyerarşi içinde takip edilmelidir. Huninin üstünde erişim, etkileşim oranı ve video tamamlanma oranı; ortasında web sitesi yönlendirme trafiği, CTR, form doldurma ve CPL; altında ise MQL ve SQL sayısı, CAC, sosyal medya kaynaklı atfedilen gelir ve LTV/CAC oranı yer alır. En stratejik metrik olan LTV/CAC oranında genellikle 3:1 veya daha yüksek bir değer sağlıklı kabul edilir.
+
+### Dark social gibi takip edilemeyen etkiler nasıl ölçülür?
+
+Doğrudan takip edilemeyen etkiler korelasyon analizi, nitel veri ve kontrol gruplarıyla dolaylı olarak ölçülür. Örneğin büyük bir LinkedIn kampanyasının yürütüldüğü hafta markalı aramalarda veya doğrudan trafikte artış olup olmadığına bakılabilir. Satış ekibinden müşterilerin markayı nereden duyduğunu CRM'e not etmesi istenebilir ve mümkünse yoğun kampanya yapılan bir bölge, yapılmayan bir bölgeyle karşılaştırılabilir.
+
+### Yönetim kuruluna sunulacak sosyal medya ROI raporunda neler olmalı?
+
+Yönetim kurulu raporu en başta bir yönetici özeti, ardından performans panosu, huni analizi, içerik ve kampanya performansı ile öğrenimler ve sonraki adımlar bölümlerini içermelidir. Yönetici özetinde yapılan yatırım, üretilen SQL ve satış hattı değeri ile kapanan anlaşmalardan doğan yatırım getirisi oranı yer almalıdır. Rapor bir veri yığını değil, geleceğe yönelik eyleme geçirilebilir içgörüler sunan bir başarı hikayesi anlatmalıdır.

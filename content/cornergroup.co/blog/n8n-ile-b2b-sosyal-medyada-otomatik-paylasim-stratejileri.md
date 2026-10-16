@@ -23,7 +23,9 @@ B2B pazarlamasında otomasyon denildiğinde akla genellikle e-posta sıralamalar
 
 Teoriden pratiğe geçerek, n8n'in B2B sosyal medya stratejinizi nasıl dönüştürebileceğini somut iş akışları üzerinden inceleyelim. Bu akışlar, sadece zaman kazandırmakla kalmaz, aynı zamanda içerik dağıtımında tutarlılık sağlar ve markanızın dijital ayak izini sistematik olarak genişletir.
 
-## Akıllı İçerik Kürasyon ve Dağıtım Motoru Kurulumu B2B'de içerik, otorite inşa etmenin temelidir
+## Akıllı İçerik Kürasyon ve Dağıtım Motoru Kurulumu
+
+B2B'de içerik, otorite inşa etmenin temelidir.
 
 Ancak sürekli olarak özgün içerik üretmek zordur. Stratejinin bir parçası da, sektörünüzle ilgili değerli üçüncü parti içerikleri (makaleler, raporlar, haberler) kürasyon yaparak hedef kitlenize sunmaktır. n8n, bu süreci tamamen otomatikleştirebilir.
 
@@ -33,7 +35,9 @@ Görsel ve Video İçeriklerin Otomatik İşlenmesi ve Paylaşımı Görsel içe
 
 **Tetikleyici Olarak Bulut Depolama:** n8n iş akışınızı, Google Drive, Dropbox veya OneDrive gibi bir bulut depolama hizmetindeki belirli bir klasörü izleyecek şekilde ayarlayabilirsiniz. Örneğin, "Paylaşıma Hazır Videolar" adında bir klasör oluşturabilirsiniz. Otomatik İşleme ve Optimizasyon: Tasarım ekibiniz bu klasöre yeni bir video veya görsel yüklediğinde, n8n bunu anında algılar. Ardından, Cloudinary veya Imgix gibi bir görsel işleme servisinin API'sini kullanarak bu dosyayı otomatik olarak işleyebilir. Örneğin, bir videonun en boy oranını LinkedIn akışı için 1:1, Instagram Hikayeleri için 9:16 yapabilir, tüm görsellerin üzerine şirket logonuzu (watermark) ekleyebilir. Meta Veri ile Zenginleştirilmiş Paylaşım: Dosya adından veya dosyanın yüklendiği alt klasörden yola çıkarak paylaşım metnini dinamik olarak oluşturabilirsiniz. Örneğin, "CaseStudy_MusteriX.mp4" adlı bir dosya yüklendiğinde, n8n otomatik olarak "Yeni başarı hikayemizi keşfedin: MüşteriX ile elde ettiğimiz sonuçlar..." gibi bir metin taslağı oluşturabilir. Bu metin, onay için bir Slack kanalına gönderildikten sonra ilgili sosyal medya platformlarında yayınlanabilir.
 
-## Proaktif Etkileşim ve Topluluk Yönetimi Sosyal medya tek yönlü bir yayın aracı değildir
+## Proaktif Etkileşim ve Topluluk Yönetimi
+
+Sosyal medya tek yönlü bir yayın aracı değildir.
 
 Gerçek değer, hedef kitleyle kurulan diyalogda yatar. n8n, bu süreci ölçeklendirmenize yardımcı olabilir.
 
@@ -68,3 +72,21 @@ Temel otomasyonları kurduktan sonra, süreci daha akıllı, dayanıklı ve insa
 ## Sonuç
 
 Corner Group olarak, B2B büyümesini izole departmanların bir çabası olarak değil, birbiriyle entegre çalışan sistemlerin bir çıktısı olarak görüyoruz. Sosyal medya, bu sistemin dışında kalan bir vitrin değil, tam merkezinde yer alan bir veri ve etkileşim kaynağıdır. n8n gibi güçlü ve esnek bir otomasyon aracı, bu vizyonu hayata geçirmek için teknik altyapıyı sunar. Ancak asıl dönüşüm, bu aracı sadece sosyal medya paylaşımlarını zamanlamak için değil, SAAS Corner'dan gelen potansiyel müşteri sinyallerini yakalamak, Sales Corner'ın satış süreçlerini tetiklemek, CRM Corner'ın veri bütünlüğünü sağlamak ve Brand Corner'ın kampanyalarını ölçeklendirmek için stratejik bir köprü olarak kullanmakla başlar. Bu entegre yaklaşımı benimsemek, B2B şirketlerini reaktif operasyonlardan, veriye dayalı kararlar alan ve her bir müşteri etkileşimini bir büyüme fırsatına dönüştüren proaktif büyüme motorlarına dönüştürür. Geleceğin rekabet avantajı, en çok çalışanda değil, sistemlerini en akıllıca entegre edende olacaktır.
+
+## Sık sorulan sorular
+
+### B2B şirketleri sosyal medya otomasyonu için neden n8n'i tercih etmeli?
+
+n8n açık kaynaklı olduğu için kendi sunucularınızda barındırılabilir ve verileriniz üçüncü parti bir platformun sunucularından geçmek zorunda kalmaz. Abonelik tabanlı araçlar iş akışı ve görev hacmi arttıkça ciddi maliyet kalemlerine dönüşebilirken, n8n'in self-hosted modeli öngörülebilir ve kontrol edilebilir bir maliyet yapısı sunar. Ayrıca herhangi bir API'ye bağlanabilmesi sayesinde özel yazılımlar, veritabanları ve dahili sistemlerle de konuşabilen otomasyonlar kurulabilir.
+
+### n8n ile içerik kürasyonu ve dağıtımı nasıl otomatikleştirilir?
+
+n8n, RSS akışları, Google Alerts veya Google Sheets ve Airtable gibi kaynakları belirlediğiniz zaman aralıklarında, örneğin her gün sabah 9'da, otomatik olarak kontrol eder. Function nodu ile paylaşımların başına "Sektörden Notlar:" gibi standart bir giriş eklenebilir, hashtag setlerinden seçim yapılabilir ve linkler Bitly ile kısaltılabilir. Son adımda iş akışı dallandırılarak LinkedIn için daha profesyonel ve uzun, Twitter için ise daha kısa ve dikkat çekici paylaşımlar yapılır.
+
+### Sosyal medyadaki etkileşimler CRM'e nasıl aktarılır?
+
+Bir kişi şirketinizin LinkedIn sayfasındaki bir paylaşımı beğendiğinde veya yorum yaptığında, n8n LinkedIn API'si üzerinden bu kişinin profil URL'sini ve adını alır. Bu bilgi HubSpot, Salesforce veya kullandığınız herhangi bir CRM sistemine gönderilir. Kişi CRM'de zaten mevcutsa aktivite akışına yeni bir not eklenir, mevcut değilse yeni bir kontak oluşturulabilir; böylece satış ekibi görüşme öncesinde müşterinin hangi konularla ilgilendiğini görebilir.
+
+### Otomasyon kullanırken insan dokunuşu nasıl korunur?
+
+İnsan dokunuşu, otomasyonu bir "asistan" gibi kullanarak ve son, kişisel cevabı insana bırakarak korunur. Otomatik direkt mesaj göndermekten veya her yoruma standart bir cevap vermekten kaçınılmalıdır. n8n önemli bir etkileşim olduğunda sizi bilgilendirmeli ve bağlamı önünüze getirmelidir; strateji, hangi görevlerin tamamen otomatize edileceğini ve hangilerinin insan zekası ve empatisi gerektirdiğini doğru ayırt edebilmektir.
