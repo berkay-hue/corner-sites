@@ -71,7 +71,7 @@ B2B SaaS dünyasında ayakta kalmak ve büyümek, sadece iyi bir ürüne sahip o
 
 ### Composable CRM'in en büyük zorluğu nedir?
 
-En büyük zorluk, farklı uygulamaların ürettiği verileri entegre etmek, senkronize tutmak ve anlamlı bir bütüne dönüştürmektir. Blissfully'nin araştırmasına göre orta ölçekli bir şirket ortalama 185 farklı SaaS uygulaması kullanıyor. Entegrasyonlar koptuğunda veya veriler tutarsızlaştığında, modüler yapının vaat ettiği çeviklik yerini kaosa ve manuel veri girişine bırakır.
+En büyük zorluk, farklı uygulamaların ürettiği verileri entegre etmek, senkronize tutmak ve anlamlı bir bütüne dönüştürmektir. Orta ölçekli bir şirket bile çoğu zaman çok sayıda farklı SaaS uygulaması kullanır. Entegrasyonlar koptuğunda veya veriler tutarsızlaştığında, modüler yapının vaat ettiği çeviklik yerini kaosa ve manuel veri girişine bırakır.
 
 ### Hiperotomasyon hangi teknolojilerden oluşur?
 

@@ -73,7 +73,7 @@ CRM ve veri etiği, artık birbirinden ayrı düşünülemeyecek iki kavramdır.
 
 ### Veri etiği neden müşteri sadakatini doğrudan etkiler?
 
-Çünkü müşteriler verilerinin etik dışı kullanıldığını fark ettiğinde o şirketten alışveriş yapmayı bırakabilir. Salesforce'un raporuna göre tüketicilerin yüzde 73'ü böyle bir durumda alışverişi bırakacağını belirtiyor. Verilerine saygı duyulduğunu hisseden müşteriler ise daha sadık olur ve bu da daha yüksek müşteri yaşam boyu değeri anlamına gelir.
+Çünkü müşteriler verilerinin etik dışı kullanıldığını fark ettiğinde o şirketten alışveriş yapmayı bırakabilir. Verilerine saygı duyulduğunu hisseden müşteriler ise daha sadık olur ve bu da daha yüksek müşteri yaşam boyu değeri anlamına gelir.
 
 ### Müşteriden veri toplarken rızayı etik bir şekilde nasıl almalıyım?
 

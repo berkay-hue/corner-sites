@@ -71,7 +71,7 @@ B2B SaaS dünyasında ayakta kalmak ve büyümek, artık sadece daha çok çalı
 
 ### CRM'de insan-AI iş birliğinde yapay zeka hangi görevleri üstlenir?
 
-Yapay zeka, büyük veri setlerini analiz etme, öngörücü müşteri adayı puanlaması yapma ve tekrar eden görevleri otomatikleştirme işini üstlenir. E-posta dizileri göndermek, toplantı zamanlamak ve veri girişi yapmak gibi işler ona devredilir. Salesforce'a göre satış temsilcileri zamanlarının yalnızca yüzde 34'ünü aktif satışa ayırdığı için bu devir, ekibine doğrudan zaman kazandırır.
+Yapay zeka, büyük veri setlerini analiz etme, öngörücü müşteri adayı puanlaması yapma ve tekrar eden görevleri otomatikleştirme işini üstlenir. E-posta dizileri göndermek, toplantı zamanlamak ve veri girişi yapmak gibi işler ona devredilir. Satış temsilcileri zamanlarının büyük kısmını aktif satış dışındaki işlere harcadığı için bu devir, ekibine doğrudan zaman kazandırır.
 
 ### Yapay zeka satış temsilcilerinin yerini alır mı?
 

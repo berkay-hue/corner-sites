@@ -73,11 +73,11 @@ B2B SaaS satış dünyasının yüksek temposu ve amansız rekabeti değişmeyec
 
 ### B2B SaaS satışta tükenmişlik neden bu kadar yaygın?
 
-Çünkü satış uzmanının günü büyük ölçüde reddedilmelerle geçer ve buna her ay ya da çeyrek yenilenen hedef baskısı eklenir. HubSpot'un araştırmasına göre satış profesyonellerinin yüzde 67'sinin tükenmişliğe yakın veya tükenmişlik içinde olduğu görülüyor. Gerçekçi olmayan hedefler sürekli bir yetersizlik hissi yaratır ve bu kronik stres uyku, anksiyete ve odaklanma sorunlarıyla performansı düşüren bir kısır döngüye dönüşür.
+Çünkü satış uzmanının günü büyük ölçüde reddedilmelerle geçer ve buna her ay ya da çeyrek yenilenen hedef baskısı eklenir. Satış profesyonellerinin önemli bir kısmı kendini tükenmişliğe yakın ya da tükenmişlik içinde hisseder. Gerçekçi olmayan hedefler sürekli bir yetersizlik hissi yaratır ve bu kronik stres uyku, anksiyete ve odaklanma sorunlarıyla performansı düşüren bir kısır döngüye dönüşür.
 
 ### Zihinsel esneklik satış performansını nasıl etkiler?
 
-Zihinsel esneklik, reddedilmeyi kişisel bir başarısızlık yerine öğrenme fırsatı olarak görmeni sağladığı için doğrudan kota başarısına yansır. BetterUp'ın araştırması, zihinsel esnekliği yüksek çalışanların yüzde 31 daha üretken olduğunu ve hedeflerine ulaşma olasılıklarının yüzde 22 daha fazla olduğunu gösteriyor. Esnek bir satış uzmanı zor bir dönemde vazgeçmek yerine enerjisini en umut vadeden anlaşmalara odaklar ve yeni taktikler dener.
+Zihinsel esneklik, reddedilmeyi kişisel bir başarısızlık yerine öğrenme fırsatı olarak görmeni sağladığı için doğrudan kota başarısına yansır. Zihinsel esnekliği yüksek çalışanlar genellikle daha üretken olur ve hedeflerine ulaşma olasılıkları daha yüksektir. Esnek bir satış uzmanı zor bir dönemde vazgeçmek yerine enerjisini en umut vadeden anlaşmalara odaklar ve yeni taktikler dener.
 
 ### Yoğun bir satış gününde stresi nasıl yönetebilirsin?
 

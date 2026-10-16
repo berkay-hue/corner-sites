@@ -71,7 +71,7 @@ Geleneksel satış eğitimlerinin devri kapanıyor. B2B SaaS pazarının dinamiz
 
 ### Geleneksel satış eğitimi neden artık yetersiz kalıyor?
 
-Çünkü herkese aynı içeriği sunar; deneyimli bir satış direktörü ile işe yeni başlamış bir temsilci aynı sunumu dinler. Araştırmalar, bu tür eğitimlerde öğrenilen bilgilerin yüzde 70'inden fazlasının ilk hafta içinde unutulduğunu gösteriyor. Ayrıca maliyeti yüksektir ve yatırım getirisini ölçmek neredeyse imkansızdır.
+Çünkü herkese aynı içeriği sunar; deneyimli bir satış direktörü ile işe yeni başlamış bir temsilci aynı sunumu dinler. Bu tür eğitimlerde öğrenilen bilgilerin önemli bir kısmı kısa sürede unutulur. Ayrıca maliyeti yüksektir ve yatırım getirisini ölçmek neredeyse imkansızdır.
 
 ### Yapay zeka satış eğitimini nasıl kişiselleştirir?
 
