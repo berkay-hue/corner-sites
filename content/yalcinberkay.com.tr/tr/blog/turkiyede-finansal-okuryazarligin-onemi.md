@@ -2,6 +2,7 @@
 title: "Türkiye'de Finansal Okuryazarlığın Önemi"
 description: "Peki bu neden Türkiye'de bizim için önemli? 🔍 Finansal okuryazarlık sadece rakamları anlamak değil; geleceğimizi şekillendiren bilinçli kararlar almaktır."
 date: "2024-01-31"
+updated: "2026-10-16"
 category: ""
 image: "/_a/fr/images/nqDxF9bRP8rLu1rxrW337jZLd8.jpeg"
 imageAlt: "Türkiye'de Finansal Okuryazarlığın Önemi"

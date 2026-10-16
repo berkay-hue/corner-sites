@@ -2,6 +2,7 @@
 title: "How to Price B2B Services for Turkish Companies"
 description: "Pricing B2B services in Turkey means balancing lira inflation, USD-linked budgets, and local buying habits. Here is how to set rates that hold up."
 date: "2026-10-15"
+updated: "2026-10-16"
 category: "Founder Notes"
 image: "https://images.pexels.com/photos/7693692/pexels-photo-7693692.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
 imageAlt: "How to Price B2B Services for Turkish Companies"

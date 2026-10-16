@@ -2,6 +2,7 @@
 title: "Can AI Replace Your SDRs? A Practical Answer"
 description: "Thinking about replacing SDRs with AI agents? Here is where automation works in B2B outbound, where humans still win, and how to decide for your team."
 date: "2026-10-11"
+updated: "2026-10-16"
 category: "AI & Automation"
 image: "https://images.pexels.com/photos/17485350/pexels-photo-17485350.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
 imageAlt: "Can AI Replace Your SDRs? A Practical Answer"

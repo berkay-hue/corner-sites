@@ -2,6 +2,7 @@
 title: "Satış Temsilcisi Mülakatında Sorulması Gereken 10 Soru"
 description: "Satış temsilcisi mülakatında adayın prospecting, itiraz yönetimi ve CRM disiplinini ölçen soruları ve iyi cevapların ayırt edici işaretlerini anlatıyoruz."
 date: "2026-10-15"
+updated: "2026-10-16"
 category: "Kariyer"
 image: "https://images.pexels.com/photos/5439379/pexels-photo-5439379.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
 imageAlt: "Satış Temsilcisi Mülakatında Sorulması Gereken 10 Soru"

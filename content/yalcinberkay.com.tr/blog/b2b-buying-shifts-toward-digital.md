@@ -2,6 +2,7 @@
 title: "B2B Buying Shifts Toward Digital!"
 description: "Pivotree Inc. and Spryker's latest report reveals a seismic shift in B2B buying behaviors, emphasizing a massive move towards digital platforms."
 date: "2024-01-11"
+updated: "2026-10-16"
 category: ""
 image: "/_a/fr/images/anrKOY1RANgRyFfJRJx3prfg4.jpeg"
 imageAlt: "B2B Buying Shifts Toward Digital!"

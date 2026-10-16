@@ -2,6 +2,7 @@
 title: "B2B'de Müşteri Geri Bildiriminin Gücü"
 description: "🚀 Müşteri geri bildirimini değerlendirmek geçici bir trend değil; B2B dünyasında oyunun kurallarını değiştiren bir unsur."
 date: "2024-01-19"
+updated: "2026-10-16"
 category: ""
 image: "/_a/fr/images/qFhIbCToccorP0yP3zTmTBx71CY.jpeg"
 imageAlt: "B2B'de Müşteri Geri Bildiriminin Gücü"
