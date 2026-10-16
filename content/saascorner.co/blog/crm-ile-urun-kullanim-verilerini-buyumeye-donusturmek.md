@@ -68,3 +68,21 @@ Her müşterinin ürününle olan yolculuğu farklıdır. Bazıları hızla adap
 ## Sonuç
 
 Ürün kullanım verileri, B2B SaaS şirketleri için yeni petroldür. Ancak bu değerli kaynak, doğru araçlarla işlenmediği sürece potansiyelini ortaya çıkaramaz. CRM ile ürün kullanım verilerini entegre etmek, artık bir lüks veya teknik bir detay değil, sürdürülebilir büyümenin temel bir gerekliliğidir. Bu entegrasyon sayesinde, müşteri davranışlarını derinlemesine anlayabilir, riskleri proaktif olarak yönetebilir, gelir fırsatlarını tam zamanında yakalayabilir ve daha iyi bir ürün inşa edebilirsin. Müşterilerinle olan ilişkini reaktif ve tahmine dayalı bir modelden, proaktif ve veriye dayalı bir ortaklığa dönüştürmenin zamanı geldi. Bugün CRM ve ürün analiz araçların arasındaki köprüyü kurmaya başla ve verilerini en değerli büyüme motoruna dönüştür.
+
+## Sık sorulan sorular
+
+### CRM'e hangi ürün kullanım verileri aktarılmalı?
+
+CRM'e her tıklamayı değil, iş hedeflerinle doğrudan ilişkili anahtar aktivasyon olaylarını aktarmalısın. Temel kategoriler kullanıcı aktivitesi (aktif kullanıcı sayısı, son giriş tarihi), özellik benimseme ve hesap sağlığı metrikleridir (kullanım limitlerine yakınlık, destek talebi sayısı). Bu odak, CRM'in kısa sürede bir veri çöplüğüne dönüşmesini engeller.
+
+### Müşteri sağlık puanı nedir?
+
+Müşteri sağlık puanı, giriş sıklığı, özellik kullanımı ve tamamlanan anahtar eylemler gibi birden fazla metriği birleştirerek her müşteriye atanan dinamik bir skordur. Puan belirli bir eşiğin altına düştüğünde CRM, müşteri başarı yöneticisine otomatik olarak görev atayabilir. Böylece ekibin, sorun kronikleşmeden ve müşteri ilişkiyi koparmadan önce müdahale edebilir.
+
+### PQL (Üründen Nitelikli Potansiyel Müşteri) nedir?
+
+PQL, ücretsiz deneme veya freemium plan kullanırken satın alma niyetini ürün içindeki davranışlarıyla gösteren kullanıcıdır. Bu kullanıcılar belirli bir aktivasyon eşiğini geçmiş ve ürünün değerini bizzat deneyimlemiştir. Kendi PQL tanımını oluşturmak için ücretli plana geçen müşterilerinin deneme sürecindeki ortak davranışlarını analiz etmelisin.
+
+### Ürün kullanım verileri üst satış fırsatlarını nasıl ortaya çıkarır?
+
+Ürün kullanım verileri, bir üst pakete geçmeye veya ek modül almaya en hazır müşterileri davranışlarından tespit etmeni sağlar. Örneğin kullanım limitine sürekli yaklaşan bir müşteri açık bir üst satış sinyali verir ve CRM, satış temsilcin için otomatik olarak daha yüksek plan teklif etme görevi oluşturabilir. Böylece satış ekibi soğuk aramalar yerine gerçek ihtiyaçlara dayalı teklifler sunar.
