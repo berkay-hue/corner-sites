@@ -1,5 +1,5 @@
 // WishCEO: sayı sayı CEO oyunu, arşiv, CEO karnesi, paylaşım ve yeni sayı bildirimi.
-// Vakalar kamuya açık kaynaklarda belgelenmiş gerçek olaylardan uyarlanmıştır; şirket, ürün ve kişi adları kurgusaldır, rakamlar yuvarlanmıştır. Kaynaklar her vakanın `sources` alanında.
+// Vakalar gerçek şirket krizlerinden uyarlanmıştır; şirket, ürün ve kişi adları kurgusaldır, rakamlar yuvarlanmıştır. Dosyalarda dış bağlantı yoktur.
 (function () {
   "use strict";
 
@@ -7,7 +7,6 @@
   var LIST_KEY = "wishceo.liste";
 
   // tag: karnede CEO tipini belirler (cerrah, kalkan, kumar, kasa)
-  // sources: oyuncuya gösterilen kaynaklar; t ve pub Türkçe özet, lang bağlantının dili
   var S001 = [
     {
       area: "Kriz yönetimi",
@@ -32,25 +31,15 @@
           r: "En büyük satış sezonunu rakiplere bırakıyorsun. Üstelik onlarca yılda kurulmuş bir adı silmek, sorunun sandığından büyük olduğu izlenimini verir." }
       ],
       real: {
-        who: "Vikram Anand",
+        who: "Vikram Sethna",
         role: "Mervale India genel müdürü",
-        k: "C",
+        k: "B",
         text: [
           "Şirketin ilk tepkisi savunmaydı: sorunu fabrikaya değil, dükkânlardaki kötü depolamaya bağladı. Basın bunu soğuk buldu ve bayram sezonunda satışlar ciddi düştü.",
           "Ardından yön değişti. Şirket yüz binlerce dükkâna ulaşan bir bayi eğitim programı başlattı, Velora’yı birkaç ay içinde daha pahalı, mühürlü bir ambalaja geçirdi ama fiyatı artırmadı. Ülkenin en sevilen oyuncularından biri kampanyanın yüzü oldu.",
           "Pazar payı birkaç puan geriledi, ertesi yıl satışlarla birlikte toparlandı. Vaka Hindistan’da kriz iletişimi derslerinde iki yüzüyle anlatılıyor: geç kalan savunma ve ardından gelen somut düzeltme."
         ]
-      },
-      sources: [
-        { t: "Çikolatada kurt vakası tüketicileri tedirgin ediyor", pub: "Inter Press Service", year: "2003", lang: "en",
-          url: "https://www.ipsnews.net/?p=7712" },
-        { t: "Şirket iddiaları reddediyor, sorunu depolamaya bağlıyor", pub: "Confectionery News", year: "2003", lang: "en",
-          url: "https://www.confectionerynews.com/Article/2003/10/06/Cadbury-denies-infestation/" },
-        { t: "Krizin ilk haftalarına eleştirel bir bakış", pub: "Business Today", year: "2003", lang: "en",
-          url: "https://archives.digitaltoday.in/businesstoday/20031109/edit.html" },
-        { t: "Marka kurt şokundan toparlanıyor", pub: "exchange4media", year: "2004", lang: "en",
-          url: "https://www.exchange4media.com/marketing-news/cadbury-recovers-from-worm-shock-12560.html" }
-      ]
+      }
     },
     {
       area: "Dönüşüm",
@@ -79,21 +68,11 @@
         role: "Tumla CEO’su",
         k: "B",
         text: [
-          "Lindvang ilk kuralı koydu: önce hayatta kal, sonra büyü. Parça çeşidini ciddi biçimde azalttı, kârsız işleri kapattı ya da sattı; kısa süre sonra tema parklarının çoğunluk hissesini de elden çıkardı.",
+          "Lindvang işe nakdi korumakla başladı: parça çeşidini ciddi biçimde azalttı, kârsız işleri kapattı ya da sattı; kısa süre sonra tema parklarının çoğunluk hissesini de elden çıkardı.",
           "Odağı tuğlaya ve sevilen temalara geri çekti, hayran topluluğunu dinlemeye başladı.",
           "Yaklaşık on yıl sonra Tumla dünyanın en büyük ve en kârlı oyuncak şirketleri arasındaydı."
         ]
-      },
-      sources: [
-        { t: "Zarardan kâra dönüş", pub: "NBC News / AP", year: "2006", lang: "en",
-          url: "https://www.nbcnews.com/id/wbna11367083" },
-        { t: "Harvard vaka çalışması: dönüşümün dersleri", pub: "Harvard Business School", year: "2013", lang: "en",
-          url: "https://www.library.hbs.edu/working-knowledge/hbs-cases-lego" },
-        { t: "Kendini yeniden icat eden marka", pub: "The Guardian", year: "2017", lang: "en",
-          url: "https://www.theguardian.com/lifeandstyle/2017/jun/04/how-lego-clicked-the-super-brand-that-reinvented-itself" },
-        { t: "Fazla yenilik şirketi nasıl batmanın eşiğine getirdi", pub: "Knowledge at Wharton", year: "2012", lang: "en",
-          url: "https://knowledge.wharton.upenn.edu/article/innovation-almost-bankrupted-lego-until-it-rebuilt-with-a-better-blueprint/" }
-      ]
+      }
     },
     {
       area: "Strateji",
@@ -122,21 +101,11 @@
         role: "Korvala CEO’su",
         k: "B",
         text: [
-          "Stoddard göreve geldikten birkaç ay sonra çalışanlara durumun ne kadar ağır olduğunu açıkça anlatan sert bir not yazdı ve Korvala’yı Tallbridge’in telefon sistemine bağladı. Eski sistem rafa kalkmaya başladı.",
+          "Stoddard göreve geldikten birkaç ay sonra çalışanlara şirketin durumunu açıkça anlattı ve Korvala’yı Tallbridge’in telefon sistemine bağladı. Eski sistem rafa kalkmaya başladı.",
           "Tallbridge’in sistemi beklenen ivmeyi yakalayamadı. Yaklaşık iki buçuk yıl sonra Korvala telefon işini, patent lisansıyla birlikte birkaç milyar avroya Tallbridge’e satmak için anlaştı. Satış ertesi yıl tamamlandı.",
           "Korvala bugün telekom altyapısı üreten bir şirket olarak yoluna devam ediyor."
         ]
-      },
-      sources: [
-        { t: "CEO’nun çalışanlara yazdığı sert not", pub: "Engadget", year: "2011", lang: "en",
-          url: "https://www.engadget.com/2011-02-08-nokia-ceo-stephen-elop-rallies-troops-in-brutally-honest-burnin.html" },
-        { t: "Ortaklık duyurusu ve pazar payı rakamları", pub: "Mail & Guardian / Reuters", year: "2011", lang: "en",
-          url: "https://mg.co.za/business/2011-02-11-nokia-microsoft-join-forces-in-smartphone-war/" },
-        { t: "Telefon işinin satışında 5 detay", pub: "Webrazzi", year: "2013", lang: "tr",
-          url: "https://webrazzi.com/2013/09/04/microsoft-nokia-satin-almasinda-5-detay/" },
-        { t: "Satışın tamamlandığını bildiren resmî bildirim", pub: "ABD SEC (6-K)", year: "2014", lang: "en",
-          url: "https://www.sec.gov/Archives/edgar/data/924613/000110465914030586/a14-11232_16k.htm" }
-      ]
+      }
     }
   ];
 
@@ -172,19 +141,7 @@
           "Ertesi yılın ilk çeyreğinde ABD’deki mevcut şubelerin satışı yüzde onu aşkın arttı; şirket yükselişi yeni tarife ve açık sözlü kampanyaya bağladı.",
           "Hisse sonraki yedi yılda yaklaşık yirmi kat değer kazandı ve büyük teknoloji şirketlerinin hisselerini geride bıraktı. Aynı dönemin sonunda Brascina, dünya genelindeki satışlarda eski pazar liderini geçerek en büyük pizza zinciri oldu."
         ]
-      },
-      sources: [
-        { t: "Zincirin yeni tarifi ve lezzet anketindeki yeri", pub: "NBC News / Reuters", year: "2009", lang: "en",
-          url: "https://www.nbcnews.com/id/wbna34450329" },
-        { t: "“Karton gibi hamur” reklamları ve şirketin durumu", pub: "NBC News / AP", year: "2010", lang: "en",
-          url: "https://www.nbcnews.com/id/wbna34812047" },
-        { t: "İlk çeyrek sonuçları: mevcut şube satışlarında sıçrama", pub: "ABD SEC (8-K)", year: "2010", lang: "en",
-          url: "https://www.sec.gov/Archives/edgar/data/0001286681/000119312510105392/dex991.htm" },
-        { t: "CEO’nun gözünden tarif değişikliği ve kampanya", pub: "AnnArbor.com", year: "2012", lang: "en",
-          url: "https://www.annarbor.com/business-review/patrick-doyle-pizza-relaunch-could-have-been-the-end-of-dominos/" },
-        { t: "Hissenin yedi yıllık yükselişi ve dünya liderliği", pub: "CNBC", year: "2018", lang: "en",
-          url: "https://www.cnbc.com/2018/03/01/no-point-1-pizza-chain-dominos-outperformed-amazon-google-and-apple-stocks.html" }
-      ]
+      }
     },
     {
       area: "Fiyatlama",
@@ -217,19 +174,7 @@
           "Birkaç ay sonra Prewitt şirket adına özür diledi, DVD işini Diskvan adlı ayrı bir markaya taşıyacağını duyurdu. Birkaç hafta sonra Diskvan açılmadan iptal edildi, zam kaldı. Şirket hissedar mektubunda ayrı fiyatlarda ısrar etti ama geçişin hızını yanlış ayarladığını kabul etti.",
           "Sonraki çeyrekte ABD’deki üye sayısı yüz binlerce azaldı. Zam öncesi 300 dolar civarındaki hisse, bir yıl içinde beşte birine yakın bir seviyeye düştü. Şirket internete yatırıma devam etti; hisse iki yıl kadar sonra yaklaşık dört katına çıkıp S&P 500’ün en çok kazandıran hissesi oldu."
         ]
-      },
-      sources: [
-        { t: "Yeni fiyatlar: DVD artık ayrı bir paket", pub: "TechCrunch", year: "2011", lang: "en",
-          url: "https://techcrunch.com/2011/07/12/netflix-dvd-only/" },
-        { t: "İkinci çeyrek hissedar mektubu: yalnız internet paketinin yükselişi", pub: "ABD SEC (8-K)", year: "2011", lang: "en",
-          url: "https://www.sec.gov/Archives/edgar/data/0001065280/000119312511196126/dex991.htm" },
-        { t: "Ayrı DVD markasından vazgeçildi, zam kaldı", pub: "NPR", year: "2011", lang: "en",
-          url: "https://www.npr.org/sections/thetwo-way/2011/10/10/141209082/netflix-kills-qwikster-price-hike-lives-on" },
-        { t: "Üçüncü çeyrek hissedar mektubu: üye kaybı ve özeleştiri", pub: "ABD SEC (8-K)", year: "2011", lang: "en",
-          url: "https://www.sec.gov/Archives/edgar/data/0001065280/000119312511278716/d246709dex991.htm" },
-        { t: "Yılın en çok kazandıran S&P 500 hisseleri", pub: "Kiplinger", year: "2013", lang: "en",
-          url: "https://www.kiplinger.com/article/investing/t052-c008-s003-best-s-p-500-stocks-of-2013.html" }
-      ]
+      }
     },
     {
       area: "Portföy",
@@ -262,19 +207,7 @@
           "İki yıl içinde çok sayıda eski fabrika kapandı, kadro yaklaşık üçte bir küçüldü. Şirket ertesi yıl ağır zarar etti; bu, tarihinin en zor dönemlerinden biriydi. Üç bellek işinden ikisini bıraktı, programlanabilir bellek çiplerinde kaldı.",
           "İşlemciler şirketin ana işi oldu. Önceki kuşakta üretim lisansı dağıtıp kendi rakiplerini yaratmışlardı; Dressler’in yeni ilkesi, tek üretici olunabilecek yerlere gitmekti. Şirket kişisel bilgisayar işlemcilerinin hâkimi oldu; yıllar sonra bilgisayarların büyük çoğunluğunda onun çipi vardı. Bellekten çıkış, sonradan şirket tarihinin en iyi kararlarından biri sayıldı."
         ]
-      },
-      sources: [
-        { t: "Kurucu ile başkanın bellekten çıkış kararı", pub: "NPR", year: "2012", lang: "en",
-          url: "https://www.npr.org/2012/04/06/150057676/intel-legends-moore-and-grove-making-it-last" },
-        { t: "Bellek savaşından işlemci liderliğine", pub: "SemiWiki", year: "2013", lang: "en",
-          url: "https://semiwiki.com/semiconductor-manufacturers/intel/2948-revisiting-andy-groves-only-the-paranoid-survive/" },
-        { t: "Hissedar mektubu: fabrika kapanışları ve yeniden yapılanma", pub: "A Letter a Day", year: "2020", lang: "en",
-          url: "https://aletteraday.substack.com/p/letter-15-intel-1986" },
-        { t: "Bellekten çıkış ve ardından gelen yeni işlemci", pub: "The Chip Letter", year: "2024", lang: "en",
-          url: "https://thechipletter.substack.com/p/intels-transformation-20" },
-        { t: "Bellek işinden çıkışlar ve Japon rakiplerin verim üstünlüğü", pub: "TrendForce", year: "2026", lang: "en",
-          url: "https://www.trendforce.com/news/2026/08/21/news-intel-and-memory-a-history-of-exits-and-a-new-bid-to-return/" }
-      ]
+      }
     }
   ];
 
@@ -310,19 +243,7 @@
           "O yıl yarım milyar dolar civarında bir kredi tamamlandı. Kredi rücusuzdu, yani şirketin geri kalanına dokunulamazdı; teminat bir düzine kadar karakterin sinema haklarıydı. Her biri belli bir bütçe sınırı içinde, sınırlı sayıda film çekilebilecekti. İlk filmler tutmazsa kalan karakterlerin hakları alacaklılara geçecekti.",
           "Zırhlı mucit Quillon’un hakları ertesi yıl başka bir stüdyodan geri dönünce ilk film için o seçildi. Birkaç yıl sonra vizyona giren film dünyada yarım milyar doları aşkın hasılat yaptı. Ertesi yıl dünyanın en büyük eğlence şirketlerinden biri Fennick’i milyarlarca dolara satın almak için anlaştı."
         ]
-      },
-      sources: [
-        { t: "Yarım milyar dolarlık film finansmanının resmi duyurusu", pub: "ABD SEC (8-K)", year: "2005", lang: "en",
-          url: "https://www.sec.gov/Archives/edgar/data/933730/000111667905002263/ex99-1.htm" },
-        { t: "Kırıntı lisanslardan kendi filmlerine: perde arkası", pub: "Slate", year: "2012", lang: "en",
-          url: "https://slate.com/business/2012/09/marvel-comics-and-the-movies-the-business-story-behind-the-avengers.html" },
-        { t: "Film stüdyosunun kuruluş hikâyesi ve pazarlıkları", pub: "The Hollywood Reporter", year: "2016", lang: "en",
-          url: "https://www.hollywoodreporter.com/movies/movie-features/marvel-studios-origin-secrets-revealed-889795/" },
-        { t: "İflastan kurtuluş ve o dönemki cesur kredi kararı", pub: "TheWrap", year: "2012", lang: "en",
-          url: "https://www.thewrap.com/how-spider-man-and-his-marvel-super-friends-were-saved-bankruptcy-46456/" },
-        { t: "Milyarlarca dolarlık satın alma duyurusu", pub: "Alıcı şirketin basın bülteni", year: "2009", lang: "en",
-          url: "https://thewaltdisneycompany.com/press-releases/disney-to-acquire-marvel-entertainment/" }
-      ]
+      }
     },
     {
       area: "Kriz yönetimi",
@@ -355,19 +276,7 @@
           "Ama değişim cihazlarında da yanma vakaları görüldü. Yaklaşık bir ay sonra satış ve değişim yeniden durduruldu, ertesi gün üretime tamamen son verildi; kullanıcılara para iadesi ya da başka bir telefon önerildi. Hisse bir günde belirgin biçimde düştü; geri çağırmanın maliyeti milyarlarca dolar olarak açıklandı.",
           "Birkaç ay sonra bağımsız laboratuvarlarla yürütülen inceleme, iki ayrı tedarikçinin bataryalarında iki farklı kusur buldu. Satılan ve etkinleştirilen milyonlarca cihazın neredeyse tamamı geri dönmüştü. Şirket çok adımlı yeni bir batarya güvenlik kontrolü getirdi."
         ]
-      },
-      sources: [
-        { t: "Şirketin açıklaması: satılan cihazlar yenisiyle değiştirilecek", pub: "Şirketin haber odası", year: "2016", lang: "en",
-          url: "https://news.samsung.com/global/statement-on-galaxy-note7" },
-        { t: "Pil yangınları sonrası küresel geri çağırma", pub: "Daily FT / Reuters", year: "2016", lang: "en",
-          url: "https://www.ft.lk/IT-Telecom-Tech/samsung-recalls-galaxy-note-7-phones-after-battery-fires/50-566134" },
-        { t: "Model tamamen üretimden kaldırıldı", pub: "TechCrunch", year: "2016", lang: "en",
-          url: "https://techcrunch.com/2016/10/11/samsung-kills-the-galaxy-note-7-for-good/" },
-        { t: "Geri çağırmanın maliyeti milyarlarca dolar", pub: "VOA / AP", year: "2016", lang: "en",
-          url: "https://www.voanews.com/a/samsung-note-7-recall-cost-least-five-point-three-billion/3550593.html" },
-        { t: "Soruşturma: patlamaların nedeni iki tedarikçinin pilleri", pub: "PCWorld", year: "2017", lang: "en",
-          url: "https://www.pcworld.com/article/411785/samsung-blames-batteries-from-two-makers-for-note7-explosions.html" }
-      ]
+      }
     },
     {
       area: "Satın alma",
@@ -377,7 +286,7 @@
       body: [
         "Kestrin internetin en tanınan adlarından biri. Ama çevrim içi reklam parasının büyük kısmı arama liderine akıyor; üç yıl önce senden küçük olan bu rakip artık pazara hükmediyor.",
         "Son çeyrekte kâr beşte bir kadar düştü. Yaklaşık bin çalışanı, kadronun küçük bir bölümünü çıkarmaya hazırlanıyorsun; hisse dört yılı aşkın sürenin en düşük seviyesinde. Şirketin kurucu ortaklarından birisin ve yedi aydır CEO’sun.",
-        "Yazılım devi Brennick bu ay teklifini açıkladı: hisse başı 30 dolar civarı, yarısı nakit yarısı hisse, toplam kırk milyar doları aşkın. Bu, bir önceki kapanışın yüzde altmış kadar üstü. Ama hissen iki yıl önce 40 doları aşmıştı ve bir yıl önce gelen birleşme önerisini zaten geri çevirmiştin."
+        "Yazılım devi Tessarc bu ay teklifini açıkladı: hisse başı 30 dolar civarı, yarısı nakit yarısı hisse, toplam kırk milyar doları aşkın. Bu, bir önceki kapanışın yüzde altmış kadar üstü. Ama hissen iki yıl önce 40 doları aşmıştı ve bir yıl önce gelen birleşme önerisini zaten geri çevirmiştin."
       ],
       stats: [["Teklif", "Hisse başı ~30 $"], ["Prim", "~%60"], ["Çeyreklik kâr", "Beşte bir düşüş"]],
       ask: "Kestrin’in başındasın. Teklife cevabın ne?",
@@ -396,23 +305,11 @@
         role: "Kestrin’in kurucu ortağı ve CEO’su",
         k: "D",
         text: [
-          "Voss ve yönetim kurulu teklifi hızla geri çevirdi; onlara göre rakam şirketin değerini yansıtmıyordu. Pazarlık aylarca sürdü. Brennick teklifi birkaç milyar dolar artırmaya hazırdı; Voss ve diğer kurucu ortak bundan da yüksek bir fiyat istedi.",
-          "Birkaç ay sonra Brennick teklifini geri çekti. Ertesi işlem gününde Kestrin hissesi sert düştü. Kestrin, reklam alanının bir kısmını arama liderine bırakan bir anlaşmaya yöneldi; Yıl bitmeden arama lideri bu anlaşmadan çekildi.",
-          "Yıl sonuna doğru hisse teklifin üçte birinin altındaydı. Brennick anlaşmasını kapatamadığı için sert eleştirilen Voss, bir yılı aşkın süre sonra CEO’luğu bırakacağını açıkladı."
+          "Voss ve yönetim kurulu teklifi hızla geri çevirdi; onlara göre rakam şirketin değerini yansıtmıyordu. Pazarlık aylarca sürdü. Tessarc teklifi birkaç milyar dolar artırmaya hazırdı; Voss ve diğer kurucu ortak bundan da yüksek bir fiyat istedi.",
+          "Birkaç ay sonra Tessarc teklifini geri çekti. Ertesi işlem gününde Kestrin hissesi sert düştü. Kestrin, reklam alanının bir kısmını arama liderine bırakan bir anlaşmaya yöneldi; yıl bitmeden arama lideri bu anlaşmadan çekildi.",
+          "Yıl sonuna doğru hisse teklifin üçte birinin altındaydı. Tessarc anlaşmasını kapatamadığı için sert eleştirilen Voss, bir yılı aşkın süre sonra CEO’luğu bırakacağını açıkladı."
         ]
-      },
-      sources: [
-        { t: "Teklifin resmî duyurusu", pub: "Alıcı şirketin basın merkezi", year: "2008", lang: "en",
-          url: "https://news.microsoft.com/2008/02/01/microsoft-proposes-acquisition-of-yahoo-for-31-per-share/" },
-        { t: "Teklif öncesi çeyrek sonuçları ve işten çıkarmalar", pub: "The Honolulu Advertiser / AP", year: "2008", lang: "en",
-          url: "https://honoluluadvertiser.com/article/2008/Jan/30/bz/hawaii801300412.html" },
-        { t: "Alıcının teklifi geri çekme açıklaması", pub: "Alıcı şirketin basın merkezi", year: "2008", lang: "en",
-          url: "https://news.microsoft.com/2008/05/03/microsoft-withdraws-proposal-to-acquire-yahoo/" },
-        { t: "Geri çekilmenin ardından hisse düşüşü", pub: "NBC News / AP", year: "2008", lang: "en",
-          url: "https://www.nbcnews.com/id/wbna24464481" },
-        { t: "CEO’nun görevi bırakması", pub: "Fortune", year: "2008", lang: "en",
-          url: "https://fortune.com/2008/11/18/yahoo-ceo-jerry-yang-to-step-down/" }
-      ]
+      }
     },
     {
       area: "Dönüşüm",
@@ -445,19 +342,7 @@
           "Dijital geçiş beklenenden hızlı gelince asıl ameliyat birkaç yıl içinde geldi: fotoğraf bölümünde binlerce kişilik kesinti, fabrika ve laboratuvarların birleştirilmesi, dijital makine üretiminin Çin’e kayması. Maliyet iki mali yılda yüz milyarlarca yen; ayrılanlara cömert tazminat ödendi.",
           "Film kimyası LCD ekran malzemelerine, tıbba ve yarı iletkene taşındı. Kısa süre sonra kolajen bilgisine dayanan bir cilt bakımı serisi çıktı, ardından bir Japon ilaç şirketinin kontrolü alındı. Dönüşüm on yıldan uzun sürdü; Wexley ise birkaç yıl sonra iflas koruması için başvurdu."
         ]
-      },
-      sources: [
-        { t: "Film biriminde binlerce kişilik iş kesintisi", pub: "Photography Blog", year: "2006", lang: "en",
-          url: "https://www.photographyblog.com/news/5000_job_losses_at_fujifilm" },
-        { t: "Şirketi dönüştüren CEO’nun portresi", pub: "Korea JoongAng Daily", year: "2016", lang: "en",
-          url: "https://www.koreajoongangdaily.com/business/innovator-komori-transformed-fujifilm/11729119" },
-        { t: "Krizden inovasyonla çıkış: çekirdek iş yok olurken", pub: "Stone Bridge Press", year: "2015", lang: "en",
-          url: "https://www.stonebridge.com/catalog/innovating-out-of-crisis" },
-        { t: "Şirketin cilt bakımı markası büyümeye hazırlanıyor", pub: "The Daily Star", year: "2013", lang: "en",
-          url: "https://www.thedailystar.net/news/skincare-brand-astalift-poised-for-expansion" },
-        { t: "Grubun tarihçesi", pub: "Şirketin kurumsal sitesi", year: "", lang: "en",
-          url: "https://holdings.fujifilm.com/en/about/history" }
-      ]
+      }
     }
   ];
 
@@ -470,7 +355,7 @@
       body: [
         "Kelvara, Amerika’nın en büyük iki kola markasından biri. Ülkede yüzü aşkın dolum tesisi var; bir dolum hattı dakikada binlerce kutu dolduruyor ve her kutu bir saniyeden kısa süre açık kalıyor.",
         "Bir yaz günü ülkenin kuzeybatısında yaşlı bir çift, diyet kola kutusunun içinde bir şırınga bulduklarını söylüyor. Haber televizyona çıkınca başka eyaletlerden de benzer iddialar gelmeye başlıyor. Gazeteler, ürünlerini topyekûn raftan çeken şirket örneklerini hatırlatıyor ve senden aynısını bekliyor.",
-        "Düzenleyici kurum soruşturma başlattı. Şu ana kadar kimse yaralanmadı ama bir hafta içinde iddialar on’dan fazla eyalete yayıldı. Kelvara’nın Kuzey Amerika içecek işinin başındasın; birkaç gün içinde karar vermen gerekiyor."
+        "Düzenleyici kurum soruşturma başlattı. Şu ana kadar kimse yaralanmadı ama bir hafta içinde iddialar ondan fazla eyalete yayıldı. Kelvara’nın Kuzey Amerika içecek işinin başındasın; birkaç gün içinde karar vermen gerekiyor."
       ],
       stats: [["Dolum tesisi", "Yüzü aşkın"], ["Hat hızı", "Dakikada binlerce kutu"], ["Kutunun açık kaldığı süre", "Bir saniyeden az"]],
       ask: "Kelvara’nın içecek işinin başındasın. Ne yaparsın?",
@@ -493,19 +378,7 @@
           "Yüzlerce müfettiş iddiaları inceledi. Bir mağaza kamerası, bir kadının şırıngayı kutuya kendisinin soktuğunu gösterdi. İddialar yirmiden fazla eyaletten gelmişti; kısa sürede birçok eyalette sahte ihbarda bulunanlar tutuklandı, sayı sonradan onlarca kişiye çıktı.",
           "Ardından gazetelere, söylenecek yeni bir şey olmadığını esprili bir dille anlatan ilanlar verildi. Hisse kısa süre hafifçe geriledi, sonra toparlandı. Krizin maliyeti on milyonlarca dolarla sınırlı kaldı; ertesi ayki kupon kampanyasıyla şirket yıllardır en iyi yazını geçirdi."
         ]
-      },
-      sources: [
-        { t: "Düzenleyicinin başkanı kurcalama iddialarından şüphe ediyor", pub: "The New York Times", year: "1993", lang: "en",
-          url: "https://www.nytimes.com/1993/06/17/us/us-official-has-doubts-about-pepsi-tampering.html" },
-        { t: "Sahte kurcalama ihbarları ve tutuklamalar", pub: "The Christian Science Monitor", year: "1993", lang: "en",
-          url: "https://www.csmonitor.com/1993/0618/18091.html" },
-        { t: "Tutuklamalar artıyor", pub: "UPI", year: "1993", lang: "en",
-          url: "https://www.upi.com/Archives/1993/06/18/Arrests-mount-in-Pepsi-tampering-hoax/7910740376000" },
-        { t: "Güvenlik kamerası görüntüsü sahtekârlığı doğruluyor", pub: "UPI", year: "1993", lang: "en",
-          url: "https://www.upi.com/Archives/1993/06/18/Pepsi-says-videotape-backs-its-claim-of-hoax/9933740376000/" },
-        { t: "Krizi doğru yönetmek", pub: "BusinessWeek", year: "1993", lang: "en",
-          url: "https://www.bloomberg.com/news/articles/1993-07-04/the-right-moves-baby" }
-      ]
+      }
     },
     {
       area: "Finansman",
@@ -538,28 +411,16 @@
           "Teminat olarak ABD’deki ana fabrikalar, logo dahil fikri mülkiyet, finans şirketindeki ve İsveçli lüks markadaki paylar verildi. O yıl on milyarlarca dolarlık rekor zararla kapandı. Lüks markalar sonraki birkaç yılda satıldı.",
           "Kriz yılında iki büyük rakip devlet yardımı aldı ve mahkeme korumasına girdi; Brayton ikisine de ihtiyaç duymadı. Ertesi yılı milyarlarca dolar kârla kapattı. Birkaç yıl sonra notu yeniden yatırım derecesine çıktı; teminatlar ve logo serbest bırakıldı."
         ]
-      },
-      sources: [
-        { t: "Finansman planının duyurusu", pub: "ABD SEC (8-K)", year: "2006", lang: "en",
-          url: "https://www.sec.gov/Archives/edgar/data/0000037996/000114036106017026/ex99.htm" },
-        { t: "Teminatların serbest bırakılması", pub: "ABD SEC (8-K)", year: "2012", lang: "en",
-          url: "https://www.sec.gov/Archives/edgar/data/0000037996/000003799612000025/collateralrelease8-k.htm" },
-        { t: "Devlet yardımı almadan dönüş", pub: "NBC News / CNBC", year: "2010", lang: "en",
-          url: "https://www.nbcnews.com/id/wbna40010150" },
-        { t: "Planı tasarlayan finans direktörü", pub: "Fortune", year: "2011", lang: "en",
-          url: "https://fortune.com/2011/05/25/fords-forgotten-man/" },
-        { t: "Kredi notu yeniden yatırım derecesinde", pub: "NPR", year: "2012", lang: "en",
-          url: "https://www.npr.org/transcripts/151339982" }
-      ]
+      }
     },
     {
       area: "Kalite",
       place: ["Almanya", " · 1990’ların sonu"],
-      company: "Steinhaal Automobil · Velto",
+      company: "Steinhaal Automobil · Tondo",
       title: "Ani manevrada devrildi",
       body: [
-        "Steinhaal, köklü bir Alman lüks otomobil üreticisi. Velto, markanın ilk küçük şehir arabası: kısa, yüksek ve içi geniş; markayı gençlere ve ilk kez lüks araba alacaklara açmak için tasarlandı. Satışa yeni çıktı ve siparişler güçlü.",
-        "Bir sonbahar günü İsveçli bir otomobil dergisi, yola fırlayan bir hayvandan kaçmayı taklit eden sert bir şerit değiştirme testinde Velto’yu orta bir hızda devirdi. İçindekiler hafif yaralandı; görüntüler bütün Avrupa’ya yayıldı.",
+        "Steinhaal, köklü bir Alman lüks otomobil üreticisi. Tondo, markanın ilk küçük şehir arabası: kısa, yüksek ve içi geniş; markayı gençlere ve ilk kez lüks araba alacaklara açmak için tasarlandı. Satışa yeni çıktı ve siparişler güçlü.",
+        "Bir sonbahar günü İsveçli bir otomobil dergisi, yola fırlayan bir hayvandan kaçmayı taklit eden sert bir şerit değiştirme testinde Tondo’yu orta bir hızda devirdi. İçindekiler hafif yaralandı; görüntüler bütün Avrupa’ya yayıldı.",
         "Şirketin ilk açıklaması testin “aşırı” olduğuydu. Ama basın ve müşteriler tek bir şey soruyor: bu araba güvenli mi? Steinhaal’in yönetim kurulunda otomobil biriminin başındasın; birkaç hafta içinde karar vermen gerekiyor."
       ],
       stats: [["Test hızı", "Orta hız"], ["Model", "Satışa yeni çıktı"], ["Şirketin ilk tepkisi", "“Aşırı test”"]],
@@ -568,7 +429,7 @@
         { k: "A", t: "Testin gerçek sürüşü yansıtmadığını açıkla; arabayı savun ve satışa devam et.", s: 15, tag: "kasa",
           r: "Kısa vadede satışlar sürer. Ama güvenlik sorununu inkâr eden lüks bir marka en değerli şeyini, güveni harcar; her yeni haber inkârı daha da zayıflatır." },
         { k: "B", t: "Teslimatları durdur; denge kontrol sistemini ücretsiz ve standart yap, süspansiyonu ve lastikleri değiştir, satılmış arabaları da geri çağırıp güncelle.", s: 90, tag: "cerrah",
-          r: "Aylarca teslimat yapamazsın, yüz milyonlarca marka mal olur ve hatayı herkesin önünde kabul edersin. Ama sorunu kökünden çözer, tartışmayı bir güvenlik sözüne çevirirsin." },
+          r: "Aylarca teslimat yapamazsın, yüz milyonlarca Alman markına mal olur ve hatayı herkesin önünde kabul edersin. Ama sorunu kökünden çözer, tartışmayı bir güvenlik sözüne çevirirsin." },
         { k: "C", t: "Satışa devam et ama her müşteriye ücretsiz kontrol, onarım ve iade hakkı sun.", s: 45, tag: "kalkan",
           r: "Müşteriye karşı nazik bir adım. Ama araba değişmeden satılmaya devam eder; ikinci bir devrilme olursa savunacak hiçbir şeyin kalmaz." },
         { k: "D", t: "Yalnızca lastikleri ve süspansiyonu değiştir; bağımsız bir kurumun testini tekrarlatıp arabanın güvenli olduğunu kanıtla.", s: 30, tag: "kumar",
@@ -579,23 +440,11 @@
         role: "Steinhaal’in otomobil biriminin başı; kararı yönetim kuruluyla aldı",
         k: "B",
         text: [
-          "Savunma tutmadı ve şirket yön değiştirdi. Birkaç hafta sonra yaklaşık üç aylık teslimat durdurması açıklandı: denge kontrol sistemi bütün Velto’larda ücretsiz ve standart olacak, süspansiyon ve lastikler değişecek, teslim edilmiş arabalar da güncellenecekti.",
-          "Denge kontrol sistemli ilk Velto’lar birkaç ay sonra fabrikadan çıktı. Krizin maliyeti yüz milyonlarca markı buldu. Yeniden tanıtım reklamlarında ünlü bir tenis yıldızı oynadı.",
-          "Kısa süre sonra denge kontrol sistemi markanın bütün modellerinde standart oldu. Velto ve onu izleyen kuşaklar milyonlarca sattı. Avrupa Birliği sistemi yıllar sonra yeni modellerde zorunlu kıldı."
+          "Savunma tutmadı ve şirket yön değiştirdi. Birkaç hafta sonra yaklaşık üç aylık teslimat durdurması açıklandı: denge kontrol sistemi bütün Tondo’larda ücretsiz ve standart olacak, süspansiyon ve lastikler değişecek, teslim edilmiş arabalar da güncellenecekti.",
+          "Denge kontrol sistemli ilk Tondo’lar birkaç ay sonra fabrikadan çıktı. Krizin maliyeti yüz milyonlarca Alman markını buldu. Yeniden tanıtım reklamlarında ünlü bir tenis yıldızı oynadı.",
+          "Kısa süre sonra denge kontrol sistemi markanın bütün modellerinde standart oldu. Tondo ve onu izleyen kuşaklar milyonlarca sattı. Avrupa Birliği sistemi yıllar sonra yeni modellerde zorunlu kıldı."
         ]
-      },
-      sources: [
-        { t: "Devrilme testinin yıl dönümü", pub: "Autohaus / dpa", year: "2017", lang: "de",
-          url: "https://www.autohaus.de/nachrichten/autohersteller/mercedes-benz-20-jahre-elchtest-der-a-klasse-2723080" },
-        { t: "Krizden çeyrek asır sonra", pub: "Schwäbische Zeitung / dpa", year: "2022", lang: "de",
-          url: "https://www.schwaebische.de/panorama/25-jahre-nach-elchtest-rolle-rueckwaerts-bei-mercedes-benz-7881" },
-        { t: "Düşüş ve yeniden yükseliş", pub: "web.de", year: "2017", lang: "de",
-          url: "https://web.de/magazine/auto/elchtest-desaster-rueckblick-sturz-aufstieg-a-klasse-32665542" },
-        { t: "Denge kontrol sisteminin çeyrek asrı", pub: "Autohaus", year: "2020", lang: "de",
-          url: "https://www.autohaus.de/nachrichten/autohersteller/25-jahre-esp-vom-elch-retter-zum-alleskoenner-2702232" },
-        { t: "Denge kontrol sisteminin tarihi", pub: "Tedarikçinin basın sayfası", year: "", lang: "en",
-          url: "https://www.bosch-presse.de/pressportal/de/en/staying-on-track-211904.html" }
-      ]
+      }
     },
     {
       area: "Liderlik",
@@ -624,27 +473,11 @@
         role: "Kagemori’nin başkanı",
         k: "D",
         text: [
-          "Ay sonunda yönetim kurulu birkaç aylığına maaşları kesti: Tsuboi’ninki yaklaşık yarıya indi, öteki üst yöneticilerinki de belirgin biçimde azaldı. Yüz milyarlarca yenlik hisse geri alımı açıklandı. Tsuboi istifa etmedi; kesinti, sorumluluğu en tepeden üstlenmenin sembolik bir yolu olarak görüldü.",
+          "Ay sonunda yönetim kurulu birkaç aylığına maaşları kesti: Tsuboi’ninki yaklaşık yarıya indi, öteki üst yöneticilerinki de belirgin biçimde azaldı. Yaklaşık yüz milyar yenlik hisse geri alımı açıklandı. Tsuboi istifa etmedi; kesinti, sorumluluğu en tepeden üstlenmenin sembolik bir yolu olarak görüldü.",
           "Şirket işten çıkarma yapmama çizgisini önceki yıllarda da korumuştu; birkaç yıl önce el konsolunun zayıf başlangıcından sonra da başkanın maaşı yarıya inmişti.",
           "O mali yıl on milyarlarca yen faaliyet zararıyla kapandı; ertesi yıl şirket faaliyet kârına döndü. Yaklaşık bir yıl sonra bir mobil oyun şirketiyle karşılıklı hisse takasıyla ortaklık kuruldu ve Kagemori akıllı telefon oyunlarına girdi."
         ]
-      },
-      sources: [
-        { t: "Yıllık tahminin düşürülmesi", pub: "Şirketin kurumsal sitesi", year: "2014", lang: "en",
-          url: "https://www.nintendo.co.jp/ir/pdf/2014/140117e.pdf" },
-        { t: "Sonuç toplantısında soru-cevap", pub: "Şirketin kurumsal sitesi", year: "2014", lang: "en",
-          url: "https://www.nintendo.co.jp/ir/en/events/140130qa/02.html" },
-        { t: "Hissedar toplantısı: neden işten çıkarma yok", pub: "Şirketin kurumsal sitesi", year: "2013", lang: "en",
-          url: "https://www.nintendo.co.jp/ir/en/stock/meeting/130627qa/03.html" },
-        { t: "Yöneticilere maaş indirimi", pub: "NBC News", year: "2014", lang: "en",
-          url: "https://www.nbcnews.com/tech/video-games/dismal-wii-u-sales-prompt-pay-cuts-nintendo-execs-n18881" },
-        { t: "Başkan baskı altında", pub: "Bloomberg", year: "2014", lang: "en",
-          url: "https://www.bloomberg.com/news/articles/2014-01-21/nintendo-s-iwata-under-fire-after-failing-to-meet-wii-u-pledge" },
-        { t: "Kâra dönüş", pub: "Şirketin kurumsal sitesi", year: "2015", lang: "en",
-          url: "https://www.nintendo.co.jp/ir/pdf/2015/150507e.pdf" },
-        { t: "Mobil oyun ortaklığı", pub: "Şirketin kurumsal sitesi", year: "2015", lang: "en",
-          url: "https://www.nintendo.co.jp/ir/pdf/2015/150317e.pdf" }
-      ]
+      }
     }
   ];
 
@@ -678,19 +511,9 @@
         text: [
           "Halloway’in ekibi pazarlama ve finans biriminden gelen fikri birkaç hafta içinde onaylattı. Yılbaşından hemen sonra duyurulan güvenceye göre yeni araba alan ya da kiralayan müşteri, bir yıl içinde elinde olmayan bir nedenle işini kaybederse, en az iki taksit ödemiş olmak şartıyla arabayı geri verebiliyordu. Kalan borçla arabanın değeri arasındaki farkın birkaç bin dolara kadarını şirket üstleniyordu.",
           "Kampanya o büyük maç yayınında ülke çapına yayıldı; kısa süre sonra güvenceye, işini kaybeden müşterinin birkaç aylık taksitini şirketin ödediği bir ek geldi. Sektör satışları ilk ayda üçte birden fazla düşerken Morivo’nun satışı arttı.",
-          "Morivo o yılı satışlarını artırarak kapattı; sektör beşte bir kadar küçüldü, pazar payı belirgin biçimde yükseldi. Geri verilen araba sayısı program boyunca yalnızca birkaç yüzde kaldı. Güvence iki yıl kadar sonra sona erdi."
+          "Morivo o yılı satışlarını artırarak kapattı; sektör beşte bir kadar küçüldü, pazar payı belirgin biçimde yükseldi. Geri verilen araba sayısı program boyunca birkaç yüzle sınırlı kaldı. Güvence iki yıl kadar sonra sona erdi."
         ]
-      },
-      sources: [
-        { t: "İşini kaybeden müşteriye arabayı geri verme hakkı", pub: "NPR", year: "2009", lang: "en",
-          url: "https://www.npr.org/2009/01/06/99053277/for-struggling-car-owners-hyundai-offers-lifeline" },
-        { t: "Güvencenin duyurusu", pub: "Şirketin haber odası", year: "2009", lang: "en",
-          url: "https://www.hyundainews.com/releases/338" },
-        { t: "İşten çıkarılana güvence veren şirketler", pub: "CNBC", year: "2009", lang: "en",
-          url: "https://www.cnbc.com/2009/03/31/getting-laid-off-theyve-got-you-covered.html" },
-        { t: "Bir yıl sonra: güvence satışları nasıl etkiledi?", pub: "NPR", year: "2010", lang: "en",
-          url: "https://www.npr.org/transcripts/122372379" }
-      ]
+      }
     },
     {
       area: "Kalite",
@@ -723,17 +546,7 @@
           "Bedeli ağırdı: biten çeyreğe bir milyar doları aşan gider yazıldı. Şirket arıza oranını hiçbir zaman açıklamadı; bağımsız bir garanti şirketinin birkaç yıl sonraki araştırmasına göre konsolların yaklaşık dörtte biri ilk iki yılda arızalanmıştı.",
           "Konsol yeni donanım revizyonlarıyla on yılı aşkın süre satıldı ve on milyonlarca adede ulaştı; üretimi yaklaşık on yıl sonra sona erdi."
         ]
-      },
-      sources: [
-        { t: "Garantinin üç yıla çıkarıldığı duyuru", pub: "Şirketin haber odası", year: "2007", lang: "en",
-          url: "https://news.microsoft.com/source/2007/07/05/microsoft-expands-xbox-360-warranty-coverage/" },
-        { t: "Bağımsız araştırma: konsolların arıza oranları", pub: "The Register", year: "2009", lang: "en",
-          url: "https://www.theregister.com/2009/09/03/squaretrade_console_failure_report_sept_09/" },
-        { t: "Konsolun üretimi on yıl sonra sona erdi", pub: "Fortune", year: "2016", lang: "en",
-          url: "https://fortune.com/2016/04/20/microsoft-quits-xbox-360-production/" },
-        { t: "Konsolun on yılı", pub: "Şirketin haber sitesi", year: "2016", lang: "en",
-          url: "https://news.xbox.com/en-us/2016/04/20/xbox-360-celebrating-10-years/" }
-      ]
+      }
     },
     {
       area: "Sahiplik",
@@ -741,7 +554,7 @@
       company: "Maison Corvelle",
       title: "Kapıdaki lüks devi",
       body: [
-        "Corvelle bir buçuk asrı aşkın geçmişi olan bir lüks evi: el yapımı çantalar, eyerler, ipek eşarplar. Şirket borsada ama hisselerin yaklaşık dörtte üçü kurucunun torunlarından oluşan kalabalık bir ailede. Son sözü ailenin kontrol ettiği bir ortaklık söylüyor.",
+        "Corvelle bir buçuk asrı aşkın geçmişi olan bir lüks moda evi: el yapımı çantalar, eyerler, ipek eşarplar. Şirket borsada ama hisselerin yaklaşık dörtte üçü kurucunun torunlarından oluşan kalabalık bir ailede. Son sözü ailenin kontrol ettiği bir ortaklık söylüyor.",
         "Bir cumartesi günü dünyanın en büyük lüks grubu Altemont, Corvelle’in yedide birine yakınına sahip olduğunu açıklıyor; birkaç gün sonra oran altıda bire yaklaşıyor. Payı birkaç yıldır, bildirim eşiğinin altında kalan ve sonradan hisseye çevrilebilen türev sözleşmelerle bankalar üzerinden topladığı ortaya çıkıyor.",
         "Altemont teklif vermeyeceğini, kontrol ya da yönetim kurulunda koltuk istemediğini söylüyor. Hisse pazartesi sert yükseliyor; geniş ailede payını satmayı düşünenler olabilir. Corvelle’in aileden olmayan yöneticisisin; kararı aile konseyiyle birlikte vereceksin."
       ],
@@ -763,22 +576,10 @@
         k: "D",
         text: [
           "Aile önce safları sıkılaştırdı ve birlikte hareket edeceğini açıkladı. Birkaç hafta sonra, payların yarısından fazlasını uzun yıllar satılamayacak ortak bir aile şirketinde toplama ve kalan paylarda önalım hakkı kurma planını duyurdu. Düzenleyici kısa süre sonra zorunlu satın alma teklifinden muafiyet verdi; yapı yaklaşık bir yıl içinde işler hâle geldi.",
-          "Morvand, Altemont’un pay toplama yöntemini düzenleyiciye taşıdı; ertesi yıl suç duyurusunda bulundular, Altemont karşı dava açtı. Birkaç yıl sonra piyasa düzenleyicisi, pay toplamayı piyasaya zamanında bildirmediği için Altemont’a milyonlarca avro ceza verdi. Düzenleyiciye göre Altemont payın önemli kısmını açıklama günündeki fiyatın yarısından da ucuza almıştı.",
+          "Morvand, Altemont’un pay toplama yöntemini düzenleyiciye taşıdı; yaklaşık iki yıl sonra suç duyurusunda bulundular, Altemont da karşı dava açtı. Birkaç yıl sonra piyasa düzenleyicisi, pay toplamayı piyasaya zamanında bildirmediği için Altemont’a milyonlarca avro ceza verdi. Düzenleyiciye göre Altemont payın önemli kısmını açıklama günündeki fiyatın yarısından da ucuza almıştı.",
           "Yaklaşık dört yıl sonra ticaret mahkemesi başkanının arabuluculuğuyla barış geldi. Altemont, o güne kadar beşte biri aşmış Corvelle payının tamamını kendi hissedarlarına dağıttı ve beş yıl boyunca Corvelle hissesi almamayı kabul etti. Aile şirketi bugün payların yarısından fazlasını elinde tutuyor."
         ]
-      },
-      sources: [
-        { t: "Lüks grubun sürpriz pay açıklaması", pub: "Taipei Times / AFP", year: "2010", lang: "en",
-          url: "https://www.taipeitimes.com/News/biz/archives/2010/10/25/2003486824" },
-        { t: "Aile holdingi kurma kararı", pub: "Şirketin düzenleyiciye bildirimi", year: "2010", lang: "en",
-          url: "https://echanges.dila.gouv.fr/OPENDATA/AMF/CNS/2010/12/FCCNS100286_20101206.pdf" },
-        { t: "Piyasa düzenleyicisinin ceza kararı", pub: "AMF (Fransa piyasa düzenleyicisi)", year: "2013", lang: "fr",
-          url: "https://www.amf-france.org/sites/institutionnel/files/sanction/decision_sanction/SAN-2013-15%20-%20Decision%20de%20la%20Commission%20des%20sanctions%20du%2025%20juin%202013%20a%20l'egard%20de%20la%20societe%20LVMH%20Moet%20Hennessy%20Louis%20Vuitton.pdf" },
-        { t: "İki grubun barış anlaşması", pub: "Lüks grubun basın sayfası", year: "2014", lang: "en",
-          url: "https://www.lvmh.com/en/publications/lvmh-and-hermes-mend-relations" },
-        { t: "Lüks devlerinin anlaşmalı ayrılığı", pub: "Business Standard / Reuters", year: "2014", lang: "en",
-          url: "https://www.business-standard.com/amp/article/companies/uber-posh-handbag-war-ends-as-luxe-titans-divorce-amicably-114090400015_1.html" }
-      ]
+      }
     }
   ];
 
@@ -814,39 +615,25 @@
           "İlan kısa sürede dünyaya yayıldı ve sonradan reklamcılığın büyük ödüllerini aldı. İlan çıktığında restoranların çoğu yeniden açılmıştı; birkaç hafta içinde neredeyse tamamı hizmetteydi. Bu arada eski dağıtıcı, kuzeydeki yüzlerce restoran için yeniden devreye alındı.",
           "Şirket resmî bir maliyet açıklamadı; basın kaybı günde milyon sterlin civarında olarak tahmin etti. Tam toparlanma yaklaşık üç hafta sürdü, ama marka bu krizden alay konusu olarak değil, iyi bir özrün örneği olarak çıktı."
         ]
-      },
-      sources: [
-        { t: "Yüzlerce restoran tavuksuz kaldı", pub: "Fortune", year: "2018", lang: "en",
-          url: "https://fortune.com/2018/02/19/kfc-closed-chicken-shortage/" },
-        { t: "Esprili özür", pub: "CNBC", year: "2018", lang: "en",
-          url: "https://www.cnbc.com/2018/02/23/kfc-issues-tongue-in-cheek-apology-after-uk-chicken-shortage-causes-restaurant-closures.html" },
-        { t: "Tavuk bitince kapanan restoranlar", pub: "CBS News / AP", year: "2018", lang: "en",
-          url: "https://www.cbsnews.com/news/kfc-out-of-chicken-united-kingdom-ireland-fried-chicken-restaurants/" },
-        { t: "Özür ilanı", pub: "Marketing Week", year: "2018", lang: "en",
-          url: "https://www.marketingweek.com/kfc-print-advert-to-apologise-for-chicken-shortage/" },
-        { t: "Eski dağıtıcı geri çağrıldı", pub: "Restaurant Online", year: "2018", lang: "en",
-          url: "https://www.restaurantonline.co.uk/Article/2018/03/08/KFC-renews-contract-with-Bidvest-Logistics/" },
-        { t: "İlanın ödül kaydı", pub: "The One Show", year: "2018", lang: "en",
-          url: "https://www.oneclub.org/awards/theoneshow/-award/34056/fck/" }
-      ]
+      }
     },
     {
       area: "Strateji",
       place: ["ABD", " · 1990’ların başı"],
-      company: "Halvorsen Systems",
+      company: "Nordahl Systems",
       title: "Parçalara bölünen dev",
       body: [
-        "Halvorsen, dünyanın en büyük bilgisayar şirketi; büyük kurumların ana bilgisayarlarını o kuruyor ve işletiyor. Ama kişisel bilgisayarlar ve küçük sunucular pazarı değiştirdi. Şirket geçen yıl yaklaşık 5 milyar dolar zarar etti; birkaç yıl önce 400 bini aşan çalışan sayısı hızla eriyor.",
+        "Nordahl, dünyanın en büyük bilgisayar şirketi; büyük kurumların ana bilgisayarlarını o kuruyor ve işletiyor. Ama kişisel bilgisayarlar ve küçük sunucular pazarı değiştirdi. Şirket geçen yıl yaklaşık 5 milyar dolar zarar etti; birkaç yıl önce 400 bini aşan çalışan sayısı hızla eriyor.",
         "Önceki yönetim şirketi, satılabilecek ya da halka açılabilecek bir düzineden fazla yarı bağımsız birime bölmeye başladı. Bankacılar parçalara ayırmayı değer yaratmanın en hızlı yolu olarak görüyor. Ana bilgisayar fiyatların yüksek, rakipler daha ucuz.",
-        "Birkaç ay önce şirketin tarihinde ilk kez dışarıdan bir CEO geldi: sen. Mühendis değilsin; daha önce tüketim ürünleri ve finans şirketleri yönettin. Analistler büyük bir vizyon bekliyor ve ikinci çeyrek sonuçları bu ay açıklanacak."
+        "Birkaç ay önce şirketin tarihinde ilk kez dışarıdan bir CEO geldi: sen. Mühendis değilsin; daha önce tüketim ürünleri ve finans şirketleri yönettin. Analistler radikal bir yön değişikliği bekliyor ve ikinci çeyrek sonuçları bu ay açıklanacak."
       ],
       stats: [["Geçen yılki zarar", "~5 milyar $"], ["Çalışan (zirvede)", "400 binden fazla"], ["Bağımsız birim", "Bir düzineden fazla"]],
-      ask: "Halvorsen’in yeni CEO’susun. Şirketin geleceği için ne yaparsın?",
+      ask: "Nordahl’ın yeni CEO’susun. Şirketin geleceği için ne yaparsın?",
       opts: [
         { k: "A", t: "Bölünmeyi tamamla: birimleri ayrı şirketler olarak halka aç ya da sat; her biri kendi pazarında çevikleşsin.", s: 35, tag: "cerrah",
           r: "Bankacıların sevdiği, kısa vadede değer gösteren bir yol. Ama büyük müşteriler parçaların değil, birlikte çalışan tek bir bütünün peşinde; bölündüğünde bunu kimse sunamaz." },
-        { k: "B", t: "Büyük bir vizyon ilan et: ana bilgisayardan çık, tüm gücünü kişisel bilgisayarlara ve tüketici pazarına ver.", s: 30, tag: "kumar",
-          r: "En büyük nakit kaynağını bırakıp kalabalık, kârı düşük ve zaten geride olduğun bir pazara koşarsın. Vizyon kâğıtta güzel durur ama kasayı boşaltır." },
+        { k: "B", t: "Radikal bir yön değişikliği ilan et: ana bilgisayardan çık, tüm gücünü kişisel bilgisayarlara ve tüketici pazarına ver.", s: 30, tag: "kumar",
+          r: "En büyük nakit kaynağını bırakıp kalabalık, kârı düşük ve zaten geride olduğun bir pazara koşarsın. Yeni strateji kâğıtta güzel durur ama kasayı boşaltır." },
         { k: "C", t: "Şirketi bütün tut: müşteriler her şeyi birleştirecek tek bir ortak istiyor. Maliyetleri tek seferde ve sert biçimde kes, ana bilgisayar fiyatlarını düşür.", s: 85, tag: "kalkan",
           r: "Bankacıların tavsiyesinin tam tersi; ağır bir zarar yazar, on binlerce kişiyle yollarını ayırırsın. Ama her parçayı birleştirebilen tek şirket olmak, parçaların toplamından daha değerli olabilir." },
         { k: "D", t: "Ana bilgisayar marjlarını koru; işten çıkarmaları yıllara yayarak sessizce yap.", s: 20, tag: "kasa",
@@ -854,24 +641,14 @@
       ],
       real: {
         who: "Richard Ansell",
-        role: "Halvorsen’in CEO’su",
+        role: "Nordahl’ın CEO’su",
         k: "C",
         text: [
-          "Yaz ortasında Halvorsen ikinci çeyrekte yaklaşık 8 milyar dolar zarar açıkladı; bunun büyük kısmı yeniden yapılanma gideriydi. O yıl ayrılan on binlerce kişinin üstüne ertesi yıl sonuna kadar on binlercesi daha ayrılacaktı; çeyreklik temettü yarıdan fazla indi. Ansell büyük bir vizyon ilan etmek yerine önce şirketi ayakta tutmaya odaklandı.",
+          "Yaz ortasında Nordahl ikinci çeyrekte yaklaşık 8 milyar dolar zarar açıkladı; bunun büyük kısmı yeniden yapılanma gideriydi. O yıl ayrılan on binlerce kişinin üstüne ertesi yıl sonuna kadar on binlercesi daha ayrılacaktı; çeyreklik temettü yarıdan fazla indi. Ansell uzun vadeli planları bir kenara bırakıp önce nakit ve maliyetlere odaklandı.",
           "Bölünme planını rafa kaldırdı; şirketi bir arada tutmak ilk büyük stratejik adımı oldu. Ana bilgisayar fiyatları düşürüldü ve şirket, başka üreticilerin parçalarını da birleştiren hizmet işine yöneldi; bu iş birkaç yıl içinde hız kazandı.",
-          "Halvorsen o yılı yaklaşık 8 milyar dolar zararla kapattı; yıl sonunda çalışan sayısı zirvedekinin üçte ikisinin altına inmişti. Ertesi yıl 60 milyar doları aşan gelirle yaklaşık 3 milyar dolar kâra döndü."
+          "Nordahl o yılı yaklaşık 8 milyar dolar zararla kapattı; yıl sonunda çalışan sayısı zirvedekinin üçte ikisinin altına inmişti. Ertesi yıl 60 milyar doları aşan gelirle yaklaşık 3 milyar dolar kâra döndü."
         ]
-      },
-      sources: [
-        { t: "Toparlanma yılının faaliyet raporu", pub: "Şirketin kurumsal sitesi", year: "1995", lang: "en",
-          url: "https://www.ibm.com/investor/att/pdf/IBM_Annual_Report_1994.pdf" },
-        { t: "Yeniden yapılanma milyarlarca dolarlık zarar getirdi", pub: "Deseret News / AP", year: "1993", lang: "en",
-          url: "https://www.deseret.com/1993/7/27/19058142/ibm-restructuring-leads-to-a-loss-of-8-billion/" },
-        { t: "Rekor zarar", pub: "Tampa Bay Times", year: "1993", lang: "en",
-          url: "https://www.tampabay.com/archive/1993/07/28/ibm-reports-record-loss/" },
-        { t: "Dönüşüm vaka çalışması", pub: "Harvard Business School", year: "2000", lang: "en",
-          url: "https://store.hbr.org/product/ibm-corp-turnaround/600098" }
-      ]
+      }
     },
     {
       area: "Marka",
@@ -880,7 +657,7 @@
       title: "Üç saatliğine kepenk",
       body: [
         "Ristaldi, bir mahalle kahvecisi olarak başlayıp dünyanın en büyük kahve zincirine dönüştü. İnsanların evle iş arasında oturup iyi kahve içtiği bir yer olmayı vaat ediyordu.",
-        "Ama hızlı büyüme bedelini ödetiyor: mağazalar kalabalık, otomatik makineler hızı artırdı ama tezgâhtaki ustalık kayboldu, kahvenin tadı sıradanlaştı. Ucuz rakipler kapıda; Birkaç hafta önce büyük bir hamburger zinciri menüsüne espresso bazlı içecekler ekledi.",
+        "Ama hızlı büyüme bedelini ödetiyor: mağazalar kalabalık, otomatik makineler hızı artırdı ama tezgâhtaki ustalık kayboldu, kahvenin tadı sıradanlaştı. Ucuz rakipler kapıda; birkaç hafta önce büyük bir hamburger zinciri menüsüne espresso bazlı içecekler ekledi.",
         "Şirketi büyüten eski CEO olarak yılın başında yeniden başa döndün. Çalışanların ve müşterilerin gözü ilk hamlende; markanın neden sıradanlaştığına bir cevap vermen gerekiyor."
       ],
       stats: [["Şirket mağazası (ABD)", "Yedi binden fazla"], ["Barista", "Yüz binden fazla"], ["CEO’nun dönüşü", "Yılın başı"]],
@@ -901,26 +678,10 @@
         k: "D",
         text: [
           "Birkaç hafta sonra bir salı akşamüstü Ristaldi’nin ülkedeki yedi binden fazla şirket mağazası üç saatliğine kapandı; yüz binden fazla çalışan aynı anda espresso eğitimi aldı. Lisanslı mağazalar açık kaldı.",
-          "Basın satış kaybını milyonlarca dolar olarak tahmin etti; sonradan dile getirilen rakam tahminlerden de yüksekti. Aynı akşam büyük bir çörek zinciri küçük boy latte ve espresso içeceklerini bir doların altında sattı.",
+          "Basın satış kaybını milyonlarca dolar olarak tahmin etti. Aynı akşam büyük bir çörek zinciri küçük boy latte ve espresso içeceklerini bir doların altında sattı.",
           "Eğitim tek başına yetmedi: yaz başında ülkede yüzlerce mağazanın kapanacağı açıklandı, on binden fazla pozisyon etkilendi. Ama iki yıl kadar sonra şirket rekor kırdı: gelir 10 milyar doları aştı, net kâr bir önceki yıla göre iki katından fazla arttı."
         ]
-      },
-      sources: [
-        { t: "Baristalar kahve yapmayı yeniden öğreniyor", pub: "NPR", year: "2008", lang: "en",
-          url: "https://www.npr.org/2008/02/27/54932288/starbucks-baristas-relearn-art-of-coffee-making" },
-        { t: "Eski CEO yeniden başa dönüyor", pub: "NBC News / AP", year: "2008", lang: "en",
-          url: "https://www.nbcnews.com/id/wbna22544023" },
-        { t: "Yüzlerce mağaza kapanıyor", pub: "ABC News", year: "2008", lang: "en",
-          url: "https://abcnews.go.com/Business/story?id=5288740" },
-        { t: "Dönüşü anlatan kitaptan bir bölüm", pub: "NPR / VPM", year: "2011", lang: "en",
-          url: "https://www.vpm.org/npr-news/2011-03-25/excerpt-onward" },
-        { t: "Mağaza kapanışlarının resmî duyurusu", pub: "ABD SEC (8-K)", year: "2008", lang: "en",
-          url: "https://www.sec.gov/Archives/edgar/data/829224/000095013408012236/v41893exv99w1.htm" },
-        { t: "Rakibin ucuz latte kampanyası", pub: "Franchising.com", year: "2008", lang: "en",
-          url: "https://www.franchising.com/news/20080225_dunkin_donuts_invites_coffee_lovers_to_enjoy_latte.html" },
-        { t: "Markanın yeniden doğuşu", pub: "Harvard Business School", year: "2014", lang: "en",
-          url: "https://www.library.hbs.edu/working-knowledge/starbucks-reinvented" }
-      ]
+      }
     },
     {
       area: "Gıda güvenliği",
@@ -950,24 +711,10 @@
         k: "B",
         text: [
           "O gece şirket, ürünün güvenli olduğunu yineleyerek erişteyi tüm ülkede raflardan çektiğini açıkladı. Ertesi gün ülkenin gıda düzenleyicisi bütün çeşitlerin toplanmasını ve üretimin durdurulmasını emretti; Brunnhof’un küresel CEO’su başkentte basın toplantısı yaptı. Şirketin ilk tahminine göre maliyet birkaç milyar rupiydi; bunun yaklaşık üçte ikisi mağazalardaki üründü.",
-          "Şirket yasağı mahkemeye taşıdı. Yaklaşık iki ay sonra yüksek mahkeme, şirkete adil bir savunma hakkı tanınmadığı ve testlerin akredite olmayan laboratuvarlarda yapıldığı gerekçesiyle yasağı kaldırdı; satışa dönüş üç laboratuvarda yapılacak yeni testlere bağlandı. Bu arada Hindistan şirketinin başına yeni bir genel müdür gelmişti.",
+          "Şirket yasağı mahkemeye taşıdı. Yaklaşık iki ay sonra bir eyalet yüksek mahkemesi, şirkete adil bir savunma hakkı tanınmadığı ve testlerin akredite olmayan laboratuvarlarda yapıldığı gerekçesiyle yasağı kaldırdı; satışa dönüş üç laboratuvarda yapılacak yeni testlere bağlandı. Bu arada Hindistan şirketinin başına yeni bir genel müdür gelmişti.",
           "Ramiko yıl bitmeden raflara döndü. Pazar payı yaklaşık beş ay sıfıra yakın kaldı; ertesi baharda yaklaşık yarıya çıktı, yaz sonunda liderliği geri aldı ve sonbaharda yarıyı aştı."
         ]
-      },
-      sources: [
-        { t: "Erişte “güvensiz ve tehlikeli” ilan edildi", pub: "Al Jazeera", year: "2015", lang: "en",
-          url: "https://www.aljazeera.com/economy/2015/6/5/indian-maggi-instant-noodles-unsafe-and-hazardous" },
-        { t: "Şirket erişteyi raflardan çekiyor", pub: "Fortune / Reuters", year: "2015", lang: "en",
-          url: "https://fortune.com/2015/06/05/nestle-maggi-noodles-india-lead-health-scare-msg/" },
-        { t: "Toplanan ürünün maliyeti", pub: "FoodNavigator", year: "2015", lang: "en",
-          url: "https://www.foodnavigator.com/Article/2015/06/16/Nestle-estimates-cost-of-withdrawn-Maggi-stock/" },
-        { t: "Mahkeme yasağı kaldırdı", pub: "Down To Earth", year: "2015", lang: "en",
-          url: "https://www.downtoearth.org.in/amp/story/food/temporary-relief-for-nestle-india-after-bombay-high-court-sets-aside-maggi-ban-50720" },
-        { t: "Erişte raflara döndü", pub: "Business Standard", year: "2015", lang: "en",
-          url: "https://www.business-standard.com/article/companies/maggi-returns-to-shop-shelves-115110900801_1.html" },
-        { t: "Pazar payında toparlanma", pub: "Business Today", year: "2016", lang: "en",
-          url: "https://www.businesstoday.in/latest/corporate/story/maggi-makes-a-comeback-wins-market-share-on-sustained-recovery-68477-2016-10-20" }
-      ]
+      }
     }
   ];
 
@@ -996,7 +743,11 @@
   var CUR = RELEASED[RELEASED.length - 1], LATEST = CUR.no;
   var qs = /[?&]s=(\d{3})\b/.exec(location.search);
   if (qs) RELEASED.forEach(function (x) { if (x.no === qs[1]) CUR = x; });
-  var ISSUE = CUR.no, CASES = CUR.cases, KEY = "wishceo.s" + ISSUE;
+  // içeriği yayından sonra değişen sayının cevap anahtarı yenilenir; eski cevaplar yeni dosyalara karışmaz.
+  // 001: birinci dosya değişti (v2). Bildirim onayı ayrı tutulur, eski "wishceo.s001" kaydından okunmaya devam eder (loadList).
+  var KEYV = { "001": "v2" };
+  function keyOf(no) { return "wishceo.s" + no + (KEYV[no] || ""); }
+  var ISSUE = CUR.no, CASES = CUR.cases, KEY = keyOf(ISSUE);
 
   var TYPES = {
     cerrah: { name: "Cerrah", desc: "Neyin kesileceğini bilirsin. Duygusal bağlara değil, şirketi neyin yaşattığına bakarsın ve zor kararı erken alırsın." },
@@ -1093,16 +844,6 @@
     }
   }
 
-  function srcHtml(c) {
-    return '<div class="src"><p class="lbl">Kaynaklar</p><ol role="list">' +
-      c.sources.map(function (s) {
-        return '<li><a href="' + esc(s.url) + '" target="_blank" rel="noopener noreferrer" hreflang="' + s.lang + '">' +
-          esc(s.t) + '<span class="ext" aria-hidden="true">↗</span><span class="sr"> (yeni sekmede açılır)</span></a>' +
-          "<span>" + esc(s.pub + (s.year ? " · " + s.year : "") + (s.lang === "en" ? " · İngilizce" : "")) + "</span></li>";
-      }).join("") +
-      '</ol><p class="src-note">Bu dosya gerçek bir olaya dayanıyor; şirket, ürün ve kişi adları değiştirildi.</p></div>';
-  }
-
   function afterHtml(i) {
     var c = CASES[i], o = opt(i, state.answers[i]), ro = opt(i, c.real.k), diff = o.s - ro.s, last = i === CASES.length - 1;
     var cmp = o.k === c.real.k ? "Gerçek CEO ile aynı kararı verdin."
@@ -1120,7 +861,7 @@
       '<p class="truth-who">' + esc(c.real.who) + " <span>" + esc(c.real.role) + " · seçimi " + c.real.k + "</span></p>" +
       c.real.text.map(function (p) { return "<p>" + esc(p) + "</p>"; }).join("") +
       '<p class="truth-cmp">' + esc(cmp) + "</p>" +
-      srcHtml(c) +
+      '<p class="truth-note">Bu dosya gerçek bir olaya dayanıyor; şirket, ürün ve kişi adları değiştirildi.</p>' +
       "</div>" +
       '<div class="after-nav"><button type="button" class="btn btn-ink" data-act="' + (last || done() ? "report" : "next") + '">' +
       (done() ? "CEO karnemi göster" : "Sonraki dosya") + ' <span aria-hidden="true">→</span></button></div>' +
@@ -1320,7 +1061,7 @@
   // ---------- sayfa: sayı bilgisi ve arşiv ----------
   var WORDS = ["", "Bir", "İki", "Üç", "Dört", "Beş", "Altı"];
   var WORDS_LO = ["", "bir", "iki", "üç", "dört", "beş", "altı"];
-  function yearOf(c) { var m = /\d{4}/.exec(c.place[1] || ""); return m ? m[0] : ""; }
+  function yearOf(c) { return (c.place[1] || "").replace(/^\s*·\s*/, ""); }
   function fillPage() {
     var n = CASES.length;
     Array.prototype.forEach.call(document.querySelectorAll("[data-issue]"), function (el) { el.textContent = "Sayı " + ISSUE; });
@@ -1338,13 +1079,13 @@
     var NEWEST = RELEASED[RELEASED.length - 1];
     var tick = '<span>Sayı ' + NEWEST.no + ' · En yeni <b class="up">▲</b></span>' + NEWEST.cases.map(function (c, i) {
       var y = yearOf(c);
-      return "<span>Dosya " + pad(i + 1) + " · " + esc(c.place[0] + (y ? " " + y : "")) + " · " + esc(c.title) + ' <b class="dn">▼</b></span>';
+      return "<span>Dosya " + pad(i + 1) + " · " + esc(c.place[0] + (y ? ", " + y : "")) + " · " + esc(c.title) + ' <b class="dn">▼</b></span>';
     }).join("") + (RELEASED.length > 1 ? '<span>Arşiv · önceki sayılar açık <b class="up">▲</b></span>' : '<span>Yeni sayılar yolda <b class="up">▲</b></span>');
     Array.prototype.forEach.call(document.querySelectorAll(".ticker-group"), function (g) { g.innerHTML = tick; });
   }
   function avgScore(iss) {
     try {
-      var s = JSON.parse(localStorage.getItem("wishceo.s" + iss.no) || "null");
+      var s = JSON.parse(localStorage.getItem(keyOf(iss.no)) || "null");
       if (!s || !Array.isArray(s.answers) || s.answers.length !== iss.cases.length) return null;
       var sum = 0;
       for (var i = 0; i < iss.cases.length; i++) {
