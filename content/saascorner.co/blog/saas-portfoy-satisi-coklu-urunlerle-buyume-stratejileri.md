@@ -1,6 +1,6 @@
 ---
 title: "SaaS Portföy Satışı: Çoklu Ürünlerle Büyüme Stratejileri"
-description: "SaaS portföy satışı ile müşteri başına geliri nasıl artırırsın? Çoklu ürünlerle büyüme, müşteri sadakati ve krlılık için kanıtlanmış…"
+description: "SaaS portföy satışı ile müşteri başına geliri nasıl artırırsın? Çoklu ürünlerle büyüme, müşteri sadakati ve kârlılık için kanıtlanmış…"
 date: "2026-09-18"
 category: "Satış"
 image: "/_a/fr/images/rZVcUgQcBJ3cTawoQPqrOof2lbs_c1528f26.jpg"
@@ -41,7 +41,7 @@ Satış ekibini tek bir ürünü satmaktan, bütün bir portföyü satmaya geçi
 
 Alt Başlık 3.2: Teşvik ve Komisyon Yapılarını Yeniden Düzenleme
 
-Satış ekiplerinin davranışlarını yönlendiren en güçlü araçlardan biri komisyon planlarıdır. Eğer prim yapın sadece yeni müşteri kazanımını (new logo acquisition) ödüllendiriyorsa, satış temsilcilerin doğal olarak tüm enerjilerini yeni anlaşmalar kapatmaya harcayacak ve mevcut müşterilerdeki büyüme fırsatlarını göz ardı edecektir. SaaS portföy satışı modelini başarıyla uygulamak için teşvik yapılarını bu stratejiyi destekleyecek şekilde yeniden düzenlemen gerekir. Komisyon planları, çapraz satış (cross-sell) ve ek satış (up-sell) hedeflerini de içermelidir. Örneğin, bir temsilcinin priminin bir kısmı yeni müşteri gelirinden, bir kısmı ise mevcut müşterilerden elde edilen ek gelirlerden (expansion revenue) gelebilir. Hatta belirli ürün kombinasyonlarını veya stratejik paketleri satan temsilcilere ek bonuslar (kicker) sunabilirsin. Bu, ekibin odak noktasını sadece anlaşma kapatmaktan, müşteri ilişkilerini derinleştirerek uzun vadeli değer yaratmaya kaydırır. Bir Gartner araştırmasına göre, satış gelirlerinin yüzde 80'i genellikle mevcut müşterilerin yüzde 20'sinden gelir. Bu da gösteriyor ki, mevcut müşterilere odaklanan ve bunu teşvik eden komisyon yapıları, krlılık üzerinde doğrudan ve pozitif bir etkiye sahiptir.
+Satış ekiplerinin davranışlarını yönlendiren en güçlü araçlardan biri komisyon planlarıdır. Eğer prim yapın sadece yeni müşteri kazanımını (new logo acquisition) ödüllendiriyorsa, satış temsilcilerin doğal olarak tüm enerjilerini yeni anlaşmalar kapatmaya harcayacak ve mevcut müşterilerdeki büyüme fırsatlarını göz ardı edecektir. SaaS portföy satışı modelini başarıyla uygulamak için teşvik yapılarını bu stratejiyi destekleyecek şekilde yeniden düzenlemen gerekir. Komisyon planları, çapraz satış (cross-sell) ve ek satış (up-sell) hedeflerini de içermelidir. Örneğin, bir temsilcinin priminin bir kısmı yeni müşteri gelirinden, bir kısmı ise mevcut müşterilerden elde edilen ek gelirlerden (expansion revenue) gelebilir. Hatta belirli ürün kombinasyonlarını veya stratejik paketleri satan temsilcilere ek bonuslar (kicker) sunabilirsin. Bu, ekibin odak noktasını sadece anlaşma kapatmaktan, müşteri ilişkilerini derinleştirerek uzun vadeli değer yaratmaya kaydırır. Bir Gartner araştırmasına göre, satış gelirlerinin yüzde 80'i genellikle mevcut müşterilerin yüzde 20'sinden gelir. Bu da gösteriyor ki, mevcut müşterilere odaklanan ve bunu teşvik eden komisyon yapıları, kârlılık üzerinde doğrudan ve pozitif bir etkiye sahiptir.
 
 ## Portföy Satışında Teknoloji ve Veri Odaklı Yaklaşım
 
@@ -65,7 +65,7 @@ Bir stratejinin işe yarayıp yaramadığını anlamanın tek yolu onu ölçmekt
 
 ## Sonuç
 
-SaaS portföy satışı, sadece bir satış tekniği değil, sürdürülebilir ve krlı bir büyüme için temel bir iş stratejisidir. Tek bir ürüne olan bağımlılığı azaltır, müşteri başına geliri ve yaşam boyu değeri önemli ölçüde artırır ve müşterilerini ekosistemine daha sıkı bağlayarak rekabet avantajı yaratır. Bu yolculuk, müşteri tabanını derinlemesine anlamak, ürünlerini akıllıca paketlemek, satış ekibini doğru yetkinlikler ve teşviklerle donatmak ve tüm süreci veriyle yönetmekten geçer. Unutma, en krlı büyüme fırsatların genellikle kapının dışında değil, zaten içinde bulunduğun mevcut müşteri ilişkilerinde gizlidir. Bugün, müşteri listeni ve ürün portföyünü bu gözle yeniden değerlendirerek ilk adımı atabilirsin.
+SaaS portföy satışı, sadece bir satış tekniği değil, sürdürülebilir ve kârlı bir büyüme için temel bir iş stratejisidir. Tek bir ürüne olan bağımlılığı azaltır, müşteri başına geliri ve yaşam boyu değeri önemli ölçüde artırır ve müşterilerini ekosistemine daha sıkı bağlayarak rekabet avantajı yaratır. Bu yolculuk, müşteri tabanını derinlemesine anlamak, ürünlerini akıllıca paketlemek, satış ekibini doğru yetkinlikler ve teşviklerle donatmak ve tüm süreci veriyle yönetmekten geçer. Unutma, en kârlı büyüme fırsatların genellikle kapının dışında değil, zaten içinde bulunduğun mevcut müşteri ilişkilerinde gizlidir. Bugün, müşteri listeni ve ürün portföyünü bu gözle yeniden değerlendirerek ilk adımı atabilirsin.
 
 ## Sık sorulan sorular
 
