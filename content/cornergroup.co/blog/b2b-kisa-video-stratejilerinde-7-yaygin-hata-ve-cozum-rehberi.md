@@ -80,3 +80,21 @@ Son hata, önceki altı hatanın çözümlerini bir araya getiren ve tüm strate
 ## Sonuç
 
 Corner Group olarak, B2B büyümesini tek bir kanala veya taktiğe indirgenemeyecek kadar karmaşık ve çok katmanlı bir süreç olarak görüyoruz. Kısa video, doğru kullanıldığında bu sürecin en güçlü katalizörlerinden biri olabilir. Ancak bu rehberde detaylandırdığımız gibi, başarı; platform dinamiklerini anlamaktan, satış yerine değer sunmaktan, her adımı ölçmekten, liderleri sürece dahil etmekten, tüm müşteri yolculuğunu düşünmekten, doğru uzmanlarla iş birliği yapmaktan ve tüm bu çabaları entegre bir teknoloji altyapısıyla desteklemekten geçer. Bu yedi hata, aslında yedi büyük fırsat alanını temsil etmektedir. Bu hatalardan kaçınmak ve sunduğumuz çözümleri uygulamak, kısa video çabalarınızı rastgele denemeler olmaktan çıkarıp, şirketinizin büyüme hedeflerine doğrudan hizmet eden, öngörülebilir ve güçlü bir stratejiye dönüştürecektir. Unutmayın, B2B'de en iyi video, en çok izlenen değil, doğru kişiyi harekete geçiren videodur.
+
+## Sık sorulan sorular
+
+### B2B kısa videolarında değer ve satış içeriği nasıl dengelenmeli?
+
+80/20 kuralına göre içeriklerin yüzde 80'i değer sunmalı, yüzde 20'si satış ve marka odaklı olmalıdır. Değer içerikleri hedef kitlenin zorluklarına, sıkıntılı noktalarına ve hedeflerine odaklanır; ürününüzden hiç bahsetmese bile değerlidir. Eğitici rehber videoları, sektör liderleriyle kısa röportajlar ve fark edilmemiş bir problemi gösteren içerikler bu grubun örnekleridir.
+
+### Kısa video performansı izlenme ve beğeni yerine hangi metriklerle ölçülmeli?
+
+Başarı, kampanyanın ana hedefine göre belirlenen KPI'larla ölçülmelidir. Potansiyel müşteri hedefi için tıklama oranı, landing page dönüşüm oranı, form doldurma sayısı ve MQL maliyeti izlenirken, satış hunisine etki için anlaşma kazanma oranına bakılır. UTM parametreleri ve CRM entegrasyonu, trafiğin ve leadlerin hangi videodan geldiğini net biçimde gösterir.
+
+### Zamanı kısıtlı yöneticiler video içeriğine nasıl dahil edilebilir?
+
+En pratik yöntem, ayda bir kez 2 saatlik toplu çekim seansı düzenlemektir. Bu seansta 8-10 farklı video çekilerek 2 aylık içerik tek seferde üretilebilir. Teleprompter ile önceden belirlenmiş anahtar noktaları okumak doğaçlama stresini azaltır, soru-cevap formatı ise daha samimi ve sohbet havasında içerikler ortaya çıkarır.
+
+### B2B'de içerik üreticisi iş birliği için nasıl bir profil seçilmeli?
+
+B2B'de doğru iş ortağı geniş kitleli bir influencer değil, hedef kitlenin güvendiği bir sektör uzmanı veya niş içerik üreticisidir. Takipçi sayısı 5.000 olabilir, ancak bu kişiler tam olarak hedeflediğiniz kitleyse iş birliği çok değerlidir. Ortak webinar, dürüst ürün incelemesi ve uzun vadeli marka elçiliği bu alandaki başlıca iş birliği modelleridir.

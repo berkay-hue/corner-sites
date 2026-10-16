@@ -78,3 +78,21 @@ Innovatech, Corner Group ekosistemine tek bir sorunla (müşteri bulamama) girdi
 Çok markalı bir B2B holding yapısında marka kimliği tutarlılığı, bir logo veya renk paletinden çok daha fazlasıdır. Bu, holdingin temel varoluş nedenini yansıtan stratejik bir disiplindir. Corner Group vaka analizi göstermektedir ki, başarı, katı bir merkezi vizyon ile esnek bir operasyonel özerkliği birleştiren "Merkezi Çekirdek, Esnek Çeper" modelinde yatmaktadır. Bu model, her bir markanın kendi alanında en iyi olmasını sağlarken, holdingin genelinin de uyumlu bir senfoni gibi çalışmasına olanak tanır.
 
 Holding perspektifinden bakıldığında, marka tutarlılığı bir maliyet merkezi değil, bir kâr çarpanıdır. Her bir markanın yarattığı güven ve itibar, diğer markalara miras kalır. Bir markanın kazandığı bir müşteri, doğru entegrasyon stratejileriyle tüm holding için bir yaşam boyu değere dönüşür. Bu, sadece pazarlama sinerjisi değil, aynı zamanda operasyonel verimlilik ve en önemlisi, rakipsiz bir müşteri deneyimi demektir. Müşteri, karşısında bir grup farklı şirket değil, büyüme yolculuğunun her aşamasında yanında olan, tek, güvenilir ve stratejik bir partner görür. Corner Group olarak bizim nihai hedefimiz ve en büyük rekabet avantajımız budur: Parçaların basit bir toplamı olmak yerine, müşterilerimiz için büyümenin her köşesinde değer yaratan, entegre ve vazgeçilmez bir bütün olmaktır.
+
+## Sık sorulan sorular
+
+### "Merkezi Çekirdek, Esnek Çeper" modeli nedir?
+
+"Merkezi Çekirdek, Esnek Çeper", holdingin vizyonunu, değerlerini ve kalite standartlarını sabit tutarken her markanın kendi hedef kitlesine göre özelleşmesine izin veren hibrit bir marka yönetimi yaklaşımıdır. Merkezi Çekirdek; vizyon tutarlılığı, kalite standardı ve isimlendirme stratejisi gibi taviz verilmeyen prensipleri kapsar. Esnek Çeper ise hedef kitleye özel iletişim, görsel kimlikte kontrollü farklılaşma ve bağımsız hizmet inovasyonu için hareket alanı tanır.
+
+### Endorsed brand (onaylayan marka) mimarisi çok markalı holdinglere ne kazandırır?
+
+Endorsed brand mimarisi, holding markasının her alt markanın güvenilirliğini ve uzmanlığını onaylamasını sağlar. Corner Group'ta tüm markalarda "Corner" ekinin tekrarlanması bilinçli bir tercihtir ve bir kalite ile metodoloji mührü işlevi görür. Müşteri bir alt markayı daha büyük bir büyüme ekosisteminin parçası olarak algılar; bu da tekil bir markanın yıllarda inşa edeceği güven kredisini anında sağlar.
+
+### Holding içindeki markalar arasında çapraz satış nasıl yapılmalıdır?
+
+Markalar arası geçiş, çapraz satış hedefiyle değil müşteri değerini yükseltme misyonuyla ve danışmanlık odaklı bir yaklaşımla yapılmalıdır. Bir ekip, müşterinin büyüme yolculuğundaki bir sonraki engeli tespit ettiğinde bunu satış fırsatı olarak değil teşhis olarak ele alır. Geçiş soğuk bir satış telefonuyla değil, mevcut proje yöneticisinin ilgili markadaki uzmanlarla proaktif bir tanışma önermesiyle gerçekleşir.
+
+### Marka tutarlılığını operasyonel olarak destekleyen uygulamalar nelerdir?
+
+Marka tutarlılığı müşteri yolculuğu entegrasyonu, iç kültür ve teknoloji altyapısı olmak üzere üç sütunla desteklenir. Tüm markaların katıldığı "Büyüme Akademisi" iç eğitimleri, Müşteri Yaşam Boyu Değeri ve Markalar Arası Müşteri Geçiş Oranı gibi ortak başarı metrikleri bu sütunların parçasıdır. Tüm markaların aynı merkezi CRM'i ve ortak proje yönetim araçlarını kullanması da 360 derecelik müşteri görünümü ve şeffaflık sağlar.
