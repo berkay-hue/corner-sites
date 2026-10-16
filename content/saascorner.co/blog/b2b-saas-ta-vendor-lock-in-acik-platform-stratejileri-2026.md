@@ -68,3 +68,21 @@ Bir SaaS platformundan diğerine geçmenin bir maliyeti vardır. Buna geçiş ma
 ## Sonuç
 
 B2B SaaS dünyasında tedarikçi bağımlılığı, kaçınılmaz bir kader değil, stratejik bir tercihin sonucudur. Kapalı ekosistemler, tescilli veri formatları ve katı sözleşmelerle dolu bir yolda ilerlemek, kısa vadede kolaylık sunsa da uzun vadede şirketinin esnekliğini, inovasyon kapasitesini ve pazarlık gücünü elinden alır. Ancak gelecek, açıklık ve esneklik üzerine kuruluyor. Açık API'ler, standart veri formatları, birleştirilebilir mimariler ve açık kaynak alternatifleri, gücü yeniden sana veriyor. 2026'ya giden yolda, teknoloji yığınını oluştururken bu ilkeleri benimsemek, sadece bir maliyetten kaçınmak değil, aynı zamanda rekabet avantajı elde etmektir. Bir sonraki SaaS yatırımını yaparken, sadece bugünkü ihtiyaçlarını değil, yarının özgürlüğünü de düşün. Şirketinin geleceğini, seni kilitleyen değil, sana kanat takan platformlarla inşa et.
+
+## Sık sorulan sorular
+
+### Tedarikçi bağımlılığının gizli maliyetleri nelerdir?
+
+Lisans ücretlerinin ötesinde üç gizli maliyet vardır: inovasyon maliyeti, operasyonel verimsizlik ve stratejik esneklik kaybı. Sağlayıcın pazarın gerisinde kalırsa sen de kalırsın, platform süreçlerine uyum sağlayamazsa ekibin verimsiz geçici çözümler üretir. En büyüğü ise yeni bir pazara girmek veya yeni bir iş modeli denemek istediğinde aracın kısıtlamalarına takılmandır.
+
+### Açık API tedarikçi bağımlılığını nasıl önler?
+
+Açık API, verilerini ve işlevlerini diğer araçlarla serbestçe paylaşmanı sağlayarak seni tek bir sağlayıcının ekosistemine hapsolmaktan kurtarır. Böylece her işlev için sınıfının en iyisi aracı seçip bunları birbirine bağlayabilirsin; örneğin Zendesk'te açılan bir talep Asana'da göreve dönüşüp Slack'e bildirim düşebilir. Sağlayıcı seçerken API belgelerinin kapsamına, geliştirici topluluğuna ve API kullanım limitlerine dikkat etmelisin.
+
+### Bir SaaS aracının veri taşınabilirliğini satın almadan önce nasıl test ederim?
+
+Deneme sürümündeyken en kritik verilerini, örneğin müşteri listeni veya proje detaylarını, sistemden dışa aktarmayı dene. Sürecin ne kadar kolay olduğuna, eksik veri olup olmadığına ve verilerin JSON veya CSV gibi standart formatlarda gelip gelmediğine bak. Tescilli veya şifrelenmiş formatlar sunan sağlayıcılardan uzak durmalısın.
+
+### Geçiş maliyetini önceden nasıl hesaplayabilirim?
+
+Geçiş maliyetini doğrudan ve dolaylı maliyetler olarak ikiye ayırarak hesaplarsın. Doğrudan maliyetler yeni platformun lisans ücreti, veri taşıma ve temizleme emeği ile yeni entegrasyonların geliştirme maliyetidir; dolaylı maliyetler ise ekip eğitimi, geçiş sırasındaki verimlilik kaybı ve adaptasyon zorluklarıdır. "Bu platformdan ayrılmak bize ne kadara mal olur?" sorusunun cevabı ne kadar yüksekse, platformun seni hapsetme potansiyeli de o kadar yüksektir.

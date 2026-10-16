@@ -76,3 +76,21 @@ Tüm partnerler aynı değildir ve onları motive eden şeyler de farklılık g�
 ## Sonuç
 
 Başarılı SaaS partner programları inşa etmek, sadece cömert komisyon planları hazırlamaktan çok daha fazlasını gerektirir. Bu, insan psikolojisini anlama ve iş ortaklarınızın kararlarını ve eylemlerini şekillendiren temel davranışsal tetikleyicileri kullanma sanatıdır. Geleneksel teşviklerin ötesine geçip oyunlaştırma, sosyal kanıt, kayıptan kaçınma ve karşılıklılık gibi ilkeleri benimsediğinde, işlemsel bir ilişkiyi dönüştürüp gerçek bir ortaklık kurarsın. Bu, sadece kısa vadeli satışları artırmakla kalmaz, aynı zamanda uzun vadede markanıza tutkuyla bağlı, sadık bir topluluk oluşturur. Bugün programına bak ve sor: Partnerlerimi sadece cüzdanlarıyla mı, yoksa kalpleri ve zihinleriyle mi hedefliyorum? Davranışsal ekonomi prensiplerini uygulamaya başlayarak, partner ekosisteminin tüm potansiyelini ortaya çıkarabilir ve sürdürülebilir bir büyüme motoru yaratabilirsin.
+
+## Sık sorulan sorular
+
+### Geleneksel komisyon modelleri partner motivasyonu için neden yetersiz kalır?
+
+Geleneksel modeller "daha fazla sat, daha fazla kazan" mantığına dayandığı için plato etkisine yol açabilir: partner belirli bir hedefe ulaştığında ek çaba göstermek için motivasyonunu kaybedebilir. Ayrıca bu modeller statü, tanınma ve başarı hissi gibi içsel motivasyonu beslemekte yetersiz kalır. Davranışsal ekonomi bu boşluğu psikolojik tetikleyicilerle doldurur.
+
+### Kayıptan kaçınma ilkesini partner teşviklerinde nasıl kullanırım?
+
+Kayıptan kaçınma, insanların kayıplara kazançlardan daha duyarlı olması demektir; bu yüzden teşviki kazanç yerine potansiyel bir kayıp olarak çerçevelemelisin. Örneğin "hedefe ulaşırsan bonus kazanırsın" yerine "sana ayrılan performans bonusunu korumak için hedefe ulaşman gerekiyor" demek, partneri harekete geçirmek için daha güçlü bir dürtü yaratır. Kazanç ve kayıp çerçeveli mesajları A/B testiyle karşılaştırarak etkisini ölçebilirsin.
+
+### Partner programına oyunlaştırma nasıl uygulanır?
+
+Programına liderlik tabloları, rozetler ve Gümüş, Altın, Platin gibi seviyeler ekleyerek oyunlaştırmayı uygulayabilirsin. Liderlik tablosu partnerler arasında sağlıklı bir rekabet yaratır, rozetler ise topluluk içinde statü ve tanınırlık sağlar. Salesforce'un Trailhead platformu, öğrenmeyi ve sertifika almayı rozet ve puanlarla teşvik eden iyi bir örnektir.
+
+### Partner programının başarısını hangi metriklerle ölçmeliyim?
+
+Kapanan anlaşma sayısı ve gelir gibi sonuç metriklerinin yanında davranışsal verileri de izlemelisin. Partnerlerin portala ne sıklıkla girdiği, hangi eğitim materyallerini tamamladığı ve pazarlama kaynaklarını ne sıklıkla indirdiği, katılım seviyeleri hakkında değerli bilgiler verir. "Eğitim tamamlama oranı" veya "pazarlama materyali indirme sayısı" gibi bir katılım metriğini KPI olarak belirlemek iyi bir başlangıçtır.

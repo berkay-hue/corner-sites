@@ -68,3 +68,21 @@ Ne kadar önlem alırsan al, hiçbir sistem yüzde 100 güvenli değildir. Bir v
 ## Sonuç
 
 CRM ve veri etiği, artık birbirinden ayrı düşünülemeyecek iki kavramdır. Müşteri verilerini yönetmek, sadece teknolojik bir görev değil, aynı zamanda derin bir ahlaki sorumluluktur. Yasalara uymak minimum gerekliliktir; gerçek başarı ise şeffaflık, dürüstlük ve müşteri gizliliğine saygı üzerine kurulu bir kültür inşa etmekten geçer. Etik bir yaklaşım benimsemek, kısa vadede ek bir çaba gibi görünebilir, ancak uzun vadede en karlı yatırımdır. Müşteri güvenini kazandığında, sadece bir ürün veya hizmet satmış olmazsın; sadık bir ortak, markanı savunacak bir elçi kazanırsın. Şimdi CRM süreçlerini gözden geçirme ve kendine şu soruyu sorma zamanı: Müşterilerimin bana emanet ettiği verilere layık mıyım? Cevabın evet ise, geleceğin en başarılı markalarından biri olma yolunda doğru adımları atıyorsun demektir.
+
+## Sık sorulan sorular
+
+### Veri etiği neden müşteri sadakatini doğrudan etkiler?
+
+Çünkü müşteriler verilerinin etik dışı kullanıldığını fark ettiğinde o şirketten alışveriş yapmayı bırakabilir. Salesforce'un raporuna göre tüketicilerin yüzde 73'ü böyle bir durumda alışverişi bırakacağını belirtiyor. Verilerine saygı duyulduğunu hisseden müşteriler ise daha sadık olur ve bu da daha yüksek müşteri yaşam boyu değeri anlamına gelir.
+
+### Müşteriden veri toplarken rızayı etik bir şekilde nasıl almalıyım?
+
+Veriyi neden istediğini, nasıl kullanacağını ve ne kadar süreyle saklayacağını açık ve anlaşılır bir dille belirterek bilgilendirilmiş rıza almalısın. Önceden işaretlenmiş onay kutucukları ve karmaşık hukuki metinler yerine, örneğin bültenin içeriğini ve abonelikten ayrılma hakkını net şekilde yazan ifadeler kullan. CRM sistemin de hangi müşterinin ne zaman, hangi amaçla ve hangi kanaldan onay verdiğini kaydetmelidir.
+
+### Veri minimizasyonu nedir, CRM'de nasıl uygulanır?
+
+Veri minimizasyonu, iş hedeflerin için kesinlikle gerekli olan minimum veriyi toplaman demektir. Örneğin bir B2B demo formunda şirket adı, iş e-postası ve telefon numarası istemek mantıklıdır, ancak doğum tarihi veya ev adresi istemek bu ilkeye aykırıdır. CRM'deki her veri alanının bir amacı olmalı; gereksiz veri hem depolama maliyetini hem de olası bir ihlaldeki riski büyütür.
+
+### Veri ihlali yaşandığında ilk ne yapmalıyım?
+
+İlk iş durumu örtbas etmek değil, etkilenen müşterileri mümkün olan en kısa sürede doğrudan ve dürüst bir şekilde bilgilendirmektir. Duyurunda ne olduğunu, hangi verilerin etkilendiğini, riski azaltmak için hangi adımları attığını ve müşterilerin kendilerini korumak için ne yapması gerektiğini açıkça belirt. Bunu yapabilmek için önceden hazırlanmış bir kriz iletişim planın olmalıdır.
