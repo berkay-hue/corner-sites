@@ -168,3 +168,21 @@ Bu yaklaşım, toplantıları daha verimli, objektif ve eyleme dönük hale geti
 ## Sonuç
 
 Salesforce ile satış pipeline değerini iyileştirmek, tek seferlik bir proje değil, sürekli bir optimizasyon sürecidir. Sağlam temeller oluşturmakla başlar; net satış aşamaları, ideal müşteri profili ve veri giriş disiplini olmadan en gelişmiş araçlar bile yetersiz kalır. Bu temellerin üzerine, Salesforce'un veri yönetimi, otomasyon ve yapay zeka yeteneklerini bir strateji dahilinde inşa ederek pipeline'ınızı bir reaktif veri deposundan, proaktif bir büyüme motoruna dönüştürebilirsiniz. Unutmayın, amaç sadece pipeline'ı doldurmak değil, doğru fırsatlarla doldurmak, bu fırsatları mümkün olan en verimli şekilde ilerletmek ve tüm bu süreci ölçülebilir, öngörülebilir ve tekrarlanabilir kılmaktır. Salesforce, bu yolculukta size doğru strateji ve kararlılıkla eşlik ettiğinizde, satış potansiyelinizi gerçekleştirmeniz için en güçlü müttefikiniz olacaktır. Şimdi, bu adımlardan birini seçip uygulamaya başlayarak pipeline'ınızın değerini artırma yolundaki ilk adımı atma zamanı.
+
+## Sık sorulan sorular
+
+### Salesforce'ta satış pipeline değeri nasıl iyileştirilebilir?
+
+Pipeline değeri net satış aşamaları, disiplinli veri girişi ve gerçekçi olasılık değerleriyle iyileştirilebilir. Satış sürecinizdeki standart aşamaları Opportunity Stages içine yansıtmak ve her aşama için giriş ve çıkış kriterleri belirlemek tahminleri daha güvenilir hale getirebilir. Path özelliği bu kriterleri temsilcilere görünür kılmaya yardımcı olabilir.
+
+### Probability alanı neden kendi verilerinize göre ayarlanmalıdır?
+
+Varsayılan olasılık değerleri sizin satış gerçekliğinizi yansıtmayabileceği için Probability alanını kendi geçmiş verilerinize göre kalibre etmek önemlidir. Geçmişte kazanılan ve kaybedilen fırsatlara bakarak her aşamanın gerçekçi kazanma olasılığını belirlemek, pipeline değerinin daha doğru hesaplanmasını sağlayabilir.
+
+### Salesforce'ta veri kalitesi nasıl korunabilir?
+
+Veri kalitesi zorunlu alanlar, doğrulama kuralları ve Duplicate Management ile korunabilir. Aktivite takibini alışkanlık haline getirmek ve veri kalitesi panoları kullanmak eksik kayıtları görünür kılabilir. Zenginleştirme entegrasyonları da kayıtlardaki boşlukları doldurmaya yardımcı olabilir.
+
+### Pipeline sağlığı hangi metriklerle izlenmelidir?
+
+Pipeline sağlığı genellikle pipeline değeri, ortalama anlaşma büyüklüğü, kazanma oranı, satış döngüsü süresi ve satış hızı gibi metriklerle izlenebilir. Bu metrikleri rol bazlı panolarda göstermek ve pipeline toplantılarını veriye dayalı yürütmek riskli fırsatların erken fark edilmesine yardımcı olabilir.

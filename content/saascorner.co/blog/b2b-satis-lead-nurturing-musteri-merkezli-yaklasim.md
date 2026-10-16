@@ -148,3 +148,21 @@ Müşteri Edinme Maliyeti (Customer Acquisition Cost - CAC): Nurturing, satış 
 ## Sonuç
 
 B2B SaaS dünyasında rekabet her geçen gün artarken, fark yaratan unsur artık sadece ürününüzün özellikleri değil, aynı zamanda sunduğunuz müşteri deneyimidir. Müşteri merkezli lead nurturing, bu deneyimi satış süreci başlamadan çok önce, ilk etkileşim anından itibaren şekillendirmeye başlar. Bu, potansiyel müşterilerinize sadece birer veri satırı olarak değil, çözülmesi gereken sorunları ve ulaşılması gereken hedefleri olan iş ortakları olarak yaklaşmaktır. Bu bir sprint değil, sabır, empati ve strateji gerektiren bir maratondur. Ancak bu maratonun sonunda sizi bekleyen ödül, sadece artan satış rakamları değil, aynı zamanda markanıza güvenen, sizi sektörde bir otorite olarak gören ve işinizin en büyük savunucuları haline gelen sadık müşterilerdir. Unutmayın, B2B satışında amaç bir ürün satmak değil, bir ilişki başlatmaktır. Müşteri merkezli nurturing, bu ilişkinin en sağlam temelidir.
+
+## Sık sorulan sorular
+
+### Müşteri merkezli lead nurturing geleneksel yaklaşımdan nasıl ayrılır?
+
+Müşteri merkezli nurturing, odağı üründen müşterinin sorunlarına, hedeflerine ve ihtiyaçlarına çevirir. Geleneksel yaklaşım genellikle ürün özelliklerini, faydalarını ve fiyatını öne çıkarır. Müşteri merkezli yaklaşım ise önce eğitici kaynaklarla güven kazanmayı ve müşterinin kendisine yardım edildiğini hissetmesini hedefler.
+
+### Nurturing içeriği satın alma yolculuğunun aşamalarına göre nasıl planlanır?
+
+İçerik genellikle farkındalık, değerlendirme ve karar aşamalarına göre planlanır. Farkındalık aşamasında blog yazıları, rehberler ve sektör raporları sorunu tanımlamaya yardımcı olabilir. Değerlendirme aşamasında vaka çalışmaları ve webinarlar, karar aşamasında ise ücretsiz deneme, müşteri referansları ve kişiselleştirilmiş demolar öne çıkar.
+
+### Lead scoring nurturing sürecinde nasıl kullanılır?
+
+Lead scoring, potansiyel müşterilere demografik bilgilerine ve davranışlarına göre puan atayarak satışa hazır olanları belirlemeye yardımcı olur. Belirli bir puan eşiğini geçen adaylar pazarlama onaylı müşteri olarak kabul edilir ve satış ekibine devredilir. Böylece satış ekibi zamanını satın almaya en yakın adaylara odaklayabilir.
+
+### Satış ve pazarlama ekipleri nurturing sürecinde nasıl uyumlu çalışabilir?
+
+İki ekibin uyumu için ortak tanımlar, yazılı bir hizmet seviyesi anlaşması ve sürekli geri bildirim döngüsü önerilir. Ekiplerin lead, MQL ve SQL gibi terimlerde ortak bir tanımda anlaşması gerekir. Aynı CRM ve otomasyon platformunu kullanmak da veri akışını şeffaflaştırarak her etkileşimin daha bağlamsal olmasını sağlayabilir.

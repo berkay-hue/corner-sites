@@ -290,3 +290,21 @@ Dönüşüm Oranı'ndan Dönüşüm Oranı²'e geçiş, sadece bir metrik deği�
 Unutmayın, yeterlilik tek bir departmanın görevi değildir. Pazarlama, doğru mesajla doğru kitleyi hedefleyerek yeterliliği başlatır. Ürün, sezgisel bir deneyim sunarak ve değeri hızla göstererek kullanıcıyı kendi kendine yeterli hale getirir. Satış, danışman bir yaklaşımla derinlemesine keşif yaparak son onayı verir. Müşteri Başarısı ekibi ise, müşterinin hedeflerine ulaşmasını sağlayarak bu yeterliliği sürekli olarak yeniden teyit eder.
 
 SaaS'ta sürdürülebilir büyüme, sızdıran bir kovayı daha hızlı doldurmaya çalışmakla elde edilmez. Sürdürülebilir büyüme, en başından itibaren kovadaki deliklere uymayan potansiyel müşterileri nazikçe geri çevirerek ve kovaya tam oturan, uzun süre kalacak ve hatta zamanla büyüyecek müşterileri bularak elde edilir. Bu, qualification yolculuğunun nihai hedefidir. Niceliğin cazibesine kapılmayı bırakıp niteliğin gücüne odaklandığınızda, sadece dönüşüm oranınızı değil, işinizin geleceğini de "karesine" yükseltirsiniz.
+
+## Sık sorulan sorular
+
+### Dönüşüm oranı tek başına neden yanıltıcı bir metrik olabilir?
+
+Dönüşüm oranı tek başına bir gösteriş metriğine dönüşebilir, çünkü gelen müşterilerin kalitesini göstermez. Yüksek bir oran; yüksek churn, düşük aktivasyon, aşırı yüklenen destek ekibi ve boşa harcanan satış eforunu gizleyebilir. Bu nedenle huninin her aşamasında bir kalite filtresi uygulanması önerilir.
+
+### PQL nedir ve MQL'den nasıl ayrılır?
+
+PQL, deneme veya freemium sürecinde ürünün temel değerini deneyimleyen, yani "Aha!" anını yaşayan kullanıcıdır. MQL ideal müşteri profiline uyan ve ilgi gösteren ama henüz satışa hazır olmayan bir adayı ifade ederken, PQL'de satın alma niyeti varsayılmaz, ürün içindeki davranışla kanıtlanır. Bu nedenle PQL'ler satış döngülerini kısaltabilir ve müşteri edinme maliyetini düşürebilir.
+
+### BANT, MEDDIC ve CHAMP arasındaki fark nedir?
+
+BANT temel bir nitelendirme çerçevesidir ancak karmaşık B2B SaaS satışlarında yetersiz kalabilir. MEDDIC genellikle kurumsal satışlara uygundur, CHAMP ise müşterinin zorluklarını merkeze alan bir yaklaşım sunar. Hangisinin seçileceği satış sürecinizin karmaşıklığına bağlı olabilir.
+
+### Uygun olmayan bir adayı erken elemek neden önemlidir?
+
+Erken eleme hem zamandan tasarruf sağlar hem de güven oluşturur. Teknik uyum, kaynaklar veya beklentiler örtüşmüyorsa adayı erkenden elemek satış ekibinin enerjisini doğru fırsatlara yönlendirebilir. Danışmanlık odaklı satış yaklaşımı da bu dürüst tutumu destekler.
