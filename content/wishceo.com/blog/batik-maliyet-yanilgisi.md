@@ -7,7 +7,7 @@ image: "/og.png"
 imageAlt: "Batık Maliyet Yanılgısı: “Bırakamayız” Refleksi"
 ---
 
-Bir toplantı düşün. Masada yıllardır süren bir proje var. Bütçe defalarca aşıldı, takvim birkaç kez kaydı, ortada hâlâ ödeme yapan tek bir müşteri yok. Biri çekinerek soruyor: "Bunu durdursak mı?" Odadaki en kıdemli kişi hemen cevap veriyor: "Bu kadar para yatırdık, şimdi mi bırakacağız?"
+Batık maliyet yanılgısı, geri gelmeyecek geçmiş harcamaların gelecekle ilgili bir kararı yönlendirmesidir. Bir toplantı düşün. Masada yıllardır süren bir proje var. Bütçe defalarca aşıldı, takvim birkaç kez kaydı, ortada hâlâ ödeme yapan tek bir müşteri yok. Biri çekinerek soruyor: "Bunu durdursak mı?" Odadaki en kıdemli kişi hemen cevap veriyor: "Bu kadar para yatırdık, şimdi mi bırakacağız?"
 
 Cümle kulağa mantıklı geliyor. Kimse emeğinin boşa gitmesini istemez. Ama içinde gizli bir sorun var: Gelecekle ilgili bir karar, geri gelmeyecek bir geçmişe bakılarak veriliyor. Bunun adı batık maliyet yanılgısı. Bu yazıda ne olduğuna, şirket yönetiminde hangi kılıklara girdiğine ve karar anında onu nasıl yakalayabileceğine bakıyoruz.
 
@@ -95,6 +95,24 @@ Geçmişte harcanan para kararını belirlememeli, ama geçmişten kalan gerçek
 Bir de sonuçla kararı karıştırmamak gerekir. Bir projeyi durdurursun, birkaç yıl sonra başka bir şirket benzer bir fikirle başarılı olur. Bu, kararının yanlış olduğunu tek başına göstermez. Önemli olan, o gün elindeki bilgiyle doğru soruyu sorup sormadığındır. Bu ayrıma [iyi karar ve kötü sonuç üzerine yazımızda](/blog/iyi-karar-kotu-sonuc) daha yakından bakıyoruz.
 
 Kriz anında bu refleks daha da sertleşir. İlk açıklamayı yaptın, ilk adımı attın. Şimdi yön değiştirmek sözünden dönmek gibi görünür. Baskının en yüksek olduğu o ilk saatlerde nasıl düşünebileceğine [krizin ilk 48 saatini anlattığımız yazıda](/blog/krizin-ilk-48-saati) göz atabilirsin.
+
+## Sık sorulan sorular
+
+### Batık maliyet yanılgısı nedir?
+
+Batık maliyet yanılgısı, harcanmış ve hangi kararı verirsen ver geri gelmeyecek para, zaman, emek ya da itibarın gelecekle ilgili bir kararı yönlendirmesidir. Sağlıklı bir kararda bu maliyetler hesaba girmez; tek soru, buradan sonra harcayacağın para, zaman ve emeğin sana en çok neyi getireceğidir.
+
+### Batık maliyet yanılgısına neden düşeriz?
+
+En büyük sebep kaybı kabul etmenin zorluğudur: bir projeyi durdurmak, kaybı gerçek yapan imzayı atmak gibi hissettirir. İtibar kaygısı, ekibe duyulan bağlılık, şirketin kendine anlattığı hikâye ve bitiş çizgisinin hep biraz ileride görünmesi de bu refleksi güçlendirir.
+
+### Batık maliyet yanılgısından nasıl kaçınılır?
+
+Karar anında kendine "Bugün sıfırdan başlasaydık bu işe bu bütçeyle girer miydik?" diye sor ve hesabı geçmişten değil bugünden başlat. Proje başlamadan önce "şu tarihe kadar şu sonucu göremezsek dururuz" diye durma noktanı yazmak da işe yarar.
+
+### Zorlanan bir projeden vazgeçmek her zaman doğru mu?
+
+Hayır. Harcanan para kararını belirlememeli, ama hâlâ üretebilen bir tesis, ekibin gerçekten öğrendikleri ya da sahiden bitmek üzere olan bir ürün gibi gerçek varlıklar geleceğe dair bilgidir ve hesaba girer.
 
 ## Masada sen varsın
 
