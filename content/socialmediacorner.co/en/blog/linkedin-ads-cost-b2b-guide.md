@@ -2,7 +2,7 @@
 title: "LinkedIn Ads Cost: A Guide for B2B Companies"
 description: "How are LinkedIn ad costs calculated? We break down CPC, CPM and minimum budgets, with a realistic budget plan for B2B companies."
 date: "2026-10-11"
-updated: "2026-10-16"
+updated: "2026-10-17"
 category: "Advertising"
 image: "https://images.pexels.com/photos/7876672/pexels-photo-7876672.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
 imageAlt: "LinkedIn Ads Cost: A Guide for B2B Companies"
@@ -124,14 +124,14 @@ Use your own historical data. If you don't have any, start your first campaign w
 
 ### Step 4: Estimate Cost per Lead
 
-Assume your campaign tests show an average cost per lead of around TL 1,500. In that case:
+Cost per lead (CPL) varies by industry, audience, ad format and period, so we don't give a fixed figure here. Take your own value from the platform dashboard, i.e. your Campaign Manager reports, after your first test campaigns. Then:
 
-- 127 leads × TL 1,500 ≈ **TL 190,500 quarterly media budget**
-- Roughly **TL 63,500** per month
+- **Quarterly media budget** ≈ 127 leads × your own CPL
+- **Monthly budget** ≈ quarterly budget ÷ 3
 
 ### Step 5: Check Your Unit Economics
 
-Now ask the critical question: how many of the 15 SQLs do you expect to close, and what's your average contract value? If 25% of SQLs close, you'll gain about 4 new customers. If a customer's annual value is TL 300,000, then TL 190,500 in media spend translates into roughly TL 1.2 million in revenue in the first year. This answers the question "Is LinkedIn expensive?" for your specific company.
+Now ask the critical question: how many of the 15 SQLs do you expect to close, and what's your average contract value? If 25% of SQLs close, you'll gain about 4 new customers. Compare the first-year revenue from those 4 customers (4 × your own average annual customer value) with the media budget you found in Step 4. This answers the question "Is LinkedIn expensive?" for your specific company.
 
 This calculation also highlights the reality of long B2B sales cycles. Rather than judging LinkedIn campaigns on a few weeks of performance, you should set an evaluation window that matches the length of your sales cycle.
 

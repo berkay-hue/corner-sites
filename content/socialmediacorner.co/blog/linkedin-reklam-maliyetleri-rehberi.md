@@ -2,7 +2,7 @@
 title: "LinkedIn Reklamı Maliyeti: B2B Şirketler İçin Rehber"
 description: "LinkedIn reklam maliyetleri nasıl hesaplanır? CPC, CPM ve minimum bütçe kalemlerini, B2B şirketler için gerçekçi bütçe planıyla birlikte anlatıyoruz."
 date: "2026-10-11"
-updated: "2026-10-16"
+updated: "2026-10-17"
 category: "Reklam"
 image: "https://images.pexels.com/photos/7876672/pexels-photo-7876672.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
 imageAlt: "LinkedIn Reklamı Maliyeti: B2B Şirketler İçin Rehber"
@@ -124,14 +124,14 @@ Kendi geçmiş verilerinizi kullanın. Veri yoksa ilk kampanyada makul tahminler
 
 ### Adım 4: Lead Başına Maliyeti Tahmin Edin
 
-Kampanya testlerinizde lead başına maliyetin ortalama 1.500 TL civarında çıktığını varsayalım. Bu durumda:
+Lead başına maliyet (CPL) sektöre, hedef kitleye, reklam formatına ve döneme göre değişir; bu yüzden burada sabit bir rakam vermiyoruz. Kendi değerinizi ilk test kampanyalarınızdan sonra platform panelinden, yani Campaign Manager raporlarından alın. Sonra:
 
-- 127 lead × 1.500 TL ≈ **190.500 TL çeyreklik medya bütçesi**
-- Aylık olarak yaklaşık **63.500 TL**
+- **Çeyreklik medya bütçesi** ≈ 127 lead × kendi CPL değeriniz
+- **Aylık bütçe** ≈ çeyreklik bütçe ÷ 3
 
 ### Adım 5: Birim Ekonomisini Kontrol Edin
 
-Şimdi kritik soruyu sorun: 15 SQL'den kaç tanesinin satışa dönüşmesini bekliyorsunuz ve ortalama sözleşme değeriniz nedir? SQL'lerin %25'i kapanıyorsa yaklaşık 4 yeni müşteri elde edersiniz. Bir müşterinin yıllık değeri 300.000 TL ise 190.500 TL'lik medya harcaması, ilk yılda yaklaşık 1,2 milyon TL'lik gelir anlamına gelir. Bu tablo, "LinkedIn pahalı mı?" sorusuna kendi şirketiniz özelinde cevap verir.
+Şimdi kritik soruyu sorun: 15 SQL'den kaç tanesinin satışa dönüşmesini bekliyorsunuz ve ortalama sözleşme değeriniz nedir? SQL'lerin %25'i kapanıyorsa yaklaşık 4 yeni müşteri elde edersiniz. Bu 4 müşterinin ilk yıl getireceği geliri (4 × kendi ortalama yıllık müşteri değeriniz) Adım 4'te bulduğunuz medya bütçesiyle karşılaştırın. Bu tablo, "LinkedIn pahalı mı?" sorusuna kendi şirketiniz özelinde cevap verir.
 
 Bu hesaplama, B2B satış döngülerinin uzun olduğu gerçeğini de görünür kılar. LinkedIn kampanyalarını birkaç haftalık performansa göre yargılamak yerine, satış döngünüzün uzunluğuna uygun bir değerlendirme penceresi belirlemelisiniz.
 
