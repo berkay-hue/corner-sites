@@ -63,7 +63,7 @@ Batık maliyet üç ayrı biçimde karşına çıkar ve her birine ayrı bakmak 
 
 ## Oyundan bir örnek: Tumla Group
 
-Oyundaki ikinci dosya, Tumla Group, bu yanılgıyı düşünmek için iyi bir masa. Tumla 1932'de kurulmuş, yetmiş yılı aşkın bir aile şirketi. Son on yılda markasını her yere taşımış: tema parkları, giyim, takı, video oyunları, bir televizyon dizisi. Yeni setler yalnızca bir kez kullanılan özel parçalarla dolu. Satışlar düşüyor, şirket zarar ediyor, kasadaki para hızla eriyor. Aile de otuzlu yaşlarındaki eski bir danışmanı CEO yapıyor. O kişi sensin.
+Oyunun 001 sayısındaki ikinci dosya, Tumla Group, bu yanılgıyı düşünmek için iyi bir masa. Tumla 1932'de kurulmuş, yetmiş yılı aşkın bir aile şirketi. Son on yılda markasını her yere taşımış: tema parkları, giyim, takı, video oyunları, bir televizyon dizisi. Yeni setler yalnızca bir kez kullanılan özel parçalarla dolu. Satışlar düşüyor, şirket zarar ediyor, kasadaki para hızla eriyor. Aile de otuzlu yaşlarındaki eski bir danışmanı CEO yapıyor. O kişi sensin.
 
 Bu masada batık maliyetin sesi her köşeden gelir. Dört tema parkı kurulmuş. Her yeni ürün hattının arkasında bir ekip, bir sözleşme, bir lansman var. Her biri için birileri "buna çok emek verdik" diyecek. Bir kısmı haklı da olacak, çünkü emek gerçekten verilmiş.
 
@@ -71,7 +71,7 @@ Ama burada sorman gereken şey o emeğin ne kadar büyük olduğu değil. Asıl 
 
 Bir ayrıntıya daha dikkat et. CEO koltuğuna yeni oturdun; parkları, giyim hattını, video oyunlarını açan kararlar senin imzanı taşımıyor. Batık maliyetle mücadelede bu bir avantaj, çünkü eski kararları savunmak zorunda değilsin. Yine de o projelerin arkasında hâlâ ekipler ve onları savunan insanlar var. Onların gözünde her biri bir emek.
 
-Hangi seçeneğe gitmen gerektiğini burada söylemeyeceğiz, gerçekte ne olduğunu da. Dosyayı açıp [kendi kararını ver](/#oyun), sonra gerçek CEO'nun ne yaptığını gör.
+Hangi seçeneğe gitmen gerektiğini burada söylemeyeceğiz, gerçekte ne olduğunu da. Dosyayı açıp [kendi kararını ver](/?s=001#oyun), sonra gerçek CEO'nun ne yaptığını gör.
 
 ## Karar anında sorulacak sorular
 
