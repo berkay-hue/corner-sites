@@ -114,3 +114,21 @@ B2B dünyasında büyüme, artık sadece daha fazla çalışmakla değil, daha a
 Corner Group olarak, farklı markalarımızla edindiğimiz çok yönlü deneyim, bize başarının silolarda değil, entegrasyonda yattığını öğretmiştir. SAAS Corner'ın bulduğu lead'in, Sales Corner'ın otomatize ettiği süreçlerle beslenmesi, CRM Corner'ın kurduğu entegre sistemlerde hayat bulması ve Brand Corner ile Social Media Corner'ın yarattığı marka değerini güçlendirmesi, bütünsel bir büyüme stratejisinin temelidir. n8n gibi esnek araçlar, bu entegrasyonu sağlayan ve her bir "Corner"ı birbirine bağlayan görünmez ama güçlü bir harç görevi görür.
 
 Bu rehberde anlatılanlar, yolculuğun sadece başlangıcıdır. Her işletmenin süreci, hedefi ve teknoloji yığını farklıdır. Önemli olan, otomasyonu bir amaç olarak değil, stratejik hedeflerinize ulaşmanızı sağlayan bir araç olarak görmektir. Büyüme yolculuğunuzda veriyi bir pusula, otomasyonu ise bir motor olarak kullanmaya hazırsanız, verimliliğin ve ölçeklenmenin sınırlarını zorlamaya da hazırsınız demektir. Corner Group, bu yolculukta stratejik bir ortak olarak yanınızdadır.
+
+## Sık sorulan sorular
+
+### Lead zenginleştirme nedir?
+
+Lead zenginleştirme, bir e-posta adresi gibi birincil veriyi kullanarak kişiye ve şirketine dair ek bilgiler eklemektir. Bu bilgiler şirket adı, sektör ve çalışan sayısı gibi firmografik verileri, unvan ve departman gibi kişisel verileri, kullanılan teknolojileri ve satın alma sinyallerini kapsar. Amaç, lead hakkında satış ve pazarlamanın kullanabileceği bütünsel bir görünüm elde etmektir.
+
+### n8n ile lead zenginleştirme akışı nasıl kurulur?
+
+n8n ile lead zenginleştirme akışı, form verisini yakalayan bir Webhook tetikleyicisiyle başlar. Ardından e-postadan alan adı ayıklanır, Clearbit ile şirket ve Hunter.io ile kişi verisi çekilir, Set node'u ile veriler CRM alanlarına uygun şekilde birleştirilir. Son olarak HubSpot node'unun "Create or Update" işlemiyle kayıt CRM'e aktarılır.
+
+### Lead zenginleştirmede API maliyetleri nasıl düşürülür?
+
+API maliyetleri, iş akışına filtreler eklenerek düşürülür. Gmail veya Hotmail gibi kişisel e-posta adresleri zenginleştirme sürecine hiç alınmamalı, yalnızca kurumsal adresler işlenmelidir. CRM'de zaten bulunan ve yakın zamanda güncellenmiş kayıtların tekrar zenginleştirilmemesi için kontrol eklemek de gereksiz çağrıları önler.
+
+### Zenginleştirme aracı veri bulamazsa ne olur?
+
+Zenginleştirme aracı veri bulamazsa, iş akışının durmaması için IF node'uyla bir yedek yol kurulmalıdır. Bu yolda temel bilgiler CRM'e kaydedilip satış ekibine manuel kontrol için Slack bildirimi gönderilebilir. Ayrıca Clearbit sonuç döndürmediğinde Hunter.io gibi ikinci bir kaynağı tetikleyen "şelale" mantığı veri kalitesini artırır.

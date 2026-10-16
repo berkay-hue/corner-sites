@@ -53,3 +53,21 @@ A/B Testleri ve Optimizasyon Stratejinizin statik kalmasına izin vermeyin. Sür
 ## Sonuç
 
 İhracatçı üreticiler için LinkedIn, doğru kullanıldığında, sadece bir sosyal ağ değil, sınırları ortadan kaldıran, hedefli, ölçülebilir ve ölçeklenebilir bir B2B büyüme motorudur. Ancak bu motorun tam potansiyelini ortaya çıkarmak, parçaları rastgele birleştirmekle değil, bir mühendislik yaklaşımıyla mümkündür. Corner Group olarak bizim holding perspektifimiz, bu sürece bütünsel bakmayı gerektirir. Başarı; doğru stratejinin (ICP ve değer teklifi), etkili iletişimin (kişisel marka ve içerik), verimli operasyonun (otomasyon ve Sales Navigator) ve akıllı entegrasyonun (CRM) bir araya gelmesiyle elde edilir. Bu makalede özetlenen adımlar, sadece bir dizi taktik değil, aynı zamanda küresel pazarlarda sürdürülebilir bir rekabet avantajı sağlamak için gereken stratejik zihniyetin bir yansımasıdır. LinkedIn'i bu entegre bakış açısıyla yöneten Türk üreticileri, sadece yeni müşteriler bulmakla kalmayacak, aynı zamanda markalarını uluslararası arenada birer sektör lideri olarak konumlandıracaktır.
+
+## Sık sorulan sorular
+
+### İhracatçı üreticiler LinkedIn outreach'e nereden başlamalı?
+
+İhracatçı üreticiler LinkedIn outreach'e ideal müşteri profilini (ICP) coğrafya, şirket büyüklüğü, sektör ve unvan bazında netleştirerek başlamalıdır. "Avrupa'daki tüm alıcılara" ulaşmaya çalışmak kaynak israfına ve etkisiz mesajlara yol açar. Ardından ihracat müşterisinin lojistik, sertifikasyon ve teslimat gibi önceliklerine cevap veren somut bir değer teklifi oluşturulmalıdır.
+
+### LinkedIn'de ilk mesajda en sık yapılan hata nedir?
+
+En sık yapılan hata, ilk mesajda doğrudan ürün satmaya çalışmaktır. B2B'de güven kurmak zaman aldığı için kişiselleştirilmiş bağlantı isteği, karşılıksız değer sunumu, sorun odaklı soru ve son olarak çözüm odaklı teklif şeklinde ilerleyen çok adımlı bir mesaj dizisi kurgulanmalıdır. Böylece teklif soğuk değil, önceki adımlarda inşa edilen güvene dayanan sıcak bir teklif olur.
+
+### İhracat için LinkedIn Sales Navigator gerekli mi?
+
+Evet, ihracat gibi niş hedeflere ulaşmak için Sales Navigator standart LinkedIn aramasına göre neredeyse zorunludur. 20'den fazla gelişmiş filtre ile şirket büyüklüğü, coğrafya, sektör ve unvana göre nokta atışı listeler oluşturulabilir. Lead ve Account listeleri sayesinde terfi veya yatırım haberi gibi kişiselleştirme fırsatları için bildirim de alınır.
+
+### LinkedIn outreach performansı hangi KPI'larla ölçülmeli?
+
+LinkedIn outreach performansı bağlantı kabul oranı, yanıt oranı, pozitif yanıt oranı, toplantı ayarlama oranı, oluşturulan lead sayısı ve lead başına maliyet ile ölçülmelidir. Görüntüleme veya beğeni gibi boş metriklerden kaçınmak gerekir. Örneğin %20'nin altındaki bir bağlantı kabul oranı, hedeflemenin veya bağlantı notunun etkisiz olduğuna işaret eder.

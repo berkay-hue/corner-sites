@@ -84,3 +84,21 @@ Huni sonrası aşama, satış akışınızı bir çizgi değil, bir döngü hali
 ## Sonuç
 
 B2B satış akışı, bir kez kurulup unutulacak statik bir yapı değildir. Aksine, sürekli olarak ölçülmesi, analiz edilmesi ve optimize edilmesi gereken yaşayan, dinamik bir sistemdir. Bu rehberde adım adım ele aldığımız süreç, pazarlamadan satışa, müşteri hizmetlerinden stratejik büyümeye kadar tüm iş fonksiyonlarını birbirine bağlayan bütünsel bir yaklaşımı temsil eder. Corner Group olarak biz, bu parçaların her birindeki derin uzmanlığı (SAAS Corner ile müşteri bulma, Sales Corner ile otomasyon, CRM Corner ile sistem entegrasyonu, Brand Corner ve Social Media Corner ile marka inşası) tek bir holding vizyonu altında birleştiriyoruz. Çünkü gerçek başarının, bu siloları yıkarak, tüm çarkların birbiriyle uyum içinde çalıştığı, veriye dayalı ve müşteri odaklı bir büyüme makinesi inşa etmekten geçtiğini biliyoruz. Satış akışınızı bir maliyet merkezi olarak değil, şirketinizin en değerli varlığı olan öngörülebilir gelir yaratma motoru olarak görmeye başladığınızda, sürdürülebilir başarının kapısını aralamış olursunuz.
+
+## Sık sorulan sorular
+
+### B2B satış akışı oluşturmaya nereden başlanmalı?
+
+B2B satış akışı oluşturmaya İdeal Müşteri Profili (ICP) ve alıcı personaları tanımlayarak başlanmalıdır. Kime konuştuğunuz netleştikten sonra değer teklifinizi ve konumlandırmanızı keskinleştirmeniz gerekir. Son olarak MQL ve SQL sayıları, dönüşüm oranları, CAC, LTV ve satış döngüsü uzunluğu gibi başarı metriklerini (KPI) en baştan belirlemek, sürecin ölçülebilir olmasını sağlar.
+
+### Satış hunisinde TOFU, MOFU ve BOFU ne anlama gelir?
+
+TOFU huninin üstünü, yani farkındalık yaratma ve müşteri çekme aşamasını; MOFU huninin ortasını, yani ilgi besleme ve niteliklendirme aşamasını; BOFU ise huninin altını, yani karar anını ve satışın kapanışını ifade eder. TOFU'da SEO, içerik ve LinkedIn gibi kanallarla görünürlük sağlanırken MOFU'da MQL tanımı, besleme dizileri ve lead scoring ile adaylar olgunlaştırılır. BOFU'da ise SQL'ler belirlenir, demolar yapılır ve teklif ile sözleşme süreçleri yönetilir.
+
+### Bir lead'in SQL olduğuna nasıl karar verilir?
+
+Bir lead'in SQL olup olmadığına karar verirken genellikle BANT metodolojisi, yani bütçe, yetki, ihtiyaç ve zaman çizelgesi kriterleri kullanılır. Bu kriterleri karşılayan aday, satın almaya yakın kabul edilerek satış ekibine devredilir. Böylece satış ekibi zamanını henüz hazır olmayan adaylarla harcamaz ve karar aşamasındaki fırsatlara odaklanabilir.
+
+### Satış kapandıktan sonra satış akışında neler yapılmalı?
+
+Satış kapandıktan sonra müşterinin başarılı bir onboarding süreciyle ürüne alıştırılması ve sadakatinin sistematik olarak yönetilmesi gerekir. Müşteri sağlık puanı ile churn riski erkenden izlenebilir, uygun müşterilere up-sell ve cross-sell fırsatları sunulabilir. NPS gibi anketlerle düzenli geri bildirim toplamak, memnun müşterilerden vaka çalışmaları üretmek ve bir referans programı kurmak da huniyi yeni müşterilerle besler.

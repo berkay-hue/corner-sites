@@ -84,3 +84,21 @@ Altı ayın sonunda elde edilen sonuçlar, sadece InnovateAnalytics yönetimini 
 InnovateAnalytics vaka çalışması, B2B SaaS büyümesinin sadece daha fazla bütçe veya daha fazla aktivite ile sağlanamayacağının canlı bir kanıtıdır. Gerçek ve sürdürülebilir büyüme, stratejik bir zihniyet değişikliği gerektirir. Hesap Bazlı Pazarlama, bu değişikliğin en güçlü aracıdır. Ancak ABM, tek başına bir pazarlama taktiği veya bir yazılım değildir; şirketin tamamını kapsayan, veri odaklı, müşteri merkezli ve satış ile pazarlamanın tam entegrasyonunu gerektiren bir iş felsefesidir.
 
 Corner Group olarak, bu felsefeyi holding yapımızın sunduğu benzersiz avantajlarla hayata geçiriyoruz. SAAS Corner'ın analitik zekası doğru hedefleri bulur, Sales Corner'ın otomasyon gücü bu hedeflere verimli bir şekilde ulaşır, CRM Corner'ın sistem entegrasyonu tüm süreci ölçülebilir kılar, Brand Corner ve Social Media Corner ise doğru mesajı doğru kanallardan ileterek markayı bir düşünce lideri olarak konumlandırır. Bu entegre yaklaşım, parçaların toplamından çok daha büyük bir bütün yaratır. InnovateAnalytics'in başarısı, bu sinerjinin bir sonucudur. B2B pazarında gürültüden sıyrılıp en değerli müşterilerin dikkatini çekmek isteyen şirketler için mesaj nettir: Okyanusa ağ atmayı bırakın. Zıpkınınızı alın, hedefinizi belirleyin ve her atışınızı stratejik bir isabete dönüştürün. Büyümenin gerçek anahtarı buradadır.
+
+## Sık sorulan sorular
+
+### Hesap Bazlı Pazarlama (ABM) nedir?
+
+Hesap Bazlı Pazarlama (Account-Based Marketing - ABM), en değerli potansiyel müşterileri en başından belirleyip tüm pazarlama ve satış eforunu bu hedeflere yoğunlaştıran stratejik bir yaklaşımdır. Klasik huni mantığının aksine piramidi tersine çevirir ve hacim yerine hassasiyete odaklanır. Bu nedenle özellikle yüksek değerli müşterilerin hedeflendiği B2B SaaS şirketleri için güçlü bir büyüme modelidir.
+
+### ABM için hedef hesap listesi (TAL) nasıl oluşturulur?
+
+Hedef hesap listesi, CRM verileri, satış ekibinin sahadan topladığı niteliksel bilgiler ve üçüncü parti pazar verileri birleştirilerek keskin bir İdeal Müşteri Profili (ICP) çıkarılmasıyla ve şirketlerin bu profile göre seçilmesiyle oluşturulur. Vaka çalışmasında genel bir tanım yerine yeni bir Veri Direktörü (CDO) ataması, bulut tabanlı veri ambarı yatırımları ve kamuya açık uyumluluk raporları gibi spesifik kriterler kullanılmış ve 50 şirketlik bir liste elde edilmiştir. Ardından her hedef hesapta CFO, CTO ve COO gibi kilit kişiler belirlenerek karar sürecindeki rollerine göre bir kişiselleştirme matrisi hazırlanmıştır.
+
+### ABM kampanyasında hangi kanallar ve içerikler kullanılır?
+
+ABM kampanyası, "Air Cover" (Hava Desteği) denen geniş çaplı bilinirlik faaliyetleriyle "Ground Game" (Saha Oyunu) denen birebir temasların birlikte yürütülmesine dayanır. Hava desteğinde LinkedIn üzerinde hedefe yönelik reklam kampanyaları ve düşünce liderliği içerikleri, saha oyununda ise kişiselleştirilmiş e-postalar ve üst düzey yöneticilere fiziksel posta paketleri kullanılmıştır. En stratejik 10 hesap için o şirkete özel analiz raporları hazırlanmış, tüm süreç Salesforce, HubSpot ve 6sense veya Demandbase gibi entegre araçlarla yönetilmiştir.
+
+### ABM vaka çalışmasında hangi sonuçlar elde edildi?
+
+Üç aylık hazırlığın ardından gelen altı aylık uygulama sonunda ortalama anlaşma değeri (ACV) %180 arttı ve satış döngüsü ortalama %40 kısaldı. Hedef listedeki 50 şirketin %60'ı (30 şirket) ile anlamlı bir diyalog kuruldu ve bu şirketlerin %40'ı (20 şirket) nitelikli satış fırsatına (SQL) dönüştü. Pazarlama bütçesinin genel yatırım getirisi de önceki döneme göre 5 kat arttı.

@@ -78,3 +78,21 @@ Bu entegre model, parçaların toplamından daha büyük bir bütün yaratır. H
 B2B pazarlamasının ve satışının geleceği, daha fazla lead üretmek üzerine değil, doğru lead'leri bulmak ve onlara en değerli deneyimi sunmak üzerine kuruludur. AI destekli lead skorlama, bu paradigma değişiminin merkezinde yer almaktadır. Artık en çok bağıran değil, en akıllı ve en ilgili olan kazanacaktır. Bu teknoloji, satış ve pazarlama ekiplerinize bir süper güç kazandırır: hangi kapıyı çalacaklarını, ne zaman çalacaklarını ve kapı açıldığında ne söyleyeceklerini bilme yeteneği.
 
 Geleneksel, kural tabanlı sistemlerin belirsizliğinden ve verimsizliğinden, makine öğrenmesinin sunduğu kesinliğe ve öngörülebilirliğe geçiş, artık bir lüks değil, rekabette öne geçmek için stratejik bir zorunluluktur. Bu dönüşüm, doğru teknoloji, temiz veri, sağlam bir strateji ve tüm gelir operasyonlarınızın tam bir hizalanmasını gerektirir. Corner Group olarak, bu yolculuğun her adımında size rehberlik etmek için buradayız. Bütünsel bakış açımız ve entegre hizmetlerimizle, AI'ın gücünü sadece potansiyel müşteri skorlarınızı değil, tüm büyüme potansiyelinizi en üst düzeye çıkarmak için kullanmanıza yardımcı oluyoruz. Potansiyel müşterilerinizi birer sayı olarak görmeyi bırakıp, her birini veriyle aydınlatılmış birer fırsat olarak görmeye hazır mısınız? Büyümenin bir sonraki aşaması burada başlıyor.
+
+## Sık sorulan sorular
+
+### AI destekli lead skorlama nedir?
+
+AI destekli lead skorlama, potansiyel müşterilerin satın alma olasılığını geçmiş verilerden öğrenen makine öğrenmesi modelleriyle tahmin etme yöntemidir. Kural tabanlı sistemlerin sabit puanları yerine, müşteriye dönüşen ve dönüşmeyen lead'lerin verilerindeki gizli kalıpları ve korelasyonları kullanır. Böylece satış ekibi zamanını gerçekten satın almaya hazır potansiyel müşterilere ayırabilir.
+
+### Geleneksel lead skorlama ile AI lead skorlama arasındaki fark nedir?
+
+Temel fark, geleneksel skorlamanın sabit ve öznel kurallara dayanması, AI skorlamanın ise verilerden öğrenip kendini sürekli güncellemesidir. Geleneksel sistemler bir eylemin neden yapıldığını anlamaz ve genellikle yalnızca pazarlama otomasyon platformundaki verilerle sınırlı kalır. AI modelleri ise CRM notları, davranışsal veriler ve sosyal medya etkileşimleri gibi farklı kaynakları birleştirerek dinamik skorlar üretir.
+
+### AI lead skorlama modeli için hangi veriler gerekir?
+
+Bir AI lead skorlama modeli için demografik ve firmografik veriler, davranışsal veriler, satış etkileşim verileri ve sosyal medya verileri gerekir. Şirket büyüklüğü ve sektör gibi bilgiler; web sitesi ziyaretleri, e-posta etkileşimleri ve içerik indirmeleri; satış temsilcilerinin CRM notları ve sosyal medya etkileşimleri bu kapsamdadır. Bu verilerin entegre ve temiz bir veri setinde birleştirilmesi, projenin başarısı için temel ön koşuldur.
+
+### Lead skorları satış ve pazarlama arasındaki uyumu nasıl iyileştirir?
+
+Lead skorları, "nitelikli lead" tanımı konusundaki anlaşmazlığı ortadan kaldıran objektif bir ölçüt sunarak uyumu iyileştirir. Yüksek skorlu lead'ler SQL olarak doğrudan satış temsilcisine atanır, orta skorlular MQL olarak besleme kampanyalarına alınır, düşük skorlular ise düşük maliyetli bültenlerle takip edilir. Bu sayede her potansiyel müşteri yolculuğunun aşamasına uygun deneyimi alırken satış ekibi yalnızca en sıcak fırsatlara odaklanır.

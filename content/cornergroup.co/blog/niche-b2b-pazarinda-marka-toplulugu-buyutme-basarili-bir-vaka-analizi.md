@@ -100,3 +100,21 @@ Pazarlama, satış, marka ve teknoloji departmanları kendi silolarında çalı�
 ## Büyümenin Yeni Paradigması
 
 CyberVanguard'ın hikayesi, B2B pazarında başarının artık en yüksek sesle bağırmakla değil, en değerli sohbet ortamını yaratmakla ilgili olduğunu kanıtlamaktadır. Niche pazarlardaki dar ve ulaşılması zor kitleler, kendilerine bir şey satılmasından yorulmuş durumdalar; ancak ait olacakları, öğrenecekleri ve katkıda bulunacakları bir topluluğun parçası olmaya her zamankinden daha fazla istekliler. Bir marka topluluğu inşa etmek, sadece bir pazarlama taktiği değil, pazarınızın merkezine yerleşmenizi sağlayan, rakiplerinize karşı size kalıcı bir üstünlük kazandıran ve sürdürülebilir büyümeyi garantileyen stratejik bir iş modelidir. Corner Group olarak bizler, bu yeni büyüme paradigmasını benimsemeye hazır olan ve sadece müşteri listelerini değil, gerçek ve kalıcı ilişkiler ağını büyütmek isteyen vizyoner B2B liderlerinin stratejik ortağı olarak, bu yolculukta onlara rehberlik etmeye devam ediyoruz. Gelecek, ürün satanların değil, topluluk kuranların olacaktır.
+
+## Sık sorulan sorular
+
+### Niche B2B pazarında marka topluluğu neden önemlidir?
+
+Niche B2B pazarlarında marka topluluğu, dar ve ulaşılması zor karar alıcı kitlesinin güvenini kazanmanın en etkili yoludur. Bu pazarlarda müşteriler bir ürün değil, kritik altyapılarını riske atmamak için bir güvence satın alır ve bu düzeyde güven reklamla veya soğuk e-postayla inşa edilemez. Topluluk, markayı bir tedarikçiden vazgeçilmez bir stratejik ortağa dönüştürür.
+
+### B2B marka topluluğu için hangi platform seçilmeli?
+
+Platform, hedef kitlenin en aktif olduğu yere göre seçilmelidir ve bu vakada ana üs LinkedIn olarak belirlenmiştir. Herkese açık bir şirket sayfası yerine, profesyonellerin özgürce bilgi paylaşabileceği kapalı ve özel bir LinkedIn Grubu kurulmuştur. Grubun kuralı net tutulmuş, satış konuşmasına izin verilmemiş ve marka grubun sahibi değil ev sahibi olarak konumlandırılmıştır.
+
+### Topluluk üyeleri satış fırsatına nasıl dönüştürülür?
+
+Topluluk üyeleri, davranışlarından gelen sinyallerin tespit edilip puanlanmasıyla satış fırsatına dönüştürülür. Hangi tartışmalara katıldıkları, hangi webinarı sonuna kadar izledikleri ve hangi whitepaper'ı indirdikleri satın alma niyetini gösterir. Bu üyelere soğuk satış mesajı yerine kişiselleştirilmiş bir değer teklifiyle yaklaşılır ve ardından ilgi alanlarına göre tasarlanmış besleme akışlarına dahil edilirler.
+
+### Topluluk odaklı büyüme stratejisi ne zaman sonuç verir?
+
+Topluluk odaklı büyüme sabır gerektirir ve bu vakada ilk altı ay temel atma ve güven inşa etme süreciyle geçmiştir. 18 aylık süreç sonunda topluluk kaynaklı MQL sayısı yüzde 450 artmış, ortalama satış döngüsü 9 aydan 5 aya düşmüş ve müşteri edinme maliyeti yüzde 60 azalmıştır. Kapanma oranı da yüzde 22'den yüzde 45'e yükselmiştir.

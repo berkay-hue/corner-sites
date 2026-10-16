@@ -82,3 +82,21 @@ Teoriyi pratiğe dökmek için, B2B markalarının hemen uygulayabileceği bazı
 B2B dünyası, dijital dönüşümün hızıyla ve artan rekabetle birlikte geri dönülmez bir şekilde değişiyor. Bu yeni düzende, sadece rasyonel argümanlara dayanan, özellikleri ve fiyatı merkeze alan markalar geride kalmaya mahkumdur. Kazananlar, B2B karar vericilerinin de birer insan olduğunu anlayan, onların korkularına, umutlarına, hırslarına ve güven arayışlarına hitap eden markalar olacaktır.
 
 Corner Group olarak, büyümenin sadece rakamlardan ibaret olmadığına inanıyoruz. Büyüme; kurulan ilişkiler, yaratılan güven ve anlatılan ilham verici hikayelerle sürdürülebilir hale gelir. SAAS Corner'dan Social Media Corner'a kadar tüm markalarımızın sinerjisi, bu felsefeyi hayata geçirmek üzerine kuruludur. Duygusal hikaye anlatıcılığı, artık pazarlama departmanının bir "ekstrası" veya "hoş bir detayı" değildir. Müşteri bulmaktan satışa, sistem entegrasyonundan marka sadakatine kadar tüm büyüme hunisini besleyen stratejik bir omurgadır. Rasyonel kalenin kapılarını çalmak yerine, o kalenin içindeki insanlara hitap eden bir hikaye anlattığınızda, kapıların sizin için ardına kadar açıldığını göreceksiniz. Geleceğin B2B liderleri, en iyi teknolojiye sahip olanlar değil, en iyi hikayeyi anlatanlar olacaktır.
+
+## Sık sorulan sorular
+
+### B2B satın alma kararlarında duygular gerçekten rol oynar mı?
+
+Evet, B2B kararları çoğu zaman B2C kararlarından daha yüksek kişisel risk içerdiği için duygular belirleyici bir rol oynar. Yanlış bir seçim karar vericinin kariyerini tehlikeye atabilirken doğru bir karar onu departmanının kahramanı yapabilir; bu da korku, umut ve başarma arzusu gibi güçlü duyguları tetikler.
+
+### B2B hikaye anlatıcılığında kahraman kim olmalıdır?
+
+B2B hikaye anlatıcılığında kahraman her zaman müşteri olmalıdır, marka değil. Markanın rolü, kahramana yolculuğunda yardımcı olan bilge rehber veya ona ihtiyaç duyduğu aracı veren yardımcı karakter olmaktır.
+
+### B2B hikayelerinde hangi duygusal tetikleyiciler kullanılmalıdır?
+
+B2B hikayeleri güven, yetkinlik ve aidiyet duygularını beslemelidir. Şeffaf bir başarısızlık hikayesi veya kurucu hikayesi güven inşa eder, eğitici içerikler okuyucuya daha yetkin olduğunu hissettirir, müşteri toplulukları ve başarıların kutlanması ise aidiyet duygusu yaratır.
+
+### B2B markaları hangi hikaye türlerini kullanabilir?
+
+B2B markaları kurucu hikayesi, dönüşüm odaklı müşteri başarı hikayesi, "başarısızlık" hikayesi ve sektörün geleceğine dair vizyoner anlatı gibi hikaye türlerini kullanabilir. Bu formatlar, müşteriyi kahraman yapma, çatışmayı netleştirme ve dönüşümü somutlaştırma gibi stratejik kuralları uygulamanın pratik yollarıdır.

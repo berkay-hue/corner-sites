@@ -90,3 +90,21 @@ SPIN, güçlü olduğu kadar, yanlış uygulandığında ters tepebilen bir meto
 ## Sonuç
 
 Corner Group olarak, B2B büyümenin birbirinden izole departmanların çabasıyla değil, bütünsel ve entegre bir stratejiyle mümkün olduğuna inanıyoruz. SPIN Satış Metodolojisi, bu felsefenin satış sahasındaki en somut yansımasıdır. Bu sadece bir soru sorma tekniği değil, müşteriyi anlama, ona değer katma ve uzun vadeli bir ortaklık kurma sanatıdır. Doğru uygulandığında SPIN, SAAS Corner'ın bulduğu nitelikli müşteri adaylarını, Sales Corner'ın otomatize ettiği verimli süreçlerle, CRM Corner'ın sağladığı bütünsel veri altyapısı üzerinde, Brand Corner'ın inşa ettiği güven ve içerik desteğiyle birleştirerek, satışı bir işlem olmaktan çıkarıp stratejik bir danışmanlık hizmetine dönüştürür. Unutmayın, modern B2B dünyasında en başarılı şirketler, en iyi ürünlere sahip olanlar değil, müşterilerinin sorunlarını en derinden anlayan ve onlara en etkili çözümleri sunanlardır. SPIN, bu anlayışa giden yolun anahtarıdır.
+
+## Sık sorulan sorular
+
+### SPIN satış metodolojisi nedir?
+
+SPIN, Neil Rackham tarafından geliştirilen ve Durum (Situation), Sorun (Problem), İma (Implication) ve İhtiyaç-Karşılama (Need-Payoff) soru türlerinden oluşan bir satış görüşmesi yaklaşımıdır. Bu yapı, rastgele sorular sormak yerine müşteriyi kendi ihtiyaçlarını ve çözümünüzün değerini keşfetmeye yönlendiren mantıksal bir akış oluşturur.
+
+### SPIN'de en kritik aşama hangisidir?
+
+En kritik ve ustalık gerektiren aşama İma (Implication) sorularıdır. Bu sorular, müşterinin kabul ettiği sorunun ciddiyetini ve aciliyetini artırarak örtük ihtiyacı açık bir ihtiyaca dönüştürür. Bir sorun tespit edildiğinde en az iki veya üç güçlü İma sorusu sormak hedeflenmelidir.
+
+### SPIN uygularken en sık yapılan hatalar nelerdir?
+
+En yaygın ve en maliyetli hata, İma aşamasını atlayıp hemen çözüm sunmaya geçmektir. Görüşmeyi art arda sorularla bir sorguya çevirmek, yüzeysel sorularla yetinmek ve SPIN'i yalnızca tek bir paydaşa uygulamak da sık görülen diğer hatalardır.
+
+### SPIN görüşmesine nasıl hazırlanılmalı?
+
+İyi SPIN soruları anlık ilhamla değil, titiz bir hazırlıkla ortaya çıkar. Satış ekibi görüşmeden önce müşterinin iş modelini, sektöründeki zorlukları, son haberlerini ve kilit yöneticilerinin LinkedIn profillerini incelemelidir. Böylece görüşmeye doğru Durum ve Sorun sorularıyla hazırlıklı girilir.
