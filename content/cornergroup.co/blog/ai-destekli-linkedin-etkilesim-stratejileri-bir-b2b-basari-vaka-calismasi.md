@@ -29,7 +29,9 @@ Bu dört temel problem, Innovatech'in LinkedIn'deki potansiyelini gerçekleştir
 
 Innovatech'in sorunlarını teşhis ettikten sonra, tek bir çözümün yeterli olmayacağı açıktı. Gerçek bir dönüşüm için, Corner Group'un holding yapısının getirdiği çok disiplinli uzmanlığı devreye sokarak 360 derecelik bir strateji geliştirdik. Bu strateji, yapay zekayı bir araç olarak kullanarak, her bir markamızın yeteneklerini bir orkestra şefi gibi yönetmeyi ve sinerji yaratmayı hedefliyordu.
 
-## Stratejik Temellerin Atılması (Social Media Corner & Brand Corner Sinerjisi) Her başarılı yapının temeli sağlam olmalıdır
+## Stratejik Temellerin Atılması (Social Media Corner & Brand Corner Sinerjisi)
+
+Her başarılı yapının temeli sağlam olmalıdır.
 
 Bizim için bu temel, doğru kitleyi anlamak ve onlara doğru mesajla ulaşmaktı.
 
@@ -86,3 +88,21 @@ Innovatech vaka çalışması, AI destekli stratejilerin mevcut B2B ortamındaki
 ## Sonuç
 
 Innovatech Solutions vaka çalışması, B2B büyümenin artık izole departmanların veya tekil taktiklerin bir sonucu olmadığını göstermektedir. Gerçek ve sürdürülebilir başarı, pazarlama, satış, teknoloji ve marka stratejilerinin, yapay zeka gibi güçlü bir katalizörle bir araya geldiği bütünsel bir mimari gerektirir. Corner Group'un holding perspektifi, tam olarak bu mimariyi tasarlama ve uygulama yeteneği üzerine kuruludur. SAAS Corner'ın veri zekası, Sales Corner'ın otomasyon becerisi, CRM Corner'ın entegrasyon ustalığı, Brand Corner'ın yaratıcı vizyonu ve Social Media Corner'ın stratejik yönetimi birleştiğinde, sonuç, parçaların toplamından çok daha büyük olmaktadır. LinkedIn, doğru strateji ve teknolojiyle birleştiğinde, sadece bir profesyonel ağ değil, öngörülebilir ve ölçeklenebilir bir gelir kaynağıdır. Innovatech'in dönüşümü, dijital gürültüde kaybolan bir potansiyelden, pazarında söz sahibi bir lidere uzanan yolculuğun, doğru ortaklık ve entegre bir büyüme vizyonuyla mümkün olduğunun canlı bir kanıtıdır.
+
+## Sık sorulan sorular
+
+### Innovatech Solutions için ideal müşteri profili nasıl yeniden tanımlandı?
+
+Hedef, genel olarak "Proje Yöneticileri" yerine Agile metodolojisini benimsemiş, Jira ve Slack entegrasyonuna önem veren, 100-500 çalışanı olan teknoloji şirketlerindeki Teknik Proje Liderleri olarak daraltıldı. Bu tanıma ulaşmak için yapay zeka destekli araçlarla demografik verilerin yanında teknografik ve psikografik veriler de analiz edildi. Böylece takip edilen liderler, katılınan gruplar ve kullanılan yazılımlar hedeflemenin parçası oldu.
+
+### Yapay zeka nitelikli müşteri adaylarını nasıl tespit etti?
+
+Yapay zeka, paylaşımlara yapılan yorumları duygu ve niyet analiziyle inceleyip sorun odaklı yorum yapan kişileri otomatik olarak MQL olarak işaretledi. Ardından CRM Corner'ın puanlama modeli devreye girdi: fiyatlandırma sayfasını ziyaret etmek +15, bir webinara kaydolmak +20, satış temsilcisinin e-postasını üç kez açmak +10 puan getirdi. Örneğin 100 puan eşiğini geçen adaylar SQL olarak en uygun satış temsilcisine atandı.
+
+### Altı ayın sonunda satış tarafında hangi sonuçlar alındı?
+
+Aylık ortalama MQL sayısı 15'ten 95'e, satış ekibine aktarılan aylık SQL sayısı ise 5'ten 38'e yükseldi. Bağlantı isteklerinin kabul oranı yüzde 4'ten yüzde 35'e çıktı, satış döngüsü 90 günden 55 güne düştü ve müşteri kazanım maliyeti yüzde 30 azaldı. Doğrudan LinkedIn çabalarına atfedilen yeni sözleşmelerin toplam değeri altı aylık dönemde 750.000 Dolar'ı aştı.
+
+### Bu süreçte yapay zekanın insanlarla ilişkisi nasıl konumlandırıldı?
+
+Yapay zeka, satış ve pazarlama profesyonellerinin yerini alan bir rakip olarak değil, yeteneklerini artıran bir "yardımcı pilot" olarak konumlandırıldı. Tekrar eden ve veri yoğun görevleri yapay zeka üstlenirken empati, stratejik düşünme ve güvene dayalı ilişki kurma insanlara kaldı. Tüm uygulamaların şeffaf, müşteri odaklı ve GDPR ile KVKK gibi veri gizliliği yönetmeliklerine tam uyumlu olması da sürecin temel şartıydı.

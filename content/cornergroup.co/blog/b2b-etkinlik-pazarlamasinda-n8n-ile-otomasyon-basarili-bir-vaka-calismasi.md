@@ -42,3 +42,21 @@ Bu otomasyon stratejisinin sonuçları, geleneksel yöntemlerle kıyaslandığı
 ## Sonuç
 
 B2B etkinlik pazarlaması, şans faktörünün ve manuel çabanın insafına bırakılamayacak kadar değerli bir yatırımdır. Bu vaka çalışmasında görüldüğü gibi, doğru strateji ve n8n gibi esnek otomasyon araçlarıyla birleştiğinde, bir maliyet merkezi olmaktan çıkıp, ölçülebilir, ölçeklenebilir ve yüksek getirili bir büyüme motoruna dönüşebilir. Corner Group olarak biz, bu dönüşümü sadece kendi içimizde yaşamakla kalmıyor, aynı zamanda SAAS Corner, Sales Corner, CRM Corner, Brand Corner ve Social Media Corner markalarımızın birleşik gücüyle müşterilerimizin de bu potansiyeli ortaya çıkarmasına yardımcı oluyoruz. Bizim için otomasyon, sadece iş akışlarını bağlamak değil; müşteri bulma, satış, sistemler ve marka iletişimini tek bir stratejik vizyon altında birleştirerek, B2B büyümesinin geleceğini inşa etmektir. Etkinlikler artık birer temas noktası değil, akıllı ve otomatik büyüme huninizin başlangıç noktasıdır.
+
+## Sık sorulan sorular
+
+### Etkinlik lead yönetiminde neden Zapier veya Make yerine n8n tercih edildi?
+
+n8n, kendi sunucunuzda barındırılabildiği için müşteri verisinin üçüncü parti platformlardan geçmesini engeller ve tam kontrol sağlar. Açık kaynaklı yapısı, görev bazlı fiyatlandırmanın aksine binlerce işlemi ek bir lisans maliyeti olmadan çalıştırmaya imkan tanır. Ayrıca JavaScript/TypeScript kod blokları ve özel düğümlerle standart API'lerin yetersiz kaldığı sistemler bile akışa dahil edilebilir.
+
+### Standa gelen bir ziyaretçinin bilgileri CRM'e nasıl aktarıldı?
+
+Ziyaretçi QR kodu okutup yalnızca Ad-Soyad, Şirket E-postası ve En Büyük Büyüme Zorluğu alanlarını içeren bir Tally formunu doldurdu. n8n e-postayı Hunter.io ile doğruladı, profili zenginleştirdi ve IF düğümüyle segmentledi. Ardından HubSpot'ta kişi ve anlaşma oluşturdu, Slack'e bildirim gönderdi ve SendGrid ile kişiselleştirilmiş e-postayı iletti; tüm süreç 2 dakika içinde tamamlandı.
+
+### Otomasyon sayesinde ilk temas süresi ne kadar kısaldı?
+
+Geleneksel yöntemde ortalama 3 gün olan ilk temas süresi 5 dakikanın altına indi ve bu %99'dan fazla bir iyileşme anlamına geliyor. Hızlı ve kişiselleştirilmiş takip, "Sıcak Lead"lerin toplantıya dönüşme oranını bir önceki yıla göre %45 artırdı. Veri girişinden kaynaklanan hata oranı da sıfıra indi.
+
+### Etkinliğin yatırım getirisi nasıl ölçüldü?
+
+HubSpot'ta her anlaşmanın kaynağı "Global Tech Innovators Summit" olarak etiketlendiği için bu kaynaktan gelen anlaşmalar net biçimde izlenebildi. Etkinlikten 6 ay sonra kapanan anlaşmaların toplam değeri hesaplandı ve etkinlik yatırımının 7 katı bir getiri sağlandığı görüldü. Ekipler ayrıca veri girişi ve raporlama işlerinde yaklaşık 80 saatlik bir süreden tasarruf etti.
