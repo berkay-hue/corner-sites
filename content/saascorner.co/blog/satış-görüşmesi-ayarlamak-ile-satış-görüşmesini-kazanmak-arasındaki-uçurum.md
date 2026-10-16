@@ -15,7 +15,7 @@ Ama ay sonunda rakamlar istenen yerde değil. Görüşmeler geliyor, bir yerde k
 
 Bu tablo birçok şirketin yaşadığı ama tam olarak nerede koptuğunu bir türlü bulamadığı problemdir. Cevap çoğu zaman görüşmenin içindedir.
 
-**Görüşmeye hazırlıksız girmek en pahalı hatadır**
+## Görüşmeye hazırlıksız girmek en pahalı hatadır
 
 Görüşme ayarlandığında iş bitti sanılır. Oysa asıl iş o noktada başlar.
 
@@ -23,7 +23,7 @@ Karşı taraf hakkında ne biliniyor? Şirketin son dönemde ne yaşadığı, ha
 
 Hazırlıklı biri ilk beş dakikada fark yaratır. Soruları daha keskindir, bağlantıları daha güçlüdür, karşı tarafın dünyasına daha hızlı girer. Hazırlıksız biri ise görüşmenin büyük bölümünü şirketini tanıtarak geçirir ve asla gerçek ihtiyaca ulaşamaz.
 
-**Konuşmanın çoğunu siz yapıyorsanız bir şeyler ters gidiyor**
+## Konuşmanın çoğunu siz yapıyorsanız bir şeyler ters gidiyor
 
 Satış görüşmesinde konuşma süresi çoğu zaman tersine çalışır.
 
@@ -33,7 +33,7 @@ Doğru soru sormak konuşmayı yönlendirmekten çok daha güçlüdür. Bir soru
 
 Satış sunmakla değil, dinlemekle başlar.
 
-**"Biz şunu yapıyoruz" yerine "siz bunu yaşıyorsunuz"**
+## "Biz şunu yapıyoruz" yerine "siz bunu yaşıyorsunuz"
 
 Çoğu satış görüşmesi bir şirket tanıtımıyla açılır.
 
@@ -43,7 +43,7 @@ Güçlü bir görüşme ürünle değil, müşteriyle başlar. Hangi sorunu yaş
 
 İnsanlar kendi hikayelerini dinlemeyi sever. Onlara kendi hikayelerini anlattığınızda kapılar açılır.
 
-**İtiraz bir engel değil, bir sinyaldir**
+## İtiraz bir engel değil, bir sinyaldir
 
 Görüşmede itiraz geldiğinde çoğu satışçı savunmaya geçer.
 
@@ -53,7 +53,7 @@ Ama her itiraz aslında bir soruyu saklar. "Fiyat yüksek" çoğunlukla "değeri
 
 İtirazı dinlemek ve arkasındaki gerçek soruyu bulmak, savunmaya geçmekten çok daha üretken bir yoldur. Çünkü gerçek soruya verilen cevap görüşmeyi ilerletir, itirazı geçiştirmeye çalışmak ise ilişkiyi bitirir.
 
-**Görüşmenin sonunda net bir adım olmalıdır**
+## Görüşmenin sonunda net bir adım olmalıdır
 
 "Sizi bilgilendireceğiz" ya da "düşünüp döneceğiz" cümleleriyle biten görüşmeler çoğunlukla hiçbir şeyle sonuçlanmaz.
 
@@ -61,7 +61,7 @@ Belirsizlik hareketi durdurur. Görüşmenin sonunda her iki taraf için de bir 
 
 **İyi bir görüşme sonu şunu içerir:** tarih, kişi ve eylem. "Önümüzdeki Salı teknik ekibinizle bir demo yapıyoruz" cümlesi belirsizliği ortadan kaldırır. Karşı taraf için de sizin için de. Bu netlik aynı zamanda ciddiyetin bir göstergesidir.
 
-**Takip görüşmenin uzantısıdır, ayrı bir süreç değil**
+## Takip görüşmenin uzantısıdır, ayrı bir süreç değil
 
 Görüşme bittikten sonra gönderilen ilk mesaj çoğu zaman şuna benzer: "Görüşmemiz için teşekkürler, sorularınız olursa buradayım."
 
@@ -71,7 +71,7 @@ Görüşme sonrası takip aslında görüşmenin devamıdır. Konuşulan bir sor
 
 Takip etmek hatırlatmak değil, inşa etmektir.
 
-**Görüşme sayısı değil, görüşme kalitesi büyütür**
+## Görüşme sayısı değil, görüşme kalitesi büyütür
 
 Haftada on görüşme yapan ama hiçbirini kapamayan ekip ile haftada üç görüşme yapan ama ikisini kapayan ekip arasında hangisi daha başarılıdır?
 

@@ -17,7 +17,7 @@ Birkaç ay sonra o müşteri yenilemiyor ya da sessizce ayrılıyor. Ve şirket 
 
 Bu döngü kırılabilir. Ama bunun için satışın nerede bittiğine dair anlayışı değiştirmek gerekir.
 
-**Churn sessizce öldürür**
+## Churn sessizce öldürür
 
 Yeni müşteri kazanmak heyecan vericidir ve görünürdür. Müşteri kaybetmek ise sessizdir ve çoğu zaman geç fark edilir.
 
@@ -27,7 +27,7 @@ Oysa sürpriz değildir. Sadece görülmemiştir.
 
 Churn'ün maliyeti yalnızca kaybedilen gelir değildir. Kazanmak için harcanan tüm enerji, zaman ve bütçe de o müşteriyle birlikte gitmiştir. Yeni müşteri kazanmanın maliyeti mevcut müşteriyi elde tutmanın maliyetinden her zaman çok daha yüksektir. Bu fark küçümsendiğinde büyüme sürekli bir yer doldurmaya dönüşür.
 
-**Müşteri başarısı bir departman değil, bir zihniyettir**
+## Müşteri başarısı bir departman değil, bir zihniyettir
 
 Büyük şirketlerde customer success ayrı bir ekiptir. Ama küçük ve orta ölçekli şirketlerde bu ekip çoğu zaman yoktur. Ve yokluğu mazeret olarak kullanılır.
 
@@ -37,7 +37,7 @@ Müşterinin sadece ürünü kullanması değil, o üründen gerçekten değer �
 
 Bu zihniyet bir ekip kurmadan önce yerleşebilir. Ve yerleştiğinde her şeyi değiştirir.
 
-**Beklenti yönetimi her şeyin önündedir**
+## Beklenti yönetimi her şeyin önündedir
 
 Müşteri memnuniyetsizliğinin büyük çoğunluğu ürünün kötü olmasından değil, beklentilerin yanlış kurgulanmasından kaynaklanır.
 
@@ -47,7 +47,7 @@ Dürüst bir beklenti yönetimi bazen satışı yavaşlatır. Ama uzun vadede m�
 
 Satış sürecinde ne söylendiği müşteri başarısını doğrudan şekillendirir.
 
-**Onboarding bir formalite değil, güven kurma sürecidir**
+## Onboarding bir formalite değil, güven kurma sürecidir
 
 Sözleşme imzalandıktan sonra çoğu şirkette şu olur: bir hoşgeldin e-postası gönderilir, birkaç belge paylaşılır, teknik kurulum yapılır ve müşteri kendi haline bırakılır.
 
@@ -55,7 +55,7 @@ Bu yaklaşım onboarding'i bir formaliteye indirger. Oysa onboarding o müşteri
 
 İyi bir onboarding süreci müşteriye şunu hissettirir: doğru yerdeyim, ne yaptığımı biliyorum ve destek gördüğümü hissediyorum. Bu his oluştuğunda müşteri sürece bağlanır. Bu his oluşmazsa müşteri başından beri bir adım geride kalır.
 
-**Mevcut müşteri en büyük büyüme fırsatıdır**
+## Mevcut müşteri en büyük büyüme fırsatıdır
 
 Yeni müşteri kazanmak için harcanan enerji çoğu şirkette mevcut müşteriyi büyütmek için harcanan enerjiden katbekat fazladır.
 
@@ -65,7 +65,7 @@ Mevcut bir müşteriye ek satış yapmak yeni bir müşteriye ilk satışı yapm
 
 Bunu sistematik olarak yapan şirketler yeni müşteri kazanmadan da büyüyebilir. Ve yeni müşteri kazandıklarında bu büyüme çok daha hızlı bileşik etki yaratır.
 
-**Referans vermek en büyük sadakat göstergesidir**
+## Referans vermek en büyük sadakat göstergesidir
 
 Memnun bir müşteri sessiz kalmaz. Etrafına anlatır.
 
@@ -75,7 +75,7 @@ Ama bu kendiliğinden olmaz. Memnun müşteriden referans istemek, deneyimini pa
 
 Müşteri başarısına yatırım yapan şirketler aynı zamanda en güçlü satış kanallarından birine yatırım yapmış olur.
 
-**Satışın gerçek sonu yoktur**
+## Satışın gerçek sonu yoktur
 
 Satış bir an değil, bir ilişkidir.
 

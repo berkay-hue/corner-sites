@@ -15,7 +15,7 @@ imageAlt: "Herkese Satmaya Çalışmak, Kimseye Satamamanın En Kısa Yolu"
 
 Bu cümleler yanlış değildir. Ama hiçbir şey söylemez. Ve bir satış operasyonu bu belirsizlik üzerine kurulduğunda ortaya çıkan tablo tahmin edilebilirdir: çok enerji harcanır, az sonuç gelir.
 
-**Geniş hedef kitle geniş kayıp demektir**
+## Geniş hedef kitle geniş kayıp demektir
 
 Hedef kitle ne kadar geniş tanımlanırsa mesaj o kadar genel olur.
 
@@ -23,7 +23,7 @@ Genel mesaj kimseye özel hissettirmez. Kimseye özel hissettirmeyen bir içerik
 
 Ama sorun outbound değildir. Sorun kime gidildiğinin yeterince netleştirilmemiş olmasıdır.
 
-**ICP bir segment değil, bir portredir**
+## ICP bir segment değil, bir portredir
 
 Ideal Customer Profile yani ICP, bir müşteri segmentini değil, somut bir müşteri portresini tanımlar.
 
@@ -33,7 +33,7 @@ Bu sorulara verilen net cevaplar bir ICP oluşturur. Ve bu profil netleştikçe 
 
 Bir şirkete "en iyi müşteriniz kim?" diye sorulduğunda "şu an çalıştığımız bu üç müşteriye benzeyen şirketler" cevabı geliyorsa ICP aslında zaten vardır, sadece yazıya dökülmemiştir.
 
-**Yanlış kitleyle geçirilen zaman geri gelmez**
+## Yanlış kitleyle geçirilen zaman geri gelmez
 
 Yanlış kişiye ulaşmanın maliyeti sadece o görüşmenin kaybedilen zamanı değildir.
 
@@ -41,7 +41,7 @@ Yanlış müşteri adaylarıyla dolu bir pipeline, gerçek fırsatları görmezd
 
 Üstelik yanlış müşteriye satış yapıldığında bile sorunlar bitmez. Ürüne gerçekten uymayan bir müşteri zamanla memnuniyetsiz hale gelir, churn yaşanır, referans vermez, hatta itibarı zedeler. Doğru müşteriyi bulmak, satıştan sonra da değer üretmeye devam eder.
 
-**Mesaj herkese yazılırsa kimse kendini göremez**
+## Mesaj herkese yazılırsa kimse kendini göremez
 
 Satış e-postasını okuyan biri zihinsel olarak tek bir soruyu sorar: bu benim için mi?
 
@@ -51,7 +51,7 @@ Ama mesaj o kişinin sektöründen, şirket büyüklüğünden, muhtemelen yaşa
 
 Kişiselleştirme sadece isim yazmak değildir. Doğru kitleye doğru dili konuşmaktır. Bu dili konuşmak için önce o kitlenin kim olduğunu bilmek gerekir.
 
-**ICP zaman içinde değişir ve güncellenmesi gerekir**
+## ICP zaman içinde değişir ve güncellenmesi gerekir
 
 Bir kez tanımlanan ICP sonsuza kadar geçerli değildir.
 
@@ -61,7 +61,7 @@ Bu yüzden ICP canlı bir belge gibi ele alınmalıdır. Kazanılan ve kaybedile
 
 Veri konuştuğunda tahminler devre dışı kalır.
 
-**Dar hedeflemek cesaret ister ama karşılığını verir**
+## Dar hedeflemek cesaret ister ama karşılığını verir
 
 Hedef kitleyi daraltmak ilk sezgiye aykırı gelir.
 

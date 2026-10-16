@@ -17,7 +17,7 @@ Ekip toplanır, değerlendirme yapılır. Sonuç hep aynıdır: "Fiyat yüzünde
 
 Bu açıklamalar bazen doğrudur. Ama çoğunlukla konforlu bir sığınaktır. Gerçek nedeni aramak daha zordur çünkü çoğu zaman aynaya bakmayı gerektirir.
 
-**Fiyat çoğunlukla bahane, nadiren gerçek neden**
+## Fiyat çoğunlukla bahane, nadiren gerçek neden
 
 Satışta en sık duyulan itiraz fiyattır. Ama fiyat itirazının arkasında genellikle başka bir şey yatar.
 
@@ -27,7 +27,7 @@ Eğer görüşmenin sonunda müşteri adayı "bu pahalı" diyorsa büyük ihtima
 
 Fiyatı düşürmek bu sorunu çözmez. Sadece marjı düşürür.
 
-**Rakip daha iyi değildi, sadece daha anlaşılırdı**
+## Rakip daha iyi değildi, sadece daha anlaşılırdı
 
 Bir müşteri rakibi seçtiğinde ilk tepki rakibin ne sunduğunu araştırmak olur.
 
@@ -35,7 +35,7 @@ Ama çoğu zaman rakip teknik olarak daha iyi değildir. Daha ucuz da olmayabili
 
 İnsanlar en iyi ürünü değil, kendilerini en iyi anlayan ürünü seçer. Bu duygusal bir karar gibi görünür ama aslında tamamen rasyoneldir. Çünkü iş dünyasında anlaşılmamak riski, yanlış ürün seçmek kadar tehlikelidir.
 
-**Karar veren siz sandığınız kişi olmayabilir**
+## Karar veren siz sandığınız kişi olmayabilir
 
 B2B satışın en sinsi tuzaklarından biri budur.
 
@@ -45,7 +45,7 @@ Satış sürecinde bu kişiye ulaşılamamışsa ya da o kişinin kriterlerine g
 
 Satın alma sürecindeki tüm aktörleri erken tespit etmek ve her birine ayrı bir dil konuşmak, kaybedilen fırsatların önemli bir kısmını geri kazandırır.
 
-**Güven eksikti ve kimse bunu söylemedi**
+## Güven eksikti ve kimse bunu söylemedi
 
 Müşteri adayları nadiren gerçek nedeni söyler.
 
@@ -55,7 +55,7 @@ Güven birçok şeyden beslenir. Referanslardan, vaka analizlerinden, konuşma t
 
 Güven inşa etmek uzun bir süreçtir ve satış görüşmesinden çok önce başlar. Dijital varlık, içerik, referanslar ve iletişim kalitesi bu sürecin parçalarıdır.
 
-**Aciliyet yoksa karar da yoktur**
+## Aciliyet yoksa karar da yoktur
 
 Müşteri adayı ilgilidir, görüşmeler iyidir, teklife olumlu bakılmaktadır. Ama karar bir türlü gelmez.
 
@@ -63,7 +63,7 @@ Bu durumun en yaygın nedeni aciliyetin oluşturulamamış olmasıdır. Müşter
 
 Eğer şu an değil de üç ay sonra da aynı şekilde başlanabiliyorsa, üç ay sonraya ertelenir. Sonra altı aya. Sonra hiç olmaz. Aciliyeti yaratan şey korkutmak değildir. Erken hareket etmenin geç harekete kıyasla ne kazandırdığını somut biçimde göstermektir.
 
-**Kaybedilen fırsat değil, kaçırılan öğrenme**
+## Kaybedilen fırsat değil, kaçırılan öğrenme
 
 Her kaybedilen satış aslında bir sorudur.
 

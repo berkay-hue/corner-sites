@@ -17,7 +17,7 @@ Bu döngü tanıdık geliyorsa yalnız değilsiniz. Ve bu döngünün dışına 
 
 Outsource satış tam olarak budur. Ve doğru yapıldığında şirketlerin büyüme hızını kökten değiştirebilir.
 
-**Neden bu kadar az konuşuluyor?**
+## Neden bu kadar az konuşuluyor?
 
 Outsource satış Türkiye'de hâlâ yeterince anlaşılmamış bir modeldir.
 
@@ -25,7 +25,7 @@ Outsource satış Türkiye'de hâlâ yeterince anlaşılmamış bir modeldir.
 
 Bu kaygıların bir kısmı meşrudur. Ama büyük çoğunluğu outsource satışın ne olduğunu değil, kötü yapıldığında ne olduğunu tarif eder. Doğru kurgulandığında outsource satış bu kaygıların hiçbirini doğrulamaz.
 
-**İçeride kurmak göründüğünden zordur**
+## İçeride kurmak göründüğünden zordur
 
 Sıfırdan bir satış operasyonu kurmak tek bir eleman almaktan ibaret değildir.
 
@@ -33,7 +33,7 @@ ICP tanımlanmalıdır. Mesajlar yazılmalı ve test edilmelidir. Araçlar seçi
 
 Bu hem zaman hem de uzmanlık gerektirir. Çoğu şirket bu sürecin ne kadar enerji tükettiğini ancak içinde kaybolunca anlar. Ve o noktada hem operasyonu hem de kaybedilen zamanı telafi etmek zorunda kalır.
 
-**Outsource satışın gerçek değeri hızda gizlidir**
+## Outsource satışın gerçek değeri hızda gizlidir
 
 Dışarıdan çalışılan bir satış operasyonu sıfırdan başlamaz.
 
@@ -41,7 +41,7 @@ Sistem kurulmuştur. Araçlar entegre edilmiştir. Süreçler test edilmiştir. 
 
 Bu birikim yeni bir müşteriyle çalışmaya başlandığında devreye girer. İçeride kurulması aylar alacak bir yapı çok daha kısa sürede işler hale gelir. Ve bu hız özellikle büyüme baskısı altındaki şirketler için kritik bir avantajdır.
 
-**Sabit maliyet değil, esnek yapı**
+## Sabit maliyet değil, esnek yapı
 
 Tam zamanlı satış personeli sabit bir maliyet yaratır.
 
@@ -51,7 +51,7 @@ Outsource modeli bu riski azaltır. Büyüme hedefine göre ölçeklenir. İhtiy
 
 Bu esneklik özellikle belirsiz büyüme aşamalarında son derece değerlidir.
 
-**Her şirket için değil, doğru aşamadaki şirket için**
+## Her şirket için değil, doğru aşamadaki şirket için
 
 Outsource satış her şirkete uygun değildir ve bunu söylemek gerekir.
 
@@ -61,7 +61,7 @@ Ama ürün netleşmiş, hedef kitle tanımlanmış ve artık ölçekleme zamanı
 
 Doğru model doğru zamanda seçildiğinde işe yarar.
 
-**Kontrol kaybı değil, odak kazanımı**
+## Kontrol kaybı değil, odak kazanımı
 
 Outsource satışa en çok yöneltilen itiraz kontroldür.
 
@@ -71,7 +71,7 @@ Outsource satışa en çok yöneltilen itiraz kontroldür.
 
 Bu bir kontrol kaybı değil, odak kazanımıdır.
 
-**Sonuç odaklı çalışmak ilişkiyi dönüştürür**
+## Sonuç odaklı çalışmak ilişkiyi dönüştürür
 
 İçerideki bir satışçı işe alındığında sonuç gelmese de maaş ödenir.
 

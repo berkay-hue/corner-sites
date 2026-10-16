@@ -17,7 +17,7 @@ Mesaj değişmemiştir. Kişi değişmemiştir. Ürün değişmemiştir. Sadece 
 
 Satışta zamanlama bu kadar belirleyicidir. Ve çoğu şirket bunu sistematik olarak yönetmek yerine şansa bırakır.
 
-**Hazır olmayan biri en iyi teklife bile hayır der**
+## Hazır olmayan biri en iyi teklife bile hayır der
 
 Satın alma kararları bir anda verilmez.
 
@@ -27,7 +27,7 @@ Bu aşamaların hangisinde karşılaştığınız, ne kadar iyi bir satışçı 
 
 Asıl marifet o kişi hazır hale geldiğinde orada olmaktır.
 
-**Tetikleyici anlar gerçektir ve takip edilebilir**
+## Tetikleyici anlar gerçektir ve takip edilebilir
 
 B2B satışta zamanlamayı şansa bırakmak zorunda değilsiniz.
 
@@ -37,7 +37,7 @@ Bunların hepsi birer tetikleyicidir. Ve her tetikleyici o kişinin dünyasında
 
 Bu sinyalleri takip eden ve doğru anda doğru mesajla ortaya çıkan şirketler, zamanlama avantajını rakiplerine bırakmak zorunda kalmaz.
 
-**Çok erken gitmek de kaybettirir**
+## Çok erken gitmek de kaybettirir
 
 Zamanlama sadece geç kalmakla ilgili değildir. Çok erken gitmek de aynı şekilde sonuçsuz kalır.
 
@@ -45,7 +45,7 @@ Bütçe henüz onaylanmamış, ihtiyaç netleşmemiş, karar verici sürece dahi
 
 İyi bir satış süreci müşteriyi kovalamaz. Müşterinin olgunlaşma sürecini okur ve doğru ana kadar ilişkiyi sıcak tutar.
 
-**Takip etmemek zamanlamayı tamamen şansa bırakmaktır**
+## Takip etmemek zamanlamayı tamamen şansa bırakmaktır
 
 Çoğu satış fırsatı ilk temastan değil, beşinci ya da altıncı temastan doğar.
 
@@ -53,7 +53,7 @@ Bir kişi ilk mesajda yanıt vermemiş olabilir. Meşguldü, gündem doluydu, o 
 
 Takip sistematik olmak zorundadır. Her temas bir öncekinin üzerine bir şeyler katar, değer ekler, hatırlatır. Takip etmek ısrar etmek değildir. Doğru anda hazır olmaktır.
 
-**Bütçe döngüleri ve karar süreçleri bir takvime bağlıdır**
+## Bütçe döngüleri ve karar süreçleri bir takvime bağlıdır
 
 Kurumsal dünyada kararlar kendiliğinden gelmez, bir takvime göre gelir.
 
@@ -61,7 +61,7 @@ Bütçe döneminin kapanmak üzere olduğu bir anda yeni bir harcama kararı alm
 
 Bu döngüleri bilerek hareket eden şirketler, aynı enerjiyle çok daha fazla kapı açar. Çünkü rüzgara karşı değil, rüzgarla birlikte yürürler.
 
-**Zamanlama bir şans değil, bir sistem meselesidir**
+## Zamanlama bir şans değil, bir sistem meselesidir
 
 Doğru zamanda doğru yerde olmak tesadüf değildir.
 

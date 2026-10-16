@@ -17,7 +17,7 @@ Ama aynı dönemde bazı şirketler soğuk e-postayla haftada onlarca nitelikli 
 
 Soğuk e-posta ölmedi. Eskisi gibi çalışmıyor, bu doğru. Ama eskisi gibi çalışması için bir neden de yok.
 
-**"Eskisi gibi" neydi ki?**
+## "Eskisi gibi" neydi ki?
 
 On yıl önce soğuk e-posta çok daha düşük bir eşikte işe yarıyordu.
 
@@ -27,7 +27,7 @@ O dönem bitti. Dikkat ekonomisi tamamen değişti. İnsan dikkatinin fiyatı ar
 
 Bu bir son değil, bir eşik yükselmesidir. Artık vasat işe yaramıyor. İyi olan hâlâ çalışıyor.
 
-**Spam ile soğuk e-postayı birbirine karıştırmak**
+## Spam ile soğuk e-postayı birbirine karıştırmak
 
 "Soğuk e-posta işe yaramıyor" diyenlerin büyük çoğunluğu aslında spam gönderiyor.
 
@@ -35,7 +35,7 @@ Satın alınmış listeler, hiç kişiselleştirilmemiş şablonlar, ilk e-posta
 
 Soğuk e-posta, daha önce temas kurulmamış ama doğru profilde bir kişiye, onunla gerçekten ilgili bir mesaj göndermektir. Bu ikisi arasındaki fark niyette değil, uygulamada görünür. Ve alıcılar bu farkı bir saniyede hisseder.
 
-**Deliverability artık stratejinin bir parçası**
+## Deliverability artık stratejinin bir parçası
 
 Birkaç yıl önce teknik kurulum o kadar kritik değildi. Şimdi göndermeden önce yapılması gereken onlarca şey var.
 
@@ -43,7 +43,7 @@ Domain ısınması, SPF ve DKIM kayıtları, gönderim hacminin kademeli artır�
 
 En iyi yazılmış e-posta bile spam klasörüne düşüyorsa hiçbir şey ifade etmez. Teknik altyapı artık içerik kadar önemlidir. Biri diğerinin önkoşuludur.
 
-**Kişiselleştirme çıtası yükseldi**
+## Kişiselleştirme çıtası yükseldi
 
 "Merhaba [İsim], şirketinizi inceledim ve etkilendim" artık kişiselleştirme sayılmıyor.
 
@@ -53,7 +53,7 @@ Gerçek kişiselleştirme o kişinin dünyasında bir şeyi fark ettiğinizi gö
 
 Bu his nadir olduğu için değerlidir. Ve bu hissi yaratan e-postalar açılır, okunur, yanıtlanır.
 
-**Sekans tek e-postadan çok daha güçlüdür**
+## Sekans tek e-postadan çok daha güçlüdür
 
 Tek bir e-posta göndermek ve yanıt beklemek soğuk e-postanın en yaygın yanlış kullanımıdır.
 
@@ -61,7 +61,7 @@ Tek bir e-posta göndermek ve yanıt beklemek soğuk e-postanın en yaygın yanl
 
 İyi kurgulanmış bir sekans her adımda yeni bir şey söyler. Sadece "takip ediyorum" demez, bir değer ekler, farklı bir açıdan bakar, yeni bir soru sorar. Alıcı her temastan bir şey öğrenirse o süreci spam olarak değil, kaynak olarak algılar.
 
-**A/B testi yapmayanlar tahminle yürür**
+## A/B testi yapmayanlar tahminle yürür
 
 Soğuk e-postada neyin işe yarayıp neyin yaramadığını anlamanın tek yolu test etmektir.
 
@@ -71,7 +71,7 @@ Bu soruların cevapları sektöre, kitleye ve ürüne göre değişir. Genel bir
 
 Tahminle yürüyen şirketler şanslarına bağımlıdır. Test edenler ise zamanla rakipsiz hale gelir.
 
-**Ölçek ile kalite arasındaki denge**
+## Ölçek ile kalite arasındaki denge
 
 Soğuk e-postada iki uç vardır.
 
@@ -83,7 +83,7 @@ Doğru nokta ikisinin arasındadır. Segmentasyon iyi yapıldığında her segme
 
 Bu dengeyi kurmak soğuk e-postanın sanatıdır.
 
-**Soğuk e-posta hâlâ en ölçülebilir kanaldır**
+## Soğuk e-posta hâlâ en ölçülebilir kanaldır
 
 Dijital pazarlamada çoğu kanal sezgiyle değerlendirilir.
 
