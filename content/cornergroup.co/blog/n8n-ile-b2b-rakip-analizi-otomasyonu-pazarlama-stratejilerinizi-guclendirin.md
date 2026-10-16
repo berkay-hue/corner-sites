@@ -43,27 +43,27 @@ Piyasada Zapier ve Make gibi birçok otomasyon aracı bulunurken, n8n (telaffuzu
 
 n8n Nedir?: n8n, temel olarak görsel bir arayüz üzerinden farklı uygulama ve servisleri birbirine bağlayarak karmaşık iş akışları (workflow) oluşturmanızı sağlayan bir otomasyon aracıdır. "Düşük kodlu" (low-code) yapısı sayesinde, yazılımcı olmayan kullanıcılar bile sürükle-bırak mantığıyla otomasyonlar kurabilirken, "kod" nodları sayesinde geliştiricilere neredeyse sınırsız bir özelleştirme imkanı sunar.
 
-### B2B İçin n8n'i Stratejik Kılan Özellikler
+## B2B İçin n8n'i Stratejik Kılan Özellikler
 
-## Açık Kaynak ve Self-Hosting (Kendi Sunucusunda Barındırma)
+### Açık Kaynak ve Self-Hosting (Kendi Sunucusunda Barındırma)
 
 n8n'in en belirgin farkı açık kaynaklı olmasıdır.
 
 Bu, iki temel stratejik avantaj sunar. Birincisi, maliyet etkinliğidir. Bulut tabanlı versiyonu bulunsa da, n8n'i kendi sunucularınıza veya özel bir bulut ortamına kurarak lisans maliyetlerinden büyük ölçüde tasarruf edebilirsiniz. Bu, özellikle binlerce otomasyon görevi çalıştıran büyük ölçekli operasyonlar için önemlidir. İkincisi ve daha kritik olanı ise veri gizliliği ve kontrolüdür. Rekabet analizi gibi hassas verilerin üçüncü parti bir platformun sunucularında değil, tamamen kendi kontrolünüzdeki bir ortamda işlenmesi, birçok B2B şirketi için vazgeçilmez bir güvenlik unsurudur.
 
-## Sınırsız Esneklik ve Özelleştirme
+### Sınırsız Esneklik ve Özelleştirme
 
 Hazır entegrasyonlar (node'lar) sunan platformların aksine, n8n'in gücü özelleştirme yeteneğinden gelir.
 
 HTTP Request nodu sayesinde, API'ı olan hemen hemen her servise bağlanabilirsiniz. Eğer bir servisin resmi bir API'ı yoksa bile, web scraping (veri kazıma) teknikleriyle web sitelerinden veri çekmek mümkündür. Ayrıca, JavaScript kodu yazmanıza olanak tanıyan Function ve Code nodları, veriyi dilediğiniz gibi işlemenize, filtrelemenize, dönüştürmenize ve zenginleştirmenize olanak tanır. Bu, standart entegrasyonların yetersiz kaldığı karmaşık ve niş B2B senaryoları için hayati bir özelliktir.
 
-## Hata Yönetimi ve Güvenilirlik
+### Hata Yönetimi ve Güvenilirlik
 
 B2B süreçlerinde otomasyonun kesintisiz çalışması kritiktir.
 
 n8n, gelişmiş hata yönetimi mekanizmaları sunar. Bir iş akışının herhangi bir adımında hata oluştuğunda, akışı durdurmak, alternatif bir yola yönlendirmek veya bir bildirim göndermek gibi senaryolar kurgulayabilirsiniz. "Retry on Fail" özelliği, geçici ağ sorunları gibi durumlarda işlemin otomatik olarak yeniden denenmesini sağlayarak sistemin dayanıklılığını artırır. Bu, manuel kontrole gerek kalmadan otomasyonlarınızın güvenilir bir şekilde çalışmasını sağlar.
 
-## Bütünsel Sistem Entegrasyonu Vizyonu
+### Bütünsel Sistem Entegrasyonu Vizyonu
 
 Corner Group'un CRM Corner markası, verinin merkezi bir sistemde akmasının önemini vurgular.
 
@@ -91,7 +91,7 @@ Veri kanallarını belirledikten sonra, n8n üzerinde bu verileri toplayacak, i�
 
 **Tetikleyici (Trigger) Node:** İş akışını başlatan bileşendir. Rakip analizi için en yaygın tetikleyici "Cron" nodudur. Bu nod, iş akışını belirlediğiniz zaman aralıklarında (örneğin her gün sabah 08:00'de veya her saat başı) otomatik olarak çalıştırır.
 
-**Veri Çekme (Fetch) Katmanı:** Bu katmanda, Kural 1'de belirlediğimiz kanallardan veriler toplanır. Her bir kaynak için farklı nodlar kullanılır: HTTP Request Node: Web sitelerinden HTML çekmek, API'lara istek göndermek (örn. SEMrush API) için kullanılır. RSS Read Node: Rakiplerin blog RSS beslemelerini okumak için en kolay yoldur. Web Scraper/HTML Extract Node: API'ı olmayan web sitelerinden yapılandırılmış veri (fiyat, ürün adı, iş ilanı başlığı vb.) çekmek için kullanılır.
+**Veri Çekme (Fetch) Katmanı:** Bu katmanda, yukarıda belirlediğimiz kanallardan veriler toplanır. Her bir kaynak için farklı nodlar kullanılır: HTTP Request Node: Web sitelerinden HTML çekmek, API'lara istek göndermek (örn. SEMrush API) için kullanılır. RSS Read Node: Rakiplerin blog RSS beslemelerini okumak için en kolay yoldur. Web Scraper/HTML Extract Node: API'ı olmayan web sitelerinden yapılandırılmış veri (fiyat, ürün adı, iş ilanı başlığı vb.) çekmek için kullanılır.
 
 Veri İşleme ve Zenginleştirme (Process & Enrich) Katmanı: Ham veri tek başına anlamlı değildir. Bu katmanda veriyi değerli bir içgörüye dönüştürürüz. Function Node (JavaScript): Gelen veriyi filtrelemek, temizlemek ve istenen formata dönüştürmek için kullanılır. Örneğin, bir blog başlığından gereksiz etiketleri temizlemek. AI/LLM Entegrasyonu (OpenAI, Hugging Face): Bu, otomasyonun en güçlü adımlarından biridir. Örneğin, rakibin yeni yayınladığı 5000 kelimelik bir blog yazısını OpenAI API'ına gönderip özetini alabilir, duygu analizini yaptırabilir veya anahtar çıkarımlarını listelemesini isteyebilirsiniz. Merge Node: Farklı kaynaklardan (blog, sosyal medya, SEO) gelen verileri tek bir veri setinde birleştirmek için kullanılır.
 

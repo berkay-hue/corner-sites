@@ -21,9 +21,9 @@ Geleneksel Churn Analizi Yöntemleri ve Yetersizlikleri: Yıllardır şirketler 
 
 Yapay zeka destekli churn tahminleme, sihirli bir kara kutu değildir. Temelinde, doğru verilerin toplanması, bu verilerin işlenmesi ve anlamlı sonuçlar üretecek şekilde eğitilmiş algoritmaların kullanılması yatar. Bu sürecin temel adımlarını anlamak, stratejik olarak doğru kararlar alabilmek için kritik öneme sahiptir.
 
-## Veri Toplama ve Entegrasyon
+## Veri Toplama ve Entegrasyon: Başarının Temeli
 
-Başarının Temeli Bir modelin doğruluğu, beslendiği verinin kalitesi ve çeşitliliği ile doğru orantılıdır. Corner Group bünyesindeki CRM Corner'ın uzmanlık alanına giren bu aşama, tüm sürecin en hayati parçasıdır. Etkili bir churn modeli için dört ana kategoride veri toplanmalıdır:
+Bir modelin doğruluğu, beslendiği verinin kalitesi ve çeşitliliği ile doğru orantılıdır. Corner Group bünyesindeki CRM Corner'ın uzmanlık alanına giren bu aşama, tüm sürecin en hayati parçasıdır. Etkili bir churn modeli için dört ana kategoride veri toplanmalıdır:
 
 **Kullanım Verileri (Product Usage Data):** Bu, müşterinin ürününüzle nasıl etkileşime girdiğini gösteren en temel veri setidir. Sadece giriş sayısı veya süresi değil, daha derin metrikler önemlidir. Hangi özellikleri kullanıyorlar? Hangi özellikleri hiç denemediler? Kritik iş akışlarını tamamlıyorlar mı? Örneğin, bir proje yönetimi aracında, sadece görev oluşturan bir ekiple, hem görev oluşturup hem de zaman takibi ve raporlama özelliklerini aktif kullanan bir ekip arasında churn riski açısından büyük bir fark vardır.
 
@@ -41,7 +41,7 @@ Veriler toplandıktan sonra, makine öğrenmesi modelleri bu verilerle eğitilir
 
 Bu süreçte, geçmişte churn etmiş ve etmemiş müşterilerin verileri kullanılarak modele "churn davranışının" neye benzediği öğretilir. Çeşitli algoritmalar kullanılabilir:
 
-**Lojistik Regresyon:** En temel ve yorumlanması en kolay modellerden biridir. Farklı değişkenlerin churn olasılığını ne kadar etkilediğini (örneğin, destek talebi sayısındaki her bir artışın churn olasılığını %X artırması gibi) gösterir.
+**Lojistik Regresyon:** En temel ve yorumlanması en kolay modellerden biridir. Farklı değişkenlerin churn olasılığını ne kadar etkilediğini (örneğin, destek talebi sayısındaki her bir artışın churn olasılığını ne ölçüde artırdığı gibi) gösterir.
 
 **Karar Ağaçları ve Random Forest:** "Eğer şu olursa, o zaman bu olur" şeklinde bir dizi kural oluşturarak çalışır. Örneğin, "Eğer müşteri son 30 günde giriş yapmadıysa VE destek taleplerinin çözüm süresi ortalamanın üzerindeyse, churn riski yüksektir" gibi kararlar verir. Random Forest, yüzlerce karar ağacının sonuçlarını birleştirerek daha isabetli tahminler yapar.
 

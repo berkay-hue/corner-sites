@@ -29,13 +29,17 @@ Her şey veriyle başlar ve biter. Yapay zekanın etik kullanımı, en temelinde
 
 **Amaç Sınırlaması İlkesi:** Toplanan veriler, sadece belirtilen amaçlar doğrultusunda kullanılmalıdır. Bir müşteriden ürün demosu için alınan iletişim bilgileri, onun rızası olmadan başka bir ürünün pazarlama listesine eklenmemelidir. CRM Corner'ın entegrasyon uzmanlığı burada devreye girer; farklı sistemlerdeki verilerin, belirlenmiş rıza ve amaç sınırları içinde kalmasını sağlayacak teknik altyapıyı kurmak kritik öneme sahiptir. Verinin yaşam döngüsü boyunca etik kurallara uygunluğunu denetleyen sistemler kurmak, bir seçenek değil, bir zorunluluktur.
 
-Algoritmanın Kara Kutusunu Aydınlatma Sorumluluğu Yapay zekanın en büyük eleştirilerinden biri, kararlarını nasıl verdiğinin anlaşılamamasıdır. B2B satış gibi insan ilişkilerinin kritik olduğu bir alanda, bu belirsizlik kabul edilemez. Satış ekiplerinin, kullandıkları araçlara güvenmesi gerekir ve bu güven, ancak anlayışla mümkündür.
+## Algoritmanın Kara Kutusunu Aydınlatma Sorumluluğu
+
+Yapay zekanın en büyük eleştirilerinden biri, kararlarını nasıl verdiğinin anlaşılamamasıdır. B2B satış gibi insan ilişkilerinin kritik olduğu bir alanda, bu belirsizlik kabul edilemez. Satış ekiplerinin, kullandıkları araçlara güvenmesi gerekir ve bu güven, ancak anlayışla mümkündür.
 
 **Açıklanabilir Yapay Zeka (XAI):** Mümkün olan her yerde, kararlarının arkasındaki mantığı açıklayabilen yapay zeka modelleri tercih edilmelidir. Örneğin, bir AI modeli bir müşteri adayına "yüksek potansiyelli" notu verdiğinde, "Çünkü bu şirket son 30 gün içinde fiyatlandırma sayfamızı üç kez ziyaret etti, sektör ortalamasının üzerinde bir büyüme oranına sahip ve CEO'su rakip bir çözümle ilgili bir makaleyi sosyal medyada paylaştı" gibi gerekçeler sunabilmelidir. Bu, Sales Corner'ın otomasyon araçlarını geliştirirken öncelik verdiği bir prensiptir. Bu açıklanabilirlik, satış temsilcisine sadece bir veri noktası değil, bir içgörü ve stratejik bir başlangıç noktası sunar.
 
 **İnsan Denetimi ve Son Karar Yetkisi:** Yapay zeka, güçlü bir yardımcı pilot olmalıdır, ancak uçağı her zaman insan pilot kullanmalıdır. Otomatikleştirilmiş e-posta dizileri veya müşteri adayı atamaları gibi kritik süreçlerde, her zaman bir insanın müdahale etme, kararı geçersiz kılma veya süreci durdurma yetkisi olmalıdır. Algoritma bir öneride bulunabilir, ancak nihai kararı ve sorumluluğu her zaman deneyimli bir satış profesyoneli üstlenmelidir. Bu, teknolojinin insan zekasını ve sezgisini ikame etmesi değil, onu güçlendirmesi gerektiği anlamına gelir.
 
-Yapay Zeka Varlığının Dürüstçe Bildirimi Müşteri ile olan etkileşimlerde, karşı tarafın bir insanla mı yoksa bir yapay zeka ile mi konuştuğunu bilme hakkı vardır. Bu dürüstlük, ilişkinin temelini oluşturur ve aldatma hissini en başından ortadan kaldırır.
+## Yapay Zeka Varlığının Dürüstçe Bildirimi
+
+Müşteri ile olan etkileşimlerde, karşı tarafın bir insanla mı yoksa bir yapay zeka ile mi konuştuğunu bilme hakkı vardır. Bu dürüstlük, ilişkinin temelini oluşturur ve aldatma hissini en başından ortadan kaldırır.
 
 **"Bot" Bildirimi:** Web sitenizdeki bir sohbet robotu (chatbot) veya ilk teması kuran otomatik bir e-posta sistemi kullanıyorsanız, bunun bir yapay zeka destekli sistem olduğunu açıkça belirtin. "Merhaba, ben Corner Group'un dijital asistanı CornerBot. Size nasıl yardımcı olabilirim?" gibi basit bir başlangıç, şeffaflık ve dürüstlük mesajı verir. Müşteriyi kandırarak bir insanla konuştuğunu düşündürmeye çalışmak, anlaşıldığı anda tüm güveni yok edecek kısa vadeli bir taktiktir.
 

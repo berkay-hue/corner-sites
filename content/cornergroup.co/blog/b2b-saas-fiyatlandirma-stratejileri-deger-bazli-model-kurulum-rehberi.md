@@ -33,7 +33,7 @@ B2B SaaS ekosisteminde hala yaygın olarak kullanılan iki eski okul fiyatlandı
 
 Değer bazlı fiyatlandırma teoride harika görünse de, uygulaması disiplinli ve veri odaklı bir yaklaşım gerektirir. İşte Corner Group'un deneyimleriyle şekillenen, bu modeli adım adım kurmanızı sağlayacak rehber.
 
-## İdeal Müşteri Profilini (ICP) ve Alıcı Personalalarını Derinlemesine Anlamak
+## İdeal Müşteri Profilini (ICP) ve Alıcı Personalarını Derinlemesine Anlamak
 
 Her şey müşteriyi anlamakla başlar.
 
@@ -87,7 +87,7 @@ Pazar, rakipleriniz ve müşterileriniz sürekli değişir. Dolayısıyla fiyatl
 
 **Test Etmek:** Fiyat noktaları ve paket yapıları üzerinde A/B testleri yapmaktan çekinmeyin. Web sitenize gelen trafiğin bir kısmına farklı bir fiyatlandırma sayfası göstererek hangi modelin daha iyi dönüşüm sağladığını ölçebilirsiniz. Bu, varsayımlarınızı gerçek dünya verileriyle doğrulamanın en iyi yoludur.
 
-**İterasyon ve Geri Bildirim:** Müşterilerinizden ve satış ekibinizden sürekli geri bildirim toplayın. Satış ekibi, hangi paketin satışının zor olduğunu, müşterilerin en çok hangi özellik için ek ödeme yapmak istediğini veya hangi fiyat noktasında en çok itiraz geldiğini en iyi bilen ekiptir. CRM Corner'ın rolü, bu geri bildirimleri CRM sisteminde sistematik olarak toplamak ve ürün ile pazarlama ekiplerine düzenli olarak raporlamaktır. Fiyatlandırmanızı en az 6 ayda bir veya yılda bir kez gözden geçirmeyi bir alışkanlık haline getirin.
+**İterasyon ve Geri Bildirim:** Müşterilerinizden ve satış ekibinizden sürekli geri bildirim toplayın. Satış ekibi, hangi paketin satışının zor olduğunu, müşterilerin en çok hangi özellik için ek ödeme yapmak istediğini veya hangi fiyat noktasında en çok itiraz geldiğini en iyi bilen ekiptir. CRM Corner'ın rolü, bu geri bildirimleri CRM sisteminde sistematik olarak toplamak ve ürün ile pazarlama ekiplerine düzenli olarak raporlamaktır. Fiyatlandırmanızı her çeyrekte gözden geçirmeyi, yılda en az bir kez de derinlemesine analiz etmeyi bir alışkanlık haline getirin.
 
 ## Değer Bazlı Fiyatlandırmada Sık Yapılan Hatalar ve Corner Group Çözümleri
 

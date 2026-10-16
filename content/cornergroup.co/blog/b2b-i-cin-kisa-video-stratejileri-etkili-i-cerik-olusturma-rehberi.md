@@ -59,7 +59,7 @@ B2B'de güvenilirlik esastır, bu da genellikle profesyonel bir görünüm gerek
 
 ## Güçlü Harekete Geçirici Mesaj (CTA)
 
-İzleyiciyi Bir Sonraki Adıma Yönlendirmek Her videonun sonunda izleyiciye ne yapması gerektiğini net bir şekilde söylemelisiniz. CTA, videonun amacına (Bölüm 1, Kural 2) doğrudan bağlı olmalıdır.
+İzleyiciyi Bir Sonraki Adıma Yönlendirmek Her videonun sonunda izleyiciye ne yapması gerektiğini net bir şekilde söylemelisiniz. CTA, videonun amacına (bkz. Amaç ve Metrik Belirleme) doğrudan bağlı olmalıdır.
 
 **Etkili B2B CTA Örnekleri:** "Daha fazlasını öğrenmek için profilimizdeki linkten e-kitabımızı indirin." (Lead Generation) "Bu özelliği kendi verilerinizle denemek için ücretsiz demo talep edin." (Sales Enablement) "Sizin şirketiniz bu sorunu nasıl çözüyor? Yorumlarda bizimle paylaşın." (Engagement & Community Building) "Bu videoyu ekibinizdeki ilgili kişilerle paylaşın." (Reach & Awareness)
 
