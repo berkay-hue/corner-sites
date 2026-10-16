@@ -25,3 +25,10 @@ test("SSS bölümü yoksa ya da başka bir başlığın parçasıysa boş", () =
   assert.deepEqual(faqItems("## SSS ve ötesi\n\n### Soru?\nCevap."), []);
   assert.deepEqual(faqItems("## Sık sorulan sorular\n\nSoru yok."), []);
 });
+
+test("başlık sonunda NBSP/BOM kabul edilir; uzun boşluk dizisi yavaşlatmaz", () => {
+  for (const h of ["## FAQ\u00a0", "## SSS\ufeff", "## SSS \r"]) assert.equal(faqItems(`${h}\n\n${qa}`).length, 2, JSON.stringify(h));
+  const t0 = performance.now();
+  assert.deepEqual(faqItems("## SSS" + " ".repeat(5000) + "x\n\n" + qa), []);
+  assert.ok(performance.now() - t0 < 200);
+});

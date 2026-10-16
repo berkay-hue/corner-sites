@@ -120,7 +120,7 @@ export function metaDescription(text, max = 155) {
 // "## Sık sorulan sorular" / "## FAQ" bölümündeki "### Soru?" + cevabın ilk paragrafı (FAQPage JSON-LD için; SSS'den sonra gelen kapanış paragrafı karışmasın).
 // Başlık toleranslı: "Sıkça Sorulan Sorular", "## **SSS**", "## FAQs:" de sayılır. blog-worker de yazıyı yayımlamadan önce bununla denetler.
 export function faqItems(md) {
-  const m = md.match(/^##[ \t]+\**[ \t]*(?:Sık(?:ça)? sorulan sorular|SSS|FAQs?|Frequently asked questions)[ \t]*:?[ \t]*\**[ \t]*:?[ \t]*$([\s\S]*?)(?=^## |(?![\s\S]))/im);
+  const m = md.match(/^##(?=[ \t])[* \t]+(?:Sık(?:ça)? sorulan sorular|SSS|FAQs?|Frequently asked questions)(?:[:*]|[^\S\n])*$([\s\S]*?)(?=^## |(?![\s\S]))/im);
   if (!m) return [];
   const plain = t => t.replace(/!?\[([^\]]*)\]\([^)]*\)/g, "$1").replace(/[*_`>]/g, "").replace(/\s+/g, " ").trim();
   return m[1].split(/^### /m).slice(1).map(b => { const [q, ...rest] = b.split("\n"); return [plain(q), plain(rest.join("\n").trim().split(/\n\s*\n/)[0])]; }).filter(([q, a]) => q && a);
