@@ -95,4 +95,4 @@ En değerli bilgiler sahadaki en başarılı satış temsilcilerindedir; bu yüz
 
 ### Satış playbook'u ne sıklıkla güncellenmelidir?
 
-Üç ayda bir veya altı ayda bir gözden geçirmek iyi bir başlangıçtır, çünkü playbook bir kere yazılıp rafa kaldırılan bir belge değil, sürekli gelişen yaşayan bir rehberdir. Kota karşılama süresi, satış döngüsü uzunluğu ve aşama dönüşüm oranları gibi metrikleri CRM üzerinden düzenli olarak takip etmelisin. Bu gözden geçirme toplantılarında ekipten geri bildirim topla ve playbook'u verilere göre güncelle.
+Playbook düzenli aralıklarla, ekip ve pazar değiştikçe gözden geçirilmelidir; çünkü bir kere yazılıp rafa kaldırılan bir belge değil, sürekli gelişen yaşayan bir rehberdir. Kota karşılama süresi, satış döngüsü uzunluğu ve aşama dönüşüm oranları gibi metrikleri CRM üzerinden düzenli olarak takip etmelisin. Bu gözden geçirme toplantılarında ekipten geri bildirim topla ve playbook'u verilere göre güncelle.

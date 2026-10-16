@@ -162,3 +162,21 @@ Entegre yeterlilik modeli, bir kere kurulup unutulacak bir sistem değildir. Sü
 ## Sonuç
 
 B2B satış yeterliliği, artık basit bir kontrol listesini işaretlemekten ibaret değildir. Günümüzün rekabetçi ve karmaşık SaaS pazarında başarılı olmak, potansiyel müşterileri 360 derecelik bir bakış açısıyla değerlendirmeyi gerektirir. Entegre bir yaklaşım benimseyerek; yani İdeal Müşteri Profilinize sıkı sıkıya bağlı kalarak, alıcıların dijital davranışlarını ve niyet sinyallerini dikkatle izleyerek, geleneksel çerçeveleri esnek bir şekilde kullanarak ve tüm bu süreci teknolojiyle destekleyerek, satış organizasyonunuzu bir verimlilik makinesine dönüştürebilirsiniz. Bu yaklaşım, sadece "daha fazla" adayla konuşmayı değil, "doğru" adaylarla daha derin ve anlamlı konuşmalar yapmayı sağlar. Sonuç olarak, satış ekipleriniz zamanlarını en değerli varlıkları olan kazanılabilir fırsatlara harcar, bu da daha sağlıklı bir satış boru hattı, daha isabetli tahminler ve en önemlisi, sürdürülebilir bir gelir artışı anlamına gelir. Yeterlilik, bir engel değil, başarıya giden en stratejik yoldur.
+
+## Sık sorulan sorular
+
+### BANT gibi geleneksel yeterlilik çerçeveleri neden tek başına yetersiz kalır?
+
+Geleneksel çerçeveler tek başına kullanıldığında genellikle adayın verdiği cevaplara bağımlı ve statik kalır. Günümüzde satın alma kararlarını tek bir yetkili yerine çok sayıda paydaştan oluşan komiteler verebilir. Bu çerçeveler ayrıca adayın davranışsal verilerini hesaba katmadığı için önemli sinyalleri kaçırabilir.
+
+### Entegre yeterlilik modelinin yapı taşları nelerdir?
+
+Entegre yeterlilik modeli genellikle dört yapı taşına dayanır. Bunlar ideal müşteri profili ve persona uyumu, davranışsal ve niyet sinyalleri, çerçevelerin hibrit kullanımı ile durumsal sorular ve CRM ile otomasyonun gücüdür. Model, adayın yalnızca ne söylediğini değil, kim olduğunu ve ne yaptığını da değerlendirmeyi hedefler.
+
+### Yeterlilik görüşmelerinde hangi tür sorular sorulmalıdır?
+
+Yeterlilik görüşmelerinde kapalı uçlu sorular yerine durumsal ve açık uçlu sorular sorulması önerilir. Örneğin bütçenin olup olmadığını sormak yerine bu tür projeler için nasıl bir bütçelendirme süreci izlendiğini sormak daha zengin bir cevap sağlayabilir. Kararın kimleri etkilediğini ve kimlerin onayının gerektiğini sormak da satın alma komitesini haritalandırmaya yardımcı olur.
+
+### SDR ve AE rollerinin yeterlilik sürecindeki görevleri nasıl ayrılır?
+
+SDR genellikle ilk teması kurar ve temel düzeyde bir yeterlilik yapar. Adayın ideal müşteri profiline uyup uymadığını doğrular, temel ihtiyaçlarını anlar ve adayın bir AE ile görüşmeye değip değmeyeceğini belirler. AE ise satın alma sürecini, karar kriterlerini ve içerideki şampiyonu anlamaya odaklanan daha derin bir keşif yapar.

@@ -190,3 +190,21 @@ Harika bir program oluşturmak bir şey, onu canlı ve etkili tutmak başka bir 
 ## Sonuç
 
 B2B SaaS satış dünyasında oyunun kuralları değişti. Artık en çok özelliği olan değil, müşterinin sorununu en iyi anlayan ve en somut değeri sunan kazanıyor. Bu yeni gerçeklikte, geleneksel, ürün odaklı satış onboarding programları, şirketleri geride bırakan bir lükstür. Müşteriyi merkeze alan bir onboarding yaklaşımı ise bir seçenek değil, sürdürülebilir büyümenin temel taşıdır. Bu yaklaşım, sadece daha hızlı hedefe ulaşan ve daha uzun süre şirkette kalan satış temsilcileri yetiştirmekle kalmaz; aynı zamanda daha mutlu müşteriler, daha güçlü marka itibarı ve en önemlisi, pazarın karmaşasında size yol gösterecek müşteri odaklı bir şirket kültürü inşa eder. Satış temsilcilerinize sadece ne satacaklarını değil, kimin için ve neden sattıklarını öğrettiğinizde, onları birer satıcıdan, müşterilerinizin vazgeçemeyeceği güvenilir danışmanlara dönüştürürsünüz. Gerçek başarı işte burada yatar.
+
+## Sık sorulan sorular
+
+### Geleneksel ürün odaklı satış onboarding'i neden yetersiz kalıyor?
+
+Ürün odaklı onboarding temsilciye ne sattığını öğretir ama neden sattığını öğretmez. İlk haftalardaki yoğun bilgi yüklemesi, temsilcinin müşteriyi dinlemek yerine özellik listesi saymasına yol açabilir. Aktivite metriklerine odaklanmak da tükenmişliği ve yüksek devir oranını artırabilir.
+
+### Müşteri merkezli onboarding programının temel direkleri nelerdir?
+
+Müşteri merkezli bir program genellikle dört direk üzerine kurulur. Bunlar müşterinin dünyasına derinlemesine dalış, ürün bilgisinden değer önermesine geçiş, süreçten çok sonuca odaklanma ve teknolojiyi müşteri odaklı kullanmaktır. Temsilci, ürün uzmanı olmadan önce bir müşteri uzmanı olarak yetiştirilir.
+
+### Özellik-fayda-değer matrisi nedir?
+
+Özellik-fayda-değer matrisi, temsilcinin her özelliği müşterinin iş hedefine bağlamasını sağlayan bir düşünce yapısıdır. Özellik ürünün ne yaptığını, fayda bu özelliğin müşteri için ne işe yaradığını, değer ise bu faydanın müşterinin iş hedefleri için ne anlama geldiğini anlatır. Onboarding sürecinde her ana özellik için bu matrisin oluşturulması ve içselleştirilmesi önerilir.
+
+### Satış onboarding programının başarısı nasıl ölçülür?
+
+Başarı, aktivite sayılarından çok programın gerçek etkisini gösteren metriklerle ölçülür. Ramp-up süresi, kota başarı oranı, ortalama anlaşma büyüklüğü ve yeni temsilci devir oranı bu metriklerin başında gelir. Satış sürecindeki müşteri memnuniyeti de temsilcinin ne kadar danışmanlık odaklı davrandığı hakkında fikir verebilir.

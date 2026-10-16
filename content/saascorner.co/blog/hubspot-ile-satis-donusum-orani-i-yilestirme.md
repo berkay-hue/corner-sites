@@ -174,3 +174,21 @@ Zamanla, bu verileri bir rapor halinde görselleştirerek en yaygın kaybetme ne
 ## HubSpot Bir Araç Değil, Bir Büyüme Felsefesidir
 
 Bu makalede ele aldığımız gibi, HubSpot ile satış dönüşüm oranını iyileştirmek, sadece birkaç düğmeye basmaktan veya yeni bir yazılım kurmaktan çok daha fazlasını ifade eder. Bu, müşteri odaklı bir yaklaşımı benimsemek, pazarlama ve satış ekiplerinizi aynı hedefler doğrultusunda hizalamak ve her adımı veriye dayalı olarak optimize etmekle ilgili bir felsefedir. Sağlam bir temel yapılandırmadan başlayarak, akıllı otomasyonlarla potansiyel müşterileri beslemek, satış sürecindeki verimsizlikleri ortadan kaldırmak ve performansı sürekli olarak analiz etmek, sürdürülebilir bir büyüme motoru oluşturmanın anahtarlarıdır. HubSpot, bu süreçlerin her birini yönetmek için size merkezi bir platform ve güçlü araçlar sunar. Ancak unutmayın ki, en iyi araç bile strateji olmadan etkisizdir. Buradaki adımları bir yol haritası olarak kullanarak, kendi iş modelinize ve müşteri profilinize en uygun stratejileri geliştirin. Küçük adımlarla başlayın, sonuçları ölçün ve sürekli olarak iyileştirin. Bu yaklaşımı benimsediğinizde, HubSpot sadece bir CRM değil, satış dönüşüm oranınızı ve nihayetinde şirketinizi yeni zirvelere taşıyan stratejik bir ortağınız haline gelecektir.
+
+## Sık sorulan sorular
+
+### HubSpot'ta MQL ve SQL nasıl tanımlanır?
+
+MQL ve SQL tanımları HubSpot'un Lifecycle Stage özelliğiyle yapılabilir. MQL kriterleri otomatikleştirilebilirken satış ekibi MQL'i BANT benzeri kriterlerle değerlendirip SQL aşamasına manuel olarak taşır. İdeal müşteri profilini ve personaları şirket ve kişi kayıtlarında özel Properties olarak tanımlamak da bu kriterleri netleştirebilir.
+
+### HubSpot'ta lead skorlaması nasıl kurulmalıdır?
+
+Lead skorlamasında olumlu sinyallere puan eklenmeli, olumsuz sinyallerden puan düşülmelidir. Örneğin kariyer sayfası ziyareti, ücretsiz bir e-posta sağlayıcısı kullanımı veya abonelikten çıkma puan düşürebilir. Skor belirlenen eşiğe ulaştığında HubSpot otomatik olarak bir görev oluşturup lead'i bir satış temsilcisine atayabilir.
+
+### Sequences özelliği satış takibini nasıl kolaylaştırır?
+
+Sequences, şablonlarla hazırlanmış takip e-postalarını ve görevleri otomatik bir akış halinde yürütür. Aday yanıt verdiğinde sekans otomatik olarak durur, böylece gereksiz mesajların önüne geçilebilir. Meetings bağlantıları da adayın uygun saati seçip toplantıyı kendisinin planlamasını sağlayabilir.
+
+### Kaybedilen anlaşmalardan nasıl ders çıkarılabilir?
+
+Lost Reason alanını zorunlu hale getirmek kaybedilen her anlaşmanın nedenini kayıt altına alır. Huni raporlarıyla birlikte değerlendirildiğinde bu veriler darboğazların nerede oluştuğunu gösterebilir. Aktivite metriklerini sonuçlarla karşılaştırmak da hangi çabaların gerçekten işe yaradığını anlamanıza yardımcı olur.

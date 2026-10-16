@@ -71,7 +71,7 @@ B2B SaaS pazarında sürdürülebilir büyüme, artık sadece iyi bir ürüne sa
 
 ### Kolektif müşteri zekası için CRM hangi araçlarla entegre edilmeli?
 
-CRM'in; HubSpot veya Marketo gibi pazarlama otomasyon platformlarıyla, Zendesk veya Intercom gibi müşteri destek yazılımlarıyla ve Mixpanel veya Amplitude gibi ürün analiz araçlarıyla konuşması gerekir. Bu entegrasyonlar sayesinde bir pazarlama e-postasına tıklayan adayın bilgisi anında satış temsilcisine ulaşır ve bir destek talebi müşteri başarı yöneticisinin panelinde uyarı tetikleyebilir. Salesforce'un AppExchange'i veya HubSpot'un App Marketplace'i gibi ekosistemler bu süreci hazır entegrasyonlarla kolaylaştırır.
+CRM'in pazarlama otomasyonu, müşteri destek yazılımı ve ürün analiz aracı gibi diğer sistemlerle konuşması gerekir. Bu entegrasyonlar sayesinde bir pazarlama e-postasına tıklayan adayın bilgisi anında satış temsilcisine ulaşır ve bir destek talebi müşteri başarı yöneticisinin panelinde uyarı tetikleyebilir. Hazır entegrasyon sunan uygulama pazarları bu süreci kolaylaştırabilir.
 
 ### CRM'de veri kalitesi nasıl korunur?
 
