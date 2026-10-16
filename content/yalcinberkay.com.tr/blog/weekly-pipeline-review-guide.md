@@ -5,7 +5,7 @@ date: "2026-10-12"
 updated: "2026-10-16"
 category: "B2B Sales"
 image: "https://images.pexels.com/photos/8424512/pexels-photo-8424512.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
-imageAlt: "How to Run a Weekly Pipeline Review That Works"
+imageAlt: "Team meeting at a conference table with a bar chart on the screen behind them"
 ---
 
 A weekly pipeline review works when it changes what people do next week. It needs clear stage definitions, a CRM updated before the meeting, a tight agenda, evidence-based questions and written commitments that carry into the following week. Keep it separate from your forecast call and deal coaching, and give the most airtime to the deals that matter most.

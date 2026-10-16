@@ -5,7 +5,7 @@ date: "2026-10-15"
 updated: "2026-10-16"
 category: "Founder Notes"
 image: "https://images.pexels.com/photos/7693692/pexels-photo-7693692.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
-imageAlt: "How to Price B2B Services for Turkish Companies"
+imageAlt: "Three colleagues reviewing printed charts and figures around a table with a laptop"
 ---
 
 To price B2B services for Turkish companies, build a pricing system rather than chase one perfect number. Know your real cost floor, choose your currency deliberately, and prefer hybrid models that cover costs while showing confidence in results. Leave honest room for negotiation, protect your margin with payment terms and indexation, and revisit your prices regularly.

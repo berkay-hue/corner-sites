@@ -13,7 +13,7 @@ To build an outbound sales team from scratch, validate outbound yourself for 6 t
 
 Most companies don't fail at outbound because the idea is wrong. They fail because they hire two reps, hand them a laptop and a vague target list, and expect pipeline to appear within a month. When it doesn't, leadership decides that "outbound doesn't work for us." I've seen this pattern many times, and I've made versions of the same mistake myself while building sales teams across Corner Group.
 
-Building an outbound sales team from scratch is less about hiring talented people and more about creating a system those people can succeed inside. That system includes a clear ideal customer profile, a tested message, clean data, a repeatable process, realistic capacity math, and a manager who coaches every week. This article walks through how I approach it step by step, with the numbers and decisions that matter most in the first six to twelve months.
+Building an outbound sales team from scratch is less about hiring talented people and more about creating a system those people can succeed inside. That system includes a clear ideal customer profile, a tested message, clean data, a repeatable process, realistic capacity math, and a manager who coaches every week and runs a [weekly pipeline review](/blog/weekly-pipeline-review-guide). This article walks through how I approach it step by step, with the numbers and decisions that matter most in the first six to twelve months.
 
 ## Key Takeaways
 
@@ -25,7 +25,7 @@ Building an outbound sales team from scratch is less about hiring talented peopl
 
 ## Step 1: Prove Outbound Works Before You Hire Anyone
 
-The most expensive way to learn whether outbound works for your business is to hire a team and find out. The cheapest way is for a founder or senior seller to run it personally for 6 to 8 weeks.
+The most expensive way to learn whether outbound works for your business is to hire a team and find out. The cheapest way is for a founder or senior seller to run it personally for 6 to 8 weeks (more on timing in [when a founder should hire the first sales rep](/blog/when-should-founder-hire-first-sales-rep)).
 
 Before your first hire, you should be able to answer these questions from real experience rather than assumptions:
 
