@@ -41,7 +41,7 @@ Teknoloji A.Ş.'nin karşılaştığı zorluklar, tek bir departmanın veya sür
 
 Stratejik çerçevenin belirlenmesinin ardından, dönüşümü hayata geçirecek olan titiz uygulama fazına geçtik. Corner Group olarak felsefemiz, teknolojiyi sadece "kurmak" değil, aynı zamanda insan ve süreçlerle tam entegrasyonunu sağlayarak bir kültür değişimini tetiklemektir. Bu fazı, her biri kendi içinde kritik öneme sahip, birbiriyle bağlantılı dört kural altında yönettik.
 
-Veri Temelli Temizlik ve Zenginleştirme (CRM Corner & SAAS Corner Sinerjisi) İlk adım, mevcut en büyük varlık olan veriyi kullanılabilir hale getirmekti. Teknoloji A.Ş.'nin CRM'i, yılların birikimiyle yinelenen kayıtlar, eksik bilgiler ve tutarsız formatlarla doluydu. CRM Corner ekibimiz, otomatize araçlar ve manuel denetimlerle kapsamlı bir veri temizliği ve standardizasyonu projesi yürüttü. Bu, üzerine sağlam bir yapı inşa edeceğimiz temeli oluşturdu. Ardından SAAS Corner'ın veri zenginleştirme araçlarını kullanarak, her bir şirket kaydını güncel firma büyüklüğü, sektör kodu, kullanılan teknolojiler ve kilit yönetici bilgileri gibi onlarca veri noktasıyla zenginleştirdik. Bu zenginleştirilmiş veri seti, Bölüm 2'de bahsettiğimiz AI destekli İdeal Müşteri Profili (ICP) modelini eğitmek için kullanıldı. Model, en değerli müşteri segmentlerinin "dijital ayak izini" öğrendi. Sonuç olarak, satış ekibi artık belirsiz listelerle değil, ICP'ye uygunluklarına göre %1'den %100'e kadar puanlanmış, önceliklendirilmiş potansiyel müşteri listeleriyle çalışmaya başladı. Bu, av tüfeğiyle rastgele ateş etmek yerine, lazer odaklı bir keskin nişancı yaklaşımına geçmek anlamına geliyordu.
+Veri Temelli Temizlik ve Zenginleştirme (CRM Corner & SAAS Corner Sinerjisi) İlk adım, mevcut en büyük varlık olan veriyi kullanılabilir hale getirmekti. Teknoloji A.Ş.'nin CRM'i, yılların birikimiyle yinelenen kayıtlar, eksik bilgiler ve tutarsız formatlarla doluydu. CRM Corner ekibimiz, otomatize araçlar ve manuel denetimlerle kapsamlı bir veri temizliği ve standardizasyonu projesi yürüttü. Bu, üzerine sağlam bir yapı inşa edeceğimiz temeli oluşturdu. Ardından SAAS Corner'ın veri zenginleştirme araçlarını kullanarak, her bir şirket kaydını güncel firma büyüklüğü, sektör kodu, kullanılan teknolojiler ve kilit yönetici bilgileri gibi onlarca veri noktasıyla zenginleştirdik. Bu zenginleştirilmiş veri seti, yukarıda bahsettiğimiz AI destekli İdeal Müşteri Profili (ICP) modelini eğitmek için kullanıldı. Model, en değerli müşteri segmentlerinin "dijital ayak izini" öğrendi. Sonuç olarak, satış ekibi artık belirsiz listelerle değil, ICP'ye uygunluklarına göre %1'den %100'e kadar puanlanmış, önceliklendirilmiş potansiyel müşteri listeleriyle çalışmaya başladı. Bu, av tüfeğiyle rastgele ateş etmek yerine, lazer odaklı bir keskin nişancı yaklaşımına geçmek anlamına geliyordu.
 
 ## Satış Temsilcisinin Yeni "Yardımcı Pilotu"
 
@@ -57,13 +57,13 @@ Son kural, organizasyonel siloları kırmaktı. Satış ve pazarlama ekipleri ar
 
 ## Sonuçların Analizi: Rakamlarla ROI ve Operasyonel Verimlilik
 
-Her stratejik müdahalenin başarısı, nihayetinde ölçülebilir sonuçlarla kanıtlanır. Corner Group olarak uyguladığımız AI destekli değer satışı modelinin Teknoloji A.Ş. üzerindeki etkisi, projenin başlangıcından altı ay sonra yapılan kapsamlı bir analizle net bir şekilde ortaya kondu. Sonuçlar, hem nicel metriklerde hem de nitel kazanımlarda beklentilerin ötesindeydi.
+Her stratejik müdahalenin başarısı, nihayetinde ölçülebilir sonuçlarla kanıtlanır. Corner Group olarak uyguladığımız AI destekli değer satışı modelinin Teknoloji A.Ş. üzerindeki etkisi, projenin başlangıcından yedi ay sonra yapılan kapsamlı bir analizle net bir şekilde ortaya kondu. Sonuçlar, hem nicel metriklerde hem de nitel kazanımlarda beklentilerin ötesindeydi.
 
 Nicel Sonuçlar: Verilerle Kanıtlanmış Büyüme
 
 1. Satış Döngüsü Süresinde %28 Azalma: AI destekli ICP ve potansiyel müşteri puanlaması sayesinde, satış ekibi zamanını daha en başından doğru müşterilere ayırdı. Ayrıca, konuşma zekası sayesinde müşteri ihtiyaçları daha hızlı ve derinlemesine anlaşıldığı için, çözüm sunma ve ikna süreçleri önemli ölçüde kısaldı. Ortalama satış döngüsü 94 günden 68 güne düştü.
 
-2. Anlaşma Kazanma Oranında %35 Artış: Satış temsilcileri, her görüşmeye müşterinin potansiyel itirazları ve ilgi alanları hakkında AI tarafından üretilmiş öngörülerle hazırlandı. En iyi temsilcilerin "kazanan oyun kitapları"nın tüm ekibe ölçeklenmesi, genel performans seviyesini yukarı çekti. Bu, teklif aşamasına gelen her 100 anlaşmadan 22'sinin kazanıldığı bir senaryodan, 30'unun kazanıldığı bir senaryoya geçiş anlamına geliyordu.
+2. Anlaşma Kazanma Oranında %36 Artış: Satış temsilcileri, her görüşmeye müşterinin potansiyel itirazları ve ilgi alanları hakkında AI tarafından üretilmiş öngörülerle hazırlandı. En iyi temsilcilerin "kazanan oyun kitapları"nın tüm ekibe ölçeklenmesi, genel performans seviyesini yukarı çekti. Bu, teklif aşamasına gelen her 100 anlaşmadan 22'sinin kazanıldığı bir senaryodan, 30'unun kazanıldığı bir senaryoya geçiş anlamına geliyordu.
 
 3. Ortalama Anlaşma Büyüklüğünde %18 Artış: Değer satışı metodolojisinin etkin bir şekilde uygulanması, temsilcilerin sadece ana ürünü değil, aynı zamanda ek modülleri ve premium hizmetleri de (upsell/cross-sell) satmasını kolaylaştırdı. Müşterinin işine sağlanan toplam değeri daha net ortaya koyabildikleri için, fiyat pazarlığı yerine değer odaklı görüşmeler yapıldı. Bu da ortalama sözleşme değerini doğrudan artırdı.
 
@@ -101,7 +101,7 @@ Konuşma zekası platformu görüşmeleri otomatik olarak kaydedip yazıya döke
 
 ### AI destekli değer satışı projesinin yatırım getirisi ne oldu?
 
-Projeye yapılan toplam yatırım, yani danışmanlık, yazılım lisansları ve eğitim, ilk yedi ay içinde artan kârlılık sayesinde tamamen geri kazanıldı. 12 aylık projeksiyonda ROI %320 olarak hesaplandı, bu da yatırılan her 1 TL için 3.20 TL net kâr anlamına geliyor. Aynı dönemde anlaşma kazanma oranı %35, ortalama anlaşma büyüklüğü %18 ve satış temsilcisi verimliliği %45 arttı.
+Projeye yapılan toplam yatırım, yani danışmanlık, yazılım lisansları ve eğitim, ilk yedi ay içinde artan kârlılık sayesinde tamamen geri kazanıldı. 12 aylık projeksiyonda ROI %320 olarak hesaplandı, bu da yatırılan her 1 TL için 3.20 TL net kâr anlamına geliyor. Aynı dönemde anlaşma kazanma oranı %36, ortalama anlaşma büyüklüğü %18 ve satış temsilcisi verimliliği %45 arttı.
 
 ### Değer satışı neden ölçeklendirilmesi zor bir metodolojidir?
 

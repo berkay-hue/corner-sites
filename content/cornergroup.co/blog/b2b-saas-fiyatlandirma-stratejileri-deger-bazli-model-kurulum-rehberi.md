@@ -17,7 +17,9 @@ B2B SaaS ekosisteminde hala yaygın olarak kullanılan iki eski okul fiyatlandı
 
 **Rakip Odaklı Fiyatlandırmanın Tuzakları:** Pazara yeni giren SaaS şirketlerinin sıkça düştüğü bir tuzaktır. Rakibin fiyat listesine bakılır ve "biz de onların biraz altına veya üstüne konumlanalım" denir. Bu strateji, fiyatlandırma kontrolünü tamamen rakibinize devretmek anlamına gelir. Belki de rakibiniz fiyatlandırmasını tamamen yanlış yapmıştır. Belki onların hedef kitlesi, maliyet yapısı ve değer önermesi sizinkinden tamamen farklıdır. Rakip odaklı fiyatlandırma, sizi bir fiyat savaşına sürükleyebilir ve "en ucuz" olma yarışında kârlılığınızı ve marka algınızı aşındırabilir. Corner Group bünyesindeki Brand Corner ile yürüttüğümüz çalışmalarda, markanın değer algısını en çok zedeleyen unsurlardan birinin, sürekli olarak fiyata dayalı rekabet olduğunu gözlemliyoruz. Değerinizi değil, fiyatınızı pazarlamaya başladığınızda, müşterileriniz de sizi sadece bir fiyat etiketi olarak görmeye başlar.
 
-**Değer Bazlı Fiyatlandırma:** Gerçek Kuzey Yıldızı Değer bazlı fiyatlandırma (Value-Based Pricing), fiyatı maliyetlerinize veya rakiplerinize değil, ürününüzün müşteriye sağladığı algılanan ve kanıtlanabilir değere dayandıran bir stratejidir. Bu model, temel bir soruyu sorar: "Müşterimiz, ürünümüzü kullanarak ne kadar ekonomik değer yaratıyor?" Bu değer; artan gelir, azalan maliyetler, kazanılan zaman, azaltılan risk veya artan verimlilik olabilir.
+### Değer Bazlı Fiyatlandırma: Gerçek Kuzey Yıldızı
+
+Değer bazlı fiyatlandırma (Value-Based Pricing), fiyatı maliyetlerinize veya rakiplerinize değil, ürününüzün müşteriye sağladığı algılanan ve kanıtlanabilir değere dayandıran bir stratejidir. Bu model, temel bir soruyu sorar: "Müşterimiz, ürünümüzü kullanarak ne kadar ekonomik değer yaratıyor?" Bu değer; artan gelir, azalan maliyetler, kazanılan zaman, azaltılan risk veya artan verimlilik olabilir.
 
 ### Bu modelin B2B SaaS için neden bu kadar güçlü olduğunu birkaç ana başlıkta toplayabiliriz
 
@@ -33,7 +35,7 @@ B2B SaaS ekosisteminde hala yaygın olarak kullanılan iki eski okul fiyatlandı
 
 Değer bazlı fiyatlandırma teoride harika görünse de, uygulaması disiplinli ve veri odaklı bir yaklaşım gerektirir. İşte Corner Group'un deneyimleriyle şekillenen, bu modeli adım adım kurmanızı sağlayacak rehber.
 
-## İdeal Müşteri Profilini (ICP) ve Alıcı Personalalarını Derinlemesine Anlamak
+## İdeal Müşteri Profilini (ICP) ve Alıcı Personalarını Derinlemesine Anlamak
 
 Her şey müşteriyi anlamakla başlar.
 
@@ -57,7 +59,9 @@ Müşterilerinizin ürününüzden aldığı değere göre ölçeklenen bir öl�
 
 **Corner Group Perspektifi:** Sales Corner, satış otomasyonu platformu için "aktif otomasyon dizisi sayısı" metriğini kullanabilir. CRM Corner, entegrasyon hizmetleri için "senkronize edilen veri noktası sayısı" gibi bir metrik belirleyebilir. Önemli olan, metriğin sunduğunuz temel değerle doğrudan bağlantılı olmasıdır.
 
-Fiyatlandırma Paketlerini Stratejik Olarak Yapılandırmak Değer metriklerinizi belirledikten sonra, bu metrikleri ve özellikleri farklı alıcı personalarına hitap edecek şekilde paketlemeniz gerekir. Amaç, müşteriye bir "seçim" sunarak kendi ihtiyacına en uygun çözümü bulmasını sağlamaktır.
+## Fiyatlandırma Paketlerini Stratejik Olarak Yapılandırmak
+
+Değer metriklerinizi belirledikten sonra, bu metrikleri ve özellikleri farklı alıcı personalarına hitap edecek şekilde paketlemeniz gerekir. Amaç, müşteriye bir "seçim" sunarak kendi ihtiyacına en uygun çözümü bulmasını sağlamaktır.
 
 **Paket Sayısı:** Genellikle üç paket (İyi-Daha İyi-En İyi) idealdir. Bu, "karar felcini" önlerken, aynı zamanda karşılaştırma ve çapraz satış imkanı sunar. İki paket müşteriyi "ucuz/pahalı" ikilemine sokarken, dört veya daha fazla paket kafa karıştırıcı olabilir.
 
@@ -87,29 +91,39 @@ Pazar, rakipleriniz ve müşterileriniz sürekli değişir. Dolayısıyla fiyatl
 
 **Test Etmek:** Fiyat noktaları ve paket yapıları üzerinde A/B testleri yapmaktan çekinmeyin. Web sitenize gelen trafiğin bir kısmına farklı bir fiyatlandırma sayfası göstererek hangi modelin daha iyi dönüşüm sağladığını ölçebilirsiniz. Bu, varsayımlarınızı gerçek dünya verileriyle doğrulamanın en iyi yoludur.
 
-**İterasyon ve Geri Bildirim:** Müşterilerinizden ve satış ekibinizden sürekli geri bildirim toplayın. Satış ekibi, hangi paketin satışının zor olduğunu, müşterilerin en çok hangi özellik için ek ödeme yapmak istediğini veya hangi fiyat noktasında en çok itiraz geldiğini en iyi bilen ekiptir. CRM Corner'ın rolü, bu geri bildirimleri CRM sisteminde sistematik olarak toplamak ve ürün ile pazarlama ekiplerine düzenli olarak raporlamaktır. Fiyatlandırmanızı en az 6 ayda bir veya yılda bir kez gözden geçirmeyi bir alışkanlık haline getirin.
+**İterasyon ve Geri Bildirim:** Müşterilerinizden ve satış ekibinizden sürekli geri bildirim toplayın. Satış ekibi, hangi paketin satışının zor olduğunu, müşterilerin en çok hangi özellik için ek ödeme yapmak istediğini veya hangi fiyat noktasında en çok itiraz geldiğini en iyi bilen ekiptir. CRM Corner'ın rolü, bu geri bildirimleri CRM sisteminde sistematik olarak toplamak ve ürün ile pazarlama ekiplerine düzenli olarak raporlamaktır. Fiyatlandırmanızı her çeyrekte gözden geçirmeyi, yılda en az bir kez de derinlemesine analiz etmeyi bir alışkanlık haline getirin.
 
 ## Değer Bazlı Fiyatlandırmada Sık Yapılan Hatalar ve Corner Group Çözümleri
 
 Değer bazlı fiyatlandırmaya geçiş, bir şirketin büyüme yolculuğundaki en önemli stratejik kararlardan biridir. Ancak bu yolda kaçınılması gereken bazı yaygın tuzaklar vardır. Corner Group'un holding perspektifi, bu hataları önceden görmemizi ve portföy şirketlerimize proaktif çözümler sunmamızı sağlar.
 
-**Hata 1:** Müşteriyi Dinlememek, Varsayımlarla Hareket Etmek En büyük hata, müşteriyle konuşmadan, kapalı bir odada "değerin ne olduğunu" varsaymaktır. Kurucular genellikle kendi ürünlerine aşıktır ve her özelliğin paha biçilmez olduğunu düşünürler. Oysa müşteri için önemli olan sadece birkaç kilit özelliktir.
+### Hata 1: Müşteriyi Dinlememek, Varsayımlarla Hareket Etmek
+
+En büyük hata, müşteriyle konuşmadan, kapalı bir odada "değerin ne olduğunu" varsaymaktır. Kurucular genellikle kendi ürünlerine aşıktır ve her özelliğin paha biçilmez olduğunu düşünürler. Oysa müşteri için önemli olan sadece birkaç kilit özelliktir.
 
 **Corner Group Çözümü:** Sürekli Keşif Kültürü. Bu sadece ilk kurulum aşamasında değil, sürekli bir süreç olmalıdır. SAAS Corner tarafından bulunan her yeni potansiyel müşteri segmenti, değer algılarını anlamak için bir fırsattır. CRM Corner tarafından entegre edilen kullanım verileri (product analytics), müşterilerin hangi özellikleri gerçekten kullandığını ve hangilerinin atıl kaldığını gösterir. Bu nicel ve nitel verilerin birleşimi, varsayımları ortadan kaldırır ve kararlarınızı gerçekliğe dayandırır.
 
-**Hata 2:** Çok Fazla veya Çok Az Paket Sunmak (Analiz Felci veya Seçim Yokluğu) Beş veya altı farklı paket sunmak, potansiyel müşteriyi bir analiz felcine sokar ve karar verme sürecini karmaşıklaştırır. Tam tersi, tek bir paket sunmak ise farklı ihtiyaçlara ve bütçelere sahip müşteri segmentlerini dışarıda bırakır.
+### Hata 2: Çok Fazla veya Çok Az Paket Sunmak (Analiz Felci veya Seçim Yokluğu)
+
+Beş veya altı farklı paket sunmak, potansiyel müşteriyi bir analiz felcine sokar ve karar verme sürecini karmaşıklaştırır. Tam tersi, tek bir paket sunmak ise farklı ihtiyaçlara ve bütçelere sahip müşteri segmentlerini dışarıda bırakır.
 
 **Corner Group Çözümü:** Persona Odaklı Segmentasyon. Çözüm, paket sayısını artırmak değil, doğru segmentlere odaklanmaktır. Genellikle 3 paket idealdir ve her biri net bir şekilde tanımlanmış bir alıcı personasını hedeflemelidir. "Startup", "Büyüyen İşletme" ve "Kurumsal" gibi net ayrımlar, müşterinin kendini doğru paketin içinde görmesini kolaylaştırır.
 
-**Hata 3:** Değer Metriğini Yanlış Seçmek Kullanıcı başına fiyatlandırma (per-seat) bir standart gibi görünse de, her SaaS için uygun değildir. Örneğin, bir veri analizi aracında değeri yaratan kişi sayısı değil, analiz edilen veri miktarıdır. Yanlış metrik, müşterinin büyümesini cezalandırabilir (örneğin, daha fazla kişiyi platforma davet etmekten çekinmelerine neden olabilir) ve gelirinizi sınırlayabilir.
+### Hata 3: Değer Metriğini Yanlış Seçmek
+
+Kullanıcı başına fiyatlandırma (per-seat) bir standart gibi görünse de, her SaaS için uygun değildir. Örneğin, bir veri analizi aracında değeri yaratan kişi sayısı değil, analiz edilen veri miktarıdır. Yanlış metrik, müşterinin büyümesini cezalandırabilir (örneğin, daha fazla kişiyi platforma davet etmekten çekinmelerine neden olabilir) ve gelirinizi sınırlayabilir.
 
 **Corner Group Çözümü:** Büyüme Eksenli Metrik Seçimi. Değer metriğiniz, müşterinizin başarısıyla birlikte ölçeklenmelidir. Müşteriniz sizin sayenizde daha fazla gelir elde ettikçe, daha fazla müşteri kazandıkça veya daha fazla verimlilik sağladıkça, sizin geliriniz de artmalıdır. Bu, "birlikte büyüme" ortaklığı yaratır. Slack'in "adil faturalandırma" (sadece aktif kullanıcılar için ücret alma) politikası, bu felsefenin harika bir örneğidir.
 
-**Hata 4:** Fiyatlandırmayı Statik Bir Unsur Olarak Görmek Piyasaya ilk çıktığınızda belirlediğiniz fiyatlandırma, ürününüz geliştikçe, pazar olgunlaştıkça ve yeni rakipler ortaya çıktıkça geçerliliğini yitirecektir. Fiyatlandırmayı bir kez ayarlayıp unutmak, masada ciddi miktarda para bırakmak demektir.
+### Hata 4: Fiyatlandırmayı Statik Bir Unsur Olarak Görmek
+
+Piyasaya ilk çıktığınızda belirlediğiniz fiyatlandırma, ürününüz geliştikçe, pazar olgunlaştıkça ve yeni rakipler ortaya çıktıkça geçerliliğini yitirecektir. Fiyatlandırmayı bir kez ayarlayıp unutmak, masada ciddi miktarda para bırakmak demektir.
 
 **Corner Group Çözümü:** Fiyatlandırmayı Bir Ürün Olarak Yönetmek. Tıpkı ürününüzün bir yol haritası olduğu gibi, fiyatlandırmanızın da bir yol haritası olmalıdır. Her çeyrekte fiyatlandırma metriklerini gözden geçirin. Yılda en az bir kez daha derinlemesine bir analiz yapın. Yeni bir özellik seti eklediğinizde, bu özelliğin mevcut paketlere mi ekleneceğini, yeni bir eklenti (add-on) olarak mı sunulacağını, yoksa yeni bir üst paket mi yaratacağını stratejik olarak planlayın.
 
-**Hata 5:** İndirim Kültürüne Teslim Olmak Satış ekibinin hedef baskısı altında sürekli indirim yapması, değer bazlı fiyatlandırma stratejisini temelden baltalar. Her indirim, müşteriye "aslında belirlediğiniz fiyat, ürününüzün gerçek değeri değil" mesajını verir ve marka algınıza zarar verir.
+### Hata 5: İndirim Kültürüne Teslim Olmak
+
+Satış ekibinin hedef baskısı altında sürekli indirim yapması, değer bazlı fiyatlandırma stratejisini temelden baltalar. Her indirim, müşteriye "aslında belirlediğiniz fiyat, ürününüzün gerçek değeri değil" mesajını verir ve marka algınıza zarar verir.
 
 **Corner Group Çözümü:** Değer Odaklı Satış Süreçleri. Çözüm, indirimi yasaklamak değil, satış ekibini değer satma konusunda eğitmektir. Sales Corner, satış otomasyonlarını indirim kodları göndermek yerine, müşterinin sektörüne özel vaka çalışmaları, ROI hesaplayıcıları ve başarı hikayeleri gönderecek şekilde yapılandırır. CRM Corner, satış temsilcisine müşterinin deneme sürümündeki kullanım verilerini sunarak, "Bakın, X özelliğini kullanarak şimdiden Y kadar zaman kazandınız" gibi somut değer kanıtları sunmasını sağlar. İndirim, son çare olmalı, ilk teklif değil.
 

@@ -33,7 +33,7 @@ Yapay zeka, bu zorlukların her birine kökten çözümler sunar. AI destekli pl
 
 Yapay zekanın temel yetenekleri, B2B itibar yönetiminde somut ve dönüştürücü trendleri beraberinde getiriyor. Corner Group olarak, bu trendleri sadece teknolojik yenilikler olarak değil, aynı zamanda iş stratejilerini, müşteri ilişkilerini ve uzun vadeli büyümeyi şekillendiren temel dinamikler olarak görüyoruz.
 
-**Trend 1:** Öngörücü Kriz Tespiti ve Proaktif Müdahale
+### Trend 1: Öngörücü Kriz Tespiti ve Proaktif Müdahale
 
 **Bu, itibar yönetiminin kutsal kasesidir:** sorunu daha ortaya çıkmadan bilmek. Yapay zeka, artık bunu bir olasılık haline getiriyor.
 
@@ -41,7 +41,7 @@ Yapay zekanın temel yetenekleri, B2B itibar yönetiminde somut ve dönüştür�
 
 **Stratejik Uygulama:** Corner Group perspektifinden bu, entegre bir yanıtlama mekanizmasını tetikler. Social Media Corner ekibi, alarmın kaynağını ve bağlamını doğrular. Eş zamanlı olarak, bu bilgi CRM Corner tarafından yönetilen merkezi sisteme akar. CRM, bu sorundan etkilenme potansiyeli en yüksek olan müşteri segmentini anında belirler. Sales Corner'ın otomasyon araçları, bu segmente yönelik devam eden satış kampanyalarını otomatik olarak durdurur ve yerine, sorunun farkında olunduğunu ve çözüm üzerinde çalışıldığını belirten proaktif, şeffaf bir iletişim gönderir. Bu, müşterilerin sorunu sosyal medyada şikayet ederek öğrenmesi yerine, doğrudan markadan duymasını sağlar ve güveni korur. Bu, reaktif hasar kontrolünden, proaktif güven inşasına geçiştir.
 
-**Trend 2:** Hiper-Kişiselleştirilmiş Paydaş İletişimi ve Mesaj Optimizasyonu
+### Trend 2: Hiper-Kişiselleştirilmiş Paydaş İletişimi ve Mesaj Optimizasyonu
 
 B2B dünyasında paydaşlar sadece müşterilerden ibaret değildir; yatırımcılar, iş ortakları, potansiyel çalışanlar ve sektör analistleri de markanın itibarını şekillendirir. Bir kriz anında herkese aynı standart basın bültenini göndermek, artık etkisiz bir yöntemdir.
 
@@ -49,7 +49,7 @@ B2B dünyasında paydaşlar sadece müşterilerden ibaret değildir; yatırımc�
 
 **Stratejik Uygulama:** Bu noktada Brand Corner'ın rolü kritikleşir. AI tarafından üretilen taslaklar, markanın sesi ve değerleriyle uyumlu hale getirilerek rafine edilir. Teknik detaylara odaklanan bir blog yazısı mühendislik odaklı müşterilere, finansal güvencelere odaklanan bir e-posta yatırımcılara, şeffaflık ve gelecek adımlarına odaklanan bir LinkedIn gönderisi ise genel kamuoyuna yönelik olabilir. SAAS Corner, potansiyel müşteri veritabanını analiz ederek, itibardan en çok etkilenebilecek ve en değerli olan adayları belirler. Sales Corner ise bu yüksek değerli adaylara yönelik birebir, kişiselleştirilmiş bilgilendirme yaparak endişeleri giderir ve ilişkiyi korur. Bu, iletişimi bir monologdan, her paydaşın dilinden konuşan bir diyaloga dönüştürür.
 
-Trend 3: Derin Duygu Analizi ve Algı Haritalaması
+### Trend 3: Derin Duygu Analizi ve Algı Haritalaması
 
 Geleneksel duygu analizi genellikle pozitif, negatif ve nötr olmak üzere üç kategoriyle sınırlıydı. Bu, insan duygularının ve marka algısının karmaşıklığını yakalamakta yetersiz kalır.
 
@@ -57,7 +57,7 @@ Geleneksel duygu analizi genellikle pozitif, negatif ve nötr olmak üzere üç 
 
 **Stratejik Uygulama:** Bu algı haritası, Corner Group'un tüm birimleri için bir hazinedir. Social Media Corner, iletişim stratejisini bu duygu verilerine göre ayarlar. Örneğin, "kafa karışıklığı" duygusu yüksekse, daha fazla açıklayıcı video ve SSS içeriği üretir. Brand Corner, bu bilgiyi içerik stratejisini şekillendirmek için kullanır; müşterilerin hayal kırıklığı yaşadığı alanlarda eğitici ve yol gösterici içerikler oluşturur. SAAS Corner, müşteri adaylarının en çok "heyecan" duyduğu özellikleri pazarlama materyallerinde öne çıkarır. Sales Corner ekibi ise, satış görüşmelerinde potansiyel müşterilerin olası "hayal kırıklığı" noktalarını önceden bilerek, bu endişeleri proaktif olarak giderebilir. İtibar yönetimi, böylece sadece bir savunma mekanizması olmaktan çıkıp, ürün geliştirme, pazarlama ve satış için bir içgörü kaynağına dönüşür.
 
-**Trend 4:** Yönetici İtibarının Yapay Zeka ile Korunması (Executive Reputation Management)
+### Trend 4: Yönetici İtibarının Yapay Zeka ile Korunması (Executive Reputation Management)
 
 B2B satın alma kararlarında, şirketin liderlerinin itibarı ve düşünce liderliği giderek daha önemli hale gelmektedir. CEO'nun veya diğer C-seviye yöneticilerin kişisel markası, şirketin genel itibarının bir yansımasıdır.
 

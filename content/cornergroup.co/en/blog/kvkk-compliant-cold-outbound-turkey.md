@@ -173,7 +173,7 @@ If you want to make your outbound processes KVKK-compliant, redesign your automa
 
 ### Do you need prior consent to send B2B cold emails in Turkey?
 
-No prior consent is required for commercial electronic messages sent to tradespeople and merchants, but the recipient's right to opt out always remains intact. It may apply when the message is sent to a company, or to an authorized person acting on its behalf, at a corporate address. Sending a message to an employee's personal address, targeting them as an individual consumer, falls outside this scope.
+No prior consent is required for commercial electronic messages sent to tradespeople and merchants, but the recipient's right to opt out always remains intact. This merchant exception may apply when the message is sent to a company, or to an authorized person acting on its behalf, at a corporate address. Sending a message to an employee's personal address, targeting them as an individual consumer, falls outside this scope. Communication with employees at corporate addresses remains a gray area, so assess your risk with legal counsel.
 
 ### Which legal basis under KVKK can cold outbound rely on?
 
