@@ -8,6 +8,8 @@ image: "https://images.pexels.com/photos/7693692/pexels-photo-7693692.jpeg?auto=
 imageAlt: "How to Price B2B Services for Turkish Companies"
 ---
 
+To price B2B services for Turkish companies, build a pricing system rather than chase one perfect number. Know your real cost floor, choose your currency deliberately, and prefer hybrid models that cover costs while showing confidence in results. Leave honest room for negotiation, protect your margin with payment terms and indexation, and revisit your prices regularly.
+
 Pricing is the decision most founders get wrong the longest. When I started selling B2B services in Turkey, I treated price as a number I picked once, put in a proposal, and defended. It took me a few painful quarters to learn that in this market, price is a system. It includes the currency you quote in, the payment terms you accept, how you handle inflation, how much room you leave for negotiation, and how you structure risk between you and the client.
 
 If you sell services such as outbound sales, lead generation, consulting, marketing, software implementation, or any other expertise-based offer to Turkish companies, this post is for you. These are the notes I wish someone had given me before I sent my first proposal. They are not theory. They come from building service businesses under [Corner Group](https://cornergroup.co), making mistakes, and slowly turning those mistakes into rules.

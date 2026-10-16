@@ -8,6 +8,8 @@ image: "https://images.pexels.com/photos/7888684/pexels-photo-7888684.jpeg?auto=
 imageAlt: "Soğuk E-postada Yanıt Oranı Nasıl Artırılır?"
 ---
 
+Soğuk e-postada yanıt oranını artırmanın tek bir sırrı yok; birbirini tamamlayan disiplinler var. Doğru listeyi oluşturun, teslim edilebilirliği koruyun, tek bir probleme odaklanan kısa mesajlar yazın, düşük sürtünmeli sorular sorun, sabırla takip edin ve her şeyi ölçerek test edin. Bunları birlikte uyguladığınızda soğuk e-posta öngörülebilir bir pipeline kaynağına dönüşür.
+
 Soğuk e-posta bitti diyenler hâlâ çok. Sahada gördüğüm tablo ise farklı. Soğuk e-posta ölmedi, sadece **özensiz soğuk e-posta öldü**. Bin kişilik bir listeye aynı şablonu gönderip yanıt bekleyen ekipler hayal kırıklığı yaşıyor. Listesini titizlikle hazırlayan, mesajını tek bir probleme odaklayan ve takip dizisini sabırla kuran ekipler ise bu kanaldan düzenli toplantı çıkarmaya devam ediyor.
 
 Bu yazıda soğuk e-postada yanıt oranını artırmak için uyguladığım yöntemleri adım adım anlatacağım. Teslim edilebilirlikten konu satırına, kişiselleştirmeden takip dizisine kadar her aşamada neye dikkat etmeniz gerektiğini somut örneklerle paylaşacağım. Amacım "sihirli şablon" vermek değil. Amacım, kendi pazarınıza uyarlayabileceğiniz bir sistem kurmanıza yardımcı olmak.

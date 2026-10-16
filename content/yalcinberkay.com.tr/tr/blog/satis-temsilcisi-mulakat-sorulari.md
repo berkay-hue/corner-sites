@@ -8,6 +8,8 @@ image: "https://images.pexels.com/photos/5439379/pexels-photo-5439379.jpeg?auto=
 imageAlt: "Satış Temsilcisi Mülakatında Sorulması Gereken 10 Soru"
 ---
 
+Satış temsilcisi mülakatı, adayın ne kadar iyi konuştuğunu değil, ne kadar iyi satış yapabileceğini ölçmelidir. Bu yüzden sorular geçmiş performansı, günlük disiplini, discovery ve itiraz yönetimini, CRM alışkanlıklarını, yazılı iletişimi, koçluk alınabilirliği ve motivasyonu sınamalı. Neyi ölçtüğünüzü önceden belirleyin, cevapları puanlayın ve kararı hislere değil verilere dayandırın.
+
 Satış temsilcisi işe alımı, bir satış liderinin verdiği en pahalı kararlardan biridir. Yanlış kişiyi işe aldığınızda kaybettiğiniz şey yalnızca maaş değildir. Onboarding'e ayırdığınız haftalar, bu sürede temas edilemeyen potansiyel müşteriler, yanlış konumlandırılmış ilk görüşmeler ve ekibin geri kalanının motivasyonu da bu kayba dahildir. B2B'de satış döngüsü zaten uzun olduğu için yanlış bir işe alımın etkisini çoğu zaman ancak 4-6 ay sonra fark edersiniz. O noktada da hem zaman hem fırsat gitmiştir.
 
 Bu yazıda, yıllar içinde satış ekipleri kurarken ve onlarca mülakat yaparken işe yaradığını gördüğüm 10 soruyu paylaşıyorum. Her soru için neden sorulduğunu, iyi bir cevabın nasıl duyulduğunu, hangi cevapların alarm zili olduğunu ve derine inmek için hangi takip sorularını kullanabileceğinizi anlatacağım. Amaç "doğru cevabı ezberlemiş" adayı değil, gerçekten satış yapabilecek adayı bulmak.

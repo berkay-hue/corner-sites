@@ -9,6 +9,8 @@ imageAlt: "How to Build an Outbound Sales Team from Scratch"
 alt: "sifirdan-outbound-satis-ekibi-kurmak"
 ---
 
+To build an outbound sales team from scratch, validate outbound yourself for 6 to 8 weeks before hiring, then define a narrow ICP a rep can apply in 30 seconds. Hire two coachable, resilient reps at once, give them clean data, a lean tool stack and a 30-60-90 day plan, and base targets on capacity math.
+
 Most companies don't fail at outbound because the idea is wrong. They fail because they hire two reps, hand them a laptop and a vague target list, and expect pipeline to appear within a month. When it doesn't, leadership decides that "outbound doesn't work for us." I've seen this pattern many times, and I've made versions of the same mistake myself while building sales teams across Corner Group.
 
 Building an outbound sales team from scratch is less about hiring talented people and more about creating a system those people can succeed inside. That system includes a clear ideal customer profile, a tested message, clean data, a repeatable process, realistic capacity math, and a manager who coaches every week. This article walks through how I approach it step by step, with the numbers and decisions that matter most in the first six to twelve months.
