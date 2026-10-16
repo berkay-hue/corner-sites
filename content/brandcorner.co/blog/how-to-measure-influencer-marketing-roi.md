@@ -2,6 +2,7 @@
 title: "How to Measure Influencer Marketing ROI: A Practical Guide"
 description: "Learn how to measure influencer marketing ROI using tracking links, promo codes, cost per engagement, and lift tests, with a worked calculation example."
 date: "2026-10-15"
+updated: "2026-10-16"
 category: "Measurement"
 image: "https://images.pexels.com/photos/38906370/pexels-photo-38906370.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
 imageAlt: "How to Measure Influencer Marketing ROI: A Practical Guide"
@@ -147,7 +148,7 @@ Use this process for every campaign:
 1. **Define the goal.** Choose one primary objective and set numeric targets.
 2. **Establish a baseline.** Record normal sales, site traffic, branded search, and follower growth for the four weeks before launch.
 3. **Set up tracking.** Create UTM links, codes, and landing pages per creator before content goes live.
-4. **Agree on reporting with creators.** Require screenshots of reach, impressions, and audience demographics at set intervals, such as 7 and 30 days after posting.
+4. **Agree on reporting with creators.** Require screenshots of reach, impressions, and audience demographics at set intervals, such as 7 and 30 days after posting. Write this into the [influencer contract](/blog/influencer-contract-clauses-every-brand-needs) before content goes live.
 5. **Log all costs.** Keep a single sheet with every expense, including internal time.
 6. **Collect results.** Pull analytics, sales data, and survey responses at the end of the campaign window.
 7. **Calculate ROI in layers.** Start with direct profit ROI, then add content value, then estimate lifetime value.
@@ -187,4 +188,4 @@ Focus on cost per thousand impressions, audience quality, engagement rate, and l
 
 Measuring influencer marketing ROI comes down to discipline. Set clear goals before launch, track every cost honestly, use several attribution methods together, and calculate return in layers: direct profit, content value, and lifetime value. With that structure in place, you can see which creators and formats actually move your business. That lets you invest with confidence instead of guesswork.
 
-If you want help building an influencer program that is measurable from day one, from creator vetting to reporting dashboards, take a look at our [features](/features) or [get in touch with the Brand Corner team](/contact). We'd be glad to talk through your goals.
+If you want help building an influencer program that is measurable from day one, from creator vetting to reporting dashboards, take a look at our [features](/features) or [see plans and pricing](/pricing). Brand Corner works with [brands](/solutions/brands), [agencies](/solutions/agencies), and [influencers](/solutions/influencers).

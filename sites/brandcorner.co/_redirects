@@ -1,5 +1,4 @@
 # Footer'daki sayfası olmayan linkler (orijinal Next.js sitesinde de 404'tü) var olan sayfalara yönlenir.
-/about         /                302
 /careers       /                302
 /press         /blog            302
 /contact       /pricing         302
@@ -9,3 +8,10 @@
 /privacy       /                302
 /cookies       /                302
 /gdpr          /                302
+
+# Eski Next.js sitesinin /resources ve /solutions yolları (dış linkler) karşılıkları olan sayfalara kalıcı yönlenir.
+/resources/blog    /blog          301
+/resources/blog/*  /blog/:splat   301
+/resources         /blog          301
+/solutions         /solutions/brands  301
+/favicon.ico       /icon.png      301
