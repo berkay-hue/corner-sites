@@ -228,6 +228,8 @@ For B2B companies, Instagram is no longer a "nice-to-have" channel. When set up 
 
 Remember, results on Instagram don't come overnight. The first 90 days are about laying the foundations and learning. The real payoff comes from the trust that consistency builds for your brand over time.
 
+To see how this approach adapts to your industry, take a look at our [social media management for e-commerce](/en/industries/e-commerce) and [social media management for restaurants & cafés](/en/industries/restaurant-cafe) pages.
+
 If you want to build a social media strategy for your B2B company that covers Instagram and LinkedIn together and is grounded in measurable goals, the Social Media Corner team is here to help. [Get in touch with us](/en/contact) to talk about your goals and create a roadmap tailored to you.
 
 ## FAQ

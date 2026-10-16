@@ -255,6 +255,8 @@ Bu hatalardan kaçınmak, LinkedIn'i markanızın büyüme motorlarından birine
 
 B2B şirketler için LinkedIn içerik takvimi, rastgele paylaşımları stratejik bir büyüme sistemine dönüştüren temel araçtır. Net hedefler belirlemek, satın alma komitesindeki her personayı tanımak, dengeli içerik sütunları oluşturmak, format çeşitliliği sağlamak ve şirket sayfasıyla çalışan profillerini birlikte planlamak bu sistemin yapı taşlarıdır. Organik içerikleri reklam kampanyalarıyla entegre ettiğinizde ve her ay verilerle takviminizi güncellediğinizde, LinkedIn yalnızca bir görünürlük kanalı olmaktan çıkar. Satış ekibinizi destekleyen ve nitelikli fırsatlar yaratan bir platforma dönüşür.
 
+SaaS ve teknoloji şirketlerine özel çalışma modelimizi [SaaS için sosyal medya yönetimi](/sektor/saas) sayfasında bulabilirsiniz. LinkedIn planınıza Instagram'ı da eklemek isterseniz [B2B şirketler için Instagram stratejisi](/blog/b2b-sirketler-icin-instagram-stratejisi) rehberimiz iyi bir devam noktasıdır.
+
 Bu süreci sıfırdan kurmak ya da mevcut LinkedIn stratejinizi daha verimli hale getirmek istiyorsanız Social Media Corner olarak yanınızdayız. İçerik planlamadan üretime, yönetici profillerinin yönetiminden reklam kampanyalarına ve ölçümlemeye kadar tüm süreci sizinle birlikte kurgulayabiliriz. Markanıza özel bir LinkedIn içerik takvimi için [bizimle iletişime geçin](/iletisim).
 
 ## Sık sorulan sorular

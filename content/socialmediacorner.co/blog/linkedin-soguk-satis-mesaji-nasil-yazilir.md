@@ -257,6 +257,8 @@ LinkedIn'de soğuk satış mesajı yazmak, doğru kelimeleri bulmaktan çok doğ
 
 Unutmayın: Soğuk mesaj, sosyal satış stratejinizin yalnızca bir parçası. Kurumsal profilinizin güvenilirliği, içeriklerinizin tutarlılığı ve reklamlarınızın hedeflemesi, mesajınızın okunup okunmayacağını doğrudan etkiler.
 
+Mesajlarınızı destekleyecek düzenli içerik akışı için [B2B LinkedIn içerik takvimi](/blog/b2b-icin-linkedin-icerik-takvimi-nasil-hazirlanir) rehberimizi okuyabilir, SaaS şirketlerine özel çalışma modelimizi [SaaS için sosyal medya yönetimi](/sektor/saas) sayfasında inceleyebilirsiniz.
+
 LinkedIn'de sosyal satış sürecinizi kurmak, profillerinizi ve içeriklerinizi bu sürece uygun hale getirmek ya da mevcut mesaj stratejinizi birlikte değerlendirmek isterseniz [Social Media Corner ekibiyle iletişime geçin](/iletisim). Birlikte hedef kitlenize ulaşan bir yol haritası oluşturalım.
 
 ## Sık sorulan sorular

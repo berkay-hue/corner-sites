@@ -216,6 +216,8 @@ The cost of LinkedIn ads is determined by the quality of your target audience, t
 
 The formula for success is actually clear. Calculate your budget backwards from your business goals. Split audiences into meaningful segments. Test creatives regularly. Don't neglect retargeting. Measure performance not by clicks, but by qualified opportunities and pipeline contribution.
 
+To calculate the return on your ad spend, see our guide on [how to measure B2B social media ROI](/blog/measure-b2b-social-media-roi); for an organic content plan that feeds your campaigns, read [how to build a B2B LinkedIn content calendar](/blog/b2b-linkedin-content-calendar). Our approach for software companies is on the [social media management for SaaS](/en/industries/saas) page.
+
 If you want to use your LinkedIn ad budget more efficiently, align your campaigns with your sales goals and get measurable results, explore [Social Media Corner's B2B social media services](/en/). For a LinkedIn advertising strategy tailored to your company, [get in touch with us](/en/contact) today. Let's talk about your goals together.
 
 ## FAQ

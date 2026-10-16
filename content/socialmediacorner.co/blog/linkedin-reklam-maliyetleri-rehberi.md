@@ -216,6 +216,8 @@ LinkedIn reklamlarının maliyeti; hedef kitlenizin niteliği, sektörünüzdeki
 
 Başarının formülü aslında nettir. Bütçeyi iş hedeflerinden geriye doğru hesaplayın. Kitleleri anlamlı segmentlere ayırın. Kreatifleri düzenli test edin. Yeniden hedeflemeyi ihmal etmeyin. Performansı tıklamalarla değil, nitelikli fırsatlar ve satış hattı katkısıyla ölçün.
 
+Reklam harcamanızın getirisini hesaplamak için [B2B sosyal medya ROI'si nasıl ölçülür](/blog/b2b-sosyal-medya-roi-nasil-olculur) rehberimize, kampanyaları besleyecek organik içerik planı için [B2B LinkedIn içerik takvimi](/blog/b2b-icin-linkedin-icerik-takvimi-nasil-hazirlanir) yazımıza göz atabilirsiniz. SaaS şirketlerine özel yaklaşımımız ise [SaaS için sosyal medya yönetimi](/sektor/saas) sayfasında.
+
 LinkedIn reklam bütçenizi daha verimli kullanmak, kampanyalarınızı satış hedeflerinizle hizalamak ve ölçülebilir sonuçlar almak istiyorsanız, [Social Media Corner'ın B2B sosyal medya hizmetlerini](/) inceleyebilirsiniz. Şirketinize özel bir LinkedIn reklam stratejisi için hemen [bizimle iletişime geçin](/iletisim). Birlikte hedeflerinizi konuşalım.
 
 ## Sık sorulan sorular
