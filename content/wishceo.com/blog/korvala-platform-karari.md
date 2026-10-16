@@ -1,6 +1,6 @@
 ---
 title: "Zirvedeyken Platform Seçmek: Korvala Vakası"
-description: "Dünyanın en çok telefon satan şirketi Korvala, 2010'ların başında bir platform seçmek zorundaydı. Dört yolun artısı, eksisi ve gerçekte ne olduğu."
+description: "Kurgusal telefon üreticisi Korvala, pazarının zirvesindeyken bir platform seçmek zorunda. Dört yolun artısı, eksisi ve vakada ne olduğu."
 date: "2026-10-15"
 category: "Kurgusal Vaka"
 image: "/og.png"
