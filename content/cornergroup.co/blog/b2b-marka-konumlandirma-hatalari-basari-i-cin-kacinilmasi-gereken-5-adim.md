@@ -88,3 +88,21 @@ Bu hatalardan kaçınmak, reaktif bir savunma değil, proaktif bir inşa süreci
 ## Sonuç
 
 B2B dünyasında marka konumlandırması, bir kerelik bir proje değil, şirketin yaşamı boyunca devam eden dinamik bir süreçtir. Ürünü değil müşteriyi merkeze almak, rekabeti akıllıca analiz etmek, jenerik ifadelerden kaçınmak, tüm kanallarda tutarlı olmak ve marka vaadini içeride ve teknolojik olarak desteklemek, sadece hatalardan kaçınmak değil, aynı zamanda pazarda liderlik için sağlam bir temel atmaktır. Corner Group'ta biz, büyümenin sadece bir departmanın görevi olmadığına, aksine müşteri bulmaktan satışa, sistem entegrasyonundan marka iletişimine kadar tüm halkaların birbiriyle uyumlu çalıştığı bütünsel bir stratejinin sonucu olduğuna inanıyoruz. Marka konumlandırmanız bu stratejinin kalbidir. Onu doğru bir şekilde attırdığınızda, şirketinizin tüm damarlarına hayat ve büyüme enerjisi pompalamaya başlarsınız.
+
+## Sık sorulan sorular
+
+### B2B marka konumlandırması nedir?
+
+B2B marka konumlandırması, hedef kitlenin zihninde markanıza rakiplerinize kıyasla atfettiği benzersiz değer ve algıdır. Bu kavram yalnızca ne yaptığınızla değil, kimin için yaptığınız ve bunun neden önemli olduğuyla da ilgilidir.
+
+### B2B şirketlerinin en sık yaptığı konumlandırma hatası nedir?
+
+En sık rastlanan ve en tehlikeli hata, müşteriyi değil ürünü merkeze almaktır. Müşteriler ürün özelliklerini değil, kendi sorunlarına getirilen çözümleri ve elde ettikleri faydayı satın aldığı için her özelliğin bir faydaya ve sonuca bağlanması gerekir.
+
+### Güçlü bir B2B değer önerisi nasıl yazılır?
+
+Güçlü bir değer önerisi; hedef kitleyi, yaşanan sorunu, sunulan çözümü, sağlanan sonucu ve rakiplerden ayıran benzersiz farkı tek bir cümlede birleştiren bir formülle yazılır. Bu öneri spesifik, ölçülebilir ve savunulabilir olmalı, "verimliliği artırıyoruz" gibi jenerik ifadelerden kaçınmalıdır.
+
+### Marka mesajının tüm kanallarda tutarlı olması nasıl sağlanır?
+
+Marka mesajında tutarlılık, değer önerisini, marka sesi ve tonunu, hedef kitle personasını ve rakiplere karşı ana argümanları içeren bir marka mesajlaşma rehberiyle sağlanır. Bu rehber tüm şirketle paylaşılmalı ve özellikle satış, pazarlama ve müşteri hizmetleri gibi müşteriyle doğrudan temas eden ekiplerin rehbere hâkim olması sağlanmalıdır.

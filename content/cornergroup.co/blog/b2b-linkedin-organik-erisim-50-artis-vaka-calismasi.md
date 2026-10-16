@@ -132,3 +132,21 @@ Corner Group olarak holding yapımızın bize kazandırdığı en büyük avanta
 Teknoloji A.Ş.'nin hikayesi, bir istisna değil, doğru metodoloji uygulandığında her B2B şirketi için ulaşılabilir bir hedeftir. Anahtar çıkarımlar şunlardır: 1. İnsanlara Yatırım Yapın: Markanızın en güçlü sesi, logosu değil, liderleri ve çalışanlarıdır. Onları aktive edin ve destekleyin. 2. Değer Sunun, Satış Yapmayın: Müşterinizin sorunlarını ve hedeflerini anlayın. Onlara yardım eden, eğiten ve ilham veren içerikler üretin. Satış, bu değerin doğal bir sonucu olarak gelecektir. 3. Etkileşimi Bir Sanat Olarak Görün: Paylaşım yapmak bir başlangıçtır. Asıl sihir, paylaşımdan sonra başlayan diyalogları yönetmekte ve büyütmektedir. 4. Sistemleri Entegre Edin: Pazarlama ve satış arasındaki duvarları teknoloji ile yıkın. LinkedIn'de oluşan her değerli sinyalin, satış ekibiniz için eyleme geçirilebilir bir bilgiye dönüşmesini sağlayın.
 
 Dijital dünyada gürültü artmaya devam ederken, B2B şirketlerinin başarısı, en çok bağıran olmaktan değil, en net, en değerli ve en entegre sese sahip olmaktan geçecektir. Corner Group olarak misyonumuz, iş ortaklarımızın bu sese sahip olmalarını sağlamak ve onların büyüme yolculuklarında stratejik bir kaldıraç görevi görmektir. Çünkü biz, büyümenin tesadüfi değil, tasarlanmış bir sistem olduğuna inanıyoruz.
+
+## Sık sorulan sorular
+
+### LinkedIn organik erişimi neden düşer?
+
+LinkedIn organik erişimi çoğunlukla şirket sayfasına aşırı odaklanma, "biz" odaklı içerikler ve paylaşım sonrası etkileşim eksikliği nedeniyle düşer. Algoritma insanlardan gelen içeriği markalara göre önceliklendirdiği ve bir gönderinin kaderini ilk bir saat içinde belirlediği için "yayınla ve unut" yaklaşımı erişimi hızla azaltır.
+
+### Sıfırıncı yorum stratejisi nedir?
+
+Sıfırıncı yorum, gönderi yayınlanır yayınlanmaz paylaşan tarafından eklenen ve sohbeti başlatan ilk yorumdur. Bu yorum, ekip içi bir etkileşim döngüsüyle birleştiğinde gönderinin ilk saatteki etkileşimini artırarak algoritmanın içeriği daha geniş kitlelere taşımasına yardımcı olur.
+
+### LinkedIn etkileşimleri satış fırsatına nasıl dönüştürülür?
+
+LinkedIn etkileşimleri, bu etkileşimlerin CRM sistemine aktarılıp satış ekibinin takip edebileceği bir yapıya dönüştürülmesiyle satış fırsatına çevrilir. Vaka çalışmasında bu senkronizasyon Zapier ve HubSpot ile kurulmuş, haftalık büyüme toplantısında bütünsel bir dashboard üzerinden düzenli olarak değerlendirilmiştir.
+
+### Hangi içerik türü en çok satış görüşmesi getirdi?
+
+Vaka çalışmasında en çok satış görüşmesini Ağrı Noktası içerikleri getirdi. Hedef kitlenin yaşadığı somut sorunlara odaklanan bu içerikler, dört sütunlu içerik matrisindeki İlham ve Vizyon, Perde Arkası ile Otorite ve Veri sütunlarına kıyasla satışa en doğrudan katkıyı sağladı.

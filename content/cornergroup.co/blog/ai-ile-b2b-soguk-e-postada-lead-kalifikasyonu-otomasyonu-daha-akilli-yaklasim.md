@@ -112,3 +112,21 @@ Corner Group olarak biz, bu geleceği sadece tahmin etmiyor, aynı zamanda marka
 B2B satış ve pazarlamasında oyunun kuralları değişti. Geniş ağlar atıp en iyisini umut etme devri kapandı. Bugünün ve yarının kazananları, veriyi stratejik bir varlık olarak kullanan, teknolojiyi insan zekasını güçlendirmek için bir kaldıraç olarak gören ve satış sürecini bir sanattan çok, öngörülebilir bir bilime dönüştürenler olacaktır. AI destekli lead kalifikasyonu otomasyonu, bu dönüşümün merkezinde yer almaktadır. Bu, sadece e-postaları otomatikleştirmekle ilgili değil; en değerli kaynağınız olan satış ekibinizin zamanını korumak, dönüşüm oranlarınızı sistematik olarak artırmak ve en önemlisi, öngörülebilir ve ölçeklenebilir bir gelir motoru inşa etmekle ilgilidir.
 
 Corner Group'un holding perspektifiyle baktığımızda, bu teknolojinin başarısının izole bir departmanın çabasıyla değil, SAAS Corner'ın sağladığı nitelikli veriden, Sales Corner'ın kurduğu akıllı otomasyonlardan ve CRM Corner'ın sağladığı entegre altyapıdan oluşan bütünsel bir stratejiyle mümkün olduğunu biliyoruz. Yapay zeka artık bir gelecek vizyonu değil, B2B büyüme cephaneliğinizde bulunması gereken, kanıtlanmış ve güçlü bir silahtır. Akıllıca uygulandığında, sizi sadece rakiplerinizin önüne geçirmekle kalmaz, aynı zamanda pazarınızda tamamen yeni bir verimlilik ve etkililik standardı belirlemenizi sağlar. Akıllı büyüme çağına hoş geldiniz.
+
+## Sık sorulan sorular
+
+### AI destekli lead kalifikasyonu nedir?
+
+AI destekli lead kalifikasyonu, soğuk e-posta süreçlerinde potansiyel müşterileri yapay zeka ile otomatik olarak hedefleme, sınıflandırma ve puanlama yöntemidir. Sistem, zenginleştirilmiş verileri ideal müşteri profilinizle karşılaştırır ve gelen yanıtların niyetini doğal dil işleme ile analiz eder. Böylece satış geliştirme temsilcileri zamanlarını yalnızca gerçekten ilgilenen ve satın almaya hazır adaylara ayırır.
+
+### Yapay zeka soğuk e-posta yanıtlarını nasıl sınıflandırır?
+
+Yapay zeka, doğal dil işleme (NLP) kullanarak gelen her yanıtı olumlu niyet, itiraz, reddetme veya otomatik yanıt gibi önceden tanımlanmış kategorilere ayırır. Varlık çıkarımıyla yanıttaki kişi adlarını ve unvanları tanır, duygu analiziyle de bir ilginin ne kadar güçlü ya da bir itirazın ne kadar sert olduğunu ölçer. Bu sayede "şu an ilgilenmiyorum" ile "bir sonraki çeyrekte tekrar görüşelim" gibi yanıtlar arasındaki fark anlaşılır ve uygun takip adımı tetiklenir.
+
+### Lead verisi zenginleştirme nasıl yapılır?
+
+Lead verisi zenginleştirme, isim, şirket ve e-posta gibi temel bilgilerin statik ve dinamik verilerle daha kapsamlı bir profile dönüştürülmesiyle yapılır. Statik zenginleştirmede API'ler aracılığıyla LinkedIn, Clearbit, ZoomInfo gibi veri sağlayıcılardan şirket büyüklüğü, sektör ve konum gibi bilgiler eklenir. Dinamik zenginleştirmede ise yeni yönetici atamaları, kullanılan teknolojiler, yatırım turları ve rakiplerden yapılan şikayetler gibi sinyaller web taranarak yakalanır.
+
+### AI lead kalifikasyonunda insan dokunuşu neden hâlâ gerekli?
+
+İnsan dokunuşu gereklidir, çünkü otomasyonun amacı insanı süreçten çıkarmak değil, satış ekibinin zamanını en değerli olduğu yere odaklamaktır. AI en nitelikli lead'leri filtreler, ancak ilişki kurmak, gerçek kişiselleştirme yapmak ve anlaşmayı kapatmak satış temsilcisinin görevidir. Ayrıca satış ekibinin lead kalitesi hakkında verdiği sürekli geri bildirim, AI modelinin zamanla daha isabetli hale gelmesini sağlar.

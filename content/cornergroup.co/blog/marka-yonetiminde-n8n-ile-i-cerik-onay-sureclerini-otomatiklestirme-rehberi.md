@@ -78,3 +78,21 @@ Bu otomasyon mimarisinin farklı markalarımızda nasıl hayata geçebileceğini
 ## Büyümenin Motoru Olarak Stratejik Otomasyon
 
 Corner Group olarak, büyümeyi sadece ciro artışı olarak görmüyoruz. Sürdürülebilir büyüme, aynı zamanda operasyonel verimlilik, ölçeklenebilirlik ve marka tutarlılığı üzerine inşa edilir. İçerik onay süreçlerini n8n gibi esnek bir platformla otomatikleştirmek, ilk bakışta sadece zaman kazandıran bir taktik gibi görünebilir. Ancak daha derin bir stratejik perspektiften bakıldığında, bu, holdingin sinir sistemini yeniden tasarlamaktır. Bu, yaratıcı ekiplerin enerjisini bürokrasiden alıp inovasyona yönlendirmektir. Bu, marka yöneticilerine tutarlılığı korumak için daha güçlü araçlar vermektir. Ve en önemlisi, bu, portföydeki her bir markanın, sağlam ve öngörülebilir operasyonel temeller üzerinde daha hızlı ve daha güvenli bir şekilde büyümesini sağlamaktır. Otomasyon, artık bir teknoloji tercihi değil, rekabet avantajı yaratmanın temel bir bileşenidir. Doğru strateji ve araçlarla, kaotik süreçler, büyümenizin en güvenilir motoruna dönüşebilir.
+
+## Sık sorulan sorular
+
+### İçerik onay süreci n8n ile nasıl otomatikleştirilir?
+
+İçerik onay süreci n8n'de bir tetikleyici, onaycıya giden bildirim, Webhook düğümü ve IF düğümünden oluşan bir iş akışıyla otomatikleştirilir. Örneğin Google Drive'daki bir klasöre dosya eklendiğinde onaycıya Slack üzerinden "Onayla" ve "Revizyon İste" butonları gönderilir. IF düğümü gelen yanıta göre akışı onay ya da revizyon yoluna ayırır.
+
+### Otomasyona geçmeden önce onay süreci neden haritalandırılmalı?
+
+Otomasyon kötü bir süreci daha hızlı hale getirmekten ibaret olmamalıdır, bu yüzden önce mevcut onay süreci haritalandırılmalıdır. İçerik türleri, her türdeki onaycılar, adımların sıralı mı paralel mi olduğu ve revizyonların nasıl işlediği netleştirilmelidir. Bu haritalama, otomasyonun mantıksal temelini oluşturur ve karmaşıklığı yönetilebilir adımlara böler.
+
+### İçerik onayı için n8n neden tercih edilmeli?
+
+n8n, düğüm tabanlı görsel arayüzü sayesinde her marka veya departman için kod yazmadan özelleştirilmiş onay akışları kurmayı mümkün kılar. Açık kaynaklı ve self-hosted yapısı lisans maliyeti bariyerini kaldırır ve verilerin kendi altyapınızda kalmasını sağlar. Ayrıca Google Drive, Asana, Trello, Jira, Slack ve HubSpot gibi araçlarla hazır entegrasyonlar sunar.
+
+### Çok markalı bir yapıda onay otomasyonu nasıl ölçeklendirilir?
+
+Çok markalı bir yapıda onay otomasyonu, temel iş akışını bir ana şablon olarak kaydedip her markaya uyarlayarak ölçeklendirilir. Yeni bir marka için yalnızca onaycılar, klasör adları ve bildirim metinleri gibi değişkenler değiştirilir. Merkezi bir otomasyon ekibi ve iş akışı sürelerinin düzenli izlenmesi, darboğazların tespit edilip giderilmesini sağlar.

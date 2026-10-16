@@ -78,3 +78,21 @@ Tek tek departmanların verimliliğini artırmak güzeldir, ancak sürdürülebi
 LinkedIn'de AI ve otomasyonu kullanmak, artık bir teknoloji tercihi değil, bir büyüme stratejisidir. Ancak başarının sırrı, en yeni aracı satın almakta değil, bu araçları insan zekası, stratejik öngörü ve bütünsel bir iş süreci yaklaşımıyla entegre etmekte yatar. Corner Group olarak, portföyümüzdeki her bir markanın uzmanlığını bir araya getirerek oluşturduğumuz bu entegre model, B2B şirketlerinin LinkedIn'i bir içerik çöplüğünden, öngörülebilir ve ölçeklenebilir bir gelir yaratma makinesine dönüştürmesini sağlar.
 
 Yapay zeka, içerik fikirleri üreterek yaratıcılığınızı tetikler. Otomasyon, bu içerikleri doğru zamanda ve tutarlı bir şekilde dağıtarak verimliliğinizi artırır. Entegrasyon ise her bir etkileşimi ölçülebilir bir iş sonucuna bağlayarak yatırımınızın geri dönüşünü kanıtlar. Bu denklemde insan, stratejiyi belirleyen, ilişkileri kuran, empati gösteren ve son kararı veren kaptan rolünü üstlenir. AI ise bu kaptanın en yetenekli, yorulmak bilmeyen co-pilotudur. B2B büyümesinin geleceği, bu güçlü ortaklığı kurabilen ve onu bir holding perspektifinin sağladığı bütünsel bakış açısıyla yönetebilenlerin elinde şekillenecektir.
+
+## Sık sorulan sorular
+
+### LinkedIn içerik üretiminde yapay zeka nasıl kullanılır?
+
+Yapay zeka LinkedIn içerik üretiminde personayı derinleştirmek, konu fikirleri üretmek, ilk taslakları yazmak ve içeriği farklı formatlara dönüştürmek için kullanılır. Örneğin bir blog yazısı veya webinar kaydından birden fazla gönderi, anket sorusu ve carousel metni çıkarılabilir. Ancak AI'ın ürettiği taslak markanın ses tonuna ve stratejik mesajlarına uyarlanmadan kullanılmamalıdır.
+
+### LinkedIn'de paylaşım otomasyonu için araç seçerken nelere dikkat edilmeli?
+
+LinkedIn otomasyon aracı seçerken en önemli kriter CRM entegrasyonu ve analitik derinliğidir. Araç, HubSpot veya Salesforce gibi CRM sistemleriyle sorunsuz çalışmalı ve gönderiyle etkileşime geçen potansiyel müşterinin bilgisini otomatik olarak CRM'e aktarmalıdır. Ayrıca yalnızca beğeni ve yorum sayısını değil, hangi içeriklerin hangi unvanlardan etkileşim ve potansiyel müşteri getirdiğini de gösterebilmelidir.
+
+### LinkedIn'de hangi etkileşimler asla tam otomatik yapılmamalı?
+
+İlk bağlantı istekleri, yüksek değerli müşteri adaylarıyla iletişim ve hassas ya da negatif yorumlara verilen yanıtlar asla tam otomatik yapılmamalıdır. Jenerik bağlantı istekleri hemen fark edilir; bu yüzden her istek kişisel bir not içermelidir. AI bu durumlarda taslak önerebilir, ancak son metni deneyimli bir insan yazmalı ve göndermelidir.
+
+### LinkedIn etkileşimleri satışa nasıl dönüştürülür?
+
+LinkedIn etkileşimleri, CRM entegrasyonu ve satış süreçleriyle hizalanarak satışa dönüştürülür. ICP'ye uyan ve içerikle etkileşime geçen kişiler kaynağıyla birlikte CRM'e kaydedilir, belirli kriterlere göre doğru temsilciye atanır ve uygun bir satış dizisi tetiklenir. Kapalı döngü raporlama ile hangi içerik ve temaların anlaşmalarla sonuçlandığı görülerek strateji sürekli iyileştirilir.

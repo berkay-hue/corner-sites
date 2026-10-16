@@ -82,3 +82,21 @@ Brand Corner, Social Media Corner ve Müşteri Deneyimi: Marka Vaadini Gerçeğe
 TechNova'nın hikayesi, modern B2B dünyasında başarılı olmanın kurallarının yeniden yazıldığını göstermektedir. Yapay zeka destekli bir CRM sistemi, artık lüks bir teknoloji aracı değil, sürdürülebilir ve ölçeklenebilir büyümenin temel direğidir. Ancak bu vaka çalışmasının asıl dersi, teknolojinin tek başına yeterli olmadığıdır. Başarı, doğru teknolojiyi, doğru strateji ve doğru süreçlerle birleştirmekten geçer. Veri silolarını yıkmak, manuel süreçleri otomatize etmek, öngörülebilirliği artırmak ve kusursuz bir müşteri deneyimi sunmak, artık birbirinden ayrı hedefler değildir. Bunlar, tek bir bütünsel büyüme mimarisinin birbirine bağlı unsurlarıdır.
 
 Corner Group olarak, SAAS Corner, Sales Corner, CRM Corner, Brand Corner ve Social Media Corner markalarımızla, bu yeni mimariyi inşa etmek için gerekli tüm uzmanlığı ve araçları tek bir çatı altında sunuyoruz. Bizim için her müşteri, TechNova gibi, potansiyelini tam olarak ortaya çıkarma fırsatı sunan benzersiz bir vaka çalışmasıdır. Sadece bir ürün veya hizmet satmıyoruz; şirketlerin büyüme motorlarını yeniden tasarlıyor, veriyi stratejik bir güce dönüştürüyor ve onları kendi pazarlarının liderleri olmaları için donatıyoruz. Geleceğin başarılı şirketleri, en iyi ürüne sahip olanlar değil, müşterilerini en iyi anlayan, süreçlerini en akıllıca yöneten ve veriyi en etkin şekilde kullananlar olacaktır. Bu dönüşüm yolculuğunda, stratejik ortağınız olmaya hazırız.
+
+## Sık sorulan sorular
+
+### TechNova vakasında hangi sorunlar vardı?
+
+TechNova, pazarında ilk beşte yer almasına rağmen büyüme platosuna takılmış bir SaaS şirketiydi. Önceliklendirilmemiş lead'ler, idari işlere giden zaman, güvenilmez satış tahminleri ve kopuk bir müşteri yolculuğu büyümenin önündeki başlıca engellerdi.
+
+### Yapay zeka destekli CRM satış döngüsünü ne kadar kısalttı?
+
+TechNova örneğinde ortalama satış döngüsü 62 günden 41 güne inerek yüzde 34 kısaldı. Bu sonuç, lead'lerin daha hızlı ve doğru önceliklendirilmesi ile takip süreçlerinin otomatize edilmesiyle elde edildi ve şirketin nakit akışını olumlu etkiledi.
+
+### Yapay zeka destekli lead puanlama dönüşüm oranlarını nasıl etkiler?
+
+TechNova'da yapay zeka destekli puanlama, MQL'den SQL'e dönüşüm oranını yüzde 28'den yüzde 45'e çıkardı. Satış ekibi pazarlamadan gelen doğru lead'lere odaklandı ve pipeline'ın her aşamasındaki optimizasyon kapatma oranını 6 ay içinde 8 puan artırdı.
+
+### Yapay zeka destekli CRM satış tahminlerini daha güvenilir hale getirir mi?
+
+Evet, TechNova'da çeyreklik gelir tahminlerindeki sapma payı yüzde 30'lardan yüzde 5'in altına düştü. Bu iyileşme, CEO ve finans ekibinin bütçeleme, yatırım ve kaynak planlamasını çok daha isabetli yapmasını sağladı.

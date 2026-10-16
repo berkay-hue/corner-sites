@@ -58,3 +58,21 @@ Stratejinin en önemli unsurlarından biri, etkinliğinin ölçülebilir olması
 ## Sonuç
 
 Çok markalı bir B2B holding yapısında iç iletişim, operasyonel bir destek fonksiyonu olmanın çok ötesinde, stratejinin kalbinde yer alan bir büyüme kaldırağıdır. Corner Group gibi bir ekosistemde, her bir markanın kendi alanındaki mükemmelliğini korurken, aynı zamanda kolektif bir güce dönüşebilmesinin sırrı, markalar arasında örülen bu görünmez ama sağlam bağlarda yatmaktadır. Stratejik iç iletişim, otonomi ile sinerji arasındaki hassas dengeyi kuran, merkezi vizyonu her bir çalışanın DNA'sına işleyen, siloları yıkarak çapraz öğrenmeyi ve inovasyonu teşvik eden ve nihayetinde tüm parçaların toplamından daha büyük bir değer yaratan merkezi sinir sistemidir. Teknoloji, süreçler ve içerikle beslenen, sürekli ölçülen ve iyileştirilen bir iç iletişim makinesi, sadece daha bilgili ve bağlı çalışanlar yaratmakla kalmaz; aynı zamanda pazara daha hızlı adapte olan, daha yenilikçi ve nihayetinde daha rekabetçi bir holding inşa eder. Bu, B2B büyüme yolculuğunda sürdürülebilir başarıyı garantileyen en temel yatırımdır.
+
+## Sık sorulan sorular
+
+### B2B holdinglerde iç iletişim neden stratejik öneme sahiptir?
+
+B2B holdinglerde iç iletişim, farklı markaları ortak bir vizyon etrafında birleştirip markalar arası sinerjiyi mümkün kıldığı için stratejik öneme sahiptir. İyi kurgulanmış bir iç iletişim, her markanın kendi kimliğini korurken holdingin bütünsel hedeflerine katkı vermesini sağlar.
+
+### Çok markalı bir holdingde otonomi ve sinerji dengesi nasıl kurulur?
+
+Otonomi ve sinerji dengesi, ortak bir merkezi vizyon belirlenip markalara bu vizyonu kendi bağlamlarında uygulama alanı tanınarak kurulur. Haftalık marka toplantıları, çapraz fonksiyonel komiteler, Town Hall buluşmaları ve yıllık strateji zirvesi gibi düzenli ritüeller bu dengenin sürdürülmesine yardımcı olur.
+
+### Holding içinde bilgi paylaşımı nasıl sınıflandırılmalıdır?
+
+Holding içinde bilgi, Genel, Marka Özel, Proje Özel ve Gizli gibi seviyelere ayrılarak sınıflandırılmalıdır. Bu yapı, doğru bilginin doğru kişilere ulaşmasını sağlarken hassas bilgilerin korunmasına da imkân tanır.
+
+### İç iletişimin etkisi nasıl ölçülür?
+
+İç iletişimin etkisi niceliksel ve niteliksel yöntemlerin birlikte kullanılmasıyla ölçülür. Intranet görüntülenmeleri, bülten açılma oranları ve etkinlik katılımı gibi veriler odak grupları, mülakatlar ve açık uçlu sorularla desteklenmeli, nabız anketlerinden gelen geri bildirimlere "Siz söylediniz, biz yaptık" yaklaşımıyla yanıt verilerek döngü kapatılmalıdır.

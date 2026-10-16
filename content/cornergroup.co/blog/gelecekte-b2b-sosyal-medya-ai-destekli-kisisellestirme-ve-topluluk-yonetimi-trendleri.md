@@ -60,3 +60,21 @@ Etkileşimden Gelire Giden Yolun Haritası B2B sosyal medyanın en büyük zorlu
 ## Sonuç
 
 B2B sosyal medyanın geleceği, daha fazla otomasyon ve daha az insan etkileşimi anlamına gelmiyor. Tam aksine, yapay zekayı bir kaldıraç olarak kullanarak daha derin, daha anlamlı ve daha insani bağlantılar kurmak anlamına geliyor. Yapay zeka, bizi kitlesel ve verimsiz iletişimden kurtararak, enerjimizi stratejik ilişki kurmaya ve gerçek değer yaratmaya odaklamamızı sağlıyor. Topluluklar ise bu ilişkilerin beslendiği, güvenden sadakate ve savunuculuğa evrildiği alanlar olarak öne çıkıyor. Corner Group olarak biz, bu geleceği sadece öngörmekle kalmıyor, aynı zamanda inşa ediyoruz. SAAS Corner, Sales Corner, CRM Corner, Brand Corner ve Social Media Corner markalarımızın her biri, bu büyük yapının kritik bir parçasını oluşturuyor. Holding perspektifimiz, bu parçaları bir araya getirerek, müşterilerimiz için sadece izole taktikler değil, baştan sona tasarlanmış, entegre ve ölçülebilir bir büyüme motoru sunmamızı sağlıyor. Değişimi kucaklayan ve bu yeni paradigmaya adapte olan şirketler, geleceğin pazar liderleri olacak. Bu yolculukta stratejik bir ortak olarak yanınızda olmak, bizim en büyük amacımızdır.
+
+## Sık sorulan sorular
+
+### Yapay zeka B2B sosyal medyada kişiselleştirmeyi nasıl değiştiriyor?
+
+Yapay zeka, CRM verileri, web sitesi davranışları ve sosyal medya etkileşimleri gibi büyük veri setlerini işleyerek hangi içeriğin hangi kitleye, hangi kanalda ve hangi zamanda en etkili olacağını öngörür. Karar vericilerin profillerini ve paylaşımlarını analiz ederek kişiye özel mesaj taslakları oluşturabilir ve sosyal satışı ölçeklenebilir hale getirir. Reklamlarda ise yüzlerce görsel, metin ve hedefleme kombinasyonunu aynı anda test ederek (multivariate testing) bütçeyi otomatik olarak en iyi performans gösteren varyasyonlara kaydırır.
+
+### B2B'de niş topluluklar neden önemlidir?
+
+B2B'de topluluk nicelikten çok nitelikle ilgili olduğu için, doğru karar vericilerin aktif olarak tartıştığı niş bir topluluk binlerce pasif takipçiden daha değerlidir. Bu topluluklar, üyelerin gerçek sorunlarını çözebildiği ve birbirinden öğrenebildiği değer merkezleri olarak kurgulanmalıdır. Marka burada ürün satmak yerine sohbetleri başlatan ve kaynak sağlayan bir kolaylaştırıcı olarak güvenilir bir danışman konumu kazanır.
+
+### Yapay zeka topluluk yönetiminde nasıl kullanılır?
+
+Yapay zeka, topluluk içindeki konuşmaları tarayarak duygu analizi yapar ve memnuniyetsizlikleri büyümeden tespit edip topluluk yöneticisini uyarır. Sıkça sorulan soruları önceden hazırlanmış yanıtlarla otomatik olarak cevaplayabilir veya ilgili bilgi bankası makalesine yönlendirebilir. Ayrıca üyelerin en çok tartıştığı konuları belirleyerek webinar, blog yazısı ve ürün geliştirme kararları için somut veri sunar.
+
+### B2B sosyal medyanın gelire etkisi nasıl ölçülür?
+
+B2B sosyal medyanın gelire etkisi, tüm temas noktalarını tek bir müşteri kaydında birleştiren çoklu temas ilişkilendirme (multi-touch attribution) modeliyle ölçülür. Entegre bir CRM sayesinde bir yöneticinin hangi reklamla topluluğa katıldığı, hangi tartışma ve webinarlara dahil olduğu ve sonunda ne kadarlık bir anlaşma imzaladığı izlenebilir. Beğeni ve takipçi sayısı yerine bu gelir verisine bakmak, sosyal medya bütçesini öngörülebilir bir büyüme yatırımına dönüştürür.

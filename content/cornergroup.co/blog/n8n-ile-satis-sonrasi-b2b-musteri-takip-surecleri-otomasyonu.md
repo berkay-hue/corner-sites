@@ -146,3 +146,21 @@ Corner Group olarak, otomasyon projelerine sadece teknik bir entegrasyon olarak 
 B2B dünyasında sürdürülebilir büyüme, sadece yeni müşteriler kazanmakla değil, kazanılan her bir müşteriyi bir başarı hikayesine ve bir marka elçisine dönüştürme becerisiyle mümkündür. Satış sonrası süreçler, bu dönüşümün gerçekleştiği en kritik sahnedir. Geleneksel, manuel ve reaktif yaklaşımlar, bu sahnede fırsatların kaçırılmasına ve müşteri kaybına neden olur. n8n gibi esnek, güvenli ve ölçeklenebilir bir otomasyon platformuyla kurgulanan akıllı iş akışları ise bu süreci proaktif, veri odaklı ve standartları yüksek bir operasyona dönüştürür.
 
 Corner Group olarak bizim yaklaşımımız, teknolojiyi bir amaç olarak değil, stratejik hedeflere ulaşmak için bir kaldıraç olarak kullanmaktır. Müşteri takibini otomatikleştirmek, sadece e-posta göndermekten ibaret değildir. Bu, müşteri yaşam döngüsünün her aşamasında değeri maksimize etmek, riski minimize etmek ve ekiplerinize en iyi yaptıkları işe odaklanmaları için alan yaratmaktır. Bu, operasyonel verimliliği, müşteri memnuniyetini ve nihayetinde kârlılığı artıran bütüncül bir büyüme stratejisidir. Satış sonrası süreçlerinizi bir maliyet merkezinden, şirketinizin en güçlü büyüme motoruna dönüştürmek için ilk adımı atmaya hazırsanız, doğru yerdesiniz.
+
+## Sık sorulan sorular
+
+### Satış sonrası müşteri takibi neden otomatikleştirilmeli?
+
+Satış sonrası müşteri takibi, manuel veri aktarımı, standartlaşmamış iletişim ve reaktif problem çözme gibi sızıntıları önlemek için otomatikleştirilmelidir. Bain & Company araştırmalarına göre müşteri tutma oranındaki yüzde 5'lik bir artış kârlılığı yüzde 25 ila yüzde 95 oranında artırabilir. Otomasyon ayrıca ekiplerin tekrarlayan işler yerine stratejik ilişki yönetimine odaklanmasını sağlar.
+
+### n8n ile müşteri onboarding sekansı nasıl kurulur?
+
+Onboarding sekansı, CRM'de bir anlaşma "Kazanıldı" olarak güncellendiğinde n8n akışının tetiklenmesiyle kurulur. n8n, Slack veya Microsoft Teams'e bildirim gönderir, proje yönetim aracında onboarding projesi ve görevleri oluşturur ve müşteriye kişiselleştirilmiş hoş geldiniz e-postaları gönderir. Aynı akış Google Drive veya SharePoint'te müşteri klasörlerini ve muhasebe yazılımında müşteri kaydını da otomatik oluşturabilir.
+
+### NPS anketi sonuçlarına göre otomatik olarak ne yapılabilir?
+
+NPS skoru 6'nın altındaysa n8n, Müşteri Başarı Direktörüne Slack bildirimi gönderip müşteriyi CRM'de "Riskli Müşteri" olarak işaretleyebilir ve yüksek öncelikli bir görev oluşturabilir. Skor 9 veya 10 ise müşteri, potansiyel vaka çalışması veya referans adayı olarak işaretlenir. Bu müşterilere 24 saat sonra G2/Capterra gibi platformlarda yorum ya da vaka çalışması talep eden bir e-posta gönderilebilir.
+
+### Sözleşme yenileme ve churn önleme süreci nasıl otomatikleştirilir?
+
+Sözleşme yenileme süreci, CRM'deki "Sözleşme Bitiş Tarihi" alanını her gün kontrol eden zamanlanmış bir n8n iş akışıyla otomatikleştirilir. Bitime 90 gün kala Hesap Yöneticisine QBR görevi açılır ve son 3 aylık kullanım ile destek verileri düşükse görev "YÜKSEK RİSK" olarak işaretlenir. 60 gün kala müşteriye otomatik e-posta gönderilir, 30 gün kala aksiyon alınmamışsa yöneticiye uyarı bildirimi gider.

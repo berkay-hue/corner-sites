@@ -97,3 +97,21 @@ Günümüzün dijital dünyasında veri boldur, ancak bilgelik nadirdir. Birçok
 ## Sonuç
 
 B2B SaaS için potansiyel müşteri yaratma, tek bir departmanın yürütebileceği basit bir taktikler listesi değildir. Bu, stratejinin, operasyonun, teknolojinin ve insan yeteneğinin uyum içinde çalıştığı, yaşayan, nefes alan bir sistemdir. Bu rehberde ele alınan hatalar, genellikle silolar halinde çalışan, bütünsel bir bakış açısından yoksun organizasyonların doğal sonuçlarıdır. Corner Group'un bir büyüme holdingi olarak sunduğu değer tam da bu noktada ortaya çıkar. Biz, parçaları bir araya getiren bir entegratörüz. SAAS Corner'ın analitik gücü, Sales Corner'ın otomasyon uzmanlığı, CRM Corner'ın sistem mimarisi, Brand Corner'ın yaratıcı hikaye anlatıcılığı ve Social Media Corner'ın topluluk oluşturma yeteneği, tek bir stratejik amaç doğrultusunda, yani sizin sürdürülebilir ve kârlı büyümeniz için bir araya gelir. Büyüme bir dizi taktikten ibaret değildir; entegre bir sistemdir. Corner Group olarak biz, bu sistemi sizin için tasarlıyor, kuruyor ve yönetiyoruz. Bu kara deliği bir büyüme motoruna dönüştürmek, doğru strateji ve doğru ortaklıkla mümkündür.
+
+## Sık sorulan sorular
+
+### B2B SaaS lead generation'da en sık yapılan hata nedir?
+
+En sık ve en maliyetli hata, İdeal Müşteri Profili (ICP) ve alıcı personayı tanımlamadan yola çıkmaktır. "Teknolojiye ihtiyacı olan her KOBİ" gibi geniş hedefler, mesajların seyrelmesine, düşük kaliteli lead'lere ve yüksek müşteri edinme maliyetine (CAC) yol açar. ICP hangi şirketlerin en fazla değeri elde edeceğini, persona ise bu şirketlerdeki karar vericilerin kim olduğunu tanımlar.
+
+### MQL ile SQL arasındaki fark nedir?
+
+MQL (Pazarlama Nitelikli Lead) pazarlamanın ilgili gördüğü, örneğin bir e-kitap indiren kişidir; SQL (Satış Nitelikli Lead) ise bütçesi, yetkisi, ihtiyacı ve zamanlaması (BANT) uygun olan kişidir. Bu tanımlar üzerinde yazılı bir SLA olmadığında satış ekibi zamanını hazır olmayan kişilerle harcar ve pazarlama-satış arasındaki güven zedelenir. Ortak tanımlar üzerine kurulan bir lead puanlama sistemi, yalnızca belirli puanı aşan lead'lerin satışa aktarılmasını sağlar.
+
+### Lead nurturing neden önemlidir?
+
+Lead nurturing, henüz satın almaya hazır olmayan potansiyel müşterileri değerli içeriklerle etkileşimde tutarak hazır olduklarında akıllarındaki ilk isim olmanızı sağladığı için önemlidir. Nurturing yapılmazsa unutulan lead'ler rakibe gider ve onları elde etmek için harcanan çaba boşa gider. Segmentlere ayrılmış, değer odaklı e-posta dizileri ve davranışsal tetikleyiciler bu süreci ölçeklenebilir kılar.
+
+### Lead generation'da hangi metrikler takip edilmelidir?
+
+Beğeni ve sayfa görüntülenmesi gibi gösteriş metrikleri yerine Müşteri Edinme Maliyeti (CAC), Müşterinin Yaşam Boyu Değeri (LTV), MQL'den SQL'e dönüşüm oranı ve satış döngüsü uzunluğu takip edilmelidir. CAC'nin LTV'den yüksek olması, şirketin kazandığı her müşteriyle para kaybettiği anlamına gelir. Atribüsyon modellemesi ise hangi kanalın satışa ne kadar katkı sağladığını göstererek bütçenin doğru yere aktarılmasına yardımcı olur.
