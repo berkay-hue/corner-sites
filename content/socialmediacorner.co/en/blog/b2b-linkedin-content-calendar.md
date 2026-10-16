@@ -255,3 +255,21 @@ Avoiding these mistakes is the first step toward turning LinkedIn into one of yo
 For B2B companies, a LinkedIn content calendar is the essential tool for turning random posts into a strategic growth system. The building blocks of this system are setting clear goals, understanding every persona on the buying committee, creating balanced content pillars, ensuring format variety and planning the company page and employee profiles together. When you integrate organic content with ad campaigns and update your calendar with data every month, LinkedIn becomes more than a visibility channel. It turns into a platform that supports your sales team and generates qualified opportunities.
 
 If you want to build this process from scratch or make your existing LinkedIn strategy more effective, Social Media Corner is here to help. We can design the entire process with you, from content planning and production to executive profile management, ad campaigns and measurement. For a LinkedIn content calendar tailored to your brand, [get in touch with us](/en/contact).
+
+## FAQ
+
+### How many times per week should a B2B company post on LinkedIn?
+
+For B2B companies, 3-5 posts per week on the company page is a sustainable and effective range in most cases. If your resources are limited, start with 2-3 high-quality posts per week and increase the frequency gradually.
+
+### How should content pillars be split in a LinkedIn content calendar?
+
+A sample split is about 35% educational content, 20% thought leadership, 20% social proof, 15% company culture and 10% product promotion. Directly sales-focused content should make up only a small share of your posts.
+
+### What is the best time to post on LinkedIn?
+
+There is no universal best time; the real answer lies in your own data. Post at different days and times for the first four weeks, lock in the two or three best-performing slots and repeat the test every quarter.
+
+### Should the content calendar cover only the company page?
+
+No, personal profiles generally get far higher organic reach than company pages, so the calendar should also include executive, sales team and employee advocacy layers.

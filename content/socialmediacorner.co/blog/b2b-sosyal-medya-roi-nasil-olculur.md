@@ -226,3 +226,21 @@ Bu hataların çoğu, dağınık araçlar ve elle yürütülen süreçlerden kay
 B2B sosyal medya ROI'sini ölçmek, doğru formülü bilmekten çok doğru altyapıyı ve disiplini kurmakla ilgilidir. Tüm maliyetleri dürüstçe hesaplamak, takip sistemlerini CRM'e bağlamak, tutarlı bir atıf modeli kullanmak ve yazılım verisini müşterinin beyanıyla desteklemek, sosyal medyanın gelire katkısını savunulabilir biçimde ortaya koyar. LinkedIn'de hedef kitle kalitesine, Instagram'da huni üst ve orta aşamalarına, sosyal satışta ise konuşmaların fırsata dönüşmesine odaklanmak, her kanalı kendi rolüne uygun ölçmenizi sağlar.
 
 Sosyal medya yatırımlarınızın gerçekte ne kazandırdığını görmek, ölçümleme altyapınızı kurmak veya LinkedIn ve Instagram stratejinizi gelir odaklı hâle getirmek istiyorsanız, Social Media Corner ekibi olarak yardımcı olmaya hazırız. Mevcut durumunuzu birlikte değerlendirmek için [bizimle iletişime geçin](/iletisim).
+
+## Sık sorulan sorular
+
+### B2B sosyal medya ROI'si nasıl hesaplanır?
+
+Sosyal medya ROI'si, sosyal medyadan elde edilen gelirden sosyal medya yatırımının çıkarılıp sonucun yatırıma bölünmesi ve 100 ile çarpılmasıyla hesaplanır. Gerçekçi bir hesap için maliyete yalnızca reklam harcaması değil; personel, araç ve yazılım, ajans veya danışmanlık ve içerik üretim maliyetleri de dahil edilmelidir.
+
+### B2B'de sosyal medya ROI'sini ölçmek neden zordur?
+
+B2B'de uzun satış döngüleri, çoklu karar vericiler, analitik araçlarda görünmeyen karanlık sosyal paylaşımlar ve çevrim dışı dönüşümler sosyal medyanın etkisini başka kanallarla iç içe geçirir. Bu ölçümü imkânsız kılmaz, ancak tek bir rakam yerine birbirini tamamlayan birden fazla göstergeyi birlikte okumayı gerektirir.
+
+### B2B sosyal medya ölçümünde hangi atıf modeli kullanılmalı?
+
+Mükemmel bir model yoktur; önemli olan bir model seçmek, raporlarda açıkça belirtmek ve tutarlı biçimde kullanmaktır. İlk dokunuş ve W-şekilli gibi iki farklı modelle aynı veriye bakmak, sosyal medyanın hem başlatıcı hem destekleyici rolünü görmenizi sağlar.
+
+### Karanlık sosyal (dark social) etkisi nasıl ölçülür?
+
+Karanlık sosyal sorununun en pratik çözümü müşteriye doğrudan sormaktır. Demo formunuza zorunlu ve serbest metinli bir "Bizi nereden duydunuz?" alanı ekleyin.

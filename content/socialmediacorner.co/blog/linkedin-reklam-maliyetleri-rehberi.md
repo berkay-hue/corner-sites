@@ -216,3 +216,21 @@ LinkedIn reklamlarının maliyeti; hedef kitlenizin niteliği, sektörünüzdeki
 Başarının formülü aslında nettir. Bütçeyi iş hedeflerinden geriye doğru hesaplayın. Kitleleri anlamlı segmentlere ayırın. Kreatifleri düzenli test edin. Yeniden hedeflemeyi ihmal etmeyin. Performansı tıklamalarla değil, nitelikli fırsatlar ve satış hattı katkısıyla ölçün.
 
 LinkedIn reklam bütçenizi daha verimli kullanmak, kampanyalarınızı satış hedeflerinizle hizalamak ve ölçülebilir sonuçlar almak istiyorsanız, [Social Media Corner'ın B2B sosyal medya hizmetlerini](/) inceleyebilirsiniz. Şirketinize özel bir LinkedIn reklam stratejisi için hemen [bizimle iletişime geçin](/iletisim). Birlikte hedeflerinizi konuşalım.
+
+## Sık sorulan sorular
+
+### LinkedIn reklam maliyeti nasıl belirlenir?
+
+LinkedIn reklamları sabit bir fiyat listesiyle değil, Campaign Manager üzerinden işleyen bir açık artırma sistemiyle satılır. Kazanan, teklif tutarı ile reklamın hedef kitle için alaka düzeyi birlikte değerlendirilerek belirlenir; bu yüzden ilgi çekici bir reklam daha düşük bir teklifle bile açık artırmayı kazanabilir.
+
+### LinkedIn reklamlarında hangi fiyatlandırma modeli seçilmeli?
+
+Doğru model, kampanyada sizin için gerçekten değerli olan aksiyona göre seçilir. Farkındalık için gösterime, trafik için tıklamaya, lead için dönüşüme odaklanın.
+
+### LinkedIn reklamları için minimum bütçe ne kadar?
+
+LinkedIn, kampanyalar için zaman zaman güncellenen minimum günlük ve toplam bütçe sınırları uygular; güncel değerleri Campaign Manager'dan kontrol etmek gerekir. Pratikte asıl sınırlayıcı platform minimumu değil, anlamlı veri toplamaya yetecek bütçedir.
+
+### LinkedIn reklam maliyetleri nasıl düşürülür?
+
+En etkili yollar katmanlı hedefleme, audience expansion'ı bilinçli kullanmak, yeniden hedefleme ile sıcak kitlelere ulaşmak ve kreatifleri düzenli test edip yenilemektir. Yeniden hedefleme kampanyaları genellikle en düşük lead başına maliyeti üretir.
