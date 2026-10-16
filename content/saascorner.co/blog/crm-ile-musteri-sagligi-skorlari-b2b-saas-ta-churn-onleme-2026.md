@@ -79,7 +79,7 @@ Tüm metrikler eşit derecede önemli olmadığı için her veri noktasına bir 
 
 ### Sağlık skoru düşen bir müşteri için CRM'de hangi otomasyonlar kurulabilir?
 
-Skor belirlediğin kritik eşiğin altına düştüğünde CRM, ilgili müşteri başarı yöneticisine anında bildirim gönderip takviminde acil iletişim görevi oluşturabilir. Aynı anda müşteriye yardım teklif eden veya özellikleri daha verimli kullanma ipuçları sunan bir e-posta otomasyonu tetiklenebilir. HubSpot veya Salesforce gibi platformlar bu tür koşullu otomasyonlar için güçlü araçlar sunar ve hiçbir riskli müşterinin gözden kaçmamasını sağlar.
+Skor belirlediğin kritik eşiğin altına düştüğünde CRM, ilgili müşteri başarı yöneticisine anında bildirim gönderip takviminde acil iletişim görevi oluşturabilir. Aynı anda müşteriye yardım teklif eden veya özellikleri daha verimli kullanma ipuçları sunan bir e-posta otomasyonu tetiklenebilir. Bu tür koşullu otomasyonlar riskli müşterilerin gözden kaçma ihtimalini azaltır.
 
 ### Yüksek sağlık skoruna sahip müşterilerle ne yapılmalı?
 

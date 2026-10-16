@@ -87,4 +87,4 @@ Geçişe önce hedeflerini netleştirerek ve API öncelikli bir yaklaşım benim
 
 ### Headless mimaride ekip yapısı nasıl değişir?
 
-Geleneksel ön yüz ve arka yüz ekipleri yerine, ödeme sistemi gibi belirli bir işlevden sorumlu ve kendi içinde hem ön yüz hem de arka yüz yetkinliklerine sahip otonom ekipler kurmayı düşünebilirsin. Amazon'un "iki pizzalık ekipler" olarak popülerleştirdiği bu model, sorumluluğu artırarak verimliliği yükseltir. Teknoloji seçiminde de ekibinin mevcut yetkinliklerini, projenin ölçeğini ve uzun vadeli bakım maliyetlerini göz önünde bulundurmalısın.
+Geleneksel ön yüz ve arka yüz ekipleri yerine, ödeme sistemi gibi belirli bir işlevden sorumlu ve kendi içinde hem ön yüz hem de arka yüz yetkinliklerine sahip otonom ekipler kurmayı düşünebilirsin. Bu model sorumluluğu netleştirerek verimliliği artırabilir. Teknoloji seçiminde de ekibinin mevcut yetkinliklerini, projenin ölçeğini ve uzun vadeli bakım maliyetlerini göz önünde bulundurmalısın.

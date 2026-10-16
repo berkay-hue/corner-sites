@@ -95,4 +95,4 @@ Dışarıdan çalışılan bir satış operasyonu sıfırdan başlamaz; sistem k
 
 ### Satışı dışarıya verince kontrol kaybedilir mi?
 
-Kontrol kaygısı anlaşılırdır, ancak haftalık raporlar, düzenli toplantılar, açık iletişim ve net hedeflerle kurulan şeffaf bir yapı bu endişeyi büyük ölçüde giderir. Üstelik her şeyi içeride tutmaya çalışmak ürün geliştirme, müşteri deneyimi ve stratejik kararlar gibi alanlarda kontrol kaybına yol açabilir. Satış operasyonunu doğru ellere bırakmak, şirketin en önemli işlerine odaklanmasını sağlar.
+Kontrol kaygısı anlaşılırdır, ancak haftalık raporlar, düzenli toplantılar, açık iletişim ve net hedeflerle kurulan şeffaf bir yapı bu endişeyi büyük ölçüde giderebilir. Üstelik her şeyi içeride tutmaya çalışmak ürün geliştirme, müşteri deneyimi ve stratejik kararlar gibi alanlarda kontrol kaybına yol açabilir. Satış operasyonunu doğru ellere bırakmak, şirketin en önemli işlerine odaklanmasını sağlar.

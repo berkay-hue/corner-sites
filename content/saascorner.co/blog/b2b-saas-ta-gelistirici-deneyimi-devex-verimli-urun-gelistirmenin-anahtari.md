@@ -71,9 +71,9 @@ Görüldüğü gibi, Geliştirici Deneyimi (DevEx) artık sadece teknik bir deta
 
 ## Sık sorulan sorular
 
-### Geliştirici deneyimini iyileştirmek için dokümantasyon ve otomasyon neden önemlidir?
+### Dokümantasyon ve otomasyon geliştirici deneyimini nasıl iyileştirir?
 
-İyi bir dokümantasyon açık, aranabilir, güncel ve bol örnekli olmalıdır; bu hem dışa açık API'ler hem de şirket içi sistemler için geçerlidir ve yeni katılanların işe alışmasını hızlandırır. CI/CD gibi otomasyonlar ise kod gönderildiği anda testlerin çalışmasını ve test ortamına dağıtımı sağlayarak manuel müdahaleyi ve insan hatası riskini azaltır. Böylece geliştiriciler karmaşık komutlarla boğuşmak yerine kod yazmaya odaklanabilir.
+İkisi de geliştiricinin zamanını bilgi aramaya ve elle yapılan işlere değil, kod yazmaya ayırmasını sağlar. Açık, aranabilir, güncel ve bol örnekli bir dokümantasyon yeni katılanların işe alışmasını hızlandırır. CI/CD gibi otomasyonlar ise testleri ve test ortamına dağıtımı kod gönderildiği anda çalıştırarak manuel müdahaleyi ve insan hatası riskini azaltır.
 
 ### Geliştirici deneyimi hangi metriklerle ölçülür?
 
@@ -81,7 +81,7 @@ Görüldüğü gibi, Geliştirici Deneyimi (DevEx) artık sadece teknik bir deta
 
 ### İç kaynak platformu nedir ve ne işe yarar?
 
-İç kaynak platformu, geliştiricilerin ihtiyaç duyduğu araçları, altyapıyı ve standartlaştırılmış iş akışlarını tek bir çatı altında toplayan self servis bir yapıdır. Farklı ekiplerin aynı sorunu farklı yollarla çözmesini önler, bilişsel yükü azaltır ve güvenlik ile uyumluluk standartlarının tüm organizasyonda tutarlı uygulanmasını sağlar. Spotify'ın geliştirdiği Backstage bu yaklaşımın bilinen örneklerindendir.
+İç kaynak platformu, geliştiricilerin ihtiyaç duyduğu araçları, altyapıyı ve standartlaştırılmış iş akışlarını tek bir çatı altında toplayan self-servis bir yapıdır. Farklı ekiplerin aynı sorunu farklı yollarla çözmesini önler, bilişsel yükü azaltır ve güvenlik ile uyumluluk standartlarının tüm organizasyonda tutarlı uygulanmasını sağlar.
 
 ### Geliştirici deneyimi yetenekleri elde tutmayı nasıl etkiler?
 

@@ -68,3 +68,21 @@ CRM veri kalitesi mücadelesinde yapay zeka (AI) ve makine öğrenmesi (machine 
 ## Sonuç
 
 Sonuç olarak, B2B SaaS dünyasında CRM veri kalitesi, göz ardı edilebilecek bir teknik detay değil, büyüme stratejisinin tam merkezinde yer alan bir unsurdur. Kötü veri, pazarlama bütçeni boşa harcar, satış ekibinin verimliliğini düşürür ve en önemlisi, müşteri ilişkilerini zedeler. Öte yandan, temiz, doğru ve güncel bir CRM veritabanı, kişiselleştirilmiş pazarlama, etkili satış ve proaktif müşteri hizmeti için sağlam bir zemin sunar. Bu makalede ele aldığımız stratejileri (veri temizleme, standartlar oluşturma, teknoloji kullanımı ve ekip eğitimi) uygulayarak veri kalitesini bir şirket kültürü haline getirebilirsin. Unutma, CRM sistemin, ona ne kadar kaliteli veriyle beslersen o kadar değerli hale gelir. Bugün CRM veri kalitesine yapacağın yatırım, yarınki sürdürülebilir büyümenin en sağlam garantisidir.
+
+## Sık sorulan sorular
+
+### Tekrarlayan kayıtlar hangi sorunlara yol açar?
+
+Tekrarlayan kayıtlar pazarlama ve satış ekipleri arasında kafa karışıklığına yol açar. Aynı kişi farklı kanallardan farklı yazımlarla sisteme girdiğinde iki ayrı kayıt oluşur. Bu durumda aynı kişiye iki ayrı kampanya gidebilir ya da iki temsilci aynı potansiyel müşteriyi arayabilir. Ayrıca müşteri sayısı ve dönüşüm oranları şişirilmiş görünür ve raporlar güvenilirliğini yitirir.
+
+### Veri temizliği tek seferlik bir proje olarak yapılabilir mi?
+
+Hayır; veri temizliği tek seferlik bir proje değil, sürekli bir alışkanlık olmalıdır. Yanlış, eksik ve tekrarlayan kayıtları bulup düzeltmek için temizleme araçlarından yararlanabilirsin. Temizliği veri zenginleştirmeyle tamamlamak eksik bilgileri güvenilir kaynaklardan doldurarak kayıtları daha kullanışlı hale getirir.
+
+### CRM veri kalitesinden sorumlu birini belirlemek gerekir mi?
+
+Evet; şirket içinde veri kalitesinden sorumlu bir kişi ya da küçük bir ekip belirlemen önerilir. Bu kişi veri standartlarını oluşturur, uygular ve denetler. Veritabanını düzenli aralıklarla doğruluk, bütünlük ve güncellik açısından denetlemek ve satış ile pazarlama ekiplerinden geri bildirim almak bu sorumluluğun parçasıdır.
+
+### Yapay zeka CRM verilerini güncel tutmaya nasıl yardımcı olur?
+
+Yapay zeka karmaşık veri desenlerini analiz ederek gözden kaçabilecek sorunları tespit edebilir. Tekrarlayan kayıtları isim ve şirket adının yanında e-posta formatı ve web sitesi aktivitesi gibi pek çok sinyale bakarak bulabilir. Veri bozulmasını öngörerek bir kişinin unvan ya da şirket değiştirdiğini fark ettiğinde ilgili kaydın güncellenmesi için uyarı oluşturabilir.

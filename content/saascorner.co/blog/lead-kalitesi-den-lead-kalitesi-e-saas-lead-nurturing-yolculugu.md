@@ -214,3 +214,21 @@ Lead nurturing otomasyona dayalıdır, ancak bu "otomatik pilot" anlamına gelme
 SaaS dünyasında sürdürülebilir büyüme, sadece yeni müşteriler kazanmakla değil, potansiyel müşterilerle daha en başından anlamlı ilişkiler kurmakla mümkündür. Lead nurturing, bu ilişkinin temelini atan, pazarlama yatırımınızın getirisini en üst düzeye çıkaran stratejik bir köprüdür. Bu süreç, bir lead'i basit bir iletişim bilgisinden (Lead Kalitesi), işletmeniz için gerçek bir gelir fırsatına (Lead Kalitesi²) dönüştüren bir simya gibidir.
 
 Bu yolculuk, müşterinizi derinlemesine anlamakla başlar, onlara yolculuklarının her aşamasında değer katan içeriklerle devam eder ve sürekli ölçümleme ve optimizasyonla mükemmelleşir. Bu, sabır, strateji ve empati gerektiren bir süreçtir. Ancak doğru yapıldığında, lead nurturing sadece satış rakamlarınızı artırmakla kalmaz, aynı zamanda markanızı sektörünüzde güvenilir bir otorite olarak konumlandırır. Sızdıran kovanızı onarın, motorunuzu doğru yakıtla doldurun ve potansiyel müşterilerinizi sadık savunuculara dönüştürme yolculuğunun keyfini çıkarın.
+
+## Sık sorulan sorular
+
+### ICP ile alıcı personası arasındaki fark nedir?
+
+ICP hedeflediğiniz şirket tipini makro düzeyde tanımlar. Alıcı personası ise bu şirketlerin içindeki gerçek kişileri anlatır. İkisini birlikte kullanmak mesajların doğru kişiye ulaşmasını kolaylaştırabilir.
+
+### Lead skorlama nasıl çalışır?
+
+Lead skorlama, demografik ve firmografik bilgilere ve davranışlara puan vererek çalışır. Toplam puan belirlediğiniz eşiği aştığında lead MQL olarak işaretlenir ve satış ekibine aktarılır.
+
+### Pazarlama ile satış arasındaki kopukluk nasıl giderilir?
+
+Pazarlama ile satış arasında bir SLA yaparak bu kopukluğu giderebilirsiniz. Bu anlaşma MQL ve SQL tanımlarını ve iki tarafın taahhütlerini netleştirir.
+
+### Nurturing akışları ne sıklıkla gözden geçirilmeli?
+
+En az ayda bir kez gözden geçirilmelidir. Bu incelemede metrikleri değerlendirebilir, eskiyen içerikleri tespit edebilir ve A/B testleri yürütebilirsiniz.

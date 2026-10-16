@@ -66,3 +66,21 @@ Anlaşma imzalandığında iş bitmez, aslında yeni başlar. SaaS birleşme ve 
 ## Sonuç
 
 SaaS birleşme ve satın almalar, bir kurucunun yolculuğundaki en önemli kilometre taşlarından biridir. 2026'ya doğru ilerlerken, yapay zeka, dikey pazar odaklanması ve ekonomik dinamikler bu alanı şekillendirmeye devam edecek. Başarı, şansa değil, bilinçli ve stratejik bir hazırlığa bağlıdır. Şirketinin finansal metriklerini optimize etmek, teknoloji altyapını güçlendirmek ve doğru çıkış anını planlamak, bu süreçte kontrolü elinde tutmanı sağlar. Unutma ki en başarılı çıkışlar, bir gecede gerçekleşen mucizeler değil, yıllar süren disiplinli bir çalışmanın ve hazırlığın sonucudur. Şirketini bugünden bir alıcının gözüyle yönetmeye başla. Değer yaratmaya odaklan, süreçlerini belgele ve her zaman bir sonraki adıma hazır ol. Bu şekilde, doğru fırsat kapını çaldığında, onu en iyi şekilde değerlendirebilirsin.
+
+## Sık sorulan sorular
+
+### Teknik borç şirket değerlemesini nasıl etkiler?
+
+Teknik borç değerlemeyi olumsuz etkiler. Durum tespitinde ortaya çıkan büyük bir teknik borç anlaşmanın iptal olmasına veya teklif edilen fiyatın düşmesine yol açabilir. Temiz, belgeli ve modern bir kod tabanı bu riski azaltır.
+
+### Stratejik alıcı ile finansal alıcı arasındaki fark nedir?
+
+Stratejik alıcı teknolojini, pazar payını veya müşteri tabanını kendi işini güçlendirmek için satın alır. Finansal alıcı ise şirketi büyütüp ileride daha yüksek bir fiyata satmayı hedefler ve genellikle mevcut yönetimle çalışmaya devam eder. Hangisinin uygun olduğu uzun vadeli hedeflerine bağlıdır.
+
+### Çıkış için doğru zamanı nasıl anlarsın?
+
+Pazar koşullarını, şirket performansını ve kişisel hedeflerini birlikte değerlendirerek anlarsın. Pazarın canlı olduğu ve büyümenin güçlü seyrettiği bir dönem uygun bir pencere olabilir. Çok erken ya da çok geç satmak değeri düşürebilir.
+
+### Durum tespitine hazırlanmak için ne yapmalısın?
+
+Bir alıcı ortaya çıkmadan önce sanal bir veri odası oluşturmalısın. Finansal tabloları, müşteri ve çalışan sözleşmelerini, fikri mülkiyet belgelerini ve teknoloji dokümanlarını burada düzenli tutmalısın. Bu hazırlık süreci hızlandırabilir ve pazarlıkta konumunu güçlendirebilir.

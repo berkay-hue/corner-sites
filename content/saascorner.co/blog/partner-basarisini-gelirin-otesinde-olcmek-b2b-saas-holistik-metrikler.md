@@ -66,3 +66,21 @@ Veriler tek başına anlamsızdır; onları yorumlamak ve eyleme dönüştürmek
 ## Sonuç
 
 Partner programını bir sonraki seviyeye taşımak istiyorsan, partner başarısını ölçmek için kullandığın metrikleri temelden değiştirmen gerekiyor. Sadece gelire odaklanan dar bir bakış açısı, seni uzun vadede başarısızlığa sürükleyebilir. Bunun yerine, müşteri yaşam boyu değeri, satış hattı kalitesi, marka etkileşimi ve stratejik katkılar gibi holistik göstergeleri benimseyerek resmin tamamını görebilirsin. Bu yaklaşım, sadece hangi partnerlerin gerçekten değerli olduğunu anlamanı sağlamakla kalmaz, aynı zamanda onlarla daha derin ve stratejik ilişkiler kurmana da olanak tanır. Unutma, en iyi partnerlikler işlemsel değil, dönüşümseldir. Bugün, partner başarı metriklerini yeniden tanımlamak için ilk adımı at ve sürdürülebilir büyümenin kapısını arala.
+
+## Sık sorulan sorular
+
+### Partner kaynaklı müşterilerin LTV ve churn değerleri neden takip edilmeli?
+
+Yalnızca gelire bakmak yanıltıcı olabileceği için takip edilmelidir. Daha uzun kalan ve daha az churn eden müşteriler toplamda daha fazla değer yaratır.
+
+### Bir partnerin satış hattına katkısı nasıl değerlendirilir?
+
+Lead sayısından çok lead kalitesine bakarak değerlendirilir. Bu lead'lerin MQL'e dönüşme oranını ve satış döngüsünün uzunluğunu izlemek daha doğru bir tablo sunar.
+
+### PRM yazılımı partner ölçümüne nasıl katkı sağlar?
+
+PRM yazılımı her partnerin lead, anlaşma, gelir, churn ve ortak pazarlama verilerini tek bir panelde toplar. Bu sayede LTV analizi gibi bütünsel değerlendirmeleri yapmak kolaylaşır.
+
+### Partner değerlendirme toplantıları ne sıklıkla yapılmalı?
+
+Stratejik değerlendirmeler üç ayda bir, operasyonel kontroller ise ayda bir yapılmalıdır. Üç aylık stratejik toplantılar QBR olarak da bilinir.

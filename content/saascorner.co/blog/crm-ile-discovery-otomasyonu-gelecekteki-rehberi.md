@@ -178,3 +178,21 @@ Tahmine Dayalı Kurşun Puanlama (Predictive Lead Scoring): Geleneksel kurşun p
 CRM ile discovery otomasyonu, artık sadece teknoloji meraklısı şirketlerin denediği bir lüks değil, rekabetçi kalmak isteyen her B2B işletmesi için stratejik bir zorunluluktur. Bu yaklaşım, satış süreçlerinizdeki tahmin yürütmeyi ortadan kaldırır ve yerine veri odaklı, tutarlı ve ölçeklenebilir bir sistem getirir. Satış temsilcilerinizin zamanını en değerli varlıkları olarak korur, onları idari görevlerden kurtarıp ilişki kurma ve anlaşma kapatma gibi insan odaklı yeteneklerini kullanmaya teşvik eder. Müşteri deneyimini, onlara daha ilk günden anlaşıldıklarını hissettirerek iyileştirir.
 
 Bu yolculuğa çıkmak, bir gecede olacak bir şey değildir. Stratejik bir planlama, doğru teknoloji yığınını kurma ve süreçleri sürekli olarak test edip optimize etme taahhüdü gerektirir. Ancak bu yatırımı yapan şirketler, sadece daha verimli çalışmakla kalmayacak, aynı zamanda pazarın geleceğini şekillendiren liderler arasında yer alacaktır. Soru artık "Discovery sürecimizi otomatikleştirmeli miyiz?" değil, "Rakiplerimizden önce ne kadar hızlı ve ne kadar akıllıca otomatikleştirebiliriz?" sorusudur. Gelecek geldi ve CRM'iniz bu geleceğin anahtarını elinde tutuyor.
+
+## Sık sorulan sorular
+
+### Discovery otomasyonu satış temsilcisinin yerini alır mı?
+
+Hayır; discovery otomasyonunun amacı satış temsilcisini denklemden çıkarmak değil, onu daha bilgili ve güçlü kılmaktır. Otomasyon tekrarlayan ve düşük değerli veri toplama görevlerini üstlenir. Böylece temsilciler zamanlarını stratejik düşünmeye, ilişki kurmaya ve anlaşma kapatmaya ayırabilir.
+
+### Aşamalı profilleme nasıl çalışır?
+
+Aşamalı profilleme her ziyarette ziyaretçiye yalnızca birkaç yeni soru sorarak çalışır. İlk içerik indirmede ad, soyad ve e-posta istenir. Ziyaretçi geri döndüğünde sistem onu çerezler aracılığıyla tanır ve şirket adı ya da çalışan sayısı gibi farklı sorular sorar. Bu yöntem müşteriyi bunaltmadan profili zaman içinde zenginleştirmenizi sağlar.
+
+### Otomatik veri zenginleştirme formları nasıl kısaltır?
+
+Veri zenginleştirme araçları yalnızca ad ve iş e-postasıyla eksik bilgileri tamamlayarak formları kısaltır. CRM'e yeni bir kişi eklendiğinde bu araçlar e-posta alan adından yola çıkarak halka açık verileri tarar. Şirket adı, sektör, çalışan sayısı ve konum gibi bilgiler ilgili alanlara otomatik olarak doldurulur. Bu da temsilcilerin araştırmaya harcadığı zamanı azaltır.
+
+### Tahmine dayalı kurşun puanlama geleneksel puanlamadan nasıl ayrılır?
+
+Tahmine dayalı puanlama sizin belirlediğiniz kurallar yerine geçmiş verilerden öğrenen bir makine öğrenmesi modeli kullanır. Model CRM'deki hem kazanılan hem de kaybedilen anlaşmaları analiz eder. Bir adayın kapanma olasılığını en iyi tahmin eden gizli kalıpları bulmaya çalışır.

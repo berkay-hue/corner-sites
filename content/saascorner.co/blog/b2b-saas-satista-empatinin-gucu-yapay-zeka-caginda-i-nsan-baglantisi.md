@@ -73,7 +73,7 @@ Yapay zeka ve otomasyon, B2B SaaS satış dünyasının kurallarını yeniden ya
 
 ### Yapay zeka B2B satışta insan temsilcinin yerini alabilir mi?
 
-Yapay zeka; potansiyel müşteri listeleri oluşturma, ilk teması otomatikleştirme ve veri analizi gibi görevlerde çok hızlıdır. Ancak bir müşterinin sesindeki tereddüdü ya da bir e-postanın satır aralarındaki endişeyi anlayamaz. Yüksek riskli B2B satın alma kararları güvene dayalı verildiği için yapay zeka insanın alternatifi değil, tamamlayıcısıdır.
+Hayır; yapay zeka insanın alternatifi değil, tamamlayıcısıdır. Potansiyel müşteri listeleri oluşturma, ilk teması otomatikleştirme ve veri analizi gibi görevlerde çok hızlıdır ama bir müşterinin sesindeki tereddüdü ya da bir e-postanın satır aralarındaki endişeyi anlayamaz. Yüksek riskli B2B satın alma kararları güvene dayalı verildiği için bu kararlarda insan temsilci belirleyici olmaya devam eder.
 
 ### Satış görüşmelerinde aktif dinleme nasıl yapılır?
 

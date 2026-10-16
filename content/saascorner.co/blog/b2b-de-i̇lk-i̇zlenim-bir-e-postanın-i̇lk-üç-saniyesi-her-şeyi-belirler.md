@@ -70,3 +70,21 @@ Açılma oranı düşükse sorun konu satırındadır. Açılma oranı yüksek a
 Her metrik bir şeyi söyler. Dinlenmesi yeterlidir.
 
 İyi yazılmış bir e-posta bile sürekli test edilip geliştirilmediğinde potansiyelinin altında kalır. A/B testleri, farklı açılış cümleleri, değişen konu satırları bu gelişimi mümkün kılar. Outbound e-posta bir kampanya değil, yaşayan bir sistemdir.
+
+## Sık sorulan sorular
+
+### Etkili bir konu satırı nasıl yazılır?
+
+Etkili bir konu satırı net, kısa ve alıcıyla ilgili olmalıdır. Konu satırını bir başlık değil, okuyucuya verilen bir söz olarak düşünebilirsiniz. Önce merak mı uyandıracağınıza, bir sorunu mu işaret edeceğinize yoksa somut bir fayda mı sunacağınıza karar vermeniz gerekir. Bu seçim hedef kitleye ve mesajın amacına göre değişir.
+
+### Kişiselleştirme için alıcının adını yazmak yeterli mi?
+
+Hayır; CRM'in otomatik doldurduğu isim alanı herkese aynı görünür ve tek başına fark yaratmaz. Gerçek kişiselleştirme o kişiye özel bir şeyi fark ettiğinizi göstermektir. Şirketin son dönemde açıkladığı bir gelişme, sektördeki bir değişim, kişinin paylaştığı bir içerik ya da şirketin büyüme aşaması bunun için iyi bir başlangıç noktası olabilir.
+
+### Yanıt gelmeyen bir e-postanın ardından takip mesajı göndermek gerekir mi?
+
+Evet; B2B satışlarda yanıtların büyük kısmı ilk e-postadan değil, takip mesajlarından gelir. Yanıt gelmemesi çoğu zaman bir ret değil, meşguliyetten ya da zamanlamadan kaynaklanan bir gürültüdür. Doğru aralıklarla ve her seferinde yeni bir değer katarak yazılan takip mesajları ilk e-postanın açamadığı kapıları açabilir.
+
+### E-posta metrikleri sorunun nerede olduğunu nasıl gösterir?
+
+Her metrik sürecin farklı bir halkasına işaret eder. Açılma oranı düşükse sorun büyük olasılıkla konu satırındadır. Açılma yüksek ama yanıt düşükse içeriğe bakmanız gerekir. Yanıtlar görüşmeye dönmüyorsa sorun teklifte ya da zamanlamada olabilir. A/B testleriyle farklı açılış cümlelerini ve konu satırlarını deneyerek sonuçları geliştirebilirsiniz.
