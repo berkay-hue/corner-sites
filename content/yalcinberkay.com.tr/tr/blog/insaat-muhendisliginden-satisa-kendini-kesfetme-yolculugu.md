@@ -5,7 +5,7 @@ date: "2023-12-27"
 updated: "2026-10-16"
 category: ""
 image: "/_a/fr/images/9wxS1nppeHDlraHjxaqcJWKf6Y.jpeg"
-imageAlt: "İnşaat Mühendisliğinden Satışa: Bir Kendini Keşfetme Yolculuğu"
+imageAlt: "İllüstrasyonlu görsel: “Y kuşağının %91'i her 3 yılda bir yeni bir işe atılıyor”, yokuşta birinin diğerini yukarı çektiği iki tırmanıcı çizimiyle"
 alt: "from-civil-engineering-to-sales-a-journey-of-self-discovery"
 ---
 

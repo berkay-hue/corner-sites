@@ -5,7 +5,7 @@ date: "2024-01-31"
 updated: "2026-10-16"
 category: ""
 image: "/_a/fr/images/nqDxF9bRP8rLu1rxrW337jZLd8.jpeg"
-imageAlt: "The Importance of Financial Literacy in Turkey"
+imageAlt: "Illustrated graphic: “The average score for financial literacy is 13.2 out of 21 globally”, with a sketch of a magnifying glass over a globe, banknotes and coins"
 alt: "turkiyede-finansal-okuryazarligin-onemi"
 ---
 

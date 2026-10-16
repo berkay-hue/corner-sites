@@ -5,7 +5,7 @@ date: "2024-02-08"
 updated: "2026-10-16"
 category: ""
 image: "/_a/fr/images/hfBk5cwFWNFbQERVS2hfZAKWlJk.jpeg"
-imageAlt: "Adapting to the New B2B Sales Landscape"
+imageAlt: "Illustrated graphic: “75% of B2B buyers prefer avoiding sales conversations” (Source: Gartner), with a sketch of a man holding a giant megaphone"
 alt: "yeni-b2b-satis-ortamina-uyum-saglamak"
 ---
 

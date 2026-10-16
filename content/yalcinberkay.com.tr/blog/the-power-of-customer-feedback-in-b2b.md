@@ -5,7 +5,7 @@ date: "2024-01-19"
 updated: "2026-10-16"
 category: ""
 image: "/_a/fr/images/qFhIbCToccorP0yP3zTmTBx71CY.jpeg"
-imageAlt: "The Power of Customer Feedback in B2B"
+imageAlt: "Illustrated graphic: “35% of companies recognize customer feedback as a top 3 innovation driver”, with a hand-drawn star and upward arrow"
 alt: "b2bde-musteri-geri-bildiriminin-gucu"
 ---
 

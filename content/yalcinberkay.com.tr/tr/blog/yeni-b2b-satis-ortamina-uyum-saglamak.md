@@ -5,7 +5,7 @@ date: "2024-02-08"
 updated: "2026-10-16"
 category: ""
 image: "/_a/fr/images/hfBk5cwFWNFbQERVS2hfZAKWlJk.jpeg"
-imageAlt: "Yeni B2B Satış Ortamına Uyum Sağlamak"
+imageAlt: "İllüstrasyonlu görsel: “B2B alıcılarının %75'i satış görüşmelerinden kaçınmayı tercih ediyor” (Kaynak: Gartner), dev bir megafon tutan adam çizimiyle"
 alt: "adapting-to-the-new-b2b-sales-landscape"
 ---
 

@@ -5,7 +5,7 @@ date: "2024-01-19"
 updated: "2026-10-16"
 category: ""
 image: "/_a/fr/images/qFhIbCToccorP0yP3zTmTBx71CY.jpeg"
-imageAlt: "B2B'de Müşteri Geri Bildiriminin Gücü"
+imageAlt: "İllüstrasyonlu görsel: “Şirketlerin %35'i müşteri geri bildirimini ilk 3 inovasyon kaynağından biri sayıyor”, el çizimi yıldız ve yukarı ok ile"
 alt: "the-power-of-customer-feedback-in-b2b"
 ---
 

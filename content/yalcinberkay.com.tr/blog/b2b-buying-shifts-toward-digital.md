@@ -5,7 +5,7 @@ date: "2024-01-11"
 updated: "2026-10-16"
 category: ""
 image: "/_a/fr/images/anrKOY1RANgRyFfJRJx3prfg4.jpeg"
-imageAlt: "B2B Buying Shifts Toward Digital!"
+imageAlt: "Illustrated graphic: “90% increase in digital B2B demand over the past two years”, with a sketch of two briefcases linked by circular arrows"
 alt: "b2b-satin-alma-dijitale-kayiyor"
 ---
 
