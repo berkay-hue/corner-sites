@@ -2,6 +2,7 @@
 title: "The Importance of Financial Literacy in Turkey"
 description: "But why does this matter to us in Turkey? 🔍 Financial Literacy: More Than Just Numbers Financial literacy isn't just about understanding numbers; it's…"
 date: "2024-01-31"
+updated: "2026-10-16"
 category: ""
 image: "/_a/fr/images/nqDxF9bRP8rLu1rxrW337jZLd8.jpeg"
 imageAlt: "The Importance of Financial Literacy in Turkey"

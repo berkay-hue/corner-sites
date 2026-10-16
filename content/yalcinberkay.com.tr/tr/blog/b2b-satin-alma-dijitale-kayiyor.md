@@ -2,6 +2,7 @@
 title: "B2B Satın Alma Dijitale Kayıyor!"
 description: "Pivotree Inc. ve Spryker'ın son raporu, B2B satın alma davranışlarında dijital platformlara doğru büyük bir kayış olduğunu ortaya koyuyor."
 date: "2024-01-11"
+updated: "2026-10-16"
 category: ""
 image: "/_a/fr/images/anrKOY1RANgRyFfJRJx3prfg4.jpeg"
 imageAlt: "B2B Satın Alma Dijitale Kayıyor!"

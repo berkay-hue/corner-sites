@@ -2,6 +2,7 @@
 title: "Soğuk E-postada Yanıt Oranı Nasıl Artırılır?"
 description: "Soğuk e-postaya gelen yanıt oranı neden düşük ve nasıl yükseltilir? Konu satırından takip sırasına kadar B2B outbound adımlarını örneklerle inceliyoruz."
 date: "2026-10-13"
+updated: "2026-10-16"
 category: "Outbound"
 image: "https://images.pexels.com/photos/7888684/pexels-photo-7888684.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
 imageAlt: "Soğuk E-postada Yanıt Oranı Nasıl Artırılır?"

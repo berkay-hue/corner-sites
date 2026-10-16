@@ -2,6 +2,7 @@
 title: "When Should a Founder Hire Their First Sales Rep?"
 description: "Founder-led selling only scales so far. Learn which revenue signals mean it's time to hire your first sales rep, and what to fix first."
 date: "2026-10-13"
+updated: "2026-10-16"
 category: "Founder Notes"
 image: "https://images.pexels.com/photos/6016350/pexels-photo-6016350.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
 imageAlt: "When Should a Founder Hire Their First Sales Rep?"

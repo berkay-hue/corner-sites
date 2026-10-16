@@ -2,6 +2,7 @@
 title: "Adapting to the New B2B Sales Landscape"
 description: "Navigating the new B2B landscape? Buyers are shying away from sales chats, says Gartner."
 date: "2024-02-08"
+updated: "2026-10-16"
 category: ""
 image: "/_a/fr/images/hfBk5cwFWNFbQERVS2hfZAKWlJk.jpeg"
 imageAlt: "Adapting to the New B2B Sales Landscape"

@@ -2,6 +2,7 @@
 title: "How to Build an Outbound Sales Team from Scratch"
 description: "A practical walkthrough for B2B founders on hiring, structuring, and ramping an outbound sales team, with roles, metrics, and early mistakes to avoid."
 date: "2026-10-10"
+updated: "2026-10-16"
 category: "Sales Leadership"
 image: "https://images.pexels.com/photos/7693103/pexels-photo-7693103.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
 imageAlt: "How to Build an Outbound Sales Team from Scratch"

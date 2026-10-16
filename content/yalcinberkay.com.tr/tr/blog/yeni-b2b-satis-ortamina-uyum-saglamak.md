@@ -2,6 +2,7 @@
 title: "Yeni B2B Satış Ortamına Uyum Sağlamak"
 description: "Yeni B2B ortamında yolunuzu mu arıyorsunuz? Gartner'a göre alıcılar satış görüşmelerinden giderek uzaklaşıyor."
 date: "2024-02-08"
+updated: "2026-10-16"
 category: ""
 image: "/_a/fr/images/hfBk5cwFWNFbQERVS2hfZAKWlJk.jpeg"
 imageAlt: "Yeni B2B Satış Ortamına Uyum Sağlamak"

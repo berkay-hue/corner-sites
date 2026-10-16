@@ -2,6 +2,7 @@
 title: "How to Run a Weekly Pipeline Review That Works"
 description: "A walkthrough for running a weekly B2B pipeline review, covering the agenda, the metrics that matter, and the mistakes that waste your team's time."
 date: "2026-10-12"
+updated: "2026-10-16"
 category: "B2B Sales"
 image: "https://images.pexels.com/photos/8424512/pexels-photo-8424512.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
 imageAlt: "How to Run a Weekly Pipeline Review That Works"

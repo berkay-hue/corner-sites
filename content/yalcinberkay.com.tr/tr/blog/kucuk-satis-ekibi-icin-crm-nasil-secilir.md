@@ -2,6 +2,7 @@
 title: "Küçük Satış Ekibi İçin CRM Nasıl Seçilir?"
 description: "Satış ekibiniz küçükse hangi CRM'in size uyduğunu nasıl anlarsınız? Excel'den geçiş, bütçe ve kurulum kriterlerini sade bir çerçevede özetliyoruz."
 date: "2026-10-11"
+updated: "2026-10-16"
 category: "CRM"
 image: "https://images.pexels.com/photos/7876739/pexels-photo-7876739.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
 imageAlt: "Küçük Satış Ekibi İçin CRM Nasıl Seçilir?"

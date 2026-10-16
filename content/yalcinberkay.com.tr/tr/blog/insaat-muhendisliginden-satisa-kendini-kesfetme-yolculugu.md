@@ -2,6 +2,7 @@
 title: "İnşaat Mühendisliğinden Satışa: Bir Kendini Keşfetme Yolculuğu"
 description: "Üniversite öğrencisiyken inşaat mühendisliği yoluna girdim ve başlangıçta MBA için mimarlık alanında bir gelecek hayal ediyordum."
 date: "2023-12-27"
+updated: "2026-10-16"
 category: ""
 image: "/_a/fr/images/9wxS1nppeHDlraHjxaqcJWKf6Y.jpeg"
 imageAlt: "İnşaat Mühendisliğinden Satışa: Bir Kendini Keşfetme Yolculuğu"

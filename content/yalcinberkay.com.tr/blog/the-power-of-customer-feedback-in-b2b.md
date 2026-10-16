@@ -2,6 +2,7 @@
 title: "The Power of Customer Feedback in B2B"
 description: "🚀 Harnessing customer feedback isn't just a trend; it's a game-changer in the B2B world."
 date: "2024-01-19"
+updated: "2026-10-16"
 category: ""
 image: "/_a/fr/images/qFhIbCToccorP0yP3zTmTBx71CY.jpeg"
 imageAlt: "The Power of Customer Feedback in B2B"

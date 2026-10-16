@@ -2,6 +2,7 @@
 title: "From Civil Engineering to Sales: A Journey of Self-Discovery"
 description: "As a university student, I embarked on a path in Civil Engineering, initially envisioning a future in Architecture for my MBA."
 date: "2023-12-27"
+updated: "2026-10-16"
 category: ""
 image: "/_a/fr/images/9wxS1nppeHDlraHjxaqcJWKf6Y.jpeg"
 imageAlt: "From Civil Engineering to Sales: A Journey of Self-Discovery"
