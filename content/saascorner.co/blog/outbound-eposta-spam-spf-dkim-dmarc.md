@@ -236,3 +236,21 @@ Outbound e-postada başarı, iyi bir liste ve iyi bir mesajla başlar; ama e-pos
 Ancak kimlik doğrulama sadece başlangıçtır. İkincil alan adlarıyla ana domain'inizi korumak, yeni posta kutularını sabırla ısıtmak, listeyi doğrulamak, hacmi kontrollü tutmak ve gerçek kişiselleştirmeyle yanıt almaya odaklanmak, uzun vadeli teslim edilebilirliğin diğer ayaklarıdır. Bunları bir kez kurup unutmak yerine düzenli olarak izlenen bir operasyon haline getirdiğinizde, outbound kampanyalarınızın sonuçları da çok daha öngörülebilir hale gelir.
 
 Outbound altyapınızı sıfırdan kurmak, mevcut kampanyalarınızdaki teslim edilebilirlik sorunlarını teşhis etmek ya da nitelikli görüşme üreten bir lead generation operasyonu oluşturmak istiyorsanız, SAAS Corner ekibi olarak yardımcı olmaktan memnuniyet duyarız. [İletişim sayfamızdan](/iletisim) bize ulaşın, ihtiyaçlarınızı birlikte değerlendirelim.
+
+## Sık sorulan sorular
+
+### SPF, DKIM ve DMARC arasındaki fark nedir?
+
+SPF alan adınız adına kimin gönderim yapabileceğini tanımlar, DKIM her e-postaya doğrulanabilir bir imza ekler, DMARC ise bu iki kontrolü görünen gönderici adresiyle eşleştirip politika belirler ve raporlar. SPF tek başına yeterli değildir, çünkü görünen "Kimden" adresini değil teknik zarf adresini kontrol eder. Bu boşluğu DKIM ve özellikle DMARC kapatır.
+
+### DMARC'a doğrudan p=reject ile başlanmalı mı?
+
+Hayır, DMARC'ı doğrudan p=reject ile başlatmak meşru e-postalarınızın da reddedilmesine neden olabilir. İlk 2-4 hafta p=none ile raporları toplayıp alan adınız adına hangi kaynakların e-posta gönderdiğini görmeniz önerilir. Bilinmeyen ama meşru kaynakları düzelttikten sonra p=quarantine; pct=25 ile başlayıp yüzdeyi kademeli olarak artırabilir, raporlar temiz olduğunda p=reject'e geçebilirsiniz.
+
+### Outbound e-postalar ana alan adından gönderilmeli mi?
+
+Hayır, B2B SaaS şirketlerinde yaygın ve sağlıklı yaklaşım outbound için ikincil alan adları kullanmaktır. Outbound'da gelen spam şikâyetleri doğrudan gönderici alan adının itibarına yazılır ve ana alan adı kullanılırsa faturalar, destek yanıtları ve ürün bildirimleri de aynı itibar havuzundan etkilenir. Ana domain'deki ayarlar ikincil domainlere otomatik olarak geçmediği için her ikincil alan adında SPF, DKIM ve DMARC'ı ayrı ayrı kurmanız gerekir.
+
+### Kurulumun doğru çalıştığı nasıl kontrol edilir?
+
+En pratik yol, her posta kutusundan kendi Gmail ve Outlook test hesaplarınıza e-posta göndermektir. Gmail'de e-postayı açıp "Orijinali göster" seçeneğine tıkladığınızda SPF, DKIM ve DMARC satırlarında PASS görmelisiniz. DNS kayıtlarınızı komut satırından dig komutlarıyla da kontrol edebilir, Google Postmaster Tools ile Gmail'e gönderdiğiniz e-postaların itibar ve spam oranı verisini izleyebilirsiniz.

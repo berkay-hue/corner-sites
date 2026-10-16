@@ -49,3 +49,17 @@ But if the product is clear, the target audience is defined and it's time to sca
 **The real question is:** Are you trying to solve your sales problem by hiring a person, or by building a system?
 
 These are two very different questions, and their answers lead to very different results.
+
+## FAQ
+
+### What is the difference between an SDR model and a full-time sales rep?
+
+A full-time sales rep relies on one person, while the SDR model relies on interconnected roles working together. In the SDR structure, separate people research potential customers, write and test messages, read and report on data, and manage the whole process. When these four roles work together, what you get is a working machine rather than a single employee.
+
+### Is a full-time sales rep cheaper than an SDR model?
+
+A full-time employee only looks cheaper at first glance. Once hiring costs, training time, tool licenses, the time it takes for performance to settle, and a possible resignation scenario are added in, the real cost of a single sales rep climbs much higher. The hiring process alone takes two to three months on average, and if the rep leaves, the process resets and everything starts over.
+
+### Is the SDR model right for every company?
+
+No, the SDR model is not right for every company. If a company is still testing product-market fit and wants to understand the sales process first-hand, an in-house salesperson may make more sense. But once the product is clear, the target audience is defined, and it's time to scale, trying to grow with a single person is like hitting the brakes.

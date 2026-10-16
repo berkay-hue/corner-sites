@@ -254,3 +254,21 @@ Türkiye'de B2B SaaS SEO'su hacim oyunu değil, isabet oyunudur. Küçük ama ne
 En önemli nokta şudur: SEO, outbound satıştan, partner kanalından ve CRM disiplininden bağımsız bir proje değildir. Bu kanallar birbirini beslediğinde müşteri edinme maliyeti zamanla düşer ve büyüme yalnızca satış ekibinin kapasitesine bağlı olmaktan çıkar.
 
 B2B SaaS şirketiniz için satış hedeflerinize bağlı bir SEO stratejisi kurmak, bunu outbound ve CRM süreçlerinizle bütünleştirmek istiyorsanız [SAAS Corner ekibiyle iletişime geçin](/iletisim). Mevcut durumunuzu birlikte değerlendirip size uygun bir yol haritası çıkaralım.
+
+## Sık sorulan sorular
+
+### Türkiye'de B2B SaaS SEO'su neden farklı işler?
+
+Türkiye'de arama hacimleri daha düşüktür ama niyet güçlüdür, bu yüzden SEO trafik hacmiyle değil niyet yoğunluğuyla kazanılır. Türkçe ve İngilizce terimler bir arada kullanılır ve satın alma kararlarında yerel mevzuat ile entegrasyonlar belirleyicidir. e-Fatura, KVKK ve yerel entegrasyonlar gibi konularda global rakipler genellikle zayıf olduğu için bu durum yerel bir SaaS için açık bir fırsattır.
+
+### İçerik üretimine hangi aşamadan başlanmalı?
+
+B2B SaaS için önce karar aşaması, sonra çözüm aşaması, en son bilgi aşaması içerikleri üretilmelidir. Küçük bir ekip ve sınırlı bütçeyle ilk 6 ayda sonuç göstermeniz gerekir. Karar aşaması içerikleri az trafik getirse de pipeline'a doğrudan katkı sağlar ve SEO yatırımının devam etmesi için gereken iç desteği kazandırır.
+
+### SEO sonuçları ne zaman görülmeye başlar?
+
+SEO'nun asıl getirisi genellikle 6-12 ay arasında görünür hâle gelir. 90 günün sonunda büyük trafik artışları değil, ticari sayfaların dizine eklenmesi ve organik kanaldan ilk nitelikli lead'lerin gelmeye başlaması beklenmelidir. 3. ayda sonuç göremeyip yatırımı durdurmak, o ana kadar yapılan işin değerini sıfırlar.
+
+### B2B SaaS için backlink nasıl kazanılır?
+
+Otorite en sağlıklı şekilde partner ekosistemi üzerinden inşa edilir. Entegrasyon partnerlerinin dizinlerinde ve pazaryeri sayfalarında yer almak, çözüm ortaklarının sitelerinde ürün sayfaları ve vaka çalışmaları yayınlatmak bu yaklaşımın parçasıdır. Toplu link paketleri, alakasız bloglardaki misafir yazılar ve özel blog ağlarından (PBN) ise uzak durulmalıdır.

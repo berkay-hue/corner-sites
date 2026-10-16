@@ -67,3 +67,21 @@ This requires not a single salesperson, but a system that works together: the ri
 To learn more about how to set up your outbound sales process or strengthen your current setup, you can visit saascorner.co.
 
 **Related page:** You can find SAAS Corner's service in this area on the [outbound sales for B2B companies expanding from Turkey to global markets](/en/industries/global-expansion) page.
+
+## FAQ
+
+### What is outbound sales?
+
+Outbound sales is a sales model in which you reach out to potential customers proactively instead of waiting for them to find you. Its core tools are email sequences, LinkedIn messages, cold calls, and automation systems. Compared with inbound marketing, it delivers faster and more measurable results.
+
+### Why do most outbound sales strategies fail?
+
+Most outbound strategies fail because of three fundamental mistakes: an incorrectly defined target audience, messages that aren't personalized, and a process run manually. If your ICP is unclear, every message you send is wasted energy. Generic emails land in the spam folder or get ignored, and manual follow-up loses time and breaks consistency.
+
+### What is a qualified meeting in B2B sales?
+
+A qualified meeting happens with someone who has the problem your company solves, has the budget, and has decision-making authority. A full sales calendar is not a sign of success on its own. To book qualified meetings, the ICP must be clearly defined and the outbound operation must be built around that profile.
+
+### What roles make up an outbound SDR team?
+
+A professional outbound operation is built on four core roles: the SDR, the sequence writer, the reporting lead, and the control director. The SDR researches prospects and makes first contact, the sequence writer designs and tests messages, the reporting lead analyzes performance data, and the control director manages the entire operation. Hiring these four roles separately is both expensive and time-consuming, which is why many companies choose to outsource this operation.

@@ -236,3 +236,21 @@ Success in outbound email starts with a good list and a good message; but if the
 But authentication is only the beginning. Protecting your main domain with secondary domains, patiently warming up new mailboxes, verifying your list, keeping volume under control and focusing on earning replies through genuine personalization are the other pillars of long-term deliverability. When you turn these into a regularly monitored operation rather than setting them up once and forgetting about them, the results of your outbound campaigns become far more predictable as well.
 
 If you want to build your outbound infrastructure from scratch, diagnose deliverability issues in your current campaigns or create a lead generation operation that generates qualified meetings, the SAAS Corner team would be happy to help. Reach out to us through our [contact page](/en/contact) and let's assess your needs together.
+
+## FAQ
+
+### What is the difference between SPF, DKIM, and DMARC?
+
+SPF defines which servers can send email on behalf of your domain, DKIM adds a verifiable cryptographic signature to every email, and DMARC aligns these two checks with the visible sender address. DMARC also tells receiving servers what to do when the checks fail and sends you aggregate reports. Today, this trio is the minimum standard expected by major email providers.
+
+### Can a domain have more than one SPF record?
+
+No, a domain can have only one SPF record. Creating a separate SPF record when adding a new tool causes both records to be treated as invalid. The right approach is to add the new include statement inside the existing record and stay within the 10 DNS lookup limit.
+
+### Should you start DMARC with a p=reject policy?
+
+No, launching DMARC straight away with p=reject can cause your legitimate emails to be rejected as well. Start with p=none for the first 2-4 weeks to collect reports, fix unknown but legitimate sending sources, then move to p=quarantine with pct=25 and gradually increase the percentage. Move to p=reject once the reports are clean.
+
+### Should you send outbound email from your main domain?
+
+No, the common and healthy approach at B2B SaaS companies is to use secondary domains for outbound. Spam complaints count directly against the sending domain's reputation, so outbound from your main domain puts your invoices, support replies, and product notifications in the same reputation pool. Set up SPF, DKIM, and DMARC separately for each secondary domain and warm up new domains before using them.

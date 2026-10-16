@@ -237,3 +237,21 @@ Bu süreç ilk yıl zahmetli görünebilir. Ancak ikinci yıldan itibaren eliniz
 - Her çeyrek gerçek verilerle modeli güncelleyin.
 
 Pazarlama bütçenizi hedeflerinize göre modellemek, kanal karışımınızı optimize etmek ya da CRM ve ölçüm altyapınızı bu modele uygun hale getirmek istiyorsanız, SAAS Corner olarak yardımcı olmaktan memnuniyet duyarız. Mevcut durumunuzu birlikte değerlendirmek için [bizimle iletişime geçebilirsiniz](/iletisim).
+
+## Sık sorulan sorular
+
+### B2B SaaS'ta pazarlama bütçesi neden geçmiş gelirin bir yüzdesiyle belirlenmemeli?
+
+Çünkü pazarlama bütçesi geçmiş gelirin yüzdesi değil, hedefin bir fonksiyonu olmalıdır. B2B SaaS'ta gelir birikimlidir, şirketin aşaması oranı değiştirir ve satış modeli maliyet yapısını belirler. Bu nedenle oranı bir başlangıç noktası değil, hedef ve huni modellendikten sonra makul olup olmadığı sorgulanan bir sonuç olarak görmek daha sağlıklıdır.
+
+### Tersine huni yöntemiyle pazarlama bütçesi nasıl hesaplanır?
+
+Hesaba yeni ARR hedefinden başlanır ve her dönüşüm aşamasında geriye doğru ilerlenir. Böylece hangi kanaldan ne kadar talep üretmeniz gerektiği ve bunun maliyeti ortaya çıkar. Ardından bulunan bütçe CAC geri ödeme süresiyle kontrol edilir ve gelire oranına bakılarak makul olup olmadığı sorgulanır.
+
+### Deney bütçesi neden ayrı tutulmalı?
+
+Deney bütçesi olmayan bir pazarlama ekibi, mevcut kanallar doyduğunda yeni büyüme kaynağı bulamaz. Yeni kanal denemesi için korunan bir bütçe yoksa her deney mevcut kanaldan para çekmek olarak algılanır ve hiç yapılmaz. Bu yüzden bütçenin büyük kısmını kanıtlanmış kanallara, küçük ama korunan bir kısmını da ayrı bir satır olarak deneylere ayırmak gerekir.
+
+### Türkiye'de pazarlama bütçesi planlanırken nelere dikkat edilmeli?
+
+Kur ve enflasyon etkisi nedeniyle döviz bazlı kalemleri ayrı bir satırda izlemek ve çeyreklik revizyon mekanizması kurmak gerekir. Reklam maliyetlerinin dalgalanmasına karşı yıllık sabit bir reklam bütçesi yerine çeyreklik hedef maliyet belirlemek daha sağlıklıdır. İlişki odaklı satış kültürü, Türkçe içerik açığının SEO'ya sağladığı fırsat ve karar vericilere ulaşmada LinkedIn'in ağırlığı da plana dahil edilmelidir.

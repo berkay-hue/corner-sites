@@ -206,3 +206,21 @@ For B2B SaaS, Google Ads is not a "switch it on and wait" channel. When set up c
 Run the reverse budget calculation with your own numbers, set up your measurement infrastructure before your campaigns, and base your decisions on qualified opportunity data, not clicks. These three principles will let you see clearly, within the first 90 days, whether Google Ads is a channel that works for you.
 
 If you want to set up your Google Ads account to fit your B2B SaaS sales process, or measure the real pipeline contribution of your existing campaigns, [get in touch with the SAAS Corner team](/en/contact). Let's build a roadmap together that ties your budget to your sales targets.
+
+## FAQ
+
+### How should B2B SaaS companies measure Google Ads success?
+
+Measure Google Ads by cost per qualified opportunity and cost per customer won, not by cost per click or cost per form fill. In B2B SaaS, a form submission or demo request is only the start of the process, and not every searcher is a buyer. A campaign that brings in cheap form fills is actually expensive if it wastes your sales team's time.
+
+### How do you calculate a Google Ads budget for B2B SaaS?
+
+Work backward from your sales target through each conversion rate. Start with the number of customers you want per month, calculate the qualified opportunities, demos, demo requests, and clicks needed, and multiply the clicks by your average CPC to find the media budget. Plan agency, tool, and content costs separately, include tax and billing items, and factor in the learning period.
+
+### Why connect offline conversions from your CRM to Google Ads?
+
+Connecting offline conversions teaches the algorithm to target the profiles that actually convert into sales rather than everyone who fills out a form. When a lead moves to the qualified opportunity or won stage in your CRM, that information is sent back to Google Ads along with the GCLID. The success of this integration depends directly on how clean your CRM data is.
+
+### When should you switch to a Target CPA bidding strategy?
+
+Switch to Target CPA only once offline conversions are flowing regularly, because a new account doesn't have enough conversion data for the algorithm to learn from. Start with manual CPC or a Maximize clicks strategy with a maximum CPC limit for the first 2-4 weeks to collect data. Once enough conversions have accumulated, move to Maximize conversions, and then to Target CPA or value-based bidding.

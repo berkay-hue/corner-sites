@@ -68,3 +68,21 @@ Sürdürülebilirlik çabalarının etkisini görmek için doğru metrikleri tak
 ## Sonuç
 
 Gördüğün gibi, SaaS ürünlerinde sürdürülebilirlik artık göz ardı edilebilecek bir lüks değil, geleceğe dönük bir zorunluluk ve akıllı bir iş stratejisidir. Yeşil yazılım ve etik tasarım ilkeleri, sadece gezegenimizi korumakla kalmaz, aynı zamanda operasyonel maliyetlerini düşürür, marka itibarını güçlendirir ve en iyi yetenekleri kendine çeker. Bu yolculuk, tek bir büyük adımla değil, her gün atılan küçük ve bilinçli adımlarla ilerler. Kodunu optimize etmek, doğru bulut ortağını seçmek ve kullanıcı deneyimini daha verimli hale getirmek gibi somut eylemlerle başlayabilirsin. Unutma, dijital dünyanın liderleri, sadece en iyi ürünü sunanlar değil, aynı zamanda bunu en sorumlu şekilde yapanlar olacaktır. Şimdi harekete geçme ve SaaS ürününü geleceğe hazırlama zamanı.
+
+## Sık sorulan sorular
+
+### Bir SaaS ürününün dijital karbon ayak izi nereden kaynaklanır?
+
+Bir SaaS ürününün dijital karbon ayak izi, ürünün çalıştığı veri merkezlerinin tükettiği enerjiden kaynaklanır. Her API çağrısı, her veritabanı sorgusu ve her kullanıcı etkileşimi sunucularda işlem gücü ve dolayısıyla enerji tüketimi anlamına gelir. Verimsiz kodlar ve karmaşık arayüzler bu tüketimi katlayarak artırır.
+
+### Veri yönetimiyle enerji tüketimi nasıl azaltılır?
+
+Enerji tüketimini azaltmanın yolu veri minimizasyonu, sorgu optimizasyonu ve katmanlı depolamadan geçer. Gerçekten ihtiyaç duymadığın verileri toplamamalı ve saklamamalısın; veritabanı sorgularını optimize etmek de işlemci kullanımında büyük fark yaratır. Sık erişilmeyen eski verileri daha az enerji tüketen soğuk depolama çözümlerine taşımak hem maliyetlerini düşürür hem de çevresel etkiyi azaltır.
+
+### Karanlık mod gerçekten enerji tasarrufu sağlar mı?
+
+Evet, karanlık mod özellikle OLED ekranlı cihazlarda belirgin bir enerji tasarrufu sağlar. Bu ekranlarda siyah pikseller hiç aydınlatılmadığı için beyaz bir arayüze kıyasla önemli ölçüde daha az enerji tüketilir. Kullanıcılarına karanlık mod seçeneği sunmak, cihazlarının pil ömrünü uzatırken kolektif olarak enerji tüketimini azaltmanın basit bir yoludur.
+
+### SaaS ürünlerinde sürdürülebilirlik hangi metriklerle ölçülür?
+
+Temel iki metrik PUE ve Yazılım Karbon Yoğunluğu'dur. PUE, veri merkezinin toplam enerji tüketiminin bilgi işlem ekipmanlarının tükettiği enerjiye oranını gösterir ve ideal değeri 1.0'dır. Yazılım Karbon Yoğunluğu ise yazılımının bir API çağrısı veya bir işlem gibi birim iş başına ne kadar karbon saldığını ölçer. Bu metrikleri düzenli takip ederek iyileştirmelerinin etkisini somut olarak görebilir ve paydaşlarına şeffaf biçimde raporlayabilirsin.

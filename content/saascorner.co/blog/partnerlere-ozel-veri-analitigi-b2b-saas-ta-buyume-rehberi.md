@@ -68,3 +68,21 @@ Veriler, sadece şirket içi stratejiler için değil, aynı zamanda partnerlerl
 ## Sonuç
 
 B2B SaaS'ta başarılı bir iş ortaklığı programı kurmak, sadece doğru partnerleri bulmakla bitmez. Asıl başarı, bu ilişkileri veriye dayalı bir şekilde yönetmekten geçer. Partnerlere özel veri analitiği, tahmin yürütmeyi ortadan kaldırarak hangi stratejilerin işe yaradığını, hangi ortakların gerçekten değerli olduğunu ve kaynaklarını nereye odaklaman gerektiğini net bir şekilde gösterir. Bu rehberde ele aldığımız gibi, doğru metrikleri toplayarak, uygun araçları kullanarak ve bu verileri eyleme geçirerek partner kanalını öngörülebilir ve ölçeklenebilir bir büyüme motoruna dönüştürebilirsin. Artık partner programını bir kara kutu olarak görmeyi bırakma zamanı geldi. İlk adımı at, en önemli bir veya iki partnerinin verilerini analiz etmeye başla ve bu verilerin sana anlatacağı hikayeyi dinle.
+
+## Sık sorulan sorular
+
+### Standart raporlar partner performansını ölçmede neden yetersiz kalır?
+
+Standart raporlar partner kanalının kendine özgü dinamiklerini ve karmaşıklığını yakalamak için tasarlanmadığı için yetersiz kalır. Genel bir satış raporu sana toplam geliri gösterebilir, ancak bu gelirin hangi partnerden, ne kadar sürede ve ne maliyetle geldiğini ayrıştıramaz. Partnerlere özel veri analitiği bu kör noktaları aydınlatarak satış ve pazarlama süreçlerini farklı partner segmentleri için optimize etmeni sağlar.
+
+### Partner programında hangi veriler takip edilmelidir?
+
+Hem satış hattı verilerini hem de gelir ve müşteri metriklerini takip etmelisin. Satış hattı tarafında partnere göre oluşturulan potansiyel müşteri sayısı, MQL oranı ve SQL oranı öne çıkar; çünkü yalnızca toplam potansiyel müşteri sayısına odaklanmak yanıltıcı olabilir. Gelir tarafında ise partnere göre toplam gelir, ortalama anlaşma büyüklüğü, müşteri yaşam boyu değeri (LTV) ve müşteri kaybı (churn) oranı bir partnerin gerçek değerini gösterir.
+
+### Partner analitiği için kendi çözümünü mü geliştirmelisin, hazır bir platform mu kullanmalısın?
+
+Her iki seçeneğin de avantajları ve maliyetleri vardır; karar kaynaklarına ve ihtiyaçlarına bağlıdır. Kendi çözümün süreçler üzerinde tam kontrol ve esneklik sunar, ancak ciddi mühendislik kaynağı, zaman ve bütçe gerektirir ve bakımı sürekli bir maliyet kalemi oluşturur. PartnerStack, Impartner veya Kiflo gibi PRM platformları ise partner kaydından performans takibine kadar tüm süreci otomatikleştirmek için tasarlanmıştır. Hangisini seçersen seç, sistemin CRM, pazarlama otomasyonu ve faturalandırma sistemlerinle ne kadar iyi entegre olduğu başarıyı belirler.
+
+### Partnerler performanslarına göre nasıl segmentlere ayrılır?
+
+Partnerlerini performans ve potansiyellerine göre "Süperstar Ortaklar", "Yükselen Yıldızlar" ve "Destek Gerekenler" gibi gruplara ayırabilirsin. Süperstar Ortaklara özel ortak pazarlama fonları ve doğrudan iletişim kurabilecekleri bir kanal yöneticisi atanabilir, Yükselen Yıldızlara ise ek eğitimler, satış materyalleri ve mentorluk sunulabilir. Destek Gerekenler için otomatik eğitim modülleri oluşturabilir veya programın onlara uygun olup olmadığını yeniden değerlendirebilirsin.

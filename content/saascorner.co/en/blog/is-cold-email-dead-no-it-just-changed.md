@@ -93,3 +93,21 @@ Content is produced, and how well it worked remains unclear. You attend events, 
 With cold email, everything can be counted. How many people it was sent to, how many opened it, how many clicked, how many replied, how many turned into meetings. This transparency shows what doesn't work and makes it possible to scale what does.
 
 The best way to tell whether a channel is dead is to look at its results. Done right, cold email's results still speak for themselves.
+
+## FAQ
+
+### Is cold email dead?
+
+No, cold email isn't dead, but it doesn't work the way it used to. Inboxes are fuller, spam filters are more advanced, and the price of human attention has gone up, so mediocre emails no longer work while good ones still do. Some companies have kept booking dozens of qualified meetings a week with cold email.
+
+### What is the difference between cold email and spam?
+
+Cold email means sending a genuinely relevant message to someone with the right profile whom you haven't contacted before, while spam relies on purchased lists and templates with no personalization at all. A price quote in the first email or a five-paragraph company introduction are also signs of spam. The difference shows not in intent but in execution, and recipients sense it in a second.
+
+### Why does a cold email sequence work better than a single email?
+
+A sequence works better because the vast majority of B2B replies come not from the first email but from the third to fifth touch. People are busy, emails get lost, and priorities shift, so silence after one email is noise rather than rejection. A well-designed sequence says something new at every step instead of just following up.
+
+### What counts as real personalization in cold email?
+
+Real personalization shows that you've noticed something in the recipient's world, not a generic line saying you looked at their company and were impressed. Examples include a change their company went through in the last six months, a new regulation in the industry, or an observation taken from the person's own posts. Used in the first sentence of an email, these make the recipient feel the message was written for them.
