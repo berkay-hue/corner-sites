@@ -15,9 +15,9 @@ Cümle kulağa mantıklı geliyor. Kimse emeğinin boşa gitmesini istemez. Ama 
 
 Batık maliyet, harcanmış ve hangi kararı verirsen ver geri gelmeyecek olan maliyettir. Para olabilir, zaman olabilir, emek ya da itibar olabilir. Ortak noktaları şu: Devam etsen de vazgeçsen de onlar çoktan gitmiştir.
 
-Sağlıklı bir kararda batık maliyet hesaba girmez. Masadaki tek soru şudur: **Buradan sonra harcayacağım para, zaman ve emek bana en çok neyi getirir?** Geçmişte ne kadar harcadığın bu sorunun cevabını değiştirmez.
+İyi bir kararda batık maliyet hesaba girmez. Masadaki tek soru şudur: **Buradan sonra harcayacağım para, zaman ve emek bana en çok neyi getirir?** Geçmişte ne kadar harcadığın bu sorunun cevabını değiştirmez.
 
-Yanılgı, geçmiş harcamanın kararı yönlendirmeye başladığı anda ortaya çıkar. "Bu kadar yatırdık" aslında bir gerekçe değil, bir duygu. Kaybı kabul etmenin acısını biraz daha erteleme isteği.
+Yanılgı, geçmiş harcamanın kararı yönlendirmeye başladığı anda ortaya çıkar. "Bu kadar yatırdık" aslında bir gerekçe değil, bir duygu. Kaybı kabul etmenin zorluğunu biraz daha erteleme isteği.
 
 Gündelik hayattan tanıdık bir örnek: Bilet aldığın bir film daha başında seni sıkıyor. Kalkıp akşamını başka bir şeye ayırabilirsin. Ama "parasını verdim" diye sonuna kadar oturuyorsun. Bilet parası iki durumda da gitti. Kalmakla kazandığın tek şey, biraz daha sıkılmak.
 
@@ -31,7 +31,7 @@ Batık maliyetin peşinden gitmek aptallık değil, insan olmanın bir parçası
 
 İkincisi itibar. Projeyi başlatan sensin. Yönetim kuruluna sunan, ekibi ikna eden, belki basına anlatan da sensin. Durdurmak "yanılmışım" demek. "Biraz daha zamana ihtiyacımız var" demek ise çok daha kolay.
 
-Üçüncüsü ekibe duyulan bağlılık. Projede gece gündüz çalışan insanlar var. Onların emeğini "boşa gitti" diye ilan etmek istemezsin. Bu duygu saygıdeğer ama yanlış yerde kullanılıyor. Bir ekibe gösterebileceğin en büyük saygı, emeklerini batan bir gemide harcatmamak olabilir.
+Üçüncüsü ekibe duyulan bağlılık. Projede gece gündüz çalışan insanlar var. Onların emeğini "boşa gitti" diye ilan etmek istemezsin. Bu duygu saygıdeğer ama yanlış yerde kullanılıyor. Bir ekibe gösterebileceğin en büyük saygı, emeklerini sonuç vermeyecek bir projede harcatmamak olabilir.
 
 Dördüncüsü hikâye. Şirketler kendilerine bir hikâye anlatır: "Biz bu işi yapan şirketiz." Bir proje o hikâyenin parçası olunca, onu kapatmak hikâyeyi yeniden yazmak demektir. Bu da bir bütçe kaleminden çok daha ağır gelir.
 
@@ -63,7 +63,7 @@ Batık maliyet üç ayrı biçimde karşına çıkar ve her birine ayrı bakmak 
 
 ## Oyundan bir örnek: Tumla Group
 
-Oyundaki dosyalardan biri, Tumla Group, bu yanılgıyı düşünmek için iyi bir masa. Tumla 1930'larda kurulmuş, yetmiş yılı aşkın bir aile şirketi. Son on yılda markasını her yere taşımış: tema parkları, giyim, takı, video oyunları, bir televizyon dizisi. Yeni setler yalnızca bir kez kullanılan özel parçalarla dolu. Satışlar düşüyor, şirket zarar ediyor, kasadaki para hızla eriyor. Aile de otuzlu yaşlarındaki eski bir danışmanı CEO yapıyor. O kişi sensin.
+Oyundaki dosyalardan biri, Tumla Group, bu yanılgıyı düşünmek için iyi bir masa. Tumla 1930'larda kurulmuş, yetmiş yılı aşkın bir aile şirketi. Son on yılda markasını her yere taşımış: tema parkları, giyim, takı, video oyunları, bir televizyon dizisi. Yeni setler yalnızca bir kez kullanılan özel parçalarla dolu. Satışlar düşüyor, şirket zarar ediyor, kasadaki para hızla azalıyor. Aile de otuzlu yaşlarındaki eski bir danışmanı CEO yapıyor. O kişi sensin.
 
 Bu masada batık maliyetin sesi her köşeden gelir. Birkaç tema parkı kurulmuş. Her yeni ürün hattının arkasında bir ekip, bir sözleşme, bir lansman var. Her biri için birileri "buna çok emek verdik" diyecek. Bir kısmı haklı da olacak, çünkü emek gerçekten verilmiş.
 
@@ -100,7 +100,7 @@ Kriz anında bu refleks daha da sertleşir. İlk açıklamayı yaptın, ilk adı
 
 ### Batık maliyet yanılgısı nedir?
 
-Batık maliyet yanılgısı, harcanmış ve hangi kararı verirsen ver geri gelmeyecek para, zaman, emek ya da itibarın gelecekle ilgili bir kararı yönlendirmesidir. Sağlıklı bir kararda bu maliyetler hesaba girmez; tek soru, buradan sonra harcayacağın para, zaman ve emeğin sana en çok neyi getireceğidir.
+Batık maliyet yanılgısı, harcanmış ve hangi kararı verirsen ver geri gelmeyecek para, zaman, emek ya da itibarın gelecekle ilgili bir kararı yönlendirmesidir. İyi bir kararda bu maliyetler hesaba girmez; tek soru, buradan sonra harcayacağın para, zaman ve emeğin sana en çok neyi getireceğidir.
 
 ### Batık maliyet yanılgısına neden düşeriz?
 

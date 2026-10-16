@@ -102,7 +102,8 @@ function cleanLinks(md, cfg, index) {
 //   "gölge", "çöl" gibi içinde "öl"/"ölü" geçen kelimeler yakalanmaz.
 // - "öl" kökü "ölç" ile devam ediyorsa atlanır: "ölçü", "ölçek", "ölçüt", "ölçmek" serbest.
 // - Bilerek katı: "öldürücü rekabet", "ölü yatırım", "ölü stok", "zehir gibi" deyimleri de yakalanır (prompt da yasaklıyor).
-// - Yaralanma ve şiddet kelimeleri yalnız prompt'ta: "yara" kökü "yarar", "yaratmak" ile çakışıyor.
+// - "yara" yalnız tek başına ya da hal ekiyle (yara, yarası, yarayı, yaraya, yarada, yaradan) ve yarala/yaralı kökleriyle aranır;
+//   böylece "yarar", "yaratmak" serbest. "şiddet" de aranır ama "şiddetle", "şiddetli" serbest.
 // - "zehir" ünlü düşmesiyle "zehri", "zehre", "zehrin" olur; bunlar zehr[ie] ile yakalanır, "Zehra" adı serbest.
 // - "kaynak" kelimesinin kendisi serbest ("kaynakları sınırlı", "Kaynaklar daralır"); düz satırda yalnız tek başına
 //   etiket olan "Kaynaklar", "Kaynakça", "Kaynak:" satırları yakalanır (SOURCE_RE).
@@ -116,12 +117,19 @@ function cleanLinks(md, cfg, index) {
 //   Etiketin TAMAMI kaynak etiketi olmalı (SOURCE_LABEL_RE, ^...$): "Kaynaklar", "Referanslar", "İleri okuma",
 //   "Kaynaklar ve ileri okuma", "Yararlandığım/Faydalı kaynaklar" yakalanır; "**Kıt kaynaklar:** ekip zamanı" gibi
 //   "kaynak = imkân" anlamındaki etiketler serbest (tek başına "**Kaynaklar:** ..." satırı yine SOURCE_RE'ye takılır).
+// - Yasak liste ölümün ötesine geçer (Berkay: "ölümlü hiçbir şey yazılmayacak"): yaralanma, kaza, yangın, afet, hastalık,
+//   sağlık, salgın, geri çağırma/toplatma, kirlenme, kurcalama, "kimse zarar görmedi/vermez" güvencesi ve beden,
+//   ameliyat, savaş, saldırı, patlama, fırtına benzetmeleri de yasak. Bunlara ek olarak derin kesik, cephe açmak, batan gemi,
+//   bozuk/tehlikeli/kusurlu ürün, boğulma, erime ("nakit eriyor", "stok eritmek"), çöküş ("talep çöktü"; "sistem/sunucu/site
+//   çöktü" serbest), geri toplama, küf/bakteri/alerjen ve teşhis/reçete/tedavi de yakalanır. Bilerek katı: "fiyat savaşı", "maliyet patladı",
+//   "sağlıklı karar", "hasta müşteri" de yakalanır. Serbest: "kazanç", "yararlı", "rekabet", "zarar etti",
+//   "Kurban Bayramı", "kurşun kalem", "selam", "seçim".
 // - Metin Türkçe kurala göre küçültülür ("İ" -> "i"); bu "DIED" gibi büyük harfli İngilizce kelimeyi "dıed" yapar.
 //   Bu yüzden İngilizce kelimeler ayrıca düz toLowerCase ile aranır (FATAL_EN_RE).
 // - Site adresi yalnız adresin kendisiyse silinir; "wishceo.com.baska.com" ya da "wishceo.com@baska.com" dış link sayılır.
 //   "//baska.com" ile başlayan markdown linki de dış linktir.
-const FATAL_TR = String.raw`öl(?!ç)\p{L}*|can(?:ını|larını)?\s+kayb\p{L}*|(?:hayat|yaşam)(?:ını|larını)\s+(?:kayb|yitir)\p{L}*|zehir\p{L}*|zehr[ie]\p{L}*|siyanür\p{L}*|intihar\p{L}*|cinayet\p{L}*|cenaze\p{L}*|vefat\p{L}*|katil\p{L}*|katlet\p{L}*|katledil\p{L}*|katliam\p{L}*|suikast\p{L}*`;
-const FATAL_EN = String.raw`death|died|dead|killed|suicide|poison\p{L}*|cyanide|murder\p{L}*`;
+const FATAL_TR = String.raw`öl(?!ç)\p{L}*|can(?:ını|larını)?\s+kayb\p{L}*|(?:hayat|yaşam)(?:ını|larını)\s+(?:kayb|yitir)\p{L}*|zehir\p{L}*|zehr[ie]\p{L}*|siyanür\p{L}*|intihar\p{L}*|cinayet\p{L}*|cenaze\p{L}*|vefat\p{L}*|katil\p{L}*|katlet\p{L}*|katledil\p{L}*|katliam\p{L}*|suikast\p{L}*|yarala\p{L}*|yaralı\p{L}*|yara(?:sı|yı|ya|da|dan)?|kanama\p{L}*|kanayan\p{L}*|sakat\p{L}*|kimse\p{L}*(?:\s+\p{L}+)?\s+zarar\s+(?:gör|ver|gel)\p{L}*|zarar\s+gören\s+(?:ol|yok)\p{L}*|can\s+güvenliğ\p{L}*|sağlığ[ıa]\s+zarar\p{L}*|sağlık\s+risk\p{L}*|hastalan\p{L}*|hastane\p{L}*|ambulans\p{L}*|acil\s+servis\p{L}*|itfaiye\p{L}*|kaza(?![nk])\p{L}*|yangın\p{L}*|alev\s+al\p{L}*|alevler\p{L}*|felaket\p{L}*|facia\p{L}*|trajedi\p{L}*|trajik\p{L}*|afet\p{L}*|deprem\p{L}*|şiddet(?!l[ie])\p{L}*|silah\p{L}*|terör\p{L}*|kurban(?!\s+bayram)\p{L}*|kanser\p{L}*|salgın\p{L}*|pandemi\p{L}*|geri\s+çağ(?:ır|rıl)\p{L}*|kontamin\p{L}*|kirlen\p{L}*|hasta\p{L}*|rahatsızlan\p{L}*|sağlık\p{L}*|sağlığ\p{L}*|kurşun(?!\s+kalem)\p{L}*|şırınga\p{L}*|kurcala\p{L}*|devril\p{L}*|toplat\p{L}*|raflardan\s+(?:çek|topla|kaldır)\p{L}*|kıvılcım\p{L}*|patla\p{L}*|yanık\p{L}*|kan\s+kayb\p{L}*|can\s+çekiş\p{L}*|kanlı\p{L}*|ameliyat\p{L}*|cerrah\p{L}*|bomba\p{L}*|darbe\p{L}*|savaş\p{L}*|saldır\p{L}*|böcek\p{L}*|kurtçuk\p{L}*|kurtlu\p{L}*|kimyasal\p{L}*|(?:gaz|yakıt|petrol)\s+sızıntı\p{L}*|tüketici\s+güvenliğ\p{L}*|ürün\s+güvenliğ\p{L}*|güvenlik\s+(?:sorun|risk|kusur|endişe)\p{L}*|sel(?:i|e|de|den)?|fırtına\p{L}*|kasırga\p{L}*|tsunami\p{L}*|tutukla\p{L}*|gözaltı\p{L}*|derin\s+(?:bir\s+)?kesik\p{L}*|cephe\s+aç\p{L}*|bat(?:an|makta\s+olan)\s+gemi\p{L}*|(?:bozuk|tehlikeli|kusurlu)\s+ürün\p{L}*|ürün\p{L}*\s+tehlikeli\p{L}*|boğul\p{L}*|eri(?:yor|yen|di|r|t|me|mi)\p{L}*|(?<!(?:sistem|sunucu|site)\p{L}*\s)çök(?!el)\p{L}*|geri\s+topla\p{L}*|küf(?!ür|r)\p{L}*|bakteri\p{L}*|alerj\p{L}*|teşhis\p{L}*|reçete\p{L}*|tedavi\p{L}*`;
+const FATAL_EN = String.raw`death|died|dead|killed|suicide|poison\p{L}*|cyanide|murder\p{L}*|injur\p{L}*|accident\p{L}*|casualt\p{L}*|fatal\p{L}*|explod\p{L}*|explos\p{L}*|disaster\p{L}*|victim\p{L}*|wound\p{L}*|recall\p{L}*|contamina\p{L}*|toxic\p{L}*|hospital\p{L}*`;
 const FATAL_RE = new RegExp(String.raw`(?<!\p{L})(?:${FATAL_TR}|${FATAL_EN})(?!\p{L})`, "gu");
 const FATAL_EN_RE = new RegExp(String.raw`(?<!\p{L})(?:${FATAL_EN})(?!\p{L})`, "gu");
 const SOURCE_RE = /^[ \t]*(?:#{1,6}[ \t]*|[-*+>][ \t]+|\d+\.[ \t]+)?\**(?:kaynaklar|kaynakça|kaynak|referanslar|ileri okuma|sources|references|further reading)\**[ \t]*(?::.*|\**[ \t]*)$/gmu;
@@ -164,7 +172,7 @@ Konu türleri: bir karar verme kavramı ya da bilişsel yanılgı, kriz anında 
 Kategoriler: ${cats.join(", ")}
 Mevcut kategori dağılımı: ${JSON.stringify(counts)} (az işlenen kategoriye öncelik ver)
 Konu, merak eden bir okurun Google'da arayacağı bir soruya cevap versin. Gerçek şirket ya da kişi adı, yatırım, borsa, sağlık ya da hukuk tavsiyesi konusu SEÇME.
-Ölüm, yaralanma, zehirlenme, intihar, şiddet ya da can kaybı olan felaket ve kazalarla ilgili konu SEÇME; başlıkta ve açıklamada bu kelimeler (deyim olarak bile) geçmesin. Krizler yalnızca ticari olsun: ürün hatası, geri çağırma, rekabet, para, itibar.
+Ölüm, yaralanma, zehirlenme, intihar, şiddet, kaza, yangın, patlama, doğal afet, hastalık, salgın, sağlık ya da güvenlik riski, ürün güvenliği sorunu, geri çağırma, kirlenme ya da bozuk ürünle ilgili konu SEÇME; başlıkta ve açıklamada bu kelimeler (deyim olarak bile) geçmesin. Krizler yalnızca ticari olsun: fiyat, rekabet, para, strateji, tedarik, itibar, beğenilmeyen ürün.
 Gerçek bir kitaba, rapora, araştırmaya ya da gerçek bir kişinin sözüne dayanan konu SEÇME.
 
 Sitedeki mevcut yazılar (bunları ya da çok benzerlerini TEKRARLAMA):
@@ -227,7 +235,7 @@ ${pages}
 Kurallar:
 - Türkçe, okura "sen" diye hitap eden sade bir dil, 900-1400 kelime. Klişe ve dolgu cümle yok ("günümüzün hızla değişen dünyasında", "sonuç olarak şunu söyleyebiliriz" gibi).
 - Örnekler yalnızca KURGUSAL şirket, kişi ve ürün adlarıyla anlatılsın. Gerçek şirket, marka, ürün ya da kişi adı, ya da gerçeğini çağrıştıran benzer ad KULLANMA.
-- Ölüm, yaralanma, zehirlenme, intihar, şiddet ya da can kaybı olan felaket ve kazaları ANLATMA; örnek, benzetme ya da arka plan olarak bile anma. "Öldürücü rekabet", "ölü yatırım" gibi deyimleri de KULLANMA. Krizler yalnızca ticari olsun: ürün hatası, geri çağırma, rekabet, para, itibar.
+- Ölüm, yaralanma, zehirlenme, intihar, şiddet, kaza, yangın, patlama, doğal afet, salgın, hastalık ya da kimsenin canını, sağlığını veya güvenliğini tehdit eden hiçbir olayı ANLATMA; örnek, benzetme ya da arka plan olarak bile anma. Ürün güvenliği sorunu, geri çağırma, kirlenme, bozuk ya da tehlikeli ürün vakası da YAZMA. "Kimse zarar görmedi", "kimse yaralanmadı" gibi güven veren cümleler de KURMA. "Öldürücü rekabet", "ölü yatırım", "kanayan yara", "derin kesik", "gizli silah", "ameliyat", "kan kaybı", "fiyat savaşı", "saldırıya geç", "cephe açmak", "fırtına", "batan gemi", "yangın söndürmek", "maliyet patladı", "nakit eriyor", "pazar payı eriyor", "stokları erit", "talep çöktü", "serbest düşüş", "teşhis koymak", "başarı reçetesi", "şirketi tedavi etmek" gibi beden, sağlık, savaş, şiddet, yangın ya da afet benzetmeleri KULLANMA; "sağlıklı" yerine "doğru", "iyi" de. Krizler yalnızca ticari olsun: fiyat, rekabet, para, strateji, tedarik, itibar, beğenilmeyen ürün.
 - Kaynak, kitap, rapor, makale, araştırma ya da gerçek bir kişiden alıntı VERME; gerçek bir kişinin sözünü, notunu ya da mektubunu kurgusal bir karaktere de söyletme. "Kaynaklar" bölümü ekleme, dış siteye link verme. Uydurma istatistik de verme; kavramları genel ifadelerle anlat.
 - Rakamlar yaklaşık olsun ("birkaç milyon", "satışların yarısı kadar"); kesin tarih yerine on yıl kullan ("1990'larda", "2010'ların başında").
 - Yatırım, borsa, finans, sağlık ya da hukuk tavsiyesi verme.
