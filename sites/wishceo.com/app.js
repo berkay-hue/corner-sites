@@ -1334,7 +1334,9 @@
       return '<li><a href="#oyun"><span class="n">' + pad(i + 1) + '</span><span class="t">' + esc(c.title) +
         '</span><span class="m">' + esc(c.area + " · " + c.place[0] + (y ? ", " + y : "")) + "</span></a></li>";
     }).join("");
-    var tick = CASES.map(function (c, i) {
+    // şerit hep en son açılan sayıyı gösterir (?s= ile eski sayı açılsa da); ileri tarihli sayılar RELEASED'da yok
+    var NEWEST = RELEASED[RELEASED.length - 1];
+    var tick = '<span>Sayı ' + NEWEST.no + ' · En yeni <b class="up">▲</b></span>' + NEWEST.cases.map(function (c, i) {
       var y = yearOf(c);
       return "<span>Dosya " + pad(i + 1) + " · " + esc(c.place[0] + (y ? " " + y : "")) + " · " + esc(c.title) + ' <b class="dn">▼</b></span>';
     }).join("") + (RELEASED.length > 1 ? '<span>Arşiv · önceki sayılar açık <b class="up">▲</b></span>' : '<span>Yeni sayılar yolda <b class="up">▲</b></span>');
