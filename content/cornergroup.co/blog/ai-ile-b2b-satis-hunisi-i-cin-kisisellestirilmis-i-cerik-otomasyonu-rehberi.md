@@ -91,7 +91,7 @@ AI destekli kişiselleştirilmiş içerik otomasyonu, B2B dünyasında artık bi
 
 AI'dan önce CRM sisteminin tek doğruluk kaynağı (single source of truth) olduğundan emin olunmalıdır. Kalitesiz veya dağınık veriyle beslenen AI aynı kalitede çıktı üretir. Bu yüzden alanlar standardize edilmeli, eksik bilgiler zenginleştirilmeli, yinelenen kayıtlar birleştirilmeli ve pazarlama, satış ve analitik araçları CRM ile entegre edilerek potansiyel müşterinin 360 derecelik görünümü oluşturulmalıdır.
 
-### Kişiselleştirilmiş nurture sekansları satış döngüsünü ne kadar kısaltabilir?
+### Kişiselleştirilmiş nurture sekansları satış döngüsünü nasıl kısaltır?
 
 Sales Corner'ın deneyimine göre akıllı nurture sekansları satış döngüsünü belirgin biçimde kısaltabilir. Bu sekanslar potansiyel müşterinin davranışına göre tetiklenir. Örneğin rakip karşılaştırma sayfasını ziyaret eden birine, rakiplere kıyasla güçlü yönleri vurgulayan bir e-posta gönderilebilir.
 

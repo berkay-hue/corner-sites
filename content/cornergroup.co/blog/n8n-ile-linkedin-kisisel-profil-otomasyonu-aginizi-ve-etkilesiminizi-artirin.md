@@ -49,23 +49,23 @@ Teoriyi pratiğe dökelim. n8n ve LinkedIn'i bir araya getirerek B2B büyüme hu
 
 Teknoloji güçlü bir araçtır, ancak her güçlü araç gibi, akıllıca ve sorumlu bir şekilde kullanılmalıdır. Corner Group olarak, kısa vadeli kazanımlar için uzun vadeli itibarı riske atan hiçbir stratejiyi desteklemiyoruz. İşte n8n ile LinkedIn otomasyonu yaparken asla unutmamanız gereken altın kurallar:
 
-## İnsan Dokunuşunu Asla Kaybetme
+### İnsan Dokunuşunu Asla Kaybetme
 
 Otomasyon, tekrar eden, düşük değerli görevleri devralmak için vardır; insan ilişkilerinin yerini almak için değil. Otomasyon bir sohbet başlatabilir, ancak o sohbeti anlamlı bir ilişkiye dönüştürecek olan yine insandır. Otomasyonun nerede bitip insanın nerede devreye gireceğini net bir şekilde belirleyin. Yanıt veren herkesle kişisel olarak ilgilenin.
 
-## LinkedIn'in Sınırlarına Saygı Göster
+### LinkedIn'in Sınırlarına Saygı Göster
 
 LinkedIn, platformunu kötüye kullanan otomasyon araçlarına karşı aktif bir savaş vermektedir. Hesabınızın kısıtlanmasını veya yasaklanmasını önlemek için şu adımları izleyin: Hız Sınırları: Günlük bağlantı isteği, profil ziyareti ve mesaj sayısını makul seviyelerde tutun (örneğin, günde 100'den fazla eylem genellikle risklidir). Rastgeleleştirme: Eylemler arasına rastgele gecikmeler ekleyin. n8n, iş akışlarınıza "Wait" (Bekle) düğümü ekleyerek bunu kolayca yapmanızı sağlar. Her 30-90 saniyede bir eylem gerçekleştirmek, her 10 saniyede bir yapmaktan çok daha doğaldır. Çalışma Saatleri: Otomasyonlarınızı sadece normal iş saatleri içinde (örneğin, Pazartesi-Cuma, 09:00-18:00) çalışacak şekilde programlayın. Gece yarısı 03:00'te profil ziyaret eden bir bot, insan davranışına aykırıdır. Adanmış IP Adresi: Mümkünse, otomasyonlarınızı çalıştırdığınız sunucu için adanmış ve temiz bir IP adresi kullanın.
 
-## Değer Odaklı Ol, Satış Odaklı Değil
+### Değer Odaklı Ol, Satış Odaklı Değil
 
 İlk mesajınızda ürününüzü veya hizmetinizi satmaya çalışmayın. Bu, en hızlı başarısızlık yöntemidir. Brand Corner'ın içerik pazarlaması felsefesinde olduğu gibi, önce verin. Yardımcı olun, içgörü paylaşın, bir sorunu çözmelerine yardımcı olacak bir kaynak sunun. Güven ve otorite inşa ettiğinizde, satış doğal olarak gelecektir. Unutmayın, kimse kendisine bir şey satılmasından hoşlanmaz, ancak herkes sorunlarını çözmek için yardım almayı sever.
 
-## Veriyi Anlamlandır
+### Veriyi Anlamlandır
 
 Ölç, Analiz Et, Optimize Et: Otomasyonu bir kez kurup unutmak büyük bir hatadır. Başarıyı ölçmek için net metrikler (KPI'lar) belirleyin: Bağlantı İsteği Kabul Oranı: Farklı mesaj metinlerini test ederek hangisinin daha yüksek kabul oranı sağladığını bulun. İlk Mesaja Yanıt Oranı: Karşılama mesajınız ne kadar etkili? İnsanları sohbete teşvik ediyor mu? Kaynak İndirme/Tıklama Oranı: Paylaştığınız içeriğin hedef kitlenizle ne kadar rezonans kurduğunu ölçün. Toplantı Ayarlama Oranı: Nihai hedefiniz buysa, hangi mesaj dizilerinin en çok toplantıya dönüştüğünü takip edin. Bu verileri düzenli olarak analiz edin ve iş akışlarınızı sürekli olarak iyileştirin.
 
-## Teknolojiyi Stratejinin Hizmetine Sun
+### Teknolojiyi Stratejinin Hizmetine Sun
 
 Asla "n8n ile ne yapabilirim?" diye sormayın. Soru şu olmalı: "B2B büyüme stratejimin hedeflerine ulaşmak için n8n'i nasıl kullanabilirim?" Önce strateji gelir, sonra araç seçilir. Hedefleriniz net değilse, en gelişmiş otomasyon bile size istediğiniz sonuçları vermeyecektir.
 
