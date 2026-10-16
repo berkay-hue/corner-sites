@@ -52,3 +52,21 @@ Corner Group olarak, attığımız her stratejik adımın ölçülebilir sonuçl
 ## Sonuç
 
 Corner Group olarak, büyümenin tek bir kanaldan değil, birbiriyle entegre olmuş çoklu disiplinlerin sinerjisinden doğduğuna inanıyoruz. Innovatech Solutions vaka çalışması, bu felsefenin mükemmel bir kanıtıdır. Yetenek kazanımı ve elde tutma, izole bir İK sorunu değildir; bu, marka stratejisi, pazarlama otomasyonu, sistem entegrasyonu ve sosyal medya iletişimini bir araya getiren karmaşık bir büyüme denklemidir. Başarılı bir işveren markası inşa etmek, sadece daha iyi adaylar bulmanızı sağlamaz. Aynı zamanda mevcut ekibinizi motive eder, müşteri algınızı güçlendirir ve nihayetinde pazar rekabetinde size stratejik bir üstünlük kazandırır. Innovatech'in yolculuğu, doğru strateji, bütünsel bir bakış açısı ve kararlı bir uygulama ile her B2B şirketinin kendi sektöründe bir yetenek mıknatısına dönüşebileceğini göstermektedir. Geleceğin kazananları, en iyi ürüne sahip olanlar değil, en iyi takıma sahip olanlar olacaktır. Ve o takımı kurmanın yolu, stratejik olarak tasarlanmış, otantik ve yaşayan bir işveren markasından geçmektedir.
+
+## Sık sorulan sorular
+
+### İşveren markası dönüşümü işe alım süresini ne kadar kısaltabilir?
+
+Innovatech örneğinde işveren markası dönüşümü, kritik teknik pozisyonlarda işe alım süresini 18 ay içinde 75 günden 35 güne indirerek yüzde 53 iyileşme sağladı. Aynı dönemde işe alım başına maliyet yüzde 40 azaldı. Kariyer sayfasının organik trafiği yüzde 300, nitelikli başvuru sayısı ise yüzde 180 arttı.
+
+### Güçlü bir çalışan değer önerisi (EVP) nasıl oluşturulur?
+
+Güçlü bir çalışan değer önerisi, şirketin yetenek adaylarına gerçekten neyi farklı sunduğunu birkaç net sütuna indirgeyerek oluşturulur. Innovatech'in EVP'si karmaşık problemler çözmek, hızlı karar almak ve alanında kıdemli uzmanlarla çalışmak olmak üzere üç sütuna dayanıyordu. Bu sütunlar "Zorlukların Üstesinden Gel, Hızla Etki Yarat, En İyilerden Öğren." sloganıyla tek bir mesajda birleştirildi.
+
+### Çalışan elçisi programı işveren markasına nasıl katkı sağlar?
+
+Çalışan elçisi programı, şirketin hikayesini dışarıya mevcut çalışanların kendi sesiyle anlatmasını sağlayarak işveren markasını güçlendirir. Innovatech bu programda çalışanlara içerik üretim atölyeleri düzenledi, "Innovatech'te Bir Günüm" gibi video tanıklıkları hazırladı ve referans bonuslarını artırdı. Bu çalışmalar, iç bağlılığı güçlendirmeyi ve dış görünürlüğü artırmayı birlikte hedefliyordu.
+
+### İşveren markası çalışan bağlılığını ve elde tutmayı nasıl etkiler?
+
+İşveren markası dönüşümü, doğru adayların doğru beklentilerle işe alınmasını sağlayarak çalışan bağlılığını ve elde tutmayı belirgin şekilde iyileştirebilir. Innovatech'te 18 ay sonunda ilk yıl çalışan devir oranı yüzde 60 düştü. Çalışan Net Tavsiye Skoru (eNPS) ise negatif bir değerden +45'e yükseldi.

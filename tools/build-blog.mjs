@@ -8,7 +8,7 @@ import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parseHTML } from "linkedom";
 import CONFIG from "./blog.config.mjs";
-import { fixMojibake, fixPlaceholders, unscaffold, markdown, metaDescription, esc } from "./lib/content.mjs";
+import { fixMojibake, fixPlaceholders, unscaffold, markdown, metaDescription, esc, faqItems } from "./lib/content.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const [cmd, host] = process.argv.slice(2);
@@ -160,14 +160,6 @@ const L = () => cfg.lang === "en" ? { related: "Related Posts", home: "Home" } :
 function relatedFor(post, posts, n = 4) {
   const t = Date.parse(post.fm.date), d = p => Math.abs(Date.parse(p.fm.date) - t);
   return posts.filter(p => p !== post).sort((a, b) => ((b.fm.category === post.fm.category) - (a.fm.category === post.fm.category)) || d(a) - d(b)).slice(0, n);
-}
-
-// "## Sık sorulan sorular" / "## FAQ" bölümündeki "### Soru?" + cevabın ilk paragrafı (FAQPage JSON-LD için; SSS'den sonra gelen kapanış paragrafı karışmasın)
-function faqItems(md) {
-  const m = md.match(/^## (?:Sık sorulan sorular|SSS|FAQ|Frequently asked questions)\s*$([\s\S]*?)(?=^## |(?![\s\S]))/im);
-  if (!m) return [];
-  const plain = t => t.replace(/!?\[([^\]]*)\]\([^)]*\)/g, "$1").replace(/[*_`>]/g, "").replace(/\s+/g, " ").trim();
-  return m[1].split(/^### /m).slice(1).map(b => { const [q, ...rest] = b.split("\n"); return [plain(q), plain(rest.join("\n").trim().split(/\n\s*\n/)[0])]; }).filter(([q, a]) => q && a);
 }
 
 function renderPost(tpl, post, next, related) {

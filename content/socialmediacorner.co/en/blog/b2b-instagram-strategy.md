@@ -2,6 +2,7 @@
 title: "How to Build an Instagram Strategy for B2B Companies"
 description: "What goals should B2B companies set on Instagram, what should they post and how do they measure success? A step-by-step guide with Turkish examples."
 date: "2026-10-15"
+updated: "2026-10-16"
 category: "Instagram"
 image: "https://images.pexels.com/photos/6476786/pexels-photo-6476786.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
 imageAlt: "How to Build an Instagram Strategy for B2B Companies"

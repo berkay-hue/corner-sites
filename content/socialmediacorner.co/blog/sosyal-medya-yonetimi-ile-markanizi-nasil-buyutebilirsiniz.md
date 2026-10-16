@@ -2,6 +2,7 @@
 title: "Sosyal Medya Yönetimi ile Markanızı Nasıl Büyütebilirsiniz?"
 description: "Sosyal medya yönetimi ile markanızı dijital dünyada büyütün. Social Media Corner ile profesyonel sosyal medya yönetimi hakkında daha fazla bilgi edinin."
 date: "2025-10-03"
+updated: "2026-10-16"
 category: "Firmalarımız"
 image: "/_a/fr/images/HZ5MjnQL4L5dlgs5jDednLyCI0_ed9b2ad9.png"
 imageAlt: "Sosyal Medya Yönetimi"

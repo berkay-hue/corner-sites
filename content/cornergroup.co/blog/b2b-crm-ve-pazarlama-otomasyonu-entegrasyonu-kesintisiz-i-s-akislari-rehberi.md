@@ -23,7 +23,9 @@ Birçok şirket, CRM ve Pazarlama Otomasyonu (MA) platformlarını ayrı ayrı, 
 
 CRM ve MA entegrasyonu, sadece iki yazılımın API anahtarlarını birbirine bağlamaktan çok daha fazlasıdır. Bu, iş süreçlerinizi, veri akışınızı ve departmanlar arası iletişiminizi yeniden tasarladığınız stratejik bir projedir. CRM Corner'daki yüzlerce entegrasyon projesinden edindiğimiz tecrübeyle, başarıyı garantilemek için izlenmesi gereken kritik adımları bir yol haritası olarak sunuyoruz.
 
-## Stratejiyi Teknolojiye Değil, Teknolojiyi Stratejiye Uydurun En sık yapılan hata, projeye teknolojiyle başlamaktır
+## Stratejiyi Teknolojiye Değil, Teknolojiyi Stratejiye Uydurun
+
+En sık yapılan hata, projeye teknolojiyle başlamaktır.
 
 "Elimizde HubSpot ve Salesforce var, bunları nasıl bağlarız?" sorusu yanlış sorudur. Doğru soru şudur: "Pazarlama ve satış süreçlerimizin kusursuz işlemesi için hangi bilgi akışına ihtiyacımız var ve bu iki teknoloji bu akışı nasıl destekleyebilir?" Entegrasyona başlamadan önce, paydaşları (pazarlama liderleri, satış müdürleri, operasyon sorumluları) bir araya getirin ve aşağıdaki soruları yanıtlayın: - Pazarlama Nitelikli Müşteri Adayı (MQL) tanımımız nedir? Hangi kriterleri karşılayan bir adayı satışa devretmeliyiz? - Satış Nitelikli Müşteri Adayı (SQL) tanımımız nedir? Satış ekibi bir MQL'i kabul ettiğinde hangi adımları izlemeli? - Hangi veri alanları iki sistem arasında senkronize edilmeli? (Örn: Unvan, şirket büyüklüğü, iletişim bilgileri, etkileşim geçmişi vb.) - Veri akışı tek yönlü mü (MA'dan CRM'e) yoksa çift yönlü mü (iki sistem de birbirini güncelleyecek mi) olmalı? - Satış ekibinin CRM'de hangi pazarlama etkileşimlerini görmesi kritik öneme sahiptir? Bu stratejik hizalanma sağlanmadan yapılan teknik entegrasyon, karmaşık ve kimsenin kullanmadığı bir sistem yaratmaktan öteye gitmez.
 
@@ -68,3 +70,21 @@ Her stratejik projede olduğu gibi, CRM ve MA entegrasyonu da potansiyel zorlukl
 ## Sonuç
 
 B2B CRM ve Pazarlama Otomasyonu entegrasyonu, bir kerelik bir proje değil, yaşayan, nefes alan bir sistemdir. Corner Group olarak bizim için bu, teknolojiyi iş stratejisiyle birleştirerek, pazarlama ve satış arasında kusursuz bir uyum yaratma sanatıdır. Bu entegrasyon, veri silolarını yıkar, müşteri yolculuğunun her adımına ışık tutar ve her etkileşimi daha anlamlı kılar. Şirketlere sadece daha verimli çalışma imkanı sunmakla kalmaz, aynı zamanda daha akıllı kararlar almalarını, müşteri deneyimini kişiselleştirmelerini ve en önemlisi, pazarlama yatırımlarının somut gelir etkisini kanıtlamalarını sağlar. Bu yolculuk, teknik engeller ve organizasyonel zorluklar içerebilir, ancak stratejik bir bakış açısı, net bir yol haritası ve doğru ortaklıklarla aşılamayacak hiçbir engel yoktur. Unutmayın, sürdürülebilir büyüme bir varış noktası değil, müşteri verilerini anlama, süreçleri optimize etme ve teknolojiyi stratejik bir kaldıraç olarak kullanma üzerine kurulu sürekli bir yolculuktur. Bu yolculukta, entegre bir ekosistem sizin en güçlü pusulanız olacaktır.
+
+## Sık sorulan sorular
+
+### CRM ve pazarlama otomasyonu entegrasyonu ekiplere ne kazandırır?
+
+Entegrasyon, pazarlama ve satış ekiplerine müşteri hakkında tek bir doğruluk kaynağı (single source of truth) ve 360 derece görünüm sağlar. Manuel veri girişi azaldığı için idari işlere harcanan zaman %20 ila %30 oranında düşebilir. Ayrıca kapalı döngü raporlama sayesinde hangi kampanyanın gerçekten gelir getirdiği ölçülebilir hale gelir.
+
+### Entegrasyona başlamadan önce veriler neden temizlenmeli?
+
+Entegrasyon mevcut veri sorunlarını çözmez, aksine kötü veriyi daha hızlı yayarak sorunu büyütebilir. Bu yüzden her iki sistemde yinelenen kayıtlar birleştirilmeli, ülke gibi alanlar için standart formatlar belirlenmeli, eksik veriler tamamlanmalı ve zorunlu alanlar netleştirilmelidir. Temiz ve standart bir veri yapısı, otomasyon kurallarının doğru çalışmasını ve raporların güvenilir olmasını sağlar.
+
+### Lead puanlaması bir potansiyel müşteriyi satışa nasıl aktarır?
+
+Lead puanlaması, her etkileşime puan vererek eşiği geçen kişiyi otomatik olarak satış ekibine aktarır. Örnek senaryoda rehber indirme 15, e-posta açma 5, tıklama 10 ve fiyatlandırma sayfası ziyareti 30 puan getirir. Toplam 60 puana ulaşan lead 50 puanlık MQL eşiğini aştığı için CRM'e aktarılır ve bir satış temsilcisine "Takip Et" göreviyle atanır.
+
+### Kapalı döngü raporlama pazarlama bütçesi kararlarını nasıl etkiler?
+
+Kapalı döngü raporlama, her kampanyanın yalnızca lead sayısını değil ürettiği geliri de gösterir. Örnekte 5.000 TL harcanan Kampanya A 4 anlaşmayla 80.000 TL gelir getirirken, aynı bütçeli Kampanya B 1 anlaşmayla 15.000 TL'de kalır. Böylece pazarlama ekibi yatırılan her 1 TL için 16 TL gelir üretildiğini gösterebilir ve bütçe kararları veriye dayanır.

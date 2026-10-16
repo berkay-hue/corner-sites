@@ -66,3 +66,21 @@ Davranışsal CRM'in gücü, farklı kaynaklardan gelen verileri birleştirme ye
 ## Sonuç
 
 B2B SaaS pazarında ayakta kalmak ve büyümek, artık sadece iyi bir ürüne sahip olmaktan geçmiyor. Müşterini herkesten daha iyi anlamak ve onların ihtiyaçlarına proaktif olarak cevap vermek zorundasın. Geleneksel CRM sistemlerinin sunduğu statik veriler bu derinliği sağlamak için yetersiz kalıyor. Davranışsal CRM, müşterilerinin ne söylediğini değil, ne yaptığını analiz ederek sana rekabette büyük bir avantaj sunar. Bu yaklaşım, müşteri kararlarını tahmin etmekten çıkarıp, onları doğru yönde etkileme sanatına dönüştürür. Müşteri kaybını azaltmak, satış verimliliğini artırmak ve gerçekten kişiselleştirilmiş bir müşteri deneyimi sunmak istiyorsan, verilerinin ardındaki hikayeyi dinlemenin zamanı geldi. Müşterilerinin dijital ayak izlerini takip ederek işini büyütmeye bugün başla.
+
+## Sık sorulan sorular
+
+### Veri körlüğü nedir?
+
+Veri körlüğü, elinde çok miktarda müşteri verisi olmasına rağmen müşterinin gerçek niyetini ve bir sonraki hamlesini anlayamama durumudur. Geleneksel CRM isim, şirket ve unvan gibi statik verileri saklar ama müşterinin bir özelliği neden kullanmadığını veya fiyatlandırma sayfasını neden defalarca ziyaret ettiğini söylemez. Bu yüzden geleneksel CRM ile proaktif olmak yerine reaktif kalırsın.
+
+### Davranışsal segmentasyon nasıl yapılır?
+
+Davranışsal segmentasyonda müşterilerini ne olduklarına göre değil, ne yaptıklarına göre gruplara ayırırsın. Örneğin her gün giriş yapan güçlü kullanıcılar, bir süredir giriş yapmayan risk altındaki kullanıcılar ve sürekli yeni özellikleri deneyen keşif aşamasındaki kullanıcılar gibi segmentler oluşturabilirsin. Böylece risk altındaki kullanıcıya kaçırdığı yenilikleri hatırlatırken güçlü kullanıcıya yeni bir beta özelliği için özel davet gönderebilirsin.
+
+### Davranışsal CRM satış ekibine nasıl yardımcı olur?
+
+Davranışsal CRM, satın alma niyetini gösteren sinyalleri bir araya getirerek potansiyel müşterinin davranışsal puanını artırır ve satış temsilcisine otomatik bildirim gönderir. Fiyatlandırma sayfasını tekrar tekrar ziyaret etmek, vaka incelemesi indirmek veya rakip karşılaştırması okumak bu sinyallere örnektir. Bu sayede satış ekibi zamanını en doğru potansiyel müşterilere ayırır ve satış döngüsü kısalır.
+
+### Davranışsal CRM aracı seçerken nereden başlamalısın?
+
+İlk adım, senin iş modelinde müşterinin üründen değer aldığını, churn riskini veya upsell potansiyelini gösteren kritik davranışları, yani aha anlarını belirlemektir. Ardından seçeceğin aracın bu verileri kolayca toplayıp analiz edebildiğinden ve ürün analitiği, pazarlama otomasyonu ve destek yazılımlarınla sorunsuz entegre olabildiğinden emin olmalısın. Veriler silolar halinde kalırsa davranışsal analizin bir anlamı kalmaz.

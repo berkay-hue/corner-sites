@@ -234,3 +234,21 @@ Shortening the B2B sales cycle isn't something you can achieve with a single too
 Sequencing matters as much as content. Diagnosis first, then process, automation last. Teams that move forward with this discipline don't just close faster. They forecast more reliably, focus their energy on winnable opportunities and make growth sustainable.
 
 At Corner Group, we bring together our experience in outbound sales, CRM configuration, n8n automation and sales methodology to help you pinpoint the bottlenecks in your sales cycle. To analyze your pipeline and build a roadmap tailored to you, [get in touch with us](/en/contact).
+
+## FAQ
+
+### Where should you start when shortening a B2B sales cycle?
+
+Start with a stage-by-stage data analysis that shows how long opportunities spend in each stage. Cycle length is an outcome, not a cause, so you cannot shorten it directly; you can only remove the bottlenecks that stretch it out. In the case, a two-week diagnostic of the last 12 months of closed opportunities revealed five bottlenecks: non-ICP opportunities, vague stage definitions, dependence on a single champion, the dead zone between demo and proposal, and manual workload.
+
+### How can you reduce the time between demo and proposal?
+
+Automating post-demo follow-up and making a same-day summary email the standard speeds this stage up significantly. An n8n workflow that starts when an opportunity moves to "Solution fit validated" uses AI on the call transcript to draft a summary email for the AE to approve, and sends a Slack alert when an opportunity sees no activity for 7 days. In the representative case, the time between demo and proposal fell from 35–40 days to roughly 15–18 days.
+
+### How does a Mutual Action Plan help shorten the sales cycle?
+
+A Mutual Action Plan brings stakeholders such as finance, IT and senior leadership into the process early, which prevents unexpected objections at the final stage. Prepared together with the customer after the demo, it lays out every step of the purchasing process along with owners and dates. As a result, objections from finance or IT surfaced and were resolved in the first two weeks rather than the final week.
+
+### How should you present an ROI calculation to a B2B buyer?
+
+Build the ROI calculation from the customer's own numbers, using a simple template filled out together with the customer. For example, if manual reporting across 6 locations takes 30 person-hours per week and that labor costs USD 25 per hour, the annual cost comes to roughly USD 39,000, which makes a USD 20,000 per year software investment far easier to justify. When the champion takes this to their finance team, they present their own company's data rather than a vendor's claims.

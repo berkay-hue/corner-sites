@@ -23,7 +23,9 @@ B2B pazarlamasının DNA'sı, uzun yıllardır fuarlar, soğuk aramalar, kapsaml
 
 Instagram Reels'ta başarılı olmak, rastgele videolar yayınlamakla mümkün değildir. Özellikle B2B gibi niş bir alanda, her saniyenin stratejik bir amaca hizmet etmesi gerekir. Pro-Tek için sıfırdan bir içerik stratejisi oluştururken, insan sezgisini ve yaratıcılığını, yapay zekanın veri işleme ve öngörü yeteneğiyle birleştiren hibrit bir model uyguladık. Bu, Social Media Corner'ın yaratıcı vizyonu ile SAAS Corner'ın veri odaklı yaklaşımının mükemmel bir birleşimiydi.
 
-## Hedef Kitle Analizinde Yapay Zeka ile Derinleşme Geleneksel persona oluşturma yöntemleri genellikle varsayımlara dayanır
+## Hedef Kitle Analizinde Yapay Zeka ile Derinleşme
+
+Geleneksel persona oluşturma yöntemleri genellikle varsayımlara dayanır.
 
 Biz ise varsayımları verilerle doğrulamak ve hatta yıkmak için yola çıktık. Yapay zeka destekli sosyal dinleme ve pazar analizi araçlarını kullanarak, Pro-Tek'in hedef kitlesi olan endüstriyel otomasyon mühendislerinin dijital ayak izlerini takip ettik.
 
@@ -92,3 +94,21 @@ Stratejinin başarısı, nihayetinde ölçülebilir sonuçlarla kanıtlanır. Pr
 Pro-Tek Endüstriyel Çözümler vaka çalışması, B2B pazarlamasının geleceğine dair önemli dersler içermektedir. Bu başarı, sadece "Instagram Reels'ta video yayınlamak" ile ilgili değildir. Bu başarı, stratejik bir zihniyetin, teknolojinin (yapay zeka), çok kanallı entegrasyonun ve insan odaklı bir yaklaşımın bir araya gelmesiyle mümkün olmuştur. Corner Group olarak bizim için bu proje, holding felsefemizin somut bir kanıtıdır. Sosyal medya, tek başına bir sihirli değnek değildir; ancak doğru müşteri adayı yaratma (SAAS Corner), satış otomasyonu (Sales Corner) ve merkezi veri yönetimi (CRM Corner) sistemleriyle entegre edildiğinde, tüm büyüme motorunu ateşleyen bir kıvılcıma dönüşür.
 
 Yapay zeka, bu yeni paradigmada bir tehdit veya insan yaratıcılığının yerini alan bir unsur değil, stratejiyi daha akıllı, daha hızlı ve daha etkili kılan bir güç çarpanıdır. Veri analizinden içerik üretimine, otomasyondan kişiselleştirmeye kadar her aşamada süreçleri optimize ederek, ekiplerin daha stratejik ve yaratıcı işlere odaklanmasına olanak tanır. B2B dünyasında artık soru, "Instagram gibi platformlarda olmalı mıyız?" değil, "Bu platformlarda rakiplerimizden nasıl daha akıllı, daha entegre ve daha insan odaklı olabiliriz?" sorusudur. Cevap, siloları yıkmak, teknolojiyi stratejinin hizmetine sunmak ve pazarlamanın her adımını ölçülebilir bir iş sonucuna bağlamaktan geçmektedir. Corner Group'un misyonu, bu dönüşümde işletmelere bütünsel bir bakış açısı ve entegre çözümler sunarak rehberlik etmektir.
+
+## Sık sorulan sorular
+
+### Yapay zeka, B2B hedef kitlesinin Instagram'da ne izlemek istediğini nasıl ortaya çıkardı?
+
+AI destekli sosyal dinleme araçları; LinkedIn grupları, r/PLC ve r/engineering gibi Reddit forumları, mühendislik blogları ve rakip yorumları gibi binlerce kaynağı taradı. Analiz, genç mühendislerin teknik bilgiyi kısa, görsel ve "nasıl yapılır" formatında tüketmeyi tercih ettiğini gösterdi. Ayrıca kurumsal dilin bu kitleye samimiyetsiz geldiği ve esprili bir jargonun daha iyi karşılandığı anlaşıldı.
+
+### AI araçları Reels üretim hızını nasıl artırdı?
+
+AI tabanlı araçlar konuşmaları saniyeler içinde yazıya dökerek %99 doğrulukla otomatik altyazı oluşturdu ve ekibin saatlerini kurtardı. Akıllı kesme, düzenleme ve önerilen B-roll görüntüleriyle videolar daha hızlı zenginleştirildi. Bu optimizasyon sayesinde Pro-Tek için haftada bir video yerine haftada 3-4 farklı ve test edilebilir Reels içeriği üretilebildi.
+
+### Instagram Reels izleyicileri nitelikli müşteri adayına nasıl dönüştürüldü?
+
+İzleyiciler, Reels sonunda sunulan ücretsiz "PLC Programlama Kılavuzu" ile bir iniş sayfasına yönlendirildi ve e-posta bırakan kişi MQL haline geldi. Ardından otomatik bir besleme akışı başladı: 1. gün kılavuz, 3. gün detaylı bir blog yazısı, 7. gün kısa bir video vaka çalışması ve 12. gün canlı demo veya ücretsiz danışmanlık teklifi gönderildi.
+
+### Proje ilk 6 ayda hangi iş sonuçlarını getirdi?
+
+Takipçi sayısı 6 ayda 350'den 8.500'e çıktı ve Reels içerikleri sektör ortalaması %1.5 iken %6.8 etkileşim oranı yakaladı. Instagram üzerinden ayda ortalama 120 nitelikli müşteri adayı kazanıldı ve aday başına maliyet %60 daha düşük oldu. Satış döngüsü 90 günden 65 güne indi ve kanal %250'lik bir yatırım getirisi sağladı.
