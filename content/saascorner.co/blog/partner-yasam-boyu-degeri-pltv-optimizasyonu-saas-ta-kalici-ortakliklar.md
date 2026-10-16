@@ -68,3 +68,21 @@ Bir PRM platformunun en büyük faydalarından biri, sana zengin bir veri havuzu
 ## Sonuç
 
 SaaS dünyasında rekabet her geçen gün artarken, sürdürülebilir büyüme için partnerlikler artık bir lüks değil, bir zorunluluktur. Ancak bu ortaklıkların gerçek potansiyelini ortaya çıkarmak, kısa vadeli gelir hedeflerinin ötesine geçmeyi gerektirir. Partner Yaşam Boyu Değeri (PLTV) felsefesini benimsemek, partnerliklere anlık işlemler yerine uzun vadeli yatırımlar olarak bakmanı sağlar. Doğru partnerleri seçmek, onları sistematik bir şekilde eğitmek, sürekli desteklemek ve teknolojiden faydalanarak performansı ölçmek, PLTV'yi optimize etmenin temel taşlarıdır. Artık partner programını değerlendirme şeklini değiştirme zamanı geldi. Sadece "Bu partner bu ay ne kadar getirdi?" diye sormak yerine, "Bu partnerle ilişkimiz önümüzdeki beş yıl içinde bize ne kadar değer katacak?" sorusuna odaklan. Bu bakış açısı, seni kalıcı ve krlı ortaklıklara götürecek en güvenilir yoldur.
+
+## Sık sorulan sorular
+
+### Partner yaşam boyu değeri nasıl hesaplanır?
+
+Temel çerçevede, partnerin yıllık ortalama gelir katkısını ortalama ortaklık süresiyle çarparsın ve bu tutardan partneri edinme ve yönetme maliyetini çıkarırsın. Her duruma uyan tek bir formül olmadığı için bu temeli zenginleştirmen gerekir. Örneğin partnerin getirdiği müşterilerin daha yüksek LTV'si gibi dolaylı etkileri de gelire eklediğinde çok daha gerçekçi bir sonuç elde edersin.
+
+### Partner kaynaklı gelir ile partner etkili gelir arasındaki fark nedir?
+
+Partner kaynaklı gelir, partnerin sıfırdan bulup kapattığı anlaşmaları ifade eder. Partner etkili gelir ise partnerin satış sürecinin bir noktasında dokunduğu ve kapanmasına yardımcı olduğu anlaşmaları kapsar. PLTV'yi doğru ölçmek için bu ikisini ayrı ayrı izlemelisin.
+
+### PRM yazılımı partner programına ne katkı sağlar?
+
+PRM platformları, partner programını tek bir merkezi yerden yönetmeni sağlar; işe alım, lead dağıtımı, ortak pazarlama fonlarının takibi ve performans analizi gibi süreçleri kapsar. Partnerler sunum, demo ve fiyat listesi gibi kaynaklara bir portal üzerinden anında ulaşır, bu da senin yönetim yükünü azaltır. Ayrıca topladığı verilerle en iyi performans gösteren partnerleri ve risk altındaki partnerleri erkenden görmeni sağlar.
+
+### Partner yaşam boyu değerini artırmaya nereden başlamalıyım?
+
+İlk adım, en başından doğru partnerleri seçmek için bir İdeal Partner Profili oluşturmaktır. Ardından ürün eğitimleri, materyallere kolay erişim ve net bir iletişim planı içeren sistematik bir işe alım süreci sunmalısın, çünkü başlangıç dönemi partnerliğin geleceği için en kritik dönemdir. Sonrasında sürekli eğitim, ortak pazarlama ve düzenli geri bildirimle ilişkiyi canlı tutabilirsin.

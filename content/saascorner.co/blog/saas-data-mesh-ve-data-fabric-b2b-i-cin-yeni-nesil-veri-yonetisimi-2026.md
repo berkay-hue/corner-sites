@@ -78,3 +78,21 @@ Kültürel değişimin yanı sıra, doğru teknolojik temel de şarttır. Hem Da
 ## Sonuç
 
 Geleneksel veri yönetiminin sonuna geldik. B2B SaaS şirketleri için rekabette öne geçmenin yolu, veriyi bir maliyet merkezi olarak değil, bir ürün ve stratejik bir varlık olarak görmekten geçiyor. SaaS Data Mesh ve Data Fabric, bu dönüşüm için bize iki farklı ama güçlü yol haritası sunuyor. Biri teknoloji ve entegrasyonla karmaşıklığı azaltırken, diğeri organizasyonel yapı ve sahiplikle darboğazları ortadan kaldırıyor. Hangisinin senin için doğru olduğu, şirketinin mevcut olgunluğuna, kültürüne ve en acil sorunlarına bağlıdır. Ancak kesin olan bir şey var: Hiçbir şey yapmamak artık bir seçenek değil. 2026'ya kadar veri stratejini modernize etmeyen şirketler, daha çevik ve veri odaklı rakiplerinin gerisinde kalmaya mahkum olacak. Veri devrimine şimdi katılarak geleceği şekillendirmeye başla.
+
+## Sık sorulan sorular
+
+### Data Mesh ve Data Fabric birlikte kullanılabilir mi?
+
+Evet, bu iki yaklaşım birbirini dışlamaz, aksine birbirini tamamlayabilir. Hibrit bir modelde Data Fabric, alan ekiplerinin ihtiyaç duyduğu self servis veri platformunun temelini oluşturur ve veri kataloglama, erişim kontrolü ve veri hattı otomasyonu gibi yetenekler sunar. Böylece Data Mesh'in organizasyonel felsefesi, Data Fabric'in teknolojik gücüyle birleşir.
+
+### Veriyi bir ürün olarak ele almak ne anlama gelir?
+
+Her alan ekibinin kendi verisini, diğer birimler için güvenilir, keşfedilebilir, anlaşılabilir ve erişilebilir bir veri ürünü olarak sunması demektir. Tıpkı bir yazılım ürünü gibi, veri ürününün de bir ürün yöneticisi, yol haritası, kalite standartları ve kullanıcıları vardır. Örneğin ürün ekibinin hazırladığı temizlenmiş ve belgelenmiş bir kullanıcı etkileşim veri seti, satış ve pazarlamanın ek satış ve churn riski analizlerinde doğrudan kullanılabilir.
+
+### Data Mesh'e geçişe nasıl başlamalıyım?
+
+Tüm şirketi bir anda değiştirmeye çalışmak yerine, veri sorunu yaşayan ama değişime açık az sayıda alanla bir pilot proje başlatmalısın. Her alan için verinin kalitesinden ve erişilebilirliğinden sorumlu bir veri ürün yöneticisi belirlemek ve merkezi bir veri kataloğu kurmak işini kolaylaştırır. Pilotun sonuçlarını somut metriklerle ölçüp şirketle paylaşmak, değişime olan inancı artırır.
+
+### Bu veri mimarileri için hangi altyapı gerekir?
+
+Hem Data Fabric hem de Data Mesh, modern bir veri yığını üzerinde en iyi şekilde çalışır. Bu yığın; bulut tabanlı veri ambarlarını, otomatik veri entegrasyon araçlarını ve veri kataloglama platformlarını içerir. Altyapını esnek, ölçeklenebilir ve API odaklı olacak şekilde modernize etmeli, ayrıca tüm organizasyonda veri okuryazarlığı kültürünü de geliştirmelisin.

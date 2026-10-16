@@ -66,3 +66,21 @@ Satış görüşmeleri, müşterinin beklentileri, hedefleri ve endişeleri hakk
 ## Sonuç
 
 Sonuç olarak, B2B SaaS satışta müşteri adaptasyonu, anlaşma imzalandıktan sonra başlayan bir süreç değil, satışın DNA'sına işlenmesi gereken bir felsefedir. Satış ekibinin rolü, sadece bir ürün satmak değil, bir çözümün ve bir başarının vizyonunu satmaktır. Bu vizyon, doğru beklentilerle, ortak başarı planlarıyla ve ekipler arası kusursuz bir iş birliğiyle hayata geçirildiğinde, müşteri kaybı azalır ve müşteri yaşam boyu değeri (LTV) artar. Satış lideri olarak, ekibini sadece anlaşma kapatmaya değil, aynı zamanda başarılı müşteriler yaratmaya odaklamalısın. Unutma, en krlı müşteri, sadece ürününü satın alan değil, onu her gün kullanarak işini büyüten müşteridir. Bu yolculuğun kaptanı ise satış ekibindir.
+
+## Sık sorulan sorular
+
+### Müşteri adaptasyonu neden satış ekibinin de sorumluluğundadır?
+
+Çünkü müşterinin değer yolculuğu sözleşme imzalandıktan sonra değil, satış temsilcisiyle ilk konuştuğu anda başlar. Satış ekibi müşterinin acı noktalarını, iş hedeflerini ve başarı metriklerini ilk öğrenen taraftır. Ürünün yapamayacağı şeyler vaat edildiğinde oluşan beklenti boşluğu ise müşterinin hayal kırıklığına uğrayıp ürünü bırakmasına yol açar.
+
+### Satış sürecinde müşteriyle başarı planı nasıl oluşturulur?
+
+Satışın son aşamalarında müşteriyle birlikte, ürünü kullanarak ilk aylarda ulaşmayı hedeflediği küçük ama anlamlı zaferleri içeren ortak bir başarı planı hazırlanır. Örneğin bir proje yönetimi aracında ilk hedef, tüm ekibin projeleri platform üzerinden yönetmeye başlaması olabilir. Bu plan hem müşteriye net bir vizyon sunar hem de müşteri başarı ekibinin işe alıştırma sürecini bu hedeflere göre şekillendirmesini sağlar.
+
+### Sıcak devir teslim nedir?
+
+Sıcak devir teslim, satış temsilcisinin müşteri başarı yöneticisini müşteriye bizzat tanıttığı ortak bir toplantıdır. Bu toplantıda satış temsilcisi müşterinin neden satın aldığını, temel hedeflerini ve potansiyel riskleri özetler; müşteri başarı yöneticisi de işe alıştırma sürecini anlatır. Böylece müşteri aynı bilgileri tekrar anlatmak zorunda kalmaz ve ilişki en baştan güven üzerine kurulur.
+
+### Satış primleri müşteri adaptasyonunu nasıl destekleyebilir?
+
+Satış ekibi yalnızca yeni müşteri kazanımıyla prim alıyorsa, anlaşma kapandıktan sonra müşterinin akıbetiyle ilgilenmek için bir teşviki kalmaz. Bu yüzden prim yapısını müşterinin başarısına endekslemek gerekir; örneğin müşteri belirli bir kullanım seviyesine ulaştığında veya işe alıştırmayı başarıyla tamamladığında ek bonus verilebilir. Bu ortak hedefler, satış ekibini başarılı olacak müşterileri bulmaya teşvik eder.
