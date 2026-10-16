@@ -13,7 +13,7 @@ import { fixMojibake, fixPlaceholders, unscaffold, markdown, metaDescription, es
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const [cmd, host] = process.argv.slice(2);
 const BASE_CFG = CONFIG[host];
-let cfg = BASE_CFG, BASE = ""; // BASE: dil varyantının yol öneki (ör. "/tr"); varyantsız sitelerde ""
+let cfg = BASE_CFG, BASE = "", BLOG_ID = null; // BASE: dil varyantının yol öneki (ör. "/tr"); varyantsız sitelerde ""
 if (!cfg || !["import", "build"].includes(cmd)) { console.error("usage: build-blog.mjs import|build <host>"); process.exit(1); }
 const SITE = join(ROOT, "sites", host), TPL = join(ROOT, "templates", host);
 let CONTENT = join(ROOT, "content", host, "blog");
@@ -148,8 +148,9 @@ function eachRegion(html, name, fn) {
   return html;
 }
 // Yazar her sitede kişi (E-E-A-T): kişisel sitedeki Person düğümüne @id ile bağlanır
-const AUTHOR = { "@type": "Person", "@id": "https://www.yalcinberkay.com.tr/#person", name: "Berkay Yalçın", url: "https://www.yalcinberkay.com.tr", jobTitle: "Founder & B2B Sales Consultant",
-  sameAs: ["https://www.linkedin.com/in/berkayyalcin2/"] };
+// (url ve sameAs canlı Person düğümüyle birebir)
+const AUTHOR = { "@type": "Person", "@id": "https://www.yalcinberkay.com.tr/#person", name: "Berkay Yalçın", url: "https://www.yalcinberkay.com.tr/", jobTitle: "Founder & B2B Sales Consultant",
+  sameAs: ["https://www.linkedin.com/in/berkayyalcin2/", "https://www.instagram.com/beerkayyalcin"] };
 const swapImg = (tag, p, lazy) => tag.replace(/\s(srcset|sizes)="[^"]*"/g, "").replace(/\ssrc="[^"]*"/, ` src="${esc(p.fm.image)}"${lazy ? ' loading="lazy"' : ""}`)
   .replace(/\salt(="[^"]*")?(?=[\s>])/, "").replace(/^<img\b/, `<img alt="${esc(p.fm.imageAlt || p.fm.title)}"`);
 const readTime = body => `${Math.max(1, Math.round(body.split(/\s+/).length / 220))}${cfg.lang === "en" ? " min read" : " dk okuma"}`;
@@ -223,10 +224,12 @@ function renderPost(tpl, post, next, related) {
     }
   }
   const ld = [{
-    "@context": "https://schema.org", "@type": "BlogPosting", headline: fm.title.slice(0, 110), description: fm.description,
+    "@context": "https://schema.org", "@type": "BlogPosting", "@id": url + "#article", url, headline: fm.title.slice(0, 110), description: fm.description,
     image: [img], datePublished: fm.date, dateModified: fm.updated || fm.date, mainEntityOfPage: url, inLanguage: cfg.lang,
+    ...(BLOG_ID && { isPartOf: { "@id": BLOG_ID } }),
     author: AUTHOR,
-    publisher: { "@type": "Organization", ...(ORG_ID && { "@id": ORG_ID }), name: cfg.brand, url: cfg.origin },
+    publisher: { "@type": "Organization", ...(ORG_ID && { "@id": ORG_ID }), name: cfg.brand, url: cfg.origin,
+      ...(cfg.logo && { logo: { "@type": "ImageObject", ...cfg.logo } }) },
   }, {
     "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [[L().home, cfg.origin + BASE + "/"], ["Blog", cfg.origin + BASE + "/blog"], [fm.title, url]]
       .map(([name, item], i) => ({ "@type": "ListItem", position: i + 1, name, item })),
@@ -345,6 +348,9 @@ async function buildSite() {
     const out = join(SITE, ...(prefix ? [prefix.slice(1)] : []));
     const tplPost = await readFile(join(TPL, `post${sfx}.html`), "utf8");
     const tplList = await readFile(join(TPL, `blog${sfx}.html`), "utf8").catch(() => null);
+    // isPartOf yalnızca liste şablonu bu Blog düğümünü gerçekten tanımlıyorsa ve kimlik bu dilin kanonik kökündeyse (apex/www)
+    BLOG_ID = c.blogId && c.blogId.startsWith(`${c.origin}${prefix}/blog#`) && tplList?.includes(`"@id":"${c.blogId}"`) ? c.blogId : null;
+    if (c.blogId && !BLOG_ID) console.warn(`UYARI: blogId ${c.blogId} ${prefix || "/"} blog şablonunda yok, isPartOf yazılmadı`);
     const lang = (h, p) => sets.length < 2 ? h : setLang(h, c.lang, Object.fromEntries(index.map(([l, i]) => [l, alts.get(p)?.[l] || (l === c.lang && p ? `${prefix}/blog/${p.slug}` : i)])), p ? alts.get(p) : Object.fromEntries(index));
     await mkdir(join(out, "blog"), { recursive: true });
     for (const [i, p] of posts.entries()) await writeFile(join(out, "blog", p.slug + ".html"), lang(renderPost(tplPost, p, posts[i + 1] || posts[0], relatedFor(p, posts)), p));

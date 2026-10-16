@@ -70,6 +70,8 @@ export default {
     origin: "https://www.brandcorner.co", brand: "Brand Corner", titleSuffix: " | Brand Corner", author: "Brand Corner",
     pClass: "sk-p", cardSelector: "sk-card", lang: "en", dateLocale: "en-US",
     regions: { readTime: "ReadTime" }, cardFields: { summary: ".sk-sum", readTime: ".sk-rt" },
+    // Yazılar şablondaki Blog düğümüne isPartOf ile bağlanır; publisher logosu seo.mjs Organization'ıyla aynı
+    blogId: "https://www.brandcorner.co/blog#blog", logo: { url: "https://www.brandcorner.co/icon.png", width: 512, height: 512 },
   },
   "wishceo.com": {
     origin: "https://wishceo.com", brand: "WishCEO", titleSuffix: " | WishCEO", author: "WishCEO",

@@ -38,14 +38,25 @@ const RULES = {
   },
   "yalcinberkay.com.tr": {
     origin: "https://www.yalcinberkay.com.tr",
-    person: {
-      "@type": "Person", "@id": "https://www.yalcinberkay.com.tr/#person", name: "Berkay YALÇIN",
-      url: "https://www.yalcinberkay.com.tr/", jobTitle: "Founder & B2B Sales Consultant",
-      worksFor: { "@type": "Organization", name: "SAAS Corner", url: "https://saascorner.co" },
-      sameAs: ["https://linkedin.com/in/berkayyalcin2", "https://www.instagram.com/beerkayyalcin"],
-    },
+    // Sayfalardaki Person düğümünün tek kaynağı; Organization @id'leri ilgili sitelerin kendi graph'ıyla aynı
+    person: (() => {
+      const id = "https://www.yalcinberkay.com.tr/#person", founder = { "@id": id };
+      const org = (name, url, oid) => ({ "@type": "Organization", ...(oid && { "@id": oid }), name, url, founder });
+      return {
+        "@type": "Person", "@id": id, name: "Berkay YALÇIN", alternateName: "Berkay Yalçın", url: "https://www.yalcinberkay.com.tr/",
+        image: "https://www.yalcinberkay.com.tr/_a/fr/images/tfHxTGcPg5W1q2kXiuBQynltGIA_d8696c1a.png", jobTitle: "Founder & B2B Sales Consultant",
+        description: "Founder of SAAS Corner, Sales Corner, Social Media Corner, Brand Corner, CRM Corner and Corner Group; B2B sales consultant with 10+ years of experience, specialising in outbound sales, lead generation and CRM.",
+        worksFor: [org("SAAS Corner", "https://saascorner.co"), org("Corner Group", "https://cornergroup.co", "https://cornergroup.co/#org"),
+          org("Sales Corner", "https://salescorner.co"), org("Social Media Corner", "https://socialmediacorner.co"),
+          org("Brand Corner", "https://www.brandcorner.co", "https://www.brandcorner.co/#org"), org("CRM Corner", "https://crmcorner.co")],
+        knowsAbout: ["B2B sales", "Lead generation", "Outbound sales", "Sales development (SDR)", "CRM", "HubSpot", "Salesforce", "Pipedrive", "Apollo.io", "Sales automation"],
+        knowsLanguage: ["en", "tr"], sameAs: ["https://www.linkedin.com/in/berkayyalcin2/", "https://www.instagram.com/beerkayyalcin"],
+      };
+    })(),
     fix(html, page) {
       const R = this;
+      // Blog yazıları build-blog.mjs ile üretilir (başlık/açıklama/BlogPosting orada)
+      if (/^\/(?:tr\/)?blog\//.test(page)) return html;
       // Şablondan kalan Framer affiliate linki ("via=mejed_k")
       html = html.replace(/\s*\|\s*Powered by\s*(?:<!--\$-->)?<a[^>]*framer\.com[^>]*>Framer<\/a>(?:<!--\/\$-->)?/g, "");
       // Şablon yazar adı
@@ -55,44 +66,38 @@ const RULES = {
       // 404: canonical olmamalı
       if (page === "/404") html = html.replace(/<link rel="canonical"[^>]*>\s*/g, "");
 
-      html = html.replace(/<script type="application\/ld\+json" data-sk-seo>[\s\S]*?<\/script>/g, "");
-      const ld = [];
-      const url = R.origin + (page === "/" ? "/" : page);
-      if (page === "/") ld.push({ "@context": "https://schema.org", "@graph": [R.person, { "@type": "WebSite", "@id": R.origin + "/#website", url: R.origin + "/", name: "Berkay YALÇIN", publisher: { "@id": R.person["@id"] }, inLanguage: "en" }] });
-
-      if (page.startsWith("/blog/")) {
-        const h1 = text(html.match(/<h1[^>]*>([\s\S]*?)<\/h1>/)?.[1] || "");
-        const paras = [...html.matchAll(/<p class="framer-text[^"]*"[^>]*>([\s\S]*?)<\/p>/g)].flatMap(m => m[1].split(/<br[^>]*>/).map(text)).filter(t => t.length > 60);
-        // Paragraf içinde nokta sonrası boşluk eksik ("platforms.Surveying")
-        const desc = metaDescription((paras[0] || h1).replace(/([a-z])\.([A-Z])/g, "$1. $2"));
-        for (const re of [/(<meta name="description" content=")([^"]*)(")/, /(<meta property="og:description" content=")([^"]*)(")/, /(<meta name="twitter:description" content=")([^"]*)(")/])
-          html = setMeta(html, re, desc);
-        const title = `${h1} - Berkay YALÇIN`.length <= 60 ? `${h1} - Berkay YALÇIN` : /[:!?]/.test(h1.slice(0, -1)) ? h1.split(/[:!?]/)[0].trim() + " - Berkay YALÇIN" : h1;
-        html = html.replace(/<title>[^<]*<\/title>/, `<title>${title.replace(/&/g, "&amp;").replace(/</g, "&lt;")}</title>`);
-        html = html.replace(/(<meta property="og:type" content=")website(")/, "$1article$2");
-        const d = html.match(/>((?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]* \d{1,2}, \d{4})</)?.[1];
-        const date = d ? new Date(d + " 12:00 UTC").toISOString().slice(0, 10) : undefined;
-        const image = html.match(/<meta property="og:image" content="([^"]*)"/)?.[1];
-        ld.push({
-          "@context": "https://schema.org", "@type": "BlogPosting", headline: h1, description: desc,
-          ...(image && { image }), ...(date && { datePublished: date, dateModified: date }),
-          author: R.person, publisher: { "@id": R.person["@id"] }, mainEntityOfPage: url, url,
-        });
+      // Ana sayfalarda (EN ve /tr/) graph'taki diğer düğümler (WebSite, ProfilePage, Service) korunur, Person yenilenir
+      const re = /<script type="application\/ld\+json" data-sk-seo>([\s\S]*?)<\/script>/;
+      if (page === "/" || page === "/tr/index") {
+        const old = html.match(re)?.[1];
+        if (old) {
+          const ld = JSON.parse(old);
+          ld["@graph"] = ld["@graph"].map(n => n["@id"] === R.person["@id"] ? R.person : n);
+          return html.replace(re, () => ldTag(ld));
+        }
+        if (page === "/") return html.replace("</head>", ldTag({ "@context": "https://schema.org", "@graph": [R.person, { "@type": "WebSite", "@id": R.origin + "/#website", url: R.origin + "/", name: "Berkay YALÇIN", publisher: { "@id": R.person["@id"] }, inLanguage: "en" }] }) + "</head>");
       }
-      if (ld.length) html = html.replace("</head>", ld.map(ldTag).join("") + "</head>");
-      return html;
+      return html.replace(new RegExp(re.source, "g"), "");
     },
   },
   "brandcorner.co": {
     origin: "https://www.brandcorner.co",
-    // v0 şablonu her sayfaya aynı başlık/açıklamayı veriyor; sayfaya özel değerler H1 ve altındaki ilk paragraftan
+    // v0 şablonu her sayfaya aynı başlık/açıklamayı veriyor. Sayfa başına [başlık ≤60, açıklama ≤160, breadcrumb adı], sitedeki metinden
+    META: {
+      "/": ["Brand Corner - Influencer Marketing Platform", "Connect brands with the right influencers. An all-in-one influencer marketing platform to manage campaigns, discover talent, and track performance."],
+      "/features": ["Influencer Marketing Features | Brand Corner", "Discovery and matching, campaign management, analytics and reporting, messaging and payments, and integrations: everything you need to run influencer campaigns.", "Features"],
+      "/pricing": ["Pricing and Plans | Brand Corner", "Compare Brand Corner's Starter, Professional and Enterprise plans side by side, with a feature comparison and answers to frequently asked questions.", "Pricing"],
+      "/solutions/brands": ["Influencer Marketing for Brands | Brand Corner", "Discover, connect, and collaborate with influencers who align with your brand values: advanced search, smart filtering, messaging and performance analytics.", "For Brands"],
+      "/solutions/influencers": ["For Influencers: Get Discovered by Brands | Brand Corner", "Get discovered by brands, receive quality offers, and manage collaborations, contracts and payments in one place, with analytics to help you grow.", "For Influencers"],
+      "/solutions/agencies": ["Influencer Agency Management Tools | Brand Corner", "Manage your talent roster, orchestrate client campaigns, and automate reporting and workflows with agency-grade tools and a dedicated client portal.", "For Agencies"],
+      "/about": ["About Brand Corner", "Brand Corner is an influencer marketing platform connecting brands, influencers, and agencies worldwide. Built in Istanbul as part of Corner Group.", "About"],
+      "/404": ["Page Not Found | Brand Corner", "This page could not be found."],
+    },
     fix(html, page) {
-      const R = this, url = R.origin + (page === "/" ? "/" : page);
-      const at = html.indexOf("<h1");
-      const h1 = text(html.match(/<h1[^>]*>([\s\S]*?)<\/h1>/)?.[1] || "");
-      const lead = text(html.slice(at).match(/<p[^>]*>([\s\S]*?)<\/p>/)?.[1] || "");
-      const title = page === "/" ? "Brand Corner - Influencer Marketing Platform" : `${h1} | Brand Corner`;
-      const desc = metaDescription(page === "/" ? `Connect brands with the right influencers. ${lead}` : lead);
+      if (/^\/blog(?:\/|$)/.test(page)) return html;  // blog sayfaları build-blog.mjs'in
+      const R = this, url = R.origin + (page === "/" ? "/" : page), ORG = R.origin + "/#org";
+      if (!R.META[page]) throw new Error(`brandcorner: ${page} için META yok`);
+      const [title, desc, crumb] = R.META[page];
       html = html.replace(/<title>[^<]*<\/title>/, `<title>${title.replace(/&/g, "&amp;")}</title>`);
       for (const [re, v] of [
         [/(<meta name="description" content=")([^"]*)(")/, desc], [/(<meta property="og:description" content=")([^"]*)(")/, desc],
@@ -120,10 +125,21 @@ const RULES = {
         if (!html.includes('property="og:image:width"'))
           html = html.replace(/(<meta property="og:image" content="[^"]*"\/>)/, `$1<meta property="og:image:width" content="1200"/><meta property="og:image:height" content="630"/>`);
       }
-      html = html.replace(/<script type="application\/ld\+json" data-sk-seo>[\s\S]*?<\/script>/g, "");
-      if (page === "/") html = html.replace("</head>", ldTag({ "@context": "https://schema.org", "@graph": [
-        { "@type": "Organization", "@id": R.origin + "/#org", name: "Brand Corner", url: R.origin + "/" },
-        { "@type": "WebSite", "@id": R.origin + "/#website", url: R.origin + "/", name: "Brand Corner", publisher: { "@id": R.origin + "/#org" }, inLanguage: "en" }] }) + "</head>");
+      // Tam Organization düğümü / ve /about'ta, diğer sayfalar @id ile bağlanır. description footer sloganı;
+      // founder ve parentOrganization @id/ad/url'leri canlı yalcinberkay ve cornergroup düğümleriyle birebir
+      html = html.replace(/<script type="application\/ld\+json" data-sk-(?:seo|page)>[\s\S]*?<\/script>\n?/g, "");
+      const org = { "@type": "Organization", "@id": ORG, name: "Brand Corner", url: R.origin + "/",
+        logo: { "@type": "ImageObject", url: R.origin + "/icon.png", width: 512, height: 512 },
+        description: "Connecting brands, influencers, and agencies worldwide",
+        founder: { "@type": "Person", "@id": "https://www.yalcinberkay.com.tr/#person", name: "Berkay YALÇIN", url: "https://www.yalcinberkay.com.tr/" },
+        parentOrganization: { "@type": "Organization", "@id": "https://cornergroup.co/#org", name: "Corner Group", url: "https://cornergroup.co/" } };
+      const h1 = text(html.match(/<h1[^>]*>([\s\S]*?)<\/h1>/)?.[1] || "");
+      const graph = noindex ? [] : page === "/"
+        ? [org, { "@type": "WebSite", "@id": R.origin + "/#website", url: R.origin + "/", name: "Brand Corner", publisher: { "@id": ORG }, inLanguage: "en" }]
+        : [...(page === "/about" ? [org] : []),
+          { "@type": page === "/about" ? "AboutPage" : "WebPage", "@id": url + "#webpage", url, name: h1, isPartOf: { "@id": R.origin + "/#website" }, about: { "@id": ORG }, inLanguage: "en" },
+          { "@type": "BreadcrumbList", itemListElement: [{ "@type": "ListItem", position: 1, name: "Home", item: R.origin + "/" }, { "@type": "ListItem", position: 2, name: crumb, item: url }] }];
+      if (graph.length) html = html.replace("</head>", ldTag({ "@context": "https://schema.org", "@graph": graph }) + "</head>");
       return html;
     },
   },
