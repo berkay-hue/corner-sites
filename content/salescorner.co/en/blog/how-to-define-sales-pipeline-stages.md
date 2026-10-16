@@ -228,3 +228,17 @@ Review these metrics monthly at the rep level as well. If a rep's post-demo conv
 Defining your sales pipeline stages isn't a CRM setting; it's **designing the backbone of your sales process**. Every stage should have entry and exit criteria based on buyer actions, a clear owner, a probability grounded in real data, and a maximum time in stage. Start with 5-7 stages depending on your business model. As you've seen with outbound SaaS, enterprise services, and SMB sales, stages can vary, but the principles stay the same: verifiability, simplicity, and regular review.
 
 Once your stages are clear, AI and automation can turn your pipeline from a manual tracking list into a self-updating system. To review your pipeline structure together and discuss automation workflows that fit your team, [schedule a call with the Sales Corner team](/en/iletisim).
+
+## FAQ
+
+### How many stages should a sales pipeline have?
+For most B2B teams, 5 to 7 stages is ideal, not counting Won and Lost. Fewer than three stages don't give enough visibility, and more than nine wear reps out with CRM updates.
+
+### What should a well-defined pipeline stage include?
+Every stage should have five components: an entry criterion, an exit criterion, an owner, a probability and a maximum time. The entry criterion should be based on an action taken by the buyer, not the sales rep.
+
+### What is the difference between a sales funnel and a pipeline?
+A funnel answers "how many?", while a pipeline answers "which one, where and when?". The funnel is a volume-based conversion model; the pipeline is an operational view of each individual opportunity.
+
+### How do you set stage probabilities?
+Start with estimated probabilities and compare them with actual results after a quarter. If 7 of 30 opportunities in a stage were won, the real rate is about 23%, not 40%; in that case you usually tighten the stage's criteria.

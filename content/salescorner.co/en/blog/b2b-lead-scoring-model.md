@@ -291,3 +291,17 @@ Especially for SaaS companies, lead scoring delivers the highest return when con
 A good B2B lead scoring model doesn't have to be complicated. What matters is defining your ideal customer with real data, measuring fit and engagement separately, keeping the model balanced with negative scoring and decay rules, and tying each score group to a clear action. By following the nine steps described in this article, you can build a working first version within a few weeks and then continuously improve the model using monthly metrics and feedback from your sales team.
 
 Ultimately, lead scoring is one of the most effective ways to direct your sales team's most valuable resource, time, toward the right leads. If you need support setting up data enrichment, automated score calculation and score-driven outbound workflows, the Sales Corner team would be happy to help. [Schedule a call with us](/en/iletisim) to review your current process together.
+
+## FAQ
+
+### What is B2B lead scoring?
+Lead scoring is a method of assigning numerical scores to prospects based on defined criteria so the sales team can prioritize. A good B2B model measures two dimensions separately: a fit score for how closely the lead matches your ideal customer profile and an engagement score for how much they interact with you.
+
+### Why should fit and engagement scores be kept separate?
+They should be kept separate because a single combined score can show a "right company, no interest" lead and a "wrong company, very interested" lead with the same number. With two scores you get a 2x2 action matrix: high-fit, high-engagement leads go to a sales rep within 24 hours, while high-fit, low-engagement leads enter a personalized outbound sequence.
+
+### How much data do you need to build a lead scoring model?
+You don't need a large dataset; even 30–50 won deals are enough to reveal strong patterns. Analyze the won and lost opportunities from the last 12–24 months to find which criteria actually increase the likelihood of purchase.
+
+### How does score decay work?
+Engagement points are reduced based on how long a lead has gone without interacting: for example, 25% after 30 days of inactivity, 50% after 60 days, and the engagement score resets after 90 days. The fit score usually doesn't decay; it is only recalculated when the person changes companies.

@@ -196,3 +196,17 @@ Yapay zekayla soğuk e-posta yazmak, bir aracı açıp "bana e-posta yaz" demekt
 Unutmayın: Strateji ve değer önerisi sizden, ölçek ve kişiselleştirme yapay zekadan gelir. İnsan kontrolünü süreçten hiçbir zaman tamamen çıkarmayın.
 
 Liste kurulumundan veri zenginleştirmeye, yapay zeka destekli kişiselleştirmeden e-posta dizilerinin otomasyonuna kadar outbound sürecinizi uçtan uca kurmak istiyorsanız Sales Corner ekibi yanınızda. Mevcut sürecinizi birlikte değerlendirmek ve size uygun otomasyon akışını tasarlamak için [hemen bir görüşme planlayın](/iletisim).
+
+## Sık sorulan sorular
+
+### Yapay zeka soğuk e-postada neyi değiştirir?
+Yapay zeka bir çarpandır: araştırmayı hızlandırır, kişiselleştirmeyi ölçeklendirir, varyasyon üretir ve e-postaları 80–120 kelimeye kısaltmaya yardım eder. Ancak yanlış hedef kitleyi düzeltemez, değer önerinizi sizin yerinize bulamaz ve kötü veriyi iyileştiremez.
+
+### İyi bir soğuk e-posta prompt'unda neler olmalı?
+İyi bir prompt altı bileşenden oluşur: rol, gönderen bağlamı, alıcı bağlamı, hedef, kısıtlar ve örnek. Bunların içinde en kritik olanı kelime sınırı ve yasaklı ifadeler gibi kısıtlardır.
+
+### Soğuk e-posta ne kadar uzun olmalı?
+Soğuk e-postada 50–125 kelime aralığı çoğu durumda daha sağlıklıdır. Yapay zeka çıktıları kısıtlanmazsa kolayca 200 kelimeyi aşar.
+
+### Soğuk e-posta başarısı nasıl ölçülür?
+Asıl başarı ölçütü olumlu yanıt oranıdır. Bunun yanında teslim ve bounce oranı, yanıt oranı ve toplantıya dönüşüm takip edilmeli, yalnızca açılma oranına güvenilmemelidir.

@@ -291,3 +291,17 @@ Lead scoring projelerinin başarısız olmasının nedenleri genellikle benzerdi
 İyi bir B2B lead scoring modeli karmaşık olmak zorunda değildir. Önemli olan ideal müşterinizi gerçek verilerle tanımlamak, fit ve engagement'ı ayrı ölçmek, negatif puanlama ve eskime kurallarıyla modeli dengede tutmak ve her skor grubunu net bir aksiyona bağlamaktır. Bu yazıda anlattığımız dokuz adımı izleyerek birkaç hafta içinde çalışan bir ilk versiyon kurabilir, ardından aylık metrikler ve satış ekibinden gelen geri bildirimlerle modeli sürekli iyileştirebilirsiniz.
 
 Sonuçta lead scoring, satış ekibinizin en değerli kaynağı olan zamanı doğru lead'lere yönlendirmenin en etkili yollarından biridir. Veri zenginleştirme, otomatik skor hesaplama ve skora bağlı outbound akışlarını kurmak için desteğe ihtiyacınız varsa Sales Corner ekibi olarak yardımcı olmaktan memnuniyet duyarız. Mevcut sürecinizi birlikte değerlendirmek için [bizimle bir görüşme planlayın](/iletisim).
+
+## Sık sorulan sorular
+
+### B2B lead scoring nedir?
+Lead scoring, potansiyel müşterilere belirli kriterlere göre sayısal puan atayarak satış ekibinin önceliklendirme yapmasını sağlayan bir yöntemdir. B2B'de iyi bir model iki boyutu ayrı ölçer: lead'in ideal müşteri profiline ne kadar uyduğunu gösteren fit skoru ve ne kadar etkileşime girdiğini gösteren engagement skoru.
+
+### Fit ve engagement skorları neden ayrı tutulmalı?
+Tek bir toplam skor, "doğru şirket ama ilgisiz" ile "yanlış şirket ama çok ilgili" lead'leri aynı puanda gösterebileceği için ayrı tutulmalıdır. İki skor ayrı kalınca 2x2 bir aksiyon matrisi kurulur: yüksek fit ve yüksek engagement'lı lead'ler 24 saat içinde satış temsilcisine devredilir, yüksek fit ama düşük engagement'lı lead'ler kişiselleştirilmiş outbound dizisine alınır.
+
+### Lead scoring modeli kurmak için ne kadar veri gerekir?
+Büyük bir veri setine gerek yoktur; 30–50 kazanılmış anlaşma bile güçlü örüntüleri ortaya çıkarmaya yeter. Son 12–24 ayda kazanılan ve kaybedilen fırsatlar analiz edilerek hangi kriterlerin satın alma olasılığını gerçekten artırdığı belirlenir.
+
+### Puan eskimesi (decay) nasıl uygulanır?
+Engagement puanları etkileşimsiz geçen süreye göre düşürülür: örneğin 30 gün etkileşim yoksa %25, 60 günde %50 düşer, 90 günün sonunda engagement skoru sıfırlanır. Fit skoru ise genellikle eskimez; yalnızca kişi şirket değiştirdiğinde yeniden hesaplanır.

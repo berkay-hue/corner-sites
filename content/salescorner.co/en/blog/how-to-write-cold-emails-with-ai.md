@@ -197,3 +197,17 @@ Writing cold emails with AI is much more than opening a tool and saying "write m
 Remember: strategy and the value proposition come from you; scale and personalization come from AI. Never remove human oversight from the process entirely.
 
 If you want to build your outbound process end to end, from list building and data enrichment to AI-powered personalization and email sequence automation, the Sales Corner team is here to help. [Book a call now](/en/iletisim) to review your current process together and design the automation workflow that fits you.
+
+## FAQ
+
+### What does AI change in cold email?
+AI is a multiplier: it speeds up research, scales personalization, generates variations and helps shorten emails to 80–120 words. It cannot fix the wrong audience, find your value proposition for you or repair bad data.
+
+### What should a good cold email prompt include?
+A good prompt has six components: role, sender context, recipient context, goal, constraints and an example. Of these, constraints such as a word limit and banned phrases are the most critical.
+
+### How long should a cold email be?
+In most cases, 50–125 words is the healthier range for a cold email. Unconstrained AI output easily goes past 200 words.
+
+### How do you measure cold email success?
+Positive reply rate is the real measure of success. Also track delivery and bounce rate, reply rate and meeting conversion, and don't rely on open rate alone.
