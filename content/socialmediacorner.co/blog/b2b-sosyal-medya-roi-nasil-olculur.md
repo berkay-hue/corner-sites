@@ -2,6 +2,7 @@
 title: "B2B Sosyal Medya ROI'si Nasıl Ölçülür?"
 description: "B2B şirketler sosyal medya yatırımının geri dönüşünü nasıl ölçer? Lead, pipeline ve maliyet metriklerini, UTM ve CRM kurgusuyla adım adım anlatıyoruz."
 date: "2026-10-12"
+updated: "2026-10-16"
 category: "Ölçümleme"
 image: "https://images.pexels.com/photos/6476254/pexels-photo-6476254.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
 imageAlt: "B2B Sosyal Medya ROI'si Nasıl Ölçülür?"

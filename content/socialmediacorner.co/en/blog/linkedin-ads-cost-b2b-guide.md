@@ -2,6 +2,7 @@
 title: "LinkedIn Ads Cost: A Guide for B2B Companies"
 description: "How are LinkedIn ad costs calculated? We break down CPC, CPM and minimum budgets, with a realistic budget plan for B2B companies."
 date: "2026-10-11"
+updated: "2026-10-16"
 category: "Advertising"
 image: "https://images.pexels.com/photos/7876672/pexels-photo-7876672.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
 imageAlt: "LinkedIn Ads Cost: A Guide for B2B Companies"

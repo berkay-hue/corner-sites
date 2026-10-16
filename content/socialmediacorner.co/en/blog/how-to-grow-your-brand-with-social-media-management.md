@@ -2,6 +2,7 @@
 title: "How to Grow Your Brand with Social Media Management"
 description: "Grow your brand online with social media management. Learn how Social Media Corner manages strategy, content, ads and reporting for you."
 date: "2025-10-03"
+updated: "2026-10-16"
 category: "Our Companies"
 image: "/_a/fr/images/HZ5MjnQL4L5dlgs5jDednLyCI0_ed9b2ad9.png"
 imageAlt: "Social media management"

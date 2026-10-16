@@ -2,6 +2,7 @@
 title: "Social Media Corner ile Sosyal Medya Yönetimini Nasıl Kolaylaştırırsınız?"
 description: "SAAS Corner'ın alt markası Social Media Corner ile sosyal medya yönetimini nasıl profesyonel destek alarak etki oluşturacağınızı keşfedin."
 date: "2025-10-03"
+updated: "2026-10-16"
 category: "Firmalarımız"
 image: "/_a/fr/images/lWVkFDmZLZsWpQdMKyxE1cL9bY_ed9b2ad9.png"
 imageAlt: "social media corner"
