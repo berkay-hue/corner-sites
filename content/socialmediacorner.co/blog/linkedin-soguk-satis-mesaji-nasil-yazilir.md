@@ -9,6 +9,8 @@ imageAlt: "LinkedIn'de Soğuk Satış Mesajı Nasıl Yazılır? Örnekler"
 alt: "linkedin-cold-sales-message-examples"
 ---
 
+LinkedIn'de etkili bir soğuk satış mesajı; ideal müşteri profilini daraltıp kendi profilinizi hazırladıktan ve alıcıyı önceden ısıttıktan sonra, kısa, kişiye özel ve en fazla tek bir soruyla biten bir mesaj olarak yazılır. Yanıt gelmezse değer katan bir takip dizisi uygulanır ve sonuçlar ölçülerek mesajlar iyileştirilir.
+
 LinkedIn, B2B satış ekipleri için karar vericilere doğrudan ulaşılabilen ender platformlardan biri. Ancak bu kolaylık bir sorunu da beraberinde getiriyor: Bir satın alma müdürünün ya da CTO'nun gelen kutusu her gün birbirine benzeyen onlarca mesajla doluyor. "Merhaba, şirketinizi inceledim ve size değer katabileceğimizi düşünüyorum" diye başlayan mesajlar çoğu zaman okunmadan siliniyor. Sorun LinkedIn'de soğuk mesaj atmak değil. Sorun, alıcının bakış açısını hesaba katmadan, kopyala-yapıştır mantığıyla atılan mesajlar.
 
 Bu yazıda LinkedIn'de soğuk satış mesajı yazmayı adım adım ele alıyoruz. Göndermeden önce yapılması gereken hazırlığı, etkili bir mesajın parçalarını, farklı senaryolar için kullanabileceğiniz şablonları, takip mesajı dizisini ve sonuçları nasıl ölçeceğinizi bulacaksınız. Amaç, karşı tarafın "Bu kişiyle konuşmak mantıklı" dediği mesajlar yazmanız.

@@ -218,12 +218,12 @@ const RULES = {
       return R.body(html.slice(0, end), page) + html.slice(end);
     },
   },
+  // SMC: /blog/* (TR/EN) atlanır, çünkü yazılar build-blog.mjs ile başlık, meta ve BlogPosting/FAQ LD dahil üretilir; burada yeniden yazmak onları ezer
   "socialmediacorner.co": {
     origin: "https://socialmediacorner.co",
     brand: "Social Media Corner",
     fix(html, page) {
       const R = this;
-      // Blog yazıları (TR/EN) build-blog.mjs ile üretilir: başlık ve LD'lerine dokunulmaz
       if (/^\/(?:en\/)?blog\//.test(page)) return html;
       const setTitle = t => html.replace(/<title>[^<]*<\/title>/, `<title>${t.replace(/&/g, "&amp;").replace(/</g, "&lt;")}</title>`);
       const metas = kind => [new RegExp(`(<meta name="${kind}" content=")([^"]*)(")`), new RegExp(`(<meta property="og:${kind}" content=")([^"]*)(")`), new RegExp(`(<meta name="twitter:${kind}" content=")([^"]*)(")`)];

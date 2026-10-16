@@ -9,6 +9,8 @@ imageAlt: "How to Measure B2B Social Media ROI"
 alt: "b2b-sosyal-medya-roi-nasil-olculur"
 ---
 
+B2B social media ROI is measured by comparing the revenue social media generates against all of its costs (personnel, content, ads and tools). To do this, you set up tracking with UTMs and your CRM, choose an attribution model, add self-reported attribution and look at leads and pipeline impact instead of likes.
+
 When B2B companies discuss their social media budget, the board almost always asks the same question: "What is this investment actually getting us?" Likes, followers and impressions can't answer that question. When sales cycles last months, purchasing decisions involve several people and a single contract can be worth a significant sum, demonstrating social media's contribution to revenue requires a measurement discipline of its own.
 
 In this article, we present a practical framework for calculating B2B social media ROI (return on investment). We cover every step with concrete examples, from accurately totaling your costs to attribution models, and from LinkedIn- and Instagram-specific metrics to measuring the impact of social selling. The goal is to reposition social media from a "visibility expense" to a measurable growth channel.

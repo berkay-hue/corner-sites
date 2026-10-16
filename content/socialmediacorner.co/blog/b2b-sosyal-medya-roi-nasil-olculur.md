@@ -9,6 +9,8 @@ imageAlt: "B2B Sosyal Medya ROI'si Nasıl Ölçülür?"
 alt: "measure-b2b-social-media-roi"
 ---
 
+B2B sosyal medya ROI'si, sosyal medyanın getirdiği geliri tüm maliyet kalemleriyle (personel, içerik, reklam ve araçlar) karşılaştırarak ölçülür. Bunun için UTM ve CRM ile takip altyapısı kurulur, bir atıf modeli seçilir, beyan edilen atıf eklenir ve beğeni yerine lead ile pipeline etkisine bakılır.
+
 B2B şirketlerde sosyal medya bütçesi konuşulurken yönetim kurulunun sorduğu soru hemen hemen hep aynıdır: "Bu yatırım bize ne kazandırıyor?" Beğeni, takipçi ve gösterim sayıları bu soruyu yanıtlamaya yetmez. Satış döngüsü aylar süren, satın alma kararını birden fazla kişinin verdiği ve tek bir sözleşmenin yüksek tutarlara ulaştığı bir yapıda, sosyal medyanın gelire katkısını göstermek ayrı bir ölçümleme disiplini ister.
 
 Bu yazıda B2B sosyal medya ROI'sini (yatırım getirisi) hesaplamak için uygulanabilir bir çerçeve sunuyoruz. Maliyet kalemlerini doğru toplamaktan atıf modellerine, LinkedIn ve Instagram'a özgü metriklerden sosyal satışın etkisini ölçmeye kadar her adımı somut örneklerle ele alıyoruz. Amaç, sosyal medyayı bir "görünürlük gideri" olmaktan çıkarıp ölçülebilir bir büyüme kanalı olarak konumlandırmak.
