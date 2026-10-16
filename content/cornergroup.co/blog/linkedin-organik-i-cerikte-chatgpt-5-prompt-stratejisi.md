@@ -116,3 +116,21 @@ Mükemmel bir prompt ile harika bir içerik üretmek, denklemin sadece yarısıd
 ChatGPT, B2B içerik pazarlamasında bir devrimdir, ancak bir sihirli değnek değildir. Onun gerçek gücü, stratejik bir zihin tarafından yönlendirildiğinde ortaya çıkar. Bu rehberde paylaştığımız beş prompt modeli, yapay zekayı bir içerik üreticisinden, iş hedeflerinize hizmet eden çok yönlü bir stratejik ortağa dönüştürmek için tasarlanmıştır. Ağrı noktalarını analiz etmekten, sektör dogmalarına meydan okumaya; pratik rehberler sunmaktan, ilham veren hikayeler anlatmaya ve en nihayetinde sistemik sorunlara bütünsel çözümler sunmaya kadar her model, büyüme hunisinin farklı bir parçasını besler.
 
 Corner Group olarak bizim için büyüme, birbirinden kopuk pazarlama, satış ve teknoloji faaliyetlerinin bir toplamı değildir. Büyüme; doğru mesajın (Brand Corner), doğru kanalda (Social Media Corner), doğru kişiye (SAAS Corner) ulaştığı, verimli bir süreçle (Sales Corner) fırsata dönüştürüldüğü ve tüm bu yolculuğun ölçülüp optimize edildiği (CRM Corner) entegre bir sistemdir. ChatGPT, bu sistemin her bir dişlisini daha hızlı ve daha akıllı bir şekilde döndürebilecek güçlü bir katalizördür. Ancak motorun kendisi, her zaman olduğu gibi, net bir vizyon, derin bir müşteri anlayışı ve sarsılmaz bir stratejiden oluşur. Başarı, en iyi araca sahip olanın değil, aracını bir büyüme sistemi vizyonuyla en stratejik şekilde kullananın olacaktır.
+
+## Sık sorulan sorular
+
+### ChatGPT'den LinkedIn için neden jenerik içerik çıkıyor?
+
+Sorun araçta değil, kullanım stratejisinin eksikliğindedir: ChatGPT'ye sadece "Bana bir LinkedIn gönderisi yaz" demek genellikle jenerik, etkileşimsiz ve iş hedeflerine hizmet etmeyen metinler üretir. Prompt'u bir komut olarak değil, bir strateji brifingi olarak düşünmek gerekir. İçeriğin amacı, hedef kitlenin sorunu ve satış hunisinin hangi aşamasına hitap edildiği prompt'a bağlam olarak verildiğinde çıktının alakası belirgin şekilde artar.
+
+### Yazıdaki 5 ChatGPT prompt modeli nelerdir?
+
+Beş model şunlardır: "Sektörel Ağrı Noktası Analisti", "Meydan Okuyan Düşünce Lideri", "Adım Adım Uygulama Rehberi", "Müşteri Başarı Hikayesi Anlatıcısı" ve "Bütünsel Sistem Düşünürü". Her biri rol, bağlam, görev ve ton tanımlarıyla kurulan bir prompt yapısıyla çalışır. Modeller farklı amaçlara hizmet eder: güven oluşturmaktan tartışma başlatmaya, eğitmekten sosyal kanıt sunmaya kadar.
+
+### ChatGPT'nin markanın sesini kaybetmesi nasıl önlenir?
+
+Bunun yolu, yapay zekayı her prompt'tan önce markanın DNA'sıyla beslemektir. Marka kimliği, değerler, hedef kitleyle konuşma biçimi ve kaçınılması gereken kelimeler hakkında net talimatlar verilmelidir. Brand Corner'daki içerik stratejistleri bu amaçla her kampanya öncesi "Marka Sesi Kılavuzu"nu prompt'ların bir parçası haline getirir.
+
+### İçerik yayınlandıktan sonra ne yapılmalı?
+
+Yayınlamak işin başlangıcıdır; içerik dağıtılmalı, etkileşimler satış fırsatına taşınmalı ve sonuçlar ölçülmelidir. Dağıtımda çalışan savunuculuğu, niş ve topluluk etiketleri ve yorumlara hızlı, değerli yanıtlar öne çıkar; anlamlı yorum yapan kişilerle sohbet özel mesajlara taşınabilir. Ölçüm tarafında LinkedIn analitikleri, UTM kodlarıyla web trafiği ve CRM'de MQL ile SQL'e dönüşen sohbetler takip edilmelidir.
