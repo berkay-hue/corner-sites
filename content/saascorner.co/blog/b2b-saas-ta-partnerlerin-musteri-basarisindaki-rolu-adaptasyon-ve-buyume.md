@@ -74,3 +74,21 @@ Partnerlerinden senin ürününü senin kadar iyi satmalarını ve desteklemeler
 ## Sonuç
 
 Sonuç olarak, B2B SaaS'ta partnerler, basit bir satış kanalından çok daha fazlasıdır. Onlar, müşteri başarısı stratejinin merkezinde yer alması gereken, büyüme motorlarıdır. Müşteri adaptasyonunu hızlandırmaktan müşteri kaybını azaltmaya, ürün ekosistemini zenginleştirmekten yeni pazarlara açılmaya kadar birçok kritik fonksiyonda kilit rol oynarlar. Bu makalede incelediğimiz gibi, partnerlerin müşteri başarısındaki rolü, doğru strateji, şeffaf iletişim ve sürekli yatırımla en üst düzeye çıkarılabilir. Artık top sende. Mevcut partner stratejini gözden geçirme veya sıfırdan bir program oluşturma zamanı. Partnerlerini işinin bir uzantısı olarak görerek, onlara başarılı olmaları için gereken desteği ve kaynakları sağlayarak, sadece kendi şirketinin değil, aynı zamanda müşterilerinin ve partnerlerinin de kazanacağı sürdürülebilir bir büyüme ekosistemi inşa edebilirsin.
+
+## Sık sorulan sorular
+
+### Partnerler müşteri adaptasyonunu nasıl hızlandırır?
+
+Uygulama partnerleri ürünü müşterinin mevcut sistemlerine entegre eder, çalışanlara özel eğitimler verir ve ilk günden doğru kullanımı sağlar. Salesforce ekosistemindeki danışmanlık ve uygulama partnerleri, karmaşık CRM kurulumlarını haftalar içinde tamamlayarak müşterilerin yatırım geri dönüşünü hızlandırır. Bir araştırmaya göre partner destekli başlangıç süreci yaşayan şirketlerin ürünü tam potansiyeliyle kullanma olasılığı yüzde 60 daha fazladır.
+
+### Müşteri başarısı için hangi partnerlik modelleri kullanılır?
+
+En yaygın iki model teknoloji entegrasyon partnerleri ile çözüm ve danışmanlık partnerleridir. Teknoloji entegrasyon partnerleri API entegrasyonlarıyla ürününü Slack, Google Drive veya Microsoft Teams gibi araçlara bağlayarak müşterinin iş akışına yerleştirir. Çözüm ve danışmanlık partnerleri ise HubSpot örneğinde olduğu gibi ürünü satmanın ötesinde müşteriye stratejik danışmanlık sunarak değer algısını yükseltir.
+
+### Partner kaynaklı gelir ile partner etkili gelir arasındaki fark nedir?
+
+Partner kaynaklı gelir, bir partnerin doğrudan kendi çabasıyla getirdiği yeni müşterilerden elde edilen gelirdir ve takip edilmesi en kolay metriktir. Partner etkili gelir ise partnerin satış sürecinin herhangi bir aşamasında dokunduğu, örneğin bir demo yaptığı veya karar vericiyle toplantı ayarladığı tüm anlaşmaları kapsar. Crossbeam'in analizine göre en hızlı büyüyen SaaS şirketlerinde toplam gelirin yüzde 30'undan fazlası partner kanalından etkilenmektedir.
+
+### Partner kanalından gelen müşterilerin memnuniyetini nasıl ölçersin?
+
+NPS ve CSAT gibi memnuniyet ve sadakat skorlarını müşteri segmentine, yani hangi partnerin yönettiğine göre ayırarak takip etmelisin. Bu karşılaştırma, hangi partnerin müşteri ilişkilerini daha iyi yönettiğini ve müşteri başarısına daha çok katkı sağladığını net biçimde gösterir. Elde ettiğin verileri başarılı partnerleri ödüllendirmek ve düşük performans gösterenlere ek eğitim sağlamak için kullanabilirsin.

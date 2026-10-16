@@ -88,3 +88,21 @@ Gelecekteki en önemli trendlerden biri de şeffaflık olacak. Nasıl ki bir gı
 ## Sonuç
 
 SaaS tedarik zinciri riski artık göz ardı edilebilecek bir konu değil; iş sürekliliğinin, müşteri güveninin ve uzun vadeli başarının temel bir bileşenidir. Gördüğümüz gibi, dijital bağımlılıklarımız arttıkça, kontrolümüz dışındaki faktörlerin işimiz üzerindeki etkisi de büyüyor. Ancak bu, çaresiz olduğumuz anlamına gelmez. Proaktif bir yaklaşımla, bağımlılıklarını haritalayarak, tedarikçilerini dikkatle seçerek, teknik dayanıklılığını artırarak ve geleceğin teknolojilerini benimseyerek bu riskleri yönetebilirsin. Unutma, en güçlü zincir, en zayıf halkası kadar güçlüdür. Senin görevin, dijital tedarik zincirindeki her bir halkayı tanımak, güçlendirmek ve olası kopmalara karşı hazırlıklı olmaktır. Bu makaledeki stratejileri uygulamaya bugünden başlayarak, şirketini 2026 ve sonrasının getireceği zorluklara karşı daha dayanıklı hale getirebilirsin.
+
+## Sık sorulan sorular
+
+### Dijital tedarik zinciri neleri kapsar?
+
+Dijital tedarik zinciri, hizmetini sunmak için güvendiğin tüm yazılım ve hizmetlerden oluşur. Amazon Web Services veya Microsoft Azure gibi bir bulut altyapısı, Stripe veya Iyzico gibi bir ödeme ağ geçidi, Salesforce gibi bir CRM ve Twilio gibi bir bildirim API'si bu zincirin halkalarıdır. Kodunda kullandığın açık kaynak kütüphaneler de zincire dahildir ve herhangi bir halkadaki zayıflık tüm zinciri koparabilir.
+
+### SaaS tedarik zincirinde hangi risk türleriyle karşılaşırım?
+
+Bu riskler dört alanda toplanır: operasyonel ve teknik, güvenlik ve uyumluluk, finansal ve işletmesel, jeopolitik ve çevresel riskler. Fastly kesintisi tek bir tedarikçideki teknik sorunun küresel etkisini, Log4j zafiyeti dolaylı güvenlik riskini, Broadcom'un VMware'i satın aldıktan sonra fiyatları değiştirmesi ise tedarikçi kilitlenmesinin finansal sonuçlarını gösterir.
+
+### Tedarikçi bağımlılıklarımı nasıl haritalayıp sınıflandırırım?
+
+Önce kullandığın SaaS araçlarını, API'leri, açık kaynak kütüphaneleri ve altyapı bileşenlerini içeren eksiksiz bir envanter çıkar; bunun için basit bir elektronik tablo yeterlidir. Ardından her bağımlılığı Kritik, Önemli ve Önemsiz olarak sınıflandır: kritik hizmet olmadan işin durur, önemli hizmetin kesintisi ciddi sorun yaratır ama alternatifi vardır, önemsiz hizmet ise ana fonksiyonları etkilemez. Bu harita, çabalarını nereye odaklaman gerektiğini gösterir.
+
+### SBOM nedir ve tedarik zinciri riskini nasıl azaltır?
+
+SBOM (Software Bill of Materials), bir yazılımın içinde kullanılan açık kaynak kütüphaneler ve üçüncü parti modüller gibi tüm bileşenlerin detaylı envanteridir. Tedarikçinden SBOM talep ettiğinde, yazılımında bilinen bir zafiyete sahip eski bir kütüphane olup olmadığını önceden tespit edebilirsin. Log4j gibi olaylardan sonra ABD hükümeti gibi büyük müşteriler tedarikçilerinden SBOM talep etmeye başladı.

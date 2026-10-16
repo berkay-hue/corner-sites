@@ -68,3 +68,21 @@ Dijital reklamcılık, nitelikli müşteri bulmak için güçlü bir araç olabi
 B2B SaaS'ta sürdürülebilir büyümenin sırrı, sürekli olarak yeni müşteri kazanmaktan çok, doğru müşteriyi kazanıp onu elinizde tutmaktan geçer. Müşteri kaybı (churn), bir sonuçtur; asıl neden ise genellikle satış sürecinin en başında, yanlış adayla yola çıkmaktır. Bu makalede gördüğümüz gibi, nitelikli müşteri bulmak, veri analizinden satış sorgulamasına, pazarlama hedeflemesinden şirket kültürüne kadar uzanan bütünsel bir yaklaşımdır. İdeal Müşteri Profilinizi tanımlayarak, negatif personalarınızı belirleyerek ve tüm organizasyonunuzu bu hedefe yönlendirerek, sadece churn oranınızı düşürmekle kalmaz, aynı zamanda daha krlı, daha sadık ve markanızı gönülden savunan bir müşteri tabanı inşa edersiniz. Sızdıran bir kovayı doldurmaya çalışmayı bırakın. Bugün, kovanızdaki delikleri kapatacak ilk adımı atın ve nitelikli müşteri avına çıkın.
 
 **İlgili sayfa:** SAAS Corner'ın bu alandaki hizmetini [B2B SaaS şirketleri için lead generation ve outsourced SDR](/sektor/b2b-saas) sayfasında bulabilirsiniz.
+
+## Sık sorulan sorular
+
+### Nitelikli müşteri bulmak churn oranını neden düşürür?
+
+Çünkü churn'ün kökü çoğu zaman ürününüzde değil, en başta yanlış müşteriyi kazanmanızdadır. Ürününüzden gerçekten değer elde edecek ve uzun vadeli başarı potansiyeli taşıyan müşterileri seçtiğinizde, kısa sürede hayal kırıklığına uğrayıp aboneliğini iptal eden müşteri sayısı azalır. Üstelik yeni müşteri kazanmanın maliyeti, mevcut müşteriyi elde tutmaktan ortalama beş kat daha fazladır.
+
+### İdeal Müşteri Profili (IMP) nasıl oluşturulur?
+
+En mutlu, en uzun süreli ve ürününüzü en aktif kullanan müşterilerinizi analiz ederek başlayın. CRM verilerinizi, ürün kullanım analizlerinizi ve destek taleplerini inceleyerek bu müşterilerin sektör, şirket büyüklüğü ve teknik altyapı gibi ortak noktalarını bulun. Böylece varsayımlara değil, kanıta dayalı bir profil oluşturursunuz.
+
+### Negatif persona nedir ve neden gereklidir?
+
+Negatif persona, kiminle çalışmak istemediğinizi tanımlayan bir dışlama profilidir. Sürekli destek talebi oluşturan, faturasını geç ödeyen ve kısa sürede aboneliğini iptal eden müşterilerin ortak özelliklerinden çıkarılır. Bu profil sayesinde satış ekibiniz niteliksiz adayları satış hattının erken aşamalarında eleyebilir.
+
+### Niteliklendirme sürecinde BANT dışında hangi soruları sormalısınız?
+
+Adayın anlık ihtiyacının yanında uzun vadeli vizyonunu, başarı metriklerini ve teknik uyumluluğunu ölçen sorular sorun. Örneğin "Başarıyı bizimle nasıl ölçeceksiniz?", "Mevcut teknoloji yığınınızla entegrasyon süreci sizin için ne kadar önemli?" veya "Bu projenin başarısız olmasına ne sebep olabilir?" gibi sorular işe yarar. Bu sorular, adayın sizinle uzun vadeli bir ortaklığa kültürel ve teknik olarak uygun olup olmadığını ortaya çıkarır.
