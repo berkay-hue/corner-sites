@@ -234,3 +234,21 @@ B2B satış döngüsünü kısaltmak tek bir araç ya da taktikle başarılabile
 Sıralama da en az içerik kadar önemlidir. Önce teşhis, sonra süreç, en son otomasyon. Bu disiplinle ilerleyen ekipler yalnızca daha hızlı kapatmakla kalmaz. Daha öngörülebilir tahminler yapar, enerjilerini kazanılabilir fırsatlara yönlendirir ve büyümeyi sürdürülebilir hale getirir.
 
 Corner Group olarak outbound satış, CRM yapılandırması, n8n otomasyonları ve satış metodolojisi alanlarındaki deneyimimizi bir araya getirerek satış döngünüzdeki darboğazları birlikte tespit edebiliriz. Pipeline'ınızı analiz etmek ve size özel bir yol haritası oluşturmak için [bizimle iletişime geçin](/iletisim).
+
+## Sık sorulan sorular
+
+### B2B satış döngüsünü kısaltmaya nereden başlanmalı?
+
+Satış döngüsünü kısaltmaya, fırsatların her aşamada ne kadar kaldığını gösteren aşama bazlı veri analiziyle başlanmalıdır. Döngü süresi bir neden değil sonuçtur; doğrudan kısaltılamaz, yalnızca onu uzatan darboğazlar giderilebilir. Vakada iki haftalık teşhiste son 12 ayın kapanan fırsatları incelendi ve ICP dışı fırsatlar, belirsiz aşama tanımları, tek şampiyon bağımlılığı, demo ile teklif arasındaki ölü bölge ve manuel iş yükü olmak üzere beş darboğaz bulundu.
+
+### Demo ile teklif arasındaki bekleme süresi nasıl kısaltılır?
+
+Demo sonrası takibi otomatikleştirip özet e-postasının aynı gün gönderilmesini standart hale getirmek bu aşamayı belirgin şekilde hızlandırır. Fırsat "Çözüm uyumu doğrulandı" aşamasına geçtiğinde başlayan n8n akışı, görüşme kaydı transkriptinden yapay zekâ ile özet e-posta taslağı hazırlayıp AE onayına sunar ve 7 gün aktivite görmeyen fırsatlar için Slack uyarısı gönderir. Örnek vakada demo ile teklif arası süre 35–40 günden yaklaşık 15–18 güne indi.
+
+### Ortak Eylem Planı satış sürecine ne katkı sağlar?
+
+Ortak Eylem Planı, finans, IT ve üst yönetim gibi paydaşları sürece erken dahil ederek son aşamadaki sürpriz itirazları önler. Demo sonrasında müşteriyle birlikte hazırlanan bu plan, satın alma sürecinin tüm adımlarını sorumluları ve tarihleriyle gösterir. Böylece finans veya IT kaynaklı itirazlar son haftada değil, ilk iki haftada ortaya çıkıp çözüldü.
+
+### Müşteriye ROI hesabı nasıl sunulmalı?
+
+ROI hesabı satıcının değil müşterinin kendi rakamlarıyla, müşteriyle birlikte doldurulan basit bir şablonla yapılmalıdır. Örneğin 6 lokasyondaki manuel raporlama haftada toplam 30 kişi-saat alıyor ve saatlik maliyet 25 USD ise yıllık maliyet yaklaşık 39.000 USD eder; bu durumda yıllık 20.000 USD'lik yazılım yatırımını savunmak kolaylaşır. Şampiyon bu hesabı finans ekibine götürdüğünde bir tedarikçi iddiası değil, kendi şirketinin verisini sunar.

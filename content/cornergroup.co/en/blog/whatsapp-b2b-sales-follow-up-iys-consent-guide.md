@@ -213,3 +213,21 @@ Reviewing these metrics monthly in sales meetings lets you manage both the chann
 WhatsApp is a powerful channel that brings speed and closeness to B2B sales follow-ups. But what makes this power sustainable is not the number of messages; it is the consent discipline behind them. Correctly classifying message types, knowing the limits of the merchant exemption, collecting consents per channel and per brand and recording them in IYS, capturing opt-outs automatically, and tying sending to consent data in the CRM minimize both legal risk and wear on customer relationships. When set up correctly, compliance stops being a burden that slows sales down and becomes the foundation of a reliable, scalable follow-up system.
 
 If you want to bring your WhatsApp follow-up processes into a structure that works with your CRM and n8n automations, centralize consent management across multiple brands, or rebuild your outbound strategy within this framework, [get in touch with the Corner Group team](/en/contact). Let's build a roadmap tailored to your sales team's needs together.
+
+## FAQ
+
+### Do you need consent to send promotional WhatsApp messages in B2B sales in Turkey?
+
+The merchant and tradesperson exemption removes the prior consent requirement, but that does not mean B2B messaging needs no consent. The recipient's right to opt out always applies, you are expected to check IYS for an opt-out record before sending, and a manager's personal mobile number may not count as a contact address belonging to the legal entity. In practice, the safest approach is to obtain explicit, recorded consent for any promotional WhatsApp message sent to mobile phones belonging to individuals.
+
+### Do meeting reminders or proposal messages require consent?
+
+No, informational messages such as reminders for a scheduled meeting, delivery of a requested proposal, contract or invoice notifications and replies to support requests do not require commercial electronic message consent. However, the moment you add promotional content to such a message, it may qualify as a commercial message. A meeting reminder that also announces a discount on a new module is no longer a purely informational message.
+
+### Does email consent also cover WhatsApp messages?
+
+No, IYS keeps consents separately for channels such as calls, messages (SMS and instant messaging) and email, so email consent does not mean consent for WhatsApp. You must upload the consents you collect to IYS within the specified time frames, because consents not recorded in IYS may not protect you in a dispute. In multi-brand structures, consent is also brand-specific, so WhatsApp consent given to one brand is not valid for another brand in the group.
+
+### How quickly must you stop messaging after a recipient opts out?
+
+You must stop sending messages within three business days of receiving an opt-out notice. Because recipients can opt out through the channel you provide or directly through IYS, changes in IYS should be pulled and compared with the CRM every morning. An n8n workflow that detects phrases such as "STOP," "NOT INTERESTED" or "UNSUBSCRIBE," switches the contact to opted-out status, notifies IYS and removes the contact from active sequences keeps this rule from depending on manual tracking.

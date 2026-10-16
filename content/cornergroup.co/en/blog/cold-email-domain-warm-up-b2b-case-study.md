@@ -225,3 +225,21 @@ Cold email domain warm-up is one of the least discussed yet most decisive stages
 Warm-up is not a one-and-done task; it's a discipline maintained throughout the campaign. Teams that build this discipline can be confident their emails reach the inbox and focus on the real work: putting the right offer in front of the right people.
 
 If you want to build your outbound infrastructure from scratch, fix your current deliverability issues or scale your email campaigns with AI and n8n automations, [get in touch with the Corner Group team](/en/contact). Let's review your current situation together and map out a roadmap tailored to you.
+
+## FAQ
+
+### Should cold emails be sent from your company's primary domain?
+
+No, cold email should be separated completely from your primary domain and moved to secondary domains. Using your primary domain puts your entire email reputation in one basket, so every complaint and bounce from outbound also affects operational communication such as invoices and support. In this case, some invoice and support emails to existing customers were landing in spam, and that problem disappeared once cold sending was moved off the primary domain.
+
+### When can you start cold sending from a new domain?
+
+New mailboxes should do warm-up only for the first two weeks, with cold sending starting in week three. Under the 4-week plan used here, week one meant 5 to 10 warm-up emails per day and week two meant 15 to 25. In week three, each mailbox sent 10 to 15 cold emails per day to a small segment with the best fit score. From week four onward, cold sending rose to 30 to 40 per mailbox per day.
+
+### Should you stop domain warm-up once campaigns begin?
+
+No, warm-up should never be switched off during the campaign. Many teams treat warm-up as a few-week preparation period and stop it once campaigns begin, but it actually acts as a continuous buffer that stabilizes reputation throughout the campaign. In this case, warm-up continued at 15 to 20 emails per day during steady-state operation. When a mailbox ran into trouble, the recommended intervention was to pause cold sending for 48 hours and keep warm-up running.
+
+### Which DNS records do you need for cold email?
+
+Every sending domain needs fully configured SPF, DKIM and DMARC records, because the bulk sender requirements Gmail and Yahoo introduced in 2024 effectively made this trio mandatory. SPF should cover only the provider and tool actually in use, and DKIM should be defined separately for both the email provider and the sending tool. DMARC can start with "p=none" and move to a "quarantine" policy once reports are verified. You also need a custom tracking domain and MX records so the domain can receive replies.
