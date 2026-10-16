@@ -172,7 +172,7 @@
         text: [
           "Prewitt o yaz paketi ikiye böldü: internet ve DVD ayrı ayrı 8 dolar civarı. İkisini birlikte kullananın faturası yaklaşık 10 dolardan 16 dolara, yüzde 60 kadar yükseldi; yeni üyeler için hemen, mevcut üyeler için birkaç ay sonra. Pek çok üye öfkelendi.",
           "Birkaç ay sonra Prewitt şirket adına özür diledi, DVD işini Diskvan adlı ayrı bir markaya taşıyacağını duyurdu. Birkaç hafta sonra Diskvan açılmadan iptal edildi, zam kaldı. Şirket ayrı fiyatlarda ısrar etti ama geçişin hızını yanlış ayarladığını kabul etti.",
-          "Sonraki çeyrekte ABD’deki üye sayısı yüz binlerce azaldı. Zam öncesi 300 dolar civarındaki hisse, bir yıl içinde beşte birine yakın bir seviyeye düştü. Şirket internete yatırıma devam etti; hisse iki yıl kadar sonra yaklaşık dört katına çıkıp S&P 500’ün en çok kazandıran hissesi oldu."
+          "Sonraki çeyrekte ABD’deki üye sayısı yüz binlerce azaldı. Hisse bir yıl içinde zam öncesindeki değerinin beşte birine yakın bir seviyeye düştü. Şirket internete yatırıma devam etti; hisse iki yıl kadar sonra yaklaşık dört katına çıkıp borsanın en çok kazandıran hisselerinden biri oldu."
         ]
       }
     },
@@ -420,11 +420,11 @@
       title: "Ani manevrada devrildi",
       body: [
         "Steinhaal, köklü bir Alman lüks otomobil üreticisi. Tondo, markanın ilk küçük şehir arabası: kısa, yüksek ve içi geniş; markayı gençlere ve ilk kez lüks araba alacaklara açmak için tasarlandı. Satışa yeni çıktı ve siparişler güçlü.",
-        "Bir sonbahar günü İsveçli bir otomobil dergisi, yola fırlayan bir hayvandan kaçmayı taklit eden sert bir şerit değiştirme testinde Tondo’yu orta bir hızda devirdi. İçindekiler hafif yaralandı; görüntüler bütün Avrupa’ya yayıldı.",
-        "Şirketin ilk açıklaması testin “aşırı” olduğuydu. Ama basın ve müşteriler tek bir şey soruyor: bu araba güvenli mi? Steinhaal’in yönetim kurulunda otomobil biriminin başındasın; birkaç hafta içinde karar vermen gerekiyor."
+        "Bir sonbahar günü İsveçli bir otomobil dergisi, yola fırlayan bir hayvandan kaçmayı taklit eden sert bir şerit değiştirme testinde Tondo’yu orta bir hızda devirdi. Kimse ciddi zarar görmedi ama görüntüler bütün Avrupa’ya yayıldı.",
+        "Şirketin ilk açıklaması testin “aşırı” olduğuydu. Ama basın ve müşteriler tek bir şey soruyor: bu araba güvenli mi? Steinhaal’ın yönetim kurulunda otomobil biriminin başındasın; birkaç hafta içinde karar vermen gerekiyor."
       ],
       stats: [["Test hızı", "Orta hız"], ["Model", "Satışa yeni çıktı"], ["Şirketin ilk tepkisi", "“Aşırı test”"]],
-      ask: "Steinhaal’in otomobil biriminin başındasın. Ne yaparsın?",
+      ask: "Steinhaal’ın otomobil biriminin başındasın. Ne yaparsın?",
       opts: [
         { k: "A", t: "Testin gerçek sürüşü yansıtmadığını açıkla; arabayı savun ve satışa devam et.", s: 15, tag: "kasa",
           r: "Kısa vadede satışlar sürer. Ama güvenlik sorununu inkâr eden lüks bir marka en değerli şeyini, güveni harcar; her yeni haber inkârı daha da zayıflatır." },
@@ -437,7 +437,7 @@
       ],
       real: {
         who: "Klaus Wendermann",
-        role: "Steinhaal’in otomobil biriminin başı; kararı yönetim kuruluyla aldı",
+        role: "Steinhaal’ın otomobil biriminin başı; kararı yönetim kuruluyla aldı",
         k: "B",
         text: [
           "Savunma tutmadı ve şirket yön değiştirdi. Birkaç hafta sonra yaklaşık üç aylık teslimat durdurması açıklandı: denge kontrol sistemi bütün Tondo’larda ücretsiz ve standart olacak, süspansiyon ve lastikler değişecek, teslim edilmiş arabalar da güncellenecekti.",
@@ -453,7 +453,7 @@
       title: "Kimseyi kovmadan",
       body: [
         "Kagemori, yüz yılı aşkın geçmişi olan bir Japon oyun şirketi. Hem konsollarını hem oyunlarını kendisi yapıyor; dünyaca ünlü karakterleri yalnızca kendi cihazlarında oynanabiliyor.",
-        "Yeni ev konsolu tutmadı. Yılın ilk ayında şirket yıllık tahminini sert biçimde düşürdü: satış beklentisi üçte bir kadar, konsol satış hedefi üçte birin altına indi. Yüz milyar yen civarında faaliyet kârı beklenirken artık faaliyet zararı öngörülüyor; bu üst üste üçüncü faaliyet zararı olacak. Temettü yarıdan fazla düşüyor.",
+        "Yeni ev konsolu tutmadı. Yılın ilk ayında şirket yıllık tahminlerini sert biçimde aşağı çekti: satış beklentisi üçte bir kadar düştü, konsol satış hedefi ise başlangıçtakinin üçte birinin altına indi. Yüz milyar yen civarında faaliyet kârı beklenirken artık faaliyet zararı öngörülüyor; bu üst üste üçüncü faaliyet zararı olacak. Temettü yarıdan fazla düşüyor.",
         "Yatırımcılar ve analistler istifadan, akıllı telefonlara geçmekten, işten çıkarmalardan söz ediyor. Kagemori’nin başkanısın; ay sonundaki sonuç toplantısında ne yapacağını açıklayacaksın."
       ],
       stats: [["Satış tahmini", "Üçte bir kadar düşüş"], ["Faaliyet sonucu", "Kârdan zarara"], ["Konsol hedefi", "Üçte birin altına"]],
@@ -587,15 +587,15 @@
     {
       area: "İletişim",
       place: ["Birleşik Krallık", " · 2010’ların sonu"],
-      company: "Haverly’s Chicken",
+      company: "Pellbrook Chicken",
       title: "Tavuksuz tavukçu",
       body: [
-        "Haverly’s, kızarmış tavuğuyla bilinen küresel bir fast food zinciri. Birleşik Krallık’ta yaklaşık 900 restoranı var ve menünün neredeyse tamamı her gün gelen taze tavuğa dayanıyor.",
+        "Pellbrook, kızarmış tavuğuyla bilinen küresel bir fast food zinciri. Birleşik Krallık’ta yaklaşık 900 restoranı var ve menünün neredeyse tamamı her gün gelen taze tavuğa dayanıyor.",
         "Kış ortasında dağıtım yeni bir lojistik firmasına ve tek bir merkez depoya geçti. Birkaç gün içinde sistem çöktü: tavuk restoranlara ulaşmıyor. Birkaç gün sonra restoranların yarıdan fazlası kapalı; sosyal medya zincirle dalga geçiyor.",
-        "Tam toparlanmanın haftalar sürebileceği söyleniyor ve bir şey söylemen gerekiyor. Haverly’s’in Birleşik Krallık genel müdürüsün; pazarlama ekibin masaya birkaç seçenek getirdi."
+        "Tam toparlanmanın haftalar sürebileceği söyleniyor ve bir şey söylemen gerekiyor. Pellbrook’un Birleşik Krallık genel müdürüsün; pazarlama ekibin masaya birkaç seçenek getirdi."
       ],
       stats: [["Restoran", "~900"], ["Kapalı restoran", "Yarıdan fazlası"], ["Dağıtım", "Tek depo"]],
-      ask: "Haverly’s’in Birleşik Krallık işinin başındasın. Kamuoyuna ne dersin?",
+      ask: "Pellbrook’un Birleşik Krallık işinin başındasın. Kamuoyuna ne dersin?",
       opts: [
         { k: "A", t: "Ulusal gazetelere kendinle dalga geçen, kısa ve açık sözlü bir özür ilanı ver; hatayı süslemeden kabul et.", s: 85, tag: "kumar",
           r: "Krizi hafife aldığın düşünülebilir; işi duran çalışanları ve bayileri kızdırabilir. Ama alay edilen bir markanın en iyi cevabı şakayı önce kendisinin yapmasıdır; özür hem dürüst hem akılda kalıcı olur." },
@@ -608,7 +608,7 @@
       ],
       real: {
         who: "Clare Whitmore",
-        role: "Haverly’s’in Birleşik Krallık ve İrlanda genel müdürü; ilanı pazarlama ekibiyle hazırladı",
+        role: "Pellbrook’un Birleşik Krallık ve İrlanda genel müdürü; ilanı pazarlama ekibiyle hazırladı",
         k: "A",
         text: [
           "Kısa süre sonra iki ulusal gazetede, markanın kendisiyle dalga geçtiği kısa ve açık sözlü bir özür ilanı çıktı. İlan hatayı süslemeden kabul ediyor; müşterilere, çalışanlara ve bayilere teşekkür ediyordu.",
@@ -623,11 +623,11 @@
       company: "Nordahl Systems",
       title: "Parçalara bölünen dev",
       body: [
-        "Nordahl, dünyanın en büyük bilgisayar şirketi; büyük kurumların ana bilgisayarlarını o kuruyor ve işletiyor. Ama kişisel bilgisayarlar ve küçük sunucular pazarı değiştirdi. Şirket geçen yıl yaklaşık 5 milyar dolar zarar etti; birkaç yıl önce 400 bini aşan çalışan sayısı hızla eriyor.",
+        "Nordahl, dünyanın en büyük bilgisayar şirketi; büyük kurumların ana bilgisayarlarını o kuruyor ve işletiyor. Ama kişisel bilgisayarlar ve küçük sunucular pazarı değiştirdi. Şirket geçen yıl milyarlarca dolar zarar etti; birkaç yıl önce yüz binlerce kişiyi bulan çalışan sayısı hızla eriyor.",
         "Önceki yönetim şirketi, satılabilecek ya da halka açılabilecek bir düzineden fazla yarı bağımsız birime bölmeye başladı. Bankacılar parçalara ayırmayı değer yaratmanın en hızlı yolu olarak görüyor. Ana bilgisayar fiyatların yüksek, rakipler daha ucuz.",
         "Birkaç ay önce şirketin tarihinde ilk kez dışarıdan bir CEO geldi: sen. Mühendis değilsin; daha önce tüketim ürünleri ve finans şirketleri yönettin. Analistler radikal bir yön değişikliği bekliyor ve ikinci çeyrek sonuçları bu ay açıklanacak."
       ],
-      stats: [["Geçen yılki zarar", "~5 milyar $"], ["Çalışan (zirvede)", "400 binden fazla"], ["Bağımsız birim", "Bir düzineden fazla"]],
+      stats: [["Geçen yılki zarar", "Milyarlarca $"], ["Çalışan (zirvede)", "Yüz binlerce"], ["Bağımsız birim", "Bir düzineden fazla"]],
       ask: "Nordahl’ın yeni CEO’susun. Şirketin geleceği için ne yaparsın?",
       opts: [
         { k: "A", t: "Bölünmeyi tamamla: birimleri ayrı şirketler olarak halka aç ya da sat; her biri kendi pazarında çevikleşsin.", s: 35, tag: "cerrah",
@@ -644,9 +644,9 @@
         role: "Nordahl’ın CEO’su",
         k: "C",
         text: [
-          "Yaz ortasında Nordahl ikinci çeyrekte yaklaşık 8 milyar dolar zarar açıkladı; bunun büyük kısmı yeniden yapılanma gideriydi. O yıl ayrılan on binlerce kişinin üstüne ertesi yıl sonuna kadar on binlercesi daha ayrılacaktı; çeyreklik temettü yarıdan fazla indi. Ansell uzun vadeli planları bir kenara bırakıp önce nakit ve maliyetlere odaklandı.",
+          "Yaz ortasında Nordahl ikinci çeyrekte rekor bir zarar açıkladı; bunun büyük kısmı yeniden yapılanma gideriydi. O yıl ayrılan on binlerce kişinin üstüne ertesi yıl sonuna kadar on binlercesi daha ayrılacaktı; çeyreklik temettü yarıdan fazla indi. Ansell uzun vadeli planları bir kenara bırakıp önce nakit ve maliyetlere odaklandı.",
           "Bölünme planını rafa kaldırdı; şirketi bir arada tutmak ilk büyük stratejik adımı oldu. Ana bilgisayar fiyatları düşürüldü ve şirket, başka üreticilerin parçalarını da birleştiren hizmet işine yöneldi; bu iş birkaç yıl içinde hız kazandı.",
-          "Nordahl o yılı yaklaşık 8 milyar dolar zararla kapattı; yıl sonunda çalışan sayısı zirvedekinin üçte ikisinin altına inmişti. Ertesi yıl 60 milyar doları aşan gelirle yaklaşık 3 milyar dolar kâra döndü."
+          "Nordahl o yılı da milyarlarca dolar zararla kapattı; yıl sonunda çalışan sayısı zirvedekinin üçte ikisinin altına inmişti. Ertesi yıl şirket yeniden kâra döndü."
         ]
       }
     },
