@@ -72,11 +72,14 @@ button{font:inherit;color:inherit}
 @media (max-width:400px){.logo{font-size:24px}.mast-nav{padding:0 8px}.mast-cta{padding:0 12px}}@media (max-width:360px){.mast-end{gap:0}.mast-nav{padding:0 6px}.mast-cta{padding:0 8px;letter-spacing:.02em}}
 
 /* ticker */
-.ticker{background:var(--ink);color:var(--on-ink);overflow:hidden;font:500 12px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase}
+.ticker{position:relative;background:var(--ink);color:var(--on-ink);overflow:hidden;font:500 12px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase}
 .ticker-track{display:flex;width:max-content;animation:tick 48s linear infinite}
-.ticker:hover .ticker-track{animation-play-state:paused}
+.ticker:hover .ticker-track,.ticker.is-paused .ticker-track{animation-play-state:paused}
+.ticker-stop{position:absolute;top:0;right:0;bottom:0;width:44px;display:grid;place-items:center;padding:0;border:0;border-left:1px solid var(--ink-rule);background:var(--ink);color:var(--on-ink);font:500 12px/1 var(--mono);cursor:pointer}
+.ticker-stop[hidden]{display:none}
+.ticker-stop:focus-visible{outline-offset:-3px}
 .ticker-group{display:flex}
-.ticker-group>span{padding:13px 28px;white-space:nowrap;border-right:1px solid var(--ink-rule)}
+.ticker-group>span{padding:16px 28px;white-space:nowrap;border-right:1px solid var(--ink-rule)}
 .ticker .dn{color:var(--red-l)}
 .ticker .up{color:#8FD3AE}
 .ticker i,.index i{font-style:normal}
@@ -202,7 +205,7 @@ button{font:inherit;color:inherit}
 .src ol{margin:0;padding:0;list-style:none}
 .src li{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:0 16px;border-bottom:1px solid var(--ink-rule)}
 .src li:first-child{border-top:1px solid var(--ink-rule)}
-.src a{padding:11px 0;font:400 16px/1.35 var(--serif);color:var(--paper);text-decoration:underline;text-decoration-color:var(--on-ink2);text-decoration-thickness:1px;text-underline-offset:3px}
+.src a{padding:12px 0;font:400 16px/1.35 var(--serif);color:var(--paper);text-decoration:underline;text-decoration-color:var(--on-ink2);text-decoration-thickness:1px;text-underline-offset:3px}
 .src a:hover{text-decoration-color:var(--red-l)}
 .src .ext{display:inline-block;margin-left:5px;font:500 12px/1 var(--mono);color:var(--red-l)}
 .src li>span{padding-bottom:10px;font:500 12px/1.4 var(--mono);letter-spacing:.02em;color:var(--on-ink2)}
@@ -357,6 +360,7 @@ noscript p{margin:0;padding:24px;border:1px solid var(--ink);background:var(--ca
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   .ticker-track{animation:none}
+  .ticker-stop{display:none}
   .opt,.btn,.opt-k{transition:none}
   .opt:hover:not([aria-disabled]){transform:none}
 }
@@ -376,8 +380,9 @@ noscript p{margin:0;padding:24px;border:1px solid var(--ink);background:var(--ca
   </div>
 </header>
 
-<div class="ticker" aria-hidden="true">
-  <div class="ticker-track">
+<div class="ticker">
+  <button class="ticker-stop" type="button" aria-pressed="false" aria-label="Kayan başlıkları durdur" hidden>❚❚</button>
+  <div class="ticker-track" aria-hidden="true">
     <div class="ticker-group">
       <span>Dosya 01 · ABD 1982 · Rafta zehir <b class="dn">▼</b></span>
       <span>Dosya 02 · Danimarka 2004 · Kasa boşalıyor <b class="dn">▼</b></span>
@@ -470,8 +475,8 @@ noscript p{margin:0;padding:24px;border:1px solid var(--ink);background:var(--ca
         <p class="wl-status" role="status" aria-live="polite"></p>
         <p class="wl-note" id="wl-note">Spam yok. Listeden çıkmak için gelen e-postayı yanıtlaman yeterli.</p>
         <div class="wl-kvkk">
-          <p><b>KVKK aydınlatma, kısaca.</b> E-postanı ve oyun sonucunu (CEO tipi, puan, kararlar) yeni sayı duyurusu e-postaları için; IP adresini ve tarayıcı bilgisini spamı önlemek için kaydederiz. Kayıtlar Cloudflare’de, bildirim kopyası Google e-posta kutusunda durur; bu sunucular yurt dışında olabilir. Listeden çıkana kadar saklanır, sonra silinir.</p>
-          <p>Veri sorumlusu: SAAS Corner Danışmanlık ve Eğitim Hizmetleri San. Tic. Ltd. Şti. KVKK md. 11’deki haklarını (bilgi isteme, düzeltme, silme, itiraz) <a href="mailto:info@saascorner.co">info@saascorner.co</a> adresine yazarak kullanabilirsin. Tam metin: <a href="/gizlilik">Aydınlatma Metni</a>.</p>
+          <p><b>KVKK aydınlatma, kısaca.</b> E-postanı ve onay kaydını yeni sayı duyurusu e-postaları için; oyun sonucunu (CEO tipi, puan, kararlar) oyunu geliştirmek için; IP adresini ve tarayıcı bilgisini spamı önlemek için kaydederiz. Kayıtlar Cloudflare’de, bildirim kopyası Google e-posta kutusunda durur; bu sunucular yurt dışında olabilir. Listeden çıkana kadar saklanır, sonra silinir.</p>
+          <p>Veri sorumlusu: SAAS Corner Danışmanlık ve Eğitim Hizmetleri San. Tic. Ltd. Şti. KVKK md. 11’deki haklarını (bilgi isteme, düzeltme, silme, itiraz) <!--email_off--><a href="mailto:info@saascorner.co">info@saascorner.co</a><!--/email_off--> adresine yazarak kullanabilirsin. Tam metin: <a href="/gizlilik">Aydınlatma Metni</a>.</p>
         </div>
       </form>
     </div>
@@ -549,7 +554,7 @@ noscript p{margin:0;padding:24px;border:1px solid var(--ink);background:var(--ca
   </div>
 </footer>
 
-<script src="/app.js?v=4" defer></script>
+<script src="/app.js?v=5" defer></script>
 <script src="/blog-latest.js?v=1" defer></script>
 </body>
 </html>

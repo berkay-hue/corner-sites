@@ -863,7 +863,17 @@
     elReport = $("#report");
     if (elSteps) { elSteps.style.setProperty("--n", CASES.length); elSteps.classList.toggle("many", CASES.length > 3); }
     var d = $("#today");
-    if (d) try { d.textContent = new Date().toLocaleDateString("tr-TR", { day: "numeric", month: "long", year: "numeric" }); } catch (e) { /* sabit tarih kalsın */ }
+    if (d) try { d.textContent = new Date(CUR.date + "T12:00:00+03:00").toLocaleDateString("tr-TR", { day: "numeric", month: "long", year: "numeric", timeZone: "Europe/Istanbul" }); } catch (e) { /* sabit tarih kalsın */ }
+    var tk = $(".ticker-stop");
+    if (tk) {
+      tk.hidden = false;
+      tk.addEventListener("click", function () {
+        var p = tk.getAttribute("aria-pressed") !== "true";
+        tk.setAttribute("aria-pressed", String(p));
+        tk.textContent = p ? "▶" : "❚❚";
+        tk.parentNode.classList.toggle("is-paused", p);
+      });
+    }
     fillPage();
     renderArchive();
     load();

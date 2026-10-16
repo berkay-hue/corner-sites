@@ -11,7 +11,7 @@ Korvala vakası, zirvedeki bir telefon şirketinin 2011'de akıllı telefonları
 
 Ama zirvede durmak, ayağının altındaki zeminin sağlam olduğu anlamına gelmiyor. Masanda tek bir soru var ve cevabı şirketin bundan sonraki yolunu çizecek: Telefonların hangi yazılımla çalışacak?
 
-> Bu yazı Korvala vakasının sonucunu anlatıyor. Önce kendin karar vermek istersen [vakayı oyna](/#oyun).
+> Bu yazı Korvala vakasının sonucunu anlatıyor. Önce kendin karar vermek istersen [vakayı oyna](/?s=001#oyun).
 
 ## Masadaki durum
 
