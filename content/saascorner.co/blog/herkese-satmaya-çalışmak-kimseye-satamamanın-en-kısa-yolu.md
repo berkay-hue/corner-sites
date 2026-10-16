@@ -70,3 +70,21 @@ Hedef kitleyi daraltmak ilk sezgiye aykırı gelir.
 Okyanusta balık avlamak ile doğru noktada olta atmak arasındaki fark budur.
 
 Hedef kitleyi daraltmak müşteri tabanını küçültmek değildir. Enerjini nereye harcayacağını bilmektir.
+
+## Sık sorulan sorular
+
+### ICP nasıl tanımlanır?
+
+ICP, bir müşteri segmentini değil somut bir müşteri portresini tanımlar. Müşterinin hangi sektörde faaliyet gösterdiği, kaç çalışanı olduğu, hangi büyüme aşamasında bulunduğu, hangi araçları kullandığı, kararı kimin verdiği ve bütçe döngüsünün nasıl işlediği gibi sorulara verilen net cevaplar bu profili oluşturur. Mevcut en iyi müşterilere benzeyen şirketler tarif edilebiliyorsa ICP aslında zaten vardır, sadece yazıya dökülmemiştir.
+
+### Outbound e-postalar neden yanıt almıyor?
+
+Çoğu zaman sorun outbound'un kendisi değil, kime gidildiğinin yeterince netleştirilmemiş olmasıdır. Hedef kitle geniş tanımlandıkça mesaj genelleşir ve kimseye özel hissettirmeyen bir içerik dikkat çekmez, yanıt almaz. Mesaj okuyucunun sektöründen, şirket büyüklüğünden ve muhtemel sorunundan yola çıktığında ise kişi kendini görür ve okumaya devam eder.
+
+### Yanlış müşteriye satış yapmanın zararları nelerdir?
+
+Yanlış adaylarla dolu bir pipeline, satış ekibinin enerjisini ilerleme şansı olmayan fırsatlara harcamasına ve gerçek fırsatların gözden kaçmasına yol açar. Satış gerçekleşse bile ürüne uymayan müşteri zamanla memnuniyetsiz hale gelir, churn yaşanır ve referans vermediği gibi itibarı da zedeleyebilir. Doğru müşteriyi bulmak ise satıştan sonra da değer üretmeye devam eder.
+
+### ICP ne sıklıkla güncellenmeli?
+
+ICP bir kez tanımlanıp bırakılacak bir belge değil, canlı bir belge gibi ele alınmalıdır. Pazar değiştikçe, ürün geliştikçe ve rakipler farklılaştıkça bir dönemin en iyi segmenti verimsiz hale gelebilir ya da hiç düşünülmeyen bir segment öne çıkabilir. Bu nedenle kazanılan ve kaybedilen müşteriler düzenli analiz edilmeli; hangi profillerin daha hızlı kapandığı, daha uzun kaldığı ve daha fazla büyüdüğü takip edilmelidir.

@@ -78,3 +78,21 @@ Bu bir kontrol kaybı değil, odak kazanımıdır.
 Outsource modelde ise ilişki sonuca bağlıdır. Hedefler netleştirilir, metrikler belirlenir ve performans sürekli ölçülür. Bu yapı her iki tarafı da doğru hedeflere kilitler.
 
 Sonuç odaklı çalışmak sadece bir ödeme modeli değildir. Aynı zamanda ilişkinin kalitesini de belirler. Her iki taraf da ne için orada olduğunu bilir. Ve bu netlik belirsizlikten çok daha üretken bir ortam yaratır.
+
+## Sık sorulan sorular
+
+### Satış operasyonunu şirket içinde sıfırdan kurmak neden zordur?
+
+Sıfırdan bir satış operasyonu kurmak tek bir eleman almaktan ibaret değildir. ICP tanımlanmalı, mesajlar yazılıp test edilmeli, araçlar seçilip entegre edilmeli, süreçler dokümante edilmeli ve ekip yönetilmelidir. Tüm bunların şirketin asıl işine devam ederken paralel yürütülmesi gerektiği için süreç hem zaman hem de uzmanlık ister.
+
+### Outsource satış şirkete nasıl hız ve esneklik kazandırır?
+
+Dışarıdan çalışılan bir satış operasyonu sıfırdan başlamaz; sistem kurulmuş, araçlar entegre edilmiş, hangi mesajların hangi sektörde işe yaradığı bilinmektedir. Bu sayede içeride aylar sürecek bir yapı çok daha kısa sürede işler hale gelir. Ayrıca tam zamanlı satış personelinin yarattığı sabit maliyetin aksine, outsource model büyüme hedefine göre genişler ve strateji değiştiğinde adapte olur.
+
+### Hangi şirketler için outsource satış uygun değildir?
+
+Ürün henüz netleşmemişse, pazar uyumu test ediliyorsa ve satış sürecinin bizzat içinde olunması gerekiyorsa dışarıdan bir operasyon kurmak erkendir, çünkü bu aşamada öğrenmenin içeride kalması gerekir. Ürün netleşmiş, hedef kitle tanımlanmış ve ölçekleme zamanı gelmişse ise dışarıdan çalışmak hız, verimlilik ve maliyet açısından güçlü bir avantaj sunar. Yani doğru model ancak doğru zamanda seçildiğinde işe yarar.
+
+### Satışı dışarıya verince kontrol kaybedilir mi?
+
+Kontrol kaygısı anlaşılırdır, ancak haftalık raporlar, düzenli toplantılar, açık iletişim ve net hedeflerle kurulan şeffaf bir yapı bu endişeyi büyük ölçüde giderir. Üstelik her şeyi içeride tutmaya çalışmak ürün geliştirme, müşteri deneyimi ve stratejik kararlar gibi alanlarda kontrol kaybına yol açabilir. Satış operasyonunu doğru ellere bırakmak, şirketin en önemli işlerine odaklanmasını sağlar.

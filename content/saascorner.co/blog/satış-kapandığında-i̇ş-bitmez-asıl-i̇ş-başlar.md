@@ -84,3 +84,21 @@ Satış bir an değil, bir ilişkidir.
 Müşteri başarısını satıştan ayrı bir konu olarak gören şirketler bu zinciri ortasından keser. Başarılı şirketler ise zincirin tamamını yönetir.
 
 Satış kapandığında iş bitmez. Sadece şekil değiştirir.
+
+## Sık sorulan sorular
+
+### Bir müşteri ayrılmadan önce hangi işaretleri verir?
+
+Müşteri ayrılmadan önce genellikle uzun süre işaret verir: kullanım azalır, yanıtlar gecikir, toplantılar iptal edilir. Bu işaretler okunmadığında ayrılık sürpriz gibi hissedilir ama aslında sadece görülmemiştir. Churn'ün maliyeti kaybedilen gelirle sınırlı değildir; o müşteriyi kazanmak için harcanan enerji, zaman ve bütçe de onunla birlikte gider.
+
+### Satış sürecindeki beklenti yönetimi müşteri bağlılığını nasıl etkiler?
+
+Müşteri memnuniyetsizliğinin büyük kısmı ürünün kötü olmasından değil, beklentilerin yanlış kurgulanmasından kaynaklanır. Satışta hız ve kolaylık abartıldığında gerçeklik farklı çıkınca hayal kırıklığı kaçınılmaz olur. Dürüst bir beklenti yönetimi satışı bazen yavaşlatsa da gerçekçi beklentiyle başlayan müşteri sabırlı olur ve sürece güvenir.
+
+### İyi bir onboarding süreci nasıl olmalı?
+
+Onboarding bir hoşgeldin e-postası ve teknik kurulumdan ibaret bir formalite değil, müşterinin şirketle yaşadığı ilk gerçek deneyimdir. İyi bir süreç müşteriye doğru yerde olduğunu, ne yaptığını bildiğini ve destek gördüğünü hissettirir. Bu his oluştuğunda müşteri sürece bağlanır, oluşmazsa en baştan bir adım geride kalır.
+
+### Mevcut müşteriler şirketin büyümesine nasıl katkı sağlar?
+
+Mevcut bir müşteriye ek satış yapmak, yeni bir müşteriye ilk satışı yapmaktan çok daha kolaydır çünkü güven ve ilişki zaten kurulmuştur. Memnun müşteriler ayrıca referans vererek yeni müşteri adaylarının satış sürecine güvenle başlamasını sağlar. Ancak bu kendiliğinden olmaz; doğru anı ve teklifi bulmak, referans istemeyi bir alışkanlığa dönüştürmek aktif çaba gerektirir.

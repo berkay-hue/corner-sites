@@ -68,3 +68,21 @@ Doğru zamanda doğru yerde olmak tesadüf değildir.
 Tetikleyicileri izleyen bir sistem, müşteri adaylarını olgunluk aşamasına göre segmentleyen bir yaklaşım, takibi disiplinli yürüten bir operasyon ve pazar dinamiklerini okuyan bir strateji bir araya geldiğinde zamanlama şans olmaktan çıkar.
 
 Rakiplerinizin çoğu hâlâ zamanlamayı şansa bırakıyor. Bu sizin için bir avantajdır. Ama ancak bu sistemi kurarsanız.
+
+## Sık sorulan sorular
+
+### B2B satışta tetikleyici anlar nelerdir?
+
+Müşteri adayının şirketinin büyüme turunu kapatması, yeni bir yönetici işe alması, yeni bir ofis açması ya da sektöründe bir regülasyonun değişmesi birer tetikleyicidir. Bu anlar o kişinin dünyasında bir şeylerin değiştiğine ve yeni kararların gündemde olduğuna işaret eder. Bu sinyalleri takip edip doğru anda doğru mesajla ortaya çıkan şirketler zamanlama avantajını rakiplerine bırakmaz.
+
+### Müşteri adayına çok erken ulaşmanın sakıncası nedir?
+
+Bütçe onaylanmamış, ihtiyaç netleşmemiş ve karar verici sürece dahil olmamışken yapılan en güçlü sunum bile sonuçsuz kalır. Üstelik erken gitmek, şirketin hazır değilken üstüne gelindiği hissini yaratarak sonraki temasları da gölgeleyebilir. İyi bir satış süreci müşteriyi kovalamaz, olgunlaşma sürecini okur ve doğru ana kadar ilişkiyi sıcak tutar.
+
+### Bütçe döngüleri satış zamanlamasını nasıl etkiler?
+
+Kurumsal dünyada kararlar bir takvime göre gelir. Bütçe döneminin kapanmak üzere olduğu anlarda yeni harcama kararı almak zorlaşırken, mali yıl başlangıçları ve yeni bir yöneticinin göreve başladığı ilk aylar değişime en açık dönemlerdir. Bu döngüleri bilerek hareket etmek, aynı enerjiyle çok daha fazla kapı açmayı sağlar.
+
+### Satışta takip neden zamanlamanın bir parçasıdır?
+
+Çoğu satış fırsatı ilk temastan değil, sonraki temaslardan doğar; ilk mesaja yanıt vermeyen biri birkaç hafta sonra tam da o sorunu yaşamaya başlamış olabilir. O süreçte orada olmazsanız başka biri olur. Sistematik bir takip her temasta değer ekler ve ısrar etmek değil, doğru anda hazır olmak anlamına gelir.

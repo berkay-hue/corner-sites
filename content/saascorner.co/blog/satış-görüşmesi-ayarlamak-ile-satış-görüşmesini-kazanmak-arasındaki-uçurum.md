@@ -78,3 +78,21 @@ Haftada on görüşme yapan ama hiçbirini kapamayan ekip ile haftada üç gör�
 Cevap açıktır ama çoğu şirket hâlâ görüşme sayısını başarı göstergesi olarak kullanır. Sayı bir aktivite metriğidir. Kapanan iş ise gerçek metriktir.
 
 Görüşme kalitesini artırmak daha az kişiyle çalışmak anlamına gelmez. Doğru hazırlanmak, doğru soru sormak, doğru dinlemek ve doğru takip etmek anlamına gelir. Bu alışkanlıklar yerleştiğinde hem sayı hem kalite birlikte yükselir.
+
+## Sık sorulan sorular
+
+### Satış görüşmesine girmeden önce müşteri hakkında neler bilinmeli?
+
+Şirketin son dönemde ne yaşadığı, hangi sorunu çözmeye çalıştığı, daha önce benzer çözümleri deneyip denemediği ve karar sürecinde kimlerin yer aldığı bilinmelidir. Bu bilgilere sahip olan biri daha keskin sorular sorar ve karşı tarafın dünyasına daha hızlı girer. Hazırlıksız giren biri ise görüşmenin büyük bölümünü şirketini tanıtarak geçirir ve gerçek ihtiyaca ulaşamaz.
+
+### Satış görüşmesinde gelen itirazlara nasıl yaklaşılmalı?
+
+İtiraz bir engel değil, arkasında bir soru saklayan bir sinyaldir. Fiyatın yüksek bulunması çoğunlukla değerin görülmediğini, bütçe olmaması ise konunun öncelikler arasında olmadığını gösterebilir. Savunmaya geçip indirim teklif etmek yerine itirazın arkasındaki gerçek soruyu bulup ona cevap vermek görüşmeyi ilerletir.
+
+### Bir satış görüşmesi nasıl sonlandırılmalı?
+
+Düşünüp döneceğiz gibi belirsiz cümlelerle biten görüşmeler çoğunlukla hiçbir şeyle sonuçlanmaz, çünkü belirsizlik hareketi durdurur. İyi bir görüşme sonu tarih, kişi ve eylem içerir; örneğin önümüzdeki Salı teknik ekiple bir demo yapılacağının netleşmesi gibi. Bu netlik hem iki taraf için belirsizliği ortadan kaldırır hem de ciddiyetin bir göstergesidir.
+
+### Satış görüşmesinden sonra gönderilen takip mesajında ne olmalı?
+
+Sadece teşekkür edip sorular için hazır olduğunuzu söyleyen bir mesaj iyi niyetlidir ama işlevsizdir. Takip, görüşmenin bir uzantısı olarak konuşulan bir soruna dair kaynak paylaşmalı, söz verilen bilgiyi iletmeli ya da görüşmede çıkan bir noktayı bir adım ileri taşımalıdır. Böylece hem değer katılır hem de süreç canlı tutulur.

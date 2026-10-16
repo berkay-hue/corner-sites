@@ -72,3 +72,21 @@ Kaybedilen her ay bir rakama dönüştürülebilir.
 Eğer aylık hedef on görüşmeyse ve bu hedefe ulaşmak üç ay yerine altı ay sürüyorsa ortada üç aylık kayıp vardır. Bu kayıp maaş bordrosunda görünmez, gider tablosunda yer almaz. Ama büyüme hızında, pazar payında ve rekabet pozisyonunda hissedilir.
 
 Zamanı doğru kullanmak en ucuz büyüme stratejisidir. Çünkü harcanan zamanın geri dönüşü yoktur.
+
+## Sık sorulan sorular
+
+### Yeni bir satış operasyonunun ilk ayında nelere odaklanılmalı?
+
+İlk ayın en büyük tuzağı hemen e-posta gönderip hemen sonuç bekleme isteğidir. Bu dönem aslında kime, hangi mesajla, hangi kanaldan ve hangi sırayla ulaşılacağı sorularının cevaplandığı bir sorular ayıdır. Araştırma, pazar analizi ve rakip incelemesiyle sağlam atılan temel, sonraki aylarda çok daha hızlı ilerlemeyi sağlar.
+
+### Satış stratejisini test ederken nelere bakılmalı?
+
+Mesajlar gönderilip yanıtlar izlendikçe hangi konu satırının daha fazla açıldığına, hangi sektörden daha hızlı yanıt geldiğine ve hangi itirazın tekrar tekrar çıktığına bakılmalıdır. Bu sorular stratejiyi şekillendiren geri bildirimlerdir. Test etmeden ilerlemek veri üretmeden yürümek demektir ve veri olmadan yapılan her düzeltme yalnızca başka bir tahmindir.
+
+### Satış stratejisini çok sık değiştirmenin zararı nedir?
+
+Sabırsızlıkla birkaç hafta içinde strateji değiştirmek, hiçbir yaklaşımın yeterince test edilmesine izin vermez. Özellikle B2B satışta karar döngüleri uzundur ve güven inşası zaman alır. Her değiştirilen strateji sıfırdan başlamak anlamına geldiği için sabırsızlık stratejilerin hayata geçmesini engeller.
+
+### İlk 90 günlük satış planında neler yer almalı?
+
+Planda kime ulaşılacağı, hangi mesajla, hangi araçlarla, hangi sırayla ulaşılacağı ve başarının nasıl ölçüleceği net olmalıdır. Bu cevaplar baştan netleşmezse ilk 90 gün onları aramakla geçer. Ayrıca bu dönemde büyük kapanmalar değil, öğrenme, test etme ve sistem kurma beklenmelidir.

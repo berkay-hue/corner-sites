@@ -72,3 +72,21 @@ Nerede koptu? Hangi noktada müşteri adayının kafasında soru işareti oluşt
 Bu soruları sormak ve cevaplarını sistematik biçimde kayıt altına almak, satış sürecini zamanla dönüştürür. Çünkü aynı hatalar tekrar edilmez hale gelir.
 
 Kaybetmek kaçınılmazdır. Ama kaybederken öğrenmemek bir seçimdir.
+
+## Sık sorulan sorular
+
+### Müşteri "fiyat pahalı" dediğinde aslında ne demek istiyor?
+
+Fiyat itirazının arkasında çoğu zaman başka bir şey yatar, çünkü müşteri gerçekten istediği bir şey için fiyat öder. Görüşmenin sonunda duyulan "bu pahalı" cümlesi genellikle bunu neden bu fiyata alması gerektiğinin cevabını bulamadığı anlamına gelir. Bu bir fiyat sorunu değil değer aktarımı sorunudur ve fiyatı düşürmek sorunu çözmez, yalnızca marjı düşürür.
+
+### Müşteri neden daha zayıf bir rakibi tercih eder?
+
+Rakip çoğu zaman teknik olarak daha iyi ya da daha ucuz değildir, sadece müşteriye daha anlaşılır konuşmuştur. Sektörünü daha iyi anladığını hissettirmiş ve sorununu daha net isimlendirebilmiştir. İnsanlar en iyi ürünü değil kendilerini en iyi anlayan ürünü seçer, çünkü iş dünyasında anlaşılmamak yanlış ürün seçmek kadar risklidir.
+
+### B2B satışta gerçek karar vericiye nasıl ulaşılır?
+
+Görüşmelerde soru soran ve ilgisini belli eden kişi çoğu zaman karar verici değil, etkileyici, iç savunucu ya da sürecin yürütücüsüdür. Asıl karar, görüşmelere hiç girmeyen biri tarafından verilebilir ve bu kişinin kriterlerine göre konuşulmadıysa iyi bir sunum bile sonucu değiştirmeyebilir. Satın alma sürecindeki tüm aktörleri erken tespit edip her birine ayrı bir dil konuşmak, kaybedilen fırsatların önemli bir kısmını geri kazandırır.
+
+### Kaybedilen satışlardan nasıl ders çıkarılır?
+
+Her kaybedilen satış, sürecin nerede koptuğunu soran bir fırsattır. Değerin yeterince aktarılıp aktarılmadığı, doğru kişiye ulaşılıp ulaşılmadığı, güvenin inşa edilip edilmediği ve aciliyetin hissettirilip hissettirilmediği sorgulanmalıdır. Bu soruların cevaplarını sistematik biçimde kayıt altına almak aynı hataların tekrarlanmasını önler ve satış sürecinizi zamanla dönüştürür.

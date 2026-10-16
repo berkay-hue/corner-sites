@@ -68,3 +68,21 @@ Değer odaklı satışa geçiş, sadece bireysel bir çaba değil, aynı zamanda
 ## Sonuç
 
 B2B SaaS pazarındaki yoğun rekabet ortamında, sadece iyi bir ürüne sahip olmak artık yeterli değil. Fiyat savaşlarından ve özellik karşılaştırmalarından sıyrılmanın yolu, odağı üründen müşteriye çevirmekten geçiyor. Değer odaklı satış, tam da bunu başaran stratejik bir yaklaşımdır. Müşterinin sorunlarını derinlemesine anlayarak, çözümünün yarattığı somut ve ölçülebilir değeri ortaya koyarak, kendini bir ürün satıcısından güvenilir bir iş ortağı konumuna taşırsın. Bu dönüşüm, daha karlı anlaşmalar, daha kısa satış döngüleri ve daha sadık müşteriler anlamına gelir. Bugün, satış sürecindeki bir görüşmeni değiştirerek işe başla. Özellikleri anlatmak yerine, müşterinin işine katacağın değeri anlat. Bu küçük adım, şirketinin geleceği için atacağın en büyük adımlardan biri olabilir.
+
+## Sık sorulan sorular
+
+### Değer odaklı satış geleneksel satıştan nasıl ayrılır?
+
+Geleneksel satış ürünün özelliklerine ve rakiplerden üstün yönlerine odaklanırken, değer odaklı satış odağı üründen müşteriye kaydırır. Temel soru ürünün ne yaptığı değil, müşterinin hangi sorununu çözdüğü ve ona ne kazandırdığıdır. Bu yaklaşım daha yüksek kontrat değerleri, daha kısa satış döngüleri ve daha düşük müşteri kaybı sağlar.
+
+### Keşif görüşmesinde müşteriye hangi sorular sorulmalı?
+
+Mevcut yazılım veya bütçe gibi sorular yerine müşterinin hedeflerine ve acı noktalarına odaklanan sorular sormalısın. Şirketin bu yıl ulaşmaya çalıştığı en önemli hedefler, mevcut süreçteki en büyük verimsizlik ve bunun maliyeti ya da sorunun çözülmesinin işe ne anlam katacağı bu tür sorulara örnektir. Böylece problemin büyüklüğünü müşterinin kendi ağzından duyar ve teklifini bu bilgiler üzerine kurarsın.
+
+### Yazılımın sağladığı değer nasıl sayısallaştırılır?
+
+Verimliliği artırdığını söylemek gibi soyut ifadeler yerine, her özelliği veya faydayı müşterinin anlayabileceği bir finansal metriğe dönüştürmelisin. Örneğin manuel veri girişini ortadan kaldırarak kazandırdığın zamanı maaş maliyeti karşılığıyla ifade edebilirsin. Bu hesaplamalar için müşteriden veri alman gerekebilir, ancak elinde sayısallaştırılmış veri olduğunda fiyat bir maliyet olmaktan çıkıp yatırıma dönüşür.
+
+### Müşteri fiyatın yüksek olduğunu söylediğinde ne yapmalıyım?
+
+Fiyatı savunmak veya hemen indirim teklif etmek yerine konuşmayı tekrar değere yönlendirmelisin. Fiyatı maliyetle değil, çözümün yaratacağı değerle karşılaştırarak yatırımın geri dönüşünü müşteriyle birlikte gözden geçirebilirsin. Eylemsizliğin maliyetini, yani sorunu çözmemenin müşteriye her ay neye mal olduğunu vurgulamak da bakış açısını tamamen değiştirebilir.

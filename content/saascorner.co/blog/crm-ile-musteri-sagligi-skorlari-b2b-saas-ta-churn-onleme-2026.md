@@ -66,3 +66,21 @@ Gelecekte, "tek tip" müşteri sağlığı skoru anlayışı geçerliliğini yit
 ## Sonuç
 
 B2B SaaS arenasındaki acımasız rekabette ayakta kalmak ve büyümek, artık sadece iyi bir ürüne sahip olmakla mümkün değil. Başarının anahtarı, müşterilerini ne kadar iyi anladığında ve onların ihtiyaçlarına ne kadar proaktif yanıt verdiğinde yatıyor. CRM ile müşteri sağlığı skorları, bu anlayışı varsayımlardan çıkarıp somut, ölçülebilir ve eyleme geçirilebilir verilere dayandırmanı sağlar. Bu skorlar, churn (müşteri kaybı) oranını düşürmenin, müşteri sadakatini artırmanın ve gizli gelir fırsatlarını ortaya çıkarmanın en etkili yoludur. Unutma, her bir veri noktası, müşterinin sana anlattığı bir hikayedir. Görevin, CRM'i bir dinleme aracı olarak kullanarak bu hikayeleri anlamak ve müşterilerinin başarısı için doğru adımları atmaktır. Daha fazla bekleme, bugün CRM verilerini analiz ederek proaktif müşteri başarısı yolculuğundaki ilk adımını at.
+
+## Sık sorulan sorular
+
+### Müşteri sağlığı skorunda hangi metrikler kullanılmalı?
+
+Metrikler genellikle dört ana kategoriye ayrılır: ürün kullanım verileri, destek ve iletişim verileri, geri bildirim ve memnuniyet verileri ile finansal veriler. Giriş sıklığı, kritik özelliklerin kullanımı, destek taleplerinin ciddiyeti, NPS sonuçları ve faturaların zamanında ödenip ödenmediği bu kategorilere örnektir. Bu verilerin çoğu zaten CRM sisteminde veya entegre araçlarda bulunur; önemli olan onları anlamlı bir bütün haline getirmektir.
+
+### Müşteri sağlığı skorunda metrikler nasıl ağırlıklandırılır?
+
+Tüm metrikler eşit derecede önemli olmadığı için her veri noktasına bir ağırlık katsayısı atamalısın. Örneğin bir müşterinin uzun süredir platforma hiç giriş yapmaması, düşük bir NPS puanından çok daha acil bir tehlike sinyali olabilir. Başlangıçta ağırlıklar varsayımsal olabilir, ancak zamanla geçmiş müşteri verilerini analiz ederek hangi davranışların gerçekten churn ile ilişkili olduğunu bulup modelini daha isabetli hale getirebilirsin.
+
+### Sağlık skoru düşen bir müşteri için CRM'de hangi otomasyonlar kurulabilir?
+
+Skor belirlediğin kritik eşiğin altına düştüğünde CRM, ilgili müşteri başarı yöneticisine anında bildirim gönderip takviminde acil iletişim görevi oluşturabilir. Aynı anda müşteriye yardım teklif eden veya özellikleri daha verimli kullanma ipuçları sunan bir e-posta otomasyonu tetiklenebilir. HubSpot veya Salesforce gibi platformlar bu tür koşullu otomasyonlar için güçlü araçlar sunar ve hiçbir riskli müşterinin gözden kaçmamasını sağlar.
+
+### Yüksek sağlık skoruna sahip müşterilerle ne yapılmalı?
+
+Yüksek skorlu müşteriler ürününden son derece memnundur ve büyüme için önemli bir fırsat sunar. Skor belirli bir seviyeyi aştığında CRM otomatik olarak başarı hikayesi daveti veya referans programı teklifi gönderebilir. Bu müşteriler yeni ve gelişmiş özelliklere geçişe en açık segment olduğu için üst satış fırsatları sunmak ve onlara özel kampanyalar düzenlemek de müşteri yaşam boyu değerini artırır.

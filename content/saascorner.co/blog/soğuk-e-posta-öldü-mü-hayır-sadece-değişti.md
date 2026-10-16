@@ -92,3 +92,21 @@ Dijital pazarlamada çoğu kanal sezgiyle değerlendirilir.
 Soğuk e-postada her şey sayılabilir. Kaç kişiye gönderildi, kaçı açtı, kaçı tıkladı, kaçı yanıt verdi, kaçı görüşmeye dönüştü. Bu şeffaflık hem neyin işe yaramadığını gösterir hem de neyin işe yaradığını ölçeklendirmeye olanak tanır.
 
 Bir kanalın ölüp ölmediğini anlamanın en iyi yolu sonuçlarına bakmaktır. Doğru yapıldığında soğuk e-postanın sonuçları hâlâ konuşuyor.
+
+## Sık sorulan sorular
+
+### Soğuk e-posta ile spam arasındaki fark nedir?
+
+Satın alınmış listeler, kişiselleştirilmemiş şablonlar, ilk e-postada fiyat teklifi ve uzun şirket tanıtımları spam'dir. Soğuk e-posta ise daha önce temas kurulmamış ama doğru profildeki bir kişiye, onunla gerçekten ilgili bir mesaj göndermektir. Aradaki fark niyette değil uygulamada görünür ve alıcılar bu farkı hemen hisseder.
+
+### Soğuk e-postaların spam klasörüne düşmemesi için neler yapılmalı?
+
+Domain ısınması, SPF ve DKIM kayıtları, gönderim hacminin kademeli artırılması, bounce oranlarının takibi ve spam şikayetlerinin yönetimi e-postanın gelen kutusuna ulaşıp ulaşmayacağını doğrudan etkiler. En iyi yazılmış e-posta bile spam klasörüne düşüyorsa hiçbir şey ifade etmez. Bu yüzden teknik altyapı artık içerik kadar önemlidir ve onun önkoşuludur.
+
+### Soğuk e-postada gerçek kişiselleştirme nasıl yapılır?
+
+İsim ekleyip şirketinizi inceledim demek artık kişiselleştirme sayılmaz, çünkü alıcılar bu kalıpları otomatik olarak filtreler. Gerçek kişiselleştirme, şirketin yaşadığı bir değişim, sektörde çıkan yeni bir regülasyon ya da kişinin kendi paylaşımlarından alınan bir gözlem gibi o kişinin dünyasında bir şeyi fark ettiğinizi göstermektir. Bu tür bir ilk cümle alıcıda e-postanın kendisi için yazıldığı hissini yaratır.
+
+### Soğuk e-postada tek e-posta yerine neden sekans kullanılmalı?
+
+B2B yanıtların büyük çoğunluğu ilk e-postadan değil, sonraki temaslardan gelir; insanlar meşguldür ve e-postalar kaybolur. Yanıt gelmemesi çoğu zaman bir red değil, gürültüdür. İyi kurgulanmış bir sekans her adımda değer ekler, farklı bir açıdan bakar veya yeni bir soru sorar; böylece alıcı süreci spam değil kaynak olarak algılar.

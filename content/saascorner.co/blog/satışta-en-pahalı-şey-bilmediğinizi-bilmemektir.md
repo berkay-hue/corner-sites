@@ -66,3 +66,21 @@ Keşke o müşteri segmentine daha erken odaklanseydık. Keşke o mesajı daha �
 Zamanında alınan bir karar, geç alınan mükemmel bir karardan her zaman daha değerlidir. Satışta pencereler açılır ve kapanır. Aynı fırsat ikinci kez aynı koşullarda gelmez.
 
 Bilmediğinizi bilmek rahatsız edicidir. Ama bilmediğinizi bilmemek çok daha pahalıya patlar.
+
+## Sık sorulan sorular
+
+### Satış performansını sadece kazanılan işlerle ölçmek neden yetersizdir?
+
+Kazanılan işler görünür, ama hiç ulaşılmayan potansiyel müşteriler, takip edilmediği için soğuyan görüşmeler ve yanlış kişiyle yapılan toplantılar görünmez. Asıl soru, kazanılabilecek ama kaybedilen kaç fırsat olduğudur. Bu soruların cevapları olmadan strateji değil, tahmin üzerine yürünür.
+
+### Satış sürecini belgelemek neden önemlidir?
+
+Müşteri adayına nasıl ulaşıldığı kişiden kişiye değişiyorsa ve takip standart değilse ortada bir süreç yoktur; neyin neden işe yaradığı da hiçbir zaman anlaşılmaz. Süreç belgelendiğinde işe yarayan görülür, tekrar edilir ve ölçeklenir. Yetenekli bir satışçı ayrıldığında bilgiyi de götürür, ama kurulmuş bir sistem şirkette kalır.
+
+### Satışta hızlı hareket etmek her zaman avantaj mıdır?
+
+Hız önemlidir ama yönü olmayan hız sadece enerji tüketir. Yanlış kitleye doğru mesajla gitmek de doğru kitleye yanlış mesajla gitmek de sonuçsuz kalır. Atılan adımların doğru yöne gidip gitmediğini ve hangi veriye dayandığını sorgulamak yavaşlamak değil, hızlanmanın önündeki engeli kaldırmaktır.
+
+### Satış ekipleri neden dışarıdan bir perspektif almalı?
+
+İşin içindeyken her şey alışkanlıkla yapıldığı için mantıklı görünür ve kör noktalar fark edilmez. Dışarıdan bakan bir göz, aylardır gözden kaçan bir sorunu ilk bakışta görebilir. Bu yüzden en iyi satış ekipleri bile yalnızca doğrulama için değil, göremedikleri şeyleri görmek için dış perspektife başvurur.

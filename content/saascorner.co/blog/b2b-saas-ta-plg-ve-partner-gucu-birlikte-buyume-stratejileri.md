@@ -90,3 +90,21 @@ Ekosistem inşa etmek gözünü korkutmasın. Bu, bir gecede olacak bir şey de�
 ## Sonuç
 
 B2B SaaS'ta büyüme artık tek bir kanala veya stratejiye indirgenemez. Ürün Odaklı Büyüme (PLG), kullanıcı edinme hunini genişletmek için inanılmaz derecede etkili bir yöntemken, tek başına kurumsal pazarların karmaşıklığını çözmek için yeterli olmayabilir. İşte bu noktada partnerlerin gücü devreye giriyor. B2B SaaS'ta PLG ve Partner Gücü stratejilerini birleştirmek, sana her iki dünyanın da en iyi yönlerini sunar: PLG'nin ölçeklenebilir ve verimli müşteri edinme motoru ile partnerlerin güvene dayalı, derinlemesine pazar erişimi. Bu hibrit model, sadece geliri artırmakla kalmaz, aynı zamanda daha sadık müşteriler, daha güçlü bir pazar konumu ve uzun vadede aşılması zor bir rekabet avantajı olan bir ekosistem yaratır. Geleneksel büyüme taktiklerinin sınırlarına dayandıysan, bu iki gücü birleştirerek şirketini bir sonraki seviyeye taşımanın zamanı gelmiş demektir.
+
+## Sık sorulan sorular
+
+### B2B SaaS'ta hangi partner türleri vardır?
+
+Satış ortakları ürünü kendi müşterilerine doğrudan satarken, tavsiye ortakları yönlendirdikleri her müşteri için komisyon alır. Teknoloji veya entegrasyon ortakları kendi ürünlerini seninkiyle entegre ederek her iki ürünün değerini artırır. Stratejik ortaklıklar ise genellikle daha büyük şirketlerle yapılan, ortak pazarlama veya ortak ürün geliştirme içeren uzun vadeli iş birlikleridir.
+
+### Doğru partner nasıl seçilir?
+
+İdeal partner, senin hedef kitlene hizmet eden, bu kitleyle güvene dayalı bir ilişkisi olan ve ürününün mevcut hizmetlerini tamamladığı bir yapıdır. Değerlendirirken partnerin teknik uzmanlığının ürününü destekleyip desteklemediğine, müşteri tabanının ideal müşteri profiline uyup uymadığına ve şirket kültürlerinin örtüşüp örtüşmediğine bak. Başlangıçta çok sayıda partner yerine birkaç stratejik partnerle derin ilişkiler kurmak genellikle daha etkilidir.
+
+### Kanal çatışması nedir ve nasıl önlenir?
+
+Kanal çatışması, doğrudan satış ekibinle partnerlerinin aynı potansiyel müşteri için rekabet etmesidir. Bunu önlemek için en baştan hangi müşterilerin self servis kanala, partnerlere veya doğrudan satış ekibine ait olduğunu belirleyen yazılı angajman kuralları koymalısın. Bir anlaşma kayıt sistemiyle, potansiyel müşteriyi sisteme ilk kaydeden tarafın o anlaşmada hak sahibi olmasını da sağlayabilirsin.
+
+### Partner programının başarısı hangi metriklerle ölçülür?
+
+Partner kaynaklı gelir, doğrudan partnerin çabasıyla kapanan anlaşmalardan gelen geliri gösterir. Partner etkisi altındaki gelir ise partnerin satış sürecine dokunduğu ama anlaşmayı doğrudan kapatmadığı durumları kapsar. Bunlara ek olarak partner başına potansiyel müşteri sayısı, anlaşma kapama oranları ve partner kaynaklı müşterilerin yaşam boyu değeri de takip edilmelidir.

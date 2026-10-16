@@ -68,3 +68,21 @@ Ortaklık programın büyüdükçe, süreçleri manuel olarak yönetmek imkansı
 ## Sonuç
 
 Partner-first kültürü, kısa vadeli bir satış taktiği veya geçici bir heves değildir. B2B SaaS şirketinin DNA'sına işlemesi gereken, uzun vadeli ve stratejik bir yatırımdır. Bu kültür, sadece gelir rakamlarını artırmakla kalmaz, aynı zamanda daha sadık müşteriler, daha güçlü bir marka ve pazarda daha sağlam bir konum elde etmeni sağlar. Bu dönüşüm kolay olmayacak; zihniyetlerin değişmesi, süreçlerin yeniden tasarlanması ve siloların yıkılması gerekecek. Ancak unutma ki, en büyük büyüme fırsatları genellikle konfor alanının dışında yatar. Şirketinin duvarlarının ötesine bakmaya ve gerçek bir ekosistem inşa etmeye bugün başla. İlk adımı at, içerdeki ilk konuşmayı başlat ve partner-first kültürü ile şirketinin potansiyelini en üst düzeye çıkar.
+
+## Sık sorulan sorular
+
+### Partner-first kültürü ile kanal satışı arasındaki fark nedir?
+
+Kanal satışı, ürününü satması için bir aracı kullanma eylemidir. Partner-first kültürü ise ürün geliştirmeden pazarlamaya, satıştan müşteri başarısına kadar tüm departmanların iş ortaklarının başarısını önceliklendirdiği bütünsel bir yaklaşımdır. Bu zihniyette ortağın getirdiği müşteri, doğrudan satışla gelen müşteri kadar değerli kabul edilir.
+
+### Satış ekibi iş ortaklarıyla çalışmaya nasıl teşvik edilir?
+
+Satış ekibinin ortakları rakip değil, anlaşmaları daha hızlı kapatmaya yardımcı olan bir müttefik olarak görmesi gerekir. Bunun için komisyon yapılarını, temsilcinin ortağın dahil olduğu anlaşmadan en az eşit ya da daha yüksek komisyon alacağı şekilde yeniden düzenlemelisin. Liderlerin bu vizyonu aktif olarak savunması da organizasyondaki direncin kırılmasını sağlar.
+
+### Doğru iş ortağı nasıl seçilir?
+
+İlk adım, ideal ortak profilini net bir şekilde tanımlamaktır. Ortağın hangi sektörlere hizmet verdiğini, müşteri tabanının hedef kitlenle ne kadar örtüştüğünü, teknik yetkinliklerini ve şirket kültürünün sana uyup uymadığını değerlendirmelisin. Çok sayıda niteliksiz ortak yerine, hedeflerine hizmet eden az sayıda stratejik ortakla başlamak çok daha etkilidir.
+
+### Ortaklık programının başarısı hangi metriklerle ölçülür?
+
+Yalnızca ortak kaynaklı gelire odaklanmak resmin küçük bir parçasını gösterir; ortağın bir şekilde dokunduğu anlaşmaları kapsayan ortak etkili geliri de izlemelisin. Ortak kanalıyla gelen müşterilerin yaşam boyu değerinin doğrudan gelenlere kıyasla durumu, satış döngüsündeki kısalma ve churn oranları da önemli göstergelerdir. Program büyüdükçe bu süreçleri PRM platformlarıyla otomatikleştirmek takibi kolaylaştırır.
