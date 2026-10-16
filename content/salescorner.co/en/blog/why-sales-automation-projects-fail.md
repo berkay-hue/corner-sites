@@ -8,7 +8,7 @@ image: "https://images.pexels.com/photos/7654193/pexels-photo-7654193.jpeg?auto=
 imageAlt: "Why Sales Automation Projects Fail"
 alt: "satis-otomasyonu-projesi-neden-basarisiz-olur"
 ---
-Sales automation projects usually fail because of design, not the tool: vague goals, undefined processes, dirty CRM data, a sales team that doesn't own the project, and systems nobody maintains. Clarifying the process manually first, starting with one measurable problem and involving reps from day one significantly reduces these risks.
+Sales automation projects usually fail because of design, not the tool: vague goals, undefined processes, dirty CRM data, a sales team that doesn't own the project, and systems nobody maintains. Clarifying the process manually first, starting with one measurable problem and involving reps from day one helps reduce these risks.
 
 On paper, sales automation looks like an investment almost every B2B company needs. It cuts down repetitive work, frees up sales reps' time for conversations, follows up on leads without letting any slip through the cracks, and makes the pipeline predictable. Yet in practice, many projects start with enthusiasm and are quietly abandoned within a few months. What's left behind is a set of half-finished workflows, CRM records nobody trusts, and a team saying, "We tried it, and it doesn't work for us."
 

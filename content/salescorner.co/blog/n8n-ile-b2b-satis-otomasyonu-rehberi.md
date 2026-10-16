@@ -6,6 +6,7 @@ updated: "2026-10-16"
 category: "Otomasyon"
 image: "https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
 imageAlt: "n8n ile B2B satış otomasyonu"
+alt: "b2b-sales-automation-with-n8n-guide"
 ---
 n8n ile B2B satış otomasyonu, satışın etrafındaki tekrar eden işleri iş akışlarına bağlamaktır: lead'i yakalayıp CRM'e yazmak, şirket bilgisini zenginleştirmek, lead'i doğru temsilciye yönlendirmek, takip hatırlatmaları açmak ve raporlamak. Sık tekrar eden, kuralları net ve hata maliyeti düşük bir süreçle başlayıp akışı adım adım genişletmek en güvenli yoldur.
 
@@ -33,7 +34,7 @@ Her şeyi aynı anda otomatikleştirmeye çalışmak, otomasyon projelerinin en 
 4. **Takip hatırlatmaları:** Belirli bir süre aksiyon alınmayan fırsatlar için temsilciye görev açmak.
 5. **Raporlama:** Haftalık pipeline özetini CRM'den çekip yöneticiye e-posta veya mesaj olarak göndermek.
 
-Bu beş akış kurulduğunda temsilcilerin manuel veri girişi ciddi ölçüde azalır ve hiçbir lead "unutulmuş" olarak kalmaz.
+Bu beş akış kurulduğunda temsilcilerin manuel veri girişi genellikle azalır ve hiçbir lead "unutulmuş" olarak kalmaz.
 
 ## Sağlam Bir Satış Workflow'unun 5 Katmanı
 

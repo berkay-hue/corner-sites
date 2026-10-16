@@ -70,7 +70,7 @@ KVKK permits data processing for the legitimate interests of the data controller
 - **What is the person's reasonable expectation?** An operations manager can reasonably expect to receive software offers related to their work. Sending the same person offers related to their hobbies goes beyond that expectation.
 - **How are the person's rights protected?** Safeguards such as an opt-out option, a privacy notice and a fast deletion process tip the balance in your favor.
 
-Putting this assessment in writing in a one-page document for each campaign significantly strengthens your position in the event of a complaint or an investigation by the Board.
+Putting this assessment in writing in a one-page document for each campaign strengthens your position in the event of a complaint or an investigation by the Board.
 
 ## The Duty to Inform: What to Include in the First Email
 

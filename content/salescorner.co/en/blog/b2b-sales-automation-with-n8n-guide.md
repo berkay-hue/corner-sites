@@ -34,7 +34,7 @@ Trying to automate everything at once is the most common reason automation proje
 4. **Follow-up reminders:** Creating a task for the rep on deals that have seen no action for a set period.
 5. **Reporting:** Pulling a weekly pipeline summary from the CRM and sending it to the manager by email or message.
 
-Once these five workflows are in place, manual data entry for reps drops significantly and no lead is left "forgotten".
+Once these five workflows are in place, manual data entry for reps usually drops and no lead is left "forgotten".
 
 ## The 5 Layers of a Robust Sales Workflow
 

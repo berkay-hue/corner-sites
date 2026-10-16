@@ -70,7 +70,7 @@ KVKK, ilgili kişinin temel hak ve özgürlüklerine zarar vermemek kaydıyla, v
 - **Kişinin makul beklentisi nedir?** Bir operasyon yöneticisi, işiyle ilgili yazılım teklifleri almayı makul ölçüde bekleyebilir. Aynı kişiye hobileriyle ilgili teklif göndermek bu beklentiyi aşar.
 - **Kişinin hakları nasıl korunuyor?** Ret imkânı, aydınlatma metni ve hızlı silme süreci gibi güvenceler dengeyi sizden yana çevirir.
 
-Bu değerlendirmeyi her kampanya için tek sayfalık bir dokümanda yazılı hâle getirmek, olası bir şikâyet veya Kurul incelemesinde elinizi ciddi ölçüde güçlendirir.
+Bu değerlendirmeyi her kampanya için tek sayfalık bir dokümanda yazılı hâle getirmek, olası bir şikâyet veya Kurul incelemesinde elinizi güçlendirir.
 
 ## Aydınlatma Yükümlülüğü: İlk E-Postada Ne Yazmalı?
 
