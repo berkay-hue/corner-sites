@@ -5,7 +5,7 @@ date: "2026-10-14"
 updated: "2026-10-16"
 category: "Career"
 image: "https://images.pexels.com/photos/8556222/pexels-photo-8556222.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
-imageAlt: "How to Move from SDR to Account Executive"
+imageAlt: "A woman presenting a chart to colleagues seated around a meeting table"
 ---
 
 To move from SDR to Account Executive, build the skills an AE needs while still excelling in your current role. Hit your numbers consistently, shadow and run real calls, develop business acumen and keep prospecting. Make your ambition clear and turn it into measurable milestones, so by promotion time you are already doing much of the work.

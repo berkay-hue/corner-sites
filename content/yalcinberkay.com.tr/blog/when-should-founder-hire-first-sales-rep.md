@@ -5,7 +5,7 @@ date: "2026-10-13"
 updated: "2026-10-16"
 category: "Founder Notes"
 image: "https://images.pexels.com/photos/6016350/pexels-photo-6016350.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
-imageAlt: "When Should a Founder Hire Their First Sales Rep?"
+imageAlt: "Two people at a desk with a hand-drawn sales growth chart, a laptop and a phone"
 ---
 
 Hire your first sales rep when you have proven that selling works, not when you are tired of selling. You should know who buys and why, be able to write the process down, show the numbers, and see that your own capacity has become the limit on growth. Before that point, a rep is a costly experiment.
