@@ -108,3 +108,21 @@ Sürecinizi sürekli olarak iyileştirmek için veri toplamanız ve analiz etmen
 Büyümenin Bütünsel Yaklaşımı B2B demo optimizasyonu, tek bir departmanın veya tek bir kişinin sorumluluğunda olan bir görev değildir. Bu, pazarlamadan satışa, sistem yönetiminden marka iletişimine kadar uzanan, şirketin büyüme motorunun tüm dişlilerinin uyum içinde çalışmasını gerektiren bütünsel bir süreçtir. Corner Group'taki felsefemiz de tam olarak bunun üzerine kuruludur. Başarılı bir demo süreci, SAAS Corner'ın bulduğu doğru potansiyel müşteriyle başlar, CRM Corner'ın sağladığı entegre veri altyapısıyla beslenir, Brand Corner'ın hikaye anlatıcılığıyla anlam kazanır, Sales Corner'ın yapılandırılmış satış süreçleriyle yönetilir ve Social Media Corner'ın çok kanallı erişimiyle desteklenir.
 
 Bu rehberde paylaştığımız stratejiler, demoyu bir ürün vitrininden, müşterinin sorunlarına özel olarak hazırlanmış, değer odaklı bir danışmanlık seansına dönüştürmeyi amaçlamaktadır. Hazırlık aşamasına yatırım yaparak, demo anında bir hikaye anlatarak ve demo sonrasında proaktif ve çok kanallı bir takip stratejisi izleyerek, dönüşüm oranlarınızı artırmakla kalmaz, aynı zamanda daha güçlü müşteri ilişkileri kurar ve satış döngülerinizi kısaltırsınız. Unutmayın, en iyi ürün her zaman kazanmaz; sorunları en iyi anlayan ve çözümünü en ikna edici şekilde sunan kazanır. Demo, bu ikna sanatını sergileyeceğiniz en önemli sahnedir.
+
+## Sık sorulan sorular
+
+### B2B demo öncesinde nasıl hazırlık yapılmalı?
+
+B2B demo öncesinde potansiyel müşteri niteliklendirilmeli, şirket ve kişi düzeyinde araştırma yapılmalı, net bir gündem paylaşılmalı ve teknik altyapı kontrol edilmelidir. Niteliklendirme sırasında mevcut çözümden memnuniyetsizlik, sorunun aciliyeti, bütçe ve zaman çizelgesi sorulur. Bu hazırlık, demoyu genel bir ürün tanıtımından müşterinin kendi sorunlarına odaklanan bir çözüm seansına dönüştürür.
+
+### Demo neden doğrudan ürün ekranıyla başlamamalı?
+
+Demo doğrudan ürün ekranıyla başlamamalıdır, çünkü bu karşı tarafa onu dinlemeye değil, ona anlatmaya geldiğiniz mesajını verir. Bunun yerine ilk dakikalar, ön araştırmada edinilen bilgileri teyit eden ve daha derine inen keşif sorularına ayrılmalıdır. Bu yaklaşım monoloğu diyaloğa çevirir ve demonun geri kalanını müşterinin en acil sorunlarına göre şekillendirmeyi sağlar.
+
+### Demoda fiyatlandırma nasıl sunulmalı?
+
+Fiyatlandırma bir maliyet olarak değil, bir yatırım olarak konumlandırılmalı ve fiyat söylenmeden hemen önce demo boyunca gösterilen değer özetlenmelidir. Fiyat seçenekleri net ve basit sunulmalı, her paketin neleri içerdiği ve hangi müşteri tipi için ideal olduğu açıkça belirtilmelidir. Fiyatı söyledikten sonra sessiz kalıp müşterinin tepkisini dinlemek, ona düşünme ve soru sorma alanı tanır.
+
+### Demo sonrası takip e-postası ne zaman gönderilmeli ve neler içermeli?
+
+Demo sonrası takip e-postası, demo bittikten sonraki ilk 24 saat içinde, ideal olarak birkaç saat içinde gönderilmelidir. E-posta kişiselleştirilmiş bir başlık, teşekkür ve konuşulanların özeti, değer vurgusu, ilgili ek kaynaklar ve net bir sonraki adım içermelidir. Belirsiz bir "tekrar görüşelim" ifadesi yerine somut bir tarih ve eylem öneren bir çağrı kullanmak süreci ilerletir.

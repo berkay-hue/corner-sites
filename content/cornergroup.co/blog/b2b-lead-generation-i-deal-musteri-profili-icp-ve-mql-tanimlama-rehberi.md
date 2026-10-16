@@ -92,3 +92,21 @@ Brand Corner, Social Media Corner ve Niyet Yaratma: Bu markalarımız, ICP'nin i
 ## Sonuç
 
 B2B büyüme, karmaşık denklemler ve belirsizliklerle dolu bir yolculuk olabilir. Ancak bu yolculuğun bir pusulası ve bir yol haritası vardır. İdeal Müşteri Profili (ICP), size kuzeyi gösteren pusulanızdır; tüm enerjinizi hangi yöne odaklamanız gerektiğini söyler. Pazarlama Odaklı Potansiyel Müşteri (MQL) tanımı ise yol haritanızdır; hangi adımları atmanız, ne zaman hızlanıp ne zaman beklemeniz gerektiğini gösterir. Bu iki kavramı birbirinden bağımsız, sadece pazarlamanın bir görevi olarak görmek, stratejik bir miyopluktur. Corner Group olarak bizim holding perspektifimizle gördüğümüz gerçek şudur: ICP ve MQL, pazarlamadan satışa, ürün geliştirmeden müşteri başarısına kadar tüm organizasyonun aynı hedefe kilitlenmesini sağlayan, yaşayan ve nefes alan bir iş stratejisidir. Bu temeli sağlam atmak, tesadüfi başarılar yerine öngörülebilir ve sürdürülebilir bir büyümenin kapısını aralar.
+
+## Sık sorulan sorular
+
+### ICP ile alıcı persona arasındaki fark nedir?
+
+ICP, ideal müşteri olan şirketin profilini tanımlarken alıcı persona o şirketin içindeki belirli bir rolü veya karar vericiyi tanımlar. Önce hangi şirketlere odaklanılacağı ICP ile belirlenir, ardından bu şirketlerde kiminle konuşulacağı personalar aracılığıyla netleştirilir.
+
+### İdeal müşteri profili nasıl oluşturulur?
+
+İdeal müşteri profili, en iyi mevcut müşterilerden oluşan bir "altın liste" ile başlanarak oluşturulur. Bu müşterilerin firmografik, teknografik ve davranışsal verileri toplanır, müşteri görüşmeleriyle desteklenir ve sonunda negatif profilleri de içeren bir ICP belgesi yazılarak ekiplerle paylaşılır.
+
+### MQL nedir ve nasıl belirlenir?
+
+MQL, pazarlama faaliyetleriyle etkileşime girmiş ve önceden tanımlanmış kriterleri karşılamış potansiyel müşteridir. Belirleme genellikle açık (explicit) ve örtük (implicit) verilere dayanan bir lead skorlama modeliyle yapılır; demo talebi gibi güçlü sinyaller puanı artırırken rakip şirketlerden gelen etkileşimler puanı düşürür.
+
+### MQL eşiği belirlemede en sık hata nedir?
+
+En sık hata, MQL eşiğini satış ekibiyle birlikte belirlememek ve sonrasında geri bildirimle güncellememektir. Bu durumda pazarlama "çok lead getiriyoruz" derken satış bu lead'leri "kalitesiz" bulur; satışın lead'leri "Kabul Edildi" veya "Reddedildi" olarak işaretlediği ve düzenli analiz edilen bir geri bildirim döngüsü bu kopukluğu giderir.

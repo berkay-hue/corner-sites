@@ -88,3 +88,21 @@ B2B dünyasında sürdürülebilir büyüme, en yeni teknolojiye sahip olmakla v
 Corner Group olarak, holding yapımızın bize kazandırdığı bütünsel bakış açısıyla, büyümenin silolar halinde gerçekleşemeyeceğine inanıyoruz. SAAS Corner'ın bulduğu bir müşterinin Sales Corner ile yaptığı görüşme, CRM Corner'ın yönettiği veri ve Brand Corner'ın oluşturduğu marka algısı, hepsi tek bir büyük senfoninin parçalarıdır. Müşteri geri bildirimi ise bu senfoninin orkestra şefidir. Her bir enstrümanın ne zaman ve nasıl çalacağını belirler, uyumu sağlar ve nihayetinde ortaya çıkan müziğin, yani müşteri deneyiminin, kusursuz olmasını hedefler.
 
 Müşteri geri bildirimini bir maliyet merkezi veya operasyonel bir yük olarak görmekten vazgeçip, onu en değerli stratejik varlığınız olarak konumlandırdığınızda, reaktif bir şirketten proaktif bir pazar liderine dönüşürsünüz. Bu, sadece ürününüzü değil, tüm iş yapış şeklinizi müşterinin sesi etrafında yeniden şekillendiren, sürekli bir öğrenme ve iyileştirme yolculuğudur. Bu yolculukta doğru sistemleri kurmak, doğru teknolojiyi kullanmak ve doğru stratejiyi benimsemek, geleceğin kazananlarını belirleyecektir.
+
+## Sık sorulan sorular
+
+### B2B'de müşteri geri bildirimi hangi kanallardan toplanmalı?
+
+B2B'de müşteri geri bildirimi hem proaktif hem de reaktif kanallardan toplanmalıdır. Proaktif kanallar arasında NPS, CSAT ve CES anketleri ile yapılandırılmış müşteri görüşmeleri yer alırken reaktif kanallar destek talepleri, satış ekibi notları, sosyal medya ve iptal nedenleridir. Tüm bu verilerin silolarda kalmayıp tek bir müşteri profilinde birleştirilmesi gerekir.
+
+### Geri bildirimi şikayet kutusu olarak görmek neden hatadır?
+
+Geri bildirimi yalnızca şikayet kutusu olarak görmek, sessiz çoğunluğu ve olumlu deneyimleri gözden kaçırmaya yol açtığı için hatadır. Ayrılmaya hazırlanan ama ses çıkarmayan müşteriler fark edilmez. Memnun müşterilerin neden memnun olduğunu anlamak da pazarlama mesajlarını ve ideal müşteri profilini netleştirmek için en az şikayetleri çözmek kadar değerlidir.
+
+### Müşteri geri bildirimi CRM'de nasıl yönetilmeli?
+
+Müşteri geri bildirimi CRM'de merkezi bir gerçeklik kaynağı olarak toplanmalı ve "özellik talebi", "fiyatlandırma sorunu" gibi etiketlerle sistematik olarak sınıflandırılmalıdır. Bu sayede trendler görülebilir ve tüm departmanlar aynı müşteri verisine bakarak karar verir. NPS skoru düştüğünde görev atanması gibi otomatik uyarılar da ekiplerin proaktif hareket etmesini sağlar.
+
+### Geri bildirim stratejisinin başarısı hangi metriklerle ölçülür?
+
+Geri bildirim stratejisinin başarısı churn oranı, NPS trendleri, müşteri yaşam boyu değeri (LTV), satış döngüsü süresi ve dönüşüm oranları ile destek talebi hacmi üzerinden ölçülür. Bu metriklerin bir kontrol panelinde düzenli izlenmesi programın etkisini görünür kılar. Rakamların yanında churn'den kurtarılan müşteri hikayeleri gibi niteliksel kanıtlar da değerlendirilmelidir.

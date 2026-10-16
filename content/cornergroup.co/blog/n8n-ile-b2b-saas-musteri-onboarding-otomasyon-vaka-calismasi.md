@@ -100,3 +100,21 @@ Bu vaka çalışması, sadece bir teknoloji implementasyon hikayesi değil, ayn�
 ## Sonuç
 
 B2B SaaS'ta büyüme, sadece daha fazla müşteri kazanmakla ilgili değildir; kazanılan her müşteriye ölçeklenebilir, tutarlı ve olağanüstü bir deneyim sunmakla ilgilidir. Manuel süreçlerin ve departman silolarının yarattığı operasyonel kaos, bu hedefin önündeki en büyük engeldir. Analytica AI vaka çalışması, n8n gibi güçlü ve esnek bir otomasyon platformu kullanılarak bu engellerin nasıl aşılabileceğini net bir şekilde göstermektedir. Müşteri onboarding sürecini 72 saatten 8 dakikaya indirmek, sadece bir metrik iyileştirmesi değil, müşteri odaklı bir büyüme zihniyetine geçişin somut bir kanıtıdır. Corner Group olarak, teknolojiyi stratejik bir vizyonla birleştirerek, portföy şirketlerimizin operasyonel mükemmelliğe ulaşmalarını ve kendi pazarlarında sürdürülebilir bir rekabet avantajı elde etmelerini sağlamaya devam edeceğiz. Doğru strateji ve doğru araçlarla, otomasyon, şirketinizin en yorulmaz, en hatasız ve en verimli çalışanına dönüşebilir.
+
+## Sık sorulan sorular
+
+### B2B SaaS'ta müşteri onboarding neden bu kadar önemli?
+
+Müşteri onboarding; müşteri elde tutma, müşteri yaşam boyu değeri (LTV) ve ürün adaptasyonu üzerinde doğrudan etkili olduğu için B2B SaaS'ta en kritik evredir. Başarılı bir onboarding, müşterinin ilk "başarı anını" hızla yaşamasını ve platforma bağlanmasını sağlar. Karmaşık ve yavaş bir başlangıç ise müşterinin ilk yenileme döneminden önce churn olmasına yol açabilir.
+
+### n8n ile onboarding otomasyonu nasıl çalışır?
+
+Onboarding otomasyonu, Pipedrive'da bir anlaşma "Won" olarak işaretlendiğinde webhook ile n8n akışının tetiklenmesiyle başlar. n8n anlaşma detaylarını çeker, e-posta formatını doğrular, ardından platformda müşteri hesabını, özel bir Slack kanalını ve Paraşüt'te cari hesap kartını oluşturur. Son olarak CSM adına kişiselleştirilmiş bir hoş geldin e-postası gönderir ve Asana'da onboarding görevlerini atar.
+
+### Onboarding otomasyonu için neden Zapier veya Make yerine n8n seçildi?
+
+n8n; self-hosting ile veri kontrolü, maliyet etkinliği ve geliştirici dostu esnekliği nedeniyle seçildi. Zapier ve Make görev veya operasyon sayısına dayalı fiyatlandırma kullanırken n8n'in self-hosted versiyonu sunucu maliyeti dışında lisans ücreti gerektirmez. Ayrıca HTTP Request ve Function nodları sayesinde standart dışı API'lerle çalışmak ve JavaScript ile özel mantıklar kurmak mümkündür.
+
+### Analytica AI vakasında onboarding otomasyonu hangi sonuçları verdi?
+
+Analytica AI vakasında 48-72 saat süren onboarding süreci ortalama 8 dakikaya düştü ve hata oranı %99 azaldı. Onboarding'e harcanan manuel iş haftada yaklaşık 20 saatten 1 saatin altına indi ve CSAT anketlerinde ilgili puanlar ortalama %40 arttı. Proje, yaklaşık 40 saatlik mühendislik zamanı ve sunucu maliyetiyle yatırımını 2 aydan kısa sürede geri döndürdü.

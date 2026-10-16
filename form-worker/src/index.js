@@ -2,11 +2,14 @@
 //   { page: "/iletisim", fields: [["Ad", "..."], ["E-posta", "..."]], hp: "" }
 // Kayıt D1'e yazılır; e-posta MAIL binding'i (Email Routing) üzerinden MAIL_TO adresine gider.
 import { EmailMessage } from "cloudflare:email";
+import { platform, cleanup } from "./platform.js";
 
 const MAX_FIELDS = 30, MAX_LEN = 5000, RATE = 5; // 10 dakikada IP başına en fazla RATE gönderim
 
 function allowedOrigin(env, origin) {
   if (!origin) return null;
+  // DEV_ORIGINS: yalnızca yerel geliştirme (wrangler dev --var), canlıda tanımlı değil
+  if ((env.DEV_ORIGINS || "").split(",").includes(origin)) return origin;
   let h;
   try { h = new URL(origin).hostname; } catch { return null; }
   const ok = env.ALLOWED_HOSTS.split(",").some(d => h === d || h === "www." + d) || /^web-[a-z]+\.pages\.dev$|\.web-[a-z]+\.pages\.dev$/.test(h);
@@ -24,9 +27,11 @@ export default {
     const origin = allowedOrigin(env, req.headers.get("origin"));
     if (req.method === "OPTIONS") return new Response(null, {
       status: origin ? 204 : 403,
-      headers: origin ? { "access-control-allow-origin": origin, "access-control-allow-methods": "GET, POST", "access-control-allow-headers": "content-type", "access-control-max-age": "86400", vary: "Origin" } : {},
+      headers: origin ? { "access-control-allow-origin": origin, "access-control-allow-methods": "GET, POST", "access-control-allow-headers": "content-type, authorization", "access-control-max-age": "86400", vary: "Origin" } : {},
     });
     if (url.pathname.startsWith("/rakip/")) return rakip(req, url, env, origin);
+    // brandcorner.co platformu: üyelik ve panel
+    if (/^\/(auth|app)\//.test(url.pathname)) return platform(req, url, env, origin, deliver);
     if (url.pathname !== "/submit" || req.method !== "POST") return json({ ok: false }, 404, origin);
     if (!origin) return json({ ok: false, error: "origin" }, 403, null);
 
@@ -55,6 +60,7 @@ export default {
   async scheduled(_, env) {
     const { results } = await env.DB.prepare("SELECT * FROM submissions WHERE emailed = 0 ORDER BY id LIMIT 50").all();
     for (const r of results) await deliver(env, { ...r, fields: JSON.parse(r.fields) });
+    await cleanup(env);
   },
 };
 

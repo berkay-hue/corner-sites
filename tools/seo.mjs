@@ -92,6 +92,8 @@ const RULES = {
       "/solutions/influencers": ["For Influencers: Get Discovered by Brands | Brand Corner", "Get discovered by brands, receive quality offers, and manage collaborations, contracts and payments in one place, with analytics to help you grow.", "For Influencers"],
       "/solutions/agencies": ["Influencer Agency Management Tools | Brand Corner", "Manage your talent roster, orchestrate client campaigns, and automate reporting and workflows with agency-grade tools and a dedicated client portal.", "For Agencies"],
       "/about": ["About Brand Corner", "Brand Corner is an influencer marketing platform connecting brands, influencers, and agencies worldwide. Built in Istanbul as part of Corner Group.", "About"],
+      "/privacy": ["Privacy Policy | Brand Corner", "How the Brand Corner website handles personal data: the newsletter form, hosting, cookies and local storage, and your rights under the GDPR and KVKK.", "Privacy Policy"],
+      "/terms": ["Terms of Service | Brand Corner", "The terms that apply when you use the Brand Corner website, including acceptable use, intellectual property, the newsletter form and liability.", "Terms of Service"],
       "/404": ["Page Not Found | Brand Corner", "This page could not be found."],
       // Giriş, kayıt ve panel: noindex, sitemap'te yok
       "/giris": ["Giriş | Brand Corner", "Brand Corner hesabınıza giriş yapın."],

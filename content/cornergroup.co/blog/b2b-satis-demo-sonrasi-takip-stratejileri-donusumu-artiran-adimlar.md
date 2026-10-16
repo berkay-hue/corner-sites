@@ -92,3 +92,21 @@ Sales Corner'ın sağladığı satış otomasyon araçları ve CRM Corner'ın en
 B2B satışta demo sonrası takip, şansa bırakılamayacak kadar önemli, stratejik bir süreçtir. Bu, sadece e-posta göndermekten ibaret bir görev değil; psikoloji, teknoloji, içerik ve insan ilişkilerini bir araya getiren bir sanattır. Corner Group olarak bizim felsefemiz, bu sanatın icrasını bilimin kesinliğiyle desteklemektir. Başarılı bir takip stratejisi, SAAS Corner ile bulunan doğru müşteriye, Brand Corner'ın ürettiği doğru içerikle, Sales Corner'ın otomatize ettiği doğru zamanda ve Social Media Corner'ın desteklediği doğru kanaldan ulaşmayı gerektirir. Tüm bu sürecin kalbinde ise CRM Corner'ın sağladığı kusursuz veri bütünlüğü ve analitik güç yatar.
 
 Potansiyel müşterilerinizle olan diyaloğu bir sorgulama seansından, karşılıklı değer yaratan bir ortaklığa dönüştürdüğünüzde, o korkulan "demo sonrası sessizlik" yerini, dönüşüme giden yolda atılan sağlam adımların yankısına bırakacaktır. Bu, sadece bir anlaşma kapatmak değil, uzun vadeli ve kârlı bir iş ilişkisi inşa etmektir. Corner Group'un entegre büyüme yaklaşımı da tam olarak bunun üzerine kuruludur.
+
+## Sık sorulan sorular
+
+### Demo sonrası takip e-postası ne zaman gönderilmeli?
+
+Demo sonrası teşekkür ve özet e-postası, demonun bitiminden sonraki ilk bir saat içinde gönderilmelidir. Demonun yarattığı ilgi zamanla azaldığı için ilk 24 saat, ilişkinin geleceği açısından en kritik zaman dilimidir. Bu sürede e-postanın yanı sıra tüm bilgilerin CRM'e işlenmesi ve kilit kişilere kişisel notlu bir LinkedIn bağlantı isteği gönderilmesi de önerilir.
+
+### Demo sonrası takip e-postasında neler yer almalı?
+
+İyi bir takip e-postası kişiselleştirilmiş bir teşekkür, toplantının değer odaklı özeti ve üzerinde anlaşılan net bir sonraki adım içermelidir. Konuşulanlarla doğrudan ilgili bir vaka çalışması, teknik doküman veya kısa video eklemek sözlerinizi somut kanıtlarla destekler. E-posta, aklına gelen sorular için iletişime açık olduğunuzu belirten bir cümleyle kapanmalıdır.
+
+### Demo sonrası takip sekansı nasıl kurgulanmalı?
+
+Etkili bir takip sekansı, rastgele kontrol e-postaları yerine önceden planlanmış, çok kanallı ve her adımda değer sunan bir akış olarak kurgulanmalıdır. Yazıdaki örnek sekans; değer katan içerik, amaca yönelik telefon görüşmesi, demoda dile getirilen endişeleri giderme, sosyal kanıt paylaşma ve nazikçe kapanışa yönlendirme adımlarından oluşur. Yanıt alınamazsa baskıyı ortadan kaldıran bir "ayrılık" e-postasıyla dosya geçici olarak kapatılır.
+
+### Müşteri adayı "şu an bütçemiz yok" derse ne yapılmalı?
+
+Bu durumda konuşmayı maliyetten yatırıma çevirmek gerekir. Mevcut sorunun müşteriye olan maliyetini ortaya koyup çözümün kendini ne kadar sürede amorti edeceğini göstermek, fiyat itirazını bir yatırım kararına dönüştürür. Kişiselleştirilmiş ROI hesaplayıcıları ve benzer şirketlerin vaka çalışmaları bu noktada en güçlü araçlardır.

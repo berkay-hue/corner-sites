@@ -60,3 +60,21 @@ Corner Group olarak, farklı B2B dikeylerinde faaliyet gösteren markalarımızd
 ## İşveren Markası, Geleceğin Bilançosudur
 
 B2B dünyasında yetenek savaşı, geçici bir trend değil, iş yapış şeklimizi temelden değiştiren kalıcı bir gerçekliktir. Bu savaşta galip gelmek, en yüksek maaşı teklif etmekle veya en şık ofise sahip olmakla ilgili değildir. Galibiyet, kimliğini net bir şekilde tanımlayan, bu kimliği otantik bir şekilde anlatan ve vaat ettiği deneyimi her bir çalışanına her gün yaşatan şirketlerin olacaktır. Employer branding, artık opsiyonel bir pazarlama aktivitesi değil, sürdürülebilir büyümenin ve pazar liderliğinin vazgeçilmez bir ön koşuludur. Corner Group olarak bizim felsefemiz nettir: Müşterilerinize gösterdiğiniz stratejik özeni, titizliği ve empatiyi, mevcut ve potansiyel çalışanlarınıza da gösterdiğinizde, sadece harika bir iş yeri değil, aynı zamanda durdurulamaz bir büyüme motoru inşa edersiniz. Geleceğin bilançosu, sadece finansal rakamlarla değil, şirketinize kattığınız ve koruduğunuz yeteneklerin kalitesiyle yazılacaktır.
+
+## Sık sorulan sorular
+
+### B2B employer branding nedir?
+
+B2B employer branding, şirketin kim olduğunu ve adaylara ne vaat ettiğini anlatan tutarlı ve otantik bir hikâyenin oluşturulmasıdır. Bu hikâye yalnızca işe alım ilanlarıyla sınırlı kalmaz; adayların şirketle temas ettiği her noktada ve mevcut çalışanların deneyiminde kendini gösterir.
+
+### Çalışan değer önermesi (EVP) hangi unsurları içermelidir?
+
+Güçlü bir EVP ödül, fayda, kariyer, çalışma ortamı ve kültür unsurlarını bir araya getirmelidir. Bu unsurların gerçek çalışan deneyimini yansıtması gerekir, aksi halde verilen vaat ile içerideki gerçeklik arasındaki fark kısa sürede ortaya çıkar.
+
+### İşveren markasının etkisi hangi metriklerle ölçülür?
+
+İşveren markasının etkisi başvuru kaynağı, işe alım süresi (time-to-hire), teklif kabul oranı ve işe alım kalitesi (quality of hire) gibi metriklerle ölçülür. Özellikle işe alım kalitesinin işe girişten aylar sonra değerlendirilmesi, markanın doğru yetenekleri çekip çekmediğini gösterir.
+
+### Yetenekleri elde tutmada ilk 90 gün neden kritiktir?
+
+İlk 90 gün, yeni çalışanın şirkette kalıp kalmayacağına dair algısının şekillendiği dönem olduğu için kritiktir. Bu süreçte iyi bir hazırlık, yapılandırılmış bir plan, buddy desteğiyle kültürel entegrasyon ve erken geri bildirim, verilen işveren markası vaadinin gerçeğe dönüşmesini sağlar.
