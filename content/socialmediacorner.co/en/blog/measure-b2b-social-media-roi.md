@@ -226,3 +226,21 @@ By the end of the first quarter, you'll have a real dataset to compare against. 
 Measuring B2B social media ROI is less about knowing the right formula and more about building the right infrastructure and discipline. Calculating all costs honestly, connecting tracking systems to your CRM, using a consistent attribution model and supplementing software data with customers' own responses lets you demonstrate social media's contribution to revenue in a defensible way. Focusing on audience quality on LinkedIn, the top and middle stages of the funnel on Instagram, and turning conversations into opportunities in social selling ensures you measure each channel according to its role.
 
 If you want to see what your social media investments are really delivering, build your measurement infrastructure or make your LinkedIn and Instagram strategy revenue-focused, the Social Media Corner team is ready to help. [Get in touch with us](/en/contact) to assess your current situation together.
+
+## FAQ
+
+### How do you calculate B2B social media ROI?
+
+Social media ROI is calculated by subtracting your social media investment from the revenue generated from social media, dividing the result by the investment and multiplying by 100. For a realistic calculation, costs should include not only ad spend but also personnel, tools and software, agency or consulting fees and content production.
+
+### Why is measuring social media ROI so difficult in B2B?
+
+In B2B, long sales cycles, multiple decision-makers, dark social sharing that analytics tools can't see and offline conversions intertwine social media's effects with other channels. This doesn't make measurement impossible, but it means reading several complementary indicators together instead of a single number.
+
+### Which attribution model should you use for B2B social media?
+
+There is no perfect model; what matters is choosing one, stating it clearly in your reports and applying it consistently. Looking at the same data through two models, such as first touch and W-shaped, shows social media's role as both initiator and supporter.
+
+### How do you measure the impact of dark social?
+
+The most practical solution to the dark social problem is to ask customers directly. Add a required, free-text "How did you hear about us?" field to your demo form.

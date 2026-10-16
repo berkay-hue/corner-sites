@@ -257,3 +257,21 @@ LinkedIn'de soğuk satış mesajı yazmak, doğru kelimeleri bulmaktan çok doğ
 Unutmayın: Soğuk mesaj, sosyal satış stratejinizin yalnızca bir parçası. Kurumsal profilinizin güvenilirliği, içeriklerinizin tutarlılığı ve reklamlarınızın hedeflemesi, mesajınızın okunup okunmayacağını doğrudan etkiler.
 
 LinkedIn'de sosyal satış sürecinizi kurmak, profillerinizi ve içeriklerinizi bu sürece uygun hale getirmek ya da mevcut mesaj stratejinizi birlikte değerlendirmek isterseniz [Social Media Corner ekibiyle iletişime geçin](/iletisim). Birlikte hedef kitlenize ulaşan bir yol haritası oluşturalım.
+
+## Sık sorulan sorular
+
+### LinkedIn soğuk satış mesajı ne kadar uzun olmalı?
+
+Bağlantı sonrası ilk mesajı 50-120 kelime aralığında tutmayı hedefleyin. Mobilde tek ekrana sığan, paragrafları bir-iki cümleyle sınırlı ve en fazla tek bir soruyla biten bir mesaj okunma ve yanıtlanma açısından avantajlıdır.
+
+### Etkili bir LinkedIn soğuk mesajı hangi bölümlerden oluşur?
+
+İyi bir soğuk mesaj genellikle bağlam, gözlem veya içgörü, değer önerisi, isteğe bağlı kanıt ve düşük sürtünmeli bir harekete geçirici çağrı olmak üzere beş parçadan oluşur. Her mesajda hepsine gerek yoktur, ancak bu yapı yazarken bir çerçeve sunar.
+
+### Soğuk mesaja yanıt gelmezse kaç kez takip edilmeli?
+
+Planlı bir takip dizisi 0. gün ilk mesaj, 3-4. gün kısa hatırlatma, 7-8. gün değer ekleyen takip ve 14. gün kapanış mesajı şeklinde ilerleyebilir. Dört-beş mesajdan fazla takip yapmak ısrar ile rahatsız etmek arasındaki çizgiyi aşar.
+
+### Bağlantı isteği notunda satış yapılmalı mı?
+
+Hayır, bağlantı isteği notunun amacı satış yapmak değil, bağlantının kabul edilmesi için bir gerekçe sunmaktır. Bu notun karakter sınırı yaklaşık 300 karakterle oldukça düşüktür.

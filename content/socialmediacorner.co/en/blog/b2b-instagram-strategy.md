@@ -228,3 +228,21 @@ For B2B companies, Instagram is no longer a "nice-to-have" channel. When set up 
 Remember, results on Instagram don't come overnight. The first 90 days are about laying the foundations and learning. The real payoff comes from the trust that consistency builds for your brand over time.
 
 If you want to build a social media strategy for your B2B company that covers Instagram and LinkedIn together and is grounded in measurable goals, the Social Media Corner team is here to help. [Get in touch with us](/en/contact) to talk about your goals and create a roadmap tailored to you.
+
+## FAQ
+
+### Do B2B companies need Instagram?
+
+Yes, when set up properly, Instagram is a powerful channel for B2B companies that builds trust, strengthens the employer brand and complements a LinkedIn strategy. The goal is not to replace LinkedIn but to turn Instagram into a complementary channel that supports the sales process.
+
+### How often should a B2B company post on Instagram?
+
+For most B2B companies, 3-4 posts per week plus a few Stories every weekday is a good start. Aim to include at least one Reel, one carousel and several Stories in your weekly plan.
+
+### What kind of content should a B2B Instagram account share?
+
+The five core content pillars that work for B2B companies are educational content, behind the scenes, people and culture, customer success and industry news. As a starting point, roughly 35% educational, 20% behind the scenes, 20% people and culture, 15% customer success and 10% industry news is a good reference split.
+
+### Can Instagram ads replace LinkedIn ads in B2B?
+
+No, Instagram doesn't offer LinkedIn's precise targeting by job title, company size or industry, so the two channels complement each other. It generally makes sense to use Instagram ads at the top and middle of the funnel and LinkedIn ads at stages that require more precise targeting.

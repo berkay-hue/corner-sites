@@ -216,3 +216,21 @@ The cost of LinkedIn ads is determined by the quality of your target audience, t
 The formula for success is actually clear. Calculate your budget backwards from your business goals. Split audiences into meaningful segments. Test creatives regularly. Don't neglect retargeting. Measure performance not by clicks, but by qualified opportunities and pipeline contribution.
 
 If you want to use your LinkedIn ad budget more efficiently, align your campaigns with your sales goals and get measurable results, explore [Social Media Corner's B2B social media services](/en/). For a LinkedIn advertising strategy tailored to your company, [get in touch with us](/en/contact) today. Let's talk about your goals together.
+
+## FAQ
+
+### How is LinkedIn ad cost determined?
+
+LinkedIn ads aren't sold from a fixed price list; they run through an auction system in Campaign Manager. The winner is chosen by weighing the bid amount together with how relevant the ad is to the target audience, so an engaging ad can win the auction even with a lower bid.
+
+### Which pricing model should you choose for LinkedIn ads?
+
+The right model depends on which action is truly valuable to you in the campaign. If you're after awareness, focus on impressions; if you're after traffic, focus on clicks; if you're after leads, focus on conversions.
+
+### What is the minimum budget for LinkedIn ads?
+
+LinkedIn enforces minimum daily and lifetime budget limits that may be updated from time to time, so check the current values in Campaign Manager. In practice, the real constraint isn't the platform minimum but having enough budget to collect meaningful data.
+
+### How can you lower LinkedIn ad costs?
+
+The most effective ways are layered targeting, using audience expansion deliberately, reaching warm audiences through retargeting and testing and refreshing creatives regularly. Retargeting campaigns typically produce the lowest cost per lead.
