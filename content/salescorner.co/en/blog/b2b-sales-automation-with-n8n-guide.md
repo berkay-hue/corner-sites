@@ -2,13 +2,15 @@
 title: "B2B Sales Automation with n8n: A Beginner's Guide"
 description: "How do you automate B2B sales processes with n8n? A step-by-step guide to lead capture, CRM sync, follow-up emails and the AI layer."
 date: "2026-10-11"
+updated: "2026-10-16"
 category: "Automation"
 image: "https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
 imageAlt: "B2B sales automation with n8n"
 alt: "n8n-ile-b2b-satis-otomasyonu-rehberi"
 ---
+B2B sales automation with n8n means connecting the repetitive work around selling into workflows: capturing leads and writing them to the CRM, enriching company data, routing leads to the right rep, creating follow-up reminders and sending reports. The safest path is to start with a frequent, rule-based, low-risk process and expand the workflow step by step.
 
-B2B sales teams spend a large share of their time not on selling, but on the work around selling: entering a form lead into the CRM, researching the company, preparing notes before a meeting, remembering to send a follow-up email, compiling the weekly report. Each of these tasks is small on its own. Added up, they can eat half of a sales rep's week.
+B2B sales teams spend a large share of their time not on selling, but on the work around selling: entering a form lead into the CRM, researching the company, preparing notes before a meeting, remembering to send a follow-up email, compiling the weekly report. Each of these tasks is small on its own. Added up, they can eat a significant part of a sales rep's week.
 
 **Sales automation with n8n** means turning these repetitive steps into connected workflows. In this guide we explain what n8n is, which sales processes you should start with, and how to build a robust automation step by step.
 
@@ -78,7 +80,7 @@ If you want to dig deeper into using AI for cold email writing, take a look at o
 - **Building one giant workflow:** Cramming everything into a single workflow makes maintenance hard. Split the work into small, single-purpose workflows and let them call each other when needed.
 - **Not measuring:** If you don't measure lead response time, time spent on manual data entry and conversion rate before and after automation, you can't prove the gain.
 
-## Frequently Asked Questions
+## FAQ
 
 ### Do you need coding skills to use n8n?
 
