@@ -53,9 +53,9 @@ Kısa Videoda Hikaye Anlatıcılığı 60 saniyeden kısa bir videonun bile bir 
 
 **Yapısal Elementler:** Sorun (Problem): Videonun başında hedef kitlenin yaşadığı acı noktasını net bir şekilde tanımlayın. Onların dilinden konuşun ve empati kurun. Çözüm (Solution): Sorunu nasıl çözdüğünüzü veya çözüme nasıl yaklaştığınızı gösterin. Burası, ürününüzün veya hizmetinizin değer önerisini sunduğunuz yerdir. Ancak özellikleri sıralamak yerine, faydalara odaklanın. Sonuç ve Harekete Geçirici Mesaj (Result & CTA): Çözümünüzün getirdiği olumlu sonucu (zaman tasarrufu, maliyet düşüşü, verimlilik artışı vb.) vurgulayın ve izleyiciden bir sonraki adımı atmasını isteyin.
 
-## Profesyonel Üretim, Otantik Sunum Dengesi B2B'de güvenilirlik esastır, bu da genellikle profesyonel bir görünüm gerektirir
+## Profesyonel Üretim, Otantik Sunum Dengesi
 
-Ancak "profesyonel", "pahalı stüdyo prodüksiyonu" anlamına gelmek zorunda değildir. İyi bir aydınlatma, net bir ses kaydı ve sabit bir kamera (modern akıllı telefonlar bunun için yeterlidir) çoğu zaman yeterlidir. Daha da önemlisi, sunumun otantik ve samimi olmasıdır. Şirketinizdeki gerçek uzmanların, mühendislerin, satış yöneticilerinin kamera karşısına geçmesi, cilalı bir reklam filminden daha fazla güven yaratabilir. Brand Corner'ın içerik üreticisi pazarlaması tecrübesi, izleyicilerin artık markalardan mükemmellik değil, gerçeklik beklediğini göstermektedir.
+B2B'de güvenilirlik esastır, bu da genellikle profesyonel bir görünüm gerektirir. Ancak "profesyonel", "pahalı stüdyo prodüksiyonu" anlamına gelmek zorunda değildir. İyi bir aydınlatma, net bir ses kaydı ve sabit bir kamera (modern akıllı telefonlar bunun için yeterlidir) çoğu zaman yeterlidir. Daha da önemlisi, sunumun otantik ve samimi olmasıdır. Şirketinizdeki gerçek uzmanların, mühendislerin, satış yöneticilerinin kamera karşısına geçmesi, cilalı bir reklam filminden daha fazla güven yaratabilir. Brand Corner'ın içerik üreticisi pazarlaması tecrübesi, izleyicilerin artık markalardan mükemmellik değil, gerçeklik beklediğini göstermektedir.
 
 ## Güçlü Harekete Geçirici Mesaj (CTA)
 
@@ -94,3 +94,21 @@ Mükemmel bir video üretmek, denklemin sadece yarısıdır. Holding perspektifi
 ## Sonuç
 
 B2B dünyasında kısa video, anlık bir heves veya izole bir pazarlama taktiği değildir. Corner Group'un bütünsel bakış açısıyla ele alındığında, stratejik olarak planlanmış, değer odaklı, doğru kanallarda dağıtılmış ve iş süreçlerine entegre edilmiş kısa video içerikleri, sürdürülebilir büyümenin en güçlü katalizörlerinden birine dönüşür. Müşteri adayını bulmaktan (SAAS Corner), onu satışa dönüştürmeye (Sales Corner), bu süreci ölçülebilir kılmaktan (CRM Corner), marka hikayenizi güçlü bir şekilde anlatmaya (Brand Corner) ve bu hikayeyi doğru kitlelere ulaştırmaya (Social Media Corner) kadar tüm aşamaları besleyen bir varlıktır. Başarı, sadece ne anlattığınızda değil, bu anlatıyı tüm şirket fonksiyonlarıyla ne kadar entegre ettiğinizde yatmaktadır. Geleceğin B2B liderleri, dikkat ekonomisinin kurallarını anlayan ve mesajlarını bu yeni formata ustalıkla adapte edebilenler olacaktır.
+
+## Sık sorulan sorular
+
+### B2B kısa videoları farklı karar vericilere nasıl uyarlanmalı?
+
+B2B kısa videoları, satın alma komitesindeki her personanın kendi önceliklerine göre ayrı ayrı hazırlanmalıdır. Finansal karar verici için ROI, toplam sahip olma maliyetindeki düşüş ve finansal kazanç öne çıkarılmalı; teknik karar verici için entegrasyon kolaylığı, güvenlik protokolleri ve uyumluluk gösterilmelidir. Nihai kullanıcılar içinse "raporlama süreniz 5 dakikaya inecek" gibi somut faydalar sunan "nasıl yapılır" videoları etkilidir.
+
+### Kısa videonun ilk saniyelerinde izleyici nasıl yakalanır?
+
+İzleyici, ilk 3 saniyede kullanılan güçlü bir kancayla yakalanır, çünkü sosyal medya akışında bir videonun kaderi ilk birkaç saniyede belirlenir. Sorun odaklı bir soru, şaşırtıcı bir istatistik, cesur ve karşıt bir ifade veya sonucu baştan gösterme etkili kanca teknikleridir. Örneğin "Soğuk arama öldü. İşte yerine ne geldiği." gibi bir açılış izleyiciyi durdurup videonun geri kalanını izlemeye ikna edebilir.
+
+### B2B kısa videoları için pahalı bir prodüksiyon gerekir mi?
+
+Hayır, B2B kısa videoları için pahalı bir stüdyo prodüksiyonu gerekmez. İyi bir aydınlatma, net bir ses kaydı ve sabit bir kamera çoğu zaman yeterlidir; modern akıllı telefonlar bunun için yeterli kabul edilir. Daha önemlisi sunumun otantik olmasıdır; şirketteki gerçek uzmanların, mühendislerin ve satış yöneticilerinin kamera karşısına geçmesi cilalı bir reklam filminden daha fazla güven yaratabilir.
+
+### Kısa video verileri CRM ile nasıl kullanılır?
+
+Video platformları CRM sistemine entegre edildiğinde, hangi potansiyel müşterinin hangi videoyu ne kadar süreyle izlediği görülebilir. Örneğin ürün fiyatlandırmasıyla ilgili bir videoyu sonuna kadar izleyen bir adayın lead score'u otomatik olarak artırılıp satış ekibinin öncelikli listesine taşınabilir. Bir vaka çalışması videosu izleyen adaya ise aynı sektörle ilgili içerikler gönderen otomatik bir e-posta dizisi tetiklenebilir.

@@ -21,9 +21,9 @@ Etik Gri Alanlar ve Güven Erozyonu Riski: Ancak madalyonun bir de diğer yüzü
 
 Corner Group olarak, teknolojinin sadece bir araç olduğuna ve asıl amacın sürdürülebilir, güvene dayalı iş ilişkileri kurmak olduğuna inanıyoruz. Bu felsefeyle, B2B satışta yapay zeka kullanımına yönelik etik bir çerçeve oluşturduk. Bu çerçeve, verimlilikten ödün vermeden, şeffaflığı ve müşteri güvenini merkeze alan dört temel kural üzerine inşa edilmiştir.
 
-## Veri Mahremiyetinde Radikal Şeffaflık Her şey veriyle başlar ve biter
+## Veri Mahremiyetinde Radikal Şeffaflık
 
-Yapay zekanın etik kullanımı, en temelinde, verinin nasıl toplandığı, işlendiği ve kullanıldığı konusunda mutlak bir şeffaflık gerektirir. Bu, yasal düzenlemelere (KVKK, GDPR vb.) uymanın çok ötesinde, proaktif bir güven beyanıdır.
+Her şey veriyle başlar ve biter. Yapay zekanın etik kullanımı, en temelinde, verinin nasıl toplandığı, işlendiği ve kullanıldığı konusunda mutlak bir şeffaflık gerektirir. Bu, yasal düzenlemelere (KVKK, GDPR vb.) uymanın çok ötesinde, proaktif bir güven beyanıdır.
 
 **Veri Kaynağı Beyanı:** Müşterilerinize ve potansiyel müşterilerinize, onlar hakkında hangi verileri topladığınızı açık ve anlaşılır bir dille anlatmalısınız. Bu bilgi, karmaşık gizlilik politikalarının derinliklerine gömülmemeli, kolayca erişilebilir olmalıdır. Örneğin, "Satış sürecimizi kişiselleştirmek ve size daha iyi hizmet sunmak amacıyla, web sitemizdeki etkileşimlerinizi, katıldığınız webinarları ve LinkedIn profilinizdeki kamuya açık bilgileri analiz eden bir yapay zeka modeli kullanıyoruz" gibi net bir ifade, güvenin ilk adımını atar.
 
@@ -41,9 +41,9 @@ Yapay Zeka Varlığının Dürüstçe Bildirimi Müşteri ile olan etkileşimler
 
 **Değer Odaklı Konumlandırma:** Yapay zekayı bir maliyet düşürme aracı olarak değil, müşteriye daha hızlı ve daha etkili hizmet sunmanın bir yolu olarak konumlandırın. "Size 7/24 anında yanıt verebilmek için yapay zeka destekli bir asistan kullanıyoruz. Eğer konuyu bir uzmanın değerlendirmesi gerekirse, sizi hemen doğru kişiye yönlendireceğim." mesajı, teknolojinin müşteri yararına kullanıldığını gösterir. Bu yaklaşım, Social Media Corner ve Brand Corner'ın savunduğu otantik iletişim ilkeleriyle de birebir örtüşmektedir.
 
-## Algoritmik Önyargının Aktif Olarak Denetlenmesi Yapay zeka modelleri, eğitildikleri verilerdeki önyargıları öğrenir ve büyütür
+## Algoritmik Önyargının Aktif Olarak Denetlenmesi
 
-Eğer geçmiş satış verilerinizde farkında olmadan belirli bir demografiyi veya şirket türünü kayıran bir eğilim varsa, AI bu eğilimi bir kural olarak benimseyebilir ve adil olmayan bir filtreleme yapabilir.
+Yapay zeka modelleri, eğitildikleri verilerdeki önyargıları öğrenir ve büyütür. Eğer geçmiş satış verilerinizde farkında olmadan belirli bir demografiyi veya şirket türünü kayıran bir eğilim varsa, AI bu eğilimi bir kural olarak benimseyebilir ve adil olmayan bir filtreleme yapabilir.
 
 **Düzenli Denetim ve Testler:** AI modellerinizin sonuçlarını düzenli olarak denetleyin. Modelin belirli sektörleri, şirket büyüklüklerini veya coğrafi bölgeleri haksız yere göz ardı edip etmediğini analiz edin. Farklı demografik gruplardan oluşturulmuş test veri setleri kullanarak, algoritmanın adil ve tarafsız kararlar verdiğinden emin olun. Bu, sadece etik bir sorumluluk değil, aynı zamanda potansiyel pazar segmentlerini kaçırmanızı önleyen akıllıca bir iş stratejisidir.
 
@@ -66,3 +66,21 @@ Brand ve Social Media Corner ile Yapay Zeka Destekli Otantiklik: Yapay zeka, iç
 B2B satışta yapay zekanın kullanımı artık bir "eğer" sorusu değil, bir "nasıl" sorusudur. Bu "nasıl" sorusunun cevabı, sadece teknik yetkinliklerde değil, aynı zamanda etik liderlikte yatmaktadır. Corner Group olarak bizim holding perspektifimiz, kısa vadeli verimlilik kazanımları için uzun vadeli müşteri güvenini feda etmenin, en büyük stratejik hata olduğunu söylüyor. Güven, B2B dünyasının en değerli para birimidir ve bir kez kaybedildiğinde geri kazanılması neredeyse imkansızdır.
 
 Yapay zekayı etik bir çerçeve içinde kullanmak, bir kısıtlama değil, tam tersine sürdürülebilir büyümenin ve rekabet avantajının temelidir. Şeffaflığı benimseyen, veri mahremiyetine saygı duyan, algoritmalarını denetleyen ve teknolojiyi insan dokunuşunu güçlendirmek için kullanan şirketler, sadece daha fazla satış yapmakla kalmayacak, aynı zamanda pazarlarında güvenilir birer otorite haline geleceklerdir. Geleceğin başarılı satış organizasyonları, en gelişmiş algoritmalara sahip olanlar değil, bu algoritmaları en yüksek etik standartlar ve en derin insan anlayışıyla birleştirebilenler olacaktır. Bu, teknoloji ve vicdan arasındaki hassas dengeyi kurma sanatıdır ve Corner Group olarak biz, müşterilerimizi bu sanatın ustaları olmaları için güçlendirmeye kararlıyız.
+
+## Sık sorulan sorular
+
+### B2B satışta yapay zeka kullanımının başlıca etik riskleri nelerdir?
+
+B2B satışta yapay zekanın başlıca etik riskleri veri mahremiyeti ihlali, manipülasyon ve algoritmik önyargıdır. Rıza dışında toplanan verilerle beslenen bir model müşterinin mahremiyetini ihlal eder; psikolojik profili analiz eden bir AI ise korkuları veya zaafları tetikleyen mesajlar üretebilir. Kararlarını açıklayamayan "kara kutu" modeller de belirli sektörlerden veya coğrafyalardan gelen potansiyel müşterileri sistematik olarak göz ardı edebilir.
+
+### Açıklanabilir yapay zeka (XAI) satış ekiplerine ne sağlar?
+
+Açıklanabilir yapay zeka, bir müşteri adayına verilen notun arkasındaki gerekçeyi göstererek satış temsilcisine bir içgörü ve stratejik bir başlangıç noktası sunar. Örneğin model bir şirkete "yüksek potansiyelli" notu verdiğinde, şirketin son 30 gün içinde fiyatlandırma sayfasını üç kez ziyaret ettiğini ve sektör ortalamasının üzerinde büyüdüğünü belirtebilir. Satış ekipleri kullandıkları araçlara ancak bu anlayışla güvenebilir.
+
+### Müşterilere yapay zeka ile konuştukları söylenmeli mi?
+
+Evet, müşterinin bir insanla mı yoksa bir yapay zeka ile mi konuştuğunu bilme hakkı vardır ve bu açıkça belirtilmelidir. Bir chatbot veya otomatik e-posta sistemi kullanılıyorsa, "Merhaba, ben Corner Group'un dijital asistanı CornerBot" gibi basit bir başlangıç şeffaflık mesajı verir. Müşteriyi bir insanla konuştuğuna inandırmaya çalışmak, anlaşıldığı anda tüm güveni yok eden kısa vadeli bir taktiktir.
+
+### Algoritmik önyargı nasıl önlenir?
+
+Algoritmik önyargı, AI modellerinin sonuçlarının düzenli olarak denetlenmesi ve çeşitliliğe sahip veri setleriyle eğitilmesiyle önlenir. Modelin belirli sektörleri, şirket büyüklüklerini veya coğrafi bölgeleri haksız yere göz ardı edip etmediği, farklı gruplardan oluşturulmuş test veri setleriyle analiz edilmelidir. Eğitim verilerine yalnızca en başarılı satışlar değil, başarısız olanlar ve farklı profillerden gelen veriler de dahil edilmelidir.

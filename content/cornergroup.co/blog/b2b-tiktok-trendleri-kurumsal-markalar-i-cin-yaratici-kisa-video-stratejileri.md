@@ -62,3 +62,21 @@ Corner Group'un holding felsefesinin temelinde, her bir pazarlama faaliyetinin �
 ## Sonuç
 
 B2B pazarlamasının yeni cephesi olan TikTok, artık görmezden gelinebilecek bir platform değildir. Ancak başarı, rastgele trendleri takip etmekle değil, stratejik, ölçülebilir ve bütünsel bir yaklaşımla mümkündür. Platformun insan odaklı doğasını anlamak, hedef kitlenin dilinden konuşan değerli içerikler üretmek ve bu çabaları somut iş sonuçlarına dönüştürecek şekilde pazarlama ve satış hunisine entegre etmek kritik önem taşır. Corner Group olarak, bu entegre bakış açısını DNA'mızda taşıyoruz. Social Media Corner ile doğru içeriği üretirken, Brand Corner ile güveni ölçeklendiriyor, SAAS Corner ile bu ilgiyi nitelikli talebe dönüştürüyor, Sales Corner ile satış süreçlerini otomatikleştiriyor ve CRM Corner ile tüm bu ekosistemin kusursuz bir şekilde çalışmasını sağlıyoruz. TikTok, doğru strateji ve doğru ortaklarla yönetildiğinde, markanız için sadece bir sosyal medya kanalı değil, sürdürülebilir büyümenin en dinamik motorlarından biri haline gelecektir. Bu yeni oyun alanında liderlik etme zamanı gelmiştir.
+
+## Sık sorulan sorular
+
+### TikTok B2B markaları için neden stratejik bir kanal haline geldi?
+
+TikTok, bugün kurumsal karar vericilerin de zaman geçirdiği, fikir edindiği ve satın alma yolculuklarına başladığı bir kanala dönüştüğü için stratejik hale geldi. Platformun algoritması, içerikleri ilgi alanlarına göre büyük bir hassasiyetle sunarak geliştiriciler veya depo yöneticileri gibi niş kitlelere organik olarak ulaşmayı mümkün kılar. Ayrıca kullanıcılar TikTok'u yeni bir beceri öğrenmek ve sektör trendlerini takip etmek için bir mikro-öğrenme aracı olarak da kullanıyor.
+
+### B2B markaları TikTok'ta hangi tür içerikler üretmeli?
+
+B2B markaları TikTok'ta beş temel içerik türüne odaklanabilir: eğitici içerik (edutainment), perde arkası videoları, vaka analizleri ve müşteri başarıları, sektörel mizah ve ürün demoları. Örneğin "Etkili bir soğuk e-posta yazmanın 5 kuralı" gibi hızlı ipuçları, çalışanların bir gününü özetleyen videolar veya önce/sonra karşılaştırmaları kullanılabilir. Ürün demolarında ise her videoda tek bir özelliğe odaklanmak ve faydayı 60 saniyenin altında göstermek önerilir.
+
+### B2B içerik üreticisi seçerken nelere dikkat edilmeli?
+
+B2B'de doğru içerik üreticisi, genellikle kendi alanında uzmanlaşmış bir yazılım mühendisi, finans danışmanı, İK yöneticisi veya pazarlama otomasyonu uzmanı gibi bir profesyoneldir. Takipçi sayısından daha önemli olan, takipçi kitlesinin kalitesi ve etkileşim oranıdır. İdeal müşteri profiliyle örtüşen bir kitleye sahip, karmaşık konuları anlaşılır biçimde açıklayabilen ve kitlesiyle samimi bir güven ilişkisi kurmuş kişiler hedeflenmelidir.
+
+### B2B TikTok performansı hangi metriklerle ölçülmeli?
+
+B2B TikTok performansı beğeni ve izlenme sayılarının ötesinde, izlenme süresi ve tamamlama oranı, paylaşımlar ve kaydetmeler, yorumların niteliği ile profil ve link tıklamalarıyla ölçülmelidir. Paylaşımlar ve kaydetmeler, izleyicinin içeriği son derece değerli bulduğunu gösterdiği için en değerli etkileşimlerden biridir. Profil ziyaretleri ve biyografideki linke yapılan tıklamalar ise içeriğin ne kadar eyleme geçirici olduğunun doğrudan ölçüsüdür.

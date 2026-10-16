@@ -25,7 +25,9 @@ Kontrolsüz ve Yönlendirilmemiş Konuşma Akışı (Dostça Sohbet İllüzyonu)
 
 **Stratejik Etkisi:** Her iş görüşmesinin bir amacı olmalıdır. Keşif görüşmesinin temel amacı, müşterinin sorununu teşhis etmek ve çözümünüzün uygun olup olmadığını karşılıklı olarak değerlendirmektir (kalifikasyon). Kontrolsüz bir görüşme, bu amacın ıskalanmasına neden olur. Görüşme sonunda "Harika bir sohbet oldu, ileride tekrar konuşuruz" gibi belirsiz bir ifadeyle ayrılınır. Bu durum, CRM Corner'da yönetilen satış hunisinin (pipeline) niteliksiz ve şişirilmiş fırsatlarla dolmasına yol açar. Satış tahminleri sağlıksız hale gelir, kaynaklar yanlış fırsatlara harcanır ve satış döngüsü gereksiz yere uzar. Profesyonel bir satış süreci, samimiyet ile yapı arasında bir denge kurmayı gerektirir. Kontrolü kaybetmek, süreci kaybetmektir.
 
-## Sadece Tek Bir Kişiye Odaklanmak (Tek Kanallı Yanılgı) B2B satış süreçleri, nadiren tek bir kişinin kararıyla ilerler
+## Sadece Tek Bir Kişiye Odaklanmak (Tek Kanallı Yanılgı)
+
+B2B satış süreçleri, nadiren tek bir kişinin kararıyla ilerler.
 
 Genellikle bir satın alma komitesi bulunur: son kullanıcılar, teknik değerlendiriciler, finans departmanı, yöneticiler ve nihai karar vericiler. Satış temsilcilerinin yaptığı yaygın bir hata, ilk temas kurdukları kişiyi tek muhatap olarak kabul etmek ve tüm çabalarını ona yöneltmektir. Bu kişi bir "şampiyon" olsa bile, organizasyon içindeki diğer paydaşları ikna edemezse veya onların endişelerini gideremezse, anlaşma bir noktada mutlaka duvara toslar.
 
@@ -52,3 +54,21 @@ Hataları teşhis etmek, denklemin sadece ilk yarısıdır. Corner Group olarak 
 ## Sonuç
 
 Keşif görüşmesi, bir satış sürecinin sadece bir adımı değildir; B2B büyüme stratejisinin ta kendisidir. Bu kritik etkileşime yapılan yatırım, tüm müşteri yaşam boyu değerini doğrudan etkiler. Yukarıda sıralanan hatalar, genellikle bireysel yetersizliklerden çok, parçalanmış süreçlerin ve entegre olmayan sistemlerin bir sonucudur. Corner Group olarak, bu zorlukları bir holdingin stratejik derinliği ve çoklu marka yetkinliği ile ele alıyoruz. Bizim için bir keşif görüşmesi, SAAS Corner'ın bulduğu bir adayın potansiyelini ölçtüğümüz, Sales Corner'ın verimlilik metodolojilerini test ettiğimiz, Brand Corner'ın yarattığı algıyı doğruladığımız ve tüm bu değerli veriyi CRM Corner ile şirketin kurumsal hafızasına işlediğimiz bütünsel bir operasyondur. B2B satışta başarı, sadece ne söylediğinizle değil, ne kadar iyi dinlediğinizle, ne kadar iyi hazırlandığınızla ve öğrendiklerinizi tüm organizasyonun büyümesi için ne kadar akıllıca kullandığınızla ölçülür. Bu, taktiksel bir oyundan çok, stratejik bir mimari meselesidir ve Corner Group, bu mimarinin ustasıdır.
+
+## Sık sorulan sorular
+
+### B2B keşif görüşmesine nasıl hazırlanılmalı?
+
+Keşif görüşmesine, müşterinin şirketi, sektörü, son haberleri ve LinkedIn paylaşımları incelenerek ve birkaç temel hipotez geliştirilerek girilmelidir. Temsilci, müşterinin hangi içerikleri indirdiğine ve web sitesinin hangi sayfalarını ziyaret ettiğine bakarak ilk ilgi alanını görebilir. Görüşmeyi "Şirketiniz ne yapar?" gibi temel bir soruyla açmak yerine bilgili ve stratejik bir soruyla başlamak, anında danışman konumu yaratır ve güven inşa eder.
+
+### Keşif görüşmesinde ürün sunumuna ne zaman geçilmeli?
+
+Ürün özellikleri, müşterinin sorunu teşhis edildikten sonra, görüşmenin sonlarına doğru o soruna yönelik bir reçete olarak sunulmalıdır. Temsilci görüşmenin büyük bölümünü soru sorarak ve dinleyerek geçirir; SPIN veya Challenger Sale gibi metodolojilerle sorunun iş üzerindeki finansal ve operasyonel etkilerini ortaya çıkarır. Müşteri özellikler değil sonuçlar satın aldığı için, erken yapılan ürün odaklı sunum şirketi sıradan bir tedarikçi konumuna düşürür ve fiyat odaklı rekabete sürükler.
+
+### Keşif görüşmesinde kalifikasyon için hangi çerçeveler kullanılabilir?
+
+Kalifikasyon için BANT (Budget, Authority, Need, Timeline) veya MEDDPICC gibi çerçeveleri içeren kontrol listeleri kullanılabilir. Bu listeler giriş, gündem belirleme, sorun teşhisi, kalifikasyon ve sonraki adımlar aşamalarını içeren keşif görüşmesi oyun planlarıyla birlikte CRM sistemine entegre edilir. Yapı katı bir senaryo değildir; temsilci müşterinin akışına göre özgürce hareket eder ancak kritik bilgileri atlamaz ve görüşmeyi net, taahhüt içeren bir sonraki adımla kapatır.
+
+### B2B satışta neden tek bir muhataba odaklanmak risklidir?
+
+Tek bir muhataba odaklanmak risklidir, çünkü B2B kararları genellikle son kullanıcılar, teknik değerlendiriciler, finans, yöneticiler ve nihai karar vericilerden oluşan bir satın alma komitesi tarafından verilir. İlk temas kurulan kişi bir şampiyon olsa bile diğer paydaşların endişeleri giderilmezse anlaşma duvara toslar. Bu yüzden keşif görüşmesinde "Bu kararda sizden başka kimlerin görüşü önemli olacak?" gibi sorularla organizasyon haritası çıkarılmalı ve her paydaşa özel içerikler hazırlanmalıdır.

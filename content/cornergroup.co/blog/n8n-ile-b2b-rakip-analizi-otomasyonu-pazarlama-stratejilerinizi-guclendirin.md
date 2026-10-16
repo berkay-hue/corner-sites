@@ -19,15 +19,21 @@ B2B ekosisteminde rekabet analizi, basitçe rakiplerin ne yaptığını gözleml
 
 Zaman ve Kaynak Tüketimi Manuel analiz, bir veya daha fazla analistin düzenli olarak rakip web sitelerini, bloglarını, sosyal medya hesaplarını, basın bültenlerini ve sektör haberlerini taramasını gerektirir. Bu, haftalık veya aylık olarak tekrarlandığında, yüzlerce saatlik bir insan kaynağı maliyeti anlamına gelir. Corner Group olarak gözlemimiz, bu değerli analitik beyin gücünün veri toplama gibi düşük değerli görevlere harcanmasının, stratejik düşünme ve yorumlama gibi yüksek değerli faaliyetlerden zaman çalmasıdır. Bu durum, özellikle kaynakları kısıtlı olan KOBİ'ler ve startup'lar için sürdürülebilir bir model değildir.
 
-## Veri Tutarsızlığı ve İnsan Hatası Manuel veri toplama, doğası gereği insan hatasına açıktır
+## Veri Tutarsızlığı ve İnsan Hatası
+
+Manuel veri toplama, doğası gereği insan hatasına açıktır.
 
 Bir detayın gözden kaçırılması, verilerin yanlış bir hücreye kopyalanması veya bir kaynağın unutulması, analiz sonuçlarının güvenilirliğini zedeler. Farklı zamanlarda farklı kişiler tarafından yapılan analizler, standart bir metodoloji olmadığında tutarsız sonuçlar üretebilir. Bu da, veriye dayalı karar alma sürecini yanıltıcı bir zemine oturtur.
 
-## Anlık ve Gecikmeli Bilgi Pazar dinamikleri saatler içinde değişebilir
+## Anlık ve Gecikmeli Bilgi
+
+Pazar dinamikleri saatler içinde değişebilir.
 
 Rakibinizin web sitesinde yaptığı kritik bir fiyatlandırma güncellemesi veya başlattığı agresif bir kampanya, siz aylık raporunuzu hazırlayana kadar etkisini çoktan göstermiş olabilir. Manuel analiz, genellikle geçmişe dönük bir "snapshot" sunar. Oysa B2B dünyasında rekabet avantajı, anlık ve proaktif hareket etme yeteneğinden gelir. Gecikmeli bilgiyle hareket etmek, fırsatları kaçırmak veya tehditlere geç reaksiyon vermek anlamına gelir.
 
-## Veri Siloları ve Bütünsel Bakış Açısı Eksikliği Farklı departmanlar, kendi ihtiyaçları doğrultusunda rakip analizi yapabilir
+## Veri Siloları ve Bütünsel Bakış Açısı Eksikliği
+
+Farklı departmanlar, kendi ihtiyaçları doğrultusunda rakip analizi yapabilir.
 
 Pazarlama ekibi içerik ve SEO'ya odaklanırken, satış ekibi fiyatlandırma ve promosyonları izleyebilir. Bu veriler genellikle farklı tablolarda, sunumlarda veya e-postalarda dağınık halde kalır. CRM Corner'ın en sık karşılaştığı sorunlardan biri olan bu veri siloları, şirketin bütünsel bir rakip stratejisi geliştirmesini engeller. Pazarlama, satış ve ürün ekiplerinin aynı, güncel ve merkezi bir veri havuzundan beslenememesi, koordinasyonsuzluğa ve stratejik uyumsuzluğa yol açar. İşte otomasyon, bu kısıtları ortadan kaldırarak rekabet analizini stratejik bir güce dönüştürmenin anahtarını sunar.
 
@@ -39,19 +45,27 @@ n8n Nedir?: n8n, temel olarak görsel bir arayüz üzerinden farklı uygulama ve
 
 ### B2B İçin n8n'i Stratejik Kılan Özellikler
 
-## Açık Kaynak ve Self-Hosting (Kendi Sunucusunda Barındırma) n8n'in en belirgin farkı açık kaynaklı olmasıdır
+## Açık Kaynak ve Self-Hosting (Kendi Sunucusunda Barındırma)
+
+n8n'in en belirgin farkı açık kaynaklı olmasıdır.
 
 Bu, iki temel stratejik avantaj sunar. Birincisi, maliyet etkinliğidir. Bulut tabanlı versiyonu bulunsa da, n8n'i kendi sunucularınıza veya özel bir bulut ortamına kurarak lisans maliyetlerinden büyük ölçüde tasarruf edebilirsiniz. Bu, özellikle binlerce otomasyon görevi çalıştıran büyük ölçekli operasyonlar için önemlidir. İkincisi ve daha kritik olanı ise veri gizliliği ve kontrolüdür. Rekabet analizi gibi hassas verilerin üçüncü parti bir platformun sunucularında değil, tamamen kendi kontrolünüzdeki bir ortamda işlenmesi, birçok B2B şirketi için vazgeçilmez bir güvenlik unsurudur.
 
-## Sınırsız Esneklik ve Özelleştirme Hazır entegrasyonlar (node'lar) sunan platformların aksine, n8n'in gücü özelleştirme yeteneğinden gelir
+## Sınırsız Esneklik ve Özelleştirme
+
+Hazır entegrasyonlar (node'lar) sunan platformların aksine, n8n'in gücü özelleştirme yeteneğinden gelir.
 
 HTTP Request nodu sayesinde, API'ı olan hemen hemen her servise bağlanabilirsiniz. Eğer bir servisin resmi bir API'ı yoksa bile, web scraping (veri kazıma) teknikleriyle web sitelerinden veri çekmek mümkündür. Ayrıca, JavaScript kodu yazmanıza olanak tanıyan Function ve Code nodları, veriyi dilediğiniz gibi işlemenize, filtrelemenize, dönüştürmenize ve zenginleştirmenize olanak tanır. Bu, standart entegrasyonların yetersiz kaldığı karmaşık ve niş B2B senaryoları için hayati bir özelliktir.
 
-## Hata Yönetimi ve Güvenilirlik B2B süreçlerinde otomasyonun kesintisiz çalışması kritiktir
+## Hata Yönetimi ve Güvenilirlik
+
+B2B süreçlerinde otomasyonun kesintisiz çalışması kritiktir.
 
 n8n, gelişmiş hata yönetimi mekanizmaları sunar. Bir iş akışının herhangi bir adımında hata oluştuğunda, akışı durdurmak, alternatif bir yola yönlendirmek veya bir bildirim göndermek gibi senaryolar kurgulayabilirsiniz. "Retry on Fail" özelliği, geçici ağ sorunları gibi durumlarda işlemin otomatik olarak yeniden denenmesini sağlayarak sistemin dayanıklılığını artırır. Bu, manuel kontrole gerek kalmadan otomasyonlarınızın güvenilir bir şekilde çalışmasını sağlar.
 
-## Bütünsel Sistem Entegrasyonu Vizyonu Corner Group'un CRM Corner markası, verinin merkezi bir sistemde akmasının önemini vurgular
+## Bütünsel Sistem Entegrasyonu Vizyonu
+
+Corner Group'un CRM Corner markası, verinin merkezi bir sistemde akmasının önemini vurgular.
 
 n8n, bu vizyon için mükemmel bir orkestrasyon aracıdır. Rakiplerin web sitelerinden, sosyal medyadan, SEO araçlarından ve haber kaynaklarından topladığı verileri işleyip zenginleştirdikten sonra, bu verileri doğrudan CRM sisteminize (Salesforce, HubSpot), proje yönetim aracınıza (Asana, Jira), iletişim platformunuza (Slack, Microsoft Teams) veya veri ambarınıza (Google BigQuery, Snowflake) aktarabilir. Bu sayede n8n, sadece bir otomasyon aracı olmaktan çıkıp, tüm şirketinizin rekabet zekası verilerini besleyen merkezi bir veri boru hattına (data pipeline) dönüşür.
 
@@ -71,7 +85,9 @@ Sosyal Medya Aktiviteleri ve Bahsedilmeler (Mentions): Rakiplerin LinkedIn, Twit
 
 **İş İlanları:** Bir rakibin hangi pozisyonlar için iş ilanı açtığı, şirketin büyüme alanları, teknoloji yığınları (stack) ve stratejik öncelikleri hakkında önemli ipuçları verir. Örneğin, "Enterprise Satış Müdürü" ilanı, daha büyük müşterilere odaklanma niyetini gösterebilir. Teknik: Rakibin kariyer sayfasını veya LinkedIn'deki şirket sayfasını düzenli olarak tarayan bir web scraping akışı.
 
-## n8n İş Akışı (Workflow) Mimarisi Veri kanallarını belirledikten sonra, n8n üzerinde bu verileri toplayacak, işleyecek ve dağıtacak mimariyi kurabiliriz
+## n8n İş Akışı (Workflow) Mimarisi
+
+Veri kanallarını belirledikten sonra, n8n üzerinde bu verileri toplayacak, işleyecek ve dağıtacak mimariyi kurabiliriz.
 
 **Tetikleyici (Trigger) Node:** İş akışını başlatan bileşendir. Rakip analizi için en yaygın tetikleyici "Cron" nodudur. Bu nod, iş akışını belirlediğiniz zaman aralıklarında (örneğin her gün sabah 08:00'de veya her saat başı) otomatik olarak çalıştırır.
 
@@ -108,3 +124,21 @@ n8n ile rekabet analizi otomasyonu kurmak, sürecin sadece teknik kısmıdır. C
 B2B pazarında ayakta kalmak ve büyümek, en çok veriye sahip olmakla değil, doğru veriyi en hızlı şekilde anlamlı içgörüye dönüştürmekle mümkündür. Geleneksel, manuel rakip analizi yöntemleri, günümüzün hızla değişen pazar koşullarında yetersiz kalmaktadır. n8n gibi güçlü ve esnek otomasyon araçları, bu süreci reaktif bir angaryadan, proaktif bir stratejik silaha dönüştürme potansiyeli sunar. Bu, sadece zaman kazanmaktan veya maliyetleri düşürmekten ibaret bir verimlilik artışı değildir; bu, pazar dinamiklerini rakiplerinizden daha hızlı anlama, fırsatları onlardan önce görme ve tehditlere karşı daha çevik olma yeteneğidir.
 
 Corner Group olarak, SAAS Corner'dan CRM Corner'a uzanan geniş uzmanlık yelpazemizle, teknolojinin stratejik bir kaldıraç olarak kullanılması gerektiğine inanıyoruz. n8n ile B2B rakip analizi otomasyonu, bu inancın somut bir örneğidir. Pazarlama stratejilerinizi varsayımlar üzerine değil, sürekli akan, zengin ve gerçek zamanlı veriler üzerine inşa etmenizi sağlar. Bu, sadece bir sonraki pazarlama kampanyanızı değil, şirketinizin pazardaki uzun vadeli konumunu ve rekabet avantajını güçlendiren temel bir yatırımdır. Unutmayın, geleceğin kazananları, en çok çalışanlar değil, en akıllıca otomatikleştirenler ve insan zekasını en stratejik noktalarda kullananlar olacaktır.
+
+## Sık sorulan sorular
+
+### Manuel rakip analizi neden yetersiz kalıyor?
+
+Manuel rakip analizi, yüzlerce saatlik insan kaynağı tüketmesi, insan hatasına açık olması ve geçmişe dönük bir anlık görüntü sunması nedeniyle yetersiz kalır. Rakibin kritik bir fiyatlandırma güncellemesi, aylık rapor hazırlanana kadar etkisini çoktan göstermiş olabilir. Ayrıca farklı departmanların topladığı veriler dağınık tablolarda, sunumlarda veya e-postalarda kalarak bütünsel bir rakip stratejisi geliştirilmesini engelleyen veri siloları oluşturur.
+
+### n8n'i Zapier ve Make gibi araçlardan ayıran nedir?
+
+n8n'i ayıran en belirgin özellik açık kaynaklı olması ve kendi sunucularınızda barındırılabilmesidir. Bu sayede lisans maliyetlerinden büyük ölçüde tasarruf edilir ve rekabet analizi gibi hassas veriler tamamen kendi kontrolünüzdeki bir ortamda işlenir. HTTP Request nodu ile API'ı olan hemen hemen her servise bağlanılabilir, Code nodlarıyla veri özelleştirilebilir ve "Retry on Fail" özelliği geçici ağ sorunlarında işlemi otomatik olarak yeniden dener.
+
+### n8n ile rakiplerin hangi verileri otomatik olarak izlenebilir?
+
+n8n ile rakiplerin web sitesi ve blog içerikleri, fiyatlandırma ve ürün sayfası değişiklikleri, sosyal medya aktiviteleri, SEO ve anahtar kelime performansı ile iş ilanları otomatik olarak izlenebilir. Örneğin fiyatlandırma sayfasının HTML içeriği düzenli aralıklarla çekilip bir önceki versiyonla karşılaştırılarak değişiklikler tespit edilebilir. İş ilanları da önemli ipuçları verir; "Enterprise Satış Müdürü" ilanı, daha büyük müşterilere odaklanma niyetini gösterebilir.
+
+### Rakip müşteri şikayetleri satış fırsatına nasıl dönüştürülebilir?
+
+Rakip müşteri şikayetleri, G2 ve Capterra gibi inceleme sitelerini her 6 saatte bir tarayan bir n8n akışıyla satış fırsatına dönüştürülebilir. Akış yalnızca 1 veya 2 yıldızlı yeni yorumları işleme alır ve OpenAI API'ı ile yorumu özetleyip müşterinin temel acı noktasını belirler. Yorumda şirket adı tespit edilirse CRM'de yeni bir lead kaydı oluşturulur ve satış ekibine Slack üzerinden bildirim gider.

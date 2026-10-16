@@ -33,7 +33,9 @@ B2B SaaS ekosisteminde hala yaygın olarak kullanılan iki eski okul fiyatlandı
 
 Değer bazlı fiyatlandırma teoride harika görünse de, uygulaması disiplinli ve veri odaklı bir yaklaşım gerektirir. İşte Corner Group'un deneyimleriyle şekillenen, bu modeli adım adım kurmanızı sağlayacak rehber.
 
-## İdeal Müşteri Profilini (ICP) ve Alıcı Personalalarını Derinlemesine Anlamak Her şey müşteriyi anlamakla başlar
+## İdeal Müşteri Profilini (ICP) ve Alıcı Personalalarını Derinlemesine Anlamak
+
+Her şey müşteriyi anlamakla başlar.
 
 Ancak bu, yüzeysel demografik bilgilerin ötesine geçmek demektir. Değer, öznel bir kavramdır ve farklı müşteri segmentleri için farklı anlamlar taşır.
 
@@ -43,7 +45,9 @@ Ancak bu, yüzeysel demografik bilgilerin ötesine geçmek demektir. Değer, öz
 
 **Değer Görüşmeleri Yapmak:** En iyi veriyi doğrudan müşterilerinizden alırsınız. Mevcut müşterilerinizle, potansiyel müşterilerinizle ve hatta kayıp müşterilerinizle görüşmeler yapın. Onlara şu soruları sorun: "Bu problemi çözmeden önce hayatınız nasıldı?", "Bu problemi çözmek sizin için ne kadar değerli (parasal olarak)?", "Ürünümüzün hangi özelliği olmasaydı kesinlikle almazdınız?", "Ürünümüzü kullanmayı bıraksanız ne kaybedersiniz?". Bu nitel veriler, değerin ne olduğunu tanımlamanız için altın madenidir.
 
-## Değer Metriklerini Belirlemek (Value Metrics) Değer metriği, fiyatlandırmanızın temelini oluşturan "birim"dir
+## Değer Metriklerini Belirlemek (Value Metrics)
+
+Değer metriği, fiyatlandırmanızın temelini oluşturan "birim"dir.
 
 Müşterilerinizin ürününüzden aldığı değere göre ölçeklenen bir ölçüttür. "Kullanıcı başına" (per user) en yaygın metrik olsa da, çoğu zaman en iyisi değildir.
 
@@ -61,7 +65,9 @@ Fiyatlandırma Paketlerini Stratejik Olarak Yapılandırmak Değer metrikleriniz
 
 **Özellik Dağılımı:** Özellikleri paketlere dağıtırken, müşteriyi bir üst pakete geçmeye teşvik edecek "değer köprüleri" kurun. Örneğin, temel pakette manuel yapılan bir işlem, orta pakette otomatik hale gelebilir. Sales Corner'ın otomasyon yetenekleri, tam olarak bu tür bir değer köprüsüdür. Müşteri, manuel işlerden sıkıldığında bir üst pakete geçmek için doğal bir motivasyon hisseder.
 
-## Değeri Sayısallaştırmak ve Fiyat Noktalarını Belirlemek Bu, sürecin en zorlu adımıdır
+## Değeri Sayısallaştırmak ve Fiyat Noktalarını Belirlemek
+
+Bu, sürecin en zorlu adımıdır.
 
 Değere bir fiyat etiketi yapıştırmak. Burada hem sanatsal sezgi hem de bilimsel veri analizi devreye girer.
 
@@ -71,7 +77,9 @@ Değere bir fiyat etiketi yapıştırmak. Burada hem sanatsal sezgi hem de bilim
 
 Bu analizler karmaşık görünebilir, ancak modern anket araçları ve analitik platformlar bu süreci oldukça kolaylaştırmaktadır. Önemli olan, fiyatı bir odaya kapanıp tahmin etmek yerine, doğrudan pazardan gelen verilerle belirlemektir.
 
-## İletişim, Test ve İterasyon Fiyatlandırma, bir kere yapılıp unutulacak bir proje değildir
+## İletişim, Test ve İterasyon
+
+Fiyatlandırma, bir kere yapılıp unutulacak bir proje değildir.
 
 Pazar, rakipleriniz ve müşterileriniz sürekli değişir. Dolayısıyla fiyatlandırmanız da canlı, nefes alan bir organizma gibi olmalıdır.
 
@@ -108,3 +116,21 @@ Değer bazlı fiyatlandırmaya geçiş, bir şirketin büyüme yolculuğundaki e
 ## Sonuç
 
 Fiyatlandırma, büyüme stratejinizin merkezinde yer alan, yaşayan ve nefes alan bir fonksiyondur. Maliyetlerinize bakarak veya rakibinizi kopyalayarak değil, müşterinizin dünyasına girip onlara sunduğunuz somut ve algılanan değeri anlayarak belirlenmelidir. Değer bazlı fiyatlandırma modeline geçiş, sadece bir fiyat değişikliği değil, müşteri odaklı bir zihniyet dönüşümüdür. Corner Group olarak, bu dönüşümün her aşamasında stratejik bir ortak olarak yer alıyoruz. Çünkü biliyoruz ki; doğru müşteri adaylarını bulmak (SAAS Corner), onlara değeri etkili bir şekilde satmak (Sales Corner), bu değeri verilerle kanıtlamak (CRM Corner) ve marka hikayenizle bu değeri sürekli pekiştirmek (Brand Corner & Social Media Corner) birbiriyle ayrılmaz bir bütündür. Bu bütünün orkestra şefi ise, müşterinizin başarısını kendi başarınızın merkezine koyan akıllı bir fiyatlandırma stratejisidir. Başarınız, sunduğunuz değerle, fiyatınız ise bu değeri ne kadar anladığınızla ölçülür.
+
+## Sık sorulan sorular
+
+### Değer bazlı fiyatlandırma nedir?
+
+Değer bazlı fiyatlandırma, fiyatı maliyetlere veya rakiplere değil, ürünün müşteriye sağladığı algılanan ve kanıtlanabilir değere dayandıran bir stratejidir. Bu değer artan gelir, azalan maliyetler, kazanılan zaman, azaltılan risk veya artan verimlilik şeklinde olabilir. Model, müşterinin ürünü kullanarak ne kadar ekonomik değer yarattığını sorar ve fiyatlandırmayı müşterinin başarısıyla doğrudan ilişkilendirir.
+
+### Maliyet-artı ve rakip odaklı fiyatlandırma neden yetersiz kalır?
+
+Her iki model de fiyatı müşterinin elde ettiği değerden kopararak gelir potansiyelini sınırlar. Maliyet-artı modelde 100.000 dolarlık verimlilik sağlayan ve maliyeti 1.000 dolar olan bir yazılımı 1.500 dolara satmak, masada 98.500 dolarlık değer bırakmak demektir. Rakip odaklı fiyatlandırma ise kontrolü rakibe devreder ve şirketi kârlılığı ile marka algısını aşındıran bir fiyat savaşına sürükleyebilir.
+
+### SaaS ürünü için kaç fiyatlandırma paketi sunulmalı?
+
+Genellikle üç paket idealdir, çünkü bu yapı karar felcini önlerken karşılaştırma ve çapraz satış imkanı da sunar. İki paket müşteriyi ucuz ya da pahalı ikilemine sokarken, dört veya daha fazla paket kafa karıştırıcı olabilir. Her paket temel, büyüme ve kurumsal gibi net tanımlanmış bir alıcı personasını hedeflemeli ve müşteriyi bir üst pakete taşıyacak değer köprüleri içermelidir.
+
+### Değer bazlı modelde fiyat noktası nasıl belirlenir?
+
+Genel kural, müşterinin üründen elde ettiği değerin ödediği fiyatın en az 10 katı olmasıdır; ayda 10.000 dolar kazandıran bir yazılım için aylık 1.000 dolar makul bir başlangıçtır. Bu sezgi Van Westendorp fiyat hassasiyeti ölçeri, Gabor-Granger tekniği ve konjoint analizi gibi araştırma yöntemleriyle desteklenmelidir. Belirlenen fiyat daha sonra A/B testleri ve satış ekibinden gelen geri bildirimlerle düzenli olarak gözden geçirilmelidir.
