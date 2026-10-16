@@ -17,11 +17,11 @@ Ama zirvede durmak, ayağının altındaki zeminin sağlam olduğu anlamına gel
 
 Dosyadaki tablo şöyle. Birkaç yıl önce bir bilgisayar şirketi parmakla kullanılan dokunmatik telefonunu çıkardı. Büyük bir internet şirketinin telefon üreticilerine ücretsiz verdiği sistem de hızla yayılıyor. Korvala'nın kendi akıllı telefon sistemi eskidi, uygulama geliştiriciler ilgisini kaybetti. Ortaklıkla geliştirilen yeni sistem ise henüz hazır değil.
 
-Akıllı telefonda pazar payın eriyor, hisse düşüyor. Telefon satışında hâlâ dünya birincisisin. Ama bu birincilik, giderek önemini yitiren bir ligde.
+Akıllı telefonda pazar payın geriliyor, hisse düşüyor. Telefon satışında hâlâ dünya birincisisin. Ama bu birincilik, giderek önemini yitiren bir ligde.
 
 Korvala'nın sorunu kötü telefon yapması değil. Fabrikalar çalışıyor, marka tanınıyor, telefonlar dünyanın her yerinde satılıyor. Sorun, telefonun değerinin donanımdan yazılıma, o yazılımın etrafındaki uygulamalara kaymış olması. Sen hâlâ en iyi kutuyu yapıyorsun. Müşteri ise artık kutunun içinde ne olduğuna bakıyor.
 
-## Platform savaşı donanımla kazanılmıyor
+## Platform yarışı donanımla kazanılmıyor
 
 Bir mahallede iki pazar kurulduğunu düşün. Satıcılar alıcının çok olduğu pazara gider, alıcılar da satıcının çok olduğu pazara. Pazarlardan biri biraz öne geçince bu döngü kendi kendini beslemeye başlar. Öbür pazarın tezgâhları ne kadar güzel olursa olsun, yavaş yavaş boşalır.
 
@@ -61,7 +61,7 @@ Bu seçeneğin içinde sinsi bir tuzak da var: "Bu sisteme bu kadar emek verdik,
 
 Ucuz ve sağlam telefonlarda dünya lideri olarak kalırsın. Bildiğin işi yaparsın, fabrikalar dolu çalışır.
 
-Bu yol bugünü kurtarır, yarını kaybettirir. Ucuz telefon pazarı da birkaç yıl içinde akıllı telefona dönecek. Bugün kaçtığın savaş, birkaç yıl sonra kendi kalenin kapısına dayanır.
+Bu yol bugünü korur, yarını kaybettirir. Ucuz telefon pazarı da birkaç yıl içinde akıllı telefona dönecek. Bugün ertelediğin rekabet, birkaç yıl sonra kendi pazarına gelir.
 
 ## Kontrol mü, erişim mi?
 
@@ -89,7 +89,7 @@ Puanlar, o dönemde bilinenlere ve sonradan olanlara bakılarak verildi. B'nin d
 
 Kötü biten her karar kötü değildir, iyi biten her karar da iyi değildir. Sonucu bilerek geriye bakmak, karar anındaki belirsizliği unutturur. Bu ayrımı [iyi karar, kötü sonuç](/blog/iyi-karar-kotu-sonuc) yazısında açtık. Kararları puanlıyoruz, insanları değil. Stoddard da tıpkı senin gibi, hiçbiri güvenli olmayan yollar arasında seçim yapmak zorundaydı.
 
-Korvala'nın derdi bir gecede patlayan bir kriz değildi. Yıllara yayılan, yavaş ilerleyen bir yangındı. Ani krizlerde ilk saatlerin nasıl yönetildiğini merak ediyorsan [krizin ilk saatleri](/blog/krizin-ilk-48-saati) üzerine yazdıklarımıza da bakabilirsin.
+Korvala'nın derdi bir gecede ortaya çıkan bir kriz değildi. Yıllara yayılan, yavaş ilerleyen bir gerilemeydi. Ani krizlerde ilk saatlerin nasıl yönetildiğini merak ediyorsan [krizin ilk saatleri](/blog/krizin-ilk-48-saati) üzerine yazdıklarımıza da bakabilirsin.
 
 ## Platform seçerken kendine sor
 
@@ -117,10 +117,10 @@ Gordon Stoddard 2010'ların başında Tallbridge ortaklığını seçti ve şirk
 
 Çünkü karar anında da görülebilen bir risk vardı: Korvala bütün geleceğini pazarın yalnızca çok küçük bir dilimini tutan tek bir sisteme bağlıyordu. B seçeneğinin 35 puanı yalnızca kötü bitmesinden gelmiyor.
 
-### Platform savaşı nasıl kazanılır?
+### Platform yarışı nasıl kazanılır?
 
-Platform savaşı donanımla değil, geliştiricileri ve kullanıcıları aynı pazara çeken döngüyle kazanılır. Kullanıcı sevdiği uygulamaların olduğu telefonu alır, geliştirici de kullanıcının çok olduğu sisteme uygulama yazar; bu döngünün yanlış tarafına düşen sistem yavaş yavaş boşalır.
+Platform yarışı donanımla değil, geliştiricileri ve kullanıcıları aynı pazara çeken döngüyle kazanılır. Kullanıcı sevdiği uygulamaların olduğu telefonu alır, geliştirici de kullanıcının çok olduğu sisteme uygulama yazar; bu döngünün yanlış tarafına düşen sistem yavaş yavaş boşalır.
 
 ## Sen ne yapardın?
 
-2010'ların başındasın. Telefonlar hâlâ satılıyor ama zemin ayağının altından kayıyor. Sen hangi yolu seçerdin? [Bugünün vakasını oyna](/#oyun) ve kararını gerçek CEO'nunkiyle karşılaştır.
+2010'ların başındasın. Telefonlar hâlâ satılıyor ama zemin ayağının altından kayıyor. Sen hangi yolu seçerdin? [Korvala vakasını oyna](/?s=001#oyun) ve kararını gerçek CEO'nunkiyle karşılaştır.
