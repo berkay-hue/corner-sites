@@ -68,3 +68,21 @@ Her stratejinin nihai testi, ürettiği somut sonuçlardır. Corner Group olarak
 ## Sonuç
 
 Büyüme, bir dizi tesadüfi eylemin toplamı değil, bilinçli ve entegre bir stratejinin metodik bir çıktısıdır. InnovateHR vaka çalışması, B2B SaaS dünyasında rekabet avantajı yaratmanın yolunun, daha geniş ağlar atmaktan değil, daha derine inmekten geçtiğini kanıtlamaktadır. Niche bir pazara odaklanmak, bir kısıtlama değil, aksine bir güçlendiricidir. Bu, mesajlarınızı keskinleştirmenize, kaynaklarınızı en verimli şekilde kullanmanıza ve potansiyel müşterilerinizle gerçek bir bağ kurmanıza olanak tanır. Corner Group olarak bizim felsefemiz, bu odaklanmayı bütünsel bir yaklaşımla birleştirmektir. Başarı, sadece SAAS Corner'ın doğru listeyi bulmasıyla ya da Sales Corner'ın mükemmel sekansı tasarlamasıyla gelmez. Başarı; bu listenin Brand Corner'ın ürettiği değerli içerikle beslenmesi, Social Media Corner'ın yarattığı sosyal kanıtla desteklenmesi ve tüm bu sürecin CRM Corner'ın inşa ettiği kusursuz teknolojik omurga üzerinde akmasıyla mümkün olur. Her bir markamızın uzmanlığı, bir diğeriyle sinerji içinde çalıştığında, ortaya çıkan sonuç parçaların toplamından çok daha büyük bir etki yaratır. InnovateHR'in dönüşüm hikayesi, bu entegre büyüme modelinin gücünün canlı bir kanıtıdır. Geleceğin başarılı B2B SaaS şirketleri, en çok bağıranlar değil, doğru kitleye en doğru ve en değerli mesajı, en uyumlu sistemlerle fısıldayabilenler olacaktır.
+
+## Sık sorulan sorular
+
+### Niche pazar outreach nedir ve "spray and pray" yaklaşımından farkı nedir?
+
+Niche pazar outreach, geniş kitlelere ulaşmaya çalışmak yerine çok net tanımlanmış bir segmente kişiselleştirilmiş ve değer odaklı mesajlarla ulaşma stratejisidir. "Spray and pray" yaklaşımı mümkün olan en fazla kişiye ulaşmayı hedefler, ancak bütçeleri eritir ve marka itibarını zedeler. InnovateHR vakasında hedef, "İK departmanı olan her şirket" yerine uzaktan çalışan teknoloji şirketlerine daraltıldı.
+
+### İdeal müşteri profili ile alıcı personası arasındaki fark nedir?
+
+İdeal müşteri profili hedeflenen şirketlerin özelliklerini tanımlarken, alıcı personası bu şirketlerdeki karar vericiyi bir insan olarak tanımlar. InnovateHR için ICP; 50-250 çalışanı olan, remote-first modelini benimsemiş, son 12 ayda yatırım almış ve aktif işe alım yapan teknoloji şirketleriydi. Persona ise 35-45 yaş aralığında, veri odaklı, Slack ve Asana gibi araçları kullanan "Teknoloji Odaklı İK Lideri Selin" olarak tanımlandı.
+
+### Lead scoring sistemi satış ekibine nasıl yardımcı olur?
+
+Lead scoring, her etkileşime puan atayarak satış ekibinin yalnızca satın almaya en hazır potansiyel müşterilerle konuşmasını sağlar. Vakada fiyatlandırma sayfasını ziyaret etmek +15, vaka çalışması indirmek +10, webinara kaydolmak +8 ve bir e-postayı açmak +1 puan değerindeydi. 100 puanlık eşiği aşan kişiler otomatik olarak MQL olarak işaretlenip tüm etkileşim geçmişiyle ilgili satış temsilcisine atandı.
+
+### Niche outreach stratejisi InnovateHR'de hangi sonuçları üretti?
+
+Strateji, üç aylık çalışmanın ardından toplantı alma oranını %0.5'ten %4'e çıkardı ve ortalama satış döngüsünü 95 günden 65 güne indirdi. Müşteri edinme maliyeti %40 azaldı, MQL'lerin SQL statüsüne taşınma oranı ise %25'ten %70'e yükseldi. Bu sonuçlar, 10.000 kişilik genel bir liste yerine 800 kişilik ultra-nitelikli bir listeyle çalışılarak elde edildi.

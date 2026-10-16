@@ -32,7 +32,9 @@ Tek Beden Herkese Uymaz Piyasada çok sayıda CRM platformu bulunmaktadır, anca
 
 Çoklu Kiracılık (Multi-Tenancy) veya İş Birimi (Business Unit) Desteği: Seçilecek CRM, verileri merkezi bir yerde tutarken, her bir markanın kendi alanında (iş birimi) çalışmasına olanak tanımalıdır. Bu, A markası ekibinin sadece kendi müşteri verilerini ve kampanyalarını görmesini sağlarken, holding seviyesindeki yöneticilerin tüm veriye bütünsel olarak erişebilmesini sağlar. Bu, hem veri güvenliği hem de operasyonel netlik için kritiktir. Güçlü API ve Entegrasyon Yetenekleri: CRM'iniz, portföyünüzdeki tüm e-ticaret platformları (Shopify, Magento, WooCommerce vb.), pazarlama otomasyon araçları, ERP sistemleri ve müşteri hizmetleri yazılımlarıyla sorunsuz bir şekilde konuşabilmelidir. API'nin esnekliği ve belgelendirmesinin kalitesi, gelecekteki entegrasyonların ne kadar kolay ve düşük maliyetli olacağını belirler. Özelleştirme Kapasitesi: Her markanın kendine özgü süreçleri ve veri alanları olabilir. CRM platformu, standart alanların yanı sıra, "Favori Marka", "Son Etkileşim Kurulan Marka" veya "Markalar Arası Müşteri Skoru" gibi özel alanlar oluşturmanıza izin vermelidir. Bu, segmentasyon ve otomasyon stratejilerinizin zenginliği için temel bir gerekliliktir. Ölçeklenebilirlik ve Performans: Müşteri veriniz ve marka sayınız arttıkça, sistemin yavaşlamaması veya çökmemesi gerekir. Bulut tabanlı, kanıtlanmış bir altyapıya sahip, yüksek hacimli veriyi sorunsuzca işleyebilen bir platform seçmek, uzun vadeli bir yatırım için olmazsa olmazdır.
 
-## Veri Mimarisi ve Yönetişim Modelini Kurmak En iyi CRM bile, içine kalitesiz veya düzensiz veri yüklendiğinde işe yaramaz hale gelir
+## Veri Mimarisi ve Yönetişim Modelini Kurmak
+
+En iyi CRM bile, içine kalitesiz veya düzensiz veri yüklendiğinde işe yaramaz hale gelir.
 
 Entegrasyon projesinin başında net bir veri mimarisi ve yönetişim modeli oluşturulmalıdır.
 
@@ -87,3 +89,21 @@ Her büyük dönüşüm projesinde olduğu gibi, çok markalı CRM entegrasyonu 
 ## Sonuç
 
 Çoklu marka e-ticaretinde CRM entegrasyonu, basit bir teknoloji projesi değil, bir büyüme felsefesidir. Veri silolarının hüküm sürdüğü, markaların birbirinden habersizce kendi yollarında ilerlediği bir yapıdan, müşteriyi merkeze alan, verinin serbestçe aktığı ve markaların birbirini beslediği bir ekosisteme geçiştir. Bu yolculuk, doğru stratejik vizyon, titiz bir operasyonel planlama ve insan odaklı bir değişim yönetimi gerektirir. Corner Group olarak, portföyümüzdeki markalarla bu süreci bizzat deneyimleyerek öğrendik ki; başarılı bir entegrasyonun sonunda elde edilen şey, sadece birleştirilmiş bir veritabanı değildir. Elde edilen, her bir müşteriyi daha derinlemesine anlama, onlara daha kişisel ve tutarlı bir deneyim sunma ve sonuç olarak tüm holding için sürdürülebilir, ölçeklenebilir ve kârlı bir büyüme motoru yaratma gücüdür. Entegre bir CRM, çok markalı yapınızın sadece parçalarının toplamı değil, bu parçaların sinerjisiyle oluşan çok daha büyük bir değer olmasını sağlayan merkezi sinir sistemidir. Bu sistemi kurmak, geleceğin rekabet ortamında ayakta kalmanın değil, lider olmanın anahtarıdır.
+
+## Sık sorulan sorular
+
+### Çok markalı bir e-ticaret yapısı için CRM seçerken nelere dikkat edilmelidir?
+
+Çok markalı bir yapı için CRM seçerken çoklu kiracılık veya iş birimi desteği, güçlü API entegrasyonları, özelleştirme esnekliği ve ölçeklenebilirlik öncelikli kriterlerdir. Platform, Shopify, Magento ve WooCommerce gibi e-ticaret altyapılarıyla sorunsuz entegre olabilmelidir. "Favori Marka", "Son Etkileşim Kurulan Marka" ve "Markalar Arası Müşteri Skoru" gibi özel alanlar tanımlanabilmeli, bulut tabanlı yapı da büyümeye uyum sağlamalıdır.
+
+### Farklı markalardaki müşteri kayıtları tek bir profilde nasıl birleştirilir?
+
+Farklı markalardaki müşteri kayıtları, Merkezi Müşteri Kimliği (Golden Record) için belirlenen ortak bir anahtarla birleştirilir. Bu anahtar genellikle e-posta adresidir, ancak telefon numarası gibi ikincil anahtarlar da kullanılabilir. Ayrıca "İstanbul", "IST" ve "Ist." gibi farklı yazımların tek bir standarda getirilmesi, veri kalitesinin korunması için gereklidir.
+
+### CRM entegrasyonuna tüm markalarla aynı anda başlamak doğru mudur?
+
+Tüm markaları aynı anda yeni CRM sistemine geçirmeye çalışmak genellikle kaosa ve başarısızlığa yol açtığı için doğru bir yaklaşım değildir. Bunun yerine bir veya iki markayla pilot proje başlatmak ve elde edilen deneyimle diğer markalar için bir yaygınlaştırma planı oluşturmak gerekir. Pilot markadan alınan başarılar, örneğin çapraz satış gelirinde yüzde 15 artış, diğer ekiplerin değişime ikna edilmesini de kolaylaştırır.
+
+### Çok markalı bir holdingde CRM başarısı hangi metriklerle ölçülür?
+
+Çok markalı bir holdingde CRM başarısı, geleneksel marka metriklerinin yanında tüm holdingin başarısını ölçen portföy düzeyindeki metriklerle ölçülmelidir. Bu metrikler arasında Portföy Yaşam Boyu Değeri (LTV), Markalar Arası Satın Alma Oranı ve Müşteri Başına Marka Sayısı yer alır. Ekiplerin yalnızca kendi markalarının dönüşüm oranı veya ortalama sepet tutarı gibi metriklerine odaklanması, merkezi sistemin getirdiği sinerjinin göz ardı edilmesine neden olur.

@@ -60,3 +60,21 @@ n8n'i bir holding yapısında uygulamak, dönüştürücü bir süreçtir ancak 
 ## Sonuç
 
 Otomasyondan Stratejik Büyüme Motoruna Corner Group olarak bizim için n8n, sadece bir görev otomasyon aracı değil, çok markalı holding yapımızın operasyonel zekasıdır. Veri silolarını yıkan, markalar arası sinerjiyi ortaya çıkaran ve her bir markanın kendi pazarında daha hızlı ve verimli hareket etmesini sağlayan bir köprü görevi görür. Doğru bir strateji, merkezi bir yönetim ve ölçeklenebilir bir mimari ile n8n, dağınık ve verimsiz bir operasyonlar yığınını, uyum içinde çalışan, veri odaklı ve yüksek performanslı bir büyüme motoruna dönüştürebilir. Bu yolculuk teknik bir uygulama projesinden çok, bir zihniyet ve kültür değişimidir. Bu değişimi başaran holdingler, sadece maliyetlerini düşürmekle kalmaz, aynı zamanda pazarın karmaşıklığına daha hızlı adapte olma, yeni fırsatları daha çabuk yakalama ve sürdürülebilir bir rekabet avantajı elde etme yeteneği kazanır. Otomasyon, artık bir seçenek değil, çok markalı yapıların gelecekteki başarısı için stratejik bir zorunluluktur.
+
+## Sık sorulan sorular
+
+### Çok markalı bir holding pazarlama otomasyonu için neden n8n'i tercih etmeli?
+
+n8n, self-hosted kurulabildiği için verilerin kontrolünü holdingin kendisinde tutar ve veri egemenliği sağlar. Açık kaynaklı yapısı, kullanıcı veya kişi sayısına göre fiyatlandırma yapan HubSpot, Marketo ve Pardot gibi platformlara kıyasla maliyet etkin bir alternatif sunar. HTTP Request node'u sayesinde markaların kullandığı farklı araçlar tek bir otomasyon altyapısında birbirine bağlanabilir.
+
+### n8n otomasyonlarını birden fazla markaya ölçeklendirirken hangi kurallara uyulmalı?
+
+Ölçeklenme için beş temel kural öne çıkar: bir Merkezi Otomasyon Ekibi (CoE) kurmak, Clearbit ve Hunter gibi araçlarla ana veri yönetimi yapıp mükerrer kayıtları önlemek ve tekrar kullanılabilir şablon (blueprint) iş akışları hazırlamak. Güvenlik tarafında Credentials yönetimi, kurumsal sürümlerdeki kullanıcı rolleri ve staging/production ortam değişkenleri kullanılmalıdır. Son olarak queue mode ile çalışmak ve Prometheus/Grafana ile izleme yapmak gerekir.
+
+### SAAS Corner'daki lead akışı n8n ile nasıl otomatikleştiriliyor?
+
+Webflow formu doldurulduğunda bir webhook n8n iş akışını başlatır ve lead verisi Clearbit ile zenginleştirilir. 50'den fazla çalışanı olan ve teknoloji sektöründeki şirketler "Kurumsal Lead" olarak etiketlenir. Diğerleri "KOBİ Lead" olarak işaretlenir. Ardından lead, Pipedrive'da doğru satış hattına ve temsilciye atanır, ilgili satış temsilcisinin Slack kanalına da bildirim gönderilir.
+
+### n8n'e geçişte karşılaşılan engeller nasıl aşılır?
+
+Teknik yetkinlik eksikliği Merkezi Otomasyon Ekibi (CoE) ile giderilir, standartlaşmaya karşı direnç ise atölye çalışmalarıyla yönetilir; örneğin Pipedrive kullanan bir ekip HubSpot'a geçmeye zorlanmaz. Hata yönetimi için Error Trigger ve bir yeniden deneme kuyruğu kurulur. İnsan dokunuşunun kaybolması riski de ayrıca gözetilmesi gereken bir engeldir.
