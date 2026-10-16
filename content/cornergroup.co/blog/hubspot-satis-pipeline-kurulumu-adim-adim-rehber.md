@@ -214,3 +214,21 @@ HubSpot'ta satış pipeline'ı kurmak teknik olarak birkaç saatlik bir iştir. 
 Unutmayın, pipeline yaşayan bir yapıdır. İlk kurulumdan sonraki aylarda toplanan gerçek veriler, aşamalarınızı, olasılık oranlarınızı ve otomasyonlarınızı iyileştirmeniz için en değerli kaynaktır.
 
 HubSpot'ta satış pipeline'ınızı sıfırdan kurmak ya da mevcut yapınızı gözden geçirip optimize etmek istiyorsanız, Corner Group ekibi süreç analizinden kuruluma, veri aktarımından ekip eğitimine kadar her adımda yanınızda. İhtiyaçlarınızı konuşmak için bizimle iletişime geçin.
+
+## Sık sorulan sorular
+
+### HubSpot satış pipeline'ında kaç aşama olmalı?
+
+B2B satış süreçlerinin çoğu için kapanış aşamaları hariç 5 ile 7 arasında aşama yeterlidir. Daha az aşama süreci fazla kabaca gösterir, daha fazlası ise temsilcilerin fırsatları güncellemeyi ihmal etmesine yol açar. 10-12 aşamalı pipeline'lar hem pano görünümünü karmaşıklaştırır hem de güncelleme yükünü artırır. Aşamalar temsilcinin iç faaliyetlerini değil, müşterinin satın alma yolculuğundaki ilerlemeyi göstermeli ve her biri için yazılı bir giriş kriteri belirlenmelidir.
+
+### HubSpot'ta kazanma olasılıkları nasıl belirlenir ve ne zaman güncellenmeli?
+
+Kazanma olasılıkları ilk kurulumda büyük ölçüde tahmine dayanır ve 3 ila 6 ay sonra gerçek verilerle güncellenmelidir. Her aşamaya atanan yüzde, ağırlıklı pipeline değerini belirler; örneğin %60 olasılıklı aşamada toplam 1.000.000 TL değerindeki fırsatların ağırlıklı değeri 600.000 TL olarak hesaplanır. Fırsat dönüşüm raporları her aşamadan kapanışa ne oranda fırsat geçtiğini gösterir. Teklif aşamasındaki fırsatların gerçekte yarıdan azı kazanılıyorsa %60 oranı aşırı iyimserdir ve düşürülmelidir.
+
+### HubSpot'ta ne zaman birden fazla pipeline kullanılmalı?
+
+Satış süreci gerçekten farklıysa ayrı pipeline, yalnızca ürün ya da bölge farklıysa tek pipeline ve filtre kullanılmalıdır. Yeni müşteri satışı ile mevcut müşteriye ek satış, doğrudan satış ile bayi üzerinden satış, proje bazlı satış ile abonelik satışı ve sözleşme yenilemeleri ayrı pipeline gerektiren tipik durumlardır. Aynı adımlarla satılan ürün grupları için "Ürün kategorisi" özelliğiyle filtreleme daha sade bir yapı sunar. Oluşturulabilecek pipeline sayısı HubSpot lisans seviyesine göre değişir.
+
+### Aşama geçişlerinde kaç alan zorunlu tutulmalı?
+
+Her aşama geçişinde en fazla 2-3 kritik alanı zorunlu tutmak genellikle iyi bir başlangıç noktasıdır. Her aşamaya beş-altı zorunlu alan eklemek temsilcileri yorar ve kaçınma davranışını tetikler. Örneğin "Kaybedildi" aşamasına geçişte kayıp nedeni ve kısa açıklama, "Kazanıldı" aşamasına geçişte kazanma nedeni ve sözleşme başlangıç tarihi istenebilir. Kayıp nedeni gibi alanlarda serbest metin yerine açılır liste kullanmak raporlamayı mümkün kılar.

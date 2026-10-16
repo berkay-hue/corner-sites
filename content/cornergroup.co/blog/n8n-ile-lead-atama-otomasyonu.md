@@ -295,3 +295,21 @@ Bu metrikleri log tablonuzdan ve CRM'den çeken bir raporlama akışını yine n
 n8n ile round-robin lead atama otomasyonu, satış operasyonunuzun en temel ama en etkili iyileştirmelerinden biridir. Doğru kurulduğunda lead'ler saniyeler içinde doğru kişiye ulaşır, iş yükü adil dağılır ve yöneticiler manuel atama yükünden kurtulur. Sağlam bir sistemin anahtarı birkaç kritik detayda gizlidir: mevcut sahip kontrolü, kapasite ve uygunluk filtreleri, eşzamanlılığa dayanıklı bir sayaç, SLA takibi ve eksiksiz loglama. Basit sıralı modelle başlayıp ihtiyaç doğdukça ağırlık, segment ve marka katmanları eklemek en pratik yoldur.
 
 Lead atama süreçlerinizi otomatikleştirmek, CRM'inizle entegre bir round-robin yapısı kurmak ya da çok markalı satış operasyonunuzu n8n ile ölçeklendirmek istiyorsanız, [Corner Group ekibiyle iletişime geçin](/iletisim). İhtiyaçlarınıza uygun mimariyi birlikte tasarlayalım.
+
+## Sık sorulan sorular
+
+### Round-robin lead atamada hangi model tercih edilmeli?
+
+Gerçek hayatta genellikle en sağlıklı sonucu veren model, izin, mesai saati ve açık lead sınırını kontrol eden kapasite ve uygunluk bazlı modeldir. Basit sıralı modelde leadler sırayla A, B, C, D ve yeniden A şeklinde döner. Ağırlıklı modelde ise 3, 2 ve 1 ağırlıklar her 6 leadlik döngüde 3-2-1 dağılım verir ve yeni temsilcileri kademeli yüklemek için kullanışlıdır.
+
+### Aynı anda gelen iki lead neden aynı temsilciye gidiyor?
+
+Bunun nedeni, iki ayrı yürütmenin aynı son_index değerini okuduğu yarış durumu (race condition) sorunudur. Yüksek hacimli ekipler için en güvenilir çözüm, Postgres'te sayacı tek sorguyla okuyup artıran atomik bir güncellemedir. Alternatif olarak leadler bir tabloya yazılıp her dakika sırayla işlenebilir. Google Sheets ve n8n workflow static data ise eşzamanlılığa karşı koruma sağlamaz.
+
+### Atanan lead'e zamanında dönülmesi nasıl garanti edilir?
+
+Bunu, her 30 dakikada bir çalışan ikinci bir SLA takip akışı sağlar. Bu akış son 24 saat içinde atanmış ama üzerinde aktivite kaydı olmayan leadleri CRM'den çeker ve belirlenen süre aşıldığında, örneğin mesai içinde 4 saat sonra, temsilciye hatırlatma gönderir. İkinci eşik de aşılırsa, örneğin 8 saatte, lead sıradaki temsilciye yeniden atanır ve satış müdürü bilgilendirilir.
+
+### Şirketin zaten bir sahibi varsa yeni lead nasıl atanmalı?
+
+Şirketin CRM'de bir sahibi varsa lead doğrudan o kişiye atanmalı ve round-robin sayacı ilerletilmemelidir. Şirket e-posta alan adı üzerinden arandığı için Gmail, Hotmail gibi genel e-posta sağlayıcıları bu kontrolden hariç tutulur. Bu adımı atlamak aynı firmaya iki temsilcinin ulaşmasına yol açar ve en hızlı güven kaybettiren hatadır.

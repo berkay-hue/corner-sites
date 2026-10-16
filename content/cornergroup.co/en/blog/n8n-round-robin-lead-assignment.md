@@ -295,3 +295,21 @@ You can also build a reporting workflow in n8n that pulls these metrics from you
 Round-robin lead assignment automation with n8n is one of the most basic yet most effective improvements you can make to your sales operations. When set up correctly, leads reach the right person within seconds, the workload is distributed fairly and managers are freed from the burden of manual assignment. The key to a robust system lies in a few critical details: existing owner checks, capacity and availability filters, a concurrency-safe counter, SLA tracking and thorough logging. The most practical path is to start with the simple sequential model and add weighting, segment and brand layers as the need arises.
 
 If you want to automate your lead assignment processes, build a round-robin structure integrated with your CRM or scale your multi-brand sales operations with n8n, [get in touch with the Corner Group team](/en/contact). Let's design the right architecture for your needs together.
+
+## FAQ
+
+### Which round-robin model should a sales team choose?
+
+In real life, the capacity- and availability-based model, which checks leave, working hours and an open-lead limit, usually delivers the healthiest results. In the simple sequential model, leads rotate from A to B to C to D and back to A. In the weighted model, weights of 3, 2 and 1 produce a 3-2-1 split in each 6-lead cycle, which is useful for gradually ramping up new hires.
+
+### Why do two leads arriving at the same time go to the same rep?
+
+This is a race condition, where two separate executions read the same last_index value. For high-volume teams, the most reliable fix is an atomic update in Postgres that reads and increments the counter in a single query. Alternatively, leads can be written to a table that a separate workflow processes in order every minute. Google Sheets and n8n workflow static data offer no protection against concurrency.
+
+### How do you make sure assigned leads are followed up on time?
+
+A second SLA-tracking workflow that runs every 30 minutes handles this. It pulls leads assigned in the last 24 hours with no logged activity and sends the rep a reminder once a threshold is exceeded, for example 4 hours during working hours. If a second threshold is also exceeded, for example 8 hours, the lead is reassigned to the next rep and the sales manager is notified.
+
+### How should a new lead be assigned if the company already has an owner?
+
+If the company already has an owner in the CRM, the lead should go directly to that person and the round-robin counter should not advance. Because the company is looked up by email domain, generic providers such as Gmail and Hotmail are excluded from this check. Skipping this step leads to two reps contacting the same company, which is the fastest way to lose trust.

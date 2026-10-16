@@ -168,3 +168,21 @@ Uyum ile performans çoğu zaman aynı yöne çalışır. Daha dar ve daha ilgil
 Türkiye'de soğuk outbound yasak değildir, ama kuralsız da değildir. KVKK verinin nasıl toplandığını ve işlendiğini, 6563 ise mesajın hangi kanaldan ve hangi şartlarla gönderildiğini düzenler. Meşru menfaate dayalı, belgelenmiş bir hedefleme yapın. Kurumsal kanalları tercih edin. İlk mesajda şeffaf bir aydınlatma sunun. Ret taleplerini üç iş günü içinde, hatta aynı gün işleyin. Yurt dışı araçlar için standart sözleşme sürecini tamamlayın. Bu adımları atan bir ekip hem hukuki riskini azaltır hem de daha nitelikli bir pipeline kurar.
 
 Outbound süreçlerinizi KVKK'ya uygun hale getirmek, otomasyonlarınızı yeniden kurgulamak veya çok markalı yapınız için ortak bir uyum altyapısı oluşturmak istiyorsanız Corner Group ekibi olarak yardımcı olmaya hazırız. [İletişim sayfamızdan](/iletisim) bize ulaşın, sürecinizi birlikte değerlendirelim.
+
+## Sık sorulan sorular
+
+### B2B soğuk e-posta göndermek için alıcının önceden onayı gerekir mi?
+
+Esnaf ve tacirlere gönderilen ticari elektronik iletiler için önceden onay gerekmez, ancak alıcının ret hakkı her zaman saklıdır. 6563 sayılı Kanun'un temel kuralı önceden onay olsa da Ticari Elektronik İletiler Yönetmeliği tacirler için bu istisnayı tanır. İstisna, iletinin bir şirkete ya da şirket adına hareket eden bir yetkiliye kurumsal adresinden gönderildiği durumlarda gündeme gelir. Bir çalışanın kişisel adresine, onu bireysel tüketici olarak hedefleyen bir ileti göndermek bu kapsamın dışında kalır.
+
+### Soğuk outbound için KVKK'da hangi hukuki sebebe dayanılabilir?
+
+Soğuk outbound'da en uygun dayanak, KVKK'nın 5/2-f maddesindeki meşru menfaat istisnasıdır, çünkü kişiyle henüz temas kurulmadığı için açık rıza yoktur. Meşru menfaat otomatik bir izin değildir; menfaatin belirli olup olmadığını, işlemenin ölçülü olup olmadığını ve kişinin makul beklentisini tartan yazılı bir denge testi gerekir. Verinin LinkedIn'de veya şirket sitesinde açık olması tek başına yeterli değildir, çünkü alenileştirme verinin kamuya açıldığı amaçla sınırlı yorumlanır.
+
+### Ret bildirimi gelen bir kişiye ne kadar süre içinde ileti gönderimi durdurulmalı?
+
+Ret bildirimi size ulaştıktan sonra en geç üç iş günü içinde ileti gönderimini durdurmanız gerekir. Otomatik sekanslarda bu süre çok kolay aşılır; ret geldiği gün planlanmış bir takip adımını kimse durdurmazsa ihlal oluşur. Bu yüzden ret veren her adresin girdiği ve tüm araçların gönderimden önce kontrol ettiği merkezi bir engelleme listesi kurmak gerekir. Verinin silinmesi veya düzeltilmesi gibi 11. madde başvurularına ise en geç 30 gün içinde yanıt verilmelidir.
+
+### Yurt dışında barındırılan CRM ve outbound araçlarını kullanmak KVKK açısından ne gerektirir?
+
+Türkiye'deki kişilerin verisini yurt dışında barındırılan araçlara yüklemek yurt dışına kişisel veri aktarımıdır ve 1 Haziran 2024'te yürürlüğe giren yeni 9. madde kurallarına tabidir. En pratik yol, Kurul'un yayımladığı standart sözleşmeleri imzalamak ve imzadan sonra beş iş günü içinde Kurum'a bildirmektir. Arızi aktarım istisnaları düzenli ve sürekli olmayan durumlar içindir, bu nedenle sürekli çalışan bir CRM veya outbound aracı için bu yola dayanmak uygun değildir.
