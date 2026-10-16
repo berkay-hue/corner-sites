@@ -9,6 +9,8 @@ imageAlt: "How to Write a LinkedIn Cold Sales Message: Examples"
 alt: "linkedin-soguk-satis-mesaji-nasil-yazilir"
 ---
 
+An effective LinkedIn cold sales message is written after you narrow your ideal customer profile, optimize your own profile and warm up the buyer: it's short, personalized and ends with no more than one question. If there's no reply, you run a follow-up sequence that adds value and measure results to keep improving your messages.
+
 For B2B sales teams, LinkedIn is one of the few platforms where you can reach decision-makers directly. But that ease of access creates a problem of its own: every day, a procurement manager's or CTO's inbox fills up with dozens of near-identical messages. Messages that open with "Hi, I came across your company and believe we could add value" usually get deleted unread. Sending cold messages on LinkedIn isn't the problem. The problem is copy-paste messages sent without any regard for the buyer's perspective.
 
 In this post, we walk through writing a LinkedIn cold sales message step by step. You'll find the preparation to do before you hit send, the building blocks of an effective message, templates for different scenarios, a follow-up sequence and how to measure your results. The goal is to write messages that make the recipient think, "It makes sense to talk to this person."

@@ -9,6 +9,8 @@ imageAlt: "B2B Şirketler İçin Instagram Stratejisi Nasıl Kurulur?"
 alt: "b2b-instagram-strategy"
 ---
 
+B2B şirketler için Instagram stratejisi; ölçülebilir hedefler koyup karar vericileri haritalayarak, profili optimize edip eğitici, sahne arkası, insan ve müşteri başarısı odaklı içerik sütunları belirleyerek kurulur. Instagram burada LinkedIn'in yerine geçmez; reklam, DM ile sosyal satış ve düzenli ölçümle satış sürecini destekleyen tamamlayıcı bir kanal olur.
+
 Instagram uzun süre B2C markalarının alanı olarak görüldü: moda, yemek, seyahat, kozmetik. B2B şirketlerin büyük bölümü ise "Bizim müşterimiz Instagram'da değil" diyerek bu kanalı ya tamamen boş bıraktı ya da yılda birkaç bayram kutlamasıyla idare etti. Oysa satın alma kararlarını veren insanlar, mesai bitince telefonlarını kapatıp ortadan kaybolmuyor. Bir fabrikanın satın alma müdürü, bir yazılım şirketinin CTO'su ya da bir lojistik firmasının operasyon direktörü de akşam Instagram'da vakit geçiriyor. Fark şu: Bu kişilere ulaşmanın yolu, B2C markalarının kullandığı yöntemlerden oldukça farklı.
 
 Bu yazıda B2B şirketler için Instagram stratejisini sıfırdan nasıl kurabileceğinizi adım adım ele alacağız. Hedef belirlemeden profil optimizasyonuna, içerik sütunlarından reklam kurgusuna ve ölçümlemeye kadar uygulanabilir bir çerçeve sunacağız. Amacımız Instagram'ı LinkedIn'in yerine koymak değil. Amacımız onu, satış sürecinizi destekleyen ve markanıza insani bir yüz kazandıran tamamlayıcı bir kanala dönüştürmek.

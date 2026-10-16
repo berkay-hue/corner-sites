@@ -9,6 +9,8 @@ imageAlt: "LinkedIn Reklamı Maliyeti: B2B Şirketler İçin Rehber"
 alt: "linkedin-ads-cost-b2b-guide"
 ---
 
+LinkedIn reklam maliyeti sabit bir fiyat değildir; açık artırmayla belirlenir ve seçtiğiniz fiyatlandırma modeline (TBM, BGM, gönderim ya da video görüntüleme başına), teklif stratejisine, hedef kitlenin niteliği ve büyüklüğüne, sektöre, coğrafyaya ve reklam kalitesine göre değişir. Bu yüzden doğru soru bir tıklamanın kaça geldiği değil, doğru karar vericiye ulaşıp onu nitelikli bir satış fırsatına çevirmenin ne kadara mal olduğudur.
+
 LinkedIn reklamlarıyla ilgili en sık duyulan cümle, "LinkedIn çok pahalı" cümlesidir. Bu cümle hem doğru hem yanlıştır. Tıklama başına ödenen tutara bakıldığında LinkedIn, diğer sosyal medya platformlarının çoğundan daha yüksek maliyetlidir. Ancak B2B bir şirket için asıl soru bir tıklamanın kaça geldiği değildir. Asıl soru, doğru karar vericiye ulaşmanın ve onu nitelikli bir satış fırsatına dönüştürmenin kaça mal olduğudur. Bu açıdan bakıldığında tablo çoğu zaman tersine döner. Doğru kurgulanmış bir LinkedIn kampanyası, ucuz ama alakasız tıklamalarla dolu bir kampanyadan çok daha verimli olabilir.
 
 Bu rehberde LinkedIn reklam maliyetlerinin nasıl oluştuğunu, hangi faktörlerin bütçenizi doğrudan etkilediğini, gerçekçi bir bütçenin nasıl hesaplanacağını ve maliyetleri kontrol altında tutmak için uygulayabileceğiniz somut adımları ele alıyoruz. Amacımız "LinkedIn reklamı kaç lira?" sorusuna ezber bir rakam vermek değil. Kendi şirketiniz için bu soruyu cevaplayabileceğiniz bir düşünme çerçevesi sunmak istiyoruz.
