@@ -171,7 +171,7 @@
         k: "A",
         text: [
           "Prewitt o yaz paketi ikiye böldü: internet ve DVD ayrı ayrı 8 dolar civarı. İkisini birlikte kullananın faturası yaklaşık 10 dolardan 16 dolara, yüzde 60 kadar yükseldi; yeni üyeler için hemen, mevcut üyeler için birkaç ay sonra. Pek çok üye öfkelendi.",
-          "Birkaç ay sonra Prewitt şirket adına özür diledi, DVD işini Diskvan adlı ayrı bir markaya taşıyacağını duyurdu. Birkaç hafta sonra Diskvan açılmadan iptal edildi, zam kaldı. Şirket hissedar mektubunda ayrı fiyatlarda ısrar etti ama geçişin hızını yanlış ayarladığını kabul etti.",
+          "Birkaç ay sonra Prewitt şirket adına özür diledi, DVD işini Diskvan adlı ayrı bir markaya taşıyacağını duyurdu. Birkaç hafta sonra Diskvan açılmadan iptal edildi, zam kaldı. Şirket ayrı fiyatlarda ısrar etti ama geçişin hızını yanlış ayarladığını kabul etti.",
           "Sonraki çeyrekte ABD’deki üye sayısı yüz binlerce azaldı. Zam öncesi 300 dolar civarındaki hisse, bir yıl içinde beşte birine yakın bir seviyeye düştü. Şirket internete yatırıma devam etti; hisse iki yıl kadar sonra yaklaşık dört katına çıkıp S&P 500’ün en çok kazandıran hissesi oldu."
         ]
       }
@@ -203,7 +203,7 @@
         role: "Brenmark’ın başkanı ve CEO’su",
         k: "D",
         text: [
-          "Yıl ortasında Dressler ile Enright, şirketi dışarıdan gelen yeni bir yönetim devralsa ne yapacağını düşündü; yanıt bellekten çıkmaktı. Kararı kendileri verdiler. Birkaç ay sonra karar çalışanlara duyuruldu; hemen ardından B32 tanıtıldı.",
+          "Yıl ortasında Dressler ile Enright bellek işinden çıkma kararını kendileri verdi. Birkaç ay sonra karar çalışanlara duyuruldu; hemen ardından B32 tanıtıldı.",
           "İki yıl içinde çok sayıda eski fabrika kapandı, kadro yaklaşık üçte bir küçüldü. Şirket ertesi yıl ağır zarar etti; bu, tarihinin en zor dönemlerinden biriydi. Üç bellek işinden ikisini bıraktı, programlanabilir bellek çiplerinde kaldı.",
           "İşlemciler şirketin ana işi oldu. Önceki kuşakta üretim lisansı dağıtıp kendi rakiplerini yaratmışlardı; Dressler’in yeni ilkesi, tek üretici olunabilecek yerlere gitmekti. Şirket kişisel bilgisayar işlemcilerinin hâkimi oldu; yıllar sonra bilgisayarların büyük çoğunluğunda onun çipi vardı. Bellekten çıkış, sonradan şirket tarihinin en iyi kararlarından biri sayıldı."
         ]
@@ -543,7 +543,7 @@
         k: "C",
         text: [
           "Fairley yeni mali yılın ilk günlerinde üç kırmızı ışık arızası için garantiyi dünya genelinde satın alma tarihinden itibaren üç yıla çıkardığını açıkladı. Onarım ve kargo ücretsiz oldu, daha önce para ödeyerek tamir ettirenlere ücretleri iade edildi. Açıklamada müşterilerden açıkça özür diledi.",
-          "Bedeli ağırdı: biten çeyreğe bir milyar doları aşan gider yazıldı. Şirket arıza oranını hiçbir zaman açıklamadı; bağımsız bir garanti şirketinin birkaç yıl sonraki araştırmasına göre konsolların yaklaşık dörtte biri ilk iki yılda arızalanmıştı.",
+          "Bedeli ağırdı: biten çeyreğe bir milyar doları aşan gider yazıldı. Şirket arıza oranını hiçbir zaman açıklamadı; sonradan yapılan tahminlere göre konsolların yaklaşık dörtte biri ilk iki yılda arızalanmıştı.",
           "Konsol yeni donanım revizyonlarıyla on yılı aşkın süre satıldı ve on milyonlarca adede ulaştı; üretimi yaklaşık on yıl sonra sona erdi."
         ]
       }
@@ -555,29 +555,29 @@
       title: "Kapıdaki lüks devi",
       body: [
         "Corvelle bir buçuk asrı aşkın geçmişi olan bir lüks moda evi: el yapımı çantalar, eyerler, ipek eşarplar. Şirket borsada ama hisselerin yaklaşık dörtte üçü kurucunun torunlarından oluşan kalabalık bir ailede. Son sözü ailenin kontrol ettiği bir ortaklık söylüyor.",
-        "Bir cumartesi günü dünyanın en büyük lüks grubu Altemont, Corvelle’in yedide birine yakınına sahip olduğunu açıklıyor; birkaç gün sonra oran altıda bire yaklaşıyor. Payı birkaç yıldır, bildirim eşiğinin altında kalan ve sonradan hisseye çevrilebilen türev sözleşmelerle bankalar üzerinden topladığı ortaya çıkıyor.",
-        "Altemont teklif vermeyeceğini, kontrol ya da yönetim kurulunda koltuk istemediğini söylüyor. Hisse pazartesi sert yükseliyor; geniş ailede payını satmayı düşünenler olabilir. Corvelle’in aileden olmayan yöneticisisin; kararı aile konseyiyle birlikte vereceksin."
+        "Bir cumartesi günü dünyanın en büyük lüks grubu Grenholt, Corvelle’in yedide birine yakınına sahip olduğunu açıklıyor; birkaç gün sonra oran altıda bire yaklaşıyor. Payı birkaç yıldır, bildirim eşiğinin altında kalan ve sonradan hisseye çevrilebilen türev sözleşmelerle bankalar üzerinden topladığı ortaya çıkıyor.",
+        "Grenholt teklif vermeyeceğini, kontrol ya da yönetim kurulunda koltuk istemediğini söylüyor. Hisse pazartesi sert yükseliyor; geniş ailede payını satmayı düşünenler olabilir. Corvelle’in aileden olmayan yöneticisisin; kararı aile konseyiyle birlikte vereceksin."
       ],
-      stats: [["Altemont’un payı", "Altıda bire yakın"], ["Ailenin payı", "~dörtte üç"], ["İlk işlem günü", "Sert yükseliş"]],
-      ask: "Corvelle’in başındasın. Altemont’a karşı ne yaparsın?",
+      stats: [["Grenholt’un payı", "Altıda bire yakın"], ["Ailenin payı", "~dörtte üç"], ["İlk işlem günü", "Sert yükseliş"]],
+      ask: "Corvelle’in başındasın. Grenholt’a karşı ne yaparsın?",
       opts: [
-        { k: "A", t: "Savaşma: Altemont’u pasif bir yatırımcı olarak kabul et, pahalı davalardan ve yeni yapılardan kaçın.", s: 25, tag: "kasa",
+        { k: "A", t: "Savaşma: Grenholt’u pasif bir yatırımcı olarak kabul et, pahalı davalardan ve yeni yapılardan kaçın.", s: 25, tag: "kasa",
           r: "Kısa vadede masrafsız. Ama bu kadar büyük bir payla başlayan bir ortak, payını satmak isteyen tek bir aile koluyla çoğunluğa yaklaşabilir." },
-        { k: "B", t: "Dost bir yatırımcı bul: ona büyük bir pay satarak Altemont’u dengele.", s: 40, tag: "kumar",
-          r: "Altemont’u dengeler ama bağımsızlığı bu kez başka biriyle bölüşürsün; yeni ortağın yarın ne isteyeceği de belli değil." },
-        { k: "C", t: "Altemont’a payını geri satması için yüksek bir fiyat öner, gerekirse borçlan; sorunu tek hamlede kes.", s: 30, tag: "cerrah",
-          r: "Sorunu keser ama bedeli sen belirlemezsin: Altemont satmak zorunda değil ve fiyatı istediği kadar yükseltebilir. Borç da bağımsızlığı başka yoldan zayıflatır." },
+        { k: "B", t: "Dost bir yatırımcı bul: ona büyük bir pay satarak Grenholt’u dengele.", s: 40, tag: "kumar",
+          r: "Grenholt’u dengeler ama bağımsızlığı bu kez başka biriyle bölüşürsün; yeni ortağın yarın ne isteyeceği de belli değil." },
+        { k: "C", t: "Grenholt’a payını geri satması için yüksek bir fiyat öner, gerekirse borçlan; sorunu tek hamlede kes.", s: 30, tag: "cerrah",
+          r: "Sorunu keser ama bedeli sen belirlemezsin: Grenholt satmak zorunda değil ve fiyatı istediği kadar yükseltebilir. Borç da bağımsızlığı başka yoldan zayıflatır." },
         { k: "D", t: "Aileyi kilitle: payların yarısından fazlasını uzun yıllar satılamayan ortak bir aile şirketine koy, kalanlarda önalım hakkı al; pay toplama yöntemini de düzenleyiciye taşı.", s: 90, tag: "kalkan",
-          r: "Yavaş ve hukuki açıdan yorucu bir yol; aileyi tek ses olmaya zorlar. Ama kontrolü kalıcı olarak güvenceye alır ve Altemont’un payını bir pazarlık kozuna çevirir." }
+          r: "Yavaş ve hukuki açıdan yorucu bir yol; aileyi tek ses olmaya zorlar. Ama kontrolü kalıcı olarak güvenceye alır ve Grenholt’un payını bir pazarlık kozuna çevirir." }
       ],
       real: {
-        who: "Philippe Morvand",
+        who: "Philippe Rocheval",
         role: "Corvelle’in yöneticisi; kararı aile konseyiyle aldı",
         k: "D",
         text: [
           "Aile önce safları sıkılaştırdı ve birlikte hareket edeceğini açıkladı. Birkaç hafta sonra, payların yarısından fazlasını uzun yıllar satılamayacak ortak bir aile şirketinde toplama ve kalan paylarda önalım hakkı kurma planını duyurdu. Düzenleyici kısa süre sonra zorunlu satın alma teklifinden muafiyet verdi; yapı yaklaşık bir yıl içinde işler hâle geldi.",
-          "Morvand, Altemont’un pay toplama yöntemini düzenleyiciye taşıdı; yaklaşık iki yıl sonra suç duyurusunda bulundular, Altemont da karşı dava açtı. Birkaç yıl sonra piyasa düzenleyicisi, pay toplamayı piyasaya zamanında bildirmediği için Altemont’a milyonlarca avro ceza verdi. Düzenleyiciye göre Altemont payın önemli kısmını açıklama günündeki fiyatın yarısından da ucuza almıştı.",
-          "Yaklaşık dört yıl sonra ticaret mahkemesi başkanının arabuluculuğuyla barış geldi. Altemont, o güne kadar beşte biri aşmış Corvelle payının tamamını kendi hissedarlarına dağıttı ve beş yıl boyunca Corvelle hissesi almamayı kabul etti. Aile şirketi bugün payların yarısından fazlasını elinde tutuyor."
+          "Rocheval, Grenholt’un pay toplama yöntemini düzenleyiciye taşıdı; yaklaşık iki yıl sonra suç duyurusunda bulundular, Grenholt da karşı dava açtı. Birkaç yıl sonra piyasa düzenleyicisi, pay toplamayı piyasaya zamanında bildirmediği için Grenholt’a milyonlarca avro ceza verdi. Düzenleyiciye göre Grenholt payın önemli kısmını açıklama günündeki fiyatın yarısından da ucuza almıştı.",
+          "Yaklaşık dört yıl sonra ticaret mahkemesi başkanının arabuluculuğuyla barış geldi. Grenholt, o güne kadar beşte biri aşmış Corvelle payının tamamını kendi hissedarlarına dağıttı ve beş yıl boyunca Corvelle hissesi almamayı kabul etti. Aile şirketi bugün payların yarısından fazlasını elinde tutuyor."
         ]
       }
     }
@@ -597,8 +597,8 @@
       stats: [["Restoran", "~900"], ["Kapalı restoran", "Yarıdan fazlası"], ["Dağıtım", "Tek depo"]],
       ask: "Haverly’s’in Birleşik Krallık işinin başındasın. Kamuoyuna ne dersin?",
       opts: [
-        { k: "A", t: "Ulusal gazetelere kendinle dalga geçen bir özür ilanı ver: boş bir tavuk kovası, üzerindeki marka harflerinin yeri değiştirilip kaba bir sözü andıran bir kelimeye çevrilmiş.", s: 85, tag: "kumar",
-          r: "Hafife alındığı, aileleri ve bayileri kızdırabileceği düşünülebilir. Ama alay edilen bir markanın en iyi cevabı şakayı önce kendisinin yapmasıdır; özür hem dürüst hem akılda kalıcı olur." },
+        { k: "A", t: "Ulusal gazetelere kendinle dalga geçen, kısa ve açık sözlü bir özür ilanı ver; hatayı süslemeden kabul et.", s: 85, tag: "kumar",
+          r: "Krizi hafife aldığın düşünülebilir; işi duran çalışanları ve bayileri kızdırabilir. Ama alay edilen bir markanın en iyi cevabı şakayı önce kendisinin yapmasıdır; özür hem dürüst hem akılda kalıcı olur." },
         { k: "B", t: "Yeni lojistik sözleşmesini bitir, eski dağıtıcıya dön; sorun çözülene kadar konuşma, çözünce açıklama yap.", s: 45, tag: "cerrah",
           r: "Eski dağıtıcı sonradan kısmen geri çağrıldı; yani işin operasyon tarafı doğru. Ama sessiz kaldığın her gün şaka seninle ilgili yapılmaya devam eder." },
         { k: "C", t: "Resmî bir açıklamayla suçu lojistik firmasına yükle; açık kalan restoranlarda menüyü daralt.", s: 20, tag: "kasa",
@@ -611,7 +611,7 @@
         role: "Haverly’s’in Birleşik Krallık ve İrlanda genel müdürü; ilanı pazarlama ekibiyle hazırladı",
         k: "A",
         text: [
-          "Kısa süre sonra iki ulusal gazetede bir ilan çıktı: boş bir tavuk kovası, üzerindeki harflerin yeri değiştirilmiş. Altındaki kısa metin, tavuksuz bir tavuk restoranının pek de ideal olmadığını kabul ediyor, özür diliyor ve müşterilere, çalışanlara ve bayilere teşekkür ediyordu.",
+          "Kısa süre sonra iki ulusal gazetede, markanın kendisiyle dalga geçtiği kısa ve açık sözlü bir özür ilanı çıktı. İlan hatayı süslemeden kabul ediyor; müşterilere, çalışanlara ve bayilere teşekkür ediyordu.",
           "İlan kısa sürede dünyaya yayıldı ve sonradan reklamcılığın büyük ödüllerini aldı. İlan çıktığında restoranların çoğu yeniden açılmıştı; birkaç hafta içinde neredeyse tamamı hizmetteydi. Bu arada eski dağıtıcı, kuzeydeki yüzlerce restoran için yeniden devreye alındı.",
           "Şirket resmî bir maliyet açıklamadı; basın kaybı günde milyon sterlin civarında olarak tahmin etti. Tam toparlanma yaklaşık üç hafta sürdü, ama marka bu krizden alay konusu olarak değil, iyi bir özrün örneği olarak çıktı."
         ]
