@@ -21,7 +21,9 @@ Bu zihniyet dönüşümünü sağlamanın ilk adımı, prompt mühendisliğini b
 
 ChatGPT'den maksimum verimi almak, belirli kurallar çerçevesinde hareket etmeyi gerektirir. Bu kurallar, yapay zekanın "zihnini" sizin iş hedeflerinize göre şekillendirmenize olanak tanır. Corner Group bünyesindeki farklı uzmanlık alanlarımızın kesişiminden doğan bu beş temel kural, B2B satış metinlerinizin kalitesini kökten değiştirecektir.
 
-## Rol Atama ve Bağlam Yaratma (Persona Prensibi) ChatGPT'ye bir görev vermeden önce, ona kim olması gerektiğini söyleyin
+### Rol Atama ve Bağlam Yaratma (Persona Prensibi)
+
+ChatGPT'ye bir görev vermeden önce, ona kim olması gerektiğini söyleyin
 
 Bu, modelin bilgi tabanındaki milyarlarca veri noktasından hangilerini önceliklendireceğini ve hangi perspektiften yazacağını belirleyen en kritik adımdır. Rol ataması, çıktının tonunu, kelime seçimini ve genel yaklaşımını doğrudan etkiler.
 
@@ -33,7 +35,9 @@ Bu rol ataması neden bu kadar güçlü? Çünkü yapay zekaya bir çerçeve sun
 
 **Bağlam Yaratma:** Rol atamasının yanı sıra, görevin bağlamını da net bir şekilde belirtmelisiniz. Bu, görevin arka planını, neden yapıldığını ve hangi genel stratejinin bir parçası olduğunu içerir. Örneğin: "Şu anda Q3 büyüme hedeflerimiz kapsamında, daha önce temas kurduğumuz ama dönüş yapmamış potansiyel müşterileri yeniden aktive etme kampanyası yürütüyoruz. Bu e-postanın amacı, sessizliği bozmak ve yeni bir özelliğimizi öne çıkararak tekrar bir görüşme zemini yaratmaktır."
 
-## İdeal Müşteri Profilini (ICP) Atomlarına Ayırmak B2B'de herkese satmaya çalışmak, hiç kimseye satamamaktır
+### İdeal Müşteri Profilini (ICP) Atomlarına Ayırmak
+
+B2B'de herkese satmaya çalışmak, hiç kimseye satamamaktır
 
 Etkili bir satış metni, konuştuğu kişinin dünyasını, endişelerini, hedeflerini ve dilini anladığını hissettirmelidir. ChatGPT'nin bunu yapabilmesi için, İdeal Müşteri Profilinizi (ICP) en ince ayrıntısına kadar bilmesi gerekir. Bu veriler, CRM Corner'ın uzmanlık alanına giren, iyi yapılandırılmış bir CRM sisteminden gelmelidir.
 
@@ -57,7 +61,9 @@ Marka Sesi ve Tonunu Entegre Etmek ChatGPT'nin ürettiği metinlerin en büyük 
 
 Bu yaklaşım, yapay zekanın sadece ne söyleyeceğini değil, nasıl söyleyeceğini de öğrenmesini sağlar. Marka tutarlılığı, özellikle çok kanallı B2B pazarlama stratejilerinde kritik öneme sahiptir ve bu yöntem, yapay zeka kullanımını marka kimliğinizle uyumlu hale getirir.
 
-## Negatif Kısıtlamalar ve İteratif Geliştirme Bazen ne istediğinizi söylemek kadar, ne istemediğinizi söylemek de önemlidir
+### Negatif Kısıtlamalar ve İteratif Geliştirme
+
+Bazen ne istediğinizi söylemek kadar, ne istemediğinizi söylemek de önemlidir
 
 Negatif kısıtlamalar, yapay zekanın sıkça düştüğü klişelerden ve hatalardan kaçınmasına yardımcı olur.
 

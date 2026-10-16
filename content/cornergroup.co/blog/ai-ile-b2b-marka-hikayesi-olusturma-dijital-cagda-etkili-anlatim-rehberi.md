@@ -31,7 +31,9 @@ Geçmişte B2B pazarlaması, büyük ölçüde ürün özelliklerini, teknik dok
 
 Yapay zekanın potansiyelinden tam olarak yararlanmak, sadece doğru araçları kullanmaktan ibaret değildir. Bu, stratejik bir zihniyet değişikliği ve belirli kurallara dayalı bir yaklaşım gerektirir. Corner Group olarak, farklı markalarımızda uyguladığımız ve başarıya ulaştığımız temel kuralları bir rehber olarak sunuyoruz.
 
-Veri, Yeni Anlatının Ham Maddesidir Bir yapay zeka modelinin üreteceği hikayenin kalitesi, ona beslediğiniz verinin kalitesiyle doğru orantılıdır. Çöp veri girerse, çöp hikaye çıkar. Bu nedenle, ilk ve en önemli adım, veri altyapınızı stratejik bir şekilde düzenlemektir.
+### Veri, Yeni Anlatının Ham Maddesidir
+
+Bir yapay zeka modelinin üreteceği hikayenin kalitesi, ona beslediğiniz verinin kalitesiyle doğru orantılıdır. Çöp veri girerse, çöp hikaye çıkar. Bu nedenle, ilk ve en önemli adım, veri altyapınızı stratejik bir şekilde düzenlemektir.
 
 **Entegre Veri Ekosistemi:** CRM Corner'daki deneyimlerimiz, şirketlerin en büyük hatasının verilerini silolarda tutmak olduğunu gösteriyor. Pazarlama otomasyon platformunuzdaki veriler, CRM'nizdeki satış verileri, müşteri destek yazılımınızdaki etkileşimler ve web analitikleriniz birbiriyle konuşmalıdır. Yapay zeka, bu entegre veri havuzundan beslenerek müşterinin 360 derecelik bir profilini çıkarabilir. Hangi içerikleri tükettiler? Hangi sorunları dile getirdiler? Satış ekibiyle ne konuştular? Bu soruların cevapları, kişiselleştirilmiş hikayenin temelini oluşturur.
 
@@ -39,7 +41,9 @@ Veri, Yeni Anlatının Ham Maddesidir Bir yapay zeka modelinin üreteceği hikay
 
 **Veri Temizliği ve Etiketleme:** Ham veriyi yapay zekaya sunmak yeterli değildir. Verinin temiz, tutarlı ve doğru bir şekilde etiketlenmiş olması gerekir. Örneğin, müşteri verilerini sektöre, şirket büyüklüğüne, karşılaşılan zorluklara ve satın alma aşamasına göre segmentlere ayırmak, AI'ın her bir segment için daha isabetli ve alakalı hikayeler üretmesini sağlar.
 
-## Doğru "Prompt" Mühendisliği, Yaratıcılığın Anahtarıdır Yapay zeka, komutlarınızı harfiyen yerine getiren güçlü bir asistandır
+### Doğru "Prompt" Mühendisliği, Yaratıcılığın Anahtarıdır
+
+Yapay zeka, komutlarınızı harfiyen yerine getiren güçlü bir asistandır
 
 Ona ne kadar net, detaylı ve stratejik bir "prompt" (komut) verirseniz, o kadar kaliteli bir çıktı alırsınız. Prompt mühendisliği, B2B pazarlamacısının yeni süper gücüdür.
 
@@ -51,7 +55,9 @@ Ona ne kadar net, detaylı ve stratejik bir "prompt" (komut) verirseniz, o kadar
 
 **Kısıtlamalar ve Format:** Ne istediğiniz kadar ne istemediğinizi de belirtmek önemlidir. "Fiyatlandırmadan bahsetme," "rakiplerin ismini anma" gibi kısıtlamalar ekleyebilirsiniz. Ayrıca, çıktının formatını (e-posta, sosyal medya gönderisi, vaka çalışması, web sitesi metni) net bir şekilde tanımlayın.
 
-## Persona Merkezli Anlatılar Yaratın B2B'de tek bir alıcı yoktur; bir satın alma komitesi vardır
+### Persona Merkezli Anlatılar Yaratın
+
+B2B'de tek bir alıcı yoktur; bir satın alma komitesi vardır
 
 Yapay zeka, bu komitedeki her bir persona için aynı temel hikayenin farklı versiyonlarını saniyeler içinde oluşturmanıza olanak tanır.
 
@@ -61,7 +67,9 @@ Yapay zeka, bu komitedeki her bir persona için aynı temel hikayenin farklı ve
 
 **Yolculuk Boyunca Tutarlılık:** Yapay zeka, müşteri yolculuğunun her aşamasında tutarlı bir anlatı sunmanıza yardımcı olur. İlk teması kuran Social Media Corner gönderisinden, potansiyel müşteriyi yakalayan SAAS Corner e-postasına, anlaşmayı kapatan Sales Corner sunumuna ve müşteri ilişkisini yöneten CRM Corner iletişimine kadar, her noktada aynı temel marka hikayesi, ilgili personanın diline ve ihtiyacına göre uyarlanarak anlatılır. Bu, dağınık mesajların yarattığı kafa karışıklığını ortadan kaldırır ve markanıza olan güveni pekiştirir.
 
-## İnsan ve Makine İşbirliğini Kutsayın Yapay zekanın yükselişi, pazarlama ve satış profesyonellerinin sonu anlamına gelmiyor
+### İnsan ve Makine İşbirliğini Kutsayın
+
+Yapay zekanın yükselişi, pazarlama ve satış profesyonellerinin sonu anlamına gelmiyor
 
 Tam aksine, bu, onların rollerinin daha stratejik bir seviyeye evrimleştiği yeni bir çağın başlangıcıdır. En başarılı sonuçlar, insan zekası ile makine zekasının işbirliğinden doğar.
 
