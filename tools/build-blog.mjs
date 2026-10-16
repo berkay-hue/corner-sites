@@ -355,14 +355,15 @@ async function buildSite() {
     }
     // Worker'ın konu seçimi ve iç linkleme için özet
     await writeFile(join(out, "_blog-index.json"), JSON.stringify(posts.map(p => ({ slug: p.slug, title: p.fm.title, category: p.fm.category, date: p.fm.date, image: p.fm.image }))));
-    // Sitemap: blog dışı sayfalar orijinalden, yazılar içerikten; /blog'un lastmod'u en yeni yazının tarihi
+    // Sitemap: blog dışı sayfalar orijinalden (varsa lastmod'larıyla), yazılar içerikten; /blog'un lastmod'u en yeni yazının tarihi
     const lastmod = posts.map(p => p.fm.updated || p.fm.date).filter(Boolean).sort().at(-1);
     const lm = lastmod ? `<lastmod>${lastmod}</lastmod>` : "";
     if (!n) {
       const orig = await readFile(join(SITE, "_orig-sitemap.xml"), "utf8").catch(() => "");
+      const origLm = new Map([...orig.matchAll(/<url>([\s\S]*?)<\/url>/g)].map(m => [m[1].match(/<loc>([^<]+)<\/loc>/)?.[1].trim(), m[1].match(/<lastmod>([^<]+)<\/lastmod>/)?.[1].trim()]).filter(([l, d]) => l && d));
       const keep = [...orig.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m => m[1].trim()).filter(u => !/\/blog\/./.test(new URL(u).pathname) && !sets.slice(1).some(s => new URL(u).pathname === `${s.prefix}/blog`));
       if (!keep.some(u => new URL(u).pathname === "/blog")) keep.push(`${cfg.origin}/blog`);
-      urls.push(...keep.map(u => `<url><loc>${u}</loc>${new URL(u).pathname === "/blog" ? lm : ""}</url>`));
+      urls.push(...keep.map(u => `<url><loc>${u}</loc>${new URL(u).pathname === "/blog" ? lm : origLm.has(u) ? `<lastmod>${origLm.get(u)}</lastmod>` : ""}</url>`));
     } else urls.push(`<url><loc>${cfg.origin}${prefix}/blog</loc>${lm}</url>`);
     urls.push(...posts.map(p => `<url><loc>${cfg.origin}${prefix}/blog/${encodeURIComponent(p.slug)}</loc><lastmod>${p.fm.updated || p.fm.date}</lastmod></url>`));
     console.log(`build${prefix ? " " + prefix : ""}: ${posts.length} yazı${tplList ? " + liste" : ""}${alts.size ? `, ${[...alts.keys()].filter(p => posts.includes(p)).length} çeviri eşi` : ""}`);
