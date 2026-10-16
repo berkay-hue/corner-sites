@@ -53,7 +53,7 @@ Bir dil modeli, elinde yalnızca "Ad, Soyad, Şirket" varsa yapabileceği tek ş
 
 Bu verileri bir tabloda (Google Sheets, Airtable ya da CRM'iniz) her kayıt için ayrı sütunlarda tutun. Sonra yapay zekayı satır bazında çalıştırarak her kayıt için "kişiselleştirme notu" üretebilirsiniz. Örneğin modele şirketin web sitesi metnini ve açık iş ilanlarını verip şunu isteyebilirsiniz: "Bu şirketin satış tarafında şu an yaşıyor olabileceği en olası problemi tek cümleyle yaz."
 
-Bu tür akışları elle kurmak yerine otomatik iş akışlarıyla çalıştırmak, yüzlerce kaydı tutarlı biçimde işlemenin en sağlıklı yoludur. [Sales Corner otomasyonları](/) tam olarak bu noktada devreye girer: veri çekme, zenginleştirme, yapay zekayla kişiselleştirme ve e-posta aracına aktarma adımlarını tek bir akışta birleştirir. Örneğin [Sekans Yazarı aracımız](/sekans-yazari) ürün videonuzdan, PDF'inizden veya web sitenizden çok adımlı bir outreach dizisi çıkarır; hedef şirketlerin sitelerindeki sinyalleri toplu taramak için ise [Web Keyword Scanner](/web-keyword) kullanılabilir.
+Bu tür akışları elle kurmak yerine otomatik iş akışlarıyla çalıştırmak, yüzlerce kaydı tutarlı biçimde işlemenin en sağlıklı yoludur. [Sales Corner otomasyonları](/) tam olarak bu noktada devreye girer: veri çekme, zenginleştirme, yapay zekayla kişiselleştirme ve e-posta aracına aktarma adımlarını tek bir akışta birleştirir. Bu akışları kendiniz kurmak isterseniz [n8n ile B2B satış otomasyonu rehberimiz](/blog/n8n-ile-b2b-satis-otomasyonu-rehberi) iyi bir başlangıç noktasıdır. Örneğin [Sekans Yazarı aracımız](/sekans-yazari) ürün videonuzdan, PDF'inizden veya web sitenizden çok adımlı bir outreach dizisi çıkarır; hedef şirketlerin sitelerindeki sinyalleri toplu taramak için ise [Web Keyword Scanner](/web-keyword) kullanılabilir.
 
 ## İyi Bir Soğuk E-Posta Promptu Nasıl Kurulur?
 
@@ -175,7 +175,7 @@ Yapay zekayla soğuk e-posta yazarken en sık karşılaşılan hatalar şunlar:
 - **Aşırı uzunluk:** Yapay zeka çıktıları kısıtlanmazsa kolayca 200 kelimeyi aşar. Soğuk e-postada 50-125 kelime aralığı çoğu durumda daha sağlıklıdır.
 - **Tek e-postada çok fazla hedef:** Hem demo isteyip hem içerik paylaşıp hem de web semineri davetine yer vermek. Her e-postada tek bir çağrı olmalı.
 - **Yapay zeka tonunu olduğu gibi bırakmak:** Aşırı resmi, aşırı coşkulu ya da kalıp ifadelerle dolu metinler. Yasaklı kelime listenizi zamanla genişletin.
-- **Veri gizliliğini göz ardı etmek:** Kişisel verileri işlerken KVKK ve hedef pazardaki ilgili mevzuata uyumu gözetin. Ayrıca e-postalarınızda alıcıya iletişimi sonlandırma imkânı tanıyın.
+- **Veri gizliliğini göz ardı etmek:** Kişisel verileri işlerken KVKK ve hedef pazardaki ilgili mevzuata uyumu gözetin. Ayrıca e-postalarınızda alıcıya iletişimi sonlandırma imkânı tanıyın. Ayrıntılar için [KVKK uyumlu soğuk e-posta rehberimize](/blog/kvkk-uyumlu-soguk-eposta-yasal-sinirlar) bakabilirsiniz.
 
 ## Ölçüm ve İterasyon
 
@@ -184,7 +184,7 @@ Yapay zekayla çalışmanın en büyük avantajlarından biri, test etmenin mali
 - **Teslim oranı ve geri dönme oranı:** Altyapı ve liste sağlığının göstergesi.
 - **Yanıt oranı:** Mesajın genel ilgi çekme gücü.
 - **Olumlu yanıt oranı:** Asıl başarı ölçütü. Bu metrik "ilgilenmiyorum" yanıtlarını ayırır.
-- **Toplantıya dönüşüm ve pipeline katkısı:** Kampanyanın gerçek iş sonucuna etkisi.
+- **Toplantıya dönüşüm ve pipeline katkısı:** Kampanyanın gerçek iş sonucuna etkisi. Bunu izlemek için [pipeline aşamalarınızın net tanımlanmış olması](/blog/satis-pipeline-asamalari-nasil-tanimlanir) gerekir.
 
 Açılma oranına tek başına güvenmeyin. Gizlilik özellikleri ve otomatik görsel yükleme nedeniyle bu metrik giderek daha az güvenilir hale geliyor.
 
@@ -194,7 +194,7 @@ Bir diğer güçlü uygulama da yanıtları yapay zekayla sınıflandırmak. Gel
 
 ## Sonuç
 
-Yapay zekayla soğuk e-posta yazmak, bir aracı açıp "bana e-posta yaz" demekten çok daha fazlası. Başarılı sonuçlar; net tanımlanmış bir hedef kitleye, temiz ve zenginleştirilmiş veriye, iyi kurgulanmış promptlara, mantıklı bir e-posta dizisine ve disiplinli bir ölçüm döngüsüne dayanır. Bu parçalar yerine oturduğunda yapay zeka, satış ekibinizin araştırma ve yazma yükünü hafifletebilir. Her alıcıya kendi bağlamında anlam taşıyan mesajları ise yüzlerce, hatta binlerce kişiye ölçeklenebilir biçimde ulaştırmanızı sağlar.
+Yapay zekayla soğuk e-posta yazmak, bir aracı açıp "bana e-posta yaz" demekten çok daha fazlası. Başarılı sonuçlar; net tanımlanmış bir hedef kitleye, temiz ve zenginleştirilmiş veriye, iyi kurgulanmış promptlara, mantıklı bir e-posta dizisine ve disiplinli bir ölçüm döngüsüne dayanır. Bu parçalar yerine oturduğunda yapay zeka, satış ekibinizin araştırma ve yazma yükünü hafifletebilir. Her alıcıya kendi bağlamında anlam taşıyan mesajları ise yüzlerce, hatta binlerce kişiye ölçeklenebilir biçimde ulaştırmanızı sağlayabilir.
 
 Unutmayın: Strateji ve değer önerisi sizden, ölçek ve kişiselleştirme yapay zekadan gelir. İnsan kontrolünü süreçten hiçbir zaman tamamen çıkarmayın.
 
