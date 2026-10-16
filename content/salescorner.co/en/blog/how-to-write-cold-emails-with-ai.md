@@ -194,7 +194,7 @@ Another powerful practice is classifying replies with AI. Sorting incoming repli
 
 ## Conclusion
 
-Writing cold emails with AI is much more than opening a tool and saying "write me an email". Successful results rest on a clearly defined audience, clean and enriched data, well-crafted prompts, a sensible email sequence and a disciplined measurement loop. When these pieces fall into place, AI significantly lightens your sales team's research and writing load. And it lets you deliver messages that are meaningful in each recipient's own context to hundreds, even thousands of people at scale.
+Writing cold emails with AI is much more than opening a tool and saying "write me an email". Successful results rest on a clearly defined audience, clean and enriched data, well-crafted prompts, a sensible email sequence and a disciplined measurement loop. When these pieces fall into place, AI can lighten your sales team's research and writing load. And it lets you deliver messages that are meaningful in each recipient's own context to hundreds, even thousands of people at scale.
 
 Remember: strategy and the value proposition come from you; scale and personalization come from AI. Never remove human oversight from the process entirely.
 

@@ -6,6 +6,7 @@ updated: "2026-10-16"
 category: "Yapay Zeka"
 image: "https://images.pexels.com/photos/7971661/pexels-photo-7971661.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
 imageAlt: "Yapay Zekayla Soğuk E-Posta Nasıl Yazılır?"
+alt: "how-to-write-cold-emails-with-ai"
 ---
 Yapay zekayla soğuk e-posta yazmanın doğru yolu, stratejiyi değil uygulamayı yapay zekaya devretmektir. Önce doğru segmenti seçip listeyi temizleyin ve zenginleştirin, ana mesajı kendiniz yazın, ardından iyi kurulmuş bir promptla kişiselleştirmeyi ölçeklendirin. Konu satırlarını ve takip dizisini de aynı yöntemle üretin, çıktıları örneklem kontrolüyle gözden geçirin.
 
@@ -193,7 +194,7 @@ Bir diğer güçlü uygulama da yanıtları yapay zekayla sınıflandırmak. Gel
 
 ## Sonuç
 
-Yapay zekayla soğuk e-posta yazmak, bir aracı açıp "bana e-posta yaz" demekten çok daha fazlası. Başarılı sonuçlar; net tanımlanmış bir hedef kitleye, temiz ve zenginleştirilmiş veriye, iyi kurgulanmış promptlara, mantıklı bir e-posta dizisine ve disiplinli bir ölçüm döngüsüne dayanır. Bu parçalar yerine oturduğunda yapay zeka, satış ekibinizin araştırma ve yazma yükünü ciddi ölçüde hafifletir. Her alıcıya kendi bağlamında anlam taşıyan mesajları ise yüzlerce, hatta binlerce kişiye ölçeklenebilir biçimde ulaştırmanızı sağlar.
+Yapay zekayla soğuk e-posta yazmak, bir aracı açıp "bana e-posta yaz" demekten çok daha fazlası. Başarılı sonuçlar; net tanımlanmış bir hedef kitleye, temiz ve zenginleştirilmiş veriye, iyi kurgulanmış promptlara, mantıklı bir e-posta dizisine ve disiplinli bir ölçüm döngüsüne dayanır. Bu parçalar yerine oturduğunda yapay zeka, satış ekibinizin araştırma ve yazma yükünü hafifletebilir. Her alıcıya kendi bağlamında anlam taşıyan mesajları ise yüzlerce, hatta binlerce kişiye ölçeklenebilir biçimde ulaştırmanızı sağlar.
 
 Unutmayın: Strateji ve değer önerisi sizden, ölçek ve kişiselleştirme yapay zekadan gelir. İnsan kontrolünü süreçten hiçbir zaman tamamen çıkarmayın.
 

@@ -8,7 +8,7 @@ image: "https://images.pexels.com/photos/7654193/pexels-photo-7654193.jpeg?auto=
 imageAlt: "Satış Otomasyonu Projesi Neden Başarısız Olur?"
 alt: "why-sales-automation-projects-fail"
 ---
-Satış otomasyonu projeleri çoğu zaman araç yüzünden değil, tasarım yüzünden başarısız olur: belirsiz hedefler, tanımlanmamış süreçler, kirli CRM verisi, projeyi sahiplenmeyen bir satış ekibi ve bakımı yapılmayan sistemler. Süreci önce manuel olarak netleştirmek, tek ve ölçülebilir bir problemle başlamak ve temsilcileri baştan dahil etmek bu riskleri belirgin şekilde azaltır.
+Satış otomasyonu projeleri çoğu zaman araç yüzünden değil, tasarım yüzünden başarısız olur: belirsiz hedefler, tanımlanmamış süreçler, kirli CRM verisi, projeyi sahiplenmeyen bir satış ekibi ve bakımı yapılmayan sistemler. Süreci önce manuel olarak netleştirmek, tek ve ölçülebilir bir problemle başlamak ve temsilcileri baştan dahil etmek bu riskleri azaltmaya yardımcı olur.
 
 Satış otomasyonu, kâğıt üzerinde neredeyse her B2B şirketinin ihtiyaç duyduğu bir yatırım gibi görünür. Tekrarlayan işleri azaltır, satış temsilcilerinin zamanını görüşmelere ayırır, lead'leri kaçırmadan takip eder ve pipeline'ı öngörülebilir hale getirir. Yine de pratikte pek çok proje heyecanla başlar, birkaç ay içinde sessizce terk edilir. Sonunda geriye yarım kalmış iş akışları, kimsenin güvenmediği CRM kayıtları ve "biz denedik, bizde işe yaramıyor" diyen bir ekip kalır.
 
