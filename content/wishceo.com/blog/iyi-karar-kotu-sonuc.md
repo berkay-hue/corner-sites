@@ -4,7 +4,7 @@ description: "İyi bir karar kötü bitebilir, kötü bir karar şansla iyi bite
 date: "2026-10-15"
 category: "Karar Verme"
 image: "/og.png"
-imageAlt: "İyi Karar, Kötü Sonuç: Farkı Nasıl Görürsün?"
+imageAlt: "WishCEO kapak kartı “Şirket batıyor. CEO sensin.”: bir kararı sonucuna bakmadan, karar anındaki bilgiye göre puanlamak"
 ---
 
 İyi bir karar kötü bitebilir, kötü bir karar da şansla iyi bitebilir; bu yüzden bir kararı sonucuna göre değil, o gün masadaki bilgiyle ne kadar iyi düşünüldüğüne göre puanlamak gerekir. Murat ve Selin aynı yıl, aynı semtte birer kafe açıyor. Murat dükkânı bir akşam yürüyüşünde beğeniyor ve ertesi gün kontratı imzalıyor. Kirayı pazarlık etmiyor, sokaktan ne kadar insan geçtiğine bakmıyor. Selin haftalarca farklı saatlerde sokakları izliyor, kirayı pazarlıkla düşürüyor, kenara yedek bir bütçe ayırıyor.

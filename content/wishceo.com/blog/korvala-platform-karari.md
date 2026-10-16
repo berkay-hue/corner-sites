@@ -4,7 +4,7 @@ description: "Dünyanın en çok telefon satan şirketi Korvala, 2011'de bir pla
 date: "2026-10-15"
 category: "Kurgusal Vaka"
 image: "/og.png"
-imageAlt: "Zirvedeyken Platform Seçmek: Korvala Vakası"
+imageAlt: "WishCEO kapak kartı “Şirket batıyor. CEO sensin.”: zirvedeki telefon şirketi Korvala'nın platform seçimi"
 ---
 
 Korvala vakası, zirvedeki bir telefon şirketinin 2011'de akıllı telefonlarının hangi yazılımla çalışacağına karar vermesidir ve masadaki dört yolun hiçbiri bedava değildir. Şubat 2011, Finlandiya. Dünyada en çok telefon satan şirketin başına yeni geçtin. Adı Korvala. Neredeyse herkesin cebinde bir Korvala var ya da yakın zamana kadar vardı. Kâğıt üzerinde zirvedesin.
