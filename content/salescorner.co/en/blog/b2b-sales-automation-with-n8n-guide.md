@@ -32,9 +32,9 @@ Trying to automate everything at once is the most common reason automation proje
 2. **Data enrichment:** Filling in details such as industry, headcount and location from the company domain on the record.
 3. **Lead routing:** Assigning the lead to the right rep based on region, company size or product, and notifying them via Slack/Teams.
 4. **Follow-up reminders:** Creating a task for the rep on deals that have seen no action for a set period.
-5. **Reporting:** Pulling a weekly pipeline summary from the CRM and sending it to the manager by email or message.
+5. **Reporting:** Pulling a weekly pipeline summary from the CRM and sending it to the manager by email or message. For this report to be meaningful, your [pipeline stages need clear definitions](/blog/how-to-define-sales-pipeline-stages).
 
-Once these five workflows are in place, manual data entry for reps usually drops and no lead is left "forgotten".
+Once these five workflows are in place, manual data entry for reps usually drops and the risk of leads being forgotten goes down.
 
 ## The 5 Layers of a Robust Sales Workflow
 
@@ -42,7 +42,7 @@ At Sales Corner, we design every sales automation we build around a five-layer a
 
 1. **Trigger:** The event that starts the workflow. It can be a webhook, a scheduled job or a change in an app.
 2. **Data enrichment:** Completing the missing fields of the incoming record. The decision quality of every later step depends on this layer.
-3. **AI layer:** Work that requires interpretation, such as classifying the lead, assigning a priority score or generating a personalized draft.
+3. **AI layer:** Work that requires interpretation, such as classifying the lead, assigning a priority score (we cover the scoring model in our [B2B lead scoring guide](/blog/b2b-lead-scoring-model)) or generating a personalized draft.
 4. **Action:** Updating the CRM, creating an email draft, opening a task, sending a notification.
 5. **Logging:** Recording the result of every run. Essential for seeing what went wrong, when and why.
 
@@ -69,11 +69,13 @@ AI makes sales automation more powerful, but left unchecked it also multiplies e
 - **Ask for structured output.** Ask the model for JSON with specific fields instead of free text, so the following nodes can process the output safely.
 - **Constrain the decision.** Define upfront the values the model can choose from ("hot", "warm", "cold"). Open-ended decisions produce inconsistency.
 - **Keep a human in the loop for customer-facing text.** Instead of sending the AI-written email directly, leave it as a draft in the CRM; let the rep review it and send it.
-- **Send the data that's needed, nothing more.** Pass the model only the fields required for the task; don't share personal data unnecessarily.
+- **Send the data that's needed, nothing more.** Pass the model only the fields required for the task; don't share personal data unnecessarily. For the legal limits on personal data in cold email, see our [KVKK guide](/blog/kvkk-compliant-b2b-cold-email).
 
 If you want to dig deeper into using AI for cold email writing, take a look at our [guide to writing cold emails with AI](/blog/how-to-write-cold-emails-with-ai). For a ready-made example running on n8n and AI, our [Sequence Writer tool](/sekans-yazari) generates outreach sequences from a video, PDF or website.
 
 ## Common Mistakes
+
+For the bigger picture behind these mistakes, see our post on [why sales automation projects fail](/blog/why-sales-automation-projects-fail).
 
 - **Skipping error handling:** When an API is temporarily unresponsive, the workflow silently stops. Attach an error workflow to every critical workflow and get notified about failed runs.
 - **Not checking for duplicates:** If you don't search by email or domain before writing to the CRM, the same person gets created more than once.

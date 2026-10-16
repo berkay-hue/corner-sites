@@ -211,7 +211,7 @@ Clearly defined stages are where automation works best. When criteria are verifi
 
 Tools like n8n are well suited for building these workflows without coding knowledge. We cover scenarios that connect CRM, calendar, email, and AI models step by step in our [beginner's guide to B2B sales automation with n8n](/blog/b2b-sales-automation-with-n8n-guide). If you're looking for ready-made workflows tailored to your team, take a look at [Sales Corner automations](/en/). Once a deal moves to the meeting stage, the [Meeting Briefing tool](/briefing) gets company and attendee research ready before the call.
 
-Automation comes with an important caveat: **Automating a poorly defined process only speeds up poor results.** First clarify your stages and criteria, apply them manually for a few weeks, and then automate.
+Automation comes with an important caveat: **Automating a poorly defined process only speeds up poor results.** First clarify your stages and criteria, apply them manually for a few weeks, and then automate. We look at why projects that skip this order stumble in our post on [why sales automation projects fail](/blog/why-sales-automation-projects-fail).
 
 ## Key Pipeline Metrics to Track
 

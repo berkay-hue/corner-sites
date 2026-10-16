@@ -211,7 +211,7 @@ Net tanımlanmış aşamalar, otomasyonun en verimli çalıştığı alandır. K
 
 Bu tür iş akışlarını kodlama bilgisi gerektirmeden kurmak için n8n gibi araçlar oldukça uygundur. CRM, takvim, e-posta ve yapay zeka modellerini birbirine bağlayan senaryoları [n8n ile B2B satış otomasyonu başlangıç rehberimizde](/blog/n8n-ile-b2b-satis-otomasyonu-rehberi) adım adım anlattık. Hazır kurulmuş, ekibinize göre uyarlanmış akışlar arıyorsanız [Sales Corner otomasyonlarını](/) inceleyebilirsiniz. Fırsat görüşme aşamasına geçtiğinde, [Toplantı Briefing aracı](/briefing) firma ve katılımcı araştırmasını görüşme öncesinde hazır eder.
 
-Otomasyonun önemli bir uyarısı var: **Kötü tanımlanmış bir süreci otomatikleştirmek, kötü sonuçları sadece hızlandırır.** Önce aşamaları ve kriterleri netleştirin, birkaç hafta manuel olarak uygulayın, sonra otomatikleştirin.
+Otomasyonun önemli bir uyarısı var: **Kötü tanımlanmış bir süreci otomatikleştirmek, kötü sonuçları sadece hızlandırır.** Önce aşamaları ve kriterleri netleştirin, birkaç hafta manuel olarak uygulayın, sonra otomatikleştirin. Bu sırayı atlayan projelerin neden tökezlediğini [satış otomasyonu projelerinin neden başarısız olduğunu anlattığımız yazıda](/blog/satis-otomasyonu-projesi-neden-basarisiz-olur) ele aldık.
 
 ## İzlemeniz Gereken Temel Pipeline Metrikleri
 
