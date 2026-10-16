@@ -2,6 +2,7 @@
 title: "How to Measure B2B Social Media ROI"
 description: "How do B2B companies measure social media ROI? A step-by-step guide to lead, pipeline and cost metrics, with UTM tracking and CRM setup."
 date: "2026-10-12"
+updated: "2026-10-16"
 category: "Measurement"
 image: "https://images.pexels.com/photos/6476254/pexels-photo-6476254.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
 imageAlt: "How to Measure B2B Social Media ROI"

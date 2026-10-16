@@ -2,6 +2,7 @@
 title: "LinkedIn Reklamı Maliyeti: B2B Şirketler İçin Rehber"
 description: "LinkedIn reklam maliyetleri nasıl hesaplanır? CPC, CPM ve minimum bütçe kalemlerini, B2B şirketler için gerçekçi bütçe planıyla birlikte anlatıyoruz."
 date: "2026-10-11"
+updated: "2026-10-16"
 category: "Reklam"
 image: "https://images.pexels.com/photos/7876672/pexels-photo-7876672.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
 imageAlt: "LinkedIn Reklamı Maliyeti: B2B Şirketler İçin Rehber"

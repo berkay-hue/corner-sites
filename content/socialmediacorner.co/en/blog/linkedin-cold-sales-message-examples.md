@@ -2,6 +2,7 @@
 title: "How to Write a LinkedIn Cold Sales Message: Examples"
 description: "A step-by-step guide for B2B sales teams on writing LinkedIn cold connection requests and follow-up messages, with examples that boost reply rates."
 date: "2026-10-13"
+updated: "2026-10-16"
 category: "Social Selling"
 image: "https://images.pexels.com/photos/6147022/pexels-photo-6147022.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
 imageAlt: "How to Write a LinkedIn Cold Sales Message: Examples"

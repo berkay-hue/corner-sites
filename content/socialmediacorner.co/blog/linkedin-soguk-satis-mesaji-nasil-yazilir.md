@@ -2,6 +2,7 @@
 title: "LinkedIn'de Soğuk Satış Mesajı Nasıl Yazılır? Örnekler"
 description: "B2B satış ekipleri için LinkedIn'de soğuk bağlantı isteği ve takip mesajının nasıl yazılacağını, yanıt oranını artıran örneklerle adım adım anlatıyoruz."
 date: "2026-10-13"
+updated: "2026-10-16"
 category: "Sosyal Satış"
 image: "https://images.pexels.com/photos/6147022/pexels-photo-6147022.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
 imageAlt: "LinkedIn'de Soğuk Satış Mesajı Nasıl Yazılır? Örnekler"

@@ -2,6 +2,7 @@
 title: "B2B Şirketler İçin Instagram Stratejisi Nasıl Kurulur?"
 description: "B2B şirketler Instagram'da hangi hedefleri koymalı, hangi içerikleri paylaşmalı ve başarıyı nasıl ölçmeli? Türkiye'deki örneklerle adım adım rehber."
 date: "2026-10-15"
+updated: "2026-10-16"
 category: "Instagram"
 image: "https://images.pexels.com/photos/6476786/pexels-photo-6476786.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
 imageAlt: "B2B Şirketler İçin Instagram Stratejisi Nasıl Kurulur?"

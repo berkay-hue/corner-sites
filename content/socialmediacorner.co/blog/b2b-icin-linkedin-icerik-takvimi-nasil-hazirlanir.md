@@ -2,6 +2,7 @@
 title: "B2B İçin LinkedIn İçerik Takvimi Nasıl Hazırlanır?"
 description: "B2B şirketler için LinkedIn içerik takvimi nasıl hazırlanır? Konu seçimi, içerik türleri, paylaşım sıklığı ve aylık ölçüm adımlarını örneklerle anlatıyoruz."
 date: "2026-10-14"
+updated: "2026-10-16"
 category: "LinkedIn"
 image: "https://images.pexels.com/photos/15635238/pexels-photo-15635238.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
 imageAlt: "B2B İçin LinkedIn İçerik Takvimi Nasıl Hazırlanır?"
