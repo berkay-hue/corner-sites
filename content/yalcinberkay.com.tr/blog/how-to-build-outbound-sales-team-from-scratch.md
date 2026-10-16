@@ -230,3 +230,21 @@ Building an outbound sales team from scratch comes down to sequencing the right 
 None of this is glamorous, but it compounds. A team built this way gets better every quarter, because every call, reply and lost deal feeds back into the system.
 
 If you're building your first outbound team, or rebuilding one that hasn't delivered, I'm always happy to compare notes. Feel free to reach out through [my homepage](/) and tell me where you are in the process.
+
+## FAQ
+
+### How long should a founder test outbound before hiring the first sales rep?
+
+A founder or senior seller should run outbound personally for 6 to 8 weeks before hiring anyone. A simple test is to pick 200 accounts in one segment, identify 2 to 3 decision-makers per account, and run a three-week sequence combining email, LinkedIn and phone. If that produces a handful of real conversations and at least one or two opportunities, you have a signal worth scaling.
+
+### Should I hire one or two outbound sales reps first?
+
+Hire two reps at the same time rather than one. With a single rep, you can never tell whether a bad month comes from the person, the territory or the process. With two, you have a comparison point and avoid drawing conclusions from one person's results.
+
+### When should an outbound team split into SDR and AE roles?
+
+Introduce the SDR/AE split only when the data shows reps are spending too much time prospecting and not enough time closing, or the other way around. Full-cycle reps work well when deal sizes are moderate, sales cycles are short and you have fewer than four or five sellers. When you do split, a common starting ratio is one SDR supporting two AEs, depending on how many meetings each AE can handle per week.
+
+### How many outbound reps do I need to hit a revenue target?
+
+Work backwards from revenue using capacity math. In an illustrative example, €600,000 in new annual revenue at an average deal size of €20,000 means 30 deals, 120 opportunities and 240 meetings, or about 20 meetings per month. If one ramped rep books 10 qualified meetings per month, you need two fully ramped reps for meetings alone, which in practice means hiring three, or two plus a strong closer.

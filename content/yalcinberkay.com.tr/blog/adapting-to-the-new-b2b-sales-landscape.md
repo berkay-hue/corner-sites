@@ -17,3 +17,13 @@ Navigating the new B2B landscape? Buyers are shying away from sales chats, says 
 - Treat marketing-sourced and outbound-sourced leads the same and build one seamless buyer journey.
 - Self-serve content like videos, FAQs and guides helps buyers decide faster, on their own terms.
 - Word-of-mouth from customers, influencers and communities is more convincing than ads.
+
+## FAQ
+
+### How should B2B sellers adapt when buyers avoid sales conversations?
+
+B2B sellers should track buying signals such as product use and website visits and reach out when a prospect's interest is highest, instead of relying on cold calls. Free or basic product tiers and self-serve content like videos, FAQs and guides also let buyers see value and decide on their own terms.
+
+### Why does word-of-mouth matter in B2B sales?
+
+Word-of-mouth matters because real stories from customers, influencers and community members are more convincing than ads. Authentic experiences shared by others build credibility before a seller ever makes a pitch.

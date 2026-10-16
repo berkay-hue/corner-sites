@@ -219,3 +219,21 @@ Küçük bir satış ekibi için doğru CRM, en çok özelliğe sahip olan deği
 İyi kurulmuş bir CRM, küçük bir ekibi büyük bir ekip gibi organize çalıştırabilir. Kötü seçilmiş bir CRM ise en yetenekli satışçıların bile enerjisini tüketir. Bu kararı acele etmeden ama sonsuza kadar da ertelemeden, yapılandırılmış bir şekilde vermek en sağlıklı yoldur.
 
 Ekibiniz için CRM seçimi, kurulumu ya da satış operasyonlarının yapılandırılması konusunda fikir alışverişi yapmak isterseniz, [Berkay Yalçın'ın kişisel sayfası](/tr) üzerinden benimle iletişime geçebilirsiniz. Deneyimlerimi paylaşmaktan memnuniyet duyarım.
+
+## Sık sorulan sorular
+
+### Küçük bir satış ekibi CRM seçerken nelere dikkat etmeli?
+
+Küçük bir ekip için en önemli kriterler kullanım kolaylığı, hızlı kurulum, öngörülebilir maliyet, mobil erişim ve büyümeye alan bırakmasıdır. Kullanım kolaylığının pratik ölçüsü, yeni bir fırsatın 30 saniyede kaydedilebilmesidir. Özelleştirilebilir pipeline aşamaları, Gmail ve Outlook senkronizasyonu, görev ve hatırlatıcılar, temel raporlar, mobil uygulama ve CSV ya da API ile veri dışa aktarımı vazgeçilmezdir; bunlardan biri eksik olan araç elenmelidir.
+
+### CRM seçim süreci ne kadar sürer?
+
+3-15 kişilik bir ekip için tüm seçim süreci genellikle 3-5 hafta sürer. Önce 6-8 araçlık bir uzun liste çıkarılır ve bu liste 3 finaliste indirilir. Finalistler 30-50 kayıt ve 10-15 fırsatla 2 haftalık bir pilotta denenir, karar da kullanım kolaylığının en yüksek ağırlığı taşıdığı bir karar matrisiyle verilir.
+
+### CRM'in gerçek maliyeti nasıl hesaplanır?
+
+Gerçek maliyet, lisans ücretine ekibin kurulum ve kullanım için harcayacağı iç zaman eklenerek hesaplanır. Örneğin 5 kullanıcı için kullanıcı başına aylık 50 dolarlık bir plan yılda 3.000 dolar, 80 dolarlık bir plan ise yılda 4.800 dolar eder. Türkiye'deki ekipler için çoğu CRM'in döviz bazlı fiyatlandırma yapması nedeniyle kur riskini de hesaba katmak gerekir.
+
+### Ekip CRM'i kullanmazsa ne yapmalı?
+
+Benimsemeyi artırmak için başlangıçta zorunlu alanları 5-7 ile sınırlamak ve CRM'i bir gözetim aracı gibi kullanmamak gerekir. Yöneticinin de CRM'i kendisi aktif olarak kullanması şarttır. 30. günde aktif fırsatların ne kadarının güncel olduğunu ve kaç kişinin CRM'i her gün açtığını ölçerek benimsemeyi takip edebilirsiniz.

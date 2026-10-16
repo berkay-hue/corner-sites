@@ -16,3 +16,13 @@ Pivotree Inc. and Spryker's latest report reveals a seismic shift in B2B buying 
 - Digital buying demand is rising fast, yet 33% of businesses still struggle to offer a satisfactory digital buying experience.
 - Consumer eCommerce ideas such as personalized journeys and marketplaces are moving into B2B.
 - AI is expected to be a major driver of efficiency and innovation in B2B commerce.
+
+## FAQ
+
+### How many B2B businesses struggle with digital buying experiences?
+
+According to the Pivotree and Spryker report, 33% of businesses still struggle to offer a satisfactory digital buying experience. The finding comes from a survey of 100 B2B leaders in the U.S. and Canada, even as digital demand rises fast.
+
+### How can B2B companies improve their digital buying experience?
+
+B2B companies can borrow strategies from consumer eCommerce, such as personalized customer journeys and marketplace experiences. The report also points to AI as a major force for efficiency and innovation in B2B commerce.

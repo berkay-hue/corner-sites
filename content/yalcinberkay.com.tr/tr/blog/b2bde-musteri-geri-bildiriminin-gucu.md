@@ -16,3 +16,13 @@ alt: "the-power-of-customer-feedback-in-b2b"
 - Geri bildirimden gelen içgörüler, ürün geliştirmeyi müşterilerin aradığı çözümlere yönlendirmelidir.
 - Geri bildirime göre aksiyon almak tek seferlik bir proje değil, süregelen bir süreçtir.
 - Müşterilere görüşlerinin ürünü şekillendirdiğini göstermek güven oluşturur.
+
+## Sık sorulan sorular
+
+### B2B'de müşteri geri bildirimi neden önemlidir?
+
+Müşteri geri bildirimi B2B'de önemlidir çünkü müşterilerin gerçekte neye ihtiyaç duyduğunu anketlerin ötesinde ortaya koyar. Bu içgörüler ürün geliştirmeyi müşterilerin aradığı çözümlere yönlendirir.
+
+### Geri bildirime göre aksiyon almak güveni nasıl artırır?
+
+Müşteriler görüşlerinin ürünlerinizi şekillendirdiğini gördüklerinde güven artar. Seslerinin önemli olduğunu göstermek ve geri bildirimi tek seferlik değil sürekli bir süreç olarak ele almak ilişkiyi güçlendirir.

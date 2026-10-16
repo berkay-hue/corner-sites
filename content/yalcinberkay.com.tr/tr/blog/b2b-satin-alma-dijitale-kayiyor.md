@@ -16,3 +16,13 @@ Pivotree Inc. ve Spryker'ın son raporu, B2B satın alma davranışlarında diji
 - Dijital satın alma talebi hızla artıyor, ancak işletmelerin %33'ü hâlâ tatmin edici bir dijital satın alma deneyimi sunmakta zorlanıyor.
 - Kişiselleştirilmiş yolculuklar ve pazaryerleri gibi tüketici e-ticareti fikirleri B2B'ye taşınıyor.
 - Yapay zekânın B2B ticarette verimlilik ve inovasyonun önemli bir itici gücü olması bekleniyor.
+
+## Sık sorulan sorular
+
+### B2B işletmelerin ne kadarı dijital satın alma deneyiminde zorlanıyor?
+
+Pivotree ve Spryker raporuna göre işletmelerin %33'ü hâlâ tatmin edici bir dijital satın alma deneyimi sunmakta zorlanıyor. Bu bulgu, ABD ve Kanada'daki 100 B2B yöneticisiyle yapılan bir ankete dayanıyor.
+
+### B2B şirketleri dijital satın alma deneyimini nasıl iyileştirebilir?
+
+B2B şirketleri kişiselleştirilmiş müşteri yolculukları ve pazaryeri deneyimleri gibi tüketici e-ticaretinden gelen stratejileri benimseyebilir. Rapor, yapay zekâyı da B2B ticarette verimlilik ve inovasyonun önemli bir itici gücü olarak öne çıkarıyor.

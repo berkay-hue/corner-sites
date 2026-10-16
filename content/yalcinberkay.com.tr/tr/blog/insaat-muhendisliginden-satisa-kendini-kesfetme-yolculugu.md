@@ -16,3 +16,9 @@ alt: "from-civil-engineering-to-sales-a-journey-of-self-discovery"
 - Uluslararası deneyim kazanmak için AIESEC'e katılmak bir dönüm noktası ve kendini keşfetme yolculuğu oldu.
 - İletişimden ve insanlarla çalışmaktan keyif alması, onu mühendislikten satış kariyerine yöneltti.
 - Kariyer yolları nadiren düz bir çizgide ilerler; değişime açık olmak güçlü yönlerinize uygun işi bulmanıza yardımcı olur.
+
+## Sık sorulan sorular
+
+### Berkay neden inşaat mühendisliğinden satışa geçti?
+
+Derslerinde ilerledikçe inşaat mühendisliğinin kendisine göre olmadığını fark etti ve AIESEC'te insanlarla iletişim kurmaktan büyük keyif aldığını keşfetti. Bu farkındalık onu mühendislikten uzaklaşıp satışta kariyer yapmaya yöneltti.

@@ -16,3 +16,13 @@ alt: "b2bde-musteri-geri-bildiriminin-gucu"
 - Feedback insights should steer product development toward solutions customers are looking for.
 - Acting on feedback is an ongoing process, not a one-time project.
 - Showing customers that their input shapes the product builds trust.
+
+## FAQ
+
+### Why is customer feedback important in B2B?
+
+Customer feedback is important in B2B because it reveals what customers really need, beyond what surveys alone capture. Those insights can steer product development toward solutions customers are actually looking for.
+
+### How does acting on customer feedback build trust?
+
+Acting on feedback builds trust because customers see their input shaping your products. Letting them know their voice matters, and treating feedback as an ongoing process rather than a one-time project, strengthens the relationship.

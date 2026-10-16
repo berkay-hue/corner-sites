@@ -179,3 +179,21 @@ Moving from SDR to Account Executive isn't about waiting your turn. It's about d
 The SDRs who make this jump successfully are rarely the loudest or the most naturally gifted. They're the most curious and the most intentional about their growth.
 
 If you're an SDR planning your next step, or a sales leader designing a career path for your team, I'd be glad to hear what you're working on. Feel free to reach out through [my personal site](/) and let's talk.
+
+## FAQ
+
+### How long should you be an SDR before getting promoted to AE?
+
+Many teams informally look for three to six consecutive months at or above quota before seriously considering an SDR for promotion. Numbers alone aren't enough, though, because managers also watch meeting quality, CRM discipline, coachability and team contribution. A practical step is to tell your manager you want to move into an AE role within a set timeframe, such as the next 9–12 months, and agree on concrete milestones.
+
+### What skills does an SDR need to become an account executive?
+
+An SDR needs to add judgment, control and depth to the volume, consistency and resilience the SDR role already rewards. That means understanding a customer's business well enough to build a case for change, managing several stakeholders, forecasting accurately, negotiating without giving away margin and keeping a deal moving for weeks or months. The biggest gap is usually business understanding, so learn to read a P&L at a high level and know your product's ROI story.
+
+### How can an SDR prove they are ready for an AE role?
+
+The best proof is doing AE work before you have the title. Shadow at least two AE calls per week, ask to run the first 10–15 minutes of discovery on meetings you've booked, and follow every opportunity you sourced through to closed-won or closed-lost. Tracking your meeting-to-opportunity conversion rate every month also shows your manager that you understand what a good prospect looks like.
+
+### Why do new account executives struggle after their promotion?
+
+The single most common reason new AEs struggle in their second quarter is that they stop prospecting after promotion. Longer sales cycles also mean many early efforts won't show results until month four or five, so an uneven first quarter is normal. Other frequent mistakes include talking too much in discovery, chasing every deal equally and discounting too early.

@@ -238,3 +238,21 @@ Soğuk e-postada yanıt oranını artırmanın tek bir sırrı yok. Ama birbirin
 Bu adımların hiçbiri tek başına mucize yaratmaz. Hepsini birlikte ve tutarlı şekilde uyguladığınızda ise soğuk e-posta, satış ekibiniz için öngörülebilir bir pipeline kaynağına dönüşür. Önerim şu: Bu hafta tek bir segment seçin, 100-150 kişilik temiz bir liste hazırlayın, yukarıdaki yapıyla beş adımlık bir dizi kurun ve sonuçları kaydedin. Bir ay sonra elinizde tahmin değil, gerçek veri olacak.
 
 Outbound sürecinizi kurarken ya da mevcut kampanyalarınızın yanıt oranını iyileştirmeye çalışırken bir fikir alışverişine ihtiyaç duyarsanız, [benimle iletişime geçebilirsiniz](/tr). Sahada yaşadığınız zorlukları konuşmaktan memnuniyet duyarım.
+
+## Sık sorulan sorular
+
+### Soğuk e-postada yanıt oranı nasıl ölçülür?
+
+Açılma oranı yanıltıcı olabileceği için ölçümü teslim oranı, toplam yanıt oranı, olumlu yanıt oranı ve toplantıya dönüşüm üzerinden yapmak gerekir. Örneğin 400 e-posta gönderip 24 yanıt alırsanız toplam yanıt oranınız %6, bunların 8'i olumluysa olumlu yanıt oranınız %2 olur. Asıl önemli olan bu olumlu yanıtlardan kaçının toplantıya dönüştüğüdür; bu örnekte sayı 5'tir.
+
+### Soğuk e-posta ne kadar uzun olmalı?
+
+Etkili bir soğuk e-postanın gövdesi 50-120 kelime arasında olmalıdır. Bu alanda bağlam, problem, değer ve çağrı yer almalı, ilk cümle de alıcının dünyasıyla ilgili olmalıdır. Konu satırı ise şirket içi bir e-posta gibi görünen, büyük harf, ünlem ve emoji içermeyen 2-5 kelimelik bir ifade olmalıdır.
+
+### Soğuk e-postada kaç takip e-postası gönderilmeli?
+
+1., 3., 7., 12. ve 18. günlere yayılan 5 adımlı bir sekans iyi bir başlangıç noktasıdır. Birçok satış temsilcisi tek bir e-posta gönderip yanıt gelmeyince vazgeçer, oysa karşı taraf e-postanızı görmemiş ya da unutmuş olabilir. Son adımdaki kibar kapanış e-postası da şaşırtıcı derecede çok yanıt getirir.
+
+### Soğuk e-postaların spam klasörüne düşmesi nasıl önlenir?
+
+Spam klasörüne düşmemek için önce teslim edilebilirlik altyapısını doğru kurmak gerekir. Ayrı bir gönderim alan adı kullanmak, SPF, DKIM ve DMARC kayıtlarını yapılandırmak, yeni hesapları ısıtmak ve hesap başına günlük gönderim hacmini düşük tutmak bu altyapının temelidir. Ayrıca e-posta adreslerini doğrulamak, ilk e-postada link ve görsel kullanmamak ve sade bir imza tercih etmek riski azaltır.

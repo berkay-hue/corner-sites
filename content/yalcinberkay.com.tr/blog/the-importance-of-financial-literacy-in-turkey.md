@@ -16,3 +16,9 @@ But why does this matter to us in Turkey? 🔍 Financial Literacy: More Than Jus
 - Turkey's economic landscape makes financial education especially important.
 - Key focus areas: managing personal and household finances, understanding investment options and risks, and using credit wisely.
 - A financially literate population builds a stronger, more resilient economy.
+
+## FAQ
+
+### Why is financial literacy important in Turkey?
+
+Financial literacy matters in Turkey because the country's unique economic landscape brings both challenges and opportunities. Understanding financial concepts helps people make better personal decisions, prepares them for uncertainty and contributes to a stronger, more resilient economy.
