@@ -2,11 +2,13 @@
 title: "B2B Lead Scoring Nasıl Yapılır? Adım Adım Model"
 description: "B2B lead scoring modeli nasıl kurulur? Puanlama kriterleri, örnek tablo ve CRM'de uygulama adımlarıyla Türkiye'deki satış ekipleri için pratik rehber."
 date: "2026-10-14"
+updated: "2026-10-16"
 category: "Lead Generation"
 image: "https://images.pexels.com/photos/7876672/pexels-photo-7876672.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
 imageAlt: "B2B Lead Scoring Nasıl Yapılır? Adım Adım Model"
 alt: "b2b-lead-scoring-model"
 ---
+B2B lead scoring, her lead'e iki ayrı puan verilerek yapılır: şirketinize ne kadar uyduğunu gösteren fit skoru (sektör, şirket büyüklüğü, unvan) ve satın almaya ne kadar yakın olduğunu gösteren engagement skoru (e-posta yanıtı, site ziyareti, demo talebi). Puanlar eşik değerlerle gruplara ayrılır, CRM'de otomatikleştirilir ve gerçek sonuçlarla düzenli olarak kalibre edilir.
 
 B2B satış ekiplerinin çoğu aynı sorunu yaşar: pipeline'da yüzlerce lead vardır ama satış temsilcilerinin günü sınırlıdır. Kime önce dönülecek, hangi lead'e bir hafta sonra yeniden temas edilecek, hangisi listeden tamamen çıkarılacak? Bu kararlar "içgüdüyle" verildiğinde en iyi fırsatlar soğur, ekip enerjisini satın alma niyeti olmayan kişilere harcar. **Lead scoring** bu kaosu sistematik bir önceliklendirmeye dönüştürür. Her lead'e, şirketinize ne kadar uygun olduğunu ve satın almaya ne kadar yakın olduğunu gösteren bir puan verir.
 

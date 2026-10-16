@@ -77,7 +77,7 @@ DevRel üç temel sütun üzerine kurulur: topluluk, içerik ve ürün geri bild
 
 ### DevRel teknoloji partnerliklerini neden güçlendirir?
 
-Çünkü bir teknoloji partnerliğinin başarısı entegrasyonun kalitesine bağlıdır ve DevRel bu entegrasyon sürecini hızlı ve pürüzsüz hale getirir. Partnerlik yöneticisi ilişkiyi kurarken DevRel ekibi partnerin teknik ekibini dokümantasyon, eğitim ve destekle donatır. Bir araştırmaya göre güçlü bir teknoloji ekosistemine sahip şirketler rakiplerine göre yüzde 30 daha hızlı büyüyor.
+Çünkü bir teknoloji partnerliğinin başarısı entegrasyonun kalitesine bağlıdır ve DevRel bu entegrasyon sürecini hızlı ve pürüzsüz hale getirir. Partnerlik yöneticisi ilişkiyi kurarken DevRel ekibi partnerin teknik ekibini dokümantasyon, eğitim ve destekle donatır. Güçlü bir teknoloji ekosistemine sahip şirketler çoğu zaman rakiplerinden daha hızlı büyür.
 
 ### Bir DevRel programının başarısını nasıl ölçersin?
 

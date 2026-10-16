@@ -47,7 +47,7 @@ Preskriptif analitiğin arkasındaki teknoloji, makine öğrenmesi ve yapay zeka
 
 ## B2B Satışta CRM ile Proaktif Karar Desteğinin Gücü
 
-Teoriyi bir kenara bırakıp pratiğe odaklandığımızda, CRM ile proaktif karar desteği sistemlerinin B2B satış metrikleri üzerinde ne kadar dönüştürücü bir etkiye sahip olduğunu net bir şekilde görebiliriz. Bu sadece satış temsilcilerinin hayatını kolaylaştırmakla kalmaz, aynı zamanda ciro, krlılık ve müşteri sadakati gibi temel iş hedeflerine doğrudan katkıda bulunur. Şirketler artık karanlıkta el yordamıyla ilerlemek yerine, verinin aydınlattığı bir yolda kendilerinden emin adımlarla yürüyorlar. Bu bölümde, preskriptif analitiğin sağladığı somut faydaları gerçek dünya senaryolarıyla inceleyeceğiz.
+Teoriyi bir kenara bırakıp pratiğe odaklandığımızda, CRM ile proaktif karar desteği sistemlerinin B2B satış metrikleri üzerinde ne kadar dönüştürücü bir etkiye sahip olduğunu net bir şekilde görebiliriz. Bu sadece satış temsilcilerinin hayatını kolaylaştırmakla kalmaz, aynı zamanda ciro, kârlılık ve müşteri sadakati gibi temel iş hedeflerine doğrudan katkıda bulunur. Şirketler artık karanlıkta el yordamıyla ilerlemek yerine, verinin aydınlattığı bir yolda kendilerinden emin adımlarla yürüyorlar. Bu bölümde, preskriptif analitiğin sağladığı somut faydaları gerçek dünya senaryolarıyla inceleyeceğiz.
 
 Alt Başlık 3.1: Satış Fırsatlarını Akıllıca Önceliklendirme
 

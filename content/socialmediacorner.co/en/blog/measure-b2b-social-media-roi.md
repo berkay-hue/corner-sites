@@ -226,6 +226,8 @@ By the end of the first quarter, you'll have a real dataset to compare against. 
 
 Measuring B2B social media ROI is less about knowing the right formula and more about building the right infrastructure and discipline. Calculating all costs honestly, connecting tracking systems to your CRM, using a consistent attribution model and supplementing software data with customers' own responses lets you demonstrate social media's contribution to revenue in a defensible way. Focusing on audience quality on LinkedIn, the top and middle stages of the funnel on Instagram, and turning conversations into opportunities in social selling ensures you measure each channel according to its role.
 
+You can see how measurement priorities differ by industry on our [social media management for SaaS](/en/industries/saas) and [for e-commerce](/en/industries/e-commerce) pages. For goals and metrics on the Instagram side, our [B2B Instagram strategy](/blog/b2b-instagram-strategy) guide will also help.
+
 If you want to see what your social media investments are really delivering, build your measurement infrastructure or make your LinkedIn and Instagram strategy revenue-focused, the Social Media Corner team is ready to help. [Get in touch with us](/en/contact) to assess your current situation together.
 
 ## FAQ

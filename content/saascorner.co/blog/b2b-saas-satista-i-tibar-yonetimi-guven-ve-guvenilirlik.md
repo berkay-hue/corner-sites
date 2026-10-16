@@ -71,11 +71,11 @@ B2B SaaS pazarında rekabet her geçen gün artarken, teknolojik üstünlük vey
 
 ### Güçlü bir itibar B2B satış sürecini nasıl etkiler?
 
-Güçlü bir itibar, satış temsilcin sunum yapmadan önce olumlu bir ilk izlenim yaratarak müşterinin itirazlarını azaltır ve satış sürecini hızlandırır. Edelman'ın Güven Barometresi araştırmasına göre B2B karar vericilerinin yüzde 87'si, bir şirketin itibarı hakkında olumsuz bir şey duyduğunda o şirketle iş yapmaktan kaçınıyor. Olumlu vaka analizleri, yüksek puanlı platform yorumları ve sektör liderlerinin övgüleri bu güveni besler.
+Güçlü bir itibar, satış temsilcin sunum yapmadan önce olumlu bir ilk izlenim yaratarak müşterinin itirazlarını azaltır ve satış sürecini hızlandırır. B2B karar vericilerinin çoğu, bir şirketin itibarı hakkında olumsuz bir şey duyduğunda o şirketle iş yapmaktan kaçınır. Olumlu vaka analizleri, yüksek puanlı platform yorumları ve sektör liderlerinin övgüleri bu güveni besler.
 
 ### Sosyal kanıtla itibar nasıl inşa edilir?
 
-Müşteri başarılarını somut verilerle destekleyen vaka analizleri hazırlayıp web sitende, satış sunumlarında ve pazarlama materyallerinde kullanarak başlarsın. Ayrıca G2, Capterra ve TrustRadius gibi inceleme platformlarında aktif olmalı, memnun müşterilerini yorum yapmaya teşvik etmelisin. Gartner'a göre B2B alıcılarının yüzde 70'inden fazlası, bir yazılımı değerlendirirken bu tür bağımsız inceleme sitelerine başvuruyor.
+Müşteri başarılarını somut verilerle destekleyen vaka analizleri hazırlayıp web sitende, satış sunumlarında ve pazarlama materyallerinde kullanarak başlarsın. Ayrıca G2, Capterra ve TrustRadius gibi inceleme platformlarında aktif olmalı, memnun müşterilerini yorum yapmaya teşvik etmelisin. B2B alıcılarının büyük kısmı, bir yazılımı değerlendirirken bu tür bağımsız inceleme sitelerine başvurur.
 
 ### Olumsuz bir yoruma nasıl yanıt vermelisin?
 

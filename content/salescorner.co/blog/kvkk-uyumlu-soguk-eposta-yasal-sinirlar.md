@@ -2,11 +2,13 @@
 title: "KVKK'ya Uygun B2B Soğuk E-Posta: Yasal Sınırlar"
 description: "B2B soğuk e-postada KVKK ve ticari elektronik ileti kurallarına nasıl uyulacağını, meşru menfaat ve açık ret seçeneklerini örneklerle anlatıyoruz."
 date: "2026-10-13"
+updated: "2026-10-16"
 category: "Outbound"
 image: "https://images.pexels.com/photos/1181370/pexels-photo-1181370.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
 imageAlt: "KVKK'ya Uygun B2B Soğuk E-Posta: Yasal Sınırlar"
 alt: "kvkk-compliant-b2b-cold-email"
 ---
+KVKK'ya uygun B2B soğuk e-posta için iki düzenlemeye birlikte uymanız gerekir. Ticari ileti mevzuatı, tacir ve esnafa gönderilen iletilerde önceden onay aramaz ama ret hakkı her zaman saklıdır. KVKK ise kişisel veriyi hangi hukuki sebeple, çoğunlukla meşru menfaat ya da alenileştirmeyle, işlediğinizi belirlemenizi ve ilk e-postada alıcıyı aydınlatmanızı ister.
 
 Türkiye'de B2B satış ekipleri için soğuk e-posta hâlâ en ölçeklenebilir outbound kanallarından biri. Ancak "Bu kişiye e-posta atabilir miyim?" sorusunun cevabı tek bir kanunda değil, birbirine temas eden iki ayrı düzenlemede yatıyor: **6698 sayılı Kişisel Verilerin Korunması Kanunu (KVKK)** ve **6563 sayılı Elektronik Ticaretin Düzenlenmesi Hakkında Kanun** ile bu kanuna bağlı ticari elektronik ileti mevzuatı. Pek çok ekip bu ikisini karıştırıyor. Biri için alınan önlemin diğerini de karşıladığını düşünüyor ya da "B2B'de izin gerekmez" gibi yarım doğrularla hareket ediyor.
 

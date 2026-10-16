@@ -2,10 +2,13 @@
 title: "When Should a Founder Hire Their First Sales Rep?"
 description: "Founder-led selling only scales so far. Learn which revenue signals mean it's time to hire your first sales rep, and what to fix first."
 date: "2026-10-13"
+updated: "2026-10-16"
 category: "Founder Notes"
 image: "https://images.pexels.com/photos/6016350/pexels-photo-6016350.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
 imageAlt: "When Should a Founder Hire Their First Sales Rep?"
 ---
+
+Hire your first sales rep when you have proven that selling works, not when you are tired of selling. You should know who buys and why, be able to write the process down, show the numbers, and see that your own capacity has become the limit on growth. Before that point, a rep is a costly experiment.
 
 Every founder I talk to reaches the same moment. Sales calls fill your calendar, product decisions wait in Slack, investors want updates, and you start thinking: *"I need to hire a salesperson so I can get back to building the company."* The instinct is understandable. But hiring your first sales rep at the wrong time is one of the most expensive mistakes an early-stage B2B company can make. You lose money and months. Worse, you can come away believing that "sales doesn't work for us" when the real problem was timing and preparation.
 

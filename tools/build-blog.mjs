@@ -220,7 +220,7 @@ function renderPost(tpl, post, next, related) {
     image: [img], datePublished: fm.date, dateModified: fm.updated || fm.date, mainEntityOfPage: url, inLanguage: cfg.lang,
     ...(BLOG_ID && { isPartOf: { "@id": BLOG_ID } }),
     author: AUTHOR,
-    publisher: { "@type": "Organization", ...(ORG_ID && { "@id": ORG_ID }), name: cfg.brand, url: cfg.origin,
+    publisher: { "@type": "Organization", ...(ORG_ID && { "@id": ORG_ID }), name: cfg.brand, url: cfg.origin + "/",
       ...(cfg.logo && { logo: { "@type": "ImageObject", ...cfg.logo } }) },
   }, {
     "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [[L().home, cfg.origin + BASE + "/"], ["Blog", cfg.origin + BASE + "/blog"], [fm.title, url]]

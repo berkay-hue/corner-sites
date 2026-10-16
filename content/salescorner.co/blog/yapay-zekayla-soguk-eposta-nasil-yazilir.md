@@ -2,10 +2,12 @@
 title: "Yapay Zekayla Soğuk E-Posta Nasıl Yazılır?"
 description: "B2B soğuk e-posta yazarken yapay zekayı nasıl kullanacağınızı; kişiselleştirme, konu satırı ve takip dizisi adımlarını örneklerle anlatıyoruz."
 date: "2026-10-10"
+updated: "2026-10-16"
 category: "Yapay Zeka"
 image: "https://images.pexels.com/photos/7971661/pexels-photo-7971661.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
 imageAlt: "Yapay Zekayla Soğuk E-Posta Nasıl Yazılır?"
 ---
+Yapay zekayla soğuk e-posta yazmanın doğru yolu, stratejiyi değil uygulamayı yapay zekaya devretmektir. Önce doğru segmenti seçip listeyi temizleyin ve zenginleştirin, ana mesajı kendiniz yazın, ardından iyi kurulmuş bir promptla kişiselleştirmeyi ölçeklendirin. Konu satırlarını ve takip dizisini de aynı yöntemle üretin, çıktıları örneklem kontrolüyle gözden geçirin.
 
 Soğuk e-posta, B2B satışta hâlâ en ölçeklenebilir kanallardan biri. Yine de çoğu satış ekibi aynı sorunla karşılaşıyor: Ya yüzlerce kişiye aynı şablonu gönderip düşük yanıt oranına razı oluyor ya da her e-postayı elle kişiselleştirip günde ancak birkaç düzine mesaj çıkarabiliyor. Yapay zeka bu ikilemi çözmek için güçlü bir araç. Ancak doğru kullanılmazsa, "yapay zekayla yazıldığı belli olan" genel geçer mesajları her zamankinden daha hızlı üretmeye yarıyor.
 

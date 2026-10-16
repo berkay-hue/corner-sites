@@ -2,11 +2,13 @@
 title: "Satış Pipeline Aşamaları Nasıl Tanımlanır? Örnekler"
 description: "B2B satış ekipleri için pipeline aşamalarını nasıl tanımlayacağınızı, her aşamanın çıkış kriterlerini ve sık yapılan hataları örneklerle anlatıyoruz."
 date: "2026-10-12"
+updated: "2026-10-16"
 category: "Pipeline"
 image: "https://images.pexels.com/photos/8555771/pexels-photo-8555771.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
 imageAlt: "Satış Pipeline Aşamaları Nasıl Tanımlanır? Örnekler"
 alt: "how-to-define-sales-pipeline-stages"
 ---
+Satış pipeline aşamaları, satıcının ne yaptığına göre değil, alıcının satın alma yolculuğunda attığı doğrulanabilir adımlara göre tanımlanır. Her aşamanın giriş ve çıkış kriteri, sorumlusu, kapanış olasılığı ve maksimum bekleme süresi olmalıdır. Çoğu B2B ekibi için Kazanıldı ve Kaybedildi hariç beş ile yedi aşama yeterlidir.
 
 Pek çok B2B satış ekibinde CRM'e girdiğinizde aynı tabloyla karşılaşırsınız: "Görüşüldü", "İlgileniyor", "Sıcak", "Teklif gönderilecek" gibi belirsiz aşamalar ve aylardır aynı sütunda bekleyen yüzlerce fırsat. Satış müdürü haftalık toplantıda tahmin ister, temsilciler ise "bu ay kapanır gibi" diye cevap verir. Sorun genellikle ekipte değil, **pipeline aşamalarının hiç net tanımlanmamış olmasındadır**.
 

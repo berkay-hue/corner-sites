@@ -2,10 +2,13 @@
 title: "Soğuk E-postada Yanıt Oranı Nasıl Artırılır?"
 description: "Soğuk e-postaya gelen yanıt oranı neden düşük ve nasıl yükseltilir? Konu satırından takip sırasına kadar B2B outbound adımlarını örneklerle inceliyoruz."
 date: "2026-10-13"
+updated: "2026-10-16"
 category: "Outbound"
 image: "https://images.pexels.com/photos/7888684/pexels-photo-7888684.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
 imageAlt: "Soğuk E-postada Yanıt Oranı Nasıl Artırılır?"
 ---
+
+Soğuk e-postada yanıt oranını artırmanın tek bir sırrı yok; birbirini tamamlayan disiplinler var. Doğru listeyi oluşturun, teslim edilebilirliği koruyun, tek bir probleme odaklanan kısa mesajlar yazın, düşük sürtünmeli sorular sorun, sabırla takip edin ve her şeyi ölçerek test edin. Bunları birlikte uyguladığınızda soğuk e-posta öngörülebilir bir pipeline kaynağına dönüşür.
 
 Soğuk e-posta bitti diyenler hâlâ çok. Sahada gördüğüm tablo ise farklı. Soğuk e-posta ölmedi, sadece **özensiz soğuk e-posta öldü**. Bin kişilik bir listeye aynı şablonu gönderip yanıt bekleyen ekipler hayal kırıklığı yaşıyor. Listesini titizlikle hazırlayan, mesajını tek bir probleme odaklayan ve takip dizisini sabırla kuran ekipler ise bu kanaldan düzenli toplantı çıkarmaya devam ediyor.
 

@@ -2,11 +2,14 @@
 title: "Sıfırdan Outbound Satış Ekibi Nasıl Kurulur?"
 description: "B2B kurucuları için outbound satış ekibini işe alma, yapılandırma ve hızlandırma üzerine pratik bir rehber: roller, metrikler ve erken dönemde kaçınılması gereken hatalar."
 date: "2026-10-10"
+updated: "2026-10-16"
 category: "Satış Liderliği"
 image: "https://images.pexels.com/photos/7693103/pexels-photo-7693103.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
 imageAlt: "Sıfırdan Outbound Satış Ekibi Nasıl Kurulur?"
 alt: "how-to-build-outbound-sales-team-from-scratch"
 ---
+
+Sıfırdan outbound satış ekibi kurmak için işe alımdan önce outbound'u 6-8 hafta boyunca kendiniz doğrulayın ve bir satışçının 30 saniyede uygulayabileceği dar bir ICP tanımlayın. Koçluğa açık, dayanıklı iki satışçıyı aynı anda işe alın; onlara temiz veri, sade bir araç seti ve 30-60-90 günlük bir plan verin, gelir hedeflerini kapasite hesabına dayandırın.
 
 Çoğu şirket outbound'da fikir yanlış olduğu için başarısız olmaz. İki satışçı işe alıp ellerine bir dizüstü bilgisayar ve belirsiz bir hedef liste verdikleri, bir ay içinde pipeline oluşmasını bekledikleri için başarısız olurlar. Pipeline oluşmayınca da yönetim "outbound bizde işe yaramıyor" kararına varır. Bu tabloyu defalarca gördüm; Corner Group bünyesinde satış ekipleri kurarken aynı hatanın farklı versiyonlarını kendim de yaptım.
 

@@ -257,6 +257,8 @@ Writing a cold sales message on LinkedIn is less about finding the right words a
 
 Remember: cold messaging is only one part of your social selling strategy. The credibility of your corporate profile, the consistency of your content and the targeting of your ads directly affect whether your message gets read.
 
+For a steady content flow that supports your messages, read our [B2B LinkedIn content calendar](/blog/b2b-linkedin-content-calendar) guide, and see how we work with software companies on the [social media management for SaaS](/en/industries/saas) page.
+
 If you'd like to set up your social selling process on LinkedIn, align your profiles and content with that process, or review your current messaging strategy together, [get in touch with the Social Media Corner team](/en/contact). Let's build a roadmap that reaches your target audience together.
 
 ## FAQ

@@ -37,6 +37,8 @@ Sosyal medya, markaların doğru kitleye ulaşmasını, ürün ve hizmetlerini t
 
 Sosyal medya yönetimi, markalar için **önemli bir pazarlama stratejisi** haline gelmiştir. **Social Media Corner** ile **SAAS Corner** olarak sunduğumuz **sosyal medya yönetim hizmetleri**, markanızın dijital dünyada güçlü bir varlık oluşturmasına olanak tanır. Sosyal medya hesaplarınızı profesyonelce yöneterek, **hedef kitlenizle daha etkili iletişim kurabilir** ve [**markanızı büyütebilirsiniz**.](https://saascorner.co/iletisim)
 
+Sektörünüze özel yaklaşımımızı [e-ticaret](/sektor/e-ticaret), [restoran ve kafe](/sektor/restoran-kafe) ve [SaaS](/sektor/saas) için sosyal medya yönetimi sayfalarımızda bulabilirsiniz. Çalışmalarınızın getirisini ölçmek için [B2B sosyal medya ROI rehberimize](/blog/b2b-sosyal-medya-roi-nasil-olculur) göz atabilir, markanız için [bizimle iletişime geçebilirsiniz](/iletisim).
+
 ## Sık sorulan sorular
 
 ### Sosyal medya yönetimi neden önemlidir?

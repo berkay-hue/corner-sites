@@ -228,6 +228,8 @@ Instagram, B2B şirketler için artık "olsa iyi olur" bir kanal değil. Doğru 
 
 Unutmayın, Instagram'da sonuçlar bir gecede gelmez. İlk 90 gün temel kurmak ve öğrenmekle geçer. Asıl kazanım, tutarlılığın birikerek markanıza kazandırdığı güvenden doğar.
 
+Sektörünüze özel yaklaşımı görmek için [e-ticaret için sosyal medya yönetimi](/sektor/e-ticaret) ve [restoran ve kafe sosyal medya yönetimi](/sektor/restoran-kafe) sayfalarımıza da göz atabilirsiniz.
+
 B2B şirketiniz için Instagram ve LinkedIn'i birlikte ele alan, ölçülebilir hedeflere dayalı bir sosyal medya stratejisi kurmak istiyorsanız Social Media Corner ekibi olarak yanınızdayız. Hedeflerinizi konuşmak ve size özel bir yol haritası oluşturmak için [bizimle iletişime geçin](/iletisim).
 
 ## Sık sorulan sorular

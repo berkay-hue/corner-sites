@@ -2,10 +2,13 @@
 title: "Küçük Satış Ekibi İçin CRM Nasıl Seçilir?"
 description: "Satış ekibiniz küçükse hangi CRM'in size uyduğunu nasıl anlarsınız? Excel'den geçiş, bütçe ve kurulum kriterlerini sade bir çerçevede özetliyoruz."
 date: "2026-10-11"
+updated: "2026-10-16"
 category: "CRM"
 image: "https://images.pexels.com/photos/7876739/pexels-photo-7876739.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
 imageAlt: "Küçük Satış Ekibi İçin CRM Nasıl Seçilir?"
 ---
+
+Küçük bir satış ekibi için doğru CRM, en çok özelliğe sahip olan değil, ekibinizin her gün gerçekten kullandığı sistemdir. Önce satış sürecinizi tanımlayın, olmazsa olmaz gereksinimlere göre eleyin, toplam sahip olma maliyetine bakın, en fazla üç finalistle gerçek verilerle pilot yapın ve ekibi karar sürecine dahil edin.
 
 Küçük bir satış ekibi yönetiyorsanız muhtemelen şu sahneyi tanırsınız: Müşteri bilgileri bir Excel dosyasında, teklifler e-posta klasörlerinde, takip notları birinin defterinde, "bu firmayı en son kim aradı?" sorusunun cevabı ise kimsenin aklında değil. Ekip iki üç kişiyken bu dağınıklık idare edilebilir. Dördüncü, beşinci kişi geldiğinde ise fırsatlar kaçmaya, aynı müşteriyi iki kişi aramaya ve satış tahminleri tahmin olmaktan çıkıp kehanete dönüşmeye başlar.
 
