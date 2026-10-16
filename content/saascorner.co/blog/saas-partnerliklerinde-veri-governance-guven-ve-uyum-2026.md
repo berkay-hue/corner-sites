@@ -66,3 +66,21 @@ Geleceğin veri paylaşım modeli, "güven ama doğrula" anlayışından "doğru
 ## Sonuç
 
 SaaS ekosisteminde partnerlikler, büyüme için vazgeçilmez bir motor olmaya devam edecek. Ancak bu büyümenin sürdürülebilir ve güvenli olması, veriye olan yaklaşımına bağlıdır. **SaaS partnerliklerinde veri governance**, artık teknik bir detay veya yasal bir angarya değil, stratejik bir iş avantajıdır. Sağlam bir yönetişim çerçevesi, seni sadece olası cezalardan ve itibar kayıplarından korumakla kalmaz, aynı zamanda en iyi iş ortaklarını kendine çekmeni sağlar. Çünkü günümüzün bilinçli şirketleri, veri güvenliğini ciddiye alan partnerlerle çalışmak ister. Bu makalede ele aldığımız adımları atarak, veri yönetişimini bir maliyet kalemi olarak görmekten vazgeçip, onu en güçlü ve güvenilir ortaklıkları inşa etmek için bir temel taşı olarak kullanabilirsin. Hemen bugün ilk adımı at ve partnerlik veri politikalarını gözden geçirerek geleceğin güvenli ekosistemini inşa etmeye başla.
+
+## Sık sorulan sorular
+
+### Partnerlerle paylaşılacak veriler nasıl sınıflandırılmalı?
+
+Paylaşılacak veriler hassas kişisel veriler, kişisel veriler, şirket içi gizli veriler ve genel veriler olarak sınıflandırılmalıdır. Bu sınıflandırma hangi verinin hangi güvenlik önlemleriyle paylaşılacağını belirler. Ortak çalışmalardan doğan verinin kime ait olduğu da en başta yazılı olarak netleştirilmelidir.
+
+### Ortaklık sözleşmesine hangi veri maddeleri eklenmeli?
+
+Sözleşmeye mutlaka bir Veri İşleme Eki eklenmelidir. Bu ek verilerin nasıl işleneceğini, kimin hangi verilere erişebileceğini, ihlal durumunda ne yapılacağını ve verilerin ne kadar saklanacağını tanımlar. Şifreleme standartları, erişim kontrolleri ve düzenli güvenlik denetimleri gibi teknik önlemler de açıkça yazılmalıdır.
+
+### En az ayrıcalık ilkesi partner erişimine nasıl uygulanır?
+
+En az ayrıcalık ilkesi, kimlik ve erişim yönetimi çözümleriyle rol tabanlı yetkiler tanımlanarak uygulanır. Örneğin bir çözüm ortağının çalışanı tüm veritabanı yerine yalnızca kendi portföyündeki müşterileri görebilir. Bu yaklaşım bir hesabın ele geçirilmesi durumunda oluşacak hasarı sınırlayabilir.
+
+### Mahremiyet artırıcı teknolojiler partnerliklere ne sağlar?
+
+Mahremiyet artırıcı teknolojiler verinin kendisini ifşa etmeden o veri üzerinde analiz yapmaya olanak tanır. Homomorfik şifreleme ile partner şifreli veri üzerinde çalışabilir. Birleşik öğrenme ile iki şirket verilerini paylaşmadan ortak bir model geliştirebilir.

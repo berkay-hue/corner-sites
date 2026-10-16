@@ -66,3 +66,21 @@ Bunun için tek bir satış personeli değil, birlikte çalışan bir sistem ger
 Outbound satış süreçlerinizi nasıl kuracağınız veya mevcut yapınızı nasıl güçlendireceğiniz hakkında daha fazla bilgi almak için saascorner.co adresini ziyaret edebilirsiniz.
 
 **İlgili sayfa:** SAAS Corner'ın bu alandaki hizmetini [Türkiye'den globale açılan B2B şirketler için outbound satış](/sektor/globale-acilan-b2b-sirketler) sayfasında bulabilirsiniz.
+
+## Sık sorulan sorular
+
+### Outbound stratejileri neden çoğu zaman başarısız olur?
+
+Çoğu zaman hedef kitle ve ideal müşteri profili net tanımlanmadığı için başarısız olur. Kişiselleştirilmemiş mesajlar ve elle yürütülen süreçler de sonuçları zayıflatabilir.
+
+### Bir SDR operasyonunda hangi roller yer alır?
+
+Bir SDR operasyonunda SDR, sekans yazarı, raporlama sorumlusu ve kontrol direktörü rolleri yer alır. Her rol sürecin farklı bir parçasını üstlenir.
+
+### Outbound her ülke için ayrı kurgulanmalı mı?
+
+Evet; her ülke için ayrı kurgulanmalıdır. Kültür, iletişim tarzı, satın alma alışkanlıkları ve karar süreçleri ülkeden ülkeye değişir. Tek tip bir yaklaşım bu farkları gözden kaçırabilir.
+
+### Nitelikli görüşme ne anlama gelir?
+
+Nitelikli görüşme, sorunu yaşayan, bütçesi olan ve karar yetkisine sahip kişiyle yapılan görüşmedir. Bu kişilere ulaşabilmek için net bir ideal müşteri profili gerekir.
