@@ -400,6 +400,9 @@ const DICT = [  // i18n sözlüğü (EN + TR); 6 sayfanın ve 404'ün chunk'ınd
   ['"socialProof.satisfaction":"%98 Memnuniyet Oranı"', '"socialProof.satisfaction":"Memnuniyet"'],
 ];
 const statGrid = v => ({ from: `,(0,${v}.jsxs)("div",{className:"mt-10 grid grid-cols-3 gap-6",children:[`, until: `]}),(0,${v}.jsxs)("div",{className:"relative"` });
+// Next build latin-ext alt kümelerini (ğ, ş, İ, ₺ …) yayımlamamış; @font-face 404 veriyor, tarayıcı zaten "* Fallback" (Arial) ile çiziyor.
+const LATIN_EXT = "U+100-2BA,U+2BD-2C5,U+2C7-2CC,U+2CE-2D7,U+2DD-2FF,U+304,U+308,U+329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF";
+const noFace = (family, weight, file) => [`@font-face{font-family:${family};font-style:normal;font-weight:${weight};font-display:swap;src:url(../media/${file}.woff2)format("woff2");unicode-range:${LATIN_EXT}}`, ""];
 const CHUNK_PATCHES = {
   "brandcorner.co": [
     // e34ca4a footer Company listesine Blog ekledi (6 sayfa); i18n sözlüklerinde footer.blog zaten var
@@ -454,6 +457,15 @@ const CHUNK_PATCHES = {
       ["analyzes thousands of profiles", "analyzes profiles"],
       ["üzere binlerce profili analiz eder.", "üzere profilleri analiz eder."],
     ] },
+    // TR font 404'leri: eksik latin-ext dosyalarına giden 6 @font-face (görünüm aynı kalır, yalnız 404 istekleri kalkar)
+    { chunk: "f525b972636fb7eb", ext: "css", edits: [
+      noFace("Inter", "100 900", "1bffadaabf893a1e-s.7cd81963"),
+      noFace("Poppins", "400", "6c55a692938ebbbc-s.0a77efb4"),
+      noFace("Poppins", "500", "0da9c7f357bd9d4d-s.b2288445"),
+      noFace("Poppins", "600", "5f9d24ebef5d5292-s.bd593fbe"),
+      noFace("Poppins", "700", "798ea22d9983e047-s.b460e02c"),
+      noFace("Space Grotesk", "300 700", "28868e710e86be81-s.c30238d4"),
+    ] },
   ],
 };
 const splice = (src, from, to, chunk) => {
@@ -469,12 +481,12 @@ const rule = RULES[host];
 if (!rule) { console.error(`kural yok: ${host}`); process.exit(1); }
 const renames = [];
 for (const p of CHUNK_PATCHES[host] || []) {
-  const dir = join(SITE, "_next/static/chunks"), src = await readFile(join(dir, p.chunk + ".js"), "utf8");
+  const dir = join(SITE, "_next/static/chunks"), ext = p.ext || "js", src = await readFile(join(dir, `${p.chunk}.${ext}`), "utf8");
   const out = p.edits.reduce((s, [from, to]) => splice(s, from, to, p.chunk), src), name = createHash("sha256").update(out).digest("hex").slice(0, 16);
   const left = rule.CLAIMS && out.match(rule.CLAIMS);  // EN + TR sözlük dahil yamalı chunk'ta da iddia kalmasın
   if (left) throw new Error(`${p.chunk}: doğrulanamayan iddia kaldı: ${left[0]}`);
-  if (!existsSync(join(dir, name + ".js"))) await writeFile(join(dir, name + ".js"), out);
-  for (const old of [p.chunk, ...(p.was || [])]) renames.push([`/_next/static/chunks/${old}.js`, `/_next/static/chunks/${name}.js`]);
+  if (!existsSync(join(dir, `${name}.${ext}`))) await writeFile(join(dir, `${name}.${ext}`), out);
+  for (const old of [p.chunk, ...(p.was || [])]) renames.push([`/_next/static/chunks/${old}.${ext}`, `/_next/static/chunks/${name}.${ext}`]);
 }
 let n = 0;
 const used = new Set();
