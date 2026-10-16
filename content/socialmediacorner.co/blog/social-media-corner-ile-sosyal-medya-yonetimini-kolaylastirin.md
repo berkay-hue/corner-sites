@@ -37,6 +37,8 @@ Sosyal medya yönetimi, **dijital pazarlamanın** önemli bir parçasıdır. Her
 
 Sosyal medya yönetimi, markaların dijital dünyada güçlü bir varlık oluşturmasının anahtarıdır. **Social Media Corner**, **SAAS Corner**'ın bir parçası olarak, işletmelerin sosyal medya hesaplarını profesyonel bir şekilde yönetir ve stratejik içerik ile etkileşimi artırır. Markanızı dijital dünyada **önde tutmak** ve **hedef kitlenize ulaşmak** için **Social Media Corner** olarak her adımda yanınızdayız.
 
+Hizmetlerimizin sektöre göre nasıl şekillendiğini [e-ticaret](/sektor/e-ticaret), [restoran ve kafe](/sektor/restoran-kafe) ve [SaaS](/sektor/saas) için sosyal medya yönetimi sayfalarımızda görebilirsiniz. B2B tarafında somut bir başlangıç için [LinkedIn içerik takvimi rehberimizi](/blog/b2b-icin-linkedin-icerik-takvimi-nasil-hazirlanir) okuyabilir, ihtiyaçlarınızı konuşmak için [bizimle iletişime geçebilirsiniz](/iletisim).
+
 ## Sık sorulan sorular
 
 ### Social Media Corner nedir?

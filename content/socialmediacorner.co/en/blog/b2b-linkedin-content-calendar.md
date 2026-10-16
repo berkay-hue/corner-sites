@@ -255,6 +255,8 @@ Avoiding these mistakes is the first step toward turning LinkedIn into one of yo
 
 For B2B companies, a LinkedIn content calendar is the essential tool for turning random posts into a strategic growth system. The building blocks of this system are setting clear goals, understanding every persona on the buying committee, creating balanced content pillars, ensuring format variety and planning the company page and employee profiles together. When you integrate organic content with ad campaigns and update your calendar with data every month, LinkedIn becomes more than a visibility channel. It turns into a platform that supports your sales team and generates qualified opportunities.
 
+You can find our approach for software and technology companies on the [social media management for SaaS](/en/industries/saas) page. If you want to add Instagram to your LinkedIn plan, our [B2B Instagram strategy](/blog/b2b-instagram-strategy) guide is a good next step.
+
 If you want to build this process from scratch or make your existing LinkedIn strategy more effective, Social Media Corner is here to help. We can design the entire process with you, from content planning and production to executive profile management, ad campaigns and measurement. For a LinkedIn content calendar tailored to your brand, [get in touch with us](/en/contact).
 
 ## FAQ

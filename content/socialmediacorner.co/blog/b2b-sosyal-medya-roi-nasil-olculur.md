@@ -226,6 +226,8 @@ Bu hataların çoğu, dağınık araçlar ve elle yürütülen süreçlerden kay
 
 B2B sosyal medya ROI'sini ölçmek, doğru formülü bilmekten çok doğru altyapıyı ve disiplini kurmakla ilgilidir. Tüm maliyetleri dürüstçe hesaplamak, takip sistemlerini CRM'e bağlamak, tutarlı bir atıf modeli kullanmak ve yazılım verisini müşterinin beyanıyla desteklemek, sosyal medyanın gelire katkısını savunulabilir biçimde ortaya koyar. LinkedIn'de hedef kitle kalitesine, Instagram'da huni üst ve orta aşamalarına, sosyal satışta ise konuşmaların fırsata dönüşmesine odaklanmak, her kanalı kendi rolüne uygun ölçmenizi sağlar.
 
+Ölçümleme önceliklerinin sektöre göre nasıl değiştiğini [SaaS için](/sektor/saas) ve [e-ticaret için sosyal medya yönetimi](/sektor/e-ticaret) sayfalarımızda inceleyebilirsiniz. Instagram tarafındaki hedef ve metrikler için [B2B Instagram stratejisi](/blog/b2b-sirketler-icin-instagram-stratejisi) rehberimiz de yol gösterici olacaktır.
+
 Sosyal medya yatırımlarınızın gerçekte ne kazandırdığını görmek, ölçümleme altyapınızı kurmak veya LinkedIn ve Instagram stratejinizi gelir odaklı hâle getirmek istiyorsanız, Social Media Corner ekibi olarak yardımcı olmaya hazırız. Mevcut durumunuzu birlikte değerlendirmek için [bizimle iletişime geçin](/iletisim).
 
 ## Sık sorulan sorular

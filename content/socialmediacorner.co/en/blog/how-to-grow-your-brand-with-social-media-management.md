@@ -37,6 +37,8 @@ Whether you want **more engagement**, **more brand awareness** or **better reach
 
 Social media management has become **a core marketing strategy** for brands. The **social media management services** we offer through **Social Media Corner** and **SAAS Corner** help your brand build a strong online presence. With your accounts managed professionally, you can **communicate more effectively with your audience** and [**grow your brand**](https://socialmediacorner.co/en/contact).
 
+You can find our industry-specific approach on our social media management pages for [e-commerce](/en/industries/e-commerce), [restaurants & cafés](/en/industries/restaurant-cafe) and [SaaS](/en/industries/saas). To measure the return on your efforts, see our [B2B social media ROI guide](/blog/measure-b2b-social-media-roi), or [get in touch with us](/en/contact) about your brand.
+
 ## FAQ
 
 ### Why does social media management matter?

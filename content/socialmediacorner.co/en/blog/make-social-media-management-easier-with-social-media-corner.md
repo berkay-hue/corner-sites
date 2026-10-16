@@ -37,6 +37,8 @@ Whether you're a small business or a large company, **Social Media Corner** mana
 
 Social media management is the key to building a strong online presence. As part of **SAAS Corner**, **Social Media Corner** manages businesses' social accounts professionally and grows engagement with strategic content. To keep your brand **ahead** and **reach your audience**, **Social Media Corner** is with you every step of the way.
 
+You can see how our services adapt by industry on our social media management pages for [e-commerce](/en/industries/e-commerce), [restaurants & cafés](/en/industries/restaurant-cafe) and [SaaS](/en/industries/saas). For a concrete B2B starting point, read our [LinkedIn content calendar guide](/blog/b2b-linkedin-content-calendar), or [get in touch with us](/en/contact) to discuss your needs.
+
 ## FAQ
 
 ### What is Social Media Corner?
