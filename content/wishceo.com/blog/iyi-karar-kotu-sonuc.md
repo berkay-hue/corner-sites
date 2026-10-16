@@ -7,7 +7,7 @@ image: "/og.png"
 imageAlt: "İyi Karar, Kötü Sonuç: Farkı Nasıl Görürsün?"
 ---
 
-Murat ve Selin aynı yıl, aynı semtte birer kafe açıyor. Murat dükkânı bir akşam yürüyüşünde beğeniyor ve ertesi gün kontratı imzalıyor. Kirayı pazarlık etmiyor, sokaktan ne kadar insan geçtiğine bakmıyor. Selin haftalarca farklı saatlerde sokakları izliyor, kirayı pazarlıkla düşürüyor, kenara yedek bir bütçe ayırıyor.
+İyi bir karar kötü bitebilir, kötü bir karar da şansla iyi bitebilir; bu yüzden bir kararı sonucuna göre değil, o gün masadaki bilgiyle ne kadar iyi düşünüldüğüne göre puanlamak gerekir. Murat ve Selin aynı yıl, aynı semtte birer kafe açıyor. Murat dükkânı bir akşam yürüyüşünde beğeniyor ve ertesi gün kontratı imzalıyor. Kirayı pazarlık etmiyor, sokaktan ne kadar insan geçtiğine bakmıyor. Selin haftalarca farklı saatlerde sokakları izliyor, kirayı pazarlıkla düşürüyor, kenara yedek bir bütçe ayırıyor.
 
 Birkaç ay sonra Murat'ın sokağına büyük bir ofis binası taşınıyor. Kafesi öğle saatlerinde dolup taşıyor. Selin'in sokağı ise altyapı çalışması yüzünden aylarca kazı altında kalıyor. Murat büyüyor, Selin zor ayakta duruyor.
 
@@ -82,6 +82,24 @@ Puanı verirken iki şeye bakıyoruz: o dönemde ne biliniyordu ve sonra ne oldu
 İnsanları değil kararları puanlamamızın anlamı bu. Aynı kural senin için de geçerli. Karnende Cerrah, Kalkan, Kumarbaz ya da Kasa Bekçisi çıkması kim olduğunu anlatmaz; o dosyalarda hangi kararları verdiğini anlatır. Başka dosyalarda başka bir tip çıkabilir.
 
 Şirket ve kişi adlarını değiştirmemizin bir nedeni de bu. Adı bilinen bir şirketi görünce sonunu da hatırlarsın ve kararını o sonun gölgesinde verirsin. Adlar değişince dosyayı o günkü CEO gibi okursun: sonucu bilmeden, yalnızca masadaki bilgiyle.
+
+## Sık sorulan sorular
+
+### Sonuç yanlılığı nedir?
+
+Sonuç yanlılığı, bir kararı ne kadar iyi düşünüldüğüne göre değil, nasıl bittiğine göre puanlamaktır. Bu hata, sonucu etkileyen bilinmeyenleri, başkalarının kararlarını ve şansı da senin seçimine yazar.
+
+### İyi bir karar neden kötü sonuçlanabilir?
+
+Çünkü sonucu yalnızca senin seçimin belirlemez; o gün bilemeyeceğin şeyler, başkalarının kararları ve zamanlama da işin içindedir. İyi bir karar şansı ortadan kaldırmaz, onu lehine çevirmeye çalışır ve işler kötü giderse zararı sınırlar.
+
+### Bir kararın iyi olup olmadığı nasıl anlaşılır?
+
+Kendini o günkü masaya geri oturt ve sor: ne biliyordun, hangi seçenekleri tarttın, en kötü ihtimali düşündün mü, seçimini tek cümleyle açıklayabilir misin ve geri dönüş kapısı bıraktın mı? Cevapların sağlamsa ve sonuç kötüyse, büyük ihtimalle şanssızlık yaşamışsındır.
+
+### WishCEO kararları nasıl puanlıyor?
+
+WishCEO her dosyadaki dört seçeneği, o dönemde ne bilindiğine ve sonra ne olduğuna bakarak puanlar; puan, gerçek CEO'yla aynı şeyi seçip seçmediğine göre belirlenmez. Bu yüzden gerçek CEO'nun seçimi her zaman en yüksek puanı almaz.
 
 ## Bir dahaki kararında
 

@@ -7,7 +7,7 @@ image: "/og.png"
 imageAlt: "Zirvedeyken Platform Seçmek: Korvala Vakası"
 ---
 
-Şubat 2011, Finlandiya. Dünyada en çok telefon satan şirketin başına yeni geçtin. Adı Korvala. Neredeyse herkesin cebinde bir Korvala var ya da yakın zamana kadar vardı. Kâğıt üzerinde zirvedesin.
+Korvala vakası, zirvedeki bir telefon şirketinin 2011'de akıllı telefonlarının hangi yazılımla çalışacağına karar vermesidir ve masadaki dört yolun hiçbiri bedava değildir. Şubat 2011, Finlandiya. Dünyada en çok telefon satan şirketin başına yeni geçtin. Adı Korvala. Neredeyse herkesin cebinde bir Korvala var ya da yakın zamana kadar vardı. Kâğıt üzerinde zirvedesin.
 
 Ama zirvede durmak, ayağının altındaki zeminin sağlam olduğu anlamına gelmiyor. Masanda tek bir soru var ve cevabı şirketin bundan sonraki yolunu çizecek: Telefonların hangi yazılımla çalışacak?
 
@@ -102,6 +102,24 @@ Korvala'nın hikâyesinden çıkan soruları kendi işine taşıyabilirsin. İst
 - Plan tutmazsa geri dönüş yolum var mı?
 
 Bu soruların hiçbiri doğru cevabı vermez. Ama hangi riski bilerek aldığını gösterir.
+
+## Sık sorulan sorular
+
+### Korvala vakasında hangi seçenekler vardı?
+
+Dört yol vardı: herkesin kullandığı ücretsiz sisteme katılmak, Tallbridge'le ortaklık kurmak, kendi yeni sistemini bitirmek ya da akıllı telefonu bırakmak. Oyunda bu seçenekler sırasıyla 75, 35, 45 ve 25 puan alıyor.
+
+### Korvala'nın CEO'su gerçekte ne yaptı?
+
+Gordon Stoddard Şubat 2011'de Tallbridge ortaklığını seçti ve çalışanlara meşhur "yanan platform" notunu yazdı. Tallbridge'in sistemi beklenen ivmeyi yakalayamadı. Eylül 2013'te Korvala telefon işini patent lisansı dâhil yaklaşık 5,4 milyar avroya Tallbridge'e satmak için anlaştı ve satış Nisan 2014'te tamamlandı.
+
+### Tallbridge ortaklığı neden düşük puan aldı?
+
+Çünkü karar anında da görülebilen bir risk vardı: Korvala bütün geleceğini pazarın yalnızca %2 kadarını tutan tek bir sisteme bağlıyordu. B seçeneğinin 35 puanı yalnızca kötü bitmesinden gelmiyor.
+
+### Platform savaşı nasıl kazanılır?
+
+Platform savaşı donanımla değil, geliştiricileri ve kullanıcıları aynı pazara çeken döngüyle kazanılır. Kullanıcı sevdiği uygulamaların olduğu telefonu alır, geliştirici de kullanıcının çok olduğu sisteme uygulama yazar; bu döngünün yanlış tarafına düşen sistem yavaş yavaş boşalır.
 
 ## Sen ne yapardın?
 
