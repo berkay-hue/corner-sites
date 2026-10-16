@@ -106,22 +106,29 @@ function cleanLinks(md, cfg, index) {
 // - "zehir" ünlü düşmesiyle "zehri", "zehre", "zehrin" olur; bunlar zehr[ie] ile yakalanır, "Zehra" adı serbest.
 // - "kaynak" kelimesinin kendisi serbest ("kaynakları sınırlı", "Kaynaklar daralır"); düz satırda yalnız tek başına
 //   etiket olan "Kaynaklar", "Kaynakça", "Kaynak:" satırları yakalanır (SOURCE_RE).
-// - Başlık ("## ...") ya da kalın etiket ("**...**") metninde daha geniş bakılır (SOURCE_HEAD_RE): "ileri okuma",
-//   "okuma listesi" gibi ifadeler her yerde; "kaynaklar/kaynakça/referanslar" ise başlığın sonunda ("Yararlandığım
-//   kaynaklar") ya da başında ":", "/", "&", "(" ile ("Kaynaklar: ...") geçerse. Ortada ya da soru başlığında geçen
-//   "Para dışında hangi kaynaklar fırsat maliyeti taşır?" gibi SSS başlıkları serbest. Bilinen yanlış alarm: soru
-//   olmayan ve "kaynaklar" ile biten başlıklar ("Zaman ve kaynaklar"); yeniden yazımda başlık değişir.
+// - Başlık ("## ...") metninde daha geniş bakılır (SOURCE_HEAD_RE): "ileri okuma", "okuma listesi" gibi ifadeler
+//   her yerde; "kaynaklar/kaynakça/referanslar" ise başlığın sonunda ("Yararlandığım kaynaklar") ya da başında ":",
+//   "/", "&", "(" ile ("Kaynaklar: ...") geçerse. Ortada ya da soru başlığında geçen "Para dışında hangi kaynaklar
+//   fırsat maliyeti taşır?" gibi SSS başlıkları serbest. Bilinen yanlış alarm: soru olmayan ve "kaynaklar" ile biten
+//   başlıklar ("Zaman ve kaynaklar"); yeniden yazımda başlık değişir.
+// - Kalın etiket ("**...**") yalnız etiket gibi kullanılınca bakılır: satırda tek başınaysa ya da ":" ile bitiyorsa
+//   ("**Kaynaklar:** ..."). Arkasından düz cümle gelen vurgu ("**Sınırlı kaynaklar** her kararı zorlaştırır") serbest.
+//   Etiketin TAMAMI kaynak etiketi olmalı (SOURCE_LABEL_RE, ^...$): "Kaynaklar", "Referanslar", "İleri okuma",
+//   "Kaynaklar ve ileri okuma", "Yararlandığım/Faydalı kaynaklar" yakalanır; "**Kıt kaynaklar:** ekip zamanı" gibi
+//   "kaynak = imkân" anlamındaki etiketler serbest (tek başına "**Kaynaklar:** ..." satırı yine SOURCE_RE'ye takılır).
 // - Metin Türkçe kurala göre küçültülür ("İ" -> "i"); bu "DIED" gibi büyük harfli İngilizce kelimeyi "dıed" yapar.
 //   Bu yüzden İngilizce kelimeler ayrıca düz toLowerCase ile aranır (FATAL_EN_RE).
 // - Site adresi yalnız adresin kendisiyse silinir; "wishceo.com.baska.com" ya da "wishceo.com@baska.com" dış link sayılır.
 //   "//baska.com" ile başlayan markdown linki de dış linktir.
-const FATAL_TR = String.raw`öl(?!ç)\p{L}*|can(?:ını|larını)?\s+kayb\p{L}*|(?:hayat|yaşam)(?:ını|larını)\s+(?:kaybet|yitir)\p{L}*|zehir\p{L}*|zehr[ie]\p{L}*|siyanür\p{L}*|intihar\p{L}*|cinayet\p{L}*|cenaze\p{L}*|vefat\p{L}*|katil\p{L}*|katlet\p{L}*|katledil\p{L}*|katliam\p{L}*|suikast\p{L}*`;
+const FATAL_TR = String.raw`öl(?!ç)\p{L}*|can(?:ını|larını)?\s+kayb\p{L}*|(?:hayat|yaşam)(?:ını|larını)\s+(?:kayb|yitir)\p{L}*|zehir\p{L}*|zehr[ie]\p{L}*|siyanür\p{L}*|intihar\p{L}*|cinayet\p{L}*|cenaze\p{L}*|vefat\p{L}*|katil\p{L}*|katlet\p{L}*|katledil\p{L}*|katliam\p{L}*|suikast\p{L}*`;
 const FATAL_EN = String.raw`death|died|dead|killed|suicide|poison\p{L}*|cyanide|murder\p{L}*`;
 const FATAL_RE = new RegExp(String.raw`(?<!\p{L})(?:${FATAL_TR}|${FATAL_EN})(?!\p{L})`, "gu");
 const FATAL_EN_RE = new RegExp(String.raw`(?<!\p{L})(?:${FATAL_EN})(?!\p{L})`, "gu");
 const SOURCE_RE = /^[ \t]*(?:#{1,6}[ \t]*|[-*+>][ \t]+|\d+\.[ \t]+)?\**(?:kaynaklar|kaynakça|kaynak|referanslar|ileri okuma|sources|references|further reading)\**[ \t]*(?::.*|\**[ \t]*)$/gmu;
-const HEAD_RE = /^[ \t]*(?:[-*+>][ \t]+|\d+\.[ \t]+)?(?:#{1,6}[ \t]+(.+?)[ \t#]*|\*\*([^*\n]+?)\*\*.*)$/gmu;
+const HEAD_RE = /^[ \t]*(?:[-*+>][ \t]+|\d+\.[ \t]+)?(?:#{1,6}[ \t]+(.+?)[ \t#]*|\*\*([^*\n]+?)\*\*(.*))$/gmu;
 const SOURCE_HEAD_RE = /(?<!\p{L})(?:ileri okuma|daha fazla okuma|okuma listesi|okuma önerileri|önerilen okumalar|kitap önerileri|further reading|reading list)(?!\p{L})|^(?:kaynak(?:lar|ça)|referanslar|sources|references)[ \t]*[:\/&(]|(?<!\p{L})(?:kaynak(?:lar|ça)|referanslar|sources|references)[ \t:.]*$/u;
+const SOURCE_LABEL = String.raw`kaynak(?:lar|ça)?|referans(?:lar)?|ileri okuma|daha fazla okuma|okuma listesi|okuma önerileri|önerilen okumalar|kitap önerileri|sources|references|further reading|reading list`;
+const SOURCE_LABEL_RE = new RegExp(String.raw`^(?:(?:yararl|faydal|başvur)\p{L}*[ \t]+|önerilen[ \t]+)?(?:${SOURCE_LABEL})(?:[ \t]*(?:ve|and|&|\/|,)[ \t]*(?:${SOURCE_LABEL}))*[ \t:.]*$`, "u");
 export function consumerIssues(md, siteUrl = "") {
   const host = siteUrl ? new URL(siteUrl).host.replace(/^www\./, "").replace(/\./g, "\\.") : null;
   const own = host ? md.replace(new RegExp(`https?://(?:www\\.)?${host}(?![\\w@:-]|\\.[\\w-])`, "gi"), "") : md;
@@ -133,8 +140,13 @@ export function consumerIssues(md, siteUrl = "") {
   for (const m of text.matchAll(/\]\((?!\/(?!\/)|#|\))([^)\s]*)\)/g)) hits.add(`dış link ${m[1]}`);
   for (const m of text.matchAll(SOURCE_RE)) hits.add(`kaynak bölümü "${m[0].trim()}"`);
   for (const m of text.matchAll(HEAD_RE)) {
-    const head = (m[1] ?? m[2]).replace(/[*_`]/g, "").trim();
-    if (SOURCE_HEAD_RE.test(head)) hits.add(`kaynak bölümü "${m[0].trim()}"`);
+    if (m[1] != null) {
+      if (SOURCE_HEAD_RE.test(m[1].replace(/[*_`]/g, "").trim())) hits.add(`kaynak bölümü "${m[0].trim()}"`);
+      continue;
+    }
+    const label = m[2].replace(/[_`]/g, "").trim(), rest = m[3].trim();
+    if (rest && !rest.startsWith(":") && !label.endsWith(":")) continue; // etiket değil, cümle içi vurgu
+    if (SOURCE_LABEL_RE.test(label)) hits.add(`kaynak bölümü "${m[0].trim()}"`);
   }
   return [...hits];
 }
