@@ -77,7 +77,7 @@ This mistake has two common consequences:
 1. **An overly complex tool:** The company only needs a few simple workflows but buys an enterprise-grade platform that takes weeks to configure. Only a tiny fraction of the features get used, while costs stay high.
 2. **Tools that can't connect to each other:** The CRM, email tool, data source, and calendar system are chosen separately, with no thought given to how data flows between them. In the end, reps copy data by hand from one system to another, and the whole point of automation is lost.
 
-**What to do:** Map out the process and the data flow first. Where does each piece of data come from, where is it enriched, which system holds the master record, and which event triggers which action? Once this map is ready, choosing a tool becomes much easier. A flexible workflow tool is often a good starting point for connecting different systems. [Our guide to getting started with B2B sales automation using n8n](/blog/b2b-sales-automation-with-n8n-guide) explains practical ways to bring your CRM, data sources, and email tools together in a single flow.
+**What to do:** Map out the process and the data flow first. Where does each piece of data come from, where is it enriched, which system holds the master record, and which event triggers which action? Once this map is ready, choosing a tool becomes much easier. A flexible workflow tool is often a good starting point for connecting different systems. [Our guide to getting started with B2B sales automation using n8n](/blog/b2b-sales-automation-with-n8n-guide) explains practical ways to bring your CRM, data sources, and email tools together in a single flow. You can see what starting with small, single-purpose modules looks like in the [Sales Corner module panel](/dashboard).
 
 ## Sacrificing Personalization for Volume
 
@@ -92,7 +92,7 @@ Here's a typical example of a volume-first approach: a team applies a 5-step seq
 - Use at least one personalized element in the first email, such as a recent company development, a position they've opened, or a technology they use.
 - Increase send volume gradually and stick to daily sending limits per domain.
 
-AI has become one of the most powerful tools for personalization at scale. But used incorrectly, it can produce robotic, repetitive copy. When [writing cold emails with AI](/blog/how-to-write-cold-emails-with-ai), prompt design, data inputs, and human review directly determine the quality of the result.
+AI has become one of the most powerful tools for personalization at scale. But used incorrectly, it can produce robotic, repetitive copy. When [writing cold emails with AI](/blog/how-to-write-cold-emails-with-ai), prompt design, data inputs, and human review directly determine the quality of the result. For example, our [Sequence Writer tool](/sekans-yazari) reduces the risk of generic copy by generating sequences from real product sources (video, PDF, website).
 
 ## Overlooking Legal Compliance and Deliverability Risks
 

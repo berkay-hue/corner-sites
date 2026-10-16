@@ -97,7 +97,7 @@ Let's consider a SaaS company with a mid-range average annual contract value and
 - **Probability:** 10%
 - **Maximum time:** 10 days. If the meeting is postponed and not rescheduled, the opportunity is moved to a "re-engagement" sequence.
 
-Feeding this stage depends heavily on email quality. For an in-depth look at personalized messaging, check out our [guide to writing cold emails with AI](/blog/how-to-write-cold-emails-with-ai).
+Feeding this stage depends heavily on email quality. For an in-depth look at personalized messaging, check out our [guide to writing cold emails with AI](/blog/how-to-write-cold-emails-with-ai). You can also try our [Sequence Writer tool](/sekans-yazari) to generate sequences automatically from your product sources.
 
 ### Stage 2: Discovery Completed
 
@@ -207,7 +207,7 @@ Clearly defined stages are where automation works best. When criteria are verifi
 - **Data enrichment:** When a new opportunity is created, the company's employee count, industry, and tech stack are filled in automatically. This allows ICP fit to be checked at stage entry.
 - **Post-loss re-engagement:** Opportunities lost due to "timing" are automatically enrolled in a personalized email sequence after 90 days.
 
-Tools like n8n are well suited for building these workflows without coding knowledge. We cover scenarios that connect CRM, calendar, email, and AI models step by step in our [beginner's guide to B2B sales automation with n8n](/blog/b2b-sales-automation-with-n8n-guide). If you're looking for ready-made workflows tailored to your team, take a look at [Sales Corner automations](/en/).
+Tools like n8n are well suited for building these workflows without coding knowledge. We cover scenarios that connect CRM, calendar, email, and AI models step by step in our [beginner's guide to B2B sales automation with n8n](/blog/b2b-sales-automation-with-n8n-guide). If you're looking for ready-made workflows tailored to your team, take a look at [Sales Corner automations](/en/). Once a deal moves to the meeting stage, the [Meeting Briefing tool](/briefing) gets company and attendee research ready before the call.
 
 Automation comes with an important caveat: **Automating a poorly defined process only speeds up poor results.** First clarify your stages and criteria, apply them manually for a few weeks, and then automate.
 
