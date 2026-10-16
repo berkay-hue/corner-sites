@@ -44,7 +44,7 @@ const RULES = {
       const id = "https://www.yalcinberkay.com.tr/#person", founder = { "@id": id };
       const org = (name, url, oid) => ({ "@type": "Organization", ...(oid && { "@id": oid }), name, url, founder });
       return {
-        "@type": "Person", "@id": id, name: "Berkay YALÇIN", alternateName: "Berkay Yalçın", url: "https://www.yalcinberkay.com.tr/",
+        "@type": "Person", "@id": id, name: "Berkay Yalçın", alternateName: "Berkay YALÇIN", url: "https://www.yalcinberkay.com.tr/",
         image: "https://www.yalcinberkay.com.tr/_a/fr/images/tfHxTGcPg5W1q2kXiuBQynltGIA_d8696c1a.png", jobTitle: "Founder & B2B Sales Consultant",
         description: "Founder of SAAS Corner, Sales Corner, Social Media Corner, Brand Corner, CRM Corner and Corner Group; B2B sales consultant with 10+ years of experience, specialising in outbound sales, lead generation and CRM.",
         worksFor: [org("SAAS Corner", "https://saascorner.co"), org("Corner Group", "https://cornergroup.co", "https://cornergroup.co/#org"),
@@ -201,7 +201,7 @@ const RULES = {
       const org = { "@type": "Organization", "@id": ORG, name: "Brand Corner", url: R.origin + "/",
         logo: { "@type": "ImageObject", url: R.origin + "/icon.png", width: 512, height: 512 },
         description: "Connecting brands, influencers, and agencies worldwide",
-        founder: { "@type": "Person", "@id": "https://www.yalcinberkay.com.tr/#person", name: "Berkay YALÇIN", url: "https://www.yalcinberkay.com.tr/" },
+        founder: { "@type": "Person", "@id": "https://www.yalcinberkay.com.tr/#person", name: "Berkay Yalçın", url: "https://www.yalcinberkay.com.tr/" },
         parentOrganization: { "@type": "Organization", "@id": "https://cornergroup.co/#org", name: "Corner Group", url: "https://cornergroup.co/" } };
       const h1 = text(html.match(/<h1[^>]*>([\s\S]*?)<\/h1>/)?.[1] || "");
       const graph = noindex ? [] : page === "/"
@@ -348,7 +348,7 @@ const RULES = {
     pages: {
       "/": ["Sales Corner | Veri Odaklı B2B Satış ve Lead Generation",
         "Sales Corner; hedef pazar araştırması, lead generation, toplantı planlama ve CRM entegrasyonuyla B2B satış sürecinizi veri ve otomasyonla uçtan uca yönetir."],
-      "/iletisim": ["İletişim | Sales Corner",
+      "/iletisim": ["İletişim | Sales Corner – B2B Satış Otomasyonu",
         "Sales Corner ekibiyle iletişime geçin: B2B satış, outsourced lead generation, CRM entegrasyonu ve pazarlama çözümleri hakkında bilgi alın."],
     },
     fix(html, page) {
@@ -356,6 +356,8 @@ const RULES = {
       const setTitle = t => html.replace(/<title>[^<]*<\/title>/, `<title>${t.replace(/&/g, "&amp;").replace(/</g, "&lt;")}</title>`);
       const metas = kind => [new RegExp(`(<meta name="${kind}" content=")([^"]*)(")`), new RegExp(`(<meta property="og:${kind}" content=")([^"]*)(")`), new RegExp(`(<meta name="twitter:${kind}" content=")([^"]*)(")`)];
       if (page === "/404") return html.replace(/<link rel="canonical"[^>]*>/g, "").replace(/<meta name="robots" content="[^"]*">/, '<meta name="robots" content="noindex">');
+      // EN sayfaları ve blog (build-blog.mjs) elle/araçla bakılır: başlık, robots ve LD'lerine dokunulmaz
+      if (/^\/en\/(?:index|iletisim)$/.test(page) || /^\/(?:en\/)?blog(?:\/|$)/.test(page)) return html;
       const meta = R.pages[page];
       // Diğer sayfalar SAAS Corner'ın iç araçları (login, dashboard, ...): arama sonuçlarına girmez
       if (!meta) return html.replace(/<meta name="robots" content="[^"]*">/, '<meta name="robots" content="noindex, nofollow">');
@@ -364,10 +366,14 @@ const RULES = {
       for (const re of metas("description")) html = setMeta(html, re, meta[1]);
       if (page === "/iletisim") html = html.replace(/<h2([^>]*)>(Bizimle iletişime geçin!\s*)<\/h2>/g, "<h1$1>$2</h1>");
 
-      html = html.replace(/<script type="application\/ld\+json" data-sk-seo>[\s\S]*?<\/script>/g, "");
-      if (page === "/") {
-        const org = { "@type": "Organization", "@id": R.origin + "/#org", name: R.brand, url: R.origin + "/", logo: html.match(/<meta property="og:image" content="([^"]*)"/)?.[1] };
-        html = html.replace("</head>", ldTag({ "@context": "https://schema.org", "@graph": [org, { "@type": "WebSite", "@id": R.origin + "/#website", url: R.origin + "/", name: R.brand, publisher: { "@id": org["@id"] }, inLanguage: "tr-TR" }] }) + "</head>");
+      // Sayfadaki data-sk-seo LD elle zenginleştirilmiş (Org adres/iletişim, founder Person, WebSite inLanguage): varsa korunur.
+      // Yoksa (taze ayna) aynı @id'lerle temel graph üretilir; Person build-blog.mjs AUTHOR ile aynı
+      if (page === "/" && !html.includes('data-sk-seo>')) {
+        const person = { "@type": "Person", "@id": "https://www.yalcinberkay.com.tr/#person", name: "Berkay Yalçın", url: "https://www.yalcinberkay.com.tr/", jobTitle: "Founder & B2B Sales Consultant",
+          sameAs: ["https://www.linkedin.com/in/berkayyalcin2/", "https://www.instagram.com/beerkayyalcin"] };
+        const org = { "@type": "Organization", "@id": R.origin + "/#org", name: R.brand, url: R.origin + "/", logo: html.match(/<meta property="og:image" content="([^"]*)"/)?.[1], founder: person,
+          parentOrganization: { "@id": "https://cornergroup.co/#org", "@type": "Organization", name: "Corner Group", url: "https://cornergroup.co/" } };
+        html = html.replace("</head>", ldTag({ "@context": "https://schema.org", "@graph": [org, { "@type": "WebSite", "@id": R.origin + "/#website", url: R.origin + "/", name: R.brand, publisher: { "@id": org["@id"] }, inLanguage: ["tr-TR", "en"] }] }) + "</head>");
       }
       return html;
     },
