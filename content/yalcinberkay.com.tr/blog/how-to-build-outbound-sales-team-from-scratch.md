@@ -5,7 +5,7 @@ date: "2026-10-10"
 updated: "2026-10-16"
 category: "Sales Leadership"
 image: "https://images.pexels.com/photos/7693103/pexels-photo-7693103.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
-imageAlt: "How to Build an Outbound Sales Team from Scratch"
+imageAlt: "How to build an outbound sales team – cover image"
 alt: "sifirdan-outbound-satis-ekibi-kurmak"
 ---
 

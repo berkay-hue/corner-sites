@@ -9,7 +9,7 @@ imageAlt: "İllüstrasyonlu görsel: “B2B alıcılarının %75'i satış gör�
 alt: "adapting-to-the-new-b2b-sales-landscape"
 ---
 
-Yeni B2B satış ortamına uyum sağlamak için alıcıların satış görüşmelerinden giderek daha fazla kaçındığını kabul edin. Ürün kullanımı ve web sitesi ziyaretleri gibi satın alma sinyallerini izleyip ilginin en yüksek olduğu anda iletişime geçin. Ücretsiz ya da temel paketler sunun, tüm lead'lere aynı şekilde yaklaşın, self-servis içerik hazırlayın ve ağızdan ağıza iletişimden yararlanın.
+Yeni B2B satış ortamına uyum sağlamak için alıcıların satış görüşmelerinden giderek daha fazla kaçındığını kabul edin ve ürün kullanımı, web sitesi ziyaretleri gibi sinyaller ilginin en yüksek olduğunu gösterdiğinde iletişime geçin. Ardından ücretsiz ya da temel paketler sunun, tüm lead'lere aynı şekilde yaklaşın, self-servis içerik hazırlayın ve ağızdan ağıza iletişimden yararlanın.
 
 Gartner'a göre alıcılar satış görüşmelerinden giderek uzaklaşıyor. Bu adımların her biri pratikte şöyle işliyor: > Soğuk aramaları unutun! Potansiyel müşterilerinizin gerçekte neyle ilgilendiğine odaklanın. Ürün kullanımını, web sitesi ziyaretlerini ve diğer sinyalleri takip ederek en ilgili oldukları anda iletişime geçin. Mesele doğru sinyali doğru zamanda yakalamak. > Ücretsiz ya da temel ürünlerinizi bir kanca olarak kullanın. Memnun kullanıcılar, siz daha teklif sunmadan değeri gösteren en iyi satış temsilcileriniz olabilir. Herkes kazanır: onlar iyi araçlara sahip olur, siz daha hızlı ve kolay satış yaparsınız. > Kanalları karıştırın! Bir lead ister etkileyici bir pazarlama kampanyasından ister doğrudan bir [outbound temasından](/blog/sifirdan-outbound-satis-ekibi-kurmak) gelsin, hepsine aynı şekilde yaklaşın. Amaç kutucuk işaretlemek değil, alıcı için kesintisiz bir yolculuk oluşturmak. > Alıcıların ürününüzü istedikleri zaman keşfetmesini kolaylaştırın. Videolar, SSS'ler ve kendi kendine yardım rehberleri ekleyin. Böylece kendi koşullarında daha hızlı karar verirler ve satış hızınız artar. > Ağızdan ağıza iletişimin gücünü kullanın. Müşterilerinizin, etkileyicilerin ve topluluk üyelerinin sizden bahsetmesini sağlayın ve [size söylediklerini dinleyin](/blog/b2bde-musteri-geri-bildiriminin-gucu). Gerçek insanlardan gelen gerçek hikâyeler her zaman reklamdan daha etkilidir. Her şey samimi deneyimlerle ilgili. Bol satışlar! 🚀📈
 
@@ -30,3 +30,7 @@ B2B satışçılar soğuk aramalara güvenmek yerine ürün kullanımı ve web s
 ### B2B satışta ağızdan ağıza iletişim neden önemlidir?
 
 Ağızdan ağıza iletişim önemlidir çünkü müşterilerden, etkileyicilerden ve topluluk üyelerinden gelen gerçek hikâyeler reklamdan daha ikna edicidir. Başkalarının paylaştığı samimi deneyimler, satışçı daha teklif sunmadan güvenilirlik oluşturur.
+
+### B2B şirketleri pazarlama ve outbound lead'lerine farklı mı yaklaşmalı?
+
+Hayır. Bir lead ister pazarlama kampanyasından ister doğrudan bir outbound temasından gelsin, hepsine aynı şekilde yaklaşın ve kutucuk işaretlemek yerine alıcı için kesintisiz bir yolculuk oluşturun.
