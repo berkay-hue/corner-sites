@@ -38,16 +38,18 @@ Tarih: 2026-10-10 · Şerit: F · Kapsam: `sites/brandcorner.co`, `templates/bra
 |---|---|
 | / | Organization + WebSite (seo.mjs, `data-sk-seo`) |
 | /features, /solutions/* | WebPage + BreadcrumbList |
-| /pricing | WebPage + BreadcrumbList + **FAQPage** (5 SSS). **Düzeltme (2026-10-15):** Sorular HTML'de var, 5 cevabın hiçbiri yok. Radix accordion panelleri HTML'de kapalı ve boş; cevap metinleri yalnızca JS chunk'ında (`6298d546504883f0.js`). Yani işaretlenen içerik sayfada görünmüyor. Öneri: FAQPage node'u kaldırılsın (Berkay onayı bekleniyor). |
+| /pricing | WebPage + BreadcrumbList. FAQPage **kaldırıldı (2026-10-16, PR-D)**: sorular HTML'de vardı ama 5 cevabın hiçbiri yoktu. Radix accordion panelleri HTML'de kapalı ve boş, cevap metinleri yalnızca JS chunk'ında (`6298d546504883f0.js`); işaretlenen içerik sayfada görünmüyordu. |
+| /about | AboutPage + BreadcrumbList (statik sayfa, `data-sk-page`; PR-D) |
 | /blog | Blog + BreadcrumbList |
-| /blog/* | BlogPosting + BreadcrumbList (build-blog.mjs) |
+| /blog/* | BlogPosting + BreadcrumbList (build-blog.mjs); SSS bölümü olan yazıda FAQPage |
 
 ### Blog
 - Blog var: `/blog` ve bir yazı. Tasarımı siteyle uyumlu (Inter/Poppins, indigo→violet gradient, sticky header).
 - Footer'da (Company → Blog) linkli. **Header menüsünde yok.** Header, Next.js'in client tarafında render edilen Resources dropdown'ı; HTML'e dokunmak hydration riski taşıdığı için bu PR'da değiştirilmedi.
 
 ### Kırık linkler / footer
-- Footer'daki Integrations, Security, Careers, Press, About ve Legal (Terms, Privacy, Cookies, GDPR) linklerinin sayfası yok. Bunlar `_redirects` ile ana sayfaya (veya ilgili sayfaya) yönleniyor. **Yasal sayfalar gerçekte mevcut değil**; metinleri yazılmadı, Berkay'ın kararına bırakıldı.
+- Footer'daki Integrations, Security, Careers, Press ve Legal (Terms, Privacy, Cookies, GDPR) linklerinin sayfası yok. Bunlar `_redirects` ile ana sayfaya (veya ilgili sayfaya) yönleniyor. **Yasal sayfalar gerçekte mevcut değil**; metinleri yazılmadı, Berkay'ın kararına bırakıldı.
+- About artık gerçek sayfa (`/about`, PR-D); `/about → /` yönlendirmesi kaldırıldı.
 - Footer'da "© 2025" yazıyor; yıl eski.
 
 ### Performans (yalnızca gözlem)
@@ -56,9 +58,9 @@ Tarih: 2026-10-10 · Şerit: F · Kapsam: `sites/brandcorner.co`, `templates/bra
 
 ### GEO
 - `llms.txt` var (dist.mjs üretiyor). Ancak site İngilizce olduğu halde başlıklar Türkçe ("Ana sayfa", "Sayfalar", "Çözümler"). Ayrıntı aşağıda, Ana'ya bölümünde.
-- Organization bilgisi zayıf: logo, sameAs (sosyal profiller) ve iletişim bilgisi yok.
-- "Brand Corner nedir / kimin için / fiyatı ne" sorularına doğrudan cevap veren kısa blokları yok. Pricing'deki SSS FAQPage ile işaretli, ama cevaplar HTML'de yok (bkz. JSON-LD tablosundaki düzeltme).
-- Blog yazılarında yazar şu an Organization; kişi yazar (Person) yok.
+- Organization bilgisi zayıf: logo, sameAs (sosyal profiller) ve iletişim bilgisi yok. (PR-E: logo, founder, parentOrganization.)
+- "Brand Corner nedir / kimin için / fiyatı ne" sorularına doğrudan cevap veren kısa blokları yok. Pricing'deki SSS FAQPage ile işaretliydi, ama cevaplar HTML'de yoktu (bkz. JSON-LD tablosu). **PR-D:** "What is Brand Corner?" ve "Who it is for" cevapları `/about`'ta.
+- Blog yazılarında yazar şu an Organization; kişi yazar (Person) yok. **Güncel:** JSON-LD yazarı build-blog.mjs'te Person (`yalcinberkay.com.tr/#person`); PR-D yazı şablonuna görünür yazar kutusu ekledi.
 
 ## Aşama 2: Bu PR'daki değişiklikler
 
@@ -74,6 +76,31 @@ Doğrulama:
 - Geçici bir kopyada `build-blog.mjs build` + `dist.mjs` çalıştı ("1 yazı + liste, sitemap 8 url").
 - Bütün JSON-LD blokları `JSON.parse` ile geçti.
 - Build çıktıları (`sites/brandcorner.co/blog*`) repoda takip edilmediği için commit'lenmedi.
+
+## Aşama 2b: PR-D (2026-10-16)
+
+1. `pricing`: `FAQPage` node'u kaldırıldı; cevaplar HTML'de olmadığı için işaretleme sayfadaki içerikle eşleşmiyordu. WebPage + BreadcrumbList kaldı.
+2. `_redirects`:
+   - `/about / 302` kaldırıldı (artık gerçek sayfa).
+   - 301 eklendi: `/resources/blog → /blog`, `/resources/blog/* → /blog/:splat`, `/resources → /blog`, `/solutions → /solutions/brands`, `/favicon.ico → /icon.png`.
+3. `_headers` (`/*`): `Strict-Transport-Security: max-age=86400` (kademeli: 86400 → 2592000 → 31536000, preload yok), `X-Frame-Options: SAMEORIGIN`, `Content-Security-Policy: frame-ancestors 'self'` (yalnızca bu direktif), `Permissions-Policy` (camera, microphone, geolocation, payment, usb, browsing-topics kapalı).
+4. Görseller: `icon.png` (512×512) ve `og.png` (1200×630) eklendi.
+   - Next sayfaları: `og:image`/`twitter:image` Logo.png → og.png; `og:image:width`/`og:image:height` ve `icon`/`apple-touch-icon` linkleri (seo.mjs ile, yalnızca `<head>`).
+   - 404: yalnızca icon linkleri.
+5. Blog şablonları (`blog.html`, `post.html`):
+   - icon/og.png, header menüsünde Contact → About, CTA `/contact` → `/pricing` (`/contact` sayfası yok).
+   - Yazı sonunda görünür yazar kutusu (Berkay Yalçın; LinkedIn ve yalcinberkay.com.tr linkleri) ve "About Brand Corner" bloğu.
+6. Yazılar:
+   - Sözleşme yazısı: cevap-önce giriş paragrafı, 4 soruluk SSS (build-blog FAQPage üretiyor), iç linkler, CTA.
+   - ROI yazısı: iç link ve CTA.
+   - İkisinde `updated: "2026-10-16"`.
+7. `/about` (statik sayfa, Next değil):
+   - "What is Brand Corner?", "Who it is for", "Where we are", kurucu, Corner Group bağlantıları.
+   - AboutPage + BreadcrumbList (`data-sk-page`); canonical/og:url/og:site_name seo.mjs ile.
+   - `_orig-sitemap.xml`'e eklendi (dist sitemap 10 URL: 8 sayfa + 2 yazı; llms.txt'de de var).
+   - Fiyat, rakam, müşteri adı veya yorum yok.
+
+Doğrulama: build-blog + dist çalıştı; bütün ld+json blokları `JSON.parse` ile geçti; dist `_headers`'ta yinelenen yol yok; `robots.txt` 72 bayt; blog şablonlarında ve build çıktısında `/contact` yok (Next sayfalarındaki `/contact` linkleri gövdede, `_redirects` ile 302 → `/pricing`).
 
 ## Ana'ya
 
@@ -95,6 +122,11 @@ Doğrulama:
    - dist.mjs llms.txt ve robots.txt'yi her seferinde baştan yazıyor, site kendine özel bir şey ekleyemiyor. Öneri: `sites/<host>/_llms-extra.md` varsa sona eklensin. Bu GEO cevap blokları için de gerekli.
 5. **Header'da Blog linki yok.** Next.js header'ına dokunmak riskli. Ya v0 kaynağında menüye Blog eklenip yeniden mirror alınmalı ya da Berkay onaylarsa Resources altına eklenmeli.
 6. **Yasal sayfalar** (Terms, Privacy, Cookies, GDPR) `_redirects` ile ana sayfaya gidiyor. SaaS'ta ve özellikle ödeme alan bir sitede bu sayfaların gerçekte olması gerekiyor. Metin yazılmadı; karar Berkay'da.
+7. **PR-D sonrası açık kalanlar:**
+   - Organization `logo`, `founder` ve `parentOrganization` PR-E'de (`tools/seo.mjs`).
+   - `tools/blog.config.mjs`'te brandcorner `author: "Brand Corner"`; yazı JSON-LD'si zaten Person `@id` kullanıyor, bu alan yalnızca görünen metni etkiliyor.
+   - HSTS: 86400 ile başladı. Sorun çıkmazsa ~1 hafta sonra 2592000, ardından 31536000; preload yok.
+   - SPF kaydı yok. Berkay: CF DNS → TXT `@` `v=spf1 include:_spf.google.com ~all`.
 
 ## Öneriler (oluşturulmadı)
 
@@ -112,4 +144,4 @@ Sektör landing sayfaları (`/influencer-marketing/<sektör>`):
 
 Diğer:
 - **TR sürümü:** Sitede TR dil düğmesi var ama ayrı bir URL yok. `/tr/...` + hreflang ile Türkçe aramalarda ikinci bir kanal açılır.
-- **GEO:** Ana sayfaya veya /about'a 3–4 cümlelik "What is Brand Corner?" cevap bloğu, Organization'a sameAs, blog yazılarına kişi yazar (Person).
+- **GEO:** Organization'a sameAs (resmî sosyal profiller belli olunca). "What is Brand Corner?" bloğu `/about`'ta ve blog yazılarında kişi yazar PR-D ile yapıldı.
