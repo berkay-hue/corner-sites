@@ -237,3 +237,21 @@ In summary:
 - Update the model with real data every quarter.
 
 If you'd like to model your marketing budget around your goals, optimize your channel mix, or adapt your CRM and measurement infrastructure to this model, we at SAAS Corner would be happy to help. To assess your current situation together, [get in touch with us](/en/contact).
+
+## FAQ
+
+### What percentage of revenue should a B2B SaaS company spend on marketing?
+
+There is no single right percentage, because the right ratio is an outcome derived from your company's goals, ACV, sales model, and conversion rates. Instead of starting with a fixed percentage of revenue, build a model that works backward from your new ARR target and makes every assumption visible. Only then look at the budget's ratio to revenue and ask whether it is reasonable.
+
+### How do you calculate a marketing budget backward from a revenue target?
+
+You use a reverse funnel calculation that starts from your new ARR target and works back through each conversion stage. Divide the new ARR target by average ACV to get the number of customers, use your win rate to find the SQLs needed, split those SQLs by source, and use your MQL-to-SQL rate and cost per MQL to find the inbound program budget. Then add outbound, partner, and fixed costs such as team salaries and content production.
+
+### Should the marketing budget be compared to current ARR or to targeted new ARR?
+
+The ratio to targeted new ARR is usually more informative, because it looks at the revenue the spend is expected to generate. In the hypothetical example in this article, a 5,400,000 TL budget equals 18 percent of current ARR but 45 percent of targeted new ARR. Either way, the ratio should be used as a control metric, not a starting point.
+
+### Which metrics show whether a marketing budget is working?
+
+The core metrics are CAC, CAC payback period, LTV:CAC ratio, pipeline per TL spent, cost per SQL by channel, and marketing-sourced and marketing-influenced revenue. Cost per MQL alone is misleading, so track costs all the way down to SQL and customer won. All of these metrics depend on a sound CRM setup where lead source fields are filled in and opportunities are linked to the right campaigns.

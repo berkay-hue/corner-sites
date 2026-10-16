@@ -215,3 +215,21 @@ MQL and SQL are not just acronyms. They are agreements that allow marketing and 
 For a successful system, build a scoring model based on your won customers. Create a written SLA between your teams. Support this structure in your CRM with required fields and automations. Recalibrate your definitions every quarter by regularly analyzing rejection reasons. If you're growing product-led, integrate PQLs into this structure; if you work outbound, integrate engagement signals.
 
 If you want to create your own MQL and SQL definitions, configure your CRM around this process or strengthen the alignment between your marketing and sales teams, we at SAAS Corner are here to help. Reach out to us through our [contact page](/en/contact), and let's map out a roadmap that fits your growth goals together.
+
+## FAQ
+
+### What is the difference between an MQL and an SQL?
+
+An MQL is a lead that fits your target audience and has shown clear interest, while an SQL is a lead the sales team has validated as having a real need and buying process. MQLs are owned by marketing and mostly identified through automated scoring, while SQLs are owned by sales and validated by a person, usually through a discovery call. In short, an MQL means interested, and an SQL means has a need and a process.
+
+### How do you set an MQL score threshold?
+
+Set the threshold with a scoring model that has separate fit and engagement scores, built from an analysis of your won customers. In the hypothetical model in this article, the MQL threshold is 60 points, with a minimum of 30 points for fit and 20 for engagement. Minimum thresholds per dimension stop a highly active student or a well-fitting but unengaged CEO from becoming an MQL.
+
+### Should demo requests go through lead scoring?
+
+No, demo requests, talk-to-sales forms, and pricing quote requests shouldn't be subject to scoring. These direct hand-raising signals should route leads that meet basic fit criteria straight to the sales team. Leaving someone who requested a demo waiting in a nurturing flow is one of the most common, and most costly, mistakes in B2B SaaS.
+
+### What is a PQL and how does it differ from an MQL?
+
+A PQL, or Product Qualified Lead, is a user who has actually used the product and shown through their usage behavior that they see value in it. A PQL is usually a much stronger purchase signal than an MQL, because using a product to get value differs greatly from consuming content. In a product-led growth model the MQL remains important for driving trial sign-ups, but PQLs move to the top of the sales team's priority list.

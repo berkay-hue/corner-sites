@@ -252,3 +252,21 @@ Tek bir webinar, haftalarca kullanılabilecek bir içerik havuzu üretir:
 B2B webinar, doğru kurgulandığında nitelikli lead toplamanın en verimli yollarından biridir; ancak bu verim kendiliğinden gelmez. Başarı; net bir ICP ve ortak bir "nitelikli lead" tanımıyla başlar, problem odaklı bir konu ve iyi tasarlanmış bir kayıt formuyla devam eder, hedefli tanıtım ve canlı oturumdaki niyet sinyalleriyle güçlenir, son olarak hızlı ve segmentlere ayrılmış bir takip akışıyla gelire dönüşür. Webinarı bir içerik etkinliği değil, uçtan uca bir satış ve pazarlama operasyonu olarak ele aldığınızda, kayıt sayısı yerine pipeline ve gelirle konuşmaya başlarsınız.
 
 Webinar programınızı outbound prospecting, CRM entegrasyonu ve satış takibiyle birlikte kurgulamak istiyorsanız, SAAS Corner ekibi olarak size yardımcı olmaktan memnuniyet duyarız. Hedef kitlenizi ve mevcut süreçlerinizi konuşmak için [bizimle iletişime geçin](/iletisim).
+
+## Sık sorulan sorular
+
+### B2B webinarlar neden çoğu zaman nitelikli lead üretmez?
+
+Çünkü webinarlar çoğu zaman uçtan uca bir lead toplama operasyonu yerine bir içerik etkinliği olarak planlanır. Başarı, net bir ICP ve pazarlama ile satışın birlikte belirlediği ortak bir nitelikli lead tanımıyla başlar. Problem odaklı bir konu, iyi tasarlanmış bir kayıt formu ve hızlı bir takip akışı olmadan yüksek kayıt sayısı pipeline'a dönüşmez.
+
+### Webinar kayıt formunda hangi bilgiler istenmeli?
+
+Kayıt formunda kurumsal e-posta adresi istenmeli ve bir nitelendirme sorusu sorulmalıdır. Formda yalnızca ad ve e-posta toplamak, sonrasında satış ekibinin yüzlerce kişiyi tek tek araştırmasına neden olur. Formda mevcut çözümü değiştirmek istediğini belirten bir kişi, canlı oturuma katılmasa bile öncelikli olarak ele alınmalıdır.
+
+### Webinar sonrasında lead'lerle ne kadar sürede iletişime geçilmeli?
+
+Sıcak lead'ler için hedef 24 saattir. Webinardan üretilen değerin büyük kısmı, oturum bittikten sonraki 48 saatte ya kazanılır ya kaybedilir. Ilık lead'ler ve kayıt olup katılmayanlar ise kayıt linki ve konuyu devam ettiren içeriklerle ayrı akışlarda takip edilmelidir.
+
+### Bir webinarın başarısı hangi metriklerle ölçülmeli?
+
+Kayıt ve katılım sayısı yalnızca başlangıç metrikleridir; webinarın gerçek değeri huninin alt basamaklarında ölçülür. Satışa aktarılan lead sayısı, gerçekleşen ilk görüşmeler, oluşan pipeline değeri, kapanan gelir ve fırsat başına maliyet takip edilmelidir. Fırsat başına maliyeti diğer kanallarla karşılaştırmak, webinarın kanal karmasındaki yerini objektif olarak değerlendirmenizi sağlar.

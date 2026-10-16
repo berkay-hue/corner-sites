@@ -215,3 +215,21 @@ MQL ve SQL, yalnızca birer kısaltma değildir. Pazarlama ile satışın ortak 
 Başarılı bir sistem için kazanılan müşterilerinizden yola çıkan bir puanlama modeli kurun. Ekipler arasında yazılı bir SLA oluşturun. Bu yapıyı CRM'de zorunlu alanlar ve otomasyonlarla destekleyin. Ret nedenlerini düzenli analiz ederek tanımlarınızı her çeyrek yeniden kalibre edin. Ürün odaklı büyüyorsanız PQL'i, outbound çalışıyorsanız etkileşim sinyallerini bu yapıya entegre edin.
 
 Kendi MQL ve SQL tanımlarınızı oluşturmak, CRM'inizi bu sürece göre kurgulamak veya pazarlama ile satış ekipleriniz arasındaki uyumu güçlendirmek istiyorsanız, SAAS Corner olarak yanınızdayız. [İletişim sayfamızdan](/iletisim) bize ulaşın, büyüme hedeflerinize uygun bir yol haritasını birlikte çizelim.
+
+## Sık sorulan sorular
+
+### MQL ile SQL arasındaki temel fark nedir?
+
+MQL pazarlamanın ilgi gösterdiğini tespit ettiği lead'dir, SQL ise satışın gerçek bir ihtiyacı ve satın alma süreci olduğunu doğruladığı lead'dir. MQL'in sahibi pazarlama ekibidir ve çoğunlukla otomatik puanlama ile davranışsal verilerle belirlenir. SQL'in sahibi satış ekibidir ve genellikle bir keşif görüşmesiyle doğrulanır.
+
+### SAL nedir ve neden izlenmeli?
+
+SAL (Sales Accepted Lead), satış ekibinin MQL'i inceleyip takip etmeyi kabul ettiği lead'dir. Bu ara aşama, satış ekibinin pazarlamadan gelen lead'leri gerçekten değerlendirip değerlendirmediğini görmenin en iyi yoludur. MQL'lerin yüzde kaçının SAL'e dönüştüğünü izlerseniz, puanlama modelinizin satış ekibinin beklentisiyle örtüşüp örtüşmediğini hızla anlarsınız.
+
+### Demo talep eden bir lead puanlamaya tabi tutulmalı mı?
+
+Hayır, demo talebi gibi doğrudan el kaldırma sinyalleri puanlamaya tabi tutulmamalıdır. Uygunluk kriterlerini temel düzeyde karşılayan bu lead'ler doğrudan satış ekibine yönlendirilmelidir. Demo talep eden birini nurturing akışında bekletmek, B2B SaaS'ta en sık yapılan ve en pahalı hatalardan biridir.
+
+### PQL nedir ve MQL'den farkı ne?
+
+PQL (Product Qualified Lead), ürünü fiilen kullanmış ve kullanım davranışıyla değer gördüğünü kanıtlamış kullanıcıdır. PQL, MQL'e kıyasla genellikle çok daha güçlü bir satın alma sinyalidir, çünkü içerik tüketmek ile ürünü kullanıp değer elde etmek arasında büyük fark vardır. Ürün odaklı büyüme modelinde MQL tamamen ortadan kalkmaz, ancak satış ekibinin öncelik listesinde PQL'ler en üste çıkar.
