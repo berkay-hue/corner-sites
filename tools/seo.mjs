@@ -94,6 +94,75 @@ const RULES = {
       "/about": ["About Brand Corner", "Brand Corner is an influencer marketing platform connecting brands, influencers, and agencies worldwide. Built in Istanbul as part of Corner Group.", "About"],
       "/404": ["Page Not Found | Brand Corner", "This page could not be found."],
     },
+    // Doğrulanamayan iddialar (500+/10,000+ sayaçları, logo şeridi, yorumlar, başarı hikâyeleri, mockup tutarları, © 2025) nötrlenir.
+    // Gövde SSR çıktısı: her değişiklik CHUNK_PATCHES'teki istemci yamasıyla birebir aynı olmalı, yoksa hydration #418 verir.
+    // cut: açılış etiketinden eşi olan kapanışa kadar silinir; section: başlığı içeren <section> silinir; swap: [eski, yeni, beklenen adet]
+    BODY: (() => {
+      const copy = ["<p>© 2025 Brand Corner. All rights reserved.</p>", "<p>© Brand Corner. All rights reserved.</p>", 1];
+      const grid = '<div class="mt-10 grid grid-cols-3 gap-6">';
+      return {
+        "/": { cut: ['<div class="mt-16 border-t border-border pt-8 lg:mt-24">'], section: [">Trusted by Industry Leaders</h2>", ">Success Stories</h2>"], swap: [
+          ['<link rel="preload" as="image" href="/fashion-brand-marketing-campaign-success.jpg"/>', "", 1],
+          ['<link rel="preload" as="image" href="/tech-startup-growth-marketing.jpg"/>', "", 1],
+          ['<link rel="preload" as="image" href="/food-delivery-app-success-story.jpg"/>', "", 1],
+          ["<span>Trusted by 500+ brands</span>", "<span>For brands</span>", 1],
+          ["<span>10,000+ influencers</span>", "<span>For influencers</span>", 1],
+          ["<span>50+ agencies</span>", "<span>For agencies</span>", 1],
+          ...["2.4K", "89%", "$45K"].map(v => [`<div class="font-mono text-2xl font-bold text-primary">${v}</div>`, '<div class="font-mono text-2xl font-bold text-primary">—</div>', 1]),
+          ['<p class="font-semibold text-foreground">+15 Influencers</p>', '<p class="font-semibold text-foreground">Influencers</p>', 1],
+          ['<p class="font-mono font-semibold text-[#10B981]">+340%</p>', '<p class="font-mono font-semibold text-[#10B981]">—</p>', 1],
+          ['<span class="text-xs text-muted-foreground">12K followers</span>', '<span class="text-xs text-muted-foreground">Followers</span>', 4],
+          ['leading-5 text-primary">4.8%</div>', 'leading-5 text-primary">—</div>', 4],
+          [">24/7 Support</h3>", ">Support</h3>", 1],
+          ["Join thousands of brands, influencers, and agencies growing with Brand Corner.", "Brands, influencers, and agencies can grow with Brand Corner.", 1], copy] },
+        "/features": { swap: [["analyzes thousands of profiles", "analyzes profiles", 1], copy] },
+        "/pricing": { swap: [copy] },
+        "/solutions/brands": { cut: [grid], swap: [
+          ["<span>125K followers</span>", "<span>Followers</span>", 4],
+          ["<span>4.8% engagement</span>", "<span>Engagement</span>", 4],
+          ['<p class="font-semibold text-foreground">+24 new</p>', '<p class="font-semibold text-foreground">New</p>', 1],
+          ['text-[#10B981]">+340%</p>', 'text-[#10B981]">—</p>', 1],
+          ["Join 500+ brands already using Brand Corner to transform their influencer marketing.", "Use Brand Corner to transform your influencer marketing.", 1], copy] },
+        "/solutions/influencers": { cut: [grid], section: [">Influencer Success Stories</h2>"], swap: [
+          ['<p class="text-sm text-muted-foreground">Fashion Brand - $1,500</p>', '<p class="text-sm text-muted-foreground">Fashion Brand</p>', 1],
+          ['<div class="font-mono text-2xl font-bold text-foreground">$4,250</div>', '<div class="font-mono text-2xl font-bold text-foreground">—</div>', 1],
+          ['text-[#10B981]">+32%</div>', 'text-[#10B981]">—</div>', 1],
+          ['<p class="font-semibold text-[#10B981]">+$1,500</p>', '<p class="font-semibold text-[#10B981]">—</p>', 1],
+          ["visible to hundreds of brands", "visible to brands", 1],
+          ["Join 10,000+ influencers already growing with Brand Corner. It&#x27;s free to join!", "Grow with Brand Corner. It&#x27;s free to join!", 1], copy] },
+        "/solutions/agencies": { cut: [grid], swap: [
+          ...[["Sarah J.", "A", "$12,500"], ["Mike R.", "B", "$8,200"], ["Emma L.", "C", "$10,800"]].flatMap(([n, k, v]) => [
+            [`<p class="font-medium text-foreground">${n}</p>`, `<p class="font-medium text-foreground">Talent ${k}</p>`, 1], [`>${v}</p>`, ">—</p>", 1]]),
+          ['<p class="font-mono font-semibold text-[#10B981]">$45,200</p>', '<p class="font-mono font-semibold text-[#10B981]">—</p>', 1],
+          ["Join leading agencies already managing their talents with Brand Corner.", "Manage your talents with Brand Corner.", 1], copy] },
+      };
+    })(),
+    // Bunlardan biri gövdede kalırsa koşu durur: ayna yenilenip işaretler kayarsa iddialar sessizce geri gelmesin
+    CLAIMS: /500\+|10,000\+|50\+ agencies|\$5M|50,000\+|98%|2\.4K|89%|\$45K|\+340%|TechCorp|ModaBrand|FoodCo|TravelGo|StyleHub|Sarah|Alex Rivera|Maria Garcia|TechStart|FoodExpress|Mike R\.|Emma L\.|\$12,500|\$8,200|\$10,800|\$45,200|\$4,250|\$1,500|125K|12K followers|4\.8%|24\/7|thousands of|hundreds of|© 2025|Join leading/,
+    body(b, page) {
+      const T = this.BODY[page] || {};
+      const drop = (i, what) => {  // i'deki açılış etiketini eşi olan kapanışla birlikte siler
+        const tag = b.slice(i + 1).match(/^\w+/)[0], re = new RegExp(`<${tag}\\b|</${tag}>`, "g");
+        re.lastIndex = i;
+        for (let d = 0, m; (m = re.exec(b)); ) if (!(d += m[0][1] === "/" ? -1 : 1)) return b.slice(0, i) + b.slice(re.lastIndex);
+        throw new Error(`brandcorner ${page}: ${what} kapanmıyor`);
+      };
+      // İşaret yoksa önceki koşuda silinmiştir (idempotent)
+      for (const open of T.cut || []) {
+        const i = b.indexOf(open);
+        if (i >= 0 && b.indexOf(open, i + 1) >= 0) throw new Error(`brandcorner ${page}: ${open} tek değil`);
+        if (i >= 0) b = drop(i, open);
+      }
+      for (const h of T.section || []) { const i = b.indexOf(h); if (i >= 0) b = drop(b.lastIndexOf("<section", i), h); }
+      for (const [a, z, n] of T.swap || []) {
+        const k = b.split(a).length - 1;
+        if (k && k !== n) throw new Error(`brandcorner ${page}: "${a}" ${k} kez, beklenen ${n}`);
+        b = b.split(a).join(z);
+      }
+      const left = b.replace(/<script\b[\s\S]*?<\/script>/g, "").match(this.CLAIMS);
+      if (left) throw new Error(`brandcorner ${page}: doğrulanamayan iddia kaldı: ${left[0]}`);
+      return b;
+    },
     fix(html, page) {
       if (/^\/blog(?:\/|$)/.test(page)) return html;  // blog sayfaları build-blog.mjs'in
       const R = this, url = R.origin + (page === "/" ? "/" : page), ORG = R.origin + "/#org";
@@ -141,7 +210,9 @@ const RULES = {
           { "@type": page === "/about" ? "AboutPage" : "WebPage", "@id": url + "#webpage", url, name: h1, isPartOf: { "@id": R.origin + "/#website" }, about: { "@id": ORG }, inLanguage: "en" },
           { "@type": "BreadcrumbList", itemListElement: [{ "@type": "ListItem", position: 1, name: "Home", item: R.origin + "/" }, { "@type": "ListItem", position: 2, name: crumb, item: url }] }];
       if (graph.length) html = html.replace("</head>", ldTag({ "@context": "https://schema.org", "@graph": graph }) + "</head>");
-      return html;
+      // Gövde (RSC verisinden önceki kısım) iddia nötrleme; RSC verisinde bu metinler yok
+      const at = html.indexOf("<script>(self.__next_f"), end = at < 0 ? html.length : at;
+      return R.body(html.slice(0, end), page) + html.slice(end);
     },
   },
   "socialmediacorner.co": {
@@ -305,11 +376,86 @@ const RULES = {
 
 // v0/Next istemci bileşenlerinin gövdesi JS chunk'ında: HTML'e eklenen öğe chunk'ta da olmalı, yoksa hydration #418 verir.
 // /_next/static/* immutable önbellekli: yamalı chunk içerik özetli yeni adla yazılır, HTML ve RSC referansları ona çevrilir; eski dosya kalır.
+// edits sırayla uygulanır: [from, to]; from ya tek eşleşen metin ya da {from, until}: tek eşleşen from'dan sonraki ilk until'e kadar (until kalır)
+// Gövdeyi silinen bileşenler "return null" olur; aynı değişiklik RULES["brandcorner.co"].BODY ile SSR HTML'de de yapılır.
+const DICT = [  // i18n sözlüğü (EN + TR); 6 sayfanın ve 404'ün chunk'ında aynı kopya
+  ['"hero.trust.brands":"Trusted by 500+ brands"', '"hero.trust.brands":"For brands"'],
+  ['"hero.trust.influencers":"10,000+ influencers"', '"hero.trust.influencers":"For influencers"'],
+  ['"hero.trust.agencies":"50+ agencies"', '"hero.trust.agencies":"For agencies"'],
+  ['"features.support.title":"24/7 Support"', '"features.support.title":"Support"'],
+  ['"footer.copyright":"© 2025 Brand Corner. All rights reserved."', '"footer.copyright":"© Brand Corner. All rights reserved."'],
+  ['"hero.trust.brands":"500+ marka güveniyor"', '"hero.trust.brands":"Markalar için"'],
+  ['"hero.trust.influencers":"10,000+ influencer"', '"hero.trust.influencers":"Influencer\'lar için"'],
+  ['"hero.trust.agencies":"50+ ajans"', '"hero.trust.agencies":"Ajanslar için"'],
+  ['"features.support.title":"7/24 Destek"', '"features.support.title":"Destek"'],
+  ['"footer.copyright":"© 2025 Brand Corner. Tüm hakları saklıdır."', '"footer.copyright":"© Brand Corner. Tüm hakları saklıdır."'],
+  ['"cta.subheadline":"Join thousands of brands, influencers, and agencies growing with Brand Corner."', '"cta.subheadline":"Brands, influencers, and agencies can grow with Brand Corner."'],
+  ['"cta.subheadline":"Brand Corner ile büyüyen binlerce marka, influencer ve ajansa katılın."', '"cta.subheadline":"Markalar, influencer\'lar ve ajanslar Brand Corner ile büyüyebilir."'],
+];
+const statGrid = v => ({ from: `,(0,${v}.jsxs)("div",{className:"mt-10 grid grid-cols-3 gap-6",children:[`, until: `]}),(0,${v}.jsxs)("div",{className:"relative"` });
 const CHUNK_PATCHES = {
   "brandcorner.co": [
     // e34ca4a footer Company listesine Blog ekledi (6 sayfa); i18n sözlüklerinde footer.blog zaten var
-    { chunk: "fbb4735ac8b2897c", from: '{href:"/press",label:e("footer.press")},', to: '{href:"/press",label:e("footer.press")},{href:"/blog",label:e("footer.blog")},' },
+    { chunk: "fbb4735ac8b2897c", edits: [['{href:"/press",label:e("footer.press")},', '{href:"/press",label:e("footer.press")},{href:"/blog",label:e("footer.blog")},']] },
+    // PR-F: doğrulanamayan sayaçlar, logo şeridi, yorumlar, başarı hikâyeleri ve mockup tutarları
+    { chunk: "411b1b9d3b6df8ca", edits: DICT },
+    { chunk: "763536697d8b15ea", edits: DICT },
+    { chunk: "e4b281dafb09dd8b", edits: [  // ana sayfa
+      [{ from: ',(0,s.jsxs)("div",{className:"mt-16 border-t border-border pt-8 lg:mt-24"', until: ']})]})}e.s(["HeroSection"' }, ""],  // "Trusted by 500+" + logo şeridi
+      [{ from: 'function l(){let{t:e,language:l}=(0,t.useLanguage)(),i=[{value:"500+"', until: 'e.s(["SocialProofSection",()=>l])' }, "function l(){return null}"],
+      [{ from: 'function i(){let{t:e,language:i}=(0,t.useLanguage)();return(0,s.jsx)("section",{className:"bg-secondary py-16 sm:py-24"', until: 'e.s(["CaseStudiesSection",()=>i])' }, "function i(){return null}"],
+      ['children:1===e?"2.4K":2===e?"89%":"$45K"', 'children:"—"'],
+      ['children:"+15 Influencers"', 'children:"Influencers"'],
+      ['children:"+340%"', 'children:"—"'],
+      ['children:"12K followers"', 'children:"Followers"'],
+      ['children:"4.8%"', 'children:"—"'],
+      ['children:"Fashion brand collaboration - $500"', 'children:"Fashion brand collaboration"'],
+      ['children:"$2.4K"', 'children:"—"'],
+      ['children:"+24%"', 'children:"—"'],
+      ['children:["$",1500*e]', 'children:"—"'],
+    ] },
+    { chunk: "265b6dd36dde1597", edits: [  // /solutions/brands
+      [statGrid("a"), ""],
+      ['(0,a.jsx)("span",{children:"125K followers"})', '(0,a.jsx)("span",{children:"Followers"})'],
+      ['(0,a.jsx)("span",{children:"4.8% engagement"})', '(0,a.jsx)("span",{children:"Engagement"})'],
+      ['children:"+24 new"', 'children:"New"'],
+      ['children:"+340%"', 'children:"—"'],
+      ['"Join 500+ brands already using Brand Corner to transform their influencer marketing."', '"Use Brand Corner to transform your influencer marketing."'],
+      ['"Influencer pazarlamasını dönüştürmek için Brand Corner kullanan 500+ markaya katılın."', '"Influencer pazarlamanızı Brand Corner ile dönüştürün."'],
+    ] },
+    { chunk: "51d3cf739a8640a6", edits: [  // /solutions/influencers
+      [statGrid("s"), ""],
+      [{ from: 'function l(){let{language:e}=(0,r.useLanguage)();return(0,s.jsx)("section",{className:"bg-background py-16 sm:py-24",children:(0,s.jsxs)("div",{className:"mx-auto max-w-7xl px-4 sm:px-6 lg:px-8",children:[(0,s.jsxs)("div",{className:"text-center",children:[(0,s.jsx)("h2",{className:"font-serif text-3xl font-bold text-foreground sm:text-4xl",children:"en"===e?"Influencer Success Stories"', until: 'e.s(["InfluencersSuccess",()=>l])' }, "function l(){return null}"],
+      ['children:"Fashion Brand - $1,500"', 'children:"Fashion Brand"'],
+      ['children:"$4,250"', 'children:"—"'],
+      ['children:"+32%"', 'children:"—"'],
+      ['children:"+$1,500"', 'children:"—"'],
+      ['"Your profile is visible to hundreds of brands actively looking for influencers like you."', '"Your profile is visible to brands actively looking for influencers like you."'],
+      ["arayan yüzlerce marka tarafından görülebilir.", "arayan markalar tarafından görülebilir."],
+      [`"Join 10,000+ influencers already growing with Brand Corner. It's free to join!"`, `"Grow with Brand Corner. It's free to join!"`],
+      [`"Brand Corner ile büyüyen 10.000+ influencer'a katılın. Katılım ücretsiz!"`, `"Brand Corner ile büyüyün. Katılım ücretsiz!"`],
+    ] },
+    { chunk: "4897118e349b9d9c", edits: [  // /solutions/agencies
+      [statGrid("t"), ""],
+      ['[{name:"Sarah J.",campaigns:5,earnings:"$12,500"},{name:"Mike R.",campaigns:3,earnings:"$8,200"},{name:"Emma L.",campaigns:4,earnings:"$10,800"}]',
+        '[{name:("en"===l?"Talent":"Yetenek")+" A",campaigns:5,earnings:"—"},{name:("en"===l?"Talent":"Yetenek")+" B",campaigns:3,earnings:"—"},{name:("en"===l?"Talent":"Yetenek")+" C",campaigns:4,earnings:"—"}]'],
+      ['children:"$45,200"', 'children:"—"'],
+      ['"Join leading agencies already managing their talents with Brand Corner."', '"Manage your talents with Brand Corner."'],
+      ['"Yeteneklerini Brand Corner ile yöneten önde gelen ajanslara katılın."', '"Yeteneklerinizi Brand Corner ile yönetin."'],
+    ] },
+    { chunk: "5c127651fc7ca527", edits: [  // /features
+      ["analyzes thousands of profiles", "analyzes profiles"],
+      ["üzere binlerce profili analiz eder.", "üzere profilleri analiz eder."],
+    ] },
   ],
+};
+const splice = (src, from, to, chunk) => {
+  const [a, z] = typeof from === "string" ? [from, null] : [from.from, from.until];
+  const i = src.indexOf(a);
+  if (i < 0 || src.indexOf(a, i + 1) >= 0) throw new Error(`chunk yaması tek eşleşmeli: ${chunk}: ${a.slice(0, 60)}`);
+  const j = z === null ? i + a.length : src.indexOf(z, i + a.length);
+  if (j < 0) throw new Error(`chunk yaması bitişi yok: ${chunk}: ${z.slice(0, 60)}`);
+  return src.slice(0, i) + to + src.slice(j);
 };
 
 const rule = RULES[host];
@@ -317,8 +463,7 @@ if (!rule) { console.error(`kural yok: ${host}`); process.exit(1); }
 const renames = [];
 for (const p of CHUNK_PATCHES[host] || []) {
   const dir = join(SITE, "_next/static/chunks"), src = await readFile(join(dir, p.chunk + ".js"), "utf8");
-  if (src.split(p.from).length !== 2) throw new Error(`chunk yaması tek eşleşmeli: ${p.chunk}`);
-  const out = src.replace(p.from, p.to), name = createHash("sha256").update(out).digest("hex").slice(0, 16);
+  const out = p.edits.reduce((s, [from, to]) => splice(s, from, to, p.chunk), src), name = createHash("sha256").update(out).digest("hex").slice(0, 16);
   if (!existsSync(join(dir, name + ".js"))) await writeFile(join(dir, name + ".js"), out);
   renames.push([`/_next/static/chunks/${p.chunk}.js`, `/_next/static/chunks/${name}.js`]);
 }
