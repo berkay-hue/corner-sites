@@ -103,18 +103,39 @@ function cleanLinks(md, cfg, index) {
 // - "öl" kökü "ölç" ile devam ediyorsa atlanır: "ölçü", "ölçek", "ölçüt", "ölçmek" serbest.
 // - Bilerek katı: "öldürücü rekabet", "ölü yatırım", "ölü stok", "zehir gibi" deyimleri de yakalanır (prompt da yasaklıyor).
 // - Yaralanma ve şiddet kelimeleri yalnız prompt'ta: "yara" kökü "yarar", "yaratmak" ile çakışıyor.
-// - "kaynak" kelimesinin kendisi serbest ("kaynakları sınırlı"); yalnız tek başına başlık/etiket olan
-//   "Kaynaklar", "Kaynakça", "Kaynak:" satırları yakalanır.
-const FATAL_RE = /(?<!\p{L})(?:öl(?!ç)\p{L}*|can(?:ını|larını)?\s+kayb\p{L}*|(?:hayat|yaşam)(?:ını|larını)\s+(?:kaybet|yitir)\p{L}*|zehir\p{L}*|siyanür\p{L}*|intihar\p{L}*|cinayet\p{L}*|cenaze\p{L}*|vefat\p{L}*|katil\p{L}*|katlet\p{L}*|katledil\p{L}*|katliam\p{L}*|suikast\p{L}*|death|died|dead|killed|suicide|poison\p{L}*|cyanide|murder\p{L}*)(?!\p{L})/gu;
+// - "zehir" ünlü düşmesiyle "zehri", "zehre", "zehrin" olur; bunlar zehr[ie] ile yakalanır, "Zehra" adı serbest.
+// - "kaynak" kelimesinin kendisi serbest ("kaynakları sınırlı", "Kaynaklar daralır"); düz satırda yalnız tek başına
+//   etiket olan "Kaynaklar", "Kaynakça", "Kaynak:" satırları yakalanır (SOURCE_RE).
+// - Başlık ("## ...") ya da kalın etiket ("**...**") metninde daha geniş bakılır (SOURCE_HEAD_RE): "ileri okuma",
+//   "okuma listesi" gibi ifadeler her yerde; "kaynaklar/kaynakça/referanslar" ise başlığın sonunda ("Yararlandığım
+//   kaynaklar") ya da başında ":", "/", "&", "(" ile ("Kaynaklar: ...") geçerse. Ortada ya da soru başlığında geçen
+//   "Para dışında hangi kaynaklar fırsat maliyeti taşır?" gibi SSS başlıkları serbest. Bilinen yanlış alarm: soru
+//   olmayan ve "kaynaklar" ile biten başlıklar ("Zaman ve kaynaklar"); yeniden yazımda başlık değişir.
+// - Metin Türkçe kurala göre küçültülür ("İ" -> "i"); bu "DIED" gibi büyük harfli İngilizce kelimeyi "dıed" yapar.
+//   Bu yüzden İngilizce kelimeler ayrıca düz toLowerCase ile aranır (FATAL_EN_RE).
+// - Site adresi yalnız adresin kendisiyse silinir; "wishceo.com.baska.com" ya da "wishceo.com@baska.com" dış link sayılır.
+//   "//baska.com" ile başlayan markdown linki de dış linktir.
+const FATAL_TR = String.raw`öl(?!ç)\p{L}*|can(?:ını|larını)?\s+kayb\p{L}*|(?:hayat|yaşam)(?:ını|larını)\s+(?:kaybet|yitir)\p{L}*|zehir\p{L}*|zehr[ie]\p{L}*|siyanür\p{L}*|intihar\p{L}*|cinayet\p{L}*|cenaze\p{L}*|vefat\p{L}*|katil\p{L}*|katlet\p{L}*|katledil\p{L}*|katliam\p{L}*|suikast\p{L}*`;
+const FATAL_EN = String.raw`death|died|dead|killed|suicide|poison\p{L}*|cyanide|murder\p{L}*`;
+const FATAL_RE = new RegExp(String.raw`(?<!\p{L})(?:${FATAL_TR}|${FATAL_EN})(?!\p{L})`, "gu");
+const FATAL_EN_RE = new RegExp(String.raw`(?<!\p{L})(?:${FATAL_EN})(?!\p{L})`, "gu");
 const SOURCE_RE = /^[ \t]*(?:#{1,6}[ \t]*|[-*+>][ \t]+|\d+\.[ \t]+)?\**(?:kaynaklar|kaynakça|kaynak|referanslar|ileri okuma|sources|references|further reading)\**[ \t]*(?::.*|\**[ \t]*)$/gmu;
+const HEAD_RE = /^[ \t]*(?:[-*+>][ \t]+|\d+\.[ \t]+)?(?:#{1,6}[ \t]+(.+?)[ \t#]*|\*\*([^*\n]+?)\*\*.*)$/gmu;
+const SOURCE_HEAD_RE = /(?<!\p{L})(?:ileri okuma|daha fazla okuma|okuma listesi|okuma önerileri|önerilen okumalar|kitap önerileri|further reading|reading list)(?!\p{L})|^(?:kaynak(?:lar|ça)|referanslar|sources|references)[ \t]*[:\/&(]|(?<!\p{L})(?:kaynak(?:lar|ça)|referanslar|sources|references)[ \t:.]*$/u;
 export function consumerIssues(md, siteUrl = "") {
   const host = siteUrl ? new URL(siteUrl).host.replace(/^www\./, "").replace(/\./g, "\\.") : null;
-  const text = (host ? md.replace(new RegExp(`https?://(?:www\\.)?${host}`, "gi"), "") : md).toLocaleLowerCase("tr");
+  const own = host ? md.replace(new RegExp(`https?://(?:www\\.)?${host}(?![\\w@:-]|\\.[\\w-])`, "gi"), "") : md;
+  const text = own.toLocaleLowerCase("tr");
   const hits = new Set();
   for (const m of text.matchAll(FATAL_RE)) hits.add(`yasak ifade "${m[0]}"`);
+  for (const m of own.toLowerCase().matchAll(FATAL_EN_RE)) hits.add(`yasak ifade "${m[0]}"`);
   for (const m of text.matchAll(/https?:\/\/[^\s)\]]+|(?<![\p{L}\d])www\.[^\s)\]]+/gu)) hits.add(`dış link ${m[0]}`);
-  for (const m of text.matchAll(/\]\((?![\/#)])([^)\s]*)\)/g)) hits.add(`dış link ${m[1]}`);
+  for (const m of text.matchAll(/\]\((?!\/(?!\/)|#|\))([^)\s]*)\)/g)) hits.add(`dış link ${m[1]}`);
   for (const m of text.matchAll(SOURCE_RE)) hits.add(`kaynak bölümü "${m[0].trim()}"`);
+  for (const m of text.matchAll(HEAD_RE)) {
+    const head = (m[1] ?? m[2]).replace(/[*_`]/g, "").trim();
+    if (SOURCE_HEAD_RE.test(head)) hits.add(`kaynak bölümü "${m[0].trim()}"`);
+  }
   return [...hits];
 }
 

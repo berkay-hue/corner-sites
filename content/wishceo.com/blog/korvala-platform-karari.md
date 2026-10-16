@@ -75,7 +75,7 @@ Bunu yalnızca telefon şirketleri yaşamıyor. Diyelim ki orta boy bir lojistik
 
 ## Gerçekte ne oldu?
 
-Korvala'nın CEO'su Gordon Stoddard B'yi seçti. Çalışanlarına eski yolda kalmanın artık bir seçenek olmadığını açıkça söyledi ve şirketi Tallbridge'in telefon sistemine bağladı. Eski sistem rafa kalkmaya başladı.
+Korvala'nın CEO'su Gordon Stoddard B'yi seçti ve şirketi Tallbridge'in telefon sistemine bağladı. Eski sistem rafa kalkmaya başladı.
 
 Tallbridge'in sistemi beklenen ivmeyi yakalayamadı. Birkaç yıl sonra Korvala telefon işini Tallbridge'e satmak için anlaştı: patent lisansı dâhil birkaç milyar avro. Satış ertesi yıl tamamlandı.
 
