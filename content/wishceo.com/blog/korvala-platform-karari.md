@@ -1,13 +1,13 @@
 ---
 title: "Zirvedeyken Platform Seçmek: Korvala Vakası"
-description: "Dünyanın en çok telefon satan şirketi Korvala, 2011'de bir platform seçmek zorundaydı. Dört yolun artısı, eksisi ve gerçekte ne olduğu."
+description: "Dünyanın en çok telefon satan şirketi Korvala, 2010'ların başında bir platform seçmek zorundaydı. Dört yolun artısı, eksisi ve gerçekte ne olduğu."
 date: "2026-10-15"
 category: "Kurgusal Vaka"
 image: "/og.png"
 imageAlt: "WishCEO kapak kartı “Şirket batıyor. CEO sensin.” — Korvala’nın platform kararı yazısı"
 ---
 
-Korvala vakası, zirvedeki bir telefon şirketinin 2011'de akıllı telefonlarının hangi yazılımla çalışacağına karar vermesidir ve masadaki dört yolun hiçbiri bedava değildir. Şubat 2011, Finlandiya. Dünyada en çok telefon satan şirketin başına yeni geçtin. Adı Korvala. Neredeyse herkesin cebinde bir Korvala var ya da yakın zamana kadar vardı. Kâğıt üzerinde zirvedesin.
+Korvala vakası, zirvedeki bir telefon şirketinin 2010'ların başında akıllı telefonlarının hangi yazılımla çalışacağına karar vermesidir ve masadaki dört yolun hiçbiri bedava değildir. 2010'ların başı, Kuzey Avrupa. Dünyada en çok telefon satan şirketin başına yeni geçtin. Adı Korvala. Neredeyse herkesin cebinde bir Korvala var ya da yakın zamana kadar vardı. Kâğıt üzerinde zirvedesin.
 
 Ama zirvede durmak, ayağının altındaki zeminin sağlam olduğu anlamına gelmiyor. Masanda tek bir soru var ve cevabı şirketin bundan sonraki yolunu çizecek: Telefonların hangi yazılımla çalışacak?
 
@@ -15,7 +15,7 @@ Ama zirvede durmak, ayağının altındaki zeminin sağlam olduğu anlamına gel
 
 ## Masadaki durum
 
-Dosyadaki tablo şöyle. 2007'de Amerikalı bir bilgisayar şirketi dokunmatik telefonunu çıkardı. Arama motoru devinin ücretsiz sistemi de hızla yayılıyor. Korvala'nın kendi akıllı telefon sistemi eskidi, uygulama geliştiriciler ilgisini kaybetti. Ortaklıkla geliştirilen yeni sistem ise henüz hazır değil.
+Dosyadaki tablo şöyle. Birkaç yıl önce bir bilgisayar şirketi parmakla kullanılan dokunmatik telefonunu çıkardı. Büyük bir internet şirketinin telefon üreticilerine ücretsiz verdiği sistem de hızla yayılıyor. Korvala'nın kendi akıllı telefon sistemi eskidi, uygulama geliştiriciler ilgisini kaybetti. Ortaklıkla geliştirilen yeni sistem ise henüz hazır değil.
 
 Akıllı telefonda pazar payın eriyor, hisse düşüyor. Telefon satışında hâlâ dünya birincisisin. Ama bu birincilik, giderek önemini yitiren bir ligde.
 
@@ -35,11 +35,11 @@ Oyunda önüne dört seçenek konuyor. Hiçbiri bedava değil.
 
 ### A: Herkesin kullandığı sisteme katıl
 
-Arama motoru devinin ücretsiz sistemine geçersin. Uygulamalar hazır, kullanıcılar hazır. Farkı donanımla ve tasarımla yaratmaya çalışırsın.
+Herkesin kullandığı ücretsiz sisteme geçersin. Uygulamalar hazır, kullanıcılar hazır. Farkı donanımla ve tasarımla yaratmaya çalışırsın.
 
 Artısı açık. Pazarın boş tarafında değil, dolu tarafında durursun. Yarın çıkardığın telefonda, insanların zaten kullandığı uygulamalar çalışır.
 
-Eksisi de açık. Bu sistemi kullanan Asyalı dev üreticilerle aynı rafta yarışırsın. Herkes aynı yazılımı kullanıyorsa müşteri neden seni seçsin? Elinde tasarım, fiyat ve marka kalır. Yazılımın nereye gideceğine de sen karar vermezsin.
+Eksisi de açık. Bu sistemi kullanan çok sayıda büyük ve ucuz üreticiyle aynı rafta yarışırsın. Herkes aynı yazılımı kullanıyorsa müşteri neden seni seçsin? Elinde tasarım, fiyat ve marka kalır. Yazılımın nereye gideceğine de sen karar vermezsin.
 
 ### B: Tallbridge'le ortaklık kur
 
@@ -47,7 +47,7 @@ Yazılım devi Tallbridge'in telefon sistemini akıllı telefonlarında ana sist
 
 Bu yolun çekiciliği burada. Ortağın seni önemsiyor, çünkü sen olmadan onun sistemi de bir yere gitmiyor. Masadaki ağırlığın büyük.
 
-Ama küçük olmayan bir kusuru var. Şirketin geleceğini, pazarın henüz yalnızca %2 kadarını tutan bir sisteme bağlıyorsun. Mahalle örneğine dönersek, iki büyük pazar zaten kurulmuşken üçüncüsünü ayağa kaldırmaya çalışıyorsun. Üstelik bu pazarın kurallarını tek başına sen koymuyorsun.
+Ama küçük olmayan bir kusuru var. Şirketin geleceğini, pazarın henüz çok küçük bir dilimini tutan bir sisteme bağlıyorsun. Mahalle örneğine dönersek, iki büyük pazar zaten kurulmuşken üçüncüsünü ayağa kaldırmaya çalışıyorsun. Üstelik bu pazarın kurallarını tek başına sen koymuyorsun.
 
 ### C: Kendi yeni sistemini bitir
 
@@ -75,11 +75,11 @@ Bunu yalnızca telefon şirketleri yaşamıyor. Diyelim ki orta boy bir lojistik
 
 ## Gerçekte ne oldu?
 
-Korvala'nın CEO'su Gordon Stoddard B'yi seçti. Şubat 2011'de çalışanlara meşhur "yanan platform" notunu yazdı ve şirketi Tallbridge'in telefon sistemine bağladı. Notun adı bile mesajı özetliyordu: Üzerinde durduğun zemin yanıyor, yerinde kalmak artık seçenek değil. Eski sistem rafa kalkmaya başladı.
+Korvala'nın CEO'su Gordon Stoddard B'yi seçti. Çalışanlarına eski yolda kalmanın artık bir seçenek olmadığını açıkça söyledi ve şirketi Tallbridge'in telefon sistemine bağladı. Eski sistem rafa kalkmaya başladı.
 
-Tallbridge'in sistemi beklenen ivmeyi yakalayamadı. Eylül 2013'te Korvala telefon işini Tallbridge'e satmak için anlaştı: patent lisansı dâhil yaklaşık 5,4 milyar avro. Satış Nisan 2014'te tamamlandı.
+Tallbridge'in sistemi beklenen ivmeyi yakalayamadı. Birkaç yıl sonra Korvala telefon işini Tallbridge'e satmak için anlaştı: patent lisansı dâhil birkaç milyar avro. Satış ertesi yıl tamamlandı.
 
-Korvala ortadan kalkmadı. Bugün telekom altyapısı üreten bir şirket olarak yoluna devam ediyor. Ama dünyada en çok telefon satan şirket, artık telefon satmıyor.
+Korvala ortadan kalkmadı. Telefon dışındaki işleriyle, daha çok altyapı tarafında yoluna devam etti. Ama dünyada en çok telefon satan şirket, artık telefon satmıyor.
 
 ## Oyunda neden 35 puan?
 
@@ -111,11 +111,11 @@ Dört yol vardı: herkesin kullandığı ücretsiz sisteme katılmak, Tallbridge
 
 ### Korvala'nın CEO'su gerçekte ne yaptı?
 
-Gordon Stoddard Şubat 2011'de Tallbridge ortaklığını seçti ve çalışanlara meşhur "yanan platform" notunu yazdı. Tallbridge'in sistemi beklenen ivmeyi yakalayamadı. Eylül 2013'te Korvala telefon işini patent lisansı dâhil yaklaşık 5,4 milyar avroya Tallbridge'e satmak için anlaştı ve satış Nisan 2014'te tamamlandı.
+Gordon Stoddard 2010'ların başında Tallbridge ortaklığını seçti ve şirketin eski sistemini rafa kaldırdı. Tallbridge'in sistemi beklenen ivmeyi yakalayamadı. Birkaç yıl sonra Korvala telefon işini patent lisansı dâhil birkaç milyar avroya Tallbridge'e satmak için anlaştı.
 
 ### Tallbridge ortaklığı neden düşük puan aldı?
 
-Çünkü karar anında da görülebilen bir risk vardı: Korvala bütün geleceğini pazarın yalnızca %2 kadarını tutan tek bir sisteme bağlıyordu. B seçeneğinin 35 puanı yalnızca kötü bitmesinden gelmiyor.
+Çünkü karar anında da görülebilen bir risk vardı: Korvala bütün geleceğini pazarın yalnızca çok küçük bir dilimini tutan tek bir sisteme bağlıyordu. B seçeneğinin 35 puanı yalnızca kötü bitmesinden gelmiyor.
 
 ### Platform savaşı nasıl kazanılır?
 
@@ -123,4 +123,4 @@ Platform savaşı donanımla değil, geliştiricileri ve kullanıcıları aynı 
 
 ## Sen ne yapardın?
 
-Şubat 2011'desin. Telefonlar hâlâ satılıyor ama zemin ayağının altında ısınıyor. Sen hangi yolu seçerdin? [Bugünün vakasını oyna](/#oyun) ve kararını gerçek CEO'nunkiyle karşılaştır.
+2010'ların başındasın. Telefonlar hâlâ satılıyor ama zemin ayağının altından kayıyor. Sen hangi yolu seçerdin? [Bugünün vakasını oyna](/#oyun) ve kararını gerçek CEO'nunkiyle karşılaştır.

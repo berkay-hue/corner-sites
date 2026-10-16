@@ -15,7 +15,7 @@ Hangisi daha iyi karar verdi?
 
 İçgüdün Murat'ı gösterir. Kazanan o, demek ki bir şeyi doğru yaptı. Ama kararlara tek tek bakınca tablo tersine döner. Selin öğrenilebilecek her şeyi öğrendi ve kötü ihtimale karşı yedek bıraktı. Murat zar attı ve zar iyi geldi. Mesele bu ikisini, kararın kalitesiyle sonucun kalitesini, birbirinden ayırabilmek.
 
-> Bu yazı Soranol ve Korvala vakalarının sonucunu anlatıyor. Önce kendin karar vermek istersen [vakaları oyna](/?s=001#oyun).
+> Bu yazı Korvala vakasının sonucunu anlatıyor. Önce kendin karar vermek istersen [vakayı oyna](/?s=001#oyun).
 
 ## Sonuç, kararın tek tanığı değil
 
@@ -41,19 +41,19 @@ Bir fırıncı düşün. Bayram öncesi, her yıl olduğu gibi fazladan hamur ha
 
 Bir kararı adil puanlamanın ilk kuralı, kendini o günkü masaya geri oturtmak. Sonradan öğrendiklerini bir kenara koymak zordur. İnsan zihni geçmişi bildiği sonla yeniden yazmayı sever. "Belliydi zaten" cümlesi çoğu zaman sonuç belli olduktan sonra kurulur.
 
-Soranol vakası bunu iyi gösteriyor. Hartwell & Hartwell'in en kârlı ürünlerinden biri olan ağrı kesicinin kapsüllerine biri siyanür koymuş, yedi kişi ölmüştü. Şirketin CEO'su Edward Hallam ülkedeki bütün Soranol kapsüllerini raflardan çektirdi: yaklaşık 31 milyon şişe, yaklaşık 100 milyon dolar. O sırada resmî kurumlar bile bunu gerekli görmüyordu.
+Bir ürün toplatma kararı bunu iyi gösterir. Orta büyüklükte bir su ısıtıcısı üreticisi düşün. Birkaç müşteri, en çok satan modelin tabanının fazla ısındığını bildiriyor. Şikâyet az, sebebi henüz belli değil. Şirket yine de o modelin satılmış bütün ürünlerini geri çağırıyor ve sorun bulunana kadar üretimi durduruyor. O sırada kimse bunu ondan istemiyordu.
 
-Yalnızca ilk düşüşe bakan biri bu kararı felaket diye yazabilirdi. Pazar payı yaklaşık %35'ten %7 civarına inmişti. Bir yıl içinde ise büyük ölçüde geri geldi. Aynı karar, hangi gün baktığına göre hem hata hem başarı gibi görünüyor. Oysa karar hiç değişmedi; değişen yalnızca takvim.
+Yalnızca ilk aylara bakan biri bu kararı felaket diye yazabilirdi. Toplatmanın faturası ağırdı, satışlar kabaca yarıya inmişti. Bir yıl içinde ise satışlar büyük ölçüde geri geldi ve marka "sorun çıkınca ürününü geri çeken şirket" diye anılmaya başladı. Aynı karar, hangi gün baktığına göre hem hata hem başarı gibi görünüyor. Oysa karar hiç değişmedi; değişen yalnızca takvim.
 
-Oyunda bu seçenek 95 puan alıyor. Gerekçesi yalnızca sonradan gelen toparlanma değil, o gün de görülebilen bir şey: insanlar ölürken önce güvenliği koyan bir şirket, güveni geri kazanma şansını korur. Krizin ilk saatlerinde bu tür kararların nasıl verildiğini [krizin ilk 48 saati](/blog/krizin-ilk-48-saati) yazısında ayrıca ele aldık.
+Bu kararı güçlü yapan yalnızca sonradan gelen toparlanma değil, o gün de görülebilen bir şey: sebebi bilinmeyen bir güvenlik sorununda önce müşteriyi koruyan şirket, güveni geri kazanma şansını korur. Krizin ilk saatlerinde bu tür kararların nasıl verildiğini [krizin ilk 48 saati](/blog/krizin-ilk-48-saati) yazısında ayrıca ele aldık.
 
 ## Kötü sonuçtan sonra doğru soru
 
-Korvala vakası öbür yönden öğretici. Şirketin yeni CEO'su Gordon Stoddard, Şubat 2011'de Korvala'yı Tallbridge'in telefon sistemine bağladı. Sistem beklenen ivmeyi yakalayamadı. Eylül 2013'te Korvala telefon işini Tallbridge'e satmak için anlaştı: patent lisansı dâhil yaklaşık 5,4 milyar avro.
+Korvala vakası öbür yönden öğretici. Şirketin yeni CEO'su Gordon Stoddard, 2010'ların başında Korvala'yı Tallbridge'in telefon sistemine bağladı. Sistem beklenen ivmeyi yakalayamadı. Birkaç yıl sonra Korvala telefon işini Tallbridge'e satmak için anlaştı: patent lisansı dâhil birkaç milyar avro.
 
-Sonuca bakıp "tabii ki yanlıştı" demek kolay. Asıl soru başka: o gün masadaki bilgiyle bu karar savunulabilir miydi? Burada eleştirinin dayanağı sonradan gelmiyor. Tallbridge'in sistemi o gün pazarın yalnızca %2 kadarını tutuyordu. Şirketin geleceğini bu kadar küçük bir sisteme bağlamak, sonuç ne olursa olsun ağır bir riskti. Oyunda bu seçenek 35 puan alıyor ve gerekçesi tam olarak bu.
+Sonuca bakıp "tabii ki yanlıştı" demek kolay. Asıl soru başka: o gün masadaki bilgiyle bu karar savunulabilir miydi? Burada eleştirinin dayanağı sonradan gelmiyor. Tallbridge'in sistemi o gün pazarın yalnızca çok küçük bir dilimini tutuyordu. Şirketin geleceğini bu kadar küçük bir sisteme bağlamak, sonuç ne olursa olsun ağır bir riskti. Oyunda bu seçenek 35 puan alıyor ve gerekçesi tam olarak bu.
 
-Arama motoru devinin ücretsiz sistemine geçmek ise 75 puan alıyor. Bu da bir kurtuluş garantisi değil. Aynı sistemde Asyalı dev üreticilerle yarışmak zordu. Korvala o yolu seçseydi ne olurdu, kimse bilmiyor. Buradaki 75 "kesin kazanırdın" demek değil, "o günün bilgisiyle daha sağlam bir bahisti" demek. Bu kararın bütün katmanlarını [Korvala'nın platform kararı](/blog/korvala-platform-karari) yazısında açtık.
+Herkesin kullandığı ücretsiz sisteme geçmek ise 75 puan alıyor. Bu da bir kurtuluş garantisi değil. Aynı sistemde çok sayıda büyük ve ucuz üreticiyle yarışmak zordu. Korvala o yolu seçseydi ne olurdu, kimse bilmiyor. Buradaki 75 "kesin kazanırdın" demek değil, "o günün bilgisiyle daha sağlam bir bahisti" demek. Bu kararın bütün katmanlarını [Korvala'nın platform kararı](/blog/korvala-platform-karari) yazısında açtık.
 
 Kötü bir sonuçtan sonra iki tuzak bekler. Birincisi, kararı verdiren mantığı da sonuçla birlikte çöpe atmak. İkincisi, "bu kadar emek verdik" deyip yanlış yolda inatla devam etmek. İkincisinin adı [batık maliyet yanılgısı](/blog/batik-maliyet-yanilgisi) ve ona ayrı bir yazı ayırdık.
 
@@ -75,7 +75,7 @@ Deniz notuna bakıyor. Karar, o gün bilinenle doğruydu. Yağmurun yağmaması 
 
 ## WishCEO'da neden kararları puanlıyoruz?
 
-WishCEO'da her dosyada dört seçenek, her seçeneğin de bir puanı var. Kararını verdikten sonra gerçek CEO'nun ne yaptığını, şirkete sonra ne olduğunu ve bu bilgilerin hangi kaynaklardan geldiğini görüyorsun. Yani kararını gerçekte olanla yan yana koyuyorsun. Ama puanın, gerçek CEO'yla aynı şeyi seçip seçmediğine göre belirlenmiyor.
+WishCEO'da her dosyada dört seçenek, her seçeneğin de bir puanı var. Kararını verdikten sonra gerçek CEO'nun ne yaptığını ve şirkete sonra ne olduğunu görüyorsun. Yani kararını gerçekte olanla yan yana koyuyorsun. Ama puanın, gerçek CEO'yla aynı şeyi seçip seçmediğine göre belirlenmiyor.
 
 Puanı verirken iki şeye bakıyoruz: o dönemde ne biliniyordu ve sonra ne oldu. Sonuç bir kontrol aracı, tek başına hâkim değil. Bu yüzden gerçek CEO'nun seçimi her zaman en yüksek puanı almıyor. Korvala dosyasında A'yı seçersen ekranda "Gerçek CEO'dan 40 puan iyi" yazısını görürsün. Bu, Stoddard'ın kötü bir yönetici olduğu anlamına gelmiyor. O gün verilmiş bir kararın, o günün bilgisiyle zayıf kaldığı anlamına geliyor.
 

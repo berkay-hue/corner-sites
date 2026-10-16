@@ -96,6 +96,28 @@ function cleanLinks(md, cfg, index) {
   return { md: out, links: kept };
 }
 
+// Tüketici sitesi (WishCEO) içerik bekçisi: prompt'a rağmen ölüm/felaket dili, dış link ya da kaynak bölümü
+// gelirse yazı bir kez yeniden yazılır, yine gelirse yayımlanmaz. Yanlış alarm seçimleri:
+// - \b Türkçe harflerde çalışmaz; önünde harf olmayan kökler aranır ((?<!\p{L}), u bayrağı). Böylece "bölüm",
+//   "gölge", "çöl" gibi içinde "öl"/"ölü" geçen kelimeler yakalanmaz.
+// - "öl" kökü "ölç" ile devam ediyorsa atlanır: "ölçü", "ölçek", "ölçüt", "ölçmek" serbest.
+// - Bilerek katı: "öldürücü rekabet", "ölü yatırım", "ölü stok", "zehir gibi" deyimleri de yakalanır (prompt da yasaklıyor).
+// - Yaralanma ve şiddet kelimeleri yalnız prompt'ta: "yara" kökü "yarar", "yaratmak" ile çakışıyor.
+// - "kaynak" kelimesinin kendisi serbest ("kaynakları sınırlı"); yalnız tek başına başlık/etiket olan
+//   "Kaynaklar", "Kaynakça", "Kaynak:" satırları yakalanır.
+const FATAL_RE = /(?<!\p{L})(?:öl(?!ç)\p{L}*|can(?:ını|larını)?\s+kayb\p{L}*|(?:hayat|yaşam)(?:ını|larını)\s+(?:kaybet|yitir)\p{L}*|zehir\p{L}*|siyanür\p{L}*|intihar\p{L}*|cinayet\p{L}*|cenaze\p{L}*|vefat\p{L}*|katil\p{L}*|katlet\p{L}*|katledil\p{L}*|katliam\p{L}*|suikast\p{L}*|death|died|dead|killed|suicide|poison\p{L}*|cyanide|murder\p{L}*)(?!\p{L})/gu;
+const SOURCE_RE = /^[ \t]*(?:#{1,6}[ \t]*|[-*+>][ \t]+|\d+\.[ \t]+)?\**(?:kaynaklar|kaynakça|kaynak|referanslar|ileri okuma|sources|references|further reading)\**[ \t]*(?::.*|\**[ \t]*)$/gmu;
+export function consumerIssues(md, siteUrl = "") {
+  const host = siteUrl ? new URL(siteUrl).host.replace(/^www\./, "").replace(/\./g, "\\.") : null;
+  const text = (host ? md.replace(new RegExp(`https?://(?:www\\.)?${host}`, "gi"), "") : md).toLocaleLowerCase("tr");
+  const hits = new Set();
+  for (const m of text.matchAll(FATAL_RE)) hits.add(`yasak ifade "${m[0]}"`);
+  for (const m of text.matchAll(/https?:\/\/[^\s)\]]+|(?<![\p{L}\d])www\.[^\s)\]]+/gu)) hits.add(`dış link ${m[0]}`);
+  for (const m of text.matchAll(/\]\((?![\/#)])([^)\s]*)\)/g)) hits.add(`dış link ${m[1]}`);
+  for (const m of text.matchAll(SOURCE_RE)) hits.add(`kaynak bölümü "${m[0].trim()}"`);
+  return [...hits];
+}
+
 async function pickTopic(env, cfg, index) {
   const cats = cfg.categories;
   const counts = Object.fromEntries(cats.map(c => [c, 0]));
@@ -109,6 +131,8 @@ Konu türleri: bir karar verme kavramı ya da bilişsel yanılgı, kriz anında 
 Kategoriler: ${cats.join(", ")}
 Mevcut kategori dağılımı: ${JSON.stringify(counts)} (az işlenen kategoriye öncelik ver)
 Konu, merak eden bir okurun Google'da arayacağı bir soruya cevap versin. Gerçek şirket ya da kişi adı, yatırım, borsa, sağlık ya da hukuk tavsiyesi konusu SEÇME.
+Ölüm, yaralanma, zehirlenme, intihar, şiddet ya da can kaybı olan felaket ve kazalarla ilgili konu SEÇME; başlıkta ve açıklamada bu kelimeler (deyim olarak bile) geçmesin. Krizler yalnızca ticari olsun: ürün hatası, geri çağırma, rekabet, para, itibar.
+Gerçek bir kitaba, rapora, araştırmaya ya da gerçek bir kişinin sözüne dayanan konu SEÇME.
 
 Sitedeki mevcut yazılar (bunları ya da çok benzerlerini TEKRARLAMA):
 ${titles || "- (yok)"}
@@ -138,8 +162,14 @@ Sitedeki mevcut yazılar (bunları ya da çok benzerlerini TEKRARLAMA):
 ${titles || "- (yok)"}
 
 Yalnızca şu JSON'u döndür: {"topic": "Türkçe başlık, en fazla 60 karakter", "category": "kategorilerden biri", "slug": "basliktan-kisa-slug", "description": "Türkçe meta açıklama, 140-155 karakter, tam cümle", "imageQuery": "konuyu anlatan 2-4 kelimelik İngilizce stok fotoğraf araması (somut sahne: ofis, ekip, ekran, toplantı; kelime oyunu yok)"}`;
-  const t = await claude(env, cfg.topicModel, prompt, { json: true, maxTokens: 4096 });
+  const pick = () => claude(env, cfg.topicModel, prompt, { json: true, maxTokens: 4096 });
+  // Tüketici sitesi: başlık ve açıklama da içerik bekçisinden geçer; uymazsa bir kez yeniden seçtir, yine uymazsa yayımlama.
+  const issues = t => consumer(cfg) ? consumerIssues(`${t.topic || ""}\n${t.description || ""}`) : [];
+  let t = await pick();
+  if (issues(t).length) t = await pick();
   if (!t.topic) throw new Error("Konu üretilemedi: " + JSON.stringify(t));
+  const bad = issues(t);
+  if (bad.length) throw new Error(`Konu içerik kuralına uymuyor, yayımlanmadı: ${bad.join("; ")}`);
   if (!cats.includes(t.category)) t.category = cats[0];
   return t;
 }
@@ -163,8 +193,10 @@ ${pages}
 
 Kurallar:
 - Türkçe, okura "sen" diye hitap eden sade bir dil, 900-1400 kelime. Klişe ve dolgu cümle yok ("günümüzün hızla değişen dünyasında", "sonuç olarak şunu söyleyebiliriz" gibi).
-- Örnekler yalnızca KURGUSAL şirket ve kişilerle anlatılsın. Gerçek şirket, marka, kişi adı ya da gerçeğini çağrıştıran benzer ad KULLANMA.
-- Uydurma istatistik, araştırma, alıntı ya da kaynak verme. Kavramları genel ifadelerle anlat.
+- Örnekler yalnızca KURGUSAL şirket, kişi ve ürün adlarıyla anlatılsın. Gerçek şirket, marka, ürün ya da kişi adı, ya da gerçeğini çağrıştıran benzer ad KULLANMA.
+- Ölüm, yaralanma, zehirlenme, intihar, şiddet ya da can kaybı olan felaket ve kazaları ANLATMA; örnek, benzetme ya da arka plan olarak bile anma. "Öldürücü rekabet", "ölü yatırım" gibi deyimleri de KULLANMA. Krizler yalnızca ticari olsun: ürün hatası, geri çağırma, rekabet, para, itibar.
+- Kaynak, kitap, rapor, makale, araştırma ya da gerçek bir kişiden alıntı VERME; gerçek bir kişinin sözünü, notunu ya da mektubunu kurgusal bir karaktere de söyletme. "Kaynaklar" bölümü ekleme, dış siteye link verme. Uydurma istatistik de verme; kavramları genel ifadelerle anlat.
+- Rakamlar yaklaşık olsun ("birkaç milyon", "satışların yarısı kadar"); kesin tarih yerine on yıl kullan ("1990'larda", "2010'ların başında").
 - Yatırım, borsa, finans, sağlık ya da hukuk tavsiyesi verme.
 - Markdown: ara başlıklar "## " ve gerekirse "### ", düz listeler "- " veya "1. ", vurgu **kalın**. Tablo, HTML ve iç içe liste KULLANMA. Alıntı gerekirse tek satır "> ".
 - Başlığı (H1) YAZMA; doğrudan 1-2 paragraflık bir girişle başla. "Giriş:", "Bölüm 1:" gibi iskelet etiketleri KULLANMA.
@@ -240,18 +272,26 @@ Kurallar:
 - Yalnızca konu prospecting, B2B iletişim verisi, lead listesi ya da outbound e-posta ile ilgiliyse Apollo.io referans linkini doğal bir metinle EN FAZLA BİR KEZ ver (ör. [Apollo.io](${APOLLO})). Aksi halde hiç anma.
 - Bu listelerde olmayan hiçbir URL'ye link verme.
 - Yalnızca makale metnini döndür.`;
-  const write = async () => {
-    const md = (await claude(env, cfg.writeModel, prompt, { maxTokens: 16000 }))
+  const write = async (extra = "") => {
+    const md = (await claude(env, cfg.writeModel, prompt + extra, { maxTokens: 16000 }))
       .replace(/^```(?:markdown)?\s*|\s*```$/g, "").replace(/^#\s+.*\n+/, "").trim();
     if (md.split(/\s+/).length < (en || consumer(cfg) ? 700 : 800)) throw new Error(`Makale çok kısa (${md.split(/\s+/).length} kelime)`);
     return md;
   };
   // SSS bölümü FAQPage JSON-LD'nin kaynağı (SEO+GEO); eksik gelirse bir kez yeniden yazdır, yine eksikse yayımlama.
+  // Tüketici sitesinde içerik bekçisi (consumerIssues) de aynı kuralla çalışır: ihlal varsa aynı tek yeniden yazımda
+  // düzeltilir, yine varsa yayımlanmaz. B2B sitelerde issues hep boş, akış eskisiyle aynı.
   const minFaq = consumer(cfg) ? 2 : 3;
+  const issues = md => consumer(cfg) ? consumerIssues(md, cfg.siteUrl) : [];
   let md = await write();
-  if (faqItems(md).length < minFaq) md = await write();
+  let bad = issues(md);
+  if (faqItems(md).length < minFaq || bad.length) {
+    md = await write(bad.length ? `\n\nÖnceki taslak içerik kurallarına uymadı (${bad.join("; ")}). Bu ifadeleri, konuları ve linkleri hiç kullanmadan baştan yaz.` : "");
+    bad = issues(md);
+  }
   const n = faqItems(md).length;
   if (n < minFaq) throw new Error(`SSS bölümü eksik (${n} soru, en az ${minFaq})`);
+  if (bad.length) throw new Error(`İçerik kuralı ihlali, yayımlanmadı: ${bad.join("; ")}`);
   return cleanLinks(md, cfg, index);
 }
 

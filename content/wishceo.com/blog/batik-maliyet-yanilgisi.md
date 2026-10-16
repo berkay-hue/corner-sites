@@ -63,9 +63,9 @@ Batık maliyet üç ayrı biçimde karşına çıkar ve her birine ayrı bakmak 
 
 ## Oyundan bir örnek: Tumla Group
 
-Oyunun 001 sayısındaki ikinci dosya, Tumla Group, bu yanılgıyı düşünmek için iyi bir masa. Tumla 1932'de kurulmuş, yetmiş yılı aşkın bir aile şirketi. Son on yılda markasını her yere taşımış: tema parkları, giyim, takı, video oyunları, bir televizyon dizisi. Yeni setler yalnızca bir kez kullanılan özel parçalarla dolu. Satışlar düşüyor, şirket zarar ediyor, kasadaki para hızla eriyor. Aile de otuzlu yaşlarındaki eski bir danışmanı CEO yapıyor. O kişi sensin.
+Oyundaki dosyalardan biri, Tumla Group, bu yanılgıyı düşünmek için iyi bir masa. Tumla 1930'larda kurulmuş, yetmiş yılı aşkın bir aile şirketi. Son on yılda markasını her yere taşımış: tema parkları, giyim, takı, video oyunları, bir televizyon dizisi. Yeni setler yalnızca bir kez kullanılan özel parçalarla dolu. Satışlar düşüyor, şirket zarar ediyor, kasadaki para hızla eriyor. Aile de otuzlu yaşlarındaki eski bir danışmanı CEO yapıyor. O kişi sensin.
 
-Bu masada batık maliyetin sesi her köşeden gelir. Dört tema parkı kurulmuş. Her yeni ürün hattının arkasında bir ekip, bir sözleşme, bir lansman var. Her biri için birileri "buna çok emek verdik" diyecek. Bir kısmı haklı da olacak, çünkü emek gerçekten verilmiş.
+Bu masada batık maliyetin sesi her köşeden gelir. Birkaç tema parkı kurulmuş. Her yeni ürün hattının arkasında bir ekip, bir sözleşme, bir lansman var. Her biri için birileri "buna çok emek verdik" diyecek. Bir kısmı haklı da olacak, çünkü emek gerçekten verilmiş.
 
 Ama burada sorman gereken şey o emeğin ne kadar büyük olduğu değil. Asıl soru şu: Bu şirketi bugün sıfırdan kursaydın, bu işlerden hangilerine yeniden girerdin?
 
