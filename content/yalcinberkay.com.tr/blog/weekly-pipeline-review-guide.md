@@ -8,6 +8,8 @@ image: "https://images.pexels.com/photos/8424512/pexels-photo-8424512.jpeg?auto=
 imageAlt: "How to Run a Weekly Pipeline Review That Works"
 ---
 
+A weekly pipeline review works when it changes what people do next week. It needs clear stage definitions, a CRM updated before the meeting, a tight agenda, evidence-based questions and written commitments that carry into the following week. Keep it separate from your forecast call and deal coaching, and give the most airtime to the deals that matter most.
+
 Most sales teams hold a weekly pipeline review. Few get much out of it. The usual version is a status meeting: reps read deal names from the CRM, the manager nods, someone says "they're very interested," and everyone leaves knowing roughly what they knew an hour earlier. The forecast slips anyway. The same deals sit in "Proposal Sent" for six weeks. Reps start treating the meeting as an interrogation to survive.
 
 I've run pipeline reviews as a founder, as a sales leader, and with outbound teams across several markets. My conclusion is simple: a pipeline review works when it changes what people do next week. If it doesn't produce specific actions on specific deals, it's theater. Below is the format I use, the preparation it needs, the questions that matter, and the mistakes I've made along the way.

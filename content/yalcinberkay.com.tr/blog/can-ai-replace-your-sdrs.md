@@ -8,6 +8,8 @@ image: "https://images.pexels.com/photos/17485350/pexels-photo-17485350.jpeg?aut
 imageAlt: "Can AI Replace Your SDRs? A Practical Answer"
 ---
 
+Can AI replace your SDRs? Not completely, and not yet. AI can take over a large share of SDR tasks, such as research, enrichment, first drafts and inbox management. But starting conversations with strangers, earning their trust and spotting real opportunities is still human work. Let AI handle the repetitive work and reinvest the saved time in conversations.
+
 Every few weeks a founder asks me some version of the same question: "Should I still hire SDRs, or can AI do the job now?" Usually they've just seen a demo where an AI agent researches a prospect, writes a personalized email, and books a meeting without a human touching anything. It looks magical, and if you're watching your burn rate, it's tempting to conclude that the SDR role is finished.
 
 My answer is more nuanced, and I think more useful. After years of building outbound teams and watching AI tools move from novelty to daily infrastructure, my view is this: **AI can replace a large share of SDR tasks, but it cannot yet replace the SDR function.** The companies that get this right aren't choosing between humans and machines. They're redesigning the role so that each does what it's actually good at. Let me walk you through how I think about it, with concrete steps you can apply this quarter.

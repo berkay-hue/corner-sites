@@ -8,6 +8,8 @@ image: "https://images.pexels.com/photos/8730986/pexels-photo-8730986.jpeg?auto=
 imageAlt: "B2B Satış Döngüsü Nasıl Kısaltılır? 7 Pratik Yöntem"
 ---
 
+B2B satış döngüsünü kısaltmak için müşterinin yavaşlığına değil, satış sürecindeki belirsizliklere odaklanın. Doğru müşteriyle konuşun, karar vericileri erkenden masaya getirin, her adımı ortak bir plana bağlayın, satın alma sürtünmesini önceden kaldırın, güveni içerikle hızlandırın, darboğazları veriyle bulun ve aciliyeti statükonun maliyetiyle yaratın. Bu yedi yöntem birlikte uygulandığında döngü kısalır.
+
 B2B satışta en sık duyduğum şikâyetlerden biri şu: "Fırsat iyiydi, müşteri ilgiliydi ama karar bir türlü çıkmadı." Aylarca süren toplantılar, "bütçe dönemini bekleyelim" cevapları ve bir anda sessizliğe gömülen e-posta zincirleri tanıdık geliyorsa yalnız değilsiniz. Uzun satış döngüsü yalnızca sabrı tüketmez. Nakit akışını bozar, tahmin doğruluğunu düşürür ve satış ekibinin aynı anda taşıyabileceği fırsat sayısını sınırlar. 90 günde kapanabilecek bir anlaşmanın 180 güne yayılması, ekibin o yıl taşıyabileceği fırsat sayısını fiilen yarıya indirmek demektir.
 
 İşin iyi tarafı, satış döngüsünün büyük kısmı kader değildir. Döngüyü uzatan şeylerin çoğu, satış ekibinin kontrol edebileceği alanlardan çıkar: yanlış müşteriyle konuşmak, karar vericiye geç ulaşmak, bir sonraki adımı belirsiz bırakmak, satın alma sürecindeki bürokrasiyi önceden görmemek. Bu yazıda yıllar içinde sahada denediğim, işe yaradığını gördüğüm 7 pratik yöntemi adım adım anlatacağım.
