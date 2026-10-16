@@ -17,7 +17,7 @@ Bu döngü tanıdık geliyorsa yalnız değilsiniz. Ve bu döngünün dışına 
 
 Outsource satış tam olarak budur. Ve doğru yapıldığında şirketlerin büyüme hızını kökten değiştirebilir.
 
-**Neden bu kadar az konuşuluyor?**
+## Neden bu kadar az konuşuluyor?
 
 Outsource satış Türkiye'de hâlâ yeterince anlaşılmamış bir modeldir.
 
@@ -25,7 +25,7 @@ Outsource satış Türkiye'de hâlâ yeterince anlaşılmamış bir modeldir.
 
 Bu kaygıların bir kısmı meşrudur. Ama büyük çoğunluğu outsource satışın ne olduğunu değil, kötü yapıldığında ne olduğunu tarif eder. Doğru kurgulandığında outsource satış bu kaygıların hiçbirini doğrulamaz.
 
-**İçeride kurmak göründüğünden zordur**
+## İçeride kurmak göründüğünden zordur
 
 Sıfırdan bir satış operasyonu kurmak tek bir eleman almaktan ibaret değildir.
 
@@ -33,7 +33,7 @@ ICP tanımlanmalıdır. Mesajlar yazılmalı ve test edilmelidir. Araçlar seçi
 
 Bu hem zaman hem de uzmanlık gerektirir. Çoğu şirket bu sürecin ne kadar enerji tükettiğini ancak içinde kaybolunca anlar. Ve o noktada hem operasyonu hem de kaybedilen zamanı telafi etmek zorunda kalır.
 
-**Outsource satışın gerçek değeri hızda gizlidir**
+## Outsource satışın gerçek değeri hızda gizlidir
 
 Dışarıdan çalışılan bir satış operasyonu sıfırdan başlamaz.
 
@@ -41,7 +41,7 @@ Sistem kurulmuştur. Araçlar entegre edilmiştir. Süreçler test edilmiştir. 
 
 Bu birikim yeni bir müşteriyle çalışmaya başlandığında devreye girer. İçeride kurulması aylar alacak bir yapı çok daha kısa sürede işler hale gelir. Ve bu hız özellikle büyüme baskısı altındaki şirketler için kritik bir avantajdır.
 
-**Sabit maliyet değil, esnek yapı**
+## Sabit maliyet değil, esnek yapı
 
 Tam zamanlı satış personeli sabit bir maliyet yaratır.
 
@@ -51,7 +51,7 @@ Outsource modeli bu riski azaltır. Büyüme hedefine göre ölçeklenir. İhtiy
 
 Bu esneklik özellikle belirsiz büyüme aşamalarında son derece değerlidir.
 
-**Her şirket için değil, doğru aşamadaki şirket için**
+## Her şirket için değil, doğru aşamadaki şirket için
 
 Outsource satış her şirkete uygun değildir ve bunu söylemek gerekir.
 
@@ -61,7 +61,7 @@ Ama ürün netleşmiş, hedef kitle tanımlanmış ve artık ölçekleme zamanı
 
 Doğru model doğru zamanda seçildiğinde işe yarar.
 
-**Kontrol kaybı değil, odak kazanımı**
+## Kontrol kaybı değil, odak kazanımı
 
 Outsource satışa en çok yöneltilen itiraz kontroldür.
 
@@ -71,10 +71,28 @@ Outsource satışa en çok yöneltilen itiraz kontroldür.
 
 Bu bir kontrol kaybı değil, odak kazanımıdır.
 
-**Sonuç odaklı çalışmak ilişkiyi dönüştürür**
+## Sonuç odaklı çalışmak ilişkiyi dönüştürür
 
 İçerideki bir satışçı işe alındığında sonuç gelmese de maaş ödenir.
 
 Outsource modelde ise ilişki sonuca bağlıdır. Hedefler netleştirilir, metrikler belirlenir ve performans sürekli ölçülür. Bu yapı her iki tarafı da doğru hedeflere kilitler.
 
 Sonuç odaklı çalışmak sadece bir ödeme modeli değildir. Aynı zamanda ilişkinin kalitesini de belirler. Her iki taraf da ne için orada olduğunu bilir. Ve bu netlik belirsizlikten çok daha üretken bir ortam yaratır.
+
+## Sık sorulan sorular
+
+### Satış operasyonunu şirket içinde sıfırdan kurmak neden zordur?
+
+Sıfırdan bir satış operasyonu kurmak tek bir eleman almaktan ibaret değildir. ICP tanımlanmalı, mesajlar yazılıp test edilmeli, araçlar seçilip entegre edilmeli, süreçler dokümante edilmeli ve ekip yönetilmelidir. Tüm bunların şirketin asıl işine devam ederken paralel yürütülmesi gerektiği için süreç hem zaman hem de uzmanlık ister.
+
+### Outsource satış şirkete nasıl hız ve esneklik kazandırır?
+
+Dışarıdan çalışılan bir satış operasyonu sıfırdan başlamaz; sistem kurulmuş, araçlar entegre edilmiş, hangi mesajların hangi sektörde işe yaradığı bilinmektedir. Bu sayede içeride aylar sürecek bir yapı çok daha kısa sürede işler hale gelir. Ayrıca tam zamanlı satış personelinin yarattığı sabit maliyetin aksine, outsource model büyüme hedefine göre genişler ve strateji değiştiğinde adapte olur.
+
+### Hangi şirketler için outsource satış uygun değildir?
+
+Ürün henüz netleşmemişse, pazar uyumu test ediliyorsa ve satış sürecinin bizzat içinde olunması gerekiyorsa dışarıdan bir operasyon kurmak erkendir, çünkü bu aşamada öğrenmenin içeride kalması gerekir. Ürün netleşmiş, hedef kitle tanımlanmış ve ölçekleme zamanı gelmişse ise dışarıdan çalışmak hız, verimlilik ve maliyet açısından güçlü bir avantaj sunar. Yani doğru model ancak doğru zamanda seçildiğinde işe yarar.
+
+### Satışı dışarıya verince kontrol kaybedilir mi?
+
+Kontrol kaygısı anlaşılırdır, ancak haftalık raporlar, düzenli toplantılar, açık iletişim ve net hedeflerle kurulan şeffaf bir yapı bu endişeyi büyük ölçüde giderir. Üstelik her şeyi içeride tutmaya çalışmak ürün geliştirme, müşteri deneyimi ve stratejik kararlar gibi alanlarda kontrol kaybına yol açabilir. Satış operasyonunu doğru ellere bırakmak, şirketin en önemli işlerine odaklanmasını sağlar.

@@ -17,7 +17,7 @@ Mesaj değişmemiştir. Kişi değişmemiştir. Ürün değişmemiştir. Sadece 
 
 Satışta zamanlama bu kadar belirleyicidir. Ve çoğu şirket bunu sistematik olarak yönetmek yerine şansa bırakır.
 
-**Hazır olmayan biri en iyi teklife bile hayır der**
+## Hazır olmayan biri en iyi teklife bile hayır der
 
 Satın alma kararları bir anda verilmez.
 
@@ -27,7 +27,7 @@ Bu aşamaların hangisinde karşılaştığınız, ne kadar iyi bir satışçı 
 
 Asıl marifet o kişi hazır hale geldiğinde orada olmaktır.
 
-**Tetikleyici anlar gerçektir ve takip edilebilir**
+## Tetikleyici anlar gerçektir ve takip edilebilir
 
 B2B satışta zamanlamayı şansa bırakmak zorunda değilsiniz.
 
@@ -37,7 +37,7 @@ Bunların hepsi birer tetikleyicidir. Ve her tetikleyici o kişinin dünyasında
 
 Bu sinyalleri takip eden ve doğru anda doğru mesajla ortaya çıkan şirketler, zamanlama avantajını rakiplerine bırakmak zorunda kalmaz.
 
-**Çok erken gitmek de kaybettirir**
+## Çok erken gitmek de kaybettirir
 
 Zamanlama sadece geç kalmakla ilgili değildir. Çok erken gitmek de aynı şekilde sonuçsuz kalır.
 
@@ -45,7 +45,7 @@ Bütçe henüz onaylanmamış, ihtiyaç netleşmemiş, karar verici sürece dahi
 
 İyi bir satış süreci müşteriyi kovalamaz. Müşterinin olgunlaşma sürecini okur ve doğru ana kadar ilişkiyi sıcak tutar.
 
-**Takip etmemek zamanlamayı tamamen şansa bırakmaktır**
+## Takip etmemek zamanlamayı tamamen şansa bırakmaktır
 
 Çoğu satış fırsatı ilk temastan değil, beşinci ya da altıncı temastan doğar.
 
@@ -53,7 +53,7 @@ Bir kişi ilk mesajda yanıt vermemiş olabilir. Meşguldü, gündem doluydu, o 
 
 Takip sistematik olmak zorundadır. Her temas bir öncekinin üzerine bir şeyler katar, değer ekler, hatırlatır. Takip etmek ısrar etmek değildir. Doğru anda hazır olmaktır.
 
-**Bütçe döngüleri ve karar süreçleri bir takvime bağlıdır**
+## Bütçe döngüleri ve karar süreçleri bir takvime bağlıdır
 
 Kurumsal dünyada kararlar kendiliğinden gelmez, bir takvime göre gelir.
 
@@ -61,10 +61,28 @@ Bütçe döneminin kapanmak üzere olduğu bir anda yeni bir harcama kararı alm
 
 Bu döngüleri bilerek hareket eden şirketler, aynı enerjiyle çok daha fazla kapı açar. Çünkü rüzgara karşı değil, rüzgarla birlikte yürürler.
 
-**Zamanlama bir şans değil, bir sistem meselesidir**
+## Zamanlama bir şans değil, bir sistem meselesidir
 
 Doğru zamanda doğru yerde olmak tesadüf değildir.
 
 Tetikleyicileri izleyen bir sistem, müşteri adaylarını olgunluk aşamasına göre segmentleyen bir yaklaşım, takibi disiplinli yürüten bir operasyon ve pazar dinamiklerini okuyan bir strateji bir araya geldiğinde zamanlama şans olmaktan çıkar.
 
 Rakiplerinizin çoğu hâlâ zamanlamayı şansa bırakıyor. Bu sizin için bir avantajdır. Ama ancak bu sistemi kurarsanız.
+
+## Sık sorulan sorular
+
+### B2B satışta tetikleyici anlar nelerdir?
+
+Müşteri adayının şirketinin büyüme turunu kapatması, yeni bir yönetici işe alması, yeni bir ofis açması ya da sektöründe bir regülasyonun değişmesi birer tetikleyicidir. Bu anlar o kişinin dünyasında bir şeylerin değiştiğine ve yeni kararların gündemde olduğuna işaret eder. Bu sinyalleri takip edip doğru anda doğru mesajla ortaya çıkan şirketler zamanlama avantajını rakiplerine bırakmaz.
+
+### Müşteri adayına çok erken ulaşmanın sakıncası nedir?
+
+Bütçe onaylanmamış, ihtiyaç netleşmemiş ve karar verici sürece dahil olmamışken yapılan en güçlü sunum bile sonuçsuz kalır. Üstelik erken gitmek, şirketin hazır değilken üstüne gelindiği hissini yaratarak sonraki temasları da gölgeleyebilir. İyi bir satış süreci müşteriyi kovalamaz, olgunlaşma sürecini okur ve doğru ana kadar ilişkiyi sıcak tutar.
+
+### Bütçe döngüleri satış zamanlamasını nasıl etkiler?
+
+Kurumsal dünyada kararlar bir takvime göre gelir. Bütçe döneminin kapanmak üzere olduğu anlarda yeni harcama kararı almak zorlaşırken, mali yıl başlangıçları ve yeni bir yöneticinin göreve başladığı ilk aylar değişime en açık dönemlerdir. Bu döngüleri bilerek hareket etmek, aynı enerjiyle çok daha fazla kapı açmayı sağlar.
+
+### Satışta takip neden zamanlamanın bir parçasıdır?
+
+Çoğu satış fırsatı ilk temastan değil, sonraki temaslardan doğar; ilk mesaja yanıt vermeyen biri birkaç hafta sonra tam da o sorunu yaşamaya başlamış olabilir. O süreçte orada olmazsanız başka biri olur. Sistematik bir takip her temasta değer ekler ve ısrar etmek değil, doğru anda hazır olmak anlamına gelir.

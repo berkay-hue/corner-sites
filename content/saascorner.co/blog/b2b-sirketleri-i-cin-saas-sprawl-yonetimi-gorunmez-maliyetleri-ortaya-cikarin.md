@@ -66,3 +66,21 @@ Eksiksiz bir envanter oluşturduktan sonraki adım, bu listeyi analiz ederek ras
 ## Sonuç
 
 SaaS Sprawl, modern B2B şirketleri için kaçınılmaz gibi görünen ancak yönetilebilir bir zorluktur. Onu görmezden gelmek, bütçeni, güvenliğini ve verimliliğini yavaş yavaş tüketen sessiz bir tehdidi beslemek demektir. Ancak proaktif bir SaaS Sprawl Yönetimi stratejisi benimseyerek bu kaosu bir fırsata dönüştürebilirsin. Şirketindeki tüm yazılımları keşfederek, gereksiz olanları rasyonelleştirerek ve harcamalarını optimize ederek sadece maliyetlerini düşürmekle kalmaz, aynı zamanda daha güvenli, daha entegre ve daha verimli bir çalışma ortamı yaratırsın. Unutma, kontrolü geri almak, tek bir adımla başlar. Şirketinin yazılım envanterini çıkarmak için bugün ilk adımı at ve görünmez maliyetleri gün yüzüne çıkararak operasyonel mükemmelliğe giden yolu aç.
+
+## Sık sorulan sorular
+
+### SaaS Sprawl B2B şirketlerinde neden bu kadar yaygın?
+
+SaaS ürünlerini satın almak ve kullanmaya başlamak son derece kolaydır; bir çalışan şirket kredi kartıyla dakikalar içinde yeni bir araca abone olabilir ve bu durum gölge BT'yi körükler. Ayrıca her departman kendi iş akışını en iyi destekleyeceğini düşündüğü aracı seçme eğilimindedir. Bunun sonucunda aynı işlevi gören birden fazla uygulama şirket içinde aynı anda kullanılmaya başlar.
+
+### Kontrolsüz SaaS kullanımı hangi görünmez maliyetleri doğurur?
+
+En büyük kalem, satın alınmış ancak hiç kullanılmayan veya çok az kullanılan atıl lisanslardır; işten ayrılan bir çalışanın aboneliğinin yenilenmeye devam etmesi buna örnektir. Unutulan ya da artık ihtiyaç duyulmayan hizmetlerin otomatik yenilenen abonelikleri de fark edilmeden bütçede delik açar. Bunlara ek olarak BT'nin haberi olmadan kullanılan uygulamalar güvenlik açıkları ve KVKK ile GDPR gibi düzenlemelere uyumsuzluk riski yaratır.
+
+### Şirkette kullanılan tüm SaaS uygulamaları nasıl tespit edilir?
+
+İlk adım, finans departmanıyla birlikte gider raporlarını ve kredi kartı ekstrelerini inceleyerek yinelenen yazılım ödemelerini bulmaktır. Ardından tek oturum açma sistemlerinin kayıtlarından çalışanların hangi uygulamalara giriş yaptığını görebilirsin. Kişisel kartla alınan veya ücretsiz planla kullanılan uygulamaları da yakalamak için ağ trafiğini analiz eden SaaS yönetim platformlarından yararlanabilir, her uygulamanın maliyetini, sahibini, kullanıcı sayısını ve yenileme tarihini envantere eklemelisin.
+
+### SaaS envanteri çıkarıldıktan sonra maliyetler nasıl optimize edilir?
+
+Önce işlevsel olarak örtüşen uygulamaları belirleyip hangisinin kalacağına karar vermelisin; örneğin hem Slack hem Microsoft Teams kullanılıyorsa kullanıcı memnuniyeti anketleri bu kararda yardımcı olur. Ardından kullanım oranlarını analiz ederek atıl lisansları tespit edip lisans sayısını düşürebilirsin. Son olarak kalan uygulamalar için tedarikçilerle daha uzun süreli sözleşme gibi seçeneklerle daha iyi koşullar için pazarlık yapabilirsin.
