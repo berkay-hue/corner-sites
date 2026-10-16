@@ -89,6 +89,8 @@ a{color:inherit;text-underline-offset:3px}
 .rail-card .btn{width:100%}
 
 .post-body{max-width:38em;font-size:18px;line-height:1.72;color:var(--ink2)}
+.post-cover{max-width:38em;margin:0 0 clamp(28px,4vw,40px);border:1px solid var(--rule2);background:var(--card)}
+.post-cover img{display:block;width:100%;height:auto;aspect-ratio:1200/630}
 .post-body.sk-post>:first-child{margin-top:0}
 .post-body.sk-post p{margin:0 0 1.1em}
 .post-body.sk-post h2{margin:1.9em 0 .55em;font:600 clamp(24px,2.6vw,30px)/1.2 var(--serif);letter-spacing:-.015em;color:var(--ink);font-variation-settings:"opsz" 72}
@@ -175,6 +177,7 @@ a{color:inherit;text-underline-offset:3px}
           </div>
         </aside>
         <div>
+          <figure class="post-cover" data-framer-name="Banner"><img src="/og.png" alt="" width="1200" height="630" decoding="async"></figure>
           <div class="post-body" data-framer-name="Content"><p>İçerik</p></div>
           <div class="post-next" data-framer-name="Next"><span class="lbl">Sonraki yazı</span> <a href="./sonraki">Sonraki</a></div>
         </div>

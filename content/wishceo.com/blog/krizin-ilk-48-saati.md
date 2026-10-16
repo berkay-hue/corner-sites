@@ -4,7 +4,7 @@ description: "Rafta zehir var, bilgi eksik, zaman dar. Soranol vakasından krizi
 date: "2026-10-15"
 category: "Kriz Liderliği"
 image: "/og.png"
-imageAlt: "WishCEO kapak kartı “Şirket batıyor. CEO sensin.”: rafta zehir bulunan ağrı kesici Soranol krizinin ilk saatleri"
+imageAlt: "WishCEO kapak kartı “Şirket batıyor. CEO sensin.” — Soranol krizinin ilk 48 saati yazısı"
 ---
 
 Krizin ilk 48 saatinde bilgi eksikken iyi karar, "Yanılırsam ne olur?" diye sorup geri dönüşü olmayan zararı önleyen adımı önce atmaktır. Kriz ilk geldiğinde elinde neredeyse hiçbir şey olmaz. Telefon susmaz, herkes senden bir cevap bekler ve o cevabın dayanacağı bilgilerin yarısı henüz ortada yoktur. Beklersen zaman kaybedersin. Acele edersen yanlış adım atabilirsin. İlk 48 saati zor yapan şey tam olarak bu.
