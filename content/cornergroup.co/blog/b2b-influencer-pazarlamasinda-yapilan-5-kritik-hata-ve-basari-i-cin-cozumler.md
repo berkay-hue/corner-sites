@@ -86,3 +86,21 @@ Büyüme Motoru Olarak Stratejik Influencer Pazarlaması B2B influencer pazarlam
 Corner Group olarak bizim yaklaşımımız ise onu, büyüme motorunun ayrılmaz bir dişlisi olarak konumlandırmaktır. Başarı, Brand Corner'ın doğru stratejiyi ve doğru ortakları belirlemesiyle başlar. Social Media Corner'ın bu stratejiyi hedef kitlenin olduğu platformlarda hayata geçirmesiyle devam eder. SAAS Corner'ın bu etkileşimleri nitelikli müşteri adaylarına dönüştürecek mekanizmaları kurmasıyla somutlaşır. Sales Corner'ın bu adayları satış sürecine dahil edecek otomasyonları ve içerikleri sağlamasıyla hızlanır. Ve tüm bu sürecin merkezinde, CRM Corner'ın kurduğu teknolojik altyapı sayesinde her adımın ölçülüp, optimize edilmesiyle sürdürülebilir hale gelir.
 
 Gerçek başarı, bir influencer kampanyası yürütmek değil, farklı uzmanlıkların bir orkestra şefi gibi uyum içinde çalıştığı, ölçülebilir ve ölçeklenebilir bir sistem inşa etmektir. Bu, sadece marka bilinirliği değil, somut gelir yaratan bir yaklaşımdır. İşte bu, Corner Group'un holding perspektifiyle sunduğu bütünsel büyüme stratejisinin ta kendisidir.
+
+## Sık sorulan sorular
+
+### B2B influencer seçerken takipçi sayısı neden yanıltıcıdır?
+
+Takipçi sayısı yalnızca erişimin potansiyelini gösterir; iş sonucunu belirleyen ise kitlenin kalitesi ve alaka düzeyidir. B2B'de satın alma kararı birden çok paydaşın dahil olduğu, ortalama 6 ila 10 ay süren rasyonel bir süreçtir. Bu nedenle on binlerce genel takipçisi olan bir "guru" yerine, kitlesi tamamen hedef rollerdeki yöneticilerden oluşan niş bir uzman çok daha değerlidir.
+
+### B2B influencer kampanyalarının başarısı hangi metriklerle ölçülmeli?
+
+Başarı, erişim veya etkileşim yerine webinar kayıt oranı, demo talep sayısı ve whitepaper indirme sayısı gibi somut aksiyon metrikleriyle ölçülmelidir. Her influencer için özel bir landing page ve takip kodu oluşturmak, hangi uzmanın ne kadar ve ne kalitede potansiyel müşteri getirdiğini gösterir. CRM'e özel kaynak etiketiyle giren lead'lerin fırsata ve kapanan anlaşmaya dönüşümü izlendiğinde gösteriş metrikleri yerini gelir metriklerine bırakır.
+
+### Influencer ile tek seferlik kampanya yerine uzun vadeli ortaklık neden daha etkilidir?
+
+Uzun vadeli ortaklık, uzmanın mesajını "reklam" olmaktan çıkarıp "tavsiye" ve "onay" statüsüne taşır. Tek seferlik bir gönderi hedef kitlenin zihninde reklam olarak kodlanıp hızla unutulurken, aynı uzmanın farklı formatlarda ve zamanlarda tutarlı biçimde bir çözümden bahsetmesi kalıcı güven oluşturur. Örneğin 6 aylık bir içerik ortaklığı; webinar, blog yazıları, LinkedIn canlı soru-cevap etkinlikleri ve ortak bir e-kitabı kapsayabilir.
+
+### Influencer pazarlamasının ROI'si nasıl hesaplanır?
+
+ROI, her influencer, içerik ve platform için benzersiz UTM kodlarıyla lead'leri CRM'e etiketleyip satış hunisindeki her adımı kapanan anlaşmaya kadar takip ederek hesaplanır. Bir kampanya panosu, hangi influencer'ın ne kadar pipeline yarattığını ve ne kadarını gerçek gelire dönüştürdüğünü gösterir. Müşteri yolculuğu doğrusal olmadığı için çoklu dokunuşlu atıf modelleri, influencer'ın tüm kazanım sürecine yaptığı katkıyı daha adil ölçer.
