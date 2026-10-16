@@ -79,7 +79,7 @@ En büyük kalem, satın alınmış ancak hiç kullanılmayan veya çok az kulla
 
 ### Şirkette kullanılan tüm SaaS uygulamaları nasıl tespit edilir?
 
-İlk adım, finans departmanıyla birlikte gider raporlarını ve kredi kartı ekstrelerini inceleyerek yinelenen yazılım ödemelerini bulmaktır. Ardından tek oturum açma sistemlerinin kayıtlarından çalışanların hangi uygulamalara giriş yaptığını görebilirsin. Kişisel kartla alınan veya ücretsiz planla kullanılan uygulamaları da yakalamak için ağ trafiğini analiz eden SaaS yönetim platformlarından yararlanabilir, her uygulamanın maliyetini, sahibini, kullanıcı sayısını ve yenileme tarihini envantere eklemelisin.
+İlk adım, finans departmanıyla birlikte gider raporlarını ve kredi kartı ekstrelerini inceleyerek yinelenen yazılım ödemelerini bulmaktır. Ardından tek oturum açma sistemlerinin kayıtlarından çalışanların hangi uygulamalara giriş yaptığını görebilirsin. Kişisel kartla alınan veya ücretsiz planla kullanılan uygulamaları da yakalamak için ağ trafiğini analiz eden SaaS yönetim platformlarından yararlanabilirsin. Her uygulamanın maliyetini, sahibini, kullanıcı sayısını ve yenileme tarihini envantere eklemelisin.
 
 ### SaaS envanteri çıkarıldıktan sonra maliyetler nasıl optimize edilir?
 

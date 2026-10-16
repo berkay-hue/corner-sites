@@ -73,7 +73,7 @@ SaaS'ta ölçeklenebilir kültür oluşturmak, büyüme yolculuğundaki en önem
 
 ### Şirket değerleri günlük davranışlara nasıl dönüştürülür?
 
-Değerler, günlük hayatta hangi davranışlara karşılık geldiği tanımlanmadıkça boş birer slogandan ibaret kalır. Örneğin şeffaflık, toplantı notlarını herkesin erişebileceği bir alanda paylaşmak veya kötü haberleri de iyi haberler kadar hızlı ve dürüstçe duyurmak anlamına gelebilir. Kendi değerlerini tanımlarken ekibine bu değeri yaşadığınızı nasıl anlayacağınızı sorabilirsin.
+Değerler, günlük hayatta hangi davranışlara karşılık geldiği tanımlanmadıkça boş birer slogandan ibaret kalır. Örneğin şeffaflık, toplantı notlarını herkesin erişebileceği bir alanda paylaşmak veya kötü haberleri de iyi haberler kadar hızlı ve dürüstçe duyurmak anlamına gelebilir. Kendi değerlerini tanımlarken ekibine "Bu değeri yaşadığımızı nasıl anlarız?" diye sorabilirsin.
 
 ### İşe alımda kültürel uyum nasıl değerlendirilir?
 
@@ -85,4 +85,4 @@ Düzenli tüm ekip toplantıları, bültenler veya kurucunun paylaştığı vide
 
 ### Liderlerin kurum kültüründeki rolü nedir?
 
-Kültür liderlik ekibinin en tepesinden başlar ve aşağı doğru yayılır, bu yüzden kurucular ve yöneticiler yazılı değerlerin canlı birer örneği olmak zorundadır. Çalışanlar liderlerinin ne söylediğinden çok ne yaptığına bakar ve özellikle kriz anlarında verilen tepkiler kültürün gerçek testidir. Üst yönetim olarak düzenli aralıklarla bir araya gelip kararlarınızı şirket değerleri süzgecinden geçirmek kendinizi sorumlu tutmanın etkili bir yoludur.
+Kültür liderlik ekibinin en tepesinden başlar ve aşağı doğru yayılır, bu yüzden kurucular ve yöneticiler yazılı değerlerin canlı birer örneği olmak zorundadır. Çalışanlar liderlerinin ne söylediğinden çok ne yaptığına bakar ve özellikle kriz anlarında verilen tepkiler kültürün gerçek testidir. Yönetim ekibinle düzenli aralıklarla bir araya gelip alınan kararları şirket değerleri süzgecinden geçirmek, liderleri sorumlu tutmanın etkili bir yoludur.

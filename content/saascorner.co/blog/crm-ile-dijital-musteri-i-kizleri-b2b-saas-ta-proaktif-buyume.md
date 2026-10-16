@@ -77,7 +77,7 @@ Demografik ve firmografik veriler müşterinin genel profilini çizerken, aramal
 
 ### Dijital müşteri ikizleri churn riskini nasıl önceden gösterir?
 
-Her müşterinin dijital ikizi; ürün kullanım sıklığı, özellik benimseme oranı, destek talepleri, fatura ödeme düzeni ve iletişim sıklığından oluşan bir sağlık puanıyla ilişkilendirilebilir. Bu puan belirgin şekilde düştüğünde sistem otomatik bir uyarı tetikler ve müşteri başarı ekibi sorunun ne olduğunu anlamak için harekete geçer. Geleneksel bakışla sorunsuz görünen sessiz bir müşteri bile bu sayede ayrılma kararı almadan önce fark edilebilir.
+Her müşterinin dijital ikizi; ürün kullanım sıklığı, özellik benimseme oranı, destek talepleri, fatura ödeme düzeni ve iletişim sıklığından oluşan bir sağlık puanıyla ilişkilendirilebilir. Bu puan belirgin şekilde düştüğünde sistem otomatik bir uyarı tetikleyebilir ve müşteri başarı ekibi sorunun ne olduğunu anlamak için harekete geçer. Geleneksel bakışla sorunsuz görünen sessiz bir müşteri bile bu sayede ayrılma kararı almadan önce fark edilebilir.
 
 ### Dijital müşteri ikizleri ek satış fırsatlarını nasıl ortaya çıkarır?
 

@@ -85,6 +85,6 @@ ICP, bir müşteri segmentini değil somut bir müşteri portresini tanımlar. M
 
 Yanlış adaylarla dolu bir pipeline, satış ekibinin enerjisini ilerleme şansı olmayan fırsatlara harcamasına ve gerçek fırsatların gözden kaçmasına yol açar. Satış gerçekleşse bile ürüne uymayan müşteri zamanla memnuniyetsiz hale gelir, churn yaşanır ve referans vermediği gibi itibarı da zedeleyebilir. Doğru müşteriyi bulmak ise satıştan sonra da değer üretmeye devam eder.
 
-### ICP ne sıklıkla güncellenmeli?
+### ICP neden ve nasıl güncellenmeli?
 
 ICP bir kez tanımlanıp bırakılacak bir belge değil, canlı bir belge gibi ele alınmalıdır. Pazar değiştikçe, ürün geliştikçe ve rakipler farklılaştıkça bir dönemin en iyi segmenti verimsiz hale gelebilir ya da hiç düşünülmeyen bir segment öne çıkabilir. Bu nedenle kazanılan ve kaybedilen müşteriler düzenli analiz edilmeli; hangi profillerin daha hızlı kapandığı, daha uzun kaldığı ve daha fazla büyüdüğü takip edilmelidir.

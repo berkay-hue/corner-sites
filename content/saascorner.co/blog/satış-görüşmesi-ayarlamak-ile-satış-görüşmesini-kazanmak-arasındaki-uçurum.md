@@ -91,8 +91,8 @@ Görüşme kalitesini artırmak daha az kişiyle çalışmak anlamına gelmez. D
 
 ### Bir satış görüşmesi nasıl sonlandırılmalı?
 
-Düşünüp döneceğiz gibi belirsiz cümlelerle biten görüşmeler çoğunlukla hiçbir şeyle sonuçlanmaz, çünkü belirsizlik hareketi durdurur. İyi bir görüşme sonu tarih, kişi ve eylem içerir; örneğin önümüzdeki Salı teknik ekiple bir demo yapılacağının netleşmesi gibi. Bu netlik hem iki taraf için belirsizliği ortadan kaldırır hem de ciddiyetin bir göstergesidir.
+Görüşme tarih, kişi ve eylem içeren net bir sonraki adımla sonlanmalıdır; örneğin önümüzdeki Salı teknik ekiple bir demo yapılacağının netleşmesi gibi. "Düşünüp döneceğiz" gibi belirsiz cümlelerle biten görüşmeler çoğunlukla hiçbir şeyle sonuçlanmaz, çünkü belirsizlik hareketi durdurur. Bu netlik hem iki taraf için belirsizliği ortadan kaldırır hem de ciddiyetin bir göstergesidir.
 
 ### Satış görüşmesinden sonra gönderilen takip mesajında ne olmalı?
 
-Sadece teşekkür edip sorular için hazır olduğunuzu söyleyen bir mesaj iyi niyetlidir ama işlevsizdir. Takip, görüşmenin bir uzantısı olarak konuşulan bir soruna dair kaynak paylaşmalı, söz verilen bilgiyi iletmeli ya da görüşmede çıkan bir noktayı bir adım ileri taşımalıdır. Böylece hem değer katılır hem de süreç canlı tutulur.
+Takip mesajı görüşmenin bir uzantısı olarak konuşulan bir soruna dair kaynak paylaşmalı, söz verilen bilgiyi iletmeli ya da görüşmede çıkan bir noktayı bir adım ileri taşımalıdır. Böylece hem değer katılır hem de süreç canlı tutulur. Sadece teşekkür edip sorular için hazır olduğunuzu söyleyen bir mesaj ise iyi niyetlidir ama işlevsizdir.

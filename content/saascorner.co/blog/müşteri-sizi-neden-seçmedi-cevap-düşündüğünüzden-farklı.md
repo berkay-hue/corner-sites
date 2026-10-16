@@ -79,9 +79,9 @@ Kaybetmek kaçınılmazdır. Ama kaybederken öğrenmemek bir seçimdir.
 
 Fiyat itirazının arkasında çoğu zaman başka bir şey yatar, çünkü müşteri gerçekten istediği bir şey için fiyat öder. Görüşmenin sonunda duyulan "bu pahalı" cümlesi genellikle bunu neden bu fiyata alması gerektiğinin cevabını bulamadığı anlamına gelir. Bu bir fiyat sorunu değil değer aktarımı sorunudur ve fiyatı düşürmek sorunu çözmez, yalnızca marjı düşürür.
 
-### Müşteri neden daha zayıf bir rakibi tercih eder?
+### Müşteri neden teknik olarak daha iyi olmayan bir rakibi tercih eder?
 
-Rakip çoğu zaman teknik olarak daha iyi ya da daha ucuz değildir, sadece müşteriye daha anlaşılır konuşmuştur. Sektörünü daha iyi anladığını hissettirmiş ve sorununu daha net isimlendirebilmiştir. İnsanlar en iyi ürünü değil kendilerini en iyi anlayan ürünü seçer, çünkü iş dünyasında anlaşılmamak yanlış ürün seçmek kadar risklidir.
+Çünkü o rakip müşteriye daha anlaşılır konuşmuş, sektörünü daha iyi anladığını hissettirmiş ve sorununu daha net isimlendirebilmiştir. İnsanlar en iyi ürünü değil kendilerini en iyi anlayan ürünü seçer. İş dünyasında anlaşılmamak yanlış ürün seçmek kadar riskli olduğu için bu his çoğu zaman teknik üstünlükten ya da fiyattan daha belirleyici olur.
 
 ### B2B satışta gerçek karar vericiye nasıl ulaşılır?
 

@@ -103,7 +103,7 @@ Satış ortakları ürünü kendi müşterilerine doğrudan satarken, tavsiye or
 
 ### Kanal çatışması nedir ve nasıl önlenir?
 
-Kanal çatışması, doğrudan satış ekibinle partnerlerinin aynı potansiyel müşteri için rekabet etmesidir. Bunu önlemek için en baştan hangi müşterilerin self servis kanala, partnerlere veya doğrudan satış ekibine ait olduğunu belirleyen yazılı angajman kuralları koymalısın. Bir anlaşma kayıt sistemiyle, potansiyel müşteriyi sisteme ilk kaydeden tarafın o anlaşmada hak sahibi olmasını da sağlayabilirsin.
+Kanal çatışması, doğrudan satış ekibinle partnerlerinin aynı potansiyel müşteri için rekabet etmesidir. Bunu önlemek için en baştan hangi müşterilerin self-servis kanala, partnerlere veya doğrudan satış ekibine ait olduğunu belirleyen yazılı angajman kuralları koymalısın. Bir anlaşma kayıt sistemiyle, potansiyel müşteriyi sisteme ilk kaydeden tarafın o anlaşmada hak sahibi olmasını da sağlayabilirsin.
 
 ### Partner programının başarısı hangi metriklerle ölçülür?
 
