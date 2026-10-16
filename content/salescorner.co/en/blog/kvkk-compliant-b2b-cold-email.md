@@ -2,11 +2,13 @@
 title: "KVKK-Compliant B2B Cold Email: The Legal Boundaries"
 description: "Learn how B2B cold email can comply with KVKK and Turkish commercial electronic message rules, with examples of legitimate interest and opt-out options."
 date: "2026-10-13"
+updated: "2026-10-16"
 category: "Outbound"
 image: "https://images.pexels.com/photos/1181370/pexels-photo-1181370.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
 imageAlt: "KVKK-Compliant B2B Cold Email: The Legal Boundaries"
 alt: "kvkk-uyumlu-soguk-eposta-yasal-sinirlar"
 ---
+A KVKK-compliant B2B cold email has to satisfy two sets of rules. Turkish commercial electronic message rules don't require prior consent for messages to merchants and tradespeople, but the right to opt out always applies. KVKK requires a legal basis for processing personal data, usually legitimate interest or data made public, and a clear notice in the first email.
 
 For B2B sales teams in Turkey, cold email remains one of the most scalable outbound channels. But the answer to "Am I allowed to email this person?" doesn't come from a single law. It sits across two separate but overlapping regulations: **Law No. 6698 on the Protection of Personal Data (KVKK)** and **Law No. 6563 on the Regulation of Electronic Commerce**, along with the commercial electronic message rules issued under it. Many teams confuse the two. They assume that measures taken for one also satisfy the other, or they operate on half-truths like "B2B doesn't require consent."
 

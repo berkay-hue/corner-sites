@@ -2,12 +2,14 @@
 title: "n8n ile B2B Satış Otomasyonu: Başlangıç Rehberi"
 description: "n8n ile B2B satış süreçlerini nasıl otomatikleştirirsiniz? Lead toplama, CRM senkronizasyonu, takip e-postaları ve AI katmanı için adım adım rehber."
 date: "2026-10-11"
+updated: "2026-10-16"
 category: "Otomasyon"
 image: "https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
 imageAlt: "n8n ile B2B satış otomasyonu"
 ---
+n8n ile B2B satış otomasyonu, satışın etrafındaki tekrar eden işleri iş akışlarına bağlamaktır: lead'i yakalayıp CRM'e yazmak, şirket bilgisini zenginleştirmek, lead'i doğru temsilciye yönlendirmek, takip hatırlatmaları açmak ve raporlamak. Sık tekrar eden, kuralları net ve hata maliyeti düşük bir süreçle başlayıp akışı adım adım genişletmek en güvenli yoldur.
 
-B2B satış ekiplerinin zamanının önemli bir kısmı satışa değil, satışın etrafındaki işlere gidiyor: formdan gelen lead'i CRM'e girmek, şirket bilgisini araştırmak, toplantı öncesi not hazırlamak, takip e-postası göndermeyi hatırlamak, haftalık raporu derlemek. Bu işlerin her biri tek başına küçük. Toplandığında ise satış temsilcisinin haftasının yarısını yiyebiliyor.
+B2B satış ekiplerinin zamanının önemli bir kısmı satışa değil, satışın etrafındaki işlere gidiyor: formdan gelen lead'i CRM'e girmek, şirket bilgisini araştırmak, toplantı öncesi not hazırlamak, takip e-postası göndermeyi hatırlamak, haftalık raporu derlemek. Bu işlerin her biri tek başına küçük. Toplandığında ise satış temsilcisinin haftasının ciddi bir bölümünü yiyebiliyor.
 
 **n8n ile satış otomasyonu**, bu tekrar eden adımları birbirine bağlı iş akışlarına (workflow) dönüştürmek demek. Bu rehberde n8n'in ne olduğunu, satışta hangi süreçlerle başlamanız gerektiğini ve sağlam bir otomasyonun nasıl kurulduğunu adım adım anlatıyoruz.
 
@@ -77,7 +79,7 @@ Yapay zekanın soğuk e-posta yazımında nasıl kullanılacağını ayrıntıl�
 - **Tek dev akış kurmak:** Her şeyi tek bir workflow'a sığdırmak bakımı zorlaştırır. İşleri küçük, tek amaçlı akışlara bölün ve gerektiğinde birbirini çağırmalarını sağlayın.
 - **Ölçmemek:** Otomasyondan önce ve sonra lead'e ilk dönüş süresini, manuel veri girişine harcanan zamanı ve dönüşüm oranını ölçmezseniz kazancı kanıtlayamazsınız.
 
-## Sık Sorulan Sorular
+## Sık sorulan sorular
 
 ### n8n kullanmak için yazılım bilgisi gerekir mi?
 

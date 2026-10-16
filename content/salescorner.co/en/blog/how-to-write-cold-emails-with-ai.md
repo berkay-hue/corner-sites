@@ -2,11 +2,13 @@
 title: "How to Write Cold Emails with AI"
 description: "How to use AI when writing B2B cold emails: personalization, subject lines and follow-up sequences, explained with examples."
 date: "2026-10-10"
+updated: "2026-10-16"
 category: "AI"
 image: "https://images.pexels.com/photos/7971661/pexels-photo-7971661.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
 imageAlt: "How to Write Cold Emails with AI"
 alt: "yapay-zekayla-soguk-eposta-nasil-yazilir"
 ---
+The right way to write cold emails with AI is to hand over the execution, not the strategy. First choose the right segment, clean and enrich your list, and write the core message yourself; then use a well-built prompt to scale personalization. Generate subject lines and follow-up sequences the same way, and review the output with sample checks.
 
 Cold email is still one of the most scalable channels in B2B sales. Yet most sales teams run into the same problem: either they send the same template to hundreds of people and settle for a low reply rate, or they personalize every email by hand and manage only a few dozen messages a day. AI is a powerful tool for solving this dilemma. Used poorly, though, it just produces generic messages that are "obviously written by AI" faster than ever.
 

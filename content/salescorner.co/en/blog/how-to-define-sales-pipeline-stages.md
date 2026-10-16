@@ -2,11 +2,13 @@
 title: "How to Define Sales Pipeline Stages: Examples"
 description: "Learn how to define B2B sales pipeline stages, set clear exit criteria for each stage, and avoid common mistakes, with practical examples."
 date: "2026-10-12"
+updated: "2026-10-16"
 category: "Pipeline"
 image: "https://images.pexels.com/photos/8555771/pexels-photo-8555771.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
 imageAlt: "How to Define Sales Pipeline Stages: Examples"
 alt: "satis-pipeline-asamalari-nasil-tanimlanir"
 ---
+Define sales pipeline stages around verifiable steps the buyer takes in their purchasing journey, not around what the seller does. Each stage needs entry and exit criteria, an owner, a close probability and a maximum time in stage. For most B2B teams, five to seven stages, excluding Won and Lost, are enough.
 
 Open the CRM of almost any B2B sales team and you'll see the same picture: vague stages like "Contacted," "Interested," "Hot," and "Proposal to be sent," with hundreds of opportunities that have been sitting in the same column for months. The sales manager asks for a forecast in the weekly meeting, and reps answer, "It looks like it'll close this month." The problem usually isn't the team. It's that **the pipeline stages were never clearly defined**.
 

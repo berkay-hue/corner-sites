@@ -2,11 +2,13 @@
 title: "How to Do B2B Lead Scoring: A Step-by-Step Model"
 description: "How to build a B2B lead scoring model? A practical guide for sales teams in Türkiye, with scoring criteria, a sample table and CRM implementation steps."
 date: "2026-10-14"
+updated: "2026-10-16"
 category: "Lead Generation"
 image: "https://images.pexels.com/photos/7876672/pexels-photo-7876672.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
 imageAlt: "How to Do B2B Lead Scoring: A Step-by-Step Model"
 alt: "b2b-lead-scoring-nasil-yapilir"
 ---
+B2B lead scoring works by giving every lead two separate scores: a fit score that shows how well it matches your company (industry, company size, job title) and an engagement score that shows how close it is to buying (email replies, site visits, demo requests). Thresholds group the scores, your CRM automates them, and real results keep them calibrated.
 
 Most B2B sales teams face the same problem: there are hundreds of leads in the pipeline, but sales reps only have so many hours in a day. Who gets a call back first? Which lead should be re-engaged a week from now? Which one should be dropped from the list entirely? When these decisions are made on gut instinct, the best opportunities go cold and the team spends its energy on people with no intention of buying. **Lead scoring** turns this chaos into systematic prioritization. It gives every lead a score that shows how well it fits your company and how close it is to buying.
 
