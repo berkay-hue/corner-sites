@@ -3,6 +3,7 @@
 import { readFile, writeFile, readdir } from "node:fs/promises";
 import { join, relative } from "node:path";
 import { existsSync } from "node:fs";
+import { createHash } from "node:crypto";
 import { metaDescription } from "./lib/content.mjs";
 
 const host = process.argv[2];
@@ -302,13 +303,31 @@ const RULES = {
   },
 };
 
+// v0/Next istemci bileşenlerinin gövdesi JS chunk'ında: HTML'e eklenen öğe chunk'ta da olmalı, yoksa hydration #418 verir.
+// /_next/static/* immutable önbellekli: yamalı chunk içerik özetli yeni adla yazılır, HTML ve RSC referansları ona çevrilir; eski dosya kalır.
+const CHUNK_PATCHES = {
+  "brandcorner.co": [
+    // e34ca4a footer Company listesine Blog ekledi (6 sayfa); i18n sözlüklerinde footer.blog zaten var
+    { chunk: "fbb4735ac8b2897c", from: '{href:"/press",label:e("footer.press")},', to: '{href:"/press",label:e("footer.press")},{href:"/blog",label:e("footer.blog")},' },
+  ],
+};
+
 const rule = RULES[host];
 if (!rule) { console.error(`kural yok: ${host}`); process.exit(1); }
+const renames = [];
+for (const p of CHUNK_PATCHES[host] || []) {
+  const dir = join(SITE, "_next/static/chunks"), src = await readFile(join(dir, p.chunk + ".js"), "utf8");
+  if (src.split(p.from).length !== 2) throw new Error(`chunk yaması tek eşleşmeli: ${p.chunk}`);
+  const out = src.replace(p.from, p.to), name = createHash("sha256").update(out).digest("hex").slice(0, 16);
+  if (!existsSync(join(dir, name + ".js"))) await writeFile(join(dir, name + ".js"), out);
+  renames.push([`/_next/static/chunks/${p.chunk}.js`, `/_next/static/chunks/${name}.js`]);
+}
 let n = 0;
 for await (const f of walk(SITE)) {
   const page = "/" + relative(SITE, f).replace(/\.html$/, "").replace(/^index$/, "");  // index -> "/"
   const before = await readFile(f, "utf8");
-  const after = rule.fix(before, page);
+  let after = rule.fix(before, page);
+  for (const [a, b] of renames) after = after.replaceAll(a, b);
   if (after !== before) { await writeFile(f, after); n++; }
 }
-console.log(`seo: ${host} ${n} dosya güncellendi`);
+console.log(`seo: ${host} ${n} dosya güncellendi${renames.length ? `, ${renames.length} chunk yamalandı` : ""}`);
