@@ -9,6 +9,8 @@ on:
     inputs:
       host: { description: "Site (örn. cornergroup.co)", required: true, default: "cornergroup.co" }
 concurrency: { group: "blog-deploy-${{ inputs.host || github.ref }}", cancel-in-progress: false }
+# actions: read — son başarılı deploy run'ını bulmak için (aşağıda)
+permissions: { contents: read, actions: read }
 jobs:
   deploy:
     runs-on: ubuntu-24.04
@@ -21,12 +23,15 @@ jobs:
         working-directory: tools
       - name: Değişen siteler
         id: hosts
-        env: { BEFORE: "${{ github.event.before }}" }
+        env: { BEFORE: "${{ github.event.before }}", GH_TOKEN: "${{ github.token }}" }
         run: |
           if [ -n "${{ inputs.host }}" ]; then echo "list=${{ inputs.host }}" >> "$GITHUB_OUTPUT"; exit 0; fi
           # Push birden çok commit getirebilir: aralık before..sha. before sıfırsa (yeni dal) ya da geçmişte yoksa (force push) HEAD~1
           base=HEAD~1
           if [ -n "${BEFORE//0/}" ] && git cat-file -e "$BEFORE^{commit}" 2>/dev/null; then base=$BEFORE; fi
+          # Concurrency bekleyen run'ı iptal edince o push'un siteleri kaybolurdu (bir de başarısız run'lar): son başarılı push deploy'unun sha'sından al
+          last=$(gh run list -R "$GITHUB_REPOSITORY" -w blog-deploy.yml -b main -e push -s success -L 1 --json headSha --jq '.[0].headSha // empty' 2>/dev/null || true)
+          if [ -n "$last" ] && git merge-base --is-ancestor "$last" "$base" 2>/dev/null; then base=$last; fi
           changed=$(git diff --name-only "$base" "$GITHUB_SHA")
           # tools/ ve templates/ build'i etkiler: bütün siteler yeniden yüklenir
           if echo "$changed" | grep -qE '^(tools|templates)/'; then
