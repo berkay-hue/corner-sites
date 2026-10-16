@@ -1,15 +1,14 @@
-// WishCEO tanıtım sayfası: 3 dosyalık oyun, CEO karnesi, paylaşım ve bekleme listesi.
+// WishCEO: sayı sayı CEO oyunu, arşiv, CEO karnesi, paylaşım ve yeni sayı bildirimi.
 // Vakalar kamuya açık kaynaklarda belgelenmiş gerçek olaylardan uyarlanmıştır; şirket, ürün ve kişi adları kurgusaldır, rakamlar yuvarlanmıştır. Kaynaklar her vakanın `sources` alanında.
 (function () {
   "use strict";
 
-  var ISSUE = "001";
   var FORM_END = "https://corner-forms.berkay-999.workers.dev/submit";
-  var KEY = "wishceo.s" + ISSUE;
+  var LIST_KEY = "wishceo.liste";
 
   // tag: karnede CEO tipini belirler (cerrah, kalkan, kumar, kasa)
   // sources: oyuncuya gösterilen kaynaklar; t ve pub Türkçe özet, lang bağlantının dili
-  var CASES = [
+  var S001 = [
     {
       area: "Kriz yönetimi",
       place: ["ABD", " · Ekim 1982"],
@@ -143,6 +142,351 @@
     }
   ];
 
+  var S002 = [
+    {
+      area: "Marka",
+      place: ["ABD", " · Aralık 2009"],
+      company: "Brascina Pizza",
+      title: "Lezzette sonuncu",
+      body: [
+        "Brascina, Amerika’nın 36 milyar dolarlık pizza pazarında ikinci büyük zincir. Dünyada 9.000’e yakın şubesi var, adı hızlı eve teslimatla anılıyor.",
+        "Ama müşteriler pizzanı sevmiyor; internette hamurunu kartona benzetiyorlar. Bir tüketici araştırmasında lezzette sonuncusun, bir çocuk eğlence merkezi zinciriyle aynı sıradasın. Rakipler aynı indirimleri yapıyor, dondurulmuş pizzalar da iyileşiyor. Kâr 2006’dan 2008’e yarıya indi, gelir 2009’da da düşüyor.",
+        "Mutfak ekibi iki yıla yakın süredir yeni bir tarif üzerinde çalışıyor: yeni hamur, yeni sos, yeni peynir. Şirketin ABD işini sen yönetiyorsun. Tarif hazır; şimdi markayı nasıl toparlayacağına karar vermelisin."
+      ],
+      stats: [["Pazardaki yeri", "ABD 2.si"], ["Lezzet anketi", "Sonuncu"], ["Kâr, 2006–2008", "Yarıya indi"]],
+      ask: "Brascina’yı nasıl toparlarsın?",
+      opts: [
+        { k: "A", t: "Fiyatla vur. Durgunlukta insanlar ucuz arıyor; iki pizzaya kalıcı indirim yap, reklam bütçesinin tamamını kampanyaya ver.", s: 20, tag: "kasa",
+          r: "Siparişler kısa süre artar ama rakipler aynı indirimi ertesi hafta yapar. Marj erir, lezzet sorunu yerinde durur." },
+        { k: "B", t: "Yeni tarifi önce birkaç şehirde dene. Sonuç iyiyse yıl içinde ülkeye yay; şube sahiplerine zaman tanı, reklamda yalnızca “yeni tarif” de.", s: 50, tag: "kalkan",
+          r: "Riski küçültürsün, şube sahipleri de rahat eder. Ama sessiz bir değişiklik, yıllardır pizzanı beğenmeyen müşteriyi geri çağırmaya yetmeyebilir." },
+        { k: "C", t: "Yeni tarife bütün ülkede tek seferde geç. Reklamlarda müşterilerin “hamur karton gibi” eleştirilerini kendin göster, beğenmeyene parasını geri ver.", s: 85, tag: "kumar",
+          r: "Kendi ürününü televizyonda kötülemek büyük risk; yeni pizza da beğenilmezse ikinci şansın olmaz. Tutarsa insanlar markana yeniden bakar." },
+        { k: "D", t: "Lezzet tartışmasına girme, gücüne odaklan: menüyü sadeleştir, kârsız ürünleri kes, parayı teslimat hızına ve internetten siparişe yatır.", s: 40, tag: "cerrah",
+          r: "Teslimatta zaten iyisin, internetten sipariş de büyüyor; maliyetler düşer. Ama pizzayı beğenmeyen müşteriyi hızlı teslimat geri getirmez." }
+      ],
+      real: {
+        who: "Owen Ballard",
+        role: "Brascina’nın ABD başkanı, Mart 2010’dan itibaren CEO’su",
+        k: "C",
+        text: [
+          "Aralık 2009 sonunda yeni pizza bütün ABD şubelerindeydi. Belgesel tarzı reklamlarda müşteriler eski hamurun “karton gibi”, sosun “ketçap gibi” olduğunu söylüyor, ardından şefler ve yöneticiler yeni tarifi anlatıyordu. Altı haftalık kampanyaya yaklaşık 75 milyon dolar harcandı; çalışanlar 200.000 saat eğitim aldı, beğenmeyene para iadesi sözü verildi.",
+          "2010’un ilk çeyreğinde ABD’deki mevcut şubelerin satışı %14 arttı. Mart 2010’da CEO olan Ballard, “çok daha iyi bir pizza ve bunu müşterilere anlatırken gösterdiğimiz dürüstlük karşılığını veriyor” dedi.",
+          "Hisse 2010’dan 2017’ye %2.000’den fazla değer kazandı ve büyük teknoloji şirketlerinin hisselerini geride bıraktı. 2017’de Brascina, dünya genelindeki satışlarda eski pazar liderini geçerek en büyük pizza zinciri oldu."
+        ]
+      },
+      sources: [
+        { t: "Zincirin yeni tarifi ve lezzet anketindeki yeri", pub: "NBC News / Reuters", year: "2009", lang: "en",
+          url: "https://www.nbcnews.com/id/wbna34450329" },
+        { t: "“Karton gibi hamur” reklamları ve şirketin durumu", pub: "NBC News / AP", year: "2010", lang: "en",
+          url: "https://www.nbcnews.com/id/wbna34812047" },
+        { t: "İlk çeyrek sonuçları: mevcut şube satışlarında sıçrama", pub: "ABD SEC (8-K)", year: "2010", lang: "en",
+          url: "https://www.sec.gov/Archives/edgar/data/0001286681/000119312510105392/dex991.htm" },
+        { t: "CEO’nun gözünden tarif değişikliği ve kampanya", pub: "AnnArbor.com", year: "2012", lang: "en",
+          url: "https://www.annarbor.com/business-review/patrick-doyle-pizza-relaunch-could-have-been-the-end-of-dominos/" },
+        { t: "Hissenin yedi yıllık yükselişi ve dünya liderliği", pub: "CNBC", year: "2018", lang: "en",
+          url: "https://www.cnbc.com/2018/03/01/no-point-1-pizza-chain-dominos-outperformed-amazon-google-and-apple-stocks.html" }
+      ]
+    },
+    {
+      area: "Fiyatlama",
+      place: ["ABD", " · Temmuz 2011"],
+      company: "Sinevia",
+      title: "İki iş, tek fiyat",
+      body: [
+        "Sinevia, Amerika’da yaklaşık 25 milyon üyesi olan bir film ve dizi kiralama şirketi. Standart pakette üyeler ayda 9,99 dolara internetten sınırsız izliyor, bir yandan da postayla DVD kiralıyor. Bu paketin fiyatı daha geçen kasımda artırılmıştı.",
+        "İnternetten izleme hızla büyüyor: yeni üyelerin dörtte üçe yakını 7,99 dolarlık yalnız internet paketini seçiyor. Stüdyolar ve kanallarla yeni lisans anlaşmaları imzaladın; içerik harcaman yılın ikinci yarısında daha da artacak. DVD gönderimleri büyük olasılıkla zirveyi gördü, yine de disk kataloğun internettekinin beş katı.",
+        "Bir e-ticaret devi ve televizyon kanallarının ortak sitesi de internetten film ve dizi sunuyor. Pakette DVD şu an aylık 2 dolarlık bir ek gibi duruyor. Sinevia’nın CEO’su sensin ve fiyatı yeniden kurman gerekiyor."
+      ],
+      stats: [["ABD’deki üye", "~25 milyon"], ["Paket fiyatı", "9,99 dolar"], ["Yalnız internet seçen", "Yeni üyenin ~%75’i"]],
+      ask: "Fiyatı nasıl kurarsın?",
+      opts: [
+        { k: "A", t: "Paketi şimdi ikiye böl: internet ve DVD ayrı ayrı 7,99 dolar, ikisini isteyen 15,98 öder. Mevcut üyelere eylüle kadar süre tanı, herkesi internete yönlendir.", s: 50, tag: "cerrah",
+          r: "DVD’nin maliyetini artık internet üyeleri taşımaz, yön netleşir. Ama iki hizmeti birlikte kullanan milyonlarca üyenin faturası bir anda %60 artar." },
+        { k: "B", t: "Paketi koru, fiyatı 11,99 dolara çıkar. Mevcut üyeler bir yıl eski fiyattan devam etsin; zammı yeni filmler ve dizilerle birlikte duyur.", s: 75, tag: "kalkan",
+          r: "Zam can sıkar ama yumuşak geçer, sadık üyeni korursun. Gelir artar; DVD’nin yükü ise bir süre daha internet büyümesini yavaşlatır." },
+        { k: "C", t: "Fiyata dokunma, üyeyi ürkütme. Yeni lisans anlaşması imzalama; içerik harcamasını bu yıl sabit tutup kârı koru.", s: 25, tag: "kasa",
+          r: "Üyeler memnun, çeyrek kârlı görünür. Ama rakipler kataloglarını büyütürken sen yerinde sayarsın; internetteki kataloğun eskir." },
+        { k: "D", t: "Saldırıya geç: internet paketini 5,99 dolara indir, borç alıp içerik harcamasını ikiye katla. Pazarı rakiplerden önce kap.", s: 35, tag: "kumar",
+          r: "Üye sayısı hızla artabilir ama gelir düşerken maliyet katlanır. Stüdyolar fiyat artırırsa borçla ayakta kalmaya çalışırsın." }
+      ],
+      real: {
+        who: "Leon Prewitt",
+        role: "Sinevia’nın CEO’su",
+        k: "A",
+        text: [
+          "Prewitt 12 Temmuz 2011’de paketi ikiye böldü: internet ve DVD ayrı ayrı 7,99 dolar. İkisini birlikte kullananın faturası 9,99’dan 15,98 dolara, %60 yükseldi; yeni üyeler için hemen, mevcut üyeler için eylülde. Pek çok üye öfkelendi.",
+          "Eylül ortasında Prewitt değişikliği iyi anlatamadıklarını kabul etti, DVD işini Diskvan adlı ayrı bir markaya taşıyacağını duyurdu. 10 Ekim’de Diskvan açılmadan iptal edildi, zam kaldı. Şirket hissedar mektubunda ayrı fiyatların doğru olduğunu ama “oraya ne kadar hızlı gidileceğini yanlış hesapladıklarını” yazdı.",
+          "Üçüncü çeyrekte ABD’deki üye sayısı yaklaşık 800.000 azalıp 23,8 milyona indi. Temmuz 2011’de 300 dolar civarındaki hisse, bir yıl sonra 54 dolara düştü. Şirket internete yatırıma devam etti; hisse 2013’te yaklaşık %300 yükselip S&P 500’ün en çok kazandıran hissesi oldu."
+        ]
+      },
+      sources: [
+        { t: "Yeni fiyatlar: DVD artık ayrı bir paket", pub: "TechCrunch", year: "2011", lang: "en",
+          url: "https://techcrunch.com/2011/07/12/netflix-dvd-only/" },
+        { t: "İkinci çeyrek hissedar mektubu: yalnız internet paketinin yükselişi", pub: "ABD SEC (8-K)", year: "2011", lang: "en",
+          url: "https://www.sec.gov/Archives/edgar/data/0001065280/000119312511196126/dex991.htm" },
+        { t: "Ayrı DVD markasından vazgeçildi, zam kaldı", pub: "NPR", year: "2011", lang: "en",
+          url: "https://www.npr.org/sections/thetwo-way/2011/10/10/141209082/netflix-kills-qwikster-price-hike-lives-on" },
+        { t: "Üçüncü çeyrek hissedar mektubu: üye kaybı ve özeleştiri", pub: "ABD SEC (8-K)", year: "2011", lang: "en",
+          url: "https://www.sec.gov/Archives/edgar/data/0001065280/000119312511278716/d246709dex991.htm" },
+        { t: "2013’ün en çok kazandıran S&P 500 hisseleri", pub: "Kiplinger", year: "2013", lang: "en",
+          url: "https://www.kiplinger.com/article/investing/t052-c008-s003-best-s-p-500-stocks-of-2013.html" }
+      ]
+    },
+    {
+      area: "Portföy",
+      place: ["ABD", " · 1985"],
+      company: "Brenmark",
+      title: "Fiyat savaşındaki çipçi",
+      body: [
+        "Brenmark on yedi yıl önce kuruldu. İlk büyük başarısı bellek çipleriydi: ürünü pazara ilk süren, işi sıfırdan kuran oydu. Pek çok çalışan belleğe hâlâ duygusal olarak bağlı.",
+        "Şimdi sermayesi güçlü Japon devleri daha ucuz ve daha iyi bellek üretiyor; verimleri yüzde 40’a kadar yüksek. Dolar değer kazandı, fiyat kırma ve damping başladı. Geçen yılın sonunda talep de çöktü: kapasite fazlası var, fiyatlar serbest düşüşte.",
+        "Öte yandan bir zamanlar yan iş olan işlemciler kişisel bilgisayarlarda standart hâline geldi; yeni nesil 32 bitlik B32 yolda. Yönetim bir yıldır karar veremeden dolanıyor. Şirketin başkanı sensin. Kurucu ortak ve CEO Walter Enright’la odada yalnızsınız."
+      ],
+      stats: [["Kuruluş", "1968"], ["Bellek pazar payı (1984)", "%1,3"], ["B32’ye yatırılan", "~100 milyon $"]],
+      ask: "Hangi yola girersin?",
+      opts: [
+        { k: "A", t: "Bellekte kal ve savaş: yeni nesil çiplere rakiplerden fazla yatırım yap, fiyatta geri adım atma.", s: 20, tag: "kumar",
+          r: "Kimliği korursun ama verimde bu kadar gerideyken her yeni nesil daha büyük zarar demek. Bellek savaşı, işlemcilere lazım olan parayı yakar." },
+        { k: "B", t: "Washington’a git: damping şikâyeti aç, koruma iste. Bu arada bir Japon ortakla üretim anlaşması yap, zaman kazan.", s: 40, tag: "kasa",
+          r: "Koruma bir işe yarar: şirket başka bir bellek türünde damping şikâyetini kazandı ve pazar payını korudu. Ama maliyet farkı kapanmaz, karar yalnızca ertelenir." },
+        { k: "C", t: "Kimseyi çıkarma. Herkes maaşından fedakârlık etsin, fabrikalar açık kalsın; pazar düzelince toparlanırız.", s: 30, tag: "kalkan",
+          r: "Ekip ve güven korunur. Ama masraflar 2–3 milyar dolarlık bir şirkete göre kurulu, ciro ise 1–1,5 milyar dolara iniyor; fedakârlık bu farkı kapatmaz." },
+        { k: "D", t: "Bellek savaşından çekil. Fabrikaları kapat, kadroyu küçült; parayı ve en iyi ekipleri işlemcilere ver.", s: 92, tag: "cerrah",
+          r: "Şirketin doğduğu işi bırakırsın, binlerce kişi gider. Ama kalan her kuruş, standardını senin belirlediğin pazara akar." }
+      ],
+      real: {
+        who: "Paul Dressler ve Walter Enright",
+        role: "Brenmark’ın başkanı ve CEO’su",
+        k: "D",
+        text: [
+          "1985 ortasında Dressler, Enright’a sordu: “Biri bizi devralıp kapı dışarı etse, yeni gelen ne yapardı?” Enright’ın yanıtı kısaydı: “Bellek işinden çıkardı.” Dressler bunu kendilerinin yapmasını önerdi. Karar 10 Ekim 1985’te çalışanlara duyuruldu; bir hafta sonra B32 tanıtıldı.",
+          "İki yılda sekiz eski fabrika kapandı, kadro 7.200 kişi azaldı; bu, çalışanların neredeyse üçte biriydi. Şirket 1986’da ağır zarar etti; hissedar mektubu o yılı “şirket tarihinin en zor yılı” diye andı. Üç bellek işinden ikisini bıraktı, programlanabilir bellek çiplerinde kaldı.",
+          "İşlemciler şirketin ana işi oldu. Önceki kuşakta üretim lisansı dağıtıp kendi rakiplerini yaratmışlardı; Dressler’in yeni ilkesi, tek üretici olunabilecek yerlere gitmekti. Şirket kişisel bilgisayar işlemcilerinin hâkimi oldu; yıllar sonra her beş bilgisayardan dördünde onun çipi vardı. Dressler bellekten çıkışı “verdiğimiz en iyi iş kararı” diye andı."
+        ]
+      },
+      sources: [
+        { t: "Kurucu ile başkanın “yeni gelen ne yapardı?” sorusu", pub: "NPR", year: "2012", lang: "en",
+          url: "https://www.npr.org/2012/04/06/150057676/intel-legends-moore-and-grove-making-it-last" },
+        { t: "Bellek savaşından işlemci liderliğine", pub: "SemiWiki", year: "2013", lang: "en",
+          url: "https://semiwiki.com/semiconductor-manufacturers/intel/2948-revisiting-andy-groves-only-the-paranoid-survive/" },
+        { t: "1986 hissedar mektubu: fabrika kapanışları ve yeniden yapılanma", pub: "A Letter a Day", year: "2020", lang: "en",
+          url: "https://aletteraday.substack.com/p/letter-15-intel-1986" },
+        { t: "Bellekten çıkış ve bir hafta sonra gelen yeni işlemci", pub: "The Chip Letter", year: "2024", lang: "en",
+          url: "https://thechipletter.substack.com/p/intels-transformation-20" },
+        { t: "Bellek işinden çıkışlar ve Japon rakiplerin verim üstünlüğü", pub: "TrendForce", year: "2026", lang: "en",
+          url: "https://www.trendforce.com/news/2026/08/21/news-intel-and-memory-a-history-of-exits-and-a-new-bid-to-return/" }
+      ]
+    }
+  ];
+
+  var S003 = [
+    {
+      area: "Finansman",
+      place: ["ABD", " · 2005"],
+      company: "Fennick",
+      title: "Kahramanları başkası için çalışıyor",
+      body: [
+        "Fennick köklü bir çizgi roman şirketi. Dokuz yıl önce iflas başvurusu yaptı, iki yıl süren bir kavgadan sonra ayağa kalkabildi. Bugün parasını karakterlerini film stüdyolarına lisanslayarak kazanıyor.",
+        "Bu lisanslar kırıntı getiriyor. En ünlü kahramanının iki filmi gişe, DVD ve televizyonla yaklaşık 3 milyar dolar kazandı; Fennick’e düşen 62 milyon dolar oldu. En bilinen karakterlerin çoğu zaten başka stüdyoların elinde.",
+        "Stüdyolar hasılatın genellikle yüzde 5’ini ya da daha azını veriyor. Yönetim kurulu temkinli ve tek bir şartı var: şirket kendi kasasından tek kuruş koymayacak. Fennick’in yeni CEO’su sensin."
+      ],
+      stats: [["İki filmin getirisi", "~3 milyar $"], ["Fennick’e düşen", "62 milyon $"], ["Stüdyoların verdiği pay", "%5 ya da altı"]],
+      ask: "Karakterlerini nasıl paraya çevirirsin?",
+      opts: [
+        { k: "A", t: "İkinci planda kalmış 10 karakterin film haklarını teminat ver, yarım milyar dolarlık kredi bul, filmleri kendin yap.", s: 90, tag: "kumar",
+          r: "Kasadan para çıkmaz ama ilk filmler tutmazsa karakterler alacaklılara geçer. Üstelik en ünlü kahramanların bu pakette yok." },
+        { k: "B", t: "Lisansa devam et ama pazarlığı sertleştir: hasılattan daha büyük pay, ürün gelirinde söz hakkı, senaryoda onay.", s: 40, tag: "kasa",
+          r: "Risksiz ve hemen para getirir. Ama ünlü karakterlerin zaten stüdyolardayken pazarlık gücün sınırlı; yüzde 5’in üstüne çıkmak zor." },
+        { k: "C", t: "Filme hiç girme. İflastan yeni çıkan şirketi yeniden riske atma; dergileri ve oyuncak işini büyüt, ekibi koru.", s: 30, tag: "kalkan",
+          r: "Şirket güvende kalır, ekip dağılmaz. Ama karakterlerinin değeri yine başkalarının filmlerinde, başkalarının kasasında büyür." },
+        { k: "D", t: "Kütüphaneyi büyük bir stüdyoya satmak için görüşmelere başla. Değer yüksekken parayı al, riski alıcı taşısın.", s: 15, tag: "cerrah",
+          r: "Hızlı ve temiz bir çıkış. Ama karakterler kendi filmini hiç denemeden el değiştirir; dört yıl sonra şirketin tamamı yaklaşık 4 milyar dolara satıldı." }
+      ],
+      real: {
+        who: "Victor Oakes",
+        role: "Fennick CEO’su",
+        k: "A",
+        text: [
+          "Planı, film biriminin başkanı ve operasyon sorumlusu olarak işe alınan Nathan Ashby hazırladı. Oakes ve yönetim kurulu, şirket tek kuruş koymayacaksa denemesine izin verdi. Son anda banka bütçelerin üçte birini Fennick’in koymasını istedi; şirket beş yabancı pazarın haklarını önceden satarak bu açığı kapattı.",
+          "Eylül 2005’te 525 milyon dolarlık kredi tamamlandı. Kredi rücusuzdu, yani şirketin geri kalanına dokunulamazdı; teminat 10 karakterin sinema haklarıydı. Her biri en fazla 165 milyon dolarlık en çok 10 film çekilebilecekti. İlk dört film tutmazsa kalan altı karakterin hakları alacaklılara geçecekti.",
+          "Zırhlı mucit Quillon’un hakları 2006’da başka bir stüdyodan geri dönünce ilk film için o seçildi. Mayıs 2008’de vizyona giren film dünyada yaklaşık 585 milyon dolar hasılat yaptı. 31 Ağustos 2009’da dünyanın en büyük eğlence şirketlerinden biri Fennick’i yaklaşık 4 milyar dolara satın almak için anlaştı."
+        ]
+      },
+      sources: [
+        { t: "525 milyon dolarlık film finansmanının resmi duyurusu", pub: "ABD SEC (8-K)", year: "2005", lang: "en",
+          url: "https://www.sec.gov/Archives/edgar/data/933730/000111667905002263/ex99-1.htm" },
+        { t: "Kırıntı lisanslardan kendi filmlerine: perde arkası", pub: "Slate", year: "2012", lang: "en",
+          url: "https://slate.com/business/2012/09/marvel-comics-and-the-movies-the-business-story-behind-the-avengers.html" },
+        { t: "Film stüdyosunun kuruluş hikâyesi ve pazarlıkları", pub: "The Hollywood Reporter", year: "2016", lang: "en",
+          url: "https://www.hollywoodreporter.com/movies/movie-features/marvel-studios-origin-secrets-revealed-889795/" },
+        { t: "İflastan kurtuluş ve 2005’teki cesur kredi kararı", pub: "TheWrap", year: "2012", lang: "en",
+          url: "https://www.thewrap.com/how-spider-man-and-his-marvel-super-friends-were-saved-bankruptcy-46456/" },
+        { t: "4 milyar dolarlık satın alma duyurusu", pub: "Alıcı şirketin basın bülteni", year: "2009", lang: "en",
+          url: "https://thewaltdisneycompany.com/press-releases/disney-to-acquire-marvel-entertainment/" }
+      ]
+    },
+    {
+      area: "Kriz yönetimi",
+      place: ["Güney Kore", " · Eylül 2016"],
+      company: "Jinsol Elektronik · Arden Pro",
+      title: "Cepteki kıvılcım",
+      body: [
+        "Arden Pro, Jinsol’un yılın en iddialı telefonu: büyük ekran, kalem, yaklaşık 885 dolarlık fiyat. Satışa çıkalı iki hafta oldu, on pazarda raflarda.",
+        "Sonra haberler geliyor: ısınıp alev alan telefonlar. 1 Eylül itibarıyla 35 vaka bildirildi. İç inceleme sorunu batarya hücresinde görüyor; Çin’de satılan cihazlarda başka bir batarya kullanılıyor.",
+        "Yaklaşık 2,5 milyon cihaz satıldı; bunların bir milyondan fazlası kullanıcıların elinde, gerisi depolarda ve yolda. Oran çok düşük, ama yanan her telefonun fotoğrafı ürünün adıyla dolaşıyor."
+      ],
+      stats: [["Satılan cihaz", "~2,5 milyon"], ["Bildirilen vaka", "35"], ["Satışta", "~2 hafta"]],
+      ask: "Jinsol’un mobil biriminin başındasın. İlk hamlen ne?",
+      opts: [
+        { k: "A", t: "Satışa devam et; servislerde ücretsiz batarya kontrolü yap, sorunlu çıkanları tek tek değiştir.", s: 15, tag: "kasa",
+          r: "Oran düşük diye beklemek ucuz görünür. Ama satış sürerken çıkan her yeni yangın markanın tamamına yazılır ve kararı senin yerine başkaları verir." },
+        { k: "B", t: "Satışı durdur, bütün cihazları geri çağır; müşteriyi bekletmeden birkaç hafta içinde yenisiyle değiştir.", s: 55, tag: "kalkan",
+          r: "Hızlı ve cesur; güven için doğru refleks. Ama değişimi haftalara sığdırmak, kök nedenden emin olmadan yeni cihaz göndermek demekti." },
+        { k: "C", t: "Satışı durdur, bütün cihazları geri çağır; sezon kaçsa da neden doğrulanmadan yeni cihaz gönderme.", s: 75, tag: "cerrah",
+          r: "Sezonu kaybedersin, rakipler boşluğu doldurur. Ama ikinci bir partinin de yanma riskini küçültürsün. Sonradan yapılan bağımsız inceleme iki ayrı batarya kusuru buldu." },
+        { k: "D", t: "Satışı sürdür, yalnızca sorunlu üretim partilerini topla; şarjı yazılım güncellemesiyle sınırla.", s: 20, tag: "kumar",
+          r: "Maliyeti sınırlı tutar, satışı korursun. Ama sorunlu partiden emin değilsen her yeni vaka “neden hepsini toplamadınız?” sorusunu doğurur." }
+      ],
+      real: {
+        who: "Yoon Tae-min",
+        role: "Jinsol’un mobil biriminin başkanı",
+        k: "B",
+        text: [
+          "Yoon 2 Eylül’de satışı durdurdu ve satılmış bütün Arden Pro’ların yenisiyle değiştirileceğini açıkladı. Değişim cihazları kısa sürede müşterilere gönderilmeye başladı.",
+          "Ama değişim cihazlarında da yanma vakaları görüldü. 10 Ekim’de satış ve değişim yeniden durduruldu, ertesi gün üretime tamamen son verildi; kullanıcılara para iadesi ya da başka bir telefon önerildi. Hisse bir günde yaklaşık %8 düştü; geri çağırmanın maliyeti en az 5,3 milyar dolar olarak açıklandı.",
+          "Ocak 2017’de bağımsız laboratuvarlarla yürütülen inceleme, iki ayrı tedarikçinin bataryalarında iki farklı kusur buldu. Satılan ve etkinleştirilen yaklaşık 3 milyon cihazın %96’sı geri dönmüştü. Şirket sekiz adımlı yeni bir batarya güvenlik kontrolü getirdi."
+        ]
+      },
+      sources: [
+        { t: "Şirketin açıklaması: satılan cihazlar yenisiyle değiştirilecek", pub: "Şirketin haber odası", year: "2016", lang: "en",
+          url: "https://news.samsung.com/global/statement-on-galaxy-note7" },
+        { t: "Pil yangınları sonrası küresel geri çağırma", pub: "Daily FT / Reuters", year: "2016", lang: "en",
+          url: "https://www.ft.lk/IT-Telecom-Tech/samsung-recalls-galaxy-note-7-phones-after-battery-fires/50-566134" },
+        { t: "Model tamamen üretimden kaldırıldı", pub: "TechCrunch", year: "2016", lang: "en",
+          url: "https://techcrunch.com/2016/10/11/samsung-kills-the-galaxy-note-7-for-good/" },
+        { t: "Geri çağırmanın maliyeti en az 5,3 milyar dolar", pub: "VOA / AP", year: "2016", lang: "en",
+          url: "https://www.voanews.com/a/samsung-note-7-recall-cost-least-five-point-three-billion/3550593.html" },
+        { t: "Soruşturma: patlamaların nedeni iki tedarikçinin pilleri", pub: "PCWorld", year: "2017", lang: "en",
+          url: "https://www.pcworld.com/article/411785/samsung-blames-batteries-from-two-makers-for-note7-explosions.html" }
+      ]
+    },
+    {
+      area: "Satın alma",
+      place: ["ABD", " · Şubat 2008"],
+      company: "Kestrin",
+      title: "Kapıdaki 44 milyar",
+      body: [
+        "Kestrin internetin en tanınan adlarından biri. Ama çevrim içi reklam parasının büyük kısmı arama liderine akıyor; üç yıl önce senden küçük olan bu rakip artık pazara hükmediyor.",
+        "Son çeyrekte kâr %23 düştü. 1.000’e kadar çalışanı, kadronun yaklaşık %7’sini çıkarmaya hazırlanıyorsun; hisse dört yılı aşkın sürenin en düşük seviyesinde. Şirketin kurucu ortaklarından birisin ve yedi aydır CEO’sun.",
+        "Yazılım devi Brennick 1 Şubat’ta teklifini açıkladı: hisse başı 31 dolar, yarısı nakit yarısı hisse, toplam yaklaşık 44,6 milyar dolar. Bu, bir önceki kapanışın %62 üstü. Ama hissen iki yıl önce 43 doları görmüştü ve bir yıl önce gelen birleşme önerisini zaten geri çevirmiştin."
+      ],
+      stats: [["Teklif", "Hisse başı 31 $"], ["Prim", "%62"], ["Çeyreklik kâr", "−%23"]],
+      ask: "Kestrin’in başındasın. Teklife cevabın ne?",
+      opts: [
+        { k: "A", t: "Kabul et. %62 prim, dört yılın dibindeki hisse için güçlü; ortaklar kazancı bugün cebine koyar.", s: 75, tag: "kasa",
+          r: "Bağımsızlık biter ve bedelin yarısı alıcının hissesine bağlı kalır. Yine de ortaklar için güçlü bir çıkıştı: aynı yılın sonunda hisse 11 doların altındaydı." },
+        { k: "B", t: "Masada kal: rakamın düşük olduğunu söyle, birkaç dolar daha iste ve anlaşmayı hızla bitir.", s: 85, tag: "cerrah",
+          r: "Hem değeri zorlarsın hem anlaşmayı kaçırmazsın. Alıcının fiyatı biraz yükseltmeye hazır olduğu sonradan ortaya çıktı; kilit nokta farkı makul tutmaktı." },
+        { k: "C", t: "Zaman kazan: başka alıcıları masaya çağır, arama lideriyle bir ortaklık seçeneğini de konuş.", s: 45, tag: "kumar",
+          r: "Rakip bir teklif fiyatı yükseltebilir, gelmezse yalnızca zaman kaybedersin. Arama lideriyle ortaklık ise alıcıyı ürkütür ve rekabet soruları doğurur." },
+        { k: "D", t: "Reddet: teklif şirketin değerinin çok altında. Bağımsız kal, kendi dönüşüm planını uygula.", s: 35, tag: "kumar",
+          r: "Kurucunun gözünden anlaşılır: hisse iki yıl önce 43 dolardı. Ama dönüşümün sonuç vermesi yıllar alacaktı ve ne piyasa ne de alıcı o kadar sabırlıydı." }
+      ],
+      real: {
+        who: "Adrian Voss",
+        role: "Kestrin’in kurucu ortağı ve CEO’su",
+        k: "D",
+        text: [
+          "Voss ve yönetim kurulu teklifi Şubat’ta hızla geri çevirdi; onlara göre rakam şirketin değerini yansıtmıyordu. Pazarlık aylarca sürdü. Brennick 33 dolara, yani yaklaşık 5 milyar dolar daha fazlasına çıkmaya hazır olduğunu söyledi; Voss ve diğer kurucu ortak 37 dolar istedi.",
+          "3 Mayıs’ta Brennick teklifini geri çekti. Ertesi işlem gününde Kestrin hissesi %15 düşerek 24 dolar civarına indi. Kestrin, reklam alanının bir kısmını arama liderine bırakan bir anlaşmaya yöneldi; Kasım’da arama lideri bu anlaşmadan çekildi.",
+          "Kasım 2008’de hisse 11 doların altındaydı. Brennick anlaşmasını kapatamadığı için sert eleştirilen Voss, 17 ay sonra CEO’luğu bırakacağını açıkladı."
+        ]
+      },
+      sources: [
+        { t: "Teklifin resmî duyurusu", pub: "Alıcı şirketin basın merkezi", year: "2008", lang: "en",
+          url: "https://news.microsoft.com/2008/02/01/microsoft-proposes-acquisition-of-yahoo-for-31-per-share/" },
+        { t: "Teklif öncesi çeyrek sonuçları ve işten çıkarmalar", pub: "The Honolulu Advertiser / AP", year: "2008", lang: "en",
+          url: "https://honoluluadvertiser.com/article/2008/Jan/30/bz/hawaii801300412.html" },
+        { t: "Alıcının teklifi geri çekme açıklaması", pub: "Alıcı şirketin basın merkezi", year: "2008", lang: "en",
+          url: "https://news.microsoft.com/2008/05/03/microsoft-withdraws-proposal-to-acquire-yahoo/" },
+        { t: "Geri çekilmenin ardından hisse düşüşü", pub: "NBC News / AP", year: "2008", lang: "en",
+          url: "https://www.nbcnews.com/id/wbna24464481" },
+        { t: "CEO’nun görevi bırakması", pub: "Fortune", year: "2008", lang: "en",
+          url: "https://fortune.com/2008/11/18/yahoo-ceo-jerry-yang-to-step-down/" }
+      ]
+    },
+    {
+      area: "Dönüşüm",
+      place: ["Japonya", " · 2004"],
+      company: "Hoshimura",
+      title: "Pazarı eriyen film devi",
+      body: [
+        "Hoshimura yetmiş yıllık bir Japon film devi. Renkli film, fotoğraf kâğıdı, baskı kimyasalları. 2000’de satışların yaklaşık %60’ı, kârın yaklaşık üçte ikisi fotoğraf ürünlerinden geldi. Onlarca yıl tek bir hedef vardı: Amerikalı dev Wexley’i geçmek.",
+        "Sonra dijital fotoğraf makinesi geldi. Dünyada renkli film talebi geriliyor, pazar her yıl biraz daha küçülüyor. Hoshimura da dijital makine satıyor ama pazar kalabalık, rekabet sert. Fabrikalar, fotoğraf laboratuvarları ve dünyaya yayılmış satış ağı hâlâ filme göre kurulu.",
+        "Elinde tıbbi görüntüleme ve matbaa malzemeleri gibi yan işler, üç yıl önce çoğunluk hissesi alınan bir fotokopi ortaklığı ve filmden kalma güçlü bir kimya ve kaplama birikimi var. Şirkete kırk yıl önce girdin; dört yıldır başkansın, geçen yıl CEO oldun. Yönetim kurulu senden bir plan bekliyor."
+      ],
+      stats: [["Kuruluş", "1934"], ["Fotoğrafın satış payı (2000)", "~%60"], ["Fotoğrafın kâr payı (2000)", "~üçte iki"]],
+      ask: "Hoshimura’yı nereye götürürsün?",
+      opts: [
+        { k: "A", t: "Bütün gücü dijitale ver. Filmden gelen parayla dijital fotoğraf makinesi ve baskı hizmetlerinde dünya lideri ol; fotoğraf işi bitmesin, biçim değiştirsin.", s: 35, tag: "kumar",
+          r: "Dijital makine pazarı hızla kalabalıklaştı, büyüme yavaşladı, fiyatlar düştü. Filmin kârını tek başına yerine koyması zordu." },
+        { k: "B", t: "Filmi sonuna kadar sağ. Yeni yatırımı durdur, maliyetleri kıs, nakdi temettüyle hissedarlara dağıt; talep düşse de film daha yıllarca para getirir.", s: 20, tag: "kasa",
+          r: "Bu çeyreği, belki birkaç yılı kurtarır. Ama şirketi her yıl küçülen tek bir işe bağlar; talep eridikçe nakit de erir." },
+        { k: "C", t: "Film tarafını küçült, binlerce kişilik kadroyu ve kapasiteyi kes. Film kimyasını ekran malzemelerine, tıbba ve yarı iletkene taşı; eksikleri satın al.", s: 90, tag: "cerrah",
+          r: "Pahalı ve sancılı: binlerce kişi gider, yüz milyarı aşkın yen yanar. Ama şirketin asıl varlığının film değil, filmin arkasındaki kimya olduğunu gören yol bu." },
+        { k: "D", t: "Kimseyi kapı dışarı etme. Fabrikaları ve çalışanları yeni işlere adım adım kaydır, dönüşümü on yıla yay; çalışanların güveni bozulmasın.", s: 45, tag: "kalkan",
+          r: "İnsana saygılı, güveni korur. Ama film talebi senin takvimini beklemiyor; her geciken yıl zararı büyütür." }
+      ],
+      real: {
+        who: "Masao Hirota",
+        role: "Hoshimura CEO’su",
+        k: "C",
+        text: [
+          "Hirota’nın CEO olarak ilk işi, şirketin hedefini Wexley’i yenmekten filmsiz bir geleceğe hazırlanmaya çevirmek oldu. Şubat 2004’te kuruluşun 75. yılını hedefleyen orta vadeli bir plan hazırladı: yeni büyüme alanları, yönetimin her kademesinde yapısal reform, grup yönetiminin güçlendirilmesi.",
+          "Dijital geçiş beklenenden hızlı gelince asıl ameliyat Ocak 2006’da geldi: fotoğraf bölümünde yaklaşık 5.000 kişilik kesinti, fabrika ve laboratuvarların birleştirilmesi, dijital makine üretiminin Çin’e kayması. Maliyet iki mali yılda yaklaşık 165 milyar yen; ayrılanlara cömert tazminat ödendi.",
+          "Film kimyası LCD ekran malzemelerine, tıbba ve yarı iletkene taşındı. 2007’de kolajen bilgisine dayanan bir cilt bakımı serisi çıktı, 2008’de bir Japon ilaç şirketinin kontrolü alındı. Hirota’nın deyişiyle dönüşüm on yıldan uzun sürdü; Wexley ise 2012’de iflas koruması için başvurdu."
+        ]
+      },
+      sources: [
+        { t: "Film biriminde 5.000 kişilik iş kesintisi", pub: "Photography Blog", year: "2006", lang: "en",
+          url: "https://www.photographyblog.com/news/5000_job_losses_at_fujifilm" },
+        { t: "Şirketi dönüştüren CEO’nun portresi", pub: "Korea JoongAng Daily", year: "2016", lang: "en",
+          url: "https://www.koreajoongangdaily.com/business/innovator-komori-transformed-fujifilm/11729119" },
+        { t: "Krizden inovasyonla çıkış: çekirdek iş yok olurken", pub: "Stone Bridge Press", year: "2015", lang: "en",
+          url: "https://www.stonebridge.com/catalog/innovating-out-of-crisis" },
+        { t: "Şirketin cilt bakımı markası büyümeye hazırlanıyor", pub: "The Daily Star", year: "2013", lang: "en",
+          url: "https://www.thedailystar.net/news/skincare-brand-astalift-poised-for-expansion" },
+        { t: "Grubun tarihçesi", pub: "Şirketin kurumsal sitesi", year: "", lang: "en",
+          url: "https://holdings.fujifilm.com/en/about/history" }
+      ]
+    }
+  ];
+
+  // ---------- sayılar ----------
+  // date: sayının açıldığı gün (Türkiye saati); ileri tarihli sayılar o gün kendiliğinden açılır
+  var ISSUES = [
+    { no: "001", date: "2026-10-15", cases: S001 },
+    { no: "002", date: "2026-10-16", cases: S002 },
+    { no: "003", date: "2026-10-19", cases: S003 }
+  ];
+  function todayTR() {
+    try {
+      var p = {};
+      new Intl.DateTimeFormat("en-US", { timeZone: "Europe/Istanbul", year: "numeric", month: "2-digit", day: "2-digit" })
+        .formatToParts(new Date()).forEach(function (x) { p[x.type] = x.value; });
+      if (p.year && p.month && p.day) return p.year + "-" + p.month + "-" + p.day;
+    } catch (e) { /* eski tarayıcı */ }
+    return new Date(Date.now() + 3 * 36e5).toISOString().slice(0, 10);
+  }
+  var TODAY = todayTR();
+  var RELEASED = ISSUES.filter(function (x) { return x.date <= TODAY; });
+  if (!RELEASED.length) RELEASED = [ISSUES[0]];
+  var CUR = RELEASED[RELEASED.length - 1], LATEST = CUR.no;
+  var qs = /[?&]s=(\d{3})\b/.exec(location.search);
+  if (qs) RELEASED.forEach(function (x) { if (x.no === qs[1]) CUR = x; });
+  var ISSUE = CUR.no, CASES = CUR.cases, KEY = "wishceo.s" + ISSUE;
+
   var TYPES = {
     cerrah: { name: "Cerrah", desc: "Neyin kesileceğini bilirsin. Duygusal bağlara değil, şirketi neyin yaşattığına bakarsın ve zor kararı erken alırsın." },
     kalkan: { name: "Kalkan", desc: "Önce insanlar, sonra rakamlar. Güven bir kez giderse hiçbir bütçenin onu geri getiremeyeceğini bilirsin." },
@@ -152,23 +496,35 @@
   var TAG_ORDER = ["cerrah", "kalkan", "kumar", "kasa"];
 
   // ---------- durum ----------
-  var state = { answers: [null, null, null], cur: 0, joined: false, consent: "" };
+  var state = { answers: CASES.map(function () { return null; }), cur: 0, joined: false, consent: "" };
   function load() {
     try {
       var s = JSON.parse(localStorage.getItem(KEY) || "null");
       if (s && Array.isArray(s.answers) && s.answers.length === CASES.length) {
         state.answers = s.answers.map(function (a, i) { return opt(i, a) ? a : null; });
-        state.joined = !!s.joined;
-        state.consent = typeof s.consent === "string" ? s.consent : "";
       }
     } catch (e) { /* gizli sekme vb. */ }
+    loadList();
     state.cur = firstOpen();
     if (state.cur === -1) state.cur = CASES.length - 1;
   }
   function save() {
-    try { localStorage.setItem(KEY, JSON.stringify({ answers: state.answers, joined: state.joined, consent: state.consent })); } catch (e) { /* yok say */ }
+    try { localStorage.setItem(KEY, JSON.stringify({ answers: state.answers })); } catch (e) { /* yok say */ }
   }
-  function opt(i, k) { return CASES[i].opts.filter(function (o) { return o.k === k; })[0] || null; }
+  // bildirim listesi sayıdan bağımsız; eski "wishceo.s001" kaydındaki onay buraya taşınır
+  function loadList() {
+    try {
+      var l = JSON.parse(localStorage.getItem(LIST_KEY) || "null"), migrate = false;
+      if (!l) { l = JSON.parse(localStorage.getItem("wishceo.s001") || "null"); migrate = !!(l && l.joined); }
+      if (l) { state.joined = !!l.joined; state.consent = typeof l.consent === "string" ? l.consent : ""; }
+      if (migrate) saveList();
+    } catch (e) { /* gizli sekme vb. */ }
+  }
+  function saveList() {
+    try { localStorage.setItem(LIST_KEY, JSON.stringify({ joined: state.joined, consent: state.consent })); } catch (e) { /* yok say */ }
+  }
+  function optOf(c, k) { return c.opts.filter(function (o) { return o.k === k; })[0] || null; }
+  function opt(i, k) { return optOf(CASES[i], k); }
   function firstOpen() { for (var i = 0; i < CASES.length; i++) if (!state.answers[i]) return i; return -1; }
   function done() { return firstOpen() === -1; }
 
@@ -337,9 +693,9 @@
       '<button type="button" class="btn btn-ghost" data-act="reset">Baştan oyna</button>' +
       "</div>" +
       '<p class="share-msg" role="status" aria-live="polite"></p>' +
-      '<a class="report-cta" href="#liste">Yarın yeni dosya gelsin mi? <b>Bekleme listesine yazıl</b> <span aria-hidden="true">↓</span></a>' +
+      '<a class="report-cta" href="#liste">Yeni sayı çıkınca haber verelim mi? <b>Bildirim al</b> <span aria-hidden="true">↓</span></a>' +
       "</div>";
-    var url = site() + "/", text = shareText();
+    var url = site() + "/?s=" + ISSUE, text = shareText();
     $('[data-net="wa"]', elReport).href = "https://wa.me/?text=" + encodeURIComponent(text + "\n" + url);
     $('[data-net="x"]', elReport).href = "https://x.com/intent/post?text=" + encodeURIComponent(text) + "&url=" + encodeURIComponent(url);
     $('[data-net="li"]', elReport).href = "https://www.linkedin.com/sharing/share-offsite/?url=" + encodeURIComponent(url);
@@ -355,7 +711,7 @@
   }
 
   function share() {
-    var text = shareText(), url = site() + "/", msg = $(".share-msg", elReport);
+    var text = shareText(), url = site() + "/?s=" + ISSUE, msg = $(".share-msg", elReport);
     if (navigator.share) {
       navigator.share({ text: text, url: url }).catch(function (e) { if (e && e.name !== "AbortError") copy(text + "\n" + url, msg); });
       return;
@@ -370,7 +726,7 @@
   }
 
   function reset() {
-    state.answers = [null, null, null];
+    state.answers = CASES.map(function () { return null; });
     state.cur = 0;
     save();
     elReport.hidden = true;
@@ -378,7 +734,7 @@
     renderCase(true);
   }
 
-  // ---------- bekleme listesi ----------
+  // ---------- bildirim listesi ----------
   function initWaitlist() {
     var f = $("#wl"), input = $("#wl-email"), ok = $("#wl-ok"), btn = $("button", f), msg = $(".wl-status", f), busy = false;
     var label = btn.textContent;
@@ -392,7 +748,7 @@
       ok.checked = !!state.consent;
       ok.disabled = true;
       ok.closest(".wl-check").hidden = !state.consent;
-      say("Listedesin. WishCEO açıldığında ilk haberi sen alacaksın.", "ok");
+      say("Listedesin. Yeni sayı çıktığında haber vereceğiz.", "ok");
     }
     if (state.joined) joined();
     ok.addEventListener("change", function () { if (ok.checked) ok.removeAttribute("aria-invalid"); });
@@ -409,14 +765,14 @@
       input.removeAttribute("aria-invalid");
       if (!ok.checked) {
         ok.setAttribute("aria-invalid", "true");
-        say("Listeye yazılmak için e-posta onayı kutusunu işaretle.", "err");
+        say("Bildirim almak için e-posta onayı kutusunu işaretle.", "err");
         ok.focus();
         return;
       }
       ok.removeAttribute("aria-invalid");
       var at = new Date().toISOString().slice(0, 16).replace("T", " ") + " UTC";
-      var fields = [["E-posta", email], ["Onay", "evet · tanıtım e-postası (6563 md. 6) · " + at],
-        ["Liste", "WishCEO bekleme listesi · Sayı " + ISSUE]];
+      var fields = [["E-posta", email], ["Onay", "evet · yeni sayı duyurusu e-postası (6563 md. 6) · " + at],
+        ["Liste", "WishCEO yeni sayı bildirimi · Sayı " + ISSUE]];
       if (done()) {
         var r = result();
         fields.push(["CEO tipi", TYPES[r.type].name], ["Puan", r.score + "/100"],
@@ -439,7 +795,7 @@
             if (!res.ok || !j.ok) throw new Error("fail");
           });
         })
-        .then(function () { state.joined = true; state.consent = at; save(); joined(); })
+        .then(function () { state.joined = true; state.consent = at; saveList(); joined(); })
         .catch(function (err) {
           btn.disabled = false;
           btn.textContent = label;
@@ -450,13 +806,66 @@
     });
   }
 
+  // ---------- sayfa: sayı bilgisi ve arşiv ----------
+  var WORDS = ["", "Bir", "İki", "Üç", "Dört", "Beş", "Altı"];
+  var WORDS_LO = ["", "bir", "iki", "üç", "dört", "beş", "altı"];
+  function yearOf(c) { var m = /\d{4}/.exec(c.place[1] || ""); return m ? m[0] : ""; }
+  function fillPage() {
+    var n = CASES.length;
+    Array.prototype.forEach.call(document.querySelectorAll("[data-issue]"), function (el) { el.textContent = "Sayı " + ISSUE; });
+    var intro = $("#oyun-intro");
+    if (intro && WORDS[n]) intro.textContent = WORDS[n] + " şirket, " + WORDS_LO[n] + " kriz. Hangisinde gerçek CEO’dan daha iyi iş çıkarırsın?";
+    var meta = $("#hero-meta");
+    if (meta) meta.textContent = n + " dosya · " + n + " karar · 1 CEO karnesi · Üyelik yok";
+    var idx = $("#index-list");
+    if (idx) idx.innerHTML = CASES.map(function (c, i) {
+      var y = yearOf(c);
+      return '<li><a href="#oyun"><span class="n">' + pad(i + 1) + '</span><span class="t">' + esc(c.title) +
+        '</span><span class="m">' + esc(c.area + " · " + c.place[0] + (y ? ", " + y : "")) + "</span></a></li>";
+    }).join("");
+    var tick = CASES.map(function (c, i) {
+      var y = yearOf(c);
+      return "<span>Dosya " + pad(i + 1) + " · " + esc(c.place[0] + (y ? " " + y : "")) + " · " + esc(c.title) + ' <b class="dn">▼</b></span>';
+    }).join("") + (RELEASED.length > 1 ? '<span>Arşiv · önceki sayılar açık <b class="up">▲</b></span>' : '<span>Yeni sayılar yolda <b class="up">▲</b></span>');
+    Array.prototype.forEach.call(document.querySelectorAll(".ticker-group"), function (g) { g.innerHTML = tick; });
+  }
+  function avgScore(iss) {
+    try {
+      var s = JSON.parse(localStorage.getItem("wishceo.s" + iss.no) || "null");
+      if (!s || !Array.isArray(s.answers) || s.answers.length !== iss.cases.length) return null;
+      var sum = 0;
+      for (var i = 0; i < iss.cases.length; i++) {
+        var o = optOf(iss.cases[i], s.answers[i]);
+        if (!o) return null;
+        sum += o.s;
+      }
+      return Math.round(sum / iss.cases.length);
+    } catch (e) { return null; }
+  }
+  function renderArchive() {
+    var sec = $("#arsiv"), list = $("#arsiv-list");
+    if (!sec || !list) return;
+    var items = RELEASED.filter(function (x) { return x !== CUR; }).reverse();
+    if (!items.length) { sec.hidden = true; return; }
+    list.innerHTML = items.map(function (x) {
+      var sc = avgScore(x);
+      var m = "Sayı " + x.no + (x.no === LATEST ? " · En yeni" : "") + " · " + x.cases.length + " dosya" + (sc === null ? "" : " · Karnen " + sc + "/100");
+      return '<li><a href="/?s=' + x.no + '#oyun"><span class="bl-m">' + esc(m) + '</span><span class="bl-t">' +
+        esc(x.cases.map(function (c) { return c.company; }).join(", ")) + "</span></a></li>";
+    }).join("");
+    sec.hidden = false;
+  }
+
   // ---------- başlat ----------
   function init() {
     elSteps = $("#steps");
     elCase = $("#case");
     elReport = $("#report");
+    if (elSteps) { elSteps.style.setProperty("--n", CASES.length); elSteps.classList.toggle("many", CASES.length > 3); }
     var d = $("#today");
     if (d) try { d.textContent = new Date().toLocaleDateString("tr-TR", { day: "numeric", month: "long", year: "numeric" }); } catch (e) { /* sabit tarih kalsın */ }
+    fillPage();
+    renderArchive();
     load();
     renderCase(false);
     renderReport();
