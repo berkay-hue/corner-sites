@@ -77,11 +77,11 @@ Geleneksel süreçte belgeler ve sorular paydaşlar arasında ayrı e-postalarla
 
 ### Dijital deal odaları satış döngüsünü ne kadar kısaltır?
 
-CSO Insights'a göre satış süreçlerini dijitalleştiren ve alıcı odaklı hale getiren şirketler, satış döngülerini ortalama yüzde 10 ila yüzde 20 arasında kısaltabiliyor. Bu, 90 günlük bir satış döngüsünün 72 güne inmesi anlamına gelir. Hızlanma, paydaşların tek platformda buluşmasından, soruların anında yanıtlanmasından ve onayların daha hızlı ilerlemesinden gelir.
+Satış süreçlerini dijitalleştiren ve alıcı odaklı hale getiren şirketler, satış döngülerini çoğu zaman belirgin biçimde kısaltabiliyor. Hızlanma, paydaşların tek platformda buluşmasından, soruların anında yanıtlanmasından ve onayların daha hızlı ilerlemesinden gelir.
 
 ### Deal odası analitiği satış ekibine hangi içgörüleri sağlar?
 
-Hangi paydaşın ne zaman giriş yaptığını, hangi belgeyi kaç kez indirdiğini, videonun ne kadarını izlediğini ve teklifin hangi bölümlerinde zaman geçirdiğini görürsün. Örneğin finans direktörü fiyatlandırma sayfasında çok zaman geçiriyorsa, bunun onun için öncelikli bir konu olduğunu anlayıp proaktif olarak iletişime geçebilirsin. Aberdeen Group araştırmasına göre bu tür satış analitiği kullanan şirketler teklif kazanma oranlarını yüzde 15'e kadar artırabiliyor.
+Hangi paydaşın ne zaman giriş yaptığını, hangi belgeyi kaç kez indirdiğini, videonun ne kadarını izlediğini ve teklifin hangi bölümlerinde zaman geçirdiğini görürsün. Örneğin finans direktörü fiyatlandırma sayfasında çok zaman geçiriyorsa, bunun onun için öncelikli bir konu olduğunu anlayıp proaktif olarak iletişime geçebilirsin. Bu tür satış analitiğini kullanan ekipler teklif kazanma oranlarını çoğu zaman artırabiliyor.
 
 ### Dijital deal odası platformu seçerken nelere dikkat etmelisin?
 

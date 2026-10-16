@@ -79,7 +79,7 @@ Sonuç olarak, B2B SaaS'ta partnerler, basit bir satış kanalından çok daha f
 
 ### Partnerler müşteri adaptasyonunu nasıl hızlandırır?
 
-Uygulama partnerleri ürünü müşterinin mevcut sistemlerine entegre eder, çalışanlara özel eğitimler verir ve ilk günden doğru kullanımı sağlar. Salesforce ekosistemindeki danışmanlık ve uygulama partnerleri, karmaşık CRM kurulumlarını haftalar içinde tamamlayarak müşterilerin yatırım geri dönüşünü hızlandırır. Bir araştırmaya göre partner destekli başlangıç süreci yaşayan şirketlerin ürünü tam potansiyeliyle kullanma olasılığı yüzde 60 daha fazladır.
+Uygulama partnerleri ürünü müşterinin mevcut sistemlerine entegre eder, çalışanlara özel eğitimler verir ve ilk günden doğru kullanımı sağlar. Salesforce ekosistemindeki danışmanlık ve uygulama partnerleri, karmaşık CRM kurulumlarını haftalar içinde tamamlayarak müşterilerin yatırım geri dönüşünü hızlandırır. Partner destekli bir başlangıç süreci yaşayan şirketlerin ürünü tam potansiyeliyle kullanma olasılığı genellikle daha yüksektir.
 
 ### Müşteri başarısı için hangi partnerlik modelleri kullanılır?
 
@@ -87,7 +87,7 @@ En yaygın iki model teknoloji entegrasyon partnerleri ile çözüm ve danışma
 
 ### Partner kaynaklı gelir ile partner etkili gelir arasındaki fark nedir?
 
-Partner kaynaklı gelir, bir partnerin doğrudan kendi çabasıyla getirdiği yeni müşterilerden elde edilen gelirdir ve takip edilmesi en kolay metriktir. Partner etkili gelir ise partnerin satış sürecinin herhangi bir aşamasında dokunduğu, örneğin bir demo yaptığı veya karar vericiyle toplantı ayarladığı tüm anlaşmaları kapsar. Crossbeam'in analizine göre en hızlı büyüyen SaaS şirketlerinde toplam gelirin yüzde 30'undan fazlası partner kanalından etkilenmektedir.
+Partner kaynaklı gelir, bir partnerin doğrudan kendi çabasıyla getirdiği yeni müşterilerden elde edilen gelirdir ve takip edilmesi en kolay metriktir. Partner etkili gelir ise partnerin satış sürecinin herhangi bir aşamasında dokunduğu, örneğin bir demo yaptığı veya karar vericiyle toplantı ayarladığı tüm anlaşmaları kapsar. Hızlı büyüyen SaaS şirketlerinde toplam gelirin kayda değer bir bölümü partner kanalından etkilenir.
 
 ### Partner kanalından gelen müşterilerin memnuniyetini nasıl ölçersin?
 
