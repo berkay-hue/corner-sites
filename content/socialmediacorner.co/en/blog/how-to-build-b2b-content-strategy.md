@@ -119,7 +119,7 @@ LinkedIn is often the primary channel in B2B for reaching decision-makers. The f
 - **Newsletters and articles:** For deeper analyses.
 - **Events and live streams:** Webinar announcements and live Q&A sessions.
 
-An important note: in B2B, **the company page alone isn't enough.** The personal profiles of founders, sales leaders and technical experts often generate more trust and reach than the company page. Your strategy should also answer the question: "Who will speak, from which account and about what?"
+An important note: in B2B, **the company page alone isn't enough.** The personal profiles of founders, sales leaders and technical experts often generate more trust and reach than the company page. Your strategy should also answer the question: "Who will speak, from which account and about what?" We explain how we plan company pages and personal accounts together for software companies on our [social media management for SaaS companies](/en/industries/saas) page.
 
 ### Instagram: Culture, people and brand perception
 

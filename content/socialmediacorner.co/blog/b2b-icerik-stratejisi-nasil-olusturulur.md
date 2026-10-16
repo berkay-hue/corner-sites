@@ -119,7 +119,7 @@ LinkedIn, karar vericilere ulaşmak için B2B'de çoğu zaman birincil kanaldır
 - **Bülten (newsletter) ve makaleler:** Daha derin analizler için.
 - **Etkinlikler ve canlı yayınlar:** Webinar duyuruları ve canlı soru-cevap oturumları.
 
-Önemli bir not: B2B'de **şirket sayfası tek başına yeterli değildir.** Kurucu, satış yöneticileri ve teknik uzmanların kişisel profilleri çoğu zaman şirket sayfasından daha fazla güven ve erişim sağlar. Stratejinizde "kim, hangi hesaptan, hangi konuda konuşacak?" sorusunu da yanıtlayın.
+Önemli bir not: B2B'de **şirket sayfası tek başına yeterli değildir.** Kurucu, satış yöneticileri ve teknik uzmanların kişisel profilleri çoğu zaman şirket sayfasından daha fazla güven ve erişim sağlar. Stratejinizde "kim, hangi hesaptan, hangi konuda konuşacak?" sorusunu da yanıtlayın. SaaS ve teknoloji şirketlerinde kurumsal sayfa ile kişisel hesapları birlikte nasıl planladığımızı [SaaS şirketleri için sosyal medya yönetimi](/sektor/saas) sayfamızda anlatıyoruz.
 
 ### Instagram: Kültür, insan ve marka algısı
 
