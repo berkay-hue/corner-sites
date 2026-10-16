@@ -50,7 +50,7 @@ Bir dil modeli, elinde yalnızca "Ad, Soyad, Şirket" varsa yapabileceği tek ş
 
 Bu verileri bir tabloda (Google Sheets, Airtable ya da CRM'iniz) her kayıt için ayrı sütunlarda tutun. Sonra yapay zekayı satır bazında çalıştırarak her kayıt için "kişiselleştirme notu" üretebilirsiniz. Örneğin modele şirketin web sitesi metnini ve açık iş ilanlarını verip şunu isteyebilirsiniz: "Bu şirketin satış tarafında şu an yaşıyor olabileceği en olası problemi tek cümleyle yaz."
 
-Bu tür akışları elle kurmak yerine otomatik iş akışlarıyla çalıştırmak, yüzlerce kaydı tutarlı biçimde işlemenin en sağlıklı yoludur. [Sales Corner otomasyonları](/) tam olarak bu noktada devreye girer: veri çekme, zenginleştirme, yapay zekayla kişiselleştirme ve e-posta aracına aktarma adımlarını tek bir akışta birleştirir.
+Bu tür akışları elle kurmak yerine otomatik iş akışlarıyla çalıştırmak, yüzlerce kaydı tutarlı biçimde işlemenin en sağlıklı yoludur. [Sales Corner otomasyonları](/) tam olarak bu noktada devreye girer: veri çekme, zenginleştirme, yapay zekayla kişiselleştirme ve e-posta aracına aktarma adımlarını tek bir akışta birleştirir. Örneğin [Sekans Yazarı aracımız](/sekans-yazari) ürün videonuzdan, PDF'inizden veya web sitenizden çok adımlı bir outreach dizisi çıkarır; hedef şirketlerin sitelerindeki sinyalleri toplu taramak için ise [Web Keyword Scanner](/web-keyword) kullanılabilir.
 
 ## İyi Bir Soğuk E-Posta Promptu Nasıl Kurulur?
 
