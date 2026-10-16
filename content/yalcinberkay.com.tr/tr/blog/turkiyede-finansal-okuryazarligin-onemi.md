@@ -5,7 +5,7 @@ date: "2024-01-31"
 updated: "2026-10-16"
 category: ""
 image: "/_a/fr/images/nqDxF9bRP8rLu1rxrW337jZLd8.jpeg"
-imageAlt: "Türkiye'de Finansal Okuryazarlığın Önemi"
+imageAlt: "İllüstrasyonlu görsel: “Küresel ortalama finansal okuryazarlık puanı 21 üzerinden 13,2”, dünya üzerinde büyüteç, banknot ve madeni para çizimiyle"
 alt: "the-importance-of-financial-literacy-in-turkey"
 ---
 

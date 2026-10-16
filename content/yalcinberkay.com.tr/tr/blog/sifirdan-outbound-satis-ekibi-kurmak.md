@@ -13,7 +13,7 @@ Sıfırdan outbound satış ekibi kurmak için işe alımdan önce outbound'u 6-
 
 Çoğu şirket outbound'da fikir yanlış olduğu için başarısız olmaz. İki satışçı işe alıp ellerine bir dizüstü bilgisayar ve belirsiz bir hedef liste verdikleri, bir ay içinde pipeline oluşmasını bekledikleri için başarısız olurlar. Pipeline oluşmayınca da yönetim "outbound bizde işe yaramıyor" kararına varır. Bu tabloyu defalarca gördüm; Corner Group bünyesinde satış ekipleri kurarken aynı hatanın farklı versiyonlarını kendim de yaptım.
 
-Sıfırdan outbound satış ekibi kurmak, yetenekli insanları işe almaktan çok bu insanların içinde başarılı olabileceği bir sistem kurmakla ilgilidir. Bu sistem; net bir ideal müşteri profili, test edilmiş bir mesaj, temiz veri, tekrarlanabilir bir süreç, gerçekçi kapasite hesabı ve her hafta koçluk yapan bir yönetici içerir. Bu yazıda ele aldığım ICP ve mesaj çalışması, [soğuk e-postada yanıt oranını artırmanın](/blog/soguk-eposta-yanit-orani-nasil-artirilir) da temelidir. Bu yazıda, ilk altı ila on iki ayda en çok önem taşıyan rakamlar ve kararlarla birlikte bu işe adım adım nasıl yaklaştığımı anlatıyorum.
+Sıfırdan outbound satış ekibi kurmak, yetenekli insanları işe almaktan çok bu insanların içinde başarılı olabileceği bir sistem kurmakla ilgilidir. Bu sistem; net bir ideal müşteri profili, test edilmiş bir mesaj, temiz veri, tekrarlanabilir bir süreç, gerçekçi kapasite hesabı ve her hafta koçluk yapan bir yönetici içerir. Buradaki ICP ve mesaj çalışması, [soğuk e-postada yanıt oranını artırmanın](/blog/soguk-eposta-yanit-orani-nasil-artirilir) da temelidir. Bu yazıda, ilk altı ila on iki ayda en çok önem taşıyan rakamlar ve kararlarla birlikte bu işe adım adım nasıl yaklaştığımı anlatıyorum.
 
 ## Önemli Çıkarımlar
 

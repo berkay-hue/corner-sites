@@ -5,7 +5,7 @@ date: "2023-12-27"
 updated: "2026-10-16"
 category: ""
 image: "/_a/fr/images/9wxS1nppeHDlraHjxaqcJWKf6Y.jpeg"
-imageAlt: "From Civil Engineering to Sales: A Journey of Self-Discovery"
+imageAlt: "Illustrated graphic: “Every 3 years, 91% of Millennials leap into new job adventures”, with a sketch of one climber helping another up a slope"
 alt: "insaat-muhendisliginden-satisa-kendini-kesfetme-yolculugu"
 ---
 

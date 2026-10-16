@@ -5,7 +5,7 @@ date: "2024-01-11"
 updated: "2026-10-16"
 category: ""
 image: "/_a/fr/images/anrKOY1RANgRyFfJRJx3prfg4.jpeg"
-imageAlt: "B2B Satın Alma Dijitale Kayıyor!"
+imageAlt: "İllüstrasyonlu görsel: “Son iki yılda dijital B2B talebinde %90 artış”, döngüsel oklarla bağlanmış iki evrak çantası çizimiyle"
 alt: "b2b-buying-shifts-toward-digital"
 ---
 
