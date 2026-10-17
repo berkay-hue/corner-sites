@@ -19,14 +19,12 @@ MAIL_FROM = "form@cornergroup.co"
 RAKIP_START = "https://smcorner.app.n8n.cloud/webhook/rakip-analizi-pro-v5"
 RAKIP_STATUS = "https://smcorner.app.n8n.cloud/webhook/rakip-analizi-status"
 ALLOWED_HOSTS ="saascorner.co,cornergroup.co,socialmediacorner.co,salescorner.co,yalcinberkay.com.tr,brandcorner.co,wishceo.com"
+# brandcorner.co şifre sıfırlama e-postaları (src/smtp.js): bu Google Workspace hesabından Gmail SMTP ile, ücretsiz.
+# Hesabın uygulama şifresi secret olarak girilir: wrangler secret put SMTP_PASS --name corner-forms
+SMTP_USER = "berkay@saascorner.co"
 
 # cornergroup.co'da Email Routing açık, berkay@saascorner.co doğrulanmış hedef adres
 [[send_email]]
 name = "MAIL"
 destination_address = "berkay@saascorner.co"
 
-# brandcorner.co şifre sıfırlama e-postaları (src/platform.js): Cloudflare Email Sending, herhangi bir adrese gider.
-# Önce brandcorner.co Email Service > Email Sending'de onaylanmış olmalı (Workers Paid plan).
-[[send_email]]
-name = "EMAIL"
-allowed_sender_addresses = ["noreply@brandcorner.co"]

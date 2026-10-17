@@ -1,9 +1,11 @@
 #!/bin/bash
 # brandcorner platform API'si için yerel duman testi. Yalnızca wrangler dev'e karşı çalıştırın:
 #   wrangler d1 execute corner-forms --local --file=schema.sql
-#   wrangler dev --local --port 8799 --var DEV_ORIGINS:http://localhost:8788 > /tmp/wd.log 2>&1
-#   MAIL_LOG=/tmp/wd.log bash dev/smoke-platform.sh [http://localhost:8799]
-# MAIL_LOG wrangler dev çıktısının dosyası; verilmezse şifre sıfırlama adımları atlanır. Hız sınırları saatlik:
+#   node dev/fake-smtp.mjs 2525 /tmp/mails > /tmp/smtp.log &
+#   wrangler dev --local --port 8799 --var DEV_ORIGINS:http://localhost:8788 \
+#     --var SMTP_HOST:127.0.0.1 --var SMTP_PORT:2525 --var SMTP_TLS:off --var SMTP_PASS:dev > /tmp/wd.log 2>&1
+#   MAIL_LOG=/tmp/smtp.log bash dev/smoke-platform.sh [http://localhost:8799]
+# MAIL_LOG sahte SMTP sunucusunun çıktısı; verilmezse şifre sıfırlama adımları atlanır. Hız sınırları saatlik:
 # aynı yerel D1'de saatte birden çok çalıştırmak 429 verir (her seferinde --persist-to ile boş bir klasör kullanın).
 # Test hesapları her çalıştırmada rastgele e-posta ve şifreyle yerel D1'e açılır; şifre ekrana yazılmaz.
 set -u
@@ -89,18 +91,18 @@ r=$(curl -s -o /dev/null -w '%{http_code}' -X POST -H 'Origin: https://saascorne
 r=$(curl -s -o /dev/null -w "%{http_code}" -X OPTIONS -H "Origin: $O" -H "Access-Control-Request-Headers: authorization" -D - "$API/app/stats" | tr -d "\r" | grep -ci "^access-control-allow-headers:.*authorization"); check "preflight authorization" 1 "$r"
 r=$(call POST /submit "" '{"page":"/smoke","fields":[["Ad","Duman testi"]]}'); check "eski form /submit" 200 "$r"
 
-# Şifre sıfırlama: yerel wrangler e-postayı göndermez, metnini geçici dosyaya yazıp yolunu loga basar ("Text: <yol>")
+# Şifre sıfırlama: dev/fake-smtp.mjs her e-postayı çözüp geçici dosyaya yazar, yolunu loga basar ("Text: <yol>")
 if [ -z "${MAIL_LOG:-}" ]; then
   echo "atlandı şifre sıfırlama (MAIL_LOG verilmedi)"
 else
   mail_files() { perl -ne 'print "$1\n" if m{Text: (/\S+)}' "$MAIL_LOG"; }
   mails() { mail_files | wc -l | tr -d ' '; }
-  # mail_token N → N. e-postadan sonra gelen ilk e-postadaki linkin token'ı (en çok 5 sn beklenir); gelmezse boş
+  # mail_token N → N. e-postadan sonra gelen ilk e-postadaki ilk linkin token'ı (en çok 5 sn beklenir); gelmezse boş
   mail_token() {
     local i f
     for i in 1 2 3 4 5 6 7 8 9 10; do [ "$(mails)" -gt "$1" ] && break; sleep 0.5; done
     f=$(mail_files | sed -n "$(($1 + 1))p")
-    [ -n "$f" ] && perl -ne 'print $1 if m{#t=([A-Za-z0-9_-]{43})}' "$f"
+    [ -n "$f" ] && perl -ne 'if (m{#t=([A-Za-z0-9_-]{43})}) { print $1; exit }' "$f"
   }
   forgot() { jq -nc --arg e "$1" --arg l "$2" '{email:$e,lang:$l}'; }
   reset_body() { jq -nc --arg t "$1" --arg p "$2" '{token:$t,password:$p}'; }

@@ -3,14 +3,16 @@
 // "Authorization: Bearer <token>" başlığıyla gönderir (site ile worker farklı alan adında, çerez yok).
 // Şifre: PBKDF2-SHA256 + 16 bayt tuz. Tur sayısı özetin içinde saklanır; PBKDF2_ITER artırılırsa
 // eski özetler bir sonraki girişte yenilenir. Varsayılan 50000: ücretsiz plandaki 10 ms CPU sınırına sığar.
-// Şifre sıfırlama: tek kullanımlık, RESET_MINUTES geçerli link; e-posta Cloudflare Email Sending ile (EMAIL binding,
-// gönderen noreply@brandcorner.co). MAIL binding'i yalnızca MAIL_TO adresine gönderebildiği için o kullanılmaz.
+// Şifre sıfırlama: tek kullanımlık, RESET_MINUTES geçerli link; e-posta Gmail SMTP ile (src/smtp.js, SMTP_USER hesabından).
+// MAIL binding'i yalnızca MAIL_TO adresine gönderebildiği için o kullanılmaz.
+
+import { smtpReady, smtpSend, smtpFrom } from "./smtp.js";
 
 const ROLES = ["brand", "influencer", "agency"];
 const PLATFORMS = ["instagram", "tiktok", "youtube", "x", "linkedin", "twitch"];
 const CURRENCIES = ["TRY", "USD", "EUR"];
 const SESSION_DAYS = 30, MAX_BODY = 20000, MAX_CAMPAIGNS = 100, DAILY_APPLY = 50;
-const RESET_MINUTES = 60, RESET_FROM = { email: "noreply@brandcorner.co", name: "Brand Corner" };
+const RESET_MINUTES = 60;
 const EMAIL_RE = /^[^\s@<>"]+@[^\s@<>"]+\.[^\s@<>"]+$/;
 const URL_RE = /^https?:\/\/[^\s<>"]+$/;
 
@@ -122,7 +124,7 @@ async function login(c) {
 // Hesap olsun olmasın aynı yanıt; link yalnızca kayıtlı adrese gider. Yeni istek eski linki geçersiz kılar.
 async function forgot(c) {
   const { env, site, ip, body } = c;
-  if (!env.EMAIL) throw new Bad("mail", 503);
+  if (!smtpReady(env)) throw new Bad("mail", 503);
   const email = String(body.email ?? "").trim().toLowerCase();
   if (email.length > 254 || !EMAIL_RE.test(email)) throw new Bad("email");
   if (await attempts(env, "forgot", "ip", ip, 60, false) >= 10) throw new Bad("rate", 429);
@@ -142,7 +144,7 @@ async function forgot(c) {
   // Token URL'nin # kısmında: sunucu loglarına ve Referer'a düşmez
   const link = `${c.origin}/${lang === "en" ? "reset-password" : "sifre-yenile"}#t=${token}`;
   try {
-    await env.EMAIL.send(resetMail(lang, user, link));
+    await smtpSend(env, resetMail(env, lang, user, link));
   } catch (e) {
     console.error("reset mail", e);
     throw new Bad("mail", 503);
@@ -188,11 +190,11 @@ const RESET_TEXT = {
   },
 };
 
-function resetMail(lang, user, link) {
+function resetMail(env, lang, user, link) {
   const t = RESET_TEXT[lang] || RESET_TEXT.tr, hi = `${t.hi} ${user.name},`;
   return {
     to: user.email,
-    from: RESET_FROM,
+    from: { email: smtpFrom(env), name: "Brand Corner" },
     subject: t.subject,
     text: `${hi}\n\n${t.body}\n\n${link}\n\n${t.ignore}\n\nBrand Corner\n`,
     html: `<div style="font-family:Arial,sans-serif;font-size:15px;line-height:1.5;color:#111;max-width:520px">
