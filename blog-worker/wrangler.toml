@@ -84,12 +84,12 @@ SITES = '''[
   },
   {
     "siteUrl": "https://www.brandcorner.co",
-    "hour": null,
+    "hour": 14,
     "lang": "en",
     "brand": "Brand Corner",
     "focus": "Influencer marketing for brands and agencies: finding and vetting creators, campaign planning, creator partnerships, UGC, measuring influencer ROI, brand positioning and social commerce",
     "categories": ["Influencer Marketing", "Creator Partnerships", "Campaigns", "Measurement", "Brand Growth"],
-    "pages": [{ "path": "/", "label": "Brand Corner" }, { "path": "/features", "label": "features" }, { "path": "/pricing", "label": "pricing" }, { "path": "/contact", "label": "contact" }],
+    "pages": [{ "path": "/", "label": "Brand Corner" }, { "path": "/features", "label": "features" }, { "path": "/pricing", "label": "pricing" }, { "path": "/about", "label": "about" }],
     "sisters": [],
     "repo": "berkay-hue/corner-sites", "branch": "main", "contentDir": "content/brandcorner.co/blog",
     "topicModel": "claude-haiku-5-5", "writeModel": "claude-opus-5-5"
