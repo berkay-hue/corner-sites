@@ -70,7 +70,7 @@ footer.bot{border-top:1px solid var(--line);color:var(--muted);font-size:14px;pa
 <section id="summary">
 <h2>2. In short</h2>
 <ul>
-<li>The website has no user accounts, no sign-in and no online payments.</li>
+<li>You can create a Brand Corner account to use the panel. We store the name, email address, account type and password you enter, and the profile and campaign details you add there. The website has no online payments.</li>
 <li>The only form on the website is the newsletter sign-up in the footer of some pages. It collects your email address, and our form service also records your IP address and browser information.</li>
 <li>We do not set cookies ourselves and do not use advertising or analytics tracking scripts.</li>
 <li>Our hosting provider, Cloudflare, processes technical data such as your IP address to deliver the website.</li>
@@ -98,7 +98,7 @@ footer.bot{border-top:1px solid var(--line);color:var(--muted);font-size:14px;pa
 <h3>Fonts and images from other providers</h3>
 <p>The About page, the blog and blog posts load fonts from Google Fonts (fonts.googleapis.com and fonts.gstatic.com), and the blog and blog posts show images hosted by Pexels (images.pexels.com). When you open these pages, your browser connects directly to Google and Pexels, which receive your IP address and browser information. See the <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google Privacy Policy</a> and the <a href="https://www.pexels.com/privacy-policy/" target="_blank" rel="noopener">Pexels Privacy Policy</a>.</p>
 <h3>What we do not collect</h3>
-<p>Because the website has no accounts, sign-in or online payments, we do not collect passwords or payment details through it. We do not use advertising or analytics tracking scripts and do not build profiles of visitors.</p>
+<p>Because the website has no online payments, we do not collect payment details through it. We do not use advertising or analytics tracking scripts and do not build profiles of visitors.</p>
 </section>
 <section id="purposes">
 <h2>4. Purposes and legal bases</h2>
@@ -141,13 +141,15 @@ footer.bot{border-top:1px solid var(--line);color:var(--muted);font-size:14px;pa
 </section>
 <section id="security">
 <h2>8. Security</h2>
-<p>The website is served over HTTPS and tells browsers to connect to it only over HTTPS (HSTS). The form service only accepts new submissions; it offers no way to read stored submissions over the internet. No method of sending or storing data over the internet is completely secure.</p>
+<p>The website is served over HTTPS and tells browsers to connect to it only over HTTPS (HSTS). The form service only accepts new submissions; it offers no way to read stored submissions over the internet. Panel data can only be reached with a valid sign-in token, and other members see only what the panel shares with them, such as an open campaign or a profile its owner has chosen to list. No method of sending or storing data over the internet is completely secure.</p>
 </section>
 <section id="cookies">
 <h2>9. Cookies and local storage</h2>
 <p>Cookies are small files that a website stores in your browser. Brand Corner itself does not set any cookies. See "Cloudflare" below for technical cookies our hosting provider may set.</p>
 <h3>Language preference</h3>
-<p>The home, features, pricing and solutions pages have a TR/EN language switch. When you use it, your choice ("en" or "tr") is saved in your browser's local storage under the name <code>brand-corner-lang</code>, so the page can show the same language next time. It contains nothing else, is not sent to us, and stays in your browser until you clear the site's data in your browser. Because it is saved only when you use the switch, and only to remember your choice, the website does not show a cookie consent banner.</p>
+<p>The home, features, pricing and solutions pages have a TR/EN language switch. When you use it, your choice ("en" or "tr") is saved in your browser's local storage under the name <code>brand-corner-lang</code>, so the page can show the same language next time. The sign-in, registration and panel pages also save it, so the panel opens in the same language. It contains nothing else, is not sent to us, and stays in your browser until you clear the site's data in your browser. Because it is saved only when you use the switch, and only to remember your choice, the website does not show a cookie consent banner.</p>
+<h3>Sign-in</h3>
+<p>When you sign in or create an account, a sign-in token is saved in your browser under the name <code>bc-token</code>: in local storage if "Remember me" is ticked, otherwise in session storage, which your browser clears when you close the tab. It is sent to our account service with each panel request so you stay signed in, and it is deleted when you log out.</p>
 <h3>Vercel Web Analytics (inactive)</h3>
 <p>The home, features, pricing and solutions pages, and the page shown when an address is not found, still include a reference to Vercel Web Analytics from the site's original build. On our current hosting, that reference loads an empty file from our own domain, so no analytics code runs and no analytics data is collected or sent.</p>
 <h3>Cloudflare</h3>
