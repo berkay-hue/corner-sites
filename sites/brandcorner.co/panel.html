@@ -44,7 +44,7 @@ footer.bot{border-top:1px solid var(--line);background:var(--bg);color:var(--mut
 .box{background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:20px}
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
 .stat .n{font:700 28px/1.2 "Poppins","Inter",system-ui,sans-serif}.stat .l{color:var(--muted);font-size:14px;margin-top:4px}
-.steps,.soon{list-style:none;margin:0;padding:0}.steps li,.soon li{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 0;border-top:1px solid var(--line)}.steps li:first-child,.soon li:first-child{border-top:0;padding-top:0}.steps li:last-child,.soon li:last-child{padding-bottom:0}
+.steps,.soon{list-style:none;margin:0}.soon{padding:0}.steps li,.soon li{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 0;border-top:1px solid var(--line)}.steps li:first-child,.soon li:first-child{border-top:0;padding-top:0}.steps li:last-child,.soon li:last-child{padding-bottom:0}
 .steps a{color:var(--accent);font-weight:600;text-decoration:none}.steps a:hover{text-decoration:underline}
 .soon-lead{color:var(--muted);font-size:14px;margin:0 0 12px}
 .head{display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;gap:12px}.head>div{min-width:0}
@@ -80,7 +80,7 @@ footer.bot{border-top:1px solid var(--line);background:var(--bg);color:var(--mut
 .msg{color:#b91c1c;font-size:14px;margin:12px 0 0}.msg:empty{display:none}.ok{color:#166534;font-size:14px;margin:12px 0 0}.ok:empty{display:none}
 .ro{color:var(--muted);font-size:14px;margin:0 0 20px;display:flex;flex-wrap:wrap;gap:4px 20px}.ro b{color:var(--text);font-weight:600}
 @media(max-width:760px){header.top .wrap{gap:12px}.who{gap:10px}.who .role{display:none}.who b{max-width:120px}
-.shell{grid-template-columns:1fr;gap:16px;padding-top:16px;padding-bottom:40px;min-height:0}
+.shell{grid-template-columns:minmax(0,1fr);gap:16px;padding-top:16px;padding-bottom:40px;min-height:0}
 .side nav{flex-direction:row;overflow-x:auto;position:static;gap:6px;margin:0 -20px;padding:0 20px 4px;scrollbar-width:none}.side nav::-webkit-scrollbar{display:none}
 .side a{white-space:nowrap;padding:8px 12px}.view h1{font-size:24px}.box{padding:16px}.grid2{grid-template-columns:1fr}.prow{grid-template-columns:1fr 1fr}.prow>div:last-child{grid-column:1/-1}}
 @media(max-width:480px){.who .me{display:none}}
