@@ -398,6 +398,7 @@ const DICT = [  // i18n sözlüğü (EN + TR); 6 sayfanın ve 404'ün chunk'ınd
   ['"footer.copyright":"© 2025 Brand Corner. Tüm hakları saklıdır."', '"footer.copyright":"© Brand Corner. Tüm hakları saklıdır."'],
   ['"cta.subheadline":"Join thousands of brands, influencers, and agencies growing with Brand Corner."', '"cta.subheadline":"Brands, influencers, and agencies can grow with Brand Corner."'],
   ['"cta.subheadline":"Brand Corner ile büyüyen binlerce marka, influencer ve ajansa katılın."', '"cta.subheadline":"Markalar, influencer\'lar ve ajanslar Brand Corner ile büyüyebilir."'],
+  ['tarafından keşfedillin,', 'tarafından keşfedilin,'],  // yazım hatası
   // PR-G: SocialProofSection "return null" olduğundan görünmüyor; sözlükte de iddia kalmasın
   ['"socialProof.headline":"Trusted by Industry Leaders"', '"socialProof.headline":"Built for brands, influencers, and agencies"'],
   ['"socialProof.brands":"500+ Brands"', '"socialProof.brands":"Brands"'],
@@ -442,8 +443,8 @@ const CHUNK_PATCHES = {
       [{ from: ',(0,t.jsxs)("div",{className:"mt-6 flex gap-4"', until: ']}),(0,t.jsxs)("div",{className:"grid grid-cols-2 gap-8 sm:grid-cols-4 lg:col-span-4"' }, ""],
     ] },
     // PR-F: doğrulanamayan sayaçlar, logo şeridi, yorumlar, başarı hikâyeleri ve mockup tutarları
-    { chunk: "411b1b9d3b6df8ca", was: ["7cc019c396358bc9"], edits: DICT },
-    { chunk: "763536697d8b15ea", was: ["021182790b26378c"], edits: DICT },
+    { chunk: "411b1b9d3b6df8ca", was: ["7cc019c396358bc9", "869eb8a0955429b6"], edits: DICT },
+    { chunk: "763536697d8b15ea", was: ["021182790b26378c", "42731d199f21ea94"], edits: DICT },
     { chunk: "e4b281dafb09dd8b", was: ["ed42209b874cf44c"], edits: [  // ana sayfa
       on('(0,s.jsxs)(a.Button,{size:"lg",className:"gradient-primary h-12 px-8 text-lg text-primary-foreground",children:[e("hero.cta.trial")', REG()),
       on('(0,s.jsxs)(a.Button,{size:"lg",variant:"outline",className:"h-12 gap-2 px-8 text-lg bg-transparent",children:[', go("/features")),
@@ -476,7 +477,8 @@ const CHUNK_PATCHES = {
       ['"Join 500+ brands already using Brand Corner to transform their influencer marketing."', '"Use Brand Corner to transform your influencer marketing."'],
       ['"Influencer pazarlamasını dönüştürmek için Brand Corner kullanan 500+ markaya katılın."', '"Influencer pazarlamanızı Brand Corner ile dönüştürün."'],
     ] },
-    { chunk: "51d3cf739a8640a6", was: ["6bbaf7b9bf66cf11"], edits: [  // /solutions/influencers
+    { chunk: "51d3cf739a8640a6", was: ["6bbaf7b9bf66cf11", "a8188971253e20e0"], edits: [  // /solutions/influencers
+      ['"Get Discovered":"Keşfedillin"', '"Get Discovered":"Keşfedilin"'],  // yazım hatası
       [statGrid("s"), ""],
       on('className:"h-12 bg-[#FFB71B] px-8 text-foreground hover:bg-[#FFB71B]/90",children:[e("solutions.influencers.cta")', REG("?role=influencer")),
       on('(0,s.jsx)(t.Button,{size:"lg",variant:"outline",className:"h-12 px-8 bg-transparent",children:e("hero.cta.demo")})', go("/features")),
