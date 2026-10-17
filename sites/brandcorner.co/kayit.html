@@ -60,7 +60,7 @@ button.btn{border:0;cursor:pointer;width:100%;font-family:inherit;padding:12px 1
 <div class="card">
 <h1>Brand Corner hesabı oluşturun</h1>
 <p class="sub">Hesap türünüzü seçin, kayıttan sonra panelinize hemen geçin.</p>
-<form id="f" data-sk-noform novalidate>
+<form id="f" method="post" data-sk-noform novalidate>
 <label for="name">Adınız</label>
 <input id="name" name="name" type="text" autocomplete="name" maxlength="100" required>
 <label for="email">E-posta</label>
@@ -74,7 +74,7 @@ button.btn{border:0;cursor:pointer;width:100%;font-family:inherit;padding:12px 1
 <label class="role"><input type="radio" name="role" value="agency"><span><b>Ajans</b><small>Müşterileriniz için kampanya yürütün.</small></span></label>
 </fieldset>
 <label class="row"><input name="remember" type="checkbox" checked> Beni hatırla</label>
-<button class="btn" type="submit">Hesap oluştur</button>
+<button class="btn" type="submit" disabled>Hesap oluştur</button>
 <p id="m" class="msg" role="alert"></p>
 </form>
 <p class="note">Hesap oluşturmadan önce <a href="/terms">Kullanım Koşulları</a> ve <a href="/privacy">Gizlilik Politikası</a> sayfalarını (İngilizce) inceleyin.</p>
@@ -123,6 +123,8 @@ button.btn{border:0;cursor:pointer;width:100%;font-family:inherit;padding:12px 1
       location.href = "/panel";
     }, function (e) { fail(BC.msg(e.code, T), e.code === "exists"); });
   });
+  // Betik yüklenmeden gönderim olmasın: düğme JS hazır olunca açılır
+  b.disabled = false;
 })();
 </script>
 </body>

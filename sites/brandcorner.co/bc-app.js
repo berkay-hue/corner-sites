@@ -29,6 +29,7 @@
       content_url: "İçerik bağlantısı http:// ya da https:// ile başlamalı.",
       net: "Sunucuya ulaşılamadı. Bağlantınızı kontrol edip tekrar deneyin.",
       store: "Tarayıcınız oturum bilgisini saklamaya izin vermiyor. Gizli pencere dışında tekrar deneyin.",
+      unavailable: "Hesap sistemi henüz açılmadı. Lütfen info@saascorner.co adresine yazın.",
       err: "Bir sorun oluştu. Lütfen tekrar deneyin."
     },
     en: {
@@ -54,6 +55,7 @@
       content_url: "The content link must start with http:// or https://.",
       net: "Couldn't reach the server. Check your connection and try again.",
       store: "Your browser isn't allowing the session to be stored. Try again outside a private window.",
+      unavailable: "Accounts aren't open yet. Please write to info@saascorner.co.",
       err: "Something went wrong. Please try again."
     }
   };
@@ -64,7 +66,8 @@
   function lang() {
     if (cur) return cur;
     try { var v = localStorage.getItem(LK); if (v === "tr" || v === "en") return v; } catch (e) {}
-    return "en";
+    // Kayıtlı seçim yoksa tarayıcı dili; yalnız okunur, saklanmaz
+    return /^tr\b/i.test(navigator.language || "") ? "tr" : "en";
   }
   function useLang(l) { cur = l === "tr" ? "tr" : "en"; }
   function setLang(l) { useLang(l); try { localStorage.setItem(LK, cur); } catch (e) {} }
@@ -88,7 +91,8 @@
         if (r.ok && d && d.ok) return d;
         var e = new Error("api");
         e.status = r.status;
-        e.code = (d && typeof d.error === "string" && d.error) || (r.status === 401 ? "auth" : r.status >= 500 ? "server" : "err");
+        // Kodsuz 404/405: hesap uçları bu sunucuda henüz yok (eski Worker sürümü)
+        e.code = (d && typeof d.error === "string" && d.error) || (r.status === 401 ? "auth" : r.status === 404 || r.status === 405 ? "unavailable" : r.status >= 500 ? "server" : "err");
         throw e;
       });
     }, function () {

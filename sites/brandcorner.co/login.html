@@ -52,13 +52,13 @@ button.btn{border:0;cursor:pointer;width:100%;font-family:inherit;padding:12px 1
 <div class="card">
 <h1>Log in to your account</h1>
 <p class="sub">Enter your email and password to access your Brand Corner panel.</p>
-<form id="f" data-sk-noform novalidate>
+<form id="f" method="post" data-sk-noform novalidate>
 <label for="email">Email</label>
 <input id="email" name="email" type="email" autocomplete="username" inputmode="email" autocapitalize="off" spellcheck="false" required>
 <label for="password">Password</label>
 <input id="password" name="password" type="password" autocomplete="current-password" required>
 <label class="row"><input name="remember" type="checkbox" checked> Remember me</label>
-<button class="btn" type="submit">Log in</button>
+<button class="btn" type="submit" disabled>Log in</button>
 <p id="m" class="msg" role="alert"></p>
 </form>
 <p class="note">Don't have an account? <a href="/register">Sign up</a></p>
@@ -90,6 +90,8 @@ button.btn{border:0;cursor:pointer;width:100%;font-family:inherit;padding:12px 1
       location.href = "/panel";
     }, function (e) { fail(BC.msg(e.code, T)); });
   });
+  // Betik yüklenmeden gönderim olmasın: düğme JS hazır olunca açılır
+  b.disabled = false;
 })();
 </script>
 </body>

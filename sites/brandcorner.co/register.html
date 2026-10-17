@@ -60,7 +60,7 @@ button.btn{border:0;cursor:pointer;width:100%;font-family:inherit;padding:12px 1
 <div class="card">
 <h1>Create your Brand Corner account</h1>
 <p class="sub">Choose your account type and go straight to your panel after signing up.</p>
-<form id="f" data-sk-noform novalidate>
+<form id="f" method="post" data-sk-noform novalidate>
 <label for="name">Your name</label>
 <input id="name" name="name" type="text" autocomplete="name" maxlength="100" required>
 <label for="email">Email</label>
@@ -74,7 +74,7 @@ button.btn{border:0;cursor:pointer;width:100%;font-family:inherit;padding:12px 1
 <label class="role"><input type="radio" name="role" value="agency"><span><b>Agency</b><small>Run campaigns for your clients.</small></span></label>
 </fieldset>
 <label class="row"><input name="remember" type="checkbox" checked> Remember me</label>
-<button class="btn" type="submit">Create account</button>
+<button class="btn" type="submit" disabled>Create account</button>
 <p id="m" class="msg" role="alert"></p>
 </form>
 <p class="note">Before signing up, please review the <a href="/terms">Terms of Service</a> and <a href="/privacy">Privacy Policy</a>.</p>
@@ -123,6 +123,8 @@ button.btn{border:0;cursor:pointer;width:100%;font-family:inherit;padding:12px 1
       location.href = "/panel";
     }, function (e) { fail(BC.msg(e.code, T), e.code === "exists"); });
   });
+  // Betik yüklenmeden gönderim olmasın: düğme JS hazır olunca açılır
+  b.disabled = false;
 })();
 </script>
 </body>
