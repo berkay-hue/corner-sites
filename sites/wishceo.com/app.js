@@ -830,7 +830,7 @@
         var cls = "opt" + (a ? (o.k === a ? " is-picked" : " is-dim") : "") + (a && o.k === c.real.k ? " is-real" : "");
         return '<button type="button" class="' + cls + '" data-k="' + o.k + '"' + (a ? ' aria-disabled="true"' : "") + ">" +
           '<span class="opt-k">' + o.k + '</span><span class="opt-t">' + esc(o.t) + "</span>" +
-          (a && o.k === c.real.k ? '<span class="opt-real">Gerçek CEO</span>' : "") + "</button>";
+          (a && o.k === c.real.k ? '<span class="opt-real">Vakadaki CEO</span>' : "") + "</button>";
       }).join("") +
       "</div></div>";
     if (a) html += afterHtml(i);
@@ -846,9 +846,9 @@
 
   function afterHtml(i) {
     var c = CASES[i], o = opt(i, state.answers[i]), ro = opt(i, c.real.k), diff = o.s - ro.s, last = i === CASES.length - 1;
-    var cmp = o.k === c.real.k ? "Gerçek CEO ile aynı kararı verdin."
-      : diff > 0 ? "Gerçek CEO’dan " + diff + " puan iyi. Yönetim kurulu not aldı."
-      : "Gerçek CEO’nun kararı " + (-diff) + " puan daha iyiydi.";
+    var cmp = o.k === c.real.k ? "Vakadaki CEO ile aynı kararı verdin."
+      : diff > 0 ? "Vakadaki CEO’dan " + diff + " puan iyi. Yönetim kurulu not aldı."
+      : "Vakadaki CEO’nun kararı " + (-diff) + " puan daha iyiydi.";
     return '<div class="after">' +
       '<div class="verdict t-' + tier(o.s) + '" tabindex="-1">' +
       '<div class="stamp' + (reduced() ? "" : " anim") + '" aria-hidden="true"><b>' + o.s + "</b><span>puan</span></div>" +
@@ -857,7 +857,7 @@
       '<p class="sr">Puanın: ' + o.s + " / 100</p>" +
       "</div>" +
       '<div class="truth">' +
-      '<p class="lbl">Gerçekte ne oldu</p>' +
+      '<p class="lbl">Vakada ne oldu</p>' +
       '<p class="truth-who">' + esc(c.real.who) + " <span>" + esc(c.real.role) + " · seçimi " + c.real.k + "</span></p>" +
       c.real.text.map(function (p) { return "<p>" + esc(p) + "</p>"; }).join("") +
       '<p class="truth-cmp">' + esc(cmp) + "</p>" +
@@ -927,7 +927,7 @@
       '<p class="lbl">Ortalama puan</p>' +
       '<p class="big"><b>' + r.score + "</b><span>/100</span></p>" +
       '<p class="board">' + esc(r.board) + "</p>" +
-      '<p class="vs">Gerçek CEO’ların ortalaması: ' + r.real + "</p>" +
+      '<p class="vs">Vakadaki CEO’ların ortalaması: ' + r.real + "</p>" +
       "</div></div>" +
       '<table class="rows"><caption class="sr">Dosya dosya kararların</caption>' +
       "<thead><tr><th scope=\"col\">Dosya</th><th scope=\"col\">Sen</th><th scope=\"col\">Gerçek</th><th scope=\"col\">Puan</th></tr></thead><tbody>" +
@@ -1066,7 +1066,7 @@
     var n = CASES.length;
     Array.prototype.forEach.call(document.querySelectorAll("[data-issue]"), function (el) { el.textContent = "Sayı " + ISSUE; });
     var intro = $("#oyun-intro");
-    if (intro && WORDS[n]) intro.textContent = WORDS[n] + " şirket, " + WORDS_LO[n] + " kriz. Hangisinde gerçek CEO’dan daha iyi iş çıkarırsın?";
+    if (intro && WORDS[n]) intro.textContent = WORDS[n] + " şirket, " + WORDS_LO[n] + " kriz. Hangisinde vakadaki CEO’dan daha iyi iş çıkarırsın?";
     var meta = $("#hero-meta");
     if (meta) meta.textContent = n + " dosya · " + n + " karar · 1 CEO karnesi · Üyelik yok";
     var idx = $("#index-list");
