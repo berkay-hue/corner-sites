@@ -89,7 +89,7 @@ Krizin sebebini ilk gün her zaman bulamazsın. Ama ne bildiğini ve ne yaptığ
 
 Dört seçeneği yan yana koyduğunda en güçlüsü, sebep bulunana kadar bütün otomatik tahsilatı durdurup iki kez ücret çekilen herkese başvuru beklemeden iade yapmak ve bunu açıkça söylemek. Pakeno’nun sonunda yaptığı da buydu; fark yalnızca sıralamadaydı. En zayıfı, hiçbir şey yapmayıp "kendiliğinden düzelir" demek. Aradaki iki seçenek ise ilk günlerin yükünü hafifletip sonraki haftaların yükünü ağırlaştıran türden.
 
-Oyundaki dosyalarda da seçenekleri böyle tartıyoruz: o gün bilinenlere ve sonradan olanlara bakarak. Gerçek CEO’nun kararı her zaman en iyisi çıkmıyor. [Korvala’nın platform kararı](/blog/korvala-platform-karari) bunun bir örneği: orada gerçek CEO’nun seçimi, masadaki başka bir seçenekten daha düşük puan alıyor.
+Oyundaki dosyalarda da seçenekleri böyle tartıyoruz: o gün bilinenlere ve sonradan olanlara bakarak. Vakadaki CEO’nun kararı her zaman en iyisi çıkmıyor. [Korvala’nın platform kararı](/blog/korvala-platform-karari) bunun bir örneği: orada CEO’nun seçimi, masadaki başka bir seçenekten daha düşük puan alıyor.
 
 WishCEO’da kararları puanlıyoruz, insanları değil. İlk gün hızlıca bir sebep açıklamayı seçen biri kötü yönetici olmaz. O seçimin neden zayıf kaldığını görmek, bir sonraki krizde daha iyi bir soru sormanı sağlar.
 
@@ -109,4 +109,4 @@ Yapılmalı, ama sebep uydurmadan. Ne bildiğini, ne bilmediğini ve bu arada ne
 
 ## Sıra sende
 
-Bir sonraki krizin hangi sabah geleceğini bilemezsin. Ama ilk saatlerde hangi soruları soracağını bugünden prova edebilirsin. Kendi kararını gerçek CEO’nunkiyle karşılaştırmak istersen bir dosya seni bekliyor. [Bugünün vakasını oyna](/#oyun).
+Bir sonraki krizin hangi sabah geleceğini bilemezsin. Ama ilk saatlerde hangi soruları soracağını bugünden prova edebilirsin. Kendi kararını vakadaki CEO’nun kararıyla karşılaştırmak istersen bir dosya seni bekliyor. [Bugünün vakasını oyna](/#oyun).

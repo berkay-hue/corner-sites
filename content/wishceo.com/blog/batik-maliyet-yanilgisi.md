@@ -73,7 +73,7 @@ Ama burada sorman gereken şey o emeğin ne kadar büyük olduğu değil. Asıl 
 
 Bir ayrıntıya daha dikkat et. CEO koltuğuna yeni oturdun; parkları, giyim hattını, video oyunlarını açan kararlar senin imzanı taşımıyor. Batık maliyetle mücadelede bu bir avantaj, çünkü eski kararları savunmak zorunda değilsin. Yine de o projelerin arkasında hâlâ ekipler ve onları savunan insanlar var. Onların gözünde her biri bir emek.
 
-Hangi seçeneğe gitmen gerektiğini burada söylemeyeceğiz, gerçekte ne olduğunu da. Dosyayı açıp [kendi kararını ver](/?s=001#oyun), sonra gerçek CEO'nun ne yaptığını gör.
+Hangi seçeneğe gitmen gerektiğini burada söylemeyeceğiz, vakada ne olduğunu da. Dosyayı açıp [kendi kararını ver](/?s=001#oyun), sonra vakadaki CEO'nun ne yaptığını gör.
 
 ## Karar anında sorulacak sorular
 
