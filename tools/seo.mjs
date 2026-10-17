@@ -100,11 +100,11 @@ const RULES = {
     // v0 şablonu her sayfaya aynı başlık/açıklamayı veriyor. Sayfa başına [başlık ≤60, açıklama ≤155, breadcrumb adı], sitedeki metinden
     META: {
       "/": ["Brand Corner - Influencer Marketing Platform", "Connect brands with the right influencers. An all-in-one influencer marketing platform to manage campaigns, discover talent, and track performance."],
-      "/features": ["Influencer Marketing Features | Brand Corner", "Discovery and matching, campaign management, analytics, messaging and payments, and integrations: everything you need to run influencer campaigns.", "Features"],
+      "/features": ["Influencer Marketing Features | Brand Corner", "Brand Corner is an influencer marketing platform with discovery and matching, campaign management, analytics, messaging, payments and integrations.", "Features"],
       "/pricing": ["Pricing and Plans | Brand Corner", "Compare Brand Corner's Starter, Professional and Enterprise plans side by side, with a feature comparison and answers to frequently asked questions.", "Pricing"],
-      "/solutions/brands": ["Influencer Marketing for Brands | Brand Corner", "Discover, connect, and collaborate with influencers who align with your brand values: advanced search, smart filtering, messaging and analytics.", "For Brands"],
-      "/solutions/influencers": ["For Influencers: Get Discovered by Brands | Brand Corner", "Get discovered by brands, receive quality offers, and manage collaborations, contracts and payments in one place, with analytics to help you grow.", "For Influencers"],
-      "/solutions/agencies": ["Influencer Agency Management Tools | Brand Corner", "Manage your talent roster, orchestrate client campaigns, and automate reporting and workflows with agency-grade tools and a dedicated client portal.", "For Agencies"],
+      "/solutions/brands": ["Influencer Marketing for Brands | Brand Corner", "Brand Corner helps brands discover, connect, and collaborate with influencers who align with their brand values, with advanced search and analytics.", "For Brands"],
+      "/solutions/influencers": ["For Influencers: Get Discovered by Brands | Brand Corner", "Brand Corner helps influencers get discovered by brands, receive quality offers, and manage collaborations, contracts and payments in one place.", "For Influencers"],
+      "/solutions/agencies": ["Influencer Agency Management Tools | Brand Corner", "Brand Corner gives agencies tools to manage their talent roster, orchestrate client campaigns, and automate reporting with a dedicated client portal.", "For Agencies"],
       "/about": ["About Brand Corner", "Brand Corner is an influencer marketing platform connecting brands, influencers, and agencies worldwide. Built in Istanbul as part of Corner Group.", "About"],
       "/privacy": ["Privacy Policy | Brand Corner", "How the Brand Corner website handles personal data: the newsletter form, hosting, cookies and local storage, and your rights under the GDPR and KVKK.", "Privacy Policy"],
       "/terms": ["Terms of Service | Brand Corner", "The terms that apply when you use the Brand Corner website, including acceptable use, intellectual property, the newsletter form and liability.", "Terms of Service"],
@@ -232,7 +232,7 @@ const RULES = {
       const graph = noindex ? [] : page === "/"
         ? [org, { "@type": "WebSite", "@id": R.origin + "/#website", url: R.origin + "/", name: "Brand Corner", publisher: { "@id": ORG }, inLanguage: "en" }]
         : [...(page === "/about" ? [org] : []),
-          { "@type": page === "/about" ? "AboutPage" : "WebPage", "@id": url + "#webpage", url, name: h1, isPartOf: { "@id": R.origin + "/#website" }, about: { "@id": ORG }, inLanguage: "en" },
+          { "@type": page === "/about" ? "AboutPage" : "WebPage", "@id": url + "#webpage", url, name: h1, description: desc, isPartOf: { "@id": R.origin + "/#website" }, about: { "@id": ORG }, inLanguage: "en" },
           { "@type": "BreadcrumbList", itemListElement: [{ "@type": "ListItem", position: 1, name: "Home", item: R.origin + "/" }, { "@type": "ListItem", position: 2, name: crumb, item: url }] }];
       // /pricing SSS'si (PricingFAQ chunk'ı) birebir; sayfa dil anahtarlı olduğundan EN ve TR ayrı FAQPage
       if (page === "/pricing") for (const [lang, qa] of Object.entries(R.FAQ))
