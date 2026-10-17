@@ -177,6 +177,9 @@ async function updateProfile(c) {
   return ok(c, { user: me(u) });
 }
 
+// null ya da boş: bütçe alanı temizlenir (int(null) 0 döndürürdü)
+const money = v => (v == null || v === "" ? null : int(v, 0, 1e9));
+
 function campaignData(b, old = {}) {
   const pick = (k, f) => (b[k] === undefined ? old[k] : f(b[k]));
   const d = {
@@ -184,8 +187,8 @@ function campaignData(b, old = {}) {
     brief: pick("brief", v => text(v, 3000)),
     niches: pick("niches", tags) || [],
     platforms: pick("platforms", v => (Array.isArray(v) ? [...new Set(v.filter(x => PLATFORMS.includes(x)))] : [])) || [],
-    budget_min: pick("budget_min", v => int(v, 0, 1e9)),
-    budget_max: pick("budget_max", v => int(v, 0, 1e9)),
+    budget_min: pick("budget_min", money),
+    budget_max: pick("budget_max", money),
     currency: pick("currency", v => (CURRENCIES.includes(v) ? v : "TRY")) || "TRY",
     deadline: pick("deadline", v => (/^\d{4}-\d{2}-\d{2}$/.test(v) ? v : null)),
   };
@@ -287,8 +290,8 @@ async function invite(c, id) {
   const { env, user, site, body } = c;
   const camp = await env.DB.prepare("SELECT id FROM campaigns WHERE id = ? AND owner_id = ? AND status = 'open'").bind(id, user.id).first();
   need(camp, "not_found", 404);
-  const inf = await env.DB.prepare("SELECT id FROM users WHERE id = ? AND site = ? AND role = 'influencer'").bind(int(body.user_id, 1, 1e12) ?? 0, site).first();
-  need(inf, "not_found", 404);
+  const inf = await env.DB.prepare("SELECT id, profile FROM users WHERE id = ? AND site = ? AND role = 'influencer'").bind(int(body.user_id, 1, 1e12) ?? 0, site).first();
+  need(inf && JSON.parse(inf.profile || "{}").listed === true, "not_found", 404);
   const a = await env.DB.prepare(
     "INSERT INTO applications (campaign_id, user_id, status, message) VALUES (?, ?, 'invited', ?) ON CONFLICT DO NOTHING RETURNING *",
   ).bind(id, inf.id, text(body.message, 1000)).first();
