@@ -32,7 +32,7 @@ Bir de alışkanlık meselesi var. Bir ekip yıllardır aynı ürünü geliştir
 
 ## Bir CEO masasından kurgusal bir örnek
 
-Tervina adında orta ölçekli bir ev tekstili şirketi düşün. CEO'su Selin Aras'ın önünde iki seçenek var. Birincisi, mevcut fabrikayı yenilemek: Daha hızlı makineler, daha düşük fire, öngörülebilir bir verim artışı. İkincisi, aynı bütçeyle çevrim içi satış kanalını sıfırdan kurmak: Daha belirsiz, daha riskli ama doğrudan müşteriye ulaşma imkânı sunan bir yol.
+Tervina adında orta ölçekli bir ev tekstili şirketi düşün. CEO'su Selin'in önünde iki seçenek var. Birincisi, mevcut fabrikayı yenilemek: Daha hızlı makineler, daha düşük fire, öngörülebilir bir verim artışı. İkincisi, aynı bütçeyle çevrim içi satış kanalını sıfırdan kurmak: Daha belirsiz, daha riskli ama doğrudan müşteriye ulaşma imkânı sunan bir yol.
 
 Yönetim kurulu toplantısında fabrika yenilemesi kolayca kabul görür. Rakamlar net, risk düşük, kimse itiraz etmez. Bir yıl sonra fabrika gerçekten daha verimli çalışıyordur. Herkes memnundur.
 
