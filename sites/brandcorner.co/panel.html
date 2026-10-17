@@ -148,7 +148,6 @@ footer.bot{border-top:1px solid var(--line);background:var(--bg);color:var(--mut
       fCurrency: "Para birimi", fDeadline: "Son tarih",
       create: "Kampanyayı oluştur", saveChanges: "Değişiklikleri kaydet", cancel: "Vazgeç",
       campLimit: "Kampanya sınırına ulaştınız (en fazla 100 kampanya).", badBudget: "Bütçeyi tam sayı olarak girin.",
-      budgetClear: "En yüksek bütçe şu anda boş bırakılamıyor; bir değer girin ya da en düşük bütçeyi de silin.",
       tagsMax: "En fazla 5 ilgi alanı girebilirsiniz.",
       close: "Kampanyayı kapat", reopen: "Kampanyayı yeniden aç", edit: "Düzenle",
       appsTitle: "Başvurular ve davetler ({n})",
@@ -225,7 +224,6 @@ footer.bot{border-top:1px solid var(--line);background:var(--bg);color:var(--mut
       fCurrency: "Currency", fDeadline: "Deadline",
       create: "Create campaign", saveChanges: "Save changes", cancel: "Cancel",
       campLimit: "You've reached the campaign limit (100 campaigns).", badBudget: "Enter the budget as a whole number.",
-      budgetClear: "The maximum budget can't be cleared right now; enter a value or clear the minimum budget too.",
       tagsMax: "You can enter up to 5 niches.",
       close: "Close campaign", reopen: "Reopen campaign", edit: "Edit",
       appsTitle: "Applications and invites ({n})",
@@ -502,7 +500,7 @@ footer.bot{border-top:1px solid var(--line);background:var(--bg);color:var(--mut
         if (c) render(true); else location.hash = "#campaign-" + d.campaign.id;
       }, function (e) {
         busy(b, false);
-        say(m, BC.msg(e.code, { limit: t("campLimit"), budget: a && !z ? t("budgetClear") : null }));
+        say(m, BC.msg(e.code, { limit: t("campLimit") }));
       });
     });
     return f;
