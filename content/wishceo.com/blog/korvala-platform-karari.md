@@ -75,7 +75,7 @@ Zirvedeki bir şirket için kontrol çok cazip gelir. Yıllarca kuralları sen k
 
 Bunu yalnızca telefon şirketleri yaşamıyor. Diyelim ki orta boy bir lojistik firmasında çalışıyorsun ve firma yıllardır kendi yazdığı takip programını kullanıyor. Müşteriler artık herkesin kullandığı bir sistemle bağlanmak istiyor. Kendi programını mı yenilersin, herkesin sistemine mi geçersin, büyük bir yazılım firmasıyla mı ortak olursun? Ölçek küçük, soru aynı.
 
-## Gerçekte ne oldu?
+## Vakada ne oldu?
 
 Korvala'nın CEO'su Gordon Stoddard B'yi seçti ve şirketi Tallbridge'in telefon sistemine bağladı. Eski sistem rafa kalkmaya başladı.
 
@@ -85,7 +85,7 @@ Korvala ortadan kalkmadı. Telefon dışındaki işleriyle, daha çok altyapı t
 
 ## Oyunda neden 35 puan?
 
-Oyunda B seçeneği 35 puan alıyor. Herkesin kullandığı sisteme geçmek 75, kendi sistemini bitirmek 45, akıllı telefonu bırakmak 25 puan. Yani gerçek CEO'nun kararı bu dosyada dört seçenek içinde sondan ikinci sırada.
+Oyunda B seçeneği 35 puan alıyor. Herkesin kullandığı sisteme geçmek 75, kendi sistemini bitirmek 45, akıllı telefonu bırakmak 25 puan. Yani vakadaki CEO'nun kararı bu dosyada dört seçenek içinde sondan ikinci sırada.
 
 Puanlar, o dönemde bilinenlere ve sonradan olanlara bakılarak verildi. B'nin düşük puanı yalnızca kötü bitmesinden gelmiyor. Karar anında da görülebilen bir risk vardı: bütün şirketi, pazarın küçük bir dilimini tutan tek bir sisteme bağlamak. A'nın yüksek puanı da bir başarı garantisi değil. Sonradan bazı yorumcular Korvala'nın bu yolu seçmesi gerektiğini savundu, ama o yolun nereye çıkacağını kimse bilemez.
 
@@ -111,7 +111,7 @@ Bu soruların hiçbiri doğru cevabı vermez. Ama hangi riski bilerek aldığın
 
 Dört yol vardı: herkesin kullandığı ücretsiz sisteme katılmak, Tallbridge'le ortaklık kurmak, kendi yeni sistemini bitirmek ya da akıllı telefonu bırakmak. Oyunda bu seçenekler sırasıyla 75, 35, 45 ve 25 puan alıyor.
 
-### Korvala'nın CEO'su gerçekte ne yaptı?
+### Korvala'nın CEO'su ne yaptı?
 
 Gordon Stoddard 2010'ların başında Tallbridge ortaklığını seçti ve şirketin eski sistemini rafa kaldırdı. Tallbridge'in sistemi beklenen ivmeyi yakalayamadı. Birkaç yıl sonra Korvala telefon işini patent lisansı dâhil birkaç milyar avroya Tallbridge'e satmak için anlaştı.
 
@@ -125,4 +125,4 @@ Platform yarışı donanımla değil, geliştiricileri ve kullanıcıları aynı
 
 ## Sen ne yapardın?
 
-2010'ların başındasın. Telefonlar hâlâ satılıyor ama pazarın yönü hızla değişiyor. Sen hangi yolu seçerdin? [Korvala vakasını oyna](/?s=001#oyun) ve kararını gerçek CEO'nunkiyle karşılaştır.
+2010'ların başındasın. Telefonlar hâlâ satılıyor ama pazarın yönü hızla değişiyor. Sen hangi yolu seçerdin? [Korvala vakasını oyna](/?s=001#oyun) ve kararını vakadaki CEO'nun kararıyla karşılaştır.
