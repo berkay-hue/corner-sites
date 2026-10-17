@@ -1,6 +1,6 @@
 ---
 title: "Türk Şirketleri İçin B2B Hizmetler Nasıl Fiyatlandırılır?"
-description: "Türkiye'de B2B hizmet fiyatlandırmak; lira enflasyonunu, dolara bağlı bütçeleri ve yerel satın alma alışkanlıklarını dengelemek demektir. Ayakta kalan fiyatları nasıl belirleyeceğinizi anlatıyorum."
+description: "Türkiye'de B2B hizmet fiyatlandırmak; lira enflasyonunu, dolara bağlı bütçeleri ve yerel satın alma alışkanlıklarını dengelemektir. Ayakta kalan fiyatlar."
 date: "2026-10-15"
 updated: "2026-10-17"
 category: "Kurucu Notları"

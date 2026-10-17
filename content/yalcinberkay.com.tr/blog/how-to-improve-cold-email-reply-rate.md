@@ -1,6 +1,6 @@
 ---
 title: "How to Improve Your Cold Email Reply Rate"
-description: "Why are cold email reply rates low, and how do you raise them? I walk through the B2B outbound steps, from subject line to follow-up sequence, with examples."
+description: "Why are cold email reply rates low, and how do you raise them? I walk through the B2B outbound steps, from subject line to follow-up, with examples."
 date: "2026-10-13"
 updated: "2026-10-17"
 category: "Outbound"

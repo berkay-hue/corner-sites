@@ -1,6 +1,6 @@
 ---
 title: "Yeni Satış Temsilcisine Kota Nasıl Belirlenir? (Örneklerle)"
-description: "Rampa süresi, kapasite hesabı ve pipeline kapsamıyla yeni B2B temsilcilerine tükenmişlik ve kaçırılan hedef yaratmayan gerçekçi kotalar belirlemeyi öğrenin."
+description: "Rampa süresi, kapasite hesabı ve pipeline kapsamıyla yeni B2B temsilcilerine tükenmişlik ve kaçırılan hedef yaratmayan gerçekçi kotalar belirleyin."
 date: "2026-10-16"
 updated: "2026-10-17"
 category: "Satış Liderliği"

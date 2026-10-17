@@ -1,6 +1,6 @@
 ---
 title: "How to Set Sales Quotas for a Sales Team: A Practical Guide"
-description: "How do you set sales quotas for a sales team? This post walks you through a step-by-step quota-setting method that combines historical data, market size and capacity."
+description: "How do you set sales quotas for a sales team? A step-by-step quota-setting method that combines historical data, market size and capacity."
 date: "2026-10-16"
 updated: "2026-10-17"
 category: "Sales Leadership"

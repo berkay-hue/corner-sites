@@ -1,6 +1,6 @@
 ---
 title: "SDR'lıktan Account Executive Rolüne Nasıl Geçilir?"
-description: "SDR'lıktan account executive rolüne nasıl geçeceğinizi mi merak ediyorsunuz? B2B satış ekiplerinde satışçıların terfi almasını genellikle sağlayan beceriler, kanıtlar ve zaman çizelgesi burada."
+description: "SDR'lıktan account executive rolüne nasıl geçilir? B2B satış ekiplerinde terfiyi genellikle sağlayan beceriler, kanıtlar ve zaman çizelgesi."
 date: "2026-10-14"
 updated: "2026-10-17"
 category: "Kariyer"

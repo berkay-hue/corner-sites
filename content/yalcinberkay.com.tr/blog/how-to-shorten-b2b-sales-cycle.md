@@ -1,6 +1,6 @@
 ---
 title: "How to Shorten the B2B Sales Cycle: 7 Practical Methods"
-description: "We look at the bottlenecks that drag out the B2B sales cycle in Turkey, the role of the buying committee, and concrete, practical ways to speed up the process."
+description: "The bottlenecks that drag out the B2B sales cycle in Turkey, the role of the buying committee, and concrete, practical ways to speed up the process."
 date: "2026-10-14"
 updated: "2026-10-17"
 category: "B2B Sales"

@@ -1,6 +1,6 @@
 ---
-title: "Yapay Zeka SDR'larınızın Yerini Alabilir mi? Pratik Bir Yanıt"
-description: "SDR'larınızın yerine yapay zeka ajanları koymayı mı düşünüyorsunuz? B2B outbound'da otomasyonun nerede işe yaradığını, insanların nerede hâlâ öne çıktığını ve ekibiniz için nasıl karar vereceğinizi anlatıyorum."
+title: "Yapay Zeka SDR'larınızın Yerini Alabilir mi? Pratik Yanıt"
+description: "B2B outbound'da yapay zeka otomasyonunun nerede işe yaradığı, insanların nerede hâlâ öne çıktığı ve ekibiniz için nasıl karar vereceğiniz."
 date: "2026-10-11"
 updated: "2026-10-17"
 category: "Yapay Zeka ve Otomasyon"
