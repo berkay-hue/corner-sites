@@ -1285,7 +1285,7 @@
           r: "Bayiler rahatlar ve bazı müşteriler kalır. Ama indirim marjı daraltır; onlarca model aynı kaynakları paylaşmaya devam eder." }
       ],
       real: {
-        who: "Elliot Dravecki",
+        who: "Warren Dravecki",
         role: "Pellastra’nın CEO’su",
         k: "A",
         text: [
