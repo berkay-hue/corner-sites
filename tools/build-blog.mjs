@@ -336,6 +336,9 @@ async function buildSite() {
   }
   const index = sets.map(s => [s.c.lang, `${s.prefix}/blog`]);
   const urls = [];
+  // Sitemap hreflang: yalnız eşi bilinen URL'ler (yazıda alts, listede index); x-default ana dil; slug loc gibi kodlanır
+  const xl = o => o ? Object.entries(o).concat([["x-default", o[BASE_CFG.lang]]]).map(([l, p]) => `<xhtml:link rel="alternate" hreflang="${l}" href="${BASE_CFG.origin}${p.replace(/[^/]+$/, encodeURIComponent)}"/>`).join("") : "";
+  const listAlts = sets.length < 2 ? null : Object.fromEntries(index);
   for (const [n, { c, prefix, sfx, posts }] of sets.entries()) {
     cfg = c; BASE = prefix;
     const out = join(SITE, ...(prefix ? [prefix.slice(1)] : []));
@@ -360,14 +363,18 @@ async function buildSite() {
     if (!n) {
       const orig = await readFile(join(SITE, "_orig-sitemap.xml"), "utf8").catch(() => "");
       const origLm = new Map([...orig.matchAll(/<url>([\s\S]*?)<\/url>/g)].map(m => [m[1].match(/<loc>([^<]+)<\/loc>/)?.[1].trim(), m[1].match(/<lastmod>([^<]+)<\/lastmod>/)?.[1].trim()]).filter(([l, d]) => l && d));
+      // Blog dışı sayfaların xhtml:link'leri orijinalden aynen taşınır
+      const origXl = new Map([...orig.matchAll(/<url>([\s\S]*?)<\/url>/g)].map(m => [m[1].match(/<loc>([^<]+)<\/loc>/)?.[1].trim(), (m[1].match(/<xhtml:link\b[^>]*>/g) || []).join("")]).filter(([l, x]) => l && x));
       const keep = [...orig.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m => m[1].trim()).filter(u => !/\/blog\/./.test(new URL(u).pathname) && !sets.slice(1).some(s => new URL(u).pathname === `${s.prefix}/blog`));
       if (!keep.some(u => new URL(u).pathname === "/blog")) keep.push(`${cfg.origin}/blog`);
-      urls.push(...keep.map(u => `<url><loc>${u}</loc>${new URL(u).pathname === "/blog" ? lm : origLm.has(u) ? `<lastmod>${origLm.get(u)}</lastmod>` : ""}</url>`));
-    } else urls.push(`<url><loc>${cfg.origin}${prefix}/blog</loc>${lm}</url>`);
-    urls.push(...posts.map(p => `<url><loc>${cfg.origin}${prefix}/blog/${encodeURIComponent(p.slug)}</loc><lastmod>${p.fm.updated || p.fm.date}</lastmod></url>`));
+      urls.push(...keep.map(u => `<url><loc>${u}</loc>${new URL(u).pathname === "/blog" ? lm + xl(listAlts) : (origLm.has(u) ? `<lastmod>${origLm.get(u)}</lastmod>` : "") + (origXl.get(u) || "")}</url>`));
+    } else urls.push(`<url><loc>${cfg.origin}${prefix}/blog</loc>${lm}${xl(listAlts)}</url>`);
+    urls.push(...posts.map(p => `<url><loc>${cfg.origin}${prefix}/blog/${encodeURIComponent(p.slug)}</loc><lastmod>${p.fm.updated || p.fm.date}</lastmod>${xl(alts.get(p))}</url>`));
     console.log(`build${prefix ? " " + prefix : ""}: ${posts.length} yazı${tplList ? " + liste" : ""}${alts.size ? `, ${[...alts.keys()].filter(p => posts.includes(p)).length} çeviri eşi` : ""}`);
   }
-  await writeFile(join(SITE, "sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.join("\n")}\n</urlset>\n`);
+  // xhtml namespace yalnız hreflang satırı varsa; diğer sitelerin çıktısı değişmez
+  const ns = urls.some(u => u.includes("<xhtml:link")) ? ' xmlns:xhtml="http://www.w3.org/1999/xhtml"' : "";
+  await writeFile(join(SITE, "sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"${ns}>\n${urls.join("\n")}\n</urlset>\n`);
   console.log(`sitemap ${urls.length} url`);
 }
 

@@ -6,6 +6,7 @@ updated: "2026-10-16"
 category: "Kariyer"
 image: "https://images.pexels.com/photos/5439379/pexels-photo-5439379.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
 imageAlt: "Masada özgeçmiş tutan görüşmeciyle konuşan bir aday"
+alt: "sales-rep-interview-questions"
 ---
 
 Satış temsilcisi mülakatı, adayın ne kadar iyi konuştuğunu değil, ne kadar iyi satış yapabileceğini ölçmelidir. Bu yüzden sorular geçmiş performansı, günlük disiplini, discovery ve itiraz yönetimini, CRM alışkanlıklarını, yazılı iletişimi, koçluk alınabilirliği ve motivasyonu sınamalı. Neyi ölçtüğünüzü önceden belirleyin, cevapları puanlayın ve kararı hislere değil verilere dayandırın.

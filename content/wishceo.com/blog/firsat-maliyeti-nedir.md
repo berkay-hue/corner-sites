@@ -4,7 +4,7 @@ description: "Fırsat maliyeti nedir? Bir seçimi yaparken vazgeçilen en iyi al
 date: "2026-10-16"
 category: "Kavramlar"
 image: "/og.png"
-imageAlt: "Fırsat Maliyeti Nedir? Görünmeyen Bedel"
+imageAlt: "WishCEO kapak kartı “Şirket batıyor. CEO sensin.” — fırsat maliyeti yazısı"
 ---
 
 Fırsat maliyeti, bir seçeneği seçtiğinde vazgeçtiğin en iyi alternatifin sana kazandırabileceği değerdir. Hiçbir faturada yazmaz, hiçbir tabloda ayrı bir satırı yoktur. Yine de verdiğin her kararın gerçek fiyatının önemli bir kısmını oluşturur. Bir şeye "evet" dediğinde, aynı kaynakla yapabileceğin başka bir şeye de sessizce "hayır" demiş olursun.
@@ -32,7 +32,7 @@ Bir de alışkanlık meselesi var. Bir ekip yıllardır aynı ürünü geliştir
 
 ## Bir CEO masasından kurgusal bir örnek
 
-Tervina adında orta ölçekli bir ev tekstili şirketi düşün. CEO'su Selin Aras'ın önünde iki seçenek var. Birincisi, mevcut fabrikayı yenilemek: Daha hızlı makineler, daha düşük fire, öngörülebilir bir verim artışı. İkincisi, aynı bütçeyle çevrim içi satış kanalını sıfırdan kurmak: Daha belirsiz, daha riskli ama doğrudan müşteriye ulaşma imkânı sunan bir yol.
+Tervina adında orta ölçekli bir ev tekstili şirketi düşün. CEO'su Selin'in önünde iki seçenek var. Birincisi, mevcut fabrikayı yenilemek: Daha hızlı makineler, daha düşük fire, öngörülebilir bir verim artışı. İkincisi, aynı bütçeyle çevrim içi satış kanalını sıfırdan kurmak: Daha belirsiz, daha riskli ama doğrudan müşteriye ulaşma imkânı sunan bir yol.
 
 Yönetim kurulu toplantısında fabrika yenilemesi kolayca kabul görür. Rakamlar net, risk düşük, kimse itiraz etmez. Bir yıl sonra fabrika gerçekten daha verimli çalışıyordur. Herkes memnundur.
 
@@ -92,5 +92,7 @@ Batık maliyet, geçmişte harcanmış ve geri alınamayacak kaynaktır ve iyi b
 ### Hiçbir şey yapmamanın da fırsat maliyeti var mı?
 
 Evet, çoğu zaman en büyüğü odur. Beklemek, mevcut durumu korumak ya da kararı ertelemek de bir seçimdir ve bu süre içinde kapanan seçenekler gerçek bir bedel oluşturur. Hareketsizlik güvenli görünür, çünkü bedeli göze çarpmaz.
+
+## Sıra sende
 
 Fırsat maliyetini en iyi öğrenme yolu, onu bir kez kendi kararında hissetmektir. Bugünün vakasında da önünde birden fazla makul yol olacak ve her birini seçtiğinde bir diğerinden vazgeçeceksin. Seçimini yapmadan önce kendine bir kez sor: Bu kararla neyi bırakıyorum? [Bugünün vakasını oyna](/#oyun)

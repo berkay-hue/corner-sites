@@ -6,6 +6,7 @@ updated: "2026-10-16"
 category: "CRM"
 image: "https://images.pexels.com/photos/7876739/pexels-photo-7876739.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
 imageAlt: "Küçük bir ekip ofiste dizüstü bilgisayarların başında birlikte çalışıyor"
+alt: "how-to-choose-crm-for-small-sales-team"
 ---
 
 Küçük bir satış ekibi için doğru CRM, en çok özelliğe sahip olan değil, ekibinizin her gün gerçekten kullandığı sistemdir. Önce satış sürecinizi tanımlayın, olmazsa olmaz gereksinimlere göre eleyin, toplam sahip olma maliyetine bakın, en fazla üç finalistle gerçek verilerle pilot yapın ve ekibi karar sürecine dahil edin.

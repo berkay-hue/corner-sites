@@ -1,13 +1,15 @@
 ---
 title: "Krizin İlk 48 Saati: Bilgi Yokken Karar Vermek"
-description: "İki kez çekilen abonelik ücreti, eksik bilgi ve dar bir zaman. Kurgusal bir abonelik şirketi örneğinden krizin ilk saatleri için notlar: karar, iletişim, güven ve maliyet."
+description: "Krizin ilk 48 saatinde bilgi eksikken nasıl karar verilir? Ücreti iki kez çeken kurgusal bir abonelik şirketinden karar, iletişim ve güven notları."
 date: "2026-10-15"
 category: "Kriz Liderliği"
 image: "/og.png"
-imageAlt: "Krizin İlk 48 Saati: Bilgi Yokken Karar Vermek"
+imageAlt: "WishCEO kapak kartı “Şirket batıyor. CEO sensin.” — krizin ilk 48 saati yazısı"
 ---
 
-Krizin ilk 48 saatinde bilgi eksikken iyi karar, "Yanılırsam ne olur?" diye sorup geri dönüşü zor olan kaybı önleyen adımı önce atmaktır. Yani bütün bilginin gelmesini beklemezsin; iki olası hatayı yan yana koyar, telafisi zor olanı önce engellersin. Kriz ilk geldiğinde elinde neredeyse hiçbir şey olmaz. Telefon susmaz, herkes senden bir cevap bekler ve o cevabın dayanacağı bilgilerin yarısı henüz ortada yoktur. Beklersen zaman kaybedersin. Acele edersen yanlış adım atabilirsin. İlk 48 saati zor yapan şey tam olarak bu.
+Krizin ilk 48 saatinde bilgi eksikken iyi karar, "Yanılırsam ne olur?" diye sorup geri dönüşü zor olan kaybı önleyen adımı önce atmaktır. Yani bütün bilginin gelmesini beklemezsin; iki olası hatayı yan yana koyar, telafisi zor olanı önce engellersin.
+
+Kriz ilk geldiğinde elinde neredeyse hiçbir şey olmaz. Telefon susmaz, herkes senden bir cevap bekler ve o cevabın dayanacağı bilgilerin yarısı henüz ortada yoktur. Beklersen zaman kaybedersin. Acele edersen yanlış adım atabilirsin. İlk 48 saati zor yapan şey tam olarak bu.
 
 Bu yazıda kurgusal bir abonelik şirketinin zor bir haftasını açıyoruz: sesli kitap ve e-kitap uygulaması Pakeno’nun binlerce abonesinden aylık ücretin iki kez çekildiği gün. Üç soruya bakacağız: bilgi eksikken nasıl karar verilir, müşterinin parası şirketin kasasıyla karşı karşıya geldiğinde ne olur, aceleyle yapılan bir açıklama güveni neden azaltır?
 
@@ -87,7 +89,7 @@ Krizin sebebini ilk gün her zaman bulamazsın. Ama ne bildiğini ve ne yaptığ
 
 Dört seçeneği yan yana koyduğunda en güçlüsü, sebep bulunana kadar bütün otomatik tahsilatı durdurup iki kez ücret çekilen herkese başvuru beklemeden iade yapmak ve bunu açıkça söylemek. Pakeno’nun sonunda yaptığı da buydu; fark yalnızca sıralamadaydı. En zayıfı, hiçbir şey yapmayıp "kendiliğinden düzelir" demek. Aradaki iki seçenek ise ilk günlerin yükünü hafifletip sonraki haftaların yükünü ağırlaştıran türden.
 
-Oyundaki dosyalarda da seçenekleri böyle tartıyoruz: o gün bilinenlere ve sonradan olanlara bakarak. Gerçek CEO’nun kararı her zaman en iyisi çıkmıyor. [Korvala’nın platform kararı](/blog/korvala-platform-karari) bunun bir örneği: orada gerçek CEO’nun seçimi, masadaki başka bir seçenekten daha düşük puan alıyor.
+Oyundaki dosyalarda da seçenekleri böyle tartıyoruz: o gün bilinenlere ve sonradan olanlara bakarak. Vakadaki CEO’nun kararı her zaman en iyisi çıkmıyor. [Korvala’nın platform kararı](/blog/korvala-platform-karari) bunun bir örneği: orada CEO’nun seçimi, masadaki başka bir seçenekten daha düşük puan alıyor.
 
 WishCEO’da kararları puanlıyoruz, insanları değil. İlk gün hızlıca bir sebep açıklamayı seçen biri kötü yönetici olmaz. O seçimin neden zayıf kaldığını görmek, bir sonraki krizde daha iyi bir soru sormanı sağlar.
 
@@ -107,4 +109,4 @@ Yapılmalı, ama sebep uydurmadan. Ne bildiğini, ne bilmediğini ve bu arada ne
 
 ## Sıra sende
 
-Bir sonraki krizin hangi sabah geleceğini bilemezsin. Ama ilk saatlerde hangi soruları soracağını bugünden prova edebilirsin. Kendi kararını gerçek CEO’nunkiyle karşılaştırmak istersen bir dosya seni bekliyor. [Bugünün vakasını oyna](/#oyun).
+Bir sonraki krizin hangi sabah geleceğini bilemezsin. Ama ilk saatlerde hangi soruları soracağını bugünden prova edebilirsin. Kendi kararını vakadaki CEO’nun kararıyla karşılaştırmak istersen bir dosya seni bekliyor. [Bugünün vakasını oyna](/#oyun).

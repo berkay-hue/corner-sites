@@ -4,10 +4,12 @@ description: "İyi bir karar kötü bitebilir, kötü bir karar şansla iyi bite
 date: "2026-10-15"
 category: "Karar Verme"
 image: "/og.png"
-imageAlt: "İyi Karar, Kötü Sonuç: Farkı Nasıl Görürsün?"
+imageAlt: "WishCEO kapak kartı “Şirket batıyor. CEO sensin.” — iyi karar ve kötü sonuç yazısı"
 ---
 
-İyi bir karar kötü bitebilir, kötü bir karar da şansla iyi bitebilir; bu yüzden bir kararı sonucuna göre değil, o gün masadaki bilgiyle ne kadar iyi düşünüldüğüne göre puanlamak gerekir. Murat ve Elif aynı yıl, aynı semtte birer kafe açıyor. Murat dükkânı bir akşam yürüyüşünde beğeniyor ve ertesi gün kontratı imzalıyor. Kirayı pazarlık etmiyor, sokaktan ne kadar insan geçtiğine bakmıyor. Elif haftalarca farklı saatlerde sokakları izliyor, kirayı pazarlıkla düşürüyor, kenara yedek bir bütçe ayırıyor.
+İyi bir karar kötü bitebilir, kötü bir karar da şansla iyi bitebilir; bu yüzden bir kararı sonucuna göre değil, o gün masadaki bilgiyle ne kadar iyi düşünüldüğüne göre puanlamak gerekir.
+
+Murat ve Elif aynı yıl, aynı semtte birer kafe açıyor. Murat dükkânı bir akşam yürüyüşünde beğeniyor ve ertesi gün kontratı imzalıyor. Kirayı pazarlık etmiyor, sokaktan ne kadar insan geçtiğine bakmıyor. Elif haftalarca farklı saatlerde sokakları izliyor, kirayı pazarlıkla düşürüyor, kenara yedek bir bütçe ayırıyor.
 
 Birkaç ay sonra Murat’ın sokağına büyük bir ofis binası taşınıyor. Kafesi öğle saatlerinde dolup taşıyor. Elif’in sokağı ise altyapı çalışması yüzünden aylarca kazı altında kalıyor. Murat büyüyor, Elif zorlanıyor.
 
@@ -62,7 +64,7 @@ Kötü bir sonuçtan sonra iki tuzak bekler. Birincisi, kararı verdiren mantı�
 Sonucu henüz görmediysen ya da gördüysen bile bir kenara koyabiliyorsan, bir karara şu soruları sorabilirsin:
 
 1. O gün ne biliyordun, makul bir çabayla ne öğrenebilirdin?
-2. Masada hangi seçenekler vardı? Yalnızca aklına ilk geleni mi tarttın?
+2. Masada hangi seçenekler vardı? Yalnızca aklına ilk geleni mi tarttın? Seçtiğin yolun gerçek bedeli, vazgeçtiğin en iyi seçenektir; buna [fırsat maliyeti](/blog/firsat-maliyeti-nedir) deniyor.
 3. En kötü ihtimali düşündün mü? O gerçekleşse altından kalkabilir miydin?
 4. Bu seçeneği neden seçtiğini tek cümleyle söyleyebilir misin?
 5. Yanlış çıkarsa geri dönmek ya da düzeltmek için bir kapı bıraktın mı?
@@ -75,9 +77,9 @@ Deniz notuna bakıyor. Karar, o gün bilinenle doğruydu. Teslimatların gecikme
 
 ## WishCEO’da neden kararları puanlıyoruz?
 
-WishCEO’da her dosyada dört seçenek, her seçeneğin de bir puanı var. Kararını verdikten sonra gerçek CEO’nun ne yaptığını ve şirkete sonra ne olduğunu görüyorsun. Yani kararını gerçekte olanla yan yana koyuyorsun. Ama puanın, gerçek CEO’yla aynı şeyi seçip seçmediğine göre belirlenmiyor.
+WishCEO’da her dosyada dört seçenek, her seçeneğin de bir puanı var. Kararını verdikten sonra vakadaki CEO’nun ne yaptığını ve şirkete sonra ne olduğunu görüyorsun. Yani kararını vakada olanla yan yana koyuyorsun. Ama puanın, o CEO’yla aynı şeyi seçip seçmediğine göre belirlenmiyor.
 
-Puanı verirken iki şeye bakıyoruz: o dönemde ne biliniyordu ve sonra ne oldu. Sonuç bir kontrol aracı, tek başına hâkim değil. Bu yüzden gerçek CEO’nun seçimi her zaman en yüksek puanı almıyor. Korvala dosyasında A’yı seçersen ekranda "Gerçek CEO’dan 40 puan iyi" yazısını görürsün. Bu, Stoddard’ın kötü bir yönetici olduğu anlamına gelmiyor. O gün verilmiş bir kararın, o günün bilgisiyle zayıf kaldığı anlamına geliyor.
+Puanı verirken iki şeye bakıyoruz: o dönemde ne biliniyordu ve sonra ne oldu. Sonuç bir kontrol aracı, tek başına hâkim değil. Bu yüzden vakadaki CEO’nun seçimi her zaman en yüksek puanı almıyor. Korvala dosyasında A’yı seçersen ekranda vakadaki CEO’dan 40 puan önde olduğunu görürsün. Bu, Stoddard’ın kötü bir yönetici olduğu anlamına gelmiyor. O gün verilmiş bir kararın, o günün bilgisiyle zayıf kaldığı anlamına geliyor.
 
 İnsanları değil kararları puanlamamızın anlamı bu. Aynı kural senin için de geçerli. Karnende Budayıcı, Kalkan, Kumarbaz ya da Kasa Bekçisi çıkması kim olduğunu anlatmaz; o dosyalarda hangi kararları verdiğini anlatır. Başka dosyalarda başka bir tip çıkabilir.
 
@@ -99,7 +101,7 @@ Kendini o günkü masaya geri oturt ve sor: ne biliyordun, hangi seçenekleri ta
 
 ### WishCEO kararları nasıl puanlıyor?
 
-WishCEO her dosyadaki dört seçeneği, o dönemde ne bilindiğine ve sonra ne olduğuna bakarak puanlar; puan, gerçek CEO’yla aynı şeyi seçip seçmediğine göre belirlenmez. Bu yüzden gerçek CEO’nun seçimi her zaman en yüksek puanı almaz.
+WishCEO her dosyadaki dört seçeneği, o dönemde ne bilindiğine ve sonra ne olduğuna bakarak puanlar; puan, vakadaki CEO’yla aynı şeyi seçip seçmediğine göre belirlenmez. Bu yüzden vakadaki CEO’nun seçimi her zaman en yüksek puanı almaz.
 
 ## Bir dahaki kararında
 

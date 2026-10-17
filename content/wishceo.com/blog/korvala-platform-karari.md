@@ -1,15 +1,17 @@
 ---
 title: "Zirvedeyken Platform Seçmek: Korvala Vakası"
-description: "Dünyanın en çok telefon satan şirketi Korvala, 2010'ların başında bir platform seçmek zorundaydı. Dört yolun artısı, eksisi ve gerçekte ne olduğu."
+description: "Kurgusal telefon üreticisi Korvala, pazarının zirvesindeyken bir platform seçmek zorunda. Dört yolun artısı, eksisi ve vakada ne olduğu."
 date: "2026-10-15"
 category: "Kurgusal Vaka"
 image: "/og.png"
 imageAlt: "WishCEO kapak kartı “Şirket batıyor. CEO sensin.” — Korvala’nın platform kararı yazısı"
 ---
 
-Korvala vakası, zirvedeki bir telefon şirketinin 2010'ların başında akıllı telefonlarının hangi yazılımla çalışacağına karar vermesidir ve masadaki dört yolun hiçbiri bedava değildir. 2010'ların başı, Kuzey Avrupa. Dünyada en çok telefon satan şirketin başına yeni geçtin. Adı Korvala. Neredeyse herkesin cebinde bir Korvala var ya da yakın zamana kadar vardı. Kâğıt üzerinde zirvedesin.
+Korvala vakası, kurgusal bir telefon üreticisinin akıllı telefonlarında hangi yazılımı kullanacağına karar vermesidir; masadaki dört yolun hiçbiri bedava değildir.
 
-Ama zirvede durmak, ayağının altındaki zeminin sağlam olduğu anlamına gelmiyor. Masanda tek bir soru var ve cevabı şirketin bundan sonraki yolunu çizecek: Telefonların hangi yazılımla çalışacak?
+2010'ların başı, Kuzey Avrupa. Pazarının zirvesindeki bir telefon üreticisinin başına yeni geçtin. Adı Korvala. Neredeyse herkesin cebinde bir Korvala var ya da yakın zamana kadar vardı. Kâğıt üzerinde zirvedesin.
+
+Ama bugün önde olmak, yarın da önde olacağın anlamına gelmiyor. Masanda tek bir soru var ve cevabı şirketin bundan sonraki yolunu çizecek: Telefonların hangi yazılımla çalışacak?
 
 > Bu yazı Korvala vakasının sonucunu anlatıyor. Önce kendin karar vermek istersen [vakayı oyna](/?s=001#oyun).
 
@@ -17,7 +19,7 @@ Ama zirvede durmak, ayağının altındaki zeminin sağlam olduğu anlamına gel
 
 Dosyadaki tablo şöyle. Birkaç yıl önce bir bilgisayar şirketi parmakla kullanılan dokunmatik telefonunu çıkardı. Büyük bir internet şirketinin telefon üreticilerine ücretsiz verdiği sistem de hızla yayılıyor. Korvala'nın kendi akıllı telefon sistemi eskidi, uygulama geliştiriciler ilgisini kaybetti. Ortaklıkla geliştirilen yeni sistem ise henüz hazır değil.
 
-Akıllı telefonda pazar payın geriliyor, hisse düşüyor. Telefon satışında hâlâ dünya birincisisin. Ama bu birincilik, giderek önemini yitiren bir ligde.
+Akıllı telefonda pazar payın geriliyor, hisse düşüyor. Telefon satışında hâlâ zirvedesin. Ama bu birincilik, giderek önemini yitiren bir ligde.
 
 Korvala'nın sorunu kötü telefon yapması değil. Fabrikalar çalışıyor, marka tanınıyor, telefonlar dünyanın her yerinde satılıyor. Sorun, telefonun değerinin donanımdan yazılıma, o yazılımın etrafındaki uygulamalara kaymış olması. Sen hâlâ en iyi kutuyu yapıyorsun. Müşteri ise artık kutunun içinde ne olduğuna bakıyor.
 
@@ -67,23 +69,23 @@ Bu yol bugünü korur, yarını kaybettirir. Ucuz telefon pazarı da birkaç yı
 
 Dört seçeneği yan yana koyunca tek bir gerilim ortaya çıkıyor. Bir uçta kontrol var: kendi sistemin, kendi kuralların. Öbür uçta erişim var: hazır kullanıcılar, hazır uygulamalar.
 
-C kontrolü seçer, erişimi kaybeder. A erişimi seçer, kontrolü bırakır. B ikisinin arasında bir yer arar: tamamen senin olmayan ama sana özel ilgi gösteren bir sistem. D ise soruyu hiç sormamayı seçer.
+C kontrolü seçer, erişimi kaybeder. A erişimi seçer, kontrolü bırakır. B ikisinin arasında bir yer arar: tamamen senin olmayan ama sana özel ilgi gösteren bir sistem. D ise soruyu hiç sormamayı seçer. Hangisini seçersen seç, bedeli vazgeçtiğin en iyi öbür yoldur; buna [fırsat maliyeti](/blog/firsat-maliyeti-nedir) deniyor.
 
 Zirvedeki bir şirket için kontrol çok cazip gelir. Yıllarca kuralları sen koymuşsun. Başkasının kurduğu pazarda tezgâh açmak gurur kırıcı görünür. Ama müşteri senin gururunu görmüyor, cebindeki telefonun neler yapabildiğine bakıyor.
 
 Bunu yalnızca telefon şirketleri yaşamıyor. Diyelim ki orta boy bir lojistik firmasında çalışıyorsun ve firma yıllardır kendi yazdığı takip programını kullanıyor. Müşteriler artık herkesin kullandığı bir sistemle bağlanmak istiyor. Kendi programını mı yenilersin, herkesin sistemine mi geçersin, büyük bir yazılım firmasıyla mı ortak olursun? Ölçek küçük, soru aynı.
 
-## Gerçekte ne oldu?
+## Vakada ne oldu?
 
 Korvala'nın CEO'su Gordon Stoddard B'yi seçti ve şirketi Tallbridge'in telefon sistemine bağladı. Eski sistem rafa kalkmaya başladı.
 
 Tallbridge'in sistemi beklenen ivmeyi yakalayamadı. Birkaç yıl sonra Korvala telefon işini Tallbridge'e satmak için anlaştı: patent lisansı dâhil birkaç milyar avro. Satış ertesi yıl tamamlandı.
 
-Korvala ortadan kalkmadı. Telefon dışındaki işleriyle, daha çok altyapı tarafında yoluna devam etti. Ama dünyada en çok telefon satan şirket, artık telefon satmıyor.
+Korvala ortadan kalkmadı. Telefon dışındaki işleriyle, daha çok altyapı tarafında yoluna devam etti. Ama bir zamanlar pazarın zirvesindeki telefon üreticisi, artık telefon satmıyor.
 
 ## Oyunda neden 35 puan?
 
-Oyunda B seçeneği 35 puan alıyor. Herkesin kullandığı sisteme geçmek 75, kendi sistemini bitirmek 45, akıllı telefonu bırakmak 25 puan. Yani gerçek CEO'nun kararı bu dosyada dört seçenek içinde sondan ikinci sırada.
+Oyunda B seçeneği 35 puan alıyor. Herkesin kullandığı sisteme geçmek 75, kendi sistemini bitirmek 45, akıllı telefonu bırakmak 25 puan. Yani vakadaki CEO'nun kararı bu dosyada dört seçenek içinde sondan ikinci sırada.
 
 Puanlar, o dönemde bilinenlere ve sonradan olanlara bakılarak verildi. B'nin düşük puanı yalnızca kötü bitmesinden gelmiyor. Karar anında da görülebilen bir risk vardı: bütün şirketi, pazarın küçük bir dilimini tutan tek bir sisteme bağlamak. A'nın yüksek puanı da bir başarı garantisi değil. Sonradan bazı yorumcular Korvala'nın bu yolu seçmesi gerektiğini savundu, ama o yolun nereye çıkacağını kimse bilemez.
 
@@ -109,7 +111,7 @@ Bu soruların hiçbiri doğru cevabı vermez. Ama hangi riski bilerek aldığın
 
 Dört yol vardı: herkesin kullandığı ücretsiz sisteme katılmak, Tallbridge'le ortaklık kurmak, kendi yeni sistemini bitirmek ya da akıllı telefonu bırakmak. Oyunda bu seçenekler sırasıyla 75, 35, 45 ve 25 puan alıyor.
 
-### Korvala'nın CEO'su gerçekte ne yaptı?
+### Korvala'nın CEO'su ne yaptı?
 
 Gordon Stoddard 2010'ların başında Tallbridge ortaklığını seçti ve şirketin eski sistemini rafa kaldırdı. Tallbridge'in sistemi beklenen ivmeyi yakalayamadı. Birkaç yıl sonra Korvala telefon işini patent lisansı dâhil birkaç milyar avroya Tallbridge'e satmak için anlaştı.
 
@@ -123,4 +125,4 @@ Platform yarışı donanımla değil, geliştiricileri ve kullanıcıları aynı
 
 ## Sen ne yapardın?
 
-2010'ların başındasın. Telefonlar hâlâ satılıyor ama zemin ayağının altından kayıyor. Sen hangi yolu seçerdin? [Korvala vakasını oyna](/?s=001#oyun) ve kararını gerçek CEO'nunkiyle karşılaştır.
+2010'ların başındasın. Telefonlar hâlâ satılıyor ama pazarın yönü hızla değişiyor. Sen hangi yolu seçerdin? [Korvala vakasını oyna](/?s=001#oyun) ve kararını vakadaki CEO'nun kararıyla karşılaştır.

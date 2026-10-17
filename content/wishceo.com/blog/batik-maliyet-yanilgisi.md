@@ -7,9 +7,11 @@ image: "/og.png"
 imageAlt: "WishCEO kapak kartı “Şirket batıyor. CEO sensin.” — batık maliyet yanılgısı yazısı"
 ---
 
-Batık maliyet yanılgısı, geri gelmeyecek geçmiş harcamaların gelecekle ilgili bir kararı yönlendirmesidir. Bir toplantı düşün. Masada yıllardır süren bir proje var. Bütçe defalarca aşıldı, takvim birkaç kez kaydı, ortada hâlâ ödeme yapan tek bir müşteri yok. Biri çekinerek soruyor: "Bunu durdursak mı?" Odadaki en kıdemli kişi hemen cevap veriyor: "Bu kadar para yatırdık, şimdi mi bırakacağız?"
+Batık maliyet yanılgısı, geri gelmeyecek geçmiş harcamaların gelecekle ilgili bir kararı yönlendirmesidir.
 
-Cümle kulağa mantıklı geliyor. Kimse emeğinin boşa gitmesini istemez. Ama içinde gizli bir sorun var: Gelecekle ilgili bir karar, geri gelmeyecek bir geçmişe bakılarak veriliyor. Bunun adı batık maliyet yanılgısı. Bu yazıda ne olduğuna, şirket yönetiminde hangi kılıklara girdiğine ve karar anında onu nasıl yakalayabileceğine bakıyoruz.
+Bir toplantı düşün. Masada yıllardır süren bir proje var. Bütçe defalarca aşıldı, takvim birkaç kez kaydı, ortada hâlâ ödeme yapan tek bir müşteri yok. Biri çekinerek soruyor: "Bunu durdursak mı?" Odadaki en kıdemli kişi hemen cevap veriyor: "Bu kadar para yatırdık, şimdi mi bırakacağız?"
+
+Cümle kulağa mantıklı geliyor. Kimse emeğinin boşa gitmesini istemez. Ama içinde gizli bir sorun var: Gelecekle ilgili bir karar, geri gelmeyecek bir geçmişe bakılarak veriliyor. Batık maliyet yanılgısı tam olarak bu. Bu yazıda ne olduğuna, şirket yönetiminde hangi kılıklara girdiğine ve karar anında onu nasıl yakalayabileceğine bakıyoruz.
 
 ## Batık maliyet ne demek?
 
@@ -71,7 +73,7 @@ Ama burada sorman gereken şey o emeğin ne kadar büyük olduğu değil. Asıl 
 
 Bir ayrıntıya daha dikkat et. CEO koltuğuna yeni oturdun; parkları, giyim hattını, video oyunlarını açan kararlar senin imzanı taşımıyor. Batık maliyetle mücadelede bu bir avantaj, çünkü eski kararları savunmak zorunda değilsin. Yine de o projelerin arkasında hâlâ ekipler ve onları savunan insanlar var. Onların gözünde her biri bir emek.
 
-Hangi seçeneğe gitmen gerektiğini burada söylemeyeceğiz, gerçekte ne olduğunu da. Dosyayı açıp [kendi kararını ver](/?s=001#oyun), sonra gerçek CEO'nun ne yaptığını gör.
+Hangi seçeneğe gitmen gerektiğini burada söylemeyeceğiz, vakada ne olduğunu da. Dosyayı açıp [kendi kararını ver](/?s=001#oyun), sonra vakadaki CEO'nun ne yaptığını gör.
 
 ## Karar anında sorulacak sorular
 
@@ -79,7 +81,7 @@ Batık maliyeti yakalamanın en iyi yolu, onu hesaptan bilinçli olarak çıkarm
 
 1. Bugün sıfırdan başlasaydık, bu işe bu bütçeyle girer miydik? Cevap hayırsa devam etmek için başka bir gerekçe bulman gerekir. "Başlamıştık" gerekçe değildir.
 2. Bu işi yarın yeni biri devralsa ne yapardı? Geçmişe bağı olmayan birinin gözüyle bak. Dışarıdan gelen bir yöneticinin ilk haftasında soracağı soruları sen de bugün sorabilirsin.
-3. Buradan sonra harcayacağım her lira ve her saat bana ne getirecek? Hesabı geçmişten değil, bugünden başlat.
+3. Buradan sonra harcayacağım her lira ve her saat bana ne getirecek? Hesabı geçmişten değil, bugünden başlat. Aynı parayla ve aynı zamanla başka neler yapabileceğini de yanına yaz; buna [fırsat maliyeti](/blog/firsat-maliyeti-nedir) deniyor.
 4. Durursam gerçekten neyi kaybediyorum? Bazı bedeller gerçektir: tutulamayan bir müşteri sözü, sözleşmeden doğan bir yükümlülük, ekipte biriken bilgi. Bunlar hesaba girer. Harcanmış para girmez, o zaten gitti.
 5. Bu kararı kimin için veriyorum? Şirket için mi, yoksa projenin başındaki kişinin, belki de kendi itibarımın korunması için mi?
 6. Durma noktamı önceden yazdım mı? Bunun en iyi zamanı, proje daha başlamadan önceki gündür. "Şu tarihe kadar şu sonucu göremezsek dururuz" cümlesini baştan yazarsan, ileride duygular değil, kendine verdiğin söz konuşur.

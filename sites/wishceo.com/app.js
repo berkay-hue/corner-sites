@@ -80,11 +80,11 @@
       company: "Korvala",
       title: "Tahttaki telefoncu",
       body: [
-        "Korvala dünyada en çok telefon satan şirket. Neredeyse herkesin cebinde bir Korvala var ya da yakın zamana kadar vardı.",
+        "Korvala, pazarının zirvesindeki telefon üreticisi. Neredeyse herkesin cebinde bir Korvala var ya da yakın zamana kadar vardı.",
         "Ama birkaç yıl önce Amerikalı bir bilgisayar şirketi dokunmatik telefonunu çıkardı, arama motoru devinin ücretsiz sistemi de hızla yayılıyor. Şirketin kendi akıllı telefon sistemi eskidi, uygulama geliştiriciler ilgisini kaybetti. Ortaklıkla geliştirilen yeni sistem ise henüz hazır değil.",
         "Akıllı telefonda pazar payı geriliyor, hisse düşüyor. Yeni CEO sensin ve bir platform seçmek zorundasın."
       ],
-      stats: [["Telefon satışında", "Dünya 1.si"], ["İşletim sistemi", "Kendi, eski"], ["Rakipler", "ABD’li iki dev"]],
+      stats: [["Telefon pazarında", "Zirvede"], ["İşletim sistemi", "Kendi, eski"], ["Rakipler", "ABD’li iki dev"]],
       ask: "Hangi yola girersin?",
       opts: [
         { k: "A", t: "Arama motoru devinin ücretsiz sistemine geç. Herkesin kullandığı yere katıl, farkı donanım ve tasarımla yarat.", s: 75, tag: "cerrah",
@@ -133,7 +133,7 @@
           r: "Teslimatta zaten iyisin, internetten sipariş de büyüyor; maliyetler düşer. Ama pizzayı beğenmeyen müşteriyi hızlı teslimat geri getirmez." }
       ],
       real: {
-        who: "Owen Ballard",
+        who: "Owen Marchbank",
         role: "Brascina’nın ABD başkanı, kısa süre sonra CEO’su",
         k: "C",
         text: [
@@ -286,7 +286,7 @@
       body: [
         "Kestrin internetin en tanınan adlarından biri. Ama çevrim içi reklam parasının büyük kısmı arama liderine akıyor; üç yıl önce senden küçük olan bu rakip artık pazara hükmediyor.",
         "Son çeyrekte kâr beşte bir kadar düştü. Yaklaşık bin çalışanı, kadronun küçük bir bölümünü çıkarmaya hazırlanıyorsun; hisse dört yılı aşkın sürenin en düşük seviyesinde. Şirketin kurucu ortaklarından birisin ve yedi aydır CEO’sun.",
-        "Yazılım devi Tessarc bu ay teklifini açıkladı: hisse başı 30 dolar civarı, yarısı nakit yarısı hisse, toplam kırk milyar doları aşkın. Bu, bir önceki kapanışın yüzde altmış kadar üstü. Ama hissen iki yıl önce 40 doları aşmıştı ve bir yıl önce gelen birleşme önerisini zaten geri çevirmiştin."
+        "Yazılım devi Vantrell bu ay teklifini açıkladı: hisse başı 30 dolar civarı, yarısı nakit yarısı hisse, toplam kırk milyar doları aşkın. Bu, bir önceki kapanışın yüzde altmış kadar üstü. Ama hissen iki yıl önce 40 doları aşmıştı ve bir yıl önce gelen birleşme önerisini zaten geri çevirmiştin."
       ],
       stats: [["Teklif", "Hisse başı ~30 $"], ["Prim", "~%60"], ["Çeyreklik kâr", "Beşte bir düşüş"]],
       ask: "Kestrin’in başındasın. Teklife cevabın ne?",
@@ -305,9 +305,9 @@
         role: "Kestrin’in kurucu ortağı ve CEO’su",
         k: "D",
         text: [
-          "Voss ve yönetim kurulu teklifi hızla geri çevirdi; onlara göre rakam şirketin değerini yansıtmıyordu. Pazarlık aylarca sürdü. Tessarc teklifi birkaç milyar dolar artırmaya hazırdı; Voss ve diğer kurucu ortak bundan da yüksek bir fiyat istedi.",
-          "Birkaç ay sonra Tessarc teklifini geri çekti. Ertesi işlem gününde Kestrin hissesi sert düştü. Kestrin, reklam alanının bir kısmını arama liderine bırakan bir anlaşmaya yöneldi; yıl bitmeden arama lideri bu anlaşmadan çekildi.",
-          "Yıl sonuna doğru hisse teklifin üçte birinin altındaydı. Tessarc anlaşmasını kapatamadığı için sert eleştirilen Voss, bir yılı aşkın süre sonra CEO’luğu bırakacağını açıkladı."
+          "Voss ve yönetim kurulu teklifi hızla geri çevirdi; onlara göre rakam şirketin değerini yansıtmıyordu. Pazarlık aylarca sürdü. Vantrell teklifi birkaç milyar dolar artırmaya hazırdı; Voss ve diğer kurucu ortak bundan da yüksek bir fiyat istedi.",
+          "Birkaç ay sonra Vantrell teklifini geri çekti. Ertesi işlem gününde Kestrin hissesi sert düştü. Kestrin, reklam alanının bir kısmını arama liderine bırakan bir anlaşmaya yöneldi; yıl bitmeden arama lideri bu anlaşmadan çekildi.",
+          "Yıl sonuna doğru hisse teklifin üçte birinin altındaydı. Vantrell anlaşmasını kapatamadığı için sert eleştirilen Voss, bir yılı aşkın süre sonra CEO’luğu bırakacağını açıkladı."
         ]
       }
     },
@@ -469,11 +469,11 @@
           r: "Sembolik bir adım; zararı kapatmaz. Ama sorumluluğu en tepeden üstlenir ve oyunları yapan ekibi korur." }
       ],
       real: {
-        who: "Haruki Tsuboi",
+        who: "Haruki Ueshiro",
         role: "Kagemori’nin başkanı",
         k: "D",
         text: [
-          "Ay sonunda yönetim kurulu birkaç aylığına maaşları kesti: Tsuboi’ninki yaklaşık yarıya indi, öteki üst yöneticilerinki de belirgin biçimde azaldı. Yaklaşık yüz milyar yenlik hisse geri alımı açıklandı. Tsuboi istifa etmedi; kesinti, sorumluluğu en tepeden üstlenmenin sembolik bir yolu olarak görüldü.",
+          "Ay sonunda yönetim kurulu birkaç aylığına maaşları kesti: Ueshiro’nunki yaklaşık yarıya indi, öteki üst yöneticilerinki de belirgin biçimde azaldı. Yaklaşık yüz milyar yenlik hisse geri alımı açıklandı. Ueshiro istifa etmedi; kesinti, sorumluluğu en tepeden üstlenmenin sembolik bir yolu olarak görüldü.",
           "Şirket işten çıkarma yapmama çizgisini önceki yıllarda da korumuştu; birkaç yıl önce el konsolunun zayıf başlangıcından sonra da başkanın maaşı yarıya inmişti.",
           "O mali yıl on milyarlarca yen faaliyet zararıyla kapandı; ertesi yıl şirket faaliyet kârına döndü. Yaklaşık bir yıl sonra bir mobil oyun şirketiyle karşılıklı hisse takasıyla ortaklık kuruldu ve Kagemori akıllı telefon oyunlarına girdi."
         ]
@@ -516,35 +516,35 @@
       }
     },
     {
-      area: "Kalite",
-      place: ["ABD", " · 2000’lerin ortası"],
-      company: "Calder Interactive · Orvia 2",
-      title: "Üç kırmızı ışık",
+      area: "Platform",
+      place: ["ABD", " · 2010’ların başı"],
+      company: "Calder Interactive · Orvia 3",
+      title: "Her gün internete bağlan",
       body: [
-        "Calder dünyanın en büyük yazılım şirketlerinden biri. Oyun konsolu Orvia 2, en büyük rakibinden bir yıl önce piyasaya çıktı ve on milyonu aşkın adede ulaştı. Konsol, şirketin oturma odasına girme stratejisinin merkezinde.",
-        "Ama oyuncu forumları tek bir görüntüyle dolu: güç düğmesinin çevresinde beliren üç kırmızı ışık. Konsol açılmıyor. Tamir merkezleri tıkanmış; garantisi biten müşteri onarım için yüz doları aşkın para ödüyor. Garanti Amerika’da bir yıl, Avrupa’da iki yıl.",
-        "Şirket arıza oranını açıklamıyor ama bağımsız tahminler çok yüksek. Mali yıl birkaç gün sonra kapanıyor. Eğlence ve cihazlar biriminin başındasın; çeyrek kapanmadan bir karar vermen gerekiyor."
+        "Calder büyük bir yazılım şirketi. Yeni konsolu Orvia 3, birkaç ay sonra yılbaşı sezonundan önce çıkacak. Tanıtımda üç şey duyurdu: oyunlar diske değil hesaba bağlı bir dijital lisansla çalışacak, konsol günde bir kez internete bağlanıp lisansı kontrol edecek, ikinci el satış ve arkadaşa ödünç verme yayıncının koyduğu kurallara bağlı olacak.",
+        "Şirkete göre bu yapı, dijital oyun kütüphanesini aileyle paylaşmanın önünü açıyor; yayıncılar da ikinci el pazarından zaten hoşlanmıyor. Ama oyuncular kırgın: forumlar dolu, ön siparişlerde ana rakip öne geçti. Büyük oyun fuarında rakip, disklerin eskisi gibi çalışacağını açıkladı ve konsolunu 100 dolar daha ucuza koydu; salon alkışla doldu.",
+        "Çıkışa yaklaşık beş ay var. Calder’in eğlence biriminin başındasın; ekibin masaya birkaç seçenek getirdi."
       ],
-      stats: [["Satılan konsol", "On milyonu aşkın"], ["Ücretli onarım", "Yüz doları aşkın"], ["Garanti (ABD)", "1 yıl"]],
+      stats: [["Çıkışa kalan", "~5 ay"], ["Rakibin fiyatı", "100 dolar ucuz"], ["Ön siparişler", "Rakip önde"]],
       ask: "Calder’in eğlence biriminin başındasın. Ne yaparsın?",
       opts: [
-        { k: "A", t: "Mevcut garantiyle devam et; tamir sürecini hızlandır, kamuoyuna açıklamayı sınırlı tut.", s: 15, tag: "kasa",
-          r: "Bu çeyreği korur. Ama forumlar büyüdükçe her yeni kırmızı ışık markanın hanesine yazılır; ilk kuşak oyuncuyu kaybetmek konsolu kaybetmektir." },
-        { k: "B", t: "Sessizce yeni bir donanım revizyonuna geç: yeni üretim sağlam olsun, eldeki konsolları kendi seyrine bırak.", s: 25, tag: "kumar",
-          r: "Gelecek satışları koruyabilir ama milyonlarca müşteriyi kendi kaderine bırakır. Arıza sürdükçe ilk alıcılar en yüksek sesli eleştirmenlerin olur." },
-        { k: "C", t: "Bu arıza için garantiyi satın alımdan itibaren üç yıla çıkar, ödenmiş onarım ücretlerini iade et, bedeli bu çeyrekte tek seferde yaz.", s: 85, tag: "kalkan",
-          r: "Bir milyar doları aşan bir gider demek. Ama oyuncuya “sorun bizde, bedeli de biz ödüyoruz” dersin ve belirsizliği tek hamlede kapatırsın." },
-        { k: "D", t: "Yeni revizyon hazır olana kadar satışı beklet; bu sürede arızalanan her konsolu ücretsiz yenisiyle değiştir.", s: 30, tag: "cerrah",
-          r: "Sorunu kökten ele alır gibi görünür. Ama yılbaşı sezonu rakibe kalır; satışı duran bir konsola oyun yapan şirketler ve yeni alıcılar da güvenini kaybeder." }
+        { k: "A", t: "Politikayı koru; büyük bir kampanyayla dijital lisansın faydalarını anlat.", s: 25, tag: "kasa",
+          r: "Yayıncılarla yapılan anlaşmalar yerinde kalır. Ama oyuncu neyi kaybettiğini net görüyor; anlatmak fikrini değiştirmez ve ön siparişler rakipte kalır." },
+        { k: "B", t: "Çıkıştan önce günlük kontrolü, ikinci el ve ödünç verme sınırlarını kaldır; diskler bugünkü gibi çalışsın, dijital paylaşımı şimdilik rafa koy.", s: 85, tag: "cerrah",
+          r: "Geri adım gibi görünür ve sevilen bir özelliği de bırakırsın. Ama tartışmanın kaynağını tek hamlede kaldırırsın; konuşma yeniden oyunlara döner." },
+        { k: "C", t: "Ortada bir yol bul: kontrolü haftada bire indir, ikinci el satışa seçili mağazalarda izin ver.", s: 40, tag: "kalkan",
+          r: "Yarım adım kimseyi tam ikna etmez: oyuncu için kısıt hâlâ orada, yayıncılar da kuralların belirsizleşmesinden hoşlanmaz." },
+        { k: "D", t: "Politikayı koru ama konsolu rakibin altında fiyatla; aradaki farkı oyun ve abonelik gelirinden çıkar.", s: 35, tag: "kumar",
+          r: "Her konsolda para kaybedersin. Üstelik oyuncunun itirazı fiyat değil, oyununu ödünç verememek; ucuzluk bu kırgınlığı gidermez." }
       ],
       real: {
-        who: "Ian Fairley",
-        role: "Calder’in eğlence ve cihazlar biriminin başkanı",
-        k: "C",
+        who: "Graham Kettley",
+        role: "Calder’in eğlence biriminin başkanı",
+        k: "B",
         text: [
-          "Fairley yeni mali yılın ilk günlerinde üç kırmızı ışık arızası için garantiyi dünya genelinde satın alma tarihinden itibaren üç yıla çıkardığını açıkladı. Onarım ve kargo ücretsiz oldu, daha önce para ödeyerek tamir ettirenlere ücretleri iade edildi. Açıklamada müşterilerden açıkça özür diledi.",
-          "Bedeli ağırdı: biten çeyreğe bir milyar doları aşan gider yazıldı. Şirket arıza oranını hiçbir zaman açıklamadı; sonradan yapılan tahminlere göre konsolların yaklaşık dörtte biri ilk iki yılda arızalanmıştı.",
-          "Konsol yeni donanım revizyonlarıyla on yılı aşkın süre satıldı ve on milyonlarca adede ulaştı; üretimi yaklaşık on yıl sonra sona erdi."
+          "Fuardan yaklaşık on gün sonra Kettley kısa bir açıklamayla politikayı değiştirdi: günlük internet kontrolü kalktı, diskli oyunlar eskisi gibi ödünç verilip ikinci el satılabilecekti, bölge kilidi de olmayacaktı. Dijital kütüphaneyi paylaşma planı ise şimdilik rafa kalktı.",
+          "Tartışma büyük ölçüde kapandı ama ilk izlenim kalıcı oldu. Orvia 3 yılbaşı sezonunda çıktı ve ilk gününde bir milyon adedi aştı; yine de rakip o kuşak boyunca önde kaldı ve kabaca iki katı sattığı tahmin ediliyor.",
+          "Ertesi yıl fiyatı düşürmek için kamera aksesuarı kutudan çıkarıldı. Sonraki yıllarda eski kuşağın oyunları da yeni konsolda oynanabilir oldu. Vaka, çıkıştan önce dinlemenin ve geri adımın zamanlamasının değerini anlatıyor."
         ]
       }
     },
@@ -561,7 +561,7 @@
       stats: [["Grenholt’un payı", "Altıda bire yakın"], ["Ailenin payı", "~dörtte üç"], ["İlk işlem günü", "Sert yükseliş"]],
       ask: "Corvelle’in başındasın. Grenholt’a karşı ne yaparsın?",
       opts: [
-        { k: "A", t: "Uzlaş: Grenholt’u pasif bir yatırımcı olarak kabul et, pahalı davalardan ve yeni yapılardan kaçın.", s: 25, tag: "kasa",
+        { k: "A", t: "Uzlaş: Grenholt’u pasif bir yatırımcı olarak kabul et, pahalı hukuki süreçlerden ve yeni yapılardan kaçın.", s: 25, tag: "kasa",
           r: "Kısa vadede masrafsız. Ama bu kadar büyük bir payla başlayan bir ortak, payını satmak isteyen tek bir aile koluyla çoğunluğa yaklaşabilir." },
         { k: "B", t: "Dost bir yatırımcı bul: ona büyük bir pay satarak Grenholt’u dengele.", s: 40, tag: "kumar",
           r: "Grenholt’u dengeler ama bağımsızlığı bu kez başka biriyle bölüşürsün; yeni ortağın yarın ne isteyeceği de belli değil." },
@@ -576,7 +576,7 @@
         k: "D",
         text: [
           "Aile önce bir araya geldi ve birlikte hareket edeceğini açıkladı. Birkaç hafta sonra, payların yarısından fazlasını uzun yıllar satılamayacak ortak bir aile şirketinde toplama ve kalan paylarda önalım hakkı kurma planını duyurdu. Düzenleyici kısa süre sonra zorunlu satın alma teklifinden muafiyet verdi; yapı yaklaşık bir yıl içinde işler hâle geldi.",
-          "Rocheval, Grenholt’un pay toplama yöntemini düzenleyiciye taşıdı; yaklaşık iki yıl sonra suç duyurusunda bulundular, Grenholt da karşı dava açtı. Birkaç yıl sonra piyasa düzenleyicisi, pay toplamayı piyasaya zamanında bildirmediği için Grenholt’a milyonlarca avro ceza verdi. Düzenleyiciye göre Grenholt payın önemli kısmını açıklama günündeki fiyatın yarısından da ucuza almıştı.",
+          "Rocheval, Grenholt’un pay toplama yöntemini düzenleyiciye taşıdı; sonraki yıllarda iki taraf da hukuki yollara başvurdu. Birkaç yıl sonra piyasa düzenleyicisi, pay toplamayı piyasaya zamanında bildirmediği için Grenholt’a milyonlarca avro ceza verdi. Düzenleyiciye göre Grenholt payın önemli kısmını açıklama günündeki fiyatın yarısından da ucuza almıştı.",
           "Yaklaşık dört yıl sonra ticaret mahkemesi başkanının arabuluculuğuyla uzlaşma sağlandı. Grenholt, o güne kadar beşte biri aşmış Corvelle payının tamamını kendi hissedarlarına dağıttı ve beş yıl boyunca Corvelle hissesi almamayı kabul etti. Aile şirketi bugün payların yarısından fazlasını elinde tutuyor."
         ]
       }
@@ -640,11 +640,11 @@
           r: "Kısa vadede kâr tablosu iyi görünür. Ama daha ucuz rakipler müşterileri almaya devam eder; yavaş yavaş kaybetmek, tek seferlik sert bir küçülmeden daha pahalıya gelir." }
       ],
       real: {
-        who: "Richard Ansell",
+        who: "Richard Hollinsby",
         role: "Nordahl’ın CEO’su",
         k: "C",
         text: [
-          "Yaz ortasında Nordahl ikinci çeyrekte rekor bir zarar açıkladı; bunun büyük kısmı yeniden yapılanma gideriydi. O yıl ayrılan on binlerce kişinin üstüne ertesi yıl sonuna kadar on binlercesi daha ayrılacaktı; çeyreklik temettü yarıdan fazla indi. Ansell uzun vadeli planları bir kenara bırakıp önce nakit ve maliyetlere odaklandı.",
+          "Yaz ortasında Nordahl ikinci çeyrekte rekor bir zarar açıkladı; bunun büyük kısmı yeniden yapılanma gideriydi. O yıl ayrılan on binlerce kişinin üstüne ertesi yıl sonuna kadar on binlercesi daha ayrılacaktı; çeyreklik temettü yarıdan fazla indi. Hollinsby uzun vadeli planları bir kenara bırakıp önce nakit ve maliyetlere odaklandı.",
           "Bölünme planını rafa kaldırdı; şirketi bir arada tutmak ilk büyük stratejik adımı oldu. Ana bilgisayar fiyatları düşürüldü ve şirket, başka üreticilerin parçalarını da birleştiren hizmet işine yöneldi; bu iş birkaç yıl içinde hız kazandı.",
           "Nordahl o yılı da milyarlarca dolar zararla kapattı; yıl sonunda çalışan sayısı zirvedekinin üçte ikisinin altına inmişti. Ertesi yıl şirket yeniden kâra döndü."
         ]
@@ -663,7 +663,7 @@
       stats: [["Şirket mağazası (ABD)", "Yedi binden fazla"], ["Barista", "Yüz binden fazla"], ["CEO’nun dönüşü", "Yılın başı"]],
       ask: "Ristaldi’nin başına geri döndün. Markayı nasıl toparlarsın?",
       opts: [
-        { k: "A", t: "Fiyat yarışına gir: indirimler ve ucuz menüyle yeni rakiplere müşteri kaptırma.", s: 25, tag: "kasa",
+        { k: "A", t: "Fiyatla yarış: indirimler ve ucuz menüyle yeni rakiplere müşteri kaptırma.", s: 25, tag: "kasa",
           r: "Kısa vadede müşteri getirebilir. Ama pahalı ve özel olmakla bilinen bir markanın ucuzla yarışması, asıl sorunu, yani sıradanlaşmayı derinleştirir." },
         { k: "B", t: "Zarar eden mağazaları kapat, yeni açılışları dondur; önce büyümeyi durdur.", s: 50, tag: "cerrah",
           r: "Aylar sonra yüzlerce mağaza gerçekten kapandı; bu gerekliydi. Ama yalnızca küçülmek, ürünün neden kötüleştiği sorusuna cevap vermez." },
@@ -706,11 +706,11 @@
           r: "Zarar hemen durur, bilanço rahatlar. Ama dünyanın en büyük tüketim pazarını, sorunun ürünün kendisinde değil ölçüsünde olduğunu görmeden bırakmış olursun." }
       ],
       real: {
-        who: "Erland Sjökvist",
+        who: "Erland Västholm",
         role: "Wennvik’in ABD operasyonunun başı",
         k: "C",
         text: [
-          "Sjökvist işe mağazalarda müşterileri dinleyerek başladı ve merkezi ikna etti: yataklar Amerikan çarşaflarına, mutfak dolapları Amerikan cihazlarına göre yeniden ölçülendi; perdeler uzadı, çekmeceler derinleşti, bardaklar büyüdü. Birkaç yıl içinde ABD’de satılan ürünlerin önemli bir kısmı bu pazar için uyarlanmıştı.",
+          "Västholm işe mağazalarda müşterileri dinleyerek başladı ve merkezi ikna etti: yataklar Amerikan çarşaflarına, mutfak dolapları Amerikan cihazlarına göre yeniden ölçülendi; perdeler uzadı, çekmeceler derinleşti, bardaklar büyüdü. Birkaç yıl içinde ABD’de satılan ürünlerin önemli bir kısmı bu pazar için uyarlanmıştı.",
           "Aynı dönemde tedarik de değişti: ürünlerin giderek daha büyük kısmı ABD’deki ve çevre ülkelerdeki üreticilerden alınmaya başlandı. Nakliye ve kur yükü azaldı, fiyatlar düştü.",
           "Sonuç kısa sürede görüldü: ABD satışları yaklaşık üç yılda üç katına çıktı ve yeni mağazalar açılmaya başladı. Marka ve tarz aynı kaldı; değişen, her pazarın kendi ölçüsünü almasıydı."
         ]
@@ -830,7 +830,7 @@
         var cls = "opt" + (a ? (o.k === a ? " is-picked" : " is-dim") : "") + (a && o.k === c.real.k ? " is-real" : "");
         return '<button type="button" class="' + cls + '" data-k="' + o.k + '"' + (a ? ' aria-disabled="true"' : "") + ">" +
           '<span class="opt-k">' + o.k + '</span><span class="opt-t">' + esc(o.t) + "</span>" +
-          (a && o.k === c.real.k ? '<span class="opt-real">Gerçek CEO</span>' : "") + "</button>";
+          (a && o.k === c.real.k ? '<span class="opt-real">Vakadaki CEO</span>' : "") + "</button>";
       }).join("") +
       "</div></div>";
     if (a) html += afterHtml(i);
@@ -846,9 +846,9 @@
 
   function afterHtml(i) {
     var c = CASES[i], o = opt(i, state.answers[i]), ro = opt(i, c.real.k), diff = o.s - ro.s, last = i === CASES.length - 1;
-    var cmp = o.k === c.real.k ? "Gerçek CEO ile aynı kararı verdin."
-      : diff > 0 ? "Gerçek CEO’dan " + diff + " puan iyi. Yönetim kurulu not aldı."
-      : "Gerçek CEO’nun kararı " + (-diff) + " puan daha iyiydi.";
+    var cmp = o.k === c.real.k ? "Vakadaki CEO ile aynı kararı verdin."
+      : diff > 0 ? "Vakadaki CEO’dan " + diff + " puan iyi. Yönetim kurulu not aldı."
+      : "Vakadaki CEO’nun kararı " + (-diff) + " puan daha iyiydi.";
     return '<div class="after">' +
       '<div class="verdict t-' + tier(o.s) + '" tabindex="-1">' +
       '<div class="stamp' + (reduced() ? "" : " anim") + '" aria-hidden="true"><b>' + o.s + "</b><span>puan</span></div>" +
@@ -857,7 +857,7 @@
       '<p class="sr">Puanın: ' + o.s + " / 100</p>" +
       "</div>" +
       '<div class="truth">' +
-      '<p class="lbl">Gerçekte ne oldu</p>' +
+      '<p class="lbl">Vakada ne oldu</p>' +
       '<p class="truth-who">' + esc(c.real.who) + " <span>" + esc(c.real.role) + " · seçimi " + c.real.k + "</span></p>" +
       c.real.text.map(function (p) { return "<p>" + esc(p) + "</p>"; }).join("") +
       '<p class="truth-cmp">' + esc(cmp) + "</p>" +
@@ -927,7 +927,7 @@
       '<p class="lbl">Ortalama puan</p>' +
       '<p class="big"><b>' + r.score + "</b><span>/100</span></p>" +
       '<p class="board">' + esc(r.board) + "</p>" +
-      '<p class="vs">Gerçek CEO’ların ortalaması: ' + r.real + "</p>" +
+      '<p class="vs">Vakadaki CEO’ların ortalaması: ' + r.real + "</p>" +
       "</div></div>" +
       '<table class="rows"><caption class="sr">Dosya dosya kararların</caption>' +
       "<thead><tr><th scope=\"col\">Dosya</th><th scope=\"col\">Sen</th><th scope=\"col\">Gerçek</th><th scope=\"col\">Puan</th></tr></thead><tbody>" +
@@ -1066,7 +1066,7 @@
     var n = CASES.length;
     Array.prototype.forEach.call(document.querySelectorAll("[data-issue]"), function (el) { el.textContent = "Sayı " + ISSUE; });
     var intro = $("#oyun-intro");
-    if (intro && WORDS[n]) intro.textContent = WORDS[n] + " şirket, " + WORDS_LO[n] + " kriz. Hangisinde gerçek CEO’dan daha iyi iş çıkarırsın?";
+    if (intro && WORDS[n]) intro.textContent = WORDS[n] + " şirket, " + WORDS_LO[n] + " kriz. Hangisinde vakadaki CEO’dan daha iyi iş çıkarırsın?";
     var meta = $("#hero-meta");
     if (meta) meta.textContent = n + " dosya · " + n + " karar · 1 CEO karnesi · Üyelik yok";
     var idx = $("#index-list");
