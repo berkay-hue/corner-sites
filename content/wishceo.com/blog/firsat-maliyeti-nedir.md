@@ -93,4 +93,6 @@ Batık maliyet, geçmişte harcanmış ve geri alınamayacak kaynaktır ve iyi b
 
 Evet, çoğu zaman en büyüğü odur. Beklemek, mevcut durumu korumak ya da kararı ertelemek de bir seçimdir ve bu süre içinde kapanan seçenekler gerçek bir bedel oluşturur. Hareketsizlik güvenli görünür, çünkü bedeli göze çarpmaz.
 
+## Sıra sende
+
 Fırsat maliyetini en iyi öğrenme yolu, onu bir kez kendi kararında hissetmektir. Bugünün vakasında da önünde birden fazla makul yol olacak ve her birini seçtiğinde bir diğerinden vazgeçeceksin. Seçimini yapmadan önce kendine bir kez sor: Bu kararla neyi bırakıyorum? [Bugünün vakasını oyna](/#oyun)

@@ -7,7 +7,9 @@ image: "/og.png"
 imageAlt: "WishCEO kapak kartı “Şirket batıyor. CEO sensin.” — iyi karar ve kötü sonuç yazısı"
 ---
 
-İyi bir karar kötü bitebilir, kötü bir karar da şansla iyi bitebilir; bu yüzden bir kararı sonucuna göre değil, o gün masadaki bilgiyle ne kadar iyi düşünüldüğüne göre puanlamak gerekir. Murat ve Elif aynı yıl, aynı semtte birer kafe açıyor. Murat dükkânı bir akşam yürüyüşünde beğeniyor ve ertesi gün kontratı imzalıyor. Kirayı pazarlık etmiyor, sokaktan ne kadar insan geçtiğine bakmıyor. Elif haftalarca farklı saatlerde sokakları izliyor, kirayı pazarlıkla düşürüyor, kenara yedek bir bütçe ayırıyor.
+İyi bir karar kötü bitebilir, kötü bir karar da şansla iyi bitebilir; bu yüzden bir kararı sonucuna göre değil, o gün masadaki bilgiyle ne kadar iyi düşünüldüğüne göre puanlamak gerekir.
+
+Murat ve Elif aynı yıl, aynı semtte birer kafe açıyor. Murat dükkânı bir akşam yürüyüşünde beğeniyor ve ertesi gün kontratı imzalıyor. Kirayı pazarlık etmiyor, sokaktan ne kadar insan geçtiğine bakmıyor. Elif haftalarca farklı saatlerde sokakları izliyor, kirayı pazarlıkla düşürüyor, kenara yedek bir bütçe ayırıyor.
 
 Birkaç ay sonra Murat’ın sokağına büyük bir ofis binası taşınıyor. Kafesi öğle saatlerinde dolup taşıyor. Elif’in sokağı ise altyapı çalışması yüzünden aylarca kazı altında kalıyor. Murat büyüyor, Elif zorlanıyor.
 
