@@ -76,12 +76,12 @@ Expecting a full quota from a newly hired rep from their first month is one of t
 
 A commonly used ramp structure looks like this:
 
-- **Q1:** 25% of the full quota
-- **Q2:** 50% of the full quota
-- **Q3:** 75% of the full quota
-- **Q4:** Full quota
+- **First quarter:** 25% of the full quota
+- **Second quarter:** 50% of the full quota
+- **Third quarter:** 75% of the full quota
+- **Fourth quarter:** Full quota
 
-Shortening the ramp period depends on two things: hiring the right person and integrating them into the system quickly. On the hiring side, the framework in my post on [questions to ask in a sales rep interview](/blog/sales-rep-interview-questions) helps you screen out, from the start, candidates who would stretch the ramp period.
+Shortening the ramp period depends on two things: hiring the right person and integrating them into the system quickly. On the hiring side, the framework in my post on [questions to ask in a sales rep interview](/blog/sales-rep-interview-questions) helps you screen out early the candidates who would drag out the ramp period.
 
 ### 5. Add an over-assignment buffer
 
@@ -195,7 +195,7 @@ If there's going to be a revision, the rules should be clear from the start. If 
 These are the mistakes I come across most often in the field:
 
 1. **Setting the quota by adding a percentage to last year.** The "last year was 4 million, let's grow 30% this year" approach doesn't account for market potential, the state of the pipeline or capacity.
-2. **Ignoring the ramp period.** Giving a new rep a full quota from day one burns out both them and your target.
+2. **Ignoring the ramp period.** Giving a new rep a full quota from day one burns them out and sinks your target.
 3. **Giving everyone the same quota.** Different segments and territories carry different potential.
 4. **Not checking pipeline coverage.** If there isn't enough pipeline at the start of the quarter, hitting the quota is mathematically impossible. You should notice this at the start of the quarter, not at the end.
 5. **Announcing the quota without discussing it with the rep.** Sharing the logic behind the quota calculation significantly increases acceptance. If a rep understands where the number comes from, they take ownership of it.
@@ -209,9 +209,9 @@ Setting the quota is half the job. The other half is communicating it properly. 
 - **Hold one-to-one meetings.** Don't send the quota by email. Sit down with each rep and explain the logic of the calculation.
 - **Share the assumptions openly.** Which win rate, which deal size and which number of opportunities were used? Listen to the rep's objections, and if they have valid points, make corrections.
 - **Turn the quota into a monthly work plan.** "5.75 million a year" is an abstract number. "This month you need to open 6 qualified opportunities and close 3 to 4 deals by the end of the quarter" is an actionable plan.
-- **Set up a regular follow-up rhythm.** Weekly pipeline meetings and monthly quota reviews let you spot problems before they're left until the end of the quarter.
+- **Set up a regular follow-up rhythm.** Weekly pipeline meetings and monthly quota reviews let you spot problems well before the end of the quarter.
 
-Building a data-driven sales organisation turns quota conversations from arguments into a shared planning session. In teams that adopt this approach, reps start to see the quota not as "a number imposed on us" but as "a target we calculated together". If you're looking for outside support with this transformation, [Sales Corner, which focuses on data-driven B2B sales and lead generation](https://salescorner.co) can be a good reference point.
+Building a data-driven sales organisation turns quota conversations from arguments into a shared planning session. In teams that adopt this approach, reps start to see the quota not as "a number imposed on us" but as "a target we calculated together". If you're looking for outside support with this transformation, [Sales Corner, which focuses on data-driven B2B sales and lead generation](https://salescorner.co), can be a good reference point.
 
 ## FAQ
 
@@ -219,7 +219,7 @@ Building a data-driven sales organisation turns quota conversations from argumen
 
 Setting the quota annually and breaking it down into quarterly and monthly targets is the most common and healthiest approach. The annual target keeps you aligned with financial planning, while the quarterly slices make tracking and, when needed, intervention possible. In businesses with a short sales cycle, a monthly quota can also be used.
 
-### What percentage of the team hitting quota is normal?
+### What percentage of the team should normally hit quota?
 
 There is no exact figure, but in a healthy quota structure the majority of the team is expected to hit quota or come very close to it. If only a small part of the team hits quota, the problem most likely lies with the quota itself. If almost everyone exceeds it easily, the quota has been set too low.
 

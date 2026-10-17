@@ -50,7 +50,7 @@ Her aşamanın ileri geçiş için objektif ve doğrulanabilir bir koşulu olmal
 - **Keşif:** İlk toplantı yapıldı. Potansiyel müşteri konuşmaya değer bir problemi olduğunu teyit etti.
 - **Nitelikli:** Sorun, bütçe aralığı, karar süreci ve zaman çizelgesi belirlendi. En az bir iç destekçi (champion) isim olarak belli.
 - **Çözüm/Demo:** Birden fazla paydaşa özelleştirilmiş demo yapıldı. Başarı kriterleri üzerinde anlaşıldı.
-- **Teklif:** Teklifin üzerinden sözlü olarak geçildikten sonra yazılı teklif gönderildi. Bütçe sahibi karar verici fiyatı gördü.
+- **Teklif:** Teklifin üzerinden sözlü olarak geçildikten sonra yazılı hâli gönderildi. Bütçe sahibi karar verici fiyatı gördü.
 - **Müzakere:** Potansiyel müşteri şartları aktif olarak müzakere ediyor. Satın alma ya da hukuk birimi sürece dahil.
 - **Kazanıldı / Kaybedildi.**
 
