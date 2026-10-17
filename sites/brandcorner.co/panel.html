@@ -785,7 +785,7 @@ footer.bot{border-top:1px solid var(--line);background:var(--bg);color:var(--mut
     // Dil seçimi yoksa hesabın kayıt dili kullanılır
     var stored = null;
     try { stored = localStorage.getItem("brand-corner-lang"); } catch (e) {}
-    if (stored !== "tr" && stored !== "en" && (U.lang === "tr" || U.lang === "en")) { L = U.lang; BC.setLang(L); }
+    if (stored !== "tr" && stored !== "en" && (U.lang === "tr" || U.lang === "en")) { L = U.lang; BC.useLang(L); }
     chrome();
     window.addEventListener("hashchange", function () { render(); });
     render();

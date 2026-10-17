@@ -58,14 +58,16 @@
     }
   };
 
-  // Dil sitenin geri kalanıyla ortak anahtarda (brand-corner-lang) tutulur; depolama kapalıysa bellekte kalır
+  // Dil sitenin geri kalanıyla ortak anahtarda (brand-corner-lang) tutulur. Yalnız dil düğmesi (setLang) kaydeder;
+  // sayfa ya da hesap dili (useLang) yalnız bellekte kalır (privacy §9).
   var cur = null;
   function lang() {
     if (cur) return cur;
     try { var v = localStorage.getItem(LK); if (v === "tr" || v === "en") return v; } catch (e) {}
     return "en";
   }
-  function setLang(l) { cur = l === "tr" ? "tr" : "en"; try { localStorage.setItem(LK, cur); } catch (e) {} }
+  function useLang(l) { cur = l === "tr" ? "tr" : "en"; }
+  function setLang(l) { useLang(l); try { localStorage.setItem(LK, cur); } catch (e) {} }
 
   // "Beni hatırla" işaretliyse localStorage, değilse sessionStorage
   function token() { for (var i = 0; i < S.length; i++) { try { var v = window[S[i]].getItem(K); if (v) return v; } catch (e) {} } return null; }
@@ -109,6 +111,6 @@
     Promise.race([p, new Promise(function (r) { setTimeout(r, 4000); })]).then(toLogin);
   }
 
-  var BC = { api: API, guard: false, lang: lang, setLang: setLang, token: token, save: save, clear: clear, toLogin: toLogin, call: call, msg: msg, logout: logout };
+  var BC = { api: API, guard: false, lang: lang, useLang: useLang, setLang: setLang, token: token, save: save, clear: clear, toLogin: toLogin, call: call, msg: msg, logout: logout };
   window.BC = BC;
 })();
