@@ -1273,7 +1273,7 @@
       '<p class="vs">Vakadaki CEO’ların ortalaması: ' + r.real + "</p>" +
       "</div></div>" +
       '<table class="rows"><caption class="sr">Dosya dosya kararların</caption>' +
-      "<thead><tr><th scope=\"col\">Dosya</th><th scope=\"col\">Sen</th><th scope=\"col\">Gerçek</th><th scope=\"col\">Puan</th></tr></thead><tbody>" +
+      "<thead><tr><th scope=\"col\">Dosya</th><th scope=\"col\">Sen</th><th scope=\"col\">Vakada</th><th scope=\"col\">Puan</th></tr></thead><tbody>" +
       CASES.map(function (c, i) {
         var o = opt(i, state.answers[i]);
         return '<tr><th scope="row"><span class="n">' + pad(i + 1) + "</span> " + esc(c.title) + "</th><td>" + o.k + "</td><td>" + c.real.k +
