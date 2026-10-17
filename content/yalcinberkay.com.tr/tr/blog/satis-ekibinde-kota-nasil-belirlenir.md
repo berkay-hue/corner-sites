@@ -5,6 +5,7 @@ date: "2026-10-16"
 category: "Satış Liderliği"
 image: "https://images.pexels.com/photos/8555676/pexels-photo-8555676.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
 imageAlt: "Satış Ekibinde Kota Nasıl Belirlenir? Pratik Rehber"
+alt: "how-to-set-sales-quotas-for-sales-team"
 ---
 
 Satış ekibinde kota, **şirketin gelir hedefinden geriye doğru hesaplanıp her temsilcinin gerçek satış kapasitesiyle karşılaştırılarak** belirlenir. Sağlıklı bir kota; geçmiş performans verisine, ortalama anlaşma büyüklüğüne, kazanma oranına, satış döngüsünün uzunluğuna ve yeni temsilcilerin rampa süresine dayanır. Kısacası iyi bir kota hem şirketin ihtiyacını hem de sahadaki gerçeği yansıtır. Yalnızca "geçen yıl 10 yaptık, bu yıl 15 yapalım" demek kota belirlemek sayılmaz, olsa olsa bir dilektir.

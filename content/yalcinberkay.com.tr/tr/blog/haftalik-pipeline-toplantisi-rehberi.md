@@ -50,7 +50,7 @@ Her aşamanın ileri geçiş için objektif ve doğrulanabilir bir koşulu olmal
 - **Keşif:** İlk toplantı yapıldı. Potansiyel müşteri konuşmaya değer bir problemi olduğunu teyit etti.
 - **Nitelikli:** Sorun, bütçe aralığı, karar süreci ve zaman çizelgesi belirlendi. En az bir iç destekçi (champion) isim olarak belli.
 - **Çözüm/Demo:** Birden fazla paydaşa özelleştirilmiş demo yapıldı. Başarı kriterleri üzerinde anlaşıldı.
-- **Teklif:** Sözlü bir üzerinden geçişin ardından yazılı teklif gönderildi. Bütçe sahibi karar verici fiyatı gördü.
+- **Teklif:** Teklifin üzerinden sözlü olarak geçildikten sonra yazılı teklif gönderildi. Bütçe sahibi karar verici fiyatı gördü.
 - **Müzakere:** Potansiyel müşteri şartları aktif olarak müzakere ediyor. Satın alma ya da hukuk birimi sürece dahil.
 - **Kazanıldı / Kaybedildi.**
 
@@ -73,7 +73,7 @@ Yönetici ya da RevOps sorumlusu toplantıdan önce tek sayfalık bir özet haz�
 - Aşamalara göre toplam pipeline, geçen haftayla karşılaştırmalı
 - Bu hafta ileri giden, geri giden ya da yeni oluşturulan fırsatlar
 - Kapanış tarihi kayan fırsatlar
-- 14 günden uzun süredir hiçbir aktivite olmayan fırsatlar
+- 14 gün veya daha uzun süredir hiçbir aktivite olmayan fırsatlar
 - Bu çeyrek ve gelecek çeyrek için pipeline kapsama oranı
 
 Herkes toplantıdan önce aynı rakamları gördüğünde "bir bakayım, bulayım" anlarını atlarsınız.
@@ -110,7 +110,7 @@ Gerçek değerin büyük kısmı buradadır ve çoğu ekibin bakmaktan kaçınd�
 
 - **Tıkanan fırsatlar:** Aynı aşamada tipik aşama süresinden daha uzun kalanlar. Fırsatlar normalde Çözüm aşamasında yaklaşık iki hafta geçiriyorsa, beşinci haftasına gelen her fırsat için bir karar gerekir.
 - **Kayan fırsatlar:** Kapanış tarihi birden fazla kez ertelenenler. Bir erteleme normaldir. İki erteleme bir örüntüdür. Üç erteleme genellikle fırsatın bu zaman diliminde gerçek olmadığı anlamına gelir.
-- **Zombi fırsatlar:** 21 günden uzun süredir alıcı tarafında anlamlı bir aktivite olmayanlar. Ya belirli bir yeniden etkileşim planı oluşturun ya da kaybedildi olarak kapatın.
+- **Zombi fırsatlar:** 21 gün veya daha uzun süredir alıcı tarafında anlamlı bir aktivite olmayanlar. Ya belirli bir yeniden etkileşim planı oluşturun ya da kaybedildi olarak kapatın.
 
 Satışçıları, fırsatları herhangi bir yaptırımla karşılaşmadan kaybedildi olarak kapatmaya teşvik ediyorum. Daha küçük ama dürüst bir pipeline, şişirilmiş bir pipeline'dan çok daha değerlidir. Bir zombi fırsatı kapatmak başarısızlık değil, sağlıklı muhakemenin işaretidir.
 
@@ -171,7 +171,7 @@ Toplantının doğrudan potansiyel müşteri bulma çalışmasına bağlandığ�
 Tek başınıza ya da bir iki satışçıyla satış yapan bir kurucuysanız 60 dakikalık bir ekip toplantısı fazladır. İlkeler yine geçerlidir, sadece daha sıkıştırılmış hâlde:
 
 - Aynı soruları kullanarak kendi pipeline'ınızı gözden geçirmek için her cuma 30 dakika ayırın.
-- Zombi fırsatları kapatma konusunda acımasız olun. Kurucular bu konuda çoğu zaman en kötü durumdadır, çünkü her fırsat kişisel hissettirir.
+- Zombi fırsatları kapatma konusunda acımasız olun. Bu hatayı en sık yapanlar çoğu zaman kuruculardır, çünkü her fırsat kişisel hissettirir.
 - Ana haftalık metriğiniz olarak oluşturulan yeni pipeline'ı takip edin. Erken aşamadaki şirketler nadiren geç aşamadaki zayıf uygulama yüzünden başarısız olur. Huninin üst kısmı kuruduğu için başarısız olurlar.
 
 Yapay zeka araçlarının artık hazırlık aşamasında yardımcı olduğunu da gördüm: görüşme notlarını özetlemek, yakın zamanda aktivite olmayan fırsatları işaretlemek ya da haftalık özetin taslağını hazırlamak gibi. Yine de odadaki muhakemenin yerini almıyorlar. Otomasyonun nerede işe yaradığını, nerede yaramadığını [Yapay zeka SDR'larınızın yerini alabilir mi? Pratik bir cevap](/blog/yapay-zeka-sdrlarin-yerini-alabilir-mi) yazısında daha ayrıntılı anlattım.

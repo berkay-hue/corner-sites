@@ -13,13 +13,13 @@ Türk şirketlerine B2B hizmet fiyatlandırmak için tek bir mükemmel rakamın 
 
 Fiyatlandırma, kurucuların en uzun süre yanlış yaptığı karardır. Türkiye'de B2B hizmet satmaya başladığımda fiyatı bir kez seçip teklife yazdığım ve sonra savunduğum bir rakam gibi görüyordum. Bu pazarda fiyatın aslında bir sistem olduğunu öğrenmem birkaç sancılı çeyreğimi aldı. Bu sistem; teklif verdiğiniz para birimini, kabul ettiğiniz ödeme koşullarını, enflasyonu nasıl yönettiğinizi, pazarlık için ne kadar pay bıraktığınızı ve riski müşteriyle aranızda nasıl paylaştırdığınızı kapsar.
 
-Türk şirketlerine outbound satış, lead generation, danışmanlık, pazarlama, yazılım entegrasyonu ya da uzmanlığa dayalı başka herhangi bir hizmet satıyorsanız bu yazı sizin için. Bunlar, ilk teklifimi göndermeden önce birinin bana vermesini isteyeceğim notlar. Teori değiller. [Corner Group](https://cornergroup.co) bünyesinde hizmet şirketleri kurarken yaptığım hatalardan ve bu hataları yavaş yavaş kurallara dönüştürmemden çıktılar.
+Türk şirketlerine outbound satış, lead generation, danışmanlık, pazarlama, yazılım entegrasyonu ya da uzmanlığa dayalı başka herhangi bir hizmet satıyorsanız bu yazı sizin için. Bunlar, ilk teklifimi göndermeden önce keşke biri bana verseydi dediğim notlar. Teori değiller. [Corner Group](https://cornergroup.co) bünyesinde hizmet şirketleri kurarken yaptığım hatalardan ve bu hataları yavaş yavaş kurallara dönüştürmemden çıktılar.
 
 ## Türkiye'de Fiyatlandırma Neden Farklı?
 
 Silikon Vadisi bloglarındaki fiyatlandırma tavsiyeleri; istikrarlı bir para birimi, öngörülebilir ödeme davranışı ve liste fiyatını küçük indirimlerle kabul eden alıcılar varsayar. Türkiye ise marjınızı doğrudan etkileyen birkaç noktada farklı işler:
 
-- **Kur oynaklığı.** Lira tek bir sözleşme dönemi içinde ciddi biçimde değer kaybedebilir. Maliyetleriniz dolar ya da euroya bağlıysa ocakta sağlıklı görünen bir fiyat hazirana gelindiğinde zayıflayabilir.
+- **Kur oynaklığı.** Lira tek bir sözleşme dönemi içinde ciddi biçimde dalgalanabilir. Maliyetleriniz dolar ya da euroya bağlıysa ocakta sağlıklı görünen bir fiyat hazirana gelindiğinde zayıflayabilir.
 - **Yüksek enflasyon.** Maaşlar, kira ve yazılım maliyetleriniz yıl boyunca artar. Sözleşmeleriniz on iki ay boyunca liraya sabitlenmişse bu artışı siz üstlenirsiniz.
 - **Uzun ödeme vadeleri.** Pek çok Türk şirketi, özellikle büyük olanlar, faturadan 60, 90, hatta 120 gün sonra ödeme yapmayı bekler. Bazıları hâlâ vadeli çek kullanır. Enflasyon ortamında her gecikme günü gerçek değeri aşındırır.
 - **Pazarlık beklenir.** Türk iş kültürünün pek çok kesiminde ilk fiyat bir açılış pozisyonu olarak görülür. Pay bırakmazsanız ya marj kaybedersiniz ya da esnek olmayan biri gibi görünürsünüz.
@@ -120,7 +120,7 @@ Kötü ödeme koşullarına sahip harika bir fiyat, zamanında ödenen ortalama 
 1. **Retainer'ları peşin faturalayın.** O ayın işini ay sonunda değil, ayın başında faturalayın.
 2. **Daha kısa vadeler için pazarlık yapın ya da uzun vadeleri fiyatlandırın.** Müşteri 90 günlük vadede ısrar ediyorsa gecikmeyi hesaba katmak için fiyatı yukarı yönlü ayarlayın. Bunu sakin bir şekilde açıklayın: "Standart vademiz 30 gün. 90 günlük vadede aylık ücret, finansman maliyetini yansıtacak şekilde ayarlanıyor."
 3. **Üç aydan uzun sözleşmelere endeksleme maddesi ekleyin.** Referansı (resmi enflasyon, döviz kuru ya da sabit bir yüzde) ve güncelleme sıklığını en baştan kararlaştırın.
-4. **Gecikme faizi maddeleri kullanın.** Pek çok müşteriye bunu uygulamayacaksınız ama maddenin varlığı davranışı değiştirir.
+4. **Gecikme faizi maddeleri kullanın.** Çoğu zaman bu maddeler fiilen uygulanmaz ama varlıkları davranışı değiştirir.
 5. **İşi durdurma kuralları.** Faturalar belirli bir gün sayısını aşacak kadar gecikirse işin duracağını belirtin. Bunu uygulayan kurucu azdır ama yazılı olması, konuyu açmak için size profesyonel bir gerekçe verir.
 
 Alacaklarınızı da pipeline'ı takip ettiğiniz gibi haftalık takip edin. Halihazırda yapılandırılmış bir satış toplantınız varsa ona bir tahsilat kontrolü ekleyin. Bu toplantıya yaklaşımımı [işe yarayan haftalık pipeline toplantısı nasıl yapılır](/blog/haftalik-pipeline-toplantisi-rehberi) yazısında anlattım.

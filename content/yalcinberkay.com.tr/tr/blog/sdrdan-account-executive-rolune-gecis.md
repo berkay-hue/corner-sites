@@ -11,7 +11,7 @@ alt: "move-from-sdr-to-account-executive"
 
 SDR'lıktan Account Executive (AE) rolüne geçmek için mevcut rolünüzde başarılı olmaya devam ederken bir AE'nin ihtiyaç duyduğu becerileri geliştirin. Hedeflerinizi istikrarlı şekilde tutturun, gerçek görüşmeleri izleyin ve yönetin, iş anlayışınızı geliştirin ve potansiyel müşteri aramayı bırakmayın. Hedefinizi açıkça dile getirin ve ölçülebilir kilometre taşlarına dönüştürün; böylece terfi zamanı geldiğinde işin büyük kısmını zaten yapıyor olursunuz.
 
-Satış kariyerine SDR olarak başlayan çoğu kişinin hedefi aynıdır: Account Executive'liğe terfi etmek. Bu unvan daha fazla sorumluluk, daha büyük bir değişken ücret payı ve toplantısını ayarladığınız anlaşmaları bizzat kapatma fırsatı getirir. Ancak yetenekli SDR'ların çoğu beklediklerinden çok daha uzun süre yerinde sayar. Bazıları her ay hedefini tutturur ama yine de terfi alamaz. Bazıları ise çok erken terfi eder ve AE olarak ilk iki çeyreğini zorlanarak geçirir.
+Satış kariyerine SDR olarak başlayan çoğu kişinin hedefi aynıdır: Account Executive'liğe terfi etmek. Bu unvan daha fazla sorumluluk, daha büyük bir değişken ücret payı ve toplantısını ayarladığınız anlaşmaları bizzat kapatma fırsatı getirir. Ancak birçok yetenekli SDR beklediğinden çok daha uzun süre yerinde sayar. Bazıları her ay hedefini tutturur ama yine de terfi alamaz. Bazıları ise çok erken terfi eder ve AE olarak ilk iki çeyreğini zorlanarak geçirir.
 
 Bu durumu farklı açılardan gördüm: [inşaat mühendisliğinden satışa geçen](/blog/insaat-muhendisliginden-satisa-kendini-kesfetme-yolculugu) biri olarak, outbound ekipleri kuran bir kurucu olarak ve bir sonraki adıma kimin hazır olduğuna karar veren bir yönetici olarak. Bu yazı, bu geçişi yapmak isteyen SDR'lar ve işleyen bir terfi yolu kurmak isteyen yöneticiler için pratik bir yol haritası.
 
@@ -70,7 +70,7 @@ Ardından notlarınızı karşılaştırmak için AE'den beş dakika isteyin. İ
 
 ### Kendi keşif görüşmenizi yürütün
 
-Yöneticinize, ayarladığınız toplantılarda keşif görüşmesinin ilk 10-15 dakikasını sizin yürütüp ardından AE'nin devralıp devralamayacağını sorun. Bu, düşük riskli bir ortamda gerçek pratik kazanmanızı sağlar.
+Yöneticinize, ayarladığınız toplantılarda keşif görüşmesinin ilk 10-15 dakikasını sizin yürütüp ardından görüşmeyi AE'ye devredip devredemeyeceğinizi sorun. Bu, düşük riskli bir ortamda gerçek pratik kazanmanızı sağlar.
 
 ### Toplantılarınızı sonuna kadar takip edin
 

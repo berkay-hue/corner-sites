@@ -171,7 +171,7 @@ The third rule in particular is the simplest way to bring the mutual action plan
 
 ### Learn from lost opportunities
 
-When analysing cycle length, don't only look at won deals. Having a short closing conversation with lost or "gone quiet" opportunities is very valuable. A 15-minute chat that starts with "I'd like to understand what influenced your decision" reveals the real bottlenecks in the process. You can find more examples on this in my article on [the power of customer feedback in B2B](/blog/the-power-of-customer-feedback-in-b2b).
+When analysing cycle length, don't only look at won deals. Having a short wrap-up call with lost or "gone quiet" opportunities is very valuable. A 15-minute chat that starts with "I'd like to understand what influenced your decision" reveals the real bottlenecks in the process. You can find more examples on this in my article on [the power of customer feedback in B2B](/blog/the-power-of-customer-feedback-in-b2b).
 
 ## 7. Create Urgency Through the Cost of the Status Quo, Not Discounts
 

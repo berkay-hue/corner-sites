@@ -104,7 +104,7 @@ I also recommend testing extremely plain subject lines that start with a lowerca
 
 In the inbox preview, part of the first sentence appears next to the subject line. So the first sentence is really a continuation of the subject line. And the most common mistake here is starting by talking about yourself.
 
-An email that starts with "Hello, I'm Y from company X. Since 2015, our company has..." doesn't get read past the second sentence. The other person doesn't know you and isn't interested in who you are yet. The only thing they care about is their own business.
+An email that starts with "Hello, I'm Y from company X. Since 2015, our company has..." doesn't get read as far as the second sentence. The other person doesn't know you and isn't interested in who you are yet. The only thing they care about is their own business.
 
 Try these approaches instead:
 
