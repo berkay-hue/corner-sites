@@ -9,7 +9,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { generate, claude, slugify } from "../blog-worker/src/index.js";
+import { generate, claude, slugify, fitMeta } from "../blog-worker/src/index.js";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const arg = name => { const i = process.argv.indexOf(`--${name}`); return i < 0 ? undefined : process.argv[i + 1]; };
@@ -40,7 +40,7 @@ async function translatePost(cfg, lang, t, trSlug, trMd) {
   const out = await claude(env, cfg.writeModel, `Translate this Turkish blog post for ${cfg.brand} into natural, fluent ${LANGS[lang] || lang} for a B2B audience. Keep the Markdown structure, headings, bold text, lists and every link URL exactly as they are; translate only the text. Do not add or remove content.
 
 Reply with exactly two parts and nothing else:
-<meta>{"title": "...", "description": "120-160 char meta description", "category": "...", "imageAlt": "...", "slug": "short-english-url-slug"}</meta>
+<meta>{"title": "max 60 chars", "description": "120-155 char meta description", "category": "...", "imageAlt": "...", "slug": "short-english-url-slug"}</meta>
 <body>
 ...translated Markdown body...
 </body>
@@ -48,6 +48,7 @@ Reply with exactly two parts and nothing else:
 ${trMd}`, { maxTokens: 12000 });
   const meta = JSON.parse(out.match(/<meta>([\s\S]*?)<\/meta>/)[1]);
   let body = out.match(/<body>\s*([\s\S]*?)\s*<\/body>/)[1];
+  Object.assign(meta, fitMeta(meta.title, meta.description, body)); // #161 sınırları: başlık ≤60, açıklama 70–155
   const dir = path.join(root, t.contentDir), trDir = path.join(root, cfg.contentDir);
   fs.mkdirSync(dir, { recursive: true });
   const pairs = Object.fromEntries(fs.readdirSync(dir).filter(f => f.endsWith(".md"))
