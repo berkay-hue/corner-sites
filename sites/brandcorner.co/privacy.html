@@ -70,8 +70,8 @@ footer.bot{border-top:1px solid var(--line);color:var(--muted);font-size:14px;pa
 <section id="summary">
 <h2>2. In short</h2>
 <ul>
-<li>You can create a Brand Corner account to use the panel. We store the name, email address, account type and password you enter, and the profile and campaign details you add there. The website has no online payments.</li>
-<li>The only form on the website is the newsletter sign-up in the footer of some pages. It collects your email address, and our form service also records your IP address and browser information.</li>
+<li>You can create a Brand Corner account to use the panel. We store the name, email address and account type you enter, a salted hash of your password (never the password itself), and the profile and campaign details you add there. The website has no online payments.</li>
+<li>Besides the account sign-up and sign-in forms, the website has a newsletter sign-up in the footer of some pages. It collects your email address, and our form service also records your IP address and browser information.</li>
 <li>We do not set cookies ourselves and do not use advertising or analytics tracking scripts.</li>
 <li>Our hosting provider, Cloudflare, processes technical data such as your IP address to deliver the website.</li>
 <li>The About page and the blog load fonts from Google Fonts, and the blog also shows images hosted by Pexels; these providers receive your IP address.</li>
@@ -79,7 +79,7 @@ footer.bot{border-top:1px solid var(--line);color:var(--muted);font-size:14px;pa
 </section>
 <section id="data">
 <h2>3. What we collect</h2>
-<p>We collect personal data electronically, in two ways: through the form you fill in, and automatically when your browser loads the website.</p>
+<p>We collect personal data electronically, in two ways: through the forms you fill in, and automatically when your browser loads the website.</p>
 <h3>Newsletter form</h3>
 <p>The home, features, pricing and solutions pages have a "Stay Updated" newsletter form in the footer. When you submit it, your browser sends your entry to our form service, which runs on Cloudflare Workers and stores each submission in a Cloudflare D1 database. A submission contains:</p>
 <ul>
@@ -92,6 +92,9 @@ footer.bot{border-top:1px solid var(--line);color:var(--muted);font-size:14px;pa
 <p>Giving your email address is voluntary and is not a legal or contractual requirement. If you do not give it, you will not receive our news and updates; you can still use the rest of the website.</p>
 <p>A copy of the submission (your email address, the page, the website name and the time, but not your IP address or user-agent string) is then sent by email to our team's mailbox.</p>
 <p>To prevent spam and abuse, we limit how many submissions can be sent from one IP address in a short period.</p>
+<h3>Account and panel</h3>
+<p>When you create an account on the sign-up page, we store your name, email address, account type (brand, influencer or agency), the page language and a salted hash of your password. In the panel you can add profile details (for example city, bio, niches and social media accounts with follower counts), campaigns and applications; these are stored with your account.</p>
+<p>To stop password guessing and abuse, each sign-up and sign-in attempt is recorded with your IP address and the email address entered; these records are deleted after one day. Each new account is also recorded with your name, email address, account type, language and IP address, and a copy without the IP address is sent by email to our team's mailbox.</p>
 <h3>When you visit the website</h3>
 <p>The website is hosted on Cloudflare Pages. To deliver pages to you and protect the service, Cloudflare processes technical data about each request, such as your IP address, the address requested, the time of the request and your browser's user-agent string. How Cloudflare handles this data is described in the <a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener">Cloudflare Privacy Policy</a>.</p>
 <p>Cloudflare also asks browsers that support it to report network errors (Network Error Logging). If a request to the website fails, your browser may send Cloudflare a short report with technical details of the failed request, such as the address requested and the type of error. Successful requests are not reported.</p>
@@ -141,7 +144,7 @@ footer.bot{border-top:1px solid var(--line);color:var(--muted);font-size:14px;pa
 </section>
 <section id="security">
 <h2>8. Security</h2>
-<p>The website is served over HTTPS and tells browsers to connect to it only over HTTPS (HSTS). The form service only accepts new submissions; it offers no way to read stored submissions over the internet. Panel data can only be reached with a valid sign-in token, and other members see only what the panel shares with them, such as an open campaign or a profile its owner has chosen to list. No method of sending or storing data over the internet is completely secure.</p>
+<p>The website is served over HTTPS and tells browsers to connect to it only over HTTPS (HSTS). The form service only accepts new submissions; it offers no way to read stored submissions over the internet. Panel data can only be reached with a valid sign-in token, and other members see only what the panel shares with them: open campaigns, profiles their owners have chosen to list, and, for a campaign's owner, the profile of each influencer who applies to or is invited to that campaign. No method of sending or storing data over the internet is completely secure.</p>
 </section>
 <section id="cookies">
 <h2>9. Cookies and local storage</h2>
