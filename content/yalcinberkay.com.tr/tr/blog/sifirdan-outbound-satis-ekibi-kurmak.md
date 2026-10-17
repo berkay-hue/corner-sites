@@ -1,6 +1,6 @@
 ---
 title: "Sıfırdan Outbound Satış Ekibi Nasıl Kurulur?"
-description: "B2B kurucuları için outbound satış ekibini işe alma, yapılandırma ve hızlandırma üzerine pratik bir rehber: roller, metrikler ve erken dönemde kaçınılması gereken hatalar."
+description: "B2B kurucuları için outbound satış ekibini işe alma, yapılandırma ve hızlandırma rehberi: roller, metrikler ve erken dönemde kaçınılacak hatalar."
 date: "2026-10-10"
 updated: "2026-10-16"
 category: "Satış Liderliği"
