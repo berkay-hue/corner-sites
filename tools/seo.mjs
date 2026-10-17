@@ -83,6 +83,20 @@ const RULES = {
   },
   "brandcorner.co": {
     origin: "https://www.brandcorner.co",
+    FAQ: {
+      en: [
+        ["Can I change plans later?", "Yes! You can upgrade or downgrade your plan at any time. Changes take effect at the start of your next billing cycle."],
+        ["What payment methods do you accept?", "We accept all major credit cards (Visa, Mastercard, American Express), PayPal, and bank transfers for enterprise plans."],
+        ["Is there a contract or commitment?", "No long-term contracts required. Monthly plans can be cancelled anytime. Yearly plans are billed annually but can be cancelled with remaining time prorated."],
+        ["How does the free trial work?", "Start with a 14-day free trial of our Professional plan. No credit card required. You'll get full access to all features during the trial period."],
+        ["What's your refund policy?", "We offer a 30-day money-back guarantee. If you're not satisfied within the first 30 days, we'll provide a full refund."]],
+      tr: [
+        ["Planımı daha sonra değiştirebilir miyim?", "Evet! Planınızı istediğiniz zaman yükseltebilir veya düşürebilirsiniz. Değişiklikler bir sonraki fatura döneminin başında yürürlüğe girer."],
+        ["Hangi ödeme yöntemlerini kabul ediyorsunuz?", "Tüm büyük kredi kartlarını (Visa, Mastercard, American Express), PayPal'ı ve kurumsal planlar için banka transferlerini kabul ediyoruz."],
+        ["Sözleşme veya taahhüt var mı?", "Uzun vadeli sözleşme gerekmez. Aylık planlar her zaman iptal edilebilir. Yıllık planlar yıllık olarak faturalandırılır ancak kalan süre orantılı olarak iptal edilebilir."],
+        ["Ücretsiz deneme nasıl çalışır?", "Profesyonel planımızın 14 günlük ücretsiz denemesiyle başlayın. Kredi kartı gerekmez. Deneme süresince tüm özelliklere tam erişim elde edeceksiniz."],
+        ["İade politikanız nedir?", "30 günlük para iade garantisi sunuyoruz. İlk 30 gün içinde memnun kalmazsanız, tam iade yapacağız."]],
+    },
     // v0 şablonu her sayfaya aynı başlık/açıklamayı veriyor. Sayfa başına [başlık ≤60, açıklama ≤155, breadcrumb adı], sitedeki metinden
     META: {
       "/": ["Brand Corner - Influencer Marketing Platform", "Connect brands with the right influencers. An all-in-one influencer marketing platform to manage campaigns, discover talent, and track performance."],
@@ -220,6 +234,10 @@ const RULES = {
         : [...(page === "/about" ? [org] : []),
           { "@type": page === "/about" ? "AboutPage" : "WebPage", "@id": url + "#webpage", url, name: h1, isPartOf: { "@id": R.origin + "/#website" }, about: { "@id": ORG }, inLanguage: "en" },
           { "@type": "BreadcrumbList", itemListElement: [{ "@type": "ListItem", position: 1, name: "Home", item: R.origin + "/" }, { "@type": "ListItem", position: 2, name: crumb, item: url }] }];
+      // /pricing SSS'si (PricingFAQ chunk'ı) birebir; sayfa dil anahtarlı olduğundan EN ve TR ayrı FAQPage
+      if (page === "/pricing") for (const [lang, qa] of Object.entries(R.FAQ))
+        graph.push({ "@type": "FAQPage", "@id": url + "#faq-" + lang, url, inLanguage: lang, isPartOf: { "@id": url + "#webpage" },
+          mainEntity: qa.map(([q, ans]) => ({ "@type": "Question", name: q, acceptedAnswer: { "@type": "Answer", text: ans } })) });
       if (graph.length) html = html.replace("</head>", ldTag({ "@context": "https://schema.org", "@graph": graph }) + "</head>");
       // Gövde (RSC verisinden önceki kısım) iddia nötrleme; RSC verisinde bu metinler yok
       const at = html.indexOf("<script>(self.__next_f"), end = at < 0 ? html.length : at;
