@@ -82,11 +82,14 @@ async function register(c) {
   if (email.length > 254 || !EMAIL_RE.test(email)) throw new Bad("email");
   if (password.length < 8 || password.length > 200) throw new Bad("password");
   if (!ROLES.includes(role)) throw new Bad("role");
+  if (body.consent !== true) throw new Bad("consent");
+  // Bot koruması: gizli alan doluysa ya da form 1,5 sn'den kısa sürede gönderildiyse kayıt, e-posta ve deneme kaydı yok
+  if (String(body.hp ?? "") !== "" || !(Number(body.t) >= 1500)) throw new Bad("bad");
   if (await attempts(env, "register", "ip", ip, 60, false) >= 5) throw new Bad("rate", 429);
   await attempt(env, ip, email, "register", 1);
 
   const user = await env.DB.prepare(
-    "INSERT INTO users (site, email, name, role, lang, pass) VALUES (?, ?, ?, ?, ?, ?) ON CONFLICT DO NOTHING RETURNING *",
+    "INSERT INTO users (site, email, name, role, lang, pass, consent_at) VALUES (?, ?, ?, ?, ?, ?, datetime('now')) ON CONFLICT DO NOTHING RETURNING *",
   ).bind(site, email, name, role, lang, await hashPass(env, password)).first();
   if (!user) throw new Bad("exists", 409);
 

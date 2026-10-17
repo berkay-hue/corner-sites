@@ -23,8 +23,11 @@ CREATE TABLE IF NOT EXISTS users (
   lang TEXT NOT NULL DEFAULT 'tr',
   pass TEXT NOT NULL,
   profile TEXT NOT NULL DEFAULT '{}',
+  consent_at TEXT,          -- kayıtta KVKK/gizlilik metni okundu ve koşullar kabul edildi onayının zamanı (UTC)
   UNIQUE (site, email)
 );
+-- Tablo önceden varsa bir kez çalıştırın:
+-- ALTER TABLE users ADD COLUMN consent_at TEXT;
 
 -- Oturum token'ının yalnızca SHA-256 özeti tutulur
 CREATE TABLE IF NOT EXISTS sessions (

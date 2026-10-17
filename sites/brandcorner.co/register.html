@@ -50,6 +50,8 @@ button.btn{border:0;cursor:pointer;width:100%;font-family:inherit;padding:12px 1
 .card .role b{display:block;font-weight:600;font-size:15px;line-height:1.4}.card .role small{display:block;color:var(--muted);font-size:13px;line-height:1.5}
 .card .role:has(input:checked){border-color:var(--accent);background:#f5f5ff}.card .role:focus-within{outline:2px solid var(--accent);outline-offset:1px}
 .msg a{color:inherit;font-weight:600}
+.card .consent{align-items:flex-start;min-height:44px;margin:0 0 12px;font-size:14px;line-height:1.5;cursor:pointer}.card .consent input{width:20px;height:20px;margin:1px 0 0;flex:none}.card .consent a{font-weight:600}
+.card .hp{position:absolute;left:-10000px;top:auto;width:1px;height:1px;overflow:hidden}
 </style>
 </head>
 <body>
@@ -73,11 +75,12 @@ button.btn{border:0;cursor:pointer;width:100%;font-family:inherit;padding:12px 1
 <label class="role"><input type="radio" name="role" value="influencer"><span><b>Influencer</b><small>Apply to campaigns and manage your collaborations.</small></span></label>
 <label class="role"><input type="radio" name="role" value="agency"><span><b>Agency</b><small>Run campaigns for your clients.</small></span></label>
 </fieldset>
+<div class="hp" aria-hidden="true"><label for="hp">Your website</label><input id="hp" name="hp" type="text" tabindex="-1" autocomplete="off" aria-hidden="true"></div>
+<label class="row consent"><input name="consent" type="checkbox" required><span>I have read the <a href="/privacy">Privacy Policy</a> and agree to the <a href="/terms">Terms of Service</a>.</span></label>
 <label class="row"><input name="remember" type="checkbox" checked> Remember me</label>
 <button class="btn" type="submit" disabled>Create account</button>
 <p id="m" class="msg" role="alert"></p>
 </form>
-<p class="note">Before signing up, please review the <a href="/terms">Terms of Service</a> and <a href="/privacy">Privacy Policy</a>.</p>
 <p class="note">Already have an account? <a href="/login">Log in</a></p>
 </div>
 </main>
@@ -93,6 +96,8 @@ button.btn{border:0;cursor:pointer;width:100%;font-family:inherit;padding:12px 1
   // Açık oturum varsa doğrudan panele geç
   if (BC.token()) BC.call("GET", "auth/me").then(function () { location.replace("/panel"); }, function () {});
 
+  // Bot koruması: gizli alan (hp) ve sayfa açılışından gönderime geçen süre (t) sunucuda denetlenir
+  var t0 = Date.now();
   var f = document.getElementById("f"), b = f.querySelector("button"), m = document.getElementById("m");
 
   // Sitedeki CTA'lar ?role=brand|influencer|agency ile gelir: hesap türü seçili açılır, dil bağlantısı da korur
@@ -116,8 +121,9 @@ button.btn{border:0;cursor:pointer;width:100%;font-family:inherit;padding:12px 1
     if (email.length > 254 || !/^[^\s@<>"]+@[^\s@<>"]+\.[^\s@<>"]+$/.test(email)) return fail(BC.msg("email"));
     if (pass.length < 8 || pass.length > 200) return fail(BC.msg("password"));
     if (!role) return fail(BC.msg("role"));
+    if (!el.consent.checked) return fail(BC.msg("consent"));
     m.textContent = ""; b.disabled = true; b.textContent = T.wait;
-    BC.call("POST", "auth/register", { name: name, email: email, password: pass, role: role, lang: "en" }).then(function (d) {
+    BC.call("POST", "auth/register", { name: name, email: email, password: pass, role: role, consent: true, hp: el.hp.value, t: Date.now() - t0, lang: "en" }).then(function (d) {
       if (!d.token) return fail(BC.msg("err"));
       if (!BC.save(d.token, el.remember.checked)) return fail(BC.msg("store"));
       location.href = "/panel";

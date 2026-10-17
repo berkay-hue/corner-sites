@@ -24,10 +24,20 @@ check() { # check AD BEKLENEN_KOD "<status> <json>"
   if [ "$got" = "$2" ]; then echo "ok   $1 ($got)"; else echo "HATA $1: $2 beklendi, $3"; fail=1; fi
 }
 body() { echo "${1#* }"; }
-reg() { jq -nc --arg n "$1" --arg e "$2" --arg p "$PASS" --arg r "$3" '{name:$n,email:$e,password:$p,role:$r,lang:"tr"}'; }
+reg() { jq -nc --arg n "$1" --arg e "$2" --arg p "$PASS" --arg r "$3" '{name:$n,email:$e,password:$p,role:$r,lang:"tr",consent:true,hp:"",t:4000}'; }
+# reg'in gövdesini değiştirir: regx '<jq ifadesi>' AD E-POSTA ROL
+regx() { reg "$2" "$3" "$4" | jq -c "$1"; }
 
 r=$(call POST /auth/register "" "$(reg 'Test Marka' "marka-$RUN@example.test" brand)"); check "marka kaydı" 200 "$r"
 BT=$(body "$r" | jq -r .token)
+r=$(call POST /auth/register "" "$(regx 'del(.consent)' 'Onaysız' "onaysiz-$RUN@example.test" brand)"); check "onaysız kayıt" 400 "$r"
+[ "$(body "$r" | jq -r .error)" = consent ] || { echo "HATA onaysız kayıt kodu: $r"; fail=1; }
+r=$(call POST /auth/register "" "$(regx '.consent="true"' 'Onaysız' "onaysiz-$RUN@example.test" brand)"); check "onay true değil" 400 "$r"
+r=$(call POST /auth/register "" "$(regx '.hp="http://spam.test"' 'Bot' "bot-$RUN@example.test" brand)"); check "dolu gizli alan" 400 "$r"
+r=$(call POST /auth/register "" "$(regx '.t=300' 'Bot' "bot-$RUN@example.test" brand)"); check "çok hızlı gönderim" 400 "$r"
+r=$(call POST /auth/register "" "$(regx 'del(.t)' 'Bot' "bot-$RUN@example.test" brand)"); check "süresiz gönderim" 400 "$r"
+[ "$(body "$r" | jq -r .error)" = bad ] || { echo "HATA bot kodu genel değil: $r"; fail=1; }
+r=$(call POST /auth/login "" "$(jq -nc --arg e "bot-$RUN@example.test" --arg p "$PASS" '{email:$e,password:$p}')"); check "bot hesabı açılmadı" 401 "$r"
 r=$(call POST /auth/register "" "$(reg 'Test Influencer' "inf-$RUN@example.test" influencer)"); check "influencer kaydı" 200 "$r"
 IT=$(body "$r" | jq -r .token); IID=$(body "$r" | jq -r .user.id)
 r=$(call POST /auth/register "" "$(reg 'Tekrar' "marka-$RUN@example.test" brand)"); check "aynı e-posta" 409 "$r"
@@ -64,6 +74,7 @@ r=$(call POST /app/campaigns/$CID/invite "$BT" "{\"user_id\":$IID}"); check "ayn
 r=$(call POST /auth/register "" "$(reg "Test Ajans" "ajans-$RUN@example.test" agency)"); check "ajans kaydı" 200 "$r"
 r=$(call POST /auth/register "" "$(reg "Test Influencer 2" "inf2-$RUN@example.test" influencer)"); check "ikinci influencer" 200 "$r"
 I2T=$(body "$r" | jq -r .token); I2ID=$(body "$r" | jq -r .user.id)
+r=$(call POST /app/profile "$I2T" '{"profile":{"niches":["Yemek"],"listed":true}}'); check "ikinci profil (davet için listelenir)" 200 "$r"
 r=$(call POST /app/campaigns/$CID/invite "$BT" "{\"user_id\":$I2ID,\"message\":\"Davet\"}"); check "davet" 200 "$r"; DID=$(body "$r" | jq -r .application.id)
 r=$(call POST /app/applications/$DID "$I2T" '{"status":"accepted"}'); check "daveti kabul" 200 "$r"
 r=$(call GET /app/stats "$BT"); check "istatistik" 200 "$r"
