@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kayıt ol | Brand Corner</title>
+<meta name="description" content="Marka, influencer ya da ajans olarak Brand Corner hesabı oluşturun.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="/icon.png" type="image/png">
+<link rel="apple-touch-icon" href="/icon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Brand Corner"/><meta property="og:title" content="Kayıt ol | Brand Corner">
+<meta property="og:description" content="Marka, influencer ya da ajans olarak Brand Corner hesabı oluşturun.">
+<meta property="og:image" content="https://www.brandcorner.co/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Kayıt ol | Brand Corner">
+<meta name="twitter:description" content="Marka, influencer ya da ajans olarak Brand Corner hesabı oluşturun.">
+<meta name="twitter:image" content="https://www.brandcorner.co/og.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#ffffff;--surface:#f8fafc;--line:#e5e7eb;--text:#111827;--muted:#4b5563;--accent:#4f46e5;--grad:linear-gradient(90deg,#4f46e5,#7c3aed)}
+*{box-sizing:border-box}html{-webkit-text-size-adjust:100%}body{margin:0;background:var(--surface);color:var(--text);font:16px/1.7 "Inter",system-ui,-apple-system,sans-serif}
+a{color:inherit}img{max-width:100%;display:block}
+.wrap{max-width:1140px;margin:0 auto;padding:0 20px}
+header.top{position:sticky;top:0;z-index:10;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+header.top .wrap{display:flex;align-items:center;gap:24px;height:68px}
+header.top nav{display:flex;gap:22px;margin-left:auto;font-size:15px}header.top nav a{text-decoration:none;color:var(--muted)}header.top nav a:hover,header.top nav a[aria-current]{color:var(--text)}
+.btn{display:inline-block;background:var(--grad);color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:10px 18px;border-radius:10px;white-space:nowrap}
+h1,h2,h3{font-family:"Poppins","Inter",system-ui,sans-serif;line-height:1.2}
+footer.bot{border-top:1px solid var(--line);background:var(--bg);color:var(--muted);font-size:14px;padding:32px 0 40px}footer.bot .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:space-between}footer.bot nav{display:flex;flex-wrap:wrap;gap:8px 18px}footer.bot a{text-decoration:none}footer.bot a:hover{color:var(--text)}
+.auth{display:flex;justify-content:center;align-items:center;min-height:calc(100vh - 69px - 112px);padding:48px 20px}
+.card{width:100%;max-width:420px;background:var(--bg);border:1px solid var(--line);border-radius:16px;padding:32px;box-shadow:0 12px 32px rgba(17,24,39,.06)}
+.card h1{font-size:26px;margin:0 0 8px;letter-spacing:-.01em}.card .sub{color:var(--muted);font-size:15px;margin:0 0 24px}
+.card label{display:block;font-weight:600;font-size:14px;margin:0 0 6px}
+.card input[type=email],.card input[type=password]{display:block;width:100%;font:inherit;font-size:16px;line-height:1.4;padding:11px 14px;margin:0 0 16px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--text)}
+.card input:focus-visible{outline:2px solid var(--accent);outline-offset:1px;border-color:var(--accent)}
+.card .row{display:flex;align-items:center;gap:8px;font-weight:400;margin:0 0 20px}.card .row input{width:16px;height:16px;margin:0;accent-color:var(--accent)}
+button.btn{border:0;cursor:pointer;width:100%;font-family:inherit;padding:12px 18px}button.btn:disabled{opacity:.65;cursor:default}
+.msg{color:#b91c1c;font-size:14px;margin:12px 0 0}.msg:empty{display:none}
+.note{color:var(--muted);font-size:14px;text-align:center;margin:20px 0 0}.note a{color:var(--accent);font-weight:600;text-decoration:none}.note a:hover{text-decoration:underline}.note+.note{margin-top:8px}
+@media(max-width:760px){header.top nav a:not(.keep){display:none}header.top .wrap{gap:12px}.auth{padding:32px 16px;min-height:0}.card{padding:24px 20px}}
+.card input[type=text]{display:block;width:100%;font:inherit;font-size:16px;line-height:1.4;padding:11px 14px;margin:0 0 16px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--text)}
+.card .hint{color:var(--muted);font-size:13px;margin:-10px 0 16px}
+.card fieldset{border:0;padding:0;margin:0 0 12px;min-width:0}.card legend{font-weight:600;font-size:14px;margin:0 0 6px;padding:0}
+.card .role{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:0 0 8px;font-weight:400;cursor:pointer}
+.card .role input{width:16px;height:16px;margin:4px 0 0;flex:none;accent-color:var(--accent)}
+.card .role b{display:block;font-weight:600;font-size:15px;line-height:1.4}.card .role small{display:block;color:var(--muted);font-size:13px;line-height:1.5}
+.card .role:has(input:checked){border-color:var(--accent);background:#f5f5ff}.card .role:focus-within{outline:2px solid var(--accent);outline-offset:1px}
+.msg a{color:inherit;font-weight:600}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap"><a href="/" aria-label="Brand Corner"><img src="/Logo.png" alt="Brand Corner" height="34" style="height:34px;width:auto"></a>
+<nav><a href="/">Ana Sayfa</a><a href="/features">Özellikler</a><a href="/pricing">Fiyatlandırma</a><a href="/blog">Blog</a><a href="/register" class="keep" lang="en" hreflang="en">English</a></nav></div></header>
+
+<main class="auth">
+<div class="card">
+<h1>Brand Corner hesabı oluşturun</h1>
+<p class="sub">Hesap türünüzü seçin, kayıttan sonra panelinize hemen geçin.</p>
+<form id="f" method="post" data-sk-noform novalidate>
+<label for="name">Adınız</label>
+<input id="name" name="name" type="text" autocomplete="name" maxlength="100" required>
+<label for="email">E-posta</label>
+<input id="email" name="email" type="email" autocomplete="email" inputmode="email" autocapitalize="off" spellcheck="false" maxlength="254" required>
+<label for="password">Şifre</label>
+<input id="password" name="password" type="password" autocomplete="new-password" minlength="8" maxlength="200" aria-describedby="ph" required>
+<p id="ph" class="hint">En az 8 karakter.</p>
+<fieldset><legend>Hesap türü</legend>
+<label class="role"><input type="radio" name="role" value="brand"><span><b>Marka</b><small>Kampanya oluşturun, influencer keşfedin.</small></span></label>
+<label class="role"><input type="radio" name="role" value="influencer"><span><b>Influencer</b><small>Kampanyalara başvurun, iş birliklerinizi yönetin.</small></span></label>
+<label class="role"><input type="radio" name="role" value="agency"><span><b>Ajans</b><small>Müşterileriniz için kampanya yürütün.</small></span></label>
+</fieldset>
+<label class="row"><input name="remember" type="checkbox" checked> Beni hatırla</label>
+<button class="btn" type="submit" disabled>Hesap oluştur</button>
+<p id="m" class="msg" role="alert"></p>
+</form>
+<p class="note">Hesap oluşturmadan önce <a href="/terms">Kullanım Koşulları</a> ve <a href="/privacy">Gizlilik Politikası</a> sayfalarını (İngilizce) inceleyin.</p>
+<p class="note">Zaten hesabınız var mı? <a href="/giris">Giriş yapın</a></p>
+</div>
+</main>
+
+<footer class="bot"><div class="wrap"><div>© Brand Corner · Tüm hakları saklıdır.</div><nav aria-label="Corner Group şirketleri"><a href="https://saascorner.co">SAAS Corner</a><a href="https://salescorner.co">Sales Corner</a><a href="https://socialmediacorner.co">Social Media Corner</a><a href="https://cornergroup.co">Corner Group</a></nav></div></footer>
+
+<script src="/bc-app.js"></script>
+<script>
+(function(){
+  BC.useLang("tr");
+  var T = { go: "Hesap oluştur", wait: "Hesap oluşturuluyor…", rate: "Çok fazla kayıt denemesi yapıldı. Lütfen bir saat sonra tekrar deneyin." };
+
+  // Açık oturum varsa doğrudan panele geç
+  if (BC.token()) BC.call("GET", "auth/me").then(function () { location.replace("/panel"); }, function () {});
+
+  var f = document.getElementById("f"), b = f.querySelector("button"), m = document.getElementById("m");
+
+  // Sitedeki CTA'lar ?role=brand|influencer|agency ile gelir: hesap türü seçili açılır, dil bağlantısı da korur
+  var r = new URLSearchParams(location.search).get("role");
+  if (r === "brand" || r === "influencer" || r === "agency") {
+    f.querySelector('input[name=role][value="' + r + '"]').checked = true;
+    var alt = document.querySelector("a[hreflang]");
+    alt.href = alt.getAttribute("href") + "?role=" + r;
+  }
+
+  function fail(s, login) {
+    m.textContent = s;
+    // Aynı e-postayla hesap varsa giriş bağlantısı
+    if (login) { var a = document.createElement("a"); a.href = "/giris"; a.textContent = "Giriş yapın"; m.appendChild(document.createTextNode(" ")); m.appendChild(a); }
+    b.disabled = false; b.textContent = T.go;
+  }
+  f.addEventListener("submit", function (ev) {
+    ev.preventDefault();
+    var el = f.elements, name = el.name.value.trim(), email = el.email.value.trim(), pass = el.password.value, role = el.role.value;
+    if (!name || name.length > 100) return fail(BC.msg("name"));
+    if (email.length > 254 || !/^[^\s@<>"]+@[^\s@<>"]+\.[^\s@<>"]+$/.test(email)) return fail(BC.msg("email"));
+    if (pass.length < 8 || pass.length > 200) return fail(BC.msg("password"));
+    if (!role) return fail(BC.msg("role"));
+    m.textContent = ""; b.disabled = true; b.textContent = T.wait;
+    BC.call("POST", "auth/register", { name: name, email: email, password: pass, role: role, lang: "tr" }).then(function (d) {
+      if (!d.token) return fail(BC.msg("err"));
+      if (!BC.save(d.token, el.remember.checked)) return fail(BC.msg("store"));
+      location.href = "/panel";
+    }, function (e) { fail(BC.msg(e.code, T), e.code === "exists"); });
+  });
+  // Betik yüklenmeden gönderim olmasın: düğme JS hazır olunca açılır
+  b.disabled = false;
+})();
+</script>
+</body>
+</html>

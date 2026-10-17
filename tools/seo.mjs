@@ -95,6 +95,12 @@ const RULES = {
       "/privacy": ["Privacy Policy | Brand Corner", "How the Brand Corner website handles personal data: the newsletter form, hosting, cookies and local storage, and your rights under the GDPR and KVKK.", "Privacy Policy"],
       "/terms": ["Terms of Service | Brand Corner", "The terms that apply when you use the Brand Corner website, including acceptable use, intellectual property, the newsletter form and liability.", "Terms of Service"],
       "/404": ["Page Not Found | Brand Corner", "This page could not be found."],
+      // Giriş, kayıt ve panel: noindex, sitemap'te yok
+      "/giris": ["Giriş | Brand Corner", "Brand Corner hesabınıza giriş yapın."],
+      "/login": ["Log in | Brand Corner", "Log in to your Brand Corner account."],
+      "/kayit": ["Kayıt ol | Brand Corner", "Marka, influencer ya da ajans olarak Brand Corner hesabı oluşturun."],
+      "/register": ["Sign up | Brand Corner", "Create a Brand Corner account as a brand, influencer or agency."],
+      "/panel": ["Panel | Brand Corner", "Brand Corner panel."],
     },
     // Doğrulanamayan iddialar (500+/10,000+ sayaçları, logo şeridi, yorumlar, başarı hikâyeleri, mockup tutarları, © 2025) nötrlenir.
     // Gövde SSR çıktısı: her değişiklik CHUNK_PATCHES'teki istemci yamasıyla birebir aynı olmalı, yoksa hydration #418 verir.
@@ -102,8 +108,9 @@ const RULES = {
     BODY: (() => {
       const copy = ["<p>© 2025 Brand Corner. All rights reserved.</p>", "<p>© Brand Corner. All rights reserved.</p>", 1];
       const grid = '<div class="mt-10 grid grid-cols-3 gap-6">';
+      const social = '<div class="mt-6 flex gap-4">';  // footer'daki 4 sosyal ikon href="#" (hesap yok)
       return {
-        "/": { cut: ['<div class="mt-16 border-t border-border pt-8 lg:mt-24">'], section: [">Trusted by Industry Leaders</h2>", ">Success Stories</h2>"], swap: [
+        "/": { cut: ['<div class="mt-16 border-t border-border pt-8 lg:mt-24">', social], section: [">Trusted by Industry Leaders</h2>", ">Success Stories</h2>"], swap: [
           ['<link rel="preload" as="image" href="/fashion-brand-marketing-campaign-success.jpg"/>', "", 1],
           ['<link rel="preload" as="image" href="/tech-startup-growth-marketing.jpg"/>', "", 1],
           ['<link rel="preload" as="image" href="/food-delivery-app-success-story.jpg"/>', "", 1],
@@ -117,22 +124,22 @@ const RULES = {
           ['leading-5 text-primary">4.8%</div>', 'leading-5 text-primary">—</div>', 4],
           [">24/7 Support</h3>", ">Support</h3>", 1],
           ["Join thousands of brands, influencers, and agencies growing with Brand Corner.", "Brands, influencers, and agencies can grow with Brand Corner.", 1], copy] },
-        "/features": { swap: [["analyzes thousands of profiles", "analyzes profiles", 1], copy] },
-        "/pricing": { swap: [copy] },
-        "/solutions/brands": { cut: [grid], swap: [
+        "/features": { cut: [social], swap: [["analyzes thousands of profiles", "analyzes profiles", 1], copy] },
+        "/pricing": { cut: [social], swap: [copy] },
+        "/solutions/brands": { cut: [grid, social], swap: [
           ["<span>125K followers</span>", "<span>Followers</span>", 4],
           ["<span>4.8% engagement</span>", "<span>Engagement</span>", 4],
           ['<p class="font-semibold text-foreground">+24 new</p>', '<p class="font-semibold text-foreground">New</p>', 1],
           ['text-[#10B981]">+340%</p>', 'text-[#10B981]">—</p>', 1],
           ["Join 500+ brands already using Brand Corner to transform their influencer marketing.", "Use Brand Corner to transform your influencer marketing.", 1], copy] },
-        "/solutions/influencers": { cut: [grid], section: [">Influencer Success Stories</h2>"], swap: [
+        "/solutions/influencers": { cut: [grid, social], section: [">Influencer Success Stories</h2>"], swap: [
           ['<p class="text-sm text-muted-foreground">Fashion Brand - $1,500</p>', '<p class="text-sm text-muted-foreground">Fashion Brand</p>', 1],
           ['<div class="font-mono text-2xl font-bold text-foreground">$4,250</div>', '<div class="font-mono text-2xl font-bold text-foreground">—</div>', 1],
           ['text-[#10B981]">+32%</div>', 'text-[#10B981]">—</div>', 1],
           ['<p class="font-semibold text-[#10B981]">+$1,500</p>', '<p class="font-semibold text-[#10B981]">—</p>', 1],
           ["visible to hundreds of brands", "visible to brands", 1],
           ["Join 10,000+ influencers already growing with Brand Corner. It&#x27;s free to join!", "Grow with Brand Corner. It&#x27;s free to join!", 1], copy] },
-        "/solutions/agencies": { cut: [grid], swap: [
+        "/solutions/agencies": { cut: [grid, social], swap: [
           ...[["Sarah J.", "A", "$12,500"], ["Mike R.", "B", "$8,200"], ["Emma L.", "C", "$10,800"]].flatMap(([n, k, v]) => [
             [`<p class="font-medium text-foreground">${n}</p>`, `<p class="font-medium text-foreground">Talent ${k}</p>`, 1], [`>${v}</p>`, ">—</p>", 1]]),
           ['<p class="font-mono font-semibold text-[#10B981]">$45,200</p>', '<p class="font-mono font-semibold text-[#10B981]">—</p>', 1],
@@ -192,9 +199,8 @@ const RULES = {
       // Favicon ve 1200×630 paylaşım görseli: dosyalar sites/brandcorner.co'ya konunca devreye girer
       if (existsSync(join(SITE, "icon.png")) && !html.includes('rel="icon"'))
         html = html.replace("</head>", `<link rel="icon" href="/icon.png" type="image/png"/><link rel="apple-touch-icon" href="/icon.png"/></head>`);
-      // Footer'daki 4 sosyal ikon href="#" (hesap yok): gövdeye dokunmadan (#418) head CSS ile gizlenir
-      if (/<a\b[^>]*href="#"/.test(html) && !html.includes('footer a[href="#"]'))
-        html = html.replace("</head>", `<style data-sk-seo>footer a[href="#"]{display:none}</style></head>`);
+      // Footer'daki sosyal ikonlar artık gövdeden ve chunk'tan birlikte siliniyor (BODY cut + CHUNK_PATCHES); eski gizleme CSS'i kalkar
+      html = html.replace('<style data-sk-seo>footer a[href="#"]{display:none}</style>', "");
       if (existsSync(join(SITE, "og.png"))) {
         html = html.replace(/(<meta (?:property="og:image"|name="twitter:image") content=")[^"]*(")/g, `$1${R.origin}/og.png$2`);
         if (!html.includes('property="og:image:width"'))
@@ -407,17 +413,44 @@ const DICT = [  // i18n sözlüğü (EN + TR); 6 sayfanın ve 404'ün chunk'ınd
   ['"socialProof.satisfaction":"%98 Memnuniyet Oranı"', '"socialProof.satisfaction":"Memnuniyet"'],
 ];
 const statGrid = v => ({ from: `,(0,${v}.jsxs)("div",{className:"mt-10 grid grid-cols-3 gap-6",children:[`, until: `]}),(0,${v}.jsxs)("div",{className:"relative"` });
+// CTA'lar düz <button>'dı: onClick SSR HTML'ine yazılmaz (#418 riski yok). Dil kapsamda yoksa localStorage'dan okunur (varsayılan en)
+const REG = (q = "") => `()=>{let l;try{l=localStorage.getItem("brand-corner-lang")}catch(x){}location.href=${q ? `("tr"===l?"/kayit":"/register")+"${q}"` : `"tr"===l?"/kayit":"/register"`}}`;
+const go = u => `()=>{location.href="${u}"}`;
+// Fiyat kartları: Kurumsal (Contact Sales) e-postaya, diğerleri kayda
+const plan = lang => `()=>{location.href=t.cta===e("pricingPage.contactSales")?"mailto:info@saascorner.co":"en"===${lang}?"/register":"/kayit"}`;
+const on = (btn, js) => {
+  const to = /^\(0,/.test(btn) ? btn.replace(/^(\(0,\w+\.jsxs?\)\(\w+\.Button,\{)/, `$1onClick:${js},`) : `onClick:${js},${btn}`;
+  if (to === btn) throw new Error(`onClick eklenemedi: ${btn.slice(0, 60)}`);
+  return [btn, to];
+};
 // Next build latin-ext alt kümelerini (ğ, ş, İ, ₺ …) yayımlamamış; @font-face 404 veriyor, tarayıcı zaten "* Fallback" (Arial) ile çiziyor.
 const LATIN_EXT = "U+100-2BA,U+2BD-2C5,U+2C7-2CC,U+2CE-2D7,U+2DD-2FF,U+304,U+308,U+329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF";
 const noFace = (family, weight, file) => [`@font-face{font-family:${family};font-style:normal;font-weight:${weight};font-display:swap;src:url(../media/${file}.woff2)format("woff2");unicode-range:${LATIN_EXT}}`, ""];
 const CHUNK_PATCHES = {
   "brandcorner.co": [
     // e34ca4a footer Company listesine Blog ekledi (6 sayfa); i18n sözlüklerinde footer.blog zaten var
-    { chunk: "fbb4735ac8b2897c", edits: [['{href:"/press",label:e("footer.press")},', '{href:"/press",label:e("footer.press")},{href:"/blog",label:e("footer.blog")},']] },
+    // Header'daki Giriş/Login ve Get Started butonlarının (masaüstü + mobil menü) tıklama işleyicisi yoktu; site diline göre
+    // /login|/giris ve /register|/kayit'e gider. onClick SSR HTML'ine yazılmaz, gövdeye dokunulmaz (#418 riski yok)
+    // Footer'daki 4 sosyal ikon href="#" idi (hesap yok): gövdeden (BODY cut) ve chunk'tan birlikte silinir
+    { chunk: "fbb4735ac8b2897c", was: ["29a4179b1081dab7"], edits: [
+      ['{href:"/press",label:e("footer.press")},', '{href:"/press",label:e("footer.press")},{href:"/blog",label:e("footer.blog")},'],
+      ...['hidden border-primary text-primary hover:bg-primary/5 sm:inline-flex bg-transparent', 'border-primary text-primary bg-transparent'].map(c => [
+        `(0,u.jsx)(m.Button,{variant:"outline",className:"${c}",children:r("nav.login")})`,
+        `(0,u.jsx)(m.Button,{variant:"outline",onClick:()=>{location.href="en"===e?"/login":"/giris"},className:"${c}",children:r("nav.login")})`]),
+      ...['hidden gradient-primary text-primary-foreground hover:opacity-90 sm:inline-flex', 'gradient-primary text-primary-foreground'].map(c =>
+        on(`(0,u.jsx)(m.Button,{className:"${c}",children:r("nav.getStarted")})`, `()=>{location.href="en"===e?"/register":"/kayit"}`)),
+      [{ from: ',(0,t.jsxs)("div",{className:"mt-6 flex gap-4"', until: ']}),(0,t.jsxs)("div",{className:"grid grid-cols-2 gap-8 sm:grid-cols-4 lg:col-span-4"' }, ""],
+    ] },
     // PR-F: doğrulanamayan sayaçlar, logo şeridi, yorumlar, başarı hikâyeleri ve mockup tutarları
     { chunk: "411b1b9d3b6df8ca", was: ["7cc019c396358bc9"], edits: DICT },
     { chunk: "763536697d8b15ea", was: ["021182790b26378c"], edits: DICT },
-    { chunk: "e4b281dafb09dd8b", edits: [  // ana sayfa
+    { chunk: "e4b281dafb09dd8b", was: ["ed42209b874cf44c"], edits: [  // ana sayfa
+      on('(0,s.jsxs)(a.Button,{size:"lg",className:"gradient-primary h-12 px-8 text-lg text-primary-foreground",children:[e("hero.cta.trial")', REG()),
+      on('(0,s.jsxs)(a.Button,{size:"lg",variant:"outline",className:"h-12 gap-2 px-8 text-lg bg-transparent",children:[', go("/features")),
+      on('(0,s.jsxs)(r.Button,{variant:"link",className:"mt-4 h-auto p-0 text-primary",children:[e("solution.learnMore")', go("/features")),
+      on('(0,s.jsxs)(r.Button,{size:"lg",className:"mt-8 gradient-primary text-primary-foreground",children:[p.cta', REG()),
+      on('(0,s.jsx)(r.Button,{className:`mt-8 w-full ${t.popular?"gradient-primary text-primary-foreground":""}`,variant:t.popular?"default":"outline",children:t.cta})', plan("d")),
+      on('(0,s.jsxs)(a.Button,{size:"lg",className:"mt-8 h-14 bg-primary-foreground px-10 text-lg text-primary hover:bg-primary-foreground/90",children:[e("cta.button")', REG()),
       [{ from: ',(0,s.jsxs)("div",{className:"mt-16 border-t border-border pt-8 lg:mt-24"', until: ']})]})}e.s(["HeroSection"' }, ""],  // "Trusted by 500+" + logo şeridi
       [{ from: 'function l(){let{t:e,language:l}=(0,t.useLanguage)(),i=[{value:"500+"', until: 'e.s(["SocialProofSection",()=>l])' }, "function l(){return null}"],
       [{ from: 'function i(){let{t:e,language:i}=(0,t.useLanguage)();return(0,s.jsx)("section",{className:"bg-secondary py-16 sm:py-24"', until: 'e.s(["CaseStudiesSection",()=>i])' }, "function i(){return null}"],
@@ -431,8 +464,11 @@ const CHUNK_PATCHES = {
       ['children:"+24%"', 'children:"—"'],
       ['children:["$",1500*e]', 'children:"—"'],
     ] },
-    { chunk: "265b6dd36dde1597", edits: [  // /solutions/brands
+    { chunk: "265b6dd36dde1597", was: ["81f74a9a6a0889fa"], edits: [  // /solutions/brands
       [statGrid("a"), ""],
+      on('className:"gradient-primary h-12 px-8 text-primary-foreground",children:[e("solutions.brands.cta")', REG("?role=brand")),
+      on('(0,a.jsx)(t.Button,{size:"lg",variant:"outline",className:"h-12 px-8 bg-transparent",children:e("hero.cta.demo")})', go("/features")),
+      on('className:"mt-8 h-12 bg-primary-foreground px-8 text-primary hover:bg-primary-foreground/90",children:[e("solutions.brands.cta")', REG("?role=brand")),
       ['(0,a.jsx)("span",{children:"125K followers"})', '(0,a.jsx)("span",{children:"Followers"})'],
       ['(0,a.jsx)("span",{children:"4.8% engagement"})', '(0,a.jsx)("span",{children:"Engagement"})'],
       ['children:"+24 new"', 'children:"New"'],
@@ -440,8 +476,11 @@ const CHUNK_PATCHES = {
       ['"Join 500+ brands already using Brand Corner to transform their influencer marketing."', '"Use Brand Corner to transform your influencer marketing."'],
       ['"Influencer pazarlamasını dönüştürmek için Brand Corner kullanan 500+ markaya katılın."', '"Influencer pazarlamanızı Brand Corner ile dönüştürün."'],
     ] },
-    { chunk: "51d3cf739a8640a6", edits: [  // /solutions/influencers
+    { chunk: "51d3cf739a8640a6", was: ["6bbaf7b9bf66cf11"], edits: [  // /solutions/influencers
       [statGrid("s"), ""],
+      on('className:"h-12 bg-[#FFB71B] px-8 text-foreground hover:bg-[#FFB71B]/90",children:[e("solutions.influencers.cta")', REG("?role=influencer")),
+      on('(0,s.jsx)(t.Button,{size:"lg",variant:"outline",className:"h-12 px-8 bg-transparent",children:e("hero.cta.demo")})', go("/features")),
+      on('className:"mt-8 h-12 bg-foreground px-8 text-background hover:bg-foreground/90",children:[e("solutions.influencers.cta")', REG("?role=influencer")),
       [{ from: 'function l(){let{language:e}=(0,r.useLanguage)();return(0,s.jsx)("section",{className:"bg-background py-16 sm:py-24",children:(0,s.jsxs)("div",{className:"mx-auto max-w-7xl px-4 sm:px-6 lg:px-8",children:[(0,s.jsxs)("div",{className:"text-center",children:[(0,s.jsx)("h2",{className:"font-serif text-3xl font-bold text-foreground sm:text-4xl",children:"en"===e?"Influencer Success Stories"', until: 'e.s(["InfluencersSuccess",()=>l])' }, "function l(){return null}"],
       ['children:"Fashion Brand - $1,500"', 'children:"Fashion Brand"'],
       ['children:"$4,250"', 'children:"—"'],
@@ -452,17 +491,29 @@ const CHUNK_PATCHES = {
       [`"Join 10,000+ influencers already growing with Brand Corner. It's free to join!"`, `"Grow with Brand Corner. It's free to join!"`],
       [`"Brand Corner ile büyüyen 10.000+ influencer'a katılın. Katılım ücretsiz!"`, `"Brand Corner ile büyüyün. Katılım ücretsiz!"`],
     ] },
-    { chunk: "4897118e349b9d9c", edits: [  // /solutions/agencies
+    { chunk: "4897118e349b9d9c", was: ["e51060d5d0abddeb"], edits: [  // /solutions/agencies
       [statGrid("t"), ""],
+      on('className:"h-12 bg-accent px-8 text-accent-foreground hover:bg-accent/90",children:[e("solutions.agencies.cta")', REG("?role=agency")),
+      on('(0,t.jsx)(s.Button,{size:"lg",variant:"outline",className:"h-12 px-8 bg-transparent",children:e("hero.cta.demo")})', go("/features")),
+      on('className:"mt-8 h-12 bg-accent-foreground px-8 text-accent hover:bg-accent-foreground/90",children:[e("solutions.agencies.cta")', REG("?role=agency")),
       ['[{name:"Sarah J.",campaigns:5,earnings:"$12,500"},{name:"Mike R.",campaigns:3,earnings:"$8,200"},{name:"Emma L.",campaigns:4,earnings:"$10,800"}]',
         '[{name:("en"===l?"Talent":"Yetenek")+" A",campaigns:5,earnings:"—"},{name:("en"===l?"Talent":"Yetenek")+" B",campaigns:3,earnings:"—"},{name:("en"===l?"Talent":"Yetenek")+" C",campaigns:4,earnings:"—"}]'],
       ['children:"$45,200"', 'children:"—"'],
       ['"Join leading agencies already managing their talents with Brand Corner."', '"Manage your talents with Brand Corner."'],
       ['"Yeteneklerini Brand Corner ile yöneten önde gelen ajanslara katılın."', '"Yeteneklerinizi Brand Corner ile yönetin."'],
     ] },
-    { chunk: "5c127651fc7ca527", edits: [  // /features
+    { chunk: "5c127651fc7ca527", was: ["6569e4e1529055d4"], edits: [  // /features
       ["analyzes thousands of profiles", "analyzes profiles"],
       ["üzere binlerce profili analiz eder.", "üzere profilleri analiz eder."],
+      on('(0,a.jsxs)(r.Button,{size:"lg",className:"gradient-primary h-12 px-8 text-primary-foreground",children:[e("hero.cta.trial")', REG()),
+      // Demo videosu yok; bu sayfadaki "Watch Demo" bir alttaki özellik bölümüne kaydırır
+      on('(0,a.jsx)(r.Button,{size:"lg",variant:"outline",className:"h-12 px-8 bg-transparent",children:e("hero.cta.demo")})',
+        'v=>{v.currentTarget.closest("section")?.nextElementSibling?.scrollIntoView({behavior:"smooth"})}'),
+      on('(0,a.jsxs)(r.Button,{size:"lg",className:"mt-8 h-12 bg-primary-foreground px-8 text-primary hover:bg-primary-foreground/90",children:[e("hero.cta.trial")', REG()),
+    ] },
+    { chunk: "6298d546504883f0", edits: [  // /pricing
+      on('(0,a.jsx)(i.Button,{className:(0,j.cn)("mt-8 w-full",t.popular?"gradient-primary text-primary-foreground":""),variant:t.popular?"default":"outline",children:t.cta})', plan("s")),
+      on('(0,a.jsxs)(r.Button,{size:"lg",className:"mt-8 gradient-primary text-primary-foreground",children:[(0,a.jsx)(n.MessageSquare,', go("mailto:info@saascorner.co")),
     ] },
     // TR font 404'leri: eksik latin-ext dosyalarına giden 6 @font-face (görünüm aynı kalır, yalnız 404 istekleri kalkar)
     { chunk: "f525b972636fb7eb", ext: "css", edits: [

@@ -1,0 +1,798 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Panel | Brand Corner</title>
+<meta name="description" content="Brand Corner panel.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="/icon.png" type="image/png">
+<link rel="apple-touch-icon" href="/icon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Brand Corner"/><meta property="og:title" content="Panel | Brand Corner">
+<meta property="og:description" content="Brand Corner panel.">
+<meta property="og:image" content="https://www.brandcorner.co/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Panel | Brand Corner">
+<meta name="twitter:description" content="Brand Corner panel.">
+<meta name="twitter:image" content="https://www.brandcorner.co/og.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#ffffff;--surface:#f8fafc;--line:#e5e7eb;--text:#111827;--muted:#4b5563;--accent:#4f46e5;--grad:linear-gradient(90deg,#4f46e5,#7c3aed)}
+*{box-sizing:border-box}html{-webkit-text-size-adjust:100%}body{margin:0;background:var(--surface);color:var(--text);font:16px/1.7 "Inter",system-ui,-apple-system,sans-serif}
+a{color:inherit}img{max-width:100%;display:block}[hidden]{display:none!important}
+.wrap{max-width:1140px;margin:0 auto;padding:0 20px}
+header.top{position:sticky;top:0;z-index:10;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+header.top .wrap{display:flex;align-items:center;gap:24px;height:68px}
+.btn{display:inline-block;background:var(--grad);color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:10px 18px;border-radius:10px;white-space:nowrap}
+button.btn{border:0;cursor:pointer;font-family:inherit}button.btn:disabled{opacity:.65;cursor:default}.btn.sm{font-size:14px;padding:8px 14px}
+h1,h2,h3{font-family:"Poppins","Inter",system-ui,sans-serif;line-height:1.2}h1:focus{outline:none}
+footer.bot{border-top:1px solid var(--line);background:var(--bg);color:var(--muted);font-size:14px;padding:32px 0 40px}footer.bot .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:space-between}footer.bot nav{display:flex;flex-wrap:wrap;gap:8px 18px}footer.bot a{text-decoration:none}footer.bot a:hover{color:var(--text)}
+.who{margin-left:auto;display:flex;align-items:center;gap:14px;font-size:14px;color:var(--muted);min-width:0}
+.who .me{display:flex;align-items:baseline;gap:6px;min-width:0}.who b{color:var(--text);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:240px}
+.lnk{background:none;border:0;padding:0;font:inherit;color:var(--muted);cursor:pointer;text-decoration:underline;text-underline-offset:3px;white-space:nowrap}.lnk:hover{color:var(--text)}
+.ghost{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:7px 14px;font:inherit;font-weight:600;font-size:14px;color:var(--text);cursor:pointer;white-space:nowrap}.ghost:hover{border-color:#cbd5e1}.ghost:disabled{opacity:.65;cursor:default}
+.shell{display:grid;grid-template-columns:210px minmax(0,1fr);gap:36px;padding-top:32px;padding-bottom:56px;min-height:calc(100vh - 69px - 112px)}
+.side nav{display:flex;flex-direction:column;gap:4px;position:sticky;top:100px}
+.side a{display:block;padding:9px 12px;border-radius:10px;text-decoration:none;color:var(--muted);font-weight:500;font-size:15px}
+.side a:hover{background:var(--bg);color:var(--text)}.side a[aria-current]{background:var(--bg);color:var(--accent);box-shadow:inset 0 0 0 1px var(--line)}
+.view{min-width:0}.view h1{font-size:28px;margin:0 0 6px;letter-spacing:-.01em;overflow-wrap:anywhere}.view h2{font-size:19px;margin:32px 0 12px}
+.lead{color:var(--muted);margin:0 0 24px}.muted{color:var(--muted)}
+.box{background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:20px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.stat .n{font:700 28px/1.2 "Poppins","Inter",system-ui,sans-serif}.stat .l{color:var(--muted);font-size:14px;margin-top:4px}
+.steps,.soon{list-style:none;margin:0}.soon{padding:0}.steps li,.soon li{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 0;border-top:1px solid var(--line)}.steps li:first-child,.soon li:first-child{border-top:0;padding-top:0}.steps li:last-child,.soon li:last-child{padding-bottom:0}
+.steps a{color:var(--accent);font-weight:600;text-decoration:none}.steps a:hover{text-decoration:underline}
+.soon-lead{color:var(--muted);font-size:14px;margin:0 0 12px}
+.head{display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;gap:12px}.head>div{min-width:0}
+.list{display:grid;gap:12px}
+.item h3{font-size:17px;margin:0;overflow-wrap:anywhere}.item h3 a{text-decoration:none}.item h3 a:hover{color:var(--accent)}
+.meta{color:var(--muted);font-size:14px;margin:6px 0 0;display:flex;flex-wrap:wrap;gap:2px 14px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 0}.chip{font-size:13px;line-height:1.5;padding:2px 10px;border-radius:999px;background:var(--surface);border:1px solid var(--line);color:var(--muted)}
+.handles{list-style:none;padding:0;margin:10px 0 0;display:flex;flex-wrap:wrap;gap:4px 18px;font-size:14px;color:var(--muted)}
+.badge{display:inline-block;font-size:12px;font-weight:600;line-height:1.6;padding:1px 9px;border-radius:999px;white-space:nowrap;background:#eef2ff;color:#3730a3}
+.b-open,.b-approved{background:#dcfce7;color:#166534}.b-closed,.b-rejected,.b-declined{background:#f1f5f9;color:#475569}
+.b-pending,.b-revision{background:#fef3c7;color:#92400e}.b-invited,.b-submitted{background:#e0f2fe;color:#075985}.b-soon{background:#f5f3ff;color:#6d28d9}
+.match{font-weight:600;color:var(--accent)}
+.prose{white-space:pre-wrap;overflow-wrap:anywhere;margin:12px 0 0}.prose.sm{font-size:15px;color:var(--muted)}
+.quote{border-left:3px solid var(--line);padding:0 0 0 12px;margin:12px 0 0}.quote .ql{display:block;font-size:13px;font-weight:600;color:var(--muted)}.quote .prose{margin:0}
+.link{overflow-wrap:anywhere}.link a{color:var(--accent)}
+.info{font-size:14px;color:var(--muted);margin:10px 0 0}
+.row-b{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:14px 0 0}
+.back{margin:0 0 10px;font-size:14px}.back a{color:var(--muted);text-decoration:none}.back a:hover{color:var(--text)}
+.empty{text-align:center;color:var(--muted);padding:36px 20px}.empty p{margin:0 0 14px}.empty p:last-child{margin:0}
+.f label,.f legend{display:block;font-weight:600;font-size:14px;margin:0 0 6px;padding:0}
+.f input:not([type=checkbox]),.f select,.f textarea{display:block;width:100%;font:inherit;font-size:16px;line-height:1.4;padding:10px 12px;margin:0 0 16px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--text)}
+.f textarea{resize:vertical;min-height:96px}
+.f input:focus-visible,.f select:focus-visible,.f textarea:focus-visible{outline:2px solid var(--accent);outline-offset:1px;border-color:var(--accent)}
+.f fieldset{border:0;padding:0;margin:0 0 16px;min-width:0}
+.hint{color:var(--muted);font-size:13px;font-weight:400;margin:-10px 0 16px}
+.checks{display:flex;flex-wrap:wrap;gap:8px 18px}.f .checks label,.f label.check{display:flex;align-items:center;gap:8px;font-weight:400;font-size:15px;margin:0}
+.f input[type=checkbox]{width:16px;height:16px;margin:0;accent-color:var(--accent)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
+.prow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0 12px}
+.filter{display:flex;flex-wrap:wrap;align-items:flex-end;gap:12px;margin:0 0 20px}.filter>div{flex:1 1 180px}.filter input,.f.filter select{margin:0}
+.sub{margin:14px 0 0;padding:16px 0 0;border-top:1px solid var(--line)}
+.inl{display:flex;flex-wrap:wrap;gap:8px}.f .inl input{flex:1 1 220px;width:auto;margin:0}
+.msg{color:#b91c1c;font-size:14px;margin:12px 0 0}.msg:empty{display:none}.ok{color:#166534;font-size:14px;margin:12px 0 0}.ok:empty{display:none}
+.ro{color:var(--muted);font-size:14px;margin:0 0 20px;display:flex;flex-wrap:wrap;gap:4px 20px}.ro b{color:var(--text);font-weight:600}
+@media(max-width:760px){header.top .wrap{gap:12px}.who{gap:10px}.who .role{display:none}.who b{max-width:120px}
+.shell{grid-template-columns:minmax(0,1fr);gap:16px;padding-top:16px;padding-bottom:40px;min-height:0}
+.side nav{flex-direction:row;overflow-x:auto;position:static;gap:6px;margin:0 -20px;padding:0 20px 4px;scrollbar-width:none}.side nav::-webkit-scrollbar{display:none}
+.side a{white-space:nowrap;padding:8px 12px}.view h1{font-size:24px}.box{padding:16px}.grid2{grid-template-columns:1fr}.prow{grid-template-columns:1fr 1fr}.prow>div:last-child{grid-column:1/-1}}
+@media(max-width:480px){.who .me{display:none}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap"><a href="/" aria-label="Brand Corner"><img src="/Logo.png" alt="Brand Corner" height="34" style="height:34px;width:auto"></a>
+<div class="who"><span class="me"><b id="who"></b><span id="role" class="role"></span></span><button type="button" id="lang" class="lnk"></button><button type="button" id="out" class="ghost">Çıkış yap</button></div></div></header>
+
+<main class="wrap shell">
+<aside class="side"><nav id="nav" aria-label="Panel"></nav></aside>
+<section id="view" class="view"><p class="muted">Yükleniyor… · Loading…</p>
+<noscript><p>Panel için JavaScript gerekli. · The panel requires JavaScript.</p></noscript></section>
+</main>
+
+<footer class="bot"><div class="wrap"><div><span id="copy">© Brand Corner · Tüm hakları saklıdır.</span> · <a id="help" href="mailto:info@saascorner.co?subject=Brand%20Corner%20panel">Yardım: info@saascorner.co</a></div><nav id="group" aria-label="Corner Group şirketleri"><a href="https://saascorner.co">SAAS Corner</a><a href="https://salescorner.co">Sales Corner</a><a href="https://socialmediacorner.co">Social Media Corner</a><a href="https://cornergroup.co">Corner Group</a></nav></div></footer>
+
+<script src="/bc-app.js"></script>
+<script>
+(function () {
+  // Oturum yoksa girişe; 401 gelirse bc-app.js oturumu silip girişe döner (BC.guard)
+  BC.guard = true;
+  if (!BC.token()) { BC.toLogin(); return; }
+
+  var PLATFORMS = ["instagram", "tiktok", "youtube", "x", "linkedin", "twitch"], CURRENCIES = ["TRY", "USD", "EUR"];
+  var PL = { instagram: "Instagram", tiktok: "TikTok", youtube: "YouTube", x: "X", linkedin: "LinkedIn", twitch: "Twitch" };
+  var URL_RE = /^https?:\/\/[^\s<>"]+$/;
+  // Durum geçişleri sözleşmedeki OWNER_MOVES / CREATOR_MOVES ile aynı; içerik gönderimi (submitted) ayrı formda
+  var OWNER_MOVES = { pending: ["accepted", "rejected"], submitted: ["approved", "revision"] }, CREATOR_MOVES = { invited: ["accepted", "declined"] };
+  // /solutions sayfalarında anlatılan ama API'si henüz olmayan özellikler
+  var SOON = {
+    brand: ["soonMsg", "soonAnalytics", "soonBudget", "soonVerified"],
+    agency: ["soonRoster", "soonTracking", "soonReports", "soonWorkflow", "soonPortal", "soonMsg"],
+    influencer: ["soonGrowth", "soonPay", "soonContracts", "soonMsg"]
+  };
+  var D = {
+    tr: {
+      loading: "Yükleniyor…", retry: "Tekrar dene", wait: "Lütfen bekleyin…", logout: "Çıkış yap",
+      copy: "© Brand Corner · Tüm hakları saklıdır.", help: "Yardım: info@saascorner.co", navLabel: "Panel menüsü", groupLabel: "Corner Group şirketleri",
+      hello: "Merhaba, {n}",
+      lead_brand: "Kampanyalarınızı yönetin, uygun influencer'ları bulun ve başvuruları değerlendirin.",
+      lead_agency: "Müşterileriniz için kampanyaları tek yerden yönetin, influencer bulun ve başvuruları değerlendirin.",
+      lead_influencer: "Size uygun kampanyaları bulun, başvurularınızı ve davetlerinizi takip edin.",
+      role_brand: "Marka", role_agency: "Ajans", role_influencer: "Influencer",
+      nOverview: "Genel bakış", nCampaigns: "Kampanyalar", nDiscover: "Influencer keşfi", nProfile: "Profil", nOpps: "Fırsatlar", nApps: "Başvurularım",
+      sCampaigns: "Kampanya", sOpen: "Açık kampanya", sPending: "Bekleyen başvuru", sApproved: "Onaylanan içerik",
+      sOpps: "Açık fırsat", sInvites: "Bekleyen davet", sActive: "Süren iş",
+      next: "Sonraki adımlar", doProfile: "Profilinizi tamamlayın", doNew: "Yeni kampanya oluşturun", doDiscover: "Influencer keşfedin ve davet gönderin",
+      doListed: "Profilinizi markalara görünür yapın", doNiches: "İlgi alanlarınızı ve platformlarınızı ekleyin; uyum puanı bunlara göre hesaplanır", doOpps: "Açık kampanyalara göz atın",
+      soon: "Yakında", soonBadge: "Yakında", soonLead: "Aşağıdaki özellikler henüz panelde yok; hazır olduklarında burada açılacak.",
+      soonMsg: "Platform içi mesajlaşma", soonAnalytics: "Performans analitiği ve özel raporlar", soonBudget: "Bütçe yönetimi", soonVerified: "Doğrulanmış influencer'lar",
+      soonRoster: "Kadro yönetimi", soonTracking: "Performans takibi", soonReports: "Otomatik raporlama", soonWorkflow: "İş akışı otomasyonu", soonPortal: "Müşteri portalı",
+      soonGrowth: "Büyüme analitiği", soonPay: "Güvenli ödemeler", soonContracts: "Korunan sözleşmeler",
+      campLead: "Açık kampanyalarınız influencer'ların Fırsatlar listesinde görünür.",
+      oppLead: "Markaların açık kampanyaları. Uyum puanı ilgi alanlarınıza ve platformlarınıza göre hesaplanır.",
+      campEmpty: "Henüz kampanyanız yok. İlk kampanyanızı oluşturun.",
+      oppEmpty: "Şu anda açık kampanya yok. Yeni kampanyalar açıldığında burada görünecek.",
+      newCamp: "Yeni kampanya", newLead: "Kampanya oluşturulduğunda açık olur ve influencer'lar başvurabilir.",
+      cntApps: "Başvuru: {n}", cntPending: "Bekleyen: {n}",
+      deadline: "Son tarih: {n}", created: "Oluşturuldu: {n}", updated: "Güncellendi: {n}",
+      budget: "Bütçe: {n}", noBudget: "Bütçe belirtilmedi", from: "en az {n}", upTo: "en fazla {n}", match: "%{n} uyum", viewApply: "İncele ve başvur",
+      fTitle: "Kampanya başlığı", fBrief: "Açıklama", fBriefHint: "Beklentilerinizi, içerik türünü ve teslim koşullarını yazın (en fazla 3000 karakter).",
+      fNiches: "İlgi alanları", fNichesHint: "Virgülle ayırın, en fazla 5 (ör. moda, güzellik).", fPlatforms: "Platformlar",
+      fMin: "En düşük bütçe", fMax: "En yüksek bütçe", fBudgetHint: "İsteğe bağlı. Boş bırakırsanız \"Bütçe belirtilmedi\" görünür.",
+      fCurrency: "Para birimi", fDeadline: "Son tarih",
+      create: "Kampanyayı oluştur", saveChanges: "Değişiklikleri kaydet", cancel: "Vazgeç",
+      campLimit: "Kampanya sınırına ulaştınız (en fazla 100 kampanya).", badBudget: "Bütçeyi tam sayı olarak girin.",
+      budgetClear: "En yüksek bütçe şu anda boş bırakılamıyor; bir değer girin ya da en düşük bütçeyi de silin.",
+      tagsMax: "En fazla 5 ilgi alanı girebilirsiniz.",
+      close: "Kampanyayı kapat", reopen: "Kampanyayı yeniden aç", edit: "Düzenle",
+      appsTitle: "Başvurular ve davetler ({n})",
+      appsEmpty: "Bu kampanyada henüz başvuru ya da davet yok. Influencer keşfinden uygun profilleri davet edebilirsiniz.",
+      goDiscover: "Influencer keşfine git", backCamps: "← Kampanyalar", backOpps: "← Fırsatlar",
+      yourApp: "Başvurunuz", apply: "Başvuru yap", appMsg: "Markaya mesajınız",
+      appMsgHint: "Bu kampanyaya neden uygun olduğunuzu kısaca anlatın (en fazla 1000 karakter).", sendApp: "Başvur",
+      applyLimit: "Bugünkü başvuru sınırına ulaştınız (davetler de sayılır). Lütfen yarın tekrar deneyin.",
+      applyExists: "Bu kampanyaya zaten başvurdunuz ya da davet aldınız.", applyClosed: "Bu kampanya artık başvuru almıyor.",
+      message: "Mesaj", content: "İçerik:", contentUrl: "İçerik bağlantısı", sendContent: "İçeriği gönder",
+      st_open: "Açık", st_closed: "Kapalı", st_pending: "Bekliyor", st_invited: "Davet edildi", st_accepted: "Kabul edildi", st_rejected: "Reddedildi",
+      st_declined: "Davet reddedildi", st_submitted: "İçerik gönderildi", st_revision: "Revizyon istendi", st_approved: "Onaylandı",
+      do_o_accepted: "Kabul et", do_o_rejected: "Reddet", do_o_approved: "İçeriği onayla", do_o_revision: "Revizyon iste",
+      do_c_accepted: "Daveti kabul et", do_c_declined: "Daveti reddet",
+      sure_rejected: "Bu başvuruyu reddetmek istiyor musunuz? Bu işlem geri alınamaz.",
+      sure_declined: "Bu daveti reddetmek istiyor musunuz? Bu işlem geri alınamaz.",
+      i_o_invited: "Influencer'ın yanıtı bekleniyor.", i_o_accepted: "Influencer'ın içeriği göndermesi bekleniyor.",
+      i_o_revision: "Influencer'ın düzeltilmiş içeriği göndermesi bekleniyor.", i_o_submitted: "İçeriği inceleyin; onaylayın ya da revizyon isteyin.",
+      i_c_invited: "Bu kampanyaya davet edildiniz.", i_c_pending: "Başvurunuz markanın değerlendirmesini bekliyor.",
+      i_c_accepted: "Kabul edildi. İçeriğinizi yayınladıktan sonra bağlantısını gönderin.",
+      i_c_revision: "Marka revizyon istedi. Düzeltilmiş içeriğin bağlantısını gönderin.",
+      i_c_submitted: "İçeriğiniz markanın onayını bekliyor.", i_c_approved: "İçeriğiniz onaylandı.",
+      appsLead: "Başvurularınız ve markalardan gelen davetler.",
+      myAppsEmpty: "Henüz başvurunuz ya da davetiniz yok. Fırsatlar sayfasından açık kampanyalara başvurabilirsiniz.", goOpps: "Fırsatlara göz at",
+      discLead: "Profilini markalara açan influencer'lar listelenir. İlgi alanı ya da platforma göre filtreleyin.",
+      discEmpty: "Henüz profilini markalara açan influencer yok.", discNone: "Bu ölçütlere uyan influencer bulunamadı.",
+      needOpen: "Davet göndermek için önce açık bir kampanya oluşturun.",
+      fNiche: "İlgi alanı", nichePh: "ör. moda", fPlatform: "Platform", allPlatforms: "Tüm platformlar", search: "Ara",
+      invite: "Davet et", sendInvite: "Daveti gönder", inviteTo: "Kampanya", inviteMsg: "Mesajınız (isteğe bağlı)",
+      invitedOk: "Davet gönderildi. Yanıtı kampanya sayfasında görebilirsiniz.",
+      inviteExists: "Bu influencer bu kampanyaya zaten başvurmuş ya da davet edilmiş.",
+      inviteGone: "Kampanya kapalı ya da influencer artık listede değil. Sayfayı yenileyin.",
+      profLeadO: "Kampanyalarınızda influencer'lar yalnızca görünen adınızı görür; diğer bilgiler hesabınızda saklanır.",
+      profLeadC: "Profilinizi markalara açarsanız adınız, şehriniz, tanıtımınız, ilgi alanlarınız ve platformlarınız influencer keşfinde görünür. Başvurduğunuz ya da sizi davet eden kampanyaların sahipleri de bu bilgileri görür. E-posta adresiniz gösterilmez.",
+      email: "E-posta:", accType: "Hesap türü:",
+      fName: "Görünen ad", fNameHintO: "Kampanyalarınızda influencer'lar bu adı görür; marka ya da ajans adınızı yazabilirsiniz.", fNameHintC: "Markalar sizi bu adla görür.",
+      fCompany: "Şirket", fIndustry: "Sektör", fClients: "Müşteri sayısı", fBio: "Hakkında", fCity: "Şehir", fWebsite: "Web sitesi",
+      fListed: "Markalar beni bulabilsin", fListedHint: "İşaretlerseniz profiliniz markaların influencer keşfinde listelenir.",
+      fPlats: "Platformlar", platsHint: "Kaldırmak için platformu boş (—) seçin.",
+      platform: "Platform", handle: "Kullanıcı adı", followersL: "Takipçi sayısı", addPlat: "Platform ekle",
+      save: "Kaydet", saved: "Kaydedildi.",
+      badWeb: "Web sitesi adresini http:// ya da https:// ile girin.",
+      badClients: "Müşteri sayısını 0 ile 10.000 arasında bir tam sayı olarak girin.", badFollowers: "Takipçi sayısını tam sayı olarak girin.",
+      followers: "{n} takipçi"
+    },
+    en: {
+      loading: "Loading…", retry: "Try again", wait: "Please wait…", logout: "Log out",
+      copy: "© Brand Corner · All rights reserved.", help: "Help: info@saascorner.co", navLabel: "Panel menu", groupLabel: "Corner Group companies",
+      hello: "Hi, {n}",
+      lead_brand: "Manage your campaigns, find the right influencers and review applications.",
+      lead_agency: "Run campaigns for your clients in one place, find influencers and review applications.",
+      lead_influencer: "Find campaigns that fit you and keep track of your applications and invites.",
+      role_brand: "Brand", role_agency: "Agency", role_influencer: "Influencer",
+      nOverview: "Overview", nCampaigns: "Campaigns", nDiscover: "Find influencers", nProfile: "Profile", nOpps: "Opportunities", nApps: "My applications",
+      sCampaigns: "Campaigns", sOpen: "Open campaigns", sPending: "Pending applications", sApproved: "Approved content",
+      sOpps: "Open opportunities", sInvites: "Pending invites", sActive: "In progress",
+      next: "Next steps", doProfile: "Complete your profile", doNew: "Create a new campaign", doDiscover: "Find influencers and send invites",
+      doListed: "Make your profile visible to brands", doNiches: "Add your niches and platforms; your match score is based on them", doOpps: "Browse open campaigns",
+      soon: "Coming soon", soonBadge: "Coming soon", soonLead: "These features aren't in the panel yet; they'll show up here when they're ready.",
+      soonMsg: "In-platform messaging", soonAnalytics: "Performance analytics and custom reports", soonBudget: "Budget management", soonVerified: "Verified influencers",
+      soonRoster: "Roster management", soonTracking: "Performance tracking", soonReports: "Automated reporting", soonWorkflow: "Workflow automation", soonPortal: "Client portal",
+      soonGrowth: "Growth analytics", soonPay: "Secure payments", soonContracts: "Protected contracts",
+      campLead: "Your open campaigns appear in influencers' Opportunities list.",
+      oppLead: "Open campaigns from brands. Your match score is based on your niches and platforms.",
+      campEmpty: "You don't have any campaigns yet. Create your first one.",
+      oppEmpty: "There are no open campaigns right now. New campaigns will show up here.",
+      newCamp: "New campaign", newLead: "A new campaign is open right away and influencers can apply.",
+      cntApps: "Applications: {n}", cntPending: "Pending: {n}",
+      deadline: "Deadline: {n}", created: "Created {n}", updated: "Updated {n}",
+      budget: "Budget: {n}", noBudget: "Budget not specified", from: "from {n}", upTo: "up to {n}", match: "{n}% match", viewApply: "View and apply",
+      fTitle: "Campaign title", fBrief: "Description", fBriefHint: "Describe what you expect, the content type and delivery terms (up to 3000 characters).",
+      fNiches: "Niches", fNichesHint: "Separate with commas, up to 5 (e.g. fashion, beauty).", fPlatforms: "Platforms",
+      fMin: "Minimum budget", fMax: "Maximum budget", fBudgetHint: "Optional. If left empty, \"Budget not specified\" is shown.",
+      fCurrency: "Currency", fDeadline: "Deadline",
+      create: "Create campaign", saveChanges: "Save changes", cancel: "Cancel",
+      campLimit: "You've reached the campaign limit (100 campaigns).", badBudget: "Enter the budget as a whole number.",
+      budgetClear: "The maximum budget can't be cleared right now; enter a value or clear the minimum budget too.",
+      tagsMax: "You can enter up to 5 niches.",
+      close: "Close campaign", reopen: "Reopen campaign", edit: "Edit",
+      appsTitle: "Applications and invites ({n})",
+      appsEmpty: "No applications or invites for this campaign yet. You can invite suitable profiles from Find influencers.",
+      goDiscover: "Go to Find influencers", backCamps: "← Campaigns", backOpps: "← Opportunities",
+      yourApp: "Your application", apply: "Apply", appMsg: "Message to the brand",
+      appMsgHint: "Briefly explain why you're a good fit for this campaign (up to 1000 characters).", sendApp: "Apply",
+      applyLimit: "You've reached today's application limit (invites count too). Please try again tomorrow.",
+      applyExists: "You've already applied to or been invited to this campaign.", applyClosed: "This campaign is no longer accepting applications.",
+      message: "Message", content: "Content:", contentUrl: "Content link", sendContent: "Submit content",
+      st_open: "Open", st_closed: "Closed", st_pending: "Pending", st_invited: "Invited", st_accepted: "Accepted", st_rejected: "Rejected",
+      st_declined: "Declined", st_submitted: "Content submitted", st_revision: "Revision requested", st_approved: "Approved",
+      do_o_accepted: "Accept", do_o_rejected: "Reject", do_o_approved: "Approve content", do_o_revision: "Request revision",
+      do_c_accepted: "Accept invite", do_c_declined: "Decline invite",
+      sure_rejected: "Reject this application? This can't be undone.",
+      sure_declined: "Decline this invite? This can't be undone.",
+      i_o_invited: "Waiting for the influencer's response.", i_o_accepted: "Waiting for the influencer to submit content.",
+      i_o_revision: "Waiting for the influencer to submit revised content.", i_o_submitted: "Review the content, then approve it or request a revision.",
+      i_c_invited: "You've been invited to this campaign.", i_c_pending: "Your application is waiting for the brand's review.",
+      i_c_accepted: "Accepted. Once your content is live, submit its link.",
+      i_c_revision: "The brand requested a revision. Submit the link to the revised content.",
+      i_c_submitted: "Your content is waiting for the brand's approval.", i_c_approved: "Your content was approved.",
+      appsLead: "Your applications and invites from brands.",
+      myAppsEmpty: "No applications or invites yet. You can apply to open campaigns from Opportunities.", goOpps: "Browse opportunities",
+      discLead: "Influencers who have made their profile visible to brands are listed here. Filter by niche or platform.",
+      discEmpty: "No influencers have made their profile visible yet.", discNone: "No influencers match these filters.",
+      needOpen: "Create an open campaign before sending invites.",
+      fNiche: "Niche", nichePh: "e.g. fashion", fPlatform: "Platform", allPlatforms: "All platforms", search: "Search",
+      invite: "Invite", sendInvite: "Send invite", inviteTo: "Campaign", inviteMsg: "Your message (optional)",
+      invitedOk: "Invite sent. You'll see the response on the campaign page.",
+      inviteExists: "This influencer has already applied to or been invited to this campaign.",
+      inviteGone: "The campaign is closed or the influencer is no longer listed. Refresh the page.",
+      profLeadO: "Influencers only see your display name on your campaigns; everything else stays in your account.",
+      profLeadC: "If you make your profile visible, brands see your name, city, bio, niches and platforms in Find influencers. Owners of campaigns you apply to or are invited to also see this information. Your email address is never shown.",
+      email: "Email:", accType: "Account type:",
+      fName: "Display name", fNameHintO: "Influencers see this name on your campaigns; you can use your brand or agency name.", fNameHintC: "Brands see you under this name.",
+      fCompany: "Company", fIndustry: "Industry", fClients: "Number of clients", fBio: "About", fCity: "City", fWebsite: "Website",
+      fListed: "Let brands find me", fListedHint: "If checked, your profile is listed in brands' Find influencers page.",
+      fPlats: "Platforms", platsHint: "To remove a platform, set it to empty (—).",
+      platform: "Platform", handle: "Username", followersL: "Followers", addPlat: "Add platform",
+      save: "Save", saved: "Saved.",
+      badWeb: "Enter the website address starting with http:// or https://.",
+      badClients: "Enter the number of clients as a whole number from 0 to 10,000.", badFollowers: "Enter followers as a whole number.",
+      followers: "{n} followers"
+    }
+  };
+
+  var L = BC.lang(), U = null, seq = 0, uid = 0, first = true, F = { niche: "", platform: "" };
+  function $(id) { return document.getElementById(id); }
+  var nav = $("nav"), view = $("view"), langB = $("lang"), outB = $("out");
+
+  function t(k, v) {
+    var s = D[L][k] != null ? D[L][k] : D.en[k] != null ? D.en[k] : k;
+    return v == null ? s : s.replace("{n}", function () { return String(v); });
+  }
+
+  // DOM yalnızca textContent/setAttribute ile kurulur (innerHTML yok)
+  function el(tag, a, kids) {
+    var n = document.createElement(tag), val;
+    if (a) for (var k in a) {
+      var v = a[k];
+      if (v == null || v === false) continue;
+      if (k === "text") n.textContent = v;
+      else if (k === "value") val = v;
+      else if (typeof v === "function") n.addEventListener(k.slice(2), v);
+      else n.setAttribute(k, v === true ? "" : v);
+    }
+    add(n, kids);
+    if (val != null) n.value = val;
+    return n;
+  }
+  function add(n, kids) {
+    if (kids == null || kids === false) return;
+    if (Array.isArray(kids)) { kids.forEach(function (c) { add(n, c); }); return; }
+    n.appendChild(typeof kids === "object" ? kids : document.createTextNode(String(kids)));
+  }
+  function fld(id, label, input, hint) {
+    input.id = id;
+    return [el("label", { for: id, text: label }), input, hint ? el("p", { class: "hint", text: hint }) : null];
+  }
+  function note() { return el("p", { class: "msg", role: "alert" }); }
+  function okNote() { return el("p", { class: "ok", role: "status" }); }
+  function say(m, s) { m.textContent = s; }
+  function busy(b, on) {
+    if (on) { b.setAttribute("data-t", b.textContent); b.textContent = t("wait"); b.disabled = true; }
+    else { b.disabled = false; if (b.getAttribute("data-t")) b.textContent = b.getAttribute("data-t"); }
+  }
+  function isOwner() { return U.role === "brand" || U.role === "agency"; }
+
+  // Biçimler: tarihler UTC "YYYY-MM-DD HH:MM:SS", son tarih "YYYY-MM-DD"; bütçede 0 ya da boş = belirtilmedi
+  function locale() { return L === "tr" ? "tr-TR" : "en-US"; }
+  function when(s) {
+    var d = new Date(String(s || "").replace(" ", "T") + "Z");
+    return isNaN(d) ? "" : d.toLocaleDateString(locale(), { day: "numeric", month: "short", year: "numeric" });
+  }
+  function day(s) {
+    return /^\d{4}-\d{2}-\d{2}$/.test(s || "") ? new Date(s + "T00:00:00Z").toLocaleDateString(locale(), { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" }) : "";
+  }
+  function num(n) { return Number(n || 0).toLocaleString(locale()); }
+  function money(n, cur) {
+    try { return new Intl.NumberFormat(locale(), { style: "currency", currency: cur || "TRY", minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(n); }
+    catch (e) { return num(n) + " " + (cur || ""); }
+  }
+  function budget(c) {
+    var lo = c.budget_min > 0 ? c.budget_min : 0, hi = c.budget_max > 0 ? c.budget_max : 0, cur = c.currency;
+    if (!lo && !hi) return t("noBudget");
+    if (lo && hi) return t("budget", lo === hi ? money(lo, cur) : money(lo, cur) + " – " + money(hi, cur));
+    return t("budget", lo ? t("from", money(lo, cur)) : t("upTo", money(hi, cur)));
+  }
+  function tags(s) {
+    var seen = {}, out = [];
+    s.split(",").forEach(function (x) { x = x.trim().slice(0, 40); var k = x.toLowerCase(); if (x && !seen[k]) { seen[k] = 1; out.push(x); } });
+    return out;
+  }
+
+  // Ortak parçalar
+  function badge(s) { return el("span", { class: "badge b-" + s, text: t("st_" + s) }); }
+  function chips(niches, platforms) {
+    var k = (niches || []).map(function (x) { return el("span", { class: "chip", text: x }); });
+    (platforms || []).forEach(function (p) { if (PL[p]) k.push(el("span", { class: "chip", text: PL[p] })); });
+    return k.length ? el("div", { class: "chips" }, k) : null;
+  }
+  function handles(list) {
+    var k = (list || []).filter(function (p) { return p && PL[p.platform]; }).map(function (p) {
+      return el("li", { text: PL[p.platform] + (p.handle ? " · " + p.handle : "") + (p.followers > 0 ? " · " + t("followers", num(p.followers)) : "") });
+    });
+    return k.length ? el("ul", { class: "handles" }, k) : null;
+  }
+  function quote(s) { return s ? el("div", { class: "quote" }, [el("span", { class: "ql", text: t("message") }), el("p", { class: "prose", text: s })]) : null; }
+  function contentLink(u) {
+    if (!u || !URL_RE.test(u)) return null;
+    return el("p", { class: "meta link" }, [el("span", { text: t("content") }), el("a", { href: u, target: "_blank", rel: "noopener noreferrer nofollow", text: u })]);
+  }
+  function back(h, k) { return el("p", { class: "back" }, el("a", { href: h, text: t(k) })); }
+  function empty(s, cta) { return el("div", { class: "box empty" }, [el("p", { text: s }), cta ? el("p", null, cta) : null]); }
+  function stamp(c) { return c.deadline ? el("span", { text: t("deadline", day(c.deadline)) }) : null; }
+
+  // Yönlendirme: #overview, #campaigns, #new, #campaign-<id>, #discover (marka/ajans), #applications (influencer), #profile
+  function route() {
+    var h = location.hash.replace(/^#/, ""), m = /^campaign-(\d+)$/.exec(h);
+    if (m) return { name: "campaign", id: +m[1], tab: "campaigns" };
+    var ok = ["overview", "campaigns", "profile"].concat(isOwner() ? ["new", "discover"] : ["applications"]);
+    if (ok.indexOf(h) < 0) h = "overview";
+    return { name: h, tab: h === "new" ? "campaigns" : h };
+  }
+  function paintNav(tab) {
+    var items = isOwner() ? [["overview", "nOverview"], ["campaigns", "nCampaigns"], ["discover", "nDiscover"], ["profile", "nProfile"]]
+      : [["overview", "nOverview"], ["campaigns", "nOpps"], ["applications", "nApps"], ["profile", "nProfile"]];
+    nav.textContent = "";
+    items.forEach(function (i) { nav.appendChild(el("a", { href: "#" + i[0], "aria-current": i[0] === tab ? "page" : null, text: t(i[1]) })); });
+  }
+  function show(kids) { view.textContent = ""; add(view, kids); }
+
+  // soft: aynı görünümü işlem sonrası tazeler (kaydırma ve odak yerinde kalır)
+  function render(soft) {
+    var my = ++seq, r = route();
+    paintNav(r.tab);
+    if (!soft) show(el("p", { class: "muted", text: t("loading") }));
+    Promise.resolve().then(function () { return VIEWS[r.name](r); }).then(function (kids) {
+      if (my !== seq) return;
+      show(kids);
+      if (!soft) {
+        window.scrollTo(0, 0);
+        var h = view.querySelector("h1");
+        if (h && !first) { h.tabIndex = -1; h.focus(); }
+        first = false;
+      }
+    }, function (e) {
+      if (my !== seq || e.code === "auth") return;
+      show(failBox(e, function () { render(); }));
+    });
+  }
+  function failBox(e, retry) {
+    return el("div", { class: "box empty", role: "alert" }, [el("p", { text: BC.msg(e.code) }), el("p", null, el("button", { type: "button", class: "ghost", text: t("retry"), onclick: retry }))]);
+  }
+
+  // Genel bakış
+  function overview() {
+    return BC.call("GET", "app/stats").then(function (d) {
+      var s = d.stats || {}, a = s.applications || {}, p = U.profile || {}, own = isOwner(), steps = [];
+      var cards = own
+        ? [[s.campaigns, "sCampaigns"], [s.open_campaigns, "sOpen"], [a.pending, "sPending"], [a.approved, "sApproved"]]
+        : [[s.open_campaigns, "sOpps"], [a.invited, "sInvites"], [(a.accepted || 0) + (a.revision || 0) + (a.submitted || 0), "sActive"], [a.approved, "sApproved"]];
+      if (own) {
+        if (!p.company && !p.bio) steps.push(["#profile", "doProfile"]);
+        steps.push(["#new", "doNew"], ["#discover", "doDiscover"]);
+      } else {
+        if (!p.listed) steps.push(["#profile", "doListed"]);
+        if (!(p.niches || []).length || !(p.platforms || []).length) steps.push(["#profile", "doNiches"]);
+        steps.push(["#campaigns", "doOpps"]);
+      }
+      return [
+        el("h1", { text: t("hello", U.name) }),
+        el("p", { class: "lead", text: t("lead_" + U.role) }),
+        el("div", { class: "stats" }, cards.map(function (c) { return el("div", { class: "box stat" }, [el("div", { class: "n", text: num(c[0]) }), el("div", { class: "l", text: t(c[1]) })]); })),
+        el("h2", { text: t("next") }),
+        el("ul", { class: "box steps" }, steps.map(function (x) { return el("li", null, el("a", { href: x[0], text: t(x[1]) })); })),
+        el("h2", { text: t("soon") }),
+        el("div", { class: "box" }, [
+          el("p", { class: "soon-lead", text: t("soonLead") }),
+          el("ul", { class: "soon" }, (SOON[U.role] || []).map(function (k) { return el("li", null, [el("span", { text: t(k) }), el("span", { class: "badge b-soon", text: t("soonBadge") })]); }))
+        ])
+      ];
+    });
+  }
+
+  // Kampanyalar (marka/ajans: kendi kampanyaları; influencer: açık fırsatlar)
+  function campaigns() {
+    return BC.call("GET", "app/campaigns").then(function (d) {
+      var list = d.campaigns || [], own = isOwner();
+      var head = el("div", { class: "head" }, [
+        el("div", null, [el("h1", { text: t(own ? "nCampaigns" : "nOpps") }), el("p", { class: "lead", text: t(own ? "campLead" : "oppLead") })]),
+        own && list.length ? el("a", { class: "btn", href: "#new", text: t("newCamp") }) : null
+      ]);
+      if (!list.length) return [head, empty(t(own ? "campEmpty" : "oppEmpty"), own ? el("a", { class: "btn", href: "#new", text: t("newCamp") }) : null)];
+      return [head, el("div", { class: "list" }, list.map(own ? ownerCard : oppCard))];
+    });
+  }
+  function ownerCard(c) {
+    return el("article", { class: "box item" }, [
+      el("div", { class: "head" }, [el("h3", null, el("a", { href: "#campaign-" + c.id, text: c.title })), badge(c.status)]),
+      el("p", { class: "meta" }, [el("span", { text: budget(c) }), stamp(c), el("span", { text: t("created", when(c.created_at)) })]),
+      chips(c.niches, c.platforms),
+      el("p", { class: "meta" }, [el("span", { text: t("cntApps", num(c.applications)) }), el("span", { text: t("cntPending", num(c.pending)) })])
+    ]);
+  }
+  function oppCard(c) {
+    return el("article", { class: "box item" }, [
+      el("div", { class: "head" }, [el("h3", null, el("a", { href: "#campaign-" + c.id, text: c.title })), c.my_status ? badge(c.my_status) : null]),
+      el("p", { class: "meta" }, [el("span", { class: "match", text: t("match", c.match) }), el("span", { text: c.owner }), el("span", { text: budget(c) }), stamp(c)]),
+      chips(c.niches, c.platforms),
+      c.my_status ? null : el("div", { class: "row-b" }, el("a", { class: "btn sm", href: "#campaign-" + c.id, text: t("viewApply") }))
+    ]);
+  }
+
+  // Kampanya formu: oluştururken boş bütçe gönderilmez; düzenlemede boşaltılan bütçe null gider
+  function campaignForm(c, onCancel) {
+    var p = "c" + (++uid) + "-", m = note(), b = el("button", { type: "submit", class: "btn", text: t(c ? "saveChanges" : "create") });
+    var title = el("input", { type: "text", maxlength: 120, required: true, value: c ? c.title : "" });
+    var brief = el("textarea", { maxlength: 3000, rows: 6, value: c ? c.brief || "" : "" });
+    var niches = el("input", { type: "text", value: c ? (c.niches || []).join(", ") : "" });
+    var boxes = PLATFORMS.map(function (x) { return el("input", { type: "checkbox", value: x, id: p + x, checked: !!c && (c.platforms || []).indexOf(x) >= 0 }); });
+    var lo = el("input", { type: "number", min: 0, step: 1, inputmode: "numeric", value: c && c.budget_min > 0 ? c.budget_min : "" });
+    var hi = el("input", { type: "number", min: 0, step: 1, inputmode: "numeric", value: c && c.budget_max > 0 ? c.budget_max : "" });
+    var cur = el("select", { value: c && c.currency || "TRY" }, CURRENCIES.map(function (x) { return el("option", { value: x, text: x }); }));
+    var dl = el("input", { type: "date", value: c && c.deadline || "" });
+    var f = el("form", { class: "box f", "data-sk-noform": true, novalidate: true }, [
+      fld(p + "t", t("fTitle"), title),
+      fld(p + "b", t("fBrief"), brief, t("fBriefHint")),
+      fld(p + "n", t("fNiches"), niches, t("fNichesHint")),
+      el("fieldset", null, [el("legend", { text: t("fPlatforms") }), el("div", { class: "checks" }, boxes.map(function (x) { return el("label", { for: x.id }, [x, PL[x.value]]); }))]),
+      el("div", { class: "grid2" }, [el("div", null, fld(p + "lo", t("fMin"), lo)), el("div", null, fld(p + "hi", t("fMax"), hi))]),
+      el("p", { class: "hint", text: t("fBudgetHint") }),
+      el("div", { class: "grid2" }, [el("div", null, fld(p + "cu", t("fCurrency"), cur)), el("div", null, fld(p + "dl", t("fDeadline"), dl))]),
+      el("div", { class: "row-b" }, [b, onCancel ? el("button", { type: "button", class: "ghost", text: t("cancel"), onclick: onCancel }) : null]),
+      m
+    ]);
+    f.addEventListener("submit", function (ev) {
+      ev.preventDefault();
+      say(m, "");
+      var a = lo.value.trim(), z = hi.value.trim(), tg = tags(niches.value), body = {
+        title: title.value.trim(), brief: brief.value.trim(), niches: tg,
+        platforms: boxes.filter(function (x) { return x.checked; }).map(function (x) { return x.value; }),
+        currency: cur.value, deadline: dl.value || null
+      };
+      if (!body.title) return say(m, BC.msg("title"));
+      if (tg.length > 5) return say(m, t("tagsMax"));
+      if ((a && (!/^\d+$/.test(a) || +a > 1e9)) || (z && (!/^\d+$/.test(z) || +z > 1e9))) return say(m, t("badBudget"));
+      if (a && z && +a > +z) return say(m, BC.msg("budget"));
+      if (a) body.budget_min = +a; else if (c) body.budget_min = null;
+      if (z) body.budget_max = +z; else if (c) body.budget_max = null;
+      busy(b, true);
+      BC.call("POST", c ? "app/campaigns/" + c.id : "app/campaigns", body).then(function (d) {
+        if (c) render(true); else location.hash = "#campaign-" + d.campaign.id;
+      }, function (e) {
+        busy(b, false);
+        say(m, BC.msg(e.code, { limit: t("campLimit"), budget: a && !z ? t("budgetClear") : null }));
+      });
+    });
+    return f;
+  }
+  function newCampaign() {
+    return [back("#campaigns", "backCamps"), el("h1", { text: t("newCamp") }), el("p", { class: "lead", text: t("newLead") }), campaignForm(null)];
+  }
+
+  // Kampanya ayrıntısı
+  function campaign(r) {
+    return BC.call("GET", "app/campaigns/" + r.id).then(function (d) {
+      return isOwner() ? ownerDetail(d.campaign, d.applications || []) : creatorDetail(d.campaign, d.application);
+    });
+  }
+  function ownerDetail(c, apps) {
+    var m = note(), edit = el("div", { class: "sub", hidden: true });
+    var eb = el("button", { type: "button", class: "ghost", "aria-expanded": "false", text: t("edit") });
+    var tog = el("button", { type: "button", class: "ghost", text: t(c.status === "open" ? "close" : "reopen") });
+    eb.addEventListener("click", function () {
+      if (!edit.firstChild) edit.appendChild(campaignForm(c, function () { edit.hidden = true; eb.setAttribute("aria-expanded", "false"); }));
+      edit.hidden = !edit.hidden;
+      eb.setAttribute("aria-expanded", String(!edit.hidden));
+    });
+    tog.addEventListener("click", function () {
+      say(m, ""); busy(tog, true);
+      BC.call("POST", "app/campaigns/" + c.id, { status: c.status === "open" ? "closed" : "open" }).then(function () { render(true); }, function (e) { busy(tog, false); say(m, BC.msg(e.code)); });
+    });
+    return [
+      back("#campaigns", "backCamps"),
+      el("div", { class: "head" }, [el("h1", { text: c.title }), badge(c.status)]),
+      el("p", { class: "meta" }, [el("span", { text: budget(c) }), stamp(c), el("span", { text: t("created", when(c.created_at)) })]),
+      chips(c.niches, c.platforms),
+      c.brief ? el("p", { class: "prose", text: c.brief }) : null,
+      el("div", { class: "row-b" }, [eb, tog]), m, edit,
+      el("h2", { text: t("appsTitle", apps.length) }),
+      apps.length ? el("div", { class: "list" }, apps.map(function (a) { return appCard(a, true); }))
+        : empty(t("appsEmpty"), c.status === "open" ? el("a", { class: "btn sm", href: "#discover", text: t("goDiscover") }) : null)
+    ];
+  }
+  function creatorDetail(c, a) {
+    var kids = [
+      back("#campaigns", "backOpps"),
+      el("div", { class: "head" }, [el("h1", { text: c.title }), c.status !== "open" ? badge(c.status) : null]),
+      el("p", { class: "meta" }, [el("span", { class: "match", text: t("match", c.match) }), el("span", { text: c.owner }), el("span", { text: budget(c) }), stamp(c)]),
+      chips(c.niches, c.platforms),
+      c.brief ? el("p", { class: "prose", text: c.brief }) : null
+    ];
+    if (a) {
+      kids.push(el("h2", { text: t("yourApp") }), el("div", { class: "box item" }, [
+        el("div", { class: "head" }, [el("p", { class: "meta", text: t("updated", when(a.updated_at)) }), badge(a.status)]),
+        quote(a.message), contentLink(a.content_url), actions(a, false)
+      ]));
+    } else if (c.status === "open") {
+      kids.push(el("h2", { text: t("apply") }), applyForm(c));
+    }
+    return kids;
+  }
+  function applyForm(c) {
+    var p = "a" + (++uid), m = note(), b = el("button", { type: "submit", class: "btn", text: t("sendApp") });
+    var ta = el("textarea", { id: p, maxlength: 1000, rows: 5 });
+    var f = el("form", { class: "box f", "data-sk-noform": true, novalidate: true }, [el("label", { for: p, text: t("appMsg") }), ta, el("p", { class: "hint", text: t("appMsgHint") }), b, m]);
+    f.addEventListener("submit", function (ev) {
+      ev.preventDefault(); say(m, ""); busy(b, true);
+      BC.call("POST", "app/campaigns/" + c.id + "/apply", { message: ta.value.trim() }).then(function () { render(true); }, function (e) {
+        busy(b, false);
+        say(m, BC.msg(e.code, { limit: t("applyLimit"), exists: t("applyExists"), not_found: t("applyClosed") }));
+      });
+    });
+    return f;
+  }
+
+  // Başvuru kartı: own = kampanya sahibi görünümü (influencer bilgisiyle), değilse influencer'ın kendi başvurusu
+  function appCard(a, own) {
+    var x = own ? a.influencer || {} : null, cp = a.campaign || {};
+    var top = own
+      ? el("div", { class: "head" }, [el("div", null, [el("h3", { text: x.name }), el("p", { class: "meta" }, [x.match != null ? el("span", { class: "match", text: t("match", x.match) }) : null, x.city ? el("span", { text: x.city }) : null, el("span", { text: t("updated", when(a.updated_at)) })])]), badge(a.status)])
+      : el("div", { class: "head" }, [el("div", null, [el("h3", null, el("a", { href: "#campaign-" + cp.id, text: cp.title })), el("p", { class: "meta" }, [el("span", { text: cp.owner }), el("span", { text: t("updated", when(a.updated_at)) })])]), badge(a.status)]);
+    return el("article", { class: "box item" }, [
+      top,
+      own && x.bio ? el("p", { class: "prose sm", text: x.bio }) : null,
+      own ? chips(x.niches) : null,
+      own ? handles(x.platforms) : null,
+      quote(a.message), contentLink(a.content_url), actions(a, own)
+    ]);
+  }
+  function actions(a, own) {
+    var m = note(), moves = (own ? OWNER_MOVES : CREATOR_MOVES)[a.status] || [], info = D[L]["i_" + (own ? "o_" : "c_") + a.status], out = [];
+    function go(body, b) {
+      say(m, ""); busy(b, true);
+      BC.call("POST", "app/applications/" + a.id, body).then(function () { render(true); }, function (e) { busy(b, false); say(m, BC.msg(e.code)); });
+    }
+    if (info) out.push(el("p", { class: "info", text: info }));
+    if (moves.length) out.push(el("div", { class: "row-b" }, moves.map(function (s) {
+      var no = s === "rejected" || s === "declined", b = el("button", { type: "button", class: no ? "ghost" : "btn sm", text: t("do_" + (own ? "o_" : "c_") + s) });
+      b.addEventListener("click", function () { if (!no || window.confirm(t("sure_" + s))) go({ status: s }, b); });
+      return b;
+    })));
+    if (!own && (a.status === "accepted" || a.status === "revision")) {
+      var p = "u" + (++uid), b = el("button", { type: "submit", class: "btn sm", text: t("sendContent") });
+      var inp = el("input", { id: p, type: "url", inputmode: "url", maxlength: 300, placeholder: "https://", autocomplete: "off", value: a.content_url || "" });
+      var f = el("form", { class: "f sub", "data-sk-noform": true, novalidate: true }, [el("label", { for: p, text: t("contentUrl") }), el("div", { class: "inl" }, [inp, b])]);
+      f.addEventListener("submit", function (ev) {
+        ev.preventDefault();
+        var u = inp.value.trim();
+        if (!URL_RE.test(u)) return say(m, BC.msg("content_url"));
+        go({ status: "submitted", content_url: u }, b);
+      });
+      out.push(f);
+    }
+    out.push(m);
+    return out;
+  }
+
+  // Başvurularım (influencer)
+  function applications() {
+    return BC.call("GET", "app/applications").then(function (d) {
+      var list = d.applications || [], head = [el("h1", { text: t("nApps") }), el("p", { class: "lead", text: t("appsLead") })];
+      if (!list.length) return head.concat(empty(t("myAppsEmpty"), el("a", { class: "btn sm", href: "#campaigns", text: t("goOpps") })));
+      return head.concat(el("div", { class: "list" }, list.map(function (a) { return appCard(a, false); })));
+    });
+  }
+
+  // Influencer keşfi (marka/ajans): yalnızca profilini açan influencer'lar
+  function discover() {
+    var q = [];
+    if (F.niche) q.push("niche=" + encodeURIComponent(F.niche));
+    if (F.platform) q.push("platform=" + encodeURIComponent(F.platform));
+    return Promise.all([BC.call("GET", "app/influencers" + (q.length ? "?" + q.join("&") : "")), BC.call("GET", "app/campaigns")]).then(function (r) {
+      var list = r[0].influencers || [], open = (r[1].campaigns || []).filter(function (c) { return c.status === "open"; });
+      var n = el("input", { type: "text", maxlength: 40, placeholder: t("nichePh"), value: F.niche });
+      var s = el("select", { value: F.platform }, [el("option", { value: "", text: t("allPlatforms") })].concat(PLATFORMS.map(function (x) { return el("option", { value: x, text: PL[x] }); })));
+      var f = el("form", { class: "box f filter", role: "search", "data-sk-noform": true, novalidate: true }, [
+        el("div", null, fld("fn", t("fNiche"), n)), el("div", null, fld("fp", t("fPlatform"), s)), el("button", { type: "submit", class: "btn", text: t("search") })
+      ]);
+      f.addEventListener("submit", function (ev) { ev.preventDefault(); F.niche = n.value.trim(); F.platform = s.value; render(true); });
+      return [
+        el("h1", { text: t("nDiscover") }), el("p", { class: "lead", text: t("discLead") }), f,
+        open.length ? null : el("p", { class: "info" }, [t("needOpen") + " ", el("a", { href: "#new", text: t("doNew") })]),
+        list.length ? el("div", { class: "list" }, list.map(function (x) { return infCard(x, open); })) : empty(t(F.niche || F.platform ? "discNone" : "discEmpty"))
+      ];
+    });
+  }
+  function infCard(x, open) {
+    var slot = el("div", { hidden: true }), b = el("button", { type: "button", class: "btn sm", "aria-expanded": "false", text: t("invite"), disabled: !open.length });
+    b.addEventListener("click", function () {
+      if (!slot.firstChild) slot.appendChild(inviteForm(x, open));
+      slot.hidden = !slot.hidden;
+      b.setAttribute("aria-expanded", String(!slot.hidden));
+    });
+    return el("article", { class: "box item" }, [
+      el("div", { class: "head" }, [el("div", null, [el("h3", { text: x.name }), x.city ? el("p", { class: "meta", text: x.city }) : null]), b]),
+      x.bio ? el("p", { class: "prose sm", text: x.bio }) : null,
+      chips(x.niches), handles(x.platforms), slot
+    ]);
+  }
+  function inviteForm(x, open) {
+    var p = "i" + (++uid) + "-", m = note(), ok = okNote(), b = el("button", { type: "submit", class: "btn sm", text: t("sendInvite") });
+    var s = el("select", null, open.map(function (c) { return el("option", { value: c.id, text: c.title }); }));
+    var ta = el("textarea", { maxlength: 1000, rows: 3 });
+    var f = el("form", { class: "f sub", "data-sk-noform": true, novalidate: true }, [fld(p + "c", t("inviteTo"), s), fld(p + "m", t("inviteMsg"), ta), b, m, ok]);
+    f.addEventListener("submit", function (ev) {
+      ev.preventDefault(); say(m, ""); say(ok, ""); busy(b, true);
+      BC.call("POST", "app/campaigns/" + s.value + "/invite", { user_id: x.id, message: ta.value.trim() }).then(function () {
+        busy(b, false); ta.value = ""; say(ok, t("invitedOk"));
+      }, function (e) { busy(b, false); say(m, BC.msg(e.code, { exists: t("inviteExists"), not_found: t("inviteGone") })); });
+    });
+    return f;
+  }
+
+  // Profil: POST app/profile profili bütünüyle değiştirir, bu yüzden tüm alanlar her seferinde gönderilir
+  function profile() {
+    return BC.call("GET", "auth/me").then(function (d) {
+      U = d.user; paintWho();
+      return [el("h1", { text: t("nProfile") }), el("p", { class: "lead", text: t(isOwner() ? "profLeadO" : "profLeadC") }), profileForm()];
+    });
+  }
+  function profileForm() {
+    var p = U.profile || {}, role = U.role, inf = role === "influencer", m = note(), ok = okNote(), rows = [];
+    var b = el("button", { type: "submit", class: "btn", text: t("save") });
+    var name = el("input", { type: "text", maxlength: 100, autocomplete: "name", value: U.name });
+    var company = el("input", { type: "text", maxlength: 100, autocomplete: "organization", value: p.company || "" });
+    var industry = el("input", { type: "text", maxlength: 60, value: p.industry || "" });
+    var clients = el("input", { type: "number", min: 0, max: 10000, step: 1, inputmode: "numeric", value: p.clients != null ? p.clients : "" });
+    var bio = el("textarea", { maxlength: 500, rows: 4, value: p.bio || "" });
+    var city = el("input", { type: "text", maxlength: 100, autocomplete: "address-level2", value: p.city || "" });
+    var web = el("input", { type: "url", maxlength: 300, inputmode: "url", placeholder: "https://", value: p.website || "" });
+    var niches = el("input", { type: "text", value: (p.niches || []).join(", ") });
+    var listed = el("input", { type: "checkbox", id: "pl-listed", checked: p.listed === true });
+    var box = el("div"), addB = el("button", { type: "button", class: "ghost", text: t("addPlat") });
+    function row(v) {
+      var k = "pr" + (++uid) + "-", r = {
+        sel: el("select", { value: v.platform || "" }, [el("option", { value: "", text: "—" })].concat(PLATFORMS.map(function (x) { return el("option", { value: x, text: PL[x] }); }))),
+        h: el("input", { type: "text", maxlength: 60, autocomplete: "off", value: v.handle || "" }),
+        fo: el("input", { type: "number", min: 0, step: 1, inputmode: "numeric", value: v.followers != null ? v.followers : "" })
+      };
+      rows.push(r);
+      box.appendChild(el("div", { class: "prow" }, [el("div", null, fld(k + "p", t("platform"), r.sel)), el("div", null, fld(k + "h", t("handle"), r.h)), el("div", null, fld(k + "f", t("followersL"), r.fo))]));
+      addB.hidden = rows.length >= PLATFORMS.length;
+    }
+    if (inf) {
+      (p.platforms || []).forEach(row);
+      if (rows.length < PLATFORMS.length) row({});
+      addB.addEventListener("click", function () { row({}); });
+    }
+    var f = el("form", { class: "box f", "data-sk-noform": true, novalidate: true }, [
+      el("p", { class: "ro" }, [el("span", null, [t("email") + " ", el("b", { text: U.email })]), el("span", null, [t("accType") + " ", el("b", { text: t("role_" + role) })])]),
+      fld("pf-name", t("fName"), name, t(inf ? "fNameHintC" : "fNameHintO")),
+      inf ? null : el("div", { class: "grid2" }, [el("div", null, fld("pf-company", t("fCompany"), company)), el("div", null, fld("pf-industry", t("fIndustry"), industry))]),
+      role === "agency" ? fld("pf-clients", t("fClients"), clients) : null,
+      fld("pf-bio", t("fBio"), bio),
+      el("div", { class: "grid2" }, [el("div", null, fld("pf-city", t("fCity"), city)), el("div", null, fld("pf-web", t("fWebsite"), web))]),
+      inf ? fld("pf-niches", t("fNiches"), niches, t("fNichesHint")) : null,
+      inf ? el("fieldset", null, [el("legend", { text: t("fPlats") }), el("p", { class: "hint", style: "margin:0 0 10px", text: t("platsHint") }), box, addB]) : null,
+      inf ? el("label", { class: "check", for: "pl-listed" }, [listed, t("fListed")]) : null,
+      inf ? el("p", { class: "hint", style: "margin:4px 0 16px", text: t("fListedHint") }) : null,
+      b, m, ok
+    ]);
+    f.addEventListener("submit", function (ev) {
+      ev.preventDefault();
+      say(m, ""); say(ok, "");
+      var nm = name.value.trim(), w = web.value.trim(), pr = { bio: bio.value.trim(), city: city.value.trim() };
+      if (!nm) return say(m, BC.msg("name"));
+      if (w && !/^https?:\/\//.test(w)) w = "https://" + w;
+      if (w && !URL_RE.test(w)) return say(m, t("badWeb"));
+      pr.website = w;
+      if (!inf) { pr.company = company.value.trim(); pr.industry = industry.value.trim(); }
+      if (role === "agency") {
+        var cl = clients.value.trim();
+        if (cl && (!/^\d+$/.test(cl) || +cl > 10000)) return say(m, t("badClients"));
+        if (cl) pr.clients = +cl;
+      }
+      if (inf) {
+        var tg = tags(niches.value), seen = {}, bad = false;
+        if (tg.length > 5) return say(m, t("tagsMax"));
+        pr.niches = tg;
+        pr.platforms = [];
+        rows.forEach(function (r) {
+          var id = r.sel.value, fo = r.fo.value.trim();
+          if (!id || seen[id]) return;
+          seen[id] = 1;
+          if (fo && (!/^\d+$/.test(fo) || +fo > 1e9)) bad = true;
+          var o = { platform: id, handle: r.h.value.trim() };
+          if (fo) o.followers = +fo;
+          pr.platforms.push(o);
+        });
+        if (bad) return say(m, t("badFollowers"));
+        pr.listed = listed.checked;
+      }
+      busy(b, true);
+      BC.call("POST", "app/profile", { name: nm, profile: pr }).then(function (d) {
+        U = d.user; paintWho(); busy(b, false);
+        web.value = (U.profile || {}).website || "";
+        say(ok, t("saved"));
+      }, function (e) { busy(b, false); say(m, BC.msg(e.code)); });
+    });
+    return f;
+  }
+
+  var VIEWS = { overview: overview, campaigns: campaigns, "new": newCampaign, campaign: campaign, discover: discover, applications: applications, profile: profile };
+
+  // Üst çubuk ve alt bilgi metinleri, dil düğmesi
+  function paintWho() { $("who").textContent = U ? U.name : ""; $("role").textContent = U ? t("role_" + U.role) : ""; }
+  function chrome() {
+    document.documentElement.lang = L;
+    langB.textContent = L === "tr" ? "English" : "Türkçe";
+    langB.setAttribute("lang", L === "tr" ? "en" : "tr");
+    outB.textContent = t("logout");
+    $("copy").textContent = t("copy");
+    $("help").textContent = t("help");
+    $("group").setAttribute("aria-label", t("groupLabel"));
+    nav.setAttribute("aria-label", t("navLabel"));
+    if (U) paintWho();
+  }
+  langB.addEventListener("click", function () { L = L === "tr" ? "en" : "tr"; BC.setLang(L); chrome(); if (U) render(true); });
+  outB.addEventListener("click", function () { outB.disabled = true; BC.logout(); });
+
+  chrome();
+  BC.call("GET", "auth/me").then(function (d) {
+    U = d.user;
+    // Dil seçimi yoksa hesabın kayıt dili kullanılır
+    var stored = null;
+    try { stored = localStorage.getItem("brand-corner-lang"); } catch (e) {}
+    if (stored !== "tr" && stored !== "en" && (U.lang === "tr" || U.lang === "en")) { L = U.lang; BC.useLang(L); }
+    chrome();
+    window.addEventListener("hashchange", function () { render(); });
+    render();
+  }, function (e) {
+    if (e.code !== "auth") show(failBox(e, function () { location.reload(); }));
+  });
+})();
+</script>
+</body>
+</html>
