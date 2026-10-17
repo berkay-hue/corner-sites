@@ -7,9 +7,11 @@ image: "/og.png"
 imageAlt: "WishCEO kapak kartı “Şirket batıyor. CEO sensin.” — Korvala’nın platform kararı yazısı"
 ---
 
-Korvala vakası, zirvedeki bir telefon şirketinin 2010'ların başında akıllı telefonlarının hangi yazılımla çalışacağına karar vermesidir ve masadaki dört yolun hiçbiri bedava değildir. 2010'ların başı, Kuzey Avrupa. Pazarının zirvesindeki bir telefon üreticisinin başına yeni geçtin. Adı Korvala. Neredeyse herkesin cebinde bir Korvala var ya da yakın zamana kadar vardı. Kâğıt üzerinde zirvedesin.
+Korvala vakası, kurgusal bir telefon üreticisinin akıllı telefonlarında hangi yazılımı kullanacağına karar vermesidir; masadaki dört yolun hiçbiri bedava değildir.
 
-Ama zirvede durmak, ayağının altındaki zeminin sağlam olduğu anlamına gelmiyor. Masanda tek bir soru var ve cevabı şirketin bundan sonraki yolunu çizecek: Telefonların hangi yazılımla çalışacak?
+2010'ların başı, Kuzey Avrupa. Pazarının zirvesindeki bir telefon üreticisinin başına yeni geçtin. Adı Korvala. Neredeyse herkesin cebinde bir Korvala var ya da yakın zamana kadar vardı. Kâğıt üzerinde zirvedesin.
+
+Ama bugün önde olmak, yarın da önde olacağın anlamına gelmiyor. Masanda tek bir soru var ve cevabı şirketin bundan sonraki yolunu çizecek: Telefonların hangi yazılımla çalışacak?
 
 > Bu yazı Korvala vakasının sonucunu anlatıyor. Önce kendin karar vermek istersen [vakayı oyna](/?s=001#oyun).
 
@@ -123,4 +125,4 @@ Platform yarışı donanımla değil, geliştiricileri ve kullanıcıları aynı
 
 ## Sen ne yapardın?
 
-2010'ların başındasın. Telefonlar hâlâ satılıyor ama zemin ayağının altından kayıyor. Sen hangi yolu seçerdin? [Korvala vakasını oyna](/?s=001#oyun) ve kararını gerçek CEO'nunkiyle karşılaştır.
+2010'ların başındasın. Telefonlar hâlâ satılıyor ama pazarın yönü hızla değişiyor. Sen hangi yolu seçerdin? [Korvala vakasını oyna](/?s=001#oyun) ve kararını gerçek CEO'nunkiyle karşılaştır.

@@ -1,13 +1,15 @@
 ---
 title: "Krizin İlk 48 Saati: Bilgi Yokken Karar Vermek"
-description: "İki kez çekilen abonelik ücreti, eksik bilgi ve dar bir zaman. Kurgusal bir abonelik şirketi örneğinden krizin ilk saatleri için notlar: karar, iletişim, güven ve maliyet."
+description: "Krizin ilk 48 saatinde bilgi eksikken nasıl karar verilir? Ücreti iki kez çeken kurgusal bir abonelik şirketinden karar, iletişim ve güven notları."
 date: "2026-10-15"
 category: "Kriz Liderliği"
 image: "/og.png"
 imageAlt: "WishCEO kapak kartı “Şirket batıyor. CEO sensin.” — krizin ilk 48 saati yazısı"
 ---
 
-Krizin ilk 48 saatinde bilgi eksikken iyi karar, "Yanılırsam ne olur?" diye sorup geri dönüşü zor olan kaybı önleyen adımı önce atmaktır. Yani bütün bilginin gelmesini beklemezsin; iki olası hatayı yan yana koyar, telafisi zor olanı önce engellersin. Kriz ilk geldiğinde elinde neredeyse hiçbir şey olmaz. Telefon susmaz, herkes senden bir cevap bekler ve o cevabın dayanacağı bilgilerin yarısı henüz ortada yoktur. Beklersen zaman kaybedersin. Acele edersen yanlış adım atabilirsin. İlk 48 saati zor yapan şey tam olarak bu.
+Krizin ilk 48 saatinde bilgi eksikken iyi karar, "Yanılırsam ne olur?" diye sorup geri dönüşü zor olan kaybı önleyen adımı önce atmaktır. Yani bütün bilginin gelmesini beklemezsin; iki olası hatayı yan yana koyar, telafisi zor olanı önce engellersin.
+
+Kriz ilk geldiğinde elinde neredeyse hiçbir şey olmaz. Telefon susmaz, herkes senden bir cevap bekler ve o cevabın dayanacağı bilgilerin yarısı henüz ortada yoktur. Beklersen zaman kaybedersin. Acele edersen yanlış adım atabilirsin. İlk 48 saati zor yapan şey tam olarak bu.
 
 Bu yazıda kurgusal bir abonelik şirketinin zor bir haftasını açıyoruz: sesli kitap ve e-kitap uygulaması Pakeno’nun binlerce abonesinden aylık ücretin iki kez çekildiği gün. Üç soruya bakacağız: bilgi eksikken nasıl karar verilir, müşterinin parası şirketin kasasıyla karşı karşıya geldiğinde ne olur, aceleyle yapılan bir açıklama güveni neden azaltır?
 

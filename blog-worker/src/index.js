@@ -243,7 +243,7 @@ Kurallar:
 - Başlığı (H1) YAZMA; doğrudan 1-2 paragraflık bir girişle başla. "Giriş:", "Bölüm 1:" gibi iskelet etiketleri KULLANMA.
 - İlk paragrafın ilk 2-3 cümlesi başlıktaki soruya/konuya doğrudan, tek başına alıntılanabilecek net bir cevap versin (arama motorları ve yapay zekâ asistanları bu kısmı alıntılar).
 - Ara başlıkların bir kısmını, okurun gerçekten soracağı soru biçiminde yaz (ör. "## Kriz anında ilk ne yapılır?").
-- Son paragraftan önce "## Sık sorulan sorular" bölümü ekle: 3 soru, her biri "### Soru?" başlığı ve altında 2-3 cümlelik net, kendi başına anlaşılır cevap.
+- Son paragraftan önce "## Sık sorulan sorular" bölümü ekle: 3-4 soru, her biri "### Soru?" başlığı ve altında 2-3 cümlelik net, kendi başına anlaşılır cevap.
 - Konuyla gerçekten ilgili yerlerde yukarıdaki yazılardan 2-4 iç link ver: [anlamlı bağlam metni](/blog/slug). Aynı yazıya bir kez link ver.
 - "İlgili yazılar" listesi EKLEME (site kendisi ekler).
 - Son paragraf okuru bugünün vakasını oynamaya davet etsin ve [Bugünün vakasını oyna](/#oyun) linkiyle bitsin.
@@ -322,7 +322,7 @@ Kurallar:
   // SSS bölümü FAQPage JSON-LD'nin kaynağı (SEO+GEO); eksik gelirse bir kez yeniden yazdır, yine eksikse yayımlama.
   // Tüketici sitesinde içerik bekçisi (consumerIssues) de aynı kuralla çalışır: ihlal varsa aynı tek yeniden yazımda
   // düzeltilir, yine varsa yayımlanmaz. B2B sitelerde issues hep boş, akış eskisiyle aynı.
-  const minFaq = consumer(cfg) ? 2 : 3;
+  const minFaq = 3; // istemler 3-4 soru istiyor; SEO+GEO kuralı tüm sitelerde 3–5 soru
   const issues = md => consumer(cfg) ? consumerIssues(md, cfg.siteUrl) : [];
   let md = await write();
   let bad = issues(md);
@@ -391,7 +391,7 @@ export async function generate(env, cfg) {
   // images: false olan site Pexels kullanmaz; şablon varsayılan görseli (blog.config defaultImage) gösterir
   const img = cfg.images === false ? { url: cfg.defaultImage || "/og.png", alt: topic.topic } : await pickImage(env, topic, index);
   const today = new Date(Date.now() + 3 * 3600e3).toISOString().slice(0, 10); // TR saati
-  const fm = { title: topic.topic, description: (topic.description || "").length >= 80 && topic.description.length <= 170 ? topic.description : metaDescription(body), date: today, category: topic.category, image: img.url, imageAlt: img.alt };
+  const fm = { title: topic.topic, description: (topic.description || "").length >= 80 && topic.description.length <= 155 ? topic.description : metaDescription(body), date: today, category: topic.category, image: img.url, imageAlt: img.alt };
   const md = `---\n${Object.entries(fm).map(([k, v]) => `${k}: ${JSON.stringify(v)}`).join("\n")}\n---\n\n${body}\n`;
   return { topic, slug, fm, body, md, links };
 }

@@ -7,9 +7,11 @@ image: "/og.png"
 imageAlt: "WishCEO kapak kartı “Şirket batıyor. CEO sensin.” — batık maliyet yanılgısı yazısı"
 ---
 
-Batık maliyet yanılgısı, geri gelmeyecek geçmiş harcamaların gelecekle ilgili bir kararı yönlendirmesidir. Bir toplantı düşün. Masada yıllardır süren bir proje var. Bütçe defalarca aşıldı, takvim birkaç kez kaydı, ortada hâlâ ödeme yapan tek bir müşteri yok. Biri çekinerek soruyor: "Bunu durdursak mı?" Odadaki en kıdemli kişi hemen cevap veriyor: "Bu kadar para yatırdık, şimdi mi bırakacağız?"
+Batık maliyet yanılgısı, geri gelmeyecek geçmiş harcamaların gelecekle ilgili bir kararı yönlendirmesidir.
 
-Cümle kulağa mantıklı geliyor. Kimse emeğinin boşa gitmesini istemez. Ama içinde gizli bir sorun var: Gelecekle ilgili bir karar, geri gelmeyecek bir geçmişe bakılarak veriliyor. Bunun adı batık maliyet yanılgısı. Bu yazıda ne olduğuna, şirket yönetiminde hangi kılıklara girdiğine ve karar anında onu nasıl yakalayabileceğine bakıyoruz.
+Bir toplantı düşün. Masada yıllardır süren bir proje var. Bütçe defalarca aşıldı, takvim birkaç kez kaydı, ortada hâlâ ödeme yapan tek bir müşteri yok. Biri çekinerek soruyor: "Bunu durdursak mı?" Odadaki en kıdemli kişi hemen cevap veriyor: "Bu kadar para yatırdık, şimdi mi bırakacağız?"
+
+Cümle kulağa mantıklı geliyor. Kimse emeğinin boşa gitmesini istemez. Ama içinde gizli bir sorun var: Gelecekle ilgili bir karar, geri gelmeyecek bir geçmişe bakılarak veriliyor. Batık maliyet yanılgısı tam olarak bu. Bu yazıda ne olduğuna, şirket yönetiminde hangi kılıklara girdiğine ve karar anında onu nasıl yakalayabileceğine bakıyoruz.
 
 ## Batık maliyet ne demek?
 
