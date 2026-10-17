@@ -7,7 +7,7 @@ image: "/og.png"
 imageAlt: "WishCEO kapak kartı “Şirket batıyor. CEO sensin.” — Korvala’nın platform kararı yazısı"
 ---
 
-Korvala vakası, zirvedeki bir telefon şirketinin 2010'ların başında akıllı telefonlarının hangi yazılımla çalışacağına karar vermesidir ve masadaki dört yolun hiçbiri bedava değildir. 2010'ların başı, Kuzey Avrupa. Dünyada en çok telefon satan şirketin başına yeni geçtin. Adı Korvala. Neredeyse herkesin cebinde bir Korvala var ya da yakın zamana kadar vardı. Kâğıt üzerinde zirvedesin.
+Korvala vakası, zirvedeki bir telefon şirketinin 2010'ların başında akıllı telefonlarının hangi yazılımla çalışacağına karar vermesidir ve masadaki dört yolun hiçbiri bedava değildir. 2010'ların başı, Kuzey Avrupa. Pazarının zirvesindeki bir telefon üreticisinin başına yeni geçtin. Adı Korvala. Neredeyse herkesin cebinde bir Korvala var ya da yakın zamana kadar vardı. Kâğıt üzerinde zirvedesin.
 
 Ama zirvede durmak, ayağının altındaki zeminin sağlam olduğu anlamına gelmiyor. Masanda tek bir soru var ve cevabı şirketin bundan sonraki yolunu çizecek: Telefonların hangi yazılımla çalışacak?
 
@@ -17,7 +17,7 @@ Ama zirvede durmak, ayağının altındaki zeminin sağlam olduğu anlamına gel
 
 Dosyadaki tablo şöyle. Birkaç yıl önce bir bilgisayar şirketi parmakla kullanılan dokunmatik telefonunu çıkardı. Büyük bir internet şirketinin telefon üreticilerine ücretsiz verdiği sistem de hızla yayılıyor. Korvala'nın kendi akıllı telefon sistemi eskidi, uygulama geliştiriciler ilgisini kaybetti. Ortaklıkla geliştirilen yeni sistem ise henüz hazır değil.
 
-Akıllı telefonda pazar payın geriliyor, hisse düşüyor. Telefon satışında hâlâ dünya birincisisin. Ama bu birincilik, giderek önemini yitiren bir ligde.
+Akıllı telefonda pazar payın geriliyor, hisse düşüyor. Telefon satışında hâlâ zirvedesin. Ama bu birincilik, giderek önemini yitiren bir ligde.
 
 Korvala'nın sorunu kötü telefon yapması değil. Fabrikalar çalışıyor, marka tanınıyor, telefonlar dünyanın her yerinde satılıyor. Sorun, telefonun değerinin donanımdan yazılıma, o yazılımın etrafındaki uygulamalara kaymış olması. Sen hâlâ en iyi kutuyu yapıyorsun. Müşteri ise artık kutunun içinde ne olduğuna bakıyor.
 
@@ -79,7 +79,7 @@ Korvala'nın CEO'su Gordon Stoddard B'yi seçti ve şirketi Tallbridge'in telefo
 
 Tallbridge'in sistemi beklenen ivmeyi yakalayamadı. Birkaç yıl sonra Korvala telefon işini Tallbridge'e satmak için anlaştı: patent lisansı dâhil birkaç milyar avro. Satış ertesi yıl tamamlandı.
 
-Korvala ortadan kalkmadı. Telefon dışındaki işleriyle, daha çok altyapı tarafında yoluna devam etti. Ama dünyada en çok telefon satan şirket, artık telefon satmıyor.
+Korvala ortadan kalkmadı. Telefon dışındaki işleriyle, daha çok altyapı tarafında yoluna devam etti. Ama bir zamanlar pazarın zirvesindeki telefon üreticisi, artık telefon satmıyor.
 
 ## Oyunda neden 35 puan?
 
