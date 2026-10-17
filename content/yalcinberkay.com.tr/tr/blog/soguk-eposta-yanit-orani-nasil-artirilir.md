@@ -6,6 +6,7 @@ updated: "2026-10-16"
 category: "Outbound"
 image: "https://images.pexels.com/photos/7888684/pexels-photo-7888684.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
 imageAlt: "Bitkilerle dolu bir ofiste dizüstü bilgisayar başında konuşan üç kişi"
+alt: "how-to-improve-cold-email-reply-rate"
 ---
 
 Soğuk e-postada yanıt oranını artırmanın tek bir sırrı yok; birbirini tamamlayan disiplinler var. Doğru listeyi oluşturun, teslim edilebilirliği koruyun, tek bir probleme odaklanan kısa mesajlar yazın, düşük sürtünmeli sorular sorun, sabırla takip edin ve her şeyi ölçerek test edin. Bunları birlikte uyguladığınızda soğuk e-posta öngörülebilir bir pipeline kaynağına dönüşür.
