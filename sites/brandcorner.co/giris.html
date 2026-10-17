@@ -40,7 +40,7 @@ footer.bot{border-top:1px solid var(--line);background:var(--bg);color:var(--mut
 .card .row{display:flex;align-items:center;gap:8px;font-weight:400;margin:0 0 20px}.card .row input{width:16px;height:16px;margin:0;accent-color:var(--accent)}
 button.btn{border:0;cursor:pointer;width:100%;font-family:inherit;padding:12px 18px}button.btn:disabled{opacity:.65;cursor:default}
 .msg{color:#b91c1c;font-size:14px;margin:12px 0 0}.msg:empty{display:none}
-.note{color:var(--muted);font-size:14px;text-align:center;margin:20px 0 0}.note a{color:var(--accent);font-weight:600;text-decoration:none}.note a:hover{text-decoration:underline}
+.note{color:var(--muted);font-size:14px;text-align:center;margin:20px 0 0}.note a{color:var(--accent);font-weight:600;text-decoration:none}.note a:hover{text-decoration:underline}.note+.note{margin-top:8px}
 @media(max-width:760px){header.top nav a:not(.keep){display:none}header.top .wrap{gap:12px}.auth{padding:32px 16px;min-height:0}.card{padding:24px 20px}}
 </style>
 </head>
@@ -61,52 +61,34 @@ button.btn{border:0;cursor:pointer;width:100%;font-family:inherit;padding:12px 1
 <button class="btn" type="submit">Giriş yap</button>
 <p id="m" class="msg" role="alert"></p>
 </form>
-<p class="note">Hesabınız yok mu? <a href="/pricing">Planları inceleyin</a></p>
+<p class="note">Hesabınız yok mu? <a href="/kayit">Kayıt olun</a></p>
+<p class="note">Şifrenizi mi unuttunuz? <a href="mailto:info@saascorner.co?subject=Brand%20Corner%20%C5%9Fifre%20s%C4%B1f%C4%B1rlama">Bize yazın</a></p>
 </div>
 </main>
 
 <footer class="bot"><div class="wrap"><div>© Brand Corner · Tüm hakları saklıdır.</div><nav aria-label="Corner Group şirketleri"><a href="https://saascorner.co">SAAS Corner</a><a href="https://salescorner.co">Sales Corner</a><a href="https://socialmediacorner.co">Social Media Corner</a><a href="https://cornergroup.co">Corner Group</a></nav></div></footer>
 
+<script src="/bc-app.js"></script>
 <script>
 (function(){
-  var API = "https://corner-forms.berkay-999.workers.dev/auth/", K = "bc-token";
-  var T = {
-    go: "Giriş yap", wait: "Giriş yapılıyor…",
-    400: "E-posta ve şifrenizi girin.",
-    401: "E-posta veya şifre hatalı.",
-    429: "Çok fazla hatalı deneme yapıldı. Lütfen 15 dakika sonra tekrar deneyin.",
-    net: "Sunucuya ulaşılamadı. Bağlantınızı kontrol edip tekrar deneyin.",
-    store: "Tarayıcınız oturum bilgisini saklamaya izin vermiyor. Gizli pencere dışında tekrar deneyin.",
-    err: "Bir sorun oluştu. Lütfen tekrar deneyin."
-  };
-  var LANG = "tr";
-  var S = ["localStorage", "sessionStorage"];
-  function token() { for (var i = 0; i < S.length; i++) { try { var v = window[S[i]].getItem(K); if (v) return v; } catch (e) {} } return null; }
-  try { localStorage.setItem("brand-corner-lang", LANG); } catch (e) {}
+  BC.setLang("tr");
+  var T = { go: "Giriş yap", wait: "Giriş yapılıyor…", rate: "Çok fazla hatalı deneme yapıldı. Lütfen 15 dakika sonra tekrar deneyin." };
 
   // Açık oturum varsa doğrudan panele geç
-  var t = token();
-  if (t) fetch(API + "me", { headers: { authorization: "Bearer " + t } }).then(function (r) { if (r.ok) location.replace("/panel"); }).catch(function () {});
+  if (BC.token()) BC.call("GET", "auth/me").then(function () { location.replace("/panel"); }, function () {});
 
   var f = document.getElementById("f"), b = f.querySelector("button"), m = document.getElementById("m");
   function fail(s) { m.textContent = s; b.disabled = false; b.textContent = T.go; }
   f.addEventListener("submit", function (ev) {
     ev.preventDefault();
     var email = f.elements.email.value.trim(), pass = f.elements.password.value;
-    if (!email || !pass) return fail(T[400]);
+    if (!email || !pass) return fail(BC.msg("missing"));
     m.textContent = ""; b.disabled = true; b.textContent = T.wait;
-    fetch(API + "login", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ email: email, password: pass }) })
-      .then(function (r) { return r.json().catch(function () { return {}; }).then(function (d) { return { s: r.status, d: d }; }); })
-      .then(function (x) {
-        if (x.s !== 200 || !x.d.ok || !x.d.token) return fail(T[x.s] || T.err);
-        var keep = f.elements.remember.checked;
-        try {
-          (keep ? localStorage : sessionStorage).setItem(K, x.d.token);
-          (keep ? sessionStorage : localStorage).removeItem(K);
-        } catch (e) {}
-        if (token() !== x.d.token) return fail(T.store);
-        location.href = "/panel";
-      }, function () { fail(T.net); });
+    BC.call("POST", "auth/login", { email: email, password: pass }).then(function (d) {
+      if (!d.token) return fail(BC.msg("err"));
+      if (!BC.save(d.token, f.elements.remember.checked)) return fail(BC.msg("store"));
+      location.href = "/panel";
+    }, function (e) { fail(BC.msg(e.code, T)); });
   });
 })();
 </script>
