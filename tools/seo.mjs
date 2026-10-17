@@ -106,6 +106,7 @@ const RULES = {
       "/solutions/agencies": ["Influencer Agency Management Tools | Brand Corner", "Brand Corner gives agencies tools to manage their talent roster, orchestrate client campaigns, and automate reporting with a dedicated client portal.", "For Agencies"],
       "/about": ["About Brand Corner", "Brand Corner is an influencer marketing platform connecting brands, influencers, and agencies worldwide. Built in Istanbul as part of Corner Group.", "About"],
       "/privacy": ["Privacy Policy | Brand Corner", "How the Brand Corner website handles personal data: the newsletter form, hosting, cookies and local storage, and your rights under the GDPR and KVKK.", "Privacy Policy"],
+      "/kvkk": ["KVKK Aydınlatma Metni | Brand Corner", "Brand Corner hesabı için kişisel verilerin hangi amaçla işlendiği, kimlere aktarıldığı, ne kadar saklandığı ve KVKK 11. madde kapsamındaki haklarınız.", "KVKK Aydınlatma Metni"],
       "/terms": ["Terms of Service | Brand Corner", "The terms that apply when you use the Brand Corner website, including acceptable use, intellectual property, the newsletter form and liability.", "Terms of Service"],
       "/404": ["Page Not Found | Brand Corner", "This page could not be found."],
       // Giriş, kayıt ve panel: noindex, sitemap'te yok
@@ -228,11 +229,13 @@ const RULES = {
         founder: { "@type": "Person", "@id": "https://www.yalcinberkay.com.tr/#person", name: "Berkay Yalçın", url: "https://www.yalcinberkay.com.tr/" },
         parentOrganization: { "@type": "Organization", "@id": "https://cornergroup.co/#org", name: "Corner Group", url: "https://cornergroup.co/" } };
       const h1 = text(html.match(/<h1[^>]*>([\s\S]*?)<\/h1>/)?.[1] || "");
+      // /kvkk tek Türkçe yasal sayfa: dil ve breadcrumb "Ana Sayfa"
+      const tr = /<html lang="tr"/.test(html);
       const graph = noindex ? [] : page === "/"
         ? [org, { "@type": "WebSite", "@id": R.origin + "/#website", url: R.origin + "/", name: "Brand Corner", publisher: { "@id": ORG }, inLanguage: "en" }]
         : [...(page === "/about" ? [org] : []),
-          { "@type": page === "/about" ? "AboutPage" : "WebPage", "@id": url + "#webpage", url, name: h1, description: desc, isPartOf: { "@id": R.origin + "/#website" }, about: { "@id": ORG }, inLanguage: "en" },
-          { "@type": "BreadcrumbList", itemListElement: [{ "@type": "ListItem", position: 1, name: "Home", item: R.origin + "/" }, { "@type": "ListItem", position: 2, name: crumb, item: url }] }];
+          { "@type": page === "/about" ? "AboutPage" : "WebPage", "@id": url + "#webpage", url, name: h1, description: desc, isPartOf: { "@id": R.origin + "/#website" }, about: { "@id": ORG }, inLanguage: tr ? "tr" : "en" },
+          { "@type": "BreadcrumbList", itemListElement: [{ "@type": "ListItem", position: 1, name: tr ? "Ana Sayfa" : "Home", item: R.origin + "/" }, { "@type": "ListItem", position: 2, name: crumb, item: url }] }];
       // /pricing SSS'si (PricingFAQ chunk'ı) birebir; sayfa dil anahtarlı olduğundan EN ve TR ayrı FAQPage
       if (page === "/pricing") for (const [lang, qa] of Object.entries(R.FAQ))
         graph.push({ "@type": "FAQPage", "@id": url + "#faq-" + lang, url, inLanguage: lang, isPartOf: { "@id": url + "#webpage" },
