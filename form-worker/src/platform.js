@@ -3,12 +3,14 @@
 // "Authorization: Bearer <token>" başlığıyla gönderir (site ile worker farklı alan adında, çerez yok).
 // Şifre: PBKDF2-SHA256 + 16 bayt tuz. Tur sayısı özetin içinde saklanır; PBKDF2_ITER artırılırsa
 // eski özetler bir sonraki girişte yenilenir. Varsayılan 50000: ücretsiz plandaki 10 ms CPU sınırına sığar.
-// Şifre sıfırlama e-postası yok: MAIL binding'i yalnızca MAIL_TO adresine gönderebiliyor.
+// Şifre sıfırlama: tek kullanımlık, RESET_MINUTES geçerli link; e-posta Cloudflare Email Sending ile (EMAIL binding,
+// gönderen noreply@brandcorner.co). MAIL binding'i yalnızca MAIL_TO adresine gönderebildiği için o kullanılmaz.
 
 const ROLES = ["brand", "influencer", "agency"];
 const PLATFORMS = ["instagram", "tiktok", "youtube", "x", "linkedin", "twitch"];
 const CURRENCIES = ["TRY", "USD", "EUR"];
 const SESSION_DAYS = 30, MAX_BODY = 20000, MAX_CAMPAIGNS = 100, DAILY_APPLY = 50;
+const RESET_MINUTES = 60, RESET_FROM = { email: "noreply@brandcorner.co", name: "Brand Corner" };
 const EMAIL_RE = /^[^\s@<>"]+@[^\s@<>"]+\.[^\s@<>"]+$/;
 const URL_RE = /^https?:\/\/[^\s<>"]+$/;
 
@@ -47,6 +49,8 @@ export async function platform(req, url, env, origin, deliver) {
     const route = `${req.method} ${url.pathname.replace(/\/+$/, "")}`;
     if (route === "POST /auth/register") return await register(c);
     if (route === "POST /auth/login") return await login(c);
+    if (route === "POST /auth/forgot") return await forgot(c);
+    if (route === "POST /auth/reset") return await reset(c);
 
     const token = (req.headers.get("authorization") || "").match(/^Bearer ([A-Za-z0-9_-]{43})$/)?.[1];
     c.user = token && await env.DB.prepare(
@@ -115,6 +119,90 @@ async function login(c) {
   return ok(c, { token: await newSession(env, user.id), user: me(user) });
 }
 
+// Hesap olsun olmasın aynı yanıt; link yalnızca kayıtlı adrese gider. Yeni istek eski linki geçersiz kılar.
+async function forgot(c) {
+  const { env, site, ip, body } = c;
+  if (!env.EMAIL) throw new Bad("mail", 503);
+  const email = String(body.email ?? "").trim().toLowerCase();
+  if (email.length > 254 || !EMAIL_RE.test(email)) throw new Bad("email");
+  if (await attempts(env, "forgot", "ip", ip, 60, false) >= 10) throw new Bad("rate", 429);
+  // Aynı adrese saatte en çok 3 e-posta; fazlası gönderilmeden yanıtlanır
+  if (await attempts(env, "forgot", "email", email, 60, false) >= 3) return ok(c, {});
+  await attempt(env, ip, email, "forgot", 1);
+  const user = await env.DB.prepare("SELECT * FROM users WHERE site = ? AND email = ?").bind(site, email).first();
+  if (!user) return ok(c, {});
+
+  const token = b64u(crypto.getRandomValues(new Uint8Array(32)));
+  await env.DB.batch([
+    env.DB.prepare("DELETE FROM password_resets WHERE user_id = ?").bind(user.id),
+    env.DB.prepare(`INSERT INTO password_resets (token_hash, user_id, expires_at) VALUES (?, ?, datetime('now', '+${RESET_MINUTES} minutes'))`)
+      .bind(await sha256(token), user.id),
+  ]);
+  const lang = ["tr", "en"].includes(body.lang) ? body.lang : user.lang;
+  // Token URL'nin # kısmında: sunucu loglarına ve Referer'a düşmez
+  const link = `${c.origin}/${lang === "en" ? "reset-password" : "sifre-yenile"}#t=${token}`;
+  try {
+    await env.EMAIL.send(resetMail(lang, user, link));
+  } catch (e) {
+    console.error("reset mail", e);
+    throw new Bad("mail", 503);
+  }
+  return ok(c, {});
+}
+
+async function reset(c) {
+  const { env, site, ip, body } = c;
+  const token = String(body.token ?? ""), password = String(body.password ?? "");
+  if (!/^[A-Za-z0-9_-]{43}$/.test(token)) throw new Bad("reset_invalid");
+  if (password.length < 8 || password.length > 200) throw new Bad("password");
+  if (await attempts(env, "reset", "ip", ip, 15, true) >= 20) throw new Bad("rate", 429);
+  // Token tek kullanımlık: kontrol edilirken silinir
+  const row = await env.DB.prepare("DELETE FROM password_resets WHERE token_hash = ? AND expires_at > datetime('now') RETURNING user_id")
+    .bind(await sha256(token)).first();
+  const user = row && await env.DB.prepare("SELECT * FROM users WHERE id = ? AND site = ?").bind(row.user_id, site).first();
+  await attempt(env, ip, user ? user.email : null, "reset", user ? 1 : 0);
+  if (!user) throw new Bad("reset_invalid");
+  // Şifre değişince açık oturumlar kapanır
+  await env.DB.batch([
+    env.DB.prepare("UPDATE users SET pass = ? WHERE id = ?").bind(await hashPass(env, password), user.id),
+    env.DB.prepare("DELETE FROM sessions WHERE user_id = ?").bind(user.id),
+    env.DB.prepare("DELETE FROM password_resets WHERE user_id = ?").bind(user.id),
+  ]);
+  return ok(c, { token: await newSession(env, user.id), user: me(user) });
+}
+
+const RESET_TEXT = {
+  tr: {
+    subject: "Brand Corner şifre sıfırlama",
+    hi: "Merhaba",
+    body: "Brand Corner hesabınız için şifre sıfırlama isteği aldık. Yeni şifrenizi aşağıdaki linkten belirleyebilirsiniz. Link 1 saat geçerli ve tek kullanımlıktır.",
+    button: "Yeni şifre belirle",
+    ignore: "Bu isteği siz yapmadıysanız bu e-postayı dikkate almayın; şifreniz değişmez.",
+  },
+  en: {
+    subject: "Reset your Brand Corner password",
+    hi: "Hi",
+    body: "We received a request to reset the password of your Brand Corner account. You can set a new password with the link below. The link is valid for 1 hour and works once.",
+    button: "Set a new password",
+    ignore: "If you did not ask for this, you can ignore this email; your password stays the same.",
+  },
+};
+
+function resetMail(lang, user, link) {
+  const t = RESET_TEXT[lang] || RESET_TEXT.tr, hi = `${t.hi} ${user.name},`;
+  return {
+    to: user.email,
+    from: RESET_FROM,
+    subject: t.subject,
+    text: `${hi}\n\n${t.body}\n\n${link}\n\n${t.ignore}\n\nBrand Corner\n`,
+    html: `<div style="font-family:Arial,sans-serif;font-size:15px;line-height:1.5;color:#111;max-width:520px">
+<p>${esc(hi)}</p><p>${esc(t.body)}</p>
+<p><a href="${esc(link)}" style="display:inline-block;background:#111;color:#fff;padding:12px 20px;border-radius:8px;text-decoration:none">${esc(t.button)}</a></p>
+<p style="font-size:13px;color:#555;word-break:break-all">${esc(link)}</p>
+<p style="font-size:13px;color:#555">${esc(t.ignore)}</p><p>Brand Corner</p></div>`,
+  };
+}
+
 const attempts = async (env, kind, col, value, minutes, failedOnly) => (await env.DB.prepare(
   `SELECT count(*) n FROM auth_attempts WHERE kind = ? AND ${col} = ? AND created_at > datetime('now', ?)${failedOnly ? " AND ok = 0" : ""}`,
 ).bind(kind, value, `-${minutes} minutes`).first()).n;
@@ -131,11 +219,12 @@ async function newSession(env, userId) {
 
 const me = u => ({ id: u.id, name: u.name, email: u.email, role: u.role, lang: u.lang, profile: JSON.parse(u.profile || "{}") });
 
-// cron'dan: süresi dolan oturumlar ve eski deneme kayıtları
+// cron'dan: süresi dolan oturumlar ve sıfırlama linkleri, eski deneme kayıtları
 export async function cleanup(env) {
   await env.DB.batch([
     env.DB.prepare("DELETE FROM sessions WHERE expires_at < datetime('now')"),
     env.DB.prepare("DELETE FROM auth_attempts WHERE created_at < datetime('now', '-1 day')"),
+    env.DB.prepare("DELETE FROM password_resets WHERE expires_at < datetime('now')"),
   ]);
 }
 
@@ -372,6 +461,7 @@ const text = (v, max) => (typeof v === "string" || typeof v === "number" ? Strin
 const link = v => { const s = text(v, 300); return URL_RE.test(s) ? s : ""; };
 const int = (v, min, max) => { const n = Number(v); return Number.isInteger(n) && n >= min && n <= max ? n : null; };
 const tags = v => (Array.isArray(v) ? [...new Set(v.map(x => text(x, 40)).filter(Boolean))].slice(0, 5) : []);
+const esc = s => String(s).replace(/[&<>"]/g, ch => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[ch]);
 
 const enc = new TextEncoder();
 const b64u = bytes => btoa(String.fromCharCode(...bytes)).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");

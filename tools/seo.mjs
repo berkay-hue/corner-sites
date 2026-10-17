@@ -109,11 +109,15 @@ const RULES = {
       "/kvkk": ["KVKK Aydınlatma Metni | Brand Corner", "Brand Corner hesabı için kişisel verilerin hangi amaçla işlendiği, kimlere aktarıldığı, ne kadar saklandığı ve KVKK 11. madde kapsamındaki haklarınız.", "KVKK Aydınlatma Metni"],
       "/terms": ["Terms of Service | Brand Corner", "The terms that apply when you use the Brand Corner website, including acceptable use, intellectual property, the newsletter form and liability.", "Terms of Service"],
       "/404": ["Page Not Found | Brand Corner", "This page could not be found."],
-      // Giriş, kayıt ve panel: noindex, sitemap'te yok
+      // Giriş, kayıt, şifre sıfırlama ve panel: noindex, sitemap'te yok
       "/giris": ["Giriş | Brand Corner", "Brand Corner hesabınıza giriş yapın."],
       "/login": ["Log in | Brand Corner", "Log in to your Brand Corner account."],
       "/kayit": ["Kayıt ol | Brand Corner", "Marka, influencer ya da ajans olarak Brand Corner hesabı oluşturun."],
       "/register": ["Sign up | Brand Corner", "Create a Brand Corner account as a brand, influencer or agency."],
+      "/sifremi-unuttum": ["Şifremi unuttum | Brand Corner", "Brand Corner hesabınızın şifresini sıfırlamak için link isteyin."],
+      "/forgot-password": ["Forgot password | Brand Corner", "Request a link to reset your Brand Corner password."],
+      "/sifre-yenile": ["Yeni şifre | Brand Corner", "Brand Corner hesabınız için yeni bir şifre belirleyin."],
+      "/reset-password": ["New password | Brand Corner", "Set a new password for your Brand Corner account."],
       "/panel": ["Panel | Brand Corner", "Brand Corner panel."],
     },
     // Doğrulanamayan iddialar (500+/10,000+ sayaçları, logo şeridi, yorumlar, başarı hikâyeleri, mockup tutarları, © 2025) nötrlenir.
