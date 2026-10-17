@@ -1261,6 +1261,108 @@
     }
   ];
 
+  var S012 = [
+    {
+      area: "Ürün gamı",
+      place: ["ABD", " · 1990’ların sonu"],
+      company: "Pellastra Computer",
+      title: "Dört kutuluk bir tablo",
+      body: [
+        "Pellastra, kişisel bilgisayarın ilk yıllarından beri tanınan bir marka. Son yıllarda katalog kontrolden çıktı: birbirine çok benzeyen onlarca masaüstü ve dizüstü model var; bayiler bile hangisinin kime uygun olduğunu açıklamakta zorlanıyor.",
+        "Satışlar üst üste düşüyor, şirket birkaç yıldır para kaybediyor. Depolarda satılmayan stok birikiyor; mühendislik ekipleri de aynı anda çok sayıda projeye bölünmüş durumda.",
+        "Kurucu ortaklardan biri olarak şirkete geri döndün. Pellastra’nın CEO’susun; ekibin masaya birkaç seçenek getirdi."
+      ],
+      stats: [["Model sayısı", "Onlarca"], ["Satışlar", "Üst üste düşüşte"], ["Kâr", "Birkaç yıldır yok"]],
+      ask: "Pellastra’nın CEO’susun. Ne yaparsın?",
+      opts: [
+        { k: "A", t: "Modellerin çoğunu bırak; ürün gamını dört kutuluk bir tabloya indir: ev ve iş için birer masaüstü, birer dizüstü.", s: 90, tag: "cerrah",
+          r: "Riskli: birçok müşteri grubundan çıkıyorsun ve gelir kısa vadede düşer. Ama müşteri neyi alacağını hemen anlar; ekipler de az sayıda ürüne odaklanıp her birini daha iyi yapar." },
+        { k: "B", t: "Daha ucuz modellerle yeni pazarlara gir; satış adedini artırarak açığı kapat.", s: 35, tag: "kumar",
+          r: "Adet bir süre artabilir ama marj daralır ve katalog daha da kalabalıklaşır. Rakipler bu fiyat yarışında zaten daha güçlü." },
+        { k: "C", t: "Ürünlere dokunma; giderleri kıs, yeni projeleri durdur ve pazarın toparlanmasını bekle.", s: 25, tag: "kasa",
+          r: "Kasa bir süre rahatlar. Ama müşteri hâlâ neyi alacağını bilmiyor; sorun pazarda değil, katalogda." },
+        { k: "D", t: "Tüm modelleri koru; bayilere ek indirim ve destek vererek mevcut müşterileri tut.", s: 40, tag: "kalkan",
+          r: "Bayiler rahatlar ve bazı müşteriler kalır. Ama indirim marjı daraltır; onlarca model aynı kaynakları paylaşmaya devam eder." }
+      ],
+      real: {
+        who: "Elliot Dravecki",
+        role: "Pellastra’nın CEO’su",
+        k: "A",
+        text: [
+          "Dravecki göreve döndükten kısa süre sonra bir toplantıda tahtaya dört kutuluk bir tablo çizdi: bir eksende ev ve iş, diğerinde masaüstü ve dizüstü. Bu kutulara girmeyen modellerin çoğu bırakıldı.",
+          "Ekipler dört ürüne odaklandı. Renkli kasalı yeni bir masaüstü bilgisayar dikkat çekti; stoklar azaltıldı, satışın bir kısmı şirketin kendi internet mağazasına taşındı.",
+          "Birkaç yıl içinde şirket yeniden kâra geçti. Daha az ürün, müşteriye daha net bir seçim sundu."
+        ]
+      }
+    },
+    {
+      area: "Fiyatlama",
+      place: ["ABD", " · 2000’lerin sonu"],
+      company: "Sundrell Airways",
+      title: "Bavul ücretsiz kalsın mı?",
+      body: [
+        "Sundrell, düşük fiyatlı ve samimi hizmetiyle tanınan bir havayolu. Yakıt fiyatları yükselince rakiplerin hemen hepsi teslim edilen bavul için ayrı ücret almaya başladı; ilk bavul yaklaşık 15 dolar, ikincisi biraz daha fazla.",
+        "Finans ekibi aynı ücreti getirmenin şirkete yılda birkaç yüz milyon dolar ek gelir sağlayacağını hesaplıyor. Pazarlama ekibi ise farklı düşünüyor: yolcuların çoğu bu ücretlerden şikâyetçi.",
+        "Sundrell’in CEO’susun; ekibin masaya birkaç seçenek getirdi."
+      ],
+      stats: [["Rakiplerde ilk bavul", "~15 dolar"], ["Olası ek gelir", "Yılda birkaç yüz milyon dolar"], ["Sundrell’de bavul", "2 bavul ücretsiz"]],
+      ask: "Sundrell’in CEO’susun. Ne yaparsın?",
+      opts: [
+        { k: "A", t: "Rakipler gibi bavul ücreti al; ek geliri maliyetleri karşılamakta kullan.", s: 30, tag: "kasa",
+          r: "Kasa hemen rahatlar. Ama Sundrell rakiplerinden farksız hâle gelir; yolcu bir sonraki biletini yalnızca fiyata bakarak seçer." },
+        { k: "B", t: "Bavul ücretsiz kalsın; bunu ‘bavullar bizde ücretsiz’ diyen büyük bir kampanyayla duyur.", s: 90, tag: "kalkan",
+          r: "Ek gelirden vazgeçiyorsun ve maliyetler artarken bu kolay bir karar değil. Ama yolcu gizli ücretlerden bıkmış durumda; tek ücretsiz şirket olmak yeni yolcular getirir." },
+        { k: "C", t: "Bavul ücretini kaldırmakla kalma; bilet fiyatlarını da indirerek pazar payı kapmaya çalış.", s: 35, tag: "kumar",
+          r: "Bir süre uçaklar dolar ama her bilette daha az kazanırsın. Rakipler fiyatı eşlerse elinde yalnızca daha düşük bir marj kalır." },
+        { k: "D", t: "Az kullanılan hatları kapat; filoyu küçültüp yalnızca en kârlı rotalarda uç.", s: 35, tag: "cerrah",
+          r: "Masraf düşer ama ağ küçülür. Yolcu uçmak istediği yerde Sundrell’i bulamazsa başka bir şirketi seçer." }
+      ],
+      real: {
+        who: "Gavin Ostrowe",
+        role: "Sundrell’in CEO’su",
+        k: "B",
+        text: [
+          "Ostrowe bavul ücretini reddetti ve konuyu bir reklam fikrine dönüştürdü. Kampanya, Sundrell’de iki bavulun ücretsiz olduğunu açık ve esprili bir dille anlattı.",
+          "Ardından gelen yıllarda şirket, kampanyanın yılda yaklaşık bir milyar dolarlık ek gelir getirdiğini hesapladı; bu, bavul ücretinden beklenen gelirin birkaç katıydı. Pazar payı arttı.",
+          "Sundrell, bavul ücreti almayan büyük havayolu olarak bilinir oldu. Rakiplerin aldığı bir ücreti almamak, şirketin en akılda kalan vaadine dönüştü."
+        ]
+      }
+    },
+    {
+      area: "Marka",
+      place: ["ABD", " · 2000’lerin sonu"],
+      company: "Morravel Coffee",
+      title: "Bir öğleden sonra kapalıyız",
+      body: [
+        "Morravel ülkenin en büyük kahve zinciri; birkaç bin mağazası var. Son yıllarda çok hızlı büyüdü ve bu sırada bir şeyler kayboldu: içecekler mağazadan mağazaya farklı çıkıyor, müşteriler kahvenin eskisi kadar iyi olmadığını söylüyor.",
+        "Ziyaret sayısı ilk kez düşüşe geçti, hisse bir yılda yarıdan fazla değer kaybetti. Daha ucuz kahve sunan zincirler de müşteri çekmeye başladı.",
+        "Kurucu olarak CEO koltuğuna geri döndün. Morravel’in CEO’susun; ekibin masaya birkaç seçenek getirdi."
+      ],
+      stats: [["Mağaza", "Birkaç bin"], ["Ziyaret", "İlk kez düşüşte"], ["Hisse", "Bir yılda yarıdan fazla düştü"]],
+      ask: "Morravel’in CEO’susun. Ne yaparsın?",
+      opts: [
+        { k: "A", t: "Fiyatları indir ve ucuz kahve zincirleriyle doğrudan rekabet et.", s: 30, tag: "kalkan",
+          r: "Bir miktar müşteri geri gelir ama marj daralır. Morravel’i farklı kılan şey fiyat değil deneyimdi; ucuzlukta rakipler daha güçlü." },
+        { k: "B", t: "Tüm mağazaları aynı gün bir öğleden sonra kapat; çalışanlara kahve hazırlamayı baştan anlat.", s: 90, tag: "kumar",
+          r: "Riskli: bir öğleden sonranın satışını kaybediyorsun ve basın kapalı kapıları zayıflık olarak yazabilir. Ama sorunun kahvede olduğunu herkesin önünde kabul edersin; çalışanlara da neyin önemli olduğunu açıkça söylersin." },
+        { k: "C", t: "Yeni mağaza açılışlarını durdur ve masrafları kıs; toparlanmayı bekle.", s: 35, tag: "kasa",
+          r: "Kasa rahatlar ama müşterinin şikâyeti yerinde durur. Daha az mağaza açmak, mevcut mağazalardaki kahveyi iyileştirmez." },
+        { k: "D", t: "Kâr etmeyen birkaç yüz mağazayı kapat; kalanlarda menüyü sadeleştir.", s: 45, tag: "cerrah",
+          r: "Masraf düşer ve menü netleşir. Ama yalnızca küçülmek, müşteriye kahvenin yeniden iyi olduğunu anlatmaya yetmez." }
+      ],
+      real: {
+        who: "Theodore Quillane",
+        role: "Morravel’in kurucusu ve CEO’su",
+        k: "B",
+        text: [
+          "Quillane bir akşamüstü ülkedeki tüm mağazaları birkaç saatliğine kapattı. Kapılara kısa bir not asıldı; içeride çalışanlar kahve hazırlamayı baştan öğrendi.",
+          "O öğleden sonranın satışı kaybedildi ve bazı yorumcular kararı eleştirdi. Ardından birkaç yüz verimsiz mağaza kapatıldı, menü sadeleşti ve mağazalara yeni kahve makineleri geldi.",
+          "Birkaç yıl içinde ziyaretler yeniden arttı; hisse dip seviyesinden kabaca beş katına çıktı. Kapalı geçen birkaç saat, şirketin neye önem verdiğini herkese gösterdi."
+        ]
+      }
+    }
+  ];
+
   // ---------- sayılar ----------
   // date: sayının açıldığı gün (Türkiye saati); ileri tarihli sayılar o gün kendiliğinden açılır
   var ISSUES = [
@@ -1274,7 +1376,8 @@
     { no: "008", date: "2026-11-23", cases: S008 },
     { no: "009", date: "2026-11-30", cases: S009 },
     { no: "010", date: "2026-12-07", cases: S010 },
-    { no: "011", date: "2026-12-14", cases: S011 }
+    { no: "011", date: "2026-12-14", cases: S011 },
+    { no: "012", date: "2026-12-21", cases: S012 }
   ];
   function todayTR() {
     try {
