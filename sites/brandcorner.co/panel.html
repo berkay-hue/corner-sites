@@ -74,7 +74,7 @@ footer.bot{border-top:1px solid var(--line);background:var(--bg);color:var(--mut
 .f input[type=checkbox]{width:16px;height:16px;margin:0;accent-color:var(--accent)}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
 .prow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0 12px}
-.filter{display:flex;flex-wrap:wrap;align-items:flex-end;gap:12px;margin:0 0 20px}.filter>div{flex:1 1 180px}.filter input,.f.filter select{margin:0}
+.filter{display:flex;flex-wrap:wrap;align-items:flex-end;gap:12px;margin:0 0 20px}.filter>div{flex:1 1 180px}.f.filter input:not([type=checkbox]),.f.filter select{margin:0}
 .sub{margin:14px 0 0;padding:16px 0 0;border-top:1px solid var(--line)}
 .inl{display:flex;flex-wrap:wrap;gap:8px}.f .inl input{flex:1 1 220px;width:auto;margin:0}
 .msg{color:#b91c1c;font-size:14px;margin:12px 0 0}.msg:empty{display:none}.ok{color:#166534;font-size:14px;margin:12px 0 0}.ok:empty{display:none}
@@ -87,7 +87,7 @@ footer.bot{border-top:1px solid var(--line);background:var(--bg);color:var(--mut
 </style>
 </head>
 <body>
-<header class="top"><div class="wrap"><a href="/" aria-label="Brand Corner"><img src="/Logo.png" alt="Brand Corner" height="34" style="height:34px;width:auto"></a>
+<header class="top"><div class="wrap"><a href="/" aria-label="Brand Corner"><img src="/logo-wide.png" alt="Brand Corner" width="102" height="34" style="height:34px;width:auto"></a>
 <div class="who"><span class="me"><b id="who"></b><span id="role" class="role"></span></span><button type="button" id="lang" class="lnk"></button><button type="button" id="out" class="ghost">Çıkış yap</button></div></div></header>
 
 <main class="wrap shell">
