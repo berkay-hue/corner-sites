@@ -83,12 +83,12 @@ const RULES = {
   },
   "brandcorner.co": {
     origin: "https://www.brandcorner.co",
-    // v0 şablonu her sayfaya aynı başlık/açıklamayı veriyor. Sayfa başına [başlık ≤60, açıklama ≤160, breadcrumb adı], sitedeki metinden
+    // v0 şablonu her sayfaya aynı başlık/açıklamayı veriyor. Sayfa başına [başlık ≤60, açıklama ≤155, breadcrumb adı], sitedeki metinden
     META: {
       "/": ["Brand Corner - Influencer Marketing Platform", "Connect brands with the right influencers. An all-in-one influencer marketing platform to manage campaigns, discover talent, and track performance."],
-      "/features": ["Influencer Marketing Features | Brand Corner", "Discovery and matching, campaign management, analytics and reporting, messaging and payments, and integrations: everything you need to run influencer campaigns.", "Features"],
+      "/features": ["Influencer Marketing Features | Brand Corner", "Discovery and matching, campaign management, analytics, messaging and payments, and integrations: everything you need to run influencer campaigns.", "Features"],
       "/pricing": ["Pricing and Plans | Brand Corner", "Compare Brand Corner's Starter, Professional and Enterprise plans side by side, with a feature comparison and answers to frequently asked questions.", "Pricing"],
-      "/solutions/brands": ["Influencer Marketing for Brands | Brand Corner", "Discover, connect, and collaborate with influencers who align with your brand values: advanced search, smart filtering, messaging and performance analytics.", "For Brands"],
+      "/solutions/brands": ["Influencer Marketing for Brands | Brand Corner", "Discover, connect, and collaborate with influencers who align with your brand values: advanced search, smart filtering, messaging and analytics.", "For Brands"],
       "/solutions/influencers": ["For Influencers: Get Discovered by Brands | Brand Corner", "Get discovered by brands, receive quality offers, and manage collaborations, contracts and payments in one place, with analytics to help you grow.", "For Influencers"],
       "/solutions/agencies": ["Influencer Agency Management Tools | Brand Corner", "Manage your talent roster, orchestrate client campaigns, and automate reporting and workflows with agency-grade tools and a dedicated client portal.", "For Agencies"],
       "/about": ["About Brand Corner", "Brand Corner is an influencer marketing platform connecting brands, influencers, and agencies worldwide. Built in Istanbul as part of Corner Group.", "About"],
