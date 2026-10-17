@@ -360,7 +360,7 @@
       stats: [["Kampanya eşiği", "~100 £ ve üstü alışveriş"], ["Hediye", "İki kişilik uçak bileti"], ["Maliyet tahmini", "Satışın üstünde, artıyor"]],
       ask: "Söz verilen biletler için ne yaparsın?",
       opts: [
-        { k: "A", t: "Bilet bekleyenlere uçuş yerine değeri yüksek bir indirim çeki öner; çoğunun kabul edeceğine güven, kuyruk da maliyet de birden düşsün.", s: 30, tag: "kumar",
+        { k: "A", t: "Bilet bekleyenlere uçuş yerine değeri yüksek bir indirim çeki öner; çoğunun kabul edeceğine bahse gir: kabul edenler kuyruktan çıksın, maliyet de bir anda düşsün.", s: 30, tag: "kumar",
           r: "Bazı müşteriler kabul eder. Ama çoğu süpürgeyi zaten bilet için aldı; çeki sözden dönmek olarak okur ve basındaki konu büyümeye devam eder." },
         { k: "B", t: "Geçerli her başvuruyu karşıla, maliyeti ana şirket üstlensin; başvuruları hızlandırmak için ek ekip kur.", s: 55, tag: "kalkan",
           r: "Doğru niyet ve çok pahalı bir söz: ödeyeceğin bedel kampanyanın getirdiği satışın üstünde. Ama başvuruları gerçekten işleyemezsen müşteri sözü değil gecikmeyi hatırlar." },
@@ -726,7 +726,7 @@
       title: "Raftaki kutu",
       body: [
         "Varnley masaüstü ve dizüstü bilgisayar yapan bir şirket. Ürünleri tasarımıyla seviliyor ama büyük elektronik zincirlerinin rafında, onlarca benzer kutunun arasında duruyor. Mağaza çalışanları müşteriyi çoğu zaman daha çok sattıkları rakip bilgisayarlara yönlendiriyor.",
-        "Pazar payı yüzde 3 ile 5 arasında. Şirket, ürünlerinin dokunup denenince anlaşıldığını düşünüyor; oysa rafta kutudan başka bir şey görünmüyor. Yönetimde bir grup, mağazalardan tümüyle çekilip yalnızca internetten satmayı öneriyor.",
+        "Pazar payı yüzde 3 ile 5 arasında. Şirket, ürünlerinin ancak dokunulup denenince anlaşıldığını düşünüyor; oysa rafta kutudan başka bir şey görünmüyor. Yönetimde bir grup, mağazalardan tümüyle çekilip yalnızca internetten satmayı öneriyor.",
         "Varnley’in CEO’susun; masada birkaç seçenek var."
       ],
       stats: [["Pazar payı", "%3–5"], ["Satış yolu", "Elektronik zincirleri"], ["Rafta görünürlük", "Düşük"]],
@@ -734,54 +734,54 @@
       opts: [
         { k: "A", t: "Zincirlerin içinde Varnley köşeleri kur; oraya kendi eğittiğin satış danışmanlarını yerleştir.", s: 40, tag: "kalkan",
           r: "Görünürlük artar ama köşe yine zincirin düzeninde kalır; yerleşim, ışık ve kasadaki deneyim sana ait değil. Danışman maliyeti de her mağazada ayrı ödenir." },
-        { k: "B", t: "Kendi mağazalarını aç: önce bir depoda tam boy bir deneme mağazası kur, sonra iki mağazayla kalabalık alışveriş caddelerinde başla.", s: 85, tag: "kumar",
+        { k: "B", t: "Kendi mağazalarını aç: önce bir depoda tam boy bir deneme mağazası kur, sonra iki mağazayla kalabalık alışveriş merkezlerinde başla.", s: 85, tag: "kumar",
           r: "Pahalı ve geri dönüşü zor bir adım. Ama müşterinin ürünü nasıl gördüğünü, denediğini ve satın aldığını baştan sona sen tasarlarsın." },
         { k: "C", t: "Mağazalardan çekil; masrafı kıs, yalnızca internetten ve telefonla sat.", s: 30, tag: "cerrah",
           r: "Masraf düşer ama ürünü görmeden alan müşteri az. Yeni müşteri bulmak zorlaşır ve pay daha da daralır." },
-        { k: "D", t: "Bugünkü düzeni koru; parayı mağazaya değil ürüne harca, yeni ürünler kendini anlatsın.", s: 35, tag: "kasa",
-          r: "Nakit kasada kalır. Ama ürün ne kadar iyi olursa olsun rafta aynı görünüyor; anlatacak biri olmadan fark görünmez." }
+        { k: "D", t: "Bugünkü düzeni koru; mağazaya büyük para ayırma, yeni ürünler kendini anlatsın.", s: 35, tag: "kasa",
+          r: "Büyük bir mağaza masrafına girmezsin. Ama ürün ne kadar iyi olursa olsun rafta öteki kutulardan farksız durur; anlatacak biri olmadan fark anlaşılmaz." }
       ],
       real: {
         who: "Elliot Branscombe",
         role: "Varnley’in CEO’su",
         k: "B",
         text: [
-          "Branscombe perakendeden deneyimli bir yönetici getirdi. Ekip bir yıla yakın, şirketin yakınındaki bir depoda tam boy bir deneme mağazası kurdu; mağaza bir kez baştan düzenlendi ve ürünler türüne göre değil, müşterinin yapmak istediği işe göre dizildi: müzik, fotoğraf, film.",
+          "Branscombe perakendeden deneyimli bir yönetici getirdi. Ekip yaklaşık bir yıl boyunca, şirket merkezinin hemen yanındaki bir depoda tam boy bir deneme mağazası kurdu; mağaza bir kez baştan düzenlendi ve ürünler türüne göre değil, müşterinin yapmak istediği işe göre dizildi: müzik, fotoğraf, film.",
           "İlk iki mağaza bir bahar ayında açıldı. Basındaki yorumcuların çoğu fikre şüpheyle baktı; birkaç yıl içinde mağazaların kapanacağını yazanlar bile oldu.",
-          "Mağazalar yaklaşık üç yılda yıllık bir milyar dolar satışı geçti; bu, o döneme göre görülmemiş bir hızdı. İçerideki danışma masası, satın almadan önceki her soruya yer açtı ve on yıl içinde mağaza sayısı 300’ü aştı. Vaka, ürünü anlatan yeri kendin kurmanın değerini gösteriyor."
+          "Mağazalar yaklaşık üç yılda yıllık bir milyar dolar satışı geçti; bu, o döneme göre görülmemiş bir hızdı. İçerideki danışma masası, müşterinin satın almadan önce aklına takılan her şeyi sorabildiği bir köşe oldu ve on yıl içinde mağaza sayısı 300’ü aştı. Vaka, ürünü anlatan yeri kendin kurmanın değerini gösteriyor."
         ]
       }
     },
     {
       area: "Yeni pazar",
       place: ["İsviçre", " · 1980’lerin sonu"],
-      company: "Holmstedt · Caffira",
+      company: "Holmstedt · Ondriva",
       title: "Kapsül kimin için?",
       body: [
-        "Holmstedt büyük bir gıda şirketi. Birkaç yıl önce Caffira adlı bir kapsül kahve sistemi çıkardı: makineye tek porsiyonluk bir kapsül takılıyor, düğmeye basınca bir fincan kahve hazır. Ürün ilk olarak ofislere ve restoranlara satıldı.",
+        "Holmstedt büyük bir gıda şirketi. Birkaç yıl önce Ondriva adlı bir kapsül kahve sistemi çıkardı: makineye tek porsiyonluk bir kapsül takılıyor, düğmeye basınca bir fincan kahve hazır. Ürün ilk olarak ofislere ve restoranlara satıldı.",
         "Sonuç beklenenin altında. Restoranlar kendi büyük makinelerini bırakmak istemiyor, ofisler fiyatı yüksek buluyor; satışlar hedefin çok gerisinde ve şirketin içinde birimin kapatılmasını önerenler var. Öte yandan küçük bir ankette, sistemi evde deneyen ailelerin çoğu memnun kalmış.",
-        "Caffira’nın başına yeni geldin; yönetim senden bir plan bekliyor."
+        "Ondriva’nın başına yeni geldin; yönetim senden bir plan bekliyor."
       ],
       stats: [["Satışlar", "Hedefin çok altında"], ["İlk müşteri", "Ofis ve restoran"], ["Evde deneyenler", "Çoğu memnun"]],
-      ask: "Caffira’nın başındasın. Ne yaparsın?",
+      ask: "Ondriva’nın başındasın. Ne yaparsın?",
       opts: [
         { k: "A", t: "Birimi kapat; makine ve kapsül yatırımını durdur, parayı ana kahve işine geri koy.", s: 20, tag: "kasa",
           r: "Kayıp burada durur ve ana iş rahatlar. Ama evde deneyenlerin verdiği işaret masada kalır; fikri başka bir şirket geliştirebilir." },
         { k: "B", t: "Kapsülleri süpermarket raflarına koy; her mağazada satılsın, reklamı da büyük yap.", s: 40, tag: "kumar",
           r: "Bir anda çok yere ulaşırsın ama kapsül rafta sıradan bir kahve paketine dönüşür; fiyat karşılaştırması başlar ve ürünün özel hissi kaybolur." },
-        { k: "C", t: "Ofisleri bırak, evlere dön: makineleri tanınmış ev aleti markalarına ürettir ve büyük mağazalarda sat; kapsülü yalnızca üyelerin sipariş verebildiği bir kulüpten gönder.", s: 90, tag: "cerrah",
+        { k: "C", t: "Ofisleri bırak, evlere yönel: makineyi ev aleti markaları yapsın, kapsülü yalnızca üyelere bir kulüpten gönder.", s: 90, tag: "cerrah",
           r: "Bir pazarı bırakıp tümüyle yenisine geçersin; ilk yıllar yavaş ilerler. Ama makineyi başkaları yapar ve satar, sen kapsüle ve müşteriyle ilişkiye odaklanırsın; her sipariş kimin ne içtiğini de gösterir." },
         { k: "D", t: "Ofislerde kal ama daha küçük ve daha ucuz bir makine çıkar; sözleşmeleri yıllık yap.", s: 35, tag: "kalkan",
           r: "Bugünkü müşteriyi korursun. Ama sorun yalnızca fiyat değildi; ofisler ve restoranlar bu sistemi pek istemiyor, daha ucuz makine bunu değiştirmez." }
       ],
       real: {
         who: "Henri Vauclair",
-        role: "Caffira’nın CEO’su",
+        role: "Ondriva’nın CEO’su",
         k: "C",
         text: [
           "Vauclair odağı evlere çevirdi. Makineleri tanınmış ev aleti üreticileri yaptı ve büyük mağazalarda sattı; kapsüller ise yalnızca üyelerin telefonla ya da postayla sipariş verdiği bir kulüp üzerinden gönderildi.",
           "İlk yıllar yavaş geçti ama kulüp her yıl büyüdü. Kulüp, şirkete hangi müşterinin hangi kahveyi sevdiğini gösterdi; yeni tatlar bu bilgiyle seçildi. Yıllar sonra ilk butik mağaza açıldı.",
-          "Sonraki yıllarda Caffira’nın yıllık geliri milyarlarca dolara ulaştı. Değişen ürün değildi; değişen, ürünün kime ve nasıl satıldığıydı."
+          "Sonraki yıllarda Ondriva’nın yıllık geliri milyarlarca dolara ulaştı. Değişen ürün değildi; değişen, ürünün kime ve nasıl satıldığıydı."
         ]
       }
     },
@@ -800,11 +800,11 @@
       opts: [
         { k: "A", t: "Eski ambalaja hızla dön; müşterileri dinlediğini sade bir dille duyur.", s: 85, tag: "cerrah",
           r: "Pahalı bir tasarımı bırakmak kolay değil; ajans da ekip de bunu bir hata kabulü gibi görebilir. Ama müşterinin aradığı kutu geri gelir ve konuşma kısa sürede kapanır." },
-        { k: "B", t: "Tasarımı koru; reklamla yeni kutuyu tanıt, müşteriye alışması için zaman tanı.", s: 30, tag: "kasa",
+        { k: "B", t: "Tasarımı koru; büyük bir reklam kampanyasıyla yeni kutuyu tanıt, müşteri alışsın.", s: 30, tag: "kumar",
           r: "Yatırım boşa gitmez ve marka kararlı görünür. Ama müşteri markayı rafta bulamıyorsa, reklam onu mağazada yönlendiremez; kayıp her hafta sürer." },
         { k: "C", t: "Yeni kutuyu koru ama pipetli portakalı ve eski logoyu üstüne geri ekle.", s: 50, tag: "kalkan",
           r: "Tanıdık işaret geri gelir ama ortaya iki tasarımın karışımı çıkar. Yeniden basım ve rafların değişmesi de aylar alır." },
-        { k: "D", t: "Yeni kutuyla birlikte geçici bir indirim başlat; satışlar dönene kadar fiyatı düşür.", s: 30, tag: "kumar",
+        { k: "D", t: "Yeni kutuyla birlikte geçici bir indirim başlat; satışlar dönene kadar fiyatı düşür.", s: 30, tag: "kasa",
           r: "Kısa sürede hacmi toplar ama marjı düşürür; müşteri ucuzluğa alışır, ambalaj sorunu da yerinde kalır." }
       ],
       real: {
@@ -813,8 +813,8 @@
         k: "A",
         text: [
           "Ashcroft iki ay dolmadan eski ambalaja dönüleceğini duyurdu. Şirket tasarımı kötülemedi; müşterilerin sesini duyduğunu sade bir dille anlattı.",
-          "Pipetli portakal birkaç hafta içinde raflara döndü. Sonradan açıklanan rakamlara göre satışlar iki ayda yaklaşık yüzde 20 düşmüştü ve kısa dönemde kaybedilen satış yaklaşık 30 milyon doları buldu; satışlar zamanla toparlandı.",
-          "Vaka, ambalajın yalnızca bir süs değil, müşterinin markayı rafta bulma yolu olduğunu ve hızlı geri dönüşün kaybı sınırladığını gösteriyor."
+          "Pipetli portakal birkaç hafta içinde raflara döndü. Bu arada satışlar iki ayda yaklaşık yüzde 20 düşmüş, kısa dönemdeki kayıp da yaklaşık 30 milyon doları bulmuştu; marka zamanla eski satış düzeyine yeniden ulaştı.",
+          "Ambalaj yalnızca bir süs değil; müşterinin markayı rafta bulma yolu. Hızlı geri dönüş de kaybı sınırladı."
         ]
       }
     }
@@ -828,7 +828,7 @@
       title: "Asıl ürün hangisi?",
       body: [
         "Tinsmere küçük bir oyun şirketi. Birkaç yıldır tarayıcıda oynanan, renkli ve sakin bir çevrimiçi oyun geliştiriyor; yatırımcılardan yaklaşık 17 milyon dolar topladı.",
-        "Oyunu sevenler çok seviyor ama yeni oyuncu gelmiyor; aylık oyuncu sayısı hedefin çok altında. Bu arada ekip, kendi aralarında yazışmak için küçük bir iç araç yaptı. Farklı şehirlerdeki ekip bu araçla hızlı çalışıyor ve onu her gün kullanıyor.",
+        "Oyunu sevenler çok seviyor ama yeni oyuncu gelmiyor; aylık oyuncu sayısı hedefin çok altında. Bu arada ekip, şirket içinde yazışmak için küçük bir araç yaptı. Farklı şehirlerdeki herkes bu araçla kolayca anlaşıyor ve onu her gün kullanıyor.",
         "Kasada bir süre daha yetecek para var. Tinsmere’in kurucusu ve CEO’susun; ne yapacağına karar vermelisin."
       ],
       stats: [["Toplanan yatırım", "~17 milyon $"], ["Oyuncu sayısı", "Hedefin altında"], ["İç araç", "Ekip her gün kullanıyor"]],
@@ -836,7 +836,7 @@
       opts: [
         { k: "A", t: "Oyuna devam et; pazarlama bütçesini artır ve bir mobil sürüm çıkar.", s: 25, tag: "kumar",
           r: "Oyun bu ilgiyi hak ediyor olabilir. Ama yeni oyuncu bulma sorunu yıllardır sürüyor; bütçe biter ve ekip aynı soruyla baş başa kalır." },
-        { k: "B", t: "Oyunu sürdür; aracı yan proje olarak dene, sonuç görürsen ona kaydır.", s: 45, tag: "kalkan",
+        { k: "B", t: "Oyunu sürdür; aracı yan proje olarak dene, sonuç görürsen odağı ona kaydır.", s: 45, tag: "kalkan",
           r: "İki işi birlikte yürütmek parayı ve dikkati ikiye böler. Hiçbiri yeterli ilgiyi görmez; karar bir yıl sonraya ertelenmiş olur." },
         { k: "C", t: "Şirketi kapat; kalan parayı yatırımcılara geri ver.", s: 35, tag: "kasa",
           r: "Dürüst ve temiz bir çıkış. Ama en değerli şeyi, ekibin her gün kullandığı aracı da masada bırakırsın." },
@@ -849,8 +849,8 @@
         k: "D",
         text: [
           "Pemberly oyunun kapanacağını duyurdu. Ayrılan çalışanların yeni iş bulmasına ekipçe destek oldu ve yatırımcılara kalan parayı geri vermeyi önerdi. Yatırımcıların çoğu parayı geri almak yerine yeni bir şey denemesini istedi.",
-          "Küçük bir ekip iç yazışma aracını bir ürüne dönüştürdü. Araç bir yılı biraz aşkın bir süre sonra şirketlere açıldı ve bir yıl dolmadan yaklaşık bir milyar dolar değerlemeye ulaştı.",
-          "Şirket yıllar sonra yaklaşık 27,7 milyar dolara satıldı. Vaka, en değerli ürünün bazen asıl işin yanında, kendi ihtiyacın için yaptığın şey olabileceğini anlatıyor."
+          "Küçük bir ekip iç yazışma aracını bir ürüne dönüştürdü. Araç bir yılı biraz aşkın bir süre sonra şirketlere açıldı; birkaç ay içinde şirketin değeri yaklaşık bir milyar dolara ulaştı.",
+          "Şirket yıllar sonra yaklaşık 28 milyar dolara satıldı. En değerli ürün bazen asıl işin yanında, kendi ihtiyacın için yaptığın şey oluyor."
         ]
       }
     },
@@ -860,11 +860,11 @@
       company: "Wrenmore",
       title: "Kuponsuz mağaza",
       body: [
-        "Wrenmore ülke çapında binden fazla mağazası olan köklü bir alışveriş zinciri. Müşteriler kupona, indirim günlerine ve sürekli kampanyaya alışkın: şirket bir yılda yaklaşık 590 ayrı indirim yapıyor ve ürünlerin çoğu etiket fiyatının çok altında satılıyor.",
-        "Yeni CEO bu düzenin karmaşık ve müşteriye yorucu olduğunu düşünüyor. Planı hazır: kuponları ve indirim günlerini kaldırmak, yerine üç basamaklı sade bir fiyat düzeni getirmek ve mağazaları marka köşeleriyle yenilemek.",
-        "Wrenmore’un CEO’susun; planı ne kadar hızlı ve nasıl uygulayacağına karar vereceksin."
+        "Wrenmore ülke çapında binden fazla mağazası olan köklü bir perakende zinciri. Müşteriler kupona, indirim günlerine ve sürekli kampanyaya alışkın: şirket bir yılda yaklaşık 600 ayrı indirim yapıyor ve ürünlerin çoğu etiket fiyatının çok altında satılıyor.",
+        "Wrenmore’un yeni CEO’susun. Bu düzenin karmaşık ve müşteri için yorucu olduğunu düşünüyorsun; planın hazır: kuponları ve indirim günlerini kaldırmak, yerine üç basamaklı sade bir fiyat düzeni getirmek ve mağazaları marka köşeleriyle yenilemek.",
+        "Şimdi planını ne kadar hızlı ve nasıl uygulayacağına karar vereceksin."
       ],
-      stats: [["Yıllık indirim", "~590"], ["Yıllık satış", "~17,3 milyar $"], ["Mağaza", "1.000’den fazla"]],
+      stats: [["Yıllık indirim", "~600"], ["Yıllık satış", "~17 milyar $"], ["Mağaza", "1.000’den fazla"]],
       ask: "Wrenmore’un CEO’susun. Ne yaparsın?",
       opts: [
         { k: "A", t: "Yeni fiyat düzenini bütün mağazalarda aynı anda başlat; test yapmadan, büyük bir reklamla duyur.", s: 30, tag: "kumar",
@@ -872,35 +872,35 @@
         { k: "B", t: "Önce birkaç bölgede dene; müşteri tepkisini ölç, düzeni buna göre ayarla, sonra bütün mağazalara yay.", s: 85, tag: "kalkan",
           r: "Yavaş görünür ve fikri rakiplere erken gösterirsin. Ama müşterinin kuponsuz alışverişe nasıl baktığını küçük ölçekte öğrenir, gerekirse planı değiştirirsin." },
         { k: "C", t: "Kuponları ve indirim günlerini koru; yalnızca mağazaların görünümünü yenile.", s: 50, tag: "kasa",
-          r: "Satışlar yerinde kalır ve müşteri alıştığı düzeni bulur. Ama marj daralmaya devam eder; sürekli indirime alışmış bir müşteri tabanı olduğu gibi kalır." },
+          r: "Satışlar yerinde kalır ve müşteri alıştığı düzeni bulur. Ama marj daralmaya devam eder; sürekli indirime alışmış müşteri tabanı da değişmez." },
         { k: "D", t: "İndirim sayısını yarıya indir; en çok kullanılan kuponları tut, marka köşelerini adım adım aç.", s: 55, tag: "cerrah",
           r: "Müşteri değişimi hisseder ama uzaklaşmaz; marj biraz toparlanır. Yine de yarım bir düzen, sade fiyat fikrini anlatmayı zorlaştırır." }
       ],
       real: {
-        who: "Ronald Easterby",
+        who: "Graham Tillotson",
         role: "Wrenmore’un CEO’su",
         k: "A",
         text: [
-          "Easterby yeni düzeni test etmeden bütün mağazalarda aynı anda başlattı. Kuponlar ve indirim günleri kalktı; fiyatlar üç basamaklı sade bir düzene geçti.",
-          "Müşteriler indirim yakalamanın keyfini kaybettiklerini hissetti ve mağazaya daha seyrek gelmeye başladı. Bir yıl içinde yıllık satış yaklaşık 17,3 milyar dolardan 13 milyar dolara geriledi.",
-          "Easterby 17 ay sonra görevden ayrıldı ve kuponlar geri geldi. Vaka, alışkanlıkları değiştiren büyük bir fikri önce küçük ölçekte denemenin değerini anlatıyor."
+          "Tillotson yeni düzeni test etmeden bütün mağazalarda aynı anda başlattı. Kuponlar ve indirim günleri kalktı; fiyatlar üç basamaklı sade bir düzene geçti.",
+          "Müşteriler indirim yakalamanın keyfini kaybettiklerini hissetti ve mağazaya daha seyrek gelmeye başladı. Bir yıl içinde yıllık satış yaklaşık 17 milyar dolardan 13 milyar dolara geriledi.",
+          "Tillotson bir buçuk yıl kadar sonra görevden ayrıldı ve kuponlar geri geldi. Alışkanlıkları değiştiren büyük bir fikri önce küçük ölçekte denemek, geri dönüşü kolaylaştırır."
         ]
       }
     },
     {
       area: "Yurt dışı",
       place: ["Almanya", " · 2000’lerin ortası"],
-      company: "Kessington Stores",
+      company: "Brindlemar Stores",
       title: "Uzak pazarda büyük mağaza",
       body: [
-        "Kessington ABD’nin en büyük perakende zinciri. Birkaç yıl önce Almanya’ya girmek için önce 21, sonra 74 mağazalık iki yerel zinciri satın aldı. Mağazaların çoğu eski ve şehir merkezlerinin dışında.",
-        "Almanya’da ucuzcu marketler çok güçlü; fiyatta onları geçmek zor. ABD’den getirilen alışkanlıklar da beklendiği gibi karşılanmadı: kapıda karşılayan görevliler, kasada poşete koyma hizmeti ve sürekli gülümseme kuralı müşterilere de çalışanlara da yabancı geldi. Pazar payı yaklaşık yüzde 2’de kaldı; şirket her yıl yüz milyonlarca dolar kaybediyor.",
-        "Kessington’ın uluslararası biriminin başındasın; yönetim senden bir yol bekliyor."
+        "Brindlemar ABD’nin en büyük perakende zinciri. Birkaç yıl önce Almanya’ya girmek için önce 21, sonra 74 mağazalık iki yerel zinciri satın aldı; zamanla birkaçını kapattı, bugün yaklaşık 85 mağazası var. Mağazaların çoğu eski ve şehir merkezlerinin dışında.",
+        "Almanya’da indirim marketleri çok güçlü; fiyatta onları geçmek zor. ABD’den getirilen alışkanlıklar da tutmadı: kapıda müşteriyi selamlayan görevliler, kasada poşete koyma hizmeti ve sürekli gülümseme kuralı müşterilere de çalışanlara da yabancı geldi. Pazar payı yaklaşık yüzde 2’de kaldı; şirket her yıl yüz milyonlarca dolar kaybediyor.",
+        "Brindlemar’ın uluslararası biriminin başındasın; yönetim senden bir yol bekliyor."
       ],
-      stats: [["Mağaza", "~85"], ["Pazar payı", "~%2"], ["Yıllık sonuç", "Yüz milyonlarca dolar kayıp"]],
-      ask: "Kessington’ın uluslararası biriminin başındasın. Ne yaparsın?",
+      stats: [["Mağaza", "~85"], ["Pazar payı", "~%2"], ["Yıllık sonuç", "Yüz milyonlarca $ kayıp"]],
+      ask: "Brindlemar’ın uluslararası biriminin başındasın. Ne yaparsın?",
       opts: [
-        { k: "A", t: "Bir zincir daha satın al; ölçeği büyüterek fiyatta ucuzcu marketlere yetiş.", s: 25, tag: "kumar",
+        { k: "A", t: "Bir zincir daha satın al; ölçeği büyüterek fiyatta indirim marketlerine yetiş.", s: 25, tag: "kumar",
           r: "Ölçek alım gücünü artırır ama sorun yalnızca büyüklük değil; konumlar, alışkanlıklar ve rekabet aynı kalır. Kayıp da büyüyebilir." },
         { k: "B", t: "Yönetimi tümüyle yerel bir ekibe bırak; ABD alışkanlıklarını kaldır, mağazaları Alman müşteriye göre düzenle.", s: 50, tag: "kalkan",
           r: "Doğru bir adım ama geç kalınmış olabilir; eski konumlar ve fiyattaki fark yerinde kalır. Toparlanma yıllar sürebilir." },
@@ -911,12 +911,12 @@
       ],
       real: {
         who: "Craig Denholm",
-        role: "Kessington’ın uluslararası biriminin başkanı",
+        role: "Brindlemar’ın uluslararası biriminin başkanı",
         k: "C",
         text: [
-          "Denholm, 85 Alman mağazasının yerel bir perakende zincirine satılacağını duyurdu. Kessington Almanya’dan çıktı ve yaklaşık bir milyar dolarlık kaybı tek seferde hesaplarına yazdı.",
+          "Denholm, 85 Alman mağazasının yerel bir perakende zincirine satılacağını duyurdu. Brindlemar Almanya’dan çıktı ve yaklaşık bir milyar dolarlık kaybı tek seferde hesaplarına yazdı.",
           "Satıştan sonra şirket yurt dışında büyümeyi bırakmadı. Sonraki adımlarında yerel ortaklarla ve yerel yöneticilerle daha çok çalışmaya yöneldi.",
-          "Vaka, büyük bir şirketin bile başka bir pazarın alışkanlıklarını kendi düzeniyle değiştiremeyeceğini ve zamanında çıkmanın da bir karar olduğunu anlatıyor."
+          "Büyük bir şirket bile başka bir pazarın alışkanlıklarını kendi düzeniyle değiştiremiyor; zamanında çıkmak da bir karardır."
         ]
       }
     },
@@ -937,19 +937,19 @@
           r: "Hızlı bir büyüme hamlesi. Ama iki markanın satış yolları farklı; dağıtıcılarla uzlaşmadan yapılan değişiklik satışları aksatabilir ve yüksek fiyatın karşılığını almak zorlaşır." },
         { k: "B", t: "Önce dağıtıcılarla görüş, satış yolunu incele; daha düşük bir teklif ver, kabul edilmezse masadan kalk.", s: 85, tag: "cerrah",
           r: "Fırsatı kaçırabilirsin ve markayı bir rakip alabilir. Ama ödeyeceğin fiyat, gerçekten büyütebileceğin işe göre belirlenir." },
-        { k: "C", t: "Satın alma; parayı spor içeceğini yurt dışında büyütmeye harca.", s: 70, tag: "kasa",
+        { k: "C", t: "Teklifi geri çevir; parayı spor içeceğini yurt dışında büyütmeye harca.", s: 70, tag: "kasa",
           r: "Bildiğin işe yatırım yaparsın ve risk düşük kalır. Ama yeni bir kategoriye girme fırsatı da masada kalır." },
         { k: "D", t: "Küçük bir pay al; iki yıl sonra kalanını alma hakkı iste.", s: 55, tag: "kalkan",
           r: "İşi içeriden tanırsın ve büyük kararı ertelersin. Ama satıcı bunu istemeyebilir; kabul etse bile kalan payın fiyatı yükselebilir." }
       ],
       real: {
-        who: "William Saxby",
+        who: "Douglas Merrifield",
         role: "Ashvane’in CEO’su",
         k: "A",
         text: [
-          "Saxby Zestwick’i istenen fiyattan, 1,7 milyar dolara satın aldı. Pek çok analist bu fiyatın markanın değerinin yaklaşık bir milyar dolar üstünde olduğunu düşünüyordu.",
+          "Merrifield Zestwick’i istenen fiyattan, 1,7 milyar dolara satın aldı. Pek çok analist bu fiyatın markanın değerinin yaklaşık bir milyar dolar üstünde olduğunu düşünüyordu.",
           "Ashvane, Zestwick’i süpermarket ağına taşımaya çalıştı ama bağımsız dağıtıcılar küçük dükkânlardaki işlerini bırakmak istemedi. Markayı sevdiren eğlenceli reklamların yerine de daha sıradan kampanyalar geldi ve satışlar düştü.",
-          "Yaklaşık 27 ay sonra Ashvane, Zestwick’i 300 milyon dolara sattı. Vaka, bir markanın değerini onu satan düzenle birlikte düşünmek gerektiğini anlatıyor."
+          "İki yılı biraz aşkın bir süre sonra Ashvane, Zestwick’i 300 milyon dolara sattı. Vaka, bir markanın değerini onu satan düzenle birlikte düşünmek gerektiğini anlatıyor."
         ]
       }
     }
@@ -963,10 +963,10 @@
       title: "Pahalı müşteri",
       body: [
         "Kipfold dosyaları bilgisayarlar arasında kendiliğinden eşitleyen bir bulut depolama hizmeti. Temel paket ücretsiz; daha fazla alan isteyen kullanıcı yılda yaklaşık 99 dolar ödüyor.",
-        "Şirket büyümek için arama reklamlarını denedi ama sonuç hayal kırıklığı oldu: her yeni kullanıcı için 233 ile 388 dolar arasında ödüyor. Oysa ücretli bir kullanıcı yılda yalnızca 99 dolar getiriyor ve kullanıcıların çoğu ücretsiz pakette kalıyor.",
+        "Şirket büyümek için arama reklamlarını denedi ama sonuç hayal kırıklığı oldu: her yeni kullanıcı için 200 ile 400 dolar arasında ödüyor. Oysa ücretli bir kullanıcı yılda yalnızca 99 dolar getiriyor ve kullanıcıların çoğu ücretsiz pakette kalıyor.",
         "Kullanıcılar ürünü seviyor ve arkadaşlarına anlatıyor. Kipfold’un kurucusu ve CEO’susun; büyümeyi nasıl sürdüreceğine karar vermelisin."
       ],
-      stats: [["Kullanıcı başı reklam", "233–388 $"], ["Yıllık ücret", "~99 $"], ["Kullanıcı memnuniyeti", "Yüksek"]],
+      stats: [["Kullanıcı başı reklam", "200–400 $"], ["Yıllık ücret", "~99 $"], ["Kullanıcı memnuniyeti", "Yüksek"]],
       ask: "Kipfold’un kurucususun. Ne yaparsın?",
       opts: [
         { k: "A", t: "Reklamı kes; ürünün içine iki taraflı bir davet ödülü koy: arkadaşını getiren de davetle gelen de ücretsiz ek alan alsın.", s: 90, tag: "cerrah",
@@ -985,7 +985,7 @@
         text: [
           "Kellaway reklamı büyük ölçüde bıraktı ve ürüne iki taraflı bir davet ödülü ekledi: arkadaşını getiren de davetle gelen de ücretsiz ek depolama alanı alıyordu. Davet göndermek birkaç tıklama sürüyordu.",
           "Kayıtlar kalıcı olarak yaklaşık yüzde 60 arttı. Kısa sürede yeni kayıtların önemli bir kısmı davetlerden gelmeye başladı.",
-          "Kullanıcı sayısı bir buçuk yıldan kısa sürede 100 binden 4 milyona çıktı. Vaka, müşteriyi satın almak yerine memnun müşterinin davetine yer açmanın gücünü gösteriyor."
+          "Kullanıcı sayısı bir buçuk yıldan kısa sürede 100 binden 4 milyona çıktı. Vaka, kullanıcıyı reklamla kazanmak yerine memnun kullanıcıların davetiyle büyümenin gücünü gösteriyor."
         ]
       }
     },
@@ -995,15 +995,15 @@
       company: "Ostervale Software",
       title: "Kutu mu, abonelik mi?",
       body: [
-        "Ostervale tasarımcıların ve fotoğrafçıların kullandığı yazılımları yapıyor. Paketi kutuda satıyor: tam paket 1.300 ile 2.600 dolar arasında ve 18–24 ayda bir yeni sürüm çıkıyor.",
+        "Ostervale tasarımcıların ve fotoğrafçıların kullandığı yazılımları yapıyor. Bu yazılımları tek bir paket hâlinde, kutuda satıyor: tam paketin fiyatı 1.300 ile 2.600 dolar arasında; her 18–24 ayda bir yeni sürüm çıkıyor.",
         "Bu düzende gelir sürüm yıllarında yükseliyor, arada düşüyor. Müşterilerin bir kısmı birkaç sürümü atlıyor; izinsiz kopya da yaygın. Şirket bulut tabanlı bir abonelik hazırladı: ayda yaklaşık 50 dolara bütün yazılımlar ve her güncelleme.",
         "Kutulu sürüm hâlâ gelirin büyük kısmını getiriyor. Ostervale’in CEO’susun; geçişin nasıl olacağına karar vereceksin."
       ],
       stats: [["Kutulu paket", "1.300–2.600 $"], ["Abonelik", "~50 $/ay"], ["Yeni sürüm", "18–24 ayda bir"]],
       ask: "Ostervale’in CEO’susun. Ne yaparsın?",
       opts: [
-        { k: "A", t: "Kutuyu ana ürün olarak koru; aboneliği isteyenlere ek bir seçenek olarak sun.", s: 30, tag: "kasa",
-          r: "Bugünkü gelir yerinde kalır. Ama müşterilerin çoğu alıştığı kutuyu seçer; abonelik küçük kalır ve gelirdeki iniş çıkış sürer." },
+        { k: "A", t: "Kutuyu koru, aboneliği şimdilik rafa kaldır; bu yılın gelirini riske atma.", s: 30, tag: "kasa",
+          r: "Bugünkü gelir yerinde kalır. Ama gelirdeki iniş çıkış sürer, izinsiz kopya da azalmaz; bulut tarafındaki hazırlık boşa gider." },
         { k: "B", t: "İki modeli de süresiz sürdür; müşteri hangisini isterse onu seçsin.", s: 45, tag: "kalkan",
           r: "İtiraz az olur. Ama iki ayrı ürün hattı, iki ayrı fiyat ve destek düzeni demek; ekip ikiye bölünür ve geçiş hiç tamamlanmaz." },
         { k: "C", t: "Kutulu paketin fiyatını büyük ölçüde indir; daha çok kişiye satarak izinsiz kopyanın önüne geç.", s: 25, tag: "kumar",
@@ -1017,8 +1017,8 @@
         k: "D",
         text: [
           "Achterberg, kutulu paketin son sürümünün çıktığını ve yeni sürümlerin yalnızca abonelikle geleceğini duyurdu. Kutulu sürümü olanlar onu kullanmaya devam edebiliyordu; onlara ilk yıl için indirimli fiyat sunuldu.",
-          "İtirazlar çok oldu: aboneliğe itiraz eden bir imza kampanyası yaklaşık 50 bin imzaya ulaştı. Geçiş yıllarında yıllık gelir 4,40 milyar dolardan 4,06 milyar dolara geriledi; buna rağmen hisse fiyatı yükseldi, çünkü yatırımcılar düzenli abonelik gelirine güveniyordu.",
-          "Birkaç yıl içinde yıllık gelir yaklaşık 7,3 milyar dolara çıktı. Vaka, kısa vadeli bir düşüşü kabul ederek iş modelini değiştirmenin uzun vadede neler getirebileceğini anlatıyor."
+          "Tepki büyük oldu: aboneliğe karşı başlatılan bir imza kampanyasına yaklaşık 50 bin kişi katıldı. Geçiş yıllarında yıllık gelir 4,4 milyar dolardan yaklaşık 4,1 milyar dolara geriledi; buna rağmen hisse fiyatı yükseldi, çünkü yatırımcılar düzenli abonelik gelirine güveniyordu.",
+          "Birkaç yıl içinde yıllık gelir yaklaşık 7,3 milyar dolara çıktı. Kısa vadeli bir düşüşü göze almak, birkaç yıl sonra kendini fazlasıyla ödedi."
         ]
       }
     },
@@ -1029,7 +1029,7 @@
       title: "Kahvaltı saati",
       body: [
         "Pottridge ülkenin en büyük hamburger zincirlerinden biri. Kahvaltı menüsü çok seviliyor ama sabah 10.30’da bitiyor; müşteriler yıllardır kahvaltının gün boyu sunulmasını istiyor.",
-        "Mutfak buna hazır değil: ızgara alanı sınırlı, yumurta hamburgerden farklı bir ısıda pişiyor ve öğle yoğunluğunda iki menüyü birlikte hazırlamak mutfağı zorlayabilir. Franchise sahipleri endişeli. Bu arada mağaza başı satışlar birkaç yıldır artmıyor.",
+        "Mutfak buna hazır değil: ızgara alanı sınırlı, yumurta hamburgerden farklı bir ısıda pişiyor ve öğle yoğunluğunda iki menüyü birlikte hazırlamak ekibi zorlayabilir. Franchise sahipleri endişeli. Bu arada mağaza başı satışlar birkaç yıldır artmıyor.",
         "Pottridge’in ABD biriminin başındasın; karar senden bekleniyor."
       ],
       stats: [["Kahvaltının bitişi", "10.30"], ["Mağaza başı satış", "Birkaç yıldır yatay"], ["Franchise sahipleri", "Endişeli"]],
@@ -1051,7 +1051,7 @@
         text: [
           "Fenwright gün boyu kahvaltıyı önce bahar aylarında tek bir şehirde denedi. Menü, mutfağı zorlamayacak birkaç ürünle sınırlandı; ızgara düzeni de buna göre ayarlandı.",
           "Test olumlu sonuç verince gün boyu kahvaltı sonbaharda bütün ülkeye yayıldı. Duyuru büyük ilgi gördü.",
-          "O yılın son çeyreğinde mağaza başı satışlar yüzde 5,7 arttı; bu, yaklaşık dört yılın en iyi çeyreğiydi. Vaka, müşterinin uzun süredir istediği bir şeyi, mutfağın taşıyabileceği ölçüde sunmanın değerini gösteriyor."
+          "O yılın son çeyreğinde mağaza başı satışlar yaklaşık yüzde 6 arttı; bu, yaklaşık dört yılın en iyi çeyreğiydi. Müşterinin uzun süredir istediği bir şeyi mutfağın taşıyabileceği ölçüde sunmak, satışa hemen yansıdı."
         ]
       }
     }
@@ -1087,6 +1087,7 @@
   if (qs) RELEASED.forEach(function (x) { if (x.no === qs[1]) CUR = x; });
   // içeriği yayından sonra değişen sayının cevap anahtarı yenilenir; eski cevaplar yeni dosyalara karışmaz.
   // 001: birinci dosya iki kez değişti (v2, sonra v3: Lavenhurst). Bildirim onayı ayrı tutulur, eski "wishceo.s001" kaydından okunmaya devam eder (loadList).
+  // Puan ve seçenek metni aynı kalıp yalnız etiket (tag) ya da anlatım değişirse anahtar yenilenmez; karne tipi kayıtlı cevaplardan yeniden hesaplanır (001: Tumla D, Korvala C etiketleri).
   var KEYV = { "001": "v3" };
   function keyOf(no) { return "wishceo.s" + no + (KEYV[no] || ""); }
   var ISSUE = CUR.no, CASES = CUR.cases, KEY = keyOf(ISSUE);
