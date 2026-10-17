@@ -313,7 +313,7 @@ const RULES = {
         const sfx = ` | ${R.brand}`, head = h1.split(/[:?!]/)[0].trim(), tag = " – Rehber";
         const cut = n => metaDescription(h1, n).replace(/…$/, "").trim();
         const own = !/-2$/.test(page) || html.includes(`<link rel="canonical" href="${url}"`);
-        R.used ||= new Set();
+        R.used ||= new Set(Object.values(R.titles || {})); // elle verilen başlıklar başka sayfaya düşmesin
         const title = R.titles[page] || [h1 + sfx, h1, head + sfx, head, head + tag + sfx, head + tag, cut(60), cut(60 - tag.length) + tag]
           .find(t => t.length <= 60 && (!own || !R.used.has(t))) || cut(60);
         if (own) R.used.add(title);
