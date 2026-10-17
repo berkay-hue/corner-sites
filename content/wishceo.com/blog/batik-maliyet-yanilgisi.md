@@ -79,7 +79,7 @@ Batık maliyeti yakalamanın en iyi yolu, onu hesaptan bilinçli olarak çıkarm
 
 1. Bugün sıfırdan başlasaydık, bu işe bu bütçeyle girer miydik? Cevap hayırsa devam etmek için başka bir gerekçe bulman gerekir. "Başlamıştık" gerekçe değildir.
 2. Bu işi yarın yeni biri devralsa ne yapardı? Geçmişe bağı olmayan birinin gözüyle bak. Dışarıdan gelen bir yöneticinin ilk haftasında soracağı soruları sen de bugün sorabilirsin.
-3. Buradan sonra harcayacağım her lira ve her saat bana ne getirecek? Hesabı geçmişten değil, bugünden başlat.
+3. Buradan sonra harcayacağım her lira ve her saat bana ne getirecek? Hesabı geçmişten değil, bugünden başlat. Aynı parayla ve aynı zamanla başka neler yapabileceğini de yanına yaz; buna [fırsat maliyeti](/blog/firsat-maliyeti-nedir) deniyor.
 4. Durursam gerçekten neyi kaybediyorum? Bazı bedeller gerçektir: tutulamayan bir müşteri sözü, sözleşmeden doğan bir yükümlülük, ekipte biriken bilgi. Bunlar hesaba girer. Harcanmış para girmez, o zaten gitti.
 5. Bu kararı kimin için veriyorum? Şirket için mi, yoksa projenin başındaki kişinin, belki de kendi itibarımın korunması için mi?
 6. Durma noktamı önceden yazdım mı? Bunun en iyi zamanı, proje daha başlamadan önceki gündür. "Şu tarihe kadar şu sonucu göremezsek dururuz" cümlesini baştan yazarsan, ileride duygular değil, kendine verdiğin söz konuşur.

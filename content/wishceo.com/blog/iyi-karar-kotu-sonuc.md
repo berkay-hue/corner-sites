@@ -4,7 +4,7 @@ description: "İyi bir karar kötü bitebilir, kötü bir karar şansla iyi bite
 date: "2026-10-15"
 category: "Karar Verme"
 image: "/og.png"
-imageAlt: "İyi Karar, Kötü Sonuç: Farkı Nasıl Görürsün?"
+imageAlt: "WishCEO kapak kartı “Şirket batıyor. CEO sensin.” — iyi karar ve kötü sonuç yazısı"
 ---
 
 İyi bir karar kötü bitebilir, kötü bir karar da şansla iyi bitebilir; bu yüzden bir kararı sonucuna göre değil, o gün masadaki bilgiyle ne kadar iyi düşünüldüğüne göre puanlamak gerekir. Murat ve Elif aynı yıl, aynı semtte birer kafe açıyor. Murat dükkânı bir akşam yürüyüşünde beğeniyor ve ertesi gün kontratı imzalıyor. Kirayı pazarlık etmiyor, sokaktan ne kadar insan geçtiğine bakmıyor. Elif haftalarca farklı saatlerde sokakları izliyor, kirayı pazarlıkla düşürüyor, kenara yedek bir bütçe ayırıyor.
@@ -62,7 +62,7 @@ Kötü bir sonuçtan sonra iki tuzak bekler. Birincisi, kararı verdiren mantı�
 Sonucu henüz görmediysen ya da gördüysen bile bir kenara koyabiliyorsan, bir karara şu soruları sorabilirsin:
 
 1. O gün ne biliyordun, makul bir çabayla ne öğrenebilirdin?
-2. Masada hangi seçenekler vardı? Yalnızca aklına ilk geleni mi tarttın?
+2. Masada hangi seçenekler vardı? Yalnızca aklına ilk geleni mi tarttın? Seçtiğin yolun gerçek bedeli, vazgeçtiğin en iyi seçenektir; buna [fırsat maliyeti](/blog/firsat-maliyeti-nedir) deniyor.
 3. En kötü ihtimali düşündün mü? O gerçekleşse altından kalkabilir miydin?
 4. Bu seçeneği neden seçtiğini tek cümleyle söyleyebilir misin?
 5. Yanlış çıkarsa geri dönmek ya da düzeltmek için bir kapı bıraktın mı?
