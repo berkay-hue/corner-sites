@@ -34,7 +34,7 @@ Yeşil ışıklara bakmadan önce kırmızı ışıklar konusunda dürüst olun.
 - **Fiyatlandırmanız her anlaşmada değişiyor.** Bir satış temsilcisinin her seferinde sıfırdan pazarlık değil, bir fiyat listesine ve net indirim kurallarına ihtiyacı vardır.
 - **Ürün her satıştan sonra ciddi biçimde değişiyor.** Kapanan her anlaşma özel geliştirme gerektiriyorsa hâlâ satış değil, keşif yapıyorsunuz demektir.
 - **Çevreniz dışından 10'dan az ödeme yapan müşteriniz var.** Bu sihirli bir sayı değil. Örüntüleri fark edebilmek için pratik bir alt sınır.
-- **Bu işe alım için ayrılmış altı aylık nakit pistiniz yok.** Yeni bir satış temsilcisinin işe alışmak için zamana ihtiyacı vardır. İşe alımın 60 günde kendini amorti etmesi gerekiyorsa bu baskı her şeyi bozar.
+- **Bu işe alım için ayrılmış altı aylık nakit tamponunuz (runway) yok.** Yeni bir satış temsilcisinin işe alışmak için zamana ihtiyacı vardır. İşe alımın 60 günde kendini amorti etmesi gerekiyorsa bu baskı her şeyi bozar.
 
 Bunların hiçbiri başarısızlık değil. Kurucunun şu anki işinin doğrudan pazardan öğrenmeye devam etmek olduğu anlamına gelir. Alıcıları dikkatle dinlemek her şeyin temelidir. Bu konuyu [B2B'de müşteri geri bildiriminin neden bu kadar güçlü olduğunu](/blog/b2bde-musteri-geri-bildiriminin-gucu) anlattığım yazımda daha ayrıntılı ele aldım.
 
@@ -71,7 +71,7 @@ Bu dokümanı yazmakta zorlanıyorsanız bu da faydalı bir bilgidir. Genellikle
 
 ## İlk Satış İşe Alımınız Kim Olmalı?
 
-Kurucular sık sık önce bir SDR mı, bir account executive mı yoksa bir Satış Direktörü (VP of Sales) mü işe almaları gerektiğini sorar. Genel görüşüm şöyle:
+Kurucular sık sık önce bir SDR mı, bir account executive mi yoksa bir Satış Direktörü (VP of Sales) mü işe almaları gerektiğini sorar. Genel görüşüm şöyle:
 
 ### İlk olarak bir Satış Direktörü işe almayın
 
@@ -79,7 +79,7 @@ Kıdemli bir satış lideri, zaten var olan bir ekibi ölçeklemekte ve yönetme
 
 ### İlk işe alım olarak yalnızca SDR konusunda dikkatli olun
 
-Bir SDR toplantı ayarlar. Kurucu hâlâ her toplantıyı yürütmek ve her anlaşmayı kapatmak zorundaysa darboğazı yalnızca yer değiştirmiş olursunuz. Kapanış kapasiteniz bol ama huninin üst kısmı zayıfsa önce SDR yaklaşımı işe yarayabilir. Bu durum kurucuların sandığından daha az yaygındır.
+Bir SDR toplantı ayarlar. Kurucu hâlâ her toplantıyı yürütmek ve her anlaşmayı kapatmak zorundaysa darboğazın yalnızca yerini değiştirmiş olursunuz. Kapanış kapasiteniz bol ama huninin üst kısmı zayıfsa önce SDR yaklaşımı işe yarayabilir. Bu durum kurucuların sandığından daha az yaygındır.
 
 ### En iyi ilk işe alım genellikle "uçtan uca" çalışan, sıfırdan inşa eden biridir
 
@@ -112,9 +112,9 @@ Hesap yalnızca kusursuz varsayımlarla tutuyorsa bekleyin. Temkinli varsayımla
 
 İyi bir işe alım bile yapı olmadan başarısız olabilir. Sevdiğim basit bir 30/60/90 çerçevesi şöyle:
 
-**1-30. günler: Öğrenme ve gölgeleme**
+**1-30. günler: Öğrenme ve gözlem**
 - Playbook'u okuyun, ürünü kullanın ve mevcut müşterilerden en az üçüyle konuşun.
-- Kurucunun satış görüşmelerinden 10'dan fazlasına katılın.
+- Kurucunun satış görüşmelerinden en az 10'una katılın.
 - Mesajları kurucunun gözden geçirdiği hafif bir potansiyel müşteri arama çalışmasına başlayın.
 
 **31-60. günler: Destekle yürütme**
@@ -129,7 +129,7 @@ Hesap yalnızca kusursuz varsayımlarla tutuyorsa bekleyin. Temkinli varsayımla
 
 Bu dönem boyunca her hafta kısa bir pipeline toplantısı yapın. Koçluk yapmanın, sorunları erken fark etmenin ve tahminlerinizi dürüst tutmanın en iyi yolu budur. Kullandığım formatı [gerçekten işe yarayan haftalık pipeline toplantısı nasıl yapılır](/blog/haftalik-pipeline-toplantisi-rehberi) yazımda paylaştım.
 
-## Dış Kaynak ya da Yapay Zeka Ne Olacak?
+## Dış Kaynak ya da Yapay Zeka Bir Seçenek mi?
 
 Her şirketin ilk adım olarak tam zamanlı bir satış temsilcisine ihtiyacı yoktur. Asıl kısıtınız anlaşma kapatmak değil de huninin üst kısmıysa başka seçenekler de var:
 
@@ -163,7 +163,7 @@ Pratik bir alt sınır olarak, ilk satış temsilcinizi işe almadan önce kişi
 
 ### Bir startup'ın ilk satış işe alımı SDR mı, AE mi yoksa Satış Direktörü mü olmalı?
 
-Erken aşamadaki çoğu B2B şirketi için en iyi ilk satış işe alımı; potansiyel müşteri bulabilen, nitelendirebilen, demo yapabilen ve anlaşmayı kapatabilen, startup DNA'sı taşıyan ve satış döngüsünün tamamını yürüten bir account executive'dir. Bir Satış Direktörü (VP of Sales) zaten var olan bir ekibi ölçeklemekte mükemmeldir, ancak çoğu süreci elle kurmak konusunda hevesli değildir. Yalnızca SDR olan biri sadece toplantı ayarlar; bu yüzden kurucu hâlâ her anlaşmayı kapatmak zorundaysa darboğazı yalnızca yer değiştirmiş olursunuz.
+Erken aşamadaki çoğu B2B şirketi için en iyi ilk satış işe alımı; potansiyel müşteri bulabilen, nitelendirebilen, demo yapabilen ve anlaşmayı kapatabilen, startup DNA'sı taşıyan ve satış döngüsünün tamamını yürüten bir account executive'dir. Bir Satış Direktörü (VP of Sales) zaten var olan bir ekibi ölçeklemekte mükemmeldir, ancak çoğu süreci elle kurmak konusunda hevesli değildir. Yalnızca SDR olan biri sadece toplantı ayarlar; bu yüzden kurucu hâlâ her anlaşmayı kapatmak zorundaysa darboğazın yalnızca yerini değiştirmiş olursunuz.
 
 ### Yeni bir satış temsilcisinin işe alışması ne kadar sürer?
 

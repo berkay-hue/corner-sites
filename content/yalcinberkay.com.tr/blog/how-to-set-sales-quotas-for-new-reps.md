@@ -5,6 +5,7 @@ date: "2026-10-16"
 category: "Sales Leadership"
 image: "https://images.pexels.com/photos/39204827/pexels-photo-39204827.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
 imageAlt: "How to Set Sales Quotas for New Reps (With Examples)"
+alt: "yeni-satis-temsilcisine-kota-nasil-belirlenir"
 ---
 
 The best way to set a sales quota for a new rep is to start from the full quota a fully productive rep can realistically hit, then use a **ramp schedule** that phases in that number over the length of your sales cycle, usually three to six months. In the first weeks, measure leading indicators like activities, meetings and pipeline created instead of revenue. As the rep's own pipeline matures, shift gradually to revenue targets.

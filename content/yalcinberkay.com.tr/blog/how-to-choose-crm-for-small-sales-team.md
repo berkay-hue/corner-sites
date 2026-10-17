@@ -177,7 +177,7 @@ Some mistakes I've observed over the years, and made myself:
 
 **4. The manager not using it.** If you're still running the weekly sales meeting from Excel, your team won't take the CRM seriously. Adoption speeds up the day you start running meetings straight from the CRM screen.
 
-**5. Not recording loss reasons.** Why lost opportunities were lost teaches you far more than the ones you won. Make the "loss reason" field required and keep the options clear: price, timing, competitor, no need, decision-maker changed, and so on. This data also becomes a valuable source of feedback for product and pricing decisions. I covered this topic in a broader frame in [my article on the power of customer feedback in B2B](/blog/the-power-of-customer-feedback-in-b2b).
+**5. Not recording loss reasons.** Understanding why you lost an opportunity teaches you far more than studying the ones you won. Make the "loss reason" field required and keep the options clear: price, timing, competitor, no need, decision-maker changed, and so on. This data also becomes a valuable source of feedback for product and pricing decisions. I covered this topic in a broader frame in [my article on the power of customer feedback in B2B](/blog/the-power-of-customer-feedback-in-b2b).
 
 **6. Waiting for the perfect setup.** Not rolling out the CRM until everything is flawless turns weeks into months. Start with a system that's 80% ready and improve the rest by using it.
 
@@ -220,7 +220,7 @@ The right CRM for a small sales team isn't the one with the most features. It's 
 - If you do outbound, test activity tracking and data integrations separately
 - Manage the first 30 days like a project
 
-A well-set-up CRM can make a small team work as organized as a big one. A badly chosen CRM drains the energy of even the most talented reps. The healthiest path is to make this decision in a structured way, without rushing it but without putting it off forever either.
+A well-set-up CRM can make a small team work as methodically as a big one. A badly chosen CRM drains the energy of even the most talented reps. The healthiest path is to make this decision in a structured way, without rushing it but without putting it off forever either.
 
 If you'd like to exchange ideas on choosing a CRM for your team, setting it up, or structuring your sales operations, you can get in touch with me through [my personal site](/). I'm happy to share my experience.
 
