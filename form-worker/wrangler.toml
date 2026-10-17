@@ -24,3 +24,9 @@ ALLOWED_HOSTS ="saascorner.co,cornergroup.co,socialmediacorner.co,salescorner.co
 [[send_email]]
 name = "MAIL"
 destination_address = "berkay@saascorner.co"
+
+# brandcorner.co şifre sıfırlama e-postaları (src/platform.js): Cloudflare Email Sending, herhangi bir adrese gider.
+# Önce brandcorner.co Email Service > Email Sending'de onaylanmış olmalı (Workers Paid plan).
+[[send_email]]
+name = "EMAIL"
+allowed_sender_addresses = ["noreply@brandcorner.co"]

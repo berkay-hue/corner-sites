@@ -38,13 +38,22 @@ CREATE TABLE IF NOT EXISTS sessions (
 );
 CREATE INDEX IF NOT EXISTS sessions_user ON sessions (user_id);
 
+-- Şifre sıfırlama: tek kullanımlık, 1 saatlik token'ın yalnızca SHA-256 özeti (kullanıcı başına en son istenen geçerli)
+CREATE TABLE IF NOT EXISTS password_resets (
+  token_hash TEXT PRIMARY KEY,
+  user_id INTEGER NOT NULL,
+  created_at TEXT NOT NULL DEFAULT (datetime('now')),
+  expires_at TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS password_resets_user ON password_resets (user_id);
+
 -- Giriş/kayıt denemeleri (hız sınırı); cron 1 günden eskileri siler
 CREATE TABLE IF NOT EXISTS auth_attempts (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   created_at TEXT NOT NULL DEFAULT (datetime('now')),
   ip TEXT,
   email TEXT,
-  kind TEXT NOT NULL,        -- login | register
+  kind TEXT NOT NULL,        -- login | register | forgot | reset
   ok INTEGER NOT NULL
 );
 CREATE INDEX IF NOT EXISTS auth_attempts_ip ON auth_attempts (ip, kind, created_at);

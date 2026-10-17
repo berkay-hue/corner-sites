@@ -1,4 +1,4 @@
-// Brand Corner hesap ve panel istemcisi (giris, login, kayit, register, panel): API adresi, oturum anahtarı ve hata metinleri tek yerde.
+// Brand Corner hesap ve panel istemcisi (giris, login, kayit, register, sifremi-unuttum, forgot-password, sifre-yenile, reset-password, panel): API adresi, oturum anahtarı ve hata metinleri tek yerde.
 // Sözleşme: form-worker/src/platform.js. Her hata {ok:false, error:"<kod>"} döner; kodların metni aşağıdaki M sözlüğündedir.
 (function () {
   // corner-forms Worker'ı; localhost'ta yerel wrangler dev (8799, DEV_ORIGINS http://localhost:8788)
@@ -23,6 +23,9 @@
       exists: "Bu e-posta adresiyle zaten bir hesap var.",
       missing: "E-posta ve şifrenizi girin.",
       invalid: "E-posta veya şifre hatalı.",
+      reset_invalid: "Bu link geçersiz ya da süresi dolmuş. Lütfen yeni bir sıfırlama linki isteyin.",
+      mismatch: "Şifreler aynı değil.",
+      mail: "Şu anda e-posta gönderilemiyor. Lütfen biraz sonra tekrar deneyin ya da info@saascorner.co adresine yazın.",
       forbidden: "Bu işlem hesap türünüz için kullanılamıyor.",
       limit: "Bu işlem için sınıra ulaştınız.",
       title: "Kampanya başlığını girin (en fazla 120 karakter).",
@@ -51,6 +54,9 @@
       exists: "An account with this email already exists.",
       missing: "Enter your email and password.",
       invalid: "Incorrect email or password.",
+      reset_invalid: "This link is invalid or has expired. Please request a new reset link.",
+      mismatch: "Passwords don't match.",
+      mail: "We can't send email right now. Please try again shortly or write to info@saascorner.co.",
       forbidden: "This action isn't available for your account type.",
       limit: "You've reached the limit for this action.",
       title: "Enter a campaign title (up to 120 characters).",
@@ -88,7 +94,7 @@
   // İstek: başarıda yanıt gövdesi, hatada {code, status} taşıyan Error. 401 "auth" oturumu siler; BC.guard açıksa girişe döner.
   function call(method, path, body) {
     var h = {}, t = token(), o = { method: method, headers: h };
-    if (t && !/^auth\/(login|register)$/.test(path)) h.authorization = "Bearer " + t;
+    if (t && !/^auth\/(login|register|forgot|reset)$/.test(path)) h.authorization = "Bearer " + t;
     if (body !== undefined) { h["content-type"] = "application/json"; o.body = JSON.stringify(body); }
     return fetch(API + path, o).then(function (r) {
       return r.json().catch(function () { return {}; }).then(function (d) {
