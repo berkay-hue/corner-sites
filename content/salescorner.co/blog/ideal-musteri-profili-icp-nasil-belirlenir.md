@@ -1,6 +1,6 @@
 ---
 title: "İdeal Müşteri Profili (ICP) Nasıl Belirlenir? B2B Rehberi"
-description: "B2B satışta ideal müşteri profilini (ICP) mevcut müşteri verinizden adım adım nasıl çıkaracağınızı, persona ile farkını ve outbound'da nasıl kullanacağınızı anlatıyoruz."
+description: "İdeal müşteri profilini (ICP) mevcut müşteri verinizden adım adım nasıl çıkaracağınızı, persona ile farkını ve outbound'da kullanımını anlatıyoruz."
 date: "2026-10-17"
 category: "Satış"
 image: "https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"

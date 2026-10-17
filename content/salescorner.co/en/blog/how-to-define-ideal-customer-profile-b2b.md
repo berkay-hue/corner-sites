@@ -1,6 +1,6 @@
 ---
 title: "How to Define an Ideal Customer Profile (ICP) in B2B"
-description: "We explain how to build your B2B ideal customer profile (ICP) step by step from your own customer data, how it differs from a buyer persona and how to use it in outbound."
+description: "How to build your B2B ideal customer profile (ICP) step by step from your customer data, how it differs from a buyer persona and how to use it in outbound."
 date: "2026-10-17"
 category: "Sales"
 image: "https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
