@@ -34,6 +34,9 @@ const RULES = {
       html = html.replace(/<title>[^<]*<\/title>/, "<title>Corner Group | B2B Satış, Pazarlama ve CRM Çözümleri</title>");
       const org = { "@type": "Organization", "@id": R.origin + "/#org", name: R.brand, url: R.origin + "/", logo: R.origin + "/_a/fr/images/6WSE5LNdHL8DI6oGFkxraYy6Dg.png" };
       const ld = { "@context": "https://schema.org", "@graph": [org, { "@type": "WebSite", "@id": R.origin + "/#website", url: R.origin + "/", name: R.brand, publisher: { "@id": org["@id"] }, inLanguage: "tr-TR" }] };
+      // WebPage: ad/açıklama sayfanın title ve meta description'ıyla aynı
+      const name = text(html.match(/<title>([^<]*)<\/title>/)[1]), description = text(html.match(/<meta name="description" content="([^"]*)"/)[1]);
+      ld["@graph"].push({ "@type": "WebPage", "@id": R.origin + "/#webpage", url: R.origin + "/", name, description, isPartOf: { "@id": R.origin + "/#website" }, about: { "@id": org["@id"] }, publisher: { "@id": org["@id"] }, inLanguage: "tr-TR" });
       return html.replace("</head>", ldTag(ld) + "</head>");
     },
   },
