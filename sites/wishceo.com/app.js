@@ -1159,6 +1159,108 @@
     }
   ];
 
+  var S011 = [
+    {
+      area: "Ürün gamı",
+      place: ["ABD", " · 2010’ların ortası"],
+      company: "Corrimont Footwear",
+      title: "Birkaç yüz model, tek bir sabo",
+      body: [
+        "Corrimont, renkli ve hafif köpük sabolarıyla tanınan bir ayakkabı markası. İlk yıllardaki hızlı büyümenin ardından şirket hemen her ayakkabı türüne girdi: bot, spor ayakkabı, sandalet, babet. Bugün katalogda birkaç yüz model, ülke genelinde yaklaşık 500 mağaza var.",
+        "Satışlar birkaç yıldır yerinde sayıyor, kâr ise her yıl biraz daha azalıyor. Müşteri araştırmaları açık: insanlar Corrimont deyince hâlâ klasik saboyu düşünüyor, yeni modellerin çoğunu tanımıyor bile. Mağazaların önemli bir kısmı da para kaybediyor.",
+        "Yönetim kurulu yeni bir yol haritası bekliyor. Corrimont’un CEO’susun; ekibin masaya birkaç seçenek getirdi."
+      ],
+      stats: [["Model sayısı", "Birkaç yüz"], ["Mağaza", "~500"], ["Satışlar", "Yıllardır yerinde sayıyor"]],
+      ask: "Corrimont’un CEO’susun. Ne yaparsın?",
+      opts: [
+        { k: "A", t: "Yeni kategorilere de gir; büyük bir reklam kampanyasıyla Corrimont’u her türden ayakkabı satan bir marka olarak anlat.", s: 35, tag: "kumar",
+          r: "Reklam markayı bir süre gündemde tutar ama müşterinin aklındaki Corrimont değişmez. Katalog daha da kalabalıklaşır; raflarda yer kaplayan modellerin çoğu yine satılmaz." },
+        { k: "B", t: "Modellerin yaklaşık üçte birini ve kâr etmeyen mağazaları kapat; klasik saboya, ona takılan süs aksesuarlarına ve iş birliklerine odaklan.", s: 90, tag: "cerrah",
+          r: "Riskli: birçok kategoriden çıkıyorsun, gelir kısa vadede düşer ve büyüme hikâyesinden vazgeçmiş görünürsün. Ama müşterinin zaten sevdiği ürüne dönersin; stok ve kira yükü de azalır." },
+        { k: "C", t: "Ürün gamına ve mağazalara dokunma; giderleri kıs ve pazarın toparlanmasını bekle.", s: 25, tag: "kasa",
+          r: "Masraflar bir süre kontrol altında kalır. Ama sorun pazarda değil katalogda; müşteri neyi temsil ettiğini bilmediği bir markadan almamaya devam eder." },
+        { k: "D", t: "Hiçbir mağazayı kapatmayacağını açıkla; satışları indirimler ve bir sadakat programıyla artırmaya çalış.", s: 40, tag: "kalkan",
+          r: "Çalışanlar ve mağaza müdürleri rahatlar, sadık müşteriler de indirimi sever. Ama indirim marjı daraltır; para kaybeden mağazalar açık kaldıkça kâr azalmaya devam eder." }
+      ],
+      real: {
+        who: "Harriet Tellingham",
+        role: "Corrimont’un CEO’su",
+        k: "B",
+        text: [
+          "Tellingham ürün gamını yaklaşık üçte bir oranında daralttı ve birkaç yıl içinde yaklaşık 150 mağazayı kapattı. Şirket ağırlığını klasik saboya ve onu tamamlayan birkaç modele verdi.",
+          "Saboya takılan küçük süs aksesuarları ayrı bir ürün hattına dönüştü; müşteriler ayakkabılarını kendi zevklerine göre süslemeye başladı. Tasarımcılar ve başka markalarla sınırlı sayıda iş birlikleri yapıldı, satışların ağırlığı internete ve bayilere kaydı.",
+          "Birkaç yıl içinde gelir kabaca iki katına çıktı; hisse en düşük seviyesinden on kattan fazla yükseldi. Daha az şey yapmak, markanın neyle tanındığını yeniden görünür kıldı."
+        ]
+      }
+    },
+    {
+      area: "Fiyatlama",
+      place: ["ABD", " · 2000’lerin sonu"],
+      company: "Tressimond Wholesale",
+      title: "Bir buçuk dolarlık söz",
+      body: [
+        "Tressimond, yıllık üyelikle alışveriş yapılan büyük depo mağazaları zinciri. Müşterilerin çoğu alışverişten sonra çıkıştaki büfeye uğruyor: sosisli sandviç ve içecekten oluşan menü 1980’lerin ortasından beri 1,50 dolar.",
+        "Aradan geçen yirmi yılda ekmek, et, kira ve maaşlar birkaç kat arttı. Finans ekibi menünün artık para kaybettirdiğini hesaplıyor ve fiyatın 2 dolara çıkarılmasını öneriyor; bir yönetici, elli sentlik farkı kimsenin fark etmeyeceğini düşünüyor.",
+        "Tressimond’un kurucu ortağı ve CEO’susun; ekibin masaya birkaç seçenek getirdi."
+      ],
+      stats: [["Menü fiyatı", "1,50 dolar"], ["Fiyat sabit", "~20 yıldır"], ["Üyelik yenileme", "~%90"]],
+      ask: "Tressimond’un kurucu ortağı ve CEO’susun. Ne yaparsın?",
+      opts: [
+        { k: "A", t: "Fiyatı 2 dolara çıkar; artan maliyetleri müşteriye yansıt.", s: 30, tag: "kasa",
+          r: "Kasayı korursun ve menü yeniden kâr eder. Ama müşteri yirmi yıldır aynı kalan fiyatı Tressimond’un ucuzluğunun kanıtı olarak görüyor; elli sent küçük bir rakam, verdiğin mesaj ise büyük olur." },
+        { k: "B", t: "Büfeyi küçült ya da kapat; alanı daha kârlı ürünlere ayır.", s: 35, tag: "cerrah",
+          r: "Bir masraf kalemi ortadan kalkar ve rafa yer açılır. Ama büfe, alışverişin sonunda müşterinin keyifle uğradığı bir duraktı; onu kaldırmak üyeliğin değerini bir parça azaltır." },
+        { k: "C", t: "Fiyatı 1 dolara indir ve bunu büyük bir kampanyayla duyur.", s: 35, tag: "kumar",
+          r: "Kısa bir süre konuşulur ama her menüde daha çok para kaybedersin. Müşteri menünün ucuz olduğunu zaten biliyordu; ek indirim ona yeni bir şey anlatmaz." },
+        { k: "D", t: "Fiyatı 1,50 dolarda tut; maliyeti düşürmek için sosis üretimini kendi tesisine al.", s: 85, tag: "kalkan",
+          r: "Bir üretim tesisi kurmak yatırım ister ve menüden yine de çok az kazanırsın. Ama fiyat sabit kalır ve her ziyarette müşteriye üyeliğinin karşılığını aldığını hatırlatır." }
+      ],
+      real: {
+        who: "Conrad Pasterly",
+        role: "Tressimond’un kurucu ortağı ve CEO’su",
+        k: "D",
+        text: [
+          "Pasterly fiyata dokunulmamasını istedi ve konuyu kapattı. Maliyeti düşürmek için şirket sosis üretimini kendi tesislerine aldı; tedarikçiyle her yıl pazarlık etmek yerine üretimi kendisi yönetmeye başladı.",
+          "Menünün fiyatı sonraki yıllarda da 1,50 dolarda kaldı. Büfeler yılda yüz milyonu aşkın menü satar oldu; müşteriler ve basın bu fiyatı zincirin ucuzluğunun simgesi olarak anmaya başladı.",
+          "Üyelik yenileme oranı yüzde 90 dolayında kaldı. Büfe kendi başına çok az kazandırdı; asıl kazanç, müşterinin her yıl üyeliğini yenilemesiydi."
+        ]
+      }
+    },
+    {
+      area: "Ürün lansmanı",
+      place: ["ABD", " · 1970’lerin sonu"],
+      company: "Orlbeck Manufacturing",
+      title: "Ne işe yarıyor?",
+      body: [
+        "Orlbeck, bant ve zımpara gibi ürünleriyle tanınan büyük bir sanayi şirketi. Laboratuvarda birkaç yıl önce zayıf tutan bir yapıştırıcı bulundu; sonra bir mühendis onu küçük kâğıtların arkasına sürmeyi denedi. Kâğıt bir yüzeye yapışıyor, iz bırakmadan kalkıyor ve başka bir yere yeniden yapıştırılabiliyor.",
+        "Ürün dört şehirde deneme satışına çıktı ve sonuçlar zayıf geldi. Raftaki küçük not kâğıdı bloku müşteriye sıradan bir not defteri gibi görünüyor; denemeden ne işe yaradığı anlaşılmıyor. Şirket içinde projeyi kapatmak isteyenler çoğunlukta.",
+        "Orlbeck’in ofis ürünleri biriminin başındasın; ekibin masaya birkaç seçenek getirdi."
+      ],
+      stats: [["Deneme şehri", "4"], ["Deneme satışları", "Zayıf"], ["Ürünü deneyen", "Çok az"]],
+      ask: "Orlbeck’in ofis ürünleri biriminin başındasın. Ne yaparsın?",
+      opts: [
+        { k: "A", t: "Projeyi rafa kaldır; deneme satışlarına daha fazla para harcama.", s: 25, tag: "kasa",
+          r: "Kasayı korursun ve daha fazla para harcamazsın. Ama ürünün neden satılmadığını öğrenmeden kapatırsın; sorunun ürün mü yoksa onu tanıtma biçimi mi olduğu bilinmeden kalır." },
+        { k: "B", t: "Tek bir şehirde ofislere, bankalara ve okullara binlerce ücretsiz numune dağıt; insanlar ürünü kendi masalarında denesin.", s: 90, tag: "kumar",
+          r: "Riskli: tutup tutmayacağı belirsiz bir ürün için büyük bir numune bütçesi harcıyorsun ve sonuç yine zayıf gelebilir. Ama bu ürünü anlamanın yolu onu kullanmak; bir kez deneyen ne işe yaradığını hemen görür." },
+        { k: "C", t: "Not kâğıdını bırak; kaynakları birimin asıl işi olan bantlara ve ofis malzemelerine ver.", s: 35, tag: "cerrah",
+          r: "Odak netleşir ve kaynak boşa gitmez. Ama elindeki yapıştırıcı rakiplerin kolayca kopyalayamayacağı bir buluş; onu kenara koyduğunda bu fırsat da kenarda kalır." },
+        { k: "D", t: "Ürünü yalnızca mevcut kurumsal müşterilere, katalogla ve küçük adetlerle sun; büyük harcama yapmadan yavaş yavaş dene.", s: 40, tag: "kalkan",
+          r: "Harcama sınırlı kalır. Ama katalogdaki bir fotoğraf bu ürünü anlatmaya yetmez; az sayıda kişi dener, sonuçlar yine zayıf gelir ve proje birkaç yıl içinde sessizce kapanır." }
+      ],
+      real: {
+        who: "Nora Kindrow",
+        role: "Orlbeck’in ofis ürünleri biriminin başkanı",
+        k: "B",
+        text: [
+          "Kindrow projeyi kapatmak yerine son bir deneme istedi. Ekip orta büyüklükte bir şehir seçti; ofislere, bankalara ve okullara binlerce ücretsiz not kâğıdı bloku dağıttı, satış ekibi de ürünü masalarda tek tek gösterdi.",
+          "Sonuç deneme satışlarından çok farklıydı: ürünü deneyenlerin yaklaşık yüzde 90’ı yeniden almak istediğini söyledi. Şirket iki yıl sonra ürünü ülke genelinde satışa çıkardı.",
+          "Birkaç yıl içinde yapışkan not kâğıtları en çok satan ofis ürünleri arasına girdi; renk renk, boy boy çeşitlendi. Ürün reklamla değil, elden ele geçerek yayıldı."
+        ]
+      }
+    }
+  ];
+
   // ---------- sayılar ----------
   // date: sayının açıldığı gün (Türkiye saati); ileri tarihli sayılar o gün kendiliğinden açılır
   var ISSUES = [
@@ -1171,7 +1273,8 @@
     { no: "007", date: "2026-11-16", cases: S007 },
     { no: "008", date: "2026-11-23", cases: S008 },
     { no: "009", date: "2026-11-30", cases: S009 },
-    { no: "010", date: "2026-12-07", cases: S010 }
+    { no: "010", date: "2026-12-07", cases: S010 },
+    { no: "011", date: "2026-12-14", cases: S011 }
   ];
   function todayTR() {
     try {
