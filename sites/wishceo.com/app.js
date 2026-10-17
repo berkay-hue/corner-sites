@@ -1094,15 +1094,15 @@
     {
       area: "Perakende",
       place: ["ABD", " · 2010’ların başı"],
-      company: "Juniver Electronics",
+      company: "Velmiren Electronics",
       title: "Mağazada bak, internetten al",
       body: [
-        "Juniver ülkenin en büyük elektronik mağazası zinciri; yaklaşık 1.000 büyük mağazası var. Müşteriler mağazaya gelip televizyonu, telefonu, kamerayı inceliyor, sonra telefonlarından daha ucuza internetten sipariş veriyor.",
+        "Velmiren ülkenin en büyük elektronik mağazası zinciri; yaklaşık 1.000 büyük mağazası var. Müşteriler mağazaya gelip televizyonu, telefonu, kamerayı inceliyor, sonra telefonlarından daha ucuza internetten sipariş veriyor.",
         "Satışlar üst üste düşüyor; hisse bir yılda yarıdan fazla değer kaybetti. Basında mağazaların internet satıcıları için ücretsiz bir vitrine dönüştüğü yazılıyor ve zincirin geleceği tartışılıyor.",
-        "Yönetim kurulu dışarıdan bir isim aradı ve seni seçti. Juniver’in yeni CEO’susun; ekibin masaya birkaç seçenek getirdi."
+        "Yönetim kurulu dışarıdan bir isim aradı ve seni seçti. Velmiren’in yeni CEO’susun; ekibin masaya birkaç seçenek getirdi."
       ],
       stats: [["Mağaza", "~1.000"], ["Satışlar", "Üst üste düşüşte"], ["Hisse", "Bir yılda yarıdan fazla düştü"]],
-      ask: "Juniver’in yeni CEO’susun. Ne yaparsın?",
+      ask: "Velmiren’in yeni CEO’susun. Ne yaparsın?",
       opts: [
         { k: "A", t: "İnternet fiyatlarını eşle; mağazalarda büyük markalara kendi köşelerini kirala ve internet siparişlerini en yakın mağazadan gönder.", s: 85, tag: "kalkan",
           r: "Fiyat eşlemek marjdan bir parça götürür ve markalarla anlaşmak zaman alır. Ama mağaza, müşterinin yalnızca baktığı yer olmaktan çıkıp aldığı yer olur; mağaza ağının bir yük değil bir avantaj olduğunu gösterirsin." },
@@ -1111,15 +1111,15 @@
         { k: "C", t: "Fiyatları internetin de altına çek; marjdan vazgeç, kârı hacimden çıkar.", s: 30, tag: "kumar",
           r: "Bir süre mağazalar kalabalıklaşır ama her satışta para kaybedersin. İnternet satıcılarının maliyeti daha düşük; bu fiyat yarışını uzun süre sürdüremezsin." },
         { k: "D", t: "Mağazaların yarısını kapat; ağırlığı internet satışına ver.", s: 35, tag: "cerrah",
-          r: "Kira ve personel masrafı hızla düşer. Ama Juniver’in internette rakiplerinden üstün bir yanı yok; elindeki en büyük varlığı, müşteriye yakın mağazaları elden çıkarmış olursun." }
+          r: "Kira ve personel masrafı hızla düşer. Ama Velmiren’in internette rakiplerinden üstün bir yanı yok; elindeki en büyük varlığı, müşteriye yakın mağazaları elden çıkarmış olursun." }
       ],
       real: {
         who: "Felix Tranholm",
-        role: "Juniver’in CEO’su",
+        role: "Velmiren’in CEO’su",
         k: "A",
         text: [
           "Tranholm göreve geldiği yıl internet fiyatlarını kalıcı olarak eşleme sözü verdi. Müşteri artık mağazada gördüğü ürünü daha ucuza bulmak için başka yere gitmek zorunda değildi.",
-          "Büyük markalar mağazaların içinde kendi köşelerini açtı; bu köşelerin kirası ve markaların desteği maliyetleri hafifletti. İnternet siparişleri en yakın mağazadan gönderilmeye başlandı, şirket genelinde masraflar da elden geçirildi.",
+          "Büyük markalar mağazaların içinde kendi köşelerini açtı; bu köşelerin kirası ve markaların desteği maliyetleri azalttı. İnternet siparişleri en yakın mağazadan gönderilmeye başlandı, şirket genelinde masraflar da elden geçirildi.",
           "Satışlar düşmeyi bıraktı, kârlılık toparlandı; hisse dip seviyesinden birkaç yıl içinde kabaca dört katına çıktı. Mağazalar kapanmadı, rolleri değişti."
         ]
       }
