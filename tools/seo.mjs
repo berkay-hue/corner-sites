@@ -210,6 +210,10 @@ const RULES = {
       const noindex = /<meta name="robots" content="[^"]*noindex/.test(html);
       html = html.replace(/<link rel="canonical"[^>]*>|<meta property="og:(?:url|site_name)"[^>]*>/g, "");
       html = html.replace(/(<meta property="og:title")/, (noindex ? "" : `<link rel="canonical" href="${url}"/><meta property="og:url" content="${url}"/>`) + `<meta property="og:site_name" content="Brand Corner"/>$1`);
+      // kvkk ↔ privacy hreflang çiftine x-default (İngilizce sayfa)
+      html = html.replace(/<link rel="alternate" hreflang="x-default"[^>]*>/g, "");
+      if (html.includes('hreflang="tr" href="https://www.brandcorner.co/kvkk"'))
+        html = html.replace("</head>", `<link rel="alternate" hreflang="x-default" href="https://www.brandcorner.co/privacy"/></head>`);
       // Favicon ve 1200×630 paylaşım görseli: dosyalar sites/brandcorner.co'ya konunca devreye girer
       if (existsSync(join(SITE, "icon.png")) && !html.includes('rel="icon"'))
         html = html.replace("</head>", `<link rel="icon" href="/icon.png" type="image/png"/><link rel="apple-touch-icon" href="/icon.png"/></head>`);
