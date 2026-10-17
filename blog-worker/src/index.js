@@ -37,6 +37,28 @@ function metaDescription(md, max = 155) {
   return dot > 80 ? cut.slice(0, dot + 1) : cut.slice(0, cut.lastIndexOf(" ")).replace(/[,;:–-]$/, "") + "…";
 }
 
+// Kelime sınırında kırpar; sondaki noktalama ve bağlaçları atar (izmitetkinlik daily.mjs clip)
+function clip(s, max) {
+  let t = s.slice(0, max + 1);
+  t = t.slice(0, t.lastIndexOf(" ") > 0 ? t.lastIndexOf(" ") : max);
+  return t.replace(/[\s,;:–—-]+$/u, "").replace(/\s+(ve|ile|veya|ya da|için|and|or|with|for|of|to|the|a)$/iu, "").trim();
+}
+
+// seo.mjs sınırları: başlık ≤60, açıklama 70–155. Uzunsa soru/iki nokta/cümle sonunda, yoksa kelime sınırında kırpılır.
+export function fitMeta(title, description, body) {
+  let t = (title || "").trim(), d = (description || "").trim();
+  if (t.length > 60) {
+    const q = t.slice(0, 61).lastIndexOf("?"), c = t.slice(0, 61).lastIndexOf(":");
+    t = q >= 19 ? t.slice(0, q + 1) : c >= 20 ? t.slice(0, c).trim() : clip(t, 60);
+  }
+  if (d.length < 70) { const m = metaDescription(body); if (m.length > d.length) d = m; }
+  if (d.length > 155) {
+    const x = d.slice(0, 155), end = Math.max(x.lastIndexOf(". "), x.lastIndexOf("? "), x.lastIndexOf("! "));
+    d = end >= 69 ? x.slice(0, end + 1) : clip(d.replace(/…$/, ""), 154) + ".";
+  }
+  return { title: t, description: d };
+}
+
 // Anthropic Messages API. JSON istenen çağrılarda yanıttaki ilk "{" ile son "}" arası ayrıştırılır.
 export async function claude(env, model, prompt, { json = false, maxTokens = 2048 } = {}) {
   const r = await fetch("https://api.anthropic.com/v1/messages", {
@@ -391,7 +413,7 @@ export async function generate(env, cfg) {
   // images: false olan site Pexels kullanmaz; şablon varsayılan görseli (blog.config defaultImage) gösterir
   const img = cfg.images === false ? { url: cfg.defaultImage || "/og.png", alt: topic.topic } : await pickImage(env, topic, index);
   const today = new Date(Date.now() + 3 * 3600e3).toISOString().slice(0, 10); // TR saati
-  const fm = { title: topic.topic, description: (topic.description || "").length >= 80 && topic.description.length <= 155 ? topic.description : metaDescription(body), date: today, category: topic.category, image: img.url, imageAlt: img.alt };
+  const fm = { ...fitMeta(topic.topic, topic.description, body), date: today, category: topic.category, image: img.url, imageAlt: img.alt };
   const md = `---\n${Object.entries(fm).map(([k, v]) => `${k}: ${JSON.stringify(v)}`).join("\n")}\n---\n\n${body}\n`;
   return { topic, slug, fm, body, md, links };
 }
