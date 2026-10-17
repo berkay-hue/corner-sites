@@ -1,6 +1,6 @@
 ---
 title: "Kurucu İlk Satış Temsilcisini Ne Zaman İşe Almalı?"
-description: "Kurucunun yürüttüğü satış bir noktaya kadar ölçeklenir. İlk satış temsilcinizi işe alma zamanının geldiğini gösteren gelir sinyallerini ve önce neyi düzeltmeniz gerektiğini öğrenin."
+description: "Kurucunun yürüttüğü satış bir noktaya kadar ölçeklenir. İlk satış temsilcisini işe alma zamanını gösteren gelir sinyalleri ve önce düzeltilmesi gerekenler."
 date: "2026-10-13"
 updated: "2026-10-17"
 category: "Kurucu Notları"
