@@ -533,7 +533,8 @@ const CHUNK_PATCHES = {
         'v=>{v.currentTarget.closest("section")?.nextElementSibling?.scrollIntoView({behavior:"smooth"})}'),
       on('(0,a.jsxs)(r.Button,{size:"lg",className:"mt-8 h-12 bg-primary-foreground px-8 text-primary hover:bg-primary-foreground/90",children:[e("hero.cta.trial")', REG()),
     ] },
-    { chunk: "6298d546504883f0", edits: [  // /pricing
+    // #170 SSS'yi kaynakta ve yamalı çıktıda yerinde değiştirdi; çıktı adı 49468e11 kaldı (içerik özeti bf87c986), o ad was'ta
+    { chunk: "6298d546504883f0", was: ["49468e11c5cb80ca"], edits: [  // /pricing
       on('(0,a.jsx)(i.Button,{className:(0,j.cn)("mt-8 w-full",t.popular?"gradient-primary text-primary-foreground":""),variant:t.popular?"default":"outline",children:t.cta})', plan("s")),
       on('(0,a.jsxs)(r.Button,{size:"lg",className:"mt-8 gradient-primary text-primary-foreground",children:[(0,a.jsx)(n.MessageSquare,', go("mailto:info@saascorner.co")),
     ] },
