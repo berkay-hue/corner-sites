@@ -35,21 +35,21 @@
 a{color:inherit}img{max-width:100%;display:block}[hidden]{display:none!important}
 .i{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .wrap{max-width:1120px;margin:0 auto;padding:0 32px}
-h1,h2,h3{font-family:"Poppins","Inter",system-ui,sans-serif;line-height:1.25}h1:focus{outline:none}
+h1,h2,h3{font-family:"Poppins","Inter",system-ui,sans-serif;font-weight:600;letter-spacing:-.01em;line-height:1.25}h1:focus{outline:none}
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 /* Kabuk: masaüstünde sol menü, mobilde üst çubuk + alt sekmeler */
 .app{display:grid;grid-template-columns:244px minmax(0,1fr);min-height:100vh}
 .side{position:sticky;top:0;height:100vh;display:flex;flex-direction:column;gap:18px;padding:22px 16px;background:var(--surface);border-right:1px solid var(--line);overflow-y:auto}
-.logo{font:700 20px/1 "Poppins","Inter",sans-serif;text-decoration:none;color:var(--text);letter-spacing:-.01em;padding:4px 8px;display:inline-flex;align-items:center;min-height:44px}.logo span{color:var(--accent)}
+.logo{gap:5px;font:700 18px/1 "Poppins","Inter",sans-serif;text-decoration:none;color:var(--text);letter-spacing:-.01em;padding:4px 8px;display:inline-flex;align-items:center;min-height:44px}.logo span{color:var(--accent)}
 .acct{display:flex;align-items:center;gap:10px;padding:10px;border:1px solid var(--line);border-radius:var(--r-card);background:var(--surface-2);min-width:0}
 .av{width:36px;height:36px;border-radius:50%;flex:none;display:grid;place-items:center;background:var(--grad);color:#fff;font:600 14px/1 "Inter",sans-serif}
 .acct>div{min-width:0}.acct .n{font-weight:600;font-size:14px;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.acct .r{font-size:12.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .nav{display:flex;flex-direction:column;gap:2px}
 .nav a,.nb{display:flex;align-items:center;gap:10px;min-height:44px;padding:0 12px;border-radius:var(--r-ctl);text-decoration:none;color:var(--muted);font:500 14.5px/1.2 "Inter",sans-serif;background:none;border:0;cursor:pointer;width:100%;text-align:left}
 .nav a:hover,.nb:hover{background:var(--surface-2);color:var(--text)}
-.nav a[aria-current]{background:var(--accent-soft);color:var(--accent-text);font-weight:600}
+.nav a[aria-current],.nb[aria-current]{background:var(--accent-soft);color:var(--accent-text);font-weight:600}
 .cnt{margin-left:auto;min-width:22px;height:22px;padding:0 7px;border-radius:999px;background:var(--accent);color:#fff;font:600 12px/22px "Inter",sans-serif;text-align:center}
-.side .foot{margin-top:auto;display:flex;flex-direction:column;gap:2px;border-top:1px solid var(--line);padding-top:12px}
+.side .foot{display:flex;flex-direction:column;gap:2px;border-top:1px solid var(--line);padding-top:12px}
 .nb:disabled{opacity:.6;cursor:default}
 .main-col{min-width:0;display:flex;flex-direction:column}
 .mtop{display:none}
@@ -57,12 +57,12 @@ h1,h2,h3{font-family:"Poppins","Inter",system-ui,sans-serif;line-height:1.25}h1:
 .tabbar{display:none}
 /* Sayfa başlığı ve kartlar */
 .ph{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px 20px;margin:0 0 22px}.ph>div{min-width:0}
-.ph h1{font-size:26px;margin:0 0 4px;letter-spacing:-.01em;overflow-wrap:anywhere}.ph p{margin:0;color:var(--muted)}.ph .acts{display:flex;flex-wrap:wrap;gap:8px}
-.wrapw>h1{font-size:26px;margin:0 0 6px;letter-spacing:-.01em;overflow-wrap:anywhere}.wrapw h2{font-size:18px;margin:30px 0 12px}
+.ph h1{font-size:24px;margin:0 0 4px;letter-spacing:-.01em;overflow-wrap:anywhere}.ph p{margin:0;color:var(--muted)}.ph .acts{display:flex;flex-wrap:wrap;gap:8px}
+.wrapw>h1{font-size:24px;margin:0 0 6px;letter-spacing:-.01em;overflow-wrap:anywhere}.wrapw h2{font-size:17px;margin:30px 0 12px}
 .lead{color:var(--muted);margin:0 0 24px}.muted{color:var(--muted)}
 .box,.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-card);padding:20px}
-.card{padding:0;overflow:hidden}.ch{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:16px 20px;border-bottom:1px solid var(--line)}.ch h2{font-size:16px;margin:0}.ch .muted{font-size:13px}
-.cb{padding:16px 20px}
+.card{padding:0;overflow:hidden}.ch{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:18px 18px 0}.ch h2{font-size:17px;margin:0}.ch .muted{font-size:13px}
+.cb{padding:12px 18px 18px}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;background:var(--accent);color:#fff;text-decoration:none;font:600 14.5px/1.2 "Inter",sans-serif;padding:9px 16px;border-radius:var(--r-ctl);white-space:nowrap;border:0;cursor:pointer}
 .btn:hover{background:var(--accent-hover)}button.btn:disabled{opacity:.65;cursor:default}.btn.sm{font-size:13.5px;padding:7px 12px;min-height:44px}
 .btn.sec{background:var(--surface);color:var(--text);border:1px solid var(--line-strong)}.btn.sec:hover{background:var(--surface-2)}
@@ -103,7 +103,7 @@ footer.bot{border-top:1px solid var(--line);color:var(--muted);font-size:13.5px;
 .quote.rev{border-left-color:var(--warn)}
 .item h3{font-size:16.5px;margin:0;overflow-wrap:anywhere}.item h3 a{text-decoration:none}.item h3 a:hover{color:var(--accent-text)}
 .meta{color:var(--muted);font-size:13.5px;margin:6px 0 0;display:flex;flex-wrap:wrap;gap:2px 14px}
-.chips{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 0}.chip{font-size:12.5px;line-height:1.5;padding:2px 10px;border-radius:999px;background:var(--surface-2);border:1px solid var(--line);color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 0}.chip{font-size:12.5px;line-height:1.5;padding:2px 9px;border-radius:6px;background:var(--surface-2);border:1px solid var(--line);color:var(--muted)}
 .handles{list-style:none;padding:0;margin:10px 0 0;display:flex;flex-wrap:wrap;gap:4px 18px;font-size:13.5px;color:var(--muted)}
 .badge{display:inline-block;font-size:12px;font-weight:600;line-height:1.6;padding:1px 9px;border-radius:999px;white-space:nowrap;background:var(--accent-soft);color:var(--accent-text)}
 .b-open,.b-approved{background:var(--ok-soft);color:var(--ok)}.b-closed,.b-rejected,.b-declined{background:var(--slate-soft);color:var(--slate)}
@@ -136,6 +136,7 @@ footer.bot{border-top:1px solid var(--line);color:var(--muted);font-size:13.5px;
 .mets.m4{grid-template-columns:repeat(4,minmax(0,1fr))}.sample{margin:14px 0 4px;padding:14px;border:1px dashed var(--line-strong);border-radius:var(--r-card)}.sample h3{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:15px;margin:12px 0 8px}.sample h3:first-of-type{margin-top:8px}
 .badge.b-sample{background:var(--surface-2);color:var(--muted);border:1px dashed var(--line-strong)}
 .sub{margin:14px 0 0;padding:16px 0 0;border-top:1px solid var(--line)}
+.f input[readonly]{background:var(--surface-2);color:var(--muted)}.btn.bad{color:var(--danger);border-color:var(--danger)}.lbl{font-weight:600;font-size:14px;margin:0 0 8px}.seg{margin:0 0 18px}.seg:last-child{margin-bottom:0}h3.sub{font-size:15px;margin:18px 0 6px}.card .f .btn{margin-top:4px}.tbar{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:10px 16px;border-bottom:1px solid var(--line);margin:0 0 16px}.tabs.ul{gap:0;margin:0}.tabs.ul button{border:0;border-bottom:2px solid transparent;border-radius:0;background:none;margin-bottom:-1px;color:var(--muted)}.tabs.ul button[aria-pressed=true]{background:none;border-bottom-color:var(--accent);color:var(--text)}.tabs.ul .n{color:var(--faint);font-weight:500}.tq{flex:0 1 260px;margin:0 0 8px}.tq input{margin:0;min-height:44px}.box.rows{padding:0;display:block}.row{position:relative;display:flex;align-items:center;gap:8px 20px;padding:14px 18px;min-height:44px;border-top:1px solid var(--line)}.row:first-child{border-top:0}.row:hover{background:var(--surface-2)}.rm{flex:1 1 auto;min-width:0}.row h3{font-size:15.5px;margin:0;overflow-wrap:anywhere}.row h3 a{text-decoration:none;color:inherit}.row h3 a::after{content:"";position:absolute;inset:0}.row h3 a:focus-visible{outline:none}.row:focus-within{outline:2px solid var(--accent);outline-offset:-2px}.row .badge{vertical-align:2px;margin-left:4px}.rc{flex:0 0 auto;justify-content:flex-end;text-align:right}@media(max-width:640px){.row{flex-wrap:wrap}.rc{justify-content:flex-start;text-align:left}.tq{flex:1 1 100%}}.dhd{align-items:center;margin:0 0 14px}.dhd h1{margin:0}.dhd h1 .badge{vertical-align:5px;margin-left:4px}.dhd .row-b{margin:0}.ghost.bad{color:var(--danger);border-color:var(--danger)}.dinfo{margin:0 0 22px}.dinfo .prose{margin:0 0 4px}.ig{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px 20px;margin:16px 0 0;padding:16px 0 0;border-top:1px solid var(--line)}.dinfo>.ig:first-child{margin-top:0;padding-top:0;border-top:0}.ig dt{font-size:12.5px;color:var(--muted);margin:0 0 3px}.ig dd{margin:0;font-weight:600;font-size:14.5px;overflow-wrap:anywhere}@media(max-width:640px){.ig{grid-template-columns:1fr 1fr}}.ld{display:inline-flex;align-items:center;gap:8px}.ld::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--faint)}.ld[data-l=colNew]::before{background:#3b82f6}.ld[data-l=colInvited]::before{background:#a855f7}.ld[data-l=colWork]::before{background:#f59e0b}.ld[data-l=colReview]::before{background:#ec4899}.ld[data-l=colDone]::before{background:#10b981}.dinfo .lbl{font-size:14px;margin:0 0 6px}.lane .row-b{gap:6px}.lane .row-b .btn.sm,.lane .row-b .ghost{padding:0 10px;font-size:13px}
 .banner{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin:0 0 16px;background:var(--info-soft);border-color:transparent}.banner p{margin:0;overflow-wrap:anywhere}
 .item .ghost,.drawer .ghost,.banner .ghost{min-height:44px}
 dialog.drawer{position:fixed;inset:0 0 0 auto;margin:0;width:min(460px,100%);max-width:100%;height:100%;max-height:none;padding:0;border:0;border-left:1px solid var(--line);background:var(--surface);color:var(--text)}
@@ -168,7 +169,7 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
 <a class="logo" href="/">Brand<span>Corner</span></a>
 <div class="acct"><span class="av" id="av" aria-hidden="true"></span><div><div class="n" id="who"></div><div class="r" id="role"></div></div></div>
 <nav class="nav" id="nav" aria-label="Panel"></nav>
-<div class="foot"><button type="button" class="nb" id="lang"></button><a class="nb" id="help2" href="mailto:info@saascorner.co?subject=Brand%20Corner%20panel"></a><button type="button" class="nb" id="out"></button></div>
+<div class="foot"><a class="nb" id="set" href="#settings"></a><button type="button" class="nb" id="lang"></button><a class="nb" id="help2" href="mailto:info@saascorner.co?subject=Brand%20Corner%20panel"></a><button type="button" class="nb" id="out"></button></div>
 </aside>
 <div class="main-col">
 <header class="mtop"><a class="logo" href="/">Brand<span>Corner</span></a><button type="button" class="me" id="me" aria-haspopup="dialog" aria-controls="sheet"><span class="av" id="av2" aria-hidden="true"></span></button></header>
@@ -182,11 +183,12 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
 <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetWho" hidden>
 <div class="grip" aria-hidden="true"></div>
 <div class="acct"><span class="av" id="av3" aria-hidden="true"></span><div><div class="n" id="sheetWho"></div><div class="r" id="sheetRole"></div></div></div>
-<button type="button" class="nb" id="lang2"></button><a class="nb" id="help3" href="mailto:info@saascorner.co?subject=Brand%20Corner%20panel"></a><button type="button" class="nb" id="out2"></button>
+<a class="nb" id="set2" href="#settings"></a><button type="button" class="nb" id="lang2"></button><a class="nb" id="help3" href="mailto:info@saascorner.co?subject=Brand%20Corner%20panel"></a><button type="button" class="nb" id="out2"></button>
 </div>
 
 <script src="/bc-app.js"></script>
 <script>
+(function () { try { var th = localStorage.getItem("bc-theme"); if (th === "light" || th === "dark") document.documentElement.setAttribute("data-theme", th); } catch (e) {} })();
 (function () {
   // Oturum yoksa girişe; 401 gelirse bc-app.js oturumu silip girişe döner (BC.guard)
   BC.guard = true;
@@ -215,7 +217,7 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
     tr: {
       loading: "Yükleniyor…", retry: "Tekrar dene", wait: "Lütfen bekleyin…", logout: "Çıkış yap",
       copy: "© Brand Corner · Tüm hakları saklıdır.", help: "Yardım: info@saascorner.co", navLabel: "Panel menüsü", groupLabel: "Corner Group şirketleri",
-      hello: "Merhaba, {n}",
+      hello: "Merhaba {n}",
       lead_brand: "Kampanyalarınızı yönetin, uygun influencer'ları bulun ve başvuruları değerlendirin.",
       lead_agency: "Müşterileriniz için kampanyaları tek yerden yönetin, influencer bulun ve başvuruları değerlendirin.",
       lead_influencer: "Size uygun kampanyaları bulun, başvurularınızı ve davetlerinizi takip edin.",
@@ -227,6 +229,7 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
       waiting: "Sizi bekleyenler", waitEmpty: "Şu an sizi bekleyen bir iş yok.", inNew: "{n} yeni başvuru", inSub: "{n} içerik onay bekliyor", inDue: "Son tarih yaklaşıyor: {n}",
       inInvite: "{n} sizi davet etti", inRev: "Revizyon istendi", inAcc: "İçerik bağlantınızı gönderin", inProf: "%{n} tamamlandı", review: "İncele", openIt: "Aç",
       profCard: "Profil", profDone: "Tamamlanma", editProf: "Profili düzenle",
+      nSettings: "Ayarlar", setLead: "Hesabını ve panelin görünümünü yönet.", setAcct: "Hesap", setName: "Ad soyad", setEmail: "E-posta", setEmailHint: "E-postanı değiştirmek için info@saascorner.co adresine yaz.", setPw: "Şifre", setPwHint: "Yeni şifre belirleme bağlantısını e-postana göndeririz.", setPwBtn: "Sıfırlama bağlantısı gönder", setPwSent: "Bağlantı gönderildi. Gelen kutunu kontrol et.", setLook: "Görünüm", setLang: "Dil", setTheme: "Tema", thSys: "Sistem", thLight: "Açık", thDark: "Koyu", setOutLead: "Bu cihazda panelden çıkış yap.",
       ckCompany: "Şirket adı", ckIndustry: "Sektör", ckCity: "Şehir", ckWebsite: "Web sitesi", ckBio: "Hakkında (en az 40 karakter)", ckClients: "Müşteri sayısı",
       ckNiches: "İlgi alanları", ckPlatform: "Takipçi sayısıyla en az bir platform", ckListed: "Markalara görünür profil",
       socTitle: "Sosyal hesaplar", socLead: "Hesabını resmî bağlantıyla bağla; takipçi ve etkileşim verileri markalara doğrulanmış olarak görünür.",
@@ -250,7 +253,7 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
       campEmpty: "Henüz kampanyanız yok. İlk kampanyanızı oluşturun.",
       oppEmpty: "Şu anda açık kampanya yok. Yeni kampanyalar açıldığında burada görünecek.",
       newCamp: "Yeni kampanya", newLead: "Kampanya oluşturulduğunda açık olur ve influencer'lar başvurabilir.",
-      cntApps: "Başvuru: {n}", cntPending: "Bekleyen: {n}",
+      cntApps: "Başvuru: {n}", cntPending: "Bekleyen: {n}", cAll: "Tümü", campQ: "Kampanya ara", campQPh: "Başlıkta ara", campNone: "Bu filtreye uyan kampanya yok.",
       deadline: "Son tarih: {n}", created: "Oluşturuldu: {n}", updated: "Güncellendi: {n}",
       budget: "Bütçe: {n}", noBudget: "Bütçe belirtilmedi", from: "en az {n}", upTo: "en fazla {n}", match: "%{n} uyum", viewApply: "İncele ve başvur",
       fTitle: "Kampanya başlığı", fBrief: "Açıklama", fBriefHint: "Beklentilerinizi, içerik türünü ve teslim koşullarını yazın (en fazla 3000 karakter).",
@@ -260,12 +263,12 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
       create: "Kampanyayı oluştur", saveChanges: "Değişiklikleri kaydet", cancel: "Vazgeç",
       campLimit: "Kampanya sınırına ulaştınız (en fazla 100 kampanya).", badBudget: "Bütçeyi tam sayı olarak girin.",
       tagsMax: "En fazla 5 ilgi alanı girebilirsiniz.",
-      close: "Kampanyayı kapat", reopen: "Kampanyayı yeniden aç", edit: "Düzenle",
+      close: "Kampanyayı kapat", reopen: "Kampanyayı yeniden aç", edit: "Düzenle", iBrief: "Açıklama", iBudget: "Bütçe", iDeadline: "Son başvuru", iPlatforms: "Platformlar", iCreated: "Oluşturuldu", iNone: "—",
       appsTitle: "Başvurular ve davetler ({n})",
       appsEmpty: "Bu kampanyada henüz başvuru ya da davet yok. Influencer keşfinden uygun profilleri davet edebilirsiniz.",
       colNew: "Yeni", colInvited: "Davet edildi", colWork: "Çalışılıyor", colReview: "İçerik onayı", colDone: "Onaylandı",
       colClosed: "Kapananlar ({n})", colEmpty: "Bu sütun boş.", revNote: "Revizyon notu", revNoteL: "Influencer'a not (isteğe bağlı)",
-      goDiscover: "Influencer keşfine git", backCamps: "← Kampanyalar", backOpps: "← Fırsatlar",
+      goDiscover: "Influencer keşfine git", backCamps: "‹ Kampanyalar", backOpps: "‹ Fırsatlar",
       yourApp: "Başvurunuz", apply: "Başvuru yap", appMsg: "Markaya mesajınız",
       appMsgHint: "Bu kampanyaya neden uygun olduğunuzu kısaca anlatın (en fazla 1000 karakter).", sendApp: "Başvur",
       applyLimit: "Bugünkü başvuru sınırına ulaştınız (davetler de sayılır). Lütfen yarın tekrar deneyin.",
@@ -331,6 +334,7 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
       waiting: "Waiting for you", waitEmpty: "Nothing is waiting for you right now.", inNew: "{n} new applications", inSub: "{n} content items awaiting approval", inDue: "Deadline coming up: {n}",
       inInvite: "{n} invited you", inRev: "Revision requested", inAcc: "Send your content link", inProf: "{n}% complete", review: "Review", openIt: "Open",
       profCard: "Profile", profDone: "Completion", editProf: "Edit profile",
+      nSettings: "Settings", setLead: "Manage your account and how the panel looks.", setAcct: "Account", setName: "Full name", setEmail: "Email", setEmailHint: "To change your email, write to info@saascorner.co.", setPw: "Password", setPwHint: "We will email you a link to set a new password.", setPwBtn: "Send reset link", setPwSent: "Reset link sent. Check your inbox.", setLook: "Appearance", setLang: "Language", setTheme: "Theme", thSys: "System", thLight: "Light", thDark: "Dark", setOutLead: "Log out of the panel on this device.",
       ckCompany: "Company name", ckIndustry: "Industry", ckCity: "City", ckWebsite: "Website", ckBio: "About (at least 40 characters)", ckClients: "Number of clients",
       ckNiches: "Niches", ckPlatform: "At least one platform with follower count", ckListed: "Profile visible to brands",
       socTitle: "Social accounts", socLead: "Connect your account officially; follower and engagement data shows to brands as verified.",
@@ -354,7 +358,7 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
       campEmpty: "You don't have any campaigns yet. Create your first one.",
       oppEmpty: "There are no open campaigns right now. New campaigns will show up here.",
       newCamp: "New campaign", newLead: "A new campaign is open right away and influencers can apply.",
-      cntApps: "Applications: {n}", cntPending: "Pending: {n}",
+      cntApps: "Applications: {n}", cntPending: "Pending: {n}", cAll: "All", campQ: "Search campaigns", campQPh: "Search titles", campNone: "No campaigns match this filter.",
       deadline: "Deadline: {n}", created: "Created {n}", updated: "Updated {n}",
       budget: "Budget: {n}", noBudget: "Budget not specified", from: "from {n}", upTo: "up to {n}", match: "{n}% match", viewApply: "View and apply",
       fTitle: "Campaign title", fBrief: "Description", fBriefHint: "Describe what you expect, the content type and delivery terms (up to 3000 characters).",
@@ -364,12 +368,12 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
       create: "Create campaign", saveChanges: "Save changes", cancel: "Cancel",
       campLimit: "You've reached the campaign limit (100 campaigns).", badBudget: "Enter the budget as a whole number.",
       tagsMax: "You can enter up to 5 niches.",
-      close: "Close campaign", reopen: "Reopen campaign", edit: "Edit",
+      close: "Close campaign", reopen: "Reopen campaign", edit: "Edit", iBrief: "Description", iBudget: "Budget", iDeadline: "Deadline", iPlatforms: "Platforms", iCreated: "Created", iNone: "—",
       appsTitle: "Applications and invites ({n})",
       appsEmpty: "No applications or invites for this campaign yet. You can invite suitable profiles from Find influencers.",
       colNew: "New", colInvited: "Invited", colWork: "In progress", colReview: "Content review", colDone: "Approved",
       colClosed: "Closed ({n})", colEmpty: "Nothing here.", revNote: "Revision note", revNoteL: "Note to the influencer (optional)",
-      goDiscover: "Go to Find influencers", backCamps: "← Campaigns", backOpps: "← Opportunities",
+      goDiscover: "Go to Find influencers", backCamps: "‹ Campaigns", backOpps: "‹ Opportunities",
       yourApp: "Your application", apply: "Apply", appMsg: "Message to the brand",
       appMsgHint: "Briefly explain why you're a good fit for this campaign (up to 1000 characters).", sendApp: "Apply",
       applyLimit: "You've reached today's application limit (invites count too). Please try again tomorrow.",
@@ -479,12 +483,14 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
     try { return new Intl.NumberFormat(locale(), { style: "currency", currency: cur || "TRY", minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(n); }
     catch (e) { return num(n) + " " + (cur || ""); }
   }
-  function budget(c) {
+  // Yalnız tutar (bütçe yoksa ""); budget() etiketli hâlini verir
+  function budgetVal(c) {
     var lo = c.budget_min > 0 ? c.budget_min : 0, hi = c.budget_max > 0 ? c.budget_max : 0, cur = c.currency;
-    if (!lo && !hi) return t("noBudget");
-    if (lo && hi) return t("budget", lo === hi ? money(lo, cur) : money(lo, cur) + " – " + money(hi, cur));
-    return t("budget", lo ? t("from", money(lo, cur)) : t("upTo", money(hi, cur)));
+    if (!lo && !hi) return "";
+    if (lo && hi) return lo === hi ? money(lo, cur) : money(lo, cur) + " – " + money(hi, cur);
+    return lo ? t("from", money(lo, cur)) : t("upTo", money(hi, cur));
   }
+  function budget(c) { var v = budgetVal(c); return v ? t("budget", v) : t("noBudget"); }
   function tags(s) {
     var seen = {}, out = [];
     s.split(",").forEach(function (x) { x = x.trim().slice(0, 40); var k = x.toLowerCase(); if (x && !seen[k]) { seen[k] = 1; out.push(x); } });
@@ -517,7 +523,7 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
   function route() {
     var h = location.hash.replace(/^#/, ""), m = /^campaign-(\d+)$/.exec(h);
     if (m) return { name: "campaign", id: +m[1], tab: "campaigns" };
-    var ok = ["overview", "campaigns", "profile"].concat(isOwner() ? ["new", "discover"] : ["applications"]);
+    var ok = ["overview", "campaigns", "profile", "settings"].concat(isOwner() ? ["new", "discover"] : ["applications"]);
     if (ok.indexOf(h) < 0) h = "overview";
     return { name: h, tab: h === "new" ? "campaigns" : h };
   }
@@ -539,6 +545,7 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
     plus: [["path", { d: "M12 5v14M5 12h14" }]],
     globe: [["circle", { cx: 12, cy: 12, r: 9 }], ["path", { d: "M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18" }]],
     help: [["circle", { cx: 12, cy: 12, r: 9 }], ["path", { d: "M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.7M12 17h.01" }]],
+    gear: [["circle", { cx: 12, cy: 12, r: 3 }], ["path", { d: "M12 2v3M12 19v3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M2 12h3M19 12h3M4.9 19.1 7 17M17 7l2.1-2.1" }]],
     logout: [["path", { d: "M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3" }], ["path", { d: "M10 17l-5-5 5-5M5 12h11" }]]
   };
   function ic(name) {
@@ -554,6 +561,7 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
   function paintNav(tab) {
     var items = isOwner() ? [["overview", "nOverview", "home"], ["campaigns", "nCampaigns", "megaphone"], ["discover", "nDiscover", "search"], ["profile", "nProfile", "user"]]
       : [["overview", "nOverview", "home"], ["campaigns", "nOpps", "briefcase"], ["applications", "nApps", "list"], ["profile", "nProfile", "user"]];
+    ["set", "set2"].forEach(function (id) { if (tab === "settings") $(id).setAttribute("aria-current", "page"); else $(id).removeAttribute("aria-current"); });
     [nav, tabbar].forEach(function (box) {
       box.textContent = "";
       items.forEach(function (i) {
@@ -615,6 +623,17 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
     return [["ckCity", has(p.city)], ["ckBio", String(p.bio || "").trim().length >= 40], ["ckNiches", (p.niches || []).length > 0],
       ["ckPlatform", (p.platforms || []).some(function (x) { return x && has(x.handle) && Number(x.followers) > 0; })], ["ckListed", !!p.listed]];
   }
+  // Profil doluluğu kartı: genel bakışta düzenle bağlantısıyla, profil sayfasında sağ sütunda
+  function profMeter(link) {
+    var checks = profileChecks(), pct = Math.round(checks.filter(function (c) { return c[1]; }).length * 100 / checks.length);
+    return el("section", { class: "card" }, [el("div", { class: "ch" }, el("h2", { text: t("profCard") })),
+      el("div", { class: "cb" }, [
+        el("div", { class: "pct" }, [el("span", { text: t("profDone") }), el("b", { text: L === "tr" ? "%" + pct : pct + "%" })]),
+        el("div", { class: "meter", role: "progressbar", "aria-valuemin": 0, "aria-valuemax": 100, "aria-valuenow": pct, "aria-label": t("profDone") }, el("i", { style: "width:" + pct + "%" })),
+        el("ul", { class: "checklist" }, checks.map(function (c) { return el("li", { class: c[1] ? "done" : null }, [el("span", { class: "dot" }, c[1] ? ic("check") : null), el("span", { text: t(c[0]) })]); })),
+        link ? el("a", { class: "btn sm sec", href: "#profile", text: t("editProf") }) : null
+      ])]);
+  }
   function daysLeft(s) {
     if (!/^\d{4}-\d{2}-\d{2}$/.test(s || "")) return null;
     // Son tarih takvim günüdür: bugün kullanıcının yerel tarihine göre alınır (TR'de 00–03 arası UTC bir gün geride kalır)
@@ -658,7 +677,7 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
       var mets = own ? ["mReach", "mEng", "mSpend"] : ["mReach", "mEng", "mEarn"];
       return [
         el("div", { class: "ph" }, [
-          el("div", null, [el("h1", { text: t("hello", U.name) }), el("p", { text: t("lead_" + U.role) })]),
+          el("div", null, [el("h1", { text: t("hello", String(U.name || "").trim().split(/\s+/)[0]) }), el("p", { text: (U.profile || {}).company || t("lead_" + U.role) })]),
           el("div", { class: "acts" }, own ? el("a", { class: "btn", href: "#new" }, [ic("plus"), el("span", { text: t("newCamp") })]) : el("a", { class: "btn", href: "#campaigns", text: t("nOpps") }))
         ]),
         r[0].err ? failBox(r[0].err, again) : el("div", { class: "stats" }, cards.map(function (c) { return el("div", { class: "stat" }, [el("div", { class: "k", text: t(c[1]) }), el("div", { class: "v", text: num(c[0]) })]); })),
@@ -671,13 +690,7 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
                 el("p", { class: "hint", text: t("perfNote") })])])
           ]),
           el("div", null, [
-            el("section", { class: "card" }, [el("div", { class: "ch" }, el("h2", { text: t("profCard") })),
-              el("div", { class: "cb" }, [
-                el("div", { class: "pct" }, [el("span", { text: t("profDone") }), el("b", { text: L === "tr" ? "%" + pct : pct + "%" })]),
-                el("div", { class: "meter", role: "progressbar", "aria-valuemin": 0, "aria-valuemax": 100, "aria-valuenow": pct, "aria-label": t("profDone") }, el("i", { style: "width:" + pct + "%" })),
-                el("ul", { class: "checklist" }, checks.map(function (c) { return el("li", { class: c[1] ? "done" : null }, [el("span", { class: "dot" }, c[1] ? ic("check") : null), el("span", { text: t(c[0]) })]); })),
-                el("a", { class: "btn sm sec", href: "#profile", text: t("editProf") })
-              ])]),
+            profMeter(true),
             el("section", { class: "card" }, [el("div", { class: "ch" }, el("h2", { text: t("soon") })),
               el("div", { class: "cb" }, [
                 el("p", { class: "soon-lead", text: t("soonLead") }),
@@ -698,8 +711,33 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
         own && list.length ? el("a", { class: "btn", href: "#new", text: t("newCamp") }) : null
       ]);
       if (!list.length) return [head, empty(t(own ? "campEmpty" : "oppEmpty"), own ? el("a", { class: "btn", href: "#new", text: t("newCamp") }) : null)];
-      return own ? [head, el("div", { class: "list" }, list.map(ownerCard))] : [head].concat(opps(list));
+      return own ? [head].concat(owned(list)) : [head].concat(opps(list));
     });
+  }
+  // Kampanyalarım (marka/ajans): Tümü/Açık/Kapalı sekmeleri sayılarıyla + başlıkta arama, tek çerçeveli satır listesi
+  var C = { tab: "all", q: "" };
+  function owned(all) {
+    var n = function (k) { return all.filter(function (c) { return k === "all" || c.status === k; }).length; };
+    var tabs = el("div", { class: "tabs ul", role: "group", "aria-label": t("nCampaigns") }, [["all", "cAll"], ["open", "st_open"], ["closed", "st_closed"]].map(function (x) {
+      var b = el("button", { type: "button", "aria-pressed": String(C.tab === x[0]), "data-tab": x[0] }, [t(x[1]) + " ", el("span", { class: "n", text: num(n(x[0])) })]);
+      b.addEventListener("click", function () {
+        C.tab = x[0];
+        tabs.querySelectorAll("button").forEach(function (y) { y.setAttribute("aria-pressed", String(y.getAttribute("data-tab") === C.tab)); });
+        paint();
+      });
+      return b;
+    }));
+    var q = el("input", { type: "search", maxlength: 60, placeholder: t("campQPh"), "aria-label": t("campQ"), value: C.q });
+    q.addEventListener("input", function () { C.q = q.value.trim(); paint(); });
+    var box = el("div");
+    function paint() {
+      var qk = fold(C.q), list = all.filter(function (c) {
+        return (C.tab === "all" || c.status === C.tab) && (!qk || fold(c.title).indexOf(qk) >= 0);
+      });
+      box.replaceChildren(list.length ? el("div", { class: "rows box" }, list.map(ownerCard)) : empty(t("campNone")));
+    }
+    paint();
+    return [el("div", { class: "tbar" }, [tabs, el("div", { class: "f tq", role: "search" }, q)]), box];
   }
   // Fırsatlar (influencer): sekme, arama, platform ve sıralama yüklenen açık kampanyalar üzerinde çalışır
   var O = { tab: "fit", q: "", platform: "", sort: "match" };
@@ -751,11 +789,12 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
     return [tabs, f, cnt, box];
   }
   function ownerCard(c) {
-    return el("article", { class: "box item" }, [
-      el("div", { class: "head" }, [el("h3", null, el("a", { href: "#campaign-" + c.id, text: c.title })), badge(c.status)]),
-      el("p", { class: "meta" }, [el("span", { text: budget(c) }), stamp(c), el("span", { text: t("created", when(c.created_at)) })]),
-      chips(c.niches, c.platforms),
-      el("p", { class: "meta" }, [el("span", { text: t("cntApps", num(c.applications)) }), el("span", { text: t("cntPending", num(c.pending)) })])
+    return el("article", { class: "row" }, [
+      el("div", { class: "rm" }, [
+        el("h3", null, [el("a", { href: "#campaign-" + c.id, text: c.title }), " ", badge(c.status)]),
+        el("p", { class: "meta" }, [el("span", { text: budget(c) }), stamp(c), el("span", { text: t("created", when(c.created_at)) })])
+      ]),
+      el("p", { class: "meta rc" }, [el("span", { text: t("cntApps", num(c.applications)) }), el("span", { text: t("cntPending", num(c.pending)) })])
     ]);
   }
   function oppCard(c) {
@@ -836,13 +875,21 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
       say(m, ""); busy(tog, true);
       BC.call("POST", "app/campaigns/" + c.id, { status: c.status === "open" ? "closed" : "open" }).then(function () { render(true); }, function (e) { busy(tog, false); say(m, BC.msg(e.code)); });
     });
+    if (c.status === "open") tog.className = "ghost bad";
+    var pl = (c.platforms || []).filter(function (p) { return PL[p]; }).map(function (p) { return PL[p]; });
+    var info = [["iBudget", budgetVal(c)], ["iDeadline", day(c.deadline)], ["iPlatforms", pl.length ? pl.join(", ") : t("allPlatforms")], ["iCreated", when(c.created_at)]];
     return [
       back("#campaigns", "backCamps"),
-      el("div", { class: "head" }, [el("h1", { text: c.title }), badge(c.status)]),
-      el("p", { class: "meta" }, [el("span", { text: budget(c) }), stamp(c), el("span", { text: t("created", when(c.created_at)) })]),
-      chips(c.niches, c.platforms),
-      c.brief ? el("p", { class: "prose", text: c.brief }) : null,
-      el("div", { class: "row-b" }, [c.status === "open" ? toDiscover(c, "inviteInf") : null, eb, tog]), m, edit,
+      el("div", { class: "head dhd" }, [
+        el("h1", null, [c.title + " ", badge(c.status)]),
+        el("div", { class: "row-b" }, [eb, c.status === "open" ? toDiscover(c, "inviteInf") : null, tog])
+      ]), m, edit,
+      el("section", { class: "box dinfo" }, [
+        c.brief ? el("h2", { class: "lbl", text: t("iBrief") }) : null,
+        c.brief ? el("p", { class: "prose", text: c.brief }) : null,
+        el("dl", { class: "ig" }, info.map(function (x) { return el("div", null, [el("dt", { text: t(x[0]) }), el("dd", { text: x[1] || t("iNone") })]); })),
+        chips(c.niches)
+      ]),
       el("h2", { text: t("appsTitle", apps.length) }),
       apps.length ? board(apps)
         : empty(t("appsEmpty"), c.status === "open" ? toDiscover(c, "goDiscover") : null)
@@ -895,7 +942,7 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
       el("div", { class: "board" }, LANES.map(function (l) {
         var xs = of(l[1]), hid = "l" + (++uid);
         return el("section", { class: "lane", "aria-labelledby": hid }, [
-          el("h3", { class: "lh", id: hid }, [el("span", { text: t(l[0]) }), el("span", { class: "n", text: num(xs.length) })]),
+          el("h3", { class: "lh", id: hid }, [el("span", { class: "ld", "data-l": l[0], text: t(l[0]) }), el("span", { class: "n", text: num(xs.length) })]),
           // Tek durumlu sütunda rozet tekrar olur; "Çalışılıyor"da kabul/revizyon ayrımı için kalır
           xs.length ? el("div", { class: "lc" }, xs.map(function (a) { return appCard(a, true, l[1].length === 1); })) : el("p", { class: "none", text: t("colEmpty") })
         ]);
@@ -1167,10 +1214,73 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
   function profile() {
     return BC.call("GET", "auth/me").then(function (d) {
       U = d.user; paintWho();
-      return [el("h1", { text: t("nProfile") }), el("p", { class: "lead", text: t(isOwner() ? "profLeadO" : "profLeadC") }), profileForm(), U.role === "influencer" ? socials() : null];
+      var side = el("div", null, profMeter(false));
+      return [el("h1", { text: t("nProfile") }), el("p", { class: "lead", text: t(isOwner() ? "profLeadO" : "profLeadC") }),
+        el("div", { class: "ov" }, [el("div", null, [profileForm(function () { side.replaceChildren(profMeter(false)); }), U.role === "influencer" ? socials() : null]), side])];
     });
   }
-  function profileForm() {
+  function setTheme(v) {
+    if (v === "light" || v === "dark") document.documentElement.setAttribute("data-theme", v);
+    else document.documentElement.removeAttribute("data-theme");
+  }
+  function seg(label, opts, cur, pick) {
+    var g = el("div", { class: "tabs seg", role: "group", "aria-label": label });
+    opts.forEach(function (o) {
+      var b = el("button", { type: "button", "aria-pressed": String(o[0] === cur), text: o[1] });
+      b.addEventListener("click", function () {
+        g.querySelectorAll("button").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); });
+        pick(o[0]);
+      });
+      add(g, b);
+    });
+    return [el("p", { class: "lbl", text: label }), g];
+  }
+  function settings() {
+    return BC.call("GET", "auth/me").then(function (d) {
+      U = d.user; paintWho();
+      var m = note(), ok = okNote(), b = el("button", { type: "submit", class: "btn", text: t("save") });
+      var name = el("input", { type: "text", maxlength: 100, autocomplete: "name", value: U.name });
+      var mail = el("input", { type: "email", value: U.email || "", readonly: true });
+      var f = el("form", { class: "f", "data-sk-noform": true, novalidate: true }, [fld("st-n", t("setName"), name), fld("st-e", t("setEmail"), mail, t("setEmailHint")), b, m, ok]);
+      f.addEventListener("submit", function (e) {
+        e.preventDefault(); say(m, ""); say(ok, "");
+        var nm = name.value.trim();
+        if (!nm) return say(m, BC.msg("name"));
+        busy(b, true);
+        BC.call("POST", "app/profile", { name: nm, profile: U.profile || {} }).then(function (d) {
+          U = d.user; paintWho(); busy(b, false); say(ok, t("saved"));
+        }, function (e) { busy(b, false); say(m, BC.msg(e.code)); });
+      });
+      var pm = note(), pok = okNote(), pb = el("button", { type: "button", class: "btn sec", text: t("setPwBtn") });
+      pb.addEventListener("click", function () {
+        say(pm, ""); say(pok, ""); busy(pb, true);
+        BC.call("POST", "auth/forgot", { email: U.email }).then(function () { busy(pb, false); say(pok, t("setPwSent")); },
+          function (e) { busy(pb, false); say(pm, BC.msg(e.code)); });
+      });
+      var th = "system";
+      try { th = localStorage.getItem("bc-theme") || "system"; } catch (e) {}
+      var ob = el("button", { type: "button", class: "btn sec bad", text: t("logout") });
+      ob.addEventListener("click", out);
+      function card(h, kids) { return el("section", { class: "card" }, [el("div", { class: "ch" }, el("h2", { text: h })), el("div", { class: "cb" }, kids)]); }
+      return [el("h1", { text: t("nSettings") }), el("p", { class: "lead", text: t("setLead") }),
+        el("div", { class: "ov" }, [
+          el("div", null, [
+            card(t("setAcct"), [f, el("h3", { class: "sub", text: t("setPw") }), el("p", { class: "hint", text: t("setPwHint") }), pb, pm, pok])
+          ]),
+          el("div", null, [
+            card(t("setLook"), [
+              seg(t("setLang"), [["tr", "Türkçe"], ["en", "English"]], L, function (v) { if (v !== L) toggleLang(); }),
+              seg(t("setTheme"), [["system", t("thSys")], ["light", t("thLight")], ["dark", t("thDark")]], th, function (v) {
+                setTheme(v);
+                try { if (v === "system") localStorage.removeItem("bc-theme"); else localStorage.setItem("bc-theme", v); } catch (e) {}
+              })
+            ]),
+            card(t("logout"), [el("p", { class: "hint", text: t("setOutLead") }), ob])
+          ])
+        ])];
+    });
+  }
+  function profileForm(onSaved) {
     var p = U.profile || {}, role = U.role, inf = role === "influencer", m = note(), ok = okNote(), rows = [];
     var b = el("button", { type: "submit", class: "btn", text: t("save") });
     var name = el("input", { type: "text", maxlength: 100, autocomplete: "name", value: U.name });
@@ -1247,6 +1357,7 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
         U = d.user; paintWho(); busy(b, false);
         web.value = (U.profile || {}).website || "";
         say(ok, t("saved"));
+        if (onSaved) onSaved();
       }, function (e) { busy(b, false); say(m, BC.msg(e.code)); });
     });
     return f;
@@ -1344,7 +1455,7 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
     return box;
   }
 
-  var VIEWS = { overview: overview, campaigns: campaigns, "new": newCampaign, campaign: campaign, discover: discover, applications: applications, profile: profile };
+  var VIEWS = { overview: overview, campaigns: campaigns, "new": newCampaign, campaign: campaign, discover: discover, applications: applications, profile: profile, settings: settings };
 
   // Üst çubuk ve alt bilgi metinleri, dil düğmesi
   function initials(s) {
@@ -1363,6 +1474,7 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
     [langB, langB2].forEach(function (b) { label(b, "globe", L === "tr" ? "English" : "Türkçe"); b.setAttribute("lang", L === "tr" ? "en" : "tr"); });
     [outB, outB2].forEach(function (b) { label(b, "logout", t("logout")); });
     [$("help2"), $("help3")].forEach(function (b) { label(b, "help", t("help")); });
+    [$("set"), $("set2")].forEach(function (b) { label(b, "gear", t("nSettings")); });
     $("copy").textContent = t("copy");
     $("help").textContent = t("help");
     $("group").setAttribute("aria-label", t("groupLabel"));
