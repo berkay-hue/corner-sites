@@ -2205,9 +2205,48 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
   var CR = { camp: 0 };
   function crSoft(p) { return p.then(function (d) { return { d: d }; }, function (e) { if (e && e.code === "auth") throw e; return { e: e }; }); }
   function crMissing(e) { return !!e && (e.status === 404 || e.status === 405 || e.code === "unavailable"); }
-  function crKey(cid) { return "bc-cposts-" + U.id + "-" + cid; }
-  function crLoad(cid) { try { var v = JSON.parse(localStorage.getItem(crKey(cid)) || "[]"); return Array.isArray(v) ? v.filter(function (s) { return typeof s === "string"; }) : []; } catch (e) { return []; } }
-  function crStore(cid, ids) { try { localStorage.setItem(crKey(cid), JSON.stringify(ids.slice(-500))); return true; } catch (e) { return false; } }
+  // Yerel modda eklenen gönderi, gönderi kaydına (pKey) yazılır: creator_id + src_post ile bulunur, kampanyalar gönderinin alanıdır
+  function crFind(list, cr, pid) { return list.filter(function (q) { return q.creator_id === cr && q.src_post === pid; })[0]; }
+  function crIn(cid, cr) {
+    var o = {};
+    pLoad().forEach(function (q) { if (q.creator_id === cr && Array.isArray(q.campaigns) && q.campaigns.indexOf(cid) >= 0) o[q.src_post] = 1; });
+    return o;
+  }
+  function crPut(list, cid, x, p, on) {
+    var cr = String(x.id), q = crFind(list, cr, p.id);
+    if (on) {
+      if (!q) {
+        var snap = { at: isoDay(new Date()) };
+        PMETS.forEach(function (m) { if (typeof p[m] === "number") snap[m] = p[m]; });
+        q = { id: newId(), url: p.url || "", platform: p.platform, type: p.type, date: p.date || snap.at, caption: p.caption || "", thumb: p.thumb || "", snaps: [snap], creator_id: cr, src_post: p.id, campaigns: [] };
+        list.push(q);
+      }
+      if (!Array.isArray(q.campaigns)) q.campaigns = [];
+      if (q.campaigns.indexOf(cid) < 0) q.campaigns.push(cid);
+      return list;
+    }
+    if (!q) return list;
+    q.campaigns = (Array.isArray(q.campaigns) ? q.campaigns : []).filter(function (c) { return c !== cid; });
+    return q.campaigns.length ? list : list.filter(function (y) { return y !== q; });
+  }
+  // Eski "bc-cposts-<uid>-<cid>" anahtarı (girdi "creator:post"): bu sayfadaki gönderiler bir kez taşınır, boşalan anahtar silinir
+  function crMigrate(x, posts) {
+    try {
+      var pre = "bc-cposts-" + U.id + "-", keys = [], list = pLoad(), moved = 0;
+      for (var i = 0; i < localStorage.length; i++) { var k = localStorage.key(i); if (k && k.indexOf(pre) === 0) keys.push(k); }
+      keys.forEach(function (k) {
+        var cid = +k.slice(pre.length), v = JSON.parse(localStorage.getItem(k) || "[]");
+        if (!Array.isArray(v) || !(cid > 0)) { localStorage.removeItem(k); return; }
+        var rest = v.filter(function (e) {
+          var j = typeof e === "string" ? e.indexOf(":") : -1, p = j > 0 && e.slice(0, j) === String(x.id) ? posts.filter(function (y) { return y.id === e.slice(j + 1); })[0] : null;
+          if (!p) return typeof e === "string";
+          list = crPut(list, cid, x, p, true); moved++; return false;
+        });
+        if (moved && !pStore(list)) return;
+        if (rest.length) localStorage.setItem(k, JSON.stringify(rest)); else localStorage.removeItem(k);
+      });
+    } catch (e) { /* depolama kapalı: taşıma yok */ }
+  }
   function crSample(x) {
     var r = rng("cposts:" + x.id), pl = (x.platforms || []).map(function (p) { return p.platform; }).filter(function (p) { return p === "instagram" || p === "tiktok" || p === "youtube"; });
     if (!pl.length) pl = ["instagram"];
@@ -2252,18 +2291,15 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
       var list = sample ? (perr ? [] : crSample(x)) : pr.d.posts.slice(0, 9).map(crPost);
       if (!open.some(function (c) { return c.id === CR.camp; })) CR.camp = open.length ? open[0].id : 0;
       var local = sample, added = {}, msg = el("p", { class: "ok", role: "status" }), err = note();
-      function load() { added = {}; if (CR.camp) crLoad(CR.camp).forEach(function (k) { added[k] = 1; }); }
-      function pid(p) { return x.id + ":" + p.id; }
+      function load() { added = CR.camp ? crIn(CR.camp, String(x.id)) : {}; }
       var sel = open.length ? el("select", { onchange: function () { CR.camp = +sel.value; load(); paint(); } }, open.map(function (c) { return el("option", { value: String(c.id), text: c.title }); })) : null;
       if (sel) sel.value = String(CR.camp);
       var grid = el("ul", { class: "pgrid cgrid" });
       function toggle(p, btn) {
-        var k = pid(p), on = !!added[k], cid = CR.camp;
+        var on = !!added[p.id], cid = CR.camp;
         say(err, ""); msg.textContent = "";
         function done() {
-          var ids = crLoad(cid).filter(function (s) { return s !== k; });
-          if (!on) ids.push(k);
-          if (!crStore(cid, ids)) { busy(btn, false); say(err, t("pFull")); return; }
+          if (!pStore(crPut(pLoad(), cid, x, p, !on))) { busy(btn, false); say(err, t("pFull")); return; }
           load(); paint(); msg.textContent = t(on ? "crRemoved" : "crAdded");
           var b = grid.querySelector('[data-cp="' + CSS.escape(p.id) + '"]'); if (b) b.focus();
         }
@@ -2276,7 +2312,7 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
         });
       }
       function card(p) {
-        var on = !!added[pid(p)], s = { likes: p.likes, comments: p.comments, views: p.views, reach: p.reach };
+        var on = !!added[p.id], s = { likes: p.likes, comments: p.comments, views: p.views, reach: p.reach };
         var btn = CR.camp ? el("button", { type: "button", class: on ? "btn sm sec" : "btn sm", "data-cp": p.id, "aria-pressed": String(on), "aria-label": t(on ? "crRemove" : "crAdd") + ": " + (p.caption || pLabel(p)), text: t(on ? "crRemove" : "crAdd") }) : null;
         if (btn) btn.addEventListener("click", function () { toggle(p, btn); });
         return el("li", { class: "pcard" }, [pThumb(p, sample),
@@ -2286,7 +2322,7 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
             el("div", { class: "pact" }, [btn, p.url ? el("a", { class: "ghost sm", href: p.url, target: "_blank", rel: "noopener noreferrer nofollow", text: t("crOpenPost") }) : null])])]);
       }
       function paint() { grid.replaceChildren.apply(grid, list.map(card)); }
-      load(); paint();
+      crMigrate(x, list); load(); paint();
       return [back("#discover", "crBack"), el("h1", { text: x.name }),
         x.city || x.bio ? el("p", { class: "lead" }, [x.city ? x.city : null, x.city && x.bio ? " · " : null, x.bio || null]) : null, chips(x.niches),
         el("section", { class: "card" }, [el("div", { class: "ch" }, el("h2", { text: t("crAccounts") })), el("div", { class: "cb" }, crAccounts(res[2].d, x))]),

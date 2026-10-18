@@ -1,7 +1,7 @@
 // brandcorner panel influencer tam profili (#creator-<id>) headless testi: sahte API (fetch mock), yerel Chrome (CDP), JS hatası 0.
 // Kullanım: node tools/smoke-creator.mjs [ekranGörüntüsüKlasörü]   (8788 ve 9333 portları boş olmalı)
 // Kontroller: örnek veri (404), 3x3 ızgara, kampanyaya ekle/çıkar (yerel ve API), açık kampanya yok, bulunamadı,
-// çekmeceden profil bağlantısı, 44px dokunma hedefi, yatay taşma; 2000x924 ve 390x844.
+// çekmeceden profil bağlantısı, 44px dokunma hedefi, yatay taşma; 2000x924, 390x844 ve 375x812.
 import { spawn } from "node:child_process";
 import { mkdtempSync, writeFileSync, mkdirSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -12,7 +12,7 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const OUT = process.argv[2]; if (OUT) mkdirSync(OUT, { recursive: true });
 const BASE = "http://localhost:8788", PORT = 9333;
 const CHROME = process.env.CHROME || "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
-const SIZES = [["d", 2000, 924, false], ["m", 390, 844, true]];
+const SIZES = [["d", 2000, 924, false], ["m", 390, 844, true], ["s", 375, 812, true]];
 
 // sc: { lang, live: gönderi API'si var mı, noOpen: açık kampanya yok }
 const mock = sc => `(() => {
@@ -110,6 +110,9 @@ try {
     ok((await txt(".cb .ok")).length > 0, "eklendi notu");
     ok(await ev(`document.activeElement && document.activeElement.getAttribute("data-cp")`) === "c0", "odak düğmede kalır");
     ok(!(await calls()).some(c => c.startsWith("POST")), "örnek modda API'ye yazılmaz");
+    const PK = `JSON.parse(localStorage.getItem("bc-posts-9") || "[]")`;
+    ok(await ev(`${PK}.some(p => p.creator_id === "12" && p.src_post === "c0" && p.campaigns.length === 1 && p.campaigns[0] === 7 && p.snaps.length === 1)`), "gönderi kaydına yazılır (kampanya alanı)");
+    ok(!(await ev(`Object.keys(localStorage).some(k => k.startsWith("bc-cposts-"))`)), "ayrı kampanya anahtarı yok");
     await shot(`creator-sample-${sz}`, w);
     await open({}, "creator-12", w, h, mobile, true);
     ok(await pressed() === 1, "yenilemede ekleme korunur");
@@ -118,6 +121,18 @@ try {
     await setv("#cr-camp", "7"); await sleep(100);
     await click('.cgrid [data-cp="c0"]'); await sleep(150);
     ok(await pressed() === 0, "çıkar → 0 seçili");
+    ok(await ev(`${PK}.length`) === 0, "çıkarınca kayıt silinir");
+    // Eski bc-cposts anahtarı bir kez gönderi kaydına taşınır
+    await ev(`localStorage.setItem("bc-cposts-9-7", JSON.stringify(["12:c1", "12:yok"]))`);
+    await open({}, "creator-12", w, h, mobile, true);
+    ok(await pressed() === 1, "eski kayıt taşındı → 1 seçili");
+    ok(await ev(`document.querySelector('.cgrid [data-cp="c1"]').getAttribute("aria-pressed")`) === "true", "taşınan gönderi c1");
+    ok(await ev(`${PK}.some(p => p.src_post === "c1" && p.campaigns[0] === 7)`), "taşınan kayıt gönderi kaydında");
+    ok(await ev(`JSON.stringify(JSON.parse(localStorage.getItem("bc-cposts-9-7")))`) === '["12:yok"]', "eşleşmeyen eski kayıt korunur");
+    await ev(`localStorage.setItem("bc-cposts-9-7", JSON.stringify(["12:c1"]))`);
+    await open({}, "creator-12", w, h, mobile, true);
+    ok(await ev(`localStorage.getItem("bc-cposts-9-7")`) === null, "boşalan eski anahtar silinir");
+    ok(await ev(`${PK}.filter(p => p.src_post === "c1").length`) === 1, "ikinci taşıma çift kayıt üretmez");
 
     // 2) Gönderi API'si var: doğrulandı rozeti, güvensiz bağlantı atılır, POST/DELETE çağrıları; İngilizce
     await open({ live: true, lang: "en" }, "creator-12", w, h, mobile);
