@@ -241,7 +241,7 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
       socFol: "Takipçi", socViews: "Ort. izlenme", socLikes: "Ort. beğeni", socComm: "Ort. yorum",
       socDone: "{n} hesabın bağlandı.", socCutOk: "{n} bağlantısı kesildi.", socDenied: "Bağlantı izni verilmedi; istersen yeniden deneyebilirsin.",
       socTaken: "Bu hesap başka bir Brand Corner hesabına bağlı.", socTicket: "Bağlantı süresi doldu ya da geçersiz; yeniden \"Bağla\"ya bas.",
-      socForbidden: "Hesap bağlama yalnız influencer hesaplarında kullanılabilir.", socProvider: "Platform şu an yanıt vermedi; biraz sonra yeniden dene.",
+      socForbidden: "Hesap bağlama yalnız influencer hesaplarında kullanılabilir.", socProvider: "Platform şu an yanıt vermedi; biraz sonra yeniden dene.", socOwner: "Bu bağlantı başka bir hesaptan başlatıldı, yeniden Bağla'ya bas.",
       perf: "Performans", mReach: "Erişim", mEng: "Etkileşim", mSpend: "Harcama", mEarn: "Kazanç", noData: "Veri yok", perfNote: "Bu ölçümler içerik bağlantıları ve ödemeler kaydedildikçe dolacak.",
       acctMenu: "Hesap menüsü", tabsLabel: "Panel sekmeleri",
       soon: "Yakında", soonBadge: "Yakında", soonLead: "Aşağıdaki özellikler henüz panelde yok; hazır olduklarında burada açılacak.",
@@ -346,7 +346,7 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
       socFol: "Followers", socViews: "Avg. views", socLikes: "Avg. likes", socComm: "Avg. comments",
       socDone: "Your {n} account is connected.", socCutOk: "{n} disconnected.", socDenied: "Permission wasn't granted; you can try again.",
       socTaken: "This account is linked to another Brand Corner account.", socTicket: "The connection expired or is invalid; press \"Connect\" again.",
-      socForbidden: "Account connections are only available for influencer accounts.", socProvider: "The platform didn't respond; try again shortly.",
+      socForbidden: "Account connections are only available for influencer accounts.", socProvider: "The platform didn't respond; try again shortly.", socOwner: "This connection was started from another account; press Connect again.",
       perf: "Performance", mReach: "Reach", mEng: "Engagement", mSpend: "Spend", mEarn: "Earnings", noData: "No data", perfNote: "These metrics fill in as content links and payments are recorded.",
       acctMenu: "Account menu", tabsLabel: "Panel tabs",
       soon: "Coming soon", soonBadge: "Coming soon", soonLead: "These features aren't in the panel yet; they'll show up here when they're ready.",
@@ -1235,6 +1235,15 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
     });
     return [el("p", { class: "lbl", text: label }), g];
   }
+  // Yalnız ad kaydında profil olduğu gibi geri gider; Worker null sayıyı 0'a çevirir (ajans clients, platform followers).
+  // null ve boş alanlar gönderilmez, Worker onları boş bırakır.
+  function bare(v) {
+    if (Array.isArray(v)) return v.map(bare);
+    if (!v || typeof v !== "object") return v;
+    var o = {};
+    Object.keys(v).forEach(function (k) { if (v[k] !== null && v[k] !== undefined && v[k] !== "") o[k] = bare(v[k]); });
+    return o;
+  }
   function settings() {
     return BC.call("GET", "auth/me").then(function (d) {
       U = d.user; paintWho();
@@ -1247,14 +1256,14 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
         var nm = name.value.trim();
         if (!nm) return say(m, BC.msg("name"));
         busy(b, true);
-        BC.call("POST", "app/profile", { name: nm, profile: U.profile || {} }).then(function (d) {
+        BC.call("POST", "app/profile", { name: nm, profile: bare(U.profile || {}) }).then(function (d) {
           U = d.user; paintWho(); busy(b, false); say(ok, t("saved"));
         }, function (e) { busy(b, false); say(m, BC.msg(e.code)); });
       });
       var pm = note(), pok = okNote(), pb = el("button", { type: "button", class: "btn sec", text: t("setPwBtn") });
       pb.addEventListener("click", function () {
         say(pm, ""); say(pok, ""); busy(pb, true);
-        BC.call("POST", "auth/forgot", { email: U.email }).then(function () { busy(pb, false); say(pok, t("setPwSent")); },
+        BC.call("POST", "auth/forgot", { email: U.email, lang: L }).then(function () { busy(pb, false); say(pok, t("setPwSent")); },
           function (e) { busy(pb, false); say(pm, BC.msg(e.code)); });
       });
       var th = "system";
@@ -1363,11 +1372,11 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
     return f;
   }
 
-  // Sosyal hesaplar (influencer): resmî API'li platformlar OAuth ile bağlanır. Ölçüm kapalıysa (409 "disabled") örnek kip:
+  // Sosyal hesaplar (influencer): resmî API'li platformlar OAuth ile bağlanır. Ölçüm kapalıysa (200 disabled:true ya da 409 "disabled") örnek kip:
   // örnek kart açıkça "örnek" etiketli, düğmeler kapalı. LinkedIn, X, Twitch: resmî veri yok, düğme yok.
   var OAUTH = ["instagram", "tiktok", "youtube"];
   function socMsg(e) {
-    return BC.msg(e.status === 410 ? "ticket" : e.code, { disabled: t("socOff"), taken: t("socTaken"), ticket: t("socTicket"), expired: t("socTicket"), forbidden: t("socForbidden"), provider: t("socProvider"), not_configured: t("socNotConf"), no_api: t("noData") });
+    return BC.msg(e.status === 410 ? "ticket" : e.code, { disabled: t("socOff"), taken: t("socTaken"), ticket: t("socTicket"), expired: t("socTicket"), forbidden: t("socForbidden"), provider: t("socProvider"), ticket_owner: t("socOwner"), not_configured: t("socNotConf"), no_api: t("noData") });
   }
   function socials() {
     var box = el("section", { class: "box soc", "aria-labelledby": "soc-h" }), m = note(), ok = okNote(), ret = RET, my = 0;
@@ -1402,27 +1411,33 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
       if (!off) b.addEventListener("click", function () { fn(p, b); });
       return b;
     }
-    function sample(md) {
+    // real: ölçüm kapalıyken de dönen bağlı/hatalı satırlar. Bunlar gerçek hesaptır: "Kes" düğmesi var, örnek sayı gösterilmez.
+    function sample(md, real) {
       var acc = ((md && md.accounts) || []).filter(function (a) { return a.source === "sample" && PL[a.platform]; });
       var card = el("div", { class: "sample" }, [
         el("p", { class: "meta" }, [el("span", { class: "badge b-sample", text: t("socSample") }), " ", t("socSampleNote")]),
         acc.length ? acc.map(function (a) { return [el("h3", null, [PL[a.platform] + (a.handle ? " · " + a.handle : ""), el("span", { class: "badge b-sample", text: t("socSample") })]), mets(a, true)]; })
           : el("p", { class: "meta", text: t("socSampleNone") })
       ]);
+      var on = {};
+      (real || []).forEach(function (c) { if (PL[c.platform] && (c.status === "connected" || c.status === "error")) on[c.platform] = c; });
       return [card].concat(PLATFORMS.map(function (p) {
+        if (on[p]) return linked(on[p], null);
         var o = OAUTH.indexOf(p) >= 0;
         return row(p, el("span", { text: o ? t("socOffRow") : t("noData") }), o ? btn("btn sm", t("socConnect"), p, null, true) : null);
       }));
     }
+    function linked(c, a) {
+      return row(c.platform, [el("span", { text: c.handle ? t("socOnAs", c.handle) : t("socOn") }), c.status === "error" ? el("span", { class: "warn", text: " · " + t("socErr") }) : null],
+        btn("ghost", t("socCut"), c.platform, cut), a ? mets(a, false) : null);
+    }
     function live(list, md) {
       var by = {};
-      ((md && md.accounts) || []).forEach(function (a) { if (a.source !== "none") by[a.platform] = a; });
+      // gerçek satıra yalnız gerçek ölçüm: "sample" ve "none" kaynaklı sayılar asla bağlı hesabın altında görünmez
+      ((md && md.accounts) || []).forEach(function (a) { if (a.source !== "none" && a.source !== "sample") by[a.platform] = a; });
       return list.filter(function (c) { return PL[c.platform]; }).map(function (c) {
         var p = c.platform, st = c.status;
-        if (st === "connected" || st === "error") {
-          return row(p, [el("span", { text: c.handle ? t("socOnAs", c.handle) : t("socOn") }), st === "error" ? el("span", { class: "warn", text: " · " + t("socErr") }) : null],
-            btn("ghost", t("socCut"), p, cut), by[p] ? mets(by[p], false) : null);
-        }
+        if (st === "connected" || st === "error") return linked(c, by[p]);
         if (st === "available") return row(p, el("span", { text: t("socAvail") }), btn("btn sm", t("socConnect"), p, connect));
         return row(p, el("span", { text: st === "not_configured" ? t("socNotConf") : t("noData") }), null);
       });
@@ -1435,7 +1450,9 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
       return Promise.all([soft(BC.call("GET", "app/connections")), soft(BC.call("GET", "app/metrics"))]).then(function (r) {
         if (me !== my) return;
         var c = r[0], md = r[1].err ? null : r[1].metrics;
-        if (c.err && c.err.code === "disabled") paint(sample(md));
+        // #198 sonrası ölçüm kapalıyken 200 {disabled:true, connections:[bağlı/hatalı]} döner; eski 409 da aynı kipe düşer
+        if (c.err && c.err.code === "disabled") paint(sample(md, []));
+        else if (!c.err && c.disabled) paint(sample(md, c.connections || []));
         else if (c.err) { if (c.err.code !== "auth") paint(failLine(c.err, function () { load(); })); }
         else paint(live(c.connections || [], md));
         if (focus) { var h = box.querySelector("h2"); h.tabIndex = -1; h.focus(); }
