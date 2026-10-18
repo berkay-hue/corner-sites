@@ -183,13 +183,13 @@ Puanlar tek başına bir şey ifade etmez. Önemli olan her puan aralığının 
 - Fit skoru 70 ve üzeri: yüksek fit
 - Engagement skoru 50 ve üzeri: yüksek engagement
 
-B grubundaki lead'ler, outbound ekiplerin en büyük fırsatıdır. Doğru şirkettirler ama henüz sizi tanımamaktadırlar. Bu gruba gönderilecek mesajların kalitesi dönüşümü doğrudan belirler. [Yapay zekayla soğuk e-posta yazmayı anlattığımız yazıda](/blog/yapay-zekayla-soguk-eposta-nasil-yazilir) bu lead'ler için ölçeklenebilir ama kişisel mesajların nasıl hazırlanacağını detaylıca ele aldık. Bu dizileri ürün videonuz, PDF dokümanınız veya web sitenizden otomatik üretmek için [Sekans Yazarı aracını](/sekans-yazari) kullanabilirsiniz.
+B grubundaki lead'ler, outbound ekiplerin en büyük fırsatıdır. Doğru şirkettirler ama henüz sizi tanımamaktadırlar. Bu gruba gönderilecek mesajların kalitesi dönüşümü doğrudan belirler. [Yapay zekayla soğuk e-posta yazmayı anlattığımız yazıda](/blog/yapay-zekayla-soguk-eposta-nasil-yazilir) bu lead'ler için ölçeklenebilir ama kişisel mesajların nasıl hazırlanacağını detaylıca ele aldık. Bu dizileri ürün videonuz, PDF dokümanınız veya web sitenizden otomatik üretmek için Sekans Yazarı aracını kullanabilirsiniz.
 
 ## Adım 7: Veri Zenginleştirmeyle Modeli Besleyin
 
 Fit skorunun doğruluğu, elinizdeki verinin eksiksizliğine bağlıdır. Bir form doldurulduğunda genellikle yalnızca ad, e-posta ve şirket adı gelir. Sektör, çalışan sayısı, unvan ve teknoloji bilgisi eksik kalır. Bu eksik alanlar sıfır puan alırsa iyi bir lead haksız yere düşük skorlanır.
 
-Bu sorunu çözmek için veri zenginleştirme araçları kullanılır. Lead CRM'e girdiği anda e-posta alan adından şirket bilgileri, kişinin adından ve şirketinden unvan ve kıdem bilgileri otomatik olarak çekilir. Örneğin [Apollo.io](https://get.apollo.io/679irkzm35ya) gibi B2B veri platformları hem yeni lead listesi oluşturmak hem de mevcut kayıtları firmografik verilerle zenginleştirmek için yaygın olarak kullanılır. Hedef şirketlerin web sitelerinde belirli ürün veya teknoloji sinyallerini toplu olarak aramak isterseniz [Web Keyword Scanner aracımız](/web-keyword) da fit skoruna veri sağlayabilir.
+Bu sorunu çözmek için veri zenginleştirme araçları kullanılır. Lead CRM'e girdiği anda e-posta alan adından şirket bilgileri, kişinin adından ve şirketinden unvan ve kıdem bilgileri otomatik olarak çekilir. Örneğin [Apollo.io](https://get.apollo.io/679irkzm35ya) gibi B2B veri platformları hem yeni lead listesi oluşturmak hem de mevcut kayıtları firmografik verilerle zenginleştirmek için yaygın olarak kullanılır. Hedef şirketlerin web sitelerinde belirli ürün veya teknoloji sinyallerini toplu olarak aramak isterseniz Web Keyword Scanner aracımız da fit skoruna veri sağlayabilir.
 
 Zenginleştirme yaparken iki noktaya dikkat edin:
 

@@ -7,8 +7,7 @@ import { mkdir, writeFile } from "node:fs/promises";
 import { join, dirname } from "node:path";
 
 const APPS = {
-  "salescorner.co": ["login", "dashboard", "briefing", "cv-analiz", "gorsel-ekleme", "haftalik-rapor", "keyword-html",
-    "kolajmaker", "linkedin-callback", "linkedin-post", "rakip-analizi", "sekans-yazari", "seo-robotu", "web-keyword"],
+  "salescorner.co": ["linkedin-callback"],
 };
 const host = process.argv[2];
 const pages = APPS[host];

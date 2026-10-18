@@ -71,7 +71,7 @@ Yapay zeka satış otomasyonunu güçlendirir, ancak kontrolsüz bırakıldığ�
 - **Müşteriye giden metinlerde insan onayı tutun.** AI'ın yazdığı e-postayı doğrudan göndermek yerine CRM'de taslak olarak bırakın; temsilci gözden geçirip göndersin.
 - **Gerekli veriyi gönderin, fazlasını değil.** Modele yalnızca görev için gereken alanları iletin; kişisel verileri gereksiz yere paylaşmayın. Soğuk e-postada kişisel verinin yasal sınırları için [KVKK rehberimize](/blog/kvkk-uyumlu-soguk-eposta-yasal-sinirlar) bakabilirsiniz.
 
-Yapay zekanın soğuk e-posta yazımında nasıl kullanılacağını ayrıntılı merak ediyorsanız [yapay zekayla soğuk e-posta yazma rehberimize](/blog/yapay-zekayla-soguk-eposta-nasil-yazilir) göz atabilirsiniz. n8n ve yapay zekayla çalışan hazır bir örnek görmek isterseniz [Sekans Yazarı aracımız](/sekans-yazari) video, PDF veya web sitesinden outreach dizisi üretiyor.
+Yapay zekanın soğuk e-posta yazımında nasıl kullanılacağını ayrıntılı merak ediyorsanız [yapay zekayla soğuk e-posta yazma rehberimize](/blog/yapay-zekayla-soguk-eposta-nasil-yazilir) göz atabilirsiniz. n8n ve yapay zekayla çalışan hazır bir örnek görmek isterseniz Sekans Yazarı aracımız video, PDF veya web sitesinden outreach dizisi üretiyor.
 
 ## Sık Yapılan Hatalar
 
@@ -104,4 +104,4 @@ Lead yakalama ve CRM'e yazma gibi tek amaçlı bir akış, araçlara erişim haz
 
 n8n ile B2B satış otomasyonu, satış ekibinizin zamanını tekrar eden işlerden alıp müşteriyle geçirilen zamana aktarmanın en pratik yollarından biri. Küçük ve net bir süreçle başlayın, beş katmanlı yapıyı koruyun, AI'ı sınırları belirli görevlerde kullanın ve her adımı ölçün.
 
-Satış süreçlerinizi AI ve n8n ile uçtan uca otomatikleştirmek istiyorsanız Sales Corner ekibi yanınızda. Aynı altyapıyla çalışan modülleri [Sales Corner modül panelinde](/dashboard) görebilirsiniz; örneğin [Toplantı Briefing aracı](/briefing) görüşme öncesi firma ve kişi araştırmasını otomatik hazırlar. Mevcut akışınızı birlikte inceleyip hangi adımların otomasyona en uygun olduğunu belirlemek için [bizimle iletişime geçin](/iletisim).
+Satış süreçlerinizi AI ve n8n ile uçtan uca otomatikleştirmek istiyorsanız Sales Corner ekibi yanınızda. Aynı altyapıyla çalışan modülleri Sales Corner modül panelinde görebilirsiniz; örneğin Toplantı Briefing aracı görüşme öncesi firma ve kişi araştırmasını otomatik hazırlar. Mevcut akışınızı birlikte inceleyip hangi adımların otomasyona en uygun olduğunu belirlemek için [bizimle iletişime geçin](/iletisim).

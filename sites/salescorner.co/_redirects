@@ -1,0 +1,16 @@
+# Eski araç/panel sayfaları kaldırıldı (gece denetimi). /linkedin-callback OAuth redirect_uri olduğu için duruyor (noindex).
+/dashboard        /iletisim  301
+/sekans-yazari    /iletisim  301
+/briefing         /iletisim  301
+/cv-analiz        /iletisim  301
+/rakip-analizi    /iletisim  301
+/seo-robotu       /iletisim  301
+/web-keyword      /iletisim  301
+/keyword-html     /iletisim  301
+/kolajmaker       /iletisim  301
+/linkedin-post    /iletisim  301
+/gorsel-ekleme    /iletisim  301
+/haftalik-rapor   /iletisim  301
+/login            /iletisim  301
+/page-5           /iletisim  301
+/page-6           /iletisim  301
