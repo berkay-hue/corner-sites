@@ -260,7 +260,7 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
       appsLead: "Başvurularınız ve markalardan gelen davetler.",
       myAppsEmpty: "Henüz başvurunuz ya da davetiniz yok. Fırsatlar sayfasından açık kampanyalara başvurabilirsiniz.", goOpps: "Fırsatlara göz at",
       discLead: "Profil kartlarını inceleyip doğrudan davet edin.", discQ: "Ara", discQPh: "İsim veya şehir", allNiches: "Tüm ilgi alanları",
-      fMin: "Takipçi", anyMin: "Her takipçi sayısı", discCount: "{n} influencer", viewProf: "Profili gör", inviteFor: "{n} için davet ediyorsunuz.",
+      fMinFol: "Takipçi", anyMin: "Her takipçi sayısı", discCount: "{n} influencer", discCount1: "1 influencer", discCap: "En yeni 100 profil gösteriliyor; daha dar sonuç için filtreleri kullanın.", viewProf: "Profili gör", inviteFor: "{n} için davet ediyorsunuz.",
       clearFor: "Temizle", drClose: "Kapat", drNoPlat: "Platform eklenmemiş.", drHist: "Sizinle geçmiş", drHistNone: "Henüz birlikte çalışmadınız.",
       drInvite: "Kampanyaya davet et", drNoOpen: "Davet edilebilecek açık kampanya yok: ya hepsinde zaten var ya da açık kampanyanız yok.",
       inviteInf: "Influencer davet et",
@@ -348,7 +348,7 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
       appsLead: "Your applications and invites from brands.",
       myAppsEmpty: "No applications or invites yet. You can apply to open campaigns from Opportunities.", goOpps: "Browse opportunities",
       discLead: "Browse profile cards and invite directly.", discQ: "Search", discQPh: "Name or city", allNiches: "All niches",
-      fMin: "Followers", anyMin: "Any follower count", discCount: "{n} influencers", viewProf: "View profile", inviteFor: "Inviting for {n}.",
+      fMinFol: "Followers", anyMin: "Any follower count", discCount: "{n} influencers", discCount1: "1 influencer", discCap: "Showing the newest 100 profiles; use the filters to narrow down.", viewProf: "View profile", inviteFor: "Inviting for {n}.",
       clearFor: "Clear", drClose: "Close", drNoPlat: "No platforms added.", drHist: "History with you", drHistNone: "You haven't worked together yet.",
       drInvite: "Invite to a campaign", drNoOpen: "No open campaign to invite them to: they're already in all of them, or you have none open.",
       inviteInf: "Invite influencers",
@@ -534,7 +534,7 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
     paintNav(r.tab);
     var stats = loadCounts(my, r.tab);
     if (!soft) show(el("p", { class: "muted", text: t("loading") }));
-    Promise.resolve().then(function () { return VIEWS[r.name](r, stats); }).then(function (kids) {
+    return Promise.resolve().then(function () { return VIEWS[r.name](r, stats); }).then(function (kids) {
       if (my !== seq) return;
       show(kids);
       if (!soft) {
@@ -871,6 +871,8 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
   }
 
   // Influencer keşfi (marka/ajans): yalnızca profilini açan influencer'lar
+  // Türkçe İ/ı dahil büyük-küçük harf ve aksan farkını yok sayan karşılaştırma anahtarı
+  function fold(v) { return String(v || "").normalize("NFD").replace(/\u0307/g, "").replace(/[ıİI]/g, "i").toLowerCase(); }
   function discover() {
     return Promise.all([BC.call("GET", "app/influencers"), BC.call("GET", "app/campaigns")]).then(function (r) {
       var all = r[0].influencers || [], camps = r[1].campaigns || [];
@@ -879,29 +881,35 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
       if (!forC) F.inviteFor = 0;
       var ctx = { all: all, camps: camps, open: open, forC: forC };
       var seen = {}, niches = [];
-      all.forEach(function (x) { (x.niches || []).forEach(function (n) { var k = n.toLocaleLowerCase(locale()); if (!seen[k]) { seen[k] = 1; niches.push(n); } }); });
+      all.forEach(function (x) { (x.niches || []).forEach(function (n) { var k = fold(n); if (!seen[k]) { seen[k] = 1; niches.push(n); } }); });
       niches.sort(function (a, b) { return a.localeCompare(b, locale()); });
+      if (F.niche && niches.indexOf(F.niche) < 0) F.niche = "";
       var q = el("input", { type: "search", maxlength: 60, placeholder: t("discQPh"), value: F.q });
       var n = el("select", { value: F.niche }, [el("option", { value: "", text: t("allNiches") })].concat(niches.map(function (x) { return el("option", { value: x, text: x }); })));
       var s = el("select", { value: F.platform }, [el("option", { value: "", text: t("allPlatforms") })].concat(PLATFORMS.map(function (x) { return el("option", { value: x, text: PL[x] }); })));
       var mn = el("select", { value: F.min }, [el("option", { value: "", text: t("anyMin") })].concat([10000, 50000, 100000].map(function (v) { return el("option", { value: String(v), text: num(v) + "+" }); })));
       var f = el("form", { class: "box f filter", role: "search", "data-sk-noform": true, novalidate: true }, [
         el("div", null, fld("dq", t("discQ"), q)), el("div", null, fld("dn", t("fNiche"), n)),
-        el("div", null, fld("dp", t("fPlatform"), s)), el("div", null, fld("dm", t("fMin"), mn))
+        el("div", null, fld("dp", t("fPlatform"), s)), el("div", null, fld("dm", t("fMinFol"), mn))
       ]);
-      var box = el("div");
-      ctx.repaint = function () { box.replaceChildren(discList(ctx)); };
+      var box = el("div"), cnt = el("p", { class: "info", role: "status" }); ctx.err = note();
+      ctx.repaint = function () {
+        var list = discList(ctx);
+        cnt.textContent = list.length ? (list.length === 1 ? t("discCount1") : t("discCount", num(list.length))) : t("discNone");
+        box.replaceChildren(list.length ? el("div", { class: "list" }, list.map(function (x) { return infCard(x, ctx); })) : empty(t("discNone")));
+      };
       function apply() { F.q = q.value.trim(); F.niche = n.value; F.platform = s.value; F.min = mn.value; ctx.repaint(); }
       f.addEventListener("submit", function (ev) { ev.preventDefault(); apply(); });
       f.addEventListener("input", apply); f.addEventListener("change", apply);
       ctx.repaint();
       var clr = el("button", { type: "button", class: "ghost", text: t("clearFor") });
-      clr.addEventListener("click", function () { F.inviteFor = 0; render(true); });
+      clr.addEventListener("click", function () { F.inviteFor = 0; render(true).then(function () { var i = view.querySelector("#dq"); if (i) i.focus(); }); });
       return [
         el("h1", { text: t("nDiscover") }), el("p", { class: "lead", text: t("discLead") }),
         forC ? el("div", { class: "box banner", role: "status" }, [forText(forC.title), clr]) : null,
         open.length ? null : el("p", { class: "info" }, [t("needOpen") + " ", el("a", { href: "#new", text: t("doNew") })]),
-        all.length ? f : null, all.length ? box : empty(t("discEmpty"))
+        all.length ? f : null, all.length >= 100 ? el("p", { class: "meta", text: t("discCap") }) : null,
+        ctx.err, all.length ? cnt : null, all.length ? box : empty(t("discEmpty"))
       ];
     });
   }
@@ -909,20 +917,17 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
     var parts = t("inviteFor").split("{n}");
     return el("p", null, [parts[0], el("b", { text: title }), parts[1] || ""]);
   }
+  // Platform seçiliyse takipçi eşiği yalnız o platformun kaydına uygulanır
   function discList(ctx) {
-    var q = F.q.toLocaleLowerCase(locale()), nk = F.niche.toLocaleLowerCase(locale()), min = +F.min || 0;
-    var list = ctx.all.filter(function (x) {
-      if (q && ((x.name || "") + " " + (x.city || "")).toLocaleLowerCase(locale()).indexOf(q) < 0) return false;
-      if (nk && !(x.niches || []).some(function (n) { return n.toLocaleLowerCase(locale()) === nk; })) return false;
-      if (F.platform && !x.platforms.some(function (p) { return p.platform === F.platform; })) return false;
-      if (min && !x.platforms.some(function (p) { return (p.followers || 0) >= min; })) return false;
+    var q = fold(F.q), nk = fold(F.niche), min = +F.min || 0;
+    return ctx.all.filter(function (x) {
+      if (q && fold((x.name || "") + " " + (x.city || "")).indexOf(q) < 0) return false;
+      if (nk && !(x.niches || []).some(function (n) { return fold(n) === nk; })) return false;
+      var ps = F.platform ? x.platforms.filter(function (p) { return p.platform === F.platform; }) : x.platforms;
+      if (F.platform && !ps.length) return false;
+      if (min && !ps.some(function (p) { return (p.followers || 0) >= min; })) return false;
       return true;
     });
-    if (!list.length) return empty(t("discNone"));
-    return el("div", null, [
-      el("p", { class: "info", role: "status", text: t("discCount", num(list.length)) }),
-      el("div", { class: "list" }, list.map(function (x) { return infCard(x, ctx); }))
-    ]);
   }
   function infCard(x, ctx) {
     var v = el("button", { type: "button", class: "ghost", "data-inf": x.id, "aria-label": t("viewProf") + ": " + x.name, text: t("viewProf") });
@@ -941,17 +946,17 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
     ]);
   }
   // Profil çekmecesi: yerel <dialog> odak tuzağı, Esc ve arka planı etkisizleştirmeyi kendisi sağlar
-  var dlg = null, dlgFor = 0;
+  var dlg = null, dlgFor = 0, dlgSeq = 0;
   function infDrawer(x, ctx, toInvite, sent) {
     if (!dlg) {
       dlg = el("dialog", { class: "drawer", "aria-labelledby": "dr-t" });
       document.body.appendChild(dlg);
       dlg.addEventListener("click", function (e) { if (e.target === dlg) drClose(); });
-      dlg.addEventListener("close", refocus);
+      dlg.addEventListener("close", function () { dlgSeq++; refocus(); });
       window.addEventListener("hashchange", function () { if (dlg.open) dlg.close(); });
     }
     dlgFor = x.id;
-    var byId = {};
+    var my = ++dlgSeq, live = function () { return dlg.open && dlgFor === x.id && my === dlgSeq; }, byId = {};
     ctx.camps.forEach(function (c) { byId[c.id] = c; });
     var hist = x.history || [], inH = {};
     hist.forEach(function (h) { inH[h.campaign_id] = 1; });
@@ -960,8 +965,11 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
     xb.addEventListener("click", drClose);
     var ok = sent ? el("p", { class: "ok", role: "status", tabindex: "-1", text: t("invitedOk") }) : null;
     var form = cands.length ? inviteForm(x, cands, ctx.forC && !inH[ctx.forC.id] ? ctx.forC.id : 0, function () {
-      ctx.repaint(); infDrawer(x, ctx, false, true);
-    }) : null;
+      // Yanıt geç geldiyse (çekmece kapandı ya da başka profil açıldı) yalnız liste yenilenir
+      ctx.repaint();
+      if (live()) infDrawer(x, ctx, false, true);
+      else if (document.activeElement === document.body) { var v = view.querySelector('[data-inf="' + x.id + '"]'); if (v) v.focus(); }
+    }, live, ctx.err) : null;
     dlg.replaceChildren(el("div", { class: "dw" }, [
       el("div", { class: "dh" }, [el("h2", { id: "dr-t", text: x.name }), xb]),
       el("div", { class: "db" }, [
@@ -992,18 +1000,23 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
     var b = view.querySelector('[data-inf="' + dlgFor + '"]');
     if (b) b.focus();
   }
-  function inviteForm(x, cands, sel, done) {
+  function inviteForm(x, cands, sel, done, live, err) {
     var p = "i" + (++uid) + "-", m = note(), b = el("button", { type: "submit", class: "btn sm", text: t("sendInvite") });
     var s = el("select", { value: String(sel || cands[0].id) }, cands.map(function (c) { return el("option", { value: String(c.id), text: c.title }); }));
     var ta = el("textarea", { maxlength: 1000, rows: 3 });
     var f = el("form", { class: "f", "data-sk-noform": true, novalidate: true }, [fld(p + "c", t("inviteTo"), s), fld(p + "m", t("inviteMsg"), ta), b, m]);
     f.addEventListener("submit", function (ev) {
-      ev.preventDefault(); say(m, ""); busy(b, true);
+      ev.preventDefault(); say(m, ""); say(err, ""); busy(b, true);
       BC.call("POST", "app/campaigns/" + s.value + "/invite", { user_id: x.id, message: ta.value.trim() }).then(function () {
         busy(b, false);
         x.history = [{ campaign_id: +s.value, status: "invited" }].concat(x.history || []);
         done();
-      }, function (e) { busy(b, false); say(m, BC.msg(e.code, { exists: t("inviteExists"), not_found: t("inviteGone") })); });
+      }, function (e) {
+        busy(b, false);
+        var msg = BC.msg(e.code, { exists: t("inviteExists"), not_found: t("inviteGone") });
+        // Çekmece kapandıysa ya da başka profile geçildiyse hata sayfadaki uyarı alanına yazılır
+        if (live()) say(m, msg); else say(err, x.name + ": " + msg);
+      });
     });
     return f;
   }
