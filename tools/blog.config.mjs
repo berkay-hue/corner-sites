@@ -27,10 +27,6 @@ export default {
     relatedCards: true, // yazı altındaki "Son Bloglar" kartları
     listHero: { title: "Navigating Remote Work: Tips for Boosting Productivity", text: "Supporting text", href: "./blog/lead-generation-saas-corner-ile-nitelikli-musterileri-elde-etmenin-yollari" },
     variants: { en: { lang: "en", dateLocale: "en-US", prefix: "/en" } },
-    services: {
-      tr: { title: "Hizmetlerimiz", links: [["SaaS şirketleri için sosyal medya yönetimi", "/sektor/saas"], ["E-ticaret için sosyal medya yönetimi", "/sektor/e-ticaret"], ["Restoran ve kafeler için sosyal medya yönetimi", "/sektor/restoran-kafe"]] },
-      en: { title: "Our Services", links: [["Social media management for SaaS companies", "/en/industries/saas"], ["Social media management for e-commerce", "/en/industries/e-commerce"], ["Social media management for restaurants and cafes", "/en/industries/restaurant-cafe"]] },
-    },
     // /en/ ve ana sayfalardaki TR/EN anahtarıyla aynı görünüm
     langCss: `<style data-sk-lang>.sk-lang{position:fixed;left:16px;bottom:16px;z-index:60;display:flex;gap:2px;padding:3px;border-radius:999px;background:rgba(10,15,13,.82);border:1px solid rgba(255,255,255,.14);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);font:600 12px/1 Inter,system-ui,-apple-system,sans-serif;letter-spacing:.04em}.sk-lang a{display:block;padding:7px 10px;border-radius:999px;color:#e8eee9;text-decoration:none}.sk-lang a:hover{background:rgba(255,255,255,.08)}.sk-lang a[aria-current]{background:#ffb71b;color:#0a0f0d}</style>`,
   },
@@ -71,10 +67,6 @@ export default {
     pClass: "sk-p", cardSelector: "sk-card", lang: "tr", dateLocale: "tr-TR",
     regions: { readTime: "ReadTime" }, cardFields: { summary: ".sk-sum", readTime: ".sk-rt" },
     variants: { en: { lang: "en", dateLocale: "en-US", prefix: "/en" } },
-    services: {
-      tr: { title: "Hizmetlerimiz", links: [["SaaS şirketleri için sosyal medya yönetimi", "/sektor/saas"], ["E-ticaret için sosyal medya yönetimi", "/sektor/e-ticaret"], ["Restoran ve kafeler için sosyal medya yönetimi", "/sektor/restoran-kafe"]] },
-      en: { title: "Our Services", links: [["Social media management for SaaS companies", "/en/industries/saas"], ["Social media management for e-commerce", "/en/industries/e-commerce"], ["Social media management for restaurants and cafes", "/en/industries/restaurant-cafe"]] },
-    },
     // /en/ ve ana sayfalardaki TR/EN anahtarıyla aynı görünüm
     langCss: `<style data-sk-lang>.sk-lang{position:fixed;left:16px;bottom:16px;z-index:50;display:flex;gap:2px;padding:4px;border-radius:999px;background:rgba(10,10,15,.88);border:1px solid rgba(255,255,255,.14);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);font:600 12px/1 Inter,system-ui,sans-serif;letter-spacing:.04em}.sk-lang a{display:block;padding:7px 10px;border-radius:999px;color:rgb(160,160,175);text-decoration:none}.sk-lang a:hover{color:#fff}.sk-lang a[aria-current]{background:linear-gradient(135deg,rgb(124,92,255),rgb(34,211,238));color:#fff}</style>`,
   },
