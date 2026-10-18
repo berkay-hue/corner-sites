@@ -32,6 +32,28 @@ for await (const f of allHtml(OUT)) {
   await writeFile(f, html.replace(/<\/body>/i, FORMS + "</body>"));
 }
 
+// Bilgi merkezi makaleleri birbirine bağlanmaz (Framer kopyası); başlık kelime benzerliğiyle 4 ilgili makale eklenir
+{
+  const KB = join(OUT, "bilgi-merkezi");
+  const files = (await has(KB)) ? (await readdir(KB)).filter(n => n.endsWith(".html")) : [];
+  const kb = [];
+  for (const n of files) {
+    const html = await readFile(join(KB, n), "utf8");
+    const title = html.match(/<h1[^>]*>([^<]+)/)?.[1].trim() || html.match(/<title>([^<|]+)/)?.[1].trim();
+    if (!title || !html.includes('data-framer-name="Custom Solution"') || html.includes("data-sk-related")) continue;
+    const words = new Set(title.toLocaleLowerCase("tr").split(/[^\p{L}\p{N}]+/u).filter(w => w.length > 3));
+    kb.push({ n, html, title, words, slug: n.replace(/\.html$/, "") });
+  }
+  for (const a of kb) {
+    const rel = kb.filter(b => b !== a && b.title !== a.title)
+      .map(b => ({ b, s: [...a.words].filter(w => b.words.has(w)).length }))
+      .sort((x, y) => y.s - x.s || x.b.slug.localeCompare(y.b.slug)).slice(0, 4).map(x => x.b);
+    const nav = `<nav data-sk-related style="max-width:880px;margin:48px auto;padding:0 24px;font-family:Inter,sans-serif"><h2 style="font-size:24px;margin:0 0 16px">İlgili makaleler</h2><ul style="margin:0;padding-left:20px;line-height:1.9">` +
+      rel.map(b => `<li><a href="/bilgi-merkezi/${encodeURI(b.slug)}">${b.title}</a></li>`).join("") + `</ul></nav>`;
+    await writeFile(join(KB, a.n), a.html.replace(/<div class="[^"]*" data-framer-name="Custom Solution"/, m => nav + m));
+  }
+}
+
 // Canonical origin (www'lu ya da çıplak) sitemap'ten alınır
 const orig = await readFile(join(SRC, "_orig-sitemap.xml"), "utf8").catch(() => "");
 const index = await readFile(join(SRC, "index.html"), "utf8").catch(() => "");
