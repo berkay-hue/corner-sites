@@ -452,7 +452,8 @@ async function updateApplication(c, id) {
   if (body.status === "revision") {
     // Not ayrı yazılır: revision_note kolonu canlıda henüz yoksa (ALTER çalışmadıysa) durum değişikliği yine geçer
     const n = text(body.note, 500) || null;
-    try { await env.DB.prepare("UPDATE applications SET revision_note = ? WHERE id = ?").bind(n, id).run(); u.revision_note = n; } catch (e) {}
+    try { await env.DB.prepare("UPDATE applications SET revision_note = ? WHERE id = ?").bind(n, id).run(); u.revision_note = n; }
+    catch (e) { if (!/no such column/i.test(String(e && e.message))) throw e; u.revision_note = null; }
   }
   return ok(c, { application: appOut(u) });
 }
@@ -464,7 +465,12 @@ async function influencers(c) {
   let list = results.map(r => ({ ...creator(r.id, r.name, r.profile), listed: JSON.parse(r.profile || "{}").listed === true })).filter(x => x.listed);
   if (q.niche) list = list.filter(x => x.niches.some(n => n.toLowerCase() === q.niche.toLowerCase()));
   if (q.platform) list = list.filter(x => x.platforms.some(p => p.platform === q.platform));
-  return ok(c, { influencers: list.slice(0, 100).map(({ listed, ...x }) => x) });
+  // Markanın kendi kampanyalarındaki geçmiş (davet/başvuru durumları); başka markaların verisi dönmez
+  const { results: hist } = await env.DB.prepare(
+    "SELECT a.user_id, a.campaign_id, a.status FROM applications a JOIN campaigns c ON c.id = a.campaign_id WHERE c.owner_id = ? ORDER BY a.id DESC",
+  ).bind(user.id).all();
+  const history = id => hist.filter(h => h.user_id === id).map(h => ({ campaign_id: h.campaign_id, status: h.status }));
+  return ok(c, { influencers: list.slice(0, 100).map(({ listed, ...x }) => ({ ...x, history: history(x.id) })) });
 }
 
 async function stats(c) {
