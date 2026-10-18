@@ -134,7 +134,7 @@ footer.bot{border-top:1px solid var(--line);color:var(--muted);font-size:13.5px;
 .soc:not(.card){margin:20px 0 0}.soc:not(.card) h2{margin:0 0 4px}.srow{display:flex;flex-wrap:wrap;align-items:center;gap:10px 12px;padding:12px 0;border-top:1px solid var(--line)}
 .srow .ic{width:34px;height:34px;border-radius:9px}.ic.slate{background:var(--slate-soft);color:var(--slate)}.srow .tx{flex:1 1 160px;min-width:0;overflow-wrap:anywhere}.srow .tx b{display:block;font-weight:600}.srow .tx span{color:var(--muted);font-size:14px}.srow .sa{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:8px;margin-left:auto}
 .badge.b-ok{background:var(--ok-soft);color:var(--ok)}.badge.b-danger{background:var(--danger-soft);color:var(--danger)}.badge.b-slate{background:var(--slate-soft);color:var(--slate)}
-.srow .tx .warn{color:var(--danger)}.lk44{display:inline-flex;align-items:center;min-height:44px}.srow .ghost,.srow .btn,.soc .btn{min-height:44px}.srow .mets{flex:1 1 100%}
+.srow .tx .warn{color:var(--danger)}.lk44{display:inline-flex;align-items:center;min-height:44px}.ch .lk44{text-decoration:none}.srow .ghost,.srow .btn,.soc .btn{min-height:44px}.srow .mets{flex:1 1 100%}
 .mets.m4{grid-template-columns:repeat(4,minmax(0,1fr))}.sample{margin:14px 0 4px;padding:14px;border:1px dashed var(--line-strong);border-radius:var(--r-card)}.sample h3{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:15px;margin:12px 0 8px}.sample h3:first-of-type{margin-top:8px}
 .badge.b-sample{background:var(--surface-2);color:var(--muted);border:1px dashed var(--line-strong)}
 .sub{margin:14px 0 0;padding:16px 0 0;border-top:1px solid var(--line)}
@@ -168,10 +168,10 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
 .tag{display:inline-flex;align-items:center;gap:0;min-width:0;max-width:100%;overflow-wrap:anywhere;background:var(--accent-soft);color:var(--accent-text);border-radius:6px;padding:0 0 0 8px;font-size:13px;font-weight:500}.tag button{flex:none;border:0;background:none;color:inherit;cursor:pointer;padding:0;min-width:44px;min-height:44px;font-size:16px;line-height:1;border-radius:4px}.tag button:focus-visible{outline:2px solid var(--accent);outline-offset:-6px}
 .preview{border:1px dashed var(--line-strong);border-radius:var(--r-card);padding:14px;background:var(--surface-2)}.pl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;font-weight:600;margin:0 0 10px}.pv-card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:8px;min-width:0}.pv-card .ph2{display:flex;gap:10px;align-items:center;min-width:0}.pv-card .ph2 b{display:block;overflow-wrap:anywhere}.pv-card .pvs{display:block;font-size:12.5px;color:var(--muted)}.pv-card .brief{font-size:13px;color:var(--muted);margin:0;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}.pv-card .chips{margin:0}.pv-card .chip{max-width:100%;overflow-wrap:anywhere}.pv-card .pls{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:12.5px;color:var(--muted);margin:0}.pv-card .pls b{color:var(--text)}
 .clink{display:inline-flex;align-items:center;gap:5px;font-size:13px;font-weight:500;word-break:break-all;min-height:44px}.clink .i{width:15px;height:15px;flex:none}
-.toolbar{display:flex;flex-wrap:wrap;gap:8px;padding:12px 16px;align-items:center;border-bottom:1px solid var(--line)}.f.toolbar input:not([type=checkbox]){margin:0;min-height:44px;flex:1 1 220px;width:auto;max-width:360px}.flush .tabs.ul{padding:0 8px;border-bottom:1px solid var(--line)}.flush .tabs.ul button{min-height:44px}
+.toolbar{display:flex;flex-wrap:wrap;gap:8px;padding:12px 16px;align-items:center;border-bottom:1px solid var(--line)}.f.toolbar input:not([type=checkbox]){margin:0;min-height:44px;flex:1 1 220px;width:auto;max-width:none}.flush .tabs.ul{padding:0 8px;border-bottom:1px solid var(--line)}.flush .tabs.ul button{min-height:44px}
 .crow{position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 16px;padding:14px 16px;border-top:1px solid var(--line);align-items:center}.crow:first-child{border-top:0}.crow:hover{background:var(--surface-2)}.crow:focus-within{outline:2px solid var(--accent);outline-offset:-2px}.crow .tl{display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center;margin:0 0 4px}.crow h3{font-size:15.5px;margin:0;overflow-wrap:anywhere}.crow .tlink{text-decoration:none;color:inherit}.crow .tlink::after{content:"";position:absolute;inset:0}.crow .tlink:focus-visible{outline:none}.crow .meta{margin:0}.crow .right{display:flex;flex-direction:column;align-items:flex-end;gap:6px}.mini b{color:var(--text);font-weight:600}.crow .meta span{display:inline-flex;align-items:center;gap:5px}.crow .meta svg.i{width:15px;height:15px}.crow .meta .warn{color:var(--danger)}
 @media(max-width:1100px){.split{grid-template-columns:minmax(0,1fr)}.sticky{position:static}}
-@media(max-width:760px){.crow{grid-template-columns:minmax(0,1fr)}.crow .right{flex-direction:row-reverse;align-items:center;justify-content:space-between}.f.toolbar input:not([type=checkbox]){max-width:none}}
+@media(max-width:760px){.crow{grid-template-columns:minmax(0,1fr)}.crow .right{flex-direction:row-reverse;align-items:center;justify-content:space-between}}
 @media(max-width:760px){.app{display:block}.side{display:none}dialog.drawer{width:100%;border-left:0}
 .mtop{display:flex;align-items:center;justify-content:space-between;gap:12px;position:sticky;top:0;z-index:20;height:56px;padding:0 8px 0 12px;background:color-mix(in srgb,var(--surface) 92%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
 .mtop .me{display:flex;align-items:center;justify-content:center;width:44px;height:44px;border:0;background:none;padding:0;cursor:pointer;border-radius:50%}
@@ -267,7 +267,7 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
       socTitle: "Sosyal hesaplar", socLead: "Hesabını resmî bağlantıyla bağla; takipçi ve etkileşim verileri markalara doğrulanmış olarak görünür.",
       socConnect: "Bağla", socCut: "Bağlantıyı kes", socSure: "{n} bağlantısı kesilsin mi? Kayıtlı ölçümler artık güncellenmez.",
       socAvail: "Bağlı değil", socOn: "Bağlı", socOnAs: "Bağlı: {n}", socErr: "Son eşitleme başarısız; yeniden bağlamayı dene.",
-      socNotConf: "Bu platform için bağlantı henüz yapılandırılmadı.", socNotConfS: "Yapılandırılmadı", socErrS: "Hata", socNoApi: "API yok", socReconnect: "Yeniden bağla", socAwait: "Metrik onayı bekleniyor", socSoonOwn: "Marka hesapları için bağlantı yakında", socLeadOwn: "Markanın sosyal hesaplarını resmî bağlantıyla bağla.", socLiName: "LinkedIn (kişisel profil)", socLiNote: "Kendi LinkedIn profilin bağlanır.", socLiRevoke: "LinkedIn tarafındaki izni LinkedIn ayarlarından kaldırabilirsin.", socLiGo: "LinkedIn ayarları", socErrOff: "Son eşitleme başarısız; bağlama açılınca yeniden bağlanabilir.", setSocLead: "Hesap bağlantıları profil sayfasında.", setSocGo: "Profil > Sosyal hesaplar", socOff: "Hesap bağlama şu an kapalı.", socOffRow: "Bağlama yakında açılacak",
+      socNotConf: "Bu platform için bağlantı henüz yapılandırılmadı.", socNotConfS: "Yapılandırılmadı", socErrS: "Hata", socNoApi: "API yok", socReconnect: "Yeniden bağla", socAwait: "Metrik onayı bekleniyor", socSoonOwn: "Marka ve ajans hesapları için bağlantı yakında", socLeadOwn: "Kurumsal sosyal hesaplarını resmî bağlantıyla bağla.", socLiName: "LinkedIn (kişisel profil)", socLiNote: "Kendi LinkedIn profilin bağlanır.", socLiRevoke: "LinkedIn tarafındaki izni LinkedIn ayarlarından kaldırabilirsin.", socLiGo: "LinkedIn ayarları", socErrOff: "Son eşitleme başarısız; bağlama açılınca yeniden bağlanabilir.", setSocLead: "Hesap bağlantıları profil sayfasında.", setSocGo: "Profil > Sosyal hesaplar", socOff: "Hesap bağlama şu an kapalı.", socOffRow: "Bağlama yakında açılacak",
       socSample: "örnek", socSampleNote: "Ölçüm bağlantısı henüz açık değil. Aşağıdaki sayılar gerçek değil, yalnızca nasıl görüneceğini gösteren örnek verilerdir.",
       socSampleNone: "Profiline Instagram, TikTok ya da YouTube eklersen örnek ölçümleri burada görürsün.",
       socFol: "Takipçi", socViews: "Ort. izlenme", socLikes: "Ort. beğeni", socComm: "Ort. yorum",
@@ -296,9 +296,9 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
       campLimit: "Kampanya sınırına ulaştınız (en fazla 100 kampanya).", badBudget: "Bütçeyi tam sayı olarak girin.",
       tagsMax: "En fazla 5 niş girebilirsiniz.",
       fCompanyN: "Şirket adı", fAgencyN: "Ajans adı", fNichesT: "Nişler (en fazla 5)", nichesHint: "Eşleşme puanı nişlere göre hesaplanır.",
-      nichesPh: "Örn. cilt bakımı — Enter ile ekle", tagsFull: "Sınıra ulaşıldı", tagRm: "{n} kaldır", nichesLater: "Nişler sunucu güncellemesinden sonra kaydedilecek",
+      nichesPh: "Örn. cilt bakımı — Enter ile ekle", tagsFull: "Sınıra ulaşıldı", tagRm: "Kaldır: {n}", nichesLater: "Nişler sunucu güncellemesinden sonra kaydedilecek",
       fClientsT: "Müşteriler (en fazla 20)", clientsPh: "Örn. marka adı — Enter ile ekle", clientsHint: "Çalıştığın markalar profilinde görünür.", clientsLater: "Müşteri adları sunucu güncellemesinden sonra kaydedilecek; şimdilik sayısı kaydedildi.",
-      ckNiches1: "Nişler (en az 1)", ckClient1: "En az bir müşteri", pvLbl: "Influencerlar seni böyle görecek", pvLblC: "Markalar seni böyle görüyor", pvBio: "Hakkında yazısı burada görünecek.",
+      ckNiches1: "Nişler (en az 1)", ckClient1: "En az bir müşteri", pvLbl: "Profil kartın", pvSoon: "Influencerlar şimdilik yalnız görünen adını görüyor; diğer alanlar yakında.", pvLblC: "Markalar seni böyle görüyor", pvBio: "Hakkında yazısı burada görünecek.",
       miniNew: "{n} yeni başvuru", miniNew1: "{n} yeni başvuru", miniAct: "{n} içerik onayı", miniAct1: "{n} içerik onayı", miniPpl: "{n} kişi", miniPpl1: "{n} kişi", dLeft1: "{n} gün kaldı", helpS: "Yardım",
       ni0: "cilt bakımı", ni1: "güzellik", ni2: "yaşam tarzı", ni3: "teknoloji", ni4: "oyun", ni5: "moda", ni6: "otomobil", ni7: "anne-çocuk", ni8: "seyahat", ni9: "yemek", ni10: "doğal ürünler", ni11: "erkek bakımı", ni12: "kendin yap", ni13: "spor", ni14: "sürdürülebilirlik", ni15: "ev", ni16: "tasarım",
       close: "Kampanyayı kapat", reopen: "Kampanyayı yeniden aç", edit: "Düzenle", iBrief: "Açıklama", iBudget: "Bütçe", iDeadline: "Son başvuru", iPlatforms: "Platformlar", iCreated: "Oluşturuldu", iNone: "—",
@@ -385,7 +385,7 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
       socTitle: "Social accounts", socLead: "Connect your account officially; follower and engagement data shows to brands as verified.",
       socConnect: "Connect", socCut: "Disconnect", socSure: "Disconnect {n}? Saved metrics will no longer update.",
       socAvail: "Not connected", socOn: "Connected", socOnAs: "Connected: {n}", socErr: "Last sync failed; try reconnecting.",
-      socNotConf: "Connections for this platform aren't set up yet.", socNotConfS: "Not configured", socErrS: "Error", socNoApi: "No API", socReconnect: "Reconnect", socAwait: "Awaiting metrics approval", socSoonOwn: "Connections for brand accounts are coming soon", socLeadOwn: "Connect the brand's social accounts officially.", socLiName: "LinkedIn (personal profile)", socLiNote: "Connects your own LinkedIn profile.", socLiRevoke: "You can remove the permission on LinkedIn's side in your LinkedIn settings.", socLiGo: "LinkedIn settings", socErrOff: "Last sync failed; you can reconnect once connections reopen.", setSocLead: "Account connections live on your profile page.", setSocGo: "Profile > Social accounts", socOff: "Account connections are turned off right now.", socOffRow: "Connecting opens soon",
+      socNotConf: "Connections for this platform aren't set up yet.", socNotConfS: "Not configured", socErrS: "Error", socNoApi: "No API", socReconnect: "Reconnect", socAwait: "Awaiting metrics approval", socSoonOwn: "Connections for brand and agency accounts are coming soon", socLeadOwn: "Connect your company's social accounts officially.", socLiName: "LinkedIn (personal profile)", socLiNote: "Connects your own LinkedIn profile.", socLiRevoke: "You can remove the permission on LinkedIn's side in your LinkedIn settings.", socLiGo: "LinkedIn settings", socErrOff: "Last sync failed; you can reconnect once connections reopen.", setSocLead: "Account connections live on your profile page.", setSocGo: "Profile > Social accounts", socOff: "Account connections are turned off right now.", socOffRow: "Connecting opens soon",
       socSample: "sample", socSampleNote: "Metric connections aren't live yet. The numbers below are not real; they're sample data showing how this will look.",
       socSampleNone: "Add Instagram, TikTok or YouTube to your profile to see sample metrics here.",
       socFol: "Followers", socViews: "Avg. views", socLikes: "Avg. likes", socComm: "Avg. comments",
@@ -416,7 +416,7 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
       fCompanyN: "Company name", fAgencyN: "Agency name", fNichesT: "Niches (up to 5)", nichesHint: "Match score is calculated from your niches.",
       nichesPh: "E.g. skincare — press Enter to add", tagsFull: "Limit reached", tagRm: "Remove {n}", nichesLater: "Niches will be saved after a server update",
       fClientsT: "Clients (up to 20)", clientsPh: "E.g. brand name — press Enter to add", clientsHint: "Brands you work with appear on your profile.", clientsLater: "Client names will be saved after a server update; the count is saved for now.",
-      ckNiches1: "Niches (at least 1)", ckClient1: "At least one client", pvLbl: "How creators will see you", pvLblC: "How brands see you", pvBio: "Your about text appears here.",
+      ckNiches1: "Niches (at least 1)", ckClient1: "At least one client", pvLbl: "Your profile card", pvSoon: "Creators only see your display name for now; the other fields are coming soon.", pvLblC: "How brands see you", pvBio: "Your about text appears here.",
       miniNew: "{n} new applications", miniNew1: "{n} new application", miniAct: "{n} to review", miniAct1: "{n} to review", miniPpl: "{n} people", miniPpl1: "{n} person", dLeft1: "{n} day left", helpS: "Help",
       ni0: "skincare", ni1: "beauty", ni2: "lifestyle", ni3: "technology", ni4: "gaming", ni5: "fashion", ni6: "automotive", ni7: "parenting", ni8: "travel", ni9: "food", ni10: "natural products", ni11: "men's grooming", ni12: "DIY", ni13: "sports", ni14: "sustainability", ni15: "home", ni16: "design",
       close: "Close campaign", reopen: "Reopen campaign", edit: "Edit", iBrief: "Description", iBudget: "Budget", iDeadline: "Deadline", iPlatforms: "Platforms", iCreated: "Created", iNone: "—",
@@ -667,12 +667,13 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
   }
 
   // Genel bakış: sayılar, sizi bekleyenler, profil doluluğu, performans (F2'ye kadar "veri yok")
-  // p: canlı taslak (profil formu); nişler hep sunucudaki kayıttan okunur, kaydedilmemiş niş tik almaz
+  // p: canlı taslak (profil formu)
   function profileChecks(p) {
     p = p || U.profile || {};
-    var nich = ((U.profile || {}).niches || []).length > 0, has = function (v) { return !!String(v || "").trim(); };
+    var has = function (v) { return !!String(v || "").trim(); };
+    // ckNiches1 yok: Worker owner nişlerini saklamıyor, görev hiç kapanmazdı (form alanı + nichesLater kalır)
     if (isOwner()) {
-      var c = [["ckCompany", has(p.company)], ["ckIndustry", has(p.industry)], ["ckCity", has(p.city)], ["ckWebsite", has(p.website)], ["ckBio", String(p.bio || "").trim().length >= 40], ["ckNiches1", nich]];
+      var c = [["ckCompany", has(p.company)], ["ckIndustry", has(p.industry)], ["ckCity", has(p.city)], ["ckWebsite", has(p.website)], ["ckBio", String(p.bio || "").trim().length >= 40]];
       if (U.role === "agency") c.push(["ckClient1", Number(p.clients) > 0]);
       return c;
     }
@@ -735,7 +736,7 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
         : !top.length ? el("p", { class: "cb none", text: t("forYouEmpty") })
         : el("div", null, top.map(function (o) {
           var x = o.x, fol = (x.platforms || []).reduce(function (n, p) { return n + (+p.followers || 0); }, 0);
-          var sub = (x.niches || []).join(", ") + (fol > 0 ? ((x.niches || []).length ? " · " : "") + t("followers", num(fol)) : "");
+          var sub = (x.niches || []).map(nicheLbl).join(", ") + (fol > 0 ? ((x.niches || []).length ? " · " : "") + t("followers", num(fol)) : "");
           return el("div", { class: "irow" }, [
             el("span", { class: "av", "aria-hidden": "true", text: initials(x.name) }),
             el("div", { class: "tx" }, [
@@ -1364,12 +1365,14 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
 
   // Profil: POST app/profile profili bütünüyle değiştirir, bu yüzden tüm alanlar her seferinde gönderilir
   function profile() {
+    var go = SOC_GO;
+    SOC_GO = false;
     return BC.call("GET", "auth/me").then(function (d) {
       U = d.user; paintWho();
       var head = [el("h1", { text: t("nProfile") }), el("p", { class: "lead", text: t(isOwner() ? "profLeadO" : "profLeadC") })];
       // Sağda yapışkan doluluk + önizleme, form değiştikçe canlı güncellenir (influencer: markaların gördüğü kart)
       var mt = el("div"), pv = el("div"), draw = function (dr) { mt.replaceChildren(profMeter(false, dr)); pv.replaceChildren((isOwner() ? pvBox : ipvBox)(dr)); };
-      return head.concat(el("div", { class: "split" }, [el("div", { class: "stack" }, [profileForm(null, draw), socials()]), el("div", { class: "sticky stack" }, [mt, pv])]));
+      return head.concat(el("div", { class: "split" }, [el("div", { class: "stack" }, [profileForm(null, draw), socials(go)]), el("div", { class: "sticky stack" }, [mt, pv])]));
     });
   }
   function setTheme(v) {
@@ -1423,14 +1426,14 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
       try { th = localStorage.getItem("bc-theme") || "system"; } catch (e) {}
       var ob = el("button", { type: "button", class: "btn sec bad", text: t("logout") });
       ob.addEventListener("click", out);
-      // Bildirim anahtarları: Worker'da ayar yok, kilitli ve "Yakında"; hiçbir yere kaydedilmez
+      // Bildirim anahtarları: Worker'da ayar yok, hepsi işaretsiz, kilitli ve "Yakında"; hiçbir yere kaydedilmez
       function notifs() {
-        var rows = isOwner() ? [["n-app", "nApp", 1], ["n-sub", "nSub", 1], ["n-week", "nWeek", 0]] : [["n-inv", "nInv", 1], ["n-st", "nSt", 1], ["n-match", "nMatch", 0]];
+        var rows = isOwner() ? [["n-app", "nApp"], ["n-sub", "nSub"], ["n-week", "nWeek"]] : [["n-inv", "nInv"], ["n-st", "nSt"], ["n-match", "nMatch"]];
         return rows.map(function (w) {
           return el("label", { class: "sw", for: w[0] }, [
             el("span", { class: "tx" }, [el("b", { text: t(w[1]) }), el("span", { text: t(w[1] + "D") })]),
             el("span", { class: "badge b-soon", text: t("soonBadge") }),
-            el("input", { type: "checkbox", id: w[0], role: "switch", checked: !!w[2], disabled: true })
+            el("input", { type: "checkbox", id: w[0], role: "switch", checked: false, disabled: true })
           ]);
         });
       }
@@ -1458,7 +1461,7 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
   // classify.js:6-35 ile eşit tut (DICT anahtarları; en etiketleri D'de ni0..ni16)
   var NICHES = ["cilt bakımı", "güzellik", "yaşam tarzı", "teknoloji", "oyun", "moda", "otomobil", "anne-çocuk", "seyahat", "yemek", "doğal ürünler", "erkek bakımı", "kendin yap", "spor", "sürdürülebilirlik", "ev", "tasarım"];
   function nicheLbl(x) { var i = NICHES.indexOf(String(x).toLocaleLowerCase("tr-TR")); return i < 0 ? x : t("ni" + i); }
-  // Etiket girişi: Enter/virgül ekler, tr-TR katlamalı tekrar ayıklanır, o.max'ta (5) kilitlenir, boşta Backspace sonuncuyu siler.
+  // Etiket girişi: Enter/virgül ekler, tr-TR katlamalı tekrar ayıklanır, o.max'ta (5) salt okunur olur, boşta Backspace sonuncuyu siler.
   // o.opts: öneri listesi (varsayılan NICHES, null = yok), o.ph: boş yer tutucu anahtarı
   function tagBox(id, vals, onCh, o) {
     o = o || {};
@@ -1473,11 +1476,13 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
     function paint() {
       var full = list.length >= max;
       wrap.replaceChildren.apply(wrap, list.map(function (x, i) {
-        return el("span", { class: "tag" }, [x, el("button", { type: "button", "aria-label": t("tagRm", x), text: "×", onclick: function () { list.splice(i, 1); paint(); inp.focus(); if (onCh) onCh(); } })]);
+        var lb = opts === NICHES ? nicheLbl(x) : x;
+        return el("span", { class: "tag" }, [lb, el("button", { type: "button", "aria-label": t("tagRm", lb), text: "×", onclick: function () { list.splice(i, 1); paint(); inp.focus(); if (onCh) onCh(); } })]);
       }).concat(inp));
-      inp.disabled = full; inp.placeholder = t(full ? "tagsFull" : ph);
+      // disabled odağı body'ye düşürür ve Backspace'i öldürür; doluyken salt okunur kalır
+      inp.readOnly = full; inp.setAttribute("aria-disabled", full ? "true" : "false"); inp.placeholder = t(full ? "tagsFull" : ph);
     }
-    function take() { var v = inp.value; if (!v.trim()) return false; v.split(",").forEach(put); inp.value = ""; paint(); return true; }
+    function take() { if (inp.readOnly) { inp.value = ""; return false; } var v = inp.value; if (!v.trim()) return false; v.split(",").forEach(put); inp.value = ""; paint(); return true; }
     inp.addEventListener("keydown", function (e) {
       if (e.isComposing || e.keyCode === 229) return;
       if (e.key === "Enter" || e.key === ",") { e.preventDefault(); if (take()) { inp.focus(); if (onCh) onCh(); } }
@@ -1487,10 +1492,10 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
     (vals || []).forEach(put); paint();
     return { node: [wrap, dl], peek: function () { return list.slice(); }, get: function () { take(); return list.slice(); } };
   }
-  // "Influencerlar seni böyle görecek": taslaktan canlı kart (site yalnız http/https ise bağlantı olur)
+  // "Profil kartın": taslaktan canlı kart; influencerlar şimdilik yalnız görünen adı görür (site yalnız http/https ise bağlantı olur)
   function pvBox(d) {
-    var nm = d.company || U.name || "", sub = [d.industry, d.city].filter(Boolean).join(" · "), w = webNorm(d.website);
-    return el("div", { class: "preview" }, [el("p", { class: "pl", text: t("pvLbl") }), el("div", { class: "pv-card" }, [
+    var nm = d.company || d.name || U.name || "", sub = [d.industry, d.city].filter(Boolean).join(" · "), w = webNorm(d.website);
+    return el("div", { class: "preview" }, [el("p", { class: "pl", text: t("pvLbl") }), el("p", { class: "hint", text: t("pvSoon") }), el("div", { class: "pv-card" }, [
       el("div", { class: "ph2" }, [el("span", { class: "av sq", "aria-hidden": "true", text: initials(nm) }), el("div", { style: "min-width:0" }, [el("b", { text: nm }), sub ? el("span", { class: "pvs", text: sub }) : null])]),
       el("p", { class: "brief", text: d.bio || t("pvBio") }),
       (d.niches || []).length ? el("div", { class: "chips" }, d.niches.map(function (x) { return el("span", { class: "chip", text: nicheLbl(x) }); })) : null,
@@ -1529,7 +1534,7 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
       cnt.textContent = bio.value.length + "/500";
       if (onDraft && inf) return onDraft({ city: city.value.trim(), bio: bio.value.trim(), niches: tb.peek(), listed: listed.checked,
         platforms: rows.map(function (r) { return { platform: r.sel.value, handle: r.h.value.trim(), followers: Number(r.fo.value) || 0 }; }) });
-      if (onDraft) onDraft({ company: company.value.trim(), industry: industry.value.trim(), clients: cb ? cCount(cb.peek()) : 0, city: city.value.trim(), website: web.value.trim(), bio: bio.value.trim(), niches: tb.peek() });
+      if (onDraft) onDraft({ name: name.value.trim(), company: company.value.trim(), industry: industry.value.trim(), clients: cb ? cCount(cb.peek()) : 0, city: city.value.trim(), website: web.value.trim(), bio: bio.value.trim(), niches: tb.peek() });
     }
     var listed = el("input", { type: "checkbox", id: "pl-listed", checked: p.listed === true });
     var box = el("div"), addB = el("button", { type: "button", class: "ghost", text: t("addPlat") });
@@ -1633,7 +1638,9 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
     }
     return RET_P;
   }
-  function socials() {
+  function socRank(p) { var i = OAUTH.indexOf(p); if (i >= 0) return i; i = PLATFORMS.indexOf(p); return OAUTH.length + (i < 0 ? PLATFORMS.length : i); }
+  // go: Ayarlar'dan gelindi (profile() SOC_GO'yu okuyup hemen temizler)
+  function socials(go) {
     var box = el("section", { class: "card soc", "aria-labelledby": "soc-h" }), m = note(), ok = okNote(), my = 0, own = U.role !== "influencer", can = OAUTH, rp = retOutcome();
     // quiet: "yakında" durumunda "bağla" çağrısı yapan giriş cümlesi gösterilmez
     function paint(kids, quiet) {
@@ -1695,8 +1702,10 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
       ]);
       var on = {};
       (real || []).forEach(function (c) { if (PL[c.platform] && (c.status === "connected" || c.status === "error")) on[c.platform] = c; });
-      // liste sabit değil: önce Worker'ın döndürdüğü bağlı/hatalı satırlar, sonra rolün connectable listesi
+      // satırlar: Worker'ın döndürdüğü bağlı/hatalı satırlar + rolün connectable listesi
       var ps = Object.keys(on).concat(can.filter(function (p) { return PL[p] && !on[p]; }));
+      // kanonik sıra: instagram, tiktok, youtube, linkedin, sonra diğerleri (PLATFORMS sırasıyla)
+      ps.sort(function (a, b) { return socRank(a) - socRank(b); });
       return [card].concat(ps.map(function (p) {
         if (on[p]) return linked(on[p], null, true);
         return row(p, "slate", sub(p === "linkedin" ? t("socLiNote") + " · " + t("socOffRow") : t("socOffRow")), ["b-slate", t("socAvail")], [btn("btn sm", t("socConnect"), p, null, true)]);
@@ -1724,7 +1733,7 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
         if (st === "connected" || st === "error") return linked(c, by[p], false);
         if (av && canOn(c)) return row(p, "slate", p === "linkedin" ? sub(t("socLiNote")) : null, ["b-slate", t("socAvail")], [btn("btn sm", t("socConnect"), p, connect)]);
         if (av || st === "not_configured") return row(p, "slate", null, ["b-slate", av && conf(c) ? t("socAvail") : t("socNotConfS")], null);
-        if (st === "no_api") return row(p, "slate", null, ["b-slate", t("socNoApi")], null);
+        if (st === "no_api") return row(p, "slate", null, ["b-slate", lc(c.label_code || "no_api")], null);
         return row(p, "slate", sub(lc(c.label_code)), null, null);
       });
     }
@@ -1753,9 +1762,8 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
       if (o && !o.shown) say(o.ok ? ok : m, o.text);
       return load().then(function () { return o; });
     }).then(function (o) {
-      if (!box.isConnected || !((o && !o.shown) || SOC_GO)) return;
+      if (!box.isConnected || !((o && !o.shown) || go)) return;
       if (o) o.shown = true;
-      SOC_GO = false;
       box.scrollIntoView({ block: "start" });
       var h = box.querySelector("h2"); h.tabIndex = -1; h.focus();
     });
