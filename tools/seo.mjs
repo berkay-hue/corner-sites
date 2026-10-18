@@ -30,6 +30,14 @@ const RULES = {
     fix(html, page) {
       const R = this;
       html = html.replace(/<script type="application\/ld\+json" data-sk-seo>[\s\S]*?<\/script>/g, "");
+      // Grup şirketleri sayfalarına iç link: Framer #main dışında, </body> öncesi statik blok (hydration'a girmez)
+      if (page === "/" || page === "/en/index" || page === "/en/") {
+        const en = page !== "/", base = en ? "/en/companies/" : "/sirketler/";
+        const co = [["saascorner", "SAAS Corner"], ["salescorner", "Sales Corner"], ["brandcorner", "Brand Corner"], ["socialmediacorner", "Social Media Corner"], ["wishceo", "WishCEO"], ["yalcinberkay", "Berkay Yalçın"]];
+        const block = `<nav data-cg-companies aria-label="${en ? "Group companies" : "Grup şirketleri"}" style="background:#0A0A0B;padding:28px 16px 104px;text-align:center;font-family:Inter,-apple-system,sans-serif;font-size:14px;border-top:1px solid rgba(255,255,255,0.06)"><span style="color:#888;margin-right:8px">${en ? "Group companies:" : "Grup şirketleri:"}</span>` +
+          co.map(([s, n]) => `<a href="${base}${s}" style="color:#FFB71B;text-decoration:none;margin:0 10px;display:inline-block;padding:10px 0">${n}</a>`).join("") + `</nav>`;
+        html = html.replace(/<nav data-cg-companies[\s\S]*?<\/nav>/, "").replace("</body>", block + "</body>");
+      }
       if (page !== "/") return html;
       html = html.replace(/<title>[^<]*<\/title>/, "<title>Corner Group | B2B Satış, Pazarlama ve CRM Çözümleri</title>");
       const org = { "@type": "Organization", "@id": R.origin + "/#org", name: R.brand, url: R.origin + "/", logo: R.origin + "/_a/fr/images/6WSE5LNdHL8DI6oGFkxraYy6Dg.png" };
