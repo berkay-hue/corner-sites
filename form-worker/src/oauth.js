@@ -1,12 +1,18 @@
 // brandcorner sosyal hesap bağlama: yalnızca resmi OAuth (Instagram API, TikTok, YouTube Data API).
-// Kazıma yok, şifre istenmez. Client id/secret Worker secret'ı; eksikse platform "yapılandırılmadı" görünür
-// ve D1'e hiç dokunulmaz. LinkedIn, X ve Twitch'in metrik API'si bağlanmadı: "veri yok".
-// Tablolar: migrations/0002_oauth.sql. Token'lar OAUTH_TOKEN_KEY (base64, 32 bayt) ile AES-GCM şifreli saklanır.
-// Sağlayıcı dönüşü: GET /oauth/<platform>/callback (index.js); OAUTH_REDIRECT_BASE yoksa worker'ın kendi adresi.
+// Kazıma yok, şifre istenmez. Client id/secret Worker secret'ı; eksikse platform "yapılandırılmadı" görünür.
+// LinkedIn, X ve Twitch'in metrik API'si bağlanmadı: "veri yok". METRICS_ENABLED kapalıyken bağlanılamaz.
+// Bağlı hesabın tek kaynağı social_accounts (0001_metrics.sql); 0002_oauth.sql akış durumu ve token'ları tutar.
+// Token'lar OAUTH_TOKEN_KEY (base64, 32 bayt) ile AES-GCM şifreli saklanır.
+// Akış: POST /app/connect → sağlayıcı → GET /oauth/<platform>/callback (index.js; OAUTH_REDIRECT_BASE yoksa
+// worker'ın kendi adresi) → panel /panel?oauth=<p>&result=pending#ticket=<bilet> → POST /app/connect/finish.
+// Token takası yalnızca bileti getiren oturum akışı başlatan kullanıcıysa yapılır; callback'i açan tarayıcı
+// başka birinin olsa bile (RFC 6749 §10.12) hesap ona bağlanmaz.
+import { metricsEnabled } from "./metrics.js";
 
 export const NOT_CONFIGURED = "yapılandırılmadı", NO_DATA = "veri yok";
 export const OAUTH = ["instagram", "tiktok", "youtube"];
-const STATE_MINUTES = 10, SAMPLE = 12; // ortalama için son 12 gönderi
+const STATE_MINUTES = 10, TICKET_MINUTES = 5, SAMPLE = 12; // ortalama için son 12 gönderi
+const TOKEN_RE = /^[A-Za-z0-9_-]{43}$/; // 32 rastgele baytın base64url'i (state ve bilet)
 
 const enc = new TextEncoder(), dec = new TextDecoder();
 const b64u = bytes => btoa(String.fromCharCode(...bytes)).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
@@ -52,11 +58,14 @@ const anyReady = env => OAUTH.some(p => oauthReady(env, p));
 
 export const redirectUri = (env, api, p) => `${String(env?.OAUTH_REDIRECT_BASE || api).replace(/\/+$/, "")}/oauth/${p}/callback`;
 
-// Bağlantı durumu: no_api ("veri yok"), not_configured ("yapılandırılmadı"), available, connected, error
+// Bağlantı durumu: no_api ("veri yok"), not_configured ("yapılandırılmadı"), available, connected, error.
+// Kaynak social_accounts: "connected" (son senkron hatalıysa "error") ya da "error"; pending/revoked → available.
 export async function listConnections(env, userId, platforms = [...OAUTH, "linkedin", "x", "twitch"]) {
   let rows = new Map();
   if (anyReady(env)) {
-    const { results = [] } = await env.DB.prepare("SELECT platform, handle, error, updated_at FROM oauth_tokens WHERE user_id = ?").bind(userId).all();
+    const { results = [] } = await env.DB.prepare(
+      "SELECT platform, handle, status, error, updated_at FROM social_accounts WHERE user_id = ? AND status IN ('connected', 'error')",
+    ).bind(userId).all();
     rows = new Map(results.map(r => [r.platform, r]));
   }
   return platforms.map(p => {
@@ -64,7 +73,7 @@ export async function listConnections(env, userId, platforms = [...OAUTH, "linke
     if (!oauthReady(env, p)) return { platform: p, status: "not_configured", label: NOT_CONFIGURED, handle: null, updated_at: null };
     const r = rows.get(p);
     if (!r) return { platform: p, status: "available", label: null, handle: null, updated_at: null };
-    return { platform: p, status: r.error ? "error" : "connected", label: null, handle: r.handle ?? null, updated_at: r.updated_at };
+    return { platform: p, status: r.status === "error" || r.error ? "error" : "connected", label: null, handle: r.handle ?? null, updated_at: r.updated_at };
   });
 }
 
@@ -75,21 +84,55 @@ export function authorizeUrl(env, p, state, redirect) {
   return u.toString();
 }
 
-// Tek kullanımlık state üretir, sağlayıcının onay sayfası adresini döndürür. c: {api, origin}
-export async function startOAuth(env, userId, p, { api, origin }) {
-  const state = b64u(crypto.getRandomValues(new Uint8Array(32)));
-  await env.DB.batch([
-    env.DB.prepare("DELETE FROM oauth_states WHERE expires_at <= datetime('now')"),
-    env.DB.prepare("INSERT INTO oauth_states (state_hash, user_id, platform, return_to, expires_at) VALUES (?, ?, ?, ?, datetime('now', ?))")
-      .bind(await sha256(state), userId, p, `${origin}/panel`, `+${STATE_MINUTES} minutes`),
-  ]);
-  return authorizeUrl(env, p, state, redirectUri(env, api, p));
+// Dönüş adresi ham Origin'den değil doğrulanmış siteden kurulur: https, port yok, yol ve kullanıcı yok.
+// platform() yalnız alan adını denetler; http ya da başka port gelirse bilet o adrese gitmesin. DEV_ORIGINS birebir.
+export function returnBase(env, origin, site) {
+  if ((env.DEV_ORIGINS || "").split(",").includes(origin)) return origin;
+  try {
+    const u = new URL(origin);
+    if (u.protocol === "https:" && !u.port && u.origin === origin) return u.origin;
+  } catch {}
+  return `https://${site}`;
 }
 
-export async function disconnectOAuth(env, userId, p) {
-  if (!anyReady(env)) return;
-  await env.DB.prepare("DELETE FROM oauth_tokens WHERE user_id = ? AND platform = ?").bind(userId, p).run();
+// Tek kullanımlık state üretir, sağlayıcının onay sayfası adresini döndürür. c: {api, origin, site}
+// origin platform()'un izin verdiği site (brandcorner.co ya da önizlemesi); dönüş adresi returnBase ile kaydedilir.
+export async function startOAuth(env, userId, p, { api, origin, site }) {
+  const state = b64u(crypto.getRandomValues(new Uint8Array(32))), redirect = redirectUri(env, api, p);
+  await env.DB.batch([
+    env.DB.prepare("DELETE FROM oauth_states WHERE expires_at <= datetime('now')"),
+    env.DB.prepare("INSERT INTO oauth_states (state_hash, user_id, platform, return_to, redirect_uri, expires_at) VALUES (?, ?, ?, ?, ?, datetime('now', ?))")
+      .bind(await sha256(state), userId, p, `${returnBase(env, origin, site)}/panel`, redirect, `+${STATE_MINUTES} minutes`),
+  ]);
+  return authorizeUrl(env, p, state, redirect);
 }
+
+// Bağı koparır: token silinir, social_accounts "revoked" olur ve platform kimliği boşalır (hesap başka
+// kullanıcıya bağlanabilir). Platform yapılandırılmamış olsa da çalışır. Ardından sağlayıcıda izin geri
+// alınmaya çalışılır (TikTok, Google); olmazsa yine de bağ kopmuştur. Instagram'ın iptal ucu yok,
+// kullanıcı izni Instagram ayarlarından kaldırır.
+export async function disconnectOAuth(env, userId, p, f = fetch) {
+  const row = await env.DB.prepare("SELECT access_token, refresh_token FROM oauth_tokens WHERE user_id = ? AND platform = ?").bind(userId, p).first();
+  await env.DB.batch([
+    env.DB.prepare("DELETE FROM oauth_tokens WHERE user_id = ? AND platform = ?").bind(userId, p),
+    env.DB.prepare("UPDATE social_accounts SET status = 'revoked', external_id = NULL, error = NULL, updated_at = datetime('now') WHERE user_id = ? AND platform = ?")
+      .bind(userId, p),
+  ]);
+  if (!row || !REVOKE[p] || !oauthReady(env, p)) return;
+  try {
+    const [url, init] = REVOKE[p](env, await decrypt(env, row.access_token), await decrypt(env, row.refresh_token));
+    const res = await f(url, init);
+    if (!res.ok) throw new ProviderError(`revoke:${res.status}`);
+  } catch (e) {
+    console.log("oauth revoke", p, e instanceof ProviderError ? e.code : "error");
+  }
+}
+
+// Sağlayıcıda izni geri alma. Google'da refresh token iptali uygulamanın bu hesaptaki tüm iznini kaldırır.
+const REVOKE = {
+  tiktok: (env, access) => [`${TT}/oauth/revoke/`, form({ client_key: env.TIKTOK_CLIENT_KEY, client_secret: env.TIKTOK_CLIENT_SECRET, token: access })],
+  youtube: (env, access, refresh) => ["https://oauth2.googleapis.com/revoke", form({ token: refresh || access })],
+};
 
 // ---- Sağlayıcı çağrıları (f: fetch; testte sahtesi verilir) ----
 
@@ -242,30 +285,46 @@ export async function decrypt(env, box) {
 const expiry = t => (num(t.expires_in) === null ? null : `+${Math.floor(num(t.expires_in))} seconds`);
 
 // Bağlı hesabın güncel metrikleri; süresi dolmak üzere olan token önce yenilenir.
-// Ölçümler henüz saklanmıyor (metric_snapshots #194'le gelince ayrı PR'da).
+// Sonuç social_accounts'a yazılır (hata kodu ya da güncel kullanıcı adı). Ölçümleri metric_snapshots'a
+// kaydetmek ve günlük senkron sonraki PR'da.
+// Okuma ile yazma arasında hesap yeniden bağlanabilir ya da token başka bir senkronla yenilenebilir. Yazımlar
+// okunan token'a ve platform kimliğine bağlı (karşılaştır-yaz): eski hesabın token'ı ya da kullanıcı adı yenisinin
+// üstüne yazılmaz. Hata yazımı da o an geçerli token'a bağlı: başka bir senkron token'ı yenilediyse ya da hesap
+// koparılıp yeniden bağlandıysa eski token'ın hatası yeni bağa düşmez. Böyle bir çakışmada (bağ koparılması dahil)
+// "changed" atılır, hesaba hata yazılmaz; çağıran bu ölçümleri kaydetmez.
 export async function syncAccount(env, userId, p, f = fetch) {
   if (!oauthReady(env, p)) throw new ProviderError("not_configured");
   const row = await env.DB.prepare(
-    "SELECT access_token, refresh_token, (expires_at IS NOT NULL AND expires_at <= datetime('now', ?)) AS stale FROM oauth_tokens WHERE user_id = ? AND platform = ?",
+    `SELECT t.access_token, t.refresh_token, (t.expires_at IS NOT NULL AND t.expires_at <= datetime('now', ?)) AS stale, a.external_id
+     FROM oauth_tokens t JOIN social_accounts a ON a.user_id = t.user_id AND a.platform = t.platform AND a.status = 'connected'
+     WHERE t.user_id = ? AND t.platform = ?`,
   ).bind(PROVIDERS[p].refresh, userId, p).first();
   if (!row) throw new ProviderError("not_connected");
+  let cur = row.access_token;
   const mark = (error, handle = null) => env.DB.prepare(
-    "UPDATE oauth_tokens SET error = ?, handle = COALESCE(?, handle), updated_at = datetime('now') WHERE user_id = ? AND platform = ?",
-  ).bind(error, handle, userId, p).run();
+    `UPDATE social_accounts SET error = ?, handle = COALESCE(?, handle), updated_at = datetime('now')
+     WHERE user_id = ? AND platform = ? AND status = 'connected' AND external_id = ?
+       AND EXISTS (SELECT 1 FROM oauth_tokens WHERE user_id = ? AND platform = ? AND access_token = ?)`,
+  ).bind(error, handle, userId, p, row.external_id, userId, p, cur).run();
   try {
     let access = await decrypt(env, row.access_token);
     if (row.stale) {
       const t = await refreshToken(env, p, { access_token: access, refresh_token: await decrypt(env, row.refresh_token) }, f);
-      await env.DB.prepare(
-        "UPDATE oauth_tokens SET access_token = ?, refresh_token = COALESCE(?, refresh_token), expires_at = datetime('now', ?), updated_at = datetime('now') WHERE user_id = ? AND platform = ?",
-      ).bind(await encrypt(env, t.access_token), await encrypt(env, t.refresh_token), expiry(t), userId, p).run();
+      const next = await encrypt(env, t.access_token);
+      const r = await env.DB.prepare(
+        "UPDATE oauth_tokens SET access_token = ?, refresh_token = COALESCE(?, refresh_token), expires_at = datetime('now', ?), updated_at = datetime('now') WHERE user_id = ? AND platform = ? AND access_token = ?",
+      ).bind(next, await encrypt(env, t.refresh_token), expiry(t), userId, p, row.access_token).run();
+      if (!r.meta?.changes) throw new ProviderError("changed");
+      cur = next;
       access = t.access_token;
     }
     const m = await fetchMetrics(p, access, f);
-    await mark(null, m.handle);
+    if (m.external_id !== row.external_id) throw new ProviderError("changed");
+    if (!(await mark(null, m.handle)).meta?.changes) throw new ProviderError("changed");
     return m;
   } catch (e) {
-    await mark(e instanceof ProviderError ? e.code : "sync");
+    if (e instanceof ProviderError && e.code === "changed") throw e;
+    if (!(await mark(e instanceof ProviderError ? e.code : "sync")).meta?.changes) throw new ProviderError("changed");
     throw e;
   }
 }
@@ -276,33 +335,75 @@ const page = (body, status) => new Response(body, { status, headers: { "content-
 const redirect = to => new Response(null, { status: 302, headers: { location: to, "cache-control": "no-store", "referrer-policy": "no-referrer" } });
 const EXPIRED = "Bağlantı geçersiz ya da süresi dolmuş. Panelden yeniden bağlanmayı deneyin.";
 
-export async function oauthCallback(req, url, env, f = fetch) {
+// Callback hiçbir hesabı bağlamaz. Sağlayıcının kodunu şifreli saklar, state'i tek kullanımlık bir bilete
+// çevirir ve paneli /panel?oauth=<p>&result=pending#ticket=<bilet> adresine gönderir (bilet sunucu
+// loglarına ve Referer'a düşmesin diye fragment'ta). Red: result=denied. State ikinci kez kullanılamaz.
+export async function oauthCallback(req, url, env) {
   const p = /^\/oauth\/([a-z]+)\/callback$/.exec(url.pathname)?.[1];
   if (req.method !== "GET" || !OAUTH.includes(p)) return page("Bulunamadı", 404);
-  if (!oauthReady(env, p)) return page(NOT_CONFIGURED, 503);
+  if (!metricsEnabled(env) || !oauthReady(env, p)) return page(NOT_CONFIGURED, 503);
   const state = url.searchParams.get("state") || "";
-  if (!/^[A-Za-z0-9_-]{43}$/.test(state)) return page(EXPIRED, 400);
-  // State tek kullanımlık: okunurken silinir. Dönüş adresi istekten değil, başlatırken kaydedilenden gelir.
+  if (!TOKEN_RE.test(state)) return page(EXPIRED, 400);
+  const hash = await sha256(state), code = url.searchParams.get("code");
+  const back = (to, result, frag = "") => redirect(`${to}?${new URLSearchParams({ oauth: p, result })}${frag}`);
+  // Dönüş adresi istekten değil, başlatırken kaydedilenden gelir.
+  if (url.searchParams.get("error") || !code) {
+    const st = await env.DB.prepare(
+      "DELETE FROM oauth_states WHERE state_hash = ? AND platform = ? AND ticket_hash IS NULL AND expires_at > datetime('now') RETURNING return_to",
+    ).bind(hash, p).first();
+    return st ? back(st.return_to, "denied") : page(EXPIRED, 400);
+  }
+  const ticket = b64u(crypto.getRandomValues(new Uint8Array(32)));
   const st = await env.DB.prepare(
-    "DELETE FROM oauth_states WHERE state_hash = ? AND platform = ? AND expires_at > datetime('now') RETURNING user_id, return_to",
-  ).bind(await sha256(state), p).first();
-  if (!st) return page(EXPIRED, 400);
-  const back = result => redirect(`${st.return_to}?${new URLSearchParams({ oauth: p, result })}`);
-  const code = url.searchParams.get("code");
-  if (url.searchParams.get("error") || !code) return back("denied");
+    `UPDATE oauth_states SET ticket_hash = ?, code = ?, expires_at = datetime('now', ?)
+     WHERE state_hash = ? AND platform = ? AND ticket_hash IS NULL AND expires_at > datetime('now') RETURNING return_to`,
+  ).bind(await sha256(ticket), await encrypt(env, code), `+${TICKET_MINUTES} minutes`, hash, p).first();
+  return st ? back(st.return_to, "pending", `#ticket=${ticket}`) : page(EXPIRED, 400);
+}
+
+// Hata kodu ve HTTP durumu; platform.js bunu kendi Bad hatasına çevirir.
+export class OAuthFail extends Error {
+  constructor(code, status = 400) { super(code); this.code = code; this.status = status; }
+}
+
+// POST /app/connect/finish {ticket}: bileti getiren oturum akışı başlatan kullanıcı değilse bilet yine
+// yanar ve hiçbir şey bağlanmaz (forbidden). Platform hesabı başka kullanıcıya bağlıysa "taken".
+export async function finishOAuth(env, userId, ticket, f = fetch) {
+  if (typeof ticket !== "string" || !TOKEN_RE.test(ticket)) throw new OAuthFail("ticket");
+  const st = await env.DB.prepare(
+    "DELETE FROM oauth_states WHERE ticket_hash = ? AND expires_at > datetime('now') RETURNING user_id, platform, code, redirect_uri",
+  ).bind(await sha256(ticket)).first();
+  if (!st) throw new OAuthFail("ticket");
+  if (Number(st.user_id) !== Number(userId)) throw new OAuthFail("forbidden", 403);
+  const p = st.platform;
+  if (!oauthReady(env, p)) throw new OAuthFail("not_configured", 409);
   try {
-    const t = await exchangeCode(env, p, code, redirectUri(env, url.origin, p), f);
+    const t = await exchangeCode(env, p, await decrypt(env, st.code), st.redirect_uri, f);
     const prof = await fetchProfile(p, t.access_token, f);
-    await env.DB.prepare(
-      `INSERT INTO oauth_tokens (user_id, platform, external_id, handle, access_token, refresh_token, expires_at, scope, error)
-       VALUES (?, ?, ?, ?, ?, ?, datetime('now', ?), ?, NULL)
-       ON CONFLICT (user_id, platform) DO UPDATE SET external_id = excluded.external_id, handle = excluded.handle,
-         access_token = excluded.access_token, refresh_token = excluded.refresh_token, expires_at = excluded.expires_at,
-         scope = excluded.scope, error = NULL, updated_at = datetime('now')`,
-    ).bind(st.user_id, p, prof.external_id, prof.handle, await encrypt(env, t.access_token), await encrypt(env, t.refresh_token), expiry(t), t.scope ?? null).run();
-    return back("ok");
+    if (!prof.external_id) throw new ProviderError("no_id");
+    const other = await env.DB.prepare("SELECT 1 FROM social_accounts WHERE platform = ? AND external_id = ? AND user_id <> ?")
+      .bind(p, prof.external_id, userId).first();
+    // Sağlayıcıda iptal yapılmaz: Google'da bu, hesabı bağlı tutan diğer kullanıcının iznini de kaldırır.
+    if (other) throw new OAuthFail("taken", 409);
+    await env.DB.batch([
+      env.DB.prepare(
+        `INSERT INTO social_accounts (user_id, platform, handle, external_id, status, connected_at, error)
+         VALUES (?, ?, ?, ?, 'connected', datetime('now'), NULL)
+         ON CONFLICT (user_id, platform) DO UPDATE SET handle = excluded.handle, external_id = excluded.external_id,
+           status = 'connected', connected_at = excluded.connected_at, error = NULL, updated_at = datetime('now')`,
+      ).bind(userId, p, prof.handle ?? null, prof.external_id),
+      env.DB.prepare(
+        `INSERT INTO oauth_tokens (user_id, platform, access_token, refresh_token, expires_at, scope)
+         VALUES (?, ?, ?, ?, datetime('now', ?), ?)
+         ON CONFLICT (user_id, platform) DO UPDATE SET access_token = excluded.access_token, refresh_token = excluded.refresh_token,
+           expires_at = excluded.expires_at, scope = excluded.scope, updated_at = datetime('now')`,
+      ).bind(userId, p, await encrypt(env, t.access_token), await encrypt(env, t.refresh_token), expiry(t), t.scope ?? null),
+    ]);
+    return { platform: p, handle: prof.handle ?? null };
   } catch (e) {
+    if (e instanceof OAuthFail) throw e;
+    if (/UNIQUE/i.test(e?.message || "")) throw new OAuthFail("taken", 409); // aynı anda iki kullanıcı
     console.log("oauth", p, e instanceof ProviderError ? e.code : "error");
-    return back("error");
+    throw new OAuthFail("provider", 502);
   }
 }
