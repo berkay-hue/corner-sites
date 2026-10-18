@@ -69,7 +69,8 @@ r=$(call POST /app/applications/$AID "$IT" '{"status":"accepted"}'); check "infl
 r=$(call POST /app/applications/$AID "$BT" '{"status":"accepted"}'); check "marka kabul" 200 "$r"
 r=$(call POST /app/applications/$AID "$IT" '{"status":"submitted","content_url":"javascript:alert(1)"}'); check "kötü içerik linki" 400 "$r"
 r=$(call POST /app/applications/$AID "$IT" '{"status":"submitted","content_url":"https://instagram.com/p/abc"}'); check "içerik gönder" 200 "$r"
-r=$(call POST /app/applications/$AID "$BT" '{"status":"revision"}'); check "revizyon iste" 200 "$r"
+r=$(call POST /app/applications/$AID "$BT" '{"status":"revision","note":"Logoyu ilk saniyede göster"}'); check "revizyon iste" 200 "$r"
+[ "$(body "$r" | jq -r .application.revision_note)" = "Logoyu ilk saniyede göster" ] || { echo "HATA revizyon notu"; fail=1; }
 r=$(call POST /app/applications/$AID "$IT" '{"status":"submitted","content_url":"https://instagram.com/p/abc2"}'); check "yeniden gönder" 200 "$r"
 r=$(call POST /app/applications/$AID "$BT" '{"status":"approved"}'); check "içerik onay" 200 "$r"
 r=$(call GET /app/campaigns/$CID "$BT"); check "kampanya detayı (marka)" 200 "$r"
