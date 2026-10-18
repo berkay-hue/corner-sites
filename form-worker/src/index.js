@@ -3,6 +3,7 @@
 // Kayıt D1'e yazılır; e-posta MAIL binding'i (Email Routing) üzerinden MAIL_TO adresine gider.
 import { EmailMessage } from "cloudflare:email";
 import { platform, cleanup } from "./platform.js";
+import { oauthCallback } from "./oauth.js";
 
 const MAX_FIELDS = 30, MAX_LEN = 5000, RATE = 5; // 10 dakikada IP başına en fazla RATE gönderim
 
@@ -30,6 +31,8 @@ export default {
       headers: origin ? { "access-control-allow-origin": origin, "access-control-allow-methods": "GET, POST", "access-control-allow-headers": "content-type, authorization", "access-control-max-age": "86400", vary: "Origin" } : {},
     });
     if (url.pathname.startsWith("/rakip/")) return rakip(req, url, env, origin);
+    // Sosyal hesap bağlama dönüşü (src/oauth.js): sağlayıcı yönlendirmesinde Origin yok, platform() dışında
+    if (url.pathname.startsWith("/oauth/")) return oauthCallback(req, url, env);
     // brandcorner.co platformu: üyelik ve panel
     if (/^\/(auth|app)\//.test(url.pathname)) return platform(req, url, env, origin, deliver);
     if (url.pathname !== "/submit" || req.method !== "POST") return json({ ok: false }, 404, origin);
