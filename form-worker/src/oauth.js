@@ -57,6 +57,10 @@ const PROVIDERS = {
 export class ProviderError extends Error {
   constructor(code) { super(code); this.code = String(code).slice(0, 120); }
 }
+// Beklenmeyen hata için güvenli log metni: ad + mesaj, tek satır, ≤160. Tırnak içindeki parçalar (ör. JSON ayrıştırma
+// hatasındaki gövde kesiti) ve 24+ karakterlik token benzeri diziler maskelenir.
+export const errText = e => `${e?.name || "Error"}: ${String(e?.message ?? e)}`.replace(/\s+/g, " ")
+  .replace(/"[^"]*"|'[^']*'/g, "\"…\"").replace(/[A-Za-z0-9_\-.~+/=]{24,}/g, "…").slice(0, 160);
 
 function tokenKey(env) {
   try {
@@ -571,7 +575,9 @@ export async function finishOAuth(env, userId, ticket, f = fetch, role = null) {
   } catch (e) {
     if (e instanceof OAuthFail) throw e;
     if (/UNIQUE/i.test(e?.message || "")) throw new OAuthFail("taken", 409); // aynı anda iki kullanıcı
-    console.log("oauth", p, e instanceof ProviderError ? e.code : "error");
+    // ProviderError dışı hata (ağ, ayrıştırma, D1): mesaj tek satır, ≤160; tırnak içi ve uzun token benzeri parçalar maskelenir
+    if (e instanceof ProviderError) console.log("oauth", p, e.code);
+    else console.log("oauth", p, "error", errText(e));
     throw new OAuthFail("provider", 502);
   }
 }

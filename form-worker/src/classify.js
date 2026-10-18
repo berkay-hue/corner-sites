@@ -33,6 +33,8 @@ const RELATED = [
 ];
 
 export const NICHES = Object.keys(DICT);
+// GET /app/niches: kanonik anahtar + İngilizce etiket; sıra ve anahtarlar panel.html "var NICHES" ile aynı
+export const NICHE_LIST = NICHES.map(key => ({ key, en: DICT[key].en }));
 
 // Türkçe küçük harf + aksan sadeleştirme: "İ"→"i", "I"→"ı"→"i", "ş"→"s"
 export const fold = s => String(s ?? "").toLocaleLowerCase("tr").normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/ı/g, "i");
