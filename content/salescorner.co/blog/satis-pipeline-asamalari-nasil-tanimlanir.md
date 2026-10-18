@@ -1,6 +1,6 @@
 ---
 title: "Satış Pipeline Aşamaları Nasıl Tanımlanır? Örnekler"
-description: "B2B satış ekipleri için pipeline aşamalarını nasıl tanımlayacağınızı, her aşamanın çıkış kriterlerini ve sık yapılan hataları örneklerle anlatıyoruz."
+description: "B2B satış pipeline aşamalarını nasıl tanımlarsınız? Her aşamanın çıkış kriterleri ve sık yapılan hatalar örneklerle."
 date: "2026-10-12"
 updated: "2026-10-16"
 category: "Pipeline"
@@ -224,6 +224,8 @@ Aşamalarınızı tanımladıktan sonra şu metrikler size sistemin sağlığın
 - **Aşama bazında kayıp nedenleri:** Kayıpların nerede ve neden yaşandığı.
 
 Bu metrikleri aylık olarak temsilci bazında da inceleyin. Bir temsilcinin demo sonrası dönüşümü ekip ortalamasının belirgin şekilde altındaysa, sorun büyük ihtimalle demo yapısında ya da keşifte eksik bırakılan bilgilerdedir.
+
+Sales Corner'ın satış otomasyonu ve outbound alanında neler yaptığını [hizmetler sayfamızda](/hizmetler) görebilirsiniz.
 
 ## Sonuç
 

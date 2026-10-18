@@ -1,6 +1,6 @@
 ---
 title: "n8n ile B2B Satış Otomasyonu: Başlangıç Rehberi"
-description: "n8n ile B2B satış süreçlerini nasıl otomatikleştirirsiniz? Lead toplama, CRM senkronizasyonu, takip e-postaları ve AI katmanı için adım adım rehber."
+description: "n8n ile B2B satış otomasyonu: lead toplama, CRM senkronizasyonu, takip e-postaları ve AI katmanı için adım adım rehber."
 date: "2026-10-11"
 updated: "2026-10-16"
 category: "Otomasyon"
@@ -99,6 +99,8 @@ Hayır. Otomasyon veri girişi, araştırma ve hatırlatma gibi tekrar eden işl
 ### İlk otomasyon ne kadar sürede devreye alınır?
 
 Lead yakalama ve CRM'e yazma gibi tek amaçlı bir akış, araçlara erişim hazırsa genellikle birkaç gün içinde test edilip devreye alınabilir. Çok adımlı ve AI katmanı içeren akışlar daha uzun test süresi gerektirir.
+
+Sales Corner'ın satış otomasyonu ve outbound alanında neler yaptığını [hizmetler sayfamızda](/hizmetler) görebilirsiniz.
 
 ## Sonuç
 

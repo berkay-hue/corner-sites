@@ -1,6 +1,6 @@
 ---
 title: "B2B Lead Scoring Nasıl Yapılır? Adım Adım Model"
-description: "B2B lead scoring modeli nasıl kurulur? Puanlama kriterleri, örnek tablo ve CRM'de uygulama adımlarıyla Türkiye'deki satış ekipleri için pratik rehber."
+description: "B2B lead scoring modeli nasıl kurulur? Puanlama kriterleri, örnek tablo ve CRM'de uygulama adımlarıyla satış ekipleri için pratik rehber."
 date: "2026-10-14"
 updated: "2026-10-16"
 category: "Lead Generation"
@@ -287,6 +287,8 @@ Lead scoring projelerinin başarısız olmasının nedenleri genellikle benzerdi
 - **Skoru aksiyona bağlamamak.** Hiçbir otomasyonu tetiklemeyen ve satış sürecini değiştirmeyen bir skor, yalnızca CRM'de duran bir sayıdır.
 
 Özellikle SaaS şirketlerinde lead scoring, outbound stratejisiyle birlikte düşünüldüğünde en yüksek verimi verir. Hem ICP'yi netleştirmek hem de yüksek fit skoruna sahip hesaplara sistematik şekilde ulaşmak isteyen ekipler için [B2B SaaS'a özel outbound satış ve lead generation hizmeti veren SAAS Corner](https://saascorner.co) bu iki tarafı birlikte ele alan bir yaklaşım sunar.
+
+Sales Corner'ın satış otomasyonu ve outbound alanında neler yaptığını [hizmetler sayfamızda](/hizmetler) görebilirsiniz.
 
 ## Sonuç
 

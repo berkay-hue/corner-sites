@@ -1,6 +1,6 @@
 ---
 title: "KVKK'ya Uygun B2B Soğuk E-Posta: Yasal Sınırlar"
-description: "B2B soğuk e-postada KVKK ve ticari elektronik ileti kurallarına nasıl uyulacağını, meşru menfaat ve açık ret seçeneklerini örneklerle anlatıyoruz."
+description: "B2B soğuk e-postada KVKK ve ticari ileti kurallarına nasıl uyulur? Meşru menfaat ve ret seçeneğini örneklerle anlatıyoruz."
 date: "2026-10-13"
 updated: "2026-10-16"
 category: "Outbound"
@@ -198,6 +198,8 @@ Bir kampanyayı başlatmadan önce şu soruların hepsine "evet" diyebiliyor olm
 - Saklama süreleri tanımlı ve imha otomatik mi?
 
 Bu altyapıyı içeride kurmak yerine outbound operasyonunun tamamını dışarıdan yönetmek istiyorsanız, B2B SaaS şirketlerine odaklanan grup şirketimiz [SAAS Corner'ın outbound satış ve lead generation hizmeti](https://saascorner.co) liste oluşturmadan dizi yönetimine kadar süreci uçtan uca üstlenebilir.
+
+Sales Corner'ın satış otomasyonu ve outbound alanında neler yaptığını [hizmetler sayfamızda](/hizmetler) görebilirsiniz.
 
 ## Sonuç
 
