@@ -15,15 +15,17 @@ registerHooks({
       : next(spec, ctx);
   },
 });
-const { platform } = await import("./platform.js");
+const { platform, cleanup } = await import("./platform.js");
 const {
   NOT_CONFIGURED, NO_DATA, OAUTH, ProviderError, oauthReady, redirectUri, listConnections, authorizeUrl,
   exchangeCode, fetchMetrics, encrypt, decrypt, syncAccount, oauthCallback, finishOAuth, OAuthFail,
+  syncDue, SYNC_MIN, SYNC_D1, pkceChallenge, disconnectOAuth,
 } = await import("./oauth.js");
 
 const SCHEMA = readFileSync(new URL("../schema.sql", import.meta.url), "utf8");
 const METRICS = readFileSync(new URL("../migrations/0001_metrics.sql", import.meta.url), "utf8");
 const MIGRATION = readFileSync(new URL("../migrations/0002_oauth.sql", import.meta.url), "utf8");
+const SYNC = readFileSync(new URL("../migrations/0003_sync.sql", import.meta.url), "utf8");
 
 // Testin ihtiyacı kadar D1: prepare().bind().all/first/run, batch (gerçek D1 gibi atomik), exec
 function d1(db) {
@@ -56,6 +58,7 @@ function freshDb() {
   db.exec(SCHEMA);
   db.exec(METRICS);
   db.exec(MIGRATION);
+  db.exec(SYNC);
   return db;
 }
 
@@ -249,8 +252,7 @@ function api(env, origin = ORIGIN) {
   };
 }
 
-async function setup(extraEnv = {}) {
-  const db = freshDb();
+async function setup(extraEnv = {}, db = freshDb()) {
   const env = { DB: d1(db), DEV_ORIGINS: ORIGIN, PBKDF2_ITER: "10000", METRICS_ENABLED: "1", ...extraEnv };
   const call = api(env);
   let ip = 0;
@@ -316,11 +318,14 @@ test("bağlantı uçları: yetki, yapılandırılmamış durum, METRICS_ENABLED 
   assert.equal(r.status, 503);
   assert.equal(await r.text(), NOT_CONFIGURED);
 
-  // METRICS_ENABLED kapalı: secret'lar girilmiş olsa da bağlanma uçları ve dönüş adresi kapalı; bağı koparmak açık
+  // METRICS_ENABLED kapalı: secret'lar girilmiş olsa da bağlanma uçları ve dönüş adresi kapalı. Liste yalnız
+  // bağlı ve hatalı satırları döner (koparılabilsinler diye); bağı koparmak açık
   const off = await setup({ ...IG_ENV, OAUTH_TOKEN_KEY: KEY, METRICS_ENABLED: "0" });
   const inf2 = await off.join("influencer", "inf@x.co");
+  const offList = await off.call("GET", "/app/connections", { token: inf2.token });
+  assert.deepEqual([offList.status, offList.body], [200, { ok: true, disabled: true, connections: [] }]);
   for (const [method, path, body] of [
-    ["GET", "/app/connections"], ["POST", "/app/connect", { platform: "instagram" }], ["POST", "/app/connect/finish", { ticket: "a".repeat(43) }],
+    ["POST", "/app/connect", { platform: "instagram" }], ["POST", "/app/connect/finish", { ticket: "a".repeat(43) }],
   ]) assert.deepEqual(fail(await off.call(method, path, { token: inf2.token, body })), [409, "disabled"], path);
   assert.equal((await callback(off.env, "/oauth/instagram/callback?code=x&state=" + "a".repeat(43))).status, 503);
   assert.equal((await off.call("POST", "/app/disconnect", { token: inf2.token, body: { platform: "instagram" } })).status, 200);
@@ -436,8 +441,8 @@ test("başkasının bileti hiçbir şey bağlamaz ve yanar (RFC 6749 §10.12)", 
 
   // A kendi onay adresini V'ye gönderir; V onaylar, sağlayıcı V'nin tarayıcısını panele biletle döndürür
   const ticket = await land(env, await start(call, a.token));
-  // V'nin oturumu bileti gönderir: forbidden, kod takası yapılmaz
-  assert.deepEqual(fail(await finish(call, v.token, ticket)), [403, "forbidden"]);
+  // V'nin oturumu bileti gönderir: ticket_owner (bilet başka hesabın), kod takası yapılmaz
+  assert.deepEqual(fail(await finish(call, v.token, ticket)), [403, "ticket_owner"]);
   // Bilet yandı: A eline geçirse de kullanamaz
   assert.deepEqual(fail(await finish(call, a.token, ticket)), [400, "ticket"]);
   assert.equal(net.calls.length, 0);
@@ -775,4 +780,274 @@ test("syncAccount: okuma ile yazma arasında hesap değişirse eski token ve kul
   await reset("tt-1", "+1 hours");
   assert.equal((await syncAccount(env, inf.id, "tiktok", fakeFetch(ttRoutes()))).handle, "inf_tt");
   assert.deepEqual([acc().handle, acc().error], ["inf_tt", null]);
+});
+
+test("METRICS_ENABLED kapalı: liste bağlı ve hatalı satırları döner, bağ koparılabilir", async t => {
+  t.mock.method(console, "log", () => {});
+  const net = fakeFetch([]);
+  t.mock.method(globalThis, "fetch", (...a) => net(...a));
+  const { db, call, join } = await setup({ ...IG_ENV, OAUTH_TOKEN_KEY: KEY, METRICS_ENABLED: "0" });
+  const inf = await join("influencer", "inf@x.co");
+  const ins = db.prepare("INSERT INTO social_accounts (user_id, platform, handle, external_id, status, error) VALUES (?, ?, ?, ?, ?, ?)");
+  ins.run(inf.id, "instagram", "inf_ig", "1784", "connected", null);
+  ins.run(inf.id, "tiktok", "inf_tt", "tt-1", "connected", "invalid_grant");
+  ins.run(inf.id, "youtube", null, null, "revoked", null);
+  const r = await call("GET", "/app/connections", { token: inf.token });
+  assert.equal(r.status, 200);
+  assert.equal(r.body.disabled, true);
+  assert.deepEqual(r.body.connections.map(c => [c.platform, c.status, c.handle]), [["instagram", "connected", "inf_ig"], ["tiktok", "error", "inf_tt"]]);
+  assert.equal((await call("POST", "/app/disconnect", { token: inf.token, body: { platform: "instagram" } })).status, 200);
+  assert.deepEqual({ ...db.prepare("SELECT status, external_id FROM social_accounts WHERE platform = 'instagram'").get() }, { status: "revoked", external_id: null });
+  const after = await call("GET", "/app/connections", { token: inf.token });
+  assert.deepEqual(after.body.connections.map(c => c.platform), ["tiktok"]);
+});
+
+test("PKCE: YouTube S256, verifier şifreli saklanır ve kod takasında gider; TikTok ve Instagram'da yok", async t => {
+  t.mock.method(console, "log", () => {});
+  let net = fakeFetch([]);
+  t.mock.method(globalThis, "fetch", (...a) => net(...a));
+  const { db, env, call, join } = await setup(ALL);
+  const inf = await join("influencer", "inf@x.co");
+  const connectUrl = async p => new URL((await call("POST", "/app/connect", { token: inf.token, body: { platform: p } })).body.url);
+  const verifierOf = p => db.prepare("SELECT code_verifier FROM oauth_states WHERE platform = ?").get(p).code_verifier;
+
+  const u = await connectUrl("youtube");
+  assert.equal(u.searchParams.get("code_challenge_method"), "S256");
+  const stored = verifierOf("youtube"), v = await decrypt(env, stored);
+  assert.match(v, /^[A-Za-z0-9_-]{43}$/);
+  assert.ok(!stored.includes(v));
+  assert.equal(u.searchParams.get("code_challenge"), await pkceChallenge(v));
+  const ticket = await land(env, u.searchParams.get("state"), "youtube");
+  net = fakeFetch(ytRoutes());
+  assert.equal((await finish(call, inf.token, ticket)).status, 200);
+  const yt = net.calls.find(c => c.url === "https://oauth2.googleapis.com/token");
+  assert.equal(yt.body.code_verifier, v);
+
+  for (const [p, tokenUrl] of [["tiktok", `${TT}/oauth/token/`], ["instagram", "https://api.instagram.com/oauth/access_token"]]) {
+    const pu = await connectUrl(p);
+    assert.equal(pu.searchParams.get("code_challenge"), null, p);
+    assert.equal(pu.searchParams.get("code_challenge_method"), null, p);
+    assert.equal(verifierOf(p), null, p);
+    const pt = await land(env, pu.searchParams.get("state"), p);
+    net = fakeFetch(ttRoutes(igRoutes()));
+    assert.equal((await finish(call, inf.token, pt)).status, 200, p);
+    const tok = net.calls.find(c => c.url.startsWith(tokenUrl));
+    assert.ok(tok, p);
+    assert.equal("code_verifier" in tok.body, false, p);
+  }
+});
+
+test("Yeniden bağlanma: aynı hesap ölçümleri korur, başka hesapta eski ölçümler ayrılır", async t => {
+  t.mock.method(console, "log", () => {});
+  let net = fakeFetch([]);
+  t.mock.method(globalThis, "fetch", (...a) => net(...a));
+  const { db, env, call, join } = await setup({ ...TT_ENV, OAUTH_TOKEN_KEY: KEY });
+  const inf = await join("influencer", "inf@x.co");
+  const connect = async routes => {
+    const ticket = await land(env, await start(call, inf.token, "tiktok"), "tiktok");
+    net = fakeFetch(routes);
+    const r = await finish(call, inf.token, ticket);
+    assert.equal(r.status, 200, JSON.stringify(r.body));
+  };
+  const acc = () => ({ ...db.prepare("SELECT id, external_id, next_sync_at FROM social_accounts WHERE user_id = ? AND platform = 'tiktok'").get(inf.id) });
+  const linked = () => db.prepare("SELECT account_id FROM link_snapshots").get().account_id;
+  await connect(ttRoutes());
+  const { id } = acc();
+  db.prepare("INSERT INTO metric_snapshots (account_id, followers) VALUES (?, 100)").run(id);
+  db.prepare("INSERT INTO link_snapshots (application_id, account_id, url, platform) VALUES (1, ?, 'https://www.tiktok.com/@inf_tt/video/1', 'tiktok')").run(id);
+  db.prepare("UPDATE social_accounts SET next_sync_at = datetime('now', '+10 minutes') WHERE id = ?").run(id);
+
+  // Aynı hesap (tt-1): ölçümler ve link bağı kalır, süren senkronun kirası düşer
+  await connect(ttRoutes());
+  assert.deepEqual([acc().id, acc().external_id, acc().next_sync_at], [id, "tt-1", null]);
+  assert.equal(count(db, "metric_snapshots"), 1);
+  assert.equal(linked(), id);
+
+  // Başka hesap (tt-2): eski hesabın ölçümleri silinir, link ölçümü kalır ama hesaptan ayrılır
+  const other = { data: { user: { open_id: "tt-2", username: "yeni_tt", display_name: "Yeni", follower_count: 50 } }, error: { code: "ok", message: "" } };
+  await connect(ttRoutes([[`${TT}/user/info/`, [200, other]]]));
+  assert.deepEqual([acc().id, acc().external_id], [id, "tt-2"]);
+  assert.equal(count(db, "metric_snapshots"), 0);
+  assert.equal(count(db, "link_snapshots"), 1);
+  assert.equal(linked(), null);
+});
+
+// Senkron testleri: bağlı hesap ve 1 saat geçerli token (yenileme gerekmez)
+const seed = async (db, env, userId, p, ext) => {
+  db.prepare("INSERT INTO social_accounts (user_id, platform, handle, external_id, status) VALUES (?, ?, 'eski', ?, 'connected')").run(userId, p, ext);
+  db.prepare("INSERT INTO oauth_tokens (user_id, platform, access_token, refresh_token, expires_at) VALUES (?, ?, ?, ?, datetime('now', '+1 hours'))")
+    .run(userId, p, await encrypt(env, `${p}-access`), await encrypt(env, `${p}-refresh`));
+};
+// Bir sonraki senkrona kalan dakika (next_sync_at NULL ise null)
+const due = (db, userId, p = "tiktok") => db.prepare(
+  "SELECT (julianday(next_sync_at) - julianday('now')) * 1440 AS m FROM social_accounts WHERE user_id = ? AND platform = ?",
+).get(userId, p).m;
+const near = (m, want) => assert.ok(m !== null && Math.abs(m - want) < 2, `${m} ~ ${want}`);
+const ZERO = { synced: 0, failed: 0, changed: 0, busy: 0, deferred: 0 };
+const route = (prefix, fn) => {
+  const hit = ttRoutes().find(([p]) => p === prefix)[1];
+  return [prefix, (u, b) => { fn(); return typeof hit === "function" ? hit(u, b) : hit; }];
+};
+
+test("syncDue: vadesi gelen hesap ölçülür, ~1 gün sonraya kurulur; vadesi gelmeyen ve yapılandırılmayan platform atlanır", async t => {
+  t.mock.method(console, "log", () => {});
+  const { db, env, join } = await setup({ ...TT_ENV, OAUTH_TOKEN_KEY: KEY });
+  const a = await join("influencer", "a@x.co"), b = await join("influencer", "b@x.co");
+  await seed(db, env, a.id, "tiktok", "tt-1");
+  await seed(db, env, b.id, "tiktok", "tt-2");
+  db.prepare("UPDATE social_accounts SET next_sync_at = datetime('now', '+2 hours') WHERE user_id = ?").run(b.id);
+  await seed(db, env, a.id, "youtube", "UC1"); // YouTube secret'ları yok: seçilmez
+  const f = fakeFetch(ttRoutes());
+  assert.deepEqual(await syncDue(env, f), { ...ZERO, synced: 1 });
+  assert.deepEqual({ ...db.prepare("SELECT account_id, source, followers, avg_views, avg_likes, avg_comments, posts_sampled FROM metric_snapshots").get() }, {
+    account_id: db.prepare("SELECT id FROM social_accounts WHERE user_id = ? AND platform = 'tiktok'").get(a.id).id,
+    source: "oauth", followers: 12000, avg_views: 6000, avg_likes: 400, avg_comments: 30, posts_sampled: 2,
+  });
+  near(due(db, a.id), 1435);
+  near(due(db, b.id), 120);
+  assert.equal(due(db, a.id, "youtube"), null);
+  assert.ok(f.calls.every(c => c.url.startsWith(TT) && !c.url.startsWith(`${TT}/oauth/`)));
+  // Hemen ikinci çalıştırma: vadesi gelen yok
+  const g = fakeFetch(ttRoutes());
+  assert.deepEqual(await syncDue(env, g), ZERO);
+  assert.equal(g.calls.length, 0);
+  assert.equal(count(db, "metric_snapshots"), 1);
+});
+
+test("syncDue: en fazla max hesap, bütçeyi aşan platform sonraki saate kalır", async t => {
+  t.mock.method(console, "log", () => {});
+  const { db, env, join } = await setup({ ...IG_ENV, ...TT_ENV, OAUTH_TOKEN_KEY: KEY });
+  const a = await join("influencer", "a@x.co"), b = await join("influencer", "b@x.co");
+  await seed(db, env, a.id, "instagram", "1784");
+  await seed(db, env, a.id, "tiktok", "tt-1");
+  await seed(db, env, b.id, "tiktok", "tt-2");
+  // Bütçe 3: Instagram (15) sığmaz, ilk TikTok (3) sığar, ikinci TikTok bütçeyi aşar
+  const f = fakeFetch(ttRoutes());
+  assert.deepEqual(await syncDue(env, f, { budget: 3 }), { ...ZERO, synced: 1, deferred: 2 });
+  assert.equal(f.calls.some(c => c.url.includes("instagram")), false);
+  near(due(db, a.id), 1435);
+  assert.equal(due(db, a.id, "instagram"), null);
+  assert.equal(due(db, b.id), null);
+  // max 1: yalnız ilk sıradaki (Instagram) alınır; diğer TikTok kalır
+  const g = fakeFetch(ttRoutes(igRoutes([["https://graph.instagram.com/refresh_access_token?", [200, { access_token: "ig-yeni", expires_in: 5184000 }]]])));
+  assert.deepEqual(await syncDue(env, g, { max: 1 }), { ...ZERO, synced: 1, deferred: 1 });
+  near(due(db, a.id, "instagram"), 1435);
+  assert.equal(due(db, b.id), null);
+  // En ucuz platforma yetmeyen bütçe ya da max 0: hiçbir sorgu ve istek yok
+  assert.equal(SYNC_MIN, 3);
+  const h = fakeFetch(ttRoutes());
+  assert.deepEqual(await syncDue(env, h, { budget: SYNC_MIN - 1 }), ZERO);
+  assert.deepEqual(await syncDue(env, h, { max: 0 }), ZERO);
+  assert.equal(h.calls.length, 0);
+});
+
+// D1 ifadelerini sayar (batch içindekiler tek tek)
+const counted = DB => {
+  let n = 0;
+  const wrap = s => ({ bind: (...a) => wrap(s.bind(...a)), all: () => (n++, s.all()), first: () => (n++, s.first()), run: () => (n++, s.run()), raw: s });
+  return { DB: { ...DB, prepare: sql => wrap(DB.prepare(sql)), batch: list => (n += list.length, DB.batch(list.map(x => x.raw))) }, n: () => n };
+};
+
+test("syncDue: D1 sınırı — liste + hesap başına en çok SYNC_D1 ifade, sığmayan hesap sonraki saate kalır", async t => {
+  t.mock.method(console, "log", () => {});
+  const { db, env, join } = await setup({ ...TT_ENV, OAUTH_TOKEN_KEY: KEY });
+  const a = await join("influencer", "a@x.co"), b = await join("influencer", "b@x.co");
+  await seed(db, env, a.id, "tiktok", "tt-1");
+  await seed(db, env, b.id, "tiktok", "tt-2");
+  // Süresi geçmiş token: en kötü yol (yenileme + ölçüm)
+  db.prepare("UPDATE oauth_tokens SET expires_at = datetime('now', '-1 hours')").run();
+  const f = fakeFetch(ttRoutes());
+  // Bir hesaba yetmeyen D1 payı: hiçbir sorgu ve istek yok
+  const none = counted(env.DB);
+  assert.deepEqual(await syncDue({ ...env, DB: none.DB }, f, { d1: SYNC_D1 }), ZERO);
+  assert.equal(none.n(), 0);
+  assert.equal(f.calls.length, 0);
+  // İkinci hesaba bir ifade eksik pay: ilk hesap yenilenip ölçülür, ikincisi kalır; harcanan ifade payı aşmaz
+  const one = counted(env.DB);
+  assert.deepEqual(await syncDue({ ...env, DB: one.DB }, f, { d1: 2 * SYNC_D1 }), { ...ZERO, synced: 1, deferred: 1 });
+  assert.ok(f.calls.some(c => c.body?.grant_type === "refresh_token"), "yenileme yapıldı");
+  assert.equal(one.n(), 1 + SYNC_D1); // SYNC_D1 en kötü yolda tam
+  near(due(db, a.id), 1435);
+  assert.equal(due(db, b.id), null);
+  assert.equal(count(db, "metric_snapshots"), 1);
+});
+
+test("syncDue: kira — başkası almışsa busy, senkron sürerken kira düşerse ölçüm yazılmaz", async t => {
+  t.mock.method(console, "log", () => {});
+  const { db, env, join } = await setup({ ...TT_ENV, OAUTH_TOKEN_KEY: KEY });
+  const a = await join("influencer", "a@x.co"), b = await join("influencer", "b@x.co");
+  await seed(db, env, a.id, "tiktok", "tt-1");
+  await seed(db, env, b.id, "tiktok", "tt-2");
+  // a senkronlanırken başka bir çalıştırma b'yi kiralar
+  const leaseB = () => db.prepare("UPDATE social_accounts SET next_sync_at = datetime('now', '+15 minutes') WHERE user_id = ?").run(b.id);
+  assert.deepEqual(await syncDue(env, fakeFetch(ttRoutes([route(`${TT}/video/list/`, leaseB)]))), { ...ZERO, synced: 1, busy: 1 });
+  near(due(db, a.id), 1435);
+  near(due(db, b.id), 15);
+  assert.equal(count(db, "metric_snapshots"), 1);
+  // a senkronlanırken yeniden bağlanır (finishOAuth next_sync_at'i NULL yapar): ölçüm yazılmaz, kira geri kurulmaz
+  db.prepare("UPDATE social_accounts SET next_sync_at = NULL WHERE user_id = ?").run(a.id);
+  db.prepare("UPDATE social_accounts SET next_sync_at = datetime('now', '+1 hours') WHERE user_id = ?").run(b.id);
+  const reconnect = () => db.prepare("UPDATE social_accounts SET next_sync_at = NULL WHERE user_id = ?").run(a.id);
+  assert.deepEqual(await syncDue(env, fakeFetch(ttRoutes([route(`${TT}/video/list/`, reconnect)]))), { ...ZERO, changed: 1 });
+  assert.equal(count(db, "metric_snapshots"), 1);
+  assert.equal(due(db, a.id), null);
+});
+
+test("syncDue: hesap kimliği değişirse ~1 saat, sağlayıcı hatasında ~6 saat sonra yeniden denenir", async t => {
+  t.mock.method(console, "log", () => {});
+  const { db, env, join } = await setup({ ...TT_ENV, OAUTH_TOKEN_KEY: KEY });
+  const a = await join("influencer", "a@x.co");
+  await seed(db, env, a.id, "tiktok", "tt-1");
+  const other = { data: { user: { open_id: "tt-2", username: "baska", display_name: "B", follower_count: 1 } }, error: { code: "ok", message: "" } };
+  assert.deepEqual(await syncDue(env, fakeFetch(ttRoutes([[`${TT}/user/info/`, [200, other]]]))), { ...ZERO, changed: 1 });
+  near(due(db, a.id), 55);
+  db.prepare("UPDATE social_accounts SET next_sync_at = NULL WHERE user_id = ?").run(a.id);
+  const denied = ttRoutes([[`${TT}/user/info/`, [401, { error: { code: "access_token_invalid", message: "" } }]]]);
+  assert.deepEqual(await syncDue(env, fakeFetch(denied)), { ...ZERO, failed: 1 });
+  near(due(db, a.id), 355);
+  assert.equal(count(db, "metric_snapshots"), 0);
+});
+
+test("0002 uygulanmadan disconnect 500 dönmez", async t => {
+  t.mock.method(console, "log", () => {});
+  const net = fakeFetch([]);
+  t.mock.method(globalThis, "fetch", (...a) => net(...a));
+  // 0001 var, 0002 yok: oauth_tokens tablosu yok
+  const db = new DatabaseSync(":memory:");
+  db.exec(SCHEMA);
+  db.exec(METRICS);
+  const { env, call, join } = await setup({ ...IG_ENV, OAUTH_TOKEN_KEY: KEY }, db);
+  const inf = await join("influencer", "inf@x.co");
+  db.prepare("INSERT INTO social_accounts (user_id, platform, handle, external_id, status) VALUES (?, 'instagram', 'inf_ig', '1784', 'connected')").run(inf.id);
+  const r = await call("POST", "/app/disconnect", { token: inf.token, body: { platform: "instagram" } });
+  assert.equal(r.status, 200, JSON.stringify(r.body));
+  assert.deepEqual({ ...db.prepare("SELECT status, external_id FROM social_accounts").get() }, { status: "revoked", external_id: null });
+  // 0001 de yok: hiç tablo yokken de hata vermez
+  const bare = new DatabaseSync(":memory:");
+  bare.exec(SCHEMA);
+  const s = await setup({}, bare);
+  const u = await s.join("influencer", "inf@x.co");
+  assert.equal((await s.call("POST", "/app/disconnect", { token: u.token, body: { platform: "tiktok" } })).status, 200);
+  await disconnectOAuth(s.env, u.id, "youtube");
+  assert.equal(net.calls.length, 0);
+});
+
+test("cleanup: süresi dolan OAuth state'leri silinir; tablo yoksa diğer temizlik yine yapılır", async t => {
+  const logs = [];
+  t.mock.method(console, "log", (...a) => logs.push(a.join(" ")));
+  const { db, env, call, join } = await setup({ ...IG_ENV, OAUTH_TOKEN_KEY: KEY });
+  const inf = await join("influencer", "inf@x.co");
+  await start(call, inf.token);
+  await start(call, inf.token);
+  db.prepare("UPDATE oauth_states SET expires_at = datetime('now', '-1 minutes') WHERE rowid = (SELECT MIN(rowid) FROM oauth_states)").run();
+  await cleanup(env);
+  assert.equal(count(db, "oauth_states"), 1);
+  assert.equal(logs.length, 0);
+  // 0002 yok: oauth_states silinemez, loglanır; süresi dolan oturum yine silinir
+  const bare = new DatabaseSync(":memory:");
+  bare.exec(SCHEMA);
+  bare.prepare("INSERT INTO sessions (token_hash, user_id, expires_at) VALUES ('h', 1, datetime('now', '-1 minutes'))").run();
+  await cleanup({ DB: d1(bare) });
+  assert.equal(count(bare, "sessions"), 0);
+  assert.ok(logs.some(l => l.startsWith("cleanup oauth_states")), logs.join("\n"));
 });

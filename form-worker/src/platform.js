@@ -224,13 +224,19 @@ async function newSession(env, userId) {
 
 const me = u => ({ id: u.id, name: u.name, email: u.email, role: u.role, lang: u.lang, profile: JSON.parse(u.profile || "{}") });
 
-// cron'dan: süresi dolan oturumlar ve sıfırlama linkleri, eski deneme kayıtları
+// cron'dan: süresi dolan oturumlar ve sıfırlama linkleri, eski deneme kayıtları, süresi dolan OAuth state'leri.
+// oauth_states 0002'de; ayrı ifade, tablo yoksa ya da hata verirse diğer temizlik yine yapılır.
 export async function cleanup(env) {
   await env.DB.batch([
     env.DB.prepare("DELETE FROM sessions WHERE expires_at < datetime('now')"),
     env.DB.prepare("DELETE FROM auth_attempts WHERE created_at < datetime('now', '-1 day')"),
     env.DB.prepare("DELETE FROM password_resets WHERE expires_at < datetime('now')"),
   ]);
+  try {
+    await env.DB.prepare("DELETE FROM oauth_states WHERE expires_at <= datetime('now')").run();
+  } catch (e) {
+    console.log("cleanup oauth_states", e?.message?.slice(0, 80));
+  }
 }
 
 // ---- panel ----
@@ -282,11 +288,13 @@ async function updateProfile(c) {
 }
 
 // Sosyal hesap bağlama (resmi OAuth, src/oauth.js): yalnızca influencer. Secret yoksa "yapılandırılmadı".
-// METRICS_ENABLED kapalıyken bağlanılamaz (disabled); bağı koparmak her zaman açık.
+// METRICS_ENABLED kapalıyken bağlanılamaz (disabled); bağı koparmak her zaman açık. Kapalıyken liste yalnız
+// bağlı ve hatalı satırları döner ({disabled: true, connections}), panel bunlara "Kes" çizebilsin.
 async function connections(c) {
   need(c.user.role === "influencer");
-  need(metricsEnabled(c.env), "disabled", 409);
-  return ok(c, { connections: await listConnections(c.env, c.user.id, PLATFORMS) });
+  const list = await listConnections(c.env, c.user.id, PLATFORMS);
+  if (!metricsEnabled(c.env)) return ok(c, { disabled: true, connections: list.filter(x => x.status === "connected" || x.status === "error") });
+  return ok(c, { connections: list });
 }
 
 async function connect(c) {

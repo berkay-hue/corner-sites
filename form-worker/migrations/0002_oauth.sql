@@ -1,6 +1,6 @@
 -- brandcorner sosyal hesap bağlama: resmi OAuth (Instagram, TikTok, YouTube). Kazıma ve şifre yok.
 -- 0001_metrics.sql'den sonra uygulanır; tekrar uygulanabilir (IF NOT EXISTS).
--- Uygula: npx wrangler d1 migrations apply corner-forms --remote
+-- Uygula (form-worker/ klasöründen çalıştır): npx wrangler d1 migrations apply corner-forms --remote
 -- Bağlı hesabın tek kaynağı social_accounts (0001): durum, kullanıcı adı, platform kimliği, hata.
 -- Bu dosyadaki tablolar yalnızca akış durumu ve şifreli token tutar.
 

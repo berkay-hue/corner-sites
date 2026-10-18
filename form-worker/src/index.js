@@ -3,7 +3,8 @@
 // Kayıt D1'e yazılır; e-posta MAIL binding'i (Email Routing) üzerinden MAIL_TO adresine gider.
 import { EmailMessage } from "cloudflare:email";
 import { platform, cleanup } from "./platform.js";
-import { oauthCallback } from "./oauth.js";
+import { oauthCallback, syncDue } from "./oauth.js";
+import { metricsEnabled } from "./metrics.js";
 
 const MAX_FIELDS = 30, MAX_LEN = 5000, RATE = 5; // 10 dakikada IP başına en fazla RATE gönderim
 
@@ -63,7 +64,14 @@ export default {
   async scheduled(_, env) {
     const { results } = await env.DB.prepare("SELECT * FROM submissions WHERE emailed = 0 ORDER BY id LIMIT 50").all();
     for (const r of results) await deliver(env, { ...r, fields: JSON.parse(r.fields) });
-    await cleanup(env);
+    try { await cleanup(env); } catch (e) { console.log("cleanup", e?.message?.slice(0, 80)); }
+    // Günlük metrik senkronu (src/oauth.js syncDue), METRICS_ENABLED "1" ise. Ücretsiz plan çağrı başına 50 alt
+    // istek ve 50 D1 sorgusu veriyor; gönderilen her e-postayı bir istek sayıp kalanı senkrona bırakıyoruz. D1'de
+    // bekleyen listesi (1), e-posta başına işaret (1) ve cleanup (4 ifade) düşülür.
+    if (metricsEnabled(env)) {
+      const d1 = 50 - 1 - results.length - 4;
+      try { await syncDue(env, fetch, { budget: 40 - results.length, d1 }); } catch (e) { console.log("sync", e?.message?.slice(0, 80)); }
+    }
   },
 };
 
