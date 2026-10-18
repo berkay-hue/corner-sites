@@ -14,7 +14,7 @@ import { NICHE_LIST } from "./classify.js";
 const ROLES = ["brand", "influencer", "agency"];
 const PLATFORMS = LISTED; // instagram, tiktok, youtube, x, linkedin, twitch (profil ve bağlantı listesi aynı)
 const CURRENCIES = ["TRY", "USD", "EUR"];
-const SESSION_DAYS = 30, MAX_BODY = 20000, MAX_CAMPAIGNS = 100, DAILY_APPLY = 50;
+const SESSION_DAYS = 30, MAX_BODY = 20000, MAX_IMPORT_BODY = 400000, MAX_CAMPAIGNS = 100, DAILY_APPLY = 50;
 const RESET_MINUTES = 60;
 const EMAIL_RE = /^[^\s@<>"]+@[^\s@<>"]+\.[^\s@<>"]+$/;
 const URL_RE = /^https?:\/\/[^\s<>"]+$/;
@@ -47,7 +47,8 @@ export async function platform(req, url, env, origin, deliver) {
   try {
     if (req.method === "POST" || req.method === "PUT") {
       const text = await req.text();
-      if (text.length > MAX_BODY) throw new Bad("size", 413);
+      // Gönderi aktarımı 50 satır x (2200 karakter açıklama + iki url) taşır; diğer uçlar MAX_BODY
+      if (text.length > (url.pathname.replace(/\/+$/, "") === "/app/posts/import" ? MAX_IMPORT_BODY : MAX_BODY)) throw new Bad("size", 413);
       try { c.body = text ? JSON.parse(text) : {}; } catch { throw new Bad("json"); }
       if (!c.body || typeof c.body !== "object" || Array.isArray(c.body)) throw new Bad("json");
     }
@@ -266,6 +267,9 @@ const APP = {
   "GET matches": matches,
   "GET notify": getNotify,
   "PUT notify": putNotify,
+  "GET posts": c => listPosts(c),
+  "POST posts/manual": c => manualPost(c),
+  "POST posts/import": c => importPosts(c),
 };
 
 const isOwnerRole = u => u.role === "brand" || u.role === "agency";
@@ -708,3 +712,109 @@ async function checkPass(password, stored) {
   for (let i = 0; i < got.length; i++) diff |= got[i] ^ (want[i] ?? 0);
   return Boolean(stored) && diff === 0;
 }
+
+// ---- gönderi ölçümleri (migrations/0006_posts.sql) ----
+// Panelin "Gönderiler" sekmesindeki kaydın sunucu karşılığı; alan adları panelle (#217) aynı:
+// {id, url, platform, type, date, caption, thumb, snaps: [{at, likes, comments, views, reach}]}.
+// POSTS_ENABLED = "1" değilse uçlar 404 döner, panel tarayıcıdaki kayda düşer. Tablolar yoksa 503 not_ready.
+const PTYPES = ["photo", "video", "reel", "carousel", "story"], PMETS = ["likes", "comments", "views", "reach"];
+const MAX_POSTS = 1000, IMPORT_ROWS = 50;
+const postsEnabled = env => env?.POSTS_ENABLED === "1";
+const isoDay = d => d.toISOString().slice(0, 10);
+
+// Paneldeki platformOf ile aynı: yalnız https; www., m., vm. atılır
+function postPlatform(u) {
+  let h;
+  try { const x = new URL(u); if (x.protocol !== "https:") return ""; h = x.hostname.toLowerCase().replace(/^(www|m|vm)\./, ""); } catch { return ""; }
+  return /(^|\.)instagram\.com$/.test(h) ? "instagram" : /(^|\.)tiktok\.com$/.test(h) ? "tiktok" : /(^|\.)(youtube\.com|youtu\.be)$/.test(h) ? "youtube"
+    : /(^|\.)linkedin\.com$/.test(h) ? "linkedin" : /(^|\.)(x\.com|twitter\.com)$/.test(h) ? "x" : "";
+}
+// YYYY-MM-DD, gerçek bir gün, en geç yarın (saat dilimi payı)
+const okDay = s => typeof s === "string" && /^\d{4}-\d{2}-\d{2}$/.test(s) && !isNaN(Date.parse(s + "T00:00:00Z"))
+  && isoDay(new Date(s + "T00:00:00Z")) === s && s <= isoDay(new Date(Date.now() + 864e5));
+const okThumb = s => typeof s === "string" && /^https:\/\/[^\s"'<>]{4,2000}$/.test(s);
+// Metrik: yok/boş = ölçülmedi (null); 0+ tam sayı en çok 12 hane (sayı ya da rakam metni); başka her şey undefined (geçersiz)
+function pInt(v) {
+  if (v == null || v === "") return null;
+  if (typeof v === "number") return Number.isInteger(v) && v >= 0 && v < 1e12 ? v : undefined;
+  return typeof v === "string" && /^\d{1,12}$/.test(v.trim()) ? Number(v.trim()) : undefined;
+}
+
+// Tek satırı doğrular: {row} ya da {error: alan}. type geçersizse platforma göre varsayılan (paneldeki CSV aktarımı gibi).
+function postIn(o) {
+  if (!o || typeof o !== "object" || Array.isArray(o)) return { error: "row" };
+  const url = typeof o.url === "string" ? o.url.trim() : "";
+  const platform = url.length <= 2000 ? postPlatform(url) : "";
+  if (!platform) return { error: "url" };
+  const today = isoDay(new Date());
+  const date = o.date == null || o.date === "" ? today : o.date;
+  if (!okDay(date)) return { error: "date" };
+  const at = o.at == null || o.at === "" ? today : o.at;
+  if (!okDay(at)) return { error: "at" };
+  const snap = { at };
+  for (const k of PMETS) { const n = pInt(o[k]); if (n === undefined) return { error: k }; snap[k] = n; }
+  if (PMETS.every(k => snap[k] == null)) return { error: "metrics" };
+  const type = PTYPES.includes(o.type) ? o.type : platform === "tiktok" || platform === "youtube" ? "video" : "photo";
+  const caption = typeof o.caption === "string" ? o.caption.slice(0, 2200) : "";
+  const thumb = okThumb(o.thumb) ? o.thumb : "";
+  return { row: { url, platform, type, date, caption, thumb, snap } };
+}
+
+// Gönderi ve ölçümü tek batch'te: gönderi varsa bilgileri korunur, yalnız o günün ölçümü eklenir ya da üzerine yazılır
+const postWrite = (env, uid, r) => [
+  env.DB.prepare("INSERT INTO posts (user_id, url, platform, type, date, caption, thumb) VALUES (?, ?, ?, ?, ?, ?, ?) ON CONFLICT (user_id, url) DO NOTHING")
+    .bind(uid, r.url, r.platform, r.type, r.date, r.caption, r.thumb),
+  env.DB.prepare(`INSERT INTO post_snaps (post_id, at, likes, comments, views, reach)
+    VALUES ((SELECT id FROM posts WHERE user_id = ? AND url = ?), ?, ?, ?, ?, ?)
+    ON CONFLICT (post_id, at) DO UPDATE SET likes = excluded.likes, comments = excluded.comments, views = excluded.views, reach = excluded.reach`)
+    .bind(uid, r.url, r.snap.at, r.snap.likes, r.snap.comments, r.snap.views, r.snap.reach),
+];
+
+async function postRows(env, uid, where = "", args = []) {
+  const posts = (await env.DB.prepare(`SELECT id, url, platform, type, date, caption, thumb FROM posts WHERE user_id = ?${where} ORDER BY date DESC, id DESC`)
+    .bind(uid, ...args).all()).results;
+  if (!posts.length) return [];
+  const snaps = (await env.DB.prepare(`SELECT s.post_id, s.at, s.likes, s.comments, s.views, s.reach FROM post_snaps s JOIN posts p ON p.id = s.post_id
+    WHERE p.user_id = ?${where.replace(/\burl\b/g, "p.url")} ORDER BY s.at`).bind(uid, ...args).all()).results;
+  const by = new Map(posts.map(p => [p.id, { ...p, id: String(p.id), snaps: [] }]));
+  for (const s of snaps) by.get(s.post_id)?.snaps.push({ at: s.at, likes: s.likes, comments: s.comments, views: s.views, reach: s.reach });
+  return [...by.values()];
+}
+
+// Bayrak kapalıysa 404 (panel tarayıcı kaydına düşer); tablo yoksa 503
+const postsRoute = fn => async c => {
+  need(postsEnabled(c.env), "not_found", 404);
+  try { return await fn(c); } catch (e) { if (/no such table/i.test(String(e && e.message))) throw new Bad("not_ready", 503); throw e; }
+};
+
+const postCount = async (env, uid) => (await env.DB.prepare("SELECT COUNT(*) AS n FROM posts WHERE user_id = ?").bind(uid).first()).n;
+
+const listPosts = postsRoute(async c => ok(c, { posts: await postRows(c.env, c.user.id) }));
+
+// Gövde: tek gönderi + ölçüm {url, type, date, caption, thumb, likes, comments, views, reach, at?}
+const manualPost = postsRoute(async c => {
+  const { env, user } = c;
+  const { row, error } = postIn(c.body);
+  need(row, error, 400);
+  const known = await env.DB.prepare("SELECT 1 FROM posts WHERE user_id = ? AND url = ?").bind(user.id, row.url).first();
+  need(known || await postCount(env, user.id) < MAX_POSTS, "posts_full", 409);
+  await env.DB.batch(postWrite(env, user.id, row));
+  const [post] = await postRows(env, user.id, " AND url = ?", [row.url]);
+  return ok(c, { post, added: !known });
+});
+
+// Gövde: {rows: [...]} en çok IMPORT_ROWS satır. Geçersiz satırlar atlanır ve sırasıyla bildirilir; geçerliler tek batch'te yazılır.
+const importPosts = postsRoute(async c => {
+  const { env, user } = c;
+  const rows = c.body.rows;
+  need(Array.isArray(rows) && rows.length >= 1 && rows.length <= IMPORT_ROWS, "rows", 400);
+  const good = [], skipped = [];
+  rows.forEach((o, i) => { const { row, error } = postIn(o); if (row) good.push(row); else skipped.push({ i, error }); });
+  const urls = [...new Set(good.map(r => r.url))];
+  const known = new Set(urls.length ? (await env.DB.prepare(`SELECT url FROM posts WHERE user_id = ? AND url IN (${urls.map(() => "?").join(",")})`)
+    .bind(user.id, ...urls).all()).results.map(r => r.url) : []);
+  const added = urls.filter(u => !known.has(u)).length;
+  need(!added || await postCount(env, user.id) + added <= MAX_POSTS, "posts_full", 409);
+  if (good.length) await env.DB.batch(good.flatMap(r => postWrite(env, user.id, r)));
+  return ok(c, { added, updated: good.length - added, skipped });
+});
