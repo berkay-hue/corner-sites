@@ -99,9 +99,10 @@ const RULES = {
         "@type": "Person", "@id": id, name: "Berkay Yalçın", alternateName: "Berkay YALÇIN", url: "https://www.yalcinberkay.com.tr/",
         image: "https://www.yalcinberkay.com.tr/_a/fr/images/tfHxTGcPg5W1q2kXiuBQynltGIA_d8696c1a.png", jobTitle: "Founder & B2B Sales Consultant",
         description: "Founder of SAAS Corner, Sales Corner, Social Media Corner, Brand Corner, CRM Corner and Corner Group; B2B sales consultant with 10+ years of experience, specialising in outbound sales, lead generation and CRM.",
-        worksFor: [org("SAAS Corner", "https://saascorner.co"), org("Corner Group", "https://cornergroup.co", "https://cornergroup.co/#org"),
-          org("Sales Corner", "https://salescorner.co"), org("Social Media Corner", "https://socialmediacorner.co"),
-          org("Brand Corner", "https://www.brandcorner.co", "https://www.brandcorner.co/#org"), org("CRM Corner", "https://crmcorner.co")],
+        worksFor: [org("SAAS Corner", "https://saascorner.co", "https://saascorner.co/#org"), org("Corner Group", "https://cornergroup.co", "https://cornergroup.co/#org"),
+          org("Sales Corner", "https://salescorner.co", "https://salescorner.co/#org"), org("Social Media Corner", "https://socialmediacorner.co", "https://socialmediacorner.co/#org"),
+          org("Brand Corner", "https://www.brandcorner.co", "https://www.brandcorner.co/#org"), org("WishCEO", "https://wishceo.com", "https://wishceo.com/#org"),
+          org("CRM Corner", "https://crmcorner.co")],
         knowsAbout: ["B2B sales", "Lead generation", "Outbound sales", "Sales development (SDR)", "CRM", "HubSpot", "Salesforce", "Pipedrive", "Apollo.io", "Sales automation"],
         knowsLanguage: ["en", "tr"], sameAs: ["https://www.linkedin.com/in/berkayyalcin2/", "https://www.instagram.com/beerkayyalcin"],
       };
