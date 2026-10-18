@@ -9,6 +9,7 @@
 import { OAUTH, LISTED, CONNECTABLE, oauthReady, listConnections, startOAuth, finishOAuth, disconnectOAuth, OAuthFail, returnBase } from "./oauth.js";
 import { smtpReady, smtpSend, smtpFrom } from "./smtp.js";
 import { metricsEnabled, accountMetrics, linkMetrics } from "./metrics.js";
+import { NICHE_LIST } from "./classify.js";
 
 const ROLES = ["brand", "influencer", "agency"];
 const PLATFORMS = LISTED; // instagram, tiktok, youtube, x, linkedin, twitch (profil ve bağlantı listesi aynı)
@@ -44,7 +45,7 @@ export async function platform(req, url, env, origin, deliver) {
   if (!site) return reply({ ok: false, error: "origin" }, 403, null);
   const c = { env, origin, api: url.origin, site, deliver, ip:req.headers.get("cf-connecting-ip") || "", body: {}, query: Object.fromEntries(url.searchParams) };
   try {
-    if (req.method === "POST") {
+    if (req.method === "POST" || req.method === "PUT") {
       const text = await req.text();
       if (text.length > MAX_BODY) throw new Bad("size", 413);
       try { c.body = text ? JSON.parse(text) : {}; } catch { throw new Bad("json"); }
@@ -67,7 +68,7 @@ export async function platform(req, url, env, origin, deliver) {
       await env.DB.prepare("DELETE FROM sessions WHERE token_hash = ?").bind(await sha256(token)).run();
       return ok(c, {});
     }
-    const m = route.match(/^(GET|POST) \/app\/([a-z]+)(?:\/(\d+))?(?:\/([a-z]+))?$/);
+    const m = route.match(/^(GET|POST|PUT) \/app\/([a-z]+)(?:\/(\d+))?(?:\/([a-z]+))?$/);
     const handler = m && APP[`${m[1]} ${m[2]}${m[3] ? "/:id" : ""}${m[4] ? "/" + m[4] : ""}`];
     if (!handler) throw new Bad("not_found", 404);
     return await handler(c, m[3] && Number(m[3]));
@@ -261,6 +262,10 @@ const APP = {
   "GET metrics": c => metrics(c, c.user),
   "GET metrics/:id": influencerMetrics,
   "GET applications/:id/metrics": applicationMetrics,
+  "GET niches": c => ok(c, { niches: NICHE_LIST }),
+  "GET matches": matches,
+  "GET notify": getNotify,
+  "PUT notify": putNotify,
 };
 
 const isOwnerRole = u => u.role === "brand" || u.role === "agency";
@@ -271,10 +276,11 @@ async function updateProfile(c) {
   const p = body.profile && typeof body.profile === "object" ? body.profile : {};
   const profile = {
     bio: text(p.bio, 500), city: text(p.city, 100), website: link(p.website),
+    // Nişler üç rolde de saklanır (en çok 5); marka/ajans için eşleşme dayanağı ve "Profilini tamamla" kontrolü
+    niches: tags(p.niches),
     ...(user.role !== "influencer" && { company: text(p.company, 100), industry: text(p.industry, 60) }),
-    ...(user.role === "agency" && { clients: int(p.clients, 0, 10000) }),
+    ...(user.role === "agency" && agencyClients(p)),
     ...(user.role === "influencer" && {
-      niches: tags(p.niches),
       platforms: (Array.isArray(p.platforms) ? p.platforms : []).slice(0, PLATFORMS.length)
         .filter(x => PLATFORMS.includes(x?.platform))
         .map(x => ({ platform: x.platform, handle: text(x.handle, 60), followers: int(x.followers, 0, 1e9) })),
@@ -285,6 +291,26 @@ async function updateProfile(c) {
   if (!name) throw new Bad("name");
   const u = await env.DB.prepare("UPDATE users SET name = ?, profile = ? WHERE id = ? RETURNING *").bind(name, JSON.stringify(profile), user.id).first();
   return ok(c, { user: me(u) });
+}
+
+// Ajans müşteri adları: en çok 20, her biri kırpılmış (≤80), büyük-küçük harf farkı gözetmeden tekil (ilk yazım kalır;
+// i/ı/I/İ aynı sayılır: "Nike" ile "NIKE" tek ad). Ad varsa clients = ad sayısı. client_names dizi değilse eski sayı girişi
+// (clients 0..10000) aynen saklanır. Dizide geçerli ad yoksa ve clients > 0 ise de eski giriş sayılır: panel adı olmayan
+// ajansta client_names: [] ile eski sayıyı gönderir; client_names anahtarı yazılmaz ki panel sonraki kayıtta da sayıyı göndersin.
+// Yalnız sahibinin profil yanıtında (me) döner; kampanya/başvuru/eşleşme yanıtları ajans profilini taşımaz.
+function agencyClients(p) {
+  const legacy = int(p.clients, 0, 10000);
+  if (!Array.isArray(p.client_names)) return { clients: legacy };
+  const seen = new Set(), names = [];
+  for (const x of p.client_names) {
+    const s = text(x, 80), k = s.toLocaleLowerCase("tr").replace(/ı/g, "i");
+    if (!s || seen.has(k)) continue;
+    seen.add(k);
+    names.push(s);
+    if (names.length === 20) break;
+  }
+  if (!names.length && legacy > 0) return { clients: legacy };
+  return { client_names: names, clients: names.length };
 }
 
 // Sosyal hesap bağlama (resmi OAuth, src/oauth.js): influencer, marka ve ajans. Rolün bağlayabildiği platformlar
@@ -382,13 +408,26 @@ async function updateCampaign(c, id) {
 async function listCampaigns(c) {
   const { env, user, site } = c;
   if (isOwnerRole(user)) {
+    // Aşama çubuğu: 1 Davet = invited, 2 Başvuru = pending, 3 Üretim = active (accepted + revision),
+    // 4 İnceleme = submitted, 5 Onaylandı = approved; rejected ve declined çubuk dışı. applications = bütün satırlar.
     const { results } = await env.DB.prepare(
-      `SELECT c.*, (SELECT count(*) FROM applications a WHERE a.campaign_id = c.id) applications,
-        (SELECT count(*) FROM applications a WHERE a.campaign_id = c.id AND a.status = 'pending') pending,
-        (SELECT count(*) FROM applications a WHERE a.campaign_id = c.id AND a.status = 'submitted') submitted
-       FROM campaigns c WHERE c.owner_id = ? ORDER BY c.id DESC`,
+      `SELECT c.*, count(a.id) applications,
+        count(CASE WHEN a.status = 'invited' THEN 1 END) invited,
+        count(CASE WHEN a.status = 'pending' THEN 1 END) pending,
+        count(CASE WHEN a.status = 'accepted' THEN 1 END) accepted,
+        count(CASE WHEN a.status = 'revision' THEN 1 END) revision,
+        count(CASE WHEN a.status = 'submitted' THEN 1 END) submitted,
+        count(CASE WHEN a.status = 'approved' THEN 1 END) approved,
+        count(CASE WHEN a.status = 'rejected' THEN 1 END) rejected,
+        count(CASE WHEN a.status = 'declined' THEN 1 END) declined
+       FROM campaigns c LEFT JOIN applications a ON a.campaign_id = c.id
+       WHERE c.owner_id = ? GROUP BY c.id ORDER BY c.id DESC`,
     ).bind(user.id).all();
-    return ok(c, { campaigns: results.map(r => ({ ...campaignOut({ ...r, owner_name: user.name }), applications: r.applications, pending: r.pending, submitted: r.submitted })) });
+    return ok(c, { campaigns: results.map(r => ({
+      ...campaignOut({ ...r, owner_name: user.name }),
+      applications: r.applications, invited: r.invited, pending: r.pending, active: r.accepted + r.revision,
+      submitted: r.submitted, approved: r.approved, rejected: r.rejected, declined: r.declined,
+    })) });
   }
   const profile = JSON.parse(user.profile || "{}");
   const { results } = await env.DB.prepare(
@@ -503,6 +542,88 @@ async function influencers(c) {
   ).bind(user.id).all();
   const history = id => hist.filter(h => h.user_id === id).map(h => ({ campaign_id: h.campaign_id, status: h.status }));
   return ok(c, { influencers: list.slice(0, 100).map(({ listed, ...x }) => ({ ...x, history: history(x.id) })) });
+}
+
+// Marka/ajans için uyumlu influencer önerisi. Dayanak: ?campaign=<id> verilirse o kampanyanın nişleri ve platformları,
+// yoksa sahibin profil nişleri (platform yok). Aday kümesi /app/influencers ile aynı (listed, son 500), en az 1 ortak niş.
+// Sıra: match büyükten küçüğe, eşitlikte id büyükten küçüğe. Sınır: varsayılan 20, en çok 50. Alanlar /app/influencers'ınkiler + match.
+// campaign ve limit yalnız düz ondalık pozitif tamsayı (1e1, 0x2, 1.0, +3, 01 → 400); çok büyük limit 50'ye iner.
+const DIGITS = /^[1-9]\d*$/;
+async function matches(c) {
+  const { env, user, site, query: q } = c;
+  need(isOwnerRole(user));
+  let id = null, basis;
+  if (q.campaign !== undefined) {
+    need(DIGITS.test(q.campaign), "campaign", 400);
+    id = Number(q.campaign);
+    need(Number.isSafeInteger(id), "not_found", 404);
+    const camp = await env.DB.prepare("SELECT data FROM campaigns WHERE id = ? AND owner_id = ?").bind(id, user.id).first();
+    need(camp, "not_found", 404);
+    const d = JSON.parse(camp.data);
+    basis = { niches: Array.isArray(d.niches) ? d.niches : [], platforms: Array.isArray(d.platforms) ? d.platforms : [] };
+  } else {
+    const p = JSON.parse(user.profile || "{}");
+    basis = { niches: Array.isArray(p.niches) ? p.niches : [], platforms: [] };
+  }
+  need(q.platform === undefined || PLATFORMS.includes(q.platform), "platform", 400);
+  need(q.limit === undefined || DIGITS.test(q.limit), "limit", 400);
+  const limit = q.limit === undefined ? 20 : Math.min(Number(q.limit), 50);
+  if (!basis.niches.length) return ok(c, { campaign_id: id, basis, reason: "no_niches", influencers: [] });
+  const want = basis.niches.map(s => String(s).toLowerCase());
+  const { results } = await env.DB.prepare("SELECT id, name, profile FROM users WHERE site = ? AND role = 'influencer' ORDER BY id DESC LIMIT 500").bind(site).all();
+  const list = results.map(r => ({ ...creator(r.id, r.name, r.profile, basis), listed: JSON.parse(r.profile || "{}").listed === true }))
+    .filter(x => x.listed && x.niches.some(n => want.includes(String(n).toLowerCase())))
+    .filter(x => q.platform === undefined || x.platforms.some(p => p.platform === q.platform))
+    .sort((a, b) => b.match - a.match || b.id - a.id)
+    .slice(0, limit);
+  let hist = [];
+  if (list.length) {
+    // Yalnız bu sahibin kendi kampanyalarındaki geçmiş; başka sahiplerin verisi dönmez
+    ({ results: hist } = await env.DB.prepare(
+      "SELECT a.user_id, a.campaign_id, a.status FROM applications a JOIN campaigns c ON c.id = a.campaign_id WHERE c.owner_id = ? ORDER BY a.id DESC",
+    ).bind(user.id).all());
+  }
+  const history = uid => hist.filter(h => h.user_id === uid).map(h => ({ campaign_id: h.campaign_id, status: h.status }));
+  return ok(c, { campaign_id: id, basis, reason: null, influencers: list.map(({ listed, ...x }) => ({ ...x, history: history(x.id) })) });
+}
+
+// Bildirim tercihleri: yalnız saklanır, gönderim YOK (SMTP/forms bağlantısı kurulmaz; yanıtta sending: false).
+// users.notify sütunu (JSON, 0005_notify.sql); profilden ayrı, profil kaydı silmez. Sütun yoksa GET varsayılanları döner, PUT 503.
+const NOTIFY = {
+  owner: { new_application: true, content_submitted: true, weekly_summary: false },
+  influencer: { invites: true, status_change: true, new_match: false },
+};
+const notifyDefaults = u => NOTIFY[isOwnerRole(u) ? "owner" : "influencer"];
+const savedNotify = u => {
+  try { const v = JSON.parse(u.notify || "{}"); return v && typeof v === "object" && !Array.isArray(v) ? v : {}; } catch { return {}; }
+};
+const notifyOut = (u, saved) => Object.fromEntries(Object.entries(notifyDefaults(u)).map(([k, d]) => [k, typeof saved[k] === "boolean" ? saved[k] : d]));
+
+function getNotify(c) {
+  return ok(c, { notify: notifyOut(c.user, savedNotify(c.user)), sending: false });
+}
+
+// Gövde {notify: {anahtar: boolean}}: kısmi birleştirme. Rolün anahtarlarına boolean dışı değer 400; bilinmeyen anahtar yok sayılır.
+// Yalnız açıkça seçilen anahtarlar saklanır. Birleştirme SQL içinde (json_patch) yapılır: eşzamanlı iki PUT birbirinin anahtarını ezmez.
+// Saklı değer bozuksa ya da nesne değilse {} üstüne yazılır.
+async function putNotify(c) {
+  const { env, user, body } = c;
+  const n = body.notify;
+  need(n && typeof n === "object" && !Array.isArray(n), "notify", 400);
+  const patch = {};
+  for (const k of Object.keys(notifyDefaults(user))) {
+    if (!Object.hasOwn(n, k)) continue;
+    need(typeof n[k] === "boolean", "notify", 400);
+    patch[k] = n[k];
+  }
+  let row;
+  try {
+    row = await env.DB.prepare(
+      "UPDATE users SET notify = json_patch(CASE WHEN json_valid(notify) THEN CASE WHEN json_type(notify) = 'object' THEN notify ELSE '{}' END ELSE '{}' END, ?) WHERE id = ? RETURNING notify",
+    ).bind(JSON.stringify(patch), user.id).first();
+  } catch (e) { if (/no such column/i.test(String(e && e.message))) throw new Bad("not_ready", 503); throw e; }
+  need(row, "auth", 401);
+  return ok(c, { notify: notifyOut(user, savedNotify(row)), sending: false });
 }
 
 // ---- sosyal metrikler (src/metrics.js) ----

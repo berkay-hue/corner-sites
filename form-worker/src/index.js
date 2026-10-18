@@ -29,7 +29,7 @@ export default {
     const origin = allowedOrigin(env, req.headers.get("origin"));
     if (req.method === "OPTIONS") return new Response(null, {
       status: origin ? 204 : 403,
-      headers: origin ? { "access-control-allow-origin": origin, "access-control-allow-methods": "GET, POST", "access-control-allow-headers": "content-type, authorization", "access-control-max-age": "86400", vary: "Origin" } : {},
+      headers: origin ? { "access-control-allow-origin": origin, "access-control-allow-methods": "GET, POST, PUT", "access-control-allow-headers": "content-type, authorization", "access-control-max-age": "86400", vary: "Origin" } : {},
     });
     if (url.pathname.startsWith("/rakip/")) return rakip(req, url, env, origin);
     // Sosyal hesap bağlama dönüşü (src/oauth.js): sağlayıcı yönlendirmesinde Origin yok, platform() dışında
