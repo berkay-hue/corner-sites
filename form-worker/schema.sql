@@ -79,6 +79,9 @@ CREATE TABLE IF NOT EXISTS applications (
   status TEXT NOT NULL,
   message TEXT,
   content_url TEXT,
+  revision_note TEXT,       -- marka revizyon isterken yazdığı not (en çok 500 karakter)
   UNIQUE (campaign_id, user_id)
 );
+-- Tablo önceden varsa bir kez çalıştırın:
+-- ALTER TABLE applications ADD COLUMN revision_note TEXT;
 CREATE INDEX IF NOT EXISTS applications_user ON applications (user_id);
