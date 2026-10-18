@@ -73,6 +73,9 @@ a{color:inherit;text-underline-offset:3px}
 .body dl{display:grid;grid-template-columns:max-content minmax(0,1fr);border-top:1px solid var(--rule)}
 .body dt,.body dd{margin:0;padding:10px 0;border-bottom:1px solid var(--rule)}
 .body dt{padding-right:20px;font:500 12px/1.9 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.steps{margin:14px 0 0;padding-left:1.3em;max-width:40em;color:var(--ink2)}
+.steps li+li{margin-top:8px}
+.rule{margin:18px 0 0;max-width:40em;padding:12px 16px;border-left:2px solid var(--red);background:var(--card);font-size:15px;color:var(--ink2)}
 @media (max-width:760px){
   .doc section{grid-template-columns:1fr}
   .body dl{grid-template-columns:1fr}
@@ -158,6 +161,27 @@ a{color:inherit;text-underline-offset:3px}
         <p class="case-sp">Bu vaka Örnek Sponsor katkısıyla hazırlandı.</p>
         <p class="ex-co">Lumora Tea</p>
       </div>
+    </div>
+
+    <div class="ex" id="vaka-talebi">
+      <p class="lbl">Kendi vakanı oluşturalım</p>
+      <p class="ex-title">Şirketine özel bir vaka</p>
+      <p class="note">Ayrı, ücretli bir hizmet. Şirketinin yaşadığı ya da yaşayabileceği bir ticari durumu WishCEO vakasına çeviriyoruz.</p>
+      <ul class="steps">
+        <li><b>Sana özel vaka:</b> dosya, üç seçenek ve CEO’nun ne yaptığı.</li>
+        <li><b>Sitede yayın:</b> vaka bir sayıda herkese açık yer alır.</li>
+        <li><b>Sponsor satırı:</b> başlığın altında tek sade satır.</li>
+      </ul>
+      <p class="lbl" style="margin-top:28px">Süreç</p>
+      <ol class="steps">
+        <li><b>Talep:</b> e-postayla kısaca konuyu yaz.</li>
+        <li><b>Kapsam görüşmesi:</b> durumu ve takvimi konuşuruz.</li>
+        <li><b>Taslak ve onay:</b> vakayı yazar, onayına sunarız.</li>
+        <li><b>Yayın:</b> onaylanan vaka bir sayıda yayınlanır.</li>
+      </ol>
+      <p class="ex-meta" style="margin-top:22px;color:var(--red)">Fiyat: teklif için iletişime geçin</p>
+      <a class="cta" href="mailto:info@saascorner.co?subject=WishCEO%20vaka%20talebi">Vaka talebi gönder</a>
+      <p class="rule">Talep edilen vakalar da yalnızca ticari kriz anlatır. Şirket, ürün ve kişi adları kurgusal kalır. Zarar ya da ölüm içeriği olmaz.</p>
     </div>
   </div>
 </main>
