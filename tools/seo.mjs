@@ -57,15 +57,15 @@ const RULES = {
         html = html.replace(/<script data-cg-links>[\s\S]*?<\/script>/, "").replace("</body>", `<script data-cg-links>${js}</script></body>`);
       }
       // Grup şirketi düğümleri: @id/url/ad, şirketin kendi sitesindeki Organization düğümüyle aynı (canlıda doğrulandı).
-      // SAAS Corner ve CRM Corner'ın sitesinde Organization @id'si yok; onlara @id uydurulmaz.
-      const SUB = { "https://salescorner.co": "https://salescorner.co/", "https://socialmediacorner.co": "https://socialmediacorner.co/",
+      // SAAS Corner'ın @id'sini A şeridi kendi sitesine ekliyor; CRM Corner'da @id yok, uydurulmaz.
+      const SUB = { "https://saascorner.co": "https://saascorner.co/", "https://salescorner.co": "https://salescorner.co/", "https://socialmediacorner.co": "https://socialmediacorner.co/",
         "https://www.brandcorner.co": "https://www.brandcorner.co/", "https://wishceo.com": "https://wishceo.com/" };
       html = html.replace(/(<script type="application\/ld\+json" data-cg-ld>)([\s\S]*?)(<\/script>)/g, (m, a, json, b) => {
         const walk = n => {
           if (Array.isArray(n)) return n.forEach(walk);
           if (!n || typeof n !== "object") return;
           if (n.name === "SaaS Corner" && /^https:\/\/saascorner\.co\/?$/.test(n.url || "")) n.name = "SAAS Corner";
-          const id = n["@id"]?.replace(/\/#org-cg$/, ""), key = id ?? (n["@type"] === "Organization" && n.url?.replace(/\/$/, ""));
+          const id = n["@id"]?.replace(/\/#org(-cg)?$/, ""), key = id ?? (n["@type"] === "Organization" && n.url?.replace(/\/$/, ""));
           if (key && SUB[key]) {
             const ent = Object.entries(n), out = { "@type": n["@type"] };
             if (!n["@type"]) delete out["@type"];
