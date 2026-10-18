@@ -41,6 +41,7 @@ export default {
     lang: "tr",
     dateLocale: "tr-TR",
     regions: { title: "Heading", category: "Published 20 Jan 2024", date: "Published 20 Jan 2024#1", summary: "Supporting text", banner: ".framer-2smd5o", content: "Content", next: null },
+    relatedCards: true,
     variants: { en: { lang: "en", dateLocale: "en-US", prefix: "/en" } },
     services: {
       tr: { title: "Hizmetlerimiz", links: [["SaaS şirketleri için sosyal medya yönetimi", "/sektor/saas"], ["E-ticaret için sosyal medya yönetimi", "/sektor/e-ticaret"], ["Restoran ve kafeler için sosyal medya yönetimi", "/sektor/restoran-kafe"]] },
