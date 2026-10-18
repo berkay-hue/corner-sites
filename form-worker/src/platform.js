@@ -6,12 +6,12 @@
 // Şifre sıfırlama: tek kullanımlık, RESET_MINUTES geçerli link; e-posta Gmail SMTP ile (src/smtp.js, SMTP_USER hesabından).
 // MAIL binding'i yalnızca MAIL_TO adresine gönderebildiği için o kullanılmaz.
 
-import { OAUTH, oauthReady, listConnections, startOAuth, finishOAuth, disconnectOAuth, OAuthFail, returnBase } from "./oauth.js";
+import { OAUTH, LISTED, CONNECTABLE, oauthReady, listConnections, startOAuth, finishOAuth, disconnectOAuth, OAuthFail, returnBase } from "./oauth.js";
 import { smtpReady, smtpSend, smtpFrom } from "./smtp.js";
 import { metricsEnabled, accountMetrics, linkMetrics } from "./metrics.js";
 
 const ROLES = ["brand", "influencer", "agency"];
-const PLATFORMS = ["instagram", "tiktok", "youtube", "x", "linkedin", "twitch"];
+const PLATFORMS = LISTED; // instagram, tiktok, youtube, x, linkedin, twitch (profil ve bağlantı listesi aynı)
 const CURRENCIES = ["TRY", "USD", "EUR"];
 const SESSION_DAYS = 30, MAX_BODY = 20000, MAX_CAMPAIGNS = 100, DAILY_APPLY = 50;
 const RESET_MINUTES = 60;
@@ -287,40 +287,43 @@ async function updateProfile(c) {
   return ok(c, { user: me(u) });
 }
 
-// Sosyal hesap bağlama (resmi OAuth, src/oauth.js): yalnızca influencer. Secret yoksa "yapılandırılmadı".
+// Sosyal hesap bağlama (resmi OAuth, src/oauth.js): influencer, marka ve ajans. Rolün bağlayabildiği platformlar
+// CONNECTABLE'da (üç rolde de instagram, tiktok, youtube, linkedin), yanıtta "connectable". Secret yoksa "yapılandırılmadı".
 // METRICS_ENABLED kapalıyken bağlanılamaz (disabled); bağı koparmak her zaman açık. Kapalıyken liste yalnız
-// bağlı ve hatalı satırları döner ({disabled: true, connections}), panel bunlara "Kes" çizebilsin.
+// bağlı ve hatalı satırları döner ({disabled: true, connectable, connections}), panel bunlara "Kes" çizebilsin.
 async function connections(c) {
-  need(c.user.role === "influencer");
-  const list = await listConnections(c.env, c.user.id, PLATFORMS);
-  if (!metricsEnabled(c.env)) return ok(c, { disabled: true, connections: list.filter(x => x.status === "connected" || x.status === "error") });
-  return ok(c, { connections: list });
+  need(ROLES.includes(c.user.role));
+  const list = await listConnections(c.env, c.user.id, c.user.role);
+  const connectable = CONNECTABLE[c.user.role];
+  if (!metricsEnabled(c.env)) return ok(c, { disabled: true, connectable, connections: list.filter(x => x.status === "connected" || x.status === "error") });
+  return ok(c, { connectable, connections: list });
 }
 
 async function connect(c) {
-  need(c.user.role === "influencer");
+  need(ROLES.includes(c.user.role));
   need(metricsEnabled(c.env), "disabled", 409);
   const p = c.body.platform;
   need(PLATFORMS.includes(p), "platform", 400);
-  need(OAUTH.includes(p), "no_api", 400);
+  need(CONNECTABLE[c.user.role].includes(p), "no_api", 400);
   need(oauthReady(c.env, p), "not_configured", 409);
   return ok(c, { url: await startOAuth(c.env, c.user.id, p, c) });
 }
 
 // Panel sağlayıcıdan dönünce #ticket=<bilet>'i buraya Bearer ile gönderir; bağlama burada yapılır.
 async function finish(c) {
-  need(c.user.role === "influencer");
+  need(ROLES.includes(c.user.role));
   need(metricsEnabled(c.env), "disabled", 409);
   try {
-    return ok(c, { connection: await finishOAuth(c.env, c.user.id, c.body.ticket) });
+    return ok(c, { connection: await finishOAuth(c.env, c.user.id, c.body.ticket, fetch, c.user.role) });
   } catch (e) {
     if (e instanceof OAuthFail) throw new Bad(e.code, e.status);
     throw e;
   }
 }
 
+// Rol değişmiş olsa da bağ koparılabilsin: OAuth platformlarının hepsi her rolde kabul edilir.
 async function disconnect(c) {
-  need(c.user.role === "influencer");
+  need(ROLES.includes(c.user.role));
   const p = c.body.platform;
   need(OAUTH.includes(p), "platform", 400);
   await disconnectOAuth(c.env, c.user.id, p);

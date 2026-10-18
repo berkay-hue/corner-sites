@@ -19,13 +19,14 @@ const { platform, cleanup } = await import("./platform.js");
 const {
   NOT_CONFIGURED, NO_DATA, OAUTH, ProviderError, oauthReady, redirectUri, listConnections, authorizeUrl,
   exchangeCode, fetchMetrics, encrypt, decrypt, syncAccount, oauthCallback, finishOAuth, OAuthFail,
-  syncDue, SYNC_MIN, SYNC_D1, pkceChallenge, disconnectOAuth,
+  syncDue, SYNC_MIN, SYNC_D1, pkceChallenge, disconnectOAuth, CHANGE_LIMIT, SYNCED, LISTED, CONNECTABLE, cleanHandle, fetchProfile, refreshToken,
 } = await import("./oauth.js");
 
 const SCHEMA = readFileSync(new URL("../schema.sql", import.meta.url), "utf8");
 const METRICS = readFileSync(new URL("../migrations/0001_metrics.sql", import.meta.url), "utf8");
 const MIGRATION = readFileSync(new URL("../migrations/0002_oauth.sql", import.meta.url), "utf8");
 const SYNC = readFileSync(new URL("../migrations/0003_sync.sql", import.meta.url), "utf8");
+const CHANGES = readFileSync(new URL("../migrations/0004_sync_changes.sql", import.meta.url), "utf8");
 
 // Testin ihtiyacı kadar D1: prepare().bind().all/first/run, batch (gerçek D1 gibi atomik), exec
 function d1(db) {
@@ -59,6 +60,7 @@ function freshDb() {
   db.exec(METRICS);
   db.exec(MIGRATION);
   db.exec(SYNC);
+  db.exec(CHANGES);
   return db;
 }
 
@@ -120,12 +122,12 @@ const ytRoutes = (extra = []) => [
 
 // ---- yapılandırma ----
 
-test("secret yoksa ya da eksikse 'yapılandırılmadı'; LinkedIn, X, Twitch 'veri yok'; DB'ye dokunulmaz", async () => {
+test("secret yoksa ya da eksikse 'yapılandırılmadı'; X, Twitch 'veri yok'; DB'ye dokunulmaz", async () => {
   const label = list => Object.fromEntries(list.map(x => [x.platform, [x.status, x.label]]));
   // env.DB yok: yapılandırılmamışken sorgu atılsaydı hata verirdi
   assert.deepEqual(label(await listConnections({}, 1)), {
     instagram: ["not_configured", NOT_CONFIGURED], tiktok: ["not_configured", NOT_CONFIGURED], youtube: ["not_configured", NOT_CONFIGURED],
-    linkedin: ["no_api", NO_DATA], x: ["no_api", NO_DATA], twitch: ["no_api", NO_DATA],
+    linkedin: ["not_configured", NOT_CONFIGURED], x: ["no_api", NO_DATA], twitch: ["no_api", NO_DATA],
   });
   assert.equal(oauthReady({ ...IG_ENV }, "instagram"), false, "anahtar yok");
   assert.equal(oauthReady({ INSTAGRAM_CLIENT_ID: "x", OAUTH_TOKEN_KEY: KEY }, "instagram"), false, "secret yok");
@@ -133,8 +135,16 @@ test("secret yoksa ya da eksikse 'yapılandırılmadı'; LinkedIn, X, Twitch 've
   assert.equal(oauthReady({ ...IG_ENV, OAUTH_TOKEN_KEY: "%%%" }, "instagram"), false, "anahtar bozuk");
   assert.equal(oauthReady({ ...IG_ENV, OAUTH_TOKEN_KEY: KEY }, "instagram"), true);
   assert.equal(oauthReady({ ...IG_ENV, OAUTH_TOKEN_KEY: KEY }, "tiktok"), false);
-  assert.equal(oauthReady({ ...ALL, LINKEDIN_CLIENT_ID: "x", LINKEDIN_CLIENT_SECRET: "y" }, "linkedin"), false);
-  assert.deepEqual(OAUTH, ["instagram", "tiktok", "youtube"]);
+  assert.equal(oauthReady({ ...ALL, LINKEDIN_CLIENT_ID: "x", LINKEDIN_CLIENT_SECRET: "y" }, "linkedin"), true);
+  assert.equal(oauthReady(ALL, "linkedin"), false);
+  assert.deepEqual(OAUTH, ["instagram", "tiktok", "youtube", "linkedin"]);
+  assert.deepEqual(SYNCED, ["instagram", "tiktok", "youtube"]);
+  assert.deepEqual(LISTED, ["instagram", "tiktok", "youtube", "x", "linkedin", "twitch"]);
+  assert.deepEqual(CONNECTABLE, {
+    influencer: ["instagram", "tiktok", "youtube", "linkedin"],
+    brand: ["instagram", "tiktok", "youtube", "linkedin"],
+    agency: ["instagram", "tiktok", "youtube", "linkedin"],
+  });
 });
 
 test("onay adresi: client id ve state var, secret yok", () => {
@@ -295,19 +305,23 @@ test("bağlantı uçları: yetki, yapılandırılmamış durum, METRICS_ENABLED 
   const brand = await join("brand", "marka@x.co"), inf = await join("influencer", "inf@x.co");
 
   assert.equal((await call("GET", "/app/connections")).status, 401);
-  assert.equal((await call("GET", "/app/connections", { token: brand.token })).status, 403);
-  assert.equal((await call("POST", "/app/connect", { token: brand.token, body: { platform: "instagram" } })).status, 403);
-  assert.equal((await finish(call, brand.token, "a".repeat(43))).status, 403);
+  const bl = await call("GET", "/app/connections", { token: brand.token });
+  assert.equal(bl.status, 200);
+  assert.deepEqual(bl.body.connectable, ["instagram", "tiktok", "youtube", "linkedin"]);
+  assert.deepEqual(fail(await call("POST", "/app/connect", { token: brand.token, body: { platform: "instagram" } })), [409, "not_configured"]);
+  assert.deepEqual(fail(await call("POST", "/app/connect", { token: brand.token, body: { platform: "linkedin" } })), [409, "not_configured"]);
+  assert.deepEqual(fail(await finish(call, brand.token, "a".repeat(43))), [400, "ticket"]);
   assert.equal((await finish(call, undefined, "a".repeat(43))).status, 401);
 
   const list = await call("GET", "/app/connections", { token: inf.token });
   assert.equal(list.status, 200);
   assert.deepEqual(list.body.connections.map(x => [x.platform, x.label]), [
     ["instagram", NOT_CONFIGURED], ["tiktok", NOT_CONFIGURED], ["youtube", NOT_CONFIGURED],
-    ["x", NO_DATA], ["linkedin", NO_DATA], ["twitch", NO_DATA],
+    ["x", NO_DATA], ["linkedin", NOT_CONFIGURED], ["twitch", NO_DATA],
   ]);
   const err = async platformName => fail(await call("POST", "/app/connect", { token: inf.token, body: { platform: platformName } }));
-  assert.deepEqual(await err("linkedin"), [400, "no_api"]);
+  assert.deepEqual(await err("linkedin"), [409, "not_configured"]);
+  assert.deepEqual(await err("x"), [400, "no_api"]);
   assert.deepEqual(await err("myspace"), [400, "platform"]);
   assert.deepEqual(await err("instagram"), [409, "not_configured"]);
   assert.deepEqual(fail(await finish(call, inf.token, "a".repeat(43))), [400, "ticket"]);
@@ -323,7 +337,7 @@ test("bağlantı uçları: yetki, yapılandırılmamış durum, METRICS_ENABLED 
   const off = await setup({ ...IG_ENV, OAUTH_TOKEN_KEY: KEY, METRICS_ENABLED: "0" });
   const inf2 = await off.join("influencer", "inf@x.co");
   const offList = await off.call("GET", "/app/connections", { token: inf2.token });
-  assert.deepEqual([offList.status, offList.body], [200, { ok: true, disabled: true, connections: [] }]);
+  assert.deepEqual([offList.status, offList.body], [200, { ok: true, disabled: true, connectable: ["instagram", "tiktok", "youtube", "linkedin"], connections: [] }]);
   for (const [method, path, body] of [
     ["POST", "/app/connect", { platform: "instagram" }], ["POST", "/app/connect/finish", { ticket: "a".repeat(43) }],
   ]) assert.deepEqual(fail(await off.call(method, path, { token: inf2.token, body })), [409, "disabled"], path);
@@ -554,7 +568,9 @@ test("bağı koparma: TikTok ve Google'da izin geri alınır; platform hazır de
     assert.deepEqual(acc(p), REVOKED);
   }
   assert.equal(net.calls.length, 0);
-  assert.deepEqual(fail(await off("linkedin")), [400, "platform"]);
+  assert.deepEqual(fail(await off("x")), [400, "platform"]);
+  assert.equal((await off("linkedin")).status, 200);
+  assert.equal(net.calls.length, 0);
 });
 
 test("syncAccount: süresi dolan token yenilenir, sonuç social_accounts'a yazılır", async () => {
@@ -748,7 +764,16 @@ test("syncAccount: okuma ile yazma arasında hesap değişirse eski token ve kul
   // Token kayıtlı hesaptan başka bir hesabı döndürüyor: yazılmaz
   await reset("tt-9", "+1 hours");
   await assert.rejects(syncAccount(env, inf.id, "tiktok", fakeFetch(ttRoutes())), changed);
-  assert.deepEqual([acc().handle, acc().error], ["eski", null]);
+  assert.deepEqual([acc().handle, acc().error, acc().sync_changes], ["eski", null, 1]);
+
+  // Uyuşmazlık ama ölçüm alınırken bağ yeniden kuruldu (token ya da hesap değişti): yeni bağın sayacına yazılmaz
+  const tt1 = [200, { data: { user: { open_id: "tt-1", username: "inf_tt", follower_count: 12000 } }, error: { code: "ok", message: "" } }];
+  for (const sql of ["UPDATE oauth_tokens SET access_token = ? WHERE platform = 'tiktok'", "UPDATE social_accounts SET external_id = 'tt-3' WHERE platform = 'tiktok' AND ? IS NOT NULL"]) {
+    await reset("tt-9", "+1 hours");
+    const moved = fakeFetch(ttRoutes([[`${TT}/user/info/`, () => { db.prepare(sql).run(other); return tt1; }]]));
+    await assert.rejects(syncAccount(env, inf.id, "tiktok", moved), changed);
+    assert.deepEqual([acc().sync_changes, acc().status, acc().error], [0, "connected", null]);
+  }
 
   // Yenileme sürerken token başka bir senkronla değişti, sağlayıcı da eski refresh token'ı reddetti: hata yeni bağa yazılmaz
   await reset("tt-1", "-1 hours");
@@ -1008,6 +1033,56 @@ test("syncDue: hesap kimliği değişirse ~1 saat, sağlayıcı hatasında ~6 sa
   assert.equal(count(db, "metric_snapshots"), 0);
 });
 
+test("syncDue: kimlik uyuşmazlığı art arda CHANGE_LIMIT kez sürerse hesap hatalı olur ve denenmez; başarı ve yeniden bağlanma sayacı sıfırlar", async t => {
+  t.mock.method(console, "log", () => {});
+  let net = fakeFetch([]);
+  t.mock.method(globalThis, "fetch", (...a) => net(...a));
+  const { db, env, call, join } = await setup({ ...TT_ENV, OAUTH_TOKEN_KEY: KEY });
+  const a = await join("influencer", "a@x.co");
+  await seed(db, env, a.id, "tiktok", "tt-1");
+  const other = { data: { user: { open_id: "tt-2", username: "baska", display_name: "B", follower_count: 1 } }, error: { code: "ok", message: "" } };
+  const swapped = () => fakeFetch(ttRoutes([[`${TT}/user/info/`, [200, other]]]));
+  const denied = () => fakeFetch(ttRoutes([[`${TT}/user/info/`, [401, { error: { code: "access_token_invalid", message: "" } }]]]));
+  const row = () => ({ ...db.prepare("SELECT status, error, sync_changes FROM social_accounts WHERE user_id = ? AND platform = 'tiktok'").get(a.id) });
+  const again = () => db.prepare("UPDATE social_accounts SET next_sync_at = NULL WHERE user_id = ?").run(a.id);
+  assert.equal(CHANGE_LIMIT, 3);
+
+  // Sınırın altında: bağlı kalır, ~1 saat sonra yeniden; başarılı senkron sayacı sıfırlar
+  for (let i = 1; i < CHANGE_LIMIT; i++) {
+    assert.deepEqual(await syncDue(env, swapped()), { ...ZERO, changed: 1 });
+    assert.deepEqual(row(), { status: "connected", error: null, sync_changes: i });
+    near(due(db, a.id), 55);
+    again();
+  }
+  assert.deepEqual(await syncDue(env, fakeFetch(ttRoutes())), { ...ZERO, synced: 1 });
+  assert.deepEqual(row(), { status: "connected", error: null, sync_changes: 0 });
+
+  // Arada sağlayıcı hatası sayacı sıfırlamaz; sınıra ulaşınca hesap 'error', ~6 saat kira, sonra hiç seçilmez
+  const steps = [[swapped, { ...ZERO, changed: 1 }, 1], [denied, { ...ZERO, failed: 1 }, 1], [swapped, { ...ZERO, changed: 1 }, 2]];
+  for (const [f, out, n] of steps) {
+    again();
+    assert.deepEqual(await syncDue(env, f()), out);
+    assert.equal(row().sync_changes, n);
+  }
+  again();
+  assert.deepEqual(await syncDue(env, swapped()), { ...ZERO, failed: 1 });
+  assert.deepEqual(row(), { status: "error", error: "account_changed", sync_changes: 3 });
+  near(due(db, a.id), 355);
+  again();
+  const idle = fakeFetch(ttRoutes());
+  assert.deepEqual(await syncDue(env, idle), ZERO);
+  assert.equal(idle.calls.length, 0);
+  assert.equal(count(db, "metric_snapshots"), 1);
+  const list = await call("GET", "/app/connections", { token: a.token });
+  assert.equal(list.body.connections.find(c => c.platform === "tiktok").status, "error");
+
+  // Yeniden bağlanma: bağlı, hatasız, sayaç sıfır
+  const ticket = await land(env, await start(call, a.token, "tiktok"), "tiktok");
+  net = fakeFetch(ttRoutes());
+  assert.equal((await finish(call, a.token, ticket)).status, 200);
+  assert.deepEqual(row(), { status: "connected", error: null, sync_changes: 0 });
+});
+
 test("0002 uygulanmadan disconnect 500 dönmez", async t => {
   t.mock.method(console, "log", () => {});
   const net = fakeFetch([]);
@@ -1050,4 +1125,261 @@ test("cleanup: süresi dolan OAuth state'leri silinir; tablo yoksa diğer temizl
   await cleanup({ DB: d1(bare) });
   assert.equal(count(bare, "sessions"), 0);
   assert.ok(logs.some(l => l.startsWith("cleanup oauth_states")), logs.join("\n"));
+});
+
+// ---- PR5: LinkedIn OIDC + marka/ajans hesapları ----
+// Sahte LinkedIn uygulama bilgileri; gerçek secret değil
+const LI_ENV = { LINKEDIN_CLIENT_ID: "li-client-id", LINKEDIN_CLIENT_SECRET: "li-gizli-secret" };
+const LI_TOKEN = "https://www.linkedin.com/oauth/v2/accessToken";
+const LI_USER = "https://api.linkedin.com/v2/userinfo";
+const liRoutes = (extra = []) => [...extra,
+  [LI_TOKEN, [200, { access_token: "li-access", expires_in: 5184000, scope: "openid,profile,email" }]],
+  [LI_USER, [200, { sub: "li-sub-1", name: "Ayşe Yılmaz", email: "a@x.co" }]]];
+const liRow = (list, p = "linkedin") => list.find(c => c.platform === p);
+
+test("LinkedIn: yetki linki (PKCE yok), kod takası, userinfo sub/ad, yenileme yok", async () => {
+  const env = { ...ALL, ...LI_ENV };
+  const redirect = "https://forms.test/oauth/linkedin/callback";
+  const u = new URL(authorizeUrl(env, "linkedin", "st-1", redirect));
+  assert.equal(`${u.origin}${u.pathname}`, "https://www.linkedin.com/oauth/v2/authorization");
+  assert.deepEqual(Object.fromEntries(u.searchParams), {
+    client_id: "li-client-id", redirect_uri: redirect, response_type: "code", scope: "openid profile email", state: "st-1",
+  });
+  assert.ok(!u.href.includes("gizli"));
+
+  const f = fakeFetch(liRoutes());
+  const t = await exchangeCode(env, "linkedin", "kod", redirect, f);
+  assert.deepEqual([f.calls[0].url, f.calls[0].method, f.calls[0].body], [LI_TOKEN, "POST", {
+    client_id: "li-client-id", client_secret: "li-gizli-secret", grant_type: "authorization_code", redirect_uri: redirect, code: "kod",
+  }]);
+  assert.equal(t.access_token, "li-access");
+  assert.equal(t.refresh_token, null);
+
+  assert.deepEqual(await fetchProfile("linkedin", t.access_token, f), { external_id: "li-sub-1", handle: "Ayşe Yılmaz", followers: null });
+  assert.equal(f.calls[1].url, LI_USER);
+  assert.equal(f.calls[1].headers.authorization, "Bearer li-access");
+
+  // name yoksa ad + soyad
+  const g = fakeFetch([[LI_USER, [200, { sub: "li-sub-2", given_name: "Ayşe", family_name: "Yılmaz" }]]]);
+  assert.deepEqual(await fetchProfile("linkedin", "t", g), { external_id: "li-sub-2", handle: "Ayşe Yılmaz", followers: null });
+  const h = fakeFetch([[LI_USER, [200, { sub: "li-sub-3" }]]]);
+  assert.deepEqual(await fetchProfile("linkedin", "t", h), { external_id: "li-sub-3", handle: null, followers: null });
+  // metin olmayan ad parçası atlanır
+  const k = fakeFetch([[LI_USER, [200, { sub: "li-sub-4", given_name: "Ayşe", family_name: { localized: "x" } }]]]);
+  assert.equal((await fetchProfile("linkedin", "t", k)).handle, "Ayşe");
+
+  // LinkedIn'de yenileme yok: fetch yapılmadan no_refresh
+  const n = fakeFetch(liRoutes());
+  await assert.rejects(refreshToken(env, "linkedin", { access_token: "a", refresh_token: "r" }, n), e => e instanceof ProviderError && e.code === "no_refresh");
+  assert.equal(n.calls.length, 0);
+});
+
+test("LinkedIn: marka bağlar; token saklanmaz, eski token satırı silinir; liste ve ölçümde veri yok; kes yalnız yerel", async t => {
+  t.mock.method(console, "log", () => {});
+  const net = fakeFetch(liRoutes());
+  t.mock.method(globalThis, "fetch", (...a) => net(...a));
+  const { db, env, call, join } = await setup({ ...ALL, ...LI_ENV });
+  const brand = await join("brand", "marka@x.co");
+  db.prepare("INSERT INTO oauth_tokens (user_id, platform, access_token, refresh_token, expires_at) VALUES (?, 'linkedin', 'eski', NULL, datetime('now', '+1 hours'))").run(brand.id);
+
+  const ticket = await land(env, await start(call, brand.token, "linkedin"), "linkedin");
+  const r = await finish(call, brand.token, ticket);
+  assert.deepEqual([r.status, r.body], [200, { ok: true, connection: { platform: "linkedin", handle: "Ayşe Yılmaz" } }]);
+  assert.equal(count(db, "oauth_tokens"), 0);
+  assert.deepEqual({ ...db.prepare("SELECT platform, external_id, status, handle, sync_changes FROM social_accounts").get() },
+    { platform: "linkedin", external_id: "li-sub-1", status: "connected", handle: "Ayşe Yılmaz", sync_changes: 0 });
+
+  const list = (await call("GET", "/app/connections", { token: brand.token })).body;
+  assert.deepEqual(list.connectable, ["instagram", "tiktok", "youtube", "linkedin"]);
+  const li = liRow(list.connections);
+  assert.deepEqual({ ...li, updated_at: typeof li.updated_at }, {
+    platform: "linkedin", status: "connected", configured: true, handle: "Ayşe Yılmaz", label: NO_DATA, label_code: "no_data", updated_at: "string",
+  });
+
+  const m = await call("GET", "/app/metrics", { token: brand.token });
+  assert.equal(m.status, 200);
+  const acc = liRow(m.body.metrics.accounts);
+  assert.deepEqual([acc.source, acc.label_code, acc.followers], ["none", "no_data", null]);
+
+  const calls = net.calls.length;
+  const d = await call("POST", "/app/disconnect", { token: brand.token, body: { platform: "linkedin" } });
+  assert.equal(d.status, 200);
+  assert.equal(net.calls.length, calls); // LinkedIn'de iptal ucu yok
+  assert.equal(db.prepare("SELECT status FROM social_accounts").get().status, "revoked");
+});
+
+test("LinkedIn: secret yoksa callback 503, connect 409 not_configured; iptal edilirse denied", async t => {
+  t.mock.method(console, "log", () => {});
+  const off = await setup(ALL);
+  const brand = await off.join("brand", "marka@x.co");
+  assert.equal((await callback(off.env, `/oauth/linkedin/callback?code=x&state=${"a".repeat(43)}`)).status, 503);
+  assert.deepEqual(fail(await off.call("POST", "/app/connect", { token: brand.token, body: { platform: "linkedin" } })), [409, "not_configured"]);
+  assert.equal(liRow((await off.call("GET", "/app/connections", { token: brand.token })).body.connections).status, "not_configured");
+
+  const { db, env, call, join } = await setup({ ...ALL, ...LI_ENV });
+  const b2 = await join("agency", "ajans@x.co");
+  const state = await start(call, b2.token, "linkedin");
+  const r = await callback(env, `/oauth/linkedin/callback?error=user_cancelled_login&state=${state}`);
+  assert.equal(r.status, 302);
+  assert.equal(r.headers.get("location"), `${ORIGIN}/panel?oauth=linkedin&result=denied`);
+  assert.equal(count(db, "oauth_states"), 0);
+});
+
+test("roller: üç rol de linkedin bağlar (veri yok, senkron yok, kes yalnız yerel); rolün listesinde olmayan bilet yanar", async t => {
+  t.mock.method(console, "log", () => {});
+  const net = fakeFetch(liRoutes(igRoutes()));
+  t.mock.method(globalThis, "fetch", (...a) => net(...a));
+  const { db, env, call, join } = await setup({ ...ALL, ...LI_ENV });
+  for (const role of ["brand", "agency", "influencer"]) {
+    const u = await join(role, `${role}@x.co`);
+    const before = (await call("GET", "/app/connections", { token: u.token })).body;
+    assert.deepEqual(before.connectable, ["instagram", "tiktok", "youtube", "linkedin"], role);
+    assert.deepEqual([liRow(before.connections).status, liRow(before.connections).configured], ["available", true], role);
+    const ticket = await land(env, await start(call, u.token, "linkedin"), "linkedin");
+    const r = await finish(call, u.token, ticket);
+    assert.deepEqual([r.status, r.body.connection], [200, { platform: "linkedin", handle: "Ayşe Yılmaz" }], role);
+    const li = liRow((await call("GET", "/app/connections", { token: u.token })).body.connections);
+    assert.deepEqual([li.status, li.configured, li.label, li.label_code], ["connected", true, NO_DATA, "no_data"], role);
+    const acc = liRow((await call("GET", "/app/metrics", { token: u.token })).body.metrics.accounts);
+    assert.deepEqual([acc.source, acc.label_code, acc.followers], ["none", "no_data", null], role);
+    const calls = net.calls.length;
+    assert.equal((await call("POST", "/app/disconnect", { token: u.token, body: { platform: "linkedin" } })).status, 200);
+    assert.equal(net.calls.length, calls, role); // LinkedIn'de iptal ucu yok
+  }
+  assert.equal(count(db, "oauth_tokens"), 0);
+
+  // Savunma: bilet rolün listesinde olmayan platform içinse finish 400 no_api ve bilet yanar
+  const u = await join("brand", "donen@x.co");
+  const ticket = await land(env, await start(call, u.token, "linkedin"), "linkedin");
+  const saved = CONNECTABLE.brand;
+  CONNECTABLE.brand = [...SYNCED];
+  const before = net.calls.length;
+  try {
+    // Rolün listesinde olmayan platform: satır no_api, secret'lar tam olsa da configured false
+    const narrowed = (await call("GET", "/app/connections", { token: u.token })).body;
+    assert.deepEqual(narrowed.connectable, [...SYNCED]);
+    assert.deepEqual(liRow(narrowed.connections), {
+      platform: "linkedin", status: "no_api", configured: false, handle: null, label: NO_DATA, label_code: "no_data", updated_at: null,
+    });
+    assert.deepEqual(fail(await finish(call, u.token, ticket)), [400, "no_api"]);
+    assert.deepEqual(fail(await finish(call, u.token, ticket)), [400, "ticket"]);
+  } finally {
+    CONNECTABLE.brand = saved;
+  }
+  assert.equal(net.calls.length, before);
+  assert.equal(db.prepare("SELECT COUNT(*) AS n FROM social_accounts WHERE user_id = ?").get(u.id).n, 0);
+});
+
+test("roller: marka kesişi influencer satırına dokunmaz; marka başka markanın ölçümünü göremez", async t => {
+  t.mock.method(console, "log", () => {});
+  const { db, env, call, join } = await setup({ ...ALL, ...LI_ENV });
+  const inf = await join("influencer", "inf@x.co"), brand = await join("brand", "marka@x.co"), other = await join("brand", "diger@x.co");
+  await seed(db, env, inf.id, "instagram", "1784");
+  await seed(db, env, brand.id, "instagram", "1785");
+  t.mock.method(globalThis, "fetch", fakeFetch(igRoutes()));
+  assert.equal((await call("POST", "/app/disconnect", { token: brand.token, body: { platform: "instagram" } })).status, 200);
+  const st = id => db.prepare("SELECT status FROM social_accounts WHERE user_id = ? AND platform = 'instagram'").get(id).status;
+  assert.equal(st(inf.id), "connected");
+  assert.equal(st(brand.id), "revoked");
+  assert.deepEqual(fail(await call("GET", `/app/metrics/${other.id}`, { token: brand.token })), [404, "not_found"]);
+});
+
+test("korumalar: roller arası taken iki yönde (linkedin dahil), marka bileti başkasında 403, linkedin UNIQUE yarışı 409", async t => {
+  t.mock.method(console, "log", () => {});
+  const net = fakeFetch(liRoutes(igRoutes()));
+  t.mock.method(globalThis, "fetch", (...a) => net(...a));
+  const { db, env, call, join } = await setup({ ...ALL, ...LI_ENV });
+  const agency = await join("agency", "ajans@x.co"), inf = await join("influencer", "inf@x.co");
+  const connect = async (u, p = "instagram") => finish(call, u.token, await land(env, await start(call, u.token, p), p));
+
+  assert.equal((await connect(agency)).status, 200);
+  assert.deepEqual(fail(await connect(inf)), [409, "taken"]);
+  assert.equal((await call("POST", "/app/disconnect", { token: agency.token, body: { platform: "instagram" } })).status, 200);
+  assert.equal((await connect(inf)).status, 200);
+  assert.deepEqual(fail(await connect(agency)), [409, "taken"]);
+
+  // LinkedIn de roller arasında: influencer'a bağlı profil ajansa bağlanamaz, kesilince bağlanır
+  assert.equal((await connect(inf, "linkedin")).status, 200);
+  assert.deepEqual(fail(await connect(agency, "linkedin")), [409, "taken"]);
+  assert.equal((await call("POST", "/app/disconnect", { token: inf.token, body: { platform: "linkedin" } })).status, 200);
+  assert.equal((await connect(agency, "linkedin")).status, 200);
+  assert.equal((await call("POST", "/app/disconnect", { token: agency.token, body: { platform: "linkedin" } })).status, 200);
+
+  // Marka bileti başka bir kullanıcıda kullanılamaz
+  const b1 = await join("brand", "b1@x.co"), b2 = await join("brand", "b2@x.co");
+  const ticket = await land(env, await start(call, b1.token, "linkedin"), "linkedin");
+  assert.deepEqual(fail(await finish(call, b2.token, ticket)), [403, "ticket_owner"]);
+  assert.deepEqual(fail(await finish(call, b1.token, ticket)), [400, "ticket"]);
+
+  // LinkedIn: aynı sub ikinci markaya bağlanamaz; ön kontrol atlansa da UNIQUE engeller
+  assert.equal((await connect(b1, "linkedin")).status, 200);
+  assert.deepEqual(fail(await connect(b2, "linkedin")), [409, "taken"]);
+  const prep = env.DB.prepare;
+  env.DB.prepare = sql => (/^SELECT 1 FROM social_accounts/.test(sql) ? { bind: () => ({ first: async () => null }) } : prep(sql));
+  const raced = await connect(b2, "linkedin");
+  env.DB.prepare = prep;
+  assert.deepEqual(fail(raced), [409, "taken"]);
+  assert.equal(db.prepare("SELECT COUNT(*) AS n FROM social_accounts WHERE user_id = ?").get(b2.id).n, 0);
+});
+
+test("liste: configured her satırda boolean ve kapalı kipten bağımsız; linkedin tek; kapalı kipte bağlı linkedin görünür", async () => {
+  const { db, env, call, join } = await setup({ ...ALL, ...LI_ENV });
+  const brand = await join("brand", "marka@x.co"), inf = await join("influencer", "inf@x.co");
+  for (const u of [brand, inf]) {
+    const { connections } = (await call("GET", "/app/connections", { token: u.token })).body;
+    assert.deepEqual(connections.map(c => c.platform), LISTED);
+    assert.equal(connections.filter(c => c.platform === "linkedin").length, 1);
+    for (const c of connections) {
+      assert.deepEqual(Object.keys(c), ["platform", "status", "configured", "handle", "label", "label_code", "updated_at"]);
+      assert.equal(typeof c.configured, "boolean");
+    }
+  }
+  const viaList = await listConnections(env, brand.id, "brand");
+  const offList = await listConnections({ ...env, METRICS_ENABLED: "0" }, brand.id, "brand");
+  assert.deepEqual(offList.map(c => c.configured), viaList.map(c => c.configured));
+  assert.equal(liRow(viaList).configured, true);
+
+  await seed(db, env, brand.id, "linkedin", "li-sub-1");
+  env.METRICS_ENABLED = "0";
+  const r = await call("GET", "/app/connections", { token: brand.token });
+  assert.deepEqual([r.status, r.body.disabled, r.body.connectable], [200, true, ["instagram", "tiktok", "youtube", "linkedin"]]);
+  assert.deepEqual(r.body.connections.map(c => [c.platform, c.status, c.label_code]), [["linkedin", "connected", "no_data"]]);
+  assert.deepEqual(fail(await call("POST", "/app/connect", { token: brand.token, body: { platform: "linkedin" } })), [409, "disabled"]);
+  assert.equal((await call("POST", "/app/disconnect", { token: brand.token, body: { platform: "linkedin" } })).status, 200);
+});
+
+test("syncDue: linkedin satırları senkrona girmez (20 linkedin + 1 tiktok → 1)", async t => {
+  t.mock.method(console, "log", () => {});
+  const { db, env, join } = await setup({ ...TT_ENV, ...LI_ENV, OAUTH_TOKEN_KEY: KEY });
+  for (let i = 0; i < 20; i++) {
+    const id = db.prepare("INSERT INTO users (site, email, name, role, pass) VALUES ('x', ?, 'x', 'brand', 'x')").run(`li${i}@x.co`).lastInsertRowid;
+    await seed(db, env, Number(id), "linkedin", `li-${i}`);
+  }
+  const inf = await join("influencer", "inf@x.co");
+  await seed(db, env, inf.id, "tiktok", "tt-1");
+  const f = fakeFetch([...ttRoutes(), ...liRoutes()]);
+  assert.deepEqual(await syncDue(env, f), { ...ZERO, synced: 1 });
+  assert.ok(f.calls.length > 0);
+  assert.ok(f.calls.every(c => !c.url.includes("linkedin")));
+  await assert.rejects(syncAccount(env, inf.id, "linkedin", f), e => e.code === "no_api");
+});
+
+test("cleanHandle: görünmez kontrol/biçim karakterleri silinir, ZWJ kalır, 60 kod noktası", () => {
+  assert.equal(cleanHandle("a b؜c\u{E0041}d­e\u0007"), "abcde");
+  assert.equal(cleanHandle("👩‍💻 Ayşe"), "👩‍💻 Ayşe");
+  assert.equal(cleanHandle("  ad‌soyad  "), "ad‌soyad");
+  assert.equal([...cleanHandle("😀".repeat(70))].length, 60);
+  assert.equal(cleanHandle(null), null);
+  assert.equal(cleanHandle(5), null);
+  assert.equal(cleanHandle(""), null);
+  assert.equal(cleanHandle("   "), null);
+});
+
+test("external_id: boş, yalnız boşluk ya da 128'den uzunsa no_id; sayı string olur", async () => {
+  const prof = body => fetchProfile("linkedin", "t", fakeFetch([[LI_USER, [200, body]]]));
+  for (const body of [{}, { sub: "  " }, { sub: "a".repeat(129) }, { sub: null }, { sub: {} }]) {
+    await assert.rejects(prof(body), e => e instanceof ProviderError && e.code === "no_id", JSON.stringify(body));
+  }
+  assert.equal((await prof({ sub: 123 })).external_id, "123");
+  assert.equal((await prof({ sub: "a".repeat(128) })).external_id, "a".repeat(128));
 });
