@@ -117,13 +117,21 @@ footer.bot{border-top:1px solid var(--line);color:var(--muted);font-size:13.5px;
 .f input[type=checkbox]{width:16px;height:16px;margin:0;accent-color:var(--accent)}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
 .prow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0 12px}
-.filter{display:flex;flex-wrap:wrap;align-items:flex-end;gap:12px;margin:0 0 20px}.filter>div{flex:1 1 180px}.f.filter input:not([type=checkbox]),.f.filter select{margin:0}
+.filter{display:flex;flex-wrap:wrap;align-items:flex-end;gap:12px;margin:0 0 20px}.filter>div{flex:1 1 180px}.f.filter input:not([type=checkbox]),.f.filter select{margin:0}.f select{min-height:44px}
 .sub{margin:14px 0 0;padding:16px 0 0;border-top:1px solid var(--line)}
+.banner{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin:0 0 16px;background:var(--info-soft);border-color:transparent}.banner p{margin:0;overflow-wrap:anywhere}
+.item .ghost,.drawer .ghost,.banner .ghost{min-height:44px}
+dialog.drawer{position:fixed;inset:0 0 0 auto;margin:0;width:min(460px,100%);max-width:100%;height:100%;max-height:none;padding:0;border:0;border-left:1px solid var(--line);background:var(--surface);color:var(--text)}
+dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[open]){overflow:hidden}
+.dw{display:flex;flex-direction:column;height:100%}.dh{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 10px 10px 20px;padding-top:max(10px,env(safe-area-inset-top,0px));border-bottom:1px solid var(--line)}
+.dh h2{font-size:18px;margin:0;overflow-wrap:anywhere}.dh .x{min-width:44px;padding:0;font-size:22px;line-height:1}
+.db{flex:1;overflow-y:auto;padding:16px 20px;padding-bottom:max(24px,env(safe-area-inset-bottom,0px))}.db h3{font-size:15px;margin:22px 0 8px}.db .meta{margin:0}
+.hist{list-style:none;padding:0;margin:0}.hist li{display:flex;align-items:center;justify-content:space-between;gap:10px;border-bottom:1px solid var(--line)}.hist a{display:flex;align-items:center;min-height:44px;overflow-wrap:anywhere;min-width:0}
 .inl{display:flex;flex-wrap:wrap;gap:8px}.f .inl input{flex:1 1 220px;width:auto;margin:0}
 .msg{color:var(--danger);font-size:14px;margin:12px 0 0}.msg:empty{display:none}.ok{color:var(--ok);font-size:14px;margin:12px 0 0}.ok:empty{display:none}
 .ro{color:var(--muted);font-size:14px;margin:0 0 20px;display:flex;flex-wrap:wrap;gap:4px 20px}.ro b{color:var(--text);font-weight:600}
 @media(max-width:1100px){.ov{grid-template-columns:minmax(0,1fr)}}
-@media(max-width:760px){.app{display:block}.side{display:none}
+@media(max-width:760px){.app{display:block}.side{display:none}dialog.drawer{width:100%;border-left:0}
 .mtop{display:flex;align-items:center;justify-content:space-between;gap:12px;position:sticky;top:0;z-index:20;height:56px;padding:0 8px 0 12px;background:color-mix(in srgb,var(--surface) 92%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
 .mtop .me{display:flex;align-items:center;justify-content:center;width:44px;height:44px;border:0;background:none;padding:0;cursor:pointer;border-radius:50%}
 .main{padding:18px 16px 24px}.wrap{padding:0 16px}
@@ -240,10 +248,14 @@ footer.bot{border-top:1px solid var(--line);color:var(--muted);font-size:13.5px;
       i_c_submitted: "İçeriğiniz markanın onayını bekliyor.", i_c_approved: "İçeriğiniz onaylandı.",
       appsLead: "Başvurularınız ve markalardan gelen davetler.",
       myAppsEmpty: "Henüz başvurunuz ya da davetiniz yok. Fırsatlar sayfasından açık kampanyalara başvurabilirsiniz.", goOpps: "Fırsatlara göz at",
-      discLead: "Profilini markalara açan influencer'lar listelenir. İlgi alanı ya da platforma göre filtreleyin.",
+      discLead: "Profil kartlarını inceleyip doğrudan davet edin.", discQ: "Ara", discQPh: "İsim veya şehir", allNiches: "Tüm ilgi alanları",
+      fMin: "Takipçi", anyMin: "Her takipçi sayısı", discCount: "{n} influencer", viewProf: "Profili gör", inviteFor: "{n} için davet ediyorsunuz.",
+      clearFor: "Temizle", drClose: "Kapat", drNoPlat: "Platform eklenmemiş.", drHist: "Sizinle geçmiş", drHistNone: "Henüz birlikte çalışmadınız.",
+      drInvite: "Kampanyaya davet et", drNoOpen: "Davet edilebilecek açık kampanya yok: ya hepsinde zaten var ya da açık kampanyanız yok.",
+      inviteInf: "Influencer davet et",
       discEmpty: "Henüz profilini markalara açan influencer yok.", discNone: "Bu ölçütlere uyan influencer bulunamadı.",
       needOpen: "Davet göndermek için önce açık bir kampanya oluşturun.",
-      fNiche: "İlgi alanı", nichePh: "ör. moda", fPlatform: "Platform", allPlatforms: "Tüm platformlar", search: "Ara",
+      fNiche: "İlgi alanı", fPlatform: "Platform", allPlatforms: "Tüm platformlar",
       invite: "Davet et", sendInvite: "Daveti gönder", inviteTo: "Kampanya", inviteMsg: "Mesajınız (isteğe bağlı)",
       invitedOk: "Davet gönderildi. Yanıtı kampanya sayfasında görebilirsiniz.",
       inviteExists: "Bu influencer bu kampanyaya zaten başvurmuş ya da davet edilmiş.",
@@ -322,10 +334,14 @@ footer.bot{border-top:1px solid var(--line);color:var(--muted);font-size:13.5px;
       i_c_submitted: "Your content is waiting for the brand's approval.", i_c_approved: "Your content was approved.",
       appsLead: "Your applications and invites from brands.",
       myAppsEmpty: "No applications or invites yet. You can apply to open campaigns from Opportunities.", goOpps: "Browse opportunities",
-      discLead: "Influencers who have made their profile visible to brands are listed here. Filter by niche or platform.",
+      discLead: "Browse profile cards and invite directly.", discQ: "Search", discQPh: "Name or city", allNiches: "All niches",
+      fMin: "Followers", anyMin: "Any follower count", discCount: "{n} influencers", viewProf: "View profile", inviteFor: "Inviting for {n}.",
+      clearFor: "Clear", drClose: "Close", drNoPlat: "No platforms added.", drHist: "History with you", drHistNone: "You haven't worked together yet.",
+      drInvite: "Invite to a campaign", drNoOpen: "No open campaign to invite them to: they're already in all of them, or you have none open.",
+      inviteInf: "Invite influencers",
       discEmpty: "No influencers have made their profile visible yet.", discNone: "No influencers match these filters.",
       needOpen: "Create an open campaign before sending invites.",
-      fNiche: "Niche", nichePh: "e.g. fashion", fPlatform: "Platform", allPlatforms: "All platforms", search: "Search",
+      fNiche: "Niche", fPlatform: "Platform", allPlatforms: "All platforms",
       invite: "Invite", sendInvite: "Send invite", inviteTo: "Campaign", inviteMsg: "Your message (optional)",
       invitedOk: "Invite sent. You'll see the response on the campaign page.",
       inviteExists: "This influencer has already applied to or been invited to this campaign.",
@@ -345,7 +361,7 @@ footer.bot{border-top:1px solid var(--line);color:var(--muted);font-size:13.5px;
     }
   };
 
-  var L = BC.lang(), U = null, seq = 0, uid = 0, first = true, F = { niche: "", platform: "" };
+  var L = BC.lang(), U = null, seq = 0, uid = 0, first = true, F = { q: "", niche: "", platform: "", min: "", inviteFor: 0 };
   function $(id) { return document.getElementById(id); }
   var nav = $("nav"), tabbar = $("tabbar"), view = $("view"), langB = $("lang"), outB = $("out"), langB2 = $("lang2"), outB2 = $("out2");
   var sheet = $("sheet"), scrim = $("scrim"), meB = $("me"), counts = {};
@@ -709,11 +725,16 @@ footer.bot{border-top:1px solid var(--line);color:var(--muted);font-size:13.5px;
       el("p", { class: "meta" }, [el("span", { text: budget(c) }), stamp(c), el("span", { text: t("created", when(c.created_at)) })]),
       chips(c.niches, c.platforms),
       c.brief ? el("p", { class: "prose", text: c.brief }) : null,
-      el("div", { class: "row-b" }, [eb, tog]), m, edit,
+      el("div", { class: "row-b" }, [c.status === "open" ? toDiscover(c, "inviteInf") : null, eb, tog]), m, edit,
       el("h2", { text: t("appsTitle", apps.length) }),
       apps.length ? el("div", { class: "list" }, apps.map(function (a) { return appCard(a, true); }))
-        : empty(t("appsEmpty"), c.status === "open" ? el("a", { class: "btn sm", href: "#discover", text: t("goDiscover") }) : null)
+        : empty(t("appsEmpty"), c.status === "open" ? toDiscover(c, "goDiscover") : null)
     ];
+  }
+  function toDiscover(c, k) {
+    var a = el("a", { class: "btn sm", href: "#discover", text: t(k) });
+    a.addEventListener("click", function () { F.inviteFor = c.id; });
+    return a;
   }
   function creatorDetail(c, a) {
     var kids = [
@@ -800,46 +821,137 @@ footer.bot{border-top:1px solid var(--line);color:var(--muted);font-size:13.5px;
 
   // Influencer keşfi (marka/ajans): yalnızca profilini açan influencer'lar
   function discover() {
-    var q = [];
-    if (F.niche) q.push("niche=" + encodeURIComponent(F.niche));
-    if (F.platform) q.push("platform=" + encodeURIComponent(F.platform));
-    return Promise.all([BC.call("GET", "app/influencers" + (q.length ? "?" + q.join("&") : "")), BC.call("GET", "app/campaigns")]).then(function (r) {
-      var list = r[0].influencers || [], open = (r[1].campaigns || []).filter(function (c) { return c.status === "open"; });
-      var n = el("input", { type: "text", maxlength: 40, placeholder: t("nichePh"), value: F.niche });
+    return Promise.all([BC.call("GET", "app/influencers"), BC.call("GET", "app/campaigns")]).then(function (r) {
+      var all = r[0].influencers || [], camps = r[1].campaigns || [];
+      var open = camps.filter(function (c) { return c.status === "open"; });
+      var forC = open.filter(function (c) { return c.id === F.inviteFor; })[0] || null;
+      if (!forC) F.inviteFor = 0;
+      var ctx = { all: all, camps: camps, open: open, forC: forC };
+      var seen = {}, niches = [];
+      all.forEach(function (x) { (x.niches || []).forEach(function (n) { var k = n.toLocaleLowerCase(locale()); if (!seen[k]) { seen[k] = 1; niches.push(n); } }); });
+      niches.sort(function (a, b) { return a.localeCompare(b, locale()); });
+      var q = el("input", { type: "search", maxlength: 60, placeholder: t("discQPh"), value: F.q });
+      var n = el("select", { value: F.niche }, [el("option", { value: "", text: t("allNiches") })].concat(niches.map(function (x) { return el("option", { value: x, text: x }); })));
       var s = el("select", { value: F.platform }, [el("option", { value: "", text: t("allPlatforms") })].concat(PLATFORMS.map(function (x) { return el("option", { value: x, text: PL[x] }); })));
+      var mn = el("select", { value: F.min }, [el("option", { value: "", text: t("anyMin") })].concat([10000, 50000, 100000].map(function (v) { return el("option", { value: String(v), text: num(v) + "+" }); })));
       var f = el("form", { class: "box f filter", role: "search", "data-sk-noform": true, novalidate: true }, [
-        el("div", null, fld("fn", t("fNiche"), n)), el("div", null, fld("fp", t("fPlatform"), s)), el("button", { type: "submit", class: "btn", text: t("search") })
+        el("div", null, fld("dq", t("discQ"), q)), el("div", null, fld("dn", t("fNiche"), n)),
+        el("div", null, fld("dp", t("fPlatform"), s)), el("div", null, fld("dm", t("fMin"), mn))
       ]);
-      f.addEventListener("submit", function (ev) { ev.preventDefault(); F.niche = n.value.trim(); F.platform = s.value; render(true); });
+      var box = el("div");
+      ctx.repaint = function () { box.replaceChildren(discList(ctx)); };
+      function apply() { F.q = q.value.trim(); F.niche = n.value; F.platform = s.value; F.min = mn.value; ctx.repaint(); }
+      f.addEventListener("submit", function (ev) { ev.preventDefault(); apply(); });
+      f.addEventListener("input", apply); f.addEventListener("change", apply);
+      ctx.repaint();
+      var clr = el("button", { type: "button", class: "ghost", text: t("clearFor") });
+      clr.addEventListener("click", function () { F.inviteFor = 0; render(true); });
       return [
-        el("h1", { text: t("nDiscover") }), el("p", { class: "lead", text: t("discLead") }), f,
+        el("h1", { text: t("nDiscover") }), el("p", { class: "lead", text: t("discLead") }),
+        forC ? el("div", { class: "box banner", role: "status" }, [forText(forC.title), clr]) : null,
         open.length ? null : el("p", { class: "info" }, [t("needOpen") + " ", el("a", { href: "#new", text: t("doNew") })]),
-        list.length ? el("div", { class: "list" }, list.map(function (x) { return infCard(x, open); })) : empty(t(F.niche || F.platform ? "discNone" : "discEmpty"))
+        all.length ? f : null, all.length ? box : empty(t("discEmpty"))
       ];
     });
   }
-  function infCard(x, open) {
-    var slot = el("div", { hidden: true }), b = el("button", { type: "button", class: "btn sm", "aria-expanded": "false", text: t("invite"), disabled: !open.length });
-    b.addEventListener("click", function () {
-      if (!slot.firstChild) slot.appendChild(inviteForm(x, open));
-      slot.hidden = !slot.hidden;
-      b.setAttribute("aria-expanded", String(!slot.hidden));
+  function forText(title) {
+    var parts = t("inviteFor").split("{n}");
+    return el("p", null, [parts[0], el("b", { text: title }), parts[1] || ""]);
+  }
+  function discList(ctx) {
+    var q = F.q.toLocaleLowerCase(locale()), nk = F.niche.toLocaleLowerCase(locale()), min = +F.min || 0;
+    var list = ctx.all.filter(function (x) {
+      if (q && ((x.name || "") + " " + (x.city || "")).toLocaleLowerCase(locale()).indexOf(q) < 0) return false;
+      if (nk && !(x.niches || []).some(function (n) { return n.toLocaleLowerCase(locale()) === nk; })) return false;
+      if (F.platform && !x.platforms.some(function (p) { return p.platform === F.platform; })) return false;
+      if (min && !x.platforms.some(function (p) { return (p.followers || 0) >= min; })) return false;
+      return true;
     });
-    return el("article", { class: "box item" }, [
-      el("div", { class: "head" }, [el("div", null, [el("h3", { text: x.name }), x.city ? el("p", { class: "meta", text: x.city }) : null]), b]),
-      x.bio ? el("p", { class: "prose sm", text: x.bio }) : null,
-      chips(x.niches), handles(x.platforms), slot
+    if (!list.length) return empty(t("discNone"));
+    return el("div", null, [
+      el("p", { class: "info", role: "status", text: t("discCount", num(list.length)) }),
+      el("div", { class: "list" }, list.map(function (x) { return infCard(x, ctx); }))
     ]);
   }
-  function inviteForm(x, open) {
-    var p = "i" + (++uid) + "-", m = note(), ok = okNote(), b = el("button", { type: "submit", class: "btn sm", text: t("sendInvite") });
-    var s = el("select", null, open.map(function (c) { return el("option", { value: c.id, text: c.title }); }));
+  function infCard(x, ctx) {
+    var v = el("button", { type: "button", class: "ghost", "data-inf": x.id, "aria-label": t("viewProf") + ": " + x.name, text: t("viewProf") });
+    v.addEventListener("click", function () { infDrawer(x, ctx, false); });
+    var h = ctx.forC ? (x.history || []).filter(function (y) { return y.campaign_id === ctx.forC.id; })[0] : null, act = null;
+    if (h) act = badge(h.status);
+    else if (ctx.open.length) {
+      act = el("button", { type: "button", class: "btn sm", "aria-label": t("invite") + ": " + x.name, text: t("invite") });
+      act.addEventListener("click", function () { infDrawer(x, ctx, true); });
+    }
+    return el("article", { class: "box item" }, [
+      el("div", { class: "head" }, [el("div", null, [el("h3", { text: x.name }), x.city ? el("p", { class: "meta", text: x.city }) : null])]),
+      x.bio ? el("p", { class: "prose sm", text: x.bio }) : null,
+      chips(x.niches), handles(x.platforms),
+      el("div", { class: "row-b" }, [v, act])
+    ]);
+  }
+  // Profil çekmecesi: yerel <dialog> odak tuzağı, Esc ve arka planı etkisizleştirmeyi kendisi sağlar
+  var dlg = null, dlgFor = 0;
+  function infDrawer(x, ctx, toInvite, sent) {
+    if (!dlg) {
+      dlg = el("dialog", { class: "drawer", "aria-labelledby": "dr-t" });
+      document.body.appendChild(dlg);
+      dlg.addEventListener("click", function (e) { if (e.target === dlg) drClose(); });
+      dlg.addEventListener("close", refocus);
+      window.addEventListener("hashchange", function () { if (dlg.open) dlg.close(); });
+    }
+    dlgFor = x.id;
+    var byId = {};
+    ctx.camps.forEach(function (c) { byId[c.id] = c; });
+    var hist = x.history || [], inH = {};
+    hist.forEach(function (h) { inH[h.campaign_id] = 1; });
+    var cands = ctx.open.filter(function (c) { return !inH[c.id]; });
+    var xb = el("button", { type: "button", class: "ghost x", "aria-label": t("drClose"), text: "×" });
+    xb.addEventListener("click", drClose);
+    var ok = sent ? el("p", { class: "ok", role: "status", tabindex: "-1", text: t("invitedOk") }) : null;
+    var form = cands.length ? inviteForm(x, cands, ctx.forC && !inH[ctx.forC.id] ? ctx.forC.id : 0, function () {
+      ctx.repaint(); infDrawer(x, ctx, false, true);
+    }) : null;
+    dlg.replaceChildren(el("div", { class: "dw" }, [
+      el("div", { class: "dh" }, [el("h2", { id: "dr-t", text: x.name }), xb]),
+      el("div", { class: "db" }, [
+        x.city ? el("p", { class: "meta", text: x.city }) : null,
+        x.bio ? el("p", { class: "prose sm", text: x.bio }) : null,
+        chips(x.niches),
+        el("h3", { text: t("fPlatforms") }),
+        x.platforms.length ? handles(x.platforms) : el("p", { class: "meta", text: t("drNoPlat") }),
+        el("h3", { text: t("drHist") }),
+        hist.length ? el("ul", { class: "hist" }, hist.map(function (h) {
+          var c = byId[h.campaign_id];
+          return el("li", null, [el("a", { href: "#campaign-" + h.campaign_id, text: c ? c.title : "#" + h.campaign_id }), badge(h.status)]);
+        })) : el("p", { class: "meta", text: t("drHistNone") }),
+        el("h3", { text: t("drInvite") }),
+        ok, form || el("p", { class: "meta", text: t("drNoOpen") })
+      ])
+    ]));
+    if (!dlg.open) dlg.showModal();
+    if (ok) ok.focus();
+    else if (toInvite && form) form.querySelector("select").focus();
+    else xb.focus();
+  }
+  function drClose() { dlg.close(); refocus(); }
+  // Kapanınca odak, çekmeceyi açan karttaki düğmeye döner (sayfa yeniden çizildiyse de)
+  function refocus() {
+    var a = document.activeElement;
+    if (a && a !== document.body && !dlg.contains(a)) return;
+    var b = view.querySelector('[data-inf="' + dlgFor + '"]');
+    if (b) b.focus();
+  }
+  function inviteForm(x, cands, sel, done) {
+    var p = "i" + (++uid) + "-", m = note(), b = el("button", { type: "submit", class: "btn sm", text: t("sendInvite") });
+    var s = el("select", { value: String(sel || cands[0].id) }, cands.map(function (c) { return el("option", { value: String(c.id), text: c.title }); }));
     var ta = el("textarea", { maxlength: 1000, rows: 3 });
-    var f = el("form", { class: "f sub", "data-sk-noform": true, novalidate: true }, [fld(p + "c", t("inviteTo"), s), fld(p + "m", t("inviteMsg"), ta), b, m, ok]);
+    var f = el("form", { class: "f", "data-sk-noform": true, novalidate: true }, [fld(p + "c", t("inviteTo"), s), fld(p + "m", t("inviteMsg"), ta), b, m]);
     f.addEventListener("submit", function (ev) {
-      ev.preventDefault(); say(m, ""); say(ok, ""); busy(b, true);
+      ev.preventDefault(); say(m, ""); busy(b, true);
       BC.call("POST", "app/campaigns/" + s.value + "/invite", { user_id: x.id, message: ta.value.trim() }).then(function () {
-        busy(b, false); ta.value = ""; say(ok, t("invitedOk"));
+        busy(b, false);
+        x.history = [{ campaign_id: +s.value, status: "invited" }].concat(x.history || []);
+        done();
       }, function (e) { busy(b, false); say(m, BC.msg(e.code, { exists: t("inviteExists"), not_found: t("inviteGone") })); });
     });
     return f;

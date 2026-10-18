@@ -431,7 +431,12 @@ async function influencers(c) {
   let list = results.map(r => ({ ...creator(r.id, r.name, r.profile), listed: JSON.parse(r.profile || "{}").listed === true })).filter(x => x.listed);
   if (q.niche) list = list.filter(x => x.niches.some(n => n.toLowerCase() === q.niche.toLowerCase()));
   if (q.platform) list = list.filter(x => x.platforms.some(p => p.platform === q.platform));
-  return ok(c, { influencers: list.slice(0, 100).map(({ listed, ...x }) => x) });
+  // Markanın kendi kampanyalarındaki geçmiş (davet/başvuru durumları); başka markaların verisi dönmez
+  const { results: hist } = await env.DB.prepare(
+    "SELECT a.user_id, a.campaign_id, a.status FROM applications a JOIN campaigns c ON c.id = a.campaign_id WHERE c.owner_id = ? ORDER BY a.id DESC",
+  ).bind(user.id).all();
+  const history = id => hist.filter(h => h.user_id === id).map(h => ({ campaign_id: h.campaign_id, status: h.status }));
+  return ok(c, { influencers: list.slice(0, 100).map(({ listed, ...x }) => ({ ...x, history: history(x.id) })) });
 }
 
 async function stats(c) {

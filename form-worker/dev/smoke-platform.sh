@@ -80,6 +80,8 @@ r=$(call POST /auth/register "" "$(reg "Test Influencer 2" "inf2-$RUN@example.te
 I2T=$(body "$r" | jq -r .token); I2ID=$(body "$r" | jq -r .user.id)
 r=$(call POST /app/profile "$I2T" '{"profile":{"niches":["Yemek"],"listed":true}}'); check "ikinci profil (davet için listelenir)" 200 "$r"
 r=$(call POST /app/campaigns/$CID/invite "$BT" "{\"user_id\":$I2ID,\"message\":\"Davet\"}"); check "davet" 200 "$r"; DID=$(body "$r" | jq -r .application.id)
+r=$(call GET /app/influencers "$BT"); check "geçmişli liste" 200 "$r"
+[ "$(body "$r" | jq -r ".influencers[] | select(.id == $I2ID) | .history[0].status")" = invited ] || { echo "HATA davet geçmişte yok"; fail=1; }
 r=$(call POST /app/applications/$DID "$I2T" '{"status":"accepted"}'); check "daveti kabul" 200 "$r"
 r=$(call GET /app/stats "$BT"); check "istatistik" 200 "$r"
 r=$(call GET /app/applications "$IT"); check "başvurularım" 200 "$r"
