@@ -81,7 +81,7 @@ WishCEO’da her dosyada dört seçenek, her seçeneğin de bir puanı var. Kara
 
 Puanı verirken iki şeye bakıyoruz: o dönemde ne biliniyordu ve sonra ne oldu. Sonuç bir kontrol aracı, tek başına hâkim değil. Bu yüzden vakadaki CEO’nun seçimi her zaman en yüksek puanı almıyor. Korvala dosyasında A’yı seçersen ekranda vakadaki CEO’dan 40 puan önde olduğunu görürsün. Bu, Stoddard’ın kötü bir yönetici olduğu anlamına gelmiyor. O gün verilmiş bir kararın, o günün bilgisiyle zayıf kaldığı anlamına geliyor.
 
-İnsanları değil kararları puanlamamızın anlamı bu. Aynı kural senin için de geçerli. Karnende Budayıcı, İnsan Odaklı, Kumarbaz ya da Kasa Ustası çıkması kim olduğunu anlatmaz; o dosyalarda hangi kararları verdiğini anlatır. Başka dosyalarda başka bir tip çıkabilir.
+İnsanları değil kararları puanlamamızın anlamı bu. Aynı kural senin için de geçerli. Karnende Budayıcı, İnsan Odaklı, Kumarbaz ya da Kasa Odaklı çıkması kim olduğunu anlatmaz; o dosyalarda hangi kararları verdiğini anlatır. Başka dosyalarda başka bir tip çıkabilir.
 
 Şirket ve kişi adlarını değiştirmemizin bir nedeni de bu. Adı bilinen bir şirketi görünce sonunu da hatırlarsın ve kararını o sonun gölgesinde verirsin. Adlar değişince dosyayı o günkü CEO gibi okursun: sonucu bilmeden, yalnızca masadaki bilgiyle.
 
@@ -107,4 +107,4 @@ WishCEO her dosyadaki dört seçeneği, o dönemde ne bilindiğine ve sonra ne o
 
 Bir karar iyi bittiğinde kendini tebrik etmeden, kötü bittiğinde kendini suçlamadan önce aynı soruyu sor: o gün masada ne vardı ve ben onunla ne yaptım? Gerisi çoğu zaman zarın işi.
 
-Bu ayrımı alışkanlık hâline getirmenin en kolay yolu, sonucu bilmeden karar vermek. Birkaç dakikan varsa bir dosya seni bekliyor. [Bugünün vakasını oyna](/#oyun).
+Bu ayrımı yapmayı alışkanlık hâline getirmenin en kolay yolu, sonucu bilmeden karar vermek. Birkaç dakikan varsa bir dosya seni bekliyor. [Bugünün vakasını oyna](/#oyun).

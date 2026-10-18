@@ -57,7 +57,7 @@ Batık maliyet üç ayrı biçimde karşına çıkar ve her birine ayrı bakmak 
 - Zaman ve emek: yıllarca geliştirilen bir ürün, şirkete özel kurulmuş bir sistem.
 - İtibar: kamuoyuna verilen söz, yönetim kuruluna sunulan plan, bir yöneticinin adının bir projeyle özdeşleşmesi.
 
-İtibar en sinsi olanı. Para tablolarda görünür, itibar görünmez. Ama en inatçı kararları çoğu zaman o verdirir.
+İtibar en geç fark edileni. Para tablolarda görünür, itibar görünmez. Ama en inatçı kararları çoğu zaman o verdirir.
 
 Şöyle bir şirket hayal et. Orta büyüklükte bir lojistik firması birkaç yıl önce kendi rota yazılımını geliştirmeye karar vermiş. O gün hazır çözümler pahalı ve yetersiz görünmüş. Bugün piyasada daha iyi ve daha ucuz hazır bir yazılım var. İç ekip ise her toplantıda "biraz daha" diyor. Hazır yazılıma geçmek, geçen yılların boşa gittiğini kabul etmek gibi geliyor. Oysa doğru soru geçen yıllara değil, önümüzdeki yıllara dair: Hangi yol daha iyi rotalar, daha düşük maliyet ve daha memnun müşteriler getirir?
 

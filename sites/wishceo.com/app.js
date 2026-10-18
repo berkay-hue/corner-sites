@@ -16,7 +16,7 @@
       title: "Yüz yıllık formüle dokunmak",
       body: [
         "Lavenhurst, Amerika’nın en çok satan kolası. Tarifi yaklaşık yüz yıldır neredeyse hiç değişmedi; marka ülkede yaz tatilleri, stadyumlar ve aile sofralarıyla anılıyor. Ama pazar payın yıllardır yavaş yavaş geriliyor ve daha tatlı kolasıyla öne çıkan ezeli rakibin marketlerde seni geçti.",
-        "Rakip yıllardır etiketsiz tadım kampanyası yürütüyor: alışveriş merkezlerinde etiketsiz iki bardak, reklamlarda hep onların bardağını seçen insanlar. Şirketin kendi tadımları da aynı sonucu verdi. Ekibin daha tatlı yeni bir formül geliştirdi; yaklaşık iki yüz bin etiketsiz tadımda yeni formül hem eskiyi hem rakibi geçti. Kısa süre önce yeni Lavenhurst büyük bir lansmanla raflara çıktı, eski formül raflardan tamamen kalktı.",
+        "Rakip yıllardır etiketsiz tadım kampanyası yürütüyor: alışveriş merkezlerinde markası gizli iki bardak, reklamlarda hep onların bardağını seçen insanlar. Şirketin kendi tadımları da aynı sonucu verdi. Ekibin daha tatlı yeni bir formül geliştirdi; yaklaşık iki yüz bin etiketsiz tadımda yeni formül hem eskiyi hem rakibi geçti. Kısa süre önce yeni Lavenhurst büyük bir lansmanla raflara çıktı, eski formül raflardan tamamen kalktı.",
         "Lansmandan bu yana şirkete on binlerce telefon ve mektup geldi. İnsanlar eski koladan kasa kasa stok yapıyor. Şikâyetlerin çoğu tatla ilgili değil: “Bizim kolamızı değiştirdiniz, kimse bize sormadı.” Araştırma ekibi, tadımlarda katılımcıların küçük bir kısmının eski formülün tamamen kalkacağını duyunca çok kızdığını hatırlatıyor. Pazarlama ekibi ise sabırlı olmanı istiyor: yeni tadı en çok gençler seviyor ve tepkinin birkaç ay içinde yatışacağını düşünüyorlar. Yeni formülü onaylayan CEO sensin ve lansmanın üzerinden yaklaşık iki ay geçti."
       ],
       stats: [["Etiketsiz tadım", "~200 bin"], ["Telefon ve mektup", "On binlerce"], ["Lansmandan bu yana", "~2 ay"]],
@@ -431,7 +431,7 @@
           r: "Bankalar paralarını alır, bilanço hızla temizlenir. Ama ülkenin en değerli markaları yabancı bir rakibin portföyüne geçer; elde kalan küçük fabrikalar da sipariş bulmakta zorlanır." },
         { k: "B", t: "Kitle pazarını tamamen bırak; yalnızca pahalı mekanik saatlere çekil, fabrikaların çoğunu kapat, iki grubu lüks markalar etrafında küçült.", s: 45, tag: "cerrah",
           r: "Lüks markalar kârlı ve korunur. Ama ucuz ve orta segmenti Asya’ya bırakınca parça üreticileri ölçeğini kaybeder, yetişmiş ustalar ve mühendisler sektörden ayrılır; zamanla lüks üretim de pahalanır ve daralır." },
-        { k: "C", t: "Bankalardan süre iste; iki grubu ayrı ayrı sürdür, ustaları ve fabrikaları koru, kuvars saate yavaş yavaş geç.", s: 25, tag: "kalkan",
+        { k: "C", t: "Bankalardan süre iste; iki grubu ayrı şirketler olarak işletmeye devam et, ustaları ve fabrikaları koru, kuvars saate yavaş yavaş geç.", s: 25, tag: "kalkan",
           r: "Ustalar ve fabrikalar bir süre daha yerinde kalır. Ama iki grup ayrı ayrı para kaybetmeye devam eder; Asya’yla fiyat farkı her ay açılırken yavaş geçiş zaman kaybettirir ve bankaların sabrı da sınırlı." },
         { k: "D", t: "İki grubu birleştir, lüks markaları koru ve kitle pazarına İsviçre’de üretilecek yeni, çok ucuz bir saatle geri dön.", s: 90, tag: "kumar",
           r: "Büyük bir bahis: para kaybeden iki grubu birleştirip ucuz saatte Asya’yla, üstelik İsviçre maliyetiyle yarışıyorsun. Ama parça sayısını ve montajı kökten değiştirirsen maliyet farkı kapanır; saat de zaman ölçen bir alet olmaktan çıkıp renkli, sezonluk bir moda ürününe dönüşür." }
@@ -1815,7 +1815,7 @@
     cerrah: { name: "Budayıcı", desc: "Neyin bırakılacağını bilirsin. Duygusal bağlara değil, şirketin gerçekte neyle para kazandığına bakarsın ve zor kararı erken alırsın." },
     kalkan: { name: "İnsan Odaklı", desc: "Önce insanlar, sonra rakamlar. Güven bir kez giderse hiçbir bütçenin onu geri getiremeyeceğini bilirsin." },
     kumar: { name: "Kumarbaz", desc: "Masaya bütün fişleri sürersin. Tutarsa kitaplara geçersin. Tutmazsa da geçersin, ama başka bir bölüme." },
-    kasa: { name: "Kasa Ustası", desc: "Bu çeyreği toparlarsın, tablolar temiz görünür. Sorun şu: şirketler çeyrekle değil, on yılla ölçülür." }
+    kasa: { name: "Kasa Odaklı", desc: "Bu çeyreği toparlarsın, tablolar temiz görünür. Sorun şu: şirketler çeyrekle değil, on yılla ölçülür." }
   };
   var TAG_ORDER = ["cerrah", "kalkan", "kumar", "kasa"];
 

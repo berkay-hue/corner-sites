@@ -18,7 +18,7 @@ En sade hâliyle şöyle düşünebilirsin: Elinde sınırlı bir kaynak var. Bu
 Burada iki ayrıntı önemli:
 
 - **Vazgeçilen tüm seçeneklerin toplamı değil, en iyi alternatif sayılır.** Beş seçeneğin varsa ve birini seçtiysen, kalan dördünün toplamını kaybetmiş olmazsın. Kaybettiğin şey, onların arasındaki en değerli olanıdır.
-- **Değer her zaman parayla ölçülmez.** Kaçırılan bir öğrenme fırsatı, yorulan bir ekip ya da ertelenen bir ilişki de fırsat maliyetinin parçasıdır.
+- **Değer her zaman parayla ölçülmez.** Kaçırılan bir öğrenme fırsatı, kapasitesi dolan bir ekip ya da ertelenen bir ilişki de fırsat maliyetinin parçasıdır.
 
 Yani kavram aslında bir muhasebe terimi olmaktan çok bir düşünme alışkanlığıdır. "Bu bana ne kazandırır?" sorusunun yanına "Bunu yaparken neyi yapamıyorum?" sorusunu koymaktır.
 

@@ -49,7 +49,7 @@ Yazılım devi Tallbridge'in telefon sistemini akıllı telefonlarında ana sist
 
 Bu yolun çekiciliği burada. Ortağın seni önemsiyor, çünkü sen olmadan onun sistemi de bir yere gitmiyor. Masadaki ağırlığın büyük.
 
-Ama küçük olmayan bir kusuru var. Şirketin geleceğini, pazarın henüz çok küçük bir dilimini tutan bir sisteme bağlıyorsun. Mahalle örneğine dönersek, iki büyük pazar zaten kurulmuşken üçüncüsünü sıfırdan kurmaya çalışıyorsun. Üstelik bu pazarın kurallarını tek başına sen koymuyorsun.
+Ama küçük olmayan bir kusuru var. Şirketin geleceğini, pazarın henüz çok küçük bir dilimini tutan bir sisteme bağlıyorsun. Mahalle örneğine dönersek, iki büyük pazar zaten kurulmuşken üçüncüsünü büyütmeye çalışıyorsun. Üstelik bu pazarın kurallarını tek başına sen koymuyorsun.
 
 ### C: Kendi yeni sistemini bitir
 
