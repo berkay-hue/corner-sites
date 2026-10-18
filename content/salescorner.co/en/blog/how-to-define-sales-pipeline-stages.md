@@ -225,6 +225,8 @@ Once you've defined your stages, these metrics show you the health of the system
 
 Review these metrics monthly at the rep level as well. If a rep's post-demo conversion is clearly below the team average, the problem most likely lies in the demo structure or in information left uncovered during discovery.
 
+You can see what Sales Corner does in sales automation and outbound on our [services page](/hizmetler) (in Turkish).
+
 ## Conclusion
 
 Defining your sales pipeline stages isn't a CRM setting; it's **designing the backbone of your sales process**. Every stage should have entry and exit criteria based on buyer actions, a clear owner, a probability grounded in real data, and a maximum time in stage. Start with 5-7 stages depending on your business model. As you've seen with outbound SaaS, enterprise services, and SMB sales, stages can vary, but the principles stay the same: verifiability, simplicity, and regular review.

@@ -1,6 +1,6 @@
 ---
 title: "Satış Ekibi Verimliliği Nasıl Ölçülür? KPI Rehberi"
-description: "B2B satış ekibinizin verimliliğini ölçmek için takip etmeniz gereken temel KPI'ları, hesaplama yöntemlerini ve sık yapılan hataları da anlatıyoruz."
+description: "B2B satış ekibinin verimliliğini ölçmek için izlenecek temel KPI'lar, hesaplama yöntemleri ve sık yapılan hatalar."
 date: "2026-10-16"
 category: "Satış"
 image: "https://images.pexels.com/photos/39205099/pexels-photo-39205099.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
@@ -228,6 +228,8 @@ Evet. 2-3 kişilik bir ekipte bile hangi aşamada fırsat kaybedildiğini bilmek
 ### SDR'lar yalnızca toplantı sayısıyla değerlendirilmeli mi?
 
 Hayır. Yalnızca toplantı sayısına bakmak, kalifikasyonu zayıf toplantıların artmasına yol açar. Toplantı sayısının yanında AE tarafından kabul edilen toplantı oranı ve SDR'ın kaynakladığı pipeline değeri de mutlaka takip edilmelidir.
+
+Sales Corner'ın satış otomasyonu ve outbound alanında neler yaptığını [hizmetler sayfamızda](/hizmetler) görebilirsiniz.
 
 ## Sonuç
 
