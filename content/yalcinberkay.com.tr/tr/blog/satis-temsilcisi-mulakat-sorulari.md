@@ -249,7 +249,7 @@ Satış temsilcisi mülakatı, adayın ne kadar iyi konuştuğunu değil, ne kad
 
 Unutmayın: En iyi satışçılar her soruya mükemmel cevap verenler değil, hatalarını açıkça kabul eden, geri bildirimi hızla uygulayan ve her gün aynı disiplinle sahaya çıkanlardır. Mülakat sürecinizi bu özellikleri ortaya çıkaracak şekilde kurarsanız, yanlış işe alım riskini ciddi şekilde azaltırsınız.
 
-Satış ekibinizi kurarken işe alım sürecinizi yapılandırmak ya da mülakat çerçevenizi birlikte gözden geçirmek isterseniz, [Berkay Yalçın](/tr) sayfası üzerinden benimle iletişime geçebilirsiniz.
+Satış ekibinizi kurarken işe alım sürecinizi yapılandırmak ya da mülakat çerçevenizi birlikte gözden geçirmek isterseniz, [Berkay Yalçın](/tr/) sayfası üzerinden benimle iletişime geçebilirsiniz.
 
 ## Sık sorulan sorular
 
