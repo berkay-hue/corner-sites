@@ -183,13 +183,13 @@ Sample thresholds:
 - Fit score of 70 or higher: high fit
 - Engagement score of 50 or higher: high engagement
 
-Group B leads are the biggest opportunity for outbound teams. They're the right companies, but they don't know you yet. The quality of the messages you send to this group directly determines conversion. In [our article on writing cold emails with AI](/blog/how-to-write-cold-emails-with-ai), we covered in detail how to craft scalable yet personal messages for these leads. To generate these sequences automatically from your product video, PDF or website, you can use our [Sequence Writer tool](/sekans-yazari) (Turkish interface).
+Group B leads are the biggest opportunity for outbound teams. They're the right companies, but they don't know you yet. The quality of the messages you send to this group directly determines conversion. In [our article on writing cold emails with AI](/blog/how-to-write-cold-emails-with-ai), we covered in detail how to craft scalable yet personal messages for these leads. To generate these sequences automatically from your product video, PDF or website, you can use our [Sequence Writer tool](/en/#otomasyonlar) (Turkish interface).
 
 ## Step 7: Feed the Model with Data Enrichment
 
 The accuracy of your fit score depends on how complete your data is. When someone fills out a form, you usually only get their name, email and company name. Industry, employee count, job title and technology information are left out. If these missing fields score zero, a good lead gets unfairly underrated.
 
-Data enrichment tools are used to solve this problem. As soon as a lead enters the CRM, company information is pulled automatically from the email domain, and job title and seniority are pulled from the person's name and company. For example, B2B data platforms such as [Apollo.io](https://get.apollo.io/679irkzm35ya) are widely used both to build new lead lists and to enrich existing records with firmographic data. If you want to scan target companies' websites for specific product or technology signals in bulk, our [Web Keyword Scanner tool](/web-keyword) can also feed your fit score.
+Data enrichment tools are used to solve this problem. As soon as a lead enters the CRM, company information is pulled automatically from the email domain, and job title and seniority are pulled from the person's name and company. For example, B2B data platforms such as [Apollo.io](https://get.apollo.io/679irkzm35ya) are widely used both to build new lead lists and to enrich existing records with firmographic data. If you want to scan target companies' websites for specific product or technology signals in bulk, our [Web Keyword Scanner tool](/en/#otomasyonlar) can also feed your fit score.
 
 Keep two things in mind when enriching data:
 
