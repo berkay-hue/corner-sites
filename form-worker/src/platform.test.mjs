@@ -120,9 +120,50 @@ test("ajans client_names: kırpma, tr büyük-küçük harf tekilliği, en çok 
   assert.deepEqual(g.body.user.profile.client_names, p.client_names);
   const me = await call("GET", "/auth/me", { token: ag.token });
   assert.equal(me.body.user.profile.clients, 20);
-  // Boş dizi: liste boş, clients 0
+  // Boş dizi + eski sayı: sayı korunur, client_names anahtarı yazılmaz (eski giriş gibi)
   const e = await profile(ag, { clients: 5, client_names: [] });
-  assert.deepEqual([e.client_names, e.clients], [[], 0]);
+  assert.equal(e.clients, 5);
+  assert.equal(Object.hasOwn(e, "client_names"), false);
+  for (const [input, want] of [[{ clients: 7, client_names: ["", "  ", null] }, 7], [{ clients: "7", client_names: [] }, 7]]) {
+    const q = await profile(ag, input);
+    assert.equal(q.clients, want, JSON.stringify(input));
+    assert.equal(Object.hasOwn(q, "client_names"), false, JSON.stringify(input));
+  }
+  // Boş dizi, eski sayı yok ya da 0/geçersiz: liste boş, clients 0
+  for (const input of [{ clients: 0, client_names: [] }, { client_names: [] }, { clients: "abc", client_names: [] }, { clients: 20000, client_names: [] }]) {
+    const q = await profile(ag, input);
+    assert.deepEqual([q.client_names, q.clients], [[], 0], JSON.stringify(input));
+  }
+});
+
+test("ajans client_names: ad varken gelen clients yok sayılır, clients = ad sayısı", async () => {
+  const { join, profile } = await setup();
+  const ag = await join("agency", "ajans@ornek.com");
+  const p = await profile(ag, { clients: 12, client_names: ["Acme", "Beta"] });
+  assert.deepEqual([p.client_names, p.clients], [["Acme", "Beta"], 2]);
+  const q = await profile(ag, { clients: 0, client_names: ["Acme"] });
+  assert.deepEqual([q.client_names, q.clients], [["Acme"], 1]);
+});
+
+test("ajans eski sayı main paneliyle art arda kayıtlarda korunur; ad eklenince ad sayısı, adlar silinince 0", async () => {
+  const { call, join, profile } = await setup();
+  const ag = await join("agency", "ajans@ornek.com");
+  // main panel.html profil kaydı: hasNames = Array.isArray(p.client_names); cCount(tags) = tags.length || (hasNames ? 0 : Number(p.clients) || 0)
+  const panelSave = async (extra, tags) => {
+    const p = (await call("GET", "/app/profile", { token: ag.token })).body.user.profile;
+    const hasNames = Array.isArray(p.client_names);
+    return { saved: await profile(ag, { ...extra, client_names: tags, clients: tags.length || (hasNames ? 0 : Number(p.clients) || 0) }), hasNames };
+  };
+  await profile(ag, { clients: 12 });
+  for (const bio of ["ilk", "ikinci", "üçüncü"]) {
+    const { saved, hasNames } = await panelSave({ bio }, []);
+    assert.equal(saved.clients, 12, bio);
+    assert.equal(hasNames, false, bio); // panelin "şimdilik sayısı kaydedildi" notu doğru kalır
+  }
+  const a = (await panelSave({ bio: "ad" }, ["Acme", "Beta", "Gama"])).saved;
+  assert.deepEqual([a.client_names, a.clients], [["Acme", "Beta", "Gama"], 3]);
+  const z = (await panelSave({ bio: "sil" }, [])).saved;
+  assert.deepEqual([z.client_names, z.clients], [[], 0]);
 });
 
 test("ajans eski clients girişi bozulmaz: client_names dizi değilse sayı saklanır, client_names anahtarı yok", async () => {

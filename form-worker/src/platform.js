@@ -294,10 +294,13 @@ async function updateProfile(c) {
 }
 
 // Ajans müşteri adları: en çok 20, her biri kırpılmış (≤80), büyük-küçük harf farkı gözetmeden tekil (ilk yazım kalır;
-// i/ı/I/İ aynı sayılır: "Nike" ile "NIKE" tek ad). clients sayısı bundan türer. client_names dizi değilse eski sayı girişi
-// (clients 0..10000) aynen saklanır. Yalnız sahibinin profil yanıtında (me) döner; kampanya/başvuru/eşleşme yanıtları ajans profilini taşımaz.
+// i/ı/I/İ aynı sayılır: "Nike" ile "NIKE" tek ad). Ad varsa clients = ad sayısı. client_names dizi değilse eski sayı girişi
+// (clients 0..10000) aynen saklanır. Dizide geçerli ad yoksa ve clients > 0 ise de eski giriş sayılır: panel adı olmayan
+// ajansta client_names: [] ile eski sayıyı gönderir; client_names anahtarı yazılmaz ki panel sonraki kayıtta da sayıyı göndersin.
+// Yalnız sahibinin profil yanıtında (me) döner; kampanya/başvuru/eşleşme yanıtları ajans profilini taşımaz.
 function agencyClients(p) {
-  if (!Array.isArray(p.client_names)) return { clients: int(p.clients, 0, 10000) };
+  const legacy = int(p.clients, 0, 10000);
+  if (!Array.isArray(p.client_names)) return { clients: legacy };
   const seen = new Set(), names = [];
   for (const x of p.client_names) {
     const s = text(x, 80), k = s.toLocaleLowerCase("tr").replace(/ı/g, "i");
@@ -306,6 +309,7 @@ function agencyClients(p) {
     names.push(s);
     if (names.length === 20) break;
   }
+  if (!names.length && legacy > 0) return { clients: legacy };
   return { client_names: names, clients: names.length };
 }
 
