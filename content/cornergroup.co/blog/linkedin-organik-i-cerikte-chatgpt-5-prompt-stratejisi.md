@@ -1,6 +1,6 @@
 ---
 title: "LinkedIn Organik İçerikte ChatGPT: 5 Prompt Stratejisi"
-description: "B2B pazarlamasının dijital arenası LinkedIn, her geçen gün daha gürültülü bir hale geliyor."
+description: "ChatGPT, doğru prompt'larla LinkedIn organik içerik fikri, taslak ve kanca üretimini hızlandırır; bu yazı B2B için 5 prompt stratejisini anlatır."
 date: "2026-05-05"
 category: "Rehber"
 image: "/_a/fr/images/WdPka1IhA0HufgV51gbdiS4RG98_cd09786e.jpg"
