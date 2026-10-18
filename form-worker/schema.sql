@@ -82,3 +82,5 @@ CREATE TABLE IF NOT EXISTS applications (
   UNIQUE (campaign_id, user_id)
 );
 CREATE INDEX IF NOT EXISTS applications_user ON applications (user_id);
+
+-- Sosyal metrik tabloları: migrations/0001_metrics.sql

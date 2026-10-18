@@ -7,6 +7,7 @@
 // MAIL binding'i yalnızca MAIL_TO adresine gönderebildiği için o kullanılmaz.
 
 import { smtpReady, smtpSend, smtpFrom } from "./smtp.js";
+import { accountMetrics, linkMetrics } from "./metrics.js";
 
 const ROLES = ["brand", "influencer", "agency"];
 const PLATFORMS = ["instagram", "tiktok", "youtube", "x", "linkedin", "twitch"];
@@ -245,6 +246,9 @@ const APP = {
   "POST campaigns/:id/invite": invite,
   "GET applications": myApplications,
   "POST applications/:id": updateApplication,
+  "GET metrics": c => metrics(c, c.user),
+  "GET metrics/:id": influencerMetrics,
+  "GET applications/:id/metrics": applicationMetrics,
 };
 
 const isOwnerRole = u => u.role === "brand" || u.role === "agency";
@@ -432,6 +436,30 @@ async function influencers(c) {
   if (q.niche) list = list.filter(x => x.niches.some(n => n.toLowerCase() === q.niche.toLowerCase()));
   if (q.platform) list = list.filter(x => x.platforms.some(p => p.platform === q.platform));
   return ok(c, { influencers: list.slice(0, 100).map(({ listed, ...x }) => x) });
+}
+
+// ---- sosyal metrikler (src/metrics.js) ----
+
+const metrics = async (c, u) => ok(c, { metrics: await accountMetrics(c.env, u.id, JSON.parse(u.profile || "{}")) });
+
+// Marka/ajans: listelenen ya da kendi kampanyasına başvurmuş/davet edilmiş influencer'ın metrikleri
+async function influencerMetrics(c, id) {
+  const { env, user, site } = c;
+  need(isOwnerRole(user));
+  const inf = await env.DB.prepare("SELECT id, profile FROM users WHERE id = ? AND site = ? AND role = 'influencer'").bind(id, site).first();
+  const linked = inf && JSON.parse(inf.profile || "{}").listed !== true
+    ? await env.DB.prepare("SELECT 1 FROM applications a JOIN campaigns c ON c.id = a.campaign_id WHERE a.user_id = ? AND c.owner_id = ? LIMIT 1").bind(id, user.id).first()
+    : true;
+  need(inf && linked, "not_found", 404);
+  return metrics(c, inf);
+}
+
+// İşbirliği içerik linkinin metrikleri: kampanya sahibi ya da başvuran görür
+async function applicationMetrics(c, id) {
+  const { env, user } = c;
+  const a = await env.DB.prepare("SELECT a.id, a.user_id, a.content_url, c.owner_id FROM applications a JOIN campaigns c ON c.id = a.campaign_id WHERE a.id = ?").bind(id).first();
+  need(a && (a.owner_id === user.id || a.user_id === user.id), "not_found", 404);
+  return ok(c, { metrics: await linkMetrics(env, a) });
 }
 
 async function stats(c) {
