@@ -35,7 +35,7 @@ const PROVIDERS = {
     scope: "user.info.basic,user.info.profile,user.info.stats,video.list",
   },
   youtube: {
-    id: "YOUTUBE_CLIENT_ID", secret: "YOUTUBE_CLIENT_SECRET", refresh: "+10 minutes",
+    id: "YOUTUBE_CLIENT_ID", secret: "YOUTUBE_CLIENT_SECRET", refresh: "+10 minutes", pkce: true,
     authorize: "https://accounts.google.com/o/oauth2/v2/auth",
     scope: "https://www.googleapis.com/auth/youtube.readonly",
     params: { access_type: "offline", prompt: "consent", include_granted_scopes: "true" },
@@ -54,32 +54,43 @@ function tokenKey(env) {
 }
 
 export const oauthReady = (env, p) => OAUTH.includes(p) && !!env?.[PROVIDERS[p].id] && !!env?.[PROVIDERS[p].secret] && !!tokenKey(env);
-const anyReady = env => OAUTH.some(p => oauthReady(env, p));
+const missing = e => /no such table/i.test(e?.message || ""); // migration uygulanmamış
+const ACCOUNT = "SELECT id FROM social_accounts WHERE user_id = ? AND platform = ?";
 
 export const redirectUri = (env, api, p) => `${String(env?.OAUTH_REDIRECT_BASE || api).replace(/\/+$/, "")}/oauth/${p}/callback`;
 
 // Bağlantı durumu: no_api ("veri yok"), not_configured ("yapılandırılmadı"), available, connected, error.
+// label görünen Türkçe metin; label_code panelin çevirebileceği sabit kod ("no_data", "not_configured", yoksa null).
 // Kaynak social_accounts: "connected" (son senkron hatalıysa "error") ya da "error"; pending/revoked → available.
+// Bağlı satır platform yapılandırılmamış olsa da (secret kaldırıldı) connected/error döner: kullanıcı bağı
+// koparabilmeli. Tablo yoksa (0001 uygulanmamış) bağlı satır yoktur.
 export async function listConnections(env, userId, platforms = [...OAUTH, "linkedin", "x", "twitch"]) {
   let rows = new Map();
-  if (anyReady(env)) {
-    const { results = [] } = await env.DB.prepare(
-      "SELECT platform, handle, status, error, updated_at FROM social_accounts WHERE user_id = ? AND status IN ('connected', 'error')",
-    ).bind(userId).all();
-    rows = new Map(results.map(r => [r.platform, r]));
+  if (env?.DB) {
+    try {
+      const { results = [] } = await env.DB.prepare(
+        "SELECT platform, handle, status, error, updated_at FROM social_accounts WHERE user_id = ? AND status IN ('connected', 'error')",
+      ).bind(userId).all();
+      rows = new Map(results.map(r => [r.platform, r]));
+    } catch (e) {
+      if (!missing(e)) throw e;
+    }
   }
   return platforms.map(p => {
-    if (!OAUTH.includes(p)) return { platform: p, status: "no_api", label: NO_DATA, handle: null, updated_at: null };
-    if (!oauthReady(env, p)) return { platform: p, status: "not_configured", label: NOT_CONFIGURED, handle: null, updated_at: null };
+    if (!OAUTH.includes(p)) return { platform: p, status: "no_api", label: NO_DATA, label_code: "no_data", handle: null, updated_at: null };
     const r = rows.get(p);
-    if (!r) return { platform: p, status: "available", label: null, handle: null, updated_at: null };
-    return { platform: p, status: r.status === "error" || r.error ? "error" : "connected", label: null, handle: r.handle ?? null, updated_at: r.updated_at };
+    if (r) return { platform: p, status: r.status === "error" || r.error ? "error" : "connected", label: null, label_code: null, handle: r.handle ?? null, updated_at: r.updated_at };
+    if (!oauthReady(env, p)) return { platform: p, status: "not_configured", label: NOT_CONFIGURED, label_code: "not_configured", handle: null, updated_at: null };
+    return { platform: p, status: "available", label: null, label_code: null, handle: null, updated_at: null };
   });
 }
 
-export function authorizeUrl(env, p, state, redirect) {
+// challenge: PKCE S256 (RFC 7636), yalnız pkce: true olan sağlayıcıda (YouTube). TikTok'un web Login Kit'i PKCE'yi
+// belgelemiyor (yalnız mobil ve masaüstü), Instagram Login de; ikisine gönderilmez.
+export function authorizeUrl(env, p, state, redirect, challenge = null) {
   const cfg = PROVIDERS[p], u = new URL(cfg.authorize);
   const q = { [cfg.idParam || "client_id"]: env[cfg.id], redirect_uri: redirect, response_type: "code", scope: cfg.scope, state, ...cfg.params };
+  if (challenge) Object.assign(q, { code_challenge: challenge, code_challenge_method: "S256" });
   for (const [k, v] of Object.entries(q)) u.searchParams.set(k, v);
   return u.toString();
 }
@@ -97,27 +108,47 @@ export function returnBase(env, origin, site) {
 
 // Tek kullanımlık state üretir, sağlayıcının onay sayfası adresini döndürür. c: {api, origin, site}
 // origin platform()'un izin verdiği site (brandcorner.co ya da önizlemesi); dönüş adresi returnBase ile kaydedilir.
+// PKCE'li sağlayıcıda code_verifier şifreli olarak state satırına yazılır, takasta (finishOAuth) gönderilir.
 export async function startOAuth(env, userId, p, { api, origin, site }) {
   const state = b64u(crypto.getRandomValues(new Uint8Array(32))), redirect = redirectUri(env, api, p);
+  const verifier = PROVIDERS[p].pkce ? b64u(crypto.getRandomValues(new Uint8Array(32))) : null;
   await env.DB.batch([
     env.DB.prepare("DELETE FROM oauth_states WHERE expires_at <= datetime('now')"),
-    env.DB.prepare("INSERT INTO oauth_states (state_hash, user_id, platform, return_to, redirect_uri, expires_at) VALUES (?, ?, ?, ?, ?, datetime('now', ?))")
-      .bind(await sha256(state), userId, p, `${returnBase(env, origin, site)}/panel`, redirect, `+${STATE_MINUTES} minutes`),
+    env.DB.prepare(
+      "INSERT INTO oauth_states (state_hash, user_id, platform, return_to, redirect_uri, code_verifier, expires_at) VALUES (?, ?, ?, ?, ?, ?, datetime('now', ?))",
+    ).bind(await sha256(state), userId, p, `${returnBase(env, origin, site)}/panel`, redirect,
+      verifier && await encrypt(env, verifier), `+${STATE_MINUTES} minutes`),
   ]);
-  return authorizeUrl(env, p, state, redirect);
+  return authorizeUrl(env, p, state, redirect, verifier && await pkceChallenge(verifier));
 }
+export const pkceChallenge = async verifier => b64u(new Uint8Array(await crypto.subtle.digest("SHA-256", enc.encode(verifier))));
 
-// Bağı koparır: token silinir, social_accounts "revoked" olur ve platform kimliği boşalır (hesap başka
-// kullanıcıya bağlanabilir). Platform yapılandırılmamış olsa da çalışır. Ardından sağlayıcıda izin geri
-// alınmaya çalışılır (TikTok, Google); olmazsa yine de bağ kopmuştur. Instagram'ın iptal ucu yok,
-// kullanıcı izni Instagram ayarlarından kaldırır.
+// Bağı koparır: token silinir, hesabın ölçümleri (metric_snapshots) silinir, link ölçümlerinin hesap bağı
+// kopar, social_accounts "revoked" olur ve platform kimliği boşalır (hesap başka kullanıcıya bağlanabilir).
+// Platform yapılandırılmamış olsa da çalışır; 0002 uygulanmamışsa (oauth_tokens yok) silinecek token yoktur,
+// bağ yine koparılır; 0001 de yoksa yapılacak bir şey yoktur. Ardından sağlayıcıda izin geri alınmaya
+// çalışılır (TikTok, Google); olmazsa yine de bağ kopmuştur. Instagram'ın iptal ucu yok, kullanıcı izni
+// Instagram ayarlarından kaldırır.
 export async function disconnectOAuth(env, userId, p, f = fetch) {
-  const row = await env.DB.prepare("SELECT access_token, refresh_token FROM oauth_tokens WHERE user_id = ? AND platform = ?").bind(userId, p).first();
-  await env.DB.batch([
-    env.DB.prepare("DELETE FROM oauth_tokens WHERE user_id = ? AND platform = ?").bind(userId, p),
-    env.DB.prepare("UPDATE social_accounts SET status = 'revoked', external_id = NULL, error = NULL, updated_at = datetime('now') WHERE user_id = ? AND platform = ?")
-      .bind(userId, p),
-  ]);
+  let row = null, tokens = true;
+  try {
+    row = await env.DB.prepare("SELECT access_token, refresh_token FROM oauth_tokens WHERE user_id = ? AND platform = ?").bind(userId, p).first();
+  } catch (e) {
+    if (!missing(e)) throw e;
+    tokens = false;
+  }
+  try {
+    await env.DB.batch([
+      ...(tokens ? [env.DB.prepare("DELETE FROM oauth_tokens WHERE user_id = ? AND platform = ?").bind(userId, p)] : []),
+      env.DB.prepare(`DELETE FROM metric_snapshots WHERE account_id IN (${ACCOUNT})`).bind(userId, p),
+      env.DB.prepare(`UPDATE link_snapshots SET account_id = NULL WHERE account_id IN (${ACCOUNT})`).bind(userId, p),
+      env.DB.prepare("UPDATE social_accounts SET status = 'revoked', external_id = NULL, error = NULL, updated_at = datetime('now') WHERE user_id = ? AND platform = ?")
+        .bind(userId, p),
+    ]);
+  } catch (e) {
+    if (tokens || !missing(e)) throw e;
+    return;
+  }
   if (!row || !REVOKE[p] || !oauthReady(env, p)) return;
   try {
     const [url, init] = REVOKE[p](env, await decrypt(env, row.access_token), await decrypt(env, row.refresh_token));
@@ -149,8 +180,8 @@ const form = obj => ({ method: "POST", headers: { "content-type": "application/x
 const bearer = token => ({ headers: { authorization: `Bearer ${token}` } });
 const igUrl = (path, q) => `${IG_API}/${path}?${new URLSearchParams(q)}`;
 
-// Dönüş: {access_token, refresh_token, expires_in, scope}
-export async function exchangeCode(env, p, code, redirect, f = fetch) {
+// Dönüş: {access_token, refresh_token, expires_in, scope}. verifier: PKCE code_verifier (yalnız YouTube).
+export async function exchangeCode(env, p, code, redirect, f = fetch, verifier = null) {
   const cfg = PROVIDERS[p], id = env[cfg.id], secret = env[cfg.secret];
   if (p === "instagram") {
     const b = await json(f, "https://api.instagram.com/oauth/access_token",
@@ -162,7 +193,10 @@ export async function exchangeCode(env, p, code, redirect, f = fetch) {
     return { access_token: long.access_token, refresh_token: null, expires_in: long.expires_in, scope: [].concat(short.permissions ?? []).join(",") || cfg.scope };
   }
   const url = p === "tiktok" ? `${TT}/oauth/token/` : "https://oauth2.googleapis.com/token";
-  const b = await json(f, url, form({ [cfg.idParam || "client_id"]: id, client_secret: secret, grant_type: "authorization_code", redirect_uri: redirect, code }));
+  const b = await json(f, url, form({
+    [cfg.idParam || "client_id"]: id, client_secret: secret, grant_type: "authorization_code", redirect_uri: redirect, code,
+    ...(verifier ? { code_verifier: verifier } : {}),
+  }));
   if (!b.access_token) throw new ProviderError("token");
   return { access_token: b.access_token, refresh_token: b.refresh_token ?? null, expires_in: b.expires_in, scope: b.scope ?? cfg.scope };
 }
@@ -285,8 +319,8 @@ export async function decrypt(env, box) {
 const expiry = t => (num(t.expires_in) === null ? null : `+${Math.floor(num(t.expires_in))} seconds`);
 
 // Bağlı hesabın güncel metrikleri; süresi dolmak üzere olan token önce yenilenir.
-// Sonuç social_accounts'a yazılır (hata kodu ya da güncel kullanıcı adı). Ölçümleri metric_snapshots'a
-// kaydetmek ve günlük senkron sonraki PR'da.
+// Sonuç social_accounts'a yazılır (hata kodu ya da güncel kullanıcı adı); ölçümleri syncDue metric_snapshots'a
+// yazar.
 // Okuma ile yazma arasında hesap yeniden bağlanabilir ya da token başka bir senkronla yenilenebilir. Yazımlar
 // okunan token'a ve platform kimliğine bağlı (karşılaştır-yaz): eski hesabın token'ı ya da kullanıcı adı yenisinin
 // üstüne yazılmaz. Hata yazımı da o an geçerli token'a bağlı: başka bir senkron token'ı yenilediyse ya da hesap
@@ -329,6 +363,70 @@ export async function syncAccount(env, userId, p, f = fetch) {
   }
 }
 
+// Günlük senkron (cron, src/index.js): bağlı hesaplar günde bir senkronlanır, ölçümler metric_snapshots'a yazılır.
+// Ücretsiz planda çağrı başına 50 dış istek ve 50 D1 sorgusu var: bir çalıştırmada en fazla `max` hesap,
+// sağlayıcı çağrılarının tahmini toplamı (COST, yenileme dahil) en fazla `budget` ve D1 ifadeleri (vade listesi,
+// alınan hesap başına en kötü SYNC_D1, kirası başkasında olan hesap başına 1) en fazla `d1`. Sığmayanlar sonraki saate kalır.
+// Kira: hesap 15 dakikalığına alınır (next_sync_at), aynı anda tek senkron olur ve iki senkron aynı refresh token'ı
+// harcamaz. Ölçüm yalnızca kira hâlâ bizdeyse, hesap bağlıysa ve platform kimliği aynıysa yazılır; hesap yeniden
+// bağlanınca kira düşer (finishOAuth next_sync_at'i NULL yapar), eski hesabın ölçümü yeni hesaba yazılmaz.
+const COST = { instagram: 15, tiktok: 3, youtube: 4 }; // profil + gönderiler (Instagram: gönderi başına insights) + yenileme
+const NEXT = { ok: "+1435 minutes", fail: "+355 minutes", changed: "+55 minutes" }; // saatlik cron'da ~1 gün, ~6 saat, ~1 saat
+export const SYNC_MIN = Math.min(...Object.values(COST));
+export const SYNC_D1 = 6; // kira, token, yenileme, son senkron işareti, ölçüm + kira bırakma (batch)
+export async function syncDue(env, f = fetch, { budget = 40, max = 5, d1 = 50 } = {}) {
+  const out = { synced: 0, failed: 0, changed: 0, busy: 0, deferred: 0 };
+  const ready = OAUTH.filter(p => oauthReady(env, p));
+  if (!ready.length || budget < SYNC_MIN || max < 1 || d1 < 1 + SYNC_D1) return out;
+  const { results = [] } = await env.DB.prepare(
+    `SELECT id, user_id, platform FROM social_accounts
+     WHERE status = 'connected' AND external_id IS NOT NULL AND platform IN (${ready.map(() => "?").join(", ")})
+       AND (next_sync_at IS NULL OR next_sync_at <= datetime('now'))
+     ORDER BY next_sync_at IS NOT NULL, next_sync_at, id LIMIT 20`,
+  ).bind(...ready).all();
+  let spent = 0, picked = 0, used = 1;
+  for (const a of results) {
+    if (picked >= max || spent + COST[a.platform] > budget || used + SYNC_D1 > d1) { out.deferred++; continue; }
+    used++;
+    try {
+      const lease = await env.DB.prepare(
+        `UPDATE social_accounts SET next_sync_at = datetime('now', '+15 minutes')
+         WHERE id = ? AND status = 'connected' AND (next_sync_at IS NULL OR next_sync_at <= datetime('now')) RETURNING next_sync_at`,
+      ).bind(a.id).first();
+      if (!lease) { out.busy++; continue; }
+      spent += COST[a.platform];
+      used += SYNC_D1 - 1;
+      picked++;
+      const release = next => env.DB.prepare("UPDATE social_accounts SET next_sync_at = datetime('now', ?) WHERE id = ? AND next_sync_at = ?")
+        .bind(next, a.id, lease.next_sync_at);
+      let m;
+      try {
+        m = await syncAccount(env, a.user_id, a.platform, f);
+      } catch (e) {
+        const changed = e instanceof ProviderError && e.code === "changed";
+        out[changed ? "changed" : "failed"]++;
+        console.log("sync", a.platform, e instanceof ProviderError ? e.code : "error");
+        await release(changed ? NEXT.changed : NEXT.fail).run();
+        continue;
+      }
+      const [ins] = await env.DB.batch([
+        env.DB.prepare(
+          `INSERT INTO metric_snapshots (account_id, source, followers, avg_views, avg_likes, avg_comments, posts_sampled)
+           SELECT id, 'oauth', ?, ?, ?, ?, ? FROM social_accounts
+           WHERE id = ? AND status = 'connected' AND external_id = ? AND next_sync_at = ?`,
+        ).bind(m.followers, m.avg_views, m.avg_likes, m.avg_comments, m.posts_sampled, a.id, m.external_id, lease.next_sync_at),
+        release(NEXT.ok),
+      ]);
+      out[ins.meta?.changes ? "synced" : "changed"]++;
+    } catch (e) {
+      out.failed++;
+      console.log("sync", a.platform, "db", e?.message?.slice(0, 80));
+    }
+  }
+  if (out.deferred) console.log("sync deferred", out.deferred); // sonraki saatte
+  return out;
+}
+
 // ---- Sağlayıcı dönüşü: GET /oauth/<platform>/callback?code=…&state=… ----
 
 const page = (body, status) => new Response(body, { status, headers: { "content-type": "text/plain; charset=utf-8", "cache-control": "no-store" } });
@@ -367,30 +465,38 @@ export class OAuthFail extends Error {
 }
 
 // POST /app/connect/finish {ticket}: bileti getiren oturum akışı başlatan kullanıcı değilse bilet yine
-// yanar ve hiçbir şey bağlanmaz (forbidden). Platform hesabı başka kullanıcıya bağlıysa "taken".
+// yanar ve hiçbir şey bağlanmaz (ticket_owner, 403). Platform hesabı başka kullanıcıya bağlıysa "taken".
 export async function finishOAuth(env, userId, ticket, f = fetch) {
   if (typeof ticket !== "string" || !TOKEN_RE.test(ticket)) throw new OAuthFail("ticket");
   const st = await env.DB.prepare(
-    "DELETE FROM oauth_states WHERE ticket_hash = ? AND expires_at > datetime('now') RETURNING user_id, platform, code, redirect_uri",
+    "DELETE FROM oauth_states WHERE ticket_hash = ? AND expires_at > datetime('now') RETURNING user_id, platform, code, redirect_uri, code_verifier",
   ).bind(await sha256(ticket)).first();
   if (!st) throw new OAuthFail("ticket");
-  if (Number(st.user_id) !== Number(userId)) throw new OAuthFail("forbidden", 403);
+  if (Number(st.user_id) !== Number(userId)) throw new OAuthFail("ticket_owner", 403);
   const p = st.platform;
   if (!oauthReady(env, p)) throw new OAuthFail("not_configured", 409);
   try {
-    const t = await exchangeCode(env, p, await decrypt(env, st.code), st.redirect_uri, f);
+    const verifier = st.code_verifier ? await decrypt(env, st.code_verifier) : null;
+    const t = await exchangeCode(env, p, await decrypt(env, st.code), st.redirect_uri, f, verifier);
     const prof = await fetchProfile(p, t.access_token, f);
     if (!prof.external_id) throw new ProviderError("no_id");
     const other = await env.DB.prepare("SELECT 1 FROM social_accounts WHERE platform = ? AND external_id = ? AND user_id <> ?")
       .bind(p, prof.external_id, userId).first();
     // Sağlayıcıda iptal yapılmaz: Google'da bu, hesabı bağlı tutan diğer kullanıcının iznini de kaldırır.
     if (other) throw new OAuthFail("taken", 409);
+    // Upsert social_accounts.id'yi korur. Kullanıcı bu platformda başka bir hesap bağlıyorsa (ya da bağ
+    // koparılmışsa) önceki hesabın ölçümleri silinir ve link ölçümlerinin hesap bağı kopar; eski hesabın
+    // takipçisi yeni hesapta görünmez. Aynı hesap yeniden bağlanırsa ölçümler kalır. next_sync_at NULL:
+    // yeni bağ hemen senkronlanır, süren bir senkronun kirası düşer (syncDue ölçüm yazmaz).
+    const old = `${ACCOUNT} AND (external_id IS NULL OR external_id <> ?)`;
     await env.DB.batch([
+      env.DB.prepare(`DELETE FROM metric_snapshots WHERE account_id IN (${old})`).bind(userId, p, prof.external_id),
+      env.DB.prepare(`UPDATE link_snapshots SET account_id = NULL WHERE account_id IN (${old})`).bind(userId, p, prof.external_id),
       env.DB.prepare(
         `INSERT INTO social_accounts (user_id, platform, handle, external_id, status, connected_at, error)
          VALUES (?, ?, ?, ?, 'connected', datetime('now'), NULL)
          ON CONFLICT (user_id, platform) DO UPDATE SET handle = excluded.handle, external_id = excluded.external_id,
-           status = 'connected', connected_at = excluded.connected_at, error = NULL, updated_at = datetime('now')`,
+           status = 'connected', connected_at = excluded.connected_at, error = NULL, next_sync_at = NULL, updated_at = datetime('now')`,
       ).bind(userId, p, prof.handle ?? null, prof.external_id),
       env.DB.prepare(
         `INSERT INTO oauth_tokens (user_id, platform, access_token, refresh_token, expires_at, scope)

@@ -45,7 +45,7 @@ const EN = lookup(NICHES.map(n => [fold(DICT[n].en), n]));
 
 // Yalnızca kendisi eşleşir: kökü sık kelimelere karışır (cars→çarşı/çarşamba, style→styles, araç→araçlar "aletler", gebe→geber-)
 const EXACT = new Set(["cars", "style", "arac", "gebe"]);
-// Kısa Türkçe terimler yalnızca bu eklerle eşleşir (rujum, saçlarım, şefler, stilini; "still", "saçma", "sefer" eşleşmez)
+// Kısa Türkçe terimler yalnızca bu eklerle eşleşir (rujum, saçlarım, şefler, stilini, stiller; "still", "saçma", "sefer" eşleşmez)
 const SHORT = new Set(["ruj", "oje", "sef", "sac", "stil"]);
 const SHORT_SUF = new Set(["i", "u", "im", "um", "in", "un", "ini", "unu", "lar", "ler", "lari", "leri", "larim", "lerim"]);
 // Sıfat gibi kullanılan genel kelimeler düz metinde konu sayılmaz (tatlım, doğal olarak, naturally, günlük hayat);
@@ -54,7 +54,7 @@ const TAG_ONLY = new Set(["tatli", "dogal", "natural", "naturel", "gunluk"]);
 // Sözlük köküyle başlayan ama konuyla ilgisi olmayan sık kelimeler (takı→takip/takım/takıldı, kamp→kampanya, koşu→koşul,
 // yoga→yoğurt, tarif→tarife, örgü→örgüt, rota→rotasyon, oyun→oyuncu, krem→krema, doğal→doğalgaz, karbon→karbonhidrat)
 const NOT_STEM = ["takip", "takib", "takim", "takild", "takili", "takilm", "takint", "kampanya", "kampus", "kosul", "kosun", "yogurt",
-  "tarife", "still", "carsamba", "carsi", "orgut", "rotasyon", "aracil", "oyuncu", "krema", "kremlin", "dogalgaz", "karbonhid", "karbonat"];
+  "tarife", "carsamba", "carsi", "orgut", "rotasyon", "aracil", "oyuncu", "krema", "kremlin", "dogalgaz", "karbonhid", "karbonat"];
 
 // Sözlük: tek kelimelik terimler (çok kelimeli ifadeler bitişik yazımıyla da) + ifadeler (ilk kelimeye göre)
 const TERMS = new Map(), PHRASES = new Map();
@@ -78,6 +78,9 @@ for (const [w, n] of TERMS) {
 STEMS.sort((a, b) => b[0].length - a[0].length);
 // Birleşik hashtag'lerde aranacak 5+ harfli terimler (#sabahrutinim, #yemektarifleri, #streetstyle)
 const INNER = [...TERMS].filter(([w]) => w.length >= 5).sort((a, b) => b[0].length - a[0].length);
+// İç aramadan önce silinen kelimeler: terimi içerir ama o konu değildir (#plastiksizhayat → lastik, #filmmaker → maker)
+const INNER_NOT = ["plastik", "elastik", "filmmaker", "moviemaker", "playmaker", "moneymaker", "matchmaker", "newsmaker",
+  "troublemaker", "peacemaker", "beatmaker", "hitmaker", "kingmaker"];
 
 const REL = new Map();
 for (const [a, b, w] of RELATED) { REL.set(`${a}|${b}`, w); REL.set(`${b}|${a}`, w); }
@@ -97,7 +100,9 @@ function wordNiche(w, hashtag) {
     return !hashtag && TAG_ONLY.has(term) ? null : niche;
   }
   // Birleşik hashtag: içinde 5+ harfli bir terim geçiyorsa
-  if (hashtag) for (const [term, niche] of INNER) if (w.includes(term)) return niche;
+  if (!hashtag) return null;
+  const v = INNER_NOT.reduce((s, x) => s.replaceAll(x, " "), w);
+  for (const [term, niche] of INNER) if (v.includes(term)) return niche;
   return null;
 }
 
@@ -114,10 +119,15 @@ function phraseAt(words, i) {
   return null;
 }
 
+// Deyimler ve sayıyla gelen "cilt" (kitap cildi) konu sayılmaz: "art arda", "bal gibi", "2. cilt", "3 ciltlik".
+// Sayı ile cilt aynı satırda olmalı ve ardından bakım/tip/ürün gelmemeli ("10 cilt bakımı önerisi" konu sayılır).
+// Ayraç tek anlamlı ([ \t]* ve isteğe bağlı nokta): uzun boşluk dizisinde geri izleme doğrusal kalır.
+const IDIOM = /(?<![\p{L}\p{N}])(?:art\s+ard\p{L}*|bal\s+gibi|\p{N}+[ \t]*(?:\.[ \t]*)?cil[td]\p{L}*(?![ \t]+(?:bak|tip|urun|ser|sag|nem|kur|lek)))(?![\p{L}\p{N}])/gu;
+
 // Metinden konu puanları: { niches: [{ tag, score (0-100, paylar toplamı ~100) }], matched }
 export function classify(input) {
   const raw = Array.isArray(input) ? input.join("\n") : String(input ?? "");
-  const text = fold(raw.slice(0, 20000));
+  const text = fold(raw.slice(0, 20000)).replace(/https?:\/\/\S+|www\.\S+|@[\w.]+/g, " ");
   const score = {};
   // Aynı kelime, ifade ya da hashtag metin boyunca en çok 3 kez sayılır (tekrar tek başına konuyu belirlemesin)
   const counted = new Map();
@@ -128,7 +138,7 @@ export function classify(input) {
   };
   const hashtags = [...text.matchAll(/#([\p{L}\p{N}_]{2,60})/gu)].map(m => m[1].replace(/_/g, ""));
   for (const h of hashtags.slice(0, 200)) { const n = wordNiche(h, true); if (n) add(`#${h}`, n, 2); }
-  const plain = text.replace(/#[\p{L}\p{N}_]+/gu, " ").replace(/https?:\/\/\S+|@[\w.]+/g, " ");
+  const plain = text.replace(/#[\p{L}\p{N}_]+/gu, " ").replace(IDIOM, " ");
   const words = plain.split(/[^\p{L}\p{N}]+/u).filter(w => w.length >= 2).slice(0, 3000);
   for (let i = 0; i < words.length; i++) {
     const hit = phraseAt(words, i);
@@ -142,13 +152,15 @@ export function classify(input) {
   return { niches, matched: total };
 }
 
-// Kampanyanın serbest metin etiketini sözlükteki konulara bağlar ("Skincare", "#güzellik", "Moda & Güzellik", "Home & Living")
+// Kampanyanın serbest metin etiketini sözlükteki konulara bağlar ("Skincare", "#güzellik", "Moda & Güzellik", "Moda-Güzellik",
+// "Home & Living"). Tireli etiketin bitişik yazımı bir terimse ("self-care", "e-spor") bölünmez.
 export function resolveNiches(tag) {
   const f = fold(tag).replace(/#/g, " ").replace(/\s+/g, " ").trim();
   if (!f) return [];
   const known = KEY[f] || EN[f];
   if (known) return [known];
-  const parts = f.split(/\s*[&,/+|]\s*|\s+(?:ve|and)\s+/).filter(Boolean);
+  if (f.includes("-")) { const j = TERMS.get(f.replace(/[\s-]+/g, "")); if (j) return [j]; }
+  const parts = f.split(/\s*[&,/+|-]\s*|\s+(?:ve|and)\s+/).filter(Boolean);
   if (parts.length > 1) return [...new Set(parts.flatMap(resolveNiches))];
   if (!f.includes(" ")) { const n = wordNiche(f, true); return n ? [n] : []; }
   // Çok kelimeli etiket: bitişik yazımı bir terimse o, değilse metinden çıkan bütün konular
@@ -169,22 +181,24 @@ export function campaignNiches(camp) {
 
 // Uyum (0-100): içeriğin ne kadarı kampanyanın konularında (%70) + kampanyanın konularının ne kadarı içerikte var (%30).
 // İçerik kampanyanın ana konusundaysa tam, yalnızca yarım ağırlıklı (brief'ten çıkan) konusundaysa kısmi puan alır.
-// Konu çıkmazsa null ("veri yok").
+// Konu çıkmazsa null ("veri yok"). label_code: "fit" ya da "no_data". Geçersiz konu öğeleri (tag metin değil,
+// score sonlu ve pozitif değil) yok sayılır.
 export function fit(contentNiches, camp) {
   const want = campaignNiches(camp), keys = Object.keys(want);
-  const have = (contentNiches || []).filter(x => x.score > 0);
-  if (!keys.length || !have.length) return { fit: null, label: "veri yok" };
+  const have = (Array.isArray(contentNiches) ? contentNiches : [])
+    .filter(x => x && typeof x.tag === "string" && Number.isFinite(x.score) && x.score > 0);
+  if (!keys.length || !have.length) return { fit: null, label: "veri yok", label_code: "no_data" };
   const total = have.reduce((a, x) => a + x.score, 0);
   const maxW = Math.max(...keys.map(k => want[k]));
   const precision = have.reduce((a, x) => a + (x.score / total) * Math.max(...keys.map(k => (sim(x.tag, k) * want[k]) / maxW)), 0);
   const wsum = keys.reduce((a, k) => a + want[k], 0);
   const recall = keys.reduce((a, k) => a + want[k] * Math.max(0, ...have.filter(x => x.score >= 10).map(x => sim(x.tag, k))), 0) / wsum;
   const value = Math.round(100 * (0.7 * precision + 0.3 * recall));
-  return { fit: value, label: `%${value} uyum` };
+  return { fit: value, label: `%${value} uyum`, label_code: "fit" };
 }
 
 // Tek çağrı: metin (açıklama + hashtag'ler) → konular + kampanyaya uyum
 export function analyze(text, camp) {
   const { niches } = classify(text);
-  return { niches, ...(camp ? fit(niches, camp) : { fit: null, label: "veri yok" }) };
+  return { niches, ...(camp ? fit(niches, camp) : { fit: null, label: "veri yok", label_code: "no_data" }) };
 }

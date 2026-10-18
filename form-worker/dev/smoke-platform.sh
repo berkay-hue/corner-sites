@@ -1,6 +1,8 @@
 #!/bin/bash
-# brandcorner platform API'si için yerel duman testi. Yalnızca wrangler dev'e karşı çalıştırın:
+# brandcorner platform API'si için yerel duman testi. Yalnızca wrangler dev'e karşı çalıştırın
+# (komutları form-worker/ klasöründen çalıştırın):
 #   wrangler d1 execute corner-forms --local --file=schema.sql
+#   wrangler d1 migrations apply corner-forms --local   (0001–0003; metrik ve OAuth tabloları)
 #   node dev/fake-smtp.mjs 2525 /tmp/mails > /tmp/smtp.log &
 #   wrangler dev --local --port 8799 --var DEV_ORIGINS:http://localhost:8788 \
 #     --var SMTP_HOST:127.0.0.1 --var SMTP_PORT:2525 --var SMTP_TLS:off --var SMTP_PASS:dev > /tmp/wd.log 2>&1

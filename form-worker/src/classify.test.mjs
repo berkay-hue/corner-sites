@@ -118,10 +118,51 @@ test("classify: girdi 20000 karakterde kesilir", () => {
   assert.deepEqual(classify("a ".repeat(9990) + "#oyun"), { niches: [{ tag: "oyun", score: 100 }], matched: 2 });
 });
 
+test("classify: en çok 200 hashtag ve 3000 kelime okunur", () => {
+  assert.deepEqual(classify("#aa ".repeat(200) + "#oyun"), { niches: [], matched: 0 });
+  assert.deepEqual(classify("#aa ".repeat(199) + "#oyun"), { niches: [{ tag: "oyun", score: 100 }], matched: 2 });
+  assert.deepEqual(classify("aa ".repeat(3000) + "oyun"), { niches: [], matched: 0 });
+  assert.deepEqual(classify("aa ".repeat(2999) + "oyun"), { niches: [{ tag: "oyun", score: 100 }], matched: 1 });
+});
+
+test("classify: birleşik hashtag içindeki ilgisiz kelime terim sayılmaz", () => {
+  assert.deepEqual(classify("#plastiksizhayat"), { niches: [], matched: 0 }); // lastik değil
+  assert.deepEqual(classify("#elastikbant"), { niches: [], matched: 0 });
+  assert.deepEqual(classify("#filmmaker"), { niches: [], matched: 0 }); // maker değil
+  assert.deepEqual(tags(classify("#coffeemaker")), ["yemek"]); // kahve yine eşleşir
+  assert.deepEqual(tags(classify("#makeuplover")), ["güzellik"]);
+});
+
+test("classify: deyimler ve kitap cildi konu sayılmaz", () => {
+  for (const t of ["art arda", "Art arda üç video", "bal gibi", "2. cilt", "3 ciltlik set", "1.cilt"]) assert.deepEqual(classify(t), { niches: [], matched: 0 }, t);
+  assert.deepEqual(tags(classify("bal")), ["doğal ürünler"]);
+  assert.deepEqual(tags(classify("cildim kuru")), ["cilt bakımı"]);
+  for (const t of ["10 Cilt Bakımı Önerisi", "5 cilt bakımı hatası", "3 cilt tipi için öneriler", "30 Cilt Bakım Ürünü Denedim",
+    "Rutinim:\n1. Cilt bakımı", "Bölüm 3\nCilt bakımı rutinim"]) assert.equal(tags(classify(t))[0], "cilt bakımı", t);
+});
+
 test("classify: çok uzun girdi hızlı biter", () => {
   const t0 = performance.now();
   for (let i = 0; i < 20; i++) classify("bugün yeni bir kombin denedim #ciltbakımrutini ".repeat(500) + i);
   assert.ok(performance.now() - t0 < 1000);
+});
+
+test("classify: rakamdan sonra uzun boşluk dizisi hızlı biter (deyim regex'i geri izlemez)", () => {
+  const t0 = performance.now();
+  for (const sp of [" ", "\n", "\t", ". "]) classify("1" + sp.repeat(Math.floor(19999 / sp.length)));
+  classify("art" + " ".repeat(19997));
+  assert.ok(performance.now() - t0 < 250);
+});
+
+test("classify: kısa terim stil çoğul ekiyle eşleşir, still eşleşmez", () => {
+  assert.deepEqual(tags(classify("stiller")), ["moda"]);
+  assert.deepEqual(classify("still"), { niches: [], matched: 0 });
+});
+
+test("classify: link içindeki # hashtag sayılmaz", () => {
+  assert.deepEqual(classify("https://x.com/a#oyun"), { niches: [], matched: 0 });
+  assert.deepEqual(classify("www.x.com/#oyun"), { niches: [], matched: 0 });
+  assert.deepEqual(tags(classify("@kullanici #oyun")), ["oyun"]);
 });
 
 test("resolveNiche: TR, EN, hashtag ve serbest etiket", () => {
@@ -137,6 +178,12 @@ test("resolveNiches: birleşik etiketler bölünür", () => {
   assert.deepEqual(resolveNiches("Moda & Güzellik"), ["moda", "güzellik"]);
   assert.deepEqual(resolveNiches("Moda, güzellik ve seyahat"), ["moda", "güzellik", "seyahat"]);
   assert.equal(resolveNiche("Moda & Güzellik"), "moda");
+  assert.deepEqual(resolveNiches("Moda-Güzellik"), ["moda", "güzellik"]);
+  assert.deepEqual(resolveNiches("moda - güzellik"), ["moda", "güzellik"]);
+  // Bitişik yazımı terim olan tireli etiket bölünmez
+  assert.deepEqual(resolveNiches("self-care"), ["yaşam tarzı"]);
+  assert.deepEqual(resolveNiches("e-spor"), ["oyun"]);
+  assert.deepEqual(resolveNiches("cilt-bakımı"), ["cilt bakımı"]);
   assert.deepEqual(resolveNiches("xyzzy"), []);
 });
 
@@ -153,29 +200,36 @@ test("campaignNiches: etiket tam, başlık/brief yarım ağırlık", () => {
 
 test("fit: aynı konu 100, yakın konu kısmi, ilgisiz 0", () => {
   const skin = classify("#skincare serum").niches;
-  assert.deepEqual(fit(skin, { niches: ["cilt bakımı"] }), { fit: 100, label: "%100 uyum" });
-  assert.deepEqual(fit(classify("cilt bakımı serum nemlendirici #skincare #makyaj").niches, { niches: ["güzellik"] }), { fit: 80, label: "%80 uyum" });
-  assert.deepEqual(fit(classify("#oyun valorant").niches, { niches: ["cilt bakımı"] }), { fit: 0, label: "%0 uyum" });
+  assert.deepEqual(fit(skin, { niches: ["cilt bakımı"] }), { fit: 100, label: "%100 uyum", label_code: "fit" });
+  assert.deepEqual(fit(classify("cilt bakımı serum nemlendirici #skincare #makyaj").niches, { niches: ["güzellik"] }), { fit: 80, label: "%80 uyum", label_code: "fit" });
+  assert.deepEqual(fit(classify("#oyun valorant").niches, { niches: ["cilt bakımı"] }), { fit: 0, label: "%0 uyum", label_code: "fit" });
   const r = fit(skin, { niches: ["güzellik"] }).fit;
   assert.ok(r > 0 && r < 100);
 });
 
 test("fit: kampanyanın ana konusu yan konudan ağır basar", () => {
   const camp = { niches: ["oyun"], title: "Serum" }; // oyun 1, cilt bakımı 0.5
-  assert.deepEqual(fit(classify("#skincare serum").niches, camp), { fit: 45, label: "%45 uyum" });
+  assert.deepEqual(fit(classify("#skincare serum").niches, camp), { fit: 45, label: "%45 uyum", label_code: "fit" });
   assert.equal(fit(classify("#oyun valorant").niches, camp).fit, 90);
 });
 
 test("fit: veri yoksa skor yok", () => {
-  const none = { fit: null, label: "veri yok" };
+  const none = { fit: null, label: "veri yok", label_code: "no_data" };
   assert.deepEqual(fit([], { niches: ["oyun"] }), none);
   assert.deepEqual(fit(null, { niches: ["oyun"] }), none);
   assert.deepEqual(fit(classify("#oyun").niches, {}), none);
   assert.deepEqual(fit(classify("#oyun").niches, { niches: ["xyzzy"] }), none);
 });
 
+test("fit: geçersiz konu öğeleri yok sayılır", () => {
+  const none = { fit: null, label: "veri yok", label_code: "no_data" }, camp = { niches: ["oyun"] };
+  for (const n of [[{ tag: "oyun", score: "100" }], [null, 5, { tag: 3, score: 50 }], [{ tag: "oyun", score: NaN }],
+    [{ tag: "oyun", score: Infinity }], "oyun", { tag: "oyun", score: 1 }]) assert.deepEqual(fit(n, camp), none);
+  assert.deepEqual(fit([{ tag: "oyun", score: 40 }, { score: 60 }], camp), { fit: 100, label: "%100 uyum", label_code: "fit" });
+});
+
 test("analyze: metin + kampanya tek çağrı", () => {
-  assert.deepEqual(analyze("#travel otel plaj", { niches: ["seyahat"] }), { niches: [{ tag: "seyahat", score: 100 }], fit: 100, label: "%100 uyum" });
-  assert.deepEqual(analyze("#travel otel plaj"), { niches: [{ tag: "seyahat", score: 100 }], fit: null, label: "veri yok" });
-  assert.deepEqual(analyze("", { niches: ["seyahat"] }), { niches: [], fit: null, label: "veri yok" });
+  assert.deepEqual(analyze("#travel otel plaj", { niches: ["seyahat"] }), { niches: [{ tag: "seyahat", score: 100 }], fit: 100, label: "%100 uyum", label_code: "fit" });
+  assert.deepEqual(analyze("#travel otel plaj"), { niches: [{ tag: "seyahat", score: 100 }], fit: null, label: "veri yok", label_code: "no_data" });
+  assert.deepEqual(analyze("", { niches: ["seyahat"] }), { niches: [], fit: null, label: "veri yok", label_code: "no_data" });
 });

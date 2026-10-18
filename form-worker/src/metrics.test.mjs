@@ -108,10 +108,11 @@ test("accountMetrics örnek mod: D1'e dokunmaz, örnek ve veri yok etiketleri", 
   const m = await accountMetrics(env, 1, profile);
   assert.equal(m.mode, "sample");
   assert.equal(m.label, SAMPLE);
+  assert.equal(m.label_code, "sample");
   assert.equal(m.accounts.length, 2);
-  assert.deepEqual(m.accounts[0], { platform: "instagram", handle: "ayse", source: "sample", label: SAMPLE, ...sampleAccount("instagram", "ayse"), taken_at: null });
+  assert.deepEqual(m.accounts[0], { platform: "instagram", handle: "ayse", source: "sample", label: SAMPLE, label_code: "sample", ...sampleAccount("instagram", "ayse"), taken_at: null });
   assert.deepEqual(m.accounts[1], {
-    platform: "linkedin", handle: "ayse-li", source: "none", label: NO_DATA,
+    platform: "linkedin", handle: "ayse-li", source: "none", label: NO_DATA, label_code: "no_data",
     followers: null, avg_views: null, avg_likes: null, avg_comments: null, taken_at: null,
   });
   for (const p of [undefined, null, {}, { platforms: "x" }]) assert.deepEqual((await accountMetrics(env, 1, p)).accounts, []);
@@ -119,14 +120,14 @@ test("accountMetrics örnek mod: D1'e dokunmaz, örnek ve veri yok etiketleri", 
 
 test("linkMetrics örnek mod: link yoksa ya da platform resmi değilse veri yok", async () => {
   const env = {};
-  const none = { source: "none", label: NO_DATA, views: null, likes: null, comments: null, taken_at: null };
+  const none = { source: "none", label: NO_DATA, label_code: "no_data", views: null, likes: null, comments: null, taken_at: null };
   assert.deepEqual(await linkMetrics(env, { id: 1, content_url: null }), { mode: "sample", url: null, platform: null, ...none });
   assert.deepEqual(await linkMetrics(env, undefined), { mode: "sample", url: null, platform: null, ...none });
   const li = "https://www.linkedin.com/posts/a";
   assert.deepEqual(await linkMetrics(env, { id: 1, content_url: li }), { mode: "sample", url: li, platform: "linkedin", ...none });
   const ig = "https://www.instagram.com/p/abc/";
   assert.deepEqual(await linkMetrics(env, { id: 1, content_url: ig }), {
-    mode: "sample", url: ig, platform: "instagram", source: "sample", label: SAMPLE, ...sampleLink("instagram", ig), taken_at: null,
+    mode: "sample", url: ig, platform: "instagram", source: "sample", label: SAMPLE, label_code: "sample", ...sampleLink("instagram", ig), taken_at: null,
   });
 });
 
@@ -167,13 +168,14 @@ test("accountMetrics canlı mod: beyan sırası, son ölçüm, bağlı platform 
   const m = await accountMetrics(env, a, profile);
   assert.equal(m.mode, "live");
   assert.equal(m.label, null);
-  const empty = { source: "none", label: NO_DATA, followers: null, avg_views: null, avg_likes: null, avg_comments: null, taken_at: null };
+  assert.equal(m.label_code, null);
+  const empty = { source: "none", label: NO_DATA, label_code: "no_data", followers: null, avg_views: null, avg_likes: null, avg_comments: null, taken_at: null };
   assert.deepEqual(m.accounts, [
     { platform: "linkedin", handle: "li_real", ...empty },
-    { platform: "instagram", handle: "ig_real", source: "oauth", label: null, followers: 1500, avg_views: 300, avg_likes: 30, avg_comments: 3, taken_at: "2026-10-05 10:00:00" },
+    { platform: "instagram", handle: "ig_real", source: "oauth", label: null, label_code: null, followers: 1500, avg_views: 300, avg_likes: 30, avg_comments: 3, taken_at: "2026-10-05 10:00:00" },
     { platform: "tiktok", handle: "tt_real", ...empty },
     { platform: "x", handle: "x_profil", ...empty },
-    { platform: "youtube", handle: "yt_real", source: "oauth", label: null, followers: 7000, avg_views: 700, avg_likes: 70, avg_comments: 7, taken_at: "2026-10-02 08:00:00" },
+    { platform: "youtube", handle: "yt_real", source: "oauth", label: null, label_code: null, followers: 7000, avg_views: 700, avg_likes: 70, avg_comments: 7, taken_at: "2026-10-02 08:00:00" },
   ]);
   assert.deepEqual((await accountMetrics(env, 999, profile)).accounts.map(x => [x.platform, x.handle, x.label]), [
     ["linkedin", "li_profil", NO_DATA], ["instagram", "ig_profil", NO_DATA], ["tiktok", "tt_profil", NO_DATA],
@@ -186,7 +188,7 @@ test("linkMetrics canlı mod: aynı başvuru ve linkin son ölçümü", async ()
   const url = "https://www.tiktok.com/@a/video/1";
   const link = (appId, u, takenAt, views) => insert(db,
     "INSERT INTO link_snapshots (application_id, url, platform, taken_at, views, likes, comments) VALUES (?, ?, 'tiktok', ?, ?, 5, 1)", appId, u, takenAt, views);
-  const none = { source: "none", label: NO_DATA, views: null, likes: null, comments: null, taken_at: null };
+  const none = { source: "none", label: NO_DATA, label_code: "no_data", views: null, likes: null, comments: null, taken_at: null };
   assert.deepEqual(await linkMetrics(env, { id: 7, content_url: url }), { mode: "live", url, platform: "tiktok", ...none });
   assert.deepEqual(await linkMetrics(env, { id: 7, content_url: "" }), { mode: "live", url: null, platform: null, ...none });
   link(7, url, "2026-10-01 00:00:00", 100);
@@ -194,8 +196,18 @@ test("linkMetrics canlı mod: aynı başvuru ve linkin son ölçümü", async ()
   link(7, "https://www.tiktok.com/@a/video/eski", "2026-10-09 00:00:00", 999); // link değişti: eski ölçüm sayılmaz
   link(8, url, "2026-10-09 00:00:00", 888); // başka başvuru
   assert.deepEqual(await linkMetrics(env, { id: 7, content_url: url }), {
-    mode: "live", url, platform: "tiktok", source: "oauth", label: null, views: 300, likes: 5, comments: 1, taken_at: "2026-10-03 00:00:00",
+    mode: "live", url, platform: "tiktok", source: "oauth", label: null, label_code: null, views: 300, likes: 5, comments: 1, taken_at: "2026-10-03 00:00:00",
   });
+});
+
+test("linkMetrics canlı mod: resmi API'si olmayan ya da tanınmayan linke tablodaki ölçüm gösterilmez", async () => {
+  const db = freshDb(), env = { DB: d1(db), METRICS_ENABLED: "1" };
+  const none = { source: "none", label: NO_DATA, label_code: "no_data", views: null, likes: null, comments: null, taken_at: null };
+  const cases = [["https://www.linkedin.com/posts/a", "linkedin"], ["https://x.com/a/status/1", "x"], ["https://twitch.tv/a", "twitch"], ["https://ornek.co/v/1", null]];
+  for (const [url, p] of cases) {
+    insert(db, "INSERT INTO link_snapshots (application_id, url, platform, taken_at, views, likes, comments) VALUES (7, ?, ?, '2026-10-03 00:00:00', 300, 5, 1)", url, p ?? "instagram");
+    assert.deepEqual(await linkMetrics(env, { id: 7, content_url: url }), { mode: "live", url, platform: p, ...none }, url);
+  }
 });
 
 // ---- API uçları ----
@@ -236,6 +248,7 @@ test("metrik uçları: yetki, görünürlük ve örnek/canlı mod", async () => 
   const mine = await call("GET", "/app/metrics", { token: inf.token });
   assert.equal(mine.status, 200);
   assert.equal(mine.body.metrics.mode, "sample");
+  assert.equal(mine.body.metrics.label_code, "sample");
   assert.deepEqual(mine.body.metrics.accounts.map(a => [a.platform, a.handle, a.label]), [["instagram", "inf_ig", SAMPLE], ["linkedin", "inf_li", NO_DATA]]);
   assert.equal(mine.body.metrics.accounts[0].followers, sampleAccount("instagram", "inf_ig").followers);
 
@@ -272,7 +285,7 @@ test("metrik uçları: yetki, görünürlük ve örnek/canlı mod", async () => 
   assert.equal((await call("POST", `/app/applications/${appId}`, { token: brand.token, body: { status: "accepted" } })).status, 200);
   assert.equal((await call("POST", `/app/applications/${appId}`, { token: inf.token, body: { status: "submitted", content_url: url } })).status, 200);
   const sample = await linkFor(brand.token);
-  assert.deepEqual(sample, { mode: "sample", url, platform: "instagram", source: "sample", label: SAMPLE, ...sampleLink("instagram", url), taken_at: null });
+  assert.deepEqual(sample, { mode: "sample", url, platform: "instagram", source: "sample", label: SAMPLE, label_code: "sample", ...sampleLink("instagram", url), taken_at: null });
 
   // Canlı mod: bağlı hesap/ölçüm yoksa "veri yok", ölçüm gelince gerçek sayı
   env.METRICS_ENABLED = "1";
@@ -287,7 +300,7 @@ test("metrik uçları: yetki, görünürlük ve örnek/canlı mod", async () => 
   snapshot(db, acc, "2026-10-10 12:00:00", 5100, 900, 80, 6);
   const brandView = await call("GET", `/app/metrics/${inf.id}`, { token: brand.token });
   assert.deepEqual(brandView.body.metrics.accounts[0], {
-    platform: "instagram", handle: "inf_ig", source: "oauth", label: null,
+    platform: "instagram", handle: "inf_ig", source: "oauth", label: null, label_code: null,
     followers: 5100, avg_views: 900, avg_likes: 80, avg_comments: 6, taken_at: "2026-10-10 12:00:00",
   });
 });

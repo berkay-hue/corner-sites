@@ -1,3 +1,7 @@
+-- corner-forms D1 şeması. Tekrar uygulanabilir (IF NOT EXISTS).
+-- Uygula (form-worker/ klasöründen çalıştır): npx wrangler d1 execute corner-forms --remote --file=schema.sql
+-- Ardından migrations/ (dosyanın sonundaki not).
+
 CREATE TABLE IF NOT EXISTS submissions (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   created_at TEXT NOT NULL DEFAULT (datetime('now')),
@@ -86,4 +90,9 @@ CREATE TABLE IF NOT EXISTS applications (
 -- ALTER TABLE applications ADD COLUMN revision_note TEXT;
 CREATE INDEX IF NOT EXISTS applications_user ON applications (user_id);
 
--- Sosyal metrik tabloları: migrations/0001_metrics.sql
+-- Sosyal metrikler bu dosyada değil, migrations/ altında; bu dosyadan sonra sırayla uygulanır:
+--   0001_metrics.sql  sosyal hesaplar ve metrik tabloları
+--   0002_oauth.sql    OAuth akışı, şifreli token, social_accounts (platform, external_id) UNIQUE
+--   0003_sync.sql     günlük senkron (next_sync_at) ve YouTube PKCE (oauth_states.code_verifier)
+-- Uygula (form-worker/ klasöründen çalıştır): npx wrangler d1 migrations apply corner-forms --remote
+-- 0002 uygulanmadan da bağ koparma çalışır; 0003 yeni kodla deploy'dan ÖNCE uygulanmalı.
