@@ -380,9 +380,17 @@ const RULES = {
       let first = true;
       html = html.replace(/<script type="application\/ld\+json" data-sk-seo>[\s\S]*?<\/script>/g, () => first ? (first = false, MARK) : "");
       // Organization (+FAQPage) sitenin kendi LD'sinde her sayfada var; yalnızca WebSite eklenir
-      const org = { "@type": "Organization", name: R.brand, url: R.origin };
+      // Sitenin Organization LD'sine kalıcı @id ve çatı şirket; diğer düğümler bu @id'ye bağlanır
+      const ORG = R.origin + "/#org";
+      html = html.replace(/(<script type="application\/ld\+json">)([\s\S]*?)(<\/script>)/g, (m, a, j, b) => {
+        let o; try { o = JSON.parse(j); } catch { return m; }
+        if (o["@type"] !== "Organization" || o.url !== R.origin) return m;
+        const { "@context": c, "@type": t, ...rest } = o;
+        return a + JSON.stringify({ "@context": c, "@type": t, "@id": ORG, ...rest, parentOrganization: { "@type": "Organization", "@id": "https://cornergroup.co/#org", name: "Corner Group", url: "https://cornergroup.co" } }) + b;
+      });
+      const org = { "@id": ORG };
       const ld = [];
-      if (page === "/") ld.push({ "@context": "https://schema.org", "@type": "WebSite", url: R.origin + "/", name: R.brand, inLanguage: "tr-TR" });
+      if (page === "/") ld.push({ "@context": "https://schema.org", "@type": "WebSite", url: R.origin + "/", name: R.brand, inLanguage: "tr-TR", publisher: org });
 
       const kb = page.startsWith("/bilgi-merkezi/");
       if (kb) {
