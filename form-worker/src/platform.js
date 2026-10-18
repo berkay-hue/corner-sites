@@ -325,10 +325,11 @@ async function listCampaigns(c) {
   if (isOwnerRole(user)) {
     const { results } = await env.DB.prepare(
       `SELECT c.*, (SELECT count(*) FROM applications a WHERE a.campaign_id = c.id) applications,
-        (SELECT count(*) FROM applications a WHERE a.campaign_id = c.id AND a.status = 'pending') pending
+        (SELECT count(*) FROM applications a WHERE a.campaign_id = c.id AND a.status = 'pending') pending,
+        (SELECT count(*) FROM applications a WHERE a.campaign_id = c.id AND a.status = 'submitted') submitted
        FROM campaigns c WHERE c.owner_id = ? ORDER BY c.id DESC`,
     ).bind(user.id).all();
-    return ok(c, { campaigns: results.map(r => ({ ...campaignOut({ ...r, owner_name: user.name }), applications: r.applications, pending: r.pending })) });
+    return ok(c, { campaigns: results.map(r => ({ ...campaignOut({ ...r, owner_name: user.name }), applications: r.applications, pending: r.pending, submitted: r.submitted })) });
   }
   const profile = JSON.parse(user.profile || "{}");
   const { results } = await env.DB.prepare(
