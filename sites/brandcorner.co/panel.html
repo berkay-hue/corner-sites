@@ -162,10 +162,11 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
 .sw input{appearance:none;-webkit-appearance:none;flex:none;width:42px;height:24px;margin:0;border-radius:12px;background:var(--line-strong);position:relative;cursor:not-allowed;opacity:.7}.sw input::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:left .15s}.sw input:checked{background:var(--accent)}.sw input:checked::after{left:21px}
 @media(max-width:1100px){.ov{grid-template-columns:minmax(0,1fr)}}
 .split{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:20px;align-items:start}.stack{display:flex;flex-direction:column;gap:16px}.sticky{position:sticky;top:16px}.av.sq{border-radius:10px}
+.daily .cb{padding-top:18px}.daily h2{font-size:15px;margin:0}.daily .count{font-size:14px;color:var(--text)}.daily .hint{margin:4px 0 0}.daily .meta{margin:8px 0 0}
 .frow{display:flex;justify-content:space-between;gap:8px;align-items:baseline}.count{font-size:12px;color:var(--faint);font-variant-numeric:tabular-nums;white-space:nowrap}
 .tags{display:flex;flex-wrap:wrap;gap:6px;align-items:center;border:1px solid var(--line-strong);border-radius:var(--r-ctl);padding:4px 8px;background:var(--surface);min-height:44px;margin:0 0 16px}.tags:focus-within{outline:2px solid var(--accent);outline-offset:1px}.f .tags input:not([type=checkbox]){display:block;width:auto;border:0;outline:0;flex:1;min-width:110px;background:transparent;padding:4px;margin:0;min-height:44px;box-shadow:none}.f .tags input:disabled{background:transparent}.f .tags input:focus-visible{outline:0}.f .frow label{margin-bottom:6px}
 .tag{display:inline-flex;align-items:center;gap:0;min-width:0;max-width:100%;overflow-wrap:anywhere;background:var(--accent-soft);color:var(--accent-text);border-radius:6px;padding:0 0 0 8px;font-size:13px;font-weight:500}.tag button{flex:none;border:0;background:none;color:inherit;cursor:pointer;padding:0;min-width:44px;min-height:44px;font-size:16px;line-height:1;border-radius:4px}.tag button:focus-visible{outline:2px solid var(--accent);outline-offset:-6px}
-.preview{border:1px dashed var(--line-strong);border-radius:var(--r-card);padding:14px;background:var(--surface-2)}.pl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;font-weight:600;margin:0 0 10px}.pv-card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:8px;min-width:0}.pv-card .ph2{display:flex;gap:10px;align-items:center;min-width:0}.pv-card .ph2 b{display:block;overflow-wrap:anywhere}.pv-card .pvs{display:block;font-size:12.5px;color:var(--muted)}.pv-card .brief{font-size:13px;color:var(--muted);margin:0;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}.pv-card .chips{margin:0}.pv-card .chip{max-width:100%;overflow-wrap:anywhere}
+.preview{border:1px dashed var(--line-strong);border-radius:var(--r-card);padding:14px;background:var(--surface-2)}.pl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;font-weight:600;margin:0 0 10px}.pv-card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:8px;min-width:0}.pv-card .ph2{display:flex;gap:10px;align-items:center;min-width:0}.pv-card .ph2 b{display:block;overflow-wrap:anywhere}.pv-card .pvs{display:block;font-size:12.5px;color:var(--muted)}.pv-card .brief{font-size:13px;color:var(--muted);margin:0;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}.pv-card .chips{margin:0}.pv-card .chip{max-width:100%;overflow-wrap:anywhere}.pv-card .pls{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:12.5px;color:var(--muted);margin:0}.pv-card .pls b{color:var(--text)}
 .clink{display:inline-flex;align-items:center;gap:5px;font-size:13px;font-weight:500;word-break:break-all;min-height:44px}.clink .i{width:15px;height:15px;flex:none}
 .toolbar{display:flex;flex-wrap:wrap;gap:8px;padding:12px 16px;align-items:center;border-bottom:1px solid var(--line)}.f.toolbar input:not([type=checkbox]){margin:0;min-height:44px;flex:1 1 220px;width:auto;max-width:360px}.flush .tabs.ul{padding:0 8px;border-bottom:1px solid var(--line)}.flush .tabs.ul button{min-height:44px}
 .crow{position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 16px;padding:14px 16px;border-top:1px solid var(--line);align-items:center}.crow:first-child{border-top:0}.crow:hover{background:var(--surface-2)}.crow:focus-within{outline:2px solid var(--accent);outline-offset:-2px}.crow .tl{display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center;margin:0 0 4px}.crow h3{font-size:15.5px;margin:0;overflow-wrap:anywhere}.crow .tlink{text-decoration:none;color:inherit}.crow .tlink::after{content:"";position:absolute;inset:0}.crow .tlink:focus-visible{outline:none}.crow .meta{margin:0}.crow .right{display:flex;flex-direction:column;align-items:flex-end;gap:6px}.mini b{color:var(--text);font-weight:600}.crow .meta span{display:inline-flex;align-items:center;gap:5px}.crow .meta svg.i{width:15px;height:15px}.crow .meta .warn{color:var(--danger)}
@@ -251,6 +252,8 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
       sReview: "Onay bekleyen içerik", sWork: "Aktif iş", sDone: "Tamamlanan", ocTitle: "Açık kampanyalar", ocAll: "Tümü", ocEmpty: "Açık kampanyan yok.", dLeft: "{n} gün kaldı", dLast: "Bugün son gün", dGone: "Süresi doldu",
       stPend: "Yeni başvurular", stInv: "Davet edilenler", stWork: "Çalışılıyor", stRev: "İçerik onayı", stDone: "Onaylandı",
       forYou: "Sana uygun influencerlar", forYouGo: "Keşfet", forYouEmpty: "Henüz listelenen influencer yok.",
+      oppsFor: "Sana uygun fırsatlar", oppsAll: "Tümü", oppsEmpty: "Şu an sana uygun yeni fırsat yok.",
+      dailyT: "Bugün kalan başvuru hakkın", dailyHint: "Her gün yenilenir. Seçici başvurular daha çok kabul alır.", dailyLater: "Sayaç sunucu güncellemesinden sonra görünecek.",
       ntTitle: "E-posta bildirimleri", nApp: "Yeni başvuru", nAppD: "Kampanyana biri başvurduğunda", nSub: "İçerik gönderildi", nSubD: "Onay bekleyen içerik geldiğinde", nWeek: "Haftalık özet", nWeekD: "Pazartesi sabahı tek e-posta",
       nInv: "Yeni davet", nInvD: "Bir marka seni davet ettiğinde", nSt: "Başvuru durumu", nStD: "Kabul, red ve revizyonlarda", nMatch: "Yeni uygun fırsat", nMatchD: "Günde en fazla bir e-posta",
       sOpps: "Açık fırsat", sInvites: "Bekleyen davet", sActive: "Süren iş",
@@ -294,7 +297,8 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
       tagsMax: "En fazla 5 niş girebilirsiniz.",
       fCompanyN: "Şirket adı", fAgencyN: "Ajans adı", fNichesT: "Nişler (en fazla 5)", nichesHint: "Eşleşme puanı nişlere göre hesaplanır.",
       nichesPh: "Örn. cilt bakımı — Enter ile ekle", tagsFull: "Sınıra ulaşıldı", tagRm: "{n} kaldır", nichesLater: "Nişler sunucu güncellemesinden sonra kaydedilecek",
-      ckNiches1: "Nişler (en az 1)", ckClient1: "En az bir müşteri", pvLbl: "Influencerlar seni böyle görecek", pvBio: "Hakkında yazısı burada görünecek.",
+      fClientsT: "Müşteriler (en fazla 20)", clientsPh: "Örn. marka adı — Enter ile ekle", clientsHint: "Çalıştığın markalar profilinde görünür.", clientsLater: "Müşteri adları sunucu güncellemesinden sonra kaydedilecek; şimdilik sayısı kaydedildi.",
+      ckNiches1: "Nişler (en az 1)", ckClient1: "En az bir müşteri", pvLbl: "Influencerlar seni böyle görecek", pvLblC: "Markalar seni böyle görüyor", pvBio: "Hakkında yazısı burada görünecek.",
       miniNew: "{n} yeni başvuru", miniNew1: "{n} yeni başvuru", miniAct: "{n} içerik onayı", miniAct1: "{n} içerik onayı", miniPpl: "{n} kişi", miniPpl1: "{n} kişi", dLeft1: "{n} gün kaldı", helpS: "Yardım",
       ni0: "cilt bakımı", ni1: "güzellik", ni2: "yaşam tarzı", ni3: "teknoloji", ni4: "oyun", ni5: "moda", ni6: "otomobil", ni7: "anne-çocuk", ni8: "seyahat", ni9: "yemek", ni10: "doğal ürünler", ni11: "erkek bakımı", ni12: "kendin yap", ni13: "spor", ni14: "sürdürülebilirlik", ni15: "ev", ni16: "tasarım",
       close: "Kampanyayı kapat", reopen: "Kampanyayı yeniden aç", edit: "Düzenle", iBrief: "Açıklama", iBudget: "Bütçe", iDeadline: "Son başvuru", iPlatforms: "Platformlar", iCreated: "Oluşturuldu", iNone: "—",
@@ -366,6 +370,8 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
       sReview: "Content awaiting approval", sWork: "Active work", sDone: "Completed", ocTitle: "Open campaigns", ocAll: "All", ocEmpty: "You have no open campaigns.", dLeft: "{n} days left", dLast: "Last day today", dGone: "Expired",
       stPend: "New applications", stInv: "Invited", stWork: "In progress", stRev: "Content approval", stDone: "Approved",
       forYou: "Influencers for you", forYouGo: "Discover", forYouEmpty: "No influencers are listed yet.",
+      oppsFor: "Opportunities for you", oppsAll: "All", oppsEmpty: "No new matches right now.",
+      dailyT: "Applications left today", dailyHint: "Resets daily. Focused applications get accepted more.", dailyLater: "The counter will appear after a server update.",
       ntTitle: "Email notifications", nApp: "New application", nAppD: "When someone applies", nSub: "Content submitted", nSubD: "When content needs approval", nWeek: "Weekly summary", nWeekD: "One email on Monday morning",
       nInv: "New invite", nInvD: "When a brand invites you", nSt: "Application status", nStD: "On accept, reject, revision", nMatch: "New matching opportunity", nMatchD: "At most one email a day",
       sOpps: "Open opportunities", sInvites: "Pending invites", sActive: "In progress",
@@ -409,7 +415,8 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
       tagsMax: "You can add up to 5 niches.",
       fCompanyN: "Company name", fAgencyN: "Agency name", fNichesT: "Niches (up to 5)", nichesHint: "Match score is calculated from your niches.",
       nichesPh: "E.g. skincare — press Enter to add", tagsFull: "Limit reached", tagRm: "Remove {n}", nichesLater: "Niches will be saved after a server update",
-      ckNiches1: "Niches (at least 1)", ckClient1: "At least one client", pvLbl: "How creators will see you", pvBio: "Your about text appears here.",
+      fClientsT: "Clients (up to 20)", clientsPh: "E.g. brand name — press Enter to add", clientsHint: "Brands you work with appear on your profile.", clientsLater: "Client names will be saved after a server update; the count is saved for now.",
+      ckNiches1: "Niches (at least 1)", ckClient1: "At least one client", pvLbl: "How creators will see you", pvLblC: "How brands see you", pvBio: "Your about text appears here.",
       miniNew: "{n} new applications", miniNew1: "{n} new application", miniAct: "{n} to review", miniAct1: "{n} to review", miniPpl: "{n} people", miniPpl1: "{n} person", dLeft1: "{n} day left", helpS: "Help",
       ni0: "skincare", ni1: "beauty", ni2: "lifestyle", ni3: "technology", ni4: "gaming", ni5: "fashion", ni6: "automotive", ni7: "parenting", ni8: "travel", ni9: "food", ni10: "natural products", ni11: "men's grooming", ni12: "DIY", ni13: "sports", ni14: "sustainability", ni15: "home", ni16: "design",
       close: "Close campaign", reopen: "Reopen campaign", edit: "Edit", iBrief: "Description", iBudget: "Budget", iDeadline: "Deadline", iPlatforms: "Platforms", iCreated: "Created", iNone: "—",
@@ -740,11 +747,41 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
         }))
     ]);
   }
+  // Influencer: açık ve başvurulmamış kampanyalar, Worker'ın uyum puanına göre (yoksa nişlerden hesaplanır)
+  function oppsForYou(d, again) {
+    var mine = U.profile || {}, top = (d.campaigns || []).filter(function (c) { return c.status === "open" && !c.my_status; }).map(function (c, i) {
+      return { c: c, u: typeof c.match === "number" ? c.match : uyum(mine, [(c.niches || []).map(fold)].filter(function (n) { return n.length; })), i: i };
+    }).filter(function (o) { return o.u > 0; }).sort(function (p, q) { return q.u - p.u || p.i - q.i; }).slice(0, 3);
+    return el("section", { class: "card" }, [
+      el("div", { class: "ch" }, [el("h2", { text: t("oppsFor") }), el("a", { class: "lk44", href: "#campaigns", text: t("oppsAll") })]),
+      d.err ? el("div", { class: "cb" }, failLine(d.err, again))
+        : !top.length ? el("p", { class: "cb none", text: t("oppsEmpty") })
+        : el("div", null, top.map(function (o) {
+          var c = o.c;
+          return el("div", { class: "irow" }, [
+            el("div", { class: "tx" }, [el("a", { class: "nm", href: "#campaign-" + c.id, text: c.title }), el("p", { class: "isub", text: [c.owner, budget(c)].filter(Boolean).join(" · ") })]),
+            el("span", { class: "match" + (o.u < 60 ? " lo" : ""), text: t("match", o.u) })
+          ]);
+        }))
+    ]);
+  }
+  // Günlük başvuru hakkı: Worker kalan hakkı vermiyor (yalnız sınırda 429). Alan gelene kadar sayaç pasif.
+  var DAILY_MAX = 5;
+  function dailyCard(s) {
+    var d = s && s.daily, has = d && typeof d.left === "number", max = has && d.limit > 0 ? d.limit : DAILY_MAX, left = has ? Math.max(0, Math.min(d.left, max)) : null;
+    var pct = has ? Math.round(left * 100 / max) : 0;
+    return el("section", { class: "card daily" }, el("div", { class: "cb" }, [
+      el("div", { class: "frow" }, [el("h2", { text: t("dailyT") }), el("b", { class: "count", text: (has ? num(left) : "—") + "/" + num(max) })]),
+      el("div", { class: "meter", role: "progressbar", "aria-valuemin": 0, "aria-valuemax": max, "aria-valuenow": has ? left : null, "aria-valuetext": has ? left + "/" + max : t("dailyLater"), "aria-label": t("dailyT") }, el("i", { style: "width:" + pct + "%" })),
+      el("p", { class: "hint", text: t("dailyHint") }),
+      has ? null : el("p", { class: "meta" }, [el("span", { class: "badge b-soon", text: t("soonBadge") }), " ", t("dailyLater")])
+    ]));
+  }
   function overview(r0, stats) {
     var own = isOwner();
     // Bir çağrı düşerse yalnız o bölüm hata gösterir; ikisi de düşerse tek kutu
     var settle = function (p) { return p.then(null, function (e) { if (e.code === "auth") throw e; return { err: e }; }); };
-    return Promise.all([settle(stats), settle(BC.call("GET", own ? "app/campaigns" : "app/applications")), own ? settle(BC.call("GET", "app/influencers")) : null]).then(function (r) {
+    return Promise.all([settle(stats), settle(BC.call("GET", own ? "app/campaigns" : "app/applications")), settle(BC.call("GET", own ? "app/influencers" : "app/campaigns"))]).then(function (r) {
       var s = r[0].stats || {}, a = s.applications || {}, items = [];
       var cards = own
         ? [[s.open_campaigns, "sOpen"], [a.pending, "sPending"], [a.submitted || 0, "sReview"], [a.approved, "sApproved"]]
@@ -788,13 +825,13 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
                 el("p", { class: "hint", text: t("perfNote") })])])
           ]),
           el("div", null, [
-            own ? forYou(r[2], camps, open, again) : null,
-            profMeter(true),
-            el("section", { class: "card" }, [el("div", { class: "ch" }, el("h2", { text: t("soon") })),
+            own ? forYou(r[2], camps, open, again) : oppsForYou(r[2], again),
+            own ? profMeter(true) : dailyCard(s),
+            own ? el("section", { class: "card" }, [el("div", { class: "ch" }, el("h2", { text: t("soon") })),
               el("div", { class: "cb" }, [
                 el("p", { class: "soon-lead", text: t("soonLead") }),
                 el("ul", { class: "soon" }, (SOON[U.role] || []).map(function (k) { return el("li", null, [el("span", { text: t(k) }), el("span", { class: "badge b-soon", text: t("soonBadge") })]); }))
-              ])])
+              ])]) : null
           ])
         ])
       ];
@@ -1330,12 +1367,8 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
     return BC.call("GET", "auth/me").then(function (d) {
       U = d.user; paintWho();
       var head = [el("h1", { text: t("nProfile") }), el("p", { class: "lead", text: t(isOwner() ? "profLeadO" : "profLeadC") })];
-      if (!isOwner()) {
-        var side = el("div", null, profMeter(false));
-        return head.concat(el("div", { class: "ov" }, [el("div", null, [profileForm(function () { side.replaceChildren(profMeter(false)); }), socials()]), side]));
-      }
-      // Marka/ajans: sağda yapışkan doluluk + önizleme, form değiştikçe canlı güncellenir
-      var mt = el("div"), pv = el("div"), draw = function (dr) { mt.replaceChildren(profMeter(false, dr)); pv.replaceChildren(pvBox(dr)); };
+      // Sağda yapışkan doluluk + önizleme, form değiştikçe canlı güncellenir (influencer: markaların gördüğü kart)
+      var mt = el("div"), pv = el("div"), draw = function (dr) { mt.replaceChildren(profMeter(false, dr)); pv.replaceChildren((isOwner() ? pvBox : ipvBox)(dr)); };
       return head.concat(el("div", { class: "split" }, [el("div", { class: "stack" }, [profileForm(null, draw), socials()]), el("div", { class: "sticky stack" }, [mt, pv])]));
     });
   }
@@ -1425,21 +1458,24 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
   // classify.js:6-35 ile eşit tut (DICT anahtarları; en etiketleri D'de ni0..ni16)
   var NICHES = ["cilt bakımı", "güzellik", "yaşam tarzı", "teknoloji", "oyun", "moda", "otomobil", "anne-çocuk", "seyahat", "yemek", "doğal ürünler", "erkek bakımı", "kendin yap", "spor", "sürdürülebilirlik", "ev", "tasarım"];
   function nicheLbl(x) { var i = NICHES.indexOf(String(x).toLocaleLowerCase("tr-TR")); return i < 0 ? x : t("ni" + i); }
-  // Etiket girişi: Enter/virgül ekler, tr-TR katlamalı tekrar ayıklanır, 5'te kilitlenir, boşta Backspace sonuncuyu siler
-  function tagBox(id, vals, onCh) {
-    var list = [], inp = el("input", { type: "text", id: id, autocomplete: "off", list: id + "-dl", "aria-describedby": id + "-h" });
+  // Etiket girişi: Enter/virgül ekler, tr-TR katlamalı tekrar ayıklanır, o.max'ta (5) kilitlenir, boşta Backspace sonuncuyu siler.
+  // o.opts: öneri listesi (varsayılan NICHES, null = yok), o.ph: boş yer tutucu anahtarı
+  function tagBox(id, vals, onCh, o) {
+    o = o || {};
+    var max = o.max || 5, opts = o.opts === undefined ? NICHES : o.opts, ph = o.ph || "nichesPh";
+    var list = [], inp = el("input", { type: "text", id: id, autocomplete: "off", list: opts ? id + "-dl" : null, "aria-describedby": id + "-h" });
     var wrap = el("div", { class: "tags", onclick: function (e) { if (e.target === wrap) inp.focus(); } });
-    var dl = el("datalist", { id: id + "-dl" }, NICHES.map(function (k, i) { return el("option", { value: k, label: t("ni" + i) }); }));
+    var dl = opts ? el("datalist", { id: id + "-dl" }, opts.map(function (k, i) { return el("option", { value: k, label: opts === NICHES ? t("ni" + i) : k }); })) : null;
     function put(v) {
       v = String(v || "").trim().slice(0, 40);
-      if (v && list.length < 5 && !list.some(function (x) { return fold(x) === fold(v); })) list.push(v);
+      if (v && list.length < max && !list.some(function (x) { return fold(x) === fold(v); })) list.push(v);
     }
     function paint() {
-      var full = list.length >= 5;
+      var full = list.length >= max;
       wrap.replaceChildren.apply(wrap, list.map(function (x, i) {
         return el("span", { class: "tag" }, [x, el("button", { type: "button", "aria-label": t("tagRm", x), text: "×", onclick: function () { list.splice(i, 1); paint(); inp.focus(); if (onCh) onCh(); } })]);
       }).concat(inp));
-      inp.disabled = full; inp.placeholder = t(full ? "tagsFull" : "nichesPh");
+      inp.disabled = full; inp.placeholder = t(full ? "tagsFull" : ph);
     }
     function take() { var v = inp.value; if (!v.trim()) return false; v.split(",").forEach(put); inp.value = ""; paint(); return true; }
     inp.addEventListener("keydown", function (e) {
@@ -1461,21 +1497,39 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
       w && URL_RE.test(w) ? el("a", { class: "clink", href: w, target: "_blank", rel: "noopener noreferrer" }, [ic("globe"), w.replace(/^https?:\/\//i, "").replace(/\/$/, "")]) : null
     ])]);
   }
+  function kNum(n) { try { return new Intl.NumberFormat(locale(), { notation: "compact", maximumFractionDigits: 1 }).format(n); } catch (e) { return num(n); } }
+  // Influencer: "Markalar seni böyle görüyor" — keşfet kartının taslaktan canlı hali
+  function ipvBox(d) {
+    var nm = U.name || "", pls = (d.platforms || []).filter(function (x) { return x.platform; });
+    return el("div", { class: "preview" }, [el("p", { class: "pl", text: t("pvLblC") }), el("div", { class: "pv-card" }, [
+      el("div", { class: "ph2" }, [el("span", { class: "av", "aria-hidden": "true", text: initials(nm) }), el("div", { style: "min-width:0" }, [el("b", { text: nm }), d.city ? el("span", { class: "pvs", text: d.city }) : null])]),
+      el("p", { class: "brief", text: d.bio || t("pvBio") }),
+      (d.niches || []).length ? el("div", { class: "chips" }, d.niches.map(function (x) { return el("span", { class: "chip", text: nicheLbl(x) }); })) : null,
+      pls.length ? el("p", { class: "pls" }, pls.map(function (x) { return el("span", null, [PL[x.platform] + " ", Number(x.followers) > 0 ? el("b", { text: kNum(+x.followers) }) : null]); })) : null
+    ])]);
+  }
   function profileForm(onSaved, onDraft) {
     var p = U.profile || {}, role = U.role, inf = role === "influencer", m = note(), ok = okNote(), rows = [];
     var b = el("button", { type: "submit", class: "btn", text: t("save") });
     var name = el("input", { type: "text", maxlength: 100, autocomplete: "name", value: U.name });
     var company = el("input", { type: "text", maxlength: 100, autocomplete: "organization", value: p.company || "" });
     var industry = el("input", { type: "text", maxlength: 60, value: p.industry || "" });
-    var clients = el("input", { type: "number", min: 0, max: 10000, step: 1, inputmode: "numeric", value: p.clients != null ? p.clients : "" });
     var bio = el("textarea", { maxlength: 500, rows: 4, value: p.bio || "" });
     var city = el("input", { type: "text", maxlength: 100, autocomplete: "address-level2", value: p.city || "" });
     var web = el("input", { type: "url", maxlength: 300, inputmode: "url", placeholder: "https://", value: p.website || "" });
     var cnt = el("span", { class: "count" }), later = el("p", { class: "hint", role: "status", hidden: true, text: t("nichesLater") });
     var tb = tagBox("pf-niches", p.niches, emit);
+    // Ajans müşterileri: niş girişiyle aynı bileşen, öneri listesi yok. Worker bugün yalnız sayı (clients) saklıyor;
+    // adlar client_names olarak gider, dönmezse sayı etiket adedinden yazılır ve not gösterilir.
+    var agency = role === "agency", hasNames = Array.isArray(p.client_names);
+    var cb = agency ? tagBox("pf-clientn", p.client_names, emit, { max: 20, opts: null, ph: "clientsPh" }) : null;
+    var cLater = el("p", { class: "hint", role: "status", hidden: !(agency && !hasNames && Number(p.clients) > 0), text: t("clientsLater") });
+    function cCount(tags) { return tags.length || (hasNames ? 0 : Number(p.clients) || 0); }
     function emit() {
       cnt.textContent = bio.value.length + "/500";
-      if (onDraft) onDraft({ company: company.value.trim(), industry: industry.value.trim(), clients: clients.value.trim(), city: city.value.trim(), website: web.value.trim(), bio: bio.value.trim(), niches: tb.peek() });
+      if (onDraft && inf) return onDraft({ city: city.value.trim(), bio: bio.value.trim(), niches: tb.peek(), listed: listed.checked,
+        platforms: rows.map(function (r) { return { platform: r.sel.value, handle: r.h.value.trim(), followers: Number(r.fo.value) || 0 }; }) });
+      if (onDraft) onDraft({ company: company.value.trim(), industry: industry.value.trim(), clients: cb ? cCount(cb.peek()) : 0, city: city.value.trim(), website: web.value.trim(), bio: bio.value.trim(), niches: tb.peek() });
     }
     var listed = el("input", { type: "checkbox", id: "pl-listed", checked: p.listed === true });
     var box = el("div"), addB = el("button", { type: "button", class: "ghost", text: t("addPlat") });
@@ -1500,7 +1554,7 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
       el("p", { class: "ro" }, [el("span", null, [t("email") + " ", el("b", { text: U.email })]), el("span", null, [t("accType") + " ", el("b", { text: t("role_" + role) })])]),
       fld("pf-name", t("fName"), name, t(inf ? "fNameHintC" : "fNameHintO")),
       inf ? null : el("div", { class: "grid2" }, [el("div", null, fld("pf-company", t(role === "agency" ? "fAgencyN" : "fCompanyN"), company)), el("div", null, fld("pf-industry", t("fIndustry"), industry))]),
-      role === "agency" ? fld("pf-clients", t("fClients"), clients) : null,
+      agency ? [el("label", { for: "pf-clientn", text: t("fClientsT") }), cb.node, el("p", { class: "hint", id: "pf-clientn-h", text: t("clientsHint") }), cLater] : null,
       inf ? bioF : null,
       el("div", { class: "grid2" }, [el("div", null, fld("pf-city", t("fCity"), city)), el("div", null, fld("pf-web", t("fWebsite"), web))]),
       inf ? null : bioF,
@@ -1521,10 +1575,10 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
       if (w && !URL_RE.test(w)) return say(m, t("badWeb"));
       pr.website = w;
       if (!inf) { pr.company = company.value.trim(); pr.industry = industry.value.trim(); }
-      if (role === "agency") {
-        var cl = clients.value.trim();
-        if (cl && (!/^\d+$/.test(cl) || +cl > 10000)) return say(m, t("badClients"));
-        if (cl) pr.clients = +cl;
+      if (agency) {
+        var cn = cb.get();
+        pr.client_names = cn;
+        pr.clients = cCount(cn);
       }
       // Nişler dizi olarak gider (Worker tags(): text(x,40), tekil, en çok 5)
       var tg = tb.get();
@@ -1551,6 +1605,7 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
         web.value = (U.profile || {}).website || "";
         // Worker bugün nişleri yalnız influencer için saklıyor: gönderilip dönmediyse kalıcıymış gibi göstermeyiz
         later.hidden = !(tg.length && !((U.profile || {}).niches || []).length);
+        if (agency) { hasNames = Array.isArray((U.profile || {}).client_names); cLater.hidden = !(cn.length && !hasNames); }
         say(ok, t("saved")); emit();
         if (onSaved) onSaved();
       }, function (e) { busy(b, false); say(m, BC.msg(e.code)); });
@@ -1558,9 +1613,9 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
     return f;
   }
 
-  // Sosyal hesaplar (3 rol): resmî API'li platformlar OAuth ile bağlanır. Bağlanabilir platformlar Worker'ın `connectable` listesinden (yoksa PR4: IG/TikTok/YouTube).
-  // Ölçüm kapalıysa (200 disabled:true ya da 409 "disabled") örnek kip: düğmeler kapalı. Marka/ajans + PR4 (403 forbidden): sakin "yakında" satırı, hata yazılmaz.
-  var OAUTH = ["instagram", "tiktok", "youtube"], LI_REVOKE = "https://www.linkedin.com/mypreferences/d/data-sharing-for-permitted-services", SOC_GO = false;
+  // Sosyal hesaplar (3 rol): resmî API'li platformlar OAuth ile bağlanır. Bağlanabilir platformlar Worker'ın `connectable` listesinden (yoksa: IG/TikTok/YouTube/LinkedIn).
+  // Ölçüm kapalıysa (200 disabled:true ya da 409 "disabled") örnek kip: düğmeler kapalı. Marka/ajans + PR4 (403 forbidden) ya da PR5 alanları yok: platform başına "Yakında" satırı, hata yazılmaz.
+  var OAUTH = ["instagram", "tiktok", "youtube", "linkedin"], SOON_OWN = ["instagram", "tiktok", "linkedin"], LI_REVOKE = "https://www.linkedin.com/mypreferences/d/data-sharing-for-permitted-services", SOC_GO = false;
   function socMsg(e) {
     return BC.msg(e.status === 410 ? "ticket" : e.code, { disabled: t("socOff"), taken: t("socTaken"), ticket: t("socTicket"), expired: t("socTicket"), forbidden: t("socForbidden"), provider: t("socProvider"), ticket_owner: t("socOwner"), not_configured: t("socNotConf"), no_api: t("noData") });
   }
@@ -1603,8 +1658,9 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
         el("div", { class: "sa" }, [badge ? el("span", { class: "badge " + badge[0], text: badge[1] }) : null].concat(acts || [])), extra || null]);
     }
     function soon() {
-      return el("div", { class: "srow" }, [el("span", { class: "ic slate", "aria-hidden": "true" }, ic("link")),
-        el("div", { class: "tx" }, el("b", { text: t("socSoonOwn") })), el("div", { class: "sa" }, el("span", { class: "badge b-slate", text: t("soonBadge") }))]);
+      return [el("p", { class: "muted", text: t("socSoonOwn") })].concat(SOON_OWN.map(function (p) {
+        return row(p, "slate", null, ["b-slate", t("soonBadge")], [btn("btn sm", t("socConnect"), p, null, true)]);
+      }));
     }
     function connect(p, b) {
       say(m, ""); say(ok, ""); busy(b, true);
@@ -1643,7 +1699,7 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
       var ps = Object.keys(on).concat(can.filter(function (p) { return PL[p] && !on[p]; }));
       return [card].concat(ps.map(function (p) {
         if (on[p]) return linked(on[p], null, true);
-        return row(p, "slate", sub(t("socOffRow")), ["b-slate", t("socAvail")], [btn("btn sm", t("socConnect"), p, null, true)]);
+        return row(p, "slate", sub(p === "linkedin" ? t("socLiNote") + " · " + t("socOffRow") : t("socOffRow")), ["b-slate", t("socAvail")], [btn("btn sm", t("socConnect"), p, null, true)]);
       }));
     }
     // off: ölçüm kapalı kip. Bağla 409 döner; hatalı satır yeniden bağlamaya çağırmaz, "Kes" her zaman açık kalır.
