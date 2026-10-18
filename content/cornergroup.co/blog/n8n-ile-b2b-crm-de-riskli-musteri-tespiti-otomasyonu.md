@@ -1,6 +1,6 @@
 ---
 title: "n8n ile B2B CRM'de Riskli Müşteri Tespiti Otomasyonu"
-description: "B2B ekosisteminde sürdürülebilir büyüme, yalnızca yeni müşteri kazanımına (acquisition) odaklanarak değil, aynı zamanda mevcut müşteri tabanını koruma ve…"
+description: "n8n ile CRM'deki kullanım düşüşü, destek talebi ve ödeme gecikmesi gibi sinyalleri izleyip riskli B2B müşterileri otomatik tespit edebilirsiniz."
 date: "2026-09-24"
 category: "Otomasyon"
 image: "/_a/fr/images/SLULxgUFKlHZUckNzwV9Y50nFE_93d995dc.jpg"

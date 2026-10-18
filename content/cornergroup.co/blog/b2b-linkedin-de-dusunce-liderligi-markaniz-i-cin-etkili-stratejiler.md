@@ -1,6 +1,6 @@
 ---
 title: "B2B LinkedIn'de Düşünce Liderliği: Markanız İçin Etkili Stratejiler"
-description: "Dijitalleşmenin B2B pazarlamanın kurallarını yeniden yazdığı günümüz iş dünyasında, LinkedIn artık sadece bir dijital kartvizit koleksiyonu veya bir iş…"
+description: "LinkedIn'de B2B düşünce liderliği, özgün görüş ve veriyle düzenli paylaşımdan doğar; bu yazı markanız için uygulanabilir stratejileri anlatır."
 date: "2026-07-20"
 category: "Strateji"
 image: "/_a/fr/images/RGpmPST5agvvFp4yNoZFW0sDUvE_592550dd.jpg"

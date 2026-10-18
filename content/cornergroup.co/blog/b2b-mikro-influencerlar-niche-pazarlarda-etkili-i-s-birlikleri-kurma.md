@@ -1,6 +1,6 @@
 ---
 title: "B2B Mikro Influencerlar: Niche Pazarlarda Etkili İş Birlikleri Kurma"
-description: "B2B pazarlama dünyası, sürekli bir evrim içinde. Geleneksel reklamcılığın gürültüsü içinde kaybolan mesajlar, karar vericilerin giderek daha seçici hale…"
+description: "B2B mikro influencerlar, küçük ama güvenilir niş kitlelere ulaştırır; bu yazı doğru kişiyi seçme ve verimli iş birliği kurma adımlarını anlatır."
 date: "2026-05-23"
 category: "Trendler"
 image: "/_a/fr/images/SLULxgUFKlHZUckNzwV9Y50nFE_93d995dc.jpg"

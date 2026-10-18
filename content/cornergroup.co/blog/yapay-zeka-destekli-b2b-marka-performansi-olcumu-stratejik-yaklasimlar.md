@@ -1,6 +1,6 @@
 ---
 title: "Yapay Zeka Destekli B2B Marka Performansı Ölçümü: Stratejik Yaklaşımlar"
-description: "B2B dünyası, uzun satış döngüleri, çok katmanlı karar alma mekanizmaları ve rasyonel faydaya dayalı satın alma süreçleriyle kendine özgü bir karmaşıklığa…"
+description: "Yapay zeka, B2B marka performansını bilinirlik, algı ve pipeline etkisi üzerinden sürekli ölçer; bu yazı stratejik ölçüm yaklaşımlarını anlatır."
 date: "2026-06-11"
 category: "Strateji"
 image: "/_a/fr/images/oyaH5nEFvdzVoweL2MUloM0_7805d9aa.jpg"

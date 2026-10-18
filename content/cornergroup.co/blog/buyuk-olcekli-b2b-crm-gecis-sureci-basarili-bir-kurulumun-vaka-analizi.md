@@ -1,6 +1,6 @@
 ---
 title: "Büyük Ölçekli B2B CRM Geçiş Süreci: Başarılı Bir Kurulumun Vaka Analizi"
-description: "Dijital dönüşümün B2B dünyasının kurallarını yeniden yazdığı bir çağda, şirketlerin en değerli varlığı olan müşteri verisi, ya en büyük rekabet avantajı…"
+description: "Bu vaka analizi, büyük ölçekli bir B2B şirketinin veri temizliği, aşamalı geçiş ve ekip eğitimiyle yeni CRM'e kesintisiz nasıl geçtiğini anlatır."
 date: "2026-05-14"
 category: "Vaka Çalışması"
 image: "/_a/fr/images/EDbEtD2jMCzzRbKZMaOQQvdhKQ_7805d9aa.jpg"

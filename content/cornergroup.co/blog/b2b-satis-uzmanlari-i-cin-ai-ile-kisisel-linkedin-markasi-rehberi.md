@@ -1,6 +1,6 @@
 ---
 title: "B2B Satış Uzmanları İçin AI ile Kişisel LinkedIn Markası Rehberi"
-description: "B2B satış dünyası, geri döndürülemez bir şekilde değişti. Soğuk aramaların ve jenerik e-postaların etkinliğinin azaldığı, karar vericilerin dijital…"
+description: "AI, B2B satış uzmanlarının LinkedIn profilini ve içerik planını hızla güçlendirir; rehber güven veren kişisel marka kurmayı adım adım anlatır."
 date: "2026-08-15"
 category: "Rehber"
 image: "/_a/fr/images/t7WkjGcrKTYn0Jbb4mmvcwLec2U_cd09786e.jpg"
