@@ -126,7 +126,7 @@ footer.bot{border-top:1px solid var(--line);color:var(--muted);font-size:13.5px;
 .f input[type=checkbox]{width:16px;height:16px;margin:0;accent-color:var(--accent)}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
 .prow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0 12px}
-.filter{display:flex;flex-wrap:wrap;align-items:flex-end;gap:12px;margin:0 0 20px}.filter>div{flex:1 1 180px}.f.filter input:not([type=checkbox]),.f.filter select{margin:0}.f select{min-height:44px}
+.filter{display:flex;flex-wrap:wrap;align-items:flex-end;gap:12px;margin:0 0 20px}.filter>div{flex:1 1 180px}.f.filter input:not([type=checkbox]),.f.filter select{margin:0}.f select{min-height:44px}.filter>.freset{flex:0 0 auto}.freset .ghost[hidden]{display:none}
 .tabs{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}.tabs button{min-height:44px;padding:0 14px;border-radius:var(--r-ctl);border:1px solid var(--line-strong);background:var(--surface);color:var(--text);font:inherit;cursor:pointer}.tabs button[aria-pressed=true]{background:var(--accent-soft);border-color:var(--accent);color:var(--accent-text);font-weight:600}
 .hl-box{border-color:var(--accent);box-shadow:inset 3px 0 0 var(--accent)}
 .apps-sec{margin:0 0 24px}.apps-sec h2{display:flex;align-items:center;gap:8px}.apps-sec h2 .n{font-size:14px;font-weight:600;color:var(--muted)}
@@ -375,7 +375,7 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
       invitedBy: "{n} sizi davet etti",
       myAppsEmpty: "Henüz başvurunuz ya da davetiniz yok. Fırsatlar sayfasından açık kampanyalara başvurabilirsiniz.", goOpps: "Fırsatlara göz at",
       discLead: "Profil kartlarını inceleyip doğrudan davet edin.", discQ: "Ara", discQPh: "İsim veya şehir", allNiches: "Tüm ilgi alanları",
-      fMinFol: "Takipçi", anyMin: "Her takipçi sayısı", discCount: "{n} influencer", discCount1: "1 influencer", discCap: "En yeni 100 profil yüklendi; filtreler yalnızca bu profiller içinde çalışır.", discCap50: "En uygun 50 profil gösteriliyor.", discMatch: "İlgi alanlarınıza göre en uygun profiller.", discMatchC: "Seçili kampanyaya en uygun profiller.", discNoNiche: "Profilinize ilgi alanı eklerseniz size en uygun profilleri öne çıkarırız.", discNoNicheC: "Bu kampanyada ilgi alanı yok; tüm profiller gösteriliyor.", discNoMatch: "Ortak ilgi alanı olan profil yok; tüm profiller gösteriliyor.", discMatchErr: "Eşleşmeler yüklenemedi; tüm profiller gösteriliyor.", viewProf: "Profili gör", inviteFor: "{n} için davet ediyorsunuz.",
+      fMinFol: "Takipçi", anyMin: "Her takipçi sayısı", fCity: "Şehir", allCities: "Tüm şehirler", fSort: "Sıralama", sortRec: "Önerilen", sortFol: "Takipçi (çoktan aza)", sortName: "Ada göre (A–Z)", fReset: "Filtreleri temizle", discCount: "{n} influencer", discCount1: "1 influencer", discCap: "En yeni 100 profil yüklendi; filtreler yalnızca bu profiller içinde çalışır.", discCap50: "En uygun 50 profil gösteriliyor.", discMatch: "İlgi alanlarınıza göre en uygun profiller.", discMatchC: "Seçili kampanyaya en uygun profiller.", discNoNiche: "Profilinize ilgi alanı eklerseniz size en uygun profilleri öne çıkarırız.", discNoNicheC: "Bu kampanyada ilgi alanı yok; tüm profiller gösteriliyor.", discNoMatch: "Ortak ilgi alanı olan profil yok; tüm profiller gösteriliyor.", discMatchErr: "Eşleşmeler yüklenemedi; tüm profiller gösteriliyor.", viewProf: "Profili gör", inviteFor: "{n} için davet ediyorsunuz.",
       clearFor: "Temizle", drClose: "Kapat", drNoPlat: "Platform eklenmemiş.", crFull: "Tam profil ve son gönderiler", crBack: "← Keşfet", crNone: "Bu influencer bulunamadı ya da artık listelenmiyor.", crAccounts: "Hesap ölçümleri", crPosts: "Son gönderiler", crSampleBadge: "Örnek veri", crSampleNote: "Gönderi bağlantısı henüz açık değil; aşağıdakiler örnek gönderilerdir. Kampanyaya eklemeler yalnız bu tarayıcıda tutulur.", crTarget: "Kampanya", crAdd: "Kampanyaya ekle", crRemove: "Kampanyadan çıkar", crAdded: "Gönderi kampanyaya eklendi.", crRemoved: "Gönderi kampanyadan çıkarıldı.", crVerified: "doğrulandı", crOpenPost: "Gönderiyi aç", crNoPosts: "Henüz gönderi yok.", drHist: "Sizinle geçmiş", drHistNone: "Henüz birlikte çalışmadınız.",
       drInvite: "Kampanyaya davet et", drNoOpen: "Davet edilebilecek açık kampanya yok: ya hepsinde zaten var ya da açık kampanyanız yok.",
       inviteInf: "Influencer davet et",
@@ -514,7 +514,7 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
       invitedBy: "{n} invited you",
       myAppsEmpty: "No applications or invites yet. You can apply to open campaigns from Opportunities.", goOpps: "Browse opportunities",
       discLead: "Browse profile cards and invite directly.", discQ: "Search", discQPh: "Name or city", allNiches: "All niches",
-      fMinFol: "Followers", anyMin: "Any follower count", discCount: "{n} influencers", discCount1: "1 influencer", discCap: "The newest 100 profiles are loaded; filters only search within them.", discCap50: "Showing the 50 best matches.", discMatch: "Best matches for your niches.", discMatchC: "Best matches for the selected campaign.", discNoNiche: "Add niches to your profile and we will bring your best matches to the top.", discNoNicheC: "This campaign has no niches; showing all profiles.", discNoMatch: "No profiles share your niches; showing all profiles.", discMatchErr: "Matches could not be loaded; showing all profiles.", viewProf: "View profile", inviteFor: "Inviting for {n}.",
+      fMinFol: "Followers", anyMin: "Any follower count", fCity: "City", allCities: "All cities", fSort: "Sort", sortRec: "Recommended", sortFol: "Followers (high to low)", sortName: "Name (A–Z)", fReset: "Clear filters", discCount: "{n} influencers", discCount1: "1 influencer", discCap: "The newest 100 profiles are loaded; filters only search within them.", discCap50: "Showing the 50 best matches.", discMatch: "Best matches for your niches.", discMatchC: "Best matches for the selected campaign.", discNoNiche: "Add niches to your profile and we will bring your best matches to the top.", discNoNicheC: "This campaign has no niches; showing all profiles.", discNoMatch: "No profiles share your niches; showing all profiles.", discMatchErr: "Matches could not be loaded; showing all profiles.", viewProf: "View profile", inviteFor: "Inviting for {n}.",
       clearFor: "Clear", drClose: "Close", drNoPlat: "No platforms added.", crFull: "Full profile and recent posts", crBack: "← Discover", crNone: "This influencer wasn't found or is no longer listed.", crAccounts: "Account metrics", crPosts: "Recent posts", crSampleBadge: "Sample data", crSampleNote: "The posts connection isn't live yet; these are sample posts. Campaign additions are kept only in this browser.", crTarget: "Campaign", crAdd: "Add to campaign", crRemove: "Remove from campaign", crAdded: "Post added to the campaign.", crRemoved: "Post removed from the campaign.", crVerified: "verified", crOpenPost: "Open post", crNoPosts: "No posts yet.", drHist: "History with you", drHistNone: "You haven't worked together yet.",
       drInvite: "Invite to a campaign", drNoOpen: "No open campaign to invite them to: they're already in all of them, or you have none open.",
       inviteInf: "Invite influencers",
@@ -540,7 +540,7 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
     }
   };
 
-  var L = BC.lang(), U = null, seq = 0, uid = 0, first = true, F = { q: "", niche: "", platform: "", min: "", inviteFor: 0 };
+  var L = BC.lang(), U = null, seq = 0, uid = 0, first = true, F = { q: "", niche: "", platform: "", min: "", city: "", sort: "", inviteFor: 0 };
   function $(id) { return document.getElementById(id); }
   var nav = $("nav"), tabbar = $("tabbar"), view = $("view"), outB = $("out"), outB2 = $("out2");
   var sheet = $("sheet"), scrim = $("scrim"), meB = $("me"), counts = {}, mob = window.matchMedia("(max-width: 760px)");
@@ -1270,13 +1270,22 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
       all.forEach(function (x) { (x.niches || []).forEach(function (n) { var k = fold(n); if (!seen[k]) { seen[k] = 1; niches.push(n); } }); });
       niches.sort(function (a, b) { return a.localeCompare(b, locale()); });
       if (F.niche) F.niche = niches.filter(function (x) { return fold(x) === fold(F.niche); })[0] || "";
+      var cseen = {}, cities = [];
+      all.forEach(function (x) { var k = fold(x.city || ""); if (k && !cseen[k]) { cseen[k] = 1; cities.push(x.city.trim()); } });
+      cities.sort(function (a, b) { return a.localeCompare(b, locale()); });
+      if (F.city) F.city = cities.filter(function (x) { return fold(x) === fold(F.city); })[0] || "";
       var q = el("input", { type: "search", maxlength: 60, placeholder: t("discQPh"), value: F.q });
       var n = el("select", { value: F.niche }, [el("option", { value: "", text: t("allNiches") })].concat(niches.map(function (x) { return el("option", { value: x, text: x }); })));
       var s = el("select", { value: F.platform }, [el("option", { value: "", text: t("allPlatforms") })].concat(PLATFORMS.map(function (x) { return el("option", { value: x, text: PL[x] }); })));
       var mn = el("select", { value: F.min }, [el("option", { value: "", text: t("anyMin") })].concat([10000, 50000, 100000].map(function (v) { return el("option", { value: String(v), text: num(v) + "+" }); })));
+      var ci = el("select", { value: F.city }, [el("option", { value: "", text: t("allCities") })].concat(cities.map(function (x) { return el("option", { value: x, text: x }); })));
+      var so = el("select", { value: F.sort }, [["", "sortRec"], ["fol", "sortFol"], ["name", "sortName"]].map(function (o) { return el("option", { value: o[0], text: t(o[1]) }); }));
+      var rs = el("button", { type: "button", class: "ghost", text: t("fReset") });
       var f = el("form", { class: "box f filter", role: "search", "data-sk-noform": true, novalidate: true }, [
         el("div", null, fld("dq", t("discQ"), q)), el("div", null, fld("dn", t("fNiche"), n)),
-        el("div", null, fld("dp", t("fPlatform"), s)), el("div", null, fld("dm", t("fMinFol"), mn))
+        el("div", null, fld("dp", t("fPlatform"), s)), el("div", null, fld("dm", t("fMinFol"), mn)),
+        cities.length ? el("div", null, fld("dc", t("fCity"), ci)) : null, el("div", null, fld("ds", t("fSort"), so)),
+        el("div", { class: "freset" }, rs)
       ]);
       var box = el("div"), cnt = el("p", { class: "info", role: "status" }); ctx.err = note(); ctx.err.id = "disc-err"; discCtx = ctx;
       ctx.repaint = function () {
@@ -1284,9 +1293,12 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
         // Sonuç yoksa metin kutuda görünür; durum satırı yalnız ekran okuyucuya söyler (iki kez görünmez)
         cnt.textContent = list.length ? (list.length === 1 ? t("discCount1") : t("discCount", num(list.length))) : t("discNone");
         cnt.classList.toggle("vh", !list.length);
+        rs.hidden = !(F.q || F.niche || F.platform || F.min || F.city || F.sort);
         box.replaceChildren(list.length ? el("div", { class: "list" }, list.map(function (x) { return infCard(x, ctx); })) : empty(t("discNone")));
       };
-      function apply() { F.q = q.value.trim(); F.niche = n.value; F.platform = s.value; F.min = mn.value; ctx.repaint(); }
+      function apply() { F.q = q.value.trim(); F.niche = n.value; F.platform = s.value; F.min = mn.value; F.city = ci.value; F.sort = so.value; ctx.repaint(); }
+      // Temizle: davet bağlamı (inviteFor) korunur, yalnız filtreler sıfırlanır; odak arama kutusuna döner
+      rs.addEventListener("click", function () { [q, n, s, mn, ci, so].forEach(function (c) { c.value = ""; }); apply(); q.focus(); });
       f.addEventListener("submit", function (ev) { ev.preventDefault(); apply(); });
       f.addEventListener("input", apply); f.addEventListener("change", apply);
       ctx.repaint();
@@ -1308,8 +1320,10 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
   }
   // Platform seçiliyse takipçi eşiği yalnız o platformun kaydına uygulanır
   function discList(ctx) {
-    var q = fold(F.q), nk = fold(F.niche), min = +F.min || 0;
-    return ctx.all.filter(function (x) {
+    var q = fold(F.q), nk = fold(F.niche), ck = fold(F.city), min = +F.min || 0;
+    var top = function (x) { var m = 0; x.platforms.forEach(function (p) { if (!F.platform || p.platform === F.platform) m = Math.max(m, p.followers || 0); }); return m; };
+    var l = ctx.all.filter(function (x) {
+      if (ck && fold(x.city || "") !== ck) return false;
       if (q && fold((x.name || "") + " " + (x.city || "")).indexOf(q) < 0) return false;
       if (nk && !(x.niches || []).some(function (n) { return fold(n) === nk; })) return false;
       var ps = F.platform ? x.platforms.filter(function (p) { return p.platform === F.platform; }) : x.platforms;
@@ -1317,6 +1331,10 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
       if (min && !ps.some(function (p) { return (p.followers || 0) >= min; })) return false;
       return true;
     });
+    // Sıralama: önerilen = sunucu sırası (eşleşme ya da en yeni); takipçi seçili platforma göre
+    if (F.sort === "fol") l.sort(function (a, b) { return top(b) - top(a); });
+    else if (F.sort === "name") l.sort(function (a, b) { return (a.name || "").localeCompare(b.name || "", locale()); });
+    return l;
   }
   // Bu oturumda gönderilen davetler: sayfa yeniden çizilse de profilin geçmişine eklenir
   var discCtx = null, sentInv = {};
