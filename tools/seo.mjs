@@ -322,6 +322,9 @@ const RULES = {
       // 160'tan uzun açıklamalar
       for (const re of metas("description")) html = html.replace(re, (m, a, v, b) => v.length > 160 ? a + attr(metaDescription(text(v))) + b : m);
 
+      // Çatı kuruluş Corner Group (cornergroup.co/#org); eski SAAS Corner düğümü tüm sayfalarda değiştirilir
+      html = html.split('"parentOrganization":{"@type":"Organization","name":"SAAS Corner","url":"https://saascorner.co","sameAs":["https://www.linkedin.com/company/saascorner/","https://www.instagram.com/saascorner.co/","https://www.trustpilot.com/review/saascorner.co"]}')
+        .join('"parentOrganization":{"@type":"Organization","@id":"https://cornergroup.co/#org","name":"Corner Group","url":"https://cornergroup.co/"}');
       // Sayfadaki data-sk-seo LD elle zenginleştirilmiş (#77: founder, parentOrganization, contactPoint): varsa korunur.
       // Yoksa (taze ayna) aynı @id'lerle aynı graph üretilir; yeniden ayna alındığında #77 geri gitmez
       if (page === "/" && !html.includes('data-sk-seo>')) {
@@ -329,7 +332,7 @@ const RULES = {
         const org = {
           "@type": "Organization", "@id": R.origin + "/#org", name: R.brand, url: R.origin + "/", logo: R.origin + "/_a/fr/images/HZ5MjnQL4L5dlgs5jDednLyCI0.png", email,
           founder: { "@type": "Person", "@id": "https://www.yalcinberkay.com.tr/#person", name: "Berkay Yalçın", url: "https://www.yalcinberkay.com.tr/" },
-          parentOrganization: { "@type": "Organization", name: "SAAS Corner", url: "https://saascorner.co", sameAs: ["https://www.linkedin.com/company/saascorner/", "https://www.instagram.com/saascorner.co/", "https://www.trustpilot.com/review/saascorner.co"] },
+          parentOrganization: { "@type": "Organization", "@id": "https://cornergroup.co/#org", name: "Corner Group", url: "https://cornergroup.co/" },
           contactPoint: { "@type": "ContactPoint", contactType: "customer service", email, availableLanguage: ["tr", "en"] },
         };
         html = html.replace("</head>", ldTag({ "@context": "https://schema.org", "@graph": [org, { "@type": "WebSite", "@id": R.origin + "/#website", url: R.origin + "/", name: R.brand, publisher: { "@id": org["@id"] }, inLanguage: "tr-TR" }] }) + "</head>");

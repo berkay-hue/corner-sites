@@ -188,7 +188,10 @@ function renderPost(tpl, post, next, related) {
   r = region(h, RG.summary); if (r) h = setInner(h, r, setP(r.inner, fm.description));
   r = region(h, RG.readTime); if (r) h = setInner(h, r, setP(r.inner, readTime(post.body)));
   const relMd = related.length ? `\n\n## ${L().related}\n\n` + related.map(p => `- [${p.fm.title.replace(/[[\]]/g, "")}](${BASE}/blog/${p.slug})`).join("\n") : "";
-  const body = markdown(post.body + relMd)
+  // Hizmet sayfalarına iç link (blog -> hizmet): sitenin config'inde dil başına { başlık, [ad, yol] }
+  const svc = cfg.services?.[cfg.lang];
+  const svcMd = svc ? `\n\n## ${svc.title}\n\n` + svc.links.map(([t, u]) => `- [${t}](${u})`).join("\n") : "";
+  const body = markdown(post.body + relMd + svcMd)
     .replace(/<(p|li|h2|h3|h4)>/g, (_, t) => `<${t} dir="auto" class="${cfg.pClass}">`)
     .replace(/<blockquote><p dir="auto" class="[^"]*">/g, `<blockquote><p dir="auto" class="${cfg.pClass}">`);
   r = region(h, RG.content); h = setInner(h, r, body);
