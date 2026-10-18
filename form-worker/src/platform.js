@@ -363,7 +363,7 @@ async function getCampaign(c, id) {
 }
 
 const myApp = (env, campaignId, userId) => env.DB.prepare("SELECT * FROM applications WHERE campaign_id = ? AND user_id = ?").bind(campaignId, userId).first();
-const appOut = a => ({ id: a.id, campaign_id: a.campaign_id, status: a.status, message: a.message, content_url: a.content_url, created_at: a.created_at, updated_at: a.updated_at });
+const appOut = a => ({ id: a.id, campaign_id: a.campaign_id, status: a.status, message: a.message, content_url: a.content_url, revision_note: a.revision_note || null, created_at: a.created_at, updated_at: a.updated_at });
 
 // Influencer'ın markalara görünen kısmı (e-posta yok)
 function creator(id, name, profileJson, camp) {
@@ -409,6 +409,7 @@ async function myApplications(c) {
 
 // Durum akışı. Marka/ajans: pending → accepted | rejected, submitted → approved | revision.
 // Influencer: invited → accepted | declined, accepted | revision → submitted (içerik linkiyle).
+// revision isteğinde isteğe bağlı "note" (≤500) revision_note olarak saklanır; sonraki gönderimde kalır, influencer görür.
 const OWNER_MOVES = { pending: ["accepted", "rejected"], submitted: ["approved", "revision"] };
 const CREATOR_MOVES = { invited: ["accepted", "declined"], accepted: ["submitted"], revision: ["submitted"] };
 
@@ -425,6 +426,11 @@ async function updateApplication(c, id) {
   }
   const u = await env.DB.prepare("UPDATE applications SET status = ?, content_url = ?, updated_at = datetime('now') WHERE id = ? RETURNING *")
     .bind(body.status, url, id).first();
+  if (body.status === "revision") {
+    // Not ayrı yazılır: revision_note kolonu canlıda henüz yoksa (ALTER çalışmadıysa) durum değişikliği yine geçer
+    const n = text(body.note, 500) || null;
+    try { await env.DB.prepare("UPDATE applications SET revision_note = ? WHERE id = ?").bind(n, id).run(); u.revision_note = n; } catch (e) {}
+  }
   return ok(c, { application: appOut(u) });
 }
 
