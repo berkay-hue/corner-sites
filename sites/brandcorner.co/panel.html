@@ -159,7 +159,7 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
 .isub{font-size:13px;color:var(--muted);margin:-8px 0 0;overflow-wrap:anywhere}
 .irow .match{flex:none;font-size:12px;font-weight:600;padding:3px 8px;border-radius:999px;background:var(--accent-soft);color:var(--accent-text)}.irow .match.lo{background:var(--slate-soft);color:var(--slate)}
 .sw{display:flex;align-items:center;gap:12px;min-height:44px;padding:12px 0;border-top:1px solid var(--line)}.sw:first-of-type{border-top:0}.sw .tx{flex:1;min-width:0}.sw .tx b{display:block;font-weight:600}.sw .tx span{font-size:13px;color:var(--muted)}
-.sw input{appearance:none;-webkit-appearance:none;flex:none;width:42px;height:24px;margin:0;border-radius:12px;background:var(--line-strong);position:relative;cursor:not-allowed;opacity:.7}.sw input::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:left .15s}.sw input:checked{background:var(--accent)}.sw input:checked::after{left:21px}
+.sw input{appearance:none;-webkit-appearance:none;flex:none;width:42px;height:24px;margin:0;border-radius:12px;background:var(--line-strong);position:relative;cursor:pointer}.sw input:disabled{cursor:not-allowed;opacity:.7}.sw input::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:left .15s}.sw input:checked{background:var(--accent)}.sw input:checked::after{left:21px}
 @media(max-width:1100px){.ov{grid-template-columns:minmax(0,1fr)}}
 .split{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:20px;align-items:start}.stack{display:flex;flex-direction:column;gap:16px}.sticky{position:sticky;top:16px}.av.sq{border-radius:10px}
 .daily .cb{padding-top:18px}.daily h2{font-size:15px;margin:0}.daily .count{font-size:14px;color:var(--text)}.daily .hint{margin:4px 0 0}.daily .meta{margin:8px 0 0}
@@ -255,7 +255,7 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
       oppsFor: "Sana uygun fırsatlar", oppsAll: "Tümü", oppsEmpty: "Şu an sana uygun yeni fırsat yok.",
       dailyT: "Bugün kalan başvuru hakkın", dailyHint: "Her gün yenilenir. Seçici başvurular daha çok kabul alır.", dailyLater: "Sayaç sunucu güncellemesinden sonra görünecek.",
       ntTitle: "E-posta bildirimleri", nApp: "Yeni başvuru", nAppD: "Kampanyana biri başvurduğunda", nSub: "İçerik gönderildi", nSubD: "Onay bekleyen içerik geldiğinde", nWeek: "Haftalık özet", nWeekD: "Pazartesi sabahı tek e-posta",
-      nInv: "Yeni davet", nInvD: "Bir marka seni davet ettiğinde", nSt: "Başvuru durumu", nStD: "Kabul, red ve revizyonlarda", nMatch: "Yeni uygun fırsat", nMatchD: "Günde en fazla bir e-posta",
+      nInv: "Yeni davet", nInvD: "Bir marka seni davet ettiğinde", nSt: "Başvuru durumu", nStD: "Kabul, red ve revizyonlarda", nMatch: "Yeni uygun fırsat", nMatchD: "Günde en fazla bir e-posta", ntLater: "Tercihlerin kaydedilir; e-posta gönderimi yakında başlayacak.",
       sOpps: "Açık fırsat", sInvites: "Bekleyen davet", sActive: "Süren iş",
       doProfile: "Profilinizi tamamlayın", doNew: "Yeni kampanya oluşturun",
       waiting: "Sizi bekleyenler", waitEmpty: "Şu an sizi bekleyen bir iş yok.", inNew: "{n} yeni başvuru", inSub: "{n} içerik onay bekliyor", inDue: "Son tarih yaklaşıyor: {n}",
@@ -296,7 +296,7 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
       campLimit: "Kampanya sınırına ulaştınız (en fazla 100 kampanya).", badBudget: "Bütçeyi tam sayı olarak girin.",
       tagsMax: "En fazla 5 niş girebilirsiniz.",
       fCompanyN: "Şirket adı", fAgencyN: "Ajans adı", fNichesT: "Nişler (en fazla 5)", nichesHint: "Eşleşme puanı nişlere göre hesaplanır.",
-      nichesPh: "Örn. cilt bakımı — Enter ile ekle", tagsFull: "Sınıra ulaşıldı", tagRm: "Kaldır: {n}", nichesLater: "Nişler sunucu güncellemesinden sonra kaydedilecek",
+      nichesPh: "Örn. cilt bakımı — Enter ile ekle", tagsFull: "Sınıra ulaşıldı", tagRm: "Kaldır: {n}",
       fClientsT: "Müşteriler (en fazla 20)", clientsPh: "Örn. marka adı — Enter ile ekle", clientsHint: "Çalıştığın markalar profilinde görünür.", clientsLater: "Müşteri adları sunucu güncellemesinden sonra kaydedilecek; şimdilik sayısı kaydedildi.",
       ckNiches1: "Nişler (en az 1)", ckClient1: "En az bir müşteri", pvLbl: "Profil kartın", pvSoon: "Influencerlar şimdilik yalnız görünen adını görüyor; diğer alanlar yakında.", pvLblC: "Markalar seni böyle görüyor", pvBio: "Hakkında yazısı burada görünecek.",
       miniNew: "{n} yeni başvuru", miniNew1: "{n} yeni başvuru", miniAct: "{n} içerik onayı", miniAct1: "{n} içerik onayı", miniPpl: "{n} kişi", miniPpl1: "{n} kişi", dLeft1: "{n} gün kaldı", helpS: "Yardım",
@@ -333,7 +333,7 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
       invitedBy: "{n} sizi davet etti",
       myAppsEmpty: "Henüz başvurunuz ya da davetiniz yok. Fırsatlar sayfasından açık kampanyalara başvurabilirsiniz.", goOpps: "Fırsatlara göz at",
       discLead: "Profil kartlarını inceleyip doğrudan davet edin.", discQ: "Ara", discQPh: "İsim veya şehir", allNiches: "Tüm ilgi alanları",
-      fMinFol: "Takipçi", anyMin: "Her takipçi sayısı", discCount: "{n} influencer", discCount1: "1 influencer", discCap: "En yeni 100 profil yüklendi; filtreler yalnızca bu profiller içinde çalışır.", viewProf: "Profili gör", inviteFor: "{n} için davet ediyorsunuz.",
+      fMinFol: "Takipçi", anyMin: "Her takipçi sayısı", discCount: "{n} influencer", discCount1: "1 influencer", discCap: "En yeni 100 profil yüklendi; filtreler yalnızca bu profiller içinde çalışır.", discCap50: "En uygun 50 profil gösteriliyor.", discMatch: "İlgi alanlarınıza göre en uygun profiller.", discMatchC: "Seçili kampanyaya en uygun profiller.", discNoNiche: "Profilinize ilgi alanı eklerseniz size en uygun profilleri öne çıkarırız.", discNoNicheC: "Bu kampanyada ilgi alanı yok; tüm profiller gösteriliyor.", discNoMatch: "Ortak ilgi alanı olan profil yok; tüm profiller gösteriliyor.", discMatchErr: "Eşleşmeler yüklenemedi; tüm profiller gösteriliyor.", viewProf: "Profili gör", inviteFor: "{n} için davet ediyorsunuz.",
       clearFor: "Temizle", drClose: "Kapat", drNoPlat: "Platform eklenmemiş.", drHist: "Sizinle geçmiş", drHistNone: "Henüz birlikte çalışmadınız.",
       drInvite: "Kampanyaya davet et", drNoOpen: "Davet edilebilecek açık kampanya yok: ya hepsinde zaten var ya da açık kampanyanız yok.",
       inviteInf: "Influencer davet et",
@@ -373,7 +373,7 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
       oppsFor: "Opportunities for you", oppsAll: "All", oppsEmpty: "No new matches right now.",
       dailyT: "Applications left today", dailyHint: "Resets daily. Focused applications get accepted more.", dailyLater: "The counter will appear after a server update.",
       ntTitle: "Email notifications", nApp: "New application", nAppD: "When someone applies", nSub: "Content submitted", nSubD: "When content needs approval", nWeek: "Weekly summary", nWeekD: "One email on Monday morning",
-      nInv: "New invite", nInvD: "When a brand invites you", nSt: "Application status", nStD: "On accept, reject, revision", nMatch: "New matching opportunity", nMatchD: "At most one email a day",
+      nInv: "New invite", nInvD: "When a brand invites you", nSt: "Application status", nStD: "On accept, reject, revision", nMatch: "New matching opportunity", nMatchD: "At most one email a day", ntLater: "Your choices are saved; emails will start soon.",
       sOpps: "Open opportunities", sInvites: "Pending invites", sActive: "In progress",
       doProfile: "Complete your profile", doNew: "Create a new campaign",
       waiting: "Waiting for you", waitEmpty: "Nothing is waiting for you right now.", inNew: "{n} new applications", inSub: "{n} content items awaiting approval", inDue: "Deadline coming up: {n}",
@@ -414,7 +414,7 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
       campLimit: "You've reached the campaign limit (100 campaigns).", badBudget: "Enter the budget as a whole number.",
       tagsMax: "You can add up to 5 niches.",
       fCompanyN: "Company name", fAgencyN: "Agency name", fNichesT: "Niches (up to 5)", nichesHint: "Match score is calculated from your niches.",
-      nichesPh: "E.g. skincare — press Enter to add", tagsFull: "Limit reached", tagRm: "Remove {n}", nichesLater: "Niches will be saved after a server update",
+      nichesPh: "E.g. skincare — press Enter to add", tagsFull: "Limit reached", tagRm: "Remove {n}",
       fClientsT: "Clients (up to 20)", clientsPh: "E.g. brand name — press Enter to add", clientsHint: "Brands you work with appear on your profile.", clientsLater: "Client names will be saved after a server update; the count is saved for now.",
       ckNiches1: "Niches (at least 1)", ckClient1: "At least one client", pvLbl: "Your profile card", pvSoon: "Creators only see your display name for now; the other fields are coming soon.", pvLblC: "How brands see you", pvBio: "Your about text appears here.",
       miniNew: "{n} new applications", miniNew1: "{n} new application", miniAct: "{n} to review", miniAct1: "{n} to review", miniPpl: "{n} people", miniPpl1: "{n} person", dLeft1: "{n} day left", helpS: "Help",
@@ -451,7 +451,7 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
       invitedBy: "{n} invited you",
       myAppsEmpty: "No applications or invites yet. You can apply to open campaigns from Opportunities.", goOpps: "Browse opportunities",
       discLead: "Browse profile cards and invite directly.", discQ: "Search", discQPh: "Name or city", allNiches: "All niches",
-      fMinFol: "Followers", anyMin: "Any follower count", discCount: "{n} influencers", discCount1: "1 influencer", discCap: "The newest 100 profiles are loaded; filters only search within them.", viewProf: "View profile", inviteFor: "Inviting for {n}.",
+      fMinFol: "Followers", anyMin: "Any follower count", discCount: "{n} influencers", discCount1: "1 influencer", discCap: "The newest 100 profiles are loaded; filters only search within them.", discCap50: "Showing the 50 best matches.", discMatch: "Best matches for your niches.", discMatchC: "Best matches for the selected campaign.", discNoNiche: "Add niches to your profile and we will bring your best matches to the top.", discNoNicheC: "This campaign has no niches; showing all profiles.", discNoMatch: "No profiles share your niches; showing all profiles.", discMatchErr: "Matches could not be loaded; showing all profiles.", viewProf: "View profile", inviteFor: "Inviting for {n}.",
       clearFor: "Clear", drClose: "Close", drNoPlat: "No platforms added.", drHist: "History with you", drHistNone: "You haven't worked together yet.",
       drInvite: "Invite to a campaign", drNoOpen: "No open campaign to invite them to: they're already in all of them, or you have none open.",
       inviteInf: "Invite influencers",
@@ -671,9 +671,8 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
   function profileChecks(p) {
     p = p || U.profile || {};
     var has = function (v) { return !!String(v || "").trim(); };
-    // ckNiches1 yok: Worker owner nişlerini saklamıyor, görev hiç kapanmazdı (form alanı + nichesLater kalır)
     if (isOwner()) {
-      var c = [["ckCompany", has(p.company)], ["ckIndustry", has(p.industry)], ["ckCity", has(p.city)], ["ckWebsite", has(p.website)], ["ckBio", String(p.bio || "").trim().length >= 40]];
+      var c = [["ckCompany", has(p.company)], ["ckIndustry", has(p.industry)], ["ckCity", has(p.city)], ["ckWebsite", has(p.website)], ["ckBio", String(p.bio || "").trim().length >= 40], ["ckNiches1", (p.niches || []).length > 0]];
       if (U.role === "agency") c.push(["ckClient1", Number(p.clients) > 0]);
       return c;
     }
@@ -1177,12 +1176,26 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
   // Influencer keşfi (marka/ajans): yalnızca profilini açan influencer'lar
   // Büyük-küçük harf farkını (Türkçe İ/ı ve birleşik nokta U+0307 dahil) yok sayan karşılaştırma anahtarı
   function fold(v) { return String(v || "").normalize("NFD").replace(/\u0307/g, "").replace(/[ıİI]/g, "i").toLowerCase(); }
+  // Keşif: önce kampanyalar. Seçili kampanya hâlâ açıksa app/matches ona göre; kapalı ya da silinmişse seçim temizlenir ve
+  // profil nişlerine göre eşleşir. Niş yoksa, eşleşme boşsa ya da çağrı düşerse tüm profiller (app/influencers) gösterilir
+  // ve nedeni tek satırla söylenir; sayfa hiçbir durumda boş kalmaz
   function discover() {
-    return Promise.all([BC.call("GET", "app/influencers"), BC.call("GET", "app/campaigns")]).then(function (r) {
-      var all = r[0].influencers || [], camps = r[1].campaigns || [];
-      var open = camps.filter(function (c) { return c.status === "open"; });
-      var forC = open.filter(function (c) { return c.id === F.inviteFor; })[0] || null;
+    var camps, open, forC;
+    return BC.call("GET", "app/campaigns").then(function (cd) {
+      camps = (cd && cd.campaigns) || [];
+      open = camps.filter(function (c) { return c.status === "open"; });
+      forC = open.filter(function (c) { return c.id === F.inviteFor; })[0] || null;
       if (!forC) F.inviteFor = 0;
+      var fc = forC ? "&campaign=" + encodeURIComponent(forC.id) : "";
+      return BC.call("GET", "app/matches?limit=50" + fc).then(function (d) {
+        var l = d && Array.isArray(d.influencers) ? d.influencers : [];
+        if (l.length) return { all: l, why: fc ? "discMatchC" : "discMatch" };
+        return { why: d && d.reason === "no_niches" ? (fc ? "discNoNicheC" : "discNoNiche") : "discNoMatch" };
+      }, function (e) { if (e && e.code === "auth") throw e; return { why: "discMatchErr" }; });
+    }).then(function (m) {
+      return m.all ? m : BC.call("GET", "app/influencers").then(function (d) { return { all: d.influencers || [], why: m.why, fb: true }; });
+    }).then(function (r0) {
+      var all = r0.all, why = r0.why, fb = !!r0.fb;
       var ctx = { all: all, camps: camps, open: open, forC: forC };
       var seen = {}, niches = [];
       all.forEach(function (x) { (x.niches || []).forEach(function (n) { var k = fold(n); if (!seen[k]) { seen[k] = 1; niches.push(n); } }); });
@@ -1214,7 +1227,8 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
         el("h1", { text: t("nDiscover") }), el("p", { class: "lead", text: t("discLead") }),
         forC ? el("div", { class: "box banner", role: "status" }, [forText(forC.title), clr]) : null,
         open.length ? null : el("p", { class: "info" }, [t("needOpen") + " ", el("a", { href: "#new", text: t("doNew") })]),
-        all.length ? f : null, all.length >= 100 ? el("p", { class: "meta", text: t("discCap") }) : null,
+        all.length || !fb ? el("p", { class: "meta" }, [t(why), why === "discNoNiche" ? el("a", { class: "btn sm sec", href: "#profile", text: t("editProf") }) : null]) : null,
+        all.length ? f : null, fb && all.length >= 100 ? el("p", { class: "meta", text: t("discCap") }) : !fb && all.length >= 50 ? el("p", { class: "meta", text: t("discCap50") }) : null,
         ctx.err, all.length ? cnt : null, all.length ? box : empty(t("discEmpty"))
       ];
     });
@@ -1253,7 +1267,7 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
       act.addEventListener("click", function () { infDrawer(x, ctx, true); });
     }
     return el("article", { class: "box item" }, [
-      el("div", { class: "head" }, [el("div", null, [el("h3", { text: x.name }), x.city ? el("p", { class: "meta", text: x.city }) : null])]),
+      el("div", { class: "head" }, [el("div", null, [el("h3", { text: x.name }), x.match != null || x.city ? el("p", { class: "meta" }, [x.match != null ? el("span", { class: "match" + (x.match < 60 ? " lo" : ""), text: t("match", x.match) }) : null, x.city ? el("span", { text: x.city }) : null]) : null])]),
       x.bio ? el("p", { class: "prose sm", text: x.bio }) : null,
       chips(x.niches), handles(x.platforms),
       el("div", { class: "row-b" }, [v, act])
@@ -1426,16 +1440,37 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
       try { th = localStorage.getItem("bc-theme") || "system"; } catch (e) {}
       var ob = el("button", { type: "button", class: "btn sec bad", text: t("logout") });
       ob.addEventListener("click", out);
-      // Bildirim anahtarları: Worker'da ayar yok, hepsi işaretsiz, kilitli ve "Yakında"; hiçbir yere kaydedilmez
+      // Bildirim anahtarları: GET/PUT app/notify. Yüklenene kadar ya da yüklenemezse kilitli kalır; kayıt düşerse anahtar geri döner
       function notifs() {
-        var rows = isOwner() ? [["n-app", "nApp"], ["n-sub", "nSub"], ["n-week", "nWeek"]] : [["n-inv", "nInv"], ["n-st", "nSt"], ["n-match", "nMatch"]];
-        return rows.map(function (w) {
-          return el("label", { class: "sw", for: w[0] }, [
-            el("span", { class: "tx" }, [el("b", { text: t(w[1]) }), el("span", { text: t(w[1] + "D") })]),
-            el("span", { class: "badge b-soon", text: t("soonBadge") }),
-            el("input", { type: "checkbox", id: w[0], role: "switch", checked: false, disabled: true })
-          ]);
+        var rows = isOwner() ? [["n-app", "nApp", "new_application"], ["n-sub", "nSub", "content_submitted"], ["n-week", "nWeek", "weekly_summary"]]
+          : [["n-inv", "nInv", "invites"], ["n-st", "nSt", "status_change"], ["n-match", "nMatch", "new_match"]];
+        var ins = {}, nm = note(), nok = okNote(), slot = el("div");
+        var list = rows.map(function (w) {
+          var i = el("input", { type: "checkbox", id: w[0], role: "switch", checked: false, disabled: true });
+          ins[w[2]] = i;
+          i.addEventListener("change", function () {
+            var on = i.checked, body = { notify: {} };
+            body.notify[w[2]] = on;
+            say(nm, ""); say(nok, ""); i.disabled = true;
+            BC.call("PUT", "app/notify", body).then(function (d) {
+              var v = d && d.notify ? d.notify[w[2]] : undefined;
+              i.disabled = false; i.checked = typeof v === "boolean" ? v : on; say(nok, t("saved"));
+            }, function (e) { i.disabled = false; i.checked = !on; say(nm, BC.msg(e && e.code)); });
+          });
+          return el("label", { class: "sw", for: w[0] }, [el("span", { class: "tx" }, [el("b", { text: t(w[1]) }), el("span", { text: t(w[1] + "D") })]), i]);
         });
+        function load() {
+          slot.replaceChildren();
+          BC.call("GET", "app/notify").then(function (d) {
+            var n = d && d.notify;
+            if (!n || typeof n !== "object") throw { code: "err" };
+            rows.forEach(function (w) { var v = n[w[2]], i = ins[w[2]]; i.checked = v === true; i.disabled = typeof v !== "boolean"; });
+            // Tercih kaydedilir ama Worker henüz e-posta göndermiyorsa bunu açıkça söyleriz
+            if (d.sending === false) slot.replaceChildren(el("p", { class: "meta" }, [el("span", { class: "badge b-soon", text: t("soonBadge") }), " ", t("ntLater")]));
+          }).then(null, function (e) { slot.replaceChildren(failLine(e || {}, load)); });
+        }
+        load();
+        return list.concat([slot, nm, nok]);
       }
       function card(h, kids) { return el("section", { class: "card" }, [el("div", { class: "ch" }, el("h2", { text: h })), el("div", { class: "cb" }, kids)]); }
       return [el("h1", { text: t("nSettings") }), el("p", { class: "lead", text: t("setLead") }),
@@ -1522,7 +1557,7 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
     var bio = el("textarea", { maxlength: 500, rows: 4, value: p.bio || "" });
     var city = el("input", { type: "text", maxlength: 100, autocomplete: "address-level2", value: p.city || "" });
     var web = el("input", { type: "url", maxlength: 300, inputmode: "url", placeholder: "https://", value: p.website || "" });
-    var cnt = el("span", { class: "count" }), later = el("p", { class: "hint", role: "status", hidden: true, text: t("nichesLater") });
+    var cnt = el("span", { class: "count" });
     var tb = tagBox("pf-niches", p.niches, emit);
     // Ajans müşterileri: niş girişiyle aynı bileşen, öneri listesi yok. Worker bugün yalnız sayı (clients) saklıyor;
     // adlar client_names olarak gider, dönmezse sayı etiket adedinden yazılır ve not gösterilir.
@@ -1563,7 +1598,7 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
       inf ? bioF : null,
       el("div", { class: "grid2" }, [el("div", null, fld("pf-city", t("fCity"), city)), el("div", null, fld("pf-web", t("fWebsite"), web))]),
       inf ? null : bioF,
-      el("label", { for: "pf-niches", text: t("fNichesT") }), tb.node, el("p", { class: "hint", id: "pf-niches-h", text: t("nichesHint") }), later,
+      el("label", { for: "pf-niches", text: t("fNichesT") }), tb.node, el("p", { class: "hint", id: "pf-niches-h", text: t("nichesHint") }),
       inf ? el("fieldset", null, [el("legend", { text: t("fPlats") }), el("p", { class: "hint", style: "margin:0 0 10px", text: t("platsHint") }), box, addB]) : null,
       inf ? el("label", { class: "check", for: "pl-listed" }, [listed, t("fListed")]) : null,
       inf ? el("p", { class: "hint", style: "margin:4px 0 16px", text: t("fListedHint") }) : null,
@@ -1608,8 +1643,6 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
       BC.call("POST", "app/profile", { name: nm, profile: pr }).then(function (d) {
         U = d.user; paintWho(); busy(b, false);
         web.value = (U.profile || {}).website || "";
-        // Worker bugün nişleri yalnız influencer için saklıyor: gönderilip dönmediyse kalıcıymış gibi göstermeyiz
-        later.hidden = !(tg.length && !((U.profile || {}).niches || []).length);
         if (agency) { hasNames = Array.isArray((U.profile || {}).client_names); cLater.hidden = !(cn.length && !hasNames); }
         say(ok, t("saved")); emit();
         if (onSaved) onSaved();
