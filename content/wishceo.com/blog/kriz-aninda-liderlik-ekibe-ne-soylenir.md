@@ -101,4 +101,4 @@ Ekip bir şeylerin değiştiğini sezmeye başladıysa, evet. "Bir gelişme var,
 
 Kontrolünde olmayan bir sonuç için söz vermek risklidir. Bunun yerine kontrolünde olan şeyleri vaat et: ne zaman bilgi vereceğini, kararları nasıl alacağını ve kimin önce bileceğini. Bu sözler hem tutulabilir hem de ekibe gerçek bir güvence sağlar.
 
-Selin'in salı sabahı verdiği karar, aslında bir iletişim kararıydı: Ne zaman, kime, ne kadarını söyleyecekti? Bu tür anlarda doğru cevap nadiren tektir, ama hangi seçeneğin neyi riske attığını görmek düşünmeyi kolaylaştırır. Sen de bugün kurgusal bir şirketin başına geç ve benzer bir anda hangi cümleyi seçeceğini dene: [Bugünün vakasını oyna](/#oyun)
+Selin'in salı sabahı verdiği karar, aslında bir iletişim kararıydı: Ne zaman, kime, ne kadarını söyleyecekti? Bu tür anlarda doğru cevap nadiren tektir, ama hangi seçeneğin neyi riske attığını görmek düşünmeyi kolaylaştırır. Sen de bugün kurgusal bir şirketin başına geç ve benzer bir anda hangi cümleyi seçeceğini dene: [Yeni sayıyı oyna](/#oyun)

@@ -85,4 +85,4 @@ Konuya hâkimsen ilk teklifi vermek çoğu zaman avantaj sağlar, çünkü tart�
 
 En belirgin hâli sayılarla görülür ama ilk izlenimler, ilk duyulan fikir ya da toplantıda ilk konuşan kişinin görüşü de çapa işlevi görebilir. Bir tartışmada ilk sunulan seçenek, diğer seçeneklerin değerlendirilme biçimini de etkiler.
 
-Bir dahaki sefere bir rakam sana hemen mantıklı geldiğinde bir an dur ve o rakamın nereden geldiğini kendine sor. Bunu denemek için iyi bir yer var: Yeni sayıda da önüne bir sayı konacak ve hangisinin senin çapan olacağına sen karar vereceksin. [Bugünün vakasını oyna](/#oyun)
+Bir dahaki sefere bir rakam sana hemen mantıklı geldiğinde bir an dur ve o rakamın nereden geldiğini kendine sor. Bunu denemek için iyi bir yer var: Yeni sayıda da önüne bir sayı konacak ve hangisinin senin çapan olacağına sen karar vereceksin. [Yeni sayıyı oyna](/#oyun)
