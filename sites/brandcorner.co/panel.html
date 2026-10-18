@@ -303,6 +303,7 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
       waiting: "Sizi bekleyenler", waitEmpty: "Şu an sizi bekleyen bir iş yok.", inNew: "{n} yeni başvuru", inSub: "{n} içerik onay bekliyor", inDue: "Son tarih yaklaşıyor: {n}",
       inInvite: "{n} sizi davet etti", inRev: "Revizyon istendi", inAcc: "İçerik bağlantınızı gönderin", inProf: "%{n} tamamlandı", review: "İncele", openIt: "Aç",
       profCard: "Profil", profDone: "Tamamlanma", editProf: "Profili düzenle",
+      kvTitle: "Verilerin", kvLead: "Hesabına ait verilerin bir kopyasını JSON dosyası olarak indir (KVKK md. 11).", kvBtn: "Verilerimi indir", kvDone: "Dosya indirildi.", kvSampleNote: "Sunucu dışa aktarımı açılana kadar dosya yalnız bu cihazdaki bilgileri içerir.", kvDelTitle: "Hesap ve veri silme", kvDelLead: "Hesabını ve verilerini sildirmek için bize yaz.", kvDelBtn: "Silme talebi gönder", kvDelSubj: "Brand Corner hesap ve veri silme talebi",
       nSettings: "Ayarlar", setLead: "Hesabını ve panelin görünümünü yönet.", setAcct: "Hesap", setName: "Ad soyad", setEmail: "E-posta", setEmailHint: "E-postanı değiştirmek için info@saascorner.co adresine yaz.", setPw: "Şifre", setPwHint: "Yeni şifre belirleme bağlantısını e-postana göndeririz.", setPwBtn: "Sıfırlama bağlantısı gönder", setPwSent: "Bağlantı gönderildi. Gelen kutunu kontrol et.", setLook: "Görünüm", setLang: "Dil", setTheme: "Tema", thSys: "Sistem", thLight: "Açık", thDark: "Koyu", setOutLead: "Bu cihazda panelden çıkış yap.",
       ckCompany: "Şirket adı", ckIndustry: "Sektör", ckCity: "Şehir", ckWebsite: "Web sitesi", ckBio: "Hakkında (en az 40 karakter)", ckClients: "Müşteri sayısı",
       ckNiches: "İlgi alanları", ckPlatform: "Takipçi sayısıyla en az bir platform", ckListed: "Markalara görünür profil",
@@ -442,6 +443,7 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
       waiting: "Waiting for you", waitEmpty: "Nothing is waiting for you right now.", inNew: "{n} new applications", inSub: "{n} content items awaiting approval", inDue: "Deadline coming up: {n}",
       inInvite: "{n} invited you", inRev: "Revision requested", inAcc: "Send your content link", inProf: "{n}% complete", review: "Review", openIt: "Open",
       profCard: "Profile", profDone: "Completion", editProf: "Edit profile",
+      kvTitle: "Your data", kvLead: "Download a copy of your account data as a JSON file (KVKK art. 11).", kvBtn: "Download my data", kvDone: "File downloaded.", kvSampleNote: "Until server export is live, the file contains only the data on this device.", kvDelTitle: "Account and data deletion", kvDelLead: "To delete your account and data, write to us.", kvDelBtn: "Request deletion", kvDelSubj: "Brand Corner account and data deletion request",
       nSettings: "Settings", setLead: "Manage your account and how the panel looks.", setAcct: "Account", setName: "Full name", setEmail: "Email", setEmailHint: "To change your email, write to info@saascorner.co.", setPw: "Password", setPwHint: "We will email you a link to set a new password.", setPwBtn: "Send reset link", setPwSent: "Reset link sent. Check your inbox.", setLook: "Appearance", setLang: "Language", setTheme: "Theme", thSys: "System", thLight: "Light", thDark: "Dark", setOutLead: "Log out of the panel on this device.",
       ckCompany: "Company name", ckIndustry: "Industry", ckCity: "City", ckWebsite: "Website", ckBio: "About (at least 40 characters)", ckClients: "Number of clients",
       ckNiches: "Niches", ckPlatform: "At least one platform with follower count", ckListed: "Profile visible to brands",
@@ -1542,6 +1544,41 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
         load();
         return list.concat([slot, nm, nok]);
       }
+      // KVKK dışa aktarma: GET app/export → JSON indir. Uç yoksa (404) bu cihazdaki bilgilerle indirir ve "Örnek veri" rozeti gösterir; oturum anahtarı dosyaya girmez
+      function kvkk() {
+        var km = note(), kok = okNote(), ks = el("div"), kb = el("button", { type: "button", class: "btn sec", text: t("kvBtn") });
+        function save(o) {
+          var a = el("a", { href: URL.createObjectURL(new Blob([JSON.stringify(o, null, 2)], { type: "application/json" })), download: "brandcorner-verilerim-" + isoDay(new Date()) + ".json" });
+          document.body.appendChild(a); a.click(); a.remove();
+          setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
+          say(kok, t("kvDone"));
+        }
+        function local() {
+          var o = { exported_at: new Date().toISOString(), source: "device", user: U };
+          try {
+            var ps = localStorage.getItem("bc-posts-" + U.id), rd = localStorage.getItem("bc-notif-read-" + U.id);
+            if (ps) o.posts = JSON.parse(ps);
+            if (rd) o.notifications_read = JSON.parse(rd);
+          } catch (e) {}
+          return o;
+        }
+        kb.addEventListener("click", function () {
+          say(km, ""); say(kok, ""); ks.replaceChildren(); busy(kb, true);
+          BC.call("GET", "app/export").then(function (d) {
+            busy(kb, false); var o = d && d.export;
+            if (!o || typeof o !== "object") return say(km, BC.msg("err"));
+            save(o);
+          }, function (e) {
+            busy(kb, false);
+            if (!crMissing(e)) return say(km, BC.msg(e && e.code));
+            ks.replaceChildren(el("p", { class: "meta" }, [el("span", { class: "badge b-sample", text: t("crSampleBadge") }), " ", t("kvSampleNote")]));
+            save(local());
+          });
+        });
+        return [el("p", { class: "hint", text: t("kvLead") }), kb, ks, km, kok,
+          el("h3", { class: "sub", text: t("kvDelTitle") }), el("p", { class: "hint", text: t("kvDelLead") }),
+          el("a", { class: "btn sec", href: "mailto:info@saascorner.co?subject=" + encodeURIComponent(t("kvDelSubj")), text: t("kvDelBtn") })];
+      }
       function card(h, kids) { return el("section", { class: "card" }, [el("div", { class: "ch" }, el("h2", { text: h })), el("div", { class: "cb" }, kids)]); }
       return [el("h1", { text: t("nSettings") }), el("p", { class: "lead", text: t("setLead") }),
         el("div", { class: "ov" }, [
@@ -1558,6 +1595,7 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
             ]),
             card(t("ntTitle"), notifs()),
             card(t("socTitle"), [el("p", { class: "hint", text: t("setSocLead") }), el("a", { class: "btn sec", href: "#profile", text: t("setSocGo"), onclick: function () { SOC_GO = true; } })]),
+            card(t("kvTitle"), kvkk()),
             card(t("logout"), [el("p", { class: "hint", text: t("setOutLead") }), ob])
           ])
         ])];
