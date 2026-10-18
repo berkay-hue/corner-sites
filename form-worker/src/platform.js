@@ -6,8 +6,9 @@
 // Şifre sıfırlama: tek kullanımlık, RESET_MINUTES geçerli link; e-posta Gmail SMTP ile (src/smtp.js, SMTP_USER hesabından).
 // MAIL binding'i yalnızca MAIL_TO adresine gönderebildiği için o kullanılmaz.
 
+import { OAUTH, oauthReady, listConnections, startOAuth, finishOAuth, disconnectOAuth, OAuthFail, returnBase } from "./oauth.js";
 import { smtpReady, smtpSend, smtpFrom } from "./smtp.js";
-import { accountMetrics, linkMetrics } from "./metrics.js";
+import { metricsEnabled, accountMetrics, linkMetrics } from "./metrics.js";
 
 const ROLES = ["brand", "influencer", "agency"];
 const PLATFORMS = ["instagram", "tiktok", "youtube", "x", "linkedin", "twitch"];
@@ -41,7 +42,7 @@ function platformSite(env, origin) {
 export async function platform(req, url, env, origin, deliver) {
   const site = platformSite(env, origin);
   if (!site) return reply({ ok: false, error: "origin" }, 403, null);
-  const c = { env, origin, site, deliver, ip: req.headers.get("cf-connecting-ip") || "", body: {}, query: Object.fromEntries(url.searchParams) };
+  const c = { env, origin, api: url.origin, site, deliver, ip:req.headers.get("cf-connecting-ip") || "", body: {}, query: Object.fromEntries(url.searchParams) };
   try {
     if (req.method === "POST") {
       const text = await req.text();
@@ -142,8 +143,9 @@ async function forgot(c) {
       .bind(await sha256(token), user.id),
   ]);
   const lang = ["tr", "en"].includes(body.lang) ? body.lang : user.lang;
-  // Token URL'nin # kısmında: sunucu loglarına ve Referer'a düşmez
-  const link = `${c.origin}/${lang === "en" ? "reset-password" : "sifre-yenile"}#t=${token}`;
+  // Token URL'nin # kısmında: sunucu loglarına ve Referer'a düşmez. Adres ham Origin'den değil doğrulanmış
+  // siteden kurulur: boşluk ya da yol içeren, http ya da başka portlu bir Origin e-postaya başka bir adres sokamaz.
+  const link = `${returnBase(env, c.origin, site)}/${lang === "en" ? "reset-password" : "sifre-yenile"}#t=${token}`;
   try {
     await smtpSend(env, resetMail(env, lang, user, link));
   } catch (e) {
@@ -236,6 +238,10 @@ export async function cleanup(env) {
 const APP = {
   "GET profile": c => ok(c, { user: me(c.user) }),
   "POST profile": updateProfile,
+  "GET connections": connections,
+  "POST connect": connect,
+  "POST connect/finish": finish,
+  "POST disconnect": disconnect,
   "GET stats": stats,
   "GET influencers": influencers,
   "GET campaigns": listCampaigns,
@@ -273,6 +279,44 @@ async function updateProfile(c) {
   if (!name) throw new Bad("name");
   const u = await env.DB.prepare("UPDATE users SET name = ?, profile = ? WHERE id = ? RETURNING *").bind(name, JSON.stringify(profile), user.id).first();
   return ok(c, { user: me(u) });
+}
+
+// Sosyal hesap bağlama (resmi OAuth, src/oauth.js): yalnızca influencer. Secret yoksa "yapılandırılmadı".
+// METRICS_ENABLED kapalıyken bağlanılamaz (disabled); bağı koparmak her zaman açık.
+async function connections(c) {
+  need(c.user.role === "influencer");
+  need(metricsEnabled(c.env), "disabled", 409);
+  return ok(c, { connections: await listConnections(c.env, c.user.id, PLATFORMS) });
+}
+
+async function connect(c) {
+  need(c.user.role === "influencer");
+  need(metricsEnabled(c.env), "disabled", 409);
+  const p = c.body.platform;
+  need(PLATFORMS.includes(p), "platform", 400);
+  need(OAUTH.includes(p), "no_api", 400);
+  need(oauthReady(c.env, p), "not_configured", 409);
+  return ok(c, { url: await startOAuth(c.env, c.user.id, p, c) });
+}
+
+// Panel sağlayıcıdan dönünce #ticket=<bilet>'i buraya Bearer ile gönderir; bağlama burada yapılır.
+async function finish(c) {
+  need(c.user.role === "influencer");
+  need(metricsEnabled(c.env), "disabled", 409);
+  try {
+    return ok(c, { connection: await finishOAuth(c.env, c.user.id, c.body.ticket) });
+  } catch (e) {
+    if (e instanceof OAuthFail) throw new Bad(e.code, e.status);
+    throw e;
+  }
+}
+
+async function disconnect(c) {
+  need(c.user.role === "influencer");
+  const p = c.body.platform;
+  need(OAUTH.includes(p), "platform", 400);
+  await disconnectOAuth(c.env, c.user.id, p);
+  return ok(c, {});
 }
 
 // null ya da boş: bütçe alanı temizlenir (int(null) 0 döndürürdü)
