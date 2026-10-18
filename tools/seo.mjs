@@ -38,6 +38,29 @@ const RULES = {
           co.map(([s, n]) => `<a href="${base}${s}" style="color:#FFB71B;text-decoration:none;margin:0 10px;display:inline-block;padding:10px 0">${n}</a>`).join("") + `</nav>`;
         html = html.replace(/<nav data-cg-companies[\s\S]*?<\/nav>/, "").replace("</body>", block + "</body>");
       }
+      // Grup şirketi düğümleri: @id/url/ad, şirketin kendi sitesindeki Organization düğümüyle aynı (canlıda doğrulandı).
+      // SAAS Corner ve CRM Corner'ın sitesinde Organization @id'si yok; onlara @id uydurulmaz.
+      const SUB = { "https://salescorner.co": "https://salescorner.co/", "https://socialmediacorner.co": "https://socialmediacorner.co/",
+        "https://www.brandcorner.co": "https://www.brandcorner.co/", "https://wishceo.com": "https://wishceo.com/" };
+      html = html.replace(/(<script type="application\/ld\+json" data-cg-ld>)([\s\S]*?)(<\/script>)/g, (m, a, json, b) => {
+        const walk = n => {
+          if (Array.isArray(n)) return n.forEach(walk);
+          if (!n || typeof n !== "object") return;
+          if (n.name === "SaaS Corner" && /^https:\/\/saascorner\.co\/?$/.test(n.url || "")) n.name = "SAAS Corner";
+          const id = n["@id"]?.replace(/\/#org-cg$/, ""), key = id ?? (n["@type"] === "Organization" && n.url?.replace(/\/$/, ""));
+          if (key && SUB[key]) {
+            const ent = Object.entries(n), out = { "@type": n["@type"] };
+            if (!n["@type"]) delete out["@type"];
+            out["@id"] = SUB[key] + "#org";
+            for (const [k, v] of ent) if (k !== "@type" && k !== "@id") out[k] = k === "url" ? SUB[key] : v;
+            for (const k of Object.keys(n)) delete n[k];
+            Object.assign(n, out);
+          }
+          Object.values(n).forEach(walk);
+        };
+        const ld = JSON.parse(json), before = JSON.stringify(ld); walk(ld);
+        return JSON.stringify(ld) === before ? m : a + JSON.stringify(ld) + b;
+      });
       if (page !== "/") return html;
       html = html.replace(/<title>[^<]*<\/title>/, "<title>Corner Group | B2B Satış, Pazarlama ve CRM Çözümleri</title>");
       const org = { "@type": "Organization", "@id": R.origin + "/#org", name: R.brand, url: R.origin + "/", logo: R.origin + "/_a/fr/images/6WSE5LNdHL8DI6oGFkxraYy6Dg.png" };
