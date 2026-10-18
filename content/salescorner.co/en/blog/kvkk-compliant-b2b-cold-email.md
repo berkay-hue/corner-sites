@@ -96,7 +96,7 @@ At a minimum, your privacy notice should include:
 - To whom the data may be transferred (including CRM, email infrastructure and enrichment providers)
 - The data subject's rights under Article 11 of KVKK and how to submit a request
 
-If you use AI to personalize your message copy, we recommend adding this notice as a fixed footer to the prompt structures described in [our guide to writing cold emails with AI](/blog/how-to-write-cold-emails-with-ai). That way, you can be sure the notice appears in every variation. If you generate sequences with our [Sequence Writer tool](/sekans-yazari), keep the same footer fixed in every step.
+If you use AI to personalize your message copy, we recommend adding this notice as a fixed footer to the prompt structures described in [our guide to writing cold emails with AI](/blog/how-to-write-cold-emails-with-ai). That way, you can be sure the notice appears in every variation. If you generate sequences with our [Sequence Writer tool](/en/#otomasyonlar), keep the same footer fixed in every step.
 
 ## Opt-Out Rights, İYS and Deadlines
 
@@ -121,7 +121,7 @@ The issue outbound teams overlook most is that the tools they use are themselves
 - Does it offer a data processing agreement (DPA)?
 - In which country are the data stored on servers?
 
-For example, large B2B contact databases like [Apollo.io](https://get.apollo.io/679irkzm35ya) greatly speed up segment-based list building and contact verification. However, the responsibility for using the data the tool provides is yours. You decide which fields you export, how long you keep them and whom you send to. Collecting signals from companies' public websites without touching personal data at all (for example with our [Web Keyword Scanner](/web-keyword)) is a safer first step from a data minimization standpoint.
+For example, large B2B contact databases like [Apollo.io](https://get.apollo.io/679irkzm35ya) greatly speed up segment-based list building and contact verification. However, the responsibility for using the data the tool provides is yours. You decide which fields you export, how long you keep them and whom you send to. Collecting signals from companies' public websites without touching personal data at all (for example with our [Web Keyword Scanner](/en/#otomasyonlar)) is a safer first step from a data minimization standpoint.
 
 ### Cross-Border Transfers
 
