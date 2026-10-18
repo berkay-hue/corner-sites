@@ -30,6 +30,8 @@ const RULES = {
     fix(html, page) {
       const R = this;
       html = html.replace(/<script type="application\/ld\+json" data-sk-seo>[\s\S]*?<\/script>/g, "");
+      // İletişim başlığı: "Bizimle çalışalım" yerine "Birlikte çalışalım"
+      html = html.replace(">BİZİMLE<!-- --> <span", ">BİRLİKTE<!-- --> <span");
       // Grup şirketleri sayfalarına iç link: Framer #main dışında, </body> öncesi statik blok (hydration'a girmez)
       if (page === "/" || page === "/en/index" || page === "/en/") {
         const en = page !== "/", base = en ? "/en/companies/" : "/sirketler/";
