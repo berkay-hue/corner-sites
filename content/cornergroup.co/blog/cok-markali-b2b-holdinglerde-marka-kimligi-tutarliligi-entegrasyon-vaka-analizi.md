@@ -1,6 +1,6 @@
 ---
 title: "Çok Markalı B2B Holdinglerde Marka Kimliği Tutarlılığı: Entegrasyon Vaka Analizi"
-description: "Modern B2B pazarının dinamikleri, şirketleri niş uzmanlık alanlarına odaklanmaya zorlarken, büyüme hedefleri ise bu nişlerin ötesine geçerek bütüncül…"
+description: "Bu vaka analizi, çok markalı bir B2B holdingin ortak marka kuralları ve merkezi onay akışıyla markalar arası tutarlılığı nasıl sağladığını anlatır."
 date: "2026-08-08"
 category: "Vaka Çalışması"
 image: "/_a/fr/images/t7WkjGcrKTYn0Jbb4mmvcwLec2U_cd09786e.jpg"

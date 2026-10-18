@@ -1,6 +1,6 @@
 ---
 title: "Yapay Zeka ile B2B Sosyal Medya İçerik Stratejileri Rehberi"
-description: "B2B pazarlama ve satış ekosistemi, tektonik bir değişimden geçiyor. Geleneksel sosyal medya yaklaşımlarının, yani düzensiz paylaşımların, beğeni ve…"
+description: "Yapay zeka, B2B sosyal medyada konu bulma, içerik üretimi ve performans analizini hızlandırır; bu rehber uygulanabilir içerik stratejilerini anlatır."
 date: "2026-07-15"
 category: "Rehber"
 image: "/_a/fr/images/SOsDsmtdfitQidLKTk1NLf2RzBQ_7805d9aa.jpg"

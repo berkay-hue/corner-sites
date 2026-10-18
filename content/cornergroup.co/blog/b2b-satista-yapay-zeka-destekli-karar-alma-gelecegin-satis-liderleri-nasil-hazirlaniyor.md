@@ -1,6 +1,6 @@
 ---
 title: "B2B Satışta Yapay Zeka Destekli Karar Alma: Geleceğin Satış Liderleri Nasıl Hazırlanıyor?"
-description: "B2B satış dünyası, geri döndürülemez bir dönüşümün eşiğinde değil, tam ortasında. Onlarca yıllık satış stratejileri, sezgisel yaklaşımlar ve ilişki ağları…"
+description: "Yapay zeka, B2B satış liderlerine pipeline, risk ve ekip performansı için veriye dayalı karar desteği sunar; yazı liderlerin hazırlığını anlatır."
 date: "2026-10-03"
 category: "Trendler"
 image: "/_a/fr/images/VX52JwyDseHvtWP9jOPsfABiBhk_cd09786e.jpg"

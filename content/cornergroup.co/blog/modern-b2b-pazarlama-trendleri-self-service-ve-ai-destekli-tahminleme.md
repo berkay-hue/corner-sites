@@ -1,6 +1,6 @@
 ---
 title: "Modern B2B Pazarlama Trendleri: Self-Service ve AI Destekli Tahminleme"
-description: "B2B pazarlama ve satış dünyası, geri döndürülemez bir paradigma değişiminin ortasında."
+description: "Modern B2B alıcısı satışçıyla konuşmadan önce kendi araştırmasını yapıyor; bu yazı self-service deneyim ve AI destekli tahminleme trendlerini anlatır."
 date: "2026-05-05"
 category: "Trendler"
 image: "/_a/fr/images/rLTJYZQTZ6MnTUiUftZ73MFIZU_93d995dc.jpg"

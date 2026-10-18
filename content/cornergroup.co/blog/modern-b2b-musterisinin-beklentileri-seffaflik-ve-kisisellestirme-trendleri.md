@@ -1,6 +1,6 @@
 ---
 title: "Modern B2B Müşterisinin Beklentileri: Şeffaflık ve Kişiselleştirme Trendleri"
-description: "B2B pazarlama ve satış evreni, tektonik bir değişimden geçiyor. Geçmişin kapalı kapılar ardında yapılan, uzun ve hantal satış döngüleri, yerini bilgiye…"
+description: "Modern B2B müşterisi açık fiyat, net süreç ve kendine özel deneyim bekliyor; bu yazı şeffaflık ve kişiselleştirme trendlerini anlatır."
 date: "2026-09-18"
 category: "Trendler"
 image: "/_a/fr/images/X5917zpJw0DsSuCSquIGJUi1w_93d995dc.jpg"
