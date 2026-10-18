@@ -1667,6 +1667,107 @@
       }
     }
   ];
+  var S016 = [
+    {
+      area: "Fiyatlama",
+      place: ["Hollanda", " · 2000’lerin sonu"],
+      company: "Lumora Tea",
+      title: "Yarı fiyatına aynı kutu",
+      body: [
+        "Lumora, marketlerde satılan pahalı ama sevilen bir çay markası. Müşteriler kutunun tasarımını ve tadını beğeniyor; marka yıllardır rafın en üst köşesinde duruyor.",
+        "Büyük bir market zinciri kendi adıyla, Lumora’ya çok benzeyen kutularda yarı fiyatına çay satmaya başladı. Satış ekibi, fiyatı hemen indirmek gerektiğini söylüyor; aksi halde müşterinin ucuz kutuya geçeceğinden endişeli.",
+        "Lumora’nın CEO’susun; ekibin masaya birkaç seçenek getirdi."
+      ],
+      stats: [["Konum", "Rafın en pahalısı"], ["Yeni rakip", "Market markası"], ["Rakibin fiyatı", "Yarısı"]],
+      ask: "Lumora’nın CEO’susun. Ne yaparsın?",
+      opts: [
+        { k: "A", t: "Fiyatı market markasına yaklaştır; raf payını koru.", s: 30, tag: "kasa",
+          r: "Satış adedi bir süre korunur. Ama marj daralır ve müşteri Lumora’nın neden pahalı olduğunu sorgulamaya başlar; marka sıradan bir rafa iner." },
+        { k: "B", t: "Fiyata dokunma; az bulunan yeni harmanlar ve sınırlı sayıda kutularla markayı daha da öne çıkar.", s: 90, tag: "kumar",
+          r: "Riskli: fiyata duyarlı müşterilerin bir kısmı gider. Ama Lumora’yı seçenler zaten ucuz olanı aramıyordu; marka farkını büyütmek onları elde tutar." },
+        { k: "C", t: "Market zinciriyle anlaş; onların markasını da Lumora üretsin.", s: 35, tag: "cerrah",
+          r: "Fabrika dolu çalışır. Ama kendi rakibini sen üretmiş olursun; zincir istediği an başka üreticiye geçebilir." },
+        { k: "D", t: "Tüketici şikâyetleri ve basın açıklamalarıyla benzer kutulara itiraz et.", s: 35, tag: "kalkan",
+          r: "Bir süre gündem olursun. Ama müşteri kutuya değil fiyata bakıyor; tartışma bitince raf yine aynı kalır." }
+      ],
+      real: {
+        who: "Elske Varmond",
+        role: "Lumora’nın CEO’su",
+        k: "B",
+        text: [
+          "Varmond fiyatı indirmedi. Her mevsim yalnızca kısa süre satılan harmanlar çıkarıldı; kutuların tasarımı her yıl yenilendi ve koleksiyon gibi toplanmaya başlandı.",
+          "Fiyata duyarlı müşterilerin bir kısmı market markasına geçti. Ama sadık müşteriler daha sık ve daha pahalı kutular almaya başladı; ortalama sepet büyüdü.",
+          "Birkaç yıl içinde Lumora’nın kârı, satış adedi azalmasına rağmen arttı. Ucuz kopyaya fiyatla değil farkla cevap vermek markayı rafın üstünde tuttu."
+        ]
+      }
+    },
+    {
+      area: "Platform",
+      place: ["Kanada", " · 2010’ların başı"],
+      company: "Pindleway Apps",
+      title: "Komisyon ikiye katlandı",
+      body: [
+        "Pindleway, telefonlar için not ve planlama uygulaması yapan küçük bir şirket. Gelirin neredeyse tamamı tek bir uygulama mağazasından geliyor.",
+        "Mağazanın sahibi, uygulama içi aboneliklerden aldığı komisyonu ikiye katladı. Pindleway’in kârı bir gecede ortadan kalkacak gibi görünüyor; ekip ne yapacağını tartışıyor.",
+        "Pindleway’in CEO’susun; ekibin masaya birkaç seçenek getirdi."
+      ],
+      stats: [["Ürün", "Planlama uygulaması"], ["Gelir kaynağı", "Tek mağaza"], ["Komisyon", "İki katı"]],
+      ask: "Pindleway’in CEO’susun. Ne yaparsın?",
+      opts: [
+        { k: "A", t: "Abonelik fiyatını artır; komisyon farkını müşteriye yansıt.", s: 35, tag: "kasa",
+          r: "Kâr kısa vadede korunur. Ama aynı mağazada daha ucuz rakipler var; müşteri fiyat farkını görünce geçer." },
+        { k: "B", t: "Kendi web sitesinden abonelik sat; uygulamayı ücretsiz giriş kapısı olarak tut.", s: 90, tag: "cerrah",
+          r: "Mağaza içinden kolay satın alma azalır ve bazı müşteriler yolda kaybolur. Ama gelirin bir kısmı mağazaya bağımlı olmaktan çıkar ve müşteri bilgisi senin elinde kalır." },
+        { k: "C", t: "Hiçbir şey değiştirme; mağazanın kararı geri almasını bekle.", s: 25, tag: "kalkan",
+          r: "Kimse rahatsız olmaz. Ama mağazanın geri adım atacağına dair bir işaret yok; beklerken kâr da gider." },
+        { k: "D", t: "Bütün ekibi rakip mağaza için yeni bir uygulamaya kaydır.", s: 35, tag: "kumar",
+          r: "Yeni bir kapı açılır. Ama rakip mağazanın kullanıcı sayısı küçük; asıl müşterilerini ihmal etmiş olursun." }
+      ],
+      real: {
+        who: "Corin Ashdell",
+        role: "Pindleway’in CEO’su",
+        k: "B",
+        text: [
+          "Ashdell web sitesinden doğrudan abonelik satmaya başladı ve uygulamanın temel sürümünü ücretsiz yaptı. Web aboneleri için ek özellikler ve aile planı sunuldu.",
+          "İlk aylarda yeni abone sayısı düştü. Sonra web üzerinden gelen abonelerin payı hızla arttı; bu müşteriler daha uzun süre abone kaldı.",
+          "İki yıl içinde gelirin yarıdan fazlası mağaza dışından gelir oldu. Tek kapıya bağlı kalmamak, şirkete fiyatını kendisi belirleme imkânı verdi."
+        ]
+      }
+    },
+    {
+      area: "Yeni pazar",
+      place: ["Danimarka", " · 2010’ların ortası"],
+      company: "Okarin Bikes",
+      title: "Bisiklet yerine üyelik",
+      body: [
+        "Okarin, şehir bisikletleri üreten orta büyüklükte bir şirket. Kendi ülkesinde satışlar yerinde sayıyor; yönetim, büyük bir komşu ülkeye açılmak istiyor.",
+        "Komşu ülkede bisiklet pazarı büyük ama köklü yerel markalar mağazaları dolduruyor. Okarin’i orada kimse tanımıyor; mağaza açmak hem pahalı hem yavaş.",
+        "Okarin’in CEO’susun; ekibin masaya birkaç seçenek getirdi."
+      ],
+      stats: [["Ürün", "Şehir bisikleti"], ["İç pazar", "Yerinde sayıyor"], ["Hedef pazar", "Büyük, yerel markalar güçlü"]],
+      ask: "Okarin’in CEO’susun. Ne yaparsın?",
+      opts: [
+        { k: "A", t: "Büyük şehirlerde mağaza zinciri aç; yerel markalarla rafta yarış.", s: 30, tag: "kumar",
+          r: "Görünür olursun. Ama mağaza yatırımı büyük ve tanınmayan bir marka için müşteri gelmesi yavaş olur." },
+        { k: "B", t: "Bisikleti satmak yerine aylık üyelikle ver; bakım ve değişim üyeliğe dahil olsun.", s: 90, tag: "cerrah",
+          r: "Gelir hemen değil, aylar içinde gelir ve filo için nakit gerekir. Ama müşteri büyük bir ödemeyi tanımadığı bir markaya yapmak zorunda kalmaz; denemesi kolaylaşır." },
+        { k: "C", t: "Yeni pazara girme; iç pazarda maliyetleri kes.", s: 35, tag: "kasa",
+          r: "Kasa korunur. Ama büyüme sorusu yerinde kalır; iç pazar zaten doymuştu." },
+        { k: "D", t: "Yerel bir bayi zincirine düşük fiyatla toptan sat.", s: 35, tag: "kalkan",
+          r: "Risk az, satış hızlı. Ama marka bayinin rafında kaybolur ve fiyatı bayi belirler." }
+      ],
+      real: {
+        who: "Tove Halsing",
+        role: "Okarin’in CEO’su",
+        k: "B",
+        text: [
+          "Halsing komşu ülkeye aylık üyelik modeliyle girdi. Bisiklet eve teslim edildi; bakım ve parça değişimi üyelik ücretine dahil edildi.",
+          "İlk yıl filoya yapılan yatırım nakdi zorladı. Ama üyelik ücreti düşük olduğu için öğrenciler ve şehre yeni taşınanlar hızla üye oldu; üyelerin çoğu bir yıldan uzun kaldı.",
+          "Birkaç yıl içinde Okarin hedef ülkenin büyük şehirlerinde en tanınan bisiklet markalarından biri oldu. Satmak yerine kiralamak, tanınmayan markayı denemeyi kolaylaştırdı."
+        ]
+      }
+    }
+  ];
 
   // ---------- sayılar ----------
   // date: sayının açıldığı gün (Türkiye saati); ileri tarihli sayılar o gün kendiliğinden açılır
@@ -1685,7 +1786,8 @@
     { no: "012", date: "2026-12-21", cases: S012 },
     { no: "013", date: "2026-12-28", cases: S013 },
     { no: "014", date: "2027-01-04", cases: S014 },
-    { no: "015", date: "2027-01-11", cases: S015 }
+    { no: "015", date: "2027-01-11", cases: S015 },
+    { no: "016", date: "2027-01-18", cases: S016 }
   ];
   function todayTR() {
     try {
