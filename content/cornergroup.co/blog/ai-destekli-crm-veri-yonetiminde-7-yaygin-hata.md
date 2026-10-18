@@ -1,6 +1,6 @@
 ---
 title: "AI Destekli CRM Veri Yönetiminde 7 Yaygın Hata"
-description: "Dijital dönüşümün her sektörü yeniden şekillendirdiği günümüz B2B pazarında, yapay zeka (AI) destekli CRM sistemleri artık bir lüks değil, rekabetçi bir…"
+description: "AI destekli CRM'de en sık hatalar kirli veri, belirsiz alan standartları ve denetimsiz otomasyondur; bu yazı 7 hatayı ve çözümlerini anlatır."
 date: "2026-05-05"
 category: "Rehber"
 image: "/_a/fr/images/oz6m8WmqODS9LaXVw89SEdbHwUY_cd09786e.jpg"

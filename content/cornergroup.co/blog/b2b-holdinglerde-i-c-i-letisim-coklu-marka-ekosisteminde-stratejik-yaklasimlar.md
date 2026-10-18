@@ -1,6 +1,6 @@
 ---
 title: "B2B Holdinglerde İç İletişim: Çoklu Marka Ekosisteminde Stratejik Yaklaşımlar"
-description: "B2B büyüme holdingleri, salt birer finansal portföy yönetimi yapısından çok daha fazlasıdır."
+description: "Çok markalı B2B holdinglerde iç iletişim; ortak hedefler, net bilgi akışı ve markalar arası koordinasyonla ekipleri tek yönde çalıştırır."
 date: "2026-05-20"
 category: "Strateji"
 image: "/_a/fr/images/aFw5JyaiYCnFc76V4GWPydSYx2E_c1df0be2.jpg"

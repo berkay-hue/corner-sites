@@ -1,6 +1,6 @@
 ---
 title: "B2B Influencer Pazarlaması: Etkili Stratejiler ve Ölçümleme Rehberi"
-description: "B2B pazarlama dünyası, sürekli bir evrim içinde. Geleneksel reklam modellerinin etkinliği azalırken, karar vericilerin bilgiye ulaşma ve güven oluşturma…"
+description: "B2B influencer pazarlaması, sektörde güvenilen uzmanlarla çalışıp sonuçları lead ve fırsat bazında ölçmektir; rehber strateji ve ölçümü anlatır."
 date: "2026-09-11"
 category: "Rehber"
 image: "/_a/fr/images/SkyWXdQkx6v4O6rGkonjPFuVcs_cd09786e.jpg"
