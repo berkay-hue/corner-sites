@@ -91,7 +91,7 @@ Batık maliyet, geçmişte harcanmış ve geri alınamayacak kaynaktır ve iyi b
 
 ### Hiçbir şey yapmamanın da fırsat maliyeti var mı?
 
-Evet, çoğu zaman en büyüğü odur. Beklemek, mevcut durumu korumak ya da kararı ertelemek de bir seçimdir ve bu süre içinde kapanan seçenekler gerçek bir bedel oluşturur. Hareketsizlik güvenli görünür, çünkü bedeli göze çarpmaz.
+Evet, çoğu zaman en büyüğü odur. Beklemek, mevcut durumu korumak ya da kararı ertelemek de bir seçimdir ve bu süre içinde kapanan seçenekler gerçek bir bedel oluşturur. Hareketsizlik risksiz görünür, çünkü bedeli hemen fark edilmez.
 
 ## Sıra sende
 

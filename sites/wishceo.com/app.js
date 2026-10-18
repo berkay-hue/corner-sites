@@ -16,10 +16,10 @@
       title: "Yüz yıllık formüle dokunmak",
       body: [
         "Lavenhurst, Amerika’nın en çok satan kolası. Tarifi yaklaşık yüz yıldır neredeyse hiç değişmedi; marka ülkede yaz tatilleri, stadyumlar ve aile sofralarıyla anılıyor. Ama pazar payın yıllardır yavaş yavaş geriliyor ve daha tatlı kolasıyla öne çıkan ezeli rakibin marketlerde seni geçti.",
-        "Rakip yıllardır kör tadım kampanyası yürütüyor: alışveriş merkezlerinde etiketsiz iki bardak, reklamlarda hep onların bardağını seçen insanlar. Şirketin kendi tadımları da aynı sonucu verdi. Ekibin daha tatlı yeni bir formül geliştirdi; yaklaşık iki yüz bin kör tadımda yeni formül hem eskiyi hem rakibi geçti. Kısa süre önce yeni Lavenhurst büyük bir lansmanla raflara çıktı, eski formül raflardan tamamen kalktı.",
+        "Rakip yıllardır etiketsiz tadım kampanyası yürütüyor: alışveriş merkezlerinde etiketsiz iki bardak, reklamlarda hep onların bardağını seçen insanlar. Şirketin kendi tadımları da aynı sonucu verdi. Ekibin daha tatlı yeni bir formül geliştirdi; yaklaşık iki yüz bin etiketsiz tadımda yeni formül hem eskiyi hem rakibi geçti. Kısa süre önce yeni Lavenhurst büyük bir lansmanla raflara çıktı, eski formül raflardan tamamen kalktı.",
         "Lansmandan bu yana şirkete on binlerce telefon ve mektup geldi. İnsanlar eski koladan kasa kasa stok yapıyor. Şikâyetlerin çoğu tatla ilgili değil: “Bizim kolamızı değiştirdiniz, kimse bize sormadı.” Araştırma ekibi, tadımlarda katılımcıların küçük bir kısmının eski formülün tamamen kalkacağını duyunca çok kızdığını hatırlatıyor. Pazarlama ekibi ise sabırlı olmanı istiyor: yeni tadı en çok gençler seviyor ve tepkinin birkaç ay içinde yatışacağını düşünüyorlar. Yeni formülü onaylayan CEO sensin ve lansmanın üzerinden yaklaşık iki ay geçti."
       ],
-      stats: [["Kör tadım", "~200 bin"], ["Telefon ve mektup", "On binlerce"], ["Lansmandan bu yana", "~2 ay"]],
+      stats: [["Etiketsiz tadım", "~200 bin"], ["Telefon ve mektup", "On binlerce"], ["Lansmandan bu yana", "~2 ay"]],
       ask: "Yeni formülle ne yaparsın?",
       opts: [
         { k: "A", t: "Geri adım atma. Reklam bütçesini iki katına çıkar, ülkenin en sevilen yüzleriyle yeni bir kampanya başlat; birkaç ay içinde insanlar yeni tada alışır.", s: 15, tag: "kumar",
@@ -49,7 +49,7 @@
       title: "Her şeye giren oyuncakçı",
       body: [
         "Tumla yetmiş yılı aşkın bir aile şirketi. Son on yılda markasını her yere taşıdı: tema parkları, giyim, takı, video oyunları, bir televizyon dizisi.",
-        "Ürün yelpazesi şişti. Yeni setler yalnızca bir kez kullanılan özel parçalarla dolu; kalıplar, depolar, maliyetler fırladı. Satışlar düşüyor, şirket zarar ediyor, kasadaki para hızla azalıyor.",
+        "Ürün yelpazesi aşırı genişledi. Yeni setler yalnızca bir kez kullanılan özel parçalarla dolu; kalıplar, depolar, maliyetler fırladı. Satışlar düşüyor, şirket zarar ediyor, kasadaki para hızla azalıyor.",
         "Aile, otuzlu yaşlarındaki eski bir danışmanı CEO yaptı. O kişi sensin."
       ],
       stats: [["Kuruluş", "1930’lar"], ["Tema parkı", "Birkaç"], ["Son bilanço", "Zarar"]],
@@ -58,11 +58,11 @@
         { k: "A", t: "Daha çok yenilik: yeni dijital ürünler, yeni filmler, yeni parklar. Büyüyerek çıkarız.", s: 15, tag: "kumar",
           r: "Şirketi bu hâle getiren tam da buydu. Kasa boşalırken yeni işlere girmek düşüşü hızlandırır." },
         { k: "B", t: "Küçül ve odaklan: parça çeşidini azalt, parkları sat, ana ürüne, tuğlaya dön.", s: 95, tag: "cerrah",
-          r: "Zor bir liste: projeler kapanır, bazı ekipler gider. Ama ilk kez herkes şirketi neyin ayakta tuttuğunu biliyor." },
+          r: "Zor bir liste: projeler kapanır, bazı ekipler gider. Ama ilk kez herkes şirketin gerçekte neyle para kazandığını biliyor." },
         { k: "C", t: "Üretimi ucuz bir ülkeye taşı, maliyeti kes. Kalite biraz düşse de idare eder.", s: 40, tag: "kasa",
           r: "Maliyet düşer ama Tumla’yı Tumla yapan şey parçaların milimetrik oturması; kaliteden kısarsan elinde sıradan bir oyuncak kalır. Üretimin bir kısmı gerçekten Macaristan, Çek Cumhuriyeti ve Meksika’ya taşındı, ama şirketi toparlayan bu olmadı." },
         { k: "D", t: "Şirketi büyük bir rakibe sat. Aile hiç değilse parasını alsın.", s: 25, tag: "kalkan",
-          r: "Belki aile kurtulur ama marka bir rakibin portföyünde sessizce kaybolur. Masadan kalkmak da bir karar, ama CEO’luk değil." }
+          r: "Belki aile kazançlı çıkar ama marka bir rakibin portföyünde sessizce kaybolur. Masadan kalkmak da bir karar, ama CEO’luk değil." }
       ],
       real: {
         who: "Rasmus Lindvang",
@@ -118,7 +118,7 @@
       title: "Lezzette sonuncu",
       body: [
         "Brascina, Amerika’nın on milyarlarca dolarlık pizza pazarında ikinci büyük zincir. Dünyada binlerce şubesi var, adı hızlı eve teslimatla anılıyor.",
-        "Ama müşteriler pizzanı sevmiyor; internette hamurunu kartona benzetiyorlar. Bir tüketici araştırmasında lezzette sonuncusun, bir çocuk eğlence merkezi zinciriyle aynı sıradasın. Rakipler aynı indirimleri yapıyor, dondurulmuş pizzalar da iyileşiyor. Kâr son birkaç yılda yarıya yakın düştü, gelir bu yıl da geriliyor.",
+        "Ama müşteriler pizzanı sevmiyor; internette hamurunu kartona benzetiyorlar. Bir tüketici araştırmasında lezzette sonuncusun, bir çocuk eğlence merkezi zinciriyle aynı sıradasın. Rakipler aynı indirimleri yapıyor, dondurulmuş pizzalar da gelişiyor. Kâr son birkaç yılda yarıya yakın düştü, gelir bu yıl da geriliyor.",
         "Mutfak ekibi iki yıla yakın süredir yeni bir tarif üzerinde çalışıyor: yeni hamur, yeni sos, yeni peynir. Şirketin ABD işini sen yönetiyorsun. Tarif hazır; şimdi markayı nasıl toparlayacağına karar vermelisin."
       ],
       stats: [["Pazardaki yeri", "ABD 2.si"], ["Lezzet anketi", "Sonuncu"], ["Son yıllarda kâr", "Yarıya yakın düştü"]],
@@ -162,9 +162,9 @@
         { k: "B", t: "Paketi koru, fiyatı 12 dolar civarına çıkar. Mevcut üyeler bir yıl eski fiyattan devam etsin; zammı yeni filmler ve dizilerle birlikte duyur.", s: 75, tag: "kalkan",
           r: "Zam hoş karşılanmaz ama yumuşak geçer, sadık üyeni korursun. Gelir artar; DVD’nin yükü ise bir süre daha internet büyümesini yavaşlatır." },
         { k: "C", t: "Fiyata dokunma, üyeyi ürkütme. Yeni lisans anlaşması imzalama; içerik harcamasını bu yıl sabit tutup kârı koru.", s: 25, tag: "kasa",
-          r: "Üyeler memnun, çeyrek kârlı görünür. Ama rakipler kataloglarını büyütürken sen yerinde sayarsın; internetteki kataloğun eskir." },
+          r: "Üyeler memnun, çeyrek kârlı görünür. Ama rakipler kataloglarını büyütürken sen olduğun yerde kalırsın; internetteki kataloğun eskir." },
         { k: "D", t: "Hamle yap: internet paketini 6 dolar civarına indir, borç alıp içerik harcamasını ikiye katla. Pazarı rakiplerden önce kap.", s: 35, tag: "kumar",
-          r: "Üye sayısı hızla artabilir ama gelir düşerken maliyet katlanır. Stüdyolar fiyat artırırsa borçla ayakta kalmaya çalışırsın." }
+          r: "Üye sayısı hızla artabilir ama gelir düşerken maliyet katlanır. Stüdyolar fiyat artırırsa borçla idare etmeye çalışırsın." }
       ],
       real: {
         who: "Leon Prewitt",
@@ -231,7 +231,7 @@
         { k: "B", t: "Lisansa devam et ama pazarlığı sertleştir: hasılattan daha büyük pay, ürün gelirinde söz hakkı, senaryoda onay.", s: 40, tag: "kasa",
           r: "Risksiz ve hemen para getirir. Ama ünlü karakterlerin zaten stüdyolardayken pazarlık gücün sınırlı; bu payın üstüne çıkmak zor." },
         { k: "C", t: "Filme hiç girme. İflastan yeni çıkan şirketi yeniden riske atma; dergileri ve oyuncak işini büyüt, ekibi koru.", s: 30, tag: "kalkan",
-          r: "Şirket güvende kalır, ekip dağılmaz. Ama karakterlerinin değeri yine başkalarının filmlerinde, başkalarının kasasında büyür." },
+          r: "Şirket risk almaz, ekip dağılmaz. Ama karakterlerinin değeri yine başkalarının filmlerinde, başkalarının kasasında büyür." },
         { k: "D", t: "Kütüphaneyi büyük bir stüdyoya satmak için görüşmelere başla. Değer yüksekken parayı al, riski alıcı taşısın.", s: 15, tag: "cerrah",
           r: "Hızlı ve temiz bir çıkış. Ama karakterler kendi filmini hiç denemeden el değiştirir; birkaç yıl sonra şirketin tamamı milyarlarca dolara satıldı." }
       ],
@@ -242,7 +242,7 @@
         text: [
           "Planı, film biriminin başkanı ve operasyon sorumlusu olarak işe alınan Nathan Ashby hazırladı. Oakes ve yönetim kurulu, şirket tek kuruş koymayacaksa denemesine izin verdi. Son anda banka bütçelerin üçte birini Fennick’in koymasını istedi; şirket beş yabancı pazarın haklarını önceden satarak bu açığı kapattı.",
           "O yıl yarım milyar dolar civarında bir kredi tamamlandı. Kredi rücusuzdu, yani şirketin geri kalanına dokunulamazdı; teminat bir düzine kadar karakterin sinema haklarıydı. Her biri belli bir bütçe sınırı içinde, sınırlı sayıda film çekilebilecekti. İlk filmler tutmazsa kalan karakterlerin hakları alacaklılara geçecekti.",
-          "Zırhlı mucit Halvard’ın hakları ertesi yıl başka bir stüdyodan geri dönünce ilk film için o seçildi. Birkaç yıl sonra vizyona giren film dünyada yarım milyar doları aşkın hasılat yaptı. Ertesi yıl dünyanın en büyük eğlence şirketlerinden biri Fennick’i milyarlarca dolara satın almak için anlaştı."
+          "Mucit kahraman Halvard’ın hakları ertesi yıl başka bir stüdyodan geri dönünce ilk film için o seçildi. Birkaç yıl sonra vizyona giren film dünyada yarım milyar doları aşkın hasılat yaptı. Ertesi yıl dünyanın en büyük eğlence şirketlerinden biri Fennick’i milyarlarca dolara satın almak için anlaştı."
         ]
       }
     },
@@ -339,7 +339,7 @@
         role: "Hoshimura CEO’su",
         k: "C",
         text: [
-          "Hirota’nın CEO olarak ilk işi, şirketin hedefini Wexley’i yenmekten filmsiz bir geleceğe hazırlanmaya çevirmek oldu. Göreve gelince kuruluş yıl dönümünü hedefleyen orta vadeli bir plan hazırladı: yeni büyüme alanları, yönetimin her kademesinde yapısal reform, grup yönetiminin güçlendirilmesi.",
+          "Hirota’nın CEO olarak ilk işi, şirketin hedefini Wexley’i geçmekten filmsiz bir geleceğe hazırlanmaya çevirmek oldu. Göreve gelince kuruluş yıl dönümünü hedefleyen orta vadeli bir plan hazırladı: yeni büyüme alanları, yönetimin her kademesinde yapısal reform, grup yönetiminin güçlendirilmesi.",
           "Dijital geçiş beklenenden hızlı gelince asıl yeniden yapılanma birkaç yıl içinde geldi: fotoğraf bölümünde binlerce kişilik kesinti, fabrika ve laboratuvarların birleştirilmesi, dijital makine üretiminin Çin’e kayması. Maliyet iki mali yılda yüz milyarlarca yen; ayrılanlara cömert tazminat ödendi.",
           "Film kimyası LCD ekran malzemelerine, kozmetiğe ve yarı iletkene taşındı. Kısa süre sonra kolajen bilgisine dayanan bir cilt bakımı serisi çıktı, ardından bu alanlarda birkaç şirket satın alındı. Dönüşüm on yıldan uzun sürdü; Wexley ise birkaç yıl sonra iflas koruması için başvurdu."
         ]
@@ -431,7 +431,7 @@
           r: "Bankalar paralarını alır, bilanço hızla temizlenir. Ama ülkenin en değerli markaları yabancı bir rakibin portföyüne geçer; elde kalan küçük fabrikalar da sipariş bulmakta zorlanır." },
         { k: "B", t: "Kitle pazarını tamamen bırak; yalnızca pahalı mekanik saatlere çekil, fabrikaların çoğunu kapat, iki grubu lüks markalar etrafında küçült.", s: 45, tag: "cerrah",
           r: "Lüks markalar kârlı ve korunur. Ama ucuz ve orta segmenti Asya’ya bırakınca parça üreticileri ölçeğini kaybeder, yetişmiş ustalar ve mühendisler sektörden ayrılır; zamanla lüks üretim de pahalanır ve daralır." },
-        { k: "C", t: "Bankalardan süre iste; iki grubu ayrı ayrı ayakta tut, ustaları ve fabrikaları koru, kuvars saate yavaş yavaş geç.", s: 25, tag: "kalkan",
+        { k: "C", t: "Bankalardan süre iste; iki grubu ayrı ayrı sürdür, ustaları ve fabrikaları koru, kuvars saate yavaş yavaş geç.", s: 25, tag: "kalkan",
           r: "Ustalar ve fabrikalar bir süre daha yerinde kalır. Ama iki grup ayrı ayrı para kaybetmeye devam eder; Asya’yla fiyat farkı her ay açılırken yavaş geçiş zaman kaybettirir ve bankaların sabrı da sınırlı." },
         { k: "D", t: "İki grubu birleştir, lüks markaları koru ve kitle pazarına İsviçre’de üretilecek yeni, çok ucuz bir saatle geri dön.", s: 90, tag: "kumar",
           r: "Büyük bir bahis: para kaybeden iki grubu birleştirip ucuz saatte Asya’yla, üstelik İsviçre maliyetiyle yarışıyorsun. Ama parça sayısını ve montajı kökten değiştirirsen maliyet farkı kapanır; saat de zaman ölçen bir alet olmaktan çıkıp renkli, sezonluk bir moda ürününe dönüşür." }
@@ -465,7 +465,7 @@
         { k: "B", t: "Ünlü karakterleri hemen akıllı telefonlara taşı; yeni gelir kapısını bugünden aç.", s: 40, tag: "kumar",
           r: "Hızlı gelir getirebilir. Ama donanımla yazılımı birlikte yapan modelden vazgeçmek ve bir sonraki konsolun değerini baştan düşürmek demek." },
         { k: "C", t: "Konsolun fiyatını sert indir, eldeki stoku bitir, platformdan erkenden çık.", s: 20, tag: "kasa",
-          r: "Zarar derinleşir; konsolu yeni almış oyuncular ve oyun yapan şirketler yüzüstü bırakıldığını hisseder. Bir sonraki konsol şüpheyle doğar." },
+          r: "Zarar derinleşir; konsolu yeni almış oyuncular ve oyun yapan şirketler ortada bırakıldığını hisseder. Bir sonraki konsol şüpheyle karşılanır." },
         { k: "D", t: "Kimseyi çıkarma. Kendi maaşını yarıya indir, öteki yöneticilerinkini de kes, hisse geri al; şirketin modelini koru.", s: 85, tag: "kalkan",
           r: "Sembolik bir adım; zararı kapatmaz. Ama sorumluluğu en tepeden üstlenir ve oyunları yapan ekibi korur." }
       ],
@@ -592,7 +592,7 @@
       title: "Tavuksuz tavukçu",
       body: [
         "Pellbrook, kızarmış tavuğuyla bilinen küresel bir fast food zinciri. Birleşik Krallık’ta yüzlerce restoranı var ve menünün neredeyse tamamı her gün gelen taze tavuğa dayanıyor.",
-        "Kış ortasında dağıtım yeni bir lojistik firmasına ve tek bir merkez depoya geçti. Birkaç gün içinde sistem çöktü: tavuk restoranlara ulaşmıyor. Birkaç gün sonra restoranların yarıdan fazlası kapalı; sosyal medya zincirle dalga geçiyor.",
+        "Kış ortasında dağıtım yeni bir lojistik firmasına ve tek bir merkez depoya geçti. Birkaç gün içinde sistem durdu: tavuk restoranlara ulaşmıyor. Birkaç gün sonra restoranların yarıdan fazlası kapalı; sosyal medya zincirle dalga geçiyor.",
         "Tam toparlanmanın haftalar sürebileceği söyleniyor ve bir şey söylemen gerekiyor. Pellbrook’un Birleşik Krallık genel müdürüsün; pazarlama ekibin masaya birkaç seçenek getirdi."
       ],
       stats: [["Restoran", "~900"], ["Kapalı restoran", "Yarıdan fazlası"], ["Dağıtım", "Tek depo"]],
@@ -698,7 +698,7 @@
       ask: "Wennvik’in ABD işinin başındasın. Ne yaparsın?",
       opts: [
         { k: "A", t: "Ürünlere dokunma: büyük bir kampanyayla farkı “otantik Avrupa tarzı” diye pazarla, mağaza sayısını da hızla artır. Ölçüler de tasarımın bir parçası.", s: 25, tag: "kumar",
-          r: "Tek yelpaze, tek üretim, tek ölçü: merkez memnun olur, yeni mağazalar da her yerde göze çarpar. Ama müşteri bir tarz değil, evine uyan bir yatak arıyor; “farklı” ile “kullanışsız” arasındaki çizgi ince." },
+          r: "Tek yelpaze, tek üretim, tek ölçü: merkez memnun olur, yeni mağazalar da her yerde dikkat çeker. Ama müşteri bir tarz değil, evine uyan bir yatak arıyor; “farklı” ile “kullanışsız” arasındaki çizgi ince." },
         { k: "B", t: "Yalnızca en çok şikâyet edilen birkaç ürünü (yatak, bardak) ABD ölçüsüne getir, gerisini aynı tut; üretimi Avrupa’da bırak.", s: 45, tag: "kalkan",
           r: "Hızlı ve ucuz bir düzeltme: en çok duyulan şikâyetler biter, merkez de fazla itiraz etmez. Ama fiyat sorunu yerinde kalır; mağazadan eli boş çıkan müşteri azalır ama kaybolmaz." },
         { k: "C", t: "Yelpazenin önemli bir kısmını ABD ölçülerine göre yeniden tasarla; ürünlerin daha büyük kısmını ABD’deki ve yakın ülkelerdeki tedarikçilerden al, fiyatları düşür.", s: 90, tag: "cerrah",
@@ -1168,10 +1168,10 @@
       title: "Birkaç yüz model, tek bir sabo",
       body: [
         "Corrimont, renkli ve hafif köpük sabolarıyla tanınan bir ayakkabı markası. İlk yıllardaki hızlı büyümenin ardından şirket hemen her ayakkabı türüne girdi: bot, spor ayakkabı, sandalet, babet. Bugün katalogda birkaç yüz model, ülke genelinde yaklaşık 500 mağaza var.",
-        "Satışlar birkaç yıldır yerinde sayıyor, kâr ise her yıl biraz daha azalıyor. Müşteri araştırmaları açık: insanlar Corrimont deyince hâlâ klasik saboyu düşünüyor, yeni modellerin çoğunu tanımıyor bile. Mağazaların önemli bir kısmı da para kaybediyor.",
+        "Satışlar birkaç yıldır artmıyor, kâr ise her yıl biraz daha azalıyor. Müşteri araştırmaları açık: insanlar Corrimont deyince hâlâ klasik saboyu düşünüyor, yeni modellerin çoğunu tanımıyor bile. Mağazaların önemli bir kısmı da para kaybediyor.",
         "Yönetim kurulu yeni bir yol haritası bekliyor. Corrimont’un CEO’susun; ekibin masaya birkaç seçenek getirdi."
       ],
-      stats: [["Model sayısı", "Birkaç yüz"], ["Mağaza", "~500"], ["Satışlar", "Yıllardır yerinde sayıyor"]],
+      stats: [["Model sayısı", "Birkaç yüz"], ["Mağaza", "~500"], ["Satışlar", "Yıllardır yatay"]],
       ask: "Corrimont’un CEO’susun. Ne yaparsın?",
       opts: [
         { k: "A", t: "Yeni kategorilere de gir; büyük bir reklam kampanyasıyla Corrimont’u her türden ayakkabı satan bir marka olarak anlat.", s: 35, tag: "kumar",
@@ -1347,7 +1347,7 @@
         { k: "B", t: "Tüm mağazaları aynı gün bir öğleden sonra kapat; çalışanlara kahve hazırlamayı baştan anlat.", s: 90, tag: "kumar",
           r: "Riskli: bir öğleden sonranın satışını kaybediyorsun ve basın kapalı kapıları zayıflık olarak yazabilir. Ama sorunun kahvede olduğunu herkesin önünde kabul edersin; çalışanlara da neyin önemli olduğunu açıkça söylersin." },
         { k: "C", t: "Yeni mağaza açılışlarını durdur ve masrafları kıs; toparlanmayı bekle.", s: 35, tag: "kasa",
-          r: "Kasa rahatlar ama müşterinin şikâyeti yerinde durur. Daha az mağaza açmak, mevcut mağazalardaki kahveyi iyileştirmez." },
+          r: "Kasa rahatlar ama müşterinin şikâyeti yerinde durur. Daha az mağaza açmak, mevcut mağazalardaki kahveyi daha iyi yapmaz." },
         { k: "D", t: "Kâr etmeyen birkaç yüz mağazayı kapat; kalanlarda menüyü sadeleştir.", s: 45, tag: "cerrah",
           r: "Masraf düşer ve menü netleşir. Ama yalnızca küçülmek, müşteriye kahvenin yeniden iyi olduğunu anlatmaya yetmez." }
       ],
@@ -1539,10 +1539,10 @@
       title: "Yüzlerce markadan altmış beşe",
       body: [
         "Halvercott, deterjandan tıraş ürünlerine kadar evde kullanılan pek çok ürünü üreten büyük bir şirket. Portföyde birkaç yüz marka var ama satışların büyük kısmı bunların küçük bir bölümünden geliyor.",
-        "Satışlar birkaç yıldır yerinde sayıyor. Yöneticilerin zamanı, toplam satışa çok az katkı yapan onlarca küçük markaya bölünüyor; rakip, daha az ürünle daha hızlı büyüyor.",
+        "Satışlar birkaç yıldır artmıyor. Yöneticilerin zamanı, toplam satışa çok az katkı yapan onlarca küçük markaya bölünüyor; rakip, daha az ürünle daha hızlı büyüyor.",
         "Halvercott’un CEO’susun; ekibin masaya birkaç seçenek getirdi."
       ],
-      stats: [["Marka", "Birkaç yüz"], ["Satışın çoğu", "Küçük bir marka grubundan"], ["Büyüme", "Yerinde sayıyor"]],
+      stats: [["Marka", "Birkaç yüz"], ["Satışın çoğu", "Küçük bir marka grubundan"], ["Büyüme", "Yatay"]],
       ask: "Halvercott’un CEO’susun. Ne yaparsın?",
       opts: [
         { k: "A", t: "Markaların çoğunu sat ya da bırak; satışın büyük kısmını getiren 60–70 markaya odaklan.", s: 90, tag: "cerrah",
@@ -1552,7 +1552,7 @@
         { k: "C", t: "Tüm markaları koru; her birine biraz daha reklam bütçesi ayır.", s: 30, tag: "kalkan",
           r: "Kimse kendi markasını kaybetmez. Ama bütçe yine yüzlerce parçaya bölünür; büyük markalar hak ettikleri desteği alamaz." },
         { k: "D", t: "Markalara dokunma; maliyet kesintisiyle kâr marjını yükselt.", s: 35, tag: "kasa",
-          r: "Kâr tablosu bir süre iyileşir. Ama büyüme sorunu yerinde durur; kesinti bir kez yapılır, sonra yeni bir hikâye gerekir." }
+          r: "Kâr tablosu bir süre düzelir. Ama büyüme sorunu yerinde durur; kesinti bir kez yapılır, sonra yeni bir hikâye gerekir." }
       ],
       real: {
         who: "Arthur Penwhistle",
@@ -1618,7 +1618,7 @@
         { k: "B", t: "Tek bir uçak modeli kullan; kısa hatlarda sık sefer yap, uçakları yerde az beklet.", s: 90, tag: "cerrah",
           r: "Bazı hatlarda uçak fazla büyük ya da küçük kalabilir. Ama her pilot her uçağı uçurur, her parça her uçağa uyar; maliyet düşer ve biletler ucuzlar." },
         { k: "C", t: "Hızla uzak şehirlere açıl; büyük rakiplerin ana hatlarında yarış.", s: 25, tag: "kumar",
-          r: "Gelir hızla büyüyebilir. Ama nakdin sınırlı ve rakiplerin güçlü olduğu yerde yarışırsın; fiyat savaşında ilk yorulan sen olursun." },
+          r: "Gelir hızla büyüyebilir. Ama nakdin sınırlı ve rakiplerin güçlü olduğu yerde yarışırsın; fiyat rekabetinde ilk zorlanan sen olursun." },
         { k: "D", t: "Uçak sayısını azalt; yalnızca en dolu saatlerde uç.", s: 35, tag: "kasa",
           r: "Masraf düşer. Ama seyrek sefer yapan havayolunu yolcu tercih etmez; doluluk da zamanla düşer." }
       ],
@@ -1662,7 +1662,7 @@
         text: [
           "Moorthy göreve geldikten kısa süre sonra ofis programlarını rakip telefon ve tabletlerde de sundu. Şirketin önceliği işletim sistemi değil, bulut ve abonelik oldu.",
           "Telefon işi küçültüldü; yatırımlar bulut hizmetlerine kaydırıldı. Ofis programları her cihazda aynı hesapla çalışan bir aboneliğe dönüştü.",
-          "Birkaç yıl içinde bulut işi şirketin en hızlı büyüyen kolu oldu ve Calvent’in piyasa değeri katlandı. Rakibin cihazına gitmek, müşterinin olduğu yere gitmek demekti."
+          "Birkaç yıl içinde bulut işi şirketin en hızlı büyüyen birimi oldu ve Calvent’in piyasa değeri katlandı. Rakibin cihazına gitmek, müşterinin olduğu yere gitmek demekti."
         ]
       }
     }
@@ -1740,11 +1740,11 @@
       company: "Okarin Bikes",
       title: "Bisiklet yerine üyelik",
       body: [
-        "Okarin, şehir bisikletleri üreten orta büyüklükte bir şirket. Kendi ülkesinde satışlar yerinde sayıyor; yönetim, büyük bir komşu ülkeye açılmak istiyor.",
+        "Okarin, şehir bisikletleri üreten orta büyüklükte bir şirket. Kendi ülkesinde satışlar artmıyor; yönetim, büyük bir komşu ülkeye açılmak istiyor.",
         "Komşu ülkede bisiklet pazarı büyük ama köklü yerel markalar mağazaları dolduruyor. Okarin’i orada kimse tanımıyor; mağaza açmak hem pahalı hem yavaş.",
         "Okarin’in CEO’susun; ekibin masaya birkaç seçenek getirdi."
       ],
-      stats: [["Ürün", "Şehir bisikleti"], ["İç pazar", "Yerinde sayıyor"], ["Hedef pazar", "Büyük, yerel markalar güçlü"]],
+      stats: [["Ürün", "Şehir bisikleti"], ["İç pazar", "Yatay"], ["Hedef pazar", "Büyük, yerel markalar güçlü"]],
       ask: "Okarin’in CEO’susun. Ne yaparsın?",
       opts: [
         { k: "A", t: "Büyük şehirlerde mağaza zinciri aç; yerel markalarla rafta yarış.", s: 30, tag: "kumar",
@@ -1812,10 +1812,10 @@
   var ISSUE = CUR.no, CASES = CUR.cases, KEY = keyOf(ISSUE);
 
   var TYPES = {
-    cerrah: { name: "Budayıcı", desc: "Neyin bırakılacağını bilirsin. Duygusal bağlara değil, şirketi neyin ayakta tuttuğuna bakarsın ve zor kararı erken alırsın." },
-    kalkan: { name: "Kalkan", desc: "Önce insanlar, sonra rakamlar. Güven bir kez giderse hiçbir bütçenin onu geri getiremeyeceğini bilirsin." },
+    cerrah: { name: "Budayıcı", desc: "Neyin bırakılacağını bilirsin. Duygusal bağlara değil, şirketin gerçekte neyle para kazandığına bakarsın ve zor kararı erken alırsın." },
+    kalkan: { name: "İnsan Odaklı", desc: "Önce insanlar, sonra rakamlar. Güven bir kez giderse hiçbir bütçenin onu geri getiremeyeceğini bilirsin." },
     kumar: { name: "Kumarbaz", desc: "Masaya bütün fişleri sürersin. Tutarsa kitaplara geçersin. Tutmazsa da geçersin, ama başka bir bölüme." },
-    kasa: { name: "Kasa Bekçisi", desc: "Bu çeyreği toparlarsın, tablolar temiz görünür. Sorun şu: şirketler çeyrek değil, on yıl yaşar." }
+    kasa: { name: "Kasa Ustası", desc: "Bu çeyreği toparlarsın, tablolar temiz görünür. Sorun şu: şirketler çeyrekle değil, on yılla ölçülür." }
   };
   var TAG_ORDER = ["cerrah", "kalkan", "kumar", "kasa"];
 

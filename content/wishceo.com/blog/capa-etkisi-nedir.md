@@ -79,7 +79,7 @@ Tamamen kaldırmaz ama azaltır. Farkında olmak tek başına yetmez. Kendi tahm
 
 ### Pazarlıkta ilk teklifi vermek mi avantajlı, beklemek mi?
 
-Konuya hâkimsen ilk teklifi vermek çoğu zaman avantaj sağlar, çünkü tartışma senin rakamının etrafında şekillenir. Bilgin sınırlıysa önce karşı tarafı dinlemek ve onların rakamının nasıl hesaplandığını sormak daha güvenli olabilir.
+Konuya hâkimsen ilk teklifi vermek çoğu zaman avantaj sağlar, çünkü tartışma senin rakamının etrafında şekillenir. Bilgin sınırlıysa önce karşı tarafı dinlemek ve onların rakamının nasıl hesaplandığını sormak daha az riskli olabilir.
 
 ### Çapa etkisi sadece sayılarla mı ilgilidir?
 

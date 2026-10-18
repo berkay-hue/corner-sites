@@ -43,9 +43,9 @@ Bir fırıncı düşün. Bayram öncesi, her yıl olduğu gibi fazladan hamur ha
 
 Bir kararı adil puanlamanın ilk kuralı, kendini o günkü masaya geri oturtmak. Sonradan öğrendiklerini bir kenara koymak zordur. İnsan zihni geçmişi bildiği sonla yeniden yazmayı sever. "Belliydi zaten" cümlesi çoğu zaman sonuç belli olduktan sonra kurulur.
 
-Hatalı bir yazılım sürümünü geri alma kararı bunu iyi gösterir. Orta büyüklükte bir muhasebe yazılımı şirketi düşün. Birkaç müşteri, yeni sürümün bazı faturaları yanlış topladığını bildiriyor. Şikâyet az, sebebi henüz belli değil. Şirket yine de bütün müşterilerine kendisi yazıyor, herkesi eski sürüme geri alıyor, sebep bulunana kadar yeni sürümün satışını durduruyor ve etkilenen faturaları ücretsiz düzeltiyor. O sırada kimse bunu ondan istemiyordu.
+Hatalı bir yazılım sürümünden eski sürüme dönme kararı bunu iyi gösterir. Orta büyüklükte bir muhasebe yazılımı şirketi düşün. Birkaç müşteri, yeni sürümün bazı faturaları yanlış topladığını bildiriyor. Şikâyet az, sebebi henüz belli değil. Şirket yine de bütün müşterilerine kendisi yazıyor, herkesi eski sürüme geçiriyor, sebep bulunana kadar yeni sürümün satışına ara veriyor ve etkilenen faturaları ücretsiz düzeltiyor. O sırada kimse bunu ondan istemiyordu.
 
-Yalnızca ilk aylara bakan biri bu kararı büyük bir hata diye yazabilirdi. Durdurulan satışların ve ücretsiz düzeltmelerin faturası ağırdı, yeni müşteri satışları kabaca yarıya inmişti. Bir yıl içinde ise satışlar büyük ölçüde geri geldi ve marka "hatasını ilk kendisi söyleyen şirket" diye anılmaya başladı. Aynı karar, hangi gün baktığına göre hem hata hem başarı gibi görünüyor. Oysa karar hiç değişmedi; değişen yalnızca takvim.
+Yalnızca ilk aylara bakan biri bu kararı büyük bir hata diye yazabilirdi. Ara verilen satışların ve ücretsiz düzeltmelerin faturası ağırdı, yeni müşteri satışları kabaca yarıya inmişti. Bir yıl içinde ise satışlar büyük ölçüde geri geldi ve marka "hatasını ilk kendisi söyleyen şirket" diye anılmaya başladı. Aynı karar, hangi gün baktığına göre hem hata hem başarı gibi görünüyor. Oysa karar hiç değişmedi; değişen yalnızca takvim.
 
 Bu kararı güçlü yapan yalnızca sonradan gelen toparlanma değil, o gün de görülebilen bir şey: sebebi bilinmeyen bir hatada önce müşterinin işini düşünen şirket, güveni geri kazanma şansını korur. Bilgi eksikken bu tür kararların nasıl verildiğini [bir faturalama krizinin ilk 48 saati](/blog/krizin-ilk-48-saati) yazısında ayrıca ele aldık.
 
@@ -57,7 +57,7 @@ Sonuca bakıp "tabii ki yanlıştı" demek kolay. Asıl soru başka: o gün masa
 
 Herkesin kullandığı ücretsiz sisteme geçmek ise 75 puan alıyor. Bu da bir başarı garantisi değil. Aynı sistemde çok sayıda büyük ve ucuz üreticiyle yarışmak zordu. Korvala o yolu seçseydi ne olurdu, kimse bilmiyor. Buradaki 75 "kesin kazanırdın" demek değil, "o günün bilgisiyle daha sağlam bir bahisti" demek. Bu kararın bütün katmanlarını [Korvala’nın platform kararı](/blog/korvala-platform-karari) yazısında açtık.
 
-Kötü bir sonuçtan sonra iki tuzak bekler. Birincisi, kararı verdiren mantığı da sonuçla birlikte çöpe atmak. İkincisi, "bu kadar emek verdik" deyip yanlış yolda inatla devam etmek. İkincisinin adı [batık maliyet yanılgısı](/blog/batik-maliyet-yanilgisi) ve ona ayrı bir yazı ayırdık.
+Kötü bir sonuçtan sonra iki yaygın hata var. Birincisi, kararı verdiren mantığı da sonuçla birlikte çöpe atmak. İkincisi, "bu kadar emek verdik" deyip yanlış yolda inatla devam etmek. İkincisinin adı [batık maliyet yanılgısı](/blog/batik-maliyet-yanilgisi) ve ona ayrı bir yazı ayırdık.
 
 ## Bir kararı sonuca bakmadan nasıl puanlarsın?
 
@@ -81,7 +81,7 @@ WishCEO’da her dosyada dört seçenek, her seçeneğin de bir puanı var. Kara
 
 Puanı verirken iki şeye bakıyoruz: o dönemde ne biliniyordu ve sonra ne oldu. Sonuç bir kontrol aracı, tek başına hâkim değil. Bu yüzden vakadaki CEO’nun seçimi her zaman en yüksek puanı almıyor. Korvala dosyasında A’yı seçersen ekranda vakadaki CEO’dan 40 puan önde olduğunu görürsün. Bu, Stoddard’ın kötü bir yönetici olduğu anlamına gelmiyor. O gün verilmiş bir kararın, o günün bilgisiyle zayıf kaldığı anlamına geliyor.
 
-İnsanları değil kararları puanlamamızın anlamı bu. Aynı kural senin için de geçerli. Karnende Budayıcı, Kalkan, Kumarbaz ya da Kasa Bekçisi çıkması kim olduğunu anlatmaz; o dosyalarda hangi kararları verdiğini anlatır. Başka dosyalarda başka bir tip çıkabilir.
+İnsanları değil kararları puanlamamızın anlamı bu. Aynı kural senin için de geçerli. Karnende Budayıcı, İnsan Odaklı, Kumarbaz ya da Kasa Ustası çıkması kim olduğunu anlatmaz; o dosyalarda hangi kararları verdiğini anlatır. Başka dosyalarda başka bir tip çıkabilir.
 
 Şirket ve kişi adlarını değiştirmemizin bir nedeni de bu. Adı bilinen bir şirketi görünce sonunu da hatırlarsın ve kararını o sonun gölgesinde verirsin. Adlar değişince dosyayı o günkü CEO gibi okursun: sonucu bilmeden, yalnızca masadaki bilgiyle.
 
@@ -107,4 +107,4 @@ WishCEO her dosyadaki dört seçeneği, o dönemde ne bilindiğine ve sonra ne o
 
 Bir karar iyi bittiğinde kendini tebrik etmeden, kötü bittiğinde kendini suçlamadan önce aynı soruyu sor: o gün masada ne vardı ve ben onunla ne yaptım? Gerisi çoğu zaman zarın işi.
 
-Bu ayrımı kafana yerleştirmenin en kolay yolu, sonucu bilmeden karar vermek. Birkaç dakikan varsa bir dosya seni bekliyor. [Bugünün vakasını oyna](/#oyun).
+Bu ayrımı alışkanlık hâline getirmenin en kolay yolu, sonucu bilmeden karar vermek. Birkaç dakikan varsa bir dosya seni bekliyor. [Bugünün vakasını oyna](/#oyun).

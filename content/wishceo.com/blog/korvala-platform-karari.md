@@ -49,7 +49,7 @@ Yazılım devi Tallbridge'in telefon sistemini akıllı telefonlarında ana sist
 
 Bu yolun çekiciliği burada. Ortağın seni önemsiyor, çünkü sen olmadan onun sistemi de bir yere gitmiyor. Masadaki ağırlığın büyük.
 
-Ama küçük olmayan bir kusuru var. Şirketin geleceğini, pazarın henüz çok küçük bir dilimini tutan bir sisteme bağlıyorsun. Mahalle örneğine dönersek, iki büyük pazar zaten kurulmuşken üçüncüsünü ayağa kaldırmaya çalışıyorsun. Üstelik bu pazarın kurallarını tek başına sen koymuyorsun.
+Ama küçük olmayan bir kusuru var. Şirketin geleceğini, pazarın henüz çok küçük bir dilimini tutan bir sisteme bağlıyorsun. Mahalle örneğine dönersek, iki büyük pazar zaten kurulmuşken üçüncüsünü sıfırdan kurmaya çalışıyorsun. Üstelik bu pazarın kurallarını tek başına sen koymuyorsun.
 
 ### C: Kendi yeni sistemini bitir
 
@@ -57,7 +57,7 @@ Geliştirmekte olduğun yeni sistemi tamamlar, bağımsız devam edersin. Kontro
 
 Sorun zamanlama. Yeni sistem henüz hazır değil. Hazır olduğunda yarışa yıllar geç girmiş olacaksın. Geliştiriciler üçüncü bir sistemi bekleyecek mi?
 
-Bu seçeneğin içinde sinsi bir tuzak da var: "Bu sisteme bu kadar emek verdik, şimdi bırakamayız" düşüncesi. Geçmişte harcanan emek, gelecekteki kararı haklı çıkarmaz. Bu tuzağı [batık maliyet yanılgısı](/blog/batik-maliyet-yanilgisi) yazısında ayrıntılı anlattık.
+Bu seçeneğin içinde kolay fark edilmeyen bir hata da var: "Bu sisteme bu kadar emek verdik, şimdi bırakamayız" düşüncesi. Geçmişte harcanan emek, gelecekteki kararı haklı çıkarmaz. Bu hatayı [batık maliyet yanılgısı](/blog/batik-maliyet-yanilgisi) yazısında ayrıntılı anlattık.
 
 ### D: Akıllı telefonu bırak
 
@@ -81,7 +81,7 @@ Korvala'nın CEO'su Gordon Stoddard B'yi seçti ve şirketi Tallbridge'in telefo
 
 Tallbridge'in sistemi beklenen ivmeyi yakalayamadı. Birkaç yıl sonra Korvala telefon işini Tallbridge'e satmak için anlaştı: patent lisansı dâhil birkaç milyar avro. Satış ertesi yıl tamamlandı.
 
-Korvala ortadan kalkmadı. Telefon dışındaki işleriyle, daha çok altyapı tarafında yoluna devam etti. Ama bir zamanlar pazarın zirvesindeki telefon üreticisi, artık telefon satmıyor.
+Korvala bugün de faaliyette. Telefon dışındaki işleriyle, daha çok altyapı tarafında yoluna devam etti. Ama bir zamanlar pazarın zirvesindeki telefon üreticisi, artık telefon satmıyor.
 
 ## Oyunda neden 35 puan?
 
@@ -89,7 +89,7 @@ Oyunda B seçeneği 35 puan alıyor. Herkesin kullandığı sisteme geçmek 75, 
 
 Puanlar, o dönemde bilinenlere ve sonradan olanlara bakılarak verildi. B'nin düşük puanı yalnızca kötü bitmesinden gelmiyor. Karar anında da görülebilen bir risk vardı: bütün şirketi, pazarın küçük bir dilimini tutan tek bir sisteme bağlamak. A'nın yüksek puanı da bir başarı garantisi değil. Sonradan bazı yorumcular Korvala'nın bu yolu seçmesi gerektiğini savundu, ama o yolun nereye çıkacağını kimse bilemez.
 
-Kötü biten her karar kötü değildir, iyi biten her karar da iyi değildir. Sonucu bilerek geriye bakmak, karar anındaki belirsizliği unutturur. Bu ayrımı [iyi karar, kötü sonuç](/blog/iyi-karar-kotu-sonuc) yazısında açtık. Kararları puanlıyoruz, insanları değil. Stoddard da tıpkı senin gibi, hiçbiri güvenli olmayan yollar arasında seçim yapmak zorundaydı.
+Kötü biten her karar kötü değildir, iyi biten her karar da iyi değildir. Sonucu bilerek geriye bakmak, karar anındaki belirsizliği unutturur. Bu ayrımı [iyi karar, kötü sonuç](/blog/iyi-karar-kotu-sonuc) yazısında açtık. Kararları puanlıyoruz, insanları değil. Stoddard da tıpkı senin gibi, hiçbirinin sonucu belli olmayan yollar arasında seçim yapmak zorundaydı.
 
 Korvala'nın derdi bir gecede ortaya çıkan bir kriz değildi. Yıllara yayılan, yavaş ilerleyen bir gerilemeydi. Ani krizlerde ilk saatlerin nasıl yönetildiğini merak ediyorsan [krizin ilk saatleri](/blog/krizin-ilk-48-saati) üzerine yazdıklarımıza da bakabilirsin.
 
