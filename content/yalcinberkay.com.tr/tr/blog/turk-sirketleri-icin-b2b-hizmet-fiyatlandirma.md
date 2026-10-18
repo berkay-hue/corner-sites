@@ -165,7 +165,7 @@ Türk şirketleri için B2B hizmet fiyatlandırmak tek bir mükemmel rakam bulma
 
 En önemlisi, fiyatlandırmanızı düzenli olarak gözden geçirin. Bu pazarda geçen yıl işe yarayan şeyin bu yıl büyük ihtimalle güncellenmesi gerekir.
 
-Türkiye'de bir hizmet şirketi kuruyorsanız ve fiyatlandırma, paketleme ya da ilk tekliflerinizi nasıl yapılandıracağınız üzerine konuşmak istiyorsanız [web sitem üzerinden benimle iletişime geçebilirsiniz](/tr). Diğer kurucularla not alışverişi yapmaktan her zaman memnuniyet duyarım.
+Türkiye'de bir hizmet şirketi kuruyorsanız ve fiyatlandırma, paketleme ya da ilk tekliflerinizi nasıl yapılandıracağınız üzerine konuşmak istiyorsanız [web sitem üzerinden benimle iletişime geçebilirsiniz](/tr/). Diğer kurucularla not alışverişi yapmaktan her zaman memnuniyet duyarım.
 
 ## SSS
 
