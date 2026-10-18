@@ -57,7 +57,7 @@ Batık maliyet üç ayrı biçimde karşına çıkar ve her birine ayrı bakmak 
 - Zaman ve emek: yıllarca geliştirilen bir ürün, şirkete özel kurulmuş bir sistem.
 - İtibar: kamuoyuna verilen söz, yönetim kuruluna sunulan plan, bir yöneticinin adının bir projeyle özdeşleşmesi.
 
-İtibar en sinsi olanı. Para tablolarda görünür, itibar görünmez. Ama en inatçı kararları çoğu zaman o verdirir.
+İtibar en geç fark edileni. Para tablolarda görünür, itibar görünmez. Ama en inatçı kararları çoğu zaman o verdirir.
 
 Şöyle bir şirket hayal et. Orta büyüklükte bir lojistik firması birkaç yıl önce kendi rota yazılımını geliştirmeye karar vermiş. O gün hazır çözümler pahalı ve yetersiz görünmüş. Bugün piyasada daha iyi ve daha ucuz hazır bir yazılım var. İç ekip ise her toplantıda "biraz daha" diyor. Hazır yazılıma geçmek, geçen yılların boşa gittiğini kabul etmek gibi geliyor. Oysa doğru soru geçen yıllara değil, önümüzdeki yıllara dair: Hangi yol daha iyi rotalar, daha düşük maliyet ve daha memnun müşteriler getirir?
 
@@ -71,7 +71,7 @@ Bu masada batık maliyetin sesi her köşeden gelir. Birkaç tema parkı kurulmu
 
 Ama burada sorman gereken şey o emeğin ne kadar büyük olduğu değil. Asıl soru şu: Bu şirketi bugün sıfırdan kursaydın, bu işlerden hangilerine yeniden girerdin?
 
-Bir ayrıntıya daha dikkat et. CEO koltuğuna yeni oturdun; parkları, giyim hattını, video oyunlarını açan kararlar senin imzanı taşımıyor. Batık maliyetle mücadelede bu bir avantaj, çünkü eski kararları savunmak zorunda değilsin. Yine de o projelerin arkasında hâlâ ekipler ve onları savunan insanlar var. Onların gözünde her biri bir emek.
+Bir ayrıntıya daha dikkat et. CEO koltuğuna yeni oturdun; parkları, giyim hattını, video oyunlarını açan kararlar senin imzanı taşımıyor. Batık maliyet yanılgısına karşı bu bir avantaj, çünkü eski kararları savunmak zorunda değilsin. Yine de o projelerin arkasında hâlâ ekipler ve onları savunan insanlar var. Onların gözünde her biri bir emek.
 
 Hangi seçeneğe gitmen gerektiğini burada söylemeyeceğiz, vakada ne olduğunu da. Dosyayı açıp [kendi kararını ver](/?s=001#oyun), sonra vakadaki CEO'nun ne yaptığını gör.
 
@@ -90,7 +90,7 @@ Bu soruları tek başına değil, ekiple birlikte sormak da işe yarar. Projeye 
 
 ## Vazgeçmek de her zaman doğru değil
 
-Bu yanılgıyı öğrenen biri bazen öbür uca savrulur ve zorlanan her projeyi "batık maliyet" diye kapatmak ister. Bu da bir hata.
+Bu yanılgıyı öğrenen biri bazen öbür uca geçer ve zorlanan her projeyi "batık maliyet" diye kapatmak ister. Bu da bir hata.
 
 Geçmişte harcanan para kararını belirlememeli, ama geçmişten kalan gerçek varlıklar belirleyebilir. Kurduğun tesis hâlâ üretebiliyorsa, ekip gerçekten bir şey öğrendiyse, ürün sahiden bitmek üzereyse, bunlar geleceğe dair bilgilerdir ve hesaba girerler. Ayrım şu: "Buna çok harcadık" geçmişe bakar. "Elimizde bunu bitirmek için gereken her şey var" geleceğe bakar.
 

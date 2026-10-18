@@ -49,9 +49,9 @@ Ardıçlı'da Selin'in konuşması gereken birkaç grup var:
 - **Müşteriyle doğrudan çalışan ekip:** Onların bilmesi gereken, müşteriyle bu hafta nasıl konuşacakları.
 - **Şirketin geri kalanı:** Ne olduğunu, kendilerini nasıl etkileyebileceğini ve ne zaman yeni bilgi geleceğini bilmeleri yeterli.
 
-Tuzak şurada: Yönetim ekibine pazartesi söyleyip geri kalanına iki hafta sonra söylemek. Bu aralıkta bilgi mutlaka sızar ve ekip, kendisinden bir şey saklandığını hisseder. Katmanlar arasındaki süreyi kısa tutmak, mesajın kendisi kadar önemlidir. Saatler makul, haftalar değil.
+Yaygın hata şu: Yönetim ekibine pazartesi söyleyip geri kalanına iki hafta sonra söylemek. Bu aralıkta bilgi mutlaka sızar ve ekip, kendisinden bir şey saklandığını hisseder. Katmanlar arasındaki süreyi kısa tutmak, mesajın kendisi kadar önemlidir. Saatler makul, haftalar değil.
 
-Bir diğer tuzak da her gruba farklı bir hikâye anlatmak. Yönetime "durum ciddi", çalışanlara "her şey yolunda" dersen, bu iki versiyon er geç karşılaşır. Karşılaştığında da kaybettiğin şey sadece bir mesaj değil, sonraki tüm mesajların inandırıcılığı olur.
+Bir diğer hata da her gruba farklı bir hikâye anlatmak. Yönetime "durum ciddi", çalışanlara "her şey yolunda" dersen, bu iki versiyon er geç karşılaşır. Karşılaştığında da kaybettiğin şey sadece bir mesaj değil, sonraki tüm mesajların inandırıcılığı olur.
 
 ## İlk söylediğin sayı neden bu kadar önemli?
 
