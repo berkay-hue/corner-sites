@@ -85,3 +85,5 @@ CREATE TABLE IF NOT EXISTS applications (
 -- Tablo önceden varsa bir kez çalıştırın:
 -- ALTER TABLE applications ADD COLUMN revision_note TEXT;
 CREATE INDEX IF NOT EXISTS applications_user ON applications (user_id);
+
+-- Sosyal metrik tabloları: migrations/0001_metrics.sql
