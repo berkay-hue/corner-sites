@@ -1,5 +1,6 @@
 // WishCEO: sayı sayı CEO oyunu, arşiv, CEO karnesi, paylaşım ve yeni sayı bildirimi.
 // Vakalar gerçek şirket krizlerinden uyarlanmıştır; şirket, ürün ve kişi adları kurgusaldır, rakamlar yuvarlanmıştır. Dosyalarda dış bağlantı yoktur.
+// Sponsorlu vaka: vaka nesnesine isteğe bağlı sponsor: "Ad" ekle; başlığın altında tek sade satır çıkar (logo, görsel, bağlantı yok; şimdilik canlı vakada kullanılmıyor). Önizleme: ?ornek-sponsor
 (function () {
   "use strict";
 
@@ -1773,6 +1774,8 @@
     }).join("");
   }
 
+  var DEMO_SP = /[?&]ornek-sponsor\b/.test(location.search);
+  function sponsorOf(c) { return c.sponsor || (DEMO_SP ? "Örnek Sponsor" : ""); }
   function renderCase(focus) {
     var i = state.cur, c = CASES[i], a = state.answers[i];
     var html =
@@ -1780,6 +1783,7 @@
       '<div class="case-main">' +
       '<p class="case-meta">' + esc(c.place[0] + c.place[1]) + "</p>" +
       '<h3 class="case-title" tabindex="-1">' + esc(c.title) + "</h3>" +
+      (sponsorOf(c) ? '<p class="case-sp">Bu vaka ' + esc(sponsorOf(c)) + " katkısıyla hazırlandı.</p>" : "") +
       '<p class="case-co">' + esc(c.company) + "</p>" +
       '<div class="case-body">' + c.body.map(function (p) { return "<p>" + esc(p) + "</p>"; }).join("") + "</div>" +
       '<dl class="stats">' + c.stats.map(function (s) { return "<div><dt>" + esc(s[0]) + "</dt><dd>" + esc(s[1]) + "</dd></div>"; }).join("") + "</dl>" +
