@@ -57,15 +57,15 @@ const RULES = {
         html = html.replace(/<script data-cg-links>[\s\S]*?<\/script>/, "").replace("</body>", `<script data-cg-links>${js}</script></body>`);
       }
       // Grup şirketi düğümleri: @id/url/ad, şirketin kendi sitesindeki Organization düğümüyle aynı (canlıda doğrulandı).
-      // SAAS Corner ve CRM Corner'ın sitesinde Organization @id'si yok; onlara @id uydurulmaz.
-      const SUB = { "https://salescorner.co": "https://salescorner.co/", "https://socialmediacorner.co": "https://socialmediacorner.co/",
+      // SAAS Corner'ın @id'sini A şeridi kendi sitesine ekliyor; CRM Corner'da @id yok, uydurulmaz.
+      const SUB = { "https://saascorner.co": "https://saascorner.co/", "https://salescorner.co": "https://salescorner.co/", "https://socialmediacorner.co": "https://socialmediacorner.co/",
         "https://www.brandcorner.co": "https://www.brandcorner.co/", "https://wishceo.com": "https://wishceo.com/" };
       html = html.replace(/(<script type="application\/ld\+json" data-cg-ld>)([\s\S]*?)(<\/script>)/g, (m, a, json, b) => {
         const walk = n => {
           if (Array.isArray(n)) return n.forEach(walk);
           if (!n || typeof n !== "object") return;
           if (n.name === "SaaS Corner" && /^https:\/\/saascorner\.co\/?$/.test(n.url || "")) n.name = "SAAS Corner";
-          const id = n["@id"]?.replace(/\/#org-cg$/, ""), key = id ?? (n["@type"] === "Organization" && n.url?.replace(/\/$/, ""));
+          const id = n["@id"]?.replace(/\/#org(-cg)?$/, ""), key = id ?? (n["@type"] === "Organization" && n.url?.replace(/\/$/, ""));
           if (key && SUB[key]) {
             const ent = Object.entries(n), out = { "@type": n["@type"] };
             if (!n["@type"]) delete out["@type"];
@@ -99,9 +99,10 @@ const RULES = {
         "@type": "Person", "@id": id, name: "Berkay Yalçın", alternateName: "Berkay YALÇIN", url: "https://www.yalcinberkay.com.tr/",
         image: "https://www.yalcinberkay.com.tr/_a/fr/images/tfHxTGcPg5W1q2kXiuBQynltGIA_d8696c1a.png", jobTitle: "Founder & B2B Sales Consultant",
         description: "Founder of SAAS Corner, Sales Corner, Social Media Corner, Brand Corner, CRM Corner and Corner Group; B2B sales consultant with 10+ years of experience, specialising in outbound sales, lead generation and CRM.",
-        worksFor: [org("SAAS Corner", "https://saascorner.co"), org("Corner Group", "https://cornergroup.co", "https://cornergroup.co/#org"),
-          org("Sales Corner", "https://salescorner.co"), org("Social Media Corner", "https://socialmediacorner.co"),
-          org("Brand Corner", "https://www.brandcorner.co", "https://www.brandcorner.co/#org"), org("CRM Corner", "https://crmcorner.co")],
+        worksFor: [org("SAAS Corner", "https://saascorner.co", "https://saascorner.co/#org"), org("Corner Group", "https://cornergroup.co", "https://cornergroup.co/#org"),
+          org("Sales Corner", "https://salescorner.co", "https://salescorner.co/#org"), org("Social Media Corner", "https://socialmediacorner.co", "https://socialmediacorner.co/#org"),
+          org("Brand Corner", "https://www.brandcorner.co", "https://www.brandcorner.co/#org"), org("WishCEO", "https://wishceo.com", "https://wishceo.com/#org"),
+          org("CRM Corner", "https://crmcorner.co")],
         knowsAbout: ["B2B sales", "Lead generation", "Outbound sales", "Sales development (SDR)", "CRM", "HubSpot", "Salesforce", "Pipedrive", "Apollo.io", "Sales automation"],
         knowsLanguage: ["en", "tr"], sameAs: ["https://www.linkedin.com/in/berkayyalcin2/", "https://www.instagram.com/beerkayyalcin"],
       };
@@ -383,9 +384,17 @@ const RULES = {
       let first = true;
       html = html.replace(/<script type="application\/ld\+json" data-sk-seo>[\s\S]*?<\/script>/g, () => first ? (first = false, MARK) : "");
       // Organization (+FAQPage) sitenin kendi LD'sinde her sayfada var; yalnızca WebSite eklenir
-      const org = { "@type": "Organization", name: R.brand, url: R.origin };
+      // Sitenin Organization LD'sine kalıcı @id ve çatı şirket; diğer düğümler bu @id'ye bağlanır
+      const ORG = R.origin + "/#org";
+      html = html.replace(/(<script type="application\/ld\+json">)([\s\S]*?)(<\/script>)/g, (m, a, j, b) => {
+        let o; try { o = JSON.parse(j); } catch { return m; }
+        if (o["@type"] !== "Organization" || o.url !== R.origin) return m;
+        const { "@context": c, "@type": t, ...rest } = o;
+        return a + JSON.stringify({ "@context": c, "@type": t, "@id": ORG, ...rest, parentOrganization: { "@type": "Organization", "@id": "https://cornergroup.co/#org", name: "Corner Group", url: "https://cornergroup.co" } }) + b;
+      });
+      const org = { "@id": ORG };
       const ld = [];
-      if (page === "/") ld.push({ "@context": "https://schema.org", "@type": "WebSite", url: R.origin + "/", name: R.brand, inLanguage: "tr-TR" });
+      if (page === "/") ld.push({ "@context": "https://schema.org", "@type": "WebSite", url: R.origin + "/", name: R.brand, inLanguage: "tr-TR", publisher: org });
 
       const kb = page.startsWith("/bilgi-merkezi/");
       if (kb) {

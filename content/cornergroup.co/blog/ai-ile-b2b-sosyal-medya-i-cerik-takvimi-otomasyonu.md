@@ -1,6 +1,6 @@
 ---
 title: "AI ile B2B Sosyal Medya İçerik Takvimi Otomasyonu"
-description: "B2B pazarlama ekosisteminde sosyal medya, artık bir \"olsa iyi olur\" lüksü değil, marka bilinirliği, düşünce liderliği ve nitelikli müşteri adayı yaratımı…"
+description: "AI ile içerik takvimi otomasyonu, B2B sosyal medya paylaşımlarını planlar, taslak üretir ve onay akışını kısaltır; ekip stratejiye odaklanır."
 date: "2026-05-17"
 category: "Otomasyon"
 image: "/_a/fr/images/jZUWdVf5W3HiE59XtK9m27nz0M_7805d9aa.jpg"

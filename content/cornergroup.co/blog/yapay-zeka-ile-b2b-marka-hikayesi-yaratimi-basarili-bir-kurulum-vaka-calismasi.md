@@ -1,6 +1,6 @@
 ---
 title: "Yapay Zeka ile B2B Marka Hikayesi Yaratımı: Başarılı Bir Kurulum Vaka Çalışması"
-description: "Dijitalleşmenin gürültüyü artırdığı, ürün ve hizmetlerin hızla metalaştığı günümüz B2B pazarında, şirketlerin en değerli varlığı ayırt edici ve tutarlı…"
+description: "Bu vaka çalışması, bir B2B şirketinin yapay zeka destekli bir süreçle ayırt edici marka hikâyesini nasıl kurduğunu ve kanallara yaydığını anlatır."
 date: "2026-06-25"
 category: "Vaka Çalışması"
 image: "/_a/fr/images/Rvupuus8eJWJtIJ33C2ualCbC8_7805d9aa.jpg"

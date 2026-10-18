@@ -1,6 +1,6 @@
 ---
 title: "B2B Satış Keşif Görüşmelerinde Yapılan 5 Yaygın Hata ve Çözümleri"
-description: "B2B satış dünyasında, tüm sürecin kaderini belirleyen kritik bir an vardır: keşif görüşmesi."
+description: "B2B keşif görüşmelerinde en sık hata, dinlemek yerine ürünü anlatmaktır; bu yazı 5 yaygın hatayı ve her biri için pratik çözümü anlatır."
 date: "2026-07-12"
 category: "Strateji"
 image: "/_a/fr/images/CDmPrVr0Ry9ujKP0qFyCD37423k_7805d9aa.jpg"

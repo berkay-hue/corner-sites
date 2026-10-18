@@ -1,6 +1,6 @@
 ---
 title: "B2B Satış Akışınızı Sıfırdan Oluşturma: Başarıya Giden Adım Adım Rehber"
-description: "B2B dünyasında sürdürülebilir büyüme, tesadüflere veya anlık başarılara dayandırılamaz."
+description: "B2B satış akışı sıfırdan ICP, net aşamalar, ölçülebilir hedefler ve CRM takibiyle kurulur; bu rehber her adımı sırasıyla anlatır."
 date: "2026-06-06"
 category: "Rehber"
 image: "/_a/fr/images/ndxLy5SDmYAZT4b832LjYl1hBXw_cd09786e.jpg"

@@ -1,6 +1,6 @@
 ---
 title: "Yapay Zeka Destekli B2B Instagram İçerik Stratejileri: Etkileşimi Artırma"
-description: "B2B pazarlama evreni, tektonik bir değişimden geçiyor. Karar alıcıların demografik yapısının gençleşmesi ve dijital kanallarda geçirilen zamanın…"
+description: "Yapay zeka, B2B Instagram içerik fikri, görsel taslak ve paylaşım zamanlamasını hızlandırır; bu yazı etkileşimi artıran stratejileri anlatır."
 date: "2026-05-11"
 category: "Trendler"
 image: "/_a/fr/images/hgLyFGCz1fBcEffwdpYX8Brip0_93d995dc.jpg"

@@ -1,6 +1,6 @@
 ---
 title: "Gelecekte B2B Sosyal Medya: AI Destekli Kişiselleştirme ve Topluluk Yönetimi Trendleri"
-description: "B2B sosyal medya, uzun yıllardır kurumsal duyuru panoları ve tek yönlü iletişim kanalları olarak görüldü."
+description: "B2B sosyal medyanın geleceği, AI destekli kişiselleştirme ve aktif topluluk yönetimi; bu yazı markaların hazırlanması gereken trendleri anlatır."
 date: "2026-06-03"
 category: "Trendler"
 image: "/_a/fr/images/kzWnbWIRHBbLs5Nm5KsaEZDCM_93d995dc.jpg"

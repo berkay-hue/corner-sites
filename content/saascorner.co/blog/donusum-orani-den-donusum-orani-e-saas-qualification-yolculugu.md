@@ -1,10 +1,10 @@
 ---
-title: "Dönüşüm Oranı'den Dönüşüm Oranı2'e: SaaS Qualification Yolculuğu"
+title: "Dönüşüm Oranı'ndan Dönüşüm Oranı²'ne: SaaS Qualification Yolculuğu"
 description: "SaaS dünyasında kutsal kase olarak görülen bir metrik vardır: Dönüşüm Oranı. Web sitenize gelen her yüz ziyaretçiden kaçının bir form doldurduğunu, deneme…"
 date: "2026-04-26"
 category: "Lead Generation"
 image: "/_a/fr/images/lAIwCibwuzocwKgJ9ZLqHBmlQA_cd09786e.jpg"
-imageAlt: "Dönüşüm Oranı'den Dönüşüm Oranı2'e: SaaS Qualification Yolculuğu"
+imageAlt: "Dönüşüm Oranı'ndan Dönüşüm Oranı²'ne: SaaS Qualification Yolculuğu"
 ---
 
 SaaS dünyasında kutsal kase olarak görülen bir metrik vardır: Dönüşüm Oranı. Web sitenize gelen her yüz ziyaretçiden kaçının bir form doldurduğunu, deneme sürümüne kaydolduğunu veya bir e-kitap indirdiğini gösteren bu basit yüzde, pazarlama panolarının en parlak yıldızıdır. CEO'lar bu oranı görmek ister, pazarlama ekipleri bu oranı optimize etmek için gecelerini gündüzlerine katar ve yatırımcılar büyümenin bir kanıtı olarak bu orana bakar. Ancak bu parlak yıldızın aldatıcı bir ışığı olabilir. Sadece dönüşüm oranına odaklanmak, sizi yanlış yola saptırabilecek bir tünel vizyonu yaratır. Çünkü her dönüşüm eşit yaratılmamıştır. Ürününüzle hiçbir ilgisi olmayan bir öğrencinin deneme sürümüne kaydolması ile ideal müşteri profilinize (ICP) mükemmel uyan bir şirketin yöneticisinin demo talep etmesi aynı "dönüşüm" değildir. İşte bu noktada, SaaS büyümesinin gerçek sırrını açığa çıkaran yeni bir paradigmaya ihtiyacımız var: Dönüşüm Oranı² (Dönüşüm Oranının Karesi). Bu, niceliğin ötesine geçip niteliğe odaklanan, sadece müşteri kazanmayı değil, doğru müşteriyi kazanmayı hedefleyen bir yaklaşımdır. Bu makale, sizi basit bir dönüşüm oranının sınırlamalarından kurtarıp, pazarlama, ürün ve satış ekiplerinizi uyumlu hale getiren bütünsel bir "qualification" yani yeterlilik yolculuğuna çıkaracak. Bu yolculuk, sadece daha fazla değil, daha iyi müşteriler kazanarak sürdürülebilir ve karlı bir büyüme sağlamanın anahtarıdır.

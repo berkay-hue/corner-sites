@@ -1,6 +1,6 @@
 ---
 title: "Yapay Zeka Destekli B2B Sosyal Medya Analitiği: Performans Ölçümünde Yeni Dönem"
-description: "B2B pazarlama ve satış dünyasında sosyal medyanın rolü, son on yılda radikal bir dönüşüm geçirdi."
+description: "Yapay zeka destekli sosyal medya analitiği, B2B paylaşımlarının etkisini otomatik ölçer ve nedenlerini açıklar; ekip daha hızlı karar verir."
 date: "2026-08-11"
 category: "Trendler"
 image: "/_a/fr/images/oJZfuCA8AIPBzgxeJDpUU9aOdbg_cd09786e.jpg"

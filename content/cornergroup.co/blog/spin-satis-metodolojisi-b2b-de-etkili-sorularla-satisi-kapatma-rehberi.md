@@ -1,6 +1,6 @@
 ---
 title: "SPIN Satış Metodolojisi: B2B'de Etkili Sorularla Satışı Kapatma Rehberi"
-description: "B2B satış dünyası, geri döndürülemez bir şekilde değişti. Artık ürün özelliklerini sıralayarak veya agresif kapatma teknikleri uygulayarak başarıya…"
+description: "SPIN satış; durum, sorun, etki ve ihtiyaç-fayda sorularıyla alıcının ihtiyacını netleştirir. Bu rehber B2B'de uygulamayı adım adım anlatır."
 date: "2026-05-28"
 category: "Rehber"
 image: "/_a/fr/images/KYlP34FwxH9FzDYwrFtvNXETIbk_cd09786e.jpg"

@@ -188,7 +188,7 @@ Yapay zeka araçlarının artık hazırlık aşamasında yardımcı olduğunu da
 
 İşe yarayan bir haftalık pipeline toplantısı karmaşık değildir. Net aşama tanımları, toplantıdan önce güncellenmiş bir CRM, sıkı bir gündem, kanıta dayalı sorular ve bir sonraki haftaya taşınan yazılı taahhütler gerektirir. Toplantıyı tahmin görüşmenizden ve fırsat koçluğunuzdan ayırın. En çok zamanı en önemli fırsatlara ve sorunlara ayırın. Ölü fırsatları kapatmayı güvenli hâle getirin. Birkaç ay içinde tahminlerinizin daha isabetli hâle geldiğini, satışçılarınızın keskinleştiğini ve toplantının katlanılan değil, değer verilen bir şeye dönüştüğünü göreceksiniz.
 
-Bir satış sürecini kuruyor ya da yeniden yapılandırıyorsanız ve pipeline yönetimi, outbound ya da bir B2B ekibini ölçeklemek üzerine fikir alışverişi yapmak isterseniz sizden haber almaktan memnuniyet duyarım. Bana [kişisel sitem](/tr) üzerinden ulaşabilirsiniz.
+Bir satış sürecini kuruyor ya da yeniden yapılandırıyorsanız ve pipeline yönetimi, outbound ya da bir B2B ekibini ölçeklemek üzerine fikir alışverişi yapmak isterseniz sizden haber almaktan memnuniyet duyarım. Bana [kişisel sitem](/tr/) üzerinden ulaşabilirsiniz.
 
 ## SSS
 

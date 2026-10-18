@@ -1,6 +1,6 @@
 ---
 title: "n8n ile B2B Sosyal Medyada Otomatik Paylaşım Stratejileri"
-description: "B2B pazarlamasının dinamik ve rekabetçi dünyasında, sosyal medya artık sadece bir iletişim kanalı değil, aynı zamanda nitelikli müşteri adayları (lead)…"
+description: "n8n ile B2B sosyal medya paylaşımlarını planlayıp birden çok kanala otomatik gönderebilirsiniz; yazı kurulum ve paylaşım stratejilerini anlatır."
 date: "2026-07-14"
 category: "Otomasyon"
 image: "/_a/fr/images/zEggssw5YKWcexYQc9WPywxU1cE_cd09786e.jpg"

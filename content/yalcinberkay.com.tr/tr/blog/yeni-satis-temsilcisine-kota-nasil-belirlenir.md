@@ -218,4 +218,4 @@ Yeni temsilcilere kota belirlemek, özünde zaman konusunda dürüst olmaktır. 
 
 İyi yapıldığında bir rampa planı, yeni çalışanlara birinci haftada, üçüncü ayda ve altıncı ayda başarının neye benzediğini tam olarak söyler. Bu netlik, çoğu zaman kalıp büyüyen temsilcilerle sessizce ayrılanları birbirinden ayıran şeydir.
 
-İlk satış işe alımlarınız için kota ya da rampa planı tasarlıyorsanız ve ikinci bir görüş istiyorsanız [benimle iletişime geçmekten](/tr) çekinmeyin. Satış liderliği hakkında konuşmaktan her zaman memnuniyet duyarım.
+İlk satış işe alımlarınız için kota ya da rampa planı tasarlıyorsanız ve ikinci bir görüş istiyorsanız [benimle iletişime geçmekten](/tr/) çekinmeyin. Satış liderliği hakkında konuşmaktan her zaman memnuniyet duyarım.

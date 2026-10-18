@@ -1,6 +1,6 @@
 ---
 title: "AI ile Marka Hikayesi Anlatımında Yeni Trendler: Otantikliği Dijital Çağda Koruma"
-description: "Dijital dönüşümün her geçen gün hız kazandığı B2B ekosisteminde, yapay zeka (AI) artık bir olasılık değil, iş yapış biçimlerimizi temelden değiştiren bir…"
+description: "AI marka hikâyesi üretimini hızlandırır ama otantiklik gerçek müşteri ve ekip deneyiminden gelir; yazı B2B markalar için yeni trendleri anlatır."
 date: "2026-10-02"
 category: "Trendler"
 image: "/_a/fr/images/YmRyx49yxnvwgmKmcqmjHyMkDw_c1df0be2.jpg"

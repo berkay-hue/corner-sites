@@ -1,6 +1,6 @@
 ---
 title: "B2B Etkinliklerde AI ile Kişiselleştirme Rehberi"
-description: "B2B dünyasında etkinlikler, potansiyel müşterilerle yüz yüze gelmek, mevcut ilişkileri güçlendirmek ve marka bilinirliğini artırmak için vazgeçilmez…"
+description: "AI, B2B etkinliklerde katılımcıya özel oturum önerisi, eşleştirme ve takip mesajı üretir; bu rehber kişiselleştirmeyi adım adım anlatır."
 date: "2026-09-30"
 category: "Rehber"
 image: "/_a/fr/images/DbjZcTdQFKWlnMAEZqdsP3SjGE_7805d9aa.jpg"

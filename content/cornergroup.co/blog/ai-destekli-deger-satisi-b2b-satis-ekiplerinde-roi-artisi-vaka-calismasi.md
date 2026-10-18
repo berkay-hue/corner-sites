@@ -1,6 +1,6 @@
 ---
 title: "AI Destekli Değer Satışı: B2B Satış Ekiplerinde ROI Artışı Vaka Çalışması"
-description: "B2B satış dünyası, geri döndürülemez bir dönüşümün eşiğinde değil, tam ortasında. Ürün özelliklerinin sıralandığı, fiyat odaklı sunumların yapıldığı ve…"
+description: "Bu vaka çalışması, bir B2B satış ekibinin AI ile müşteriye özel değer hesapları hazırlayıp fiyat yerine getiriyi konuşarak ROI'yi artırdığını anlatır."
 date: "2026-07-05"
 category: "Vaka Çalışması"
 image: "/_a/fr/images/36RZ1m9HXR9Zohc8wdTzSwPM5I8_7805d9aa.jpg"
