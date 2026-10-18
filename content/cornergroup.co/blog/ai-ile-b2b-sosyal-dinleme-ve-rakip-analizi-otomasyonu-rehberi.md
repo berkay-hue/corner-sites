@@ -1,6 +1,6 @@
 ---
 title: "AI ile B2B Sosyal Dinleme ve Rakip Analizi Otomasyonu Rehberi"
-description: "Günümüzün hiper-rekabetçi B2B pazarında, bilgi artık sadece bir güç değil, aynı zamanda en değerli ticari varlıktır."
+description: "AI ile sosyal dinleme ve rakip analizi otomasyonu, sektör konuşmalarını ve rakip hamlelerini sürekli izleyip B2B ekibine hazır özet sunar."
 date: "2026-06-13"
 category: "Otomasyon"
 image: "/_a/fr/images/z0j2XjiGMR4xwq0XEBbr1rxQI_cd09786e.jpg"

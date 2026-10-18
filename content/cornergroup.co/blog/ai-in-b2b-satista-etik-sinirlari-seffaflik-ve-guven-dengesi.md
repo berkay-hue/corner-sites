@@ -1,6 +1,6 @@
 ---
 title: "AI'ın B2B Satışta Etik Sınırları: Şeffaflık ve Güven Dengesi"
-description: "B2B satış dünyası, yapay zekanın (AI) vaat ettiği verimlilik ve kişiselleştirme devriminin tam ortasında yer alıyor."
+description: "B2B satışta AI kullanırken şeffaflık, veri izni ve insan denetimi şarttır; bu yazı güveni koruyan etik sınırları ve uygulamaları anlatır."
 date: "2026-07-16"
 category: "Trendler"
 image: "/_a/fr/images/36RZ1m9HXR9Zohc8wdTzSwPM5I8_7805d9aa.jpg"

@@ -1,6 +1,6 @@
 ---
 title: "B2B CRM ve Pazarlama Otomasyonu Entegrasyonu: Kesintisiz İş Akışları Rehberi"
-description: "Günümüzün rekabetçi B2B pazarında, şirketler artık sadece iyi bir ürün veya hizmet sunarak ayakta kalamıyor."
+description: "CRM ile pazarlama otomasyonunu entegre etmek, lead'in pazarlamadan satışa veri kaybı olmadan geçmesini sağlar; rehber kurulumu adım adım anlatır."
 date: "2026-08-06"
 category: "Otomasyon"
 image: "/_a/fr/images/Prjgsiu9hyLtGKGJnC7F1XHk0_cd09786e.jpg"

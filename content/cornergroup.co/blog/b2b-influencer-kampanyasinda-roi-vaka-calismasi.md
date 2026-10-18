@@ -1,6 +1,6 @@
 ---
 title: "B2B Influencer Kampanyasında ROI: Bir Vaka Çalışması"
-description: "Bir B2B markasının influencer kampanyasında ölçülebilir ROI nasıl elde ettiğini; hedef belirleme, takip metrikleri ve sonuç analiziyle adım adım inceliyoruz."
+description: "Bu vaka çalışması, bir B2B markasının influencer kampanyasında ROI'yi nasıl ölçtüğünü; hedef, takip ve sonuç adımlarıyla birlikte anlatır."
 date: "2026-10-10"
 category: "Vaka Çalışması"
 image: "https://images.pexels.com/photos/5922543/pexels-photo-5922543.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
