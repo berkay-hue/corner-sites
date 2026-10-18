@@ -19,53 +19,96 @@
 <meta name="twitter:description" content="Brand Corner panel.">
 <meta name="twitter:image" content="https://www.brandcorner.co/og.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#ffffff;--surface:#f8fafc;--line:#e5e7eb;--text:#111827;--muted:#4b5563;--accent:#4f46e5;--grad:linear-gradient(90deg,#4f46e5,#7c3aed)}
-*{box-sizing:border-box}html{-webkit-text-size-adjust:100%}body{margin:0;background:var(--surface);color:var(--text);font:16px/1.7 "Inter",system-ui,-apple-system,sans-serif}
+:root{--bg:#f6f7fb;--surface:#fff;--surface-2:#f1f3f9;--line:#e4e7ef;--line-strong:#cfd4e2;--text:#131726;--muted:#5b6275;--faint:#80869a;
+--accent:#4f46e5;--accent-hover:#4338ca;--accent-2:#7c3aed;--accent-soft:#eef0ff;--accent-text:#4338ca;
+--ok:#157f3b;--ok-soft:#e7f6ec;--warn:#a15c07;--warn-soft:#fdf3e1;--info:#0b6aa2;--info-soft:#e6f3fb;--danger:#b42318;--danger-soft:#fdecea;--slate:#525b6e;--slate-soft:#eef0f4;
+--r-card:12px;--r-ctl:8px;--grad:linear-gradient(90deg,var(--accent),var(--accent-2));color-scheme:light}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1018;--surface:#161925;--surface-2:#1d2130;--line:#272c3d;--line-strong:#383e55;--text:#e9ebf3;--muted:#a3a9bc;--faint:#7d8399;
+--accent:#6a63f2;--accent-hover:#7a74f5;--accent-2:#9b7bff;--accent-soft:#24254f;--accent-text:#aba6ff;
+--ok:#4cc27a;--ok-soft:#13301f;--warn:#e7a446;--warn-soft:#33260f;--info:#5bb6ea;--info-soft:#102a3a;--danger:#f2756a;--danger-soft:#3a1714;--slate:#a3a9bc;--slate-soft:#232736;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0e1018;--surface:#161925;--surface-2:#1d2130;--line:#272c3d;--line-strong:#383e55;--text:#e9ebf3;--muted:#a3a9bc;--faint:#7d8399;
+--accent:#6a63f2;--accent-hover:#7a74f5;--accent-2:#9b7bff;--accent-soft:#24254f;--accent-text:#aba6ff;
+--ok:#4cc27a;--ok-soft:#13301f;--warn:#e7a446;--warn-soft:#33260f;--info:#5bb6ea;--info-soft:#102a3a;--danger:#f2756a;--danger-soft:#3a1714;--slate:#a3a9bc;--slate-soft:#232736;color-scheme:dark}
+*{box-sizing:border-box}html{-webkit-text-size-adjust:100%}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.6 "Inter",system-ui,-apple-system,sans-serif}
 a{color:inherit}img{max-width:100%;display:block}[hidden]{display:none!important}
-.wrap{max-width:1140px;margin:0 auto;padding:0 20px}
-header.top{position:sticky;top:0;z-index:10;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
-header.top .wrap{display:flex;align-items:center;gap:24px;height:68px}
-.btn{display:inline-block;background:var(--grad);color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:10px 18px;border-radius:10px;white-space:nowrap}
-button.btn{border:0;cursor:pointer;font-family:inherit}button.btn:disabled{opacity:.65;cursor:default}.btn.sm{font-size:14px;padding:8px 14px}
-h1,h2,h3{font-family:"Poppins","Inter",system-ui,sans-serif;line-height:1.2}h1:focus{outline:none}
-footer.bot{border-top:1px solid var(--line);background:var(--bg);color:var(--muted);font-size:14px;padding:32px 0 40px}footer.bot .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:space-between}footer.bot nav{display:flex;flex-wrap:wrap;gap:8px 18px}footer.bot a{text-decoration:none}footer.bot a:hover{color:var(--text)}
-.who{margin-left:auto;display:flex;align-items:center;gap:14px;font-size:14px;color:var(--muted);min-width:0}
-.who .me{display:flex;align-items:baseline;gap:6px;min-width:0}.who b{color:var(--text);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:240px}
-.lnk{background:none;border:0;padding:0;font:inherit;color:var(--muted);cursor:pointer;text-decoration:underline;text-underline-offset:3px;white-space:nowrap}.lnk:hover{color:var(--text)}
-.ghost{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:7px 14px;font:inherit;font-weight:600;font-size:14px;color:var(--text);cursor:pointer;white-space:nowrap}.ghost:hover{border-color:#cbd5e1}.ghost:disabled{opacity:.65;cursor:default}
-.shell{display:grid;grid-template-columns:210px minmax(0,1fr);gap:36px;padding-top:32px;padding-bottom:56px;min-height:calc(100vh - 69px - 112px)}
-.side nav{display:flex;flex-direction:column;gap:4px;position:sticky;top:100px}
-.side a{display:block;padding:9px 12px;border-radius:10px;text-decoration:none;color:var(--muted);font-weight:500;font-size:15px}
-.side a:hover{background:var(--bg);color:var(--text)}.side a[aria-current]{background:var(--bg);color:var(--accent);box-shadow:inset 0 0 0 1px var(--line)}
-.view{min-width:0}.view h1{font-size:28px;margin:0 0 6px;letter-spacing:-.01em;overflow-wrap:anywhere}.view h2{font-size:19px;margin:32px 0 12px}
+.i{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.wrap{max-width:1120px;margin:0 auto;padding:0 32px}
+h1,h2,h3{font-family:"Poppins","Inter",system-ui,sans-serif;line-height:1.25}h1:focus{outline:none}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+/* Kabuk: masaüstünde sol menü, mobilde üst çubuk + alt sekmeler */
+.app{display:grid;grid-template-columns:244px minmax(0,1fr);min-height:100vh}
+.side{position:sticky;top:0;height:100vh;display:flex;flex-direction:column;gap:18px;padding:22px 16px;background:var(--surface);border-right:1px solid var(--line);overflow-y:auto}
+.logo{font:700 20px/1 "Poppins","Inter",sans-serif;text-decoration:none;color:var(--text);letter-spacing:-.01em;padding:4px 8px;display:inline-flex;align-items:center;min-height:44px}.logo span{color:var(--accent)}
+.acct{display:flex;align-items:center;gap:10px;padding:10px;border:1px solid var(--line);border-radius:var(--r-card);background:var(--surface-2);min-width:0}
+.av{width:36px;height:36px;border-radius:50%;flex:none;display:grid;place-items:center;background:var(--grad);color:#fff;font:600 14px/1 "Inter",sans-serif}
+.acct>div{min-width:0}.acct .n{font-weight:600;font-size:14px;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.acct .r{font-size:12.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nav{display:flex;flex-direction:column;gap:2px}
+.nav a,.nb{display:flex;align-items:center;gap:10px;min-height:44px;padding:0 12px;border-radius:var(--r-ctl);text-decoration:none;color:var(--muted);font:500 14.5px/1.2 "Inter",sans-serif;background:none;border:0;cursor:pointer;width:100%;text-align:left}
+.nav a:hover,.nb:hover{background:var(--surface-2);color:var(--text)}
+.nav a[aria-current]{background:var(--accent-soft);color:var(--accent-text);font-weight:600}
+.cnt{margin-left:auto;min-width:22px;height:22px;padding:0 7px;border-radius:999px;background:var(--accent);color:#fff;font:600 12px/22px "Inter",sans-serif;text-align:center}
+.side .foot{margin-top:auto;display:flex;flex-direction:column;gap:2px;border-top:1px solid var(--line);padding-top:12px}
+.nb:disabled{opacity:.6;cursor:default}
+.main-col{min-width:0;display:flex;flex-direction:column}
+.mtop{display:none}
+.main{flex:1;padding:28px 32px 56px}.wrapw{max-width:1120px;margin:0 auto;min-width:0}
+.tabbar{display:none}
+/* Sayfa başlığı ve kartlar */
+.ph{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px 20px;margin:0 0 22px}.ph>div{min-width:0}
+.ph h1{font-size:26px;margin:0 0 4px;letter-spacing:-.01em;overflow-wrap:anywhere}.ph p{margin:0;color:var(--muted)}.ph .acts{display:flex;flex-wrap:wrap;gap:8px}
+.wrapw>h1{font-size:26px;margin:0 0 6px;letter-spacing:-.01em;overflow-wrap:anywhere}.wrapw h2{font-size:18px;margin:30px 0 12px}
 .lead{color:var(--muted);margin:0 0 24px}.muted{color:var(--muted)}
-.box{background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:20px}
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
-.stat .n{font:700 28px/1.2 "Poppins","Inter",system-ui,sans-serif}.stat .l{color:var(--muted);font-size:14px;margin-top:4px}
-.steps,.soon{list-style:none;margin:0}.soon{padding:0}.steps li,.soon li{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 0;border-top:1px solid var(--line)}.steps li:first-child,.soon li:first-child{border-top:0;padding-top:0}.steps li:last-child,.soon li:last-child{padding-bottom:0}
-.steps a{color:var(--accent);font-weight:600;text-decoration:none}.steps a:hover{text-decoration:underline}
+.box,.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-card);padding:20px}
+.card{padding:0;overflow:hidden}.ch{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:16px 20px;border-bottom:1px solid var(--line)}.ch h2{font-size:16px;margin:0}.ch .muted{font-size:13px}
+.cb{padding:16px 20px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;background:var(--accent);color:#fff;text-decoration:none;font:600 14.5px/1.2 "Inter",sans-serif;padding:9px 16px;border-radius:var(--r-ctl);white-space:nowrap;border:0;cursor:pointer}
+.btn:hover{background:var(--accent-hover)}button.btn:disabled{opacity:.65;cursor:default}.btn.sm{font-size:13.5px;padding:7px 12px;min-height:44px}
+.btn.sec{background:var(--surface);color:var(--text);border:1px solid var(--line-strong)}.btn.sec:hover{background:var(--surface-2)}
+.lnk{background:none;border:0;padding:0;font:inherit;color:var(--muted);cursor:pointer;text-decoration:underline;text-underline-offset:3px;white-space:nowrap}.lnk:hover{color:var(--text)}
+.ghost{background:var(--surface);border:1px solid var(--line-strong);border-radius:var(--r-ctl);padding:7px 14px;min-height:40px;font:inherit;font-weight:600;font-size:14px;color:var(--text);cursor:pointer;white-space:nowrap}.ghost:hover{background:var(--surface-2)}.ghost:disabled{opacity:.65;cursor:default}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-card);padding:16px 18px;min-width:0}.stat .k{color:var(--muted);font-size:13px}.stat .v{font:600 26px/1.25 "Poppins","Inter",sans-serif;margin-top:4px}
+.stat .v.na{font:500 15px/1.4 "Inter",sans-serif;color:var(--faint);margin-top:10px}
+.ov{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:16px;margin-top:16px;align-items:start}.ov>div{display:grid;gap:16px;min-width:0}
+.inbox{list-style:none;margin:0;padding:0}.inbox li{display:flex;align-items:center;gap:12px;padding:12px 20px;border-top:1px solid var(--line)}.inbox li:first-child{border-top:0}
+.ic{width:36px;height:36px;flex:none;border-radius:10px;display:grid;place-items:center}.ic.warn{background:var(--warn-soft);color:var(--warn)}.ic.info{background:var(--info-soft);color:var(--info)}.ic.danger{background:var(--danger-soft);color:var(--danger)}.ic.accent{background:var(--accent-soft);color:var(--accent-text)}.ic.ok{background:var(--ok-soft);color:var(--ok)}
+.tx{flex:1;min-width:0;display:flex;flex-direction:column}.tx b{font-weight:600;font-size:14.5px;overflow-wrap:anywhere}.tx span{color:var(--muted);font-size:13px;overflow-wrap:anywhere}
+.cb.none{color:var(--muted);text-align:center;padding:28px 20px}
+.meter{height:8px;border-radius:999px;background:var(--surface-2);overflow:hidden;margin:6px 0 4px}.meter i{display:block;height:100%;background:var(--grad);border-radius:999px}
+.pct{display:flex;justify-content:space-between;font-size:13px;color:var(--muted)}.pct b{color:var(--text);font-weight:600}
+.checklist{list-style:none;margin:14px 0 16px;padding:0;display:grid;gap:8px}.checklist li{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--muted)}
+.checklist .dot{width:20px;height:20px;flex:none;border-radius:50%;border:1.5px solid var(--line-strong);display:grid;place-items:center}
+.checklist li.done{color:var(--text)}.checklist li.done .dot{background:var(--ok-soft);border-color:transparent;color:var(--ok)}.checklist .dot .i{width:13px;height:13px;stroke-width:2.4}
+.mets{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.mets .stat{background:var(--surface-2);border:0}
+.steps,.soon{list-style:none;margin:0}.soon{padding:0}.soon li{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 0;border-top:1px solid var(--line)}.soon li:first-child{border-top:0;padding-top:0}.soon li:last-child{padding-bottom:0}
 .soon-lead{color:var(--muted);font-size:14px;margin:0 0 12px}
+footer.bot{border-top:1px solid var(--line);color:var(--muted);font-size:13.5px;padding:24px 0 32px}footer.bot .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:space-between}footer.bot nav{display:flex;flex-wrap:wrap;gap:8px 18px}footer.bot a{text-decoration:none;display:inline-flex;align-items:center;min-height:44px}footer.bot a:hover{color:var(--text)}
+/* Mobil menü sayfası (ayarlar, yardım, çıkış) */
+.scrim{position:fixed;inset:0;background:rgba(10,12,20,.45);z-index:40}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:41;background:var(--surface);border-radius:16px 16px 0 0;padding:12px 16px calc(16px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:6px;box-shadow:0 -8px 30px rgba(0,0,0,.18)}
+.sheet .grip{width:40px;height:4px;border-radius:2px;background:var(--line-strong);margin:0 auto 8px}
+/* Mevcut görünümler (kampanya, keşif, profil) */
 .head{display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;gap:12px}.head>div{min-width:0}
 .list{display:grid;gap:12px}
-.item h3{font-size:17px;margin:0;overflow-wrap:anywhere}.item h3 a{text-decoration:none}.item h3 a:hover{color:var(--accent)}
-.meta{color:var(--muted);font-size:14px;margin:6px 0 0;display:flex;flex-wrap:wrap;gap:2px 14px}
-.chips{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 0}.chip{font-size:13px;line-height:1.5;padding:2px 10px;border-radius:999px;background:var(--surface);border:1px solid var(--line);color:var(--muted)}
-.handles{list-style:none;padding:0;margin:10px 0 0;display:flex;flex-wrap:wrap;gap:4px 18px;font-size:14px;color:var(--muted)}
-.badge{display:inline-block;font-size:12px;font-weight:600;line-height:1.6;padding:1px 9px;border-radius:999px;white-space:nowrap;background:#eef2ff;color:#3730a3}
-.b-open,.b-approved{background:#dcfce7;color:#166534}.b-closed,.b-rejected,.b-declined{background:#f1f5f9;color:#475569}
-.b-pending,.b-revision{background:#fef3c7;color:#92400e}.b-invited,.b-submitted{background:#e0f2fe;color:#075985}.b-soon{background:#f5f3ff;color:#6d28d9}
-.match{font-weight:600;color:var(--accent)}
-.prose{white-space:pre-wrap;overflow-wrap:anywhere;margin:12px 0 0}.prose.sm{font-size:15px;color:var(--muted)}
-.quote{border-left:3px solid var(--line);padding:0 0 0 12px;margin:12px 0 0}.quote .ql{display:block;font-size:13px;font-weight:600;color:var(--muted)}.quote .prose{margin:0}
-.link{overflow-wrap:anywhere}.link a{color:var(--accent)}
-.info{font-size:14px;color:var(--muted);margin:10px 0 0}
+.item h3{font-size:16.5px;margin:0;overflow-wrap:anywhere}.item h3 a{text-decoration:none}.item h3 a:hover{color:var(--accent-text)}
+.meta{color:var(--muted);font-size:13.5px;margin:6px 0 0;display:flex;flex-wrap:wrap;gap:2px 14px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 0}.chip{font-size:12.5px;line-height:1.5;padding:2px 10px;border-radius:999px;background:var(--surface-2);border:1px solid var(--line);color:var(--muted)}
+.handles{list-style:none;padding:0;margin:10px 0 0;display:flex;flex-wrap:wrap;gap:4px 18px;font-size:13.5px;color:var(--muted)}
+.badge{display:inline-block;font-size:12px;font-weight:600;line-height:1.6;padding:1px 9px;border-radius:999px;white-space:nowrap;background:var(--accent-soft);color:var(--accent-text)}
+.b-open,.b-approved{background:var(--ok-soft);color:var(--ok)}.b-closed,.b-rejected,.b-declined{background:var(--slate-soft);color:var(--slate)}
+.b-pending,.b-revision{background:var(--warn-soft);color:var(--warn)}.b-invited,.b-submitted{background:var(--info-soft);color:var(--info)}.b-soon{background:var(--accent-soft);color:var(--accent-text)}
+.match{font-weight:600;color:var(--accent-text)}
+.prose{white-space:pre-wrap;overflow-wrap:anywhere;margin:12px 0 0}.prose.sm{font-size:14.5px;color:var(--muted)}
+.quote{border-left:3px solid var(--line-strong);padding:0 0 0 12px;margin:12px 0 0}.quote .ql{display:block;font-size:12.5px;font-weight:600;color:var(--muted)}.quote .prose{margin:0}
+.link{overflow-wrap:anywhere}.link a{color:var(--accent-text)}
+.info{font-size:13.5px;color:var(--muted);margin:10px 0 0}
 .row-b{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:14px 0 0}
 .back{margin:0 0 10px;font-size:14px}.back a{color:var(--muted);text-decoration:none}.back a:hover{color:var(--text)}
 .empty{text-align:center;color:var(--muted);padding:36px 20px}.empty p{margin:0 0 14px}.empty p:last-child{margin:0}
 .f label,.f legend{display:block;font-weight:600;font-size:14px;margin:0 0 6px;padding:0}
-.f input:not([type=checkbox]),.f select,.f textarea{display:block;width:100%;font:inherit;font-size:16px;line-height:1.4;padding:10px 12px;margin:0 0 16px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--text)}
+.f input:not([type=checkbox]),.f select,.f textarea{display:block;width:100%;font:inherit;font-size:16px;line-height:1.4;padding:10px 12px;margin:0 0 16px;border:1px solid var(--line-strong);border-radius:var(--r-ctl);background:var(--surface);color:var(--text)}
 .f textarea{resize:vertical;min-height:96px}
 .f input:focus-visible,.f select:focus-visible,.f textarea:focus-visible{outline:2px solid var(--accent);outline-offset:1px;border-color:var(--accent)}
 .f fieldset{border:0;padding:0;margin:0 0 16px;min-width:0}
@@ -77,26 +120,45 @@ footer.bot{border-top:1px solid var(--line);background:var(--bg);color:var(--mut
 .filter{display:flex;flex-wrap:wrap;align-items:flex-end;gap:12px;margin:0 0 20px}.filter>div{flex:1 1 180px}.f.filter input:not([type=checkbox]),.f.filter select{margin:0}
 .sub{margin:14px 0 0;padding:16px 0 0;border-top:1px solid var(--line)}
 .inl{display:flex;flex-wrap:wrap;gap:8px}.f .inl input{flex:1 1 220px;width:auto;margin:0}
-.msg{color:#b91c1c;font-size:14px;margin:12px 0 0}.msg:empty{display:none}.ok{color:#166534;font-size:14px;margin:12px 0 0}.ok:empty{display:none}
+.msg{color:var(--danger);font-size:14px;margin:12px 0 0}.msg:empty{display:none}.ok{color:var(--ok);font-size:14px;margin:12px 0 0}.ok:empty{display:none}
 .ro{color:var(--muted);font-size:14px;margin:0 0 20px;display:flex;flex-wrap:wrap;gap:4px 20px}.ro b{color:var(--text);font-weight:600}
-@media(max-width:760px){header.top .wrap{gap:12px}.who{gap:10px}.who .role{display:none}.who b{max-width:120px}
-.shell{grid-template-columns:minmax(0,1fr);gap:16px;padding-top:16px;padding-bottom:40px;min-height:0}
-.side nav{flex-direction:row;overflow-x:auto;position:static;gap:6px;margin:0 -20px;padding:0 20px 4px;scrollbar-width:none}.side nav::-webkit-scrollbar{display:none}
-.side a{white-space:nowrap;padding:8px 12px}.view h1{font-size:24px}.box{padding:16px}.grid2{grid-template-columns:1fr}.prow{grid-template-columns:1fr 1fr}.prow>div:last-child{grid-column:1/-1}}
-@media(max-width:480px){.who .me{display:none}}
+@media(max-width:1100px){.ov{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:760px){.app{display:block}.side{display:none}
+.mtop{display:flex;align-items:center;justify-content:space-between;gap:12px;position:sticky;top:0;z-index:20;height:56px;padding:0 8px 0 12px;background:color-mix(in srgb,var(--surface) 92%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.mtop .me{display:flex;align-items:center;justify-content:center;width:44px;height:44px;border:0;background:none;padding:0;cursor:pointer;border-radius:50%}
+.main{padding:18px 16px 24px}.wrap{padding:0 16px}
+.tabbar{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--surface);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
+.tabbar a{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-height:52px;text-decoration:none;color:var(--muted);font:500 11px/1.2 "Inter",sans-serif;padding:4px 2px;text-align:center}
+.tabbar a[aria-current]{color:var(--accent-text);font-weight:600}.tabbar .i{width:22px;height:22px}
+.tabbar .cnt{position:absolute;top:4px;left:calc(50% + 6px);margin:0;min-width:18px;height:18px;padding:0 5px;font-size:11px;line-height:18px}
+.main-col{padding-bottom:calc(64px + env(safe-area-inset-bottom))}
+.stats,.mets{grid-template-columns:repeat(2,minmax(0,1fr))}.mets .stat:last-child{grid-column:1/-1}
+.btn,.btn.sm,.ghost{min-height:44px}.inbox li{padding:12px 16px;flex-wrap:wrap}.inbox .btn{margin-left:48px}
+.ph h1,.wrapw>h1{font-size:22px}.box{padding:16px}.ch,.cb{padding-left:16px;padding-right:16px}.grid2{grid-template-columns:1fr}.prow{grid-template-columns:1fr 1fr}.prow>div:last-child{grid-column:1/-1}}
 </style>
 </head>
 <body>
-<header class="top"><div class="wrap"><a href="/" aria-label="Brand Corner"><img src="/logo-wide.png" alt="Brand Corner" width="102" height="34" style="height:34px;width:auto"></a>
-<div class="who"><span class="me"><b id="who"></b><span id="role" class="role"></span></span><button type="button" id="lang" class="lnk"></button><button type="button" id="out" class="ghost">Çıkış yap</button></div></div></header>
-
-<main class="wrap shell">
-<aside class="side"><nav id="nav" aria-label="Panel"></nav></aside>
-<section id="view" class="view"><p class="muted">Yükleniyor… · Loading…</p>
-<noscript><p>Panel için JavaScript gerekli. · The panel requires JavaScript.</p></noscript></section>
-</main>
-
+<div class="app">
+<aside class="side" id="side">
+<a class="logo" href="/">Brand<span>Corner</span></a>
+<div class="acct"><span class="av" id="av" aria-hidden="true"></span><div><div class="n" id="who"></div><div class="r" id="role"></div></div></div>
+<nav class="nav" id="nav" aria-label="Panel"></nav>
+<div class="foot"><button type="button" class="nb" id="lang"></button><a class="nb" id="help2" href="mailto:info@saascorner.co?subject=Brand%20Corner%20panel"></a><button type="button" class="nb" id="out"></button></div>
+</aside>
+<div class="main-col">
+<header class="mtop"><a class="logo" href="/">Brand<span>Corner</span></a><button type="button" class="me" id="me" aria-haspopup="dialog" aria-controls="sheet"><span class="av" id="av2" aria-hidden="true"></span></button></header>
+<main class="main"><div class="wrapw" id="view"><p class="muted">Yükleniyor… · Loading…</p>
+<noscript><p>Panel için JavaScript gerekli. · The panel requires JavaScript.</p></noscript></div></main>
 <footer class="bot"><div class="wrap"><div><span id="copy">© Brand Corner · Tüm hakları saklıdır.</span> · <a id="help" href="mailto:info@saascorner.co?subject=Brand%20Corner%20panel">Yardım: info@saascorner.co</a></div><nav id="group" aria-label="Corner Group şirketleri"><a href="https://saascorner.co">SAAS Corner</a><a href="https://salescorner.co">Sales Corner</a><a href="https://socialmediacorner.co">Social Media Corner</a><a href="https://cornergroup.co">Corner Group</a></nav></div></footer>
+</div>
+</div>
+<nav class="tabbar" id="tabbar" aria-label="Panel"></nav>
+<div class="scrim" id="scrim" hidden></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetWho" hidden>
+<div class="grip" aria-hidden="true"></div>
+<div class="acct"><span class="av" id="av3" aria-hidden="true"></span><div><div class="n" id="sheetWho"></div><div class="r" id="sheetRole"></div></div></div>
+<button type="button" class="nb" id="lang2"></button><a class="nb" id="help3" href="mailto:info@saascorner.co?subject=Brand%20Corner%20panel"></a><button type="button" class="nb" id="out2"></button>
+</div>
 
 <script src="/bc-app.js"></script>
 <script>
@@ -128,8 +190,14 @@ footer.bot{border-top:1px solid var(--line);background:var(--bg);color:var(--mut
       nOverview: "Genel bakış", nCampaigns: "Kampanyalar", nDiscover: "Influencer keşfi", nProfile: "Profil", nOpps: "Fırsatlar", nApps: "Başvurularım",
       sCampaigns: "Kampanya", sOpen: "Açık kampanya", sPending: "Bekleyen başvuru", sApproved: "Onaylanan içerik",
       sOpps: "Açık fırsat", sInvites: "Bekleyen davet", sActive: "Süren iş",
-      next: "Sonraki adımlar", doProfile: "Profilinizi tamamlayın", doNew: "Yeni kampanya oluşturun", doDiscover: "Influencer keşfedin ve davet gönderin",
-      doListed: "Profilinizi markalara görünür yapın", doNiches: "İlgi alanlarınızı ve platformlarınızı ekleyin; uyum puanı bunlara göre hesaplanır", doOpps: "Açık kampanyalara göz atın",
+      doProfile: "Profilinizi tamamlayın", doNew: "Yeni kampanya oluşturun",
+      waiting: "Sizi bekleyenler", waitEmpty: "Şu an sizi bekleyen bir iş yok.", inNew: "{n} yeni başvuru", inSub: "{n} içerik onay bekliyor", inDue: "Son tarih yaklaşıyor: {n}",
+      inInvite: "{n} sizi davet etti", inRev: "Revizyon istendi", inAcc: "İçerik bağlantınızı gönderin", inProf: "%{n} tamamlandı", review: "İncele", openIt: "Aç",
+      profCard: "Profil", profDone: "Tamamlanma", editProf: "Profili düzenle",
+      ckCompany: "Şirket adı", ckIndustry: "Sektör", ckCity: "Şehir", ckWebsite: "Web sitesi", ckBio: "Hakkında (en az 40 karakter)", ckClients: "Müşteri sayısı",
+      ckNiches: "İlgi alanları", ckPlatform: "Takipçi sayısıyla en az bir platform", ckListed: "Markalara görünür profil",
+      perf: "Performans", mReach: "Erişim", mEng: "Etkileşim", mSpend: "Harcama", mEarn: "Kazanç", noData: "Veri yok", perfNote: "Bu ölçümler içerik bağlantıları ve ödemeler kaydedildikçe dolacak.",
+      acctMenu: "Hesap menüsü", tabsLabel: "Panel sekmeleri",
       soon: "Yakında", soonBadge: "Yakında", soonLead: "Aşağıdaki özellikler henüz panelde yok; hazır olduklarında burada açılacak.",
       soonMsg: "Platform içi mesajlaşma", soonAnalytics: "Performans analitiği ve özel raporlar", soonBudget: "Bütçe yönetimi", soonVerified: "Doğrulanmış influencer'lar",
       soonRoster: "Kadro yönetimi", soonTracking: "Performans takibi", soonReports: "Otomatik raporlama", soonWorkflow: "İş akışı otomasyonu", soonPortal: "Müşteri portalı",
@@ -204,8 +272,14 @@ footer.bot{border-top:1px solid var(--line);background:var(--bg);color:var(--mut
       nOverview: "Overview", nCampaigns: "Campaigns", nDiscover: "Find influencers", nProfile: "Profile", nOpps: "Opportunities", nApps: "My applications",
       sCampaigns: "Campaigns", sOpen: "Open campaigns", sPending: "Pending applications", sApproved: "Approved content",
       sOpps: "Open opportunities", sInvites: "Pending invites", sActive: "In progress",
-      next: "Next steps", doProfile: "Complete your profile", doNew: "Create a new campaign", doDiscover: "Find influencers and send invites",
-      doListed: "Make your profile visible to brands", doNiches: "Add your niches and platforms; your match score is based on them", doOpps: "Browse open campaigns",
+      doProfile: "Complete your profile", doNew: "Create a new campaign",
+      waiting: "Waiting for you", waitEmpty: "Nothing is waiting for you right now.", inNew: "{n} new applications", inSub: "{n} content items awaiting approval", inDue: "Deadline coming up: {n}",
+      inInvite: "{n} invited you", inRev: "Revision requested", inAcc: "Send your content link", inProf: "{n}% complete", review: "Review", openIt: "Open",
+      profCard: "Profile", profDone: "Completion", editProf: "Edit profile",
+      ckCompany: "Company name", ckIndustry: "Industry", ckCity: "City", ckWebsite: "Website", ckBio: "About (at least 40 characters)", ckClients: "Number of clients",
+      ckNiches: "Niches", ckPlatform: "At least one platform with follower count", ckListed: "Profile visible to brands",
+      perf: "Performance", mReach: "Reach", mEng: "Engagement", mSpend: "Spend", mEarn: "Earnings", noData: "No data", perfNote: "These metrics fill in as content links and payments are recorded.",
+      acctMenu: "Account menu", tabsLabel: "Panel tabs",
       soon: "Coming soon", soonBadge: "Coming soon", soonLead: "These features aren't in the panel yet; they'll show up here when they're ready.",
       soonMsg: "In-platform messaging", soonAnalytics: "Performance analytics and custom reports", soonBudget: "Budget management", soonVerified: "Verified influencers",
       soonRoster: "Roster management", soonTracking: "Performance tracking", soonReports: "Automated reporting", soonWorkflow: "Workflow automation", soonPortal: "Client portal",
@@ -273,7 +347,8 @@ footer.bot{border-top:1px solid var(--line);background:var(--bg);color:var(--mut
 
   var L = BC.lang(), U = null, seq = 0, uid = 0, first = true, F = { niche: "", platform: "" };
   function $(id) { return document.getElementById(id); }
-  var nav = $("nav"), view = $("view"), langB = $("lang"), outB = $("out");
+  var nav = $("nav"), tabbar = $("tabbar"), view = $("view"), langB = $("lang"), outB = $("out"), langB2 = $("lang2"), outB2 = $("out2");
+  var sheet = $("sheet"), scrim = $("scrim"), meB = $("me"), counts = {};
 
   function t(k, v) {
     var s = D[L][k] != null ? D[L][k] : D.en[k] != null ? D.en[k] : k;
@@ -369,11 +444,54 @@ footer.bot{border-top:1px solid var(--line);background:var(--bg);color:var(--mut
     if (ok.indexOf(h) < 0) h = "overview";
     return { name: h, tab: h === "new" ? "campaigns" : h };
   }
+  // Simgeler: [etiket, öznitelikler] verisinden createElementNS ile (innerHTML yok)
+  var ICONS = {
+    home: [["path", { d: "M3 10.5 12 3l9 7.5" }], ["path", { d: "M5 9.5V21h14V9.5" }]],
+    megaphone: [["path", { d: "M3 11v2a1 1 0 0 0 1 1h3l5 4V6L7 10H4a1 1 0 0 0-1 1z" }], ["path", { d: "M16 9a4 4 0 0 1 0 6" }]],
+    search: [["circle", { cx: 11, cy: 11, r: 7 }], ["path", { d: "m20 20-3.5-3.5" }]],
+    user: [["circle", { cx: 12, cy: 8, r: 4 }], ["path", { d: "M4 21a8 8 0 0 1 16 0" }]],
+    briefcase: [["rect", { x: 3, y: 7, width: 18, height: 13, rx: 2 }], ["path", { d: "M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" }]],
+    list: [["rect", { x: 5, y: 4, width: 14, height: 17, rx: 2 }], ["path", { d: "M9 9h6M9 13h6M9 17h4" }]],
+    inbox: [["path", { d: "M3 13h5l2 3h4l2-3h5" }], ["path", { d: "M5 5h14l2 8v6H3v-6z" }]],
+    eye: [["path", { d: "M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z" }], ["circle", { cx: 12, cy: 12, r: 3 }]],
+    clock: [["circle", { cx: 12, cy: 12, r: 9 }], ["path", { d: "M12 7v5l3 2" }]],
+    mail: [["rect", { x: 3, y: 5, width: 18, height: 14, rx: 2 }], ["path", { d: "m3 7 9 6 9-6" }]],
+    refresh: [["path", { d: "M20 11a8 8 0 0 0-14.9-3M4 13a8 8 0 0 0 14.9 3" }], ["path", { d: "M4 4v4h4M20 20v-4h-4" }]],
+    send: [["path", { d: "M21 3 10 14" }], ["path", { d: "m21 3-7 18-4-7-7-4z" }]],
+    check: [["path", { d: "m5 12 5 5 9-10" }]],
+    plus: [["path", { d: "M12 5v14M5 12h14" }]],
+    globe: [["circle", { cx: 12, cy: 12, r: 9 }], ["path", { d: "M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18" }]],
+    help: [["circle", { cx: 12, cy: 12, r: 9 }], ["path", { d: "M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.7M12 17h.01" }]],
+    logout: [["path", { d: "M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3" }], ["path", { d: "M10 17l-5-5 5-5M5 12h11" }]]
+  };
+  function ic(name) {
+    var NS = "http://www.w3.org/2000/svg", s = document.createElementNS(NS, "svg");
+    s.setAttribute("class", "i"); s.setAttribute("viewBox", "0 0 24 24"); s.setAttribute("aria-hidden", "true");
+    (ICONS[name] || []).forEach(function (p) {
+      var n = document.createElementNS(NS, p[0]);
+      for (var k in p[1]) n.setAttribute(k, p[1][k]);
+      s.appendChild(n);
+    });
+    return s;
+  }
   function paintNav(tab) {
-    var items = isOwner() ? [["overview", "nOverview"], ["campaigns", "nCampaigns"], ["discover", "nDiscover"], ["profile", "nProfile"]]
-      : [["overview", "nOverview"], ["campaigns", "nOpps"], ["applications", "nApps"], ["profile", "nProfile"]];
-    nav.textContent = "";
-    items.forEach(function (i) { nav.appendChild(el("a", { href: "#" + i[0], "aria-current": i[0] === tab ? "page" : null, text: t(i[1]) })); });
+    var items = isOwner() ? [["overview", "nOverview", "home"], ["campaigns", "nCampaigns", "megaphone"], ["discover", "nDiscover", "search"], ["profile", "nProfile", "user"]]
+      : [["overview", "nOverview", "home"], ["campaigns", "nOpps", "briefcase"], ["applications", "nApps", "list"], ["profile", "nProfile", "user"]];
+    [nav, tabbar].forEach(function (box) {
+      box.textContent = "";
+      items.forEach(function (i) {
+        var c = counts[i[0]];
+        box.appendChild(el("a", { href: "#" + i[0], "aria-current": i[0] === tab ? "page" : null }, [ic(i[2]), el("span", { text: t(i[1]) }), c ? el("span", { class: "cnt", text: c > 99 ? "99+" : String(c) }) : null]));
+      });
+    });
+  }
+  // Menüdeki sayılar: sahip için yeni başvuru + onay bekleyen içerik, influencer için davet + süren işler. Hata yok sayılır.
+  function loadCounts(tab) {
+    BC.call("GET", "app/stats").then(function (d) {
+      var a = (d.stats || {}).applications || {};
+      counts = isOwner() ? { campaigns: (a.pending || 0) + (a.submitted || 0) } : { applications: (a.invited || 0) + (a.accepted || 0) + (a.revision || 0) };
+      if (route().tab === tab) paintNav(tab);
+    }, function () {});
   }
   function show(kids) { view.textContent = ""; add(view, kids); }
 
@@ -381,6 +499,7 @@ footer.bot{border-top:1px solid var(--line);background:var(--bg);color:var(--mut
   function render(soft) {
     var my = ++seq, r = route();
     paintNav(r.tab);
+    loadCounts(r.tab);
     if (!soft) show(el("p", { class: "muted", text: t("loading") }));
     Promise.resolve().then(function () { return VIEWS[r.name](r); }).then(function (kids) {
       if (my !== seq) return;
@@ -400,31 +519,79 @@ footer.bot{border-top:1px solid var(--line);background:var(--bg);color:var(--mut
     return el("div", { class: "box empty", role: "alert" }, [el("p", { text: BC.msg(e.code) }), el("p", null, el("button", { type: "button", class: "ghost", text: t("retry"), onclick: retry }))]);
   }
 
-  // Genel bakış
+  // Genel bakış: sayılar, sizi bekleyenler, profil doluluğu, performans (F2'ye kadar "veri yok")
+  function profileChecks() {
+    var p = U.profile || {}, has = function (v) { return !!String(v || "").trim(); };
+    if (isOwner()) {
+      var c = [["ckCompany", has(p.company)], ["ckIndustry", has(p.industry)], ["ckCity", has(p.city)], ["ckWebsite", has(p.website)], ["ckBio", String(p.bio || "").trim().length >= 40]];
+      if (U.role === "agency") c.push(["ckClients", Number(p.clients) > 0]);
+      return c;
+    }
+    return [["ckCity", has(p.city)], ["ckBio", String(p.bio || "").trim().length >= 40], ["ckNiches", (p.niches || []).length > 0],
+      ["ckPlatform", (p.platforms || []).some(function (x) { return x && has(x.handle) && Number(x.followers) > 0; })], ["ckListed", !!p.listed]];
+  }
+  function daysLeft(s) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(s || "")) return null;
+    var now = new Date(), today = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
+    return Math.round((Date.parse(s + "T00:00:00Z") - today) / 864e5);
+  }
+  function task(kind, icon, title, sub, href, label) {
+    return el("li", null, [el("span", { class: "ic " + kind }, ic(icon)), el("div", { class: "tx" }, [el("b", { text: title }), sub ? el("span", { text: sub }) : null]),
+      el("a", { class: "btn sm sec", href: href, text: label })]);
+  }
   function overview() {
-    return BC.call("GET", "app/stats").then(function (d) {
-      var s = d.stats || {}, a = s.applications || {}, p = U.profile || {}, own = isOwner(), steps = [];
+    var own = isOwner();
+    return Promise.all([BC.call("GET", "app/stats"), BC.call("GET", own ? "app/campaigns" : "app/applications")]).then(function (r) {
+      var s = r[0].stats || {}, a = s.applications || {}, items = [];
       var cards = own
         ? [[s.campaigns, "sCampaigns"], [s.open_campaigns, "sOpen"], [a.pending, "sPending"], [a.approved, "sApproved"]]
         : [[s.open_campaigns, "sOpps"], [a.invited, "sInvites"], [(a.accepted || 0) + (a.revision || 0) + (a.submitted || 0), "sActive"], [a.approved, "sApproved"]];
       if (own) {
-        if (!p.company && !p.bio) steps.push(["#profile", "doProfile"]);
-        steps.push(["#new", "doNew"], ["#discover", "doDiscover"]);
+        (r[1].campaigns || []).filter(function (c) { return c.status === "open"; }).forEach(function (c) {
+          var h = "#campaign-" + c.id, dl = daysLeft(c.deadline);
+          if (c.pending) items.push(task("warn", "inbox", t("inNew", c.pending), c.title, h, t("review")));
+          if (c.submitted) items.push(task("info", "eye", t("inSub", c.submitted), c.title, h, t("review")));
+          if (dl != null && dl >= 0 && dl <= 7) items.push(task("danger", "clock", t("inDue", day(c.deadline)), c.title, h, t("openIt")));
+        });
       } else {
-        if (!p.listed) steps.push(["#profile", "doListed"]);
-        if (!(p.niches || []).length || !(p.platforms || []).length) steps.push(["#profile", "doNiches"]);
-        steps.push(["#campaigns", "doOpps"]);
+        (r[1].applications || []).forEach(function (x) {
+          var c = x.campaign || {}, h = "#campaign-" + c.id;
+          if (x.status === "invited") items.push(task("info", "mail", t("inInvite", c.owner || ""), c.title, h, t("openIt")));
+          else if (x.status === "revision") items.push(task("warn", "refresh", t("inRev"), c.title, h, t("openIt")));
+          else if (x.status === "accepted") items.push(task("accent", "send", t("inAcc"), c.title, h, t("openIt")));
+        });
       }
+      var checks = profileChecks(), done = checks.filter(function (c) { return c[1]; }).length, pct = Math.round(done * 100 / checks.length);
+      if (pct < 100) items.push(task("accent", "user", t("doProfile"), t("inProf", pct), "#profile", t("openIt")));
+      var mets = own ? ["mReach", "mEng", "mSpend"] : ["mReach", "mEng", "mEarn"];
       return [
-        el("h1", { text: t("hello", U.name) }),
-        el("p", { class: "lead", text: t("lead_" + U.role) }),
-        el("div", { class: "stats" }, cards.map(function (c) { return el("div", { class: "box stat" }, [el("div", { class: "n", text: num(c[0]) }), el("div", { class: "l", text: t(c[1]) })]); })),
-        el("h2", { text: t("next") }),
-        el("ul", { class: "box steps" }, steps.map(function (x) { return el("li", null, el("a", { href: x[0], text: t(x[1]) })); })),
-        el("h2", { text: t("soon") }),
-        el("div", { class: "box" }, [
-          el("p", { class: "soon-lead", text: t("soonLead") }),
-          el("ul", { class: "soon" }, (SOON[U.role] || []).map(function (k) { return el("li", null, [el("span", { text: t(k) }), el("span", { class: "badge b-soon", text: t("soonBadge") })]); }))
+        el("div", { class: "ph" }, [
+          el("div", null, [el("h1", { text: t("hello", U.name) }), el("p", { text: t("lead_" + U.role) })]),
+          el("div", { class: "acts" }, own ? el("a", { class: "btn", href: "#new" }, [ic("plus"), el("span", { text: t("newCamp") })]) : el("a", { class: "btn", href: "#campaigns", text: t("nOpps") }))
+        ]),
+        el("div", { class: "stats" }, cards.map(function (c) { return el("div", { class: "stat" }, [el("div", { class: "k", text: t(c[1]) }), el("div", { class: "v", text: num(c[0]) })]); })),
+        el("div", { class: "ov" }, [
+          el("div", null, [
+            el("section", { class: "card" }, [el("div", { class: "ch" }, el("h2", { text: t("waiting") })),
+              items.length ? el("ul", { class: "inbox" }, items) : el("p", { class: "cb none", text: t("waitEmpty") })]),
+            el("section", { class: "card" }, [el("div", { class: "ch" }, el("h2", { text: t("perf") })),
+              el("div", { class: "cb" }, [el("div", { class: "mets" }, mets.map(function (k) { return el("div", { class: "stat" }, [el("div", { class: "k", text: t(k) }), el("div", { class: "v na", text: t("noData") })]); })),
+                el("p", { class: "hint", text: t("perfNote") })])])
+          ]),
+          el("div", null, [
+            el("section", { class: "card" }, [el("div", { class: "ch" }, el("h2", { text: t("profCard") })),
+              el("div", { class: "cb" }, [
+                el("div", { class: "pct" }, [el("span", { text: t("profDone") }), el("b", { text: L === "tr" ? "%" + pct : pct + "%" })]),
+                el("div", { class: "meter", role: "progressbar", "aria-valuemin": 0, "aria-valuemax": 100, "aria-valuenow": pct, "aria-label": t("profDone") }, el("i", { style: "width:" + pct + "%" })),
+                el("ul", { class: "checklist" }, checks.map(function (c) { return el("li", { class: c[1] ? "done" : null }, [el("span", { class: "dot" }, c[1] ? ic("check") : null), el("span", { text: t(c[0]) })]); })),
+                el("a", { class: "btn sm sec", href: "#profile", text: t("editProf") })
+              ])]),
+            el("section", { class: "card" }, [el("div", { class: "ch" }, el("h2", { text: t("soon") })),
+              el("div", { class: "cb" }, [
+                el("p", { class: "soon-lead", text: t("soonLead") }),
+                el("ul", { class: "soon" }, (SOON[U.role] || []).map(function (k) { return el("li", null, [el("span", { text: t(k) }), el("span", { class: "badge b-soon", text: t("soonBadge") })]); }))
+              ])])
+          ])
         ])
       ];
     });
@@ -762,20 +929,44 @@ footer.bot{border-top:1px solid var(--line);background:var(--bg);color:var(--mut
   var VIEWS = { overview: overview, campaigns: campaigns, "new": newCampaign, campaign: campaign, discover: discover, applications: applications, profile: profile };
 
   // Üst çubuk ve alt bilgi metinleri, dil düğmesi
-  function paintWho() { $("who").textContent = U ? U.name : ""; $("role").textContent = U ? t("role_" + U.role) : ""; }
+  function initials(s) {
+    var w = String(s || "").trim().split(/\s+/).filter(Boolean);
+    return ((w[0] || "?").charAt(0) + (w.length > 1 ? w[w.length - 1].charAt(0) : "")).toLocaleUpperCase(locale());
+  }
+  function paintWho() {
+    var p = U.profile || {}, r = t("role_" + U.role) + (p.company ? " · " + p.company : ""), ini = initials(U.name);
+    $("who").textContent = $("sheetWho").textContent = U.name;
+    $("role").textContent = $("sheetRole").textContent = r;
+    ["av", "av2", "av3"].forEach(function (id) { $(id).textContent = ini; });
+  }
+  function label(n, icon, text) { n.textContent = ""; add(n, [ic(icon), el("span", { text: text })]); }
   function chrome() {
     document.documentElement.lang = L;
-    langB.textContent = L === "tr" ? "English" : "Türkçe";
-    langB.setAttribute("lang", L === "tr" ? "en" : "tr");
-    outB.textContent = t("logout");
+    [langB, langB2].forEach(function (b) { label(b, "globe", L === "tr" ? "English" : "Türkçe"); b.setAttribute("lang", L === "tr" ? "en" : "tr"); });
+    [outB, outB2].forEach(function (b) { label(b, "logout", t("logout")); });
+    [$("help2"), $("help3")].forEach(function (b) { label(b, "help", t("help")); });
     $("copy").textContent = t("copy");
     $("help").textContent = t("help");
     $("group").setAttribute("aria-label", t("groupLabel"));
     nav.setAttribute("aria-label", t("navLabel"));
+    tabbar.setAttribute("aria-label", t("tabsLabel"));
+    meB.setAttribute("aria-label", t("acctMenu"));
     if (U) paintWho();
   }
-  langB.addEventListener("click", function () { L = L === "tr" ? "en" : "tr"; BC.setLang(L); chrome(); if (U) render(true); });
-  outB.addEventListener("click", function () { outB.disabled = true; BC.logout(); });
+  // Mobil hesap menüsü: dil, yardım, çıkış. Esc, arka plan ya da sayfa değişimi kapatır.
+  function sheetOpen(on) {
+    sheet.hidden = scrim.hidden = !on;
+    meB.setAttribute("aria-expanded", on ? "true" : "false");
+    if (on) langB2.focus(); else if (document.activeElement && sheet.contains(document.activeElement)) meB.focus();
+  }
+  meB.addEventListener("click", function () { sheetOpen(true); });
+  scrim.addEventListener("click", function () { sheetOpen(false); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !sheet.hidden) sheetOpen(false); });
+  window.addEventListener("hashchange", function () { if (!sheet.hidden) sheetOpen(false); });
+  function toggleLang() { L = L === "tr" ? "en" : "tr"; BC.setLang(L); chrome(); if (U) render(true); }
+  function out() { outB.disabled = outB2.disabled = true; BC.logout(); }
+  [langB, langB2].forEach(function (b) { b.addEventListener("click", toggleLang); });
+  [outB, outB2].forEach(function (b) { b.addEventListener("click", out); });
 
   chrome();
   BC.call("GET", "auth/me").then(function (d) {
