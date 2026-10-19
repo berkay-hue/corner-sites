@@ -3,6 +3,7 @@
 // Pages build komutu: node tools/build-blog.mjs build <host> (blogu olan sitelerde) && node tools/dist.mjs <host>
 import { cp, readFile, writeFile, access, mkdir, readdir } from "node:fs/promises";
 import { join, basename, relative } from "node:path";
+import { execFileSync } from "node:child_process";
 import CONFIG from "./blog.config.mjs";
 
 const host = process.argv[2];
@@ -12,7 +13,16 @@ const has = p => access(p).then(() => true, () => false);
 const PRIVATE = /^_(audit|mirror-report|orig-).*|\.log$/;
 
 await mkdir(OUT, { recursive: true });
-await cp(SRC, OUT, { recursive: true, force: true, filter: src => !PRIVATE.test(basename(src)) });
+// wishceo sayilar/NNN.json: app.js ISSUES'taki açılış tarihi bugünden (UTC) ileri olan sayı yayına çıkmaz;
+// hiç açılmış sayı yoksa en yeni JSON kopyalanır
+const ISSUE_DATES = new Map([...(await readFile(join(SRC, "app.js"), "utf8").catch(() => "")).matchAll(/no:\s*"(\d+)",\s*date:\s*"(\d{4}-\d{2}-\d{2})"/g)].map(m => [m[1], m[2]]));
+const today = new Date().toISOString().slice(0, 10);
+const issueFiles = (await readdir(join(SRC, "sayilar")).catch(() => [])).filter(n => /^\d+\.json$/.test(n)).sort();
+let liveIssues = new Set(issueFiles.filter(n => (ISSUE_DATES.get(n.replace(".json", "")) || "9999") <= today));
+if (issueFiles.length && !liveIssues.size) liveIssues = new Set(issueFiles.slice(-1));
+const isIssue = src => basename(join(src, "..")) === "sayilar" && /^\d+\.json$/.test(basename(src));
+await cp(SRC, OUT, { recursive: true, force: true, filter: src => !PRIVATE.test(basename(src)) && (!isIssue(src) || liveIssues.has(basename(src))) });
+if (issueFiles.length) console.log(`sayilar: ${liveIssues.size}/${issueFiles.length} yayında (${today})`);
 
 // Formlar corner-forms Worker'ına bağlanır (tools/forms-client.js); salescorner rakip analizi ayrı bir araç
 const FORMS = `<script data-sk-forms>${await readFile(join(import.meta.dirname, "forms-client.js"), "utf8")}</script>`;
@@ -111,7 +121,18 @@ if (!(await has(join(OUT, "sitemap.xml")))) {
     xml = xml.replace(b, b.replace(/<lastmod>[^<]*<\/lastmod>/, mod ? `<lastmod>${mod}</lastmod>` : ""));
     fixed.push(`/${p}: ${lm} -> ${mod || "yok"}`);
   }
-  if (fixed.length) { console.log("lastmod düzeltildi:", fixed); await writeFile(join(OUT, "sitemap.xml"), xml); }
+  if (fixed.length) console.log("lastmod düzeltildi:", fixed);
+  // lastmod'u kalmayan URL'ye kaynak dosyanın son commit tarihi yazılır (aynı commit'te her build aynı sitemap)
+  for (const b of xml.match(/<url>[\s\S]*?<\/url>/g) || []) {
+    if (b.includes("<lastmod>")) continue;
+    const p = decodeURI(new URL(b.match(/<loc>([^<]+)/)[1].trim()).pathname).replace(/^\/|\/$/g, "");
+    const cands = p === "" ? ["index.html"] : [p + ".html", join(p, "index.html")];
+    const src = (await Promise.all(cands.map(async c => (await has(join(SRC, c))) && c))).find(Boolean);
+    let d = "";
+    try { if (src) d = execFileSync("git", ["log", "-1", "--format=%cs", "--", join(SRC, src)], { cwd: root, encoding: "utf8" }).trim(); } catch {}
+    if (d) xml = xml.replace(b, b.replace(/<\/loc>/, `</loc><lastmod>${d}</lastmod>`));
+  }
+  await writeFile(join(OUT, "sitemap.xml"), xml);
 }
 // llms.txt (llmstxt.org): yapay zekâ aramaları için site özeti, sitemap'teki sayfalardan üretilir
 const NAMES = { "yalcinberkay.com.tr": "Berkay Yalçın", "wishceo.com": "WishCEO" };
@@ -126,7 +147,8 @@ const homeTitle = meta(index, /<title>([^<]*)/);
 const name = NAMES[host] || homeTitle.split(/\s+[|–-]\s+/)[0];
 const brands = [...new Set([name, homeTitle.split(/\s+[|–-]\s+/)[0]].filter(Boolean))].map(b => b.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|");
 const BRAND_PRE = new RegExp(`^(${brands})\\s+[|–·-]\\s+`, "iu"), BRAND_SUF = new RegExp(`\\s+[|–·-]\\s+(${brands}).*$`, "iu");
-const groups = new Map();
+const groups = new Map(), full = [];
+const text = h => unesc(h.replace(/<(script|style|noscript|svg|nav|header|footer)\b[\s\S]*?<\/\1>/gi, " ").replace(/<\/(p|h[1-6]|li|div|section|br|tr)>/gi, "\n").replace(/<[^>]+>/g, " ").replace(/&nbsp;/g, " ")).split("\n").map(l => l.replace(/\s+/g, " ").trim()).filter(Boolean).join("\n");
 for (const loc of [...(await readFile(join(OUT, "sitemap.xml"), "utf8")).matchAll(/<loc>([^<]+)<\/loc>/g)].map(m => m[1].trim())) {
   const p = decodeURI(new URL(loc).pathname).replace(/^\/|\/$/g, "");
   if (!p) continue;
@@ -139,10 +161,23 @@ for (const loc of [...(await readFile(join(OUT, "sitemap.xml"), "utf8")).matchAl
   const seg = /^(?:(?:tr|en)\/)?blog(?:\/|$)/.test(p) ? "blog" : p.includes("/") || /^(tr|en)$/.test(p) ? p.split("/")[0] : "";
   const key = SECTIONS[seg] || (seg ? seg[0].toUpperCase() + seg.slice(1) : PAGES);
   if (!groups.has(key)) groups.set(key, []);
+  full.push(`## ${title}\n\nURL: ${loc}\n\n${text(html.match(/<body[^>]*>([\s\S]*)<\/body>/i)?.[1] || html)}\n`);
   groups.get(key).push(`- [${title.replace(/[[\]]/g, "")}](${loc})${desc ? ": " + desc : ""}`);
 }
 const order = [...groups.keys()].sort((a, b) => (b === PAGES) - (a === PAGES));
-await writeFile(join(OUT, "llms.txt"), `# ${name}\n\n> ${meta(index, /<meta name="description" content="([^"]*)"/)}\n\n- [${EN ? "Home" : "Ana sayfa"}](${origin}/)\n- [Sitemap](${origin}/sitemap.xml)\n` +
+// Key facts: ana sayfa JSON-LD'sindeki kuruluş/kişi düğümünden
+const ldNodes = [...index.matchAll(/<script type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g)].flatMap(m => { try { const j = JSON.parse(m[1]); return Array.isArray(j) ? j : j["@graph"] || [j]; } catch { return []; } });
+const org = ldNodes.find(n => /Organization|Person|Corporation/.test([].concat(n["@type"]).join(" "))) || {};
+const nm = v => typeof v === "string" ? v : v?.name;
+const facts = [[EN ? "Name" : "Ad", nm(org) || name], ["URL", origin + "/"], [EN ? "Language" : "Dil", EN ? "English" : "Türkçe"],
+  [EN ? "Founded" : "Kuruluş", org.foundingDate], [EN ? "Founder" : "Kurucu", [].concat(org.founder || []).map(nm).filter(Boolean).join(", ")],
+  [EN ? "Location" : "Konum", nm(org.address?.addressLocality) || org.address?.addressLocality], ["E-posta", org.email],
+  [EN ? "Profiles" : "Profiller", [].concat(org.sameAs || []).join(", ")], [EN ? "Pages" : "Sayfa sayısı", String(full.length + 1)],
+  [EN ? "Full text" : "Tam metin", `${origin}/llms-full.txt`]].filter(([, v]) => v);
+const KEY = `## Key facts\n\n${facts.map(([k, v]) => `- ${k}: ${v}`).join("\n")}\n\n`;
+const desc0 = meta(index, /<meta name="description" content="([^"]*)"/);
+await writeFile(join(OUT, "llms-full.txt"), `# ${name}\n\n> ${desc0}\n\n${KEY}## ${EN ? "Home" : "Ana sayfa"}\n\nURL: ${origin}/\n\n${text(index.match(/<body[^>]*>([\s\S]*)<\/body>/i)?.[1] || "")}\n\n` + full.join("\n"));
+await writeFile(join(OUT, "llms.txt"), `# ${name}\n\n> ${desc0}\n\n${KEY}- [${EN ? "Home" : "Ana sayfa"}](${origin}/)\n- [Sitemap](${origin}/sitemap.xml)\n` +
   order.map(k => `\n## ${k}\n\n${groups.get(k).join("\n")}\n`).join(""));
 
 await writeFile(join(OUT, "robots.txt"), `User-agent: *\nAllow: /\n\nSitemap: ${origin}/sitemap.xml\n`);
@@ -158,9 +193,14 @@ const DEFAULTS = `/_a/*
 /llms.txt
   Content-Type: text/plain; charset=utf-8
 
+/llms-full.txt
+  Content-Type: text/plain; charset=utf-8
+
 /*
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
+  Strict-Transport-Security: max-age=31536000
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), browsing-topics=()
 
 # Test adresi (*.pages.dev) indekslenmez: kopya içerik olmasın. Gerçek alan adını etkilemez.
 https://:project.pages.dev/*
@@ -168,7 +208,16 @@ https://:project.pages.dev/*
 `;
 // Kendi _headers'ı olan site (ör. CSP) onu korur; varsayılanlardan yalnızca sitenin tanımlamadığı yolların blokları sona eklenir
 // (aynı yol iki kez yazılırsa Pages aynı başlığı virgülle birleştirir: "nosniff, nosniff")
-const own = (await readFile(join(SRC, "_headers"), "utf8").catch(() => "")).trimEnd();
+let own = (await readFile(join(SRC, "_headers"), "utf8").catch(() => "")).trimEnd();
+// Sitenin kendi /* bloğu varsa varsayılan güvenlik başlıklarından eksik olanlar o bloğa eklenir (var olan tekrar yazılmaz)
+{
+  const sec = DEFAULTS.split("\n\n").find(b => b.startsWith("/*\n")).split("\n").slice(1);
+  own = own.replace(/^\/\*\n((?:[ \t]+\S.*\n?)*)/m, (blk, body) => {
+    const names = new Set(body.split("\n").map(l => l.trim().split(":")[0].toLowerCase()));
+    const add = sec.filter(l => !names.has(l.trim().split(":")[0].toLowerCase()));
+    return add.length ? blk.replace(/\n?$/, "\n" + add.join("\n") + (blk.endsWith("\n") ? "\n" : "")) : blk;
+  });
+}
 const ownPaths = new Set(own.split("\n").filter(l => /^[^\s#]/.test(l)).map(l => l.trim()));
 const blocks = DEFAULTS.split("\n\n").filter(b => !ownPaths.has(b.split("\n").find(l => !l.startsWith("#"))));
 await writeFile(join(OUT, "_headers"), [own, ...blocks].filter(Boolean).join("\n\n"));
