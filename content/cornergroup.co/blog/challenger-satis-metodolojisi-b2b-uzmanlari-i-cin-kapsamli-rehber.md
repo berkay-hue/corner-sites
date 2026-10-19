@@ -1,6 +1,6 @@
 ---
 title: "Challenger Satış Metodolojisi: B2B Uzmanları İçin Kapsamlı Rehber"
-description: "Günümüzün bilgiye doymuş B2B pazarında, geleneksel satış yaklaşımları hızla etkinliğini yitiriyor."
+description: "Challenger satış, müşteriye yeni bir bakış öğretip çözümü ona göre uyarlar ve görüşmeyi yönetir; rehber B2B uzmanları için uygulamayı anlatır."
 date: "2026-05-10"
 category: "Rehber"
 image: "/_a/fr/images/b6JxlZNg8JCveAqBiwKd0HLrY_591b46ea.jpg"

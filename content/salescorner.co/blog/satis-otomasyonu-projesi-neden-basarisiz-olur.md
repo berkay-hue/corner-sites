@@ -1,6 +1,6 @@
 ---
 title: "Satış Otomasyonu Projesi Neden Başarısız Olur?"
-description: "Satış otomasyonu projeleri çoğu zaman araç yüzünden değil, süreç ve veri eksikliği yüzünden başarısız olur. Sık hataları ve çözümlerini inceliyoruz."
+description: "Satış otomasyonu projeleri çoğu zaman araç yüzünden değil, süreç ve veri eksikliğinden başarısız olur. Sık hatalar ve çözümleri."
 date: "2026-10-15"
 updated: "2026-10-16"
 category: "Satış Otomasyonu"
@@ -79,7 +79,7 @@ Bu hatanın iki yaygın sonucu vardır:
 1. **Aşırı karmaşık araç:** Şirketin ihtiyacı birkaç basit iş akışıyken, kurumsal ölçekli ve yapılandırması haftalar süren bir platform alınır. Özelliklerin çok küçük bir kısmı kullanılır, maliyet ise yüksek kalır.
 2. **Birbirine bağlanamayan araçlar:** CRM, e-posta aracı, veri kaynağı ve takvim sistemi ayrı ayrı seçilir. Aralarındaki veri akışı ise düşünülmez. Sonuçta temsilciler veriyi elle bir sistemden diğerine kopyalar ve otomasyonun amacı ortadan kalkar.
 
-**Ne yapmalı?** Önce süreci ve veri akışını çizin. Hangi veri nereden gelir, nerede zenginleşir, hangi sistemde ana kayıt tutulur, hangi olay hangi aksiyonu tetikler? Bu harita hazır olduktan sonra araç seçimi çok daha kolaylaşır. Farklı sistemleri birbirine bağlamak için esnek bir iş akışı aracı genellikle iyi bir başlangıçtır. [n8n ile B2B satış otomasyonuna başlama rehberimiz](/blog/n8n-ile-b2b-satis-otomasyonu-rehberi), CRM, veri kaynakları ve e-posta araçlarını tek bir akışta birleştirmenin pratik yollarını anlatıyor. Her biri tek bir işe odaklanan küçük modüllerle başlamanın nasıl göründüğünü [Sales Corner modül panelinde](/dashboard) inceleyebilirsiniz.
+**Ne yapmalı?** Önce süreci ve veri akışını çizin. Hangi veri nereden gelir, nerede zenginleşir, hangi sistemde ana kayıt tutulur, hangi olay hangi aksiyonu tetikler? Bu harita hazır olduktan sonra araç seçimi çok daha kolaylaşır. Farklı sistemleri birbirine bağlamak için esnek bir iş akışı aracı genellikle iyi bir başlangıçtır. [n8n ile B2B satış otomasyonuna başlama rehberimiz](/blog/n8n-ile-b2b-satis-otomasyonu-rehberi), CRM, veri kaynakları ve e-posta araçlarını tek bir akışta birleştirmenin pratik yollarını anlatıyor. Her biri tek bir işe odaklanan küçük modüllerle başlamanın nasıl göründüğünü [Sales Corner modül panelinde](/#otomasyonlar) inceleyebilirsiniz.
 
 ## Kişiselleştirmeyi Hacme Feda Etmek
 
@@ -94,7 +94,7 @@ Hacim odaklı yaklaşımın tipik bir örneği şöyledir: Bir ekip, 5 adımlı 
 - İlk e-postada en az bir kişiye özel unsur kullanın: şirketin son gelişmesi, açtığı bir pozisyon, kullandığı teknoloji gibi.
 - Gönderim hacmini kademeli artırın ve alan adı başına günlük gönderim limitlerini koruyun.
 
-Yapay zeka, ölçekli kişiselleştirmeyi mümkün kılan en güçlü araçlardan biri haline geldi. Ancak doğru kullanılmazsa robotik ve tekrarlayan metinler üretebilir. [Yapay zekayla soğuk e-posta yazarken](/blog/yapay-zekayla-soguk-eposta-nasil-yazilir) prompt tasarımı, veri girdileri ve insan kontrolü, sonucun kalitesini doğrudan belirler. Örneğin [Sekans Yazarı aracımız](/sekans-yazari) dizileri gerçek ürün kaynağından (video, PDF, web sitesi) üreterek jenerik metin riskini azaltır.
+Yapay zeka, ölçekli kişiselleştirmeyi mümkün kılan en güçlü araçlardan biri haline geldi. Ancak doğru kullanılmazsa robotik ve tekrarlayan metinler üretebilir. [Yapay zekayla soğuk e-posta yazarken](/blog/yapay-zekayla-soguk-eposta-nasil-yazilir) prompt tasarımı, veri girdileri ve insan kontrolü, sonucun kalitesini doğrudan belirler. Örneğin [Sekans Yazarı aracımız](/#otomasyonlar) dizileri gerçek ürün kaynağından (video, PDF, web sitesi) üreterek jenerik metin riskini azaltır.
 
 ## Yasal Uyum ve Teslim Edilebilirlik Risklerinin Göz Ardı Edilmesi
 
@@ -186,6 +186,8 @@ Yeni bir otomasyon projesine onay vermeden önce aşağıdaki sorulara "evet" di
 Bu sorulardan birkaçına "hayır" cevabı veriyorsanız, otomasyona başlamadan önce o eksikleri kapatmak uzun vadede çok daha fazla zaman kazandırır.
 
 Bazı durumlarda şirketin önceliği, otomasyon altyapısını sıfırdan kurmak yerine pipeline'ı hızla doldurmaktır. Özellikle B2B SaaS şirketleri için outbound kapasitesini dışarıdan almak daha hızlı bir yol olabilir. [SAAS Corner'ın B2B SaaS'a özel outbound satış ve lead generation hizmeti](https://saascorner.co) bu ihtiyaca yönelik bir alternatiftir.
+
+Sales Corner'ın satış otomasyonu ve outbound alanında neler yaptığını [hizmetler sayfamızda](/hizmetler) görebilirsiniz.
 
 ## Sonuç
 

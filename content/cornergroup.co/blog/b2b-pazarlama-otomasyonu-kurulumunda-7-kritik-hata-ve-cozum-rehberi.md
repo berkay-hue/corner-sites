@@ -1,6 +1,6 @@
 ---
 title: "B2B Pazarlama Otomasyonu Kurulumunda 7 Kritik Hata ve Çözüm Rehberi"
-description: "B2B dünyasında büyüme, artık sadece yetenekli satış ekiplerine veya parlak pazarlama kampanyalarına bağlı değil."
+description: "B2B pazarlama otomasyonu kurulumunda en sık hatalar kötü veri, belirsiz hedef ve kopuk satış ekibidir; rehber 7 hatayı ve çözümünü anlatır."
 date: "2026-08-31"
 category: "Strateji"
 image: "/_a/fr/images/XZIr2wpVmqSk772nkxxJ0WVeqvM_cd09786e.jpg"

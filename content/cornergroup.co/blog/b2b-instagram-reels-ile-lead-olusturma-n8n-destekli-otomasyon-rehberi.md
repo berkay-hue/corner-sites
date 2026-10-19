@@ -1,6 +1,6 @@
 ---
 title: "B2B Instagram Reels ile Lead Oluşturma: n8n Destekli Otomasyon Rehberi"
-description: "B2B pazarlamasının geleneksel kaleleri sarsılırken, karar vericilerin dikkatini çekmek için yeni ve dinamik arenalara yönelmek artık bir seçenek değil…"
+description: "Instagram Reels B2B lead toplayabilir; n8n ile yorum ve DM'leri otomatik yakalayıp CRM'e aktarabilirsiniz. Rehber kurulumu adım adım anlatır."
 date: "2026-08-18"
 category: "Otomasyon"
 image: "/_a/fr/images/kBUprEOq0Yhs41ovpBSJtZXzS4_cd09786e.jpg"

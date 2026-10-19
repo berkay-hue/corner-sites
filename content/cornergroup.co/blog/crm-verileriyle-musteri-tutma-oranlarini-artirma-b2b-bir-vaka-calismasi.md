@@ -1,6 +1,6 @@
 ---
 title: "CRM Verileriyle Müşteri Tutma Oranlarını Artırma: B2B Bir Vaka Çalışması"
-description: "B2B ekosisteminde sürdürülebilir büyümenin temel dinamiği, sürekli yeni müşteri kazanımının yüksek maliyetine karşın, mevcut müşterileri elde tutma…"
+description: "Bu vaka çalışması, bir B2B şirketinin CRM verisiyle risk sinyallerini erken görüp proaktif temasla müşteri tutma oranını artırdığını anlatır."
 date: "2026-10-09"
 category: "Vaka Çalışması"
 image: "/_a/fr/images/ufUo0wvduYflMQcwfil5B5FMdc.jpg"

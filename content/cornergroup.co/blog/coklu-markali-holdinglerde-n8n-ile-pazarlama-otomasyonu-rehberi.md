@@ -1,6 +1,6 @@
 ---
 title: "Çoklu Markalı Holdinglerde n8n ile Pazarlama Otomasyonu Rehberi"
-description: "Corner Group gibi çok markalı bir B2B büyüme holdinginin operasyonel karmaşıklığı, tek bir şirketin karşılaştığı zorlukların katlanarak artması anlamına…"
+description: "n8n ile çok markalı holdingler, her markanın pazarlama akışını tek altyapıda otomatikleştirebilir; rehber kurulum ve yönetim adımlarını anlatır."
 date: "2026-09-23"
 category: "Otomasyon"
 image: "/_a/fr/images/5SJwQG4nsmX5KgWpmzxCDKlK5k_cd09786e.jpg"

@@ -1,6 +1,6 @@
 ---
 title: "Yeni Nesil'da SaaS Enterprise SaaS: AI Integration ve Fırsatlar"
-description: "Yeni 7esil'da SaaS Enterprise SaaS: AI Integration ve Fırsatlar"
+description: "Yeni Nesil SaaS'ta Enterprise SaaS: AI Integration ve Fırsatlar"
 date: "2026-04-23"
 category: "SaaS Büyüme"
 image: "/_a/fr/images/KvvnNlEYgBQSVLttvnrSl0Uy9c4_cd09786e.jpg"

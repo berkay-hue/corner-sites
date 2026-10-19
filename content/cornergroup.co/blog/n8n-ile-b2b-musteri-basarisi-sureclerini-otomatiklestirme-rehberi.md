@@ -1,6 +1,6 @@
 ---
 title: "n8n ile B2B Müşteri Başarısı Süreçlerini Otomatikleştirme Rehberi"
-description: "B2B ekosisteminde sürdürülebilir büyüme, yalnızca yeni müşteri kazanımına değil, aynı zamanda mevcut müşterilerin elde tutulması ve değerlerinin maksimize…"
+description: "n8n ile onboarding, sağlık skoru ve yenileme takibini otomatikleştirerek müşteri başarısı ekibinin yükünü azaltabilirsiniz; rehber adımları anlatır."
 date: "2026-08-02"
 category: "Otomasyon"
 image: "/_a/fr/images/SLULxgUFKlHZUckNzwV9Y50nFE_93d995dc.jpg"

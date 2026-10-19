@@ -1,6 +1,6 @@
 ---
 title: "İhracatçı Üreticiler İçin LinkedIn Outreach: Potansiyel Müşteri Bulma Stratejileri"
-description: "Küresel pazarlarda rekabetin her geçen gün arttığı ve dijital dönüşümün B2B ticaretin kurallarını yeniden yazdığı bir dönemde, Türkiye'nin ihracatçı…"
+description: "İhracatçı üreticiler, LinkedIn'de hedef pazardaki satın almacıları bulup kişisel mesajlarla ulaşarak yeni müşteri kazanabilir; yazı adımları anlatır."
 date: "2026-05-22"
 category: "Strateji"
 image: "/_a/fr/images/yMnVfHtdZ5tp2uImOhcL1iV5BA_cd09786e.jpg"

@@ -1,6 +1,6 @@
 ---
 title: "AI Destekli Satış Tahminleme: B2B Satış Akışınızı Geleceğe Taşıyın"
-description: "B2B dünyasının karmaşık ve sürekli değişen dinamiklerinde, geleceği öngörebilme yeteneği artık bir lüks değil, rekabette ayakta kalmanın temel bir…"
+description: "AI destekli satış tahminleme, geçmiş pipeline verisinden kapanış olasılığını hesaplar; B2B ekipler daha gerçekçi hedef ve kaynak planı yapar."
 date: "2026-06-01"
 category: "Strateji"
 image: "/_a/fr/images/0lxIfgnWXQPLM88ZpsTRI6Xfzg_cd09786e.jpg"

@@ -1,10 +1,10 @@
 ---
-title: "Lead Kalitesi'den Lead Kalitesi2'e: SaaS Qualification Yolculuğu"
+title: "Lead Kalitesi'nden Lead Kalitesi²'ye: SaaS Qualification Yolculuğu"
 description: "SaaS dünyasında hemen her kurucunun ve satış liderinin aşina olduğu bir senaryo vardır: Pazarlama ekibi harika bir iş çıkarır, müşteri adayı (lead) hunisi…"
 date: "2026-04-20"
 category: "Lead Generation"
 image: ""
-imageAlt: "Lead Kalitesi'den Lead Kalitesi2'e: SaaS Qualification Yolculuğu"
+imageAlt: "Lead Kalitesi'nden Lead Kalitesi²'ye: SaaS Qualification Yolculuğu"
 ---
 
 SaaS dünyasında hemen her kurucunun ve satış liderinin aşina olduğu bir senaryo vardır: Pazarlama ekibi harika bir iş çıkarır, müşteri adayı (lead) hunisi ağzına kadar dolar, metrikler yeşildedir. Ancak satış ekibi bu adaylarla konuşmaya başladığında duvarla karşılaşır. Bütçesi olmayan, karar verme yetkisine sahip olmayan veya ürününüzün çözdüğü probleme dahi sahip olmayan şirketlerle dolu bir boru hattı. Bu durum, sadece zaman ve kaynak israfı değil, aynı zamanda moral bozan ve büyümeyi durduran sinsi bir verimsizliktir. Sorun, lead sayısında değil, kalitesindedir. Ancak modern SaaS ekosisteminde "kalite" kelimesi bile tek başına yeterli değil. Artık sadece "kaliteli" lead'ler bulmak değil, bu kaliteyi katlayarak artırmak, yani "kalite karesi"ne ulaşmak zorundayız. Bu makale, geleneksel lead nitelendirme yöntemlerinin neden yetersiz kaldığını, SaaS'a özel dinamik bir nitelendirme modelinin nasıl oluşturulacağını ve bu yolculuğun satış ve pazarlama operasyonlarınızı nasıl kökten dönüştürebileceğini adım adım ele alacak. Bu, basit bir filtreleme sürecinden, şirketinizin büyüme motorunu besleyen stratejik bir zeka operasyonuna geçişin yol haritasıdır.

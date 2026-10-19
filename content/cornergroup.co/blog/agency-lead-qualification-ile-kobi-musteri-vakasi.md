@@ -1,6 +1,6 @@
 ---
 title: "Lead Qualification ile KOBİ Müşteri Vakası"
-description: "B2B ekosisteminde faaliyet gösteren KOBİ'ler için büyüme, genellikle çift taraflı keskin bir kılıçtır: Bir yanda daha fazla müşteriye ulaşma arzusu, diğer…"
+description: "Bu vaka, bir B2B KOBİ'nin lead qualification süreciyle zayıf adayları erken eleyip satış ekibinin zamanını nitelikli fırsatlara nasıl ayırdığını anlatır."
 date: "2026-05-05"
 category: "Vaka Çalışması"
 image: "/_a/fr/images/QqPJjRNqwzgfPScjVFCrWcYfjSs_93d995dc.jpg"

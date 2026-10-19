@@ -1,6 +1,6 @@
 ---
 title: "B2B LinkedIn Organik Erişim Stratejileri: Algoritma ve İçerik İpuçları"
-description: "B2B dünyasının dijital pazar yeri haline gelen LinkedIn'de organik erişimin giderek düştüğü, paylaşımların eskisi kadar etkileşim almadığı yönündeki…"
+description: "LinkedIn organik erişimi; ilk saatteki etkileşim, yorum kalitesi ve platformda kalan içerikle artar. Yazı algoritma ve içerik ipuçlarını anlatır."
 date: "2026-06-24"
 category: "Strateji"
 image: "/_a/fr/images/ED0AXG4SCap4aov2ZN5fdM8m6EA_cd09786e.jpg"

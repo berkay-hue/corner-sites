@@ -1,6 +1,6 @@
 ---
 title: "B2B LinkedIn Organik Erişim: %50 Artış Vaka Çalışması"
-description: "B2B pazarlama ve satış dünyasında LinkedIn, artık bir seçenek değil, bir zorunluluktur."
+description: "Bu vaka çalışması, bir B2B markasının içerik planı ve düzenli etkileşimle LinkedIn organik erişimini %50 artırma sürecini adım adım anlatır."
 date: "2026-06-27"
 category: "Vaka Çalışması"
 image: "/_a/fr/images/AC9X00QiNZT3G24HQiD885VJaU_bfd659cc.jpg"

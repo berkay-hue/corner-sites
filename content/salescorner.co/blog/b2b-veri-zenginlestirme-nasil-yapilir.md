@@ -1,6 +1,6 @@
 ---
 title: "B2B Veri Zenginleştirme Nasıl Yapılır? Türkiye Rehberi"
-description: "Türkiye'de B2B veri zenginleştirme için güvenilir kaynaklar, sık yapılan hatalar ve KVKK'ya uygun bir iş akışı nasıl kurulur? Bu rehberde anlatıyoruz."
+description: "Türkiye'de B2B veri zenginleştirme: güvenilir kaynaklar, sık yapılan hatalar ve KVKK'ya uygun bir iş akışının nasıl kurulacağı."
 date: "2026-10-18"
 category: "Lead Generation"
 image: "https://images.pexels.com/photos/36733316/pexels-photo-36733316.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
@@ -231,6 +231,8 @@ Aktif e-posta dizisine girecek kayıtlar her gönderimden önce doğrulanmalıd�
 ### Veri zenginleştirmeyi tamamen otomatikleştirmek mümkün mü?
 
 Normalizasyon, waterfall sorguları, e-posta doğrulama, yapay zekâ ile sınıflandırma ve CRM'e yazma adımlarının büyük kısmı otomatikleştirilebilir. Ancak yüksek değerli hesaplarda manuel kontrol ve rastgele örneklemle kalite denetimi her zaman gereklidir. En iyi sonuç, otomasyonun hacmi, insanın ise kaliteyi yönettiği hibrit modelden gelir.
+
+Sales Corner'ın satış otomasyonu ve outbound alanında neler yaptığını [hizmetler sayfamızda](/hizmetler) görebilirsiniz.
 
 ## Sonuç
 
