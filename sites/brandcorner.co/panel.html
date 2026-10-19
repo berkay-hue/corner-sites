@@ -280,6 +280,8 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
       mLikes: "Beğeni", mComments: "Yorum", mViews: "İzlenme", mEr: "Etkileşim oranı", pErNote: "Etkileşim oranı = (beğeni + yorum) ÷ erişim; erişim yoksa izlenme kullanılır.",
       pSampleNote: "Henüz gönderi eklemedin. Aşağıdakiler gerçek değil, ekranın nasıl görüneceğini gösteren örnek verilerdir.",
       pLocal: "Elle girdiğin gönderiler şimdilik yalnız bu cihazda, bu tarayıcıda saklanır.",
+      pSrv: "Gönderilerin hesabında saklanır; her cihazdan görebilirsin.", pSrvNoDel: "Hesaptaki gönderiyi silme henüz yok.",
+      pMove: "Sunucuya aktar", pMoveHint: "{n} gönderi yalnız bu cihazda duruyor. Bir kez hesabına aktarabilirsin.", pMoved: "{n} gönderi hesabına aktarıldı.",
       pAdd: "Gönderi ekle", pUrl: "Gönderi bağlantısı", pUrlHint: "Instagram, TikTok, YouTube ya da LinkedIn gönderisinin tam adresi (https://…).",
       pDate: "Paylaşım tarihi", pCaption: "Açıklama", pThumb: "Küçük resim adresi (isteğe bağlı)", pThumbHint: "Yalnız https:// ile başlayan bir resim adresi.",
       pSave: "Kaydet", pSaved: "Gönderi eklendi.", pBadUrl: "Geçerli bir https:// gönderi bağlantısı gir.", pBadDate: "Geçerli bir tarih seç.", pBadNum: "Sayılar 0 ya da daha büyük tam sayı olmalı.", pDup: "Bu bağlantı zaten ekli.",
@@ -420,6 +422,8 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
       mLikes: "Likes", mComments: "Comments", mViews: "Views", mEr: "Engagement rate", pErNote: "Engagement rate = (likes + comments) ÷ reach; views are used when reach is missing.",
       pSampleNote: "You haven't added any posts yet. The posts below are not real; they're sample data showing how this screen will look.",
       pLocal: "Posts you enter by hand are stored only on this device, in this browser, for now.",
+      pSrv: "Your posts are stored in your account, so you can see them on any device.", pSrvNoDel: "Deleting a post from your account is not available yet.",
+      pMove: "Move to my account", pMoveHint: "{n} posts are only on this device. You can move them to your account once.", pMoved: "{n} posts moved to your account.",
       pAdd: "Add a post", pUrl: "Post link", pUrlHint: "The full address of an Instagram, TikTok, YouTube or LinkedIn post (https://…).",
       pDate: "Posted on", pCaption: "Caption", pThumb: "Thumbnail address (optional)", pThumbHint: "Only an image address starting with https://.",
       pSave: "Save", pSaved: "Post added.", pBadUrl: "Enter a valid https:// post link.", pBadDate: "Pick a valid date.", pBadNum: "Numbers must be whole numbers, 0 or more.", pDup: "This link is already added.",
@@ -1934,6 +1938,64 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
     try { var a = JSON.parse(localStorage.getItem(pKey()) || "[]"); return Array.isArray(a) ? a.filter(pValid) : []; } catch (e) { return []; }
   }
   function pStore(list) { try { localStorage.setItem(pKey(), JSON.stringify(list)); return true; } catch (e) { return false; } }
+  // Sunucu kaydı (app/posts): GET başarılıysa gönderiler sunucudan okunur ve yazılır; 404/kapalı/ağ hatasında bu cihaz (localStorage).
+  // Marka tarafındaki içerik üreticisi kayıtları (creator_id) her zaman bu cihazda kalır.
+  var PS = { srv: false, list: [] }, PCHUNK = 50;
+  function pSrvPost(p) {
+    var snaps = (p && Array.isArray(p.snaps) ? p.snaps : []).filter(function (s) { return s && /^\d{4}-\d{2}-\d{2}$/.test(s.at || ""); }).map(function (s) {
+      var o = { at: s.at };
+      PMETS.forEach(function (m) { o[m] = Number.isInteger(s[m]) && s[m] >= 0 ? s[m] : null; });
+      return o;
+    }).sort(function (a, b) { return a.at < b.at ? -1 : a.at > b.at ? 1 : 0; });
+    var url = p && typeof p.url === "string" ? p.url : "", pl = platformOf(url) || (p && PL[p.platform] ? p.platform : "");
+    return { id: p && p.id != null && /^[a-z0-9]{1,24}$/.test(String(p.id)) ? String(p.id) : "", url: url, platform: pl,
+      type: p && PTYPES.indexOf(p.type) >= 0 ? p.type : "photo", date: p && okDay(p.date) ? p.date : (snaps[0] || {}).at || "",
+      caption: p && typeof p.caption === "string" ? p.caption.slice(0, 2200) : "", thumb: p && okThumb(p.thumb) ? p.thumb : "", snaps: snaps };
+  }
+  function pSync() {
+    return BC.call("GET", "app/posts").then(function (d) {
+      PS.srv = !!(d && Array.isArray(d.posts));
+      PS.list = (PS.srv ? d.posts : []).map(pSrvPost).filter(function (p) { return p.id && p.platform && p.snaps.length; });
+    }, function (e) { if (e && e.code === "auth") throw e; PS.srv = false; PS.list = []; });
+  }
+  function pErr(e) {
+    var c = e && e.code;
+    return c === "url" ? t("pBadUrl") : c === "date" || c === "at" ? t("pBadDate") : c === "thumb" ? t("pThumbHint")
+      : c === "metrics" || PMETS.indexOf(c) >= 0 ? t("pBadNum") : c === "posts_full" || (e && e.status === 409) ? t("pFull") : BC.msg(c);
+  }
+  // CSV/aktarım: en çok 50 satırlık parçalar sırayla; atlanan satırlar çağıranın satır numarasına çevrilir
+  function pImport(rows, lines) {
+    var sum = { added: 0, updated: 0, bad: [] }, i = 0;
+    function next() {
+      if (i >= rows.length) return Promise.resolve(sum);
+      var base = i, part = rows.slice(i, i + PCHUNK);
+      i += PCHUNK;
+      return BC.call("POST", "app/posts/import", { rows: part }).then(function (d) {
+        sum.added += d.added || 0; sum.updated += d.updated || 0;
+        (d.skipped || []).forEach(function (s) { sum.bad.push(lines ? lines[base + s.i] : base + s.i + 1); });
+        return next();
+      }, function (e) { if (e) e.sum = sum; throw e; });
+    }
+    return next();
+  }
+  function pApiRow(o) { var r = { url: o.url, date: o.date, type: o.type, caption: o.caption || "", thumb: o.thumb || "" }; PMETS.forEach(function (m) { r[m] = o[m]; }); if (o.at) r.at = o.at; return r; }
+  // Bu cihazdaki eski gönderiler: tek seferlik "sunucuya aktar" (bayrak bc-posts-moved-<id>)
+  function pMoveKey() { return "bc-posts-moved-" + U.id; }
+  function pLocalOwn() { return pLoad().filter(function (p) { return !p.creator_id && p.url && platformOf(p.url); }); }
+  function pMoveDue() { try { if (localStorage.getItem(pMoveKey())) return false; } catch (e) { return false; } return PS.srv && pLocalOwn().length > 0; }
+  function pMoveCard() {
+    var own = pLocalOwn(), msg = note(), btn = el("button", { type: "button", class: "btn", text: t("pMove") });
+    btn.addEventListener("click", function () {
+      var rows = [];
+      own.forEach(function (p) { p.snaps.forEach(function (s) { var o = { url: p.url, date: p.date, type: p.type, caption: p.caption, thumb: p.thumb, at: s.at }; PMETS.forEach(function (m) { o[m] = s[m]; }); rows.push(pApiRow(o)); }); });
+      say(msg, ""); busy(btn, true);
+      pImport(rows).then(function () {
+        try { localStorage.setItem(pMoveKey(), "1"); } catch (e) { /* özel pencere */ }
+        pAfter(t("pMoved", num(own.length)));
+      }, function (e) { busy(btn, false); say(msg, pErr(e)); });
+    });
+    return el("div", { class: "box", role: "note" }, [el("p", { class: "meta", text: t("pMoveHint", num(own.length)) }), msg, btn]);
+  }
   function pPrefView() { try { return localStorage.getItem("bc-posts-view") === "list" ? "list" : "grid"; } catch (e) { return "grid"; } }
   function platformOf(u) {
     var h;
@@ -1975,7 +2037,7 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
     return out;
   }
   function pData() {
-    var list = pLoad(), sample = !list.length;
+    var list = PS.srv ? PS.list.slice() : pLoad(), sample = !list.length;
     if (sample) list = samplePosts();
     list.sort(function (a, b) { return a.date < b.date ? 1 : a.date > b.date ? -1 : 0; });
     return { list: list, sample: sample };
@@ -2043,13 +2105,19 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
       fld("pa-cap", t("pCaption"), cap), fld("pa-th", t("pThumb"), thumb, t("pThumbHint")), mi.box, msg, btn]);
     f.addEventListener("submit", function (e) {
       e.preventDefault(); say(msg, "");
-      var u = url.value.trim(), pl = platformOf(u), m = pReadMets(mi.ins), list = pLoad();
+      var u = url.value.trim(), pl = platformOf(u), m = pReadMets(mi.ins), list = PS.srv ? PS.list : pLoad();
       if (!pl) { say(msg, t("pBadUrl")); url.focus(); return; }
       if (list.some(function (p) { return p.url === u; })) { say(msg, t("pDup")); url.focus(); return; }
       if (!okDay(date.value)) { say(msg, t("pBadDate")); date.focus(); return; }
       if (thumb.value.trim() && !okThumb(thumb.value.trim())) { say(msg, t("pThumbHint")); thumb.focus(); return; }
       if (!m) { say(msg, t("pBadNum")); return; }
       m.at = isoDay(new Date());
+      if (PS.srv) {
+        busy(btn, true);
+        BC.call("POST", "app/posts/manual", pApiRow({ url: u, date: date.value, type: type.value, caption: cap.value.trim(), thumb: thumb.value.trim(), likes: m.likes, comments: m.comments, views: m.views, reach: m.reach }))
+          .then(function () { pAfter(t("pSaved")); }, function (e) { busy(btn, false); say(msg, pErr(e)); });
+        return;
+      }
       list.push({ id: newId(), url: u, platform: pl, type: type.value, date: date.value, caption: cap.value.trim(), thumb: thumb.value.trim(), snaps: [m] });
       if (!pStore(list)) { say(msg, t("pFull")); return; }
       pAfter(t("pSaved"));
@@ -2074,7 +2142,7 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
   function importCsv(txt) {
     var rows = parseCsv(txt), cols = ["url", "date", "type", "likes", "comments", "views", "reach", "caption"], start = 0, list = pLoad(), added = 0, upd = 0, bad = [], today = isoDay(new Date());
     if (rows.length && rows[0].some(function (x) { return x.trim().toLowerCase() === "url"; })) { cols = rows[0].map(function (x) { return x.trim().toLowerCase(); }); start = 1; }
-    var data = [];
+    var data = [], api = [], lines = [];
     for (var i = start; i < rows.length; i++) if (rows[i].some(function (x) { return x.trim(); })) data.push([i + 1, rows[i]]);
     if (!data.length) return { err: t("pCsvEmpty") };
     if (data.length > 500) return { err: t("pCsvBig") };
@@ -2084,17 +2152,22 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
       var pl = platformOf(o.url), ty = (o.type || "").toLowerCase(), ok = !!pl && okDay(o.date || today);
       PMETS.forEach(function (m) { var v = pInt(o[m]); if (v === undefined) ok = false; s[m] = v; });
       if (!ok) { bad.push(d[0]); return; }
+      if (PS.srv) { var r = { url: o.url, date: o.date || today, type: PTYPES.indexOf(ty) >= 0 ? ty : "", caption: (o.caption || "").slice(0, 2200), thumb: okThumb(o.thumb) ? o.thumb : "" }; PMETS.forEach(function (m) { r[m] = s[m]; }); api.push(pApiRow(r)); lines.push(d[0]); return; }
       var ex = list.filter(function (p) { return p.url === o.url; })[0];
       if (ex) { ex.snaps = ex.snaps.filter(function (x) { return x.at !== today; }).concat(s); upd++; return; }
       list.push({ id: newId() + added, url: o.url, platform: pl, type: PTYPES.indexOf(ty) >= 0 ? ty : pl === "tiktok" || pl === "youtube" ? "video" : "photo", date: o.date || today, caption: (o.caption || "").slice(0, 2200), thumb: okThumb(o.thumb) ? o.thumb : "", snaps: [s] });
       added++;
     });
+    if (PS.srv) return { api: api, lines: lines, bad: bad };
     if ((added || upd) && !pStore(list)) return { err: t("pFull") };
+    return { added: added + upd, text: pCsvText(added, upd, bad) };
+  }
+  function pCsvText(added, upd, bad) {
     var out = [];
     if (added) out.push(t("pCsvDone", num(added)));
     if (upd) out.push(t("pCsvUpd", num(upd)));
     if (bad.length) out.push(t("pCsvSkip", num(bad.length)).replace("{r}", bad.slice(0, 10).join(", ") + (bad.length > 10 ? "…" : "")));
-    return { added: added + upd, text: out.join(" ") };
+    return out.join(" ");
   }
   function pCsvForm() {
     var file = el("input", { type: "file", accept: ".csv,text/csv,text/plain" }), msg = note(), btn = el("button", { type: "submit", class: "btn", text: t("pCsvGo") });
@@ -2109,6 +2182,21 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
         busy(btn, false);
         var r = importCsv(txt);
         if (r.err) { say(msg, r.err); return; }
+        if (r.api) {
+          var fin = function (sm) {
+            var bad = r.bad.concat(sm.bad).sort(function (a, b) { return a - b; }), tx = pCsvText(sm.added, sm.updated, bad);
+            if (!sm.added && !sm.updated) { busy(btn, false); say(msg, tx || t("pCsvEmpty")); return; }
+            pAfter(tx);
+          };
+          if (!r.api.length) { fin({ added: 0, updated: 0, bad: [] }); return; }
+          busy(btn, true);
+          pImport(r.api, r.lines).then(fin, function (e) {
+            busy(btn, false);
+            var sm = e && e.sum, tx = sm && (sm.added || sm.updated) ? pCsvText(sm.added, sm.updated, []) + " " : "";
+            say(msg, tx + pErr(e));
+          });
+          return;
+        }
         if (!r.added) { say(msg, r.text || t("pCsvEmpty")); return; }
         pAfter(r.text);
       }, function () { busy(btn, false); say(msg, t("pCsvRead")); });
@@ -2130,8 +2218,8 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
   }
   function posts() {
     PF.view = PF.view || pPrefView();
-    return BC.call("GET", "app/connections").then(function (c) { return c; }, function (e) { return { err: e }; }).then(function (c) {
-      var d = pData(), flash = okNote(), cnt = el("p", { class: "info", role: "status" }), res = el("div"), sels = [];
+    return Promise.all([BC.call("GET", "app/connections").then(function (c) { return c; }, function (e) { return { err: e }; }), pSync()]).then(function (all) {
+      var c = all[0], d = pData(), flash = okNote(), cnt = el("p", { class: "info", role: "status" }), res = el("div"), sels = [];
       say(flash, PF.flash); PF.flash = "";
       var vt = el("div", { class: "tabs", role: "group", "aria-label": t("pvView") }, [["grid", "pvGrid"], ["list", "pvList"]].map(function (x) {
         return el("button", { type: "button", "aria-pressed": String(PF.view === x[0]), text: t(x[1]), onclick: function () {
@@ -2165,7 +2253,7 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
       }
       draw();
       var entry = el("section", { class: "card" }, [el("div", { class: "ch" }, el("h2", { text: t("pDataH") })), el("div", { class: "cb" }, [
-        el("p", { class: "hint", text: t("pLocal") }),
+        el("p", { class: "hint", text: t(PS.srv ? "pSrv" : "pLocal") }), pMoveDue() ? pMoveCard() : null,
         el("details", { class: "pd", open: d.sample ? null : null }, [el("summary", { text: t("pAdd") }), pAddForm()]),
         el("details", { class: "pd" }, [el("summary", { text: t("pCsv") }), pCsvForm()])])]);
       return [el("h1", { text: t("nPosts") }), el("p", { class: "lead", text: t("postsLead") }), flash,
@@ -2192,7 +2280,8 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
     xs.forEach(function (s) { g.appendChild(sv("circle", { cx: X(s).toFixed(1), cy: Y(s[key]).toFixed(1), r: 4, stroke: "var(--accent)" })); });
     return g;
   }
-  function post(r) {
+  function post(r) { return pSync().then(function () { return postView(r); }); }
+  function postView(r) {
     var d = pData(), p = d.list.filter(function (x) { return x.id === r.id; })[0];
     if (!p) return [back("#posts", "pBack"), empty(t("pNotFound"), el("a", { class: "btn sm", href: "#posts", text: t("pBack") }))];
     var s = lastSnap(p), key = "likes", tlBox = el("div");
@@ -2219,6 +2308,12 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
         var m = pReadMets(mi.ins), list = pLoad(), q = list.filter(function (x) { return x.id === p.id; })[0];
         if (!okDay(at.value)) { say(msg, t("pBadDate")); at.focus(); return; }
         if (!m) { say(msg, t("pBadNum")); return; }
+        if (PS.srv) {
+          var sb = f.querySelector("button[type=submit]"); busy(sb, true);
+          m.url = p.url; m.date = p.date; m.type = p.type; m.at = at.value;
+          BC.call("POST", "app/posts/manual", pApiRow(m)).then(function () { pAfter(t("pSnapOk")); }, function (e) { busy(sb, false); say(msg, pErr(e)); });
+          return;
+        }
         if (!q) { say(msg, t("pNotFound")); return; }
         m.at = at.value;
         q.snaps = q.snaps.filter(function (x) { return x.at !== m.at; }).concat(m).sort(function (a, b2) { return a.at < b2.at ? -1 : a.at > b2.at ? 1 : 0; });
@@ -2230,7 +2325,7 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
         pStore(pLoad().filter(function (x) { return x.id !== p.id; }));
         PF.flash = t("pDeleted"); location.hash = "#posts";
       } });
-      edit = [el("h3", { class: "sub", text: t("pSnap") }), f, el("p", { style: "margin:18px 0 0" }, del)];
+      edit = [el("h3", { class: "sub", text: t("pSnap") }), f, PS.srv ? el("p", { class: "pnote", text: t("pSrvNoDel") }) : el("p", { style: "margin:18px 0 0" }, del)];
     }
     var flash = okNote(); say(flash, PF.flash); PF.flash = "";
     var title = (p.caption || "").split("\n")[0];
