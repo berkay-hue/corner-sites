@@ -13,6 +13,7 @@ export const rule = {
       "/hakkimizda": ["Hakkımızda | Sales Corner",
         "Sales Corner, AI ve n8n ile B2B satış süreçlerini otomatikleştiren, Corner Group çatısı altındaki satış otomasyonu ajansıdır. Kurucu: Berkay Yalçın."],
     },
+    services: ["Lead generation", "CRM senkronizasyonu", "Email ve WhatsApp otomasyonu", "Toplantı brifingi ve görüşme analizi", "Rakip analizi ve teklif hazırlama"],
     fix(html, page) {
       const R = this;
       const setTitle = t => html.replace(/<title>[^<]*<\/title>/, `<title>${t.replace(/&/g, "&amp;").replace(/</g, "&lt;")}</title>`);
@@ -37,6 +38,15 @@ export const rule = {
           parentOrganization: { "@id": "https://cornergroup.co/#org", "@type": "Organization", name: "Corner Group", url: "https://cornergroup.co/" } };
         html = html.replace("</head>", ldTag({ "@context": "https://schema.org", "@graph": [org, { "@type": "WebSite", "@id": R.origin + "/#website", url: R.origin + "/", name: R.brand, publisher: { "@id": org["@id"] }, inLanguage: ["tr-TR", "en"] }] }) + "</head>");
       }
+      // Org'a hizmet kataloğu: yalnız hizmetler.html'deki başlıklar, rakam yok (görev 368)
+      if (page === "/") html = html.replace(/(<script type="application\/ld\+json"[^>]*>)(.*?)(<\/script>)/gs, (m, a, body, c) => {
+        let d; try { d = JSON.parse(body); } catch { return m; }
+        const org = (d["@graph"] || [d]).find(n => n["@id"] === R.origin + "/#org");
+        if (!org || org.hasOfferCatalog) return m;
+        org.hasOfferCatalog = { "@type": "OfferCatalog", name: "Sales Corner hizmetleri", url: R.origin + "/hizmetler",
+          itemListElement: R.services.map(name => ({ "@type": "Offer", itemOffered: { "@type": "Service", name, provider: { "@id": org["@id"] } } })) };
+        return a + JSON.stringify(d) + c;
+      });
       return html;
     },
 };
