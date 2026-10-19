@@ -1,6 +1,6 @@
 ---
 title: "B2B Satış Playbooku Oluşturma: Ekibinizin Performansını Yükseltin"
-description: "B2B dünyasında büyüme, tesadüflere bırakılamayacak kadar değerli ve karmaşık bir süreçtir."
+description: "Satış playbook'u, ICP'den itiraz yanıtlarına kadar en iyi uygulamaları tek yerde toplar; B2B ekibiniz tutarlı ve daha hızlı satış yapar."
 date: "2026-07-04"
 category: "Strateji"
 image: "/_a/fr/images/nXGADNpKKe1PJrlg6Q58fcnHDk_7805d9aa.jpg"

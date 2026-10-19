@@ -1,6 +1,6 @@
 ---
 title: "Yapay Zekayla Soğuk E-Posta Nasıl Yazılır?"
-description: "B2B soğuk e-posta yazarken yapay zekayı nasıl kullanacağınızı; kişiselleştirme, konu satırı ve takip dizisi adımlarını örneklerle anlatıyoruz."
+description: "B2B soğuk e-postada yapay zekayı nasıl kullanırsınız? Kişiselleştirme, konu satırı ve takip dizisi adımları örneklerle."
 date: "2026-10-10"
 updated: "2026-10-16"
 category: "Yapay Zeka"
@@ -53,7 +53,7 @@ Bir dil modeli, elinde yalnızca "Ad, Soyad, Şirket" varsa yapabileceği tek ş
 
 Bu verileri bir tabloda (Google Sheets, Airtable ya da CRM'iniz) her kayıt için ayrı sütunlarda tutun. Sonra yapay zekayı satır bazında çalıştırarak her kayıt için "kişiselleştirme notu" üretebilirsiniz. Örneğin modele şirketin web sitesi metnini ve açık iş ilanlarını verip şunu isteyebilirsiniz: "Bu şirketin satış tarafında şu an yaşıyor olabileceği en olası problemi tek cümleyle yaz."
 
-Bu tür akışları elle kurmak yerine otomatik iş akışlarıyla çalıştırmak, yüzlerce kaydı tutarlı biçimde işlemenin en sağlıklı yoludur. [Sales Corner otomasyonları](/) tam olarak bu noktada devreye girer: veri çekme, zenginleştirme, yapay zekayla kişiselleştirme ve e-posta aracına aktarma adımlarını tek bir akışta birleştirir. Bu akışları kendiniz kurmak isterseniz [n8n ile B2B satış otomasyonu rehberimiz](/blog/n8n-ile-b2b-satis-otomasyonu-rehberi) iyi bir başlangıç noktasıdır. Örneğin [Sekans Yazarı aracımız](/sekans-yazari) ürün videonuzdan, PDF'inizden veya web sitenizden çok adımlı bir outreach dizisi çıkarır; hedef şirketlerin sitelerindeki sinyalleri toplu taramak için ise [Web Keyword Scanner](/web-keyword) kullanılabilir.
+Bu tür akışları elle kurmak yerine otomatik iş akışlarıyla çalıştırmak, yüzlerce kaydı tutarlı biçimde işlemenin en sağlıklı yoludur. [Sales Corner otomasyonları](/) tam olarak bu noktada devreye girer: veri çekme, zenginleştirme, yapay zekayla kişiselleştirme ve e-posta aracına aktarma adımlarını tek bir akışta birleştirir. Bu akışları kendiniz kurmak isterseniz [n8n ile B2B satış otomasyonu rehberimiz](/blog/n8n-ile-b2b-satis-otomasyonu-rehberi) iyi bir başlangıç noktasıdır. Örneğin [Sekans Yazarı aracımız](/#otomasyonlar) ürün videonuzdan, PDF'inizden veya web sitenizden çok adımlı bir outreach dizisi çıkarır; hedef şirketlerin sitelerindeki sinyalleri toplu taramak için ise [Web Keyword Scanner](/#otomasyonlar) kullanılabilir.
 
 ## İyi Bir Soğuk E-Posta Promptu Nasıl Kurulur?
 
@@ -191,6 +191,8 @@ Açılma oranına tek başına güvenmeyin. Gizlilik özellikleri ve otomatik g�
 İterasyon için basit bir döngü önerisi: Her hafta tek bir değişkeni test edin. Bir hafta konu satırını, sonraki hafta açılış cümlesi tipini, bir sonraki hafta çağrının formatını değiştirin. Her varyasyonu anlamlı bir sonuç görebileceğiniz büyüklükte bir gruba, örneğin en az birkaç yüz kişiye gönderin. Kazanan varyasyonu yeni temel kabul edin ve promptunuza işleyin. Birkaç ay içinde, ekibinizin hedef kitlesine özel ve sürekli gelişen bir "prompt kütüphanesi" oluşur.
 
 Bir diğer güçlü uygulama da yanıtları yapay zekayla sınıflandırmak. Gelen yanıtları "ilgili", "şimdi değil", "yanlış kişi", "ilgilenmiyor" ve "iletişimden çıkar" gibi kategorilere ayırmak, takip sürecini hızlandırır. Ayrıca hangi mesajın hangi itirazı tetiklediğine dair değerli bir veri seti oluşturur.
+
+Sales Corner'ın satış otomasyonu ve outbound alanında neler yaptığını [hizmetler sayfamızda](/hizmetler) görebilirsiniz.
 
 ## Sonuç
 

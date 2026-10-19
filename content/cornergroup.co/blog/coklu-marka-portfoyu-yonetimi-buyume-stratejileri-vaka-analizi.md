@@ -1,6 +1,6 @@
 ---
 title: "Çoklu Marka Portföyü Yönetimi: Büyüme Stratejileri Vaka Analizi"
-description: "Günümüzün rekabetçi ve hızla dijitalleşen B2B pazarında, sürdürülebilir büyüme artık tek bir ürün veya hizmet etrafında şekillenen lineer bir yolculuk…"
+description: "Bu vaka analizi, çoklu marka portföyü yöneten bir B2B grubun markaları birbirini besleyecek şekilde konumlayarak nasıl büyüdüğünü anlatır."
 date: "2026-05-08"
 category: "Vaka Çalışması"
 image: "/_a/fr/images/hgLyFGCz1fBcEffwdpYX8Brip0_93d995dc.jpg"

@@ -232,6 +232,8 @@ Records entering an active email sequence should be verified before every send. 
 
 Most of the normalization, waterfall queries, email verification, AI classification and CRM writing steps can be automated. However, manual checks on high-value accounts and quality audits through random sampling are always necessary. The best results come from a hybrid model in which automation handles volume and people manage quality.
 
+You can see what Sales Corner does in sales automation and outbound on our [services page](/hizmetler) (in Turkish).
+
 ## Conclusion
 
 When done right, B2B data enrichment is one of the most powerful levers for outbound sales in the Turkish market. The formula for success is this: define your ICP and data schema first, solve the normalization problems specific to Turkey, use multiple sources with waterfall logic, verify every email, use AI to generate context and audit its output, and keep your data up to date on a regular schedule. These steps let your sales team spend their time on real conversations instead of wrestling with incomplete data.

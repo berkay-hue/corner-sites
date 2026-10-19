@@ -1,6 +1,6 @@
 ---
 title: "Çok Markalı Holdingde CRM Veri Kalitesi: Başarılı Bir Vaka Çalışması"
-description: "Dijital çağın B2B arenasında, veri artık yeni petrol değil, işleyen bir organizmanın kanıdır."
+description: "Bu vaka çalışması, çok markalı bir holdingin dağınık CRM verisini temizleyip ortak standartlarla nasıl tek ve güvenilir bir kaynağa çevirdiğini anlatır."
 date: "2026-08-03"
 category: "Vaka Çalışması"
 image: "/_a/fr/images/notKjQmxh4JFzpK93aVU2nLhuQ_cd09786e.jpg"

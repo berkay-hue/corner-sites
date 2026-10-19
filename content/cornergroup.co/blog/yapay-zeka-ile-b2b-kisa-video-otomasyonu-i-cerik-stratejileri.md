@@ -1,6 +1,6 @@
 ---
 title: "Yapay Zeka ile B2B Kısa Video Otomasyonu: İçerik Stratejileri"
-description: "B2B pazarlama ve satış dünyası, geri döndürülemez bir değişimden geçiyor. Karar vericilerin bilgi tüketim alışkanlıkları, B2C dünyasının dinamizmi ve…"
+description: "Yapay zeka ile uzun içeriklerden B2B kısa videolar üretip altyazı ve dağıtımı otomatikleştirebilirsiniz; yazı içerik stratejilerini anlatır."
 date: "2026-05-25"
 category: "Otomasyon"
 image: "/_a/fr/images/GBTzQdXdauj8wpBqe6wQgY8lRU_7805d9aa.jpg"

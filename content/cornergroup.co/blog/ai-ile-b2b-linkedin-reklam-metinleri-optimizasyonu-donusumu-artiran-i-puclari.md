@@ -1,6 +1,6 @@
 ---
 title: "AI ile B2B LinkedIn Reklam Metinleri Optimizasyonu: Dönüşümü Artıran İpuçları"
-description: "B2B pazarlamasının ana sahnesi olan LinkedIn, artık sadece bir network platformu değil, aynı zamanda sofistike karar vericilere ulaşmanın en kritik kanalı…"
+description: "AI ile LinkedIn reklam metinlerinin farklı varyasyonlarını üretip test ederek B2B dönüşümünü artırabilirsiniz; yazı pratik ipuçlarını anlatır."
 date: "2026-08-30"
 category: "Rehber"
 image: "/_a/fr/images/O7DCWv68CnGA1dmYroiKBz3B4Ew_cd09786e.jpg"

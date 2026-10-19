@@ -232,7 +232,7 @@ Sıfırdan outbound satış ekibi kurmak, doğru kararları doğru sırayla alma
 
 Bunların hiçbiri göz alıcı değil, ama birikerek büyür. Bu şekilde kurulan bir ekip her çeyrekte daha iyi hâle gelir, çünkü her görüşme, her yanıt ve her kaybedilen anlaşma sisteme geri besleme olarak döner.
 
-İlk outbound ekibinizi kuruyorsanız ya da beklentiyi karşılamayan bir ekibi yeniden yapılandırıyorsanız, fikir alışverişi yapmaktan her zaman memnuniyet duyarım. [Ana sayfam](/tr) üzerinden ulaşıp sürecin neresinde olduğunuzu anlatabilirsiniz.
+İlk outbound ekibinizi kuruyorsanız ya da beklentiyi karşılamayan bir ekibi yeniden yapılandırıyorsanız, fikir alışverişi yapmaktan her zaman memnuniyet duyarım. [Ana sayfam](/tr/) üzerinden ulaşıp sürecin neresinde olduğunuzu anlatabilirsiniz.
 
 ## Sık sorulan sorular
 

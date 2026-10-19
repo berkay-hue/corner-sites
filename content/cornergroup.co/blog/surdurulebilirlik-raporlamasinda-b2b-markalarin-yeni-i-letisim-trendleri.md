@@ -1,6 +1,6 @@
 ---
 title: "Sürdürülebilirlik Raporlamasında B2B Markaların Yeni İletişim Trendleri"
-description: "B2B dünyasında sürdürülebilirlik, artık yıllık raporların son sayfalarını süsleyen bir kurumsal sosyal sorumluluk (KSS) faaliyeti veya bir pazarlama…"
+description: "B2B markalar sürdürülebilirlik raporlamasında genel vaatlerden ölçülebilir veri ve şeffaf ilerlemeye geçiyor; yazı yeni iletişim trendlerini anlatır."
 date: "2026-10-01"
 category: "Trendler"
 image: "/_a/fr/images/hJewEkxolskaSB0WUKbIXubi6SA_cd09786e.jpg"

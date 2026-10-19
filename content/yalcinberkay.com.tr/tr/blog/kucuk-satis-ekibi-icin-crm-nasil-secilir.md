@@ -222,7 +222,7 @@ Küçük bir satış ekibi için doğru CRM, en çok özelliğe sahip olan deği
 
 İyi kurulmuş bir CRM, küçük bir ekibi büyük bir ekip gibi organize çalıştırabilir. Kötü seçilmiş bir CRM ise en yetenekli satışçıların bile enerjisini tüketir. Bu kararı acele etmeden ama sonsuza kadar da ertelemeden, yapılandırılmış bir şekilde vermek en sağlıklı yoldur.
 
-Ekibiniz için CRM seçimi, kurulumu ya da satış operasyonlarının yapılandırılması konusunda fikir alışverişi yapmak isterseniz, [Berkay Yalçın'ın kişisel sayfası](/tr) üzerinden benimle iletişime geçebilirsiniz. Deneyimlerimi paylaşmaktan memnuniyet duyarım.
+Ekibiniz için CRM seçimi, kurulumu ya da satış operasyonlarının yapılandırılması konusunda fikir alışverişi yapmak isterseniz, [Berkay Yalçın'ın kişisel sayfası](/tr/) üzerinden benimle iletişime geçebilirsiniz. Deneyimlerimi paylaşmaktan memnuniyet duyarım.
 
 ## Sık sorulan sorular
 

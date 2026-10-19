@@ -1,6 +1,6 @@
 ---
 title: "B2B LinkedIn Organik Erişimde AI Destekli İçerik Hataları ve Çözümleri"
-description: "Dijital dönüşümün ve verimlilik arayışının B2B pazarlamasını yeniden şekillendirdiği bir çağda, yapay zeka destekli içerik üretimi bir devrim vaadiyle…"
+description: "AI ile üretilen LinkedIn içerikleri genel ve kişiliksiz kalınca erişim düşer; bu yazı B2B markalar için sık hataları ve çözümlerini anlatır."
 date: "2026-10-05"
 category: "Strateji"
 image: "/_a/fr/images/Olry9OLXTmilm7WenKDprhT6yXw_cd09786e.jpg"

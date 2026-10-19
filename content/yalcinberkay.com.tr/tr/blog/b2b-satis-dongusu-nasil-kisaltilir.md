@@ -217,7 +217,7 @@ B2B satış döngüsü, çoğu zaman sanıldığı gibi müşterinin yavaşlığ
 
 En önemli tavsiyem şu: Bugün CRM'inizi açın ve fırsatlarınızın en uzun hangi aşamada beklediğine bakın. İlk iyileştirmeyi oradan başlatın.
 
-Satış döngünüzü analiz etmek, outbound sürecinizi kurmak ya da satış operasyonlarınızı daha verimli hale getirmek için fikir alışverişi yapmak isterseniz, [Berkay Yalçın](/tr) sayfası üzerinden benimle iletişime geçebilirsiniz.
+Satış döngünüzü analiz etmek, outbound sürecinizi kurmak ya da satış operasyonlarınızı daha verimli hale getirmek için fikir alışverişi yapmak isterseniz, [Berkay Yalçın](/tr/) sayfası üzerinden benimle iletişime geçebilirsiniz.
 
 ## Sık sorulan sorular
 

@@ -241,7 +241,7 @@ Soğuk e-postada yanıt oranını artırmanın tek bir sırrı yok. Ama birbirin
 
 Bu adımların hiçbiri tek başına mucize yaratmaz. Hepsini birlikte ve tutarlı şekilde uyguladığınızda ise soğuk e-posta, satış ekibiniz için öngörülebilir bir pipeline kaynağına dönüşür. Önerim şu: Bu hafta tek bir segment seçin, 100-150 kişilik temiz bir liste hazırlayın, yukarıdaki yapıyla beş adımlık bir dizi kurun ve sonuçları kaydedin. Bir ay sonra elinizde tahmin değil, gerçek veri olacak.
 
-Outbound sürecinizi kurarken ya da mevcut kampanyalarınızın yanıt oranını iyileştirmeye çalışırken bir fikir alışverişine ihtiyaç duyarsanız, [benimle iletişime geçebilirsiniz](/tr). Sahada yaşadığınız zorlukları konuşmaktan memnuniyet duyarım.
+Outbound sürecinizi kurarken ya da mevcut kampanyalarınızın yanıt oranını iyileştirmeye çalışırken bir fikir alışverişine ihtiyaç duyarsanız, [benimle iletişime geçebilirsiniz](/tr/). Sahada yaşadığınız zorlukları konuşmaktan memnuniyet duyarım.
 
 ## Sık sorulan sorular
 

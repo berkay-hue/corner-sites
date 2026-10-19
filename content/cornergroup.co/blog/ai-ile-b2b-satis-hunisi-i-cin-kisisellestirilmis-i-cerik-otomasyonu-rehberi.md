@@ -1,6 +1,6 @@
 ---
 title: "AI ile B2B Satış Hunisi İçin Kişiselleştirilmiş İçerik Otomasyonu Rehberi"
-description: "B2B pazarının dinamikleri, geri döndürülemez bir şekilde değişti. Karar vericiler, her gün yüzlerce jenerik e-posta ve içerik bombardımanına tutulurken…"
+description: "AI ile içerik otomasyonu, satış hunisinin her aşamasındaki B2B alıcıya ihtiyacına uygun içerik gönderir; rehber kurulumu adım adım anlatır."
 date: "2026-08-01"
 category: "Otomasyon"
 image: "/_a/fr/images/fiWD2EU83cmmFsA1glzAYANsg_bca213ce.jpg"

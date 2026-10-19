@@ -153,7 +153,7 @@ Bu seçenekleri bir ekip kurmaktan kaçınmak için kalıcı bahaneler olarak de
 
 Bu yüzden örüntüler netleşene kadar satış yapmaya devam edin. Ardından her şeyi belgeleyin, hesabı dürüstçe yapın ve bir yönetici yerine sıfırdan inşa edebilecek birini işe alın. İlk 90 gün boyunca yakın durun. Bu parçaları doğru yerine oturtursanız ilk satış işe alımınız gerçek bir satış ekibinin temeli olabilir.
 
-Şu anda bu kararı tartıyorsanız ve fikir alışverişi yapmak isterseniz sizden haber almaktan memnuniyet duyarım. [Kişisel sitemden](/tr) beni daha yakından tanıyabilir ve iletişime geçebilirsiniz.
+Şu anda bu kararı tartıyorsanız ve fikir alışverişi yapmak isterseniz sizden haber almaktan memnuniyet duyarım. [Kişisel sitemden](/tr/) beni daha yakından tanıyabilir ve iletişime geçebilirsiniz.
 
 ## Sık sorulan sorular
 

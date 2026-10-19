@@ -234,4 +234,4 @@ Geçmiş veri yoksa sektör deneyimine, kurucuların ilk satışlarından elde e
 
 İyi bir satış kotası tahminle değil hesapla belirlenir. Şirket hedefinden başlayın, temsilci kapasitesini geçmiş veriyle hesaplayın, rampa süresini ve fazladan atama payını ekleyin, ardından aradaki boşluğu açıkça masaya koyun. Kotayı segment ve döneme göre dağıtın, komisyon planına doğru şekilde bağlayın ve her temsilciyle mantığını paylaşarak iletin. Bu süreci bir kez kurduğunuzda kota görüşmeleri her yıl daha kısa, daha az gergin ve çok daha isabetli hale gelir.
 
-Satış ekibiniz için kota yapısı, komisyon planı ya da pipeline modeli kurarken bir dış göz istiyorsanız benimle iletişime geçebilirsiniz. Satış operasyonları ve ekip kurma tarafındaki çalışmalarıma [Berkay Yalçın](/tr) sayfasından ulaşabilir, birlikte sizin rakamlarınız üzerinden düşünebiliriz.
+Satış ekibiniz için kota yapısı, komisyon planı ya da pipeline modeli kurarken bir dış göz istiyorsanız benimle iletişime geçebilirsiniz. Satış operasyonları ve ekip kurma tarafındaki çalışmalarıma [Berkay Yalçın](/tr/) sayfasından ulaşabilir, birlikte sizin rakamlarınız üzerinden düşünebiliriz.

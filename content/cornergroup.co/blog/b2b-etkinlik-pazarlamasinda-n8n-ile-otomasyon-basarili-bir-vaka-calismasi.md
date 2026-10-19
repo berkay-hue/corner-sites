@@ -1,6 +1,6 @@
 ---
 title: "B2B Etkinlik Pazarlamasında n8n ile Otomasyon: Başarılı Bir Vaka Çalışması"
-description: "B2B dünyasında fiziksel etkinlikler, fuarlar ve zirveler, potansiyel müşterilerle yüz yüze bağ kurmak, marka bilinirliğini artırmak ve stratejik…"
+description: "Bu vaka çalışması, bir B2B şirketinin n8n ile etkinlik kaydı, hatırlatma ve etkinlik sonrası takibi otomatikleştirip lead kaybını azalttığını anlatır."
 date: "2026-08-04"
 category: "Vaka Çalışması"
 image: "/_a/fr/images/zEggssw5YKWcexYQc9WPywxU1cE_cd09786e.jpg"

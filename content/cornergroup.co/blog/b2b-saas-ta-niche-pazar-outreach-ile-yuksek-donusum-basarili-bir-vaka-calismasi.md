@@ -1,6 +1,6 @@
 ---
 title: "B2B SaaS'ta Niche Pazar Outreach ile Yüksek Dönüşüm: Başarılı Bir Vaka Çalışması"
-description: "B2B SaaS dünyası, her geçen gün daha da kalabalıklaşan ve rekabetin acımasızlaştığı bir arenaya dönüşüyor."
+description: "Bu vaka çalışması, bir B2B SaaS şirketinin dar bir niş pazara özel mesajlarla outreach yapıp dönüşüm oranını nasıl yükselttiğini anlatır."
 date: "2026-09-08"
 category: "Vaka Çalışması"
 image: "/_a/fr/images/XZIr2wpVmqSk772nkxxJ0WVeqvM_cd09786e.jpg"
