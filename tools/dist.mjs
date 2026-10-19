@@ -32,6 +32,20 @@ async function* allHtml(dir) {
     if (e.isDirectory()) yield* allHtml(p); else if (e.name.endsWith(".html")) yield p;
   }
 }
+// font-display'siz @font-face'e font-display:swap (yalnız <style> içi ve .css; script/data-URI'ye dokunulmaz, idempotent)
+const swapFaces = css => css.replace(/@font-face\s*\{([^{}]*)\}/g, (m, body) => /font-display\s*:/.test(body) ? m : m.replace(/\{/, "{font-display:swap;"));
+async function* allFiles(dir) {
+  for (const e of await readdir(dir, { withFileTypes: true })) {
+    const p = join(dir, e.name);
+    if (e.isDirectory()) yield* allFiles(p); else if (/\.(html|css)$/.test(e.name)) yield p;
+  }
+}
+for await (const f of allFiles(OUT)) {
+  const src = await readFile(f, "utf8");
+  if (!src.includes("@font-face")) continue;
+  const out = f.endsWith(".css") ? swapFaces(src) : src.replace(/(<style\b[^>]*>)([\s\S]*?)(<\/style>)/gi, (m, o, css, c) => o + swapFaces(css) + c);
+  if (out !== src) await writeFile(f, out);
+}
 for await (const f of allHtml(OUT)) {
   let html = await readFile(f, "utf8");
   // Framer runtime'ı taşınan uygulama sayfaları (tools/framer-app.mjs) formlarını kendisi yönetir
