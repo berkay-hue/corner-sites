@@ -253,8 +253,9 @@ function renderList(tpl, posts) {
     if (!groupKeys) { if (seen.has(key)) groupKeys = seen; else { seen.add(key); variants.push(slot); } }
     h = h.slice(0, s) + "\u0000" + h.slice(e);
   }
-  const fill = (c, p) => {
-    c = c.replace(/(<a\b[^>]*\shref=")\.\/[^"]*/, `$1./blog/${p.slug}`).replace(/<img\b[^>]*>/, tag => swapImg(tag, p, true));
+  // İlk 3 kart ekranın üstünde: eager; sonrakiler loading="lazy"
+  const fill = (c, p, i) => {
+    c = c.replace(/(<a\b[^>]*\shref=")\.\/[^"]*/, `$1./blog/${p.slug}`).replace(/<img\b[^>]*>/, tag => swapImg(tag, p, i >= 3));
     for (const n of ["Tag", "Subheading"]) {
       const r = region(c, n); if (r && r.inner.replace(/<[^>]+>/g, "").trim()) c = setInner(c, r, setP(r.inner, p.fm.category || "Blog"));
     }
@@ -270,7 +271,7 @@ function renderList(tpl, posts) {
     return c;
   };
   const cards = posts.map((p, i) => "<!--$-->" + variants.map(v => {
-    const c = fill(v, p);
+    const c = fill(v, p, i);
     return cfg.perPage && i >= cfg.perPage ? c.replace(/^<div class="([^"]*)"/, '<div class="$1 sk-more" hidden') : c;
   }).join("") + "<!--/$-->").join("");
   // Öne çıkan (hero) alanı en yeni yazıya — kartlardan önce, aynı slug kartı ezmesin
