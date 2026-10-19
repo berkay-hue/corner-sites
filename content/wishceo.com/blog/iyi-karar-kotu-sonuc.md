@@ -107,4 +107,4 @@ WishCEO her dosyadaki dört seçeneği, o dönemde ne bilindiğine ve sonra ne o
 
 Bir karar iyi bittiğinde kendini tebrik etmeden, kötü bittiğinde kendini suçlamadan önce aynı soruyu sor: o gün masada ne vardı ve ben onunla ne yaptım? Gerisi çoğu zaman zarın işi.
 
-Bu ayrımı yapmayı alışkanlık hâline getirmenin en kolay yolu, sonucu bilmeden karar vermek. Birkaç dakikan varsa bir dosya seni bekliyor. [Bugünün vakasını oyna](/#oyun).
+Bu ayrımı yapmayı alışkanlık hâline getirmenin en kolay yolu, sonucu bilmeden karar vermek. Birkaç dakikan varsa bir dosya seni bekliyor. [Yeni sayıyı oyna](/#oyun).

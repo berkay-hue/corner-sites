@@ -439,6 +439,10 @@ const RULES = {
         "Sales Corner, AI ve n8n ile B2B satışı otomatikleştiren satış otomasyonu ajansıdır: pazar araştırması, lead generation, toplantı planı, CRM entegrasyonu."],
       "/iletisim": ["İletişim | Sales Corner – B2B Satış Otomasyonu",
         "Sales Corner ekibiyle iletişime geçin: B2B satış, outsourced lead generation, CRM entegrasyonu ve pazarlama çözümleri hakkında bilgi alın."],
+      "/hizmetler": ["Hizmetler | Sales Corner",
+        "Sales Corner hizmetleri: AI ve n8n ile lead generation, CRM senkronizasyonu, email ve WhatsApp otomasyonu, toplantı brifingi, görüşme analizi ve teklif hazırlama."],
+      "/hakkimizda": ["Hakkımızda | Sales Corner",
+        "Sales Corner, AI ve n8n ile B2B satış süreçlerini otomatikleştiren, Corner Group çatısı altındaki satış otomasyonu ajansıdır. Kurucu: Berkay Yalçın."],
     },
     fix(html, page) {
       const R = this;

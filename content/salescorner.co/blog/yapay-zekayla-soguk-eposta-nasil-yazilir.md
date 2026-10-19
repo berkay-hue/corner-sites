@@ -1,6 +1,6 @@
 ---
 title: "Yapay Zekayla Soğuk E-Posta Nasıl Yazılır?"
-description: "B2B soğuk e-posta yazarken yapay zekayı nasıl kullanacağınızı; kişiselleştirme, konu satırı ve takip dizisi adımlarını örneklerle anlatıyoruz."
+description: "B2B soğuk e-postada yapay zekayı nasıl kullanırsınız? Kişiselleştirme, konu satırı ve takip dizisi adımları örneklerle."
 date: "2026-10-10"
 updated: "2026-10-16"
 category: "Yapay Zeka"
@@ -191,6 +191,8 @@ Açılma oranına tek başına güvenmeyin. Gizlilik özellikleri ve otomatik g�
 İterasyon için basit bir döngü önerisi: Her hafta tek bir değişkeni test edin. Bir hafta konu satırını, sonraki hafta açılış cümlesi tipini, bir sonraki hafta çağrının formatını değiştirin. Her varyasyonu anlamlı bir sonuç görebileceğiniz büyüklükte bir gruba, örneğin en az birkaç yüz kişiye gönderin. Kazanan varyasyonu yeni temel kabul edin ve promptunuza işleyin. Birkaç ay içinde, ekibinizin hedef kitlesine özel ve sürekli gelişen bir "prompt kütüphanesi" oluşur.
 
 Bir diğer güçlü uygulama da yanıtları yapay zekayla sınıflandırmak. Gelen yanıtları "ilgili", "şimdi değil", "yanlış kişi", "ilgilenmiyor" ve "iletişimden çıkar" gibi kategorilere ayırmak, takip sürecini hızlandırır. Ayrıca hangi mesajın hangi itirazı tetiklediğine dair değerli bir veri seti oluşturur.
+
+Sales Corner'ın satış otomasyonu ve outbound alanında neler yaptığını [hizmetler sayfamızda](/hizmetler) görebilirsiniz.
 
 ## Sonuç
 

@@ -95,4 +95,4 @@ Evet, çoğu zaman en büyüğü odur. Beklemek, mevcut durumu korumak ya da kar
 
 ## Sıra sende
 
-Fırsat maliyetini en iyi öğrenme yolu, onu bir kez kendi kararında hissetmektir. Bugünün vakasında da önünde birden fazla makul yol olacak ve her birini seçtiğinde bir diğerinden vazgeçeceksin. Seçimini yapmadan önce kendine bir kez sor: Bu kararla neyi bırakıyorum? [Bugünün vakasını oyna](/#oyun)
+Fırsat maliyetini en iyi öğrenme yolu, onu bir kez kendi kararında hissetmektir. Yeni sayıda da önünde birden fazla makul yol olacak ve her birini seçtiğinde bir diğerinden vazgeçeceksin. Seçimini yapmadan önce kendine bir kez sor: Bu kararla neyi bırakıyorum? [Yeni sayıyı oyna](/#oyun)

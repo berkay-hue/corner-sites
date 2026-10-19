@@ -187,6 +187,8 @@ If you answer "no" to several of these questions, closing those gaps before star
 
 In some cases, a company's priority is filling the pipeline quickly rather than building automation infrastructure from scratch. For B2B SaaS companies in particular, outsourcing outbound capacity can be a faster route. [SAAS Corner's outbound sales and lead generation service built for B2B SaaS](https://saascorner.co) is an alternative designed for this need.
 
+You can see what Sales Corner does in sales automation and outbound on our [services page](/hizmetler) (in Turkish).
+
 ## Conclusion
 
 Most sales automation projects fail not because of technology, but because of vague goals, undefined processes, dirty data, unowned systems, and a team that doesn't buy in. Automation is a powerful multiplier, but it only works when it's built on a solid foundation. Starting with a small, measurable problem, preparing the process and data in advance, involving the team in the design, and assigning an owner to every workflow are what separate successful projects from failed ones.

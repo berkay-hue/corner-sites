@@ -1,6 +1,6 @@
 ---
-title: "İdeal Müşteri Profili (ICP) Nasıl Belirlenir? B2B Rehberi"
-description: "B2B'de ideal müşteri profilini (ICP) mevcut müşteri verinizden adım adım nasıl çıkaracağınızı, persona ile farkını ve outbound'da kullanımını anlatıyoruz."
+title: "İdeal Müşteri Profili (ICP) Nasıl Belirlenir? B2B Rehber"
+description: "B2B'de ideal müşteri profilini (ICP) müşteri verinizden adım adım çıkarmayı, persona farkını ve outbound'da kullanımını anlatıyoruz."
 date: "2026-10-17"
 category: "Satış"
 image: "https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
@@ -107,6 +107,8 @@ Evet. Farklı ürünler, farklı pazarlar ya da farklı satış hareketleri içi
 ### ICP ne sıklıkla güncellenmeli?
 
 ICP'yi düzenli aralıklarla, örneğin her çeyrek, kazanılan ve kaybedilen fırsatlar üzerinden gözden geçirmek iyi bir pratiktir. Ürüne önemli bir özellik eklendiğinde, fiyatlama değiştiğinde ya da yeni bir pazara girildiğinde ise beklemeden güncellenmelidir.
+
+Sales Corner'ın satış otomasyonu ve outbound alanında neler yaptığını [hizmetler sayfamızda](/hizmetler) görebilirsiniz.
 
 ## Sonuç
 

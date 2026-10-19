@@ -192,6 +192,8 @@ A simple loop for iteration: test a single variable each week. One week change t
 
 Another powerful practice is classifying replies with AI. Sorting incoming replies into categories such as "interested", "not now", "wrong person", "not interested" and "unsubscribe" speeds up follow-up. It also builds a valuable dataset on which message triggers which objection.
 
+You can see what Sales Corner does in sales automation and outbound on our [services page](/hizmetler) (in Turkish).
+
 ## Conclusion
 
 Writing cold emails with AI is much more than opening a tool and saying "write me an email". Successful results rest on a clearly defined audience, clean and enriched data, well-crafted prompts, a sensible email sequence and a disciplined measurement loop. When these pieces fall into place, AI can lighten your sales team's research and writing load. And it can help you deliver messages that are meaningful in each recipient's own context to hundreds, even thousands of people at scale.
