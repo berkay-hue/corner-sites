@@ -75,6 +75,8 @@ h1,h2,h3{font-family:"Poppins","Inter",system-ui,sans-serif;font-weight:600;lett
 .inbox{list-style:none;margin:0;padding:0}.inbox li{display:flex;align-items:center;gap:12px;padding:12px 20px;border-top:1px solid var(--line)}.inbox li:first-child{border-top:0}
 .ic{width:36px;height:36px;flex:none;border-radius:10px;display:grid;place-items:center}.ic.warn{background:var(--warn-soft);color:var(--warn)}.ic.info{background:var(--info-soft);color:var(--info)}.ic.danger{background:var(--danger-soft);color:var(--danger)}.ic.accent{background:var(--accent-soft);color:var(--accent-text)}.ic.ok{background:var(--ok-soft);color:var(--ok)}
 .tx{flex:1;min-width:0;display:flex;flex-direction:column}.tx b{font-weight:600;font-size:14.5px;overflow-wrap:anywhere}.tx span{color:var(--muted);font-size:13px;overflow-wrap:anywhere}
+.nfhead{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:0 0 12px}.nfhead .meta{margin:0}
+.nf{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-card);overflow:hidden}.inbox.nf li{padding:0;flex-wrap:nowrap}.nf .nfa{display:flex;align-items:center;gap:12px;min-height:44px;padding:12px 20px;flex:1;min-width:0;color:inherit;text-decoration:none}.nf a.nfa:hover{background:var(--surface-2)}.nf li.un .tx b{font-weight:700}.nf .dot{width:10px;height:10px;flex:none;border-radius:50%;background:var(--accent)}
 .ierr{display:flex;align-items:center;gap:12px;flex-wrap:wrap;color:var(--danger);font-size:14px}.ierr span{flex:1 1 200px}
 .cb.none{color:var(--muted);text-align:center;padding:28px 20px}
 .meter{height:8px;border-radius:999px;background:var(--surface-2);overflow:hidden;margin:6px 0 4px}.meter i{display:block;height:100%;background:var(--grad);border-radius:999px}
@@ -204,7 +206,7 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
 .tabbar .cnt{position:absolute;top:4px;left:calc(50% + 6px);margin:0;min-width:18px;height:18px;padding:0 5px;font-size:11px;line-height:18px}
 .main-col{padding-bottom:calc(64px + env(safe-area-inset-bottom))}
 .stats,.mets,.mets.m4{grid-template-columns:repeat(2,minmax(0,1fr))}.stats .stat .v{font-size:22px}.mets .stat:last-child{grid-column:1/-1}.mets.m4 .stat:last-child{grid-column:auto}
-.btn,.btn.sm,.ghost{min-height:44px}.inbox li{padding:12px 16px;flex-wrap:wrap}.inbox .btn{margin-left:48px}
+.btn,.btn.sm,.ghost{min-height:44px}.inbox li{padding:12px 16px;flex-wrap:wrap}.inbox .btn{margin-left:48px}.nf .nfa{padding:12px 16px}
 .ph h1,.wrapw>h1{font-size:22px}.box{padding:16px}.ch,.cb{padding-left:16px;padding-right:16px}.oc,.irow,.legend{padding-left:16px;padding-right:16px}.grid2{grid-template-columns:1fr}.prow{grid-template-columns:1fr 1fr}.prow>div:last-child{grid-column:1/-1}}
 </style>
 </head>
@@ -214,7 +216,7 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
 <a class="logo" href="/">Brand<span>Corner</span></a>
 <div class="acct"><span class="av" id="av" aria-hidden="true"></span><div><div class="n" id="who"></div><div class="r" id="role"></div></div></div>
 <nav class="nav" id="nav" aria-label="Panel"></nav>
-<div class="foot"><a class="nb" id="set" href="#settings"></a><a class="nb" id="help2" href="mailto:info@saascorner.co?subject=Brand%20Corner%20panel"></a><button type="button" class="nb" id="out"></button></div>
+<div class="foot"><a class="nb" id="ntf" href="#notifications"></a><a class="nb" id="set" href="#settings"></a><a class="nb" id="help2" href="mailto:info@saascorner.co?subject=Brand%20Corner%20panel"></a><button type="button" class="nb" id="out"></button></div>
 </aside>
 <div class="main-col">
 <header class="mtop"><a class="logo" href="/">Brand<span>Corner</span></a><button type="button" class="me" id="me" aria-haspopup="dialog" aria-controls="sheet"><span class="av" id="av2" aria-hidden="true"></span></button></header>
@@ -228,7 +230,7 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
 <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetWho" hidden>
 <div class="grip" aria-hidden="true"></div>
 <div class="acct"><span class="av" id="av3" aria-hidden="true"></span><div><div class="n" id="sheetWho"></div><div class="r" id="sheetRole"></div></div></div>
-<a class="nb" id="set2" href="#settings"></a><a class="nb" id="help3" href="mailto:info@saascorner.co?subject=Brand%20Corner%20panel"></a><button type="button" class="nb" id="out2"></button>
+<a class="nb" id="ntf2" href="#notifications"></a><a class="nb" id="set2" href="#settings"></a><a class="nb" id="help3" href="mailto:info@saascorner.co?subject=Brand%20Corner%20panel"></a><button type="button" class="nb" id="out2"></button>
 </div>
 
 <script src="/bc-app.js"></script>
@@ -304,6 +306,7 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
       waiting: "Sizi bekleyenler", waitEmpty: "Şu an sizi bekleyen bir iş yok.", inNew: "{n} yeni başvuru", inSub: "{n} içerik onay bekliyor", inDue: "Son tarih yaklaşıyor: {n}",
       inInvite: "{n} sizi davet etti", inRev: "Revizyon istendi", inAcc: "İçerik bağlantınızı gönderin", inProf: "%{n} tamamlandı", review: "İncele", openIt: "Aç",
       profCard: "Profil", profDone: "Tamamlanma", editProf: "Profili düzenle",
+      nNotif: "Bildirimler", nfLead: "Başvurular, davetler ve içerik onayları burada toplanır.", nfUnread: "{n} okunmamış", nfAllRead: "Hepsi okundu.", nfMarkAll: "Tümünü okundu say", nfNone: "Henüz bildirim yok.", nfNew: "Yeni", nfSampleNote: "Bildirim servisi açılınca gerçek bildirimlerin burada görünür.", nfSApply: "Yaz koleksiyonu kampanyana yeni bir başvuru geldi.", nfSContent: "Bir influencer onayın için içerik gönderdi.", nfSView: "Kampanya özetin 3 influencer tarafından görüntülendi.", nfSInvite: "Bir marka seni kampanyasına davet etti.", nfSAccepted: "Başvurun kabul edildi.", nfSMetrics: "Gönderi ölçümlerini güncelleme zamanı.",
       nSettings: "Ayarlar", setLead: "Hesabını ve panelin görünümünü yönet.", setAcct: "Hesap", setName: "Ad soyad", setEmail: "E-posta", setEmailHint: "E-postanı değiştirmek için info@saascorner.co adresine yaz.", setPw: "Şifre", setPwHint: "Yeni şifre belirleme bağlantısını e-postana göndeririz.", setPwBtn: "Sıfırlama bağlantısı gönder", setPwSent: "Bağlantı gönderildi. Gelen kutunu kontrol et.", setLook: "Görünüm", setLang: "Dil", setTheme: "Tema", thSys: "Sistem", thLight: "Açık", thDark: "Koyu", setOutLead: "Bu cihazda panelden çıkış yap.",
       ckCompany: "Şirket adı", ckIndustry: "Sektör", ckCity: "Şehir", ckWebsite: "Web sitesi", ckBio: "Hakkında (en az 40 karakter)", ckClients: "Müşteri sayısı",
       ckNiches: "İlgi alanları", ckPlatform: "Takipçi sayısıyla en az bir platform", ckListed: "Markalara görünür profil",
@@ -443,6 +446,7 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
       waiting: "Waiting for you", waitEmpty: "Nothing is waiting for you right now.", inNew: "{n} new applications", inSub: "{n} content items awaiting approval", inDue: "Deadline coming up: {n}",
       inInvite: "{n} invited you", inRev: "Revision requested", inAcc: "Send your content link", inProf: "{n}% complete", review: "Review", openIt: "Open",
       profCard: "Profile", profDone: "Completion", editProf: "Edit profile",
+      nNotif: "Notifications", nfLead: "Applications, invites and content approvals in one place.", nfUnread: "{n} unread", nfAllRead: "All caught up.", nfMarkAll: "Mark all as read", nfNone: "No notifications yet.", nfNew: "New", nfSampleNote: "Your real notifications will appear here once the service is live.", nfSApply: "New application to your summer collection campaign.", nfSContent: "A creator sent content for your approval.", nfSView: "Your campaign brief was viewed by 3 creators.", nfSInvite: "A brand invited you to its campaign.", nfSAccepted: "Your application was accepted.", nfSMetrics: "Time to update your post metrics.",
       nSettings: "Settings", setLead: "Manage your account and how the panel looks.", setAcct: "Account", setName: "Full name", setEmail: "Email", setEmailHint: "To change your email, write to info@saascorner.co.", setPw: "Password", setPwHint: "We will email you a link to set a new password.", setPwBtn: "Send reset link", setPwSent: "Reset link sent. Check your inbox.", setLook: "Appearance", setLang: "Language", setTheme: "Theme", thSys: "System", thLight: "Light", thDark: "Dark", setOutLead: "Log out of the panel on this device.",
       ckCompany: "Company name", ckIndustry: "Industry", ckCity: "City", ckWebsite: "Website", ckBio: "About (at least 40 characters)", ckClients: "Number of clients",
       ckNiches: "Niches", ckPlatform: "At least one platform with follower count", ckListed: "Profile visible to brands",
@@ -642,7 +646,7 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
   var cm = /^creator-([a-z0-9]{1,24})$/.exec(h);
   if (cm && isOwner()) return { name: "creator", id: cm[1], tab: "discover" };
     if (m) return { name: "campaign", id: +m[1], tab: "campaigns" };
-    var ok = ["overview", "campaigns", "profile", "settings"].concat(isOwner() ? ["new", "discover"] : ["applications", "posts"]);
+    var ok = ["overview", "campaigns", "profile", "settings", "notifications"].concat(isOwner() ? ["new", "discover"] : ["applications", "posts"]);
     if (ok.indexOf(h) < 0) h = "overview";
     return { name: h, tab: h === "new" ? "campaigns" : h };
   }
@@ -669,6 +673,7 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
     help: [["circle", { cx: 12, cy: 12, r: 9 }], ["path", { d: "M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.7M12 17h.01" }]],
     gear: [["circle", { cx: 12, cy: 12, r: 3 }], ["path", { d: "M12 2v3M12 19v3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M2 12h3M19 12h3M4.9 19.1 7 17M17 7l2.1-2.1" }]],
     logout: [["path", { d: "M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3" }], ["path", { d: "M10 17l-5-5 5-5M5 12h11" }]],
+    bell: [["path", { d: "M6 16V11a6 6 0 0 1 12 0v5l2 2H4z" }], ["path", { d: "M10 21h4" }]],
     image: [["rect", { x: 3, y: 4, width: 18, height: 16, rx: 2 }], ["circle", { cx: 9, cy: 10, r: 2 }], ["path", { d: "m21 16-5-5-9 9" }]]
   };
   function ic(name) {
@@ -685,6 +690,7 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
     var items = isOwner() ? [["overview", "nOverview", "home"], ["campaigns", "nCampaigns", "megaphone"], ["discover", "nDiscover", "search"], ["profile", "nProfile", "user"]]
       : [["overview", "nOverview", "home"], ["campaigns", "nOpps", "briefcase"], ["applications", "nApps", "list"], ["posts", "nPosts", "image"], ["profile", "nProfile", "user"]];
     tabbar.classList.toggle("n5", items.length > 4);
+    ["ntf", "ntf2"].forEach(function (id) { if (tab === "notifications") $(id).setAttribute("aria-current", "page"); else $(id).removeAttribute("aria-current"); });
     ["set", "set2"].forEach(function (id) { if (tab === "settings") $(id).setAttribute("aria-current", "page"); else $(id).removeAttribute("aria-current"); });
     [nav, tabbar].forEach(function (box) {
       box.textContent = "";
@@ -2372,7 +2378,62 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
     });
   }
 
-  var VIEWS = { overview: overview, campaigns: campaigns, "new": newCampaign, campaign: campaign, discover: discover, applications: applications, profile: profile, settings: settings, posts: posts, post: post, creator: creator };
+  // Bildirimler: app/notifications 404 verirse rol bazlı örnek liste. Okundu bilgisi bu tarayıcıda (bc-notif-read-<id>); sunucu "read" verirse o da sayılır.
+  // Menüdeki sayı yalnız bu ekran açıldıktan sonra görünür (ek istek yok).
+  var NF = { unread: 0 };
+  function nfKey() { return "bc-notif-read-" + U.id; }
+  function nfRead() { try { var o = JSON.parse(localStorage.getItem(nfKey()) || "{}"); return o && typeof o === "object" ? o : {}; } catch (e) { return {}; } }
+  function nfSave(o) { try { localStorage.setItem(nfKey(), JSON.stringify(o)); } catch (e) {} }
+  function nfPaint() {
+    [$("ntf"), $("ntf2")].forEach(function (b) {
+      label(b, "bell", t("nNotif"));
+      if (NF.unread) add(b, [el("span", { class: "cnt", text: NF.unread > 99 ? "99+" : String(NF.unread) })]);
+    });
+  }
+  var NF_KIND = { apply: ["inbox", "info"], content: ["eye", "warn"], view: ["eye", "info"], invite: ["send", "accent"], accepted: ["check", "ok"], metrics: ["image", "info"] };
+  function nfSample() {
+    var now = Date.now(), at = function (hr) { return new Date(now - hr * 36e5).toISOString().slice(0, 19).replace("T", " "); };
+    return (isOwner() ? [["s1", "apply", "nfSApply", "#campaigns", 2], ["s2", "content", "nfSContent", "#campaigns", 20], ["s3", "view", "nfSView", "#campaigns", 50]]
+      : [["s1", "invite", "nfSInvite", "#applications", 3], ["s2", "accepted", "nfSAccepted", "#applications", 26], ["s3", "metrics", "nfSMetrics", "#posts", 72]])
+      .map(function (x) { return { id: x[0], kind: x[1], text: t(x[2]), link: x[3], at: at(x[4]) }; });
+  }
+  function ago(s) {
+    var d = new Date(String(s || "").replace(" ", "T") + "Z"), sec = (d - Date.now()) / 1000;
+    if (isNaN(d)) return "";
+    if (sec < -7 * 864e2) return when(s);
+    var u = [["day", 864e2], ["hour", 3600], ["minute", 60]].filter(function (x) { return Math.abs(sec) >= x[1]; })[0] || ["minute", 60];
+    try { return new Intl.RelativeTimeFormat(locale(), { numeric: "auto" }).format(Math.round(sec / u[1]), u[0]); } catch (e) { return when(s); }
+  }
+  function notifications() {
+    return BC.call("GET", "app/notifications").then(function (d) { return { list: (d && d.notifications) || [] }; }, function (e) {
+      if (crMissing(e)) return { list: nfSample(), sample: true };
+      throw e;
+    }).then(function (r) {
+      var rd = nfRead(), box = el("div");
+      var list = r.list.filter(function (x) { return x && x.id != null && x.text; });
+      function un(x) { return !x.read && !rd[x.id]; }
+      function mark(x) { rd[x.id] = 1; nfSave(rd); }
+      function draw() {
+        var n = list.filter(un).length, row;
+        NF.unread = n; nfPaint();
+        box.textContent = "";
+        add(box, [el("div", { class: "nfhead" }, [el("p", { class: "meta", "aria-live": "polite", text: n ? t("nfUnread").replace("{n}", num(n)) : t("nfAllRead") }),
+          n ? el("button", { type: "button", class: "ghost", text: t("nfMarkAll"), onclick: function () { list.forEach(mark); draw(); var h = view.querySelector("h1"); if (h) { h.tabIndex = -1; h.focus(); } } }) : null]),
+          list.length ? el("ul", { class: "inbox nf" }, list.map(function (x) {
+            var k = NF_KIND[x.kind] || ["bell", "accent"], href = /^#[a-z0-9-]{1,40}$/.test(x.link || "") ? x.link : null;
+            var kids = [el("span", { class: "ic " + k[1] }, ic(k[0])), el("span", { class: "tx" }, [el("b", { text: String(x.text) }), el("span", { text: ago(x.at) })]),
+              un(x) ? el("span", { class: "dot", role: "img", "aria-label": t("nfNew") }) : null];
+            row = href ? el("a", { class: "nfa", href: href, onclick: function () { mark(x); } }, kids) : el("div", { class: "nfa" }, kids);
+            return el("li", { class: un(x) ? "un" : null }, row);
+          })) : empty(t("nfNone"))]);
+      }
+      draw();
+      return [el("h1", { text: t("nNotif") }), el("p", { class: "lead", text: t("nfLead") }),
+        r.sample ? el("p", { class: "meta" }, [el("span", { class: "badge b-sample", text: t("crSampleBadge") }), " ", t("nfSampleNote")]) : null, box];
+    });
+  }
+
+  var VIEWS = { overview: overview, campaigns: campaigns, "new": newCampaign, campaign: campaign, discover: discover, applications: applications, profile: profile, settings: settings, notifications: notifications, posts: posts, post: post, creator: creator };
 
   // Üst çubuk ve alt bilgi metinleri, dil düğmesi
   function initials(s) {
@@ -2390,6 +2451,7 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
     document.documentElement.lang = L;
     [outB, outB2].forEach(function (b) { label(b, "logout", t("logout")); });
     [$("help2"), $("help3")].forEach(function (b) { label(b, "help", t("helpS")); });
+    nfPaint();
     [$("set"), $("set2")].forEach(function (b) { label(b, "gear", t("nSettings")); });
     $("copy").textContent = t("copy");
     $("help").textContent = t("help");
