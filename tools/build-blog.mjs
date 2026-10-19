@@ -6,6 +6,7 @@
 import { readFile, writeFile, readdir, mkdir, copyFile, access } from "node:fs/promises";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+import { execFileSync } from "node:child_process";
 import { parseHTML } from "linkedom";
 import CONFIG from "./blog.config.mjs";
 import { fixMojibake, fixPlaceholders, unscaffold, markdown, metaDescription, esc, faqItems } from "./lib/content.mjs";
@@ -154,6 +155,7 @@ const AUTHOR = { "@type": "Person", "@id": "https://www.yalcinberkay.com.tr/#per
 const swapImg = (tag, p, lazy) => tag.replace(/\s(srcset|sizes)="[^"]*"/g, "").replace(/\ssrc="[^"]*"/, ` src="${esc(p.fm.image)}"${lazy ? ' loading="lazy"' : ""}`)
   .replace(/\salt(="[^"]*")?(?=[\s>])/, "").replace(/^<img\b/, `<img alt="${esc(p.fm.imageAlt || p.fm.title)}"`);
 const readTime = body => `${Math.max(1, Math.round(body.split(/\s+/).length / 220))}${cfg.lang === "en" ? " min read" : " dk okuma"}`;
+const wordCount = body => markdown(body).replace(/<[^>]+>/g, " ").split(/\s+/).filter(w => /[\p{L}\p{N}]/u.test(w)).length;
 const L = () => cfg.lang === "en" ? { related: "Related Posts", home: "Home" } : { related: "İlgili Yazılar", home: "Ana Sayfa" };
 
 // Aynı kategoriden başlayıp tarihe en yakın yazılar
@@ -222,6 +224,7 @@ function renderPost(tpl, post, next, related) {
   const ld = [{
     "@context": "https://schema.org", "@type": "BlogPosting", "@id": url + "#article", url, headline: fm.title.slice(0, 110), description: fm.description,
     image: [img], datePublished: fm.date, dateModified: fm.updated || fm.date, mainEntityOfPage: url, inLanguage: cfg.lang,
+    ...(fm.category && { articleSection: fm.category }), wordCount: wordCount(post.body),
     ...(BLOG_ID && { isPartOf: { "@id": BLOG_ID } }),
     author: AUTHOR,
     publisher: { "@type": "Organization", ...(ORG_ID && { "@id": ORG_ID }), name: cfg.brand, url: cfg.origin + "/",
@@ -232,6 +235,8 @@ function renderPost(tpl, post, next, related) {
   }];
   const faq = faqItems(post.body);
   if (faq.length) ld.push({ "@context": "https://schema.org", "@type": "FAQPage", mainEntity: faq.map(([q, a]) => ({ "@type": "Question", name: q, acceptedAnswer: { "@type": "Answer", text: a } })) });
+  // Şablon değişkenleri: {{updated}} = son güncelleme tarihi (görünen biçimde), {{updated_iso}} = YYYY-MM-DD
+  h = h.split("{{updated_iso}}").join(fm.updated || fm.date).split("{{updated}}").join(fmtDate(fm.updated || fm.date));
   h = h.replace(/<style data-sk-post>[\s\S]*?<\/style>/, "").replace(/<script type="application\/ld\+json" data-sk-post>[\s\S]*?<\/script>/, "");
   return h.replace("</head>", `${POST_CSS}<script type="application/ld+json" data-sk-post>${JSON.stringify(ld).replace(/</g, "\\u003c")}</script></head>`);
 }
@@ -285,6 +290,23 @@ function renderList(tpl, posts) {
   return h.replace("</head>", css + "</head>").replace("</body>", js.replace("<script>", "<script data-sk-list>") + "</body>");
 }
 
+// RSS 2.0: <out>/blog/rss.xml, en yeni 50 yazı; sayfalara <link rel="alternate" type="application/rss+xml">
+const xmlEsc = s => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+const rfc822 = d => new Date(d + "T00:00:00Z").toUTCString();
+function rss(posts) {
+  const home = `${cfg.origin}${BASE}/blog`, items = posts.slice(0, 50).map(p => {
+    const u = `${home}/${encodeURIComponent(p.slug)}`;
+    return `<item><title>${xmlEsc(p.fm.title)}</title><link>${u}</link><guid isPermaLink="true">${u}</guid><pubDate>${rfc822(p.fm.date)}</pubDate>` +
+      (p.fm.category ? `<category>${xmlEsc(p.fm.category)}</category>` : "") + `<description>${xmlEsc(p.fm.description || "")}</description></item>`;
+  });
+  const last = posts.map(p => p.fm.updated || p.fm.date).sort().at(-1);
+  return `<?xml version="1.0" encoding="UTF-8"?>\n<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>${xmlEsc(cfg.brand)} Blog</title><link>${home}</link>` +
+    `<atom:link href="${home}/rss.xml" rel="self" type="application/rss+xml"/><description>${xmlEsc(cfg.brand)} Blog</description><language>${cfg.lang}</language>` +
+    (last ? `<lastBuildDate>${rfc822(last)}</lastBuildDate>` : "") + `\n${items.join("\n")}\n</channel></rss>\n`;
+}
+const rssLink = h => h.replace(/<link rel="alternate" type="application\/rss\+xml"[^>]*>/g, "")
+  .replace("</head>", `<link rel="alternate" type="application/rss+xml" title="${esc(cfg.brand)} Blog" href="${cfg.origin}${BASE}/blog/rss.xml"></head>`);
+
 // --- Dil varyantları (cfg.variants, ör. yalcinberkay /tr/blog): hreflang + og:locale + dil anahtarı.
 // Varyantı olmayan sitelerin çıktısı değişmez.
 // Anahtarın görünümü sitenin ana sayfalarıyla aynı olsun diye cfg.langCss ile değiştirilebilir.
@@ -305,12 +327,25 @@ function setLang(h, lang, links, alts) {
   return h.replace("</head>", (BASE_CFG.langCss || LANG_CSS) + "</head>").replace(/<\/body>/i, box + "</body>");
 }
 
+// dateModified: md dosyasının son commit tarihi (git log; CI fetch-depth: 0). Front matter "updated" önceliklidir,
+// git yoksa/dosya commit'lenmemişse yayın tarihi. Yayın tarihinden eski olamaz.
+function gitDates(dir) {
+  const m = new Map();
+  try {
+    const out = execFileSync("git", ["-C", ROOT, "log", "--format=%x00%cs", "--name-only", "--", dir], { encoding: "utf8", maxBuffer: 1 << 26 });
+    let d; for (const l of out.split("\n")) { if (l.startsWith("\0")) d = l.slice(1); else if (l && !m.has(l)) m.set(l, d); }
+  } catch {}
+  return m;
+}
+
 async function loadPosts(dir, prefix) {
-  const posts = [];
+  const posts = [], git = gitDates(dir), rel = dir.slice(ROOT.length + 1);
   for (const f of (await readdir(dir)).filter(f => f.endsWith(".md"))) {
     const { fm, body } = parseMd(await readFile(join(dir, f), "utf8"));
     if (fm.draft) continue;
     if (!fm.image && cfg.defaultImage) fm.image = cfg.defaultImage;
+    const g = git.get(`${rel}/${f}`);
+    fm.updated = [fm.updated || g, fm.date].filter(Boolean).sort().at(-1);
     // Yazar/worker iç linkleri /blog/slug yazar; varyantta kendi dilindeki yazılara gider
     posts.push({ slug: f.replace(/\.md$/, ""), fm, body: prefix ? body.replace(/\]\(\/blog\//g, `](${prefix}/blog/`) : body });
   }
@@ -352,11 +387,12 @@ async function buildSite() {
     if (c.blogId && !BLOG_ID) console.warn(`UYARI: blogId ${c.blogId} ${prefix || "/"} blog şablonunda yok, isPartOf yazılmadı`);
     const lang = (h, p) => sets.length < 2 ? h : setLang(h, c.lang, Object.fromEntries(index.map(([l, i]) => [l, alts.get(p)?.[l] || (l === c.lang && p ? `${prefix}/blog/${p.slug}` : i)])), p ? alts.get(p) : Object.fromEntries(index));
     await mkdir(join(out, "blog"), { recursive: true });
-    for (const [i, p] of posts.entries()) await writeFile(join(out, "blog", p.slug + ".html"), lang(renderPost(tplPost, p, posts[i + 1] || posts[0], relatedFor(p, posts)), p));
+    for (const [i, p] of posts.entries()) await writeFile(join(out, "blog", p.slug + ".html"), lang(rssLink(renderPost(tplPost, p, posts[i + 1] || posts[0], relatedFor(p, posts))), p));
+    await writeFile(join(out, "blog", "rss.xml"), rss(posts));
     if (tplList) {
       let h = renderList(tplList, posts);
       if (prefix) h = setMeta(h, "og:url", `${c.origin}${prefix}/blog`).replace(/(<link rel="canonical" href=")[^"]*/, `$1${c.origin}${prefix}/blog`);
-      await writeFile(join(out, "blog.html"), lang(h, null));
+      await writeFile(join(out, "blog.html"), lang(rssLink(h), null));
     }
     // Worker'ın konu seçimi ve iç linkleme için özet
     await writeFile(join(out, "_blog-index.json"), JSON.stringify(posts.map(p => ({ slug: p.slug, title: p.fm.title, category: p.fm.category, date: p.fm.date, image: p.fm.image }))));

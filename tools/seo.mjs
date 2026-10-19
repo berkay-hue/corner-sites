@@ -155,6 +155,7 @@ const RULES = {
       "/solutions/influencers": ["For Influencers: Get Discovered by Brands | Brand Corner", "Brand Corner helps influencers get discovered by brands, receive quality offers, and manage collaborations, contracts and payments in one place.", "For Influencers"],
       "/solutions/agencies": ["Influencer Agency Management Tools | Brand Corner", "Brand Corner gives agencies tools to manage their talent roster, orchestrate client campaigns, and automate reporting with a dedicated client portal.", "For Agencies"],
       "/about": ["About Brand Corner", "Brand Corner is an influencer marketing platform connecting brands, influencers, and agencies worldwide. Built in Istanbul as part of Corner Group.", "About"],
+      "/contact": ["Contact Brand Corner", "Contact the Brand Corner team about influencer campaigns, plans, or partnerships. Send us a message and we will get back to you.", "Contact"],
       "/privacy": ["Privacy Policy | Brand Corner", "How the Brand Corner website handles personal data: the newsletter form, hosting, cookies and local storage, and your rights under the GDPR and KVKK.", "Privacy Policy"],
       "/kvkk": ["KVKK Aydınlatma Metni | Brand Corner", "Brand Corner hesabı için kişisel verilerin hangi amaçla işlendiği, kimlere aktarıldığı, ne kadar saklandığı ve KVKK 11. madde kapsamındaki haklarınız.", "KVKK Aydınlatma Metni"],
       "/terms": ["Terms of Service | Brand Corner", "The terms that apply when you use the Brand Corner website, including acceptable use, intellectual property, the newsletter form and liability.", "Terms of Service"],
@@ -450,7 +451,7 @@ const RULES = {
       const metas = kind => [new RegExp(`(<meta name="${kind}" content=")([^"]*)(")`), new RegExp(`(<meta property="og:${kind}" content=")([^"]*)(")`), new RegExp(`(<meta name="twitter:${kind}" content=")([^"]*)(")`)];
       if (page === "/404") return html.replace(/<link rel="canonical"[^>]*>/g, "").replace(/<meta name="robots" content="[^"]*">/, '<meta name="robots" content="noindex">');
       // EN sayfaları ve blog (build-blog.mjs) elle/araçla bakılır: başlık, robots ve LD'lerine dokunulmaz
-      if (/^\/en\/(?:index|iletisim)$/.test(page) || /^\/(?:en\/)?blog(?:\/|$)/.test(page)) return html;
+      if (/^\/en\/(?:index|contact)$/.test(page) || /^\/(?:en\/)?blog(?:\/|$)/.test(page)) return html;
       const meta = R.pages[page];
       // Diğer sayfalar SAAS Corner'ın iç araçları (login, dashboard, ...): arama sonuçlarına girmez
       if (!meta) return html.replace(/<meta name="robots" content="[^"]*">/, '<meta name="robots" content="noindex, nofollow">');

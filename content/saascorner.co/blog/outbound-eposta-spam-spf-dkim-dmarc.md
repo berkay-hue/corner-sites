@@ -191,7 +191,7 @@ Geçersiz adreslere gönderim yapmak, yüksek bounce oranına yol açar ve alıc
 
 Alıcı sunucular, e-postalarınızın yanıtlanıp yanıtlanmadığına, silinip silinmediğine ve spam olarak işaretlenip işaretlenmediğine bakar. Yanıt oranı yüksek kampanyalar zamanla itibarı güçlendirir. Bu nedenle e-postanın sonunda, ilgilenmeyen alıcının kolayca "ilgilenmiyorum" diyebileceği bir çıkış yolu sunmak, onun spam butonuna basmasından çok daha iyidir. Spam şikâyet oranınızı Google Postmaster Tools'tan takip edin; bu oranın çok düşük seviyelerde kalması gerekir.
 
-Outbound'un bütün resmini, yani hedefleme, mesajlaşma ve görüşme alma sürecini [B2B şirketler için outbound satış ve nitelikli görüşme alma](/blog/outbound-satış-nedir-b2b-şirketler-i̇çin-nitelikli-görüşme-almanın-yolu) yazımızda detaylı anlattık. Teslim edilebilirlik, o resmin görünmeyen ama her şeyi taşıyan zeminidir.
+Outbound'un bütün resmini, yani hedefleme, mesajlaşma ve görüşme alma sürecini [B2B şirketler için outbound satış ve nitelikli görüşme alma](/blog/outbound-satis-nedir-b2b-sirketler-icin-nitelikli-gorusme-almanin-yolu) yazımızda detaylı anlattık. Teslim edilebilirlik, o resmin görünmeyen ama her şeyi taşıyan zeminidir.
 
 ## Sık Yapılan Hatalar ve Hızlı Kontrol Listesi
 
@@ -215,7 +215,7 @@ Her kampanya öncesinde şu soruları hızlıca kontrol edin:
 6. Posta kutusu başına günlük hacim makul mü?
 7. Özel izleme alan adı kullanılıyor mu?
 
-Bu kontrolleri manuel yapmak yerine operasyonun bir parçası haline getirmek uzun vadede çok daha sürdürülebilirdir. Liste temizliğinden gönderim takibine kadar tekrarlayan adımları nasıl otomatiğe bağlayabileceğinizi [lead generation operasyonunu otomatiğe bağlamak](/blog/b2b’de-uykusuz-gecelerin-çıktısı-lead-generation-operasyonunu-otomatiğe-bağlamak) yazımızda ele aldık.
+Bu kontrolleri manuel yapmak yerine operasyonun bir parçası haline getirmek uzun vadede çok daha sürdürülebilirdir. Liste temizliğinden gönderim takibine kadar tekrarlayan adımları nasıl otomatiğe bağlayabileceğinizi [lead generation operasyonunu otomatiğe bağlamak](/blog/b2bde-uykusuz-gecelerin-ciktisi-lead-generation-operasyonunu-otomatige-baglamak) yazımızda ele aldık.
 
 ## Sorumluluk Kimde? Satış ve Teknik Ekip Arasındaki Boşluk
 

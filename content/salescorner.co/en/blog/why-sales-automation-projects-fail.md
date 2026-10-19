@@ -193,7 +193,7 @@ You can see what Sales Corner does in sales automation and outbound on our [serv
 
 Most sales automation projects fail not because of technology, but because of vague goals, undefined processes, dirty data, unowned systems, and a team that doesn't buy in. Automation is a powerful multiplier, but it only works when it's built on a solid foundation. Starting with a small, measurable problem, preparing the process and data in advance, involving the team in the design, and assigning an owner to every workflow are what separate successful projects from failed ones.
 
-If you have a half-finished automation project of your own, or you want to start a new one on the right foundation, we can assess your current process together. [Schedule a call with the Sales Corner team](/en/iletisim) to build an automation roadmap tailored to your sales processes.
+If you have a half-finished automation project of your own, or you want to start a new one on the right foundation, we can assess your current process together. [Schedule a call with the Sales Corner team](/en/contact) to build an automation roadmap tailored to your sales processes.
 
 ## FAQ
 

@@ -75,6 +75,8 @@ h1,h2,h3{font-family:"Poppins","Inter",system-ui,sans-serif;font-weight:600;lett
 .inbox{list-style:none;margin:0;padding:0}.inbox li{display:flex;align-items:center;gap:12px;padding:12px 20px;border-top:1px solid var(--line)}.inbox li:first-child{border-top:0}
 .ic{width:36px;height:36px;flex:none;border-radius:10px;display:grid;place-items:center}.ic.warn{background:var(--warn-soft);color:var(--warn)}.ic.info{background:var(--info-soft);color:var(--info)}.ic.danger{background:var(--danger-soft);color:var(--danger)}.ic.accent{background:var(--accent-soft);color:var(--accent-text)}.ic.ok{background:var(--ok-soft);color:var(--ok)}
 .tx{flex:1;min-width:0;display:flex;flex-direction:column}.tx b{font-weight:600;font-size:14.5px;overflow-wrap:anywhere}.tx span{color:var(--muted);font-size:13px;overflow-wrap:anywhere}
+.nfhead{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:0 0 12px}.nfhead .meta{margin:0}
+.nf{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-card);overflow:hidden}.inbox.nf li{padding:0;flex-wrap:nowrap}.nf .nfa{display:flex;align-items:center;gap:12px;min-height:44px;padding:12px 20px;flex:1;min-width:0;color:inherit;text-decoration:none}.nf a.nfa:hover{background:var(--surface-2)}.nf li.un .tx b{font-weight:700}.nf .dot{width:10px;height:10px;flex:none;border-radius:50%;background:var(--accent)}
 .ierr{display:flex;align-items:center;gap:12px;flex-wrap:wrap;color:var(--danger);font-size:14px}.ierr span{flex:1 1 200px}
 .cb.none{color:var(--muted);text-align:center;padding:28px 20px}
 .meter{height:8px;border-radius:999px;background:var(--surface-2);overflow:hidden;margin:6px 0 4px}.meter i{display:block;height:100%;background:var(--grad);border-radius:999px}
@@ -122,11 +124,11 @@ footer.bot{border-top:1px solid var(--line);color:var(--muted);font-size:13.5px;
 .f input:focus-visible,.f select:focus-visible,.f textarea:focus-visible{outline:2px solid var(--accent);outline-offset:1px;border-color:var(--accent)}
 .f fieldset{border:0;padding:0;margin:0 0 16px;min-width:0}
 .hint{color:var(--muted);font-size:13px;font-weight:400;margin:-10px 0 16px}
-.checks{display:flex;flex-wrap:wrap;gap:8px 18px}.f .checks label,.f label.check{display:flex;align-items:center;gap:8px;font-weight:400;font-size:15px;margin:0}
+.checks{display:flex;flex-wrap:wrap;gap:8px 18px}.f .checks label,.f label.check{display:flex;align-items:center;min-height:44px;gap:8px;font-weight:400;font-size:15px;margin:0}
 .f input[type=checkbox]{width:16px;height:16px;margin:0;accent-color:var(--accent)}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
 .prow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0 12px}
-.filter{display:flex;flex-wrap:wrap;align-items:flex-end;gap:12px;margin:0 0 20px}.filter>div{flex:1 1 180px}.f.filter input:not([type=checkbox]),.f.filter select{margin:0}.f select{min-height:44px}
+.filter{display:flex;flex-wrap:wrap;align-items:flex-end;gap:12px;margin:0 0 20px}.filter>div{flex:1 1 180px}.f.filter input:not([type=checkbox]),.f.filter select{margin:0}.f select{min-height:44px}.filter>.freset{flex:0 0 auto}.freset .ghost[hidden]{display:none}
 .tabs{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}.tabs button{min-height:44px;padding:0 14px;border-radius:var(--r-ctl);border:1px solid var(--line-strong);background:var(--surface);color:var(--text);font:inherit;cursor:pointer}.tabs button[aria-pressed=true]{background:var(--accent-soft);border-color:var(--accent);color:var(--accent-text);font-weight:600}
 .hl-box{border-color:var(--accent);box-shadow:inset 3px 0 0 var(--accent)}
 .apps-sec{margin:0 0 24px}.apps-sec h2{display:flex;align-items:center;gap:8px}.apps-sec h2 .n{font-size:14px;font-weight:600;color:var(--muted)}
@@ -134,8 +136,9 @@ footer.bot{border-top:1px solid var(--line);color:var(--muted);font-size:13.5px;
 .soc:not(.card){margin:20px 0 0}.soc:not(.card) h2{margin:0 0 4px}.srow{display:flex;flex-wrap:wrap;align-items:center;gap:10px 12px;padding:12px 0;border-top:1px solid var(--line)}
 .srow .ic{width:34px;height:34px;border-radius:9px}.ic.slate{background:var(--slate-soft);color:var(--slate)}.srow .tx{flex:1 1 160px;min-width:0;overflow-wrap:anywhere}.srow .tx b{display:block;font-weight:600}.srow .tx span{color:var(--muted);font-size:14px}.srow .sa{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:8px;margin-left:auto}
 .badge.b-ok{background:var(--ok-soft);color:var(--ok)}.badge.b-danger{background:var(--danger-soft);color:var(--danger)}.badge.b-slate{background:var(--slate-soft);color:var(--slate)}
-.srow .tx .warn{color:var(--danger)}.lk44{display:inline-flex;align-items:center;min-height:44px}.ch .lk44{text-decoration:none}.srow .ghost,.srow .btn,.soc .btn{min-height:44px}.srow .mets{flex:1 1 100%}
+.srow .tx .warn{color:var(--danger)}.lk44{display:inline-flex;align-items:center;justify-content:center;min-height:44px;min-width:44px}.ch .lk44{text-decoration:none}.srow .ghost,.srow .btn,.soc .btn{min-height:44px}.srow .mets{flex:1 1 100%}
 .mets.m4{grid-template-columns:repeat(4,minmax(0,1fr))}.sample{margin:14px 0 4px;padding:14px;border:1px dashed var(--line-strong);border-radius:var(--r-card)}.sample h3{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:15px;margin:12px 0 8px}.sample h3:first-of-type{margin-top:8px}
+.perf .ch{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:8px}h3.ptop{font-size:14px;margin:14px 0 4px}ol.ptop{list-style:none;margin:0 0 12px;padding:0}ol.ptop a{display:flex;justify-content:space-between;gap:12px;color:inherit;text-decoration:none;border-bottom:1px solid var(--line)}ol.ptop .pcap{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin:0}
 .badge.b-sample{background:var(--surface-2);color:var(--muted);border:1px dashed var(--line-strong)}.crep{margin:0 0 22px;display:grid;gap:12px}.crep .lbl{margin:0;display:flex;flex-wrap:wrap;align-items:center;gap:8px}.crep .hint{margin:0}.amets{margin:10px 0 0}.amh{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:13px;color:var(--muted);margin:0 0 8px}.amets .stat{padding:10px 12px}.amets .stat .v{font-size:18px}.amets .stat .v.na{font-size:13px;margin-top:6px}
 .sub{margin:14px 0 0;padding:16px 0 0;border-top:1px solid var(--line)}
 .f input[readonly]{background:var(--surface-2);color:var(--muted)}.btn.bad{color:var(--danger);border-color:var(--danger)}.lbl{font-weight:600;font-size:14px;margin:0 0 8px}.seg{margin:0 0 18px}.seg:last-child{margin-bottom:0}h3.sub{font-size:15px;margin:18px 0 6px}.card .f .btn{margin-top:4px}.tbar{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:10px 16px;border-bottom:1px solid var(--line);margin:0 0 16px}.tabs.ul{gap:0;margin:0}.tabs.ul button{border:0;border-bottom:2px solid transparent;border-radius:0;background:none;margin-bottom:-1px;color:var(--muted)}.tabs.ul button[aria-pressed=true]{background:none;border-bottom-color:var(--accent);color:var(--text)}.tabs.ul .n{color:var(--faint);font-weight:500}.tq{flex:0 1 260px;margin:0 0 8px}.tq input{margin:0;min-height:44px}.box.rows{padding:0;display:block}.row{position:relative;display:flex;align-items:center;gap:8px 20px;padding:14px 18px;min-height:44px;border-top:1px solid var(--line)}.row:first-child{border-top:0}.row:hover{background:var(--surface-2)}.rm{flex:1 1 auto;min-width:0}.row h3{font-size:15.5px;margin:0;overflow-wrap:anywhere}.row h3 a{text-decoration:none;color:inherit}.row h3 a::after{content:"";position:absolute;inset:0}.row h3 a:focus-visible{outline:none}.row:focus-within{outline:2px solid var(--accent);outline-offset:-2px}.row .badge{vertical-align:2px;margin-left:4px}.rc{flex:0 0 auto;justify-content:flex-end;text-align:right}@media(max-width:640px){.row{flex-wrap:wrap}.rc{justify-content:flex-start;text-align:left}.tq{flex:1 1 100%}}.dhd{align-items:center;margin:0 0 14px}.dhd h1{margin:0}.dhd h1 .badge{vertical-align:5px;margin-left:4px}.dhd .row-b{margin:0}.ghost.bad{color:var(--danger);border-color:var(--danger)}.dinfo{margin:0 0 22px}.dinfo .prose{margin:0 0 4px}.ig{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px 20px;margin:16px 0 0;padding:16px 0 0;border-top:1px solid var(--line)}.dinfo>.ig:first-child{margin-top:0;padding-top:0;border-top:0}.ig dt{font-size:12.5px;color:var(--muted);margin:0 0 3px}.ig dd{margin:0;font-weight:600;font-size:14.5px;overflow-wrap:anywhere}@media(max-width:640px){.ig{grid-template-columns:1fr 1fr}}.ld{display:inline-flex;align-items:center;gap:8px}.ld::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--faint)}.ld[data-l=colNew]::before{background:#3b82f6}.ld[data-l=colInvited]::before{background:#a855f7}.ld[data-l=colWork]::before{background:#f59e0b}.ld[data-l=colReview]::before{background:#ec4899}.ld[data-l=colDone]::before{background:#10b981}.dinfo .lbl{font-size:14px;margin:0 0 6px}.lane .row-b{gap:6px}.lane .row-b .btn.sm,.lane .row-b .ghost{padding:0 10px;font-size:13px}
@@ -203,7 +206,7 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
 .tabbar .cnt{position:absolute;top:4px;left:calc(50% + 6px);margin:0;min-width:18px;height:18px;padding:0 5px;font-size:11px;line-height:18px}
 .main-col{padding-bottom:calc(64px + env(safe-area-inset-bottom))}
 .stats,.mets,.mets.m4{grid-template-columns:repeat(2,minmax(0,1fr))}.stats .stat .v{font-size:22px}.mets .stat:last-child{grid-column:1/-1}.mets.m4 .stat:last-child{grid-column:auto}
-.btn,.btn.sm,.ghost{min-height:44px}.inbox li{padding:12px 16px;flex-wrap:wrap}.inbox .btn{margin-left:48px}
+.btn,.btn.sm,.ghost{min-height:44px}.inbox li{padding:12px 16px;flex-wrap:wrap}.inbox .btn{margin-left:48px}.nf .nfa{padding:12px 16px}
 .ph h1,.wrapw>h1{font-size:22px}.box{padding:16px}.ch,.cb{padding-left:16px;padding-right:16px}.oc,.irow,.legend{padding-left:16px;padding-right:16px}.grid2{grid-template-columns:1fr}.prow{grid-template-columns:1fr 1fr}.prow>div:last-child{grid-column:1/-1}}
 </style>
 </head>
@@ -213,7 +216,7 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
 <a class="logo" href="/">Brand<span>Corner</span></a>
 <div class="acct"><span class="av" id="av" aria-hidden="true"></span><div><div class="n" id="who"></div><div class="r" id="role"></div></div></div>
 <nav class="nav" id="nav" aria-label="Panel"></nav>
-<div class="foot"><a class="nb" id="set" href="#settings"></a><a class="nb" id="help2" href="mailto:info@saascorner.co?subject=Brand%20Corner%20panel"></a><button type="button" class="nb" id="out"></button></div>
+<div class="foot"><a class="nb" id="ntf" href="#notifications"></a><a class="nb" id="set" href="#settings"></a><a class="nb" id="help2" href="mailto:info@saascorner.co?subject=Brand%20Corner%20panel"></a><button type="button" class="nb" id="out"></button></div>
 </aside>
 <div class="main-col">
 <header class="mtop"><a class="logo" href="/">Brand<span>Corner</span></a><button type="button" class="me" id="me" aria-haspopup="dialog" aria-controls="sheet"><span class="av" id="av2" aria-hidden="true"></span></button></header>
@@ -227,7 +230,7 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
 <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetWho" hidden>
 <div class="grip" aria-hidden="true"></div>
 <div class="acct"><span class="av" id="av3" aria-hidden="true"></span><div><div class="n" id="sheetWho"></div><div class="r" id="sheetRole"></div></div></div>
-<a class="nb" id="set2" href="#settings"></a><a class="nb" id="help3" href="mailto:info@saascorner.co?subject=Brand%20Corner%20panel"></a><button type="button" class="nb" id="out2"></button>
+<a class="nb" id="ntf2" href="#notifications"></a><a class="nb" id="set2" href="#settings"></a><a class="nb" id="help3" href="mailto:info@saascorner.co?subject=Brand%20Corner%20panel"></a><button type="button" class="nb" id="out2"></button>
 </div>
 
 <script src="/bc-app.js"></script>
@@ -277,6 +280,8 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
       mLikes: "Beğeni", mComments: "Yorum", mViews: "İzlenme", mEr: "Etkileşim oranı", pErNote: "Etkileşim oranı = (beğeni + yorum) ÷ erişim; erişim yoksa izlenme kullanılır.",
       pSampleNote: "Henüz gönderi eklemedin. Aşağıdakiler gerçek değil, ekranın nasıl görüneceğini gösteren örnek verilerdir.",
       pLocal: "Elle girdiğin gönderiler şimdilik yalnız bu cihazda, bu tarayıcıda saklanır.",
+      pSrv: "Gönderilerin hesabında saklanır; her cihazdan görebilirsin.", pSrvNoDel: "Hesaptaki gönderiyi silme henüz yok.",
+      pMove: "Sunucuya aktar", pMoveHint: "{n} gönderi yalnız bu cihazda duruyor. Bir kez hesabına aktarabilirsin.", pMoved: "{n} gönderi hesabına aktarıldı.",
       pAdd: "Gönderi ekle", pUrl: "Gönderi bağlantısı", pUrlHint: "Instagram, TikTok, YouTube ya da LinkedIn gönderisinin tam adresi (https://…).",
       pDate: "Paylaşım tarihi", pCaption: "Açıklama", pThumb: "Küçük resim adresi (isteğe bağlı)", pThumbHint: "Yalnız https:// ile başlayan bir resim adresi.",
       pSave: "Kaydet", pSaved: "Gönderi eklendi.", pBadUrl: "Geçerli bir https:// gönderi bağlantısı gir.", pBadDate: "Geçerli bir tarih seç.", pBadNum: "Sayılar 0 ya da daha büyük tam sayı olmalı.", pDup: "Bu bağlantı zaten ekli.",
@@ -303,6 +308,7 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
       waiting: "Sizi bekleyenler", waitEmpty: "Şu an sizi bekleyen bir iş yok.", inNew: "{n} yeni başvuru", inSub: "{n} içerik onay bekliyor", inDue: "Son tarih yaklaşıyor: {n}",
       inInvite: "{n} sizi davet etti", inRev: "Revizyon istendi", inAcc: "İçerik bağlantınızı gönderin", inProf: "%{n} tamamlandı", review: "İncele", openIt: "Aç",
       profCard: "Profil", profDone: "Tamamlanma", editProf: "Profili düzenle",
+      nNotif: "Bildirimler", nfLead: "Başvurular, davetler ve içerik onayları burada toplanır.", nfUnread: "{n} okunmamış", nfAllRead: "Hepsi okundu.", nfMarkAll: "Tümünü okundu say", nfNone: "Henüz bildirim yok.", nfNew: "Yeni", nfSampleNote: "Bildirim servisi açılınca gerçek bildirimlerin burada görünür.", nfSApply: "Yaz koleksiyonu kampanyana yeni bir başvuru geldi.", nfSContent: "Bir influencer onayın için içerik gönderdi.", nfSView: "Kampanya özetin 3 influencer tarafından görüntülendi.", nfSInvite: "Bir marka seni kampanyasına davet etti.", nfSAccepted: "Başvurun kabul edildi.", nfSMetrics: "Gönderi ölçümlerini güncelleme zamanı.",
       nSettings: "Ayarlar", setLead: "Hesabını ve panelin görünümünü yönet.", setAcct: "Hesap", setName: "Ad soyad", setEmail: "E-posta", setEmailHint: "E-postanı değiştirmek için info@saascorner.co adresine yaz.", setPw: "Şifre", setPwHint: "Yeni şifre belirleme bağlantısını e-postana göndeririz.", setPwBtn: "Sıfırlama bağlantısı gönder", setPwSent: "Bağlantı gönderildi. Gelen kutunu kontrol et.", setLook: "Görünüm", setLang: "Dil", setTheme: "Tema", thSys: "Sistem", thLight: "Açık", thDark: "Koyu", setOutLead: "Bu cihazda panelden çıkış yap.",
       ckCompany: "Şirket adı", ckIndustry: "Sektör", ckCity: "Şehir", ckWebsite: "Web sitesi", ckBio: "Hakkında (en az 40 karakter)", ckClients: "Müşteri sayısı",
       ckNiches: "İlgi alanları", ckPlatform: "Takipçi sayısıyla en az bir platform", ckListed: "Markalara görünür profil",
@@ -316,7 +322,7 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
       socDone: "{n} hesabın bağlandı.", socCutOk: "{n} bağlantısı kesildi.", socDenied: "Bağlantı izni verilmedi; istersen yeniden deneyebilirsin.",
       socTaken: "Bu hesap başka bir Brand Corner hesabına bağlı. Önce oradan bağlantıyı kes.", socTicket: "Bağlantı süresi doldu ya da geçersiz; yeniden \"Bağla\"ya bas.",
       socForbidden: "Bu hesap için bağlantı kullanılamıyor.", socProvider: "Platform şu an yanıt vermedi; biraz sonra yeniden dene.", socOwner: "Bu bağlantı başka bir hesaptan başlatıldı, yeniden Bağla'ya bas.",
-      perf: "Performans", mReach: "Erişim", mEng: "Etkileşim", mSpend: "Harcama", mEarn: "Kazanç", noData: "Veri yok", perfNote: "Bu ölçümler içerik bağlantıları ve ödemeler kaydedildikçe dolacak.",
+      perf: "Performans", mReach: "Erişim", mEng: "Etkileşim", mSpend: "Harcama", mEarn: "Kazanç", noData: "Veri yok", perfNote: "Bu ölçümler içerik bağlantıları ve ödemeler kaydedildikçe dolacak.", perfWin: "Son 30 gün", perfPosts: "Gönderi", perfTop: "En çok erişen gönderiler", perfAll: "Tüm gönderiler", perfNone: "Son 30 günde gönderi yok.", perfSampleNote: "Henüz gönderi eklemediniz; bu özet örnek veridir.",
       acctMenu: "Hesap menüsü", tabsLabel: "Panel sekmeleri",
       soon: "Yakında", soonBadge: "Yakında", soonLead: "Aşağıdaki özellikler henüz panelde yok; hazır olduklarında burada açılacak.",
       soonMsg: "Platform içi mesajlaşma", soonAnalytics: "Performans analitiği ve özel raporlar", soonBudget: "Bütçe yönetimi", soonVerified: "Doğrulanmış influencer'lar",
@@ -377,7 +383,7 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
       invitedBy: "{n} sizi davet etti",
       myAppsEmpty: "Henüz başvurunuz ya da davetiniz yok. Fırsatlar sayfasından açık kampanyalara başvurabilirsiniz.", goOpps: "Fırsatlara göz at",
       discLead: "Profil kartlarını inceleyip doğrudan davet edin.", discQ: "Ara", discQPh: "İsim veya şehir", allNiches: "Tüm ilgi alanları",
-      fMinFol: "Takipçi", anyMin: "Her takipçi sayısı", discCount: "{n} influencer", discCount1: "1 influencer", discCap: "En yeni 100 profil yüklendi; filtreler yalnızca bu profiller içinde çalışır.", discCap50: "En uygun 50 profil gösteriliyor.", discMatch: "İlgi alanlarınıza göre en uygun profiller.", discMatchC: "Seçili kampanyaya en uygun profiller.", discNoNiche: "Profilinize ilgi alanı eklerseniz size en uygun profilleri öne çıkarırız.", discNoNicheC: "Bu kampanyada ilgi alanı yok; tüm profiller gösteriliyor.", discNoMatch: "Ortak ilgi alanı olan profil yok; tüm profiller gösteriliyor.", discMatchErr: "Eşleşmeler yüklenemedi; tüm profiller gösteriliyor.", viewProf: "Profili gör", inviteFor: "{n} için davet ediyorsunuz.",
+      fMinFol: "Takipçi", anyMin: "Her takipçi sayısı", fCity: "Şehir", allCities: "Tüm şehirler", fSort: "Sıralama", sortRec: "Önerilen", sortFol: "Takipçi (çoktan aza)", sortName: "Ada göre (A–Z)", fReset: "Filtreleri temizle", discCount: "{n} influencer", discCount1: "1 influencer", discCap: "En yeni 100 profil yüklendi; filtreler yalnızca bu profiller içinde çalışır.", discCap50: "En uygun 50 profil gösteriliyor.", discMatch: "İlgi alanlarınıza göre en uygun profiller.", discMatchC: "Seçili kampanyaya en uygun profiller.", discNoNiche: "Profilinize ilgi alanı eklerseniz size en uygun profilleri öne çıkarırız.", discNoNicheC: "Bu kampanyada ilgi alanı yok; tüm profiller gösteriliyor.", discNoMatch: "Ortak ilgi alanı olan profil yok; tüm profiller gösteriliyor.", discMatchErr: "Eşleşmeler yüklenemedi; tüm profiller gösteriliyor.", viewProf: "Profili gör", inviteFor: "{n} için davet ediyorsunuz.",
       clearFor: "Temizle", drClose: "Kapat", drNoPlat: "Platform eklenmemiş.", crFull: "Tam profil ve son gönderiler", crBack: "← Keşfet", crNone: "Bu influencer bulunamadı ya da artık listelenmiyor.", crAccounts: "Hesap ölçümleri", crPosts: "Son gönderiler", crSampleBadge: "Örnek veri", crSampleNote: "Gönderi bağlantısı henüz açık değil; aşağıdakiler örnek gönderilerdir. Kampanyaya eklemeler yalnız bu tarayıcıda tutulur.", crTarget: "Kampanya", crAdd: "Kampanyaya ekle", crRemove: "Kampanyadan çıkar", crAdded: "Gönderi kampanyaya eklendi.", crRemoved: "Gönderi kampanyadan çıkarıldı.", crVerified: "doğrulandı", crOpenPost: "Gönderiyi aç", crNoPosts: "Henüz gönderi yok.", drHist: "Sizinle geçmiş", drHistNone: "Henüz birlikte çalışmadınız.",
       drInvite: "Kampanyaya davet et", drNoOpen: "Davet edilebilecek açık kampanya yok: ya hepsinde zaten var ya da açık kampanyanız yok.",
       inviteInf: "Influencer davet et",
@@ -418,6 +424,8 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
       mLikes: "Likes", mComments: "Comments", mViews: "Views", mEr: "Engagement rate", pErNote: "Engagement rate = (likes + comments) ÷ reach; views are used when reach is missing.",
       pSampleNote: "You haven't added any posts yet. The posts below are not real; they're sample data showing how this screen will look.",
       pLocal: "Posts you enter by hand are stored only on this device, in this browser, for now.",
+      pSrv: "Your posts are stored in your account, so you can see them on any device.", pSrvNoDel: "Deleting a post from your account is not available yet.",
+      pMove: "Move to my account", pMoveHint: "{n} posts are only on this device. You can move them to your account once.", pMoved: "{n} posts moved to your account.",
       pAdd: "Add a post", pUrl: "Post link", pUrlHint: "The full address of an Instagram, TikTok, YouTube or LinkedIn post (https://…).",
       pDate: "Posted on", pCaption: "Caption", pThumb: "Thumbnail address (optional)", pThumbHint: "Only an image address starting with https://.",
       pSave: "Save", pSaved: "Post added.", pBadUrl: "Enter a valid https:// post link.", pBadDate: "Pick a valid date.", pBadNum: "Numbers must be whole numbers, 0 or more.", pDup: "This link is already added.",
@@ -444,6 +452,7 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
       waiting: "Waiting for you", waitEmpty: "Nothing is waiting for you right now.", inNew: "{n} new applications", inSub: "{n} content items awaiting approval", inDue: "Deadline coming up: {n}",
       inInvite: "{n} invited you", inRev: "Revision requested", inAcc: "Send your content link", inProf: "{n}% complete", review: "Review", openIt: "Open",
       profCard: "Profile", profDone: "Completion", editProf: "Edit profile",
+      nNotif: "Notifications", nfLead: "Applications, invites and content approvals in one place.", nfUnread: "{n} unread", nfAllRead: "All caught up.", nfMarkAll: "Mark all as read", nfNone: "No notifications yet.", nfNew: "New", nfSampleNote: "Your real notifications will appear here once the service is live.", nfSApply: "New application to your summer collection campaign.", nfSContent: "A creator sent content for your approval.", nfSView: "Your campaign brief was viewed by 3 creators.", nfSInvite: "A brand invited you to its campaign.", nfSAccepted: "Your application was accepted.", nfSMetrics: "Time to update your post metrics.",
       nSettings: "Settings", setLead: "Manage your account and how the panel looks.", setAcct: "Account", setName: "Full name", setEmail: "Email", setEmailHint: "To change your email, write to info@saascorner.co.", setPw: "Password", setPwHint: "We will email you a link to set a new password.", setPwBtn: "Send reset link", setPwSent: "Reset link sent. Check your inbox.", setLook: "Appearance", setLang: "Language", setTheme: "Theme", thSys: "System", thLight: "Light", thDark: "Dark", setOutLead: "Log out of the panel on this device.",
       ckCompany: "Company name", ckIndustry: "Industry", ckCity: "City", ckWebsite: "Website", ckBio: "About (at least 40 characters)", ckClients: "Number of clients",
       ckNiches: "Niches", ckPlatform: "At least one platform with follower count", ckListed: "Profile visible to brands",
@@ -457,7 +466,7 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
       socDone: "Your {n} account is connected.", socCutOk: "{n} disconnected.", socDenied: "Permission wasn't granted; you can try again.",
       socTaken: "This account is linked to another Brand Corner account. Disconnect it there first.", socTicket: "The connection expired or is invalid; press \"Connect\" again.",
       socForbidden: "Connections aren't available for this account.", socProvider: "The platform didn't respond; try again shortly.", socOwner: "This connection was started from another account; press Connect again.",
-      perf: "Performance", mReach: "Reach", mEng: "Engagement", mSpend: "Spend", mEarn: "Earnings", noData: "No data", perfNote: "These metrics fill in as content links and payments are recorded.",
+      perf: "Performance", mReach: "Reach", mEng: "Engagement", mSpend: "Spend", mEarn: "Earnings", noData: "No data", perfNote: "These metrics fill in as content links and payments are recorded.", perfWin: "Last 30 days", perfPosts: "Posts", perfTop: "Top posts by reach", perfAll: "All posts", perfNone: "No posts in the last 30 days.", perfSampleNote: "You haven't added any posts yet; this summary is sample data.",
       acctMenu: "Account menu", tabsLabel: "Panel tabs",
       soon: "Coming soon", soonBadge: "Coming soon", soonLead: "These features aren't in the panel yet; they'll show up here when they're ready.",
       soonMsg: "In-platform messaging", soonAnalytics: "Performance analytics and custom reports", soonBudget: "Budget management", soonVerified: "Verified influencers",
@@ -518,7 +527,7 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
       invitedBy: "{n} invited you",
       myAppsEmpty: "No applications or invites yet. You can apply to open campaigns from Opportunities.", goOpps: "Browse opportunities",
       discLead: "Browse profile cards and invite directly.", discQ: "Search", discQPh: "Name or city", allNiches: "All niches",
-      fMinFol: "Followers", anyMin: "Any follower count", discCount: "{n} influencers", discCount1: "1 influencer", discCap: "The newest 100 profiles are loaded; filters only search within them.", discCap50: "Showing the 50 best matches.", discMatch: "Best matches for your niches.", discMatchC: "Best matches for the selected campaign.", discNoNiche: "Add niches to your profile and we will bring your best matches to the top.", discNoNicheC: "This campaign has no niches; showing all profiles.", discNoMatch: "No profiles share your niches; showing all profiles.", discMatchErr: "Matches could not be loaded; showing all profiles.", viewProf: "View profile", inviteFor: "Inviting for {n}.",
+      fMinFol: "Followers", anyMin: "Any follower count", fCity: "City", allCities: "All cities", fSort: "Sort", sortRec: "Recommended", sortFol: "Followers (high to low)", sortName: "Name (A–Z)", fReset: "Clear filters", discCount: "{n} influencers", discCount1: "1 influencer", discCap: "The newest 100 profiles are loaded; filters only search within them.", discCap50: "Showing the 50 best matches.", discMatch: "Best matches for your niches.", discMatchC: "Best matches for the selected campaign.", discNoNiche: "Add niches to your profile and we will bring your best matches to the top.", discNoNicheC: "This campaign has no niches; showing all profiles.", discNoMatch: "No profiles share your niches; showing all profiles.", discMatchErr: "Matches could not be loaded; showing all profiles.", viewProf: "View profile", inviteFor: "Inviting for {n}.",
       clearFor: "Clear", drClose: "Close", drNoPlat: "No platforms added.", crFull: "Full profile and recent posts", crBack: "← Discover", crNone: "This influencer wasn't found or is no longer listed.", crAccounts: "Account metrics", crPosts: "Recent posts", crSampleBadge: "Sample data", crSampleNote: "The posts connection isn't live yet; these are sample posts. Campaign additions are kept only in this browser.", crTarget: "Campaign", crAdd: "Add to campaign", crRemove: "Remove from campaign", crAdded: "Post added to the campaign.", crRemoved: "Post removed from the campaign.", crVerified: "verified", crOpenPost: "Open post", crNoPosts: "No posts yet.", drHist: "History with you", drHistNone: "You haven't worked together yet.",
       drInvite: "Invite to a campaign", drNoOpen: "No open campaign to invite them to: they're already in all of them, or you have none open.",
       inviteInf: "Invite influencers",
@@ -544,7 +553,7 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
     }
   };
 
-  var L = BC.lang(), U = null, seq = 0, uid = 0, first = true, F = { q: "", niche: "", platform: "", min: "", inviteFor: 0 };
+  var L = BC.lang(), U = null, seq = 0, uid = 0, first = true, F = { q: "", niche: "", platform: "", min: "", city: "", sort: "", inviteFor: 0 };
   function $(id) { return document.getElementById(id); }
   var nav = $("nav"), tabbar = $("tabbar"), view = $("view"), outB = $("out"), outB2 = $("out2");
   var sheet = $("sheet"), scrim = $("scrim"), meB = $("me"), counts = {}, mob = window.matchMedia("(max-width: 760px)");
@@ -693,7 +702,7 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
   var cm = /^creator-([a-z0-9]{1,24})$/.exec(h);
   if (cm && isOwner()) return { name: "creator", id: cm[1], tab: "discover" };
     if (m) return { name: "campaign", id: +m[1], tab: "campaigns" };
-    var ok = ["overview", "campaigns", "profile", "settings"].concat(isOwner() ? ["new", "discover"] : ["applications", "posts"]);
+    var ok = ["overview", "campaigns", "profile", "settings", "notifications"].concat(isOwner() ? ["new", "discover"] : ["applications", "posts"]);
     if (ok.indexOf(h) < 0) h = "overview";
     return { name: h, tab: h === "new" ? "campaigns" : h };
   }
@@ -720,6 +729,7 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
     help: [["circle", { cx: 12, cy: 12, r: 9 }], ["path", { d: "M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.7M12 17h.01" }]],
     gear: [["circle", { cx: 12, cy: 12, r: 3 }], ["path", { d: "M12 2v3M12 19v3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M2 12h3M19 12h3M4.9 19.1 7 17M17 7l2.1-2.1" }]],
     logout: [["path", { d: "M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3" }], ["path", { d: "M10 17l-5-5 5-5M5 12h11" }]],
+    bell: [["path", { d: "M6 16V11a6 6 0 0 1 12 0v5l2 2H4z" }], ["path", { d: "M10 21h4" }]],
     image: [["rect", { x: 3, y: 4, width: 18, height: 16, rx: 2 }], ["circle", { cx: 9, cy: 10, r: 2 }], ["path", { d: "m21 16-5-5-9 9" }]]
   };
   function ic(name) {
@@ -736,6 +746,7 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
     var items = isOwner() ? [["overview", "nOverview", "home"], ["campaigns", "nCampaigns", "megaphone"], ["discover", "nDiscover", "search"], ["profile", "nProfile", "user"]]
       : [["overview", "nOverview", "home"], ["campaigns", "nOpps", "briefcase"], ["applications", "nApps", "list"], ["posts", "nPosts", "image"], ["profile", "nProfile", "user"]];
     tabbar.classList.toggle("n5", items.length > 4);
+    ["ntf", "ntf2"].forEach(function (id) { if (tab === "notifications") $(id).setAttribute("aria-current", "page"); else $(id).removeAttribute("aria-current"); });
     ["set", "set2"].forEach(function (id) { if (tab === "settings") $(id).setAttribute("aria-current", "page"); else $(id).removeAttribute("aria-current"); });
     [nav, tabbar].forEach(function (box) {
       box.textContent = "";
@@ -898,6 +909,27 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
       has ? null : el("p", { class: "meta" }, [el("span", { class: "badge b-soon", text: t("soonBadge") }), " ", t("dailyLater")])
     ]));
   }
+  // Performans özeti: influencer için son 30 günün gönderileri (son ölçüm), gönderi yoksa örnek veri; marka/ajans için F2'ye kadar "veri yok"
+  function perfCard(own, mets) {
+    var stat = function (k, v) { return el("div", { class: "stat" }, [el("div", { class: "k", text: t(k) }), el("div", { class: v == null ? "v na" : "v", text: v == null ? t("noData") : v })]); };
+    if (own) return el("section", { class: "card" }, [el("div", { class: "ch" }, el("h2", { text: t("perf") })),
+      el("div", { class: "cb" }, [el("div", { class: "mets" }, mets.map(function (k) { return stat(k, null); })), el("p", { class: "hint", text: t("perfNote") })])]);
+    var d = pData(), cut = isoDay(new Date(Date.now() - 30 * 864e5)), list = d.list.filter(function (p) { return p.date >= cut; });
+    var sum = function (m) { var n = 0, any = false; list.forEach(function (p) { var v = lastSnap(p)[m]; if (v != null) { n += v; any = true; } }); return any ? n : null; };
+    var reach = sum("reach"), likes = sum("likes"), comm = sum("comments"), eng = likes == null && comm == null ? null : (likes || 0) + (comm || 0);
+    var top = list.slice().sort(function (a, b) { return (lastSnap(b).reach || 0) - (lastSnap(a).reach || 0); }).slice(0, 3);
+    return el("section", { class: "card perf" }, [
+      el("div", { class: "ch" }, [el("h2", { text: t("perf") }), el("span", { class: "meta", text: t("perfWin") })]),
+      el("div", { class: "cb" }, [
+        d.sample ? el("p", { class: "meta" }, [el("span", { class: "badge b-sample", text: t("crSampleBadge") }), " ", t("perfSampleNote")]) : null,
+        el("div", { class: "mets m4" }, [stat("perfPosts", num(list.length)), stat("mReach", reach == null ? null : short(reach)), stat("mEng", eng == null ? null : short(eng)), stat("mEarn", null)]),
+        top.length ? el("div", null, [el("h3", { class: "ptop", text: t("perfTop") }), el("ol", { class: "ptop" }, top.map(function (p) {
+          var s = lastSnap(p);
+          return el("li", null, el("a", { class: "lk44", href: d.sample ? "#posts" : "#post-" + p.id }, [el("span", { class: "pcap", dir: "auto", text: p.caption || pLabel(p) }), el("b", { text: short(s.reach) })]));
+        }))]) : el("p", { class: "hint", text: t("perfNone") }),
+        el("a", { class: "btn sm sec", href: "#posts", text: t("perfAll") })
+      ])]);
+  }
   function overview(r0, stats) {
     var own = isOwner();
     // Bir çağrı düşerse yalnız o bölüm hata gösterir; ikisi de düşerse tek kutu
@@ -941,9 +973,7 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
             el("section", { class: "card" }, [el("div", { class: "ch" }, el("h2", { text: t("waiting") })),
               inbox]),
             own && !r[1].err ? ocCard(open) : null,
-            el("section", { class: "card" }, [el("div", { class: "ch" }, el("h2", { text: t("perf") })),
-              el("div", { class: "cb" }, [el("div", { class: "mets" }, mets.map(function (k) { return el("div", { class: "stat" }, [el("div", { class: "k", text: t(k) }), el("div", { class: "v na", text: t("noData") })]); })),
-                el("p", { class: "hint", text: t("perfNote") })])])
+            perfCard(own, mets)
           ]),
           el("div", null, [
             own ? forYou(r[2], camps, open, again) : oppsForYou(r[2], again),
@@ -1324,13 +1354,22 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
       all.forEach(function (x) { (x.niches || []).forEach(function (n) { var k = fold(n); if (!seen[k]) { seen[k] = 1; niches.push(n); } }); });
       niches.sort(function (a, b) { return a.localeCompare(b, locale()); });
       if (F.niche) F.niche = niches.filter(function (x) { return fold(x) === fold(F.niche); })[0] || "";
+      var cseen = {}, cities = [];
+      all.forEach(function (x) { var k = fold(x.city || ""); if (k && !cseen[k]) { cseen[k] = 1; cities.push(x.city.trim()); } });
+      cities.sort(function (a, b) { return a.localeCompare(b, locale()); });
+      if (F.city) F.city = cities.filter(function (x) { return fold(x) === fold(F.city); })[0] || "";
       var q = el("input", { type: "search", maxlength: 60, placeholder: t("discQPh"), value: F.q });
       var n = el("select", { value: F.niche }, [el("option", { value: "", text: t("allNiches") })].concat(niches.map(function (x) { return el("option", { value: x, text: x }); })));
       var s = el("select", { value: F.platform }, [el("option", { value: "", text: t("allPlatforms") })].concat(PLATFORMS.map(function (x) { return el("option", { value: x, text: PL[x] }); })));
       var mn = el("select", { value: F.min }, [el("option", { value: "", text: t("anyMin") })].concat([10000, 50000, 100000].map(function (v) { return el("option", { value: String(v), text: num(v) + "+" }); })));
+      var ci = el("select", { value: F.city }, [el("option", { value: "", text: t("allCities") })].concat(cities.map(function (x) { return el("option", { value: x, text: x }); })));
+      var so = el("select", { value: F.sort }, [["", "sortRec"], ["fol", "sortFol"], ["name", "sortName"]].map(function (o) { return el("option", { value: o[0], text: t(o[1]) }); }));
+      var rs = el("button", { type: "button", class: "ghost", text: t("fReset") });
       var f = el("form", { class: "box f filter", role: "search", "data-sk-noform": true, novalidate: true }, [
         el("div", null, fld("dq", t("discQ"), q)), el("div", null, fld("dn", t("fNiche"), n)),
-        el("div", null, fld("dp", t("fPlatform"), s)), el("div", null, fld("dm", t("fMinFol"), mn))
+        el("div", null, fld("dp", t("fPlatform"), s)), el("div", null, fld("dm", t("fMinFol"), mn)),
+        cities.length ? el("div", null, fld("dc", t("fCity"), ci)) : null, el("div", null, fld("ds", t("fSort"), so)),
+        el("div", { class: "freset" }, rs)
       ]);
       var box = el("div"), cnt = el("p", { class: "info", role: "status" }); ctx.err = note(); ctx.err.id = "disc-err"; discCtx = ctx;
       ctx.repaint = function () {
@@ -1338,9 +1377,12 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
         // Sonuç yoksa metin kutuda görünür; durum satırı yalnız ekran okuyucuya söyler (iki kez görünmez)
         cnt.textContent = list.length ? (list.length === 1 ? t("discCount1") : t("discCount", num(list.length))) : t("discNone");
         cnt.classList.toggle("vh", !list.length);
+        rs.hidden = !(F.q || F.niche || F.platform || F.min || F.city || F.sort);
         box.replaceChildren(list.length ? el("div", { class: "list" }, list.map(function (x) { return infCard(x, ctx); })) : empty(t("discNone")));
       };
-      function apply() { F.q = q.value.trim(); F.niche = n.value; F.platform = s.value; F.min = mn.value; ctx.repaint(); }
+      function apply() { F.q = q.value.trim(); F.niche = n.value; F.platform = s.value; F.min = mn.value; F.city = ci.value; F.sort = so.value; ctx.repaint(); }
+      // Temizle: davet bağlamı (inviteFor) korunur, yalnız filtreler sıfırlanır; odak arama kutusuna döner
+      rs.addEventListener("click", function () { [q, n, s, mn, ci, so].forEach(function (c) { c.value = ""; }); apply(); q.focus(); });
       f.addEventListener("submit", function (ev) { ev.preventDefault(); apply(); });
       f.addEventListener("input", apply); f.addEventListener("change", apply);
       ctx.repaint();
@@ -1362,8 +1404,10 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
   }
   // Platform seçiliyse takipçi eşiği yalnız o platformun kaydına uygulanır
   function discList(ctx) {
-    var q = fold(F.q), nk = fold(F.niche), min = +F.min || 0;
-    return ctx.all.filter(function (x) {
+    var q = fold(F.q), nk = fold(F.niche), ck = fold(F.city), min = +F.min || 0;
+    var top = function (x) { var m = 0; x.platforms.forEach(function (p) { if (!F.platform || p.platform === F.platform) m = Math.max(m, p.followers || 0); }); return m; };
+    var l = ctx.all.filter(function (x) {
+      if (ck && fold(x.city || "") !== ck) return false;
       if (q && fold((x.name || "") + " " + (x.city || "")).indexOf(q) < 0) return false;
       if (nk && !(x.niches || []).some(function (n) { return fold(n) === nk; })) return false;
       var ps = F.platform ? x.platforms.filter(function (p) { return p.platform === F.platform; }) : x.platforms;
@@ -1371,6 +1415,10 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
       if (min && !ps.some(function (p) { return (p.followers || 0) >= min; })) return false;
       return true;
     });
+    // Sıralama: önerilen = sunucu sırası (eşleşme ya da en yeni); takipçi seçili platforma göre
+    if (F.sort === "fol") l.sort(function (a, b) { return top(b) - top(a); });
+    else if (F.sort === "name") l.sort(function (a, b) { return (a.name || "").localeCompare(b.name || "", locale()); });
+    return l;
   }
   // Bu oturumda gönderilen davetler: sayfa yeniden çizilse de profilin geçmişine eklenir
   var discCtx = null, sentInv = {};
@@ -1944,6 +1992,64 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
     try { var a = JSON.parse(localStorage.getItem(pKey()) || "[]"); return Array.isArray(a) ? a.filter(pValid) : []; } catch (e) { return []; }
   }
   function pStore(list) { try { localStorage.setItem(pKey(), JSON.stringify(list)); return true; } catch (e) { return false; } }
+  // Sunucu kaydı (app/posts): GET başarılıysa gönderiler sunucudan okunur ve yazılır; 404/kapalı/ağ hatasında bu cihaz (localStorage).
+  // Marka tarafındaki içerik üreticisi kayıtları (creator_id) her zaman bu cihazda kalır.
+  var PS = { srv: false, list: [] }, PCHUNK = 50;
+  function pSrvPost(p) {
+    var snaps = (p && Array.isArray(p.snaps) ? p.snaps : []).filter(function (s) { return s && /^\d{4}-\d{2}-\d{2}$/.test(s.at || ""); }).map(function (s) {
+      var o = { at: s.at };
+      PMETS.forEach(function (m) { o[m] = Number.isInteger(s[m]) && s[m] >= 0 ? s[m] : null; });
+      return o;
+    }).sort(function (a, b) { return a.at < b.at ? -1 : a.at > b.at ? 1 : 0; });
+    var url = p && typeof p.url === "string" ? p.url : "", pl = platformOf(url) || (p && PL[p.platform] ? p.platform : "");
+    return { id: p && p.id != null && /^[a-z0-9]{1,24}$/.test(String(p.id)) ? String(p.id) : "", url: url, platform: pl,
+      type: p && PTYPES.indexOf(p.type) >= 0 ? p.type : "photo", date: p && okDay(p.date) ? p.date : (snaps[0] || {}).at || "",
+      caption: p && typeof p.caption === "string" ? p.caption.slice(0, 2200) : "", thumb: p && okThumb(p.thumb) ? p.thumb : "", snaps: snaps };
+  }
+  function pSync() {
+    return BC.call("GET", "app/posts").then(function (d) {
+      PS.srv = !!(d && Array.isArray(d.posts));
+      PS.list = (PS.srv ? d.posts : []).map(pSrvPost).filter(function (p) { return p.id && p.platform && p.snaps.length; });
+    }, function (e) { if (e && e.code === "auth") throw e; PS.srv = false; PS.list = []; });
+  }
+  function pErr(e) {
+    var c = e && e.code;
+    return c === "url" ? t("pBadUrl") : c === "date" || c === "at" ? t("pBadDate") : c === "thumb" ? t("pThumbHint")
+      : c === "metrics" || PMETS.indexOf(c) >= 0 ? t("pBadNum") : c === "posts_full" || (e && e.status === 409) ? t("pFull") : BC.msg(c);
+  }
+  // CSV/aktarım: en çok 50 satırlık parçalar sırayla; atlanan satırlar çağıranın satır numarasına çevrilir
+  function pImport(rows, lines) {
+    var sum = { added: 0, updated: 0, bad: [] }, i = 0;
+    function next() {
+      if (i >= rows.length) return Promise.resolve(sum);
+      var base = i, part = rows.slice(i, i + PCHUNK);
+      i += PCHUNK;
+      return BC.call("POST", "app/posts/import", { rows: part }).then(function (d) {
+        sum.added += d.added || 0; sum.updated += d.updated || 0;
+        (d.skipped || []).forEach(function (s) { sum.bad.push(lines ? lines[base + s.i] : base + s.i + 1); });
+        return next();
+      }, function (e) { if (e) e.sum = sum; throw e; });
+    }
+    return next();
+  }
+  function pApiRow(o) { var r = { url: o.url, date: o.date, type: o.type, caption: o.caption || "", thumb: o.thumb || "" }; PMETS.forEach(function (m) { r[m] = o[m]; }); if (o.at) r.at = o.at; return r; }
+  // Bu cihazdaki eski gönderiler: tek seferlik "sunucuya aktar" (bayrak bc-posts-moved-<id>)
+  function pMoveKey() { return "bc-posts-moved-" + U.id; }
+  function pLocalOwn() { return pLoad().filter(function (p) { return !p.creator_id && p.url && platformOf(p.url); }); }
+  function pMoveDue() { try { if (localStorage.getItem(pMoveKey())) return false; } catch (e) { return false; } return PS.srv && pLocalOwn().length > 0; }
+  function pMoveCard() {
+    var own = pLocalOwn(), msg = note(), btn = el("button", { type: "button", class: "btn", text: t("pMove") });
+    btn.addEventListener("click", function () {
+      var rows = [];
+      own.forEach(function (p) { p.snaps.forEach(function (s) { var o = { url: p.url, date: p.date, type: p.type, caption: p.caption, thumb: p.thumb, at: s.at }; PMETS.forEach(function (m) { o[m] = s[m]; }); rows.push(pApiRow(o)); }); });
+      say(msg, ""); busy(btn, true);
+      pImport(rows).then(function () {
+        try { localStorage.setItem(pMoveKey(), "1"); } catch (e) { /* özel pencere */ }
+        pAfter(t("pMoved", num(own.length)));
+      }, function (e) { busy(btn, false); say(msg, pErr(e)); });
+    });
+    return el("div", { class: "box", role: "note" }, [el("p", { class: "meta", text: t("pMoveHint", num(own.length)) }), msg, btn]);
+  }
   function pPrefView() { try { return localStorage.getItem("bc-posts-view") === "list" ? "list" : "grid"; } catch (e) { return "grid"; } }
   function platformOf(u) {
     var h;
@@ -1985,7 +2091,7 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
     return out;
   }
   function pData() {
-    var list = pLoad(), sample = !list.length;
+    var list = PS.srv ? PS.list.slice() : pLoad(), sample = !list.length;
     if (sample) list = samplePosts();
     list.sort(function (a, b) { return a.date < b.date ? 1 : a.date > b.date ? -1 : 0; });
     return { list: list, sample: sample };
@@ -2053,13 +2159,19 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
       fld("pa-cap", t("pCaption"), cap), fld("pa-th", t("pThumb"), thumb, t("pThumbHint")), mi.box, msg, btn]);
     f.addEventListener("submit", function (e) {
       e.preventDefault(); say(msg, "");
-      var u = url.value.trim(), pl = platformOf(u), m = pReadMets(mi.ins), list = pLoad();
+      var u = url.value.trim(), pl = platformOf(u), m = pReadMets(mi.ins), list = PS.srv ? PS.list : pLoad();
       if (!pl) { say(msg, t("pBadUrl")); url.focus(); return; }
       if (list.some(function (p) { return p.url === u; })) { say(msg, t("pDup")); url.focus(); return; }
       if (!okDay(date.value)) { say(msg, t("pBadDate")); date.focus(); return; }
       if (thumb.value.trim() && !okThumb(thumb.value.trim())) { say(msg, t("pThumbHint")); thumb.focus(); return; }
       if (!m) { say(msg, t("pBadNum")); return; }
       m.at = isoDay(new Date());
+      if (PS.srv) {
+        busy(btn, true);
+        BC.call("POST", "app/posts/manual", pApiRow({ url: u, date: date.value, type: type.value, caption: cap.value.trim(), thumb: thumb.value.trim(), likes: m.likes, comments: m.comments, views: m.views, reach: m.reach }))
+          .then(function () { pAfter(t("pSaved")); }, function (e) { busy(btn, false); say(msg, pErr(e)); });
+        return;
+      }
       list.push({ id: newId(), url: u, platform: pl, type: type.value, date: date.value, caption: cap.value.trim(), thumb: thumb.value.trim(), snaps: [m] });
       if (!pStore(list)) { say(msg, t("pFull")); return; }
       pAfter(t("pSaved"));
@@ -2084,7 +2196,7 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
   function importCsv(txt) {
     var rows = parseCsv(txt), cols = ["url", "date", "type", "likes", "comments", "views", "reach", "caption"], start = 0, list = pLoad(), added = 0, upd = 0, bad = [], today = isoDay(new Date());
     if (rows.length && rows[0].some(function (x) { return x.trim().toLowerCase() === "url"; })) { cols = rows[0].map(function (x) { return x.trim().toLowerCase(); }); start = 1; }
-    var data = [];
+    var data = [], api = [], lines = [];
     for (var i = start; i < rows.length; i++) if (rows[i].some(function (x) { return x.trim(); })) data.push([i + 1, rows[i]]);
     if (!data.length) return { err: t("pCsvEmpty") };
     if (data.length > 500) return { err: t("pCsvBig") };
@@ -2094,17 +2206,22 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
       var pl = platformOf(o.url), ty = (o.type || "").toLowerCase(), ok = !!pl && okDay(o.date || today);
       PMETS.forEach(function (m) { var v = pInt(o[m]); if (v === undefined) ok = false; s[m] = v; });
       if (!ok) { bad.push(d[0]); return; }
+      if (PS.srv) { var r = { url: o.url, date: o.date || today, type: PTYPES.indexOf(ty) >= 0 ? ty : "", caption: (o.caption || "").slice(0, 2200), thumb: okThumb(o.thumb) ? o.thumb : "" }; PMETS.forEach(function (m) { r[m] = s[m]; }); api.push(pApiRow(r)); lines.push(d[0]); return; }
       var ex = list.filter(function (p) { return p.url === o.url; })[0];
       if (ex) { ex.snaps = ex.snaps.filter(function (x) { return x.at !== today; }).concat(s); upd++; return; }
       list.push({ id: newId() + added, url: o.url, platform: pl, type: PTYPES.indexOf(ty) >= 0 ? ty : pl === "tiktok" || pl === "youtube" ? "video" : "photo", date: o.date || today, caption: (o.caption || "").slice(0, 2200), thumb: okThumb(o.thumb) ? o.thumb : "", snaps: [s] });
       added++;
     });
+    if (PS.srv) return { api: api, lines: lines, bad: bad };
     if ((added || upd) && !pStore(list)) return { err: t("pFull") };
+    return { added: added + upd, text: pCsvText(added, upd, bad) };
+  }
+  function pCsvText(added, upd, bad) {
     var out = [];
     if (added) out.push(t("pCsvDone", num(added)));
     if (upd) out.push(t("pCsvUpd", num(upd)));
     if (bad.length) out.push(t("pCsvSkip", num(bad.length)).replace("{r}", bad.slice(0, 10).join(", ") + (bad.length > 10 ? "…" : "")));
-    return { added: added + upd, text: out.join(" ") };
+    return out.join(" ");
   }
   function pCsvForm() {
     var file = el("input", { type: "file", accept: ".csv,text/csv,text/plain" }), msg = note(), btn = el("button", { type: "submit", class: "btn", text: t("pCsvGo") });
@@ -2119,6 +2236,21 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
         busy(btn, false);
         var r = importCsv(txt);
         if (r.err) { say(msg, r.err); return; }
+        if (r.api) {
+          var fin = function (sm) {
+            var bad = r.bad.concat(sm.bad).sort(function (a, b) { return a - b; }), tx = pCsvText(sm.added, sm.updated, bad);
+            if (!sm.added && !sm.updated) { busy(btn, false); say(msg, tx || t("pCsvEmpty")); return; }
+            pAfter(tx);
+          };
+          if (!r.api.length) { fin({ added: 0, updated: 0, bad: [] }); return; }
+          busy(btn, true);
+          pImport(r.api, r.lines).then(fin, function (e) {
+            busy(btn, false);
+            var sm = e && e.sum, tx = sm && (sm.added || sm.updated) ? pCsvText(sm.added, sm.updated, []) + " " : "";
+            say(msg, tx + pErr(e));
+          });
+          return;
+        }
         if (!r.added) { say(msg, r.text || t("pCsvEmpty")); return; }
         pAfter(r.text);
       }, function () { busy(btn, false); say(msg, t("pCsvRead")); });
@@ -2140,8 +2272,8 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
   }
   function posts() {
     PF.view = PF.view || pPrefView();
-    return BC.call("GET", "app/connections").then(function (c) { return c; }, function (e) { return { err: e }; }).then(function (c) {
-      var d = pData(), flash = okNote(), cnt = el("p", { class: "info", role: "status" }), res = el("div"), sels = [];
+    return Promise.all([BC.call("GET", "app/connections").then(function (c) { return c; }, function (e) { return { err: e }; }), pSync()]).then(function (all) {
+      var c = all[0], d = pData(), flash = okNote(), cnt = el("p", { class: "info", role: "status" }), res = el("div"), sels = [];
       say(flash, PF.flash); PF.flash = "";
       var vt = el("div", { class: "tabs", role: "group", "aria-label": t("pvView") }, [["grid", "pvGrid"], ["list", "pvList"]].map(function (x) {
         return el("button", { type: "button", "aria-pressed": String(PF.view === x[0]), text: t(x[1]), onclick: function () {
@@ -2175,7 +2307,7 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
       }
       draw();
       var entry = el("section", { class: "card" }, [el("div", { class: "ch" }, el("h2", { text: t("pDataH") })), el("div", { class: "cb" }, [
-        el("p", { class: "hint", text: t("pLocal") }),
+        el("p", { class: "hint", text: t(PS.srv ? "pSrv" : "pLocal") }), pMoveDue() ? pMoveCard() : null,
         el("details", { class: "pd", open: d.sample ? null : null }, [el("summary", { text: t("pAdd") }), pAddForm()]),
         el("details", { class: "pd" }, [el("summary", { text: t("pCsv") }), pCsvForm()])])]);
       return [el("h1", { text: t("nPosts") }), el("p", { class: "lead", text: t("postsLead") }), flash,
@@ -2202,7 +2334,8 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
     xs.forEach(function (s) { g.appendChild(sv("circle", { cx: X(s).toFixed(1), cy: Y(s[key]).toFixed(1), r: 4, stroke: "var(--accent)" })); });
     return g;
   }
-  function post(r) {
+  function post(r) { return pSync().then(function () { return postView(r); }); }
+  function postView(r) {
     var d = pData(), p = d.list.filter(function (x) { return x.id === r.id; })[0];
     if (!p) return [back("#posts", "pBack"), empty(t("pNotFound"), el("a", { class: "btn sm", href: "#posts", text: t("pBack") }))];
     var s = lastSnap(p), key = "likes", tlBox = el("div");
@@ -2229,6 +2362,12 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
         var m = pReadMets(mi.ins), list = pLoad(), q = list.filter(function (x) { return x.id === p.id; })[0];
         if (!okDay(at.value)) { say(msg, t("pBadDate")); at.focus(); return; }
         if (!m) { say(msg, t("pBadNum")); return; }
+        if (PS.srv) {
+          var sb = f.querySelector("button[type=submit]"); busy(sb, true);
+          m.url = p.url; m.date = p.date; m.type = p.type; m.at = at.value;
+          BC.call("POST", "app/posts/manual", pApiRow(m)).then(function () { pAfter(t("pSnapOk")); }, function (e) { busy(sb, false); say(msg, pErr(e)); });
+          return;
+        }
         if (!q) { say(msg, t("pNotFound")); return; }
         m.at = at.value;
         q.snaps = q.snaps.filter(function (x) { return x.at !== m.at; }).concat(m).sort(function (a, b2) { return a.at < b2.at ? -1 : a.at > b2.at ? 1 : 0; });
@@ -2240,7 +2379,7 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
         pStore(pLoad().filter(function (x) { return x.id !== p.id; }));
         PF.flash = t("pDeleted"); location.hash = "#posts";
       } });
-      edit = [el("h3", { class: "sub", text: t("pSnap") }), f, el("p", { style: "margin:18px 0 0" }, del)];
+      edit = [el("h3", { class: "sub", text: t("pSnap") }), f, PS.srv ? el("p", { class: "pnote", text: t("pSrvNoDel") }) : el("p", { style: "margin:18px 0 0" }, del)];
     }
     var flash = okNote(); say(flash, PF.flash); PF.flash = "";
     var title = (p.caption || "").split("\n")[0];
@@ -2388,7 +2527,62 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
     });
   }
 
-  var VIEWS = { overview: overview, campaigns: campaigns, "new": newCampaign, campaign: campaign, discover: discover, applications: applications, profile: profile, settings: settings, posts: posts, post: post, creator: creator };
+  // Bildirimler: app/notifications 404 verirse rol bazlı örnek liste. Okundu bilgisi bu tarayıcıda (bc-notif-read-<id>); sunucu "read" verirse o da sayılır.
+  // Menüdeki sayı yalnız bu ekran açıldıktan sonra görünür (ek istek yok).
+  var NF = { unread: 0 };
+  function nfKey() { return "bc-notif-read-" + U.id; }
+  function nfRead() { try { var o = JSON.parse(localStorage.getItem(nfKey()) || "{}"); return o && typeof o === "object" ? o : {}; } catch (e) { return {}; } }
+  function nfSave(o) { try { localStorage.setItem(nfKey(), JSON.stringify(o)); } catch (e) {} }
+  function nfPaint() {
+    [$("ntf"), $("ntf2")].forEach(function (b) {
+      label(b, "bell", t("nNotif"));
+      if (NF.unread) add(b, [el("span", { class: "cnt", text: NF.unread > 99 ? "99+" : String(NF.unread) })]);
+    });
+  }
+  var NF_KIND = { apply: ["inbox", "info"], content: ["eye", "warn"], view: ["eye", "info"], invite: ["send", "accent"], accepted: ["check", "ok"], metrics: ["image", "info"] };
+  function nfSample() {
+    var now = Date.now(), at = function (hr) { return new Date(now - hr * 36e5).toISOString().slice(0, 19).replace("T", " "); };
+    return (isOwner() ? [["s1", "apply", "nfSApply", "#campaigns", 2], ["s2", "content", "nfSContent", "#campaigns", 20], ["s3", "view", "nfSView", "#campaigns", 50]]
+      : [["s1", "invite", "nfSInvite", "#applications", 3], ["s2", "accepted", "nfSAccepted", "#applications", 26], ["s3", "metrics", "nfSMetrics", "#posts", 72]])
+      .map(function (x) { return { id: x[0], kind: x[1], text: t(x[2]), link: x[3], at: at(x[4]) }; });
+  }
+  function ago(s) {
+    var d = new Date(String(s || "").replace(" ", "T") + "Z"), sec = (d - Date.now()) / 1000;
+    if (isNaN(d)) return "";
+    if (sec < -7 * 864e2) return when(s);
+    var u = [["day", 864e2], ["hour", 3600], ["minute", 60]].filter(function (x) { return Math.abs(sec) >= x[1]; })[0] || ["minute", 60];
+    try { return new Intl.RelativeTimeFormat(locale(), { numeric: "auto" }).format(Math.round(sec / u[1]), u[0]); } catch (e) { return when(s); }
+  }
+  function notifications() {
+    return BC.call("GET", "app/notifications").then(function (d) { return { list: (d && d.notifications) || [] }; }, function (e) {
+      if (crMissing(e)) return { list: nfSample(), sample: true };
+      throw e;
+    }).then(function (r) {
+      var rd = nfRead(), box = el("div");
+      var list = r.list.filter(function (x) { return x && x.id != null && x.text; });
+      function un(x) { return !x.read && !rd[x.id]; }
+      function mark(x) { rd[x.id] = 1; nfSave(rd); }
+      function draw() {
+        var n = list.filter(un).length, row;
+        NF.unread = n; nfPaint();
+        box.textContent = "";
+        add(box, [el("div", { class: "nfhead" }, [el("p", { class: "meta", "aria-live": "polite", text: n ? t("nfUnread").replace("{n}", num(n)) : t("nfAllRead") }),
+          n ? el("button", { type: "button", class: "ghost", text: t("nfMarkAll"), onclick: function () { list.forEach(mark); draw(); var h = view.querySelector("h1"); if (h) { h.tabIndex = -1; h.focus(); } } }) : null]),
+          list.length ? el("ul", { class: "inbox nf" }, list.map(function (x) {
+            var k = NF_KIND[x.kind] || ["bell", "accent"], href = /^#[a-z0-9-]{1,40}$/.test(x.link || "") ? x.link : null;
+            var kids = [el("span", { class: "ic " + k[1] }, ic(k[0])), el("span", { class: "tx" }, [el("b", { text: String(x.text) }), el("span", { text: ago(x.at) })]),
+              un(x) ? el("span", { class: "dot", role: "img", "aria-label": t("nfNew") }) : null];
+            row = href ? el("a", { class: "nfa", href: href, onclick: function () { mark(x); } }, kids) : el("div", { class: "nfa" }, kids);
+            return el("li", { class: un(x) ? "un" : null }, row);
+          })) : empty(t("nfNone"))]);
+      }
+      draw();
+      return [el("h1", { text: t("nNotif") }), el("p", { class: "lead", text: t("nfLead") }),
+        r.sample ? el("p", { class: "meta" }, [el("span", { class: "badge b-sample", text: t("crSampleBadge") }), " ", t("nfSampleNote")]) : null, box];
+    });
+  }
+
+  var VIEWS = { overview: overview, campaigns: campaigns, "new": newCampaign, campaign: campaign, discover: discover, applications: applications, profile: profile, settings: settings, notifications: notifications, posts: posts, post: post, creator: creator };
 
   // Üst çubuk ve alt bilgi metinleri, dil düğmesi
   function initials(s) {
@@ -2406,6 +2600,7 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
     document.documentElement.lang = L;
     [outB, outB2].forEach(function (b) { label(b, "logout", t("logout")); });
     [$("help2"), $("help3")].forEach(function (b) { label(b, "help", t("helpS")); });
+    nfPaint();
     [$("set"), $("set2")].forEach(function (b) { label(b, "gear", t("nSettings")); });
     $("copy").textContent = t("copy");
     $("help").textContent = t("help");

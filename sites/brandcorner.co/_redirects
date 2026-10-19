@@ -1,7 +1,6 @@
 # Footer'daki sayfası olmayan linkler (orijinal Next.js sitesinde de 404'tü) var olan sayfalara yönlenir; /cookies ve /gdpr gizlilik politikasının ilgili bölümüne gider.
 /careers       /                302
 /press         /blog            302
-/contact       /pricing         302
 /integrations  /features        302
 /security      /features        302
 /cookies       /privacy#cookies 302

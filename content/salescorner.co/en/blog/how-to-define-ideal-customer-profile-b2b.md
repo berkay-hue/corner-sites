@@ -114,4 +114,4 @@ You can see what Sales Corner does in sales automation and outbound on our [serv
 
 The ideal customer profile is the foundation of outbound sales. It decides who you reach, what you say and which opportunities count as qualified. A good ICP comes from your best customers' data, clearly states who is left out, includes the problem and the buying trigger, and is tested regularly.
 
-If you want to sharpen your ICP and automate your target account lists, data enrichment and scoring flows, [book a call with the Sales Corner team](/en/iletisim). Let's review your customer data together and design a sales process focused on your ideal customers.
+If you want to sharpen your ICP and automate your target account lists, data enrichment and scoring flows, [book a call with the Sales Corner team](/en/contact). Let's review your customer data together and design a sales process focused on your ideal customers.
