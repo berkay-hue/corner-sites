@@ -6,11 +6,20 @@ export const rule = {
       en: [
         ["Can I change plans later?", "Yes! You can upgrade or downgrade your plan at any time. Changes take effect at the start of your next billing cycle."],
         ["What payment methods do you accept?", "We accept all major credit cards (Visa, Mastercard, American Express), PayPal, and bank transfers for enterprise plans."],
-        ["Is there a contract or commitment?", "No long-term contracts required. Monthly plans can be cancelled anytime. Yearly plans are billed annually but can be cancelled with remaining time prorated."]],
+        ["Is there a contract or commitment?", "No long-term contracts required. Monthly plans can be cancelled anytime. Yearly plans are billed annually but can be cancelled with remaining time prorated."],
+        // Eklenen sorular yalnız fiyat kartlarında yazanlardan; deneme süresi ve iade Berkay doğrulayana kadar yazılmaz
+        ["Is there a free plan?", "Yes. The Starter plan is free and includes influencer browsing, 3 campaigns per month, basic analytics and email support."],
+        ["How much does the Professional plan cost?", "The Professional plan is $99 per month. It adds unlimited campaigns, advanced analytics, priority support, team collaboration for 3 users and custom reports."],
+        ["What does the Enterprise plan include?", "Enterprise has custom pricing. It includes everything in Professional plus unlimited users, a dedicated account manager, custom integrations and white-label options. Contact sales for a quote."],
+        ["Do I need a credit card to start?", "No. You can start on the free plan without a credit card."]],
       tr: [
         ["Planımı daha sonra değiştirebilir miyim?", "Evet! Planınızı istediğiniz zaman yükseltebilir veya düşürebilirsiniz. Değişiklikler bir sonraki fatura döneminin başında yürürlüğe girer."],
         ["Hangi ödeme yöntemlerini kabul ediyorsunuz?", "Tüm büyük kredi kartlarını (Visa, Mastercard, American Express), PayPal'ı ve kurumsal planlar için banka transferlerini kabul ediyoruz."],
-        ["Sözleşme veya taahhüt var mı?", "Uzun vadeli sözleşme gerekmez. Aylık planlar her zaman iptal edilebilir. Yıllık planlar yıllık olarak faturalandırılır ancak kalan süre orantılı olarak iptal edilebilir."]],
+        ["Sözleşme veya taahhüt var mı?", "Uzun vadeli sözleşme gerekmez. Aylık planlar her zaman iptal edilebilir. Yıllık planlar yıllık olarak faturalandırılır ancak kalan süre orantılı olarak iptal edilebilir."],
+        ["Ücretsiz plan var mı?", "Evet. Starter planı ücretsizdir; influencer arama, ayda 3 kampanya, temel analitik ve e-posta desteği içerir."],
+        ["Professional planın fiyatı nedir?", "Professional planı aylık 99 $'dır. Sınırsız kampanya, gelişmiş analitik, öncelikli destek, 3 kullanıcılı ekip çalışması ve özel raporlar ekler."],
+        ["Enterprise planı neleri içerir?", "Enterprise fiyatı size özeldir. Professional'daki her şeye ek olarak sınırsız kullanıcı, özel hesap yöneticisi, özel entegrasyonlar ve white-label seçenekleri içerir. Teklif için satış ekibiyle görüşün."],
+        ["Başlamak için kredi kartı gerekir mi?", "Hayır. Ücretsiz planla kredi kartı olmadan başlayabilirsiniz."]],
     },
     // v0 şablonu her sayfaya aynı başlık/açıklamayı veriyor. Sayfa başına [başlık ≤60, açıklama ≤155, breadcrumb adı], sitedeki metinden
     META: {
@@ -60,7 +69,8 @@ export const rule = {
           [">24/7 Support</h3>", ">Support</h3>", 1],
           ["Join thousands of brands, influencers, and agencies growing with Brand Corner.", "Brands, influencers, and agencies can grow with Brand Corner.", 1], copy] },
         "/features": { cut: [social], swap: [["analyzes thousands of profiles", "analyzes profiles", 1], copy] },
-        "/pricing": { cut: [social], swap: [copy] },
+        // SSS akordeonu kapalıyken cevaplar HTML'de yok: düz liste olur (chunk'ta aynı değişiklik), SSR dili EN
+        "/pricing": { cut: [social], swap: [copy], put: [['<div data-slot="accordion" class="mt-10"', faqHtml]] },
         "/solutions/brands": { cut: [grid, social], swap: [
           ["<span>125K followers</span>", "<span>Followers</span>", 4],
           ["<span>4.8% engagement</span>", "<span>Engagement</span>", 4],
@@ -97,6 +107,7 @@ export const rule = {
         if (i >= 0 && b.indexOf(open, i + 1) >= 0) throw new Error(`brandcorner ${page}: ${open} tek değil`);
         if (i >= 0) b = drop(i, open);
       }
+      for (const [open, html] of T.put || []) { const i = b.indexOf(open); if (i >= 0) { b = drop(i, open); b = b.slice(0, i) + html() + b.slice(i); } }  // put: öğeyi html() ile değiştirir
       for (const h of T.section || []) { const i = b.indexOf(h); if (i >= 0) b = drop(b.lastIndexOf("<section", i), h); }
       for (const [a, z, n] of T.swap || []) {
         const k = b.split(a).length - 1;
@@ -161,10 +172,16 @@ export const rule = {
         : [...(page === "/about" ? [org] : []),
           { "@type": page === "/about" ? "AboutPage" : "WebPage", "@id": url + "#webpage", url, name: h1, description: desc, isPartOf: { "@id": R.origin + "/#website" }, about: { "@id": ORG }, inLanguage: tr ? "tr" : "en" },
           { "@type": "BreadcrumbList", itemListElement: [{ "@type": "ListItem", position: 1, name: tr ? "Ana Sayfa" : "Home", item: R.origin + "/" }, { "@type": "ListItem", position: 2, name: crumb, item: url }] }];
-      // /pricing SSS'si (PricingFAQ chunk'ı) birebir; sayfa dil anahtarlı olduğundan EN ve TR ayrı FAQPage
-      if (page === "/pricing") for (const [lang, qa] of Object.entries(R.FAQ))
-        graph.push({ "@type": "FAQPage", "@id": url + "#faq-" + lang, url, inLanguage: lang, isPartOf: { "@id": url + "#webpage" },
-          mainEntity: qa.map(([q, ans]) => ({ "@type": "Question", name: q, acceptedAnswer: { "@type": "Answer", text: ans } })) });
+      // /pricing: FAQPage görünür (SSR, EN) SSS ile birebir; TR yalnız dil değişince istemcide. Teklifler fiyat kartlarından;
+      // Enterprise fiyatsız olduğundan Offer'a girmez, deneme/iade süresi Berkay doğrulayana kadar şemada yok
+      if (page === "/pricing") graph.push(
+        { "@type": "FAQPage", "@id": url + "#faq", url, inLanguage: "en", isPartOf: { "@id": url + "#webpage" },
+          mainEntity: R.FAQ.en.map(([q, ans]) => ({ "@type": "Question", name: q, acceptedAnswer: { "@type": "Answer", text: ans } })) },
+        { "@type": "SoftwareApplication", "@id": R.origin + "/#app", name: "Brand Corner", url: R.origin + "/", applicationCategory: "BusinessApplication",
+          operatingSystem: "Web", description: "Connecting brands, influencers, and agencies worldwide", publisher: { "@id": ORG },
+          offers: [{ "@type": "Offer", name: "Starter", price: "0", priceCurrency: "USD", url },
+            { "@type": "Offer", name: "Professional", price: "99", priceCurrency: "USD", url,
+              priceSpecification: { "@type": "UnitPriceSpecification", price: "99", priceCurrency: "USD", unitCode: "MON", referenceQuantity: { "@type": "QuantitativeValue", value: 1, unitCode: "MON" } } }] });
       if (graph.length) html = html.replace("</head>", ldTag({ "@context": "https://schema.org", "@graph": graph }) + "</head>");
       // Gövde (RSC verisinden önceki kısım) iddia nötrleme; RSC verisinde bu metinler yok
       const at = html.indexOf("<script>(self.__next_f"), end = at < 0 ? html.length : at;
@@ -172,6 +189,15 @@ export const rule = {
     },
 };
 
+// SSS düz liste: SSR (EN) ve chunk aynı yapıyı çizer. React metin kaçışı: & < > " '
+const esc = t => t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#x27;");
+function faqHtml() {
+  return '<div class="mt-10">' + rule.FAQ.en.map(([q, a]) => `<div class="border-b border-border py-5"><h3 class="font-semibold text-foreground">${esc(q)}</h3><p class="mt-2 text-sm text-muted-foreground">${esc(a)}</p></div>`).join("") + "</div>";
+}
+const faqJs = () => '(0,a.jsx)("div",{className:"mt-10",children:[' + rule.FAQ.en.map(([q, a], i) => {
+  const [tq, ta] = rule.FAQ.tr[i];
+  return `{question:"en"===e?${JSON.stringify(q)}:${JSON.stringify(tq)},answer:"en"===e?${JSON.stringify(a)}:${JSON.stringify(ta)}}`;
+}).join(",") + '].map((e,t)=>(0,a.jsxs)("div",{className:"border-b border-border py-5",children:[(0,a.jsx)("h3",{className:"font-semibold text-foreground",children:e.question}),(0,a.jsx)("p",{className:"mt-2 text-sm text-muted-foreground",children:e.answer})]},t))';
 // v0/Next istemci bileşenlerinin gövdesi JS chunk'ında: HTML'e eklenen öğe chunk'ta da olmalı, yoksa hydration #418 verir.
 // /_next/static/* immutable önbellekli: yamalı chunk içerik özetli yeni adla yazılır, HTML ve RSC referansları ona çevrilir; eski dosya kalır.
 // edits sırayla uygulanır: [from, to]; from ya tek eşleşen metin ya da {from, until}: tek eşleşen from'dan sonraki ilk until'e kadar (until kalır)
@@ -305,7 +331,8 @@ export const chunks = [
       on('(0,a.jsxs)(r.Button,{size:"lg",className:"mt-8 h-12 bg-primary-foreground px-8 text-primary hover:bg-primary-foreground/90",children:[e("hero.cta.trial")', REG()),
     ] },
     // #170 SSS'yi kaynakta ve yamalı çıktıda yerinde değiştirdi; çıktı adı 49468e11 kaldı (içerik özeti bf87c986), o ad was'ta
-    { chunk: "6298d546504883f0", was: ["49468e11c5cb80ca"], edits: [  // /pricing
+    { chunk: "6298d546504883f0", was: ["49468e11c5cb80ca", "bf87c986ab1ea156"], edits: [  // /pricing
+      [{ from: '(0,a.jsx)(er,{type:"single",collapsible:!0,className:"mt-10",children:[', until: '})]})})}e.s(["PricingFAQ"' }, faqJs()],
       on('(0,a.jsx)(i.Button,{className:(0,j.cn)("mt-8 w-full",t.popular?"gradient-primary text-primary-foreground":""),variant:t.popular?"default":"outline",children:t.cta})', plan("s")),
       on('(0,a.jsxs)(r.Button,{size:"lg",className:"mt-8 gradient-primary text-primary-foreground",children:[(0,a.jsx)(n.MessageSquare,', go("mailto:info@saascorner.co")),
     ] },
