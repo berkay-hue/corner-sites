@@ -5,7 +5,7 @@ date: "2026-05-15"
 category: "Sales"
 image: "/_a/fr/images/eSkWCbXgXoenGwl4y3RjFl7z0_0d4c0f1a.jpg"
 imageAlt: "SDR vs. Full-Time Sales Rep"
-alt: "sdr-vs.-tam-zamanlı-satış-personeli"
+alt: "sdr-vs-tam-zamanli-satis-personeli"
 ---
 
 **Did You Hire a Person for Sales, or Build a System?**

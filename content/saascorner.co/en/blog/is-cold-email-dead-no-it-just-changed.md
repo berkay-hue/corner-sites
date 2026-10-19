@@ -5,7 +5,7 @@ date: "2026-06-10"
 category: "Sales"
 image: "/_a/fr/images/9o0ASWbF2iDdoDVptlAhVH1dMM_04fae6c7.jpg"
 imageAlt: "Is Cold Email Dead? No, It Just Changed"
-alt: "soğuk-e-posta-öldü-mü-hayır-sadece-değişti"
+alt: "soguk-e-posta-oldu-mu-hayir-sadece-degisti"
 ---
 
 **Is Cold Email Dead? No, It Just Changed**
