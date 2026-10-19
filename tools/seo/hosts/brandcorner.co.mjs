@@ -5,7 +5,7 @@ export const rule = {
     FAQ: {
       en: [
         ["Can I change plans later?", "Yes! You can upgrade or downgrade your plan at any time. Changes take effect at the start of your next billing cycle."],
-        ["What payment methods do you accept?", "We accept all major credit cards (Visa, Mastercard, American Express), PayPal, and bank transfers for enterprise plans."],
+        ["What payment methods do you accept?", "Online payments are not accepted at the moment."],
         ["Is there a contract or commitment?", "No long-term contracts required. Monthly plans can be cancelled anytime. Yearly plans are billed annually but can be cancelled with remaining time prorated."],
         // Eklenen sorular yalnız fiyat kartlarında yazanlardan; deneme süresi ve iade Berkay doğrulayana kadar yazılmaz
         ["Is there a free plan?", "Yes. The Starter plan is free and includes influencer browsing, 3 campaigns per month, basic analytics and email support."],
@@ -14,7 +14,7 @@ export const rule = {
         ["Do I need a credit card to start?", "No. You can start on the free plan without a credit card."]],
       tr: [
         ["Planımı daha sonra değiştirebilir miyim?", "Evet! Planınızı istediğiniz zaman yükseltebilir veya düşürebilirsiniz. Değişiklikler bir sonraki fatura döneminin başında yürürlüğe girer."],
-        ["Hangi ödeme yöntemlerini kabul ediyorsunuz?", "Tüm büyük kredi kartlarını (Visa, Mastercard, American Express), PayPal'ı ve kurumsal planlar için banka transferlerini kabul ediyoruz."],
+        ["Hangi ödeme yöntemlerini kabul ediyorsunuz?", "Şu an online ödeme alınmıyor."],
         ["Sözleşme veya taahhüt var mı?", "Uzun vadeli sözleşme gerekmez. Aylık planlar her zaman iptal edilebilir. Yıllık planlar yıllık olarak faturalandırılır ancak kalan süre orantılı olarak iptal edilebilir."],
         ["Ücretsiz plan var mı?", "Evet. Starter planı ücretsizdir; influencer arama, ayda 3 kampanya, temel analitik ve e-posta desteği içerir."],
         ["Professional planın fiyatı nedir?", "Professional planı aylık 99 $'dır. Sınırsız kampanya, gelişmiş analitik, öncelikli destek, 3 kullanıcılı ekip çalışması ve özel raporlar ekler."],
@@ -46,6 +46,7 @@ export const rule = {
       "/reset-password": ["New password | Brand Corner", "Set a new password for your Brand Corner account."],
       "/panel": ["Panel | Brand Corner", "Brand Corner panel."],
     },
+    // (FOOTER aşağıda: Integrations/Security/Careers/Press çıkar, KVKK ve Corner Group linkleri girer)
     // Doğrulanamayan iddialar (500+/10,000+ sayaçları, logo şeridi, yorumlar, başarı hikâyeleri, mockup tutarları, © 2025) nötrlenir.
     // Gövde SSR çıktısı: her değişiklik CHUNK_PATCHES'teki istemci yamasıyla birebir aynı olmalı, yoksa hydration #418 verir.
     // cut: açılış etiketinden eşi olan kapanışa kadar silinir; section: başlığı içeren <section> silinir; swap: [eski, yeni, beklenen adet]
@@ -70,7 +71,7 @@ export const rule = {
           ["Join thousands of brands, influencers, and agencies growing with Brand Corner.", "Brands, influencers, and agencies can grow with Brand Corner.", 1], copy] },
         "/features": { cut: [social], swap: [["analyzes thousands of profiles", "analyzes profiles", 1], copy] },
         // SSS akordeonu kapalıyken cevaplar HTML'de yok: düz liste olur (chunk'ta aynı değişiklik), SSR dili EN
-        "/pricing": { cut: [social], swap: [copy], put: [['<div data-slot="accordion" class="mt-10"', faqHtml]] },
+        "/pricing": { cut: [social], swap: [copy, ['role="switch" aria-checked=', 'role="switch" aria-label="Yearly" aria-checked=', 1], ['We accept all major credit cards (Visa, Mastercard, American Express), PayPal, and bank transfers for enterprise plans.', 'Online payments are not accepted at the moment.', 1]], put: [['<div data-slot="accordion" class="mt-10"', faqHtml]] },
         "/solutions/brands": { cut: [grid, social], swap: [
           ["<span>125K followers</span>", "<span>Followers</span>", 4],
           ["<span>4.8% engagement</span>", "<span>Engagement</span>", 4],
@@ -95,6 +96,8 @@ export const rule = {
     CLAIMS: /500\+|10,000\+|50\+ agencies|\$5M|50,000\+|98%|2\.4K|89%|\$45K|\+340%|TechCorp|ModaBrand|FoodCo|TravelGo|StyleHub|Sarah|Alex Rivera|Maria Garcia|TechStart|FoodExpress|Mike R\.|Emma L\.|\$12,500|\$8,200|\$10,800|\$45,200|\$4,250|\$1,500|125K|12K followers|4\.8%|24\/7|thousands of|hundreds of|© 2025|Join leading|Industry Leaders|10\.000\+|50\.000\+|₺\d+M|%98|7\/24|binlerce|yüzlerce|Sektör Lider/,
     body(b, page) {
       const T = this.BODY[page] || {};
+      // 6 Next sayfasının footer'ı: chunk'taki FOOTER yamasıyla birebir (yoksa #418)
+      if (T.swap) T.swap = [...T.swap.filter(x => !FOOTER.includes(x)), ...FOOTER];
       const drop = (i, what) => {  // i'deki açılış etiketini eşi olan kapanışla birlikte siler
         const tag = b.slice(i + 1).match(/^\w+/)[0], re = new RegExp(`<${tag}\\b|</${tag}>`, "g");
         re.lastIndex = i;
@@ -151,6 +154,11 @@ export const rule = {
         html = html.replace("</head>", `<link rel="icon" href="/icon.png" type="image/png"/><link rel="apple-touch-icon" href="/icon.png"/></head>`);
       // Footer'daki sosyal ikonlar artık gövdeden ve chunk'tan birlikte siliniyor (BODY cut + CHUNK_PATCHES); eski gizleme CSS'i kalkar
       html = html.replace('<style data-sk-seo>footer a[href="#"]{display:none}</style>', "");
+      // Skip link (Next sayfaları; statik sayfalarda HTML'de). React 19 body'ye eklenmiş fazladan etiketi hydration'da atlar
+      if (html.includes('<main class="flex-1">') && !html.includes('class="sk-skip"')) html = html
+        .replace("</head>", '<style data-sk-skip>.sk-skip{position:absolute;left:-9999px;top:8px;z-index:100;padding:8px 12px;border-radius:6px;background:#fff;color:#111}.sk-skip:focus{left:8px}</style></head>')
+        .replace(/(<body\b[^>]*>)/, '$1<a class="sk-skip" href="#main">Skip to content</a>')
+        .replace('<main class="flex-1">', '<main id="main" class="flex-1">');
       if (existsSync(join(SITE, "og.png"))) {
         html = html.replace(/(<meta (?:property="og:image"|name="twitter:image") content=")[^"]*(")/g, `$1${R.origin}/og.png$2`);
         if (!html.includes('property="og:image:width"'))
@@ -163,14 +171,17 @@ export const rule = {
         logo: { "@type": "ImageObject", url: R.origin + "/icon.png", width: 512, height: 512 },
         description: "Connecting brands, influencers, and agencies worldwide",
         founder: { "@type": "Person", "@id": "https://www.yalcinberkay.com.tr/#person", name: "Berkay Yalçın", url: "https://www.yalcinberkay.com.tr/" },
-        parentOrganization: { "@type": "Organization", "@id": "https://cornergroup.co/#org", name: "Corner Group", url: "https://cornergroup.co/" } };
+        parentOrganization: { "@type": "Organization", "@id": "https://cornergroup.co/#org", name: "Corner Group", url: "https://cornergroup.co/" },
+        contactPoint: { "@type": "ContactPoint", email: "info@saascorner.co", contactType: "customer support", availableLanguage: ["en", "tr"] },
+        // Brand Corner'ın kendi sosyal hesabı yok; saascorner.co'daki SAAS Corner hesapları (Ana, 19 Eki)
+        sameAs: ["https://www.linkedin.com/company/saascorner/", "https://www.instagram.com/saascorner.co/"] };
       const h1 = text(html.match(/<h1[^>]*>([\s\S]*?)<\/h1>/)?.[1] || "");
       // /kvkk tek Türkçe yasal sayfa: dil ve breadcrumb "Ana Sayfa"
       const tr = /<html lang="tr"/.test(html);
       const graph = noindex ? [] : page === "/"
         ? [org, { "@type": "WebSite", "@id": R.origin + "/#website", url: R.origin + "/", name: "Brand Corner", publisher: { "@id": ORG }, inLanguage: "en" }]
         : [...(page === "/about" ? [org] : []),
-          { "@type": page === "/about" ? "AboutPage" : "WebPage", "@id": url + "#webpage", url, name: h1, description: desc, isPartOf: { "@id": R.origin + "/#website" }, about: { "@id": ORG }, inLanguage: tr ? "tr" : "en" },
+          { "@type": page === "/about" ? "AboutPage" : page === "/contact" ? "ContactPage" : "WebPage", "@id": url + "#webpage", url, name: h1, description: desc, isPartOf: { "@id": R.origin + "/#website" }, about: { "@id": ORG }, inLanguage: tr ? "tr" : "en" },
           { "@type": "BreadcrumbList", itemListElement: [{ "@type": "ListItem", position: 1, name: tr ? "Ana Sayfa" : "Home", item: R.origin + "/" }, { "@type": "ListItem", position: 2, name: crumb, item: url }] }];
       // /pricing: FAQPage görünür (SSR, EN) SSS ile birebir; TR yalnız dil değişince istemcide. Teklifler fiyat kartlarından;
       // Enterprise fiyatsız olduğundan Offer'a girmez, deneme/iade süresi Berkay doğrulayana kadar şemada yok
@@ -189,6 +200,15 @@ export const rule = {
     },
 };
 
+const GROUP = [["https://saascorner.co", "SAAS Corner"], ["https://salescorner.co", "Sales Corner"], ["https://socialmediacorner.co", "Social Media Corner"], ["https://cornergroup.co", "Corner Group"]];
+const LI = (h, n) => `<li><a class="text-sm text-muted-foreground transition-colors hover:text-primary" href="${h}">${n}</a></li>`;
+const FOOTER = [
+  ...[["/integrations", "Integrations"], ["/security", "Security"], ["/careers", "Careers"], ["/press", "Press"]].map(([h, n]) => [LI(h, n), "", 1]),
+  [LI("/gdpr", "GDPR Compliance") + "</ul>", LI("/gdpr", "GDPR Compliance") + LI("/kvkk", "KVKK") + "</ul>", 1],
+  ['flex-1" placeholder="email@example.com"/>', 'flex-1" placeholder="email@example.com" aria-label="Email address"/>', 1],
+  ["<p>Made with ❤️ in Istanbul</p></div>", '<p>Made with ❤️ in Istanbul</p><nav aria-label="Corner Group companies" class="flex flex-wrap gap-4">'
+    + GROUP.map(([u, n]) => `<a href="${u}" class="hover:text-primary">${n}</a>`).join("") + "</nav></div>", 1],
+];
 // SSS düz liste: SSR (EN) ve chunk aynı yapıyı çizer. React metin kaçışı: & < > " '
 const esc = t => t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#x27;");
 function faqHtml() {
@@ -250,8 +270,14 @@ export const chunks = [
     // Header'daki Giriş/Login ve Get Started butonlarının (masaüstü + mobil menü) tıklama işleyicisi yoktu; site diline göre
     // /login|/giris ve /register|/kayit'e gider. onClick SSR HTML'ine yazılmaz, gövdeye dokunulmaz (#418 riski yok)
     // Footer'daki 4 sosyal ikon href="#" idi (hesap yok): gövdeden (BODY cut) ve chunk'tan birlikte silinir
-    { chunk: "fbb4735ac8b2897c", was: ["29a4179b1081dab7"], edits: [
-      ['{href:"/press",label:e("footer.press")},', '{href:"/press",label:e("footer.press")},{href:"/blog",label:e("footer.blog")},'],
+    // 19 Eki: Integrations/Security/Careers/Press sayfası yok, footer'dan çıkar; Legal'e KVKK, alt satıra Corner Group şirketleri
+    { chunk: "fbb4735ac8b2897c", was: ["29a4179b1081dab7", "f847b81df96780e6"], edits: [
+      ['{href:"/pricing",label:e("footer.pricing")},{href:"/integrations",label:e("footer.integrations")},{href:"/security",label:e("footer.security")}]', '{href:"/pricing",label:e("footer.pricing")}]'],
+      ['{href:"/careers",label:e("footer.careers")},{href:"/press",label:e("footer.press")},', '{href:"/blog",label:e("footer.blog")},'],
+      ['{href:"/gdpr",label:e("footer.gdpr")}]', '{href:"/gdpr",label:e("footer.gdpr")},{href:"/kvkk",label:"KVKK"}]'],
+      ['type:"email",placeholder:"email@example.com",className:"flex-1"', 'type:"email",placeholder:"email@example.com","aria-label":"Email address",className:"flex-1"'],
+      ['(0,t.jsx)("p",{children:e("footer.madeWith")})', '(0,t.jsx)("p",{children:e("footer.madeWith")}),(0,t.jsx)("nav",{"aria-label":"Corner Group companies",className:"flex flex-wrap gap-4",children:'
+        + JSON.stringify(GROUP.map(([u, n]) => [u, n])) + '.map(([u,n])=>(0,t.jsx)("a",{href:u,className:"hover:text-primary",children:n},u))})'],
       ...['hidden border-primary text-primary hover:bg-primary/5 sm:inline-flex bg-transparent', 'border-primary text-primary bg-transparent'].map(c => [
         `(0,u.jsx)(m.Button,{variant:"outline",className:"${c}",children:r("nav.login")})`,
         `(0,u.jsx)(m.Button,{variant:"outline",onClick:()=>{location.href="en"===e?"/login":"/giris"},className:"${c}",children:r("nav.login")})`]),
@@ -331,7 +357,8 @@ export const chunks = [
       on('(0,a.jsxs)(r.Button,{size:"lg",className:"mt-8 h-12 bg-primary-foreground px-8 text-primary hover:bg-primary-foreground/90",children:[e("hero.cta.trial")', REG()),
     ] },
     // #170 SSS'yi kaynakta ve yamalı çıktıda yerinde değiştirdi; çıktı adı 49468e11 kaldı (içerik özeti bf87c986), o ad was'ta
-    { chunk: "6298d546504883f0", was: ["49468e11c5cb80ca", "bf87c986ab1ea156"], edits: [  // /pricing
+    { chunk: "6298d546504883f0", was: ["49468e11c5cb80ca", "bf87c986ab1ea156", "38c0e5819384d936"], edits: [  // /pricing
+      ['(0,a.jsx)(N,{checked:l,onCheckedChange:o})', '(0,a.jsx)(N,{checked:l,onCheckedChange:o,"aria-label":"Yearly"})'],
       [{ from: '(0,a.jsx)(er,{type:"single",collapsible:!0,className:"mt-10",children:[', until: '})]})})}e.s(["PricingFAQ"' }, faqJs()],
       on('(0,a.jsx)(i.Button,{className:(0,j.cn)("mt-8 w-full",t.popular?"gradient-primary text-primary-foreground":""),variant:t.popular?"default":"outline",children:t.cta})', plan("s")),
       on('(0,a.jsxs)(r.Button,{size:"lg",className:"mt-8 gradient-primary text-primary-foreground",children:[(0,a.jsx)(n.MessageSquare,', go("mailto:info@saascorner.co")),
