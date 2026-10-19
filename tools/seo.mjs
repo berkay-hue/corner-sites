@@ -29,6 +29,10 @@ for await (const f of walk(SITE)) {
   for (const [, b] of renames) if (after.includes(b)) used.add(b);
   if (after !== before) { await writeFile(f, after); n++; }
 }
+for (const [rel, fn] of Object.entries(rule.files || {})) {  // html dışı dosyalar (ör. Framer searchIndex json)
+  const f = join(SITE, rel), before = await readFile(f, "utf8"), after = fn(before);
+  if (after !== before) { await writeFile(f, after); n++; }
+}
 const unused = [...new Set(renames.map(([, b]) => b))].filter(b => !used.has(b));
 if (unused.length) throw new Error(`yamalı chunk hiçbir sayfada yok (önceki adı was'a ekle): ${unused.join(", ")}`);
 console.log(`seo: ${host} ${n} dosya güncellendi${(CHUNK_PATCHES[host] || []).length ? `, ${CHUNK_PATCHES[host].length} chunk yamalandı` : ""}`);
