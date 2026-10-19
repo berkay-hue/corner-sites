@@ -215,7 +215,7 @@ Before every campaign, quickly check the following questions:
 6. Is the daily volume per mailbox reasonable?
 7. Is a custom tracking domain being used?
 
-Rather than doing these checks manually, making them part of your operations is far more sustainable in the long run. We discussed how you can automate repetitive steps, from list cleaning to send monitoring, in our post on [automating your lead generation operation](https://saascorner.co/blog/b2b’de-uykusuz-gecelerin-çıktısı-lead-generation-operasyonunu-otomatiğe-bağlamak).
+Rather than doing these checks manually, making them part of your operations is far more sustainable in the long run. We discussed how you can automate repetitive steps, from list cleaning to send monitoring, in our post on [automating your lead generation operation](https://saascorner.co/blog/b2bde-uykusuz-gecelerin-ciktisi-lead-generation-operasyonunu-otomatige-baglamak).
 
 ## Who Owns This? The Gap Between Sales and Technical Teams
 

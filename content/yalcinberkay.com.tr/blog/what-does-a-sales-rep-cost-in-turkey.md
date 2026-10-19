@@ -111,7 +111,7 @@ If your average sales cycle is three months, a rep who starts prospecting in mon
 
 Now look at break-even. Suppose your gross margin is 60%. To cover a fully loaded cost of ~1.78 million TRY, the rep needs to generate about **3 million TRY in revenue** in the first year just to pay for themselves, not to make you a profit. If most of that has to happen in the second half of the year, the monthly target in months 7–12 is steep.
 
-This is why quotas for new reps must be ramped, not flat. I explain how to structure that in [how to set sales quotas for new reps](/blog/how-to-set-sales-quotas-for-new-reps). Anything that shortens your sales cycle also directly shortens your payback period, so the ramp math is a strong argument for tightening your process.
+This is why quotas for new reps must be ramped, not flat. I explain how to structure that in [how to set sales quotas for a sales team](/blog/how-to-set-sales-quotas-for-sales-team). Anything that shortens your sales cycle also directly shortens your payback period, so the ramp math is a strong argument for tightening your process.
 
 ## How do inflation and currency change the math?
 

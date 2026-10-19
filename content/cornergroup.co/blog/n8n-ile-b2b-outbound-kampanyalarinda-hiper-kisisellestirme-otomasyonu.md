@@ -1,6 +1,6 @@
 ---
 title: "N8n ile B2B Outbound Kampanyalarında Hiper Kişiselleştirme Otomasyonu"
-description: "B2B pazarının gürültü seviyesi, daha önce hiç olmadığı kadar yüksek. Karar vericiler, her gün yüzlerce jenerik, ruhsuz ve \"Değerli Yetkili\" ile başlayan…"
+description: "n8n ile firma ve kişi verisini birleştirip her alıcıya özel outbound mesaj üretebilirsiniz; bu yazı hiper kişiselleştirme otomasyonunu anlatır."
 date: "2026-06-26"
 category: "Otomasyon"
 image: "/_a/fr/images/T36B0FRxvMlwPraHdT3zbSf25c_cd09786e.jpg"

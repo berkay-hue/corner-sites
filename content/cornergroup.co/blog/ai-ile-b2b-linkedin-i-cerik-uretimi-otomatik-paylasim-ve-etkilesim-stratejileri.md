@@ -1,6 +1,6 @@
 ---
 title: "AI ile B2B LinkedIn İçerik Üretimi: Otomatik Paylaşım ve Etkileşim Stratejileri"
-description: "B2B dünyasının dijital merkezi haline gelen LinkedIn, artık sadece bir profesyonel ağ platformu değil, aynı zamanda bir itibar yönetimi, müşteri bulma ve…"
+description: "AI, B2B LinkedIn içerik üretimini ve paylaşım planını hızlandırır; bu yazı otomasyonu insan dokunuşuyla dengeleyen etkileşim stratejilerini anlatır."
 date: "2026-05-29"
 category: "Otomasyon"
 image: "/_a/fr/images/uVXjDk1VaEL03ZycoO4ErnCDg4_7805d9aa.jpg"

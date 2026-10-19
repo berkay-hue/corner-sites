@@ -75,6 +75,8 @@ h1,h2,h3{font-family:"Poppins","Inter",system-ui,sans-serif;font-weight:600;lett
 .inbox{list-style:none;margin:0;padding:0}.inbox li{display:flex;align-items:center;gap:12px;padding:12px 20px;border-top:1px solid var(--line)}.inbox li:first-child{border-top:0}
 .ic{width:36px;height:36px;flex:none;border-radius:10px;display:grid;place-items:center}.ic.warn{background:var(--warn-soft);color:var(--warn)}.ic.info{background:var(--info-soft);color:var(--info)}.ic.danger{background:var(--danger-soft);color:var(--danger)}.ic.accent{background:var(--accent-soft);color:var(--accent-text)}.ic.ok{background:var(--ok-soft);color:var(--ok)}
 .tx{flex:1;min-width:0;display:flex;flex-direction:column}.tx b{font-weight:600;font-size:14.5px;overflow-wrap:anywhere}.tx span{color:var(--muted);font-size:13px;overflow-wrap:anywhere}
+.nfhead{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:0 0 12px}.nfhead .meta{margin:0}
+.nf{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-card);overflow:hidden}.inbox.nf li{padding:0;flex-wrap:nowrap}.nf .nfa{display:flex;align-items:center;gap:12px;min-height:44px;padding:12px 20px;flex:1;min-width:0;color:inherit;text-decoration:none}.nf a.nfa:hover{background:var(--surface-2)}.nf li.un .tx b{font-weight:700}.nf .dot{width:10px;height:10px;flex:none;border-radius:50%;background:var(--accent)}
 .ierr{display:flex;align-items:center;gap:12px;flex-wrap:wrap;color:var(--danger);font-size:14px}.ierr span{flex:1 1 200px}
 .cb.none{color:var(--muted);text-align:center;padding:28px 20px}
 .meter{height:8px;border-radius:999px;background:var(--surface-2);overflow:hidden;margin:6px 0 4px}.meter i{display:block;height:100%;background:var(--grad);border-radius:999px}
@@ -122,11 +124,11 @@ footer.bot{border-top:1px solid var(--line);color:var(--muted);font-size:13.5px;
 .f input:focus-visible,.f select:focus-visible,.f textarea:focus-visible{outline:2px solid var(--accent);outline-offset:1px;border-color:var(--accent)}
 .f fieldset{border:0;padding:0;margin:0 0 16px;min-width:0}
 .hint{color:var(--muted);font-size:13px;font-weight:400;margin:-10px 0 16px}
-.checks{display:flex;flex-wrap:wrap;gap:8px 18px}.f .checks label,.f label.check{display:flex;align-items:center;gap:8px;font-weight:400;font-size:15px;margin:0}
+.checks{display:flex;flex-wrap:wrap;gap:8px 18px}.f .checks label,.f label.check{display:flex;align-items:center;min-height:44px;gap:8px;font-weight:400;font-size:15px;margin:0}
 .f input[type=checkbox]{width:16px;height:16px;margin:0;accent-color:var(--accent)}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
 .prow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0 12px}
-.filter{display:flex;flex-wrap:wrap;align-items:flex-end;gap:12px;margin:0 0 20px}.filter>div{flex:1 1 180px}.f.filter input:not([type=checkbox]),.f.filter select{margin:0}.f select{min-height:44px}
+.filter{display:flex;flex-wrap:wrap;align-items:flex-end;gap:12px;margin:0 0 20px}.filter>div{flex:1 1 180px}.f.filter input:not([type=checkbox]),.f.filter select{margin:0}.f select{min-height:44px}.filter>.freset{flex:0 0 auto}.freset .ghost[hidden]{display:none}
 .tabs{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}.tabs button{min-height:44px;padding:0 14px;border-radius:var(--r-ctl);border:1px solid var(--line-strong);background:var(--surface);color:var(--text);font:inherit;cursor:pointer}.tabs button[aria-pressed=true]{background:var(--accent-soft);border-color:var(--accent);color:var(--accent-text);font-weight:600}
 .hl-box{border-color:var(--accent);box-shadow:inset 3px 0 0 var(--accent)}
 .apps-sec{margin:0 0 24px}.apps-sec h2{display:flex;align-items:center;gap:8px}.apps-sec h2 .n{font-size:14px;font-weight:600;color:var(--muted)}
@@ -134,8 +136,9 @@ footer.bot{border-top:1px solid var(--line);color:var(--muted);font-size:13.5px;
 .soc:not(.card){margin:20px 0 0}.soc:not(.card) h2{margin:0 0 4px}.srow{display:flex;flex-wrap:wrap;align-items:center;gap:10px 12px;padding:12px 0;border-top:1px solid var(--line)}
 .srow .ic{width:34px;height:34px;border-radius:9px}.ic.slate{background:var(--slate-soft);color:var(--slate)}.srow .tx{flex:1 1 160px;min-width:0;overflow-wrap:anywhere}.srow .tx b{display:block;font-weight:600}.srow .tx span{color:var(--muted);font-size:14px}.srow .sa{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:8px;margin-left:auto}
 .badge.b-ok{background:var(--ok-soft);color:var(--ok)}.badge.b-danger{background:var(--danger-soft);color:var(--danger)}.badge.b-slate{background:var(--slate-soft);color:var(--slate)}
-.srow .tx .warn{color:var(--danger)}.lk44{display:inline-flex;align-items:center;min-height:44px}.ch .lk44{text-decoration:none}.srow .ghost,.srow .btn,.soc .btn{min-height:44px}.srow .mets{flex:1 1 100%}
+.srow .tx .warn{color:var(--danger)}.lk44{display:inline-flex;align-items:center;justify-content:center;min-height:44px;min-width:44px}.ch .lk44{text-decoration:none}.srow .ghost,.srow .btn,.soc .btn{min-height:44px}.srow .mets{flex:1 1 100%}
 .mets.m4{grid-template-columns:repeat(4,minmax(0,1fr))}.sample{margin:14px 0 4px;padding:14px;border:1px dashed var(--line-strong);border-radius:var(--r-card)}.sample h3{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:15px;margin:12px 0 8px}.sample h3:first-of-type{margin-top:8px}
+.perf .ch{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:8px}h3.ptop{font-size:14px;margin:14px 0 4px}ol.ptop{list-style:none;margin:0 0 12px;padding:0}ol.ptop a{display:flex;justify-content:space-between;gap:12px;color:inherit;text-decoration:none;border-bottom:1px solid var(--line)}ol.ptop .pcap{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin:0}
 .badge.b-sample{background:var(--surface-2);color:var(--muted);border:1px dashed var(--line-strong)}
 .sub{margin:14px 0 0;padding:16px 0 0;border-top:1px solid var(--line)}
 .f input[readonly]{background:var(--surface-2);color:var(--muted)}.btn.bad{color:var(--danger);border-color:var(--danger)}.lbl{font-weight:600;font-size:14px;margin:0 0 8px}.seg{margin:0 0 18px}.seg:last-child{margin-bottom:0}h3.sub{font-size:15px;margin:18px 0 6px}.card .f .btn{margin-top:4px}.tbar{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:10px 16px;border-bottom:1px solid var(--line);margin:0 0 16px}.tabs.ul{gap:0;margin:0}.tabs.ul button{border:0;border-bottom:2px solid transparent;border-radius:0;background:none;margin-bottom:-1px;color:var(--muted)}.tabs.ul button[aria-pressed=true]{background:none;border-bottom-color:var(--accent);color:var(--text)}.tabs.ul .n{color:var(--faint);font-weight:500}.tq{flex:0 1 260px;margin:0 0 8px}.tq input{margin:0;min-height:44px}.box.rows{padding:0;display:block}.row{position:relative;display:flex;align-items:center;gap:8px 20px;padding:14px 18px;min-height:44px;border-top:1px solid var(--line)}.row:first-child{border-top:0}.row:hover{background:var(--surface-2)}.rm{flex:1 1 auto;min-width:0}.row h3{font-size:15.5px;margin:0;overflow-wrap:anywhere}.row h3 a{text-decoration:none;color:inherit}.row h3 a::after{content:"";position:absolute;inset:0}.row h3 a:focus-visible{outline:none}.row:focus-within{outline:2px solid var(--accent);outline-offset:-2px}.row .badge{vertical-align:2px;margin-left:4px}.rc{flex:0 0 auto;justify-content:flex-end;text-align:right}@media(max-width:640px){.row{flex-wrap:wrap}.rc{justify-content:flex-start;text-align:left}.tq{flex:1 1 100%}}.dhd{align-items:center;margin:0 0 14px}.dhd h1{margin:0}.dhd h1 .badge{vertical-align:5px;margin-left:4px}.dhd .row-b{margin:0}.ghost.bad{color:var(--danger);border-color:var(--danger)}.dinfo{margin:0 0 22px}.dinfo .prose{margin:0 0 4px}.ig{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px 20px;margin:16px 0 0;padding:16px 0 0;border-top:1px solid var(--line)}.dinfo>.ig:first-child{margin-top:0;padding-top:0;border-top:0}.ig dt{font-size:12.5px;color:var(--muted);margin:0 0 3px}.ig dd{margin:0;font-weight:600;font-size:14.5px;overflow-wrap:anywhere}@media(max-width:640px){.ig{grid-template-columns:1fr 1fr}}.ld{display:inline-flex;align-items:center;gap:8px}.ld::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--faint)}.ld[data-l=colNew]::before{background:#3b82f6}.ld[data-l=colInvited]::before{background:#a855f7}.ld[data-l=colWork]::before{background:#f59e0b}.ld[data-l=colReview]::before{background:#ec4899}.ld[data-l=colDone]::before{background:#10b981}.dinfo .lbl{font-size:14px;margin:0 0 6px}.lane .row-b{gap:6px}.lane .row-b .btn.sm,.lane .row-b .ghost{padding:0 10px;font-size:13px}
@@ -171,18 +174,39 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
 .toolbar{display:flex;flex-wrap:wrap;gap:8px;padding:12px 16px;align-items:center;border-bottom:1px solid var(--line)}.f.toolbar input:not([type=checkbox]){margin:0;min-height:44px;flex:1 1 220px;width:auto;max-width:none}.flush .tabs.ul{padding:0 8px;border-bottom:1px solid var(--line)}.flush .tabs.ul button{min-height:44px}
 .crow{position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 16px;padding:14px 16px;border-top:1px solid var(--line);align-items:center}.crow:first-child{border-top:0}.crow:hover{background:var(--surface-2)}.crow:focus-within{outline:2px solid var(--accent);outline-offset:-2px}.crow .tl{display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center;margin:0 0 4px}.crow h3{font-size:15.5px;margin:0;overflow-wrap:anywhere}.crow .tlink{text-decoration:none;color:inherit}.crow .tlink::after{content:"";position:absolute;inset:0}.crow .tlink:focus-visible{outline:none}.crow .meta{margin:0}.crow .right{display:flex;flex-direction:column;align-items:flex-end;gap:6px}.mini b{color:var(--text);font-weight:600}.crow .meta span{display:inline-flex;align-items:center;gap:5px}.crow .meta svg.i{width:15px;height:15px}.crow .meta .warn{color:var(--danger)}
 @media(max-width:1100px){.split{grid-template-columns:minmax(0,1fr)}.sticky{position:static}}
+.pbar{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;justify-content:space-between;margin:0 0 12px}.pbar .tabs{margin:0}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;list-style:none;margin:0;padding:0}
+.pcard{position:relative;display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-card);overflow:hidden}.pcard:hover{border-color:var(--line-strong)}.pcard:focus-within{outline:2px solid var(--accent);outline-offset:2px}
+.pcard a.pl{position:absolute;inset:0;z-index:1;font-size:0}.pcard a.pl:focus{outline:0}
+.pth{position:relative;aspect-ratio:1/1;background:var(--surface-2);display:flex;align-items:center;justify-content:center;color:var(--faint);overflow:hidden}.pth img{width:100%;height:100%;object-fit:cover;display:block}.pth .i{width:34px;height:34px}
+.pth .pt{position:absolute;left:8px;top:8px;background:color-mix(in srgb,var(--surface) 90%,transparent);color:var(--text);font-size:11.5px;font-weight:600;border-radius:999px;padding:3px 8px}
+.pth .badge{position:absolute;right:8px;top:8px;margin:0}
+.pbody{padding:10px 12px 12px;display:flex;flex-direction:column;gap:6px;min-width:0}.pcap{margin:0;font-size:13.5px;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}
+.pmeta{display:flex;flex-wrap:wrap;gap:2px 10px;color:var(--muted);font-size:12.5px}.pmeta b{color:var(--text);font-weight:600}
+.cgrid{grid-template-columns:repeat(3,minmax(0,1fr))}.pact{display:flex;flex-wrap:wrap;gap:6px;margin-top:2px}.pact .btn,.pact .ghost{min-height:44px;display:inline-flex;align-items:center;text-decoration:none}.pact .badge{margin:0}.ctarget{max-width:360px;margin:0 0 12px}.ctarget select{min-height:44px}.cacc{list-style:none;margin:0;padding:0}.cacc li{padding:10px 0;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:4px}.cacc li:first-child{border-top:0;padding-top:0}.cacc .badge{margin:0}@media(max-width:640px){.cgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.plist{list-style:none;margin:0;padding:0;border:1px solid var(--line);border-radius:var(--r-card);background:var(--surface);overflow:hidden}
+.prow2{position:relative;display:grid;grid-template-columns:56px minmax(0,1fr) auto;gap:12px;align-items:center;padding:10px 14px;border-top:1px solid var(--line)}.prow2:first-child{border-top:0}.prow2:hover{background:var(--surface-2)}.prow2:focus-within{outline:2px solid var(--accent);outline-offset:-2px}
+.prow2 .pth{width:56px;height:56px;border-radius:8px}.prow2 .pth .i{width:22px;height:22px}.prow2 a.pl{position:absolute;inset:0;z-index:1;font-size:0}.prow2 .er{text-align:right;font-size:13px;color:var(--muted)}.prow2 .er b{display:block;font-size:15px;color:var(--text)}
+.pager{display:flex;align-items:center;justify-content:center;gap:12px;margin:16px 0 0;flex-wrap:wrap}.pager .info{margin:0}.pnote{color:var(--muted);font-size:13px;margin:14px 0 18px}.cb .pnote{margin:12px 0 0}
+.pdet{display:grid;grid-template-columns:minmax(0,280px) minmax(0,1fr);gap:18px;align-items:start}.pdet .pth{border-radius:var(--r-card)}
+.pchart{width:100%;height:auto;max-height:300px;display:block;margin:6px 0 0}.pchart .ax{stroke:var(--line-strong);stroke-width:1}.pchart .ln{fill:none;stroke-width:2.5}.pchart .l1{stroke:var(--accent)}.pchart .l2{stroke:var(--accent-2);stroke-dasharray:5 4}.pchart text{fill:var(--muted);font:11px "Inter",sans-serif}.pchart circle{fill:var(--surface);stroke-width:2}
+.legend2{display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);margin:6px 0 0}.legend2 span::before{content:"";display:inline-block;width:14px;height:3px;border-radius:2px;margin-right:6px;vertical-align:middle;background:var(--accent)}.legend2 span.b::before{background:var(--accent-2)}
+.snaps{width:100%;border-collapse:collapse;font-size:13.5px;margin:12px 0 0}.snaps th,.snaps td{text-align:right;padding:8px 6px;border-top:1px solid var(--line)}.snaps th:first-child,.snaps td:first-child{text-align:left}.snaps th{color:var(--muted);font-weight:500}.tscroll{overflow-x:auto}
+details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}details.pd>summary{min-height:44px;display:flex;align-items:center;cursor:pointer;font-weight:600;padding:6px 0}details.pd>summary::-webkit-details-marker{display:none}details.pd>summary::before{content:"+";width:22px;color:var(--muted)}details.pd[open]>summary::before{content:"−"}
+.grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0 12px}
 @media(max-width:760px){.crow{grid-template-columns:minmax(0,1fr)}.crow .right{flex-direction:row-reverse;align-items:center;justify-content:space-between}}
 @media(max-width:760px){.app{display:block}.side{display:none}dialog.drawer{width:100%;border-left:0}
 .mtop{display:flex;align-items:center;justify-content:space-between;gap:12px;position:sticky;top:0;z-index:20;height:56px;padding:0 8px 0 12px;background:color-mix(in srgb,var(--surface) 92%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
 .mtop .me{display:flex;align-items:center;justify-content:center;width:44px;height:44px;border:0;background:none;padding:0;cursor:pointer;border-radius:50%}
 .main{padding:18px 16px 24px}.wrap{padding:0 16px}
 .tabbar{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--surface);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
+.tabbar.n5{grid-template-columns:repeat(5,minmax(0,1fr))}.pgrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.pdet{grid-template-columns:1fr}.pdet .pth{max-width:320px}.grid4{grid-template-columns:1fr 1fr}.pbar{align-items:stretch}.pbar .tabs{width:100%}
 .tabbar a{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-height:52px;text-decoration:none;color:var(--muted);font:500 11px/1.2 "Inter",sans-serif;padding:4px 2px;text-align:center}
 .tabbar a[aria-current]{color:var(--accent-text);font-weight:600}.tabbar .i{width:22px;height:22px}
 .tabbar .cnt{position:absolute;top:4px;left:calc(50% + 6px);margin:0;min-width:18px;height:18px;padding:0 5px;font-size:11px;line-height:18px}
 .main-col{padding-bottom:calc(64px + env(safe-area-inset-bottom))}
 .stats,.mets,.mets.m4{grid-template-columns:repeat(2,minmax(0,1fr))}.stats .stat .v{font-size:22px}.mets .stat:last-child{grid-column:1/-1}.mets.m4 .stat:last-child{grid-column:auto}
-.btn,.btn.sm,.ghost{min-height:44px}.inbox li{padding:12px 16px;flex-wrap:wrap}.inbox .btn{margin-left:48px}
+.btn,.btn.sm,.ghost{min-height:44px}.inbox li{padding:12px 16px;flex-wrap:wrap}.inbox .btn{margin-left:48px}.nf .nfa{padding:12px 16px}
 .ph h1,.wrapw>h1{font-size:22px}.box{padding:16px}.ch,.cb{padding-left:16px;padding-right:16px}.oc,.irow,.legend{padding-left:16px;padding-right:16px}.grid2{grid-template-columns:1fr}.prow{grid-template-columns:1fr 1fr}.prow>div:last-child{grid-column:1/-1}}
 </style>
 </head>
@@ -192,7 +216,7 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
 <a class="logo" href="/">Brand<span>Corner</span></a>
 <div class="acct"><span class="av" id="av" aria-hidden="true"></span><div><div class="n" id="who"></div><div class="r" id="role"></div></div></div>
 <nav class="nav" id="nav" aria-label="Panel"></nav>
-<div class="foot"><a class="nb" id="set" href="#settings"></a><a class="nb" id="help2" href="mailto:info@saascorner.co?subject=Brand%20Corner%20panel"></a><button type="button" class="nb" id="out"></button></div>
+<div class="foot"><a class="nb" id="ntf" href="#notifications"></a><a class="nb" id="set" href="#settings"></a><a class="nb" id="help2" href="mailto:info@saascorner.co?subject=Brand%20Corner%20panel"></a><button type="button" class="nb" id="out"></button></div>
 </aside>
 <div class="main-col">
 <header class="mtop"><a class="logo" href="/">Brand<span>Corner</span></a><button type="button" class="me" id="me" aria-haspopup="dialog" aria-controls="sheet"><span class="av" id="av2" aria-hidden="true"></span></button></header>
@@ -206,7 +230,7 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
 <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetWho" hidden>
 <div class="grip" aria-hidden="true"></div>
 <div class="acct"><span class="av" id="av3" aria-hidden="true"></span><div><div class="n" id="sheetWho"></div><div class="r" id="sheetRole"></div></div></div>
-<a class="nb" id="set2" href="#settings"></a><a class="nb" id="help3" href="mailto:info@saascorner.co?subject=Brand%20Corner%20panel"></a><button type="button" class="nb" id="out2"></button>
+<a class="nb" id="ntf2" href="#notifications"></a><a class="nb" id="set2" href="#settings"></a><a class="nb" id="help3" href="mailto:info@saascorner.co?subject=Brand%20Corner%20panel"></a><button type="button" class="nb" id="out2"></button>
 </div>
 
 <script src="/bc-app.js"></script>
@@ -248,6 +272,29 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
       lead_influencer: "Size uygun kampanyaları bulun, başvurularınızı ve davetlerinizi takip edin.",
       role_brand: "Marka", role_agency: "Ajans", role_influencer: "Influencer",
       nOverview: "Genel bakış", nCampaigns: "Kampanyalar", nDiscover: "Influencer keşfi", nProfile: "Profil", nOpps: "Fırsatlar", nApps: "Başvurularım",
+      nPosts: "Gönderiler", postsLead: "Paylaşımlarının beğeni, yorum, izlenme ve erişimini tek yerde izle.",
+      pvGrid: "Izgara", pvList: "Liste", pvView: "Görünüm", pRange: "Tarih", pRAll: "Tümü", pR7: "Son 7 gün", pR30: "Son 30 gün", pR90: "Son 90 gün",
+      pType: "Tür", pTAll: "Tüm türler", pt_photo: "Fotoğraf", pt_video: "Video", pt_reel: "Reels / kısa video", pt_carousel: "Kaydırmalı", pt_story: "Hikâye",
+      pPlat: "Platform", pPAll: "Tüm platformlar", pCount: "{n} gönderi", pNone: "Bu filtrelerle gönderi yok.", pClear: "Filtreleri temizle",
+      pPrev: "Önceki", pNext: "Sonraki", pPage: "Sayfa {n}", pPager: "Sayfalar",
+      mLikes: "Beğeni", mComments: "Yorum", mViews: "İzlenme", mEr: "Etkileşim oranı", pErNote: "Etkileşim oranı = (beğeni + yorum) ÷ erişim; erişim yoksa izlenme kullanılır.",
+      pSampleNote: "Henüz gönderi eklemedin. Aşağıdakiler gerçek değil, ekranın nasıl görüneceğini gösteren örnek verilerdir.",
+      pLocal: "Elle girdiğin gönderiler şimdilik yalnız bu cihazda, bu tarayıcıda saklanır.",
+      pSrv: "Gönderilerin hesabında saklanır; her cihazdan görebilirsin.", pSrvNoDel: "Hesaptaki gönderiyi silme henüz yok.",
+      pMove: "Sunucuya aktar", pMoveHint: "{n} gönderi yalnız bu cihazda duruyor. Bir kez hesabına aktarabilirsin.", pMoved: "{n} gönderi hesabına aktarıldı.",
+      pAdd: "Gönderi ekle", pUrl: "Gönderi bağlantısı", pUrlHint: "Instagram, TikTok, YouTube ya da LinkedIn gönderisinin tam adresi (https://…).",
+      pDate: "Paylaşım tarihi", pCaption: "Açıklama", pThumb: "Küçük resim adresi (isteğe bağlı)", pThumbHint: "Yalnız https:// ile başlayan bir resim adresi.",
+      pSave: "Kaydet", pSaved: "Gönderi eklendi.", pBadUrl: "Geçerli bir https:// gönderi bağlantısı gir.", pBadDate: "Geçerli bir tarih seç.", pBadNum: "Sayılar 0 ya da daha büyük tam sayı olmalı.", pDup: "Bu bağlantı zaten ekli.",
+      pCsv: "CSV içe aktar", pCsvHint: "Sütunlar: url, date, type, likes, comments, views, reach, caption. İlk satır başlık olabilir; ayraç virgül ya da noktalı virgül.", pCsvFile: "CSV dosyası",
+      pCsvGo: "İçe aktar", pCsvUpd: "{n} gönderiye yeni ölçüm eklendi.", pDataH: "Veri ekle", pCsvDone: "{n} gönderi eklendi.", pCsvSkip: "{n} satır atlandı (satır {r}).", pCsvEmpty: "Dosyada içe aktarılacak satır yok.", pCsvBig: "En fazla 500 satır içe aktarılabilir.", pCsvRead: "Dosya okunamadı.",
+      pFull: "Bu cihazda yer kalmadı; gönderi kaydedilemedi.",
+      pBack: "Gönderilere dön", pOpen: "Gönderiyi aç", pNotFound: "Bu gönderi bulunamadı.", pTimeline: "Zaman çizelgesi", pTlNone: "Zaman çizelgesi için en az iki ölçüm gerekir.",
+      pSnap: "Ölçüm ekle", pSnapAt: "Ölçüm tarihi", pSnapOk: "Ölçüm eklendi.", pDel: "Gönderiyi sil", pDelQ: "Bu gönderi bu cihazdan silinsin mi?", pDeleted: "Gönderi silindi.",
+      pSampleRO: "Örnek gönderiler düzenlenemez; kendi gönderini ekleyince örnekler kalkar.",
+      pConn: "Otomatik bağlantılar", pConnOff: "Otomatik ölçüm çekme henüz açık değil. O zamana kadar gönderilerini elle ya da CSV ile ekleyebilirsin.",
+      pConnSoon: "Hesap bağlı; gönderilerin otomatik çekilmesi yakında.", pConnNot: "Bağlı değil", pConnOk: "Bağlı", pConnApi: "Kaynak: {n}",
+      pLiNote: "LinkedIn kişisel gönderi ölçümlerini dışarıya vermiyor; LinkedIn gönderilerini elle ya da CSV ile ekle.",
+      pNoCap: "Açıklama yok",
       sCampaigns: "Kampanya", sOpen: "Açık kampanya", sPending: "Bekleyen başvuru", sApproved: "Onaylanan içerik",
       sReview: "Onay bekleyen içerik", sWork: "Aktif iş", sDone: "Tamamlanan", ocTitle: "Açık kampanyalar", ocAll: "Tümü", ocEmpty: "Açık kampanyan yok.", dLeft: "{n} gün kaldı", dLast: "Bugün son gün", dGone: "Süresi doldu",
       stPend: "Yeni başvurular", stInv: "Davet edilenler", stWork: "Çalışılıyor", stRev: "İçerik onayı", stDone: "Onaylandı",
@@ -261,6 +308,8 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
       waiting: "Sizi bekleyenler", waitEmpty: "Şu an sizi bekleyen bir iş yok.", inNew: "{n} yeni başvuru", inSub: "{n} içerik onay bekliyor", inDue: "Son tarih yaklaşıyor: {n}",
       inInvite: "{n} sizi davet etti", inRev: "Revizyon istendi", inAcc: "İçerik bağlantınızı gönderin", inProf: "%{n} tamamlandı", review: "İncele", openIt: "Aç",
       profCard: "Profil", profDone: "Tamamlanma", editProf: "Profili düzenle",
+      kvTitle: "Verilerin", kvLead: "Hesabına ait verilerin bir kopyasını JSON dosyası olarak indir (KVKK md. 11).", kvBtn: "Verilerimi indir", kvDone: "Dosya indirildi.", kvSampleNote: "Sunucu dışa aktarımı açılana kadar dosya yalnız bu cihazdaki bilgileri içerir.", kvDelTitle: "Hesap ve veri silme", kvDelLead: "Hesabını ve verilerini sildirmek için bize yaz.", kvDelBtn: "Silme talebi gönder", kvDelSubj: "Brand Corner hesap ve veri silme talebi",
+      nNotif: "Bildirimler", nfLead: "Başvurular, davetler ve içerik onayları burada toplanır.", nfUnread: "{n} okunmamış", nfAllRead: "Hepsi okundu.", nfMarkAll: "Tümünü okundu say", nfNone: "Henüz bildirim yok.", nfNew: "Yeni", nfSampleNote: "Bildirim servisi açılınca gerçek bildirimlerin burada görünür.", nfSApply: "Yaz koleksiyonu kampanyana yeni bir başvuru geldi.", nfSContent: "Bir influencer onayın için içerik gönderdi.", nfSView: "Kampanya özetin 3 influencer tarafından görüntülendi.", nfSInvite: "Bir marka seni kampanyasına davet etti.", nfSAccepted: "Başvurun kabul edildi.", nfSMetrics: "Gönderi ölçümlerini güncelleme zamanı.",
       nSettings: "Ayarlar", setLead: "Hesabını ve panelin görünümünü yönet.", setAcct: "Hesap", setName: "Ad soyad", setEmail: "E-posta", setEmailHint: "E-postanı değiştirmek için info@saascorner.co adresine yaz.", setPw: "Şifre", setPwHint: "Yeni şifre belirleme bağlantısını e-postana göndeririz.", setPwBtn: "Sıfırlama bağlantısı gönder", setPwSent: "Bağlantı gönderildi. Gelen kutunu kontrol et.", setLook: "Görünüm", setLang: "Dil", setTheme: "Tema", thSys: "Sistem", thLight: "Açık", thDark: "Koyu", setOutLead: "Bu cihazda panelden çıkış yap.",
       ckCompany: "Şirket adı", ckIndustry: "Sektör", ckCity: "Şehir", ckWebsite: "Web sitesi", ckBio: "Hakkında (en az 40 karakter)", ckClients: "Müşteri sayısı",
       ckNiches: "İlgi alanları", ckPlatform: "Takipçi sayısıyla en az bir platform", ckListed: "Markalara görünür profil",
@@ -274,7 +323,7 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
       socDone: "{n} hesabın bağlandı.", socCutOk: "{n} bağlantısı kesildi.", socDenied: "Bağlantı izni verilmedi; istersen yeniden deneyebilirsin.",
       socTaken: "Bu hesap başka bir Brand Corner hesabına bağlı. Önce oradan bağlantıyı kes.", socTicket: "Bağlantı süresi doldu ya da geçersiz; yeniden \"Bağla\"ya bas.",
       socForbidden: "Bu hesap için bağlantı kullanılamıyor.", socProvider: "Platform şu an yanıt vermedi; biraz sonra yeniden dene.", socOwner: "Bu bağlantı başka bir hesaptan başlatıldı, yeniden Bağla'ya bas.",
-      perf: "Performans", mReach: "Erişim", mEng: "Etkileşim", mSpend: "Harcama", mEarn: "Kazanç", noData: "Veri yok", perfNote: "Bu ölçümler içerik bağlantıları ve ödemeler kaydedildikçe dolacak.",
+      perf: "Performans", mReach: "Erişim", mEng: "Etkileşim", mSpend: "Harcama", mEarn: "Kazanç", noData: "Veri yok", perfNote: "Bu ölçümler içerik bağlantıları ve ödemeler kaydedildikçe dolacak.", perfWin: "Son 30 gün", perfPosts: "Gönderi", perfTop: "En çok erişen gönderiler", perfAll: "Tüm gönderiler", perfNone: "Son 30 günde gönderi yok.", perfSampleNote: "Henüz gönderi eklemediniz; bu özet örnek veridir.",
       acctMenu: "Hesap menüsü", tabsLabel: "Panel sekmeleri",
       soon: "Yakında", soonBadge: "Yakında", soonLead: "Aşağıdaki özellikler henüz panelde yok; hazır olduklarında burada açılacak.",
       soonMsg: "Platform içi mesajlaşma", soonAnalytics: "Performans analitiği ve özel raporlar", soonBudget: "Bütçe yönetimi", soonVerified: "Doğrulanmış influencer'lar",
@@ -333,8 +382,8 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
       invitedBy: "{n} sizi davet etti",
       myAppsEmpty: "Henüz başvurunuz ya da davetiniz yok. Fırsatlar sayfasından açık kampanyalara başvurabilirsiniz.", goOpps: "Fırsatlara göz at",
       discLead: "Profil kartlarını inceleyip doğrudan davet edin.", discQ: "Ara", discQPh: "İsim veya şehir", allNiches: "Tüm ilgi alanları",
-      fMinFol: "Takipçi", anyMin: "Her takipçi sayısı", discCount: "{n} influencer", discCount1: "1 influencer", discCap: "En yeni 100 profil yüklendi; filtreler yalnızca bu profiller içinde çalışır.", discCap50: "En uygun 50 profil gösteriliyor.", discMatch: "İlgi alanlarınıza göre en uygun profiller.", discMatchC: "Seçili kampanyaya en uygun profiller.", discNoNiche: "Profilinize ilgi alanı eklerseniz size en uygun profilleri öne çıkarırız.", discNoNicheC: "Bu kampanyada ilgi alanı yok; tüm profiller gösteriliyor.", discNoMatch: "Ortak ilgi alanı olan profil yok; tüm profiller gösteriliyor.", discMatchErr: "Eşleşmeler yüklenemedi; tüm profiller gösteriliyor.", viewProf: "Profili gör", inviteFor: "{n} için davet ediyorsunuz.",
-      clearFor: "Temizle", drClose: "Kapat", drNoPlat: "Platform eklenmemiş.", drHist: "Sizinle geçmiş", drHistNone: "Henüz birlikte çalışmadınız.",
+      fMinFol: "Takipçi", anyMin: "Her takipçi sayısı", fCity: "Şehir", allCities: "Tüm şehirler", fSort: "Sıralama", sortRec: "Önerilen", sortFol: "Takipçi (çoktan aza)", sortName: "Ada göre (A–Z)", fReset: "Filtreleri temizle", discCount: "{n} influencer", discCount1: "1 influencer", discCap: "En yeni 100 profil yüklendi; filtreler yalnızca bu profiller içinde çalışır.", discCap50: "En uygun 50 profil gösteriliyor.", discMatch: "İlgi alanlarınıza göre en uygun profiller.", discMatchC: "Seçili kampanyaya en uygun profiller.", discNoNiche: "Profilinize ilgi alanı eklerseniz size en uygun profilleri öne çıkarırız.", discNoNicheC: "Bu kampanyada ilgi alanı yok; tüm profiller gösteriliyor.", discNoMatch: "Ortak ilgi alanı olan profil yok; tüm profiller gösteriliyor.", discMatchErr: "Eşleşmeler yüklenemedi; tüm profiller gösteriliyor.", viewProf: "Profili gör", inviteFor: "{n} için davet ediyorsunuz.",
+      clearFor: "Temizle", drClose: "Kapat", drNoPlat: "Platform eklenmemiş.", crFull: "Tam profil ve son gönderiler", crBack: "← Keşfet", crNone: "Bu influencer bulunamadı ya da artık listelenmiyor.", crAccounts: "Hesap ölçümleri", crPosts: "Son gönderiler", crSampleBadge: "Örnek veri", crSampleNote: "Gönderi bağlantısı henüz açık değil; aşağıdakiler örnek gönderilerdir. Kampanyaya eklemeler yalnız bu tarayıcıda tutulur.", crTarget: "Kampanya", crAdd: "Kampanyaya ekle", crRemove: "Kampanyadan çıkar", crAdded: "Gönderi kampanyaya eklendi.", crRemoved: "Gönderi kampanyadan çıkarıldı.", crVerified: "doğrulandı", crOpenPost: "Gönderiyi aç", crNoPosts: "Henüz gönderi yok.", drHist: "Sizinle geçmiş", drHistNone: "Henüz birlikte çalışmadınız.",
       drInvite: "Kampanyaya davet et", drNoOpen: "Davet edilebilecek açık kampanya yok: ya hepsinde zaten var ya da açık kampanyanız yok.",
       inviteInf: "Influencer davet et",
       discEmpty: "Henüz profilini markalara açan influencer yok.", discNone: "Bu ölçütlere uyan influencer bulunamadı.",
@@ -366,6 +415,29 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
       lead_influencer: "Find campaigns that fit you and keep track of your applications and invites.",
       role_brand: "Brand", role_agency: "Agency", role_influencer: "Influencer",
       nOverview: "Overview", nCampaigns: "Campaigns", nDiscover: "Find influencers", nProfile: "Profile", nOpps: "Opportunities", nApps: "My applications",
+      nPosts: "Posts", postsLead: "Track likes, comments, views and reach for your posts in one place.",
+      pvGrid: "Grid", pvList: "List", pvView: "View", pRange: "Date", pRAll: "All time", pR7: "Last 7 days", pR30: "Last 30 days", pR90: "Last 90 days",
+      pType: "Type", pTAll: "All types", pt_photo: "Photo", pt_video: "Video", pt_reel: "Reel / short", pt_carousel: "Carousel", pt_story: "Story",
+      pPlat: "Platform", pPAll: "All platforms", pCount: "{n} posts", pNone: "No posts match these filters.", pClear: "Clear filters",
+      pPrev: "Previous", pNext: "Next", pPage: "Page {n}", pPager: "Pages",
+      mLikes: "Likes", mComments: "Comments", mViews: "Views", mEr: "Engagement rate", pErNote: "Engagement rate = (likes + comments) ÷ reach; views are used when reach is missing.",
+      pSampleNote: "You haven't added any posts yet. The posts below are not real; they're sample data showing how this screen will look.",
+      pLocal: "Posts you enter by hand are stored only on this device, in this browser, for now.",
+      pSrv: "Your posts are stored in your account, so you can see them on any device.", pSrvNoDel: "Deleting a post from your account is not available yet.",
+      pMove: "Move to my account", pMoveHint: "{n} posts are only on this device. You can move them to your account once.", pMoved: "{n} posts moved to your account.",
+      pAdd: "Add a post", pUrl: "Post link", pUrlHint: "The full address of an Instagram, TikTok, YouTube or LinkedIn post (https://…).",
+      pDate: "Posted on", pCaption: "Caption", pThumb: "Thumbnail address (optional)", pThumbHint: "Only an image address starting with https://.",
+      pSave: "Save", pSaved: "Post added.", pBadUrl: "Enter a valid https:// post link.", pBadDate: "Pick a valid date.", pBadNum: "Numbers must be whole numbers, 0 or more.", pDup: "This link is already added.",
+      pCsv: "Import CSV", pCsvHint: "Columns: url, date, type, likes, comments, views, reach, caption. The first row may be a header; comma or semicolon separated.", pCsvFile: "CSV file",
+      pCsvGo: "Import", pCsvUpd: "New measurements added to {n} posts.", pDataH: "Add data", pCsvDone: "{n} posts added.", pCsvSkip: "{n} rows skipped (row {r}).", pCsvEmpty: "The file has no rows to import.", pCsvBig: "You can import at most 500 rows.", pCsvRead: "Couldn't read the file.",
+      pFull: "This device is out of space; the post couldn't be saved.",
+      pBack: "Back to posts", pOpen: "Open post", pNotFound: "This post wasn't found.", pTimeline: "Timeline", pTlNone: "The timeline needs at least two measurements.",
+      pSnap: "Add measurement", pSnapAt: "Measured on", pSnapOk: "Measurement added.", pDel: "Delete post", pDelQ: "Delete this post from this device?", pDeleted: "Post deleted.",
+      pSampleRO: "Sample posts can't be edited; they disappear once you add your own post.",
+      pConn: "Automatic connections", pConnOff: "Automatic metric sync isn't live yet. Until then you can add your posts by hand or with a CSV.",
+      pConnSoon: "Account connected; automatic post sync is coming soon.", pConnNot: "Not connected", pConnOk: "Connected", pConnApi: "Source: {n}",
+      pLiNote: "LinkedIn doesn't share personal post metrics with other apps; add LinkedIn posts by hand or with a CSV.",
+      pNoCap: "No caption",
       sCampaigns: "Campaigns", sOpen: "Open campaigns", sPending: "Pending applications", sApproved: "Approved content",
       sReview: "Content awaiting approval", sWork: "Active work", sDone: "Completed", ocTitle: "Open campaigns", ocAll: "All", ocEmpty: "You have no open campaigns.", dLeft: "{n} days left", dLast: "Last day today", dGone: "Expired",
       stPend: "New applications", stInv: "Invited", stWork: "In progress", stRev: "Content approval", stDone: "Approved",
@@ -379,6 +451,8 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
       waiting: "Waiting for you", waitEmpty: "Nothing is waiting for you right now.", inNew: "{n} new applications", inSub: "{n} content items awaiting approval", inDue: "Deadline coming up: {n}",
       inInvite: "{n} invited you", inRev: "Revision requested", inAcc: "Send your content link", inProf: "{n}% complete", review: "Review", openIt: "Open",
       profCard: "Profile", profDone: "Completion", editProf: "Edit profile",
+      kvTitle: "Your data", kvLead: "Download a copy of your account data as a JSON file (KVKK art. 11).", kvBtn: "Download my data", kvDone: "File downloaded.", kvSampleNote: "Until server export is live, the file contains only the data on this device.", kvDelTitle: "Account and data deletion", kvDelLead: "To delete your account and data, write to us.", kvDelBtn: "Request deletion", kvDelSubj: "Brand Corner account and data deletion request",
+      nNotif: "Notifications", nfLead: "Applications, invites and content approvals in one place.", nfUnread: "{n} unread", nfAllRead: "All caught up.", nfMarkAll: "Mark all as read", nfNone: "No notifications yet.", nfNew: "New", nfSampleNote: "Your real notifications will appear here once the service is live.", nfSApply: "New application to your summer collection campaign.", nfSContent: "A creator sent content for your approval.", nfSView: "Your campaign brief was viewed by 3 creators.", nfSInvite: "A brand invited you to its campaign.", nfSAccepted: "Your application was accepted.", nfSMetrics: "Time to update your post metrics.",
       nSettings: "Settings", setLead: "Manage your account and how the panel looks.", setAcct: "Account", setName: "Full name", setEmail: "Email", setEmailHint: "To change your email, write to info@saascorner.co.", setPw: "Password", setPwHint: "We will email you a link to set a new password.", setPwBtn: "Send reset link", setPwSent: "Reset link sent. Check your inbox.", setLook: "Appearance", setLang: "Language", setTheme: "Theme", thSys: "System", thLight: "Light", thDark: "Dark", setOutLead: "Log out of the panel on this device.",
       ckCompany: "Company name", ckIndustry: "Industry", ckCity: "City", ckWebsite: "Website", ckBio: "About (at least 40 characters)", ckClients: "Number of clients",
       ckNiches: "Niches", ckPlatform: "At least one platform with follower count", ckListed: "Profile visible to brands",
@@ -392,7 +466,7 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
       socDone: "Your {n} account is connected.", socCutOk: "{n} disconnected.", socDenied: "Permission wasn't granted; you can try again.",
       socTaken: "This account is linked to another Brand Corner account. Disconnect it there first.", socTicket: "The connection expired or is invalid; press \"Connect\" again.",
       socForbidden: "Connections aren't available for this account.", socProvider: "The platform didn't respond; try again shortly.", socOwner: "This connection was started from another account; press Connect again.",
-      perf: "Performance", mReach: "Reach", mEng: "Engagement", mSpend: "Spend", mEarn: "Earnings", noData: "No data", perfNote: "These metrics fill in as content links and payments are recorded.",
+      perf: "Performance", mReach: "Reach", mEng: "Engagement", mSpend: "Spend", mEarn: "Earnings", noData: "No data", perfNote: "These metrics fill in as content links and payments are recorded.", perfWin: "Last 30 days", perfPosts: "Posts", perfTop: "Top posts by reach", perfAll: "All posts", perfNone: "No posts in the last 30 days.", perfSampleNote: "You haven't added any posts yet; this summary is sample data.",
       acctMenu: "Account menu", tabsLabel: "Panel tabs",
       soon: "Coming soon", soonBadge: "Coming soon", soonLead: "These features aren't in the panel yet; they'll show up here when they're ready.",
       soonMsg: "In-platform messaging", soonAnalytics: "Performance analytics and custom reports", soonBudget: "Budget management", soonVerified: "Verified influencers",
@@ -451,8 +525,8 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
       invitedBy: "{n} invited you",
       myAppsEmpty: "No applications or invites yet. You can apply to open campaigns from Opportunities.", goOpps: "Browse opportunities",
       discLead: "Browse profile cards and invite directly.", discQ: "Search", discQPh: "Name or city", allNiches: "All niches",
-      fMinFol: "Followers", anyMin: "Any follower count", discCount: "{n} influencers", discCount1: "1 influencer", discCap: "The newest 100 profiles are loaded; filters only search within them.", discCap50: "Showing the 50 best matches.", discMatch: "Best matches for your niches.", discMatchC: "Best matches for the selected campaign.", discNoNiche: "Add niches to your profile and we will bring your best matches to the top.", discNoNicheC: "This campaign has no niches; showing all profiles.", discNoMatch: "No profiles share your niches; showing all profiles.", discMatchErr: "Matches could not be loaded; showing all profiles.", viewProf: "View profile", inviteFor: "Inviting for {n}.",
-      clearFor: "Clear", drClose: "Close", drNoPlat: "No platforms added.", drHist: "History with you", drHistNone: "You haven't worked together yet.",
+      fMinFol: "Followers", anyMin: "Any follower count", fCity: "City", allCities: "All cities", fSort: "Sort", sortRec: "Recommended", sortFol: "Followers (high to low)", sortName: "Name (A–Z)", fReset: "Clear filters", discCount: "{n} influencers", discCount1: "1 influencer", discCap: "The newest 100 profiles are loaded; filters only search within them.", discCap50: "Showing the 50 best matches.", discMatch: "Best matches for your niches.", discMatchC: "Best matches for the selected campaign.", discNoNiche: "Add niches to your profile and we will bring your best matches to the top.", discNoNicheC: "This campaign has no niches; showing all profiles.", discNoMatch: "No profiles share your niches; showing all profiles.", discMatchErr: "Matches could not be loaded; showing all profiles.", viewProf: "View profile", inviteFor: "Inviting for {n}.",
+      clearFor: "Clear", drClose: "Close", drNoPlat: "No platforms added.", crFull: "Full profile and recent posts", crBack: "← Discover", crNone: "This influencer wasn't found or is no longer listed.", crAccounts: "Account metrics", crPosts: "Recent posts", crSampleBadge: "Sample data", crSampleNote: "The posts connection isn't live yet; these are sample posts. Campaign additions are kept only in this browser.", crTarget: "Campaign", crAdd: "Add to campaign", crRemove: "Remove from campaign", crAdded: "Post added to the campaign.", crRemoved: "Post removed from the campaign.", crVerified: "verified", crOpenPost: "Open post", crNoPosts: "No posts yet.", drHist: "History with you", drHistNone: "You haven't worked together yet.",
       drInvite: "Invite to a campaign", drNoOpen: "No open campaign to invite them to: they're already in all of them, or you have none open.",
       inviteInf: "Invite influencers",
       discEmpty: "No influencers have made their profile visible yet.", discNone: "No influencers match these filters.",
@@ -477,7 +551,7 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
     }
   };
 
-  var L = BC.lang(), U = null, seq = 0, uid = 0, first = true, F = { q: "", niche: "", platform: "", min: "", inviteFor: 0 };
+  var L = BC.lang(), U = null, seq = 0, uid = 0, first = true, F = { q: "", niche: "", platform: "", min: "", city: "", sort: "", inviteFor: 0 };
   function $(id) { return document.getElementById(id); }
   var nav = $("nav"), tabbar = $("tabbar"), view = $("view"), outB = $("out"), outB2 = $("out2");
   var sheet = $("sheet"), scrim = $("scrim"), meB = $("me"), counts = {}, mob = window.matchMedia("(max-width: 760px)");
@@ -573,8 +647,12 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
   // Yönlendirme: #overview, #campaigns, #new, #campaign-<id>, #discover (marka/ajans), #applications (influencer), #profile
   function route() {
     var h = location.hash.replace(/^#/, ""), m = /^campaign-(\d+)$/.exec(h);
+    var pm = /^post-([a-z0-9]{1,24})$/.exec(h);
+    if (pm && !isOwner()) return { name: "post", id: pm[1], tab: "posts" };
+  var cm = /^creator-([a-z0-9]{1,24})$/.exec(h);
+  if (cm && isOwner()) return { name: "creator", id: cm[1], tab: "discover" };
     if (m) return { name: "campaign", id: +m[1], tab: "campaigns" };
-    var ok = ["overview", "campaigns", "profile", "settings"].concat(isOwner() ? ["new", "discover"] : ["applications"]);
+    var ok = ["overview", "campaigns", "profile", "settings", "notifications"].concat(isOwner() ? ["new", "discover"] : ["applications", "posts"]);
     if (ok.indexOf(h) < 0) h = "overview";
     return { name: h, tab: h === "new" ? "campaigns" : h };
   }
@@ -600,7 +678,9 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
     globe: [["circle", { cx: 12, cy: 12, r: 9 }], ["path", { d: "M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18" }]],
     help: [["circle", { cx: 12, cy: 12, r: 9 }], ["path", { d: "M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.7M12 17h.01" }]],
     gear: [["circle", { cx: 12, cy: 12, r: 3 }], ["path", { d: "M12 2v3M12 19v3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M2 12h3M19 12h3M4.9 19.1 7 17M17 7l2.1-2.1" }]],
-    logout: [["path", { d: "M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3" }], ["path", { d: "M10 17l-5-5 5-5M5 12h11" }]]
+    logout: [["path", { d: "M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3" }], ["path", { d: "M10 17l-5-5 5-5M5 12h11" }]],
+    bell: [["path", { d: "M6 16V11a6 6 0 0 1 12 0v5l2 2H4z" }], ["path", { d: "M10 21h4" }]],
+    image: [["rect", { x: 3, y: 4, width: 18, height: 16, rx: 2 }], ["circle", { cx: 9, cy: 10, r: 2 }], ["path", { d: "m21 16-5-5-9 9" }]]
   };
   function ic(name) {
     var NS = "http://www.w3.org/2000/svg", s = document.createElementNS(NS, "svg");
@@ -614,7 +694,9 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
   }
   function paintNav(tab) {
     var items = isOwner() ? [["overview", "nOverview", "home"], ["campaigns", "nCampaigns", "megaphone"], ["discover", "nDiscover", "search"], ["profile", "nProfile", "user"]]
-      : [["overview", "nOverview", "home"], ["campaigns", "nOpps", "briefcase"], ["applications", "nApps", "list"], ["profile", "nProfile", "user"]];
+      : [["overview", "nOverview", "home"], ["campaigns", "nOpps", "briefcase"], ["applications", "nApps", "list"], ["posts", "nPosts", "image"], ["profile", "nProfile", "user"]];
+    tabbar.classList.toggle("n5", items.length > 4);
+    ["ntf", "ntf2"].forEach(function (id) { if (tab === "notifications") $(id).setAttribute("aria-current", "page"); else $(id).removeAttribute("aria-current"); });
     ["set", "set2"].forEach(function (id) { if (tab === "settings") $(id).setAttribute("aria-current", "page"); else $(id).removeAttribute("aria-current"); });
     [nav, tabbar].forEach(function (box) {
       box.textContent = "";
@@ -777,6 +859,27 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
       has ? null : el("p", { class: "meta" }, [el("span", { class: "badge b-soon", text: t("soonBadge") }), " ", t("dailyLater")])
     ]));
   }
+  // Performans özeti: influencer için son 30 günün gönderileri (son ölçüm), gönderi yoksa örnek veri; marka/ajans için F2'ye kadar "veri yok"
+  function perfCard(own, mets) {
+    var stat = function (k, v) { return el("div", { class: "stat" }, [el("div", { class: "k", text: t(k) }), el("div", { class: v == null ? "v na" : "v", text: v == null ? t("noData") : v })]); };
+    if (own) return el("section", { class: "card" }, [el("div", { class: "ch" }, el("h2", { text: t("perf") })),
+      el("div", { class: "cb" }, [el("div", { class: "mets" }, mets.map(function (k) { return stat(k, null); })), el("p", { class: "hint", text: t("perfNote") })])]);
+    var d = pData(), cut = isoDay(new Date(Date.now() - 30 * 864e5)), list = d.list.filter(function (p) { return p.date >= cut; });
+    var sum = function (m) { var n = 0, any = false; list.forEach(function (p) { var v = lastSnap(p)[m]; if (v != null) { n += v; any = true; } }); return any ? n : null; };
+    var reach = sum("reach"), likes = sum("likes"), comm = sum("comments"), eng = likes == null && comm == null ? null : (likes || 0) + (comm || 0);
+    var top = list.slice().sort(function (a, b) { return (lastSnap(b).reach || 0) - (lastSnap(a).reach || 0); }).slice(0, 3);
+    return el("section", { class: "card perf" }, [
+      el("div", { class: "ch" }, [el("h2", { text: t("perf") }), el("span", { class: "meta", text: t("perfWin") })]),
+      el("div", { class: "cb" }, [
+        d.sample ? el("p", { class: "meta" }, [el("span", { class: "badge b-sample", text: t("crSampleBadge") }), " ", t("perfSampleNote")]) : null,
+        el("div", { class: "mets m4" }, [stat("perfPosts", num(list.length)), stat("mReach", reach == null ? null : short(reach)), stat("mEng", eng == null ? null : short(eng)), stat("mEarn", null)]),
+        top.length ? el("div", null, [el("h3", { class: "ptop", text: t("perfTop") }), el("ol", { class: "ptop" }, top.map(function (p) {
+          var s = lastSnap(p);
+          return el("li", null, el("a", { class: "lk44", href: d.sample ? "#posts" : "#post-" + p.id }, [el("span", { class: "pcap", dir: "auto", text: p.caption || pLabel(p) }), el("b", { text: short(s.reach) })]));
+        }))]) : el("p", { class: "hint", text: t("perfNone") }),
+        el("a", { class: "btn sm sec", href: "#posts", text: t("perfAll") })
+      ])]);
+  }
   function overview(r0, stats) {
     var own = isOwner();
     // Bir çağrı düşerse yalnız o bölüm hata gösterir; ikisi de düşerse tek kutu
@@ -820,9 +923,7 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
             el("section", { class: "card" }, [el("div", { class: "ch" }, el("h2", { text: t("waiting") })),
               inbox]),
             own && !r[1].err ? ocCard(open) : null,
-            el("section", { class: "card" }, [el("div", { class: "ch" }, el("h2", { text: t("perf") })),
-              el("div", { class: "cb" }, [el("div", { class: "mets" }, mets.map(function (k) { return el("div", { class: "stat" }, [el("div", { class: "k", text: t(k) }), el("div", { class: "v na", text: t("noData") })]); })),
-                el("p", { class: "hint", text: t("perfNote") })])])
+            perfCard(own, mets)
           ]),
           el("div", null, [
             own ? forYou(r[2], camps, open, again) : oppsForYou(r[2], again),
@@ -1201,13 +1302,22 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
       all.forEach(function (x) { (x.niches || []).forEach(function (n) { var k = fold(n); if (!seen[k]) { seen[k] = 1; niches.push(n); } }); });
       niches.sort(function (a, b) { return a.localeCompare(b, locale()); });
       if (F.niche) F.niche = niches.filter(function (x) { return fold(x) === fold(F.niche); })[0] || "";
+      var cseen = {}, cities = [];
+      all.forEach(function (x) { var k = fold(x.city || ""); if (k && !cseen[k]) { cseen[k] = 1; cities.push(x.city.trim()); } });
+      cities.sort(function (a, b) { return a.localeCompare(b, locale()); });
+      if (F.city) F.city = cities.filter(function (x) { return fold(x) === fold(F.city); })[0] || "";
       var q = el("input", { type: "search", maxlength: 60, placeholder: t("discQPh"), value: F.q });
       var n = el("select", { value: F.niche }, [el("option", { value: "", text: t("allNiches") })].concat(niches.map(function (x) { return el("option", { value: x, text: x }); })));
       var s = el("select", { value: F.platform }, [el("option", { value: "", text: t("allPlatforms") })].concat(PLATFORMS.map(function (x) { return el("option", { value: x, text: PL[x] }); })));
       var mn = el("select", { value: F.min }, [el("option", { value: "", text: t("anyMin") })].concat([10000, 50000, 100000].map(function (v) { return el("option", { value: String(v), text: num(v) + "+" }); })));
+      var ci = el("select", { value: F.city }, [el("option", { value: "", text: t("allCities") })].concat(cities.map(function (x) { return el("option", { value: x, text: x }); })));
+      var so = el("select", { value: F.sort }, [["", "sortRec"], ["fol", "sortFol"], ["name", "sortName"]].map(function (o) { return el("option", { value: o[0], text: t(o[1]) }); }));
+      var rs = el("button", { type: "button", class: "ghost", text: t("fReset") });
       var f = el("form", { class: "box f filter", role: "search", "data-sk-noform": true, novalidate: true }, [
         el("div", null, fld("dq", t("discQ"), q)), el("div", null, fld("dn", t("fNiche"), n)),
-        el("div", null, fld("dp", t("fPlatform"), s)), el("div", null, fld("dm", t("fMinFol"), mn))
+        el("div", null, fld("dp", t("fPlatform"), s)), el("div", null, fld("dm", t("fMinFol"), mn)),
+        cities.length ? el("div", null, fld("dc", t("fCity"), ci)) : null, el("div", null, fld("ds", t("fSort"), so)),
+        el("div", { class: "freset" }, rs)
       ]);
       var box = el("div"), cnt = el("p", { class: "info", role: "status" }); ctx.err = note(); ctx.err.id = "disc-err"; discCtx = ctx;
       ctx.repaint = function () {
@@ -1215,9 +1325,12 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
         // Sonuç yoksa metin kutuda görünür; durum satırı yalnız ekran okuyucuya söyler (iki kez görünmez)
         cnt.textContent = list.length ? (list.length === 1 ? t("discCount1") : t("discCount", num(list.length))) : t("discNone");
         cnt.classList.toggle("vh", !list.length);
+        rs.hidden = !(F.q || F.niche || F.platform || F.min || F.city || F.sort);
         box.replaceChildren(list.length ? el("div", { class: "list" }, list.map(function (x) { return infCard(x, ctx); })) : empty(t("discNone")));
       };
-      function apply() { F.q = q.value.trim(); F.niche = n.value; F.platform = s.value; F.min = mn.value; ctx.repaint(); }
+      function apply() { F.q = q.value.trim(); F.niche = n.value; F.platform = s.value; F.min = mn.value; F.city = ci.value; F.sort = so.value; ctx.repaint(); }
+      // Temizle: davet bağlamı (inviteFor) korunur, yalnız filtreler sıfırlanır; odak arama kutusuna döner
+      rs.addEventListener("click", function () { [q, n, s, mn, ci, so].forEach(function (c) { c.value = ""; }); apply(); q.focus(); });
       f.addEventListener("submit", function (ev) { ev.preventDefault(); apply(); });
       f.addEventListener("input", apply); f.addEventListener("change", apply);
       ctx.repaint();
@@ -1239,8 +1352,10 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
   }
   // Platform seçiliyse takipçi eşiği yalnız o platformun kaydına uygulanır
   function discList(ctx) {
-    var q = fold(F.q), nk = fold(F.niche), min = +F.min || 0;
-    return ctx.all.filter(function (x) {
+    var q = fold(F.q), nk = fold(F.niche), ck = fold(F.city), min = +F.min || 0;
+    var top = function (x) { var m = 0; x.platforms.forEach(function (p) { if (!F.platform || p.platform === F.platform) m = Math.max(m, p.followers || 0); }); return m; };
+    var l = ctx.all.filter(function (x) {
+      if (ck && fold(x.city || "") !== ck) return false;
       if (q && fold((x.name || "") + " " + (x.city || "")).indexOf(q) < 0) return false;
       if (nk && !(x.niches || []).some(function (n) { return fold(n) === nk; })) return false;
       var ps = F.platform ? x.platforms.filter(function (p) { return p.platform === F.platform; }) : x.platforms;
@@ -1248,6 +1363,10 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
       if (min && !ps.some(function (p) { return (p.followers || 0) >= min; })) return false;
       return true;
     });
+    // Sıralama: önerilen = sunucu sırası (eşleşme ya da en yeni); takipçi seçili platforma göre
+    if (F.sort === "fol") l.sort(function (a, b) { return top(b) - top(a); });
+    else if (F.sort === "name") l.sort(function (a, b) { return (a.name || "").localeCompare(b.name || "", locale()); });
+    return l;
   }
   // Bu oturumda gönderilen davetler: sayfa yeniden çizilse de profilin geçmişine eklenir
   var discCtx = null, sentInv = {};
@@ -1317,6 +1436,7 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
         chips(x.niches),
         el("h3", { text: t("fPlatforms") }),
         x.platforms.length ? handles(x.platforms) : el("p", { class: "meta", text: t("drNoPlat") }),
+        /^[a-z0-9]{1,24}$/.test(String(x.id)) ? el("p", null, el("a", { class: "lk44", href: "#creator-" + x.id, text: t("crFull") })) : null,
         el("h3", { text: t("drHist") }),
         hist.length ? el("ul", { class: "hist" }, hist.map(function (h) {
           var c = byId[h.campaign_id];
@@ -1472,6 +1592,41 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
         load();
         return list.concat([slot, nm, nok]);
       }
+      // KVKK dışa aktarma: GET app/export → JSON indir. Uç yoksa (404) bu cihazdaki bilgilerle indirir ve "Örnek veri" rozeti gösterir; oturum anahtarı dosyaya girmez
+      function kvkk() {
+        var km = note(), kok = okNote(), ks = el("div"), kb = el("button", { type: "button", class: "btn sec", text: t("kvBtn") });
+        function save(o) {
+          var a = el("a", { href: URL.createObjectURL(new Blob([JSON.stringify(o, null, 2)], { type: "application/json" })), download: "brandcorner-verilerim-" + isoDay(new Date()) + ".json" });
+          document.body.appendChild(a); a.click(); a.remove();
+          setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
+          say(kok, t("kvDone"));
+        }
+        function local() {
+          var o = { exported_at: new Date().toISOString(), source: "device", user: U };
+          try {
+            var ps = localStorage.getItem("bc-posts-" + U.id), rd = localStorage.getItem("bc-notif-read-" + U.id);
+            if (ps) o.posts = JSON.parse(ps);
+            if (rd) o.notifications_read = JSON.parse(rd);
+          } catch (e) {}
+          return o;
+        }
+        kb.addEventListener("click", function () {
+          say(km, ""); say(kok, ""); ks.replaceChildren(); busy(kb, true);
+          BC.call("GET", "app/export").then(function (d) {
+            busy(kb, false); var o = d && d.export;
+            if (!o || typeof o !== "object") return say(km, BC.msg("err"));
+            save(o);
+          }, function (e) {
+            busy(kb, false);
+            if (!crMissing(e)) return say(km, BC.msg(e && e.code));
+            ks.replaceChildren(el("p", { class: "meta" }, [el("span", { class: "badge b-sample", text: t("crSampleBadge") }), " ", t("kvSampleNote")]));
+            save(local());
+          });
+        });
+        return [el("p", { class: "hint", text: t("kvLead") }), kb, ks, km, kok,
+          el("h3", { class: "sub", text: t("kvDelTitle") }), el("p", { class: "hint", text: t("kvDelLead") }),
+          el("a", { class: "btn sec", href: "mailto:info@saascorner.co?subject=" + encodeURIComponent(t("kvDelSubj")), text: t("kvDelBtn") })];
+      }
       function card(h, kids) { return el("section", { class: "card" }, [el("div", { class: "ch" }, el("h2", { text: h })), el("div", { class: "cb" }, kids)]); }
       return [el("h1", { text: t("nSettings") }), el("p", { class: "lead", text: t("setLead") }),
         el("div", { class: "ov" }, [
@@ -1488,6 +1643,7 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
             ]),
             card(t("ntTitle"), notifs()),
             card(t("socTitle"), [el("p", { class: "hint", text: t("setSocLead") }), el("a", { class: "btn sec", href: "#profile", text: t("setSocGo"), onclick: function () { SOC_GO = true; } })]),
+            card(t("kvTitle"), kvkk()),
             card(t("logout"), [el("p", { class: "hint", text: t("setOutLead") }), ob])
           ])
         ])];
@@ -1803,7 +1959,614 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
     return box;
   }
 
-  var VIEWS = { overview: overview, campaigns: campaigns, "new": newCampaign, campaign: campaign, discover: discover, applications: applications, profile: profile, settings: settings };
+  // Gönderiler (influencer): elle giriş ve CSV, şimdilik bu cihazda (localStorage). Gönderi yoksa "örnek" etiketli örnek veri.
+  // Gerçek API bağlayıcıları yalnız arayüz: METRICS_ENABLED kapalıyken app/connections "disabled" döner ve elle yol kullanılır.
+  var PTYPES = ["photo", "video", "reel", "carousel", "story"], PPAGE = 12, PMETS = ["likes", "comments", "views", "reach"];
+  var PMK = { likes: "mLikes", comments: "mComments", views: "mViews", reach: "mReach" };
+  var PF = { view: "", range: "all", type: "", platform: "", page: 1, flash: "" };
+  // Bağlayıcı katmanı: platform başına kaynak ve fetch; bayrak açılıp worker uç noktası gelene kadar fetch yok (null)
+  var CONNECTORS = {
+    instagram: { api: "Instagram Graph API · /me/media", fetch: null },
+    tiktok: { api: "TikTok Display API · /v2/video/list", fetch: null },
+    youtube: { api: "YouTube Data API · /channels → /playlistItems", fetch: null }
+  };
+  function pKey() { return "bc-posts-" + U.id; }
+  function pValid(p) { return !!p && typeof p.id === "string" && /^[a-z0-9]{1,24}$/.test(p.id) && Array.isArray(p.snaps) && p.snaps.length > 0; }
+  function pLoad() {
+    try { var a = JSON.parse(localStorage.getItem(pKey()) || "[]"); return Array.isArray(a) ? a.filter(pValid) : []; } catch (e) { return []; }
+  }
+  function pStore(list) { try { localStorage.setItem(pKey(), JSON.stringify(list)); return true; } catch (e) { return false; } }
+  // Sunucu kaydı (app/posts): GET başarılıysa gönderiler sunucudan okunur ve yazılır; 404/kapalı/ağ hatasında bu cihaz (localStorage).
+  // Marka tarafındaki içerik üreticisi kayıtları (creator_id) her zaman bu cihazda kalır.
+  var PS = { srv: false, list: [] }, PCHUNK = 50;
+  function pSrvPost(p) {
+    var snaps = (p && Array.isArray(p.snaps) ? p.snaps : []).filter(function (s) { return s && /^\d{4}-\d{2}-\d{2}$/.test(s.at || ""); }).map(function (s) {
+      var o = { at: s.at };
+      PMETS.forEach(function (m) { o[m] = Number.isInteger(s[m]) && s[m] >= 0 ? s[m] : null; });
+      return o;
+    }).sort(function (a, b) { return a.at < b.at ? -1 : a.at > b.at ? 1 : 0; });
+    var url = p && typeof p.url === "string" ? p.url : "", pl = platformOf(url) || (p && PL[p.platform] ? p.platform : "");
+    return { id: p && p.id != null && /^[a-z0-9]{1,24}$/.test(String(p.id)) ? String(p.id) : "", url: url, platform: pl,
+      type: p && PTYPES.indexOf(p.type) >= 0 ? p.type : "photo", date: p && okDay(p.date) ? p.date : (snaps[0] || {}).at || "",
+      caption: p && typeof p.caption === "string" ? p.caption.slice(0, 2200) : "", thumb: p && okThumb(p.thumb) ? p.thumb : "", snaps: snaps };
+  }
+  function pSync() {
+    return BC.call("GET", "app/posts").then(function (d) {
+      PS.srv = !!(d && Array.isArray(d.posts));
+      PS.list = (PS.srv ? d.posts : []).map(pSrvPost).filter(function (p) { return p.id && p.platform && p.snaps.length; });
+    }, function (e) { if (e && e.code === "auth") throw e; PS.srv = false; PS.list = []; });
+  }
+  function pErr(e) {
+    var c = e && e.code;
+    return c === "url" ? t("pBadUrl") : c === "date" || c === "at" ? t("pBadDate") : c === "thumb" ? t("pThumbHint")
+      : c === "metrics" || PMETS.indexOf(c) >= 0 ? t("pBadNum") : c === "posts_full" || (e && e.status === 409) ? t("pFull") : BC.msg(c);
+  }
+  // CSV/aktarım: en çok 50 satırlık parçalar sırayla; atlanan satırlar çağıranın satır numarasına çevrilir
+  function pImport(rows, lines) {
+    var sum = { added: 0, updated: 0, bad: [] }, i = 0;
+    function next() {
+      if (i >= rows.length) return Promise.resolve(sum);
+      var base = i, part = rows.slice(i, i + PCHUNK);
+      i += PCHUNK;
+      return BC.call("POST", "app/posts/import", { rows: part }).then(function (d) {
+        sum.added += d.added || 0; sum.updated += d.updated || 0;
+        (d.skipped || []).forEach(function (s) { sum.bad.push(lines ? lines[base + s.i] : base + s.i + 1); });
+        return next();
+      }, function (e) { if (e) e.sum = sum; throw e; });
+    }
+    return next();
+  }
+  function pApiRow(o) { var r = { url: o.url, date: o.date, type: o.type, caption: o.caption || "", thumb: o.thumb || "" }; PMETS.forEach(function (m) { r[m] = o[m]; }); if (o.at) r.at = o.at; return r; }
+  // Bu cihazdaki eski gönderiler: tek seferlik "sunucuya aktar" (bayrak bc-posts-moved-<id>)
+  function pMoveKey() { return "bc-posts-moved-" + U.id; }
+  function pLocalOwn() { return pLoad().filter(function (p) { return !p.creator_id && p.url && platformOf(p.url); }); }
+  function pMoveDue() { try { if (localStorage.getItem(pMoveKey())) return false; } catch (e) { return false; } return PS.srv && pLocalOwn().length > 0; }
+  function pMoveCard() {
+    var own = pLocalOwn(), msg = note(), btn = el("button", { type: "button", class: "btn", text: t("pMove") });
+    btn.addEventListener("click", function () {
+      var rows = [];
+      own.forEach(function (p) { p.snaps.forEach(function (s) { var o = { url: p.url, date: p.date, type: p.type, caption: p.caption, thumb: p.thumb, at: s.at }; PMETS.forEach(function (m) { o[m] = s[m]; }); rows.push(pApiRow(o)); }); });
+      say(msg, ""); busy(btn, true);
+      pImport(rows).then(function () {
+        try { localStorage.setItem(pMoveKey(), "1"); } catch (e) { /* özel pencere */ }
+        pAfter(t("pMoved", num(own.length)));
+      }, function (e) { busy(btn, false); say(msg, pErr(e)); });
+    });
+    return el("div", { class: "box", role: "note" }, [el("p", { class: "meta", text: t("pMoveHint", num(own.length)) }), msg, btn]);
+  }
+  function pPrefView() { try { return localStorage.getItem("bc-posts-view") === "list" ? "list" : "grid"; } catch (e) { return "grid"; } }
+  function platformOf(u) {
+    var h;
+    try { var x = new URL(u); if (x.protocol !== "https:") return ""; h = x.hostname.toLowerCase().replace(/^(www|m|vm)\./, ""); } catch (e) { return ""; }
+    return /(^|\.)instagram\.com$/.test(h) ? "instagram" : /(^|\.)tiktok\.com$/.test(h) ? "tiktok" : /(^|\.)(youtube\.com|youtu\.be)$/.test(h) ? "youtube"
+      : /(^|\.)linkedin\.com$/.test(h) ? "linkedin" : /(^|\.)(x\.com|twitter\.com)$/.test(h) ? "x" : "";
+  }
+  function isoDay(d) { return d.toISOString().slice(0, 10); }
+  function okDay(s) { return /^\d{4}-\d{2}-\d{2}$/.test(s || "") && !isNaN(Date.parse(s + "T00:00:00Z")) && s <= isoDay(new Date(Date.now() + 864e5)); }
+  function lastSnap(p) { return p.snaps[p.snaps.length - 1]; }
+  function erOf(s) { var b = s.reach > 0 ? s.reach : s.views > 0 ? s.views : 0; return b ? ((s.likes || 0) + (s.comments || 0)) / b : null; }
+  function pct(x) { return x == null ? "—" : new Intl.NumberFormat(locale(), { style: "percent", maximumFractionDigits: 1 }).format(x); }
+  function short(n) { return n == null ? "—" : new Intl.NumberFormat(locale(), { notation: "compact", maximumFractionDigits: 1 }).format(n); }
+  function newId() { return (Date.now().toString(36) + Math.random().toString(36).slice(2, 8)).slice(0, 24); }
+  function okThumb(s) { return /^https:\/\/[^\s"'<>]{4,2000}$/.test(s || ""); }
+  // Sayı alanı: boş = ölçülmedi (null), yoksa 0+ tam sayı; geçersizse undefined
+  function pInt(v) { v = String(v == null ? "" : v).trim().replace(/[.,\s](?=\d{3}(\D|$))/g, ""); return v === "" ? null : /^\d{1,12}$/.test(v) ? +v : undefined; }
+  // Örnek veri: kullanıcıya göre sabit tohumlu (FNV-1a + mulberry32), her açılışta aynı
+  function rng(seed) {
+    var h = 2166136261;
+    for (var i = 0; i < seed.length; i++) h = Math.imul(h ^ seed.charCodeAt(i), 16777619);
+    return function () { h = h + 0x6D2B79F5 | 0; var x = Math.imul(h ^ h >>> 15, 1 | h); x = x + Math.imul(x ^ x >>> 7, 61 | x) ^ x; return ((x ^ x >>> 14) >>> 0) / 4294967296; };
+  }
+  function samplePosts() {
+    var r = rng("posts:" + U.id), out = [], plats = ["instagram", "instagram", "tiktok", "youtube"], grow = [0.35, 0.6, 0.8, 0.93, 1], gap = [0, 1, 3, 7, 14];
+    var caps = L === "tr" ? ["Haftanın en sevdiğim üç ürünü", "Sabah rutinim, baştan sona", "Yeni sezon kombin önerileri", "Kampanya için kamera arkası", "Sorularınızı yanıtladım", "Beş dakikada pratik tarif", "Bu ayın favorileri"]
+      : ["My three favourite products this week", "My morning routine, start to finish", "New season outfit ideas", "Behind the scenes of the campaign", "Answering your questions", "A quick five-minute recipe", "This month's favourites"];
+    for (var i = 0; i < 14; i++) {
+      var pl = plats[Math.floor(r() * plats.length)], type = pl === "instagram" ? ["photo", "reel", "carousel", "story"][Math.floor(r() * 4)] : pl === "tiktok" ? "video" : r() < 0.5 ? "video" : "reel";
+      var at = Date.now() - (1 + i * 6 + Math.floor(r() * 4)) * 864e5, reach = Math.round(3000 + r() * 45000), video = type !== "photo" && type !== "carousel";
+      var fin = { likes: Math.round(reach * (0.03 + r() * 0.06)), comments: Math.round(reach * (0.002 + r() * 0.01)), views: video ? Math.round(reach * (1.1 + r() * 0.8)) : null, reach: reach };
+      var snaps = gap.filter(function (g) { return at + g * 864e5 <= Date.now(); }).map(function (g, k, all) {
+        var f = all.length === gap.length ? grow[k] : grow[k] * (0.8 + 0.2 * k / all.length), s = { at: isoDay(new Date(at + g * 864e5)) };
+        PMETS.forEach(function (m) { s[m] = fin[m] == null ? null : Math.round(fin[m] * f); });
+        return s;
+      });
+      out.push({ id: "s" + i, url: "", platform: pl, type: type, date: isoDay(new Date(at)), caption: caps[i % caps.length], thumb: "", snaps: snaps });
+    }
+    return out;
+  }
+  function pData() {
+    var list = PS.srv ? PS.list.slice() : pLoad(), sample = !list.length;
+    if (sample) list = samplePosts();
+    list.sort(function (a, b) { return a.date < b.date ? 1 : a.date > b.date ? -1 : 0; });
+    return { list: list, sample: sample };
+  }
+  function pFilter(list) {
+    var cut = PF.range === "all" ? "" : isoDay(new Date(Date.now() - (+PF.range) * 864e5));
+    return list.filter(function (p) { return (!cut || p.date >= cut) && (!PF.type || p.type === PF.type) && (!PF.platform || p.platform === PF.platform); });
+  }
+  function pThumb(p, sample) {
+    var box = el("div", { class: "pth" }), tile = function () { box.textContent = ""; add(box, [ic("image"), tag()]); };
+    function tag() { return [el("span", { class: "pt", text: PL[p.platform] || "—" }), sample ? el("span", { class: "badge b-sample", text: t("socSample") }) : null]; }
+    if (okThumb(p.thumb)) add(box, [el("img", { src: p.thumb, alt: "", loading: "lazy", decoding: "async", referrerpolicy: "no-referrer", onerror: tile }), tag()]);
+    else tile();
+    return box;
+  }
+  function pLabel(p) { return [PL[p.platform], t("pt_" + p.type), day(p.date)].join(" · "); }
+  function pMetric(v, k) { return el("span", null, [el("b", { text: short(v) }), " " + t(k)]); }
+  function pCard(p, sample) {
+    var s = lastSnap(p);
+    return el("li", { class: "pcard" }, [pThumb(p, sample),
+      el("div", { class: "pbody" }, [el("p", { class: "pcap", dir: "auto", text: p.caption || t("pNoCap") }),
+        el("div", { class: "pmeta" }, [el("span", { text: t("pt_" + p.type) }), el("span", { text: day(p.date) })]),
+        el("div", { class: "pmeta" }, [pMetric(s.likes, "mLikes"), pMetric(s.comments, "mComments"), el("span", null, [el("b", { text: pct(erOf(s)) }), " ER"])])]),
+      el("a", { class: "pl", href: "#post-" + p.id, "aria-label": t("pOpen") + ": " + pLabel(p), text: t("pOpen") })]);
+  }
+  function pRow(p, sample) {
+    var s = lastSnap(p);
+    return el("li", { class: "prow2" }, [pThumb(p, false),
+      el("div", { style: "min-width:0" }, [el("div", { class: "pmeta" }, [el("span", { text: pLabel(p) }), sample ? el("span", { class: "badge b-sample", text: t("socSample") }) : null]),
+        el("p", { class: "pcap", dir: "auto", text: p.caption || t("pNoCap") }),
+        el("div", { class: "pmeta" }, PMETS.map(function (m) { return pMetric(s[m], PMK[m]); }))]),
+      el("div", { class: "er" }, [el("b", { text: pct(erOf(s)) }), t("mEr")]),
+      el("a", { class: "pl", href: "#post-" + p.id, "aria-label": t("pOpen") + ": " + pLabel(p), text: t("pOpen") })]);
+  }
+  function pSelect(id, label, opts, key, onch) {
+    var s = el("select", { onchange: function () { PF[key] = s.value; PF.page = 1; onch(); } }, opts.map(function (o) { return el("option", { value: o[0], text: o[1] }); }));
+    s.value = PF[key];
+    return el("div", null, fld(id, label, s));
+  }
+  function pMetInputs(pre, vals) {
+    var ins = {};
+    return { ins: ins, box: el("div", { class: "grid4" }, PMETS.map(function (m) {
+      ins[m] = el("input", { type: "text", inputmode: "numeric", autocomplete: "off", maxlength: "15", value: vals && vals[m] != null ? String(vals[m]) : null });
+      return el("div", null, fld(pre + m, t(PMK[m]), ins[m]));
+    })) };
+  }
+  function pReadMets(ins) {
+    var o = {};
+    for (var i = 0; i < PMETS.length; i++) { var v = pInt(ins[PMETS[i]].value); if (v === undefined) return null; o[PMETS[i]] = v; }
+    return o;
+  }
+  function pAfter(msg) {
+    PF.flash = msg;
+    return render(true).then(function () { var o = view.querySelector(".ok"); if (o && o.textContent) { o.tabIndex = -1; o.focus(); } });
+  }
+  // Elle gönderi ekleme formu
+  function pAddForm() {
+    var url = el("input", { type: "url", inputmode: "url", autocomplete: "off", maxlength: "500", required: true, placeholder: "https://" });
+    var date = el("input", { type: "date", required: true, max: isoDay(new Date()), value: isoDay(new Date()) });
+    var type = el("select", null, PTYPES.map(function (x) { return el("option", { value: x, text: t("pt_" + x) }); }));
+    var cap = el("textarea", { rows: "3", maxlength: "2200" }), thumb = el("input", { type: "url", inputmode: "url", autocomplete: "off", maxlength: "2000", placeholder: "https://" });
+    var mi = pMetInputs("pa-"), msg = note(), btn = el("button", { type: "submit", class: "btn", text: t("pSave") });
+    var f = el("form", { class: "f", "data-sk-noform": true, novalidate: true }, [fld("pa-url", t("pUrl"), url, t("pUrlHint")),
+      el("div", { class: "grid2" }, [el("div", null, fld("pa-date", t("pDate"), date)), el("div", null, fld("pa-type", t("pType"), type))]),
+      fld("pa-cap", t("pCaption"), cap), fld("pa-th", t("pThumb"), thumb, t("pThumbHint")), mi.box, msg, btn]);
+    f.addEventListener("submit", function (e) {
+      e.preventDefault(); say(msg, "");
+      var u = url.value.trim(), pl = platformOf(u), m = pReadMets(mi.ins), list = PS.srv ? PS.list : pLoad();
+      if (!pl) { say(msg, t("pBadUrl")); url.focus(); return; }
+      if (list.some(function (p) { return p.url === u; })) { say(msg, t("pDup")); url.focus(); return; }
+      if (!okDay(date.value)) { say(msg, t("pBadDate")); date.focus(); return; }
+      if (thumb.value.trim() && !okThumb(thumb.value.trim())) { say(msg, t("pThumbHint")); thumb.focus(); return; }
+      if (!m) { say(msg, t("pBadNum")); return; }
+      m.at = isoDay(new Date());
+      if (PS.srv) {
+        busy(btn, true);
+        BC.call("POST", "app/posts/manual", pApiRow({ url: u, date: date.value, type: type.value, caption: cap.value.trim(), thumb: thumb.value.trim(), likes: m.likes, comments: m.comments, views: m.views, reach: m.reach }))
+          .then(function () { pAfter(t("pSaved")); }, function (e) { busy(btn, false); say(msg, pErr(e)); });
+        return;
+      }
+      list.push({ id: newId(), url: u, platform: pl, type: type.value, date: date.value, caption: cap.value.trim(), thumb: thumb.value.trim(), snaps: [m] });
+      if (!pStore(list)) { say(msg, t("pFull")); return; }
+      pAfter(t("pSaved"));
+    });
+    return f;
+  }
+  // CSV: tırnaklı alanlar, virgül ya da noktalı virgül; ilk satır başlıksa sütunlar ada göre eşlenir
+  function parseCsv(txt) {
+    txt = String(txt).replace(/^﻿/, "");
+    var head = txt.split(/\r?\n/)[0], sep = head.split(";").length > head.split(",").length ? ";" : ",", rows = [], row = [], f = "", q = false;
+    for (var i = 0; i < txt.length; i++) {
+      var c = txt[i];
+      if (q) { if (c === '"') { if (txt[i + 1] === '"') { f += '"'; i++; } else q = false; } else f += c; }
+      else if (c === '"') q = true;
+      else if (c === sep) { row.push(f); f = ""; }
+      else if (c === "\n" || c === "\r") { if (c === "\r" && txt[i + 1] === "\n") i++; row.push(f); rows.push(row); row = []; f = ""; }
+      else f += c;
+    }
+    if (f || row.length) { row.push(f); rows.push(row); }
+    return rows;
+  }
+  function importCsv(txt) {
+    var rows = parseCsv(txt), cols = ["url", "date", "type", "likes", "comments", "views", "reach", "caption"], start = 0, list = pLoad(), added = 0, upd = 0, bad = [], today = isoDay(new Date());
+    if (rows.length && rows[0].some(function (x) { return x.trim().toLowerCase() === "url"; })) { cols = rows[0].map(function (x) { return x.trim().toLowerCase(); }); start = 1; }
+    var data = [], api = [], lines = [];
+    for (var i = start; i < rows.length; i++) if (rows[i].some(function (x) { return x.trim(); })) data.push([i + 1, rows[i]]);
+    if (!data.length) return { err: t("pCsvEmpty") };
+    if (data.length > 500) return { err: t("pCsvBig") };
+    data.forEach(function (d) {
+      var o = {}, s = { at: today };
+      cols.forEach(function (c, k) { o[c] = (d[1][k] || "").trim(); });
+      var pl = platformOf(o.url), ty = (o.type || "").toLowerCase(), ok = !!pl && okDay(o.date || today);
+      PMETS.forEach(function (m) { var v = pInt(o[m]); if (v === undefined) ok = false; s[m] = v; });
+      if (!ok) { bad.push(d[0]); return; }
+      if (PS.srv) { var r = { url: o.url, date: o.date || today, type: PTYPES.indexOf(ty) >= 0 ? ty : "", caption: (o.caption || "").slice(0, 2200), thumb: okThumb(o.thumb) ? o.thumb : "" }; PMETS.forEach(function (m) { r[m] = s[m]; }); api.push(pApiRow(r)); lines.push(d[0]); return; }
+      var ex = list.filter(function (p) { return p.url === o.url; })[0];
+      if (ex) { ex.snaps = ex.snaps.filter(function (x) { return x.at !== today; }).concat(s); upd++; return; }
+      list.push({ id: newId() + added, url: o.url, platform: pl, type: PTYPES.indexOf(ty) >= 0 ? ty : pl === "tiktok" || pl === "youtube" ? "video" : "photo", date: o.date || today, caption: (o.caption || "").slice(0, 2200), thumb: okThumb(o.thumb) ? o.thumb : "", snaps: [s] });
+      added++;
+    });
+    if (PS.srv) return { api: api, lines: lines, bad: bad };
+    if ((added || upd) && !pStore(list)) return { err: t("pFull") };
+    return { added: added + upd, text: pCsvText(added, upd, bad) };
+  }
+  function pCsvText(added, upd, bad) {
+    var out = [];
+    if (added) out.push(t("pCsvDone", num(added)));
+    if (upd) out.push(t("pCsvUpd", num(upd)));
+    if (bad.length) out.push(t("pCsvSkip", num(bad.length)).replace("{r}", bad.slice(0, 10).join(", ") + (bad.length > 10 ? "…" : "")));
+    return out.join(" ");
+  }
+  function pCsvForm() {
+    var file = el("input", { type: "file", accept: ".csv,text/csv,text/plain" }), msg = note(), btn = el("button", { type: "submit", class: "btn", text: t("pCsvGo") });
+    var f = el("form", { class: "f", "data-sk-noform": true, novalidate: true }, [el("p", { class: "hint", text: t("pCsvHint") }), fld("pc-file", t("pCsvFile"), file), msg, btn]);
+    f.addEventListener("submit", function (e) {
+      e.preventDefault(); say(msg, "");
+      var fl = file.files && file.files[0];
+      if (!fl) { say(msg, t("pCsvEmpty")); file.focus(); return; }
+      if (fl.size > 1048576) { say(msg, t("pCsvBig")); return; }
+      busy(btn, true);
+      fl.text().then(function (txt) {
+        busy(btn, false);
+        var r = importCsv(txt);
+        if (r.err) { say(msg, r.err); return; }
+        if (r.api) {
+          var fin = function (sm) {
+            var bad = r.bad.concat(sm.bad).sort(function (a, b) { return a - b; }), tx = pCsvText(sm.added, sm.updated, bad);
+            if (!sm.added && !sm.updated) { busy(btn, false); say(msg, tx || t("pCsvEmpty")); return; }
+            pAfter(tx);
+          };
+          if (!r.api.length) { fin({ added: 0, updated: 0, bad: [] }); return; }
+          busy(btn, true);
+          pImport(r.api, r.lines).then(fin, function (e) {
+            busy(btn, false);
+            var sm = e && e.sum, tx = sm && (sm.added || sm.updated) ? pCsvText(sm.added, sm.updated, []) + " " : "";
+            say(msg, tx + pErr(e));
+          });
+          return;
+        }
+        if (!r.added) { say(msg, r.text || t("pCsvEmpty")); return; }
+        pAfter(r.text);
+      }, function () { busy(btn, false); say(msg, t("pCsvRead")); });
+    });
+    return f;
+  }
+  // Otomatik bağlantılar: bayrak kapalıysa elle yol, açık ve bağlıysa "yakında"; LinkedIn notu her zaman
+  function pConnCard(c) {
+    var code = c.err && c.err.code, off = code === "disabled" || code === "forbidden" || (!c.err && c.disabled), kids;
+    if (c.err && !off) kids = failLine(c.err, function () { render(true); });
+    else if (off) kids = el("p", { class: "meta", text: t("pConnOff") });
+    else kids = Object.keys(CONNECTORS).map(function (p) {
+      var cn = (c.connections || []).filter(function (x) { return x.platform === p; })[0], on = !!cn && cn.status === "connected";
+      return el("div", { class: "srow" }, [el("span", { class: "ic " + (on ? "ok" : "slate"), "aria-hidden": "true" }, ic("link")),
+        el("div", { class: "tx" }, [el("b", { text: PL[p] }), el("span", { text: on ? t("pConnSoon") : t("pConnApi", CONNECTORS[p].api) })]),
+        el("div", { class: "sa" }, el("span", { class: "badge " + (on ? "b-ok" : "b-slate"), text: on ? t("pConnOk") : t("pConnNot") }))]);
+    });
+    return el("section", { class: "card" }, [el("div", { class: "ch" }, el("h2", { text: t("pConn") })), el("div", { class: "cb" }, [kids, el("p", { class: "pnote", text: t("pLiNote") })])]);
+  }
+  function posts() {
+    PF.view = PF.view || pPrefView();
+    return Promise.all([BC.call("GET", "app/connections").then(function (c) { return c; }, function (e) { return { err: e }; }), pSync()]).then(function (all) {
+      var c = all[0], d = pData(), flash = okNote(), cnt = el("p", { class: "info", role: "status" }), res = el("div"), sels = [];
+      say(flash, PF.flash); PF.flash = "";
+      var vt = el("div", { class: "tabs", role: "group", "aria-label": t("pvView") }, [["grid", "pvGrid"], ["list", "pvList"]].map(function (x) {
+        return el("button", { type: "button", "aria-pressed": String(PF.view === x[0]), text: t(x[1]), onclick: function () {
+          PF.view = x[0]; try { localStorage.setItem("bc-posts-view", x[0]); } catch (e) { /* özel pencere */ }
+          vt.querySelectorAll("button").forEach(function (b, k) { b.setAttribute("aria-pressed", String(k === (x[0] === "grid" ? 0 : 1))); });
+          draw();
+        } });
+      }));
+      var plats = [];
+      d.list.forEach(function (p) { if (plats.indexOf(p.platform) < 0) plats.push(p.platform); });
+      var f = el("form", { class: "box f filter", role: "search", "data-sk-noform": true, novalidate: true, onsubmit: function (e) { e.preventDefault(); } }, [
+        pSelect("pf-r", t("pRange"), [["all", t("pRAll")], ["7", t("pR7")], ["30", t("pR30")], ["90", t("pR90")]], "range", draw),
+        pSelect("pf-t", t("pType"), [["", t("pTAll")]].concat(PTYPES.map(function (x) { return [x, t("pt_" + x)]; })), "type", draw),
+        pSelect("pf-p", t("pPlat"), [["", t("pPAll")]].concat(plats.map(function (x) { return [x, PL[x]]; })), "platform", draw)]);
+      if (plats.indexOf(PF.platform) < 0) PF.platform = "";
+      f.querySelectorAll("select").forEach(function (s) { sels.push(s); });
+      function clear() { PF.range = "all"; PF.type = ""; PF.platform = ""; PF.page = 1; sels[0].value = "all"; sels[1].value = ""; sels[2].value = ""; draw(); sels[0].focus(); }
+      function go(dlt) { PF.page += dlt; draw(); var b = res.querySelector(dlt < 0 ? "[data-pg=prev]" : "[data-pg=next]"); if (b && b.disabled) b = res.querySelector("[data-pg]:not([disabled])"); if (b) b.focus(); cnt.scrollIntoView({ block: "nearest" }); }
+      function draw() {
+        var xs = pFilter(d.list), pages = Math.max(1, Math.ceil(xs.length / PPAGE));
+        PF.page = Math.min(Math.max(1, PF.page), pages);
+        var sl = xs.slice((PF.page - 1) * PPAGE, PF.page * PPAGE);
+        cnt.textContent = t("pCount", num(xs.length));
+        res.textContent = "";
+        if (!xs.length) { add(res, empty(t("pNone"), el("button", { type: "button", class: "ghost", text: t("pClear"), onclick: clear }))); return; }
+        add(res, PF.view === "list" ? el("ul", { class: "plist" }, sl.map(function (p) { return pRow(p, d.sample); })) : el("ul", { class: "pgrid" }, sl.map(function (p) { return pCard(p, d.sample); })));
+        if (pages > 1) add(res, el("nav", { class: "pager", "aria-label": t("pPager") }, [
+          el("button", { type: "button", class: "ghost", "data-pg": "prev", disabled: PF.page <= 1, text: t("pPrev"), onclick: function () { go(-1); } }),
+          el("span", { class: "info", text: t("pPage", num(PF.page) + " / " + num(pages)) }),
+          el("button", { type: "button", class: "ghost", "data-pg": "next", disabled: PF.page >= pages, text: t("pNext"), onclick: function () { go(1); } })]));
+      }
+      draw();
+      var entry = el("section", { class: "card" }, [el("div", { class: "ch" }, el("h2", { text: t("pDataH") })), el("div", { class: "cb" }, [
+        el("p", { class: "hint", text: t(PS.srv ? "pSrv" : "pLocal") }), pMoveDue() ? pMoveCard() : null,
+        el("details", { class: "pd", open: d.sample ? null : null }, [el("summary", { text: t("pAdd") }), pAddForm()]),
+        el("details", { class: "pd" }, [el("summary", { text: t("pCsv") }), pCsvForm()])])]);
+      return [el("h1", { text: t("nPosts") }), el("p", { class: "lead", text: t("postsLead") }), flash,
+        d.sample ? el("div", { class: "box banner", role: "note" }, el("p", { class: "meta" }, [el("span", { class: "badge b-sample", text: t("socSample") }), " ", t("pSampleNote")])) : null,
+        el("div", { class: "pbar" }, [vt, cnt]), f, res, el("p", { class: "pnote", text: t("pErNote") }), entry, pConnCard(c)];
+    });
+  }
+  // Zaman çizelgesi: tek ölçüt, SVG (createElementNS)
+  function sv(tag, a, txt) { var n = document.createElementNS("http://www.w3.org/2000/svg", tag); for (var k in a) n.setAttribute(k, a[k]); if (txt != null) n.textContent = txt; return n; }
+  function pChart(snaps, key) {
+    var xs = snaps.filter(function (s) { return s[key] != null; });
+    if (xs.length < 2) return el("p", { class: "info", text: t("pTlNone") });
+    var W = 600, H = 210, l = 52, r = 14, tp = 14, b = 28, t0 = Date.parse(xs[0].at), t1 = Date.parse(xs[xs.length - 1].at);
+    var max = Math.max.apply(null, xs.map(function (s) { return s[key]; })) || 1;
+    var X = function (s) { return l + (t1 > t0 ? (Date.parse(s.at) - t0) / (t1 - t0) : 0.5) * (W - l - r); }, Y = function (v) { return H - b - v / max * (H - tp - b); };
+    var g = sv("svg", { class: "pchart", viewBox: "0 0 " + W + " " + H, role: "img", "aria-label": t(PMK[key]) + ": " + xs.map(function (s) { return day(s.at) + " " + num(s[key]); }).join(", ") });
+    g.appendChild(sv("line", { class: "ax", x1: l, x2: W - r, y1: H - b, y2: H - b }));
+    g.appendChild(sv("line", { class: "ax", x1: l, x2: W - r, y1: tp, y2: tp, "stroke-dasharray": "3 4" }));
+    g.appendChild(sv("text", { x: l - 8, y: tp + 4, "text-anchor": "end" }, short(max)));
+    g.appendChild(sv("text", { x: l - 8, y: H - b + 4, "text-anchor": "end" }, "0"));
+    g.appendChild(sv("text", { x: l, y: H - 8 }, day(xs[0].at)));
+    g.appendChild(sv("text", { x: W - r, y: H - 8, "text-anchor": "end" }, day(xs[xs.length - 1].at)));
+    g.appendChild(sv("path", { class: "ln l1", d: xs.map(function (s, i) { return (i ? "L" : "M") + X(s).toFixed(1) + " " + Y(s[key]).toFixed(1); }).join(" ") }));
+    xs.forEach(function (s) { g.appendChild(sv("circle", { cx: X(s).toFixed(1), cy: Y(s[key]).toFixed(1), r: 4, stroke: "var(--accent)" })); });
+    return g;
+  }
+  function post(r) { return pSync().then(function () { return postView(r); }); }
+  function postView(r) {
+    var d = pData(), p = d.list.filter(function (x) { return x.id === r.id; })[0];
+    if (!p) return [back("#posts", "pBack"), empty(t("pNotFound"), el("a", { class: "btn sm", href: "#posts", text: t("pBack") }))];
+    var s = lastSnap(p), key = "likes", tlBox = el("div");
+    function drawTl() { tlBox.textContent = ""; add(tlBox, pChart(p.snaps, key)); }
+    var kt = el("div", { class: "tabs", role: "group", "aria-label": t("pTimeline") }, PMETS.map(function (m) {
+      return el("button", { type: "button", "aria-pressed": String(m === key), text: t(PMK[m]), onclick: function () {
+        key = m; kt.querySelectorAll("button").forEach(function (b, k) { b.setAttribute("aria-pressed", String(PMETS[k] === m)); }); drawTl();
+      } });
+    }));
+    drawTl();
+    var table = el("div", { class: "tscroll" }, el("table", { class: "snaps" }, [el("caption", { class: "vh", text: t("pTimeline") }),
+      el("thead", null, el("tr", null, [el("th", { scope: "col", text: t("pSnapAt") })].concat(PMETS.map(function (m) { return el("th", { scope: "col", text: t(PMK[m]) }); }), el("th", { scope: "col", text: "ER" })))),
+      el("tbody", null, p.snaps.slice().reverse().map(function (x) {
+        return el("tr", null, [el("td", { text: day(x.at) })].concat(PMETS.map(function (m) { return el("td", { text: x[m] == null ? "—" : num(x[m]) }); }), el("td", { text: pct(erOf(x)) })));
+      }))]));
+    var edit;
+    if (d.sample) edit = el("p", { class: "pnote", text: t("pSampleRO") });
+    else {
+      var at = el("input", { type: "date", required: true, max: isoDay(new Date()), value: isoDay(new Date()) }), mi = pMetInputs("ps-", s), msg = note();
+      var f = el("form", { class: "f", "data-sk-noform": true, novalidate: true }, [el("div", { class: "grid2" }, el("div", null, fld("ps-at", t("pSnapAt"), at))), mi.box, msg,
+        el("button", { type: "submit", class: "btn", text: t("pSave") })]);
+      f.addEventListener("submit", function (e) {
+        e.preventDefault(); say(msg, "");
+        var m = pReadMets(mi.ins), list = pLoad(), q = list.filter(function (x) { return x.id === p.id; })[0];
+        if (!okDay(at.value)) { say(msg, t("pBadDate")); at.focus(); return; }
+        if (!m) { say(msg, t("pBadNum")); return; }
+        if (PS.srv) {
+          var sb = f.querySelector("button[type=submit]"); busy(sb, true);
+          m.url = p.url; m.date = p.date; m.type = p.type; m.at = at.value;
+          BC.call("POST", "app/posts/manual", pApiRow(m)).then(function () { pAfter(t("pSnapOk")); }, function (e) { busy(sb, false); say(msg, pErr(e)); });
+          return;
+        }
+        if (!q) { say(msg, t("pNotFound")); return; }
+        m.at = at.value;
+        q.snaps = q.snaps.filter(function (x) { return x.at !== m.at; }).concat(m).sort(function (a, b2) { return a.at < b2.at ? -1 : a.at > b2.at ? 1 : 0; });
+        if (!pStore(list)) { say(msg, t("pFull")); return; }
+        pAfter(t("pSnapOk"));
+      });
+      var del = el("button", { type: "button", class: "ghost bad", text: t("pDel"), onclick: function () {
+        if (!window.confirm(t("pDelQ"))) return;
+        pStore(pLoad().filter(function (x) { return x.id !== p.id; }));
+        PF.flash = t("pDeleted"); location.hash = "#posts";
+      } });
+      edit = [el("h3", { class: "sub", text: t("pSnap") }), f, PS.srv ? el("p", { class: "pnote", text: t("pSrvNoDel") }) : el("p", { style: "margin:18px 0 0" }, del)];
+    }
+    var flash = okNote(); say(flash, PF.flash); PF.flash = "";
+    var title = (p.caption || "").split("\n")[0];
+    return [back("#posts", "pBack"), el("h1", { dir: "auto", text: title.length > 70 ? title.slice(0, 68) + "…" : title || pLabel(p) }),
+      el("p", { class: "meta" }, [el("span", { text: pLabel(p) }), d.sample ? el("span", { class: "badge b-sample", text: t("socSample") }) : null,
+        p.url ? el("a", { class: "clink", href: p.url, target: "_blank", rel: "noopener noreferrer" }, [ic("link"), t("pOpen")]) : null]), flash,
+      el("div", { class: "pdet", style: "margin-top:16px" }, [pThumb(p, d.sample), el("div", null, [
+        p.caption ? el("p", { class: "prose", dir: "auto", style: "margin:0 0 14px", text: p.caption }) : null,
+        el("div", { class: "stats" }, PMETS.map(function (m) { return el("div", { class: "stat" }, [el("div", { class: "k", text: t(PMK[m]) }), el("div", { class: s[m] == null ? "v na" : "v", text: s[m] == null ? t("noData") : num(s[m]) })]); })
+          .concat(el("div", { class: "stat", style: "grid-column:1/-1" }, [el("div", { class: "k", text: t("mEr") }), el("div", { class: erOf(s) == null ? "v na" : "v", text: pct(erOf(s)) })]))),
+        el("p", { class: "pnote", text: t("pErNote") })])]),
+      el("section", { class: "card", style: "margin-top:16px" }, [el("div", { class: "ch" }, el("h2", { text: t("pTimeline") })), el("div", { class: "cb" }, [kt, tlBox, table, edit])])];
+  }
+  // Influencer tam profili (#creator-<id>, marka/ajans): hesap ölçümleri, son 9 gönderi, kampanyaya ekle/çıkar.
+  // app/creators/:id/posts ve app/campaigns/:id/posts 404 verirse örnek gönderiler gösterilir; eklemeler yalnız bu tarayıcıda tutulur.
+  var CR = { camp: 0 };
+  function crSoft(p) { return p.then(function (d) { return { d: d }; }, function (e) { if (e && e.code === "auth") throw e; return { e: e }; }); }
+  function crMissing(e) { return !!e && (e.status === 404 || e.status === 405 || e.code === "unavailable"); }
+  // Yerel modda eklenen gönderi, gönderi kaydına (pKey) yazılır: creator_id + src_post ile bulunur, kampanyalar gönderinin alanıdır
+  function crFind(list, cr, pid) { return list.filter(function (q) { return q.creator_id === cr && q.src_post === pid; })[0]; }
+  function crIn(cid, cr) {
+    var o = {};
+    pLoad().forEach(function (q) { if (q.creator_id === cr && Array.isArray(q.campaigns) && q.campaigns.indexOf(cid) >= 0) o[q.src_post] = 1; });
+    return o;
+  }
+  function crPut(list, cid, x, p, on) {
+    var cr = String(x.id), q = crFind(list, cr, p.id);
+    if (on) {
+      if (!q) {
+        var snap = { at: isoDay(new Date()) };
+        PMETS.forEach(function (m) { if (typeof p[m] === "number") snap[m] = p[m]; });
+        q = { id: newId(), url: p.url || "", platform: p.platform, type: p.type, date: p.date || snap.at, caption: p.caption || "", thumb: p.thumb || "", snaps: [snap], creator_id: cr, src_post: p.id, campaigns: [] };
+        list.push(q);
+      }
+      if (!Array.isArray(q.campaigns)) q.campaigns = [];
+      if (q.campaigns.indexOf(cid) < 0) q.campaigns.push(cid);
+      return list;
+    }
+    if (!q) return list;
+    q.campaigns = (Array.isArray(q.campaigns) ? q.campaigns : []).filter(function (c) { return c !== cid; });
+    return q.campaigns.length ? list : list.filter(function (y) { return y !== q; });
+  }
+  // Eski "bc-cposts-<uid>-<cid>" anahtarı (girdi "creator:post"): bu sayfadaki gönderiler bir kez taşınır, boşalan anahtar silinir
+  function crMigrate(x, posts) {
+    try {
+      var pre = "bc-cposts-" + U.id + "-", keys = [], list = pLoad(), moved = 0;
+      for (var i = 0; i < localStorage.length; i++) { var k = localStorage.key(i); if (k && k.indexOf(pre) === 0) keys.push(k); }
+      keys.forEach(function (k) {
+        var cid = +k.slice(pre.length), v = JSON.parse(localStorage.getItem(k) || "[]");
+        if (!Array.isArray(v) || !(cid > 0)) { localStorage.removeItem(k); return; }
+        var rest = v.filter(function (e) {
+          var j = typeof e === "string" ? e.indexOf(":") : -1, p = j > 0 && e.slice(0, j) === String(x.id) ? posts.filter(function (y) { return y.id === e.slice(j + 1); })[0] : null;
+          if (!p) return typeof e === "string";
+          list = crPut(list, cid, x, p, true); moved++; return false;
+        });
+        if (moved && !pStore(list)) return;
+        if (rest.length) localStorage.setItem(k, JSON.stringify(rest)); else localStorage.removeItem(k);
+      });
+    } catch (e) { /* depolama kapalı: taşıma yok */ }
+  }
+  function crSample(x) {
+    var r = rng("cposts:" + x.id), pl = (x.platforms || []).map(function (p) { return p.platform; }).filter(function (p) { return p === "instagram" || p === "tiktok" || p === "youtube"; });
+    if (!pl.length) pl = ["instagram"];
+    var caps = L === "tr" ? ["Yeni sezon favorilerim", "Bir günüm, baştan sona", "Sorularınızı yanıtladım", "Kamera arkası", "Beş dakikada pratik tarif", "Haftanın keşifleri"]
+      : ["My new season favourites", "A day in my life", "Answering your questions", "Behind the scenes", "A quick five-minute recipe", "This week's finds"];
+    var out = [];
+    for (var i = 0; i < 9; i++) {
+      var p = pl[Math.floor(r() * pl.length)], type = p === "instagram" ? ["photo", "reel", "carousel"][Math.floor(r() * 3)] : "video", reach = Math.round(2000 + r() * 40000);
+      out.push({ id: "c" + i, url: "", platform: p, type: type, date: isoDay(new Date(Date.now() - (1 + i * 5 + Math.floor(r() * 4)) * 864e5)), caption: caps[i % caps.length], thumb: "", verified: false,
+        likes: Math.round(reach * (0.03 + r() * 0.06)), comments: Math.round(reach * (0.002 + r() * 0.01)), views: type === "photo" || type === "carousel" ? null : Math.round(reach * (1.1 + r() * 0.8)), reach: reach });
+    }
+    return out;
+  }
+  // API gönderisi: bilinmeyen alanlar atılır, geçersiz sayılar boş sayılır
+  function crPost(p, i) {
+    var n = function (v) { return typeof v === "number" && v >= 0 && isFinite(v) ? Math.round(v) : null; };
+    return { id: String(p.id != null ? p.id : "p" + i).slice(0, 40), url: URL_RE.test(p.url || "") ? p.url : "", platform: PL[p.platform] ? p.platform : "instagram",
+      type: PTYPES.indexOf(p.type) >= 0 ? p.type : "photo", date: okDay(String(p.date || "").slice(0, 10)) ? String(p.date).slice(0, 10) : "", caption: String(p.caption || "").slice(0, 300),
+      thumb: okThumb(p.thumb) ? p.thumb : "", verified: p.verified === true || p.source === "oauth", likes: n(p.likes), comments: n(p.comments), views: n(p.views), reach: n(p.reach) };
+  }
+  function crAccounts(m, x) {
+    var acc = m && m.metrics && Array.isArray(m.metrics.accounts) ? m.metrics.accounts : null, sample = !acc || m.metrics.mode !== "live";
+    if (!acc) acc = (x.platforms || []).map(function (p) { return { platform: p.platform, handle: p.handle, followers: p.followers > 0 ? p.followers : null }; });
+    acc = acc.filter(function (a) { return a && PL[a.platform]; });
+    if (!acc.length) return el("p", { class: "meta", text: t("drNoPlat") });
+    return el("ul", { class: "cacc" }, acc.map(function (a) {
+      return el("li", null, [el("div", { class: "pmeta" }, [el("b", { text: PL[a.platform] + (a.handle ? " · " + a.handle : "") }), sample ? el("span", { class: "badge b-sample", text: t("socSample") }) : null]),
+        el("div", { class: "pmeta" }, [["followers", "socFol"], ["avg_views", "socViews"], ["avg_likes", "socLikes"], ["avg_comments", "socComm"]].map(function (k) {
+          return el("span", null, [el("b", { text: typeof a[k[0]] === "number" ? short(a[k[0]]) : "—" }), " " + t(k[1])]);
+        }))]);
+    }));
+  }
+  function creator(r) {
+    var id = r.id;
+    return Promise.all([BC.call("GET", "app/influencers"), crSoft(BC.call("GET", "app/campaigns")), crSoft(BC.call("GET", "app/metrics/" + encodeURIComponent(id))),
+      crSoft(BC.call("GET", "app/creators/" + encodeURIComponent(id) + "/posts"))]).then(function (res) {
+      var x = ((res[0] && res[0].influencers) || []).filter(function (y) { return String(y.id) === id; })[0];
+      if (!x) return [back("#discover", "crBack"), el("h1", { text: t("nDiscover") }), empty(t("crNone"))];
+      x.platforms = x.platforms || [];
+      var camps = res[1].d && res[1].d.campaigns || [], open = camps.filter(function (c) { return c.status === "open"; });
+      var pr = res[3], sample = !pr.d || !Array.isArray(pr.d.posts), perr = pr.e && !crMissing(pr.e) ? pr.e : null;
+      var list = sample ? (perr ? [] : crSample(x)) : pr.d.posts.slice(0, 9).map(crPost);
+      if (!open.some(function (c) { return c.id === CR.camp; })) CR.camp = open.length ? open[0].id : 0;
+      var local = sample, added = {}, msg = el("p", { class: "ok", role: "status" }), err = note();
+      function load() { added = CR.camp ? crIn(CR.camp, String(x.id)) : {}; }
+      var sel = open.length ? el("select", { onchange: function () { CR.camp = +sel.value; load(); paint(); } }, open.map(function (c) { return el("option", { value: String(c.id), text: c.title }); })) : null;
+      if (sel) sel.value = String(CR.camp);
+      var grid = el("ul", { class: "pgrid cgrid" });
+      function toggle(p, btn) {
+        var on = !!added[p.id], cid = CR.camp;
+        say(err, ""); msg.textContent = "";
+        function done() {
+          if (!pStore(crPut(pLoad(), cid, x, p, !on))) { busy(btn, false); say(err, t("pFull")); return; }
+          load(); paint(); msg.textContent = t(on ? "crRemoved" : "crAdded");
+          var b = grid.querySelector('[data-cp="' + CSS.escape(p.id) + '"]'); if (b) b.focus();
+        }
+        if (local) return done();
+        busy(btn, true);
+        var path = "app/campaigns/" + cid + "/posts";
+        (on ? BC.call("DELETE", path + "/" + encodeURIComponent(p.id)) : BC.call("POST", path, { creator_id: x.id, post_id: p.id, url: p.url || null })).then(done, function (e) {
+          if (crMissing(e)) { local = true; return done(); }
+          busy(btn, false); say(err, BC.msg(e.code));
+        });
+      }
+      function card(p) {
+        var on = !!added[p.id], s = { likes: p.likes, comments: p.comments, views: p.views, reach: p.reach };
+        var btn = CR.camp ? el("button", { type: "button", class: on ? "btn sm sec" : "btn sm", "data-cp": p.id, "aria-pressed": String(on), "aria-label": t(on ? "crRemove" : "crAdd") + ": " + (p.caption || pLabel(p)), text: t(on ? "crRemove" : "crAdd") }) : null;
+        if (btn) btn.addEventListener("click", function () { toggle(p, btn); });
+        return el("li", { class: "pcard" }, [pThumb(p, sample),
+          el("div", { class: "pbody" }, [el("p", { class: "pcap", dir: "auto", text: p.caption || t("pNoCap") }),
+            el("div", { class: "pmeta" }, [el("span", { text: t("pt_" + p.type) }), p.date ? el("span", { text: day(p.date) }) : null, p.verified ? el("span", { class: "badge b-ok", text: t("crVerified") }) : null]),
+            el("div", { class: "pmeta" }, [pMetric(p.likes, "mLikes"), pMetric(p.comments, "mComments"), el("span", null, [el("b", { text: pct(erOf(s)) }), " ER"])]),
+            el("div", { class: "pact" }, [btn, p.url ? el("a", { class: "ghost sm", href: p.url, target: "_blank", rel: "noopener noreferrer nofollow", text: t("crOpenPost") }) : null])])]);
+      }
+      function paint() { grid.replaceChildren.apply(grid, list.map(card)); }
+      crMigrate(x, list); load(); paint();
+      return [back("#discover", "crBack"), el("h1", { text: x.name }),
+        x.city || x.bio ? el("p", { class: "lead" }, [x.city ? x.city : null, x.city && x.bio ? " · " : null, x.bio || null]) : null, chips(x.niches),
+        el("section", { class: "card" }, [el("div", { class: "ch" }, el("h2", { text: t("crAccounts") })), el("div", { class: "cb" }, crAccounts(res[2].d, x))]),
+        el("section", { class: "card" }, [el("div", { class: "ch" }, el("h2", { text: t("crPosts") })), el("div", { class: "cb" }, [
+          sample && !perr ? el("p", { class: "meta" }, [el("span", { class: "badge b-sample", text: t("crSampleBadge") }), " ", t("crSampleNote")]) : null,
+          open.length ? el("div", { class: "f ctarget" }, fld("cr-camp", t("crTarget"), sel)) : el("p", { class: "meta" }, [t("needOpen") + " ", el("a", { class: "lk44", href: "#new", text: t("doNew") })]),
+          msg, err, perr ? failLine(perr, function () { render(); }) : list.length ? grid : el("p", { class: "meta", text: t("crNoPosts") }),
+          el("p", { class: "pnote", text: t("pErNote") })])])];
+    });
+  }
+
+  // Bildirimler: app/notifications 404 verirse rol bazlı örnek liste. Okundu bilgisi bu tarayıcıda (bc-notif-read-<id>); sunucu "read" verirse o da sayılır.
+  // Menüdeki sayı yalnız bu ekran açıldıktan sonra görünür (ek istek yok).
+  var NF = { unread: 0 };
+  function nfKey() { return "bc-notif-read-" + U.id; }
+  function nfRead() { try { var o = JSON.parse(localStorage.getItem(nfKey()) || "{}"); return o && typeof o === "object" ? o : {}; } catch (e) { return {}; } }
+  function nfSave(o) { try { localStorage.setItem(nfKey(), JSON.stringify(o)); } catch (e) {} }
+  function nfPaint() {
+    [$("ntf"), $("ntf2")].forEach(function (b) {
+      label(b, "bell", t("nNotif"));
+      if (NF.unread) add(b, [el("span", { class: "cnt", text: NF.unread > 99 ? "99+" : String(NF.unread) })]);
+    });
+  }
+  var NF_KIND = { apply: ["inbox", "info"], content: ["eye", "warn"], view: ["eye", "info"], invite: ["send", "accent"], accepted: ["check", "ok"], metrics: ["image", "info"] };
+  function nfSample() {
+    var now = Date.now(), at = function (hr) { return new Date(now - hr * 36e5).toISOString().slice(0, 19).replace("T", " "); };
+    return (isOwner() ? [["s1", "apply", "nfSApply", "#campaigns", 2], ["s2", "content", "nfSContent", "#campaigns", 20], ["s3", "view", "nfSView", "#campaigns", 50]]
+      : [["s1", "invite", "nfSInvite", "#applications", 3], ["s2", "accepted", "nfSAccepted", "#applications", 26], ["s3", "metrics", "nfSMetrics", "#posts", 72]])
+      .map(function (x) { return { id: x[0], kind: x[1], text: t(x[2]), link: x[3], at: at(x[4]) }; });
+  }
+  function ago(s) {
+    var d = new Date(String(s || "").replace(" ", "T") + "Z"), sec = (d - Date.now()) / 1000;
+    if (isNaN(d)) return "";
+    if (sec < -7 * 864e2) return when(s);
+    var u = [["day", 864e2], ["hour", 3600], ["minute", 60]].filter(function (x) { return Math.abs(sec) >= x[1]; })[0] || ["minute", 60];
+    try { return new Intl.RelativeTimeFormat(locale(), { numeric: "auto" }).format(Math.round(sec / u[1]), u[0]); } catch (e) { return when(s); }
+  }
+  function notifications() {
+    return BC.call("GET", "app/notifications").then(function (d) { return { list: (d && d.notifications) || [] }; }, function (e) {
+      if (crMissing(e)) return { list: nfSample(), sample: true };
+      throw e;
+    }).then(function (r) {
+      var rd = nfRead(), box = el("div");
+      var list = r.list.filter(function (x) { return x && x.id != null && x.text; });
+      function un(x) { return !x.read && !rd[x.id]; }
+      function mark(x) { rd[x.id] = 1; nfSave(rd); }
+      function draw() {
+        var n = list.filter(un).length, row;
+        NF.unread = n; nfPaint();
+        box.textContent = "";
+        add(box, [el("div", { class: "nfhead" }, [el("p", { class: "meta", "aria-live": "polite", text: n ? t("nfUnread").replace("{n}", num(n)) : t("nfAllRead") }),
+          n ? el("button", { type: "button", class: "ghost", text: t("nfMarkAll"), onclick: function () { list.forEach(mark); draw(); var h = view.querySelector("h1"); if (h) { h.tabIndex = -1; h.focus(); } } }) : null]),
+          list.length ? el("ul", { class: "inbox nf" }, list.map(function (x) {
+            var k = NF_KIND[x.kind] || ["bell", "accent"], href = /^#[a-z0-9-]{1,40}$/.test(x.link || "") ? x.link : null;
+            var kids = [el("span", { class: "ic " + k[1] }, ic(k[0])), el("span", { class: "tx" }, [el("b", { text: String(x.text) }), el("span", { text: ago(x.at) })]),
+              un(x) ? el("span", { class: "dot", role: "img", "aria-label": t("nfNew") }) : null];
+            row = href ? el("a", { class: "nfa", href: href, onclick: function () { mark(x); } }, kids) : el("div", { class: "nfa" }, kids);
+            return el("li", { class: un(x) ? "un" : null }, row);
+          })) : empty(t("nfNone"))]);
+      }
+      draw();
+      return [el("h1", { text: t("nNotif") }), el("p", { class: "lead", text: t("nfLead") }),
+        r.sample ? el("p", { class: "meta" }, [el("span", { class: "badge b-sample", text: t("crSampleBadge") }), " ", t("nfSampleNote")]) : null, box];
+    });
+  }
+
+  var VIEWS = { overview: overview, campaigns: campaigns, "new": newCampaign, campaign: campaign, discover: discover, applications: applications, profile: profile, settings: settings, notifications: notifications, posts: posts, post: post, creator: creator };
 
   // Üst çubuk ve alt bilgi metinleri, dil düğmesi
   function initials(s) {
@@ -1821,6 +2584,7 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
     document.documentElement.lang = L;
     [outB, outB2].forEach(function (b) { label(b, "logout", t("logout")); });
     [$("help2"), $("help3")].forEach(function (b) { label(b, "help", t("helpS")); });
+    nfPaint();
     [$("set"), $("set2")].forEach(function (b) { label(b, "gear", t("nSettings")); });
     $("copy").textContent = t("copy");
     $("help").textContent = t("help");

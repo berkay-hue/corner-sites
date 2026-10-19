@@ -1,6 +1,6 @@
 ---
 title: "AI Destekli Satış Koçluğu: B2B Ekiplerinin Performansını Nasıl Yükseltir?"
-description: "B2B satış dünyası, benzeri görülmemiş bir karmaşıklık ve rekabet döneminden geçiyor."
+description: "AI destekli satış koçluğu, görüşme kayıtlarını analiz edip her temsilciye kişisel geri bildirim vererek B2B satış ekibinin performansını yükseltir."
 date: "2026-07-25"
 category: "Trendler"
 image: "/_a/fr/images/xUhnBGV0f3FSYfnXGTc1MD6EkWo_c1df0be2.jpg"

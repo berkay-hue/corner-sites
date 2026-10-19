@@ -1,10 +1,10 @@
 ---
-title: "Lead Kalitesi'den Lead Kalitesi2'e: SaaS Lead 4urturing Yolculuğu"
+title: "Lead Kalitesi'nden Lead Kalitesi²'ye: SaaS Lead Nurturing Yolculuğu"
 description: "SaaS dünyasında hepimizin bildiği bir gerçek var: Müşteri adayı (lead) hunisinin tepesini doldurmak, savaşın sadece yarısıdır."
 date: "2026-05-04"
 category: "Lead Generation"
 image: "/_a/fr/images/3NsRiEWTlKKC7EXDQ5ueKCVaQ_93d995dc.jpg"
-imageAlt: "Lead Kalitesi'den Lead Kalitesi2'e: SaaS Lead 4urturing Yolculuğu"
+imageAlt: "Lead Kalitesi'nden Lead Kalitesi²'ye: SaaS Lead Nurturing Yolculuğu"
 ---
 
 SaaS dünyasında hepimizin bildiği bir gerçek var: Müşteri adayı (lead) hunisinin tepesini doldurmak, savaşın sadece yarısıdır. Pazarlama departmanınız harika bir iş çıkarıp yüzlerce, hatta binlerce lead üretebilir. Ancak bu lead'lerin çoğu, satış ekibinizle konuşmaya hazır değildir. İşte bu noktada birçok SaaS şirketi, değerli potansiyel müşterileri sızdıran bir kovaya benzer. Kovayı doldurmak için sürekli yeni su (lead) eklersiniz, ama alttaki delikler yüzünden suyun çoğu boşa gider. Bu delikleri kapatan, lead'lerinizi basit bir "ilgili kişiden" "satın almaya hazır bir müşteriye" dönüştüren stratejik sürecin adı Lead Nurturing, yani potansiyel müşteri beslemedir. Bu makale, sadece kaliteli lead'ler (Lead Kalitesi) elde etmekle kalmayıp, bu lead'leri satışa hazır, yüksek değerli fırsatlara (Lead Kalitesi²) dönüştüren bu yolculuğun kapsamlı bir haritasını sunmak için tasarlandı. Lead nurturing'in ne olduğundan başlayarak, stratejinizin temel taşlarını nasıl döşeyeceğinize, hangi taktikleri kullanacağınıza ve başarınızı nasıl ölçeceğinize kadar her adımı detaylı bir şekilde ele alacağız. Hazırsanız, sızdıran kovanızı sağlam bir boru hattına dönüştürme yolculuğuna başlayalım.

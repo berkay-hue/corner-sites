@@ -1,6 +1,6 @@
 ---
 title: "n8n ile CRM Veri Senkronizasyonu ve Raporlama Otomasyonu Rehberi"
-description: "Dijital dönüşümün hız kazandığı B2B ekosisteminde, veri artık bir yan ürün değil, büyümenin temel lokomotifidir."
+description: "n8n ile CRM verisini diğer araçlarla otomatik senkronize edip raporları zamanlanmış akışlarla üretebilirsiniz; rehber kurulumu adım adım anlatır."
 date: "2026-05-07"
 category: "Otomasyon"
 image: "/_a/fr/images/RHA3rgMHulH5MZ1jP0vCnaJnAs_93d995dc.jpg"

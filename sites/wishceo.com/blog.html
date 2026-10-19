@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Blog · WishCEO</title>
+<title>WishCEO Blog · Kriz anında karar yazıları</title>
 <meta name="description" content="Kriz anlarında karar vermek üzerine yazılar: batık maliyet, belirsizlik, kriz iletişimi ve WishCEO vakalarının arka planı.">
 <link rel="canonical" href="https://wishceo.com/blog">
 <meta name="theme-color" content="#F2EEE5">
@@ -25,10 +25,12 @@
 <meta name="twitter:image:alt" content="WishCEO: Şirket batıyor. CEO sensin.">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Blog","name":"WishCEO Blog","url":"https://wishceo.com/blog","inLanguage":"tr","description":"Kriz anlarında karar vermek üzerine yazılar.","publisher":{"@type":"Organization","name":"WishCEO","url":"https://wishceo.com/"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Ana Sayfa","item":"https://wishceo.com/"},{"@type":"ListItem","position":2,"name":"Blog","item":"https://wishceo.com/blog"}]}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Blog","@id":"https://wishceo.com/blog#blog","name":"WishCEO Blog","url":"https://wishceo.com/blog","inLanguage":"tr","description":"Kriz anlarında karar vermek üzerine yazılar.","publisher":{"@id":"https://wishceo.com/#org"},"isPartOf":{"@id":"https://wishceo.com/#website"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Ana Sayfa","item":"https://wishceo.com/"},{"@type":"ListItem","position":2,"name":"Blog","item":"https://wishceo.com/blog"}]}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","@id":"https://wishceo.com/blog#sss","mainEntity":[{"@type":"Question","name":"WishCEO nedir?","acceptedAnswer":{"@type":"Answer","text":"WishCEO, gerçek krizlerden uyarlanmış vakalarla oynanan ücretsiz bir CEO karar oyunudur. Dosyayı okursun, kararını verirsin, sonra o gün CEO’nun ne yaptığını ve sonunda ne olduğunu görürsün. Şirket, ürün ve kişi adları kurgusaldır."}},{"@type":"Question","name":"WishCEO nasıl oynanır?","acceptedAnswer":{"@type":"Answer","text":"Bir sayı üç ya da dört dosyadan oluşur. Her dosyada durumu oku, dört seçenekten birini seç ve CEO’nun gerçekte ne yaptığını gör. Kararların sonunda CEO karnen çıkar. Bir dosya yaklaşık üç dakika sürer; üyelik gerekmez."}},{"@type":"Question","name":"WishCEO Pro nedir?","acceptedAnswer":{"@type":"Answer","text":"Pro, daha fazla oynamak isteyenler için hazırlanan ücretli sürümdür: tüm arşiv, kendi kararını serbest metinle yazıp gerekçeli değerlendirme alma ve karar istatistikleri. Yeni sayı her zaman ücretsiz kalır. Pro’nun fiyatı yakında açıklanacak."}},{"@type":"Question","name":"Sponsorlu vaka nedir?","acceptedAnswer":{"@type":"Answer","text":"Sponsorlu vaka, bir şirketin katkısıyla hazırlanan vakadır. Başlığın altında yalnızca tek bir sade sponsor satırı görünür; vaka metni, seçenekler ve puanlar aynı kalır. Sitede reklam alanı yoktur."}}]}</script>
 <style>
 :root{
   --paper:#F2EEE5;--card:#FBF9F4;--ink:#15130F;--ink2:#3B372F;--muted:#6B6559;
@@ -117,6 +119,20 @@ a{color:inherit;text-underline-offset:3px}
 .foot-row{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:16px 32px}
 .foot p{margin:0;max-width:52em}
 .foot .logo{font-size:20px;color:var(--ink)}
+
+/* faq */
+.faq{padding:clamp(56px,8vw,96px) 0;border-top:1px solid var(--ink)}
+.faq-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:clamp(24px,5vw,72px)}
+.faq h2{margin:0;font:600 clamp(32px,4.4vw,52px)/1.05 var(--serif);letter-spacing:-.025em}
+.faq h2 em{font-style:italic;font-weight:400;color:var(--red)}
+.faq-list{border-top:1px solid var(--ink)}
+.faq details{border-bottom:1px solid var(--rule2)}
+.faq summary{display:flex;justify-content:space-between;align-items:center;gap:16px;min-height:64px;padding:16px 0;list-style:none;cursor:pointer;font:600 clamp(19px,2vw,22px)/1.3 var(--serif)}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";flex:none;font:400 26px/1 var(--mono);color:var(--red);transition:transform .2s}
+.faq details[open] summary::after{transform:rotate(45deg)}
+.faq details p{margin:0 0 20px;max-width:40em;color:var(--ink2)}
+@media (max-width:760px){.faq-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -144,7 +160,34 @@ a{color:inherit;text-underline-offset:3px}
 
   <section id="yazilar" aria-label="Yazılar">
     <div class="wrap cards">
-      <!--$--><div class="sk-card"><a href="./blog/firsat-maliyeti-nedir"><div class="sk-tag" data-framer-name="Tag"><p>Kavramlar</p></div><div class="sk-ttl"><h2>Fırsat Maliyeti Nedir? Görünmeyen Bedel</h2></div><div class="sk-sum"><p>Fırsat maliyeti nedir? Bir seçimi yaparken vazgeçilen en iyi alternatifin değerini, CEO kararlarından gündelik örneklere kadar adım adım açıklıyoruz.</p></div><div class="sk-meta"><div class="sk-date"><p>16 Eki 2026</p></div><div class="sk-rt"><p>5 dk okuma</p></div></div></a></div><!--/$--><!--$--><div class="sk-card"><a href="./blog/batik-maliyet-yanilgisi"><div class="sk-tag" data-framer-name="Tag"><p>Kavramlar</p></div><div class="sk-ttl"><h2>Batık Maliyet Yanılgısı: “Bırakamayız” Refleksi</h2></div><div class="sk-sum"><p>Zaten harcanmış para, zaman ve itibar yeni kararını nasıl bozar? Batık maliyet yanılgısını fark etmenin yolları ve karar anında kendine sorman gerekenler.</p></div><div class="sk-meta"><div class="sk-date"><p>15 Eki 2026</p></div><div class="sk-rt"><p>7 dk okuma</p></div></div></a></div><!--/$--><!--$--><div class="sk-card"><a href="./blog/iyi-karar-kotu-sonuc"><div class="sk-tag" data-framer-name="Tag"><p>Karar Verme</p></div><div class="sk-ttl"><h2>İyi Karar, Kötü Sonuç: Farkı Nasıl Görürsün?</h2></div><div class="sk-sum"><p>İyi bir karar kötü bitebilir, kötü bir karar şansla iyi bitebilir. Sonuç yanlılığını ve bir kararı sonuca bakmadan nasıl puanlayacağını anlatıyoruz.</p></div><div class="sk-meta"><div class="sk-date"><p>15 Eki 2026</p></div><div class="sk-rt"><p>7 dk okuma</p></div></div></a></div><!--/$--><!--$--><div class="sk-card"><a href="./blog/korvala-platform-karari"><div class="sk-tag" data-framer-name="Tag"><p>Kurgusal Vaka</p></div><div class="sk-ttl"><h2>Zirvedeyken Platform Seçmek: Korvala Vakası</h2></div><div class="sk-sum"><p>Kurgusal telefon üreticisi Korvala, pazarının zirvesindeyken bir platform seçmek zorunda. Dört yolun artısı, eksisi ve vakada ne olduğu.</p></div><div class="sk-meta"><div class="sk-date"><p>15 Eki 2026</p></div><div class="sk-rt"><p>6 dk okuma</p></div></div></a></div><!--/$--><!--$--><div class="sk-card"><a href="./blog/krizin-ilk-48-saati"><div class="sk-tag" data-framer-name="Tag"><p>Kriz Liderliği</p></div><div class="sk-ttl"><h2>Krizin İlk 48 Saati: Bilgi Yokken Karar Vermek</h2></div><div class="sk-sum"><p>İki kez çekilen abonelik ücreti, eksik bilgi ve dar bir zaman. Kurgusal bir abonelik şirketi örneğinden krizin ilk saatleri için notlar: karar, iletişim, güven ve maliyet.</p></div><div class="sk-meta"><div class="sk-date"><p>15 Eki 2026</p></div><div class="sk-rt"><p>8 dk okuma</p></div></div></a></div><!--/$-->
+      <!--$--><div class="sk-card"><a href="./blog/kriz-aninda-liderlik-ekibe-ne-soylenir"><div class="sk-tag" data-framer-name="Tag"><p>Kriz Liderliği</p></div><div class="sk-ttl"><h2>Kriz Anında Liderlik: Ekibe Ne Zaman Ne Söylenir?</h2></div><div class="sk-sum"><p>Kriz anında liderin ekibine ne zaman, neyi, hangi sırayla anlatması gerektiğini; bilgi eksikken şeffaflık ile panik arasındaki dengeyi ele alıyoruz.</p></div><div class="sk-meta"><div class="sk-date"><p>18 Eki 2026</p></div><div class="sk-rt"><p>6 dk okuma</p></div></div></a></div><!--/$--><!--$--><div class="sk-card"><a href="./blog/capa-etkisi-nedir"><div class="sk-tag" data-framer-name="Tag"><p>Karar Verme</p></div><div class="sk-ttl"><h2>Çapa Etkisi Nedir? İlk Sayının Gizli Gücü</h2></div><div class="sk-sum"><p>İlk duyulan rakam karar masasını nasıl yönlendirir? Çapa etkisinin iş hayatındaki izlerini, ona karşı alınabilecek önlemleri ve günlük örnekleri.</p></div><div class="sk-meta"><div class="sk-date"><p>17 Eki 2026</p></div><div class="sk-rt"><p>5 dk okuma</p></div></div></a></div><!--/$--><!--$--><div class="sk-card"><a href="./blog/firsat-maliyeti-nedir"><div class="sk-tag" data-framer-name="Tag"><p>Kavramlar</p></div><div class="sk-ttl"><h2>Fırsat Maliyeti Nedir? Görünmeyen Bedel</h2></div><div class="sk-sum"><p>Fırsat maliyeti nedir? Bir seçimi yaparken vazgeçilen en iyi alternatifin değerini, CEO kararlarından gündelik örneklere kadar adım adım açıklıyoruz.</p></div><div class="sk-meta"><div class="sk-date"><p>16 Eki 2026</p></div><div class="sk-rt"><p>5 dk okuma</p></div></div></a></div><!--/$--><!--$--><div class="sk-card"><a href="./blog/batik-maliyet-yanilgisi"><div class="sk-tag" data-framer-name="Tag"><p>Kavramlar</p></div><div class="sk-ttl"><h2>Batık Maliyet Yanılgısı: “Bırakamayız” Refleksi</h2></div><div class="sk-sum"><p>Zaten harcanmış para, zaman ve itibar yeni kararını nasıl bozar? Batık maliyet yanılgısını fark etmenin yolları ve karar anında kendine sorman gerekenler.</p></div><div class="sk-meta"><div class="sk-date"><p>15 Eki 2026</p></div><div class="sk-rt"><p>7 dk okuma</p></div></div></a></div><!--/$--><!--$--><div class="sk-card"><a href="./blog/iyi-karar-kotu-sonuc"><div class="sk-tag" data-framer-name="Tag"><p>Karar Verme</p></div><div class="sk-ttl"><h2>İyi Karar, Kötü Sonuç: Farkı Nasıl Görürsün?</h2></div><div class="sk-sum"><p>İyi bir karar kötü bitebilir, kötü bir karar şansla iyi bitebilir. Sonuç yanlılığını ve bir kararı sonuca bakmadan nasıl puanlayacağını anlatıyoruz.</p></div><div class="sk-meta"><div class="sk-date"><p>15 Eki 2026</p></div><div class="sk-rt"><p>7 dk okuma</p></div></div></a></div><!--/$--><!--$--><div class="sk-card"><a href="./blog/korvala-platform-karari"><div class="sk-tag" data-framer-name="Tag"><p>Kurgusal Vaka</p></div><div class="sk-ttl"><h2>Zirvedeyken Platform Seçmek: Korvala Vakası</h2></div><div class="sk-sum"><p>Kurgusal telefon üreticisi Korvala, pazarının zirvesindeyken bir platform seçmek zorunda. Dört yolun artısı, eksisi ve vakada ne olduğu.</p></div><div class="sk-meta"><div class="sk-date"><p>15 Eki 2026</p></div><div class="sk-rt"><p>6 dk okuma</p></div></div></a></div><!--/$--><!--$--><div class="sk-card"><a href="./blog/krizin-ilk-48-saati"><div class="sk-tag" data-framer-name="Tag"><p>Kriz Liderliği</p></div><div class="sk-ttl"><h2>Krizin İlk 48 Saati: Bilgi Yokken Karar Vermek</h2></div><div class="sk-sum"><p>Krizin ilk 48 saatinde bilgi eksikken nasıl karar verilir? Ücreti iki kez çeken kurgusal bir abonelik şirketinden karar, iletişim ve güven notları.</p></div><div class="sk-meta"><div class="sk-date"><p>15 Eki 2026</p></div><div class="sk-rt"><p>8 dk okuma</p></div></div></a></div><!--/$-->
+    </div>
+  </section>
+
+  <section class="faq" aria-labelledby="faq-h">
+    <div class="wrap faq-grid">
+      <div>
+        <p class="lbl">Sorular</p>
+        <h2 id="faq-h">Kısaca <em>WishCEO</em></h2>
+      </div>
+      <div class="faq-list">
+        <details>
+          <summary>WishCEO nedir?</summary>
+          <p>WishCEO, gerçek krizlerden uyarlanmış vakalarla oynanan ücretsiz bir CEO karar oyunudur. Dosyayı okursun, kararını verirsin, sonra o gün CEO’nun ne yaptığını ve sonunda ne olduğunu görürsün. Şirket, ürün ve kişi adları kurgusaldır.</p>
+        </details>
+        <details>
+          <summary>WishCEO nasıl oynanır?</summary>
+          <p>Bir sayı üç ya da dört dosyadan oluşur. Her dosyada durumu oku, dört seçenekten birini seç ve CEO’nun gerçekte ne yaptığını gör. Kararların sonunda CEO karnen çıkar. Bir dosya yaklaşık üç dakika sürer; üyelik gerekmez.</p>
+        </details>
+        <details>
+          <summary>WishCEO Pro nedir?</summary>
+          <p>Pro, daha fazla oynamak isteyenler için hazırlanan ücretli sürümdür: tüm arşiv, kendi kararını serbest metinle yazıp gerekçeli değerlendirme alma ve karar istatistikleri. Yeni sayı her zaman ücretsiz kalır. Pro’nun fiyatı yakında açıklanacak.</p>
+        </details>
+        <details>
+          <summary>Sponsorlu vaka nedir?</summary>
+          <p>Sponsorlu vaka, bir şirketin katkısıyla hazırlanan vakadır. Başlığın altında yalnızca tek bir sade sponsor satırı görünür; vaka metni, seçenekler ve puanlar aynı kalır. Sitede reklam alanı yoktur.</p>
+        </details>
+      </div>
     </div>
   </section>
 

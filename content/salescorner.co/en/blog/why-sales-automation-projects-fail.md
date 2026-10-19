@@ -79,7 +79,7 @@ This mistake has two common consequences:
 1. **An overly complex tool:** The company only needs a few simple workflows but buys an enterprise-grade platform that takes weeks to configure. Only a tiny fraction of the features get used, while costs stay high.
 2. **Tools that can't connect to each other:** The CRM, email tool, data source, and calendar system are chosen separately, with no thought given to how data flows between them. In the end, reps copy data by hand from one system to another, and the whole point of automation is lost.
 
-**What to do:** Map out the process and the data flow first. Where does each piece of data come from, where is it enriched, which system holds the master record, and which event triggers which action? Once this map is ready, choosing a tool becomes much easier. A flexible workflow tool is often a good starting point for connecting different systems. [Our guide to getting started with B2B sales automation using n8n](/blog/b2b-sales-automation-with-n8n-guide) explains practical ways to bring your CRM, data sources, and email tools together in a single flow. You can see what starting with small, single-purpose modules looks like in the [Sales Corner module panel](/dashboard).
+**What to do:** Map out the process and the data flow first. Where does each piece of data come from, where is it enriched, which system holds the master record, and which event triggers which action? Once this map is ready, choosing a tool becomes much easier. A flexible workflow tool is often a good starting point for connecting different systems. [Our guide to getting started with B2B sales automation using n8n](/blog/b2b-sales-automation-with-n8n-guide) explains practical ways to bring your CRM, data sources, and email tools together in a single flow. You can see what starting with small, single-purpose modules looks like in the [Sales Corner module panel](/en/#otomasyonlar).
 
 ## Sacrificing Personalization for Volume
 
@@ -94,7 +94,7 @@ Here's a typical example of a volume-first approach: a team applies a 5-step seq
 - Use at least one personalized element in the first email, such as a recent company development, a position they've opened, or a technology they use.
 - Increase send volume gradually and stick to daily sending limits per domain.
 
-AI has become one of the most powerful tools for personalization at scale. But used incorrectly, it can produce robotic, repetitive copy. When [writing cold emails with AI](/blog/how-to-write-cold-emails-with-ai), prompt design, data inputs, and human review directly determine the quality of the result. For example, our [Sequence Writer tool](/sekans-yazari) reduces the risk of generic copy by generating sequences from real product sources (video, PDF, website).
+AI has become one of the most powerful tools for personalization at scale. But used incorrectly, it can produce robotic, repetitive copy. When [writing cold emails with AI](/blog/how-to-write-cold-emails-with-ai), prompt design, data inputs, and human review directly determine the quality of the result. For example, our [Sequence Writer tool](/en/#otomasyonlar) reduces the risk of generic copy by generating sequences from real product sources (video, PDF, website).
 
 ## Overlooking Legal Compliance and Deliverability Risks
 
@@ -187,11 +187,13 @@ If you answer "no" to several of these questions, closing those gaps before star
 
 In some cases, a company's priority is filling the pipeline quickly rather than building automation infrastructure from scratch. For B2B SaaS companies in particular, outsourcing outbound capacity can be a faster route. [SAAS Corner's outbound sales and lead generation service built for B2B SaaS](https://saascorner.co) is an alternative designed for this need.
 
+You can see what Sales Corner does in sales automation and outbound on our [services page](/hizmetler) (in Turkish).
+
 ## Conclusion
 
 Most sales automation projects fail not because of technology, but because of vague goals, undefined processes, dirty data, unowned systems, and a team that doesn't buy in. Automation is a powerful multiplier, but it only works when it's built on a solid foundation. Starting with a small, measurable problem, preparing the process and data in advance, involving the team in the design, and assigning an owner to every workflow are what separate successful projects from failed ones.
 
-If you have a half-finished automation project of your own, or you want to start a new one on the right foundation, we can assess your current process together. [Schedule a call with the Sales Corner team](/en/iletisim) to build an automation roadmap tailored to your sales processes.
+If you have a half-finished automation project of your own, or you want to start a new one on the right foundation, we can assess your current process together. [Schedule a call with the Sales Corner team](/en/contact) to build an automation roadmap tailored to your sales processes.
 
 ## FAQ
 

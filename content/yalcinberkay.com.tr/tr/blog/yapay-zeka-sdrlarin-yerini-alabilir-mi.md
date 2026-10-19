@@ -143,7 +143,7 @@ Peki, yapay zeka SDR'larınızın yerini alabilir mi? Tamamen değil, en azında
 
 Ancak SDR fonksiyonunun özü, yani tanımadığınız insanlarla konuşma başlatmak, birkaç dakikalık güvenlerini kazanmak ve gerçek bir fırsat olup olmadığını anlamak, hâlâ derinden insani bir iş. Kazanan yaklaşım; şirketlerinizi segmentlere ayırmak, tekrarlayan işleri yapay zekaya bırakmak ve kazanılan zamanı gerçekten pipeline yaratan görüşmelere yeniden yatırmaktır.
 
-Outbound yapınızı yeniden düşünüyorsanız ya da yapay zekanın satış ekibinizde nereye oturduğunu anlamaya çalışıyorsanız fikir alışverişi yapmaktan memnuniyet duyarım. [Sitem üzerinden bana ulaşabilirsiniz](/tr), konuşalım.
+Outbound yapınızı yeniden düşünüyorsanız ya da yapay zekanın satış ekibinizde nereye oturduğunu anlamaya çalışıyorsanız fikir alışverişi yapmaktan memnuniyet duyarım. [Sitem üzerinden bana ulaşabilirsiniz](/tr/), konuşalım.
 
 ## Sıkça Sorulan Sorular
 

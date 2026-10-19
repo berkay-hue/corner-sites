@@ -1,6 +1,6 @@
 ---
 title: "B2B Marka Konumlandırma Stratejisi: 5 Adımda Başarılı Bir Yol Haritası"
-description: "B2B pazarının artan rekabetçiliği ve dijital dönüşümün getirdiği dinamikler, şirketleri artık sadece ne sattıklarıyla değil, kim oldukları ve pazarda…"
+description: "B2B marka konumlandırma; hedef kitle, rakip analizi, farklılaşma, mesaj ve tutarlı uygulama adımlarıyla kurulur. Yazı 5 adımı sırayla anlatır."
 date: "2026-05-05"
 category: "Strateji"
 image: "/_a/fr/images/ViMfloRNxcsba8grT7hJvbds_44238234.jpg"

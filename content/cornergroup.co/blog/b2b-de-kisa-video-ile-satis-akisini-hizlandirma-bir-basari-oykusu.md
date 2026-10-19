@@ -1,6 +1,6 @@
 ---
 title: "B2B'de Kısa Video ile Satış Akışını Hızlandırma: Bir Başarı Öyküsü"
-description: "Dijitalleşmenin her an yeni bir boyut kazandığı günümüz B2B pazarında, karar vericilerin dikkat süresi her zamankinden daha kısa, ancak beklentileri daha…"
+description: "Bu başarı öyküsü, bir B2B ekibinin kısa ürün ve cevap videolarıyla alıcı sorularını erken yanıtlayıp satış akışını nasıl hızlandırdığını anlatır."
 date: "2026-07-19"
 category: "Vaka Çalışması"
 image: "/_a/fr/images/4SsyW8H13TunRkKPtX5WlKIX9o4_cd09786e.jpg"
