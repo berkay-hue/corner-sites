@@ -1,6 +1,6 @@
 ---
 title: "AI Destekli B2B Satın Alma Davranışları: Geleceğin Trendleri"
-description: "B2B dünyası, tarihinin en büyük dönüşümlerinden birini yaşıyor. Geleneksel, insan odaklı ve genellikle doğrusal ilerleyen satın alma yolculukları, yerini…"
+description: "B2B alıcılar artık AI araçlarıyla kendi araştırmasını yapıp satışçıya geç ulaşıyor; bu yazı satın alma davranışındaki değişimi ve trendleri anlatır."
 date: "2026-09-01"
 category: "Trendler"
 image: "/_a/fr/images/fXspMlyequQzncHDbQow83s1Ic_7805d9aa.jpg"

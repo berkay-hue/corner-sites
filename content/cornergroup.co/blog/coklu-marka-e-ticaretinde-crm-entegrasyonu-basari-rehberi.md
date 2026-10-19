@@ -1,6 +1,6 @@
 ---
 title: "Çoklu Marka E-Ticaretinde CRM Entegrasyonu: Başarı Rehberi"
-description: "Dijital ticaretin bugünkü rekabetçi arenasında, tek bir markanın başarısı artık yeterli değil."
+description: "Çoklu marka e-ticarette CRM entegrasyonu, tüm mağazaların müşteri verisini tek profilde birleştirir; rehber kurulum adımlarını anlatır."
 date: "2026-09-25"
 category: "Rehber"
 image: "/_a/fr/images/lCvDr0vSo2t5kfoFbk68cfVqorY_5967f816.jpg"

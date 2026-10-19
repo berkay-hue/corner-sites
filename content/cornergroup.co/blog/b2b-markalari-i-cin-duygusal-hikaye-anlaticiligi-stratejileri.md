@@ -1,6 +1,6 @@
 ---
 title: "B2B Markaları İçin Duygusal Hikaye Anlatıcılığı Stratejileri"
-description: "B2B pazarlaması ve satışı üzerine yapılan tartışmaların büyük çoğunluğu, on yıllardır aynı varsayım etrafında döner: B2B kararları rasyoneldir, mantığa…"
+description: "B2B kararları yalnız mantıkla verilmez; alıcının kaygı ve hedeflerine dokunan hikâyeler güven kurar. Bu yazı duygusal hikâye stratejilerini anlatır."
 date: "2026-06-29"
 category: "Strateji"
 image: "/_a/fr/images/JVhdCx4pELSvTDEw0SWKW8VUh8_cd09786e.jpg"

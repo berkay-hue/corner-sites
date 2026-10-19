@@ -1,6 +1,6 @@
 ---
 title: "B2B Satış Ekipleri İçin Etkili Satış Enablement Programı Oluşturma"
-description: "Günümüzün rekabetçi B2B pazarında, satış başarısı artık sadece yetenekli bireylerin sezgisel çabalarına bırakılamayacak kadar kritik bir işlev haline…"
+description: "Satış enablement programı, B2B ekibine doğru içerik, eğitim ve araçları tek yerden sunar; bu yazı programı kurma adımlarını sırayla anlatır."
 date: "2026-08-07"
 category: "Strateji"
 image: "/_a/fr/images/0XxZ3gUblTLMcYcMcLFXGDo6yJ4_cd09786e.jpg"

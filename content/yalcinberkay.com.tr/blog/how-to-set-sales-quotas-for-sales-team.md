@@ -2,7 +2,7 @@
 title: "How to Set Sales Quotas for a Sales Team: A Practical Guide"
 description: "How do you set sales quotas for a sales team? A step-by-step quota-setting method that combines historical data, market size and capacity."
 date: "2026-10-16"
-updated: "2026-10-17"
+updated: "2026-10-19"
 category: "Sales Leadership"
 image: "https://images.pexels.com/photos/8555676/pexels-photo-8555676.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
 imageAlt: "How to Set Sales Quotas for a Sales Team: A Practical Guide"
@@ -80,6 +80,8 @@ A commonly used ramp structure looks like this:
 - **Second quarter:** 50% of the full quota
 - **Third quarter:** 75% of the full quota
 - **Fourth quarter:** Full quota
+
+How long should the ramp be? A simple rule: **ramp length = onboarding time + average sales cycle length**. Transactional SaaS (2 weeks of onboarding, 30-day cycle) usually needs 2 to 3 months. Mid-market B2B software (4 weeks, 90-day cycle) needs about 4 months. Enterprise or complex services (6 weeks, 6-month cycle) need 6 to 8 months. In the first one or two months, measure activities, meetings and pipeline created instead of revenue. Revenue expectations should rise only as fast as the rep's pipeline can mature.
 
 Shortening the ramp period depends on two things: hiring the right person and integrating them into the system quickly. On the hiring side, the framework in my post on [questions to ask in a sales rep interview](/blog/sales-rep-interview-questions) helps you screen out early the candidates who would drag out the ramp period.
 

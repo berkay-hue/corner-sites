@@ -288,11 +288,13 @@ The reasons lead scoring projects fail are usually similar:
 
 Especially for SaaS companies, lead scoring delivers the highest return when considered together with outbound strategy. For teams that want both to sharpen their ICP and to systematically reach accounts with high fit scores, [SAAS Corner, which provides outbound sales and lead generation services specifically for B2B SaaS](https://saascorner.co), offers an approach that tackles both sides together.
 
+You can see what Sales Corner does in sales automation and outbound on our [services page](/hizmetler) (in Turkish).
+
 ## Conclusion
 
 A good B2B lead scoring model doesn't have to be complicated. What matters is defining your ideal customer with real data, measuring fit and engagement separately, keeping the model balanced with negative scoring and decay rules, and tying each score group to a clear action. By following the nine steps described in this article, you can build a working first version within a few weeks and then continuously improve the model using monthly metrics and feedback from your sales team.
 
-Ultimately, lead scoring is one of the most effective ways to direct your sales team's most valuable resource, time, toward the right leads. If you need support setting up data enrichment, automated score calculation and score-driven outbound workflows, the Sales Corner team would be happy to help. [Schedule a call with us](/en/iletisim) to review your current process together.
+Ultimately, lead scoring is one of the most effective ways to direct your sales team's most valuable resource, time, toward the right leads. If you need support setting up data enrichment, automated score calculation and score-driven outbound workflows, the Sales Corner team would be happy to help. [Schedule a call with us](/en/contact) to review your current process together.
 
 ## FAQ
 

@@ -1,6 +1,6 @@
 ---
 title: "Yapay Zeka Destekli CRM ile Satış Pipeline Optimizasyonu: Başarılı Bir Vaka Çalışması"
-description: "B2B pazarının dinamikleri, teknolojik evrimle birlikte köklü bir dönüşüm geçiriyor."
+description: "Bu vaka çalışması, yapay zeka destekli CRM ile riskli fırsatları erken görüp satış pipeline'ını önceliklendiren bir B2B ekibinin sürecini anlatır."
 date: "2026-06-14"
 category: "Vaka Çalışması"
 image: "/_a/fr/images/ORNKEMtuL5gm8C6iUVupKmgEds_93d995dc.jpg"

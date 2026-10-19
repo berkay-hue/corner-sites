@@ -182,7 +182,7 @@ SDR'lıktan Account Executive rolüne geçmek sıranızı beklemekle ilgili değ
 
 Bu geçişi başarıyla yapan SDR'lar nadiren en gürültücü ya da doğuştan en yetenekli olanlardır. Gelişimleri konusunda en meraklı ve en bilinçli olanlardır.
 
-Bir sonraki adımınızı planlayan bir SDR ya da ekibi için kariyer yolu tasarlayan bir satış lideriyseniz, üzerinde çalıştığınız şeyi duymaktan memnuniyet duyarım. [Kişisel sitem](/tr) üzerinden bana ulaşabilirsiniz, konuşalım.
+Bir sonraki adımınızı planlayan bir SDR ya da ekibi için kariyer yolu tasarlayan bir satış lideriyseniz, üzerinde çalıştığınız şeyi duymaktan memnuniyet duyarım. [Kişisel sitem](/tr/) üzerinden bana ulaşabilirsiniz, konuşalım.
 
 ## Sıkça Sorulan Sorular
 

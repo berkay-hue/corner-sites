@@ -1,6 +1,6 @@
 ---
 title: "B2B Satışta Yapay Zeka Destekli Ajanlar ve Geleceğin Satış Ekipleri"
-description: "B2B satış dünyası, tektonik bir değişimin eşiğinde duruyor. Yıllardır bildiğimiz, insan ilişkileri ve sezgisel yetenekler üzerine kurulu satış…"
+description: "Yapay zeka ajanları B2B satışta araştırma, ilk temas ve takibi üstlenirken satışçı ilişki ve kapanışa odaklanır; yazı geleceğin ekiplerini anlatır."
 date: "2026-06-18"
 category: "Trendler"
 image: "/_a/fr/images/jTlm8SdYCfEbWUjngkSsBtevsBc_cd09786e.jpg"

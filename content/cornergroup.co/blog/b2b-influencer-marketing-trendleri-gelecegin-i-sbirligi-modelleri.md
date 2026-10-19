@@ -1,6 +1,6 @@
 ---
 title: "B2B Influencer Marketing Trendleri: Geleceğin İşbirliği Modelleri"
-description: "B2B pazarlama evreni, güvenin en değerli para birimi olduğu bir dönüşümden geçiyor."
+description: "B2B influencer marketing, tek seferlik paylaşımlardan uzun vadeli uzman iş birliklerine kayıyor; bu yazı yükselen modelleri ve trendleri anlatır."
 date: "2026-05-16"
 category: "Trendler"
 image: "/_a/fr/images/VGWCMuYSLfCqamS3T8mCt35yvqk_cd09786e.jpg"

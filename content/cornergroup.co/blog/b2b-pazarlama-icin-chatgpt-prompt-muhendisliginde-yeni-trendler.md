@@ -1,6 +1,6 @@
 ---
 title: "B2B Pazarlama için ChatGPT Prompt Mühendisliğinde Yeni Trendler"
-description: "B2B pazarlama ve satış dünyası, tektonik bir değişimden geçiyor. Dijital dönüşümün ilk dalgalarını geride bırakırken, yapay zeka artık bir yenilik veya…"
+description: "B2B pazarlamada prompt mühendisliği, rol, bağlam ve marka verisini birleştiren yapılara kayıyor; bu yazı ChatGPT kullanımındaki yeni trendleri anlatır."
 date: "2026-08-09"
 category: "Trendler"
 image: "/_a/fr/images/XZIr2wpVmqSk772nkxxJ0WVeqvM_cd09786e.jpg"

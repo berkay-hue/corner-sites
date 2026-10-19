@@ -41,6 +41,7 @@ export default {
     lang: "tr",
     dateLocale: "tr-TR",
     regions: { title: "Heading", category: "Published 20 Jan 2024", date: "Published 20 Jan 2024#1", summary: "Supporting text", banner: ".framer-2smd5o", content: "Content", next: null },
+    relatedCards: true,
     variants: { en: { lang: "en", dateLocale: "en-US", prefix: "/en" } },
     services: {
       tr: { title: "Hizmetlerimiz", links: [["SaaS şirketleri için sosyal medya yönetimi", "/sektor/saas"], ["E-ticaret için sosyal medya yönetimi", "/sektor/e-ticaret"], ["Restoran ve kafeler için sosyal medya yönetimi", "/sektor/restoran-kafe"]] },
@@ -70,7 +71,7 @@ export default {
     // Sitede ayrı hizmet sayfası yok; linkler ana sayfa bölümleri ve iletişim sayfası
     services: {
       tr: { title: "Hizmetlerimiz", links: [["Hazır satış otomasyonları kütüphanesi", "/#otomasyonlar"], ["Size özel AI satış otomasyonu", "/#custom"], ["Otomasyon mimarisi", "/#mimari"], ["Satış otomasyonu için iletişim", "/iletisim"]] },
-      en: { title: "Our Services", links: [["Ready-made sales automation library", "/en/#otomasyonlar"], ["Custom AI sales automation", "/en/#custom"], ["Automation architecture", "/en/#mimari"], ["Contact us about sales automation", "/en/iletisim"]] },
+      en: { title: "Our Services", links: [["Ready-made sales automation library", "/en/#otomasyonlar"], ["Custom AI sales automation", "/en/#custom"], ["Automation architecture", "/en/#mimari"], ["Contact us about sales automation", "/en/contact"]] },
     },
     // /en/ ve ana sayfalardaki TR/EN anahtarıyla aynı görünüm
     langCss: `<style data-sk-lang>.sk-lang{position:fixed;left:16px;bottom:16px;z-index:50;display:flex;gap:2px;padding:4px;border-radius:999px;background:rgba(10,10,15,.88);border:1px solid rgba(255,255,255,.14);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);font:600 12px/1 Inter,system-ui,sans-serif;letter-spacing:.04em}.sk-lang a{display:block;padding:7px 10px;border-radius:999px;color:rgb(160,160,175);text-decoration:none}.sk-lang a:hover{color:#fff}.sk-lang a[aria-current]{background:linear-gradient(135deg,rgb(124,92,255),rgb(34,211,238));color:#fff}</style>`,

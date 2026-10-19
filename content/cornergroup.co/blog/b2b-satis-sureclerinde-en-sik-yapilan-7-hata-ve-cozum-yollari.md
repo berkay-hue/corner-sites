@@ -1,6 +1,6 @@
 ---
 title: "B2B Satış Süreçlerinde En Sık Yapılan 7 Hata ve Çözüm Yolları"
-description: "B2B pazarının dinamikleri, dijital dönüşümün hız kazandığı ve rekabetin her zamankinden daha karmaşık hale geldiği günümüz iş dünyasında, satış…"
+description: "B2B satışta en sık hatalar yanlış hedefleme, zayıf keşif ve geciken takiptir; bu yazı 7 yaygın hatayı ve her biri için çözüm yolunu anlatır."
 date: "2026-09-17"
 category: "Strateji"
 image: "/_a/fr/images/vV4E5cbvXExK23POSiroVSOyvLQ_7805d9aa.jpg"

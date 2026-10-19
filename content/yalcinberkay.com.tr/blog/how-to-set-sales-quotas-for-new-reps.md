@@ -2,6 +2,7 @@
 title: "How to Set Sales Quotas for New Reps (With Examples)"
 description: "Learn how to set realistic sales quotas for new B2B reps using ramp periods, capacity math, and pipeline coverage to avoid burnout and missed targets."
 date: "2026-10-16"
+draft: true
 category: "Sales Leadership"
 image: "https://images.pexels.com/photos/39204827/pexels-photo-39204827.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
 imageAlt: "How to Set Sales Quotas for New Reps (With Examples)"

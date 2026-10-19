@@ -1,6 +1,6 @@
 ---
 title: "Satış Otomasyonu Projesi Neden Başarısız Olur?"
-description: "Satış otomasyonu projeleri çoğu zaman araç yüzünden değil, süreç ve veri eksikliği yüzünden başarısız olur. Sık hataları ve çözümlerini inceliyoruz."
+description: "Satış otomasyonu projeleri çoğu zaman araç yüzünden değil, süreç ve veri eksikliğinden başarısız olur. Sık hatalar ve çözümleri."
 date: "2026-10-15"
 updated: "2026-10-16"
 category: "Satış Otomasyonu"
@@ -186,6 +186,8 @@ Yeni bir otomasyon projesine onay vermeden önce aşağıdaki sorulara "evet" di
 Bu sorulardan birkaçına "hayır" cevabı veriyorsanız, otomasyona başlamadan önce o eksikleri kapatmak uzun vadede çok daha fazla zaman kazandırır.
 
 Bazı durumlarda şirketin önceliği, otomasyon altyapısını sıfırdan kurmak yerine pipeline'ı hızla doldurmaktır. Özellikle B2B SaaS şirketleri için outbound kapasitesini dışarıdan almak daha hızlı bir yol olabilir. [SAAS Corner'ın B2B SaaS'a özel outbound satış ve lead generation hizmeti](https://saascorner.co) bu ihtiyaca yönelik bir alternatiftir.
+
+Sales Corner'ın satış otomasyonu ve outbound alanında neler yaptığını [hizmetler sayfamızda](/hizmetler) görebilirsiniz.
 
 ## Sonuç
 

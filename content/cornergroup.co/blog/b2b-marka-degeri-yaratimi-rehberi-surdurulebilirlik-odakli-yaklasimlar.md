@@ -1,6 +1,6 @@
 ---
 title: "B2B Marka Değeri Yaratımı Rehberi: Sürdürülebilirlik Odaklı Yaklaşımlar"
-description: "Dijitalleşmenin ve küresel rekabetin B2B pazarını yeniden şekillendirdiği günümüzde, marka değeri kavramı artık basit bir pazarlama metriği olmaktan…"
+description: "B2B marka değeri, güven, tutarlılık ve kanıtlanabilir sürdürülebilirlik taahhütleriyle büyür; rehber uzun vadeli değer yaratma adımlarını anlatır."
 date: "2026-08-16"
 category: "Rehber"
 image: "/_a/fr/images/wSsXeAeJekD5Gvv9b0TtjnbRLX8_cd09786e.jpg"

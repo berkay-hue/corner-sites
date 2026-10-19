@@ -1,6 +1,6 @@
 ---
 title: "AI Destekli Satış Metodolojileri: B2B Satış Ekipleri İçin Yeni Yaklaşımlar"
-description: "B2B satış dünyası, geri döndürülemez bir dönüşümün eşiğinde değil, tam ortasında bulunuyor."
+description: "AI destekli satış metodolojileri, veriyle önceliklendirme ve kişiselleştirilmiş temasla B2B satış ekiplerinin uzayan satış döngülerini kısaltır."
 date: "2026-07-03"
 category: "Trendler"
 image: "/_a/fr/images/KQ0ScQOgiEIfRTW08VX5ZmyxDbQ_cd09786e.jpg"

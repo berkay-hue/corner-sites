@@ -1,6 +1,6 @@
 ---
 title: "Niche B2B Pazarında Marka Topluluğu Büyütme: Başarılı Bir Vaka Analizi"
-description: "B2B pazarlamasının dinamikleri, son on yılda geri dönülmez bir şekilde değişti. Geleneksel, tek yönlü iletişim modelleri ve agresif satış taktikleri…"
+description: "Bu vaka analizi, niş bir B2B pazarındaki markanın uzman içerik ve etkinliklerle sadık bir topluluk kurup nasıl büyüdüğünü adım adım anlatır."
 date: "2026-05-30"
 category: "Vaka Çalışması"
 image: "/_a/fr/images/78G1zBmwMoc1zpLNxYvB9TF3Xo_cd09786e.jpg"

@@ -1,6 +1,6 @@
 ---
 title: "AI ile B2B Marka Sesi: Çok Kanallı İletişimde Tutarlılık Rehberi"
-description: "Dijital ekosistemin her geçen gün daha karmaşık ve gürültülü hale geldiği günümüz B2B pazarında, markaların en değerli varlıklarından biri tutarlı ve…"
+description: "AI, net bir marka sesi rehberiyle beslendiğinde tüm kanallarda tutarlı B2B iletişim sağlar; bu rehber kurulumu ve kontrol adımlarını anlatır."
 date: "2026-07-26"
 category: "Rehber"
 image: "/_a/fr/images/fXspMlyequQzncHDbQow83s1Ic_7805d9aa.jpg"

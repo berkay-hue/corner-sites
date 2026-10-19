@@ -1,6 +1,6 @@
 ---
 title: "B2B SaaS'ta AI ile Outbound Satış Verimliliği: Başarılı Bir Vaka Çalışması"
-description: "B2B SaaS pazarının artan rekabeti, geleneksel outbound satış metotlarını her geçen gün daha az etkili hale getiriyor."
+description: "Bu vaka çalışması, bir B2B SaaS şirketinin AI ile hedefleme ve kişiselleştirmeyi otomatikleştirip outbound satış verimliliğini nasıl artırdığını anlatır."
 date: "2026-10-07"
 category: "Vaka Çalışması"
 image: "/_a/fr/images/BmH4wbYrsINsSqZFJwPzbRpLY_cd09786e.jpg"

@@ -1,6 +1,6 @@
 ---
 title: "AI ile B2B Soğuk E-postada Lead Kalifikasyonu Otomasyonu: Daha Akıllı Yaklaşım"
-description: "B2B büyüme, hacimden çok isabetle ilgilidir. Geleneksel soğuk e-posta stratejileri, genellikle geniş bir ağ atarak doğru balığı yakalamayı uman bir…"
+description: "AI, soğuk e-posta yanıtlarını ve firma verisini analiz ederek nitelikli lead'leri otomatik ayırır; satış ekibi yalnız gerçek fırsatlara odaklanır."
 date: "2026-06-23"
 category: "Otomasyon"
 image: "/_a/fr/images/fXspMlyequQzncHDbQow83s1Ic_7805d9aa.jpg"

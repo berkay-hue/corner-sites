@@ -1,6 +1,6 @@
 ---
 title: "n8n ile Satış Sonrası B2B Müşteri Takip Süreçleri Otomasyonu"
-description: "B2B dünyasında bir anlaşmayı kapatmak, maratonun sonu değil, aslında en kritik etabın başlangıcıdır."
+description: "n8n ile satış sonrası takip otomasyonu; onboarding, memnuniyet anketi ve yenileme hatırlatmalarını zamanında göndererek B2B müşteriyi elde tutar."
 date: "2026-06-16"
 category: "Otomasyon"
 image: "/_a/fr/images/jCqA8As6IIA65pwpGzbHGPiMuik_93d995dc.jpg"
