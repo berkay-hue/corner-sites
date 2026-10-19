@@ -121,3 +121,5 @@ Hayır. Harcanan para kararını belirlememeli, ama hâlâ üretebilen bir tesis
 WishCEO'daki her dosya seni bir şirketin en zor gününde CEO koltuğuna oturtur. O masada geçmiş kararlar, harcanmış paralar ve verilmiş sözler her zaman vardır. Oyunun sorusu ise hep aynı: Buradan sonra ne yaparsın? Kararları puanlarız, insanları değil.
 
 Batık maliyetin sesini masada fark edebilecek misin, kendin gör: [Yeni sayıyı oyna](/#oyun).
+
+Diğer karar kavramlarının kısa tanımları için: [Kavramlar sözlüğü](/kavramlar).
