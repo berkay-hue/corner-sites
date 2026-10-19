@@ -1,6 +1,6 @@
 ---
 title: "B2B İçin Kısa Video Stratejileri: Etkili İçerik Oluşturma Rehberi"
-description: "Dijital ekosistemin dinamikleri, B2B pazarlama ve satış stratejilerini kökten dönüştürüyor."
+description: "B2B kısa videolar, tek bir soruna ilk saniyelerde cevap verdiğinde işe yarar; bu rehber senaryo, format ve dağıtım adımlarını anlatır."
 date: "2026-07-24"
 category: "Rehber"
 image: "/_a/fr/images/D6ik1zHOdgaJZ9KvCPek02oTNuM_93d995dc.jpg"

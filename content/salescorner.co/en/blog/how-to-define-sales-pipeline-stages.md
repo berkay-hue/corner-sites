@@ -99,7 +99,7 @@ Let's consider a SaaS company with a mid-range average annual contract value and
 - **Probability:** 10%
 - **Maximum time:** 10 days. If the meeting is postponed and not rescheduled, the opportunity is moved to a "re-engagement" sequence.
 
-Feeding this stage depends heavily on email quality. For an in-depth look at personalized messaging, check out our [guide to writing cold emails with AI](/blog/how-to-write-cold-emails-with-ai). You can also try our Sequence Writer tool to generate sequences automatically from your product sources.
+Feeding this stage depends heavily on email quality. For an in-depth look at personalized messaging, check out our [guide to writing cold emails with AI](/blog/how-to-write-cold-emails-with-ai). You can also try our [Sequence Writer tool](/en/#otomasyonlar) to generate sequences automatically from your product sources.
 
 ### Stage 2: Discovery Completed
 
@@ -209,7 +209,7 @@ Clearly defined stages are where automation works best. When criteria are verifi
 - **Data enrichment:** When a new opportunity is created, the company's employee count, industry, and tech stack are filled in automatically. This allows ICP fit to be checked at stage entry.
 - **Post-loss re-engagement:** Opportunities lost due to "timing" are automatically enrolled in a personalized email sequence after 90 days.
 
-Tools like n8n are well suited for building these workflows without coding knowledge. We cover scenarios that connect CRM, calendar, email, and AI models step by step in our [beginner's guide to B2B sales automation with n8n](/blog/b2b-sales-automation-with-n8n-guide). If you're looking for ready-made workflows tailored to your team, take a look at [Sales Corner automations](/en/). Once a deal moves to the meeting stage, the Meeting Briefing tool gets company and attendee research ready before the call.
+Tools like n8n are well suited for building these workflows without coding knowledge. We cover scenarios that connect CRM, calendar, email, and AI models step by step in our [beginner's guide to B2B sales automation with n8n](/blog/b2b-sales-automation-with-n8n-guide). If you're looking for ready-made workflows tailored to your team, take a look at [Sales Corner automations](/en/). Once a deal moves to the meeting stage, the [Meeting Briefing tool](/en/#otomasyonlar) gets company and attendee research ready before the call.
 
 Automation comes with an important caveat: **Automating a poorly defined process only speeds up poor results.** First clarify your stages and criteria, apply them manually for a few weeks, and then automate. We look at why projects that skip this order stumble in our post on [why sales automation projects fail](/blog/why-sales-automation-projects-fail).
 
@@ -225,11 +225,13 @@ Once you've defined your stages, these metrics show you the health of the system
 
 Review these metrics monthly at the rep level as well. If a rep's post-demo conversion is clearly below the team average, the problem most likely lies in the demo structure or in information left uncovered during discovery.
 
+You can see what Sales Corner does in sales automation and outbound on our [services page](/hizmetler) (in Turkish).
+
 ## Conclusion
 
 Defining your sales pipeline stages isn't a CRM setting; it's **designing the backbone of your sales process**. Every stage should have entry and exit criteria based on buyer actions, a clear owner, a probability grounded in real data, and a maximum time in stage. Start with 5-7 stages depending on your business model. As you've seen with outbound SaaS, enterprise services, and SMB sales, stages can vary, but the principles stay the same: verifiability, simplicity, and regular review.
 
-Once your stages are clear, AI and automation can turn your pipeline from a manual tracking list into a self-updating system. To review your pipeline structure together and discuss automation workflows that fit your team, [schedule a call with the Sales Corner team](/en/iletisim).
+Once your stages are clear, AI and automation can turn your pipeline from a manual tracking list into a self-updating system. To review your pipeline structure together and discuss automation workflows that fit your team, [schedule a call with the Sales Corner team](/en/contact).
 
 ## FAQ
 

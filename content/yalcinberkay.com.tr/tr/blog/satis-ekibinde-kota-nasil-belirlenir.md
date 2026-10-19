@@ -2,6 +2,7 @@
 title: "Satış Ekibinde Kota Nasıl Belirlenir? Pratik Rehber"
 description: "Satış ekibinde kota nasıl belirlenir? Geçmiş veri, pazar büyüklüğü ve kapasiteyi birleştiren adım adım kota belirleme yöntemini bu yazıda bulursunuz."
 date: "2026-10-16"
+updated: "2026-10-19"
 category: "Satış Liderliği"
 image: "https://images.pexels.com/photos/8555676/pexels-photo-8555676.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
 imageAlt: "Satış Ekibinde Kota Nasıl Belirlenir? Pratik Rehber"
@@ -79,6 +80,8 @@ Sık kullanılan bir rampa yapısı şöyledir:
 - **2. çeyrek:** Tam kotanın %50'si
 - **3. çeyrek:** Tam kotanın %75'i
 - **4. çeyrek:** Tam kota
+
+Rampa ne kadar sürmeli? Basit bir kural: **rampa süresi = işe alıştırma süresi + ortalama satış döngüsü**. İşlemsel SaaS'te (2 hafta alıştırma, 30 günlük döngü) genellikle 2-3 ay yeter. Orta ölçekli B2B yazılımda (4 hafta, 90 günlük döngü) yaklaşık 4 ay gerekir. Kurumsal ya da karmaşık hizmetlerde (6 hafta, 6 aylık döngü) 6-8 ay gerekir. İlk bir iki ayda gelir yerine aktivite, toplantı ve yaratılan pipeline'ı ölçün. Gelir beklentisi, temsilcinin pipeline'ı olgunlaştığı hızdan fazla artmamalı.
 
 Rampa süresinin kısalması iki şeye bağlı: doğru kişiyi işe almak ve onu hızla sisteme entegre etmek. İşe alım tarafında [satış temsilcisi mülakatında sorulması gereken sorular](/blog/satis-temsilcisi-mulakat-sorulari) yazısındaki çerçeve, rampa süresini uzatacak adayları baştan elemenize yardımcı olur.
 
@@ -234,4 +237,4 @@ Geçmiş veri yoksa sektör deneyimine, kurucuların ilk satışlarından elde e
 
 İyi bir satış kotası tahminle değil hesapla belirlenir. Şirket hedefinden başlayın, temsilci kapasitesini geçmiş veriyle hesaplayın, rampa süresini ve fazladan atama payını ekleyin, ardından aradaki boşluğu açıkça masaya koyun. Kotayı segment ve döneme göre dağıtın, komisyon planına doğru şekilde bağlayın ve her temsilciyle mantığını paylaşarak iletin. Bu süreci bir kez kurduğunuzda kota görüşmeleri her yıl daha kısa, daha az gergin ve çok daha isabetli hale gelir.
 
-Satış ekibiniz için kota yapısı, komisyon planı ya da pipeline modeli kurarken bir dış göz istiyorsanız benimle iletişime geçebilirsiniz. Satış operasyonları ve ekip kurma tarafındaki çalışmalarıma [Berkay Yalçın](/tr) sayfasından ulaşabilir, birlikte sizin rakamlarınız üzerinden düşünebiliriz.
+Satış ekibiniz için kota yapısı, komisyon planı ya da pipeline modeli kurarken bir dış göz istiyorsanız benimle iletişime geçebilirsiniz. Satış operasyonları ve ekip kurma tarafındaki çalışmalarıma [Berkay Yalçın](/tr/) sayfasından ulaşabilir, birlikte sizin rakamlarınız üzerinden düşünebiliriz.

@@ -1,6 +1,6 @@
 ---
 title: "AI ile B2B Lead Skorlama: Potansiyel Müşteri Değerini Artırma Rehberi"
-description: "Günümüzün rekabetçi B2B pazarında, satış ve pazarlama ekipleri sürekli bir veri bombardımanı altındadır."
+description: "AI ile lead skorlama, davranış ve firma verisini birleştirip satışa en yakın adayları öne çıkarır; bu rehber kurulumu adım adım anlatır."
 date: "2026-06-10"
 category: "Rehber"
 image: "/_a/fr/images/jbzob89iXV3vSgzLa7wqIG1I_cd09786e.jpg"

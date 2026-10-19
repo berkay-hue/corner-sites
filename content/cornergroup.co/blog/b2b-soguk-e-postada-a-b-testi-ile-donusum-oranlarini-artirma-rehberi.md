@@ -1,6 +1,6 @@
 ---
 title: "B2B Soğuk E-postada A/B Testi ile Dönüşüm Oranlarını Artırma Rehberi"
-description: "B2B büyüme yolculuğunda, soğuk e-posta kampanyaları hala en güçlü müşteri kazanım araçlarından biridir."
+description: "Soğuk e-postada A/B testi, konu satırı ve çağrıyı tek tek deneyerek yanıt oranını artırır; rehber B2B ekipler için test kurulumunu anlatır."
 date: "2026-07-06"
 category: "Rehber"
 image: "/_a/fr/images/58yw94pXkk5inHUfMrdDXcu6M_52a77c6c.jpg"

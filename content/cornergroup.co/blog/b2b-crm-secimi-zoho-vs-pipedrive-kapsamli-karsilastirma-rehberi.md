@@ -1,6 +1,6 @@
 ---
 title: "B2B CRM Seçimi: Zoho vs Pipedrive Kapsamlı Karşılaştırma Rehberi"
-description: "B2B dünyasında sürdürülebilir büyüme, artık sadece iyi bir ürün veya hizmet sunmaktan ibaret değil."
+description: "Zoho geniş modül ve özelleştirme, Pipedrive sade ve satış hunisi odaklı kullanım sunar; bu rehber B2B ekibiniz için doğru CRM seçimini anlatır."
 date: "2026-09-22"
 category: "Rehber"
 image: "/_a/fr/images/SLULxgUFKlHZUckNzwV9Y50nFE_93d995dc.jpg"

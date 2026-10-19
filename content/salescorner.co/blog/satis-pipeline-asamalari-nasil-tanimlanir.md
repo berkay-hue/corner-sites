@@ -1,6 +1,6 @@
 ---
 title: "Satış Pipeline Aşamaları Nasıl Tanımlanır? Örnekler"
-description: "B2B satış ekipleri için pipeline aşamalarını nasıl tanımlayacağınızı, her aşamanın çıkış kriterlerini ve sık yapılan hataları örneklerle anlatıyoruz."
+description: "B2B satış pipeline aşamalarını nasıl tanımlarsınız? Her aşamanın çıkış kriterleri ve sık yapılan hatalar örneklerle."
 date: "2026-10-12"
 updated: "2026-10-16"
 category: "Pipeline"
@@ -99,7 +99,7 @@ Ortalama yıllık sözleşme değeri orta seviyede olan ve satış döngüsü 30
 - **Olasılık:** %10
 - **Maksimum süre:** 10 gün. Toplantı ertelenip yeniden planlanmazsa fırsat "yeniden canlandırma" dizisine alınır.
 
-Bu aşamanın beslenmesi büyük ölçüde e-posta kalitesine bağlıdır. Kişiselleştirilmiş mesajlar üzerine detaylı bir çalışma için [yapay zekayla soğuk e-posta yazma rehberimize](/blog/yapay-zekayla-soguk-eposta-nasil-yazilir) göz atabilirsiniz. Dizileri ürün kaynağınızdan otomatik üretmek için Sekans Yazarı aracımızı da deneyebilirsiniz.
+Bu aşamanın beslenmesi büyük ölçüde e-posta kalitesine bağlıdır. Kişiselleştirilmiş mesajlar üzerine detaylı bir çalışma için [yapay zekayla soğuk e-posta yazma rehberimize](/blog/yapay-zekayla-soguk-eposta-nasil-yazilir) göz atabilirsiniz. Dizileri ürün kaynağınızdan otomatik üretmek için [Sekans Yazarı aracımızı](/#otomasyonlar) da deneyebilirsiniz.
 
 ### Aşama 2: Keşif Tamamlandı
 
@@ -209,7 +209,7 @@ Net tanımlanmış aşamalar, otomasyonun en verimli çalıştığı alandır. K
 - **Veri zenginleştirme:** Yeni bir fırsat oluşturulduğunda şirketin çalışan sayısı, sektörü ve teknoloji yığını otomatik olarak doldurulur. Böylece ICP uyumu aşama girişinde kontrol edilebilir.
 - **Kayıp sonrası yeniden canlandırma:** "Zamanlama" nedeniyle kaybedilen fırsatlar, 90 gün sonra otomatik olarak kişiselleştirilmiş bir e-posta dizisine alınır.
 
-Bu tür iş akışlarını kodlama bilgisi gerektirmeden kurmak için n8n gibi araçlar oldukça uygundur. CRM, takvim, e-posta ve yapay zeka modellerini birbirine bağlayan senaryoları [n8n ile B2B satış otomasyonu başlangıç rehberimizde](/blog/n8n-ile-b2b-satis-otomasyonu-rehberi) adım adım anlattık. Hazır kurulmuş, ekibinize göre uyarlanmış akışlar arıyorsanız [Sales Corner otomasyonlarını](/) inceleyebilirsiniz. Fırsat görüşme aşamasına geçtiğinde, Toplantı Briefing aracı firma ve katılımcı araştırmasını görüşme öncesinde hazır eder.
+Bu tür iş akışlarını kodlama bilgisi gerektirmeden kurmak için n8n gibi araçlar oldukça uygundur. CRM, takvim, e-posta ve yapay zeka modellerini birbirine bağlayan senaryoları [n8n ile B2B satış otomasyonu başlangıç rehberimizde](/blog/n8n-ile-b2b-satis-otomasyonu-rehberi) adım adım anlattık. Hazır kurulmuş, ekibinize göre uyarlanmış akışlar arıyorsanız [Sales Corner otomasyonlarını](/) inceleyebilirsiniz. Fırsat görüşme aşamasına geçtiğinde, [Toplantı Briefing aracı](/#otomasyonlar) firma ve katılımcı araştırmasını görüşme öncesinde hazır eder.
 
 Otomasyonun önemli bir uyarısı var: **Kötü tanımlanmış bir süreci otomatikleştirmek, kötü sonuçları sadece hızlandırır.** Önce aşamaları ve kriterleri netleştirin, birkaç hafta manuel olarak uygulayın, sonra otomatikleştirin. Bu sırayı atlayan projelerin neden tökezlediğini [satış otomasyonu projelerinin neden başarısız olduğunu anlattığımız yazıda](/blog/satis-otomasyonu-projesi-neden-basarisiz-olur) ele aldık.
 
@@ -224,6 +224,8 @@ Aşamalarınızı tanımladıktan sonra şu metrikler size sistemin sağlığın
 - **Aşama bazında kayıp nedenleri:** Kayıpların nerede ve neden yaşandığı.
 
 Bu metrikleri aylık olarak temsilci bazında da inceleyin. Bir temsilcinin demo sonrası dönüşümü ekip ortalamasının belirgin şekilde altındaysa, sorun büyük ihtimalle demo yapısında ya da keşifte eksik bırakılan bilgilerdedir.
+
+Sales Corner'ın satış otomasyonu ve outbound alanında neler yaptığını [hizmetler sayfamızda](/hizmetler) görebilirsiniz.
 
 ## Sonuç
 

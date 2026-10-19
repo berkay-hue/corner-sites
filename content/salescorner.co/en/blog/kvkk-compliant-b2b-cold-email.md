@@ -96,7 +96,7 @@ At a minimum, your privacy notice should include:
 - To whom the data may be transferred (including CRM, email infrastructure and enrichment providers)
 - The data subject's rights under Article 11 of KVKK and how to submit a request
 
-If you use AI to personalize your message copy, we recommend adding this notice as a fixed footer to the prompt structures described in [our guide to writing cold emails with AI](/blog/how-to-write-cold-emails-with-ai). That way, you can be sure the notice appears in every variation. If you generate sequences with our Sequence Writer tool, keep the same footer fixed in every step.
+If you use AI to personalize your message copy, we recommend adding this notice as a fixed footer to the prompt structures described in [our guide to writing cold emails with AI](/blog/how-to-write-cold-emails-with-ai). That way, you can be sure the notice appears in every variation. If you generate sequences with our [Sequence Writer tool](/en/#otomasyonlar), keep the same footer fixed in every step.
 
 ## Opt-Out Rights, İYS and Deadlines
 
@@ -121,7 +121,7 @@ The issue outbound teams overlook most is that the tools they use are themselves
 - Does it offer a data processing agreement (DPA)?
 - In which country are the data stored on servers?
 
-For example, large B2B contact databases like [Apollo.io](https://get.apollo.io/679irkzm35ya) greatly speed up segment-based list building and contact verification. However, the responsibility for using the data the tool provides is yours. You decide which fields you export, how long you keep them and whom you send to. Collecting signals from companies' public websites without touching personal data at all (for example with our Web Keyword Scanner) is a safer first step from a data minimization standpoint.
+For example, large B2B contact databases like [Apollo.io](https://get.apollo.io/679irkzm35ya) greatly speed up segment-based list building and contact verification. However, the responsibility for using the data the tool provides is yours. You decide which fields you export, how long you keep them and whom you send to. Collecting signals from companies' public websites without touching personal data at all (for example with our [Web Keyword Scanner](/en/#otomasyonlar)) is a safer first step from a data minimization standpoint.
 
 ### Cross-Border Transfers
 
@@ -199,11 +199,13 @@ Before launching a campaign, you should be able to answer "yes" to all of these 
 
 If you'd rather have your entire outbound operation managed externally instead of building this infrastructure in-house, our group company focused on B2B SaaS companies, [SAAS Corner's outbound sales and lead generation service](https://saascorner.co), can take on the process end to end, from list building to sequence management.
 
+You can see what Sales Corner does in sales automation and outbound on our [services page](/hizmetler) (in Turkish).
+
 ## Conclusion
 
 KVKK-compliant cold email isn't an obstacle that slows outbound down. When set up correctly, it means cleaner lists, more precise targeting and fewer complaints. In short: on the commercial message side, know the limits of the merchant/tradesperson exemption and fully honor the right to opt out. On the KVKK side, document your legal basis, provide notice in the first email, process only the data you need, check your tools' cross-border transfer status and stick to your retention periods.
 
-Most of these steps can be run through well-built automations without leaving them to human error. Suppression checks, opt-out handling, privacy notice footers and periodic disposal top the list. To make your outbound processes both efficient and compliant, [schedule a call with Sales Corner](/en/iletisim) and let's review your workflow together.
+Most of these steps can be run through well-built automations without leaving them to human error. Suppression checks, opt-out handling, privacy notice footers and periodic disposal top the list. To make your outbound processes both efficient and compliant, [schedule a call with Sales Corner](/en/contact) and let's review your workflow together.
 
 ## FAQ
 

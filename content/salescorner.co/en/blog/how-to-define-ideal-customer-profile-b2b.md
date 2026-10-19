@@ -108,8 +108,10 @@ Yes. Separate ICPs can be defined for different products, markets or sales motio
 
 It is good practice to review the ICP at regular intervals, for example every quarter, based on won and lost opportunities. It should be updated right away when a major feature is added to the product, pricing changes or you enter a new market.
 
+You can see what Sales Corner does in sales automation and outbound on our [services page](/hizmetler) (in Turkish).
+
 ## Conclusion
 
 The ideal customer profile is the foundation of outbound sales. It decides who you reach, what you say and which opportunities count as qualified. A good ICP comes from your best customers' data, clearly states who is left out, includes the problem and the buying trigger, and is tested regularly.
 
-If you want to sharpen your ICP and automate your target account lists, data enrichment and scoring flows, [book a call with the Sales Corner team](/en/iletisim). Let's review your customer data together and design a sales process focused on your ideal customers.
+If you want to sharpen your ICP and automate your target account lists, data enrichment and scoring flows, [book a call with the Sales Corner team](/en/contact). Let's review your customer data together and design a sales process focused on your ideal customers.

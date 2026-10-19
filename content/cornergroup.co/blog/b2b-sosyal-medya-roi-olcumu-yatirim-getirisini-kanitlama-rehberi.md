@@ -1,6 +1,6 @@
 ---
 title: "B2B Sosyal Medya ROI Ölçümü: Yatırım Getirisini Kanıtlama Rehberi"
-description: "B2B dünyasında sosyal medya, yönetim kurullarında sıkça soru işaretleri yaratan bir bütçe kalemi olmuştur."
+description: "B2B sosyal medya ROI'si, paylaşımları lead ve satış fırsatlarına bağlayarak ölçülür; bu rehber yönetime yatırım getirisini kanıtlamayı anlatır."
 date: "2026-07-18"
 category: "Rehber"
 image: "/_a/fr/images/dj6XQdrj0on0zUUtbGICwoBWiZE_cd09786e.jpg"

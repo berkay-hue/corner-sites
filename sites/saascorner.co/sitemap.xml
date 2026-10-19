@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-<url><loc>https://saascorner.co/</loc></url>
-<url><loc>https://saascorner.co/cerez-politikasi</loc></url>
-<url><loc>https://saascorner.co/kvk</loc></url>
-<url><loc>https://saascorner.co/blog</loc></url>
-<url><loc>https://saascorner.co/iletisim</loc></url>
-<url><loc>https://saascorner.co/bilgi-merkezi</loc></url>
-<url><loc>https://saascorner.co/aydinlatma-metni/ticari-iletisim</loc></url>
-<url><loc>https://saascorner.co/kvkk-basvuru-formu</loc></url>
-<url><loc>https://saascorner.co/kullanim-kosullari</loc></url>
-<url><loc>https://saascorner.co/gizlilik-politikasi</loc></url>
-<url><loc>https://saascorner.co/bilgi-merkezi/basarili-partner-ekosistemi-olusturmanin-7-kurali-2</loc><lastmod>2026-01-29</lastmod></url>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+<url><loc>https://saascorner.co/</loc><lastmod>2026-10-16</lastmod><xhtml:link rel="alternate" hreflang="tr" href="https://saascorner.co/"/><xhtml:link rel="alternate" hreflang="en" href="https://saascorner.co/en/"/><xhtml:link rel="alternate" hreflang="x-default" href="https://saascorner.co/"/></url>
+<url><loc>https://saascorner.co/cerez-politikasi</loc><lastmod>2026-10-17</lastmod></url>
+<url><loc>https://saascorner.co/kvk</loc><lastmod>2026-10-17</lastmod></url>
+<url><loc>https://saascorner.co/blog</loc><lastmod>2026-10-18</lastmod><xhtml:link rel="alternate" hreflang="tr" href="https://saascorner.co/blog"/><xhtml:link rel="alternate" hreflang="en" href="https://saascorner.co/en/blog"/><xhtml:link rel="alternate" hreflang="x-default" href="https://saascorner.co/blog"/></url>
+<url><loc>https://saascorner.co/iletisim</loc><lastmod>2026-10-17</lastmod><xhtml:link rel="alternate" hreflang="tr" href="https://saascorner.co/iletisim"/><xhtml:link rel="alternate" hreflang="en" href="https://saascorner.co/en/contact"/><xhtml:link rel="alternate" hreflang="x-default" href="https://saascorner.co/iletisim"/></url>
+<url><loc>https://saascorner.co/bilgi-merkezi</loc><lastmod>2026-10-16</lastmod></url>
+<url><loc>https://saascorner.co/aydinlatma-metni/ticari-iletisim</loc><lastmod>2026-10-16</lastmod></url>
+<url><loc>https://saascorner.co/kvkk-basvuru-formu</loc><lastmod>2026-10-16</lastmod></url>
+<url><loc>https://saascorner.co/kullanim-kosullari</loc><lastmod>2026-10-16</lastmod></url>
+<url><loc>https://saascorner.co/gizlilik-politikasi</loc><lastmod>2026-10-16</lastmod></url>
 <url><loc>https://saascorner.co/bilgi-merkezi/saas-sirketlerinde-veri-guvenligi-ve-compliance</loc><lastmod>2026-01-29</lastmod></url>
 <url><loc>https://saascorner.co/bilgi-merkezi/basarili-partner-ekosistemi-olusturmanin-7-kurali</loc><lastmod>2026-01-29</lastmod></url>
 <url><loc>https://saascorner.co/bilgi-merkezi/yapay-zeka-destekli-satis-b2b-saas-donusumunun-anahtari</loc><lastmod>2026-01-29</lastmod></url>
@@ -18,31 +17,29 @@
 <url><loc>https://saascorner.co/bilgi-merkezi/b2b-saas-sirketlerinde-musteri-elde-tutma-stratejileri-2026</loc><lastmod>2026-01-31</lastmod></url>
 <url><loc>https://saascorner.co/bilgi-merkezi/yapay-zeka-destekli-urun-gelistirme-saas-sirketleri-i-cin-yeni-ufuklar</loc><lastmod>2026-01-30</lastmod></url>
 <url><loc>https://saascorner.co/bilgi-merkezi/api-odakli-partnerlikler-b2b-saas-ta-entegrasyon-ekosistemini-guclendirmek</loc><lastmod>2026-01-31</lastmod></url>
-<url><loc>https://saascorner.co/bilgi-merkezi/b2b-saas-sirketlerinde-musteri-elde-tutma-stratejileri-2026-2</loc><lastmod>2026-01-31</lastmod></url>
 <url><loc>https://saascorner.co/bilgi-merkezi/saas-metrikleri-rehberi-mrr-arr-cac-ltv-ve-daha-fazlasi</loc><lastmod>2026-01-31</lastmod></url>
 <url><loc>https://saascorner.co/bilgi-merkezi/lead-kalitesi-odakli-crm-stratejileri</loc><lastmod>2026-01-31</lastmod></url>
-<url><loc>https://saascorner.co/bilgi-merkezi/2027-partner-ekosistemi-3o-code-ve-conversational-ai</loc><lastmod>2026-01-31</lastmod></url>
+<url><loc>https://saascorner.co/bilgi-merkezi/2027-partner-ekosistemi-no-code-ve-conversational-ai</loc><lastmod>2026-01-31</lastmod></url>
 <url><loc>https://saascorner.co/bilgi-merkezi/crm-de-etik-yapay-zeka-musteri-deneyimi-ve-guven-i-nsasi-2026</loc><lastmod>2026-01-31</lastmod></url>
 <url><loc>https://saascorner.co/bilgi-merkezi/modern-da-saas-horizontal-saas-self-service-analizi</loc><lastmod>2026-01-31</lastmod></url>
 <url><loc>https://saascorner.co/bilgi-merkezi/saas-entegrasyon-2027-standartlari-ve-en-i-yi-uygulamalar</loc><lastmod>2026-01-31</lastmod></url>
 <url><loc>https://saascorner.co/bilgi-merkezi/b2b-satista-chatbot-kullanimi-yeni-nesil-rehberi</loc><lastmod>2026-02-01</lastmod></url>
-<url><loc>https://saascorner.co/bilgi-merkezi/b2b-satis-qualification-entegre-yaklasim</loc><lastmod>2026-02-01</lastmod></url>
 <url><loc>https://saascorner.co/bilgi-merkezi/musteri-deneyimi-donusumunde-composable-crm-in-rolu-2026-trendleri</loc><lastmod>2026-02-01</lastmod></url>
 <url><loc>https://saascorner.co/bilgi-merkezi/b2b-satis-follow-up-entegre-yaklasim</loc><lastmod>2026-02-01</lastmod></url>
-<url><loc>https://saascorner.co/bilgi-merkezi/usage-based-tabanli-saas-7e-zaman-ve-7asil-kullanilir</loc><lastmod>2026-02-13</lastmod></url>
+<url><loc>https://saascorner.co/bilgi-merkezi/usage-based-tabanli-saas-ne-zaman-ve-nasil-kullanilir</loc><lastmod>2026-02-13</lastmod></url>
 <url><loc>https://saascorner.co/bilgi-merkezi/agency-ortakliklarinda-kullanici-deneyimi-ve-basari</loc><lastmod>2026-02-16</lastmod></url>
-<url><loc>https://saascorner.co/bilgi-merkezi/salesforce-vs-zendesk-sell-hangisi-yeni-8esil-da-daha-i-yi</loc><lastmod>2026-02-10</lastmod></url>
+<url><loc>https://saascorner.co/bilgi-merkezi/salesforce-vs-zendesk-sell-hangisi-yeni-nesil-da-daha-i-yi</loc><lastmod>2026-02-10</lastmod></url>
 <url><loc>https://saascorner.co/bilgi-merkezi/salesforce-vs-freshsales-hangisi-2027-da-daha-i-yi</loc><lastmod>2026-02-12</lastmod></url>
 <url><loc>https://saascorner.co/bilgi-merkezi/saas-sirketlerinde-surdurulebilirlik-yesil-teknoloji-ve-operasyonel-verimlilik</loc><lastmod>2026-02-07</lastmod></url>
 <url><loc>https://saascorner.co/bilgi-merkezi/b2b-satis-discovery-musteri-merkezli-yaklasim</loc><lastmod>2026-02-22</lastmod></url>
 <url><loc>https://saascorner.co/bilgi-merkezi/composable-saas-i-sletmeler-i-cin-esneklik-ve-olceklenebilirlik-stratejileri</loc><lastmod>2026-02-14</lastmod></url>
-<url><loc>https://saascorner.co/bilgi-merkezi/pipedrive-vs-microsoft-dynamics-hangisi-yeni-3esil-da-daha-i-yi</loc><lastmod>2026-02-17</lastmod></url>
+<url><loc>https://saascorner.co/bilgi-merkezi/pipedrive-vs-microsoft-dynamics-hangisi-yeni-nesil-da-daha-i-yi</loc><lastmod>2026-02-17</lastmod></url>
 <url><loc>https://saascorner.co/bilgi-merkezi/crm-de-lead-scoring-seffaflik-saglamak</loc><lastmod>2026-02-21</lastmod></url>
 <url><loc>https://saascorner.co/bilgi-merkezi/agency-ortakliklarinda-guvenlik-ve-basari</loc><lastmod>2026-02-04</lastmod></url>
 <url><loc>https://saascorner.co/bilgi-merkezi/saas-api-entegrasyonu-gelistirmede-microservices-stratejisi</loc><lastmod>2026-02-05</lastmod></url>
 <url><loc>https://saascorner.co/bilgi-merkezi/crm-ile-qualification-otomasyonu-modern-rehberi</loc><lastmod>2026-02-06</lastmod></url>
 <url><loc>https://saascorner.co/bilgi-merkezi/saas-reporting-gelistirmede-api-first-stratejisi</loc><lastmod>2026-02-09</lastmod></url>
-<url><loc>https://saascorner.co/bilgi-merkezi/b2b-satis-lead-9urturing-veri-odakli-yaklasim</loc><lastmod>2026-02-23</lastmod></url>
+<url><loc>https://saascorner.co/bilgi-merkezi/b2b-satis-lead-nurturing-veri-odakli-yaklasim</loc><lastmod>2026-02-23</lastmod></url>
 <url><loc>https://saascorner.co/bilgi-merkezi/saglik-teknolojileri-sektorunde-satis-trendleri-2027</loc><lastmod>2026-02-08</lastmod></url>
 <url><loc>https://saascorner.co/bilgi-merkezi/saas-lead-scoring-gelistirmede-mobile-first-stratejisi</loc><lastmod>2026-02-20</lastmod></url>
 <url><loc>https://saascorner.co/bilgi-merkezi/ecosystem-selling-saas-sirketleri-i-cin-ortak-deger-yaratma-stratejileri-2026</loc><lastmod>2026-03-09</lastmod></url>
@@ -57,28 +54,26 @@
 <url><loc>https://saascorner.co/bilgi-merkezi/pipedrive-vs-copper-hangisi-modern-da-daha-i-yi</loc><lastmod>2026-03-02</lastmod></url>
 <url><loc>https://saascorner.co/bilgi-merkezi/reseller-programi-2027-baslangic-rehberi</loc><lastmod>2026-03-05</lastmod></url>
 <url><loc>https://saascorner.co/bilgi-merkezi/partner-kanalindan-elde-edilen-roi-yi-maksimize-etme-saas-sirketleri-i-cin-stratejiler</loc><lastmod>2026-03-04</lastmod></url>
-<url><loc>https://saascorner.co/bilgi-merkezi/yeni-6esil-partner-ekosistemi-ai-integration-ve-predictive-analytics</loc><lastmod>2026-02-26</lastmod></url>
+<url><loc>https://saascorner.co/bilgi-merkezi/yeni-nesil-partner-ekosistemi-ai-integration-ve-predictive-analytics</loc><lastmod>2026-02-26</lastmod></url>
 <url><loc>https://saascorner.co/bilgi-merkezi/crm-ve-musteri-geri-bildirim-dongusu-urun-gelistirmeyi-besleyen-stratejiler</loc><lastmod>2026-03-11</lastmod></url>
 <url><loc>https://saascorner.co/bilgi-merkezi/2027-crm-trendleri-chatbot-ve-ai-destekli-tahminleme</loc><lastmod>2026-03-25</lastmod></url>
 <url><loc>https://saascorner.co/bilgi-merkezi/saas-mobile-access-gelistirmede-microservices-stratejisi</loc><lastmod>2026-03-23</lastmod></url>
 <url><loc>https://saascorner.co/bilgi-merkezi/yapay-zeka-destekli-partner-secimi-ve-uyum-surecleri-saas-sirketleri-i-cin-yeni-nesil-stratejiler</loc><lastmod>2026-03-14</lastmod></url>
 <url><loc>https://saascorner.co/bilgi-merkezi/enablement-ile-partner-olceklenebilirlik-maksimize-etmek</loc><lastmod>2026-03-26</lastmod></url>
-<url><loc>https://saascorner.co/bilgi-merkezi/2026-da-saas-horizontal-saas-8o-code-ve-firsatlar</loc><lastmod>2026-03-22</lastmod></url>
+<url><loc>https://saascorner.co/bilgi-merkezi/2026-da-saas-horizontal-saas-no-code-ve-firsatlar</loc><lastmod>2026-03-22</lastmod></url>
 <url><loc>https://saascorner.co/bilgi-merkezi/topluluk-odakli-buyume-b2b-saas-satis-ekipleri-i-cin-yeni-bir-yaklasim-2026</loc><lastmod>2026-03-17</lastmod></url>
 <url><loc>https://saascorner.co/bilgi-merkezi/crm-ile-saas-musteri-onboarding-ini-donusturme-verimlilik-ve-erken-deger-yaratma</loc><lastmod>2026-03-24</lastmod></url>
 <url><loc>https://saascorner.co/bilgi-merkezi/kazanma-orani-artirmak-i-cin-8-strateji</loc><lastmod>2026-03-19</lastmod></url>
-<url><loc>https://saascorner.co/bilgi-merkezi/musteri-memnuniyeti-den-musteri-memnuniyeti2-e-saas-lead-7urturing-yolculugu-2</loc><lastmod>2026-03-20</lastmod></url>
-<url><loc>https://saascorner.co/bilgi-merkezi/b2b-satis-discovery-musteri-merkezli-yaklasim-2</loc><lastmod>2026-03-13</lastmod></url>
-<url><loc>https://saascorner.co/bilgi-merkezi/saas-kullanici-deneyimi-yeni-7esil-standartlari-ve-en-i-yi-uygulamalar</loc><lastmod>2026-03-10</lastmod></url>
+<url><loc>https://saascorner.co/bilgi-merkezi/musteri-memnuniyeti-den-musteri-memnuniyeti-e-saas-lead-nurturing-yolculugu</loc><lastmod>2026-03-20</lastmod></url>
+<url><loc>https://saascorner.co/bilgi-merkezi/saas-kullanici-deneyimi-yeni-nesil-standartlari-ve-en-i-yi-uygulamalar</loc><lastmod>2026-03-10</lastmod></url>
 <url><loc>https://saascorner.co/bilgi-merkezi/b2b-saas-ta-satis-ekibi-motivasyonu-2026-nin-yeni-nesil-odullendirme-modelleri</loc><lastmod>2026-03-15</lastmod></url>
 <url><loc>https://saascorner.co/bilgi-merkezi/b2b-saas-i-cin-low-code-no-code-gelistirme-sureclerini-ve-operasyonlari-hizlandirma</loc><lastmod>2026-03-21</lastmod></url>
 <url><loc>https://saascorner.co/bilgi-merkezi/b2b-satista-veri-analitigi-kullanimi-gelecekteki-rehberi</loc><lastmod>2026-03-16</lastmod></url>
-<url><loc>https://saascorner.co/bilgi-merkezi/musteri-memnuniyeti-den-musteri-memnuniyeti2-e-saas-follow-up-yolculugu-2</loc><lastmod>2026-03-12</lastmod></url>
 <url><loc>https://saascorner.co/bilgi-merkezi/pipeline-degeri-artirmak-i-cin-8-strateji</loc><lastmod>2026-03-27</lastmod></url>
 <url><loc>https://saascorner.co/bilgi-merkezi/agency-ortakliklarinda-performans-ve-basari</loc><lastmod>2026-03-30</lastmod></url>
 <url><loc>https://saascorner.co/bilgi-merkezi/b2b-satis-qualification-agile-yaklasim</loc><lastmod>2026-03-28</lastmod></url>
 <url><loc>https://saascorner.co/bilgi-merkezi/b2b-satis-onboarding-proaktif-yaklasim</loc><lastmod>2026-03-29</lastmod></url>
-<url><loc>https://saascorner.co/bilgi-merkezi/musteri-memnuniyeti-den-musteri-memnuniyeti2-e-saas-follow-up-yolculugu</loc><lastmod>2026-04-02</lastmod></url>
+<url><loc>https://saascorner.co/bilgi-merkezi/musteri-memnuniyeti-den-musteri-memnuniyeti-e-saas-follow-up-yolculugu</loc><lastmod>2026-04-02</lastmod></url>
 <url><loc>https://saascorner.co/bilgi-merkezi/crm-ile-gelir-operasyonlari-revops-b2b-saas-buyume-ve-verimlilik-stratejileri-2026</loc><lastmod>2026-04-04</lastmod></url>
 <url><loc>https://saascorner.co/bilgi-merkezi/channel-partner-programi-2027-baslangic-rehberi</loc><lastmod>2026-04-03</lastmod></url>
 <url><loc>https://saascorner.co/bilgi-merkezi/gelecegin-crm-i-musteri-i-htiyaclarini-tahmin-ederek-proaktif-satis-stratejileri-2026</loc><lastmod>2026-04-01</lastmod></url>
@@ -87,12 +82,12 @@
 <url><loc>https://saascorner.co/bilgi-merkezi/lojistik-sektorunde-satis-trendleri-2026</loc><lastmod>2026-04-07</lastmod></url>
 <url><loc>https://saascorner.co/bilgi-merkezi/referral-ortakliklarinda-performans-ve-basari</loc><lastmod>2026-04-06</lastmod></url>
 <url><loc>https://saascorner.co/bilgi-merkezi/surdurulebilir-partner-ekosistemleri-b2b-saas-ta-deger-yaratimi-ve-uzun-vadeli-buyume-2026</loc><lastmod>2026-04-14</lastmod></url>
-<url><loc>https://saascorner.co/bilgi-merkezi/pipeline-degeri-den-pipeline-degeri2-e-saas-follow-up-yolculugu</loc><lastmod>2026-04-15</lastmod></url>
+<url><loc>https://saascorner.co/bilgi-merkezi/pipeline-degeri-den-pipeline-degeri-e-saas-follow-up-yolculugu</loc><lastmod>2026-04-15</lastmod></url>
 <url><loc>https://saascorner.co/bilgi-merkezi/crm-de-api-entegrasyonu-otomasyon-saglamak</loc><lastmod>2026-04-15</lastmod></url>
 <url><loc>https://saascorner.co/bilgi-merkezi/b2b-satista-chatbot-kullanimi-gelecekteki-rehberi</loc><lastmod>2026-04-12</lastmod></url>
 <url><loc>https://saascorner.co/bilgi-merkezi/saas-pipeline-management-gelistirmede-api-first-stratejisi</loc><lastmod>2026-04-08</lastmod></url>
 <url><loc>https://saascorner.co/bilgi-merkezi/modern-crm-trendleri-yapay-zeka-ve-conversational-ai</loc><lastmod>2026-04-11</lastmod></url>
-<url><loc>https://saascorner.co/bilgi-merkezi/referral-programi-yeni-6esil-baslangic-rehberi</loc><lastmod>2026-04-09</lastmod></url>
+<url><loc>https://saascorner.co/bilgi-merkezi/referral-programi-yeni-nesil-baslangic-rehberi</loc><lastmod>2026-04-09</lastmod></url>
 <url><loc>https://saascorner.co/bilgi-merkezi/donusum-orani-artirmak-i-cin-9-strateji</loc><lastmod>2026-04-13</lastmod></url>
 <url><loc>https://saascorner.co/bilgi-merkezi/crm-in-b2b-saas-ta-musteri-kaybini-onlemedeki-gucu-proaktif-yapay-zeka-stratejileri-2026</loc><lastmod>2026-04-10</lastmod></url>
 <url><loc>https://saascorner.co/bilgi-merkezi/saas-guvenlik-2027-standartlari-ve-en-i-yi-uygulamalar</loc><lastmod>2026-04-15</lastmod></url>
@@ -100,45 +95,45 @@
 <url><loc>https://saascorner.co/bilgi-merkezi/saas-partner-programlarinda-etkili-egitim-ve-sertifikasyon-stratejileri-2026</loc><lastmod>2026-04-15</lastmod></url>
 <url><loc>https://saascorner.co/bilgi-merkezi/referral-ortakliklarinda-olceklenebilirlik-ve-basari</loc><lastmod>2026-04-15</lastmod></url>
 <url><loc>https://saascorner.co/bilgi-merkezi/b2b-saas-partner-programlarinda-gamification-i-s-ortaklarinin-katilimini-artirma-yollari-2026</loc><lastmod>2026-04-15</lastmod></url>
-<url><loc>https://saascorner.co/bilgi-merkezi/b2b-satista-machine-learning-kullanimi-yeni-6esil-rehberi</loc><lastmod>2026-04-15</lastmod></url>
+<url><loc>https://saascorner.co/bilgi-merkezi/b2b-satista-machine-learning-kullanimi-yeni-nesil-rehberi</loc><lastmod>2026-04-15</lastmod></url>
 <url><loc>https://saascorner.co/bilgi-merkezi/strategic-alliance-programi-2027-baslangic-rehberi</loc><lastmod>2026-04-15</lastmod></url>
-<url><loc>https://saascorner.co/bilgi-merkezi/b2b-satis-onboarding-musteri-merkezli-yaklasim</loc><lastmod>2026-04-15</lastmod></url>
 <url><loc>https://saascorner.co/bilgi-merkezi/gelecekteki-da-saas-horizontal-saas-embedded-analytics-ve-firsatlar</loc><lastmod>2026-04-15</lastmod></url>
-<url><loc>https://saascorner.co/bilgi-merkezi/b2b-satis-lead-8urturing-musteri-merkezli-yaklasim</loc><lastmod>2026-04-15</lastmod></url>
-<url><loc>https://saascorner.co/bilgi-merkezi/saas-kullanici-deneyimi-2027-standartlari-ve-en-i-yi-uygulamalar</loc><lastmod>2026-04-15</lastmod></url>
 <url><loc>https://saascorner.co/bilgi-merkezi/crm-ile-discovery-otomasyonu-2027-rehberi</loc><lastmod>2026-04-15</lastmod></url>
 <url><loc>https://saascorner.co/bilgi-merkezi/crm-de-mobile-access-seffaflik-saglamak</loc><lastmod>2026-04-15</lastmod></url>
-<url><loc>https://saascorner.co/bilgi-merkezi/referral-programi-yeni-9esil-baslangic-rehberi-2</loc><lastmod>2026-04-15</lastmod></url>
 <url><loc>https://saascorner.co/bilgi-merkezi/revenue-share-ile-partner-seffaflik-maksimize-etmek</loc><lastmod>2026-04-19</lastmod></url>
 <url><loc>https://saascorner.co/bilgi-merkezi/saas-partner-onboarding-sureclerini-otomatiklestirmek-basari-i-cin-temel-stratejiler-2026</loc><lastmod>2026-04-18</lastmod></url>
 <url><loc>https://saascorner.co/bilgi-merkezi/crm-ve-veri-gizliligi-yonetimi-yeni-nesil-regulasyonlara-uyum-ve-guven-olusturma-2026</loc><lastmod>2026-04-27</lastmod></url>
-<url><loc>https://saascorner.co/bilgi-merkezi/saas-urunlerinde-uretken-yapay-zeka-donusturucu-ozellikler-ve-stratejik-entegrasyon-2026</loc><lastmod>2026-04-24</lastmod></url>
 <url><loc>https://saascorner.co/bilgi-merkezi/crm-de-duygusal-yapay-zeka-musteri-duygu-analiziyle-kisisellestirme-2026</loc><lastmod>2026-04-28</lastmod></url>
-<url><loc>https://saascorner.co/bilgi-merkezi/b2b-satista-veri-analitigi-kullanimi-yeni-5esil-rehberi</loc><lastmod>2026-04-28</lastmod></url>
-<url><loc>https://saascorner.co/bilgi-merkezi/platform-tabanli-saas-7e-zaman-ve-7asil-kullanilir</loc><lastmod>2026-04-25</lastmod></url>
-<url><loc>https://saascorner.co/bilgi-merkezi/yeni-7esil-da-saas-enterprise-saas-ai-integration-ve-firsatlar</loc><lastmod>2026-04-23</lastmod></url>
-<url><loc>https://saascorner.co/bilgi-merkezi/b2b-satis-lead-10urturing-entegre-yaklasim</loc><lastmod>2026-04-20</lastmod></url>
-<url><loc>https://saascorner.co/bilgi-merkezi/donusum-orani-den-donusum-orani2-e-saas-qualification-yolculugu</loc><lastmod>2026-04-26</lastmod></url>
-<url><loc>https://saascorner.co/bilgi-merkezi/crm-ile-discovery-otomasyonu-yeni-8esil-rehberi</loc><lastmod>2026-04-20</lastmod></url>
-<url><loc>https://saascorner.co/bilgi-merkezi/lead-kalitesi-den-lead-kalitesi2-e-saas-qualification-yolculugu</loc><lastmod>2026-04-20</lastmod></url>
+<url><loc>https://saascorner.co/bilgi-merkezi/b2b-satista-veri-analitigi-kullanimi-yeni-nesil-rehberi</loc><lastmod>2026-04-28</lastmod></url>
+<url><loc>https://saascorner.co/bilgi-merkezi/platform-tabanli-saas-ne-zaman-ve-nasil-kullanilir</loc><lastmod>2026-04-25</lastmod></url>
+<url><loc>https://saascorner.co/bilgi-merkezi/yeni-nesil-da-saas-enterprise-saas-ai-integration-ve-firsatlar</loc><lastmod>2026-04-23</lastmod></url>
+<url><loc>https://saascorner.co/bilgi-merkezi/b2b-satis-lead-nurturing-entegre-yaklasim</loc><lastmod>2026-04-20</lastmod></url>
+<url><loc>https://saascorner.co/bilgi-merkezi/donusum-orani-den-donusum-orani-e-saas-qualification-yolculugu</loc><lastmod>2026-04-26</lastmod></url>
+<url><loc>https://saascorner.co/bilgi-merkezi/lead-kalitesi-den-lead-kalitesi-e-saas-qualification-yolculugu</loc><lastmod>2026-04-20</lastmod></url>
 <url><loc>https://saascorner.co/bilgi-merkezi/tiered-program-ile-partner-roi-maksimize-etmek</loc><lastmod>2026-04-20</lastmod></url>
 <url><loc>https://saascorner.co/bilgi-merkezi/co-marketing-stratejileri-b2b-saas-partnerlerinin-birlikte-buyumesi-icin-yenilikci-yaklasimlar-2026</loc><lastmod>2026-04-28</lastmod></url>
-<url><loc>https://saascorner.co/bilgi-merkezi/b2b-satista-chatbot-kullanimi-gelecekteki-rehberi-2</loc><lastmod>2026-04-20</lastmod></url>
 <url><loc>https://saascorner.co/bilgi-merkezi/b2b-satis-follow-up-agile-yaklasim</loc><lastmod>2026-04-17</lastmod></url>
 <url><loc>https://saascorner.co/bilgi-merkezi/partner-kazanma-orani-artirmak-i-cin-9-yontem</loc><lastmod>2026-04-20</lastmod></url>
 <url><loc>https://saascorner.co/bilgi-merkezi/gelecekteki-da-saas-smb-saas-ai-integration-ve-firsatlar</loc><lastmod>2026-04-28</lastmod></url>
-<url><loc>https://saascorner.co/bilgi-merkezi/reseller-programi-2027-baslangic-rehberi-2</loc><lastmod>2026-04-20</lastmod></url>
 <url><loc>https://saascorner.co/bilgi-merkezi/monday-sales-vs-copper-hangisi-modern-da-daha-i-yi</loc><lastmod>2026-04-20</lastmod></url>
 <url><loc>https://saascorner.co/bilgi-merkezi/ortak-urun-gelistirme-saas-partnerliklerinde-yenilikci-modeller-ve-birlikte-yaratim-2027</loc><lastmod>2026-04-16</lastmod></url>
 <url><loc>https://saascorner.co/bilgi-merkezi/saas-urunlerinde-hiper-kisisellestirilmis-deneyimler-yapay-zeka-ile-kullanici-bagliligini-artirma-2026</loc><lastmod>2026-04-20</lastmod></url>
-<url><loc>https://saascorner.co/sektor/b2b-saas</loc></url>
-<url><loc>https://saascorner.co/sektor/saas-partner-ekosistemi</loc></url>
-<url><loc>https://saascorner.co/sektor/globale-acilan-b2b-sirketler</loc></url>
-<url><loc>https://saascorner.co/en/</loc></url>
-<url><loc>https://saascorner.co/en/contact</loc></url>
-<url><loc>https://saascorner.co/en/industries/b2b-saas</loc></url>
-<url><loc>https://saascorner.co/en/industries/saas-partner-ecosystem</loc></url>
-<url><loc>https://saascorner.co/en/industries/global-expansion</loc></url>
+<url><loc>https://saascorner.co/sektor/b2b-saas</loc><lastmod>2026-10-16</lastmod><xhtml:link rel="alternate" hreflang="tr" href="https://saascorner.co/sektor/b2b-saas"/><xhtml:link rel="alternate" hreflang="en" href="https://saascorner.co/en/industries/b2b-saas"/><xhtml:link rel="alternate" hreflang="x-default" href="https://saascorner.co/sektor/b2b-saas"/></url>
+<url><loc>https://saascorner.co/sektor/saas-partner-ekosistemi</loc><lastmod>2026-10-16</lastmod><xhtml:link rel="alternate" hreflang="tr" href="https://saascorner.co/sektor/saas-partner-ekosistemi"/><xhtml:link rel="alternate" hreflang="en" href="https://saascorner.co/en/industries/saas-partner-ecosystem"/><xhtml:link rel="alternate" hreflang="x-default" href="https://saascorner.co/sektor/saas-partner-ekosistemi"/></url>
+<url><loc>https://saascorner.co/sektor/globale-acilan-b2b-sirketler</loc><lastmod>2026-10-16</lastmod><xhtml:link rel="alternate" hreflang="tr" href="https://saascorner.co/sektor/globale-acilan-b2b-sirketler"/><xhtml:link rel="alternate" hreflang="en" href="https://saascorner.co/en/industries/global-expansion"/><xhtml:link rel="alternate" hreflang="x-default" href="https://saascorner.co/sektor/globale-acilan-b2b-sirketler"/></url>
+<url><loc>https://saascorner.co/en/</loc><lastmod>2026-10-16</lastmod><xhtml:link rel="alternate" hreflang="tr" href="https://saascorner.co/"/><xhtml:link rel="alternate" hreflang="en" href="https://saascorner.co/en/"/><xhtml:link rel="alternate" hreflang="x-default" href="https://saascorner.co/"/></url>
+<url><loc>https://saascorner.co/en/contact</loc><lastmod>2026-10-17</lastmod><xhtml:link rel="alternate" hreflang="tr" href="https://saascorner.co/iletisim"/><xhtml:link rel="alternate" hreflang="en" href="https://saascorner.co/en/contact"/><xhtml:link rel="alternate" hreflang="x-default" href="https://saascorner.co/iletisim"/></url>
+<url><loc>https://saascorner.co/en/industries/b2b-saas</loc><lastmod>2026-10-16</lastmod><xhtml:link rel="alternate" hreflang="tr" href="https://saascorner.co/sektor/b2b-saas"/><xhtml:link rel="alternate" hreflang="en" href="https://saascorner.co/en/industries/b2b-saas"/><xhtml:link rel="alternate" hreflang="x-default" href="https://saascorner.co/sektor/b2b-saas"/></url>
+<url><loc>https://saascorner.co/en/industries/saas-partner-ecosystem</loc><lastmod>2026-10-16</lastmod><xhtml:link rel="alternate" hreflang="tr" href="https://saascorner.co/sektor/saas-partner-ekosistemi"/><xhtml:link rel="alternate" hreflang="en" href="https://saascorner.co/en/industries/saas-partner-ecosystem"/><xhtml:link rel="alternate" hreflang="x-default" href="https://saascorner.co/sektor/saas-partner-ekosistemi"/></url>
+<url><loc>https://saascorner.co/en/industries/global-expansion</loc><lastmod>2026-10-16</lastmod><xhtml:link rel="alternate" hreflang="tr" href="https://saascorner.co/sektor/globale-acilan-b2b-sirketler"/><xhtml:link rel="alternate" hreflang="en" href="https://saascorner.co/en/industries/global-expansion"/><xhtml:link rel="alternate" hreflang="x-default" href="https://saascorner.co/sektor/globale-acilan-b2b-sirketler"/></url>
+<url><loc>https://saascorner.co/blog/b2b-e-posta-bulteni-saas-nasil-baslanir</loc><lastmod>2026-10-18</lastmod><xhtml:link rel="alternate" hreflang="tr" href="https://saascorner.co/blog/b2b-e-posta-bulteni-saas-nasil-baslanir"/><xhtml:link rel="alternate" hreflang="en" href="https://saascorner.co/en/blog/b2b-email-newsletter-saas"/><xhtml:link rel="alternate" hreflang="x-default" href="https://saascorner.co/blog/b2b-e-posta-bulteni-saas-nasil-baslanir"/></url>
+<url><loc>https://saascorner.co/blog/b2b-soguk-eposta-kvkk-rehberi</loc><lastmod>2026-10-17</lastmod><xhtml:link rel="alternate" hreflang="tr" href="https://saascorner.co/blog/b2b-soguk-eposta-kvkk-rehberi"/><xhtml:link rel="alternate" hreflang="en" href="https://saascorner.co/en/blog/kvkk-b2b-cold-email"/><xhtml:link rel="alternate" hreflang="x-default" href="https://saascorner.co/blog/b2b-soguk-eposta-kvkk-rehberi"/></url>
+<url><loc>https://saascorner.co/blog/b2b-saas-icerik-pazarlamasi-nereden-baslanir</loc><lastmod>2026-10-16</lastmod><xhtml:link rel="alternate" hreflang="tr" href="https://saascorner.co/blog/b2b-saas-icerik-pazarlamasi-nereden-baslanir"/><xhtml:link rel="alternate" hreflang="en" href="https://saascorner.co/en/blog/b2b-saas-content-marketing-turkey"/><xhtml:link rel="alternate" hreflang="x-default" href="https://saascorner.co/blog/b2b-saas-icerik-pazarlamasi-nereden-baslanir"/></url>
+<url><loc>https://saascorner.co/blog/b2b-saas-pazarlama-butcesi-nasil-belirlenir</loc><lastmod>2026-10-15</lastmod><xhtml:link rel="alternate" hreflang="tr" href="https://saascorner.co/blog/b2b-saas-pazarlama-butcesi-nasil-belirlenir"/><xhtml:link rel="alternate" hreflang="en" href="https://saascorner.co/en/blog/b2b-saas-marketing-budget-percentage-of-revenue"/><xhtml:link rel="alternate" hreflang="x-default" href="https://saascorner.co/blog/b2b-saas-pazarlama-butcesi-nasil-belirlenir"/></url>
+<url><loc>https://saascorner.co/blog/mql-nedir-mql-sql-farki</loc><lastmod>2026-10-14</lastmod><xhtml:link rel="alternate" hreflang="tr" href="https://saascorner.co/blog/mql-nedir-mql-sql-farki"/><xhtml:link rel="alternate" hreflang="en" href="https://saascorner.co/en/blog/what-is-mql-mql-vs-sql-b2b-saas"/><xhtml:link rel="alternate" hreflang="x-default" href="https://saascorner.co/blog/mql-nedir-mql-sql-farki"/></url>
+<url><loc>https://saascorner.co/blog/outbound-eposta-spam-spf-dkim-dmarc</loc><lastmod>2026-10-13</lastmod><xhtml:link rel="alternate" hreflang="tr" href="https://saascorner.co/blog/outbound-eposta-spam-spf-dkim-dmarc"/><xhtml:link rel="alternate" hreflang="en" href="https://saascorner.co/en/blog/outbound-email-spf-dkim-dmarc"/><xhtml:link rel="alternate" hreflang="x-default" href="https://saascorner.co/blog/outbound-eposta-spam-spf-dkim-dmarc"/></url>
+<url><loc>https://saascorner.co/blog/b2b-webinar-nitelikli-lead-toplama-rehberi</loc><lastmod>2026-10-12</lastmod><xhtml:link rel="alternate" hreflang="tr" href="https://saascorner.co/blog/b2b-webinar-nitelikli-lead-toplama-rehberi"/><xhtml:link rel="alternate" hreflang="en" href="https://saascorner.co/en/blog/b2b-webinar-qualified-leads-guide"/><xhtml:link rel="alternate" hreflang="x-default" href="https://saascorner.co/blog/b2b-webinar-nitelikli-lead-toplama-rehberi"/></url>
+<url><loc>https://saascorner.co/blog/b2b-saas-google-ads-rehberi</loc><lastmod>2026-10-11</lastmod><xhtml:link rel="alternate" hreflang="tr" href="https://saascorner.co/blog/b2b-saas-google-ads-rehberi"/><xhtml:link rel="alternate" hreflang="en" href="https://saascorner.co/en/blog/google-ads-b2b-saas-guide"/><xhtml:link rel="alternate" hreflang="x-default" href="https://saascorner.co/blog/b2b-saas-google-ads-rehberi"/></url>
 <url><loc>https://saascorner.co/blog/b2b-saas-seo-rehberi-turkiye-adim-adim</loc><lastmod>2026-10-10</lastmod></url>
 <url><loc>https://saascorner.co/blog/linkedin-reklamlari-b2b-saas-deger-mi</loc><lastmod>2026-10-10</lastmod></url>
 <url><loc>https://saascorner.co/blog/crm-ile-surekli-ogrenen-b2b-saas-organizasyonu-2026-stratejileri</loc><lastmod>2026-10-08</lastmod></url>
@@ -214,37 +209,37 @@
 <url><loc>https://saascorner.co/blog/saas-ta-aciklanabilir-yapay-zeka-guven-ve-benimsenmenin-anahtari</loc><lastmod>2026-06-26</lastmod></url>
 <url><loc>https://saascorner.co/blog/crm-in-b2b-saas-ta-urun-yol-haritasi-gelisimine-etkisi-veri-odakli-kararlar</loc><lastmod>2026-06-25</lastmod></url>
 <url><loc>https://saascorner.co/blog/partnerops-saas-ta-kanal-buyumesini-otomatiklestiren-stratejiler</loc><lastmod>2026-06-24</lastmod></url>
-<url><loc>https://saascorner.co/blog/sat%C4%B1%C5%9F-kapand%C4%B1%C4%9F%C4%B1nda-i%CC%87%C5%9F-bitmez-as%C4%B1l-i%CC%87%C5%9F-ba%C5%9Flar</loc><lastmod>2026-06-24</lastmod></url>
+<url><loc>https://saascorner.co/blog/satis-kapandiginda-is-bitmez-asil-is-baslar</loc><lastmod>2026-06-24</lastmod></url>
 <url><loc>https://saascorner.co/blog/b2b-saas-satista-empatinin-gucu-yapay-zeka-caginda-i-nsan-baglantisi</loc><lastmod>2026-06-23</lastmod></url>
 <url><loc>https://saascorner.co/blog/b2b-saas-ta-gomulu-finans-yeni-nesil-deger-ve-buyume-stratejileri</loc><lastmod>2026-06-22</lastmod></url>
 <url><loc>https://saascorner.co/blog/b2b-saas-ta-crm-ile-mikro-segmentasyon-gizli-buyume-firsatlarini-kesfetmek</loc><lastmod>2026-06-21</lastmod></url>
 <url><loc>https://saascorner.co/blog/dinamik-saas-partnerlikleri-i-cin-hukuki-cerceveler-2026</loc><lastmod>2026-06-20</lastmod></url>
 <url><loc>https://saascorner.co/blog/b2b-saas-satista-dark-funnel-i-aydinlatmak-gorunmez-alici-yolculugunu-yakalama</loc><lastmod>2026-06-19</lastmod></url>
-<url><loc>https://saascorner.co/blog/sat%C4%B1%C5%9Fta-i%CC%87lk-90-g%C3%BCn-%C3%A7o%C4%9Fu-%C5%9Firketin-fark-etmeden-harcad%C4%B1%C4%9F%C4%B1-zaman</loc><lastmod>2026-06-19</lastmod></url>
+<url><loc>https://saascorner.co/blog/satista-ilk-90-gun-cogu-sirketin-fark-etmeden-harcadigi-zaman</loc><lastmod>2026-06-19</lastmod></url>
 <url><loc>https://saascorner.co/blog/b2b-saas-ta-gelistirici-deneyimi-devex-verimli-urun-gelistirmenin-anahtari</loc><lastmod>2026-06-18</lastmod></url>
-<url><loc>https://saascorner.co/blog/b%C3%BCy%C3%BCyen-%C5%9Firketlerin-sessiz-ortakl%C4%B1%C4%9F%C4%B1-outsource-sat%C4%B1%C5%9F</loc><lastmod>2026-06-17</lastmod></url>
+<url><loc>https://saascorner.co/blog/buyuyen-sirketlerin-sessiz-ortakligi-outsource-satis</loc><lastmod>2026-06-17</lastmod></url>
 <url><loc>https://saascorner.co/blog/crm-ile-musteri-sagligi-skorlari-b2b-saas-ta-churn-onleme-2026</loc><lastmod>2026-06-17</lastmod></url>
 <url><loc>https://saascorner.co/blog/b2b-saas-ta-partner-ekosistem-olgunluk-modeli-stratejik-buyume-asamalari</loc><lastmod>2026-06-16</lastmod></url>
 <url><loc>https://saascorner.co/blog/b2b-saas-ta-deger-odakli-satis-musteri-sonuclarina-odaklanma</loc><lastmod>2026-06-15</lastmod></url>
-<url><loc>https://saascorner.co/blog/sat%C4%B1%C5%9F-g%C3%B6r%C3%BC%C5%9Fmesi-ayarlamak-ile-sat%C4%B1%C5%9F-g%C3%B6r%C3%BC%C5%9Fmesini-kazanmak-aras%C4%B1ndaki-u%C3%A7urum</loc><lastmod>2026-06-15</lastmod></url>
+<url><loc>https://saascorner.co/blog/satis-gorusmesi-ayarlamak-ile-satis-gorusmesini-kazanmak-arasindaki-ucurum</loc><lastmod>2026-06-15</lastmod></url>
 <url><loc>https://saascorner.co/blog/saas-urunlerinde-etik-yapay-zeka-guven-i-nsasi-ve-sorumlu-i-novasyon-2026</loc><lastmod>2026-06-14</lastmod></url>
 <url><loc>https://saascorner.co/blog/b2b-saas-ta-crm-ile-musteri-onay-yonetimi-etik-kisisellesme-2026</loc><lastmod>2026-06-13</lastmod></url>
 <url><loc>https://saascorner.co/blog/b2b-saas-ta-plg-ve-partner-gucu-birlikte-buyume-stratejileri</loc><lastmod>2026-06-12</lastmod></url>
 <url><loc>https://saascorner.co/blog/b2b-saas-satis-ekipleri-i-cin-veri-okuryazarligi-karar-alma-sureclerini-guclendirme</loc><lastmod>2026-06-11</lastmod></url>
 <url><loc>https://saascorner.co/blog/saas-ta-olceklenebilir-kultur-hizli-buyumede-degerleri-korumak-2026</loc><lastmod>2026-06-10</lastmod></url>
-<url><loc>https://saascorner.co/blog/so%C4%9Fuk-e-posta-%C3%B6ld%C3%BC-m%C3%BC-hay%C4%B1r-sadece-de%C4%9Fi%C5%9Fti</loc><lastmod>2026-06-10</lastmod></url>
+<url><loc>https://saascorner.co/blog/soguk-e-posta-oldu-mu-hayir-sadece-degisti</loc><lastmod>2026-06-10</lastmod><xhtml:link rel="alternate" hreflang="tr" href="https://saascorner.co/blog/soguk-e-posta-oldu-mu-hayir-sadece-degisti"/><xhtml:link rel="alternate" hreflang="en" href="https://saascorner.co/en/blog/is-cold-email-dead-no-it-just-changed"/><xhtml:link rel="alternate" hreflang="x-default" href="https://saascorner.co/blog/soguk-e-posta-oldu-mu-hayir-sadece-degisti"/></url>
 <url><loc>https://saascorner.co/blog/crm-ile-b2b-saas-fiyatlandirma-stratejileri-deger-bazli-modeller-kurmak</loc><lastmod>2026-06-09</lastmod></url>
-<url><loc>https://saascorner.co/blog/herkese-satmaya-%C3%A7al%C4%B1%C5%9Fmak-kimseye-satamaman%C4%B1n-en-k%C4%B1sa-yolu</loc><lastmod>2026-06-09</lastmod></url>
+<url><loc>https://saascorner.co/blog/herkese-satmaya-calismak-kimseye-satamamanin-en-kisa-yolu</loc><lastmod>2026-06-09</lastmod></url>
 <url><loc>https://saascorner.co/blog/b2b-saas-sirketlerinde-partner-first-kulturu-i-csel-donusum-ve-basari</loc><lastmod>2026-06-08</lastmod></url>
-<url><loc>https://saascorner.co/blog/sat%C4%B1%C5%9Fta-en-hafife-al%C4%B1nan-silah-zamanlama</loc><lastmod>2026-06-08</lastmod></url>
+<url><loc>https://saascorner.co/blog/satista-en-hafife-alinan-silah-zamanlama</loc><lastmod>2026-06-08</lastmod></url>
 <url><loc>https://saascorner.co/blog/b2b-saas-satis-playbooklari-basariyi-standartlastirma-2026</loc><lastmod>2026-06-07</lastmod></url>
 <url><loc>https://saascorner.co/blog/b2b-sirketleri-i-cin-saas-sprawl-yonetimi-gorunmez-maliyetleri-ortaya-cikarin</loc><lastmod>2026-06-06</lastmod></url>
 <url><loc>https://saascorner.co/blog/b2b-saas-m-a-da-crm-in-stratejik-rolu-kesintisiz-musteri-deneyimi</loc><lastmod>2026-06-05</lastmod></url>
-<url><loc>https://saascorner.co/blog/m%C3%BC%C5%9Fteri-sizi-neden-se%C3%A7medi-cevap-d%C3%BC%C5%9F%C3%BCnd%C3%BC%C4%9F%C3%BCn%C3%BCzden-farkl%C4%B1</loc><lastmod>2026-06-05</lastmod></url>
+<url><loc>https://saascorner.co/blog/musteri-sizi-neden-secmedi-cevap-dusundugunuzden-farkli</loc><lastmod>2026-06-05</lastmod></url>
 <url><loc>https://saascorner.co/blog/b2b-saas-satis-operasyonlari-veri-odakli-buyumenin-dinamosu</loc><lastmod>2026-06-03</lastmod></url>
 <url><loc>https://saascorner.co/blog/b2b-micro-saas-nislerde-bagimsiz-buyume-stratejileri-2026</loc><lastmod>2026-06-02</lastmod></url>
 <url><loc>https://saascorner.co/blog/crm-ve-kolektif-musteri-zekasi-b2b-saas-ta-stratejiler</loc><lastmod>2026-06-01</lastmod></url>
-<url><loc>https://saascorner.co/blog/sat%C4%B1%C5%9Fta-en-pahal%C4%B1-%C5%9Fey-bilmedi%C4%9Finizi-bilmemektir</loc><lastmod>2026-06-01</lastmod></url>
+<url><loc>https://saascorner.co/blog/satista-en-pahali-sey-bilmediginizi-bilmemektir</loc><lastmod>2026-06-01</lastmod></url>
 <url><loc>https://saascorner.co/blog/partner-basarisini-gelirin-otesinde-olcmek-b2b-saas-holistik-metrikler</loc><lastmod>2026-05-31</lastmod></url>
 <url><loc>https://saascorner.co/blog/b2b-saas-satista-davranissal-ekonomi-karar-alma-sureclerini-anlamak</loc><lastmod>2026-05-30</lastmod></url>
 <url><loc>https://saascorner.co/blog/saas-gelir-akisini-yeniden-tanimlamak-veriyi-urune-donusturme-2026</loc><lastmod>2026-05-29</lastmod></url>
@@ -254,21 +249,21 @@
 <url><loc>https://saascorner.co/blog/saas-birlesme-ve-satin-almalar-m-a-2026-da-deger-yaratma-ve-stratejik-cikis-yollari</loc><lastmod>2026-05-25</lastmod></url>
 <url><loc>https://saascorner.co/blog/crm-ve-prm-entegrasyonu-b2b-saas-ta-kanal-satisini-guclendirme</loc><lastmod>2026-05-24</lastmod></url>
 <url><loc>https://saascorner.co/blog/b2b-saas-satista-alici-odakli-yaklasim-musteri-yolculugunu-kolaylastirma</loc><lastmod>2026-05-23</lastmod></url>
-<url><loc>https://saascorner.co/blog/linkedin-de-herkes-var-ama-%C3%A7ok-az%C4%B1-sat%C4%B1%C5%9F-yap%C4%B1yor</loc><lastmod>2026-05-22</lastmod></url>
+<url><loc>https://saascorner.co/blog/linkedin-de-herkes-var-ama-cok-azi-satis-yapiyor</loc><lastmod>2026-05-22</lastmod></url>
 <url><loc>https://saascorner.co/blog/satis-ekipleri-crm-i-neden-sevmiyor-benimsenmeyi-artirmanin-5-stratejisi</loc><lastmod>2026-05-22</lastmod></url>
 <url><loc>https://saascorner.co/blog/b2b-saas-satis-koclugu-ekipleri-zirveye-tasiyan-stratejiler-2026</loc><lastmod>2026-05-21</lastmod></url>
-<url><loc>https://saascorner.co/blog/b2b-de-i%CC%87lk-i%CC%87zlenim-bir-e-postan%C4%B1n-i%CC%87lk-%C3%BC%C3%A7-saniyesi-her-%C5%9Feyi-belirler</loc><lastmod>2026-05-20</lastmod></url>
+<url><loc>https://saascorner.co/blog/b2b-de-ilk-izlenim-bir-e-postanin-ilk-uc-saniyesi-her-seyi-belirler</loc><lastmod>2026-05-20</lastmod></url>
 <url><loc>https://saascorner.co/blog/karmasik-b2b-satista-crm-paydas-haritalama-ve-i-liski-stratejileri</loc><lastmod>2026-05-20</lastmod></url>
 <url><loc>https://saascorner.co/blog/yapay-zeka-caginda-b2b-saas-satis-i-nsan-faktoru-ve-kritik-beceriler-2026</loc><lastmod>2026-05-19</lastmod></url>
 <url><loc>https://saascorner.co/blog/crm-in-urun-adaptasyonunu-hizlandirmadaki-rolu-saas-ta-deger-yaratimi-ve-genisleme-stratejileri-2026</loc><lastmod>2026-05-18</lastmod></url>
-<url><loc>https://saascorner.co/blog/sat%C4%B1%C5%9F-ekibi-neden-t%C3%BCkenip-gider</loc><lastmod>2026-05-18</lastmod></url>
+<url><loc>https://saascorner.co/blog/satis-ekibi-neden-tukenip-gider</loc><lastmod>2026-05-18</lastmod></url>
 <url><loc>https://saascorner.co/blog/kullanim-tabanli-fiyatlamada-crm-veri-odakli-buyume-2026</loc><lastmod>2026-05-17</lastmod></url>
 <url><loc>https://saascorner.co/blog/crm-in-urun-odakli-buyume-plg-stratejilerindeki-rolu</loc><lastmod>2026-05-15</lastmod></url>
-<url><loc>https://saascorner.co/blog/sdr-vs.-tam-zamanl%C4%B1-sat%C4%B1%C5%9F-personeli</loc><lastmod>2026-05-15</lastmod></url>
-<url><loc>https://saascorner.co/blog/yeni-bir-pazara-girerken-%C5%9Firketlerin-yapt%C4%B1%C4%9F%C4%B1-4-b%C3%BCy%C3%BCk-hata</loc><lastmod>2026-05-14</lastmod></url>
+<url><loc>https://saascorner.co/blog/sdr-vs-tam-zamanli-satis-personeli</loc><lastmod>2026-05-15</lastmod><xhtml:link rel="alternate" hreflang="tr" href="https://saascorner.co/blog/sdr-vs-tam-zamanli-satis-personeli"/><xhtml:link rel="alternate" hreflang="en" href="https://saascorner.co/en/blog/sdr-vs-full-time-sales-rep"/><xhtml:link rel="alternate" hreflang="x-default" href="https://saascorner.co/blog/sdr-vs-tam-zamanli-satis-personeli"/></url>
+<url><loc>https://saascorner.co/blog/yeni-bir-pazara-girerken-sirketlerin-yaptigi-4-buyuk-hata</loc><lastmod>2026-05-14</lastmod></url>
 <url><loc>https://saascorner.co/blog/crm-ve-abm-stratejileri-senkronize-ederek-buyumeyi-hizlandirma</loc><lastmod>2026-05-13</lastmod></url>
-<url><loc>https://saascorner.co/blog/outbound-sat%C4%B1%C5%9F-nedir-b2b-%C5%9Firketler-i%CC%87%C3%A7in-nitelikli-g%C3%B6r%C3%BC%C5%9Fme-alman%C4%B1n-yolu</loc><lastmod>2026-05-13</lastmod></url>
-<url><loc>https://saascorner.co/blog/b2b%E2%80%99de-uykusuz-gecelerin-%C3%A7%C4%B1kt%C4%B1s%C4%B1-lead-generation-operasyonunu-otomati%C4%9Fe-ba%C4%9Flamak</loc><lastmod>2026-05-12</lastmod></url>
+<url><loc>https://saascorner.co/blog/outbound-satis-nedir-b2b-sirketler-icin-nitelikli-gorusme-almanin-yolu</loc><lastmod>2026-05-13</lastmod><xhtml:link rel="alternate" hreflang="tr" href="https://saascorner.co/blog/outbound-satis-nedir-b2b-sirketler-icin-nitelikli-gorusme-almanin-yolu"/><xhtml:link rel="alternate" hreflang="en" href="https://saascorner.co/en/blog/what-is-outbound-sales-b2b-qualified-meetings"/><xhtml:link rel="alternate" hreflang="x-default" href="https://saascorner.co/blog/outbound-satis-nedir-b2b-sirketler-icin-nitelikli-gorusme-almanin-yolu"/></url>
+<url><loc>https://saascorner.co/blog/b2bde-uykusuz-gecelerin-ciktisi-lead-generation-operasyonunu-otomatige-baglamak</loc><lastmod>2026-05-12</lastmod></url>
 <url><loc>https://saascorner.co/blog/crm-de-calisan-deneyimi-ekip-katilimiyla-verimliligi-artirma</loc><lastmod>2026-05-12</lastmod></url>
 <url><loc>https://saascorner.co/blog/b2b-saas-i-cin-crm-veri-kalitesi-stratejik-bir-bakis</loc><lastmod>2026-05-11</lastmod></url>
 <url><loc>https://saascorner.co/blog/crm-ile-musteri-basarisi-proaktif-deger-yaratma-ve-hesap-buyutme</loc><lastmod>2026-05-07</lastmod></url>
@@ -304,13 +299,13 @@
 <url><loc>https://saascorner.co/blog/b2b-satis-lead-nurturing-musteri-merkezli-yaklasim</loc><lastmod>2026-04-15</lastmod></url>
 <url><loc>https://saascorner.co/blog/b2b-satis-onboarding-musteri-merkezli-yaklasim</loc><lastmod>2026-04-15</lastmod></url>
 <url><loc>https://saascorner.co/blog/saas-kullanici-deneyimi-2027-standartlari-ve-en-i-yi-uygulamalar</loc><lastmod>2026-04-15</lastmod></url>
-<url><loc>https://saascorner.co/blog/b2b-operasyonlar%C4%B1nda-mesguliyet-yanilsamasi-35-sayfalik-raporu-5-dakikada-cikarmak</loc><lastmod>2026-04-13</lastmod></url>
-<url><loc>https://saascorner.co/blog/saas-operasyonlar%C4%B1nda-gizli-kahraman-sadelesmenin-gucu</loc><lastmod>2026-04-06</lastmod></url>
+<url><loc>https://saascorner.co/blog/b2b-operasyonlarinda-mesguliyet-yanilsamasi-35-sayfalik-raporu-5-dakikada-cikarmak</loc><lastmod>2026-04-13</lastmod></url>
+<url><loc>https://saascorner.co/blog/saas-operasyonlarinda-gizli-kahraman-sadelesmenin-gucu</loc><lastmod>2026-04-06</lastmod></url>
 <url><loc>https://saascorner.co/blog/b2b-satista-gorunmez-bariyerleri-asmak-dijital-otorite-cagi</loc><lastmod>2026-03-30</lastmod></url>
 <url><loc>https://saascorner.co/blog/b2b-de-basari-teklifin-otesindeki-dijital-guvendir.-saas-corner-ile-stratejik-aginizi-kurun</loc><lastmod>2026-03-26</lastmod></url>
-<url><loc>https://saascorner.co/blog/b2b-i%CC%87letisiminde-yeni-standart-dijital-guven-ve-stratejik-gorunurluk</loc><lastmod>2026-02-25</lastmod></url>
+<url><loc>https://saascorner.co/blog/b2b-iletisiminde-yeni-standart-dijital-guven-ve-stratejik-gorunurluk</loc><lastmod>2026-02-25</lastmod></url>
 <url><loc>https://saascorner.co/blog/genc-ve-dinamik-satis-ekiplerini-yonetmenin-yeni-kurallari</loc><lastmod>2026-02-09</lastmod></url>
-<url><loc>https://saascorner.co/blog/i%CC%87ceride-sdr-ekibi-kurmanin-gizli-maliyetleri-2026%E2%80%99da-neden-ajans-modeli-kazaniyor</loc><lastmod>2026-01-27</lastmod></url>
+<url><loc>https://saascorner.co/blog/iceride-sdr-ekibi-kurmanin-gizli-maliyetleri-2026da-neden-ajans-modeli-kazaniyor</loc><lastmod>2026-01-27</lastmod></url>
 <url><loc>https://saascorner.co/blog/2026-da-b2b-satisin-yeni-denklemi-neden-bir-sdr-ajansiyla-calismalisiniz</loc><lastmod>2026-01-09</lastmod></url>
 <url><loc>https://saascorner.co/blog/lead-generation-nedir</loc><lastmod>2025-10-04</lastmod></url>
 <url><loc>https://saascorner.co/blog/be1-ile-sap-erp-cozumu-ile-isletme-surecinizi-optimiz-edin</loc><lastmod>2025-10-03</lastmod></url>
@@ -332,8 +327,16 @@
 <url><loc>https://saascorner.co/blog/satis-dis-kaynak-kullanimi-faydalari</loc><lastmod>2022-02-28</lastmod></url>
 <url><loc>https://saascorner.co/blog/satis-dis-kaynak-kullanimi-maliyet-optimizasyonu</loc><lastmod>2022-02-28</lastmod></url>
 <url><loc>https://saascorner.co/blog/veri-odakli-satis-analiz-ve-icgoru</loc><lastmod>2022-02-28</lastmod></url>
-<url><loc>https://saascorner.co/en/blog</loc></url>
-<url><loc>https://saascorner.co/en/blog/is-cold-email-dead-no-it-just-changed</loc><lastmod>2026-06-10</lastmod></url>
-<url><loc>https://saascorner.co/en/blog/sdr-vs-full-time-sales-rep</loc><lastmod>2026-05-15</lastmod></url>
-<url><loc>https://saascorner.co/en/blog/what-is-outbound-sales-b2b-qualified-meetings</loc><lastmod>2026-05-13</lastmod></url>
+<url><loc>https://saascorner.co/en/blog</loc><lastmod>2026-10-18</lastmod><xhtml:link rel="alternate" hreflang="tr" href="https://saascorner.co/blog"/><xhtml:link rel="alternate" hreflang="en" href="https://saascorner.co/en/blog"/><xhtml:link rel="alternate" hreflang="x-default" href="https://saascorner.co/blog"/></url>
+<url><loc>https://saascorner.co/en/blog/b2b-email-newsletter-saas</loc><lastmod>2026-10-18</lastmod><xhtml:link rel="alternate" hreflang="tr" href="https://saascorner.co/blog/b2b-e-posta-bulteni-saas-nasil-baslanir"/><xhtml:link rel="alternate" hreflang="en" href="https://saascorner.co/en/blog/b2b-email-newsletter-saas"/><xhtml:link rel="alternate" hreflang="x-default" href="https://saascorner.co/blog/b2b-e-posta-bulteni-saas-nasil-baslanir"/></url>
+<url><loc>https://saascorner.co/en/blog/kvkk-b2b-cold-email</loc><lastmod>2026-10-17</lastmod><xhtml:link rel="alternate" hreflang="tr" href="https://saascorner.co/blog/b2b-soguk-eposta-kvkk-rehberi"/><xhtml:link rel="alternate" hreflang="en" href="https://saascorner.co/en/blog/kvkk-b2b-cold-email"/><xhtml:link rel="alternate" hreflang="x-default" href="https://saascorner.co/blog/b2b-soguk-eposta-kvkk-rehberi"/></url>
+<url><loc>https://saascorner.co/en/blog/b2b-saas-content-marketing-turkey</loc><lastmod>2026-10-16</lastmod><xhtml:link rel="alternate" hreflang="tr" href="https://saascorner.co/blog/b2b-saas-icerik-pazarlamasi-nereden-baslanir"/><xhtml:link rel="alternate" hreflang="en" href="https://saascorner.co/en/blog/b2b-saas-content-marketing-turkey"/><xhtml:link rel="alternate" hreflang="x-default" href="https://saascorner.co/blog/b2b-saas-icerik-pazarlamasi-nereden-baslanir"/></url>
+<url><loc>https://saascorner.co/en/blog/b2b-saas-marketing-budget-percentage-of-revenue</loc><lastmod>2026-10-15</lastmod><xhtml:link rel="alternate" hreflang="tr" href="https://saascorner.co/blog/b2b-saas-pazarlama-butcesi-nasil-belirlenir"/><xhtml:link rel="alternate" hreflang="en" href="https://saascorner.co/en/blog/b2b-saas-marketing-budget-percentage-of-revenue"/><xhtml:link rel="alternate" hreflang="x-default" href="https://saascorner.co/blog/b2b-saas-pazarlama-butcesi-nasil-belirlenir"/></url>
+<url><loc>https://saascorner.co/en/blog/what-is-mql-mql-vs-sql-b2b-saas</loc><lastmod>2026-10-14</lastmod><xhtml:link rel="alternate" hreflang="tr" href="https://saascorner.co/blog/mql-nedir-mql-sql-farki"/><xhtml:link rel="alternate" hreflang="en" href="https://saascorner.co/en/blog/what-is-mql-mql-vs-sql-b2b-saas"/><xhtml:link rel="alternate" hreflang="x-default" href="https://saascorner.co/blog/mql-nedir-mql-sql-farki"/></url>
+<url><loc>https://saascorner.co/en/blog/outbound-email-spf-dkim-dmarc</loc><lastmod>2026-10-13</lastmod><xhtml:link rel="alternate" hreflang="tr" href="https://saascorner.co/blog/outbound-eposta-spam-spf-dkim-dmarc"/><xhtml:link rel="alternate" hreflang="en" href="https://saascorner.co/en/blog/outbound-email-spf-dkim-dmarc"/><xhtml:link rel="alternate" hreflang="x-default" href="https://saascorner.co/blog/outbound-eposta-spam-spf-dkim-dmarc"/></url>
+<url><loc>https://saascorner.co/en/blog/b2b-webinar-qualified-leads-guide</loc><lastmod>2026-10-12</lastmod><xhtml:link rel="alternate" hreflang="tr" href="https://saascorner.co/blog/b2b-webinar-nitelikli-lead-toplama-rehberi"/><xhtml:link rel="alternate" hreflang="en" href="https://saascorner.co/en/blog/b2b-webinar-qualified-leads-guide"/><xhtml:link rel="alternate" hreflang="x-default" href="https://saascorner.co/blog/b2b-webinar-nitelikli-lead-toplama-rehberi"/></url>
+<url><loc>https://saascorner.co/en/blog/google-ads-b2b-saas-guide</loc><lastmod>2026-10-11</lastmod><xhtml:link rel="alternate" hreflang="tr" href="https://saascorner.co/blog/b2b-saas-google-ads-rehberi"/><xhtml:link rel="alternate" hreflang="en" href="https://saascorner.co/en/blog/google-ads-b2b-saas-guide"/><xhtml:link rel="alternate" hreflang="x-default" href="https://saascorner.co/blog/b2b-saas-google-ads-rehberi"/></url>
+<url><loc>https://saascorner.co/en/blog/is-cold-email-dead-no-it-just-changed</loc><lastmod>2026-06-10</lastmod><xhtml:link rel="alternate" hreflang="tr" href="https://saascorner.co/blog/soguk-e-posta-oldu-mu-hayir-sadece-degisti"/><xhtml:link rel="alternate" hreflang="en" href="https://saascorner.co/en/blog/is-cold-email-dead-no-it-just-changed"/><xhtml:link rel="alternate" hreflang="x-default" href="https://saascorner.co/blog/soguk-e-posta-oldu-mu-hayir-sadece-degisti"/></url>
+<url><loc>https://saascorner.co/en/blog/sdr-vs-full-time-sales-rep</loc><lastmod>2026-05-15</lastmod><xhtml:link rel="alternate" hreflang="tr" href="https://saascorner.co/blog/sdr-vs-tam-zamanli-satis-personeli"/><xhtml:link rel="alternate" hreflang="en" href="https://saascorner.co/en/blog/sdr-vs-full-time-sales-rep"/><xhtml:link rel="alternate" hreflang="x-default" href="https://saascorner.co/blog/sdr-vs-tam-zamanli-satis-personeli"/></url>
+<url><loc>https://saascorner.co/en/blog/what-is-outbound-sales-b2b-qualified-meetings</loc><lastmod>2026-05-13</lastmod><xhtml:link rel="alternate" hreflang="tr" href="https://saascorner.co/blog/outbound-satis-nedir-b2b-sirketler-icin-nitelikli-gorusme-almanin-yolu"/><xhtml:link rel="alternate" hreflang="en" href="https://saascorner.co/en/blog/what-is-outbound-sales-b2b-qualified-meetings"/><xhtml:link rel="alternate" hreflang="x-default" href="https://saascorner.co/blog/outbound-satis-nedir-b2b-sirketler-icin-nitelikli-gorusme-almanin-yolu"/></url>
 </urlset>

@@ -1,6 +1,6 @@
 ---
 title: "B2B Satış Demo Sonrası Takip Stratejileri: Dönüşümü Artıran Adımlar"
-description: "B2B satış dünyasının en kritik anlarından biri, başarılı bir demonun hemen ardından başlayan o belirsiz sessizliktir."
+description: "Demo sonrası takip, ilk 24 saatte kişisel özet ve net bir sonraki adımla dönüşümü artırır; bu yazı B2B ekipler için takip adımlarını anlatır."
 date: "2026-06-05"
 category: "Rehber"
 image: "/_a/fr/images/3ewuyh0UV1Ny2a7302m2jFPsrE_cd09786e.jpg"

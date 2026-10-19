@@ -1,6 +1,6 @@
 ---
 title: "B2B Podcast Pazarlamasında AI: İçerik Üretimi ve Dinleyici Erişimi Stratejileri"
-description: "B2B pazarlama evreni, dikkat ekonomisinin en çetin savaşlarının yaşandığı bir arenaya dönüştü."
+description: "AI, B2B podcast üretiminde konu araştırması, transkript ve kısa klip hazırlığını hızlandırır; bu yazı dinleyiciye ulaşma stratejilerini anlatır."
 date: "2026-09-13"
 category: "Strateji"
 image: "/_a/fr/images/lDWEQrcWvw5tkGfSNw6j6EOIyIk_cd09786e.jpg"

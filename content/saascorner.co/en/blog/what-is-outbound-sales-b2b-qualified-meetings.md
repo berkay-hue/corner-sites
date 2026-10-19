@@ -5,7 +5,7 @@ date: "2026-05-13"
 category: "Lead Generation"
 image: "/_a/fr/images/C8Z1uPfCWt0rXBnTLYHE3w0ylI4_0d4c0f1a.jpg"
 imageAlt: "What Is Outbound Sales? How B2B Companies Book Qualified Meetings"
-alt: "outbound-satış-nedir-b2b-şirketler-i̇çin-nitelikli-görüşme-almanın-yolu"
+alt: "outbound-satis-nedir-b2b-sirketler-icin-nitelikli-gorusme-almanin-yolu"
 ---
 
 **Most B2B companies face the same problem:** the product or service is ready, the team is motivated, but the calendar is empty. Sales meetings either don't come in, or they do but not with the right people. This is where outbound sales comes in.

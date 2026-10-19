@@ -2,6 +2,7 @@
 title: "Yeni Satış Temsilcisine Kota Nasıl Belirlenir? (Örneklerle)"
 description: "Rampa süresi, kapasite hesabı ve pipeline kapsamıyla yeni B2B temsilcilerine tükenmişlik ve kaçırılan hedef yaratmayan gerçekçi kotalar belirleyin."
 date: "2026-10-16"
+draft: true
 updated: "2026-10-17"
 category: "Satış Liderliği"
 image: "https://images.pexels.com/photos/39204827/pexels-photo-39204827.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
@@ -218,4 +219,4 @@ Yeni temsilcilere kota belirlemek, özünde zaman konusunda dürüst olmaktır. 
 
 İyi yapıldığında bir rampa planı, yeni çalışanlara birinci haftada, üçüncü ayda ve altıncı ayda başarının neye benzediğini tam olarak söyler. Bu netlik, çoğu zaman kalıp büyüyen temsilcilerle sessizce ayrılanları birbirinden ayıran şeydir.
 
-İlk satış işe alımlarınız için kota ya da rampa planı tasarlıyorsanız ve ikinci bir görüş istiyorsanız [benimle iletişime geçmekten](/tr) çekinmeyin. Satış liderliği hakkında konuşmaktan her zaman memnuniyet duyarım.
+İlk satış işe alımlarınız için kota ya da rampa planı tasarlıyorsanız ve ikinci bir görüş istiyorsanız [benimle iletişime geçmekten](/tr/) çekinmeyin. Satış liderliği hakkında konuşmaktan her zaman memnuniyet duyarım.

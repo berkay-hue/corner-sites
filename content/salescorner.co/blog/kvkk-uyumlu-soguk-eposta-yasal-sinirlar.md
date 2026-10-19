@@ -1,6 +1,6 @@
 ---
 title: "KVKK'ya Uygun B2B Soğuk E-Posta: Yasal Sınırlar"
-description: "B2B soğuk e-postada KVKK ve ticari elektronik ileti kurallarına nasıl uyulacağını, meşru menfaat ve açık ret seçeneklerini örneklerle anlatıyoruz."
+description: "B2B soğuk e-postada KVKK ve ticari ileti kurallarına nasıl uyulur? Meşru menfaat ve ret seçeneğini örneklerle anlatıyoruz."
 date: "2026-10-13"
 updated: "2026-10-16"
 category: "Outbound"
@@ -96,7 +96,7 @@ Aydınlatma metninizde en azından şunlar yer almalıdır:
 - Verinin kimlere aktarılabileceği (CRM, e-posta altyapısı, zenginleştirme sağlayıcıları dahil)
 - İlgili kişinin KVKK 11. maddedeki hakları ve başvuru yöntemi
 
-Mesaj metnini kişiselleştirirken yapay zekadan yararlanıyorsanız, [yapay zekayla soğuk e-posta yazma rehberimizde](/blog/yapay-zekayla-soguk-eposta-nasil-yazilir) anlattığımız prompt yapılarına bu bilgilendirme notunu sabit bir footer olarak eklemenizi öneririz. Dizileri Sekans Yazarı aracımızla üretiyorsanız aynı footer'ı her adımda sabit tutmayı unutmayın. Böylece her varyasyonda notun yer aldığından emin olursunuz.
+Mesaj metnini kişiselleştirirken yapay zekadan yararlanıyorsanız, [yapay zekayla soğuk e-posta yazma rehberimizde](/blog/yapay-zekayla-soguk-eposta-nasil-yazilir) anlattığımız prompt yapılarına bu bilgilendirme notunu sabit bir footer olarak eklemenizi öneririz. Dizileri [Sekans Yazarı aracımızla](/#otomasyonlar) üretiyorsanız aynı footer'ı her adımda sabit tutmayı unutmayın. Böylece her varyasyonda notun yer aldığından emin olursunuz.
 
 ## Ret Hakkı, İYS ve Süreler
 
@@ -121,7 +121,7 @@ Outbound ekiplerinin en çok gözden kaçırdığı konu, kullandıkları araçl
 - Veri işleme sözleşmesi (DPA) sunuyor mu?
 - Veriler hangi ülkedeki sunucularda saklanıyor?
 
-Örneğin [Apollo.io](https://get.apollo.io/679irkzm35ya) gibi geniş B2B iletişim veritabanları, segment bazlı liste oluşturmayı ve iletişim bilgisi doğrulamayı oldukça hızlandırır. Ancak aracın sunduğu veriyi kullanma sorumluluğu size aittir. Hangi alanları dışarı aktardığınızı, ne kadar süre sakladığınızı ve kime gönderim yaptığınızı siz belirlersiniz. Kişi verisine hiç dokunmadan şirketlerin kamuya açık web sitelerinden sinyal toplamak (örneğin Web Keyword Scanner ile) ise veri minimizasyonu açısından daha güvenli bir ilk adımdır.
+Örneğin [Apollo.io](https://get.apollo.io/679irkzm35ya) gibi geniş B2B iletişim veritabanları, segment bazlı liste oluşturmayı ve iletişim bilgisi doğrulamayı oldukça hızlandırır. Ancak aracın sunduğu veriyi kullanma sorumluluğu size aittir. Hangi alanları dışarı aktardığınızı, ne kadar süre sakladığınızı ve kime gönderim yaptığınızı siz belirlersiniz. Kişi verisine hiç dokunmadan şirketlerin kamuya açık web sitelerinden sinyal toplamak (örneğin [Web Keyword Scanner](/#otomasyonlar) ile) ise veri minimizasyonu açısından daha güvenli bir ilk adımdır.
 
 ### Yurt Dışına Aktarım
 
@@ -198,6 +198,8 @@ Bir kampanyayı başlatmadan önce şu soruların hepsine "evet" diyebiliyor olm
 - Saklama süreleri tanımlı ve imha otomatik mi?
 
 Bu altyapıyı içeride kurmak yerine outbound operasyonunun tamamını dışarıdan yönetmek istiyorsanız, B2B SaaS şirketlerine odaklanan grup şirketimiz [SAAS Corner'ın outbound satış ve lead generation hizmeti](https://saascorner.co) liste oluşturmadan dizi yönetimine kadar süreci uçtan uca üstlenebilir.
+
+Sales Corner'ın satış otomasyonu ve outbound alanında neler yaptığını [hizmetler sayfamızda](/hizmetler) görebilirsiniz.
 
 ## Sonuç
 

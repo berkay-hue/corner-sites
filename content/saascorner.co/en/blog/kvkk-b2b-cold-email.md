@@ -127,7 +127,7 @@ The process below offers a practical framework for a B2B SaaS team building outb
 9. **Define your request-handling process.** Under KVKK, data subject requests must be answered within **30 days** at the latest. Decide in advance who will handle requests, which template will be used to respond and how data will be deleted.
 10. **Train your team.** SDRs should be able to give a standard, honest answer to the question "where did you find this address?" Even a 30-minute internal training session and a one-page checklist make a big difference.
 
-A significant portion of these steps can be managed through automation, such as source tagging, suppression list checks and deleting records whose retention period has expired. We go into detail on how to set this up in our article on [automating your lead generation operations](https://saascorner.co/blog/b2b’de-uykusuz-gecelerin-çıktısı-lead-generation-operasyonunu-otomatiğe-bağlamak).
+A significant portion of these steps can be managed through automation, such as source tagging, suppression list checks and deleting records whose retention period has expired. We go into detail on how to set this up in our article on [automating your lead generation operations](https://saascorner.co/blog/b2bde-uykusuz-gecelerin-ciktisi-lead-generation-operasyonunu-otomatige-baglamak).
 
 ## What should you do when an opt-out request comes in?
 

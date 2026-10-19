@@ -1,6 +1,6 @@
 ---
 title: "Çok Markalı Holdinglerde Merkezi CRM Stratejileri: Veri Bütünlüğü Rehberi"
-description: "Günümüzün rekabetçi B2B pazarında, holding yapıları ve çok markalı şirketler için en büyük zorluklardan biri, dağınık veriyi stratejik bir varlığa…"
+description: "Çok markalı holdinglerde merkezi CRM, dağınık müşteri verisini ortak standartlarla birleştirir; bu rehber veri bütünlüğü stratejilerini anlatır."
 date: "2026-08-12"
 category: "Strateji"
 image: "/_a/fr/images/5cZPXt2EsMEe5MTypfBVS7OHsQ_cd09786e.jpg"

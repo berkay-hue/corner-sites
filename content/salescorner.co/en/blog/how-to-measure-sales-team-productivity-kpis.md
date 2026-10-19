@@ -229,8 +229,10 @@ Yes. Even on a team of 2-3 people, knowing at which stage opportunities are lost
 
 No. Looking only at meeting count leads to more poorly qualified meetings. Alongside meeting count, the rate of meetings accepted by AEs and the pipeline value sourced by the SDR should always be tracked.
 
+You can see what Sales Corner does in sales automation and outbound on our [services page](/hizmetler) (in Turkish).
+
 ## Conclusion
 
 Measuring sales team productivity is much more than looking at end-of-month revenue. When you track activity, conversion and outcome metrics in tiers, you can clearly see where the team is losing time, at which stage opportunities are leaking and which improvement will have the greatest impact. Clearly defined pipeline stages, role-based KPI sets, backward calculations from targets and automated data collection are the cornerstones of this system.
 
-The biggest gains usually come not from adding new metrics but from making existing data reliable and reducing reps' manual workload. If you want to set up automated reporting, data enrichment and KPI tracking for your sales team, [schedule a call with the Sales Corner team](/en/iletisim). Let's analyze your sales process together and design automations that measurably boost your productivity.
+The biggest gains usually come not from adding new metrics but from making existing data reliable and reducing reps' manual workload. If you want to set up automated reporting, data enrichment and KPI tracking for your sales team, [schedule a call with the Sales Corner team](/en/contact). Let's analyze your sales process together and design automations that measurably boost your productivity.

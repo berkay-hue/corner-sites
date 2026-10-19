@@ -53,7 +53,7 @@ If a language model has only "First name, Last name, Company" to work with, it d
 
 Keep this data in a table (Google Sheets, Airtable or your CRM), with a separate column for each field per record. Then you can run AI row by row to generate a "personalization note" for each record. For example, you can give the model the company's website copy and open job postings and ask: "In one sentence, write the most likely problem this company is facing on the sales side right now."
 
-Running these flows as automated workflows instead of building them by hand is the most reliable way to process hundreds of records consistently. This is exactly where [Sales Corner automations](/en/) come in: they combine data collection, enrichment, AI personalization and the handoff to your email tool into a single workflow. If you want to build these flows yourself, our [beginner's guide to B2B sales automation with n8n](/blog/b2b-sales-automation-with-n8n-guide) is a good starting point. For example, our Sequence Writer tool turns your product video, PDF or website into a multi-step outreach sequence, and the Web Keyword Scanner can scan target companies' websites for signals in bulk.
+Running these flows as automated workflows instead of building them by hand is the most reliable way to process hundreds of records consistently. This is exactly where [Sales Corner automations](/en/) come in: they combine data collection, enrichment, AI personalization and the handoff to your email tool into a single workflow. If you want to build these flows yourself, our [beginner's guide to B2B sales automation with n8n](/blog/b2b-sales-automation-with-n8n-guide) is a good starting point. For example, our [Sequence Writer tool](/en/#otomasyonlar) turns your product video, PDF or website into a multi-step outreach sequence, and the [Web Keyword Scanner](/en/#otomasyonlar) can scan target companies' websites for signals in bulk.
 
 ## How to Build a Good Cold Email Prompt
 
@@ -192,13 +192,15 @@ A simple loop for iteration: test a single variable each week. One week change t
 
 Another powerful practice is classifying replies with AI. Sorting incoming replies into categories such as "interested", "not now", "wrong person", "not interested" and "unsubscribe" speeds up follow-up. It also builds a valuable dataset on which message triggers which objection.
 
+You can see what Sales Corner does in sales automation and outbound on our [services page](/hizmetler) (in Turkish).
+
 ## Conclusion
 
 Writing cold emails with AI is much more than opening a tool and saying "write me an email". Successful results rest on a clearly defined audience, clean and enriched data, well-crafted prompts, a sensible email sequence and a disciplined measurement loop. When these pieces fall into place, AI can lighten your sales team's research and writing load. And it can help you deliver messages that are meaningful in each recipient's own context to hundreds, even thousands of people at scale.
 
 Remember: strategy and the value proposition come from you; scale and personalization come from AI. Never remove human oversight from the process entirely.
 
-If you want to build your outbound process end to end, from list building and data enrichment to AI-powered personalization and email sequence automation, the Sales Corner team is here to help. [Book a call now](/en/iletisim) to review your current process together and design the automation workflow that fits you.
+If you want to build your outbound process end to end, from list building and data enrichment to AI-powered personalization and email sequence automation, the Sales Corner team is here to help. [Book a call now](/en/contact) to review your current process together and design the automation workflow that fits you.
 
 ## FAQ
 
