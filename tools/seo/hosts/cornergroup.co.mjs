@@ -12,7 +12,7 @@ export const rule = {
       // Grup şirketleri sayfalarına iç link: Framer #main dışında, </body> öncesi statik blok (hydration'a girmez)
       if (page === "/" || page === "/en/index" || page === "/en/") {
         const en = page !== "/", base = en ? "/en/companies/" : "/sirketler/";
-        const co = [["saascorner", "SAAS Corner"], ["salescorner", "Sales Corner"], ["brandcorner", "Brand Corner"], ["socialmediacorner", "Social Media Corner"], ["wishceo", "WishCEO"], ["yalcinberkay", "Berkay Yalçın"]];
+        const co = [["saascorner", "SAAS Corner"], ["crmcorner", "CRM Corner"], ["salescorner", "Sales Corner"], ["brandcorner", "Brand Corner"], ["socialmediacorner", "Social Media Corner"], ["wishceo", "WishCEO"], ["yalcinberkay", "Berkay Yalçın"]];
         const block = `<nav data-cg-companies aria-label="${en ? "Group companies" : "Grup şirketleri"}" style="background:#0A0A0B;padding:28px 16px 104px;text-align:center;font-family:Inter,-apple-system,sans-serif;font-size:14px;border-top:1px solid rgba(255,255,255,0.06)"><span style="color:#888;margin-right:8px">${en ? "Group companies:" : "Grup şirketleri:"}</span>` +
           co.map(([s, n]) => `<a href="${base}${s}" style="color:#FFB71B;text-decoration:none;margin:0 10px;display:inline-block;padding:10px 0">${n}</a>`).join("") + `</nav>`;
         html = html.replace(/<nav data-cg-companies[\s\S]*?<\/nav>/, "").replace("</body>", block + "</body>");
