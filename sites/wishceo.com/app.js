@@ -424,6 +424,9 @@
     if (d) try { d.textContent = new Date(CUR.date + "T12:00:00+03:00").toLocaleDateString("tr-TR", { day: "numeric", month: "long", year: "numeric", timeZone: "Europe/Istanbul" }); } catch (e) { /* sabit tarih kalsın */ }
     var tk = $(".ticker-stop");
     if (tk) {
+      var tg = $(".ticker-group");
+      if (tg) tg.parentNode.appendChild(tg.cloneNode(true));
+      tk.textContent = "❚❚";
       tk.hidden = false;
       tk.addEventListener("click", function () {
         var p = tk.getAttribute("aria-pressed") !== "true";
