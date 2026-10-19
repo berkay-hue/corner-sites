@@ -4,7 +4,7 @@ description: "The questions that test a sales rep candidate's prospecting, objec
 date: "2026-10-15"
 updated: "2026-10-17"
 category: "Career"
-image: "https://images.pexels.com/photos/5439379/pexels-photo-5439379.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
+image: "/_a/blog/sales-rep-interview-questions.jpg"
 imageAlt: "A candidate talking with an interviewer holding a resume at a desk"
 alt: "satis-temsilcisi-mulakat-sorulari"
 ---

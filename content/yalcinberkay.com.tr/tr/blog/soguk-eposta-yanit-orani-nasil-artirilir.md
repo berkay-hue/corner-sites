@@ -4,7 +4,7 @@ description: "Soğuk e-postaya gelen yanıt oranı neden düşük ve nasıl yük
 date: "2026-10-13"
 updated: "2026-10-16"
 category: "Outbound"
-image: "https://images.pexels.com/photos/7888684/pexels-photo-7888684.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
+image: "/_a/blog/soguk-eposta-yanit-orani-nasil-artirilir.jpg"
 imageAlt: "Bitkilerle dolu bir ofiste dizüstü bilgisayar başında konuşan üç kişi"
 alt: "how-to-improve-cold-email-reply-rate"
 ---

@@ -4,7 +4,7 @@ description: "Pricing B2B services in Turkey means balancing lira inflation, USD
 date: "2026-10-15"
 updated: "2026-10-16"
 category: "Founder Notes"
-image: "https://images.pexels.com/photos/7693692/pexels-photo-7693692.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
+image: "/_a/blog/how-to-price-b2b-services-turkish-companies.jpg"
 imageAlt: "Three colleagues reviewing printed charts and figures around a table with a laptop"
 alt: "turk-sirketleri-icin-b2b-hizmet-fiyatlandirma"
 ---

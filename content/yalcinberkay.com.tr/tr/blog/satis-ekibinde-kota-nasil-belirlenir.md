@@ -4,7 +4,7 @@ description: "Satış ekibinde kota nasıl belirlenir? Geçmiş veri, pazar büy
 date: "2026-10-16"
 updated: "2026-10-19"
 category: "Satış Liderliği"
-image: "https://images.pexels.com/photos/8555676/pexels-photo-8555676.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
+image: "/_a/blog/satis-ekibinde-kota-nasil-belirlenir.jpg"
 imageAlt: "Satış Ekibinde Kota Nasıl Belirlenir? Pratik Rehber"
 alt: "how-to-set-sales-quotas-for-sales-team"
 ---

@@ -4,7 +4,7 @@ description: "If your sales team is small, how do you know which CRM fits you? A
 date: "2026-10-11"
 updated: "2026-10-17"
 category: "CRM"
-image: "https://images.pexels.com/photos/7876739/pexels-photo-7876739.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
+image: "/_a/blog/how-to-choose-crm-for-small-sales-team.jpg"
 imageAlt: "A small team working together at their laptops in an office"
 alt: "kucuk-satis-ekibi-icin-crm-nasil-secilir"
 ---

@@ -4,7 +4,7 @@ description: "SDR'lıktan account executive rolüne nasıl geçilir? B2B satış
 date: "2026-10-14"
 updated: "2026-10-17"
 category: "Kariyer"
-image: "https://images.pexels.com/photos/8556222/pexels-photo-8556222.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
+image: "/_a/blog/sdrdan-account-executive-rolune-gecis.jpg"
 imageAlt: "Toplantı masasının etrafında oturan iş arkadaşlarına grafik sunan bir kadın"
 alt: "move-from-sdr-to-account-executive"
 ---

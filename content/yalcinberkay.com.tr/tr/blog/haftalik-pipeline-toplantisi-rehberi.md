@@ -4,7 +4,7 @@ description: "Haftalık B2B pipeline toplantısını yönetmek için adım adım
 date: "2026-10-12"
 updated: "2026-10-17"
 category: "B2B Satış"
-image: "https://images.pexels.com/photos/8424512/pexels-photo-8424512.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
+image: "/_a/blog/haftalik-pipeline-toplantisi-rehberi.jpg"
 imageAlt: "Arkadaki ekranda bir sütun grafik varken toplantı masasında toplanmış bir ekip"
 alt: "weekly-pipeline-review-guide"
 ---

@@ -4,7 +4,7 @@ description: "The bottlenecks that drag out the B2B sales cycle in Turkey, the r
 date: "2026-10-14"
 updated: "2026-10-17"
 category: "B2B Sales"
-image: "https://images.pexels.com/photos/8730986/pexels-photo-8730986.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
+image: "/_a/blog/how-to-shorten-b2b-sales-cycle.jpg"
 imageAlt: "Business people reviewing documents and taking notes at a meeting table"
 alt: "b2b-satis-dongusu-nasil-kisaltilir"
 ---

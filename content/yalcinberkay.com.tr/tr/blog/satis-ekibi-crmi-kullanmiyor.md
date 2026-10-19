@@ -3,7 +3,7 @@ title: "Satış Ekibi CRM'i Kullanmıyor: Neden ve Ne Yapmalı?"
 description: "Satış ekibiniz CRM'e veri girmiyorsa sorun çoğu zaman yazılım değil, teşviklerdir. Nedenleri ve adım adım çözüm yolunu bu yazıda bulabilirsiniz."
 date: "2026-10-18"
 category: "CRM"
-image: "https://images.pexels.com/photos/8068691/pexels-photo-8068691.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
+image: "/_a/blog/satis-ekibi-crmi-kullanmiyor.jpg"
 imageAlt: "Satış Ekibi CRM'i Kullanmıyor: Neden ve Ne Yapmalı?"
 ---
 

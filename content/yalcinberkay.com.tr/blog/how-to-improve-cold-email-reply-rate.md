@@ -4,7 +4,7 @@ description: "Why are cold email reply rates low, and how do you raise them? I w
 date: "2026-10-13"
 updated: "2026-10-17"
 category: "Outbound"
-image: "https://images.pexels.com/photos/7888684/pexels-photo-7888684.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
+image: "/_a/blog/how-to-improve-cold-email-reply-rate.jpg"
 imageAlt: "Three people talking at a laptop in an office full of plants"
 alt: "soguk-eposta-yanit-orani-nasil-artirilir"
 ---

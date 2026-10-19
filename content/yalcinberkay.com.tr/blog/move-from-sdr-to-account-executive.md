@@ -4,7 +4,7 @@ description: "Wondering how to move from SDR to account executive? Here are the 
 date: "2026-10-14"
 updated: "2026-10-16"
 category: "Career"
-image: "https://images.pexels.com/photos/8556222/pexels-photo-8556222.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
+image: "/_a/blog/move-from-sdr-to-account-executive.jpg"
 imageAlt: "A woman presenting a chart to colleagues seated around a meeting table"
 alt: "sdrdan-account-executive-rolune-gecis"
 ---
