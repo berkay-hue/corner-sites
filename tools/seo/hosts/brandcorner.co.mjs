@@ -33,7 +33,7 @@ export const rule = {
       "/contact": ["Contact Brand Corner", "Contact the Brand Corner team about influencer campaigns, plans, or partnerships. Send us a message and we will get back to you.", "Contact"],
       "/privacy": ["Privacy Policy | Brand Corner", "How the Brand Corner website handles personal data: the newsletter form, hosting, cookies and local storage, and your rights under the GDPR and KVKK.", "Privacy Policy"],
       "/kvkk": ["KVKK Aydınlatma Metni | Brand Corner", "Brand Corner hesabı için kişisel verilerin hangi amaçla işlendiği, kimlere aktarıldığı, ne kadar saklandığı ve KVKK 11. madde kapsamındaki haklarınız.", "KVKK Aydınlatma Metni"],
-      "/terms": ["Terms of Service | Brand Corner", "The terms that apply when you use the Brand Corner website, including acceptable use, intellectual property, the newsletter form and liability.", "Terms of Service"],
+      "/terms": ["Terms of Service | Brand Corner", "The terms for using the Brand Corner website and panel: your account, your content, brand and influencer roles, acceptable use and liability.", "Terms of Service"],
       "/404": ["Page Not Found | Brand Corner", "This page could not be found."],
       // Giriş, kayıt, şifre sıfırlama ve panel: noindex, sitemap'te yok
       "/giris": ["Giriş | Brand Corner", "Brand Corner hesabınıza giriş yapın."],
