@@ -1,9 +1,29 @@
 import { SITE, text, attr, setMeta, ldTag, existsSync, join, metaDescription } from "../core.mjs";
 
+// <div ...> açılışından eşleşen </div>'e kadar olan aralığın sonu (iç içe div sayılır)
+const divEnd = (html, i) => {
+  const re = /<div\b|<\/div>/g;
+  re.lastIndex = i;
+  for (let depth = 0, m; (m = re.exec(html));) if ((depth += m[0] === "</div>" ? -1 : 1) === 0) return re.lastIndex;
+  return -1;
+};
+
   // SMC: /blog/* (TR/EN) atlanır, çünkü yazılar build-blog.mjs ile başlık, meta ve BlogPosting/FAQ LD dahil üretilir; burada yeniden yazmak onları ezer
 export const rule = {
     origin: "https://socialmediacorner.co",
     brand: "Social Media Corner",
+    // Görev 215: site araması da aynı eski metni göstermesin
+    files: {
+      "_a/fr/sites/3ddpnibf9YvA3arhvREVUM/searchIndex-FeAl8UKWvLPu.json": (src) => {
+        const idx = JSON.parse(src);
+        for (const [url, doc] of Object.entries(idx)) for (const [k, v] of Object.entries(doc)) {
+          if (!Array.isArray(v)) continue;
+          doc[k] = v.filter((t) => t !== "Get Alter" && !(url.startsWith("/blog") ? false : /CRM Corner|HubSpot|^Herhangi bir araç sağlıyor musunuz\?$/.test(t)))
+            .map((t) => t === "© 2025 SAAS Corner" ? "© 2026 Social Media Corner — bir Corner Group şirketi" : t === "Made by SAAS Corner" ? "Made by Corner Group" : t);
+        }
+        return JSON.stringify(idx);
+      },
+    },
     fix(html, page) {
       const R = this;
       if (/^\/(?:en\/)?blog\//.test(page)) return html;
@@ -34,6 +54,21 @@ export const rule = {
         };
         html = html.replace("</head>", ldTag({ "@context": "https://schema.org", "@graph": [org, { "@type": "WebSite", "@id": R.origin + "/#website", url: R.origin + "/", name: R.brand, publisher: { "@id": org["@id"] }, inLanguage: "tr-TR" }] }) + "</head>");
       }
+      // Görev 215 (BODY): Framer şablonundan kalan gövde parçaları; ayna yeniden alınsa da kural tekrar temizler
+      // 1) 'Get Alter' remix butonu (framer.com/projects/new?duplicate=...)
+      html = html.replace(/<!--\$--><a [^>]*href="https:\/\/framer\.com\/projects\/new\?duplicate=[^"]*"[\s\S]*?Get Alter<\/p><\/div><\/a><!--\/\$-->/g, "");
+      // 2) Eski SAAS Corner / CRM Corner / HubSpot SSS maddeleri (soru+cevap kartı bütünüyle çıkar)
+      const faq = /<div class="framer-[a-z0-9]+-container" data-sk-reveal[^>]*><div class="framer-kFUTx/g;
+      for (let m; (m = faq.exec(html));) {
+        const end = divEnd(html, m.index);
+        if (end > 0 && /CRM Corner|HubSpot|SAAS Corner/.test(html.slice(m.index, end))) { html = html.slice(0, m.index) + html.slice(end); faq.lastIndex = m.index; }
+      }
+      // Kardeş şirket logosunun alt metni
+      html = html.replace(/alt="CRM Corner logosu"/g, 'alt="Corner Group şirket logosu"').replace(/alt="CRM Corner logo"/g, 'alt="Corner Group company logo"');
+      // 3) Footer: SAAS Corner → Social Media Corner, bir Corner Group şirketi
+      const en = /^\/en(\/|$)/.test(page);
+      html = html.replace(/© 2025 SAAS Corner/g, en ? "© 2026 Social Media Corner — a Corner Group company" : "© 2026 Social Media Corner — bir Corner Group şirketi")
+        .replace(/href="https:\/\/saascorner\.co" target="_blank" rel="noopener">SAAS Corner<\/a>/g, 'href="https://cornergroup.co/" target="_blank" rel="noopener">Corner Group</a>');
       return html;
     },
 };
