@@ -136,7 +136,7 @@ footer.bot{border-top:1px solid var(--line);color:var(--muted);font-size:13.5px;
 .badge.b-ok{background:var(--ok-soft);color:var(--ok)}.badge.b-danger{background:var(--danger-soft);color:var(--danger)}.badge.b-slate{background:var(--slate-soft);color:var(--slate)}
 .srow .tx .warn{color:var(--danger)}.lk44{display:inline-flex;align-items:center;min-height:44px}.ch .lk44{text-decoration:none}.srow .ghost,.srow .btn,.soc .btn{min-height:44px}.srow .mets{flex:1 1 100%}
 .mets.m4{grid-template-columns:repeat(4,minmax(0,1fr))}.sample{margin:14px 0 4px;padding:14px;border:1px dashed var(--line-strong);border-radius:var(--r-card)}.sample h3{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:15px;margin:12px 0 8px}.sample h3:first-of-type{margin-top:8px}
-.badge.b-sample{background:var(--surface-2);color:var(--muted);border:1px dashed var(--line-strong)}
+.badge.b-sample{background:var(--surface-2);color:var(--muted);border:1px dashed var(--line-strong)}.crep{margin:0 0 22px;display:grid;gap:12px}.crep .lbl{margin:0;display:flex;flex-wrap:wrap;align-items:center;gap:8px}.crep .hint{margin:0}.amets{margin:10px 0 0}.amh{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:13px;color:var(--muted);margin:0 0 8px}.amets .stat{padding:10px 12px}.amets .stat .v{font-size:18px}.amets .stat .v.na{font-size:13px;margin-top:6px}
 .sub{margin:14px 0 0;padding:16px 0 0;border-top:1px solid var(--line)}
 .f input[readonly]{background:var(--surface-2);color:var(--muted)}.btn.bad{color:var(--danger);border-color:var(--danger)}.lbl{font-weight:600;font-size:14px;margin:0 0 8px}.seg{margin:0 0 18px}.seg:last-child{margin-bottom:0}h3.sub{font-size:15px;margin:18px 0 6px}.card .f .btn{margin-top:4px}.tbar{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:10px 16px;border-bottom:1px solid var(--line);margin:0 0 16px}.tabs.ul{gap:0;margin:0}.tabs.ul button{border:0;border-bottom:2px solid transparent;border-radius:0;background:none;margin-bottom:-1px;color:var(--muted)}.tabs.ul button[aria-pressed=true]{background:none;border-bottom-color:var(--accent);color:var(--text)}.tabs.ul .n{color:var(--faint);font-weight:500}.tq{flex:0 1 260px;margin:0 0 8px}.tq input{margin:0;min-height:44px}.box.rows{padding:0;display:block}.row{position:relative;display:flex;align-items:center;gap:8px 20px;padding:14px 18px;min-height:44px;border-top:1px solid var(--line)}.row:first-child{border-top:0}.row:hover{background:var(--surface-2)}.rm{flex:1 1 auto;min-width:0}.row h3{font-size:15.5px;margin:0;overflow-wrap:anywhere}.row h3 a{text-decoration:none;color:inherit}.row h3 a::after{content:"";position:absolute;inset:0}.row h3 a:focus-visible{outline:none}.row:focus-within{outline:2px solid var(--accent);outline-offset:-2px}.row .badge{vertical-align:2px;margin-left:4px}.rc{flex:0 0 auto;justify-content:flex-end;text-align:right}@media(max-width:640px){.row{flex-wrap:wrap}.rc{justify-content:flex-start;text-align:left}.tq{flex:1 1 100%}}.dhd{align-items:center;margin:0 0 14px}.dhd h1{margin:0}.dhd h1 .badge{vertical-align:5px;margin-left:4px}.dhd .row-b{margin:0}.ghost.bad{color:var(--danger);border-color:var(--danger)}.dinfo{margin:0 0 22px}.dinfo .prose{margin:0 0 4px}.ig{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px 20px;margin:16px 0 0;padding:16px 0 0;border-top:1px solid var(--line)}.dinfo>.ig:first-child{margin-top:0;padding-top:0;border-top:0}.ig dt{font-size:12.5px;color:var(--muted);margin:0 0 3px}.ig dd{margin:0;font-weight:600;font-size:14.5px;overflow-wrap:anywhere}@media(max-width:640px){.ig{grid-template-columns:1fr 1fr}}.ld{display:inline-flex;align-items:center;gap:8px}.ld::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--faint)}.ld[data-l=colNew]::before{background:#3b82f6}.ld[data-l=colInvited]::before{background:#a855f7}.ld[data-l=colWork]::before{background:#f59e0b}.ld[data-l=colReview]::before{background:#ec4899}.ld[data-l=colDone]::before{background:#10b981}.dinfo .lbl{font-size:14px;margin:0 0 6px}.lane .row-b{gap:6px}.lane .row-b .btn.sm,.lane .row-b .ghost{padding:0 10px;font-size:13px}
 .banner{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin:0 0 16px;background:var(--info-soft);border-color:transparent}.banner p{margin:0;overflow-wrap:anywhere}
@@ -353,6 +353,8 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
       appMsgHint: "Bu kampanyaya neden uygun olduğunuzu kısaca anlatın (en fazla 1000 karakter).", sendApp: "Başvur",
       applyLimit: "Bugünkü başvuru sınırına ulaştınız (davetler de sayılır). Lütfen yarın tekrar deneyin.",
       applyExists: "Bu kampanyaya zaten başvurdunuz ya da davet aldınız.", applyClosed: "Bu kampanya artık başvuru almıyor.",
+      rTitle: "Kampanya raporu", rApps: "Başvuru ve davet", rWork: "Çalışılıyor", rReview: "İncelemede", rDone: "Onaylanan", rContent: "İçerik", rNoContent: "İçerik bağlantıları gönderildikçe izlenme ve etkileşim toplamları burada görünür.",
+      amTitle: "İçerik ölçümleri", amViews: "İzlenme", amLikes: "Beğeni", amComm: "Yorum",
       message: "Mesaj", content: "İçerik:", contentUrl: "İçerik bağlantısı", sendContent: "İçeriği gönder",
       st_open: "Açık", st_closed: "Kapalı", st_pending: "Bekliyor", st_invited: "Davet edildi", st_accepted: "Kabul edildi", st_rejected: "Reddedildi",
       st_declined: "Davet reddedildi", st_submitted: "İçerik gönderildi", st_revision: "Revizyon istendi", st_approved: "Onaylandı",
@@ -492,6 +494,8 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
       appMsgHint: "Briefly explain why you're a good fit for this campaign (up to 1000 characters).", sendApp: "Apply",
       applyLimit: "You've reached today's application limit (invites count too). Please try again tomorrow.",
       applyExists: "You've already applied to or been invited to this campaign.", applyClosed: "This campaign is no longer accepting applications.",
+      rTitle: "Campaign report", rApps: "Applications and invites", rWork: "In progress", rReview: "In review", rDone: "Approved", rContent: "Content", rNoContent: "View and engagement totals appear here as content links are submitted.",
+      amTitle: "Content metrics", amViews: "Views", amLikes: "Likes", amComm: "Comments",
       message: "Message", content: "Content:", contentUrl: "Content link", sendContent: "Submit content",
       st_open: "Open", st_closed: "Closed", st_pending: "Pending", st_invited: "Invited", st_accepted: "Accepted", st_rejected: "Rejected",
       st_declined: "Declined", st_submitted: "Content submitted", st_revision: "Revision requested", st_approved: "Approved",
@@ -628,6 +632,54 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
   function contentLink(u) {
     if (!u || !URL_RE.test(u)) return null;
     return el("p", { class: "meta link" }, [el("span", { text: t("content") }), el("a", { href: u, target: "_blank", rel: "noopener noreferrer nofollow", text: u })]);
+  }
+  // İçerik ölçümleri (app/applications/:id/metrics): label_code "sample" → örnek rozeti, "no_data" → veri yok; hata/404 kartı bozmaz
+  var AM = {}, AM_K = [["views", "amViews"], ["likes", "amLikes"], ["comments", "amComm"]];
+  function hasContent(a) { return !!a.content_url && URL_RE.test(a.content_url); }
+  function amGet(a) {
+    var k = a.id + "|" + a.content_url;
+    if (!AM[k]) AM[k] = BC.call("GET", "app/applications/" + a.id + "/metrics").then(function (d) { return d && d.metrics ? d.metrics : { err: {} }; }, function (e) { return { err: e || {} }; });
+    return AM[k];
+  }
+  function amStats(keys, vals) {
+    return keys.map(function (k) {
+      var v = vals ? vals[k[0]] : null, has = typeof v === "number";
+      return el("div", { class: "stat" }, [el("div", { class: "k", text: t(k[1]) }), el("div", { class: has ? "v" : "v na", text: has ? short(v) : t("noData") })]);
+    });
+  }
+  function appMets(a) {
+    if (!hasContent(a)) return null;
+    var box = el("div", { class: "amets", hidden: true });
+    amGet(a).then(function (m) {
+      if (m.err) return;
+      var lc = m.label_code;
+      box.replaceChildren.apply(box, [el("p", { class: "amh" }, [el("span", { text: t("amTitle") }), lc === "sample" ? el("span", { class: "badge b-sample", text: t("socSample") }) : lc === "no_data" ? el("span", { class: "badge b-slate", text: t("noData") }) : null]),
+        lc === "no_data" ? null : el("div", { class: "mets" }, amStats(AM_K, m))].filter(Boolean));
+      box.hidden = false;
+    });
+    return box;
+  }
+  // Kampanya raporu (sahip): durum sayıları + içerik bağlantısı olan başvuruların izlenme/beğeni/yorum toplamı
+  function campReport(apps) {
+    var cnt = function (ss) { return apps.filter(function (a) { return ss.indexOf(a.status) >= 0; }).length; };
+    var withC = apps.filter(hasContent), hid = "r" + (++uid), bs = el("span", { class: "rb" });
+    var TK = [["content", "rContent"]].concat(AM_K);
+    var tot = el("div", { class: "mets m4" }, amStats(TK, { content: withC.length }));
+    if (withC.length) Promise.all(withC.map(amGet)).then(function (ms) {
+      var ok = ms.filter(function (m) { return !m.err; }), sum = { content: withC.length };
+      AM_K.forEach(function (k) { ok.forEach(function (m) { if (typeof m[k[0]] === "number") sum[k[0]] = (sum[k[0]] || 0) + m[k[0]]; }); });
+      tot.replaceChildren.apply(tot, amStats(TK, sum));
+      var miss = ms.some(function (m) { return m.err && crMissing(m.err); });
+      if (ok.some(function (m) { return m.label_code === "sample"; }) || miss && !ok.length) bs.replaceChildren(el("span", { class: "badge b-sample", text: t("socSample") }));
+    });
+    return el("section", { class: "box crep", "aria-labelledby": hid }, [
+      el("h2", { class: "lbl", id: hid }, [t("rTitle") + " ", bs]),
+      el("div", { class: "mets m4" }, [["rApps", apps.length], ["rWork", cnt(["accepted", "revision"])], ["rReview", cnt(["submitted"])], ["rDone", cnt(["approved"])]].map(function (x) {
+        return el("div", { class: "stat" }, [el("div", { class: "k", text: t(x[0]) }), el("div", { class: "v", text: num(x[1]) })]);
+      })),
+      tot,
+      withC.length ? null : el("p", { class: "hint", text: t("rNoContent") })
+    ]);
   }
   function back(h, k) { return el("p", { class: "back" }, el("a", { href: h, text: t(k) })); }
   function empty(s, cta) { return el("div", { class: "box empty" }, [el("p", { text: s }), cta ? el("p", null, cta) : null]); }
@@ -1070,6 +1122,7 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
 
   // Kampanya ayrıntısı
   function campaign(r) {
+    AM = {};
     return BC.call("GET", "app/campaigns/" + r.id).then(function (d) {
       return isOwner() ? ownerDetail(d.campaign, d.applications || []) : creatorDetail(d.campaign, d.application);
     });
@@ -1102,6 +1155,7 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
         el("dl", { class: "ig" }, info.map(function (x) { return el("div", null, [el("dt", { text: t(x[0]) }), el("dd", { text: x[1] || t("iNone") })]); })),
         chips(c.niches)
       ]),
+      apps.length ? campReport(apps) : null,
       el("h2", { text: t("appsTitle", apps.length) }),
       apps.length ? board(apps)
         : empty(t("appsEmpty"), c.status === "open" ? toDiscover(c, "goDiscover") : null)
@@ -1124,7 +1178,7 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
       var inv = a.status === "invited";
       kids.push(el("h2", { text: inv ? t("invitedBy", c.owner) : t("yourApp") }), el("div", { class: inv ? "box item hl-box" : "box item", "data-app": a.id }, [
         el("div", { class: "head" }, [el("p", { class: "meta", text: t("updated", when(a.updated_at)) }), badge(a.status)]),
-        quote(a.message), revNote(a), contentLink(a.content_url), actions(a, false)
+        quote(a.message), revNote(a), contentLink(a.content_url), appMets(a), actions(a, false)
       ]));
     } else if (c.status === "open") {
       kids.push(el("h2", { text: t("apply") }), applyForm(c));
@@ -1176,7 +1230,7 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
       own && x.bio ? el("p", { class: "prose sm", text: x.bio }) : null,
       own ? chips(x.niches) : null,
       own ? handles(x.platforms) : null,
-      quote(a.message), revNote(a), contentLink(a.content_url), actions(a, own)
+      quote(a.message), revNote(a), contentLink(a.content_url), appMets(a), actions(a, own)
     ]);
   }
   function actions(a, own) {
