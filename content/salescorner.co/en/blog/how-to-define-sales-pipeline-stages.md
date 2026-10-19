@@ -231,7 +231,7 @@ You can see what Sales Corner does in sales automation and outbound on our [serv
 
 Defining your sales pipeline stages isn't a CRM setting; it's **designing the backbone of your sales process**. Every stage should have entry and exit criteria based on buyer actions, a clear owner, a probability grounded in real data, and a maximum time in stage. Start with 5-7 stages depending on your business model. As you've seen with outbound SaaS, enterprise services, and SMB sales, stages can vary, but the principles stay the same: verifiability, simplicity, and regular review.
 
-Once your stages are clear, AI and automation can turn your pipeline from a manual tracking list into a self-updating system. To review your pipeline structure together and discuss automation workflows that fit your team, [schedule a call with the Sales Corner team](/en/iletisim).
+Once your stages are clear, AI and automation can turn your pipeline from a manual tracking list into a self-updating system. To review your pipeline structure together and discuss automation workflows that fit your team, [schedule a call with the Sales Corner team](/en/contact).
 
 ## FAQ
 

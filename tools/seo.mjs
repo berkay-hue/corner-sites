@@ -450,7 +450,7 @@ const RULES = {
       const metas = kind => [new RegExp(`(<meta name="${kind}" content=")([^"]*)(")`), new RegExp(`(<meta property="og:${kind}" content=")([^"]*)(")`), new RegExp(`(<meta name="twitter:${kind}" content=")([^"]*)(")`)];
       if (page === "/404") return html.replace(/<link rel="canonical"[^>]*>/g, "").replace(/<meta name="robots" content="[^"]*">/, '<meta name="robots" content="noindex">');
       // EN sayfaları ve blog (build-blog.mjs) elle/araçla bakılır: başlık, robots ve LD'lerine dokunulmaz
-      if (/^\/en\/(?:index|iletisim)$/.test(page) || /^\/(?:en\/)?blog(?:\/|$)/.test(page)) return html;
+      if (/^\/en\/(?:index|contact)$/.test(page) || /^\/(?:en\/)?blog(?:\/|$)/.test(page)) return html;
       const meta = R.pages[page];
       // Diğer sayfalar SAAS Corner'ın iç araçları (login, dashboard, ...): arama sonuçlarına girmez
       if (!meta) return html.replace(/<meta name="robots" content="[^"]*">/, '<meta name="robots" content="noindex, nofollow">');
