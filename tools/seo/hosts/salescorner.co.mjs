@@ -8,6 +8,12 @@ export const rule = {
         "Sales Corner, AI ve n8n ile B2B satışı otomatikleştiren satış otomasyonu ajansıdır: pazar araştırması, lead generation, toplantı planı, CRM entegrasyonu."],
       "/iletisim": ["İletişim | Sales Corner – B2B Satış Otomasyonu",
         "Sales Corner ekibiyle iletişime geçin: B2B satış, outsourced lead generation, CRM entegrasyonu ve pazarlama çözümleri hakkında bilgi alın."],
+      "/kvkk": ["KVKK Aydınlatma Metni | Sales Corner",
+        "Sales Corner (salescorner.co) kişisel verilerin işlenmesine ilişkin 6698 sayılı KVKK aydınlatma metni."],
+      "/gizlilik-politikasi": ["Gizlilik Politikası | Sales Corner",
+        "Sales Corner (salescorner.co) gizlilik politikası: hangi verileri topladığımız, nasıl kullandığımız ve haklarınız."],
+      "/kullanim-kosullari": ["Kullanım Koşulları | Sales Corner",
+        "Sales Corner (salescorner.co) web sitesi kullanım koşulları."],
       "/hizmetler": ["Hizmetler | Sales Corner",
         "Sales Corner hizmetleri: AI ve n8n ile lead generation, CRM senkronizasyonu, email ve WhatsApp otomasyonu, toplantı brifingi, görüşme analizi ve teklif hazırlama."],
       "/hakkimizda": ["Hakkımızda | Sales Corner",
@@ -20,7 +26,7 @@ export const rule = {
       const metas = kind => [new RegExp(`(<meta name="${kind}" content=")([^"]*)(")`), new RegExp(`(<meta property="og:${kind}" content=")([^"]*)(")`), new RegExp(`(<meta name="twitter:${kind}" content=")([^"]*)(")`)];
       if (page === "/404") return html.replace(/<link rel="canonical"[^>]*>/g, "").replace(/<meta name="robots" content="[^"]*">/, '<meta name="robots" content="noindex">');
       // EN sayfaları ve blog (build-blog.mjs) elle/araçla bakılır: başlık, robots ve LD'lerine dokunulmaz
-      if (/^\/en\/(?:index|contact)$/.test(page) || /^\/(?:en\/)?blog(?:\/|$)/.test(page)) return html;
+      if (/^\/en\/(?:index|contact|privacy|terms)$/.test(page) || /^\/(?:en\/)?blog(?:\/|$)/.test(page)) return html;
       const meta = R.pages[page];
       // Diğer sayfalar SAAS Corner'ın iç araçları (login, dashboard, ...): arama sonuçlarına girmez
       if (!meta) return html.replace(/<meta name="robots" content="[^"]*">/, '<meta name="robots" content="noindex, nofollow">');
