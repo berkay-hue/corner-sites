@@ -17,7 +17,7 @@ export default {
     origin: "https://saascorner.co",
     brand: "SaaS Corner",
     titleSuffix: " | SaaS Corner",
-    author: "SaaS Corner",
+    author: "Berkay Yalçın",
     pClass: "framer-text framer-styles-preset-dv2q2y",
     cardSelector: "framer-6qjzk6-container",
     defaultImage: "/_a/fr/assets/DdUF2hjKpJDDtxNUSLuWBnlwMc.png",
