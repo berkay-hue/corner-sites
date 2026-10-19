@@ -23,7 +23,7 @@ export const rule = {
       // Blog yazıları (build-blog.mjs, data-sk-post LD), /blog listesi, sektör ve EN sayfaları elle/araçla bakılır:
       // başlık, açıklama ve LD'lerine (data-sk-seo dahil) dokunulmaz
       if (/^\/(?:en|sektor)\//.test(page) || /^\/blog(?:\/|$)/.test(page)) return html;
-      if (page === "/") html = setTitle("SAAS Corner | Outsourced Lead Generation & B2B Growth");
+      if (page === "/") html = setTitle("Nitelikli Satış Toplantıları Getiriyoruz | SAAS Corner");
       if (page === "/iletisim") h2toH1("Bizimle iletişime geçin!");
       if (page === "/bilgi-merkezi") {
         h2toH1("Bilgi Merkezi");
