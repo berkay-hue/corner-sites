@@ -203,7 +203,7 @@ If you'd rather have your entire outbound operation managed externally instead o
 
 KVKK-compliant cold email isn't an obstacle that slows outbound down. When set up correctly, it means cleaner lists, more precise targeting and fewer complaints. In short: on the commercial message side, know the limits of the merchant/tradesperson exemption and fully honor the right to opt out. On the KVKK side, document your legal basis, provide notice in the first email, process only the data you need, check your tools' cross-border transfer status and stick to your retention periods.
 
-Most of these steps can be run through well-built automations without leaving them to human error. Suppression checks, opt-out handling, privacy notice footers and periodic disposal top the list. To make your outbound processes both efficient and compliant, [schedule a call with Sales Corner](/en/iletisim) and let's review your workflow together.
+Most of these steps can be run through well-built automations without leaving them to human error. Suppression checks, opt-out handling, privacy notice footers and periodic disposal top the list. To make your outbound processes both efficient and compliant, [schedule a call with Sales Corner](/en/contact) and let's review your workflow together.
 
 ## FAQ
 

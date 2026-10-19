@@ -198,7 +198,7 @@ Writing cold emails with AI is much more than opening a tool and saying "write m
 
 Remember: strategy and the value proposition come from you; scale and personalization come from AI. Never remove human oversight from the process entirely.
 
-If you want to build your outbound process end to end, from list building and data enrichment to AI-powered personalization and email sequence automation, the Sales Corner team is here to help. [Book a call now](/en/iletisim) to review your current process together and design the automation workflow that fits you.
+If you want to build your outbound process end to end, from list building and data enrichment to AI-powered personalization and email sequence automation, the Sales Corner team is here to help. [Book a call now](/en/contact) to review your current process together and design the automation workflow that fits you.
 
 ## FAQ
 
