@@ -136,6 +136,7 @@ footer.bot{border-top:1px solid var(--line);color:var(--muted);font-size:13.5px;
 .badge.b-ok{background:var(--ok-soft);color:var(--ok)}.badge.b-danger{background:var(--danger-soft);color:var(--danger)}.badge.b-slate{background:var(--slate-soft);color:var(--slate)}
 .srow .tx .warn{color:var(--danger)}.lk44{display:inline-flex;align-items:center;min-height:44px}.ch .lk44{text-decoration:none}.srow .ghost,.srow .btn,.soc .btn{min-height:44px}.srow .mets{flex:1 1 100%}
 .mets.m4{grid-template-columns:repeat(4,minmax(0,1fr))}.sample{margin:14px 0 4px;padding:14px;border:1px dashed var(--line-strong);border-radius:var(--r-card)}.sample h3{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:15px;margin:12px 0 8px}.sample h3:first-of-type{margin-top:8px}
+.perf .ch{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:8px}h3.ptop{font-size:14px;margin:14px 0 4px}ol.ptop{list-style:none;margin:0 0 12px;padding:0}ol.ptop a{display:flex;justify-content:space-between;gap:12px;color:inherit;text-decoration:none;border-bottom:1px solid var(--line)}ol.ptop .pcap{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin:0}
 .badge.b-sample{background:var(--surface-2);color:var(--muted);border:1px dashed var(--line-strong)}
 .sub{margin:14px 0 0;padding:16px 0 0;border-top:1px solid var(--line)}
 .f input[readonly]{background:var(--surface-2);color:var(--muted)}.btn.bad{color:var(--danger);border-color:var(--danger)}.lbl{font-weight:600;font-size:14px;margin:0 0 8px}.seg{margin:0 0 18px}.seg:last-child{margin-bottom:0}h3.sub{font-size:15px;margin:18px 0 6px}.card .f .btn{margin-top:4px}.tbar{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:10px 16px;border-bottom:1px solid var(--line);margin:0 0 16px}.tabs.ul{gap:0;margin:0}.tabs.ul button{border:0;border-bottom:2px solid transparent;border-radius:0;background:none;margin-bottom:-1px;color:var(--muted)}.tabs.ul button[aria-pressed=true]{background:none;border-bottom-color:var(--accent);color:var(--text)}.tabs.ul .n{color:var(--faint);font-weight:500}.tq{flex:0 1 260px;margin:0 0 8px}.tq input{margin:0;min-height:44px}.box.rows{padding:0;display:block}.row{position:relative;display:flex;align-items:center;gap:8px 20px;padding:14px 18px;min-height:44px;border-top:1px solid var(--line)}.row:first-child{border-top:0}.row:hover{background:var(--surface-2)}.rm{flex:1 1 auto;min-width:0}.row h3{font-size:15.5px;margin:0;overflow-wrap:anywhere}.row h3 a{text-decoration:none;color:inherit}.row h3 a::after{content:"";position:absolute;inset:0}.row h3 a:focus-visible{outline:none}.row:focus-within{outline:2px solid var(--accent);outline-offset:-2px}.row .badge{vertical-align:2px;margin-left:4px}.rc{flex:0 0 auto;justify-content:flex-end;text-align:right}@media(max-width:640px){.row{flex-wrap:wrap}.rc{justify-content:flex-start;text-align:left}.tq{flex:1 1 100%}}.dhd{align-items:center;margin:0 0 14px}.dhd h1{margin:0}.dhd h1 .badge{vertical-align:5px;margin-left:4px}.dhd .row-b{margin:0}.ghost.bad{color:var(--danger);border-color:var(--danger)}.dinfo{margin:0 0 22px}.dinfo .prose{margin:0 0 4px}.ig{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px 20px;margin:16px 0 0;padding:16px 0 0;border-top:1px solid var(--line)}.dinfo>.ig:first-child{margin-top:0;padding-top:0;border-top:0}.ig dt{font-size:12.5px;color:var(--muted);margin:0 0 3px}.ig dd{margin:0;font-weight:600;font-size:14.5px;overflow-wrap:anywhere}@media(max-width:640px){.ig{grid-template-columns:1fr 1fr}}.ld{display:inline-flex;align-items:center;gap:8px}.ld::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--faint)}.ld[data-l=colNew]::before{background:#3b82f6}.ld[data-l=colInvited]::before{background:#a855f7}.ld[data-l=colWork]::before{background:#f59e0b}.ld[data-l=colReview]::before{background:#ec4899}.ld[data-l=colDone]::before{background:#10b981}.dinfo .lbl{font-size:14px;margin:0 0 6px}.lane .row-b{gap:6px}.lane .row-b .btn.sm,.lane .row-b .ghost{padding:0 10px;font-size:13px}
@@ -316,7 +317,7 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
       socDone: "{n} hesabın bağlandı.", socCutOk: "{n} bağlantısı kesildi.", socDenied: "Bağlantı izni verilmedi; istersen yeniden deneyebilirsin.",
       socTaken: "Bu hesap başka bir Brand Corner hesabına bağlı. Önce oradan bağlantıyı kes.", socTicket: "Bağlantı süresi doldu ya da geçersiz; yeniden \"Bağla\"ya bas.",
       socForbidden: "Bu hesap için bağlantı kullanılamıyor.", socProvider: "Platform şu an yanıt vermedi; biraz sonra yeniden dene.", socOwner: "Bu bağlantı başka bir hesaptan başlatıldı, yeniden Bağla'ya bas.",
-      perf: "Performans", mReach: "Erişim", mEng: "Etkileşim", mSpend: "Harcama", mEarn: "Kazanç", noData: "Veri yok", perfNote: "Bu ölçümler içerik bağlantıları ve ödemeler kaydedildikçe dolacak.",
+      perf: "Performans", mReach: "Erişim", mEng: "Etkileşim", mSpend: "Harcama", mEarn: "Kazanç", noData: "Veri yok", perfNote: "Bu ölçümler içerik bağlantıları ve ödemeler kaydedildikçe dolacak.", perfWin: "Son 30 gün", perfPosts: "Gönderi", perfTop: "En çok erişen gönderiler", perfAll: "Tüm gönderiler", perfNone: "Son 30 günde gönderi yok.", perfSampleNote: "Henüz gönderi eklemediniz; bu özet örnek veridir.",
       acctMenu: "Hesap menüsü", tabsLabel: "Panel sekmeleri",
       soon: "Yakında", soonBadge: "Yakında", soonLead: "Aşağıdaki özellikler henüz panelde yok; hazır olduklarında burada açılacak.",
       soonMsg: "Platform içi mesajlaşma", soonAnalytics: "Performans analitiği ve özel raporlar", soonBudget: "Bütçe yönetimi", soonVerified: "Doğrulanmış influencer'lar",
@@ -455,7 +456,7 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
       socDone: "Your {n} account is connected.", socCutOk: "{n} disconnected.", socDenied: "Permission wasn't granted; you can try again.",
       socTaken: "This account is linked to another Brand Corner account. Disconnect it there first.", socTicket: "The connection expired or is invalid; press \"Connect\" again.",
       socForbidden: "Connections aren't available for this account.", socProvider: "The platform didn't respond; try again shortly.", socOwner: "This connection was started from another account; press Connect again.",
-      perf: "Performance", mReach: "Reach", mEng: "Engagement", mSpend: "Spend", mEarn: "Earnings", noData: "No data", perfNote: "These metrics fill in as content links and payments are recorded.",
+      perf: "Performance", mReach: "Reach", mEng: "Engagement", mSpend: "Spend", mEarn: "Earnings", noData: "No data", perfNote: "These metrics fill in as content links and payments are recorded.", perfWin: "Last 30 days", perfPosts: "Posts", perfTop: "Top posts by reach", perfAll: "All posts", perfNone: "No posts in the last 30 days.", perfSampleNote: "You haven't added any posts yet; this summary is sample data.",
       acctMenu: "Account menu", tabsLabel: "Panel tabs",
       soon: "Coming soon", soonBadge: "Coming soon", soonLead: "These features aren't in the panel yet; they'll show up here when they're ready.",
       soonMsg: "In-platform messaging", soonAnalytics: "Performance analytics and custom reports", soonBudget: "Budget management", soonVerified: "Verified influencers",
@@ -846,6 +847,27 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
       has ? null : el("p", { class: "meta" }, [el("span", { class: "badge b-soon", text: t("soonBadge") }), " ", t("dailyLater")])
     ]));
   }
+  // Performans özeti: influencer için son 30 günün gönderileri (son ölçüm), gönderi yoksa örnek veri; marka/ajans için F2'ye kadar "veri yok"
+  function perfCard(own, mets) {
+    var stat = function (k, v) { return el("div", { class: "stat" }, [el("div", { class: "k", text: t(k) }), el("div", { class: v == null ? "v na" : "v", text: v == null ? t("noData") : v })]); };
+    if (own) return el("section", { class: "card" }, [el("div", { class: "ch" }, el("h2", { text: t("perf") })),
+      el("div", { class: "cb" }, [el("div", { class: "mets" }, mets.map(function (k) { return stat(k, null); })), el("p", { class: "hint", text: t("perfNote") })])]);
+    var d = pData(), cut = isoDay(new Date(Date.now() - 30 * 864e5)), list = d.list.filter(function (p) { return p.date >= cut; });
+    var sum = function (m) { var n = 0, any = false; list.forEach(function (p) { var v = lastSnap(p)[m]; if (v != null) { n += v; any = true; } }); return any ? n : null; };
+    var reach = sum("reach"), likes = sum("likes"), comm = sum("comments"), eng = likes == null && comm == null ? null : (likes || 0) + (comm || 0);
+    var top = list.slice().sort(function (a, b) { return (lastSnap(b).reach || 0) - (lastSnap(a).reach || 0); }).slice(0, 3);
+    return el("section", { class: "card perf" }, [
+      el("div", { class: "ch" }, [el("h2", { text: t("perf") }), el("span", { class: "meta", text: t("perfWin") })]),
+      el("div", { class: "cb" }, [
+        d.sample ? el("p", { class: "meta" }, [el("span", { class: "badge b-sample", text: t("crSampleBadge") }), " ", t("perfSampleNote")]) : null,
+        el("div", { class: "mets m4" }, [stat("perfPosts", num(list.length)), stat("mReach", reach == null ? null : short(reach)), stat("mEng", eng == null ? null : short(eng)), stat("mEarn", null)]),
+        top.length ? el("div", null, [el("h3", { class: "ptop", text: t("perfTop") }), el("ol", { class: "ptop" }, top.map(function (p) {
+          var s = lastSnap(p);
+          return el("li", null, el("a", { class: "lk44", href: d.sample ? "#posts" : "#post-" + p.id }, [el("span", { class: "pcap", dir: "auto", text: p.caption || pLabel(p) }), el("b", { text: short(s.reach) })]));
+        }))]) : el("p", { class: "hint", text: t("perfNone") }),
+        el("a", { class: "btn sm sec", href: "#posts", text: t("perfAll") })
+      ])]);
+  }
   function overview(r0, stats) {
     var own = isOwner();
     // Bir çağrı düşerse yalnız o bölüm hata gösterir; ikisi de düşerse tek kutu
@@ -889,9 +911,7 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
             el("section", { class: "card" }, [el("div", { class: "ch" }, el("h2", { text: t("waiting") })),
               inbox]),
             own && !r[1].err ? ocCard(open) : null,
-            el("section", { class: "card" }, [el("div", { class: "ch" }, el("h2", { text: t("perf") })),
-              el("div", { class: "cb" }, [el("div", { class: "mets" }, mets.map(function (k) { return el("div", { class: "stat" }, [el("div", { class: "k", text: t(k) }), el("div", { class: "v na", text: t("noData") })]); })),
-                el("p", { class: "hint", text: t("perfNote") })])])
+            perfCard(own, mets)
           ]),
           el("div", null, [
             own ? forYou(r[2], camps, open, again) : oppsForYou(r[2], again),
