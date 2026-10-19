@@ -25,6 +25,9 @@ SMTP_USER = "berkay@saascorner.co"
 # brandcorner sosyal metrikleri (src/metrics.js). "1": gerçek veri D1'den okunur; önce migrations/0001_metrics.sql uygulanmalı.
 # "0": D1 metrik tablolarına dokunulmaz, panel "örnek" etiketli örnek veri gösterir.
 METRICS_ENABLED = "0"
+# brandcorner gönderi ölçümleri (GET/POST /app/posts*). "1": D1'e yazılır; önce migrations/0006_posts.sql uygulanmalı.
+# "0": uçlar 404 döner, panel kaydı tarayıcıda tutar.
+POSTS_ENABLED = "0"
 
 # cornergroup.co'da Email Routing açık, berkay@saascorner.co doğrulanmış hedef adres
 [[send_email]]

@@ -96,5 +96,6 @@ CREATE INDEX IF NOT EXISTS applications_user ON applications (user_id);
 --   0003_sync.sql     günlük senkron (next_sync_at) ve YouTube PKCE (oauth_states.code_verifier)
 --   0004_sync_changes.sql  kalıcı hesap kimliği uyuşmazlığı sayacı (social_accounts.sync_changes)
 --   0005_notify.sql   bildirim tercihleri (users.notify, JSON; yalnız saklama, gönderim yok)
+--   0006_posts.sql    elle girilen gönderi ölçümleri (posts, post_snaps; POSTS_ENABLED = "1" ile açılır)
 -- Uygula (form-worker/ klasöründen çalıştır): npx wrangler d1 migrations apply corner-forms --remote
--- 0002 uygulanmadan da bağ koparma çalışır; 0003, 0004 ve 0005 yeni kodla deploy'dan ÖNCE uygulanmalı.
+-- 0002 uygulanmadan da bağ koparma çalışır; 0003, 0004, 0005 ve 0006 yeni kodla deploy'dan ÖNCE uygulanmalı.
