@@ -64,7 +64,7 @@ Meşru menfaate dayanacaksanız bunu savunulabilir kılan şey, önceden yazıl�
 3. **Kişi bu iletişimi makul olarak bekler mi?** Örneğin bir finans direktörünün, rolüyle doğrudan ilgili bir finans yazılımı hakkında e-posta alması makul görülebilir. Aynı kişiye ilgisiz bir ürün göndermek ise beklenti sınırını aşar.
 4. **Kişinin hakları nasıl korunuyor?** Örnek: "İlk e-postada aydınlatma yapılır, tek tıkla veya tek kelimeyle ret imkânı sunulur, ret gelen kişi kalıcı olarak listeden çıkarılır, veri 12 ay içinde etkileşim yoksa silinir."
 
-Bu değerlendirme ne kadar daraltılmış bir hedef kitleye dayanırsa o kadar güçlü olur. 10.000 kişilik rastgele bir listeye aynı mesajı göndermek denge testini zorlaştırır. 300 kişilik, rol ve sektör bazında süzülmüş bir segmente kişiselleştirilmiş mesaj göndermek ise hem hukuken hem satış açısından çok daha savunulabilirdir. Bu noktada uyum ile performans aynı yöne çalışır. [Soğuk e-postanın nasıl değiştiğini](/blog/soğuk-e-posta-öldü-mü-hayır-sadece-değişti) anlattığımız yazıda da aynı sonuca varıyoruz: Hacim yerine alaka kazanır.
+Bu değerlendirme ne kadar daraltılmış bir hedef kitleye dayanırsa o kadar güçlü olur. 10.000 kişilik rastgele bir listeye aynı mesajı göndermek denge testini zorlaştırır. 300 kişilik, rol ve sektör bazında süzülmüş bir segmente kişiselleştirilmiş mesaj göndermek ise hem hukuken hem satış açısından çok daha savunulabilirdir. Bu noktada uyum ile performans aynı yöne çalışır. [Soğuk e-postanın nasıl değiştiğini](/blog/soguk-e-posta-oldu-mu-hayir-sadece-degisti) anlattığımız yazıda da aynı sonuca varıyoruz: Hacim yerine alaka kazanır.
 
 ## İlk e-postada aydınlatma nasıl yapılır?
 
@@ -127,7 +127,7 @@ Aşağıdaki süreç, sıfırdan outbound kuran veya mevcut sürecini düzeltmek
 9. **Başvuru sürecini tanımlayın.** İlgili kişi başvurularına KVKK uyarınca en geç **30 gün** içinde yanıt verilmelidir. Başvuruları kimin karşılayacağını, hangi şablonla yanıt verileceğini ve verinin nasıl silineceğini önceden belirleyin.
 10. **Ekibi eğitin.** SDR'lar "bu adresi nereden buldun" sorusuna standart ve dürüst bir cevap verebilmeli. 30 dakikalık bir iç eğitim ve tek sayfalık bir kontrol listesi bile büyük fark yaratır.
 
-Bu adımların önemli bir kısmı otomasyonla yönetilebilir: kaynak etiketleme, bastırma listesi kontrolü, saklama süresi dolan kayıtların silinmesi gibi. Bu tarafı nasıl kurgulayabileceğinizi [lead generation operasyonunu otomatiğe bağlamak](/blog/b2b’de-uykusuz-gecelerin-çıktısı-lead-generation-operasyonunu-otomatiğe-bağlamak) üzerine yazdığımız yazıda detaylandırdık.
+Bu adımların önemli bir kısmı otomasyonla yönetilebilir: kaynak etiketleme, bastırma listesi kontrolü, saklama süresi dolan kayıtların silinmesi gibi. Bu tarafı nasıl kurgulayabileceğinizi [lead generation operasyonunu otomatiğe bağlamak](/blog/b2bde-uykusuz-gecelerin-ciktisi-lead-generation-operasyonunu-otomatige-baglamak) üzerine yazdığımız yazıda detaylandırdık.
 
 ## Ret talebi geldiğinde ne yapmalısınız?
 
@@ -161,7 +161,7 @@ Bu soru özellikle büyüme baskısı altındaki SaaS ekiplerinden sık gelir. B
 - **Düzenli temizlenen bir CRM** bounce oranını düşürür, alan adı itibarını korur.
 - **Az ama alakalı takip** spam şikâyetlerini azaltır.
 
-Örneğin 5.000 kişilik genel bir listeye standart mesaj gönderen bir ekip ile 400 kişilik, rol ve sektöre göre daraltılmış, her biri için ilk satırı kişiselleştirilmiş bir segmente yazan bir ekip düşünün. İkinci ekip hem hukuken savunması çok daha kolay bir süreç yürütür hem de genellikle daha fazla nitelikli görüşme elde eder. Outbound'un temellerini ve nitelikli görüşmeye giden yolu merak ediyorsanız [outbound satışın ne olduğunu ve B2B'de nasıl işlediğini](/blog/outbound-satış-nedir-b2b-şirketler-i̇çin-nitelikli-görüşme-almanın-yolu) anlattığımız yazıya göz atabilirsiniz.
+Örneğin 5.000 kişilik genel bir listeye standart mesaj gönderen bir ekip ile 400 kişilik, rol ve sektöre göre daraltılmış, her biri için ilk satırı kişiselleştirilmiş bir segmente yazan bir ekip düşünün. İkinci ekip hem hukuken savunması çok daha kolay bir süreç yürütür hem de genellikle daha fazla nitelikli görüşme elde eder. Outbound'un temellerini ve nitelikli görüşmeye giden yolu merak ediyorsanız [outbound satışın ne olduğunu ve B2B'de nasıl işlediğini](/blog/outbound-satis-nedir-b2b-sirketler-icin-nitelikli-gorusme-almanin-yolu) anlattığımız yazıya göz atabilirsiniz.
 
 Veri tarafını içeride kurmakta zorlanan ekipler için dışarıdan destek de bir seçenektir. Grubumuzdaki [veri odaklı B2B satış ve lead generation şirketi Sales Corner](https://salescorner.co), hedef kitle tanımından veri hazırlığına kadar bu süreçlerin operasyonel tarafını yürütebilir.
 

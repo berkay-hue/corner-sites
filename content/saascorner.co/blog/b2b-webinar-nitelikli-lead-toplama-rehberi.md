@@ -113,7 +113,7 @@ CRM'deki potansiyel müşterileri, açık fırsatları ve bültene abone olanlar
 
 ### 2. Hedefli outbound davetler
 
-Webinar, outbound ekipleri için mükemmel bir "değer önerisi" bahanesidir. Soğuk bir e-postada doğrudan demo istemek yerine, ICP'nize uyan şirketlerdeki karar vericilere ücretsiz ve faydalı bir oturum önermek çok daha düşük sürtünmeli bir taleptir. Bu yaklaşımı [outbound satışın temel prensipleri](/blog/outbound-satış-nedir-b2b-şirketler-i̇çin-nitelikli-görüşme-almanın-yolu) ile birleştirdiğinizde, webinar davetini bir prospecting dizisinin ilk temas noktası olarak kullanabilirsiniz.
+Webinar, outbound ekipleri için mükemmel bir "değer önerisi" bahanesidir. Soğuk bir e-postada doğrudan demo istemek yerine, ICP'nize uyan şirketlerdeki karar vericilere ücretsiz ve faydalı bir oturum önermek çok daha düşük sürtünmeli bir taleptir. Bu yaklaşımı [outbound satışın temel prensipleri](/blog/outbound-satis-nedir-b2b-sirketler-icin-nitelikli-gorusme-almanin-yolu) ile birleştirdiğinizde, webinar davetini bir prospecting dizisinin ilk temas noktası olarak kullanabilirsiniz.
 
 Hedef hesap listesini oluşturmak için sektör, şirket büyüklüğü ve unvan filtreleriyle çalışan B2B veri araçlarından yararlanılabilir. Örneğin [Apollo.io](https://get.apollo.io/679irkzm35ya) üzerinden ICP kriterlerinize uyan karar vericileri listeleyip kişiselleştirilmiş davet dizileri kurgulayabilirsiniz. Burada önemli olan hacim değil, uyumdur: 2.000 rastgele kişiye gönderilen davet yerine, ICP'ye tam uyan 300 kişiye kişiselleştirilmiş davet çok daha nitelikli bir katılımcı kitlesi oluşturur.
 
