@@ -4,7 +4,7 @@ description: "Satış ekibiniz küçükse hangi CRM'in size uyduğunu nasıl anl
 date: "2026-10-11"
 updated: "2026-10-16"
 category: "CRM"
-image: "https://images.pexels.com/photos/7876739/pexels-photo-7876739.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
+image: "/_a/blog/kucuk-satis-ekibi-icin-crm-nasil-secilir.jpg"
 imageAlt: "Küçük bir ekip ofiste dizüstü bilgisayarların başında birlikte çalışıyor"
 alt: "how-to-choose-crm-for-small-sales-team"
 ---

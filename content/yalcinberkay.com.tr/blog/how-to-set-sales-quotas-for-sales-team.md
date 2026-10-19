@@ -4,7 +4,7 @@ description: "How do you set sales quotas for a sales team? A step-by-step quota
 date: "2026-10-16"
 updated: "2026-10-19"
 category: "Sales Leadership"
-image: "https://images.pexels.com/photos/8555676/pexels-photo-8555676.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
+image: "/_a/blog/how-to-set-sales-quotas-for-sales-team.jpg"
 imageAlt: "How to Set Sales Quotas for a Sales Team: A Practical Guide"
 alt: "satis-ekibinde-kota-nasil-belirlenir"
 ---

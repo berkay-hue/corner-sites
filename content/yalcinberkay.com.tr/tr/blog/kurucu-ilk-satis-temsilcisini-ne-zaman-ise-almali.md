@@ -4,7 +4,7 @@ description: "Kurucunun yürüttüğü satış bir noktaya kadar ölçeklenir. �
 date: "2026-10-13"
 updated: "2026-10-17"
 category: "Kurucu Notları"
-image: "https://images.pexels.com/photos/6016350/pexels-photo-6016350.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
+image: "/_a/blog/kurucu-ilk-satis-temsilcisini-ne-zaman-ise-almali.jpg"
 imageAlt: "Masada elle çizilmiş bir satış büyüme grafiği, bir dizüstü bilgisayar ve bir telefonla çalışan iki kişi"
 alt: "when-should-founder-hire-first-sales-rep"
 ---

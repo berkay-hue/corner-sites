@@ -4,7 +4,7 @@ description: "Founder-led selling only scales so far. Learn which revenue signal
 date: "2026-10-13"
 updated: "2026-10-16"
 category: "Founder Notes"
-image: "https://images.pexels.com/photos/6016350/pexels-photo-6016350.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
+image: "/_a/blog/when-should-founder-hire-first-sales-rep.jpg"
 imageAlt: "Two people at a desk with a hand-drawn sales growth chart, a laptop and a phone"
 alt: "kurucu-ilk-satis-temsilcisini-ne-zaman-ise-almali"
 ---

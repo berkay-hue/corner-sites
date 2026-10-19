@@ -4,7 +4,7 @@ description: "Türkiye'de B2B satış döngüsünü uzatan darboğazları, satı
 date: "2026-10-14"
 updated: "2026-10-16"
 category: "B2B Satış"
-image: "https://images.pexels.com/photos/8730986/pexels-photo-8730986.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
+image: "/_a/blog/b2b-satis-dongusu-nasil-kisaltilir.jpg"
 imageAlt: "Toplantı masasında belgeleri inceleyen ve not alan iş insanları"
 alt: "how-to-shorten-b2b-sales-cycle"
 ---

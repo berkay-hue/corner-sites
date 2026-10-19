@@ -4,7 +4,7 @@ description: "A walkthrough for running a weekly B2B pipeline review, covering t
 date: "2026-10-12"
 updated: "2026-10-16"
 category: "B2B Sales"
-image: "https://images.pexels.com/photos/8424512/pexels-photo-8424512.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
+image: "/_a/blog/weekly-pipeline-review-guide.jpg"
 imageAlt: "Team meeting at a conference table with a bar chart on the screen behind them"
 alt: "haftalik-pipeline-toplantisi-rehberi"
 ---

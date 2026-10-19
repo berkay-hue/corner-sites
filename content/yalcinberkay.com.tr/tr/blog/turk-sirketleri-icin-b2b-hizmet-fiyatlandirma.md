@@ -4,7 +4,7 @@ description: "Türkiye'de B2B hizmet fiyatlandırmak; lira enflasyonunu, dolara 
 date: "2026-10-15"
 updated: "2026-10-17"
 category: "Kurucu Notları"
-image: "https://images.pexels.com/photos/7693692/pexels-photo-7693692.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
+image: "/_a/blog/turk-sirketleri-icin-b2b-hizmet-fiyatlandirma.jpg"
 imageAlt: "Bir masa etrafında dizüstü bilgisayarla basılı grafik ve rakamları inceleyen üç iş arkadaşı"
 alt: "how-to-price-b2b-services-turkish-companies"
 ---

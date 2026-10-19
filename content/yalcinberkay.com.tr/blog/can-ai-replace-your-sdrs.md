@@ -4,7 +4,7 @@ description: "Thinking about replacing SDRs with AI agents? Here is where automa
 date: "2026-10-11"
 updated: "2026-10-16"
 category: "AI & Automation"
-image: "https://images.pexels.com/photos/17485350/pexels-photo-17485350.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
+image: "/_a/blog/can-ai-replace-your-sdrs.jpg"
 imageAlt: "Hands typing on a laptop showing an online store page at a white desk"
 alt: "yapay-zeka-sdrlarin-yerini-alabilir-mi"
 ---

@@ -4,7 +4,7 @@ description: "A practical walkthrough for B2B founders on hiring, structuring, a
 date: "2026-10-10"
 updated: "2026-10-16"
 category: "Sales Leadership"
-image: "https://images.pexels.com/photos/7693103/pexels-photo-7693103.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
+image: "/_a/blog/how-to-build-outbound-sales-team-from-scratch.jpg"
 imageAlt: "How to build an outbound sales team – cover image"
 alt: "sifirdan-outbound-satis-ekibi-kurmak"
 ---

@@ -3,7 +3,7 @@ title: "Soğuk E-posta ve KVKK: Outbound Ekipler Neye Dikkat Etmeli?"
 description: "Türkiye'de B2B soğuk e-posta gönderirken KVKK ve ticari elektronik ileti kurallarına nasıl uyulacağını, outbound ekipler için pratik adımlarla anlatıyoruz."
 date: "2026-10-17"
 category: "Outbound"
-image: "https://images.pexels.com/photos/7993898/pexels-photo-7993898.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
+image: "/_a/blog/soguk-eposta-kvkk-outbound-ekipler.jpg"
 imageAlt: "Soğuk E-posta ve KVKK: Outbound Ekipler Neye Dikkat Etmeli?"
 ---
 

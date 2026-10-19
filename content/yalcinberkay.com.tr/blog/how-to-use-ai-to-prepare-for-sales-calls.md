@@ -3,7 +3,7 @@ title: "How to Use AI to Prepare for Sales Calls"
 description: "A step-by-step AI workflow for B2B sales teams to research accounts, map stakeholders, and prep discovery calls faster without losing accuracy."
 date: "2026-10-17"
 category: "AI & Automation"
-image: "https://images.pexels.com/photos/3865639/pexels-photo-3865639.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
+image: "/_a/blog/how-to-use-ai-to-prepare-for-sales-calls.jpg"
 imageAlt: "How to Use AI to Prepare for Sales Calls"
 ---
 

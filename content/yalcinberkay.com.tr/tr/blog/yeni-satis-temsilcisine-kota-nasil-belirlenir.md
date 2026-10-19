@@ -5,7 +5,7 @@ date: "2026-10-16"
 draft: true
 updated: "2026-10-17"
 category: "Satış Liderliği"
-image: "https://images.pexels.com/photos/39204827/pexels-photo-39204827.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
+image: "/_a/blog/yeni-satis-temsilcisine-kota-nasil-belirlenir.jpg"
 imageAlt: "Yeni Satış Temsilcisine Kota Nasıl Belirlenir? (Örneklerle)"
 alt: "how-to-set-sales-quotas-for-new-reps"
 ---

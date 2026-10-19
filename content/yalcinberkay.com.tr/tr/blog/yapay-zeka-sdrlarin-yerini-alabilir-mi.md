@@ -4,7 +4,7 @@ description: "B2B outbound'da yapay zeka otomasyonunun nerede işe yaradığı, 
 date: "2026-10-11"
 updated: "2026-10-17"
 category: "Yapay Zeka ve Otomasyon"
-image: "https://images.pexels.com/photos/17485350/pexels-photo-17485350.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
+image: "/_a/blog/yapay-zeka-sdrlarin-yerini-alabilir-mi.jpg"
 imageAlt: "Beyaz bir masada, ekranında çevrim içi mağaza sayfası açık bir dizüstü bilgisayarda yazı yazan eller"
 alt: "can-ai-replace-your-sdrs"
 ---

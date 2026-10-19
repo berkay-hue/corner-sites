@@ -3,7 +3,7 @@ title: "What Does a Sales Rep Really Cost in Turkey?"
 description: "Find out what a sales rep really costs a Turkish company, including base pay, social security, commission, tools, and ramp time."
 date: "2026-10-18"
 category: "Founder Notes"
-image: "https://images.pexels.com/photos/7108454/pexels-photo-7108454.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
+image: "/_a/blog/what-does-a-sales-rep-cost-in-turkey.jpg"
 imageAlt: "What Does a Sales Rep Really Cost in Turkey?"
 ---
 
