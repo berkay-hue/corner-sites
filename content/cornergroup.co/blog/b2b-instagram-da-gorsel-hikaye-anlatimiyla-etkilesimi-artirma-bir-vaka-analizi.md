@@ -1,6 +1,6 @@
 ---
 title: "B2B Instagram'da Görsel Hikaye Anlatımıyla Etkileşimi Artırma: Bir Vaka Analizi"
-description: "Dijital pazarlama evreninde B2B şirketleri için çoğu zaman bir muamma olarak kalan Instagram, doğru stratejiyle yaklaşıldığında, marka bilinirliğinden…"
+description: "Bu vaka analizi, bir B2B markasının Instagram'da ekip, müşteri ve süreç hikâyeleri anlatarak etkileşimini artırdığını adım adım anlatır."
 date: "2026-07-09"
 category: "Vaka Çalışması"
 image: "/_a/fr/images/9hziHKZaOSDz6zpVihCNOvBjsw_cd09786e.jpg"

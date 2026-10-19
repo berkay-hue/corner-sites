@@ -1,6 +1,6 @@
 ---
 title: "AI Destekli Satışta Yapılan Yaygın Hatalar: Satış Akışınızı Nasıl Optimize Edersiniz?"
-description: "Yapay zeka (AI), B2B satış dünyasında bir devrim vaadiyle geldi. Potansiyel müşteri bulmaktan kapanış oranlarını artırmaya kadar her aşamada verimliliği…"
+description: "AI destekli satışta en yaygın hata, aracı süreç netleşmeden kurmaktır; bu yazı sık hataları ve satış akışını adım adım iyileştirmeyi anlatır."
 date: "2026-05-05"
 category: "Strateji"
 image: "/_a/fr/images/fxlcLiThcq03tWdXh2nJRs0CK0o_cd09786e.jpg"

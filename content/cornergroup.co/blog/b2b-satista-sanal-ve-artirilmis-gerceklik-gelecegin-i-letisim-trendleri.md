@@ -1,6 +1,6 @@
 ---
 title: "B2B Satışta Sanal ve Artırılmış Gerçeklik: Geleceğin İletişim Trendleri"
-description: "Dijital dönüşüm, B2B satış dünyasının paradigmalarını kökünden değiştirdi. Pandemi sonrası dönemde uzaktan çalışma ve dijital etkileşim norm haline…"
+description: "Sanal ve artırılmış gerçeklik, B2B satışta ürünü uzaktan deneyimletir ve demo süresini kısaltır; bu yazı yükselen iletişim trendlerini anlatır."
 date: "2026-09-03"
 category: "Trendler"
 image: "/_a/fr/images/bYxc4NculIeGPztEONsp5e6n0xY_cd09786e.jpg"

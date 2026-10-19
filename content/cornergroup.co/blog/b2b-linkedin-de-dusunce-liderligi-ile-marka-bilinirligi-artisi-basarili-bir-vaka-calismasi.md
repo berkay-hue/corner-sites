@@ -1,6 +1,6 @@
 ---
 title: "B2B LinkedIn'de Düşünce Liderliği ile Marka Bilinirliği Artışı: Başarılı Bir Vaka Çalışması"
-description: "Dijital çağın gürültülü B2B pazarında, potansiyel müşterilerin dikkatini çekmek ve sürdürmek, geleneksel pazarlama taktiklerinin yetersiz kaldığı karmaşık…"
+description: "Bu vaka çalışması, bir B2B markasının yöneticilerinin düzenli uzman içerikleriyle LinkedIn'de düşünce liderliği kurup bilinirliği artırdığını anlatır."
 date: "2026-09-29"
 category: "Vaka Çalışması"
 image: "/_a/fr/images/zEggssw5YKWcexYQc9WPywxU1cE_cd09786e.jpg"

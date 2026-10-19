@@ -1,6 +1,6 @@
 ---
 title: "Marka Yönetiminde n8n ile İçerik Onay Süreçlerini Otomatikleştirme Rehberi"
-description: "Büyüme odaklı bir holding yapısında, her biri kendi dinamiklerine sahip SAAS Corner, Sales Corner, CRM Corner, Brand Corner ve Social Media Corner gibi…"
+description: "n8n ile içerik onay süreçlerini otomatikleştirerek taslak, onay ve yayın adımlarını tek akışta toplayabilirsiniz; rehber kurulumu adım adım anlatır."
 date: "2026-06-02"
 category: "Otomasyon"
 image: "/_a/fr/images/TpbVfp2DbP84L45p3Zz5A2iFJ40_cd09786e.jpg"

@@ -180,6 +180,7 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
 .pth .badge{position:absolute;right:8px;top:8px;margin:0}
 .pbody{padding:10px 12px 12px;display:flex;flex-direction:column;gap:6px;min-width:0}.pcap{margin:0;font-size:13.5px;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}
 .pmeta{display:flex;flex-wrap:wrap;gap:2px 10px;color:var(--muted);font-size:12.5px}.pmeta b{color:var(--text);font-weight:600}
+.cgrid{grid-template-columns:repeat(3,minmax(0,1fr))}.pact{display:flex;flex-wrap:wrap;gap:6px;margin-top:2px}.pact .btn,.pact .ghost{min-height:44px;display:inline-flex;align-items:center;text-decoration:none}.pact .badge{margin:0}.ctarget{max-width:360px;margin:0 0 12px}.ctarget select{min-height:44px}.cacc{list-style:none;margin:0;padding:0}.cacc li{padding:10px 0;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:4px}.cacc li:first-child{border-top:0;padding-top:0}.cacc .badge{margin:0}@media(max-width:640px){.cgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .plist{list-style:none;margin:0;padding:0;border:1px solid var(--line);border-radius:var(--r-card);background:var(--surface);overflow:hidden}
 .prow2{position:relative;display:grid;grid-template-columns:56px minmax(0,1fr) auto;gap:12px;align-items:center;padding:10px 14px;border-top:1px solid var(--line)}.prow2:first-child{border-top:0}.prow2:hover{background:var(--surface-2)}.prow2:focus-within{outline:2px solid var(--accent);outline-offset:-2px}
 .prow2 .pth{width:56px;height:56px;border-radius:8px}.prow2 .pth .i{width:22px;height:22px}.prow2 a.pl{position:absolute;inset:0;z-index:1;font-size:0}.prow2 .er{text-align:right;font-size:13px;color:var(--muted)}.prow2 .er b{display:block;font-size:15px;color:var(--text)}
@@ -375,7 +376,7 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
       myAppsEmpty: "Henüz başvurunuz ya da davetiniz yok. Fırsatlar sayfasından açık kampanyalara başvurabilirsiniz.", goOpps: "Fırsatlara göz at",
       discLead: "Profil kartlarını inceleyip doğrudan davet edin.", discQ: "Ara", discQPh: "İsim veya şehir", allNiches: "Tüm ilgi alanları",
       fMinFol: "Takipçi", anyMin: "Her takipçi sayısı", discCount: "{n} influencer", discCount1: "1 influencer", discCap: "En yeni 100 profil yüklendi; filtreler yalnızca bu profiller içinde çalışır.", discCap50: "En uygun 50 profil gösteriliyor.", discMatch: "İlgi alanlarınıza göre en uygun profiller.", discMatchC: "Seçili kampanyaya en uygun profiller.", discNoNiche: "Profilinize ilgi alanı eklerseniz size en uygun profilleri öne çıkarırız.", discNoNicheC: "Bu kampanyada ilgi alanı yok; tüm profiller gösteriliyor.", discNoMatch: "Ortak ilgi alanı olan profil yok; tüm profiller gösteriliyor.", discMatchErr: "Eşleşmeler yüklenemedi; tüm profiller gösteriliyor.", viewProf: "Profili gör", inviteFor: "{n} için davet ediyorsunuz.",
-      clearFor: "Temizle", drClose: "Kapat", drNoPlat: "Platform eklenmemiş.", drHist: "Sizinle geçmiş", drHistNone: "Henüz birlikte çalışmadınız.",
+      clearFor: "Temizle", drClose: "Kapat", drNoPlat: "Platform eklenmemiş.", crFull: "Tam profil ve son gönderiler", crBack: "← Keşfet", crNone: "Bu influencer bulunamadı ya da artık listelenmiyor.", crAccounts: "Hesap ölçümleri", crPosts: "Son gönderiler", crSampleBadge: "Örnek veri", crSampleNote: "Gönderi bağlantısı henüz açık değil; aşağıdakiler örnek gönderilerdir. Kampanyaya eklemeler yalnız bu tarayıcıda tutulur.", crTarget: "Kampanya", crAdd: "Kampanyaya ekle", crRemove: "Kampanyadan çıkar", crAdded: "Gönderi kampanyaya eklendi.", crRemoved: "Gönderi kampanyadan çıkarıldı.", crVerified: "doğrulandı", crOpenPost: "Gönderiyi aç", crNoPosts: "Henüz gönderi yok.", drHist: "Sizinle geçmiş", drHistNone: "Henüz birlikte çalışmadınız.",
       drInvite: "Kampanyaya davet et", drNoOpen: "Davet edilebilecek açık kampanya yok: ya hepsinde zaten var ya da açık kampanyanız yok.",
       inviteInf: "Influencer davet et",
       discEmpty: "Henüz profilini markalara açan influencer yok.", discNone: "Bu ölçütlere uyan influencer bulunamadı.",
@@ -514,7 +515,7 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
       myAppsEmpty: "No applications or invites yet. You can apply to open campaigns from Opportunities.", goOpps: "Browse opportunities",
       discLead: "Browse profile cards and invite directly.", discQ: "Search", discQPh: "Name or city", allNiches: "All niches",
       fMinFol: "Followers", anyMin: "Any follower count", discCount: "{n} influencers", discCount1: "1 influencer", discCap: "The newest 100 profiles are loaded; filters only search within them.", discCap50: "Showing the 50 best matches.", discMatch: "Best matches for your niches.", discMatchC: "Best matches for the selected campaign.", discNoNiche: "Add niches to your profile and we will bring your best matches to the top.", discNoNicheC: "This campaign has no niches; showing all profiles.", discNoMatch: "No profiles share your niches; showing all profiles.", discMatchErr: "Matches could not be loaded; showing all profiles.", viewProf: "View profile", inviteFor: "Inviting for {n}.",
-      clearFor: "Clear", drClose: "Close", drNoPlat: "No platforms added.", drHist: "History with you", drHistNone: "You haven't worked together yet.",
+      clearFor: "Clear", drClose: "Close", drNoPlat: "No platforms added.", crFull: "Full profile and recent posts", crBack: "← Discover", crNone: "This influencer wasn't found or is no longer listed.", crAccounts: "Account metrics", crPosts: "Recent posts", crSampleBadge: "Sample data", crSampleNote: "The posts connection isn't live yet; these are sample posts. Campaign additions are kept only in this browser.", crTarget: "Campaign", crAdd: "Add to campaign", crRemove: "Remove from campaign", crAdded: "Post added to the campaign.", crRemoved: "Post removed from the campaign.", crVerified: "verified", crOpenPost: "Open post", crNoPosts: "No posts yet.", drHist: "History with you", drHistNone: "You haven't worked together yet.",
       drInvite: "Invite to a campaign", drNoOpen: "No open campaign to invite them to: they're already in all of them, or you have none open.",
       inviteInf: "Invite influencers",
       discEmpty: "No influencers have made their profile visible yet.", discNone: "No influencers match these filters.",
@@ -637,6 +638,8 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
     var h = location.hash.replace(/^#/, ""), m = /^campaign-(\d+)$/.exec(h);
     var pm = /^post-([a-z0-9]{1,24})$/.exec(h);
     if (pm && !isOwner()) return { name: "post", id: pm[1], tab: "posts" };
+  var cm = /^creator-([a-z0-9]{1,24})$/.exec(h);
+  if (cm && isOwner()) return { name: "creator", id: cm[1], tab: "discover" };
     if (m) return { name: "campaign", id: +m[1], tab: "campaigns" };
     var ok = ["overview", "campaigns", "profile", "settings"].concat(isOwner() ? ["new", "discover"] : ["applications", "posts"]);
     if (ok.indexOf(h) < 0) h = "overview";
@@ -1383,6 +1386,7 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
         chips(x.niches),
         el("h3", { text: t("fPlatforms") }),
         x.platforms.length ? handles(x.platforms) : el("p", { class: "meta", text: t("drNoPlat") }),
+        /^[a-z0-9]{1,24}$/.test(String(x.id)) ? el("p", null, el("a", { class: "lk44", href: "#creator-" + x.id, text: t("crFull") })) : null,
         el("h3", { text: t("drHist") }),
         hist.length ? el("ul", { class: "hist" }, hist.map(function (h) {
           var c = byId[h.campaign_id];
@@ -2196,7 +2200,141 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
         el("p", { class: "pnote", text: t("pErNote") })])]),
       el("section", { class: "card", style: "margin-top:16px" }, [el("div", { class: "ch" }, el("h2", { text: t("pTimeline") })), el("div", { class: "cb" }, [kt, tlBox, table, edit])])];
   }
-  var VIEWS = { overview: overview, campaigns: campaigns, "new": newCampaign, campaign: campaign, discover: discover, applications: applications, profile: profile, settings: settings, posts: posts, post: post };
+  // Influencer tam profili (#creator-<id>, marka/ajans): hesap ölçümleri, son 9 gönderi, kampanyaya ekle/çıkar.
+  // app/creators/:id/posts ve app/campaigns/:id/posts 404 verirse örnek gönderiler gösterilir; eklemeler yalnız bu tarayıcıda tutulur.
+  var CR = { camp: 0 };
+  function crSoft(p) { return p.then(function (d) { return { d: d }; }, function (e) { if (e && e.code === "auth") throw e; return { e: e }; }); }
+  function crMissing(e) { return !!e && (e.status === 404 || e.status === 405 || e.code === "unavailable"); }
+  // Yerel modda eklenen gönderi, gönderi kaydına (pKey) yazılır: creator_id + src_post ile bulunur, kampanyalar gönderinin alanıdır
+  function crFind(list, cr, pid) { return list.filter(function (q) { return q.creator_id === cr && q.src_post === pid; })[0]; }
+  function crIn(cid, cr) {
+    var o = {};
+    pLoad().forEach(function (q) { if (q.creator_id === cr && Array.isArray(q.campaigns) && q.campaigns.indexOf(cid) >= 0) o[q.src_post] = 1; });
+    return o;
+  }
+  function crPut(list, cid, x, p, on) {
+    var cr = String(x.id), q = crFind(list, cr, p.id);
+    if (on) {
+      if (!q) {
+        var snap = { at: isoDay(new Date()) };
+        PMETS.forEach(function (m) { if (typeof p[m] === "number") snap[m] = p[m]; });
+        q = { id: newId(), url: p.url || "", platform: p.platform, type: p.type, date: p.date || snap.at, caption: p.caption || "", thumb: p.thumb || "", snaps: [snap], creator_id: cr, src_post: p.id, campaigns: [] };
+        list.push(q);
+      }
+      if (!Array.isArray(q.campaigns)) q.campaigns = [];
+      if (q.campaigns.indexOf(cid) < 0) q.campaigns.push(cid);
+      return list;
+    }
+    if (!q) return list;
+    q.campaigns = (Array.isArray(q.campaigns) ? q.campaigns : []).filter(function (c) { return c !== cid; });
+    return q.campaigns.length ? list : list.filter(function (y) { return y !== q; });
+  }
+  // Eski "bc-cposts-<uid>-<cid>" anahtarı (girdi "creator:post"): bu sayfadaki gönderiler bir kez taşınır, boşalan anahtar silinir
+  function crMigrate(x, posts) {
+    try {
+      var pre = "bc-cposts-" + U.id + "-", keys = [], list = pLoad(), moved = 0;
+      for (var i = 0; i < localStorage.length; i++) { var k = localStorage.key(i); if (k && k.indexOf(pre) === 0) keys.push(k); }
+      keys.forEach(function (k) {
+        var cid = +k.slice(pre.length), v = JSON.parse(localStorage.getItem(k) || "[]");
+        if (!Array.isArray(v) || !(cid > 0)) { localStorage.removeItem(k); return; }
+        var rest = v.filter(function (e) {
+          var j = typeof e === "string" ? e.indexOf(":") : -1, p = j > 0 && e.slice(0, j) === String(x.id) ? posts.filter(function (y) { return y.id === e.slice(j + 1); })[0] : null;
+          if (!p) return typeof e === "string";
+          list = crPut(list, cid, x, p, true); moved++; return false;
+        });
+        if (moved && !pStore(list)) return;
+        if (rest.length) localStorage.setItem(k, JSON.stringify(rest)); else localStorage.removeItem(k);
+      });
+    } catch (e) { /* depolama kapalı: taşıma yok */ }
+  }
+  function crSample(x) {
+    var r = rng("cposts:" + x.id), pl = (x.platforms || []).map(function (p) { return p.platform; }).filter(function (p) { return p === "instagram" || p === "tiktok" || p === "youtube"; });
+    if (!pl.length) pl = ["instagram"];
+    var caps = L === "tr" ? ["Yeni sezon favorilerim", "Bir günüm, baştan sona", "Sorularınızı yanıtladım", "Kamera arkası", "Beş dakikada pratik tarif", "Haftanın keşifleri"]
+      : ["My new season favourites", "A day in my life", "Answering your questions", "Behind the scenes", "A quick five-minute recipe", "This week's finds"];
+    var out = [];
+    for (var i = 0; i < 9; i++) {
+      var p = pl[Math.floor(r() * pl.length)], type = p === "instagram" ? ["photo", "reel", "carousel"][Math.floor(r() * 3)] : "video", reach = Math.round(2000 + r() * 40000);
+      out.push({ id: "c" + i, url: "", platform: p, type: type, date: isoDay(new Date(Date.now() - (1 + i * 5 + Math.floor(r() * 4)) * 864e5)), caption: caps[i % caps.length], thumb: "", verified: false,
+        likes: Math.round(reach * (0.03 + r() * 0.06)), comments: Math.round(reach * (0.002 + r() * 0.01)), views: type === "photo" || type === "carousel" ? null : Math.round(reach * (1.1 + r() * 0.8)), reach: reach });
+    }
+    return out;
+  }
+  // API gönderisi: bilinmeyen alanlar atılır, geçersiz sayılar boş sayılır
+  function crPost(p, i) {
+    var n = function (v) { return typeof v === "number" && v >= 0 && isFinite(v) ? Math.round(v) : null; };
+    return { id: String(p.id != null ? p.id : "p" + i).slice(0, 40), url: URL_RE.test(p.url || "") ? p.url : "", platform: PL[p.platform] ? p.platform : "instagram",
+      type: PTYPES.indexOf(p.type) >= 0 ? p.type : "photo", date: okDay(String(p.date || "").slice(0, 10)) ? String(p.date).slice(0, 10) : "", caption: String(p.caption || "").slice(0, 300),
+      thumb: okThumb(p.thumb) ? p.thumb : "", verified: p.verified === true || p.source === "oauth", likes: n(p.likes), comments: n(p.comments), views: n(p.views), reach: n(p.reach) };
+  }
+  function crAccounts(m, x) {
+    var acc = m && m.metrics && Array.isArray(m.metrics.accounts) ? m.metrics.accounts : null, sample = !acc || m.metrics.mode !== "live";
+    if (!acc) acc = (x.platforms || []).map(function (p) { return { platform: p.platform, handle: p.handle, followers: p.followers > 0 ? p.followers : null }; });
+    acc = acc.filter(function (a) { return a && PL[a.platform]; });
+    if (!acc.length) return el("p", { class: "meta", text: t("drNoPlat") });
+    return el("ul", { class: "cacc" }, acc.map(function (a) {
+      return el("li", null, [el("div", { class: "pmeta" }, [el("b", { text: PL[a.platform] + (a.handle ? " · " + a.handle : "") }), sample ? el("span", { class: "badge b-sample", text: t("socSample") }) : null]),
+        el("div", { class: "pmeta" }, [["followers", "socFol"], ["avg_views", "socViews"], ["avg_likes", "socLikes"], ["avg_comments", "socComm"]].map(function (k) {
+          return el("span", null, [el("b", { text: typeof a[k[0]] === "number" ? short(a[k[0]]) : "—" }), " " + t(k[1])]);
+        }))]);
+    }));
+  }
+  function creator(r) {
+    var id = r.id;
+    return Promise.all([BC.call("GET", "app/influencers"), crSoft(BC.call("GET", "app/campaigns")), crSoft(BC.call("GET", "app/metrics/" + encodeURIComponent(id))),
+      crSoft(BC.call("GET", "app/creators/" + encodeURIComponent(id) + "/posts"))]).then(function (res) {
+      var x = ((res[0] && res[0].influencers) || []).filter(function (y) { return String(y.id) === id; })[0];
+      if (!x) return [back("#discover", "crBack"), el("h1", { text: t("nDiscover") }), empty(t("crNone"))];
+      x.platforms = x.platforms || [];
+      var camps = res[1].d && res[1].d.campaigns || [], open = camps.filter(function (c) { return c.status === "open"; });
+      var pr = res[3], sample = !pr.d || !Array.isArray(pr.d.posts), perr = pr.e && !crMissing(pr.e) ? pr.e : null;
+      var list = sample ? (perr ? [] : crSample(x)) : pr.d.posts.slice(0, 9).map(crPost);
+      if (!open.some(function (c) { return c.id === CR.camp; })) CR.camp = open.length ? open[0].id : 0;
+      var local = sample, added = {}, msg = el("p", { class: "ok", role: "status" }), err = note();
+      function load() { added = CR.camp ? crIn(CR.camp, String(x.id)) : {}; }
+      var sel = open.length ? el("select", { onchange: function () { CR.camp = +sel.value; load(); paint(); } }, open.map(function (c) { return el("option", { value: String(c.id), text: c.title }); })) : null;
+      if (sel) sel.value = String(CR.camp);
+      var grid = el("ul", { class: "pgrid cgrid" });
+      function toggle(p, btn) {
+        var on = !!added[p.id], cid = CR.camp;
+        say(err, ""); msg.textContent = "";
+        function done() {
+          if (!pStore(crPut(pLoad(), cid, x, p, !on))) { busy(btn, false); say(err, t("pFull")); return; }
+          load(); paint(); msg.textContent = t(on ? "crRemoved" : "crAdded");
+          var b = grid.querySelector('[data-cp="' + CSS.escape(p.id) + '"]'); if (b) b.focus();
+        }
+        if (local) return done();
+        busy(btn, true);
+        var path = "app/campaigns/" + cid + "/posts";
+        (on ? BC.call("DELETE", path + "/" + encodeURIComponent(p.id)) : BC.call("POST", path, { creator_id: x.id, post_id: p.id, url: p.url || null })).then(done, function (e) {
+          if (crMissing(e)) { local = true; return done(); }
+          busy(btn, false); say(err, BC.msg(e.code));
+        });
+      }
+      function card(p) {
+        var on = !!added[p.id], s = { likes: p.likes, comments: p.comments, views: p.views, reach: p.reach };
+        var btn = CR.camp ? el("button", { type: "button", class: on ? "btn sm sec" : "btn sm", "data-cp": p.id, "aria-pressed": String(on), "aria-label": t(on ? "crRemove" : "crAdd") + ": " + (p.caption || pLabel(p)), text: t(on ? "crRemove" : "crAdd") }) : null;
+        if (btn) btn.addEventListener("click", function () { toggle(p, btn); });
+        return el("li", { class: "pcard" }, [pThumb(p, sample),
+          el("div", { class: "pbody" }, [el("p", { class: "pcap", dir: "auto", text: p.caption || t("pNoCap") }),
+            el("div", { class: "pmeta" }, [el("span", { text: t("pt_" + p.type) }), p.date ? el("span", { text: day(p.date) }) : null, p.verified ? el("span", { class: "badge b-ok", text: t("crVerified") }) : null]),
+            el("div", { class: "pmeta" }, [pMetric(p.likes, "mLikes"), pMetric(p.comments, "mComments"), el("span", null, [el("b", { text: pct(erOf(s)) }), " ER"])]),
+            el("div", { class: "pact" }, [btn, p.url ? el("a", { class: "ghost sm", href: p.url, target: "_blank", rel: "noopener noreferrer nofollow", text: t("crOpenPost") }) : null])])]);
+      }
+      function paint() { grid.replaceChildren.apply(grid, list.map(card)); }
+      crMigrate(x, list); load(); paint();
+      return [back("#discover", "crBack"), el("h1", { text: x.name }),
+        x.city || x.bio ? el("p", { class: "lead" }, [x.city ? x.city : null, x.city && x.bio ? " · " : null, x.bio || null]) : null, chips(x.niches),
+        el("section", { class: "card" }, [el("div", { class: "ch" }, el("h2", { text: t("crAccounts") })), el("div", { class: "cb" }, crAccounts(res[2].d, x))]),
+        el("section", { class: "card" }, [el("div", { class: "ch" }, el("h2", { text: t("crPosts") })), el("div", { class: "cb" }, [
+          sample && !perr ? el("p", { class: "meta" }, [el("span", { class: "badge b-sample", text: t("crSampleBadge") }), " ", t("crSampleNote")]) : null,
+          open.length ? el("div", { class: "f ctarget" }, fld("cr-camp", t("crTarget"), sel)) : el("p", { class: "meta" }, [t("needOpen") + " ", el("a", { class: "lk44", href: "#new", text: t("doNew") })]),
+          msg, err, perr ? failLine(perr, function () { render(); }) : list.length ? grid : el("p", { class: "meta", text: t("crNoPosts") }),
+          el("p", { class: "pnote", text: t("pErNote") })])])];
+    });
+  }
+
+  var VIEWS = { overview: overview, campaigns: campaigns, "new": newCampaign, campaign: campaign, discover: discover, applications: applications, profile: profile, settings: settings, posts: posts, post: post, creator: creator };
 
   // Üst çubuk ve alt bilgi metinleri, dil düğmesi
   function initials(s) {

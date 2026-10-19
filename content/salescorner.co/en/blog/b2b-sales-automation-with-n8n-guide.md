@@ -71,7 +71,7 @@ AI makes sales automation more powerful, but left unchecked it also multiplies e
 - **Keep a human in the loop for customer-facing text.** Instead of sending the AI-written email directly, leave it as a draft in the CRM; let the rep review it and send it.
 - **Send the data that's needed, nothing more.** Pass the model only the fields required for the task; don't share personal data unnecessarily. For the legal limits on personal data in cold email, see our [KVKK guide](/blog/kvkk-compliant-b2b-cold-email).
 
-If you want to dig deeper into using AI for cold email writing, take a look at our [guide to writing cold emails with AI](/blog/how-to-write-cold-emails-with-ai). For a ready-made example running on n8n and AI, our [Sequence Writer tool](/sekans-yazari) generates outreach sequences from a video, PDF or website.
+If you want to dig deeper into using AI for cold email writing, take a look at our [guide to writing cold emails with AI](/blog/how-to-write-cold-emails-with-ai). For a ready-made example running on n8n and AI, our [Sequence Writer tool](/en/#otomasyonlar) generates outreach sequences from a video, PDF or website.
 
 ## Common Mistakes
 
@@ -100,8 +100,10 @@ No. Automation takes over repetitive work such as data entry, research and remin
 
 A single-purpose workflow such as lead capture and CRM entry can usually be tested and launched within a few days, provided access to the tools is ready. Multi-step workflows with an AI layer require a longer testing period.
 
+You can see what Sales Corner does in sales automation and outbound on our [services page](/hizmetler) (in Turkish).
+
 ## Conclusion
 
 B2B sales automation with n8n is one of the most practical ways to shift your sales team's time from repetitive work to time spent with customers. Start with a small, well-defined process, keep the five-layer structure, use AI for tasks with clear boundaries, and measure every step.
 
-If you want to automate your sales processes end to end with AI and n8n, the Sales Corner team is here to help. You can see the modules built on the same stack in the [Sales Corner module panel](/dashboard); for example, the [Meeting Briefing tool](/briefing) prepares company and contact research before a call automatically. [Get in touch with us](/en/iletisim) to review your current workflow together and identify which steps are best suited for automation.
+If you want to automate your sales processes end to end with AI and n8n, the Sales Corner team is here to help. You can see the modules built on the same stack in the [Sales Corner module panel](/en/#otomasyonlar); for example, the [Meeting Briefing tool](/en/#otomasyonlar) prepares company and contact research before a call automatically. [Get in touch with us](/en/iletisim) to review your current workflow together and identify which steps are best suited for automation.

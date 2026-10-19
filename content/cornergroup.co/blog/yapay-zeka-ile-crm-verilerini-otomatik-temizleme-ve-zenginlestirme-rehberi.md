@@ -1,6 +1,6 @@
 ---
 title: "Yapay Zeka ile CRM Verilerini Otomatik Temizleme ve Zenginleştirme Rehberi"
-description: "B2B dünyasında rekabet avantajı, artık sadece sunduğunuz ürün veya hizmetin kalitesine değil, aynı zamanda operasyonel verimliliğinize ve pazar…"
+description: "Yapay zeka, CRM'deki tekrar ve eksik kayıtları bulup firma bilgileriyle otomatik zenginleştirir; bu rehber temizleme sürecini adım adım anlatır."
 date: "2026-06-08"
 category: "Otomasyon"
 image: "/_a/fr/images/fXspMlyequQzncHDbQow83s1Ic_7805d9aa.jpg"

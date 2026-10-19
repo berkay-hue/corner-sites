@@ -1,6 +1,6 @@
 ---
 title: "B2B Lead Generation: İdeal Müşteri Profili (ICP) ve MQL Tanımlama Rehberi"
-description: "B2B ekosisteminde sürdürülebilir büyüme, sadece daha fazla potansiyel müşteri (lead) üretmekten ibaret değildir."
+description: "Doğru ICP ve net MQL tanımı, B2B lead generation'da satış ekibine yalnız nitelikli adayların gitmesini sağlar; rehber tanımlamayı adım adım anlatır."
 date: "2026-05-24"
 category: "Rehber"
 image: "/_a/fr/images/MLTT4m2hCBJQVBXoxvBLbDX3ShQ_cd09786e.jpg"

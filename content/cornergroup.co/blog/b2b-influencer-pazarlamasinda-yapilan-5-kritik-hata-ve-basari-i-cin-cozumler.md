@@ -1,6 +1,6 @@
 ---
 title: "B2B Influencer Pazarlamasında Yapılan 5 Kritik Hata ve Başarı İçin Çözümler"
-description: "B2B influencer pazarlaması, artık sadece B2C markalarının oyun alanı olmaktan çıkıp, karmaşık satış döngülerine sahip B2B şirketler için de vazgeçilmez…"
+description: "B2B influencer pazarlamasında en kritik hata, takipçi sayısına göre seçim yapmaktır; bu yazı 5 hatayı ve her biri için çözümü anlatır."
 date: "2026-09-26"
 category: "Strateji"
 image: "/_a/fr/images/hovmm50H3QUV0eAxXQ6tI3k6o9s_cd09786e.jpg"
