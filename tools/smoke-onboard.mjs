@@ -111,6 +111,7 @@ try {
     ok((await txt("#onb-l")).startsWith("Sosyal hesaplarını"), "influencer giriş metni");
     ok((await plats()) === ALL.join(), "4 platform düğmesi");
     ok((await txt("dialog.onb .srow:last-child b")) === "LinkedIn (kişisel profil)", "LinkedIn adı");
+    ok((await txt("dialog.onb .srow:last-child .tx span")).startsWith("Kendi LinkedIn profilin bağlanır."), "linkedin satırında socLiNote metni var");
     ok((await txt("dialog.onb .srow:last-child .tx span")).includes("gönderi ölçümlerini dışarıya vermiyor"), "LinkedIn ölçüm notu");
     ok(!(await txt("dialog.onb .srow:first-child .tx span")), "Instagram'da LinkedIn notu yok");
     ok(await ev(`document.querySelector("dialog.onb").getAttribute("aria-labelledby")==="onb-t"`), "aria-labelledby");
