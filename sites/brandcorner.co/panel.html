@@ -149,6 +149,9 @@ dialog.drawer::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.drawer[ope
 .dw{display:flex;flex-direction:column;height:100%}.dh{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 10px 10px 20px;padding-top:max(10px,env(safe-area-inset-top,0px));border-bottom:1px solid var(--line)}
 .dh h2{font-size:18px;margin:0;overflow-wrap:anywhere}.dh .x{min-width:44px;padding:0;font-size:22px;line-height:1}
 .db{flex:1;overflow-y:auto;padding:16px 20px;padding-bottom:max(24px,env(safe-area-inset-bottom,0px))}.db h3{font-size:15px;margin:22px 0 8px}.db .meta{margin:0}
+dialog.onb{width:min(520px,calc(100% - 32px));max-height:calc(100% - 32px);padding:0;border:1px solid var(--line);border-radius:var(--r-card);background:var(--surface);color:var(--text);overflow-y:auto}
+dialog.onb::backdrop{background:rgba(10,12,20,.45)}body:has(dialog.onb[open]){overflow:hidden}
+.ow{padding:22px 22px max(22px,env(safe-area-inset-bottom,0px))}.ow h2{font-size:20px;margin:0 0 6px;overflow-wrap:anywhere}.ow>.muted{margin:0 0 12px}.ow .msg:empty{display:none}.ow .hint{margin:12px 0 0}.ow .srow .btn{min-height:44px}.of{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:10px;margin:16px 0 0}.of .btn{white-space:normal;text-align:center}
 .hist{list-style:none;padding:0;margin:0}.hist li{display:flex;align-items:center;justify-content:space-between;gap:10px;border-bottom:1px solid var(--line)}.hist a{display:flex;align-items:center;min-height:44px;overflow-wrap:anywhere;min-width:0}
 .inl{display:flex;flex-wrap:wrap;gap:8px}.f .inl input{flex:1 1 220px;width:auto;margin:0}
 .msg{color:var(--danger);font-size:14px;margin:12px 0 0}.msg:empty{display:none}.ok{color:var(--ok);font-size:14px;margin:12px 0 0}.ok:empty{display:none}
@@ -196,6 +199,7 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
 .grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0 12px}
 @media(max-width:760px){.crow{grid-template-columns:minmax(0,1fr)}.crow .right{flex-direction:row-reverse;align-items:center;justify-content:space-between}}
 @media(max-width:760px){.app{display:block}.side{display:none}dialog.drawer{width:100%;border-left:0}
+dialog.onb{width:100%;max-width:100%;margin:auto 0 0;max-height:92%;border-width:1px 0 0;border-radius:var(--r-card) var(--r-card) 0 0}.of .btn{flex:1 1 100%}
 .mtop{display:flex;align-items:center;justify-content:space-between;gap:12px;position:sticky;top:0;z-index:20;height:56px;padding:0 8px 0 12px;background:color-mix(in srgb,var(--surface) 92%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
 .mtop .me{display:flex;align-items:center;justify-content:center;width:44px;height:44px;border:0;background:none;padding:0;cursor:pointer;border-radius:50%}
 .main{padding:18px 16px 24px}.wrap{padding:0 16px}
@@ -316,7 +320,7 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
       socTitle: "Sosyal hesaplar", socLead: "Hesabını resmî bağlantıyla bağla; takipçi ve etkileşim verileri markalara doğrulanmış olarak görünür.",
       socConnect: "Bağla", socCut: "Bağlantıyı kes", socSure: "{n} bağlantısı kesilsin mi? Kayıtlı ölçümler artık güncellenmez.",
       socAvail: "Bağlı değil", socOn: "Bağlı", socOnAs: "Bağlı: {n}", socErr: "Son eşitleme başarısız; yeniden bağlamayı dene.",
-      socNotConf: "Bu platform için bağlantı henüz yapılandırılmadı.", socNotConfS: "Yapılandırılmadı", socErrS: "Hata", socNoApi: "API yok", socReconnect: "Yeniden bağla", socAwait: "Metrik onayı bekleniyor", socSoonOwn: "Marka ve ajans hesapları için bağlantı yakında", socLeadOwn: "Kurumsal sosyal hesaplarını resmî bağlantıyla bağla.", socLiName: "LinkedIn (kişisel profil)", socLiNote: "Kendi LinkedIn profilin bağlanır.", socLiRevoke: "LinkedIn tarafındaki izni LinkedIn ayarlarından kaldırabilirsin.", socLiGo: "LinkedIn ayarları", socErrOff: "Son eşitleme başarısız; bağlama açılınca yeniden bağlanabilir.", setSocLead: "Hesap bağlantıları profil sayfasında.", setSocGo: "Profil > Sosyal hesaplar", socOff: "Hesap bağlama şu an kapalı.", socOffRow: "Bağlama yakında açılacak",
+      socNotConf: "Bu platform için bağlantı henüz yapılandırılmadı.", socNotConfS: "Yapılandırılmadı", socErrS: "Hata", socNoApi: "API yok", socReconnect: "Yeniden bağla", socAwait: "Metrik onayı bekleniyor", socSoonOwn: "Marka ve ajans hesapları için bağlantı yakında", socLeadOwn: "Kurumsal sosyal hesaplarını resmî bağlantıyla bağla.", socLiName: "LinkedIn (kişisel profil)", socLiNote: "Kendi LinkedIn profilin bağlanır.", socLiRevoke: "LinkedIn tarafındaki izni LinkedIn ayarlarından kaldırabilirsin.", socLiGo: "LinkedIn ayarları", socErrOff: "Son eşitleme başarısız; bağlama açılınca yeniden bağlanabilir.", setSocLead: "Hesap bağlantıları profil sayfasında.", setSocGo: "Profil > Sosyal hesaplar", socOff: "Hesap bağlama şu an kapalı.", onbTitle: "Hoş geldin! Hesaplarını bağla", onbLead: "Sosyal hesaplarını resmî bağlantıyla bağla; takipçi ve etkileşim verilerin markalara doğrulanmış olarak görünür.", onbLeadOwn: "Kurumsal sosyal hesaplarını resmî bağlantıyla bağla.", onbHint: "İstediğin zaman Profil > Sosyal hesaplar bölümünden de bağlayabilirsin.", onbSkip: "Şimdilik geç", socOffRow: "Bağlama yakında açılacak",
       socSample: "örnek", socSampleNote: "Ölçüm bağlantısı henüz açık değil. Aşağıdaki sayılar gerçek değil, yalnızca nasıl görüneceğini gösteren örnek verilerdir.",
       socSampleNone: "Profiline Instagram, TikTok ya da YouTube eklersen örnek ölçümleri burada görürsün.",
       socFol: "Takipçi", socViews: "Ort. izlenme", socLikes: "Ort. beğeni", socComm: "Ort. yorum",
@@ -461,7 +465,7 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
       socTitle: "Social accounts", socLead: "Connect your account officially; follower and engagement data shows to brands as verified.",
       socConnect: "Connect", socCut: "Disconnect", socSure: "Disconnect {n}? Saved metrics will no longer update.",
       socAvail: "Not connected", socOn: "Connected", socOnAs: "Connected: {n}", socErr: "Last sync failed; try reconnecting.",
-      socNotConf: "Connections for this platform aren't set up yet.", socNotConfS: "Not configured", socErrS: "Error", socNoApi: "No API", socReconnect: "Reconnect", socAwait: "Awaiting metrics approval", socSoonOwn: "Connections for brand and agency accounts are coming soon", socLeadOwn: "Connect your company's social accounts officially.", socLiName: "LinkedIn (personal profile)", socLiNote: "Connects your own LinkedIn profile.", socLiRevoke: "You can remove the permission on LinkedIn's side in your LinkedIn settings.", socLiGo: "LinkedIn settings", socErrOff: "Last sync failed; you can reconnect once connections reopen.", setSocLead: "Account connections live on your profile page.", setSocGo: "Profile > Social accounts", socOff: "Account connections are turned off right now.", socOffRow: "Connecting opens soon",
+      socNotConf: "Connections for this platform aren't set up yet.", socNotConfS: "Not configured", socErrS: "Error", socNoApi: "No API", socReconnect: "Reconnect", socAwait: "Awaiting metrics approval", socSoonOwn: "Connections for brand and agency accounts are coming soon", socLeadOwn: "Connect your company's social accounts officially.", socLiName: "LinkedIn (personal profile)", socLiNote: "Connects your own LinkedIn profile.", socLiRevoke: "You can remove the permission on LinkedIn's side in your LinkedIn settings.", socLiGo: "LinkedIn settings", socErrOff: "Last sync failed; you can reconnect once connections reopen.", setSocLead: "Account connections live on your profile page.", setSocGo: "Profile > Social accounts", socOff: "Account connections are turned off right now.", onbTitle: "Welcome! Connect your accounts", onbLead: "Connect your social accounts officially; your follower and engagement data shows to brands as verified.", onbLeadOwn: "Connect your company's social accounts officially.", onbHint: "You can also connect them any time under Profile > Social accounts.", onbSkip: "Skip for now", socOffRow: "Connecting opens soon",
       socSample: "sample", socSampleNote: "Metric connections aren't live yet. The numbers below are not real; they're sample data showing how this will look.",
       socSampleNone: "Add Instagram, TikTok or YouTube to your profile to see sample metrics here.",
       socFol: "Followers", socViews: "Avg. views", socLikes: "Avg. likes", socComm: "Avg. comments",
@@ -2013,6 +2017,61 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
     return box;
   }
 
+  // İlk giriş adımı: hiç hesap bağlı değilse kısa karşılama penceresi (bu cihazda kullanıcı başına bir kez).
+  // Yalnız bağlama gerçekten açıkken gösterilir; ölçüm kapalı, "yakında" kipi, hata ya da sağlayıcıdan dönüşte açılmaz ve bayrak yazılmaz.
+  // "Şimdilik geç", Esc, arka plan, Profil bağlantısı ya da "Bağla" bayrağı yazar; hesap zaten bağlıysa da yazılır.
+  function onbKey() { return "bc-onb-" + U.id; }
+  function onbSeen() { try { return !!localStorage.getItem(onbKey()); } catch (e) { return true; } }
+  function onbMark() { try { localStorage.setItem(onbKey(), "1"); } catch (e) {} }
+  function onboard() {
+    if (RET || RET_P || onbSeen()) return;
+    BC.call("GET", "app/connections").then(function (c) {
+      if (!c || c.disabled || !Array.isArray(c.connectable) || onbSeen() || document.querySelector("dialog[open]")) return;
+      var cs = c.connections || [], by = {};
+      if (cs.some(function (x) { return x.status === "connected" || x.status === "error"; })) { onbMark(); return; }
+      cs.forEach(function (x) { by[x.platform] = x; });
+      var ps = c.connectable.filter(function (p) {
+        var x = by[p];
+        return !!PL[p] && !(x && (x.configured === false || x.status === "not_configured" || x.status === "no_api"));
+      });
+      if (!ps.length) return;
+      var m = note(), d = el("dialog", { class: "onb", "aria-labelledby": "onb-t", "aria-describedby": "onb-l" });
+      var skip = el("button", { type: "button", class: "btn sec", text: t("onbSkip") });
+      function close() { onbMark(); if (d.open) d.close(); }
+      function go(p, b) {
+        say(m, ""); busy(b, true); onbMark();
+        BC.call("POST", "app/connect", { platform: p }).then(function (r) {
+          if (r && /^https:\/\//.test(r.url || "")) location.assign(r.url);
+          else { busy(b, false); say(m, BC.msg("err")); }
+        }, function (e) { busy(b, false); say(m, socMsg(e)); });
+      }
+      skip.addEventListener("click", close);
+      d.addEventListener("cancel", onbMark);
+      d.addEventListener("close", function () { d.remove(); });
+      d.addEventListener("click", function (e) { if (e.target === d) close(); });
+      window.addEventListener("hashchange", function () { if (d.open) close(); });
+      d.appendChild(el("div", { class: "ow" }, [
+        el("h2", { id: "onb-t", text: t("onbTitle") }),
+        el("p", { id: "onb-l", class: "muted", text: t(isOwner() ? "onbLeadOwn" : "onbLead") }),
+        m,
+        el("div", null, ps.map(function (p) {
+          var b = el("button", { type: "button", class: "btn sm", text: t("socConnect"), "aria-label": t("socConnect") + ": " + PL[p], "data-p": p });
+          b.addEventListener("click", function () { go(p, b); });
+          return el("div", { class: "srow" }, [el("span", { class: "ic slate", "aria-hidden": "true" }, ic("link")),
+            el("div", { class: "tx" }, el("b", { text: p === "linkedin" ? t("socLiName") : PL[p] })), el("div", { class: "sa" }, b)]);
+        })),
+        el("p", { class: "hint", text: t("onbHint") }),
+        el("div", { class: "of" }, [el("a", { class: "btn sec", href: "#profile", text: t("setSocGo"), onclick: function () {
+          // Zaten #profile'daysa hashchange olmaz: pencere kapanır, sayfa sosyal hesaplara kaydırılarak yeniden çizilir
+          SOC_GO = true;
+          if (location.hash === "#profile") { close(); render(); }
+        } }), skip])
+      ]));
+      document.body.appendChild(d);
+      d.showModal();
+    }, function () {});
+  }
+
   // Gönderiler (influencer): elle giriş ve CSV, şimdilik bu cihazda (localStorage). Gönderi yoksa "örnek" etiketli örnek veri.
   // Gerçek API bağlayıcıları yalnız arayüz: METRICS_ENABLED kapalıyken app/connections "disabled" döner ve elle yol kullanılır.
   var PTYPES = ["photo", "video", "reel", "carousel", "story"], PPAGE = 12, PMETS = ["likes", "comments", "views", "reach"];
@@ -2688,6 +2747,7 @@ details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}
     chrome();
     window.addEventListener("hashchange", function () { render(); });
     render();
+    onboard();
   }, function (e) {
     if (e.code !== "auth") show(failBox(e, function () { location.reload(); }));
   });
