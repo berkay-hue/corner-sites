@@ -55,7 +55,7 @@ function parseDate(inner) {
   const mi = mon ? Math.max(TR_MONTHS.indexOf(mon), EN_MONTHS.indexOf(mon.slice(0, 3))) : -1;
   return mi < 0 ? null : `${y}-${String(mi + 1).padStart(2, "0")}-${d.padStart(2, "0")}`;
 }
-const setMeta = (html, key, val) => html.replace(new RegExp(`(<meta (?:name|property)="${key}" content=")[^"]*(")`), `$1${esc(val)}$2`);
+const setMeta = (html, key, val) => html.replace(new RegExp(`(<meta (?:name|property)="${key}" content=")[^"]*(")`), (_, a, b) => a + esc(val) + b);
 
 // --- Front matter
 function parseMd(src) {
@@ -153,7 +153,7 @@ function eachRegion(html, name, fn) {
 const AUTHOR = { "@type": "Person", "@id": "https://www.yalcinberkay.com.tr/#person", name: "Berkay Yalçın", url: "https://www.yalcinberkay.com.tr/", jobTitle: "Founder & B2B Sales Consultant",
   sameAs: ["https://www.linkedin.com/in/berkayyalcin2/", "https://www.instagram.com/beerkayyalcin"] };
 const swapImg = (tag, p, lazy) => tag.replace(/\s(srcset|sizes)="[^"]*"/g, "").replace(/\ssrc="[^"]*"/, ` src="${esc(p.fm.image)}"${lazy ? ' loading="lazy"' : ""}`)
-  .replace(/\salt(="[^"]*")?(?=[\s>])/, "").replace(/^<img\b/, `<img alt="${esc(p.fm.imageAlt || p.fm.title)}"`);
+  .replace(/\salt(="[^"]*")?(?=[\s>])/, "").replace(/^<img\b/, () => `<img alt="${esc(p.fm.imageAlt || p.fm.title)}"`);
 const readTime = body => `${Math.max(1, Math.round(body.split(/\s+/).length / 220))}${cfg.lang === "en" ? " min read" : " dk okuma"}`;
 const wordCount = body => markdown(body).replace(/<[^>]+>/g, " ").split(/\s+/).filter(w => /[\p{L}\p{N}]/u.test(w)).length;
 const L = () => cfg.lang === "en" ? { related: "Related Posts", home: "Home" } : { related: "İlgili Yazılar", home: "Ana Sayfa" };
@@ -168,25 +168,52 @@ function renderPost(tpl, post, next, related) {
   const { fm, slug } = post;
   const url = `${cfg.origin}${BASE}/blog/${slug}`;
   const img = fm.image.startsWith("http") ? fm.image : cfg.origin + fm.image;
+  // Yalnız şablonunda foto künyesi yuvası olan siteler (brandcorner): 1200x630 sosyal görsel, article:* meta,
+  // saat dilimli tarihler, görünen güncelleme tarihi, foto künyesi. Diğer sitelerin çıktısı değişmez.
+  const OPT = tpl.includes("data-sk-credit");
+  const pexels = /^https:\/\/images\.pexels\.com\//.test(img);
+  const px = q => img.split("?")[0] + "?auto=compress&cs=tinysrgb&" + q;
+  const social = OPT && pexels ? px("w=1200&h=630&fit=crop") : img;
+  const iso = d => OPT ? `${d}T00:00:00+03:00` : d;
   // <title> 60 karakteri aşmasın: tam başlık, ya da iki noktadan önceki kısım, ya da kelime sınırında kısaltma
   const head = fm.title.split(/[:?!]/)[0].trim();
   const pageTitle = [fm.title + cfg.titleSuffix, fm.title, head + cfg.titleSuffix, head].find(t => t.length <= 60) || metaDescription(fm.title, 60).replace(/…$/, "");
   let h = tpl;
-  h = h.replace(/<title>[^<]*<\/title>/, `<title>${esc(pageTitle)}</title>`);
+  h = h.replace(/<title>[^<]*<\/title>/, () => `<title>${esc(pageTitle)}</title>`);
   for (const k of ["og:title", "twitter:title"]) h = setMeta(h, k, fm.title);
   for (const k of ["description", "og:description", "twitter:description"]) h = setMeta(h, k, fm.description);
-  for (const k of ["og:image", "twitter:image"]) h = setMeta(h, k, img);
+  for (const k of ["og:image", "twitter:image"]) h = setMeta(h, k, social);
   for (const k of ["og:image:alt", "twitter:image:alt"]) h = setMeta(h, k, fm.imageAlt || fm.title);
   h = setMeta(h, "og:url", url).replace(/(<link rel="canonical" href=")[^"]*/, `$1${url}`);
   h = setMeta(h, "og:type", "article");
+  if (OPT) {
+    h = setMeta(setMeta(h, "article:published_time", iso(fm.date)), "article:modified_time", iso(fm.updated || fm.date));
+    h = fm.category ? setMeta(setMeta(h, "article:section", fm.category), "article:tag", fm.category) : h.replace(/<meta property="article:(section|tag)"[^>]*>\s*/g, "");
+    // Şablondaki 1200x630 boyutu yalnız Pexels kırpımı için doğru
+    if (!pexels) h = h.replace(/<meta property="og:image:(width|height)"[^>]*>\s*/g, "");
+  }
   h = h.replace(/<meta name="framer-search-index[^>]*>\s*/g, "");
 
-  let r = region(h, RG.title); h = setInner(h, r, r.inner.replace(/(<h1[^>]*>)[\s\S]*?(<\/h1>)/, `$1${esc(fm.title)}$2`));
+  let r = region(h, RG.title); h = setInner(h, r, r.inner.replace(/(<h1[^>]*>)[\s\S]*?(<\/h1>)/, (_, a, b) => a + esc(fm.title) + b));
   r = region(h, RG.date); h = setInner(h, r, /<time\b/.test(r.inner)
-    ? r.inner.replace(/<time[^>]*>[^<]*<\/time>/, `<time datetime="${fm.date}T00:00:00.000Z">${fmtDate(fm.date)}</time>`)
+    ? r.inner.replace(/<time[^>]*>[^<]*<\/time>/, `<time datetime="${OPT ? iso(fm.date) : fm.date + "T00:00:00.000Z"}">${fmtDate(fm.date)}</time>`)
     : setP(r.inner, fmtDate(fm.date)));
   h = eachRegion(h, RG.banner, (h, r) => setInner(h, r, r.inner.replace(/<img\b[^>]*>/, tag => swapImg(tag, post))));
-  r = region(h, RG.category); if (r) h = setInner(h, r, r.inner.replace(/(<p[^>]*>)[^<]*(<\/p>)/, `$1${esc(fm.category || "")}$2`));
+  if (OPT) {
+    r = region(h, "Updated");
+    if (r) h = fm.updated && fm.updated !== fm.date
+      ? setInner(h, r, r.inner.replace(/<time[^>]*>[^<]*<\/time>/, `<time datetime="${iso(fm.updated)}">${fmtDate(fm.updated)}</time>`))
+      : h.slice(0, r.start) + h.slice(r.end);
+    // Kapak görseli: en az 1200px (max-image-preview:large), ekrana göre srcset
+    if (pexels) h = eachRegion(h, RG.banner, (h, r) => setInner(h, r, r.inner.replace(/<img\b[^>]*>/, tag => tag
+      .replace(/\ssrc="[^"]*"/, ` src="${esc(px("w=1200"))}" srcset="${esc(`${px("w=800")} 800w, ${px("w=1200")} 1200w, ${px("w=1600")} 1600w`)}" sizes="(max-width: 760px) 100vw, 720px" width="1200" height="675"`))));
+    // Foto künyesi: front matter'da fotoğrafçı varsa adıyla, yoksa Pexels görselinde yalnız Pexels; ikisi de yoksa satır çıkar
+    r = region(h, "Credit");
+    const PX = `<a href="https://www.pexels.com" target="_blank" rel="noopener">Pexels</a>`;
+    const by = fm.imageCredit && (/^https?:\/\//i.test(fm.imageCreditUrl || "") ? `<a href="${esc(fm.imageCreditUrl)}" target="_blank" rel="noopener">${esc(fm.imageCredit)}</a>` : esc(fm.imageCredit));
+    if (r) h = by || pexels ? setInner(h, r, by ? `Photo: ${by}${pexels ? " / " + PX : ""}` : `Photo: ${PX}`) : h.slice(0, r.start) + h.slice(r.end);
+  }
+  r = region(h, RG.category); if (r) h = setInner(h, r, r.inner.replace(/(<p[^>]*>)[^<]*(<\/p>)/, (_, a, b) => a + esc(fm.category || "") + b));
   r = region(h, RG.summary); if (r) h = setInner(h, r, setP(r.inner, fm.description));
   r = region(h, RG.readTime); if (r) h = setInner(h, r, setP(r.inner, readTime(post.body)));
   const relMd = related.length ? `\n\n## ${L().related}\n\n` + related.map(p => `- [${p.fm.title.replace(/[[\]]/g, "")}](${BASE}/blog/${p.slug})`).join("\n") : "";
@@ -202,7 +229,7 @@ function renderPost(tpl, post, next, related) {
     : h.replace(`data-framer-name="${RG.content}"`, `data-framer-name="${RG.content}" data-sk-content`).replace(/(<div class=")([^"]*)("[^>]*data-sk-content)/, "$1$2 sk-post$3");
   r = region(h, RG.next);
   if (r) h = next
-    ? setInner(h, r, r.inner.replace(/(<a\b[^>]*href=")[^"]*("[^>]*>)[\s\S]*?(<\/a>)/, `$1./${next.slug}$2${esc(next.fm.title)} ›$3`))
+    ? setInner(h, r, r.inner.replace(/(<a\b[^>]*href=")[^"]*("[^>]*>)[\s\S]*?(<\/a>)/, (_, a, b, z) => `${a}./${next.slug}${b}${esc(next.fm.title)} ›${z}`))
     : h.slice(0, r.start) + h.slice(r.end);
   // Şablondaki "son yazılar" kartları: her farklı eski hedef bir ilgili yazıya eşlenir
   if (cfg.relatedCards) {
@@ -223,7 +250,7 @@ function renderPost(tpl, post, next, related) {
   }
   const ld = [{
     "@context": "https://schema.org", "@type": "BlogPosting", "@id": url + "#article", url, headline: fm.title.slice(0, 110), description: fm.description,
-    image: [img], datePublished: fm.date, dateModified: fm.updated || fm.date, mainEntityOfPage: url, inLanguage: cfg.lang,
+    image: [social], datePublished: iso(fm.date), dateModified: iso(fm.updated || fm.date), mainEntityOfPage: url, inLanguage: cfg.lang,
     ...(fm.category && { articleSection: fm.category }), wordCount: wordCount(post.body),
     ...(BLOG_ID && { isPartOf: { "@id": BLOG_ID } }),
     author: AUTHOR,
@@ -238,7 +265,7 @@ function renderPost(tpl, post, next, related) {
   // Şablon değişkenleri: {{updated}} = son güncelleme tarihi (görünen biçimde), {{updated_iso}} = YYYY-MM-DD
   h = h.split("{{updated_iso}}").join(fm.updated || fm.date).split("{{updated}}").join(fmtDate(fm.updated || fm.date));
   h = h.replace(/<style data-sk-post>[\s\S]*?<\/style>/, "").replace(/<script type="application\/ld\+json" data-sk-post>[\s\S]*?<\/script>/, "");
-  return h.replace("</head>", `${POST_CSS}<script type="application/ld+json" data-sk-post>${JSON.stringify(ld).replace(/</g, "\\u003c")}</script></head>`);
+  return h.replace("</head>", () => `${POST_CSS}<script type="application/ld+json" data-sk-post>${JSON.stringify(ld).replace(/</g, "\\u003c")}</script></head>`);
 }
 
 function renderList(tpl, posts) {
@@ -259,12 +286,13 @@ function renderList(tpl, posts) {
     for (const n of ["Tag", "Subheading"]) {
       const r = region(c, n); if (r && r.inner.replace(/<[^>]+>/g, "").trim()) c = setInner(c, r, setP(r.inner, p.fm.category || "Blog"));
     }
-    if (/<h5\b/.test(c)) c = c.replace(/(<h5[^>]*>)[\s\S]*?(<\/h5>)/, `$1${esc(p.fm.title)}$2`);
+    if (/<h2 data-sk-title\b/.test(c)) c = c.replace(/(<h2 data-sk-title\b[^>]*>)[\s\S]*?(<\/h2>)/, (_, a, b) => a + esc(p.fm.title) + b);
+    else if (/<h5\b/.test(c)) c = c.replace(/(<h5[^>]*>)[\s\S]*?(<\/h5>)/, (_, a, b) => a + esc(p.fm.title) + b);
     else { const r = region(c, "Heading"); if (r) c = setInner(c, r, setP(r.inner, p.fm.title)); }
     const r = region(c, "date &amp; author"); if (r) c = setInner(c, r, r.inner.replace(/(<p[^>]*>)[^<]*(<\/p>)/, `$1${fmtDate(p.fm.date)}$2`));
     // Sınıfla tanımlı kart alanları (ör. yalcinberkay: h3 başlık, özet, tarih, okuma süresi)
     const F = cfg.cardFields || {};
-    let f = region(c, F.title); if (f) c = setInner(c, f, f.inner.replace(/(<h\d[^>]*>)[\s\S]*?(<\/h\d>)/, `$1${esc(p.fm.title)}$2`));
+    let f = region(c, F.title); if (f) c = setInner(c, f, f.inner.replace(/(<h\d[^>]*>)[\s\S]*?(<\/h\d>)/, (_, a, b) => a + esc(p.fm.title) + b));
     for (const [k, v] of [["summary", p.fm.description], ["date", fmtDate(p.fm.date)], ["readTime", readTime(p.body)]]) {
       f = region(c, F[k]); if (f) c = setInner(c, f, setP(f.inner, v));
     }
@@ -278,7 +306,7 @@ function renderList(tpl, posts) {
   if (cfg.listHero && posts[0]) {
     const p = posts[0], hero = cfg.listHero;
     h = h.split(`href="${hero.href}"`).join(`href="./blog/${p.slug}"`);
-    h = eachRegion(h, hero.title, (h, r) => setInner(h, r, r.inner.replace(/(<h1[^>]*>)[\s\S]*?(<\/h1>)/, `$1${esc(p.fm.title)}$2`)));
+    h = eachRegion(h, hero.title, (h, r) => setInner(h, r, r.inner.replace(/(<h1[^>]*>)[\s\S]*?(<\/h1>)/, (_, a, b) => a + esc(p.fm.title) + b)));
     h = eachRegion(h, hero.text, (h, r) => setInner(h, r, setP(r.inner, p.fm.description)));
   }
   let first = true;
