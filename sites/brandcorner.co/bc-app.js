@@ -92,11 +92,17 @@
   function toLogin() { location.replace(lang() === "tr" ? "/giris" : "/login"); }
 
   // İstek: başarıda yanıt gövdesi, hatada {code, status} taşıyan Error. 401 "auth" oturumu siler; BC.guard açıksa girişe döner.
+  // Yanıt gövdesiyle WAIT içinde gelmezse istek kesilir ve hata "net" olur; sayfalar hata yolunda düğmeyi yeniden açar.
+  var WAIT = 15000;
+  function net() { var e = new Error("net"); e.code = "net"; e.status = 0; return e; }
   function call(method, path, body) {
-    var h = {}, t = token(), o = { method: method, headers: h };
+    var h = {}, t = token(), o = { method: method, headers: h }, tm;
+    var ac = typeof AbortController === "function" ? new AbortController() : null;
     if (t && !/^auth\/(login|register|forgot|reset)$/.test(path)) h.authorization = "Bearer " + t;
     if (body !== undefined) { h["content-type"] = "application/json"; o.body = JSON.stringify(body); }
-    return fetch(API + path, o).then(function (r) {
+    if (ac) o.signal = ac.signal;
+    var late = new Promise(function (_, no) { tm = setTimeout(function () { no(net()); if (ac) ac.abort(); }, WAIT); });
+    var req = fetch(API + path, o).then(function (r) {
       return r.json().catch(function () { return {}; }).then(function (d) {
         if (r.ok && d && d.ok) return d;
         var e = new Error("api");
@@ -105,9 +111,9 @@
         e.code = (d && typeof d.error === "string" && d.error) || (r.status === 401 ? "auth" : r.status === 404 || r.status === 405 ? "unavailable" : r.status >= 500 ? "server" : "err");
         throw e;
       });
-    }, function () {
-      var e = new Error("net"); e.code = "net"; e.status = 0; throw e;
-    }).catch(function (e) {
+    }, function () { throw net(); });
+    return Promise.race([req, late]).then(function (d) { clearTimeout(tm); return d; }, function (e) {
+      clearTimeout(tm);
       if (e.code === "auth") { clear(); if (BC.guard) toLogin(); }
       throw e;
     });
