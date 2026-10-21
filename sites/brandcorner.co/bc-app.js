@@ -93,7 +93,8 @@
 
   // İstek: başarıda yanıt gövdesi, hatada {code, status} taşıyan Error. 401 "auth" oturumu siler; BC.guard açıksa girişe döner.
   // Yanıt gövdesiyle WAIT içinde gelmezse istek kesilir ve hata "net" olur; sayfalar hata yolunda düğmeyi yeniden açar.
-  var WAIT = 15000;
+  // WAIT, sunucunun 15 sn'lik SMTP beklemesinden uzun: posta asılırsa önce sunucu "mail" döner, info@ metni görünür.
+  var WAIT = 30000;
   function net() { var e = new Error("net"); e.code = "net"; e.status = 0; return e; }
   function call(method, path, body) {
     var h = {}, t = token(), o = { method: method, headers: h }, tm;
