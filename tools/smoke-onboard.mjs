@@ -111,9 +111,11 @@ try {
     ok((await txt("#onb-l")).startsWith("Sosyal hesaplarını"), "influencer giriş metni");
     ok((await plats()) === ALL.join(), "4 platform düğmesi");
     ok((await txt("dialog.onb .srow:last-child b")) === "LinkedIn (kişisel profil)", "LinkedIn adı");
+    ok((await txt("dialog.onb .srow:last-child .tx span")).includes("gönderi ölçümlerini dışarıya vermiyor"), "LinkedIn ölçüm notu");
+    ok(!(await txt("dialog.onb .srow:first-child .tx span")), "Instagram'da LinkedIn notu yok");
     ok(await ev(`document.querySelector("dialog.onb").getAttribute("aria-labelledby")==="onb-t"`), "aria-labelledby");
     await shot(`onb-inf-${sz}`, w, h);
-    ok(await click("dialog.onb .of button"), "Şimdilik geç düğmesi");
+    ok(await click("dialog.onb .of button"), "Şimdilik geç düğmesi"); await sleep(200);
     ok(!(await isOpen()) && await q("dialog.onb") === 0, "geç: pencere kapandı");
     ok((await flag()) === "1", "geç: bayrak yazıldı");
     await reload();
@@ -169,6 +171,9 @@ try {
     ok(!(await isOpen()), "OAuth dönüşü: açılmadı");
 
     // 9) Marka/ajans: `connectable` yoksa ("yakında") açılmaz; varsa kurumsal metin ve sunucunun listesi, EN
+    await open({ role: "brand", conn: live([], ["instagram", "tiktok", "youtube", "linkedin"]) }, "#overview", w, h, mobile);
+    ok((await plats()) === ALL.join() && (await txt("#onb-l")) === "Kurumsal sosyal hesaplarını resmî bağlantıyla bağla.", "marka: 4 platform, kurumsal metin");
+    await shot(`onb-brand-${sz}`, w, h);
     await open({ role: "brand", conn: { ok: true, connections: [] } }, "#overview", w, h, mobile);
     ok(!(await isOpen()), "marka yakında: açılmadı");
     await open({ role: "agency", lang: "en", conn: live([], ["instagram", "linkedin"]) }, "#overview", w, h, mobile);
@@ -176,6 +181,7 @@ try {
     ok((await txt("#onb-t")) === "Welcome! Connect your accounts", "EN başlık");
     ok((await txt("#onb-l")) === "Connect your company's social accounts officially.", "EN kurumsal metin");
     ok((await plats()) === "instagram,linkedin", "ajans: sunucu listesi");
+    ok((await txt("dialog.onb .srow:last-child .tx span")).includes("doesn't share personal post metrics"), "EN LinkedIn ölçüm notu");
     ok((await txt("dialog.onb .of button")) === "Skip for now", "EN geç düğmesi");
     await shot(`onb-agency-en-${sz}`, w, h);
   }
