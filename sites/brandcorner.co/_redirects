@@ -1,14 +1,35 @@
-# Footer'daki sayfası olmayan linkler (orijinal Next.js sitesinde de 404'tü) var olan sayfalara yönlenir; /cookies ve /gdpr gizlilik politikasının ilgili bölümüne gider.
-/careers       /                302
-/press         /blog            302
-/integrations  /features        302
-/security      /features        302
-/cookies       /privacy#cookies 302
-/gdpr          /privacy#gdpr    302
+# Footer'daki sayfası olmayan linkler (orijinal Next.js sitesinde de 404'tü) var olan sayfalara yönlenir; /cookies ve /gdpr gizlilik politikasının ilgili bölümüne kalıcı gider.
+# Pages kaynaktaki sondaki /'ı eşitlemez: her sayfa yolunun /'lı ikizi de yazılır ve hedef tek adımda son adrestir (/blog/ değil /blog).
+# Statik kurallar (* ve :ad içermeyen) önce gelir; ilk dinamik kuraldan sonrakiler sırayla eşleşir. Denetim: node sites/brandcorner.co/_audit-redirects.mjs
+/careers        /                 302
+/careers/       /                 302
+/press          /blog             302
+/press/         /blog             302
+/integrations   /features         302
+/integrations/  /features         302
+/security       /features         302
+/security/      /features         302
+/cookies        /privacy#cookies  301
+/cookies/       /privacy#cookies  301
+/gdpr           /privacy#gdpr     301
+/gdpr/          /privacy#gdpr     301
 
 # Eski Next.js sitesinin /resources ve /solutions yolları (dış linkler) karşılıkları olan sayfalara kalıcı yönlenir.
-/resources/blog    /blog          301
-/resources/blog/*  /blog/:splat   301
-/resources         /blog          301
-/solutions         /solutions/brands  301
-/favicon.ico       /icon.png      301
+/resources        /blog              301
+/resources/       /blog              301
+/resources/blog   /blog              301
+/resources/blog/  /blog              301
+/solutions        /solutions/brands  301
+/solutions/       /solutions/brands  301
+
+# Tarayıcı ve akış okuyucuların tahmin ettiği dosya yolları: favicon, eski iOS ikonu, RSS (asıl akış /blog/rss.xml)
+/favicon.ico                       /icon.png              301
+/apple-touch-icon-precomposed.png  /apple-touch-icon.png  301
+/rss.xml                           /blog/rss.xml          301
+/feed.xml                          /blog/rss.xml          301
+/feed                              /blog/rss.xml          301
+/feed/                             /blog/rss.xml          301
+
+# Dinamik kurallar en sonda: /resources/blog/<yazı>/ ara adım (/blog/<yazı>/) olmadan /blog/<yazı>'ya gider.
+/resources/blog/:slug/  /blog/:slug   301
+/resources/blog/*       /blog/:splat  301
