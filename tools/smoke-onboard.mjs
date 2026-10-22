@@ -1,8 +1,8 @@
 // brandcorner panel ilk giriş sosyal hesap bağlama adımı headless testi: sahte API (fetch mock), yerel Chrome (CDP), JS hatası 0.
 // Kullanım: node tools/smoke-onboard.mjs [ekranGörüntüsüKlasörü]   (8788 ve 9333 portları boş olmalı)
-// Kontroller: hiç bağlı hesap yoksa pencere açılır (influencer 4 platform, marka/ajans `connectable` listesi), "Şimdilik geç" / Esc /
+// Kontroller: hiç bağlı hesap yoksa pencere açılır (influencer 4 platform, marka/ajans `connectable` listesi), "Şimdilik geç" / Esc / arka plan /
 // Profil bağlantısı bayrağı yazar ve pencere bir daha açılmaz, bağlı hesap varsa açılmaz, ölçüm kapalı / "yakında" / sağlayıcıdan
-// dönüşte açılmaz, "Bağla" app/connect çağırır, TR/EN, 44px dokunma hedefi, taşma; 2000x924, 390x844 ve 375x812.
+// dönüşte açılmaz, "Bağla" app/connect çağırır (başarıda sağlayıcıya gider), TR/EN, 44px dokunma hedefi, taşma; 2000x924, 390x844 ve 375x812.
 import { spawn } from "node:child_process";
 import { mkdtempSync, writeFileSync, mkdirSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -26,7 +26,7 @@ const mock = sc => `(() => {
     if (p.startsWith("app/campaigns")) return { ok: true, campaigns: [] };
     if (p === "app/notifications") return { ok: true, notifications: [] };
     if (p === "app/connections") return SC.conn;
-    if (p === "app/connect" && m === "POST") return [409, { ok: false, error: "disabled" }];
+    if (p === "app/connect" && m === "POST") return SC.connect || [409, { ok: false, error: "disabled" }];
     return { ok: true };
   };
   const of = window.fetch.bind(window);
@@ -55,13 +55,16 @@ try {
   const tgt = await (await fetch(`http://127.0.0.1:${PORT}/json/new?about:blank`, { method: "PUT" })).json();
   ws = new WebSocket(tgt.webSocketDebuggerUrl);
   await new Promise(r => ws.addEventListener("open", r));
-  let id = 0; const pend = new Map(), errs = [];
+  let id = 0; const pend = new Map(), errs = [], assigned = [];
   ws.addEventListener("message", e => { const m = JSON.parse(e.data); if (m.id && pend.has(m.id)) { pend.get(m.id)(m); pend.delete(m.id); }
+    // Sağlayıcı adresine gidiş (location.assign): adres kaydedilir, 204 ile sayfa yerinde kalır
+    if (m.method === "Fetch.requestPaused") { assigned.push(m.params.request.url); cmd("Fetch.fulfillRequest", { requestId: m.params.requestId, responseCode: 204 }); }
     if (m.method === "Runtime.exceptionThrown") errs.push(m.params.exceptionDetails.exception?.description || m.params.exceptionDetails.text);
     if (m.method === "Runtime.consoleAPICalled" && m.params.type === "error") errs.push("console.error: " + m.params.args.map(a => a.value ?? a.description).join(" ")); });
   const cmd = (method, params = {}) => new Promise(r => { const i = ++id; pend.set(i, r); ws.send(JSON.stringify({ id: i, method, params })); });
   const ev = async expr => { const r = await cmd("Runtime.evaluate", { expression: expr, awaitPromise: true, returnByValue: true }); if (r.result?.exceptionDetails) throw new Error("eval: " + (r.result.exceptionDetails.exception?.description || r.result.exceptionDetails.text)); return r.result?.result?.value; };
   await cmd("Page.enable"); await cmd("Runtime.enable");
+  await cmd("Fetch.enable", { patterns: [{ urlPattern: "https://example.invalid/*", requestStage: "Request" }] });
   for (let i = 0; i < 25; i++) { try { await fetch(BASE + "/panel.html"); break; } catch { await sleep(200); } }
 
   // Pencere içindeki dokunma hedefleri 44px; pencere ekrandan taşmaz
@@ -135,6 +138,21 @@ try {
     ok(await ev(`(window.__calls||[]).some(c=>c.startsWith("POST app/connect 409") && c.includes('"tiktok"'))`), "app/connect tiktok çağrısı");
     ok((await txt("dialog.onb .msg")) === "Hesap bağlama şu an kapalı.", "hata metni pencerede");
     ok((await flag()) === "1", "Bağla: bayrak yazıldı");
+    // başarılı bağlantı: sunucunun verdiği adrese location.assign, bayrak yazılır
+    await open({ conn: live(none), connect: { ok: true, url: "https://example.invalid/auth" } }, "#overview", w, h, mobile);
+    assigned.length = 0;
+    ok(await click('dialog.onb [data-p="instagram"]'), "Bağla (başarılı) tıklandı"); await sleep(500);
+    ok(assigned.join() === "https://example.invalid/auth", `başarılı bağlantı: sağlayıcıya yönlendirildi ${assigned.join()}`);
+    ok(await ev(`(window.__calls||[]).some(c=>c.startsWith("POST app/connect 200") && c.includes('"instagram"'))`), "başarılı bağlantı: app/connect instagram");
+    ok((await flag()) === "1", "başarılı bağlantı: bayrak yazıldı");
+    ok(!errs.length, `başarılı bağlantı: JS hatası ${errs.join(" | ").slice(0, 300)}`);
+
+    // 3b) Arka plana tıklama: pencere kapanır, bayrak yazılır
+    await open({ conn: live(none) }, "#overview", w, h, mobile);
+    ok(await isOpen(), "arka plan: pencere açıldı");
+    await cmd("Input.dispatchMouseEvent", { type: "mousePressed", x: 2, y: 2, button: "left", clickCount: 1 });
+    await cmd("Input.dispatchMouseEvent", { type: "mouseReleased", x: 2, y: 2, button: "left", clickCount: 1 }); await sleep(200);
+    ok(!(await isOpen()) && (await flag()) === "1", "arka plan: kapandı, bayrak yazıldı");
 
     // 4) Profil bağlantısı: #profile'a gider, pencere kapanır, bayrak yazılır
     await open({ conn: live(none) }, "#overview", w, h, mobile);
@@ -173,6 +191,7 @@ try {
     // 9) Marka/ajans: `connectable` yoksa ("yakında") açılmaz; varsa kurumsal metin ve sunucunun listesi, EN
     await open({ role: "brand", conn: live([], ["instagram", "tiktok", "youtube", "linkedin"]) }, "#overview", w, h, mobile);
     ok((await plats()) === ALL.join() && (await txt("#onb-l")) === "Kurumsal sosyal hesaplarını resmî bağlantıyla bağla.", "marka: 4 platform, kurumsal metin");
+    ok((await txt("dialog.onb .srow:last-child .tx span")) === "Kendi LinkedIn profilin bağlanır.", "marka: LinkedIn notunda CSV ipucu yok");
     await shot(`onb-brand-${sz}`, w, h);
     await open({ role: "brand", conn: { ok: true, connections: [] } }, "#overview", w, h, mobile);
     ok(!(await isOpen()), "marka yakında: açılmadı");
@@ -181,7 +200,8 @@ try {
     ok((await txt("#onb-t")) === "Welcome! Connect your accounts", "EN başlık");
     ok((await txt("#onb-l")) === "Connect your company's social accounts officially.", "EN kurumsal metin");
     ok((await plats()) === "instagram,linkedin", "ajans: sunucu listesi");
-    ok((await txt("dialog.onb .srow:last-child .tx span")).includes("doesn't share personal post metrics"), "EN LinkedIn ölçüm notu");
+    ok((await txt("dialog.onb .srow:last-child .tx span")) === "Connects your own LinkedIn profile.", "EN LinkedIn notu");
+    ok(!/CSV|by hand/.test(await txt("dialog.onb .srow:last-child .tx span")), "ajans: LinkedIn notunda elle/CSV ipucu yok");
     ok((await txt("dialog.onb .of button")) === "Skip for now", "EN geç düğmesi");
     await shot(`onb-agency-en-${sz}`, w, h);
   }

@@ -151,7 +151,7 @@ export const rule = {
         html = html.replace("</head>", `<link rel="alternate" hreflang="x-default" href="https://www.brandcorner.co/privacy"/></head>`);
       // Favicon ve 1200×630 paylaşım görseli: dosyalar sites/brandcorner.co'ya konunca devreye girer
       if (existsSync(join(SITE, "icon.png")) && !html.includes('rel="icon"'))
-        html = html.replace("</head>", `<link rel="icon" href="/icon.png" type="image/png"/><link rel="apple-touch-icon" href="/icon.png"/></head>`);
+        html = html.replace("</head>", `<link rel="icon" href="/icon.png" type="image/png"/><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"/></head>`);
       // Footer'daki sosyal ikonlar artık gövdeden ve chunk'tan birlikte siliniyor (BODY cut + CHUNK_PATCHES); eski gizleme CSS'i kalkar
       html = html.replace('<style data-sk-seo>footer a[href="#"]{display:none}</style>', "");
       // Skip link (Next sayfaları; statik sayfalarda HTML'de). React 19 body'ye eklenmiş fazladan etiketi hydration'da atlar

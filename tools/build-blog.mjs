@@ -164,6 +164,9 @@ function relatedFor(post, posts, n = 4) {
   return posts.filter(p => p !== post).sort((a, b) => ((b.fm.category === post.fm.category) - (a.fm.category === post.fm.category)) || d(a) - d(b)).slice(0, n);
 }
 
+// Foto künyesi yuvalı şablonlarda (brandcorner) tarihler +03:00'lı; diğer sitelerde yalnız gün
+const isoFor = opt => d => opt ? `${d}T00:00:00+03:00` : d;
+
 function renderPost(tpl, post, next, related) {
   const { fm, slug } = post;
   const url = `${cfg.origin}${BASE}/blog/${slug}`;
@@ -174,7 +177,7 @@ function renderPost(tpl, post, next, related) {
   const pexels = /^https:\/\/images\.pexels\.com\//.test(img);
   const px = q => img.split("?")[0] + "?auto=compress&cs=tinysrgb&" + q;
   const social = OPT && pexels ? px("w=1200&h=630&fit=crop") : img;
-  const iso = d => OPT ? `${d}T00:00:00+03:00` : d;
+  const iso = isoFor(OPT);
   // <title> 60 karakteri aşmasın: tam başlık, ya da iki noktadan önceki kısım, ya da kelime sınırında kısaltma
   const head = fm.title.split(/[:?!]/)[0].trim();
   const pageTitle = [fm.title + cfg.titleSuffix, fm.title, head + cfg.titleSuffix, head].find(t => t.length <= 60) || metaDescription(fm.title, 60).replace(/…$/, "");
@@ -321,8 +324,9 @@ function renderList(tpl, posts) {
 
 // RSS 2.0: <out>/blog/rss.xml, en yeni 50 yazı; sayfalara <link rel="alternate" type="application/rss+xml">
 const xmlEsc = s => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-const rfc822 = d => new Date(d + "T00:00:00Z").toUTCString();
-function rss(posts) {
+// pubDate/lastBuildDate sayfadaki meta ve JSON-LD tarihleriyle aynı an (opt: +03:00; değilse UTC gece yarısı)
+function rss(posts, opt) {
+  const iso = isoFor(opt), rfc822 = d => new Date(iso(d)).toUTCString();
   const home = `${cfg.origin}${BASE}/blog`, items = posts.slice(0, 50).map(p => {
     const u = `${home}/${encodeURIComponent(p.slug)}`;
     return `<item><title>${xmlEsc(p.fm.title)}</title><link>${u}</link><guid isPermaLink="true">${u}</guid><pubDate>${rfc822(p.fm.date)}</pubDate>` +
@@ -417,7 +421,7 @@ async function buildSite() {
     const lang = (h, p) => sets.length < 2 ? h : setLang(h, c.lang, Object.fromEntries(index.map(([l, i]) => [l, alts.get(p)?.[l] || (l === c.lang && p ? `${prefix}/blog/${p.slug}` : i)])), p ? alts.get(p) : Object.fromEntries(index));
     await mkdir(join(out, "blog"), { recursive: true });
     for (const [i, p] of posts.entries()) await writeFile(join(out, "blog", p.slug + ".html"), lang(rssLink(renderPost(tplPost, p, posts[i + 1] || posts[0], relatedFor(p, posts))), p));
-    await writeFile(join(out, "blog", "rss.xml"), rss(posts));
+    await writeFile(join(out, "blog", "rss.xml"), rss(posts, tplPost.includes("data-sk-credit")));
     if (tplList) {
       let h = renderList(tplList, posts);
       if (prefix) h = setMeta(h, "og:url", `${c.origin}${prefix}/blog`).replace(/(<link rel="canonical" href=")[^"]*/, `$1${c.origin}${prefix}/blog`);

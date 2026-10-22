@@ -7,7 +7,7 @@
 <meta name="description" content="Brand Corner panel.">
 <meta name="robots" content="noindex, nofollow">
 <link rel="icon" href="/icon.png" type="image/png">
-<link rel="apple-touch-icon" href="/icon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Brand Corner"/><meta property="og:title" content="Panel | Brand Corner">
 <meta property="og:description" content="Brand Corner panel.">
@@ -2059,8 +2059,8 @@ dialog.onb{width:100%;max-width:100%;margin:auto 0 0;max-height:92%;border-width
           b.addEventListener("click", function () { go(p, b); });
           return el("div", { class: "srow" }, [el("span", { class: "ic slate", "aria-hidden": "true" }, ic("link")),
             el("div", { class: "tx" }, [el("b", { text: p === "linkedin" ? t("socLiName") : PL[p] }),
-              // LinkedIn: kişisel profil bağlanır, gönderi ölçümü yok (Profil'deki notla aynı)
-              p === "linkedin" ? el("span", { dir: "auto", text: t("socLiNote") + " " + t("pLiNote") }) : null]), el("div", { class: "sa" }, b)]);
+              // LinkedIn: kişisel profil bağlanır; elle/CSV ipucu yalnız influencer'da (marka/ajansta elle gönderi yolu yok)
+              p === "linkedin" ? el("span", { dir: "auto", text: t("socLiNote") + (isOwner() ? "" : " " + t("pLiNote")) }) : null]), el("div", { class: "sa" }, b)]);
         })),
         el("p", { class: "hint", text: t("onbHint") }),
         el("div", { class: "of" }, [el("a", { class: "btn sec", href: "#profile", text: t("setSocGo"), onclick: function () {

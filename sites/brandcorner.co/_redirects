@@ -31,5 +31,6 @@
 /feed/                             /blog/rss.xml          301
 
 # Dinamik kurallar en sonda: /resources/blog/<yazı>/ ara adım (/blog/<yazı>/) olmadan /blog/<yazı>'ya gider.
+/resources/blog/:slug.html  /blog/:slug  301
 /resources/blog/:slug/  /blog/:slug   301
 /resources/blog/*       /blog/:splat  301
