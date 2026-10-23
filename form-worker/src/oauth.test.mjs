@@ -27,6 +27,9 @@ const METRICS = readFileSync(new URL("../migrations/0001_metrics.sql", import.me
 const MIGRATION = readFileSync(new URL("../migrations/0002_oauth.sql", import.meta.url), "utf8");
 const SYNC = readFileSync(new URL("../migrations/0003_sync.sql", import.meta.url), "utf8");
 const CHANGES = readFileSync(new URL("../migrations/0004_sync_changes.sql", import.meta.url), "utf8");
+const NOTIFY = readFileSync(new URL("../migrations/0005_notify.sql", import.meta.url), "utf8");
+const POSTS = readFileSync(new URL("../migrations/0006_posts.sql", import.meta.url), "utf8");
+const SOURCE = readFileSync(new URL("../migrations/0007_post_source.sql", import.meta.url), "utf8");
 
 // Testin ihtiyacı kadar D1: prepare().bind().all/first/run, batch (gerçek D1 gibi atomik), exec
 function d1(db) {
@@ -61,6 +64,9 @@ function freshDb() {
   db.exec(MIGRATION);
   db.exec(SYNC);
   db.exec(CHANGES);
+  db.exec(NOTIFY);
+  db.exec(POSTS);
+  db.exec(SOURCE);
   return db;
 }
 
@@ -98,6 +104,37 @@ const igRoutes = (extra = []) => [
   [`${IGV}/m2/insights?`, [200, { data: [{ name: "views", values: [{ value: 3001 }] }] }]],
   [`${IGV}/m3/insights?`, [400, { error: { message: "unsupported", type: "OAuthException", code: 100 } }]],
 ];
+
+// Gönderi aktarımı: m4'ün bağlantısı instagram.com değil, m6'nın hiç ölçümü yok (ikisi de aktarılmaz, ortalamaya girer)
+const IG_REFRESH = ["https://graph.instagram.com/refresh_access_token?", [200, { access_token: "ig-yeni", expires_in: 5184000 }]];
+const IG_MEDIA = [
+  { id: "m1", like_count: 100, comments_count: 4, permalink: "https://www.instagram.com/p/AAA/", timestamp: "2026-10-20T10:00:00+0000",
+    media_type: "IMAGE", media_product_type: "FEED", caption: "İlk gönderi", media_url: "https://cdn.ig.test/m1.jpg" },
+  { id: "m2", like_count: 50, comments_count: 2, permalink: "https://www.instagram.com/reel/BBB/", timestamp: "2026-10-21T09:30:00+0000",
+    media_type: "VIDEO", media_product_type: "REELS", caption: "Reel", media_url: "https://cdn.ig.test/m2.mp4", thumbnail_url: "https://cdn.ig.test/m2.jpg" },
+  { id: "m3", like_count: 10, comments_count: 1, permalink: "https://www.instagram.com/p/CCC/", timestamp: "2026-10-22T08:00:00+0000",
+    media_type: "CAROUSEL_ALBUM", media_product_type: "FEED", caption: "x".repeat(2300), media_url: "https://cdn.ig.test/m3.jpg" },
+  { id: "m4", like_count: 7, comments_count: 0, permalink: "https://evil.test/p/DDD/", timestamp: "2026-10-22T08:00:00+0000", media_type: "IMAGE" },
+  { id: "m5", comments_count: 3, permalink: "https://www.instagram.com/p/EEE/", timestamp: "2026-10-23T07:00:00+0000",
+    media_type: "VIDEO", media_product_type: "FEED", media_url: "https://cdn.ig.test/m5.mp4" },
+  { id: "m6", permalink: "https://www.instagram.com/p/FFF/", timestamp: "2026-10-23T07:00:00+0000", media_type: "IMAGE" },
+];
+const IG_POSTS = [
+  { url: "https://www.instagram.com/p/AAA/", type: "photo", date: "2026-10-20", caption: "İlk gönderi", thumb: "https://cdn.ig.test/m1.jpg", likes: 100, comments: 4, views: 1000, reach: 800 },
+  { url: "https://www.instagram.com/reel/BBB/", type: "reel", date: "2026-10-21", caption: "Reel", thumb: "https://cdn.ig.test/m2.jpg", likes: 50, comments: 2, views: 3000, reach: 2500 },
+  { url: "https://www.instagram.com/p/CCC/", type: "carousel", date: "2026-10-22", caption: "x".repeat(2200), thumb: "https://cdn.ig.test/m3.jpg", likes: 10, comments: 1, views: 400, reach: null },
+  { url: "https://www.instagram.com/p/EEE/", type: "video", date: "2026-10-23", caption: "", thumb: "", likes: null, comments: 3, views: null, reach: null },
+];
+const igPostRoutes = (extra = [], media = IG_MEDIA) => igRoutes([
+  ...extra,
+  [`${IGV}/me/media?`, [200, { data: media }]],
+  [`${IGV}/m1/insights?`, [200, { data: [{ name: "views", total_value: { value: 1000 } }, { name: "reach", total_value: { value: 800 } }] }]],
+  [`${IGV}/m2/insights?`, [200, { data: [{ name: "views", values: [{ value: 3000 }] }, { name: "reach", values: [{ value: 2500 }] }] }]],
+  [`${IGV}/m3/insights?`, [200, { data: [{ name: "views", total_value: { value: 400 } }] }]],
+  [`${IGV}/m4/insights?`, [200, { data: [{ name: "views", total_value: { value: 50 } }] }]],
+  [`${IGV}/m5/insights?`, [400, { error: { message: "unsupported", type: "OAuthException", code: 100 } }]],
+  [`${IGV}/m6/insights?`, [400, { error: { message: "unsupported", type: "OAuthException", code: 100 } }]],
+]);
 
 const TT = "https://open.tiktokapis.com/v2";
 const ttRoutes = (extra = []) => [
@@ -207,18 +244,26 @@ test("kod takası: üç sağlayıcı aynı biçime çevrilir", async () => {
 test("metrikler: takipçi ve son gönderilerin ortalamaları; gizli değer ortalamaya girmez", async () => {
   const ig = await fetchMetrics("instagram", "ig-token", fakeFetch(igRoutes()));
   // m2'nin beğenisi gizli, m3'ün izlenmesi alınamadı
-  assert.deepEqual(ig, { external_id: "1784", handle: "inf_ig", followers: 5400, avg_views: 2001, avg_likes: 151, avg_comments: 3, posts_sampled: 3 });
+  assert.deepEqual(ig, { external_id: "1784", handle: "inf_ig", followers: 5400, avg_views: 2001, avg_likes: 151, avg_comments: 3, posts_sampled: 3, posts: [] });
+
+  // Bağlantılı gönderiler aktarılacaklar listesine girer: tür, tarih, kapak, metin (2200), izlenme ve erişim
+  const igf = fakeFetch(igPostRoutes());
+  const igp = await fetchMetrics("instagram", "ig-token", igf);
+  assert.deepEqual(igp.posts, IG_POSTS);
+  assert.deepEqual([igp.avg_views, igp.avg_likes, igp.avg_comments, igp.posts_sampled], [1113, 42, 2, 6]);
+  assert.match(new URL(igf.calls[1].url).searchParams.get("fields"), /\bpermalink\b.*\btimestamp\b.*\bthumbnail_url\b/);
+  assert.ok(igf.calls.slice(2).every(c => new URL(c.url).searchParams.get("metric") === "views,reach"));
 
   const ttf = fakeFetch(ttRoutes());
   assert.deepEqual(await fetchMetrics("tiktok", "tt-token", ttf),
-    { external_id: "tt-1", handle: "inf_tt", followers: 12000, avg_views: 6000, avg_likes: 400, avg_comments: 30, posts_sampled: 2 });
+    { external_id: "tt-1", handle: "inf_tt", followers: 12000, avg_views: 6000, avg_likes: 400, avg_comments: 30, posts_sampled: 2, posts: [] });
   assert.equal(ttf.calls[0].headers.authorization, "Bearer tt-token");
   assert.deepEqual(ttf.calls[1].body, { max_count: 12 });
 
   // YouTube sayıları metin döner; eksik beğeni/yorum ortalamaya girmez
   const ytf = fakeFetch(ytRoutes());
   assert.deepEqual(await fetchMetrics("youtube", "yt-token", ytf),
-    { external_id: "UC1", handle: "@infyt", followers: 8800, avg_views: 1000, avg_likes: 90, avg_comments: 9, posts_sampled: 2 });
+    { external_id: "UC1", handle: "@infyt", followers: 8800, avg_views: 1000, avg_likes: 90, avg_comments: 9, posts_sampled: 2, posts: [] });
   assert.match(ytf.calls.at(-1).url, /id=a,b$/);
 
   // Gizli abone sayısı ve videosuz kanal (yükleme listesi 404)
@@ -227,7 +272,7 @@ test("metrikler: takipçi ve son gönderilerin ortalamaları; gizli değer ortal
     [`${YT}/playlistItems?`, [404, { error: { code: 404, message: "playlistNotFound" } }]],
   ]));
   assert.deepEqual(await fetchMetrics("youtube", "t", hidden),
-    { external_id: "UC2", handle: "Yeni", followers: null, avg_views: null, avg_likes: null, avg_comments: null, posts_sampled: 0 });
+    { external_id: "UC2", handle: "Yeni", followers: null, avg_views: null, avg_likes: null, avg_comments: null, posts_sampled: 0, posts: [] });
 
   const noChannel = fakeFetch([[`${YT}/channels?`, [200, { items: [] }]]]);
   await assert.rejects(fetchMetrics("youtube", "t", noChannel), e => e.code === "no_channel");
@@ -975,13 +1020,12 @@ const counted = DB => {
 
 test("syncDue: D1 sınırı — liste + hesap başına en çok SYNC_D1 ifade, sığmayan hesap sonraki saate kalır", async t => {
   t.mock.method(console, "log", () => {});
-  const { db, env, join } = await setup({ ...TT_ENV, OAUTH_TOKEN_KEY: KEY });
+  const { db, env, join } = await setup({ ...IG_ENV, OAUTH_TOKEN_KEY: KEY, POSTS_ENABLED: "1" });
   const a = await join("influencer", "a@x.co"), b = await join("influencer", "b@x.co");
-  await seed(db, env, a.id, "tiktok", "tt-1");
-  await seed(db, env, b.id, "tiktok", "tt-2");
-  // Süresi geçmiş token: en kötü yol (yenileme + ölçüm)
-  db.prepare("UPDATE oauth_tokens SET expires_at = datetime('now', '-1 hours')").run();
-  const f = fakeFetch(ttRoutes());
+  await seed(db, env, a.id, "instagram", "1784");
+  await seed(db, env, b.id, "instagram", "1785");
+  // En kötü yol: Instagram token'ı 7 günden kısa (yenileme) + ölçüm + gönderiler
+  const f = fakeFetch(igPostRoutes([IG_REFRESH]));
   // Bir hesaba yetmeyen D1 payı: hiçbir sorgu ve istek yok
   const none = counted(env.DB);
   assert.deepEqual(await syncDue({ ...env, DB: none.DB }, f, { d1: SYNC_D1 }), ZERO);
@@ -990,11 +1034,22 @@ test("syncDue: D1 sınırı — liste + hesap başına en çok SYNC_D1 ifade, s�
   // İkinci hesaba bir ifade eksik pay: ilk hesap yenilenip ölçülür, ikincisi kalır; harcanan ifade payı aşmaz
   const one = counted(env.DB);
   assert.deepEqual(await syncDue({ ...env, DB: one.DB }, f, { d1: 2 * SYNC_D1 }), { ...ZERO, synced: 1, deferred: 1 });
-  assert.ok(f.calls.some(c => c.body?.grant_type === "refresh_token"), "yenileme yapıldı");
+  assert.ok(f.calls.some(c => c.url.startsWith(IG_REFRESH[0])), "yenileme yapıldı");
   assert.equal(one.n(), 1 + SYNC_D1); // SYNC_D1 en kötü yolda tam
-  near(due(db, a.id), 1435);
-  assert.equal(due(db, b.id), null);
+  near(due(db, a.id, "instagram"), 1435);
+  assert.equal(due(db, b.id, "instagram"), null);
   assert.equal(count(db, "metric_snapshots"), 1);
+  assert.equal(count(db, "posts"), IG_POSTS.length);
+  // TikTok'un en kötü yolu (yenileme + ölçüm, gönderi yok) da payın içinde
+  const tt = await setup({ ...TT_ENV, OAUTH_TOKEN_KEY: KEY, POSTS_ENABLED: "1" });
+  const c = await tt.join("influencer", "c@x.co");
+  await seed(tt.db, tt.env, c.id, "tiktok", "tt-1");
+  tt.db.prepare("UPDATE oauth_tokens SET expires_at = datetime('now', '-1 hours')").run();
+  const two = counted(tt.env.DB);
+  const g = fakeFetch(ttRoutes());
+  assert.deepEqual(await syncDue({ ...tt.env, DB: two.DB }, g, { d1: 1 + SYNC_D1 }), { ...ZERO, synced: 1 });
+  assert.ok(g.calls.some(x => x.body?.grant_type === "refresh_token"), "yenileme yapıldı");
+  assert.ok(two.n() <= 1 + SYNC_D1, String(two.n()));
 });
 
 test("syncDue: kira — başkası almışsa busy, senkron sürerken kira düşerse ölçüm yazılmaz", async t => {
@@ -1016,6 +1071,127 @@ test("syncDue: kira — başkası almışsa busy, senkron sürerken kira düşer
   assert.deepEqual(await syncDue(env, fakeFetch(ttRoutes([route(`${TT}/video/list/`, reconnect)]))), { ...ZERO, changed: 1 });
   assert.equal(count(db, "metric_snapshots"), 1);
   assert.equal(due(db, a.id), null);
+});
+
+// Gönderi aktarımı: aktarılan gönderi account_id'li, elle girilen NULL
+const igAcc = (db, userId) => db.prepare("SELECT id FROM social_accounts WHERE user_id = ? AND platform = 'instagram'").get(userId).id;
+const imported = db => db.prepare("SELECT url, platform, type, date, caption, thumb, account_id FROM posts WHERE account_id IS NOT NULL ORDER BY date")
+  .all().map(r => ({ ...r }));
+const snapsOf = (db, url) => db.prepare("SELECT s.at, s.likes, s.comments, s.views, s.reach FROM post_snaps s JOIN posts p ON p.id = s.post_id WHERE p.url = ? ORDER BY s.at")
+  .all(url).map(r => ({ ...r }));
+const today = () => new Date().toISOString().slice(0, 10);
+const MANUAL = { url: "https://www.instagram.com/p/CCC/", type: "photo", date: "2026-10-01", caption: "elle", likes: 5, at: "2026-10-02" };
+const IG_9999 = [`${IGV}/me?`, [200, { user_id: "9999", username: "yeni_ig", followers_count: 10 }]];
+
+test("syncDue: Instagram gönderileri Gönderiler'e aktarılır; aynı gün yeniden senkron tazeler; elle girilen gönderiye dokunulmaz", async t => {
+  t.mock.method(console, "log", () => {});
+  const { db, env, call, join } = await setup({ ...IG_ENV, OAUTH_TOKEN_KEY: KEY, POSTS_ENABLED: "1" });
+  const a = await join("influencer", "a@x.co");
+  await seed(db, env, a.id, "instagram", "1784");
+  const r = await call("POST", "/app/posts/manual", { token: a.token, body: MANUAL });
+  assert.equal(r.status, 200, JSON.stringify(r.body));
+  // POSTS_ENABLED kapalı: ölçüm yazılır, gönderi aktarılmaz
+  assert.deepEqual(await syncDue({ ...env, POSTS_ENABLED: "0" }, fakeFetch(igPostRoutes([IG_REFRESH]))), { ...ZERO, synced: 1 });
+  assert.deepEqual([count(db, "metric_snapshots"), count(db, "posts")], [1, 1]);
+  // Açık: bağlantısı elle girilenle aynı olan (CCC) atlanır, diğerleri hesaba bağlı ve bugünün ölçümüyle aktarılır
+  db.prepare("UPDATE social_accounts SET next_sync_at = NULL").run();
+  assert.deepEqual(await syncDue(env, fakeFetch(igPostRoutes([IG_REFRESH]))), { ...ZERO, synced: 1 });
+  const acc = igAcc(db, a.id);
+  const pick = ({ url, type, date, caption, thumb }) => ({ url, platform: "instagram", type, date, caption, thumb, account_id: acc });
+  assert.deepEqual(imported(db), IG_POSTS.filter(p => p.url !== MANUAL.url).map(pick));
+  assert.deepEqual(snapsOf(db, IG_POSTS[0].url), [{ at: today(), likes: 100, comments: 4, views: 1000, reach: 800 }]);
+  assert.deepEqual(snapsOf(db, IG_POSTS[3].url), [{ at: today(), likes: null, comments: 3, views: null, reach: null }]);
+  assert.deepEqual({ ...db.prepare("SELECT type, caption, account_id FROM posts WHERE url = ?").get(MANUAL.url) }, { type: "photo", caption: "elle", account_id: null });
+  assert.deepEqual(snapsOf(db, MANUAL.url), [{ at: "2026-10-02", likes: 5, comments: null, views: null, reach: null }]);
+  // Panel listesi: aktarılanlar ve elle girilen, ölçümleriyle (tarih sırasıyla)
+  const list = await call("GET", "/app/posts", { token: a.token });
+  assert.equal(list.status, 200, JSON.stringify(list.body));
+  assert.deepEqual(list.body.posts.map(p => [p.url, p.type, p.snaps.length]), [
+    [IG_POSTS[3].url, "video", 1], [IG_POSTS[1].url, "reel", 1], [IG_POSTS[0].url, "photo", 1], [MANUAL.url, "photo", 1],
+  ]);
+  assert.deepEqual(list.body.posts[2].snaps, [{ at: today(), likes: 100, comments: 4, views: 1000, reach: 800 }]);
+
+  // Aynı gün yeniden: metin, kapak ve o günün ölçümü tazelenir; gönderi ve ölçüm sayısı aynı kalır
+  const media = IG_MEDIA.map(m => m.id === "m1" ? { ...m, like_count: 120, caption: "Düzeltildi", media_url: "https://cdn.ig.test/m1-yeni.jpg" } : m);
+  const before = [count(db, "posts"), count(db, "post_snaps")];
+  db.prepare("UPDATE social_accounts SET next_sync_at = NULL").run();
+  assert.deepEqual(await syncDue(env, fakeFetch(igPostRoutes([], media))), { ...ZERO, synced: 1 });
+  assert.deepEqual([count(db, "posts"), count(db, "post_snaps")], before);
+  assert.deepEqual({ ...db.prepare("SELECT caption, thumb, date FROM posts WHERE url = ?").get(IG_POSTS[0].url) },
+    { caption: "Düzeltildi", thumb: "https://cdn.ig.test/m1-yeni.jpg", date: "2026-10-20" });
+  assert.deepEqual(snapsOf(db, IG_POSTS[0].url), [{ at: today(), likes: 120, comments: 4, views: 1000, reach: 800 }]);
+  // Ertesi gün: aktarılan gönderiye yeni ölçüm satırı eklenir, öncekiler kalır; elle girilen değişmez
+  db.prepare("UPDATE post_snaps SET at = date('now', '-1 days') WHERE post_id IN (SELECT id FROM posts WHERE account_id IS NOT NULL)").run();
+  db.prepare("UPDATE social_accounts SET next_sync_at = NULL").run();
+  assert.deepEqual(await syncDue(env, fakeFetch(igPostRoutes())), { ...ZERO, synced: 1 });
+  assert.equal(count(db, "post_snaps"), 2 * (IG_POSTS.length - 1) + 1);
+  assert.deepEqual(snapsOf(db, IG_POSTS[0].url).map(s => s.likes), [120, 100]);
+  assert.deepEqual(snapsOf(db, MANUAL.url), [{ at: "2026-10-02", likes: 5, comments: null, views: null, reach: null }]);
+});
+
+test("Gönderi aktarımı: bağ koparılınca ya da başka hesap bağlanınca aktarılanlar silinir; elle girilenler ve başkasınınkiler kalır", async t => {
+  t.mock.method(console, "log", () => {});
+  let net = fakeFetch([]);
+  t.mock.method(globalThis, "fetch", (...a) => net(...a));
+  const { db, env, call, join } = await setup({ ...IG_ENV, OAUTH_TOKEN_KEY: KEY, POSTS_ENABLED: "1" });
+  const a = await join("influencer", "a@x.co"), b = await join("influencer", "b@x.co");
+  assert.equal((await call("POST", "/app/posts/manual", { token: a.token, body: MANUAL })).status, 200);
+  const connect = async routes => {
+    const ticket = await land(env, await start(call, a.token));
+    net = fakeFetch(routes);
+    const r = await finish(call, a.token, ticket);
+    assert.equal(r.status, 200, JSON.stringify(r.body));
+  };
+  const sync = async (extra = []) => {
+    db.prepare("UPDATE social_accounts SET next_sync_at = NULL WHERE user_id = ?").run(a.id);
+    assert.deepEqual(await syncDue(env, fakeFetch(igPostRoutes([IG_REFRESH, ...extra]))), { ...ZERO, synced: 1 });
+  };
+  // b'nin kendi hesabından aktarılmış bir gönderisi (a'nın işlemleri dokunmaz)
+  await seed(db, env, b.id, "instagram", "1785");
+  db.prepare("UPDATE social_accounts SET next_sync_at = datetime('now', '+1 days') WHERE user_id = ?").run(b.id);
+  db.prepare("INSERT INTO posts (user_id, url, platform, type, date, account_id) VALUES (?, 'https://www.instagram.com/p/BBB1/', 'instagram', 'photo', '2026-10-20', ?)")
+    .run(b.id, igAcc(db, b.id));
+  const theirs = () => db.prepare("SELECT COUNT(*) AS n FROM posts WHERE user_id = ?").get(b.id).n;
+
+  await connect(igRoutes());
+  await sync();
+  assert.equal(imported(db).filter(p => p.account_id === igAcc(db, a.id)).length, 3);
+  // Aynı hesap yeniden bağlanır: gönderiler kalır
+  await connect(igRoutes());
+  assert.equal(imported(db).filter(p => p.account_id === igAcc(db, a.id)).length, 3);
+  // Başka hesap (9999): eski hesaptan aktarılanlar ve ölçümleri silinir, elle girilen kalır
+  await connect(igRoutes([IG_9999]));
+  assert.equal(imported(db).filter(p => p.account_id === igAcc(db, a.id)).length, 0);
+  assert.deepEqual(db.prepare("SELECT url FROM posts WHERE user_id = ?").all(a.id).map(r => r.url), [MANUAL.url]);
+  assert.equal(snapsOf(db, MANUAL.url).length, 1);
+  assert.equal(count(db, "post_snaps"), 1);
+  // Yeni hesaptan aktarım, ardından bağı koparma: aktarılanlar silinir, elle girilen ve b'ninki kalır
+  await sync([IG_9999]);
+  assert.equal(imported(db).filter(p => p.account_id === igAcc(db, a.id)).length, 3);
+  net = fakeFetch([]);
+  const r = await call("POST", "/app/disconnect", { token: a.token, body: { platform: "instagram" } });
+  assert.equal(r.status, 200, JSON.stringify(r.body));
+  assert.deepEqual(db.prepare("SELECT url, account_id FROM posts WHERE user_id = ?").all(a.id).map(r => ({ ...r })), [{ url: MANUAL.url, account_id: null }]);
+  assert.equal(count(db, "post_snaps"), 1);
+  assert.equal(theirs(), 1);
+  assert.equal(net.calls.length, 0);
+});
+
+test("syncDue: kira düşerse gönderi de yazılmaz; kullanıcının MAX_POSTS gönderisi varsa yenisi eklenmez, ölçüm yazılır", async t => {
+  t.mock.method(console, "log", () => {});
+  const { db, env, join } = await setup({ ...IG_ENV, OAUTH_TOKEN_KEY: KEY, POSTS_ENABLED: "1" });
+  const a = await join("influencer", "a@x.co");
+  await seed(db, env, a.id, "instagram", "1784");
+  // Gönderiler okunurken yeniden bağlanır (finishOAuth next_sync_at'i NULL yapar): hiçbir şey yazılmaz
+  const reconnect = [`${IGV}/me/media?`, () => { db.prepare("UPDATE social_accounts SET next_sync_at = NULL").run(); return [200, { data: IG_MEDIA }]; }];
+  assert.deepEqual(await syncDue(env, fakeFetch(igPostRoutes([IG_REFRESH, reconnect]))), { ...ZERO, changed: 1 });
+  assert.deepEqual([count(db, "metric_snapshots"), count(db, "posts"), count(db, "post_snaps")], [0, 0, 0]);
+  // 1000 elle girilmiş gönderi: aktarım eklemez, ölçüm yine yazılır
+  const add = db.prepare("INSERT INTO posts (user_id, url, platform, type, date) VALUES (?, ?, 'instagram', 'photo', '2026-01-01')");
+  for (let i = 0; i < 1000; i++) add.run(a.id, `https://www.instagram.com/p/elle${i}/`);
+  db.prepare("UPDATE social_accounts SET next_sync_at = NULL").run();
+  assert.deepEqual(await syncDue(env, fakeFetch(igPostRoutes([IG_REFRESH]))), { ...ZERO, synced: 1 });
+  assert.deepEqual([count(db, "metric_snapshots"), count(db, "posts"), count(db, "post_snaps")], [1, 1000, 0]);
 });
 
 test("syncDue: hesap kimliği değişirse ~1 saat, sağlayıcı hatasında ~6 saat sonra yeniden denenir", async t => {

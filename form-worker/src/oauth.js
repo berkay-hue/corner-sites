@@ -4,6 +4,8 @@
 // kadar "veri yok". X ve Twitch bağlanamaz ("veri yok"). METRICS_ENABLED kapalıyken bağlanılamaz.
 // Bağlı hesabın tek kaynağı social_accounts (0001_metrics.sql); 0002_oauth.sql akış durumu ve token'ları tutar.
 // Token'lar OAUTH_TOKEN_KEY (base64, 32 bayt) ile AES-GCM şifreli saklanır.
+// POSTS_ENABLED "1" ise Instagram senkronu son 12 gönderiyi panelin Gönderiler kaydına (posts/post_snaps, 0007
+// posts.account_id) aktarır; bağ koparılınca ya da platformda başka hesap bağlanınca bu gönderiler silinir.
 // Akış: POST /app/connect → sağlayıcı → GET /oauth/<platform>/callback (index.js; OAUTH_REDIRECT_BASE yoksa
 // worker'ın kendi adresi) → panel /panel?oauth=<p>&result=pending#ticket=<bilet> → POST /app/connect/finish.
 // Token takası yalnızca bileti getiren oturum akışı başlatan kullanıcıysa yapılır; callback'i açan tarayıcı
@@ -147,8 +149,9 @@ export async function startOAuth(env, userId, p, { api, origin, site }) {
 }
 export const pkceChallenge = async verifier => b64u(new Uint8Array(await crypto.subtle.digest("SHA-256", enc.encode(verifier))));
 
-// Bağı koparır: token silinir, hesabın ölçümleri (metric_snapshots) silinir, link ölçümlerinin hesap bağı
-// kopar, social_accounts "revoked" olur ve platform kimliği boşalır (hesap başka kullanıcıya bağlanabilir).
+// Bağı koparır: token silinir, hesabın ölçümleri (metric_snapshots) ve hesaptan aktarılan gönderiler (posts,
+// post_snaps; elle girilenler kalır) silinir, link ölçümlerinin hesap bağı kopar, social_accounts "revoked" olur
+// ve platform kimliği boşalır (hesap başka kullanıcıya bağlanabilir).
 // Platform yapılandırılmamış olsa da çalışır; 0002 uygulanmamışsa (oauth_tokens yok) silinecek token yoktur,
 // bağ yine koparılır; 0001 de yoksa yapılacak bir şey yoktur. Ardından sağlayıcıda izin geri alınmaya
 // çalışılır (TikTok, Google); olmazsa yine de bağ kopmuştur. Instagram'ın ve LinkedIn'in iptal ucu yok, kullanıcı
@@ -160,6 +163,15 @@ export async function disconnectOAuth(env, userId, p, f = fetch) {
   } catch (e) {
     if (!missing(e)) throw e;
     tokens = false;
+  }
+  // 0006 ya da 0007 uygulanmamışsa (tablo ya da sütun yok) aktarılmış gönderi de yoktur
+  try {
+    await env.DB.batch([
+      env.DB.prepare(`DELETE FROM post_snaps WHERE post_id IN (SELECT id FROM posts WHERE account_id IN (${ACCOUNT}))`).bind(userId, p),
+      env.DB.prepare(`DELETE FROM posts WHERE account_id IN (${ACCOUNT})`).bind(userId, p),
+    ]);
+  } catch (e) {
+    if (!/no such (table|column)/i.test(e?.message || "")) throw e;
   }
   try {
     await env.DB.batch([
@@ -248,7 +260,28 @@ const avg = list => {
   return xs.length ? Math.round(xs.reduce((a, b) => a + b, 0) / xs.length) : null;
 };
 
-// Her sağlayıcı: profile → {external_id, handle, followers, ...}; recent → [{views, likes, comments}]
+// Aktarılan gönderi: platform.js postIn kurallarıyla aynı (platform.js bu dosyayı içe aktardığı için kopya).
+// Bağlantı yalnız https instagram.com, tarih YYYY-MM-DD, kapak https, metin en çok 2200, ölçüm 0+ tam sayı.
+// Bağlantısı, tarihi ya da hiç ölçümü olmayan gönderi aktarılmaz (ortalamaya yine girer).
+const MAX_POSTS = 1000; // platform.js ile aynı: kullanıcı başına gönderi sınırı
+const IG_TYPE = { IMAGE: "photo", VIDEO: "video", CAROUSEL_ALBUM: "carousel" };
+const okThumb = s => typeof s === "string" && /^https:\/\/[^\s"'<>]{4,2000}$/.test(s);
+const whole = v => { const n = num(v); return n !== null && Number.isInteger(n) && n < 1e12 ? n : null; };
+function igPost(m, ins) {
+  const url = typeof m.permalink === "string" ? m.permalink.trim() : "";
+  const date = typeof m.timestamp === "string" ? m.timestamp.slice(0, 10) : "";
+  if (url.length > 2000 || !/^https:\/\/(www\.)?instagram\.com\/[^\s"'<>]+$/.test(url) || !/^\d{4}-\d{2}-\d{2}$/.test(date)) return null;
+  const type = m.media_product_type === "REELS" ? "reel" : m.media_product_type === "STORY" ? "story" : IG_TYPE[m.media_type] || "photo";
+  // Videoda media_url videonun kendisi, kapak thumbnail_url; fotoğraf ve albümde kapak media_url
+  const thumb = [m.thumbnail_url, m.media_type === "VIDEO" ? null : m.media_url].find(okThumb) || "";
+  const post = {
+    url, type, date, caption: typeof m.caption === "string" ? m.caption.slice(0, 2200) : "", thumb,
+    likes: whole(m.like_count), comments: whole(m.comments_count), views: whole(ins.views), reach: whole(ins.reach),
+  };
+  return (post.likes ?? post.comments ?? post.views ?? post.reach ?? null) === null ? null : post;
+}
+
+// Her sağlayıcı: profile → {external_id, handle, followers, ...}; recent → [{views, likes, comments, post?}]
 const API = {
   instagram: {
     async profile(token, f) {
@@ -256,12 +289,16 @@ const API = {
       return { external_id: me.user_id ?? me.id, handle: me.username, followers: me.followers_count };
     },
     async recent(token, f) {
-      const media = await json(f, igUrl("me/media", { fields: "id,like_count,comments_count", limit: SAMPLE, access_token: token }));
+      const media = await json(f, igUrl("me/media", {
+        fields: "id,like_count,comments_count,permalink,timestamp,media_type,media_product_type,caption,media_url,thumbnail_url",
+        limit: SAMPLE, access_token: token,
+      }));
       const items = (media.data || []).slice(0, SAMPLE);
-      // İzlenme yalnızca gönderi insights'ında; alınamayan gönderi (eski, reklam vb.) ortalamaya girmez
-      const views = await Promise.all(items.map(m => json(f, igUrl(`${m.id}/insights`, { metric: "views", access_token: token }))
-        .then(b => { const d = b.data?.[0]; return d?.total_value?.value ?? d?.values?.[0]?.value ?? null; }, () => null)));
-      return items.map((m, i) => ({ views: views[i], likes: m.like_count, comments: m.comments_count }));
+      // İzlenme ve erişim yalnızca gönderi insights'ında; alınamayan gönderi (eski, reklam vb.) ortalamaya girmez
+      const ins = await Promise.all(items.map(m => json(f, igUrl(`${m.id}/insights`, { metric: "views,reach", access_token: token }))
+        .then(b => Object.fromEntries((Array.isArray(b.data) ? b.data : []).map(d => [d?.name, d?.total_value?.value ?? d?.values?.[0]?.value ?? null])),
+          () => ({}))));
+      return items.map((m, i) => ({ views: ins[i].views ?? null, likes: m.like_count, comments: m.comments_count, post: igPost(m, ins[i]) }));
     },
   },
   tiktok: {
@@ -324,7 +361,7 @@ export async function fetchProfile(p, token, f = fetch) {
   return { external_id: extId(pr.external_id), handle: cleanHandle(pr.handle), followers: num(pr.followers) };
 }
 
-// Takipçi + son gönderilerin ortalama izlenme, beğeni ve yorumu
+// Takipçi + son gönderilerin ortalama izlenme, beğeni ve yorumu; posts: aktarılacak gönderiler (yalnız Instagram)
 export async function fetchMetrics(p, token, f = fetch) {
   if (!SYNCED.includes(p)) throw new ProviderError("no_api");
   const pr = await API[p].profile(token, f);
@@ -332,7 +369,7 @@ export async function fetchMetrics(p, token, f = fetch) {
   return {
     external_id: extId(pr.external_id), handle: cleanHandle(pr.handle), followers: num(pr.followers),
     avg_views: avg(posts.map(x => x.views)), avg_likes: avg(posts.map(x => x.likes)), avg_comments: avg(posts.map(x => x.comments)),
-    posts_sampled: posts.length,
+    posts_sampled: posts.length, posts: posts.map(x => x.post).filter(Boolean),
   };
 }
 
@@ -430,10 +467,11 @@ export async function syncAccount(env, userId, p, f = fetch) {
 // Kira: hesap 15 dakikalığına alınır (next_sync_at), aynı anda tek senkron olur ve iki senkron aynı refresh token'ı
 // harcamaz. Ölçüm yalnızca kira hâlâ bizdeyse, hesap bağlıysa ve platform kimliği aynıysa yazılır; hesap yeniden
 // bağlanınca kira düşer (finishOAuth next_sync_at'i NULL yapar), eski hesabın ölçümü yeni hesaba yazılmaz.
+// POSTS_ENABLED "1" ise gönderiler (fetchMetrics posts) aynı koşullarla ve aynı batch'te posts/post_snaps'e yazılır.
 const COST = { instagram: 15, tiktok: 3, youtube: 4 }; // profil + gönderiler (Instagram: gönderi başına insights) + yenileme
 const NEXT = { ok: "+1435 minutes", fail: "+355 minutes", changed: "+55 minutes" }; // saatlik cron'da ~1 gün, ~6 saat, ~1 saat
 export const SYNC_MIN = Math.min(...Object.values(COST));
-export const SYNC_D1 = 6; // kira, token, yenileme, son senkron işareti, ölçüm + kira bırakma (batch)
+export const SYNC_D1 = 8; // kira, token, yenileme, son senkron işareti, ölçüm + gönderiler + gönderi ölçümleri + kira bırakma (batch)
 export async function syncDue(env, f = fetch, { budget = 40, max = 5, d1 = 50 } = {}) {
   const out = { synced: 0, failed: 0, changed: 0, busy: 0, deferred: 0 };
   const ready = SYNCED.filter(p => oauthReady(env, p));
@@ -469,12 +507,37 @@ export async function syncDue(env, f = fetch, { budget = 40, max = 5, d1 = 50 } 
         await release(changed ? NEXT.changed : NEXT.fail).run();
         continue;
       }
+      // Gönderiler tek JSON parametresiyle (D1'de sorgu başına en çok 100 parametre). Bu hesaptan aktarılmış gönderinin
+      // türü, metni ve kapağı tazelenir (Instagram kapak adresleri süreli); elle girilmiş aynı bağlantıya dokunulmaz.
+      // Kullanıcının MAX_POSTS gönderisi varsa yenisi eklenmez. Ölçüm günde bir: aynı gün tekrar senkronlanırsa üzerine yazılır.
+      const own = "EXISTS (SELECT 1 FROM social_accounts WHERE id = ? AND status = 'connected' AND external_id = ? AND next_sync_at = ?)";
+      const posts = env.POSTS_ENABLED === "1" && m.posts?.length ? JSON.stringify(m.posts) : null;
       const [ins] = await env.DB.batch([
         env.DB.prepare(
           `INSERT INTO metric_snapshots (account_id, source, followers, avg_views, avg_likes, avg_comments, posts_sampled)
            SELECT id, 'oauth', ?, ?, ?, ?, ? FROM social_accounts
            WHERE id = ? AND status = 'connected' AND external_id = ? AND next_sync_at = ?`,
         ).bind(m.followers, m.avg_views, m.avg_likes, m.avg_comments, m.posts_sampled, a.id, m.external_id, lease.next_sync_at),
+        ...(posts ? [
+          env.DB.prepare(
+            `INSERT INTO posts (user_id, url, platform, type, date, caption, thumb, account_id)
+             SELECT ?, json_extract(j.value, '$.url'), ?, json_extract(j.value, '$.type'), json_extract(j.value, '$.date'),
+               json_extract(j.value, '$.caption'), json_extract(j.value, '$.thumb'), ?
+             FROM json_each(?) j
+             WHERE ${own} AND (SELECT COUNT(*) FROM posts WHERE user_id = ?) < ${MAX_POSTS}
+             ON CONFLICT (user_id, url) DO UPDATE SET type = excluded.type, caption = excluded.caption, thumb = excluded.thumb
+               WHERE posts.account_id = excluded.account_id`,
+          ).bind(a.user_id, a.platform, a.id, posts, a.id, m.external_id, lease.next_sync_at, a.user_id),
+          env.DB.prepare(
+            `INSERT INTO post_snaps (post_id, at, likes, comments, views, reach)
+             SELECT p.id, date('now'), json_extract(j.value, '$.likes'), json_extract(j.value, '$.comments'),
+               json_extract(j.value, '$.views'), json_extract(j.value, '$.reach')
+             FROM json_each(?) j JOIN posts p ON p.user_id = ? AND p.url = json_extract(j.value, '$.url') AND p.account_id = ?
+             WHERE ${own}
+             ON CONFLICT (post_id, at) DO UPDATE SET likes = excluded.likes, comments = excluded.comments, views = excluded.views,
+               reach = excluded.reach`,
+          ).bind(posts, a.user_id, a.id, a.id, m.external_id, lease.next_sync_at),
+        ] : []),
         release(NEXT.ok),
       ]);
       out[ins.meta?.changes ? "synced" : "changed"]++;
@@ -547,12 +610,14 @@ export async function finishOAuth(env, userId, ticket, f = fetch, role = null) {
     // Sağlayıcıda iptal yapılmaz: Google'da bu, hesabı bağlı tutan diğer kullanıcının iznini de kaldırır.
     if (other) throw new OAuthFail("taken", 409);
     // Upsert social_accounts.id'yi korur. Kullanıcı bu platformda başka bir hesap bağlıyorsa (ya da bağ
-    // koparılmışsa) önceki hesabın ölçümleri silinir ve link ölçümlerinin hesap bağı kopar; eski hesabın
-    // takipçisi yeni hesapta görünmez. Aynı hesap yeniden bağlanırsa ölçümler kalır. next_sync_at NULL:
-    // yeni bağ hemen senkronlanır, süren bir senkronun kirası düşer (syncDue ölçüm yazmaz).
+    // koparılmışsa) önceki hesabın ölçümleri ve ondan aktarılan gönderiler silinir, link ölçümlerinin hesap bağı
+    // kopar; eski hesabın takipçisi ve gönderileri yeni hesapta görünmez. Aynı hesap yeniden bağlanırsa ölçümler
+    // kalır. next_sync_at NULL: yeni bağ hemen senkronlanır, süren bir senkronun kirası düşer (syncDue ölçüm yazmaz).
     // Senkronu olmayan platformda (LinkedIn) token saklanmaz; varsa eski token satırı silinir.
     const old = `${ACCOUNT} AND (external_id IS NULL OR external_id <> ?)`;
     await env.DB.batch([
+      env.DB.prepare(`DELETE FROM post_snaps WHERE post_id IN (SELECT id FROM posts WHERE account_id IN (${old}))`).bind(userId, p, prof.external_id),
+      env.DB.prepare(`DELETE FROM posts WHERE account_id IN (${old})`).bind(userId, p, prof.external_id),
       env.DB.prepare(`DELETE FROM metric_snapshots WHERE account_id IN (${old})`).bind(userId, p, prof.external_id),
       env.DB.prepare(`UPDATE link_snapshots SET account_id = NULL WHERE account_id IN (${old})`).bind(userId, p, prof.external_id),
       env.DB.prepare(
