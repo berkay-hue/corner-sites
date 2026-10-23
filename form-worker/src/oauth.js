@@ -290,7 +290,8 @@ function igPost(m, ins) {
     likes: m.like_count, comments: m.comments_count, views: ins.views, reach: ins.reach,
   });
 }
-// TikTok paylaşım bağlantısının sorgusu (izleme parametreleri) atılır; kapak adresi ~6 saat geçerli, senkronda tazelenir
+// TikTok paylaşım bağlantısının sorgusu (izleme parametreleri) atılır. Kapak adresi ~6 saat geçerli: günlük senkronda
+// tazelenir, arada süresi dolunca panel kapak yerine kutu gösterir (son videolardan çıkan videonun kapağı tazelenmez)
 function ttPost(v) {
   let url = "";
   try { const u = new URL(v.share_url); url = u.origin + u.pathname; } catch {}
@@ -369,10 +370,12 @@ const API = {
       const ids = (pl.items || []).map(i => i.contentDetails?.videoId).filter(Boolean).slice(0, SAMPLE);
       if (!ids.length) return [];
       const vs = await json(f, `${YT}/videos?part=snippet,statistics,status&id=${ids.map(encodeURIComponent).join(",")}`, bearer(token));
-      // Özel video ortalamaya girer ama gönderi olarak aktarılmaz (TikTok da yalnız herkese açık videoları döner)
+      // Özel video ve izlenemeyen video (reddedilmiş, yüklemesi başarısız, silinmiş) ortalamaya girer ama gönderi olarak
+      // aktarılmaz (TikTok da yalnız herkese açık videoları döner)
       return (vs.items || []).map(v => {
         const s = v.statistics || {};
-        return { views: s.viewCount, likes: s.likeCount, comments: s.commentCount, post: v.status?.privacyStatus === "private" ? null : ytPost(v) };
+        const hidden = v.status?.privacyStatus === "private" || ["rejected", "failed", "deleted"].includes(v.status?.uploadStatus);
+        return { views: s.viewCount, likes: s.likeCount, comments: s.commentCount, post: hidden ? null : ytPost(v) };
       });
     },
   },

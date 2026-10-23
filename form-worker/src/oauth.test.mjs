@@ -300,7 +300,7 @@ test("metrikler: takipçi ve son gönderilerin ortalamaları; gizli değer ortal
   await assert.rejects(fetchMetrics("youtube", "t", noChannel), e => e.code === "no_channel");
 });
 
-test("metrikler: TikTok ve YouTube'da adresi, tarihi ya da ölçümü uygun olmayan gönderi ve özel video aktarılmaz, ortalamaya girer", async () => {
+test("metrikler: TikTok ve YouTube'da adresi, tarihi ya da ölçümü uygun olmayan gönderi ve özel ya da izlenemeyen video aktarılmaz, ortalamaya girer", async () => {
   // Elenen videoların ölçümleri 100/10/1; yalnız v9 aktarılır (sorgu ve parça atılır, http kapak boş, metin 2200, eksi ve kesirli sayı null)
   const ok = { create_time: Date.UTC(2026, 9, 20) / 1000, view_count: 100, like_count: 10, comment_count: 1 };
   const videos = [
@@ -322,7 +322,8 @@ test("metrikler: TikTok ve YouTube'da adresi, tarihi ya da ölçümü uygun olma
   ]);
   assert.deepEqual([tt.avg_views, tt.avg_likes, tt.avg_comments, tt.posts_sampled], [122, 10, 1, 10]);
 
-  // Özel video, kimliği bozuk ve tarihsiz video aktarılmaz; uygun olmayan kapak adayı atlanır
+  // Özel video, reddedilmiş, yüklemesi başarısız ya da silinmiş video, kimliği bozuk ve tarihsiz video aktarılmaz;
+  // uygun olmayan kapak adayı atlanır. İşlenmiş (processed) video aktarılır.
   const snippet = { publishedAt: "2026-10-19T08:00:00Z", title: "T" }, pub = { privacyStatus: "public" };
   const items = [
     { id: "p1", snippet, status: { privacyStatus: "private" }, statistics: { viewCount: "500", likeCount: "50", commentCount: "5" } },
@@ -330,12 +331,14 @@ test("metrikler: TikTok ve YouTube'da adresi, tarihi ya da ölçümü uygun olma
     { id: "p3", snippet: { title: "T" }, status: pub, statistics: { viewCount: "500" } },
     { id: "p4", snippet: { publishedAt: snippet.publishedAt, thumbnails: { medium: { url: "javascript:alert(1)" }, high: { url: "https://i.ytimg.test/p4/hqdefault.jpg" } } },
       status: pub, statistics: { viewCount: "100", likeCount: "x", commentCount: "" } },
+    ...["rejected", "failed", "deleted", "processed"].map((uploadStatus, i) => ({ id: `u${i}`, snippet, status: { ...pub, uploadStatus }, statistics: { viewCount: "400" } })),
   ];
   const yt = await fetchMetrics("youtube", "t", fakeFetch(ytRoutes([[`${YT}/videos?`, [200, { items }]]])));
   assert.deepEqual(yt.posts, [
     { url: "https://www.youtube.com/watch?v=p4", type: "video", date: "2026-10-19", caption: "", thumb: "https://i.ytimg.test/p4/hqdefault.jpg", likes: null, comments: null, views: 100, reach: null },
+    { url: "https://www.youtube.com/watch?v=u3", type: "video", date: "2026-10-19", caption: "T", thumb: "", likes: null, comments: null, views: 400, reach: null },
   ]);
-  assert.deepEqual([yt.avg_views, yt.avg_likes, yt.avg_comments, yt.posts_sampled], [400, 50, 5, 4]);
+  assert.deepEqual([yt.avg_views, yt.avg_likes, yt.avg_comments, yt.posts_sampled], [400, 50, 5, 8]);
 });
 
 test("metrikler: Instagram'da yorumları kapalı gönderinin 0 yorumu ve erişimi olan gönderinin 0 izlenmesi ölçülmemiş sayılır", async () => {
