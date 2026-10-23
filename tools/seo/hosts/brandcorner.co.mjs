@@ -288,7 +288,7 @@ const faqJs = () => '(0,a.jsx)("div",{className:"mt-10",children:[' + rule.FAQ.e
 // edits sırayla uygulanır: [from, to]; from ya tek eşleşen metin ya da {from, until}: tek eşleşen from'dan sonraki ilk until'e kadar (until kalır)
 // Yamalanmış chunk'ın edits'i değişirse sayfalar önceki çıktının adını gösterir: o ad was'a eklenir (yeni ad hiçbir sayfada yoksa koşu durur)
 // Gövdeyi silinen bileşenler "return null" olur; aynı değişiklik RULES["brandcorner.co"].BODY ile SSR HTML'de de yapılır.
-const DICT = [  // i18n sözlüğü (EN + TR); 6 sayfanın ve 404'ün chunk'ında aynı kopya
+const DICT = [  // i18n sözlüğü (EN + TR); 6 sayfanın chunk'ında aynı kopya
   ['"hero.trust.brands":"Trusted by 500+ brands"', '"hero.trust.brands":"For brands"'],
   ['"hero.trust.influencers":"10,000+ influencers"', '"hero.trust.influencers":"For influencers"'],
   ['"hero.trust.agencies":"50+ agencies"', '"hero.trust.agencies":"For agencies"'],
@@ -359,7 +359,7 @@ export const chunks = [
     // 23 Eki: TR seçilince <html lang> "en" kalıyordu (ekran okuyucu Türkçeyi İngilizce okur). Dil değişince eşitlenir;
     // effect hydration'dan sonra çalışır, SSR HTML aynı (#418 riski yok)
     { chunk: "411b1b9d3b6df8ca", was: ["7cc019c396358bc9", "869eb8a0955429b6", "45989ccf38b6b48c"], edits: [...DICT, LANG] },
-    { chunk: "763536697d8b15ea", was: ["021182790b26378c", "42731d199f21ea94", "30d357c83269cae1"], edits: [...DICT, LANG] },
+    // 404 statik sayfa oldu (23 Eki): yalnız 404'ün yüklediği sözlük kopyası (763536697d8b15ea) artık yamalanmıyor
     { chunk: "e4b281dafb09dd8b", was: ["ed42209b874cf44c"], edits: [  // ana sayfa
       on('(0,s.jsxs)(a.Button,{size:"lg",className:"gradient-primary h-12 px-8 text-lg text-primary-foreground",children:[e("hero.cta.trial")', REG()),
       on('(0,s.jsxs)(a.Button,{size:"lg",variant:"outline",className:"h-12 gap-2 px-8 text-lg bg-transparent",children:[', go("/features")),
