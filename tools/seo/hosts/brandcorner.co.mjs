@@ -98,6 +98,11 @@ export const rule = {
       const T = this.BODY[page] || {};
       // 6 Next sayfasının footer'ı: chunk'taki FOOTER yamasıyla birebir (yoksa #418)
       if (T.swap) T.swap = [...T.swap.filter(x => !FOOTER.includes(x)), ...FOOTER];
+      // <a><button> (header menüsü 5 öğe + ana sayfada "View All Plans") yerine tek <a data-slot="button">: chunk'lardaki
+      // Button asChild yamasıyla birebir. 0 ise önceki koşuda çevrilmiştir
+      if (T.swap) { const n = page === "/" ? 6 : 5, k = (b.match(LINKBTN) || []).length;
+        if (k && k !== n) throw new Error(`brandcorner ${page}: <a><button> ${k} kez, beklenen ${n}`);
+        b = b.replace(LINKBTN, '<a data-slot="button" class="$2" href="$1">$3</a>'); }
       const drop = (i, what) => {  // i'deki açılış etiketini eşi olan kapanışla birlikte siler
         const tag = b.slice(i + 1).match(/^\w+/)[0], re = new RegExp(`<${tag}\\b|</${tag}>`, "g");
         re.lastIndex = i;
@@ -267,6 +272,7 @@ const TAP = "@media (max-width:1023px),(pointer:coarse){" + [
 
 const GROUP = [["https://saascorner.co", "SAAS Corner"], ["https://salescorner.co", "Sales Corner"], ["https://socialmediacorner.co", "Social Media Corner"], ["https://cornergroup.co", "Corner Group"]];
 const LI = (h, n) => `<li><a class="text-sm text-muted-foreground transition-colors hover:text-primary" href="${h}">${n}</a></li>`;
+const LINKBTN = /<a href="(\/[a-z]*)"><button data-slot="button" class="([^"]*)">([^<]+(?:<svg\b[^>]*>(?:<path\b[^>]*><\/path>)*<\/svg>)?)<\/button><\/a>/g;
 const FOOTER = [
   ...[["/integrations", "Integrations"], ["/security", "Security"], ["/careers", "Careers"], ["/press", "Press"]].map(([h, n]) => [LI(h, n), "", 1]),
   [LI("/gdpr", "GDPR Compliance") + "</ul>", LI("/gdpr", "GDPR Compliance") + LI("/kvkk", "KVKK") + "</ul>", 1],
@@ -336,7 +342,9 @@ export const chunks = [
     // 19 Eki: Integrations/Security/Careers/Press sayfası yok, footer'dan çıkar; Legal'e KVKK, alt satıra Corner Group şirketleri
     // 23 Eki: mobil menü (Sheet) başlıksızdı; ekran okuyucuda adsız pencere, açılınca konsolda Radix DialogTitle hatası.
     // Dile göre aria-label; başlık uyarısı aria-label varken susar. Kapalı Sheet SSR'da yok (#418 riski yok)
-    { chunk: "fbb4735ac8b2897c", was: ["29a4179b1081dab7", "f847b81df96780e6", "50ec8e92a50e74a5"], edits: [
+    // 23 Eki: masaüstü menüde Link içinde Button vardı (<a><button>: iç içe etkileşimli öğe, her öğede iki Tab durağı).
+    // Button asChild ile Link'i <a data-slot="button"> olarak çizer; görünüm aynı. SSR gövdesi body()'deki LINKBTN ile aynı biçime çevrilir
+    { chunk: "fbb4735ac8b2897c", was: ["29a4179b1081dab7", "f847b81df96780e6", "50ec8e92a50e74a5", "2c6b236da8230460"], edits: [
       ['{href:"/pricing",label:e("footer.pricing")},{href:"/integrations",label:e("footer.integrations")},{href:"/security",label:e("footer.security")}]', '{href:"/pricing",label:e("footer.pricing")}]'],
       ['{href:"/careers",label:e("footer.careers")},{href:"/press",label:e("footer.press")},', '{href:"/blog",label:e("footer.blog")},'],
       ['{href:"/gdpr",label:e("footer.gdpr")}]', '{href:"/gdpr",label:e("footer.gdpr")},{href:"/kvkk",label:"KVKK"}]'],
@@ -351,13 +359,15 @@ export const chunks = [
       [{ from: ',(0,t.jsxs)("div",{className:"mt-6 flex gap-4"', until: ']}),(0,t.jsxs)("div",{className:"grid grid-cols-2 gap-8 sm:grid-cols-4 lg:col-span-4"' }, ""],
       ['(0,u.jsx)(ts,{side:"right",className:"w-80",children:', '(0,u.jsx)(ts,{side:"right",className:"w-80","aria-label":"en"===e?"Menu":"Menü","aria-labelledby":void 0,"aria-describedby":void 0,children:'],
       ['(0,u.jsx)(te,{titleId:l.titleId})', '(0,u.jsx)(te,{titleId:i["aria-label"]?void 0:l.titleId})'],
+      ['(0,u.jsx)(f.default,{href:e.href,children:(0,u.jsx)(m.Button,{variant:"ghost",className:"text-muted-foreground hover:text-foreground",children:e.label})},e.href)',
+        '(0,u.jsx)(m.Button,{asChild:!0,variant:"ghost",className:"text-muted-foreground hover:text-foreground",children:(0,u.jsx)(f.default,{href:e.href,children:e.label})},e.href)'],
     ] },
     // PR-F: doğrulanamayan sayaçlar, logo şeridi, yorumlar, başarı hikâyeleri ve mockup tutarları
     // 23 Eki: TR seçilince <html lang> "en" kalıyordu (ekran okuyucu Türkçeyi İngilizce okur). Dil değişince eşitlenir;
     // effect hydration'dan sonra çalışır, SSR HTML aynı (#418 riski yok)
     { chunk: "411b1b9d3b6df8ca", was: ["7cc019c396358bc9", "869eb8a0955429b6", "45989ccf38b6b48c"], edits: [...DICT, LANG] },
     // 404 statik sayfa oldu (23 Eki): yalnız 404'ün yüklediği sözlük kopyası (763536697d8b15ea) artık yamalanmıyor
-    { chunk: "e4b281dafb09dd8b", was: ["ed42209b874cf44c"], edits: [  // ana sayfa
+    { chunk: "e4b281dafb09dd8b", was: ["ed42209b874cf44c", "5e56863b5691ae63"], edits: [  // ana sayfa
       on('(0,s.jsxs)(a.Button,{size:"lg",className:"gradient-primary h-12 px-8 text-lg text-primary-foreground",children:[e("hero.cta.trial")', REG()),
       on('(0,s.jsxs)(a.Button,{size:"lg",variant:"outline",className:"h-12 gap-2 px-8 text-lg bg-transparent",children:[', go("/features")),
       on('(0,s.jsxs)(r.Button,{variant:"link",className:"mt-4 h-auto p-0 text-primary",children:[e("solution.learnMore")', go("/features")),
@@ -368,6 +378,8 @@ export const chunks = [
       [{ from: 'function l(){let{t:e,language:l}=(0,t.useLanguage)(),i=[{value:"500+"', until: 'e.s(["SocialProofSection",()=>l])' }, "function l(){return null}"],
       [{ from: 'function i(){let{t:e,language:i}=(0,t.useLanguage)();return(0,s.jsx)("section",{className:"bg-secondary py-16 sm:py-24"', until: 'e.s(["CaseStudiesSection",()=>i])' }, "function i(){return null}"],
       ['children:1===e?"2.4K":2===e?"89%":"$45K"', 'children:"—"'],
+      ['(0,s.jsx)(n.default,{href:"/pricing",children:(0,s.jsxs)(r.Button,{variant:"link",className:"text-primary",children:[e("pricing.viewAll"),(0,s.jsx)(i.ArrowRight,{className:"ml-1 h-4 w-4"})]})})',  // <a><button>: header ile aynı düzeltme
+        '(0,s.jsx)(r.Button,{asChild:!0,variant:"link",className:"text-primary",children:(0,s.jsxs)(n.default,{href:"/pricing",children:[e("pricing.viewAll"),(0,s.jsx)(i.ArrowRight,{className:"ml-1 h-4 w-4"})]})})'],
       ['children:"+15 Influencers"', 'children:"Influencers"'],
       ['children:"+340%"', 'children:"—"'],
       ['children:"12K followers"', 'children:"Followers"'],
