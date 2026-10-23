@@ -133,6 +133,14 @@ footer.bot{border-top:1px solid var(--line);color:var(--muted);font-size:13.5px;
 .hl-box{border-color:var(--accent);box-shadow:inset 3px 0 0 var(--accent)}
 .apps-sec{margin:0 0 24px}.apps-sec h2{display:flex;align-items:center;gap:8px}.apps-sec h2 .n{font-size:14px;font-weight:600;color:var(--muted)}
 .vh{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+/* Yükleme iskeleti: veri gelene kadar görünümün gri taslağı; hareket azaltma tercihinde parıltı durur */
+.sk,body.boot .av,body.boot #who:empty::before,body.boot #role:empty::before{background:linear-gradient(90deg,var(--surface-2) 30%,var(--line) 50%,var(--surface-2) 70%) 0 0/300% 100%;animation:skm 1.6s linear infinite}
+@keyframes skm{from{background-position:100% 0}to{background-position:0 0}}
+.sk{display:block;height:12px;max-width:100%;border-radius:6px}.skv{pointer-events:none;user-select:none}.skv>div>.box+.box{margin-top:16px}.skv .ph>div{flex:1 1 auto}
+.sk-h{height:28px;width:min(280px,70%);margin:4px 0 12px;border-radius:8px}.sk-p{height:14px;width:min(200px,50%)}.sk-b{height:44px;width:150px;border-radius:var(--r-ctl)}.sk-k{width:58%}.sk-v{height:26px;width:34%;margin-top:12px;border-radius:7px}.sk-t{height:16px;width:38%}.sk-l{margin-top:12px}.sk-c{width:36px;height:36px;border-radius:50%;flex:none}.sk-pl{height:22px;width:64px;border-radius:999px;flex:none}
+body.boot #who:empty::before,body.boot #role:empty::before{content:"";display:block;height:11px;width:110px;border-radius:6px}body.boot #role:empty::before{width:76px;margin-top:7px}
+.nsk{display:flex;align-items:center;gap:10px;min-height:44px;padding:0 12px}.nsk .sk-c{width:18px;height:18px;border-radius:5px}.tabbar .nsk{flex-direction:column;justify-content:center;gap:7px;min-height:52px;padding:4px 2px}.tabbar .nsk .sk{height:8px}.tabbar .nsk .sk-c{width:22px;height:22px}
+@media(prefers-reduced-motion:reduce){.sk,body.boot .av,body.boot #who:empty::before,body.boot #role:empty::before{animation:none}}
 .soc:not(.card){margin:20px 0 0}.soc:not(.card) h2{margin:0 0 4px}.srow{display:flex;flex-wrap:wrap;align-items:center;gap:10px 12px;padding:12px 0;border-top:1px solid var(--line)}
 .srow .ic{width:34px;height:34px;border-radius:9px}.ic.slate{background:var(--slate-soft);color:var(--slate)}.srow .tx{flex:1 1 160px;min-width:0;overflow-wrap:anywhere}.srow .tx b{display:block;font-weight:600}.srow .tx span{color:var(--muted);font-size:14px}.srow .sa{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:8px;margin-left:auto}
 .badge.b-ok{background:var(--ok-soft);color:var(--ok)}.badge.b-danger{background:var(--danger-soft);color:var(--danger)}.badge.b-slate{background:var(--slate-soft);color:var(--slate)}
@@ -775,13 +783,35 @@ dialog.onb{width:100%;max-width:100%;margin:auto 0 0;max-height:92%;border-width
     return stats;
   }
   function show(kids) { view.textContent = ""; add(view, kids); }
+  // Yükleme iskeleti: görünümün kaba taslağı (başlık + içerik). Ekran okuyucu yalnız "Yükleniyor…" okur.
+  function sk(cls, w) { return el("span", { class: "sk" + (cls ? " sk-" + cls : ""), style: w ? "width:" + w : null }); }
+  function skWrap(kids) { return el("div", { class: "skv" }, [el("p", { class: "vh", text: t("loading") }), el("div", { "aria-hidden": "true" }, kids)]); }
+  function skel(name) {
+    var W = ["46%", "34%", "52%", "40%", "30%"];
+    var card = function (n, w) {
+      var ls = [sk("t", w)];
+      for (var i = 0; i < n; i++) ls.push(sk("l", ["92%", "78%", "86%", "64%"][i % 4]));
+      return el("div", { class: "box" }, ls);
+    };
+    var rows = [];
+    for (var i = 0; i < 5; i++) rows.push(el("div", { class: "row" }, [el("div", { class: "rm" }, [sk("t", W[i]), sk("l", "62%")]), sk("pl")]));
+    var body = name === "overview" ? [
+      el("div", { class: "stats" }, [0, 1, 2, 3].map(function () { return el("div", { class: "stat" }, [sk("k"), sk("v")]); })),
+      el("div", { class: "ov" }, [el("div", null, [card(4, "34%"), card(3, "30%")]), el("div", null, [card(3, "50%"), card(5, "26%")])])
+    ] : ["campaigns", "applications", "discover", "notifications", "posts"].indexOf(name) >= 0 ? [el("div", { class: "box rows" }, rows)]
+      : ["campaign", "creator", "post"].indexOf(name) >= 0 ? [el("div", { class: "box" }, [sk("l", "88%"), sk("l", "72%"), el("div", { class: "ig" }, [0, 1, 2, 3].map(function () { return el("div", null, [sk("k"), sk("l", "80%")]); }))]), card(4, "28%")]
+      : [card(3, "30%"), card(4, "26%")];
+    var btn = U && isOwner() && (name === "overview" || name === "campaigns") ? sk("b") : null;
+    return skWrap([el("div", { class: "ph" }, [el("div", null, [sk("h"), sk("p")]), btn])].concat(body));
+  }
+  function skSoc() { return skWrap([0, 1].map(function () { return el("div", { class: "srow" }, [sk("c"), el("div", { class: "tx" }, [sk("t", "40%"), sk("l", "64%")])]); })); }
 
   // soft: aynı görünümü işlem sonrası tazeler (kaydırma ve odak yerinde kalır)
   function render(soft) {
     var my = ++seq, r = route();
     paintNav(r.tab);
     var stats = loadCounts(my, r.tab);
-    if (!soft) show(el("p", { class: "muted", text: t("loading") }));
+    if (!soft) show(skel(r.name));
     return Promise.resolve().then(function () { return VIEWS[r.name](r, stats); }).then(function (kids) {
       if (my !== seq) return;
       show(kids);
@@ -1987,8 +2017,8 @@ dialog.onb{width:100%;max-width:100%;margin:auto 0 0;max-height:92%;border-width
     // focus: bağlantı kesilince tıklanan düğme kalkar; odak bölüm başlığına alınır
     function load(focus) {
       var me = ++my;
-      paint(el("p", { class: "muted", text: t("loading") }));
-      var soft = function (pr) { return pr.then(null, function (e) { return { err: e }; }); };
+      paint(skSoc());
+      var soft =function (pr) { return pr.then(null, function (e) { return { err: e }; }); };
       return Promise.all([soft(BC.call("GET", "app/connections")), own ? { err: 1 } : soft(BC.call("GET", "app/metrics"))]).then(function (r) {
         if (me !== my) return;
         var c = r[0], md = r[1].err ? null : r[1].metrics;
@@ -2004,8 +2034,8 @@ dialog.onb{width:100%;max-width:100%;margin:auto 0 0;max-height:92%;border-width
       });
     }
     // Dönüş sonucu ve Ayarlar'dan gelen bağlantı: odak/kaydırma paylaşılan duruma bağlı, sonuç yalnız bir kez gösterilir
-    paint(el("p", { class: "muted", text: t("loading") }));
-    (rp || Promise.resolve(null)).then(function (o) {
+    paint(skSoc());
+    (rp ||Promise.resolve(null)).then(function (o) {
       if (o && !o.shown) say(o.ok ? ok : m, o.text);
       return load().then(function () { return o; });
     }).then(function (o) {
@@ -2739,9 +2769,20 @@ dialog.onb{width:100%;max-width:100%;margin:auto 0 0;max-height:92%;border-width
   });
   [outB, outB2].forEach(function (b) { b.addEventListener("click", out); });
 
+  // Oturum doğrulanırken hesap kutusu, menü ve içerik iskelet olarak görünür (rol henüz bilinmiyor: 4 menü yeri)
+  var boot = function (on) {
+    document.body.classList.toggle("boot", on);
+    [nav, tabbar].forEach(function (box) {
+      box.textContent = "";
+      if (on) for (var i = 0; i < 4; i++) box.appendChild(el("span", { class: "nsk", "aria-hidden": "true" }, [sk("c"), sk("", box === nav ? ["52%", "64%", "46%", "38%"][i] : "34px")]));
+    });
+  };
+  boot(true);
+  show(skel(location.hash.replace(/^#/, "").replace(/-.*/, "") || "overview"));
   chrome();
   BC.call("GET", "auth/me").then(function (d) {
     U = d.user;
+    boot(false);
     // Dil seçimi yoksa hesabın kayıt dili kullanılır
     var stored = null;
     try { stored = localStorage.getItem("brand-corner-lang"); } catch (e) {}
@@ -2751,7 +2792,7 @@ dialog.onb{width:100%;max-width:100%;margin:auto 0 0;max-height:92%;border-width
     render();
     onboard();
   }, function (e) {
-    if (e.code !== "auth") show(failBox(e, function () { location.reload(); }));
+    if (e.code !== "auth") { boot(false); show(failBox(e, function () { location.reload(); })); }
   });
 })();
 </script>
