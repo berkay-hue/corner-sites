@@ -4,8 +4,9 @@
 // kadar "veri yok". X ve Twitch bağlanamaz ("veri yok"). METRICS_ENABLED kapalıyken bağlanılamaz.
 // Bağlı hesabın tek kaynağı social_accounts (0001_metrics.sql); 0002_oauth.sql akış durumu ve token'ları tutar.
 // Token'lar OAUTH_TOKEN_KEY (base64, 32 bayt) ile AES-GCM şifreli saklanır.
-// POSTS_ENABLED "1" ise senkron (Instagram, TikTok, YouTube) son 12 gönderiyi panelin Gönderiler kaydına (posts/post_snaps,
-// 0007 posts.account_id) aktarır; bağ koparılınca ya da platformda başka hesap bağlanınca bu gönderiler silinir.
+// POSTS_ENABLED "1" ise senkron (Instagram, TikTok, YouTube) son gönderileri (Instagram ve YouTube'da en çok 200, TikTok'ta
+// 100) panelin Gönderiler kaydına (posts/post_snaps, 0007 posts.account_id) aktarır; bağ koparılınca ya da platformda başka
+// hesap bağlanınca bu gönderiler silinir.
 // Akış: POST /app/connect → sağlayıcı → GET /oauth/<platform>/callback (index.js; OAUTH_REDIRECT_BASE yoksa
 // worker'ın kendi adresi) → panel /panel?oauth=<p>&result=pending#ticket=<bilet> → POST /app/connect/finish.
 // Token takası yalnızca bileti getiren oturum akışı başlatan kullanıcıysa yapılır; callback'i açan tarayıcı
@@ -19,7 +20,9 @@ export const OAUTH = ["instagram", "tiktok", "youtube", "linkedin"];
 export const SYNCED = ["instagram", "tiktok", "youtube"];
 export const LISTED = ["instagram", "tiktok", "youtube", "x", "linkedin", "twitch"];
 export const CONNECTABLE = { influencer: [...SYNCED, "linkedin"], brand: [...SYNCED, "linkedin"], agency: [...SYNCED, "linkedin"] };
-const STATE_MINUTES = 10, TICKET_MINUTES = 5, SAMPLE = 12; // ortalama için son 12 gönderi
+const STATE_MINUTES = 10, TICKET_MINUTES = 5, SAMPLE = 12; // ortalama (ve Instagram insights'ı) için son 12 gönderi
+// Gönderi listesi sayfa boyu ve en çok sayfa: Instagram ve YouTube 4 × 50, TikTok 5 × 20 (TikTok'ta sayfa en çok 20)
+const IG_PAGE = 50, IG_PAGES = 4, TT_PAGE = 20, TT_PAGES = 5, YT_PAGE = 50, YT_PAGES = 4;
 const TOKEN_RE = /^[A-Za-z0-9_-]{43}$/; // 32 rastgele baytın base64url'i (state ve bilet)
 
 const enc = new TextEncoder(), dec = new TextDecoder();
@@ -215,6 +218,21 @@ async function json(f, url, init) {
 const form = obj => ({ method: "POST", headers: { "content-type": "application/x-www-form-urlencoded" }, body: new URLSearchParams(obj) });
 const bearer = token => ({ headers: { authorization: `Bearer ${token}` } });
 const igUrl = (path, q) => `${IG_API}/${path}?${new URLSearchParams(q)}`;
+// Sayfalı liste: get(imleç) → {items, next}. İlk sayfanın hatası yukarı çıkar; sonraki sayfa hata verirse o ana kadar
+// gelenler kalır. En çok `max` sayfa; aynı kimlik bir kez (sayfalar arasında kayan liste), kimliksiz öğe elenmez.
+async function paged(get, max, id) {
+  const out = [], seen = new Set();
+  let page = await get(null);
+  for (let n = 1; ; n++) {
+    for (const x of Array.isArray(page?.items) ? page.items : []) {
+      const k = x && id(x);
+      if (x && !seen.has(k)) { if (k != null) seen.add(k); out.push(x); }
+    }
+    if (n >= max || !page?.next) return out;
+    page = await get(page.next).catch(() => null);
+    if (!page) return out;
+  }
+}
 
 // Dönüş: {access_token, refresh_token, expires_in, scope}. verifier: PKCE code_verifier (yalnız YouTube).
 export async function exchangeCode(env, p, code, redirect, f = fetch, verifier = null) {
@@ -318,21 +336,30 @@ const API = {
       return { external_id: me.user_id ?? me.id, handle: me.username, followers: me.followers_count };
     },
     async recent(token, f) {
-      const fields = "id,like_count,comments_count,permalink,timestamp,media_type,media_product_type,caption,media_url,thumbnail_url";
-      const page = list => json(f, igUrl("me/media", { fields: list, limit: SAMPLE, access_token: token }));
-      // is_comment_enabled reddedilirse (400) liste bir kez onsuz istenir; o zaman yorum sayısı geldiği gibi kalır
-      const media = await page(`${fields},is_comment_enabled`)
-        .catch(e => e instanceof ProviderError && e.code.startsWith("400:") ? page(fields) : Promise.reject(e));
-      const items = (media.data || []).slice(0, SAMPLE);
-      // İzlenme ve erişim yalnızca gönderi insights'ında; alınamayan gönderi (eski, reklam vb.) ortalamaya girmez
-      const ins = await Promise.all(items.map(m => json(f, igUrl(`${m.id}/insights`, { metric: "views,reach", access_token: token }))
+      const base = "id,like_count,comments_count,permalink,timestamp,media_type,media_product_type,caption,media_url,thumbnail_url";
+      let fields = `${base},is_comment_enabled`;
+      const page = (list, after) => json(f, igUrl("me/media", { fields: list, limit: IG_PAGE, ...(after ? { after } : {}), access_token: token }));
+      // Sonraki sayfa imleçle kendi adresimizden istenir (paging.next adresi açılmaz). is_comment_enabled reddedilirse (400)
+      // liste onsuz istenir (sonraki sayfalar da); o zaman yorum sayısı geldiği gibi kalır.
+      const items = await paged(async after => {
+        const b = await page(fields, after).catch(e => {
+          if (after || fields === base || !(e instanceof ProviderError && e.code.startsWith("400:"))) throw e;
+          fields = base;
+          return page(fields, after);
+        });
+        const next = b.paging?.next && b.paging?.cursors?.after;
+        return { items: b.data, next: typeof next === "string" && next ? next : null };
+      }, IG_PAGES, m => m.id);
+      // İzlenme ve erişim yalnızca gönderi insights'ında (son SAMPLE gönderi); alınamayan gönderi (eski, reklam vb.)
+      // ortalamaya girmez
+      const ins = await Promise.all(items.slice(0, SAMPLE).map(m => json(f, igUrl(`${m.id}/insights`, { metric: "views,reach", access_token: token }))
         .then(b => Object.fromEntries((Array.isArray(b.data) ? b.data : []).map(d => [d?.name, d?.total_value?.value ?? d?.values?.[0]?.value ?? null])),
           () => ({}))));
       // Olamayacak 0 ölçülmemiş sayılır (null): yorumları kapalı gönderinin 0 yorumu ve erişimi olan gönderinin 0 izlenmesi
       // (Instagram eski gönderilerde izlenmeyi 0 döner; erişilen her hesap gönderiyi en az bir kez görmüştür)
       return items.map((m, i) => {
         const mm = m.is_comment_enabled === false && num(m.comments_count) === 0 ? { ...m, comments_count: null } : m;
-        const it = num(ins[i].views) === 0 && num(ins[i].reach) > 0 ? { ...ins[i], views: null } : ins[i];
+        const n = ins[i] || {}, it = num(n.views) === 0 && num(n.reach) > 0 ? { ...n, views: null } : n;
         return { views: it.views ?? null, likes: mm.like_count, comments: mm.comments_count, post: igPost(mm, it) };
       });
     },
@@ -345,10 +372,14 @@ const API = {
     },
     async recent(token, f) {
       const fields = "id,create_time,share_url,cover_image_url,title,video_description,view_count,like_count,comment_count";
-      const b = await json(f, `${TT}/video/list/?fields=${fields}`, {
-        method: "POST", headers: { ...bearer(token).headers, "content-type": "application/json" }, body: JSON.stringify({ max_count: SAMPLE }),
-      });
-      return (b.data?.videos || []).slice(0, SAMPLE).map(v => ({ views: v.view_count, likes: v.like_count, comments: v.comment_count, post: ttPost(v) }));
+      const vs = await paged(async cursor => {
+        const b = await json(f, `${TT}/video/list/?fields=${fields}`, {
+          method: "POST", headers: { ...bearer(token).headers, "content-type": "application/json" },
+          body: JSON.stringify(cursor === null ? { max_count: TT_PAGE } : { max_count: TT_PAGE, cursor }),
+        });
+        return { items: b.data?.videos, next: b.data?.has_more && Number.isFinite(b.data?.cursor) ? b.data.cursor : null };
+      }, TT_PAGES, v => v.id);
+      return vs.map(v => ({ views: v.view_count, likes: v.like_count, comments: v.comment_count, post: ttPost(v) }));
     },
   },
   youtube: {
@@ -364,15 +395,29 @@ const API = {
     },
     async recent(token, f, prof) {
       if (!prof.uploads) return [];
-      // Videosu olmayan kanalda yükleme listesi 404 dönebilir
-      const pl = await json(f, `${YT}/playlistItems?part=contentDetails&maxResults=${SAMPLE}&playlistId=${encodeURIComponent(prof.uploads)}`, bearer(token))
-        .catch(() => ({ items: [] }));
-      const ids = (pl.items || []).map(i => i.contentDetails?.videoId).filter(Boolean).slice(0, SAMPLE);
+      // Videosu olmayan kanalda yükleme listesi 404 dönebilir. fields yalnız kullanılan alanları ister (yanıt küçük kalır;
+      // alan adları YouTube şemasında olmalı, yoksa istek 400 döner).
+      const pf = encodeURIComponent("nextPageToken,items/contentDetails/videoId");
+      const ids = await paged(async pageToken => {
+        const b = await json(f, `${YT}/playlistItems?part=contentDetails&maxResults=${YT_PAGE}&fields=${pf}&playlistId=${encodeURIComponent(prof.uploads)}`
+          + (pageToken ? `&pageToken=${encodeURIComponent(pageToken)}` : ""), bearer(token));
+        const next = b.nextPageToken;
+        return {
+          items: (Array.isArray(b.items) ? b.items : []).map(i => i?.contentDetails?.videoId).filter(v => typeof v === "string" && v),
+          next: typeof next === "string" && next ? next : null,
+        };
+      }, YT_PAGES, v => v).catch(() => []);
       if (!ids.length) return [];
-      const vs = await json(f, `${YT}/videos?part=snippet,statistics,status&id=${ids.map(encodeURIComponent).join(",")}`, bearer(token));
-      // Özel video ve izlenemeyen video (reddedilmiş, yüklemesi başarısız, silinmiş) ortalamaya girer ama gönderi olarak
-      // aktarılmaz (TikTok da yalnız herkese açık videoları döner)
-      return (vs.items || []).map(v => {
+      // Videolar 50'şer (videos.list sınırı); ilk parçanın hatası yukarı çıkar, sonrakiler gelmezse eksik kalır
+      const vf = encodeURIComponent("items(id,snippet(publishedAt,title,thumbnails),statistics(viewCount,likeCount,commentCount),status(privacyStatus,uploadStatus))");
+      const parts = await Promise.all(Array.from({ length: Math.ceil(ids.length / YT_PAGE) }, (_, k) => {
+        const q = json(f, `${YT}/videos?part=snippet,statistics,status&fields=${vf}&id=${ids.slice(k * YT_PAGE, (k + 1) * YT_PAGE).map(encodeURIComponent).join(",")}`, bearer(token));
+        return k ? q.catch(() => ({ items: [] })) : q;
+      }));
+      const by = new Map(parts.flatMap(b => Array.isArray(b.items) ? b.items : []).filter(v => v && typeof v.id === "string").map(v => [v.id, v]));
+      // Yükleme listesi sırasıyla (en yeni önce). Özel video ve izlenemeyen video (reddedilmiş, yüklemesi başarısız,
+      // silinmiş) ortalamaya girer ama gönderi olarak aktarılmaz (TikTok da yalnız herkese açık videoları döner)
+      return ids.map(id => by.get(id)).filter(Boolean).map(v => {
         const s = v.statistics || {};
         const hidden = v.status?.privacyStatus === "private" || ["rejected", "failed", "deleted"].includes(v.status?.uploadStatus);
         return { views: s.viewCount, likes: s.likeCount, comments: s.commentCount, post: hidden ? null : ytPost(v) };
@@ -404,15 +449,16 @@ export async function fetchProfile(p, token, f = fetch) {
   return { external_id: extId(pr.external_id), handle: cleanHandle(pr.handle), followers: num(pr.followers) };
 }
 
-// Takipçi + son gönderilerin ortalama izlenme, beğeni ve yorumu; posts: aktarılacak gönderiler
+// Takipçi + son SAMPLE gönderinin ortalama izlenme, beğeni ve yorumu; posts: aktarılacak gönderiler (en yeni önce),
+// posts_recent: bunlardan kaçı son SAMPLE gönderiden (posts'un ilk posts_recent kadarı)
 export async function fetchMetrics(p, token, f = fetch) {
   if (!SYNCED.includes(p)) throw new ProviderError("no_api");
   const pr = await API[p].profile(token, f);
-  const posts = await API[p].recent(token, f, pr);
+  const all = await API[p].recent(token, f, pr), last = all.slice(0, SAMPLE);
   return {
     external_id: extId(pr.external_id), handle: cleanHandle(pr.handle), followers: num(pr.followers),
-    avg_views: avg(posts.map(x => x.views)), avg_likes: avg(posts.map(x => x.likes)), avg_comments: avg(posts.map(x => x.comments)),
-    posts_sampled: posts.length, posts: posts.map(x => x.post).filter(Boolean),
+    avg_views: avg(last.map(x => x.views)), avg_likes: avg(last.map(x => x.likes)), avg_comments: avg(last.map(x => x.comments)),
+    posts_sampled: last.length, posts: all.map(x => x.post).filter(Boolean), posts_recent: last.filter(x => x.post).length,
   };
 }
 
@@ -511,7 +557,9 @@ export async function syncAccount(env, userId, p, f = fetch) {
 // harcamaz. Ölçüm yalnızca kira hâlâ bizdeyse, hesap bağlıysa ve platform kimliği aynıysa yazılır; hesap yeniden
 // bağlanınca kira düşer (finishOAuth next_sync_at'i NULL yapar), eski hesabın ölçümü yeni hesaba yazılmaz.
 // POSTS_ENABLED "1" ise gönderiler (fetchMetrics posts) aynı koşullarla ve aynı batch'te posts/post_snaps'e yazılır.
-const COST = { instagram: 16, tiktok: 3, youtube: 4 }; // profil + gönderiler (Instagram: alan reddinde tekrar + gönderi başına insights) + yenileme
+// En kötü durumda istek sayısı: profil + gönderi sayfaları + yenileme. Instagram: 4 sayfa + alan reddinde tekrar + son 12
+// gönderinin insights'ı; TikTok: 5 sayfa; YouTube: 4 liste sayfası + 4 video parçası.
+const COST = { instagram: 19, tiktok: 7, youtube: 10 };
 const NEXT = { ok: "+1435 minutes", fail: "+355 minutes", changed: "+55 minutes" }; // saatlik cron'da ~1 gün, ~6 saat, ~1 saat
 export const SYNC_MIN = Math.min(...Object.values(COST));
 export const SYNC_D1 = 8; // kira, token, yenileme, son senkron işareti, ölçüm + gönderiler + gönderi ölçümleri + kira bırakma (batch)
@@ -551,8 +599,10 @@ export async function syncDue(env, f = fetch, { budget = 40, max = 5, d1 = 50 } 
         continue;
       }
       // Gönderiler tek JSON parametresiyle (D1'de sorgu başına en çok 100 parametre). Bu hesaptan aktarılmış gönderinin
-      // türü, metni ve kapağı tazelenir (Instagram ve TikTok kapak adresleri süreli); elle girilmiş aynı bağlantıya dokunulmaz.
-      // Kullanıcının MAX_POSTS gönderisi varsa yenisi eklenmez. Ölçüm günde bir: aynı gün tekrar senkronlanırsa üzerine yazılır.
+      // türü, metni ve kapağı değiştiyse tazelenir (Instagram ve TikTok kapak adresleri süreli); elle girilmiş aynı bağlantıya
+      // dokunulmaz. Kullanıcının MAX_POSTS gönderisi varsa yenisi eklenmez (sınır sorgu başında sayılır: bir senkron aşabilir).
+      // Ölçüm son SAMPLE gönderide günde bir (aynı gün tekrar senkronlanırsa üzerine yazılır), daha eskilerde haftada bir.
+      // Gelmeyen izlenme ve erişim (Instagram insights'ı yalnız son SAMPLE gönderide) son ölçülen değerle sürer.
       const own = "EXISTS (SELECT 1 FROM social_accounts WHERE id = ? AND status = 'connected' AND external_id = ? AND next_sync_at = ?)";
       const posts = env.POSTS_ENABLED === "1" && m.posts?.length ? JSON.stringify(m.posts) : null;
       const [ins] = await env.DB.batch([
@@ -569,17 +619,22 @@ export async function syncDue(env, f = fetch, { budget = 40, max = 5, d1 = 50 } 
              FROM json_each(?) j
              WHERE ${own} AND (SELECT COUNT(*) FROM posts WHERE user_id = ?) < ${MAX_POSTS}
              ON CONFLICT (user_id, url) DO UPDATE SET type = excluded.type, caption = excluded.caption, thumb = excluded.thumb
-               WHERE posts.account_id = excluded.account_id`,
+               WHERE posts.account_id = excluded.account_id
+                 AND (posts.type <> excluded.type OR posts.caption <> excluded.caption OR posts.thumb <> excluded.thumb)`,
           ).bind(a.user_id, a.platform, a.id, posts, a.id, m.external_id, lease.next_sync_at, a.user_id),
           env.DB.prepare(
             `INSERT INTO post_snaps (post_id, at, likes, comments, views, reach)
              SELECT p.id, date('now'), json_extract(j.value, '$.likes'), json_extract(j.value, '$.comments'),
-               json_extract(j.value, '$.views'), json_extract(j.value, '$.reach')
+               COALESCE(json_extract(j.value, '$.views'),
+                 (SELECT s.views FROM post_snaps s WHERE s.post_id = p.id AND s.views IS NOT NULL ORDER BY s.at DESC LIMIT 1)),
+               COALESCE(json_extract(j.value, '$.reach'),
+                 (SELECT s.reach FROM post_snaps s WHERE s.post_id = p.id AND s.reach IS NOT NULL ORDER BY s.at DESC LIMIT 1))
              FROM json_each(?) j JOIN posts p ON p.user_id = ? AND p.url = json_extract(j.value, '$.url') AND p.account_id = ?
              WHERE ${own}
+               AND (j.key < ? OR NOT EXISTS (SELECT 1 FROM post_snaps s WHERE s.post_id = p.id AND s.at > date('now', '-7 days')))
              ON CONFLICT (post_id, at) DO UPDATE SET likes = excluded.likes, comments = excluded.comments, views = excluded.views,
                reach = excluded.reach`,
-          ).bind(posts, a.user_id, a.id, a.id, m.external_id, lease.next_sync_at),
+          ).bind(posts, a.user_id, a.id, a.id, m.external_id, lease.next_sync_at, m.posts_recent),
         ] : []),
         release(NEXT.ok),
       ]);
