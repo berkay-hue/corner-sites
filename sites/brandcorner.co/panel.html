@@ -231,6 +231,11 @@ dialog.cmdk[open]{display:flex;flex-direction:column}dialog.cmdk::backdrop{backg
 .tags{display:flex;flex-wrap:wrap;gap:6px;align-items:center;border:1px solid var(--line-strong);border-radius:var(--r-ctl);padding:4px 8px;background:var(--surface);min-height:44px;margin:0 0 16px}.tags:focus-within{outline:2px solid var(--accent);outline-offset:1px}.f .tags input:not([type=checkbox]){display:block;width:auto;border:0;outline:0;flex:1;min-width:110px;background:transparent;padding:4px;margin:0;min-height:44px;box-shadow:none}.f .tags input:disabled{background:transparent}.f .tags input:focus-visible{outline:0}.f .frow label{margin-bottom:6px}
 .tag{display:inline-flex;align-items:center;gap:0;min-width:0;max-width:100%;overflow-wrap:anywhere;background:var(--accent-soft);color:var(--accent-text);border-radius:6px;padding:0 0 0 8px;font-size:13px;font-weight:500}.tag button{flex:none;border:0;background:none;color:inherit;cursor:pointer;padding:0;min-width:44px;min-height:44px;font-size:16px;line-height:1;border-radius:4px}.tag button:focus-visible{outline:2px solid var(--accent);outline-offset:-6px}
 .preview{border:1px dashed var(--line-strong);border-radius:var(--r-card);padding:14px;background:var(--surface-2)}.pl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;font-weight:600;margin:0 0 10px}.pv-card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:8px;min-width:0}.pv-card .ph2{display:flex;gap:10px;align-items:center;min-width:0}.pv-card .ph2 b{display:block;overflow-wrap:anywhere}.pv-card .pvs{display:block;font-size:12.5px;color:var(--muted)}.pv-card .brief{font-size:13px;color:var(--muted);margin:0;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}.pv-card .chips{margin:0}.pv-card .chip{max-width:100%;overflow-wrap:anywhere}.pv-card .pls{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:12.5px;color:var(--muted);margin:0}.pv-card .pls b{color:var(--text)}
+.checks.pills{gap:8px}.f .checks.pills label{position:relative;padding:0 14px;border:1px solid var(--line-strong);border-radius:999px;background:var(--surface);font-size:14px;font-weight:500;cursor:pointer;transition:background .15s,border-color .15s}.f .checks.pills label:hover{border-color:var(--accent)}
+.f .checks.pills input{position:absolute;opacity:0;width:1px;height:1px;pointer-events:none}.f .checks.pills label::before{content:"";flex:none;width:16px;height:16px;box-sizing:border-box;border:1.5px solid var(--line-strong);border-radius:5px;background:var(--surface)}
+.f .checks.pills label:has(:checked){background:var(--accent-soft);border-color:var(--accent);color:var(--accent-text)}.f .checks.pills label:has(:checked)::before{border-color:var(--accent);background:var(--accent) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2.5 6.2 5 8.5l4.5-5' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/11px no-repeat}.f .checks.pills label:has(:focus-visible){outline:2px solid var(--accent);outline-offset:2px}
+.qd{display:flex;flex-wrap:wrap;gap:6px;margin:-8px 0 16px}.qd button{font:inherit;font-size:12.5px;font-weight:500;min-height:30px;padding:0 12px;border:1px solid var(--line);border-radius:999px;background:var(--surface-2);color:var(--text);cursor:pointer}.qd button:hover{border-color:var(--accent)}.qd button[aria-pressed=true]{background:var(--accent-soft);border-color:var(--accent);color:var(--accent-text)}
+.cpv .cpv-t{font-size:16px;overflow-wrap:anywhere}.cpv .cpv-e{color:var(--faint)}.cpv .meta{margin:0}
 .clink{display:inline-flex;align-items:center;gap:5px;font-size:13px;font-weight:500;word-break:break-all;min-height:44px}.clink .i{width:15px;height:15px;flex:none}
 .toolbar{display:flex;flex-wrap:wrap;gap:8px;padding:12px 16px;align-items:center;border-bottom:1px solid var(--line)}.f.toolbar input:not([type=checkbox]){margin:0;min-height:44px;flex:1 1 220px;width:auto;max-width:none}.flush .tabs.ul{padding:0 8px;border-bottom:1px solid var(--line)}.flush .tabs.ul button{min-height:44px}
 .crow{position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 16px;padding:14px 16px;border-top:1px solid var(--line);align-items:center}.crow:first-child{border-top:0}.crow:hover{background:var(--surface-2)}.crow:focus-within{outline:2px solid var(--accent);outline-offset:-2px}.crow .tl{display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center;margin:0 0 4px}.crow h3{font-size:15.5px;margin:0;overflow-wrap:anywhere}.crow .tlink{text-decoration:none;color:inherit}.crow .tlink::after{content:"";position:absolute;inset:0}.crow .tlink:focus-visible{outline:none}.crow .meta{margin:0}.crow .right{display:flex;flex-direction:column;align-items:flex-end;gap:6px}.mini b{color:var(--text);font-weight:600}.crow .meta span{display:inline-flex;align-items:center;gap:5px}.crow .meta svg.i{width:15px;height:15px}.crow .meta .warn{color:var(--danger)}
@@ -420,9 +425,11 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       deadline: "Son tarih: {n}", created: "Oluşturuldu: {n}", updated: "Güncellendi: {n}",
       budget: "Bütçe: {n}", noBudget: "Bütçe belirtilmedi", from: "en az {n}", upTo: "en fazla {n}", match: "%{n} uyum", viewApply: "İncele ve başvur",
       fTitle: "Kampanya başlığı", fBrief: "Açıklama", fBriefHint: "Beklentilerinizi, içerik türünü ve teslim koşullarını yazın (en fazla 3000 karakter).",
-      fNiches: "İlgi alanları", fNichesHint: "Virgülle ayırın, en fazla 5 (ör. moda, güzellik).", fPlatforms: "Platformlar",
+      fNiches: "İlgi alanları", fNichesHint: "Listeden seçin ya da yazıp Enter'a basın; en fazla 5.", fPlatforms: "Platformlar",
       fMin: "En düşük bütçe", fMax: "En yüksek bütçe", fBudgetHint: "İsteğe bağlı. Boş bırakırsanız \"Bütçe belirtilmedi\" görünür.",
-      fCurrency: "Para birimi", fDeadline: "Son tarih",
+      fCurrency: "Para birimi", fDeadline: "Son tarih", qdLbl: "Son tarih için hızlı seçim", qd1w: "1 hafta", qd2w: "2 hafta", qd1m: "1 ay",
+      crTitle: "Kampanya hazırlığı", ckTitle: "Başlık", ckBriefC: "Açıklama (en az 80 karakter)", ckCNiche: "En az 1 ilgi alanı", ckCPlat: "En az 1 platform", ckBudget: "Bütçe", ckDeadline: "Son tarih",
+      cpvLbl: "Influencerlar böyle görecek", cpvTitle: "Kampanya başlığı", cpvBrief: "Açıklama burada görünür.",
       create: "Kampanyayı oluştur", saveChanges: "Değişiklikleri kaydet", cancel: "Vazgeç",
       campLimit: "Kampanya sınırına ulaştınız (en fazla 100 kampanya).", badBudget: "Bütçeyi tam sayı olarak girin.",
       tagsMax: "En fazla 5 niş girebilirsiniz.",
@@ -586,9 +593,11 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       deadline: "Deadline: {n}", created: "Created {n}", updated: "Updated {n}",
       budget: "Budget: {n}", noBudget: "Budget not specified", from: "from {n}", upTo: "up to {n}", match: "{n}% match", viewApply: "View and apply",
       fTitle: "Campaign title", fBrief: "Description", fBriefHint: "Describe what you expect, the content type and delivery terms (up to 3000 characters).",
-      fNiches: "Niches", fNichesHint: "Separate with commas, up to 5 (e.g. fashion, beauty).", fPlatforms: "Platforms",
+      fNiches: "Niches", fNichesHint: "Pick from the list or type and press Enter; up to 5.", fPlatforms: "Platforms",
       fMin: "Minimum budget", fMax: "Maximum budget", fBudgetHint: "Optional. If left empty, \"Budget not specified\" is shown.",
-      fCurrency: "Currency", fDeadline: "Deadline",
+      fCurrency: "Currency", fDeadline: "Deadline", qdLbl: "Quick deadline", qd1w: "1 week", qd2w: "2 weeks", qd1m: "1 month",
+      crTitle: "Campaign readiness", ckTitle: "Title", ckBriefC: "Brief (at least 80 characters)", ckCNiche: "At least 1 niche", ckCPlat: "At least 1 platform", ckBudget: "Budget", ckDeadline: "Deadline",
+      cpvLbl: "How creators will see it", cpvTitle: "Campaign title", cpvBrief: "Your brief appears here.",
       create: "Create campaign", saveChanges: "Save changes", cancel: "Cancel",
       campLimit: "You've reached the campaign limit (100 campaigns).", badBudget: "Enter the budget as a whole number.",
       tagsMax: "You can add up to 5 niches.",
@@ -741,11 +750,6 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
     return lo ? t("from", money(lo, cur)) : t("upTo", money(hi, cur));
   }
   function budget(c) { var v = budgetVal(c); return v ? t("budget", v) : t("noBudget"); }
-  function tags(s) {
-    var seen = {}, out = [];
-    s.split(",").forEach(function (x) { x = x.trim().slice(0, 40); var k = x.toLowerCase(); if (x && !seen[k]) { seen[k] = 1; out.push(x); } });
-    return out;
-  }
 
   // Ortak parçalar
   function badge(s) { return el("span", { class: "badge b-" + s, text: t("st_" + s) }); }
@@ -1080,14 +1084,23 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
   }
   // Profil doluluğu kartı: genel bakışta düzenle bağlantısıyla, profil sayfasında sağ sütunda
   function profMeter(link, p) {
-    var checks = profileChecks(p), pct = Math.round(checks.filter(function (c) { return c[1]; }).length * 100 / checks.length);
-    return el("section", { class: "card" }, [el("div", { class: "ch" }, el("h2", { text: t("profCard") })),
+    return meterCard(t("profCard"), profileChecks(p), link ? el("a", { class: "btn sm sec", href: "#profile", text: t("editProf") }) : null);
+  }
+  // Doluluk kartı: yüzde, çubuk ve madde listesi (profil ve yeni kampanya)
+  function meterCard(title, checks, foot) {
+    var pct = Math.round(checks.filter(function (c) { return c[1]; }).length * 100 / checks.length);
+    return el("section", { class: "card" }, [el("div", { class: "ch" }, el("h2", { text: title })),
       el("div", { class: "cb" }, [
         el("div", { class: "pct" }, [el("span", { text: t("profDone") }), el("b", { text: L === "tr" ? "%" + pct : pct + "%" })]),
         el("div", { class: "meter", role: "progressbar", "aria-valuemin": 0, "aria-valuemax": 100, "aria-valuenow": pct, "aria-label": t("profDone") }, el("i", { style: "width:" + pct + "%" })),
         el("ul", { class: "checklist" }, checks.map(function (c) { return el("li", { class: c[1] ? "done" : null }, [el("span", { class: "dot" }, c[1] ? ic("check") : null), el("span", { text: t(c[0]) })]); })),
-        link ? el("a", { class: "btn sm sec", href: "#profile", text: t("editProf") }) : null
+        foot
       ])]);
+  }
+  // Bugünden n gün sonrası, yerel takvime göre "YYYY-MM-DD"
+  function dayIn(n) {
+    var d = new Date(); d.setDate(d.getDate() + n);
+    return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
   }
   function daysLeft(s) {
     if (!/^\d{4}-\d{2}-\d{2}$/.test(s || "")) return null;
@@ -1403,31 +1416,46 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
   }
 
   // Kampanya formu: oluştururken boş bütçe gönderilmez; düzenlemede boşaltılan bütçe null gider
-  function campaignForm(c, onCancel) {
+  // onDraft: her değişiklikte taslak (yeni kampanyada sağdaki önizleme)
+  function campaignForm(c, onCancel, onDraft) {
     var p = "c" + (++uid) + "-", m = note(), b = el("button", { type: "submit", class: "btn", text: t(c ? "saveChanges" : "create") });
     var title = el("input", { type: "text", maxlength: 120, required: true, value: c ? c.title : "" });
-    var brief = el("textarea", { maxlength: 3000, rows: 6, value: c ? c.brief || "" : "" });
-    var niches = el("input", { type: "text", value: c ? (c.niches || []).join(", ") : "" });
+    var brief = el("textarea", { id: p + "b", maxlength: 3000, rows: 6, value: c ? c.brief || "" : "" }), bcnt = el("span", { class: "count" });
+    var tb = tagBox(p + "n", c ? c.niches : null, emit);
     var boxes = PLATFORMS.map(function (x) { return el("input", { type: "checkbox", value: x, id: p + x, checked: !!c && (c.platforms || []).indexOf(x) >= 0 }); });
     var lo = el("input", { type: "number", min: 0, step: 1, inputmode: "numeric", value: c && c.budget_min > 0 ? c.budget_min : "" });
     var hi = el("input", { type: "number", min: 0, step: 1, inputmode: "numeric", value: c && c.budget_max > 0 ? c.budget_max : "" });
     var cur = el("select", { value: c && c.currency || "TRY" }, CURRENCIES.map(function (x) { return el("option", { value: x, text: x }); }));
-    var dl = el("input", { type: "date", value: c && c.deadline || "" });
+    var dl = el("input", { type: "date", min: c ? null : dayIn(0), value: c && c.deadline || "" });
+    // Hızlı son tarih: bugünden 1 hafta, 2 hafta, 1 ay; seçili olan basılı görünür
+    var qd = el("div", { class: "qd", role: "group", "aria-label": t("qdLbl") }, [[7, "qd1w"], [14, "qd2w"], [30, "qd1m"]].map(function (x) {
+      var v = dayIn(x[0]);
+      return el("button", { type: "button", "aria-pressed": "false", "data-d": v, text: t(x[1]), onclick: function () { dl.value = v; emit(); } });
+    }));
     var f = el("form", { class: "box f", "data-sk-noform": true, novalidate: true }, [
       fld(p + "t", t("fTitle"), title),
-      fld(p + "b", t("fBrief"), brief, t("fBriefHint")),
-      fld(p + "n", t("fNiches"), niches, t("fNichesHint")),
-      el("fieldset", null, [el("legend", { text: t("fPlatforms") }), el("div", { class: "checks" }, boxes.map(function (x) { return el("label", { for: x.id }, [x, PL[x.value]]); }))]),
+      el("div", { class: "frow" }, [el("label", { for: p + "b", text: t("fBrief") }), bcnt]), brief, el("p", { class: "hint", text: t("fBriefHint") }),
+      el("label", { for: p + "n", text: t("fNiches") }), tb.node, el("p", { class: "hint", id: p + "n-h", text: t("fNichesHint") }),
+      el("fieldset", null, [el("legend", { text: t("fPlatforms") }), el("div", { class: "checks pills" }, boxes.map(function (x) { return el("label", { for: x.id }, [x, PL[x.value]]); }))]),
       el("div", { class: "grid2" }, [el("div", null, fld(p + "lo", t("fMin"), lo)), el("div", null, fld(p + "hi", t("fMax"), hi))]),
       el("p", { class: "hint", text: t("fBudgetHint") }),
-      el("div", { class: "grid2" }, [el("div", null, fld(p + "cu", t("fCurrency"), cur)), el("div", null, fld(p + "dl", t("fDeadline"), dl))]),
+      el("div", { class: "grid2" }, [el("div", null, fld(p + "cu", t("fCurrency"), cur)), el("div", null, [fld(p + "dl", t("fDeadline"), dl), qd])]),
       el("div", { class: "row-b" }, [b, onCancel ? el("button", { type: "button", class: "ghost", text: t("cancel"), onclick: onCancel }) : null]),
       m
     ]);
+    function emit() {
+      bcnt.textContent = brief.value.length + "/3000";
+      qd.querySelectorAll("button").forEach(function (x) { x.setAttribute("aria-pressed", String(x.getAttribute("data-d") === dl.value)); });
+      if (onDraft) onDraft({ title: title.value.trim(), brief: brief.value.trim(), niches: tb.peek(), platforms: boxes.filter(function (x) { return x.checked; }).map(function (x) { return x.value; }),
+        budget_min: Number(lo.value) || 0, budget_max: Number(hi.value) || 0, currency: cur.value, deadline: dl.value });
+    }
+    f.addEventListener("input", emit);
+    f.addEventListener("change", emit);
+    emit();
     f.addEventListener("submit", function (ev) {
       ev.preventDefault();
       say(m, "");
-      var a = lo.value.trim(), z = hi.value.trim(), tg = tags(niches.value), body = {
+      var a = lo.value.trim(), z = hi.value.trim(), tg = tb.get(), body = {
         title: title.value.trim(), brief: brief.value.trim(), niches: tg,
         platforms: boxes.filter(function (x) { return x.checked; }).map(function (x) { return x.value; }),
         currency: cur.value, deadline: dl.value || null
@@ -1449,8 +1477,23 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
     });
     return f;
   }
+  // Yeni kampanya: sağda yapışkan hazırlık listesi ve influencer'ın fırsatlarda göreceği kart, form değiştikçe güncellenir
   function newCampaign() {
-    return [back("#campaigns", "backCamps"), el("h1", { text: t("newCamp") }), el("p", { class: "lead", text: t("newLead") }), campaignForm(null)];
+    var side = el("div", { class: "sticky stack" }), draw = function (d) { side.replaceChildren(meterCard(t("crTitle"), campChecks(d)), cpvBox(d)); };
+    return [back("#campaigns", "backCamps"), el("h1", { text: t("newCamp") }), el("p", { class: "lead", text: t("newLead") }),
+      el("div", { class: "split" }, [campaignForm(null, null, draw), side])];
+  }
+  function campChecks(d) {
+    return [["ckTitle", !!d.title], ["ckBriefC", d.brief.length >= 80], ["ckCNiche", d.niches.length > 0], ["ckCPlat", d.platforms.length > 0],
+      ["ckBudget", d.budget_min > 0 || d.budget_max > 0], ["ckDeadline", !!d.deadline]];
+  }
+  function cpvBox(d) {
+    return el("div", { class: "preview" }, [el("p", { class: "pl", text: t("cpvLbl") }), el("div", { class: "pv-card cpv" }, [
+      el("b", { class: d.title ? "cpv-t" : "cpv-t cpv-e", text: d.title || t("cpvTitle") }),
+      el("p", { class: "meta" }, [el("span", { text: (U.profile || {}).company || U.name }), el("span", { text: budget(d) }), stamp(d)]),
+      chips(d.niches, d.platforms),
+      el("p", { class: d.brief ? "brief" : "brief cpv-e", text: d.brief || t("cpvBrief") })
+    ])]);
   }
 
   // Kampanya ayrıntısı
