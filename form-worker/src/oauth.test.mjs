@@ -143,7 +143,17 @@ const ttRoutes = (extra = []) => [
     ? { access_token: "tt-yeni-access", refresh_token: "tt-yeni-refresh", expires_in: 86400, open_id: "tt-1" }
     : { access_token: "tt-access", refresh_token: "tt-refresh", expires_in: 86400, open_id: "tt-1", scope: "user.info.basic,video.list" }]],
   [`${TT}/user/info/`, [200, { data: { user: { open_id: "tt-1", username: "inf_tt", display_name: "Inf", follower_count: 12000 } }, error: { code: "ok", message: "" } }]],
-  [`${TT}/video/list/`, [200, { data: { videos: [{ id: "v1", view_count: 5000, like_count: 300, comment_count: 20 }, { id: "v2", view_count: 7000, like_count: 500, comment_count: 40 }] }, error: { code: "ok" } }]],
+  [`${TT}/video/list/`, [200, { data: { videos: [
+    { id: "v1", create_time: Date.UTC(2026, 9, 20, 10) / 1000, share_url: "https://www.tiktok.com/@inf_tt/video/v1?utm_campaign=tt4d_open_api&utm_source=x",
+      cover_image_url: "https://p16.tiktokcdn.test/v1.jpeg", video_description: "İlk video", title: "", view_count: 5000, like_count: 300, comment_count: 20 },
+    { id: "v2", create_time: Date.UTC(2026, 9, 21, 12) / 1000, share_url: "https://www.tiktok.com/@inf_tt/video/v2", title: "Başlık",
+      view_count: 7000, like_count: 500, comment_count: 40 },
+  ] }, error: { code: "ok" } }]],
+];
+// Paylaşım bağlantısının izleme sorgusu atılır; açıklama yoksa başlık, kapak yoksa boş; TikTok erişim vermez
+const TT_POSTS = [
+  { url: "https://www.tiktok.com/@inf_tt/video/v1", type: "video", date: "2026-10-20", caption: "İlk video", thumb: "https://p16.tiktokcdn.test/v1.jpeg", likes: 300, comments: 20, views: 5000, reach: null },
+  { url: "https://www.tiktok.com/@inf_tt/video/v2", type: "video", date: "2026-10-21", caption: "Başlık", thumb: "", likes: 500, comments: 40, views: 7000, reach: null },
 ];
 
 const YT = "https://www.googleapis.com/youtube/v3";
@@ -154,7 +164,18 @@ const ytRoutes = (extra = []) => [
     : { access_token: "yt-access", refresh_token: "yt-refresh", expires_in: 3599, scope: "https://www.googleapis.com/auth/youtube.readonly" }]],
   [`${YT}/channels?`, [200, { items: [{ id: "UC1", snippet: { title: "Inf Kanal", customUrl: "@infyt" }, statistics: { subscriberCount: "8800", hiddenSubscriberCount: false }, contentDetails: { relatedPlaylists: { uploads: "UU1" } } }] }]],
   [`${YT}/playlistItems?`, [200, { items: [{ contentDetails: { videoId: "a" } }, { contentDetails: { videoId: "b" } }] }]],
-  [`${YT}/videos?`, [200, { items: [{ statistics: { viewCount: "900", likeCount: "90", commentCount: "9" } }, { statistics: { viewCount: "1100" } }] }]],
+  [`${YT}/videos?`, [200, { items: [
+    { id: "a", snippet: { publishedAt: "2026-10-19T08:00:00Z", title: "Video A", thumbnails: { default: { url: "https://i.ytimg.test/a/default.jpg" }, medium: { url: "https://i.ytimg.test/a/mqdefault.jpg" },
+      high: { url: "https://i.ytimg.test/a/hqdefault.jpg" } } },
+      status: { privacyStatus: "public" }, statistics: { viewCount: "900", likeCount: "90", commentCount: "9" } },
+    { id: "b", snippet: { publishedAt: "2026-10-22T18:30:00Z", title: "Video B", thumbnails: { default: { url: "https://i.ytimg.test/b/default.jpg" } } },
+      status: { privacyStatus: "unlisted" }, statistics: { viewCount: "1100" } },
+  ] }]],
+];
+// Bağlantı watch?v=<kimlik>, kapak önce orta boy; liste dışı video aktarılır; YouTube erişim vermez
+const YT_POSTS = [
+  { url: "https://www.youtube.com/watch?v=a", type: "video", date: "2026-10-19", caption: "Video A", thumb: "https://i.ytimg.test/a/mqdefault.jpg", likes: 90, comments: 9, views: 900, reach: null },
+  { url: "https://www.youtube.com/watch?v=b", type: "video", date: "2026-10-22", caption: "Video B", thumb: "https://i.ytimg.test/b/default.jpg", likes: null, comments: null, views: 1100, reach: null },
 ];
 
 // ---- yapılandırma ----
@@ -256,15 +277,16 @@ test("metrikler: takipçi ve son gönderilerin ortalamaları; gizli değer ortal
 
   const ttf = fakeFetch(ttRoutes());
   assert.deepEqual(await fetchMetrics("tiktok", "tt-token", ttf),
-    { external_id: "tt-1", handle: "inf_tt", followers: 12000, avg_views: 6000, avg_likes: 400, avg_comments: 30, posts_sampled: 2, posts: [] });
+    { external_id: "tt-1", handle: "inf_tt", followers: 12000, avg_views: 6000, avg_likes: 400, avg_comments: 30, posts_sampled: 2, posts: TT_POSTS });
   assert.equal(ttf.calls[0].headers.authorization, "Bearer tt-token");
   assert.deepEqual(ttf.calls[1].body, { max_count: 12 });
+  assert.match(new URL(ttf.calls[1].url).searchParams.get("fields"), /\bcreate_time\b.*\bshare_url\b.*\bcover_image_url\b/);
 
   // YouTube sayıları metin döner; eksik beğeni/yorum ortalamaya girmez
   const ytf = fakeFetch(ytRoutes());
   assert.deepEqual(await fetchMetrics("youtube", "yt-token", ytf),
-    { external_id: "UC1", handle: "@infyt", followers: 8800, avg_views: 1000, avg_likes: 90, avg_comments: 9, posts_sampled: 2, posts: [] });
-  assert.match(ytf.calls.at(-1).url, /id=a,b$/);
+    { external_id: "UC1", handle: "@infyt", followers: 8800, avg_views: 1000, avg_likes: 90, avg_comments: 9, posts_sampled: 2, posts: YT_POSTS });
+  assert.match(ytf.calls.at(-1).url, /part=snippet,statistics,status&id=a,b$/);
 
   // Gizli abone sayısı ve videosuz kanal (yükleme listesi 404)
   const hidden = fakeFetch(ytRoutes([
@@ -276,6 +298,47 @@ test("metrikler: takipçi ve son gönderilerin ortalamaları; gizli değer ortal
 
   const noChannel = fakeFetch([[`${YT}/channels?`, [200, { items: [] }]]]);
   await assert.rejects(fetchMetrics("youtube", "t", noChannel), e => e.code === "no_channel");
+});
+
+test("metrikler: TikTok ve YouTube'da adresi, tarihi ya da ölçümü uygun olmayan gönderi ve özel ya da izlenemeyen video aktarılmaz, ortalamaya girer", async () => {
+  // Elenen videoların ölçümleri 100/10/1; yalnız v9 aktarılır (sorgu ve parça atılır, http kapak boş, metin 2200, eksi ve kesirli sayı null)
+  const ok = { create_time: Date.UTC(2026, 9, 20) / 1000, view_count: 100, like_count: 10, comment_count: 1 };
+  const videos = [
+    { ...ok, share_url: "https://www.tiktok.com.evil.test/@x/video/1" },
+    { ...ok, share_url: "https://www.tiktok.com@evil.test/@x/video/2" },
+    { ...ok, share_url: "http://www.tiktok.com/@x/video/3" },
+    { ...ok, share_url: "https://www.tiktok.com:8443/@x/video/4" },
+    { ...ok, share_url: "https://www.tiktok.com/@x/video/it's" },
+    { ...ok, share_url: "https://www.tiktok.com/@x/video/6", create_time: undefined },
+    { ...ok, share_url: "https://www.tiktok.com/@x/video/7", create_time: -5 },
+    { ...ok, share_url: "https://www.tiktok.com/@x/video/8", create_time: 1e15 },
+    { share_url: "https://www.tiktok.com/@x/video/9", create_time: ok.create_time },
+    { share_url: "https://www.tiktok.com/@inf_tt/video/v9?lang=tr#yorum", create_time: ok.create_time, cover_image_url: "http://p16.tiktokcdn.test/v9.jpeg",
+      video_description: "y".repeat(2300), view_count: 300, like_count: -1, comment_count: 2.5 },
+  ];
+  const tt = await fetchMetrics("tiktok", "t", fakeFetch(ttRoutes([[`${TT}/video/list/`, [200, { data: { videos }, error: { code: "ok" } }]]])));
+  assert.deepEqual(tt.posts, [
+    { url: "https://www.tiktok.com/@inf_tt/video/v9", type: "video", date: "2026-10-20", caption: "y".repeat(2200), thumb: "", likes: null, comments: null, views: 300, reach: null },
+  ]);
+  assert.deepEqual([tt.avg_views, tt.avg_likes, tt.avg_comments, tt.posts_sampled], [122, 10, 1, 10]);
+
+  // Özel video, reddedilmiş, yüklemesi başarısız ya da silinmiş video, kimliği bozuk ve tarihsiz video aktarılmaz;
+  // uygun olmayan kapak adayı atlanır. İşlenmiş (processed) video aktarılır.
+  const snippet = { publishedAt: "2026-10-19T08:00:00Z", title: "T" }, pub = { privacyStatus: "public" };
+  const items = [
+    { id: "p1", snippet, status: { privacyStatus: "private" }, statistics: { viewCount: "500", likeCount: "50", commentCount: "5" } },
+    { id: "b&x=1", snippet, status: pub, statistics: { viewCount: "500" } },
+    { id: "p3", snippet: { title: "T" }, status: pub, statistics: { viewCount: "500" } },
+    { id: "p4", snippet: { publishedAt: snippet.publishedAt, thumbnails: { medium: { url: "javascript:alert(1)" }, high: { url: "https://i.ytimg.test/p4/hqdefault.jpg" } } },
+      status: pub, statistics: { viewCount: "100", likeCount: "x", commentCount: "" } },
+    ...["rejected", "failed", "deleted", "processed"].map((uploadStatus, i) => ({ id: `u${i}`, snippet, status: { ...pub, uploadStatus }, statistics: { viewCount: "400" } })),
+  ];
+  const yt = await fetchMetrics("youtube", "t", fakeFetch(ytRoutes([[`${YT}/videos?`, [200, { items }]]])));
+  assert.deepEqual(yt.posts, [
+    { url: "https://www.youtube.com/watch?v=p4", type: "video", date: "2026-10-19", caption: "", thumb: "https://i.ytimg.test/p4/hqdefault.jpg", likes: null, comments: null, views: 100, reach: null },
+    { url: "https://www.youtube.com/watch?v=u3", type: "video", date: "2026-10-19", caption: "T", thumb: "", likes: null, comments: null, views: 400, reach: null },
+  ]);
+  assert.deepEqual([yt.avg_views, yt.avg_likes, yt.avg_comments, yt.posts_sampled], [400, 50, 5, 8]);
 });
 
 test("metrikler: Instagram'da yorumları kapalı gönderinin 0 yorumu ve erişimi olan gönderinin 0 izlenmesi ölçülmemiş sayılır", async () => {
@@ -1097,7 +1160,7 @@ test("syncDue: D1 sınırı — liste + hesap başına en çok SYNC_D1 ifade, s�
   assert.equal(due(db, b.id, "instagram"), null);
   assert.equal(count(db, "metric_snapshots"), 1);
   assert.equal(count(db, "posts"), IG_POSTS.length);
-  // TikTok'un en kötü yolu (yenileme + ölçüm, gönderi yok) da payın içinde
+  // TikTok'un en kötü yolu (yenileme + ölçüm + gönderiler) da payın içinde
   const tt = await setup({ ...TT_ENV, OAUTH_TOKEN_KEY: KEY, POSTS_ENABLED: "1" });
   const c = await tt.join("influencer", "c@x.co");
   await seed(tt.db, tt.env, c.id, "tiktok", "tt-1");
@@ -1184,6 +1247,28 @@ test("syncDue: Instagram gönderileri Gönderiler'e aktarılır; aynı gün yeni
   assert.equal(count(db, "post_snaps"), 2 * (IG_POSTS.length - 1) + 1);
   assert.deepEqual(snapsOf(db, IG_POSTS[0].url).map(s => s.likes), [120, 100]);
   assert.deepEqual(snapsOf(db, MANUAL.url), [{ at: "2026-10-02", likes: 5, comments: null, views: null, reach: null }]);
+});
+
+test("syncDue: TikTok ve YouTube gönderileri de aktarılır; her gönderi kendi platformu ve hesabıyla, erişimsiz", async t => {
+  t.mock.method(console, "log", () => {});
+  const { db, env, call, join } = await setup({ ...TT_ENV, ...YT_ENV, OAUTH_TOKEN_KEY: KEY, POSTS_ENABLED: "1" });
+  const a = await join("influencer", "a@x.co");
+  await seed(db, env, a.id, "tiktok", "tt-1");
+  await seed(db, env, a.id, "youtube", "UC1");
+  assert.deepEqual(await syncDue(env, fakeFetch([...ttRoutes(), ...ytRoutes()])), { ...ZERO, synced: 2 });
+  const acc = p => db.prepare("SELECT id FROM social_accounts WHERE user_id = ? AND platform = ?").get(a.id, p).id;
+  const pick = p => ({ url, type, date, caption, thumb }) => ({ url, platform: p, type, date, caption, thumb, account_id: acc(p) });
+  const [tt, yt] = [TT_POSTS.map(pick("tiktok")), YT_POSTS.map(pick("youtube"))];
+  assert.notEqual(acc("tiktok"), acc("youtube"));
+  assert.deepEqual(imported(db), [yt[0], tt[0], tt[1], yt[1]]);
+  assert.deepEqual(snapsOf(db, TT_POSTS[0].url), [{ at: today(), likes: 300, comments: 20, views: 5000, reach: null }]);
+  assert.deepEqual(snapsOf(db, YT_POSTS[1].url), [{ at: today(), likes: null, comments: null, views: 1100, reach: null }]);
+  // Panel listesi: iki platform birlikte, yeniden eskiye
+  const list = await call("GET", "/app/posts", { token: a.token });
+  assert.equal(list.status, 200, JSON.stringify(list.body));
+  assert.deepEqual(list.body.posts.map(p => [p.platform, p.url, p.snaps.length]), [
+    ["youtube", YT_POSTS[1].url, 1], ["tiktok", TT_POSTS[1].url, 1], ["tiktok", TT_POSTS[0].url, 1], ["youtube", YT_POSTS[0].url, 1],
+  ]);
 });
 
 test("Gönderi aktarımı: bağ koparılınca ya da başka hesap bağlanınca aktarılanlar silinir; elle girilenler ve başkasınınkiler kalır", async t => {
