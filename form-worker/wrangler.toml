@@ -23,8 +23,8 @@ ALLOWED_HOSTS ="saascorner.co,cornergroup.co,socialmediacorner.co,salescorner.co
 # Hesabın uygulama şifresi secret olarak girilir: wrangler secret put SMTP_PASS --name corner-forms
 SMTP_USER = "berkay@saascorner.co"
 # brandcorner sosyal metrikleri (src/metrics.js). "1": gerçek veri D1'den okunur; önce migrations/0001_metrics.sql uygulanmalı.
-# "0": D1 metrik tablolarına dokunulmaz, panel "örnek" etiketli örnek veri gösterir.
-METRICS_ENABLED = "0"
+# "0": D1 metrik tablolarına dokunulmaz, panel "örnek" etiketli örnek veri gösterir. D1 0001–0006 uygulandı, Instagram secret'ları girildi (23 Eki 2026).
+METRICS_ENABLED = "1"
 # brandcorner gönderi ölçümleri (GET/POST /app/posts*). "1": D1'e yazılır; önce migrations/0006_posts.sql uygulanmalı.
 # "0": uçlar 404 döner, panel kaydı tarayıcıda tutar. D1 0006 uygulandı (19 Eki 2026).
 POSTS_ENABLED = "1"
