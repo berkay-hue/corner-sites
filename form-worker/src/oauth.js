@@ -289,16 +289,23 @@ const API = {
       return { external_id: me.user_id ?? me.id, handle: me.username, followers: me.followers_count };
     },
     async recent(token, f) {
-      const media = await json(f, igUrl("me/media", {
-        fields: "id,like_count,comments_count,permalink,timestamp,media_type,media_product_type,caption,media_url,thumbnail_url",
-        limit: SAMPLE, access_token: token,
-      }));
+      const fields = "id,like_count,comments_count,permalink,timestamp,media_type,media_product_type,caption,media_url,thumbnail_url";
+      const page = list => json(f, igUrl("me/media", { fields: list, limit: SAMPLE, access_token: token }));
+      // is_comment_enabled reddedilirse (400) liste bir kez onsuz istenir; o zaman yorum sayısı geldiği gibi kalır
+      const media = await page(`${fields},is_comment_enabled`)
+        .catch(e => e instanceof ProviderError && e.code.startsWith("400:") ? page(fields) : Promise.reject(e));
       const items = (media.data || []).slice(0, SAMPLE);
       // İzlenme ve erişim yalnızca gönderi insights'ında; alınamayan gönderi (eski, reklam vb.) ortalamaya girmez
       const ins = await Promise.all(items.map(m => json(f, igUrl(`${m.id}/insights`, { metric: "views,reach", access_token: token }))
         .then(b => Object.fromEntries((Array.isArray(b.data) ? b.data : []).map(d => [d?.name, d?.total_value?.value ?? d?.values?.[0]?.value ?? null])),
           () => ({}))));
-      return items.map((m, i) => ({ views: ins[i].views ?? null, likes: m.like_count, comments: m.comments_count, post: igPost(m, ins[i]) }));
+      // Olamayacak 0 ölçülmemiş sayılır (null): yorumları kapalı gönderinin 0 yorumu ve erişimi olan gönderinin 0 izlenmesi
+      // (Instagram eski gönderilerde izlenmeyi 0 döner; erişilen her hesap gönderiyi en az bir kez görmüştür)
+      return items.map((m, i) => {
+        const mm = m.is_comment_enabled === false && num(m.comments_count) === 0 ? { ...m, comments_count: null } : m;
+        const it = num(ins[i].views) === 0 && num(ins[i].reach) > 0 ? { ...ins[i], views: null } : ins[i];
+        return { views: it.views ?? null, likes: mm.like_count, comments: mm.comments_count, post: igPost(mm, it) };
+      });
     },
   },
   tiktok: {
@@ -468,7 +475,7 @@ export async function syncAccount(env, userId, p, f = fetch) {
 // harcamaz. Ölçüm yalnızca kira hâlâ bizdeyse, hesap bağlıysa ve platform kimliği aynıysa yazılır; hesap yeniden
 // bağlanınca kira düşer (finishOAuth next_sync_at'i NULL yapar), eski hesabın ölçümü yeni hesaba yazılmaz.
 // POSTS_ENABLED "1" ise gönderiler (fetchMetrics posts) aynı koşullarla ve aynı batch'te posts/post_snaps'e yazılır.
-const COST = { instagram: 15, tiktok: 3, youtube: 4 }; // profil + gönderiler (Instagram: gönderi başına insights) + yenileme
+const COST = { instagram: 16, tiktok: 3, youtube: 4 }; // profil + gönderiler (Instagram: alan reddinde tekrar + gönderi başına insights) + yenileme
 const NEXT = { ok: "+1435 minutes", fail: "+355 minutes", changed: "+55 minutes" }; // saatlik cron'da ~1 gün, ~6 saat, ~1 saat
 export const SYNC_MIN = Math.min(...Object.values(COST));
 export const SYNC_D1 = 8; // kira, token, yenileme, son senkron işareti, ölçüm + gönderiler + gönderi ölçümleri + kira bırakma (batch)
