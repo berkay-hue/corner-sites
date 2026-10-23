@@ -163,6 +163,9 @@ export const rule = {
       // yalnız <head>'e eklenir (gövde aynı, #418 yok). Her çalıştırmada silinip yeniden yazılır; panel kendi stilini taşır
       html = html.replace(/<style data-sk-tap>[\s\S]*?<\/style>/, "");
       if (page !== "/panel") html = html.replace("</head>", `<style data-sk-tap>${TAP}</style></head>`);
+      // WCAG AA metin kontrastı (yalnız Next sayfaları; statik sayfalarda bu sınıflar yok)
+      html = html.replace(/<style data-sk-con>[\s\S]*?<\/style>/, "");
+      if (html.includes("/_next/static/")) html = html.replace("</head>", `<style data-sk-con>${CON}</style></head>`);
       if (existsSync(join(SITE, "og.png"))) {
         html = html.replace(/(<meta (?:property="og:image"|name="twitter:image") content=")[^"]*(")/g, `$1${R.origin}/og.png$2`);
         if (!html.includes('property="og:image:width"'))
@@ -203,6 +206,15 @@ export const rule = {
       return R.body(html.slice(0, end), page) + html.slice(end);
     },
 };
+
+// Beyaz zeminde yeşil #10B981 metin 2.54:1, sarı #FFB71B 1.74:1, features etiketleri 4.39:1 (AA 4.5:1).
+// Aynı tonun koyusu; ikonlar (svg) grafik, renkleri kalır
+const CON = [
+  ":is(p,span,div).text-\\[\\#10B981\\]:not(:has(svg)){color:#047857}", // 5.48:1
+  ".bg-\\[\\#10B981\\]\\/20.text-\\[\\#10B981\\]{color:#065f46}", // "Verified" rozeti, açık yeşil zeminde
+  ":is(p,span,div).text-\\[\\#FFB71B\\]:not(:has(svg)){color:#B45309}", // 5.02:1
+  ".rounded-full.bg-muted.text-muted-foreground{color:#4b5563}", // 6.87:1
+].join("");
 
 // 44px dokunma alanı yalnız dar ekranda ve dokunmatikte; fareli masaüstü düzeni aynı kalır
 const TAP = "@media (max-width:1023px),(pointer:coarse){" + [
