@@ -225,7 +225,10 @@ const CON = [
 const UX = [
   "@media (max-width:1023.98px){#main>section:first-child .grid.items-center{grid-template-columns:minmax(0,1fr)}",
   "#main>section:first-child .grid>.relative .flex-1{min-width:0}#main>section:first-child .grid>.relative .rounded-full{flex-shrink:0}}",
-  "@media (max-width:639.98px){#main>section:first-child .absolute.-right-4.rounded-xl.border{right:0}#main>section:first-child .absolute.-left-4.rounded-xl.border{left:0}}",
+  "@media (max-width:639.98px){#main>section:first-child .absolute.-right-4.rounded-xl.border{right:0}#main>section:first-child .absolute.-left-4.rounded-xl.border{left:0}",
+  // Yapışkan header'daki "Get Started Free" 640px altında gizliydi (kaydırınca kayıt yolu hamburger içinde kalıyordu);
+  // Login ve TR gizli kalır, logo + CTA + menü 320px'e sığar
+  "header [data-slot=button].gradient-primary{display:inline-flex;padding:0 14px}}",
 ].join("");
 
 // 44px dokunma alanı yalnız dar ekranda ve dokunmatikte; fareli masaüstü düzeni aynı kalır
