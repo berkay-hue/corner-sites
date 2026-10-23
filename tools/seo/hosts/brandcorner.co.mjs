@@ -159,6 +159,10 @@ export const rule = {
         .replace("</head>", '<style data-sk-skip>.sk-skip{position:absolute;left:-9999px;top:8px;z-index:100;padding:8px 12px;border-radius:6px;background:#fff;color:#111}.sk-skip:focus{left:8px}</style></head>')
         .replace(/(<body\b[^>]*>)/, '$1<a class="sk-skip" href="#main">Skip to content</a>')
         .replace('<main class="flex-1">', '<main id="main" class="flex-1">');
+      // Mobil/dokunmatikte 44px dokunma alanı + mobil menü iç boşluğu. Katmansız CSS, Tailwind'in @layer utilities'ini ezer;
+      // yalnız <head>'e eklenir (gövde aynı, #418 yok). Her çalıştırmada silinip yeniden yazılır; panel kendi stilini taşır
+      html = html.replace(/<style data-sk-tap>[\s\S]*?<\/style>/, "");
+      if (page !== "/panel") html = html.replace("</head>", `<style data-sk-tap>${TAP}</style></head>`);
       if (existsSync(join(SITE, "og.png"))) {
         html = html.replace(/(<meta (?:property="og:image"|name="twitter:image") content=")[^"]*(")/g, `$1${R.origin}/og.png$2`);
         if (!html.includes('property="og:image:width"'))
@@ -199,6 +203,25 @@ export const rule = {
       return R.body(html.slice(0, end), page) + html.slice(end);
     },
 };
+
+// 44px dokunma alanı yalnız dar ekranda ve dokunmatikte; fareli masaüstü düzeni aynı kalır
+const TAP = "@media (max-width:1023px),(pointer:coarse){" + [
+  // Next sayfaları: menü düğmesi ve sağdan açılan menü (kenara yapışık içerik, 28px bağlantılar, 16px kapat)
+  "[data-slot=sheet-trigger]{width:44px;height:44px}",
+  "[data-slot=sheet-content]>div{padding:56px 20px 24px;gap:4px}",
+  "[data-slot=sheet-content]>div>a{display:flex;align-items:center;min-height:44px}",
+  "[data-slot=sheet-content]>button{top:6px;right:6px;width:44px;height:44px;display:flex;align-items:center;justify-content:center}",
+  "header [data-slot],main [data-slot=button],footer [data-slot=button],footer [data-slot=input],[data-slot=sheet-content] [data-slot=button]{min-height:44px}",
+  // "View All Plans": düğmeyi saran <a> satır içi (20px); kutusu düğmeyle aynı olsun
+  "main a:has(>[data-slot=button]){display:inline-flex}",
+  // Yearly anahtarı 32×18: görünüm aynı, tıklama alanı ::after ile 44×44
+  "[data-slot=switch]{position:relative}[data-slot=switch]::after{content:\"\";position:absolute;inset:-13px -6px}",
+  // Footer bağlantıları (Next + statik): satır boşluğu yerine 44px yükseklik
+  "footer a:not(.flex){display:inline-flex;align-items:center;min-height:44px;min-width:44px}footer a.flex{min-height:44px}footer ul>li{margin-block:0}footer nav{row-gap:0}",
+  // Statik sayfalar (about, contact, yasal, giriş/kayıt): logo, üst menü, buton, onay kutusu satırı
+  "header.top .wrap>a:first-child,header.top nav a,header.top .btn{display:inline-flex;align-items:center;min-height:44px;min-width:44px}",
+  ".sk-skip{display:inline-flex;align-items:center;min-height:44px}button.btn,.card .row{min-height:44px}",
+].join("") + "}";
 
 const GROUP = [["https://saascorner.co", "SAAS Corner"], ["https://salescorner.co", "Sales Corner"], ["https://socialmediacorner.co", "Social Media Corner"], ["https://cornergroup.co", "Corner Group"]];
 const LI = (h, n) => `<li><a class="text-sm text-muted-foreground transition-colors hover:text-primary" href="${h}">${n}</a></li>`;
