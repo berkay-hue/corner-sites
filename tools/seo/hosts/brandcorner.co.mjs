@@ -253,6 +253,9 @@ const UX = [
   // Ana sayfa CTA bölümündeki desen %10 opaklıkta, her ziyarette 137 KB PNG iniyordu; aynı 1024×717 desen webp (21 KB).
   // Derlenmiş CSS'teki PNG kuralı geçersiz kalır, PNG hiç istenmez
   "#main [class*=\"abstract-geometric-pattern.png\"]{background-image:url(/abstract-geometric-pattern.webp)}",
+  // Bülten durum satırı: boşken yer kaplamaz, dolunca giriş+butonun altında tam satır; hata kırmızı (#b91c1c beyazda 6.5:1)
+  "footer form.sk-nl{flex-wrap:wrap;row-gap:0}footer .sk-nl-msg{flex-basis:100%;margin:0;font-size:.875rem;line-height:1.25rem;color:var(--muted-foreground)}",
+  "footer .sk-nl-msg:not(:empty){margin-top:.5rem}footer .sk-nl-msg[data-err]{color:#b91c1c}",
 ].join("");
 
 // 44px dokunma alanı yalnız dar ekranda ve dokunmatikte; fareli masaüstü düzeni aynı kalır
@@ -281,9 +284,24 @@ const FOOTER = [
   ...[["/integrations", "Integrations"], ["/security", "Security"], ["/careers", "Careers"], ["/press", "Press"]].map(([h, n]) => [LI(h, n), "", 1]),
   [LI("/gdpr", "GDPR Compliance") + "</ul>", LI("/gdpr", "GDPR Compliance") + LI("/kvkk", "KVKK") + "</ul>", 1],
   ['flex-1" placeholder="email@example.com"/>', 'flex-1" placeholder="email@example.com" aria-label="Email address"/>', 1],
+  // Bülten formu (NL ile birebir): sınıf, alan adı/otomatik doldurma ve boş durum satırı
+  ['<form class="flex w-full max-w-md gap-2">', '<form class="flex w-full max-w-md gap-2 sk-nl">', 1],
+  ['placeholder="email@example.com" aria-label="Email address"/>', 'placeholder="email@example.com" aria-label="Email address" name="email" autoComplete="email" required=""/>', 1],
+  ["Subscribe</button></form>", 'Subscribe</button><p role="status" aria-live="polite" class="sk-nl-msg"></p></form>', 1],
   ["<p>Made with ❤️ in Istanbul</p></div>", '<p>Made with ❤️ in Istanbul</p><nav aria-label="Corner Group companies" class="flex flex-wrap gap-4">'
     + GROUP.map(([u, n]) => `<a href="${u}" class="hover:text-primary">${n}</a>`).join("") + "</nav></div>", 1],
 ];
+// Footer bülten formunun action'ı, alan adı ve işleyicisi yoktu: Subscribe sayfayı yeniliyor, e-posta kayboluyordu. Corner
+// form alıcısının genel /submit ucuna (iletişim formuyla aynı) page "/newsletter" olarak gider; sonuç formun altındaki
+// durum satırında, site diliyle. onSubmit SSR HTML'ine yazılmaz; sınıf/öznitelik/boş <p> FOOTER swap'larıyla aynı
+const NL_MSG = { wait: ["Subscribing…", "Kaydediliyor…"], ok: ["Thanks! We'll keep you updated.", "Teşekkürler! Gelişmelerden haberdar edeceğiz."],
+  rate: ["Too many attempts. Please try again later.", "Çok fazla deneme. Lütfen biraz sonra tekrar deneyin."],
+  err: ["Something went wrong. Please try again.", "Bir sorun oluştu. Lütfen tekrar deneyin."] };
+const NL = "s=>{s.preventDefault();let f=s.currentTarget,m=f.querySelector(\"[role=status]\"),b=f.querySelector(\"button\"),say=(k,x)=>{m.textContent="
+  + JSON.stringify(NL_MSG) + "[k][\"tr\"===nlLang?1:0];x?m.setAttribute(\"data-err\",\"\"):m.removeAttribute(\"data-err\")};b.disabled=!0;say(\"wait\");"
+  + "fetch(\"https://corner-forms.berkay-999.workers.dev/submit\",{method:\"POST\",headers:{\"Content-Type\":\"application/json\"},"
+  + "body:JSON.stringify({page:\"/newsletter\",fields:[[\"Email\",f.elements.email.value.trim()],[\"Page\",location.pathname]],hp:\"\"})})"
+  + ".then(r=>r.json()).then(d=>{d&&d.ok?(f.reset(),say(\"ok\")):say(d&&\"rate\"===d.error?\"rate\":\"err\",1)}).catch(()=>say(\"err\",1)).finally(()=>{b.disabled=!1})}";
 // Poppins yalnız font-serif ile ve hep 600/700 çiziliyor (HTML'de ve chunk'larda 400/500 yok): 400 ve 500 önyüklemesi her
 // sayfada boşa 2 istek (~17 KB) ve LCP'den bant alıyordu. @font-face kalır, ileride kullanılırsa tembel iner. Head'deki <link>
 // ve akıştaki :HL ipucu birlikte gider, yoksa React hidrasyonda önyüklemeyi geri ekler
@@ -357,12 +375,16 @@ export const chunks = [
     // 23 Eki: statik sunucu ?_rsc= isteğine RSC değil HTML döner; Next her görünen bağlantıyı boşuna ön yüklüyordu (ana sayfada
     // 14 istek, ~140 KB) ve tıklamada yine tam sayfa yüklemesine düşüyordu. Link router bağlamını görmez: ön yükleme yok,
     // tıklama doğrudan <a> gezinmesi. Çizilen <a> aynı (#418 riski yok)
-    { chunk: "fbb4735ac8b2897c", was: ["29a4179b1081dab7", "f847b81df96780e6", "50ec8e92a50e74a5", "2c6b236da8230460", "75a2fdeac448816e"], edits: [
+    // 23 Eki: footer bülten formu sayfayı yeniliyordu; onSubmit form alıcısına gönderir (NL, yukarıda), sonucu durum satırında gösterir
+    { chunk: "fbb4735ac8b2897c", was: ["29a4179b1081dab7", "f847b81df96780e6", "50ec8e92a50e74a5", "2c6b236da8230460", "75a2fdeac448816e", "173212324b0a63cf"], edits: [
       ['let I=l.default.useContext(c.AppRouterContext),L=!1!==E', 'let I=null,L=!1!==E'],
       ['{href:"/pricing",label:e("footer.pricing")},{href:"/integrations",label:e("footer.integrations")},{href:"/security",label:e("footer.security")}]', '{href:"/pricing",label:e("footer.pricing")}]'],
       ['{href:"/careers",label:e("footer.careers")},{href:"/press",label:e("footer.press")},', '{href:"/blog",label:e("footer.blog")},'],
       ['{href:"/gdpr",label:e("footer.gdpr")}]', '{href:"/gdpr",label:e("footer.gdpr")},{href:"/kvkk",label:"KVKK"}]'],
-      ['type:"email",placeholder:"email@example.com",className:"flex-1"', 'type:"email",placeholder:"email@example.com","aria-label":"Email address",className:"flex-1"'],
+      ['type:"email",placeholder:"email@example.com",className:"flex-1"', 'type:"email",placeholder:"email@example.com","aria-label":"Email address",name:"email",autoComplete:"email",required:!0,className:"flex-1"'],
+      ['let{t:e}=(0,n.useLanguage)(),i={solutions:', 'let{t:e,language:nlLang}=(0,n.useLanguage)(),i={solutions:'],
+      ['(0,t.jsxs)("form",{className:"flex w-full max-w-md gap-2",children:[', `(0,t.jsxs)("form",{className:"flex w-full max-w-md gap-2 sk-nl",onSubmit:${NL},children:[`],
+      ['children:e("footer.subscribe")})]})', 'children:e("footer.subscribe")}),(0,t.jsx)("p",{role:"status","aria-live":"polite",className:"sk-nl-msg"})]})'],
       ['(0,t.jsx)("p",{children:e("footer.madeWith")})', '(0,t.jsx)("p",{children:e("footer.madeWith")}),(0,t.jsx)("nav",{"aria-label":"Corner Group companies",className:"flex flex-wrap gap-4",children:'
         + JSON.stringify(GROUP.map(([u, n]) => [u, n])) + '.map(([u,n])=>(0,t.jsx)("a",{href:u,className:"hover:text-primary",children:n},u))})'],
       ...['hidden border-primary text-primary hover:bg-primary/5 sm:inline-flex bg-transparent', 'border-primary text-primary bg-transparent'].map(c => [
