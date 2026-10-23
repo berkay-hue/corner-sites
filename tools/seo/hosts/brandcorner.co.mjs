@@ -56,16 +56,20 @@ export const rule = {
       const social = '<div class="mt-6 flex gap-4">';  // footer'daki 4 sosyal ikon href="#" (hesap yok)
       // Hero: "No credit card required · 14-day free trial" yalnız sayfa sonundaki CTA'daydı; butonların altına da girer
       // (aynı sözlük anahtarları ve ikonlar). Ana sayfa chunk'ındaki hero yamasıyla birebir
-      const svg = (n, d) => `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-${n} h-4 w-4 text-primary">${d}</svg>`;
+      const svg = (n, d, c) => `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-${n} h-4 w-4${c}">${d}</svg>`;
       const trust = '<div class="mt-10 flex flex-wrap items-center justify-center gap-6 text-sm text-muted-foreground lg:justify-start">';
-      const ok = (cls, lg = "") => `<div class="mt-4 flex flex-wrap items-center ${cls}gap-4 text-sm font-medium text-foreground${lg}">` + [
+      const items = c => [
           ["shield", '<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path>', "No credit card required"],
           ["clock", '<circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline>', "14-day free trial"],
-        ].map(([n, d, t]) => `<div class="flex items-center gap-2">${svg(n, d)}<span>${t}</span></div>`).join("") + "</div>";
+        ].map(([n, d, t]) => `<div class="flex items-center gap-2">${svg(n, d, c)}<span>${t}</span></div>`).join("");
+      const ok = (cls, lg = "") => `<div class="mt-4 flex flex-wrap items-center ${cls}gap-4 text-sm font-medium text-foreground${lg}">` + items(" text-primary") + "</div>";
       const trial = ["Watch Demo</button></div>" + trust, "Watch Demo</button></div>" + ok("justify-center ", " lg:justify-start") + trust, 1];
       // features ve marka/ajans çözüm sayfalarının hero'su da aynı satırı alır (chunk'taki trialRow ile birebir). Influencer'a
       // deneme yok ("It's free to join"), o sayfaya girmez
       const heroTrial = (after, cls) => ["Watch Demo</button></div>" + after, "Watch Demo</button></div>" + ok(cls) + after, 1];
+      // Sayfa sonu CTA'sı da ana sayfanınki gibi butonun altında aynı satırı alır (chunk'taki ctaRow ile birebir)
+      const arrow = '<path d="m12 5 7 7-7 7"></path></svg></button>';
+      const endTrial = fg => [arrow + "</div></section>", arrow + `<div class="mt-8 flex flex-wrap items-center justify-center gap-6 text-sm text-${fg}/80">` + items("") + "</div></div></section>", 1];
       // Fiyat sayfası: deneme butonlu kartta (SSR'da Pro) butonun hemen altında "14-day free trial" (pricing chunk yamasıyla birebir)
       const card = ["Start Trial</button></div></div>", "Start Trial</button>"
         + '<div class="flex items-center justify-center gap-2 text-sm font-medium text-foreground">'
@@ -85,7 +89,7 @@ export const rule = {
           ['leading-5 text-primary">4.8%</div>', 'leading-5 text-primary">—</div>', 4],
           [">24/7 Support</h3>", ">Support</h3>", 1],
           ["Join thousands of brands, influencers, and agencies growing with Brand Corner.", "Brands, influencers, and agencies can grow with Brand Corner.", 1], trial, copy] },
-        "/features": { cut: [social], swap: [["analyzes thousands of profiles", "analyzes profiles", 1], heroTrial("</div></section>", "justify-center "), copy] },
+        "/features": { cut: [social], swap: [["analyzes thousands of profiles", "analyzes profiles", 1], heroTrial("</div></section>", "justify-center "), endTrial("primary-foreground"), copy] },
         // SSS akordeonu kapalıyken cevaplar HTML'de yok: düz liste olur (chunk'ta aynı değişiklik), SSR dili EN
         "/pricing": { cut: [social], swap: [copy, ['role="switch" aria-checked=', 'role="switch" aria-label="Yearly" aria-checked=', 1], ['We accept all major credit cards (Visa, Mastercard, American Express), PayPal, and bank transfers for enterprise plans.', 'Online payments are not accepted at the moment.', 1], card], put: [['<div data-slot="accordion" class="mt-10"', faqHtml]] },
         "/solutions/brands": { cut: [grid, social], swap: [
@@ -93,7 +97,7 @@ export const rule = {
           ["<span>4.8% engagement</span>", "<span>Engagement</span>", 4],
           ['<p class="font-semibold text-foreground">+24 new</p>', '<p class="font-semibold text-foreground">New</p>', 1],
           ['text-[#10B981]">+340%</p>', 'text-[#10B981]">—</p>', 1],
-          ["Join 500+ brands already using Brand Corner to transform their influencer marketing.", "Use Brand Corner to transform your influencer marketing.", 1], heroTrial('</div><div class="relative">', ""), copy] },
+          ["Join 500+ brands already using Brand Corner to transform their influencer marketing.", "Use Brand Corner to transform your influencer marketing.", 1], heroTrial('</div><div class="relative">', ""), endTrial("primary-foreground"), copy] },
         "/solutions/influencers": { cut: [grid, social], section: [">Influencer Success Stories</h2>"], swap: [
           ['<p class="text-sm text-muted-foreground">Fashion Brand - $1,500</p>', '<p class="text-sm text-muted-foreground">Fashion Brand</p>', 1],
           ['<div class="font-mono text-2xl font-bold text-foreground">$4,250</div>', '<div class="font-mono text-2xl font-bold text-foreground">—</div>', 1],
@@ -105,7 +109,7 @@ export const rule = {
           ...[["Sarah J.", "A", "$12,500"], ["Mike R.", "B", "$8,200"], ["Emma L.", "C", "$10,800"]].flatMap(([n, k, v]) => [
             [`<p class="font-medium text-foreground">${n}</p>`, `<p class="font-medium text-foreground">Talent ${k}</p>`, 1], [`>${v}</p>`, ">—</p>", 1]]),
           ['<p class="font-mono font-semibold text-[#10B981]">$45,200</p>', '<p class="font-mono font-semibold text-[#10B981]">—</p>', 1],
-          ["Join leading agencies already managing their talents with Brand Corner.", "Manage your talents with Brand Corner.", 1], heroTrial('</div><div class="relative">', ""), copy] },
+          ["Join leading agencies already managing their talents with Brand Corner.", "Manage your talents with Brand Corner.", 1], heroTrial('</div><div class="relative">', ""), endTrial("accent-foreground"), copy] },
       };
     })(),
     // Bunlardan biri gövdede kalırsa koşu durur: ayna yenilenip işaretler kayarsa iddialar sessizce geri gelmesin
@@ -393,6 +397,13 @@ const heroRow = (pre, v, cls) => [
     + `(0,${v}.jsxs)("div",{className:"flex items-center gap-2",children:[(0,${v}.jsx)(skSh,{className:"h-4 w-4 text-primary"}),(0,${v}.jsx)("span",{children:e("cta.noCreditCard")})]}),`
     + `(0,${v}.jsxs)("div",{className:"flex items-center gap-2",children:[(0,${v}.jsx)(skCl,{className:"h-4 w-4 text-primary"}),(0,${v}.jsx)("span",{children:e("cta.freeTrial")})]})]})`],
 ];
+// Sayfa sonu CTA'sı: ana sayfadaki gibi butonun altında aynı satır (ikon renksiz, yazı CTA renginde). İkonlar CTA modülüne ayrıca
+const ctaRow = (pre, v, ic, mod, fg) => [
+  [pre, pre.replace(/function (\w)\(\)\{$/, TRIAL_ICONS + "function $1(){")],
+  [`(0,${v}.jsx)(${ic}.ArrowRight,{className:"ml-2 h-5 w-5"})]})]})]})}e.s(["${mod}"`, `(0,${v}.jsx)(${ic}.ArrowRight,{className:"ml-2 h-5 w-5"})]}),(0,${v}.jsxs)("div",{className:"mt-8 flex flex-wrap items-center justify-center gap-6 text-sm text-${fg}/80",children:[`
+    + `(0,${v}.jsxs)("div",{className:"flex items-center gap-2",children:[(0,${v}.jsx)(skSh,{className:"h-4 w-4"}),(0,${v}.jsx)("span",{children:e("cta.noCreditCard")})]}),`
+    + `(0,${v}.jsxs)("div",{className:"flex items-center gap-2",children:[(0,${v}.jsx)(skCl,{className:"h-4 w-4"}),(0,${v}.jsx)("span",{children:e("cta.freeTrial")})]})]})]})]})}e.s(["${mod}"`],
+];
 const statGrid = v =>({ from: `,(0,${v}.jsxs)("div",{className:"mt-10 grid grid-cols-3 gap-6",children:[`, until: `]}),(0,${v}.jsxs)("div",{className:"relative"` });
 // CTA'lar düz <button>'dı: onClick SSR HTML'ine yazılmaz (#418 riski yok). Dil kapsamda yoksa localStorage'dan okunur (varsayılan en)
 const REG = (q = "") => `()=>{let l;try{l=localStorage.getItem("brand-corner-lang")}catch(x){}location.href=${q ? `("tr"===l?"/kayit":"/register")+"${q}"` : `"tr"===l?"/kayit":"/register"`}}`;
@@ -475,8 +486,9 @@ export const chunks = [
       ['children:"+24%"', 'children:"—"'],
       ['children:["$",1500*e]', 'children:"—"'],
     ] },
-    { chunk: "265b6dd36dde1597", was: ["81f74a9a6a0889fa", "7604cbf6525a7d40"], edits: [  // /solutions/brands
+    { chunk: "265b6dd36dde1597", was: ["81f74a9a6a0889fa", "7604cbf6525a7d40", "0544c72b65ceb52c"], edits: [  // /solutions/brands
       ...heroRow("var a=e.i(29511),r=e.i(50661),t=e.i(67881),n=e.i(95751),s=e.i(10552),i=e.i(5576),l=e.i(65739);function d(){", "a", ""),
+      ...ctaRow("var a=e.i(29511),r=e.i(50661),t=e.i(67881),n=e.i(95751);function s(){", "a", "n", "BrandsCTA", "primary-foreground"),
       [statGrid("a"), ""],
       on('className:"gradient-primary h-12 px-8 text-primary-foreground",children:[e("solutions.brands.cta")', REG("?role=brand")),
       on('(0,a.jsx)(t.Button,{size:"lg",variant:"outline",className:"h-12 px-8 bg-transparent",children:e("hero.cta.demo")})', go("/features")),
@@ -504,8 +516,9 @@ export const chunks = [
       [`"Join 10,000+ influencers already growing with Brand Corner. It's free to join!"`, `"Grow with Brand Corner. It's free to join!"`],
       [`"Brand Corner ile büyüyen 10.000+ influencer'a katılın. Katılım ücretsiz!"`, `"Brand Corner ile büyüyün. Katılım ücretsiz!"`],
     ] },
-    { chunk: "4897118e349b9d9c", was: ["e51060d5d0abddeb", "3aaf446f0a85a424"], edits: [  // /solutions/agencies
+    { chunk: "4897118e349b9d9c", was: ["e51060d5d0abddeb", "3aaf446f0a85a424", "ac4c025f67728f03"], edits: [  // /solutions/agencies
       ...heroRow("var t=e.i(29511),a=e.i(50661),s=e.i(67881),n=e.i(95751),r=e.i(2870),i=e.i(96755);function l(){", "t", ""),
+      ...ctaRow("var t=e.i(29511),a=e.i(50661),s=e.i(67881),n=e.i(95751);function r(){", "t", "n", "AgenciesCTA", "accent-foreground"),
       [statGrid("t"), ""],
       on('className:"h-12 bg-accent px-8 text-accent-foreground hover:bg-accent/90",children:[e("solutions.agencies.cta")', REG("?role=agency")),
       on('(0,t.jsx)(s.Button,{size:"lg",variant:"outline",className:"h-12 px-8 bg-transparent",children:e("hero.cta.demo")})', go("/features")),
@@ -516,8 +529,9 @@ export const chunks = [
       ['"Join leading agencies already managing their talents with Brand Corner."', '"Manage your talents with Brand Corner."'],
       ['"Yeteneklerini Brand Corner ile yöneten önde gelen ajanslara katılın."', '"Yeteneklerinizi Brand Corner ile yönetin."'],
     ] },
-    { chunk: "5c127651fc7ca527", was: ["6569e4e1529055d4", "5d99e18e1caf9b4d"], edits: [  // /features
+    { chunk: "5c127651fc7ca527", was: ["6569e4e1529055d4", "5d99e18e1caf9b4d", "4c61cd8d0a3a4a07"], edits: [  // /features
       ...heroRow("var a=e.i(29511),t=e.i(50661),r=e.i(67881),i=e.i(95751),n=e.i(60813);function l(){", "a", "justify-center "),
+      ...ctaRow("var a=e.i(29511),t=e.i(50661),r=e.i(67881),i=e.i(95751);function n(){", "a", "i", "FeaturesCTA", "primary-foreground"),
       ["analyzes thousands of profiles", "analyzes profiles"],
       ["üzere binlerce profili analiz eder.", "üzere profilleri analiz eder."],
       on('(0,a.jsxs)(r.Button,{size:"lg",className:"gradient-primary h-12 px-8 text-primary-foreground",children:[e("hero.cta.trial")', REG()),
