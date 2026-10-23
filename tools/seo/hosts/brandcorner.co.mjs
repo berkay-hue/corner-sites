@@ -328,9 +328,6 @@ const on = (btn, js) => {
   if (to === btn) throw new Error(`onClick eklenemedi: ${btn.slice(0, 60)}`);
   return [btn, to];
 };
-// Next build latin-ext alt kümelerini (ğ, ş, İ, ₺ …) yayımlamamış; @font-face 404 veriyor, tarayıcı zaten "* Fallback" (Arial) ile çiziyor.
-const LATIN_EXT = "U+100-2BA,U+2BD-2C5,U+2C7-2CC,U+2CE-2D7,U+2DD-2FF,U+304,U+308,U+329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF";
-const noFace = (family, weight, file) => [`@font-face{font-family:${family};font-style:normal;font-weight:${weight};font-display:swap;src:url(../media/${file}.woff2)format("woff2");unicode-range:${LATIN_EXT}}`, ""];
 export const chunks = [
     // e34ca4a footer Company listesine Blog ekledi (6 sayfa); i18n sözlüklerinde footer.blog zaten var
     // Header'daki Giriş/Login ve Get Started butonlarının (masaüstü + mobil menü) tıklama işleyicisi yoktu; site diline göre
@@ -434,14 +431,5 @@ export const chunks = [
       [{ from: '(0,a.jsx)(er,{type:"single",collapsible:!0,className:"mt-10",children:[', until: '})]})})}e.s(["PricingFAQ"' }, faqJs()],
       on('(0,a.jsx)(i.Button,{className:(0,j.cn)("mt-8 w-full",t.popular?"gradient-primary text-primary-foreground":""),variant:t.popular?"default":"outline",children:t.cta})', plan("s")),
       on('(0,a.jsxs)(r.Button,{size:"lg",className:"mt-8 gradient-primary text-primary-foreground",children:[(0,a.jsx)(n.MessageSquare,', go("mailto:info@saascorner.co")),
-    ] },
-    // TR font 404'leri: eksik latin-ext dosyalarına giden 6 @font-face (görünüm aynı kalır, yalnız 404 istekleri kalkar)
-    { chunk: "f525b972636fb7eb", ext: "css", edits: [
-      noFace("Inter", "100 900", "1bffadaabf893a1e-s.7cd81963"),
-      noFace("Poppins", "400", "6c55a692938ebbbc-s.0a77efb4"),
-      noFace("Poppins", "500", "0da9c7f357bd9d4d-s.b2288445"),
-      noFace("Poppins", "600", "5f9d24ebef5d5292-s.bd593fbe"),
-      noFace("Poppins", "700", "798ea22d9983e047-s.b460e02c"),
-      noFace("Space Grotesk", "300 700", "28868e710e86be81-s.c30238d4"),
     ] },
 ];
