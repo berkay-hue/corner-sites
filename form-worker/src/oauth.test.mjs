@@ -280,9 +280,10 @@ test("metrikler: takipçi ve son gönderilerin ortalamaları; gizli değer ortal
 
 test("metrikler: Instagram'da yorumları kapalı gönderinin 0 yorumu ve erişimi olan gönderinin 0 izlenmesi ölçülmemiş sayılır", async () => {
   // m1: yorum kapalı ve 0, izlenme 0 ama erişim var; m2: yorum kapalı ama sayı var, izlenme ve erişim 0; m3: yorum açık ve 0
+  // (kural ortalamaya uygulanmasaydı yorum ortalaması 1, izlenme ortalaması 133 çıkardı)
   const media = [
     { ...IG_MEDIA[0], comments_count: 0, is_comment_enabled: false },
-    { ...IG_MEDIA[1], comments_count: 2, is_comment_enabled: false },
+    { ...IG_MEDIA[1], comments_count: 3, is_comment_enabled: false },
     { ...IG_MEDIA[2], comments_count: 0, is_comment_enabled: true },
   ];
   const f = fakeFetch(igPostRoutes([
@@ -290,8 +291,8 @@ test("metrikler: Instagram'da yorumları kapalı gönderinin 0 yorumu ve erişim
     [`${IGV}/m2/insights?`, [200, { data: [{ name: "views", values: [{ value: 0 }] }, { name: "reach", values: [{ value: 0 }] }] }]],
   ], media));
   const m = await fetchMetrics("instagram", "ig-token", f);
-  assert.deepEqual(m.posts.map(p => [p.comments, p.views, p.reach]), [[null, null, 800], [2, 0, 0], [0, 400, null]]);
-  assert.deepEqual([m.avg_views, m.avg_comments, m.posts_sampled], [200, 1, 3]);
+  assert.deepEqual(m.posts.map(p => [p.comments, p.views, p.reach]), [[null, null, 800], [3, 0, 0], [0, 400, null]]);
+  assert.deepEqual([m.avg_views, m.avg_comments, m.posts_sampled], [200, 2, 3]);
   assert.match(new URL(f.calls[1].url).searchParams.get("fields"), /,is_comment_enabled$/);
   assert.equal(f.calls.filter(c => c.url.startsWith(`${IGV}/me/media?`)).length, 1);
 });
