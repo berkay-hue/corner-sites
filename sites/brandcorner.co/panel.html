@@ -127,7 +127,14 @@ footer.bot{border-top:1px solid var(--line);color:var(--muted);font-size:13.5px;
 .info{font-size:13.5px;color:var(--muted);margin:10px 0 0}
 .row-b{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:14px 0 0}
 .back{margin:0 0 10px;font-size:14px}.back a{color:var(--muted);text-decoration:none;display:inline-flex;align-items:center;min-height:44px}.back a:hover{color:var(--text)}
-.empty{text-align:center;color:var(--muted);padding:36px 20px}.empty p{margin:0 0 14px}.empty p:last-child{margin:0}
+.empty{text-align:center;color:var(--muted);padding:36px 20px}.empty p{margin:0 0 14px}.empty p:last-child{margin-bottom:0}
+.empty>p{max-width:52ch;margin-left:auto;margin-right:auto}.empty .es-t{font-size:17px;color:var(--text);margin:0 0 6px}.empty .es-cta{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}.empty.sm{padding:28px 20px}
+.es-ic{display:inline-grid;place-items:center;width:56px;height:56px;border-radius:50%;background:var(--accent-soft);color:var(--accent-text);box-shadow:0 0 0 6px var(--surface),0 0 0 7px var(--line)}.es-ic .i{width:26px;height:26px}.es-ic.sm{width:40px;height:40px;box-shadow:none}.es-ic.sm .i{width:20px;height:20px}.es-ic.ok{background:var(--ok-soft);color:var(--ok)}.empty.sm .es-ic{margin-bottom:12px}
+.es-art{position:relative;display:flex;justify-content:center;margin:0 auto 18px;width:150px;height:64px}.es-art::before,.es-art::after{content:"";position:absolute;top:12px;width:52px;height:40px;border-radius:8px;background:var(--surface-2);border:1px solid var(--line)}.es-art::before{left:10px;transform:rotate(-8deg)}.es-art::after{right:10px;transform:rotate(8deg)}.es-art .es-ic{position:relative;z-index:1;align-self:center}
+.es-art.board{width:220px;height:auto;gap:8px;align-items:flex-start}.es-art.board::before,.es-art.board::after{display:none}.es-art.board i{display:grid;gap:6px;flex:1;padding:8px;border-radius:8px;background:var(--surface-2);border:1px solid var(--line)}.es-art.board b{display:block;height:14px;border-radius:4px;background:var(--surface);border:1px solid var(--line)}.es-art.board b:first-child{height:5px;width:60%;border:0;background:var(--line-strong)}.es-art.board i:first-child b+b{border:1px dashed var(--accent);background:var(--accent-soft)}
+.es-steps{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 22px;list-style:none;counter-reset:es;margin:22px auto 0;padding:18px 0 0;max-width:620px;border-top:1px dashed var(--line);font-size:13.5px}.es-steps li{position:relative;display:inline-flex;align-items:center;gap:8px;counter-increment:es;color:var(--text)}.es-steps li::before{content:counter(es);display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--surface-2);border:1px solid var(--line);font-size:12px;font-weight:700;color:var(--muted)}.es-steps li:first-child::before{background:var(--accent);border-color:var(--accent);color:#fff}.es-steps li+li::after{content:"";position:absolute;left:-17px;top:50%;width:12px;border-top:1px solid var(--line-strong)}@media(max-width:760px){.es-steps{flex-direction:column;align-items:flex-start;gap:8px;width:max-content;max-width:100%}.es-steps li{text-align:left}.es-steps li+li::after{left:10.5px;top:-8px;width:0;height:8px;border-top:0;border-left:1px solid var(--line-strong)}}
+.cb.none{display:flex;flex-direction:column;align-items:center;gap:10px}.cb.none p{margin:0}
+@media(prefers-reduced-motion:no-preference){.empty .es-ic,.empty .es-art.board i{animation:esin .32s ease-out both}.empty .es-art.board i:nth-child(2){animation-delay:.06s}.empty .es-art.board i:nth-child(3){animation-delay:.12s}@keyframes esin{from{opacity:0;transform:translateY(6px)}}}
 .f label,.f legend{display:block;font-weight:600;font-size:14px;margin:0 0 6px;padding:0}
 .f input:not([type=checkbox]),.f select,.f textarea{display:block;width:100%;font:inherit;font-size:16px;line-height:1.4;padding:10px 12px;margin:0 0 16px;border:1px solid var(--line-strong);border-radius:var(--r-ctl);background:var(--surface);color:var(--text)}
 .f textarea{resize:vertical;min-height:96px}
@@ -366,7 +373,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       inInvite: "{n} sizi davet etti", inRev: "Revizyon istendi", inAcc: "İçerik bağlantınızı gönderin", inProf: "%{n} tamamlandı", review: "İncele", openIt: "Aç",
       profCard: "Profil", profDone: "Tamamlanma", editProf: "Profili düzenle",
       kvTitle: "Verilerin", kvLead: "Hesabına ait verilerin bir kopyasını JSON dosyası olarak indir (KVKK md. 11).", kvBtn: "Verilerimi indir", kvDone: "Dosya indirildi.", kvSampleNote: "Sunucu dışa aktarımı açılana kadar dosya yalnız bu cihazdaki bilgileri içerir.", kvDelTitle: "Hesap ve veri silme", kvDelLead: "Hesabını ve verilerini sildirmek için bize yaz.", kvDelBtn: "Silme talebi gönder", kvDelSubj: "Brand Corner hesap ve veri silme talebi",
-      nNotif: "Bildirimler", nfLead: "Başvurular, davetler ve içerik onayları burada toplanır.", nfUnread: "{n} okunmamış", nfAllRead: "Hepsi okundu.", nfMarkAll: "Tümünü okundu say", nfNone: "Henüz bildirim yok.", nfNew: "Yeni", nfSampleNote: "Bildirim servisi açılınca gerçek bildirimlerin burada görünür.", nfSApply: "Yaz koleksiyonu kampanyana yeni bir başvuru geldi.", nfSContent: "Bir influencer onayın için içerik gönderdi.", nfSView: "Kampanya özetin 3 influencer tarafından görüntülendi.", nfSInvite: "Bir marka seni kampanyasına davet etti.", nfSAccepted: "Başvurun kabul edildi.", nfSMetrics: "Gönderi ölçümlerini güncelleme zamanı.",
+      nNotif: "Bildirimler", nfLead: "Başvurular, davetler ve içerik onayları burada toplanır.", nfUnread: "{n} okunmamış", nfAllRead: "Hepsi okundu.", nfMarkAll: "Tümünü okundu say", nfNone: "Yeni başvurular, davetler ve içerik onayları burada görünür.", nfNew: "Yeni", nfSampleNote: "Bildirim servisi açılınca gerçek bildirimlerin burada görünür.", nfSApply: "Yaz koleksiyonu kampanyana yeni bir başvuru geldi.", nfSContent: "Bir influencer onayın için içerik gönderdi.", nfSView: "Kampanya özetin 3 influencer tarafından görüntülendi.", nfSInvite: "Bir marka seni kampanyasına davet etti.", nfSAccepted: "Başvurun kabul edildi.", nfSMetrics: "Gönderi ölçümlerini güncelleme zamanı.",
       nSettings: "Ayarlar", setLead: "Hesabını ve panelin görünümünü yönet.", setAcct: "Hesap", setName: "Ad soyad", setEmail: "E-posta", setEmailHint: "E-postanı değiştirmek için info@saascorner.co adresine yaz.", setPw: "Şifre", setPwHint: "Yeni şifre belirleme bağlantısını e-postana göndeririz.", setPwBtn: "Sıfırlama bağlantısı gönder", setPwSent: "Bağlantı gönderildi. Gelen kutunu kontrol et.", setLook: "Görünüm", setLang: "Dil", setTheme: "Tema", thSys: "Sistem", thLight: "Açık", thDark: "Koyu", setOutLead: "Bu cihazda panelden çıkış yap.",
       ckCompany: "Şirket adı", ckIndustry: "Sektör", ckCity: "Şehir", ckWebsite: "Web sitesi", ckBio: "Hakkında (en az 40 karakter)", ckClients: "Müşteri sayısı",
       ckNiches: "İlgi alanları", ckPlatform: "Takipçi sayısıyla en az bir platform", ckListed: "Markalara görünür profil",
@@ -391,8 +398,8 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       soonGrowth: "Büyüme analitiği", soonPay: "Güvenli ödemeler", soonContracts: "Korunan sözleşmeler",
       campLead: "Açık kampanyalarınız influencer'ların Fırsatlar listesinde görünür.",
       oppLead: "Markaların açık kampanyaları. Uyum puanı ilgi alanlarınıza ve platformlarınıza göre hesaplanır.",
-      campEmpty: "Henüz kampanyanız yok. İlk kampanyanızı oluşturun.",
-      oppEmpty: "Şu anda açık kampanya yok. Yeni kampanyalar açıldığında burada görünecek.",
+      campEmpty: "Brifinizi, bütçenizi ve son başvuru tarihini girin. Açık kampanyanız influencer'ların Fırsatlar listesinde görünür.",
+      oppEmpty: "Yeni kampanyalar açıldığında burada görünecek. Bu arada profilinizi tamamlayın; uyum puanınız nişlerinize ve platformlarınıza göre hesaplanır.",
       newCamp: "Yeni kampanya", newLead: "Kampanya oluşturulduğunda açık olur ve influencer'lar başvurabilir.",
       cntApps: "Başvuru: {n}", cntPending: "Bekleyen: {n}", cAll: "Tümü", campQ: "Kampanya ara", campQPh: "Başlıkta ara", campNone: "Bu filtreye uyan kampanya yok.",
       deadline: "Son tarih: {n}", created: "Oluşturuldu: {n}", updated: "Güncellendi: {n}",
@@ -412,7 +419,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       ni0: "cilt bakımı", ni1: "güzellik", ni2: "yaşam tarzı", ni3: "teknoloji", ni4: "oyun", ni5: "moda", ni6: "otomobil", ni7: "anne-çocuk", ni8: "seyahat", ni9: "yemek", ni10: "doğal ürünler", ni11: "erkek bakımı", ni12: "kendin yap", ni13: "spor", ni14: "sürdürülebilirlik", ni15: "ev", ni16: "tasarım",
       close: "Kampanyayı kapat", reopen: "Kampanyayı yeniden aç", edit: "Düzenle", iBrief: "Açıklama", iBudget: "Bütçe", iDeadline: "Son başvuru", iPlatforms: "Platformlar", iCreated: "Oluşturuldu", iNone: "—",
       appsTitle: "Başvurular ve davetler ({n})",
-      appsEmpty: "Bu kampanyada henüz başvuru ya da davet yok. Influencer keşfinden uygun profilleri davet edebilirsiniz.",
+      appsEmpty: "Kampanyanız açık; influencer'lar başvurdukça kartları burada belirir. Beklemek yerine uygun profilleri siz davet edin.",
       colNew: "Yeni", colInvited: "Davet edildi", colWork: "Çalışılıyor", colReview: "İçerik onayı", colDone: "Onaylandı",
       colClosed: "Kapananlar ({n})", dnView: "Kart görünümü", dnRoomy: "Rahat", dnDense: "Sıkı", colEmpty: "Bu sütun boş.", revNote: "Revizyon notu", revNoteL: "Influencer'a not (isteğe bağlı)",
       goDiscover: "Influencer keşfine git", backCamps: "‹ Kampanyalar", backOpps: "‹ Fırsatlar",
@@ -442,13 +449,16 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       oppNoFit: "İlgi alanlarınıza ve platformlarınıza uyan açık kampanya şu an yok.", showAll: "Tüm kampanyaları gör",
       secInv: "Davetler", secTodo: "Yapılacaklar", secWait: "İncelemede", secDone: "Tamamlananlar", secClosed: "Sonuçlanmayanlar ({n})",
       invitedBy: "{n} sizi davet etti",
-      myAppsEmpty: "Henüz başvurunuz ya da davetiniz yok. Fırsatlar sayfasından açık kampanyalara başvurabilirsiniz.", goOpps: "Fırsatlara göz at",
+      myAppsEmpty: "Açık kampanyalara başvurun ya da markaların davetlerini bekleyin; her adımı burada takip edersiniz.", goOpps: "Fırsatlara göz at",
+      esHow: "Nasıl işler", esCampT: "İlk kampanyanızı oluşturun", esS1: "Kampanyayı oluşturun", esS2: "Başvuruları değerlendirin", esS3: "İçeriği onaylayın", esBrowse: "Influencer'lara göz at",
+      esOppT: "Şu an açık kampanya yok", esAppsT: "Henüz başvuru yok", appsClosedE: "Bu kampanya başvuru almadan kapandı.", esMyT: "İlk başvurunuzu yapın", esI1: "Fırsat bulun", esI2: "Başvurun", esI3: "İçeriği gönderin",
+      esDiscT: "Henüz listelenen influencer yok", esNfT: "Henüz bildirim yok",
       discLead: "Profil kartlarını inceleyip doğrudan davet edin.", discQ: "Ara", discQPh: "İsim veya şehir", allNiches: "Tüm ilgi alanları",
       fMinFol: "Takipçi", anyMin: "Her takipçi sayısı", fCity: "Şehir", allCities: "Tüm şehirler", fSort: "Sıralama", sortRec: "Önerilen", sortFol: "Takipçi (çoktan aza)", sortName: "Ada göre (A–Z)", fReset: "Filtreleri temizle", discCount: "{n} influencer", discCount1: "1 influencer", discCap: "En yeni 100 profil yüklendi; filtreler yalnızca bu profiller içinde çalışır.", discCap50: "En uygun 50 profil gösteriliyor.", discMatch: "İlgi alanlarınıza göre en uygun profiller.", discMatchC: "Seçili kampanyaya en uygun profiller.", discNoNiche: "Profilinize ilgi alanı eklerseniz size en uygun profilleri öne çıkarırız.", discNoNicheC: "Bu kampanyada ilgi alanı yok; tüm profiller gösteriliyor.", discNoMatch: "Ortak ilgi alanı olan profil yok; tüm profiller gösteriliyor.", discMatchErr: "Eşleşmeler yüklenemedi; tüm profiller gösteriliyor.", viewProf: "Profili gör", inviteFor: "{n} için davet ediyorsunuz.",
       clearFor: "Temizle", drClose: "Kapat", drNoPlat: "Platform eklenmemiş.", crFull: "Tam profil ve son gönderiler", crBack: "← Keşfet", crNone: "Bu influencer bulunamadı ya da artık listelenmiyor.", crAccounts: "Hesap ölçümleri", crPosts: "Son gönderiler", crSampleBadge: "Örnek veri", crSampleNote: "Gönderi bağlantısı henüz açık değil; aşağıdakiler örnek gönderilerdir. Kampanyaya eklemeler yalnız bu tarayıcıda tutulur.", crTarget: "Kampanya", crAdd: "Kampanyaya ekle", crRemove: "Kampanyadan çıkar", crAdded: "Gönderi kampanyaya eklendi.", crRemoved: "Gönderi kampanyadan çıkarıldı.", crVerified: "doğrulandı", crOpenPost: "Gönderiyi aç", crNoPosts: "Henüz gönderi yok.", drHist: "Sizinle geçmiş", drHistNone: "Henüz birlikte çalışmadınız.",
       drInvite: "Kampanyaya davet et", drNoOpen: "Davet edilebilecek açık kampanya yok: ya hepsinde zaten var ya da açık kampanyanız yok.",
       inviteInf: "Influencer davet et",
-      discEmpty: "Henüz profilini markalara açan influencer yok.", discNone: "Bu ölçütlere uyan influencer bulunamadı.",
+      discEmpty: "Influencer'lar profillerini markalara açtıkça burada listelenecek. Açık kampanyalarınız bu sırada Fırsatlar listesinde görünmeye devam eder.", discNone: "Bu ölçütlere uyan influencer bulunamadı.",
       needOpen: "Davet göndermek için önce açık bir kampanya oluşturun.",
       fNiche: "İlgi alanı", fPlatform: "Platform", allPlatforms: "Tüm platformlar",
       invite: "Davet et", sendInvite: "Daveti gönder", inviteTo: "Kampanya", inviteMsg: "Mesajınız (isteğe bağlı)",
@@ -518,7 +528,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       inInvite: "{n} invited you", inRev: "Revision requested", inAcc: "Send your content link", inProf: "{n}% complete", review: "Review", openIt: "Open",
       profCard: "Profile", profDone: "Completion", editProf: "Edit profile",
       kvTitle: "Your data", kvLead: "Download a copy of your account data as a JSON file (KVKK art. 11).", kvBtn: "Download my data", kvDone: "File downloaded.", kvSampleNote: "Until server export is live, the file contains only the data on this device.", kvDelTitle: "Account and data deletion", kvDelLead: "To delete your account and data, write to us.", kvDelBtn: "Request deletion", kvDelSubj: "Brand Corner account and data deletion request",
-      nNotif: "Notifications", nfLead: "Applications, invites and content approvals in one place.", nfUnread: "{n} unread", nfAllRead: "All caught up.", nfMarkAll: "Mark all as read", nfNone: "No notifications yet.", nfNew: "New", nfSampleNote: "Your real notifications will appear here once the service is live.", nfSApply: "New application to your summer collection campaign.", nfSContent: "A creator sent content for your approval.", nfSView: "Your campaign brief was viewed by 3 creators.", nfSInvite: "A brand invited you to its campaign.", nfSAccepted: "Your application was accepted.", nfSMetrics: "Time to update your post metrics.",
+      nNotif: "Notifications", nfLead: "Applications, invites and content approvals in one place.", nfUnread: "{n} unread", nfAllRead: "All caught up.", nfMarkAll: "Mark all as read", nfNone: "New applications, invites and content approvals show up here.", nfNew: "New", nfSampleNote: "Your real notifications will appear here once the service is live.", nfSApply: "New application to your summer collection campaign.", nfSContent: "A creator sent content for your approval.", nfSView: "Your campaign brief was viewed by 3 creators.", nfSInvite: "A brand invited you to its campaign.", nfSAccepted: "Your application was accepted.", nfSMetrics: "Time to update your post metrics.",
       nSettings: "Settings", setLead: "Manage your account and how the panel looks.", setAcct: "Account", setName: "Full name", setEmail: "Email", setEmailHint: "To change your email, write to info@saascorner.co.", setPw: "Password", setPwHint: "We will email you a link to set a new password.", setPwBtn: "Send reset link", setPwSent: "Reset link sent. Check your inbox.", setLook: "Appearance", setLang: "Language", setTheme: "Theme", thSys: "System", thLight: "Light", thDark: "Dark", setOutLead: "Log out of the panel on this device.",
       ckCompany: "Company name", ckIndustry: "Industry", ckCity: "City", ckWebsite: "Website", ckBio: "About (at least 40 characters)", ckClients: "Number of clients",
       ckNiches: "Niches", ckPlatform: "At least one platform with follower count", ckListed: "Profile visible to brands",
@@ -543,8 +553,8 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       soonGrowth: "Growth analytics", soonPay: "Secure payments", soonContracts: "Protected contracts",
       campLead: "Your open campaigns appear in influencers' Opportunities list.",
       oppLead: "Open campaigns from brands. Your match score is based on your niches and platforms.",
-      campEmpty: "You don't have any campaigns yet. Create your first one.",
-      oppEmpty: "There are no open campaigns right now. New campaigns will show up here.",
+      campEmpty: "Add your brief, budget and application deadline. Open campaigns appear in influencers' Opportunities list.",
+      oppEmpty: "New campaigns will show up here. Meanwhile, complete your profile; your match score is based on your niches and platforms.",
       newCamp: "New campaign", newLead: "A new campaign is open right away and influencers can apply.",
       cntApps: "Applications: {n}", cntPending: "Pending: {n}", cAll: "All", campQ: "Search campaigns", campQPh: "Search titles", campNone: "No campaigns match this filter.",
       deadline: "Deadline: {n}", created: "Created {n}", updated: "Updated {n}",
@@ -564,7 +574,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       ni0: "skincare", ni1: "beauty", ni2: "lifestyle", ni3: "technology", ni4: "gaming", ni5: "fashion", ni6: "automotive", ni7: "parenting", ni8: "travel", ni9: "food", ni10: "natural products", ni11: "men's grooming", ni12: "DIY", ni13: "sports", ni14: "sustainability", ni15: "home", ni16: "design",
       close: "Close campaign", reopen: "Reopen campaign", edit: "Edit", iBrief: "Description", iBudget: "Budget", iDeadline: "Deadline", iPlatforms: "Platforms", iCreated: "Created", iNone: "—",
       appsTitle: "Applications and invites ({n})",
-      appsEmpty: "No applications or invites for this campaign yet. You can invite suitable profiles from Find influencers.",
+      appsEmpty: "Your campaign is open; cards appear here as influencers apply. Don't wait: invite suitable profiles yourself.",
       colNew: "New", colInvited: "Invited", colWork: "In progress", colReview: "Content review", colDone: "Approved",
       colClosed: "Closed ({n})", dnView: "Card density", dnRoomy: "Comfortable", dnDense: "Compact", colEmpty: "Nothing here.", revNote: "Revision note", revNoteL: "Note to the influencer (optional)",
       goDiscover: "Go to Find influencers", backCamps: "‹ Campaigns", backOpps: "‹ Opportunities",
@@ -594,13 +604,16 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       oppNoFit: "No open campaigns match your niches and platforms right now.", showAll: "See all campaigns",
       secInv: "Invites", secTodo: "To do", secWait: "In review", secDone: "Completed", secClosed: "Not taken forward ({n})",
       invitedBy: "{n} invited you",
-      myAppsEmpty: "No applications or invites yet. You can apply to open campaigns from Opportunities.", goOpps: "Browse opportunities",
+      myAppsEmpty: "Apply to open campaigns or wait for brand invites; you can follow every step here.", goOpps: "Browse opportunities",
+      esHow: "How it works", esCampT: "Create your first campaign", esS1: "Create the campaign", esS2: "Review applications", esS3: "Approve the content", esBrowse: "Browse influencers",
+      esOppT: "No open campaigns right now", esAppsT: "No applications yet", appsClosedE: "This campaign closed without any applications.", esMyT: "Make your first application", esI1: "Find an opportunity", esI2: "Apply", esI3: "Submit your content",
+      esDiscT: "No listed influencers yet", esNfT: "No notifications yet",
       discLead: "Browse profile cards and invite directly.", discQ: "Search", discQPh: "Name or city", allNiches: "All niches",
       fMinFol: "Followers", anyMin: "Any follower count", fCity: "City", allCities: "All cities", fSort: "Sort", sortRec: "Recommended", sortFol: "Followers (high to low)", sortName: "Name (A–Z)", fReset: "Clear filters", discCount: "{n} influencers", discCount1: "1 influencer", discCap: "The newest 100 profiles are loaded; filters only search within them.", discCap50: "Showing the 50 best matches.", discMatch: "Best matches for your niches.", discMatchC: "Best matches for the selected campaign.", discNoNiche: "Add niches to your profile and we will bring your best matches to the top.", discNoNicheC: "This campaign has no niches; showing all profiles.", discNoMatch: "No profiles share your niches; showing all profiles.", discMatchErr: "Matches could not be loaded; showing all profiles.", viewProf: "View profile", inviteFor: "Inviting for {n}.",
       clearFor: "Clear", drClose: "Close", drNoPlat: "No platforms added.", crFull: "Full profile and recent posts", crBack: "← Discover", crNone: "This influencer wasn't found or is no longer listed.", crAccounts: "Account metrics", crPosts: "Recent posts", crSampleBadge: "Sample data", crSampleNote: "The posts connection isn't live yet; these are sample posts. Campaign additions are kept only in this browser.", crTarget: "Campaign", crAdd: "Add to campaign", crRemove: "Remove from campaign", crAdded: "Post added to the campaign.", crRemoved: "Post removed from the campaign.", crVerified: "verified", crOpenPost: "Open post", crNoPosts: "No posts yet.", drHist: "History with you", drHistNone: "You haven't worked together yet.",
       drInvite: "Invite to a campaign", drNoOpen: "No open campaign to invite them to: they're already in all of them, or you have none open.",
       inviteInf: "Invite influencers",
-      discEmpty: "No influencers have made their profile visible yet.", discNone: "No influencers match these filters.",
+      discEmpty: "Influencers appear here as they make their profiles visible to brands. Meanwhile your open campaigns stay in the Opportunities list.", discNone: "No influencers match these filters.",
       needOpen: "Create an open campaign before sending invites.",
       fNiche: "Niche", fPlatform: "Platform", allPlatforms: "All platforms",
       invite: "Invite", sendInvite: "Send invite", inviteTo: "Campaign", inviteMsg: "Your message (optional)",
@@ -764,7 +777,20 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
     ]);
   }
   function back(h, k) { return el("p", { class: "back" }, el("a", { href: h, text: t(k) })); }
-  function empty(s, cta) { return el("div", { class: "box empty" }, [el("p", { text: s }), cta ? el("p", null, cta) : null]); }
+  // Boş durum: başlıklıysa simge (ya da panoyu andıran soluk önizleme), başlık, açıklama, işlemler ve "Nasıl işler" adımları; başlıksız (filtre sonucu) sade kalır
+  // o: { ic: simge, ti: başlık anahtarı, lv: başlık etiketi (h2), art: "board", steps: [anahtarlar] }
+  function empty(s, cta, o) {
+    o = o || {};
+    var art = o.art === "board" ? el("div", { class: "es-art board", "aria-hidden": "true" }, [0, 1, 2].map(function (i) { return el("i", null, [el("b"), el("b"), i ? null : el("b")]); }))
+      : o.ic && o.ti ? el("div", { class: "es-art", "aria-hidden": "true" }, el("span", { class: "es-ic" }, ic(o.ic)))
+      : o.ic ? el("span", { class: "es-ic sm", "aria-hidden": "true" }, ic(o.ic)) : null;
+    return el("div", { class: "box empty" + (o.ti ? "" : " sm") }, [
+      art, o.ti ? el(o.lv || "h2", { class: "es-t", text: t(o.ti) }) : null, el("p", { text: s }),
+      cta ? el("p", { class: "es-cta" }, cta) : null,
+      o.steps ? el("ol", { class: "es-steps", "aria-label": t("esHow") }, o.steps.map(function (k) { return el("li", { text: t(k) }); })) : null
+    ]);
+  }
+  function none(k, icon, cta, cls) { return el("div", { class: "cb none" }, [el("span", { class: "es-ic sm" + (cls ? " " + cls : ""), "aria-hidden": "true" }, ic(icon)), el("p", { text: t(k) }), cta || null]); }
   function stamp(c) { return c.deadline ? el("span", { text: t("deadline", day(c.deadline)) }) : null; }
 
   // Yönlendirme: #overview, #campaigns, #new, #campaign-<id>, #discover (marka/ajans), #applications (influencer), #profile
@@ -998,7 +1024,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
             return c[g[0]] > 0 ? el("i", { style: "flex:" + c[g[0]] + ";--c:var(--" + g[1] + ")", title: t(g[2]) + ": " + num(c[g[0]]) }) : null;
           }))
         ]);
-      })) : el("p", { class: "cb none", text: t("ocEmpty") }),
+      })) : none("ocEmpty", "megaphone", el("a", { class: "btn sm sec", href: "#new", text: t("newCamp") })),
       open.length ? el("ul", { class: "legend" }, STAGES.map(function (g) { return el("li", null, [el("i", { style: "--c:var(--" + g[1] + ")" }), el("span", { text: t(g[2]) })]); })) : null
     ]);
   }
@@ -1019,7 +1045,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
     return el("section", { class: "card" }, [
       el("div", { class: "ch" }, [el("h2", { text: t("forYou") }), el("a", { class: "lk44", href: "#discover", text: t("forYouGo") })]),
       d.err ? el("div", { class: "cb" }, failLine(d.err, again))
-        : !top.length ? el("p", { class: "cb none", text: t("forYouEmpty") })
+        : !top.length ? none("forYouEmpty", "search")
         : el("div", null, top.map(function (o) {
           var x = o.x, fol = (x.platforms || []).reduce(function (n, p) { return n + (+p.followers || 0); }, 0);
           var sub = (x.niches || []).map(nicheLbl).join(", ") + (fol > 0 ? ((x.niches || []).length ? " · " : "") + t("followers", num(fol)) : "");
@@ -1042,7 +1068,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
     return el("section", { class: "card" }, [
       el("div", { class: "ch" }, [el("h2", { text: t("oppsFor") }), el("a", { class: "lk44", href: "#campaigns", text: t("oppsAll") })]),
       d.err ? el("div", { class: "cb" }, failLine(d.err, again))
-        : !top.length ? el("p", { class: "cb none", text: t("oppsEmpty") })
+        : !top.length ? none("oppsEmpty", "briefcase")
         : el("div", null, top.map(function (o) {
           var c = o.c;
           return el("div", { class: "irow" }, [
@@ -1139,7 +1165,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       var prof = items[items.length - 1], both = r[0].err && r[1].err, again = function () { render(); };
       var inbox = r[1].err
         ? el("div", null, [both ? null : el("div", { class: "cb" }, failLine(r[1].err, again)), pct < 100 ? el("ul", { class: "inbox" }, prof) : null])
-        : items.length ? el("ul", { class: "inbox" }, items) : el("p", { class: "cb none", text: t("waitEmpty") });
+        : items.length ? el("ul", { class: "inbox" }, items) : none("waitEmpty", "check", null, "ok");
       var mets = own ? ["mReach", "mEng", "mSpend"] : ["mReach", "mEng", "mEarn"];
       return [
         el("div", { class: "ph" }, [
@@ -1176,7 +1202,8 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
         el("div", null, [el("h1", { text: t(own ? "nCampaigns" : "nOpps") }), el("p", { class: "lead", text: t(own ? "campLead" : "oppLead") })]),
         own && list.length ? el("a", { class: "btn", href: "#new", text: t("newCamp") }) : null
       ]);
-      if (!list.length) return [head, empty(t(own ? "campEmpty" : "oppEmpty"), own ? el("a", { class: "btn", href: "#new", text: t("newCamp") }) : null)];
+      if (!list.length) return [head, own ? empty(t("campEmpty"), [el("a", { class: "btn", href: "#new" }, [ic("plus"), t("newCamp")]), el("a", { class: "btn sec", href: "#discover", text: t("esBrowse") })], { ic: "megaphone", ti: "esCampT", steps: ["esS1", "esS2", "esS3"] })
+        : empty(t("oppEmpty"), el("a", { class: "btn sec", href: "#profile", text: t("editProf") }), { ic: "briefcase", ti: "esOppT" })];
       return own ? [head].concat(owned(list)) : [head].concat(opps(list));
     });
   }
@@ -1200,7 +1227,11 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       var qk = fold(C.q), list = all.filter(function (c) {
         return (C.tab === "all" || c.status === C.tab) && (!qk || fold(c.title).indexOf(qk) >= 0);
       });
-      box.replaceChildren(list.length ? el("div", null, list.map(ownerCard)) : empty(t("campNone")));
+      box.replaceChildren(list.length ? el("div", null, list.map(ownerCard)) : empty(t("campNone"), C.tab !== "all" || C.q ? el("button", { type: "button", class: "ghost", text: t("pClear"), onclick: function () {
+        C.tab = "all"; C.q = ""; q.value = "";
+        tabs.querySelectorAll("button").forEach(function (y) { y.setAttribute("aria-pressed", String(y.getAttribute("data-tab") === "all")); });
+        paint(); q.focus();
+      } }) : null, { ic: "search" }));
     }
     paint();
     return [el("section", { class: "card flush" }, [tabs, el("div", { class: "toolbar f", role: "search" }, q), box])];
@@ -1244,7 +1275,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       if (!list.length) {
         var fitOnly = O.tab === "fit" && !qk && !O.platform, sa = el("button", { type: "button", class: "btn sm", text: t("showAll") });
         sa.addEventListener("click", function () { setTab("all"); var b = tabs.querySelector('[data-tab="all"]'); if (b) b.focus(); });
-        none = empty(t(fitOnly ? "oppNoFit" : "oppNone"), fitOnly ? sa : null);
+        none = empty(t(fitOnly ? "oppNoFit" : "oppNone"), fitOnly ? sa : null, { ic: "search" });
       }
       box.replaceChildren(none || el("div", { class: "list" }, list.map(oppCard)));
     }
@@ -1381,7 +1412,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       ]),
       apps.length ? campReport(apps) : null,
       el("div", { class: "bhd" }, [el("h2", { text: t("appsTitle", apps.length) }), bw ? densBar(bw) : null]),
-      bw || empty(t("appsEmpty"), c.status === "open" ? toDiscover(c, "goDiscover") : null)
+      bw || (c.status === "open" ? empty(t("appsEmpty"), toDiscover(c, "goDiscover"), { art: "board", ti: "esAppsT", lv: "h3" }) : empty(t("appsClosedE"), null, { ic: "inbox" }))
     ];
   }
   function toDiscover(c, k) {
@@ -1526,7 +1557,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
   function applications() {
     return BC.call("GET", "app/applications").then(function (d) {
       var list = d.applications || [], head = [el("h1", { text: t("nApps") }), el("p", { class: "lead", text: t("appsLead") })];
-      if (!list.length) return head.concat(empty(t("myAppsEmpty"), el("a", { class: "btn sm", href: "#campaigns", text: t("goOpps") })));
+      if (!list.length) return head.concat(empty(t("myAppsEmpty"), el("a", { class: "btn", href: "#campaigns" }, [ic("briefcase"), t("goOpps")]), { ic: "list", ti: "esMyT", steps: ["esI1", "esI2", "esI3"] }));
       var of = function (ss) { return list.filter(function (a) { return ss.indexOf(a.status) >= 0; }); }, closed = of(["rejected", "declined"]);
       var secs = [["secInv", ["invited"]], ["secTodo", ["accepted", "revision"]], ["secWait", ["pending", "submitted"]], ["secDone", ["approved"]]].map(function (x) {
         var xs = of(x[1]), hid = "s" + (++uid);
@@ -1591,7 +1622,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
         cnt.textContent = list.length ? (list.length === 1 ? t("discCount1") : t("discCount", num(list.length))) : t("discNone");
         cnt.classList.toggle("vh", !list.length);
         rs.hidden = !(F.q || F.niche || F.platform || F.min || F.city || F.sort);
-        box.replaceChildren(list.length ? el("div", { class: "list" }, list.map(function (x) { return infCard(x, ctx); })) : empty(t("discNone")));
+        box.replaceChildren(list.length ? el("div", { class: "list" }, list.map(function (x) { return infCard(x, ctx); })) : empty(t("discNone"), rs.hidden ? null : el("button", { type: "button", class: "ghost", text: t("fReset"), onclick: function () { rs.click(); } }), { ic: "search" }));
       };
       function apply() { F.q = q.value.trim(); F.niche = n.value; F.platform = s.value; F.min = mn.value; F.city = ci.value; F.sort = so.value; ctx.repaint(); }
       // Temizle: davet bağlamı (inviteFor) korunur, yalnız filtreler sıfırlanır; odak arama kutusuna döner
@@ -1607,7 +1638,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
         open.length ? null : el("p", { class: "info" }, [t("needOpen") + " ", el("a", { href: "#new", text: t("doNew") })]),
         all.length || !fb ? el("p", { class: "meta" }, [t(why), why === "discNoNiche" ? el("a", { class: "btn sm sec", href: "#profile", text: t("editProf") }) : null]) : null,
         all.length ? f : null, fb && all.length >= 100 ? el("p", { class: "meta", text: t("discCap") }) : !fb && all.length >= 50 ? el("p", { class: "meta", text: t("discCap50") }) : null,
-        ctx.err, all.length ? cnt : null, all.length ? box : empty(t("discEmpty"))
+        ctx.err, all.length ? cnt : null, all.length ? box : empty(t("discEmpty"), null, { ic: "user", ti: "esDiscT" })
       ];
     });
   }
@@ -2604,7 +2635,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
         var sl = xs.slice((PF.page - 1) * PPAGE, PF.page * PPAGE);
         cnt.textContent = t("pCount", num(xs.length));
         res.textContent = "";
-        if (!xs.length) { add(res, empty(t("pNone"), el("button", { type: "button", class: "ghost", text: t("pClear"), onclick: clear }))); return; }
+        if (!xs.length) { add(res, empty(t("pNone"), el("button", { type: "button", class: "ghost", text: t("pClear"), onclick: clear }), { ic: "search" })); return; }
         add(res, PF.view === "list" ? el("ul", { class: "plist" }, sl.map(function (p) { return pRow(p, d.sample); })) : el("ul", { class: "pgrid" }, sl.map(function (p) { return pCard(p, d.sample); })));
         if (pages > 1) add(res, el("nav", { class: "pager", "aria-label": t("pPager") }, [
           el("button", { type: "button", class: "ghost", "data-pg": "prev", disabled: PF.page <= 1, text: t("pPrev"), onclick: function () { go(-1); } }),
@@ -2643,7 +2674,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
   function post(r) { return pSync().then(function () { return postView(r); }); }
   function postView(r) {
     var d = pData(), p = d.list.filter(function (x) { return x.id === r.id; })[0];
-    if (!p) return [back("#posts", "pBack"), empty(t("pNotFound"), el("a", { class: "btn sm", href: "#posts", text: t("pBack") }))];
+    if (!p) return [back("#posts", "pBack"), empty(t("pNotFound"), el("a", { class: "btn sm", href: "#posts", text: t("pBack") }), { ic: "image" })];
     var s = lastSnap(p), key = "likes", tlBox = el("div");
     function drawTl() { tlBox.textContent = ""; add(tlBox, pChart(p.snaps, key)); }
     var kt = el("div", { class: "tabs", role: "group", "aria-label": t("pTimeline") }, PMETS.map(function (m) {
@@ -2783,7 +2814,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
     return Promise.all([BC.call("GET", "app/influencers"), crSoft(BC.call("GET", "app/campaigns")), crSoft(BC.call("GET", "app/metrics/" + encodeURIComponent(id))),
       crSoft(BC.call("GET", "app/creators/" + encodeURIComponent(id) + "/posts"))]).then(function (res) {
       var x = ((res[0] && res[0].influencers) || []).filter(function (y) { return String(y.id) === id; })[0];
-      if (!x) return [back("#discover", "crBack"), el("h1", { text: t("nDiscover") }), empty(t("crNone"))];
+      if (!x) return [back("#discover", "crBack"), el("h1", { text: t("nDiscover") }), empty(t("crNone"), el("a", { class: "btn sm sec", href: "#discover", text: t("crBack") }), { ic: "user" })];
       x.platforms = x.platforms || [];
       var camps = res[1].d && res[1].d.campaigns || [], open = camps.filter(function (c) { return c.status === "open"; });
       var pr = res[3], sample = !pr.d || !Array.isArray(pr.d.posts), perr = pr.e && !crMissing(pr.e) ? pr.e : null;
@@ -2880,7 +2911,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
               un(x) ? el("span", { class: "dot", role: "img", "aria-label": t("nfNew") }) : null];
             row = href ? el("a", { class: "nfa", href: href, onclick: function () { mark(x); } }, kids) : el("div", { class: "nfa" }, kids);
             return el("li", { class: un(x) ? "un" : null }, row);
-          })) : empty(t("nfNone"))]);
+          })) : empty(t("nfNone"), null, { ic: "bell", ti: "esNfT" })]);
       }
       draw();
       return [el("h1", { text: t("nNotif") }), el("p", { class: "lead", text: t("nfLead") }),
