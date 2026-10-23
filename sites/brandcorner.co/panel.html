@@ -419,7 +419,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       socDone: "{n} hesabın bağlandı.", socCutOk: "{n} bağlantısı kesildi.", socDenied: "Bağlantı izni verilmedi; istersen yeniden deneyebilirsin.",
       socTaken: "Bu hesap başka bir Brand Corner hesabına bağlı. Önce oradan bağlantıyı kes.", socTicket: "Bağlantı süresi doldu ya da geçersiz; yeniden \"Bağla\"ya bas.",
       socForbidden: "Bu hesap için bağlantı kullanılamıyor.", socProvider: "Platform şu an yanıt vermedi; biraz sonra yeniden dene.", socOwner: "Bu bağlantı başka bir hesaptan başlatıldı, yeniden Bağla'ya bas.",
-      perf: "Performans", mReach: "Erişim", mEng: "Etkileşim", mSpend: "Harcama", mEarn: "Kazanç", noData: "Veri yok", perfNote: "Bu ölçümler içerik bağlantıları ve ödemeler kaydedildikçe dolacak.", perfWin: "Son 30 gün", perfPosts: "Gönderi", perfTop: "En çok erişen gönderiler", perfAll: "Tüm gönderiler", perfNone: "Son 30 günde gönderi yok.", perfSampleNote: "Henüz gönderi eklemediniz; bu özet örnek veridir.",
+      perf: "Performans", mReach: "Erişim", mEng: "Etkileşim", mSpend: "Harcama", mEarn: "Kazanç", noData: "Veri yok", perfNote: "Bu ölçümler içerik bağlantıları ve ödemeler kaydedildikçe dolacak.", perfWin: "Son 30 gün", perfPosts: "Gönderi", perfTop: "En çok erişen gönderiler", perfAll: "Tüm gönderiler", perfNone: "Son 30 günde gönderi yok.", perfLast: "Son {n} gönderi", perfSampleNote: "Henüz gönderi eklemediniz; bu özet örnek veridir.",
       acctMenu: "Hesap menüsü", tabsLabel: "Panel sekmeleri",
       kTrig: "Ara veya git", kPh: "Sayfa, kampanya ara…", kPhOwn: "Sayfa, kampanya, influencer ara…", kLabel: "Komut paleti", kGo: "Git", kAct: "İşlemler", kPeople: "Influencer'lar",
       kNone: "Sonuç yok. Başka bir kelime dene.", kHintNav: "gezin", kHintOpen: "aç", kHintClose: "kapat", kDark: "Koyu temaya geç", kLight: "Açık temaya geç",
@@ -588,7 +588,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       socDone: "Your {n} account is connected.", socCutOk: "{n} disconnected.", socDenied: "Permission wasn't granted; you can try again.",
       socTaken: "This account is linked to another Brand Corner account. Disconnect it there first.", socTicket: "The connection expired or is invalid; press \"Connect\" again.",
       socForbidden: "Connections aren't available for this account.", socProvider: "The platform didn't respond; try again shortly.", socOwner: "This connection was started from another account; press Connect again.",
-      perf: "Performance", mReach: "Reach", mEng: "Engagement", mSpend: "Spend", mEarn: "Earnings", noData: "No data", perfNote: "These metrics fill in as content links and payments are recorded.", perfWin: "Last 30 days", perfPosts: "Posts", perfTop: "Top posts by reach", perfAll: "All posts", perfNone: "No posts in the last 30 days.", perfSampleNote: "You haven't added any posts yet; this summary is sample data.",
+      perf: "Performance", mReach: "Reach", mEng: "Engagement", mSpend: "Spend", mEarn: "Earnings", noData: "No data", perfNote: "These metrics fill in as content links and payments are recorded.", perfWin: "Last 30 days", perfPosts: "Posts", perfTop: "Top posts by reach", perfAll: "All posts", perfNone: "No posts in the last 30 days.", perfLast: "Last {n} posts", perfSampleNote: "You haven't added any posts yet; this summary is sample data.",
       acctMenu: "Account menu", tabsLabel: "Panel tabs",
       kTrig: "Search or jump to", kPh: "Search pages, campaigns…", kPhOwn: "Search pages, campaigns, creators…", kLabel: "Command palette", kGo: "Go to", kAct: "Actions", kPeople: "Creators",
       kNone: "No results. Try another word.", kHintNav: "navigate", kHintOpen: "open", kHintClose: "close", kDark: "Switch to dark theme", kLight: "Switch to light theme",
@@ -1209,19 +1209,24 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       has ? null : el("p", { class: "meta" }, [el("span", { class: "badge b-soon", text: t("soonBadge") }), " ", t("dailyLater")])
     ]));
   }
-  // Performans özeti: influencer için son 30 günün gönderileri (son ölçüm), gönderi yoksa örnek veri; marka/ajans için F2'ye kadar "veri yok"
+  // Performans özeti: influencer için son 30 günün gönderileri (son ölçüm); o aralıkta yoksa son PERF_LAST gönderi, hiç yoksa örnek veri;
+  // marka/ajans için F2'ye kadar "veri yok"
+  var PERF_LAST = 12;
   function perfCard(own, mets) {
     var stat = function (k, v) { return el("div", { class: "stat" }, [el("div", { class: "k", text: t(k) }), el("div", { class: v == null ? "v na" : "v", text: v == null ? t("noData") : v })]); };
     if (own) return el("section", { class: "card" }, [el("div", { class: "ch" }, el("h2", { text: t("perf") })),
       el("div", { class: "cb" }, [el("div", { class: "mets" }, mets.map(function (k) { return stat(k, null); })), el("p", { class: "hint", text: t("perfNote") })])]);
     var d = pData(), cut = isoDay(new Date(Date.now() - 30 * 864e5)), list = d.list.filter(function (p) { return p.date >= cut; });
+    var old = !d.sample && !list.length;
+    if (old) list = d.list.slice(0, PERF_LAST);
     var sum = function (m) { var n = 0, any = false; list.forEach(function (p) { var v = lastSnap(p)[m]; if (v != null) { n += v; any = true; } }); return any ? n : null; };
     var reach = sum("reach"), likes = sum("likes"), comm = sum("comments"), eng = likes == null && comm == null ? null : (likes || 0) + (comm || 0);
     var top = list.slice().sort(function (a, b) { return (lastSnap(b).reach || 0) - (lastSnap(a).reach || 0); }).slice(0, 3);
     return el("section", { class: "card perf" }, [
-      el("div", { class: "ch" }, [el("h2", { text: t("perf") }), el("span", { class: "meta", text: t("perfWin") })]),
+      el("div", { class: "ch" }, [el("h2", { text: t("perf") }), el("span", { class: "meta", text: old ? t("perfLast", list.length) : t("perfWin") })]),
       el("div", { class: "cb" }, [
         d.sample ? el("p", { class: "meta" }, [el("span", { class: "badge b-sample", text: t("crSampleBadge") }), " ", t("perfSampleNote")]) : null,
+        old ? el("p", { class: "hint", text: t("perfNone") }) : null,
         el("div", { class: "mets m4" }, [stat("perfPosts", num(list.length)), stat("mReach", reach == null ? null : short(reach)), stat("mEng", eng == null ? null : short(eng)), stat("mEarn", null)]),
         top.length ? el("div", null, [el("h3", { class: "ptop", text: t("perfTop") }), el("ol", { class: "ptop" }, top.map(function (p) {
           var s = lastSnap(p);
@@ -1234,7 +1239,8 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
     var own = isOwner();
     // Bir çağrı düşerse yalnız o bölüm hata gösterir; ikisi de düşerse tek kutu
     var settle = function (p) { return p.then(null, function (e) { if (e.code === "auth") throw e; return { err: e }; }); };
-    return Promise.all([settle(stats), settle(BC.call("GET", own ? "app/campaigns" : "app/applications")), settle(BC.call("GET", own ? "app/influencers" : "app/campaigns"))]).then(function (r) {
+    // Performans kartı gönderileri sunucudan okur (pSync); düşerse bu cihazdaki kayda, o da boşsa örnek veriye kalır
+    return Promise.all([settle(stats), settle(BC.call("GET", own ? "app/campaigns" : "app/applications")), settle(BC.call("GET", own ? "app/influencers" : "app/campaigns")), own ? null : settle(pSync())]).then(function (r) {
       var s = r[0].stats || {}, a = s.applications || {}, items = [];
       var camps = own && !r[1].err ? r[1].campaigns || [] : [], open = camps.filter(function (c) { return c.status === "open"; });
       // Sayı kutuları: [sayı, etiket, hedef, vurgulanacak bölüm, alt satır (yalnız gerçek veriden), Kampanyalar sekmesi]
