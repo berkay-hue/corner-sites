@@ -96,8 +96,8 @@ export const rule = {
     CLAIMS: /500\+|10,000\+|50\+ agencies|\$5M|50,000\+|98%|2\.4K|89%|\$45K|\+340%|TechCorp|ModaBrand|FoodCo|TravelGo|StyleHub|Sarah|Alex Rivera|Maria Garcia|TechStart|FoodExpress|Mike R\.|Emma L\.|\$12,500|\$8,200|\$10,800|\$45,200|\$4,250|\$1,500|125K|12K followers|4\.8%|24\/7|thousands of|hundreds of|© 2025|Join leading|Industry Leaders|10\.000\+|50\.000\+|₺\d+M|%98|7\/24|binlerce|yüzlerce|Sektör Lider/,
     body(b, page) {
       const T = this.BODY[page] || {};
-      // 6 Next sayfasının footer'ı: chunk'taki FOOTER yamasıyla birebir (yoksa #418)
-      if (T.swap) T.swap = [...T.swap.filter(x => !FOOTER.includes(x)), ...FOOTER];
+      // 6 Next sayfasının footer'ı (chunk'taki FOOTER yamasıyla birebir, yoksa #418) ve kullanılmayan font önyüklemeleri (PRE)
+      if (T.swap) T.swap = [...T.swap.filter(x => !FOOTER.includes(x) && !PRE.includes(x)), ...FOOTER, ...PRE];
       // <a><button> (header menüsü 5 öğe + ana sayfada "View All Plans") yerine tek <a data-slot="button">: chunk'lardaki
       // Button asChild yamasıyla birebir. 0 ise önceki koşuda çevrilmiştir
       if (T.swap) { const n = page === "/" ? 6 : 5, k = (b.match(LINKBTN) || []).length;
@@ -211,7 +211,8 @@ export const rule = {
       if (graph.length) html = html.replace("</head>", ldTag({ "@context": "https://schema.org", "@graph": graph }) + "</head>");
       // Gövde (RSC verisinden önceki kısım) iddia nötrleme; RSC verisinde bu metinler yok
       const at = html.indexOf("<script>(self.__next_f"), end = at < 0 ? html.length : at;
-      return R.body(html.slice(0, end), page) + html.slice(end);
+      const tail = HL.reduce((s, h) => s.split(h).join(""), html.slice(end));  // font önyükleme ipuçları (PRE ile birlikte)
+      return R.body(html.slice(0, end), page) + tail;
     },
 };
 
@@ -283,6 +284,12 @@ const FOOTER = [
   ["<p>Made with ❤️ in Istanbul</p></div>", '<p>Made with ❤️ in Istanbul</p><nav aria-label="Corner Group companies" class="flex flex-wrap gap-4">'
     + GROUP.map(([u, n]) => `<a href="${u}" class="hover:text-primary">${n}</a>`).join("") + "</nav></div>", 1],
 ];
+// Poppins yalnız font-serif ile ve hep 600/700 çiziliyor (HTML'de ve chunk'larda 400/500 yok): 400 ve 500 önyüklemesi her
+// sayfada boşa 2 istek (~17 KB) ve LCP'den bant alıyordu. @font-face kalır, ileride kullanılırsa tembel iner. Head'deki <link>
+// ve akıştaki :HL ipucu birlikte gider, yoksa React hidrasyonda önyüklemeyi geri ekler
+const FONTS = ["a218039a3287bcfd-s.p.4a23d71b", "8e6fa89aa22d24ec-s.p.3aec397d"].map(f => `/_next/static/media/${f}.woff2`);
+const PRE = FONTS.map(u => [`<link rel="preload" href="${u}" as="font" crossorigin="" type="font/woff2"/>`, "", 1]);
+const HL = FONTS.map(u => `:HL[\\"${u}\\",\\"font\\",{\\"crossOrigin\\":\\"\\",\\"type\\":\\"font/woff2\\"}]\\n`);
 // SSS düz liste: SSR (EN) ve chunk aynı yapıyı çizer. React metin kaçışı: & < > " '
 const esc = t => t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#x27;");
 function faqHtml() {
