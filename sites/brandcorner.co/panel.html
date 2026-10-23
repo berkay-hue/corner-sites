@@ -135,6 +135,21 @@ footer.bot{border-top:1px solid var(--line);color:var(--muted);font-size:13.5px;
 .es-steps{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 22px;list-style:none;counter-reset:es;margin:22px auto 0;padding:18px 0 0;max-width:620px;border-top:1px dashed var(--line);font-size:13.5px}.es-steps li{position:relative;display:inline-flex;align-items:center;gap:8px;counter-increment:es;color:var(--text)}.es-steps li::before{content:counter(es);display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--surface-2);border:1px solid var(--line);font-size:12px;font-weight:700;color:var(--muted)}.es-steps li:first-child::before{background:var(--accent);border-color:var(--accent);color:#fff}.es-steps li+li::after{content:"";position:absolute;left:-17px;top:50%;width:12px;border-top:1px solid var(--line-strong)}@media(max-width:760px){.es-steps{flex-direction:column;align-items:flex-start;gap:8px;width:max-content;max-width:100%}.es-steps li{text-align:left}.es-steps li+li::after{left:10.5px;top:-8px;width:0;height:8px;border-top:0;border-left:1px solid var(--line-strong)}}
 .cb.none{display:flex;flex-direction:column;align-items:center;gap:10px}.cb.none p{margin:0}
 @media(prefers-reduced-motion:no-preference){.empty .es-ic,.empty .es-art.board i{animation:esin .32s ease-out both}.empty .es-art.board i:nth-child(2){animation-delay:.06s}.empty .es-art.board i:nth-child(3){animation-delay:.12s}@keyframes esin{from{opacity:0;transform:translateY(6px)}}}
+.start{position:relative;margin:0 0 22px}.start::before{content:"";position:absolute;inset:0 0 auto;height:3px;background:var(--grad)}
+.st-h{display:flex;align-items:center;gap:14px;padding:20px 18px 0}.st-tx{flex:1;min-width:0}.st-tx h2{font-size:17px;margin:0}.st-tx p{margin:3px 0 0;color:var(--muted);font-size:13.5px}
+.st-ring{position:relative;flex:none;display:grid;place-items:center;width:52px;height:52px}.st-ring svg{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg)}.st-ring circle{fill:none;stroke-width:5}.st-ring .bg{stroke:var(--line)}.st-ring .fg{stroke:var(--accent);stroke-linecap:round}.st-ring b{font:600 13px/1 "Poppins","Inter",sans-serif}
+.st-x{flex:none;align-self:flex-start;display:grid;place-items:center;width:44px;height:44px;margin:-10px -8px 0 0;padding:0;border:0;border-radius:50%;background:none;color:var(--muted);cursor:pointer}.st-x:hover{background:var(--surface-2);color:var(--text)}.st-x .i{width:18px;height:18px}
+.st-steps{list-style:none;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));margin:18px 0 0;padding:0 12px}.st-steps li{position:relative;min-width:0}
+.st-steps li+li::before{content:"";position:absolute;top:21px;left:calc(-50% + 20px);right:calc(50% + 20px);height:2px;border-radius:2px;background:var(--line)}.st-steps li.done+li::before{background:var(--ok)}
+.st-steps a{display:flex;flex-direction:column;align-items:center;gap:6px;min-height:44px;padding:7px 2px 6px;border-radius:var(--r-ctl);color:var(--muted);text-decoration:none;font-size:12.5px;font-weight:500;line-height:1.3;text-align:center;overflow-wrap:anywhere}
+.st-steps .n{display:grid;place-items:center;width:28px;height:28px;border-radius:50%;border:1.5px solid var(--line-strong);background:var(--surface);font:600 12.5px/1 "Inter",sans-serif}.st-steps .n .i{width:15px;height:15px;stroke-width:2.6}
+.st-steps a:hover .n{border-color:var(--accent)}.st-steps .done a{color:var(--text)}.st-steps .done .n{background:var(--ok-soft);border-color:transparent;color:var(--ok)}
+.st-steps .cur a{color:var(--accent-text);font-weight:600}.st-steps .cur .n{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 0 0 4px var(--accent-soft)}
+.st-now{display:flex;align-items:center;gap:16px;margin:10px 18px 18px;padding:14px 16px;border:1px solid var(--line);border-radius:var(--r-card);background:var(--surface-2)}.st-now .tx{flex:1;min-width:0}
+.st-now .k{font-size:11.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--accent-text)}.st-now b{display:block;font-size:15px;margin:2px 0}.st-now p{margin:0;color:var(--muted);font-size:13.5px}
+.start.bye{opacity:0;transform:translateY(-6px);transition:opacity .18s,transform .18s}
+@media(max-width:760px){.st-steps{padding:0 6px}.st-steps a{font-size:11.5px}.st-now{flex-direction:column;align-items:stretch;gap:12px}.st-now .btn{width:100%}}
+@media(prefers-reduced-motion:no-preference){.start{animation:esin .32s ease-out both}.st-ring .fg{animation:stfill .7s ease-out both}.st-steps .cur .n{animation:stpulse 2s ease-in-out 3}@keyframes stfill{from{stroke-dasharray:0 100}}@keyframes stpulse{50%{box-shadow:0 0 0 8px var(--accent-soft)}}}
 .f label,.f legend{display:block;font-weight:600;font-size:14px;margin:0 0 6px;padding:0}
 .f input:not([type=checkbox]),.f select,.f textarea{display:block;width:100%;font:inherit;font-size:16px;line-height:1.4;padding:10px 12px;margin:0 0 16px;border:1px solid var(--line-strong);border-radius:var(--r-ctl);background:var(--surface);color:var(--text)}
 .f textarea{resize:vertical;min-height:96px}
@@ -475,6 +490,17 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       platform: "Platform", handle: "Kullanıcı adı", followersL: "Takipçi sayısı", addPlat: "Platform ekle",
       save: "Kaydet", saved: "Kaydedildi.",
       tsCreated: "Kampanya oluşturuldu", tsSaved: "Kampanya güncellendi", tsClosed: "Kampanya kapatıldı", tsOpened: "Kampanya yeniden açıldı",
+      stTitle: "İlk adımlar", stLead: "Sıradaki: {n}", stProg: "{n} adım tamamlandı", stStep: "Adım {n}", stDone: "tamamlandı", stHide: "İlk adımları gizle", stHidden: "İlk adımlar gizlendi", kStart: "İlk adımları göster",
+      joProf: "Profil", joProfT: "Marka profilinizi tamamlayın", joProfD: "Şirket, sektör ve kısa tanıtım: influencer'lar başvurmadan önce buna bakar.", joProfC: "Profili tamamla",
+      joCamp: "Kampanya", joCampT: "İlk kampanyanızı oluşturun", joCampD: "Bütçe, son tarih, niş ve platformları girin; açık kampanyanızı uygun influencer'lar hemen görür.", joCampC: "Kampanya oluştur",
+      joInv: "Davet", joInvT: "Influencer'ları davet edin", joInvD: "Keşfet'te profilleri uyum puanına göre görün, beğendiklerinizi kampanyanıza davet edin.", joInvC: "Profilleri keşfet",
+      joAcc: "Başvuru", joAccT: "Bir başvuruyu kabul edin", joAccD: "Başvuruları kampanya panosunda inceleyin; kabul ettiğiniz influencer içeriğini hazırlamaya başlar.", joAccC: "Başvuruları incele",
+      joOk: "Onay", joOkT: "İlk içeriği onaylayın", joOkD: "Influencer paylaşım bağlantısını gönderince inceleyin; onaylayın ya da revizyon isteyin.", joOkC: "İçerikleri incele",
+      jiProf: "Profil", jiProfT: "Profilinizi tamamlayın", jiProfD: "Şehrinizi, ilgi alanlarınızı, platformlarınızı ve kısa tanıtımınızı ekleyin; markalar sizi Keşfet'te böyle bulur.", jiProfC: "Profili tamamla",
+      jiApply: "Başvuru", jiApplyT: "İlk başvurunuzu yapın", jiApplyD: "Size uyan fırsatlara kısa bir mesajla başvurun.", jiApplyC: "Fırsatlara göz at",
+      jiHire: "İşbirliği", jiHireT: "Bir işbirliği kazanın", jiHireD: "Marka başvurunuzu kabul edince iş Başvurularım'da Yapılacaklar'a düşer.", jiHireC: "Başvurularım",
+      jiSend: "Gönderim", jiSendT: "İçeriğinizi gönderin", jiSendD: "Paylaştığınız içeriğin bağlantısını gönderin; marka inceleyip onaylasın.", jiSendC: "Yapılacaklar",
+      jiOk: "Onay", jiOkT: "İlk onayınızı alın", jiOkD: "Marka içeriğinizi onaylayınca iş Tamamlananlar'a geçer.", jiOkC: "Başvurularım",
       tsApplied: "Başvurunuz gönderildi", tsSeeApps: "Başvurularım", tsUndo: "Geri al", tsClose: "Bildirimi kapat", tsSomeone: "Başvuru",
       ts_o_accepted: "{n} kabul edildi", ts_o_rejected: "{n} reddedildi", ts_o_approved: "İçerik onaylandı: {n}", ts_o_revision: "{n} için revizyon istendi",
       ts_c_accepted: "Davet kabul edildi", ts_c_declined: "Davet reddedildi", ts_c_submitted: "İçerik gönderildi; markanın onayı bekleniyor",
@@ -630,6 +656,17 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       platform: "Platform", handle: "Username", followersL: "Followers", addPlat: "Add platform",
       save: "Save", saved: "Saved.",
       tsCreated: "Campaign created", tsSaved: "Campaign updated", tsClosed: "Campaign closed", tsOpened: "Campaign reopened",
+      stTitle: "Getting started", stLead: "Next: {n}", stProg: "{n} steps done", stStep: "Step {n}", stDone: "done", stHide: "Hide getting started", stHidden: "Getting started hidden", kStart: "Show getting started",
+      joProf: "Profile", joProfT: "Complete your brand profile", joProfD: "Company, industry and a short intro: creators check this before they apply.", joProfC: "Complete profile",
+      joCamp: "Campaign", joCampT: "Create your first campaign", joCampD: "Set the budget, deadline, niches and platforms; matching creators see your open campaign right away.", joCampC: "Create campaign",
+      joInv: "Invite", joInvT: "Invite creators", joInvD: "See profiles by match score in Discover and invite the ones you like to your campaign.", joInvC: "Discover profiles",
+      joAcc: "Accept", joAccT: "Accept an application", joAccD: "Review applications on the campaign board; the creator you accept starts preparing content.", joAccC: "Review applications",
+      joOk: "Approve", joOkT: "Approve your first content", joOkD: "When the creator sends the post link, review it and approve or ask for a revision.", joOkC: "Review content",
+      jiProf: "Profile", jiProfT: "Complete your profile", jiProfD: "Add your city, interests, platforms and a short intro; this is how brands find you in Discover.", jiProfC: "Complete profile",
+      jiApply: "Apply", jiApplyT: "Send your first application", jiApplyD: "Apply to opportunities that fit you with a short message.", jiApplyC: "Browse opportunities",
+      jiHire: "Hired", jiHireT: "Land a collaboration", jiHireD: "When a brand accepts your application, the job moves to To do in My applications.", jiHireC: "My applications",
+      jiSend: "Submit", jiSendT: "Submit your content", jiSendD: "Send the link to the post you shared so the brand can review and approve it.", jiSendC: "To do",
+      jiOk: "Approval", jiOkT: "Get your first approval", jiOkD: "Once the brand approves your content, the job moves to Completed.", jiOkC: "My applications",
       tsApplied: "Application sent", tsSeeApps: "My applications", tsUndo: "Undo", tsClose: "Dismiss notification", tsSomeone: "Application",
       ts_o_accepted: "{n} accepted", ts_o_rejected: "{n} rejected", ts_o_approved: "Content approved: {n}", ts_o_revision: "Revision requested from {n}",
       ts_c_accepted: "Invite accepted", ts_c_declined: "Invite declined", ts_c_submitted: "Content sent; waiting for the brand's approval",
@@ -974,6 +1011,60 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
     return el("div", { class: "ierr", role: "alert" }, [el("span", { text: BC.msg(e.code) }), el("button", { type: "button", class: "ghost", text: t("retry"), onclick: retry })]);
   }
 
+  // İlk adımlar: yeni hesapta genel bakışın başında yol haritası. Adımlar gerçek veriden (app/stats, kampanyalar, profil) işaretlenir;
+  // son adım (ilk içerik onayı) tamamlanınca ya da "Gizle" ile (bu cihazda, kullanıcı başına) kalkar. Sıradaki adım: ilk tamamlanmamış olan
+  function stKey() { return "bc-start-off-" + U.id; }
+  function stOff() { try { return !!localStorage.getItem(stKey()); } catch (e) { return false; } }
+  // Geri getirince odak kartın başlığına gider (yumuşak yenileme odağı düşürür)
+  function stShow() {
+    try { localStorage.removeItem(stKey()); } catch (e) {}
+    if (route().name !== "overview") { location.hash = "#overview"; return; }
+    render(true).then(function () { var h = view.querySelector("#st-t"); if (h) { h.tabIndex = -1; h.focus({ preventScroll: true }); } });
+  }
+  function startCard(s, camps, pct) {
+    var a = s.applications || {}, own = isOwner(), pre = own ? "jo" : "ji";
+    var sum = function (ks) { return ks.reduce(function (n, k) { return n + (+a[k] || 0); }, 0); };
+    var all = sum(Object.keys(a)), hired = sum(["accepted", "revision", "submitted", "approved"]);
+    var most = function (k) { return camps.filter(function (c) { return c[k] > 0; }).sort(function (x, y) { return y[k] - x[k]; })[0]; };
+    var mp = most("pending"), ms = most("submitted");
+    // [anahtar, tamam mı, hedef, hedefte vurgulanacak bölüm]
+    var steps = own ? [["Prof", pct === 100, "#profile"], ["Camp", +s.campaigns > 0 || camps.length > 0, "#new"], ["Inv", all > 0, "#discover"],
+      ["Acc", hired > 0, mp ? "#campaign-" + mp.id : "#campaigns", mp && "colNew"], ["Ok", +a.approved > 0, ms ? "#campaign-" + ms.id : "#campaigns", ms && "colReview"]]
+      : [["Prof", pct === 100, "#profile"], ["Apply", all - (+a.invited || 0) > 0, "#campaigns"], ["Hire", hired > 0, "#applications", "secWait"],
+      ["Send", sum(["submitted", "revision", "approved"]) > 0, "#applications", "secTodo"], ["Ok", +a.approved > 0, "#applications", "secDone"]];
+    if (steps[steps.length - 1][1] || stOff()) return null;
+    var cur = 0, n = steps.length, done = steps.filter(function (x) { return x[1]; }).length, p = Math.round(done * 100 / n);
+    while (steps[cur][1]) cur++;
+    var c = steps[cur], go = function (x) { return function (e) { if (!(e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button)) SPOT = x[3] || null; }; };
+    var ring = sv("svg", { viewBox: "0 0 52 52" });
+    ring.appendChild(sv("circle", { class: "bg", cx: 26, cy: 26, r: 22 }));
+    if (p) ring.appendChild(sv("circle", { class: "fg", cx: 26, cy: 26, r: 22, pathLength: 100, "stroke-dasharray": p + " 100" }));
+    var box = el("section", { class: "card start", "aria-labelledby": "st-t" }, [
+      el("div", { class: "st-h" }, [
+        el("div", { class: "st-ring", role: "img", "aria-label": t("stProg", done + "/" + n) }, [ring, el("b", { "aria-hidden": "true", text: done + "/" + n })]),
+        el("div", { class: "st-tx" }, [el("h2", { id: "st-t", text: t("stTitle") }), el("p", { text: t("stLead", t(pre + c[0] + "T")) })]),
+        el("button", { type: "button", class: "st-x", "aria-label": t("stHide"), title: t("stHide"), onclick: hide }, ic("x"))
+      ]),
+      el("ol", { class: "st-steps" }, steps.map(function (x, i) {
+        return el("li", { class: x[1] ? "done" : i === cur ? "cur" : null }, el("a", { href: x[2], "aria-current": i === cur ? "step" : null, onclick: go(x) }, [
+          el("span", { class: "n", "aria-hidden": "true" }, x[1] ? ic("check") : String(i + 1)), el("span", { text: t(pre + x[0]) }), x[1] ? el("span", { class: "vh", text: ", " + t("stDone") }) : null
+        ]));
+      })),
+      el("div", { class: "st-now" }, [
+        el("div", { class: "tx" }, [el("span", { class: "k", text: t("stStep", cur + 1) }), el("b", { text: t(pre + c[0] + "T") }), el("p", { text: t(pre + c[0] + "D") })]),
+        el("a", { class: "btn", href: c[2], onclick: go(c) }, [el("span", { text: t(pre + c[0] + "C") }), ic("arrow")])
+      ])
+    ]);
+    function hide() {
+      try { localStorage.setItem(stKey(), "1"); } catch (e) {}
+      box.classList.add("bye");
+      setTimeout(function () { if (box.parentNode) box.parentNode.removeChild(box); }, 180);
+      var h = view.querySelector("h1"); if (h) { h.tabIndex = -1; h.focus({ preventScroll: true }); }
+      toast(t("stHidden"), [t("tsUndo"), stShow]);
+    }
+    return box;
+  }
+
   // Genel bakış: sayılar, sizi bekleyenler, profil doluluğu, performans (F2'ye kadar "veri yok")
   // p: canlı taslak (profil formu)
   function profileChecks(p) {
@@ -1172,6 +1263,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
           el("div", null, [el("h1", { text: t("hello", String(U.name || "").trim().split(/\s+/)[0]) }), el("p", { text: (U.profile || {}).company || t("lead_" + U.role) })]),
           el("div", { class: "acts" }, own ? el("a", { class: "btn", href: "#new" }, [ic("plus"), el("span", { text: t("newCamp") })]) : el("a", { class: "btn", href: "#campaigns", text: t("nOpps") }))
         ]),
+        r[0].err ? null : startCard(s, camps, pct),
         r[0].err ? failBox(r[0].err, again) : el("div", { class: "stats" }, cards.map(tile)),
         el("div", { class: "ov" }, [
           el("div", null, [
@@ -3045,6 +3137,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
         try { localStorage.setItem("bc-theme", v); } catch (e) {}
         if (route().name === "settings") render(true);
       } },
+      stOff() ? { key: "start", label: t("kStart"), icon: "list", alt: "ilk adimlar baslangic rehber getting started onboarding checklist", run: stShow } : null,
       { key: "lang", label: t("kLang"), icon: "globe", alt: "dil language turkce english ingilizce", run: toggleLang },
       { key: "help", label: t("kHelp"), icon: "help", alt: "destek support yardim help e-posta email", run: function () { location.href = $("help2").href; } },
       { key: "out", label: t("logout"), icon: "logout", alt: "cikis logout sign out", run: out }
