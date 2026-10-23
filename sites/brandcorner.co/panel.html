@@ -71,6 +71,11 @@ h1,h2,h3{font-family:"Poppins","Inter",system-ui,sans-serif;font-weight:600;lett
 .stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
 .stat{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-card);padding:16px 18px;min-width:0}.stat .k{color:var(--muted);font-size:13px}.stat .v{font:600 26px/1.25 "Poppins","Inter",sans-serif;margin-top:4px}
 .stat .v.na{font:500 15px/1.4 "Inter",sans-serif;color:var(--faint);margin-top:10px}
+/* Sayı kutusu bağlantı: üzerine gelince ok kayar; alt satır tek satırda kısalır. Hedef bölüm ([data-spot]) varınca çerçevesi yanıp söner */
+.stat.go{display:flex;flex-direction:column;text-decoration:none;transition:border-color .15s,box-shadow .15s,transform .15s}.stat.go .k{display:flex;align-items:center;justify-content:space-between;gap:8px}.stat.go .k span{min-width:0}.stat.go .k .i{width:16px;height:16px;color:var(--faint);transition:transform .15s,color .15s}
+.stat.go:hover{border-color:var(--line-strong);box-shadow:0 4px 14px rgba(16,24,40,.07);transform:translateY(-1px)}.stat.go:hover .k .i,.stat.go:focus-visible .k .i{color:var(--accent);transform:translateX(3px)}.stat .sub{margin-top:2px;font-size:12.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+[data-spot]{scroll-margin-top:16px;outline:2px solid transparent;outline-offset:6px;transition:outline-color .9s ease-out}.lane[data-spot]{outline-offset:2px}.apps-sec[data-spot]{border-radius:6px}.spot{outline-color:var(--accent);transition:none}[data-spot] > h2:focus,[data-spot] > h3:focus{outline:none}
+@media(prefers-reduced-motion:reduce){.stat.go,.stat.go .k .i,[data-spot]{transition:none}.stat.go:hover,.stat.go:hover .k .i,.stat.go:focus-visible .k .i{transform:none}}
 .ov{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:16px;margin-top:16px;align-items:start}.ov>div{display:grid;gap:16px;min-width:0}
 .inbox{list-style:none;margin:0;padding:0}.inbox li{display:flex;align-items:center;gap:12px;padding:12px 20px;border-top:1px solid var(--line)}.inbox li:first-child{border-top:0}
 .ic{width:36px;height:36px;flex:none;border-radius:10px;display:grid;place-items:center}.ic.warn{background:var(--warn-soft);color:var(--warn)}.ic.info{background:var(--info-soft);color:var(--info)}.ic.danger{background:var(--danger-soft);color:var(--danger)}.ic.accent{background:var(--accent-soft);color:var(--accent-text)}.ic.ok{background:var(--ok-soft);color:var(--ok)}
@@ -235,7 +240,7 @@ dialog.onb{width:100%;max-width:100%;margin:auto 0 0;max-height:92%;border-width
 .tabbar a[aria-current]{color:var(--accent-text);font-weight:600}.tabbar .i{width:22px;height:22px}
 .tabbar .cnt{position:absolute;top:4px;left:calc(50% + 6px);margin:0;min-width:18px;height:18px;padding:0 5px;font-size:11px;line-height:18px}
 .main-col{padding-bottom:calc(64px + env(safe-area-inset-bottom))}
-.stats,.mets,.mets.m4{grid-template-columns:repeat(2,minmax(0,1fr))}.stats .stat .v{font-size:22px}.mets .stat:last-child{grid-column:1/-1}.mets.m4 .stat:last-child{grid-column:auto}
+.stats,.mets,.mets.m4{grid-template-columns:repeat(2,minmax(0,1fr))}.stats .stat .v{font-size:22px}.stats .stat{padding:14px}[data-spot]{scroll-margin-top:72px}.mets .stat:last-child{grid-column:1/-1}.mets.m4 .stat:last-child{grid-column:auto}
 .btn,.btn.sm,.ghost{min-height:44px}.inbox li{padding:12px 16px;flex-wrap:wrap}.inbox .btn{margin-left:48px}.nf .nfa{padding:12px 16px}
 .ph h1,.wrapw>h1{font-size:22px}.box{padding:16px}.ch,.cb{padding-left:16px;padding-right:16px}.oc,.irow,.legend{padding-left:16px;padding-right:16px}.grid2{grid-template-columns:1fr}.prow{grid-template-columns:1fr 1fr}.prow>div:last-child{grid-column:1/-1}}
 @media(max-width:760px){.cmdk-m{display:flex;align-items:center;justify-content:center;width:44px;height:44px;border:0;background:none;padding:0;cursor:pointer;border-radius:50%;color:var(--muted)}.cmdk-m .i{width:22px;height:22px}
@@ -329,7 +334,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       pLiNote: "LinkedIn kişisel gönderi ölçümlerini dışarıya vermiyor; LinkedIn gönderilerini elle ya da CSV ile ekle.",
       pNoCap: "Açıklama yok",
       sCampaigns: "Kampanya", sOpen: "Açık kampanya", sPending: "Bekleyen başvuru", sApproved: "Onaylanan içerik",
-      sReview: "Onay bekleyen içerik", sWork: "Aktif iş", sDone: "Tamamlanan", ocTitle: "Açık kampanyalar", ocAll: "Tümü", ocEmpty: "Açık kampanyan yok.", dLeft: "{n} gün kaldı", dLast: "Bugün son gün", dGone: "Süresi doldu",
+      sReview: "Onay bekleyen içerik", sWork: "Aktif iş", sDone: "Tamamlanan", subNear: "En yakını: {n}", subTop: "En çok: {n}", subNext: "Sıradaki: {n}", ocTitle: "Açık kampanyalar", ocAll: "Tümü", ocEmpty: "Açık kampanyan yok.", dLeft: "{n} gün kaldı", dLast: "Bugün son gün", dGone: "Süresi doldu",
       stPend: "Yeni başvurular", stInv: "Davet edilenler", stWork: "Çalışılıyor", stRev: "İçerik onayı", stDone: "Onaylandı",
       forYou: "Sana uygun influencerlar", forYouGo: "Keşfet", forYouEmpty: "Henüz listelenen influencer yok.",
       oppsFor: "Sana uygun fırsatlar", oppsAll: "Tümü", oppsEmpty: "Şu an sana uygun yeni fırsat yok.",
@@ -477,7 +482,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       pLiNote: "LinkedIn doesn't share personal post metrics with other apps; add LinkedIn posts by hand or with a CSV.",
       pNoCap: "No caption",
       sCampaigns: "Campaigns", sOpen: "Open campaigns", sPending: "Pending applications", sApproved: "Approved content",
-      sReview: "Content awaiting approval", sWork: "Active work", sDone: "Completed", ocTitle: "Open campaigns", ocAll: "All", ocEmpty: "You have no open campaigns.", dLeft: "{n} days left", dLast: "Last day today", dGone: "Expired",
+      sReview: "Content awaiting approval", sWork: "Active work", sDone: "Completed", subNear: "Soonest: {n}", subTop: "Most: {n}", subNext: "Next up: {n}", ocTitle: "Open campaigns", ocAll: "All", ocEmpty: "You have no open campaigns.", dLeft: "{n} days left", dLast: "Last day today", dGone: "Expired",
       stPend: "New applications", stInv: "Invited", stWork: "In progress", stRev: "Content approval", stDone: "Approved",
       forYou: "Influencers for you", forYouGo: "Discover", forYouEmpty: "No influencers are listed yet.",
       oppsFor: "Opportunities for you", oppsAll: "All", oppsEmpty: "No new matches right now.",
@@ -773,7 +778,8 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
     bell: [["path", { d: "M6 16V11a6 6 0 0 1 12 0v5l2 2H4z" }], ["path", { d: "M10 21h4" }]],
     image: [["rect", { x: 3, y: 4, width: 18, height: 16, rx: 2 }], ["circle", { cx: 9, cy: 10, r: 2 }], ["path", { d: "m21 16-5-5-9 9" }]],
     moon: [["path", { d: "M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" }]],
-    sun: [["circle", { cx: 12, cy: 12, r: 4 }], ["path", { d: "M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" }]]
+    sun: [["circle", { cx: 12, cy: 12, r: 4 }], ["path", { d: "M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" }]],
+    arrow: [["path", { d: "M5 12h14M13 6l6 6-6 6" }]]
   };
   function ic(name) {
     var NS = "http://www.w3.org/2000/svg", s = document.createElementNS(NS, "svg");
@@ -840,24 +846,38 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
   function skSoc() { return skWrap([0, 1].map(function () { return el("div", { class: "srow" }, [sk("c"), el("div", { class: "tx" }, [sk("t", "40%"), sk("l", "64%")])]); })); }
 
   // soft: aynı görünümü işlem sonrası tazeler (kaydırma ve odak yerinde kalır)
+  // SPOT: genel bakıştaki sayı kutusundan gelindi; sonraki çizimde hedef bölüm ([data-spot]) bir kez kaydırılıp kısa süre vurgulanır
+  var SPOT = null;
   function render(soft) {
-    var my = ++seq, r = route();
+    var my = ++seq, r = route(), spot = SPOT;
+    SPOT = null;
     paintNav(r.tab);
     var stats = loadCounts(my, r.tab);
     if (!soft) show(skel(r.name));
     return Promise.resolve().then(function () { return VIEWS[r.name](r, stats); }).then(function (kids) {
       if (my !== seq) return;
       show(kids);
+      var sp = spot && view.querySelector('[data-spot="' + spot + '"]');
       if (!soft) {
         window.scrollTo(0, 0);
         var h = view.querySelector("h1");
-        if (h && !first) { h.tabIndex = -1; h.focus(); }
+        if (h && !first && !sp) { h.tabIndex = -1; h.focus(); }
         first = false;
       }
+      if (sp) spotlight(sp);
     }, function (e) {
       if (my !== seq || e.code === "auth") return;
       show(failBox(e, function () { render(); }));
     });
+  }
+  // Görünmüyorsa bölüme kaydırır, odağı başlığına taşır (ekran okuyucu oradan devam eder), çerçeveyi yakıp söndürür
+  function spotlight(n) {
+    var b = n.getBoundingClientRect(), calm = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (b.top < 0 || b.bottom > window.innerHeight) n.scrollIntoView({ block: "start", behavior: calm ? "auto" : "smooth" });
+    var h = n.querySelector("h2,h3");
+    if (h) { h.tabIndex = -1; h.focus({ preventScroll: true }); }
+    n.classList.add("spot");
+    setTimeout(function () { n.classList.remove("spot"); }, 1600);
   }
   function failBox(e, retry) {
     return el("div", { class: "box empty", role: "alert" }, [el("p", { text: BC.msg(e.code) }), el("p", null, el("button", { type: "button", class: "ghost", text: t("retry"), onclick: retry }))]);
@@ -1005,9 +1025,34 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
     var settle = function (p) { return p.then(null, function (e) { if (e.code === "auth") throw e; return { err: e }; }); };
     return Promise.all([settle(stats), settle(BC.call("GET", own ? "app/campaigns" : "app/applications")), settle(BC.call("GET", own ? "app/influencers" : "app/campaigns"))]).then(function (r) {
       var s = r[0].stats || {}, a = s.applications || {}, items = [];
-      var cards = own
-        ? [[s.open_campaigns, "sOpen"], [a.pending, "sPending"], [a.submitted || 0, "sReview"], [a.approved, "sApproved"]]
-        : [[(a.accepted || 0) + (a.revision || 0), "sWork"], [a.pending, "sPending"], [a.submitted || 0, "sReview"], [a.approved, "sDone"]];
+      var camps = own && !r[1].err ? r[1].campaigns || [] : [], open = camps.filter(function (c) { return c.status === "open"; });
+      // Sayı kutuları: [sayı, etiket, hedef, vurgulanacak bölüm, alt satır (yalnız gerçek veriden), Kampanyalar sekmesi]
+      var most = function (k) { return camps.filter(function (c) { return c[k] > 0; }).sort(function (x, y) { return y[k] - x[k]; })[0]; };
+      var soon = function (xs, dl) { return xs.map(function (x) { return [dl(x), x]; }).filter(function (p) { return p[0] != null && p[0] >= 0; }).sort(function (x, y) { return x[0] - y[0]; })[0]; };
+      var cards;
+      if (own) {
+        var mp = most("pending"), ms = most("submitted"), nd = soon(open, function (c) { return daysLeft(c.deadline); });
+        cards = [[s.open_campaigns, "sOpen", "#campaigns", null, nd && t("subNear", nd[0] ? t("dLeft", nd[0]) : t("dLast")), "open"],
+          [a.pending, "sPending", mp ? "#campaign-" + mp.id : "#campaigns", mp && "colNew", mp && t("subTop", mp.title), "all"],
+          [a.submitted || 0, "sReview", ms ? "#campaign-" + ms.id : "#campaigns", ms && "colReview", ms && t("subTop", ms.title), "all"],
+          [a.approved, "sApproved", "#campaigns", null, null, "all"]];
+      } else {
+        var work = (r[1].applications || []).filter(function (x) { return x.status === "accepted" || x.status === "revision"; });
+        var nx = soon(work, function (x) { return daysLeft((x.campaign || {}).deadline); });
+        cards = [[(a.accepted || 0) + (a.revision || 0), "sWork", "#applications", "secTodo", nx && t("subNext", nx[1].campaign.title)],
+          [a.pending, "sPending", "#applications", "secWait"], [a.submitted || 0, "sReview", "#applications", "secWait"], [a.approved, "sDone", "#applications", "secDone"]];
+      }
+      var tile = function (c) {
+        return el("a", { class: "stat go", href: c[2], onclick: function (e) {
+          if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button) return;
+          SPOT = c[3] || null;
+          if (c[5]) { C.tab = c[5]; C.q = ""; }
+        } }, [
+          el("div", { class: "k" }, [el("span", { text: t(c[1]) }), ic("arrow")]),
+          el("div", { class: "v", text: num(c[0]) }),
+          c[4] ? el("div", { class: "sub", dir: "auto", text: c[4] }) : null
+        ]);
+      };
       if (own) {
         (r[1].campaigns || []).forEach(function (c) {
           var h = "#campaign-" + c.id, dl = daysLeft(c.deadline);
@@ -1030,13 +1075,12 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
         ? el("div", null, [both ? null : el("div", { class: "cb" }, failLine(r[1].err, again)), pct < 100 ? el("ul", { class: "inbox" }, prof) : null])
         : items.length ? el("ul", { class: "inbox" }, items) : el("p", { class: "cb none", text: t("waitEmpty") });
       var mets = own ? ["mReach", "mEng", "mSpend"] : ["mReach", "mEng", "mEarn"];
-      var camps = own && !r[1].err ? r[1].campaigns || [] : [], open = camps.filter(function (c) { return c.status === "open"; });
       return [
         el("div", { class: "ph" }, [
           el("div", null, [el("h1", { text: t("hello", String(U.name || "").trim().split(/\s+/)[0]) }), el("p", { text: (U.profile || {}).company || t("lead_" + U.role) })]),
           el("div", { class: "acts" }, own ? el("a", { class: "btn", href: "#new" }, [ic("plus"), el("span", { text: t("newCamp") })]) : el("a", { class: "btn", href: "#campaigns", text: t("nOpps") }))
         ]),
-        r[0].err ? failBox(r[0].err, again) : el("div", { class: "stats" }, cards.map(function (c) { return el("div", { class: "stat" }, [el("div", { class: "k", text: t(c[1]) }), el("div", { class: "v", text: num(c[0]) })]); })),
+        r[0].err ? failBox(r[0].err, again) : el("div", { class: "stats" }, cards.map(tile)),
         el("div", { class: "ov" }, [
           el("div", null, [
             el("section", { class: "card" }, [el("div", { class: "ch" }, el("h2", { text: t("waiting") })),
@@ -1306,7 +1350,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
     return [
       el("div", { class: "board" }, LANES.map(function (l) {
         var xs = of(l[1]), hid = "l" + (++uid);
-        return el("section", { class: "lane", "aria-labelledby": hid }, [
+        return el("section", { class: "lane", "aria-labelledby": hid, "data-spot": l[0] }, [
           el("h3", { class: "lh", id: hid }, [el("span", { class: "ld", "data-l": l[0], text: t(l[0]) }), el("span", { class: "n", text: num(xs.length) })]),
           // Tek durumlu sütunda rozet tekrar olur; "Çalışılıyor"da kabul/revizyon ayrımı için kalır
           xs.length ? el("div", { class: "lc" }, xs.map(function (a) { return appCard(a, true, l[1].length === 1); })) : el("p", { class: "none", text: t("colEmpty") })
@@ -1386,7 +1430,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       var of = function (ss) { return list.filter(function (a) { return ss.indexOf(a.status) >= 0; }); }, closed = of(["rejected", "declined"]);
       var secs = [["secInv", ["invited"]], ["secTodo", ["accepted", "revision"]], ["secWait", ["pending", "submitted"]], ["secDone", ["approved"]]].map(function (x) {
         var xs = of(x[1]), hid = "s" + (++uid);
-        return xs.length ? el("section", { class: "apps-sec", "aria-labelledby": hid }, [
+        return xs.length ? el("section", { class: "apps-sec", "aria-labelledby": hid, "data-spot": x[0] }, [
           el("h2", { id: hid }, [el("span", { text: t(x[0]) }), el("span", { class: "n", text: num(xs.length) })]),
           el("div", { class: "list" }, xs.map(function (a) { var c = appCard(a, false); if (a.status === "invited") c.classList.add("hl-box"); return c; }))
         ]) : null;
