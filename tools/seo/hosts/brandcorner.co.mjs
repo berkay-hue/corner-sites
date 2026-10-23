@@ -249,6 +249,9 @@ const UX = [
   "@media (max-width:639.98px){#main .overflow-x-auto>table{min-width:30rem}",
   "#main .overflow-x-auto>table :is(th,td):first-child{position:sticky;left:0;z-index:1;width:8.5rem;min-width:8.5rem;padding-right:.5rem;background:var(--background)}#main .overflow-x-auto>table td:first-child{font-size:.875rem;line-height:1.25rem}",
   "#main .overflow-x-auto>table :is(th,td):first-child::after{content:\"\";position:absolute;top:0;bottom:0;right:-8px;width:8px;background:linear-gradient(to right,rgb(0 0 0/.08),transparent);pointer-events:none}}",
+  // Ana sayfa CTA bölümündeki desen %10 opaklıkta, her ziyarette 137 KB PNG iniyordu; aynı 1024×717 desen webp (21 KB).
+  // Derlenmiş CSS'teki PNG kuralı geçersiz kalır, PNG hiç istenmez
+  "#main [class*=\"abstract-geometric-pattern.png\"]{background-image:url(/abstract-geometric-pattern.webp)}",
 ].join("");
 
 // 44px dokunma alanı yalnız dar ekranda ve dokunmatikte; fareli masaüstü düzeni aynı kalır
