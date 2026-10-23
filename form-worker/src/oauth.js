@@ -4,8 +4,8 @@
 // kadar "veri yok". X ve Twitch bağlanamaz ("veri yok"). METRICS_ENABLED kapalıyken bağlanılamaz.
 // Bağlı hesabın tek kaynağı social_accounts (0001_metrics.sql); 0002_oauth.sql akış durumu ve token'ları tutar.
 // Token'lar OAUTH_TOKEN_KEY (base64, 32 bayt) ile AES-GCM şifreli saklanır.
-// POSTS_ENABLED "1" ise Instagram senkronu son 12 gönderiyi panelin Gönderiler kaydına (posts/post_snaps, 0007
-// posts.account_id) aktarır; bağ koparılınca ya da platformda başka hesap bağlanınca bu gönderiler silinir.
+// POSTS_ENABLED "1" ise senkron (Instagram, TikTok, YouTube) son 12 gönderiyi panelin Gönderiler kaydına (posts/post_snaps,
+// 0007 posts.account_id) aktarır; bağ koparılınca ya da platformda başka hesap bağlanınca bu gönderiler silinir.
 // Akış: POST /app/connect → sağlayıcı → GET /oauth/<platform>/callback (index.js; OAUTH_REDIRECT_BASE yoksa
 // worker'ın kendi adresi) → panel /panel?oauth=<p>&result=pending#ticket=<bilet> → POST /app/connect/finish.
 // Token takası yalnızca bileti getiren oturum akışı başlatan kullanıcıysa yapılır; callback'i açan tarayıcı
@@ -261,24 +261,52 @@ const avg = list => {
 };
 
 // Aktarılan gönderi: platform.js postIn kurallarıyla aynı (platform.js bu dosyayı içe aktardığı için kopya).
-// Bağlantı yalnız https instagram.com, tarih YYYY-MM-DD, kapak https, metin en çok 2200, ölçüm 0+ tam sayı.
+// Bağlantı https ve platformun kendi adresi (YouTube'da yalnız watch?v=<kimlik>), tarih YYYY-MM-DD, kapak https
+// (ilk uygun aday), metin en çok 2200, ölçüm 0+ tam sayı.
 // Bağlantısı, tarihi ya da hiç ölçümü olmayan gönderi aktarılmaz (ortalamaya yine girer).
 const MAX_POSTS = 1000; // platform.js ile aynı: kullanıcı başına gönderi sınırı
-const IG_TYPE = { IMAGE: "photo", VIDEO: "video", CAROUSEL_ALBUM: "carousel" };
+const POST_URL = {
+  instagram: /^https:\/\/(www\.)?instagram\.com\/[^\s"'<>]+$/,
+  tiktok: /^https:\/\/(www\.)?tiktok\.com\/[^\s"'<>]+$/,
+  youtube: /^https:\/\/www\.youtube\.com\/watch\?v=[\w-]{1,64}$/,
+};
 const okThumb = s => typeof s === "string" && /^https:\/\/[^\s"'<>]{4,2000}$/.test(s);
 const whole = v => { const n = num(v); return n !== null && Number.isInteger(n) && n < 1e12 ? n : null; };
-function igPost(m, ins) {
-  const url = typeof m.permalink === "string" ? m.permalink.trim() : "";
-  const date = typeof m.timestamp === "string" ? m.timestamp.slice(0, 10) : "";
-  if (url.length > 2000 || !/^https:\/\/(www\.)?instagram\.com\/[^\s"'<>]+$/.test(url) || !/^\d{4}-\d{2}-\d{2}$/.test(date)) return null;
-  const type = m.media_product_type === "REELS" ? "reel" : m.media_product_type === "STORY" ? "story" : IG_TYPE[m.media_type] || "photo";
-  // Videoda media_url videonun kendisi, kapak thumbnail_url; fotoğraf ve albümde kapak media_url
-  const thumb = [m.thumbnail_url, m.media_type === "VIDEO" ? null : m.media_url].find(okThumb) || "";
+function toPost(p, { url, date, type, caption, thumbs, likes, comments, views, reach = null }) {
+  if (typeof url !== "string" || url.length > 2000 || !POST_URL[p].test(url) || typeof date !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(date)) return null;
   const post = {
-    url, type, date, caption: typeof m.caption === "string" ? m.caption.slice(0, 2200) : "", thumb,
-    likes: whole(m.like_count), comments: whole(m.comments_count), views: whole(ins.views), reach: whole(ins.reach),
+    url, type, date, caption: typeof caption === "string" ? caption.slice(0, 2200) : "", thumb: thumbs.find(okThumb) || "",
+    likes: whole(likes), comments: whole(comments), views: whole(views), reach: whole(reach),
   };
   return (post.likes ?? post.comments ?? post.views ?? post.reach ?? null) === null ? null : post;
+}
+const IG_TYPE = { IMAGE: "photo", VIDEO: "video", CAROUSEL_ALBUM: "carousel" };
+function igPost(m, ins) {
+  return toPost("instagram", {
+    url: typeof m.permalink === "string" ? m.permalink.trim() : "", date: typeof m.timestamp === "string" ? m.timestamp.slice(0, 10) : "",
+    type: m.media_product_type === "REELS" ? "reel" : m.media_product_type === "STORY" ? "story" : IG_TYPE[m.media_type] || "photo",
+    // Videoda media_url videonun kendisi, kapak thumbnail_url; fotoğraf ve albümde kapak media_url
+    caption: m.caption, thumbs: [m.thumbnail_url, m.media_type === "VIDEO" ? null : m.media_url],
+    likes: m.like_count, comments: m.comments_count, views: ins.views, reach: ins.reach,
+  });
+}
+// TikTok paylaşım bağlantısının sorgusu (izleme parametreleri) atılır; kapak adresi ~6 saat geçerli, senkronda tazelenir
+function ttPost(v) {
+  let url = "";
+  try { const u = new URL(v.share_url); url = u.origin + u.pathname; } catch {}
+  const at = num(v.create_time), d = at ? new Date(at * 1000) : null;
+  return toPost("tiktok", {
+    url, date: d && Number.isFinite(d.getTime()) ? d.toISOString().slice(0, 10) : "", type: "video",
+    caption: v.video_description || v.title, thumbs: [v.cover_image_url], likes: v.like_count, comments: v.comment_count, views: v.view_count,
+  });
+}
+function ytPost(v) {
+  const s = v.snippet || {}, th = s.thumbnails || {}, st = v.statistics || {};
+  return toPost("youtube", {
+    url: typeof v.id === "string" ? `https://www.youtube.com/watch?v=${v.id}` : "", date: typeof s.publishedAt === "string" ? s.publishedAt.slice(0, 10) : "",
+    type: "video", caption: s.title, thumbs: [th.medium?.url, th.high?.url, th.default?.url],
+    likes: st.likeCount, comments: st.commentCount, views: st.viewCount,
+  });
 }
 
 // Her sağlayıcı: profile → {external_id, handle, followers, ...}; recent → [{views, likes, comments, post?}]
@@ -315,10 +343,11 @@ const API = {
       return { external_id: u.open_id, handle: u.username || u.display_name, followers: u.follower_count };
     },
     async recent(token, f) {
-      const b = await json(f, `${TT}/video/list/?fields=id,view_count,like_count,comment_count`, {
+      const fields = "id,create_time,share_url,cover_image_url,title,video_description,view_count,like_count,comment_count";
+      const b = await json(f, `${TT}/video/list/?fields=${fields}`, {
         method: "POST", headers: { ...bearer(token).headers, "content-type": "application/json" }, body: JSON.stringify({ max_count: SAMPLE }),
       });
-      return (b.data?.videos || []).slice(0, SAMPLE).map(v => ({ views: v.view_count, likes: v.like_count, comments: v.comment_count }));
+      return (b.data?.videos || []).slice(0, SAMPLE).map(v => ({ views: v.view_count, likes: v.like_count, comments: v.comment_count, post: ttPost(v) }));
     },
   },
   youtube: {
@@ -339,8 +368,12 @@ const API = {
         .catch(() => ({ items: [] }));
       const ids = (pl.items || []).map(i => i.contentDetails?.videoId).filter(Boolean).slice(0, SAMPLE);
       if (!ids.length) return [];
-      const vs = await json(f, `${YT}/videos?part=statistics&id=${ids.map(encodeURIComponent).join(",")}`, bearer(token));
-      return (vs.items || []).map(({ statistics: s = {} }) => ({ views: s.viewCount, likes: s.likeCount, comments: s.commentCount }));
+      const vs = await json(f, `${YT}/videos?part=snippet,statistics,status&id=${ids.map(encodeURIComponent).join(",")}`, bearer(token));
+      // Özel video ortalamaya girer ama gönderi olarak aktarılmaz (TikTok da yalnız herkese açık videoları döner)
+      return (vs.items || []).map(v => {
+        const s = v.statistics || {};
+        return { views: s.viewCount, likes: s.likeCount, comments: s.commentCount, post: v.status?.privacyStatus === "private" ? null : ytPost(v) };
+      });
     },
   },
   // OpenID Connect userinfo: sub uygulamaya özel kalıcı kimlik; ad görünen ad olur. Metrik yok (Community Management).
@@ -368,7 +401,7 @@ export async function fetchProfile(p, token, f = fetch) {
   return { external_id: extId(pr.external_id), handle: cleanHandle(pr.handle), followers: num(pr.followers) };
 }
 
-// Takipçi + son gönderilerin ortalama izlenme, beğeni ve yorumu; posts: aktarılacak gönderiler (yalnız Instagram)
+// Takipçi + son gönderilerin ortalama izlenme, beğeni ve yorumu; posts: aktarılacak gönderiler
 export async function fetchMetrics(p, token, f = fetch) {
   if (!SYNCED.includes(p)) throw new ProviderError("no_api");
   const pr = await API[p].profile(token, f);
@@ -515,7 +548,7 @@ export async function syncDue(env, f = fetch, { budget = 40, max = 5, d1 = 50 } 
         continue;
       }
       // Gönderiler tek JSON parametresiyle (D1'de sorgu başına en çok 100 parametre). Bu hesaptan aktarılmış gönderinin
-      // türü, metni ve kapağı tazelenir (Instagram kapak adresleri süreli); elle girilmiş aynı bağlantıya dokunulmaz.
+      // türü, metni ve kapağı tazelenir (Instagram ve TikTok kapak adresleri süreli); elle girilmiş aynı bağlantıya dokunulmaz.
       // Kullanıcının MAX_POSTS gönderisi varsa yenisi eklenmez. Ölçüm günde bir: aynı gün tekrar senkronlanırsa üzerine yazılır.
       const own = "EXISTS (SELECT 1 FROM social_accounts WHERE id = ? AND status = 'connected' AND external_id = ? AND next_sync_at = ?)";
       const posts = env.POSTS_ENABLED === "1" && m.posts?.length ? JSON.stringify(m.posts) : null;
