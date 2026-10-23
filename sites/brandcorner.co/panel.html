@@ -941,15 +941,20 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       open.length ? el("ul", { class: "legend" }, STAGES.map(function (g) { return el("li", null, [el("i", { style: "--c:var(--" + g[1] + ")" }), el("span", { text: t(g[2]) })]); })) : null
     ]);
   }
-  // Uyum: açık kampanya nişleriyle örtüşme oranı (en iyi kampanya); Worker skor vermiyor
-  function uyum(x, cn) {
-    var xs = (x.niches || []).map(fold), best = 0;
-    cn.forEach(function (n) { best = Math.max(best, Math.round(100 * n.filter(function (k) { return xs.indexOf(k) >= 0; }).length / n.length)); });
+  // Uyum: Worker'ın match() ölçüsü (kampanya nişleri %60, platformları %40; platform istemeyen kampanyada o kısım tam), en iyi kampanya.
+  // app/influencers skor vermediği için burada hesaplanır; keşif ve kanbandaki puanla aynı çıkar. Ortak niş yoksa 0 (app/matches de eler)
+  function uyum(x, cs) {
+    var xs = (x.niches || []).map(fold), xp = (x.platforms || []).map(function (p) { return p.platform; }), best = 0;
+    var share = function (want, have) { return want.length ? want.filter(function (k) { return have.indexOf(k) >= 0; }).length / want.length : 1; };
+    cs.forEach(function (c) {
+      var n = (c.niches || []).map(fold), sn = n.length ? share(n, xs) : 0;
+      if (sn > 0) best = Math.max(best, Math.round(60 * sn + 40 * share(c.platforms || [], xp)));
+    });
     return best;
   }
   function forYou(d, camps, open, again) {
-    var all = d.influencers || [], cn = open.map(function (c) { return (c.niches || []).map(fold); }).filter(function (n) { return n.length; });
-    var top = all.map(function (x, i) { return { x: x, u: uyum(x, cn), i: i }; }).sort(function (p, q) { return q.u - p.u || p.i - q.i; }).slice(0, 3);
+    var all = d.influencers || [];
+    var top = all.map(function (x, i) { return { x: x, u: uyum(x, open), i: i }; }).sort(function (p, q) { return q.u - p.u || p.i - q.i; }).slice(0, 3);
     return el("section", { class: "card" }, [
       el("div", { class: "ch" }, [el("h2", { text: t("forYou") }), el("a", { class: "lk44", href: "#discover", text: t("forYouGo") })]),
       d.err ? el("div", { class: "cb" }, failLine(d.err, again))
@@ -968,10 +973,10 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
         }))
     ]);
   }
-  // Influencer: açık ve başvurulmamış kampanyalar, Worker'ın uyum puanına göre (yoksa nişlerden hesaplanır)
+  // Influencer: açık ve başvurulmamış kampanyalar, Worker'ın uyum puanına göre (yoksa aynı ölçüyle burada hesaplanır)
   function oppsForYou(d, again) {
     var mine = U.profile || {}, top = (d.campaigns || []).filter(function (c) { return c.status === "open" && !c.my_status; }).map(function (c, i) {
-      return { c: c, u: typeof c.match === "number" ? c.match : uyum(mine, [(c.niches || []).map(fold)].filter(function (n) { return n.length; })), i: i };
+      return { c: c, u: typeof c.match === "number" ? c.match : uyum(mine, [c]), i: i };
     }).filter(function (o) { return o.u > 0; }).sort(function (p, q) { return q.u - p.u || p.i - q.i; }).slice(0, 3);
     return el("section", { class: "card" }, [
       el("div", { class: "ch" }, [el("h2", { text: t("oppsFor") }), el("a", { class: "lk44", href: "#campaigns", text: t("oppsAll") })]),
