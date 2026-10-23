@@ -166,6 +166,9 @@ export const rule = {
       // WCAG AA metin kontrastı (yalnız Next sayfaları; statik sayfalarda bu sınıflar yok)
       html = html.replace(/<style data-sk-con>[\s\S]*?<\/style>/, "");
       if (html.includes("/_next/static/")) html = html.replace("</head>", `<style data-sk-con>${CON}</style></head>`);
+      // Yerleşim düzeltmeleri (yalnız Next sayfaları, yalnız CSS; gövde aynı)
+      html = html.replace(/<style data-sk-ux>[\s\S]*?<\/style>/, "");
+      if (html.includes("/_next/static/")) html = html.replace("</head>", `<style data-sk-ux>${UX}</style></head>`);
       if (existsSync(join(SITE, "og.png"))) {
         html = html.replace(/(<meta (?:property="og:image"|name="twitter:image") content=")[^"]*(")/g, `$1${R.origin}/og.png$2`);
         if (!html.includes('property="og:image:width"'))
@@ -214,6 +217,15 @@ const CON = [
   ".bg-\\[\\#10B981\\]\\/20.text-\\[\\#10B981\\]{color:#065f46}", // "Verified" rozeti, açık yeşil zeminde
   ":is(p,span,div).text-\\[\\#FFB71B\\]:not(:has(svg)){color:#B45309}", // 5.02:1
   ".rounded-full.bg-muted.text-muted-foreground{color:#4b5563}", // 6.87:1
+].join("");
+
+// Mobil hero: tek sütunlu grid'in örtük "auto" sütunu mockup satırının min-content genişliğine uzuyordu
+// (/solutions/brands 375px'te H1, metin ve CTA'lar sağdan kesik). Sütun ekran genişliğine sabitlenir;
+// mockup satırlarında metin daralır, avatar küçülmez. Yüzen bilgi kartları ekran kenarına taşmaz, içerik kenarına hizalanır
+const UX = [
+  "@media (max-width:1023.98px){#main>section:first-child .grid.items-center{grid-template-columns:minmax(0,1fr)}",
+  "#main>section:first-child .grid>.relative .flex-1{min-width:0}#main>section:first-child .grid>.relative .rounded-full{flex-shrink:0}}",
+  "@media (max-width:639.98px){#main>section:first-child .absolute.-right-4.rounded-xl.border{right:0}#main>section:first-child .absolute.-left-4.rounded-xl.border{left:0}}",
 ].join("");
 
 // 44px dokunma alanı yalnız dar ekranda ve dokunmatikte; fareli masaüstü düzeni aynı kalır
