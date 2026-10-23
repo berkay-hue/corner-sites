@@ -63,6 +63,10 @@ export const rule = {
           ["shield", '<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path>', "No credit card required"],
           ["clock", '<circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline>', "14-day free trial"],
         ].map(([n, d, t]) => `<div class="flex items-center gap-2">${svg(n, d)}<span>${t}</span></div>`).join("") + "</div>" + trust, 1];
+      // Fiyat sayfası: deneme butonlu kartta (SSR'da Pro) butonun hemen altında "14-day free trial" (pricing chunk yamasıyla birebir)
+      const card = ["Start Trial</button></div></div>", "Start Trial</button>"
+        + '<div class="flex items-center justify-center gap-2 text-sm font-medium text-foreground">'
+        + svg("clock", '<circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline>') + "<span>14-day free trial</span></div></div></div>", 1];
       return {
         "/": { cut: ['<div class="mt-16 border-t border-border pt-8 lg:mt-24">', social], section: [">Trusted by Industry Leaders</h2>", ">Success Stories</h2>"], swap: [
           ['<link rel="preload" as="image" href="/fashion-brand-marketing-campaign-success.jpg"/>', "", 1],
@@ -80,7 +84,7 @@ export const rule = {
           ["Join thousands of brands, influencers, and agencies growing with Brand Corner.", "Brands, influencers, and agencies can grow with Brand Corner.", 1], trial, copy] },
         "/features": { cut: [social], swap: [["analyzes thousands of profiles", "analyzes profiles", 1], copy] },
         // SSS akordeonu kapalıyken cevaplar HTML'de yok: düz liste olur (chunk'ta aynı değişiklik), SSR dili EN
-        "/pricing": { cut: [social], swap: [copy, ['role="switch" aria-checked=', 'role="switch" aria-label="Yearly" aria-checked=', 1], ['We accept all major credit cards (Visa, Mastercard, American Express), PayPal, and bank transfers for enterprise plans.', 'Online payments are not accepted at the moment.', 1]], put: [['<div data-slot="accordion" class="mt-10"', faqHtml]] },
+        "/pricing": { cut: [social], swap: [copy, ['role="switch" aria-checked=', 'role="switch" aria-label="Yearly" aria-checked=', 1], ['We accept all major credit cards (Visa, Mastercard, American Express), PayPal, and bank transfers for enterprise plans.', 'Online payments are not accepted at the moment.', 1], card], put: [['<div data-slot="accordion" class="mt-10"', faqHtml]] },
         "/solutions/brands": { cut: [grid, social], swap: [
           ["<span>125K followers</span>", "<span>Followers</span>", 4],
           ["<span>4.8% engagement</span>", "<span>Engagement</span>", 4],
@@ -270,6 +274,9 @@ const UX = [
   "footer .sk-nl-msg:not(:empty){margin-top:.5rem}footer .sk-nl-msg[data-err]{color:#b91c1c}",
   // Pricing Monthly/Yearly yazıları tıklanınca dönemi seçer (chunk onClick); el imleci, çift tıkta metin seçilmez
   "div:has(>[data-slot=switch])>span:not(.rounded-full){cursor:pointer;user-select:none}",
+  // Fiyat kartında deneme butonunun altındaki "14-day free trial" satırı: 12px boşluk + 20px satır, kartın pb-8 (32px) alt
+  // boşluğuna oturur (-32px), böylece deneme butonu diğer kartların butonlarıyla aynı hizada kalır
+  "#main [data-slot=card-content]>ul+[data-slot=button].w-full+div{margin:12px 0 -32px;min-height:20px}",
 ].join("");
 
 // 44px dokunma alanı yalnız dar ekranda ve dokunmatikte; fareli masaüstü düzeni aynı kalır
@@ -505,12 +512,17 @@ export const chunks = [
       on('(0,a.jsxs)(r.Button,{size:"lg",className:"mt-8 h-12 bg-primary-foreground px-8 text-primary hover:bg-primary-foreground/90",children:[e("hero.cta.trial")', REG()),
     ] },
     // #170 SSS'yi kaynakta ve yamalı çıktıda yerinde değiştirdi; çıktı adı 49468e11 kaldı (içerik özeti bf87c986), o ad was'ta
-    { chunk: "6298d546504883f0", was: ["49468e11c5cb80ca", "bf87c986ab1ea156", "38c0e5819384d936", "19ccbd72fabe6063"], edits: [  // /pricing
+    { chunk: "6298d546504883f0", was: ["49468e11c5cb80ca", "bf87c986ab1ea156", "38c0e5819384d936", "19ccbd72fabe6063", "79d8a97afcd84cc0"], edits: [  // /pricing
       // Anahtarın adı "Yearly"; yanındaki Monthly/Yearly yazılarına basınca da seçilir (yalnız onClick, SSR aynı)
       ['(0,a.jsx)("span",{className:(0,j.cn)("text-sm",!l&&"font-semibold text-foreground"),children:e("pricingPage.toggle.monthly")}),(0,a.jsx)(N,{checked:l,onCheckedChange:o}),(0,a.jsx)("span",{className:(0,j.cn)("text-sm",l&&"font-semibold text-foreground"),children:e("pricingPage.toggle.yearly")})',
         '(0,a.jsx)("span",{className:(0,j.cn)("text-sm",!l&&"font-semibold text-foreground"),onClick:()=>o(!1),children:e("pricingPage.toggle.monthly")}),(0,a.jsx)(N,{checked:l,onCheckedChange:o,"aria-label":"Yearly"}),(0,a.jsx)("span",{className:(0,j.cn)("text-sm",l&&"font-semibold text-foreground"),onClick:()=>o(!0),children:e("pricingPage.toggle.yearly")})'],
       [{ from: '(0,a.jsx)(er,{type:"single",collapsible:!0,className:"mt-10",children:[', until: '})]})})}e.s(["PricingFAQ"' }, faqJs()],
       on('(0,a.jsx)(i.Button,{className:(0,j.cn)("mt-8 w-full",t.popular?"gradient-primary text-primary-foreground":""),variant:t.popular?"default":"outline",children:t.cta})', plan("s")),
+      // Deneme butonlu kartlarda (Start Trial / Denemeyi Başlat) butonun altına "14-day free trial" satırı (BODY'deki card ile birebir)
+      ['var w=e.i(72809),C=e.i(10552),P=e.i(84135),S=e.i(2870);function z(){', 'var w=e.i(72809),C=e.i(10552),P=e.i(84135),S=e.i(2870);let skCl='
+        + '(0,e.i(10965).default)("Clock",[["circle",{cx:"12",cy:"12",r:"10",key:"1mglay"}],["polyline",{points:"12 6 12 12 16 14",key:"68esgv"}]]);function z(){'],
+      ['children:t.cta})]})]},r))', 'children:t.cta}),t.cta===e("pricingPage.startTrial")&&(0,a.jsxs)("div",{className:"flex items-center justify-center gap-2 text-sm font-medium text-foreground",'
+        + 'children:[(0,a.jsx)(skCl,{className:"h-4 w-4 text-primary"}),(0,a.jsx)("span",{children:e("cta.freeTrial")})]})]})]},r))'],
       on('(0,a.jsxs)(r.Button,{size:"lg",className:"mt-8 gradient-primary text-primary-foreground",children:[(0,a.jsx)(n.MessageSquare,', go("mailto:info@saascorner.co")),
     ] },
 ];
