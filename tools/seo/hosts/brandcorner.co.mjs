@@ -262,6 +262,9 @@ const UX = [
   // Ana sayfa CTA bölümündeki desen %10 opaklıkta, her ziyarette 137 KB PNG iniyordu; aynı 1024×717 desen webp (21 KB).
   // Derlenmiş CSS'teki PNG kuralı geçersiz kalır, PNG hiç istenmez
   "#main [class*=\"abstract-geometric-pattern.png\"]{background-image:url(/abstract-geometric-pattern.webp)}",
+  // Özellik/çözüm kartları: kartın py-6'sı ile içeriğin p-6'sı üst üste biniyordu (üst/alt 48px, yanlar 24px; telefonda
+  // her kartta ~48px boşluk). Tek çocuğu içerik olan kartta dikey boşluğu içerik verir; her kenar eşit (24px, sm:p-8'de 32px)
+  "#main [data-slot=card].py-6:has(>[data-slot=card-content]:only-child){padding-block:0}",
   // Bülten durum satırı: boşken yer kaplamaz, dolunca giriş+butonun altında tam satır; hata kırmızı (#b91c1c beyazda 6.5:1)
   "footer form.sk-nl{flex-wrap:wrap;row-gap:0}footer .sk-nl-msg{flex-basis:100%;margin:0;font-size:.875rem;line-height:1.25rem;color:var(--muted-foreground)}",
   "footer .sk-nl-msg:not(:empty){margin-top:.5rem}footer .sk-nl-msg[data-err]{color:#b91c1c}",
