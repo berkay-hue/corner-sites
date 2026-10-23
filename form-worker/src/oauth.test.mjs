@@ -278,6 +278,48 @@ test("metrikler: takipçi ve son gönderilerin ortalamaları; gizli değer ortal
   await assert.rejects(fetchMetrics("youtube", "t", noChannel), e => e.code === "no_channel");
 });
 
+test("metrikler: Instagram'da yorumları kapalı gönderinin 0 yorumu ve erişimi olan gönderinin 0 izlenmesi ölçülmemiş sayılır", async () => {
+  // m1: yorum kapalı ve 0, izlenme 0 ama erişim var; m2: yorum kapalı ama sayı var, izlenme ve erişim 0; m3: yorum açık ve 0
+  // (kural ortalamaya uygulanmasaydı yorum ortalaması 1, izlenme ortalaması 133 çıkardı)
+  const media = [
+    { ...IG_MEDIA[0], comments_count: 0, is_comment_enabled: false },
+    { ...IG_MEDIA[1], comments_count: 3, is_comment_enabled: false },
+    { ...IG_MEDIA[2], comments_count: 0, is_comment_enabled: true },
+  ];
+  const f = fakeFetch(igPostRoutes([
+    [`${IGV}/m1/insights?`, [200, { data: [{ name: "views", total_value: { value: 0 } }, { name: "reach", total_value: { value: 800 } }] }]],
+    [`${IGV}/m2/insights?`, [200, { data: [{ name: "views", values: [{ value: 0 }] }, { name: "reach", values: [{ value: 0 }] }] }]],
+  ], media));
+  const m = await fetchMetrics("instagram", "ig-token", f);
+  assert.deepEqual(m.posts.map(p => [p.comments, p.views, p.reach]), [[null, null, 800], [3, 0, 0], [0, 400, null]]);
+  assert.deepEqual([m.avg_views, m.avg_comments, m.posts_sampled], [200, 2, 3]);
+  assert.match(new URL(f.calls[1].url).searchParams.get("fields"), /,is_comment_enabled$/);
+  assert.equal(f.calls.filter(c => c.url.startsWith(`${IGV}/me/media?`)).length, 1);
+});
+
+// is_comment_enabled istenince status ile reddeden gönderi listesi; alan istenmezse media döner
+const igNoField = (status, media = IG_MEDIA) => [`${IGV}/me/media?`, u => new URL(u).searchParams.get("fields").includes("is_comment_enabled")
+  ? [status, { error: { message: "(#100) Tried accessing nonexisting field (is_comment_enabled)", type: "OAuthException", code: 100 } }]
+  : [200, { data: media }]];
+const lists = f => f.calls.filter(c => c.url.startsWith(`${IGV}/me/media?`)).map(c => new URL(c.url).searchParams.get("fields"));
+
+test("metrikler: Instagram is_comment_enabled alanını reddederse liste bir kez onsuz istenir, başka hata tekrarlanmaz", async () => {
+  const f = fakeFetch(igPostRoutes([igNoField(400)]));
+  assert.deepEqual((await fetchMetrics("instagram", "ig-token", f)).posts, IG_POSTS);
+  const [first, second, ...rest] = lists(f);
+  assert.match(first, /,is_comment_enabled$/);
+  assert.doesNotMatch(second, /is_comment_enabled/);
+  assert.equal(rest.length, 0);
+  // 400 dışı hata: tekrar yok
+  const g = fakeFetch(igPostRoutes([igNoField(500)]));
+  await assert.rejects(fetchMetrics("instagram", "ig-token", g), e => e instanceof ProviderError && e.code === "500:100");
+  assert.equal(lists(g).length, 1);
+  // Token hatası tekrarda da döner ve yukarı iletilir
+  const h = fakeFetch(igPostRoutes([[`${IGV}/me/media?`, [400, { error: { message: "Invalid OAuth access token", type: "OAuthException", code: 190 } }]]]));
+  await assert.rejects(fetchMetrics("instagram", "ig-token", h), e => e instanceof ProviderError && e.code === "400:190");
+  assert.equal(lists(h).length, 2);
+});
+
 // ---- şifreleme ----
 
 test("token şifreleme: gidiş-dönüş, her seferinde farklı, yanlış anahtar açamaz", async () => {
@@ -991,7 +1033,7 @@ test("syncDue: en fazla max hesap, bütçeyi aşan platform sonraki saate kalır
   await seed(db, env, a.id, "instagram", "1784");
   await seed(db, env, a.id, "tiktok", "tt-1");
   await seed(db, env, b.id, "tiktok", "tt-2");
-  // Bütçe 3: Instagram (15) sığmaz, ilk TikTok (3) sığar, ikinci TikTok bütçeyi aşar
+  // Bütçe 3: Instagram (16) sığmaz, ilk TikTok (3) sığar, ikinci TikTok bütçeyi aşar
   const f = fakeFetch(ttRoutes());
   assert.deepEqual(await syncDue(env, f, { budget: 3 }), { ...ZERO, synced: 1, deferred: 2 });
   assert.equal(f.calls.some(c => c.url.includes("instagram")), false);
@@ -1009,6 +1051,21 @@ test("syncDue: en fazla max hesap, bütçeyi aşan platform sonraki saate kalır
   assert.deepEqual(await syncDue(env, h, { budget: SYNC_MIN - 1 }), ZERO);
   assert.deepEqual(await syncDue(env, h, { max: 0 }), ZERO);
   assert.equal(h.calls.length, 0);
+});
+
+test("syncDue: Instagram'ın en kötü yolu (yenileme + alan reddinde tekrar + 12 insights) bütçe payına sığar", async t => {
+  t.mock.method(console, "log", () => {});
+  const { db, env, join } = await setup({ ...IG_ENV, OAUTH_TOKEN_KEY: KEY });
+  const a = await join("influencer", "a@x.co");
+  await seed(db, env, a.id, "instagram", "1784"); // token 7 günden kısa: yenilenir
+  const media = Array.from({ length: 13 }, (_, i) => ({ id: `n${i}`, like_count: i }));
+  const f = fakeFetch(igRoutes([IG_REFRESH, igNoField(400, media)]));
+  assert.deepEqual(await syncDue(env, f, { budget: 15 }), { ...ZERO, deferred: 1 });
+  assert.equal(f.calls.length, 0);
+  assert.deepEqual(await syncDue(env, f, { budget: 16 }), { ...ZERO, synced: 1 });
+  assert.ok(f.calls.some(c => c.url.startsWith(IG_REFRESH[0])), "yenileme yapıldı");
+  assert.equal(lists(f).length, 2);
+  assert.equal(f.calls.length, 16);
 });
 
 // D1 ifadelerini sayar (batch içindekiler tek tek)
