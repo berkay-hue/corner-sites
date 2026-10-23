@@ -245,6 +245,20 @@ dialog.onb{width:100%;max-width:100%;margin:auto 0 0;max-height:92%;border-width
 .ph h1,.wrapw>h1{font-size:22px}.box{padding:16px}.ch,.cb{padding-left:16px;padding-right:16px}.oc,.irow,.legend{padding-left:16px;padding-right:16px}.grid2{grid-template-columns:1fr}.prow{grid-template-columns:1fr 1fr}.prow>div:last-child{grid-column:1/-1}}
 @media(max-width:760px){.cmdk-m{display:flex;align-items:center;justify-content:center;width:44px;height:44px;border:0;background:none;padding:0;cursor:pointer;border-radius:50%;color:var(--muted)}.cmdk-m .i{width:22px;height:22px}
 dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;border-radius:0 0 14px 14px;padding-top:env(safe-area-inset-top,0px)}.ck-f{display:none}.ck-k{display:none}}
+.toasts{position:fixed;right:20px;bottom:20px;z-index:50;display:flex;flex-direction:column;align-items:flex-end;gap:8px;max-width:calc(100vw - 32px);pointer-events:none}
+.toast{--tk:#4cc27a;--tbad:#f2756a;--ta:#c7d2fe;position:relative;overflow:hidden;pointer-events:auto;display:flex;align-items:center;gap:10px;max-width:440px;min-height:52px;padding:6px 6px 6px 14px;border-radius:var(--r-card);background:var(--text);color:var(--surface);box-shadow:0 12px 32px rgba(10,12,20,.24);font:500 14px/1.4 "Inter",sans-serif}
+.toast>.i{color:var(--tk)}.toast.bad>.i{color:var(--tbad)}.toast .tm{flex:1;min-width:0;padding:8px 0}
+.toast .ta,.toast .tx-x{flex:none;display:flex;align-items:center;justify-content:center;min-height:40px;border:0;border-radius:var(--r-ctl);background:none;color:inherit;cursor:pointer;padding:0 12px;font:600 14px/1 "Inter",sans-serif}
+.toast .ta{color:var(--ta)}.toast .tx-x{width:40px;padding:0;opacity:.72}.toast .ta:hover,.toast .tx-x:hover{background:color-mix(in srgb,currentColor 14%,transparent);opacity:1}
+.toast :focus-visible{outline:2px solid var(--ta);outline-offset:1px}
+.toast .tb{position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--tk);opacity:.75;transform-origin:left;animation:tbar 5s linear forwards}.toast.long .tb{animation-duration:8s}.toast.bad .tb{background:var(--tbad)}
+.toast:hover .tb,.toast:focus-within .tb{animation-play-state:paused}@keyframes tbar{to{transform:scaleX(0)}}
+.toast.out{opacity:0}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .toast{--tk:#157f3b;--tbad:#b42318;--ta:#4338ca;box-shadow:0 12px 32px rgba(0,0,0,.5)}}
+:root[data-theme="dark"] .toast{--tk:#157f3b;--tbad:#b42318;--ta:#4338ca;box-shadow:0 12px 32px rgba(0,0,0,.5)}
+@media(prefers-reduced-motion:no-preference){.toast{animation:tin .22s cubic-bezier(.2,.9,.3,1.15)}.toast.out{transform:translateY(6px);transition:opacity .16s,transform .16s}@keyframes tin{from{opacity:0;transform:translateY(12px) scale(.96)}}}
+@media(prefers-reduced-motion:reduce){.toast .tb{opacity:0}}
+@media(max-width:760px){.toasts{left:12px;right:12px;bottom:calc(72px + env(safe-area-inset-bottom));align-items:stretch;max-width:none}.toast{max-width:none}.toast .ta{min-height:44px}.toast .tx-x{width:44px;height:44px}}
 </style>
 </head>
 <body>
@@ -445,6 +459,10 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       fPlats: "Platformlar", platsHint: "Kaldırmak için platformu boş (—) seçin.",
       platform: "Platform", handle: "Kullanıcı adı", followersL: "Takipçi sayısı", addPlat: "Platform ekle",
       save: "Kaydet", saved: "Kaydedildi.",
+      tsCreated: "Kampanya oluşturuldu", tsSaved: "Kampanya güncellendi", tsClosed: "Kampanya kapatıldı", tsOpened: "Kampanya yeniden açıldı",
+      tsApplied: "Başvurunuz gönderildi", tsSeeApps: "Başvurularım", tsUndo: "Geri al", tsClose: "Bildirimi kapat", tsSomeone: "Başvuru",
+      ts_o_accepted: "{n} kabul edildi", ts_o_rejected: "{n} reddedildi", ts_o_approved: "İçerik onaylandı: {n}", ts_o_revision: "{n} için revizyon istendi",
+      ts_c_accepted: "Davet kabul edildi", ts_c_declined: "Davet reddedildi", ts_c_submitted: "İçerik gönderildi; markanın onayı bekleniyor",
       badWeb: "Web sitesi adresini http:// ya da https:// ile girin.",
       badClients: "Müşteri sayısını 0 ile 10.000 arasında bir tam sayı olarak girin.", badFollowers: "Takipçi sayısını tam sayı olarak girin.",
       followers: "{n} takipçi"
@@ -593,6 +611,10 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       fPlats: "Platforms", platsHint: "To remove a platform, set it to empty (—).",
       platform: "Platform", handle: "Username", followersL: "Followers", addPlat: "Add platform",
       save: "Save", saved: "Saved.",
+      tsCreated: "Campaign created", tsSaved: "Campaign updated", tsClosed: "Campaign closed", tsOpened: "Campaign reopened",
+      tsApplied: "Application sent", tsSeeApps: "My applications", tsUndo: "Undo", tsClose: "Dismiss notification", tsSomeone: "Application",
+      ts_o_accepted: "{n} accepted", ts_o_rejected: "{n} rejected", ts_o_approved: "Content approved: {n}", ts_o_revision: "Revision requested from {n}",
+      ts_c_accepted: "Invite accepted", ts_c_declined: "Invite declined", ts_c_submitted: "Content sent; waiting for the brand's approval",
       badWeb: "Enter the website address starting with http:// or https://.",
       badClients: "Enter the number of clients as a whole number from 0 to 10,000.", badFollowers: "Enter followers as a whole number.",
       followers: "{n} followers"
@@ -779,7 +801,9 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
     image: [["rect", { x: 3, y: 4, width: 18, height: 16, rx: 2 }], ["circle", { cx: 9, cy: 10, r: 2 }], ["path", { d: "m21 16-5-5-9 9" }]],
     moon: [["path", { d: "M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" }]],
     sun: [["circle", { cx: 12, cy: 12, r: 4 }], ["path", { d: "M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" }]],
-    arrow: [["path", { d: "M5 12h14M13 6l6 6-6 6" }]]
+    arrow: [["path", { d: "M5 12h14M13 6l6 6-6 6" }]],
+    x: [["path", { d: "M6 6l12 12M18 6 6 18" }]],
+    alert: [["circle", { cx: 12, cy: 12, r: 9 }], ["path", { d: "M12 7.5v5.5M12 16.5h.01" }]]
   };
   function ic(name) {
     var NS = "http://www.w3.org/2000/svg", s = document.createElementNS(NS, "svg");
@@ -878,6 +902,36 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
     if (h) { h.tabIndex = -1; h.focus({ preventScroll: true }); }
     n.classList.add("spot");
     setTimeout(function () { n.classList.remove("spot"); }, 1600);
+  }
+  // İşlem sonrası kısa bildirim: sağ altta (mobilde sekme çubuğunun üstünde) çıkar, alttaki çizgi kalan süreyi gösterir;
+  // üstüne gelince ya da odaktayken durur, Esc kapatır. act: [etiket, fonksiyon] (ör. "Geri al"). Ekran okuyucu ayrı canlı bölgeden duyar.
+  var TS = null;
+  function toast(msg, act, bad) {
+    if (!TS) {
+      TS = { box: el("div", { class: "toasts" }), live: el("p", { class: "vh", "aria-live": "polite" }) };
+      document.body.appendChild(TS.box); document.body.appendChild(TS.live);
+      document.addEventListener("keydown", function (e) {
+        var n = TS.box.lastChild;
+        if (e.key === "Escape" && n && n.bye && !e.defaultPrevented && sheet.hidden && !document.querySelector("dialog[open]")) n.bye();
+      }, true);
+    }
+    var bar = el("span", { class: "tb", "aria-hidden": "true" }), n = el("div", { class: "toast" + (bad ? " bad" : "") + (act ? " long" : "") });
+    n.bye = function () {
+      if (n.classList.contains("out")) return;
+      var had = n.contains(document.activeElement);
+      n.classList.add("out");
+      setTimeout(function () { if (n.parentNode) n.parentNode.removeChild(n); }, 180);
+      if (had) { var h = view.querySelector("h1"); if (h) { h.tabIndex = -1; h.focus({ preventScroll: true }); } }
+    };
+    add(n, [ic(bad ? "alert" : "check"), el("span", { class: "tm", text: msg }),
+      act ? el("button", { type: "button", class: "ta", text: act[0], onclick: function () { n.bye(); act[1](); } }) : null,
+      el("button", { type: "button", class: "tx-x", "aria-label": t("tsClose"), onclick: n.bye }, ic("x")), bar]);
+    bar.addEventListener("animationend", n.bye);
+    TS.box.appendChild(n);
+    while (TS.box.children.length > 3) TS.box.removeChild(TS.box.firstChild);
+    TS.live.textContent = "";
+    setTimeout(function () { TS.live.textContent = msg; }, 60);
+    return n;
   }
   function failBox(e, retry) {
     return el("div", { class: "box empty", role: "alert" }, [el("p", { text: BC.msg(e.code) }), el("p", null, el("button", { type: "button", class: "ghost", text: t("retry"), onclick: retry }))]);
@@ -1256,7 +1310,8 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       if (z) body.budget_max = +z; else if (c) body.budget_max = null;
       busy(b, true);
       BC.call("POST", c ? "app/campaigns/" + c.id : "app/campaigns", body).then(function (d) {
-        if (c) render(true); else location.hash = "#campaign-" + d.campaign.id;
+        if (c) render(true).then(function () { toast(t("tsSaved")); });
+        else { location.hash = "#campaign-" + d.campaign.id; toast(t("tsCreated")); }
       }, function (e) {
         busy(b, false);
         say(m, BC.msg(e.code, { limit: t("campLimit") }));
@@ -1278,7 +1333,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
   function ownerDetail(c, apps) {
     var m = note(), edit = el("div", { class: "sub", hidden: true });
     var eb = el("button", { type: "button", class: "ghost", "aria-expanded": "false", text: t("edit") });
-    var tog = el("button", { type: "button", class: "ghost", text: t(c.status === "open" ? "close" : "reopen") });
+    var tog = el("button", { type: "button", class: "ghost", "data-tog": true, text: t(c.status === "open" ? "close" : "reopen") });
     eb.addEventListener("click", function () {
       if (!edit.firstChild) edit.appendChild(campaignForm(c, function () { edit.hidden = true; eb.setAttribute("aria-expanded", "false"); }));
       edit.hidden = !edit.hidden;
@@ -1286,7 +1341,20 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
     });
     tog.addEventListener("click", function () {
       say(m, ""); busy(tog, true);
-      BC.call("POST", "app/campaigns/" + c.id, { status: c.status === "open" ? "closed" : "open" }).then(function () { render(true); }, function (e) { busy(tog, false); say(m, BC.msg(e.code)); });
+      var to = c.status === "open" ? "closed" : "open";
+      // Yeniden çizimde düğme değişir; odak boşa düşerse yenisine döner
+      function back() { var n = !view.contains(document.activeElement) && view.querySelector("[data-tog]"); if (n) n.focus(); }
+      BC.call("POST", "app/campaigns/" + c.id, { status: to }).then(function () {
+        return render(true).then(function () {
+          back();
+          // Kapatma tek tıkla geri alınabilir: kampanya aynı haliyle yeniden açılır
+          toast(t(to === "closed" ? "tsClosed" : "tsOpened"), to === "closed" ? [t("tsUndo"), function () {
+            BC.call("POST", "app/campaigns/" + c.id, { status: "open" }).then(function () {
+              return render(true).then(function () { back(); toast(t("tsOpened")); });
+            }, function (e) { toast(BC.msg(e.code), null, true); });
+          }] : null);
+        });
+      }, function (e) { busy(tog, false); say(m, BC.msg(e.code)); });
     });
     if (c.status === "open") tog.className = "ghost bad";
     var pl = (c.platforms || []).filter(function (p) { return PL[p]; }).map(function (p) { return PL[p]; });
@@ -1339,7 +1407,9 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
     var f = el("form", { class: "box f", "data-sk-noform": true, novalidate: true }, [el("label", { for: p, text: t("appMsg") }), ta, el("p", { class: "hint", text: t("appMsgHint") }), b, m]);
     f.addEventListener("submit", function (ev) {
       ev.preventDefault(); say(m, ""); busy(b, true);
-      BC.call("POST", "app/campaigns/" + c.id + "/apply", { message: ta.value.trim() }).then(function () { render(true); }, function (e) {
+      BC.call("POST", "app/campaigns/" + c.id + "/apply", { message: ta.value.trim() }).then(function () {
+        return render(true).then(function () { toast(t("tsApplied"), [t("tsSeeApps"), function () { location.hash = "#applications"; }]); });
+      }, function (e) {
         busy(b, false);
         say(m, BC.msg(e.code, { limit: t("applyLimit"), exists: t("applyExists"), not_found: t("applyClosed") }));
       });
@@ -1388,6 +1458,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       BC.call("POST", "app/applications/" + a.id, body).then(function () {
         // Kart başka bölüme taşınınca odak kaybolur; aynı başvurunun kartına dön
         return render(true).then(function () {
+          toast(t("ts_" + (own ? "o_" : "c_") + body.status, own ? (a.influencer && a.influencer.name) || t("tsSomeone") : ""));
           if (view.contains(document.activeElement)) return;
           var c = view.querySelector('[data-app="' + a.id + '"]');
           if (c) { c.tabIndex = -1; c.focus(); }
