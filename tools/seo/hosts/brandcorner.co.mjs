@@ -286,6 +286,8 @@ const FOOTER = [
   ['flex-1" placeholder="email@example.com"/>', 'flex-1" placeholder="email@example.com" aria-label="Email address"/>', 1],
   // Bülten formu (NL ile birebir): sınıf, alan adı/otomatik doldurma ve boş durum satırı
   ['<form class="flex w-full max-w-md gap-2">', '<form class="flex w-full max-w-md gap-2 sk-nl">', 1],
+  // data-sk-noform: dist.mjs'in forms-client'ı formu yakalamasın (yakalarsa onSubmit hiç çalışmaz, mesaj yalnız İngilizce butonda)
+  ['<form class="flex w-full max-w-md gap-2 sk-nl">', '<form class="flex w-full max-w-md gap-2 sk-nl" data-sk-noform="">', 1],
   ['placeholder="email@example.com" aria-label="Email address"/>', 'placeholder="email@example.com" aria-label="Email address" name="email" autoComplete="email" required=""/>', 1],
   ["Subscribe</button></form>", 'Subscribe</button><p role="status" aria-live="polite" class="sk-nl-msg"></p></form>', 1],
   ["<p>Made with ❤️ in Istanbul</p></div>", '<p>Made with ❤️ in Istanbul</p><nav aria-label="Corner Group companies" class="flex flex-wrap gap-4">'
@@ -376,14 +378,14 @@ export const chunks = [
     // 14 istek, ~140 KB) ve tıklamada yine tam sayfa yüklemesine düşüyordu. Link router bağlamını görmez: ön yükleme yok,
     // tıklama doğrudan <a> gezinmesi. Çizilen <a> aynı (#418 riski yok)
     // 23 Eki: footer bülten formu sayfayı yeniliyordu; onSubmit form alıcısına gönderir (NL, yukarıda), sonucu durum satırında gösterir
-    { chunk: "fbb4735ac8b2897c", was: ["29a4179b1081dab7", "f847b81df96780e6", "50ec8e92a50e74a5", "2c6b236da8230460", "75a2fdeac448816e", "173212324b0a63cf"], edits: [
+    { chunk: "fbb4735ac8b2897c", was: ["29a4179b1081dab7", "f847b81df96780e6", "50ec8e92a50e74a5", "2c6b236da8230460", "75a2fdeac448816e", "173212324b0a63cf", "5ea4debd3abcbb8f"], edits: [
       ['let I=l.default.useContext(c.AppRouterContext),L=!1!==E', 'let I=null,L=!1!==E'],
       ['{href:"/pricing",label:e("footer.pricing")},{href:"/integrations",label:e("footer.integrations")},{href:"/security",label:e("footer.security")}]', '{href:"/pricing",label:e("footer.pricing")}]'],
       ['{href:"/careers",label:e("footer.careers")},{href:"/press",label:e("footer.press")},', '{href:"/blog",label:e("footer.blog")},'],
       ['{href:"/gdpr",label:e("footer.gdpr")}]', '{href:"/gdpr",label:e("footer.gdpr")},{href:"/kvkk",label:"KVKK"}]'],
       ['type:"email",placeholder:"email@example.com",className:"flex-1"', 'type:"email",placeholder:"email@example.com","aria-label":"Email address",name:"email",autoComplete:"email",required:!0,className:"flex-1"'],
       ['let{t:e}=(0,n.useLanguage)(),i={solutions:', 'let{t:e,language:nlLang}=(0,n.useLanguage)(),i={solutions:'],
-      ['(0,t.jsxs)("form",{className:"flex w-full max-w-md gap-2",children:[', `(0,t.jsxs)("form",{className:"flex w-full max-w-md gap-2 sk-nl",onSubmit:${NL},children:[`],
+      ['(0,t.jsxs)("form",{className:"flex w-full max-w-md gap-2",children:[', `(0,t.jsxs)("form",{className:"flex w-full max-w-md gap-2 sk-nl","data-sk-noform":"",onSubmit:${NL},children:[`],
       ['children:e("footer.subscribe")})]})', 'children:e("footer.subscribe")}),(0,t.jsx)("p",{role:"status","aria-live":"polite",className:"sk-nl-msg"})]})'],
       ['(0,t.jsx)("p",{children:e("footer.madeWith")})', '(0,t.jsx)("p",{children:e("footer.madeWith")}),(0,t.jsx)("nav",{"aria-label":"Corner Group companies",className:"flex flex-wrap gap-4",children:'
         + JSON.stringify(GROUP.map(([u, n]) => [u, n])) + '.map(([u,n])=>(0,t.jsx)("a",{href:u,className:"hover:text-primary",children:n},u))})'],
