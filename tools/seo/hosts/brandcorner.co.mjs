@@ -306,7 +306,9 @@ export const chunks = [
     // /login|/giris ve /register|/kayit'e gider. onClick SSR HTML'ine yazılmaz, gövdeye dokunulmaz (#418 riski yok)
     // Footer'daki 4 sosyal ikon href="#" idi (hesap yok): gövdeden (BODY cut) ve chunk'tan birlikte silinir
     // 19 Eki: Integrations/Security/Careers/Press sayfası yok, footer'dan çıkar; Legal'e KVKK, alt satıra Corner Group şirketleri
-    { chunk: "fbb4735ac8b2897c", was: ["29a4179b1081dab7", "f847b81df96780e6"], edits: [
+    // 23 Eki: mobil menü (Sheet) başlıksızdı; ekran okuyucuda adsız pencere, açılınca konsolda Radix DialogTitle hatası.
+    // Dile göre aria-label; başlık uyarısı aria-label varken susar. Kapalı Sheet SSR'da yok (#418 riski yok)
+    { chunk: "fbb4735ac8b2897c", was: ["29a4179b1081dab7", "f847b81df96780e6", "50ec8e92a50e74a5"], edits: [
       ['{href:"/pricing",label:e("footer.pricing")},{href:"/integrations",label:e("footer.integrations")},{href:"/security",label:e("footer.security")}]', '{href:"/pricing",label:e("footer.pricing")}]'],
       ['{href:"/careers",label:e("footer.careers")},{href:"/press",label:e("footer.press")},', '{href:"/blog",label:e("footer.blog")},'],
       ['{href:"/gdpr",label:e("footer.gdpr")}]', '{href:"/gdpr",label:e("footer.gdpr")},{href:"/kvkk",label:"KVKK"}]'],
@@ -319,6 +321,8 @@ export const chunks = [
       ...['hidden gradient-primary text-primary-foreground hover:opacity-90 sm:inline-flex', 'gradient-primary text-primary-foreground'].map(c =>
         on(`(0,u.jsx)(m.Button,{className:"${c}",children:r("nav.getStarted")})`, `()=>{location.href="en"===e?"/register":"/kayit"}`)),
       [{ from: ',(0,t.jsxs)("div",{className:"mt-6 flex gap-4"', until: ']}),(0,t.jsxs)("div",{className:"grid grid-cols-2 gap-8 sm:grid-cols-4 lg:col-span-4"' }, ""],
+      ['(0,u.jsx)(ts,{side:"right",className:"w-80",children:', '(0,u.jsx)(ts,{side:"right",className:"w-80","aria-label":"en"===e?"Menu":"Menü","aria-labelledby":void 0,"aria-describedby":void 0,children:'],
+      ['(0,u.jsx)(te,{titleId:l.titleId})', '(0,u.jsx)(te,{titleId:i["aria-label"]?void 0:l.titleId})'],
     ] },
     // PR-F: doğrulanamayan sayaçlar, logo şeridi, yorumlar, başarı hikâyeleri ve mockup tutarları
     { chunk: "411b1b9d3b6df8ca", was: ["7cc019c396358bc9", "869eb8a0955429b6"], edits: DICT },
