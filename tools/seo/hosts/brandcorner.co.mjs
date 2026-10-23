@@ -229,6 +229,8 @@ const UX = [
   // Yapışkan header'daki "Get Started Free" 640px altında gizliydi (kaydırınca kayıt yolu hamburger içinde kalıyordu);
   // Login ve TR gizli kalır, logo + CTA + menü 320px'e sığar
   "header [data-slot=button].gradient-primary{display:inline-flex;padding:0 14px}}",
+  // Pricing SSS satırları py-5 kullanıyor ama derlenmiş CSS'te py-5 yok (Tailwind yalnız kaynakta görüleni üretir); satırlar dipdibeydi
+  ".py-5{padding-block:calc(var(--spacing)*5)}",
 ].join("");
 
 // 44px dokunma alanı yalnız dar ekranda ve dokunmatikte; fareli masaüstü düzeni aynı kalır
