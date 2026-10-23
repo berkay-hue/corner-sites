@@ -231,6 +231,14 @@ const UX = [
   "header [data-slot=button].gradient-primary{display:inline-flex;padding:0 14px}}",
   // Pricing SSS satırları py-5 kullanıyor ama derlenmiş CSS'te py-5 yok (Tailwind yalnız kaynakta görüleni üretir); satırlar dipdibeydi
   ".py-5{padding-block:calc(var(--spacing)*5)}",
+  // Plan kartları (/, /pricing): buton listenin hemen altındaydı; madde sayısı farklı olunca masaüstünde butonlar
+  // farklı hizadaydı (Starter 64px yukarıda). İçerik esnek sütun, buton kartın dibinde; masaüstünde de 44px
+  "#main [data-slot=card]>[data-slot=card-content]:has(>ul+[data-slot=button].w-full){flex:1;display:flex;flex-direction:column}",
+  "#main [data-slot=card-content]>ul:has(+[data-slot=button].w-full){margin-bottom:2rem}#main [data-slot=card-content]>ul+[data-slot=button].w-full{margin-top:auto;min-height:44px;font-weight:600}",
+  // Öne çıkan plan (Most Popular): deneme butonu daha belirgin (metin aynı)
+  "#main [data-slot=card].ring-2 [data-slot=card-content]>ul+[data-slot=button].gradient-primary{min-height:48px;font-size:1rem;box-shadow:0 8px 20px -6px rgb(37 99 235/.55)}",
+  // Alt alta dizilen kartlarda scale-105 Pro kartını ekran kenarına 7px yaklaştırıyor, rozeti üstteki karta değdiriyordu
+  "@media (max-width:1023.98px){#main [data-slot=card].scale-105{scale:1}}",
 ].join("");
 
 // 44px dokunma alanı yalnız dar ekranda ve dokunmatikte; fareli masaüstü düzeni aynı kalır
