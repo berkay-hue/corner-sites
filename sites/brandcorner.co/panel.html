@@ -107,6 +107,11 @@ footer.bot{border-top:1px solid var(--line);color:var(--muted);font-size:13.5px;
 .lane .prose.sm{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
 .lane .none{font-size:13.5px;color:var(--muted);margin:4px 4px 6px}
 .closed{margin:16px 0 0}.closed summary{cursor:pointer;font-weight:600;min-height:44px;line-height:44px}.closed .list{margin-top:8px}
+.wrapw .bhd{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 16px;margin:30px 0 12px}.wrapw .bhd h2{margin:0}
+.dens{display:inline-flex;gap:2px;padding:3px;background:var(--surface-2);border:1px solid var(--line);border-radius:var(--r-ctl)}.dens button{display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:0 12px;border:0;border-radius:7px;background:none;color:var(--muted);font:inherit;font-size:13.5px;font-weight:600;cursor:pointer}.dens button:hover{color:var(--text)}.dens button[aria-pressed=true]{background:var(--surface);color:var(--text);box-shadow:0 0 0 1px var(--line),0 1px 2px rgba(16,24,40,.08)}.dens .i{width:16px;height:16px}
+.dense .lc{gap:8px;grid-template-columns:minmax(0,1fr)}.dense .item{padding:10px 12px;min-width:0}.dense .item h3{font-size:15px}.dense .item .meta{margin-top:2px;font-size:13px}.dense .item .prose.sm,.dense .item .chips,.dense .item .handles,.dense .item .amets,.dense .item .info,.dense .item .meta .up{display:none}
+.dense .item .quote{margin-top:8px}.dense .item .quote .ql{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}.dense .item .quote .prose{font-size:13.5px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}.dense .item .link{margin-top:6px;flex-wrap:nowrap;gap:6px}.dense .item .link span{flex:none}.dense .item .link a{min-width:0;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.dense .item .row-b{margin-top:8px}
+@media(pointer:fine){.dense .item .row-b .btn.sm,.dense .item .row-b .ghost{min-height:36px}}
 .quote.rev{border-left-color:var(--warn)}
 .item h3{font-size:16.5px;margin:0;overflow-wrap:anywhere}.item h3 a{text-decoration:none}.item h3 a:hover{color:var(--accent-text)}
 .meta{color:var(--muted);font-size:13.5px;margin:6px 0 0;display:flex;flex-wrap:wrap;gap:2px 14px}
@@ -409,7 +414,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       appsTitle: "Başvurular ve davetler ({n})",
       appsEmpty: "Bu kampanyada henüz başvuru ya da davet yok. Influencer keşfinden uygun profilleri davet edebilirsiniz.",
       colNew: "Yeni", colInvited: "Davet edildi", colWork: "Çalışılıyor", colReview: "İçerik onayı", colDone: "Onaylandı",
-      colClosed: "Kapananlar ({n})", colEmpty: "Bu sütun boş.", revNote: "Revizyon notu", revNoteL: "Influencer'a not (isteğe bağlı)",
+      colClosed: "Kapananlar ({n})", dnView: "Kart görünümü", dnRoomy: "Rahat", dnDense: "Sıkı", colEmpty: "Bu sütun boş.", revNote: "Revizyon notu", revNoteL: "Influencer'a not (isteğe bağlı)",
       goDiscover: "Influencer keşfine git", backCamps: "‹ Kampanyalar", backOpps: "‹ Fırsatlar",
       yourApp: "Başvurunuz", apply: "Başvuru yap", appMsg: "Markaya mesajınız",
       appMsgHint: "Bu kampanyaya neden uygun olduğunuzu kısaca anlatın (en fazla 1000 karakter).", sendApp: "Başvur",
@@ -561,7 +566,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       appsTitle: "Applications and invites ({n})",
       appsEmpty: "No applications or invites for this campaign yet. You can invite suitable profiles from Find influencers.",
       colNew: "New", colInvited: "Invited", colWork: "In progress", colReview: "Content review", colDone: "Approved",
-      colClosed: "Closed ({n})", colEmpty: "Nothing here.", revNote: "Revision note", revNoteL: "Note to the influencer (optional)",
+      colClosed: "Closed ({n})", dnView: "Card density", dnRoomy: "Comfortable", dnDense: "Compact", colEmpty: "Nothing here.", revNote: "Revision note", revNoteL: "Note to the influencer (optional)",
       goDiscover: "Go to Find influencers", backCamps: "‹ Campaigns", backOpps: "‹ Opportunities",
       yourApp: "Your application", apply: "Apply", appMsg: "Message to the brand",
       appMsgHint: "Briefly explain why you're a good fit for this campaign (up to 1000 characters).", sendApp: "Apply",
@@ -803,7 +808,9 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
     sun: [["circle", { cx: 12, cy: 12, r: 4 }], ["path", { d: "M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" }]],
     arrow: [["path", { d: "M5 12h14M13 6l6 6-6 6" }]],
     x: [["path", { d: "M6 6l12 12M18 6 6 18" }]],
-    alert: [["circle", { cx: 12, cy: 12, r: 9 }], ["path", { d: "M12 7.5v5.5M12 16.5h.01" }]]
+    alert: [["circle", { cx: 12, cy: 12, r: 9 }], ["path", { d: "M12 7.5v5.5M12 16.5h.01" }]],
+    roomy: [["rect", { x: 4, y: 4, width: 16, height: 7, rx: 1.5 }], ["rect", { x: 4, y: 13, width: 16, height: 7, rx: 1.5 }]],
+    dense: [["rect", { x: 4, y: 4, width: 16, height: 4, rx: 1 }], ["rect", { x: 4, y: 10, width: 16, height: 4, rx: 1 }], ["rect", { x: 4, y: 16, width: 16, height: 4, rx: 1 }]]
   };
   function ic(name) {
     var NS = "http://www.w3.org/2000/svg", s = document.createElementNS(NS, "svg");
@@ -1359,6 +1366,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
     if (c.status === "open") tog.className = "ghost bad";
     var pl = (c.platforms || []).filter(function (p) { return PL[p]; }).map(function (p) { return PL[p]; });
     var info = [["iBudget", budgetVal(c)], ["iDeadline", day(c.deadline)], ["iPlatforms", pl.length ? pl.join(", ") : t("allPlatforms")], ["iCreated", when(c.created_at)]];
+    var bw = apps.length ? board(apps) : null;
     return [
       back("#campaigns", "backCamps"),
       el("div", { class: "head dhd" }, [
@@ -1372,9 +1380,8 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
         chips(c.niches)
       ]),
       apps.length ? campReport(apps) : null,
-      el("h2", { text: t("appsTitle", apps.length) }),
-      apps.length ? board(apps)
-        : empty(t("appsEmpty"), c.status === "open" ? toDiscover(c, "goDiscover") : null)
+      el("div", { class: "bhd" }, [el("h2", { text: t("appsTitle", apps.length) }), bw ? densBar(bw) : null]),
+      bw || empty(t("appsEmpty"), c.status === "open" ? toDiscover(c, "goDiscover") : null)
     ];
   }
   function toDiscover(c, k) {
@@ -1419,10 +1426,27 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
 
   // Başvuru panosu (sahip): durumlara göre sütunlar; reddedilen ve geri çevrilenler katlanmış "Kapananlar"da
   var LANES = [["colNew", ["pending"]], ["colInvited", ["invited"]], ["colWork", ["accepted", "revision"]], ["colReview", ["submitted"]], ["colDone", ["approved"]]];
+  // Kart yoğunluğu: "Sıkı" kartta ad, uyum, şehir, durum, mesajın ilk satırları ve işlemler kalır; seçim bu cihazda saklanır
+  var BD = null;
+  function bDense() {
+    if (BD === null) { try { BD = localStorage.getItem("bc-board-dense") === "1"; } catch (e) { BD = false; } }
+    return BD;
+  }
+  function densBar(box) {
+    var bar = el("div", { class: "dens", role: "group", "aria-label": t("dnView") });
+    add(bar, [[false, "roomy", "dnRoomy"], [true, "dense", "dnDense"]].map(function (x) {
+      return el("button", { type: "button", "data-dens": x[1], "aria-pressed": String(bDense() === x[0]), onclick: function () {
+        BD = x[0]; box.classList.toggle("dense", BD);
+        try { localStorage.setItem("bc-board-dense", BD ? "1" : "0"); } catch (e) { /* özel pencere */ }
+        bar.querySelectorAll("button").forEach(function (b) { b.setAttribute("aria-pressed", String(b.getAttribute("data-dens") === x[1])); });
+      } }, [ic(x[1]), el("span", { text: t(x[2]) })]);
+    }));
+    return bar;
+  }
   function board(apps) {
     var of = function (ss) { return apps.filter(function (a) { return ss.indexOf(a.status) >= 0; }); };
     var closed = of(["rejected", "declined"]);
-    return [
+    return el("div", { class: bDense() ? "bwrap dense" : "bwrap" }, [
       el("div", { class: "board" }, LANES.map(function (l) {
         var xs = of(l[1]), hid = "l" + (++uid);
         return el("section", { class: "lane", "aria-labelledby": hid, "data-spot": l[0] }, [
@@ -1432,7 +1456,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
         ]);
       })),
       closed.length ? el("details", { class: "closed" }, [el("summary", { text: t("colClosed", closed.length) }), el("div", { class: "list" }, closed.map(function (a) { return appCard(a, true); }))]) : null
-    ];
+    ]);
   }
   function revNote(a) {
     return a.revision_note && (a.status === "revision" || a.status === "submitted") ? el("div", { class: "quote rev" }, [el("span", { class: "ql", text: t("revNote") }), el("p", { class: "prose", text: a.revision_note })]) : null;
@@ -1441,7 +1465,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
   function appCard(a, own, noBadge) {
     var x = own ? a.influencer || {} : null, cp = a.campaign || {};
     var top = own
-      ? el("div", { class: "head" }, [el("div", null, [el("h3", { text: x.name }), el("p", { class: "meta" }, [x.match != null ? el("span", { class: "match", text: t("match", x.match) }) : null, x.city ? el("span", { text: x.city }) : null, el("span", { text: t("updated", when(a.updated_at)) })])]), noBadge ? null : badge(a.status)])
+      ? el("div", { class: "head" }, [el("div", null, [el("h3", { text: x.name }), el("p", { class: "meta" }, [x.match != null ? el("span", { class: "match", text: t("match", x.match) }) : null, x.city ? el("span", { text: x.city }) : null, el("span", { class: "up", text: t("updated", when(a.updated_at)) })])]), noBadge ? null : badge(a.status)])
       : el("div", { class: "head" }, [el("div", null, [el("h3", null, el("a", { href: "#campaign-" + cp.id, text: cp.title })), el("p", { class: "meta" }, [el("span", { text: cp.owner }), el("span", { text: t("updated", when(a.updated_at)) })])]), badge(a.status)]);
     return el("article", { class: "box item", "data-app": a.id }, [
       top,
