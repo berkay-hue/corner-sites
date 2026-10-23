@@ -255,6 +255,9 @@ dialog.cmdk[open]{display:flex;flex-direction:column}dialog.cmdk::backdrop{backg
 .pth{position:relative;aspect-ratio:1/1;background:var(--surface-2);display:flex;align-items:center;justify-content:center;color:var(--faint);overflow:hidden}.pth img{width:100%;height:100%;object-fit:cover;display:block}.pth .i{width:34px;height:34px}
 .pth .pt{position:absolute;left:8px;top:8px;background:color-mix(in srgb,var(--surface) 90%,transparent);color:var(--text);font-size:11.5px;font-weight:600;border-radius:999px;padding:3px 8px}
 .pth .badge{position:absolute;right:8px;top:8px;margin:0}
+/* Görselsiz gönderi: platform renginde hafif zemin, videoda oynat simgesi */
+.pth[data-p=instagram]{background:linear-gradient(135deg,color-mix(in srgb,#f58529 16%,var(--surface-2)),color-mix(in srgb,#dd2a7b 18%,var(--surface-2)))}.pth[data-p=tiktok]{background:linear-gradient(135deg,color-mix(in srgb,#25f4ee 18%,var(--surface-2)),color-mix(in srgb,#fe2c55 16%,var(--surface-2)))}.pth[data-p=youtube]{background:linear-gradient(135deg,var(--surface-2),color-mix(in srgb,#ff0033 18%,var(--surface-2)))}.pth[data-p=linkedin]{background:linear-gradient(135deg,var(--surface-2),color-mix(in srgb,#0a66c2 20%,var(--surface-2)))}
+.psum{margin:0 0 16px}.psum .stat .sub{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}.spk{display:flex;align-items:flex-end;gap:3px;height:26px;margin-top:10px}.spk i{flex:1 1 0;max-width:14px;border-radius:2px 2px 0 0;background:color-mix(in srgb,var(--accent) 55%,transparent)}.spk i:last-child{background:var(--accent)}
 .pbody{padding:10px 12px 12px;display:flex;flex-direction:column;gap:6px;min-width:0}.pcap{margin:0;font-size:13.5px;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}
 .pmeta{display:flex;flex-wrap:wrap;gap:2px 10px;color:var(--muted);font-size:12.5px}.pmeta b{color:var(--text);font-weight:600}
 .cgrid{grid-template-columns:repeat(3,minmax(0,1fr))}.pact{display:flex;flex-wrap:wrap;gap:6px;margin-top:2px}.pact .btn,.pact .ghost{min-height:44px;display:inline-flex;align-items:center;text-decoration:none}.pact .badge{margin:0}.ctarget{max-width:360px;margin:0 0 12px}.ctarget select{min-height:44px}.cacc{list-style:none;margin:0;padding:0}.cacc li{padding:10px 0;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:4px}.cacc li:first-child{border-top:0;padding-top:0}.cacc .badge{margin:0}@media(max-width:640px){.cgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
@@ -384,7 +387,8 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       pSnap: "Ölçüm ekle", pSnapAt: "Ölçüm tarihi", pSnapOk: "Ölçüm eklendi.", pDel: "Gönderiyi sil", pDelQ: "Bu gönderi bu cihazdan silinsin mi?", pDeleted: "Gönderi silindi.",
       pSampleRO: "Örnek gönderiler düzenlenemez; kendi gönderini ekleyince örnekler kalkar.",
       pConn: "Otomatik bağlantılar", pConnOff: "Otomatik ölçüm çekme henüz açık değil. O zamana kadar gönderilerini elle ya da CSV ile ekleyebilirsin.",
-      pConnSoon: "Hesap bağlı; gönderilerin otomatik çekilmesi yakında.", pConnNot: "Bağlı değil", pConnOk: "Bağlı", pConnApi: "Kaynak: {n}",
+      pConnSoon: "Hesap bağlı; gönderilerin otomatik çekilmesi yakında.", pConnOk: "Bağlı", pConnHow: "Bağladığında gönderilerin buraya kendiliğinden gelir.", pConnGo: "Bağla",
+      psPosts: "Gönderi", psReach: "Toplam erişim", psPer: "Gönderi başına {n}", psEr: "Ortalama etkileşim oranı", psEng: "{n} beğeni ve yorum", psTop: "En çok erişen", psFirst: "İlk gönderini ekle",
       pLiNote: "LinkedIn kişisel gönderi ölçümlerini dışarıya vermiyor; LinkedIn gönderilerini elle ya da CSV ile ekle.",
       pNoCap: "Açıklama yok",
       sCampaigns: "Kampanya", sOpen: "Açık kampanya", sPending: "Bekleyen başvuru", sApproved: "Onaylanan içerik",
@@ -552,7 +556,8 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       pSnap: "Add measurement", pSnapAt: "Measured on", pSnapOk: "Measurement added.", pDel: "Delete post", pDelQ: "Delete this post from this device?", pDeleted: "Post deleted.",
       pSampleRO: "Sample posts can't be edited; they disappear once you add your own post.",
       pConn: "Automatic connections", pConnOff: "Automatic metric sync isn't live yet. Until then you can add your posts by hand or with a CSV.",
-      pConnSoon: "Account connected; automatic post sync is coming soon.", pConnNot: "Not connected", pConnOk: "Connected", pConnApi: "Source: {n}",
+      pConnSoon: "Account connected; automatic post sync is coming soon.", pConnOk: "Connected", pConnHow: "Once connected, your posts arrive here on their own.", pConnGo: "Connect",
+      psPosts: "Posts", psReach: "Total reach", psPer: "{n} per post", psEr: "Average engagement rate", psEng: "{n} likes and comments", psTop: "Top by reach", psFirst: "Add your first post",
       pLiNote: "LinkedIn doesn't share personal post metrics with other apps; add LinkedIn posts by hand or with a CSV.",
       pNoCap: "No caption",
       sCampaigns: "Campaigns", sOpen: "Open campaigns", sPending: "Pending applications", sApproved: "Approved content",
@@ -883,6 +888,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
     sun: [["circle", { cx: 12, cy: 12, r: 4 }], ["path", { d: "M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" }]],
     arrow: [["path", { d: "M5 12h14M13 6l6 6-6 6" }]],
     filter: [["path", { d: "M4 6h16M7 12h10M10 18h4" }]],
+    play: [["path", { d: "M8 5.5v13l10.5-6.5z" }]],
     x: [["path", { d: "M6 6l12 12M18 6 6 18" }]],
     alert: [["circle", { cx: 12, cy: 12, r: 9 }], ["path", { d: "M12 7.5v5.5M12 16.5h.01" }]],
     roomy: [["rect", { x: 4, y: 4, width: 16, height: 7, rx: 1.5 }], ["rect", { x: 4, y: 13, width: 16, height: 7, rx: 1.5 }]],
@@ -2604,7 +2610,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
     return list.filter(function (p) { return (!cut || p.date >= cut) && (!PF.type || p.type === PF.type) && (!PF.platform || p.platform === PF.platform); });
   }
   function pThumb(p, sample) {
-    var box = el("div", { class: "pth" }), tile = function () { box.textContent = ""; add(box, [ic("image"), tag()]); };
+    var box = el("div", { class: "pth", "data-p": p.platform }), tile = function () { box.textContent = ""; add(box, [ic(p.type === "video" || p.type === "reel" ? "play" : "image"), tag()]); };
     function tag() { return [el("span", { class: "pt", text: PL[p.platform] || "—" }), sample ? el("span", { class: "badge b-sample", text: t("socSample") }) : null]; }
     if (okThumb(p.thumb)) add(box, [el("img", { src: p.thumb, alt: "", loading: "lazy", decoding: "async", referrerpolicy: "no-referrer", onerror: tile }), tag()]);
     else tile();
@@ -2760,7 +2766,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
     });
     return f;
   }
-  // Otomatik bağlantılar: bayrak kapalıysa elle yol, açık ve bağlıysa "yakında"; LinkedIn notu her zaman
+  // Otomatik bağlantılar: bayrak kapalıysa elle yol, açık ve bağlıysa "yakında", bağlı değilse profildeki sosyal hesaplara "Bağla"; LinkedIn notu her zaman
   function pConnCard(c) {
     var code = c.err && c.err.code, off = code === "disabled" || code === "forbidden" || (!c.err && c.disabled), kids;
     if (c.err && !off) kids = failLine(c.err, function () { render(true); });
@@ -2768,15 +2774,34 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
     else kids = Object.keys(CONNECTORS).map(function (p) {
       var cn = (c.connections || []).filter(function (x) { return x.platform === p; })[0], on = !!cn && cn.status === "connected";
       return el("div", { class: "srow" }, [el("span", { class: "ic " + (on ? "ok" : "slate"), "aria-hidden": "true" }, ic("link")),
-        el("div", { class: "tx" }, [el("b", { text: PL[p] }), el("span", { text: on ? t("pConnSoon") : t("pConnApi", CONNECTORS[p].api) })]),
-        el("div", { class: "sa" }, el("span", { class: "badge " + (on ? "b-ok" : "b-slate"), text: on ? t("pConnOk") : t("pConnNot") }))]);
+        el("div", { class: "tx" }, [el("b", { text: PL[p] }), el("span", { text: t(on ? "pConnSoon" : "pConnHow") })]),
+        el("div", { class: "sa" }, on ? el("span", { class: "badge b-ok", text: t("pConnOk") })
+          : el("a", { class: "btn sm sec", href: "#profile", "aria-label": t("pConnGo") + ": " + PL[p], text: t("pConnGo"), onclick: function () { SOC_GO = true; } }))]);
     });
     return el("section", { class: "card" }, [el("div", { class: "ch" }, el("h2", { text: t("pConn") })), el("div", { class: "cb" }, [kids, el("p", { class: "pnote", text: t("pLiNote") })])]);
+  }
+  // Özet şeridi: süzülen gönderilerin son ölçümleri; erişim kutusunda son 12 gönderinin erişim çubukları (eskiden yeniye)
+  function pSum(xs) {
+    var has = function (m) { return xs.filter(function (p) { return lastSnap(p)[m] != null; }); };
+    var sum = function (m) { var ys = has(m); return ys.length ? ys.reduce(function (n, p) { return n + lastSnap(p)[m]; }, 0) : null; };
+    var rs = has("reach"), reach = sum("reach"), likes = sum("likes"), comm = sum("comments"), eng = likes == null && comm == null ? null : (likes || 0) + (comm || 0);
+    var ers = xs.map(function (p) { return erOf(lastSnap(p)); }).filter(function (x) { return x != null; }), er = ers.length ? ers.reduce(function (a, b) { return a + b; }, 0) / ers.length : null;
+    var by = {}, top = rs.slice().sort(function (a, b) { return lastSnap(b).reach - lastSnap(a).reach; })[0];
+    xs.forEach(function (p) { by[p.platform] = (by[p.platform] || 0) + 1; });
+    var bars = rs.slice(0, 12).reverse(), mx = Math.max.apply(null, bars.map(function (p) { return lastSnap(p).reach; })) || 1;
+    var stat = function (k, v, sub, x) { return el("div", { class: "stat" }, [el("div", { class: "k", text: t(k) }), el("div", { class: v == null ? "v na" : "v", text: v == null ? t("noData") : v }), sub ? el("div", { class: "sub", text: sub }) : null, x]); };
+    return el("div", { class: "stats psum" }, [
+      stat("psPosts", num(xs.length), Object.keys(by).sort(function (a, b) { return by[b] - by[a]; }).map(function (p) { return (PL[p] || p) + " " + num(by[p]); }).join(" · ")),
+      stat("psReach", reach == null ? null : short(reach), reach == null ? "" : t("psPer", short(Math.round(reach / rs.length))),
+        bars.length > 1 ? el("div", { class: "spk", "aria-hidden": "true" }, bars.map(function (p) { return el("i", { style: "height:" + Math.max(8, Math.round(lastSnap(p).reach / mx * 100)) + "%" }); })) : null),
+      stat("psEr", er == null ? null : pct(er), eng == null ? "" : t("psEng", short(eng))),
+      top ? el("a", { class: "stat go", href: "#post-" + top.id }, [el("div", { class: "k" }, [el("span", { text: t("psTop") }), ic("arrow")]),
+        el("div", { class: "v", text: short(lastSnap(top).reach) }), el("div", { class: "sub", dir: "auto", text: top.caption || pLabel(top) })]) : stat("psTop", null)]);
   }
   function posts() {
     PF.view = PF.view || pPrefView();
     return Promise.all([BC.call("GET", "app/connections").then(function (c) { return c; }, function (e) { return { err: e }; }), pSync()]).then(function (all) {
-      var c = all[0], d = pData(), flash = okNote(), cnt = el("p", { class: "info", role: "status" }), res = el("div"), sels = [];
+      var c = all[0], d = pData(), flash = okNote(), cnt = el("p", { class: "info", role: "status" }), res = el("div"), sum = el("div"), sels = [];
       say(flash, PF.flash); PF.flash = "";
       var vt = el("div", { class: "tabs", role: "group", "aria-label": t("pvView") }, [["grid", "pvGrid"], ["list", "pvList"]].map(function (x) {
         return el("button", { type: "button", "aria-pressed": String(PF.view === x[0]), text: t(x[1]), onclick: function () {
@@ -2800,7 +2825,8 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
         PF.page = Math.min(Math.max(1, PF.page), pages);
         var sl = xs.slice((PF.page - 1) * PPAGE, PF.page * PPAGE);
         cnt.textContent = t("pCount", num(xs.length));
-        res.textContent = "";
+        res.textContent = ""; sum.textContent = "";
+        if (xs.length) add(sum, pSum(xs));
         if (!xs.length) { add(res, empty(t("pNone"), el("button", { type: "button", class: "ghost", text: t("pClear"), onclick: clear }), { ic: "search" })); return; }
         add(res, PF.view === "list" ? el("ul", { class: "plist" }, sl.map(function (p) { return pRow(p, d.sample); })) : el("ul", { class: "pgrid" }, sl.map(function (p) { return pCard(p, d.sample); })));
         if (pages > 1) add(res, el("nav", { class: "pager", "aria-label": t("pPager") }, [
@@ -2809,13 +2835,22 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
           el("button", { type: "button", class: "ghost", "data-pg": "next", disabled: PF.page >= pages, text: t("pNext"), onclick: function () { go(1); } })]));
       }
       draw();
+      var addD = el("details", { class: "pd" }, [el("summary", { text: t("pAdd") }), pAddForm()]), csvD = el("details", { class: "pd" }, [el("summary", { text: t("pCsv") }), pCsvForm()]);
+      // Üstteki düğmeler: bölümü açar, görünür yapar, ilk alana odaklanır
+      function openD(dt) {
+        dt.open = true;
+        var calm = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches, i = dt.querySelector("input");
+        dt.scrollIntoView({ block: "start", behavior: calm ? "auto" : "smooth" });
+        if (i) i.focus({ preventScroll: true });
+      }
       var entry = el("section", { class: "card" }, [el("div", { class: "ch" }, el("h2", { text: t("pDataH") })), el("div", { class: "cb" }, [
-        el("p", { class: "hint", text: t(PS.srv ? "pSrv" : "pLocal") }), pMoveDue() ? pMoveCard() : null,
-        el("details", { class: "pd", open: d.sample ? null : null }, [el("summary", { text: t("pAdd") }), pAddForm()]),
-        el("details", { class: "pd" }, [el("summary", { text: t("pCsv") }), pCsvForm()])])]);
-      return [el("h1", { text: t("nPosts") }), el("p", { class: "lead", text: t("postsLead") }), flash,
-        d.sample ? el("div", { class: "box banner", role: "note" }, el("p", { class: "meta" }, [el("span", { class: "badge b-sample", text: t("socSample") }), " ", t("pSampleNote")])) : null,
-        el("div", { class: "pbar" }, [vt, cnt]), f, res, el("p", { class: "pnote", text: t("pErNote") }), entry, pConnCard(c)];
+        el("p", { class: "hint", text: t(PS.srv ? "pSrv" : "pLocal") }), pMoveDue() ? pMoveCard() : null, addD, csvD])]);
+      return [el("div", { class: "ph" }, [el("div", null, [el("h1", { text: t("nPosts") }), el("p", { text: t("postsLead") })]),
+          el("div", { class: "acts" }, [el("button", { type: "button", class: "btn", onclick: function () { openD(addD); } }, [ic("plus"), el("span", { text: t("pAdd") })]),
+            el("button", { type: "button", class: "ghost", text: t("pCsv"), onclick: function () { openD(csvD); } })])]), flash,
+        d.sample ? el("div", { class: "box banner", role: "note" }, [el("p", { class: "meta" }, [el("span", { class: "badge b-sample", text: t("socSample") }), " ", t("pSampleNote")]),
+          el("button", { type: "button", class: "ghost", text: t("psFirst"), onclick: function () { openD(addD); } })]) : null,
+        sum, el("div", { class: "pbar" }, [vt, cnt]), f, res, el("p", { class: "pnote", text: t("pErNote") }), entry, pConnCard(c)];
     });
   }
   // Zaman çizelgesi: tek ölçüt, SVG (createElementNS)
