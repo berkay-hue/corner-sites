@@ -347,7 +347,11 @@ export const chunks = [
     // Dile göre aria-label; başlık uyarısı aria-label varken susar. Kapalı Sheet SSR'da yok (#418 riski yok)
     // 23 Eki: masaüstü menüde Link içinde Button vardı (<a><button>: iç içe etkileşimli öğe, her öğede iki Tab durağı).
     // Button asChild ile Link'i <a data-slot="button"> olarak çizer; görünüm aynı. SSR gövdesi body()'deki LINKBTN ile aynı biçime çevrilir
-    { chunk: "fbb4735ac8b2897c", was: ["29a4179b1081dab7", "f847b81df96780e6", "50ec8e92a50e74a5", "2c6b236da8230460"], edits: [
+    // 23 Eki: statik sunucu ?_rsc= isteğine RSC değil HTML döner; Next her görünen bağlantıyı boşuna ön yüklüyordu (ana sayfada
+    // 14 istek, ~140 KB) ve tıklamada yine tam sayfa yüklemesine düşüyordu. Link router bağlamını görmez: ön yükleme yok,
+    // tıklama doğrudan <a> gezinmesi. Çizilen <a> aynı (#418 riski yok)
+    { chunk: "fbb4735ac8b2897c", was: ["29a4179b1081dab7", "f847b81df96780e6", "50ec8e92a50e74a5", "2c6b236da8230460", "75a2fdeac448816e"], edits: [
+      ['let I=l.default.useContext(c.AppRouterContext),L=!1!==E', 'let I=null,L=!1!==E'],
       ['{href:"/pricing",label:e("footer.pricing")},{href:"/integrations",label:e("footer.integrations")},{href:"/security",label:e("footer.security")}]', '{href:"/pricing",label:e("footer.pricing")}]'],
       ['{href:"/careers",label:e("footer.careers")},{href:"/press",label:e("footer.press")},', '{href:"/blog",label:e("footer.blog")},'],
       ['{href:"/gdpr",label:e("footer.gdpr")}]', '{href:"/gdpr",label:e("footer.gdpr")},{href:"/kvkk",label:"KVKK"}]'],
