@@ -268,6 +268,8 @@ const UX = [
   // Bülten durum satırı: boşken yer kaplamaz, dolunca giriş+butonun altında tam satır; hata kırmızı (#b91c1c beyazda 6.5:1)
   "footer form.sk-nl{flex-wrap:wrap;row-gap:0}footer .sk-nl-msg{flex-basis:100%;margin:0;font-size:.875rem;line-height:1.25rem;color:var(--muted-foreground)}",
   "footer .sk-nl-msg:not(:empty){margin-top:.5rem}footer .sk-nl-msg[data-err]{color:#b91c1c}",
+  // Pricing Monthly/Yearly yazıları tıklanınca dönemi seçer (chunk onClick); el imleci, çift tıkta metin seçilmez
+  "div:has(>[data-slot=switch])>span:not(.rounded-full){cursor:pointer;user-select:none}",
 ].join("");
 
 // 44px dokunma alanı yalnız dar ekranda ve dokunmatikte; fareli masaüstü düzeni aynı kalır
@@ -280,8 +282,10 @@ const TAP = "@media (max-width:1023px),(pointer:coarse){" + [
   "header [data-slot],main [data-slot=button],footer [data-slot=button],footer [data-slot=input],[data-slot=sheet-content] [data-slot=button]{min-height:44px}",
   // "View All Plans": düğmeyi saran <a> satır içi (20px); kutusu düğmeyle aynı olsun
   "main a:has(>[data-slot=button]){display:inline-flex}",
-  // Yearly anahtarı 32×18: görünüm aynı, tıklama alanı ::after ile 44×44
-  "[data-slot=switch]{position:relative}[data-slot=switch]::after{content:\"\";position:absolute;inset:-13px -6px}",
+  // Yearly anahtarı 32×18 (+1px kenarlık; ::after dolgu kutusundan ölçülür): görünüm aynı, tıklama alanı 46×44.
+  // Yanındaki Monthly/Yearly yazıları (20px) da 44px yüksekliğinde basılır; aradaki 16px boşlukta alanlar çakışmaz
+  "[data-slot=switch]{position:relative}[data-slot=switch]::after{content:\"\";position:absolute;inset:-14px -8px}",
+  "div:has(>[data-slot=switch])>span:not(.rounded-full){position:relative}div:has(>[data-slot=switch])>span:not(.rounded-full)::after{content:\"\";position:absolute;inset:-12px -4px}",
   // Footer bağlantıları (Next + statik): satır boşluğu yerine 44px yükseklik
   "footer a:not(.flex){display:inline-flex;align-items:center;min-height:44px;min-width:44px}footer a.flex{min-height:44px}footer ul>li{margin-block:0}footer nav{row-gap:0}",
   // Statik sayfalar (about, contact, yasal, giriş/kayıt): logo, üst menü, buton, onay kutusu satırı
@@ -501,8 +505,10 @@ export const chunks = [
       on('(0,a.jsxs)(r.Button,{size:"lg",className:"mt-8 h-12 bg-primary-foreground px-8 text-primary hover:bg-primary-foreground/90",children:[e("hero.cta.trial")', REG()),
     ] },
     // #170 SSS'yi kaynakta ve yamalı çıktıda yerinde değiştirdi; çıktı adı 49468e11 kaldı (içerik özeti bf87c986), o ad was'ta
-    { chunk: "6298d546504883f0", was: ["49468e11c5cb80ca", "bf87c986ab1ea156", "38c0e5819384d936"], edits: [  // /pricing
-      ['(0,a.jsx)(N,{checked:l,onCheckedChange:o})', '(0,a.jsx)(N,{checked:l,onCheckedChange:o,"aria-label":"Yearly"})'],
+    { chunk: "6298d546504883f0", was: ["49468e11c5cb80ca", "bf87c986ab1ea156", "38c0e5819384d936", "19ccbd72fabe6063"], edits: [  // /pricing
+      // Anahtarın adı "Yearly"; yanındaki Monthly/Yearly yazılarına basınca da seçilir (yalnız onClick, SSR aynı)
+      ['(0,a.jsx)("span",{className:(0,j.cn)("text-sm",!l&&"font-semibold text-foreground"),children:e("pricingPage.toggle.monthly")}),(0,a.jsx)(N,{checked:l,onCheckedChange:o}),(0,a.jsx)("span",{className:(0,j.cn)("text-sm",l&&"font-semibold text-foreground"),children:e("pricingPage.toggle.yearly")})',
+        '(0,a.jsx)("span",{className:(0,j.cn)("text-sm",!l&&"font-semibold text-foreground"),onClick:()=>o(!1),children:e("pricingPage.toggle.monthly")}),(0,a.jsx)(N,{checked:l,onCheckedChange:o,"aria-label":"Yearly"}),(0,a.jsx)("span",{className:(0,j.cn)("text-sm",l&&"font-semibold text-foreground"),onClick:()=>o(!0),children:e("pricingPage.toggle.yearly")})'],
       [{ from: '(0,a.jsx)(er,{type:"single",collapsible:!0,className:"mt-10",children:[', until: '})]})})}e.s(["PricingFAQ"' }, faqJs()],
       on('(0,a.jsx)(i.Button,{className:(0,j.cn)("mt-8 w-full",t.popular?"gradient-primary text-primary-foreground":""),variant:t.popular?"default":"outline",children:t.cta})', plan("s")),
       on('(0,a.jsxs)(r.Button,{size:"lg",className:"mt-8 gradient-primary text-primary-foreground",children:[(0,a.jsx)(n.MessageSquare,', go("mailto:info@saascorner.co")),
