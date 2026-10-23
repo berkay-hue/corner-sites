@@ -97,7 +97,7 @@ export const rule = {
     body(b, page) {
       const T = this.BODY[page] || {};
       // 6 Next sayfasının footer'ı (chunk'taki FOOTER yamasıyla birebir, yoksa #418) ve kullanılmayan font önyüklemeleri (PRE)
-      if (T.swap) T.swap = [...T.swap.filter(x => !FOOTER.includes(x) && !PRE.includes(x)), ...FOOTER, ...PRE];
+      if (T.swap) T.swap = [...T.swap.filter(x => !FOOTER.includes(x) && !LOGO.includes(x) && !PRE.includes(x)), ...FOOTER, ...LOGO, ...PRE];
       // <a><button> (header menüsü 5 öğe + ana sayfada "View All Plans") yerine tek <a data-slot="button">: chunk'lardaki
       // Button asChild yamasıyla birebir. 0 ise önceki koşuda çevrilmiştir
       if (T.swap) { const n = page === "/" ? 6 : 5, k = (b.match(LINKBTN) || []).length;
@@ -308,6 +308,9 @@ const NL = "s=>{s.preventDefault();let f=s.currentTarget,m=f.querySelector(\"[ro
 // sayfada boşa 2 istek (~17 KB) ve LCP'den bant alıyordu. @font-face kalır, ileride kullanılırsa tembel iner. Head'deki <link>
 // ve akıştaki :HL ipucu birlikte gider, yoksa React hidrasyonda önyüklemeyi geri ekler
 const FONTS = ["a218039a3287bcfd-s.p.4a23d71b", "8e6fa89aa22d24ec-s.p.3aec397d"].map(f => `/_next/static/media/${f}.woff2`);
+// Header logosu ilk ekranda ama loading="lazy" idi; ana sayfa bağlantısının tek adı da "Brand Corner Logo"ydu.
+// Statik sayfalardaki gibi "Brand Corner" ve hemen yüklenir (chunk'taki logo yamasıyla birebir)
+const LOGO = [['<img alt="Brand Corner Logo" loading="lazy" width="64"', '<img alt="Brand Corner" loading="eager" width="64"', 1]];
 const PRE = FONTS.map(u => [`<link rel="preload" href="${u}" as="font" crossorigin="" type="font/woff2"/>`, "", 1]);
 const HL = FONTS.map(u => `:HL[\\"${u}\\",\\"font\\",{\\"crossOrigin\\":\\"\\",\\"type\\":\\"font/woff2\\"}]\\n`);
 // SSS düz liste: SSR (EN) ve chunk aynı yapıyı çizer. React metin kaçışı: & < > " '
@@ -377,13 +380,15 @@ export const chunks = [
     // 23 Eki: statik sunucu ?_rsc= isteğine RSC değil HTML döner; Next her görünen bağlantıyı boşuna ön yüklüyordu (ana sayfada
     // 14 istek, ~140 KB) ve tıklamada yine tam sayfa yüklemesine düşüyordu. Link router bağlamını görmez: ön yükleme yok,
     // tıklama doğrudan <a> gezinmesi. Çizilen <a> aynı (#418 riski yok)
+    // 23 Eki: header logosu "Brand Corner" adıyla hemen yüklenir (LOGO, yukarıda)
     // 23 Eki: footer bülten formu sayfayı yeniliyordu; onSubmit form alıcısına gönderir (NL, yukarıda), sonucu durum satırında gösterir
-    { chunk: "fbb4735ac8b2897c", was: ["29a4179b1081dab7", "f847b81df96780e6", "50ec8e92a50e74a5", "2c6b236da8230460", "75a2fdeac448816e", "173212324b0a63cf", "5ea4debd3abcbb8f"], edits: [
+    { chunk: "fbb4735ac8b2897c", was: ["29a4179b1081dab7", "f847b81df96780e6", "50ec8e92a50e74a5", "2c6b236da8230460", "75a2fdeac448816e", "173212324b0a63cf", "5ea4debd3abcbb8f", "00b8225ea81abed0"], edits: [
       ['let I=l.default.useContext(c.AppRouterContext),L=!1!==E', 'let I=null,L=!1!==E'],
       ['{href:"/pricing",label:e("footer.pricing")},{href:"/integrations",label:e("footer.integrations")},{href:"/security",label:e("footer.security")}]', '{href:"/pricing",label:e("footer.pricing")}]'],
       ['{href:"/careers",label:e("footer.careers")},{href:"/press",label:e("footer.press")},', '{href:"/blog",label:e("footer.blog")},'],
       ['{href:"/gdpr",label:e("footer.gdpr")}]', '{href:"/gdpr",label:e("footer.gdpr")},{href:"/kvkk",label:"KVKK"}]'],
       ['type:"email",placeholder:"email@example.com",className:"flex-1"', 'type:"email",placeholder:"email@example.com","aria-label":"Email address",name:"email",autoComplete:"email",required:!0,className:"flex-1"'],
+      ['alt:"Brand Corner Logo",width:64,height:64,className:"rounded-lg"', 'alt:"Brand Corner",width:64,height:64,loading:"eager",className:"rounded-lg"'],
       ['let{t:e}=(0,n.useLanguage)(),i={solutions:', 'let{t:e,language:nlLang}=(0,n.useLanguage)(),i={solutions:'],
       ['(0,t.jsxs)("form",{className:"flex w-full max-w-md gap-2",children:[', `(0,t.jsxs)("form",{className:"flex w-full max-w-md gap-2 sk-nl","data-sk-noform":"",onSubmit:${NL},children:[`],
       ['children:e("footer.subscribe")})]})', 'children:e("footer.subscribe")}),(0,t.jsx)("p",{role:"status","aria-live":"polite",className:"sk-nl-msg"})]})'],
