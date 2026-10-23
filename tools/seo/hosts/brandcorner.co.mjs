@@ -54,6 +54,15 @@ export const rule = {
       const copy = ["<p>© 2025 Brand Corner. All rights reserved.</p>", "<p>© Brand Corner. All rights reserved.</p>", 1];
       const grid = '<div class="mt-10 grid grid-cols-3 gap-6">';
       const social = '<div class="mt-6 flex gap-4">';  // footer'daki 4 sosyal ikon href="#" (hesap yok)
+      // Hero: "No credit card required · 14-day free trial" yalnız sayfa sonundaki CTA'daydı; butonların altına da girer
+      // (aynı sözlük anahtarları ve ikonlar). Ana sayfa chunk'ındaki hero yamasıyla birebir
+      const svg = (n, d) => `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-${n} h-4 w-4 text-primary">${d}</svg>`;
+      const trust = '<div class="mt-10 flex flex-wrap items-center justify-center gap-6 text-sm text-muted-foreground lg:justify-start">';
+      const trial = ["Watch Demo</button></div>" + trust, "Watch Demo</button></div>"
+        + '<div class="mt-4 flex flex-wrap items-center justify-center gap-4 text-sm font-medium text-foreground lg:justify-start">' + [
+          ["shield", '<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path>', "No credit card required"],
+          ["clock", '<circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline>', "14-day free trial"],
+        ].map(([n, d, t]) => `<div class="flex items-center gap-2">${svg(n, d)}<span>${t}</span></div>`).join("") + "</div>" + trust, 1];
       return {
         "/": { cut: ['<div class="mt-16 border-t border-border pt-8 lg:mt-24">', social], section: [">Trusted by Industry Leaders</h2>", ">Success Stories</h2>"], swap: [
           ['<link rel="preload" as="image" href="/fashion-brand-marketing-campaign-success.jpg"/>', "", 1],
@@ -68,7 +77,7 @@ export const rule = {
           ['<span class="text-xs text-muted-foreground">12K followers</span>', '<span class="text-xs text-muted-foreground">Followers</span>', 4],
           ['leading-5 text-primary">4.8%</div>', 'leading-5 text-primary">—</div>', 4],
           [">24/7 Support</h3>", ">Support</h3>", 1],
-          ["Join thousands of brands, influencers, and agencies growing with Brand Corner.", "Brands, influencers, and agencies can grow with Brand Corner.", 1], copy] },
+          ["Join thousands of brands, influencers, and agencies growing with Brand Corner.", "Brands, influencers, and agencies can grow with Brand Corner.", 1], trial, copy] },
         "/features": { cut: [social], swap: [["analyzes thousands of profiles", "analyzes profiles", 1], copy] },
         // SSS akordeonu kapalıyken cevaplar HTML'de yok: düz liste olur (chunk'ta aynı değişiklik), SSR dili EN
         "/pricing": { cut: [social], swap: [copy, ['role="switch" aria-checked=', 'role="switch" aria-label="Yearly" aria-checked=', 1], ['We accept all major credit cards (Visa, Mastercard, American Express), PayPal, and bank transfers for enterprise plans.', 'Online payments are not accepted at the moment.', 1]], put: [['<div data-slot="accordion" class="mt-10"', faqHtml]] },
@@ -410,7 +419,13 @@ export const chunks = [
     // effect hydration'dan sonra çalışır, SSR HTML aynı (#418 riski yok)
     { chunk: "411b1b9d3b6df8ca", was: ["7cc019c396358bc9", "869eb8a0955429b6", "45989ccf38b6b48c"], edits: [...DICT, LANG] },
     // 404 statik sayfa oldu (23 Eki): yalnız 404'ün yüklediği sözlük kopyası (763536697d8b15ea) artık yamalanmıyor
-    { chunk: "e4b281dafb09dd8b", was: ["ed42209b874cf44c", "5e56863b5691ae63"], edits: [  // ana sayfa
+    // 23 Eki: hero butonlarının altına deneme satırı (BODY'deki trial ile birebir). Shield modülü ve Clock alt CTA'dakiyle aynı
+    { chunk: "e4b281dafb09dd8b", was: ["ed42209b874cf44c", "5e56863b5691ae63", "67c20b341ca8d0dd"], edits: [  // ana sayfa
+      ['var l=e.i(10552),i=e.i(84135),n=e.i(2870),d=e.i(95751);function c(){', 'var l=e.i(10552),i=e.i(84135),n=e.i(2870),d=e.i(95751);let skSh=e.i(42838).Shield,'
+        + 'skCl=(0,e.i(10965).default)("Clock",[["circle",{cx:"12",cy:"12",r:"10",key:"1mglay"}],["polyline",{points:"12 6 12 12 16 14",key:"68esgv"}]]);function c(){'],
+      ['e("hero.cta.demo")]})]}),', 'e("hero.cta.demo")]})]}),(0,s.jsxs)("div",{className:"mt-4 flex flex-wrap items-center justify-center gap-4 text-sm font-medium text-foreground lg:justify-start",children:['
+        + '(0,s.jsxs)("div",{className:"flex items-center gap-2",children:[(0,s.jsx)(skSh,{className:"h-4 w-4 text-primary"}),(0,s.jsx)("span",{children:e("cta.noCreditCard")})]}),'
+        + '(0,s.jsxs)("div",{className:"flex items-center gap-2",children:[(0,s.jsx)(skCl,{className:"h-4 w-4 text-primary"}),(0,s.jsx)("span",{children:e("cta.freeTrial")})]})]}),'],
       on('(0,s.jsxs)(a.Button,{size:"lg",className:"gradient-primary h-12 px-8 text-lg text-primary-foreground",children:[e("hero.cta.trial")', REG()),
       on('(0,s.jsxs)(a.Button,{size:"lg",variant:"outline",className:"h-12 gap-2 px-8 text-lg bg-transparent",children:[', go("/features")),
       on('(0,s.jsxs)(r.Button,{variant:"link",className:"mt-4 h-auto p-0 text-primary",children:[e("solution.learnMore")', go("/features")),
