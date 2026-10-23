@@ -227,6 +227,14 @@ dialog.cmdk[open]{display:flex;flex-direction:column}dialog.cmdk::backdrop{backg
 @media(max-width:1100px){.ov{grid-template-columns:minmax(0,1fr)}}
 .split{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:20px;align-items:start}.stack{display:flex;flex-direction:column;gap:16px}.sticky{position:sticky;top:16px}.av.sq{border-radius:10px}
 .daily .cb{padding-top:18px}.daily h2{font-size:15px;margin:0}.daily .count{font-size:14px;color:var(--text)}.daily .hint{margin:4px 0 0}.daily .meta{margin:8px 0 0}
+.dfl>div:first-child{flex:1.2 1 220px}.fmore{display:contents}.fmore>div{flex:1 1 150px;min-width:0}.ftog{display:none;align-items:center;gap:6px}.ftog .i{width:18px;height:18px}.ftog .n{min-width:20px;height:20px;padding:0 6px;border-radius:10px;background:var(--accent);color:#fff;font-size:12px;line-height:20px;text-align:center}.ftog .n:empty{display:none}
+@media(max-width:760px){.dfl{flex-wrap:wrap}.dfl>div:first-child{flex:1 1 0;min-width:0}.dfl .ftog{display:inline-flex;flex:none}.dfl .fmore{display:none;flex:1 1 100%}.dfl.opn .fmore{display:grid;grid-template-columns:minmax(0,1fr);gap:12px}.rbar>.sortw,.rbar>.ghost:not([hidden])+.sortw{flex:1 1 100%;margin-left:0}.sortw select{flex:1;min-width:0}}
+.rbar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;margin:0 0 14px}.rbar .info{margin:0}.rbar [hidden]{display:none}.rbar>.ghost,.rbar>.sortw{margin-left:auto}.rbar>.ghost:not([hidden])+.sortw{margin-left:0}.sortw{display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--muted)}.sortw select{font:inherit;font-size:14px;color:var(--text);min-height:44px;padding:6px 8px;border:1px solid var(--line-strong);border-radius:var(--r-ctl);background-color:var(--surface)}.sortw select:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.dgrid{grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:14px}.dc{display:flex;flex-direction:column;min-width:0;padding:18px;transition:border-color .15s,box-shadow .15s}.dc:hover{border-color:var(--line-strong);box-shadow:0 10px 28px -18px rgba(15,23,42,.45)}
+.dch{display:flex;align-items:center;gap:12px}.dch .tx{flex:1;min-width:0}.dch .meta{margin:2px 0 0}.dc .av{width:44px;height:44px;font-size:15px;background:var(--grad);background:linear-gradient(135deg,oklch(56% .15 var(--h)),oklch(44% .15 calc(var(--h) + 40)))}
+.mr{--p:0;flex:none;width:48px;height:48px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--accent) calc(var(--p) * 1%),var(--line) 0)}.mr b{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:var(--surface);font-size:12.5px;font-weight:700;color:var(--accent-text);font-variant-numeric:tabular-nums}.mr.lo{background:conic-gradient(var(--slate) calc(var(--p) * 1%),var(--line) 0)}.mr.lo b{color:var(--slate)}
+.dbio{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}.pst{list-style:none;padding:0;margin:14px 0 0;display:grid;gap:6px}.pst li{display:flex;align-items:center;gap:8px;min-width:0;font-size:13.5px;padding:7px 10px;border-radius:8px;background:var(--surface-2)}.pst .pn{font-weight:600;flex:none}.pst .hd{flex:1;min-width:0;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.pst b{margin-left:auto;flex:none;font-variant-numeric:tabular-nums}
+.dc .row-b{margin:auto 0 0;padding-top:16px}.dc .row-b>.ghost,.dc .row-b>.btn{flex:1 1 40%;justify-content:center;text-align:center}
 .frow{display:flex;justify-content:space-between;gap:8px;align-items:baseline}.count{font-size:12px;color:var(--faint);font-variant-numeric:tabular-nums;white-space:nowrap}
 .tags{display:flex;flex-wrap:wrap;gap:6px;align-items:center;border:1px solid var(--line-strong);border-radius:var(--r-ctl);padding:4px 8px;background:var(--surface);min-height:44px;margin:0 0 16px}.tags:focus-within{outline:2px solid var(--accent);outline-offset:1px}.f .tags input:not([type=checkbox]){display:block;width:auto;border:0;outline:0;flex:1;min-width:110px;background:transparent;padding:4px;margin:0;min-height:44px;box-shadow:none}.f .tags input:disabled{background:transparent}.f .tags input:focus-visible{outline:0}.f .frow label{margin-bottom:6px}
 .tag{display:inline-flex;align-items:center;gap:0;min-width:0;max-width:100%;overflow-wrap:anywhere;background:var(--accent-soft);color:var(--accent-text);border-radius:6px;padding:0 0 0 8px;font-size:13px;font-weight:500}.tag button{flex:none;border:0;background:none;color:inherit;cursor:pointer;padding:0;min-width:44px;min-height:44px;font-size:16px;line-height:1;border-radius:4px}.tag button:focus-visible{outline:2px solid var(--accent);outline-offset:-6px}
@@ -476,7 +484,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       esOppT: "Şu an açık kampanya yok", esAppsT: "Henüz başvuru yok", appsClosedE: "Bu kampanya başvuru almadan kapandı.", esMyT: "İlk başvurunuzu yapın", esI1: "Fırsat bulun", esI2: "Başvurun", esI3: "İçeriği gönderin",
       esDiscT: "Henüz listelenen influencer yok", esNfT: "Henüz bildirim yok",
       discLead: "Profil kartlarını inceleyip doğrudan davet edin.", discQ: "Ara", discQPh: "İsim veya şehir", allNiches: "Tüm ilgi alanları",
-      fMinFol: "Takipçi", anyMin: "Her takipçi sayısı", fCity: "Şehir", allCities: "Tüm şehirler", fSort: "Sıralama", sortRec: "Önerilen", sortFol: "Takipçi (çoktan aza)", sortName: "Ada göre (A–Z)", fReset: "Filtreleri temizle", discCount: "{n} influencer", discCount1: "1 influencer", discCap: "En yeni 100 profil yüklendi; filtreler yalnızca bu profiller içinde çalışır.", discCap50: "En uygun 50 profil gösteriliyor.", discMatch: "İlgi alanlarınıza göre en uygun profiller.", discMatchC: "Seçili kampanyaya en uygun profiller.", discNoNiche: "Profilinize ilgi alanı eklerseniz size en uygun profilleri öne çıkarırız.", discNoNicheC: "Bu kampanyada ilgi alanı yok; tüm profiller gösteriliyor.", discNoMatch: "Ortak ilgi alanı olan profil yok; tüm profiller gösteriliyor.", discMatchErr: "Eşleşmeler yüklenemedi; tüm profiller gösteriliyor.", viewProf: "Profili gör", inviteFor: "{n} için davet ediyorsunuz.",
+      fMinFol: "Takipçi", anyMin: "Her takipçi sayısı", fCity: "Şehir", allCities: "Tüm şehirler", fSort: "Sıralama", fMore: "Filtreler", sortRec: "Önerilen", sortFol: "Takipçi (çoktan aza)", sortName: "Ada göre (A–Z)", fReset: "Filtreleri temizle", discCount: "{n} influencer", discCount1: "1 influencer", discCap: "En yeni 100 profil yüklendi; filtreler yalnızca bu profiller içinde çalışır.", discCap50: "En uygun 50 profil gösteriliyor.", discMatch: "İlgi alanlarınıza göre en uygun profiller.", discMatchC: "Seçili kampanyaya en uygun profiller.", discNoNiche: "Profilinize ilgi alanı eklerseniz size en uygun profilleri öne çıkarırız.", discNoNicheC: "Bu kampanyada ilgi alanı yok; tüm profiller gösteriliyor.", discNoMatch: "Ortak ilgi alanı olan profil yok; tüm profiller gösteriliyor.", discMatchErr: "Eşleşmeler yüklenemedi; tüm profiller gösteriliyor.", viewProf: "Profili gör", inviteFor: "{n} için davet ediyorsunuz.",
       clearFor: "Temizle", drClose: "Kapat", drNoPlat: "Platform eklenmemiş.", crFull: "Tam profil ve son gönderiler", crBack: "← Keşfet", crNone: "Bu influencer bulunamadı ya da artık listelenmiyor.", crAccounts: "Hesap ölçümleri", crPosts: "Son gönderiler", crSampleBadge: "Örnek veri", crSampleNote: "Gönderi bağlantısı henüz açık değil; aşağıdakiler örnek gönderilerdir. Kampanyaya eklemeler yalnız bu tarayıcıda tutulur.", crTarget: "Kampanya", crAdd: "Kampanyaya ekle", crRemove: "Kampanyadan çıkar", crAdded: "Gönderi kampanyaya eklendi.", crRemoved: "Gönderi kampanyadan çıkarıldı.", crVerified: "doğrulandı", crOpenPost: "Gönderiyi aç", crNoPosts: "Henüz gönderi yok.", drHist: "Sizinle geçmiş", drHistNone: "Henüz birlikte çalışmadınız.",
       drInvite: "Kampanyaya davet et", drNoOpen: "Davet edilebilecek açık kampanya yok: ya hepsinde zaten var ya da açık kampanyanız yok.",
       inviteInf: "Influencer davet et",
@@ -644,7 +652,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       esOppT: "No open campaigns right now", esAppsT: "No applications yet", appsClosedE: "This campaign closed without any applications.", esMyT: "Make your first application", esI1: "Find an opportunity", esI2: "Apply", esI3: "Submit your content",
       esDiscT: "No listed influencers yet", esNfT: "No notifications yet",
       discLead: "Browse profile cards and invite directly.", discQ: "Search", discQPh: "Name or city", allNiches: "All niches",
-      fMinFol: "Followers", anyMin: "Any follower count", fCity: "City", allCities: "All cities", fSort: "Sort", sortRec: "Recommended", sortFol: "Followers (high to low)", sortName: "Name (A–Z)", fReset: "Clear filters", discCount: "{n} influencers", discCount1: "1 influencer", discCap: "The newest 100 profiles are loaded; filters only search within them.", discCap50: "Showing the 50 best matches.", discMatch: "Best matches for your niches.", discMatchC: "Best matches for the selected campaign.", discNoNiche: "Add niches to your profile and we will bring your best matches to the top.", discNoNicheC: "This campaign has no niches; showing all profiles.", discNoMatch: "No profiles share your niches; showing all profiles.", discMatchErr: "Matches could not be loaded; showing all profiles.", viewProf: "View profile", inviteFor: "Inviting for {n}.",
+      fMinFol: "Followers", anyMin: "Any follower count", fCity: "City", allCities: "All cities", fSort: "Sort", fMore: "Filters", sortRec: "Recommended", sortFol: "Followers (high to low)", sortName: "Name (A–Z)", fReset: "Clear filters", discCount: "{n} influencers", discCount1: "1 influencer", discCap: "The newest 100 profiles are loaded; filters only search within them.", discCap50: "Showing the 50 best matches.", discMatch: "Best matches for your niches.", discMatchC: "Best matches for the selected campaign.", discNoNiche: "Add niches to your profile and we will bring your best matches to the top.", discNoNicheC: "This campaign has no niches; showing all profiles.", discNoMatch: "No profiles share your niches; showing all profiles.", discMatchErr: "Matches could not be loaded; showing all profiles.", viewProf: "View profile", inviteFor: "Inviting for {n}.",
       clearFor: "Clear", drClose: "Close", drNoPlat: "No platforms added.", crFull: "Full profile and recent posts", crBack: "← Discover", crNone: "This influencer wasn't found or is no longer listed.", crAccounts: "Account metrics", crPosts: "Recent posts", crSampleBadge: "Sample data", crSampleNote: "The posts connection isn't live yet; these are sample posts. Campaign additions are kept only in this browser.", crTarget: "Campaign", crAdd: "Add to campaign", crRemove: "Remove from campaign", crAdded: "Post added to the campaign.", crRemoved: "Post removed from the campaign.", crVerified: "verified", crOpenPost: "Open post", crNoPosts: "No posts yet.", drHist: "History with you", drHistNone: "You haven't worked together yet.",
       drInvite: "Invite to a campaign", drNoOpen: "No open campaign to invite them to: they're already in all of them, or you have none open.",
       inviteInf: "Invite influencers",
@@ -874,6 +882,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
     moon: [["path", { d: "M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" }]],
     sun: [["circle", { cx: 12, cy: 12, r: 4 }], ["path", { d: "M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" }]],
     arrow: [["path", { d: "M5 12h14M13 6l6 6-6 6" }]],
+    filter: [["path", { d: "M4 6h16M7 12h10M10 18h4" }]],
     x: [["path", { d: "M6 6l12 12M18 6 6 18" }]],
     alert: [["circle", { cx: 12, cy: 12, r: 9 }], ["path", { d: "M12 7.5v5.5M12 16.5h.01" }]],
     roomy: [["rect", { x: 4, y: 4, width: 16, height: 7, rx: 1.5 }], ["rect", { x: 4, y: 13, width: 16, height: 7, rx: 1.5 }]],
@@ -1738,32 +1747,40 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       cities.sort(function (a, b) { return a.localeCompare(b, locale()); });
       if (F.city) F.city = cities.filter(function (x) { return fold(x) === fold(F.city); })[0] || "";
       var q = el("input", { type: "search", maxlength: 60, placeholder: t("discQPh"), value: F.q });
-      var n = el("select", { value: F.niche }, [el("option", { value: "", text: t("allNiches") })].concat(niches.map(function (x) { return el("option", { value: x, text: x }); })));
+      var n = el("select", { value: F.niche }, [el("option", { value: "", text: t("allNiches") })].concat(niches.map(function (x) { return el("option", { value: x, text: nicheLbl(x) }); })));
       var s = el("select", { value: F.platform }, [el("option", { value: "", text: t("allPlatforms") })].concat(PLATFORMS.map(function (x) { return el("option", { value: x, text: PL[x] }); })));
       var mn = el("select", { value: F.min }, [el("option", { value: "", text: t("anyMin") })].concat([10000, 50000, 100000].map(function (v) { return el("option", { value: String(v), text: num(v) + "+" }); })));
       var ci = el("select", { value: F.city }, [el("option", { value: "", text: t("allCities") })].concat(cities.map(function (x) { return el("option", { value: x, text: x }); })));
       var so = el("select", { value: F.sort }, [["", "sortRec"], ["fol", "sortFol"], ["name", "sortName"]].map(function (o) { return el("option", { value: o[0], text: t(o[1]) }); }));
       var rs = el("button", { type: "button", class: "ghost", text: t("fReset") });
-      var f = el("form", { class: "box f filter", role: "search", "data-sk-noform": true, novalidate: true }, [
-        el("div", null, fld("dq", t("discQ"), q)), el("div", null, fld("dn", t("fNiche"), n)),
-        el("div", null, fld("dp", t("fPlatform"), s)), el("div", null, fld("dm", t("fMinFol"), mn)),
-        cities.length ? el("div", null, fld("dc", t("fCity"), ci)) : null, el("div", null, fld("ds", t("fSort"), so)),
-        el("div", { class: "freset" }, rs)
+      // Dar ekranda arama tek başına görünür; diğer filtreler "Filtreler" düğmesiyle açılır, sayaç etkin olanları gösterir
+      var tc = el("span", { class: "n" }), tg = el("button", { type: "button", class: "ghost ftog", "aria-expanded": "false", "aria-controls": "dmore" }, [ic("filter"), t("fMore"), tc]);
+      var f = el("form", { class: "box f filter dfl", role: "search", "data-sk-noform": true, novalidate: true }, [
+        el("div", null, fld("dq", t("discQ"), q)), tg,
+        el("div", { class: "fmore", id: "dmore" }, [
+          el("div", null, fld("dn", t("fNiche"), n)), el("div", null, fld("dp", t("fPlatform"), s)), el("div", null, fld("dm", t("fMinFol"), mn)),
+          cities.length ? el("div", null, fld("dc", t("fCity"), ci)) : null
+        ])
       ]);
+      tg.addEventListener("click", function () { var o = f.classList.toggle("opn"); tg.setAttribute("aria-expanded", String(o)); });
+      // Sonuç sayısı, temizle ve sıralama listenin hemen üstünde tek satırda
+      so.id = "ds";
       var box = el("div"), cnt = el("p", { class: "info", role: "status" }); ctx.err = note(); ctx.err.id = "disc-err"; discCtx = ctx;
+      var bar = el("div", { class: "rbar" }, [cnt, rs, el("label", { class: "sortw" }, [el("span", { text: t("fSort") }), so])]);
       ctx.repaint = function () {
         var list = discList(ctx);
         // Sonuç yoksa metin kutuda görünür; durum satırı yalnız ekran okuyucuya söyler (iki kez görünmez)
         cnt.textContent = list.length ? (list.length === 1 ? t("discCount1") : t("discCount", num(list.length))) : t("discNone");
         cnt.classList.toggle("vh", !list.length);
         rs.hidden = !(F.q || F.niche || F.platform || F.min || F.city || F.sort);
-        box.replaceChildren(list.length ? el("div", { class: "list" }, list.map(function (x) { return infCard(x, ctx); })) : empty(t("discNone"), rs.hidden ? null : el("button", { type: "button", class: "ghost", text: t("fReset"), onclick: function () { rs.click(); } }), { ic: "search" }));
+        tc.textContent = [F.niche, F.platform, F.min, F.city].filter(Boolean).length || "";
+        box.replaceChildren(list.length ? el("div", { class: "list dgrid" }, list.map(function (x) { return infCard(x, ctx); })) : empty(t("discNone"), rs.hidden ? null : el("button", { type: "button", class: "ghost", text: t("fReset"), onclick: function () { rs.click(); } }), { ic: "search" }));
       };
       function apply() { F.q = q.value.trim(); F.niche = n.value; F.platform = s.value; F.min = mn.value; F.city = ci.value; F.sort = so.value; ctx.repaint(); }
       // Temizle: davet bağlamı (inviteFor) korunur, yalnız filtreler sıfırlanır; odak arama kutusuna döner
       rs.addEventListener("click", function () { [q, n, s, mn, ci, so].forEach(function (c) { c.value = ""; }); apply(); q.focus(); });
       f.addEventListener("submit", function (ev) { ev.preventDefault(); apply(); });
-      f.addEventListener("input", apply); f.addEventListener("change", apply);
+      f.addEventListener("input", apply); f.addEventListener("change", apply); so.addEventListener("change", apply);
       ctx.repaint();
       var clr = el("button", { type: "button", class: "ghost", text: t("clearFor") });
       clr.addEventListener("click", function () { F.inviteFor = 0; render(true).then(function () { var i = view.querySelector("#dq"); if (i) i.focus(); }); });
@@ -1773,7 +1790,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
         open.length ? null : el("p", { class: "info" }, [t("needOpen") + " ", el("a", { href: "#new", text: t("doNew") })]),
         all.length || !fb ? el("p", { class: "meta" }, [t(why), why === "discNoNiche" ? el("a", { class: "btn sm sec", href: "#profile", text: t("editProf") }) : null]) : null,
         all.length ? f : null, fb && all.length >= 100 ? el("p", { class: "meta", text: t("discCap") }) : !fb && all.length >= 50 ? el("p", { class: "meta", text: t("discCap50") }) : null,
-        ctx.err, all.length ? cnt : null, all.length ? box : empty(t("discEmpty"), null, { ic: "user", ti: "esDiscT" })
+        ctx.err, all.length ? bar : null, all.length ? box : empty(t("discEmpty"), null, { ic: "user", ti: "esDiscT" })
       ];
     });
   }
@@ -1816,13 +1833,27 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       act = el("button", { type: "button", class: "btn sm", "data-inv": x.id, "aria-label": t("invite") + ": " + x.name, text: t("invite") });
       act.addEventListener("click", function () { infDrawer(x, ctx, true); });
     }
-    return el("article", { class: "box item" }, [
-      el("div", { class: "head" }, [el("div", null, [el("h3", { text: x.name }), x.match != null || x.city ? el("p", { class: "meta" }, [x.match != null ? el("span", { class: "match" + (x.match < 60 ? " lo" : ""), text: t("match", x.match) }) : null, x.city ? el("span", { text: x.city }) : null]) : null])]),
-      x.bio ? el("p", { class: "prose sm", text: x.bio }) : null,
-      chips(x.niches), handles(x.platforms),
+    // Kart: renkli baş harf avatarı, uyum halkası, kısa bio, ilgi alanları ve platform başına takipçi
+    var m = x.match, pl = (x.platforms || []).filter(function (p) { return p && PL[p.platform]; });
+    var nc = (x.niches || []).map(function (y) { return el("span", { class: "chip", text: nicheLbl(y) }); });
+    return el("article", { class: "box item dc" }, [
+      el("div", { class: "dch" }, [
+        el("span", { class: "av", style: "--h:" + hue(x.name), "aria-hidden": "true", text: initials(x.name) }),
+        el("div", { class: "tx" }, [el("h3", { text: x.name }), x.city ? el("p", { class: "meta", text: x.city }) : null]),
+        m != null ? el("span", { class: "mr" + (m < 60 ? " lo" : ""), style: "--p:" + Math.max(0, Math.min(100, m)), role: "img", title: t("match", m), "aria-label": t("match", m) }, el("b", { text: L === "tr" ? "%" + m : m + "%" })) : null
+      ]),
+      x.bio ? el("p", { class: "prose sm dbio", text: x.bio }) : null,
+      nc.length ? el("div", { class: "chips" }, nc) : null,
+      pl.length ? el("ul", { class: "pst" }, pl.map(function (p) {
+        var fo = p.followers > 0 ? t("followers", num(p.followers)) : "";
+        return el("li", null, [el("span", { class: "pn", text: PL[p.platform] }), p.handle ? el("span", { class: "hd", text: p.handle }) : null,
+          fo ? el("b", { "aria-hidden": "true", title: fo, text: kNum(p.followers) }) : null, fo ? el("span", { class: "vh", text: fo }) : null]);
+      })) : null,
       el("div", { class: "row-b" }, [v, act])
     ]);
   }
+  // İsimden sabit renk tonu: aynı kişi her yenilemede aynı avatar rengini alır
+  function hue(s) { var h = 0; String(s || "").split("").forEach(function (c) { h = (h * 31 + c.charCodeAt(0)) % 360; }); return h; }
   // Profil çekmecesi: yerel <dialog> odak tuzağı, Esc ve arka planı etkisizleştirmeyi kendisi sağlar
   var dlg = null, dlgFor = 0, dlgSeq = 0, dlgX = null, dlgCtx = null, dlgMsg = null;
   function infDrawer(x, ctx, toInvite, sent) {
