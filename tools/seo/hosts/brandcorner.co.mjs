@@ -239,6 +239,11 @@ const UX = [
   "#main [data-slot=card].ring-2 [data-slot=card-content]>ul+[data-slot=button].gradient-primary{min-height:48px;font-size:1rem;box-shadow:0 8px 20px -6px rgb(37 99 235/.55)}",
   // Alt alta dizilen kartlarda scale-105 Pro kartını ekran kenarına 7px yaklaştırıyor, rozeti üstteki karta değdiriyordu
   "@media (max-width:1023.98px){#main [data-slot=card].scale-105{scale:1}}",
+  // Pricing karşılaştırma tablosu 375px'te 600px genişlikte yatay kayıyordu; "Feature" sütunu 268px olduğundan
+  // Enterprise'a kaydırınca özellik adları ekrandan çıkıyordu. Dar ekranda tablo 480px, ilk sütun 136px ve yapışkan
+  "@media (max-width:639.98px){#main .overflow-x-auto>table{min-width:30rem}",
+  "#main .overflow-x-auto>table :is(th,td):first-child{position:sticky;left:0;z-index:1;width:8.5rem;min-width:8.5rem;padding-right:.5rem;background:var(--background)}#main .overflow-x-auto>table td:first-child{font-size:.875rem;line-height:1.25rem}",
+  "#main .overflow-x-auto>table :is(th,td):first-child::after{content:\"\";position:absolute;top:0;bottom:0;right:-8px;width:8px;background:linear-gradient(to right,rgb(0 0 0/.08),transparent);pointer-events:none}}",
 ].join("");
 
 // 44px dokunma alanı yalnız dar ekranda ve dokunmatikte; fareli masaüstü düzeni aynı kalır
