@@ -39,10 +39,10 @@ h1,h2,h3{font-family:"Poppins","Inter",system-ui,sans-serif;line-height:1.2}
 footer.bot{border-top:1px solid var(--line);color:var(--muted);font-size:14px;padding:32px 0 40px}footer.bot .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:space-between}footer.bot nav{display:flex;flex-wrap:wrap;gap:8px 18px}footer.bot a{text-decoration:none}footer.bot a:hover{color:var(--text)}
 @media(max-width:760px){header.top nav a:not(.keep){display:none}header.top .btn{padding:8px 12px;font-size:14px}header.top .wrap{gap:12px}.hero{padding:40px 0 16px}}
 .cf{max-width:640px;padding:8px 0 72px}.cf label{display:block;font-weight:600;font-size:15px;margin:0 0 6px}.cf .f{margin:0 0 18px}
-.cf input,.cf textarea{width:100%;font:inherit;font-size:16px;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--text)}
+.cf input,.cf textarea{width:100%;font:inherit;font-size:16px;padding:12px 14px;border:1px solid #878d96;border-radius:10px;scroll-margin-top:96px;background:var(--surface);color:var(--text)}
 .cf input:focus,.cf textarea:focus{outline:2px solid var(--accent);outline-offset:1px}.cf textarea{min-height:150px;resize:vertical}
 .cf .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}.cf button{border:0;cursor:pointer;min-height:44px;font-family:inherit}.cf button[disabled]{opacity:.6;cursor:default}
-.cf .opt{color:var(--muted);font-weight:400}.cf #msg{margin:16px 0 0;font-weight:600}.cf #msg.ok{color:#047857}.cf #msg.err{color:#b91c1c}
+.cf .opt{color:var(--muted);font-weight:400}.cf #msg{margin:16px 0 0;font-weight:600}.cf #msg.ok{color:#047857}.cf #msg.err{color:#b91c1c}.cf [aria-invalid=true]{border-color:#b91c1c;box-shadow:0 0 0 1px #b91c1c}
 .mm{display:none}.mm summary{list-style:none;display:flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:10px;cursor:pointer;color:var(--text)}.mm summary::-webkit-details-marker{display:none}.mm summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}.mm[open] .mm-o,.mm:not([open]) .mm-x{display:none}.mm .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 @media(max-width:760px){header.top .wrap>nav{display:none}header.top .wrap>a.btn,header.top .wrap>nav+.mm{margin-left:auto}.mm{display:block}header.top .mm>nav{flex-direction:column;gap:0;margin:0;position:absolute;left:0;right:0;top:100%;background:var(--bg);border-bottom:1px solid var(--line);box-shadow:0 12px 24px -12px rgb(17 24 39/.18);padding:6px 0 10px}header.top .wrap .mm>nav a{display:flex;align-items:center;min-height:48px;padding:0 20px;font-size:16px;color:var(--text);text-decoration:none}header.top .wrap .mm>nav a[aria-current]{color:var(--accent);font-weight:600}}
 </style>
@@ -73,10 +73,13 @@ var LOCAL=/^(localhost|127\.0\.0\.1)$/.test(location.hostname);
 var END=(LOCAL?"http://localhost:8799/":"https://corner-forms.berkay-999.workers.dev/")+"submit";
 var f=document.getElementById("cf"),msg=document.getElementById("msg"),btn=f.querySelector("button");
 function say(t,c){msg.textContent=t;msg.className=c}
+function mark(el,on){if(on){el.setAttribute("aria-invalid","true");el.setAttribute("aria-describedby","msg")}else{el.removeAttribute("aria-invalid");el.removeAttribute("aria-describedby")}}
+f.addEventListener("input",function(ev){if(ev.target.hasAttribute("aria-invalid"))mark(ev.target,false)});
 f.addEventListener("submit",function(ev){
 ev.preventDefault();
 var n=f.Name.value.trim(),e=f.Email.value.trim(),m=f.Message.value.trim();
-if(!n||!m||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)){say("Please enter your name, a valid email, and a message.","err");return}
+var bad=[[f.Name,!n],[f.Email,!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)],[f.Message,!m]].filter(function(x){mark(x[0],x[1]);return x[1]});
+if(bad.length){say("Please enter your name, a valid email, and a message.","err");bad[0][0].focus();return}
 var fields=[["Name",n],["Email",e]],c=f.Company.value.trim();if(c)fields.push(["Company",c]);fields.push(["Message",m]);
 btn.disabled=true;say("Sending…","");
 fetch(END,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({page:"/contact",fields:fields,hp:f.hp.value})})
