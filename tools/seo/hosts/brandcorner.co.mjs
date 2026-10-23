@@ -286,6 +286,8 @@ const TAP = "@media (max-width:1023px),(pointer:coarse){" + [
   "footer a:not(.flex){display:inline-flex;align-items:center;min-height:44px;min-width:44px}footer a.flex{min-height:44px}footer ul>li{margin-block:0}footer nav{row-gap:0}",
   // Statik sayfalar (about, contact, yasal, giriş/kayıt): logo, üst menü, buton, onay kutusu satırı
   "header.top .wrap>a:first-child,header.top nav a,header.top .btn{display:inline-flex;align-items:center;min-height:44px;min-width:44px}",
+  // Dar ekranda (320px) yer yetmeyince buton ve logo eziliyordu: buton küçülmez, logo oranını koruyarak küçülür
+  "header.top .btn{flex-shrink:0;white-space:nowrap}header.top .wrap>a:first-child img{min-width:0;object-fit:contain;object-position:left center}",
   ".sk-skip{display:inline-flex;align-items:center;min-height:44px}button.btn,.card .row{min-height:44px}",
 ].join("") + "}";
 
