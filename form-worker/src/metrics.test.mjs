@@ -18,6 +18,7 @@ const { platform } = await import("./platform.js");
 
 const SCHEMA = readFileSync(new URL("../schema.sql", import.meta.url), "utf8");
 const MIGRATION = readFileSync(new URL("../migrations/0001_metrics.sql", import.meta.url), "utf8");
+const LINKEDIN = readFileSync(new URL("../migrations/0008_linkedin.sql", import.meta.url), "utf8");
 
 // Testin ihtiyacı kadar D1: prepare().bind().all/first/run, batch, exec
 function d1(db) {
@@ -37,6 +38,7 @@ function freshDb() {
   const db = new DatabaseSync(":memory:");
   db.exec(SCHEMA);
   db.exec(MIGRATION);
+  db.exec(LINKEDIN);
   return db;
 }
 
@@ -155,7 +157,9 @@ test("accountMetrics canlı mod: beyan sırası, son ölçüm, bağlı platform 
   snapshot(db, ig, "2026-09-01 10:00:00", 900);
   social(db, a, "tiktok", "tt_real"); // ölçümü yok
   snapshot(db, social(db, a, "youtube", "yt_real"), "2026-10-02 08:00:00", 7000, 700, 70, 7); // beyan edilmemiş
-  snapshot(db, social(db, a, "linkedin", "li_real"), "2026-10-02 08:00:00", 5000); // resmi değil: sayı gösterilmez
+  // LinkedIn: takipçi + gönderi toplamları, ortalama yok; gelmeyen toplam null
+  const li = snapshot(db, social(db, a, "linkedin", "li_real"), "2026-10-02 08:00:00", 5000, null, null, null);
+  db.prepare("UPDATE metric_snapshots SET total_impressions = 12000, total_reach = 4000, total_reactions = 300, total_comments = 40 WHERE id = ?").run(li);
   social(db, a, "x", "x_rev", "revoked");
   snapshot(db, social(db, b, "instagram", "b_ig"), "2026-10-06 10:00:00", 99); // başka kullanıcı
   db.prepare("UPDATE social_accounts SET status = 'connected' WHERE user_id = ? AND status = 'pending'").run(a);
@@ -171,7 +175,10 @@ test("accountMetrics canlı mod: beyan sırası, son ölçüm, bağlı platform 
   assert.equal(m.label_code, null);
   const empty = { source: "none", label: NO_DATA, label_code: "no_data", followers: null, avg_views: null, avg_likes: null, avg_comments: null, taken_at: null };
   assert.deepEqual(m.accounts, [
-    { platform: "linkedin", handle: "li_real", ...empty },
+    {
+      platform: "linkedin", handle: "li_real", source: "oauth", label: null, label_code: null, followers: 5000, avg_views: null, avg_likes: null, avg_comments: null, taken_at: "2026-10-02 08:00:00",
+      totals: { impressions: 12000, reach: 4000, reactions: 300, comments: 40, reshares: null },
+    },
     { platform: "instagram", handle: "ig_real", source: "oauth", label: null, label_code: null, followers: 1500, avg_views: 300, avg_likes: 30, avg_comments: 3, taken_at: "2026-10-05 10:00:00" },
     { platform: "tiktok", handle: "tt_real", ...empty },
     { platform: "x", handle: "x_profil", ...empty },
