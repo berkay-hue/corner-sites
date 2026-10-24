@@ -2,6 +2,7 @@
 // Kullanım: node tools/smoke-connect-card.mjs [ekranGörüntüsüKlasörü]   (8789 ve 9334 portları boş olmalı)
 // Kontroller: marka ve ajansta kart görünür; sunucunun `connectable` listesine uyar (listede olmayan platformda "Bağla" yok);
 // not_configured → "Yapılandırılmadı", no_api → "API yok", bağlı → "Bağlı" + "Bağlantıyı kes", LinkedIn no_data → "Veri yok";
+// YouTube bağlı + gerçek ölçüm ama kitle verisi yok → "Yeniden bağla" (app/connect youtube), kitle varsa yalnız "Bağlantıyı kes";
 // `connectable` yoksa ya da 403 → "Yakında" (Instagram/TikTok/LinkedIn, düğmeler kapalı); ölçüm kapalıyken marka/ajansta örnek
 // influencer sayısı yok, influencer'da "Örnek veri" rozeti kalır; "Bağla" app/connect çağırır; TR/EN, 44px, taşma; 2000x924, 390x844, 375x812.
 import { spawn } from "node:child_process";
@@ -118,7 +119,23 @@ try {
     await shot(`card-brand-${sz}`, w, h);
     ok(await ev(`(()=>{const b=document.querySelector("section.soc .srow .sa button");if(!b||b.textContent!=="Bağla")return false;b.click();return true})()`), "Bağla tıklandı"); await sleep(300);
     ok(await ev(`(window.__calls||[]).some(c=>c.startsWith("POST app/connect 409") && c.includes('"instagram"'))`), "Bağla: app/connect instagram");
-    ok(!(await ev(`(window.__calls||[]).some(c=>c.startsWith("GET app/metrics"))`)), "marka: app/metrics çağrılmadı");
+    // d3be920'den beri marka/ajans da bağlı hesaplarının gerçek ölçümünü görür
+    ok(await ev(`(window.__calls||[]).some(c=>c.startsWith("GET app/metrics"))`), "marka: app/metrics çağrıldı");
+
+    // 1b) YouTube bağlı, gerçek ölçüm var ama kitle yok (eski bağ yt-analytics iznini içermiyor): "Yeniden bağla" + "Kes";
+    // kitle gelince yalnız "Kes". Yeniden bağla app/connect çağırır (Kes gibi veri silmez)
+    const yt = aud => ({ ok: true, metrics: { accounts: [{ platform: "youtube", source: "oauth", handle: "acme", followers: 857, avg_views: 120, avg_likes: 9, avg_comments: 1, posts_sampled: 12, taken_at: "2026-10-24 16:17:50", audience: aud }] } });
+    const ytConn = { ok: true, connectable: ALL, connections: [{ platform: "youtube", status: "connected", configured: true, handle: "acme" }] };
+    await open({ conn: ytConn, metrics: yt(null) }, w, h, mobile);
+    ok((await rows()).join("\n") === "YouTube|Bağlı|Yeniden bağla+Bağlantıyı kes", `YouTube kitle yok: ${(await rows()).join(" / ")}`);
+    await shot(`card-yt-reconnect-${sz}`, w, h);
+    ok(await ev(`(()=>{const b=[...document.querySelectorAll("section.soc .sa button")].find(b=>b.textContent==="Yeniden bağla");if(!b)return false;b.click();return true})()`), "Yeniden bağla tıklandı"); await sleep(300);
+    ok(await ev(`(window.__calls||[]).some(c=>c.startsWith("POST app/connect 409") && c.includes('"youtube"'))`), "Yeniden bağla: app/connect youtube");
+    ok(!(await ev(`(window.__calls||[]).some(c=>c.includes("app/disconnect"))`)), "Yeniden bağla: app/disconnect çağrılmadı");
+    await open({ conn: ytConn, metrics: yt({ viewers: { age: [["25-34", 60.2]], gender: [["F", 41.5], ["M", 58.5]], country: [["TR", 80.1]] } }) }, w, h, mobile);
+    ok((await rows()).join("\n") === "YouTube|Bağlı|Bağlantıyı kes", `YouTube kitle var: ${(await rows()).join(" / ")}`);
+    await open({ role: "agency", lang: "en", conn: ytConn, metrics: yt({}) }, w, h, mobile);
+    ok((await rows()).join("\n") === "YouTube|Connected|Reconnect+Disconnect", `YouTube EN kitle boş: ${(await rows()).join(" / ")}`);
 
     // 2) Ajans, sunucu listesi yalnız instagram+linkedin: listede olmayan tiktok "Bağla" almaz
     await open({ role: "agency", conn: { ok: true, connectable: ["instagram", "linkedin"], connections: ALL.map(p => ({ platform: p, status: "available", configured: true })) } }, w, h, mobile);
