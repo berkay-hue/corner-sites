@@ -137,6 +137,25 @@ try {
     await open({ role: "agency", lang: "en", conn: ytConn, metrics: yt({}) }, w, h, mobile);
     ok((await rows()).join("\n") === "YouTube|Connected|Reconnect+Disconnect", `YouTube EN kitle boş: ${(await rows()).join(" / ")}`);
 
+    // 1c) Kitle özeti: Instagram takipçi dağılımı (24 Eki canlı verinin biçimi) → cinsiyet, yaş grubu, ülke+şehir kutuları ve yaş grubu çubukları;
+    // LinkedIn şirket sayfası kırılımı (ileride) → sektör, kıdem, iş fonksiyonu, şirket büyüklüğü kutuları; SIZE_2_TO_10 → "2–10"
+    const tiles = () => ev(`[...document.querySelectorAll("section.soc .auds .stat")].map(s=>[...s.children].map(c=>c.textContent).join("|"))`);
+    const igAud = { followers: { age: [["18-24", 10.6], ["25-34", 79.7], ["35-44", 5.3], ["45-54", 3.3], ["55-64", 0.5], ["65+", 0.6]], gender: [["F", 37.6], ["M", 37.9], ["U", 24.5]],
+      country: [["TR", 81], ["DE", 5.3]], city: [["Istanbul, İstanbul Province", 34.3], ["Izmit, Kocaeli Province", 15.7]] }, engaged: null };
+    await open({ conn: { ok: true, connectable: ALL, connections: [{ platform: "instagram", status: "connected", configured: true, handle: "acme" }] },
+      metrics: { ok: true, metrics: { accounts: [{ platform: "instagram", source: "oauth", handle: "acme", followers: 1500, avg_views: 300, avg_likes: 20, avg_comments: 2, posts_sampled: 12, taken_at: "2026-10-24 16:17:50", audience: igAud }] } } }, w, h, mobile);
+    const t1 = (await tiles()).join("\n");
+    ok(t1 === ["Cinsiyet|Dengeli|Kadın %37,6 · Erkek %37,9 · Belirtilmemiş %24,5", "Yaş grubu|Yetişkin (25–44)|%85 · en büyük dilim 25-34 (%79,7)", "Ülke|Türkiye|%81 · en çok Istanbul (%34,3)"].join("\n"), `IG özet:\n${t1}`);
+    ok(await ev(`[...document.querySelectorAll("section.soc .aud .k")].some(k=>k.textContent==="Yaş grubu")`), "IG: yaş grubu çubukları");
+    ok((await txt("section.soc .aud > p.meta:last-child")).startsWith("Sektör, kıdem ve şirket büyüklüğünü"), "IG: sektör notu");
+    await shot(`card-aud-ig-${sz}`, w, h);
+    const liAud = { followers: { industry: [["Bilgisayar Yazılımı", 32.1], ["Pazarlama", 18]], seniority: [["Kıdemli", 41]], function: [["Satış", 27.5]], size: [["SIZE_2_TO_10", 40], ["SIZE_10001_OR_MORE", 9]] } };
+    await open({ conn: { ok: true, connectable: ALL, connections: [{ platform: "linkedin", status: "connected", configured: true, handle: "Acme" }] },
+      metrics: { ok: true, metrics: { accounts: [{ platform: "linkedin", source: "oauth", handle: "Acme", followers: 900, taken_at: "2026-10-24 16:17:50", audience: liAud }] } } }, w, h, mobile);
+    const t2 = (await tiles()).join("\n");
+    ok(t2 === ["Sektör|Bilgisayar Yazılımı|%32,1", "Kıdem|Kıdemli|%41", "İş fonksiyonu|Satış|%27,5", "Şirket büyüklüğü (çalışan)|2–10|%40"].join("\n"), `LinkedIn özet:\n${t2}`);
+    await shot(`card-aud-li-${sz}`, w, h);
+
     // 2) Ajans, sunucu listesi yalnız instagram+linkedin: listede olmayan tiktok "Bağla" almaz
     await open({ role: "agency", conn: { ok: true, connectable: ["instagram", "linkedin"], connections: ALL.map(p => ({ platform: p, status: "available", configured: true })) } }, w, h, mobile);
     const r2 = await rows();
