@@ -64,8 +64,8 @@ export function platformOf(url) {
   return null;
 }
 
-// Kitle dağılımı sütunu (migrations/0009_audience.sql): JSON nesnesi; boş ya da bozuk değer null
-const parseAudience = s => {
+// Kitle dağılımı sütunu (migrations/0009_audience.sql, gönderide 0010_post_audience.sql): JSON nesnesi; boş ya da bozuk değer null
+export const parseAudience = s => {
   if (typeof s !== "string" || !s) return null;
   try { const a = JSON.parse(s); return a && typeof a === "object" && !Array.isArray(a) ? a : null; } catch { return null; }
 };
