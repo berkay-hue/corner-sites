@@ -369,7 +369,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       role_brand: "Marka", role_agency: "Ajans", role_influencer: "Influencer",
       nOverview: "Genel bakış", nCampaigns: "Kampanyalar", nDiscover: "Influencer keşfi", nProfile: "Profil", nOpps: "Fırsatlar", nApps: "Başvurularım",
       nPosts: "Gönderiler", postsLead: "Paylaşımlarının beğeni, yorum, izlenme ve erişimini tek yerde izle.",
-      pvGrid: "Izgara", pvList: "Liste", pvView: "Görünüm", pRange: "Tarih", pRAll: "Tümü", pR7: "Son 7 gün", pR30: "Son 30 gün", pR90: "Son 90 gün",
+      pvGrid: "Izgara", pvList: "Liste", pvView: "Görünüm", pRange: "Tarih", pRAll: "Tümü", pR7: "Son 7 gün", pR30: "Son 30 gün", pR90: "Son 90 gün", pR180: "Son 180 gün", pR365: "Son 365 gün",
       pType: "Tür", pTAll: "Tüm türler", pt_photo: "Fotoğraf", pt_video: "Video", pt_reel: "Reels / kısa video", pt_carousel: "Kaydırmalı", pt_story: "Hikâye",
       pPlat: "Platform", pPAll: "Tüm platformlar", pCount: "{n} gönderi", pNone: "Bu filtrelerle gönderi yok.", pClear: "Filtreleri temizle",
       pPrev: "Önceki", pNext: "Sonraki", pPage: "Sayfa {n}", pPager: "Sayfalar",
@@ -540,7 +540,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       role_brand: "Brand", role_agency: "Agency", role_influencer: "Influencer",
       nOverview: "Overview", nCampaigns: "Campaigns", nDiscover: "Find influencers", nProfile: "Profile", nOpps: "Opportunities", nApps: "My applications",
       nPosts: "Posts", postsLead: "Track likes, comments, views and reach for your posts in one place.",
-      pvGrid: "Grid", pvList: "List", pvView: "View", pRange: "Date", pRAll: "All time", pR7: "Last 7 days", pR30: "Last 30 days", pR90: "Last 90 days",
+      pvGrid: "Grid", pvList: "List", pvView: "View", pRange: "Date", pRAll: "All time", pR7: "Last 7 days", pR30: "Last 30 days", pR90: "Last 90 days", pR180: "Last 180 days", pR365: "Last 365 days",
       pType: "Type", pTAll: "All types", pt_photo: "Photo", pt_video: "Video", pt_reel: "Reel / short", pt_carousel: "Carousel", pt_story: "Story",
       pPlat: "Platform", pPAll: "All platforms", pCount: "{n} posts", pNone: "No posts match these filters.", pClear: "Clear filters",
       pPrev: "Previous", pNext: "Next", pPage: "Page {n}", pPager: "Pages",
@@ -2914,7 +2914,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       var plats = [];
       d.list.forEach(function (p) { if (plats.indexOf(p.platform) < 0) plats.push(p.platform); });
       var f = el("form", { class: "box f filter", role: "search", "data-sk-noform": true, novalidate: true, onsubmit: function (e) { e.preventDefault(); } }, [
-        pSelect("pf-r", t("pRange"), [["all", t("pRAll")], ["7", t("pR7")], ["30", t("pR30")], ["90", t("pR90")]], "range", draw),
+        pSelect("pf-r", t("pRange"), [["all", t("pRAll")], ["7", t("pR7")], ["30", t("pR30")], ["90", t("pR90")], ["180", t("pR180")], ["365", t("pR365")]], "range", draw),
         pSelect("pf-t", t("pType"), [["", t("pTAll")]].concat(PTYPES.map(function (x) { return [x, t("pt_" + x)]; })), "type", draw),
         pSelect("pf-p", t("pPlat"), [["", t("pPAll")]].concat(plats.map(function (x) { return [x, PL[x]]; })), "platform", draw)]);
       if (plats.indexOf(PF.platform) < 0) PF.platform = "";
