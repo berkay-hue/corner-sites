@@ -137,7 +137,7 @@ try {
     // 4) Boş liste, EN
     await open({ lang: "en", nf: [] }, "notifications", w, h, mobile);
     ok((await txt("main h1")) === "Notifications" && (await txt(".nfhead .meta")) === "All caught up.", "EN başlık");
-    ok((await txt("main .empty p")) === "No notifications yet.", "EN boş durum");
+    ok((await txt("main .empty .es-t")) === "No notifications yet" && (await txt("main .empty p")) === "New applications, invites and content approvals show up here.", "EN boş durum");
     ok((await txt("#ntf span")) === "Notifications", "EN menü");
     await shot(`notif-empty-en-${sz}`, w);
   }

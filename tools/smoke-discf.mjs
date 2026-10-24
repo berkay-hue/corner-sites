@@ -1,7 +1,8 @@
 // brandcorner panel Keşfet filtreleri headless testi: sahte API (fetch mock), yerel Chrome (CDP), JS hatası 0.
 // Kullanım: node tools/smoke-discf.mjs [ekranGörüntüsüKlasörü]   (8788 ve 9333 portları boş olmalı)
 // Kontroller: şehir filtresi, sıralama (önerilen/takipçi/ad, platforma göre takipçi), "Filtreleri temizle",
-// TR/EN, filtre formunda 44px dokunma hedefi, sayfada yatay taşma; 2000x924, 390x844 ve 375x812.
+// dar ekranda "Filtreler" düğmesi, TR/EN, filtre formunda ve sonuç satırında 44px dokunma hedefi, sayfada yatay taşma;
+// 2000x924, 390x844 ve 375x812.
 import { spawn } from "node:child_process";
 import { mkdtempSync, writeFileSync, mkdirSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -62,7 +63,7 @@ try {
   await cmd("Page.enable"); await cmd("Runtime.enable");
   for (let i = 0; i < 25; i++) { try { await fetch(BASE + "/panel.html"); break; } catch { await sleep(200); } }
 
-  const T44 = `[...document.querySelectorAll("form.filter button,form.filter input,form.filter select")].filter(n=>{const r=n.getBoundingClientRect();if(!r.width||!r.height)return false;return r.height<44||r.width<44&&n.tagName==="BUTTON"}).map(n=>{const r=n.getBoundingClientRect();return n.tagName.toLowerCase()+"["+(n.textContent||n.id||"").trim().slice(0,20)+"] "+Math.round(r.width)+"x"+Math.round(r.height)})`;
+  const T44 = `[...document.querySelectorAll("form.filter button,form.filter input,form.filter select,.rbar button,.rbar select")].filter(n=>{const r=n.getBoundingClientRect();if(!r.width||!r.height)return false;return r.height<44||r.width<44&&n.tagName==="BUTTON"}).map(n=>{const r=n.getBoundingClientRect();return n.tagName.toLowerCase()+"["+(n.textContent||n.id||"").trim().slice(0,20)+"] "+Math.round(r.width)+"x"+Math.round(r.height)})`;
 
   let scriptId;
   const open = async (sc, hash, w, h, mobile) => {
@@ -92,18 +93,26 @@ try {
 
   const click = s => ev(`(()=>{const n=document.querySelector(${JSON.stringify(s)});if(!n)return false;n.click();return true})()`);
   const names = () => ev(`[...document.querySelectorAll(".list article h3")].map(n=>n.textContent)`);
-  const vis = () => ev(`!document.querySelector(".freset .ghost").hidden`);
+  const vis = () => ev(`!document.querySelector(".rbar>.ghost").hidden`);
+  const shown = s => ev(`(()=>{const n=document.querySelector(${JSON.stringify(s)});return !!n&&n.getBoundingClientRect().height>0})()`);
   for (const [sz, w, h, mobile] of SIZES) {
-    // 1) TR: 6 alan + temizle (gizli), şehir listesi tekil ve sıralı
+    // 1) TR: formda arama + 4 seçim kutusu; sıralama ve temizle (gizli) listenin üstündeki satırda; şehir listesi tekil ve sıralı
     await open({}, "discover", w, h, mobile);
-    ok(await q("form.filter select") === 5, "5 seçim kutusu (" + await q("form.filter select") + ")");
+    ok(await q("form.filter select") === 4 && await q(".rbar #ds") === 1, "4 seçim kutusu + sıralama (" + await q("form.filter select") + ")");
     ok(await ev(`[...document.querySelectorAll("#dc option")].map(o=>o.textContent).join("|")`) === "Tüm şehirler|Ankara|istanbul|İzmir", "şehir seçenekleri " + await ev(`[...document.querySelectorAll("#dc option")].map(o=>o.textContent).join("|")`));
     ok(!(await vis()), "temizle başta gizli");
     ok((await names()).join() === "Zeynep K.,Ahmet B.,Can D.,Ömer T.,Banu S.", "önerilen sıra");
-    // 2) Şehir İzmir: 2 sonuç, temizle görünür
+    // Dar ekranda arama dışındaki alanlar "Filtreler" düğmesiyle açılır; geniş ekranda düğme yok, alanlar açık
+    if (mobile) {
+      ok(await shown(".ftog") && !(await shown("#dc")), "dar ekran: Filtreler düğmesi var, alanlar kapalı");
+      await click(".ftog");
+      ok(await ev(`document.querySelector(".ftog").getAttribute("aria-expanded")`) === "true" && await shown("#dc"), "Filtreler açıldı");
+    } else ok(!(await shown(".ftog")) && await shown("#dc"), "geniş ekran: alanlar açık, düğme yok");
+    // 2) Şehir İzmir: 2 sonuç, temizle görünür, düğmedeki sayaç 1
     await setv("#dc", "İzmir");
     ok((await names()).join() === "Zeynep K.,Can D.", "İzmir filtresi " + (await names()).join());
     ok(await vis(), "temizle görünür");
+    ok(await txt(".ftog .n") === "1", "etkin filtre sayacı " + await txt(".ftog .n"));
     await shot(`discf-city-${sz}`, w);
     // 3) Sıralama: takipçi (tüm platformlar), ad, tiktok takipçisi
     await setv("#dc", ""); await setv("#ds", "fol");
@@ -113,16 +122,17 @@ try {
     await setv("#dp", "tiktok"); await setv("#ds", "fol");
     ok((await names()).join() === "Can D.,Banu S.,Ahmet B.", "tiktok takipçi sırası " + (await names()).join());
     // 4) Temizle: tüm alanlar boş, 5 sonuç, odak aramada
-    await click(".freset .ghost");
+    await click(".rbar>.ghost");
     ok((await names()).length === 5, "temizle → 5 sonuç");
-    ok(await ev(`[...document.querySelectorAll("form.filter select,form.filter input")].every(n=>n.value==="")`), "alanlar boş");
+    ok(await ev(`[...document.querySelectorAll("form.filter select,form.filter input,#ds")].every(n=>n.value==="")`), "alanlar boş");
     ok(!(await vis()), "temizle yine gizli");
+    ok(await txt(".ftog .n") === "", "sayaç boş");
     ok(await ev(`document.activeElement && document.activeElement.id`) === "dq", "odak arama kutusunda");
     // 5) EN etiketleri
     await open({ lang: "en" }, "discover", w, h, mobile);
-    ok(await txt('label[for="dc"]') === "City" && await txt('label[for="ds"]') === "Sort", "EN etiketler");
+    ok(await txt('label[for="dc"]') === "City" && await txt(".sortw span") === "Sort" && await txt(".ftog") === "Filters", "EN etiketler");
     await setv("#ds", "name");
-    ok(await txt(".freset .ghost") === "Clear filters", "EN temizle");
+    ok(await txt(".rbar>.ghost") === "Clear filters", "EN temizle");
     await shot(`discf-en-${sz}`, w);
   }
   console.log("HATA=" + fails); done(fails ? 1 : 0);
