@@ -18,7 +18,7 @@ const { platform } = await import("./platform.js");
 const read = p => readFileSync(new URL(p, import.meta.url), "utf8");
 const SCHEMA = read("../schema.sql");
 const MIGRATIONS = ["0001_metrics", "0002_oauth", "0003_sync", "0004_sync_changes", "0005_notify"].map(n => read(`../migrations/${n}.sql`));
-const POSTS_SQL = read("../migrations/0006_posts.sql");
+const POSTS_SQL = read("../migrations/0006_posts.sql"), POST_AUD_SQL = read("../migrations/0010_post_audience.sql");
 
 function d1(db) {
   const stmt = (sql, args = []) => ({
@@ -31,12 +31,13 @@ function d1(db) {
   return { prepare: sql => stmt(sql), batch };
 }
 
-// posts=false: 0006 uygulanmamış canlı D1 gibi
-function freshDb(posts = true) {
+// posts=false: 0006 uygulanmamış canlı D1 gibi; audience=false: 0010 uygulanmamış
+function freshDb(posts = true, audience = posts) {
   const db = new DatabaseSync(":memory:");
   db.exec(SCHEMA);
   for (const m of MIGRATIONS) db.exec(m);
   if (posts) db.exec(POSTS_SQL);
+  if (audience) db.exec(POST_AUD_SQL);
   return db;
 }
 
@@ -73,11 +74,13 @@ test("bayrak kapalı: üç uç da 404 not_found (panel tarayıcı kaydına düş
   fails(await call("POST", "/app/posts/import", { token, body: { rows: [{ url: IG, likes: 1 }] } }), 404, "not_found");
 });
 
-test("0006 uygulanmamış: 503 not_ready", async () => {
+test("0006 ya da 0010 uygulanmamış: 503 not_ready", async () => {
   const { call, join } = await setup({ db: freshDb(false) });
   const token = await join();
   fails(await call("GET", "/app/posts", { token }), 503, "not_ready");
   fails(await call("POST", "/app/posts/manual", { token, body: { url: IG, likes: 1 } }), 503, "not_ready");
+  const b = await setup({ db: freshDb(true, false) });
+  fails(await b.call("GET", "/app/posts", { token: await b.join() }), 503, "not_ready");
 });
 
 test("oturumsuz 401", async () => {
@@ -93,7 +96,7 @@ test("manual: #217 alanlarıyla kayıt; aynı url yeni gün ölçümü ekler, ay
   ok200(r);
   assert.equal(r.body.added, true);
   assert.deepEqual(r.body.post, { id: r.body.post.id, url: IG, platform: "instagram", type: "reel", date: "2026-01-02", caption: "merhaba", thumb: "https://cdn.ornek.test/a.jpg",
-    snaps: [{ at: "2026-01-03", likes: 10, comments: 3, views: null, reach: 200 }] });
+    audience: null, snaps: [{ at: "2026-01-03", likes: 10, comments: 3, views: null, reach: 200 }] });
   assert.match(r.body.post.id, /^[a-z0-9]{1,24}$/);
   r = await call("POST", "/app/posts/manual", { token, body: { url: IG, type: "photo", caption: "değişmez", likes: 12, at: "2026-01-04" } });
   ok200(r);
