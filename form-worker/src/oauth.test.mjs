@@ -429,6 +429,24 @@ test("kitle: YouTube raporu alınamazsa neden döner (izin yok, API kapalı, di�
   assert.equal(await run(500, "bozuk"), "error");
 });
 
+test("kitle: YouTube'da iki rapordan biri alınamazsa kanal gelenle sürer, gönderiye yarım kitle yazılmaz; gelen boşsa neden döner", async t => {
+  t.mock.method(console, "log", () => {});
+  // fail boyutundaki rapor 500; empty: bu filters değerlerinde gelen rapor satırsız (null: kanal raporu)
+  const half = (fail, empty = []) => [YTA, u => {
+    const q = new URL(u).searchParams, dim = q.get("dimensions");
+    if (dim === fail) return [500, { error: { code: 500, message: "backendError" } }];
+    const r = dim === "country" ? YT_GEO : YT_DEMO;
+    return [200, empty.includes(q.get("filters")) ? { columnHeaders: r.columnHeaders } : r];
+  }];
+  const geoOff = await fetchMetrics("youtube", "yt-token", fakeFetch(ytRoutes([half("country")])));
+  assert.deepEqual([geoOff.audience, geoOff.posts.map(p => p.audience)], [{ viewers: { age: YT_VIEWERS.age, gender: YT_VIEWERS.gender } }, [undefined, undefined]]);
+  const demoOff = await fetchMetrics("youtube", "yt-token", fakeFetch(ytRoutes([half("ageGroup,gender")])));
+  assert.deepEqual([demoOff.audience, demoOff.posts.map(p => p.audience)], [{ viewers: { country: YT_VIEWERS.country } }, [undefined, undefined]]);
+  // Gelen kanal raporu boş, öteki alınamadı: "few" değil alınamayanın nedeni
+  const emptyDemo = await fetchMetrics("youtube", "yt-token", fakeFetch(ytRoutes([half("country", [null])])));
+  assert.deepEqual(emptyDemo.audience, { reason: "error" });
+});
+
 test("metrikler: TikTok ve YouTube'da adresi, tarihi ya da ölçümü uygun olmayan gönderi ve özel ya da izlenemeyen video aktarılmaz, ortalamaya girer", async t => {
   t.mock.method(console, "log", () => {}); // kitle raporu yolu yok: "yt audience error 404"
   // Elenen videoların ölçümleri 100/10/1; yalnız v9 aktarılır (sorgu ve parça atılır, http kapak boş, metin 2200, eksi ve kesirli sayı null)

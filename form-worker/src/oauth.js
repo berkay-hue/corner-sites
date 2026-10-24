@@ -511,13 +511,15 @@ const API = {
     // ~20 günde 60 video), yayın gününden düne; veri gelirse o videonun post.audience alanına yazılır (D1'de kalır).
     async audience(token, f, prof, items = []) {
       const day = n => new Date(Date.now() - n * 864e5).toISOString().slice(0, 10), endDate = day(1);
-      // İki rapor da alınamazsa {reason}; biri gelirse gelenle sürer
+      // Rapor alınamazsa ve gelen de boşsa alınamayanın {reason}'ı; biri alınamazsa gelenle sürer (partial): kanal
+      // yarım kırılımı gösterir, gönderiye yazılmaz (D1'deki tam kitle kalır)
       const viewers = async q => {
         const [demo, geo] = await Promise.all([
           ytReport(f, token, { ids: "channel==MINE", endDate, ...q, dimensions: "ageGroup,gender", metrics: "viewerPercentage" }),
           ytReport(f, token, { ids: "channel==MINE", endDate, ...q, dimensions: "country", metrics: "views" }),
         ]);
-        return demo.reason && geo.reason ? demo : { viewers: ytViewers(demo.rows || [], geo.rows || []) };
+        const v = ytViewers(demo.rows || [], geo.rows || []), bad = demo.reason ? demo : geo.reason ? geo : null;
+        return bad && !v ? bad : { viewers: v, partial: !!bad };
       };
       const ch = await viewers({ startDate: day(91) });
       if (ch.reason) {
@@ -528,7 +530,7 @@ const API = {
       const old = vids.slice(2), k = old.length ? (Math.floor(Date.now() / 864e5) * 3) % old.length : 0;
       await Promise.all([...vids.slice(0, 2), ...old.slice(k), ...old.slice(0, k)].slice(0, YT_AUD_VIDEOS).map(async x => {
         const r = await viewers({ startDate: x.post.date, filters: `video==${x.id}` });
-        if (r.viewers) x.post.audience = { viewers: r.viewers };
+        if (r.viewers && !r.partial) x.post.audience = { viewers: r.viewers };
       }));
       return ch.viewers ? { viewers: ch.viewers } : { reason: "few" };
     },
