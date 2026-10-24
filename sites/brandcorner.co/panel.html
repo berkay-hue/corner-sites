@@ -2405,7 +2405,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       var me = ++my;
       paint(skSoc());
       var soft =function (pr) { return pr.then(null, function (e) { return { err: e }; }); };
-      return Promise.all([soft(BC.call("GET", "app/connections")), own ? { err: 1 } : soft(BC.call("GET", "app/metrics"))]).then(function (r) {
+      return Promise.all([soft(BC.call("GET", "app/connections")), soft(BC.call("GET", "app/metrics"))]).then(function (r) {
         if (me !== my) return;
         var c = r[0], md = r[1].err ? null : r[1].metrics;
         if (!c.err && Array.isArray(c.connectable)) can = c.connectable;
