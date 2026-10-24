@@ -261,6 +261,7 @@ dialog.cmdk[open]{display:flex;flex-direction:column}dialog.cmdk::backdrop{backg
 .pbody{padding:10px 12px 12px;display:flex;flex-direction:column;gap:6px;min-width:0}.pcap{margin:0;font-size:13.5px;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}
 .pmeta{display:flex;flex-wrap:wrap;gap:2px 10px;color:var(--muted);font-size:12.5px}.pmeta b{color:var(--text);font-weight:600}
 .cgrid{grid-template-columns:repeat(3,minmax(0,1fr))}.pact{display:flex;flex-wrap:wrap;gap:6px;margin-top:2px}.pact .btn,.pact .ghost{min-height:44px;display:inline-flex;align-items:center;text-decoration:none}.pact .badge{margin:0}.ctarget{max-width:360px;margin:0 0 12px}.ctarget select{min-height:44px}.cacc{list-style:none;margin:0;padding:0}.cacc li{padding:10px 0;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:4px}.cacc li:first-child{border-top:0;padding-top:0}.cacc .badge{margin:0}@media(max-width:640px){.cgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.aud{flex:1 1 100%;margin:10px 0 0}.aud h3{font-size:15px;margin:4px 0 8px}.aud h4{font-size:13.5px;font-weight:600;color:var(--muted);margin:14px 0 6px}.aud h3+h4{margin-top:0}.audg{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 24px}.aud .k{font-size:12.5px;color:var(--muted);margin:0 0 4px}.bars{list-style:none;margin:0;padding:0}.bars li{display:grid;grid-template-columns:minmax(0,7.5em) minmax(0,1fr) 3.4em;align-items:center;gap:8px;font-size:13px;padding:2px 0}.bars li span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.bars .bt{height:8px;border-radius:4px;background:var(--surface-2);overflow:hidden}.bars .bt i{display:block;height:100%;border-radius:4px;background:var(--accent)}.bars b{font-weight:600;text-align:right;font-variant-numeric:tabular-nums}.audacc{padding:10px 0;border-top:1px solid var(--line)}.aud h3+.audacc{border-top:0;padding-top:0}@media(max-width:640px){.audg{grid-template-columns:minmax(0,1fr)}}
 .plist{list-style:none;margin:0;padding:0;border:1px solid var(--line);border-radius:var(--r-card);background:var(--surface);overflow:hidden}
 .prow2{position:relative;display:grid;grid-template-columns:56px minmax(0,1fr) auto;gap:12px;align-items:center;padding:10px 14px;border-top:1px solid var(--line)}.prow2:first-child{border-top:0}.prow2:hover{background:var(--surface-2)}.prow2:focus-within{outline:2px solid var(--accent);outline-offset:-2px}
 .prow2 .pth{width:56px;height:56px;border-radius:8px}.prow2 .pth .i{width:22px;height:22px}.prow2 a.pl{position:absolute;inset:0;z-index:1;font-size:0}.prow2 .er{text-align:right;font-size:13px;color:var(--muted)}.prow2 .er b{display:block;font-size:15px;color:var(--text)}
@@ -490,6 +491,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       discLead: "Profil kartlarını inceleyip doğrudan davet edin.", discQ: "Ara", discQPh: "İsim veya şehir", allNiches: "Tüm ilgi alanları",
       fMinFol: "Takipçi", anyMin: "Her takipçi sayısı", fCity: "Şehir", allCities: "Tüm şehirler", fSort: "Sıralama", fMore: "Filtreler", sortRec: "Önerilen", sortFol: "Takipçi (çoktan aza)", sortName: "Ada göre (A–Z)", fReset: "Filtreleri temizle", discCount: "{n} influencer", discCount1: "1 influencer", discCap: "En yeni 100 profil yüklendi; filtreler yalnızca bu profiller içinde çalışır.", discCap50: "En uygun 50 profil gösteriliyor.", discMatch: "İlgi alanlarınıza göre en uygun profiller.", discMatchC: "Seçili kampanyaya en uygun profiller.", discNoNiche: "Profilinize ilgi alanı eklerseniz size en uygun profilleri öne çıkarırız.", discNoNicheC: "Bu kampanyada ilgi alanı yok; tüm profiller gösteriliyor.", discNoMatch: "Ortak ilgi alanı olan profil yok; tüm profiller gösteriliyor.", discMatchErr: "Eşleşmeler yüklenemedi; tüm profiller gösteriliyor.", viewProf: "Profili gör", inviteFor: "{n} için davet ediyorsunuz.",
       clearFor: "Temizle", drClose: "Kapat", drNoPlat: "Platform eklenmemiş.", crFull: "Tam profil ve son gönderiler", crBack: "← Keşfet", crNone: "Bu influencer bulunamadı ya da artık listelenmiyor.", crAccounts: "Hesap ölçümleri", crPosts: "Son gönderiler", crSampleBadge: "Örnek veri", crSampleNote: "Gönderi bağlantısı henüz açık değil; aşağıdakiler örnek gönderilerdir. Kampanyaya eklemeler yalnız bu tarayıcıda tutulur.", crTarget: "Kampanya", crAdd: "Kampanyaya ekle", crRemove: "Kampanyadan çıkar", crAdded: "Gönderi kampanyaya eklendi.", crRemoved: "Gönderi kampanyadan çıkarıldı.", crVerified: "doğrulandı", crOpenPost: "Gönderiyi aç", crNoPosts: "Henüz gönderi yok.", drHist: "Sizinle geçmiş", drHistNone: "Henüz birlikte çalışmadınız.",
+      audTitle: "Kitle dağılımı", aud_followers: "Takipçiler", aud_engaged: "Bu ay etkileşenler", aud_viewers: "İzleyiciler (son 90 gün)", aud_age: "Yaş", aud_gender: "Cinsiyet", aud_country: "Ülke", aud_city: "Şehir", audCountryViews: "Ülke (izlenme payı)", audF: "Kadın", audM: "Erkek", audU: "Belirtilmemiş", audYtNote: "Yaş ve cinsiyet yalnız oturum açmış izleyicilerden.", audIgMin: "Kitle dağılımı henüz yok. Instagram bu veriyi 100 ve üzeri takipçili hesaplara verir; bir sonraki eşitlemede güncellenir.", audYtWait: "Kitle dağılımı henüz yok. YouTube kitle izni açıldığında hesabı bir kez yeniden bağlaman gerekebilir; az izlenen kanallarda YouTube bu veriyi vermez.", audNone: "Bu platform kitle dağılımı (yaş, cinsiyet, ülke) vermiyor.", audNoneYet: "Kitle dağılımı henüz yok.",
       drInvite: "Kampanyaya davet et", drNoOpen: "Davet edilebilecek açık kampanya yok: ya hepsinde zaten var ya da açık kampanyanız yok.",
       inviteInf: "Influencer davet et",
       discEmpty: "Influencer'lar profillerini markalara açtıkça burada listelenecek. Açık kampanyalarınız bu sırada Fırsatlar listesinde görünmeye devam eder.", discNone: "Bu ölçütlere uyan influencer bulunamadı.",
@@ -659,6 +661,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       discLead: "Browse profile cards and invite directly.", discQ: "Search", discQPh: "Name or city", allNiches: "All niches",
       fMinFol: "Followers", anyMin: "Any follower count", fCity: "City", allCities: "All cities", fSort: "Sort", fMore: "Filters", sortRec: "Recommended", sortFol: "Followers (high to low)", sortName: "Name (A–Z)", fReset: "Clear filters", discCount: "{n} influencers", discCount1: "1 influencer", discCap: "The newest 100 profiles are loaded; filters only search within them.", discCap50: "Showing the 50 best matches.", discMatch: "Best matches for your niches.", discMatchC: "Best matches for the selected campaign.", discNoNiche: "Add niches to your profile and we will bring your best matches to the top.", discNoNicheC: "This campaign has no niches; showing all profiles.", discNoMatch: "No profiles share your niches; showing all profiles.", discMatchErr: "Matches could not be loaded; showing all profiles.", viewProf: "View profile", inviteFor: "Inviting for {n}.",
       clearFor: "Clear", drClose: "Close", drNoPlat: "No platforms added.", crFull: "Full profile and recent posts", crBack: "← Discover", crNone: "This influencer wasn't found or is no longer listed.", crAccounts: "Account metrics", crPosts: "Recent posts", crSampleBadge: "Sample data", crSampleNote: "The posts connection isn't live yet; these are sample posts. Campaign additions are kept only in this browser.", crTarget: "Campaign", crAdd: "Add to campaign", crRemove: "Remove from campaign", crAdded: "Post added to the campaign.", crRemoved: "Post removed from the campaign.", crVerified: "verified", crOpenPost: "Open post", crNoPosts: "No posts yet.", drHist: "History with you", drHistNone: "You haven't worked together yet.",
+      audTitle: "Audience breakdown", aud_followers: "Followers", aud_engaged: "Engaged this month", aud_viewers: "Viewers (last 90 days)", aud_age: "Age", aud_gender: "Gender", aud_country: "Country", aud_city: "City", audCountryViews: "Country (share of views)", audF: "Women", audM: "Men", audU: "Unspecified", audYtNote: "Age and gender come from signed-in viewers only.", audIgMin: "No audience breakdown yet. Instagram only provides it for accounts with 100+ followers; it updates on the next sync.", audYtWait: "No audience breakdown yet. Once YouTube audience access is enabled you may need to reconnect the account once; YouTube doesn't provide it for channels with few views.", audNone: "This platform doesn't provide an audience breakdown (age, gender, country).", audNoneYet: "No audience breakdown yet.",
       drInvite: "Invite to a campaign", drNoOpen: "No open campaign to invite them to: they're already in all of them, or you have none open.",
       inviteInf: "Invite influencers",
       discEmpty: "Influencers appear here as they make their profiles visible to brands. Meanwhile your open campaigns stay in the Opportunities list.", discNone: "No influencers match these filters.",
@@ -2281,6 +2284,47 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
     return f;
   }
 
+  // Kitle dağılımı (form-worker src/oauth.js audience): Instagram takipçi + bu ay etkileşen, YouTube izleyici; değerler yüzde (0–100)
+  var AUD_P = { instagram: ["followers", "engaged"], youtube: ["viewers"] }, AUD_K = ["age", "gender", "country", "city"];
+  function audLabel(k, v) {
+    if (k === "gender") return t(v === "F" ? "audF" : v === "M" ? "audM" : "audU");
+    if (k === "country") { try { return new Intl.DisplayNames([locale()], { type: "region" }).of(v) || v; } catch (e) { return v; } }
+    return v;
+  }
+  function audPairs(l) {
+    return Array.isArray(l) ? l.filter(function (x) { return Array.isArray(x) && typeof x[0] === "string" && typeof x[1] === "number" && x[1] >= 0 && x[1] <= 100; }) : [];
+  }
+  // brand: markanın influencer sayfası; başlığı crAudience yazar, influencer'a yönelik açıklamalar gösterilmez
+  function audBox(a, brand) {
+    var secs = AUD_P[a.platform], au = a.audience && typeof a.audience === "object" ? a.audience : {}, kids = [], demo = false;
+    if (!secs) return brand ? null : el("p", { class: "meta aud", text: t("audNone") });
+    secs.forEach(function (s) {
+      var sec = au[s] && typeof au[s] === "object" ? au[s] : {}, blocks = [];
+      AUD_K.forEach(function (k) {
+        var l = audPairs(sec[k]);
+        if (!l.length) return;
+        if (k === "age" || k === "gender") demo = true;
+        blocks.push(el("div", null, [el("div", { class: "k", text: t(a.platform === "youtube" && k === "country" ? "audCountryViews" : "aud_" + k) }),
+          el("ul", { class: "bars" }, l.map(function (x) {
+            var n = audLabel(k, x[0]);
+            return el("li", null, [el("span", { dir: "auto", title: n, text: n }), el("span", { class: "bt", "aria-hidden": "true" }, el("i", { style: "width:" + x[1] + "%" })), el("b", { text: pct(x[1] / 100) })]);
+          }))]));
+      });
+      if (blocks.length) kids.push(el("h4", { text: t("aud_" + s) }), el("div", { class: "audg" }, blocks));
+    });
+    if (!kids.length) return el("p", { class: "meta aud", text: t(brand ? "audNoneYet" : a.platform === "youtube" ? "audYtWait" : "audIgMin") });
+    return el("div", { class: "aud" }, [brand ? null : el("h3", { text: t("audTitle") }), kids, demo && a.platform === "youtube" ? el("p", { class: "meta", text: t("audYtNote") }) : null]);
+  }
+  // Marka görünümü: gerçek ölçümlü Instagram/YouTube hesaplarının kitlesi; hiçbiri yoksa bölüm yok
+  function crAudience(m) {
+    var acc = m && m.metrics && m.metrics.mode === "live" && Array.isArray(m.metrics.accounts) ? m.metrics.accounts : [];
+    acc = acc.filter(function (a) { return a && AUD_P[a.platform] && a.source !== "none" && a.source !== "sample"; });
+    if (!acc.length) return null;
+    return el("div", { class: "aud" }, [el("h3", { text: t("audTitle") })].concat(acc.map(function (a) {
+      return el("div", { class: "audacc" }, [el("div", { class: "pmeta" }, el("b", { text: PL[a.platform] + (a.handle ? " · " + a.handle : "") })), audBox(a, true)]);
+    })));
+  }
+
   // Sosyal hesaplar (3 rol): resmî API'li platformlar OAuth ile bağlanır. Bağlanabilir platformlar Worker'ın `connectable` listesinden (yoksa: IG/TikTok/YouTube/LinkedIn).
   // Ölçüm kapalıysa (200 disabled:true ya da 409 "disabled") örnek kip: düğmeler kapalı. Marka/ajans + PR4 (403 forbidden) ya da PR5 alanları yok: platform başına "Yakında" satırı, hata yazılmaz.
   var OAUTH = ["instagram", "tiktok", "youtube", "linkedin"], SOON_OWN = ["instagram", "tiktok", "linkedin"], LI_REVOKE = "https://www.linkedin.com/mypreferences/d/data-sharing-for-permitted-services", SOC_GO = false;
@@ -2385,7 +2429,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       }
       // PR5: LinkedIn bağlı ama ölçüm onayı yok (label_code no_data): sayı yok, "veri yok" rozeti
       if (c.label_code === "no_data") return row(p, "ok", sub((h ? t("socOnAs", h) : t("socOn")) + " · " + t("socAwait")), ["b-slate", t("noData")], [x]);
-      return row(p, "ok", sub(h), ["b-ok", t("socOn")], [x], a ? mets(a, false) : null);
+      return row(p, "ok", sub(h), ["b-ok", t("socOn")], [x], a ? [mets(a, false), audBox(a)] : null);
     }
     function live(list, md) {
       var by = {};
@@ -3064,7 +3108,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       crMigrate(x, list); load(); paint();
       return [back("#discover", "crBack"), el("h1", { text: x.name }),
         x.city || x.bio ? el("p", { class: "lead" }, [x.city ? x.city : null, x.city && x.bio ? " · " : null, x.bio || null]) : null, chips(x.niches),
-        el("section", { class: "card" }, [el("div", { class: "ch" }, el("h2", { text: t("crAccounts") })), el("div", { class: "cb" }, crAccounts(res[2].d, x))]),
+        el("section", { class: "card" }, [el("div", { class: "ch" }, el("h2", { text: t("crAccounts") })), el("div", { class: "cb" }, [crAccounts(res[2].d, x), crAudience(res[2].d)])]),
         el("section", { class: "card" }, [el("div", { class: "ch" }, el("h2", { text: t("crPosts") })), el("div", { class: "cb" }, [
           sample && !perr ? el("p", { class: "meta" }, [el("span", { class: "badge b-sample", text: t("crSampleBadge") }), " ", t("crSampleNote")]) : null,
           open.length ? el("div", { class: "f ctarget" }, fld("cr-camp", t("crTarget"), sel)) : el("p", { class: "meta" }, [t("needOpen") + " ", el("a", { class: "lk44", href: "#new", text: t("doNew") })]),

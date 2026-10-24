@@ -28,6 +28,10 @@ METRICS_ENABLED = "1"
 # brandcorner gönderi ölçümleri (GET/POST /app/posts*). "1": D1'e yazılır; önce migrations/0006_posts.sql uygulanmalı.
 # "0": uçlar 404 döner, panel kaydı tarayıcıda tutar. D1 0006 uygulandı (19 Eki 2026).
 POSTS_ENABLED = "1"
+# YouTube kitle dağılımı (yaş, cinsiyet, ülke). "1": bağlanırken yt-analytics.readonly izni de istenir. Önce GCP'de
+# YouTube Analytics API açılmalı ve izin OAuth onay ekranına eklenmeli; mevcut bağlantılar yeniden bağlanınca veri alır.
+# "0": yalnız youtube.readonly; kitle raporu 403 döner, panel "yeniden bağlanınca" der.
+YT_ANALYTICS = "0"
 
 # cornergroup.co'da Email Routing açık, berkay@saascorner.co doğrulanmış hedef adres
 [[send_email]]
