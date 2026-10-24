@@ -64,6 +64,12 @@ export function platformOf(url) {
   return null;
 }
 
+// Kitle dağılımı sütunu (migrations/0009_audience.sql): JSON nesnesi; boş ya da bozuk değer null
+const parseAudience = s => {
+  if (typeof s !== "string" || !s) return null;
+  try { const a = JSON.parse(s); return a && typeof a === "object" && !Array.isArray(a) ? a : null; } catch { return null; }
+};
+
 const account = (platform, handle, row) => {
   const real = row?.taken_at && OFFICIAL.includes(platform);
   return {
@@ -72,6 +78,7 @@ const account = (platform, handle, row) => {
     followers: real ? row.followers : null, avg_views: real ? row.avg_views : null,
     avg_likes: real ? row.avg_likes : null, avg_comments: real ? row.avg_comments : null,
     taken_at: real ? row.taken_at : null,
+    audience: real ? parseAudience(row.audience) : null,
   };
 };
 
@@ -83,12 +90,12 @@ export async function accountMetrics(env, userId, profile) {
       mode: "sample", label: SAMPLE, label_code: "sample",
       accounts: declared.map(({ platform, handle }) => {
         const ok = OFFICIAL.includes(platform);
-        return { platform, handle: handle ?? null, source: ok ? "sample" : "none", label: ok ? SAMPLE : NO_DATA, label_code: ok ? "sample" : "no_data", ...sampleAccount(platform, handle), taken_at: null };
+        return { platform, handle: handle ?? null, source: ok ? "sample" : "none", label: ok ? SAMPLE : NO_DATA, label_code: ok ? "sample" : "no_data", ...sampleAccount(platform, handle), audience: null, taken_at: null };
       }),
     };
   }
   const { results = [] } = await env.DB.prepare(
-    `SELECT a.platform, a.handle, s.taken_at, s.source, s.followers, s.avg_views, s.avg_likes, s.avg_comments
+    `SELECT a.platform, a.handle, s.taken_at, s.source, s.followers, s.avg_views, s.avg_likes, s.avg_comments, s.audience
      FROM social_accounts a
      LEFT JOIN metric_snapshots s ON s.id = (SELECT id FROM metric_snapshots WHERE account_id = a.id ORDER BY taken_at DESC, id DESC LIMIT 1)
      WHERE a.user_id = ? AND a.status = 'connected'`,
