@@ -47,9 +47,9 @@ const user = (db, email, role = "influencer", profile = {}) =>
   insert(db, "INSERT INTO users (site, email, name, role, lang, pass, consent_at, profile) VALUES ('brandcorner.co', ?, 'Ad', ?, 'tr', 'x', datetime('now'), ?)", email, role, JSON.stringify(profile));
 const social = (db, userId, platformName, handle, status = "connected") =>
   insert(db, "INSERT INTO social_accounts (user_id, platform, handle, status) VALUES (?, ?, ?, ?)", userId, platformName, handle, status);
-const snapshot = (db, accountId, takenAt, followers, views = 100, likes = 10, comments = 1) =>
-  insert(db, "INSERT INTO metric_snapshots (account_id, taken_at, followers, avg_views, avg_likes, avg_comments) VALUES (?, ?, ?, ?, ?, ?)",
-    accountId, takenAt, followers, views, likes, comments);
+const snapshot = (db, accountId, takenAt, followers, views = 100, likes = 10, comments = 1, posts = null) =>
+  insert(db, "INSERT INTO metric_snapshots (account_id, taken_at, followers, avg_views, avg_likes, avg_comments, posts_sampled) VALUES (?, ?, ?, ?, ?, ?, ?)",
+    accountId, takenAt, followers, views, likes, comments, posts);
 
 // ---- örnek veri ----
 
@@ -153,7 +153,7 @@ test("accountMetrics canlı mod: beyan sırası, son ölçüm, bağlı platform 
   const a = user(db, "a@x.co"), b = user(db, "b@x.co");
   const ig = social(db, a, "instagram", "ig_real");
   snapshot(db, ig, "2026-10-01 10:00:00", 1000);
-  snapshot(db, ig, "2026-10-05 10:00:00", 1500, 300, 30, 3);
+  snapshot(db, ig, "2026-10-05 10:00:00", 1500, 300, 30, 3, 12);
   snapshot(db, ig, "2026-09-01 10:00:00", 900);
   social(db, a, "tiktok", "tt_real"); // ölçümü yok
   snapshot(db, social(db, a, "youtube", "yt_real"), "2026-10-02 08:00:00", 7000, 700, 70, 7); // beyan edilmemiş
@@ -171,13 +171,13 @@ test("accountMetrics canlı mod: beyan sırası, son ölçüm, bağlı platform 
   assert.equal(m.mode, "live");
   assert.equal(m.label, null);
   assert.equal(m.label_code, null);
-  const empty = { source: "none", label: NO_DATA, label_code: "no_data", followers: null, avg_views: null, avg_likes: null, avg_comments: null, taken_at: null, audience: null };
+  const empty = { source: "none", label: NO_DATA, label_code: "no_data", followers: null, avg_views: null, avg_likes: null, avg_comments: null, posts_sampled: null, taken_at: null, audience: null };
   assert.deepEqual(m.accounts, [
     { platform: "linkedin", handle: "li_real", ...empty },
-    { platform: "instagram", handle: "ig_real", source: "oauth", label: null, label_code: null, followers: 1500, avg_views: 300, avg_likes: 30, avg_comments: 3, taken_at: "2026-10-05 10:00:00", audience: null },
+    { platform: "instagram", handle: "ig_real", source: "oauth", label: null, label_code: null, followers: 1500, avg_views: 300, avg_likes: 30, avg_comments: 3, posts_sampled: 12, taken_at: "2026-10-05 10:00:00", audience: null },
     { platform: "tiktok", handle: "tt_real", ...empty },
     { platform: "x", handle: "x_profil", ...empty },
-    { platform: "youtube", handle: "yt_real", source: "oauth", label: null, label_code: null, followers: 7000, avg_views: 700, avg_likes: 70, avg_comments: 7, taken_at: "2026-10-02 08:00:00", audience: null },
+    { platform: "youtube", handle: "yt_real", source: "oauth", label: null, label_code: null, followers: 7000, avg_views: 700, avg_likes: 70, avg_comments: 7, posts_sampled: null, taken_at: "2026-10-02 08:00:00", audience: null },
   ]);
   assert.deepEqual((await accountMetrics(env, 999, profile)).accounts.map(x => [x.platform, x.handle, x.label]), [
     ["linkedin", "li_profil", NO_DATA], ["instagram", "ig_profil", NO_DATA], ["tiktok", "tt_profil", NO_DATA],
@@ -198,6 +198,17 @@ test("accountMetrics canlı mod: kitle dağılımı son ölçümden; bozuk ya da
   db.prepare("UPDATE social_accounts SET status = 'connected'").run();
   const m = await accountMetrics(env, u, {});
   assert.deepEqual(Object.fromEntries(m.accounts.map(a => [a.platform, a.audience])), { instagram: aud, youtube: null, tiktok: null });
+});
+
+test("accountMetrics canlı mod: paylaşımı olmayan hesap takipçi + posts_sampled 0 döner", async () => {
+  const db = freshDb(), env = { DB: d1(db), METRICS_ENABLED: "1" };
+  const a = user(db, "a@x.co");
+  snapshot(db, social(db, a, "tiktok", "tt_bos"), "2026-10-24 10:00:00", 6, null, null, null, 0);
+  db.prepare("UPDATE social_accounts SET status = 'connected' WHERE user_id = ?").run(a);
+  assert.deepEqual((await accountMetrics(env, a, {})).accounts, [{
+    platform: "tiktok", handle: "tt_bos", source: "oauth", label: null, label_code: null,
+    followers: 6, avg_views: null, avg_likes: null, avg_comments: null, posts_sampled: 0, taken_at: "2026-10-24 10:00:00", audience: null,
+  }]);
 });
 
 test("linkMetrics canlı mod: aynı başvuru ve linkin son ölçümü", async () => {
@@ -318,6 +329,6 @@ test("metrik uçları: yetki, görünürlük ve örnek/canlı mod", async () => 
   const brandView = await call("GET", `/app/metrics/${inf.id}`, { token: brand.token });
   assert.deepEqual(brandView.body.metrics.accounts[0], {
     platform: "instagram", handle: "inf_ig", source: "oauth", label: null, label_code: null,
-    followers: 5100, avg_views: 900, avg_likes: 80, avg_comments: 6, taken_at: "2026-10-10 12:00:00", audience: null,
+    followers: 5100, avg_views: 900, avg_likes: 80, avg_comments: 6, posts_sampled: null, taken_at: "2026-10-10 12:00:00", audience: null,
   });
 });
