@@ -204,6 +204,35 @@ export async function disconnectOAuth(env, userId, p, f = fetch) {
   }
 }
 
+// YouTube API saklama kuralı (developers.google.com/youtube/terms/developer-policies III.E.4): istatistik 30 günden
+// uzun tutulabilir ama yetki 30 günde bir doğrulanmalı; başka API verisi (başlık, kapak, kitle) en çok 30 gün durur,
+// sonra silinir ya da yenilenir. Kullanıcı izni Google'ın ayarlarından kaldırırsa veri 30 gün içinde silinmeli (III.D.2.c.ii).
+// Taramaya giren gönderi en geç 7 günde bir ölçülür (syncAccount), bu yüzden son ölçümü YT_RETAIN_DAYS günden eski
+// API gönderisi taramadan çıkmıştır: ölçümleriyle silinir. Ölçümü olmayan gönderide aktarım tarihi esas alınır. Hesabın
+// son YT_RETAIN_DAYS gününde başarılı senkronu (metric_snapshots satırı) yoksa yetki doğrulanamamıştır, hesap ölçümleri
+// silinir; hesap ve bağ durumu olduğu gibi kalır. Elle girilen gönderiler (account_id NULL) API verisi değildir, dokunulmaz.
+// Saatlik cron ve senkron gecikmesi için 30 güne bir gün pay bırakılır. Tablo ya da sütun yoksa (0001, 0006, 0007
+// uygulanmamış) o adımda silinecek veri yoktur, diğer adım yine çalışır.
+export const YT_RETAIN_DAYS = 29;
+export async function ytRetention(env) {
+  const age = `-${YT_RETAIN_DAYS} days`;
+  const stale = `SELECT id FROM posts p WHERE p.platform = 'youtube' AND p.account_id IS NOT NULL
+    AND COALESCE((SELECT MAX(at) FROM post_snaps s WHERE s.post_id = p.id) < date('now', ?1), p.created_at < datetime('now', ?1))`;
+  const skip = e => { if (!/no such (table|column)/i.test(e?.message || "")) throw e; };
+  try {
+    await env.DB.batch([
+      env.DB.prepare(`DELETE FROM post_snaps WHERE post_id IN (${stale})`).bind(age),
+      env.DB.prepare(`DELETE FROM posts WHERE id IN (${stale})`).bind(age),
+    ]);
+  } catch (e) { skip(e); }
+  try {
+    await env.DB.prepare(
+      `DELETE FROM metric_snapshots WHERE account_id IN (SELECT id FROM social_accounts WHERE platform = 'youtube')
+         AND account_id NOT IN (SELECT account_id FROM metric_snapshots WHERE taken_at >= datetime('now', ?1))`,
+    ).bind(age).run();
+  } catch (e) { skip(e); }
+}
+
 // Sağlayıcıda izni geri alma. Google'da refresh token iptali uygulamanın bu hesaptaki tüm iznini kaldırır.
 const REVOKE = {
   tiktok: (env, access) => [`${TT}/oauth/revoke/`, form({ client_key: env.TIKTOK_CLIENT_KEY, client_secret: env.TIKTOK_CLIENT_SECRET, token: access })],
