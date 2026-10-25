@@ -392,6 +392,10 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       pConnSync: "Hesap bağlı; gönderilerin her gün otomatik çekilir.", pConnOk: "Bağlı", pConnHow: "Bağladığında gönderilerin buraya kendiliğinden gelir.", pConnGo: "Bağla",
       psPosts: "Gönderi", psReach: "Toplam erişim", psPer: "Gönderi başına {n}", psEr: "Ortalama etkileşim oranı", psEng: "{n} beğeni ve yorum", psTop: "En çok erişen", psFirst: "İlk gönderini ekle",
       pLiNote: "LinkedIn kişisel gönderi ölçümlerini dışarıya vermiyor; LinkedIn gönderilerini elle ya da CSV ile ekle.",
+      pOlder: "Daha eskileri getir", pOlderNote: "Otomatik senkron her hesaptan en yeni gönderileri alır: Instagram ve YouTube'da 200, TikTok'ta 100. Daha eskilerini görmek için \"Daha eskileri getir\"e bas; her basışta 200 gönderi daha gelir, hesabında toplam en çok 1000 gönderi tutulur.",
+      pOlderAdded: "{n} eski gönderi eklendi.", pOlderMore: "Daha eskileri için yeniden bas.", pOlderEnd: "Bu hesabın tüm gönderileri geldi.", pOlderNone: "Bu hesapta getirilecek daha eski gönderi yok.",
+      pOlderFull: "Gönderi sınırına (1000) ulaştın; daha fazla gönderi eklenemez.", pOlderBusy: "Bu hesap şu an güncelleniyor; birkaç dakika sonra yeniden dene.",
+      pOlderRate: "Bir saatte en çok 10 kez getirebilirsin; biraz sonra yeniden dene.", pOlderProv: "Platform şu an yanıt vermedi; biraz sonra yeniden dene.", pOlderConn: "Hesap bağlantısı kopmuş; Profil'den yeniden bağla.",
       pNoCap: "Açıklama yok",
       sCampaigns: "Kampanya", sOpen: "Açık kampanya", sPending: "Bekleyen başvuru", sApproved: "Onaylanan içerik",
       sReview: "Onay bekleyen içerik", sWork: "Aktif iş", sDone: "Tamamlanan", subNear: "En yakını: {n}", subTop: "En çok: {n}", subNext: "Sıradaki: {n}", ocTitle: "Açık kampanyalar", ocAll: "Tümü", ocEmpty: "Açık kampanyan yok.", dLeft: "{n} gün kaldı", dLast: "Bugün son gün", dGone: "Süresi doldu",
@@ -577,6 +581,10 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       pConnSync: "Account connected; your posts sync automatically every day.", pConnOk: "Connected", pConnHow: "Once connected, your posts arrive here on their own.", pConnGo: "Connect",
       psPosts: "Posts", psReach: "Total reach", psPer: "{n} per post", psEr: "Average engagement rate", psEng: "{n} likes and comments", psTop: "Top by reach", psFirst: "Add your first post",
       pLiNote: "LinkedIn doesn't share personal post metrics with other apps; add LinkedIn posts by hand or with a CSV.",
+      pOlder: "Load older posts", pOlderNote: "Automatic sync picks up the newest posts from each account: 200 on Instagram and YouTube, 100 on TikTok. To see older ones, press \"Load older posts\"; each press brings 200 more, and your account keeps at most 1000 posts in total.",
+      pOlderAdded: "{n} older posts added.", pOlderMore: "Press again for older ones.", pOlderEnd: "All posts from this account are in.", pOlderNone: "This account has no older posts to load.",
+      pOlderFull: "You've reached the 1000-post limit; no more posts can be added.", pOlderBusy: "This account is updating right now; try again in a few minutes.",
+      pOlderRate: "You can load older posts at most 10 times an hour; try again a bit later.", pOlderProv: "The platform didn't respond; try again a bit later.", pOlderConn: "The account connection was lost; reconnect it from Profile.",
       pNoCap: "No caption",
       sCampaigns: "Campaigns", sOpen: "Open campaigns", sPending: "Pending applications", sApproved: "Approved content",
       sReview: "Content awaiting approval", sWork: "Active work", sDone: "Completed", subNear: "Soonest: {n}", subTop: "Most: {n}", subNext: "Next up: {n}", ocTitle: "Open campaigns", ocAll: "All", ocEmpty: "You have no open campaigns.", dLeft: "{n} days left", dLast: "Last day today", dGone: "Expired",
@@ -2910,17 +2918,37 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
   }
   // Otomatik bağlantılar: bayrak kapalıysa elle yol, açık ve bağlıysa "her gün çekilir", bağlı değilse profildeki sosyal hesaplara "Bağla"; LinkedIn notu her zaman
   function pConnCard(c) {
-    var code = c.err && c.err.code, off = code === "disabled" || code === "forbidden" || (!c.err && c.disabled), kids;
+    var code = c.err && c.err.code, off = code === "disabled" || code === "forbidden" || (!c.err && c.disabled), kids, older = {};
+    Object.keys(CONNECTORS).forEach(function (p) { older[p] = { ok: okNote(), err: note() }; });
     if (c.err && !off) kids = failLine(c.err, function () { render(true); });
     else if (off) kids = el("p", { class: "meta", text: t("pConnOff") });
     else kids = Object.keys(CONNECTORS).map(function (p) {
       var cn = (c.connections || []).filter(function (x) { return x.platform === p; })[0], on = !!cn && cn.status === "connected";
       return el("div", { class: "srow" }, [el("span", { class: "ic " + (on ? "ok" : "slate"), "aria-hidden": "true" }, ic("link")),
-        el("div", { class: "tx" }, [el("b", { text: PL[p] }), el("span", { text: t(on ? "pConnSync" : "pConnHow") })]),
-        el("div", { class: "sa" }, on ? el("span", { class: "badge b-ok", text: t("pConnOk") })
+        el("div", { class: "tx" }, [el("b", { text: PL[p] }), el("span", { text: t(on ? "pConnSync" : "pConnHow") }), on ? older[p].ok : null, on ? older[p].err : null]),
+        el("div", { class: "sa" }, on ? [el("span", { class: "badge b-ok", text: t("pConnOk") }), pOlderBtn(p, older[p])]
           : el("a", { class: "btn sm sec", href: "#profile", "aria-label": t("pConnGo") + ": " + PL[p], text: t("pConnGo"), onclick: function () { SOC_GO = true; } }))]);
     });
-    return el("section", { class: "card" }, [el("div", { class: "ch" }, el("h2", { text: t("pConn") })), el("div", { class: "cb" }, [kids, el("p", { class: "pnote", text: t("pLiNote") })])]);
+    var any = !off && !c.err && (c.connections || []).some(function (x) { return CONNECTORS[x.platform] && x.status === "connected"; });
+    return el("section", { class: "card" }, [el("div", { class: "ch" }, el("h2", { text: t("pConn") })), el("div", { class: "cb" }, [kids,
+      any ? el("p", { class: "pnote", text: t("pOlderNote") }) : null, el("p", { class: "pnote", text: t("pLiNote") })])]);
+  }
+  // Daha eski gönderiler (app/posts/older): senkronun almadığı en çok 200 eski gönderi; eklenince sayfa yeniden çizilir (GET app/posts)
+  function pOlderBtn(p, m) {
+    var btn = el("button", { type: "button", class: "btn sm sec", "aria-label": t("pOlder") + ": " + PL[p], text: t("pOlder") });
+    btn.addEventListener("click", function () {
+      say(m.ok, ""); say(m.err, ""); busy(btn, true);
+      BC.call("POST", "app/posts/older", { platform: p }).then(function (r) {
+        busy(btn, false);
+        if (!r.added) { say(m.ok, t(r.full ? "pOlderFull" : "pOlderNone")); return; }
+        pAfter(t("pOlderAdded", num(r.added)) + " " + t(r.full ? "pOlderFull" : r.more ? "pOlderMore" : "pOlderEnd"));
+      }, function (e) {
+        busy(btn, false);
+        say(m.err, BC.msg(e.code, { busy: t("pOlderBusy"), rate: t("pOlderRate"), posts_full: t("pOlderFull"), provider: t("pOlderProv"),
+          not_connected: t("pOlderConn"), account_changed: t("pOlderConn") }));
+      });
+    });
+    return btn;
   }
   // Özet şeridi: süzülen gönderilerin son ölçümleri; erişim kutusunda son 12 gönderinin erişim çubukları (eskiden yeniye)
   function pSum(xs) {
