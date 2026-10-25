@@ -160,7 +160,7 @@ export const pkceChallenge = async verifier => b64u(new Uint8Array(await crypto.
 
 // Bağı koparır: token silinir, hesabın ölçümleri (metric_snapshots) ve hesaptan aktarılan gönderiler (posts,
 // post_snaps; elle girilenler kalır) silinir, link ölçümlerinin hesap bağı kopar, social_accounts "revoked" olur
-// ve platform kimliği boşalır (hesap başka kullanıcıya bağlanabilir).
+// ve platform kimliği (Instagram'da uygulamaya özel kimlik de, 0011) boşalır (hesap başka kullanıcıya bağlanabilir).
 // Platform yapılandırılmamış olsa da çalışır; 0002 uygulanmamışsa (oauth_tokens yok) silinecek token yoktur,
 // bağ yine koparılır; 0001 de yoksa yapılacak bir şey yoktur. Ardından sağlayıcıda izin geri alınmaya
 // çalışılır (TikTok, Google); olmazsa yine de bağ kopmuştur. Instagram'ın ve LinkedIn'in iptal ucu yok, kullanıcı
@@ -193,6 +193,14 @@ export async function disconnectOAuth(env, userId, p, f = fetch) {
   } catch (e) {
     if (tokens || !missing(e)) throw e;
     return;
+  }
+  // 0011 uygulanmamışsa sütun yoktur
+  if (p === "instagram") {
+    try {
+      await env.DB.prepare("UPDATE social_accounts SET scoped_id = NULL WHERE user_id = ? AND platform = ?").bind(userId, p).run();
+    } catch (e) {
+      if (!/no such (table|column)/i.test(e?.message || "")) throw e;
+    }
   }
   if (!row || !REVOKE[p] || !oauthReady(env, p)) return;
   try {
@@ -399,8 +407,8 @@ function ytPost(v) {
 const API = {
   instagram: {
     async profile(token, f) {
-      const me = await json(f, igUrl("me", { fields: "user_id,username,followers_count", access_token: token }));
-      return { external_id: me.user_id ?? me.id, handle: me.username, followers: me.followers_count };
+      const me = await json(f, igUrl("me", { fields: "user_id,id,username,followers_count", access_token: token }));
+      return { external_id: me.user_id ?? me.id, scoped_id: me.id, handle: me.username, followers: me.followers_count };
     },
     async recent(token, f) {
       const base = "id,like_count,comments_count,permalink,timestamp,media_type,media_product_type,caption,media_url,thumbnail_url";
@@ -554,10 +562,13 @@ const extId = v => {
   if (!id || id.length > 128) throw new ProviderError("no_id");
   return id;
 };
+// Uygulamaya özel kimlik (scoped_id, 0011): yalnız sağlayıcı veriyorsa döner (Instagram), geçersizse null; diğer
+// platformların çıktısı değişmez. Meta geri çağrısında (metaCallback) eşleştirme için.
+const scoped = pr => pr.scoped_id === undefined ? {} : { scoped_id: (() => { try { return extId(pr.scoped_id); } catch { return null; } })() };
 
 export async function fetchProfile(p, token, f = fetch) {
   const pr = await API[p].profile(token, f);
-  return { external_id: extId(pr.external_id), handle: cleanHandle(pr.handle), followers: num(pr.followers) };
+  return { external_id: extId(pr.external_id), ...scoped(pr), handle: cleanHandle(pr.handle), followers: num(pr.followers) };
 }
 
 // Takipçi + son SAMPLE gönderinin ortalama izlenme, beğeni ve yorumu; posts: aktarılacak gönderiler (en yeni önce),
@@ -570,7 +581,7 @@ export async function fetchMetrics(p, token, f = fetch) {
   const all = await API[p].recent(token, f, pr), last = all.slice(0, SAMPLE);
   const audience = API[p].audience ? await API[p].audience(token, f, pr, all).catch(() => null) : null;
   return {
-    external_id: extId(pr.external_id), handle: cleanHandle(pr.handle), followers: num(pr.followers),
+    external_id: extId(pr.external_id), ...scoped(pr), handle: cleanHandle(pr.handle), followers: num(pr.followers),
     avg_views: avg(last.map(x => x.views)), avg_likes: avg(last.map(x => x.likes)), avg_comments: avg(last.map(x => x.comments)),
     posts_sampled: last.length, posts: all.map(x => x.post).filter(Boolean), posts_recent: last.filter(x => x.post).length, audience,
   };
@@ -622,12 +633,12 @@ export async function syncAccount(env, userId, p, f = fetch) {
   ).bind(PROVIDERS[p].refresh, userId, p).first();
   if (!row) throw new ProviderError("not_connected");
   let cur = row.access_token;
-  const mark = (error, handle = null) => env.DB.prepare(
-    `UPDATE social_accounts SET error = ?, handle = COALESCE(?, handle), updated_at = datetime('now'),
+  const mark = (error, handle = null, scopedId = null) => env.DB.prepare(
+    `UPDATE social_accounts SET error = ?, handle = COALESCE(?, handle), scoped_id = COALESCE(?, scoped_id), updated_at = datetime('now'),
        sync_changes = CASE WHEN ? IS NULL THEN 0 ELSE sync_changes END
      WHERE user_id = ? AND platform = ? AND status = 'connected' AND external_id = ?
        AND EXISTS (SELECT 1 FROM oauth_tokens WHERE user_id = ? AND platform = ? AND access_token = ?)`,
-  ).bind(error, handle, error, userId, p, row.external_id, userId, p, cur).run();
+  ).bind(error, handle, scopedId, error, userId, p, row.external_id, userId, p, cur).run();
   // Kalıcı kimlik uyuşmazlığını say; aynı bağ ve aynı token'a bağlı (yarışta 0 satır: sayılmaz, "changed")
   const mismatch = async () => {
     const r = await env.DB.prepare(
@@ -654,7 +665,7 @@ export async function syncAccount(env, userId, p, f = fetch) {
     }
     const m = await fetchMetrics(p, access, f);
     if (m.external_id !== row.external_id) throw new ProviderError(await mismatch());
-    if (!(await mark(null, m.handle)).meta?.changes) throw new ProviderError("changed");
+    if (!(await mark(null, m.handle, m.scoped_id ?? null)).meta?.changes) throw new ProviderError("changed");
     return m;
   } catch (e) {
     if (e instanceof ProviderError && (e.code === "changed" || e.code === "account_changed")) throw e;
@@ -799,6 +810,66 @@ export async function oauthCallback(req, url, env) {
   return st ? back(st.return_to, "pending", `#ticket=${ticket}`) : page(EXPIRED, 400);
 }
 
+// ---- Meta geri çağrıları: POST /oauth/instagram/deauthorize, POST /oauth/instagram/delete, GET /oauth/instagram/delete?code=… ----
+
+const DELETE_CODE = /^[A-Za-z0-9_-]{16}$/; // 12 rastgele baytın base64url'i
+const jsonOut = body => new Response(JSON.stringify(body), { headers: { "content-type": "application/json", "cache-control": "no-store" } });
+
+// Meta signed_request: "<imza>.<yük>" (base64url, dolgusuz); imza, yük parçasının Instagram app secret'ıyla HMAC-SHA256'sı.
+// Geçerliyse user_id (rakam dizisi), değilse null. user_id sayı gelirse JSON.parse büyük sayıyı yuvarlar; ham metinden okunur.
+async function signedUser(env, sr) {
+  try {
+    const [sig, payload, extra] = String(sr ?? "").split(".");
+    if (!sig || !payload || extra !== undefined) return null;
+    const key = await crypto.subtle.importKey("raw", enc.encode(env[PROVIDERS.instagram.secret]), { name: "HMAC", hash: "SHA-256" }, false, ["verify"]);
+    if (!(await crypto.subtle.verify("HMAC", key, unb64u(sig), enc.encode(payload)))) return null;
+    const raw = dec.decode(unb64u(payload)), data = JSON.parse(raw);
+    if (String(data?.algorithm).toUpperCase() !== "HMAC-SHA256") return null;
+    const id = typeof data.user_id === "string" ? data.user_id : /"user_id"\s*:\s*(\d+)\s*[,}]/.exec(raw)?.[1] ?? "";
+    return /^\d{1,32}$/.test(id) ? id : null;
+  } catch {
+    return null;
+  }
+}
+
+// Kullanıcı Instagram'da uygulamanın iznini kaldırınca (deauthorize) ya da verisinin silinmesini isteyince (delete)
+// Meta imzalı istek gönderir. user_id hem external_id (profesyonel hesap kimliği) hem scoped_id (uygulamaya özel
+// kimlik) ile eşleştirilir; Meta hangisini gönderdiğini yazmıyor. Eşleşen her bağ disconnectOAuth ile koparılır
+// (token, ölçüm, kitle ve aktarılan gönderiler silinir); delete'te görünen ad da silinir. delete Meta'nın beklediği
+// {url, confirmation_code} ile döner; kod saklanmaz, durum sayfası (GET) silmenin istek anında bittiğini yazar.
+// Bilinmeyen user_id de aynı yanıtı alır (hangi hesabın bağlı olduğu dışarıdan anlaşılmasın).
+export async function metaCallback(req, url, env, f = fetch) {
+  const kind = /^\/oauth\/instagram\/(deauthorize|delete)$/.exec(url.pathname)?.[1];
+  if (!kind) return page("Bulunamadı", 404);
+  if (req.method === "GET" && kind === "delete") {
+    const code = url.searchParams.get("code") || "";
+    if (!DELETE_CODE.test(code)) return page("Geçersiz silme kodu.\n\nInvalid deletion code.", 400);
+    return page(`Silme isteği ${code} tamamlandı. brandcorner'da bu Instagram hesabına ait gönderi, ölçüm, kitle ve bağlantı verisi kalmadı.\n\n`
+      + `Deletion request ${code} is complete. brandcorner holds no post, metric, audience or connection data for this Instagram account.`, 200);
+  }
+  if (req.method !== "POST") return page("İzin verilmeyen yöntem", 405);
+  if (!env?.[PROVIDERS.instagram.secret]) return page(NOT_CONFIGURED, 503);
+  // signed_request birkaç yüz bayttır; büyük gövde ayrıştırılmaz
+  const body = await req.text();
+  const igUser = body.length <= 8192 ? await signedUser(env, new URLSearchParams(body).get("signed_request")) : null;
+  if (!igUser) return page("Geçersiz istek", 400);
+  const { results = [] } = await env.DB.prepare(
+    "SELECT user_id FROM social_accounts WHERE platform = 'instagram' AND (external_id = ? OR scoped_id = ?)",
+  ).bind(igUser, igUser).all();
+  for (const r of results) {
+    await disconnectOAuth(env, r.user_id, "instagram", f);
+    if (kind === "delete") {
+      await env.DB.prepare("UPDATE social_accounts SET handle = NULL, updated_at = datetime('now') WHERE user_id = ? AND platform = 'instagram'")
+        .bind(r.user_id).run();
+    }
+  }
+  console.log("meta", kind, results.length);
+  if (kind === "deauthorize") return jsonOut({ ok: true });
+  const code = b64u(crypto.getRandomValues(new Uint8Array(12)));
+  const base = String(env?.OAUTH_REDIRECT_BASE || url.origin).replace(/\/+$/, "");
+  return jsonOut({ url: `${base}/oauth/instagram/delete?code=${code}`, confirmation_code: code });
+}
+
 // Hata kodu ve HTTP durumu; platform.js bunu kendi Bad hatasına çevirir.
 export class OAuthFail extends Error {
   constructor(code, status = 400) { super(code); this.code = code; this.status = status; }
@@ -838,12 +909,13 @@ export async function finishOAuth(env, userId, ticket, f = fetch, role = null) {
       env.DB.prepare(`DELETE FROM metric_snapshots WHERE account_id IN (${old})`).bind(userId, p, prof.external_id),
       env.DB.prepare(`UPDATE link_snapshots SET account_id = NULL WHERE account_id IN (${old})`).bind(userId, p, prof.external_id),
       env.DB.prepare(
-        `INSERT INTO social_accounts (user_id, platform, handle, external_id, status, connected_at, error)
-         VALUES (?, ?, ?, ?, 'connected', datetime('now'), NULL)
+        `INSERT INTO social_accounts (user_id, platform, handle, external_id, scoped_id, status, connected_at, error)
+         VALUES (?, ?, ?, ?, ?, 'connected', datetime('now'), NULL)
          ON CONFLICT (user_id, platform) DO UPDATE SET handle = excluded.handle, external_id = excluded.external_id,
+           scoped_id = excluded.scoped_id,
            status = 'connected', connected_at = excluded.connected_at, error = NULL, next_sync_at = NULL, sync_changes = 0,
            updated_at = datetime('now')`,
-      ).bind(userId, p, prof.handle ?? null, prof.external_id),
+      ).bind(userId, p, prof.handle ?? null, prof.external_id, prof.scoped_id ?? null),
       SYNCED.includes(p)
         ? env.DB.prepare(
           `INSERT INTO oauth_tokens (user_id, platform, access_token, refresh_token, expires_at, scope)

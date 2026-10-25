@@ -3,7 +3,7 @@
 // Kayıt D1'e yazılır; e-posta MAIL binding'i (Email Routing) üzerinden MAIL_TO adresine gider.
 import { EmailMessage } from "cloudflare:email";
 import { platform, cleanup } from "./platform.js";
-import { oauthCallback, syncDue } from "./oauth.js";
+import { metaCallback, oauthCallback, syncDue } from "./oauth.js";
 import { metricsEnabled } from "./metrics.js";
 
 const MAX_FIELDS = 30, MAX_LEN = 5000, RATE = 5; // 10 dakikada IP başına en fazla RATE gönderim
@@ -32,6 +32,8 @@ export default {
       headers: origin ? { "access-control-allow-origin": origin, "access-control-allow-methods": "GET, POST, PUT", "access-control-allow-headers": "content-type, authorization", "access-control-max-age": "86400", vary: "Origin" } : {},
     });
     if (url.pathname.startsWith("/rakip/")) return rakip(req, url, env, origin);
+    // Meta'nın deauthorize ve veri silme geri çağrıları (src/oauth.js; imzalı, sunucudan sunucuya)
+    if (/^\/oauth\/instagram\/(deauthorize|delete)$/.test(url.pathname)) return metaCallback(req, url, env);
     // Sosyal hesap bağlama dönüşü (src/oauth.js): sağlayıcı yönlendirmesinde Origin yok, platform() dışında
     if (url.pathname.startsWith("/oauth/")) return oauthCallback(req, url, env);
     // brandcorner.co platformu: üyelik ve panel

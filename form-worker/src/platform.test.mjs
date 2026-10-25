@@ -575,6 +575,17 @@ test("CORS ön isteği PUT'a izin verir", async () => {
   assert.equal(bad.status, 403);
 });
 
+test("Meta geri çağrıları index.js'ten metaCallback'e gider", async () => {
+  const idx = (await import("./index.js")).default;
+  const env = { INSTAGRAM_CLIENT_SECRET: "ig-gizli-secret", ALLOWED_HOSTS: "brandcorner.co" };
+  const bad = await idx.fetch(new Request("https://forms.test/oauth/instagram/deauthorize", { method: "POST", body: new URLSearchParams({ signed_request: "x.y" }) }), env);
+  assert.deepEqual([bad.status, await bad.text()], [400, "Geçersiz istek"]);
+  const st = await idx.fetch(new Request(`https://forms.test/oauth/instagram/delete?code=${"A".repeat(16)}`), env);
+  assert.equal(st.status, 200);
+  const get = await idx.fetch(new Request("https://forms.test/oauth/instagram/deauthorize"), env);
+  assert.deepEqual([get.status, await get.text()], [405, "İzin verilmeyen yöntem"]);
+});
+
 // 5) finishOAuth log metni
 
 test("errText: tek satır, en çok 160 karakter, tırnak içi ve uzun token maskelenir", () => {
