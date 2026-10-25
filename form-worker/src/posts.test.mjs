@@ -187,3 +187,40 @@ test("en çok 1000 gönderi: aşan ekleme 409 posts_full, var olana ölçüm ekl
   const r = await call("POST", "/app/posts/import", { token, body: { rows: [{ url: "https://instagram.com/p/6", likes: 2 }] } });
   assert.deepEqual([r.body.added, r.body.updated], [0, 1]);
 });
+
+test("bağlantı tek biçime çevrilir: paylaşım sorgusu ve kısa biçimler aynı satıra düşer; eski biçimle kayıtlı satır korunur", async () => {
+  const { db, call, join } = await setup();
+  const token = await join();
+  const uid = db.prepare("SELECT id FROM users").get().id;
+  const YT = "https://www.youtube.com/watch?v=Ab_c-1";
+  let r = await call("POST", "/app/posts/manual", { token, body: { url: "https://youtu.be/Ab_c-1?si=paylas", views: 10, at: "2026-01-01" } });
+  ok200(r);
+  assert.deepEqual([r.body.post.url, r.body.added], [YT, true]);
+  r = await call("POST", "/app/posts/manual", { token, body: { url: "https://m.youtube.com/watch?v=Ab_c-1&t=30s", views: 20, at: "2026-01-02" } });
+  assert.deepEqual([r.body.post.url, r.body.added], [YT, false]);
+  r = await call("POST", "/app/posts/import", { token, body: { rows: [
+    { url: "https://www.youtube.com/shorts/Ab_c-1", views: 30, at: "2026-01-03" },
+    { url: "https://m.tiktok.com/@ad.1/video/7301?is_from_webapp=1&sender_device=pc", likes: 1 },
+    { url: "https://instagram.com/kullanici/reels/C0d-E?igsh=x#yorum", likes: 2 },
+    { url: "https://www.instagram.com/p/C0d-E/?img_index=2", likes: 3 },
+    { url: "https://vm.tiktok.com/ZMabc/", likes: 4 },
+    { url: "https://www.youtube.com/@kanal", views: 5 },
+  ] } });
+  assert.deepEqual([r.body.added, r.body.updated], [5, 1]);
+  const posts = (await call("GET", "/app/posts", { token })).body.posts;
+  assert.deepEqual(posts.map(p => p.url).sort(), [
+    "https://vm.tiktok.com/ZMabc/", "https://www.instagram.com/p/C0d-E/", "https://www.instagram.com/reel/C0d-E/",
+    "https://www.tiktok.com/@ad.1/video/7301", "https://www.youtube.com/@kanal", YT,
+  ]);
+  assert.deepEqual(posts.find(p => p.url === YT).snaps.map(s => s.views), [10, 20, 30]);
+
+  // Bu değişiklikten önce girilen haliyle kaydedilmiş satır: ölçüm ona yazılır, tek biçimli ikinci satır açılmaz
+  const OLD = "https://youtu.be/Eski1";
+  db.prepare("INSERT INTO posts (user_id, url, platform, type, date) VALUES (?, ?, 'youtube', 'video', '2026-01-01')").run(uid, OLD);
+  r = await call("POST", "/app/posts/manual", { token, body: { url: OLD, views: 7, at: "2026-01-04" } });
+  assert.deepEqual([r.body.post.url, r.body.added, r.body.post.snaps.length], [OLD, false, 1]);
+  r = await call("POST", "/app/posts/import", { token, body: { rows: [{ url: OLD, views: 8, at: "2026-01-05" }] } });
+  assert.deepEqual([r.body.added, r.body.updated], [0, 1]);
+  const old = db.prepare("SELECT url FROM posts WHERE user_id = ? AND url LIKE '%Eski1%'").all(uid).map(p => p.url);
+  assert.deepEqual(old, [OLD]);
+});

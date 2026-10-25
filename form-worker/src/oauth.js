@@ -663,6 +663,22 @@ export async function syncAccount(env, userId, p, f = fetch) {
   }
 }
 
+// TikTok bağlantısında kullanıcı adı var (@ad/video/<kimlik>): ad değişince bu hesaptan aktarılmış aynı video yeni
+// bağlantıya taşınır, ölçüm geçmişi aynı satırda sürer (yoksa her video yeni satır olarak çiftlenir, eskisi donardı).
+// Yeni bağlantı kullanıcıda zaten varsa satıra dokunulmaz; elle girilmiş satır (account_id yok) taşınmaz.
+// Gönderi yazımıyla aynı batch'te ve aynı koşullarla (hesap bağlı, platform kimliği aynı, kira bizde), ondan önce.
+function ttRename(env, a, externalId, leaseAt, posts) {
+  const vid = c => `substr(${c}, instr(${c}, '/video/'))`;
+  return env.DB.prepare(
+    `UPDATE posts SET url = n.url FROM (SELECT json_extract(value, '$.url') AS url FROM json_each(?)) n
+     WHERE posts.user_id = ? AND posts.account_id = ? AND posts.platform = 'tiktok' AND instr(n.url, '/video/') > 0
+       AND posts.id = (SELECT MIN(q.id) FROM posts q WHERE q.user_id = posts.user_id AND q.account_id = posts.account_id
+         AND q.platform = 'tiktok' AND instr(q.url, '/video/') > 0 AND ${vid("q.url")} = ${vid("n.url")})
+       AND NOT EXISTS (SELECT 1 FROM posts q WHERE q.user_id = posts.user_id AND q.url = n.url)
+       AND EXISTS (SELECT 1 FROM social_accounts WHERE id = ? AND status = 'connected' AND external_id = ? AND next_sync_at = ?)`,
+  ).bind(posts, a.user_id, a.id, a.id, externalId, leaseAt);
+}
+
 // Günlük senkron (cron, src/index.js): bağlı hesaplar günde bir senkronlanır, ölçümler metric_snapshots'a yazılır.
 // Ücretsiz planda çağrı başına 50 dış istek ve 50 D1 sorgusu var: bir çalıştırmada en fazla `max` hesap,
 // sağlayıcı çağrılarının tahmini toplamı (COST, yenileme dahil) en fazla `budget` ve D1 ifadeleri (vade listesi,
@@ -677,7 +693,7 @@ export async function syncAccount(env, userId, p, f = fetch) {
 const COST = { instagram: 27, tiktok: 7, youtube: 12 + 2 * YT_AUD_VIDEOS };
 const NEXT = { ok: "+1435 minutes", fail: "+355 minutes", changed: "+55 minutes" }; // saatlik cron'da ~1 gün, ~6 saat, ~1 saat
 export const SYNC_MIN = Math.min(...Object.values(COST));
-export const SYNC_D1 = 8; // kira, token, yenileme, son senkron işareti, ölçüm + gönderiler + gönderi ölçümleri + kira bırakma (batch)
+export const SYNC_D1 = 9; // kira, token, yenileme, son senkron işareti, ölçüm + TikTok'ta ad değişikliği + gönderiler + gönderi ölçümleri + kira bırakma (batch)
 export async function syncDue(env, f = fetch, { budget = 40, max = 5, d1 = 50 } = {}) {
   const out = { synced: 0, failed: 0, changed: 0, busy: 0, deferred: 0 };
   const ready = SYNCED.filter(p => oauthReady(env, p));
@@ -728,6 +744,7 @@ export async function syncDue(env, f = fetch, { budget = 40, max = 5, d1 = 50 } 
            WHERE id = ? AND status = 'connected' AND external_id = ? AND next_sync_at = ?`,
         ).bind(m.followers, m.avg_views, m.avg_likes, m.avg_comments, m.posts_sampled, m.audience ? JSON.stringify(m.audience) : null,
           a.id, m.external_id, lease.next_sync_at),
+        ...(posts && a.platform === "tiktok" ? [ttRename(env, a, m.external_id, lease.next_sync_at, posts)] : []),
         ...(posts ? [
           env.DB.prepare(
             `INSERT INTO posts (user_id, url, platform, type, date, caption, thumb, account_id, audience)

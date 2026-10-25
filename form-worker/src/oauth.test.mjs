@@ -1456,12 +1456,12 @@ test("syncDue: D1 sınırı — liste + hesap başına en çok SYNC_D1 ifade, s�
   const one = counted(env.DB);
   assert.deepEqual(await syncDue({ ...env, DB: one.DB }, f, { d1: 2 * SYNC_D1 }), { ...ZERO, synced: 1, deferred: 1 });
   assert.ok(f.calls.some(c => c.url.startsWith(IG_REFRESH[0])), "yenileme yapıldı");
-  assert.equal(one.n(), 1 + SYNC_D1); // SYNC_D1 en kötü yolda tam
+  assert.equal(one.n(), SYNC_D1); // Instagram'da TikTok'un ad değişikliği ifadesi yok: liste + SYNC_D1 - 1
   near(due(db, a.id, "instagram"), 1435);
   assert.equal(due(db, b.id, "instagram"), null);
   assert.equal(count(db, "metric_snapshots"), 1);
   assert.equal(count(db, "posts"), IG_POSTS.length);
-  // TikTok'un en kötü yolu (yenileme + ölçüm + gönderiler) da payın içinde
+  // TikTok'un en kötü yolu (yenileme + ölçüm + ad değişikliği + gönderiler) payı tam doldurur
   const tt = await setup({ ...TT_ENV, OAUTH_TOKEN_KEY: KEY, POSTS_ENABLED: "1" });
   const c = await tt.join("influencer", "c@x.co");
   await seed(tt.db, tt.env, c.id, "tiktok", "tt-1");
@@ -1470,7 +1470,7 @@ test("syncDue: D1 sınırı — liste + hesap başına en çok SYNC_D1 ifade, s�
   const g = fakeFetch(ttRoutes());
   assert.deepEqual(await syncDue({ ...tt.env, DB: two.DB }, g, { d1: 1 + SYNC_D1 }), { ...ZERO, synced: 1 });
   assert.ok(g.calls.some(x => x.body?.grant_type === "refresh_token"), "yenileme yapıldı");
-  assert.ok(two.n() <= 1 + SYNC_D1, String(two.n()));
+  assert.equal(two.n(), 1 + SYNC_D1); // SYNC_D1 en kötü yolda tam
 });
 
 test("syncDue: kira — başkası almışsa busy, senkron sürerken kira düşerse ölçüm yazılmaz", async t => {
@@ -1570,6 +1570,47 @@ test("syncDue: TikTok ve YouTube gönderileri de aktarılır; her gönderi kendi
   assert.deepEqual(list.body.posts.map(p => [p.platform, p.url, p.snaps.length]), [
     ["youtube", YT_POSTS[1].url, 1], ["tiktok", TT_POSTS[1].url, 1], ["tiktok", TT_POSTS[0].url, 1], ["youtube", YT_POSTS[0].url, 1],
   ]);
+});
+
+test("syncDue: TikTok kullanıcı adı değişince aktarılmış video yeni bağlantıya taşınır, geçmişi kalır; elle girilen, başka kullanıcı ve çakışan bağlantı değişmez", async t => {
+  t.mock.method(console, "log", () => {});
+  const { db, env, join } = await setup({ ...TT_ENV, OAUTH_TOKEN_KEY: KEY, POSTS_ENABLED: "1" });
+  const a = await join("influencer", "a@x.co"), b = await join("influencer", "b@x.co");
+  await seed(db, env, a.id, "tiktok", "tt-1");
+  const acc = db.prepare("SELECT id FROM social_accounts WHERE user_id = ?").get(a.id).id;
+  const tt = (ad, v) => `https://www.tiktok.com/@${ad}/video/${v}`;
+  const add = (user, url, account) => db.prepare(
+    "INSERT INTO posts (user_id, url, platform, type, date, account_id) VALUES (?, ?, 'tiktok', 'video', '2026-10-20', ?) RETURNING id",
+  ).get(user, url, account).id;
+  const v1 = add(a.id, tt("eski_ad", "v1"), acc);
+  db.prepare("INSERT INTO post_snaps (post_id, at, likes) VALUES (?, '2026-10-01', 1)").run(v1);
+  add(a.id, tt("eski_ad", "v2"), null); // elle girilmiş
+  add(b.id, tt("eski_ad", "v1"), null); // başka kullanıcı
+  const urls = user => db.prepare("SELECT id, url, account_id FROM posts WHERE user_id = ? ORDER BY id").all(user).map(r => ({ ...r }));
+
+  // inf_tt: v1 aynı satırda yeni bağlantıya geçer, eski ölçümü kalır; elle girilmiş v2 taşınmaz, aktarılan v2 yeni satır olur
+  assert.deepEqual(await syncDue(env, fakeFetch(ttRoutes())), { ...ZERO, synced: 1 });
+  const v2 = urls(a.id).at(-1).id;
+  assert.deepEqual(urls(a.id), [
+    { id: v1, url: tt("inf_tt", "v1"), account_id: acc }, { id: v1 + 1, url: tt("eski_ad", "v2"), account_id: null },
+    { id: v2, url: tt("inf_tt", "v2"), account_id: acc },
+  ]);
+  assert.deepEqual(snapsOf(db, tt("inf_tt", "v1")).map(s => [s.at, s.likes]), [["2026-10-01", 1], [today(), 300]]);
+  assert.deepEqual(snapsOf(db, tt("eski_ad", "v2")), []);
+  assert.deepEqual(urls(b.id).map(r => r.url), [tt("eski_ad", "v1")]);
+
+  // yeni_ad: v1'in yeni bağlantısı kullanıcıda elle girilmiş olarak var (çakışma), v1 yerinde kalır; senkron yine başarılı
+  const manual = add(a.id, tt("yeni_ad", "v1"), null);
+  db.prepare("UPDATE social_accounts SET next_sync_at = NULL").run();
+  const renamed = ttRoutes().find(([u]) => u === `${TT}/video/list/`)[1][1].data.videos.map(v => ({ ...v, share_url: v.share_url.replace("@inf_tt", "@yeni_ad") }));
+  const list = [`${TT}/video/list/`, [200, { data: { videos: renamed }, error: { code: "ok" } }]];
+  assert.deepEqual(await syncDue(env, fakeFetch(ttRoutes([list]))), { ...ZERO, synced: 1 });
+  assert.deepEqual(urls(a.id), [
+    { id: v1, url: tt("inf_tt", "v1"), account_id: acc }, { id: v1 + 1, url: tt("eski_ad", "v2"), account_id: null },
+    { id: v2, url: tt("yeni_ad", "v2"), account_id: acc }, { id: manual, url: tt("yeni_ad", "v1"), account_id: null },
+  ]);
+  assert.equal(snapsOf(db, tt("yeni_ad", "v2")).length, 1);
+  assert.deepEqual(snapsOf(db, tt("yeni_ad", "v1")), []);
 });
 
 test("syncDue: YouTube video kitlesi gönderiye, kanal kitlesi ölçüme yazılır; video gelmezse eskisi kalır, değişirse tazelenir; rapor alınamazsa neden saklanır", async t => {
