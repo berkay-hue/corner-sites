@@ -426,6 +426,8 @@ function ttPost(v) {
     caption: v.video_description || v.title, thumbs: [v.cover_image_url], likes: v.like_count, comments: v.comment_count, views: v.view_count,
   });
 }
+// Bağlantının /video/<kimlik> kısmı: kullanıcı adı değişse de aynı kalır (ttRename SQL'de aynı kesimi yapar)
+const ttVid = u => POST_URL.tiktok.test(u) && u.includes("/video/") ? u.slice(u.indexOf("/video/")) : null;
 function ytPost(v) {
   const s = v.snippet || {}, th = s.thumbnails || {}, st = v.statistics || {};
   return toPost("youtube", {
@@ -513,9 +515,11 @@ const API = {
       const vs = await API.tiktok.list(token, f, TT_PAGES);
       return vs.map(v => ({ views: v.view_count, likes: v.like_count, comments: v.comment_count, post: ttPost(v) }));
     },
-    // Daha eski gönderiler: bu hesaptan aktarılmış en eski gönderinin gün sonundan geriye (o günün aktarılmışları elenir)
+    // Daha eski gönderiler: bu hesaptan aktarılmış en eski gönderinin gün sonundan geriye (o günün aktarılmışları elenir;
+    // kullanıcı adı değiştiyse bağlantıları da değişmiştir, bu yüzden video kimliğiyle de elenir)
     async older(token, f, prof, { known, want, oldest }) {
-      const fresh = list => list.map(ttPost).filter(x => x && !known.has(x.url));
+      const vids = new Set([...known].map(ttVid).filter(Boolean));
+      const fresh = list => list.map(ttPost).filter(x => x && !known.has(x.url) && !vids.has(ttVid(x.url)));
       const vs = await API.tiktok.list(token, f, OLDER_PAGES, list => fresh(list).length >= want, oldest ? Date.parse(oldest) + 864e5 : null);
       const posts = fresh(vs).slice(0, want);
       return { posts, more: posts.length > 0 && vs.more };
@@ -748,6 +752,22 @@ async function withToken(env, userId, p, f, use) {
   }
 }
 
+// TikTok bağlantısında kullanıcı adı var (@ad/video/<kimlik>): ad değişince bu hesaptan aktarılmış aynı video yeni
+// bağlantıya taşınır, ölçüm geçmişi aynı satırda sürer (yoksa her video yeni satır olarak çiftlenir, eskisi donardı).
+// Yeni bağlantı kullanıcıda zaten varsa satıra dokunulmaz; elle girilmiş satır (account_id yok) taşınmaz.
+// Gönderi yazımıyla aynı batch'te ve aynı koşullarla (hesap bağlı, platform kimliği aynı, kira bizde), ondan önce.
+function ttRename(env, a, externalId, leaseAt, posts) {
+  const vid = c => `substr(${c}, instr(${c}, '/video/'))`;
+  return env.DB.prepare(
+    `UPDATE posts SET url = n.url FROM (SELECT json_extract(value, '$.url') AS url FROM json_each(?)) n
+     WHERE posts.user_id = ? AND posts.account_id = ? AND posts.platform = 'tiktok' AND instr(n.url, '/video/') > 0
+       AND posts.id = (SELECT MIN(q.id) FROM posts q WHERE q.user_id = posts.user_id AND q.account_id = posts.account_id
+         AND q.platform = 'tiktok' AND instr(q.url, '/video/') > 0 AND ${vid("q.url")} = ${vid("n.url")})
+       AND NOT EXISTS (SELECT 1 FROM posts q WHERE q.user_id = posts.user_id AND q.url = n.url)
+       AND EXISTS (SELECT 1 FROM social_accounts WHERE id = ? AND status = 'connected' AND external_id = ? AND next_sync_at = ?)`,
+  ).bind(posts, a.user_id, a.id, a.id, externalId, leaseAt);
+}
+
 // Gönderiler tek JSON parametresiyle (D1'de sorgu başına en çok 100 parametre). Bu hesaptan aktarılmış gönderinin
 // türü, metni ve kapağı değiştiyse tazelenir (Instagram ve TikTok kapak adresleri süreli); elle girilmiş aynı bağlantıya
 // dokunulmaz. Kullanıcının MAX_POSTS gönderisi varsa yenisi eklenmez (sınır sorgu başında sayılır: bir senkron aşabilir);
@@ -803,7 +823,7 @@ function postWrites(env, a, externalId, leaseAt, posts, recent) {
 const COST = { instagram: 27, tiktok: 7, youtube: 15 + 2 * YT_AUD_VIDEOS };
 const NEXT = { ok: "+1435 minutes", fail: "+355 minutes", changed: "+55 minutes" }; // saatlik cron'da ~1 gün, ~6 saat, ~1 saat
 export const SYNC_MIN = Math.min(...Object.values(COST));
-export const SYNC_D1 = 8; // kira, token, yenileme, son senkron işareti, ölçüm + gönderiler + gönderi ölçümleri + kira bırakma (batch)
+export const SYNC_D1 = 9; // kira, token, yenileme, son senkron işareti, ölçüm + TikTok'ta ad değişikliği + gönderiler + gönderi ölçümleri + kira bırakma (batch)
 export async function syncDue(env, f = fetch, { budget = 40, max = 5, d1 = 50 } = {}) {
   const out = { synced: 0, failed: 0, changed: 0, busy: 0, deferred: 0 };
   const ready = SYNCED.filter(p => oauthReady(env, p));
@@ -848,6 +868,7 @@ export async function syncDue(env, f = fetch, { budget = 40, max = 5, d1 = 50 } 
            WHERE id = ? AND status = 'connected' AND external_id = ? AND next_sync_at = ?`,
         ).bind(m.followers, m.avg_views, m.avg_likes, m.avg_comments, m.posts_sampled, m.audience ? JSON.stringify(m.audience) : null,
           a.id, m.external_id, lease.next_sync_at),
+        ...(posts && a.platform === "tiktok" ? [ttRename(env, a, m.external_id, lease.next_sync_at, posts)] : []),
         ...(posts ? postWrites(env, a, m.external_id, lease.next_sync_at, posts, m.posts_recent) : []),
         release(NEXT.ok),
       ]);
