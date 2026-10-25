@@ -1871,6 +1871,20 @@ test("eski gönderiler: TikTok bu hesaptan aktarılmış en eski günün sonunda
   assert.equal(g.calls.length, 0);
 });
 
+test("eski gönderiler: TikTok kullanıcı adı değiştiyse sınır gününde aktarılmış ya da elle girilmiş video yeni bağlantıyla yeniden eklenmez", async () => {
+  const { db, env, join } = await setup({ ...TT_ENV, OAUTH_TOKEN_KEY: KEY, POSTS_ENABLED: "1" });
+  const a = await join("influencer", "a@x.co");
+  await seed(db, env, a.id, "tiktok", "tt-1");
+  const tt = (ad, v) => `https://www.tiktok.com/@${ad}/video/${v}`;
+  addPost(db, a.id, "tiktok", tt("eski_ad", "w0"), accOf(db, a.id, "tiktok")); // en eski gün: liste o günün sonundan başlar
+  addPost(db, a.id, "tiktok", tt("eski_ad", "w1")); // elle girilmiş
+  const renamed = span(0, 4, ttv).map(v => ({ ...v, share_url: v.share_url.replace("@inf_tt", "@yeni_ad") }));
+  const list = [`${TT}/video/list/`, [200, { data: { videos: renamed, cursor: 7, has_more: false }, error: { code: "ok" } }]];
+  assert.deepEqual(await fetchOlderPosts(env, a.id, "tiktok", fakeFetch(ttRoutes([list]))), { added: 2, more: false, full: false });
+  assert.deepEqual(db.prepare("SELECT url FROM posts WHERE user_id = ? ORDER BY id").all(a.id).map(r => r.url),
+    [tt("eski_ad", "w0"), tt("eski_ad", "w1"), tt("yeni_ad", "w2"), tt("yeni_ad", "w3")]);
+});
+
 test("eski gönderiler: YouTube yükleme listesi baştan yürünür, yalnız aktarılmamış videolar istenir; kitle raporu istenmez", async t => {
   t.mock.method(console, "log", () => {});
   const { db, env, join } = await setup({ ...YT_ENV, OAUTH_TOKEN_KEY: KEY, POSTS_ENABLED: "1" });

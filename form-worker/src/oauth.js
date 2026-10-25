@@ -397,6 +397,8 @@ function ttPost(v) {
     caption: v.video_description || v.title, thumbs: [v.cover_image_url], likes: v.like_count, comments: v.comment_count, views: v.view_count,
   });
 }
+// Bağlantının /video/<kimlik> kısmı: kullanıcı adı değişse de aynı kalır (ttRename SQL'de aynı kesimi yapar)
+const ttVid = u => POST_URL.tiktok.test(u) && u.includes("/video/") ? u.slice(u.indexOf("/video/")) : null;
 function ytPost(v) {
   const s = v.snippet || {}, th = s.thumbnails || {}, st = v.statistics || {};
   return toPost("youtube", {
@@ -484,9 +486,11 @@ const API = {
       const vs = await API.tiktok.list(token, f, TT_PAGES);
       return vs.map(v => ({ views: v.view_count, likes: v.like_count, comments: v.comment_count, post: ttPost(v) }));
     },
-    // Daha eski gönderiler: bu hesaptan aktarılmış en eski gönderinin gün sonundan geriye (o günün aktarılmışları elenir)
+    // Daha eski gönderiler: bu hesaptan aktarılmış en eski gönderinin gün sonundan geriye (o günün aktarılmışları elenir;
+    // kullanıcı adı değiştiyse bağlantıları da değişmiştir, bu yüzden video kimliğiyle de elenir)
     async older(token, f, prof, { known, want, oldest }) {
-      const fresh = list => list.map(ttPost).filter(x => x && !known.has(x.url));
+      const vids = new Set([...known].map(ttVid).filter(Boolean));
+      const fresh = list => list.map(ttPost).filter(x => x && !known.has(x.url) && !vids.has(ttVid(x.url)));
       const vs = await API.tiktok.list(token, f, OLDER_PAGES, list => fresh(list).length >= want, oldest ? Date.parse(oldest) + 864e5 : null);
       const posts = fresh(vs).slice(0, want);
       return { posts, more: posts.length > 0 && vs.more };
