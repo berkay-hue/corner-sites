@@ -6,7 +6,7 @@
 // Şifre sıfırlama: tek kullanımlık, RESET_MINUTES geçerli link; e-posta Gmail SMTP ile (src/smtp.js, SMTP_USER hesabından).
 // MAIL binding'i yalnızca MAIL_TO adresine gönderebildiği için o kullanılmaz.
 
-import { OAUTH, LISTED, CONNECTABLE, oauthReady, listConnections, startOAuth, finishOAuth, disconnectOAuth, OAuthFail, returnBase } from "./oauth.js";
+import { OAUTH, SYNCED, LISTED, CONNECTABLE, oauthReady, listConnections, startOAuth, finishOAuth, disconnectOAuth, OAuthFail, returnBase, fetchOlderPosts, ProviderError } from "./oauth.js";
 import { smtpReady, smtpSend, smtpFrom } from "./smtp.js";
 import { metricsEnabled, accountMetrics, linkMetrics, parseAudience } from "./metrics.js";
 import { NICHE_LIST } from "./classify.js";
@@ -270,6 +270,7 @@ const APP = {
   "GET posts": c => listPosts(c),
   "POST posts/manual": c => manualPost(c),
   "POST posts/import": c => importPosts(c),
+  "POST posts/older": c => olderPosts(c),
 };
 
 const isOwnerRole = u => u.role === "brand" || u.role === "agency";
@@ -839,4 +840,28 @@ const importPosts = postsRoute(async c => {
   need(!added || await postCount(env, user.id) + added <= MAX_POSTS, "posts_full", 409);
   if (good.length) await env.DB.batch(good.flatMap(r => postWrite(env, user.id, r)));
   return ok(c, { added, updated: good.length - added, skipped });
+});
+
+// Gövde: {platform}. Bağlı hesaptan senkronun almadığı daha eski en çok OLDER gönderiyi getirir (oauth.js fetchOlderPosts).
+// Saatte OLDER_RATE istek (her biri platforma 30'a kadar çağrı). Dönüş: {added, more, full}; panel listeyi GET posts ile yeniler.
+const OLDER_RATE = 10;
+const OLDER_FAIL = { busy: ["busy", 409], changed: ["busy", 409], not_connected: ["not_connected", 409], full: ["posts_full", 409],
+  not_configured: ["not_configured", 409], account_changed: ["account_changed", 409] };
+const olderPosts = postsRoute(async c => {
+  const { env, user } = c;
+  need(ROLES.includes(user.role));
+  need(metricsEnabled(env), "disabled", 409);
+  const p = c.body.platform;
+  need(SYNCED.includes(p), "platform", 400);
+  if (await attempts(env, "older", "email", user.email, 60, false) >= OLDER_RATE) throw new Bad("rate", 429);
+  await attempt(env, c.ip, user.email, "older", 1);
+  let r;
+  try {
+    r = await fetchOlderPosts(env, user.id, p);
+  } catch (e) {
+    if (!(e instanceof ProviderError)) throw e;
+    const [code, status] = OLDER_FAIL[e.code] || ["provider", 502];
+    throw new Bad(code, status);
+  }
+  return ok(c, r);
 });
