@@ -19,7 +19,7 @@ const { platform, cleanup } = await import("./platform.js");
 const {
   NOT_CONFIGURED, NO_DATA, OAUTH, ProviderError, oauthReady, redirectUri, listConnections, authorizeUrl,
   exchangeCode, fetchMetrics, encrypt, decrypt, syncAccount, oauthCallback, finishOAuth, OAuthFail,
-  syncDue, SYNC_MIN, SYNC_D1, pkceChallenge, disconnectOAuth, CHANGE_LIMIT, SYNCED, LISTED, CONNECTABLE, cleanHandle, fetchProfile, refreshToken, metaCallback,
+  syncDue, SYNC_MIN, SYNC_D1, pkceChallenge, disconnectOAuth, CHANGE_LIMIT, SYNCED, LISTED, CONNECTABLE, cleanHandle, fetchProfile, refreshToken,
 } = await import("./oauth.js");
 
 const SCHEMA = readFileSync(new URL("../schema.sql", import.meta.url), "utf8");
@@ -2076,6 +2076,7 @@ test("external_id: boş, yalnız boşluk ya da 128'den uzunsa no_id; sayı strin
 });
 
 // ---- Meta geri çağrıları (metaCallback) ----
+const { metaCallback } = await import("./oauth.js");
 // Meta'nın signed_request'i: yük parçasının app secret'la HMAC-SHA256'sı + "." + yük (base64url, dolgusuz)
 const signed = (payload, secret = IG_ENV.INSTAGRAM_CLIENT_SECRET, raw = JSON.stringify(payload)) => {
   const p = Buffer.from(raw).toString("base64url");
