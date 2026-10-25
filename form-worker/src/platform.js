@@ -8,7 +8,7 @@
 
 import { OAUTH, LISTED, CONNECTABLE, oauthReady, listConnections, startOAuth, finishOAuth, disconnectOAuth, OAuthFail, returnBase } from "./oauth.js";
 import { smtpReady, smtpSend, smtpFrom } from "./smtp.js";
-import { metricsEnabled, accountMetrics, linkMetrics } from "./metrics.js";
+import { metricsEnabled, accountMetrics, linkMetrics, parseAudience } from "./metrics.js";
 import { NICHE_LIST } from "./classify.js";
 
 const ROLES = ["brand", "influencer", "agency"];
@@ -771,20 +771,20 @@ const postWrite = (env, uid, r) => [
 ];
 
 async function postRows(env, uid, where = "", args = []) {
-  const posts = (await env.DB.prepare(`SELECT id, url, platform, type, date, caption, thumb FROM posts WHERE user_id = ?${where} ORDER BY date DESC, id DESC`)
+  const posts = (await env.DB.prepare(`SELECT id, url, platform, type, date, caption, thumb, audience FROM posts WHERE user_id = ?${where} ORDER BY date DESC, id DESC`)
     .bind(uid, ...args).all()).results;
   if (!posts.length) return [];
   const snaps = (await env.DB.prepare(`SELECT s.post_id, s.at, s.likes, s.comments, s.views, s.reach FROM post_snaps s JOIN posts p ON p.id = s.post_id
     WHERE p.user_id = ?${where.replace(/\burl\b/g, "p.url")} ORDER BY s.at`).bind(uid, ...args).all()).results;
-  const by = new Map(posts.map(p => [p.id, { ...p, id: String(p.id), snaps: [] }]));
+  const by = new Map(posts.map(p => [p.id, { ...p, id: String(p.id), audience: parseAudience(p.audience), snaps: [] }]));
   for (const s of snaps) by.get(s.post_id)?.snaps.push({ at: s.at, likes: s.likes, comments: s.comments, views: s.views, reach: s.reach });
   return [...by.values()];
 }
 
-// Bayrak kapalıysa 404 (panel tarayıcı kaydına düşer); tablo yoksa 503
+// Bayrak kapalıysa 404 (panel tarayıcı kaydına düşer); tablo (0006) ya da kitle sütunu (0010) yoksa 503
 const postsRoute = fn => async c => {
   need(postsEnabled(c.env), "not_found", 404);
-  try { return await fn(c); } catch (e) { if (/no such table/i.test(String(e && e.message))) throw new Bad("not_ready", 503); throw e; }
+  try { return await fn(c); } catch (e) { if (/no such (table|column)/i.test(String(e && e.message))) throw new Bad("not_ready", 503); throw e; }
 };
 
 const postCount = async (env, uid) => (await env.DB.prepare("SELECT COUNT(*) AS n FROM posts WHERE user_id = ?").bind(uid).first()).n;

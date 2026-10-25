@@ -23,6 +23,8 @@ export const CONNECTABLE = { influencer: [...SYNCED, "linkedin"], brand: [...SYN
 const STATE_MINUTES = 10, TICKET_MINUTES = 5, SAMPLE = 12; // ortalama (ve Instagram insights'ı) için son 12 gönderi
 // Gönderi listesi sayfa boyu ve en çok sayfa: Instagram ve YouTube 4 × 50, TikTok 5 × 20 (TikTok'ta sayfa en çok 20)
 const IG_PAGE = 50, IG_PAGES = 4, TT_PAGE = 20, TT_PAGES = 5, YT_PAGE = 50, YT_PAGES = 4;
+// Gönderi başına kitle: senkron başına en çok bu kadar YouTube videosu (en yeni 2 + sırayla eskiler; video başına 2 rapor)
+const YT_AUD_VIDEOS = 5;
 const TOKEN_RE = /^[A-Za-z0-9_-]{43}$/; // 32 rastgele baytın base64url'i (state ve bilet)
 
 const enc = new TextEncoder(), dec = new TextDecoder();
@@ -32,6 +34,7 @@ const sha256 = async s => [...new Uint8Array(await crypto.subtle.digest("SHA-256
 
 const IG = "https://graph.instagram.com", IG_API = `${IG}/v23.0`;
 const TT = "https://open.tiktokapis.com/v2", YT = "https://www.googleapis.com/youtube/v3";
+const YTA = "https://youtubeanalytics.googleapis.com/v2", YT_AUDIENCE = "https://www.googleapis.com/auth/yt-analytics.readonly";
 
 // refresh: süresi bu kadar içinde dolacak token yenilenir (Instagram 60 gün, TikTok 1 gün, YouTube 1 saat geçerli).
 // LinkedIn'de refresh yok: token 60 gün geçerli, yenilenmez ve saklanmaz (yalnızca bağlanırken kimlik okunur).
@@ -116,9 +119,12 @@ export async function listConnections(env, userId, role = "influencer") {
 
 // challenge: PKCE S256 (RFC 7636), yalnız pkce: true olan sağlayıcıda (YouTube). TikTok'un web Login Kit'i PKCE'yi
 // belgelemiyor (yalnız mobil ve masaüstü), Instagram Login de; ikisine gönderilmez.
+// YT_ANALYTICS "1" ise YouTube'dan kitle raporu izni de istenir (yt-analytics.readonly). GCP'de YouTube Analytics API
+// açılmadan ve izin onay ekranına eklenmeden istenirse Google bağlanan herkese uyarı gösterebilir; o yüzden bayrakla.
 export function authorizeUrl(env, p, state, redirect, challenge = null) {
   const cfg = PROVIDERS[p], u = new URL(cfg.authorize);
-  const q = { [cfg.idParam || "client_id"]: env[cfg.id], redirect_uri: redirect, response_type: "code", scope: cfg.scope, state, ...cfg.params };
+  const scope = p === "youtube" && env?.YT_ANALYTICS === "1" ? `${cfg.scope} ${YT_AUDIENCE}` : cfg.scope;
+  const q = { [cfg.idParam || "client_id"]: env[cfg.id], redirect_uri: redirect, response_type: "code", scope, state, ...cfg.params };
   if (challenge) Object.assign(q, { code_challenge: challenge, code_challenge_method: "S256" });
   for (const [k, v] of Object.entries(q)) u.searchParams.set(k, v);
   return u.toString();
@@ -278,6 +284,67 @@ const avg = list => {
   return xs.length ? Math.round(xs.reduce((a, b) => a + b, 0) / xs.length) : null;
 };
 
+// Kitle dağılımı: [[değer, yüzde]] (bir ondalık); yaş ve cinsiyet sabit sırayla, ülke ve şehir en büyük AUD_TOP.
+// Bilinmeyen yaş/cinsiyet değeri, boş anahtar ve 0 ya da sayı olmayan değer atılır.
+const AGES = ["13-17", "18-24", "25-34", "35-44", "45-54", "55-64", "65+"], GENDERS = ["F", "M", "U"], AUD_TOP = 10;
+const sumOf = pairs => pairs.reduce((a, [, v]) => a + (num(v) || 0), 0);
+// total: yüzdenin paydası, kırılımın kendi toplamından büyükse (yalnız ilk 45 değeri gelen ülke ve şehirde bütün kitle)
+function shares(pairs, { order = null, total = 0 } = {}) {
+  const by = new Map();
+  for (const [k, v] of pairs) {
+    const key = typeof k === "string" ? k.trim().slice(0, 80) : "", n = num(v);
+    if (key && n) by.set(key, (by.get(key) || 0) + n);
+  }
+  const base = Math.max(sumOf([...by]), total);
+  const list = order ? order.filter(k => by.has(k)).map(k => [k, by.get(k)]) : [...by].sort((a, b) => b[1] - a[1]).slice(0, AUD_TOP);
+  return base ? list.map(([k, v]) => [k, Math.round((v / base) * 1000) / 10]) : [];
+}
+// Boş kırılımlar atılır; hiçbiri yoksa null
+const section = s => {
+  const o = Object.fromEntries(Object.entries(s).filter(([, l]) => l.length));
+  return Object.keys(o).length ? o : null;
+};
+// Instagram kırılımı: data[0].total_value.breakdowns[0].results[{dimension_values, value}]. dimension_keys başta
+// "timeframe" taşıyabilir: kırılımın kendi sırası alınır, bulunamazsa son değer.
+function igBreakdown(b, key) {
+  const br = b?.data?.[0]?.total_value?.breakdowns?.[0];
+  const i = Array.isArray(br?.dimension_keys) ? br.dimension_keys.indexOf(key) : -1;
+  return (Array.isArray(br?.results) ? br.results : []).map(r => {
+    const d = Array.isArray(r?.dimension_values) ? r.dimension_values : [];
+    return [d[i >= 0 ? i : d.length - 1], r?.value];
+  });
+}
+// YouTube Analytics raporu: satırlar columnHeaders adlarıyla nesneye çevrilir
+function ytRows(b) {
+  const names = (Array.isArray(b?.columnHeaders) ? b.columnHeaders : []).map(c => c?.name);
+  return (Array.isArray(b?.rows) ? b.rows : []).filter(Array.isArray).map(r => Object.fromEntries(names.map((n, i) => [n, r[i]])));
+}
+const YT_GENDER = { female: "F", male: "M", user_specified: "U" };
+// YouTube Analytics raporu. Alınamazsa nedeni ayrılır (panel ne yapılacağını yazar): no_scope (bağlantıda izin yok:
+// Google onay ekranında YouTube Analytics kutusu işaretlenmemiş), api_off (GCP projesinde API kapalı), error (diğer).
+// Hata atmaz: {rows} ya da {reason, status}.
+async function ytReport(f, token, q) {
+  const res = await f(`${YTA}/reports?${new URLSearchParams(q)}`, bearer(token)).catch(() => null);
+  const body = res ? await res.json().catch(() => null) : null;
+  if (res?.ok && body && !body.error) return { rows: ytRows(body) };
+  const e = body?.error && typeof body.error === "object" ? body.error : {};
+  const why = [...(Array.isArray(e.errors) ? e.errors : []), ...(Array.isArray(e.details) ? e.details : [])].map(x => x?.reason);
+  const reason = why.includes("insufficientPermissions") || why.includes("ACCESS_TOKEN_SCOPE_INSUFFICIENT")
+    || (res?.status === 403 && /insufficient authentication scopes/i.test(String(e.message ?? ""))) ? "no_scope"
+    : why.includes("accessNotConfigured") || why.includes("SERVICE_DISABLED") ? "api_off" : "error";
+  return { reason, status: res?.status ?? 0 };
+}
+// İzleyici kırılımı: yaş ve cinsiyet yüzdesi (YouTube yalnız oturum açmış izleyicileri sayar) ve ülkeye göre izlenme payı
+// (bilinmeyen ZZ paydada kalır, listede yok); boşsa null
+function ytViewers(demo, geo) {
+  const age = demo.map(r => [typeof r.ageGroup === "string" ? r.ageGroup.replace(/^age/, "").replace(/-$/, "+") : null, r.viewerPercentage]);
+  const views = geo.map(r => [r.country, r.views]);
+  return section({
+    age: shares(age, { order: AGES }), gender: shares(demo.map(r => [YT_GENDER[r.gender], r.viewerPercentage]), { order: GENDERS }),
+    country: shares(views.filter(([c]) => c !== "ZZ"), { total: sumOf(views) }),
+  });
+}
+
 // Aktarılan gönderi: platform.js postIn kurallarıyla aynı (platform.js bu dosyayı içe aktardığı için kopya).
 // Bağlantı https ve platformun kendi adresi (YouTube'da yalnız watch?v=<kimlik>), tarih YYYY-MM-DD, kapak https
 // (ilk uygun aday), metin en çok 2200, ölçüm 0+ tam sayı.
@@ -363,6 +430,21 @@ const API = {
         return { views: it.views ?? null, likes: mm.like_count, comments: mm.comments_count, post: igPost(mm, it) };
       });
     },
+    // Kitle: takipçiler (follower_demographics) ve bu ay etkileşenler (engaged_audience_demographics), kırılım
+    // başına bir çağrı (Instagram tek kırılım kabul eder, timeframe zorunlu). 100'den az takipçide ya da etkileşimde
+    // Instagram boş döner; hata da boş sayılır. Ülke ve şehrin yalnız ilk 45 değeri gelir: payda cinsiyet toplamı.
+    async audience(token, f) {
+      const get = (metric, breakdown) => json(f, igUrl("me/insights", {
+        metric, period: "lifetime", timeframe: "this_month", metric_type: "total_value", breakdown, access_token: token,
+      })).then(b => igBreakdown(b, breakdown), () => []);
+      const one = async metric => {
+        const [age, gender, country, city] = await Promise.all(["age", "gender", "country", "city"].map(k => get(metric, k)));
+        const total = sumOf(gender);
+        return section({ age: shares(age, { order: AGES }), gender: shares(gender, { order: GENDERS }), country: shares(country, { total }), city: shares(city, { total }) });
+      };
+      const [followers, engaged] = await Promise.all([one("follower_demographics"), one("engaged_audience_demographics")]);
+      return followers || engaged ? { followers, engaged } : null;
+    },
   },
   tiktok: {
     async profile(token, f) {
@@ -420,8 +502,37 @@ const API = {
       return ids.map(id => by.get(id)).filter(Boolean).map(v => {
         const s = v.statistics || {};
         const hidden = v.status?.privacyStatus === "private" || ["rejected", "failed", "deleted"].includes(v.status?.uploadStatus);
-        return { views: s.viewCount, likes: s.likeCount, comments: s.commentCount, post: hidden ? null : ytPost(v) };
+        return { id: v.id, views: s.viewCount, likes: s.likeCount, comments: s.commentCount, post: hidden ? null : ytPost(v) };
       });
+    },
+    // Kitle (dünden geriye 90 gün): izleyici kırılımı (ytViewers). Şehir raporu okunur ad vermez, alınmaz. Rapor
+    // alınamazsa {reason} (ytReport), kanal YouTube'un gizlilik eşiğinin altındaysa rapor boş gelir: {reason: "few"};
+    // panel nedeni yazar. Gönderi başına kitle: her senkronda en yeni 2 video ve sırayla eskiler (en çok YT_AUD_VIDEOS,
+    // ~20 günde 60 video), yayın gününden düne; veri gelirse o videonun post.audience alanına yazılır (D1'de kalır).
+    async audience(token, f, prof, items = []) {
+      const day = n => new Date(Date.now() - n * 864e5).toISOString().slice(0, 10), endDate = day(1);
+      // Rapor alınamazsa ve gelen de boşsa alınamayanın {reason}'ı; biri alınamazsa gelenle sürer (partial): kanal
+      // yarım kırılımı gösterir, gönderiye yazılmaz (D1'deki tam kitle kalır)
+      const viewers = async q => {
+        const [demo, geo] = await Promise.all([
+          ytReport(f, token, { ids: "channel==MINE", endDate, ...q, dimensions: "ageGroup,gender", metrics: "viewerPercentage" }),
+          ytReport(f, token, { ids: "channel==MINE", endDate, ...q, dimensions: "country", metrics: "views" }),
+        ]);
+        const v = ytViewers(demo.rows || [], geo.rows || []), bad = demo.reason ? demo : geo.reason ? geo : null;
+        return bad && !v ? bad : { viewers: v, partial: !!bad };
+      };
+      const ch = await viewers({ startDate: day(91) });
+      if (ch.reason) {
+        console.log("yt audience", ch.reason, ch.status);
+        return { reason: ch.reason };
+      }
+      const vids = items.filter(x => typeof x.id === "string" && x.post && num(x.views) > 0 && x.post.date <= endDate);
+      const old = vids.slice(2), k = old.length ? (Math.floor(Date.now() / 864e5) * 3) % old.length : 0;
+      await Promise.all([...vids.slice(0, 2), ...old.slice(k), ...old.slice(0, k)].slice(0, YT_AUD_VIDEOS).map(async x => {
+        const r = await viewers({ startDate: x.post.date, filters: `video==${x.id}` });
+        if (r.viewers && !r.partial) x.post.audience = { viewers: r.viewers };
+      }));
+      return ch.viewers ? { viewers: ch.viewers } : { reason: "few" };
     },
   },
   // OpenID Connect userinfo: sub uygulamaya özel kalıcı kimlik; ad görünen ad olur. Metrik yok (Community Management).
@@ -450,15 +561,18 @@ export async function fetchProfile(p, token, f = fetch) {
 }
 
 // Takipçi + son SAMPLE gönderinin ortalama izlenme, beğeni ve yorumu; posts: aktarılacak gönderiler (en yeni önce),
-// posts_recent: bunlardan kaçı son SAMPLE gönderiden (posts'un ilk posts_recent kadarı)
+// posts_recent: bunlardan kaçı son SAMPLE gönderiden (posts'un ilk posts_recent kadarı); audience: kitle dağılımı
+// (Instagram ve YouTube), alınamazsa null (YouTube'da nedeniyle {reason}); ölçümü bozmaz. YouTube'da bazı gönderiler
+// audience taşır (gönderi başına kitle).
 export async function fetchMetrics(p, token, f = fetch) {
   if (!SYNCED.includes(p)) throw new ProviderError("no_api");
   const pr = await API[p].profile(token, f);
   const all = await API[p].recent(token, f, pr), last = all.slice(0, SAMPLE);
+  const audience = API[p].audience ? await API[p].audience(token, f, pr, all).catch(() => null) : null;
   return {
     external_id: extId(pr.external_id), handle: cleanHandle(pr.handle), followers: num(pr.followers),
     avg_views: avg(last.map(x => x.views)), avg_likes: avg(last.map(x => x.likes)), avg_comments: avg(last.map(x => x.comments)),
-    posts_sampled: last.length, posts: all.map(x => x.post).filter(Boolean), posts_recent: last.filter(x => x.post).length,
+    posts_sampled: last.length, posts: all.map(x => x.post).filter(Boolean), posts_recent: last.filter(x => x.post).length, audience,
   };
 }
 
@@ -558,8 +672,9 @@ export async function syncAccount(env, userId, p, f = fetch) {
 // bağlanınca kira düşer (finishOAuth next_sync_at'i NULL yapar), eski hesabın ölçümü yeni hesaba yazılmaz.
 // POSTS_ENABLED "1" ise gönderiler (fetchMetrics posts) aynı koşullarla ve aynı batch'te posts/post_snaps'e yazılır.
 // En kötü durumda istek sayısı: profil + gönderi sayfaları + yenileme. Instagram: 4 sayfa + alan reddinde tekrar + son 12
-// gönderinin insights'ı; TikTok: 5 sayfa; YouTube: 4 liste sayfası + 4 video parçası.
-const COST = { instagram: 19, tiktok: 7, youtube: 10 };
+// gönderinin insights'ı + 8 kitle kırılımı; TikTok: 5 sayfa; YouTube: 4 liste sayfası + 4 video parçası + 2 kitle raporu
+// + YT_AUD_VIDEOS videonun 2'şer kitle raporu.
+const COST = { instagram: 27, tiktok: 7, youtube: 12 + 2 * YT_AUD_VIDEOS };
 const NEXT = { ok: "+1435 minutes", fail: "+355 minutes", changed: "+55 minutes" }; // saatlik cron'da ~1 gün, ~6 saat, ~1 saat
 export const SYNC_MIN = Math.min(...Object.values(COST));
 export const SYNC_D1 = 8; // kira, token, yenileme, son senkron işareti, ölçüm + gönderiler + gönderi ölçümleri + kira bırakma (batch)
@@ -601,26 +716,30 @@ export async function syncDue(env, f = fetch, { budget = 40, max = 5, d1 = 50 } 
       // Gönderiler tek JSON parametresiyle (D1'de sorgu başına en çok 100 parametre). Bu hesaptan aktarılmış gönderinin
       // türü, metni ve kapağı değiştiyse tazelenir (Instagram ve TikTok kapak adresleri süreli); elle girilmiş aynı bağlantıya
       // dokunulmaz. Kullanıcının MAX_POSTS gönderisi varsa yenisi eklenmez (sınır sorgu başında sayılır: bir senkron aşabilir).
+      // Kitle (audience, yalnız YouTube'da ve her senkronda birkaç videoda gelir) gelmezse eskisi kalır.
       // Ölçüm son SAMPLE gönderide günde bir (aynı gün tekrar senkronlanırsa üzerine yazılır), daha eskilerde haftada bir.
       // Gelmeyen izlenme ve erişim (Instagram insights'ı yalnız son SAMPLE gönderide) son ölçülen değerle sürer.
       const own = "EXISTS (SELECT 1 FROM social_accounts WHERE id = ? AND status = 'connected' AND external_id = ? AND next_sync_at = ?)";
       const posts = env.POSTS_ENABLED === "1" && m.posts?.length ? JSON.stringify(m.posts) : null;
       const [ins] = await env.DB.batch([
         env.DB.prepare(
-          `INSERT INTO metric_snapshots (account_id, source, followers, avg_views, avg_likes, avg_comments, posts_sampled)
-           SELECT id, 'oauth', ?, ?, ?, ?, ? FROM social_accounts
+          `INSERT INTO metric_snapshots (account_id, source, followers, avg_views, avg_likes, avg_comments, posts_sampled, audience)
+           SELECT id, 'oauth', ?, ?, ?, ?, ?, ? FROM social_accounts
            WHERE id = ? AND status = 'connected' AND external_id = ? AND next_sync_at = ?`,
-        ).bind(m.followers, m.avg_views, m.avg_likes, m.avg_comments, m.posts_sampled, a.id, m.external_id, lease.next_sync_at),
+        ).bind(m.followers, m.avg_views, m.avg_likes, m.avg_comments, m.posts_sampled, m.audience ? JSON.stringify(m.audience) : null,
+          a.id, m.external_id, lease.next_sync_at),
         ...(posts ? [
           env.DB.prepare(
-            `INSERT INTO posts (user_id, url, platform, type, date, caption, thumb, account_id)
+            `INSERT INTO posts (user_id, url, platform, type, date, caption, thumb, account_id, audience)
              SELECT ?, json_extract(j.value, '$.url'), ?, json_extract(j.value, '$.type'), json_extract(j.value, '$.date'),
-               json_extract(j.value, '$.caption'), json_extract(j.value, '$.thumb'), ?
+               json_extract(j.value, '$.caption'), json_extract(j.value, '$.thumb'), ?, json_extract(j.value, '$.audience')
              FROM json_each(?) j
              WHERE ${own} AND (SELECT COUNT(*) FROM posts WHERE user_id = ?) < ${MAX_POSTS}
-             ON CONFLICT (user_id, url) DO UPDATE SET type = excluded.type, caption = excluded.caption, thumb = excluded.thumb
+             ON CONFLICT (user_id, url) DO UPDATE SET type = excluded.type, caption = excluded.caption, thumb = excluded.thumb,
+               audience = COALESCE(excluded.audience, posts.audience)
                WHERE posts.account_id = excluded.account_id
-                 AND (posts.type <> excluded.type OR posts.caption <> excluded.caption OR posts.thumb <> excluded.thumb)`,
+                 AND (posts.type <> excluded.type OR posts.caption <> excluded.caption OR posts.thumb <> excluded.thumb
+                   OR (excluded.audience IS NOT NULL AND excluded.audience IS NOT posts.audience))`,
           ).bind(a.user_id, a.platform, a.id, posts, a.id, m.external_id, lease.next_sync_at, a.user_id),
           env.DB.prepare(
             `INSERT INTO post_snaps (post_id, at, likes, comments, views, reach)
