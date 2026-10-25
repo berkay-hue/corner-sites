@@ -2,7 +2,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { createHash } from "node:crypto";
+import { createHash, createHmac } from "node:crypto";
 import { DatabaseSync } from "node:sqlite";
 import { registerHooks } from "node:module";
 
@@ -34,6 +34,7 @@ const POSTS = readFileSync(new URL("../migrations/0006_posts.sql", import.meta.u
 const SOURCE = readFileSync(new URL("../migrations/0007_post_source.sql", import.meta.url), "utf8");
 const AUDIENCE = readFileSync(new URL("../migrations/0009_audience.sql", import.meta.url), "utf8");
 const POST_AUD = readFileSync(new URL("../migrations/0010_post_audience.sql", import.meta.url), "utf8");
+const SCOPED = readFileSync(new URL("../migrations/0011_meta_scoped.sql", import.meta.url), "utf8");
 
 // Testin ihtiyacı kadar D1: prepare().bind().all/first/run, batch (gerçek D1 gibi atomik), exec
 function d1(db) {
@@ -73,6 +74,7 @@ function freshDb() {
   db.exec(SOURCE);
   db.exec(AUDIENCE);
   db.exec(POST_AUD);
+  db.exec(SCOPED);
   return db;
 }
 
@@ -2376,4 +2378,215 @@ test("external_id: boş, yalnız boşluk ya da 128'den uzunsa no_id; sayı strin
   }
   assert.equal((await prof({ sub: 123 })).external_id, "123");
   assert.equal((await prof({ sub: "a".repeat(128) })).external_id, "a".repeat(128));
+});
+
+// ---- Meta geri çağrıları (metaCallback) ----
+const { metaCallback } = await import("./oauth.js");
+// Meta'nın signed_request'i: yük parçasının app secret'la HMAC-SHA256'sı + "." + yük (base64url, dolgusuz)
+const signed = (payload, secret = IG_ENV.INSTAGRAM_CLIENT_SECRET, raw = JSON.stringify(payload)) => {
+  const p = Buffer.from(raw).toString("base64url");
+  return `${createHmac("sha256", secret).update(p).digest("base64url")}.${p}`;
+};
+const meta = async (env, path, sr, method = "POST") => {
+  const init = method === "POST" ? { method, body: new URLSearchParams(sr === undefined ? {} : { signed_request: sr }) } : { method };
+  const req = new Request(`https://forms.test${path}`, init);
+  const res = await metaCallback(req, new URL(req.url), env);
+  const type = res.headers.get("content-type") || "", text = await res.text();
+  return { status: res.status, type, text, body: /json/.test(type) ? JSON.parse(text) : null };
+};
+const IG_ME_SCOPED = [`${IGV}/me?`, [200, { user_id: "1784", id: "7701", username: "inf_ig", followers_count: 5400 }]];
+const SR = { algorithm: "HMAC-SHA256", issued_at: 1761400000, expires: 0 };
+const igRow = (db, userId) => ({ ...db.prepare("SELECT status, handle, external_id, scoped_id FROM social_accounts WHERE user_id = ? AND platform = 'instagram'").get(userId) });
+const tokensOf = (db, userId) => db.prepare("SELECT COUNT(*) AS n FROM oauth_tokens WHERE user_id = ?").get(userId).n;
+const metaLogs = logs => logs.mock.calls.map(c => c.arguments).filter(a => a[0] === "meta");
+
+test("Meta veri silme: bağ koparılır, token, ölçüm ve aktarılan gönderiler silinir, görünen ad boşalır; başkasınınkine dokunulmaz", async t => {
+  const logs = t.mock.method(console, "log", () => {});
+  let net = fakeFetch([]);
+  t.mock.method(globalThis, "fetch", (...a) => net(...a));
+  const { db, env, call, join } = await setup({ ...IG_ENV, OAUTH_TOKEN_KEY: KEY, POSTS_ENABLED: "1" });
+  const a = await join("influencer", "a@x.co"), b = await join("influencer", "b@x.co");
+  assert.equal((await call("POST", "/app/posts/manual", { token: a.token, body: MANUAL })).status, 200);
+  // b'nin kendi hesabından aktarılmış bir gönderisi
+  await seed(db, env, b.id, "instagram", "1785");
+  db.prepare("UPDATE social_accounts SET next_sync_at = datetime('now', '+1 days') WHERE user_id = ?").run(b.id);
+  db.prepare("INSERT INTO posts (user_id, url, platform, type, date, account_id) VALUES (?, 'https://www.instagram.com/p/BBB1/', 'instagram', 'photo', '2026-10-20', ?)")
+    .run(b.id, igAcc(db, b.id));
+
+  const ticket = await land(env, await start(call, a.token));
+  net = fakeFetch(igRoutes([IG_ME_SCOPED]));
+  assert.equal((await finish(call, a.token, ticket)).status, 200);
+  assert.deepEqual(igRow(db, a.id), { status: "connected", handle: "inf_ig", external_id: "1784", scoped_id: "7701" });
+  db.prepare("UPDATE social_accounts SET next_sync_at = NULL WHERE user_id = ?").run(a.id);
+  assert.deepEqual(await syncDue(env, fakeFetch(igPostRoutes([IG_REFRESH, IG_ME_SCOPED]))), { ...ZERO, synced: 1 });
+  assert.ok(imported(db).filter(p => p.account_id === igAcc(db, a.id)).length > 0);
+  assert.ok(count(db, "metric_snapshots") > 0);
+
+  net = fakeFetch([]);
+  const del = await meta(env, "/oauth/instagram/delete", signed({ ...SR, user_id: "1784" }));
+  assert.equal(del.status, 200, del.text);
+  assert.match(del.type, /^application\/json/);
+  const code = del.body.confirmation_code;
+  assert.match(code, /^[A-Za-z0-9_-]{16}$/);
+  assert.deepEqual(del.body, { url: `https://forms.test/oauth/instagram/delete?code=${code}`, confirmation_code: code });
+  assert.deepEqual(igRow(db, a.id), { status: "revoked", handle: null, external_id: null, scoped_id: null });
+  assert.equal(tokensOf(db, a.id), 0);
+  assert.equal(count(db, "metric_snapshots"), 0);
+  assert.deepEqual(db.prepare("SELECT url, account_id FROM posts WHERE user_id = ?").all(a.id).map(r => ({ ...r })), [{ url: MANUAL.url, account_id: null }]);
+  assert.equal(snapsOf(db, MANUAL.url).length, 1);
+  assert.deepEqual(igRow(db, b.id), { status: "connected", handle: "eski", external_id: "1785", scoped_id: null });
+  assert.equal(tokensOf(db, b.id), 1);
+  assert.equal(db.prepare("SELECT COUNT(*) AS n FROM posts WHERE user_id = ?").get(b.id).n, 1);
+  assert.equal(net.calls.length, 0);
+
+  // Durum sayfası kodu yazar
+  const st = await meta(env, `/oauth/instagram/delete?code=${code}`, undefined, "GET");
+  assert.equal(st.status, 200);
+  assert.match(st.type, /^text\/plain/);
+  assert.ok(st.text.includes(code), st.text);
+  // OAUTH_REDIRECT_BASE varsa durum bağlantısı onunla kurulur, sondaki / kırpılır
+  const viaBase = await meta({ ...env, OAUTH_REDIRECT_BASE: "https://api.brandcorner.test/" }, "/oauth/instagram/delete", signed({ ...SR, user_id: "1784" }));
+  assert.equal(viaBase.body.url, `https://api.brandcorner.test/oauth/instagram/delete?code=${viaBase.body.confirmation_code}`);
+  assert.notEqual(viaBase.body.confirmation_code, code);
+  assert.deepEqual(metaLogs(logs), [["meta", "delete", 1], ["meta", "delete", 0]]);
+});
+
+test("Meta deauthorize: uygulamaya özel kimlikle de eşleşir, bağı koparır, görünen ad kalır; bilinmeyen kimlik aynı yanıtı alır", async t => {
+  const logs = t.mock.method(console, "log", () => {});
+  let net = fakeFetch([]);
+  t.mock.method(globalThis, "fetch", (...a) => net(...a));
+  const { db, env, call, join } = await setup({ ...IG_ENV, OAUTH_TOKEN_KEY: KEY });
+  const a = await join("influencer", "a@x.co");
+  const connect = async () => {
+    const ticket = await land(env, await start(call, a.token));
+    net = fakeFetch(igRoutes([IG_ME_SCOPED]));
+    assert.equal((await finish(call, a.token, ticket)).status, 200);
+    net = fakeFetch([]);
+  };
+  await connect();
+  const before = igRow(db, a.id);
+
+  const unknown = await meta(env, "/oauth/instagram/deauthorize", signed({ ...SR, user_id: "5555" }));
+  assert.deepEqual([unknown.status, unknown.body], [200, { ok: true }]);
+  const unknownDel = await meta(env, "/oauth/instagram/delete", signed({ ...SR, user_id: "5555" }));
+  assert.equal(unknownDel.status, 200);
+  assert.deepEqual(Object.keys(unknownDel.body).sort(), ["confirmation_code", "url"]);
+  assert.deepEqual(igRow(db, a.id), before);
+  assert.equal(tokensOf(db, a.id), 1);
+
+  const r = await meta(env, "/oauth/instagram/deauthorize", signed({ ...SR, user_id: "7701" }));
+  assert.deepEqual([r.status, r.body], [200, { ok: true }]);
+  assert.match(r.type, /^application\/json/);
+  assert.deepEqual(igRow(db, a.id), { status: "revoked", handle: "inf_ig", external_id: null, scoped_id: null });
+  assert.equal(tokensOf(db, a.id), 0);
+  // Aynı istek yeniden gelirse eşleşen bağ yoktur
+  assert.equal((await meta(env, "/oauth/instagram/deauthorize", signed({ ...SR, user_id: "7701" }))).status, 200);
+  assert.deepEqual(metaLogs(logs), [["meta", "deauthorize", 0], ["meta", "delete", 0], ["meta", "deauthorize", 1], ["meta", "deauthorize", 0]]);
+  // Kullanıcı yeniden bağlanabilir
+  await connect();
+  assert.deepEqual(igRow(db, a.id), { status: "connected", handle: "inf_ig", external_id: "1784", scoped_id: "7701" });
+  assert.equal(net.calls.length, 0);
+});
+
+test("Meta geri çağrıları: imzası, algoritması ya da user_id'si geçersiz istek 400; yöntem, yol, gövde boyu ve yapılandırma denetlenir", async t => {
+  const logs = t.mock.method(console, "log", () => {});
+  const { db, env, join } = await setup({ ...IG_ENV, OAUTH_TOKEN_KEY: KEY });
+  const a = await join("influencer", "a@x.co");
+  await seed(db, env, a.id, "instagram", "1784");
+  const ok = { ...SR, user_id: "1784" }, good = signed(ok);
+  const [sig, payload] = good.split(".");
+  const b64 = s => Buffer.from(s).toString("base64url");
+  const bad = [
+    ["yanlış secret", signed(ok, "baska-secret")],
+    ["değiştirilmiş yük", `${sig}.${b64(JSON.stringify({ ...ok, user_id: "1785" }))}`],
+    ["HMAC-SHA1", signed({ ...ok, algorithm: "HMAC-SHA1" })],
+    ["algorithm yok", signed({ issued_at: 1, user_id: "1784" })],
+    ["üç parça", `${good}.x`],
+    ["tek parça", payload],
+    ["imza boş", `.${payload}`],
+    ["boş", ""],
+    ["bozuk JSON", signed(null, undefined, "{bozuk")],
+    ["dizi", signed(null, undefined, "[1]")],
+    ["null", signed(null)],
+    ["harf içeren user_id", signed({ ...ok, user_id: "17a84" })],
+    ["boş user_id", signed({ ...ok, user_id: "" })],
+    ["33 haneli user_id", signed({ ...ok, user_id: "1".repeat(33) })],
+    ["user_id yok", signed(SR)],
+    ["negatif sayı", signed(null, undefined, '{"algorithm":"HMAC-SHA256","user_id":-1784}')],
+    ["kesirli sayı", signed(null, undefined, '{"algorithm":"HMAC-SHA256","user_id":1784.5}')],
+    ["base64url dışı imza", `${sig.slice(0, -1)}!.${payload}`],
+  ];
+  for (const [name, sr] of bad) {
+    for (const kind of ["deauthorize", "delete"]) {
+      const r = await meta(env, `/oauth/instagram/${kind}`, sr);
+      assert.deepEqual([r.status, r.text], [400, "Geçersiz istek"], `${name} ${kind}`);
+    }
+  }
+  assert.equal((await meta(env, "/oauth/instagram/deauthorize", undefined)).status, 400);
+  // 8 KB'tan büyük gövde imza doğru olsa da ayrıştırılmaz
+  const big = new Request("https://forms.test/oauth/instagram/delete", { method: "POST", body: new URLSearchParams({ signed_request: good, pad: "x".repeat(8192) }) });
+  assert.equal((await metaCallback(big, new URL(big.url), env)).status, 400);
+  // Yöntem ve yol
+  assert.equal((await meta(env, "/oauth/instagram/deauthorize", undefined, "GET")).status, 405);
+  assert.equal((await meta(env, "/oauth/instagram/delete", undefined, "PUT")).status, 405);
+  assert.equal((await meta(env, "/oauth/instagram/deauthorize/x", good)).status, 404);
+  assert.equal((await meta(env, "/oauth/tiktok/delete", good)).status, 404);
+  // Durum sayfası yalnız geçerli biçimdeki kodu yazar
+  for (const q of ["?code=abc", "", `?code=${"A".repeat(17)}`, `?code=${"A".repeat(15)}!`]) {
+    const r = await meta(env, `/oauth/instagram/delete${q}`, undefined, "GET");
+    assert.deepEqual([r.status, r.text], [400, "Geçersiz silme kodu.\n\nInvalid deletion code."], q);
+  }
+  // Secret yoksa 503
+  const nc = await meta({ ...env, INSTAGRAM_CLIENT_SECRET: "" }, "/oauth/instagram/delete", good);
+  assert.deepEqual([nc.status, nc.text], [503, NOT_CONFIGURED]);
+  assert.deepEqual(igRow(db, a.id), { status: "connected", handle: "eski", external_id: "1784", scoped_id: null });
+  assert.equal(tokensOf(db, a.id), 1);
+  assert.equal(logs.mock.calls.length, 0);
+  // Algoritma adı büyük-küçük harf duyarsız; sayı olarak gelen user_id de okunur
+  const lower = await meta(env, "/oauth/instagram/deauthorize", signed(null, undefined, '{"algorithm":"hmac-sha256","issued_at":1,"user_id":1784}'));
+  assert.deepEqual([lower.status, lower.body], [200, { ok: true }]);
+  assert.deepEqual(igRow(db, a.id), { status: "revoked", handle: "eski", external_id: null, scoped_id: null });
+});
+
+test("Meta geri çağrısı: 2^53'ten büyük sayı user_id yuvarlanmadan eşleşir", async t => {
+  t.mock.method(console, "log", () => {});
+  const { db, env, join } = await setup({ ...IG_ENV, OAUTH_TOKEN_KEY: KEY });
+  const a = await join("influencer", "a@x.co");
+  await seed(db, env, a.id, "instagram", "17841400000000077");
+  const raw = '{"algorithm":"HMAC-SHA256","issued_at":1,"user_id":17841400000000077}';
+  assert.notEqual(String(JSON.parse(raw).user_id), "17841400000000077");
+  const r = await meta(env, "/oauth/instagram/delete", signed(null, undefined, raw));
+  assert.equal(r.status, 200, r.text);
+  assert.deepEqual(igRow(db, a.id), { status: "revoked", handle: null, external_id: null, scoped_id: null });
+});
+
+test("Instagram uygulamaya özel kimliği: senkron doldurur, gelmezse eskisi kalır, bağ koparılınca boşalır", async t => {
+  t.mock.method(console, "log", () => {});
+  const { db, env, join } = await setup({ ...IG_ENV, OAUTH_TOKEN_KEY: KEY });
+  const a = await join("influencer", "a@x.co");
+  await seed(db, env, a.id, "instagram", "1784");
+  const sync = async (extra = []) => {
+    db.prepare("UPDATE social_accounts SET next_sync_at = NULL WHERE user_id = ?").run(a.id);
+    assert.deepEqual(await syncDue(env, fakeFetch(igRoutes([IG_REFRESH, ...extra]))), { ...ZERO, synced: 1 });
+  };
+  assert.equal(igRow(db, a.id).scoped_id, null);
+  await sync([IG_ME_SCOPED]);
+  assert.deepEqual(igRow(db, a.id), { status: "connected", handle: "inf_ig", external_id: "1784", scoped_id: "7701" });
+  await sync();
+  assert.equal(igRow(db, a.id).scoped_id, "7701");
+  await disconnectOAuth(env, a.id, "instagram", fakeFetch([]));
+  assert.deepEqual(igRow(db, a.id), { status: "revoked", handle: "inf_ig", external_id: null, scoped_id: null });
+});
+
+test("fetchProfile: Instagram'da /me id'si istenir ve scoped_id olarak döner; boşsa null, gelmezse anahtar yok", async () => {
+  const prof = me => fetchProfile("instagram", "t", fakeFetch(igRoutes([[`${IGV}/me?`, [200, me]]])));
+  assert.deepEqual(await prof({ user_id: "1784", id: "7701", username: "inf_ig", followers_count: 5400 }),
+    { external_id: "1784", scoped_id: "7701", handle: "inf_ig", followers: 5400 });
+  assert.equal((await prof({ user_id: "1784", id: "", username: "inf_ig" })).scoped_id, null);
+  assert.equal((await prof({ user_id: "1784", id: 7701, username: "inf_ig" })).scoped_id, "7701");
+  assert.equal("scoped_id" in await prof({ user_id: "1784", username: "inf_ig" }), false);
+  const f = fakeFetch(igRoutes([IG_ME_SCOPED]));
+  await fetchProfile("instagram", "t", f);
+  const me = f.calls.find(c => c.url.startsWith(`${IGV}/me?`));
+  assert.deepEqual(new URL(me.url).searchParams.get("fields").split(","), ["user_id", "id", "username", "followers_count"]);
 });
