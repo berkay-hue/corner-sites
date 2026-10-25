@@ -473,6 +473,7 @@ const API = {
       return {
         external_id: ch.id, handle: ch.snippet?.customUrl || ch.snippet?.title,
         followers: st.hiddenSubscriberCount ? null : st.subscriberCount, uploads: ch.contentDetails?.relatedPlaylists?.uploads,
+        since: typeof ch.snippet?.publishedAt === "string" ? ch.snippet.publishedAt.slice(0, 10) : null,
       };
     },
     async recent(token, f, prof) {
@@ -506,11 +507,14 @@ const API = {
       });
     },
     // Kitle (dünden geriye 90 gün): izleyici kırılımı (ytViewers). Şehir raporu okunur ad vermez, alınmaz. Rapor
-    // alınamazsa {reason} (ytReport), kanal YouTube'un gizlilik eşiğinin altındaysa rapor boş gelir: {reason: "few"};
-    // panel nedeni yazar. Gönderi başına kitle: her senkronda en yeni 2 video ve sırayla eskiler (en çok YT_AUD_VIDEOS,
-    // ~20 günde 60 video), yayın gününden düne; veri gelirse o videonun post.audience alanına yazılır (D1'de kalır).
+    // alınamazsa {reason} (ytReport). Küçük kanalda 90 günün yaş ve cinsiyeti YouTube'un gizlilik eşiğinin altında kalıp
+    // boş gelir: o zaman kanalın açıldığı günden (yoksa en eski videodan) düne bakılır, gelirse {viewers, range: "all"}.
+    // Yine boşsa {reason: "few", views}: aynı aralığın toplam izlenmesi (0 ise YouTube Analytics bu kanalda henüz izlenme
+    // görmüyor, 0'dan büyükse kırılım eşiğin altında; alınamazsa null); panel nedeni yazar. Gönderi başına kitle: her
+    // senkronda en yeni 2 video ve sırayla eskiler (en çok YT_AUD_VIDEOS, ~20 günde 60 video), yayın gününden düne; veri
+    // gelirse o videonun post.audience alanına yazılır (D1'de kalır).
     async audience(token, f, prof, items = []) {
-      const day = n => new Date(Date.now() - n * 864e5).toISOString().slice(0, 10), endDate = day(1);
+      const day = n => new Date(Date.now() - n * 864e5).toISOString().slice(0, 10), endDate = day(1), from = day(91);
       // Rapor alınamazsa ve gelen de boşsa alınamayanın {reason}'ı; biri alınamazsa gelenle sürer (partial): kanal
       // yarım kırılımı gösterir, gönderiye yazılmaz (D1'deki tam kitle kalır)
       const viewers = async q => {
@@ -521,10 +525,16 @@ const API = {
         const v = ytViewers(demo.rows || [], geo.rows || []), bad = demo.reason ? demo : geo.reason ? geo : null;
         return bad && !v ? bad : { viewers: v, partial: !!bad };
       };
-      const ch = await viewers({ startDate: day(91) });
+      let ch = await viewers({ startDate: from }), range = null;
       if (ch.reason) {
         console.log("yt audience", ch.reason, ch.status);
         return { reason: ch.reason };
+      }
+      const first = prof?.since || items.map(x => x.post?.date).filter(Boolean).sort()[0];
+      const start = first && first < from ? first : from;
+      if (!(ch.viewers?.age || ch.viewers?.gender) && start < from) {
+        const all = await viewers({ startDate: start });
+        if (all.viewers && (all.viewers.age || all.viewers.gender || !ch.viewers)) [ch, range] = [all, "all"];
       }
       const vids = items.filter(x => typeof x.id === "string" && x.post && num(x.views) > 0 && x.post.date <= endDate);
       const old = vids.slice(2), k = old.length ? (Math.floor(Date.now() / 864e5) * 3) % old.length : 0;
@@ -532,7 +542,9 @@ const API = {
         const r = await viewers({ startDate: x.post.date, filters: `video==${x.id}` });
         if (r.viewers && !r.partial) x.post.audience = { viewers: r.viewers };
       }));
-      return ch.viewers ? { viewers: ch.viewers } : { reason: "few" };
+      if (ch.viewers) return range ? { viewers: ch.viewers, range } : { viewers: ch.viewers };
+      const tot = await ytReport(f, token, { ids: "channel==MINE", startDate: start, endDate, metrics: "views" });
+      return { reason: "few", views: tot.rows ? num(tot.rows[0]?.views) ?? 0 : null };
     },
   },
   // OpenID Connect userinfo: sub uygulamaya özel kalıcı kimlik; ad görünen ad olur. Metrik yok (Community Management).
@@ -673,8 +685,8 @@ export async function syncAccount(env, userId, p, f = fetch) {
 // POSTS_ENABLED "1" ise gönderiler (fetchMetrics posts) aynı koşullarla ve aynı batch'te posts/post_snaps'e yazılır.
 // En kötü durumda istek sayısı: profil + gönderi sayfaları + yenileme. Instagram: 4 sayfa + alan reddinde tekrar + son 12
 // gönderinin insights'ı + 8 kitle kırılımı; TikTok: 5 sayfa; YouTube: 4 liste sayfası + 4 video parçası + 2 kitle raporu
-// + YT_AUD_VIDEOS videonun 2'şer kitle raporu.
-const COST = { instagram: 27, tiktok: 7, youtube: 12 + 2 * YT_AUD_VIDEOS };
+// + kanalın tüm zamanı için 2 kitle raporu + toplam izlenme + YT_AUD_VIDEOS videonun 2'şer kitle raporu.
+const COST = { instagram: 27, tiktok: 7, youtube: 15 + 2 * YT_AUD_VIDEOS };
 const NEXT = { ok: "+1435 minutes", fail: "+355 minutes", changed: "+55 minutes" }; // saatlik cron'da ~1 gün, ~6 saat, ~1 saat
 export const SYNC_MIN = Math.min(...Object.values(COST));
 export const SYNC_D1 = 8; // kira, token, yenileme, son senkron işareti, ölçüm + gönderiler + gönderi ölçümleri + kira bırakma (batch)
