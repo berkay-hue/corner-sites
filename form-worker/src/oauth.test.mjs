@@ -17,6 +17,7 @@ registerHooks({
 });
 const { platform, cleanup } = await import("./platform.js");
 const {
+  ytRetention, YT_RETAIN_DAYS,
   NOT_CONFIGURED, NO_DATA, OAUTH, ProviderError, oauthReady, redirectUri, listConnections, authorizeUrl,
   exchangeCode, fetchMetrics, encrypt, decrypt, syncAccount, oauthCallback, finishOAuth, OAuthFail,
   syncDue, SYNC_MIN, SYNC_D1, pkceChallenge, disconnectOAuth, CHANGE_LIMIT, SYNCED, LISTED, CONNECTABLE, cleanHandle, fetchProfile, refreshToken,
@@ -2006,6 +2007,63 @@ test("cleanup: süresi dolan OAuth state'leri silinir; tablo yoksa diğer temizl
   await cleanup({ DB: d1(bare) });
   assert.equal(count(bare, "sessions"), 0);
   assert.ok(logs.some(l => l.startsWith("cleanup oauth_states")), logs.join("\n"));
+});
+
+test("ytRetention: taramadan çıkan YouTube API gönderisi ve senkronu durmuş hesabın ölçümleri silinir; elle girilen, taze ve diğer platform kalır", async () => {
+  const { db, env, join } = await setup({ OAUTH_TOKEN_KEY: KEY });
+  const a = await join("influencer", "a@x.co"), b = await join("influencer", "b@x.co");
+  await seed(db, env, a.id, "youtube", "UC-a");
+  await seed(db, env, a.id, "instagram", "ig-a");
+  await seed(db, env, b.id, "youtube", "UC-b");
+  const acc = (u, p) => db.prepare("SELECT id FROM social_accounts WHERE user_id = ? AND platform = ?").get(u, p).id;
+  const ytA = acc(a.id, "youtube"), igA = acc(a.id, "instagram"), ytB = acc(b.id, "youtube");
+  const ago = d => `-${d} days`, over = YT_RETAIN_DAYS + 1;
+  const post = (u, url, p, accountId, created) => db.prepare(
+    "INSERT INTO posts (user_id, url, platform, type, date, account_id, created_at) VALUES (?, ?, ?, 'video', '2026-01-01', ?, datetime('now', ?))",
+  ).run(u, url, p, accountId, ago(created)).lastInsertRowid;
+  const snap = (id, d) => db.prepare("INSERT INTO post_snaps (post_id, at, views) VALUES (?, date('now', ?), 1)").run(id, ago(d));
+  const metric = (id, d) => db.prepare("INSERT INTO metric_snapshots (account_id, taken_at, followers) VALUES (?, datetime('now', ?), 1)").run(id, ago(d));
+  // Son ölçümü sınırdan eski: silinir
+  const old = post(a.id, "https://youtu.be/old", "youtube", ytA, 90);
+  snap(old, 60); snap(old, over);
+  // Taramada: eski ölçümleri de kalır (istatistik, yetki doğrulanıyor)
+  const live = post(a.id, "https://youtu.be/live", "youtube", ytA, 90);
+  snap(live, 60); snap(live, 3);
+  // Ölçümsüz: aktarım tarihi sınırdan eskiyse silinir, yeniyse kalır
+  post(a.id, "https://youtu.be/bare-old", "youtube", ytA, over);
+  post(a.id, "https://youtu.be/bare-new", "youtube", ytA, 2);
+  // Elle girilen YouTube ve Instagram gönderisi kalır
+  snap(post(a.id, "https://youtu.be/manual", "youtube", null, 120), 120);
+  snap(post(a.id, "https://instagram.com/p/x", "instagram", igA, 120), 120);
+  // a'nın YouTube hesabı sınır boyunca senkronlanmamış: ölçümleri silinir; b'ninki ve Instagram kalır
+  metric(ytA, 60); metric(ytA, over);
+  metric(igA, 60);
+  metric(ytB, 60); metric(ytB, 1);
+  await ytRetention(env);
+  const urls = db.prepare("SELECT url FROM posts ORDER BY url").all().map(r => r.url);
+  assert.deepEqual(urls, ["https://instagram.com/p/x", "https://youtu.be/bare-new", "https://youtu.be/live", "https://youtu.be/manual"]);
+  assert.equal(db.prepare("SELECT COUNT(*) AS n FROM post_snaps WHERE post_id = ?").get(old).n, 0);
+  assert.equal(db.prepare("SELECT COUNT(*) AS n FROM post_snaps WHERE post_id = ?").get(live).n, 2);
+  assert.equal(count(db, "post_snaps"), 4);
+  const left = db.prepare("SELECT account_id, COUNT(*) AS n FROM metric_snapshots GROUP BY account_id ORDER BY account_id").all().map(r => [r.account_id, r.n]);
+  assert.deepEqual(left, [[igA, 1], [ytB, 2]].sort((x, y) => x[0] - y[0]));
+  // Hesap ve bağ durumu değişmez
+  assert.equal(db.prepare("SELECT status FROM social_accounts WHERE id = ?").get(ytA).status, "connected");
+  // İkinci çalıştırma bir şey silmez
+  await ytRetention(env);
+  assert.equal(count(db, "posts"), 4);
+  assert.equal(count(db, "metric_snapshots"), 3);
+  // Tablolar yoksa (0001 ya da 0006 uygulanmamış) hata vermez, gönderi tablosu yoksa ölçümler yine silinir;
+  // başka hata yukarı çıkar
+  const bare = new DatabaseSync(":memory:");
+  bare.exec(SCHEMA);
+  await ytRetention({ DB: d1(bare) });
+  bare.exec(METRICS);
+  bare.prepare("INSERT INTO social_accounts (user_id, platform, handle, status) VALUES (1, 'youtube', 'k', 'error')").run();
+  bare.prepare("INSERT INTO metric_snapshots (account_id, taken_at) VALUES (1, datetime('now', ?))").run(ago(over));
+  await ytRetention({ DB: d1(bare) });
+  assert.equal(count(bare, "metric_snapshots"), 0);
+  await assert.rejects(ytRetention({ DB: { prepare: () => ({ bind: () => ({}) }), batch: async () => { throw new Error("D1_ERROR: busy"); } } }), /busy/);
 });
 
 // ---- PR5: LinkedIn OIDC + marka/ajans hesapları ----
