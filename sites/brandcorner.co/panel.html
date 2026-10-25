@@ -24,13 +24,13 @@
 :root{--bg:#f6f7fb;--surface:#fff;--surface-2:#f1f3f9;--line:#e4e7ef;--line-strong:#cfd4e2;--text:#131726;--muted:#5b6275;--faint:#80869a;
 --accent:#4f46e5;--accent-hover:#4338ca;--accent-2:#7c3aed;--accent-soft:#eef0ff;--accent-text:#4338ca;
 --ok:#157f3b;--ok-soft:#e7f6ec;--warn:#a15c07;--warn-soft:#fdf3e1;--info:#0b6aa2;--info-soft:#e6f3fb;--danger:#b42318;--danger-soft:#fdecea;--slate:#525b6e;--slate-soft:#eef0f4;
---r-card:12px;--r-ctl:8px;--grad:linear-gradient(90deg,var(--accent),var(--accent-2));color-scheme:light}
+--r-card:12px;--r-ctl:8px;--grad:linear-gradient(90deg,var(--accent),var(--accent-2));--c1:#2a78d6;--c2:#eb6834;--c0:#868c9b;--o1:#86b6ef;--o2:#3987e5;--o3:#184f95;color-scheme:light}
 @media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1018;--surface:#161925;--surface-2:#1d2130;--line:#272c3d;--line-strong:#383e55;--text:#e9ebf3;--muted:#a3a9bc;--faint:#7d8399;
 --accent:#6a63f2;--accent-hover:#7a74f5;--accent-2:#9b7bff;--accent-soft:#24254f;--accent-text:#aba6ff;
---ok:#4cc27a;--ok-soft:#13301f;--warn:#e7a446;--warn-soft:#33260f;--info:#5bb6ea;--info-soft:#102a3a;--danger:#f2756a;--danger-soft:#3a1714;--slate:#a3a9bc;--slate-soft:#232736;color-scheme:dark}}
+--ok:#4cc27a;--ok-soft:#13301f;--warn:#e7a446;--warn-soft:#33260f;--info:#5bb6ea;--info-soft:#102a3a;--danger:#f2756a;--danger-soft:#3a1714;--slate:#a3a9bc;--slate-soft:#232736;--c1:#3987e5;--c2:#d95926;--c0:#6b7286;--o1:#184f95;--o2:#3987e5;--o3:#9ec5f4;color-scheme:dark}}
 :root[data-theme="dark"]{--bg:#0e1018;--surface:#161925;--surface-2:#1d2130;--line:#272c3d;--line-strong:#383e55;--text:#e9ebf3;--muted:#a3a9bc;--faint:#7d8399;
 --accent:#6a63f2;--accent-hover:#7a74f5;--accent-2:#9b7bff;--accent-soft:#24254f;--accent-text:#aba6ff;
---ok:#4cc27a;--ok-soft:#13301f;--warn:#e7a446;--warn-soft:#33260f;--info:#5bb6ea;--info-soft:#102a3a;--danger:#f2756a;--danger-soft:#3a1714;--slate:#a3a9bc;--slate-soft:#232736;color-scheme:dark}
+--ok:#4cc27a;--ok-soft:#13301f;--warn:#e7a446;--warn-soft:#33260f;--info:#5bb6ea;--info-soft:#102a3a;--danger:#f2756a;--danger-soft:#3a1714;--slate:#a3a9bc;--slate-soft:#232736;--c1:#3987e5;--c2:#d95926;--c0:#6b7286;--o1:#184f95;--o2:#3987e5;--o3:#9ec5f4;color-scheme:dark}
 *{box-sizing:border-box}html{-webkit-text-size-adjust:100%}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.6 "Inter",system-ui,-apple-system,sans-serif}
 a{color:inherit}img{max-width:100%;display:block}[hidden]{display:none!important}
 .i{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
@@ -262,6 +262,7 @@ dialog.cmdk[open]{display:flex;flex-direction:column}dialog.cmdk::backdrop{backg
 .pmeta{display:flex;flex-wrap:wrap;gap:2px 10px;color:var(--muted);font-size:12.5px}.pmeta b{color:var(--text);font-weight:600}
 .cgrid{grid-template-columns:repeat(3,minmax(0,1fr))}.pact{display:flex;flex-wrap:wrap;gap:6px;margin-top:2px}.pact .btn,.pact .ghost{min-height:44px;display:inline-flex;align-items:center;text-decoration:none}.pact .badge{margin:0}.ctarget{max-width:360px;margin:0 0 12px}.ctarget select{min-height:44px}.cacc{list-style:none;margin:0;padding:0}.cacc li{padding:10px 0;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:4px}.cacc li:first-child{border-top:0;padding-top:0}.cacc .badge{margin:0}@media(max-width:640px){.cgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .aud{flex:1 1 100%;margin:10px 0 0}.aud h3{font-size:15px;margin:4px 0 8px}.aud h4{font-size:13.5px;font-weight:600;color:var(--muted);margin:14px 0 6px}.aud h3+h4{margin-top:0}.aud>h4:first-child{margin-top:0}.audg{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 24px}.aud .k{font-size:12.5px;color:var(--muted);margin:0 0 4px}.bars{list-style:none;margin:0;padding:0}.bars li{display:grid;grid-template-columns:minmax(0,7.5em) minmax(0,1fr) 3.4em;align-items:center;gap:8px;font-size:13px;padding:2px 0}.bars li span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.bars .bt{height:8px;border-radius:4px;background:var(--surface-2);overflow:hidden}.bars .bt i{display:block;height:100%;border-radius:4px;background:var(--accent)}.bars b{font-weight:600;text-align:right;font-variant-numeric:tabular-nums}.bars.wide li{grid-template-columns:minmax(0,9.5em) minmax(0,1fr) 3.4em}.audacc{padding:10px 0;border-top:1px solid var(--line)}.aud h3+.audacc{border-top:0;padding-top:0}.cb>.audacc:first-child{border-top:0;padding-top:0}.auds{display:grid;grid-template-columns:repeat(auto-fit,minmax(10.5em,1fr));gap:10px;margin:0 0 12px}.auds .stat{background:var(--surface-2);border:0;padding:10px 12px}.auds .stat .v{font-size:16px}.auds .stat .d{font-size:12.5px;color:var(--muted);margin-top:2px}@media(max-width:640px){.audg{grid-template-columns:minmax(0,1fr)}}
+.ach{min-width:0}.achart{border-radius:6px}.achart:focus-visible{outline:2px solid var(--accent);outline-offset:4px}.stk{display:flex;gap:2px}.stk i{flex:1 1 0;min-width:2px;height:24px}.stk i::before{content:"";display:block;height:16px;margin-top:4px;background:var(--c)}.stk i:first-child::before{border-radius:4px 0 0 4px}.stk i:last-child::before{border-radius:0 4px 4px 0}.stk i:only-child::before{border-radius:4px}.stk i.on::before{outline:2px solid var(--text);outline-offset:1px}.stk.mini{min-width:6em;margin:0 0 4px}.stk.mini i,.stk.mini i::before{height:8px;margin:0}.lgd{display:flex;flex-wrap:wrap;gap:4px 14px;list-style:none;margin:6px 0 0;padding:0;font-size:12.5px;color:var(--muted)}.lgd li{display:inline-flex;align-items:center;gap:6px}.lgd i{flex:none;width:10px;height:10px;border-radius:2px}.lgd b{color:var(--text);font-weight:600;font-variant-numeric:tabular-nums}.acol{display:flex;margin:2px 0 0}.acol>div{flex:1 1 0;min-width:0;height:136px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end}.acol b{font-size:11.5px;font-weight:500;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap;margin:0 0 3px}.acol b.top{color:var(--text);font-weight:700}.acol i{display:block;width:min(24px,64%);border-radius:4px 4px 0 0;background:var(--c1)}.acol>div.on i{outline:2px solid var(--text);outline-offset:1px}.acol span{align-self:stretch;text-align:center;border-top:1px solid var(--line-strong);padding:4px 0 0;font-size:11.5px;color:var(--muted);white-space:nowrap}.hb{list-style:none;margin:0;padding:0}.hb li{display:grid;grid-template-columns:minmax(0,7.5em) minmax(0,1fr);gap:8px;align-items:center;min-height:26px;font-size:13px}.hb li>span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.hb .hv{display:flex;align-items:center;gap:6px;min-width:0}.hb .hv i{flex:none;height:12px;min-width:2px;border-radius:0 4px 4px 0;background:var(--c1)}.hb li.oth .hv i{background:var(--c0)}.hb li.on .hv i{outline:2px solid var(--text);outline-offset:1px}.hb .hv b{font-size:12.5px;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}.hb.wide li{grid-template-columns:minmax(0,9.5em) minmax(0,1fr)}.ctip{position:fixed;left:0;top:0;z-index:60;pointer-events:none;display:flex;align-items:center;gap:8px;max-width:min(320px,calc(100vw - 16px));padding:6px 10px;border:1px solid var(--line-strong);border-radius:8px;background:var(--surface);color:var(--text);box-shadow:0 6px 18px rgba(0,0,0,.14);font-size:12.5px;white-space:nowrap}.ctip[hidden]{display:none}.ctip i{flex:none;width:12px;height:3px;border-radius:2px}.ctip b{font-weight:700;font-variant-numeric:tabular-nums}.ctip span{min-width:0;overflow:hidden;text-overflow:ellipsis;color:var(--muted)}.atab{display:none;width:100%;border-collapse:collapse;font-size:13.5px;margin:4px 0 0}.atab th,.atab td{text-align:right;padding:8px 6px;border-top:1px solid var(--line)}.atab th:first-child,.atab td:first-child{text-align:left}.atab th{color:var(--muted);font-weight:500}.atab tbody th{color:var(--text);font-weight:400}.aud.tbl .achart{display:none}.aud.tbl .atab{display:table}
 .plist{list-style:none;margin:0;padding:0;border:1px solid var(--line);border-radius:var(--r-card);background:var(--surface);overflow:hidden}
 .prow2{position:relative;display:grid;grid-template-columns:56px minmax(0,1fr) auto;gap:12px;align-items:center;padding:10px 14px;border-top:1px solid var(--line)}.prow2:first-child{border-top:0}.prow2:hover{background:var(--surface-2)}.prow2:focus-within{outline:2px solid var(--accent);outline-offset:-2px}
 .prow2 .pth{width:56px;height:56px;border-radius:8px}.prow2 .pth .i{width:22px;height:22px}.prow2 a.pl{position:absolute;inset:0;z-index:1;font-size:0}.prow2 .er{text-align:right;font-size:13px;color:var(--muted)}.prow2 .er b{display:block;font-size:15px;color:var(--text)}
@@ -392,10 +393,14 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       pConnSync: "Hesap bağlı; gönderilerin her gün otomatik çekilir.", pConnOk: "Bağlı", pConnHow: "Bağladığında gönderilerin buraya kendiliğinden gelir.", pConnGo: "Bağla",
       psPosts: "Gönderi", psReach: "Toplam erişim", psPer: "Gönderi başına {n}", psEr: "Ortalama etkileşim oranı", psEng: "{n} beğeni ve yorum", psTop: "En çok erişen", psFirst: "İlk gönderini ekle",
       pLiNote: "LinkedIn kişisel gönderi ölçümlerini dışarıya vermiyor; LinkedIn gönderilerini elle ya da CSV ile ekle.",
+      pOlder: "Daha eskileri getir", pOlderNote: "Otomatik senkron her hesaptan en yeni gönderileri alır: Instagram ve YouTube'da 200, TikTok'ta 100. Daha eskilerini görmek için \"Daha eskileri getir\"e bas; her basışta 200 gönderi daha gelir, hesabında toplam en çok 1000 gönderi tutulur.",
+      pOlderAdded: "{n} eski gönderi eklendi.", pOlderMore: "Daha eskileri için yeniden bas.", pOlderEnd: "Bu hesabın tüm gönderileri geldi.", pOlderNone: "Bu hesapta getirilecek daha eski gönderi yok.",
+      pOlderFull: "Gönderi sınırına (1000) ulaştın; daha fazla gönderi eklenemez.", pOlderBusy: "Bu hesap şu an güncelleniyor; birkaç dakika sonra yeniden dene.",
+      pOlderRate: "Bir saatte en çok 10 kez getirebilirsin; biraz sonra yeniden dene.", pOlderProv: "Platform şu an yanıt vermedi; biraz sonra yeniden dene.", pOlderConn: "Hesap bağlantısı kopmuş; Profil'den yeniden bağla.",
       pNoCap: "Açıklama yok",
       sCampaigns: "Kampanya", sOpen: "Açık kampanya", sPending: "Bekleyen başvuru", sApproved: "Onaylanan içerik",
       sReview: "Onay bekleyen içerik", sWork: "Aktif iş", sDone: "Tamamlanan", subNear: "En yakını: {n}", subTop: "En çok: {n}", subNext: "Sıradaki: {n}", ocTitle: "Açık kampanyalar", ocAll: "Tümü", ocEmpty: "Açık kampanyan yok.", dLeft: "{n} gün kaldı", dLast: "Bugün son gün", dGone: "Süresi doldu",
-      stPend: "Yeni başvurular", stInv: "Davet edilenler", stWork: "Çalışılıyor", stRev: "İçerik onayı", stDone: "Onaylandı",
+      stPend: "Yeni başvurular", stInv: "Davet edilenler", stWork: "Çalışılıyor", stRev: "İçerik onayı",
       forYou: "Sana uygun influencerlar", forYouGo: "Keşfet", forYouEmpty: "Henüz listelenen influencer yok.",
       oppsFor: "Sana uygun fırsatlar", oppsAll: "Tümü", oppsEmpty: "Şu an sana uygun yeni fırsat yok.",
       dailyT: "Bugün kalan başvuru hakkın", dailyHint: "Her gün yenilenir. Seçici başvurular daha çok kabul alır.", dailyLater: "Sayaç sunucu güncellemesinden sonra görünecek.",
@@ -412,7 +417,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       ckCompany: "Şirket adı", ckIndustry: "Sektör", ckCity: "Şehir", ckWebsite: "Web sitesi", ckBio: "Hakkında (en az 40 karakter)", ckClients: "Müşteri sayısı",
       ckNiches: "İlgi alanları", ckPlatform: "Takipçi sayısıyla en az bir platform", ckListed: "Markalara görünür profil",
       socTitle: "Sosyal hesaplar", socLead: "Hesabını resmî bağlantıyla bağla; takipçi ve etkileşim verileri markalara doğrulanmış olarak görünür.",
-      socConnect: "Bağla", socCut: "Bağlantıyı kes", socSure: "{n} bağlantısı kesilsin mi? Kayıtlı ölçümler artık güncellenmez.",
+      socConnect: "Bağla", socCut: "Bağlantıyı kes", socSure: "{n} bağlantısı kesilsin mi? Bu hesabın ölçüm geçmişi ve içe aktarılan gönderileri silinir.",
       socAvail: "Bağlı değil", socOn: "Bağlı", socOnAs: "Bağlı: {n}", socErr: "Son eşitleme başarısız; yeniden bağlamayı dene.",
       socNotConf: "Bu platform için bağlantı henüz yapılandırılmadı.", socNotConfS: "Yapılandırılmadı", socErrS: "Hata", socNoApi: "API yok", socReconnect: "Yeniden bağla", socAwait: "Metrik onayı bekleniyor", socSoonOwn: "Marka ve ajans hesapları için bağlantı yakında", socLeadOwn: "Kurumsal sosyal hesaplarını resmî bağlantıyla bağla.", socLiName: "LinkedIn (kişisel profil)", socLiNote: "Kendi LinkedIn profilin bağlanır.", socLiRevoke: "LinkedIn tarafındaki izni LinkedIn ayarlarından kaldırabilirsin.", socLiGo: "LinkedIn ayarları", socErrOff: "Son eşitleme başarısız; bağlama açılınca yeniden bağlanabilir.", setSocLead: "Hesap bağlantıları profil sayfasında.", setSocGo: "Profil > Sosyal hesaplar", socOff: "Hesap bağlama şu an kapalı.", onbTitle: "Hoş geldin! Hesaplarını bağla", onbLead: "Sosyal hesaplarını resmî bağlantıyla bağla; takipçi ve etkileşim verilerin markalara doğrulanmış olarak görünür.", onbLeadOwn: "Kurumsal sosyal hesaplarını resmî bağlantıyla bağla.", onbHint: "İstediğin zaman Profil > Sosyal hesaplar bölümünden de bağlayabilirsin.", onbSkip: "Şimdilik geç", socOffRow: "Bağlama yakında açılacak",
       socSample: "örnek", socSampleNote: "Ölçüm bağlantısı henüz açık değil. Aşağıdaki sayılar gerçek değil, yalnızca nasıl görüneceğini gösteren örnek verilerdir.",
@@ -421,7 +426,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       socDone: "{n} hesabın bağlandı.", socCutOk: "{n} bağlantısı kesildi.", socDenied: "Bağlantı izni verilmedi; istersen yeniden deneyebilirsin.",
       socTaken: "Bu hesap başka bir Brand Corner hesabına bağlı. Önce oradan bağlantıyı kes.", socTicket: "Bağlantı süresi doldu ya da geçersiz; yeniden \"Bağla\"ya bas.",
       socForbidden: "Bu hesap için bağlantı kullanılamıyor.", socProvider: "Platform şu an yanıt vermedi; biraz sonra yeniden dene.", socOwner: "Bu bağlantı başka bir hesaptan başlatıldı, yeniden Bağla'ya bas.",
-      perf: "Performans", mReach: "Erişim", mEng: "Etkileşim", mSpend: "Harcama", mEarn: "Kazanç", noData: "Veri yok", perfNote: "Bu ölçümler içerik bağlantıları ve ödemeler kaydedildikçe dolacak.", perfWin: "Son 30 gün", perfPosts: "Gönderi", perfTop: "En çok erişen gönderiler", perfAll: "Tüm gönderiler", perfNone: "Son 30 günde gönderi yok.", perfLast: "Son {n} gönderi", perfSampleNote: "Henüz gönderi eklemediniz; bu özet örnek veridir.",
+      perf: "Performans", mReach: "Erişim", mEng: "Etkileşim", mSpend: "Harcama", mEarn: "Kazanç", noData: "Veri yok", perfNote: "Bu ölçümler içerik bağlantıları ve ödemeler kaydedildikçe dolacak.", perfWin: "Son 30 gün", perfPosts: "Gönderi", mReachV: "Erişim / izlenme", perfTop: "En çok erişen veya izlenen gönderiler", perfAll: "Tüm gönderiler", perfNone: "Son 30 günde gönderi yok.", perfLast: "Son {n} gönderi", perfSampleNote: "Henüz gönderi eklemediniz; bu özet örnek veridir.",
       acctMenu: "Hesap menüsü", tabsLabel: "Panel sekmeleri",
       kTrig: "Ara veya git", kPh: "Sayfa, kampanya ara…", kPhOwn: "Sayfa, kampanya, influencer ara…", kLabel: "Komut paleti", kGo: "Git", kAct: "İşlemler", kPeople: "Influencer'lar",
       kNone: "Sonuç yok. Başka bir kelime dene.", kHintNav: "gezin", kHintOpen: "aç", kHintClose: "kapat", kDark: "Koyu temaya geç", kLight: "Açık temaya geç",
@@ -490,11 +495,11 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       esOppT: "Şu an açık kampanya yok", esAppsT: "Henüz başvuru yok", appsClosedE: "Bu kampanya başvuru almadan kapandı.", esMyT: "İlk başvurunuzu yapın", esI1: "Fırsat bulun", esI2: "Başvurun", esI3: "İçeriği gönderin",
       esDiscT: "Henüz listelenen influencer yok", esNfT: "Henüz bildirim yok",
       discLead: "Profil kartlarını inceleyip doğrudan davet edin.", discQ: "Ara", discQPh: "İsim veya şehir", allNiches: "Tüm ilgi alanları",
-      fMinFol: "Takipçi", anyMin: "Her takipçi sayısı", fCity: "Şehir", allCities: "Tüm şehirler", fSort: "Sıralama", fMore: "Filtreler", sortRec: "Önerilen", sortFol: "Takipçi (çoktan aza)", sortName: "Ada göre (A–Z)", fReset: "Filtreleri temizle", discCount: "{n} influencer", discCount1: "1 influencer", discCap: "En yeni 100 profil yüklendi; filtreler yalnızca bu profiller içinde çalışır.", discCap50: "En uygun 50 profil gösteriliyor.", discMatch: "İlgi alanlarınıza göre en uygun profiller.", discMatchC: "Seçili kampanyaya en uygun profiller.", discNoNiche: "Profilinize ilgi alanı eklerseniz size en uygun profilleri öne çıkarırız.", discNoNicheC: "Bu kampanyada ilgi alanı yok; tüm profiller gösteriliyor.", discNoMatch: "Ortak ilgi alanı olan profil yok; tüm profiller gösteriliyor.", discMatchErr: "Eşleşmeler yüklenemedi; tüm profiller gösteriliyor.", viewProf: "Profili gör", inviteFor: "{n} için davet ediyorsunuz.",
+      fMinFol: "Takipçi", anyMin: "Her takipçi sayısı", fCity: "Şehir", allCities: "Tüm şehirler", dSort: "Sıralama", fMore: "Filtreler", sortRec: "Önerilen", sortFol: "Takipçi (çoktan aza)", sortName: "Ada göre (A–Z)", fReset: "Filtreleri temizle", discCount: "{n} influencer", discCount1: "1 influencer", discCap: "En yeni 100 profil yüklendi; filtreler yalnızca bu profiller içinde çalışır.", discCap50: "En uygun 50 profil gösteriliyor.", discMatch: "İlgi alanlarınıza göre en uygun profiller.", discMatchC: "Seçili kampanyaya en uygun profiller.", discNoNiche: "Profilinize ilgi alanı eklerseniz size en uygun profilleri öne çıkarırız.", discNoNicheC: "Bu kampanyada ilgi alanı yok; tüm profiller gösteriliyor.", discNoMatch: "Ortak ilgi alanı olan profil yok; tüm profiller gösteriliyor.", discMatchErr: "Eşleşmeler yüklenemedi; tüm profiller gösteriliyor.", viewProf: "Profili gör", inviteFor: "{n} için davet ediyorsunuz.",
       clearFor: "Temizle", drClose: "Kapat", drNoPlat: "Platform eklenmemiş.", crFull: "Tam profil ve son gönderiler", crBack: "← Keşfet", crNone: "Bu influencer bulunamadı ya da artık listelenmiyor.", crAccounts: "Hesap ölçümleri", crPosts: "Son gönderiler", crSampleBadge: "Örnek veri", crSampleNote: "Gönderi bağlantısı henüz açık değil; aşağıdakiler örnek gönderilerdir. Kampanyaya eklemeler yalnız bu tarayıcıda tutulur.", crTarget: "Kampanya", crAdd: "Kampanyaya ekle", crRemove: "Kampanyadan çıkar", crAdded: "Gönderi kampanyaya eklendi.", crRemoved: "Gönderi kampanyadan çıkarıldı.", crVerified: "doğrulandı", crOpenPost: "Gönderiyi aç", crNoPosts: "Henüz gönderi yok.", drHist: "Sizinle geçmiş", drHistNone: "Henüz birlikte çalışmadınız.",
-      audTitle: "Kitle dağılımı", aud_followers: "Takipçiler", aud_engaged: "Bu ay etkileşenler", aud_viewers: "İzleyiciler (son 90 gün)", aud_age: "Yaş", aud_gender: "Cinsiyet", aud_country: "Ülke", aud_city: "Şehir", audCountryViews: "Ülke (izlenme payı)", audF: "Kadın", audM: "Erkek", audU: "Belirtilmemiş", audYtNote: "Yaş ve cinsiyet yalnız oturum açmış izleyicilerden.", audIgMin: "Kitle dağılımı henüz yok. Instagram bu veriyi 100 ve üzeri takipçili hesaplara verir; bir sonraki eşitlemede güncellenir.", audYtWait: "Kitle dağılımı henüz yok. Bağlantın kitle iznini içermiyorsa YouTube'u bir kez \"Yeniden bağla\" ile bağla; ölçümlerin silinmez. Az izlenen kanallarda YouTube bu veriyi vermez.", audNone: "Bu platform kitle dağılımı (yaş, cinsiyet, ülke) vermiyor.", audNoneYet: "Kitle dağılımı henüz yok.",
+      audTitle: "Kitle dağılımı", aud_followers: "Takipçiler", aud_engaged: "Bu ay etkileşenler", aud_viewers: "İzleyiciler (son 90 gün)", aud_viewers_all: "İzleyiciler (kanalın açıldığı günden bu yana)", aud_age: "Yaş", aud_gender: "Cinsiyet", aud_country: "Ülke", aud_city: "Şehir", audCountryViews: "Ülke (izlenme payı)", audF: "Kadın", audM: "Erkek", audU: "Belirtilmemiş", audYtNote: "Yaş ve cinsiyet yalnız oturum açmış izleyicilerden.", audIgMin: "Kitle dağılımı henüz yok. Instagram bu veriyi 100 ve üzeri takipçili hesaplara verir; bir sonraki eşitlemede güncellenir.", audYtWait: "Kitle dağılımı henüz yok. Bağlantın kitle iznini içermiyorsa YouTube'u bir kez \"Yeniden bağla\" ile bağla; ölçümlerin silinmez. Az izlenen kanallarda YouTube bu veriyi vermez.", audNone: "Bu platform kitle dağılımı (yaş, cinsiyet, ülke) vermiyor.", audNoneYet: "Kitle dağılımı henüz yok.",
       aud_industry: "Sektör", aud_seniority: "Kıdem", aud_function: "İş fonksiyonu", aud_size: "Şirket büyüklüğü (çalışan)", audAgeGrp: "Yaş grubu", audYoung: "Genç (13–24)", audAdult: "Yetişkin (25–44)", audMature: "Olgun (45+)", audLeanEq: "Dengeli", audLeanF: "Kadın ağırlıklı", audLeanM: "Erkek ağırlıklı", audTopAge: "en büyük dilim {n}", audTopCity: "en çok {n}", audLiNone: "LinkedIn kişisel profilde yalnız takipçi sayısını veriyor. Sektör, kıdem, iş fonksiyonu ve şirket büyüklüğü dağılımı yalnız LinkedIn şirket sayfası takipçilerinde var.", audProNote: "Sektör, kıdem ve şirket büyüklüğünü Instagram ve YouTube vermiyor; bu dağılım yalnız LinkedIn şirket sayfası takipçilerinde var.",
-      audTotH: "Hesap geneli", audPostsH: "Gönderi başına", audColPost: "Gönderi",
+      audTotH: "Hesap geneli", audPostsH: "Gönderi başına", audColPost: "Gönderi", audShowTable: "Tablo olarak gör", audShowChart: "Grafik olarak gör", audOther: "Diğer", audColShare: "Pay",
       audNoAcc: "Kitle dağılımı veren bağlı hesabın yok. Instagram ya da YouTube'u Profil'den bağla. Yeni bağladıysan kitle ilk eşitlemeden sonra burada görünür.",
       audPostsNone: "Henüz kitle dağılımı gelen gönderi yok. Gönderi başına kitleyi şimdilik yalnız YouTube veriyor; her eşitlemede birkaç video sorulur.",
       audPostsNote: "Gönderi başına kitleyi şimdilik yalnız YouTube veriyor (video başına, yayından bu yana); Instagram, TikTok ve LinkedIn bu bağlantıda gönderi başına dağılım vermiyor.",
@@ -504,7 +509,8 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       pAudSample: "Örnek gönderide kitle dağılımı yok. Hesabını bağladığında YouTube videolarının kitlesi burada görünür.",
       audGoAll: "Hesabın genel kitlesini gör", audReconHint: "Yeniden bağlamak için Profil'e git",
       audR_no_scope: "Kitle dağılımı alınamadı: YouTube bağlantısında YouTube Analytics izni yok. \"Yeniden bağla\"ya bas ve Google izin ekranında YouTube Analytics kutusunu da işaretle.",
-      audR_few: "YouTube bu kanal için son 90 günün kitle dağılımını boş döndürdü; izleyici sayısı YouTube'un gizlilik eşiğinin altında kalınca böyle olur. İzlenme arttıkça kendiliğinden gelir.",
+      audR_few: "YouTube bu kanalın kitle dağılımını hem son 90 gün hem kanalın açıldığı günden bu yana boş döndürdü; izleyici sayısı YouTube'un gizlilik eşiğinin altında kalınca böyle olur. İzlenme arttıkça kendiliğinden gelir.",
+      audR_few0: "YouTube Analytics bu kanal için henüz hiç izlenme göstermiyor, bu yüzden kitle dağılımı da boş. Yeni videoların izlenmeleri Analytics'e birkaç gün gecikmeyle düşer; bir sonraki eşitlemede yeniden denenecek.",
       audR_error: "YouTube kitle raporu şu an alınamadı; bir sonraki eşitlemede yeniden denenecek.",
       audR_api_off: "YouTube kitle raporu şu an alınamıyor: YouTube Analytics API bizim tarafımızda kapalı. Açıldığında bir sonraki eşitlemede burada görünür; senin bir şey yapman gerekmez.",
       drInvite: "Kampanyaya davet et", drNoOpen: "Davet edilebilecek açık kampanya yok: ya hepsinde zaten var ya da açık kampanyanız yok.",
@@ -520,7 +526,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       profLeadC: "Profilinizi markalara açarsanız adınız, şehriniz, tanıtımınız, ilgi alanlarınız ve platformlarınız influencer keşfinde görünür. Başvurduğunuz ya da sizi davet eden kampanyaların sahipleri de bu bilgileri görür. E-posta adresiniz gösterilmez.",
       email: "E-posta:", accType: "Hesap türü:",
       fName: "Görünen ad", fNameHintO: "Kampanyalarınızda influencer'lar bu adı görür; marka ya da ajans adınızı yazabilirsiniz.", fNameHintC: "Markalar sizi bu adla görür.",
-      fCompany: "Şirket", fIndustry: "Sektör", fClients: "Müşteri sayısı", fBio: "Hakkında", fCity: "Şehir", fWebsite: "Web sitesi",
+      fCompany: "Şirket", fIndustry: "Sektör", fClients: "Müşteri sayısı", fBio: "Hakkında", fWebsite: "Web sitesi",
       fListed: "Markalar beni bulabilsin", fListedHint: "İşaretlerseniz profiliniz markaların influencer keşfinde listelenir.",
       fPlats: "Platformlar", platsHint: "Kaldırmak için platformu boş (—) seçin.",
       platform: "Platform", handle: "Kullanıcı adı", followersL: "Takipçi sayısı", addPlat: "Platform ekle",
@@ -577,10 +583,14 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       pConnSync: "Account connected; your posts sync automatically every day.", pConnOk: "Connected", pConnHow: "Once connected, your posts arrive here on their own.", pConnGo: "Connect",
       psPosts: "Posts", psReach: "Total reach", psPer: "{n} per post", psEr: "Average engagement rate", psEng: "{n} likes and comments", psTop: "Top by reach", psFirst: "Add your first post",
       pLiNote: "LinkedIn doesn't share personal post metrics with other apps; add LinkedIn posts by hand or with a CSV.",
+      pOlder: "Load older posts", pOlderNote: "Automatic sync picks up the newest posts from each account: 200 on Instagram and YouTube, 100 on TikTok. To see older ones, press \"Load older posts\"; each press brings 200 more, and your account keeps at most 1000 posts in total.",
+      pOlderAdded: "{n} older posts added.", pOlderMore: "Press again for older ones.", pOlderEnd: "All posts from this account are in.", pOlderNone: "This account has no older posts to load.",
+      pOlderFull: "You've reached the 1000-post limit; no more posts can be added.", pOlderBusy: "This account is updating right now; try again in a few minutes.",
+      pOlderRate: "You can load older posts at most 10 times an hour; try again a bit later.", pOlderProv: "The platform didn't respond; try again a bit later.", pOlderConn: "The account connection was lost; reconnect it from Profile.",
       pNoCap: "No caption",
       sCampaigns: "Campaigns", sOpen: "Open campaigns", sPending: "Pending applications", sApproved: "Approved content",
       sReview: "Content awaiting approval", sWork: "Active work", sDone: "Completed", subNear: "Soonest: {n}", subTop: "Most: {n}", subNext: "Next up: {n}", ocTitle: "Open campaigns", ocAll: "All", ocEmpty: "You have no open campaigns.", dLeft: "{n} days left", dLast: "Last day today", dGone: "Expired",
-      stPend: "New applications", stInv: "Invited", stWork: "In progress", stRev: "Content approval", stDone: "Approved",
+      stPend: "New applications", stInv: "Invited", stWork: "In progress", stRev: "Content approval",
       forYou: "Influencers for you", forYouGo: "Discover", forYouEmpty: "No influencers are listed yet.",
       oppsFor: "Opportunities for you", oppsAll: "All", oppsEmpty: "No new matches right now.",
       dailyT: "Applications left today", dailyHint: "Resets daily. Focused applications get accepted more.", dailyLater: "The counter will appear after a server update.",
@@ -597,7 +607,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       ckCompany: "Company name", ckIndustry: "Industry", ckCity: "City", ckWebsite: "Website", ckBio: "About (at least 40 characters)", ckClients: "Number of clients",
       ckNiches: "Niches", ckPlatform: "At least one platform with follower count", ckListed: "Profile visible to brands",
       socTitle: "Social accounts", socLead: "Connect your account officially; follower and engagement data shows to brands as verified.",
-      socConnect: "Connect", socCut: "Disconnect", socSure: "Disconnect {n}? Saved metrics will no longer update.",
+      socConnect: "Connect", socCut: "Disconnect", socSure: "Disconnect {n}? This account's metric history and imported posts will be deleted.",
       socAvail: "Not connected", socOn: "Connected", socOnAs: "Connected: {n}", socErr: "Last sync failed; try reconnecting.",
       socNotConf: "Connections for this platform aren't set up yet.", socNotConfS: "Not configured", socErrS: "Error", socNoApi: "No API", socReconnect: "Reconnect", socAwait: "Awaiting metrics approval", socSoonOwn: "Connections for brand and agency accounts are coming soon", socLeadOwn: "Connect your company's social accounts officially.", socLiName: "LinkedIn (personal profile)", socLiNote: "Connects your own LinkedIn profile.", socLiRevoke: "You can remove the permission on LinkedIn's side in your LinkedIn settings.", socLiGo: "LinkedIn settings", socErrOff: "Last sync failed; you can reconnect once connections reopen.", setSocLead: "Account connections live on your profile page.", setSocGo: "Profile > Social accounts", socOff: "Account connections are turned off right now.", onbTitle: "Welcome! Connect your accounts", onbLead: "Connect your social accounts officially; your follower and engagement data shows to brands as verified.", onbLeadOwn: "Connect your company's social accounts officially.", onbHint: "You can also connect them any time under Profile > Social accounts.", onbSkip: "Skip for now", socOffRow: "Connecting opens soon",
       socSample: "sample", socSampleNote: "Metric connections aren't live yet. The numbers below are not real; they're sample data showing how this will look.",
@@ -606,7 +616,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       socDone: "Your {n} account is connected.", socCutOk: "{n} disconnected.", socDenied: "Permission wasn't granted; you can try again.",
       socTaken: "This account is linked to another Brand Corner account. Disconnect it there first.", socTicket: "The connection expired or is invalid; press \"Connect\" again.",
       socForbidden: "Connections aren't available for this account.", socProvider: "The platform didn't respond; try again shortly.", socOwner: "This connection was started from another account; press Connect again.",
-      perf: "Performance", mReach: "Reach", mEng: "Engagement", mSpend: "Spend", mEarn: "Earnings", noData: "No data", perfNote: "These metrics fill in as content links and payments are recorded.", perfWin: "Last 30 days", perfPosts: "Posts", perfTop: "Top posts by reach", perfAll: "All posts", perfNone: "No posts in the last 30 days.", perfLast: "Last {n} posts", perfSampleNote: "You haven't added any posts yet; this summary is sample data.",
+      perf: "Performance", mReach: "Reach", mEng: "Engagement", mSpend: "Spend", mEarn: "Earnings", noData: "No data", perfNote: "These metrics fill in as content links and payments are recorded.", perfWin: "Last 30 days", perfPosts: "Posts", mReachV: "Reach / views", perfTop: "Top posts by reach or views", perfAll: "All posts", perfNone: "No posts in the last 30 days.", perfLast: "Last {n} posts", perfSampleNote: "You haven't added any posts yet; this summary is sample data.",
       acctMenu: "Account menu", tabsLabel: "Panel tabs",
       kTrig: "Search or jump to", kPh: "Search pages, campaigns…", kPhOwn: "Search pages, campaigns, creators…", kLabel: "Command palette", kGo: "Go to", kAct: "Actions", kPeople: "Creators",
       kNone: "No results. Try another word.", kHintNav: "navigate", kHintOpen: "open", kHintClose: "close", kDark: "Switch to dark theme", kLight: "Switch to light theme",
@@ -675,11 +685,11 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       esOppT: "No open campaigns right now", esAppsT: "No applications yet", appsClosedE: "This campaign closed without any applications.", esMyT: "Make your first application", esI1: "Find an opportunity", esI2: "Apply", esI3: "Submit your content",
       esDiscT: "No listed influencers yet", esNfT: "No notifications yet",
       discLead: "Browse profile cards and invite directly.", discQ: "Search", discQPh: "Name or city", allNiches: "All niches",
-      fMinFol: "Followers", anyMin: "Any follower count", fCity: "City", allCities: "All cities", fSort: "Sort", fMore: "Filters", sortRec: "Recommended", sortFol: "Followers (high to low)", sortName: "Name (A–Z)", fReset: "Clear filters", discCount: "{n} influencers", discCount1: "1 influencer", discCap: "The newest 100 profiles are loaded; filters only search within them.", discCap50: "Showing the 50 best matches.", discMatch: "Best matches for your niches.", discMatchC: "Best matches for the selected campaign.", discNoNiche: "Add niches to your profile and we will bring your best matches to the top.", discNoNicheC: "This campaign has no niches; showing all profiles.", discNoMatch: "No profiles share your niches; showing all profiles.", discMatchErr: "Matches could not be loaded; showing all profiles.", viewProf: "View profile", inviteFor: "Inviting for {n}.",
+      fMinFol: "Followers", anyMin: "Any follower count", fCity: "City", allCities: "All cities", dSort: "Sort", fMore: "Filters", sortRec: "Recommended", sortFol: "Followers (high to low)", sortName: "Name (A–Z)", fReset: "Clear filters", discCount: "{n} influencers", discCount1: "1 influencer", discCap: "The newest 100 profiles are loaded; filters only search within them.", discCap50: "Showing the 50 best matches.", discMatch: "Best matches for your niches.", discMatchC: "Best matches for the selected campaign.", discNoNiche: "Add niches to your profile and we will bring your best matches to the top.", discNoNicheC: "This campaign has no niches; showing all profiles.", discNoMatch: "No profiles share your niches; showing all profiles.", discMatchErr: "Matches could not be loaded; showing all profiles.", viewProf: "View profile", inviteFor: "Inviting for {n}.",
       clearFor: "Clear", drClose: "Close", drNoPlat: "No platforms added.", crFull: "Full profile and recent posts", crBack: "← Discover", crNone: "This influencer wasn't found or is no longer listed.", crAccounts: "Account metrics", crPosts: "Recent posts", crSampleBadge: "Sample data", crSampleNote: "The posts connection isn't live yet; these are sample posts. Campaign additions are kept only in this browser.", crTarget: "Campaign", crAdd: "Add to campaign", crRemove: "Remove from campaign", crAdded: "Post added to the campaign.", crRemoved: "Post removed from the campaign.", crVerified: "verified", crOpenPost: "Open post", crNoPosts: "No posts yet.", drHist: "History with you", drHistNone: "You haven't worked together yet.",
-      audTitle: "Audience breakdown", aud_followers: "Followers", aud_engaged: "Engaged this month", aud_viewers: "Viewers (last 90 days)", aud_age: "Age", aud_gender: "Gender", aud_country: "Country", aud_city: "City", audCountryViews: "Country (share of views)", audF: "Women", audM: "Men", audU: "Unspecified", audYtNote: "Age and gender come from signed-in viewers only.", audIgMin: "No audience breakdown yet. Instagram only provides it for accounts with 100+ followers; it updates on the next sync.", audYtWait: "No audience breakdown yet. If your connection doesn't include audience access, reconnect YouTube once with \"Reconnect\"; your metrics stay. YouTube doesn't provide it for channels with few views.", audNone: "This platform doesn't provide an audience breakdown (age, gender, country).", audNoneYet: "No audience breakdown yet.",
+      audTitle: "Audience breakdown", aud_followers: "Followers", aud_engaged: "Engaged this month", aud_viewers: "Viewers (last 90 days)", aud_viewers_all: "Viewers (since the channel opened)", aud_age: "Age", aud_gender: "Gender", aud_country: "Country", aud_city: "City", audCountryViews: "Country (share of views)", audF: "Women", audM: "Men", audU: "Unspecified", audYtNote: "Age and gender come from signed-in viewers only.", audIgMin: "No audience breakdown yet. Instagram only provides it for accounts with 100+ followers; it updates on the next sync.", audYtWait: "No audience breakdown yet. If your connection doesn't include audience access, reconnect YouTube once with \"Reconnect\"; your metrics stay. YouTube doesn't provide it for channels with few views.", audNone: "This platform doesn't provide an audience breakdown (age, gender, country).", audNoneYet: "No audience breakdown yet.",
       aud_industry: "Industry", aud_seniority: "Seniority", aud_function: "Job function", aud_size: "Company size (employees)", audAgeGrp: "Age group", audYoung: "Young (13–24)", audAdult: "Adult (25–44)", audMature: "Mature (45+)", audLeanEq: "Balanced", audLeanF: "Mostly women", audLeanM: "Mostly men", audTopAge: "largest bracket {n}", audTopCity: "top city {n}", audLiNone: "LinkedIn only gives the follower count for personal profiles. Industry, seniority, job function and company size breakdowns exist only for LinkedIn company page followers.", audProNote: "Instagram and YouTube don't provide industry, seniority or company size; that breakdown exists only for LinkedIn company page followers.",
-      audTotH: "Account-wide", audPostsH: "Per post", audColPost: "Post",
+      audTotH: "Account-wide", audPostsH: "Per post", audColPost: "Post", audShowTable: "Show as table", audShowChart: "Show as chart", audOther: "Other", audColShare: "Share",
       audNoAcc: "You have no connected account that provides an audience breakdown. Connect Instagram or YouTube from Profile. If you just connected one, the breakdown shows here after its first sync.",
       audPostsNone: "No posts with an audience breakdown yet. For now only YouTube provides a per-post audience; a few videos are requested on each sync.",
       audPostsNote: "For now only YouTube provides a per-post audience (per video, since publishing); Instagram, TikTok and LinkedIn don't provide a per-post breakdown through this connection.",
@@ -689,7 +699,8 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       pAudSample: "Sample posts have no audience breakdown. Once you connect your account, your YouTube videos' audience shows up here.",
       audGoAll: "See your account-wide audience", audReconHint: "Go to Profile to reconnect",
       audR_no_scope: "Couldn't get the audience breakdown: your YouTube connection lacks YouTube Analytics access. Press \"Reconnect\" and also tick the YouTube Analytics box on Google's permission screen.",
-      audR_few: "YouTube returned an empty audience breakdown for this channel's last 90 days; this happens when the viewer count is below YouTube's privacy threshold. It arrives on its own as views grow.",
+      audR_few: "YouTube returned an empty audience breakdown for this channel, both for the last 90 days and since the channel opened; this happens when the viewer count is below YouTube's privacy threshold. It arrives on its own as views grow.",
+      audR_few0: "YouTube Analytics doesn't show any views for this channel yet, so the audience breakdown is empty too. Views of new videos reach Analytics with a delay of a few days; it will be retried on the next sync.",
       audR_error: "The YouTube audience report couldn't be fetched right now; it will be retried on the next sync.",
       audR_api_off: "The YouTube audience report isn't available right now: the YouTube Analytics API is turned off on our side. Once it's on, it shows here after the next sync; you don't need to do anything.",
       drInvite: "Invite to a campaign", drNoOpen: "No open campaign to invite them to: they're already in all of them, or you have none open.",
@@ -705,7 +716,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       profLeadC: "If you make your profile visible, brands see your name, city, bio, niches and platforms in Find influencers. Owners of campaigns you apply to or are invited to also see this information. Your email address is never shown.",
       email: "Email:", accType: "Account type:",
       fName: "Display name", fNameHintO: "Influencers see this name on your campaigns; you can use your brand or agency name.", fNameHintC: "Brands see you under this name.",
-      fCompany: "Company", fIndustry: "Industry", fClients: "Number of clients", fBio: "About", fCity: "City", fWebsite: "Website",
+      fCompany: "Company", fIndustry: "Industry", fClients: "Number of clients", fBio: "About", fWebsite: "Website",
       fListed: "Let brands find me", fListedHint: "If checked, your profile is listed in brands' Find influencers page.",
       fPlats: "Platforms", platsHint: "To remove a platform, set it to empty (—).",
       platform: "Platform", handle: "Username", followersL: "Followers", addPlat: "Add platform",
@@ -1254,18 +1265,21 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
     var d = pData(), cut = isoDay(new Date(Date.now() - 30 * 864e5)), list = d.list.filter(function (p) { return p.date >= cut; });
     var old = !d.sample && !list.length;
     if (old) list = d.list.slice(0, PERF_LAST);
-    var sum = function (m) { var n = 0, any = false; list.forEach(function (p) { var v = lastSnap(p)[m]; if (v != null) { n += v; any = true; } }); return any ? n : null; };
-    var reach = sum("reach"), likes = sum("likes"), comm = sum("comments"), eng = likes == null && comm == null ? null : (likes || 0) + (comm || 0);
-    var top = list.slice().sort(function (a, b) { return (lastSnap(b).reach || 0) - (lastSnap(a).reach || 0); }).slice(0, 3);
+    // YouTube/TikTok erişim vermez; erişim yoksa izlenme sayılır
+    var rv = function (s) { return s.reach != null ? s.reach : s.views; };
+    var sum = function (f) { var n = 0, any = false; list.forEach(function (p) { var v = f(lastSnap(p)); if (v != null) { n += v; any = true; } }); return any ? n : null; };
+    var pick = function (m) { return function (s) { return s[m]; }; };
+    var reach = sum(rv), likes = sum(pick("likes")), comm = sum(pick("comments")), eng = likes == null && comm == null ? null : (likes || 0) + (comm || 0);
+    var top = list.slice().sort(function (a, b) { return (rv(lastSnap(b)) || 0) - (rv(lastSnap(a)) || 0); }).slice(0, 3);
     return el("section", { class: "card perf" }, [
       el("div", { class: "ch" }, [el("h2", { text: t("perf") }), el("span", { class: "meta", text: old ? t("perfLast", list.length) : t("perfWin") })]),
       el("div", { class: "cb" }, [
         d.sample ? el("p", { class: "meta" }, [el("span", { class: "badge b-sample", text: t("crSampleBadge") }), " ", t("perfSampleNote")]) : null,
         old ? el("p", { class: "hint", text: t("perfNone") }) : null,
-        el("div", { class: "mets m4" }, [stat("perfPosts", num(list.length)), stat("mReach", reach == null ? null : short(reach)), stat("mEng", eng == null ? null : short(eng)), stat("mEarn", null)]),
+        el("div", { class: "mets m4" }, [stat("perfPosts", num(list.length)), stat("mReachV", reach == null ? null : short(reach)), stat("mEng", eng == null ? null : short(eng)), stat("mEarn", null)]),
         top.length ? el("div", null, [el("h3", { class: "ptop", text: t("perfTop") }), el("ol", { class: "ptop" }, top.map(function (p) {
           var s = lastSnap(p);
-          return el("li", null, el("a", { class: "lk44", href: d.sample ? "#posts" : "#post-" + p.id }, [el("span", { class: "pcap", dir: "auto", text: p.caption || pLabel(p) }), el("b", { text: short(s.reach) })]));
+          return el("li", null, el("a", { class: "lk44", href: d.sample ? "#posts" : "#post-" + p.id }, [el("span", { class: "pcap", dir: "auto", text: p.caption || pLabel(p) }), el("b", { text: short(rv(s)) })]));
         }))]) : el("p", { class: "hint", text: t("perfNone") }),
         el("a", { class: "btn sm sec", href: "#posts", text: t("perfAll") })
       ])]);
@@ -1813,7 +1827,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       // Sonuç sayısı, temizle ve sıralama listenin hemen üstünde tek satırda
       so.id = "ds";
       var box = el("div"), cnt = el("p", { class: "info", role: "status" }); ctx.err = note(); ctx.err.id = "disc-err"; discCtx = ctx;
-      var bar = el("div", { class: "rbar" }, [cnt, rs, el("label", { class: "sortw" }, [el("span", { text: t("fSort") }), so])]);
+      var bar = el("div", { class: "rbar" }, [cnt, rs, el("label", { class: "sortw" }, [el("span", { text: t("dSort") }), so])]);
       ctx.repaint = function () {
         var list = discList(ctx);
         // Sonuç yoksa metin kutuda görünür; durum satırı yalnız ekran okuyucuya söyler (iki kez görünmez)
@@ -2367,17 +2381,146 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
     var au = a && a.audience && typeof a.audience === "object" ? a.audience : {};
     return (AUD_P[a.platform] || []).some(function (s) { var sec = au[s] || {}; return AUD_K.some(function (k) { return audPairs(sec[k]).length > 0; }); });
   }
+  // Kitle grafiklerinin ortak ipucu: işaretin (dilim, sütun, satır) üzerine gelince, dokununca ya da grafik klavyeyle seçiliyken
+  // ok tuşlarıyla gezilince açılır. İşaret: { n: öğe, c: renk, v: değer metni, l: etiket }; kb = klavye konumu (işaretin üstü).
+  var ATIP = { el: null, on: null, kb: false };
+  function audTipHide() {
+    if (ATIP.on) ATIP.on.n.classList.remove("on");
+    ATIP.on = null;
+    if (ATIP.el) ATIP.el.hidden = true;
+  }
+  function audTipShow(m, x, y) {
+    var tip = ATIP.el;
+    if (!tip) {
+      tip = ATIP.el = el("div", { class: "ctip", role: "tooltip", hidden: true });
+      document.body.appendChild(tip);
+      window.addEventListener("scroll", function () { if (ATIP.on && ATIP.kb) audTipShow(ATIP.on); else audTipHide(); }, { capture: true, passive: true });
+      window.addEventListener("hashchange", audTipHide);
+      document.addEventListener("pointerdown", function (e) { if (ATIP.on && !ATIP.on.n.contains(e.target)) audTipHide(); }, true);
+    }
+    if (ATIP.on !== m) {
+      if (ATIP.on) ATIP.on.n.classList.remove("on");
+      ATIP.on = m;
+      m.n.classList.add("on");
+      tip.textContent = "";
+      add(tip, [el("i", { style: "background:" + m.c }), el("b", { text: m.v }), el("span", { dir: "auto", text: m.l })]);
+    }
+    tip.hidden = false;
+    ATIP.kb = x == null;
+    var w = tip.offsetWidth, h = tip.offsetHeight, vw = document.documentElement.clientWidth, vh = document.documentElement.clientHeight, l, tp;
+    if (ATIP.kb) {
+      var r = m.n.getBoundingClientRect();
+      l = r.left + r.width / 2 - w / 2;
+      tp = r.top - h - 8 < 8 ? r.bottom + 8 : r.top - h - 8;
+    } else {
+      l = x + 12 + w > vw - 8 ? x - w - 12 : x + 12;
+      tp = y + 12 + h > vh - 8 ? y - h - 12 : y + 12;
+    }
+    tip.style.transform = "translate(" + Math.round(Math.max(8, Math.min(l, vw - w - 8))) + "px," + Math.round(Math.max(8, tp)) + "px)";
+  }
+  // Fare ve dokunuş işaretin kendisinde; klavyede grafik kutusu tek sekme durağıdır, oklar/Home/End işaretler arasında gezer
+  function audInteract(box, marks) {
+    if (!marks.length) return;
+    var cur = -1;
+    var go = function (i) { cur = Math.max(0, Math.min(marks.length - 1, i)); audTipShow(marks[cur]); };
+    marks.forEach(function (m, i) {
+      var show = function (e) { cur = i; audTipShow(m, e.clientX, e.clientY); };
+      m.n.addEventListener("pointerenter", show);
+      m.n.addEventListener("pointermove", show);
+      m.n.addEventListener("pointerdown", show);
+      m.n.addEventListener("pointerleave", function (e) { if (e.pointerType !== "touch" && ATIP.on === m) audTipHide(); });
+    });
+    box.addEventListener("focus", function () {
+      var kb = true;
+      try { kb = box.matches(":focus-visible"); } catch (e) { /* eski tarayıcı: klavye say */ }
+      if (kb) go(cur < 0 ? 0 : cur);
+    });
+    box.addEventListener("blur", audTipHide);
+    box.addEventListener("keydown", function (e) {
+      var k = e.key, d = k === "ArrowRight" || k === "ArrowDown" ? 1 : k === "ArrowLeft" || k === "ArrowUp" ? -1 : 0;
+      if (k === "Escape") audTipHide();
+      else if (d) go(cur + d);
+      else if (k === "Home") go(0);
+      else if (k === "End") go(marks.length - 1);
+      else return;
+      e.preventDefault();
+    });
+  }
+  // Grafik öğeleri [etiket, yüzde, renk]. Cinsiyet sırası ve rengi sabit (Kadın, Erkek, Belirtilmemiş); yaş grupları tek tonun açıktan koyuya üç adımı
+  function audGenderItems(l) {
+    var g = { F: 0, M: 0, U: 0 };
+    audPairs(l).forEach(function (x) { g[x[0] === "F" || x[0] === "M" ? x[0] : "U"] += x[1]; });
+    return [["F", "--c1"], ["M", "--c2"], ["U", "--c0"]].filter(function (x) { return g[x[0]] > 0; }).map(function (x) {
+      return [audLabel("gender", x[0]), Math.round(g[x[0]] * 10) / 10, "var(" + x[1] + ")"];
+    });
+  }
+  function audGroupItems(gr) { return gr.map(function (x, i) { return [x[0], x[1], "var(--o" + (i + 1) + ")"]; }); }
+  // Parça-bütün: %100 yığılmış yatay çubuk + değerli lejant. Dönüş { c: grafik, m: işaretler, lgd, r: tablo satırları [etiket, yüzde] }
+  function audStack(items) {
+    var m = [];
+    var c = el("div", { class: "stk" }, items.map(function (x) {
+      if (!(x[1] > 0)) return null;
+      var n = el("i", { style: "--c:" + x[2] + ";flex:" + x[1] + " 1 0" });
+      m.push({ n: n, c: x[2], v: pct(x[1] / 100), l: x[0] });
+      return n;
+    }));
+    var lgd = el("ul", { class: "lgd" }, items.map(function (x) {
+      return el("li", null, [el("i", { style: "background:" + x[2] }), el("span", { text: x[0] }), el("b", { text: pct(x[1] / 100) })]);
+    }));
+    return { c: c, m: m, lgd: lgd, r: items };
+  }
+  // Gönderi tablosundaki küçük yığılmış çubuk (değerler yanındaki metinde)
+  function audMini(items) {
+    return el("div", { class: "stk mini", "aria-hidden": "true" }, items.map(function (x) { return x[1] > 0 ? el("i", { style: "--c:" + x[2] + ";flex:" + x[1] + " 1 0" }) : null; }));
+  }
+  // Yaş dilimleri: sıralı sütunlar, değer tepede; en büyük dilimin değeri koyu
+  function audCols(l) {
+    var lo = function (x) { var n = parseInt(x[0], 10); return isNaN(n) ? 1e9 : n; };
+    var s = l.slice().sort(function (a, b) { return lo(a) - lo(b); }).map(function (x) { return [x[0].replace("-", "–"), x[1]]; });
+    var mx = Math.max.apply(null, s.map(function (x) { return x[1]; })) || 1, m = [], top = false;
+    var c = el("div", { class: "acol" }, s.map(function (x) {
+      var hi = !top && x[1] === mx;
+      if (hi) top = true;
+      var n = el("div", null, [el("b", { class: hi ? "top" : null, text: pct(x[1] / 100) }),
+        el("i", { style: "height:" + (x[1] > 0 ? Math.max(2, Math.round(x[1] / mx * 96)) : 0) + "px" }), el("span", { text: x[0] })]);
+      m.push({ n: n, c: "var(--c1)", v: pct(x[1] / 100), l: x[0] });
+      return n;
+    }));
+    return { c: c, m: m, r: s };
+  }
+  // Sıralama (ülke, şehir, sektör…): yatay çubuklar büyükten küçüğe; ilk 8 gösterilir, kalanı "Diğer"e katlanır, tabloda hepsi var
+  function audHBars(k, l) {
+    var s = l.slice().sort(function (a, b) { return b[1] - a[1]; }).map(function (x) { return [audLabel(k, x[0]), x[1]]; });
+    var rest = function (list) { var sum = 0; list.forEach(function (x) { sum += x[1]; }); return Math.round((100 - sum) * 10) / 10; };
+    var vis = s.slice(0, 8), o = rest(vis), all = rest(s), m = [];
+    if (o >= 0.5) vis.push([t("audOther"), o, true]);
+    var mx = Math.max.apply(null, vis.map(function (x) { return x[1]; })) || 1;
+    var c = el("ul", { class: AUD_PRO.indexOf(k) >= 0 ? "hb wide" : "hb" }, vis.map(function (x) {
+      var n = el("li", { class: x[2] ? "oth" : null }, [el("span", { dir: "auto", title: x[0], text: x[0] }),
+        el("span", { class: "hv" }, [el("i", { style: "width:calc((100% - 4em) * " + (x[1] / mx).toFixed(4) + ")" }), el("b", { text: pct(x[1] / 100) })])]);
+      m.push({ n: n, c: x[2] ? "var(--c0)" : "var(--c1)", v: pct(x[1] / 100), l: x[0] });
+      return n;
+    }));
+    return { c: c, m: m, r: all >= 0.5 ? s.concat([[t("audOther"), all]]) : s };
+  }
+  // Her grafiğin tablo görünümü ("Tablo olarak gör" ile açılır)
+  function audTable(title, rows) {
+    return el("table", { class: "atab" }, [el("caption", { class: "vh", text: title }),
+      el("thead", null, el("tr", null, [el("th", { scope: "col", text: title }), el("th", { scope: "col", text: t("audColShare") })])),
+      el("tbody", null, rows.map(function (x) { return el("tr", null, [el("th", { scope: "row", dir: "auto", text: x[0] }), el("td", { text: pct(x[1] / 100) })]); }))]);
+  }
   // mode: yok = Profil'deki hesap kartı; "brand" = markanın influencer sayfası (başlığı crAudience yazar, influencer'a yönelik
   // açıklamalar yok); "page" = Kitle sayfası (başlık ve sektör notu sayfada bir kez); "post" = tek video (gönderi sayfası)
   function audBox(a, mode) {
     var brand = mode === "brand", post = mode === "post";
     var secs = AUD_P[a.platform], au = a.audience && typeof a.audience === "object" ? a.audience : {}, kids = [], demo = false;
     if (!secs) return brand ? null : el("p", { class: "meta aud", text: t("audNone") });
+    // k: alan; null = yaş grupları. Cinsiyet ve yaş grubu yığılmış çubuk, yaş dilimi sütun, gerisi sıralı yatay çubuk
     var bars = function (k, title, l) {
-      return el("div", null, [el("div", { class: "k", text: title }), el("ul", { class: k ? "bars" : "bars wide" }, l.map(function (x) {
-        var n = k ? audLabel(k, x[0]) : x[0];
-        return el("li", null, [el("span", { dir: "auto", title: n, text: n }), el("span", { class: "bt", "aria-hidden": "true" }, el("i", { style: "width:" + x[1] + "%" })), el("b", { text: pct(x[1] / 100) })]);
-      }))]);
+      var g = k === "age" ? audCols(l) : k && k !== "gender" ? audHBars(k, l) : audStack(k ? audGenderItems(l) : audGroupItems(l));
+      var box = el("div", { class: "achart", tabindex: 0, role: "img", "aria-label": title + ": " + g.r.map(function (x) { return x[0] + " " + pct(x[1] / 100); }).join(", ") }, [g.c, g.lgd || null]);
+      audInteract(box, g.m);
+      return el("div", { class: "ach" }, [el("div", { class: "k", text: title }), box, audTable(title, g.r)]);
     };
     secs.forEach(function (s) {
       var sec = au[s] && typeof au[s] === "object" ? au[s] : {}, blocks = [];
@@ -2388,13 +2531,22 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
         blocks.push(bars(k, t(a.platform === "youtube" && k === "country" ? "audCountryViews" : "aud_" + k), l));
         if (k === "age") { var gr = audGroups(sec); if (gr.length) blocks.push(bars(null, t("audAgeGrp"), gr)); }
       });
-      if (blocks.length) kids.push(el("h4", { text: t(post ? "audPostViewers" : "aud_" + s) }), audSum(sec, a.platform), el("div", { class: "audg" }, blocks));
+      if (blocks.length) kids.push(el("h4", { text: t(post ? "audPostViewers" : "aud_" + s + (s === "viewers" && au.range === "all" ? "_all" : "")) }), audSum(sec, a.platform), el("div", { class: "audg" }, blocks));
     });
-    // YouTube kitlesi alınamayınca Worker nedenini yazar (form-worker src/oauth.js): no_scope (izin yok), few (eşik altı), api_off, error
-    var why = a.platform === "youtube" && typeof au.reason === "string" ? (au.reason === "no_scope" || au.reason === "few" || au.reason === "api_off" ? au.reason : "error") : "";
+    // YouTube kitlesi alınamayınca Worker nedenini yazar (form-worker src/oauth.js): no_scope (izin yok), few (eşik altı), api_off, error.
+    // few ile gelen views kanalın toplam izlenmesi: 0 ise Analytics henüz izlenme görmüyor (few0), sayıysa gizlilik eşiği.
+    var why = a.platform === "youtube" && typeof au.reason === "string" ? (au.reason === "few" && au.views === 0 ? "few0" : au.reason === "no_scope" || au.reason === "few" || au.reason === "api_off" ? au.reason : "error") : "";
     if (!kids.length) return el("p", { class: "meta aud", text: t(brand ? "audNoneYet" : post ? "pAudYtNone" : why ? "audR_" + why : a.platform === "linkedin" ? "audLiNone" : a.platform === "youtube" ? "audYtWait" : "audIgMin") });
-    return el("div", { class: "aud" }, [mode ? null : el("h3", { text: t("audTitle") }), kids, demo && a.platform === "youtube" ? el("p", { class: "meta", text: t("audYtNote") }) : null,
+    // Tablo düğmesi grafiklerin hemen altında, notlar en sonda kalır
+    var box, tb = el("button", { type: "button", class: "btn sm sec", text: t("audShowTable"), onclick: function () {
+      var on = box.classList.toggle("tbl");
+      tb.textContent = t(on ? "audShowChart" : "audShowTable");
+      audTipHide();
+    } });
+    box = el("div", { class: "aud" }, [mode ? null : el("h3", { text: t("audTitle") }), kids, el("div", { class: "row-b" }, tb),
+      demo && a.platform === "youtube" ? el("p", { class: "meta", text: t("audYtNote") }) : null,
       mode || a.platform === "linkedin" ? null : el("p", { class: "meta", text: t("audProNote") })]);
+    return box;
   }
   // Marka görünümü: gerçek ölçümlü Instagram/YouTube hesaplarının kitlesi; hiçbiri yoksa bölüm yok
   function crAudience(m) {
@@ -2907,17 +3059,37 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
   }
   // Otomatik bağlantılar: bayrak kapalıysa elle yol, açık ve bağlıysa "her gün çekilir", bağlı değilse profildeki sosyal hesaplara "Bağla"; LinkedIn notu her zaman
   function pConnCard(c) {
-    var code = c.err && c.err.code, off = code === "disabled" || code === "forbidden" || (!c.err && c.disabled), kids;
+    var code = c.err && c.err.code, off = code === "disabled" || code === "forbidden" || (!c.err && c.disabled), kids, older = {};
+    Object.keys(CONNECTORS).forEach(function (p) { older[p] = { ok: okNote(), err: note() }; });
     if (c.err && !off) kids = failLine(c.err, function () { render(true); });
     else if (off) kids = el("p", { class: "meta", text: t("pConnOff") });
     else kids = Object.keys(CONNECTORS).map(function (p) {
       var cn = (c.connections || []).filter(function (x) { return x.platform === p; })[0], on = !!cn && cn.status === "connected";
       return el("div", { class: "srow" }, [el("span", { class: "ic " + (on ? "ok" : "slate"), "aria-hidden": "true" }, ic("link")),
-        el("div", { class: "tx" }, [el("b", { text: PL[p] }), el("span", { text: t(on ? "pConnSync" : "pConnHow") })]),
-        el("div", { class: "sa" }, on ? el("span", { class: "badge b-ok", text: t("pConnOk") })
+        el("div", { class: "tx" }, [el("b", { text: PL[p] }), el("span", { text: t(on ? "pConnSync" : "pConnHow") }), on ? older[p].ok : null, on ? older[p].err : null]),
+        el("div", { class: "sa" }, on ? [el("span", { class: "badge b-ok", text: t("pConnOk") }), pOlderBtn(p, older[p])]
           : el("a", { class: "btn sm sec", href: "#profile", "aria-label": t("pConnGo") + ": " + PL[p], text: t("pConnGo"), onclick: function () { SOC_GO = true; } }))]);
     });
-    return el("section", { class: "card" }, [el("div", { class: "ch" }, el("h2", { text: t("pConn") })), el("div", { class: "cb" }, [kids, el("p", { class: "pnote", text: t("pLiNote") })])]);
+    var any = !off && !c.err && (c.connections || []).some(function (x) { return CONNECTORS[x.platform] && x.status === "connected"; });
+    return el("section", { class: "card" }, [el("div", { class: "ch" }, el("h2", { text: t("pConn") })), el("div", { class: "cb" }, [kids,
+      any ? el("p", { class: "pnote", text: t("pOlderNote") }) : null, el("p", { class: "pnote", text: t("pLiNote") })])]);
+  }
+  // Daha eski gönderiler (app/posts/older): senkronun almadığı en çok 200 eski gönderi; eklenince sayfa yeniden çizilir (GET app/posts)
+  function pOlderBtn(p, m) {
+    var btn = el("button", { type: "button", class: "btn sm sec", "aria-label": t("pOlder") + ": " + PL[p], text: t("pOlder") });
+    btn.addEventListener("click", function () {
+      say(m.ok, ""); say(m.err, ""); busy(btn, true);
+      BC.call("POST", "app/posts/older", { platform: p }).then(function (r) {
+        busy(btn, false);
+        if (!r.added) { say(m.ok, t(r.full ? "pOlderFull" : "pOlderNone")); return; }
+        pAfter(t("pOlderAdded", num(r.added)) + " " + t(r.full ? "pOlderFull" : r.more ? "pOlderMore" : "pOlderEnd"));
+      }, function (e) {
+        busy(btn, false);
+        say(m.err, BC.msg(e.code, { busy: t("pOlderBusy"), rate: t("pOlderRate"), posts_full: t("pOlderFull"), provider: t("pOlderProv"),
+          not_connected: t("pOlderConn"), account_changed: t("pOlderConn") }));
+      });
+    });
+    return btn;
   }
   // Özet şeridi: süzülen gönderilerin son ölçümleri; erişim kutusunda son 12 gönderinin erişim çubukları (eskiden yeniye)
   function pSum(xs) {
@@ -3100,11 +3272,11 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       var d = pData(), ps = d.sample ? [] : d.list.filter(audHas);
       var cell = function (x) { return el("td", { text: x || "—" }); };
       var rows = ps.map(function (p) {
-        var sec = audSec(p), g = { F: 0, M: 0 }, gi = audTop(audGroups(sec)), c = audTop(sec.country), cap = (p.caption || "").split("\n")[0];
+        var sec = audSec(p), g = { F: 0, M: 0 }, gr = audGroups(sec), gi = audTop(gr), c = audTop(sec.country), cap = (p.caption || "").split("\n")[0];
         audPairs(sec.gender).forEach(function (x) { if (x[0] === "F" || x[0] === "M") g[x[0]] += x[1]; });
         return el("tr", null, [el("td", null, [el("a", { href: "#post-" + p.id, dir: "auto", text: cap ? (cap.length > 48 ? cap.slice(0, 46) + "…" : cap) : pLabel(p) }), cap ? el("div", { class: "pmeta", text: pLabel(p) }) : null]),
-          cell(g.F + g.M > 0 ? t("audF") + " " + pct(g.F / 100) + " · " + t("audM") + " " + pct(g.M / 100) : ""),
-          cell(gi ? gi[0] + " " + pct(gi[1] / 100) : ""), cell(c ? audLabel("country", c[0]) + " " + pct(c[1] / 100) : "")]);
+          g.F + g.M > 0 ? el("td", null, [audMini(audGenderItems(sec.gender)), el("div", { text: t("audF") + " " + pct(g.F / 100) + " · " + t("audM") + " " + pct(g.M / 100) })]) : cell(""),
+          gi ? el("td", null, [audMini(audGroupItems(gr)), el("div", { text: gi[0] + " " + pct(gi[1] / 100) })]) : cell(""), cell(c ? audLabel("country", c[0]) + " " + pct(c[1] / 100) : "")]);
       });
       var per = rows.length ? [el("div", { class: "tscroll" }, el("table", { class: "snaps" }, [el("caption", { class: "vh", text: t("audPostsH") }),
           el("thead", null, el("tr", null, ["audColPost", "aud_gender", "audAgeGrp", "audCountryViews"].map(function (k) { return el("th", { scope: "col", text: t(k) }); }))),

@@ -6,7 +6,7 @@
 // Şifre sıfırlama: tek kullanımlık, RESET_MINUTES geçerli link; e-posta Gmail SMTP ile (src/smtp.js, SMTP_USER hesabından).
 // MAIL binding'i yalnızca MAIL_TO adresine gönderebildiği için o kullanılmaz.
 
-import { OAUTH, LISTED, CONNECTABLE, oauthReady, listConnections, startOAuth, finishOAuth, disconnectOAuth, OAuthFail, returnBase } from "./oauth.js";
+import { OAUTH, SYNCED, LISTED, CONNECTABLE, oauthReady, listConnections, startOAuth, finishOAuth, disconnectOAuth, OAuthFail, returnBase, fetchOlderPosts, ProviderError } from "./oauth.js";
 import { smtpReady, smtpSend, smtpFrom } from "./smtp.js";
 import { metricsEnabled, accountMetrics, linkMetrics, parseAudience } from "./metrics.js";
 import { NICHE_LIST } from "./classify.js";
@@ -270,6 +270,7 @@ const APP = {
   "GET posts": c => listPosts(c),
   "POST posts/manual": c => manualPost(c),
   "POST posts/import": c => importPosts(c),
+  "POST posts/older": c => olderPosts(c),
 };
 
 const isOwnerRole = u => u.role === "brand" || u.role === "agency";
@@ -729,6 +730,23 @@ function postPlatform(u) {
   return /(^|\.)instagram\.com$/.test(h) ? "instagram" : /(^|\.)tiktok\.com$/.test(h) ? "tiktok" : /(^|\.)(youtube\.com|youtu\.be)$/.test(h) ? "youtube"
     : /(^|\.)linkedin\.com$/.test(h) ? "linkedin" : /(^|\.)(x\.com|twitter\.com)$/.test(h) ? "x" : "";
 }
+// Elle girilen bağlantı senkronun yazdığı biçime çevrilir: paylaşım sorgusu (igsh, si, utm) ve # atılır, aynı gönderi iki satır olmaz.
+// YouTube: youtu.be, shorts, live, embed, m., music. → watch?v=<kimlik>; TikTok: @ad/(video|photo)/<rakam>; Instagram: p|reel|tv/<kod>/.
+// Tanınmayan biçim (vm.tiktok kısa bağlantısı, LinkedIn, X) olduğu gibi kalır.
+function canonUrl(u, platform) {
+  let x, m;
+  try { x = new URL(u); } catch { return u; }
+  const h = x.hostname.toLowerCase(), p = x.pathname;
+  if (platform === "youtube") {
+    const id = /(^|\.)youtu\.be$/.test(h) ? p.split("/")[1] : p === "/watch" ? x.searchParams.get("v") : p.match(/^\/(?:shorts|live|embed|v)\/([^/]+)/)?.[1];
+    return /^[\w-]{1,64}$/.test(id || "") ? `https://www.youtube.com/watch?v=${id}` : u;
+  }
+  if (platform === "tiktok" && /^(www\.|m\.)?tiktok\.com$/.test(h) && (m = p.match(/^\/(@[\w.]{1,64})\/(video|photo)\/(\d{1,30})\/?$/)))
+    return `https://www.tiktok.com/${m[1]}/${m[2]}/${m[3]}`;
+  if (platform === "instagram" && /^(www\.|m\.)?instagram\.com$/.test(h) && (m = p.match(/^\/(?:[\w.]{1,30}\/)?(p|reels?|tv)\/([\w-]{1,64})\/?$/)))
+    return `https://www.instagram.com/${m[1] === "reels" ? "reel" : m[1]}/${m[2]}/`;
+  return u;
+}
 // YYYY-MM-DD, gerçek bir gün, en geç yarın (saat dilimi payı)
 const okDay = s => typeof s === "string" && /^\d{4}-\d{2}-\d{2}$/.test(s) && !isNaN(Date.parse(s + "T00:00:00Z"))
   && isoDay(new Date(s + "T00:00:00Z")) === s && s <= isoDay(new Date(Date.now() + 864e5));
@@ -741,10 +759,11 @@ function pInt(v) {
 }
 
 // Tek satırı doğrular: {row} ya da {error: alan}. type geçersizse platforma göre varsayılan (paneldeki CSV aktarımı gibi).
+// row.url tek biçimli bağlantı, row.raw girilen hali (bu değişiklikten önce o haliyle kaydedilmiş satırı bulmak için).
 function postIn(o) {
   if (!o || typeof o !== "object" || Array.isArray(o)) return { error: "row" };
-  const url = typeof o.url === "string" ? o.url.trim() : "";
-  const platform = url.length <= 2000 ? postPlatform(url) : "";
+  const raw = typeof o.url === "string" ? o.url.trim() : "";
+  const platform = raw.length <= 2000 ? postPlatform(raw) : "";
   if (!platform) return { error: "url" };
   const today = isoDay(new Date());
   const date = o.date == null || o.date === "" ? today : o.date;
@@ -757,7 +776,7 @@ function postIn(o) {
   const type = PTYPES.includes(o.type) ? o.type : platform === "tiktok" || platform === "youtube" ? "video" : "photo";
   const caption = typeof o.caption === "string" ? o.caption.slice(0, 2200) : "";
   const thumb = okThumb(o.thumb) ? o.thumb : "";
-  return { row: { url, platform, type, date, caption, thumb, snap } };
+  return { row: { url: canonUrl(raw, platform), raw, platform, type, date, caption, thumb, snap } };
 }
 
 // Gönderi ve ölçümü tek batch'te: gönderi varsa bilgileri korunur, yalnız o günün ölçümü eklenir ya da üzerine yazılır
@@ -796,7 +815,9 @@ const manualPost = postsRoute(async c => {
   const { env, user } = c;
   const { row, error } = postIn(c.body);
   need(row, error, 400);
-  const known = await env.DB.prepare("SELECT 1 FROM posts WHERE user_id = ? AND url = ?").bind(user.id, row.url).first();
+  // Girilen haliyle kayıtlı satır varsa ölçüm ona yazılır
+  const known = await env.DB.prepare("SELECT url FROM posts WHERE user_id = ? AND url IN (?, ?) ORDER BY url = ? DESC").bind(user.id, row.url, row.raw, row.raw).first();
+  if (known) row.url = known.url;
   need(known || await postCount(env, user.id) < MAX_POSTS, "posts_full", 409);
   await env.DB.batch(postWrite(env, user.id, row));
   const [post] = await postRows(env, user.id, " AND url = ?", [row.url]);
@@ -810,11 +831,37 @@ const importPosts = postsRoute(async c => {
   need(Array.isArray(rows) && rows.length >= 1 && rows.length <= IMPORT_ROWS, "rows", 400);
   const good = [], skipped = [];
   rows.forEach((o, i) => { const { row, error } = postIn(o); if (row) good.push(row); else skipped.push({ i, error }); });
+  // Tek biçimli ve girilen haller birlikte aranır (100 parametre sınırına takılmasın diye tek JSON); girilen haliyle kayıtlı satır öncelikli
+  const known = new Set(good.length ? (await env.DB.prepare("SELECT url FROM posts WHERE user_id = ? AND url IN (SELECT value FROM json_each(?))")
+    .bind(user.id, JSON.stringify([...new Set(good.flatMap(r => [r.url, r.raw]))])).all()).results.map(r => r.url) : []);
+  for (const r of good) if (known.has(r.raw)) r.url = r.raw;
   const urls = [...new Set(good.map(r => r.url))];
-  const known = new Set(urls.length ? (await env.DB.prepare(`SELECT url FROM posts WHERE user_id = ? AND url IN (${urls.map(() => "?").join(",")})`)
-    .bind(user.id, ...urls).all()).results.map(r => r.url) : []);
   const added = urls.filter(u => !known.has(u)).length;
   need(!added || await postCount(env, user.id) + added <= MAX_POSTS, "posts_full", 409);
   if (good.length) await env.DB.batch(good.flatMap(r => postWrite(env, user.id, r)));
   return ok(c, { added, updated: good.length - added, skipped });
+});
+
+// Gövde: {platform}. Bağlı hesaptan senkronun almadığı daha eski en çok OLDER gönderiyi getirir (oauth.js fetchOlderPosts).
+// Saatte OLDER_RATE istek (her biri platforma 30'a kadar çağrı). Dönüş: {added, more, full}; panel listeyi GET posts ile yeniler.
+const OLDER_RATE = 10;
+const OLDER_FAIL = { busy: ["busy", 409], changed: ["busy", 409], not_connected: ["not_connected", 409], full: ["posts_full", 409],
+  not_configured: ["not_configured", 409], account_changed: ["account_changed", 409] };
+const olderPosts = postsRoute(async c => {
+  const { env, user } = c;
+  need(ROLES.includes(user.role));
+  need(metricsEnabled(env), "disabled", 409);
+  const p = c.body.platform;
+  need(SYNCED.includes(p), "platform", 400);
+  if (await attempts(env, "older", "email", user.email, 60, false) >= OLDER_RATE) throw new Bad("rate", 429);
+  await attempt(env, c.ip, user.email, "older", 1);
+  let r;
+  try {
+    r = await fetchOlderPosts(env, user.id, p);
+  } catch (e) {
+    if (!(e instanceof ProviderError)) throw e;
+    const [code, status] = OLDER_FAIL[e.code] || ["provider", 502];
+    throw new Bad(code, status);
+  }
+  return ok(c, r);
 });
