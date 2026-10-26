@@ -331,4 +331,11 @@ test("metrik uçları: yetki, görünürlük ve örnek/canlı mod", async () => 
     platform: "instagram", handle: "inf_ig", source: "oauth", label: null, label_code: null,
     followers: 5100, avg_views: 900, avg_likes: 80, avg_comments: 6, posts_sampled: null, taken_at: "2026-10-10 12:00:00", audience: null,
   });
+  // Kaynaklar ve gönderiye özel kitle anahtarları yalnız influencer'ın kendi görünümünde; marka kırılımı ve aralığı görür
+  const aud = { viewers: { age: [["18-24", 100]] }, range: "all", sources: { at: "2026-10-10", traffic: [["YT_SEARCH", 5]] }, watch: { views: 1 },
+    demo: { ok: true }, unlisted: false, ig: { views: 1 }, comments_off: true, mid: "m1" };
+  db.prepare("UPDATE metric_snapshots SET audience = ? WHERE account_id = ?").run(JSON.stringify(aud), acc);
+  const audOf = async (token, path) => (await call("GET", path, { token })).body.metrics.accounts[0].audience;
+  assert.deepEqual(await audOf(brand.token, `/app/metrics/${inf.id}`), { viewers: aud.viewers, range: "all" });
+  assert.deepEqual(await audOf(inf.token, "/app/metrics"), aud);
 });

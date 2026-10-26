@@ -21,7 +21,7 @@ const {
   NOT_CONFIGURED, NO_DATA, OAUTH, ProviderError, oauthReady, redirectUri, listConnections, authorizeUrl,
   exchangeCode, fetchMetrics, encrypt, decrypt, syncAccount, oauthCallback, finishOAuth, OAuthFail,
   syncDue, SYNC_MIN, SYNC_D1, pkceChallenge, disconnectOAuth, CHANGE_LIMIT, SYNCED, LISTED, CONNECTABLE, cleanHandle, fetchProfile, refreshToken,
-  fetchOlderPosts, OLDER,
+  fetchOlderPosts, OLDER, postAudSkip,
 } = await import("./oauth.js");
 
 const SCHEMA = readFileSync(new URL("../schema.sql", import.meta.url), "utf8");
@@ -133,6 +133,14 @@ const IG_POSTS = [
   { url: "https://www.instagram.com/p/CCC/", type: "carousel", date: "2026-10-22", caption: "x".repeat(2200), thumb: "https://cdn.ig.test/m3.jpg", likes: 10, comments: 1, views: 400, reach: null },
   { url: "https://www.instagram.com/p/EEE/", type: "video", date: "2026-10-23", caption: "", thumb: "", likes: null, comments: 3, views: null, reach: null },
 ];
+const IG_FEED = "reach,views,likes,comments,saved,shares,total_interactions,follows,profile_visits";
+const IG_REELS = "reach,views,likes,comments,saved,shares,total_interactions,ig_reels_avg_watch_time,ig_reels_video_view_total_time";
+// Gönderi kitlesi: medya kimliği ve gelen insights (bugün); m5'in insights'ı alınamadı
+const IG_OUT = () => {
+  const at = new Date().toISOString().slice(0, 10);
+  return IG_POSTS.map((p, i) => ({ ...p, audience: [{ mid: "m1", ig: { at, reach: 800, views: 1000 } }, { mid: "m2", ig: { at, reach: 2500, views: 3000 } },
+    { mid: "m3", ig: { at, views: 400 } }, { mid: "m5" }][i] }));
+};
 const igPostRoutes = (extra = [], media = IG_MEDIA) => igRoutes([
   ...extra,
   [`${IGV}/me/media?`, [200, { data: media }]],
@@ -180,10 +188,12 @@ const ytRoutes = (extra = []) => [
       status: { privacyStatus: "unlisted" }, statistics: { viewCount: "1100" } },
   ] }]],
 ];
-// Bağlantı watch?v=<kimlik>, kapak önce orta boy; liste dışı video aktarılır; YouTube erişim vermez
+// Bağlantı watch?v=<kimlik>, kapak önce orta boy; liste dışı video aktarılır (audience.unlisted); YouTube erişim vermez
 const YT_POSTS = [
-  { url: "https://www.youtube.com/watch?v=a", type: "video", date: "2026-10-19", caption: "Video A", thumb: "https://i.ytimg.test/a/mqdefault.jpg", likes: 90, comments: 9, views: 900, reach: null },
-  { url: "https://www.youtube.com/watch?v=b", type: "video", date: "2026-10-22", caption: "Video B", thumb: "https://i.ytimg.test/b/default.jpg", likes: null, comments: null, views: 1100, reach: null },
+  { url: "https://www.youtube.com/watch?v=a", type: "video", date: "2026-10-19", caption: "Video A", thumb: "https://i.ytimg.test/a/mqdefault.jpg", likes: 90, comments: 9, views: 900, reach: null,
+    audience: { unlisted: false } },
+  { url: "https://www.youtube.com/watch?v=b", type: "video", date: "2026-10-22", caption: "Video B", thumb: "https://i.ytimg.test/b/default.jpg", likes: null, comments: null, views: 1100, reach: null,
+    audience: { unlisted: true } },
 ];
 
 // ---- yapılandırma ----
@@ -283,10 +293,13 @@ test("metrikler: takipçi ve son gönderilerin ortalamaları; gizli değer ortal
   // Bağlantılı gönderiler aktarılacaklar listesine girer: tür, tarih, kapak, metin (2200), izlenme ve erişim
   const igf = fakeFetch(igPostRoutes());
   const igp = await fetchMetrics("instagram", "ig-token", igf);
-  assert.deepEqual(igp.posts, IG_POSTS);
+  assert.deepEqual(igp.posts, IG_OUT());
   assert.deepEqual([igp.avg_views, igp.avg_likes, igp.avg_comments, igp.posts_sampled], [1113, 42, 2, 6]);
   assert.match(new URL(igf.calls[1].url).searchParams.get("fields"), /\bpermalink\b.*\btimestamp\b.*\bthumbnail_url\b/);
-  assert.ok(igf.calls.slice(2).filter(c => !c.url.startsWith(`${IGV}/me/`)).every(c => new URL(c.url).searchParams.get("metric") === "views,reach"));
+  // insights türüne göre (gönderi, reel); reddeden (400) m5 ve m6 bir kez kısa listeyle (en çok 2 tekrar)
+  assert.deepEqual(igf.calls.filter(c => c.url.includes("/insights?") && !c.url.startsWith(`${IGV}/me/`))
+    .map(c => `${new URL(c.url).pathname.split("/")[2]} ${new URL(c.url).searchParams.get("metric")}`).sort(),
+  [`m1 ${IG_FEED}`, `m2 ${IG_REELS}`, `m3 ${IG_FEED}`, `m4 ${IG_FEED}`, `m5 ${IG_FEED}`, "m5 views,reach", `m6 ${IG_FEED}`, "m6 views,reach"]);
 
   const ttf = fakeFetch(ttRoutes());
   assert.deepEqual(await fetchMetrics("tiktok", "tt-token", ttf),
@@ -367,9 +380,10 @@ test("kitle: Instagram takipçi ve etkileşen dağılımı; yaş ve cinsiyet sab
   assert.deepEqual([zero.audience, zero.followers, zero.avg_views], [null, 5400, 2001]);
 });
 
-// YouTube Analytics yanıtı: dimensions'a göre columnHeaders + rows (dimensions yoksa toplam izlenme); status 200 değilse
-// o hata (body verilmezse izin hatası). empty: bu raporlarda satır yok, YouTube eşiğin altında rows'u hiç göndermez:
-// video için filters değeri, kanalın son 90 günü null, 90 günden uzun aralığı "all", toplam izlenme "total"
+// YouTube Analytics yanıtı: dimensions'a göre columnHeaders + rows (dimensions yoksa toplam izlenme ya da izlenme özeti);
+// status 200 değilse o hata (body verilmezse izin hatası). empty: bu raporlarda satır yok, YouTube eşiğin altında rows'u
+// hiç göndermez: kırılımda video için filters değeri, kanalın son 90 günü null, 90 günden uzun aralığı "all", toplam
+// izlenme "total"; öteki raporlarda "boyut filters" (ör. "video", "deviceType video==a", "watch video==a"). fail: bu raporlar 500
 const YTA = "https://youtubeanalytics.googleapis.com/v2/reports?";
 const YT_DEMO = {
   columnHeaders: [{ name: "ageGroup" }, { name: "gender" }, { name: "viewerPercentage" }],
@@ -378,21 +392,45 @@ const YT_DEMO = {
 const YT_GEO = { columnHeaders: [{ name: "country" }, { name: "views" }], rows: [["TR", 600], ["ZZ", 200], ["DE", 150], ["US", 50]] };
 const YT_TOTAL = { columnHeaders: [{ name: "views" }], rows: [[1000]] };
 const YT_VIEWERS = { age: [["18-24", 35], ["25-34", 55], ["65+", 10]], gender: [["F", 50.5], ["M", 39.5], ["U", 10]], country: [["TR", 60], ["DE", 15], ["US", 5]] };
-const ytAudience = (status = 200, { body, empty = [] } = {}) => [YTA, u => {
+// Üst videolar (b önde), abonelerin izlenmesi (yalnız a), trafik kaynağı, cihaz, abone durumu ve tek videonun izlenme özeti
+const YT_BEST = { columnHeaders: ["video", "views", "estimatedMinutesWatched", "averageViewDuration", "averageViewPercentage", "subscribersGained"].map(name => ({ name })),
+  rows: [["b", 800, 1600, 95.6, 40.04, 2], ["a", 700, 1400, 120.4, 45.26, 7]] };
+const YT_SUBS = { columnHeaders: [{ name: "video" }, { name: "views" }], rows: [["a", 300]] };
+const YT_TRAFFIC = { columnHeaders: [{ name: "insightTrafficSourceType" }, { name: "views" }], rows: [["SUBSCRIBER", 200], ["EXT_URL", 0], ["YT_SEARCH", 500]] };
+const YT_DEVICE = { columnHeaders: [{ name: "deviceType" }, { name: "views" }], rows: [["DESKTOP", 100], ["MOBILE", 600]] };
+const YT_SUBST = { columnHeaders: [{ name: "subscribedStatus" }, { name: "views" }], rows: [["UNSUBSCRIBED", 400], ["SUBSCRIBED", 300]] };
+const YT_WATCH = { columnHeaders: YT_BEST.columnHeaders.slice(1), rows: [[700, 1400, 120.4, 45.26, 7]] };
+const YT_REP = { "ageGroup,gender": YT_DEMO, country: YT_GEO, insightTrafficSourceType: YT_TRAFFIC, deviceType: YT_DEVICE, subscribedStatus: YT_SUBST };
+const ytAudience = (status = 200, { body, empty = [], fail = [] } = {}) => [YTA, u => {
   if (status !== 200) return [status, body ?? { error: { code: status, message: "Request had insufficient authentication scopes.", status: "PERMISSION_DENIED" } }];
-  const q = new URL(u).searchParams, dim = q.get("dimensions"), r = dim === "country" ? YT_GEO : dim ? YT_DEMO : YT_TOTAL;
-  const key = q.get("filters") ?? (!dim ? "total" : Date.parse(q.get("endDate")) - Date.parse(q.get("startDate")) > 90 * 864e5 ? "all" : null);
+  const q = new URL(u).searchParams, dim = q.get("dimensions"), fl = q.get("filters"), views = q.get("metrics") === "views";
+  const r = dim === "video" ? (fl ? YT_SUBS : YT_BEST) : YT_REP[dim] ?? (views ? YT_TOTAL : YT_WATCH);
+  const key = dim === "country" || dim === "ageGroup,gender" || !dim && views
+    ? fl ?? (!dim ? "total" : Date.parse(q.get("endDate")) - Date.parse(q.get("startDate")) > 90 * 864e5 ? "all" : null)
+    : [dim ?? "watch", fl].filter(Boolean).join(" ");
+  if (fail.includes(key)) return [500, { error: { code: 500, message: "backendError" } }];
   return [200, empty.includes(key) ? { columnHeaders: r.columnHeaders } : r];
 }];
 // Kanal 2020'de açılmış (snippet.publishedAt): 90 günlük kitle boşsa açıldığı günden bakılır
 const YT_OLD = [`${YT}/channels?`, [200, { items: [{ id: "UC1", snippet: { title: "Inf Kanal", customUrl: "@infyt", publishedAt: "2020-05-01T10:00:00Z" },
   statistics: { subscriberCount: "8800", hiddenSubscriberCount: false }, contentDetails: { relatedPlaylists: { uploads: "UU1" } } }] }]];
 const yesterday = () => new Date(Date.now() - 864e5).toISOString().slice(0, 10);
+// Gönderi kitlesi (bugün sorulan), yayından bir gün önceden düne: izlenme özeti üst videolar raporundan (abone izlenmesi
+// aboneler raporundan, raporda yoksa 0), kaynaklar ve (liste dışı değilse) kırılım videonun raporlarından.
+// demo: "ok" kırılım geldi, "empty" eşiğin altında (ok false), "none" sorulmadı ya da yarım kaldı
+const ymd = n => new Date(Date.now() - n * 864e5).toISOString().slice(0, 10);
+const ytSrc = from => ({ at: ymd(0), from, to: ymd(1), traffic: [["YT_SEARCH", 500], ["SUBSCRIBER", 200], ["EXT_URL", 0]], device: [["MOBILE", 600], ["DESKTOP", 100]] });
+const ytAud = (demo = "ok") => [
+  { unlisted: false, watch: { at: ymd(0), from: "2026-10-18", to: ymd(1), views: 700, minutes: 1400, avg_s: 120, avg_pct: 45.3, subs: 7, sub_views: 300 },
+    sources: ytSrc("2026-10-18"),
+    ...{ ok: { viewers: YT_VIEWERS, demo: { at: ymd(0), ok: true, views: 700 } }, empty: { demo: { at: ymd(0), ok: false, views: 700 } }, none: {} }[demo] },
+  { unlisted: true, watch: { at: ymd(0), from: "2026-10-21", to: ymd(1), views: 800, minutes: 1600, avg_s: 96, avg_pct: 40, subs: 2, sub_views: 0 }, sources: ytSrc("2026-10-21") },
+];
 
-test("kitle: YouTube izleyici yaşı ve cinsiyeti, ülkeye göre izlenme payı (ZZ paydada, listede yok); her video için yayın gününden düne aynı kırılım", async () => {
+test("kitle: YouTube izleyici yaşı ve cinsiyeti, ülkeye göre izlenme payı (ZZ paydada, listede yok), kanalın kaynakları; her video için yayından bir gün önceden düne izlenme özeti, kaynaklar ve (liste dışı değilse) aynı kırılım", async () => {
   const f = fakeFetch(ytRoutes([ytAudience()]));
   const m = await fetchMetrics("youtube", "yt-token", f);
-  assert.deepEqual(m.audience, { viewers: YT_VIEWERS });
+  assert.deepEqual(m.audience, { viewers: YT_VIEWERS, sources: ytSrc(ymd(91)) });
   const reps = f.calls.filter(c => c.url.startsWith(YTA));
   const qs = reps.map(c => Object.fromEntries(new URL(c.url).searchParams));
   for (const [i, q] of qs.entries()) {
@@ -400,62 +438,70 @@ test("kitle: YouTube izleyici yaşı ve cinsiyeti, ülkeye göre izlenme payı (
     assert.equal(reps[i].headers.authorization, "Bearer yt-token");
     assert.equal(q.endDate, yesterday());
   }
-  // Kanal: dünden geriye 90 gün, filtresiz
-  const ch = qs.filter(q => !q.filters);
-  assert.deepEqual(ch.map(q => `${q.dimensions}:${q.metrics}`).sort(), ["ageGroup,gender:viewerPercentage", "country:views"]);
-  assert.ok(ch.every(q => Date.parse(q.endDate) - Date.parse(q.startDate) === 90 * 864e5));
-  // Video başına aynı iki rapor, yayın gününden; sonuç gönderinin audience alanında
-  assert.deepEqual(qs.filter(q => q.filters).map(q => `${q.filters} ${q.startDate} ${q.dimensions}:${q.metrics}`).sort(), [
-    "video==a 2026-10-19 ageGroup,gender:viewerPercentage", "video==a 2026-10-19 country:views",
-    "video==b 2026-10-22 ageGroup,gender:viewerPercentage", "video==b 2026-10-22 country:views",
+  // Kanal: dünden geriye 90 gün; üst videolar (en çok 200, çoktan aza) 90 günden bir gün önceden
+  const ch = qs.filter(q => !q.filters?.startsWith("video=="));
+  assert.deepEqual(ch.map(q => `${q.dimensions}:${q.metrics}:${q.filters ?? ""}:${q.sort ?? ""}:${q.maxResults ?? ""}`).sort(), [
+    "ageGroup,gender:viewerPercentage:::", "country:views:::", "deviceType:views::-views:", "insightTrafficSourceType:views::-views:",
+    "video:views,estimatedMinutesWatched,averageViewDuration,averageViewPercentage,subscribersGained::-views:200",
+    "video:views:subscribedStatus==SUBSCRIBED:-views:200",
   ]);
-  assert.deepEqual(m.posts, YT_POSTS.map(p => ({ ...p, audience: { viewers: YT_VIEWERS } })));
+  assert.ok(ch.every(q => Date.parse(q.endDate) - Date.parse(q.startDate) === (q.dimensions === "video" ? 91 : 90) * 864e5));
+  // Video başına kaynaklar ve (liste dışı b hariç) kırılım, yayından bir gün önceden; sonuç gönderinin audience alanında
+  assert.deepEqual(qs.filter(q => q.filters?.startsWith("video==")).map(q => `${q.filters} ${q.startDate} ${q.dimensions}:${q.metrics}`).sort(), [
+    "video==a 2026-10-18 ageGroup,gender:viewerPercentage", "video==a 2026-10-18 country:views",
+    "video==a 2026-10-18 deviceType:views", "video==a 2026-10-18 insightTrafficSourceType:views",
+    "video==b 2026-10-21 deviceType:views", "video==b 2026-10-21 insightTrafficSourceType:views",
+  ]);
+  assert.deepEqual(m.posts, YT_POSTS.map((p, i) => ({ ...p, audience: ytAud()[i] })));
 
-  // Eşiğin altındaki video (rows yok): o gönderide kitle yok, diğeri gelir
-  const one = await fetchMetrics("youtube", "yt-token", fakeFetch(ytRoutes([ytAudience(200, { empty: ["video==b"] })])));
-  assert.deepEqual(one.posts.map(p => p.audience), [{ viewers: YT_VIEWERS }, undefined]);
-  // Kanal eşiğin altında: kitle nedeniyle ("few") ve aynı 90 günün toplam izlenmesiyle, videolar yine sorulur; kanal
-  // 90 günden genç olduğu için (açılış günü yok, en eski video 2026-10-19) daha uzun aralık sorulmaz
+  // Eşiğin altındaki video (rows yok): kırılım yok, demo.ok false; diğeri gelir
+  const one = await fetchMetrics("youtube", "yt-token", fakeFetch(ytRoutes([ytAudience(200, { empty: ["video==a"] })])));
+  assert.deepEqual(one.posts.map(p => p.audience), ytAud("empty"));
+  // Kanal eşiğin altında: kitle nedeniyle ("few"), aynı 90 günün toplam izlenmesi ve kaynaklarla; videolara yalnız kaynaklar
+  // sorulur. Kanal 90 günden genç olduğu için (açılış günü yok, en eski video 2026-10-19) daha uzun aralık sorulmaz
   const ff = fakeFetch(ytRoutes([ytAudience(200, { empty: [null] })]));
   const few = await fetchMetrics("youtube", "yt-token", ff);
-  assert.deepEqual([few.audience, few.posts.map(p => p.audience)], [{ reason: "few", views: 1000 }, [{ viewers: YT_VIEWERS }, { viewers: YT_VIEWERS }]]);
-  const fq = ff.calls.filter(c => c.url.startsWith(YTA)).map(c => Object.fromEntries(new URL(c.url).searchParams)).filter(q => !q.filters);
-  assert.deepEqual(fq.map(q => `${q.dimensions ?? "-"}:${q.metrics}`).sort(), ["-:views", "ageGroup,gender:viewerPercentage", "country:views"]);
+  assert.deepEqual([few.audience, few.posts.map(p => p.audience)], [{ reason: "few", views: 1000, sources: ytSrc(ymd(91)) }, ytAud("none")]);
+  const fq = ff.calls.filter(c => c.url.startsWith(YTA)).map(c => Object.fromEntries(new URL(c.url).searchParams)).filter(q => !q.filters && q.dimensions !== "video");
+  assert.deepEqual(fq.map(q => `${q.dimensions ?? "-"}:${q.metrics}`).sort(), ["-:views", "ageGroup,gender:viewerPercentage", "country:views", "deviceType:views", "insightTrafficSourceType:views"]);
   assert.ok(fq.every(q => Date.parse(q.endDate) - Date.parse(q.startDate) === 90 * 864e5));
+  assert.equal(ff.calls.filter(c => new URL(c.url).searchParams.get("filters")?.startsWith("video==")).length, 4);
 });
 
 test("kitle: YouTube'da 90 günün yaş ve cinsiyeti boşsa kanalın açıldığı günden düne bakılır (range: all); yine boşsa toplam izlenme nedeni ayırır", async t => {
   t.mock.method(console, "log", () => {});
-  const chan = f => f.calls.filter(c => c.url.startsWith(YTA)).map(c => Object.fromEntries(new URL(c.url).searchParams)).filter(q => !q.filters);
+  // Kanal kırılımı ve toplam izlenme raporları (videolar, üst videolar ve kaynaklar hariç)
+  const chan = f => f.calls.filter(c => c.url.startsWith(YTA)).map(c => Object.fromEntries(new URL(c.url).searchParams)).filter(q => !q.filters && !q.sort);
   // Tüm zaman dolu: kanal kitlesi oradan, toplam izlenme sorulmaz; videolar yine yayın gününden
   const f = fakeFetch(ytRoutes([YT_OLD, ytAudience(200, { empty: [null] })]));
   const m = await fetchMetrics("youtube", "yt-token", f);
-  assert.deepEqual([m.audience, m.posts.map(p => p.audience)], [{ viewers: YT_VIEWERS, range: "all" }, [{ viewers: YT_VIEWERS }, { viewers: YT_VIEWERS }]]);
+  assert.deepEqual([m.audience, m.posts.map(p => p.audience)], [{ viewers: YT_VIEWERS, range: "all", sources: ytSrc(ymd(91)) }, ytAud()]);
   assert.deepEqual(chan(f).map(q => `${q.startDate === "2020-05-01" ? "all" : "90"} ${q.dimensions}`).sort(),
     ["90 ageGroup,gender", "90 country", "all ageGroup,gender", "all country"]);
   // 90 gün dolu: daha uzun aralık sorulmaz
   const g = fakeFetch(ytRoutes([YT_OLD, ytAudience()]));
-  assert.deepEqual((await fetchMetrics("youtube", "yt-token", g)).audience, { viewers: YT_VIEWERS });
+  assert.deepEqual((await fetchMetrics("youtube", "yt-token", g)).audience, { viewers: YT_VIEWERS, sources: ytSrc(ymd(91)) });
   assert.equal(chan(g).length, 2);
   // İkisi de boş: toplam izlenme açılış gününden; 0 ise views 0
   const h = fakeFetch(ytRoutes([YT_OLD, ytAudience(200, { empty: [null, "all"] })]));
-  assert.deepEqual((await fetchMetrics("youtube", "yt-token", h)).audience, { reason: "few", views: 1000 });
+  assert.deepEqual((await fetchMetrics("youtube", "yt-token", h)).audience, { reason: "few", views: 1000, sources: ytSrc(ymd(91)) });
   assert.deepEqual(chan(h).filter(q => !q.dimensions).map(q => `${q.startDate}:${q.metrics}`), ["2020-05-01:views"]);
   const zero = await fetchMetrics("youtube", "yt-token", fakeFetch(ytRoutes([YT_OLD, ytAudience(200, { empty: [null, "all", "total"] })])));
-  assert.deepEqual(zero.audience, { reason: "few", views: 0 });
+  assert.deepEqual(zero.audience, { reason: "few", views: 0, sources: ytSrc(ymd(91)) });
   // 90 günde yalnız ülke varsa: tüm zamanda yaş ve cinsiyet gelirse o, gelmezse 90 gün kalır (toplam izlenme sorulmaz)
   const part = allDemo => [YTA, u => {
     const q = new URL(u).searchParams, dim = q.get("dimensions");
     if (dim === "country") return [200, YT_GEO];
+    if (dim !== "ageGroup,gender") return ytAudience()[1](u);
     return [200, allDemo && q.get("startDate") === "2020-05-01" ? YT_DEMO : { columnHeaders: YT_DEMO.columnHeaders }];
   }];
-  assert.deepEqual((await fetchMetrics("youtube", "yt-token", fakeFetch(ytRoutes([YT_OLD, part(true)])))).audience, { viewers: YT_VIEWERS, range: "all" });
+  assert.deepEqual((await fetchMetrics("youtube", "yt-token", fakeFetch(ytRoutes([YT_OLD, part(true)])))).audience, { viewers: YT_VIEWERS, range: "all", sources: ytSrc(ymd(91)) });
   const geo = fakeFetch(ytRoutes([YT_OLD, part(false)]));
-  assert.deepEqual((await fetchMetrics("youtube", "yt-token", geo)).audience, { viewers: { country: YT_VIEWERS.country } });
+  assert.deepEqual((await fetchMetrics("youtube", "yt-token", geo)).audience, { viewers: { country: YT_VIEWERS.country }, sources: ytSrc(ymd(91)) });
   assert.equal(chan(geo).length, 4);
-  // Toplam izlenme alınamazsa views null
+  // Toplam izlenme alınamazsa views null; satırsız kaynak raporları boş liste
   const fail = fakeFetch(ytRoutes([YT_OLD, [YTA, u => new URL(u).searchParams.get("dimensions") ? [200, { columnHeaders: [] }] : [500, { error: { code: 500 } }]]]));
-  assert.deepEqual((await fetchMetrics("youtube", "yt-token", fail)).audience, { reason: "few", views: null });
+  assert.deepEqual((await fetchMetrics("youtube", "yt-token", fail)).audience, { reason: "few", views: null, sources: { ...ytSrc(ymd(91)), traffic: [], device: [] } });
 });
 
 test("kitle: YouTube raporu alınamazsa neden döner (izin yok, API kapalı, diğer); video sorulmaz, ölçüm yine gelir", async t => {
@@ -484,13 +530,14 @@ test("kitle: YouTube'da iki rapordan biri alınamazsa kanal gelenle sürer, gön
   const half = (fail, empty = []) => [YTA, u => {
     const q = new URL(u).searchParams, dim = q.get("dimensions");
     if (dim === fail) return [500, { error: { code: 500, message: "backendError" } }];
+    if (dim !== "country" && dim !== "ageGroup,gender") return ytAudience()[1](u);
     const r = dim === "country" ? YT_GEO : YT_DEMO;
     return [200, empty.includes(q.get("filters")) ? { columnHeaders: r.columnHeaders } : r];
   }];
   const geoOff = await fetchMetrics("youtube", "yt-token", fakeFetch(ytRoutes([half("country")])));
-  assert.deepEqual([geoOff.audience, geoOff.posts.map(p => p.audience)], [{ viewers: { age: YT_VIEWERS.age, gender: YT_VIEWERS.gender } }, [undefined, undefined]]);
+  assert.deepEqual([geoOff.audience, geoOff.posts.map(p => p.audience)], [{ viewers: { age: YT_VIEWERS.age, gender: YT_VIEWERS.gender }, sources: ytSrc(ymd(91)) }, ytAud("none")]);
   const demoOff = await fetchMetrics("youtube", "yt-token", fakeFetch(ytRoutes([half("ageGroup,gender")])));
-  assert.deepEqual([demoOff.audience, demoOff.posts.map(p => p.audience)], [{ viewers: { country: YT_VIEWERS.country } }, [undefined, undefined]]);
+  assert.deepEqual([demoOff.audience, demoOff.posts.map(p => p.audience)], [{ viewers: { country: YT_VIEWERS.country }, sources: ytSrc(ymd(91)) }, ytAud("none")]);
   // Gelen kanal raporu boş, öteki alınamadı: "few" değil alınamayanın nedeni
   const emptyDemo = await fetchMetrics("youtube", "yt-token", fakeFetch(ytRoutes([half("country", [null])])));
   assert.deepEqual(emptyDemo.audience, { reason: "error" });
@@ -535,8 +582,10 @@ test("metrikler: TikTok ve YouTube'da adresi, tarihi ya da ölçümü uygun olma
     [`${YT}/videos?`, [200, { items }]],
   ])));
   assert.deepEqual(yt.posts, [
-    { url: "https://www.youtube.com/watch?v=p4", type: "video", date: "2026-10-19", caption: "", thumb: "https://i.ytimg.test/p4/hqdefault.jpg", likes: null, comments: null, views: 100, reach: null },
-    { url: "https://www.youtube.com/watch?v=u3", type: "video", date: "2026-10-19", caption: "T", thumb: "", likes: null, comments: null, views: 400, reach: null },
+    { url: "https://www.youtube.com/watch?v=p4", type: "video", date: "2026-10-19", caption: "", thumb: "https://i.ytimg.test/p4/hqdefault.jpg", likes: null, comments: null, views: 100, reach: null,
+      audience: { unlisted: false } },
+    { url: "https://www.youtube.com/watch?v=u3", type: "video", date: "2026-10-19", caption: "T", thumb: "", likes: null, comments: null, views: 400, reach: null,
+      audience: { unlisted: false } },
   ]);
   assert.deepEqual([yt.avg_views, yt.avg_likes, yt.avg_comments, yt.posts_sampled], [400, 50, 5, 8]);
 });
@@ -570,7 +619,7 @@ const insightsOf = f => f.calls.filter(c => c.url.includes("/insights?") && !c.u
 
 test("metrikler: Instagram is_comment_enabled alanını reddederse liste bir kez onsuz istenir, başka hata tekrarlanmaz", async () => {
   const f = fakeFetch(igPostRoutes([igNoField(400)]));
-  assert.deepEqual((await fetchMetrics("instagram", "ig-token", f)).posts, IG_POSTS);
+  assert.deepEqual((await fetchMetrics("instagram", "ig-token", f)).posts, IG_OUT());
   const [first, second, ...rest] = lists(f);
   assert.match(first, /,is_comment_enabled$/);
   assert.doesNotMatch(second, /is_comment_enabled/);
@@ -681,24 +730,45 @@ test("metrikler: YouTube yükleme listesi sayfa sayfa (en çok 4), videolar 50'�
   await assert.rejects(fetchMetrics("youtube", "t", fakeFetch(ytRoutes(ytPages({ failPart: 0 })))), e => e instanceof ProviderError && e.code === "500:500");
 });
 
-test("kitle: YouTube'da video başına kitle en çok 5 videoya sorulur: en yeni 2 ve günden güne kayan 3 eski", async () => {
-  const f = fakeFetch(ytRoutes([...ytPages(), ytAudience()]));
-  const m = await fetchMetrics("youtube", "t", f);
-  const k = (Math.floor(Date.now() / 864e5) * 3) % 198, want = [0, 1, ...[0, 1, 2].map(i => 2 + (k + i) % 198)];
-  const asked = f.calls.map(c => new URL(c.url).searchParams.get("filters")).filter(Boolean);
-  assert.equal(asked.length, 10);
-  assert.deepEqual([...new Set(asked)].sort(), want.map(i => `video==v${i}`).sort());
-  assert.deepEqual(m.posts.flatMap((p, i) => p.audience ? [i] : []), want.toSorted((a, b) => a - b));
-  // Bugün yayınlanan ve izlenmesi 0 olan video sorulmaz
-  const fresh = fakeFetch(ytRoutes([ytAudience(),
-    [`${YT}/videos?`, [200, { items: [
-      { ...ytv("a"), snippet: { publishedAt: new Date().toISOString(), title: "a", thumbnails: {} } },
-      { ...ytv("b"), statistics: { viewCount: "0" } },
-    ] }]],
+// Üst videolar (ve aboneler) raporu tam 200 satır: v0…v198 ve listede olmayan zz; v199 raporda yok
+const ytTop200 = opt => [YTA, u => new URL(u).searchParams.get("dimensions") === "video"
+  ? [200, { columnHeaders: YT_BEST.columnHeaders, rows: [...span(0, 199, i => [`v${i}`, 300 - i, 10, 60, 50, 0]), ["zz", 1, 1, 1, 1, 0]] }]
+  : ytAudience(200, opt)[1](u)];
+
+test("kitle: YouTube'da video başına raporlar en çok 16 çağrı: en yeni 2 video ve günden güne kayan eskiler; kanal kırılımı varsa 4 video 4'er, yoksa 8 video 2'şer çağrı", async () => {
+  const run = async (opt, n, mul) => {
+    const f = fakeFetch(ytRoutes([...ytPages(), ytTop200(opt)]));
+    const m = await fetchMetrics("youtube", "t", f);
+    const k = (Math.floor(Date.now() / 864e5) * mul) % 198, want = [0, 1, ...span(0, n - 2, i => 2 + (k + i) % 198)];
+    const per = f.calls.map(c => new URL(c.url).searchParams).filter(q => q.get("filters")?.startsWith("video=="));
+    assert.equal(per.length, 16);
+    assert.deepEqual([...new Set(per.map(q => q.get("filters")))].sort(), want.map(i => `video==v${i}`).sort());
+    assert.deepEqual(m.posts.flatMap((p, i) => p.audience.sources ? [i] : []), want.toSorted((a, b) => a - b));
+    // İzlenme özeti raporda olan her videoya; tam 200 satırlık raporda olmayan v199'a yazılmaz
+    assert.equal(m.posts.filter(p => p.audience.watch).length, 199);
+    assert.equal(m.posts[199].audience.watch, undefined);
+    return [m, per.map(q => q.get("dimensions"))];
+  };
+  const w0 = { at: ymd(0), from: "2026-09-30", to: ymd(1), views: 300, minutes: 10, avg_s: 60, avg_pct: 50, subs: 0, sub_views: 300 };
+  const [m, dims] = await run(undefined, 4, 2);
+  assert.deepEqual(m.posts[0].audience, { unlisted: false, watch: w0, sources: ytSrc("2026-09-30"), viewers: YT_VIEWERS, demo: { at: ymd(0), ok: true, views: 300 } });
+  assert.deepEqual(dims.sort(), ["ageGroup,gender", "country", "deviceType", "insightTrafficSourceType"].flatMap(d => [d, d, d, d]));
+  // Kanal eşiğin altında (few): yaş/cinsiyet/ülke sorulmaz, 8 video
+  const [few, fdims] = await run({ empty: [null] }, 8, 6);
+  assert.deepEqual(few.posts[0].audience, { unlisted: false, watch: w0, sources: ytSrc("2026-09-30") });
+  assert.deepEqual(fdims.sort(), ["deviceType", "insightTrafficSourceType"].flatMap(d => Array(8).fill(d)));
+  // 3 günden yeni video (a, bugün) ve üst videolar raporunda olmayan (0 izlenmeli sayılan) b sorulmaz; a'ya izlenme
+  // özeti yazılır, b'ye 0 (rapor 200'den az satır)
+  const fresh = fakeFetch(ytRoutes([
+    [YTA, u => new URL(u).searchParams.get("dimensions") === "video" ? [200, { columnHeaders: YT_BEST.columnHeaders, rows: [YT_BEST.rows[1]] }] : ytAudience()[1](u)],
+    [`${YT}/videos?`, [200, { items: [{ ...ytv("a"), snippet: { publishedAt: new Date().toISOString(), title: "a", thumbnails: {} } }, ytv("b")] }]],
   ]));
   const nf = await fetchMetrics("youtube", "t", fresh);
-  assert.deepEqual(fresh.calls.filter(c => new URL(c.url).searchParams.get("filters")).length, 0);
-  assert.deepEqual(nf.posts.map(p => p.audience), [undefined, undefined]);
+  assert.equal(fresh.calls.filter(c => new URL(c.url).searchParams.get("filters")?.startsWith("video==")).length, 0);
+  assert.deepEqual(nf.posts.map(p => p.audience), [
+    { unlisted: false, watch: { at: ymd(0), from: ymd(1), to: ymd(1), views: 700, minutes: 1400, avg_s: 120, avg_pct: 45.3, subs: 7, sub_views: 700 } },
+    { unlisted: false, watch: { at: ymd(0), from: "2026-09-30", to: ymd(1), views: 0, minutes: 0, sub_views: 0 } },
+  ]);
 });
 
 // ---- şifreleme ----
@@ -1415,7 +1485,7 @@ test("syncDue: en fazla max hesap, bütçeyi aşan platform sonraki saate kalır
   await seed(db, env, a.id, "instagram", "1784");
   await seed(db, env, a.id, "tiktok", "tt-1");
   await seed(db, env, b.id, "tiktok", "tt-2");
-  // Bütçe 7: Instagram (27) sığmaz, ilk TikTok (7) sığar, ikinci TikTok bütçeyi aşar
+  // Bütçe 7: Instagram (29) sığmaz, ilk TikTok (7) sığar, ikinci TikTok bütçeyi aşar
   const f = fakeFetch(ttRoutes());
   assert.deepEqual(await syncDue(env, f, { budget: 7 }), { ...ZERO, synced: 1, deferred: 2 });
   assert.equal(f.calls.some(c => c.url.includes("instagram")), false);
@@ -1435,38 +1505,42 @@ test("syncDue: en fazla max hesap, bütçeyi aşan platform sonraki saate kalır
   assert.equal(h.calls.length, 0);
 });
 
-test("syncDue: Instagram'ın en kötü yolu (yenileme + alan reddinde tekrar + 4 sayfa + 12 insights + 8 kitle kırılımı) bütçe payına sığar", async t => {
+test("syncDue: Instagram'ın en kötü yolu (yenileme + alan reddinde tekrar + 4 sayfa + 12 insights + 2 insights tekrarı + 8 kitle kırılımı) bütçe payına sığar", async t => {
   t.mock.method(console, "log", () => {});
   const { db, env, join } = await setup({ ...IG_ENV, OAUTH_TOKEN_KEY: KEY });
   const a = await join("influencer", "a@x.co");
   await seed(db, env, a.id, "instagram", "1784"); // token 7 günden kısa: yenilenir
-  const pages = [span(0, 13, igm), span(13, 20, igm), span(20, 30, igm), span(30, 40, igm), span(40, 50, igm)];
-  const f = fakeFetch(igRoutes([IG_REFRESH, igPages(pages, 400)]));
-  assert.deepEqual(await syncDue(env, f, { budget: 26 }), { ...ZERO, deferred: 1 });
+  // Tekler reel: iki türün de zengin listesi reddedilir (400), ikisi de bir kez views,reach ile tekrar sorulur
+  const pages = [span(0, 13, i => ({ ...igm(i), ...(i % 2 ? { media_product_type: "REELS" } : {}) })), span(13, 20, igm), span(20, 30, igm), span(30, 40, igm), span(40, 50, igm)];
+  const ins = [`${IGV}/n`, u => new URL(u).searchParams.get("metric") === "views,reach" ? [200, { data: [] }]
+    : [400, { error: { message: "unsupported", type: "OAuthException", code: 100 } }]];
+  const f = fakeFetch(igRoutes([IG_REFRESH, ins, igPages(pages, 400)]));
+  assert.deepEqual(await syncDue(env, f, { budget: 28 }), { ...ZERO, deferred: 1 });
   assert.equal(f.calls.length, 0);
-  assert.deepEqual(await syncDue(env, f, { budget: 27 }), { ...ZERO, synced: 1 });
+  assert.deepEqual(await syncDue(env, f, { budget: 29 }), { ...ZERO, synced: 1 });
   assert.ok(f.calls.some(c => c.url.startsWith(IG_REFRESH[0])), "yenileme yapıldı");
   assert.equal(lists(f).length, 5);
   assert.equal(f.calls.filter(c => c.url.startsWith(`${IGV}/me/insights?`)).length, 8);
-  assert.equal(f.calls.length, 27);
+  assert.equal(f.calls.filter(c => c.url.startsWith(`${IGV}/n`)).length, 14);
+  assert.equal(f.calls.length, 29);
 });
 
-test("syncDue: TikTok'un (yenileme + 5 sayfa) ve YouTube'un (yenileme + 4 liste sayfası + 4 video parçası + 90 gün ve tüm zaman için 2'şer kanal kitle raporu + toplam izlenme + 5 videonun 2'şer kitle raporu) en kötü yolu bütçe payına sığar", async t => {
+test("syncDue: TikTok'un (yenileme + 5 sayfa) ve YouTube'un (yenileme + 4 liste sayfası + 4 video parçası + 90 gün ve tüm zaman için 2'şer kanal kitle raporu + toplam izlenme + üst videolar, aboneler, kanal trafik ve cihaz raporu + 8 videonun 2'şer raporu) en kötü yolu bütçe payına sığar", async t => {
   t.mock.method(console, "log", () => {});
   const { db, env, join } = await setup({ ...TT_ENV, ...YT_ENV, OAUTH_TOKEN_KEY: KEY });
   const a = await join("influencer", "a@x.co");
   await seed(db, env, a.id, "tiktok", "tt-1");
   await seed(db, env, a.id, "youtube", "UC1");
   db.prepare("UPDATE oauth_tokens SET expires_at = datetime('now', '-1 hours')").run();
-  const f = fakeFetch([...ttRoutes([ttPages()]), ...ytRoutes([YT_OLD, ...ytPages(), ytAudience(200, { empty: [null, "all"] })])]);
+  const f = fakeFetch([...ttRoutes([ttPages()]), ...ytRoutes([YT_OLD, ...ytPages(), ytTop200({ empty: [null, "all"] })])]);
   assert.deepEqual(await syncDue(env, f, { budget: 6 }), ZERO); // en ucuz platformdan az: hiç bakılmaz
   assert.deepEqual(await syncDue(env, f, { budget: 7 }), { ...ZERO, synced: 1, deferred: 1 });
   assert.equal(f.calls.length, 7);
   assert.ok(f.calls.every(c => c.url.startsWith(TT)));
-  assert.deepEqual(await syncDue(env, f, { budget: 24 }), { ...ZERO, deferred: 1 });
-  assert.deepEqual(await syncDue(env, f, { budget: 25 }), { ...ZERO, synced: 1 });
-  assert.equal(f.calls.filter(c => c.url.startsWith(YTA)).length, 15);
-  assert.equal(f.calls.length, 32);
+  assert.deepEqual(await syncDue(env, f, { budget: 34 }), { ...ZERO, deferred: 1 });
+  assert.deepEqual(await syncDue(env, f, { budget: 35 }), { ...ZERO, synced: 1 });
+  assert.equal(f.calls.filter(c => c.url.startsWith(YTA)).length, 25);
+  assert.equal(f.calls.length, 42);
 });
 
 test("syncDue: kitle dağılımı ölçümle birlikte JSON olarak yazılır; vermeyen platformda NULL", async t => {
@@ -1605,7 +1679,10 @@ test("syncDue: TikTok ve YouTube gönderileri de aktarılır; her gönderi kendi
   const a = await join("influencer", "a@x.co");
   await seed(db, env, a.id, "tiktok", "tt-1");
   await seed(db, env, a.id, "youtube", "UC1");
-  assert.deepEqual(await syncDue(env, fakeFetch([...ttRoutes(), ...ytRoutes()])), { ...ZERO, synced: 2 });
+  // TikTok (7) ve YouTube (35) 40'lık bütçeye birlikte sığmaz: ikincisi sonraki çalışmaya kalır
+  const f = fakeFetch([...ttRoutes(), ...ytRoutes()]);
+  assert.deepEqual(await syncDue(env, f), { ...ZERO, synced: 1, deferred: 1 });
+  assert.deepEqual(await syncDue(env, f), { ...ZERO, synced: 1 });
   const acc = p => db.prepare("SELECT id FROM social_accounts WHERE user_id = ? AND platform = ?").get(a.id, p).id;
   const pick = p => ({ url, type, date, caption, thumb }) => ({ url, platform: p, type, date, caption, thumb, account_id: acc(p) });
   const [tt, yt] = [TT_POSTS.map(pick("tiktok")), YT_POSTS.map(pick("youtube"))];
@@ -1662,7 +1739,7 @@ test("syncDue: TikTok kullanıcı adı değişince aktarılmış video yeni bağ
   assert.deepEqual(snapsOf(db, tt("yeni_ad", "v1")), []);
 });
 
-test("syncDue: YouTube video kitlesi gönderiye, kanal kitlesi ölçüme yazılır; video gelmezse eskisi kalır, değişirse tazelenir; rapor alınamazsa neden saklanır", async t => {
+test("syncDue: YouTube video kitlesi (izlenme, kaynaklar, kırılım) gönderiye, kanal kitlesi ve kaynakları ölçüme yazılır; gelmeyen anahtar kalır, eşiğin altındaki kırılım silinir; rapor alınamazsa neden saklanır", async t => {
   t.mock.method(console, "log", () => {});
   const { db, env, call, join } = await setup({ ...YT_ENV, OAUTH_TOKEN_KEY: KEY, POSTS_ENABLED: "1" });
   const a = await join("influencer", "a@x.co");
@@ -1673,19 +1750,20 @@ test("syncDue: YouTube video kitlesi gönderiye, kanal kitlesi ölçüme yazıl�
   };
   const snap = () => JSON.parse(db.prepare("SELECT audience FROM metric_snapshots ORDER BY id DESC LIMIT 1").get().audience);
   const posts = () => db.prepare("SELECT audience FROM posts ORDER BY date").all().map(r => JSON.parse(r.audience));
-  const V = { viewers: YT_VIEWERS };
   await sync(ytAudience());
-  assert.deepEqual([snap(), posts()], [V, [V, V]]);
+  assert.deepEqual([snap(), posts()], [{ viewers: YT_VIEWERS, sources: ytSrc(ymd(91)) }, ytAud()]);
   const list = await call("GET", "/app/posts", { token: a.token });
   assert.equal(list.status, 200, JSON.stringify(list.body));
-  assert.deepEqual(list.body.posts.map(p => p.audience), [V, V]);
-  // a bu kez eşiğin altında: kitlesi silinmez; b'nin değişen kitlesi tazelenir
-  db.prepare("UPDATE posts SET audience = ? WHERE url = ?").run(JSON.stringify({ viewers: { age: [["18-24", 100]] } }), YT_POSTS[1].url);
+  assert.deepEqual(list.body.posts.map(p => p.audience), ytAud().reverse());
+  // a'nın kırılımı bu kez eşiğin altında: viewers silinir, demo ok false. Liste dışı b'ye kırılım sorulmaz: eski viewers
+  // ve bilinmeyen anahtar kalır, gelenler yazılır
+  const old = { viewers: { age: [["18-24", 100]] }, x: 1 }, want = [ytAud("empty")[0], { ...old, ...ytAud()[1] }];
+  db.prepare("UPDATE posts SET audience = ? WHERE url = ?").run(JSON.stringify(old), YT_POSTS[1].url);
   await sync(ytAudience(200, { empty: ["video==a"] }));
-  assert.deepEqual(posts(), [V, V]);
+  assert.deepEqual(posts(), want);
   // İzin yok: ölçüme nedeni yazılır, video sorulmaz, gönderilerin kitlesi kalır
   await sync(ytAudience(403));
-  assert.deepEqual([snap(), posts()], [{ reason: "no_scope" }, [V, V]]);
+  assert.deepEqual([snap(), posts()], [{ reason: "no_scope" }, want]);
 });
 
 test("syncDue: son 12 gönderi günde bir, eskiler haftada bir ölçülür; gelmeyen izlenme ve erişim son ölçülenle sürer; değişmeyen gönderi yeniden yazılmaz", async t => {
@@ -1720,7 +1798,7 @@ test("syncDue: son 12 gönderi günde bir, eskiler haftada bir ölçülür; gelm
   assert.deepEqual(snapsOf(db, url(13)), [{ at: today(), likes: 13, comments: 1, views: 1013, reach: 513 }]);
   assert.equal(updates(), 0);
   // 5 gün sonra (son ölçüm 8 gün önce) n10 ve n11 yeniden ölçülür: insights'ları istenmez, izlenme ve erişim sürer;
-  // yalnız metni değişen n0 güncellenir
+  // metni değişen n0 ve insights'ı (audience.ig) değişen son 12 gönderi güncellenir; ölçülmeyen n10 ve n11'in kitlesi kalır
   ago(5);
   const media = [igm(13), igm(12), { ...igm(0), caption: "Yeni metin" }, ...span(1, 10, igm), { ...igm(10), like_count: 40 }, { ...igm(11), like_count: 41 }];
   assert.deepEqual(await sync(media, 2000), ["n13", "n12", ...span(0, 10, i => `n${i}`)]);
@@ -1728,7 +1806,9 @@ test("syncDue: son 12 gönderi günde bir, eskiler haftada bir ölçülür; gelm
     { at: day(8), likes: 11, comments: 1, views: 1011, reach: 511 }, { at: today(), likes: 41, comments: 1, views: 1011, reach: 511 },
   ]);
   assert.deepEqual(snapsOf(db, url(9)).at(-1), { at: today(), likes: 9, comments: 1, views: 2009, reach: 509 });
-  assert.equal(updates(), 1);
+  assert.equal(updates(), 12);
+  const ig = i => JSON.parse(db.prepare("SELECT audience FROM posts WHERE url = ?").get(url(i)).audience).ig;
+  assert.deepEqual([ig(9), ig(11)], [{ at: today(), views: 2009, reach: 509 }, { at: today(), views: 1011, reach: 511 }]);
   assert.equal(db.prepare("SELECT caption FROM posts WHERE url = ?").get(url(0)).caption, "Yeni metin");
 });
 
@@ -2589,4 +2669,244 @@ test("fetchProfile: Instagram'da /me id'si istenir ve scoped_id olarak döner; b
   await fetchProfile("instagram", "t", f);
   const me = f.calls.find(c => c.url.startsWith(`${IGV}/me?`));
   assert.deepEqual(new URL(me.url).searchParams.get("fields").split(","), ["user_id", "id", "username", "followers_count"]);
+});
+
+// ---- Gönderi başına kitle (audience) ----
+test("kitle: YouTube'da alınamayan rapor yalnız kendi anahtarını eksik bırakır (video kaynak/cihaz, üst videolar, aboneler, kanal kaynakları); aboneler raporu 200 satırı doldurursa listede olmayana sub_views yazılmaz", async t => {
+  t.mock.method(console, "log", () => {});
+  const run = route => fetchMetrics("youtube", "yt-token", fakeFetch(ytRoutes([route])));
+  const aud = m => m.posts.map(p => p.audience);
+  const noTraffic = ytAud();
+  delete noTraffic[0].sources.traffic;
+  assert.deepEqual(aud(await run(ytAudience(200, { fail: ["insightTrafficSourceType video==a"] }))), noTraffic);
+  const { sources, ...noSrc } = ytAud()[0];
+  assert.deepEqual(aud(await run(ytAudience(200, { fail: ["insightTrafficSourceType video==a", "deviceType video==a"] }))), [noSrc, ytAud()[1]]);
+  // Üst videolar alınamazsa izlenme özeti yok, kaynak ve kırılım yine sorulur
+  const top = await run(ytAudience(200, { fail: ["video"] }));
+  assert.deepEqual([top.audience, aud(top)], [{ viewers: YT_VIEWERS, sources: ytSrc(ymd(91)) }, [
+    { unlisted: false, sources: ytSrc("2026-10-18"), viewers: YT_VIEWERS, demo: { at: ymd(0), ok: true, views: null } },
+    { unlisted: true, sources: ytSrc("2026-10-21") }]]);
+  const noSubs = ytAud();
+  for (const p of noSubs) delete p.watch.sub_views;
+  assert.deepEqual(aud(await run(ytAudience(200, { fail: ["video subscribedStatus==SUBSCRIBED"] }))), noSubs);
+  const ch = await run(ytAudience(200, { fail: ["insightTrafficSourceType", "deviceType"] }));
+  assert.deepEqual([ch.audience, aud(ch)], [{ viewers: YT_VIEWERS }, ytAud()]);
+  const full = await run([YTA, u => {
+    const q = new URL(u).searchParams;
+    return q.get("dimensions") === "video" && q.get("filters")
+      ? [200, { columnHeaders: YT_SUBS.columnHeaders, rows: [["a", 300], ...span(0, 199, i => [`z${i}`, 1])] }] : ytAudience()[1](u);
+  }]);
+  const part = ytAud();
+  delete part[1].watch.sub_views;
+  assert.deepEqual(aud(full), part);
+});
+
+test("metrikler: Instagram insights reddi türler arasında en çok 2 kez kısa listeyle tekrarlanır; hikâyeye sorulmaz; yorumu kapalı gönderinin 0 yorumu ölçülmemiş, açık ve sayısı gelmeyeninki insights'tan", async t => {
+  t.mock.method(console, "log", () => {});
+  const IG_V = { views: 100, reach: 50, comments: 7, saved: 3, total_interactions: 20, follows: 1, profile_visits: 2,
+    ig_reels_avg_watch_time: 1500, ig_reels_video_view_total_time: 90000 };
+  const run = async (media, fail) => {
+    const ins = u => {
+      const id = new URL(u).pathname.split("/")[2], metric = new URL(u).searchParams.get("metric");
+      return fail.includes(id) && metric !== "views,reach" ? [400, { error: { message: "unsupported", type: "OAuthException", code: 100 } }]
+        : [200, { data: metric.split(",").filter(k => k in IG_V).map(name => ({ name, total_value: { value: IG_V[name] } })) }];
+    };
+    const f = fakeFetch(igRoutes([[`${IGV}/me/media?`, [200, { data: media }]], [`${IGV}/f`, ins], [`${IGV}/r`, ins]]));
+    const m = await fetchMetrics("instagram", "ig-token", f);
+    const calls = f.calls.filter(c => c.url.includes("/insights?") && !c.url.startsWith(`${IGV}/me/`))
+      .map(c => `${new URL(c.url).pathname.split("/")[2]} ${new URL(c.url).searchParams.get("metric")}`).sort();
+    return { calls, posts: m.posts };
+  };
+  const at = ymd(0), ts = "2026-10-20T10:00:00+0000", short = { at, views: 100, reach: 50 };
+  const feed = (id, x) => ({ id, like_count: 10, timestamp: ts, permalink: `https://www.instagram.com/p/${id.toUpperCase()}/`, media_type: "IMAGE", media_product_type: "FEED", ...x });
+  const reel = id => ({ id, like_count: 10, comments_count: 1, timestamp: ts, permalink: `https://www.instagram.com/reel/${id.toUpperCase()}/`, media_type: "VIDEO", media_product_type: "REELS" });
+  const one = await run([feed("f0", { is_comment_enabled: true }), feed("f1", { is_comment_enabled: false, comments_count: 0 }), feed("f2", { comments_count: 1 }),
+    feed("f3", { is_comment_enabled: true, comments_count: 2 }), reel("r0"), { id: "s1", like_count: 10, timestamp: ts, media_type: "IMAGE", media_product_type: "STORY" }], ["f1", "f2", "f3"]);
+  assert.deepEqual(one.calls.filter(c => !c.endsWith(" views,reach")), [...["f0", "f1", "f2", "f3"].map(id => `${id} ${IG_FEED}`), `r0 ${IG_REELS}`]);
+  const retried = one.calls.filter(c => c.endsWith(" views,reach"));
+  assert.equal(retried.length, 2);
+  assert.ok(retried.every(c => /^f[123] /.test(c)), retried.join());
+  const post = id => one.posts.find(p => p.url.includes(`/${id.toUpperCase()}/`));
+  assert.equal(one.posts.length, 5);
+  assert.deepEqual([post("f0").comments, post("f0").audience],
+    [7, { comments_off: false, mid: "f0", ig: { at, reach: 50, views: 100, saved: 3, interactions: 20, follows: 1, profile_visits: 2 } }]);
+  assert.deepEqual([post("f1").comments, post("f1").audience.comments_off], [null, true]);
+  assert.equal("comments_off" in post("f2").audience, false);
+  assert.deepEqual([post("f3").comments, post("f3").audience.comments_off], [2, false]);
+  assert.deepEqual(["f1", "f2", "f3"].map(id => post(id).audience.ig).filter(Boolean), [short, short]);
+  assert.deepEqual(post("r0").audience, { mid: "r0", ig: { at, reach: 50, views: 100, saved: 3, interactions: 20, avg_watch_ms: 1500, watch_ms: 90000 } });
+  // İlk reel reddedilirse kalanlar doğrudan kısa listeyle sorulur
+  const reels = await run(["r0", "r1", "r2"].map(reel), ["r0", "r1", "r2"]);
+  assert.deepEqual(reels.calls, [`r0 ${IG_REELS}`, "r0 views,reach", "r1 views,reach", "r2 views,reach"]);
+  assert.deepEqual(reels.posts.map(p => p.audience.ig), [short, short, short]);
+});
+
+test("syncDue: gönderi kitlesi anahtar anahtar birleşir — gelen watch/sources/viewers/demo eskisinin yerine geçer, bilinmeyen anahtar kalır, bozuk kayıt yenisiyle değişir; aynı kitle satırı güncellemez", async t => {
+  t.mock.method(console, "log", () => {});
+  const { db, env, join } = await setup({ ...YT_ENV, OAUTH_TOKEN_KEY: KEY, POSTS_ENABLED: "1" });
+  const a = await join("influencer", "a@x.co");
+  await seed(db, env, a.id, "youtube", "UC1");
+  const sync = async () => {
+    db.prepare("UPDATE social_accounts SET next_sync_at = NULL").run();
+    assert.deepEqual(await syncDue(env, fakeFetch(ytRoutes([ytAudience()]))), { ...ZERO, synced: 1 });
+  };
+  const posts = () => db.prepare("SELECT audience FROM posts ORDER BY date").all().map(r => JSON.parse(r.audience));
+  const set = (url, s) => db.prepare("UPDATE posts SET audience = ? WHERE url = ?").run(s, url);
+  await sync();
+  const [wa, wb] = posts();
+  assert.deepEqual([wa, wb], ytAud());
+  set(YT_POSTS[0].url, JSON.stringify({ ...wa, watch: { ...wa.watch, extra: 9 }, viewers: { ...YT_VIEWERS, zz: 1 }, x: 1 }));
+  set(YT_POSTS[1].url, "{bozuk");
+  await sync();
+  assert.deepEqual(posts(), [{ ...wa, x: 1 }, wb]);
+  db.exec("CREATE TABLE upd (n INTEGER); INSERT INTO upd VALUES (0); CREATE TRIGGER posts_upd AFTER UPDATE ON posts BEGIN UPDATE upd SET n = n + 1; END;");
+  await sync();
+  assert.equal(db.prepare("SELECT n FROM upd").get().n, 0);
+  assert.deepEqual(posts(), [{ ...wa, x: 1 }, wb]);
+});
+
+test("postAudSkip: hikâye, elle girilen ve TikTok desteklenmez; YouTube'da 3 günden yeni video too_new; dünden beri ölçülmüşse fresh", () => {
+  const yt = { platform: "youtube", account_id: 1, type: "video", date: ymd(10) }, ig = { ...yt, platform: "instagram", type: "photo" };
+  const w = at => ({ at });
+  assert.equal(postAudSkip({ ...yt, platform: "tiktok" }, null), "unsupported");
+  assert.equal(postAudSkip({ ...yt, account_id: null }, null), "unsupported");
+  assert.equal(postAudSkip({ ...ig, type: "story" }, null), "unsupported");
+  assert.equal(postAudSkip({ ...yt, date: ymd(2) }, null), "too_new");
+  assert.equal(postAudSkip({ ...yt, date: ymd(3) }, null), null);
+  assert.equal(postAudSkip(yt, { watch: w(ymd(1)), sources: w(ymd(1)) }), "fresh");
+  assert.equal(postAudSkip(yt, { watch: w(ymd(1)), sources: w(ymd(2)) }), null);
+  assert.equal(postAudSkip(yt, { watch: w(ymd(0)) }), null);
+  assert.equal(postAudSkip(ig, { comments_off: false, ig: w(ymd(1)) }), "fresh");
+  assert.equal(postAudSkip(ig, { ig: w(ymd(0)) }), null);
+  assert.equal(postAudSkip(ig, { comments_off: true, ig: w(ymd(2)) }), null);
+  assert.equal(postAudSkip(ig, null), null);
+});
+
+test("ytRetention: gönderi kitlesinde 29 günden eski izlenme özeti, kaynak ve kırılım (demo kaydı olmayan kırılım da) silinir, kanal ölçümünün eski kaynakları da; Instagram, bozuk ve boş kitle kalır; 5 ifade", async () => {
+  const { db, env, join } = await setup({ OAUTH_TOKEN_KEY: KEY });
+  const a = await join("influencer", "a@x.co");
+  await seed(db, env, a.id, "youtube", "UC-a");
+  await seed(db, env, a.id, "instagram", "ig-a");
+  const acc = p => db.prepare("SELECT id FROM social_accounts WHERE user_id = ? AND platform = ?").get(a.id, p).id;
+  const yt = acc("youtube"), ig = acc("instagram");
+  const old = ymd(30), fresh = ymd(0), w = at => ({ at }), demo = at => ({ at, ok: true });
+  const add = (url, p, account, aud) => db.prepare("INSERT INTO posts (user_id, url, platform, type, date, account_id, audience) VALUES (?, ?, ?, 'video', '2026-10-01', ?, ?)")
+    .run(a.id, url, p, account, aud === null || typeof aud === "string" ? aud : JSON.stringify(aud));
+  // [kayıtlı, beklenen]
+  const rows = [
+    [{ unlisted: false, watch: w(old), sources: w(old), viewers: YT_VIEWERS, demo: demo(old), x: 1 }, { unlisted: false, x: 1 }],
+    [{ watch: w(fresh), sources: w(old), viewers: YT_VIEWERS, demo: demo(fresh) }, { watch: w(fresh), viewers: YT_VIEWERS, demo: demo(fresh) }],
+    [{ watch: w(fresh), viewers: YT_VIEWERS }, { watch: w(fresh) }],
+    [{ watch: w(fresh), sources: w(fresh), viewers: YT_VIEWERS, demo: demo(fresh) }],
+  ];
+  rows.forEach(([aud], i) => add(`https://www.youtube.com/watch?v=p${i}`, "youtube", yt, aud));
+  const igAud = { watch: w(old), sources: w(old), ig: w(old) };
+  add("https://www.instagram.com/p/OLD/", "instagram", ig, igAud);
+  add("https://www.youtube.com/watch?v=bad", "youtube", yt, "{bozuk");
+  add("https://www.youtube.com/watch?v=none", "youtube", yt, null);
+  const snap = (account, ago, aud) => db.prepare("INSERT INTO metric_snapshots (account_id, taken_at, followers, audience) VALUES (?, datetime('now', ?), 1, ?)")
+    .run(account, ago, JSON.stringify(aud));
+  snap(yt, "-40 days", { viewers: YT_VIEWERS, sources: ytSrc(ymd(131)) });
+  snap(yt, "-1 days", { viewers: YT_VIEWERS, sources: ytSrc(ymd(91)) });
+  snap(ig, "-40 days", { sources: 1 });
+  const read = sql => db.prepare(sql).all().map(r => { try { return JSON.parse(r.audience); } catch { return r.audience; } });
+  const want = [[...rows.map(([x, y = x]) => y), igAud, "{bozuk", null],
+    [{ viewers: YT_VIEWERS }, { viewers: YT_VIEWERS, sources: ytSrc(ymd(91)) }, { sources: 1 }]];
+  const c = counted(env.DB);
+  await ytRetention({ ...env, DB: c.DB });
+  assert.equal(c.n(), 5);
+  assert.deepEqual([read("SELECT audience FROM posts ORDER BY id"), read("SELECT audience FROM metric_snapshots ORDER BY id")], want);
+  // İkinci çalıştırma bir şey değiştirmez
+  await ytRetention(env);
+  assert.deepEqual([read("SELECT audience FROM posts ORDER BY id"), read("SELECT audience FROM metric_snapshots ORDER BY id")], want);
+});
+
+test("POST /app/posts/:id/audience: gönderinin kitlesini sağlayıcıdan tazeleyip birleştirir; desteklenmeyen, yeni ve taze gönderide çağrı ve sayaç yok; saatte 40; alınamazsa kayıtlı kitle ve neden döner, kira geri verilir", async t => {
+  t.mock.method(console, "log", () => {});
+  let f = fakeFetch([]);
+  t.mock.method(globalThis, "fetch", (...x) => f(...x));
+  const { db, env, call, join } = await setup({ ...YT_ENV, ...IG_ENV, OAUTH_TOKEN_KEY: KEY, POSTS_ENABLED: "1" });
+  const a = await join("influencer", "a@x.co"), b = await join("influencer", "b@x.co");
+  await seed(db, env, a.id, "youtube", "UC1");
+  await seed(db, env, a.id, "instagram", "1784");
+  const acc = p => db.prepare("SELECT id FROM social_accounts WHERE user_id = ? AND platform = ?").get(a.id, p).id;
+  const yt = acc("youtube");
+  const add = (u, url, p, type, date, account, aud) => Number(db.prepare("INSERT INTO posts (user_id, url, platform, type, date, account_id, audience) VALUES (?, ?, ?, ?, ?, ?, ?)")
+    .run(u, url, p, type, date, account, aud).lastInsertRowid);
+  const v = id => `https://www.youtube.com/watch?v=${id}`;
+  const freshAud = { watch: { at: ymd(0) }, sources: { at: ymd(0) } };
+  const ya = add(a.id, v("a"), "youtube", "video", "2026-10-19", yt, '{"unlisted":false,"x":1}');
+  const yb = add(a.id, v("b"), "youtube", "video", "2026-10-22", yt, null);
+  const yNew = add(a.id, v("c"), "youtube", "video", ymd(1), yt, null);
+  const manual = add(a.id, v("d"), "youtube", "video", "2026-10-01", null, null);
+  const fresh = add(a.id, v("e"), "youtube", "video", "2026-10-10", yt, JSON.stringify(freshAud));
+  const other = add(b.id, v("a"), "youtube", "video", "2026-10-19", null, null);
+  const ig = add(a.id, IG_MEDIA[0].permalink, "instagram", "photo", "2026-10-20", acc("instagram"), null);
+  const aud = (id, token = a.token) => call("POST", `/app/posts/${id}/audience`, { token, body: {} });
+  const ok = r => { assert.equal(r.status, 200, JSON.stringify(r.body)); return r.body; };
+  const stored = id => JSON.parse(db.prepare("SELECT audience FROM posts WHERE id = ?").get(id).audience);
+  const setAud = (id, s) => db.prepare("UPDATE posts SET audience = ? WHERE id = ?").run(s, id);
+  const lease = () => db.prepare("SELECT next_sync_at FROM social_accounts WHERE id = ?").get(yt).next_sync_at;
+  const yta = () => f.calls.filter(c => c.url.startsWith(YTA)).length;
+  const videos = () => f.calls.filter(c => c.url.startsWith(`${YT}/videos?`)).length;
+  const tries = () => db.prepare("SELECT COUNT(*) AS n FROM auth_attempts WHERE kind = 'post_aud'").get().n;
+  // Bulunamayan, başkasının ve 0; desteklenmeyen, yeni ve taze gönderi: sağlayıcı çağrısı ve sayaç yok
+  for (const id of [999, other, 0]) assert.deepEqual(fail(await aud(id)), [404, "not_found"]);
+  assert.deepEqual(ok(await aud(manual)), { ok: true, audience: null, fetched: false, reason: "unsupported" });
+  assert.deepEqual(ok(await aud(yNew)), { ok: true, audience: null, fetched: false, reason: "too_new" });
+  assert.deepEqual(ok(await aud(fresh)), { ok: true, audience: freshAud, fetched: false, reason: "fresh" });
+  assert.deepEqual([f.calls.length, tries()], [0, 0]);
+  // Saatte POST_AUD_RATE istek
+  for (let i = 0; i < 40; i++) db.prepare("INSERT INTO auth_attempts (ip, email, kind, ok) VALUES ('10.0.0.9', 'a@x.co', 'post_aud', 1)").run();
+  assert.deepEqual(fail(await aud(ya)), [429, "rate"]);
+  db.prepare("DELETE FROM auth_attempts WHERE kind = 'post_aud'").run();
+  // YouTube: liste dışı bilgisi kayıtlıysa video sorulmaz; izlenme, aboneler, kaynaklar ve kırılım (6 rapor), bilinmeyen anahtar kalır
+  f = fakeFetch(ytRoutes([ytAudience()]));
+  const wa = { ...ytAud()[0], x: 1 };
+  assert.deepEqual(ok(await aud(ya)), { ok: true, audience: wa, fetched: true });
+  assert.deepEqual([stored(ya), lease(), yta(), videos(), tries()], [wa, null, 6, 0, 1]);
+  assert.deepEqual(ok(await aud(ya)), { ok: true, audience: wa, fetched: false, reason: "fresh" });
+  // Bilinmiyorsa önce video sorulur; liste dışı videoya kırılım sorulmaz (4 rapor)
+  f = fakeFetch(ytRoutes([ytAudience()]));
+  const wb = { unlisted: true, watch: { ...ytAud()[0].watch, from: "2026-10-21" }, sources: ytSrc("2026-10-21") };
+  assert.deepEqual(ok(await aud(yb)).audience, wb);
+  assert.deepEqual([stored(yb), yta(), videos()], [wb, 4, 1]);
+  // Kanalın son ölçümü few: videoya da kırılım sorulmaz
+  const few = db.prepare("INSERT INTO metric_snapshots (account_id, audience) VALUES (?, ?)").run(yt, JSON.stringify({ reason: "few" })).lastInsertRowid;
+  setAud(ya, '{"unlisted":false}');
+  f = fakeFetch(ytRoutes([ytAudience()]));
+  assert.deepEqual(ok(await aud(ya)).audience, { unlisted: false, watch: ytAud()[0].watch, sources: ytSrc("2026-10-18") });
+  assert.equal(yta(), 4);
+  db.prepare("DELETE FROM metric_snapshots WHERE id = ?").run(few);
+  // İzlenme özeti alınamazsa kayıtlı kitle ve upstream; kira geri verilir
+  setAud(ya, '{"unlisted":false}');
+  f = fakeFetch(ytRoutes([ytAudience(200, { fail: ["watch video==a"] })]));
+  assert.deepEqual(ok(await aud(ya)), { ok: true, audience: { unlisted: false }, fetched: false, reason: "upstream" });
+  assert.deepEqual([stored(ya), lease()], [{ unlisted: false }, null]);
+  // Senkron sürüyorsa busy
+  db.prepare("UPDATE social_accounts SET next_sync_at = datetime('now', '+10 minutes') WHERE id = ?").run(yt);
+  assert.equal(ok(await aud(ya)).reason, "busy");
+  db.prepare("UPDATE social_accounts SET next_sync_at = NULL WHERE id = ?").run(yt);
+  // Instagram: medya kimliği yoksa liste yürünür, kimlik ve yorum kapalı bilgisi kaydedilir
+  const igw = { at: ymd(0), reach: 800, views: 1000 };
+  f = fakeFetch(igPostRoutes([IG_REFRESH], [{ ...IG_MEDIA[0], is_comment_enabled: false }]));
+  assert.deepEqual(ok(await aud(ig)), { ok: true, audience: { comments_off: true, mid: "m1", ig: igw }, fetched: true });
+  assert.equal(f.calls.filter(c => c.url.startsWith(`${IGV}/m1?`)).length, 0);
+  assert.equal(ok(await aud(ig)).reason, "fresh");
+  // Kimlik kayıtlıysa medya doğrudan sorulur, liste yürünmez
+  setAud(ig, '{"mid":"m1"}');
+  f = fakeFetch(igPostRoutes([IG_REFRESH, [`${IGV}/m1?`, [200, { ...IG_MEDIA[0], is_comment_enabled: true }]]]));
+  assert.deepEqual(ok(await aud(ig)).audience, { comments_off: false, mid: "m1", ig: igw });
+  assert.equal(lists(f).length, 0);
+  // Bağlantısı tutmayan medya: upstream, kayıtlı kitle
+  setAud(ig, '{"mid":"m1"}');
+  f = fakeFetch(igPostRoutes([IG_REFRESH, [`${IGV}/m1?`, [200, { ...IG_MEDIA[0], permalink: "https://www.instagram.com/p/ZZZ/" }]]]));
+  assert.deepEqual(ok(await aud(ig)), { ok: true, audience: { mid: "m1" }, fetched: false, reason: "upstream" });
+  // Hesap bağlı değilse not_connected; ölçümler kapalıysa 409, gönderiler kapalıysa 404
+  db.prepare("UPDATE social_accounts SET status = 'error' WHERE id = ?").run(yt);
+  assert.equal(ok(await aud(ya)).reason, "not_connected");
+  env.METRICS_ENABLED = "0";
+  assert.deepEqual(fail(await aud(ya)), [409, "disabled"]);
+  env.POSTS_ENABLED = "0";
+  assert.deepEqual(fail(await aud(ya)), [404, "not_found"]);
 });
