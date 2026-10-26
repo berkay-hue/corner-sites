@@ -14,9 +14,31 @@ const PRIVATE = /^_(audit|mirror-report|orig-).*|\.log$/;
 
 await mkdir(OUT, { recursive: true });
 // wishceo sayilar/NNN.json: app.js ISSUES'taki açılış tarihi bugünden (Türkiye saati, app.js todayTR gibi) ileri olan sayı yayına çıkmaz;
-// hiç açılmış sayı yoksa en yeni JSON kopyalanır. Yorumlar önce bütün dosyadan atılır, sonra yalnız ISSUES = [ … ]; dizisi (satır başındaki "];"e kadar) okunur;
-// yorum satırına alınmış sayı açılmış sayılmaz. Okunamayan kayıt ya da tarihi olmayan sayı dosyası uyarı verir
-const ISSUES_SRC = (await readFile(join(SRC, "app.js"), "utf8").catch(() => "")).replace(/\/\*[\s\S]*?\*\/|\/\/.*/g, "").match(/\bISSUES\s*=\s*\[([\s\S]*?)\n\s*\];/)?.[1] || "";
+// hiç açılmış sayı yoksa app.js gibi ISSUES'taki ilk sayı kopyalanır. Dizi, satır başındaki tek "var ISSUES = [" bildiriminden eşleşen "]"e kadar okunur:
+// dizgiler korunur, yorumlar atılır (yorum satırına alınmış sayı açılmış sayılmaz). Dizi okunamazsa eskisi gibi bütün dosya taranır.
+// Bu durum, okunamayan kayıt ve tarihi olmayan sayı dosyası uyarı verir
+const APP_JS = await readFile(join(SRC, "app.js"), "utf8").catch(() => "");
+const issuesArray = s => {
+  const decl = [...s.matchAll(/^[ \t]*(?:var|let|const)[ \t]+ISSUES[ \t]*=[ \t]*\[/gm)];
+  if (decl.length !== 1) return null;
+  let out = "", depth = 1;
+  for (let i = decl[0].index + decl[0][0].length; i < s.length; i++) {
+    const c = s[i];
+    if (c === "/" && s[i + 1] === "/") { const e = s.indexOf("\n", i); if (e < 0) return null; i = e - 1; continue; }
+    if (c === "/" && s[i + 1] === "*") { const e = s.indexOf("*/", i + 2); if (e < 0) return null; i = e + 1; out += " "; continue; }
+    if (c === '"' || c === "'" || c === "`") {
+      let j = i + 1;
+      for (; j < s.length && s[j] !== c; j++) { if (s[j] === "\\") j++; else if (c !== "`" && s[j] === "\n") return null; }
+      if (j >= s.length) return null;
+      out += s.slice(i, j + 1); i = j; continue;
+    }
+    if ("[{(".includes(c)) depth++;
+    else if ("]})".includes(c) && !--depth) return out;
+    out += c;
+  }
+  return null;
+};
+const ISSUES_ARR = issuesArray(APP_JS), ISSUES_SRC = ISSUES_ARR ?? APP_JS;
 const ISSUE_DATES = new Map([...ISSUES_SRC.matchAll(/no:\s*"(\d+)",\s*date:\s*"(\d{4}-\d{2}-\d{2})"/g)].map(m => [m[1], m[2]]));
 // Intl/saat dilimi verisi yoksa ya da beklenmedik parça dönerse app.js todayTR gibi UTC+3 (Türkiye 2016'dan beri yaz saati uygulamıyor)
 const today = (() => {
@@ -28,14 +50,16 @@ const today = (() => {
   return new Date(Date.now() + 3 * 36e5).toISOString().slice(0, 10);
 })();
 const issueFiles = (await readdir(join(SRC, "sayilar")).catch(() => [])).filter(n => /^\d+\.json$/.test(n)).sort();
-const released = issueFiles.filter(n => (ISSUE_DATES.get(n.replace(".json", "")) || "9999") <= today);
-const liveIssues = new Set(released.length ? released : issueFiles.slice(-1));
+// app.js RELEASED gibi ISSUES sırasıyla
+const hasFile = new Set(issueFiles), dated = [...ISSUE_DATES.keys()].map(n => `${n}.json`).filter(n => hasFile.has(n));
+const released = dated.filter(n => ISSUE_DATES.get(n.replace(".json", "")) <= today);
+const liveIssues = new Set(released.length ? released : dated.length ? dated.slice(0, 1) : issueFiles.slice(0, 1));
 const isIssue = src => basename(join(src, "..")) === "sayilar" && /^\d+\.json$/.test(basename(src));
 await cp(SRC, OUT, { recursive: true, force: true, filter: src => !PRIVATE.test(basename(src)) && (!isIssue(src) || liveIssues.has(basename(src))) });
 if (issueFiles.length) console.log(`sayilar: ${liveIssues.size}/${issueFiles.length} yayında (${today})`);
 const undated = issueFiles.filter(n => !ISSUE_DATES.has(n.replace(".json", "")));
-if (issueFiles.length && (undated.length || (ISSUES_SRC.match(/\bno\s*:/g) || []).length !== ISSUE_DATES.size))
-  console.log(`::warning file=${relative(root, join(SRC, "app.js"))}::sayilar: ISSUES ${ISSUE_DATES.size} kayıt okundu${undated.length ? `, tarihi yok: ${undated.join(" ")}` : ""}`);
+if (issueFiles.length && (ISSUES_ARR == null || undated.length || (ISSUES_SRC.match(/\bno\s*:/g) || []).length !== ISSUE_DATES.size))
+  console.log(`::warning file=${relative(root, join(SRC, "app.js"))}::sayilar: ${ISSUES_ARR == null ? "ISSUES dizisi okunamadı, bütün dosya tarandı; " : ""}ISSUES ${ISSUE_DATES.size} kayıt okundu${undated.length ? `, tarihi yok: ${undated.join(" ")}` : ""}`);
 
 // wishceo index.html'deki sayı alanları (JS çalıştırmayan botlar ve ilk boyama için) yayındaki son sayıdan yazılır; metinler app.js fillPage/init ile aynı.
 // Alanlardan biri bulunmazsa, birden çok yerde geçerse ya da içinde etiket varsa index olduğu gibi kalır (app.js sayfayı yine doldurur)
@@ -50,21 +74,25 @@ if (released.length) {
   }
   // app.js'in okuduğu vaka alanlarından biri yoksa yazılmaz (sayfaya "undefined" çıkmasın)
   if (no && !cases.every(c => c?.title != null && c.area != null && Array.isArray(c.place) && c.place[0] != null)) { warn(`sayı ${no} yazılmadı, vaka alanı eksik`); no = undefined; }
-  // place[1] metin değilse app.js yearOf çöker: deploy bilerek durur (oyunu açılmayan sayı yayına çıkmasın)
-  if (no) cases.forEach((c, i) => { if (c.place[1] != null && typeof c.place[1] !== "string") throw new Error(`sayı ${no} dosya ${i + 1}: place[1] metin değil`); });
+  // place[1] boş olmayan bir metin dışı değerse app.js yearOf çöker: deploy bilerek durur (oyunu açılmayan sayı yayına çıkmasın)
+  if (no) cases.forEach((c, i) => { if (c.place[1] && typeof c.place[1] !== "string") throw new Error(`sayı ${no} dosya ${i + 1}: place[1] metin değil`); });
+  // tarih app.js gibi taşarak okunur (31 Nisan -> 1 Mayıs); ay geçersizse app.js de tarihi yazamaz, index olduğu gibi kalır
+  const [Y, M, D] = no ? ISSUE_DATES.get(no).split("-").map(Number) : [];
+  if (no && !(M >= 1 && M <= 12 && D >= 1)) { warn(`sayı ${no} yazılmadı, tarih geçersiz: ${ISSUE_DATES.get(no)}`); no = undefined; }
   if (no) {
     const N = cases.length, WORDS = ["", "Bir", "İki", "Üç", "Dört", "Beş", "Altı"], WORDS_LO = ["", "bir", "iki", "üç", "dört", "beş", "altı"];
     const AY = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"];
     const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
     // tr-TR "26 Ekim 2026" elle kurulur (Node'un Intl verisi eksikse de aynı metin)
-    const [Y, M, D] = ISSUE_DATES.get(no).split("-"), date = `${+D} ${AY[M - 1]} ${Y}`;
+    const day = new Date(Date.UTC(Y, M - 1, D)), date = `${day.getUTCDate()} ${AY[day.getUTCMonth()]} ${day.getUTCFullYear()}`;
     const items = cases.map((c, i) => {
       const y = (c.place[1] || "").replace(/^\s*·\s*/, "");
       return `<li><a href="#oyun"><span class="n">${String(i + 1).padStart(2, "0")}</span><span class="t">${esc(c.title)}</span><span class="m">${esc(c.area + " · " + c.place[0] + (y ? ", " + y : ""))}</span></a></li>`;
     });
-    // Etiketler öznitelik değerleri atlanarak okunur; yorum, <script> ve <style> aynı uzunlukta boşlukla maskelenir (konumlar asıl HTML'de geçerli)
-    const mask = h => h.replace(/<!--(?:-?>|[\s\S]*?(?:--!?>|$))|<(script|style)\b[\s\S]*?(?:<\/\1\s*>|$)/gi, m => " ".repeat(m.length));
-    const tags = h => [...mask(h).matchAll(/<([a-zA-Z][a-zA-Z0-9-]*)((?:\s+[^\s"'>\/=]+(?:\s*=\s*(?:"[^"]*"|'[^']*'|[^\s"'=<>`]+))?)*)\s*\/?>/g)].map(m => ({
+    // Etiketler öznitelik değerleri atlanarak okunur; yorum, <script>, <style>, <textarea> ve <title> aynı uzunlukta boşlukla maskelenir (konumlar asıl HTML'de geçerli)
+    const mask = h => h.replace(/<!--(?:-?>|[\s\S]*?(?:--!?>|$))|<(script|style|textarea|title)\b[\s\S]*?(?:<\/\1\s*>|$)/gi, m => " ".repeat(m.length));
+    const TAG = /<([a-zA-Z][a-zA-Z0-9-]*)((?:\s+[^\s"'>\/=]+(?:\s*=\s*(?:"[^"]*"|'[^']*'|[^\s"'=<>`]+))?)*)\s*\/?>/g;
+    const tags = h => [...mask(h).matchAll(TAG)].map(m => ({
       name: m[1].toLowerCase(), start: m.index, end: m.index + m[0].length,
       attrs: new Map([...m[2].matchAll(/\s+([^\s"'>\/=]+)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'=<>`]+)))?/g)].map(a => [a[1].toLowerCase(), a[2] ?? a[3] ?? a[4] ?? ""])),
     }));
@@ -84,7 +112,8 @@ if (released.length) {
     }
     // vaka listesi: tek bir <ol id="index-list">, içinde yalnız <li>'ler (yorum, <script>, <style> yok); satır düzeni korunur (ilk <li>'den önceki boşluk her satırda tekrarlanır)
     const lists = tags(html).filter(t => t.attrs.get("id") === "index-list");
-    const len = lists.length === 1 && lists[0].name === "ol" ? mask(html).slice(lists[0].end).search(/<\/ol\s*>/i) : -1;
+    // liste sonu, açılış etiketleri de maskelenerek aranır (öznitelik değerindeki "</ol>" sayılmaz)
+    const len = lists.length === 1 && lists[0].name === "ol" ? mask(html).slice(lists[0].end).replace(TAG, m => " ".repeat(m.length)).search(/<\/ol\s*>/i) : -1;
     const body = len < 0 ? undefined : html.slice(lists[0].end, lists[0].end + len);
     if (body == null || mask(body) !== body || /<ol\b|<\/?(?:section|aside|main|div|article|header|footer)\b|\sid\s*=/i.test(body) || !/^\s*(?:<li\b(?:(?!<\/?li\b)[\s\S])*<\/li\s*>\s*)*$/i.test(body)) miss.push('id="index-list"');
     else {
@@ -93,7 +122,7 @@ if (released.length) {
     }
     if (!miss.length && ids(html) !== before) miss.push("id kümesi değişti");
     if (miss.length) warn(`sayı ${no} yazılmadı, bulunamayan alan: ${miss.join(", ")}`);
-    else { await writeFile(join(OUT, "index.html"), html); stamped = html; stampedDate = ISSUE_DATES.get(no); console.log(`index: sayı ${no} yazıldı (${N} dosya, ${date})`); }
+    else { await writeFile(join(OUT, "index.html"), html); stamped = html; stampedDate = day.toISOString().slice(0, 10); console.log(`index: sayı ${no} yazıldı (${N} dosya, ${date})`); }
   }
 }
 
