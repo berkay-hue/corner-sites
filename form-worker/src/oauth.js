@@ -1,7 +1,8 @@
 // brandcorner sosyal hesap bağlama: yalnızca resmi OAuth (Instagram API, TikTok, YouTube Data API,
-// LinkedIn OpenID Connect). Kazıma yok, şifre istenmez. Client id/secret Worker secret'ı; eksikse platform
-// "yapılandırılmadı" görünür. LinkedIn yalnızca kimlik (OpenID Connect): metrikleri Community Management onayına
-// kadar "veri yok". X ve Twitch bağlanamaz ("veri yok"). METRICS_ENABLED kapalıyken bağlanılamaz.
+// LinkedIn Community Management API). Kazıma yok, şifre istenmez. Client id/secret Worker secret'ı; eksikse platform
+// "yapılandırılmadı" görünür. LinkedIn'de üyenin kendi takipçisi ve gönderi toplamları (gösterim, erişim, tepki,
+// yorum, paylaşım) okunur; gönderi listesi aktarılmaz. X ve Twitch bağlanamaz ("veri yok"). METRICS_ENABLED
+// kapalıyken bağlanılamaz.
 // Bağlı hesabın tek kaynağı social_accounts (0001_metrics.sql); 0002_oauth.sql akış durumu ve token'ları tutar.
 // Token'lar OAUTH_TOKEN_KEY (base64, 32 bayt) ile AES-GCM şifreli saklanır.
 // POSTS_ENABLED "1" ise senkron (Instagram, TikTok, YouTube) son gönderileri (Instagram ve YouTube'da en çok 200, TikTok'ta
@@ -15,11 +16,11 @@ import { metricsEnabled, parseAudience } from "./metrics.js";
 
 export const NOT_CONFIGURED = "yapılandırılmadı", NO_DATA = "veri yok";
 // OAUTH: bağlanabilen (OAuth akışı var). SYNCED: metrikleri senkronlanan. LISTED: bağlantı listesi (sıra).
-// CONNECTABLE: rolün bağlayabildiği; üç rolde de SYNCED + LinkedIn (LinkedIn'de senkron yok, "veri yok").
+// CONNECTABLE: rolün bağlayabildiği; üç rolde de SYNCED.
 export const OAUTH = ["instagram", "tiktok", "youtube", "linkedin"];
-export const SYNCED = ["instagram", "tiktok", "youtube"];
+export const SYNCED = ["instagram", "tiktok", "youtube", "linkedin"];
 export const LISTED = ["instagram", "tiktok", "youtube", "x", "linkedin", "twitch"];
-export const CONNECTABLE = { influencer: [...SYNCED, "linkedin"], brand: [...SYNCED, "linkedin"], agency: [...SYNCED, "linkedin"] };
+export const CONNECTABLE = { influencer: [...SYNCED], brand: [...SYNCED], agency: [...SYNCED] };
 // 0012 tabloları (post_edits, perm_log) bu isolate'te yok mu: ilk "no such table" hatasında true olur, sonraki yazımlar tabloya
 // hiç değinmez ve tekrar denenmez (testler sıfırlar). batchOr: build(true) tabloya değinen, build(false) değinmeyen ifadeler;
 // tablo yoksa bir kez onsuz tekrarlanır. fits(n) tekrarın n ifadesi bütçeye sığmıyorsa false döner, o zaman hata atılır.
@@ -54,10 +55,15 @@ const sha256 = async s => [...new Uint8Array(await crypto.subtle.digest("SHA-256
 
 const IG = "https://graph.instagram.com", IG_API = `${IG}/v23.0`;
 const TT = "https://open.tiktokapis.com/v2", YT = "https://www.googleapis.com/youtube/v3";
+const LI = "https://api.linkedin.com", LI_VERSION = "202610";
+// LinkedIn gönderi toplamları: [totals anahtarı, queryType]; metric_snapshots sütunu total_<anahtar> (0008)
+const LI_TOTALS = [["impressions", "IMPRESSION"], ["reach", "MEMBERS_REACHED"], ["reactions", "REACTION"], ["comments", "COMMENT"], ["reshares", "RESHARE"]];
 const YTA = "https://youtubeanalytics.googleapis.com/v2", YT_AUDIENCE = "https://www.googleapis.com/auth/yt-analytics.readonly";
 
 // refresh: süresi bu kadar içinde dolacak token yenilenir (Instagram 60 gün, TikTok 1 gün, YouTube 1 saat geçerli).
-// LinkedIn'de refresh yok: token 60 gün geçerli, yenilenmez ve saklanmaz (yalnızca bağlanırken kimlik okunur).
+// LinkedIn'de refresh yok: token 60 gün geçerli ve yenilenmez; süresi dolunca senkron "no_refresh" hatası yazar,
+// kullanıcı yeniden bağlar. Community Management ürünü başka ürünle aynı uygulamada olamaz (OpenID yok): kimlik
+// r_basicprofile ile /v2/me'den.
 const PROVIDERS = {
   instagram: {
     id: "INSTAGRAM_CLIENT_ID", secret: "INSTAGRAM_CLIENT_SECRET", refresh: "+7 days",
@@ -78,7 +84,7 @@ const PROVIDERS = {
   linkedin: {
     id: "LINKEDIN_CLIENT_ID", secret: "LINKEDIN_CLIENT_SECRET",
     authorize: "https://www.linkedin.com/oauth/v2/authorization", token: "https://www.linkedin.com/oauth/v2/accessToken",
-    scope: "openid profile email",
+    scope: "r_basicprofile r_member_postAnalytics r_member_profileAnalytics",
   },
 };
 
@@ -108,8 +114,7 @@ export const redirectUri = (env, api, p) => `${String(env?.OAUTH_REDIRECT_BASE |
 // configured: bu rol bu platformu bağlayabilir ve secret'lar tam (METRICS_ENABLED'dan bağımsız).
 // Kaynak social_accounts: "connected" (son senkron hatalıysa "error") ya da "error"; pending/revoked → available.
 // Bağlı satır platform yapılandırılmamış ya da rol artık bağlayamıyor olsa da connected/error döner: kullanıcı
-// bağı koparabilmeli. Bağlı LinkedIn "veri yok" etiketi taşır (metrik yok). Tablo yoksa (0001 uygulanmamış)
-// bağlı satır yoktur.
+// bağı koparabilmeli. Tablo yoksa (0001 uygulanmamış) bağlı satır yoktur.
 export async function listConnections(env, userId, role = "influencer") {
   let rows = new Map();
   if (env?.DB) {
@@ -184,7 +189,7 @@ export const pkceChallenge = async verifier => b64u(new Uint8Array(await crypto.
 // Platform yapılandırılmamış olsa da çalışır; 0002 uygulanmamışsa (oauth_tokens yok) silinecek token yoktur,
 // bağ yine koparılır; 0001 de yoksa yapılacak bir şey yoktur. Ardından sağlayıcıda izin geri alınmaya
 // çalışılır (TikTok, Google); olmazsa yine de bağ kopmuştur. Instagram'ın ve LinkedIn'in iptal ucu yok, kullanıcı
-// izni platformun ayarlarından kaldırır (LinkedIn token'ı zaten saklanmaz).
+// izni platformun ayarlarından kaldırır.
 export async function disconnectOAuth(env, userId, p, f = fetch) {
   let row = null, tokens = true;
   try {
@@ -297,6 +302,8 @@ async function json(f, url, init) {
 }
 const form = obj => ({ method: "POST", headers: { "content-type": "application/x-www-form-urlencoded" }, body: new URLSearchParams(obj) });
 const bearer = token => ({ headers: { authorization: `Bearer ${token}` } });
+// LinkedIn REST (/rest/...) sürümlü: Rest.li 2.0 ve aylık API sürümü başlığı zorunlu
+const liRest = token => ({ headers: { ...bearer(token).headers, "x-restli-protocol-version": "2.0.0", "linkedin-version": LI_VERSION } });
 const igUrl = (path, q) => `${IG_API}/${path}?${new URLSearchParams(q)}`;
 // Sayfalı liste: get(imleç) → {items, next}. İlk sayfanın hatası yukarı çıkar; sonraki sayfa hata verirse o ana kadar
 // gelenler kalır. En çok `max` sayfa ya da enough(liste) doğru olunca durur; aynı kimlik bir kez (sayfalar arasında kayan
@@ -769,11 +776,27 @@ const API = {
       return { reason: "few", views: tot.rows ? num(tot.rows[0]?.views) ?? 0 : null, ...src };
     },
   },
-  // OpenID Connect userinfo: sub uygulamaya özel kalıcı kimlik; ad görünen ad olur. Metrik yok (Community Management).
+  // Kimlik /v2/me (r_basicprofile): id uygulamaya özel kalıcı kimlik, ad + soyad görünen ad. Gönderi listesi yok;
+  // stats: takipçi (memberFollowersCount) ve tüm gönderilerin toplamları (memberCreatorPostAnalytics, aggregation
+  // TOTAL, tarih aralığı yok). Takipçi hatası yukarı çıkar; toplamlar tür başına ayrı istek, gelmeyen tür null,
+  // hiçbiri gelmezse ilkinin hatası yukarı çıkar.
   linkedin: {
     async profile(token, f) {
-      const u = await json(f, "https://api.linkedin.com/v2/userinfo", bearer(token));
-      return { external_id: u.sub, handle: u.name || [u.given_name, u.family_name].filter(v => typeof v === "string").join(" "), followers: null };
+      const u = await json(f, `${LI}/v2/me`, bearer(token));
+      return { external_id: u.id, handle: [u.localizedFirstName, u.localizedLastName].filter(v => typeof v === "string").join(" "), followers: null };
+    },
+    async stats(token, f) {
+      const total = type => json(f, `${LI}/rest/memberCreatorPostAnalytics?${new URLSearchParams({ q: "me", queryType: type, aggregation: "TOTAL" })}`, liRest(token))
+        .then(b => ({ v: whole(b.elements?.[0]?.count) }), err => ({ err }));
+      const [fol, ...tot] = await Promise.all([
+        json(f, `${LI}/rest/memberFollowersCount?q=me`, liRest(token)),
+        ...LI_TOTALS.map(([, type]) => total(type)),
+      ]);
+      if (tot.every(x => x.err)) throw tot[0].err;
+      return {
+        followers: fol.elements?.[0]?.memberFollowersCount,
+        totals: Object.fromEntries(LI_TOTALS.map(([k], i) => [k, tot[i].err ? null : tot[i].v])),
+      };
     },
   },
 };
@@ -801,9 +824,17 @@ export async function fetchProfile(p, token, f = fetch) {
 // posts_recent: bunlardan kaçı son SAMPLE gönderiden (posts'un ilk posts_recent kadarı); audience: kitle dağılımı
 // (Instagram ve YouTube), alınamazsa null (YouTube'da nedeniyle {reason}); ölçümü bozmaz. Instagram ve YouTube
 // gönderileri audience taşır (gönderi başına kitle: izlenme özeti, kaynaklar, kırılım, Instagram insights'ı).
+// LinkedIn'de gönderi listesi ve ortalama yok; totals: tüm gönderilerin toplamları (LI_TOTALS anahtarları).
 export async function fetchMetrics(p, token, f = fetch) {
   if (!SYNCED.includes(p)) throw new ProviderError("no_api");
   const pr = await API[p].profile(token, f);
+  if (API[p].stats) {
+    const st = await API[p].stats(token, f);
+    return {
+      external_id: extId(pr.external_id), handle: cleanHandle(pr.handle), followers: num(st.followers),
+      avg_views: null, avg_likes: null, avg_comments: null, posts_sampled: 0, posts: [], posts_recent: 0, totals: st.totals,
+    };
+  }
   const all = await API[p].recent(token, f, pr), last = all.slice(0, SAMPLE);
   const audience = API[p].audience ? await API[p].audience(token, f, pr, all).catch(() => null) : null;
   return {
@@ -856,11 +887,12 @@ export async function syncAccount(env, userId, p, f = fetch) {
 async function withToken(env, userId, p, f, use) {
   if (!SYNCED.includes(p)) throw new ProviderError("no_api");
   if (!oauthReady(env, p)) throw new ProviderError("not_configured");
+  // Yenilemesi olmayan platformda (LinkedIn) token yalnız süresi dolunca bayat; refreshToken "no_refresh" atar
   const row = await env.DB.prepare(
     `SELECT t.access_token, t.refresh_token, (t.expires_at IS NOT NULL AND t.expires_at <= datetime('now', ?)) AS stale, a.external_id
      FROM oauth_tokens t JOIN social_accounts a ON a.user_id = t.user_id AND a.platform = t.platform AND a.status = 'connected'
      WHERE t.user_id = ? AND t.platform = ?`,
-  ).bind(PROVIDERS[p].refresh, userId, p).first();
+  ).bind(PROVIDERS[p].refresh || "+0 minutes", userId, p).first();
   if (!row) throw new ProviderError("not_connected");
   let cur = row.access_token;
   const mark = (error, handle = null, scopedId = null) => env.DB.prepare(
@@ -996,8 +1028,9 @@ function postWrites(env, a, externalId, leaseAt, posts, recent, edits = true) {
 // En kötü durumda istek sayısı: profil + gönderi sayfaları + yenileme. Instagram: 4 sayfa + alan reddinde tekrar + son 12
 // gönderinin insights'ı + kısa listeyle en çok IG_RETRY tekrar + 8 kitle kırılımı; TikTok: 5 sayfa; YouTube: 4 liste
 // sayfası + 4 video parçası + kanalın 9 raporu (90 gün ve tüm zaman kırılımı, toplam izlenme, en çok izlenen videolar,
-// abonelerin izlenmesi, trafik kaynağı, cihaz) + YT_VIDEO_CALLS video raporu.
-const COST = { instagram: 27 + IG_RETRY, tiktok: 7, youtube: 10 + 9 + YT_VIDEO_CALLS };
+// abonelerin izlenmesi, trafik kaynağı, cihaz) + YT_VIDEO_CALLS video raporu; LinkedIn: kimlik + takipçi + 5 toplam
+// (yenileme, gönderi ve kitle yok).
+const COST = { instagram: 27 + IG_RETRY, tiktok: 7, youtube: 10 + 9 + YT_VIDEO_CALLS, linkedin: 7 };
 const NEXT = { ok: "+1435 minutes", fail: "+355 minutes", changed: "+55 minutes" }; // saatlik cron'da ~1 gün, ~6 saat, ~1 saat
 export const SYNC_MIN = Math.min(...Object.values(COST));
 export const SYNC_D1 = 9; // kira, token, yenileme, son senkron işareti, ölçüm + TikTok'ta ad değişikliği + gönderiler + gönderi ölçümleri + kira bırakma (batch)
@@ -1042,11 +1075,12 @@ export async function syncDue(env, f = fetch, { budget = 40, max = 5, d1 = 50 } 
       // sığmazsa hata (failed, kira 15 dakikada düşer, sonraki saat koşulsuz yazar)
       const [ins] = await batchOr(env, "post_edits", ed => [
         env.DB.prepare(
-          `INSERT INTO metric_snapshots (account_id, source, followers, avg_views, avg_likes, avg_comments, posts_sampled, audience)
-           SELECT id, 'oauth', ?, ?, ?, ?, ?, ? FROM social_accounts
+          `INSERT INTO metric_snapshots (account_id, source, followers, avg_views, avg_likes, avg_comments, posts_sampled, audience,
+             total_impressions, total_reach, total_reactions, total_comments, total_reshares)
+           SELECT id, 'oauth', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? FROM social_accounts
            WHERE id = ? AND status = 'connected' AND external_id = ? AND next_sync_at = ?`,
         ).bind(m.followers, m.avg_views, m.avg_likes, m.avg_comments, m.posts_sampled, m.audience ? JSON.stringify(m.audience) : null,
-          a.id, m.external_id, lease.next_sync_at),
+          ...LI_TOTALS.map(([k]) => m.totals?.[k] ?? null), a.id, m.external_id, lease.next_sync_at),
         ...(posts && a.platform === "tiktok" ? [ttRename(env, a, m.external_id, lease.next_sync_at, posts)] : []),
         ...(posts ? postWrites(env, a, m.external_id, lease.next_sync_at, posts, m.posts_recent, ed) : []),
         release(NEXT.ok),
@@ -1061,6 +1095,10 @@ export async function syncDue(env, f = fetch, { budget = 40, max = 5, d1 = 50 } 
   return out;
 }
 
+// Daha eski gönderi listesi olan senkron platformları (LinkedIn'de gönderi listesi yok); POST /app/posts/older da bununla
+// doğrular, platform reddi istek sınırına sayılmaz
+export const OLDER_SYNCED = SYNCED.filter(p => API[p].older);
+
 // Daha eski gönderiler (panelde "Daha eski gönderileri getir"): senkron her hesaptan en yeni ~200 gönderiyi alır; bu
 // istek bağlı hesabın listesini baştan yürür (TikTok'ta bu hesaptan aktarılmış en eski gönderinin gününden geriye) ve
 // henüz aktarılmamış en çok OLDER gönderiyi (kullanıcının MAX_POSTS sınırına kadar) postWrites ile yazar. Ölçüm ve
@@ -1071,7 +1109,7 @@ export async function syncDue(env, f = fetch, { budget = 40, max = 5, d1 = 50 } 
 // sahiplenir (yeni satır eklemez, sınıra yaklaştırmaz). Dönüş: {added (yeni eklenen ya da sahiplenilen gönderi sayısı),
 // more (listede daha eski var), full (sınıra ulaşıldı)}.
 export async function fetchOlderPosts(env, userId, p, f = fetch) {
-  if (!SYNCED.includes(p)) throw new ProviderError("no_api");
+  if (!OLDER_SYNCED.includes(p)) throw new ProviderError("no_api");
   if (!oauthReady(env, p)) throw new ProviderError("not_configured");
   const acc = await env.DB.prepare(
     `SELECT id, external_id, next_sync_at FROM social_accounts
@@ -1162,7 +1200,8 @@ async function igPostAud(token, f, post, stored) {
 // vade geri konur. Yazım kitle, hesap ve kira değişmediyse olur (yoksa changed). Dönüş: birleşmiş kitle.
 export async function fetchPostAudience(env, userId, post, f = fetch) {
   const p = post.platform;
-  if (!SYNCED.includes(p)) throw new ProviderError("no_api");
+  // postAudSkip'teki gibi yalnız YouTube ve Instagram: SYNCED'deki TikTok ve LinkedIn'in gönderi kitlesi yok
+  if (!["youtube", "instagram"].includes(p)) throw new ProviderError("no_api");
   if (!oauthReady(env, p)) throw new ProviderError("not_configured");
   const acc = await env.DB.prepare(
     `SELECT id, external_id, next_sync_at FROM social_accounts
@@ -1327,7 +1366,7 @@ export async function finishOAuth(env, userId, ticket, f = fetch, role = null) {
     // koparılmışsa) önceki hesabın ölçümleri ve ondan aktarılan gönderiler silinir, link ölçümlerinin hesap bağı
     // kopar; eski hesabın takipçisi ve gönderileri yeni hesapta görünmez. Aynı hesap yeniden bağlanırsa ölçümler
     // kalır. next_sync_at NULL: yeni bağ hemen senkronlanır, süren bir senkronun kirası düşer (syncDue ölçüm yazmaz).
-    // Senkronu olmayan platformda (LinkedIn) token saklanmaz; varsa eski token satırı silinir.
+    // Senkronu olmayan platformda token saklanmaz; varsa eski token satırı silinir.
     const old = `${ACCOUNT} AND (external_id IS NULL OR external_id <> ?)`;
     await env.DB.batch([
       env.DB.prepare(`DELETE FROM post_snaps WHERE post_id IN (SELECT id FROM posts WHERE account_id IN (${old}))`).bind(userId, p, prof.external_id),
