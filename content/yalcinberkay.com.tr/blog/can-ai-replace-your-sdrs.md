@@ -143,7 +143,7 @@ So, can AI replace your SDRs? Not completely, and not yet. It can replace a big 
 
 But the core of the SDR function, starting conversations with strangers, earning a few minutes of their trust, and figuring out whether there's a real opportunity, is still deeply human. The winning approach is to tier your accounts, let AI handle the repetitive work, and reinvest the saved time into the conversations that actually create pipeline.
 
-If you're rethinking your outbound setup or trying to figure out where AI fits in your sales team, I'd be happy to exchange ideas. Feel free to [reach out to me through my site](/) and let's talk.
+If you're rethinking your outbound setup or trying to figure out where AI fits in your sales team, I'd be happy to exchange ideas. Feel free to [reach out to me through my site](/#contact) and let's talk.
 
 ## FAQ
 

@@ -194,4 +194,4 @@ Yes, when it's targeted and personalized. Short, relevant messages sent by the f
 
 Your first 10 B2B customers won't come from a clever growth hack. They come from a narrow ICP, a hand-built list of the right accounts, your warm network, consistent founder-led outreach, honest discovery, and obsessive delivery that turns early buyers into references. Track your numbers, learn from every conversation, and write down what works. That record becomes the playbook your future team will run.
 
-If you're working through this stage right now and want to talk through your ICP, outreach, or first sales hire, feel free to [get in touch with me through my website](/). I'm always happy to hear from founders building in B2B.
+If you're working through this stage right now and want to talk through your ICP, outreach, or first sales hire, feel free to [get in touch with me through my website](/contact). I'm always happy to hear from founders building in B2B.

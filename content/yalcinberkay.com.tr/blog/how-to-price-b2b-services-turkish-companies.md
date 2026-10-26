@@ -165,7 +165,7 @@ Pricing B2B services for Turkish companies is not about finding one perfect numb
 
 Most importantly, revisit your pricing regularly. In this market, what worked last year probably needs adjusting this year.
 
-If you are building a service business in Turkey and want to talk through pricing, packaging, or how to structure your first proposals, feel free to [get in touch with me through my website](/). I am always happy to exchange notes with fellow founders.
+If you are building a service business in Turkey and want to talk through pricing, packaging, or how to structure your first proposals, feel free to [get in touch with me through my website](/contact). I am always happy to exchange notes with fellow founders.
 
 ## FAQ
 

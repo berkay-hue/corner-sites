@@ -232,7 +232,7 @@ Building an outbound sales team from scratch comes down to sequencing the right 
 
 None of this is glamorous, but it compounds. A team built this way gets better every quarter, because every call, reply and lost deal feeds back into the system.
 
-If you're building your first outbound team, or rebuilding one that hasn't delivered, I'm always happy to compare notes. Feel free to reach out through [my homepage](/) and tell me where you are in the process.
+If you're building your first outbound team, or rebuilding one that hasn't delivered, I'm always happy to compare notes. Feel free to reach out through [my homepage](/#contact) and tell me where you are in the process.
 
 ## FAQ
 
