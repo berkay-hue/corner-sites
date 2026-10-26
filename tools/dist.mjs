@@ -16,8 +16,15 @@ await mkdir(OUT, { recursive: true });
 // wishceo sayilar/NNN.json: app.js ISSUES'taki açılış tarihi bugünden (Türkiye saati, app.js todayTR gibi) ileri olan sayı yayına çıkmaz;
 // hiç açılmış sayı yoksa en yeni JSON kopyalanır
 const ISSUE_DATES = new Map([...(await readFile(join(SRC, "app.js"), "utf8").catch(() => "")).matchAll(/no:\s*"(\d+)",\s*date:\s*"(\d{4}-\d{2}-\d{2})"/g)].map(m => [m[1], m[2]]));
-const trDate = Object.fromEntries(new Intl.DateTimeFormat("en-US", { timeZone: "Europe/Istanbul", year: "numeric", month: "2-digit", day: "2-digit" }).formatToParts(new Date()).map(p => [p.type, p.value]));
-const today = `${trDate.year}-${trDate.month}-${trDate.day}`;
+// Intl/saat dilimi verisi yoksa ya da beklenmedik parça dönerse app.js todayTR gibi UTC+3 (Türkiye 2016'dan beri yaz saati uygulamıyor)
+const today = (() => {
+  try {
+    const p = Object.fromEntries(new Intl.DateTimeFormat("en-US", { timeZone: "Europe/Istanbul", year: "numeric", month: "2-digit", day: "2-digit" }).formatToParts(new Date()).map(x => [x.type, x.value]));
+    const d = `${p.year}-${p.month}-${p.day}`;
+    if (/^\d{4}-\d{2}-\d{2}$/.test(d)) return d;
+  } catch {}
+  return new Date(Date.now() + 3 * 36e5).toISOString().slice(0, 10);
+})();
 const issueFiles = (await readdir(join(SRC, "sayilar")).catch(() => [])).filter(n => /^\d+\.json$/.test(n)).sort();
 let liveIssues = new Set(issueFiles.filter(n => (ISSUE_DATES.get(n.replace(".json", "")) || "9999") <= today));
 if (issueFiles.length && !liveIssues.size) liveIssues = new Set(issueFiles.slice(-1));
