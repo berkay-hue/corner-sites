@@ -171,4 +171,4 @@ Yes, but founders often struggle to stop stepping in themselves because they kno
 
 Coaching sales reps without micromanaging them comes down to a few decisions: agree on a clear scoreboard, inspect work on a fixed schedule instead of constantly, focus on one skill at a time, and adjust autonomy based on each rep's experience and results. When reps know what good looks like and when they will be reviewed, they stop feeling watched and start feeling supported. Managers get the same benefit: less chasing, more time for the conversations that actually move deals.
 
-If you are building or scaling a sales team and want to talk through your coaching setup, pipeline rhythm or outbound strategy, feel free to [get in touch with me here](/). I am always happy to exchange ideas with founders and sales leaders.
+If you are building or scaling a sales team and want to talk through your coaching setup, pipeline rhythm or outbound strategy, feel free to [get in touch with me here](/contact). I am always happy to exchange ideas with founders and sales leaders.

@@ -153,7 +153,7 @@ The right time to hire your first sales rep isn't when you're tired of selling. 
 
 So keep selling until the patterns are clear. Then document everything, do the math honestly, and hire a builder rather than a manager. Stay close for the first 90 days. Get those pieces right, and your first sales hire can become the foundation of a real sales team.
 
-If you're weighing this decision right now and want to compare notes, I'd be happy to hear from you. You can learn more about me and get in touch through [my personal site](/).
+If you're weighing this decision right now and want to compare notes, I'd be happy to hear from you. You can learn more about me and get in touch through [my personal site](/#contact).
 
 ## FAQ
 

@@ -164,4 +164,4 @@ Price objections are not the end of a B2B deal. Usually they're a sign the buyer
 
 If you build these habits into your playbook and coach them every week, price stops being the scariest moment in the sales call and becomes another part of the conversation.
 
-If you're working on your team's sales process, struggling with discounting, or selling B2B services in Turkey and want to compare notes, [get in touch with me here](/). I'm always happy to talk sales.
+If you're working on your team's sales process, struggling with discounting, or selling B2B services in Turkey and want to compare notes, [get in touch with me here](/contact). I'm always happy to talk sales.

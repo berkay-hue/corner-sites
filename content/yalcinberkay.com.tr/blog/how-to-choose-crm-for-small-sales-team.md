@@ -222,7 +222,7 @@ The right CRM for a small sales team isn't the one with the most features. It's 
 
 A well-set-up CRM can make a small team work as methodically as a big one. A badly chosen CRM drains the energy of even the most talented reps. The healthiest path is to make this decision in a structured way, without rushing it but without putting it off forever either.
 
-If you'd like to exchange ideas on choosing a CRM for your team, setting it up, or structuring your sales operations, you can get in touch with me through [my personal site](/). I'm happy to share my experience.
+If you'd like to exchange ideas on choosing a CRM for your team, setting it up, or structuring your sales operations, you can get in touch with me through [my personal site](/#contact). I'm happy to share my experience.
 
 ## FAQ
 

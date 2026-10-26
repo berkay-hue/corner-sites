@@ -193,4 +193,4 @@ A sales rep in Turkey costs far more than the number on their payslip. Once you 
 
 None of this means you should not hire. A good rep is one of the best investments a B2B company can make. But it should be a funded, deliberate investment with a clear break-even target, not a hopeful bet based on a monthly salary figure.
 
-If you are planning your first sales hire, or weighing in-house versus outsourced sales for the Turkish market, I am happy to share what has worked for us. [Get in touch with me here](/) and let's talk it through.
+If you are planning your first sales hire, or weighing in-house versus outsourced sales for the Turkish market, I am happy to share what has worked for us. [Get in touch with me here](/contact) and let's talk it through.

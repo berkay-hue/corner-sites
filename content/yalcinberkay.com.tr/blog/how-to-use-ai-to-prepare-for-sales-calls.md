@@ -168,4 +168,4 @@ It's especially useful for junior reps, because it gives them a structured way t
 
 Preparing for sales calls with AI isn't about producing more information. It's about producing the right information faster. Gather solid inputs, build a short company and stakeholder brief, form clear pain hypotheses, sharpen your discovery questions, rehearse objections, and always define the next step. Done well, this takes 10–15 minutes and makes every call feel more focused and more human.
 
-The reps who win with AI aren't the ones who automate the most. They use the time they save to listen better. If you're building an outbound team and want to make AI-supported prep part of how your reps work, feel free to [get in touch with me](/). I'm always happy to compare notes.
+The reps who win with AI aren't the ones who automate the most. They use the time they save to listen better. If you're building an outbound team and want to make AI-supported prep part of how your reps work, feel free to [get in touch with me](/contact). I'm always happy to compare notes.
