@@ -8,6 +8,9 @@ on:
   workflow_dispatch:
     inputs:
       host: { description: "Site (örn. cornergroup.co)", required: true, default: "cornergroup.co" }
+  # wishceo haftalık sayısı pazartesi 00:00 TR'de açılır: Pazar 21:05 UTC'de yalnız wishceo'yu yeniden yükle
+  schedule:
+    - cron: "5 21 * * 0"
 concurrency: { group: "blog-deploy-${{ inputs.host || github.ref }}", cancel-in-progress: false }
 # actions: read — son başarılı deploy run'ını bulmak için (aşağıda)
 permissions: { contents: read, actions: read }
@@ -25,6 +28,8 @@ jobs:
         id: hosts
         env: { BEFORE: "${{ github.event.before }}", GH_TOKEN: "${{ github.token }}" }
         run: |
+          # Zamanlı run (wishceo haftalık sayı): yalnız wishceo.com; aşağıdaki diff son commit'in sitelerini seçerdi
+          if [ "${{ github.event_name }}" = "schedule" ]; then echo "list=wishceo.com" >> "$GITHUB_OUTPUT"; exit 0; fi
           if [ -n "${{ inputs.host }}" ]; then echo "list=${{ inputs.host }}" >> "$GITHUB_OUTPUT"; exit 0; fi
           # Push birden çok commit getirebilir: aralık before..sha. before sıfırsa (yeni dal) ya da geçmişte yoksa (force push) HEAD~1
           base=HEAD~1
