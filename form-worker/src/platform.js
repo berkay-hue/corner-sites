@@ -6,7 +6,7 @@
 // Şifre sıfırlama: tek kullanımlık, RESET_MINUTES geçerli link; e-posta Gmail SMTP ile (src/smtp.js, SMTP_USER hesabından).
 // MAIL binding'i yalnızca MAIL_TO adresine gönderebildiği için o kullanılmaz.
 
-import { OAUTH, SYNCED, LISTED, CONNECTABLE, oauthReady, listConnections, startOAuth, finishOAuth, disconnectOAuth, OAuthFail, returnBase, fetchOlderPosts, ProviderError } from "./oauth.js";
+import { OAUTH, SYNCED, LISTED, CONNECTABLE, oauthReady, listConnections, startOAuth, finishOAuth, disconnectOAuth, OAuthFail, returnBase, fetchOlderPosts, ProviderError, fetchPostAudience, postAudSkip } from "./oauth.js";
 import { smtpReady, smtpSend, smtpFrom } from "./smtp.js";
 import { metricsEnabled, accountMetrics, linkMetrics, parseAudience } from "./metrics.js";
 import { NICHE_LIST } from "./classify.js";
@@ -271,6 +271,7 @@ const APP = {
   "POST posts/manual": c => manualPost(c),
   "POST posts/import": c => importPosts(c),
   "POST posts/older": c => olderPosts(c),
+  "POST posts/:id/audience": (c, id) => postAudience(c, id),
 };
 
 const isOwnerRole = u => u.role === "brand" || u.role === "agency";
@@ -633,7 +634,13 @@ async function putNotify(c) {
 
 // ---- sosyal metrikler (src/metrics.js) ----
 
-const metrics = async (c, u) => ok(c, { metrics: await accountMetrics(c.env, u.id, JSON.parse(u.profile || "{}")) });
+// Markaya giden ölçümde gönderi kitlesi ve kanal kaynakları yok (yalnız içerik üreticisinin kendi panelinde)
+const OWN_AUD = ["watch", "sources", "demo", "unlisted", "ig", "comments_off", "mid"];
+const forBrand = m => Array.isArray(m?.accounts) ? { ...m, accounts: m.accounts.map(a => a?.audience ? { ...a, audience: Object.fromEntries(Object.entries(a.audience).filter(([k]) => !OWN_AUD.includes(k))) } : a) } : m;
+const metrics = async (c, u, brand = false) => {
+  const m = await accountMetrics(c.env, u.id, JSON.parse(u.profile || "{}"));
+  return ok(c, { metrics: brand ? forBrand(m) : m });
+};
 
 // Marka/ajans: listelenen ya da kendi kampanyasına başvurmuş/davet edilmiş influencer'ın metrikleri
 async function influencerMetrics(c, id) {
@@ -644,7 +651,7 @@ async function influencerMetrics(c, id) {
     ? await env.DB.prepare("SELECT 1 FROM applications a JOIN campaigns c ON c.id = a.campaign_id WHERE a.user_id = ? AND c.owner_id = ? LIMIT 1").bind(id, user.id).first()
     : true;
   need(inf && linked, "not_found", 404);
-  return metrics(c, inf);
+  return metrics(c, inf, true);
 }
 
 // İşbirliği içerik linkinin metrikleri: kampanya sahibi ya da başvuran görür
@@ -801,9 +808,9 @@ async function postRows(env, uid, where = "", args = []) {
 }
 
 // Bayrak kapalıysa 404 (panel tarayıcı kaydına düşer); tablo (0006) ya da kitle sütunu (0010) yoksa 503
-const postsRoute = fn => async c => {
+const postsRoute = fn => async (c, id) => {
   need(postsEnabled(c.env), "not_found", 404);
-  try { return await fn(c); } catch (e) { if (/no such (table|column)/i.test(String(e && e.message))) throw new Bad("not_ready", 503); throw e; }
+  try { return await fn(c, id); } catch (e) { if (/no such (table|column)/i.test(String(e && e.message))) throw new Bad("not_ready", 503); throw e; }
 };
 
 const postCount = async (env, uid) => (await env.DB.prepare("SELECT COUNT(*) AS n FROM posts WHERE user_id = ?").bind(uid).first()).n;
@@ -864,4 +871,23 @@ const olderPosts = postsRoute(async c => {
     throw new Bad(code, status);
   }
   return ok(c, r);
+});
+
+// Gövde: {}. Gönderinin kendi kitlesini sağlayıcıdan tazeler (oauth.js fetchPostAudience); taze, desteklenmeyen ya da yeni
+// gönderide çağrı yapılmaz. Saatte POST_AUD_RATE istek. Dönüş: {audience, fetched, reason?}; sağlayıcı hatasında da 200 (kayıtlı kitle)
+const POST_AUD_RATE = 40;
+const POST_AUD_FAIL = { busy: "busy", changed: "busy", not_connected: "not_connected", account_changed: "not_connected", not_configured: "not_connected", no_api: "not_connected" };
+const postAudience = postsRoute(async (c, id) => {
+  const { env, user } = c;
+  need(ROLES.includes(user.role));
+  need(metricsEnabled(env), "disabled", 409);
+  need(Number.isInteger(id) && id > 0, "not_found", 404);
+  const post = await env.DB.prepare("SELECT id, url, platform, type, date, account_id, audience FROM posts WHERE id = ? AND user_id = ?").bind(id, user.id).first();
+  need(post, "not_found", 404);
+  const audience = parseAudience(post.audience), skip = postAudSkip(post, audience);
+  if (skip) return ok(c, { audience, fetched: false, reason: skip });
+  if (await attempts(env, "post_aud", "email", user.email, 60, false) >= POST_AUD_RATE) throw new Bad("rate", 429);
+  await attempt(env, c.ip, user.email, "post_aud", 1);
+  try { return ok(c, { audience: await fetchPostAudience(env, user.id, post), fetched: true }); }
+  catch (e) { if (!(e instanceof ProviderError)) throw e; return ok(c, { audience, fetched: false, reason: POST_AUD_FAIL[e.code] || "upstream" }); }
 });

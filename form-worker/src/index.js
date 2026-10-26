@@ -71,9 +71,9 @@ export default {
     try { await ytRetention(env); } catch (e) { console.log("retention", e?.message?.slice(0, 80)); }
     // Günlük metrik senkronu (src/oauth.js syncDue), METRICS_ENABLED "1" ise. Ücretsiz plan çağrı başına 50 alt
     // istek ve 50 D1 sorgusu veriyor; gönderilen her e-postayı bir istek sayıp kalanı senkrona bırakıyoruz. D1'de
-    // bekleyen listesi (1), e-posta başına işaret (1), cleanup (4 ifade) ve YouTube saklama (3 ifade) düşülür.
+    // bekleyen listesi (1), e-posta başına işaret (1), cleanup (4 ifade) ve YouTube saklama (5 ifade) düşülür.
     if (metricsEnabled(env)) {
-      const d1 = 50 - 1 - results.length - 4 - 3;
+      const d1 = 50 - 1 - results.length - 4 - 5;
       try { await syncDue(env, fetch, { budget: 40 - results.length, d1 }); } catch (e) { console.log("sync", e?.message?.slice(0, 80)); }
     }
   },
