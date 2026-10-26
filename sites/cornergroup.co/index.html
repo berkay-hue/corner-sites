@@ -140,6 +140,7 @@
                 @keyframes pulse { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:.6; transform:scale(1.1); } }
                 @keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
                 @keyframes shine { 0% { background-position:-200% center; } 100% { background-position:200% center; } }
+                [data-cg-car] + div { gap: 0 !important; } [data-cg-car] + div > button { position: relative; box-sizing: content-box; padding: 8.5px; margin: -8.5px 0; background-clip: content-box !important; border-radius: 12.5px !important; } [data-cg-car] + div > button::before { content: ""; position: absolute; inset: 0; } [data-cg-car="d"] + div > button { padding: 8px; margin: -8px 0; border-radius: 12px !important; } .cg-lang a { min-height: 24px; display: inline-flex; align-items: center; }
                 @keyframes slideIn { from { opacity:0; transform:translateY(30px); } to { opacity:1; transform:translateY(0); } }
                 @keyframes spin { to { transform: rotate(360deg); } }
                 @keyframes indProg { from { width:0%; } to { width:100%; } }
