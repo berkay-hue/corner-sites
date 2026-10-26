@@ -11,7 +11,8 @@ on:
   # wishceo haftalık sayısı pazartesi 00:00 TR'de açılır: Pazar 21:05 UTC'de yalnız wishceo'yu yeniden yükle (GitHub zamanlı run'ı bu repoda saatlerce geç başlatabiliyor; sayı ilk wishceo build'inde açılır)
   schedule:
     - cron: "5 21 * * 0"
-concurrency: { group: "blog-deploy-${{ inputs.host || github.ref }}", cancel-in-progress: false }
+# Zamanlı run wishceo dispatch'leriyle aynı grupta bekler: arkasından gelen push onu iptal edemez (iptal ederse sayı bir sonraki wishceo build'ine kalırdı)
+concurrency: { group: "blog-deploy-${{ inputs.host || (github.event_name == 'schedule' && 'wishceo.com') || github.ref }}", cancel-in-progress: false }
 # actions: read — son başarılı deploy run'ını bulmak için (aşağıda)
 permissions: { contents: read, actions: read }
 jobs:
