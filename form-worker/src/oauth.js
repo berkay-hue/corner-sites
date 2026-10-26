@@ -466,28 +466,31 @@ async function ytVideo(f, token, id, from, to, at, unlisted) {
   }
   return a;
 }
-// Instagram gönderi insights'ı: türüne göre ölçüm listesi (hikâyede çağrı yok). Liste reddedilirse (400) o gönderi bir
-// kez IG_SHORT ile istenir ve tür senkron boyunca kısa listede kalır (en çok IG_RETRY tekrar). Alınamayan gönderi {}.
-const IG_INS = {
+// Instagram gönderi insights'ı: türüne göre ölçüm listesi (hikâyede çağrı yok). Basamaklar: yeni ölçümlü liste (IG_INS) →
+// reposts/reels_skip_rate'siz temel liste (IG_BASE) → IG_SHORT. Basamak reddedilirse (400) o gönderi bir alttakiyle yeniden istenir
+// ve tür senkron boyunca alt basamakta kalır (her tekrar ortak bütçeden, en çok IG_RETRY: 2 tür × 2 basamak). Alınamayan gönderi {}.
+const IG_BASE = {
   FEED: "reach,views,likes,comments,saved,shares,total_interactions,follows,profile_visits",
   REELS: "reach,views,likes,comments,saved,shares,total_interactions,ig_reels_avg_watch_time,ig_reels_video_view_total_time",
 };
-const IG_SHORT = "views,reach", IG_RETRY = 2;
+const IG_INS = { FEED: `${IG_BASE.FEED},reposts`, REELS: `${IG_BASE.REELS},reposts,reels_skip_rate` };
+const IG_SHORT = "views,reach", IG_RETRY = 4;
+const IG_STEPS = Object.fromEntries(Object.keys(IG_INS).map(k => [k, [IG_INS[k], IG_BASE[k], IG_SHORT]]));
 // Gönderi kitlesi (audience.ig): insights adı → kayıt adı
 const IG_AUD = { reach: "reach", views: "views", saved: "saved", shares: "shares", follows: "follows", profile_visits: "profile_visits",
-  total_interactions: "interactions", ig_reels_avg_watch_time: "avg_watch_ms", ig_reels_video_view_total_time: "watch_ms" };
+  total_interactions: "interactions", ig_reels_avg_watch_time: "avg_watch_ms", ig_reels_video_view_total_time: "watch_ms", reposts: "reposts" };
 const igKind = m => m.media_product_type === "REELS" ? "REELS" : m.media_product_type === "STORY" ? null : "FEED";
 async function igInsights(token, f, list) {
   const get = (m, metric) => json(f, igUrl(`${m.id}/insights`, { metric, access_token: token }))
     .then(b => Object.fromEntries((Array.isArray(b.data) ? b.data : []).map(d => [d?.name, d?.total_value?.value ?? d?.values?.[0]?.value ?? null])));
-  const short = new Set();
+  const lvl = { FEED: 0, REELS: 0 };
   let retries = IG_RETRY;
   const one = async (m, kind) => {
-    const rich = !short.has(kind);
-    try { return await get(m, rich ? IG_INS[kind] : IG_SHORT); } catch (e) {
-      if (!rich || retries <= 0 || !(e instanceof ProviderError && e.code.startsWith("400:"))) return {};
-      short.add(kind); retries--;
-      return get(m, IG_SHORT).catch(() => ({}));
+    for (let i = lvl[kind]; ; i++) {
+      try { return await get(m, IG_STEPS[kind][i]); } catch (e) {
+        if (!IG_STEPS[kind][i + 1] || retries <= 0 || !(e instanceof ProviderError && e.code.startsWith("400:"))) return {};
+        lvl[kind] = Math.max(lvl[kind], i + 1); retries--;
+      }
     }
   };
   const out = list.map(() => ({}));
@@ -527,7 +530,10 @@ function igItem(m, n = {}) {
   const it = num(n.views) === 0 && num(n.reach) > 0 ? { ...n, views: null } : n;
   const post = igPost(mm, it);
   if (post) {
-    const ig = Object.fromEntries(Object.entries(IG_AUD).map(([k, to]) => [to, whole(it[k])]).filter(([, v]) => v !== null));
+    // Geçme oranı (ilk 3 sn) yüzde: kesirli olabilir, 0–100 dışı atılır, tek ondalığa yuvarlanır
+    const skip = num(it.reels_skip_rate);
+    const ig = Object.fromEntries([...Object.entries(IG_AUD).map(([k, to]) => [to, whole(it[k])]),
+      ["skip_pct", skip !== null && skip <= 100 ? Math.round(skip * 10) / 10 : null]].filter(([, v]) => v !== null));
     post.audience = { ...(off === null ? {} : { comments_off: off }), ...(typeof m.id === "string" ? { mid: m.id } : {}),
       ...(Object.keys(ig).length ? { ig: { at: day(0), ...ig } } : {}) };
   }
@@ -994,7 +1000,7 @@ function postWrites(env, a, externalId, leaseAt, posts, recent, edits = true) {
 // bağlanınca kira düşer (finishOAuth next_sync_at'i NULL yapar), eski hesabın ölçümü yeni hesaba yazılmaz.
 // POSTS_ENABLED "1" ise gönderiler (fetchMetrics posts) aynı koşullarla ve aynı batch'te posts/post_snaps'e yazılır.
 // En kötü durumda istek sayısı: profil + gönderi sayfaları + yenileme. Instagram: 4 sayfa + alan reddinde tekrar + son 12
-// gönderinin insights'ı + kısa listeyle en çok IG_RETRY tekrar + 8 kitle kırılımı; TikTok: 5 sayfa; YouTube: 4 liste
+// gönderinin insights'ı + alt basamaklarla en çok IG_RETRY tekrar + 8 kitle kırılımı; TikTok: 5 sayfa; YouTube: 4 liste
 // sayfası + 4 video parçası + kanalın 9 raporu (90 gün ve tüm zaman kırılımı, toplam izlenme, en çok izlenen videolar,
 // abonelerin izlenmesi, trafik kaynağı, cihaz) + YT_VIDEO_CALLS video raporu.
 const COST = { instagram: 27 + IG_RETRY, tiktok: 7, youtube: 10 + 9 + YT_VIDEO_CALLS };

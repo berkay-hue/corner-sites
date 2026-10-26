@@ -135,6 +135,8 @@ const IG_POSTS = [
 ];
 const IG_FEED = "reach,views,likes,comments,saved,shares,total_interactions,follows,profile_visits";
 const IG_REELS = "reach,views,likes,comments,saved,shares,total_interactions,ig_reels_avg_watch_time,ig_reels_video_view_total_time";
+// İlk basamak: yeni ölçümlü listeler (IG_FEED ve IG_REELS ikinci basamak, temel liste)
+const IG_FEED_X = `${IG_FEED},reposts`, IG_REELS_X = `${IG_REELS},reposts,reels_skip_rate`;
 // Gönderi kitlesi: medya kimliği ve gelen insights (bugün); m5'in insights'ı alınamadı
 const IG_OUT = () => {
   const at = new Date().toISOString().slice(0, 10);
@@ -296,10 +298,11 @@ test("metrikler: takipçi ve son gönderilerin ortalamaları; gizli değer ortal
   assert.deepEqual(igp.posts, IG_OUT());
   assert.deepEqual([igp.avg_views, igp.avg_likes, igp.avg_comments, igp.posts_sampled], [1113, 42, 2, 6]);
   assert.match(new URL(igf.calls[1].url).searchParams.get("fields"), /\bpermalink\b.*\btimestamp\b.*\bthumbnail_url\b/);
-  // insights türüne göre (gönderi, reel); reddeden (400) m5 ve m6 bir kez kısa listeyle (en çok 2 tekrar)
+  // insights türüne göre (gönderi, reel) yeni ölçümlerle; reddeden (400) m5 ve m6 temel, sonra kısa listeyle (4 tekrar)
   assert.deepEqual(igf.calls.filter(c => c.url.includes("/insights?") && !c.url.startsWith(`${IGV}/me/`))
     .map(c => `${new URL(c.url).pathname.split("/")[2]} ${new URL(c.url).searchParams.get("metric")}`).sort(),
-  [`m1 ${IG_FEED}`, `m2 ${IG_REELS}`, `m3 ${IG_FEED}`, `m4 ${IG_FEED}`, `m5 ${IG_FEED}`, "m5 views,reach", `m6 ${IG_FEED}`, "m6 views,reach"]);
+  [`m1 ${IG_FEED_X}`, `m2 ${IG_REELS_X}`, `m3 ${IG_FEED_X}`, `m4 ${IG_FEED_X}`, `m5 ${IG_FEED}`, `m5 ${IG_FEED_X}`, "m5 views,reach",
+    `m6 ${IG_FEED}`, `m6 ${IG_FEED_X}`, "m6 views,reach"]);
 
   const ttf = fakeFetch(ttRoutes());
   assert.deepEqual(await fetchMetrics("tiktok", "tt-token", ttf),
@@ -1485,7 +1488,7 @@ test("syncDue: en fazla max hesap, bütçeyi aşan platform sonraki saate kalır
   await seed(db, env, a.id, "instagram", "1784");
   await seed(db, env, a.id, "tiktok", "tt-1");
   await seed(db, env, b.id, "tiktok", "tt-2");
-  // Bütçe 7: Instagram (29) sığmaz, ilk TikTok (7) sığar, ikinci TikTok bütçeyi aşar
+  // Bütçe 7: Instagram (31) sığmaz, ilk TikTok (7) sığar, ikinci TikTok bütçeyi aşar
   const f = fakeFetch(ttRoutes());
   assert.deepEqual(await syncDue(env, f, { budget: 7 }), { ...ZERO, synced: 1, deferred: 2 });
   assert.equal(f.calls.some(c => c.url.includes("instagram")), false);
@@ -1505,24 +1508,40 @@ test("syncDue: en fazla max hesap, bütçeyi aşan platform sonraki saate kalır
   assert.equal(h.calls.length, 0);
 });
 
-test("syncDue: Instagram'ın en kötü yolu (yenileme + alan reddinde tekrar + 4 sayfa + 12 insights + 2 insights tekrarı + 8 kitle kırılımı) bütçe payına sığar", async t => {
+test("syncDue: Instagram'ın en kötü yolu (yenileme + alan reddinde tekrar + 4 sayfa + 12 insights + 4 insights tekrarı + 8 kitle kırılımı) bütçe payına sığar", async t => {
   t.mock.method(console, "log", () => {});
   const { db, env, join } = await setup({ ...IG_ENV, OAUTH_TOKEN_KEY: KEY });
   const a = await join("influencer", "a@x.co");
   await seed(db, env, a.id, "instagram", "1784"); // token 7 günden kısa: yenilenir
-  // Tekler reel: iki türün de zengin listesi reddedilir (400), ikisi de bir kez views,reach ile tekrar sorulur
+  // Tekler reel: iki türün de yeni ve temel listesi reddedilir (400); ikisinin ilki iki basamak inip views,reach ile
+  // sorulur, kalanlar doğrudan views,reach ile
   const pages = [span(0, 13, i => ({ ...igm(i), ...(i % 2 ? { media_product_type: "REELS" } : {}) })), span(13, 20, igm), span(20, 30, igm), span(30, 40, igm), span(40, 50, igm)];
   const ins = [`${IGV}/n`, u => new URL(u).searchParams.get("metric") === "views,reach" ? [200, { data: [] }]
     : [400, { error: { message: "unsupported", type: "OAuthException", code: 100 } }]];
   const f = fakeFetch(igRoutes([IG_REFRESH, ins, igPages(pages, 400)]));
-  assert.deepEqual(await syncDue(env, f, { budget: 28 }), { ...ZERO, deferred: 1 });
+  assert.deepEqual(await syncDue(env, f, { budget: 30 }), { ...ZERO, deferred: 1 });
   assert.equal(f.calls.length, 0);
-  assert.deepEqual(await syncDue(env, f, { budget: 29 }), { ...ZERO, synced: 1 });
+  assert.deepEqual(await syncDue(env, f, { budget: 31 }), { ...ZERO, synced: 1 });
   assert.ok(f.calls.some(c => c.url.startsWith(IG_REFRESH[0])), "yenileme yapıldı");
   assert.equal(lists(f).length, 5);
   assert.equal(f.calls.filter(c => c.url.startsWith(`${IGV}/me/insights?`)).length, 8);
-  assert.equal(f.calls.filter(c => c.url.startsWith(`${IGV}/n`)).length, 14);
-  assert.equal(f.calls.length, 29);
+  assert.equal(f.calls.filter(c => c.url.startsWith(`${IGV}/n`)).length, 16);
+  assert.equal(f.calls.length, 31);
+});
+
+test("syncDue: cron bütçesi (40 − bekleyen e-posta): Instagram (31) ve TikTok (7) 38'e birlikte sığar, Instagram ile YouTube (35) sığmaz", async t => {
+  t.mock.method(console, "log", () => {});
+  const { db, env, join } = await setup({ ...IG_ENV, ...YT_ENV, ...TT_ENV, OAUTH_TOKEN_KEY: KEY });
+  const a = await join("influencer", "a@x.co");
+  await seed(db, env, a.id, "instagram", "1784");
+  await seed(db, env, a.id, "youtube", "UC1");
+  await seed(db, env, a.id, "tiktok", "tt-1");
+  const f = fakeFetch(ttRoutes(igRoutes([IG_REFRESH])));
+  assert.deepEqual(await syncDue(env, f, { budget: 38 }), { ...ZERO, synced: 2, deferred: 1 });
+  assert.equal(f.calls.some(c => c.url.includes("googleapis")), false);
+  near(due(db, a.id, "instagram"), 1435);
+  near(due(db, a.id), 1435);
+  assert.equal(due(db, a.id, "youtube"), null);
 });
 
 test("syncDue: TikTok'un (yenileme + 5 sayfa) ve YouTube'un (yenileme + 4 liste sayfası + 4 video parçası + 90 gün ve tüm zaman için 2'şer kanal kitle raporu + toplam izlenme + üst videolar, aboneler, kanal trafik ve cihaz raporu + 8 videonun 2'şer raporu) en kötü yolu bütçe payına sığar", async t => {
@@ -2814,7 +2833,7 @@ test("kitle: YouTube'da alınamayan rapor yalnız kendi anahtarını eksik bıra
   assert.deepEqual(aud(full), part);
 });
 
-test("metrikler: Instagram insights reddi türler arasında en çok 2 kez kısa listeyle tekrarlanır; hikâyeye sorulmaz; yorumu kapalı gönderinin 0 yorumu ölçülmemiş, açık ve sayısı gelmeyeninki insights'tan", async t => {
+test("metrikler: Instagram insights reddi türler arasında en çok 4 kez alt basamakla tekrarlanır; hikâyeye sorulmaz; yorumu kapalı gönderinin 0 yorumu ölçülmemiş, açık ve sayısı gelmeyeninki insights'tan", async t => {
   t.mock.method(console, "log", () => {});
   const IG_V = { views: 100, reach: 50, comments: 7, saved: 3, total_interactions: 20, follows: 1, profile_visits: 2,
     ig_reels_avg_watch_time: 1500, ig_reels_video_view_total_time: 90000 };
@@ -2835,9 +2854,11 @@ test("metrikler: Instagram insights reddi türler arasında en çok 2 kez kısa 
   const reel = id => ({ id, like_count: 10, comments_count: 1, timestamp: ts, permalink: `https://www.instagram.com/reel/${id.toUpperCase()}/`, media_type: "VIDEO", media_product_type: "REELS" });
   const one = await run([feed("f0", { is_comment_enabled: true }), feed("f1", { is_comment_enabled: false, comments_count: 0 }), feed("f2", { comments_count: 1 }),
     feed("f3", { is_comment_enabled: true, comments_count: 2 }), reel("r0"), { id: "s1", like_count: 10, timestamp: ts, media_type: "IMAGE", media_product_type: "STORY" }], ["f1", "f2", "f3"]);
-  assert.deepEqual(one.calls.filter(c => !c.endsWith(" views,reach")), [...["f0", "f1", "f2", "f3"].map(id => `${id} ${IG_FEED}`), `r0 ${IG_REELS}`]);
+  // Reddeden üç gönderi temel listeyle tekrar sorulur (3 tekrar), kalan tek tekrarla biri kısa listeye iner
+  assert.deepEqual(one.calls.filter(c => !c.endsWith(" views,reach")),
+    [`f0 ${IG_FEED_X}`, ...["f1", "f2", "f3"].flatMap(id => [`${id} ${IG_FEED}`, `${id} ${IG_FEED_X}`]), `r0 ${IG_REELS_X}`]);
   const retried = one.calls.filter(c => c.endsWith(" views,reach"));
-  assert.equal(retried.length, 2);
+  assert.equal(retried.length, 1);
   assert.ok(retried.every(c => /^f[123] /.test(c)), retried.join());
   const post = id => one.posts.find(p => p.url.includes(`/${id.toUpperCase()}/`));
   assert.equal(one.posts.length, 5);
@@ -2846,12 +2867,77 @@ test("metrikler: Instagram insights reddi türler arasında en çok 2 kez kısa 
   assert.deepEqual([post("f1").comments, post("f1").audience.comments_off], [null, true]);
   assert.equal("comments_off" in post("f2").audience, false);
   assert.deepEqual([post("f3").comments, post("f3").audience.comments_off], [2, false]);
-  assert.deepEqual(["f1", "f2", "f3"].map(id => post(id).audience.ig).filter(Boolean), [short, short]);
+  assert.deepEqual(["f1", "f2", "f3"].map(id => post(id).audience.ig).filter(Boolean), [short]);
   assert.deepEqual(post("r0").audience, { mid: "r0", ig: { at, reach: 50, views: 100, saved: 3, interactions: 20, avg_watch_ms: 1500, watch_ms: 90000 } });
-  // İlk reel reddedilirse kalanlar doğrudan kısa listeyle sorulur
+  // İlk reel iki basamakta da reddedilirse kalanlar doğrudan kısa listeyle sorulur
   const reels = await run(["r0", "r1", "r2"].map(reel), ["r0", "r1", "r2"]);
-  assert.deepEqual(reels.calls, [`r0 ${IG_REELS}`, "r0 views,reach", "r1 views,reach", "r2 views,reach"]);
+  assert.deepEqual(reels.calls, [`r0 ${IG_REELS}`, `r0 ${IG_REELS_X}`, "r0 views,reach", "r1 views,reach", "r2 views,reach"]);
   assert.deepEqual(reels.posts.map(p => p.audience.ig), [short, short, short]);
+});
+
+test("metrikler: Instagram gönderiye reposts, reele reposts ve reels_skip_rate de sorar (aynı istek), hikâyeye sormaz; reposts tam sayı, geçme oranı (skip_pct) 0–100 ve tek ondalık", async t => {
+  t.mock.method(console, "log", () => {});
+  const V = { f0: { reposts: 4, reels_skip_rate: 41.37 }, r0: { reposts: 12, reels_skip_rate: 41.37 }, r1: { reposts: 2.5, reels_skip_rate: 0 },
+    r2: { reposts: 0, reels_skip_rate: 100 }, r3: { reels_skip_rate: 100.5 }, r4: { reels_skip_rate: -1 }, r5: { reels_skip_rate: "abc" }, r6: { reels_skip_rate: null } };
+  const ins = u => {
+    const id = new URL(u).pathname.split("/")[2], v = { views: 100, reach: 50, ...V[id] };
+    return [200, { data: new URL(u).searchParams.get("metric").split(",").filter(k => k in v).map(name => ({ name, total_value: { value: v[name] } })) }];
+  };
+  const ts = "2026-10-20T10:00:00+0000", reels = ["r0", "r1", "r2", "r3", "r4", "r5", "r6"];
+  const media = [{ id: "f0", like_count: 10, timestamp: ts, permalink: "https://www.instagram.com/p/F0/", media_type: "IMAGE", media_product_type: "FEED" },
+    ...reels.map(id => ({ id, like_count: 10, timestamp: ts, permalink: `https://www.instagram.com/reel/${id.toUpperCase()}/`, media_type: "VIDEO", media_product_type: "REELS" })),
+    { id: "s1", like_count: 10, timestamp: ts, media_type: "IMAGE", media_product_type: "STORY" }];
+  const f = fakeFetch(igRoutes([[`${IGV}/me/media?`, [200, { data: media }]], [`${IGV}/f`, ins], [`${IGV}/r`, ins], [`${IGV}/s`, ins]]));
+  const m = await fetchMetrics("instagram", "ig-token", f);
+  assert.deepEqual(f.calls.filter(c => c.url.includes("/insights?") && !c.url.startsWith(`${IGV}/me/`))
+    .map(c => `${new URL(c.url).pathname.split("/")[2]} ${new URL(c.url).searchParams.get("metric")}`).sort(),
+  [`f0 ${IG_FEED_X}`, ...reels.map(id => `${id} ${IG_REELS_X}`)]);
+  const base = { at: ymd(0), views: 100, reach: 50 };
+  assert.deepEqual(Object.fromEntries(m.posts.map(p => [p.audience.mid, p.audience.ig])), {
+    f0: { ...base, reposts: 4 }, r0: { ...base, reposts: 12, skip_pct: 41.4 }, r1: { ...base, skip_pct: 0 }, r2: { ...base, reposts: 0, skip_pct: 100 },
+    r3: base, r4: base, r5: base, r6: base,
+  });
+});
+
+test("metrikler: Instagram yeni ölçümleri reddederse (400) tür temel listeye, o da reddedilirse kısa listeye iner; sonraki gönderi indiği basamaktan başlar; en çok 4 tekrar; 400 dışı hata tekrarsız {}", async t => {
+  t.mock.method(console, "log", () => {});
+  const V = { views: 100, reach: 50, saved: 3, total_interactions: 20, follows: 1, profile_visits: 2,
+    ig_reels_avg_watch_time: 1500, ig_reels_video_view_total_time: 90000, reposts: 5, reels_skip_rate: 30 };
+  const run = async (ids, res) => {
+    const ins = u => {
+      const id = new URL(u).pathname.split("/")[2], metric = new URL(u).searchParams.get("metric");
+      return res(id, metric) ?? [200, { data: metric.split(",").filter(k => k in V).map(name => ({ name, total_value: { value: V[name] } })) }];
+    };
+    const ts = "2026-10-20T10:00:00+0000", r = id => id[0] === "r";
+    const media = ids.map(id => ({ id, like_count: 10, timestamp: ts, permalink: `https://www.instagram.com/${r(id) ? "reel" : "p"}/${id.toUpperCase()}/`,
+      media_type: r(id) ? "VIDEO" : "IMAGE", media_product_type: r(id) ? "REELS" : "FEED" }));
+    const f = fakeFetch(igRoutes([[`${IGV}/me/media?`, [200, { data: media }]], [`${IGV}/f`, ins], [`${IGV}/r`, ins]]));
+    const m = await fetchMetrics("instagram", "ig-token", f);
+    const calls = f.calls.filter(c => c.url.includes("/insights?") && !c.url.startsWith(`${IGV}/me/`))
+      .map(c => `${new URL(c.url).pathname.split("/")[2]} ${new URL(c.url).searchParams.get("metric")}`).sort();
+    return { calls, ig: Object.fromEntries(m.posts.map(p => [p.audience.mid, p.audience.ig ?? null])) };
+  };
+  const E400 = [400, { error: { message: "unsupported", type: "OAuthException", code: 100 } }];
+  const short = { at: ymd(0), views: 100, reach: 50 };
+  const feed = { ...short, saved: 3, interactions: 20, follows: 1, profile_visits: 2 }, reel = { ...short, saved: 3, interactions: 20, avg_watch_ms: 1500, watch_ms: 90000 };
+  // Yeni ölçümler reddedilir: türün ilk gönderisi temel listeyle bir kez daha, kalanlar doğrudan onunla; yeni anahtar yok
+  const a = await run(["f0", "f1", "f2", "r0", "r1"], (id, metric) => metric.includes("reposts") ? E400 : null);
+  assert.deepEqual(a.calls, [`f0 ${IG_FEED}`, `f0 ${IG_FEED_X}`, `f1 ${IG_FEED}`, `f2 ${IG_FEED}`, `r0 ${IG_REELS}`, `r0 ${IG_REELS_X}`, `r1 ${IG_REELS}`]);
+  assert.deepEqual(a.ig, { f0: feed, f1: feed, f2: feed, r0: reel, r1: reel });
+  // Bugünkü liste de reddedilir: ilk gönderiler kısa listeye iner (türde 2'şer, toplam 4 tekrar), kalanlar doğrudan kısa
+  const b = await run(["f0", "f1", "r0", "r1"], (id, metric) => metric === "views,reach" ? null : E400);
+  assert.deepEqual(b.calls, [`f0 ${IG_FEED}`, `f0 ${IG_FEED_X}`, "f0 views,reach", "f1 views,reach",
+    `r0 ${IG_REELS}`, `r0 ${IG_REELS_X}`, "r0 views,reach", "r1 views,reach"]);
+  assert.deepEqual(b.ig, { f0: short, f1: short, r0: short, r1: short });
+  // Bütçe biter: ilk gönderi alınır; birlikte reddeden beş gönderiye ancak 4 tekrar düşer, alınamayan gönderi {}
+  const c = await run(["f0", "f1", "f2", "f3", "f4", "f5"], id => id === "f0" ? null : E400);
+  assert.equal(c.calls.filter(x => x.endsWith(IG_FEED_X)).length, 6);
+  assert.equal(c.calls.length, 6 + 4);
+  assert.deepEqual(c.ig, { f0: { ...feed, reposts: 5 }, f1: null, f2: null, f3: null, f4: null, f5: null });
+  // 400 dışı hata (500, 403): tekrar yok, gönderi {}, tür basamağı inmez
+  const d = await run(["f0", "f1", "f2", "r0"], id => ({ f0: [500, { error: { message: "x", code: 1 } }], f1: [403, { error: { message: "x", code: 10 } }] })[id] ?? null);
+  assert.deepEqual(d.calls, [`f0 ${IG_FEED_X}`, `f1 ${IG_FEED_X}`, `f2 ${IG_FEED_X}`, `r0 ${IG_REELS_X}`]);
+  assert.deepEqual(d.ig, { f0: null, f1: null, f2: { ...feed, reposts: 5 }, r0: { ...reel, reposts: 5, skip_pct: 30 } });
 });
 
 test("syncDue: gönderi kitlesi anahtar anahtar birleşir — gelen watch/sources/viewers/demo eskisinin yerine geçer, bilinmeyen anahtar kalır, bozuk kayıt yenisiyle değişir; aynı kitle satırı güncellemez", async t => {
@@ -3022,6 +3108,28 @@ test("POST /app/posts/:id/audience: gönderinin kitlesini sağlayıcıdan tazele
   assert.deepEqual(fail(await aud(ya)), [409, "disabled"]);
   env.POSTS_ENABLED = "0";
   assert.deepEqual(fail(await aud(ya)), [404, "not_found"]);
+});
+
+test("POST /app/posts/:id/audience: Instagram reelinde yeniden paylaşım (reposts) ve geçme oranı (skip_pct) da aynı istekle gelir", async t => {
+  t.mock.method(console, "log", () => {});
+  let f = fakeFetch([]);
+  t.mock.method(globalThis, "fetch", (...x) => f(...x));
+  const { db, env, call, join } = await setup({ ...IG_ENV, OAUTH_TOKEN_KEY: KEY, POSTS_ENABLED: "1" });
+  const a = await join("influencer", "a@x.co");
+  await seed(db, env, a.id, "instagram", "1784");
+  const acc = db.prepare("SELECT id FROM social_accounts WHERE user_id = ? AND platform = 'instagram'").get(a.id).id;
+  const id = Number(db.prepare("INSERT INTO posts (user_id, url, platform, type, date, account_id, audience) VALUES (?, ?, 'instagram', 'reel', '2026-10-21', ?, ?)")
+    .run(a.id, IG_MEDIA[1].permalink, acc, '{"mid":"m2"}').lastInsertRowid);
+  const v = { views: 3000, reach: 2500, reposts: 12, reels_skip_rate: 41.37 };
+  const ins = [`${IGV}/m2/insights?`, u => new URL(u).searchParams.get("metric") === IG_REELS_X
+    ? [200, { data: Object.entries(v).map(([name, value]) => ({ name, values: [{ value }] })) }] : [400, { error: { message: "x", type: "OAuthException", code: 100 } }]];
+  f = fakeFetch(igPostRoutes([IG_REFRESH, [`${IGV}/m2?`, [200, IG_MEDIA[1]]], ins]));
+  const r = await call("POST", `/app/posts/${id}/audience`, { token: a.token, body: {} });
+  assert.equal(r.status, 200, JSON.stringify(r.body));
+  const want = { mid: "m2", ig: { at: ymd(0), reach: 2500, views: 3000, reposts: 12, skip_pct: 41.4 } };
+  assert.deepEqual(r.body, { ok: true, audience: want, fetched: true });
+  assert.deepEqual(JSON.parse(db.prepare("SELECT audience FROM posts WHERE id = ?").get(id).audience), want);
+  assert.equal(f.calls.filter(c => c.url.includes("/insights?") && !c.url.startsWith(`${IGV}/me/`)).length, 1);
 });
 
 test("meta_events (0012): her geçerli geri çağrı tür, kod (yalnız delete) ve eşleşen bağ sayısıyla yazılır; Meta kimliği yazılmaz; tablo yoksa yanıt aynı", async t => {

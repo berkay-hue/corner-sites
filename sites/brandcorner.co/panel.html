@@ -520,7 +520,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       audUnshared: "YouTube'un paylaşmadığı", paDemoLow: "YouTube bu video için yaş ve cinsiyet paylaşmadı: {n} izlenme gizlilik eşiğinin altında (eşiği YouTube açıklamıyor).", paDemoLowN: "YouTube bu video için yaş ve cinsiyet paylaşmadı: izlenme sayısı gizlilik eşiğinin altında (eşiği YouTube açıklamıyor).", paLastCheck: "Son kontrol: {n}.",
       paUnlisted: "Liste dışı videolarda YouTube kitle verisi vermez.", paYtNew: "Yeni video: YouTube verileri 2–3 gün gecikmeli gelir.", paChFew: "Kanalın izlenmesi YouTube'un yaş ve cinsiyet için gizlilik eşiğinin altında; bu yüzden yaş-cinsiyet verisi yok.",
       paR_fresh: "Güncel", paR_busy: "Senkron sürüyor, birazdan tekrar deneyin", paR_not_connected: "Hesap bağlı değil", paR_upstream: "Platform şu an yanıt vermedi", paR_too_new: "Yeni video: veriler 2–3 gün içinde gelir", paFail: "Yeni veri alınamadı; kayıtlı veriler gösteriliyor.", paRefresh: "Yenile", paLoading: "Kitle verisi yükleniyor",
-      paComOff: "Yorumlar kapalı", paSaved: "Kaydetme", paShares: "Paylaşım", paProfile: "Profil ziyareti", paFollows: "Takip", paAvgWatch: "Ort. izleme süresi",
+      paComOff: "Yorumlar kapalı", paSaved: "Kaydetme", paShares: "Paylaşım", paReposts: "Yeniden paylaşım", paProfile: "Profil ziyareti", paFollows: "Takip", paAvgWatch: "Ort. izleme süresi", paSkip: "Geçme oranı (ilk 3 sn)",
       paTLikes: "beğeni", paTComments: "yorum", paTSaved: "kaydetme", paTShares: "paylaşım", paTReach: "erişim", paNonFol: "En az {n} takip etmeyen hesaba ulaştı (bugünkü takipçi sayısına göre).", paErNoReach: "Erişim olmadan etkileşim oranı hesaplanamaz.",
       paIgNoDemo: "Instagram gönderi başına yaş ve cinsiyet vermez; aşağıdakiler hesabın genel kitlesidir.", paIgTop45: "Instagram ülke ve şehirlerde en fazla ilk 45'i verir; veriler 48 saate kadar gecikebilir.", paIgNoAcc: "Hesap geneli kitle verisi henüz yok.",
       paNoPlat: "{n} gönderi başına kitle verisi vermiyor; yukarıdaki sayılar gönderinin kendi ölçümleri.", paManual: "Elle eklenen gönderilerde gönderi başına kitle verisi yok; yukarıdaki sayılar senin girdiğin ölçümler.", paStory: "Instagram hikâyelerinde gönderi başına kitle verisi yok; yukarıdaki sayılar hikâyenin kendi ölçümleri.",
@@ -739,7 +739,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       audUnshared: "Not shared by YouTube", paDemoLow: "YouTube didn't share age and gender for this video: {n} views is below its privacy threshold (YouTube doesn't disclose the threshold).", paDemoLowN: "YouTube didn't share age and gender for this video: its views are below the privacy threshold (YouTube doesn't disclose the threshold).", paLastCheck: "Last checked: {n}.",
       paUnlisted: "YouTube doesn't provide audience data for unlisted videos.", paYtNew: "New video: YouTube data arrives 2–3 days late.", paChFew: "Your channel's views are below YouTube's privacy threshold for age and gender, so there's no age/gender data.",
       paR_fresh: "Up to date", paR_busy: "A sync is running, try again shortly", paR_not_connected: "Account not connected", paR_upstream: "The platform didn't respond right now", paR_too_new: "New video: data arrives within 2–3 days", paFail: "Couldn't fetch new data; showing stored data.", paRefresh: "Refresh", paLoading: "Loading audience data",
-      paComOff: "Comments off", paSaved: "Saves", paShares: "Shares", paProfile: "Profile visits", paFollows: "Follows", paAvgWatch: "Avg. watch time",
+      paComOff: "Comments off", paSaved: "Saves", paShares: "Shares", paReposts: "Reposts", paProfile: "Profile visits", paFollows: "Follows", paAvgWatch: "Avg. watch time", paSkip: "Skip rate (first 3s)",
       paTLikes: "likes", paTComments: "comments", paTSaved: "saves", paTShares: "shares", paTReach: "reach", paNonFol: "Reached at least {n} accounts that don't follow you (based on today's follower count).", paErNoReach: "The engagement rate can't be calculated without reach.",
       paIgNoDemo: "Instagram doesn't provide age and gender per post; what follows is your account-wide audience.", paIgTop45: "Instagram gives at most the top 45 countries and cities; data can be up to 48 hours late.", paIgNoAcc: "No account-wide audience data yet.",
       paNoPlat: "{n} doesn't provide per-post audience data; the numbers above are the post's own metrics.", paManual: "Manually added posts have no per-post audience data; the numbers above are the ones you entered.", paStory: "Instagram stories have no per-post audience data; the numbers above are the story's own metrics.",
@@ -3381,13 +3381,13 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
   }
   // Instagram 1. düzey: gönderinin kendi sayıları; snap boşsa ig.views / ig.reach, ek sayılar yalnız varsa. ER "Hesaplanan" kartında
   function paIgNums(p, s) {
-    var a = paAud(p), ig = paObj(a.ig) || {}, aw = paNum(ig.avg_watch_ms);
-    var opt = [["paSaved", ig.saved], ["paShares", ig.shares], ["paProfile", ig.profile_visits], ["paFollows", ig.follows]].filter(function (x) { return paNum(x[1]) != null; })
+    var a = paAud(p), ig = paObj(a.ig) || {}, aw = paNum(ig.avg_watch_ms), sp = paNum(ig.skip_pct);
+    var opt = [["paSaved", ig.saved], ["paShares", ig.shares], ["paReposts", ig.reposts], ["paProfile", ig.profile_visits], ["paFollows", ig.follows]].filter(function (x) { return paNum(x[1]) != null; })
       .map(function (x) { return paTile(x[0], num(x[1])); });
     return [el("h2", { class: "pdh", text: t("paIgH") }), el("div", { class: "stats" }, [paTile("mLikes", paN(s.likes)),
       a.comments_off === true ? el("div", { class: "stat" }, [el("div", { class: "k", text: t("mComments") }), el("div", { class: "v na", text: t("paComOff") })]) : paTile("mComments", paN(s.comments)),
       paTile("mViews", paN(s.views != null ? s.views : ig.views)), paTile("mReach", paN(s.reach != null ? s.reach : ig.reach))]
-      .concat(opt, aw != null ? paTile("paAvgWatch", paMs(aw / 1000)) : []))];
+      .concat(opt, aw != null ? paTile("paAvgWatch", paMs(aw / 1000)) : [], sp != null ? paTile("paSkip", pct(sp / 100)) : []))];
   }
   // Instagram 2. ve 3. düzey: hesaplanan etkileşim oranı (formül açık, yalnız var olan terimler), takip etmeyen erişim alt sınırı; hesap geneli kitle <details>'te.
   // Erişim ÷ takipçi hiç gösterilmez: erişimde takip etmeyenler de var, oran yanıltır
