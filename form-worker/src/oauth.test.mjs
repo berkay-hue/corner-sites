@@ -1627,9 +1627,11 @@ const snapsOf = (db, url) => db.prepare("SELECT s.at, s.likes, s.comments, s.vie
   .all(url).map(r => ({ ...r }));
 const today = () => new Date().toISOString().slice(0, 10);
 const MANUAL = { url: "https://www.instagram.com/p/CCC/", type: "photo", date: "2026-10-01", caption: "elle", likes: 5, at: "2026-10-02" };
+// MANUAL'ın bağlantısı senkronda gelir (sahiplenilir); ELLE'ninki gelmez (elle girilmiş kalır)
+const ELLE = { ...MANUAL, url: "https://www.instagram.com/p/ELLE/" };
 const IG_9999 = [`${IGV}/me?`, [200, { user_id: "9999", username: "yeni_ig", followers_count: 10 }]];
 
-test("syncDue: Instagram gönderileri Gönderiler'e aktarılır; aynı gün yeniden senkron tazeler; elle girilen gönderiye dokunulmaz", async t => {
+test("syncDue: Instagram gönderileri Gönderiler'e aktarılır; aynı bağlantıyla elle girilen sahiplenilir; aynı gün yeniden senkron tazeler", async t => {
   t.mock.method(console, "log", () => {});
   const { db, env, call, join } = await setup({ ...IG_ENV, OAUTH_TOKEN_KEY: KEY, POSTS_ENABLED: "1" });
   const a = await join("influencer", "a@x.co");
@@ -1639,23 +1641,27 @@ test("syncDue: Instagram gönderileri Gönderiler'e aktarılır; aynı gün yeni
   // POSTS_ENABLED kapalı: ölçüm yazılır, gönderi aktarılmaz
   assert.deepEqual(await syncDue({ ...env, POSTS_ENABLED: "0" }, fakeFetch(igPostRoutes([IG_REFRESH]))), { ...ZERO, synced: 1 });
   assert.deepEqual([count(db, "metric_snapshots"), count(db, "posts")], [1, 1]);
-  // Açık: bağlantısı elle girilenle aynı olan (CCC) atlanır, diğerleri hesaba bağlı ve bugünün ölçümüyle aktarılır
+  // Açık: gönderiler hesaba bağlı ve bugünün ölçümüyle aktarılır; bağlantısı elle girilenle aynı olan (CCC) aynı satırda
+  // sahiplenilir: hesaba bağlanır, türü, tarihi, metni ve kapağı senkrondan gelir, elle ölçümü kalır, bugünün ölçümü de yazılır
+  const ccc = db.prepare("SELECT id FROM posts WHERE url = ?").get(MANUAL.url).id;
   db.prepare("UPDATE social_accounts SET next_sync_at = NULL").run();
   assert.deepEqual(await syncDue(env, fakeFetch(igPostRoutes([IG_REFRESH]))), { ...ZERO, synced: 1 });
   const acc = igAcc(db, a.id);
   const pick = ({ url, type, date, caption, thumb }) => ({ url, platform: "instagram", type, date, caption, thumb, account_id: acc });
-  assert.deepEqual(imported(db), IG_POSTS.filter(p => p.url !== MANUAL.url).map(pick));
+  assert.deepEqual(imported(db), IG_POSTS.map(pick));
+  assert.equal(db.prepare("SELECT id FROM posts WHERE url = ?").get(MANUAL.url).id, ccc);
   assert.deepEqual(snapsOf(db, IG_POSTS[0].url), [{ at: today(), likes: 100, comments: 4, views: 1000, reach: 800 }]);
   assert.deepEqual(snapsOf(db, IG_POSTS[3].url), [{ at: today(), likes: null, comments: 3, views: null, reach: null }]);
-  assert.deepEqual({ ...db.prepare("SELECT type, caption, account_id FROM posts WHERE url = ?").get(MANUAL.url) }, { type: "photo", caption: "elle", account_id: null });
-  assert.deepEqual(snapsOf(db, MANUAL.url), [{ at: "2026-10-02", likes: 5, comments: null, views: null, reach: null }]);
-  // Panel listesi: aktarılanlar ve elle girilen, ölçümleriyle (tarih sırasıyla)
+  assert.deepEqual(snapsOf(db, MANUAL.url), [
+    { at: "2026-10-02", likes: 5, comments: null, views: null, reach: null }, { at: today(), likes: 10, comments: 1, views: 400, reach: null },
+  ]);
+  // Panel listesi: hepsi aktarılmış (synced), ölçümleriyle (tarih sırasıyla)
   const list = await call("GET", "/app/posts", { token: a.token });
   assert.equal(list.status, 200, JSON.stringify(list.body));
-  assert.deepEqual(list.body.posts.map(p => [p.url, p.type, p.snaps.length]), [
-    [IG_POSTS[3].url, "video", 1], [IG_POSTS[1].url, "reel", 1], [IG_POSTS[0].url, "photo", 1], [MANUAL.url, "photo", 1],
+  assert.deepEqual(list.body.posts.map(p => [p.url, p.type, p.snaps.length, p.synced]), [
+    [IG_POSTS[3].url, "video", 1, true], [MANUAL.url, "carousel", 2, true], [IG_POSTS[1].url, "reel", 1, true], [IG_POSTS[0].url, "photo", 1, true],
   ]);
-  assert.deepEqual(list.body.posts[2].snaps, [{ at: today(), likes: 100, comments: 4, views: 1000, reach: 800 }]);
+  assert.deepEqual(list.body.posts[3].snaps, [{ at: today(), likes: 100, comments: 4, views: 1000, reach: 800 }]);
 
   // Aynı gün yeniden: metin, kapak ve o günün ölçümü tazelenir; gönderi ve ölçüm sayısı aynı kalır
   const media = IG_MEDIA.map(m => m.id === "m1" ? { ...m, like_count: 120, caption: "Düzeltildi", media_url: "https://cdn.ig.test/m1-yeni.jpg" } : m);
@@ -1666,13 +1672,14 @@ test("syncDue: Instagram gönderileri Gönderiler'e aktarılır; aynı gün yeni
   assert.deepEqual({ ...db.prepare("SELECT caption, thumb, date FROM posts WHERE url = ?").get(IG_POSTS[0].url) },
     { caption: "Düzeltildi", thumb: "https://cdn.ig.test/m1-yeni.jpg", date: "2026-10-20" });
   assert.deepEqual(snapsOf(db, IG_POSTS[0].url), [{ at: today(), likes: 120, comments: 4, views: 1000, reach: 800 }]);
-  // Ertesi gün: aktarılan gönderiye yeni ölçüm satırı eklenir, öncekiler kalır; elle girilen değişmez
-  db.prepare("UPDATE post_snaps SET at = date('now', '-1 days') WHERE post_id IN (SELECT id FROM posts WHERE account_id IS NOT NULL)").run();
+  // Ertesi gün: her gönderiye yeni ölçüm satırı eklenir, öncekiler (sahiplenilenin elle ölçümü de) kalır
+  const yday = new Date(Date.now() - 864e5).toISOString().slice(0, 10);
+  db.prepare("UPDATE post_snaps SET at = date('now', '-1 days') WHERE at = date('now')").run();
   db.prepare("UPDATE social_accounts SET next_sync_at = NULL").run();
   assert.deepEqual(await syncDue(env, fakeFetch(igPostRoutes())), { ...ZERO, synced: 1 });
-  assert.equal(count(db, "post_snaps"), 2 * (IG_POSTS.length - 1) + 1);
+  assert.equal(count(db, "post_snaps"), 2 * IG_POSTS.length + 1);
   assert.deepEqual(snapsOf(db, IG_POSTS[0].url).map(s => s.likes), [120, 100]);
-  assert.deepEqual(snapsOf(db, MANUAL.url), [{ at: "2026-10-02", likes: 5, comments: null, views: null, reach: null }]);
+  assert.deepEqual(snapsOf(db, MANUAL.url).map(s => [s.at, s.likes]), [["2026-10-02", 5], [yday, 10], [today(), 10]]);
 });
 
 test("syncDue: TikTok ve YouTube gönderileri de aktarılır; her gönderi kendi platformu ve hesabıyla, erişimsiz", async t => {
@@ -1700,7 +1707,7 @@ test("syncDue: TikTok ve YouTube gönderileri de aktarılır; her gönderi kendi
   ]);
 });
 
-test("syncDue: TikTok kullanıcı adı değişince aktarılmış video yeni bağlantıya taşınır, geçmişi kalır; elle girilen, başka kullanıcı ve çakışan bağlantı değişmez", async t => {
+test("syncDue: TikTok kullanıcı adı değişince aktarılmış video yeni bağlantıya taşınır, geçmişi kalır; başka bağlantılı elle girilen ve başka kullanıcınınki değişmez, çakışan elle girilen sahiplenilir", async t => {
   t.mock.method(console, "log", () => {});
   const { db, env, join } = await setup({ ...TT_ENV, OAUTH_TOKEN_KEY: KEY, POSTS_ENABLED: "1" });
   const a = await join("influencer", "a@x.co"), b = await join("influencer", "b@x.co");
@@ -1727,7 +1734,8 @@ test("syncDue: TikTok kullanıcı adı değişince aktarılmış video yeni bağ
   assert.deepEqual(snapsOf(db, tt("eski_ad", "v2")), []);
   assert.deepEqual(urls(b.id).map(r => r.url), [tt("eski_ad", "v1")]);
 
-  // yeni_ad: v1'in yeni bağlantısı kullanıcıda elle girilmiş olarak var (çakışma), v1 yerinde kalır; senkron yine başarılı
+  // yeni_ad: v1'in yeni bağlantısı kullanıcıda elle girilmiş olarak var (çakışma): v1 eski bağlantısında kalır, elle girilen
+  // satır sahiplenilir ve bugünün ölçümünü alır (aynı video iki satırda: bilinen sınır); senkron yine başarılı
   const manual = add(a.id, tt("yeni_ad", "v1"), null);
   db.prepare("UPDATE social_accounts SET next_sync_at = NULL").run();
   const renamed = ttRoutes().find(([u]) => u === `${TT}/video/list/`)[1][1].data.videos.map(v => ({ ...v, share_url: v.share_url.replace("@inf_tt", "@yeni_ad") }));
@@ -1735,10 +1743,11 @@ test("syncDue: TikTok kullanıcı adı değişince aktarılmış video yeni bağ
   assert.deepEqual(await syncDue(env, fakeFetch(ttRoutes([list]))), { ...ZERO, synced: 1 });
   assert.deepEqual(urls(a.id), [
     { id: v1, url: tt("inf_tt", "v1"), account_id: acc }, { id: v1 + 1, url: tt("eski_ad", "v2"), account_id: null },
-    { id: v2, url: tt("yeni_ad", "v2"), account_id: acc }, { id: manual, url: tt("yeni_ad", "v1"), account_id: null },
+    { id: v2, url: tt("yeni_ad", "v2"), account_id: acc }, { id: manual, url: tt("yeni_ad", "v1"), account_id: acc },
   ]);
   assert.equal(snapsOf(db, tt("yeni_ad", "v2")).length, 1);
-  assert.deepEqual(snapsOf(db, tt("yeni_ad", "v1")), []);
+  assert.deepEqual(snapsOf(db, tt("yeni_ad", "v1")).map(s => [s.at, s.likes]), [[today(), 300]]);
+  assert.deepEqual(snapsOf(db, tt("inf_tt", "v1")).map(s => [s.at, s.likes]), [["2026-10-01", 1], [today(), 300]]);
 });
 
 test("syncDue: YouTube video kitlesi (izlenme, kaynaklar, kırılım) gönderiye, kanal kitlesi ve kaynakları ölçüme yazılır; gelmeyen anahtar kalır, eşiğin altındaki kırılım silinir; rapor alınamazsa neden saklanır", async t => {
@@ -1820,7 +1829,7 @@ test("Gönderi aktarımı: bağ koparılınca ya da başka hesap bağlanınca ak
   t.mock.method(globalThis, "fetch", (...a) => net(...a));
   const { db, env, call, join } = await setup({ ...IG_ENV, OAUTH_TOKEN_KEY: KEY, POSTS_ENABLED: "1" });
   const a = await join("influencer", "a@x.co"), b = await join("influencer", "b@x.co");
-  assert.equal((await call("POST", "/app/posts/manual", { token: a.token, body: MANUAL })).status, 200);
+  assert.equal((await call("POST", "/app/posts/manual", { token: a.token, body: ELLE })).status, 200);
   const connect = async routes => {
     const ticket = await land(env, await start(call, a.token));
     net = fakeFetch(routes);
@@ -1840,25 +1849,96 @@ test("Gönderi aktarımı: bağ koparılınca ya da başka hesap bağlanınca ak
 
   await connect(igRoutes());
   await sync();
-  assert.equal(imported(db).filter(p => p.account_id === igAcc(db, a.id)).length, 3);
+  assert.equal(imported(db).filter(p => p.account_id === igAcc(db, a.id)).length, IG_POSTS.length);
   // Aynı hesap yeniden bağlanır: gönderiler kalır
   await connect(igRoutes());
-  assert.equal(imported(db).filter(p => p.account_id === igAcc(db, a.id)).length, 3);
+  assert.equal(imported(db).filter(p => p.account_id === igAcc(db, a.id)).length, IG_POSTS.length);
   // Başka hesap (9999): eski hesaptan aktarılanlar ve ölçümleri silinir, elle girilen kalır
   await connect(igRoutes([IG_9999]));
   assert.equal(imported(db).filter(p => p.account_id === igAcc(db, a.id)).length, 0);
-  assert.deepEqual(db.prepare("SELECT url FROM posts WHERE user_id = ?").all(a.id).map(r => r.url), [MANUAL.url]);
-  assert.equal(snapsOf(db, MANUAL.url).length, 1);
+  assert.deepEqual(db.prepare("SELECT url FROM posts WHERE user_id = ?").all(a.id).map(r => r.url), [ELLE.url]);
+  assert.equal(snapsOf(db, ELLE.url).length, 1);
   assert.equal(count(db, "post_snaps"), 1);
   // Yeni hesaptan aktarım, ardından bağı koparma: aktarılanlar silinir, elle girilen ve b'ninki kalır
   await sync([IG_9999]);
-  assert.equal(imported(db).filter(p => p.account_id === igAcc(db, a.id)).length, 3);
+  assert.equal(imported(db).filter(p => p.account_id === igAcc(db, a.id)).length, IG_POSTS.length);
   net = fakeFetch([]);
   const r = await call("POST", "/app/disconnect", { token: a.token, body: { platform: "instagram" } });
   assert.equal(r.status, 200, JSON.stringify(r.body));
-  assert.deepEqual(db.prepare("SELECT url, account_id FROM posts WHERE user_id = ?").all(a.id).map(r => ({ ...r })), [{ url: MANUAL.url, account_id: null }]);
+  assert.deepEqual(db.prepare("SELECT url, account_id FROM posts WHERE user_id = ?").all(a.id).map(r => ({ ...r })), [{ url: ELLE.url, account_id: null }]);
   assert.equal(count(db, "post_snaps"), 1);
   assert.equal(theirs(), 1);
+  assert.equal(net.calls.length, 0);
+});
+
+// Sahiplenme: senkron, aynı kullanıcıda aynı bağlantıyla elle girilmiş (account_id NULL) aynı platformdaki gönderiyi hesaba bağlar
+test("syncDue: elle girilen gönderi senkronda sahiplenilir; başka hesabınki ve platformu farklı olan alınmaz; sonra düzeltme yetki ister, bağ koparılınca silinir, günlüğü kalır", async t => {
+  t.mock.method(console, "log", () => {});
+  let net = fakeFetch([]);
+  t.mock.method(globalThis, "fetch", (...a) => net(...a));
+  const { db, env, call, join } = await setup({ ...IG_ENV, OAUTH_TOKEN_KEY: KEY, POSTS_ENABLED: "1" });
+  const a = await join("influencer", "a@x.co");
+  // Bağlanmadan önce elle girilen CCC (elle ölçümü günlüğe yazılır)
+  assert.equal((await call("POST", "/app/posts/manual", { token: a.token, body: MANUAL })).status, 200);
+  const ccc = db.prepare("SELECT id FROM posts WHERE url = ?").get(MANUAL.url).id;
+  const edits = () => db.prepare("SELECT COUNT(*) AS n FROM post_edits WHERE url = ?").get(MANUAL.url).n;
+  assert.equal(edits(), 1);
+  await seed(db, env, a.id, "instagram", "1784");
+  // AAA a'nın başka hesabından (TikTok) aktarılmış; BBB'nin bağlantısı Instagram ama elle tiktok olarak girilmiş: ikisi de sahiplenilmez
+  await seed(db, env, a.id, "tiktok", "tt-1");
+  db.prepare("UPDATE social_accounts SET next_sync_at = datetime('now', '+1 days') WHERE platform = 'tiktok'").run();
+  const ttAcc = db.prepare("SELECT id FROM social_accounts WHERE user_id = ? AND platform = 'tiktok'").get(a.id).id;
+  const add = (url, platform, account) => db.prepare(
+    "INSERT INTO posts (user_id, url, platform, type, date, account_id) VALUES (?, ?, ?, 'video', '2026-10-01', ?)",
+  ).run(a.id, url, platform, account);
+  add(IG_POSTS[0].url, "instagram", ttAcc);
+  add(IG_POSTS[1].url, "tiktok", null);
+  const row = url => ({ ...db.prepare("SELECT platform, type, date, account_id FROM posts WHERE url = ?").get(url) });
+
+  // İlk senkron (token yenilemeli en kötü yol) CCC'yi sahiplenir; D1 ifade sayısı değişmez
+  const d1 = counted(env.DB);
+  assert.deepEqual(await syncDue({ ...env, DB: d1.DB }, fakeFetch(igPostRoutes([IG_REFRESH]))), { ...ZERO, synced: 1 });
+  assert.equal(d1.n(), SYNC_D1);
+  const acc = igAcc(db, a.id);
+  assert.deepEqual({ ...db.prepare("SELECT id, platform, type, date, caption, thumb, account_id FROM posts WHERE url = ?").get(MANUAL.url) },
+    { id: ccc, platform: "instagram", type: "carousel", date: "2026-10-22", caption: IG_POSTS[2].caption, thumb: IG_POSTS[2].thumb, account_id: acc });
+  assert.deepEqual(snapsOf(db, MANUAL.url), [
+    { at: "2026-10-02", likes: 5, comments: null, views: null, reach: null }, { at: today(), likes: 10, comments: 1, views: 400, reach: null },
+  ]);
+  assert.deepEqual([row(IG_POSTS[0].url), row(IG_POSTS[1].url)], [
+    { platform: "instagram", type: "video", date: "2026-10-01", account_id: ttAcc }, { platform: "tiktok", type: "video", date: "2026-10-01", account_id: null },
+  ]);
+  assert.deepEqual([snapsOf(db, IG_POSTS[0].url), snapsOf(db, IG_POSTS[1].url)], [[], []]);
+  const list = (await call("GET", "/app/posts", { token: a.token })).body.posts;
+  assert.deepEqual(list.map(p => [p.url, p.synced]), [
+    [IG_POSTS[3].url, true], [MANUAL.url, true], [IG_POSTS[1].url, undefined], [IG_POSTS[0].url, true],
+  ]);
+
+  // Değişmeyen yeniden senkron hiçbir gönderi satırını yeniden yazmaz (sahiplenilen dahil)
+  db.exec("CREATE TABLE upd (n INTEGER); INSERT INTO upd VALUES (0); CREATE TRIGGER posts_upd AFTER UPDATE ON posts BEGIN UPDATE upd SET n = n + 1; END;");
+  db.prepare("UPDATE social_accounts SET next_sync_at = NULL WHERE platform = 'instagram'").run();
+  assert.deepEqual(await syncDue(env, fakeFetch(igPostRoutes())), { ...ZERO, synced: 1 });
+  assert.equal(db.prepare("SELECT n FROM upd").get().n, 0);
+  assert.equal(snapsOf(db, MANUAL.url).length, 2);
+
+  // Artık aktarılmış gönderi: elle düzeltme edit_metrics ister; düzeltme günlüğe yazılır
+  const fix = { url: MANUAL.url, at: today(), likes: 7, comments: 1, views: 400 };
+  assert.deepEqual(fail(await call("POST", "/app/posts/manual", { token: a.token, body: fix })), [403, "no_perm"]);
+  assert.equal(edits(), 1);
+  db.prepare("INSERT INTO user_perms (user_id, perm) VALUES (?, 'edit_metrics')").run(a.id);
+  const r = await call("POST", "/app/posts/manual", { token: a.token, body: fix });
+  assert.equal(r.status, 200, JSON.stringify(r.body));
+  assert.deepEqual([r.body.added, r.body.post.synced, r.body.post.snaps.map(s => s.likes)], [false, true, [5, 7]]);
+  assert.equal(edits(), 2);
+
+  // Bağ koparılınca sahiplenilen ve aktarılan gönderiler ölçümleriyle silinir; günlük, başka hesabınki ve platformu farklı olan kalır
+  const off = await call("POST", "/app/disconnect", { token: a.token, body: { platform: "instagram" } });
+  assert.equal(off.status, 200, JSON.stringify(off.body));
+  assert.deepEqual(db.prepare("SELECT url, account_id FROM posts WHERE user_id = ? ORDER BY id").all(a.id).map(r => ({ ...r })),
+    [{ url: IG_POSTS[0].url, account_id: ttAcc }, { url: IG_POSTS[1].url, account_id: null }]);
+  assert.equal(db.prepare("SELECT COUNT(*) AS n FROM post_snaps WHERE post_id = ?").get(ccc).n, 0);
+  assert.equal(count(db, "post_snaps"), 0);
+  assert.equal(edits(), 2);
   assert.equal(net.calls.length, 0);
 });
 
@@ -1898,14 +1978,26 @@ const addPost = (db, userId, p, url, acc = null) =>
   db.prepare("INSERT INTO posts (user_id, url, platform, type, date, account_id) VALUES (?, ?, ?, 'video', '2026-10-01', ?)").run(userId, url, p, acc);
 const urlsOf = (db, userId) => db.prepare("SELECT url FROM posts WHERE user_id = ? AND account_id IS NOT NULL ORDER BY id").all(userId).map(r => r.url);
 const coded = code => e => e instanceof ProviderError && e.code === code;
+const idOf = (db, url) => db.prepare("SELECT id FROM posts WHERE url = ?").get(url).id;
+// Sahiplenilen gönderi: aynı satır hesaba bağlı, panelde aktarılmış (synced), elle düzeltmesi yetki ister
+const adoptedOk = async (db, call, user, url, acc, id) => {
+  assert.deepEqual({ ...db.prepare("SELECT id, account_id FROM posts WHERE url = ?").get(url) }, { id, account_id: acc });
+  const list = await call("GET", "/app/posts", { token: user.token });
+  assert.equal(list.status, 200, JSON.stringify(list.body));
+  assert.equal(list.body.posts.find(p => p.url === url).synced, true);
+  const fix = { url, at: today(), likes: 7, comments: 1, views: 400 };
+  assert.deepEqual(fail(await call("POST", "/app/posts/manual", { token: user.token, body: fix })), [403, "no_perm"]);
+};
 
-test("eski gönderiler: Instagram listesi baştan yürünür, aktarılmamış en çok 200 gönderi yazılır (insights yok); vade geri konur", async () => {
-  const { db, env, join } = await setup({ ...IG_ENV, OAUTH_TOKEN_KEY: KEY, POSTS_ENABLED: "1" });
+test("eski gönderiler: Instagram listesi baştan yürünür, aktarılmamış en çok 200 gönderi yazılır (insights yok); aynı bağlantıyla elle girilen sahiplenilir; vade geri konur", async () => {
+  const { db, env, call, join } = await setup({ ...IG_ENV, OAUTH_TOKEN_KEY: KEY, POSTS_ENABLED: "1" });
   const a = await join("influencer", "a@x.co");
   await seed(db, env, a.id, "instagram", "1784");
   const acc = accOf(db, a.id, "instagram");
   span(0, 10, igm).forEach(m => addPost(db, a.id, "instagram", m.permalink, acc));
-  addPost(db, a.id, "instagram", igm(12).permalink); // elle girilmiş: yeniden aktarılmaz
+  addPost(db, a.id, "instagram", igm(12).permalink); // elle girilmiş: aynı satırda sahiplenilir
+  addPost(db, a.id, "tiktok", igm(13).permalink); // elle girilmiş ama platformu farklı: atlanır, sahiplenilmez
+  const n12 = idOf(db, igm(12).permalink);
   db.prepare("UPDATE social_accounts SET next_sync_at = datetime('now', '+600 minutes')").run();
   const pages = span(0, 6, k => span(50 * k, 50 * k + 50, igm));
   const run = async () => {
@@ -1917,7 +2009,9 @@ test("eski gönderiler: Instagram listesi baştan yürünür, aktarılmamış en
   assert.deepEqual(r, { added: OLDER, more: true, full: false });
   assert.equal(lists(f).length, 5);
   assert.ok(!f.calls.some(c => c.url.includes("/insights?")));
-  assert.deepEqual(urlsOf(db, a.id), [...span(0, 12, i => i), ...span(13, 211, i => i)].map(i => igm(i).permalink));
+  assert.deepEqual(urlsOf(db, a.id), [...span(0, 10, i => i), 12, 10, 11, ...span(14, 211, i => i)].map(i => igm(i).permalink));
+  await adoptedOk(db, call, a, igm(12).permalink, acc, n12);
+  assert.deepEqual({ ...db.prepare("SELECT platform, account_id FROM posts WHERE url = ?").get(igm(13).permalink) }, { platform: "tiktok", account_id: null });
   assert.equal(count(db, "metric_snapshots"), 0);
   assert.equal(count(db, "post_snaps"), OLDER);
   near(due(db, a.id, "instagram"), 600);
@@ -1946,43 +2040,62 @@ test("eski gönderiler: TikTok bu hesaptan aktarılmış en eski günün sonunda
   assert.deepEqual(f.calls.filter(c => c.url.startsWith(`${TT}/video/list/`)).map(c => c.body),
     [{ max_count: 20, cursor: Date.UTC(2026, 9, 2) }, { max_count: 20, cursor: 7 }]);
   assert.equal(due(db, a.id), null);
-  // 995 gönderi: 5'i eklenir ve sınır dolar; sınırdayken sağlayıcıya gidilmez
-  for (let i = 0; i < 970; i++) addPost(db, a.id, "tiktok", `https://www.tiktok.com/@inf_tt/video/elle${i}`);
+  // 995 gönderi, biri bu hesabın w25 videosunun elle girilmişi: w25 sahiplenilir, 4'ü eklenir; sahiplenilen sınıra yaklaştırmaz
+  for (let i = 0; i < 969; i++) addPost(db, a.id, "tiktok", `https://www.tiktok.com/@inf_tt/video/elle${i}`);
+  addPost(db, a.id, "tiktok", ttv(25).share_url);
+  const w25 = idOf(db, ttv(25).share_url);
   o = 25;
-  assert.deepEqual(await fetchOlderPosts(env, a.id, "tiktok", fakeFetch(ttRoutes([pages]))), { added: 5, more: true, full: true });
+  assert.deepEqual(await fetchOlderPosts(env, a.id, "tiktok", fakeFetch(ttRoutes([pages]))), { added: 5, more: true, full: false });
+  assert.equal(count(db, "posts"), 999);
+  assert.deepEqual({ ...db.prepare("SELECT id, account_id FROM posts WHERE url = ?").get(ttv(25).share_url) }, { id: w25, account_id: acc });
+  // 1'i eklenir ve sınır dolar; sınırdayken sağlayıcıya gidilmez
+  o = 30;
+  assert.deepEqual(await fetchOlderPosts(env, a.id, "tiktok", fakeFetch(ttRoutes([pages]))), { added: 1, more: true, full: true });
   assert.equal(count(db, "posts"), 1000);
   const g = fakeFetch([]);
   await assert.rejects(fetchOlderPosts(env, a.id, "tiktok", g), coded("full"));
   assert.equal(g.calls.length, 0);
 });
 
-test("eski gönderiler: TikTok kullanıcı adı değiştiyse sınır gününde aktarılmış ya da elle girilmiş video yeni bağlantıyla yeniden eklenmez", async () => {
-  const { db, env, join } = await setup({ ...TT_ENV, OAUTH_TOKEN_KEY: KEY, POSTS_ENABLED: "1" });
+test("eski gönderiler: TikTok kullanıcı adı değiştiyse sınır gününde aktarılmış ya da elle girilmiş video yeni bağlantıyla yeniden eklenmez; aynı bağlantıyla elle girilen sahiplenilir", async () => {
+  const { db, env, call, join } = await setup({ ...TT_ENV, OAUTH_TOKEN_KEY: KEY, POSTS_ENABLED: "1" });
   const a = await join("influencer", "a@x.co");
   await seed(db, env, a.id, "tiktok", "tt-1");
   const tt = (ad, v) => `https://www.tiktok.com/@${ad}/video/${v}`;
   addPost(db, a.id, "tiktok", tt("eski_ad", "w0"), accOf(db, a.id, "tiktok")); // en eski gün: liste o günün sonundan başlar
-  addPost(db, a.id, "tiktok", tt("eski_ad", "w1")); // elle girilmiş
+  addPost(db, a.id, "tiktok", tt("eski_ad", "w1")); // elle girilmiş, eski bağlantıyla: kimliğiyle elenir
+  addPost(db, a.id, "tiktok", tt("yeni_ad", "w2")); // elle girilmiş, listedeki bağlantıyla: sahiplenilir
+  addPost(db, a.id, "tiktok", tt("yeni_ad", "w0")); // elle girilmiş ama videosu bu hesaptan aktarılmış: elenir (çift satır olmaz)
+  const w2 = idOf(db, tt("yeni_ad", "w2"));
   const renamed = span(0, 4, ttv).map(v => ({ ...v, share_url: v.share_url.replace("@inf_tt", "@yeni_ad") }));
   const list = [`${TT}/video/list/`, [200, { data: { videos: renamed, cursor: 7, has_more: false }, error: { code: "ok" } }]];
   assert.deepEqual(await fetchOlderPosts(env, a.id, "tiktok", fakeFetch(ttRoutes([list]))), { added: 2, more: false, full: false });
-  assert.deepEqual(db.prepare("SELECT url FROM posts WHERE user_id = ? ORDER BY id").all(a.id).map(r => r.url),
-    [tt("eski_ad", "w0"), tt("eski_ad", "w1"), tt("yeni_ad", "w2"), tt("yeni_ad", "w3")]);
+  const acc = accOf(db, a.id, "tiktok");
+  assert.deepEqual(db.prepare("SELECT url, account_id FROM posts WHERE user_id = ? ORDER BY id").all(a.id).map(r => [r.url, r.account_id]), [
+    [tt("eski_ad", "w0"), acc], [tt("eski_ad", "w1"), null], [tt("yeni_ad", "w2"), acc], [tt("yeni_ad", "w0"), null], [tt("yeni_ad", "w3"), acc],
+  ]);
+  await adoptedOk(db, call, a, tt("yeni_ad", "w2"), acc, w2);
 });
 
-test("eski gönderiler: YouTube yükleme listesi baştan yürünür, yalnız aktarılmamış videolar istenir; kitle raporu istenmez", async t => {
+test("eski gönderiler: YouTube yükleme listesi baştan yürünür, yalnız aktarılmamış videolar istenir; aynı bağlantıyla elle girilen sahiplenilir; kitle raporu istenmez", async t => {
   t.mock.method(console, "log", () => {});
-  const { db, env, join } = await setup({ ...YT_ENV, OAUTH_TOKEN_KEY: KEY, POSTS_ENABLED: "1" });
+  const { db, env, call, join } = await setup({ ...YT_ENV, OAUTH_TOKEN_KEY: KEY, POSTS_ENABLED: "1" });
   const a = await join("influencer", "a@x.co");
   await seed(db, env, a.id, "youtube", "UC1");
   const acc = accOf(db, a.id, "youtube");
   span(0, 50, ytUrl).forEach(u => addPost(db, a.id, "youtube", u, acc));
+  addPost(db, a.id, "youtube", ytUrl(60)); // elle girilmiş: sahiplenilir
+  addPost(db, a.id, "instagram", ytUrl(70)); // elle girilmiş ama platformu farklı: atlanır
+  const v60 = idOf(db, ytUrl(60));
   const f = fakeFetch(ytRoutes(ytPages({ pages: 3 })));
-  assert.deepEqual(await fetchOlderPosts(env, a.id, "youtube", f), { added: 100, more: false, full: false });
+  assert.deepEqual(await fetchOlderPosts(env, a.id, "youtube", f), { added: 99, more: false, full: false });
+  const ids = span(50, 150, i => `v${i}`).filter(v => v !== "v70");
   assert.deepEqual(f.calls.filter(c => c.url.startsWith(`${YT}/videos?`)).map(c => new URL(c.url).searchParams.get("id")),
-    [span(50, 100, i => `v${i}`).join(","), span(100, 150, i => `v${i}`).join(",")]);
+    [ids.slice(0, 50).join(","), ids.slice(50).join(",")]);
   assert.ok(!f.calls.some(c => c.url.startsWith(YTA)));
-  assert.deepEqual(urlsOf(db, a.id), span(0, 150, ytUrl));
+  assert.deepEqual(urlsOf(db, a.id), [...span(0, 50, i => i), 60, ...span(50, 60, i => i), ...span(61, 70, i => i), ...span(71, 150, i => i)].map(ytUrl));
+  await adoptedOk(db, call, a, ytUrl(60), acc, v60);
+  assert.deepEqual({ ...db.prepare("SELECT platform, account_id FROM posts WHERE url = ?").get(ytUrl(70)) }, { platform: "instagram", account_id: null });
 });
 
 test("eski gönderiler: bağlı olmayan, API'siz ve yapılandırılmamış platform; vade 15 dakika içindeyse meşgul; sağlayıcı hatası ve yeniden bağlanma", async () => {
@@ -2580,7 +2693,7 @@ test("Meta veri silme: bağ koparılır, token, ölçüm ve aktarılan gönderil
   t.mock.method(globalThis, "fetch", (...a) => net(...a));
   const { db, env, call, join } = await setup({ ...IG_ENV, OAUTH_TOKEN_KEY: KEY, POSTS_ENABLED: "1" });
   const a = await join("influencer", "a@x.co"), b = await join("influencer", "b@x.co");
-  assert.equal((await call("POST", "/app/posts/manual", { token: a.token, body: MANUAL })).status, 200);
+  assert.equal((await call("POST", "/app/posts/manual", { token: a.token, body: ELLE })).status, 200);
   // b'nin kendi hesabından aktarılmış bir gönderisi
   await seed(db, env, b.id, "instagram", "1785");
   db.prepare("UPDATE social_accounts SET next_sync_at = datetime('now', '+1 days') WHERE user_id = ?").run(b.id);
@@ -2606,8 +2719,8 @@ test("Meta veri silme: bağ koparılır, token, ölçüm ve aktarılan gönderil
   assert.deepEqual(igRow(db, a.id), { status: "revoked", handle: null, external_id: null, scoped_id: null });
   assert.equal(tokensOf(db, a.id), 0);
   assert.equal(count(db, "metric_snapshots"), 0);
-  assert.deepEqual(db.prepare("SELECT url, account_id FROM posts WHERE user_id = ?").all(a.id).map(r => ({ ...r })), [{ url: MANUAL.url, account_id: null }]);
-  assert.equal(snapsOf(db, MANUAL.url).length, 1);
+  assert.deepEqual(db.prepare("SELECT url, account_id FROM posts WHERE user_id = ?").all(a.id).map(r => ({ ...r })), [{ url: ELLE.url, account_id: null }]);
+  assert.equal(snapsOf(db, ELLE.url).length, 1);
   assert.deepEqual(igRow(db, b.id), { status: "connected", handle: "eski", external_id: "1785", scoped_id: null });
   assert.equal(tokensOf(db, b.id), 1);
   assert.equal(db.prepare("SELECT COUNT(*) AS n FROM posts WHERE user_id = ?").get(b.id).n, 1);

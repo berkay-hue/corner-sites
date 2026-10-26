@@ -639,10 +639,13 @@ const API = {
       return vs.map(v => ({ views: v.view_count, likes: v.like_count, comments: v.comment_count, post: ttPost(v) }));
     },
     // Daha eski gönderiler: bu hesaptan aktarılmış en eski gönderinin gün sonundan geriye (o günün aktarılmışları elenir;
-    // kullanıcı adı değiştiyse bağlantıları da değişmiştir, bu yüzden video kimliğiyle de elenir)
-    async older(token, f, prof, { known, want, oldest }) {
-      const vids = new Set([...known].map(ttVid).filter(Boolean));
-      const fresh = list => list.map(ttPost).filter(x => x && !known.has(x.url) && !vids.has(ttVid(x.url)));
+    // kullanıcı adı değiştiyse bağlantıları da değişmiştir, bu yüzden video kimliğiyle de elenir). Aynı bağlantıyla elle
+    // girilmiş video (adopt) elenmez, sahiplenilir (videosu aktarılmış başka bir satırda değilse); başka bağlantıyla elle
+    // girilmiş video eskisi gibi kimliğiyle elenir
+    async older(token, f, prof, { known, adopt, want, oldest }) {
+      const vid = s => new Set([...s].map(ttVid).filter(Boolean)), vids = vid(known), hand = vid(adopt);
+      const fresh = list => list.map(ttPost).filter(x => x && !known.has(x.url) && !vids.has(ttVid(x.url))
+        && (adopt.has(x.url) || !hand.has(ttVid(x.url))));
       const vs = await API.tiktok.list(token, f, OLDER_PAGES, list => fresh(list).length >= want, oldest ? Date.parse(oldest) + 864e5 : null);
       const posts = fresh(vs).slice(0, want);
       return { posts, more: posts.length > 0 && vs.more };
@@ -964,9 +967,12 @@ const mergeAud = (old, neu) => {
 };
 
 // Gönderiler tek JSON parametresiyle (D1'de sorgu başına en çok 100 parametre). Bu hesaptan aktarılmış gönderinin
-// türü, metni ve kapağı değiştiyse tazelenir (Instagram ve TikTok kapak adresleri süreli); elle girilmiş aynı bağlantıya
-// dokunulmaz. Kullanıcının MAX_POSTS gönderisi varsa yenisi eklenmez (sınır sorgu başında sayılır: bir senkron aşabilir);
-// var olan gönderi sınırda da tazelenir.
+// türü, metni ve kapağı değiştiyse tazelenir (Instagram ve TikTok kapak adresleri süreli). Aynı bağlantıyla elle girilmiş
+// (account_id NULL) aynı platformdaki gönderi sahiplenilir: hesaba bağlanır, türü, tarihi, metni, kapağı ve kitlesi
+// senkrondan yazılır; aynı batch'teki ölçüm yazımı onu görür (o günün ölçümü ilk senkronda yazılır), eski elle ölçümleri
+// kalır. Bundan sonra aktarılmış gönderidir (düzeltme yetkisi, bağ koparılınca silinme, ytRetention). Başka hesaptan
+// aktarılmış gönderiye dokunulmaz. Kullanıcının MAX_POSTS gönderisi varsa yenisi eklenmez (sınır sorgu başında
+// sayılır: bir senkron aşabilir); var olan gönderi sınırda da tazelenir.
 // Kitle (audience) anahtar anahtar birleşir (patchAud): gelen watch/sources/viewers/demo/ig eskisinin yerine geçer, gelmeyen anahtar kalır.
 // Yeni satıra null'suz yazılır; var olan satırda ham değer birleşir (null anahtar silinir).
 // Ölçüm son SAMPLE gönderide günde bir (aynı gün tekrar senkronlanırsa üzerine yazılır), daha eskilerde haftada bir.
@@ -986,11 +992,13 @@ function postWrites(env, a, externalId, leaseAt, posts, recent, edits = true) {
        FROM json_each(?) j
        WHERE ${own} AND ((SELECT COUNT(*) FROM posts WHERE user_id = ?) < ${MAX_POSTS}
          OR EXISTS (SELECT 1 FROM posts q WHERE q.user_id = ? AND q.url = json_extract(j.value, '$.url')))
-       ON CONFLICT (user_id, url) DO UPDATE SET type = excluded.type, caption = excluded.caption, thumb = excluded.thumb,
-         audience = ${AUD}
-         WHERE posts.account_id = excluded.account_id
-           AND (posts.type <> excluded.type OR posts.caption <> excluded.caption OR posts.thumb <> excluded.thumb
-             OR (excluded.audience IS NOT NULL AND (${AUD}) IS NOT posts.audience))`,
+       ON CONFLICT (user_id, url) DO UPDATE SET account_id = excluded.account_id, type = excluded.type,
+         date = CASE WHEN posts.account_id IS NULL THEN excluded.date ELSE posts.date END,
+         caption = excluded.caption, thumb = excluded.thumb, audience = ${AUD}
+         WHERE (posts.account_id IS NULL AND posts.platform = excluded.platform)
+           OR (posts.account_id = excluded.account_id
+             AND (posts.type <> excluded.type OR posts.caption <> excluded.caption OR posts.thumb <> excluded.thumb
+               OR (excluded.audience IS NOT NULL AND (${AUD}) IS NOT posts.audience)))`,
     ).bind(a.user_id, a.platform, a.id, a.user_id, posts, a.id, externalId, leaseAt, a.user_id, a.user_id),
     env.DB.prepare(
       `INSERT INTO post_snaps (post_id, at, likes, comments, views, reach)
@@ -1097,7 +1105,9 @@ export const OLDER_SYNCED = SYNCED.filter(p => API[p].older);
 // kitle yazılmaz. Senkronla aynı kira: vadesi 15 dakika içindeyse (senkron ya da başka istek sürüyor) "busy"; bitince
 // eski vade geri konur, günlük senkron kaymaz. İstek sayısı en kötü: yenileme + profil + OLDER_PAGES liste sayfası
 // (Instagram'da + alan reddinde tekrar, YouTube'da + 4 video parçası): Instagram 27, TikTok 26, YouTube 30.
-// Dönüş: {added, more (listede daha eski var), full (sınıra ulaşıldı)}.
+// Aynı platformda aynı bağlantıyla elle girilmiş (account_id NULL) gönderi atlanmaz: listede gelirse postWrites onu
+// sahiplenir (yeni satır eklemez, sınıra yaklaştırmaz). Dönüş: {added (yeni eklenen ya da sahiplenilen gönderi sayısı),
+// more (listede daha eski var), full (sınıra ulaşıldı)}.
 export async function fetchOlderPosts(env, userId, p, f = fetch) {
   if (!OLDER_SYNCED.includes(p)) throw new ProviderError("no_api");
   if (!oauthReady(env, p)) throw new ProviderError("not_configured");
@@ -1106,10 +1116,11 @@ export async function fetchOlderPosts(env, userId, p, f = fetch) {
      WHERE user_id = ? AND platform = ? AND status = 'connected' AND external_id IS NOT NULL`,
   ).bind(userId, p).first();
   if (!acc) throw new ProviderError("not_connected");
-  const { results: rows = [] } = await env.DB.prepare("SELECT url, date, account_id FROM posts WHERE user_id = ?").bind(userId).all();
+  const { results: rows = [] } = await env.DB.prepare("SELECT url, date, account_id, platform FROM posts WHERE user_id = ?").bind(userId).all();
   const want = Math.min(OLDER, MAX_POSTS - rows.length);
   if (want <= 0) throw new ProviderError("full");
-  const known = new Set(rows.map(r => r.url));
+  const adopt = new Set(rows.filter(r => r.account_id == null && r.platform === p).map(r => r.url));
+  const known = new Set(rows.map(r => r.url).filter(u => !adopt.has(u)));
   const oldest = rows.filter(r => r.account_id === acc.id).map(r => r.date).sort()[0] || null;
   const lease = await env.DB.prepare(
     `UPDATE social_accounts SET next_sync_at = datetime('now', '+15 minutes')
@@ -1121,13 +1132,14 @@ export async function fetchOlderPosts(env, userId, p, f = fetch) {
   try {
     const m = await withToken(env, userId, p, f, async access => {
       const pr = await API[p].profile(access, f);
-      return { external_id: extId(pr.external_id), handle: cleanHandle(pr.handle), ...(await API[p].older(access, f, pr, { known, want, oldest })) };
+      return { external_id: extId(pr.external_id), handle: cleanHandle(pr.handle), ...(await API[p].older(access, f, pr, { known, adopt, want, oldest })) };
     });
     if (!m.posts.length) return { added: 0, more: false, full: false };
     const [ins] = await batchOr(env, "post_edits", ed => postWrites(env, { id: acc.id, user_id: userId, platform: p }, m.external_id, lease.next_sync_at, JSON.stringify(m.posts), 0, ed));
     const added = ins.meta?.changes || 0;
     if (!added) throw new ProviderError("changed"); // kira düştü (hesap yeniden bağlandı) ya da sınır araya giren aktarımla doldu
-    return { added, more: m.more, full: rows.length + added >= MAX_POSTS };
+    const adopted = m.posts.filter(x => adopt.has(x.url)).length; // satırı zaten rows'ta sayılı
+    return { added, more: m.more, full: rows.length + Math.max(0, added - adopted) >= MAX_POSTS };
   } finally {
     await env.DB.prepare("UPDATE social_accounts SET next_sync_at = ? WHERE id = ? AND next_sync_at = ?")
       .bind(acc.next_sync_at, acc.id, lease.next_sync_at).run().catch(() => {});
