@@ -14,8 +14,10 @@ const PRIVATE = /^_(audit|mirror-report|orig-).*|\.log$/;
 
 await mkdir(OUT, { recursive: true });
 // wishceo sayilar/NNN.json: app.js ISSUES'taki açılış tarihi bugünden (Türkiye saati, app.js todayTR gibi) ileri olan sayı yayına çıkmaz;
-// hiç açılmış sayı yoksa en yeni JSON kopyalanır. Yalnız ISSUES = [ … ] dizisi okunur; yorum satırına alınmış sayı açılmış sayılmaz
-const ISSUE_DATES = new Map([...((await readFile(join(SRC, "app.js"), "utf8").catch(() => "")).match(/\bISSUES\s*=\s*\[([\s\S]*?)\]/)?.[1] || "").replace(/\/\*[\s\S]*?\*\/|\/\/.*/g, "").matchAll(/no:\s*"(\d+)",\s*date:\s*"(\d{4}-\d{2}-\d{2})"/g)].map(m => [m[1], m[2]]));
+// hiç açılmış sayı yoksa en yeni JSON kopyalanır. Yorumlar önce bütün dosyadan atılır, sonra yalnız ISSUES = [ … ]; dizisi (satır başındaki "];"e kadar) okunur;
+// yorum satırına alınmış sayı açılmış sayılmaz. Okunamayan kayıt ya da tarihi olmayan sayı dosyası uyarı verir
+const ISSUES_SRC = (await readFile(join(SRC, "app.js"), "utf8").catch(() => "")).replace(/\/\*[\s\S]*?\*\/|\/\/.*/g, "").match(/\bISSUES\s*=\s*\[([\s\S]*?)\n\s*\];/)?.[1] || "";
+const ISSUE_DATES = new Map([...ISSUES_SRC.matchAll(/no:\s*"(\d+)",\s*date:\s*"(\d{4}-\d{2}-\d{2})"/g)].map(m => [m[1], m[2]]));
 // Intl/saat dilimi verisi yoksa ya da beklenmedik parça dönerse app.js todayTR gibi UTC+3 (Türkiye 2016'dan beri yaz saati uygulamıyor)
 const today = (() => {
   try {
@@ -31,6 +33,9 @@ const liveIssues = new Set(released.length ? released : issueFiles.slice(-1));
 const isIssue = src => basename(join(src, "..")) === "sayilar" && /^\d+\.json$/.test(basename(src));
 await cp(SRC, OUT, { recursive: true, force: true, filter: src => !PRIVATE.test(basename(src)) && (!isIssue(src) || liveIssues.has(basename(src))) });
 if (issueFiles.length) console.log(`sayilar: ${liveIssues.size}/${issueFiles.length} yayında (${today})`);
+const undated = issueFiles.filter(n => !ISSUE_DATES.has(n.replace(".json", "")));
+if (issueFiles.length && (undated.length || (ISSUES_SRC.match(/\bno\s*:/g) || []).length !== ISSUE_DATES.size))
+  console.log(`::warning file=${relative(root, join(SRC, "app.js"))}::sayilar: ISSUES ${ISSUE_DATES.size} kayıt okundu${undated.length ? `, tarihi yok: ${undated.join(" ")}` : ""}`);
 
 // wishceo index.html'deki sayı alanları (JS çalıştırmayan botlar ve ilk boyama için) yayındaki son sayıdan yazılır; metinler app.js fillPage/init ile aynı.
 // Alanlardan biri bulunmazsa, birden çok yerde geçerse ya da içinde etiket varsa index olduğu gibi kalır (app.js sayfayı yine doldurur)
@@ -58,7 +63,7 @@ if (released.length) {
       return `<li><a href="#oyun"><span class="n">${String(i + 1).padStart(2, "0")}</span><span class="t">${esc(c.title)}</span><span class="m">${esc(c.area + " · " + c.place[0] + (y ? ", " + y : ""))}</span></a></li>`;
     });
     // Etiketler öznitelik değerleri atlanarak okunur; yorum, <script> ve <style> aynı uzunlukta boşlukla maskelenir (konumlar asıl HTML'de geçerli)
-    const mask = h => h.replace(/<!--[\s\S]*?(?:-->|$)|<(script|style)\b[\s\S]*?(?:<\/\1\s*>|$)/gi, m => " ".repeat(m.length));
+    const mask = h => h.replace(/<!--(?:-?>|[\s\S]*?(?:--!?>|$))|<(script|style)\b[\s\S]*?(?:<\/\1\s*>|$)/gi, m => " ".repeat(m.length));
     const tags = h => [...mask(h).matchAll(/<([a-zA-Z][a-zA-Z0-9-]*)((?:\s+[^\s"'>\/=]+(?:\s*=\s*(?:"[^"]*"|'[^']*'|[^\s"'=<>`]+))?)*)\s*\/?>/g)].map(m => ({
       name: m[1].toLowerCase(), start: m.index, end: m.index + m[0].length,
       attrs: new Map([...m[2].matchAll(/\s+([^\s"'>\/=]+)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'=<>`]+)))?/g)].map(a => [a[1].toLowerCase(), a[2] ?? a[3] ?? a[4] ?? ""])),
@@ -77,10 +82,11 @@ if (released.length) {
       if (!cands.length || raw !== cands.length || spans.some(s => !s.m)) { miss.push(label); continue; }
       for (const { t, m } of spans.reverse()) html = html.slice(0, t.end) + val + html.slice(t.end + m[0].length);
     }
-    // vaka listesi: tek bir <ol id="index-list">, içinde yalnız <li>'ler; satır düzeni korunur (ilk <li>'den önceki boşluk her satırda tekrarlanır)
+    // vaka listesi: tek bir <ol id="index-list">, içinde yalnız <li>'ler (yorum, <script>, <style> yok); satır düzeni korunur (ilk <li>'den önceki boşluk her satırda tekrarlanır)
     const lists = tags(html).filter(t => t.attrs.get("id") === "index-list");
-    const body = lists.length === 1 && lists[0].name === "ol" ? html.slice(lists[0].end).match(/^[\s\S]*?(?=<\/ol\s*>)/i)?.[0] : undefined;
-    if (body == null || /<ol\b|<\/?(?:section|aside|main|div|article|header|footer)\b|\sid\s*=/i.test(body) || !/^\s*(?:<li\b[\s\S]*?<\/li>\s*)*$/i.test(body)) miss.push('id="index-list"');
+    const len = lists.length === 1 && lists[0].name === "ol" ? mask(html).slice(lists[0].end).search(/<\/ol\s*>/i) : -1;
+    const body = len < 0 ? undefined : html.slice(lists[0].end, lists[0].end + len);
+    if (body == null || mask(body) !== body || /<ol\b|<\/?(?:section|aside|main|div|article|header|footer)\b|\sid\s*=/i.test(body) || !/^\s*(?:<li\b(?:(?!<\/?li\b)[\s\S])*<\/li\s*>\s*)*$/i.test(body)) miss.push('id="index-list"');
     else {
       const ws = body.match(/^\s*/)[0], trail = body.slice(ws.length).match(/\s*$/)[0];
       html = html.slice(0, lists[0].end) + ws + items.join(ws) + trail + html.slice(lists[0].end + body.length);
