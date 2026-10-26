@@ -26,11 +26,51 @@ const today = (() => {
   return new Date(Date.now() + 3 * 36e5).toISOString().slice(0, 10);
 })();
 const issueFiles = (await readdir(join(SRC, "sayilar")).catch(() => [])).filter(n => /^\d+\.json$/.test(n)).sort();
-let liveIssues = new Set(issueFiles.filter(n => (ISSUE_DATES.get(n.replace(".json", "")) || "9999") <= today));
-if (issueFiles.length && !liveIssues.size) liveIssues = new Set(issueFiles.slice(-1));
+const released = issueFiles.filter(n => (ISSUE_DATES.get(n.replace(".json", "")) || "9999") <= today);
+const liveIssues = new Set(released.length ? released : issueFiles.slice(-1));
 const isIssue = src => basename(join(src, "..")) === "sayilar" && /^\d+\.json$/.test(basename(src));
 await cp(SRC, OUT, { recursive: true, force: true, filter: src => !PRIVATE.test(basename(src)) && (!isIssue(src) || liveIssues.has(basename(src))) });
 if (issueFiles.length) console.log(`sayilar: ${liveIssues.size}/${issueFiles.length} yayında (${today})`);
+
+// wishceo index.html'deki sayı alanları (JS çalıştırmayan botlar ve ilk boyama için) yayındaki son sayıdan yazılır; metinler app.js fillPage/init ile aynı.
+// Alanlardan biri bulunmazsa ya da içinde etiket varsa index olduğu gibi kalır (app.js sayfayı yine doldurur)
+let stamped;
+if (released.length) {
+  // app.js boot gibi: vaka dizisi dolu olan en yeni açılmış sayı
+  let no, cases;
+  for (const n of [...released].reverse()) {
+    cases = await readFile(join(SRC, "sayilar", n), "utf8").then(JSON.parse).catch(() => null);
+    if (Array.isArray(cases) && cases.length) { no = n.replace(".json", ""); break; }
+  }
+  // app.js'in okuduğu vaka alanlarından biri yoksa yazılmaz (sayfaya "undefined" çıkmasın)
+  if (no && !cases.every(c => c?.title != null && c.area != null && Array.isArray(c.place) && c.place[0] != null)) { console.log(`index: sayı ${no} yazılmadı, vaka alanı eksik`); no = undefined; }
+  if (no) {
+    const N = cases.length, WORDS = ["", "Bir", "İki", "Üç", "Dört", "Beş", "Altı"], WORDS_LO = ["", "bir", "iki", "üç", "dört", "beş", "altı"];
+    const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+    const date = new Date(ISSUE_DATES.get(no) + "T12:00:00+03:00").toLocaleDateString("tr-TR", { day: "numeric", month: "long", year: "numeric", timeZone: "Europe/Istanbul" });
+    const items = cases.map((c, i) => {
+      const y = (c.place[1] || "").replace(/^\s*·\s*/, "");
+      return `<li><a href="#oyun"><span class="n">${String(i + 1).padStart(2, "0")}</span><span class="t">${esc(c.title)}</span><span class="m">${esc(c.area + " · " + c.place[0] + (y ? ", " + y : ""))}</span></a></li>`;
+    });
+    // [öznitelik, metin]: o öznitelikli her öğenin içi (düz metinse) değişir; app.js de altıdan fazla dosyada giriş cümlesine dokunmaz
+    const FIELDS = [["data-issue", `Sayı ${no}`], ['id="today"', date], ['id="hero-meta"', `${N} dosya · ${N} karar · 1 CEO karnesi · Üyelik yok`]];
+    if (WORDS[N]) FIELDS.push(['id="oyun-intro"', `${WORDS[N]} şirket, ${WORDS_LO[N]} kriz. Hangisinde vakadaki CEO’dan daha iyi iş çıkarırsın?`]);
+    let html = await readFile(join(OUT, "index.html"), "utf8").catch(() => "");
+    const miss = [];
+    for (const [attr, val] of FIELDS) {
+      const open = `<([a-z][a-z0-9]*)\\b[^>]*\\s${attr}(?=[\\s>])[^>]*>`;
+      let hits = 0;
+      const out = html.replace(new RegExp(`(${open})[^<]*(?=</\\2>)`, "g"), (m, o) => (hits++, o + val));
+      if (hits && hits === (html.match(new RegExp(open, "g")) || []).length) html = out; else miss.push(attr);
+    }
+    // vaka listesi: satır düzeni korunur (ilk <li>'den önceki boşluk her satırda tekrarlanır)
+    let list = 0;
+    html = html.replace(/(<ol\b[^>]*\sid="index-list"[^>]*>)(\s*)[\s\S]*?(\s*<\/ol>)/, (m, o, ws, c) => (list++, o + ws + items.join(ws) + c));
+    if (!list) miss.push('id="index-list"');
+    if (miss.length) console.log(`index: sayı ${no} yazılmadı, bulunamayan alan: ${miss.join(", ")}`);
+    else { await writeFile(join(OUT, "index.html"), html); stamped = html; console.log(`index: sayı ${no} yazıldı (${N} dosya, ${date})`); }
+  }
+}
 
 // Formlar corner-forms Worker'ına bağlanır (tools/forms-client.js); salescorner rakip analizi ayrı bir araç
 const FORMS = `<script data-sk-forms>${await readFile(join(import.meta.dirname, "forms-client.js"), "utf8")}</script>`;
@@ -88,7 +128,8 @@ for await (const f of allHtml(OUT)) {
 
 // Canonical origin (www'lu ya da çıplak) sitemap'ten alınır
 const orig = await readFile(join(SRC, "_orig-sitemap.xml"), "utf8").catch(() => "");
-const index = await readFile(join(SRC, "index.html"), "utf8").catch(() => "");
+// wishceo'da sayı alanları yazılmış index (llms-full.txt ana sayfa metni yayındaki sayıyı gösterir)
+const index = stamped ?? await readFile(join(SRC, "index.html"), "utf8").catch(() => "");
 const origin = orig.match(/<loc>(https?:\/\/[^/<]+)/)?.[1] || index.match(/<link rel="canonical" href="(https?:\/\/[^/"]+)/)?.[1] || `https://${host}`;
 
 async function* pages(dir) {
