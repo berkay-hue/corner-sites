@@ -15,30 +15,33 @@ const PRIVATE = /^_(audit|mirror-report|orig-).*|\.log$/;
 await mkdir(OUT, { recursive: true });
 // wishceo sayilar/NNN.json: app.js ISSUES'taki açılış tarihi bugünden (Türkiye saati, app.js todayTR gibi) ileri olan sayı yayına çıkmaz;
 // hiç açılmış sayı yoksa app.js gibi ISSUES'taki ilk sayı kopyalanır. Dizi, satır başındaki tek "var ISSUES = [" bildiriminden eşleşen "]"e kadar okunur:
-// dizgiler korunur, yorumlar atılır (yorum satırına alınmış sayı açılmış sayılmaz). Dizi okunamazsa eskisi gibi bütün dosya taranır.
+// dizgiler korunur, yorumlar atılır (yorum satırına alınmış sayı açılmış sayılmaz). Dizi okunamazsa bütün dosya yorumları atılarak taranır.
 // Bu durum, okunamayan kayıt ve tarihi olmayan sayı dosyası uyarı verir
 const APP_JS = await readFile(join(SRC, "app.js"), "utf8").catch(() => "");
-const issuesArray = s => {
-  const decl = [...s.matchAll(/^[ \t]*(?:var|let|const)[ \t]+ISSUES[ \t]*=[ \t]*\[/gm)];
-  if (decl.length !== 1) return null;
-  let out = "", depth = 1;
-  for (let i = decl[0].index + decl[0][0].length; i < s.length; i++) {
+// i'den itibaren dizgiler korunup yorumlar atılır; depth verilirse eşleşen kapanış parantezinde durulur
+const stripJs = (s, i = 0, depth = 0) => {
+  let out = "";
+  for (; i < s.length; i++) {
     const c = s[i];
-    if (c === "/" && s[i + 1] === "/") { const e = s.indexOf("\n", i); if (e < 0) return null; i = e - 1; continue; }
+    if (c === "/" && s[i + 1] === "/") { const e = s.indexOf("\n", i); if (e < 0) return depth ? null : out; i = e - 1; continue; }
     if (c === "/" && s[i + 1] === "*") { const e = s.indexOf("*/", i + 2); if (e < 0) return null; i = e + 1; out += " "; continue; }
     if (c === '"' || c === "'" || c === "`") {
       let j = i + 1;
-      for (; j < s.length && s[j] !== c; j++) { if (s[j] === "\\") j++; else if (c !== "`" && s[j] === "\n") return null; }
-      if (j >= s.length) return null;
-      out += s.slice(i, j + 1); i = j; continue;
+      for (; j < s.length && s[j] !== c && (c === "`" || s[j] !== "\n"); j++) if (s[j] === "\\") j++;
+      if (s[j] === c) { out += s.slice(i, j + 1); i = j; continue; }
+      // kapanmayan dizgi: dizide okuma bırakılır; bütün dosyada (düzenli ifadedeki tırnak gibi) düz karakter sayılır
+      if (depth) return null;
     }
-    if ("[{(".includes(c)) depth++;
-    else if ("]})".includes(c) && !--depth) return out;
+    if (depth) { if ("[{(".includes(c)) depth++; else if ("]})".includes(c) && !--depth) return out; }
     out += c;
   }
-  return null;
+  return depth ? null : out;
 };
-const ISSUES_ARR = issuesArray(APP_JS), ISSUES_SRC = ISSUES_ARR ?? APP_JS;
+const issuesArray = s => {
+  const decl = [...s.matchAll(/^[ \t]*(?:var|let|const)[ \t]+ISSUES[ \t]*=[ \t]*\[/gm)];
+  return decl.length === 1 ? stripJs(s, decl[0].index + decl[0][0].length, 1) : null;
+};
+const ISSUES_ARR = issuesArray(APP_JS), ISSUES_SRC = ISSUES_ARR ?? stripJs(APP_JS) ?? APP_JS;
 const ISSUE_DATES = new Map([...ISSUES_SRC.matchAll(/no:\s*"(\d+)",\s*date:\s*"(\d{4}-\d{2}-\d{2})"/g)].map(m => [m[1], m[2]]));
 // Intl/saat dilimi verisi yoksa ya da beklenmedik parça dönerse app.js todayTR gibi UTC+3 (Türkiye 2016'dan beri yaz saati uygulamıyor)
 const today = (() => {
@@ -76,9 +79,9 @@ if (released.length) {
   if (no && !cases.every(c => c?.title != null && c.area != null && Array.isArray(c.place) && c.place[0] != null)) { warn(`sayı ${no} yazılmadı, vaka alanı eksik`); no = undefined; }
   // place[1] boş olmayan bir metin dışı değerse app.js yearOf çöker: deploy bilerek durur (oyunu açılmayan sayı yayına çıkmasın)
   if (no) cases.forEach((c, i) => { if (c.place[1] && typeof c.place[1] !== "string") throw new Error(`sayı ${no} dosya ${i + 1}: place[1] metin değil`); });
-  // tarih app.js gibi taşarak okunur (31 Nisan -> 1 Mayıs); ay geçersizse app.js de tarihi yazamaz, index olduğu gibi kalır
+  // tarih app.js gibi taşarak okunur (31 Nisan -> 1 Mayıs); ay ya da gün geçersizse (32 vb.) app.js de tarihi yazamaz, index olduğu gibi kalır
   const [Y, M, D] = no ? ISSUE_DATES.get(no).split("-").map(Number) : [];
-  if (no && !(M >= 1 && M <= 12 && D >= 1)) { warn(`sayı ${no} yazılmadı, tarih geçersiz: ${ISSUE_DATES.get(no)}`); no = undefined; }
+  if (no && !(M >= 1 && M <= 12 && D >= 1 && D <= 31)) { warn(`sayı ${no} yazılmadı, tarih geçersiz: ${ISSUE_DATES.get(no)}`); no = undefined; }
   if (no) {
     const N = cases.length, WORDS = ["", "Bir", "İki", "Üç", "Dört", "Beş", "Altı"], WORDS_LO = ["", "bir", "iki", "üç", "dört", "beş", "altı"];
     const AY = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"];
