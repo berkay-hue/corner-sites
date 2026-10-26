@@ -114,7 +114,7 @@ footer.bot{border-top:1px solid var(--line);color:var(--muted);font-size:13.5px;
 @media(pointer:fine){.dense .item .row-b .btn.sm,.dense .item .row-b .ghost{min-height:36px}}
 .quote.rev{border-left-color:var(--warn)}
 .item h3{font-size:16.5px;margin:0;overflow-wrap:anywhere}.item h3 a{text-decoration:none}.item h3 a:hover{color:var(--accent-text)}
-.meta{color:var(--muted);font-size:13.5px;margin:6px 0 0;display:flex;flex-wrap:wrap;gap:2px 14px}
+.meta{color:var(--muted);font-size:13.5px;margin:6px 0 0;display:flex;flex-wrap:wrap;align-items:center;gap:2px 14px}
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 0}.chip{font-size:12.5px;line-height:1.5;padding:2px 9px;border-radius:6px;background:var(--surface-2);border:1px solid var(--line);color:var(--muted)}
 .handles{list-style:none;padding:0;margin:10px 0 0;display:flex;flex-wrap:wrap;gap:4px 18px;font-size:13.5px;color:var(--muted)}
 .badge{display:inline-block;font-size:12px;font-weight:600;line-height:1.6;padding:1px 9px;border-radius:999px;white-space:nowrap;background:var(--accent-soft);color:var(--accent-text)}
@@ -262,12 +262,14 @@ dialog.cmdk[open]{display:flex;flex-direction:column}dialog.cmdk::backdrop{backg
 .pmeta{display:flex;flex-wrap:wrap;gap:2px 10px;color:var(--muted);font-size:12.5px}.pmeta b{color:var(--text);font-weight:600}
 .cgrid{grid-template-columns:repeat(3,minmax(0,1fr))}.pact{display:flex;flex-wrap:wrap;gap:6px;margin-top:2px}.pact .btn,.pact .ghost{min-height:44px;display:inline-flex;align-items:center;text-decoration:none}.pact .badge{margin:0}.ctarget{max-width:360px;margin:0 0 12px}.ctarget select{min-height:44px}.cacc{list-style:none;margin:0;padding:0}.cacc li{padding:10px 0;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:4px}.cacc li:first-child{border-top:0;padding-top:0}.cacc .badge{margin:0}@media(max-width:640px){.cgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .aud{flex:1 1 100%;margin:10px 0 0}.aud h3{font-size:15px;margin:4px 0 8px}.aud h4{font-size:13.5px;font-weight:600;color:var(--muted);margin:14px 0 6px}.aud h3+h4{margin-top:0}.aud>h4:first-child{margin-top:0}.audg{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 24px}.aud .k{font-size:12.5px;color:var(--muted);margin:0 0 4px}.bars{list-style:none;margin:0;padding:0}.bars li{display:grid;grid-template-columns:minmax(0,7.5em) minmax(0,1fr) 3.4em;align-items:center;gap:8px;font-size:13px;padding:2px 0}.bars li span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.bars .bt{height:8px;border-radius:4px;background:var(--surface-2);overflow:hidden}.bars .bt i{display:block;height:100%;border-radius:4px;background:var(--accent)}.bars b{font-weight:600;text-align:right;font-variant-numeric:tabular-nums}.bars.wide li{grid-template-columns:minmax(0,9.5em) minmax(0,1fr) 3.4em}.audacc{padding:10px 0;border-top:1px solid var(--line)}.aud h3+.audacc{border-top:0;padding-top:0}.cb>.audacc:first-child{border-top:0;padding-top:0}.auds{display:grid;grid-template-columns:repeat(auto-fit,minmax(10.5em,1fr));gap:10px;margin:0 0 12px}.auds .stat{background:var(--surface-2);border:0;padding:10px 12px}.auds .stat .v{font-size:16px}.auds .stat .d{font-size:12.5px;color:var(--muted);margin-top:2px}@media(max-width:640px){.audg{grid-template-columns:minmax(0,1fr)}}
-.ach{min-width:0}.achart{border-radius:6px}.achart:focus-visible{outline:2px solid var(--accent);outline-offset:4px}.stk{display:flex;gap:2px}.stk i{flex:1 1 0;min-width:2px;height:24px}.stk i::before{content:"";display:block;height:16px;margin-top:4px;background:var(--c)}.stk i:first-child::before{border-radius:4px 0 0 4px}.stk i:last-child::before{border-radius:0 4px 4px 0}.stk i:only-child::before{border-radius:4px}.stk i.on::before{outline:2px solid var(--text);outline-offset:1px}.stk.mini{min-width:6em;margin:0 0 4px}.stk.mini i,.stk.mini i::before{height:8px;margin:0}.lgd{display:flex;flex-wrap:wrap;gap:4px 14px;list-style:none;margin:6px 0 0;padding:0;font-size:12.5px;color:var(--muted)}.lgd li{display:inline-flex;align-items:center;gap:6px}.lgd i{flex:none;width:10px;height:10px;border-radius:2px}.lgd b{color:var(--text);font-weight:600;font-variant-numeric:tabular-nums}.acol{display:flex;margin:2px 0 0}.acol>div{flex:1 1 0;min-width:0;height:136px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end}.acol b{font-size:11.5px;font-weight:500;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap;margin:0 0 3px}.acol b.top{color:var(--text);font-weight:700}.acol i{display:block;width:min(24px,64%);border-radius:4px 4px 0 0;background:var(--c1)}.acol>div.on i{outline:2px solid var(--text);outline-offset:1px}.acol span{align-self:stretch;text-align:center;border-top:1px solid var(--line-strong);padding:4px 0 0;font-size:11.5px;color:var(--muted);white-space:nowrap}.hb{list-style:none;margin:0;padding:0}.hb li{display:grid;grid-template-columns:minmax(0,7.5em) minmax(0,1fr);gap:8px;align-items:center;min-height:26px;font-size:13px}.hb li>span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.hb .hv{display:flex;align-items:center;gap:6px;min-width:0}.hb .hv i{flex:none;height:12px;min-width:2px;border-radius:0 4px 4px 0;background:var(--c1)}.hb li.oth .hv i{background:var(--c0)}.hb li.on .hv i{outline:2px solid var(--text);outline-offset:1px}.hb .hv b{font-size:12.5px;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}.hb.wide li{grid-template-columns:minmax(0,9.5em) minmax(0,1fr)}.ctip{position:fixed;left:0;top:0;z-index:60;pointer-events:none;display:flex;align-items:center;gap:8px;max-width:min(320px,calc(100vw - 16px));padding:6px 10px;border:1px solid var(--line-strong);border-radius:8px;background:var(--surface);color:var(--text);box-shadow:0 6px 18px rgba(0,0,0,.14);font-size:12.5px;white-space:nowrap}.ctip[hidden]{display:none}.ctip i{flex:none;width:12px;height:3px;border-radius:2px}.ctip b{font-weight:700;font-variant-numeric:tabular-nums}.ctip span{min-width:0;overflow:hidden;text-overflow:ellipsis;color:var(--muted)}.atab{display:none;width:100%;border-collapse:collapse;font-size:13.5px;margin:4px 0 0}.atab th,.atab td{text-align:right;padding:8px 6px;border-top:1px solid var(--line)}.atab th:first-child,.atab td:first-child{text-align:left}.atab th{color:var(--muted);font-weight:500}.atab tbody th{color:var(--text);font-weight:400}.aud.tbl .achart{display:none}.aud.tbl .atab{display:table}
+.ach{min-width:0}.achart{border-radius:6px}.achart:focus-visible{outline:2px solid var(--accent);outline-offset:4px}.stk{display:flex;gap:2px}.stk i{flex:1 1 0;min-width:2px;height:24px}.stk i::before{content:"";display:block;height:16px;margin-top:4px;background:var(--c)}.stk i:first-child::before{border-radius:4px 0 0 4px}.stk i:last-child::before{border-radius:0 4px 4px 0}.stk i:only-child::before{border-radius:4px}.stk i.on::before{outline:2px solid var(--text);outline-offset:1px}.lgd{display:flex;flex-wrap:wrap;gap:4px 14px;list-style:none;margin:6px 0 0;padding:0;font-size:12.5px;color:var(--muted)}.lgd li{display:inline-flex;align-items:center;gap:6px}.lgd i{flex:none;width:10px;height:10px;border-radius:2px}.lgd b{color:var(--text);font-weight:600;font-variant-numeric:tabular-nums}.acol{display:flex;margin:2px 0 0}.acol>div{flex:1 1 0;min-width:0;height:136px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end}.acol b{font-size:11.5px;font-weight:500;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap;margin:0 0 3px}.acol b.top{color:var(--text);font-weight:700}.acol i{display:block;width:min(24px,64%);border-radius:4px 4px 0 0;background:var(--c1)}.acol>div.on i{outline:2px solid var(--text);outline-offset:1px}.acol span{align-self:stretch;text-align:center;border-top:1px solid var(--line-strong);padding:4px 0 0;font-size:11.5px;color:var(--muted);white-space:nowrap}.hb{list-style:none;margin:0;padding:0}.hb li{display:grid;grid-template-columns:minmax(0,7.5em) minmax(0,1fr);gap:8px;align-items:center;min-height:26px;font-size:13px}.hb li>span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.hb .hv{display:flex;align-items:center;gap:6px;min-width:0}.hb .hv i{flex:none;height:12px;min-width:2px;border-radius:0 4px 4px 0;background:var(--c1)}.hb li.oth .hv i{background:var(--c0)}.hb li.on .hv i{outline:2px solid var(--text);outline-offset:1px}.hb .hv b{font-size:12.5px;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}.hb.wide li{grid-template-columns:minmax(0,9.5em) minmax(0,1fr)}.ctip{position:fixed;left:0;top:0;z-index:60;pointer-events:none;display:flex;align-items:center;gap:8px;max-width:min(320px,calc(100vw - 16px));padding:6px 10px;border:1px solid var(--line-strong);border-radius:8px;background:var(--surface);color:var(--text);box-shadow:0 6px 18px rgba(0,0,0,.14);font-size:12.5px;white-space:nowrap}.ctip[hidden]{display:none}.ctip i{flex:none;width:12px;height:3px;border-radius:2px}.ctip b{font-weight:700;font-variant-numeric:tabular-nums}.ctip span{min-width:0;overflow:hidden;text-overflow:ellipsis;color:var(--muted)}.atab{display:none;width:100%;border-collapse:collapse;font-size:13.5px;margin:4px 0 0}.atab th,.atab td{text-align:right;padding:8px 6px;border-top:1px solid var(--line)}.atab th:first-child,.atab td:first-child{text-align:left}.atab th{color:var(--muted);font-weight:500}.atab tbody th{color:var(--text);font-weight:400}.aud.tbl .achart{display:none}.aud.tbl .atab{display:table}
 .plist{list-style:none;margin:0;padding:0;border:1px solid var(--line);border-radius:var(--r-card);background:var(--surface);overflow:hidden}
 .prow2{position:relative;display:grid;grid-template-columns:56px minmax(0,1fr) auto;gap:12px;align-items:center;padding:10px 14px;border-top:1px solid var(--line)}.prow2:first-child{border-top:0}.prow2:hover{background:var(--surface-2)}.prow2:focus-within{outline:2px solid var(--accent);outline-offset:-2px}
 .prow2 .pth{width:56px;height:56px;border-radius:8px}.prow2 .pth .i{width:22px;height:22px}.prow2 a.pl{position:absolute;inset:0;z-index:1;font-size:0}.prow2 .er{text-align:right;font-size:13px;color:var(--muted)}.prow2 .er b{display:block;font-size:15px;color:var(--text)}
 .pager{display:flex;align-items:center;justify-content:center;gap:12px;margin:16px 0 0;flex-wrap:wrap}.pager .info{margin:0}.pnote{color:var(--muted);font-size:13px;margin:14px 0 18px}.cb .pnote{margin:12px 0 0}
 .pdet{display:grid;grid-template-columns:minmax(0,280px) minmax(0,1fr);gap:18px;align-items:start}.pdet .pth{border-radius:var(--r-card)}
+.pah{font-size:13.5px;font-weight:600;color:var(--muted);margin:18px 0 6px}.pdh{font-size:15px;margin:0 0 8px}.auds.pa{grid-template-columns:repeat(auto-fit,minmax(8.5em,1fr))}.hb.pab li{grid-template-columns:minmax(0,11em) minmax(0,1fr);padding:2px 0}.hb.pab li>span:first-child{white-space:normal;line-height:1.3}.pasrc{margin-top:14px;display:flex;flex-wrap:wrap;align-items:center;gap:0 12px}.pdcap{display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}.pdcap.open{display:block}.pdmore{margin-top:4px}.pdkpi .stats{margin-top:0}.aptab{min-width:38em}.aptab th,.aptab td{text-align:left}.aptab td{vertical-align:middle}.aptab a.apl{display:flex;align-items:center;gap:10px;min-height:44px;color:inherit;text-decoration:none}.aptab a.apl:hover .apc{text-decoration:underline}.aptab .pth{width:36px;height:36px;border-radius:6px;flex:none}.aptab .pth .i{width:16px;height:16px}.aptab .pth .pt,.aptab .pth .badge{display:none}.aptab .apc{max-width:16em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.aptab .badge{margin:0;white-space:nowrap}.aptab .apn{white-space:nowrap;font-variant-numeric:tabular-nums}
+@media(max-width:640px){.hb.pab li{grid-template-columns:minmax(0,1fr);gap:2px;padding:4px 0}.aptab{min-width:0}.aptab,.aptab tbody{display:block}.aptab thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}.aptab tr{display:flex;flex-wrap:wrap;align-items:center;gap:2px 12px;padding:6px 0;border-top:1px solid var(--line)}.snaps.aptab td{display:block;padding:0;border:0;text-align:left}.aptab td:first-child{flex:1 0 100%}.aptab .apf,.aptab .apd{color:var(--muted);font-size:12.5px}.snaps.aptab td.apb{order:3;display:flex;align-items:center;gap:6px}.aptab .apb::before{content:attr(data-l);color:var(--muted);font-size:12.5px}.snaps.aptab td.apv{order:4;flex:1 0 100%;white-space:normal;padding-bottom:4px}.aptab .apc{max-width:none;white-space:normal}}
 .pchart{width:100%;height:auto;max-height:300px;display:block;margin:6px 0 0}.pchart .ax{stroke:var(--line-strong);stroke-width:1}.pchart .ln{fill:none;stroke-width:2.5}.pchart .l1{stroke:var(--accent)}.pchart .l2{stroke:var(--accent-2);stroke-dasharray:5 4}.pchart text{fill:var(--muted);font:11px "Inter",sans-serif}.pchart circle{fill:var(--surface);stroke-width:2}
 .legend2{display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);margin:6px 0 0}.legend2 span::before{content:"";display:inline-block;width:14px;height:3px;border-radius:2px;margin-right:6px;vertical-align:middle;background:var(--accent)}.legend2 span.b::before{background:var(--accent-2)}
 .snaps{width:100%;border-collapse:collapse;font-size:13.5px;margin:12px 0 0}.snaps th,.snaps td{text-align:right;padding:8px 6px;border-top:1px solid var(--line)}.snaps th:first-child,.snaps td:first-child{text-align:left}.snaps th{color:var(--muted);font-weight:500}.tscroll{overflow-x:auto}
@@ -499,15 +501,30 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       clearFor: "Temizle", drClose: "Kapat", drNoPlat: "Platform eklenmemiş.", crFull: "Tam profil ve son gönderiler", crBack: "← Keşfet", crNone: "Bu influencer bulunamadı ya da artık listelenmiyor.", crAccounts: "Hesap ölçümleri", crPosts: "Son gönderiler", crSampleBadge: "Örnek veri", crSampleNote: "Gönderi bağlantısı henüz açık değil; aşağıdakiler örnek gönderilerdir. Kampanyaya eklemeler yalnız bu tarayıcıda tutulur.", crTarget: "Kampanya", crAdd: "Kampanyaya ekle", crRemove: "Kampanyadan çıkar", crAdded: "Gönderi kampanyaya eklendi.", crRemoved: "Gönderi kampanyadan çıkarıldı.", crVerified: "doğrulandı", crOpenPost: "Gönderiyi aç", crNoPosts: "Henüz gönderi yok.", drHist: "Sizinle geçmiş", drHistNone: "Henüz birlikte çalışmadınız.",
       audTitle: "Kitle dağılımı", aud_followers: "Takipçiler", aud_engaged: "Bu ay etkileşenler", aud_viewers: "İzleyiciler (son 90 gün)", aud_viewers_all: "İzleyiciler (kanalın açıldığı günden bu yana)", aud_age: "Yaş", aud_gender: "Cinsiyet", aud_country: "Ülke", aud_city: "Şehir", audCountryViews: "Ülke (izlenme payı)", audF: "Kadın", audM: "Erkek", audU: "Belirtilmemiş", audYtNote: "Yaş ve cinsiyet yalnız oturum açmış izleyicilerden.", audIgMin: "Kitle dağılımı henüz yok. Instagram bu veriyi 100 ve üzeri takipçili hesaplara verir; bir sonraki eşitlemede güncellenir.", audYtWait: "Kitle dağılımı henüz yok. Bağlantın kitle iznini içermiyorsa YouTube'u bir kez \"Yeniden bağla\" ile bağla; ölçümlerin silinmez. Az izlenen kanallarda YouTube bu veriyi vermez.", audNone: "Bu platform kitle dağılımı (yaş, cinsiyet, ülke) vermiyor.", audNoneYet: "Kitle dağılımı henüz yok.",
       aud_industry: "Sektör", aud_seniority: "Kıdem", aud_function: "İş fonksiyonu", aud_size: "Şirket büyüklüğü (çalışan)", audAgeGrp: "Yaş grubu", audYoung: "Genç (13–24)", audAdult: "Yetişkin (25–44)", audMature: "Olgun (45+)", audLeanEq: "Dengeli", audLeanF: "Kadın ağırlıklı", audLeanM: "Erkek ağırlıklı", audTopAge: "en büyük dilim {n}", audTopCity: "en çok {n}", audLiNone: "LinkedIn kişisel profilde yalnız takipçi sayısını veriyor. Sektör, kıdem, iş fonksiyonu ve şirket büyüklüğü dağılımı yalnız LinkedIn şirket sayfası takipçilerinde var.", audProNote: "Sektör, kıdem ve şirket büyüklüğünü Instagram ve YouTube vermiyor; bu dağılım yalnız LinkedIn şirket sayfası takipçilerinde var.",
-      audTotH: "Hesap geneli", audPostsH: "Gönderi başına", audColPost: "Gönderi", audShowTable: "Tablo olarak gör", audShowChart: "Grafik olarak gör", audOther: "Diğer", audColShare: "Pay",
+      audTotH: "Hesap geneli", audColPost: "Gönderi", audShowTable: "Tablo olarak gör", audShowChart: "Grafik olarak gör", audOther: "Diğer", audColShare: "Pay",
       audNoAcc: "Kitle dağılımı veren bağlı hesabın yok. Instagram ya da YouTube'u Profil'den bağla. Yeni bağladıysan kitle ilk eşitlemeden sonra burada görünür.",
-      audPostsNone: "Henüz kitle dağılımı gelen gönderi yok. Gönderi başına kitleyi şimdilik yalnız YouTube veriyor; her eşitlemede birkaç video sorulur.",
-      audPostsNote: "Gönderi başına kitleyi şimdilik yalnız YouTube veriyor (video başına, yayından bu yana); Instagram, TikTok ve LinkedIn bu bağlantıda gönderi başına dağılım vermiyor.",
+     
+     
       pAudH: "Bu gönderinin kitlesi", audPostViewers: "Bu videonun izleyicileri (yayından bu yana)",
       pAudNoPlat: "{n} gönderi başına kitle dağılımı (yaş, cinsiyet, ülke) vermiyor; bunu şimdilik yalnız YouTube videolar için veriyor. Hesabının genel kitlesi Kitle sayfasında.",
       pAudYtNone: "YouTube bu video için henüz kitle dağılımı vermedi. Her eşitlemede birkaç video sorulur; az izlenen videolarda YouTube gizlilik eşiği nedeniyle veri paylaşmaz.",
       pAudSample: "Örnek gönderide kitle dağılımı yok. Hesabını bağladığında YouTube videolarının kitlesi burada görünür.",
       audGoAll: "Hesabın genel kitlesini gör", audReconHint: "Yeniden bağlamak için Profil'e git",
+      paYtH: "Bu videonun izleyicileri", paIgH: "Bu gönderinin sayıları (Instagram)", paCalcH: "Hesaplanan", paIgAcc: "Hesabın genel kitlesi (bu gönderiye özel değil)", paYtCh: "Kanal geneli (bu videoya özel değil)",
+      paViews: "İzlenme", paMinutes: "İzlenme süresi (dk)", paAvgDur: "Ortalama izleme", paAvgPct: "Ortalama izlenme (%)", paSubs: "Kazanılan abone", paSubH: "Aboneler / abone olmayanlar", paSubY: "Aboneler", paSubN: "Abone olmayanlar",
+      paTraffic: "Trafik kaynakları", paDevice: "Cihazlar", paNoRows: "Bu dönemde veri yok.", paSrc: "Kaynak: YouTube Analytics", paSrcIg: "Kaynak: Instagram", paUpd: "güncellendi {n}", paOpenYt: "Videoyu YouTube'da aç", paOpenIg: "Gönderiyi Instagram'da aç",
+      tr_YT_SEARCH: "YouTube araması", tr_SUBSCRIBER: "Ana sayfa ve abonelik akışı", tr_RELATED_VIDEO: "Önerilen videolar", tr_SHORTS: "Shorts akışı", tr_EXT_URL: "Dış bağlantılar (Google araması dahil)", tr_NO_LINK_OTHER: "Doğrudan / bilinmeyen", tr_YT_CHANNEL: "Kanal sayfası", tr_PLAYLIST: "Oynatma listesi", tr_NOTIFICATION: "Bildirimler", tr_END_SCREEN: "Bitiş ekranı", tr_HASHTAGS: "Hashtag sayfaları", tr_ADVERTISING: "Reklam",
+      dv_MOBILE: "Mobil", dv_DESKTOP: "Masaüstü", dv_TV: "TV", dv_TABLET: "Tablet", dv_GAME_CONSOLE: "Oyun konsolu", dv_UNKNOWN_PLATFORM: "Bilinmeyen",
+      audUnshared: "YouTube'un paylaşmadığı", paDemoLow: "YouTube bu video için yaş ve cinsiyet paylaşmadı: {n} izlenme gizlilik eşiğinin altında (eşiği YouTube açıklamıyor).", paDemoLowN: "YouTube bu video için yaş ve cinsiyet paylaşmadı: izlenme sayısı gizlilik eşiğinin altında (eşiği YouTube açıklamıyor).", paLastCheck: "Son kontrol: {n}.",
+      paUnlisted: "Liste dışı videolarda YouTube kitle verisi vermez.", paYtNew: "Yeni video: YouTube verileri 2–3 gün gecikmeli gelir.", paChFew: "Kanalın izlenmesi YouTube'un yaş ve cinsiyet için gizlilik eşiğinin altında; bu yüzden yaş-cinsiyet verisi yok.",
+      paR_fresh: "Güncel", paR_busy: "Senkron sürüyor, birazdan tekrar deneyin", paR_not_connected: "Hesap bağlı değil", paR_upstream: "Platform şu an yanıt vermedi", paR_too_new: "Yeni video: veriler 2–3 gün içinde gelir", paFail: "Yeni veri alınamadı; kayıtlı veriler gösteriliyor.", paRefresh: "Yenile", paLoading: "Kitle verisi yükleniyor",
+      paComOff: "Yorumlar kapalı", paSaved: "Kaydetme", paShares: "Paylaşım", paProfile: "Profil ziyareti", paFollows: "Takip", paAvgWatch: "Ort. izleme süresi",
+      paTLikes: "beğeni", paTComments: "yorum", paTSaved: "kaydetme", paTShares: "paylaşım", paTReach: "erişim", paNonFol: "En az {n} takip etmeyen hesaba ulaştı (bugünkü takipçi sayısına göre).", paErNoReach: "Erişim olmadan etkileşim oranı hesaplanamaz.",
+      paIgNoDemo: "Instagram gönderi başına yaş ve cinsiyet vermez; aşağıdakiler hesabın genel kitlesidir.", paIgTop45: "Instagram ülke ve şehirlerde en fazla ilk 45'i verir; veriler 48 saate kadar gecikebilir.", paIgNoAcc: "Hesap geneli kitle verisi henüz yok.",
+      paNoPlat: "{n} gönderi başına kitle verisi vermiyor; yukarıdaki sayılar gönderinin kendi ölçümleri.", paManual: "Elle eklenen gönderilerde gönderi başına kitle verisi yok; yukarıdaki sayılar senin girdiğin ölçümler.", paStory: "Instagram hikâyelerinde gönderi başına kitle verisi yok; yukarıdaki sayılar hikâyenin kendi ölçümleri.",
+      apPostH: "Gönderi başına kitle", apColPlat: "Platform", apColDate: "Tarih", apColNums: "Temel sayılar", apColDemo: "Yaş-cinsiyet", apAvgPct: "Ort. izlenme", apSubShare: "Abone payı",
+      apVar: "Var", apLow: "Eşik altı", apUnl: "Liste dışı", apWait: "Bekliyor", apIgNo: "Instagram vermez", apNone: "Henüz YouTube veya Instagram gönderisi yok.", apNote: "Yaş ve cinsiyet gönderi başına yalnız YouTube'da gelir (oturum açmış izleyicilerden, gizlilik eşiğinin üstündeyse); Instagram gönderi başına yaş-cinsiyet vermez. Gönderiyi açınca tüm kitle verisi görünür.", apChTraffic: "Kanal geneli trafik kaynakları (son 90 gün)", apChDevice: "Kanal geneli cihazlar (son 90 gün)",
+      pcAud: "Kitle verisi var", pcWait: "Bekliyor", pcWaitT: "Gönderi başına kitle verisi bekleniyor", pdMore: "Devamını göster", pdLess: "Daha az göster", pdOpen: "Orijinal gönderiyi aç",
       audR_no_scope: "Kitle dağılımı alınamadı: YouTube bağlantısında YouTube Analytics izni yok. \"Yeniden bağla\"ya bas ve Google izin ekranında YouTube Analytics kutusunu da işaretle.",
       audR_few: "YouTube bu kanalın kitle dağılımını hem son 90 gün hem kanalın açıldığı günden bu yana boş döndürdü; izleyici sayısı YouTube'un gizlilik eşiğinin altında kalınca böyle olur. İzlenme arttıkça kendiliğinden gelir.",
       audR_few0: "YouTube Analytics bu kanal için henüz hiç izlenme göstermiyor, bu yüzden kitle dağılımı da boş. Yeni videoların izlenmeleri Analytics'e birkaç gün gecikmeyle düşer; bir sonraki eşitlemede yeniden denenecek.",
@@ -689,15 +706,30 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       clearFor: "Clear", drClose: "Close", drNoPlat: "No platforms added.", crFull: "Full profile and recent posts", crBack: "← Discover", crNone: "This influencer wasn't found or is no longer listed.", crAccounts: "Account metrics", crPosts: "Recent posts", crSampleBadge: "Sample data", crSampleNote: "The posts connection isn't live yet; these are sample posts. Campaign additions are kept only in this browser.", crTarget: "Campaign", crAdd: "Add to campaign", crRemove: "Remove from campaign", crAdded: "Post added to the campaign.", crRemoved: "Post removed from the campaign.", crVerified: "verified", crOpenPost: "Open post", crNoPosts: "No posts yet.", drHist: "History with you", drHistNone: "You haven't worked together yet.",
       audTitle: "Audience breakdown", aud_followers: "Followers", aud_engaged: "Engaged this month", aud_viewers: "Viewers (last 90 days)", aud_viewers_all: "Viewers (since the channel opened)", aud_age: "Age", aud_gender: "Gender", aud_country: "Country", aud_city: "City", audCountryViews: "Country (share of views)", audF: "Women", audM: "Men", audU: "Unspecified", audYtNote: "Age and gender come from signed-in viewers only.", audIgMin: "No audience breakdown yet. Instagram only provides it for accounts with 100+ followers; it updates on the next sync.", audYtWait: "No audience breakdown yet. If your connection doesn't include audience access, reconnect YouTube once with \"Reconnect\"; your metrics stay. YouTube doesn't provide it for channels with few views.", audNone: "This platform doesn't provide an audience breakdown (age, gender, country).", audNoneYet: "No audience breakdown yet.",
       aud_industry: "Industry", aud_seniority: "Seniority", aud_function: "Job function", aud_size: "Company size (employees)", audAgeGrp: "Age group", audYoung: "Young (13–24)", audAdult: "Adult (25–44)", audMature: "Mature (45+)", audLeanEq: "Balanced", audLeanF: "Mostly women", audLeanM: "Mostly men", audTopAge: "largest bracket {n}", audTopCity: "top city {n}", audLiNone: "LinkedIn only gives the follower count for personal profiles. Industry, seniority, job function and company size breakdowns exist only for LinkedIn company page followers.", audProNote: "Instagram and YouTube don't provide industry, seniority or company size; that breakdown exists only for LinkedIn company page followers.",
-      audTotH: "Account-wide", audPostsH: "Per post", audColPost: "Post", audShowTable: "Show as table", audShowChart: "Show as chart", audOther: "Other", audColShare: "Share",
+      audTotH: "Account-wide", audColPost: "Post", audShowTable: "Show as table", audShowChart: "Show as chart", audOther: "Other", audColShare: "Share",
       audNoAcc: "You have no connected account that provides an audience breakdown. Connect Instagram or YouTube from Profile. If you just connected one, the breakdown shows here after its first sync.",
-      audPostsNone: "No posts with an audience breakdown yet. For now only YouTube provides a per-post audience; a few videos are requested on each sync.",
-      audPostsNote: "For now only YouTube provides a per-post audience (per video, since publishing); Instagram, TikTok and LinkedIn don't provide a per-post breakdown through this connection.",
+     
+     
       pAudH: "This post's audience", audPostViewers: "This video's viewers (since publishing)",
       pAudNoPlat: "{n} doesn't provide a per-post audience breakdown (age, gender, country); for now only YouTube does, per video. Your account-wide audience is on the Audience page.",
       pAudYtNone: "YouTube hasn't provided an audience breakdown for this video yet. A few videos are requested on each sync; for videos with few views YouTube doesn't share data because of its privacy threshold.",
       pAudSample: "Sample posts have no audience breakdown. Once you connect your account, your YouTube videos' audience shows up here.",
       audGoAll: "See your account-wide audience", audReconHint: "Go to Profile to reconnect",
+      paYtH: "This video's viewers", paIgH: "This post's numbers (Instagram)", paCalcH: "Calculated", paIgAcc: "Account-wide audience (not specific to this post)", paYtCh: "Channel-wide (not specific to this video)",
+      paViews: "Views", paMinutes: "Watch time (min)", paAvgDur: "Average view duration", paAvgPct: "Average percentage viewed", paSubs: "Subscribers gained", paSubH: "Subscribers / non-subscribers", paSubY: "Subscribers", paSubN: "Non-subscribers",
+      paTraffic: "Traffic sources", paDevice: "Devices", paNoRows: "No data for this period.", paSrc: "Source: YouTube Analytics", paSrcIg: "Source: Instagram", paUpd: "updated {n}", paOpenYt: "Open the video on YouTube", paOpenIg: "Open the post on Instagram",
+      tr_YT_SEARCH: "YouTube search", tr_SUBSCRIBER: "Home and subscription feed", tr_RELATED_VIDEO: "Suggested videos", tr_SHORTS: "Shorts feed", tr_EXT_URL: "External links (incl. Google search)", tr_NO_LINK_OTHER: "Direct / unknown", tr_YT_CHANNEL: "Channel page", tr_PLAYLIST: "Playlists", tr_NOTIFICATION: "Notifications", tr_END_SCREEN: "End screens", tr_HASHTAGS: "Hashtag pages", tr_ADVERTISING: "Advertising",
+      dv_MOBILE: "Mobile", dv_DESKTOP: "Desktop", dv_TV: "TV", dv_TABLET: "Tablet", dv_GAME_CONSOLE: "Game console", dv_UNKNOWN_PLATFORM: "Unknown",
+      audUnshared: "Not shared by YouTube", paDemoLow: "YouTube didn't share age and gender for this video: {n} views is below its privacy threshold (YouTube doesn't disclose the threshold).", paDemoLowN: "YouTube didn't share age and gender for this video: its views are below the privacy threshold (YouTube doesn't disclose the threshold).", paLastCheck: "Last checked: {n}.",
+      paUnlisted: "YouTube doesn't provide audience data for unlisted videos.", paYtNew: "New video: YouTube data arrives 2–3 days late.", paChFew: "Your channel's views are below YouTube's privacy threshold for age and gender, so there's no age/gender data.",
+      paR_fresh: "Up to date", paR_busy: "A sync is running, try again shortly", paR_not_connected: "Account not connected", paR_upstream: "The platform didn't respond right now", paR_too_new: "New video: data arrives within 2–3 days", paFail: "Couldn't fetch new data; showing stored data.", paRefresh: "Refresh", paLoading: "Loading audience data",
+      paComOff: "Comments off", paSaved: "Saves", paShares: "Shares", paProfile: "Profile visits", paFollows: "Follows", paAvgWatch: "Avg. watch time",
+      paTLikes: "likes", paTComments: "comments", paTSaved: "saves", paTShares: "shares", paTReach: "reach", paNonFol: "Reached at least {n} accounts that don't follow you (based on today's follower count).", paErNoReach: "The engagement rate can't be calculated without reach.",
+      paIgNoDemo: "Instagram doesn't provide age and gender per post; what follows is your account-wide audience.", paIgTop45: "Instagram gives at most the top 45 countries and cities; data can be up to 48 hours late.", paIgNoAcc: "No account-wide audience data yet.",
+      paNoPlat: "{n} doesn't provide per-post audience data; the numbers above are the post's own metrics.", paManual: "Manually added posts have no per-post audience data; the numbers above are the ones you entered.", paStory: "Instagram stories have no per-post audience data; the numbers above are the story's own metrics.",
+      apPostH: "Audience per post", apColPlat: "Platform", apColDate: "Date", apColNums: "Key numbers", apColDemo: "Age & gender", apAvgPct: "Avg. viewed", apSubShare: "Subscriber share",
+      apVar: "Available", apLow: "Below threshold", apUnl: "Unlisted", apWait: "Pending", apIgNo: "Not provided by Instagram", apNone: "No YouTube or Instagram posts yet.", apNote: "Per-post age and gender come only from YouTube (signed-in viewers, above its privacy threshold); Instagram gives no per-post age or gender. Open a post to see all of its audience data.", apChTraffic: "Channel-wide traffic sources (last 90 days)", apChDevice: "Channel-wide devices (last 90 days)",
+      pcAud: "Audience data", pcWait: "Pending", pcWaitT: "Waiting for per-post audience data", pdMore: "Show more", pdLess: "Show less", pdOpen: "Open original post",
       audR_no_scope: "Couldn't get the audience breakdown: your YouTube connection lacks YouTube Analytics access. Press \"Reconnect\" and also tick the YouTube Analytics box on Google's permission screen.",
       audR_few: "YouTube returned an empty audience breakdown for this channel, both for the last 90 days and since the channel opened; this happens when the viewer count is below YouTube's privacy threshold. It arrives on its own as views grow.",
       audR_few0: "YouTube Analytics doesn't show any views for this channel yet, so the audience breakdown is empty too. Views of new videos reach Analytics with a delay of a few days; it will be retried on the next sync.",
@@ -2469,10 +2501,6 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
     }));
     return { c: c, m: m, lgd: lgd, r: items };
   }
-  // Gönderi tablosundaki küçük yığılmış çubuk (değerler yanındaki metinde)
-  function audMini(items) {
-    return el("div", { class: "stk mini", "aria-hidden": "true" }, items.map(function (x) { return x[1] > 0 ? el("i", { style: "--c:" + x[2] + ";flex:" + x[1] + " 1 0" }) : null; }));
-  }
   // Yaş dilimleri: sıralı sütunlar, değer tepede; en büyük dilimin değeri koyu
   function audCols(l) {
     var lo = function (x) { var n = parseInt(x[0], 10); return isNaN(n) ? 1e9 : n; };
@@ -2517,7 +2545,13 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
     if (!secs) return brand ? null : el("p", { class: "meta aud", text: t("audNone") });
     // k: alan; null = yaş grupları. Cinsiyet ve yaş grubu yığılmış çubuk, yaş dilimi sütun, gerisi sıralı yatay çubuk
     var bars = function (k, title, l) {
-      var g = k === "age" ? audCols(l) : k && k !== "gender" ? audHBars(k, l) : audStack(k ? audGenderItems(l) : audGroupItems(l));
+      var it = k === "age" || k && k !== "gender" ? null : k ? audGenderItems(l) : audGroupItems(l), sm = 0;
+      // Tek videoda YouTube yüzdelerin bir kısmını paylaşmayabilir: kalan, taralı ve etiketli bir parça olarak gösterilir
+      if (it && post) {
+        it.forEach(function (x) { sm += x[1]; });
+        if (sm < 99.5) it = it.concat([[t("audUnshared"), Math.round((100 - sm) * 10) / 10, "repeating-linear-gradient(135deg,var(--faint) 0 2px,transparent 2px 5px)"]]);
+      }
+      var g = it ? audStack(it) : k === "age" ? audCols(l) : audHBars(k, l);
       var box = el("div", { class: "achart", tabindex: 0, role: "img", "aria-label": title + ": " + g.r.map(function (x) { return x[0] + " " + pct(x[1] / 100); }).join(", ") }, [g.c, g.lgd || null]);
       audInteract(box, g.m);
       return el("div", { class: "ach" }, [el("div", { class: "k", text: title }), box, audTable(title, g.r)]);
@@ -2810,6 +2844,8 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
     return BC.call("GET", "app/posts").then(function (d) {
       PS.srv = !!(d && Array.isArray(d.posts));
       PS.list = (PS.srv ? d.posts : []).map(pSrvPost).filter(function (p) { return p.id && p.platform && p.snaps.length; });
+      // Bu oturumda gönderi sayfasından alınan kitle, liste daha eski kayıtla gelirse korunur
+      PS.list.forEach(function (p) { if (PA.got[p.id] && !paFresh(p)) p.audience = PA.got[p.id]; });
     }, function (e) { if (e && e.code === "auth") throw e; PS.srv = false; PS.list = []; });
   }
   function pErr(e) {
@@ -2860,7 +2896,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
   function isoDay(d) { return d.toISOString().slice(0, 10); }
   function okDay(s) { return /^\d{4}-\d{2}-\d{2}$/.test(s || "") && !isNaN(Date.parse(s + "T00:00:00Z")) && s <= isoDay(new Date(Date.now() + 864e5)); }
   function lastSnap(p) { return p.snaps[p.snaps.length - 1]; }
-  function erOf(s) { var b = s.reach > 0 ? s.reach : s.views > 0 ? s.views : 0; return b ? ((s.likes || 0) + (s.comments || 0)) / b : null; }
+  function erOf(s) { if (s.likes == null && s.comments == null) return null; var b = s.reach > 0 ? s.reach : s.views > 0 ? s.views : 0; return b ? ((s.likes || 0) + (s.comments || 0)) / b : null; }
   function pct(x) { return x == null ? "—" : new Intl.NumberFormat(locale(), { style: "percent", maximumFractionDigits: 1 }).format(x); }
   function short(n) { return n == null ? "—" : new Intl.NumberFormat(locale(), { notation: "compact", maximumFractionDigits: 1 }).format(n); }
   function newId() { return (Date.now().toString(36) + Math.random().toString(36).slice(2, 8)).slice(0, 24); }
@@ -2908,19 +2944,25 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
     return box;
   }
   function pLabel(p) { return [PL[p.platform], t("pt_" + p.type), day(p.date)].join(" · "); }
+  // Gönderi listesinde küçük kitle çipi: gönderi başına kitle verisi (izleme, izleyici ya da Instagram ölçümleri) geldi mi
+  function pcChip(p, sample) {
+    if (!paLive(p, sample)) return null;
+    var a = paAud(p), on = !!(paObj(a.watch) || paObj(a.viewers) || paObj(a.ig));
+    return el("span", { class: on ? "badge b-ok" : "badge b-sample", title: on ? null : t("pcWaitT"), text: t(on ? "pcAud" : "pcWait") });
+  }
   function pMetric(v, k) { return el("span", null, [el("b", { text: short(v) }), " " + t(k)]); }
   function pCard(p, sample) {
     var s = lastSnap(p);
     return el("li", { class: "pcard" }, [pThumb(p, sample),
       el("div", { class: "pbody" }, [el("p", { class: "pcap", dir: "auto", text: p.caption || t("pNoCap") }),
-        el("div", { class: "pmeta" }, [el("span", { text: t("pt_" + p.type) }), el("span", { text: day(p.date) })]),
+        el("div", { class: "pmeta" }, [el("span", { text: t("pt_" + p.type) }), el("span", { text: day(p.date) }), pcChip(p, sample)]),
         el("div", { class: "pmeta" }, [pMetric(s.likes, "mLikes"), pMetric(s.comments, "mComments"), el("span", null, [el("b", { text: pct(erOf(s)) }), " ER"])])]),
       el("a", { class: "pl", href: "#post-" + p.id, "aria-label": t("pOpen") + ": " + pLabel(p), text: t("pOpen") })]);
   }
   function pRow(p, sample) {
     var s = lastSnap(p);
     return el("li", { class: "prow2" }, [pThumb(p, false),
-      el("div", { style: "min-width:0" }, [el("div", { class: "pmeta" }, [el("span", { text: pLabel(p) }), sample ? el("span", { class: "badge b-sample", text: t("socSample") }) : null]),
+      el("div", { style: "min-width:0" }, [el("div", { class: "pmeta" }, [el("span", { text: pLabel(p) }), sample ? el("span", { class: "badge b-sample", text: t("socSample") }) : pcChip(p, sample)]),
         el("p", { class: "pcap", dir: "auto", text: p.caption || t("pNoCap") }),
         el("div", { class: "pmeta" }, PMETS.map(function (m) { return pMetric(s[m], PMK[m]); }))]),
       el("div", { class: "er" }, [el("b", { text: pct(erOf(s)) }), t("mEr")]),
@@ -3184,15 +3226,184 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
     xs.forEach(function (s) { g.appendChild(sv("circle", { cx: X(s).toFixed(1), cy: Y(s[key]).toFixed(1), r: 4, stroke: "var(--accent)" })); });
     return g;
   }
-  // Gönderinin kitlesi: platform gönderi başına veriyorsa (şimdilik yalnız YouTube) yaş, cinsiyet, ülke; yoksa nedeni
-  function pAudCard(p, sample) {
-    var has = !sample && p.platform === "youtube" && audHas(p);
-    return el("section", { class: "card", style: "margin-top:16px" }, [el("div", { class: "ch" }, el("h2", { text: t("pAudH") })), el("div", { class: "cb" }, [
-      has ? audBox(p, "post") : el("p", { class: "meta", text: sample ? t("pAudSample") : p.platform === "youtube" ? t("pAudYtNone") : t("pAudNoPlat", PL[p.platform] || p.platform) }),
-      sample ? null : el("div", { class: "row-b" }, el("a", { class: "btn sm sec", href: "#audience", text: t("audGoAll") }))])]);
+  // Gönderi başına kitle (#post-<id>). posts.audience biçimi form-worker CONTRACT'ında: YouTube watch/sources/viewers/demo/unlisted,
+  // Instagram ig/comments_off. Eksik ya da bayatsa sayfa oturumunda gönderi başına bir kez POST app/posts/<id>/audience; yalnız kart yeniden çizilir.
+  // PA.done: bu oturumda istenenler; PA.got: gelen kitle (pSync listeyi yeniden kurunca kaybolmasın)
+  var PA = { done: {}, got: {} };
+  function paObj(o) { return o && typeof o === "object" && !Array.isArray(o) ? o : null; }
+  function paNum(v) { return typeof v === "number" && isFinite(v) && v >= 0 ? v : null; }
+  function paAgo(n) { return isoDay(new Date(Date.now() - n * 864e5)); }
+  function paAud(p) { return paObj(p.audience) || {}; }
+  function paAt(o) { o = paObj(o); return o && okDay(o.at) ? o.at : ""; }
+  // YouTube videosu 3 günden yeniyse Analytics henüz boş döner (Worker "too_new"); istek atılmaz
+  function paNew(p) { return p.platform === "youtube" && okDay(p.date) && p.date > paAgo(3); }
+  // Tazelik kuralı Worker'la aynı: dün ya da bugün alınmışsa güncel
+  function paFresh(p) {
+    var a = paAud(p), y = paAgo(1);
+    return p.platform === "youtube" ? paAt(a.watch) >= y && paAt(a.sources) >= y : paAt(a.ig) >= y && typeof a.comments_off === "boolean";
   }
-  function post(r) { return pSync().then(function () { return postView(r); }); }
-  function postView(r) {
+  function paLive(p, sample) { return !sample && PS.srv && (p.platform === "youtube" || p.platform === "instagram" && p.type !== "story"); }
+  function paDm(s) { return okDay(s) ? new Date(s + "T00:00:00Z").toLocaleDateString(locale(), { day: "numeric", month: "short", timeZone: "UTC" }) : ""; }
+  // YouTube Pasifik günü kullandığından from yayından bir gün önce olabilir: max(from, yayın) – to
+  function paRange(o, from) {
+    var f = okDay(o.from) ? o.from : "", to = okDay(o.to) ? o.to : "";
+    if (f && okDay(from) && from > f) f = from;
+    return f && to && f <= to ? paDm(f) + "–" + paDm(to) : "";
+  }
+  function paMs(s) { s = Math.round(s); return Math.floor(s / 60) + ":" + ("0" + s % 60).slice(-2); }
+  function paRows(l) { return Array.isArray(l) ? l.filter(function (x) { return Array.isArray(x) && typeof x[0] === "string" && paNum(x[1]) != null; }) : null; }
+  function paLink(p, k) { return /^https:\/\//i.test(p.url || "") ? el("a", { class: "clink", href: p.url, target: "_blank", rel: "noopener noreferrer" }, [ic("link"), t(k)]) : null; }
+  // Trafik kaynağı / cihaz: tek renk yatay çubuk, izlenmeye göre sıralı, değer + yüzde metin renginde; tanınmayan anahtarlar "Diğer"de toplanır.
+  // Dizi yoksa (rapor alınamadı) null; boş dizi = o dönemde satır yok
+  function paBars(title, l, pre) {
+    var rows = paRows(l), vis = [], oth = 0, sum = 0;
+    if (!rows) return null;
+    rows.forEach(function (x) { sum += x[1]; if (!(x[1] > 0)) return; if (D.en[pre + x[0]] != null) vis.push([t(pre + x[0]), x[1]]); else oth += x[1]; });
+    vis.sort(function (a, b) { return b[1] - a[1]; });
+    if (oth > 0) vis.push([t("audOther"), oth, true]);
+    var head = el("h3", { class: "pah", text: title });
+    if (!(sum > 0)) return el("div", { class: "ach" }, [head, el("p", { class: "meta", text: t("paNoRows") })]);
+    var mx = Math.max.apply(null, vis.map(function (x) { return x[1]; })) || 1;
+    return el("div", { class: "ach" }, [head, el("ul", { class: "hb pab" }, vis.map(function (x) {
+      return el("li", { class: x[2] ? "oth" : null }, [el("span", { dir: "auto", title: x[0], text: x[0] }),
+        el("span", { class: "hv" }, [el("i", { style: "width:calc((100% - 7.5em) * " + (x[1] / mx).toFixed(4) + ")" }), el("b", { text: num(x[1]) + " · " + pct(x[1] / sum) })])]);
+    }))]);
+  }
+  function paWatch(p, w) {
+    var v = paNum(w.views), mi = paNum(w.minutes), as = paNum(w.avg_s), ap = paNum(w.avg_pct), su = paNum(w.subs);
+    var tiles = [v == null ? null : audTile(t("paViews"), num(v), paRange(w, p.date)), mi == null ? null : audTile(t("paMinutes"), num(Math.round(mi))),
+      as == null ? null : audTile(t("paAvgDur"), paMs(as)), ap == null ? null : audTile(t("paAvgPct"), pct(Math.round(ap * 10) / 1000)),
+      su == null ? null : audTile(t("paSubs"), num(su))].filter(Boolean);
+    return tiles.length ? el("div", { class: "auds pa" }, tiles) : null;
+  }
+  // Aboneler / abone olmayanlar: iki parçalı yığılmış çubuk (--c1/--c2, cinsiyet çubuğuyla aynı doğrulanmış çift), lejantta sayı ve yüzde
+  function paSubs(w) {
+    var v = paNum(w.views), sv = paNum(w.sub_views), m = [];
+    if (!(v > 0) || sv == null) return null;
+    sv = Math.min(sv, v);
+    var items = [[t("paSubY"), sv, "var(--c1)"], [t("paSubN"), v - sv, "var(--c2)"]];
+    var lab = function (x) { return num(x[1]) + " · " + pct(x[1] / v); };
+    var c = el("div", { class: "stk" }, items.map(function (x) {
+      if (!(x[1] > 0)) return null;
+      var n = el("i", { style: "--c:" + x[2] + ";flex:" + x[1] + " 1 0" });
+      m.push({ n: n, c: x[2], v: lab(x), l: x[0] });
+      return n;
+    }));
+    var box = el("div", { class: "achart", tabindex: 0, role: "img", "aria-label": t("paSubH") + ": " + items.map(function (x) { return x[0] + " " + lab(x); }).join(", ") }, [c,
+      el("ul", { class: "lgd" }, items.map(function (x) { return el("li", null, [el("i", { style: "background:" + x[2] }), el("span", { text: x[0] }), el("b", { text: lab(x) })]); }))]);
+    audInteract(box, m);
+    return el("div", { class: "ach" }, [el("h3", { class: "pah", text: t("paSubH") }), box]);
+  }
+  // Videoya özel yaş-cinsiyet yoksa tek not: eşik altı (demo) > liste dışı > yeni video > kanal eşik altı > genel
+  function paDemoNote(p, a, ctx) {
+    var dm = paObj(a.demo), ca = ctx.yt && paObj(ctx.yt.audience);
+    if (dm && dm.ok === false) {
+      var dv = paNum(dm.views), at = paDm(dm.at);
+      return (dv != null ? t("paDemoLow", num(dv)) : t("paDemoLowN")) + (at ? " " + t("paLastCheck", at) : "");
+    }
+    if (a.unlisted === true) return t("paUnlisted");
+    if (paNew(p)) return t("paYtNew");
+    if (ca && ca.reason === "few") return t("paChFew");
+    return t("pAudYtNone");
+  }
+  function paSrcLine(p, a) {
+    var w = paObj(a.watch), s = paObj(a.sources);
+    if (!w && !s) return null;
+    var at = [paAt(w), paAt(s)].sort().pop();
+    return el("p", { class: "meta pasrc" }, [el("span", { text: [t("paSrc"), paRange(w || s, p.date), at ? t("paUpd", paDm(at)) : ""].filter(Boolean).join(" · ") }), paLink(p, "paOpenYt")]);
+  }
+  // Kanal geneli (bu videoya özel değil): kanal izleyicileri ve son 90 günün trafik/cihaz dağılımı, kapalı <details> içinde
+  function paChBars(yt) {
+    var cs = paObj((paObj(yt.audience) || {}).sources), tr = cs && paBars(t("apChTraffic"), cs.traffic, "tr_"), dv = cs && paBars(t("apChDevice"), cs.device, "dv_");
+    return tr || dv ? el("div", { class: "audg" }, [tr, dv]) : null;
+  }
+  function paYtCh(yt) {
+    return el("details", { class: "pd" }, [el("summary", { text: t("paYtCh") }), audBox(yt, "page"), paChBars(yt)]);
+  }
+  function paYt(p, ctx) {
+    var a = paAud(p), w = paObj(a.watch), s = paObj(a.sources), tr = s && paBars(t("paTraffic"), s.traffic, "tr_"), dv = s && paBars(t("paDevice"), s.device, "dv_");
+    return [w ? paWatch(p, w) : null, w ? paSubs(w) : null, tr || dv ? el("div", { class: "audg" }, [tr, dv]) : null,
+      audHas(p) ? audBox(p, "post") : el("p", { class: "meta", text: paDemoNote(p, a, ctx) }), paSrcLine(p, a), ctx.yt ? paYtCh(ctx.yt) : null];
+  }
+  function paTile(k, v) { return el("div", { class: "stat" }, [el("div", { class: "k", text: t(k) }), el("div", { class: v == null ? "v na" : "v", text: v == null ? t("noData") : v })]); }
+  function paN(v) { v = paNum(v); return v == null ? null : num(v); }
+  // Genel KPI ızgarası (YouTube, TikTok, LinkedIn, elle eklenen, örnek): ölçüm sayıları + ER
+  function pKpis(s) {
+    var er = paTile("mEr", erOf(s) == null ? null : pct(erOf(s)));
+    er.style.gridColumn = "1/-1";
+    return [el("div", { class: "stats" }, PMETS.map(function (m) { return paTile(PMK[m], paN(s[m])); }).concat(er)), el("p", { class: "pnote", text: t("pErNote") })];
+  }
+  // Instagram 1. düzey: gönderinin kendi sayıları; snap boşsa ig.views / ig.reach, ek sayılar yalnız varsa. ER "Hesaplanan" kartında
+  function paIgNums(p, s) {
+    var a = paAud(p), ig = paObj(a.ig) || {}, aw = paNum(ig.avg_watch_ms);
+    var opt = [["paSaved", ig.saved], ["paShares", ig.shares], ["paProfile", ig.profile_visits], ["paFollows", ig.follows]].filter(function (x) { return paNum(x[1]) != null; })
+      .map(function (x) { return paTile(x[0], num(x[1])); });
+    return [el("h2", { class: "pdh", text: t("paIgH") }), el("div", { class: "stats" }, [paTile("mLikes", paN(s.likes)),
+      a.comments_off === true ? el("div", { class: "stat" }, [el("div", { class: "k", text: t("mComments") }), el("div", { class: "v na", text: t("paComOff") })]) : paTile("mComments", paN(s.comments)),
+      paTile("mViews", paN(s.views != null ? s.views : ig.views)), paTile("mReach", paN(s.reach != null ? s.reach : ig.reach))]
+      .concat(opt, aw != null ? paTile("paAvgWatch", paMs(aw / 1000)) : []))];
+  }
+  // Instagram 2. ve 3. düzey: hesaplanan etkileşim oranı (formül açık, yalnız var olan terimler), takip etmeyen erişim alt sınırı; hesap geneli kitle <details>'te.
+  // Erişim ÷ takipçi hiç gösterilmez: erişimde takip etmeyenler de var, oran yanıltır
+  function paIg(p, s, ctx) {
+    var a = paAud(p), ig = paObj(a.ig) || {}, reach = paNum(s.reach != null ? s.reach : ig.reach), sum = 0;
+    var terms = [["paTLikes", s.likes], ["paTComments", a.comments_off === true ? null : s.comments], ["paTSaved", ig.saved], ["paTShares", ig.shares]]
+      .filter(function (x) { return paNum(x[1]) != null; });
+    terms.forEach(function (x) { sum += x[1]; });
+    var fo = ctx.ig ? paNum(ctx.ig.followers) : null, nf = reach != null && fo != null ? reach - fo : 0, at = paAt(ig), ln = paLink(p, "paOpenIg");
+    return [reach > 0 && terms.length ? el("div", { class: "auds pa" }, audTile(t("mEr"), pct(sum / reach),
+        "(" + terms.map(function (x) { return t(x[0]); }).join(" + ") + ") ÷ " + t("paTReach") + " = (" + terms.map(function (x) { return num(x[1]); }).join(" + ") + ") ÷ " + num(reach)))
+      : reach > 0 ? null : el("p", { class: "meta", text: t("paErNoReach") }),
+      nf > 0 ? el("p", { class: "meta", text: t("paNonFol", num(nf)) }) : null,
+      at || ln ? el("p", { class: "meta pasrc" }, [at ? el("span", { text: t("paSrcIg") + " · " + t("paUpd", paDm(at)) }) : null, ln]) : null,
+      el("details", { class: "pd" }, [el("summary", { text: t("paIgAcc") }), el("p", { class: "meta", text: t("paIgNoDemo") }),
+        ctx.ig ? audBox(ctx.ig, "page") : el("p", { class: "meta", text: t("paIgNoAcc") }), el("p", { class: "meta", text: t("paIgTop45") })])];
+  }
+  // Gönderi sayfasının KPI alanı ve kitle kartı birlikte: kitle gelince ikisi de yeniden çizilir (sayfa değil).
+  // Yenile ve otomatik istek yalnız sunucudaki YouTube/Instagram gönderisinde; örnek modda hiç istek yok
+  function pAud(p, sample, ctx) {
+    var s = lastSnap(p), yt = p.platform === "youtube", ig = p.platform === "instagram", live = paLive(p, sample), msg = "", rb = null;
+    var kpi = el("div"), box = el("div"), st = el("p", { class: "meta", role: "status" }), card;
+    var draw = function () {
+      kpi.textContent = ""; box.textContent = "";
+      add(kpi, live && ig ? paIgNums(p, s) : pKpis(s));
+      add(box, sample ? el("p", { class: "meta", text: t("pAudSample") })
+        : !live && (yt || ig) ? el("p", { class: "meta", text: t(ig && p.type === "story" ? "paStory" : "paManual") })
+        : yt ? paYt(p, ctx) : ig ? paIg(p, s, ctx) : el("p", { class: "meta", text: t("paNoPlat", PL[p.platform] || p.platform) }));
+      st.textContent = msg;
+    };
+    var go = function () {
+      PA.done[p.id] = true; msg = "";
+      card.setAttribute("aria-busy", "true"); rb.disabled = true; st.textContent = "";
+      box.textContent = "";
+      add(box, skWrap([sk("t"), sk("l", "92%"), sk("l", "78%")]));
+      BC.call("POST", "app/posts/" + p.id + "/audience", {}).then(function (d) {
+        if (d && paObj(d.audience)) p.audience = PA.got[p.id] = d.audience;
+        var r = d && d.fetched !== true && typeof d.reason === "string" ? d.reason : "";
+        msg = r === "unsupported" ? t(ig && p.type === "story" ? "paStory" : "paManual") : r && D.en["paR_" + r] != null ? t("paR_" + r) : "";
+      }, function (e) { if (!e || e.code !== "auth") msg = t("paFail"); }).then(function () {
+        card.removeAttribute("aria-busy"); rb.disabled = false; draw();
+      });
+    };
+    if (live) rb = el("button", { type: "button", class: "btn sm sec", text: t("paRefresh"), onclick: go });
+    card = el("section", { class: "card", style: "margin-top:16px" }, [el("div", { class: "ch" }, [el("h2", { text: t(live ? (yt ? "paYtH" : "paCalcH") : "pAudH") }), rb]),
+      el("div", { class: "cb" }, [box, st])]);
+    draw();
+    if (live && !paNew(p) && !paFresh(p) && !PA.done[p.id]) go();
+    return { kpi: kpi, card: card };
+  }
+  // Gönderi sayfası: gönderiler + (kanal geneli kitle ve takipçi sayısı için) bağlı hesapların son ölçümü. Ölçüm alınamazsa sayfa yine açılır
+  function post(r) {
+    return Promise.all([pSync(), BC.call("GET", "app/metrics").then(function (d) { return d; }, function (e) { if (e && e.code === "auth") throw e; return null; })]).then(function (all) {
+      var md = all[1] && all[1].metrics, ctx = { yt: null, ig: null };
+      if (md && md.mode === "live" && Array.isArray(md.accounts)) md.accounts.forEach(function (a) {
+        var k = a && a.source !== "none" && a.source !== "sample" ? { youtube: "yt", instagram: "ig" }[a.platform] : "";
+        if (k && !ctx[k]) ctx[k] = a;
+      });
+      return postView(r, ctx);
+    });
+  }
+  function postView(r, ctx) {
     var d = pData(), p = d.list.filter(function (x) { return x.id === r.id; })[0];
     if (!p) return [back("#posts", "pBack"), empty(t("pNotFound"), el("a", { class: "btn sm", href: "#posts", text: t("pBack") }), { ic: "image" })];
     var s = lastSnap(p), key = "likes", tlBox = el("div");
@@ -3239,23 +3450,67 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       edit = [el("h3", { class: "sub", text: t("pSnap") }), f, PS.srv ? el("p", { class: "pnote", text: t("pSrvNoDel") }) : el("p", { style: "margin:18px 0 0" }, del)];
     }
     var flash = okNote(); say(flash, PF.flash); PF.flash = "";
-    var title = (p.caption || "").split("\n")[0];
+    var title = (p.caption || "").split("\n")[0], A = pAud(p, d.sample, ctx || {}), cap = null;
+    // Uzun açıklama 4 satırda kesilir; "Devamını göster" açar (başlığın aynısıysa tekrar yazılmaz)
+    if (p.caption && p.caption.trim() !== title.trim()) {
+      var cp = el("p", { class: "prose", id: "pdcap", dir: "auto", style: "margin:0", text: p.caption }), mb = null;
+      if (p.caption.length > 140 || p.caption.split("\n").length > 4) {
+        cp.classList.add("pdcap");
+        mb = el("button", { type: "button", class: "ghost pdmore", "aria-expanded": "false", "aria-controls": "pdcap", text: t("pdMore"), onclick: function () {
+          var on = cp.classList.toggle("open");
+          mb.setAttribute("aria-expanded", String(on)); mb.textContent = t(on ? "pdLess" : "pdMore");
+        } });
+      }
+      cap = el("div", { style: "margin:0 0 14px" }, [cp, mb]);
+    }
     return [back("#posts", "pBack"), el("h1", { dir: "auto", text: title.length > 70 ? title.slice(0, 68) + "…" : title || pLabel(p) }),
       el("p", { class: "meta" }, [el("span", { text: pLabel(p) }), d.sample ? el("span", { class: "badge b-sample", text: t("socSample") }) : null,
-        p.url ? el("a", { class: "clink", href: p.url, target: "_blank", rel: "noopener noreferrer" }, [ic("link"), t("pOpen")]) : null]), flash,
-      el("div", { class: "pdet", style: "margin-top:16px" }, [pThumb(p, d.sample), el("div", null, [
-        p.caption ? el("p", { class: "prose", dir: "auto", style: "margin:0 0 14px", text: p.caption }) : null,
-        el("div", { class: "stats" }, PMETS.map(function (m) { return el("div", { class: "stat" }, [el("div", { class: "k", text: t(PMK[m]) }), el("div", { class: s[m] == null ? "v na" : "v", text: s[m] == null ? t("noData") : num(s[m]) })]); })
-          .concat(el("div", { class: "stat", style: "grid-column:1/-1" }, [el("div", { class: "k", text: t("mEr") }), el("div", { class: erOf(s) == null ? "v na" : "v", text: pct(erOf(s)) })]))),
-        el("p", { class: "pnote", text: t("pErNote") })])]),
-      pAudCard(p, d.sample),
+        /^https?:\/\//i.test(p.url || "") ? el("a", { class: "clink", href: p.url, target: "_blank", rel: "noopener noreferrer" }, [ic("link"), t("pdOpen")]) : null]), flash,
+      el("div", { class: "pdet", style: "margin-top:16px" }, [pThumb(p, d.sample), el("div", { style: "min-width:0" }, [cap, A.kpi])]),
+      A.card,
       el("section", { class: "card", style: "margin-top:16px" }, [el("div", { class: "ch" }, el("h2", { text: t("pTimeline") })), el("div", { class: "cb" }, [kt, tlBox, table, edit])])];
   }
-  // Kitle (#audience, influencer): hesap geneli dağılım (bağlı hesapların son ölçümü, app/metrics) ve gönderi başına dağılım (şimdilik yalnız YouTube videoları)
-  function audSec(a) {
-    var au = a && a.audience && typeof a.audience === "object" ? a.audience : {};
-    return (AUD_P[a.platform] || []).map(function (s) { return au[s] && typeof au[s] === "object" ? au[s] : {}; })
-      .filter(function (sec) { return AUD_K.some(function (k) { return audPairs(sec[k]).length > 0; }); })[0] || {};
+  // Kitle (#audience, influencer): hesap geneli dağılım (bağlı hesapların son ölçümü, app/metrics) ve gönderi başına kitle tablosu (YouTube ve Instagram gönderileri)
+  // Gönderi başına yaş-cinsiyet çipi: [anahtar, rozet sınıfı]. Sıra gönderi sayfasındaki notla aynı (paDemoNote)
+  function apChip(p, yc) {
+    if (p.platform !== "youtube") return ["apIgNo", "b-slate"];
+    var a = paAud(p), v = paObj(a.viewers), dm = paObj(a.demo);
+    if (v && (audPairs(v.age).length || audPairs(v.gender).length)) return ["apVar", "b-ok"];
+    if (dm && dm.ok === false) return ["apLow", "b-slate"];
+    if (a.unlisted === true) return ["apUnl", "b-slate"];
+    if (yc && (paObj(yc.audience) || {}).reason === "few") return ["apLow", "b-slate"];
+    return ["apWait", "b-sample"];
+  }
+  // Tablodaki temel sayılar: YouTube izlenme, ort. izlenme %, abone payı; Instagram erişim, kaydetme, paylaşım (yalnız var olanlar)
+  function apNums(p) {
+    var a = paAud(p), s = lastSnap(p) || {}, o = [];
+    var put = function (k, v) { if (v != null) o.push(t(k) + " " + v); };
+    if (p.platform === "youtube") {
+      var w = paObj(a.watch) || {}, v = paNum(w.views), sv = paNum(w.sub_views), ap = paNum(w.avg_pct);
+      if (v == null) v = paNum(s.views);
+      put("paViews", v == null ? null : num(v));
+      put("apAvgPct", ap == null ? null : pct(Math.round(ap * 10) / 1000));
+      put("apSubShare", sv == null || !(paNum(w.views) > 0) ? null : pct(Math.min(sv / w.views, 1)));
+    } else {
+      var ig = paObj(a.ig) || {}, r = paNum(s.reach != null ? s.reach : ig.reach);
+      put("mReach", r == null ? null : num(r));
+      put("paSaved", paN(ig.saved));
+      put("paShares", paN(ig.shares));
+    }
+    return o.join(" · ") || "—";
+  }
+  function apTable(list, yc) {
+    var ps = list.filter(function (p) { return p.platform === "youtube" || p.platform === "instagram"; });
+    if (!ps.length) return el("p", { class: "meta", text: t("apNone") });
+    var rows = ps.map(function (p) {
+      var cap = (p.caption || "").split("\n")[0], ch = apChip(p, yc);
+      return el("tr", null, [el("td", null, el("a", { class: "apl", href: "#post-" + p.id }, [pThumb(p, false), el("span", { class: "apc", dir: "auto", text: cap || t("pNoCap") })])),
+        el("td", { class: "apf", text: PL[p.platform] }), el("td", { class: "apn apd", text: day(p.date) }), el("td", { class: "apn apv", text: apNums(p) }),
+        el("td", { class: "apb", "data-l": t("apColDemo") }, el("span", { class: "badge " + ch[1], text: t(ch[0]) }))]);
+    });
+    return [el("div", { class: "tscroll" }, el("table", { class: "snaps aptab" }, [el("caption", { class: "vh", text: t("apPostH") }),
+      el("thead", null, el("tr", null, ["audColPost", "apColPlat", "apColDate", "apColNums", "apColDemo"].map(function (k) { return el("th", { scope: "col", text: t(k) }); }))),
+      el("tbody", null, rows)])), el("p", { class: "pnote", text: t("apNote") })];
   }
   function audPage() {
     // Ölçüm kapalıysa (409 disabled) hesap geneli boş durumda kalır; oturum düşünce (auth) hata render'a gider
@@ -3265,26 +3520,15 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       var tot = all[0].err ? failLine(all[0].err, function () { render(true); })
         : acc.length ? [acc.map(function (a) {
             var re = a.platform === "youtube" && !audHas(a) && (!a.audience || !a.audience.reason || a.audience.reason === "no_scope");
-            return el("div", { class: "audacc" }, [el("div", { class: "pmeta" }, el("b", { text: PL[a.platform] + (a.handle ? " · " + a.handle : "") })), audBox(a, "page"),
+            return el("div", { class: "audacc" }, [el("div", { class: "pmeta" }, el("b", { text: PL[a.platform] + (a.handle ? " · " + a.handle : "") })), audBox(a, "page"), a.platform === "youtube" ? paChBars(a) : null,
               re ? el("div", { class: "row-b" }, el("a", { class: "btn sm sec", href: "#profile", text: t("audReconHint"), onclick: function () { SOC_GO = true; } })) : null]);
           }), acc.some(function (a) { return a.platform !== "linkedin" && audHas(a); }) ? el("p", { class: "meta", text: t("audProNote") }) : null]
         : empty(t("audNoAcc"), el("a", { class: "btn sm", href: "#profile", text: t("nProfile"), onclick: function () { SOC_GO = true; } }), { ic: "user" });
-      var d = pData(), ps = d.sample ? [] : d.list.filter(audHas);
-      var cell = function (x) { return el("td", { text: x || "—" }); };
-      var rows = ps.map(function (p) {
-        var sec = audSec(p), g = { F: 0, M: 0 }, gr = audGroups(sec), gi = audTop(gr), c = audTop(sec.country), cap = (p.caption || "").split("\n")[0];
-        audPairs(sec.gender).forEach(function (x) { if (x[0] === "F" || x[0] === "M") g[x[0]] += x[1]; });
-        return el("tr", null, [el("td", null, [el("a", { href: "#post-" + p.id, dir: "auto", text: cap ? (cap.length > 48 ? cap.slice(0, 46) + "…" : cap) : pLabel(p) }), cap ? el("div", { class: "pmeta", text: pLabel(p) }) : null]),
-          g.F + g.M > 0 ? el("td", null, [audMini(audGenderItems(sec.gender)), el("div", { text: t("audF") + " " + pct(g.F / 100) + " · " + t("audM") + " " + pct(g.M / 100) })]) : cell(""),
-          gi ? el("td", null, [audMini(audGroupItems(gr)), el("div", { text: gi[0] + " " + pct(gi[1] / 100) })]) : cell(""), cell(c ? audLabel("country", c[0]) + " " + pct(c[1] / 100) : "")]);
-      });
-      var per = rows.length ? [el("div", { class: "tscroll" }, el("table", { class: "snaps" }, [el("caption", { class: "vh", text: t("audPostsH") }),
-          el("thead", null, el("tr", null, ["audColPost", "aud_gender", "audAgeGrp", "audCountryViews"].map(function (k) { return el("th", { scope: "col", text: t(k) }); }))),
-          el("tbody", null, rows)])), el("p", { class: "pnote", text: t("audPostsNote") + " " + t("audYtNote") })]
-        : el("p", { class: "meta", text: t("audPostsNone") });
+      var d = pData(), yc = acc.filter(function (a) { return a.platform === "youtube"; })[0];
+      var per = apTable(PS.srv && !d.sample ? d.list : [], yc);
       return [el("div", { class: "ph" }, [el("div", null, [el("h1", { text: t("nAudience") }), el("p", { text: t("audLead") })])]),
         el("section", { class: "card" }, [el("div", { class: "ch" }, el("h2", { text: t("audTotH") })), el("div", { class: "cb" }, tot)]),
-        el("section", { class: "card", style: "margin-top:16px" }, [el("div", { class: "ch" }, el("h2", { text: t("audPostsH") })), el("div", { class: "cb" }, per)])];
+        el("section", { class: "card", style: "margin-top:16px" }, [el("div", { class: "ch" }, el("h2", { text: t("apPostH") })), el("div", { class: "cb" }, per)])];
     });
   }
   // Influencer tam profili (#creator-<id>, marka/ajans): hesap ölçümleri, son 9 gönderi, kampanyaya ekle/çıkar.
