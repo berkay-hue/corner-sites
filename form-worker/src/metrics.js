@@ -67,6 +67,12 @@ export function platformOf(url) {
   return null;
 }
 
+// Kitle dağılımı sütunu (migrations/0009_audience.sql, gönderide 0010_post_audience.sql): JSON nesnesi; boş ya da bozuk değer null
+export const parseAudience = s => {
+  if (typeof s !== "string" || !s) return null;
+  try { const a = JSON.parse(s); return a && typeof a === "object" && !Array.isArray(a) ? a : null; } catch { return null; }
+};
+
 // totals: yalnız ölçümü olan LinkedIn hesabında (gösterim, erişilen üye, tepki, yorum, yeniden paylaşım; gelmeyen null)
 const account = (platform, handle, row) => {
   const real = row?.taken_at && MEASURED.includes(platform);
@@ -75,7 +81,10 @@ const account = (platform, handle, row) => {
     source: real ? row.source || "oauth" : "none", label: real ? null : NO_DATA, label_code: real ? null : "no_data",
     followers: real ? row.followers : null, avg_views: real ? row.avg_views : null,
     avg_likes: real ? row.avg_likes : null, avg_comments: real ? row.avg_comments : null,
+    // Ortalamanın hesaplandığı gönderi sayısı; 0 ise hesapta paylaşım yok (panel "Henüz paylaşım yok" yazar)
+    posts_sampled: real ? row.posts_sampled ?? null : null,
     taken_at: real ? row.taken_at : null,
+    audience: real ? parseAudience(row.audience) : null,
     ...(real && platform === "linkedin" ? {
       totals: {
         impressions: row.total_impressions ?? null, reach: row.total_reach ?? null, reactions: row.total_reactions ?? null,
@@ -93,12 +102,12 @@ export async function accountMetrics(env, userId, profile) {
       mode: "sample", label: SAMPLE, label_code: "sample",
       accounts: declared.map(({ platform, handle }) => {
         const ok = OFFICIAL.includes(platform);
-        return { platform, handle: handle ?? null, source: ok ? "sample" : "none", label: ok ? SAMPLE : NO_DATA, label_code: ok ? "sample" : "no_data", ...sampleAccount(platform, handle), taken_at: null };
+        return { platform, handle: handle ?? null, source: ok ? "sample" : "none", label: ok ? SAMPLE : NO_DATA, label_code: ok ? "sample" : "no_data", ...sampleAccount(platform, handle), audience: null, taken_at: null };
       }),
     };
   }
   const { results = [] } = await env.DB.prepare(
-    `SELECT a.platform, a.handle, s.taken_at, s.source, s.followers, s.avg_views, s.avg_likes, s.avg_comments,
+    `SELECT a.platform, a.handle, s.taken_at, s.source, s.followers, s.avg_views, s.avg_likes, s.avg_comments, s.posts_sampled, s.audience,
        s.total_impressions, s.total_reach, s.total_reactions, s.total_comments, s.total_reshares
      FROM social_accounts a
      LEFT JOIN metric_snapshots s ON s.id = (SELECT id FROM metric_snapshots WHERE account_id = a.id ORDER BY taken_at DESC, id DESC LIMIT 1)

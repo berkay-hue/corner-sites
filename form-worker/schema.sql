@@ -90,6 +90,51 @@ CREATE TABLE IF NOT EXISTS applications (
 -- ALTER TABLE applications ADD COLUMN revision_note TEXT;
 CREATE INDEX IF NOT EXISTS applications_user ON applications (user_id);
 
+-- Yönetim paneli (migrations/0012_admin.sql ile aynı; yeni kurulumda burada da oluşur)
+-- Yetki: admin (yalnız elle eklenir) | edit_metrics (bağlı hesaptan gelen ölçümü elle değiştirme)
+CREATE TABLE IF NOT EXISTS user_perms (
+  user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  perm TEXT NOT NULL CHECK (perm IN ('admin', 'edit_metrics')),
+  granted_by INTEGER,
+  granted_at TEXT NOT NULL DEFAULT (datetime('now')),
+  PRIMARY KEY (user_id, perm)
+);
+-- Elle ölçüm değişikliği günlüğü (alan başına bir satır; source: manual | import | admin; gönderi silinse de kalır)
+CREATE TABLE IF NOT EXISTS post_edits (
+  id INTEGER PRIMARY KEY,
+  at TEXT NOT NULL DEFAULT (datetime('now')),
+  actor_id INTEGER,
+  user_id INTEGER NOT NULL,
+  post_id INTEGER,
+  url TEXT NOT NULL,
+  snap_at TEXT NOT NULL,
+  field TEXT NOT NULL,
+  before INTEGER,
+  after INTEGER,
+  source TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS post_edits_at ON post_edits (at DESC);
+CREATE INDEX IF NOT EXISTS post_edits_user ON post_edits (user_id, at);
+CREATE INDEX IF NOT EXISTS post_edits_post ON post_edits (post_id, snap_at);
+-- Yetki değişikliği günlüğü (yalnız gerçek değişiklik; granted 1 = verildi, 0 = alındı)
+CREATE TABLE IF NOT EXISTS perm_log (
+  id INTEGER PRIMARY KEY,
+  at TEXT NOT NULL DEFAULT (datetime('now')),
+  actor_id INTEGER,
+  user_id INTEGER NOT NULL,
+  perm TEXT NOT NULL,
+  granted INTEGER NOT NULL
+);
+CREATE INDEX IF NOT EXISTS perm_log_at ON perm_log (at DESC);
+-- Meta deauthorize / veri silme geri çağrıları (Meta kullanıcı kimliği saklanmaz; code yalnız silmede)
+CREATE TABLE IF NOT EXISTS meta_events (
+  id INTEGER PRIMARY KEY,
+  at TEXT NOT NULL DEFAULT (datetime('now')),
+  kind TEXT NOT NULL,
+  code TEXT,
+  matched INTEGER NOT NULL
+);
+
 -- Sosyal metrikler bu dosyada değil, migrations/ altında; bu dosyadan sonra sırayla uygulanır:
 --   0001_metrics.sql  sosyal hesaplar ve metrik tabloları
 --   0002_oauth.sql    OAuth akışı, şifreli token, social_accounts (platform, external_id) UNIQUE
@@ -98,5 +143,10 @@ CREATE INDEX IF NOT EXISTS applications_user ON applications (user_id);
 --   0005_notify.sql   bildirim tercihleri (users.notify, JSON; yalnız saklama, gönderim yok)
 --   0006_posts.sql    elle girilen gönderi ölçümleri (posts, post_snaps; POSTS_ENABLED = "1" ile açılır)
 --   0007_post_source.sql  bağlı hesaptan aktarılan gönderiler (posts.account_id; bağ koparılınca silinir)
+--   0008_linkedin.sql      LinkedIn üye analitiği toplamları (metric_snapshots.total_*: gösterim, erişim, tepki, yorum, paylaşım)
+--   0009_audience.sql      hesap kitle dağılımı (yaş, cinsiyet, ülke, şehir)
+--   0010_post_audience.sql gönderi başına kitle dağılımı (posts.audience)
+--   0011_meta_scoped.sql   Instagram hesabının uygulamaya özel kimliği (Meta deauthorize / veri silme eşleşmesi)
+--   0012_admin.sql         yönetim paneli: user_perms, perm_log, post_edits, meta_events (yukarıdakiyle aynı tablolar)
 -- Uygula (form-worker/ klasöründen çalıştır): npx wrangler d1 migrations apply corner-forms --remote
--- 0002 uygulanmadan da bağ koparma çalışır; 0003–0007 yeni kodla deploy'dan ÖNCE uygulanmalı.
+-- 0002 uygulanmadan da bağ koparma çalışır; 0003–0012 yeni kodla deploy'dan ÖNCE uygulanmalı.

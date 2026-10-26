@@ -3,7 +3,7 @@
 // Kayıt D1'e yazılır; e-posta MAIL binding'i (Email Routing) üzerinden MAIL_TO adresine gider.
 import { EmailMessage } from "cloudflare:email";
 import { platform, cleanup } from "./platform.js";
-import { oauthCallback, syncDue } from "./oauth.js";
+import { metaCallback, oauthCallback, syncDue, ytRetention } from "./oauth.js";
 import { metricsEnabled } from "./metrics.js";
 
 const MAX_FIELDS = 30, MAX_LEN = 5000, RATE = 5; // 10 dakikada IP başına en fazla RATE gönderim
@@ -32,6 +32,8 @@ export default {
       headers: origin ? { "access-control-allow-origin": origin, "access-control-allow-methods": "GET, POST, PUT", "access-control-allow-headers": "content-type, authorization", "access-control-max-age": "86400", vary: "Origin" } : {},
     });
     if (url.pathname.startsWith("/rakip/")) return rakip(req, url, env, origin);
+    // Meta'nın deauthorize ve veri silme geri çağrıları (src/oauth.js; imzalı, sunucudan sunucuya)
+    if (/^\/oauth\/instagram\/(deauthorize|delete)$/.test(url.pathname)) return metaCallback(req, url, env);
     // Sosyal hesap bağlama dönüşü (src/oauth.js): sağlayıcı yönlendirmesinde Origin yok, platform() dışında
     if (url.pathname.startsWith("/oauth/")) return oauthCallback(req, url, env);
     // brandcorner.co platformu: üyelik ve panel
@@ -65,11 +67,13 @@ export default {
     const { results } = await env.DB.prepare("SELECT * FROM submissions WHERE emailed = 0 ORDER BY id LIMIT 50").all();
     for (const r of results) await deliver(env, { ...r, fields: JSON.parse(r.fields) });
     try { await cleanup(env); } catch (e) { console.log("cleanup", e?.message?.slice(0, 80)); }
+    // YouTube saklama kuralı (src/oauth.js ytRetention): METRICS_ENABLED kapansa da kalan veri süresi dolunca silinir
+    try { await ytRetention(env); } catch (e) { console.log("retention", e?.message?.slice(0, 80)); }
     // Günlük metrik senkronu (src/oauth.js syncDue), METRICS_ENABLED "1" ise. Ücretsiz plan çağrı başına 50 alt
     // istek ve 50 D1 sorgusu veriyor; gönderilen her e-postayı bir istek sayıp kalanı senkrona bırakıyoruz. D1'de
-    // bekleyen listesi (1), e-posta başına işaret (1) ve cleanup (4 ifade) düşülür.
+    // bekleyen listesi (1), e-posta başına işaret (1), cleanup (4 ifade) ve YouTube saklama (5 ifade) düşülür.
     if (metricsEnabled(env)) {
-      const d1 = 50 - 1 - results.length - 4;
+      const d1 = 50 - 1 - results.length - 4 - 5;
       try { await syncDue(env, fetch, { budget: 40 - results.length, d1 }); } catch (e) { console.log("sync", e?.message?.slice(0, 80)); }
     }
   },

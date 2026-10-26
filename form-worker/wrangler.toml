@@ -23,11 +23,17 @@ ALLOWED_HOSTS ="saascorner.co,cornergroup.co,socialmediacorner.co,salescorner.co
 # Hesabın uygulama şifresi secret olarak girilir: wrangler secret put SMTP_PASS --name corner-forms
 SMTP_USER = "berkay@saascorner.co"
 # brandcorner sosyal metrikleri (src/metrics.js). "1": gerçek veri D1'den okunur; önce migrations/0001_metrics.sql uygulanmalı.
-# "0": D1 metrik tablolarına dokunulmaz, panel "örnek" etiketli örnek veri gösterir. D1 0001–0006 uygulandı, Instagram secret'ları girildi (23 Eki 2026).
+# "0": D1 metrik tablolarına dokunulmaz, panel "örnek" etiketli örnek veri gösterir. D1 0001–0007, 0009 ve 0010 uygulandı (25 Eki 2026).
 METRICS_ENABLED = "1"
 # brandcorner gönderi ölçümleri (GET/POST /app/posts*). "1": D1'e yazılır; önce migrations/0006_posts.sql uygulanmalı.
-# "0": uçlar 404 döner, panel kaydı tarayıcıda tutar. D1 0006 uygulandı (19 Eki 2026).
+# "0": uçlar 404 döner, panel kaydı tarayıcıda tutar. D1 0006 uygulandı (19 Eki 2026). Gönderi başına kitle (audience
+# sütunu) için migrations/0010_post_audience.sql bu kodun deploy'undan ÖNCE uygulanmalı; yoksa uçlar 503 not_ready döner.
+# 0010 uygulandı (25 Eki 2026).
 POSTS_ENABLED = "1"
+# YouTube kitle dağılımı (yaş, cinsiyet, ülke). "1": bağlanırken yt-analytics.readonly izni de istenir. GCP brand-corner
+# projesinde YouTube Analytics API açık ve izin OAuth onay ekranında (24 Eki 2026); mevcut bağlantılar yeniden bağlanınca veri alır.
+# "0": yalnız youtube.readonly; kitle raporu 403 döner, panel "yeniden bağlanınca" der.
+YT_ANALYTICS = "1"
 
 # cornergroup.co'da Email Routing açık, berkay@saascorner.co doğrulanmış hedef adres
 [[send_email]]
