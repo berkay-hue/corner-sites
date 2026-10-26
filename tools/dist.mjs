@@ -14,8 +14,8 @@ const PRIVATE = /^_(audit|mirror-report|orig-).*|\.log$/;
 
 await mkdir(OUT, { recursive: true });
 // wishceo sayilar/NNN.json: app.js ISSUES'taki açılış tarihi bugünden (Türkiye saati, app.js todayTR gibi) ileri olan sayı yayına çıkmaz;
-// hiç açılmış sayı yoksa en yeni JSON kopyalanır
-const ISSUE_DATES = new Map([...(await readFile(join(SRC, "app.js"), "utf8").catch(() => "")).matchAll(/no:\s*"(\d+)",\s*date:\s*"(\d{4}-\d{2}-\d{2})"/g)].map(m => [m[1], m[2]]));
+// hiç açılmış sayı yoksa en yeni JSON kopyalanır. Yalnız ISSUES = [ … ] dizisi okunur; yorum satırına alınmış sayı açılmış sayılmaz
+const ISSUE_DATES = new Map([...((await readFile(join(SRC, "app.js"), "utf8").catch(() => "")).match(/\bISSUES\s*=\s*\[([\s\S]*?)\]/)?.[1] || "").replace(/\/\*[\s\S]*?\*\/|\/\/.*/g, "").matchAll(/no:\s*"(\d+)",\s*date:\s*"(\d{4}-\d{2}-\d{2})"/g)].map(m => [m[1], m[2]]));
 // Intl/saat dilimi verisi yoksa ya da beklenmedik parça dönerse app.js todayTR gibi UTC+3 (Türkiye 2016'dan beri yaz saati uygulamıyor)
 const today = (() => {
   try {
@@ -33,42 +33,61 @@ await cp(SRC, OUT, { recursive: true, force: true, filter: src => !PRIVATE.test(
 if (issueFiles.length) console.log(`sayilar: ${liveIssues.size}/${issueFiles.length} yayında (${today})`);
 
 // wishceo index.html'deki sayı alanları (JS çalıştırmayan botlar ve ilk boyama için) yayındaki son sayıdan yazılır; metinler app.js fillPage/init ile aynı.
-// Alanlardan biri bulunmazsa ya da içinde etiket varsa index olduğu gibi kalır (app.js sayfayı yine doldurur)
-let stamped;
+// Alanlardan biri bulunmazsa, birden çok yerde geçerse ya da içinde etiket varsa index olduğu gibi kalır (app.js sayfayı yine doldurur)
+let stamped, stampedDate;
 if (released.length) {
-  // app.js boot gibi: vaka dizisi dolu olan en yeni açılmış sayı
+  const warn = msg => console.log(`::warning file=${relative(root, join(SRC, "index.html"))}::index: ${msg}`);
+  // app.js boot gibi: vaka dizisi dolu olan en yeni açılmış sayı (BOM'lu JSON da okunur, fetch().json() gibi)
   let no, cases;
   for (const n of [...released].reverse()) {
-    cases = await readFile(join(SRC, "sayilar", n), "utf8").then(JSON.parse).catch(() => null);
+    cases = await readFile(join(SRC, "sayilar", n), "utf8").then(s => JSON.parse(s.replace(/^﻿/, ""))).catch(() => null);
     if (Array.isArray(cases) && cases.length) { no = n.replace(".json", ""); break; }
   }
   // app.js'in okuduğu vaka alanlarından biri yoksa yazılmaz (sayfaya "undefined" çıkmasın)
-  if (no && !cases.every(c => c?.title != null && c.area != null && Array.isArray(c.place) && c.place[0] != null)) { console.log(`index: sayı ${no} yazılmadı, vaka alanı eksik`); no = undefined; }
+  if (no && !cases.every(c => c?.title != null && c.area != null && Array.isArray(c.place) && c.place[0] != null)) { warn(`sayı ${no} yazılmadı, vaka alanı eksik`); no = undefined; }
+  // place[1] metin değilse app.js yearOf çöker: deploy bilerek durur (oyunu açılmayan sayı yayına çıkmasın)
+  if (no) cases.forEach((c, i) => { if (c.place[1] != null && typeof c.place[1] !== "string") throw new Error(`sayı ${no} dosya ${i + 1}: place[1] metin değil`); });
   if (no) {
     const N = cases.length, WORDS = ["", "Bir", "İki", "Üç", "Dört", "Beş", "Altı"], WORDS_LO = ["", "bir", "iki", "üç", "dört", "beş", "altı"];
+    const AY = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"];
     const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
-    const date = new Date(ISSUE_DATES.get(no) + "T12:00:00+03:00").toLocaleDateString("tr-TR", { day: "numeric", month: "long", year: "numeric", timeZone: "Europe/Istanbul" });
+    // tr-TR "26 Ekim 2026" elle kurulur (Node'un Intl verisi eksikse de aynı metin)
+    const [Y, M, D] = ISSUE_DATES.get(no).split("-"), date = `${+D} ${AY[M - 1]} ${Y}`;
     const items = cases.map((c, i) => {
       const y = (c.place[1] || "").replace(/^\s*·\s*/, "");
       return `<li><a href="#oyun"><span class="n">${String(i + 1).padStart(2, "0")}</span><span class="t">${esc(c.title)}</span><span class="m">${esc(c.area + " · " + c.place[0] + (y ? ", " + y : ""))}</span></a></li>`;
     });
-    // [öznitelik, metin]: o öznitelikli her öğenin içi (düz metinse) değişir; app.js de altıdan fazla dosyada giriş cümlesine dokunmaz
-    const FIELDS = [["data-issue", `Sayı ${no}`], ['id="today"', date], ['id="hero-meta"', `${N} dosya · ${N} karar · 1 CEO karnesi · Üyelik yok`]];
-    if (WORDS[N]) FIELDS.push(['id="oyun-intro"', `${WORDS[N]} şirket, ${WORDS_LO[N]} kriz. Hangisinde vakadaki CEO’dan daha iyi iş çıkarırsın?`]);
+    // Etiketler öznitelik değerleri atlanarak okunur; yorum, <script> ve <style> aynı uzunlukta boşlukla maskelenir (konumlar asıl HTML'de geçerli)
+    const mask = h => h.replace(/<!--[\s\S]*?(?:-->|$)|<(script|style)\b[\s\S]*?(?:<\/\1\s*>|$)/gi, m => " ".repeat(m.length));
+    const tags = h => [...mask(h).matchAll(/<([a-zA-Z][a-zA-Z0-9-]*)((?:\s+[^\s"'>\/=]+(?:\s*=\s*(?:"[^"]*"|'[^']*'|[^\s"'=<>`]+))?)*)\s*\/?>/g)].map(m => ({
+      name: m[1].toLowerCase(), start: m.index, end: m.index + m[0].length,
+      attrs: new Map([...m[2].matchAll(/\s+([^\s"'>\/=]+)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'=<>`]+)))?/g)].map(a => [a[1].toLowerCase(), a[2] ?? a[3] ?? a[4] ?? ""])),
+    }));
+    const ids = h => tags(h).map(t => t.attrs.get("id")).filter(v => v != null).sort().join("\n");
     let html = await readFile(join(OUT, "index.html"), "utf8").catch(() => "");
-    const miss = [];
-    for (const [attr, val] of FIELDS) {
-      const open = `<([a-z][a-z0-9]*)\\b[^>]*\\s${attr}(?=[\\s>])[^>]*>`;
-      let hits = 0;
-      const out = html.replace(new RegExp(`(${open})[^<]*(?=</\\2>)`, "g"), (m, o) => (hits++, o + val));
-      if (hits && hits === (html.match(new RegExp(open, "g")) || []).length) html = out; else miss.push(attr);
+    const before = ids(html), miss = [];
+    // Her alanın bütün adayları düz metinli öğe olmalı; öznitelik adı başka bir yerde de geçiyorsa (metinde, değer içinde, bozuk etikette) yazılmaz
+    const FIELDS = [["data-issue", null, `Sayı ${no}`], ["id", "today", date], ["id", "hero-meta", `${N} dosya · ${N} karar · 1 CEO karnesi · Üyelik yok`]];
+    if (WORDS[N]) FIELDS.push(["id", "oyun-intro", `${WORDS[N]} şirket, ${WORDS_LO[N]} kriz. Hangisinde vakadaki CEO’dan daha iyi iş çıkarırsın?`]);
+    for (const [attr, v, val] of FIELDS) {
+      const label = v == null ? attr : `${attr}="${v}"`;
+      const cands = tags(html).filter(t => t.attrs.has(attr) && (v == null || t.attrs.get(attr) === v));
+      const raw = (mask(html).match(new RegExp(v == null ? `\\b${attr}\\b` : `\\b${attr}\\s*=\\s*["']?${v}(?![\\w-])`, "gi")) || []).length;
+      const spans = cands.map(t => ({ t, m: html.slice(t.end).match(new RegExp(`^[^<]*(?=</${t.name}\\s*>)`, "i")) }));
+      if (!cands.length || raw !== cands.length || spans.some(s => !s.m)) { miss.push(label); continue; }
+      for (const { t, m } of spans.reverse()) html = html.slice(0, t.end) + val + html.slice(t.end + m[0].length);
     }
-    // vaka listesi: satır düzeni korunur (ilk <li>'den önceki boşluk her satırda tekrarlanır)
-    let list = 0;
-    html = html.replace(/(<ol\b[^>]*\sid="index-list"[^>]*>)(\s*)[\s\S]*?(\s*<\/ol>)/, (m, o, ws, c) => (list++, o + ws + items.join(ws) + c));
-    if (!list) miss.push('id="index-list"');
-    if (miss.length) console.log(`index: sayı ${no} yazılmadı, bulunamayan alan: ${miss.join(", ")}`);
-    else { await writeFile(join(OUT, "index.html"), html); stamped = html; console.log(`index: sayı ${no} yazıldı (${N} dosya, ${date})`); }
+    // vaka listesi: tek bir <ol id="index-list">, içinde yalnız <li>'ler; satır düzeni korunur (ilk <li>'den önceki boşluk her satırda tekrarlanır)
+    const lists = tags(html).filter(t => t.attrs.get("id") === "index-list");
+    const body = lists.length === 1 && lists[0].name === "ol" ? html.slice(lists[0].end).match(/^[\s\S]*?(?=<\/ol\s*>)/i)?.[0] : undefined;
+    if (body == null || /<ol\b|<\/?(?:section|aside|main|div|article|header|footer)\b|\sid\s*=/i.test(body) || !/^\s*(?:<li\b[\s\S]*?<\/li>\s*)*$/i.test(body)) miss.push('id="index-list"');
+    else {
+      const ws = body.match(/^\s*/)[0], trail = body.slice(ws.length).match(/\s*$/)[0];
+      html = html.slice(0, lists[0].end) + ws + items.join(ws) + trail + html.slice(lists[0].end + body.length);
+    }
+    if (!miss.length && ids(html) !== before) miss.push("id kümesi değişti");
+    if (miss.length) warn(`sayı ${no} yazılmadı, bulunamayan alan: ${miss.join(", ")}`);
+    else { await writeFile(join(OUT, "index.html"), html); stamped = html; stampedDate = ISSUE_DATES.get(no); console.log(`index: sayı ${no} yazıldı (${N} dosya, ${date})`); }
   }
 }
 
@@ -168,7 +187,7 @@ if (!(await has(join(OUT, "sitemap.xml")))) {
   await writeFile(join(OUT, "sitemap.xml"), xml);
 }
 // lastmod yalnızca içerik değişikliğinden gelir: yazıda BlogPosting dateModified, blog listesinde en yeni yazı,
-// statik sayfada elle tutulan _orig-sitemap değeri. Başka kaynaklı lastmod (araç commit'i, dosya tarihi) silinir.
+// statik sayfada elle tutulan _orig-sitemap değeri (wishceo ana sayfasında yazılan sayının tarihi daha yeniyse o). Başka kaynaklı lastmod (araç commit'i, dosya tarihi) silinir.
 {
   const ld = h => [...h.matchAll(/<script type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g)].flatMap(m => { try { const j = JSON.parse(m[1]); return Array.isArray(j) ? j : j["@graph"] || [j]; } catch { return []; } });
   const origLm = new Set([...orig.matchAll(/<url>([\s\S]*?)<\/url>/g)].map(m => `${m[1].match(/<loc>([^<]+)/)?.[1].trim()} ${m[1].match(/<lastmod>([^<]+)/)?.[1].trim()}`));
@@ -177,6 +196,8 @@ if (!(await has(join(OUT, "sitemap.xml")))) {
   for (const b of xml.match(/<url>[\s\S]*?<\/url>/g) || []) {
     const lm = b.match(/<lastmod>([^<]+)<\/lastmod>/)?.[1].trim(), loc = b.match(/<loc>([^<]+)/)[1].trim();
     const p = decodeURI(new URL(loc).pathname).replace(/^\/|\/$/g, "");
+    // wishceo ana sayfası: yazılan sayının açılış tarihi elle tutulan değerden yeniyse lastmod o olur
+    if (p === "" && stampedDate && lm && stampedDate > lm) { xml = xml.replace(b, b.replace(/<lastmod>[^<]*<\/lastmod>/, `<lastmod>${stampedDate}</lastmod>`)); fixed.push(`/: ${lm} -> ${stampedDate}`); continue; }
     if (!lm || origLm.has(`${loc} ${lm}`) || /^(?:(?:tr|en)\/)?blog$/.test(p)) continue;
     const f = (await has(join(OUT, p + ".html"))) ? join(OUT, p + ".html") : join(OUT, p, "index.html");
     const mod = ld(await readFile(f, "utf8").catch(() => "")).find(n => n["@type"] === "BlogPosting")?.dateModified;
