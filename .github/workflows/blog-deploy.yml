@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
     inputs:
       host: { description: "Site (örn. cornergroup.co)", required: true, default: "cornergroup.co" }
-  # wishceo haftalık sayısı pazartesi 00:00 TR'de açılır: Pazar 21:05 UTC'de yalnız wishceo'yu yeniden yükle
+  # wishceo haftalık sayısı pazartesi 00:00 TR'de açılır: Pazar 21:05 UTC'de yalnız wishceo'yu yeniden yükle (GitHub zamanlı run'ı bu repoda saatlerce geç başlatabiliyor; sayı ilk wishceo build'inde açılır)
   schedule:
     - cron: "5 21 * * 0"
 concurrency: { group: "blog-deploy-${{ inputs.host || github.ref }}", cancel-in-progress: false }
