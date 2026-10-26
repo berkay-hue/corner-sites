@@ -20,6 +20,22 @@ export const OAUTH = ["instagram", "tiktok", "youtube", "linkedin"];
 export const SYNCED = ["instagram", "tiktok", "youtube"];
 export const LISTED = ["instagram", "tiktok", "youtube", "x", "linkedin", "twitch"];
 export const CONNECTABLE = { influencer: [...SYNCED, "linkedin"], brand: [...SYNCED, "linkedin"], agency: [...SYNCED, "linkedin"] };
+// 0012 tabloları (post_edits, perm_log) bu isolate'te yok mu: ilk "no such table" hatasında true olur, sonraki yazımlar tabloya
+// hiç değinmez ve tekrar denenmez (testler sıfırlar). batchOr: build(true) tabloya değinen, build(false) değinmeyen ifadeler;
+// tablo yoksa bir kez onsuz tekrarlanır. fits(n) tekrarın n ifadesi bütçeye sığmıyorsa false döner, o zaman hata atılır.
+export const MISSING = { post_edits: false, perm_log: false };
+export async function batchOr(env, table, build, fits = () => true) {
+  if (MISSING[table]) return env.DB.batch(build(false));
+  try { return await env.DB.batch(build(true)); }
+  catch (e) {
+    if (!new RegExp(`no such table: ${table}\\b`, "i").test(String(e?.message))) throw e;
+    MISSING[table] = true;
+    console.log("no table", table);
+    const again = build(false);
+    if (!fits(again.length)) throw e;
+    return env.DB.batch(again);
+  }
+}
 const STATE_MINUTES = 10, TICKET_MINUTES = 5, SAMPLE = 12; // ortalama (ve Instagram insights'ı) için son 12 gönderi
 // Gönderi listesi sayfa boyu ve en çok sayfa: Instagram ve YouTube 4 × 50, TikTok 5 × 20 (TikTok'ta sayfa en çok 20)
 const IG_PAGE = 50, IG_PAGES = 4, TT_PAGE = 20, TT_PAGES = 5, YT_PAGE = 50, YT_PAGES = 4;
@@ -925,7 +941,8 @@ const mergeAud = (old, neu) => {
 // Gelmeyen izlenme ve erişim (Instagram insights'ı yalnız son SAMPLE gönderide) son ölçülen değerle sürer.
 // Hesap (a: id, user_id, platform) yalnız hâlâ bağlıysa, platform kimliği aynıysa ve kira (leaseAt) hâlâ bizdeyse yazılır.
 // recent: gönderilerin ilk kaçı son SAMPLE gönderiden (bunların ölçümü günde bir).
-function postWrites(env, a, externalId, leaseAt, posts, recent) {
+// edits: o günün ölçümü elle düzeltilmişse (aynı post_id ve snap_at için post_edits satırı) ezilmez; false yalnız tablo yoksa (batchOr).
+function postWrites(env, a, externalId, leaseAt, posts, recent, edits = true) {
   const own = "EXISTS (SELECT 1 FROM social_accounts WHERE id = ? AND status = 'connected' AND external_id = ? AND next_sync_at = ?)";
   return [
     env.DB.prepare(
@@ -954,7 +971,8 @@ function postWrites(env, a, externalId, leaseAt, posts, recent) {
        WHERE ${own}
          AND (j.key < ? OR NOT EXISTS (SELECT 1 FROM post_snaps s WHERE s.post_id = p.id AND s.at > date('now', '-7 days')))
        ON CONFLICT (post_id, at) DO UPDATE SET likes = excluded.likes, comments = excluded.comments, views = excluded.views,
-         reach = excluded.reach`,
+         reach = excluded.reach${edits ? `
+         WHERE NOT EXISTS (SELECT 1 FROM post_edits e WHERE e.post_id = post_snaps.post_id AND e.snap_at = post_snaps.at)` : ""}`,
     ).bind(posts, a.user_id, a.id, a.id, externalId, leaseAt, recent),
   ];
 }
@@ -1012,7 +1030,9 @@ export async function syncDue(env, f = fetch, { budget = 40, max = 5, d1 = 50 } 
       }
       // Gönderiler (POSTS_ENABLED "1") ölçümle aynı batch'te ve aynı koşullarla (postWrites)
       const posts = env.POSTS_ENABLED === "1" && m.posts?.length ? JSON.stringify(m.posts) : null;
-      const [ins] = await env.DB.batch([
+      // post_edits yoksa (0012 uygulanmamış) batch isolate başına bir kez onsuz tekrarlanır; tekrar D1 bütçesine sayılır,
+      // sığmazsa hata (failed, kira 15 dakikada düşer, sonraki saat koşulsuz yazar)
+      const [ins] = await batchOr(env, "post_edits", ed => [
         env.DB.prepare(
           `INSERT INTO metric_snapshots (account_id, source, followers, avg_views, avg_likes, avg_comments, posts_sampled, audience)
            SELECT id, 'oauth', ?, ?, ?, ?, ?, ? FROM social_accounts
@@ -1020,9 +1040,9 @@ export async function syncDue(env, f = fetch, { budget = 40, max = 5, d1 = 50 } 
         ).bind(m.followers, m.avg_views, m.avg_likes, m.avg_comments, m.posts_sampled, m.audience ? JSON.stringify(m.audience) : null,
           a.id, m.external_id, lease.next_sync_at),
         ...(posts && a.platform === "tiktok" ? [ttRename(env, a, m.external_id, lease.next_sync_at, posts)] : []),
-        ...(posts ? postWrites(env, a, m.external_id, lease.next_sync_at, posts, m.posts_recent) : []),
+        ...(posts ? postWrites(env, a, m.external_id, lease.next_sync_at, posts, m.posts_recent, ed) : []),
         release(NEXT.ok),
-      ]);
+      ], n => used + n <= d1 && (used += n, true));
       out[ins.meta?.changes ? "synced" : "changed"]++;
     } catch (e) {
       out.failed++;
@@ -1066,7 +1086,7 @@ export async function fetchOlderPosts(env, userId, p, f = fetch) {
       return { external_id: extId(pr.external_id), handle: cleanHandle(pr.handle), ...(await API[p].older(access, f, pr, { known, want, oldest })) };
     });
     if (!m.posts.length) return { added: 0, more: false, full: false };
-    const [ins] = await env.DB.batch(postWrites(env, { id: acc.id, user_id: userId, platform: p }, m.external_id, lease.next_sync_at, JSON.stringify(m.posts), 0));
+    const [ins] = await batchOr(env, "post_edits", ed => postWrites(env, { id: acc.id, user_id: userId, platform: p }, m.external_id, lease.next_sync_at, JSON.stringify(m.posts), 0, ed));
     const added = ins.meta?.changes || 0;
     if (!added) throw new ProviderError("changed"); // kira düştü (hesap yeniden bağlandı) ya da sınır araya giren aktarımla doldu
     return { added, more: m.more, full: rows.length + added >= MAX_POSTS };
@@ -1226,7 +1246,8 @@ async function signedUser(env, sr) {
 // Meta imzalı istek gönderir. user_id hem external_id (profesyonel hesap kimliği) hem scoped_id (uygulamaya özel
 // kimlik) ile eşleştirilir; Meta hangisini gönderdiğini yazmıyor. Eşleşen her bağ disconnectOAuth ile koparılır
 // (token, ölçüm, kitle ve aktarılan gönderiler silinir); delete'te görünen ad da silinir. delete Meta'nın beklediği
-// {url, confirmation_code} ile döner; kod saklanmaz, durum sayfası (GET) silmenin istek anında bittiğini yazar.
+// {url, confirmation_code} ile döner. Her geri çağrı meta_events'e (0012) tür, kod (yalnız delete) ve eşleşen hesap sayısıyla
+// yazılır, Meta kullanıcı kimliği yazılmaz; durum sayfası (GET) tabloya bakmaz, silmenin istek anında bittiğini yazar.
 // Bilinmeyen user_id de aynı yanıtı alır (hangi hesabın bağlı olduğu dışarıdan anlaşılmasın).
 export async function metaCallback(req, url, env, f = fetch) {
   const kind = /^\/oauth\/instagram\/(deauthorize|delete)$/.exec(url.pathname)?.[1];
@@ -1254,8 +1275,11 @@ export async function metaCallback(req, url, env, f = fetch) {
     }
   }
   console.log("meta", kind, results.length);
+  // Yönetim panelinin "Meta silme" listesi; tablo yoksa ya da yazılamazsa Meta yine yanıtını alır
+  const code = kind === "delete" ? b64u(crypto.getRandomValues(new Uint8Array(12))) : null;
+  try { await env.DB.prepare("INSERT INTO meta_events (kind, code, matched) VALUES (?, ?, ?)").bind(kind, code, results.length).run(); }
+  catch (e) { console.error("meta_events", String(e && e.message).slice(0, 80)); }
   if (kind === "deauthorize") return jsonOut({ ok: true });
-  const code = b64u(crypto.getRandomValues(new Uint8Array(12)));
   const base = String(env?.OAUTH_REDIRECT_BASE || url.origin).replace(/\/+$/, "");
   return jsonOut({ url: `${base}/oauth/instagram/delete?code=${code}`, confirmation_code: code });
 }

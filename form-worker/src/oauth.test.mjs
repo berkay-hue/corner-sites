@@ -21,7 +21,7 @@ const {
   NOT_CONFIGURED, NO_DATA, OAUTH, ProviderError, oauthReady, redirectUri, listConnections, authorizeUrl,
   exchangeCode, fetchMetrics, encrypt, decrypt, syncAccount, oauthCallback, finishOAuth, OAuthFail,
   syncDue, SYNC_MIN, SYNC_D1, pkceChallenge, disconnectOAuth, CHANGE_LIMIT, SYNCED, LISTED, CONNECTABLE, cleanHandle, fetchProfile, refreshToken,
-  fetchOlderPosts, OLDER, postAudSkip,
+  fetchOlderPosts, OLDER, postAudSkip, MISSING,
 } = await import("./oauth.js");
 
 const SCHEMA = readFileSync(new URL("../schema.sql", import.meta.url), "utf8");
@@ -2909,4 +2909,107 @@ test("POST /app/posts/:id/audience: gönderinin kitlesini sağlayıcıdan tazele
   assert.deepEqual(fail(await aud(ya)), [409, "disabled"]);
   env.POSTS_ENABLED = "0";
   assert.deepEqual(fail(await aud(ya)), [404, "not_found"]);
+});
+
+test("meta_events (0012): her geçerli geri çağrı tür, kod (yalnız delete) ve eşleşen bağ sayısıyla yazılır; Meta kimliği yazılmaz; tablo yoksa yanıt aynı", async t => {
+  t.mock.method(console, "log", () => {});
+  const errs = t.mock.method(console, "error", () => {});
+  const { db, env, join } = await setup({ ...IG_ENV, OAUTH_TOKEN_KEY: KEY });
+  const a = await join("influencer", "a@x.co");
+  await seed(db, env, a.id, "instagram", "1784");
+  const del = await meta(env, "/oauth/instagram/delete", signed({ ...SR, user_id: "1784" }));
+  assert.equal(del.status, 200, del.text);
+  const de = await meta(env, "/oauth/instagram/deauthorize", signed({ ...SR, user_id: "5555" }));
+  assert.deepEqual([de.status, de.body], [200, { ok: true }]);
+  // Geçersiz istek ve durum sayfası yazmaz
+  assert.equal((await meta(env, "/oauth/instagram/delete", signed({ ...SR, user_id: "17a84" }))).status, 400);
+  assert.equal((await meta(env, `/oauth/instagram/delete?code=${del.body.confirmation_code}`, undefined, "GET")).status, 200);
+  const rows = db.prepare("SELECT * FROM meta_events ORDER BY id").all().map(r => ({ ...r }));
+  assert.deepEqual(rows.map(r => [r.kind, r.code, r.matched]), [["delete", del.body.confirmation_code, 1], ["deauthorize", null, 0]]);
+  assert.deepEqual(Object.keys(rows[0]).sort(), ["at", "code", "id", "kind", "matched"]);
+  assert.match(rows[0].at, /^\d{4}-\d\d-\d\d \d\d:\d\d:\d\d$/);
+  assert.ok(!/1784|5555/.test(JSON.stringify(rows)));
+  assert.equal(errs.mock.calls.length, 0);
+  db.exec("DROP TABLE meta_events");
+  const d2 = await meta(env, "/oauth/instagram/delete", signed({ ...SR, user_id: "1784" }));
+  assert.deepEqual([d2.status, Object.keys(d2.body).sort()], [200, ["confirmation_code", "url"]]);
+  const de2 = await meta(env, "/oauth/instagram/deauthorize", signed({ ...SR, user_id: "1784" }));
+  assert.deepEqual([de2.status, de2.body], [200, { ok: true }]);
+  assert.deepEqual(errs.mock.calls.map(c => c.arguments[0]), ["meta_events", "meta_events"]);
+  assert.match(String(errs.mock.calls[0].arguments[1]), /no such table/);
+});
+
+// R1: elle düzeltilen o günün ölçümü (aynı post_id ve snap_at için post_edits satırı) senkronla ezilmez
+test("syncDue: yöneticinin düzelttiği günün ölçümü senkronla ezilmez; gönderinin metni ve diğer gün/gönderilerin ölçümü tazelenir", async t => {
+  t.mock.method(console, "log", () => {});
+  const { db, env, call, join } = await setup({ ...IG_ENV, OAUTH_TOKEN_KEY: KEY, POSTS_ENABLED: "1" });
+  const a = await join("influencer", "a@x.co"), adm = await join("influencer", "adm@x.co");
+  db.prepare("INSERT INTO user_perms (user_id, perm) VALUES (?, 'admin')").run(adm.id);
+  await seed(db, env, a.id, "instagram", "1784");
+  assert.deepEqual(await syncDue(env, fakeFetch(igPostRoutes([IG_REFRESH]))), { ...ZERO, synced: 1 });
+  const pid = url => db.prepare("SELECT id FROM posts WHERE url = ?").get(url).id;
+  const yday = new Date(Date.now() - 864e5).toISOString().slice(0, 10);
+  const fix = async (url, body) => {
+    const r = await call("POST", `/app/admin/${pid(url)}/snap`, { token: adm.token, body });
+    assert.equal(r.status, 200, JSON.stringify(r.body));
+    assert.equal(r.body.changed, 1);
+  };
+  await fix(IG_POSTS[0].url, { likes: 777 });
+  await fix(IG_POSTS[1].url, { at: yday, likes: 1 });
+  const media = IG_MEDIA.map(m => ({ ...m, ...(m.like_count != null && { like_count: m.like_count + 20 }), ...(m.id === "m1" && { caption: "Düzeltildi" }) }));
+  db.prepare("UPDATE social_accounts SET next_sync_at = NULL").run();
+  assert.deepEqual(await syncDue(env, fakeFetch(igPostRoutes([], media))), { ...ZERO, synced: 1 });
+  assert.deepEqual(snapsOf(db, IG_POSTS[0].url), [{ at: today(), likes: 777, comments: 4, views: 1000, reach: 800 }]);
+  assert.equal(db.prepare("SELECT caption FROM posts WHERE url = ?").get(IG_POSTS[0].url).caption, "Düzeltildi");
+  assert.deepEqual(snapsOf(db, IG_POSTS[1].url), [{ at: yday, likes: 1, comments: null, views: null, reach: null }, { at: today(), likes: 70, comments: 2, views: 3000, reach: 2500 }]);
+  assert.deepEqual(snapsOf(db, IG_POSTS[2].url).map(s => s.likes), [30]);
+});
+
+test("syncDue: post_edits yoksa gönderi ve ölçümler yine yazılır (ilk batch bir kez günlük kontrolsüz tekrarlanır, bir log); sonraki senkron da tazeler", async t => {
+  const log = t.mock.method(console, "log", () => {});
+  t.after(() => { MISSING.post_edits = false; });
+  const { db, env, join } = await setup({ ...IG_ENV, OAUTH_TOKEN_KEY: KEY, POSTS_ENABLED: "1" });
+  const a = await join("influencer", "a@x.co");
+  await seed(db, env, a.id, "instagram", "1784");
+  db.exec("DROP TABLE post_edits");
+  assert.deepEqual(await syncDue(env, fakeFetch(igPostRoutes([IG_REFRESH]))), { ...ZERO, synced: 1 });
+  assert.equal(MISSING.post_edits, true);
+  assert.equal(count(db, "metric_snapshots"), 1);
+  assert.deepEqual(imported(db).map(p => p.url), IG_POSTS.map(p => p.url));
+  assert.deepEqual(snapsOf(db, IG_POSTS[0].url), [{ at: today(), likes: 100, comments: 4, views: 1000, reach: 800 }]);
+  const media = IG_MEDIA.map(m => m.id === "m1" ? { ...m, like_count: 120 } : m);
+  db.prepare("UPDATE social_accounts SET next_sync_at = NULL").run();
+  assert.deepEqual(await syncDue(env, fakeFetch(igPostRoutes([], media))), { ...ZERO, synced: 1 });
+  assert.deepEqual(snapsOf(db, IG_POSTS[0].url).map(s => s.likes), [120]);
+  assert.equal(log.mock.calls.filter(c => c.arguments[0] === "no table").length, 1);
+});
+
+test("syncDue: post_edits yoksa yalnız isolate'in ilk senkronu bir batch fazla (tekrar); sonra tablosu olanla aynı sayıda batch, aynı ölçümler", async t => {
+  t.mock.method(console, "log", () => {});
+  t.after(() => { MISSING.post_edits = false; });
+  const media = IG_MEDIA.map(m => m.id === "m1" ? { ...m, like_count: 120 } : m);
+  const run = async drop => {
+    const { db, env, join } = await setup({ ...IG_ENV, OAUTH_TOKEN_KEY: KEY, POSTS_ENABLED: "1" });
+    const a = await join("influencer", "a@x.co");
+    await seed(db, env, a.id, "instagram", "1784");
+    if (drop) db.exec("DROP TABLE post_edits");
+    const calls = [], batch = env.DB.batch, out = [];
+    env.DB.batch = list => (calls.push(list.length), batch(list));
+    for (const routes of [igPostRoutes([IG_REFRESH]), igPostRoutes([], media)]) {
+      calls.length = 0;
+      db.prepare("UPDATE social_accounts SET next_sync_at = NULL").run();
+      assert.deepEqual(await syncDue(env, fakeFetch(routes)), { ...ZERO, synced: 1 });
+      out.push(calls.length);
+    }
+    return { db, out };
+  };
+  const base = await run(false);
+  assert.equal(MISSING.post_edits, false);
+  const miss = await run(true);
+  assert.deepEqual([MISSING.post_edits, miss.out], [true, [base.out[0] + 1, base.out[1]]]);
+  // Bayrak kalkmışken yeni hesap: tekrar yok
+  const again = await run(true);
+  assert.deepEqual(again.out, base.out);
+  for (const p of IG_POSTS) assert.deepEqual(snapsOf(miss.db, p.url), snapsOf(base.db, p.url));
+  assert.equal(count(again.db, "post_snaps"), count(base.db, "post_snaps"));
 });

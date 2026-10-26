@@ -273,6 +273,8 @@ dialog.cmdk[open]{display:flex;flex-direction:column}dialog.cmdk::backdrop{backg
 .pchart{width:100%;height:auto;max-height:300px;display:block;margin:6px 0 0}.pchart .ax{stroke:var(--line-strong);stroke-width:1}.pchart .ln{fill:none;stroke-width:2.5}.pchart .l1{stroke:var(--accent)}.pchart .l2{stroke:var(--accent-2);stroke-dasharray:5 4}.pchart text{fill:var(--muted);font:11px "Inter",sans-serif}.pchart circle{fill:var(--surface);stroke-width:2}
 .legend2{display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);margin:6px 0 0}.legend2 span::before{content:"";display:inline-block;width:14px;height:3px;border-radius:2px;margin-right:6px;vertical-align:middle;background:var(--accent)}.legend2 span.b::before{background:var(--accent-2)}
 .snaps{width:100%;border-collapse:collapse;font-size:13.5px;margin:12px 0 0}.snaps th,.snaps td{text-align:right;padding:8px 6px;border-top:1px solid var(--line)}.snaps th:first-child,.snaps td:first-child{text-align:left}.snaps th{color:var(--muted);font-weight:500}.tscroll{overflow-x:auto}
+.adt{margin:0}.adt th,.adt td{text-align:left;white-space:nowrap;vertical-align:middle}.adt th{position:relative}.adt thead th{border-top:0}.adt th:first-child,.adt td:first-child{padding-left:16px}.adt th:last-child,.adt td:last-child{padding-right:16px}.adt .nr{text-align:right}.adt .wr{white-space:normal;min-width:12em;max-width:22em;overflow-wrap:anywhere}.adt a{display:inline-flex;align-items:center;min-height:44px}.adt .ghost{min-height:44px}.adq button{min-width:44px}.adt .em{white-space:normal;overflow-wrap:break-word;width:15em;min-width:15em}@media(max-width:640px){.adt .em{width:12em;min-width:12em}}.adt .em .muted{font-size:12.5px}.adp>summary::before{flex:none}.adm-msg:empty{display:none}.adsh,.cb .adsh{display:flex;gap:8px;align-items:flex-start;margin:0 0 16px}.adsh .i{flex:none;width:16px;height:16px;margin-top:1px}.adlog{border-top:1px solid var(--line)}.adlog .ch{padding-bottom:10px}.adm-msg{padding:12px 16px 0}.toolbar .qd{margin:0}
+.asw{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0;margin:0;background:none;border:0;font:inherit;color:var(--text);cursor:pointer}.asw .tk{flex:none;width:42px;height:24px;border-radius:12px;background:var(--line-strong);position:relative}.asw .tk::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:left .15s}.asw[aria-pressed=true] .tk{background:var(--accent)}.asw[aria-pressed=true] .tk::after{left:21px}.asw[aria-busy=true]{cursor:progress;opacity:.7}.adfix{margin:0 0 4px}.adfix .row-b{margin-top:12px}.adp>summary{gap:0}.adp .adc{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.adp .adc .muted{font-weight:400}.adpc .ch h2{min-width:0;overflow-wrap:anywhere}
 details.pd{border-top:1px solid var(--line)}details.pd:first-child{border-top:0}details.pd>summary{min-height:44px;display:flex;align-items:center;cursor:pointer;font-weight:600;padding:6px 0}details.pd>summary::-webkit-details-marker{display:none}details.pd>summary::before{content:"+";width:22px;color:var(--muted)}details.pd[open]>summary::before{content:"−"}
 .grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0 12px}
 @media(max-width:760px){.crow{grid-template-columns:minmax(0,1fr)}.crow .right{flex-direction:row-reverse;align-items:center;justify-content:space-between}}
@@ -565,7 +567,21 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       ts_c_accepted: "Davet kabul edildi", ts_c_declined: "Davet reddedildi", ts_c_submitted: "İçerik gönderildi; markanın onayı bekleniyor",
       badWeb: "Web sitesi adresini http:// ya da https:// ile girin.",
       badClients: "Müşteri sayısını 0 ile 10.000 arasında bir tam sayı olarak girin.", badFollowers: "Takipçi sayısını tam sayı olarak girin.",
-      followers: "{n} takipçi"
+      followers: "{n} takipçi",
+      nAdmin: "Yönetim", admLead: "Kullanıcılar, elle yapılan değişiklikler, senkron durumu ve Meta silme istekleri.", admOnly: "Bu sayfa yalnız yöneticiler içindir.", admTabs: "Yönetim bölümleri",
+      admUsers: "Kullanıcılar", admEdits: "Elle değişiklikler", admSyncs: "Senkron", admMeta: "Meta silme",
+      admRole: "Rol", admJoined: "Kayıt", admLast: "Son oturum", admPosts: "Gönderi", admConns: "Bağlantı",
+      admPerm: "Elle düzeltme yetkisi", admPermL: "Elle düzeltme yetkisi: {n}", admOn: "Açık", admOff: "Kapalı", admAdmin: "Yönetici",
+      admSee: "Gönderileri", admSeeL: "Gönderileri göster: {n}", admPostsOf: "Gönderiler: {n}", admNoPosts: "Bu kullanıcının gönderisi yok.", admHide: "Kapat",
+      admFix: "Ölçümü düzelt", admFixHint: "Boş bıraktığın alan olduğu gibi kalır.", admSaved: "Kaydedildi.", admChanged: "Değişen alan: {n}.", admNoChange: "Değişen alan yok.", admOneMet: "En az bir sayı gir.",
+      admTime: "Zaman", admWho: "Değiştiren", admWhose: "Gönderi sahibi", admPost: "Gönderi", admDay: "Ölçüm günü", admField: "Alan", admChange: "Eski → yeni", admSrc: "Kaynak",
+      src_manual: "Elle", src_import: "CSV", src_admin: "Yönetici", admQ: "E-postada ara", admNone: "Bu filtreye uyan kayıt yok.", admEmpty: "Henüz kayıt yok.", admDeleted: "silindi",
+      admUser: "Kullanıcı", admPlat: "Platform", admAcc: "Hesap", admStatus: "Durum", admConnAt: "Bağlandı", admUpd: "Son güncelleme", admNext: "Sıradaki senkron", admErr: "Hata",
+      ss_connected: "Bağlı", ss_error: "Hata", ss_revoked: "Kaldırıldı",
+      admSyncHint: "Elle düzeltilen gün senkronla değişmez; sonraki günler senkrondan gelir.",
+      admPlog: "Yetki geçmişi", admPlogNone: "Henüz yetki değişikliği yok.", admPermC: "Yetki", admAct: "İşlem", admGranted: "Verildi", admRevoked: "Geri alındı", perm_edit_metrics: "Elle düzeltme",
+      admKind: "Tür", mk_deauthorize: "İzin kaldırma", mk_delete: "Veri silme", admCode: "Onay kodu", admMatched: "Eşleşen hesap",
+      pNoPerm: "Bağlı hesaptan gelen sayıları değiştirmek için yönetici izni gerekir.", pCsvPerm: "{n} satır bağlı hesaptan geldiği için atlandı; yönetici izni gerekir."
     },
     en: {
       loading: "Loading…", retry: "Try again", wait: "Please wait…", logout: "Log out",
@@ -770,7 +786,21 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       ts_c_accepted: "Invite accepted", ts_c_declined: "Invite declined", ts_c_submitted: "Content sent; waiting for the brand's approval",
       badWeb: "Enter the website address starting with http:// or https://.",
       badClients: "Enter the number of clients as a whole number from 0 to 10,000.", badFollowers: "Enter followers as a whole number.",
-      followers: "{n} followers"
+      followers: "{n} followers",
+      nAdmin: "Admin", admLead: "Users, manual changes, sync status and Meta deletion requests.", admOnly: "This page is for admins only.", admTabs: "Admin sections",
+      admUsers: "Users", admEdits: "Manual changes", admSyncs: "Sync", admMeta: "Meta deletion",
+      admRole: "Role", admJoined: "Joined", admLast: "Last session", admPosts: "Posts", admConns: "Connections",
+      admPerm: "Manual edit permission", admPermL: "Manual edit permission: {n}", admOn: "On", admOff: "Off", admAdmin: "Admin",
+      admSee: "Posts", admSeeL: "Show posts: {n}", admPostsOf: "Posts: {n}", admNoPosts: "This user has no posts.", admHide: "Close",
+      admFix: "Correct measurements", admFixHint: "Fields you leave empty stay as they are.", admSaved: "Saved.", admChanged: "Fields changed: {n}.", admNoChange: "No fields changed.", admOneMet: "Enter at least one number.",
+      admTime: "Time", admWho: "Changed by", admWhose: "Post owner", admPost: "Post", admDay: "Measured on", admField: "Field", admChange: "Old → new", admSrc: "Source",
+      src_manual: "Manual", src_import: "CSV", src_admin: "Admin", admQ: "Search email", admNone: "No records match this filter.", admEmpty: "No records yet.", admDeleted: "deleted",
+      admUser: "User", admPlat: "Platform", admAcc: "Account", admStatus: "Status", admConnAt: "Connected", admUpd: "Last updated", admNext: "Next sync", admErr: "Error",
+      ss_connected: "Connected", ss_error: "Error", ss_revoked: "Revoked",
+      admSyncHint: "A corrected day is kept by sync; later days come from sync.",
+      admPlog: "Permission history", admPlogNone: "No permission changes yet.", admPermC: "Permission", admAct: "Change", admGranted: "Granted", admRevoked: "Revoked", perm_edit_metrics: "Manual edits",
+      admKind: "Type", mk_deauthorize: "Deauthorization", mk_delete: "Data deletion", admCode: "Confirmation code", admMatched: "Matched accounts",
+      pNoPerm: "Changing numbers that come from a connected account needs admin permission.", pCsvPerm: "{n} rows came from a connected account and were skipped; this needs admin permission."
     }
   };
 
@@ -931,6 +961,8 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
   var cm = /^creator-([a-z0-9]{1,24})$/.exec(h);
   if (cm && isOwner()) return { name: "creator", id: cm[1], tab: "discover" };
     if (m) return { name: "campaign", id: +m[1], tab: "campaigns" };
+    // Yönetim yalnız auth/me admin: true olana; diğerleri için bilinmeyen sayfa gibi genel bakışa düşer
+    if (h === "admin" && U && U.admin === true) return { name: "admin", tab: "admin" };
     var ok = ["overview", "campaigns", "profile", "settings", "notifications"].concat(isOwner() ? ["new", "discover"] : ["applications", "posts", "audience"]);
     if (ok.indexOf(h) < 0) h = "overview";
     return { name: h, tab: h === "new" ? "campaigns" : h };
@@ -969,7 +1001,8 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
     alert: [["circle", { cx: 12, cy: 12, r: 9 }], ["path", { d: "M12 7.5v5.5M12 16.5h.01" }]],
     roomy: [["rect", { x: 4, y: 4, width: 16, height: 7, rx: 1.5 }], ["rect", { x: 4, y: 13, width: 16, height: 7, rx: 1.5 }]],
     dense: [["rect", { x: 4, y: 4, width: 16, height: 4, rx: 1 }], ["rect", { x: 4, y: 10, width: 16, height: 4, rx: 1 }], ["rect", { x: 4, y: 16, width: 16, height: 4, rx: 1 }]],
-    chart: [["path", { d: "M4 20V10M10 20V4M16 20v-7M2 20h20" }]]
+    chart: [["path", { d: "M4 20V10M10 20V4M16 20v-7M2 20h20" }]],
+    shield: [["path", { d: "M12 3l7 3v5c0 4.5-3 8.4-7 10-4-1.6-7-5.5-7-10V6z" }]]
   };
   function ic(name) {
     var NS = "http://www.w3.org/2000/svg", s = document.createElementNS(NS, "svg");
@@ -984,14 +1017,17 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
   // Rolün menüsü: [sekme, etiket anahtarı, simge, (varsa) alt sekme çubuğundaki üst sekme] (menü, alt sekme çubuğu ve komut paleti ortak kullanır).
   // Dördüncü öğesi olan sekme mobil sekme çubuğunda yer almaz (en çok 5 yer); o sayfadayken üst sekmesi seçili görünür.
   function navItems() {
-    return isOwner() ? [["overview", "nOverview", "home"], ["campaigns", "nCampaigns", "megaphone"], ["discover", "nDiscover", "search"], ["profile", "nProfile", "user"]]
+    var a = isOwner() ? [["overview", "nOverview", "home"], ["campaigns", "nCampaigns", "megaphone"], ["discover", "nDiscover", "search"], ["profile", "nProfile", "user"]]
       : [["overview", "nOverview", "home"], ["campaigns", "nOpps", "briefcase"], ["applications", "nApps", "list"], ["posts", "nPosts", "image"], ["audience", "nAudience", "chart", "posts"], ["profile", "nProfile", "user"]];
+    // Yönetim mobil sekme çubuğunda yer almaz (hesap menüsünde #adm2)
+    return U && U.admin === true ? a.concat([["admin", "nAdmin", "shield", "admin"]]) : a;
   }
   function paintNav(tab) {
     var items = navItems(), bar = items.filter(function (i) { return !i[3]; }), up = (items.filter(function (i) { return i[0] === tab; })[0] || [])[3] || tab;
     tabbar.classList.toggle("n5", bar.length > 4);
     ["ntf", "ntf2"].forEach(function (id) { if (tab === "notifications") $(id).setAttribute("aria-current", "page"); else $(id).removeAttribute("aria-current"); });
     ["set", "set2"].forEach(function (id) { if (tab === "settings") $(id).setAttribute("aria-current", "page"); else $(id).removeAttribute("aria-current"); });
+    if ($("adm2")) { if (tab === "admin") $("adm2").setAttribute("aria-current", "page"); else $("adm2").removeAttribute("aria-current"); }
     [[nav, items, tab], [tabbar, bar, up]].forEach(function (b) {
       b[0].textContent = "";
       b[1].forEach(function (i) {
@@ -2102,7 +2138,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
         if (!nm) return say(m, BC.msg("name"));
         busy(b, true);
         BC.call("POST", "app/profile", { name: nm, profile: bare(U.profile || {}) }).then(function (d) {
-          U = d.user; paintWho(); busy(b, false); say(ok, t("saved"));
+          U = keepAdm(d.user); paintWho(); busy(b, false); say(ok, t("saved"));
         }, function (e) { busy(b, false); say(m, BC.msg(e.code)); });
       });
       var pm = note(), pok = okNote(), pb = el("button", { type: "button", class: "btn sec", text: t("setPwBtn") });
@@ -2352,7 +2388,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       }
       busy(b, true);
       BC.call("POST", "app/profile", { name: nm, profile: pr }).then(function (d) {
-        U = d.user; paintWho(); busy(b, false);
+        U = keepAdm(d.user); paintWho(); busy(b, false);
         web.value = (U.profile || {}).website || "";
         if (agency) { hasNames = Array.isArray((U.profile || {}).client_names); cLater.hidden = !(cn.length && !hasNames); }
         say(ok, t("saved")); emit();
@@ -2838,8 +2874,16 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       type: p && PTYPES.indexOf(p.type) >= 0 ? p.type : "photo", date: p && okDay(p.date) ? p.date : (snaps[0] || {}).at || "",
       caption: p && typeof p.caption === "string" ? p.caption.slice(0, 2200) : "", thumb: p && okThumb(p.thumb) ? p.thumb : "", snaps: snaps,
       // Gönderinin kitlesi (form-worker posts.audience, şimdilik yalnız YouTube videoları); yoksa null
-      audience: p && p.audience && typeof p.audience === "object" && !Array.isArray(p.audience) ? p.audience : null };
+      audience: p && p.audience && typeof p.audience === "object" && !Array.isArray(p.audience) ? p.audience : null,
+      // Bağlı hesaptan senkronlanan gönderi: elle düzeltme yalnız yönetici ya da edit_metrics izniyle
+      synced: !!(p && p.synced === true) };
   }
+  // app/profile yanıtı admin/perms taşımaz: oturumdaki değerler korunur (yetki değişikliği auth/me ile gelir)
+  function keepAdm(u) {
+    if (u && U && u.admin === undefined && u.perms === undefined) { if (U.admin === true) u.admin = true; if (Array.isArray(U.perms)) u.perms = U.perms; }
+    return u;
+  }
+  function canFix() { return !!U && (U.admin === true || (Array.isArray(U.perms) && U.perms.indexOf("edit_metrics") >= 0)); }
   function pSync() {
     return BC.call("GET", "app/posts").then(function (d) {
       PS.srv = !!(d && Array.isArray(d.posts));
@@ -2850,19 +2894,20 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
   }
   function pErr(e) {
     var c = e && e.code;
-    return c === "url" ? t("pBadUrl") : c === "date" || c === "at" ? t("pBadDate") : c === "thumb" ? t("pThumbHint")
+    return c === "no_perm" ? t("pNoPerm") : c === "url" ? t("pBadUrl") : c === "date" || c === "at" ? t("pBadDate") : c === "thumb" ? t("pThumbHint")
       : c === "metrics" || PMETS.indexOf(c) >= 0 ? t("pBadNum") : c === "posts_full" || (e && e.status === 409) ? t("pFull") : BC.msg(c);
   }
   // CSV/aktarım: en çok 50 satırlık parçalar sırayla; atlanan satırlar çağıranın satır numarasına çevrilir
   function pImport(rows, lines) {
-    var sum = { added: 0, updated: 0, bad: [] }, i = 0;
+    var sum = { added: 0, updated: 0, bad: [], perm: 0 }, i = 0;
     function next() {
       if (i >= rows.length) return Promise.resolve(sum);
       var base = i, part = rows.slice(i, i + PCHUNK);
       i += PCHUNK;
       return BC.call("POST", "app/posts/import", { rows: part }).then(function (d) {
         sum.added += d.added || 0; sum.updated += d.updated || 0;
-        (d.skipped || []).forEach(function (s) { sum.bad.push(lines ? lines[base + s.i] : base + s.i + 1); });
+        // error "perm": bağlı hesaptan gelen gönderi, izin yok; hatalı satırlardan ayrı sayılır
+        (d.skipped || []).forEach(function (s) { if (s && s.error === "perm") sum.perm++; else sum.bad.push(lines ? lines[base + s.i] : base + s.i + 1); });
         return next();
       }, function (e) { if (e) e.sum = sum; throw e; });
     }
@@ -3058,11 +3103,12 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
     if ((added || upd) && !pStore(list)) return { err: t("pFull") };
     return { added: added + upd, text: pCsvText(added, upd, bad) };
   }
-  function pCsvText(added, upd, bad) {
+  function pCsvText(added, upd, bad, perm) {
     var out = [];
     if (added) out.push(t("pCsvDone", num(added)));
     if (upd) out.push(t("pCsvUpd", num(upd)));
     if (bad.length) out.push(t("pCsvSkip", num(bad.length)).replace("{r}", bad.slice(0, 10).join(", ") + (bad.length > 10 ? "…" : "")));
+    if (perm) out.push(t("pCsvPerm", num(perm)));
     return out.join(" ");
   }
   function pCsvForm() {
@@ -3080,7 +3126,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
         if (r.err) { say(msg, r.err); return; }
         if (r.api) {
           var fin = function (sm) {
-            var bad = r.bad.concat(sm.bad).sort(function (a, b) { return a - b; }), tx = pCsvText(sm.added, sm.updated, bad);
+            var bad = r.bad.concat(sm.bad).sort(function (a, b) { return a - b; }), tx = pCsvText(sm.added, sm.updated, bad, sm.perm);
             if (!sm.added && !sm.updated) { busy(btn, false); say(msg, tx || t("pCsvEmpty")); return; }
             pAfter(tx);
           };
@@ -3088,7 +3134,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
           busy(btn, true);
           pImport(r.api, r.lines).then(fin, function (e) {
             busy(btn, false);
-            var sm = e && e.sum, tx = sm && (sm.added || sm.updated) ? pCsvText(sm.added, sm.updated, []) + " " : "";
+            var sm = e && e.sum, tx = sm && (sm.added || sm.updated || sm.perm) ? pCsvText(sm.added, sm.updated, [], sm.perm) + " " : "";
             say(msg, tx + pErr(e));
           });
           return;
@@ -3421,6 +3467,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       }))]));
     var edit;
     if (d.sample) edit = el("p", { class: "pnote", text: t("pSampleRO") });
+    else if (PS.srv && p.synced && !canFix()) edit = [el("h3", { class: "sub", text: t("pSnap") }), el("p", { class: "pnote", text: t("pNoPerm") })];
     else {
       var at = el("input", { type: "date", required: true, max: isoDay(new Date()), value: isoDay(new Date()) }), mi = pMetInputs("ps-", s), msg = note();
       var f = el("form", { class: "f", "data-sk-noform": true, novalidate: true }, [el("div", { class: "grid2" }, el("div", null, fld("ps-at", t("pSnapAt"), at))), mi.box, msg,
@@ -3721,7 +3768,224 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
     });
   }
 
-  var VIEWS = { overview: overview, campaigns: campaigns, "new": newCampaign, campaign: campaign, discover: discover, applications: applications, profile: profile, settings: settings, notifications: notifications, posts: posts, post: post, audience: audPage, creator: creator };
+  // Yönetim (#admin, yalnız auth/me admin: true): kullanıcılar ve elle düzeltme yetkisi, elle değişiklik kaydı, senkron durumu, Meta silme istekleri.
+  // Sunucu yönetici olmayana 404 döner; o zaman yalnız "yöneticiler içindir" notu kalır. Kimlikler URL'ye yalnız rakam/[a-z0-9] olarak girer
+  var AD = { tab: "users", src: "", q: "" };
+  var AD_TABS = [["users", "admUsers"], ["edits", "admEdits"], ["syncs", "admSyncs"], ["meta", "admMeta"]];
+  function admList(d, k) { return d && Array.isArray(d[k]) ? d[k].filter(function (x) { return x && typeof x === "object"; }) : []; }
+  function admId(v) { return /^\d{1,15}$/.test(String(v)) ? String(v) : ""; }
+  function admTs(s) {
+    var x = String(s || "").replace(" ", "T");
+    if (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/.test(x)) return "";
+    var d = new Date(/(Z|[+-]\d{2}:?\d{2})$/.test(x) ? x : x + "Z");
+    return isNaN(d) ? "" : d.toLocaleString(locale(), { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" });
+  }
+  function admDash() { return el("span", { class: "muted", text: "—" }); }
+  // E-posta: dar sütunda "@" önünden kırılır
+  function admEm(v, tag) { var s = String(v || ""), i = s.indexOf("@"); return s ? el(tag || "span", null, i > 0 ? [s.slice(0, i), el("wbr"), s.slice(i)] : s) : ""; }
+  function admTd(v, cls) { return el("td", { class: cls || null }, v === "" || v == null ? admDash() : v); }
+  // heads: [metin, sınıf, gizli başlık mı]
+  function admTable(cap, heads, rows) {
+    return el("div", { class: "tscroll", role: "region", tabindex: "0", "aria-label": cap }, el("table", { class: "snaps adt" }, [el("caption", { class: "vh", text: cap }),
+      el("thead", null, el("tr", null, heads.map(function (h) { return el("th", { scope: "col", class: h[1] || null }, h[2] ? el("span", { class: "vh", text: h[0] }) : h[0]); }))),
+      el("tbody", null, rows)]));
+  }
+  // Yetki geçmişi (perm_log, en yeni önce): kim, kime, verildi/geri alındı, ne zaman
+  function admPlog(list) {
+    if (!list.length) return el("div", { class: "cb" }, empty(t("admPlogNone"), null, { ic: "shield" }));
+    return admTable(t("admPlog"), [[t("admTime")], [t("admWho")], [t("admUser")], [t("admPermC")], [t("admAct")]], list.map(function (x) {
+      var on = x.granted === 1 || x.granted === true, pm = D[L]["perm_" + x.perm] != null ? t("perm_" + x.perm) : String(x.perm || "");
+      return el("tr", null, [admTd(admTs(x.at)), admTd(admEm(x.actor_email), "em"), admTd(admEm(x.email), "em"), admTd(pm),
+        admTd(el("span", { class: "badge " + (on ? "b-ok" : "b-slate"), text: t(on ? "admGranted" : "admRevoked") }))]);
+    }));
+  }
+  // Kullanıcılar: elle düzeltme yetkisi anahtarı yerinde değişir; hata olursa eski hâline döner ve hata satırı gösterilir.
+  // cur(): güncel yönetim verisi (düzeltme sonrası tazelenmiş olabilir); başarılı değişiklik geçmişin başına yerelde eklenir
+  function admUsers(d, slot, open, cur) {
+    var lbox = el("div");
+    function drawLog() { lbox.replaceChildren(admPlog(admList(cur(), "perm_log"))); }
+    drawLog();
+    var log = el("div", { class: "adlog" }, [el("div", { class: "ch" }, el("h2", { text: t("admPlog") })), lbox]);
+    var list = admList(d, "users");
+    if (!list.length) return el("div", null, [el("div", { class: "cb" }, empty(t("admEmpty"), null, { ic: "user" })), log]);
+    var rows = list.map(function (u) {
+      var id = admId(u.id), em = String(u.email || ""), sw = null, see = null;
+      if (u.admin === true) sw = el("span", { class: "badge b-ok", text: t("admAdmin") });
+      else if (id) {
+        var lb = el("span", { "aria-hidden": "true" });
+        sw = el("button", { type: "button", class: "asw", "aria-label": t("admPermL", em || id) }, [el("span", { class: "tk", "aria-hidden": "true" }), lb]);
+        var set = function (on) { sw.setAttribute("aria-pressed", String(on)); lb.textContent = t(on ? "admOn" : "admOff"); };
+        set(Array.isArray(u.perms) && u.perms.indexOf("edit_metrics") >= 0);
+        sw.addEventListener("click", function () {
+          if (sw.getAttribute("aria-busy") === "true") return;
+          var was = sw.getAttribute("aria-pressed") === "true";
+          slot.textContent = ""; set(!was); sw.setAttribute("aria-busy", "true");
+          BC.call("POST", "app/admin/" + id + "/perm", { perm: "edit_metrics", on: !was }).then(function (r) {
+            u.perms = r && Array.isArray(r.perms) ? r.perms : !was ? ["edit_metrics"] : [];
+            var now = u.perms.indexOf("edit_metrics") >= 0, dd = cur();
+            set(now);
+            admList(dd, "users").forEach(function (x) { if (admId(x.id) === id) x.perms = u.perms; });
+            // Sunucu yalnız durum gerçekten değişince kayıt yazar; burada da öyle
+            if (now !== was) {
+              dd.perm_log = [{ at: new Date().toISOString(), actor_id: U.id, actor_email: U.email, user_id: u.id, email: em, perm: "edit_metrics", granted: now ? 1 : 0 }].concat(admList(dd, "perm_log"));
+              drawLog();
+            }
+          }, function (e) {
+            set(was);
+            if (e && e.code === "auth") return;
+            slot.replaceChildren(failLine(e, function () { slot.textContent = ""; sw.focus(); sw.click(); }));
+          }).then(function () { sw.removeAttribute("aria-busy"); });
+        });
+      }
+      if (id && u.posts > 0) {
+        see = el("button", { type: "button", class: "ghost", "data-uid": id, "aria-label": t("admSeeL", em || id), text: t("admSee") });
+        see.addEventListener("click", function () { open(u, id, see); });
+      }
+      var role = D[L]["role_" + u.role] != null ? t("role_" + u.role) : String(u.role || "");
+      var nm = String(u.name || "");
+      return el("tr", null, [el("td", { class: "em" }, [em ? admEm(em, "div") : admDash(), nm ? el("div", { class: "muted", text: nm }) : null]),
+        admTd(sw), admTd(num(u.posts), "nr"), admTd(see), admTd(num(u.conns), "nr"), admTd(role), admTd(when(u.created_at)), admTd(admTs(u.last_login))]);
+    });
+    // Sık kullanılanlar (yetki, gönderiler) önde: dar ekranda kaydırmadan görünür
+    return el("div", null, [admTable(t("admUsers"), [[t("admUser")], [t("admPerm")], [t("admPosts"), "nr"], [t("admSee"), "", true], [t("admConns"), "nr"], [t("admRole")], [t("admJoined")], [t("admLast")]], rows), log]);
+  }
+  // Kullanıcının gönderileri: her gönderi açılır bir satır, içinde o günün ölçümünü düzeltme formu (boş alan olduğu gibi kalır)
+  function admPostRow(p, done) {
+    var s = lastSnap(p) || null, pre = "ad-" + p.id + "-", cap = (p.caption || "").split("\n")[0];
+    var at = el("input", { type: "date", required: true, max: isoDay(new Date()), value: s ? s.at : isoDay(new Date()) });
+    var mi = pMetInputs(pre, s), msg = note(), ok = okNote(), sb = el("button", { type: "submit", class: "btn", text: t("pSave") });
+    function fill(x) { PMETS.forEach(function (m) { mi.ins[m].value = x && x[m] != null ? String(x[m]) : ""; }); }
+    at.addEventListener("change", function () { fill(p.snaps.filter(function (y) { return y.at === at.value; })[0]); });
+    var f = el("form", { class: "f adfix", "data-sk-noform": true, novalidate: true }, [
+      el("div", { class: "grid2" }, el("div", null, fld(pre + "at", t("pSnapAt"), at, t("admFixHint")))),
+      p.synced ? el("p", { class: "pnote adsh", id: pre + "sh" }, [ic("refresh"), el("span", { text: t("admSyncHint") })]) : null, mi.box, msg, ok, el("div", { class: "row-b" }, sb)]);
+    if (p.synced) at.setAttribute("aria-describedby", pre + "sh");
+    f.addEventListener("submit", function (e) {
+      e.preventDefault(); say(msg, ""); say(ok, "");
+      if (!okDay(at.value)) { say(msg, t("pBadDate")); at.focus(); return; }
+      var m = pReadMets(mi.ins), body = { at: at.value }, n = 0;
+      if (!m) { say(msg, t("pBadNum")); return; }
+      PMETS.forEach(function (k) { if (m[k] != null) { body[k] = m[k]; n++; } });
+      if (!n) { say(msg, t("admOneMet")); mi.ins[PMETS[0]].focus(); return; }
+      busy(sb, true);
+      BC.call("POST", "app/admin/" + p.id + "/snap", body).then(function (r) {
+        busy(sb, false);
+        // changed: null = kayıt tablosu yok, sayı bilinmiyor; kaydedildi sayılır ve liste tazelenir (0 dışında hep tazelenir)
+        var c = r && Number.isInteger(r.changed) ? r.changed : null, sn = r && r.snap;
+        if (sn && sn.at === body.at) {
+          var o = { at: sn.at };
+          PMETS.forEach(function (k) { o[k] = Number.isInteger(sn[k]) && sn[k] >= 0 ? sn[k] : null; });
+          p.snaps = p.snaps.filter(function (x) { return x.at !== o.at; }).concat(o).sort(function (a, b) { return a.at < b.at ? -1 : a.at > b.at ? 1 : 0; });
+          fill(o);
+        }
+        say(ok, t("admSaved") + (c == null ? "" : " " + (c > 0 ? t("admChanged", num(c)) : t("admNoChange"))));
+        if (c !== 0) done();
+      }, function (e) { busy(sb, false); if (!e || e.code !== "auth") say(msg, pErr(e)); });
+    });
+    var link = /^https?:\/\//i.test(p.url || "") ? el("p", { class: "meta", style: "margin:0" }, el("a", { class: "clink", href: p.url, target: "_blank", rel: "noopener noreferrer" }, [ic("link"), t("pdOpen")])) : null;
+    return el("details", { class: "pd adp" }, [el("summary", null, el("span", { class: "adc" }, [pLabel(p), cap ? el("span", { class: "muted", dir: "auto", text: " · " + cap }) : null])),
+      el("div", { style: "padding:0 0 16px" }, [link, f])]);
+  }
+  function admPosts(u, id, holder, from, done) {
+    var h = el("h2", { tabindex: "-1", text: t("admPostsOf", u.email || u.name || id) }), body = el("div", { class: "cb" });
+    var close = el("button", { type: "button", class: "ghost", text: t("admHide"), onclick: function () {
+      holder.textContent = "";
+      var b = from && from.isConnected ? from : view.querySelector('[data-uid="' + id + '"]');
+      if (b) b.focus();
+    } });
+    holder.replaceChildren(el("section", { class: "card adpc", style: "margin-top:16px" }, [el("div", { class: "ch" }, [h, close]), body]));
+    h.focus();
+    function load() {
+      body.replaceChildren(el("p", { class: "meta", role: "status", style: "margin:0", text: t("loading") }));
+      BC.call("GET", "app/admin/" + id + "/posts").then(function (r) {
+        if (!h.isConnected) return;
+        var ps = (r && Array.isArray(r.posts) ? r.posts : []).map(pSrvPost).filter(function (p) { return admId(p.id); });
+        body.replaceChildren(ps.length ? el("div", null, ps.map(function (p) { return admPostRow(p, done); })) : el("p", { class: "meta", style: "margin:0", text: t("admNoPosts") }));
+      }, function (e) { if (h.isConnected && (!e || e.code !== "auth")) body.replaceChildren(failLine(e, load)); });
+    }
+    load();
+  }
+  // Elle değişiklikler: kaynak çipleri ve e-postada arama (değiştiren ya da gönderi sahibi)
+  function admEdits(d) {
+    var list = admList(d, "edits"), box = el("div");
+    var chips = el("div", { class: "qd adq", role: "group", "aria-label": t("admSrc") }, [["", "cAll"], ["manual", "src_manual"], ["import", "src_import"], ["admin", "src_admin"]].map(function (x) {
+      return el("button", { type: "button", "aria-pressed": String(AD.src === x[0]), "data-src": x[0], text: t(x[1]), onclick: function () { AD.src = x[0]; mark(); draw(); } });
+    }));
+    var q = el("input", { type: "search", maxlength: 80, placeholder: t("admQ"), "aria-label": t("admQ"), value: AD.q });
+    q.addEventListener("input", function () { AD.q = q.value.trim(); draw(); });
+    function mark() { chips.querySelectorAll("button").forEach(function (b) { b.setAttribute("aria-pressed", String(b.getAttribute("data-src") === AD.src)); }); }
+    function post(x) {
+      var url = /^https?:\/\//i.test(x.url || "") ? x.url : "", host = "";
+      try { host = url ? new URL(url).hostname.replace(/^www\./, "") : ""; } catch (e) { host = ""; }
+      var name = PL[x.platform] || host || "—", gone = x.post_id == null ? el("span", { class: "muted", text: " · " + t("admDeleted") }) : null;
+      return [url ? el("a", { href: url, target: "_blank", rel: "noopener noreferrer", text: name }) : name, gone];
+    }
+    function val(v) { return Number.isInteger(v) ? num(v) : "—"; }
+    function draw() {
+      var qk = fold(AD.q), rows = list.filter(function (x) {
+        return (!AD.src || x.source === AD.src) && (!qk || fold(x.actor_email).indexOf(qk) >= 0 || fold(x.owner_email).indexOf(qk) >= 0);
+      });
+      box.replaceChildren(rows.length ? admTable(t("admEdits"), [[t("admTime")], [t("admWho")], [t("admWhose")], [t("admPost")], [t("admDay")], [t("admField")], [t("admChange")], [t("admSrc")]],
+        rows.map(function (x) {
+          var src = D[L]["src_" + x.source] != null ? t("src_" + x.source) : String(x.source || "");
+          return el("tr", null, [admTd(admTs(x.at)), admTd(admEm(x.actor_email), "em"), admTd(admEm(x.owner_email), "em"), el("td", null, post(x)), admTd(day(x.snap_at)),
+            admTd(PMK[x.field] ? t(PMK[x.field]) : String(x.field || "")), admTd(val(x.before) + " → " + val(x.after)),
+            admTd(src ? el("span", { class: "badge " + (x.source === "admin" ? "b-ok" : "b-slate"), text: src }) : "")]);
+        }))
+        : el("div", { class: "cb" }, empty(t(list.length ? "admNone" : "admEmpty"), list.length ? el("button", { type: "button", class: "ghost", text: t("pClear"), onclick: function () {
+          AD.src = ""; AD.q = ""; q.value = ""; mark(); draw(); q.focus();
+        } }) : null, { ic: list.length ? "search" : "list" })));
+    }
+    draw();
+    return el("div", null, [el("div", { class: "toolbar f", role: "search" }, [chips, q]), box]);
+  }
+  function admSyncs(d) {
+    var list = admList(d, "syncs");
+    if (!list.length) return el("div", { class: "cb" }, empty(t("admEmpty"), null, { ic: "refresh" }));
+    var cls = { connected: "b-ok", error: "b-danger", revoked: "b-slate" };
+    return admTable(t("admSyncs"), [[t("admUser")], [t("admPlat")], [t("admAcc")], [t("admStatus")], [t("admConnAt")], [t("admUpd")], [t("admNext")], [t("admErr")]], list.map(function (x) {
+      var st = String(x.status || "");
+      return el("tr", null, [admTd(admEm(x.email), "em"), admTd(PL[x.platform] || String(x.platform || "")), admTd(String(x.handle || "")),
+        admTd(st ? el("span", { class: "badge " + (cls[st] || "b-slate"), text: D[L]["ss_" + st] != null ? t("ss_" + st) : st }) : ""),
+        admTd(admTs(x.connected_at)), admTd(admTs(x.updated_at)), admTd(admTs(x.next_sync_at)), admTd(String(x.error || ""), "wr")]);
+    }));
+  }
+  function admMeta(d) {
+    var list = admList(d, "meta");
+    if (!list.length) return el("div", { class: "cb" }, empty(t("admEmpty"), null, { ic: "shield" }));
+    return admTable(t("admMeta"), [[t("admTime")], [t("admKind")], [t("admCode")], [t("admMatched"), "nr"]], list.map(function (x) {
+      return el("tr", null, [admTd(admTs(x.at)), admTd(D[L]["mk_" + x.kind] != null ? t("mk_" + x.kind) : String(x.kind || "")), admTd(String(x.code || "")), admTd(num(x.matched), "nr")]);
+    }));
+  }
+  function adminView() {
+    return BC.call("GET", "app/admin").then(function (d) {
+      var slot = el("div", { class: "adm-msg" }), body = el("div"), posts = el("div");
+      var tabs = el("div", { class: "tabs ul", role: "group", "aria-label": t("admTabs") }, AD_TABS.map(function (x) {
+        var b = el("button", { type: "button", "aria-pressed": String(AD.tab === x[0]), "data-tab": x[0] }, [t(x[1]) + " ", el("span", { class: "n" })]);
+        b.addEventListener("click", function () {
+          AD.tab = x[0];
+          tabs.querySelectorAll("button").forEach(function (y) { y.setAttribute("aria-pressed", String(y.getAttribute("data-tab") === AD.tab)); });
+          paint();
+        });
+        return b;
+      }));
+      function counts() { tabs.querySelectorAll("button").forEach(function (b) { b.querySelector(".n").textContent = num(admList(d, b.getAttribute("data-tab")).length); }); }
+      // Düzeltme kaydedilince liste ve sayılar sessizce tazelenir (açık sekme yeniden çizilmez, odak yerinde kalır)
+      function done() { BC.call("GET", "app/admin").then(function (nd) { d = nd; counts(); }, function () {}); }
+      function open(u, id, from) { admPosts(u, id, posts, from, done); }
+      function paint() {
+        slot.textContent = ""; posts.hidden = AD.tab !== "users";
+        body.replaceChildren(AD.tab === "edits" ? admEdits(d) : AD.tab === "syncs" ? admSyncs(d) : AD.tab === "meta" ? admMeta(d) : admUsers(d, slot, open, function () { return d; }));
+      }
+      counts(); paint();
+      return [el("div", { class: "ph" }, el("div", null, [el("h1", { text: t("nAdmin") }), el("p", { text: t("admLead") })])),
+        el("section", { class: "card flush" }, [tabs, slot, body]), posts];
+    }, function (e) {
+      if (e && e.status === 404) return [el("div", { class: "ph" }, el("div", null, el("h1", { text: t("nAdmin") }))), empty(t("admOnly"), null, { ic: "shield" })];
+      throw e;
+    });
+  }
+  var VIEWS = { overview: overview, campaigns: campaigns, "new": newCampaign, campaign: campaign, discover: discover, applications: applications, profile: profile, settings: settings, notifications: notifications, posts: posts, post: post, audience: audPage, creator: creator, admin: adminView };
 
   // Üst çubuk ve alt bilgi metinleri, dil düğmesi
   function initials(s) {
@@ -3741,6 +4005,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
     [$("help2"), $("help3")].forEach(function (b) { label(b, "help", t("helpS")); });
     nfPaint();
     [$("set"), $("set2")].forEach(function (b) { label(b, "gear", t("nSettings")); });
+    if ($("adm2")) label($("adm2"), "shield", t("nAdmin"));
     $("copy").textContent = t("copy");
     $("help").textContent = t("help");
     $("group").setAttribute("aria-label", t("groupLabel"));
@@ -3787,7 +4052,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
   // Arama Türkçe harf katlamalı (ı/i, ş/s…); eşleşen harfler <mark>. ARIA combobox + listbox: ok tuşları, Enter, Esc.
   // "g" ardından harf doğrudan sayfaya götürür (g o genel bakış, g c kampanyalar…); harfler palette yazılı.
   var mac = /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent);
-  var GO_KEYS = { overview: "O", campaigns: "C", discover: "D", applications: "A", posts: "G", audience: "K", profile: "P", notifications: "N", settings: "S" };
+  var GO_KEYS = { overview: "O", campaigns: "C", discover: "D", applications: "A", posts: "G", audience: "K", profile: "P", notifications: "N", settings: "S", admin: "Y" };
   var CK = { dlg: null, opts: [], sel: -1, q: null, data: null, own: null, at: 0, busy: null }, gAt = 0;
   // Harf harf katlar; m[i] katlanmış i. harfin özgün metindeki yeri (vurgu için)
   function ckFold(s) {
@@ -4006,6 +4271,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
   BC.call("GET", "auth/me").then(function (d) {
     U = d.user;
     boot(false);
+    if (U.admin === true) sheet.insertBefore(el("a", { class: "nb", id: "adm2", href: "#admin" }), $("ntf2"));
     // Dil seçimi yoksa hesabın kayıt dili kullanılır
     var stored = null;
     try { stored = localStorage.getItem("brand-corner-lang"); } catch (e) {}
