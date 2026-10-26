@@ -6,7 +6,7 @@
 // Şifre sıfırlama: tek kullanımlık, RESET_MINUTES geçerli link; e-posta Gmail SMTP ile (src/smtp.js, SMTP_USER hesabından).
 // MAIL binding'i yalnızca MAIL_TO adresine gönderebildiği için o kullanılmaz.
 
-import { OAUTH, SYNCED, LISTED, CONNECTABLE, oauthReady, listConnections, startOAuth, finishOAuth, disconnectOAuth, OAuthFail, returnBase, fetchOlderPosts, ProviderError, fetchPostAudience, postAudSkip } from "./oauth.js";
+import { OAUTH, SYNCED, LISTED, CONNECTABLE, oauthReady, listConnections, startOAuth, finishOAuth, disconnectOAuth, OAuthFail, returnBase, fetchOlderPosts, ProviderError, fetchPostAudience, postAudSkip, MISSING, batchOr } from "./oauth.js";
 import { smtpReady, smtpSend, smtpFrom } from "./smtp.js";
 import { metricsEnabled, accountMetrics, linkMetrics, parseAudience } from "./metrics.js";
 import { NICHE_LIST } from "./classify.js";
@@ -64,7 +64,11 @@ export async function platform(req, url, env, origin, deliver) {
     ).bind(await sha256(token), site).first();
     if (!c.user) throw new Bad("auth", 401);
 
-    if (route === "GET /auth/me") return ok(c, { user: me(c.user) });
+    // Yönetici ise admin: true; kendi yetkileri (admin hariç) perms, yoksa alan yok
+    if (route === "GET /auth/me") {
+      const p = await perms(c) || [], own = p.filter(x => x !== "admin");
+      return ok(c, { user: { ...me(c.user), ...(p.includes("admin") && { admin: true }), ...(own.length && { perms: own }) } });
+    }
     if (route === "POST /auth/logout") {
       await env.DB.prepare("DELETE FROM sessions WHERE token_hash = ?").bind(await sha256(token)).run();
       return ok(c, {});
@@ -226,6 +230,18 @@ async function newSession(env, userId) {
 
 const me = u => ({ id: u.id, name: u.name, email: u.email, role: u.role, lang: u.lang, profile: JSON.parse(u.profile || "{}") });
 
+// Yetkiler (migrations/0012_admin.sql user_perms): istek başına tek SELECT, c.perms'te tutulur.
+// Tablo yoksa null: yönetici yok, edit_metrics kapısı açık (0012'den önceki davranış).
+const noTable = e => /no such table/i.test(String(e && e.message));
+async function perms(c) {
+  if (c.perms !== undefined) return c.perms;
+  try { c.perms = (await c.env.DB.prepare("SELECT perm FROM user_perms WHERE user_id = ? ORDER BY perm").bind(c.user.id).all()).results.map(r => r.perm); }
+  catch (e) { if (!noTable(e)) throw e; c.perms = null; }
+  return c.perms;
+}
+const isAdmin = async c => !!(await perms(c))?.includes("admin");
+const canEdit = async c => { const p = await perms(c); return !p || p.includes("edit_metrics") || p.includes("admin"); };
+
 // cron'dan: süresi dolan oturumlar ve sıfırlama linkleri, eski deneme kayıtları, süresi dolan OAuth state'leri.
 // oauth_states 0002'de; ayrı ifade, tablo yoksa ya da hata verirse diğer temizlik yine yapılır.
 export async function cleanup(env) {
@@ -272,6 +288,10 @@ const APP = {
   "POST posts/import": c => importPosts(c),
   "POST posts/older": c => olderPosts(c),
   "POST posts/:id/audience": (c, id) => postAudience(c, id),
+  "GET admin": c => adminHome(c),
+  "GET admin/:id/posts": (c, id) => adminPosts(c, id),
+  "POST admin/:id/perm": (c, id) => adminPerm(c, id),
+  "POST admin/:id/snap": (c, id) => adminSnap(c, id),
 };
 
 const isOwnerRole = u => u.role === "brand" || u.role === "agency";
@@ -796,13 +816,43 @@ const postWrite = (env, uid, r) => [
     .bind(uid, r.url, r.snap.at, r.snap.likes, r.snap.comments, r.snap.views, r.snap.reach),
 ];
 
+// Elle değişiklik günlüğü (0012 post_edits): yazılacak (url, gün) ölçümlerinin önceki hali tek SELECT'le (json_each) okunur
+async function snapsBefore(env, uid, rows) {
+  const keys = [...new Set(rows.map(r => JSON.stringify([r.url, r.snap.at])))], cur = new Map();
+  if (!keys.length) return cur;
+  const got = (await env.DB.prepare(`SELECT p.url, s.at, s.likes, s.comments, s.views, s.reach FROM post_snaps s JOIN posts p ON p.id = s.post_id
+    WHERE p.user_id = ? AND (p.url, s.at) IN (SELECT json_extract(value, '$[0]'), json_extract(value, '$[1]') FROM json_each(?))`).bind(uid, `[${keys}]`).all()).results;
+  for (const s of got) cur.set(JSON.stringify([s.url, s.at]), s);
+  return cur;
+}
+// Değişen her ölçüm alanı bir satır (yeni ölçümde before null); yazımla aynı batch'te tek INSERT … SELECT (D1 ifade sınırı).
+// post_id ifadenin içinde bulunur (yeni gönderi de kimliğini alır). post_edits yoksa yazım bir kez günlüksüz tekrarlanır, sonra bu
+// isolate'te (MISSING) doğrudan günlüksüz yapılır. Dönüş: yazılan günlük satırı sayısı; tablo yoksa null (bilinmiyor).
+async function writeLogged(env, writes, { actor, uid, rows, source, cur }) {
+  if (MISSING.post_edits) { await env.DB.batch(writes); return null; }
+  cur = cur || await snapsBefore(env, uid, rows);
+  const log = [];
+  for (const r of rows) {
+    const k = JSON.stringify([r.url, r.snap.at]), was = cur.get(k);
+    for (const f of PMETS) { const b = was?.[f] ?? null, n = r.snap[f] ?? null; if (b !== n) log.push({ u: r.url, a: r.snap.at, f, b, n }); }
+    cur.set(k, r.snap);
+  }
+  if (!log.length) { await env.DB.batch(writes); return 0; }
+  const ins = env.DB.prepare(`INSERT INTO post_edits (actor_id, user_id, post_id, url, snap_at, field, before, after, source)
+    SELECT ?, ?, (SELECT id FROM posts WHERE user_id = ? AND url = json_extract(value, '$.u')), json_extract(value, '$.u'), json_extract(value, '$.a'),
+    json_extract(value, '$.f'), json_extract(value, '$.b'), json_extract(value, '$.n'), ? FROM json_each(?)`).bind(actor, uid, uid, source, JSON.stringify(log));
+  await batchOr(env, "post_edits", ed => ed ? [...writes, ins] : writes);
+  return MISSING.post_edits ? null : log.length;
+}
+
 async function postRows(env, uid, where = "", args = []) {
-  const posts = (await env.DB.prepare(`SELECT id, url, platform, type, date, caption, thumb, audience FROM posts WHERE user_id = ?${where} ORDER BY date DESC, id DESC`)
+  const posts = (await env.DB.prepare(`SELECT id, url, platform, type, date, caption, thumb, audience, account_id FROM posts WHERE user_id = ?${where} ORDER BY date DESC, id DESC`)
     .bind(uid, ...args).all()).results;
   if (!posts.length) return [];
   const snaps = (await env.DB.prepare(`SELECT s.post_id, s.at, s.likes, s.comments, s.views, s.reach FROM post_snaps s JOIN posts p ON p.id = s.post_id
     WHERE p.user_id = ?${where.replace(/\burl\b/g, "p.url")} ORDER BY s.at`).bind(uid, ...args).all()).results;
-  const by = new Map(posts.map(p => [p.id, { ...p, id: String(p.id), audience: parseAudience(p.audience), snaps: [] }]));
+  // synced: bağlı hesaptan gelen gönderi (0007 account_id); ölçümü elle değiştirmek edit_metrics ister
+  const by = new Map(posts.map(({ account_id, ...p }) => [p.id, { ...p, id: String(p.id), audience: parseAudience(p.audience), ...(account_id != null && { synced: true }), snaps: [] }]));
   for (const s of snaps) by.get(s.post_id)?.snaps.push({ at: s.at, likes: s.likes, comments: s.comments, views: s.views, reach: s.reach });
   return [...by.values()];
 }
@@ -823,10 +873,12 @@ const manualPost = postsRoute(async c => {
   const { row, error } = postIn(c.body);
   need(row, error, 400);
   // Girilen haliyle kayıtlı satır varsa ölçüm ona yazılır
-  const known = await env.DB.prepare("SELECT url FROM posts WHERE user_id = ? AND url IN (?, ?) ORDER BY url = ? DESC").bind(user.id, row.url, row.raw, row.raw).first();
+  const known = await env.DB.prepare("SELECT url, account_id FROM posts WHERE user_id = ? AND url IN (?, ?) ORDER BY url = ? DESC").bind(user.id, row.url, row.raw, row.raw).first();
   if (known) row.url = known.url;
+  // Bağlı hesaptan gelen gönderinin ölçümü edit_metrics (ya da admin) yetkisi ister
+  if (known?.account_id != null) need(await canEdit(c), "no_perm", 403);
   need(known || await postCount(env, user.id) < MAX_POSTS, "posts_full", 409);
-  await env.DB.batch(postWrite(env, user.id, row));
+  await writeLogged(env, postWrite(env, user.id, row), { actor: user.id, uid: user.id, rows: [row], source: "manual" });
   const [post] = await postRows(env, user.id, " AND url = ?", [row.url]);
   return ok(c, { post, added: !known });
 });
@@ -836,16 +888,22 @@ const importPosts = postsRoute(async c => {
   const { env, user } = c;
   const rows = c.body.rows;
   need(Array.isArray(rows) && rows.length >= 1 && rows.length <= IMPORT_ROWS, "rows", 400);
-  const good = [], skipped = [];
-  rows.forEach((o, i) => { const { row, error } = postIn(o); if (row) good.push(row); else skipped.push({ i, error }); });
+  let good = [], skipped = [];
+  rows.forEach((o, i) => { const { row, error } = postIn(o); if (row) good.push(Object.assign(row, { i })); else skipped.push({ i, error }); });
   // Tek biçimli ve girilen haller birlikte aranır (100 parametre sınırına takılmasın diye tek JSON); girilen haliyle kayıtlı satır öncelikli
-  const known = new Set(good.length ? (await env.DB.prepare("SELECT url FROM posts WHERE user_id = ? AND url IN (SELECT value FROM json_each(?))")
-    .bind(user.id, JSON.stringify([...new Set(good.flatMap(r => [r.url, r.raw]))])).all()).results.map(r => r.url) : []);
+  const known = new Map(good.length ? (await env.DB.prepare("SELECT url, account_id FROM posts WHERE user_id = ? AND url IN (SELECT value FROM json_each(?))")
+    .bind(user.id, JSON.stringify([...new Set(good.flatMap(r => [r.url, r.raw]))])).all()).results.map(r => [r.url, r.account_id]) : []);
   for (const r of good) if (known.has(r.raw)) r.url = r.raw;
+  // Bağlı hesaptan gelen gönderiye yazan satır yetki yoksa "perm" ile atlanır, diğerleri yazılır
+  const synced = r => known.get(r.url) != null;
+  if (good.some(synced) && !await canEdit(c)) {
+    skipped = [...skipped, ...good.filter(synced).map(r => ({ i: r.i, error: "perm" }))].sort((a, b) => a.i - b.i);
+    good = good.filter(r => !synced(r));
+  }
   const urls = [...new Set(good.map(r => r.url))];
   const added = urls.filter(u => !known.has(u)).length;
   need(!added || await postCount(env, user.id) + added <= MAX_POSTS, "posts_full", 409);
-  if (good.length) await env.DB.batch(good.flatMap(r => postWrite(env, user.id, r)));
+  if (good.length) await writeLogged(env, good.flatMap(r => postWrite(env, user.id, r)), { actor: user.id, uid: user.id, rows: good, source: "import" });
   return ok(c, { added, updated: good.length - added, skipped });
 });
 
@@ -890,4 +948,83 @@ const postAudience = postsRoute(async (c, id) => {
   await attempt(env, c.ip, user.email, "post_aud", 1);
   try { return ok(c, { audience: await fetchPostAudience(env, user.id, post), fetched: true }); }
   catch (e) { if (!(e instanceof ProviderError)) throw e; return ok(c, { audience, fetched: false, reason: POST_AUD_FAIL[e.code] || "upstream" }); }
+});
+
+// ---- yönetim paneli (migrations/0012_admin.sql) ----
+// Yalnız user_perms'te admin satırı olana açık; diğerlerine (tablo yoksa da) 404, uçların varlığı belli olmaz.
+// Sosyal hesaplardan yalnız durum sütunları okunur (token sütunları ve scope asla). Tablo/sütun yoksa 503 not_ready.
+const adminRoute = fn => async (c, id) => {
+  need(await isAdmin(c), "not_found", 404);
+  need(id === undefined || Number.isSafeInteger(id), "not_found", 404);
+  try { return await fn(c, id); } catch (e) { if (/no such (table|column)/i.test(String(e && e.message))) throw new Bad("not_ready", 503); throw e; }
+};
+// Panelin tek isteği. Günlükler (edits, perm_log, meta) tablosu yoksa boş döner; kullanıcı ve hesap listesindeki hata 503 not_ready.
+const listAll = async (env, sql, ...args) => (await env.DB.prepare(sql).bind(...args).all()).results;
+const listOr = (env, sql, ...args) => listAll(env, sql, ...args).catch(e => { if (noTable(e)) return []; throw e; });
+const adminHome = adminRoute(async c => {
+  const { env, site } = c;
+  const [users, edits, syncs, meta, permLog] = await Promise.all([
+    listAll(env, `SELECT u.id, u.created_at, u.email, u.name, u.role, u.lang, (SELECT COUNT(*) FROM posts WHERE user_id = u.id) posts,
+      (SELECT COUNT(*) FROM social_accounts WHERE user_id = u.id AND status = 'connected') conns, (SELECT group_concat(perm) FROM user_perms WHERE user_id = u.id) perms,
+      (SELECT MAX(created_at) FROM sessions WHERE user_id = u.id) last_login FROM users u WHERE u.site = ? ORDER BY u.created_at DESC, u.id DESC`, site),
+    // Gönderi silindiyse post_id ve platform null (posts.id yeniden kullanılabilir; eşleşme kullanıcı ve url ile de denetlenir)
+    listOr(env, `SELECT e.id, e.at, e.actor_id, a.email actor_email, e.user_id, o.email owner_email, p.id post_id, p.platform, e.url, e.snap_at, e.field, e.before, e.after, e.source
+      FROM post_edits e JOIN users o ON o.id = e.user_id AND o.site = ? LEFT JOIN users a ON a.id = e.actor_id
+      LEFT JOIN posts p ON p.id = e.post_id AND p.user_id = e.user_id AND p.url = e.url ORDER BY e.id DESC LIMIT 200`, site),
+    listAll(env, `SELECT s.id, s.user_id, u.email, s.platform, s.handle, s.status, s.connected_at, s.updated_at, s.next_sync_at, s.error, s.sync_changes
+      FROM social_accounts s JOIN users u ON u.id = s.user_id AND u.site = ? ORDER BY s.updated_at DESC, s.id DESC`, site),
+    listOr(env, "SELECT id, at, kind, code, matched FROM meta_events ORDER BY id DESC LIMIT 100"),
+    // Yetki geçmişi: hedef kullanıcının sitesinden, en yeni önce
+    listOr(env, `SELECT l.id, l.at, l.actor_id, a.email actor_email, l.user_id, u.email, l.perm, l.granted
+      FROM perm_log l JOIN users u ON u.id = l.user_id AND u.site = ? LEFT JOIN users a ON a.id = l.actor_id ORDER BY l.id DESC LIMIT 100`, site),
+  ]);
+  return ok(c, {
+    users: users.map(u => { const p = (u.perms || "").split(",").filter(Boolean); return { ...u, perms: p.filter(x => x !== "admin").sort(), ...(p.includes("admin") && { admin: true }) }; }),
+    edits, syncs, meta, perm_log: permLog,
+  });
+});
+
+const siteUser = (c, id) => c.env.DB.prepare("SELECT id FROM users WHERE id = ? AND site = ?").bind(id, c.site).first();
+
+// Kullanıcının gönderileri (GET posts ile aynı biçim); yönetici düzeltecek gönderiyi buradan seçer
+const adminPosts = adminRoute(async (c, id) => {
+  need(await siteUser(c, id), "not_found", 404);
+  return ok(c, { posts: await postRows(c.env, id) });
+});
+
+// Gövde: {perm: "edit_metrics", on: bool}. API yalnız edit_metrics'i açar/kapatır; admin yalnız elle eklenir (0012 başlığı).
+const adminPerm = adminRoute(async (c, id) => {
+  const { env } = c;
+  need(c.body.perm === "edit_metrics" && typeof c.body.on === "boolean", "bad_perm", 400);
+  need(await siteUser(c, id), "not_found", 404);
+  // Durum gerçekten değişiyorsa perm_log'a bir satır (değişiklikten önce, aynı batch'te); perm_log yoksa değişiklik günlüksüz yapılır
+  const on = c.body.on ? 1 : 0;
+  const log = env.DB.prepare(`INSERT INTO perm_log (actor_id, user_id, perm, granted) SELECT ?, ?, 'edit_metrics', ?
+    WHERE ? <> EXISTS (SELECT 1 FROM user_perms WHERE user_id = ? AND perm = 'edit_metrics')`).bind(c.user.id, id, on, on, id);
+  const change = on ? env.DB.prepare("INSERT INTO user_perms (user_id, perm, granted_by) VALUES (?, 'edit_metrics', ?) ON CONFLICT DO NOTHING").bind(id, c.user.id)
+    : env.DB.prepare("DELETE FROM user_perms WHERE user_id = ? AND perm = 'edit_metrics'").bind(id);
+  await batchOr(env, "perm_log", ed => ed ? [log, change] : [change]);
+  const perms = (await env.DB.prepare("SELECT perm FROM user_perms WHERE user_id = ? AND perm <> 'admin' ORDER BY perm").bind(id).all()).results.map(r => r.perm);
+  return ok(c, { user_id: id, perms });
+});
+
+// Gönderi (bu sitede) önce aranır: yoksa gövdeye bakılmadan 404. Gövde: {at, likes?, comments?, views?, reach?} (postIn kuralları
+// ve hata kodları, en az bir ölçüm). O günün ölçümüne yazılır, gövdede olmayan (ya da boş) alan korunur; değişen alanlar günlüğe
+// source admin ile yazılır, o gün senkronla ezilmez (oauth.js postWrites). Dönüş: {snap, changed}; post_edits yoksa changed null.
+const adminSnap = adminRoute(async (c, id) => {
+  const { env } = c, b = c.body;
+  const post = await env.DB.prepare("SELECT p.id, p.user_id, p.url FROM posts p JOIN users u ON u.id = p.user_id AND u.site = ? WHERE p.id = ?").bind(c.site, id).first();
+  need(post, "not_found", 404);
+  const at = b.at == null || b.at === "" ? isoDay(new Date()) : b.at;
+  need(okDay(at), "at", 400);
+  const set = {};
+  for (const k of PMETS) { set[k] = pInt(b[k]); need(set[k] !== undefined, k, 400); }
+  need(PMETS.some(k => set[k] != null), "metrics", 400);
+  const cur = await snapsBefore(env, post.user_id, [{ url: post.url, snap: { at } }]), was = cur.get(JSON.stringify([post.url, at])), snap = { at };
+  for (const k of PMETS) snap[k] = set[k] ?? was?.[k] ?? null;
+  const changed = await writeLogged(env, [env.DB.prepare(`INSERT INTO post_snaps (post_id, at, likes, comments, views, reach) VALUES (?, ?, ?, ?, ?, ?)
+    ON CONFLICT (post_id, at) DO UPDATE SET likes = COALESCE(excluded.likes, likes), comments = COALESCE(excluded.comments, comments),
+    views = COALESCE(excluded.views, views), reach = COALESCE(excluded.reach, reach)`).bind(post.id, at, set.likes, set.comments, set.views, set.reach)],
+  { actor: c.user.id, uid: post.user_id, rows: [{ url: post.url, snap }], source: "admin", cur });
+  return ok(c, { snap: { post_id: String(post.id), ...snap }, changed });
 });
