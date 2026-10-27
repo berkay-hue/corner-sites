@@ -137,7 +137,10 @@ if (released.length) {
     if (live.length && !slotEnd) warn(`sayı bağlantıları yazılmadı, boş ve hidden tek <p id="sayi-links"> yok`);
     else if (live.length) {
       const open = html.slice(slots[0].start, slots[0].end).replace(/\s+hidden(?:\s*=\s*(?:""|''|hidden))?(?=[\s>\/])/i, "");
-      html = html.slice(0, slots[0].start) + open + `Sayı arşivi: ${live.map(n => `<a href="/sayi/${n}">Sayı ${n}</a>`).join(" · ")}</p>` + html.slice(slots[0].end + slotEnd[0].length);
+      // hidden="true" gibi tanınmayan bir yazımda öğe gizli kalır ya da başka öznitelik bozulurdu: yalnız hidden düştüyse yazılır
+      const after = tags(open)[0];
+      if (!after || JSON.stringify([...after.attrs]) !== JSON.stringify([...slots[0].attrs].filter(([k]) => k !== "hidden"))) warn(`sayı bağlantıları yazılmadı, <p id="sayi-links"> hidden özniteliği kaldırılamadı`);
+      else html = html.slice(0, slots[0].start) + open + `Sayı arşivi: ${live.map(n => `<a href="/sayi/${n}">Sayı ${n}</a>`).join(" · ")}</p>` + html.slice(slots[0].end + slotEnd[0].length);
     }
     if (!miss.length && ids(html) !== before) miss.push("id kümesi değişti");
     if (miss.length) warn(`sayı ${no} yazılmadı, bulunamayan alan: ${miss.join(", ")}`);
