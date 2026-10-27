@@ -104,3 +104,5 @@ Tek bir tedarikçiye bağımlıysan, fiyat ve koşullar üzerindeki söz hakkın
 Bilinçli bir bekleme, örneğin piyasanın yönünü görmek için belirli bir süre tanımak, makul olabilir. Ama hiçbir şey yapmadan yeni koşulların kendiliğinden yürürlüğe girmesine izin vermek, farkında olmadan alınmış bir karardır.
 
 Selvi Çanta'nın masasında sen otursaydın hangi adımı önce atardın? Belki pazarlığı hiç denemez, doğrudan yeni kumaşa geçerdin. Belki de zammı tamamen üstlenip müşteriye hiçbir şey hissettirmemeyi seçerdin. Her gün yeni bir kurgusal şirket, yeni bir karar anıyla seni bekliyor: [Bugünün vakasını oyna](/#oyun)
+
+Diğer karar kavramlarının kısa tanımları için: [Kavramlar sözlüğü](/kavramlar).

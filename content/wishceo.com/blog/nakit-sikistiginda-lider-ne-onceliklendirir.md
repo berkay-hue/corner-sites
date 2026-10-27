@@ -93,3 +93,5 @@ Genellikle işi durdurmadan ertelenebilen harcamalar ilk sıradadır: yeni proje
 Otomatik olarak değil. Kriz dönemi, hangi projelerin gerçekten gerekli olduğunu görmek için iyi bir fırsattır. Ertelenen her proje, yeniden başlatılmadan önce bugünün koşullarında baştan değerlendirilmelidir.
 
 Velnora'da Defne'nin ne yapacağını bilmiyoruz; bu yazıda doğru cevabı vermek de niyetimiz değildi. Ama bir şey açık: Nakit sıkıştığında asıl mesele parayı bulmaktan çok dikkati doğru yere vermek. Sen olsan hangi kararla başlardın? Showroom'u mu durdururdun, zincirle masaya mı otururdun, depoyu mu boşaltırdın? Bugün seni bekleyen kurgusal şirketin masasında benzer bir sıralama sorusu var. [Bugünün vakasını oyna](/#oyun)
+
+Diğer karar kavramlarının kısa tanımları için: [Kavramlar sözlüğü](/kavramlar).
