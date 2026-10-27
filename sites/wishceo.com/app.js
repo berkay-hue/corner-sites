@@ -151,6 +151,7 @@
   function afterHtml(i) {
     var c = CASES[i], o = opt(i, state.answers[i]), ro = opt(i, c.real.k), diff = o.s - ro.s, last = i === CASES.length - 1;
     var cmp = o.k === c.real.k ? "Vakadaki CEO ile aynı kararı verdin."
+      : diff === 0 ? "Vakadaki CEO’dan farklı karar verdin, ikinizin puanı aynı."
       : diff > 0 ? "Vakadaki CEO’dan " + diff + " puan iyi. Yönetim kurulu not aldı."
       : "Vakadaki CEO’nun kararı " + (-diff) + " puan daha iyiydi.";
     return '<div class="after">' +
@@ -366,6 +367,11 @@
   var WORDS = ["", "Bir", "İki", "Üç", "Dört", "Beş", "Altı"];
   var WORDS_LO = ["", "bir", "iki", "üç", "dört", "beş", "altı"];
   function dateTR(iso) { return new Date(iso + "T12:00:00+03:00").toLocaleDateString("tr-TR", { day: "numeric", month: "long", year: "numeric", timeZone: "Europe/Istanbul" }); }
+  // bozuk bir vaka (eksik alan) bütün oyunu düşürmesin: böyle bir sayı hiç açılmaz, önceki sayılar çalışır
+  function validCase(c) {
+    return !!c && Array.isArray(c.place) && Array.isArray(c.body) && Array.isArray(c.stats) && Array.isArray(c.opts) && c.opts.length > 0 &&
+      c.opts.every(function (o) { return o && typeof o.s === "number"; }) && !!c.real && Array.isArray(c.real.text) && !!optOf(c, c.real.k);
+  }
   function yearOf(c) { return (c.place[1] || "").replace(/^\s*·\s*/, ""); }
   function fillPage() {
     var n = CASES.length;
@@ -499,7 +505,7 @@
         .then(function (c) { x.cases = c; }, function () { x.cases = null; });
     })).then(function () {
       var cur = CUR;
-      RELEASED = RELEASED.filter(function (x) { return Array.isArray(x.cases) && x.cases.length; });
+      RELEASED = RELEASED.filter(function (x) { return Array.isArray(x.cases) && x.cases.length && x.cases.every(validCase); });
       if (!RELEASED.length) return revealIssue(true);
       if (RELEASED.indexOf(cur) < 0) cur = RELEASED[RELEASED.length - 1];
       LATEST = RELEASED[RELEASED.length - 1].no;
