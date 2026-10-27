@@ -39,11 +39,15 @@ jobs:
           last=$(gh run list -R "$GITHUB_REPOSITORY" -w blog-deploy.yml -b main -e push -s success -L 1 --json headSha --jq '.[0].headSha // empty' 2>/dev/null || true)
           if [ -n "$last" ] && git merge-base --is-ancestor "$last" "$base" 2>/dev/null; then base=$last; fi
           changed=$(git diff --name-only "$base" "$GITHUB_SHA")
-          # tools/ ve templates/ build'i etkiler: bütün siteler yeniden yüklenir
-          if echo "$changed" | grep -qE '^(tools|templates)/'; then
+          # templates/<host>/ yalnız o sitenin build'ini etkiler (build-blog.mjs TPL = templates/<host>); templates/ kökündeki dosya
+          # ya da sites/ altında karşılığı olmayan templates/<klasör> ortak sayılır. --no-renames: taşımada eski yol da görünsün
+          tpl=$(git -c core.quotePath=false diff --name-only --no-renames "$base" "$GITHUB_SHA" -- templates/)
+          tpl_shared=$(echo "$tpl" | grep -E '^templates/' | while IFS=/ read -r _ h rest; do [ -n "$rest" ] && [ -d "sites/$h" ] || echo "$h"; done)
+          # tools/ ve ortak şablon build'i etkiler: bütün siteler yeniden yüklenir
+          if echo "$changed" | grep -qE '^tools/' || [ -n "$tpl_shared" ]; then
             list=$(ls -d sites/*/ | cut -d/ -f2 | tr '\n' ' ')
           else
-            list=$(echo "$changed" | grep -E '^(content|sites)/' | cut -d/ -f2 | sort -u | tr '\n' ' ')
+            list=$(printf '%s\n%s\n' "$changed" "$tpl" | grep -E '^(content|sites|templates)/' | cut -d/ -f2 | sort -u | tr '\n' ' ')
           fi
           echo "base=$base list=$list"
           echo "list=$list" >> "$GITHUB_OUTPUT"
