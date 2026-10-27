@@ -38,7 +38,8 @@ jobs:
           # Concurrency bekleyen run'ı iptal edince o push'un siteleri kaybolurdu (bir de başarısız run'lar): son başarılı push deploy'unun sha'sından al
           last=$(gh run list -R "$GITHUB_REPOSITORY" -w blog-deploy.yml -b main -e push -s success -L 1 --json headSha --jq '.[0].headSha // empty' 2>/dev/null || true)
           if [ -n "$last" ] && git merge-base --is-ancestor "$last" "$base" 2>/dev/null; then base=$last; fi
-          changed=$(git diff --name-only "$base" "$GITHUB_SHA")
+          # quotePath=false: Türkçe karakterli ad ("content/…/\303\247ay.md" değil) düz yazılsın, aşağıdaki desenlere uysun
+          changed=$(git -c core.quotePath=false diff --name-only "$base" "$GITHUB_SHA")
           # templates/<host>/ yalnız o sitenin build'ini etkiler (build-blog.mjs TPL = templates/<host>); templates/ kökündeki dosya
           # ya da sites/ altında karşılığı olmayan templates/<klasör> ortak sayılır. --no-renames: taşımada eski yol da görünsün
           tpl=$(git -c core.quotePath=false diff --name-only --no-renames "$base" "$GITHUB_SHA" -- templates/)
