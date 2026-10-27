@@ -122,4 +122,4 @@ WishCEO'daki her dosya seni bir şirketin en zor gününde CEO koltuğuna oturtu
 
 Batık maliyetin sesini masada fark edebilecek misin, kendin gör: [Yeni sayıyı oyna](/#oyun).
 
-Diğer karar kavramlarının kısa tanımları için: [Kavramlar sözlüğü](/kavramlar).
+Diğer karar kavramlarının kısa tanımları için: [Kavramlar sözlüğü](/kavramlar#batik-maliyet).

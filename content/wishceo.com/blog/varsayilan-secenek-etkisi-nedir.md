@@ -88,4 +88,4 @@ Belirsizlik arttığında her değişiklik daha riskli görünür, mevcut durum 
 
 WishCEO'daki vakalarda da sık sık bu anla karşılaşacaksın: Önünde değiştirmesi zahmetli, sürdürmesi rahat bir seçenek ve onun yanında daha belirsiz ama belki daha doğru bir yol olacak. Bir sonraki kararında kendine sadece şunu sor: Bunu gerçekten seçiyor muyum, yoksa sadece dokunmuyor muyum? Cevabını görmek için [Bugünün vakasını oyna](/#oyun)
 
-Diğer karar kavramlarının kısa tanımları için: [Kavramlar sözlüğü](/kavramlar).
+Diğer karar kavramlarının kısa tanımları için: [Kavramlar sözlüğü](/kavramlar#varsayilan-secenek).
