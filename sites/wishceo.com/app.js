@@ -412,8 +412,6 @@
         esc(x.cases.map(function (c) { return c.company; }).join(", ")) + '</span></a><a class="bl-x" href="/sayi/' + x.no + '">Sayı ' + x.no + ' vakalarını oku <span aria-hidden="true">→</span></a></li>';
     }).join("");
     sec.hidden = false;
-    // blog altlığındaki /#arsiv: bölüm JS ile açıldığı için tarayıcının ilk kaydırması boşa gidebilir
-    if (location.hash === "#arsiv") try { sec.scrollIntoView(); } catch (e) { /* kaydırma şart değil */ }
   }
 
   // ---------- başlat ----------
@@ -442,6 +440,9 @@
     load();
     renderCase(false);
     renderReport();
+    // blog altlığındaki /#arsiv: bölüm JS ile açılıyor ve üstündeki vaka/karne şimdi doldu; tarayıcının ilk kaydırması boşa gitmiş olabilir
+    var arsiv = document.getElementById("arsiv");
+    if (location.hash === "#arsiv" && arsiv && !arsiv.hidden) try { arsiv.scrollIntoView(); } catch (e) { /* kaydırma şart değil */ }
 
     elCase.addEventListener("click", function (e) {
       var b = e.target.closest("button");
