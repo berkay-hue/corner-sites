@@ -44,9 +44,9 @@
   var qs = /[?&]s=(\d{3})\b/.exec(location.search);
   if (qs) RELEASED.forEach(function (x) { if (x.no === qs[1]) CUR = x; });
   // içeriği yayından sonra değişen sayının cevap anahtarı yenilenir; eski cevaplar yeni dosyalara karışmaz.
-  // 001: birinci dosya iki kez değişti (v2, sonra v3: Lavenhurst). Bildirim onayı ayrı tutulur, eski "wishceo.s001" kaydından okunmaya devam eder (loadList).
+  // 001: birinci dosya üç kez değişti (v2, v3: Lavenhurst; v4: Lavenhurst seçenek sırası, doğru cevap B yerine D). Bildirim onayı ayrı tutulur, eski "wishceo.s001" kaydından okunmaya devam eder (loadList).
   // Puan ve seçenek metni aynı kalıp yalnız etiket (tag) ya da anlatım değişirse anahtar yenilenmez; karne tipi kayıtlı cevaplardan yeniden hesaplanır (001: Tumla D, Korvala C etiketleri).
-  var KEYV = { "001": "v3" };
+  var KEYV = { "001": "v4" };
   function keyOf(no) { return "wishceo.s" + no + (KEYV[no] || ""); }
   var ISSUE = CUR.no, CASES = [], KEY = keyOf(ISSUE);
 
