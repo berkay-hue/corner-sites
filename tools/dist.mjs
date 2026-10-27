@@ -108,7 +108,8 @@ if (released.length) {
     const before = ids(html), miss = [];
     // Her alanın bütün adayları düz metinli öğe olmalı; öznitelik adı başka bir yerde de geçiyorsa (metinde, değer içinde, bozuk etikette) yazılmaz
     const FIELDS = [["data-issue", null, `Sayı ${no}`], ["id", "today", date], ["id", "hero-meta", `${N} dosya · ${N} karar · 1 CEO karnesi · Üyelik yok`]];
-    if (WORDS[N]) FIELDS.push(["id", "oyun-intro", `${WORDS[N]} şirket, ${WORDS_LO[N]} kriz. Hangisinde vakadaki CEO’dan daha iyi iş çıkarırsın?`]);
+    // app.js gibi: 7 ve üstü rakamla yazılır
+    if (N) FIELDS.push(["id", "oyun-intro", `${WORDS[N] || N} şirket, ${WORDS_LO[N] || N} kriz. Hangisinde vakadaki CEO’dan daha iyi iş çıkarırsın?`]);
     for (const [attr, v, val] of FIELDS) {
       const label = v == null ? attr : `${attr}="${v}"`;
       const cands = tags(html).filter(t => t.attrs.has(attr) && (v == null || t.attrs.get(attr) === v));
