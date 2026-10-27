@@ -365,6 +365,7 @@
   // ---------- sayfa: sayı bilgisi ve arşiv ----------
   var WORDS = ["", "Bir", "İki", "Üç", "Dört", "Beş", "Altı"];
   var WORDS_LO = ["", "bir", "iki", "üç", "dört", "beş", "altı"];
+  function dateTR(iso) { return new Date(iso + "T12:00:00+03:00").toLocaleDateString("tr-TR", { day: "numeric", month: "long", year: "numeric", timeZone: "Europe/Istanbul" }); }
   function yearOf(c) { return (c.place[1] || "").replace(/^\s*·\s*/, ""); }
   function fillPage() {
     var n = CASES.length;
@@ -422,7 +423,7 @@
     elReport = $("#report");
     if (elSteps) { elSteps.style.setProperty("--n", CASES.length); elSteps.classList.toggle("many", CASES.length > 3); }
     var d = $("#today");
-    if (d) try { d.textContent = new Date(CUR.date + "T12:00:00+03:00").toLocaleDateString("tr-TR", { day: "numeric", month: "long", year: "numeric", timeZone: "Europe/Istanbul" }); } catch (e) { /* sabit tarih kalsın */ }
+    if (d) try { d.textContent = dateTR(CUR.date); } catch (e) { /* sabit tarih kalsın */ }
     var tk = $(".ticker-stop");
     if (tk) {
       var tg = $(".ticker-group");
@@ -474,9 +475,11 @@
     if (CUR.no === LATEST) return;
     Array.prototype.forEach.call(document.querySelectorAll("[data-issue], #today"), function (el) {
       EARLY.push([el, el.textContent]);
-      el.textContent = el.id === "today" ? new Date(CUR.date + "T12:00:00+03:00").toLocaleDateString("tr-TR", { day: "numeric", month: "long", year: "numeric", timeZone: "Europe/Istanbul" }) : "Sayı " + CUR.no;
+      el.textContent = el.id === "today" ? dateTR(CUR.date) : "Sayı " + CUR.no;
     });
     ["#index-list", "#hero-meta", "#oyun-intro"].forEach(function (s) { var el = $(s); if (el) el.style.visibility = "hidden"; });
+    // ağ takılırsa boşluk kalmasın: statik içerik geri gelir, JSON sonra gelirse fillPage yine yazar
+    setTimeout(function () { if (EARLY.length) revealIssue(true); }, 4000);
   }
   function revealIssue(restore) {
     if (restore) EARLY.forEach(function (x) { x[0].textContent = x[1]; });
@@ -498,7 +501,8 @@
       LATEST = RELEASED[RELEASED.length - 1].no;
       CUR = cur; ISSUE = CUR.no; CASES = CUR.cases; KEY = keyOf(ISSUE);
       state.answers = CASES.map(function () { return null; });
-      init();
+      // init yarıda hata verse de gizlenen satırlar açılsın (önceki gibi görünür kalır)
+      try { init(); } finally { revealIssue(false); }
     });
   }
 
