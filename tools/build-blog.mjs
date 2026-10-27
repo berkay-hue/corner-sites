@@ -19,6 +19,7 @@ if (!cfg || !["import", "build"].includes(cmd)) { console.error("usage: build-bl
 const SITE = join(ROOT, "sites", host), TPL = join(ROOT, "templates", host);
 let CONTENT = join(ROOT, "content", host, "blog");
 // Bugün (TR saati, dist.mjs ile aynı): date'i bundan ileri olan yazı o güne kadar derlenmez
+// Kapı 7 sitede geçerli ama Pazar 21:05 UTC cron'u yalnız wishceo'yu deploy eder; diğer sitelerde ileri tarihli yazı o gün kendiliğinden açılmaz, o siteye bir sonraki deploy'da açılır
 const TODAY = (() => {
   try {
     const p = Object.fromEntries(new Intl.DateTimeFormat("en-US", { timeZone: "Europe/Istanbul", year: "numeric", month: "2-digit", day: "2-digit" }).formatToParts(new Date()).map(x => [x.type, x.value]));
