@@ -57,8 +57,12 @@ const issueFiles = (await readdir(join(SRC, "sayilar")).catch(() => [])).filter(
 const hasFile = new Set(issueFiles), dated = [...ISSUE_DATES.keys()].map(n => `${n}.json`).filter(n => hasFile.has(n));
 const released = dated.filter(n => ISSUE_DATES.get(n.replace(".json", "")) <= today);
 const liveIssues = new Set(released.length ? released : dated.length ? dated.slice(0, 1) : issueFiles.slice(0, 1));
-const isIssue = src => basename(join(src, "..")) === "sayilar" && /^\d+\.json$/.test(basename(src));
-await cp(SRC, OUT, { recursive: true, force: true, filter: src => !PRIVATE.test(basename(src)) && (!isIssue(src) || liveIssues.has(basename(src))) });
+// sayi/NNN.html arşiv sayfası da sayilar/NNN.json ile aynı tarih kapısından geçer
+const issueOf = src => {
+  const dir = basename(join(src, "..")), f = basename(src);
+  return dir === "sayilar" && /^\d+\.json$/.test(f) ? f : dir === "sayi" && /^\d+\.html$/.test(f) ? f.replace(".html", ".json") : null;
+};
+await cp(SRC, OUT, { recursive: true, force: true, filter: src => !PRIVATE.test(basename(src)) && (!issueOf(src) || liveIssues.has(issueOf(src))) });
 if (issueFiles.length) console.log(`sayilar: ${liveIssues.size}/${issueFiles.length} yayında (${today})`);
 const undated = issueFiles.filter(n => !ISSUE_DATES.has(n.replace(".json", "")));
 if (issueFiles.length && (ISSUES_ARR == null || undated.length || (ISSUES_SRC.match(/\bno\s*:/g) || []).length !== ISSUE_DATES.size))
@@ -223,6 +227,22 @@ if (!(await has(join(OUT, "sitemap.xml")))) {
     xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.sort().map(u => `<url><loc>${u}</loc></url>`).join("\n")}\n</urlset>\n`;
   }
   await writeFile(join(OUT, "sitemap.xml"), xml);
+}
+// Tarihi gelmemiş sayının arşiv sayfası çıktıda yok: build-blog'un _orig-sitemap'ten taşıdığı /sayi/NNN URL'si düşülür (llms.txt sitemap'ten üretilir)
+{
+  let xml = await readFile(join(OUT, "sitemap.xml"), "utf8");
+  const dropped = [];
+  for (const b of xml.match(/<url>[\s\S]*?<\/url>/g) || []) {
+    const p = decodeURI(new URL(b.match(/<loc>([^<]+)/)[1].trim()).pathname).replace(/^\/|\/$/g, "");
+    if (!/^sayi\/\d+$/.test(p) || (await has(join(OUT, p + ".html")))) continue;
+    const i = xml.indexOf(b);
+    let s = i;
+    while (s > 0 && /[ \t]/.test(xml[s - 1])) s--;
+    if (xml[s - 1] === "\n") s--;
+    xml = xml.slice(0, s) + xml.slice(i + b.length);
+    dropped.push("/" + p);
+  }
+  if (dropped.length) { await writeFile(join(OUT, "sitemap.xml"), xml); console.log(`sitemap: açılmamış ${dropped.length} sayı düşüldü (${dropped[0]}…)`); }
 }
 // lastmod yalnızca içerik değişikliğinden gelir: yazıda BlogPosting dateModified, blog listesinde en yeni yazı,
 // statik sayfada elle tutulan _orig-sitemap değeri (wishceo ana sayfasında yazılan sayının tarihi daha yeniyse o). Başka kaynaklı lastmod (araç commit'i, dosya tarihi) silinir.
