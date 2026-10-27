@@ -128,6 +128,20 @@ if (released.length) {
       const ws = body.match(/^\s*/)[0], trail = body.slice(ws.length).match(/\s*$/)[0];
       html = html.slice(0, lists[0].end) + ws + items.join(ws) + trail + html.slice(lists[0].end + body.length);
     }
+    // footer'daki <p id="sayi-links" hidden></p>: yayındaki sayıların (liveIssues, sayi/NNN.html'i çıktıda olan) arşiv sayfalarına statik bağlantı, yeniden eskiye.
+    // Öğe tek, boş ve hidden değilse yazılmaz (sayı alanları yine yazılır; app.js arşiv listesindeki bağlantıyı kendisi ekler)
+    const live = [];
+    for (const n of [...liveIssues].sort().reverse()) if (await has(join(OUT, "sayi", n.replace(".json", ".html")))) live.push(n.replace(".json", ""));
+    const slots = tags(html).filter(t => t.attrs.get("id") === "sayi-links");
+    const slotEnd = slots.length === 1 && slots[0].name === "p" && slots[0].attrs.has("hidden") ? html.slice(slots[0].end).match(/^\s*<\/p\s*>/i) : null;
+    if (live.length && !slotEnd) warn(`sayı bağlantıları yazılmadı, boş ve hidden tek <p id="sayi-links"> yok`);
+    else if (live.length) {
+      const open = html.slice(slots[0].start, slots[0].end).replace(/\s+hidden(?:\s*=\s*(?:""|''|hidden))?(?=[\s>\/])/i, "");
+      // hidden="true" gibi tanınmayan bir yazımda öğe gizli kalır ya da başka öznitelik bozulurdu: yalnız hidden düştüyse yazılır
+      const after = tags(open)[0];
+      if (!after || JSON.stringify([...after.attrs]) !== JSON.stringify([...slots[0].attrs].filter(([k]) => k !== "hidden"))) warn(`sayı bağlantıları yazılmadı, <p id="sayi-links"> hidden özniteliği kaldırılamadı`);
+      else html = html.slice(0, slots[0].start) + open + `Sayı arşivi: ${live.map(n => `<a href="/sayi/${n}">Sayı ${n}</a>`).join(" · ")}</p>` + html.slice(slots[0].end + slotEnd[0].length);
+    }
     if (!miss.length && ids(html) !== before) miss.push("id kümesi değişti");
     if (miss.length) warn(`sayı ${no} yazılmadı, bulunamayan alan: ${miss.join(", ")}`);
     else { await writeFile(join(OUT, "index.html"), html); stamped = html; stampedDate = day.toISOString().slice(0, 10); console.log(`index: sayı ${no} yazıldı (${N} dosya, ${date})`); }

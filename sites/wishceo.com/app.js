@@ -410,9 +410,12 @@
     if (!items.length) { sec.hidden = true; return; }
     list.innerHTML = items.map(function (x) {
       var sc = avgScore(x);
+      // dist.mjs #sayi-links'e bu sayının /sayi bağlantısını statik yazdıysa ikinci kez eklenmez
+      var read = document.querySelector('#sayi-links a[href="/sayi/' + x.no + '"]') ? "" :
+        '<a class="bl-x" href="/sayi/' + x.no + '">Sayı ' + x.no + ' vakalarını oku <span aria-hidden="true">→</span></a>';
       var m = "Sayı " + x.no + (x.no === LATEST ? " · En yeni" : "") + " · " + x.cases.length + " dosya" + (sc === null ? "" : " · Karnen " + sc + "/100");
       return '<li><a href="/?s=' + x.no + '#oyun"><span class="bl-m">' + esc(m) + '</span><span class="bl-t">' +
-        esc(x.cases.map(function (c) { return c.company; }).join(", ")) + '</span></a><a class="bl-x" href="/sayi/' + x.no + '">Sayı ' + x.no + ' vakalarını oku <span aria-hidden="true">→</span></a></li>';
+        esc(x.cases.map(function (c) { return c.company; }).join(", ")) + '</span></a>' + read + '</li>';
     }).join("");
     sec.hidden = false;
   }
