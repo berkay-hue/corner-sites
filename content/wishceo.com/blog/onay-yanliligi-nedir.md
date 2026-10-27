@@ -93,4 +93,4 @@ Hayır, gündelik küçük kararlarda da sürekli çalışır. Hangi haberi okud
 
 Onay yanlılığını okumak bir şey, onu kendi kararında yakalamak başka bir şey. Bir dahaki sefere bir rapora bakarken "bu bilgi beni neden bu kadar rahatlattı?" diye sormayı dene. Belki de en değerli soru tam olarak budur. Bunu pratikte denemek istersen, bugün CEO koltuğu senin. Önünde bir kriz, birkaç seçenek ve haklı çıkma isteğine karşı koyman gereken bir an var. [Bugünün vakasını oyna](/#oyun)
 
-Diğer karar kavramlarının kısa tanımları için: [Kavramlar sözlüğü](/kavramlar).
+Diğer karar kavramlarının kısa tanımları için: [Kavramlar sözlüğü](/kavramlar#onay-yanliligi).

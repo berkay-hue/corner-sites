@@ -87,4 +87,4 @@ Geri dönüşün neye mal olacağını somut olarak söylemek en açık yoldur. 
 
 Bir sonraki kararında kendine yalnızca şunu sor: Bu kapı arkamdan kapanacak mı? Cevap hayırsa hızlı ol, cevap evetse yavaşla ve dönüş yolu arayıp aramadığına bak. Bugünün kurgusal krizinde de masada hem geri alınabilir hem de geri alınamaz seçenekler var; hangisinin hangisi olduğunu görmek sana kalmış. [Bugünün vakasını oyna](/#oyun)
 
-Diğer karar kavramlarının kısa tanımları için: [Kavramlar sözlüğü](/kavramlar).
+Diğer karar kavramlarının kısa tanımları için: [Kavramlar sözlüğü](/kavramlar#geri-donussuz-karar).
