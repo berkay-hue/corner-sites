@@ -459,15 +459,15 @@ noscript p{margin:0;padding:24px;border:1px solid var(--ink);background:var(--ca
       <form id="wl" novalidate data-sk-noform>
         <label for="wl-email">E-posta adresin</label>
         <div class="wl-row">
-          <input id="wl-email" name="email" type="email" inputmode="email" autocomplete="email" placeholder="ad@ornek.com" required aria-describedby="wl-note">
+          <input id="wl-email" name="email" type="email" inputmode="email" autocomplete="email" placeholder="ad@ornek.com" required aria-describedby="wl-status wl-note">
           <button type="submit">Haber ver</button>
         </div>
         <input class="hp" name="website" type="text" tabindex="-1" autocomplete="off" aria-hidden="true">
         <label class="wl-check" for="wl-ok">
-          <input id="wl-ok" name="onay" type="checkbox" required>
+          <input id="wl-ok" name="onay" type="checkbox" required aria-describedby="wl-status">
           <span>WishCEO’nun yeni sayı duyurularını bana e-postayla göndermesine onay veriyorum. Onayımı istediğim an geri alabilirim.</span>
         </label>
-        <p class="wl-status" role="status" aria-live="polite"></p>
+        <p class="wl-status" id="wl-status" role="status" aria-live="polite"></p>
         <p class="wl-note" id="wl-note">Spam yok. Listeden çıkmak için gelen e-postayı yanıtlaman yeterli.</p>
         <div class="wl-kvkk">
           <p><b>KVKK aydınlatma, kısaca.</b> E-postanı ve onay kaydını yeni sayı duyurusu e-postaları için; oyun sonucunu (CEO tipi, puan, kararlar) oyunu geliştirmek için; IP adresini ve tarayıcı bilgisini spamı önlemek için kaydederiz. Kayıtlar Cloudflare’de, bildirim kopyası Google e-posta kutusunda durur; bu sunucular yurt dışında olabilir. Listeden çıkana kadar saklanır, sonra silinir.</p>
