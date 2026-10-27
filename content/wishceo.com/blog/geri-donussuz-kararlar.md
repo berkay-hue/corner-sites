@@ -86,3 +86,5 @@ Evet. Beklemek de bir karardır ve bazen beklerken kapı kendiliğinden kapanır
 Geri dönüşün neye mal olacağını somut olarak söylemek en açık yoldur. "Bunu yaparsak şu seçeneği kalıcı olarak kaybederiz" cümlesi, soyut uyarılardan çok daha anlaşılırdır.
 
 Bir sonraki kararında kendine yalnızca şunu sor: Bu kapı arkamdan kapanacak mı? Cevap hayırsa hızlı ol, cevap evetse yavaşla ve dönüş yolu arayıp aramadığına bak. Bugünün kurgusal krizinde de masada hem geri alınabilir hem de geri alınamaz seçenekler var; hangisinin hangisi olduğunu görmek sana kalmış. [Bugünün vakasını oyna](/#oyun)
+
+Diğer karar kavramlarının kısa tanımları için: [Kavramlar sözlüğü](/kavramlar).
