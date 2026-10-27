@@ -126,3 +126,5 @@ Platform yarışı donanımla değil, geliştiricileri ve kullanıcıları aynı
 ## Sen ne yapardın?
 
 2010'ların başındasın. Telefonlar hâlâ satılıyor ama pazarın yönü hızla değişiyor. Sen hangi yolu seçerdin? [Korvala vakasını oyna](/?s=001#oyun) ve kararını vakadaki CEO'nun kararıyla karşılaştır.
+
+Diğer karar kavramlarının kısa tanımları için: [Kavramlar sözlüğü](/kavramlar).

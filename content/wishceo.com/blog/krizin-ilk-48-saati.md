@@ -110,3 +110,5 @@ Yapılmalı, ama sebep uydurmadan. Ne bildiğini, ne bilmediğini ve bu arada ne
 ## Sıra sende
 
 Bir sonraki krizin hangi sabah geleceğini bilemezsin. Ama ilk saatlerde hangi soruları soracağını bugünden prova edebilirsin. Kendi kararını vakadaki CEO’nun kararıyla karşılaştırmak istersen bir dosya seni bekliyor. [Yeni sayıyı oyna](/#oyun).
+
+Diğer karar kavramlarının kısa tanımları için: [Kavramlar sözlüğü](/kavramlar).
