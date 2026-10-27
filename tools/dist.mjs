@@ -233,7 +233,7 @@ if (!(await has(join(OUT, "sitemap.xml")))) {
   let xml = await readFile(join(OUT, "sitemap.xml"), "utf8");
   const dropped = [];
   for (const b of xml.match(/<url>[\s\S]*?<\/url>/g) || []) {
-    const p = decodeURI(new URL(b.match(/<loc>([^<]+)/)[1].trim()).pathname).replace(/^\/|\/$/g, "");
+    const p = decodeURI(new URL(b.match(/<loc>([^<]+)/)[1].trim()).pathname).replace(/^\/|\/$/g, "").replace(/(\/index)?\.html$|\/index$/, "");
     if (!/^sayi\/\d+$/.test(p) || (await has(join(OUT, p + ".html")))) continue;
     const i = xml.indexOf(b);
     let s = i;
