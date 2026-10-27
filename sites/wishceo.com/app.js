@@ -379,6 +379,7 @@
       return '<li><a href="#oyun"><span class="n">' + pad(i + 1) + '</span><span class="t">' + esc(c.title) +
         '</span><span class="m">' + esc(c.area + " · " + c.place[0] + (y ? ", " + y : "")) + "</span></a></li>";
     }).join("");
+    revealIssue(false);
     // şerit hep en son açılan sayıyı gösterir (?s= ile eski sayı açılsa da); ileri tarihli sayılar RELEASED'da yok
     var NEWEST = RELEASED[RELEASED.length - 1];
     var tick = '<span>Sayı ' + NEWEST.no + ' · En yeni <b class="up">▲</b></span>' + NEWEST.cases.map(function (c, i) {
@@ -466,15 +467,33 @@
     initWaitlist();
   }
 
+  // ?s= ile eski sayı açılınca HTML'deki statik son sayı (dist.mjs yazar) JSON gelene kadar görünmesin: etiket ve tarih hemen yazılır,
+  // sayıya bağlı satırlar yer kaplamaya devam ederek gizlenir (kayma yok); fillPage ya da başarısız yükleme geri açar
+  var EARLY = [];
+  function earlyIssue() {
+    if (CUR.no === LATEST) return;
+    Array.prototype.forEach.call(document.querySelectorAll("[data-issue], #today"), function (el) {
+      EARLY.push([el, el.textContent]);
+      el.textContent = el.id === "today" ? new Date(CUR.date + "T12:00:00+03:00").toLocaleDateString("tr-TR", { day: "numeric", month: "long", year: "numeric", timeZone: "Europe/Istanbul" }) : "Sayı " + CUR.no;
+    });
+    ["#index-list", "#hero-meta", "#oyun-intro"].forEach(function (s) { var el = $(s); if (el) el.style.visibility = "hidden"; });
+  }
+  function revealIssue(restore) {
+    if (restore) EARLY.forEach(function (x) { x[0].textContent = x[1]; });
+    EARLY = [];
+    ["#index-list", "#hero-meta", "#oyun-intro"].forEach(function (s) { var el = $(s); if (el) el.style.visibility = ""; });
+  }
+
   // vakalar sayilar/NNN.json'da; yalnız açılmış (tarihi gelmiş) sayılar istenir, ileri tarihli metin istemciye gelmez
   function boot() {
+    try { earlyIssue(); } catch (e) { revealIssue(true); }
     Promise.all(RELEASED.map(function (x) {
       return fetch("/sayilar/" + x.no + ".json").then(function (r) { if (!r.ok) throw r.status; return r.json(); })
         .then(function (c) { x.cases = c; }, function () { x.cases = null; });
     })).then(function () {
       var cur = CUR;
       RELEASED = RELEASED.filter(function (x) { return Array.isArray(x.cases) && x.cases.length; });
-      if (!RELEASED.length) return;
+      if (!RELEASED.length) return revealIssue(true);
       if (RELEASED.indexOf(cur) < 0) cur = RELEASED[RELEASED.length - 1];
       LATEST = RELEASED[RELEASED.length - 1].no;
       CUR = cur; ISSUE = CUR.no; CASES = CUR.cases; KEY = keyOf(ISSUE);
