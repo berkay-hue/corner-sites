@@ -81,3 +81,5 @@ Pek mümkün değil, gerekli de değil. Büyük ve geri dönülmez kayıplara ka
 Aynı seçeneği farklı bir dille anlattığında fikrin değişiyorsa bu güçlü bir işarettir. Hiçbir şey yapmamanın bedelini hiç konuşmadıysan ya da tartışmanın neredeyse tamamı "neyi kaybederiz" üzerine döndüyse de durup yeniden bakmaya değer.
 
 Kayıp kaçınmayı okumak kolay, masada fark etmek zor. En iyi pratik, korkunun bir seçeneği gerçekte olduğundan daha riskli gösterdiği o anı kendi kararında yakalamaktır. Bugün WishCEO'da seni bekleyen kurgusal şirketin krizinde de büyük ihtimalle bir şeyler kaybedilecek. Sorulması gereken soru şu: Kararını kayıp mı verecek, yoksa sen mi? [Bugünün vakasını oyna](/#oyun)
+
+Diğer karar kavramlarının kısa tanımları için: [Kavramlar sözlüğü](/kavramlar).

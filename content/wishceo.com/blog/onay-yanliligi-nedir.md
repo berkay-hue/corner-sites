@@ -92,3 +92,5 @@ En etkili yol, itirazı güvenli ve beklenen bir davranış haline getirmektir. 
 Hayır, gündelik küçük kararlarda da sürekli çalışır. Hangi haberi okuduğun, hangi çalışanın raporuna daha çok güvendiğin, hangi müşteri yorumunu hatırladığın gibi seçimlerin hepsi bu eğilimden etkilenebilir. Büyük kararlarda sadece bedeli daha görünür olur.
 
 Onay yanlılığını okumak bir şey, onu kendi kararında yakalamak başka bir şey. Bir dahaki sefere bir rapora bakarken "bu bilgi beni neden bu kadar rahatlattı?" diye sormayı dene. Belki de en değerli soru tam olarak budur. Bunu pratikte denemek istersen, bugün CEO koltuğu senin. Önünde bir kriz, birkaç seçenek ve haklı çıkma isteğine karşı koyman gereken bir an var. [Bugünün vakasını oyna](/#oyun)
+
+Diğer karar kavramlarının kısa tanımları için: [Kavramlar sözlüğü](/kavramlar).
