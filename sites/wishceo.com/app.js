@@ -371,7 +371,8 @@
     var n = CASES.length;
     Array.prototype.forEach.call(document.querySelectorAll("[data-issue]"), function (el) { el.textContent = "Sayı " + ISSUE; });
     var intro = $("#oyun-intro");
-    if (intro && WORDS[n]) intro.textContent = WORDS[n] + " şirket, " + WORDS_LO[n] + " kriz. Hangisinde vakadaki CEO’dan daha iyi iş çıkarırsın?";
+    // 7 ve üstü rakamla yazılır ("7 şirket, 7 kriz")
+    if (intro && n) intro.textContent = (WORDS[n] || n) + " şirket, " + (WORDS_LO[n] || n) + " kriz. Hangisinde vakadaki CEO’dan daha iyi iş çıkarırsın?";
     var meta = $("#hero-meta");
     if (meta) meta.textContent = n + " dosya · " + n + " karar · 1 CEO karnesi · Üyelik yok";
     var idx = $("#index-list");
