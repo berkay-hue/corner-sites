@@ -18,6 +18,15 @@ let cfg = BASE_CFG, BASE = "", BLOG_ID = null; // BASE: dil varyantının yol ö
 if (!cfg || !["import", "build"].includes(cmd)) { console.error("usage: build-blog.mjs import|build <host>"); process.exit(1); }
 const SITE = join(ROOT, "sites", host), TPL = join(ROOT, "templates", host);
 let CONTENT = join(ROOT, "content", host, "blog");
+// Bugün (TR saati, dist.mjs ile aynı): date'i bundan ileri olan yazı o güne kadar derlenmez
+const TODAY = (() => {
+  try {
+    const p = Object.fromEntries(new Intl.DateTimeFormat("en-US", { timeZone: "Europe/Istanbul", year: "numeric", month: "2-digit", day: "2-digit" }).formatToParts(new Date()).map(x => [x.type, x.value]));
+    const d = `${p.year}-${p.month}-${p.day}`;
+    if (/^\d{4}-\d{2}-\d{2}$/.test(d)) return d;
+  } catch {}
+  return new Date(Date.now() + 3 * 36e5).toISOString().slice(0, 10);
+})();
 // Ana sayfa Organization'ı "#org" kimliğiyle tanımlıyorsa (seo.mjs) yazıların publisher'ı aynı varlığa bağlanır
 const ORG_ID = (await readFile(join(SITE, "index.html"), "utf8").catch(() => "")).includes(`"@id":"${cfg.origin}/#org"`) ? cfg.origin + "/#org" : null;
 
@@ -376,6 +385,7 @@ async function loadPosts(dir, prefix) {
   for (const f of (await readdir(dir)).filter(f => f.endsWith(".md"))) {
     const { fm, body } = parseMd(await readFile(join(dir, f), "utf8"));
     if (fm.draft) continue;
+    if (fm.date > TODAY) { console.log(`ertelendi: ${rel}/${f} (${fm.date})`); continue; }
     if (!fm.image && cfg.defaultImage) fm.image = cfg.defaultImage;
     const g = git.get(`${rel}/${f}`);
     fm.updated = [fm.updated || g, fm.date].filter(Boolean).sort().at(-1);
