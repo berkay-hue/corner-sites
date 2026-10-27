@@ -409,7 +409,7 @@
       var sc = avgScore(x);
       var m = "Sayı " + x.no + (x.no === LATEST ? " · En yeni" : "") + " · " + x.cases.length + " dosya" + (sc === null ? "" : " · Karnen " + sc + "/100");
       return '<li><a href="/?s=' + x.no + '#oyun"><span class="bl-m">' + esc(m) + '</span><span class="bl-t">' +
-        esc(x.cases.map(function (c) { return c.company; }).join(", ")) + "</span></a></li>";
+        esc(x.cases.map(function (c) { return c.company; }).join(", ")) + '</span></a><a class="bl-x" href="/sayi/' + x.no + '">Sayı ' + x.no + ' vakalarını oku <span aria-hidden="true">→</span></a></li>';
     }).join("");
     sec.hidden = false;
   }
@@ -440,6 +440,9 @@
     load();
     renderCase(false);
     renderReport();
+    // blog altlığındaki /#arsiv: bölüm JS ile açılıyor ve üstündeki vaka/karne şimdi doldu; tarayıcının ilk kaydırması boşa gitmiş olabilir
+    var arsiv = document.getElementById("arsiv");
+    if (location.hash === "#arsiv" && arsiv && !arsiv.hidden) try { arsiv.scrollIntoView(); } catch (e) { /* kaydırma şart değil */ }
 
     elCase.addEventListener("click", function (e) {
       var b = e.target.closest("button");
