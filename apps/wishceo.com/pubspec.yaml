@@ -1,0 +1,48 @@
+name: wishceo
+description: "WishCEO: haftalık CEO karar oyunu (wishceo.com)."
+publish_to: 'none'
+
+# build-name = CFBundleShortVersionString / versionName,
+# build-number = CFBundleVersion / versionCode. Her mağaza yüklemesinde
+# build-number artmalı (README: Sürüm).
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.12.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  shared_preferences: ^2.5.5
+  share_plus: ^13.3.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  share_plus_platform_interface: ^7.2.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/career.json
+    # Uygulamayla gelen, açılmış sayılar (tool/bundle_issues.dart kopyalar).
+    # Yeni sayılar wishceo.com/sayilar/NNN.json'dan iner.
+    - assets/sayilar/
+    - assets/fonts/Roboto_LICENSE.txt
+
+  fonts:
+    - family: Roboto
+      fonts:
+        - asset: assets/fonts/Roboto-Regular.ttf
+        - asset: assets/fonts/Roboto-Italic.ttf
+          style: italic
+        - asset: assets/fonts/Roboto-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Roboto-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Roboto-Black.ttf
+          weight: 900

@@ -1,0 +1,1220 @@
+{
+ "company": "Lunavik",
+ "intro": [
+  "Lunavik çanta, ayakkabı ve giyim satan orta boy bir marka. Mağazaları var, internetten de satıyor. Yönetim kurulu seni yeni CEO olarak atadı.",
+  "Her kart bir çeyrek. Kartı sağa ya da sola kaydırarak karar verirsin. Her karar Nakit, Marka, Ekip ve Pazar payını değiştirir.",
+  "Bir gösterge 0’a ya da 100’e değerse kurul seni görevden alır. Ne kadar çok çeyrek dayanırsan o kadar iyi."
+ ],
+ "endings": {
+  "nakit_0": "Kasa boşaldı. Maaş gününden önce yönetim kurulu toplandı ve koltuğunu boşalttı.",
+  "nakit_100": "Kasada çok para var ama şirket yerinde sayıyor. Yatırımcılar “bu parayı neden kullanmıyorsun” diye sordu, cevabın yetmedi.",
+  "marka_0": "Şirketin adı artık kimseye bir şey ifade etmiyor. Kurul, markayı yeniden kuracak birini arıyor.",
+  "marka_100": "Herkes markayı konuşuyor ama ürün yetişemiyor; kurul vitrine değil işe bakan birini istedi.",
+  "ekip_0": "Ekibin en iyileri birer birer ayrıldı. Kalanlar kurula mektup yazdı; kurul okudu.",
+  "ekip_100": "Ekip seni çok seviyor ama kararları artık onlar veriyor. Kurul, “şirketi kim yönetiyor?” diye sordu.",
+  "pazar_0": "Raflarda adın kalmadı. Müşteriler rakiplere geçti, kurul da yeni bir isim aradı.",
+  "pazar_100": "Pazarın neredeyse tamamı senin. Rekabet kurumu inceleme başlattı, kurul geri adım atacak birini seçti."
+ },
+ "cards": [
+  {
+   "id": "fi01",
+   "who": "Finans direktörü",
+   "text": "Çantalara yüzde 15 zam yaparsak bu çeyrek kasa rahatlar. Müşteriler söylenir ama belki alışır. Etiketleri değiştirelim mi?",
+   "left": {
+    "label": "Fiyatı koru",
+    "fx": {
+     "nakit": -10,
+     "marka": 0,
+     "ekip": 0,
+     "pazar": 10
+    },
+    "tag": "kalkan"
+   },
+   "right": {
+    "label": "Zam yap",
+    "fx": {
+     "nakit": 20,
+     "marka": -5,
+     "ekip": 0,
+     "pazar": -10
+    },
+    "tag": "kasa"
+   }
+  },
+  {
+   "id": "fi02",
+   "who": "Yatırımcı",
+   "text": "Lunavik’e büyük bir yatırım yapmak istiyoruz. Karşılığında yönetim kurulunda iki koltuk ve hızlı bir büyüme planı isteriz. Var mısınız?",
+   "left": {
+    "label": "Bağımsız kal",
+    "fx": {
+     "nakit": 0,
+     "marka": 0,
+     "ekip": 10,
+     "pazar": -10
+    },
+    "tag": "kalkan"
+   },
+   "right": {
+    "label": "Parayı al",
+    "fx": {
+     "nakit": 20,
+     "marka": 0,
+     "ekip": -10,
+     "pazar": 5
+    },
+    "tag": "kumar"
+   }
+  },
+  {
+   "id": "fi03",
+   "who": "En büyük tedarikçi",
+   "text": "Kumaşı vadeli değil peşin öderseniz yüzde 8 indirim yaparız, ortaklığımız da güçlenir. Ama kasadan şimdi büyük para çıkar. Anlaştık mı?",
+   "left": {
+    "label": "Vadede kal",
+    "fx": {
+     "nakit": 10,
+     "marka": 0,
+     "ekip": 0,
+     "pazar": -5
+    },
+    "tag": "kasa"
+   },
+   "right": {
+    "label": "Peşin öde",
+    "fx": {
+     "nakit": -20,
+     "marka": 0,
+     "ekip": 0,
+     "pazar": 10
+    },
+    "tag": "kalkan"
+   }
+  },
+  {
+   "id": "fi04",
+   "who": "Rakip bir atölyenin sahibi",
+   "text": "Emekliye ayrılıyorum, atölyemi devretmek istiyorum. Ustalarım ve makinelerim sizin olsun ama fiyatım pek mütevazı değil. Alır mısınız?",
+   "left": {
+    "label": "Kibarca reddet",
+    "fx": {
+     "nakit": 10,
+     "marka": 0,
+     "ekip": 0,
+     "pazar": -10
+    },
+    "tag": "kasa"
+   },
+   "right": {
+    "label": "Atölyeyi al",
+    "fx": {
+     "nakit": -15,
+     "marka": 5,
+     "ekip": 5,
+     "pazar": 0
+    },
+    "tag": "kumar"
+   }
+  },
+  {
+   "id": "fi05",
+   "who": "Yönetim kurulu başkanı",
+   "text": "Merkezdeki mağazamızın binası satılığa çıktı. Alırsak kira biter ama kasanın büyük kısmı binaya bağlanır. Almazsak rakip alabilir. Alalım mı?",
+   "left": {
+    "label": "Kirada kal",
+    "fx": {
+     "nakit": 10,
+     "marka": 0,
+     "ekip": 0,
+     "pazar": -10
+    },
+    "tag": "kasa"
+   },
+   "right": {
+    "label": "Binayı al",
+    "fx": {
+     "nakit": -20,
+     "marka": 5,
+     "ekip": 0,
+     "pazar": 10
+    },
+    "tag": "kumar"
+   }
+  },
+  {
+   "id": "fi06",
+   "who": "Muhasebe ekibi",
+   "text": "Gider listesinde kimsenin kullanmadığı üç yazılım, boş duran bir depo ve pahalı ekip yemekleri var. Hepsini kesiyor muyuz?",
+   "left": {
+    "label": "Önce ekibe sor",
+    "fx": {
+     "nakit": -5,
+     "marka": 0,
+     "ekip": 10,
+     "pazar": 0
+    },
+    "tag": "kalkan"
+   },
+   "right": {
+    "label": "Hepsini kes",
+    "fx": {
+     "nakit": 15,
+     "marka": 0,
+     "ekip": -10,
+     "pazar": 0
+    },
+    "tag": "cerrah"
+   }
+  },
+  {
+   "id": "fi07",
+   "who": "Mağazalar müdürü",
+   "text": "Üç mağazamız iki yıldır kâr etmiyor. Kapatırsak kira yükü kalkar ama o semtlerdeki müdavimleri kaybederiz. Kapatalım mı?",
+   "left": {
+    "label": "Kapat",
+    "fx": {
+     "nakit": 15,
+     "marka": 0,
+     "ekip": -5,
+     "pazar": -10
+    },
+    "tag": "cerrah"
+   },
+   "right": {
+    "label": "Bir yıl daha ver",
+    "fx": {
+     "nakit": -10,
+     "marka": 5,
+     "ekip": 5,
+     "pazar": 0
+    },
+    "tag": "kalkan"
+   }
+  },
+  {
+   "id": "fi08",
+   "who": "Pazarlama direktörü",
+   "text": "Kasadaki yedek paranın yarısını yeni koleksiyonun lansmanına ayıralım. Herkes Lunavik’i konuşur ama kasa bir süre sıkışır. Onaylıyor musunuz?",
+   "left": {
+    "label": "Yedek kalsın",
+    "fx": {
+     "nakit": 10,
+     "marka": 0,
+     "ekip": 0,
+     "pazar": -10
+    },
+    "tag": "kasa"
+   },
+   "right": {
+    "label": "Lansmanı yap",
+    "fx": {
+     "nakit": -15,
+     "marka": 10,
+     "ekip": 0,
+     "pazar": 5
+    },
+    "tag": "kumar"
+   }
+  },
+  {
+   "id": "fi09",
+   "who": "Büyük bir moda grubunun temsilcisi",
+   "text": "Ayakkabı bölümünüzü satın almak istiyoruz, teklifimiz cömert. Satarsanız kasa büyür ama ayakkabı müşterileri başka markalara gider. Satıyor musunuz?",
+   "left": {
+    "label": "Satmıyoruz",
+    "fx": {
+     "nakit": -5,
+     "marka": 5,
+     "ekip": 5,
+     "pazar": 0
+    },
+    "tag": "kalkan"
+   },
+   "right": {
+    "label": "Bölümü sat",
+    "fx": {
+     "nakit": 20,
+     "marka": 0,
+     "ekip": -5,
+     "pazar": -10
+    },
+    "tag": "cerrah"
+   }
+  },
+  {
+   "id": "fi10",
+   "who": "Online satış ekibi",
+   "text": "Online mağazada kargoyu ücretsiz yaparsak sepetler büyür ama her siparişin kargosu bizim cebimizden çıkar. Ücretsiz yapalım mı?",
+   "left": {
+    "label": "Ücretli kalsın",
+    "fx": {
+     "nakit": 10,
+     "marka": 0,
+     "ekip": 0,
+     "pazar": -10
+    },
+    "tag": "kasa"
+   },
+   "right": {
+    "label": "Ücretsiz yap",
+    "fx": {
+     "nakit": -15,
+     "marka": 0,
+     "ekip": 0,
+     "pazar": 15
+    },
+    "tag": "kumar"
+   }
+  },
+  {
+   "id": "fi11",
+   "who": "Satış direktörü",
+   "text": "Rakip bir marka çantalarda yüzde 30 indirime girdi. Fiyatı daha da indirirsek pazarı alırız ama kâr marjımız erir. Fiyat rekabetine girelim mi?",
+   "left": {
+    "label": "Fiyatı indir",
+    "fx": {
+     "nakit": -15,
+     "marka": 0,
+     "ekip": 0,
+     "pazar": 15
+    },
+    "tag": "kumar"
+   },
+   "right": {
+    "label": "Kaliteye odaklan",
+    "fx": {
+     "nakit": 5,
+     "marka": 5,
+     "ekip": 0,
+     "pazar": -10
+    },
+    "tag": "cerrah"
+   }
+  },
+  {
+   "id": "fi12",
+   "who": "Bir banka temsilcisi",
+   "text": "Size düşük faizli bir kredi ayırdık. Kasa hemen rahatlar, yeni mağazalar açılır, taksitler de üç yıl sizi bekler. İmzalıyor musunuz?",
+   "left": {
+    "label": "Borç almayalım",
+    "fx": {
+     "nakit": 5,
+     "marka": 0,
+     "ekip": 0,
+     "pazar": -10
+    },
+    "tag": "kasa"
+   },
+   "right": {
+    "label": "Krediyi çek",
+    "fx": {
+     "nakit": 15,
+     "marka": 0,
+     "ekip": -5,
+     "pazar": 10
+    },
+    "tag": "kumar"
+   }
+  },
+  {
+   "id": "pa01",
+   "who": "Ürün müdürü",
+   "text": "Çocuklar için mini bir çanta ve ayakkabı serisi tasarladık. Ebeveynler sever, muhasebe pek sevmez. Üretime geçelim mi?",
+   "left": {
+    "label": "Rafa kaldır",
+    "fx": {
+     "nakit": 10,
+     "marka": 0,
+     "ekip": -10,
+     "pazar": 0
+    },
+    "tag": "kasa"
+   },
+   "right": {
+    "label": "Üretime geç",
+    "fx": {
+     "nakit": -15,
+     "marka": 0,
+     "ekip": 5,
+     "pazar": 15
+    },
+    "tag": "kumar"
+   }
+  },
+  {
+   "id": "pa02",
+   "who": "Online satış ekibi",
+   "text": "Her ay yaptığımız indirim haftası yüzünden müşteriler artık tam fiyattan almıyor, hep indirimi bekliyor. İndirim haftalarını kaldıralım mı?",
+   "left": {
+    "label": "İndirim sürsün",
+    "fx": {
+     "nakit": 10,
+     "marka": -10,
+     "ekip": 0,
+     "pazar": 0
+    },
+    "tag": "kasa"
+   },
+   "right": {
+    "label": "İndirimi kaldır",
+    "fx": {
+     "nakit": -10,
+     "marka": 10,
+     "ekip": 0,
+     "pazar": -5
+    },
+    "tag": "cerrah"
+   }
+  },
+  {
+   "id": "pa03",
+   "who": "Mağazalar müdürü",
+   "text": "Yeni bir şehirde iki mağazalık yer bulduk. Kiralar makul ama deneyimli ekibin bir kısmı oraya taşınmalı. Açalım mı?",
+   "left": {
+    "label": "Ekip kalsın",
+    "fx": {
+     "nakit": 5,
+     "marka": 0,
+     "ekip": 10,
+     "pazar": -5
+    },
+    "tag": "kalkan"
+   },
+   "right": {
+    "label": "Mağazaları aç",
+    "fx": {
+     "nakit": -15,
+     "marka": 0,
+     "ekip": -5,
+     "pazar": 15
+    },
+    "tag": "kumar"
+   }
+  },
+  {
+   "id": "pa04",
+   "who": "Finans direktörü",
+   "text": "Takım elbise serisi üç çeyrektir kâr etmiyor ama küçük, sadık bir müşteri kitlesi var. Seriyi kapatalım mı?",
+   "left": {
+    "label": "Devam etsin",
+    "fx": {
+     "nakit": -10,
+     "marka": 5,
+     "ekip": 5,
+     "pazar": 0
+    },
+    "tag": "kalkan"
+   },
+   "right": {
+    "label": "Seriyi kapat",
+    "fx": {
+     "nakit": 15,
+     "marka": -5,
+     "ekip": 0,
+     "pazar": -10
+    },
+    "tag": "cerrah"
+   }
+  },
+  {
+   "id": "pa05",
+   "who": "Büyük bir pazar yerinin temsilcisi",
+   "text": "Platformumuzda mağaza açın, milyonlarca alıcı sizi görsün. Karşılığında her satıştan komisyon alırız. Anlaştık mı?",
+   "left": {
+    "label": "Kendi sitemiz yeter",
+    "fx": {
+     "nakit": 5,
+     "marka": 5,
+     "ekip": 0,
+     "pazar": -5
+    },
+    "tag": "cerrah"
+   },
+   "right": {
+    "label": "Anlaşalım",
+    "fx": {
+     "nakit": -5,
+     "marka": -5,
+     "ekip": 0,
+     "pazar": 15
+    },
+    "tag": "kumar"
+   }
+  },
+  {
+   "id": "pa06",
+   "who": "Pazarlama ekibi",
+   "text": "Abonelere her ay sürpriz bir aksesuar kutusu gönderelim! Depo ekibi şimdiden kaş çatıyor. Abonelik modelini başlatalım mı?",
+   "left": {
+    "label": "Şimdilik hayır",
+    "fx": {
+     "nakit": 5,
+     "marka": 0,
+     "ekip": 5,
+     "pazar": -5
+    },
+    "tag": "kalkan"
+   },
+   "right": {
+    "label": "Aboneliği başlat",
+    "fx": {
+     "nakit": 0,
+     "marka": 5,
+     "ekip": -15,
+     "pazar": 10
+    },
+    "tag": "kumar"
+   }
+  },
+  {
+   "id": "pa07",
+   "who": "Yatırımcı",
+   "text": "Yurt dışındaki ilk mağazanızı bu çeyrek açarsanız yeni yatırım turuna ben öncülük ederim. Yavaş gitmeyi sevmem. Var mısınız?",
+   "left": {
+    "label": "Acele etmeyelim",
+    "fx": {
+     "nakit": 0,
+     "marka": 0,
+     "ekip": 10,
+     "pazar": -5
+    },
+    "tag": "kalkan"
+   },
+   "right": {
+    "label": "Yurt dışına açıl",
+    "fx": {
+     "nakit": 10,
+     "marka": 0,
+     "ekip": -10,
+     "pazar": 10
+    },
+    "tag": "kumar"
+   }
+  },
+  {
+   "id": "pa08",
+   "who": "Tasarım atölyesi",
+   "text": "Atölyede 300 adetlik, numaralı bir çanta serisi hazırladık. Fiyatı yüksek ama mağaza önünde sıra garanti. Satışa çıkaralım mı?",
+   "left": {
+    "label": "Ana seriye odaklan",
+    "fx": {
+     "nakit": 10,
+     "marka": -5,
+     "ekip": -5,
+     "pazar": 0
+    },
+    "tag": "cerrah"
+   },
+   "right": {
+    "label": "Satışa çıkar",
+    "fx": {
+     "nakit": -10,
+     "marka": 10,
+     "ekip": 0,
+     "pazar": 0
+    },
+    "tag": "kumar"
+   }
+  },
+  {
+   "id": "pa09",
+   "who": "Satış direktörü",
+   "text": "Bir toptancı stokun üçte birini peşin almak istiyor ama %40 iskonto şart. Tam fiyat ödeyenler ürünü her yerde ucuza görür. İmzalayalım mı?",
+   "left": {
+    "label": "Reddet",
+    "fx": {
+     "nakit": 0,
+     "marka": 5,
+     "ekip": 0,
+     "pazar": -5
+    },
+    "tag": "kalkan"
+   },
+   "right": {
+    "label": "İmzala",
+    "fx": {
+     "nakit": 20,
+     "marka": -10,
+     "ekip": 0,
+     "pazar": 5
+    },
+    "tag": "kasa"
+   }
+  },
+  {
+   "id": "pa10",
+   "who": "Bir müşteri temsilcisi",
+   "text": "Sadık müşteriler hep aynı şeyi soruyor: “Bize özel indirim yok mu?” Üyelere kalıcı %10 indirim verelim mi?",
+   "left": {
+    "label": "Üyelere %10",
+    "fx": {
+     "nakit": -15,
+     "marka": 5,
+     "ekip": 0,
+     "pazar": 10
+    },
+    "tag": "kalkan"
+   },
+   "right": {
+    "label": "Herkese aynı fiyat",
+    "fx": {
+     "nakit": 5,
+     "marka": -5,
+     "ekip": 0,
+     "pazar": -5
+    },
+    "tag": "kasa"
+   }
+  },
+  {
+   "id": "pa11",
+   "who": "Operasyon direktörü",
+   "text": "Katalogda 900 ürün var ama satışın çoğu 150 tanesinden geliyor. Depo da tıka basa dolu. Gerisini çıkarıp odaklanalım mı?",
+   "left": {
+    "label": "Çeşit bizim gücümüz",
+    "fx": {
+     "nakit": -10,
+     "marka": 0,
+     "ekip": 0,
+     "pazar": 5
+    },
+    "tag": "kalkan"
+   },
+   "right": {
+    "label": "Kataloğu sadeleştir",
+    "fx": {
+     "nakit": 15,
+     "marka": 0,
+     "ekip": 5,
+     "pazar": -10
+    },
+    "tag": "cerrah"
+   }
+  },
+  {
+   "id": "pa12",
+   "who": "Toptan satış müdürü",
+   "text": "Ayakkabılarımızı satan büyük bir mağaza zinciri ödemeleri hep geciktiriyor, ürünlerimizi de rafın en arkasına koyuyor. Anlaşmayı bitirelim mi?",
+   "left": {
+    "label": "Devam edelim",
+    "fx": {
+     "nakit": 10,
+     "marka": -10,
+     "ekip": 0,
+     "pazar": 5
+    },
+    "tag": "kasa"
+   },
+   "right": {
+    "label": "Anlaşmayı bitir",
+    "fx": {
+     "nakit": -10,
+     "marka": 10,
+     "ekip": 0,
+     "pazar": -10
+    },
+    "tag": "cerrah"
+   }
+  },
+  {
+   "id": "ek01",
+   "who": "İK direktörü",
+   "text": "Ekip haftada iki gün evden çalışıyor, ofis hep yarı boş. Ofisi tamamen kapatıp uzaktan çalışmaya geçelim mi?",
+   "left": {
+    "label": "Hibrit kalsın",
+    "fx": {
+     "nakit": -10,
+     "marka": 0,
+     "ekip": 10,
+     "pazar": 0
+    },
+    "tag": "kalkan"
+   },
+   "right": {
+    "label": "Ofisi kapat",
+    "fx": {
+     "nakit": 15,
+     "marka": -5,
+     "ekip": -5,
+     "pazar": 0
+    },
+    "tag": "cerrah"
+   }
+  },
+  {
+   "id": "ek02",
+   "who": "Finans direktörü",
+   "text": "Yıl iyi kapandı, ekip prim bekliyor. Kârın büyük kısmını primlere ayırırsak yeni sezona az para kalır. Cömert olalım mı?",
+   "left": {
+    "label": "Büyümeye yatır",
+    "fx": {
+     "nakit": 0,
+     "marka": 0,
+     "ekip": -10,
+     "pazar": 10
+    },
+    "tag": "kumar"
+   },
+   "right": {
+    "label": "Cömert prim",
+    "fx": {
+     "nakit": -15,
+     "marka": 0,
+     "ekip": 20,
+     "pazar": 0
+    },
+    "tag": "kalkan"
+   }
+  },
+  {
+   "id": "ek03",
+   "who": "Mağazalar müdürü",
+   "text": "En çok satan mağaza sorumlusunu bölge müdürü yapmak istiyorum. Ama o mağazanın satışları bir süre düşebilir. Terfi ettirelim mi?",
+   "left": {
+    "label": "Yerinde kalsın",
+    "fx": {
+     "nakit": 10,
+     "marka": 0,
+     "ekip": -10,
+     "pazar": 0
+    },
+    "tag": "kasa"
+   },
+   "right": {
+    "label": "Terfi ettir",
+    "fx": {
+     "nakit": -5,
+     "marka": 0,
+     "ekip": 10,
+     "pazar": -5
+    },
+    "tag": "kalkan"
+   }
+  },
+  {
+   "id": "ek04",
+   "who": "Tasarım direktörü",
+   "text": "Sektörde adı bilinen bir tasarımcı bize gelmeye hazır. Ama ekipteki herkesin iki katı maaş istiyor. Teklif verelim mi?",
+   "left": {
+    "label": "Kendi ekibimiz",
+    "fx": {
+     "nakit": 5,
+     "marka": -5,
+     "ekip": 10,
+     "pazar": 0
+    },
+    "tag": "kalkan"
+   },
+   "right": {
+    "label": "Teklif ver",
+    "fx": {
+     "nakit": -15,
+     "marka": 10,
+     "ekip": -5,
+     "pazar": 0
+    },
+    "tag": "kumar"
+   }
+  },
+  {
+   "id": "ek05",
+   "who": "Yeni satış müdürü",
+   "text": "İlk haftamda bütün satış süreçlerini baştan yazmak istiyorum. Ekip biraz homurdanıyor. Bana tam yetki verir misiniz?",
+   "left": {
+    "label": "Yavaş ilerle",
+    "fx": {
+     "nakit": 0,
+     "marka": 0,
+     "ekip": 5,
+     "pazar": -5
+    },
+    "tag": "kalkan"
+   },
+   "right": {
+    "label": "Tam yetki",
+    "fx": {
+     "nakit": 0,
+     "marka": 0,
+     "ekip": -15,
+     "pazar": 10
+    },
+    "tag": "cerrah"
+   }
+  },
+  {
+   "id": "ek06",
+   "who": "Tasarım ekibi",
+   "text": "Yurt dışında bir aylık tasarım atölyesi var. Hepimiz katılırsak bütçe zorlanır ama yeni sezona ilhamla döneriz. Bizi gönderir misiniz?",
+   "left": {
+    "label": "Online eğitim",
+    "fx": {
+     "nakit": 10,
+     "marka": 0,
+     "ekip": -5,
+     "pazar": 0
+    },
+    "tag": "kasa"
+   },
+   "right": {
+    "label": "Herkesi gönder",
+    "fx": {
+     "nakit": -15,
+     "marka": 5,
+     "ekip": 10,
+     "pazar": 0
+    },
+    "tag": "kumar"
+   }
+  },
+  {
+   "id": "ek07",
+   "who": "İK direktörü",
+   "text": "Çanta ve ayakkabı tasarım ekipleri ayrı çalışıyor, aynı işi çoğu zaman iki kez yapıyorlar. İki ekibi tek yöneticiye bağlayıp birleştirelim mi?",
+   "left": {
+    "label": "Ayrı kalsınlar",
+    "fx": {
+     "nakit": -10,
+     "marka": 0,
+     "ekip": 5,
+     "pazar": 0
+    },
+    "tag": "kalkan"
+   },
+   "right": {
+    "label": "Ekipleri birleştir",
+    "fx": {
+     "nakit": 10,
+     "marka": 0,
+     "ekip": -10,
+     "pazar": 0
+    },
+    "tag": "cerrah"
+   }
+  },
+  {
+   "id": "ek08",
+   "who": "Strateji danışmanı",
+   "text": "Toptan satış bölümü üç çeyrektir hedefin altında. Bölümü küçültüp bazı pozisyonları kapatalım mı?",
+   "left": {
+    "label": "Bölüme yatırım yap",
+    "fx": {
+     "nakit": -15,
+     "marka": 0,
+     "ekip": 5,
+     "pazar": 10
+    },
+    "tag": "kumar"
+   },
+   "right": {
+    "label": "Küçült",
+    "fx": {
+     "nakit": 15,
+     "marka": 0,
+     "ekip": -10,
+     "pazar": -5
+    },
+    "tag": "cerrah"
+   }
+  },
+  {
+   "id": "ek09",
+   "who": "Çalışan temsilcisi",
+   "text": "Ekip dört günlük çalışma haftası istiyor, verim düşmez diyorlar. Ama mağazalar yine her gün açık kalmalı. Deneyelim mi?",
+   "left": {
+    "label": "Beş gün kalsın",
+    "fx": {
+     "nakit": 5,
+     "marka": 0,
+     "ekip": -10,
+     "pazar": 5
+    },
+    "tag": "kasa"
+   },
+   "right": {
+    "label": "Deneyelim",
+    "fx": {
+     "nakit": -10,
+     "marka": 0,
+     "ekip": 20,
+     "pazar": 0
+    },
+    "tag": "kalkan"
+   }
+  },
+  {
+   "id": "ek10",
+   "who": "Ofis yöneticisi",
+   "text": "Dilek kutusu doldu: masa tenisi, kahve makinesi, cuma kahvaltısı. Ekip çok sevinir, bütçe pek sevmez. Hepsini onaylayalım mı?",
+   "left": {
+    "label": "Bu çeyrek değil",
+    "fx": {
+     "nakit": 10,
+     "marka": 0,
+     "ekip": -10,
+     "pazar": 0
+    },
+    "tag": "kasa"
+   },
+   "right": {
+    "label": "Hepsine evet",
+    "fx": {
+     "nakit": -15,
+     "marka": 0,
+     "ekip": 15,
+     "pazar": 0
+    },
+    "tag": "kalkan"
+   }
+  },
+  {
+   "id": "ek11",
+   "who": "Mağaza ekibi",
+   "text": "Mağazada kendi tasarladığımız üniformaları deniyoruz. Müşteriler bunlar satılık mı diye soruyor. Küçük bir koleksiyon yapalım mı?",
+   "left": {
+    "label": "Odak dağılmasın",
+    "fx": {
+     "nakit": 0,
+     "marka": 5,
+     "ekip": -10,
+     "pazar": 0
+    },
+    "tag": "cerrah"
+   },
+   "right": {
+    "label": "Koleksiyon yap",
+    "fx": {
+     "nakit": -10,
+     "marka": 5,
+     "ekip": 10,
+     "pazar": 0
+    },
+    "tag": "kalkan"
+   }
+  },
+  {
+   "id": "ek12",
+   "who": "Online satış ekibi",
+   "text": "Online siparişler kapasitemizi aştı. Ekibi ikiye katlarsak pazar payımız büyür ama maaş yükü de artar. İşe alım yapalım mı?",
+   "left": {
+    "label": "Önce sadeleştir",
+    "fx": {
+     "nakit": 10,
+     "marka": 0,
+     "ekip": -10,
+     "pazar": 0
+    },
+    "tag": "cerrah"
+   },
+   "right": {
+    "label": "İşe alımı başlat",
+    "fx": {
+     "nakit": -15,
+     "marka": 0,
+     "ekip": 5,
+     "pazar": 15
+    },
+    "tag": "kumar"
+   }
+  },
+  {
+   "id": "ma01",
+   "who": "Tasarım ekibi",
+   "text": "Çanta, ayakkabı ve giyimde üç ayrı logomuz var. Tek logoya geçersek tüm tabelalar değişir. Hepsini tek bir Lunavik logosunda toplayalım mı?",
+   "left": {
+    "label": "Üç logo kalsın",
+    "fx": {
+     "nakit": 10,
+     "marka": -10,
+     "ekip": 0,
+     "pazar": 0
+    },
+    "tag": "kasa"
+   },
+   "right": {
+    "label": "Tek logoda topla",
+    "fx": {
+     "nakit": -15,
+     "marka": 10,
+     "ekip": 0,
+     "pazar": -5
+    },
+    "tag": "cerrah"
+   }
+  },
+  {
+   "id": "ma02",
+   "who": "Pazarlama direktörü",
+   "text": "Adı çok konuşulan bağımsız bir tasarımcı bizimle ortak bir çanta serisi yapmak istiyor. İstediği pay yüksek ama ilgi büyük olur. Anlaşalım mı?",
+   "left": {
+    "label": "Kibarca reddet",
+    "fx": {
+     "nakit": 10,
+     "marka": -10,
+     "ekip": 5,
+     "pazar": 0
+    },
+    "tag": "kasa"
+   },
+   "right": {
+    "label": "Anlaş",
+    "fx": {
+     "nakit": -10,
+     "marka": 10,
+     "ekip": -5,
+     "pazar": 0
+    },
+    "tag": "kumar"
+   }
+  },
+  {
+   "id": "ma03",
+   "who": "Online satış ekibi",
+   "text": "Bir müşterinin ayakkabımızla dans ettiği video sosyal medyada milyonlarca kez izlendi. Stok az. Tanıtım bütçesi ekleyelim mi?",
+   "left": {
+    "label": "Ek bütçe yok",
+    "fx": {
+     "nakit": 10,
+     "marka": -10,
+     "ekip": 0,
+     "pazar": -5
+    },
+    "tag": "kasa"
+   },
+   "right": {
+    "label": "Dalgaya katıl",
+    "fx": {
+     "nakit": -10,
+     "marka": 15,
+     "ekip": 0,
+     "pazar": 5
+    },
+    "tag": "kumar"
+   }
+  },
+  {
+   "id": "ma04",
+   "who": "Bir müşteri temsilcisi",
+   "text": "Dikişi sökülen bir çanta hakkındaki şikâyet sosyal medyada hızla yayıldı. Açıkça özür dileyip ücretsiz değişim sunalım mı?",
+   "left": {
+    "label": "Özelden çöz",
+    "fx": {
+     "nakit": 10,
+     "marka": -15,
+     "ekip": 0,
+     "pazar": -5
+    },
+    "tag": "kasa"
+   },
+   "right": {
+    "label": "Açıkça özür dile",
+    "fx": {
+     "nakit": -10,
+     "marka": 10,
+     "ekip": 5,
+     "pazar": 0
+    },
+    "tag": "kalkan"
+   }
+  },
+  {
+   "id": "ma05",
+   "who": "En büyük tedarikçi",
+   "text": "Geri dönüştürülmüş kumaşa geçebiliriz, maliyet yüzde yirmi artar. Ya tüm koleksiyon geçer ya da fikir rafa kalkar. Geçiyor muyuz?",
+   "left": {
+    "label": "Fikri rafa kaldır",
+    "fx": {
+     "nakit": 10,
+     "marka": -10,
+     "ekip": -5,
+     "pazar": 0
+    },
+    "tag": "kasa"
+   },
+   "right": {
+    "label": "Tümüyle geç",
+    "fx": {
+     "nakit": -15,
+     "marka": 10,
+     "ekip": 5,
+     "pazar": 0
+    },
+    "tag": "kumar"
+   }
+  },
+  {
+   "id": "ma06",
+   "who": "Finans direktörü",
+   "text": "Ambalaj maliyeti ürün fiyatının yüzde onunu buldu. Şık kutuyu kaldırıp ürünleri sade bez torbayla gönderelim mi?",
+   "left": {
+    "label": "Kutu kalsın",
+    "fx": {
+     "nakit": -10,
+     "marka": 5,
+     "ekip": 0,
+     "pazar": 5
+    },
+    "tag": "kalkan"
+   },
+   "right": {
+    "label": "Kutuyu kaldır",
+    "fx": {
+     "nakit": 15,
+     "marka": -15,
+     "ekip": 0,
+     "pazar": 0
+    },
+    "tag": "cerrah"
+   }
+  },
+  {
+   "id": "ma07",
+   "who": "Basın sözcüsü",
+   "text": "Bir iş dergisi kapak röportajı istiyor. Yeni stratejini ilk kez orada anlatırsın; ekip de dergiden öğrenir. Kabul edelim mi?",
+   "left": {
+    "label": "Önce ekibe anlat",
+    "fx": {
+     "nakit": 0,
+     "marka": -10,
+     "ekip": 10,
+     "pazar": 0
+    },
+    "tag": "kalkan"
+   },
+   "right": {
+    "label": "Kapağa çık",
+    "fx": {
+     "nakit": 0,
+     "marka": 10,
+     "ekip": -15,
+     "pazar": 5
+    },
+    "tag": "kumar"
+   }
+  },
+  {
+   "id": "ma08",
+   "who": "Marka müdürü",
+   "text": "Pazarlama bütçesi yirmi ayrı ürüne bölünüyor ve hiçbiri akılda kalmıyor. Bütçenin tamamını tek bir imza çantaya verelim mi?",
+   "left": {
+    "label": "Bölmeye devam",
+    "fx": {
+     "nakit": 0,
+     "marka": -10,
+     "ekip": 0,
+     "pazar": 5
+    },
+    "tag": "kasa"
+   },
+   "right": {
+    "label": "Tek çantaya odaklan",
+    "fx": {
+     "nakit": 0,
+     "marka": 10,
+     "ekip": -5,
+     "pazar": -10
+    },
+    "tag": "cerrah"
+   }
+  },
+  {
+   "id": "ma09",
+   "who": "İletişim ajansı",
+   "text": "Sosyal medyada çok takip edilen genç bir stil yorumcusu marka yüzümüz olmak istiyor. Ama geçen ay rakibimizin çantasını övüyordu. Anlaşalım mı?",
+   "left": {
+    "label": "Çalışanlarımız olsun",
+    "fx": {
+     "nakit": 5,
+     "marka": -10,
+     "ekip": 10,
+     "pazar": 0
+    },
+    "tag": "kalkan"
+   },
+   "right": {
+    "label": "Yüzümüz olsun",
+    "fx": {
+     "nakit": -15,
+     "marka": 15,
+     "ekip": 0,
+     "pazar": 0
+    },
+    "tag": "kumar"
+   }
+  },
+  {
+   "id": "ma10",
+   "who": "Yatırımcı",
+   "text": "İki küçük mağazayı kapatıp yerine galeri gibi tek bir büyük vitrin mağazası açalım. Az ürün, ferah bir alan. Onaylıyor musun?",
+   "left": {
+    "label": "Mağazalar kalsın",
+    "fx": {
+     "nakit": 0,
+     "marka": -10,
+     "ekip": 5,
+     "pazar": 5
+    },
+    "tag": "kalkan"
+   },
+   "right": {
+    "label": "Vitrin mağazası aç",
+    "fx": {
+     "nakit": 0,
+     "marka": 10,
+     "ekip": -10,
+     "pazar": -10
+    },
+    "tag": "cerrah"
+   }
+  },
+  {
+   "id": "ma11",
+   "who": "Atölye şefi",
+   "text": "Bekleme listemiz üç aya çıktı, atölye yetişemiyor. Yeni sipariş almayı durdurup önce sıradakileri teslim edelim mi?",
+   "left": {
+    "label": "Siparişe devam",
+    "fx": {
+     "nakit": 0,
+     "marka": 5,
+     "ekip": -15,
+     "pazar": 10
+    },
+    "tag": "kumar"
+   },
+   "right": {
+    "label": "Siparişleri durdur",
+    "fx": {
+     "nakit": -10,
+     "marka": -10,
+     "ekip": 10,
+     "pazar": 0
+    },
+    "tag": "cerrah"
+   }
+  },
+  {
+   "id": "ma12",
+   "who": "Mağazalar müdürü",
+   "text": "Merkez mağazanın yanındaki dükkân boşaldı. Orada Lunavik adıyla küçük bir kafe açarsak gelen müşteri artar ama bu bizim işimiz değil. Açalım mı?",
+   "left": {
+    "label": "İşimize odaklan",
+    "fx": {
+     "nakit": 10,
+     "marka": -10,
+     "ekip": 0,
+     "pazar": 0
+    },
+    "tag": "cerrah"
+   },
+   "right": {
+    "label": "Kafeyi aç",
+    "fx": {
+     "nakit": -15,
+     "marka": 10,
+     "ekip": 0,
+     "pazar": 5
+    },
+    "tag": "kumar"
+   }
+  }
+ ]
+}
