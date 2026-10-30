@@ -1,0 +1,7 @@
+# Bu dosyayı ~/.wishceo/key.properties olarak kopyala ya da yolunu
+# WISHCEO_KEY_PROPERTIES ile ver. Değerleri yalnız kendi makinende doldur;
+# gerçek key.properties ve .jks depoya girmez (android/.gitignore).
+storeFile=/Users/<kullanici>/.wishceo/upload-keystore.jks
+storePassword=
+keyAlias=upload
+keyPassword=
