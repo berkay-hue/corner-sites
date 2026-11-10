@@ -143,6 +143,7 @@ CREATE TABLE IF NOT EXISTS meta_events (
 --   0005_notify.sql   bildirim tercihleri (users.notify, JSON; yalnız saklama, gönderim yok)
 --   0006_posts.sql    elle girilen gönderi ölçümleri (posts, post_snaps; POSTS_ENABLED = "1" ile açılır)
 --   0007_post_source.sql  bağlı hesaptan aktarılan gönderiler (posts.account_id; bağ koparılınca silinir)
+--   0008_linkedin.sql      LinkedIn üye analitiği toplamları (metric_snapshots.total_*: gösterim, erişim, tepki, yorum, paylaşım)
 --   0009_audience.sql      hesap kitle dağılımı (yaş, cinsiyet, ülke, şehir)
 --   0010_post_audience.sql gönderi başına kitle dağılımı (posts.audience)
 --   0011_meta_scoped.sql   Instagram hesabının uygulamaya özel kimliği (Meta deauthorize / veri silme eşleşmesi)

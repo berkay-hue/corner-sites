@@ -289,7 +289,7 @@ dialog.onb{width:100%;max-width:100%;margin:auto 0 0;max-height:92%;border-width
 .tabbar a[aria-current]{color:var(--accent-text);font-weight:600}.tabbar .i{width:22px;height:22px}
 .tabbar .cnt{position:absolute;top:4px;left:calc(50% + 6px);margin:0;min-width:18px;height:18px;padding:0 5px;font-size:11px;line-height:18px}
 .main-col{padding-bottom:calc(64px + env(safe-area-inset-bottom))}
-.stats,.mets,.mets.m4{grid-template-columns:repeat(2,minmax(0,1fr))}.stats .stat .v{font-size:22px}.stats .stat{padding:14px}[data-spot]{scroll-margin-top:72px}.mets .stat:last-child{grid-column:1/-1}.mets.m4 .stat:last-child{grid-column:auto}
+.stats,.mets,.mets.m4{grid-template-columns:repeat(2,minmax(0,1fr))}.stats .stat .v{font-size:22px}.stats .stat{padding:14px}[data-spot]{scroll-margin-top:72px}.mets .stat:last-child{grid-column:1/-1}.mets.m4 .stat:last-child,.mets.m6 .stat:last-child{grid-column:auto}
 .btn,.btn.sm,.ghost{min-height:44px}.inbox li{padding:12px 16px;flex-wrap:wrap}.inbox .btn{margin-left:48px}.nf .nfa{padding:12px 16px}
 .ph h1,.wrapw>h1{font-size:22px}.box{padding:16px}.ch,.cb{padding-left:16px;padding-right:16px}.oc,.irow,.legend{padding-left:16px;padding-right:16px}.grid2{grid-template-columns:1fr}.prow{grid-template-columns:1fr 1fr}.prow>div:last-child{grid-column:1/-1}}
 @media(max-width:760px){.cmdk-m{display:flex;align-items:center;justify-content:center;width:44px;height:44px;border:0;background:none;padding:0;cursor:pointer;border-radius:50%;color:var(--muted)}.cmdk-m .i{width:22px;height:22px}
@@ -396,7 +396,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       pConn: "Otomatik bağlantılar", pConnOff: "Otomatik ölçüm çekme henüz açık değil. O zamana kadar gönderilerini elle ya da CSV ile ekleyebilirsin.",
       pConnSync: "Hesap bağlı; gönderilerin her gün otomatik çekilir.", pConnOk: "Bağlı", pConnHow: "Bağladığında gönderilerin buraya kendiliğinden gelir.", pConnGo: "Bağla",
       psPosts: "Gönderi", psReach: "Toplam erişim", psPer: "Gönderi başına {n}", psEr: "Ortalama etkileşim oranı", psEng: "{n} beğeni ve yorum", psTop: "En çok erişen", psFirst: "İlk gönderini ekle",
-      pLiNote: "LinkedIn kişisel gönderi ölçümlerini dışarıya vermiyor; LinkedIn gönderilerini elle ya da CSV ile ekle.",
+      pLiNote: "LinkedIn bağlantısı takipçi sayını ve tüm gönderilerinin toplam ölçümlerini getirir; tek tek LinkedIn gönderilerini elle ya da CSV ile ekle.",
       pOlder: "Daha eskileri getir", pOlderNote: "Otomatik senkron her hesaptan en yeni gönderileri alır: Instagram ve YouTube'da 200, TikTok'ta 100. Daha eskilerini görmek için \"Daha eskileri getir\"e bas; her basışta 200 gönderi daha gelir, hesabında toplam en çok 1000 gönderi tutulur.",
       pOlderAdded: "{n} eski gönderi eklendi.", pOlderMore: "Daha eskileri için yeniden bas.", pOlderEnd: "Bu hesabın tüm gönderileri geldi.", pOlderNone: "Bu hesapta getirilecek daha eski gönderi yok.",
       pOlderFull: "Gönderi sınırına (1000) ulaştın; daha fazla gönderi eklenemez.", pOlderBusy: "Bu hesap şu an güncelleniyor; birkaç dakika sonra yeniden dene.",
@@ -426,7 +426,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       socNotConf: "Bu platform için bağlantı henüz yapılandırılmadı.", socNotConfS: "Yapılandırılmadı", socErrS: "Hata", socNoApi: "API yok", socReconnect: "Yeniden bağla", socAwait: "Metrik onayı bekleniyor", socSoonOwn: "Marka ve ajans hesapları için bağlantı yakında", socLeadOwn: "Kurumsal sosyal hesaplarını resmî bağlantıyla bağla.", socLiName: "LinkedIn (kişisel profil)", socLiNote: "Kendi LinkedIn profilin bağlanır.", socLiRevoke: "LinkedIn tarafındaki izni LinkedIn ayarlarından kaldırabilirsin.", socLiGo: "LinkedIn ayarları", socErrOff: "Son eşitleme başarısız; bağlama açılınca yeniden bağlanabilir.", setSocLead: "Hesap bağlantıları profil sayfasında.", setSocGo: "Profil > Sosyal hesaplar", socOff: "Hesap bağlama şu an kapalı.", onbTitle: "Hoş geldin! Hesaplarını bağla", onbLead: "Sosyal hesaplarını resmî bağlantıyla bağla; takipçi ve etkileşim verilerin markalara doğrulanmış olarak görünür.", onbLeadOwn: "Kurumsal sosyal hesaplarını resmî bağlantıyla bağla.", onbHint: "İstediğin zaman Profil > Sosyal hesaplar bölümünden de bağlayabilirsin.", onbSkip: "Şimdilik geç", socOffRow: "Bağlama yakında açılacak",
       socSample: "örnek", socSampleNote: "Ölçüm bağlantısı henüz açık değil. Aşağıdaki sayılar gerçek değil, yalnızca nasıl görüneceğini gösteren örnek verilerdir.",
       socSampleNone: "Profiline Instagram, TikTok ya da YouTube eklersen örnek ölçümleri burada görürsün.",
-      socFol: "Takipçi", socViews: "Ort. izlenme", socLikes: "Ort. beğeni", socComm: "Ort. yorum", socNoPosts: "Henüz paylaşım yok",
+      socFol: "Takipçi", socViews: "Ort. izlenme", socLikes: "Ort. beğeni", socComm: "Ort. yorum", socImp: "Toplam gösterim", socReach: "Erişilen üye", socReact: "Toplam tepki", socCommT: "Toplam yorum", socShare: "Toplam paylaşım", socNoPosts: "Henüz paylaşım yok",
       socDone: "{n} hesabın bağlandı.", socCutOk: "{n} bağlantısı kesildi.", socDenied: "Bağlantı izni verilmedi; istersen yeniden deneyebilirsin.",
       socTaken: "Bu hesap başka bir Brand Corner hesabına bağlı. Önce oradan bağlantıyı kes.", socTicket: "Bağlantı süresi doldu ya da geçersiz; yeniden \"Bağla\"ya bas.",
       socForbidden: "Bu hesap için bağlantı kullanılamıyor.", socProvider: "Platform şu an yanıt vermedi; biraz sonra yeniden dene.", socOwner: "Bu bağlantı başka bir hesaptan başlatıldı, yeniden Bağla'ya bas.",
@@ -615,7 +615,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       pConn: "Automatic connections", pConnOff: "Automatic metric sync isn't live yet. Until then you can add your posts by hand or with a CSV.",
       pConnSync: "Account connected; your posts sync automatically every day.", pConnOk: "Connected", pConnHow: "Once connected, your posts arrive here on their own.", pConnGo: "Connect",
       psPosts: "Posts", psReach: "Total reach", psPer: "{n} per post", psEr: "Average engagement rate", psEng: "{n} likes and comments", psTop: "Top by reach", psFirst: "Add your first post",
-      pLiNote: "LinkedIn doesn't share personal post metrics with other apps; add LinkedIn posts by hand or with a CSV.",
+      pLiNote: "Connecting LinkedIn brings in your follower count and totals across all your posts; add individual LinkedIn posts by hand or with a CSV.",
       pOlder: "Load older posts", pOlderNote: "Automatic sync picks up the newest posts from each account: 200 on Instagram and YouTube, 100 on TikTok. To see older ones, press \"Load older posts\"; each press brings 200 more, and your account keeps at most 1000 posts in total.",
       pOlderAdded: "{n} older posts added.", pOlderMore: "Press again for older ones.", pOlderEnd: "All posts from this account are in.", pOlderNone: "This account has no older posts to load.",
       pOlderFull: "You've reached the 1000-post limit; no more posts can be added.", pOlderBusy: "This account is updating right now; try again in a few minutes.",
@@ -645,7 +645,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       socNotConf: "Connections for this platform aren't set up yet.", socNotConfS: "Not configured", socErrS: "Error", socNoApi: "No API", socReconnect: "Reconnect", socAwait: "Awaiting metrics approval", socSoonOwn: "Connections for brand and agency accounts are coming soon", socLeadOwn: "Connect your company's social accounts officially.", socLiName: "LinkedIn (personal profile)", socLiNote: "Connects your own LinkedIn profile.", socLiRevoke: "You can remove the permission on LinkedIn's side in your LinkedIn settings.", socLiGo: "LinkedIn settings", socErrOff: "Last sync failed; you can reconnect once connections reopen.", setSocLead: "Account connections live on your profile page.", setSocGo: "Profile > Social accounts", socOff: "Account connections are turned off right now.", onbTitle: "Welcome! Connect your accounts", onbLead: "Connect your social accounts officially; your follower and engagement data shows to brands as verified.", onbLeadOwn: "Connect your company's social accounts officially.", onbHint: "You can also connect them any time under Profile > Social accounts.", onbSkip: "Skip for now", socOffRow: "Connecting opens soon",
       socSample: "sample", socSampleNote: "Metric connections aren't live yet. The numbers below are not real; they're sample data showing how this will look.",
       socSampleNone: "Add Instagram, TikTok or YouTube to your profile to see sample metrics here.",
-      socFol: "Followers", socViews: "Avg. views", socLikes: "Avg. likes", socComm: "Avg. comments", socNoPosts: "No posts yet",
+      socFol: "Followers", socViews: "Avg. views", socLikes: "Avg. likes", socComm: "Avg. comments", socImp: "Total impressions", socReach: "Members reached", socReact: "Total reactions", socCommT: "Total comments", socShare: "Total reshares", socNoPosts: "No posts yet",
       socDone: "Your {n} account is connected.", socCutOk: "{n} disconnected.", socDenied: "Permission wasn't granted; you can try again.",
       socTaken: "This account is linked to another Brand Corner account. Disconnect it there first.", socTicket: "The connection expired or is invalid; press \"Connect\" again.",
       socForbidden: "Connections aren't available for this account.", socProvider: "The platform didn't respond; try again shortly.", socOwner: "This connection was started from another account; press Connect again.",
@@ -857,6 +857,14 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
     return /^\d{4}-\d{2}-\d{2}$/.test(s || "") ? new Date(s + "T00:00:00Z").toLocaleDateString(locale(), { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" }) : "";
   }
   function num(n) { return Number(n || 0).toLocaleString(locale()); }
+  // Hesap ölçüm kutuları [metin anahtarı, değer]: LinkedIn ortalama vermez; takipçi ve tüm gönderilerin toplamları gelir
+  function metList(a) {
+    var tt = a.totals;
+    if (tt) return [["socFol", a.followers], ["socImp", tt.impressions], ["socReach", tt.reach], ["socReact", tt.reactions], ["socCommT", tt.comments], ["socShare", tt.reshares]];
+    return [["socFol", a.followers], ["socViews", a.avg_views], ["socLikes", a.avg_likes], ["socComm", a.avg_comments]];
+  }
+  // Hesap bağlı ama hiç paylaşımı yok (posts_sampled 0). LinkedIn gönderi listesi çekmediği için hep 0 yazar; toplamları (totals) varsa sayılmaz
+  function noPosts(a) { return !a.totals && a.posts_sampled === 0; }
   function money(n, cur) {
     try { return new Intl.NumberFormat(locale(), { style: "currency", currency: cur || "TRY", minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(n); }
     catch (e) { return num(n) + " " + (cur || ""); }
@@ -2658,10 +2666,10 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
         el("div", { class: "cb" }, [quiet ? null : el("p", { class: "muted", text: t(own ? "socLeadOwn" : "socLead") }), m, ok, kids]));
     }
     function mets(a, sample) {
-      return el("div", { class: "mets m4" }, [["followers", "socFol"], ["avg_views", "socViews"], ["avg_likes", "socLikes"], ["avg_comments", "socComm"]].map(function (k) {
+      return el("div", { class: a.totals ? "mets m6" : "mets m4" }, metList(a).map(function (k) {
         // posts_sampled 0: hesap bağlı ama hiç paylaşımı yok, ortalama yerine bunu söyle
-        var v = a[k[0]], has = typeof v === "number", none = !has && k[0] !== "followers" && a.posts_sampled === 0;
-        return el("div", { class: "stat" }, [el("div", { class: "k", text: t(k[1]) }), el("div", { class: has ? "v" : "v na", text: has ? num(v) : t(none ? "socNoPosts" : "noData") }), sample ? el("span", { class: "vh", text: t("socSample") }) : null]);
+        var v = k[1], has = typeof v === "number", none = !has && k[0] !== "socFol" && noPosts(a);
+        return el("div", { class: "stat" }, [el("div", { class: "k", text: t(k[0]) }), el("div", { class: has ? "v" : "v na", text: has ? num(v) : t(none ? "socNoPosts" : "noData") }), sample ? el("span", { class: "vh", text: t("socSample") }) : null]);
       }));
     }
     // `configured` yoksa (PR4) not_configured/no_api dışındakiler yapılandırılmış sayılır
@@ -3651,10 +3659,11 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
     acc = acc.filter(function (a) { return a && PL[a.platform]; });
     if (!acc.length) return el("p", { class: "meta", text: t("drNoPlat") });
     return el("ul", { class: "cacc" }, acc.map(function (a) {
-      var none = a.posts_sampled === 0, keys = none ? [["followers", "socFol"]] : [["followers", "socFol"], ["avg_views", "socViews"], ["avg_likes", "socLikes"], ["avg_comments", "socComm"]];
+      // metList'in ilki hep takipçi; paylaşım yoksa yalnız takipçi + "Henüz paylaşım yok"
+      var none = noPosts(a), keys = none ? metList(a).slice(0, 1) : metList(a);
       return el("li", null, [el("div", { class: "pmeta" }, [el("b", { text: PL[a.platform] + (a.handle ? " · " + a.handle : "") }), sample ? el("span", { class: "badge b-sample", text: t("socSample") }) : null]),
         el("div", { class: "pmeta" }, keys.map(function (k) {
-          return el("span", null, [el("b", { text: typeof a[k[0]] === "number" ? short(a[k[0]]) : "—" }), " " + t(k[1])]);
+          return el("span", null, [el("b", { text: typeof k[1] === "number" ? short(k[1]) : "—" }), " " + t(k[0])]);
         }).concat(none ? [el("span", { text: t("socNoPosts") })] : []))]);
     }));
   }

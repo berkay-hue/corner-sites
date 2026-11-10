@@ -6,7 +6,7 @@
 // Şifre sıfırlama: tek kullanımlık, RESET_MINUTES geçerli link; e-posta Gmail SMTP ile (src/smtp.js, SMTP_USER hesabından).
 // MAIL binding'i yalnızca MAIL_TO adresine gönderebildiği için o kullanılmaz.
 
-import { OAUTH, SYNCED, LISTED, CONNECTABLE, oauthReady, listConnections, startOAuth, finishOAuth, disconnectOAuth, OAuthFail, returnBase, fetchOlderPosts, ProviderError, fetchPostAudience, postAudSkip, MISSING, batchOr } from "./oauth.js";
+import { OAUTH, LISTED, CONNECTABLE, oauthReady, listConnections, startOAuth, finishOAuth, disconnectOAuth, OAuthFail, returnBase, fetchOlderPosts, OLDER_SYNCED, ProviderError, fetchPostAudience, postAudSkip, MISSING, batchOr } from "./oauth.js";
 import { smtpReady, smtpSend, smtpFrom } from "./smtp.js";
 import { metricsEnabled, accountMetrics, linkMetrics, parseAudience } from "./metrics.js";
 import { NICHE_LIST } from "./classify.js";
@@ -917,7 +917,7 @@ const olderPosts = postsRoute(async c => {
   need(ROLES.includes(user.role));
   need(metricsEnabled(env), "disabled", 409);
   const p = c.body.platform;
-  need(SYNCED.includes(p), "platform", 400);
+  need(OLDER_SYNCED.includes(p), "platform", 400);
   if (await attempts(env, "older", "email", user.email, 60, false) >= OLDER_RATE) throw new Bad("rate", 429);
   await attempt(env, c.ip, user.email, "older", 1);
   let r;
