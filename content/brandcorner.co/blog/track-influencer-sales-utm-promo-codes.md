@@ -31,33 +31,33 @@ If you rely on one method alone, you will undercount. For the bigger picture of 
 
 UTM parameters are tags added to the end of a URL. Analytics tools such as Google Analytics 4 read them and attribute the visit accordingly. There are five standard parameters:
 
-- **utm_source**: where the traffic comes from (e.g., `instagram`, `tiktok`, `youtube`)
-- **utm_medium**: the type of channel (for creators, use `influencer` consistently)
-- **utm_campaign**: the campaign name (e.g., `spring_launch_2025`)
-- **utm_content**: the specific creator or asset (e.g., `jane_doe_reel1`)
+- **utm_source**: where the traffic comes from (e.g., instagram, tiktok, youtube)
+- **utm_medium**: the type of channel (for creators, use influencer consistently)
+- **utm_campaign**: the campaign name (e.g., spring_launch_2025)
+- **utm_content**: the specific creator or asset (e.g., jane_doe_reel1)
 - **utm_term**: optional; useful for tracking a content angle or hook variant
 
 A complete link might look like this:
 
-`https://yourbrand.com/serum?utm_source=instagram&utm_medium=influencer&utm_campaign=spring_launch_2025&utm_content=janedoe_reel1`
+https://yourbrand.com/serum?utm_source=instagram&utm_medium=influencer&utm_campaign=spring_launch_2025&utm_content=janedoe_reel1
 
 ### What naming convention should you use?
 
-Naming discipline matters more than anything else in this process. GA4 treats `Instagram`, `instagram`, and `IG` as three separate sources. A sloppy convention will split one creator's results across several rows.
+Naming discipline matters more than anything else in this process. GA4 treats Instagram, instagram, and IG as three separate sources. A sloppy convention will split one creator's results across several rows.
 
 Follow these rules:
 
 1. **Always lowercase.** No exceptions.
 2. **Use underscores, not spaces or hyphens.** Choose one separator and stick with it.
-3. **Keep medium fixed.** Every creator link uses `utm_medium=influencer`. This lets you filter all creator traffic in one click.
-4. **Put the creator handle in utm_content.** Add an asset suffix if they post more than once (`janedoe_story1`, `janedoe_reel2`).
+3. **Keep medium fixed.** Every creator link uses utm_medium=influencer. This lets you filter all creator traffic in one click.
+4. **Put the creator handle in utm_content.** Add an asset suffix if they post more than once (janedoe_story1, janedoe_reel2).
 5. **Store every link in a shared tracker** before it goes out. Include columns for creator, platform, campaign, full URL, short URL, promo code, and posting date.
 
 Create links from a template in a spreadsheet so nobody types parameters by hand. A simple concatenation formula prevents most typos.
 
 ### Should you shorten UTM links?
 
-Yes, when the link appears on screen or gets read aloud. A long UTM string looks spammy in a bio and is impossible to remember from a podcast or video. Use a branded short link (e.g., `yourbrand.co/jane`) that redirects to the full UTM URL. Test every redirect to confirm the parameters survive. Some redirect setups strip query strings, and you won't notice until the report comes back empty.
+Yes, when the link appears on screen or gets read aloud. A long UTM string looks spammy in a bio and is impossible to remember from a podcast or video. Use a branded short link (e.g., yourbrand.co/jane) that redirects to the full UTM URL. Test every redirect to confirm the parameters survive. Some redirect setups strip query strings, and you won't notice until the report comes back empty.
 
 ## How do you set up promo codes that attribute correctly?
 
@@ -65,7 +65,7 @@ A promo code is only useful for attribution if it is unique to one creator and y
 
 ### Make codes creator-specific and memorable
 
-Formats like `JANE15` or `MAYA20` work well. They are short, easy to say aloud, and they identify the creator immediately. Avoid generic codes like `SPRING15` shared across several creators, because that makes attribution impossible.
+Formats like JANE15 or MAYA20 work well. They are short, easy to say aloud, and they identify the creator immediately. Avoid generic codes like SPRING15 shared across several creators, because that makes attribution impossible.
 
 ### Decide on discount depth deliberately
 
@@ -103,7 +103,7 @@ Every platform handles links differently, so tailor your instructions:
 - **Instagram Stories:** Link stickers are clickable, so this is where UTMs shine. Ask for the sticker on at least one frame.
 - **TikTok:** Bio links and in-app shop features vary by account type and region. Have creators say the code on screen *and* show it as a text overlay.
 - **YouTube:** Description links are clickable and searchable long after posting, so use the full UTM link there and mention the code verbally.
-- **Podcasts and live streams:** Use a vanity URL (`yourbrand.com/jane`) that redirects with UTMs, plus a code. Expect most attribution to come from the code.
+- **Podcasts and live streams:** Use a vanity URL (yourbrand.com/jane) that redirects with UTMs, plus a code. Expect most attribution to come from the code.
 
 For shoppable formats where purchases happen inside the platform, native analytics may replace UTMs entirely. Our guide on [launching creator-led social commerce campaigns](/blog/creator-led-social-commerce-campaigns) explains how to measure those.
 
@@ -121,8 +121,8 @@ This is where most teams double-count. The goal is to count each order exactly o
 
 Suppose a skincare brand runs a three-week campaign with creator "Jane" (illustrative numbers):
 
-- Analytics shows **38 orders** with `utm_content=janedoe_*`.
-- The ecommerce platform shows **61 orders** using code `JANE15`.
+- Analytics shows **38 orders** with utm_content=janedoe_*.
+- The ecommerce platform shows **61 orders** using code JANE15.
 - Matching on order ID, **27 orders** appear in both lists.
 
 Unique attributed orders = 38 + 61 − 27 = **72 orders**. At a $55 average order value after discount, that's $3,960 in attributed revenue. If Jane's fee was $1,200 plus $150 in product, attributed revenue relative to cost is roughly 2.9x. Gross profit and repeat purchases then determine whether that's a good result.
