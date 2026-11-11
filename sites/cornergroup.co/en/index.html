@@ -143,6 +143,7 @@
                 @keyframes slideIn { from { opacity:0; transform:translateY(30px); } to { opacity:1; transform:translateY(0); } }
                 @keyframes spin { to { transform: rotate(360deg); } }
                 @keyframes indProg { from { width:0%; } to { width:100%; } }
+                [style*=";color:#555"]:not([disabled]):not(.mb-tab-active), [style^="color:#555"]:not([disabled]):not(.mb-tab-active), [style*=";color:#666"]:not([disabled]):not(.mb-tab-active), [style^="color:#666"]:not([disabled]):not(.mb-tab-active) { color: #8a8a8a !important; } [style*=";color:#777"] { color: #8f8f8f !important; } svg text[fill="#555"] { fill: #8a8a8a; }
                 .mb-btn-shine { background: linear-gradient(110deg, #FFB71B 0%, #FFD24A 40%, #FFFFFF 50%, #FFD24A 60%, #FFB71B 100%); background-size: 200% 100%; animation: shine 3s linear infinite; }
                 .mb-fade-up { animation: fadeUp .5s cubic-bezier(.16,1,.3,1) both; }
                 .mb-slide-in { animation: slideIn .4s cubic-bezier(.16,1,.3,1) both; }
