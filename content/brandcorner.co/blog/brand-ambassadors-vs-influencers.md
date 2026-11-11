@@ -180,4 +180,4 @@ Both can drive sales, but they do so differently. Influencers can create sharp s
 
 The choice between brand ambassadors and influencers isn't really either-or. Influencers give you reach, speed, and a low-risk way to test audiences and messages. Ambassadors give you trust, consistency, and content that keeps paying off over time. The strongest programs use influencer campaigns to find great partners, then turn the best of them into long-term ambassadors with clear contracts, fair pay, and measurement windows that match how each model performs.
 
-If you're deciding how to structure your creator partnerships or want help finding and vetting the right people, [get in touch with the Brand Corner team](/) and we'll help you build a program that fits your goals.
+If you're deciding how to structure your creator partnerships or want help finding and vetting the right people, [get in touch with the Brand Corner team](/contact) and we'll help you build a program that fits your goals.
