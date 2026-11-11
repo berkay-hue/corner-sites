@@ -188,7 +188,7 @@ I've also found that AI tools now help with preparation: summarizing call notes,
 
 A weekly pipeline review that works isn't complicated. It needs clear stage definitions, a CRM that's updated before the meeting, a tight agenda, evidence-based questions, and written commitments that carry into the following week. Separate it from your forecast call and your deal coaching. Give the most airtime to the deals and problems that matter most. Make it safe to close dead deals. Over a few months, you'll find your forecast gets more accurate, your reps get sharper, and the meeting becomes something people value rather than endure.
 
-If you're building or rebuilding a sales process and want to compare notes on pipeline management, outbound, or scaling a B2B team, I'd be glad to hear from you. You can reach me through [my personal site](/).
+If you're building or rebuilding a sales process and want to compare notes on pipeline management, outbound, or scaling a B2B team, I'd be glad to hear from you. You can reach me through [my personal site](/#contact).
 
 ## FAQ
 

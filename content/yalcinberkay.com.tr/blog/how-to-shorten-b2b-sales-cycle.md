@@ -217,7 +217,7 @@ The B2B sales cycle usually gets longer not because the customer is slow, as is 
 
 My most important piece of advice is this: open your CRM today and see which stage your opportunities wait in the longest. Start your first improvement there.
 
-If you'd like to exchange ideas on analysing your sales cycle, setting up your outbound process or making your sales operations more efficient, you can get in touch with me through the [Berkay Yalçın](/) page.
+If you'd like to exchange ideas on analysing your sales cycle, setting up your outbound process or making your sales operations more efficient, you can get in touch with me through the [Berkay Yalçın](/about) page.
 
 ## Frequently asked questions
 

@@ -194,4 +194,4 @@ Templates are useful for structure, but the content must come from your own deal
 
 A sales playbook turns what your best people know into something the whole team can use. Start with clear ICP filters and stage definitions, add real examples from won deals, test the draft with a small group, and review it on a regular schedule. Done well, it shortens ramp time, improves forecast accuracy, and reduces your dependence on any single rep.
 
-If you are building or scaling a B2B sales team and want to talk through your playbook, outbound strategy, or sales hiring, feel free to [get in touch with me here](/). I am always happy to exchange ideas with founders and sales leaders.
+If you are building or scaling a B2B sales team and want to talk through your playbook, outbound strategy, or sales hiring, feel free to [get in touch with me here](/contact). I am always happy to exchange ideas with founders and sales leaders.

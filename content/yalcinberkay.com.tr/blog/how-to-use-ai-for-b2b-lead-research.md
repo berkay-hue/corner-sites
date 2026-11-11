@@ -176,4 +176,4 @@ Re-verify any contact you haven't engaged in the last few months before adding t
 
 AI has made B2B lead research dramatically faster, but speed without accuracy just helps you make mistakes at scale. The teams getting real value treat AI as a research assistant, not a source of truth. Start with a clearly written ICP, build your base list from verified data, use AI to classify and enrich, verify contacts strictly, and spot-check every batch before it reaches your reps. That process is simple and repeatable, and it protects both your pipeline and your domain reputation.
 
-If you're building an outbound engine and want to talk through how to set up an AI-assisted research workflow that your team can trust, feel free to [get in touch with me](/). I'm always happy to compare notes with founders and sales leaders working on the same problem.
+If you're building an outbound engine and want to talk through how to set up an AI-assisted research workflow that your team can trust, feel free to [get in touch with me](/contact). I'm always happy to compare notes with founders and sales leaders working on the same problem.

@@ -241,7 +241,7 @@ There is no single secret to improving your cold email reply rate. But there are
 
 None of these steps works miracles on its own. When you apply all of them together and consistently, though, cold email becomes a predictable source of pipeline for your sales team. My suggestion: this week, pick one segment, prepare a clean list of 100 to 150 people, set up a five-step sequence with the structure above and record the results. A month from now, you'll have real data in hand, not guesses.
 
-If you'd like to exchange ideas while setting up your outbound process or trying to improve the reply rate of your current campaigns, [feel free to get in touch with me](/). I'm always happy to talk about the challenges you're facing in the field.
+If you'd like to exchange ideas while setting up your outbound process or trying to improve the reply rate of your current campaigns, [feel free to get in touch with me](/contact). I'm always happy to talk about the challenges you're facing in the field.
 
 ## FAQ
 

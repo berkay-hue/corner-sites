@@ -218,4 +218,4 @@ Setting quotas for new reps comes down to honesty about time. Define a realistic
 
 Done well, a ramp plan tells new hires exactly what success looks like in week one, month three and month six, and that clarity is often what separates reps who stay and grow from those who quietly leave.
 
-If you're designing quotas or a ramp plan for your first sales hires and want a second opinion, feel free to [get in touch with me](/). I'm always happy to talk sales leadership.
+If you're designing quotas or a ramp plan for your first sales hires and want a second opinion, feel free to [get in touch with me](/contact). I'm always happy to talk sales leadership.

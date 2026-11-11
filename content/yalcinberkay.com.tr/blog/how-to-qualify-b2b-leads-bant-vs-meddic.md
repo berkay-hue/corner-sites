@@ -190,4 +190,4 @@ BANT and MEDDIC answer different questions. BANT asks whether a deal can happen.
 
 The framework itself matters less than the consistency with which your team uses it. Pick one, define it clearly, coach to it, and refine it based on what your won and lost deals teach you.
 
-If you are building or restructuring a sales team and want to talk through how qualification should work in your context, feel free to [get in touch with me](/). I am always happy to exchange ideas with founders and sales leaders.
+If you are building or restructuring a sales team and want to talk through how qualification should work in your context, feel free to [get in touch with me](/contact). I am always happy to exchange ideas with founders and sales leaders.

@@ -249,7 +249,7 @@ A sales rep interview should measure how well a candidate can sell, not how well
 
 Remember: the best sellers aren't the ones who give a perfect answer to every question, but the ones who openly admit their mistakes, apply feedback quickly and show up in the field with the same discipline every day. If you build your interview process to bring these traits to the surface, you'll seriously reduce the risk of a bad hire.
 
-If you'd like to structure your hiring process as you build your sales team, or review your interview framework together, you can get in touch with me through the [Berkay Yalçın](/) page.
+If you'd like to structure your hiring process as you build your sales team, or review your interview framework together, you can get in touch with me through the [Berkay Yalçın](/about) page.
 
 ## Frequently asked questions
 

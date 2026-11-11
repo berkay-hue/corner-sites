@@ -182,7 +182,7 @@ Moving from SDR to Account Executive isn't about waiting your turn. It's about d
 
 The SDRs who make this jump successfully are rarely the loudest or the most naturally gifted. They're the most curious and the most intentional about their growth.
 
-If you're an SDR planning your next step, or a sales leader designing a career path for your team, I'd be glad to hear what you're working on. Feel free to reach out through [my personal site](/) and let's talk.
+If you're an SDR planning your next step, or a sales leader designing a career path for your team, I'd be glad to hear what you're working on. Feel free to reach out through [my personal site](/#contact) and let's talk.
 
 ## FAQ
 

@@ -159,4 +159,4 @@ Quarterly progress reviews work best for most teams, with actual promotion decis
 
 A sales career path isn't a nice-to-have HR document. It's a performance tool. When reps know exactly what the next level looks like, what it pays, and what it takes to get there, they work with more focus and stay longer. Start with clear levels, attach measurable criteria to each one, give your best sellers a track that doesn't force them into management, and review progress every quarter. You can build the first version in a month, and it will pay you back with every rep you don't lose to a competitor.
 
-If you're designing a career path for your sales team or building an outbound function from the ground up and want to talk it through, feel free to [get in touch with me](/). I'm always happy to compare notes with founders and sales leaders.
+If you're designing a career path for your sales team or building an outbound function from the ground up and want to talk it through, feel free to [get in touch with me](/contact). I'm always happy to compare notes with founders and sales leaders.
