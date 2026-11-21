@@ -387,7 +387,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       pAdd: "Gönderi ekle", pUrl: "Gönderi bağlantısı", pUrlHint: "Instagram, TikTok, YouTube ya da LinkedIn gönderisinin tam adresi (https://…).",
       pDate: "Paylaşım tarihi", pCaption: "Açıklama", pThumb: "Küçük resim adresi (isteğe bağlı)", pThumbHint: "Yalnız https:// ile başlayan bir resim adresi.",
       pSave: "Kaydet", pSaved: "Gönderi eklendi.", pBadUrl: "Geçerli bir https:// gönderi bağlantısı gir.", pBadDate: "Geçerli bir tarih seç.", pBadNum: "Sayılar 0 ya da daha büyük tam sayı olmalı.", pDup: "Bu bağlantı zaten ekli.",
-      pCsv: "CSV içe aktar", pCsvHint: "Sütunlar: url, date, type, likes, comments, views, reach, caption. İlk satır başlık olabilir; ayraç virgül ya da noktalı virgül.", pCsvFile: "CSV dosyası",
+      pCsv: "CSV içe aktar", pCsvHint: "Sütunlar: url, date, type, likes, comments, views, reach, caption. İlk satır başlık olabilir; ayraç virgül ya da noktalı virgül. LinkedIn'in Shares.csv dosyası da olduğu gibi yüklenebilir.", pCsvFile: "CSV dosyası",
       pCsvGo: "İçe aktar", pCsvUpd: "{n} gönderiye yeni ölçüm eklendi.", pDataH: "Veri ekle", pCsvDone: "{n} gönderi eklendi.", pCsvSkip: "{n} satır atlandı (satır {r}).", pCsvEmpty: "Dosyada içe aktarılacak satır yok.", pCsvBig: "En fazla 500 satır içe aktarılabilir.", pCsvRead: "Dosya okunamadı.",
       pFull: "Bu cihazda yer kalmadı; gönderi kaydedilemedi.",
       pBack: "Gönderilere dön", pOpen: "Gönderiyi aç", pNotFound: "Bu gönderi bulunamadı.", pTimeline: "Zaman çizelgesi", pTlNone: "Zaman çizelgesi için en az iki ölçüm gerekir.",
@@ -396,7 +396,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       pConn: "Otomatik bağlantılar", pConnOff: "Otomatik ölçüm çekme henüz açık değil. O zamana kadar gönderilerini elle ya da CSV ile ekleyebilirsin.",
       pConnSync: "Hesap bağlı; gönderilerin her gün otomatik çekilir.", pConnOk: "Bağlı", pConnHow: "Bağladığında gönderilerin buraya kendiliğinden gelir.", pConnGo: "Bağla",
       psPosts: "Gönderi", psReach: "Toplam erişim", psPer: "Gönderi başına {n}", psEr: "Ortalama etkileşim oranı", psEng: "{n} beğeni ve yorum", psTop: "En çok erişen", psFirst: "İlk gönderini ekle",
-      pLiNote: "LinkedIn bağlantısı takipçi sayını ve tüm gönderilerinin toplamlarını getirir. Tek tek gönderiler için gönderi bağlantısını ölçüm girmeden ekle; bağlı hesap gösterim, erişim, tepki ve yorumunu günde en çok 5 gönderi için çeker.",
+      pLiNote: "LinkedIn bağlantısı takipçi sayını ve tüm gönderilerinin toplamlarını getirir. Yönettiğin şirket sayfalarının (en çok 2) gönderileri istatistikleriyle her gün kendiliğinden aktarılır. Kişisel gönderilerini LinkedIn'in veri arşivindeki Shares.csv dosyasıyla toplu ekle (LinkedIn > Ayarlar > Veri gizliliği > Verilerinin bir kopyasını al) ya da bağlantısını ölçüm girmeden tek tek ekle; bağlı hesap gösterim, erişim, tepki ve yorumunu her gün birkaç gönderi için çeker.",
       pOlder: "Daha eskileri getir", pOlderNote: "Otomatik senkron her hesaptan en yeni gönderileri alır: Instagram ve YouTube'da 200, TikTok'ta 100. Daha eskilerini görmek için \"Daha eskileri getir\"e bas; her basışta 200 gönderi daha gelir, hesabında toplam en çok 1000 gönderi tutulur.",
       pOlderAdded: "{n} eski gönderi eklendi.", pOlderMore: "Daha eskileri için yeniden bas.", pOlderEnd: "Bu hesabın tüm gönderileri geldi.", pOlderNone: "Bu hesapta getirilecek daha eski gönderi yok.",
       pOlderFull: "Gönderi sınırına (1000) ulaştın; daha fazla gönderi eklenemez.", pOlderBusy: "Bu hesap şu an güncelleniyor; birkaç dakika sonra yeniden dene.",
@@ -423,7 +423,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       socTitle: "Sosyal hesaplar", socLead: "Hesabını resmî bağlantıyla bağla; takipçi ve etkileşim verileri markalara doğrulanmış olarak görünür.",
       socConnect: "Bağla", socCut: "Bağlantıyı kes", socSure: "{n} bağlantısı kesilsin mi? Bu hesabın ölçüm geçmişi ve içe aktarılan gönderileri silinir.",
       socAvail: "Bağlı değil", socOn: "Bağlı", socOnAs: "Bağlı: {n}", socErr: "Son eşitleme başarısız; yeniden bağlamayı dene.",
-      socNotConf: "Bu platform için bağlantı henüz yapılandırılmadı.", socNotConfS: "Yapılandırılmadı", socErrS: "Hata", socNoApi: "API yok", socReconnect: "Yeniden bağla", socAwait: "Metrik onayı bekleniyor", socSoonOwn: "Marka ve ajans hesapları için bağlantı yakında", socLeadOwn: "Kurumsal sosyal hesaplarını resmî bağlantıyla bağla.", socLiName: "LinkedIn (kişisel profil)", socLiNote: "Kendi LinkedIn profilin bağlanır.", socLiRevoke: "LinkedIn tarafındaki izni LinkedIn ayarlarından kaldırabilirsin.", socLiGo: "LinkedIn ayarları", socErrOff: "Son eşitleme başarısız; bağlama açılınca yeniden bağlanabilir.", setSocLead: "Hesap bağlantıları profil sayfasında.", setSocGo: "Profil > Sosyal hesaplar", socOff: "Hesap bağlama şu an kapalı.", onbTitle: "Hoş geldin! Hesaplarını bağla", onbLead: "Sosyal hesaplarını resmî bağlantıyla bağla; takipçi ve etkileşim verilerin markalara doğrulanmış olarak görünür.", onbLeadOwn: "Kurumsal sosyal hesaplarını resmî bağlantıyla bağla.", onbHint: "İstediğin zaman Profil > Sosyal hesaplar bölümünden de bağlayabilirsin.", onbSkip: "Şimdilik geç", socOffRow: "Bağlama yakında açılacak",
+      socNotConf: "Bu platform için bağlantı henüz yapılandırılmadı.", socNotConfS: "Yapılandırılmadı", socErrS: "Hata", socNoApi: "API yok", socReconnect: "Yeniden bağla", socAwait: "Metrik onayı bekleniyor", socSoonOwn: "Marka ve ajans hesapları için bağlantı yakında", socLeadOwn: "Kurumsal sosyal hesaplarını resmî bağlantıyla bağla.", socLiName: "LinkedIn (kişisel profil)", socLiNote: "Kendi LinkedIn profilin ve yönettiğin şirket sayfaları bağlanır.", socLiOrgPage: "Şirket sayfası", socLiOrgFol: "{n} takipçi", socLiOrgPosts: "{n} gönderi aktarıldı", socLiOrgErr: "Şirket sayfası gönderileri için LinkedIn'i yeniden bağla.", socLiOrgFail: "Şirket sayfası gönderileri bu eşitlemede alınamadı; bir sonrakinde yeniden denenir.", socLiRevoke: "LinkedIn tarafındaki izni LinkedIn ayarlarından kaldırabilirsin.", socLiGo: "LinkedIn ayarları", socErrOff: "Son eşitleme başarısız; bağlama açılınca yeniden bağlanabilir.", setSocLead: "Hesap bağlantıları profil sayfasında.", setSocGo: "Profil > Sosyal hesaplar", socOff: "Hesap bağlama şu an kapalı.", onbTitle: "Hoş geldin! Hesaplarını bağla", onbLead: "Sosyal hesaplarını resmî bağlantıyla bağla; takipçi ve etkileşim verilerin markalara doğrulanmış olarak görünür.", onbLeadOwn: "Kurumsal sosyal hesaplarını resmî bağlantıyla bağla.", onbHint: "İstediğin zaman Profil > Sosyal hesaplar bölümünden de bağlayabilirsin.", onbSkip: "Şimdilik geç", socOffRow: "Bağlama yakında açılacak",
       socSample: "örnek", socSampleNote: "Ölçüm bağlantısı henüz açık değil. Aşağıdaki sayılar gerçek değil, yalnızca nasıl görüneceğini gösteren örnek verilerdir.",
       socSampleNone: "Profiline Instagram, TikTok ya da YouTube eklersen örnek ölçümleri burada görürsün.",
       socFol: "Takipçi", socViews: "Ort. izlenme", socLikes: "Ort. beğeni", socComm: "Ort. yorum", socImp: "Toplam gösterim", socReach: "Erişilen üye", socReact: "Toplam tepki", socCommT: "Toplam yorum", socShare: "Toplam paylaşım", socSave: "Kaydetme", socSend: "Mesajla gönderme", socClick: "Bağlantı tıklaması", socFollowC: "İçerikten takipçi", socProfC: "İçerikten profil ziyareti", socNoPosts: "Henüz paylaşım yok",
@@ -606,7 +606,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       pAdd: "Add a post", pUrl: "Post link", pUrlHint: "The full address of an Instagram, TikTok, YouTube or LinkedIn post (https://…).",
       pDate: "Posted on", pCaption: "Caption", pThumb: "Thumbnail address (optional)", pThumbHint: "Only an image address starting with https://.",
       pSave: "Save", pSaved: "Post added.", pBadUrl: "Enter a valid https:// post link.", pBadDate: "Pick a valid date.", pBadNum: "Numbers must be whole numbers, 0 or more.", pDup: "This link is already added.",
-      pCsv: "Import CSV", pCsvHint: "Columns: url, date, type, likes, comments, views, reach, caption. The first row may be a header; comma or semicolon separated.", pCsvFile: "CSV file",
+      pCsv: "Import CSV", pCsvHint: "Columns: url, date, type, likes, comments, views, reach, caption. The first row may be a header; comma or semicolon separated. LinkedIn's Shares.csv works as is.", pCsvFile: "CSV file",
       pCsvGo: "Import", pCsvUpd: "New measurements added to {n} posts.", pDataH: "Add data", pCsvDone: "{n} posts added.", pCsvSkip: "{n} rows skipped (row {r}).", pCsvEmpty: "The file has no rows to import.", pCsvBig: "You can import at most 500 rows.", pCsvRead: "Couldn't read the file.",
       pFull: "This device is out of space; the post couldn't be saved.",
       pBack: "Back to posts", pOpen: "Open post", pNotFound: "This post wasn't found.", pTimeline: "Timeline", pTlNone: "The timeline needs at least two measurements.",
@@ -615,7 +615,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       pConn: "Automatic connections", pConnOff: "Automatic metric sync isn't live yet. Until then you can add your posts by hand or with a CSV.",
       pConnSync: "Account connected; your posts sync automatically every day.", pConnOk: "Connected", pConnHow: "Once connected, your posts arrive here on their own.", pConnGo: "Connect",
       psPosts: "Posts", psReach: "Total reach", psPer: "{n} per post", psEr: "Average engagement rate", psEng: "{n} likes and comments", psTop: "Top by reach", psFirst: "Add your first post",
-      pLiNote: "Connecting LinkedIn brings in your follower count and totals across all your posts. For single posts, add the post link without metrics; the connected account pulls impressions, reach, reactions and comments for up to 5 posts a day.",
+      pLiNote: "Connecting LinkedIn brings in your follower count and totals across all your posts. Posts from the company pages you manage (up to 2) are imported with their stats automatically every day. Bulk-add your personal posts with Shares.csv from your LinkedIn data archive (LinkedIn > Settings > Data privacy > Get a copy of your data), or add single post links without metrics; the connected account pulls impressions, reach, reactions and comments for a few posts every day.",
       pOlder: "Load older posts", pOlderNote: "Automatic sync picks up the newest posts from each account: 200 on Instagram and YouTube, 100 on TikTok. To see older ones, press \"Load older posts\"; each press brings 200 more, and your account keeps at most 1000 posts in total.",
       pOlderAdded: "{n} older posts added.", pOlderMore: "Press again for older ones.", pOlderEnd: "All posts from this account are in.", pOlderNone: "This account has no older posts to load.",
       pOlderFull: "You've reached the 1000-post limit; no more posts can be added.", pOlderBusy: "This account is updating right now; try again in a few minutes.",
@@ -642,7 +642,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       socTitle: "Social accounts", socLead: "Connect your account officially; follower and engagement data shows to brands as verified.",
       socConnect: "Connect", socCut: "Disconnect", socSure: "Disconnect {n}? This account's metric history and imported posts will be deleted.",
       socAvail: "Not connected", socOn: "Connected", socOnAs: "Connected: {n}", socErr: "Last sync failed; try reconnecting.",
-      socNotConf: "Connections for this platform aren't set up yet.", socNotConfS: "Not configured", socErrS: "Error", socNoApi: "No API", socReconnect: "Reconnect", socAwait: "Awaiting metrics approval", socSoonOwn: "Connections for brand and agency accounts are coming soon", socLeadOwn: "Connect your company's social accounts officially.", socLiName: "LinkedIn (personal profile)", socLiNote: "Connects your own LinkedIn profile.", socLiRevoke: "You can remove the permission on LinkedIn's side in your LinkedIn settings.", socLiGo: "LinkedIn settings", socErrOff: "Last sync failed; you can reconnect once connections reopen.", setSocLead: "Account connections live on your profile page.", setSocGo: "Profile > Social accounts", socOff: "Account connections are turned off right now.", onbTitle: "Welcome! Connect your accounts", onbLead: "Connect your social accounts officially; your follower and engagement data shows to brands as verified.", onbLeadOwn: "Connect your company's social accounts officially.", onbHint: "You can also connect them any time under Profile > Social accounts.", onbSkip: "Skip for now", socOffRow: "Connecting opens soon",
+      socNotConf: "Connections for this platform aren't set up yet.", socNotConfS: "Not configured", socErrS: "Error", socNoApi: "No API", socReconnect: "Reconnect", socAwait: "Awaiting metrics approval", socSoonOwn: "Connections for brand and agency accounts are coming soon", socLeadOwn: "Connect your company's social accounts officially.", socLiName: "LinkedIn (personal profile)", socLiNote: "Connects your own LinkedIn profile and the company pages you manage.", socLiOrgPage: "Company page", socLiOrgFol: "{n} followers", socLiOrgPosts: "{n} posts imported", socLiOrgErr: "Reconnect LinkedIn to import your company page posts.", socLiOrgFail: "Company page posts couldn't be fetched this sync; they'll be retried on the next one.", socLiRevoke: "You can remove the permission on LinkedIn's side in your LinkedIn settings.", socLiGo: "LinkedIn settings", socErrOff: "Last sync failed; you can reconnect once connections reopen.", setSocLead: "Account connections live on your profile page.", setSocGo: "Profile > Social accounts", socOff: "Account connections are turned off right now.", onbTitle: "Welcome! Connect your accounts", onbLead: "Connect your social accounts officially; your follower and engagement data shows to brands as verified.", onbLeadOwn: "Connect your company's social accounts officially.", onbHint: "You can also connect them any time under Profile > Social accounts.", onbSkip: "Skip for now", socOffRow: "Connecting opens soon",
       socSample: "sample", socSampleNote: "Metric connections aren't live yet. The numbers below are not real; they're sample data showing how this will look.",
       socSampleNone: "Add Instagram, TikTok or YouTube to your profile to see sample metrics here.",
       socFol: "Followers", socViews: "Avg. views", socLikes: "Avg. likes", socComm: "Avg. comments", socImp: "Total impressions", socReach: "Members reached", socReact: "Total reactions", socCommT: "Total comments", socShare: "Total reshares", socSave: "Saves", socSend: "Sends", socClick: "Link clicks", socFollowC: "Followers from content", socProfC: "Profile views from content", socNoPosts: "No posts yet",
@@ -2747,7 +2747,26 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       // (audience.reason) düğme yalnız izin eksikken (no_scope) çıkar: eşik altı (few) ya da API hatasında yeniden bağlamak işe yaramaz.
       var re = !off && p === "youtube" && a && canOn(c) && !audHas(a) && (!a.audience || !a.audience.reason || a.audience.reason === "no_scope")
         ? btn("ghost", t("socReconnect"), p, connect) : null;
-      return row(p, "ok", sub(h), ["b-ok", t("socOn")], [re, x], a ? [mets(a, false), audBox(a)] : null);
+      var org = p === "linkedin" && a ? liOrgs(a) : null;
+      if (!re && !off && org && org.re && canOn(c)) re = btn("ghost", t("socReconnect"), p, connect);
+      return row(p, "ok", sub(h), ["b-ok", t("socOn")], [re, x], a ? [org && org.el, mets(a, false), audBox(a)] : null);
+    }
+    // LinkedIn şirket sayfaları (form-worker oauth.js audience.orgs): ad · takipçi · aktarılan gönderi. orgs_err 401/403 = eski bağda
+    // sayfa izni yok, yeniden bağlamak gerekir; başka hata geçicidir. Yönetilen sayfa yoksa (orgs: []) satır çıkmaz.
+    function liOrgs(a) {
+      var au = a.audience && typeof a.audience === "object" ? a.audience : {};
+      if (typeof au.orgs_err === "string") {
+        var perm = /^40[13]:/.test(au.orgs_err);
+        return { re: perm, el: el("p", { class: "meta", dir: "auto", text: t(perm ? "socLiOrgErr" : "socLiOrgFail") }) };
+      }
+      var l = Array.isArray(au.orgs) ? au.orgs.filter(function (o) { return o && typeof o === "object"; }) : [];
+      if (!l.length) return null;
+      return { el: el("div", { class: "meta" }, l.map(function (o) {
+        var s = [typeof o.name === "string" && o.name ? o.name : t("socLiOrgPage")];
+        if (typeof o.followers === "number") s.push(t("socLiOrgFol", num(o.followers)));
+        if (typeof o.posts === "number") s.push(t("socLiOrgPosts", num(o.posts)));
+        return el("div", { dir: "auto", text: s.join(" · ") });
+      })) };
     }
     function live(list, md) {
       var by = {};
@@ -3092,14 +3111,19 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
   }
   function importCsv(txt) {
     var rows = parseCsv(txt), cols = ["url", "date", "type", "likes", "comments", "views", "reach", "caption"], start = 0, list = pLoad(), added = 0, upd = 0, bad = [], today = isoDay(new Date());
-    if (rows.length && rows[0].some(function (x) { return x.trim().toLowerCase() === "url"; })) { cols = rows[0].map(function (x) { return x.trim().toLowerCase(); }); start = 1; }
+    // LinkedIn veri arşivindeki Shares.csv: ShareLink → url, ShareCommentary → açıklama, Date'in ilk 10 karakteri gün; ölçüm yok (bağlı hesap çeker)
+    var li = rows.length && rows[0].some(function (x) { return x.trim().toLowerCase() === "sharelink"; });
+    if (li) { cols = rows[0].map(function (x) { x = x.trim().toLowerCase(); return x === "sharelink" ? "url" : x === "sharecommentary" ? "caption" : x === "url" ? "" : x; }); start = 1; }
+    else if (rows.length && rows[0].some(function (x) { return x.trim().toLowerCase() === "url"; })) { cols = rows[0].map(function (x) { return x.trim().toLowerCase(); }); start = 1; }
     var data = [], api = [], lines = [];
     for (var i = start; i < rows.length; i++) if (rows[i].some(function (x) { return x.trim(); })) data.push([i + 1, rows[i]]);
     if (!data.length) return { err: t("pCsvEmpty") };
-    if (data.length > 500) return { err: t("pCsvBig") };
+    // Shares.csv en yeniden eskiye sıralı: uzun arşivde en yeni 500 gönderi alınır
+    if (data.length > 500) { if (!li) return { err: t("pCsvBig") }; data = data.slice(0, 500); }
     data.forEach(function (d) {
       var o = {}, s = { at: today };
-      cols.forEach(function (c, k) { o[c] = (d[1][k] || "").trim(); });
+      cols.forEach(function (c, k) { if (c) o[c] = (d[1][k] || "").trim(); });
+      if (li) { o.date = (o.date || "").slice(0, 10); PMETS.forEach(function (m) { o[m] = ""; }); }
       var pl = platformOf(o.url), ty = (o.type || "").toLowerCase(), ok = !!pl && okDay(o.date || today);
       PMETS.forEach(function (m) { var v = pInt(o[m]); if (v === undefined) ok = false; s[m] = v; });
       if (!ok) { bad.push(d[0]); return; }
@@ -3128,7 +3152,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
       e.preventDefault(); say(msg, "");
       var fl = file.files && file.files[0];
       if (!fl) { say(msg, t("pCsvEmpty")); file.focus(); return; }
-      if (fl.size > 1048576) { say(msg, t("pCsvBig")); return; }
+      if (fl.size > 5242880) { say(msg, t("pCsvBig")); return; }
       busy(btn, true);
       fl.text().then(function (txt) {
         busy(btn, false);
