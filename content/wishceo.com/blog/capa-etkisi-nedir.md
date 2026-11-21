@@ -87,4 +87,4 @@ En belirgin hâli sayılarla görülür ama ilk izlenimler, ilk duyulan fikir ya
 
 Bir dahaki sefere bir rakam sana hemen mantıklı geldiğinde bir an dur ve o rakamın nereden geldiğini kendine sor. Bunu denemek için iyi bir yer var: Yeni sayıda da önüne bir sayı konacak ve hangisinin senin çapan olacağına sen karar vereceksin. [Yeni sayıyı oyna](/#oyun)
 
-Diğer karar kavramlarının kısa tanımları için: [Kavramlar sözlüğü](/kavramlar).
+Diğer karar kavramlarının kısa tanımları için: [Kavramlar sözlüğü](/kavramlar#capa-etkisi).

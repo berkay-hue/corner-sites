@@ -44,9 +44,9 @@
   var qs = /[?&]s=(\d{3})\b/.exec(location.search);
   if (qs) RELEASED.forEach(function (x) { if (x.no === qs[1]) CUR = x; });
   // içeriği yayından sonra değişen sayının cevap anahtarı yenilenir; eski cevaplar yeni dosyalara karışmaz.
-  // 001: birinci dosya iki kez değişti (v2, sonra v3: Lavenhurst). Bildirim onayı ayrı tutulur, eski "wishceo.s001" kaydından okunmaya devam eder (loadList).
+  // 001: birinci dosya üç kez değişti (v2, v3: Lavenhurst; v4: Lavenhurst seçenek sırası, doğru cevap B yerine D). Bildirim onayı ayrı tutulur, eski "wishceo.s001" kaydından okunmaya devam eder (loadList).
   // Puan ve seçenek metni aynı kalıp yalnız etiket (tag) ya da anlatım değişirse anahtar yenilenmez; karne tipi kayıtlı cevaplardan yeniden hesaplanır (001: Tumla D, Korvala C etiketleri).
-  var KEYV = { "001": "v3" };
+  var KEYV = { "001": "v4" };
   function keyOf(no) { return "wishceo.s" + no + (KEYV[no] || ""); }
   var ISSUE = CUR.no, CASES = [], KEY = keyOf(ISSUE);
 
@@ -151,6 +151,7 @@
   function afterHtml(i) {
     var c = CASES[i], o = opt(i, state.answers[i]), ro = opt(i, c.real.k), diff = o.s - ro.s, last = i === CASES.length - 1;
     var cmp = o.k === c.real.k ? "Vakadaki CEO ile aynı kararı verdin."
+      : diff === 0 ? "Vakadaki CEO’dan farklı karar verdin, ikinizin puanı aynı."
       : diff > 0 ? "Vakadaki CEO’dan " + diff + " puan iyi. Yönetim kurulu not aldı."
       : "Vakadaki CEO’nun kararı " + (-diff) + " puan daha iyiydi.";
     return '<div class="after">' +
@@ -365,12 +366,19 @@
   // ---------- sayfa: sayı bilgisi ve arşiv ----------
   var WORDS = ["", "Bir", "İki", "Üç", "Dört", "Beş", "Altı"];
   var WORDS_LO = ["", "bir", "iki", "üç", "dört", "beş", "altı"];
+  function dateTR(iso) { return new Date(iso + "T12:00:00+03:00").toLocaleDateString("tr-TR", { day: "numeric", month: "long", year: "numeric", timeZone: "Europe/Istanbul" }); }
+  // bozuk bir vaka (eksik alan) bütün oyunu düşürmesin: böyle bir sayı hiç açılmaz, önceki sayılar çalışır
+  function validCase(c) {
+    return !!c && Array.isArray(c.place) && Array.isArray(c.body) && Array.isArray(c.stats) && Array.isArray(c.opts) && c.opts.length > 0 &&
+      c.opts.every(function (o) { return o && typeof o.s === "number"; }) && !!c.real && Array.isArray(c.real.text) && !!optOf(c, c.real.k);
+  }
   function yearOf(c) { return (c.place[1] || "").replace(/^\s*·\s*/, ""); }
   function fillPage() {
     var n = CASES.length;
     Array.prototype.forEach.call(document.querySelectorAll("[data-issue]"), function (el) { el.textContent = "Sayı " + ISSUE; });
     var intro = $("#oyun-intro");
-    if (intro && WORDS[n]) intro.textContent = WORDS[n] + " şirket, " + WORDS_LO[n] + " kriz. Hangisinde vakadaki CEO’dan daha iyi iş çıkarırsın?";
+    // 7 ve üstü rakamla yazılır ("7 şirket, 7 kriz")
+    if (intro && n) intro.textContent = (WORDS[n] || n) + " şirket, " + (WORDS_LO[n] || n) + " kriz. Hangisinde vakadaki CEO’dan daha iyi iş çıkarırsın?";
     var meta = $("#hero-meta");
     if (meta) meta.textContent = n + " dosya · " + n + " karar · 1 CEO karnesi · Üyelik yok";
     var idx = $("#index-list");
@@ -379,6 +387,7 @@
       return '<li><a href="#oyun"><span class="n">' + pad(i + 1) + '</span><span class="t">' + esc(c.title) +
         '</span><span class="m">' + esc(c.area + " · " + c.place[0] + (y ? ", " + y : "")) + "</span></a></li>";
     }).join("");
+    revealIssue(false);
     // şerit hep en son açılan sayıyı gösterir (?s= ile eski sayı açılsa da); ileri tarihli sayılar RELEASED'da yok
     var NEWEST = RELEASED[RELEASED.length - 1];
     var tick = '<span>Sayı ' + NEWEST.no + ' · En yeni <b class="up">▲</b></span>' + NEWEST.cases.map(function (c, i) {
@@ -407,9 +416,12 @@
     if (!items.length) { sec.hidden = true; return; }
     list.innerHTML = items.map(function (x) {
       var sc = avgScore(x);
+      // dist.mjs #sayi-links'e bu sayının /sayi bağlantısını statik yazdıysa ikinci kez eklenmez
+      var read = document.querySelector('#sayi-links a[href="/sayi/' + x.no + '"]') ? "" :
+        '<a class="bl-x" href="/sayi/' + x.no + '">Sayı ' + x.no + ' vakalarını oku <span aria-hidden="true">→</span></a>';
       var m = "Sayı " + x.no + (x.no === LATEST ? " · En yeni" : "") + " · " + x.cases.length + " dosya" + (sc === null ? "" : " · Karnen " + sc + "/100");
       return '<li><a href="/?s=' + x.no + '#oyun"><span class="bl-m">' + esc(m) + '</span><span class="bl-t">' +
-        esc(x.cases.map(function (c) { return c.company; }).join(", ")) + "</span></a></li>";
+        esc(x.cases.map(function (c) { return c.company; }).join(", ")) + '</span></a>' + read + '</li>';
     }).join("");
     sec.hidden = false;
   }
@@ -421,7 +433,7 @@
     elReport = $("#report");
     if (elSteps) { elSteps.style.setProperty("--n", CASES.length); elSteps.classList.toggle("many", CASES.length > 3); }
     var d = $("#today");
-    if (d) try { d.textContent = new Date(CUR.date + "T12:00:00+03:00").toLocaleDateString("tr-TR", { day: "numeric", month: "long", year: "numeric", timeZone: "Europe/Istanbul" }); } catch (e) { /* sabit tarih kalsın */ }
+    if (d) try { d.textContent = dateTR(CUR.date); } catch (e) { /* sabit tarih kalsın */ }
     var tk = $(".ticker-stop");
     if (tk) {
       var tg = $(".ticker-group");
@@ -440,6 +452,9 @@
     load();
     renderCase(false);
     renderReport();
+    // blog altlığındaki /#arsiv: bölüm JS ile açılıyor ve üstündeki vaka/karne şimdi doldu; tarayıcının ilk kaydırması boşa gitmiş olabilir
+    var arsiv = document.getElementById("arsiv");
+    if (location.hash === "#arsiv" && arsiv && !arsiv.hidden) try { arsiv.scrollIntoView(); } catch (e) { /* kaydırma şart değil */ }
 
     elCase.addEventListener("click", function (e) {
       var b = e.target.closest("button");
@@ -463,20 +478,41 @@
     initWaitlist();
   }
 
+  // ?s= ile eski sayı açılınca HTML'deki statik son sayı (dist.mjs yazar) JSON gelene kadar görünmesin: etiket ve tarih hemen yazılır,
+  // sayıya bağlı satırlar yer kaplamaya devam ederek gizlenir (kayma yok); fillPage ya da başarısız yükleme geri açar
+  var EARLY = [];
+  function earlyIssue() {
+    if (CUR.no === LATEST) return;
+    Array.prototype.forEach.call(document.querySelectorAll("[data-issue], #today"), function (el) {
+      EARLY.push([el, el.textContent]);
+      el.textContent = el.id === "today" ? dateTR(CUR.date) : "Sayı " + CUR.no;
+    });
+    ["#index-list", "#hero-meta", "#oyun-intro"].forEach(function (s) { var el = $(s); if (el) el.style.visibility = "hidden"; });
+    // ağ takılırsa boşluk kalmasın: statik içerik geri gelir, JSON sonra gelirse fillPage yine yazar
+    setTimeout(function () { if (EARLY.length) revealIssue(true); }, 4000);
+  }
+  function revealIssue(restore) {
+    if (restore) EARLY.forEach(function (x) { x[0].textContent = x[1]; });
+    EARLY = [];
+    ["#index-list", "#hero-meta", "#oyun-intro"].forEach(function (s) { var el = $(s); if (el) el.style.visibility = ""; });
+  }
+
   // vakalar sayilar/NNN.json'da; yalnız açılmış (tarihi gelmiş) sayılar istenir, ileri tarihli metin istemciye gelmez
   function boot() {
+    try { earlyIssue(); } catch (e) { revealIssue(true); }
     Promise.all(RELEASED.map(function (x) {
       return fetch("/sayilar/" + x.no + ".json").then(function (r) { if (!r.ok) throw r.status; return r.json(); })
         .then(function (c) { x.cases = c; }, function () { x.cases = null; });
     })).then(function () {
       var cur = CUR;
-      RELEASED = RELEASED.filter(function (x) { return Array.isArray(x.cases) && x.cases.length; });
-      if (!RELEASED.length) return;
+      RELEASED = RELEASED.filter(function (x) { return Array.isArray(x.cases) && x.cases.length && x.cases.every(validCase); });
+      if (!RELEASED.length) return revealIssue(true);
       if (RELEASED.indexOf(cur) < 0) cur = RELEASED[RELEASED.length - 1];
       LATEST = RELEASED[RELEASED.length - 1].no;
       CUR = cur; ISSUE = CUR.no; CASES = CUR.cases; KEY = keyOf(ISSUE);
       state.answers = CASES.map(function () { return null; });
-      init();
+      // init yarıda hata verse de gizlenen satırlar açılsın (önceki gibi görünür kalır)
+      try { init(); } finally { revealIssue(false); }
     });
   }
 

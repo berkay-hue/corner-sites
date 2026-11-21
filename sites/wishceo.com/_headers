@@ -14,3 +14,19 @@
 
 /_blog-index.json
   Cache-Control: public, max-age=300, must-revalidate
+
+# Sürüm parametresi olmayan görsel, ikon ve manifest bir gün önbellekte kalır
+/og.png
+  Cache-Control: public, max-age=86400
+
+/favicon.svg
+  Cache-Control: public, max-age=86400
+
+/favicon.ico
+  Cache-Control: public, max-age=86400
+
+/apple-touch-icon.png
+  Cache-Control: public, max-age=86400
+
+/site.webmanifest
+  Cache-Control: public, max-age=86400

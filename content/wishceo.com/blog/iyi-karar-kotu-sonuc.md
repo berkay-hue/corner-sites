@@ -109,4 +109,4 @@ Bir karar iyi bittiğinde kendini tebrik etmeden, kötü bittiğinde kendini su�
 
 Bu ayrımı yapmayı alışkanlık hâline getirmenin en kolay yolu, sonucu bilmeden karar vermek. Birkaç dakikan varsa bir dosya seni bekliyor. [Yeni sayıyı oyna](/#oyun).
 
-Diğer karar kavramlarının kısa tanımları için: [Kavramlar sözlüğü](/kavramlar).
+Diğer karar kavramlarının kısa tanımları için: [Kavramlar sözlüğü](/kavramlar#sonuc-yanliligi).

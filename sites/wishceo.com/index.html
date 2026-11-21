@@ -57,7 +57,6 @@ button{font:inherit;color:inherit}
 .skip:focus{top:12px}
 .wrap{width:100%;max-width:1160px;margin:0 auto;padding:0 max(16px,env(safe-area-inset-left)) 0 max(16px,env(safe-area-inset-right))}
 @media (min-width:720px){.wrap{padding:0 32px}}
-.mono{font-family:var(--mono)}
 .lbl{margin:0 0 10px;font:500 12px/1.3 var(--mono);letter-spacing:.08em;text-transform:uppercase}
 
 /* masthead */
@@ -132,7 +131,7 @@ button{font:inherit;color:inherit}
 
 /* game: steps */
 .steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(var(--n,3),minmax(0,1fr))}
-.step{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:12px;width:100%;min-height:60px;padding:10px 16px;border:1px solid var(--ink);border-bottom:0;background:transparent;color:var(--muted);text-align:left;cursor:pointer}
+.step{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:12px;width:100%;min-height:60px;padding:10px 16px;border:1px solid var(--ink);border-bottom:0;background:var(--paper);color:var(--muted);text-align:left;cursor:pointer}
 .steps li+li .step{border-left:0}
 .step:hover:not(:disabled){color:var(--ink)}
 .step:disabled{cursor:not-allowed;color:#9C9586}
@@ -329,6 +328,12 @@ button{font:inherit;color:inherit}
 .bl-m{display:block;font:500 11.5px/1.4 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
 .bl-t{display:block;margin-top:10px;font:600 24px/1.2 var(--serif);letter-spacing:-.01em}
 .bl-list a:hover .bl-t{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:4px}
+/* arşiv: oyna bağlantısının altında sayının arşiv sayfası (/sayi/NNN) */
+#arsiv-list li{display:flex;flex-direction:column}
+#arsiv-list a{height:auto}
+#arsiv-list a:first-child{flex:1}
+#arsiv-list .bl-x{display:inline-flex;align-items:center;align-self:flex-start;min-height:44px;padding-top:0;padding-bottom:12px;font:500 12px/1.4 var(--mono);letter-spacing:.06em;text-transform:uppercase;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:4px}
+#arsiv-list .bl-x:hover{color:var(--red)}
 @media (max-width:760px){
   .bl-list{grid-template-columns:1fr}
   .bl-list li+li{border-left:0;border-top:1px solid var(--rule2)}
@@ -342,7 +347,7 @@ button{font:inherit;color:inherit}
 .faq details{border-bottom:1px solid var(--rule2)}
 .faq summary{display:flex;justify-content:space-between;align-items:center;gap:16px;min-height:64px;padding:16px 0;list-style:none;cursor:pointer;font:600 clamp(19px,2vw,22px)/1.3 var(--serif)}
 .faq summary::-webkit-details-marker{display:none}
-.faq summary::after{content:"+";flex:none;font:400 26px/1 var(--mono);color:var(--red);transition:transform .2s}
+.faq summary::after{content:"+";content:"+" / "";flex:none;font:400 26px/1 var(--mono);color:var(--red);transition:transform .2s}
 .faq details[open] summary::after{transform:rotate(45deg)}
 .faq details p{margin:0 0 20px;max-width:40em;color:var(--ink2)}
 @media (max-width:760px){.faq-grid{grid-template-columns:1fr}}
@@ -352,6 +357,7 @@ button{font:inherit;color:inherit}
 .foot-row{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px 32px}
 .foot p{margin:0;max-width:52em}
 .foot .logo{font-size:20px;color:var(--ink)}
+.foot .foot-sayi{flex-basis:100%}
 noscript p{margin:0;padding:24px;border:1px solid var(--ink);background:var(--card)}
 
 @media (prefers-reduced-motion:reduce){
@@ -409,7 +415,7 @@ noscript p{margin:0;padding:24px;border:1px solid var(--ink);background:var(--ca
         </div>
         <aside class="index" aria-labelledby="index-h">
           <p class="lbl" id="index-h">Bu sayıda</p>
-          <ol id="index-list">
+          <ol id="index-list" role="list">
             <li><a href="#oyun"><span class="n">01</span><span class="t">Yüz yıllık formüle dokunmak</span><span class="m">Müşteri sadakati · ABD, 1980’lerin ortası</span></a></li>
             <li><a href="#oyun"><span class="n">02</span><span class="t">Her şeye giren oyuncakçı</span><span class="m">Dönüşüm · Danimarka, 2000’lerin başı</span></a></li>
             <li><a href="#oyun"><span class="n">03</span><span class="t">Tahttaki telefoncu</span><span class="m">Strateji · Finlandiya, 2010’ların başı</span></a></li>
@@ -428,7 +434,7 @@ noscript p{margin:0;padding:24px;border:1px solid var(--ink);background:var(--ca
         </div>
         <p id="oyun-intro">Üç şirket, üç kriz. Hangisinde vakadaki CEO’dan daha iyi iş çıkarırsın?</p>
       </div>
-      <ol class="steps" id="steps" aria-label="Dosyalar"></ol>
+      <ol class="steps" id="steps" role="list" aria-label="Dosyalar"></ol>
       <article class="case" id="case" aria-label="Dosya">
         <noscript><p>Oyunu oynamak için tarayıcında JavaScript’i açman gerekiyor. Bildirim listesine yine de aşağıdan yazılabilirsin.</p></noscript>
       </article>
@@ -445,7 +451,7 @@ noscript p{margin:0;padding:24px;border:1px solid var(--ink);background:var(--ca
         </div>
         <p>Kaçırdığın sayıları buradan oyna.</p>
       </div>
-      <ol class="bl-list" id="arsiv-list"></ol>
+      <ol class="bl-list" id="arsiv-list" role="list"></ol>
     </div>
   </section>
 
@@ -459,15 +465,15 @@ noscript p{margin:0;padding:24px;border:1px solid var(--ink);background:var(--ca
       <form id="wl" novalidate data-sk-noform>
         <label for="wl-email">E-posta adresin</label>
         <div class="wl-row">
-          <input id="wl-email" name="email" type="email" inputmode="email" autocomplete="email" placeholder="ad@ornek.com" required aria-describedby="wl-note">
+          <input id="wl-email" name="email" type="email" inputmode="email" autocomplete="email" placeholder="ad@ornek.com" required aria-describedby="wl-status wl-note">
           <button type="submit">Haber ver</button>
         </div>
         <input class="hp" name="website" type="text" tabindex="-1" autocomplete="off" aria-hidden="true">
         <label class="wl-check" for="wl-ok">
-          <input id="wl-ok" name="onay" type="checkbox" required>
+          <input id="wl-ok" name="onay" type="checkbox" required aria-describedby="wl-status">
           <span>WishCEO’nun yeni sayı duyurularını bana e-postayla göndermesine onay veriyorum. Onayımı istediğim an geri alabilirim.</span>
         </label>
-        <p class="wl-status" role="status" aria-live="polite"></p>
+        <p class="wl-status" id="wl-status" role="status" aria-live="polite"></p>
         <p class="wl-note" id="wl-note">Spam yok. Listeden çıkmak için gelen e-postayı yanıtlaman yeterli.</p>
         <div class="wl-kvkk">
           <p><b>KVKK aydınlatma, kısaca.</b> E-postanı ve onay kaydını yeni sayı duyurusu e-postaları için; oyun sonucunu (CEO tipi, puan, kararlar) oyunu geliştirmek için; IP adresini ve tarayıcı bilgisini spamı önlemek için kaydederiz. Kayıtlar Cloudflare’de, bildirim kopyası Google e-posta kutusunda durur; bu sunucular yurt dışında olabilir. Listeden çıkana kadar saklanır, sonra silinir.</p>
@@ -485,7 +491,7 @@ noscript p{margin:0;padding:24px;border:1px solid var(--ink);background:var(--ca
           <h2 id="how-h">Üç dakika, <em>bir karar.</em></h2>
         </div>
       </div>
-      <ol>
+      <ol role="list">
         <li><span class="num">01</span><h3>Dosyayı oku</h3><p>Gerçek bir olay, adı değiştirilmiş bir şirket. Rakamlar ve bağlam iki dakikada önünde.</p></li>
         <li><span class="num">02</span><h3>Kararını ver</h3><p>Dört seçenekten birini seç. Yakında kendi planını yazacaksın, yapay zekâ puanlayacak. <span class="soon">Yakında</span></p></li>
         <li><span class="num">03</span><h3>Gerçeği gör</h3><p>O gün CEO ne yaptı, şirkete ne oldu? Sonucu oku, puanını arkadaşlarınla karşılaştır.</p></li>
@@ -502,7 +508,7 @@ noscript p{margin:0;padding:24px;border:1px solid var(--ink);background:var(--ca
         </div>
         <a class="btn btn-line" href="/blog">Tüm yazılar <span aria-hidden="true">→</span></a>
       </div>
-      <ol class="bl-list" id="blog-latest"></ol>
+      <ol class="bl-list" id="blog-latest" role="list"></ol>
     </div>
   </section>
 
@@ -562,10 +568,11 @@ noscript p{margin:0;padding:24px;border:1px solid var(--ink);background:var(--ca
   <div class="wrap foot-row">
     <a class="logo" href="/"><em>Wish</em>CEO</a>
     <p>Vakalar gerçek olaylardan uyarlanmıştır; şirket, ürün ve kişi adları kurgusaldır. WishCEO’nun bu olaylardaki şirketlerle bir bağı yoktur. © 2026 WishCEO · <a href="/blog">Blog</a> · <a href="/pro">Pro</a> · <a href="/kavramlar">Kavramlar</a> · <a href="/sponsorlu-vaka">Sponsorlu vaka</a> · <a href="/gizlilik">Aydınlatma Metni</a></p>
+    <p class="foot-sayi" id="sayi-links" hidden></p>
   </div>
 </footer>
 
-<script src="/app.js?v=22" defer></script>
+<script src="/app.js?v=28" defer></script>
 <script src="/blog-latest.js?v=1" defer></script>
 </body>
 </html>

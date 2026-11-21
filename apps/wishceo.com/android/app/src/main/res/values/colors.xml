@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- lib/theme.dart C ile aynı renkler. -->
+<resources>
+    <color name="paper">#F2EEE5</color>
+    <color name="ink">#15130F</color>
+    <color name="red">#C0341D</color>
+</resources>

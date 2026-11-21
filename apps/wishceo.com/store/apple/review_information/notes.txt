@@ -1,0 +1,10 @@
+WishCEO is a single-player business decision game in Turkish. No account, login, in-app purchase or ads; no data is collected (App Privacy: Data Not Collected).
+
+How to review:
+1. Home screen: tap "Dosyaları aç" to play this week's case files (choose one of four options, then see what the real CEO did). At the end you get a report card ("CEO karnesi").
+2. "Kariyere başla" opens Career mode: swipe cards left/right; if a meter hits 0 or 100 the board fires you.
+3. "Arşiv" lists past issues. "Sonucumu paylaş" opens a preview of the shareable result; "Sonucu paylaş" there opens the system share sheet (plain text).
+
+Note on content: one of the four result labels is "Kumarbaz" ("Gambler"). It is only a personality label for high-risk business decisions; there is no gambling, betting, wagering, chance-based reward or real or virtual currency in the app.
+
+New issues are published every Monday as static JSON from https://wishceo.com/sayilar/. Company, product and person names in the cases are fictionalised.
