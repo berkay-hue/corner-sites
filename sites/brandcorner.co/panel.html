@@ -2901,7 +2901,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
     var url = p && typeof p.url === "string" ? p.url : "", pl = platformOf(url) || (p && PL[p.platform] ? p.platform : "");
     return { id: p && p.id != null && /^[a-z0-9]{1,24}$/.test(String(p.id)) ? String(p.id) : "", url: url, platform: pl,
       type: p && PTYPES.indexOf(p.type) >= 0 ? p.type : "photo", date: p && okDay(p.date) ? p.date : (snaps[0] || {}).at || "",
-      caption: p && typeof p.caption === "string" ? p.caption.slice(0, 2200) : "", thumb: p && okThumb(p.thumb) ? p.thumb : "", snaps: snaps,
+      caption: p && typeof p.caption === "string" ? (pl === "linkedin" ? liText(p.caption) : p.caption).slice(0, 2200) : "", thumb: p && okThumb(p.thumb) ? p.thumb : "", snaps: snaps,
       // Gönderinin kitlesi (form-worker posts.audience, şimdilik yalnız YouTube videoları); yoksa null
       audience: p && p.audience && typeof p.audience === "object" && !Array.isArray(p.audience) ? p.audience : null,
       // Bağlı hesaptan senkronlanan gönderi: elle düzeltme yalnız yönetici ya da edit_metrics izniyle
@@ -2970,7 +2970,16 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
   function isoDay(d) { return d.toISOString().slice(0, 10); }
   function okDay(s) { return /^\d{4}-\d{2}-\d{2}$/.test(s || "") && !isNaN(Date.parse(s + "T00:00:00Z")) && s <= isoDay(new Date(Date.now() + 864e5)); }
   function lastSnap(p) { return p.snaps[p.snaps.length - 1]; }
-  function erOf(s) { if (s.likes == null && s.comments == null) return null; var b = s.reach > 0 ? s.reach : s.views > 0 ? s.views : 0; return b ? ((s.likes || 0) + (s.comments || 0)) / b : null; }
+  // LinkedIn gönderi metnindeki işaretler düz metne: @[Ad](urn:li:person:…) → Ad, {hashtag|\#|etiket} → #etiket, \( gibi kaçışlar → (
+  function liText(x) {
+    return String(x || "").replace(/@\[([^\]]*)\]\(urn:li:[a-zA-Z]+:[^)]*\)/g, "$1")
+      .replace(/\{hashtag\|\\?#\|([^}]*)\}/g, "#$1")
+      .replace(/\\([|{}@\[\]()<>#\\*_~.!-])/g, "$1");
+  }
+  // Etkileşim oranı = (beğeni + yorum) / erişim (yoksa gösterim). Beğeni+yorum tabandan büyükse taban eksik ölçülmüş demektir
+  // (ör. LinkedIn eski gönderilerde erişimi çok düşük döndürüyor) → oran gösterilmez, %100'ü aşan oran çıkmaz.
+  function erParts(s) { if (!s || (s.likes == null && s.comments == null)) return null; var b = s.reach > 0 ? s.reach : s.views > 0 ? s.views : 0, e = (s.likes || 0) + (s.comments || 0); return b && e <= b ? { e: e, b: b } : null; }
+  function erOf(s) { var x = erParts(s); return x ? x.e / x.b : null; }
   function pct(x) { return x == null ? "—" : new Intl.NumberFormat(locale(), { style: "percent", maximumFractionDigits: 1 }).format(x); }
   function short(n) { return n == null ? "—" : new Intl.NumberFormat(locale(), { notation: "compact", maximumFractionDigits: 1 }).format(n); }
   function newId() { return (Date.now().toString(36) + Math.random().toString(36).slice(2, 8)).slice(0, 24); }
@@ -3218,7 +3227,8 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
     var has = function (m) { return xs.filter(function (p) { return lastSnap(p)[m] != null; }); };
     var sum = function (m) { var ys = has(m); return ys.length ? ys.reduce(function (n, p) { return n + lastSnap(p)[m]; }, 0) : null; };
     var rs = has("reach"), reach = sum("reach"), likes = sum("likes"), comm = sum("comments"), eng = likes == null && comm == null ? null : (likes || 0) + (comm || 0);
-    var ers = xs.map(function (p) { return erOf(lastSnap(p)); }).filter(function (x) { return x != null; }), er = ers.length ? ers.reduce(function (a, b) { return a + b; }, 0) / ers.length : null;
+    // Toplam (beğeni + yorum) / toplam erişim: gönderi oranlarının düz ortalaması küçük erişimli tek gönderiyle şişiyordu
+    var ers = xs.map(function (p) { return erParts(lastSnap(p)); }).filter(Boolean), erB = ers.reduce(function (n, x) { return n + x.b; }, 0), er = erB ? ers.reduce(function (n, x) { return n + x.e; }, 0) / erB : null;
     var by = {}, top = rs.slice().sort(function (a, b) { return lastSnap(b).reach - lastSnap(a).reach; })[0];
     xs.forEach(function (p) { by[p.platform] = (by[p.platform] || 0) + 1; });
     var bars = rs.slice(0, 12).reverse(), mx = Math.max.apply(null, bars.map(function (p) { return lastSnap(p).reach; })) || 1;
@@ -3676,7 +3686,7 @@ dialog.cmdk{width:100%;max-height:88%;margin:0 0 auto;border-width:0 0 1px;borde
   function crPost(p, i) {
     var n = function (v) { return typeof v === "number" && v >= 0 && isFinite(v) ? Math.round(v) : null; };
     return { id: String(p.id != null ? p.id : "p" + i).slice(0, 40), url: URL_RE.test(p.url || "") ? p.url : "", platform: PL[p.platform] ? p.platform : "instagram",
-      type: PTYPES.indexOf(p.type) >= 0 ? p.type : "photo", date: okDay(String(p.date || "").slice(0, 10)) ? String(p.date).slice(0, 10) : "", caption: String(p.caption || "").slice(0, 300),
+      type: PTYPES.indexOf(p.type) >= 0 ? p.type : "photo", date: okDay(String(p.date || "").slice(0, 10)) ? String(p.date).slice(0, 10) : "", caption: (p.platform === "linkedin" ? liText(String(p.caption || "")) : String(p.caption || "")).slice(0, 300),
       thumb: okThumb(p.thumb) ? p.thumb : "", verified: p.verified === true || p.source === "oauth", likes: n(p.likes), comments: n(p.comments), views: n(p.views), reach: n(p.reach) };
   }
   function crAccounts(m, x) {
