@@ -148,5 +148,6 @@ CREATE TABLE IF NOT EXISTS meta_events (
 --   0010_post_audience.sql gönderi başına kitle dağılımı (posts.audience)
 --   0011_meta_scoped.sql   Instagram hesabının uygulamaya özel kimliği (Meta deauthorize / veri silme eşleşmesi)
 --   0012_admin.sql         yönetim paneli: user_perms, perm_log, post_edits, meta_events (yukarıdakiyle aynı tablolar)
+--   0013_linkedin_posts.sql LinkedIn ek toplamlar (kaydetme, gönderme, bağlantı tıklaması, içerikten takipçi ve profil görüntüleme) ve posts.synced_at
 -- Uygula (form-worker/ klasöründen çalıştır): npx wrangler d1 migrations apply corner-forms --remote
--- 0002 uygulanmadan da bağ koparma çalışır; 0003–0012 yeni kodla deploy'dan ÖNCE uygulanmalı.
+-- 0002 uygulanmadan da bağ koparma çalışır; 0003–0013 yeni kodla deploy'dan ÖNCE uygulanmalı.

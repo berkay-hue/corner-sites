@@ -56,8 +56,15 @@ const sha256 = async s => [...new Uint8Array(await crypto.subtle.digest("SHA-256
 const IG = "https://graph.instagram.com", IG_API = `${IG}/v23.0`;
 const TT = "https://open.tiktokapis.com/v2", YT = "https://www.googleapis.com/youtube/v3";
 const LI = "https://api.linkedin.com", LI_VERSION = "202610";
-// LinkedIn gönderi toplamları: [totals anahtarı, queryType]; metric_snapshots sütunu total_<anahtar> (0008)
-const LI_TOTALS = [["impressions", "IMPRESSION"], ["reach", "MEMBERS_REACHED"], ["reactions", "REACTION"], ["comments", "COMMENT"], ["reshares", "RESHARE"]];
+// LinkedIn gönderi toplamları: [totals anahtarı, queryType]; metric_snapshots sütunu total_<anahtar> (ilk beşi 0008, kalanı 0013)
+export const LI_TOTALS = [["impressions", "IMPRESSION"], ["reach", "MEMBERS_REACHED"], ["reactions", "REACTION"], ["comments", "COMMENT"], ["reshares", "RESHARE"],
+  ["saves", "POST_SAVE"], ["sends", "POST_SEND"], ["link_clicks", "LINK_CLICKS"], ["follows", "FOLLOWER_GAINED_FROM_CONTENT"],
+  ["profile_views", "PROFILE_VIEW_FROM_CONTENT"]];
+// Elle eklenen LinkedIn gönderisinin ölçümü: [post_snaps alanı, queryType]. İlk tür gönderi kimliğini de sınar.
+// Senkronda en çok LI_POSTS gönderi; gönderi başına en kötü LI_POST_CALLS çağrı (etkinlik kimliğinde share + ugcPost denemesi).
+const LI_POST_METS = [["views", "IMPRESSION"], ["reach", "MEMBERS_REACHED"], ["likes", "REACTION"], ["comments", "COMMENT"]];
+export const LI_POSTS = 5;
+const LI_POST_CALLS = LI_POST_METS.length + 1;
 const YTA = "https://youtubeanalytics.googleapis.com/v2", YT_AUDIENCE = "https://www.googleapis.com/auth/yt-analytics.readonly";
 
 // refresh: süresi bu kadar içinde dolacak token yenilenir (Instagram 60 gün, TikTok 1 gün, YouTube 1 saat geçerli).
@@ -804,8 +811,38 @@ const API = {
         totals: Object.fromEntries(LI_TOTALS.map(([k], i) => [k, tot[i].err ? null : tot[i].v])),
       };
     },
+    // Elle eklenen gönderiler [{id, url}] → bulunanların ölçümü [{id, views, reach, likes, comments}] (aggregation TOTAL,
+    // tarih aralığı yok: gönderinin tüm ömrü). Etkinlik kimliği (urn:li:activity) share, olmazsa ugcPost olarak denenir;
+    // ikisi de hata verirse ya da hiçbir tür gelmezse gönderi atlanır. Hata yukarı çıkmaz (toplamlar zaten yazılır).
+    async postStats(token, f, posts) {
+      const q = (ent, type) => json(f, `${LI}/rest/memberCreatorPostAnalytics?q=entity&entity=${ent}&queryType=${type}&aggregation=TOTAL`, liRest(token))
+        .then(b => whole(b.elements?.[0]?.count));
+      const one = async p => {
+        const ref = liPostRef(p.url);
+        if (!ref) return null;
+        let ent = null, first = null;
+        for (const kind of ref.kind === "activity" ? ["share", "ugcPost"] : [ref.kind]) {
+          const e = `(${kind === "share" ? "share" : "ugc"}:${encodeURIComponent(`urn:li:${kind}:${ref.id}`)})`;
+          try { first = await q(e, LI_POST_METS[0][1]); ent = e; break; } catch { /* sonraki tür */ }
+        }
+        if (!ent) return null;
+        const vals = [first, ...await Promise.all(LI_POST_METS.slice(1).map(([, type]) => q(ent, type).catch(() => null)))];
+        return vals.every(v => v == null) ? null : { id: p.id, ...Object.fromEntries(LI_POST_METS.map(([k], i) => [k, vals[i] ?? null])) };
+      };
+      return (await Promise.all(posts.map(p => one(p).catch(() => null)))).filter(Boolean);
+    },
   },
 };
+
+// LinkedIn gönderi bağlantısındaki kimlik: urn:li:(activity|share|ugcPost):<rakam> (feed/update, embed) ya da
+// /posts/<ad>_<başlık>-(activity|share|ugcPost)-<rakam>-<kod>. Bulunamazsa null.
+export function liPostRef(u) {
+  let x, path;
+  try { x = new URL(u); path = decodeURIComponent(x.pathname); } catch { return null; }
+  if (x.protocol !== "https:" || !/(^|\.)linkedin\.com$/i.test(x.hostname)) return null;
+  const m = path.match(/(?:urn:li:|[-_/])(activity|share|ugcPost)[:-](\d{10,22})(?!\d)/);
+  return m ? { kind: m[1], id: m[2] } : null;
+}
 
 // Görünen ad: kontrol, satır/paragraf ayırıcı ve biçim karakterleri silinir (ZWNJ/ZWJ kalır, emoji bozulmasın),
 // en çok 60 kod noktası; boşsa null.
@@ -830,15 +867,18 @@ export async function fetchProfile(p, token, f = fetch) {
 // posts_recent: bunlardan kaçı son SAMPLE gönderiden (posts'un ilk posts_recent kadarı); audience: kitle dağılımı
 // (Instagram ve YouTube), alınamazsa null (YouTube'da nedeniyle {reason}); ölçümü bozmaz. Instagram ve YouTube
 // gönderileri audience taşır (gönderi başına kitle: izlenme özeti, kaynaklar, kırılım, Instagram insights'ı).
-// LinkedIn'de gönderi listesi ve ortalama yok; totals: tüm gönderilerin toplamları (LI_TOTALS anahtarları).
-export async function fetchMetrics(p, token, f = fetch) {
+// LinkedIn'de gönderi listesi ve ortalama yok; totals: tüm gönderilerin toplamları (LI_TOTALS anahtarları);
+// liPosts ([{id, url}], elle eklenen gönderiler) verilirse li_posts: bulunanların ölçümü, li_tried: denenenlerin kimliği.
+export async function fetchMetrics(p, token, f = fetch, { liPosts = [] } = {}) {
   if (!SYNCED.includes(p)) throw new ProviderError("no_api");
   const pr = await API[p].profile(token, f);
   if (API[p].stats) {
     const st = await API[p].stats(token, f);
+    const tried = liPosts.filter(x => liPostRef(x.url));
     return {
       external_id: extId(pr.external_id), handle: cleanHandle(pr.handle), followers: num(st.followers),
       avg_views: null, avg_likes: null, avg_comments: null, posts_sampled: 0, posts: [], posts_recent: 0, totals: st.totals,
+      ...(tried.length ? { li_tried: tried.map(x => x.id), li_posts: await API[p].postStats(token, f, tried) } : {}),
     };
   }
   const all = await API[p].recent(token, f, pr), last = all.slice(0, SAMPLE);
@@ -886,8 +926,8 @@ const expiry = t => (num(t.expires_in) === null ? null : `+${Math.floor(num(t.ex
 // uyuşmazlıktır: art arda CHANGE_LIMIT. seferde hesap 'error' olur ("account_changed"), saatlik deneme durur.
 // Ondan önceki seferler "changed" atar (~1 saat sonra yeniden). Başarılı senkron ve yeniden bağlama sayacı sıfırlar.
 export const CHANGE_LIMIT = 3;
-export async function syncAccount(env, userId, p, f = fetch) {
-  return withToken(env, userId, p, f, access => fetchMetrics(p, access, f));
+export async function syncAccount(env, userId, p, f = fetch, opts = {}) {
+  return withToken(env, userId, p, f, access => fetchMetrics(p, access, f, opts));
 }
 // syncAccount'un gövdesi: token (gerekirse yenilenir) `use`'a verilir; `use` {external_id, handle, ...} döner.
 async function withToken(env, userId, p, f, use) {
@@ -986,8 +1026,9 @@ const mergeAud = (old, neu) => {
 // Hesap (a: id, user_id, platform) yalnız hâlâ bağlıysa, platform kimliği aynıysa ve kira (leaseAt) hâlâ bizdeyse yazılır.
 // recent: gönderilerin ilk kaçı son SAMPLE gönderiden (bunların ölçümü günde bir).
 // edits: o günün ölçümü elle düzeltilmişse (aynı post_id ve snap_at için post_edits satırı) ezilmez; false yalnız tablo yoksa (batchOr).
+const OWN = "EXISTS (SELECT 1 FROM social_accounts WHERE id = ? AND status = 'connected' AND external_id = ? AND next_sync_at = ?)";
 function postWrites(env, a, externalId, leaseAt, posts, recent, edits = true) {
-  const own = "EXISTS (SELECT 1 FROM social_accounts WHERE id = ? AND status = 'connected' AND external_id = ? AND next_sync_at = ?)";
+  const own = OWN;
   return [
     env.DB.prepare(
       `INSERT INTO posts (user_id, url, platform, type, date, caption, thumb, account_id, audience)
@@ -1023,6 +1064,39 @@ function postWrites(env, a, externalId, leaseAt, posts, recent, edits = true) {
   ];
 }
 
+// Elle eklenen LinkedIn gönderilerinden ölçülecekler: kimliği okunabilen, en uzun süredir denenmeyen (synced_at, 0013)
+// en çok n gönderi [{id, url}]. Kimliği okunamayanlar sırada kalır ama ilk LI_SCAN satırda atlanır.
+const LI_SCAN = 50;
+async function liDue(env, userId, n) {
+  if (n < 1) return [];
+  const { results = [] } = await env.DB.prepare(
+    `SELECT id, url FROM posts WHERE user_id = ? AND platform = 'linkedin' ORDER BY synced_at IS NOT NULL, synced_at, id DESC LIMIT ${LI_SCAN}`,
+  ).bind(userId).all();
+  return results.filter(r => liPostRef(r.url)).slice(0, n);
+}
+// LinkedIn gönderi ölçümü: denenen gönderilerin synced_at'i bugüne çekilir, bulunanların o günkü ölçümü yazılır (aynı gün
+// tekrar senkronlanırsa üzerine; gelmeyen alan son ölçülen değerle sürer). Yalnız hesap hâlâ bağlıysa, kimlik aynıysa ve
+// kira bizdeyse; gönderi hesaba bağlanmaz (account_id NULL kalır, bağ koparılınca silinmez). edits: postWrites'taki gibi.
+function liPostWrites(env, a, externalId, leaseAt, tried, stats, edits = true) {
+  const last = k => `COALESCE(json_extract(j.value, '$.${k}'),
+           (SELECT s.${k} FROM post_snaps s WHERE s.post_id = p.id AND s.${k} IS NOT NULL ORDER BY s.at DESC LIMIT 1))`;
+  return [
+    env.DB.prepare(
+      `UPDATE posts SET synced_at = datetime('now')
+       WHERE user_id = ? AND platform = 'linkedin' AND id IN (SELECT value FROM json_each(?)) AND ${OWN}`,
+    ).bind(a.user_id, JSON.stringify(tried), a.id, externalId, leaseAt),
+    ...(stats.length ? [env.DB.prepare(
+      `INSERT INTO post_snaps (post_id, at, likes, comments, views, reach)
+       SELECT p.id, date('now'), ${["likes", "comments", "views", "reach"].map(last).join(", ")}
+       FROM json_each(?) j JOIN posts p ON p.id = json_extract(j.value, '$.id') AND p.user_id = ? AND p.platform = 'linkedin'
+       WHERE ${OWN}
+       ON CONFLICT (post_id, at) DO UPDATE SET likes = excluded.likes, comments = excluded.comments, views = excluded.views,
+         reach = excluded.reach${edits ? `
+         WHERE NOT EXISTS (SELECT 1 FROM post_edits e WHERE e.post_id = post_snaps.post_id AND e.snap_at = post_snaps.at)` : ""}`,
+    ).bind(JSON.stringify(stats), a.user_id, a.id, externalId, leaseAt)] : []),
+  ];
+}
+
 // Günlük senkron (cron, src/index.js): bağlı hesaplar günde bir senkronlanır, ölçümler metric_snapshots'a yazılır.
 // Ücretsiz planda çağrı başına 50 dış istek ve 50 D1 sorgusu var: bir çalıştırmada en fazla `max` hesap,
 // sağlayıcı çağrılarının tahmini toplamı (COST, yenileme dahil) en fazla `budget` ve D1 ifadeleri (vade listesi,
@@ -1034,12 +1108,14 @@ function postWrites(env, a, externalId, leaseAt, posts, recent, edits = true) {
 // En kötü durumda istek sayısı: profil + gönderi sayfaları + yenileme. Instagram: 4 sayfa + alan reddinde tekrar + son 12
 // gönderinin insights'ı + alt basamaklarla en çok IG_RETRY tekrar + 8 kitle kırılımı; TikTok: 5 sayfa; YouTube: 4 liste
 // sayfası + 4 video parçası + kanalın 9 raporu (90 gün ve tüm zaman kırılımı, toplam izlenme, en çok izlenen videolar,
-// abonelerin izlenmesi, trafik kaynağı, cihaz) + YT_VIDEO_CALLS video raporu; LinkedIn: kimlik + takipçi + 5 toplam
-// (yenileme, gönderi ve kitle yok).
-const COST = { instagram: 27 + IG_RETRY, tiktok: 7, youtube: 10 + 9 + YT_VIDEO_CALLS, linkedin: 7 };
+// abonelerin izlenmesi, trafik kaynağı, cihaz) + YT_VIDEO_CALLS video raporu; LinkedIn: kimlik + takipçi + LI_TOTALS
+// toplamı (yenileme ve kitle yok). LinkedIn'de elle eklenen gönderiler (POSTS_ENABLED "1") bütçeden artan kadar ölçülür:
+// en çok LI_POSTS gönderi, her biri LI_POST_CALLS çağrı; sığmayanlar sırada kalır (synced_at), ertesi senkronda önce gelir.
+const COST = { instagram: 27 + IG_RETRY, tiktok: 7, youtube: 10 + 9 + YT_VIDEO_CALLS, linkedin: 2 + LI_TOTALS.length };
 const NEXT = { ok: "+1435 minutes", fail: "+355 minutes", changed: "+55 minutes" }; // saatlik cron'da ~1 gün, ~6 saat, ~1 saat
 export const SYNC_MIN = Math.min(...Object.values(COST));
 export const SYNC_D1 = 9; // kira, token, yenileme, son senkron işareti, ölçüm + TikTok'ta ad değişikliği + gönderiler + gönderi ölçümleri + kira bırakma (batch)
+// LinkedIn: kira, token, son senkron işareti, ölçülecek gönderiler (liDue) + batch'te ölçüm, synced_at, gönderi ölçümleri, kira bırakma = 8
 export async function syncDue(env, f = fetch, { budget = 40, max = 5, d1 = 50 } = {}) {
   const out = { synced: 0, failed: 0, changed: 0, busy: 0, deferred: 0 };
   const ready = SYNCED.filter(p => oauthReady(env, p));
@@ -1065,9 +1141,13 @@ export async function syncDue(env, f = fetch, { budget = 40, max = 5, d1 = 50 } 
       picked++;
       const release = next => env.DB.prepare("UPDATE social_accounts SET next_sync_at = datetime('now', ?) WHERE id = ? AND next_sync_at = ?")
         .bind(next, a.id, lease.next_sync_at);
-      let m;
+      let m, liPosts = [];
+      if (a.platform === "linkedin" && env.POSTS_ENABLED === "1") {
+        liPosts = await liDue(env, a.user_id, Math.min(LI_POSTS, Math.floor((budget - spent) / LI_POST_CALLS))).catch(() => []);
+        spent += liPosts.length * LI_POST_CALLS;
+      }
       try {
-        m = await syncAccount(env, a.user_id, a.platform, f);
+        m = await syncAccount(env, a.user_id, a.platform, f, { liPosts });
       } catch (e) {
         const changed = e instanceof ProviderError && e.code === "changed";
         out[changed ? "changed" : "failed"]++;
@@ -1082,13 +1162,14 @@ export async function syncDue(env, f = fetch, { budget = 40, max = 5, d1 = 50 } 
       const [ins] = await batchOr(env, "post_edits", ed => [
         env.DB.prepare(
           `INSERT INTO metric_snapshots (account_id, source, followers, avg_views, avg_likes, avg_comments, posts_sampled, audience,
-             total_impressions, total_reach, total_reactions, total_comments, total_reshares)
-           SELECT id, 'oauth', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? FROM social_accounts
+             ${LI_TOTALS.map(([k]) => `total_${k}`).join(", ")})
+           SELECT id, 'oauth', ?, ?, ?, ?, ?, ?, ${LI_TOTALS.map(() => "?").join(", ")} FROM social_accounts
            WHERE id = ? AND status = 'connected' AND external_id = ? AND next_sync_at = ?`,
         ).bind(m.followers, m.avg_views, m.avg_likes, m.avg_comments, m.posts_sampled, m.audience ? JSON.stringify(m.audience) : null,
           ...LI_TOTALS.map(([k]) => m.totals?.[k] ?? null), a.id, m.external_id, lease.next_sync_at),
         ...(posts && a.platform === "tiktok" ? [ttRename(env, a, m.external_id, lease.next_sync_at, posts)] : []),
         ...(posts ? postWrites(env, a, m.external_id, lease.next_sync_at, posts, m.posts_recent, ed) : []),
+        ...(m.li_tried?.length ? liPostWrites(env, a, m.external_id, lease.next_sync_at, m.li_tried, m.li_posts, ed) : []),
         release(NEXT.ok),
       ], n => used + n <= d1 && (used += n, true));
       out[ins.meta?.changes ? "synced" : "changed"]++;

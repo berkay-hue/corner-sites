@@ -21,8 +21,9 @@ const {
   NOT_CONFIGURED, NO_DATA, OAUTH, ProviderError, oauthReady, redirectUri, listConnections, authorizeUrl,
   exchangeCode, fetchMetrics, encrypt, decrypt, syncAccount, oauthCallback, finishOAuth, OAuthFail,
   syncDue, SYNC_MIN, SYNC_D1, pkceChallenge, disconnectOAuth, CHANGE_LIMIT, SYNCED, LISTED, CONNECTABLE, cleanHandle, fetchProfile, refreshToken,
-  fetchOlderPosts, OLDER, postAudSkip, fetchPostAudience, MISSING,
+  fetchOlderPosts, OLDER, postAudSkip, fetchPostAudience, MISSING, liPostRef, LI_POSTS, LI_TOTALS: LI_TOTAL_TYPES,
 } = await import("./oauth.js");
+const { LI_KEYS } = await import("./metrics.js");
 
 const SCHEMA = readFileSync(new URL("../schema.sql", import.meta.url), "utf8");
 const METRICS = readFileSync(new URL("../migrations/0001_metrics.sql", import.meta.url), "utf8");
@@ -36,6 +37,7 @@ const LINKEDIN = readFileSync(new URL("../migrations/0008_linkedin.sql", import.
 const AUDIENCE = readFileSync(new URL("../migrations/0009_audience.sql", import.meta.url), "utf8");
 const POST_AUD = readFileSync(new URL("../migrations/0010_post_audience.sql", import.meta.url), "utf8");
 const SCOPED = readFileSync(new URL("../migrations/0011_meta_scoped.sql", import.meta.url), "utf8");
+const LI_POSTS_SQL = readFileSync(new URL("../migrations/0013_linkedin_posts.sql", import.meta.url), "utf8");
 
 // Testin ihtiyacı kadar D1: prepare().bind().all/first/run, batch (gerçek D1 gibi atomik), exec
 function d1(db) {
@@ -77,6 +79,7 @@ function freshDb() {
   db.exec(AUDIENCE);
   db.exec(POST_AUD);
   db.exec(SCOPED);
+  db.exec(LI_POSTS_SQL);
   return db;
 }
 
@@ -2344,8 +2347,11 @@ const LI_TOKEN = "https://www.linkedin.com/oauth/v2/accessToken";
 const LI_ME = "https://api.linkedin.com/v2/me";
 const LI_FOL = "https://api.linkedin.com/rest/memberFollowersCount?q=me";
 const LI_POST = "https://api.linkedin.com/rest/memberCreatorPostAnalytics?";
-const LI_COUNTS = { IMPRESSION: 12000, MEMBERS_REACHED: 4000, REACTION: 300, COMMENT: 40, RESHARE: 7 };
-const LI_TOTALS = { impressions: 12000, reach: 4000, reactions: 300, comments: 40, reshares: 7 };
+const LI_COUNTS = { IMPRESSION: 12000, MEMBERS_REACHED: 4000, REACTION: 300, COMMENT: 40, RESHARE: 7,
+  POST_SAVE: 9, POST_SEND: 3, LINK_CLICKS: 25, FOLLOWER_GAINED_FROM_CONTENT: 11, PROFILE_VIEW_FROM_CONTENT: 60 };
+const LI_TOTALS = { impressions: 12000, reach: 4000, reactions: 300, comments: 40, reshares: 7,
+  saves: 9, sends: 3, link_clicks: 25, follows: 11, profile_views: 60 };
+const LI_NULLS = Object.fromEntries(Object.keys(LI_TOTALS).map(k => [k, null]));
 const liType = u => new URL(u).searchParams.get("queryType");
 // Gönderi toplamı rotası; `bad` türleri 403 döner
 const liPosts = (...bad) => [LI_POST, u => (bad.includes(liType(u))
@@ -2396,20 +2402,20 @@ test("LinkedIn: yetki linki (PKCE yok, analitik izinleri), kod takası, /v2/me k
   assert.equal(n.calls.length, 0);
 });
 
-test("LinkedIn ölçümü: takipçi + beş gönderi toplamı (sürümlü REST başlıkları); gelmeyen toplam null; hepsi ya da takipçi hatalıysa hata", async () => {
+test("LinkedIn ölçümü: takipçi + on gönderi toplamı (sürümlü REST başlıkları); gelmeyen toplam null; hepsi ya da takipçi hatalıysa hata", async () => {
   const f = fakeFetch(liRoutes());
   assert.deepEqual(await fetchMetrics("linkedin", "li-access", f), {
     external_id: "li-id-1", handle: "Ayşe Yılmaz", followers: 5000, avg_views: null, avg_likes: null, avg_comments: null,
     posts_sampled: 0, posts: [], posts_recent: 0, totals: LI_TOTALS,
   });
-  // kimlik + takipçi + 5 toplam = COST 7
-  assert.deepEqual(f.calls.map(c => c.url.split("?")[0]), [LI_ME, LI_FOL.split("?")[0], ...Array(5).fill(LI_POST.slice(0, -1))]);
+  // kimlik + takipçi + 10 toplam = COST 12
+  assert.deepEqual(f.calls.map(c => c.url.split("?")[0]), [LI_ME, LI_FOL.split("?")[0], ...Array(10).fill(LI_POST.slice(0, -1))]);
   for (const c of f.calls.slice(1)) {
     assert.deepEqual([c.method, c.headers], ["GET", { authorization: "Bearer li-access", "x-restli-protocol-version": "2.0.0", "linkedin-version": "202610" }]);
   }
   // Tarih aralığı yok: tüm zamanların toplamı
   assert.deepEqual(f.calls.slice(2).map(c => Object.fromEntries(new URL(c.url).searchParams)),
-    ["IMPRESSION", "MEMBERS_REACHED", "REACTION", "COMMENT", "RESHARE"].map(queryType => ({ q: "me", queryType, aggregation: "TOTAL" })));
+    Object.keys(LI_COUNTS).map(queryType => ({ q: "me", queryType, aggregation: "TOTAL" })));
 
   // Bir tür izinsiz ya da hatalı: o tür null, diğerleri dolu
   assert.deepEqual((await fetchMetrics("linkedin", "t", fakeFetch(liRoutes([liPosts("REACTION")])))).totals, { ...LI_TOTALS, reactions: null });
@@ -2417,13 +2423,13 @@ test("LinkedIn ölçümü: takipçi + beş gönderi toplamı (sürümlü REST ba
   const odd = fakeFetch(liRoutes([[LI_POST, u => [200, {
     IMPRESSION: { elements: [{ count: "12" }] }, MEMBERS_REACHED: { elements: [] }, REACTION: { elements: [{ count: 1.5 }] },
     COMMENT: {}, RESHARE: { elements: [{ count: "x" }] },
-  }[liType(u)]]]]));
-  assert.deepEqual((await fetchMetrics("linkedin", "t", odd)).totals, { impressions: 12, reach: null, reactions: null, comments: null, reshares: null });
+  }[liType(u)] ?? {}]]]));
+  assert.deepEqual((await fetchMetrics("linkedin", "t", odd)).totals, { ...LI_NULLS, impressions: 12 });
   // Takipçi gelmezse null
   const nofol = fakeFetch(liRoutes([[LI_FOL, [200, { elements: [] }]]]));
   assert.equal((await fetchMetrics("linkedin", "t", nofol)).followers, null);
 
-  // Beş tür de hatalı (izin yok): hata yukarı çıkar
+  // On tür de hatalı (izin yok): hata yukarı çıkar
   await assert.rejects(fetchMetrics("linkedin", "t", fakeFetch(liRoutes([liPosts(...Object.keys(LI_COUNTS))]))),
     e => e instanceof ProviderError && e.code === "403:http");
   // Takipçi hatası yukarı çıkar
@@ -2463,11 +2469,11 @@ test("LinkedIn: marka bağlar; token şifreli saklanır (yenileme yok), eski tok
 
   const calls = net.calls.length;
   assert.deepEqual(await syncDue(env, net), { ...ZERO, synced: 1 });
-  assert.equal(net.calls.length - calls, 7);
+  assert.equal(net.calls.length - calls, 12);
   assert.deepEqual({ ...db.prepare(`SELECT followers, avg_views, avg_likes, avg_comments, posts_sampled,
-      total_impressions, total_reach, total_reactions, total_comments, total_reshares FROM metric_snapshots`).get() }, {
+      ${Object.keys(LI_TOTALS).map(k => `total_${k}`).join(", ")} FROM metric_snapshots`).get() }, {
     followers: 5000, avg_views: null, avg_likes: null, avg_comments: null, posts_sampled: 0,
-    total_impressions: 12000, total_reach: 4000, total_reactions: 300, total_comments: 40, total_reshares: 7,
+    ...Object.fromEntries(Object.entries(LI_TOTALS).map(([k, v]) => [`total_${k}`, v])),
   });
 
   const m = await call("GET", "/app/metrics", { token: brand.token });
@@ -2630,14 +2636,14 @@ test("liste: configured her satırda boolean ve kapalı kipten bağımsız; link
   assert.equal((await call("POST", "/app/disconnect", { token: brand.token, body: { platform: "linkedin" } })).status, 200);
 });
 
-test("syncDue: linkedin ölçülür (COST 7: kimlik + takipçi + 5 toplam), gelmeyen toplam null; süresi dolan token yenilenmez (no_refresh)", async t => {
+test("syncDue: linkedin ölçülür (COST 12: kimlik + takipçi + 10 toplam), gelmeyen toplam null; süresi dolan token yenilenmez (no_refresh)", async t => {
   t.mock.method(console, "log", () => {});
   const { db, env, join } = await setup({ ...TT_ENV, ...LI_ENV, OAUTH_TOKEN_KEY: KEY });
   const brand = await join("brand", "marka@x.co"), inf = await join("influencer", "inf@x.co");
   await seed(db, env, brand.id, "linkedin", "li-id-1");
   await seed(db, env, inf.id, "tiktok", "tt-1");
   const f = fakeFetch([...ttRoutes(), ...liRoutes([liPosts("RESHARE")])]);
-  assert.deepEqual(await syncDue(env, f, { budget: 14 }), { ...ZERO, synced: 2 });
+  assert.deepEqual(await syncDue(env, f, { budget: 19 }), { ...ZERO, synced: 2 });
   const snap = p => ({ ...db.prepare(
     `SELECT s.followers, s.avg_views, s.posts_sampled, s.total_impressions, s.total_reach, s.total_reactions, s.total_comments, s.total_reshares
      FROM metric_snapshots s JOIN social_accounts a ON a.id = s.account_id WHERE a.platform = ?`,
@@ -2646,13 +2652,14 @@ test("syncDue: linkedin ölçülür (COST 7: kimlik + takipçi + 5 toplam), gelm
     followers: 5000, avg_views: null, posts_sampled: 0,
     total_impressions: 12000, total_reach: 4000, total_reactions: 300, total_comments: 40, total_reshares: null,
   });
+  assert.equal(db.prepare("SELECT total_profile_views FROM metric_snapshots s JOIN social_accounts a ON a.id = s.account_id WHERE a.platform = 'linkedin'").get().total_profile_views, 60);
   const tt = snap("tiktok");
   assert.deepEqual([tt.followers, tt.total_impressions, tt.total_reach, tt.total_reactions, tt.total_comments, tt.total_reshares],
     [12000, null, null, null, null, null]);
   const li = () => ({ ...db.prepare("SELECT handle, error FROM social_accounts WHERE platform = 'linkedin'").get() });
   assert.deepEqual(li(), { handle: "Ayşe Yılmaz", error: null });
   near(due(db, brand.id, "linkedin"), 1435);
-  assert.equal(f.calls.filter(c => c.url.includes("linkedin.com")).length, 7);
+  assert.equal(f.calls.filter(c => c.url.includes("linkedin.com")).length, 12);
   assert.ok(f.calls.every(c => !c.url.startsWith(LI_TOKEN)));
 
   // 60 günlük token dolunca yenileme yok: ağa çıkmadan no_refresh, kullanıcı yeniden bağlar
@@ -2664,6 +2671,134 @@ test("syncDue: linkedin ölçülür (COST 7: kimlik + takipçi + 5 toplam), gelm
   assert.deepEqual(li(), { handle: "Ayşe Yılmaz", error: "no_refresh" });
   near(due(db, brand.id, "linkedin"), 355);
   assert.equal(count(db, "metric_snapshots"), 2);
+});
+
+// ---- LinkedIn gönderi başına ölçüm (elle eklenen gönderiler, 0013) ----
+const LI_ACT = n => `https://www.linkedin.com/feed/update/urn:li:activity:73900000000000000${n}/`;
+const LI_SHARE = n => `https://www.linkedin.com/feed/update/urn:li:share:73900000000000000${n}/`;
+const liEnt = u => new URL(u).searchParams.get("entity");
+// Gönderi ölçümü rotası: entity → sayı tablosu (yoksa 404); `bad` türleri o gönderide 403
+const liEntity = (table, bad = {}) => [LI_POST, u => {
+  if (new URL(u).searchParams.get("q") !== "entity") return [200, { elements: [{ count: LI_COUNTS[liType(u)] }] }];
+  const c = table[liEnt(u)];
+  if (!c || (bad[liEnt(u)] || []).includes(liType(u))) return [c ? 403 : 404, { status: c ? 403 : 404, message: "x" }];
+  return [200, { elements: [{ count: c[liType(u)] }] }];
+}];
+const postCounts = n => ({ IMPRESSION: 1000 * n, MEMBERS_REACHED: 500 * n, REACTION: 10 * n, COMMENT: n });
+
+test("liPostRef: feed/update, embed, /posts/ ve kodlanmış URN'den tür ve kimlik; LinkedIn dışı, http ve kimliksiz bağlantı null; toplam anahtarları metrics.js ile aynı", () => {
+  assert.deepEqual(LI_TOTAL_TYPES.map(([k]) => k), LI_KEYS);
+  const id = "7390000000000000001";
+  for (const [u, want] of [
+    [`https://www.linkedin.com/feed/update/urn:li:activity:${id}/`, { kind: "activity", id }],
+    [`https://www.linkedin.com/feed/update/urn:li:ugcPost:${id}?utm_source=share`, { kind: "ugcPost", id }],
+    [`https://www.linkedin.com/embed/feed/update/urn:li:share:${id}`, { kind: "share", id }],
+    [`https://tr.linkedin.com/posts/ayse-yilmaz_baslik-activity-${id}-AbCd`, { kind: "activity", id }],
+    [`https://www.linkedin.com/posts/ayse_x-ugcPost-${id}-zz/`, { kind: "ugcPost", id }],
+    [`https://www.linkedin.com/feed/update/urn%3Ali%3Aactivity%3A${id}/`, { kind: "activity", id }],
+    [`http://www.linkedin.com/feed/update/urn:li:activity:${id}/`, null],
+    [`https://linkedin.com.evil.test/feed/update/urn:li:activity:${id}/`, null],
+    [`https://evil.test/www.linkedin.com/feed/update/urn:li:activity:${id}/`, null],
+    [`https://www.linkedin.com/feed/update/urn:li:activity:123/`, null],
+    [`https://www.linkedin.com/feed/update/urn:li:activity:${id}9999/`, null],
+    ["https://www.linkedin.com/in/ayse-yilmaz/", null],
+    ["linkedin", null], [null, null],
+  ]) assert.deepEqual(liPostRef(u), want, String(u));
+});
+
+test("LinkedIn gönderi ölçümü: share doğrudan, etkinlik önce share sonra ugcPost; ikisi de yoksa ya da hiç tür gelmezse atlanır; eksik tür null; hata yukarı çıkmaz", async () => {
+  const sh = n => `(share:${encodeURIComponent(`urn:li:share:73900000000000000${n}`)})`;
+  const ugc = n => `(ugc:${encodeURIComponent(`urn:li:ugcPost:73900000000000000${n}`)})`;
+  const dec = s => decodeURIComponent(s);
+  const f = fakeFetch(liRoutes([liEntity(
+    { [dec(sh(11))]: postCounts(1), [dec(ugc(12))]: postCounts(2), [dec(sh(14))]: postCounts(4), [dec(sh(15))]: {} },
+    { [dec(sh(14))]: ["MEMBERS_REACHED", "COMMENT"] },
+  )]));
+  const posts = [
+    { id: 1, url: LI_SHARE(11) }, { id: 2, url: LI_ACT(12) }, { id: 3, url: LI_ACT(13) },
+    { id: 4, url: LI_SHARE(14) }, { id: 5, url: LI_SHARE(15) }, { id: 6, url: "https://www.linkedin.com/in/ayse/" },
+  ];
+  const m = await fetchMetrics("linkedin", "li-access", f, { liPosts: posts });
+  assert.deepEqual(m.totals, LI_TOTALS);
+  assert.deepEqual(m.li_tried, [1, 2, 3, 4, 5]);
+  assert.deepEqual(m.li_posts, [
+    { id: 1, views: 1000, reach: 500, likes: 10, comments: 1 },
+    { id: 2, views: 2000, reach: 1000, likes: 20, comments: 2 },
+    { id: 4, views: 4000, reach: null, likes: 40, comments: null },
+  ]);
+  const ent = f.calls.filter(c => c.url.includes("q=entity"));
+  // Ham URL: parantez açık, URN kodlu; tarih aralığı yok
+  assert.ok(ent.some(c => c.url === `${LI_POST}q=entity&entity=${sh(11)}&queryType=IMPRESSION&aggregation=TOTAL`));
+  assert.deepEqual(ent.filter(c => liEnt(c.url).includes("7390000000000000013")).map(c => [liEnt(c.url).split(":")[0], liType(c.url)]),
+    [["(share", "IMPRESSION"], ["(ugc", "IMPRESSION"]]);
+  // gönderi başına en kötü 5 çağrı (ilk tür iki kez denenir)
+  assert.equal(ent.filter(c => liEnt(c.url).includes("7390000000000000012")).length, 5);
+  for (const c of ent) assert.deepEqual(c.headers, { authorization: "Bearer li-access", "x-restli-protocol-version": "2.0.0", "linkedin-version": "202610" });
+  // Gönderi verilmezse ya da hiçbiri okunamıyorsa çağrı yok, alan yok
+  const g = fakeFetch(liRoutes());
+  const plain = await fetchMetrics("linkedin", "t", g, { liPosts: [{ id: 6, url: "https://www.linkedin.com/in/ayse/" }] });
+  assert.ok(!("li_tried" in plain) && !("li_posts" in plain));
+  assert.equal(g.calls.length, 12);
+});
+
+test("syncDue: LinkedIn elle eklenen gönderiler bütçeden artan kadar (en çok LI_POSTS) ölçülür; sıra synced_at; bağlanmaz; düzeltilen gün ezilmez; kira düşerse yazılmaz; POSTS_ENABLED kapalıysa yok", async t => {
+  t.mock.method(console, "log", () => {});
+  const { db, env, join } = await setup({ ...LI_ENV, OAUTH_TOKEN_KEY: KEY, POSTS_ENABLED: "1" });
+  const brand = await join("brand", "marka@x.co"), other = await join("brand", "baska@x.co");
+  await seed(db, env, brand.id, "linkedin", "li-id-1");
+  const add = (u, url, p = "linkedin") => db.prepare("INSERT INTO posts (user_id, url, platform, type, date) VALUES (?, ?, ?, 'photo', '2026-11-01') RETURNING id").get(u, url, p).id;
+  const ids = [11, 12, 13, 14, 15, 16, 17].map(n => add(brand.id, LI_SHARE(n)));
+  const bad = add(brand.id, "https://www.linkedin.com/in/ayse/");
+  const ig = add(brand.id, "https://www.instagram.com/p/LIX/", "instagram");
+  const theirs = add(other.id, LI_SHARE(11));
+  const table = Object.fromEntries([11, 12, 13, 14, 15, 16, 17].map(n => [decodeURIComponent(`(share:${encodeURIComponent(`urn:li:share:73900000000000000${n}`)})`), postCounts(n)]));
+  const snaps = () => db.prepare("SELECT post_id, likes, comments, views, reach FROM post_snaps ORDER BY post_id").all().map(r => ({ ...r }));
+  const tried = () => db.prepare("SELECT id FROM posts WHERE synced_at IS NOT NULL ORDER BY id").all().map(r => r.id);
+  const again = () => db.prepare("UPDATE social_accounts SET next_sync_at = NULL").run();
+
+  // Bütçe 40: 12 temel + 5 gönderi × 5 = 37. Önce hiç denenmeyenler, en yeni (büyük id) önce
+  const f = fakeFetch(liRoutes([liEntity(table)]));
+  assert.deepEqual(await syncDue(env, f), { ...ZERO, synced: 1 });
+  assert.equal(LI_POSTS, 5);
+  assert.equal(f.calls.length, 12 + 5 * 4);
+  const first = ids.slice(2);
+  assert.deepEqual(tried(), first);
+  assert.deepEqual(snaps(), first.map((id, i) => ({ post_id: id, likes: 10 * (13 + i), comments: 13 + i, views: 1000 * (13 + i), reach: 500 * (13 + i) })));
+  assert.deepEqual(db.prepare("SELECT DISTINCT account_id FROM posts").all().map(r => r.account_id), [null]);
+  assert.equal(db.prepare("SELECT COUNT(*) n FROM post_snaps WHERE post_id IN (?, ?, ?)").get(bad, ig, theirs).n, 0);
+
+  // Sonraki senkron: kalan ikisi önce; bütçe 22 → 12 + 2 gönderi
+  again();
+  const g = fakeFetch(liRoutes([liEntity(table)]));
+  assert.deepEqual(await syncDue(env, g, { budget: 22 }), { ...ZERO, synced: 1 });
+  assert.equal(g.calls.length, 12 + 2 * 4);
+  assert.deepEqual(tried(), ids);
+
+  // Yöneticinin düzelttiği günün ölçümü ezilmez; gelmeyen tür son ölçülenle sürer
+  db.prepare("UPDATE post_snaps SET likes = 1 WHERE post_id = ?").run(ids[0]);
+  db.prepare("INSERT INTO post_edits (user_id, post_id, url, snap_at, field, before, after, source) VALUES (?, ?, ?, date('now'), 'likes', 110, 1, 'admin')").run(brand.id, ids[0], LI_SHARE(11));
+  db.prepare("UPDATE posts SET synced_at = NULL WHERE id IN (?, ?)").run(ids[0], ids[1]);
+  again();
+  const h = fakeFetch(liRoutes([liEntity(table, { [Object.keys(table)[1]]: ["MEMBERS_REACHED"] })]));
+  await syncDue(env, h, { budget: 22 });
+  const s = Object.fromEntries(snaps().map(r => [r.post_id, r]));
+  assert.equal(s[ids[0]].likes, 1);
+  assert.deepEqual(s[ids[1]], { post_id: ids[1], likes: 120, comments: 12, views: 12000, reach: 6000 });
+
+  // Kira düşerse (başka senkron aldı) ne ölçüm ne synced_at yazılır
+  db.prepare("UPDATE posts SET synced_at = NULL WHERE id = ?").run(ids[2]);
+  db.prepare("UPDATE post_snaps SET views = 7 WHERE post_id = ?").run(ids[2]);
+  again();
+  const steal = fakeFetch(liRoutes([[LI_ME, () => { db.prepare("UPDATE social_accounts SET next_sync_at = datetime('now', '+5 hours')").run(); return [200, { id: "li-id-1", localizedFirstName: "Ayşe" }]; }], liEntity(table)]));
+  await syncDue(env, steal, { budget: 17 });
+  assert.equal(db.prepare("SELECT synced_at FROM posts WHERE id = ?").get(ids[2]).synced_at, null);
+  assert.equal(snaps().find(r => r.post_id === ids[2]).views, 7);
+
+  // POSTS_ENABLED kapalı: gönderi çağrısı yok
+  again();
+  const off = fakeFetch(liRoutes([liEntity(table)]));
+  assert.deepEqual(await syncDue({ ...env, POSTS_ENABLED: "0" }, off), { ...ZERO, synced: 1 });
+  assert.equal(off.calls.length, 12);
 });
 
 test("cleanHandle: görünmez kontrol/biçim karakterleri silinir, ZWJ kalır, 60 kod noktası", () => {
