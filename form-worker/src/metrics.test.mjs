@@ -20,6 +20,9 @@ const SCHEMA = readFileSync(new URL("../schema.sql", import.meta.url), "utf8");
 const MIGRATION = readFileSync(new URL("../migrations/0001_metrics.sql", import.meta.url), "utf8");
 const LINKEDIN = readFileSync(new URL("../migrations/0008_linkedin.sql", import.meta.url), "utf8");
 const AUDIENCE = readFileSync(new URL("../migrations/0009_audience.sql", import.meta.url), "utf8");
+// 0013'ün yalnız metric_snapshots kısmı (posts tablosu bu testlerde yok)
+const LI_MORE = readFileSync(new URL("../migrations/0013_linkedin_posts.sql", import.meta.url), "utf8")
+  .split("\n").filter(l => l.startsWith("ALTER TABLE metric_snapshots")).join("\n");
 
 // Testin ihtiyacı kadar D1: prepare().bind().all/first/run, batch, exec
 function d1(db) {
@@ -41,6 +44,7 @@ function freshDb() {
   db.exec(MIGRATION);
   db.exec(LINKEDIN);
   db.exec(AUDIENCE);
+  db.exec(LI_MORE);
   return db;
 }
 
@@ -161,7 +165,7 @@ test("accountMetrics canlı mod: beyan sırası, son ölçüm, bağlı platform 
   snapshot(db, social(db, a, "youtube", "yt_real"), "2026-10-02 08:00:00", 7000, 700, 70, 7); // beyan edilmemiş
   // LinkedIn: takipçi + gönderi toplamları, ortalama yok; gelmeyen toplam null
   const li = snapshot(db, social(db, a, "linkedin", "li_real"), "2026-10-02 08:00:00", 5000, null, null, null);
-  db.prepare("UPDATE metric_snapshots SET total_impressions = 12000, total_reach = 4000, total_reactions = 300, total_comments = 40 WHERE id = ?").run(li);
+  db.prepare("UPDATE metric_snapshots SET total_impressions = 12000, total_reach = 4000, total_reactions = 300, total_comments = 40, total_saves = 9, total_profile_views = 60 WHERE id = ?").run(li);
   social(db, a, "x", "x_rev", "revoked");
   snapshot(db, social(db, b, "instagram", "b_ig"), "2026-10-06 10:00:00", 99); // başka kullanıcı
   db.prepare("UPDATE social_accounts SET status = 'connected' WHERE user_id = ? AND status = 'pending'").run(a);
@@ -179,7 +183,7 @@ test("accountMetrics canlı mod: beyan sırası, son ölçüm, bağlı platform 
   assert.deepEqual(m.accounts, [
     {
       platform: "linkedin", handle: "li_real", source: "oauth", label: null, label_code: null, followers: 5000, avg_views: null, avg_likes: null, avg_comments: null, posts_sampled: null, taken_at: "2026-10-02 08:00:00", audience: null,
-      totals: { impressions: 12000, reach: 4000, reactions: 300, comments: 40, reshares: null },
+      totals: { impressions: 12000, reach: 4000, reactions: 300, comments: 40, reshares: null, saves: 9, sends: null, link_clicks: null, follows: null, profile_views: 60 },
     },
     { platform: "instagram", handle: "ig_real", source: "oauth", label: null, label_code: null, followers: 1500, avg_views: 300, avg_likes: 30, avg_comments: 3, posts_sampled: 12, taken_at: "2026-10-05 10:00:00", audience: null },
     { platform: "tiktok", handle: "tt_real", ...empty },

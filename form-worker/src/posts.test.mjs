@@ -227,6 +227,30 @@ test("bağlantı tek biçime çevrilir: paylaşım sorgusu ve kısa biçimler ay
   assert.deepEqual(old, [OLD]);
 });
 
+test("LinkedIn: gönderi bağlantısı feed/update/urn biçimine çevrilir; kimliği okunan LinkedIn gönderisi ölçümsüz eklenir (ölçüm ve günlük yazılmaz), diğerleri yine metrics ister", async () => {
+  const { db, call, join } = await setup({ db: (() => { const d = freshDb(); d.exec(read("../migrations/0012_admin.sql")); return d; })() });
+  const token = await join();
+  const ID = "7390000000000000001", LI = `https://www.linkedin.com/feed/update/urn:li:activity:${ID}/`;
+  let r = await call("POST", "/app/posts/manual", { token, body: { url: `https://tr.linkedin.com/posts/ayse_baslik-activity-${ID}-AbCd?utm_source=share` } });
+  ok200(r);
+  assert.deepEqual([r.body.post.url, r.body.post.platform, r.body.post.type, r.body.added, r.body.post.snaps], [LI, "linkedin", "photo", true, []]);
+  // Aynı gönderi başka biçimle: aynı satır; ölçüm verilirse yazılır
+  r = await call("POST", "/app/posts/manual", { token, body: { url: `https://www.linkedin.com/feed/update/urn:li:activity:${ID}?trk=x`, likes: 5, at: "2026-01-02" } });
+  assert.deepEqual([r.body.post.url, r.body.added, r.body.post.snaps.map(s => s.likes)], [LI, false, [5]]);
+  r = await call("POST", "/app/posts/import", { token, body: { rows: [
+    { url: `https://www.linkedin.com/embed/feed/update/urn:li:ugcPost:${ID}` },
+    { url: "https://www.linkedin.com/in/ayse/" },
+    { url: IG },
+  ] } });
+  ok200(r);
+  assert.deepEqual([r.body.added, r.body.updated, r.body.skipped], [1, 0, [{ i: 1, error: "metrics" }, { i: 2, error: "metrics" }]]);
+  assert.deepEqual(db.prepare("SELECT url FROM posts ORDER BY id").all().map(p => p.url), [LI, `https://www.linkedin.com/feed/update/urn:li:ugcPost:${ID}/`]);
+  assert.equal(db.prepare("SELECT COUNT(*) n FROM post_snaps").get().n, 1);
+  assert.deepEqual(db.prepare("SELECT field, after FROM post_edits").all().map(e => [e.field, e.after]), [["likes", 5]]);
+  fails(await call("POST", "/app/posts/manual", { token, body: { url: "https://www.linkedin.com/in/ayse/" } }), 400, "metrics");
+  fails(await call("POST", "/app/posts/manual", { token, body: { url: `http://www.linkedin.com/feed/update/urn:li:activity:${ID}/` } }), 400, "url");
+});
+
 // ---- yönetim paneli ve edit_metrics kapısı (migrations/0012_admin.sql; schema.sql aynı tabloları da kurar) ----
 const ADMIN_SQL = read("../migrations/0012_admin.sql");
 const IG2 = "https://www.instagram.com/p/def/";

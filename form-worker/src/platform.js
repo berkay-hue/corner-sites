@@ -6,7 +6,7 @@
 // Şifre sıfırlama: tek kullanımlık, RESET_MINUTES geçerli link; e-posta Gmail SMTP ile (src/smtp.js, SMTP_USER hesabından).
 // MAIL binding'i yalnızca MAIL_TO adresine gönderebildiği için o kullanılmaz.
 
-import { OAUTH, LISTED, CONNECTABLE, oauthReady, listConnections, startOAuth, finishOAuth, disconnectOAuth, OAuthFail, returnBase, fetchOlderPosts, OLDER_SYNCED, ProviderError, fetchPostAudience, postAudSkip, MISSING, batchOr } from "./oauth.js";
+import { OAUTH, LISTED, CONNECTABLE, oauthReady, listConnections, startOAuth, finishOAuth, disconnectOAuth, OAuthFail, returnBase, fetchOlderPosts, OLDER_SYNCED, ProviderError, fetchPostAudience, postAudSkip, MISSING, batchOr, liPostRef } from "./oauth.js";
 import { smtpReady, smtpSend, smtpFrom } from "./smtp.js";
 import { metricsEnabled, accountMetrics, linkMetrics, parseAudience } from "./metrics.js";
 import { NICHE_LIST } from "./classify.js";
@@ -759,7 +759,8 @@ function postPlatform(u) {
 }
 // Elle girilen bağlantı senkronun yazdığı biçime çevrilir: paylaşım sorgusu (igsh, si, utm) ve # atılır, aynı gönderi iki satır olmaz.
 // YouTube: youtu.be, shorts, live, embed, m., music. → watch?v=<kimlik>; TikTok: @ad/(video|photo)/<rakam>; Instagram: p|reel|tv/<kod>/.
-// Tanınmayan biçim (vm.tiktok kısa bağlantısı, LinkedIn, X) olduğu gibi kalır.
+// LinkedIn: feed/update, embed ya da /posts/…-activity-<kimlik> → feed/update/urn:li:<tür>:<kimlik>/ (oauth.js liPostRef).
+// Tanınmayan biçim (vm.tiktok kısa bağlantısı, kimliksiz LinkedIn, X) olduğu gibi kalır.
 function canonUrl(u, platform) {
   let x, m;
   try { x = new URL(u); } catch { return u; }
@@ -772,6 +773,7 @@ function canonUrl(u, platform) {
     return `https://www.tiktok.com/${m[1]}/${m[2]}/${m[3]}`;
   if (platform === "instagram" && /^(www\.|m\.)?instagram\.com$/.test(h) && (m = p.match(/^\/(?:[\w.]{1,30}\/)?(p|reels?|tv)\/([\w-]{1,64})\/?$/)))
     return `https://www.instagram.com/${m[1] === "reels" ? "reel" : m[1]}/${m[2]}/`;
+  if (platform === "linkedin" && (m = liPostRef(u))) return `https://www.linkedin.com/feed/update/urn:li:${m.kind}:${m.id}/`;
   return u;
 }
 // YYYY-MM-DD, gerçek bir gün, en geç yarın (saat dilimi payı)
@@ -799,21 +801,24 @@ function postIn(o) {
   if (!okDay(at)) return { error: "at" };
   const snap = { at };
   for (const k of PMETS) { const n = pInt(o[k]); if (n === undefined) return { error: k }; snap[k] = n; }
-  if (PMETS.every(k => snap[k] == null)) return { error: "metrics" };
+  // Ölçümsüz satır yalnız kimliği okunan LinkedIn gönderisinde: ölçümü bağlı hesabın senkronu getirir (snap null, ölçüm yazılmaz)
+  const bare = PMETS.every(k => snap[k] == null);
+  if (bare && !(platform === "linkedin" && liPostRef(raw))) return { error: "metrics" };
   const type = PTYPES.includes(o.type) ? o.type : platform === "tiktok" || platform === "youtube" ? "video" : "photo";
   const caption = typeof o.caption === "string" ? o.caption.slice(0, 2200) : "";
   const thumb = okThumb(o.thumb) ? o.thumb : "";
-  return { row: { url: canonUrl(raw, platform), raw, platform, type, date, caption, thumb, snap } };
+  return { row: { url: canonUrl(raw, platform), raw, platform, type, date, caption, thumb, snap: bare ? null : snap } };
 }
 
 // Gönderi ve ölçümü tek batch'te: gönderi varsa bilgileri korunur, yalnız o günün ölçümü eklenir ya da üzerine yazılır
+// Ölçümsüz LinkedIn satırında (snap null) yalnız gönderi eklenir.
 const postWrite = (env, uid, r) => [
   env.DB.prepare("INSERT INTO posts (user_id, url, platform, type, date, caption, thumb) VALUES (?, ?, ?, ?, ?, ?, ?) ON CONFLICT (user_id, url) DO NOTHING")
     .bind(uid, r.url, r.platform, r.type, r.date, r.caption, r.thumb),
-  env.DB.prepare(`INSERT INTO post_snaps (post_id, at, likes, comments, views, reach)
+  ...!r.snap ? [] : [env.DB.prepare(`INSERT INTO post_snaps (post_id, at, likes, comments, views, reach)
     VALUES ((SELECT id FROM posts WHERE user_id = ? AND url = ?), ?, ?, ?, ?, ?)
     ON CONFLICT (post_id, at) DO UPDATE SET likes = excluded.likes, comments = excluded.comments, views = excluded.views, reach = excluded.reach`)
-    .bind(uid, r.url, r.snap.at, r.snap.likes, r.snap.comments, r.snap.views, r.snap.reach),
+    .bind(uid, r.url, r.snap.at, r.snap.likes, r.snap.comments, r.snap.views, r.snap.reach)],
 ];
 
 // Elle değişiklik günlüğü (0012 post_edits): yazılacak (url, gün) ölçümlerinin önceki hali tek SELECT'le (json_each) okunur
@@ -830,6 +835,7 @@ async function snapsBefore(env, uid, rows) {
 // isolate'te (MISSING) doğrudan günlüksüz yapılır. Dönüş: yazılan günlük satırı sayısı; tablo yoksa null (bilinmiyor).
 async function writeLogged(env, writes, { actor, uid, rows, source, cur }) {
   if (MISSING.post_edits) { await env.DB.batch(writes); return null; }
+  rows = rows.filter(r => r.snap);
   cur = cur || await snapsBefore(env, uid, rows);
   const log = [];
   for (const r of rows) {
