@@ -8,6 +8,9 @@
 export const SAMPLE = "örnek", NO_DATA = "veri yok";
 // Resmi API'si bağlanabilen platformlar; LinkedIn, X ve Twitch için "veri yok"
 export const OFFICIAL = ["instagram", "tiktok", "youtube"];
+// Gerçek hesap ölçümü gelen platformlar: LinkedIn'de takipçi + tüm gönderilerin toplamları (ortalama yok). Örnek modda
+// ve içerik linklerinde LinkedIn yine "veri yok".
+const MEASURED = [...OFFICIAL, "linkedin"];
 export const metricsEnabled = env => env?.METRICS_ENABLED === "1";
 
 // Girdiden tohumlanan sabit rastgele sayı üreteci (FNV-1a + mulberry32)
@@ -70,8 +73,9 @@ export const parseAudience = s => {
   try { const a = JSON.parse(s); return a && typeof a === "object" && !Array.isArray(a) ? a : null; } catch { return null; }
 };
 
+// totals: yalnız ölçümü olan LinkedIn hesabında (gösterim, erişilen üye, tepki, yorum, yeniden paylaşım; gelmeyen null)
 const account = (platform, handle, row) => {
-  const real = row?.taken_at && OFFICIAL.includes(platform);
+  const real = row?.taken_at && MEASURED.includes(platform);
   return {
     platform, handle: handle ?? null,
     source: real ? row.source || "oauth" : "none", label: real ? null : NO_DATA, label_code: real ? null : "no_data",
@@ -81,6 +85,12 @@ const account = (platform, handle, row) => {
     posts_sampled: real ? row.posts_sampled ?? null : null,
     taken_at: real ? row.taken_at : null,
     audience: real ? parseAudience(row.audience) : null,
+    ...(real && platform === "linkedin" ? {
+      totals: {
+        impressions: row.total_impressions ?? null, reach: row.total_reach ?? null, reactions: row.total_reactions ?? null,
+        comments: row.total_comments ?? null, reshares: row.total_reshares ?? null,
+      },
+    } : {}),
   };
 };
 
@@ -97,7 +107,8 @@ export async function accountMetrics(env, userId, profile) {
     };
   }
   const { results = [] } = await env.DB.prepare(
-    `SELECT a.platform, a.handle, s.taken_at, s.source, s.followers, s.avg_views, s.avg_likes, s.avg_comments, s.posts_sampled, s.audience
+    `SELECT a.platform, a.handle, s.taken_at, s.source, s.followers, s.avg_views, s.avg_likes, s.avg_comments, s.posts_sampled, s.audience,
+       s.total_impressions, s.total_reach, s.total_reactions, s.total_comments, s.total_reshares
      FROM social_accounts a
      LEFT JOIN metric_snapshots s ON s.id = (SELECT id FROM metric_snapshots WHERE account_id = a.id ORDER BY taken_at DESC, id DESC LIMIT 1)
      WHERE a.user_id = ? AND a.status = 'connected'`,
