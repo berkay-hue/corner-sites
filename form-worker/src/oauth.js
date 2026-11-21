@@ -65,6 +65,12 @@ export const LI_TOTALS = [["impressions", "IMPRESSION"], ["reach", "MEMBERS_REAC
 const LI_POST_METS = [["views", "IMPRESSION"], ["reach", "MEMBERS_REACHED"], ["likes", "REACTION"], ["comments", "COMMENT"]];
 export const LI_POSTS = 5;
 const LI_POST_CALLS = LI_POST_METS.length + 1;
+// Yönetici olunan şirket sayfaları (organizationAcls, ADMINISTRATOR): en çok LI_ORGS sayfanın en yeni LI_ORG_POSTS
+// gönderisi aktarılır. Sayfa başına en kötü LI_ORG_CALLS çağrı: gönderi listesi + takipçi + istatistik (share ve ugcPost
+// listeleri ayrı, LI_STAT_CHUNK kimlik bir istekte). Bunlara ek 2 çağrı: yetki listesi + sayfa adları.
+export const LI_ORGS = 2, LI_ORG_POSTS = 100;
+const LI_STAT_CHUNK = 50;
+const LI_ORG_CALLS = 2 + Math.ceil(LI_ORG_POSTS / LI_STAT_CHUNK) + 1;
 const YTA = "https://youtubeanalytics.googleapis.com/v2", YT_AUDIENCE = "https://www.googleapis.com/auth/yt-analytics.readonly";
 
 // refresh: süresi bu kadar içinde dolacak token yenilenir (Instagram 60 gün, TikTok 1 gün, YouTube 1 saat geçerli).
@@ -91,7 +97,7 @@ const PROVIDERS = {
   linkedin: {
     id: "LINKEDIN_CLIENT_ID", secret: "LINKEDIN_CLIENT_SECRET",
     authorize: "https://www.linkedin.com/oauth/v2/authorization", token: "https://www.linkedin.com/oauth/v2/accessToken",
-    scope: "r_basicprofile r_member_postAnalytics r_member_profileAnalytics",
+    scope: "r_basicprofile r_member_postAnalytics r_member_profileAnalytics r_organization_social rw_organization_admin",
   },
 };
 
@@ -443,6 +449,7 @@ const POST_URL = {
   instagram: /^https:\/\/(www\.)?instagram\.com\/[^\s"'<>]+$/,
   tiktok: /^https:\/\/(www\.)?tiktok\.com\/[^\s"'<>]+$/,
   youtube: /^https:\/\/www\.youtube\.com\/watch\?v=[\w-]{1,64}$/,
+  linkedin: /^https:\/\/www\.linkedin\.com\/feed\/update\/urn:li:(share|ugcPost):\d{10,22}\/$/,
 };
 const okThumb = s => typeof s === "string" && /^https:\/\/[^\s"'<>]{4,2000}$/.test(s);
 const whole = v => { const n = num(v); return n !== null && Number.isInteger(n) && n < 1e12 ? n : null; };
@@ -831,8 +838,65 @@ const API = {
       };
       return (await Promise.all(posts.map(p => one(p).catch(() => null)))).filter(Boolean);
     },
+    // Yönetici olunan şirket sayfaları (r_organization_social + rw_organization_admin): ilk LI_ORGS sayfanın adı,
+    // takipçisi ve en yeni LI_ORG_POSTS yayımlanmış gönderisi (taslak, silinmiş ve akışta görünmeyen reklam gönderisi
+    // hariç) ömür boyu organik istatistikle. → {orgs: [{id, name, vanity, followers, posts}], posts: [toPost], err?}.
+    // Yetki listesi alınamazsa (eski bağda kapsam yok: 403) hata yukarı çıkar; sayfa başına hata o sayfayı atlar,
+    // istatistiği alınamayan gönderi bu senkronda aktarılmaz.
+    async orgs(token, f) {
+      const acl = await json(f, `${LI}/rest/organizationAcls?q=roleAssignee&role=ADMINISTRATOR&state=APPROVED&count=10`, liRest(token));
+      const ids = [...new Set((acl.elements || []).map(e => String(e.organization || e.organizationTarget || "").match(/^urn:li:organization:(\d{1,20})$/)?.[1]).filter(Boolean))].slice(0, LI_ORGS);
+      if (!ids.length) return { orgs: [], posts: [] };
+      const names = await json(f, `${LI}/rest/organizations?ids=List(${ids.join(",")})`, liRest(token)).then(b => b.results || {}, () => ({}));
+      const finder = { headers: { ...liRest(token).headers, "x-restli-method": "FINDER" } };
+      const one = async id => {
+        const urn = encodeURIComponent(`urn:li:organization:${id}`);
+        const [list, net] = await Promise.all([
+          json(f, `${LI}/rest/posts?author=${urn}&q=author&count=${LI_ORG_POSTS}&sortBy=CREATED`, finder),
+          json(f, `${LI}/rest/networkSizes/${urn}?edgeType=COMPANY_FOLLOWED_BY_MEMBER`, liRest(token)).catch(() => null),
+        ]);
+        const items = (list.elements || []).filter(x => typeof x?.id === "string" && /^urn:li:(share|ugcPost):\d{10,22}$/.test(x.id)
+          && x.lifecycleState === "PUBLISHED" && x.distribution?.feedDistribution !== "NONE").slice(0, LI_ORG_POSTS);
+        const stats = new Map();
+        const chunks = [];
+        for (const kind of ["share", "ugcPost"]) {
+          const of = items.filter(x => x.id.startsWith(`urn:li:${kind}:`)).map(x => x.id);
+          for (let i = 0; i < of.length; i += LI_STAT_CHUNK) chunks.push([kind, of.slice(i, i + LI_STAT_CHUNK)]);
+        }
+        await Promise.all(chunks.map(([kind, list]) => json(f, `${LI}/rest/organizationalEntityShareStatistics?q=organizationalEntity&organizationalEntity=${urn}&${kind === "share" ? "shares" : "ugcPosts"}=List(${list.map(encodeURIComponent).join(",")})`, liRest(token))
+          .then(b => {
+            // Yanıtta olmayan gönderi (henüz etkileşim yok) sıfır sayılır
+            for (const u of list) stats.set(u, {});
+            for (const e of b.elements || []) { const u = e.share || e.ugcPost; if (stats.has(u)) stats.set(u, e.totalShareStatistics || {}); }
+          }, () => { /* bu parçanın gönderileri bu senkronda aktarılmaz */ })));
+        const posts = items.filter(x => stats.has(x.id)).map(x => liOrgPost(x, stats.get(x.id))).filter(Boolean);
+        const n = names[id] || {};
+        return {
+          org: { id, name: cleanHandle(n.localizedName), vanity: typeof n.vanityName === "string" && /^[\w-]{1,100}$/.test(n.vanityName) ? n.vanityName : null,
+            followers: whole(net?.firstDegreeSize), posts: posts.length },
+          posts,
+        };
+      };
+      const got = await Promise.all(ids.map(id => one(id).catch(err => ({ err }))));
+      const ok = got.filter(x => !x.err);
+      if (!ok.length) throw got[0].err;
+      return { orgs: ok.map(x => x.org), posts: ok.flatMap(x => x.posts).sort((a, b) => b.date.localeCompare(a.date)) };
+    },
   },
 };
+
+// Şirket sayfası gönderisi → toPost. Tür: video → video, çoklu görsel ya da belge → carousel, diğerleri photo.
+// Ölçüm: izlenme = gösterim, erişim = tekil gösterim; tarih yayımlanma (yoksa oluşturulma) günü (UTC).
+function liOrgPost(x, s) {
+  const at = Number.isFinite(x.publishedAt) ? x.publishedAt : x.createdAt;
+  const c = x.content || {}, media = typeof c.media?.id === "string" ? c.media.id : "";
+  return toPost("linkedin", {
+    url: `https://www.linkedin.com/feed/update/${x.id}/`, date: Number.isFinite(at) ? new Date(at).toISOString().slice(0, 10) : "",
+    type: media.startsWith("urn:li:video:") ? "video" : c.multiImage || media.startsWith("urn:li:document:") ? "carousel" : "photo",
+    caption: x.commentary, thumbs: [],
+    likes: s.likeCount ?? 0, comments: s.commentCount ?? 0, views: s.impressionCount ?? 0, reach: s.uniqueImpressionsCount ?? 0,
+  });
+}
 
 // LinkedIn gönderi bağlantısındaki kimlik: urn:li:(activity|share|ugcPost):<rakam> (feed/update, embed) ya da
 // /posts/<ad>_<başlık>-(activity|share|ugcPost)-<rakam>-<kod>. Bulunamazsa null.
@@ -867,7 +931,9 @@ export async function fetchProfile(p, token, f = fetch) {
 // posts_recent: bunlardan kaçı son SAMPLE gönderiden (posts'un ilk posts_recent kadarı); audience: kitle dağılımı
 // (Instagram ve YouTube), alınamazsa null (YouTube'da nedeniyle {reason}); ölçümü bozmaz. Instagram ve YouTube
 // gönderileri audience taşır (gönderi başına kitle: izlenme özeti, kaynaklar, kırılım, Instagram insights'ı).
-// LinkedIn'de gönderi listesi ve ortalama yok; totals: tüm gönderilerin toplamları (LI_TOTALS anahtarları);
+// LinkedIn'de kişisel gönderi listesi ve ortalama yok (r_member_social kısıtlı); totals: tüm gönderilerin toplamları
+// (LI_TOTALS anahtarları); posts: yönetici olunan şirket sayfalarının gönderileri (API.linkedin.orgs), audience:
+// {orgs: [{id, name, vanity, followers, posts}]} ya da alınamadıysa {orgs_err};
 // liPosts ([{id, url}], elle eklenen gönderiler) verilirse li_posts: bulunanların ölçümü, li_tried: denenenlerin kimliği.
 export async function fetchMetrics(p, token, f = fetch, { liPosts = [] } = {}) {
   if (!SYNCED.includes(p)) throw new ProviderError("no_api");
@@ -875,9 +941,13 @@ export async function fetchMetrics(p, token, f = fetch, { liPosts = [] } = {}) {
   if (API[p].stats) {
     const st = await API[p].stats(token, f);
     const tried = liPosts.filter(x => liPostRef(x.url));
+    // Şirket sayfaları ayrı: alınamazsa (eski bağda kapsam yok) kişisel ölçüm yine yazılır, kitlede orgs_err kalır
+    const org = API[p].orgs ? await API[p].orgs(token, f).catch(e => ({ err: e instanceof ProviderError ? e.code : "error" })) : null;
+    const orgPosts = org?.posts || [];
     return {
       external_id: extId(pr.external_id), handle: cleanHandle(pr.handle), followers: num(st.followers),
-      avg_views: null, avg_likes: null, avg_comments: null, posts_sampled: 0, posts: [], posts_recent: 0, totals: st.totals,
+      avg_views: null, avg_likes: null, avg_comments: null, posts_sampled: 0, posts: orgPosts, posts_recent: Math.min(orgPosts.length, SAMPLE),
+      totals: st.totals, audience: org ? (org.err ? { orgs_err: org.err } : { orgs: org.orgs }) : null,
       ...(tried.length ? { li_tried: tried.map(x => x.id), li_posts: await API[p].postStats(token, f, tried) } : {}),
     };
   }
@@ -1064,13 +1134,14 @@ function postWrites(env, a, externalId, leaseAt, posts, recent, edits = true) {
   ];
 }
 
-// Elle eklenen LinkedIn gönderilerinden ölçülecekler: kimliği okunabilen, en uzun süredir denenmeyen (synced_at, 0013)
+// Elle eklenen LinkedIn gönderilerinden ölçülecekler (şirket sayfasından aktarılanlar, account_id dolu, hariç: onlar
+// organizationalEntityShareStatistics ile ölçülür): kimliği okunabilen, en uzun süredir denenmeyen (synced_at, 0013)
 // en çok n gönderi [{id, url}]. Kimliği okunamayanlar sırada kalır ama ilk LI_SCAN satırda atlanır.
 const LI_SCAN = 50;
 async function liDue(env, userId, n) {
   if (n < 1) return [];
   const { results = [] } = await env.DB.prepare(
-    `SELECT id, url FROM posts WHERE user_id = ? AND platform = 'linkedin' ORDER BY synced_at IS NOT NULL, synced_at, id DESC LIMIT ${LI_SCAN}`,
+    `SELECT id, url FROM posts WHERE user_id = ? AND platform = 'linkedin' AND account_id IS NULL ORDER BY synced_at IS NOT NULL, synced_at, id DESC LIMIT ${LI_SCAN}`,
   ).bind(userId).all();
   return results.filter(r => liPostRef(r.url)).slice(0, n);
 }
@@ -1109,13 +1180,15 @@ function liPostWrites(env, a, externalId, leaseAt, tried, stats, edits = true) {
 // gönderinin insights'ı + alt basamaklarla en çok IG_RETRY tekrar + 8 kitle kırılımı; TikTok: 5 sayfa; YouTube: 4 liste
 // sayfası + 4 video parçası + kanalın 9 raporu (90 gün ve tüm zaman kırılımı, toplam izlenme, en çok izlenen videolar,
 // abonelerin izlenmesi, trafik kaynağı, cihaz) + YT_VIDEO_CALLS video raporu; LinkedIn: kimlik + takipçi + LI_TOTALS
-// toplamı (yenileme ve kitle yok). LinkedIn'de elle eklenen gönderiler (POSTS_ENABLED "1") bütçeden artan kadar ölçülür:
+// toplamı + şirket sayfaları (yetki listesi + adlar + sayfa başına LI_ORG_CALLS; yenileme yok). LinkedIn'de elle eklenen gönderiler (POSTS_ENABLED "1") bütçeden artan kadar ölçülür:
 // en çok LI_POSTS gönderi, her biri LI_POST_CALLS çağrı; sığmayanlar sırada kalır (synced_at), ertesi senkronda önce gelir.
-const COST = { instagram: 27 + IG_RETRY, tiktok: 7, youtube: 10 + 9 + YT_VIDEO_CALLS, linkedin: 2 + LI_TOTALS.length };
+const COST = { instagram: 27 + IG_RETRY, tiktok: 7, youtube: 10 + 9 + YT_VIDEO_CALLS, linkedin: 2 + LI_TOTALS.length + 2 + LI_ORGS * LI_ORG_CALLS };
 const NEXT = { ok: "+1435 minutes", fail: "+355 minutes", changed: "+55 minutes" }; // saatlik cron'da ~1 gün, ~6 saat, ~1 saat
 export const SYNC_MIN = Math.min(...Object.values(COST));
 export const SYNC_D1 = 9; // kira, token, yenileme, son senkron işareti, ölçüm + TikTok'ta ad değişikliği + gönderiler + gönderi ölçümleri + kira bırakma (batch)
-// LinkedIn: kira, token, son senkron işareti, ölçülecek gönderiler (liDue) + batch'te ölçüm, synced_at, gönderi ölçümleri, kira bırakma = 8
+// LinkedIn 10: kira, token, son senkron işareti, ölçülecek gönderiler (liDue) + batch'te ölçüm, şirket gönderileri ve
+// ölçümleri (postWrites), synced_at, elle eklenen gönderi ölçümleri, kira bırakma
+const D1_OF = p => p === "linkedin" ? SYNC_D1 + 1 : SYNC_D1;
 export async function syncDue(env, f = fetch, { budget = 40, max = 5, d1 = 50 } = {}) {
   const out = { synced: 0, failed: 0, changed: 0, busy: 0, deferred: 0 };
   const ready = SYNCED.filter(p => oauthReady(env, p));
@@ -1128,7 +1201,7 @@ export async function syncDue(env, f = fetch, { budget = 40, max = 5, d1 = 50 } 
   ).bind(...ready).all();
   let spent = 0, picked = 0, used = 1;
   for (const a of results) {
-    if (!Number.isFinite(COST[a.platform]) || picked >= max || spent + COST[a.platform] > budget || used + SYNC_D1 > d1) { out.deferred++; continue; }
+    if (!Number.isFinite(COST[a.platform]) || picked >= max || spent + COST[a.platform] > budget || used + D1_OF(a.platform) > d1) { out.deferred++; continue; }
     used++;
     try {
       const lease = await env.DB.prepare(
@@ -1137,7 +1210,7 @@ export async function syncDue(env, f = fetch, { budget = 40, max = 5, d1 = 50 } 
       ).bind(a.id).first();
       if (!lease) { out.busy++; continue; }
       spent += COST[a.platform];
-      used += SYNC_D1 - 1;
+      used += D1_OF(a.platform) - 1;
       picked++;
       const release = next => env.DB.prepare("UPDATE social_accounts SET next_sync_at = datetime('now', ?) WHERE id = ? AND next_sync_at = ?")
         .bind(next, a.id, lease.next_sync_at);

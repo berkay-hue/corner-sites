@@ -22,6 +22,7 @@ const {
   exchangeCode, fetchMetrics, encrypt, decrypt, syncAccount, oauthCallback, finishOAuth, OAuthFail,
   syncDue, SYNC_MIN, SYNC_D1, pkceChallenge, disconnectOAuth, CHANGE_LIMIT, SYNCED, LISTED, CONNECTABLE, cleanHandle, fetchProfile, refreshToken,
   fetchOlderPosts, OLDER, postAudSkip, fetchPostAudience, MISSING, liPostRef, LI_POSTS, LI_TOTALS: LI_TOTAL_TYPES,
+  LI_ORGS, LI_ORG_POSTS,
 } = await import("./oauth.js");
 const { LI_KEYS } = await import("./metrics.js");
 
@@ -2347,6 +2348,7 @@ const LI_TOKEN = "https://www.linkedin.com/oauth/v2/accessToken";
 const LI_ME = "https://api.linkedin.com/v2/me";
 const LI_FOL = "https://api.linkedin.com/rest/memberFollowersCount?q=me";
 const LI_POST = "https://api.linkedin.com/rest/memberCreatorPostAnalytics?";
+const LI_ACL = "https://api.linkedin.com/rest/organizationAcls?";
 const LI_COUNTS = { IMPRESSION: 12000, MEMBERS_REACHED: 4000, REACTION: 300, COMMENT: 40, RESHARE: 7,
   POST_SAVE: 9, POST_SEND: 3, LINK_CLICKS: 25, FOLLOWER_GAINED_FROM_CONTENT: 11, PROFILE_VIEW_FROM_CONTENT: 60 };
 const LI_TOTALS = { impressions: 12000, reach: 4000, reactions: 300, comments: 40, reshares: 7,
@@ -2361,6 +2363,8 @@ const liRoutes = (extra = []) => [...extra,
   [LI_TOKEN, [200, { access_token: "li-access", expires_in: 5184000, scope: "r_basicprofile,r_member_postAnalytics,r_member_profileAnalytics" }]],
   [LI_ME, [200, { id: "li-id-1", localizedFirstName: "Ayşe", localizedLastName: "Yılmaz" }]],
   [LI_FOL, [200, { elements: [{ memberFollowersCount: 5000 }] }]],
+  // Varsayılan: yönetilen şirket sayfası yok (tek ek çağrı)
+  [LI_ACL, [200, { elements: [] }]],
   liPosts()];
 const liRow = (list, p = "linkedin") => list.find(c => c.platform === p);
 
@@ -2371,7 +2375,7 @@ test("LinkedIn: yetki linki (PKCE yok, analitik izinleri), kod takası, /v2/me k
   assert.equal(`${u.origin}${u.pathname}`, "https://www.linkedin.com/oauth/v2/authorization");
   assert.deepEqual(Object.fromEntries(u.searchParams), {
     client_id: "li-client-id", redirect_uri: redirect, response_type: "code",
-    scope: "r_basicprofile r_member_postAnalytics r_member_profileAnalytics", state: "st-1",
+    scope: "r_basicprofile r_member_postAnalytics r_member_profileAnalytics r_organization_social rw_organization_admin", state: "st-1",
   });
   assert.ok(!u.href.includes("gizli"));
 
@@ -2406,15 +2410,15 @@ test("LinkedIn ölçümü: takipçi + on gönderi toplamı (sürümlü REST baş
   const f = fakeFetch(liRoutes());
   assert.deepEqual(await fetchMetrics("linkedin", "li-access", f), {
     external_id: "li-id-1", handle: "Ayşe Yılmaz", followers: 5000, avg_views: null, avg_likes: null, avg_comments: null,
-    posts_sampled: 0, posts: [], posts_recent: 0, totals: LI_TOTALS,
+    posts_sampled: 0, posts: [], posts_recent: 0, totals: LI_TOTALS, audience: { orgs: [] },
   });
-  // kimlik + takipçi + 10 toplam = COST 12
-  assert.deepEqual(f.calls.map(c => c.url.split("?")[0]), [LI_ME, LI_FOL.split("?")[0], ...Array(10).fill(LI_POST.slice(0, -1))]);
+  // kimlik + takipçi + 10 toplam + şirket sayfası yetki listesi (sayfa yok: başka çağrı yok)
+  assert.deepEqual(f.calls.map(c => c.url.split("?")[0]), [LI_ME, LI_FOL.split("?")[0], ...Array(10).fill(LI_POST.slice(0, -1)), LI_ACL.slice(0, -1)]);
   for (const c of f.calls.slice(1)) {
     assert.deepEqual([c.method, c.headers], ["GET", { authorization: "Bearer li-access", "x-restli-protocol-version": "2.0.0", "linkedin-version": "202610" }]);
   }
   // Tarih aralığı yok: tüm zamanların toplamı
-  assert.deepEqual(f.calls.slice(2).map(c => Object.fromEntries(new URL(c.url).searchParams)),
+  assert.deepEqual(f.calls.slice(2, 12).map(c => Object.fromEntries(new URL(c.url).searchParams)),
     Object.keys(LI_COUNTS).map(queryType => ({ q: "me", queryType, aggregation: "TOTAL" })));
 
   // Bir tür izinsiz ya da hatalı: o tür null, diğerleri dolu
@@ -2469,7 +2473,7 @@ test("LinkedIn: marka bağlar; token şifreli saklanır (yenileme yok), eski tok
 
   const calls = net.calls.length;
   assert.deepEqual(await syncDue(env, net), { ...ZERO, synced: 1 });
-  assert.equal(net.calls.length - calls, 12);
+  assert.equal(net.calls.length - calls, 13);
   assert.deepEqual({ ...db.prepare(`SELECT followers, avg_views, avg_likes, avg_comments, posts_sampled,
       ${Object.keys(LI_TOTALS).map(k => `total_${k}`).join(", ")} FROM metric_snapshots`).get() }, {
     followers: 5000, avg_views: null, avg_likes: null, avg_comments: null, posts_sampled: 0,
@@ -2481,7 +2485,7 @@ test("LinkedIn: marka bağlar; token şifreli saklanır (yenileme yok), eski tok
   const acc = liRow(m.body.metrics.accounts);
   assert.deepEqual({ ...acc, taken_at: typeof acc.taken_at }, {
     platform: "linkedin", handle: "Ayşe Yılmaz", source: "oauth", label: null, label_code: null,
-    followers: 5000, avg_views: null, avg_likes: null, avg_comments: null, posts_sampled: 0, taken_at: "string", audience: null,
+    followers: 5000, avg_views: null, avg_likes: null, avg_comments: null, posts_sampled: 0, taken_at: "string", audience: { orgs: [] },
     totals: LI_TOTALS,
   });
 
@@ -2636,14 +2640,14 @@ test("liste: configured her satırda boolean ve kapalı kipten bağımsız; link
   assert.equal((await call("POST", "/app/disconnect", { token: brand.token, body: { platform: "linkedin" } })).status, 200);
 });
 
-test("syncDue: linkedin ölçülür (COST 12: kimlik + takipçi + 10 toplam), gelmeyen toplam null; süresi dolan token yenilenmez (no_refresh)", async t => {
+test("syncDue: linkedin ölçülür (COST 24: kimlik + takipçi + 10 toplam + şirket sayfaları), gelmeyen toplam null; süresi dolan token yenilenmez (no_refresh)", async t => {
   t.mock.method(console, "log", () => {});
   const { db, env, join } = await setup({ ...TT_ENV, ...LI_ENV, OAUTH_TOKEN_KEY: KEY });
   const brand = await join("brand", "marka@x.co"), inf = await join("influencer", "inf@x.co");
   await seed(db, env, brand.id, "linkedin", "li-id-1");
   await seed(db, env, inf.id, "tiktok", "tt-1");
   const f = fakeFetch([...ttRoutes(), ...liRoutes([liPosts("RESHARE")])]);
-  assert.deepEqual(await syncDue(env, f, { budget: 19 }), { ...ZERO, synced: 2 });
+  assert.deepEqual(await syncDue(env, f, { budget: 31 }), { ...ZERO, synced: 2 });
   const snap = p => ({ ...db.prepare(
     `SELECT s.followers, s.avg_views, s.posts_sampled, s.total_impressions, s.total_reach, s.total_reactions, s.total_comments, s.total_reshares
      FROM metric_snapshots s JOIN social_accounts a ON a.id = s.account_id WHERE a.platform = ?`,
@@ -2659,7 +2663,7 @@ test("syncDue: linkedin ölçülür (COST 12: kimlik + takipçi + 10 toplam), ge
   const li = () => ({ ...db.prepare("SELECT handle, error FROM social_accounts WHERE platform = 'linkedin'").get() });
   assert.deepEqual(li(), { handle: "Ayşe Yılmaz", error: null });
   near(due(db, brand.id, "linkedin"), 1435);
-  assert.equal(f.calls.filter(c => c.url.includes("linkedin.com")).length, 12);
+  assert.equal(f.calls.filter(c => c.url.includes("linkedin.com")).length, 13);
   assert.ok(f.calls.every(c => !c.url.startsWith(LI_TOKEN)));
 
   // 60 günlük token dolunca yenileme yok: ağa çıkmadan no_refresh, kullanıcı yeniden bağlar
@@ -2671,6 +2675,137 @@ test("syncDue: linkedin ölçülür (COST 12: kimlik + takipçi + 10 toplam), ge
   assert.deepEqual(li(), { handle: "Ayşe Yılmaz", error: "no_refresh" });
   near(due(db, brand.id, "linkedin"), 355);
   assert.equal(count(db, "metric_snapshots"), 2);
+});
+
+// ---- LinkedIn şirket sayfaları (r_organization_social + rw_organization_admin) ----
+const LI_R = "https://api.linkedin.com/rest/";
+const ORG_A = "urn:li:organization:111", ORG_B = "urn:li:organization:222";
+const SH = n => `urn:li:share:73900000000000001${n}`, UGC = n => `urn:li:ugcPost:73900000000000001${n}`;
+const liUrl = urn => `https://www.linkedin.com/feed/update/${urn}/`;
+const at = d => Date.parse(`${d}T09:00:00Z`);
+const orgPost = (id, extra = {}) => ({ id, lifecycleState: "PUBLISHED", distribution: { feedDistribution: "MAIN_FEED" },
+  publishedAt: at("2026-11-10"), commentary: `metin ${id.slice(-3)}`, ...extra });
+const ORG_POSTS = [
+  orgPost(SH("01"), { commentary: "Merhaba" }),
+  orgPost(UGC("02"), { publishedAt: at("2026-11-15"), content: { media: { id: "urn:li:video:C1" } } }),
+  orgPost(UGC("03"), { publishedAt: undefined, createdAt: at("2026-11-01"), content: { multiImage: { images: [] } } }),
+  orgPost(SH("04"), { lifecycleState: "DRAFT" }),
+  orgPost(SH("05"), { distribution: { feedDistribution: "NONE" } }),
+  orgPost("urn:li:share:12"),
+  orgPost("urn:li:activity:7390000000000000107"),
+  orgPost(UGC("06"), { publishedAt: at("2026-11-12"), content: { media: { id: "urn:li:document:D1" } } }),
+];
+const ORG_STATS = {
+  [SH("01")]: { impressionCount: 500, uniqueImpressionsCount: 300, likeCount: 20, commentCount: 3, shareCount: 1 },
+  [UGC("03")]: { likeCount: 5 },
+};
+// Şirket sayfası rotaları: A yönetilir ve gönderisi var; B'nin gönderi listesi düşer. `over`: önek → yanıt (öncelikli)
+const orgRoutes = (over = {}) => [
+  ...Object.entries(over),
+  [`${LI_R}organizationAcls?`, [200, { elements: [
+    { organization: "urn:li:person:9" }, { organization: ORG_A, role: "ADMINISTRATOR" }, { organizationTarget: ORG_B }, { organization: "urn:li:organization:333" },
+  ] }]],
+  [`${LI_R}organizations?`, [200, { results: { 111: { localizedName: "SAAS Corner", vanityName: "saascorner" }, 222: { localizedName: "Diğer" } } }]],
+  [`${LI_R}posts?`, u => new URL(u).searchParams.get("author") === ORG_A ? [200, { elements: ORG_POSTS }] : [500, { message: "x" }]],
+  [`${LI_R}networkSizes/`, u => u.includes("111") ? [200, { firstDegreeSize: 1234 }] : [404, { message: "x" }]],
+  [`${LI_R}organizationalEntityShareStatistics?`, u => {
+    const q = new URL(u).searchParams, list = (q.get("shares") || q.get("ugcPosts")).slice(5, -1).split(",");
+    return [200, { elements: list.filter(x => ORG_STATS[x]).map(x => ({ [x.includes(":share:") ? "share" : "ugcPost"]: x, totalShareStatistics: ORG_STATS[x] })) }];
+  }],
+];
+const zero = { likes: 0, comments: 0, views: 0, reach: 0 };
+const ORG_OUT = [
+  { url: liUrl(UGC("02")), type: "video", date: "2026-11-15", caption: "metin 102", thumb: "", ...zero },
+  { url: liUrl(UGC("06")), type: "carousel", date: "2026-11-12", caption: "metin 106", thumb: "", ...zero },
+  { url: liUrl(SH("01")), type: "photo", date: "2026-11-10", caption: "Merhaba", thumb: "", likes: 20, comments: 3, views: 500, reach: 300 },
+  { url: liUrl(UGC("03")), type: "carousel", date: "2026-11-01", caption: "metin 103", thumb: "", ...zero, likes: 5 },
+];
+
+test("LinkedIn şirket sayfaları: yönetilen ilk LI_ORGS sayfanın yayımlanmış gönderileri istatistikle; taslak, akışta olmayan ve geçersiz kimlik elenir; istatistiği gelmeyen 0; sayfa hatası o sayfayı atlar", async () => {
+  assert.deepEqual([LI_ORGS, LI_ORG_POSTS], [2, 100]);
+  const f = fakeFetch(liRoutes(orgRoutes()));
+  const m = await fetchMetrics("linkedin", "li-access", f);
+  assert.deepEqual(m.totals, LI_TOTALS);
+  assert.deepEqual(m.posts, ORG_OUT);
+  assert.equal(m.posts_recent, 4);
+  assert.deepEqual(m.audience, { orgs: [{ id: "111", name: "SAAS Corner", vanity: "saascorner", followers: 1234, posts: 4 }] });
+  const org = f.calls.filter(c => c.url.startsWith(LI_R) && !c.url.includes("memberFollowersCount") && !c.url.startsWith(LI_POST));
+  // yetki + ad + 2 sayfa × (liste + takipçi) + A'nın share ve ugcPost istatistiği = 8 (COST payı 2 + 2 × 5)
+  assert.equal(org.length, 8);
+  assert.equal(f.calls.length, 12 + 8);
+  assert.ok(org.find(c => c.url.startsWith(`${LI_R}organizations?`)).url.endsWith("ids=List(111,222)"));
+  const list = org.find(c => c.url.includes(encodeURIComponent(ORG_A)) && c.url.startsWith(`${LI_R}posts?`));
+  assert.deepEqual(Object.fromEntries(new URL(list.url).searchParams), { author: ORG_A, q: "author", count: "100", sortBy: "CREATED" });
+  assert.equal(list.headers["x-restli-method"], "FINDER");
+  for (const c of org) assert.equal(c.headers["linkedin-version"], "202610");
+  const st = org.filter(c => c.url.includes("ShareStatistics")).map(c => Object.fromEntries(new URL(c.url).searchParams));
+  assert.deepEqual(st, [
+    { q: "organizationalEntity", organizationalEntity: ORG_A, shares: `List(${SH("01")})` },
+    { q: "organizationalEntity", organizationalEntity: ORG_A, ugcPosts: `List(${[UGC("02"), UGC("03"), UGC("06")].join(",")})` },
+  ]);
+
+  // İstatistik parçası düşerse o gönderiler aktarılmaz; ad gelmezse null; takipçi gelmezse null
+  const g = fakeFetch(liRoutes(orgRoutes({
+    [`${LI_R}organizationalEntityShareStatistics?`]: u => u.includes("ugcPosts=") ? [500, { message: "x" }] : [200, { elements: [{ share: SH("01"), totalShareStatistics: ORG_STATS[SH("01")] }] }],
+    [`${LI_R}organizations?`]: [403, { message: "x" }],
+    [`${LI_R}networkSizes/`]: [500, { message: "x" }],
+  })));
+  const n = await fetchMetrics("linkedin", "t", g);
+  assert.deepEqual(n.posts, [ORG_OUT[2]]);
+  assert.deepEqual(n.audience, { orgs: [{ id: "111", name: null, vanity: null, followers: null, posts: 1 }] });
+
+  // Yetki listesi alınamazsa (eski bağ: kapsam yok) ya da her sayfa düşerse senkron sürer, gönderi yok, orgs_err
+  for (const [over, code] of [
+    [{ [`${LI_R}organizationAcls?`]: [403, { status: 403, message: "Not enough permissions" }] }, "403:http"],
+    [{ [`${LI_R}posts?`]: [500, { message: "x" }] }, "500:http"],
+  ]) {
+    const h = await fetchMetrics("linkedin", "t", fakeFetch(liRoutes(orgRoutes(over))));
+    assert.deepEqual([h.totals, h.posts, h.posts_recent, h.audience], [LI_TOTALS, [], 0, { orgs_err: code }], code);
+  }
+  // Sayfa yönetilmiyorsa yalnız yetki çağrısı
+  const none = fakeFetch(liRoutes());
+  assert.deepEqual((await fetchMetrics("linkedin", "t", none)).audience, { orgs: [] });
+  assert.equal(none.calls.length, 13);
+});
+
+test("syncDue: LinkedIn şirket gönderileri hesaba bağlı aktarılır, aynı bağlantıyla elle eklenen benimsenir; elle ölçüm sırasına girmez; bağ kesilince silinir; D1 en çok SYNC_D1 + 1", async t => {
+  t.mock.method(console, "log", () => {});
+  const { db, env, call, join } = await setup({ ...LI_ENV, OAUTH_TOKEN_KEY: KEY, POSTS_ENABLED: "1" });
+  const brand = await join("brand", "marka@x.co");
+  await seed(db, env, brand.id, "linkedin", "li-id-1");
+  const acc = db.prepare("SELECT id FROM social_accounts").get().id;
+  const add = url => db.prepare("INSERT INTO posts (user_id, url, platform, type, date) VALUES (?, ?, 'linkedin', 'photo', '2026-11-02') RETURNING id").get(brand.id, url).id;
+  const mine = add(liUrl(SH("01"))), hand = add(LI_ACT(19));
+  const table = { "(share:urn:li:share:7390000000000000019)": postCounts(9) };
+  const ent = c => c.url.includes("q=entity");
+
+  const d = counted(env.DB);
+  const f = fakeFetch(liRoutes([liEntity(table), ...orgRoutes()]));
+  assert.deepEqual(await syncDue({ ...env, DB: d.DB }, f), { ...ZERO, synced: 1 });
+  // liste + kira + token + son senkron + liDue + batch (ölçüm, 2 postWrites, elle ölçüm 2, kira bırakma)
+  assert.ok(d.n() <= 1 + SYNC_D1 + 1, String(d.n()));
+  const rows = db.prepare("SELECT id, url, type, date, account_id FROM posts ORDER BY date DESC").all().map(r => ({ ...r }));
+  assert.deepEqual(rows.map(r => [r.url, r.type, r.date, r.account_id]), [
+    ...ORG_OUT.map(p => [p.url, p.type, p.date, acc]).slice(0, 3),
+    [LI_ACT(19), "photo", "2026-11-02", null],
+    [ORG_OUT[3].url, "carousel", "2026-11-01", acc],
+  ]);
+  // Elle eklenen aynı bağlantı benimsendi: aynı satır, tarih aktarılandan
+  assert.equal(rows.find(r => r.url === liUrl(SH("01"))).id, mine);
+  const snap = id => ({ ...db.prepare("SELECT likes, comments, views, reach FROM post_snaps WHERE post_id = ?").get(id) });
+  assert.deepEqual(snap(mine), { likes: 20, comments: 3, views: 500, reach: 300 });
+  assert.equal(snap(hand).views, 9000);
+  assert.equal(count(db, "post_snaps"), 5);
+
+  // Sonraki senkronda benimsenen gönderi elle ölçülmez (account_id dolu); yalnız elle eklenen
+  db.prepare("UPDATE social_accounts SET next_sync_at = NULL").run();
+  const g = fakeFetch(liRoutes([liEntity(table), ...orgRoutes()]));
+  await syncDue(env, g);
+  assert.deepEqual([...new Set(g.calls.filter(ent).map(c => liEnt(c.url)))], Object.keys(table));
+
+  // Bağ kesilince aktarılan (benimsenen dahil) silinir, elle eklenen kalır
+  assert.equal((await call("POST", "/app/disconnect", { token: brand.token, body: { platform: "linkedin" } })).status, 200);
+  assert.deepEqual(db.prepare("SELECT id FROM posts").all().map(r => r.id), [hand]);
 });
 
 // ---- LinkedIn gönderi başına ölçüm (elle eklenen gönderiler, 0013) ----
@@ -2738,7 +2873,7 @@ test("LinkedIn gönderi ölçümü: share doğrudan, etkinlik önce share sonra 
   const g = fakeFetch(liRoutes());
   const plain = await fetchMetrics("linkedin", "t", g, { liPosts: [{ id: 6, url: "https://www.linkedin.com/in/ayse/" }] });
   assert.ok(!("li_tried" in plain) && !("li_posts" in plain));
-  assert.equal(g.calls.length, 12);
+  assert.equal(g.calls.length, 13);
 });
 
 test("syncDue: LinkedIn elle eklenen gönderiler bütçeden artan kadar (en çok LI_POSTS) ölçülür; sıra synced_at; bağlanmaz; düzeltilen gün ezilmez; kira düşerse yazılmaz; POSTS_ENABLED kapalıysa yok", async t => {
@@ -2756,22 +2891,22 @@ test("syncDue: LinkedIn elle eklenen gönderiler bütçeden artan kadar (en çok
   const tried = () => db.prepare("SELECT id FROM posts WHERE synced_at IS NOT NULL ORDER BY id").all().map(r => r.id);
   const again = () => db.prepare("UPDATE social_accounts SET next_sync_at = NULL").run();
 
-  // Bütçe 40: 12 temel + 5 gönderi × 5 = 37. Önce hiç denenmeyenler, en yeni (büyük id) önce
+  // Bütçe 52: COST 24 + 5 gönderi × 5 = 49 (varsayılan 40'ta 3 gönderi). Önce hiç denenmeyenler, en yeni (büyük id) önce
   const f = fakeFetch(liRoutes([liEntity(table)]));
-  assert.deepEqual(await syncDue(env, f), { ...ZERO, synced: 1 });
+  assert.deepEqual(await syncDue(env, f, { budget: 52 }), { ...ZERO, synced: 1 });
   assert.equal(LI_POSTS, 5);
-  assert.equal(f.calls.length, 12 + 5 * 4);
+  assert.equal(f.calls.length, 13 + 5 * 4);
   const first = ids.slice(2);
   assert.deepEqual(tried(), first);
   assert.deepEqual(snaps(), first.map((id, i) => ({ post_id: id, likes: 10 * (13 + i), comments: 13 + i, views: 1000 * (13 + i), reach: 500 * (13 + i) })));
   assert.deepEqual(db.prepare("SELECT DISTINCT account_id FROM posts").all().map(r => r.account_id), [null]);
   assert.equal(db.prepare("SELECT COUNT(*) n FROM post_snaps WHERE post_id IN (?, ?, ?)").get(bad, ig, theirs).n, 0);
 
-  // Sonraki senkron: kalan ikisi önce; bütçe 22 → 12 + 2 gönderi
+  // Sonraki senkron: kalan ikisi önce; bütçe 34 → 24 + 2 gönderi
   again();
   const g = fakeFetch(liRoutes([liEntity(table)]));
-  assert.deepEqual(await syncDue(env, g, { budget: 22 }), { ...ZERO, synced: 1 });
-  assert.equal(g.calls.length, 12 + 2 * 4);
+  assert.deepEqual(await syncDue(env, g, { budget: 34 }), { ...ZERO, synced: 1 });
+  assert.equal(g.calls.length, 13 + 2 * 4);
   assert.deepEqual(tried(), ids);
 
   // Yöneticinin düzelttiği günün ölçümü ezilmez; gelmeyen tür son ölçülenle sürer
@@ -2780,7 +2915,7 @@ test("syncDue: LinkedIn elle eklenen gönderiler bütçeden artan kadar (en çok
   db.prepare("UPDATE posts SET synced_at = NULL WHERE id IN (?, ?)").run(ids[0], ids[1]);
   again();
   const h = fakeFetch(liRoutes([liEntity(table, { [Object.keys(table)[1]]: ["MEMBERS_REACHED"] })]));
-  await syncDue(env, h, { budget: 22 });
+  await syncDue(env, h, { budget: 34 });
   const s = Object.fromEntries(snaps().map(r => [r.post_id, r]));
   assert.equal(s[ids[0]].likes, 1);
   assert.deepEqual(s[ids[1]], { post_id: ids[1], likes: 120, comments: 12, views: 12000, reach: 6000 });
@@ -2790,7 +2925,7 @@ test("syncDue: LinkedIn elle eklenen gönderiler bütçeden artan kadar (en çok
   db.prepare("UPDATE post_snaps SET views = 7 WHERE post_id = ?").run(ids[2]);
   again();
   const steal = fakeFetch(liRoutes([[LI_ME, () => { db.prepare("UPDATE social_accounts SET next_sync_at = datetime('now', '+5 hours')").run(); return [200, { id: "li-id-1", localizedFirstName: "Ayşe" }]; }], liEntity(table)]));
-  await syncDue(env, steal, { budget: 17 });
+  await syncDue(env, steal, { budget: 29 });
   assert.equal(db.prepare("SELECT synced_at FROM posts WHERE id = ?").get(ids[2]).synced_at, null);
   assert.equal(snaps().find(r => r.post_id === ids[2]).views, 7);
 
@@ -2798,7 +2933,7 @@ test("syncDue: LinkedIn elle eklenen gönderiler bütçeden artan kadar (en çok
   again();
   const off = fakeFetch(liRoutes([liEntity(table)]));
   assert.deepEqual(await syncDue({ ...env, POSTS_ENABLED: "0" }, off), { ...ZERO, synced: 1 });
-  assert.equal(off.calls.length, 12);
+  assert.equal(off.calls.length, 13);
 });
 
 test("cleanHandle: görünmez kontrol/biçim karakterleri silinir, ZWJ kalır, 60 kod noktası", () => {
