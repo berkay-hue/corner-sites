@@ -6,6 +6,7 @@
 <meta name="color-scheme" content="light dark">
 <meta name="robots" content="noindex">
 <title>Draft Desk · Social Media Corner</title>
+<meta name="description" content="Write your topic in one sentence and get three LinkedIn post drafts: a story, a list and a take.">
 <link rel="canonical" href="https://app.socialmediacorner.co/en/">
 <link rel="alternate" hreflang="tr" href="https://app.socialmediacorner.co/">
 <link rel="alternate" hreflang="en" href="https://app.socialmediacorner.co/en/">
@@ -48,7 +49,7 @@
     <p class="giris" id="giris">A story, a list and a take for your LinkedIn post.</p>
     <noscript><p class="not not-uyari js-yok">This tool runs on JavaScript. <a href="https://socialmediacorner.co/en/">Go to Social Media Corner</a></p></noscript>
 
-    <form id="form" class="sheet brif" data-sk-noform novalidate aria-label="Draft brief">
+    <form id="form" class="sheet brif" method="post" data-sk-noform novalidate aria-label="Draft brief">
       <div class="alan">
         <label class="alan-etiket" for="konu">What do you want to post about?</label>
         <textarea id="konu" name="topic" rows="2" maxlength="300" required aria-required="true" aria-describedby="konu-ipucu konu-hata" placeholder="E.g. We reached our first 100 customers"></textarea>
@@ -191,7 +192,7 @@
         <h4 class="cikis-baslik" id="c-bekle" tabindex="-1">Waitlist for the account version</h4>
         <p id="b-vaat">Be the first to hear when the account version opens: brand voice, calendar, team approval.</p>
         <p class="ipucu" id="b-durust">No date yet. This list is used only for that announcement.</p>
-        <form id="b-form" data-sk-noform novalidate>
+        <form id="b-form" method="post" data-sk-noform novalidate>
           <div class="alan-k">
             <label for="b-eposta">E-mail <span class="zor">(required)</span></label>
             <input type="email" id="b-eposta" name="email" autocomplete="email" inputmode="email" required pattern=".+@[^@]+\.[^@.]{2,}" aria-describedby="b-eposta-hata">
@@ -268,7 +269,7 @@
       <button type="button" class="btn btn-cizgi btn-kucuk" id="teklif-kapat" hidden>Close</button>
     </div>
     <p class="not not-hata" id="t-hata" role="alert"></p>
-    <form id="t-form" data-sk-noform novalidate>
+    <form id="t-form" method="post" data-sk-noform novalidate>
       <p class="ipucu">The team replies by e-mail; the quote is prepared around your needs.</p>
       <div class="alan-k">
         <label for="t-eposta">E-mail <span class="zor">(required)</span></label>

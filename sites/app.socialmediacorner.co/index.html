@@ -6,6 +6,7 @@
 <meta name="color-scheme" content="light dark">
 <meta name="robots" content="noindex">
 <title>Taslak Masası · Social Media Corner</title>
+<meta name="description" content="Konunu bir cümleyle yaz, LinkedIn gönderin için hikâye, liste ve görüş açısından üç taslak al.">
 <link rel="canonical" href="https://app.socialmediacorner.co/">
 <link rel="alternate" hreflang="tr" href="https://app.socialmediacorner.co/">
 <link rel="alternate" hreflang="en" href="https://app.socialmediacorner.co/en/">
@@ -47,7 +48,7 @@
     <p class="giris" id="giris">LinkedIn gönderin için hikâye, liste ve görüş.</p>
     <noscript><p class="not not-uyari js-yok">Bu araç JavaScript ile çalışır. <a href="https://socialmediacorner.co/">Social Media Corner’a git</a></p></noscript>
 
-    <form id="form" class="sheet brif" data-sk-noform novalidate aria-label="Taslak brifi">
+    <form id="form" class="sheet brif" method="post" data-sk-noform novalidate aria-label="Taslak brifi">
       <div class="alan">
         <label class="alan-etiket" for="konu">Ne hakkında paylaşacaksın?</label>
         <textarea id="konu" name="topic" rows="2" maxlength="300" required aria-required="true" aria-describedby="konu-ipucu konu-hata" placeholder="Örn. İlk 100 müşteriye ulaştık"></textarea>
@@ -190,7 +191,7 @@
         <h4 class="cikis-baslik" id="c-bekle" tabindex="-1">Hesaplı sürüm için bekleme listesi</h4>
         <p id="b-vaat">Hesaplı sürüm açılınca ilk sen haber al: marka sesi, takvim, ekip onayı.</p>
         <p class="ipucu" id="b-durust">Tarih henüz belli değil. Bu liste yalnız o duyuru için kullanılır.</p>
-        <form id="b-form" data-sk-noform novalidate>
+        <form id="b-form" method="post" data-sk-noform novalidate>
           <div class="alan-k">
             <label for="b-eposta">E-posta <span class="zor">(zorunlu)</span></label>
             <input type="email" id="b-eposta" name="email" autocomplete="email" inputmode="email" required pattern=".+@[^@]+\.[^@.]{2,}" aria-describedby="b-eposta-hata">
@@ -267,7 +268,7 @@
       <button type="button" class="btn btn-cizgi btn-kucuk" id="teklif-kapat" hidden>Kapat</button>
     </div>
     <p class="not not-hata" id="t-hata" role="alert"></p>
-    <form id="t-form" data-sk-noform novalidate>
+    <form id="t-form" method="post" data-sk-noform novalidate>
       <p class="ipucu">Ekip e-postayla döner; teklif ihtiyaca göre hazırlanır.</p>
       <div class="alan-k">
         <label for="t-eposta">E-posta <span class="zor">(zorunlu)</span></label>
