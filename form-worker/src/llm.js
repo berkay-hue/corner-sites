@@ -1,6 +1,6 @@
 // Anthropic Messages API çağrısı (ISTEM §5): ham fetch, stream:false, tek JSON yanıt. fetch parametre olarak
 // verilir (testlerde sahte). Hata türleri LlmError.kind ile döner; HTTP kodu ve iade kararı generate.js'te:
-//   busy    faturalanmamış (bağlantı kurulamadı; HTTP 429/5xx/529, 1 yeniden denemeden sonra) → tam iade
+//   busy    faturalanmamış (bağlantı kurulamadı, denenmez; HTTP 429/5xx/529, 1 yeniden denemeden sonra) → tam iade
 //   limit   Console harcama sınırı (429 enforced spend limit) → tam iade, yeniden deneme yok
 //   fail    zaman aşımı, max_tokens, diğer 4xx, JSON/şema/sayı hatası → faturalanmış olabilir
 //   refusal stop_reason "refusal" ya da bütün text alanları boş (ret işareti) → faturalanmış olabilir
@@ -44,8 +44,8 @@ async function attempt(env, f, body, ms) {
       signal: AbortSignal.timeout(ms),
     });
   } catch (e) {
-    // zaman aşımında istek sağlayıcıya ulaşmış olabilir; bağlantı hatası faturalanmaz
-    return isTimeout(e) ? { err: "fail", why: "timeout" } : { retry: true, wait: 0, why: "conn" };
+    // zaman aşımında istek sağlayıcıya ulaşmış olabilir; bağlantı hatası faturalanmaz ama denenmez (çift fatura riski, A0 §7)
+    return isTimeout(e) ? { err: "fail", why: "timeout" } : { err: "busy", why: "conn" };
   }
   if (r.status === 200) {
     try { return { data: await r.json() }; } catch (e) { return { err: "fail", why: isTimeout(e) ? "timeout" : "body" }; }

@@ -125,6 +125,16 @@ test("index.js /gen/* yönlendirmesi: canlı varsayılan (GEN_ENABLED 0) → 503
   assert.equal((await res.json()).error, "not_ready");
 });
 
+test("index.js önizleme origin'i yalnız harfli web-*.pages.dev (A0 §2); canlı ALLOWED_HOSTS'la app izinli değil", async () => {
+  const env = { DB: d1(freshDb()), ALLOWED_HOSTS: "socialmediacorner.co", GEN_ENABLED: "0" };
+  const acao = async o => (await worker.fetch(new Request("https://forms.test/submit", { method: "OPTIONS", headers: { origin: o } }), env, { waitUntil() {} })).headers.get("access-control-allow-origin");
+  assert.equal(await acao("https://web-smcapp.pages.dev"), "https://web-smcapp.pages.dev");
+  assert.equal(await acao("https://abc123.web-smcapp.pages.dev"), "https://abc123.web-smcapp.pages.dev");
+  assert.equal(await acao("https://web-smc-app.pages.dev"), null);
+  assert.equal(await acao("https://x.web-smcapp-1a2.pages.dev"), null);
+  assert.equal(await acao("https://app.socialmediacorner.co"), null);
+});
+
 test("0014 uygulanmadıysa → 503 not_ready; genCleanup tablo yokken sessiz", async () => {
   const s = setup({ db: freshDb(false) });
   const r = await s.gen();
@@ -319,6 +329,19 @@ test("busy sonra başarı: tek yeniden deneme yeter", async () => {
   const r = await s.gen();
   assert.equal(r.status, 200);
   assert.equal(s.calls.llm.length, 2);
+});
+
+test("bağlantı hatası denenmez (çift fatura riski) → 503 llm_busy tam iade; zaman aşımı denenmez → llm_fail", async () => {
+  const s = setup({ fetch: fakeFetch({ llm: () => { throw new TypeError("Network connection lost"); } }) });
+  const r = await s.gen();
+  assert.deepEqual([r.status, r.body.error, r.body.charged, r.body.left], [503, "llm_busy", false, 3]);
+  assert.equal(s.calls.llm.length, 1);
+  assert.deepEqual([s.usage("anon"), s.usage("ip"), s.usage("all"), s.usage("rid")], [[0], [0], [0], [0]]);
+  assert.equal(s.daily().busy, 1);
+  const t = setup({ fetch: fakeFetch({ llm: () => { throw new DOMException("zaman aşımı", "TimeoutError"); } }) });
+  const u = await t.gen();
+  assert.deepEqual([u.status, u.body.error, u.body.charged], [502, "llm_fail", false]);
+  assert.equal(t.calls.llm.length, 1);
 });
 
 test("llm_fail: günün ilki anon iadesi (charged false), ikincisi charged true; IP ve global iade edilmez", async () => {

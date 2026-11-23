@@ -15,7 +15,7 @@ function allowedOrigin(env, origin) {
   if ((env.DEV_ORIGINS || "").split(",").includes(origin)) return origin;
   let h;
   try { h = new URL(origin).hostname; } catch { return null; }
-  const ok = env.ALLOWED_HOSTS.split(",").some(d => h === d || h === "www." + d) || /^web-[a-z]+(-[a-z0-9]+)?\.pages\.dev$|\.web-[a-z]+(-[a-z0-9]+)?\.pages\.dev$/.test(h);
+  const ok = env.ALLOWED_HOSTS.split(",").some(d => h === d || h === "www." + d) || /^web-[a-z]+\.pages\.dev$|\.web-[a-z]+\.pages\.dev$/.test(h);
   return ok ? origin : null;
 }
 
