@@ -133,6 +133,7 @@ test("index.js önizleme origin'i yalnız harfli web-*.pages.dev (A0 §2); canl�
   assert.equal(await acao("https://web-smc-app.pages.dev"), null);
   assert.equal(await acao("https://x.web-smcapp-1a2.pages.dev"), null);
   assert.equal(await acao("https://app.socialmediacorner.co"), null);
+  assert.equal(await (async () => { env.ALLOWED_HOSTS = (await import("node:fs")).readFileSync(new URL("../wrangler.toml", import.meta.url), "utf8").match(/^ALLOWED_HOSTS\s*=\s*"([^"]*)"/m)[1]; return acao("https://app.socialmediacorner.co"); })(), "https://app.socialmediacorner.co"); // A3-1: wrangler.toml ALLOWED_HOSTS'ta app izinli
 });
 
 test("0014 uygulanmadıysa → 503 not_ready; genCleanup tablo yokken sessiz", async () => {

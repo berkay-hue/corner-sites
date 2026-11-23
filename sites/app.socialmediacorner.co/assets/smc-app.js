@@ -6,10 +6,13 @@ function $$(s,r){return Array.prototype.slice.call((r||d).querySelectorAll(s))}
 function el(t,c,x){var e=d.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e}
 var RM=!!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches);
 var nf=new Intl.NumberFormat('tr-TR');
-/* Mod kapısı: api-base boş + yerel/pages.dev host → ÖRNEK (ornek.js); boş + başka host → Çok yakında; dolu → A3-1 sağlayıcısı (bu dalda yok, not_ready). */
-var API=(($('meta[name="api-base"]')||{}).content||'').trim(),MOCKHOST=/^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname)||/\.pages\.dev$/.test(location.hostname),ORNEK=!API&&MOCKHOST,mockFn=null;
+/* Mod kapısı (A0 §2): api-base boş + yerel/pages.dev host → ÖRNEK (ornek.js); yerel/pages.dev'de #ornek ya da #d=… inceleme bağlantısı dolu api-base'te de ÖRNEK açar.
+   Diğer her durumda gerçek sağlayıcı (gercekProv, corner-forms worker'ı); api-base boşsa not_ready → Çok yakında + bekleme listesi. */
+var API=(($('meta[name="api-base"]')||{}).content||'').trim().replace(/\/+$/,''),TS=(($('meta[name="turnstile-sitekey"]')||{}).content||'').trim(),
+    MOCKHOST=/^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname)||/\.pages\.dev$/.test(location.hostname),
+    ORNEK=MOCKHOST&&(!API||/(^|&)(ornek|d|durum)(=|&|$)/.test(location.hash.slice(1))),mockFn=null,T0=Date.now();
 function hd(){return Promise.reject({kod:'not_ready'})}
-/* sağlayıcı arayüzü: linkedin(req), refine(req), quota(), submit(sayfa, alanlar) → Promise; hata {kod, scope?, charged?} */
+/* sağlayıcı arayüzü: linkedin(req), refine(req), quota(), submit(sayfa, alanlar), olay(kind, src)? → Promise; hata {kod, scope?, charged?, left?, cap?, reset_at?} */
 var prov={linkedin:hd,refine:hd,quota:hd,submit:hd};
 
 /* ---- sabit veri ---- */
@@ -65,7 +68,7 @@ function pasif(b){return b.getAttribute('aria-disabled')==='true'}
 function formNot(m){var f=$('#form-not');f.textContent=m||'';f.hidden=!m}
 function hakYaz(){
   /* tur-1: istemci hatasında (ag, zaman) hakkın düşüp düşmediği bilinmez; sayı uydurulmaz (K: /gen/quota yanıtsızsa yalnız "1 hak kullanır") */
-  var bel=D.view==='hata'&&(HATA[D.hata]||HATA.genel).e==='istemci',sc=D.view==='duvar'?D.scope:'';
+  var bel=!!D.hakBilinmez||D.view==='hata'&&(HATA[D.hata]||HATA.genel).e==='istemci',sc=D.view==='duvar'?D.scope:'';
   /* tur-4: "Çok yakında"da hak sayılmaz; dolu 3/3 göstergesi "Araç henüz açılmadı" ile çelişir */
   $$('.pips').forEach(function(p){p.classList.toggle('pips-gizli',!!(bel||sc==='yakinda'));$$('i',p).forEach(function(i,n){i.className=n<D.left?'dolu':''})});
   var kapali=sc==='ip'||sc==='global',ust='Bugün '+D.left+' / '+D.cap+' hak',alt;
@@ -159,7 +162,7 @@ $$('input[name="sector"],input[name="tone"],input[name="platform"]').forEach(fun
 /* ---- üretim akışı ---- */
 /* Hak yokken (D5 tıklama): G6 açıktır ya da açılır, odak G6 başlığına iner; taslaklar ekrandaysa yerinde kalır */
 function hakYok(){
-  if(D.view!=='duvar'){duvarGoster('anon',false);esle(D.kartVar?'sonuc-0':'limit-anon')}
+  if(D.view!=='duvar'){duvarGoster(D.hakScope||'anon',false);esle(D.kartVar?'sonuc-0':'limit-'+(D.hakScope||'anon'))}
   /* tur-6: odaklanan başlık cümleyi okur; #durum ikinci kez duyurmasın (hataGoster ile aynı) */
   durum('');odakla($('#duvar-baslik'));
 }
@@ -198,14 +201,14 @@ function yukle(gecen,sabit){
   if(gecen<20)zaman(function(){durum('Biraz uzun sürdü; taslaklar hâlâ hazırlanıyor.')},(20-gecen)*1000);
   zaman(function(){hataGoster('zaman',true)},(45-gecen)*1000);
   if(sabit)return;
-  var no=D.istek;prov.linkedin(istekKur()).then(function(r){if(no!==D.istek)return;durdur();D.left=r&&typeof r.left==='number'?r.left:Math.max(0,D.left-1);D.taslaklar=(r&&r.drafts)||[];D.kartVar=true;sonucGoster(true);esle(D.left>=2?'sonuc':'sonuc-'+D.left)},function(h){if(no!==D.istek)return;hataIsle(h||{})});
+  var no=D.istek;prov.linkedin(istekKur()).then(function(r){if(no!==D.istek)return;durdur();if(r&&typeof r.left==='number')hakAl(r);else D.left=Math.max(0,D.left-1);D.taslaklar=(r&&r.drafts)||[];D.kartVar=true;sonucGoster(true);esle(D.left>=2?'sonuc':'sonuc-'+D.left)},function(h){if(no!==D.istek)return;hataIsle(h||{})});
 }
 $('#vazgec').addEventListener('click',function(){
   durdur();uretMesgul(false);
   goster(D.kartVar?'sonuc':'bos',false);durum('Vazgeçildi.');esle('vazgecildi');
   /* kalan hak yeniden sorulur (/gen/quota); ÖRNEK'te kısa gecikmeyle aynı sayı */
   $('#hak-alt').textContent='1 hak kullanır';
-  var nq=D.istek;prov.quota().then(function(r){if(nq!==D.istek)return;if(r&&typeof r.left==='number')D.left=r.left;hakYaz()},function(){if(nq===D.istek)hakYaz()});
+  var nq=D.istek;prov.quota().then(function(r){if(nq!==D.istek)return;if(r&&typeof r.left==='number')hakAl(r);hakYaz()},function(){if(nq===D.istek)hakYaz()});
   uretBtn.focus();
 });
 form.addEventListener('submit',function(e){e.preventDefault();uret()});
@@ -356,7 +359,12 @@ function kart(a){
     }
     if(aninda){bit();return}
     var op=btn===bKisalt?'shorten':btn===bUzat?'lengthen':'tone',lv0=st.lv,ton0=st.ton;fn();var hton=st.ton;st.lv=lv0;st.ton=ton0;
-    prov.refine({anon:D.anon||null,op:op,tone:op==='tone'?hton:undefined,text:st.metin,lang:dilAl(),rid:yeniRid()}).then(function(r){if(r&&typeof r.text==='string')st.yeni=r.text;bit()},function(){hataSirada=true;bit()});
+    /* /gen/refine: {anon, op, tone (yalnız op=tone), text, lang, angle}; Turnstile ve rid yok, üretim hakkı düşmez */
+    var rq={anon:anonAl(),op:op,text:st.metin,lang:dilAl()};if(op==='tone')rq.tone=hton;if(ACI[a.id])rq.angle=a.id;
+    prov.refine(rq).then(function(r){if(r&&typeof r.text==='string')st.yeni=r.text;bit()},function(h){
+      /* düzenleme sınırı (anon 9/gün, bağlantı ya da günlük toplam): düğmeler kilitlenir, taslak aynı kalır */
+      if(h&&h.kod==='limit'){mesgul=false;art.removeAttribute('aria-busy');btn.textContent=eski;once=null;D.refine=9;ks.textContent='';kh.textContent=h.scope==='ip'||h.scope==='global'?DUVAR[h.scope].b:SINIR;D.kartApi.forEach(function(x){x.yenile()});return}
+      hataSirada=true;bit()});
   }
   bKisalt.addEventListener('click',function(){if(pasif(bKisalt)){neden(bKisalt);return}duzenle(function(){st.lv--},bKisalt,'Kısaltılıyor…','Kısaltıldı.')});
   bUzat.addEventListener('click',function(){if(pasif(bUzat)){neden(bUzat);return}duzenle(function(){st.lv++},bUzat,'Uzatılıyor…','Uzatıldı.')});
@@ -366,7 +374,7 @@ function kart(a){
   });
   /* kopyalama üç kademe: pano → seçim (execCommand) → görünür K6 alanı; her zaman saklanan metinden */
   function elleAc(){
-    elleT.value=st.metin;elle.hidden=false;
+    olay('copy_fb');elleT.value=st.metin;elle.hidden=false;
     elleN.textContent='Kopyalanamadı. Metin aşağıdaki alanda seçili: Ctrl/Cmd + C ile ya da uzun basıp kopyala.';
     try{elleT.focus();elleT.select()}catch(e){}
   }
@@ -374,14 +382,14 @@ function kart(a){
   bKopya.addEventListener('click',function(){
     if(pasif(bKopya))return;
     kopyala(st.metin,function(){
-      bKopya.textContent='Kopyalandı';kh.textContent='';ks.textContent='Kopyalandı. LinkedIn’e yapıştır, kendi sesinle bitir.';
+      olay('copy_ok');bKopya.textContent='Kopyalandı';kh.textContent='';ks.textContent='Kopyalandı. LinkedIn’e yapıştır, kendi sesinle bitir.';
       $$('.hizmet',kartlar).forEach(function(x){x.hidden=true});hz.hidden=false;
       setTimeout(function(){bKopya.textContent='Kopyala'},2000);
     },elleAc);
   });
   if(navigator.share){
     bPay=dugme('Paylaş','btn btn-cizgi btn-kucuk');
-    bPay.addEventListener('click',function(){if(pasif(bPay))return;try{navigator.share({text:st.metin}).catch(function(){})}catch(e){}});
+    bPay.addEventListener('click',function(){if(pasif(bPay))return;try{navigator.share({text:st.metin}).then(function(){olay('share')},function(){})}catch(e){}});
     ey.insertBefore(bPay,bTon); /* tur-3: Ton ile ton grubu art arda kalsın (odak sırası) */
   }
   govde.appendChild(p1);govde.appendChild(fold);govde.appendChild(p2);govde.appendChild(olcu);if(reels)govde.appendChild(reels);govde.appendChild(ey);govde.appendChild(tonG);
@@ -403,16 +411,17 @@ function sonucGoster(odak){
   if(D.left===1){uyari.hidden=false;uyari.textContent='Son hakkın: bugün 3 hakkından 1 kaldı. Kısalt, Uzat ve Ton hak düşürmez.'}
   else{uyari.hidden=true;uyari.textContent=''}
   /* S3c: son hak kullanıldıysa taslaklar + G6 (anon) + G7; odak h2'de */
-  if(D.left<=0){duvarHazirla('anon');goster('duvar',odak);durum('3 taslak hazır. '+DUVAR.anon.b);return}
+  if(D.left<=0){var hs=D.hakScope||'anon';duvarHazirla(hs);goster('duvar',odak);durum('3 taslak hazır. '+DUVAR[hs].b);return}
   goster('sonuc',odak);durum('3 taslak hazır.');
 }
 
 /* ---- hata (G5, kartların üstünde) ---- */
-function hataGoster(kod,odak){
+function hataGoster(kod,odak,sayac){
   durdur();uretMesgul(false);
   var ch=/-charged$/.test(kod);kod=kod.replace(/-charged$/,'');
   var h=HATA[kod]||HATA.genel;D.hata=kod;
-  if(ch)D.left=Math.max(0,D.left-1);
+  /* sayac: sunucu yanıtı left taşıdıysa sayı zaten güncel (hakAl); yoksa charged ile bir düşülür */
+  if(ch&&!sayac)D.left=Math.max(0,D.left-1);
   $('#hata-baslik').textContent=h.b;
   var m=$('#hata-metin');m.textContent=h.m;m.hidden=!h.m;
   /* charged cümlesi: true / false / belirsiz (istemci) */
@@ -449,7 +458,8 @@ function duvarHazirla(scope){
   if(scope!=='yakinda'&&scope!=='kapasite')D.left=0;
   $('#duvar-baslik').textContent=w.b;$('#duvar-metin').textContent=w.m;
   var dl=$('#duvar-dokum');dl.textContent='';dl.hidden=!w.d.length;
-  w.d.forEach(function(x){var g=el('div');g.appendChild(el('dt',null,x[0]));g.appendChild(el('dd',null,x[1]));dl.appendChild(g)});
+  /* gerçek modda yenilenme süresi sunucunun reset_at'inden, kullanılan hak cap'ten gelir */
+  w.d.forEach(function(x){var g=el('div');g.appendChild(el('dt',null,x[0]));g.appendChild(el('dd',null,x[1]===YEN?yenMetin():x[0]==='Kullandığın'?D.cap+' / '+D.cap+' hak':x[1]));dl.appendChild(g)});
   $('#duvar-taslak').hidden=!D.kartVar;
   var yk=scope==='yakinda';D.yakinda=yk;
   $('#c-bekle').textContent=yk?'Açılış için bekleme listesi':'Hesaplı sürüm için bekleme listesi';
@@ -502,8 +512,10 @@ function teklifBitti(){
 }
 /* temsilci: kartlardaki sonradan eklenen bağlantılar da açar */
 d.addEventListener('click',function(e){
+  /* ölçüm: teklif tıklaması (quote_click + kaynak); Calendly/iletişim bağlantısı yeni sekmede açılır, engellenmez */
+  if(e.target.closest&&e.target.closest('[data-src="calendly"]')){olay('quote_click','calendly');return}
   var b=e.target.closest&&e.target.closest('[data-teklif]');if(!b)return;
-  e.preventDefault();teklifAc(b.getAttribute('data-teklif'),b);
+  e.preventDefault();var k=b.getAttribute('data-teklif');olay('quote_click',KAYNAK[k]||'top');teklifAc(k,b);
 });
 $('#teklif-kapat').addEventListener('click',teklifKapat);
 $('#teklif-vazgec').addEventListener('click',teklifKapat);
@@ -516,7 +528,7 @@ tForm.addEventListener('submit',function(e){
   $('#t-hata').textContent='';
   if(!epostaBak($('#t-eposta'),$('#t-eposta-hata'))){$('#t-eposta').focus();return}
   tBtn.textContent='Gönderiliyor…';tBtn.setAttribute('aria-disabled','true');
-  var nt=D.istek;prov.submit('teklif',alanlar(tForm)).then(function(){if(nt!==D.istek)return;tBtn.textContent='Teklif iste';tBtn.removeAttribute('aria-disabled');teklifBitti()},function(){if(nt!==D.istek)return;tBtn.textContent='Teklif iste';tBtn.removeAttribute('aria-disabled');$('#t-hata').textContent='Gönderilemedi. Alanları kontrol edip tekrar dene.'});
+  var nt=D.istek;prov.submit('teklif',alanlar(tForm)).then(function(){if(nt!==D.istek)return;tBtn.textContent='Teklif iste';tBtn.removeAttribute('aria-disabled');teklifBitti()},function(h){if(nt!==D.istek)return;tBtn.textContent='Teklif iste';tBtn.removeAttribute('aria-disabled');$('#t-hata').textContent=gonderHata(h)});
 });
 
 /* ---- bekleme listesi ---- */
@@ -538,16 +550,53 @@ bForm.addEventListener('submit',function(e){
   if(!bRiza.checked){rizaHata();return}
   if(!epostaBak(bEposta,$('#b-eposta-hata'))){bEposta.focus();return}
   var eski=bBtn.textContent;bBtn.textContent='Ekleniyor…';bBtn.setAttribute('aria-disabled','true');
-  var nb=D.istek;prov.submit('bekleme',alanlar(bForm)).then(function(){if(nb!==D.istek)return;bBtn.textContent=eski;rizaYaz();bekleBitti()},function(){if(nb!==D.istek)return;bBtn.textContent=eski;rizaYaz();alanHata(bEposta,$('#b-eposta-hata'),'Gönderilemedi. Alanları kontrol edip tekrar dene.')});
+  var nb=D.istek;prov.submit('bekleme',alanlar(bForm)).then(function(){if(nb!==D.istek)return;bBtn.textContent=eski;rizaYaz();bekleBitti()},function(h){if(nb!==D.istek)return;bBtn.textContent=eski;rizaYaz();alanHata(bEposta,$('#b-eposta-hata'),gonderHata(h))});
 });
 
-/* ---- istek (A0 biçimi; anon/ret/Turnstile/fetch A3-1'de) ---- */
-function yeniRid(){var a=new Uint8Array(8);crypto.getRandomValues(a);return Array.prototype.map.call(a,function(x){return(256+x).toString(16).slice(1)}).join('')}
+/* ---- istek (A3-1: corner-forms worker'ı; sözleşme form-worker/src/generate.js + index.js /submit) ---- */
+/* yerel depo: smc-anon (rastgele kimlik, kişisel veri değil), smc-son (son başarılı üretim günü, ret için), smc-acik (araç açık görüldü) */
+function depo(k,v){try{if(v===undefined)return localStorage.getItem(k);if(v===null)localStorage.removeItem(k);else localStorage.setItem(k,v)}catch(e){}return null}
+function uuid(){try{if(crypto.randomUUID)return crypto.randomUUID()}catch(e){}var a=new Uint8Array(16);crypto.getRandomValues(a);a[6]=a[6]&15|64;a[8]=a[8]&63|128;var h=Array.prototype.map.call(a,function(x){return(256+x).toString(16).slice(1)}).join('');return h.slice(0,8)+'-'+h.slice(8,12)+'-'+h.slice(12,16)+'-'+h.slice(16,20)+'-'+h.slice(20)}
+function yeniRid(){return uuid()}
+function anonAl(){if(D.anon)return D.anon;var a=depo('smc-anon');if(!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(a||'')){a=uuid();depo('smc-anon',a)}return(D.anon=a)}
+function gunAl(){try{var p={};new Intl.DateTimeFormat('en-US',{timeZone:'Europe/Istanbul',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date()).forEach(function(x){p[x.type]=x.value});return p.year+'-'+p.month+'-'+p.day}catch(e){return ''}}
+/* ret: ilk üretim ret0; önceki üretim günü dün ret1, 2-7 gün ret2_7, 8+ ret8; aynı gün ya da bilinmiyorsa null */
+function retAl(){var s=depo('smc-son'),b=gunAl();if(!b)return null;if(!/^\d{4}-\d\d-\d\d$/.test(s||''))return 'ret0';var f=Math.round((Date.parse(b)-Date.parse(s))/864e5);return !(f>0)?null:f===1?'ret1':f<=7?'ret2_7':'ret8'}
 function dilAl(){return root.lang==='en'?'en':'tr'}
-function istekKur(){var g=hedef.value.replace(/\s+/g,' ').trim(),hp=$('input[name="website"]',form);var q={anon:D.anon||null,topic:konu.value.replace(/\s+/g,' ').trim(),sector:D.sektor,tone:D.tone,lang:dilAl(),t:'',hp:hp?hp.value:'',ret:null,rid:D.rid||(D.rid=yeniRid()),ts:Date.now()};if(g)q.goal=g;return q}
+function istekKur(){var g=hedef.value.replace(/\s+/g,' ').trim(),hp=$('input[name="website"]',form);var q={anon:anonAl(),topic:konu.value.replace(/\s+/g,' ').trim(),sector:D.sektor,tone:D.tone,lang:dilAl(),t:Date.now()-T0,hp:hp?hp.value:'',ret:retAl(),rid:D.rid||(D.rid=yeniRid()),ts:''};if(g)q.goal=g;return q}
+function hakAl(r){if(!r)return;if(typeof r.left==='number'){D.left=Math.max(0,r.left);D.hakBilinmez=false}if(typeof r.cap==='number'&&r.cap>0)D.cap=r.cap;if(typeof r.reset_at==='string')D.reset=r.reset_at;if(r.scope==='anon'||r.scope==='ip'||r.scope==='global')D.hakScope=r.scope}
+/* tek POST yardımcısı: başarı → gövde; hata → {kod, scope, charged, left, cap, reset_at, field}; ağ → ag; süre → zaman */
+function post(yol,govde,ms,kalici){
+  if(!window.fetch)return Promise.reject({kod:'ag'});
+  var ac=window.AbortController?new AbortController():null,tm=ac&&ms?setTimeout(function(){ac.abort()},ms):null,o={method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(govde),credentials:'omit',cache:'no-store'};
+  if(ac)o.signal=ac.signal;if(kalici)o.keepalive=true;
+  return fetch(API+yol,o).then(function(r){clearTimeout(tm);if(r.status===204)return {};return r.json().then(function(j){if(r.ok&&j&&j.ok!==false)return j;j=j||{};throw {kod:j.error||'genel',scope:j.scope,charged:!!j.charged,left:j.left,cap:j.cap,reset_at:j.reset_at,field:j.field}},function(){throw {kod:'genel'}})},function(e){clearTimeout(tm);throw {kod:e&&e.name==='AbortError'?'zaman':'ag'}});
+}
+/* /submit (index.js): {page, fields:[[etiket, değer]], hp}; site origin'den gelir. Boş alanlar gönderilmez. */
+var ROL={isletme:'işletme',ajans:'ajans',serbest:'serbest'},RIZA='Evet — metin v1 (https://socialmediacorner.co/kvkk)';
+function gercekProv(){return{
+  linkedin:function(q){return tsAl().then(function(ts){q.ts=ts;return post('/gen/linkedin',q,46000)}).then(function(r){tsSifirla();D.acik=true;depo('smc-acik','1');var g=gunAl();if(g)depo('smc-son',g);return r},function(h){tsSifirla();throw h})},
+  refine:function(q){return post('/gen/refine',q,30000).then(function(r){hakAl(r);var a=r&&r.drafts&&r.drafts[0];return{text:a&&typeof a.text==='string'?a.text:null}})},
+  quota:function(){return post('/gen/quota',{anon:anonAl()},10000)},
+  olay:function(kind,src){var b={anon:anonAl(),kind:kind};if(src)b.src=src;return post('/gen/event',b,8000,true)},
+  submit:function(tur,o){var f=tur==='bekleme'?[['E-posta',o.email],['Ad',o.name],['Rol',ROL[o.role]||''],['Açık rıza',o.consent?RIZA:''],['Ticari ileti izni',o.marketing?'Evet — v1':'']]:[['E-posta',o.email],['Ad',o.name],['Şirket',o.company],['Sektör',o.sector],['Kaynak',o.src],['Dil',dilAl()]];
+    return post('/submit',{page:tur==='bekleme'?'/bekleme-listesi':'/teklif',fields:f.filter(function(x){return x[1]}),hp:o.website||''},15000)}
+}}
+/* ölçüm olayı (/gen/event): yalnız anon + tür + kaynak; kişisel veri yok; sunucu o gün üretim yapmamış anon'u yok sayar */
+function olay(kind,src){if(!D.acik||!prov.olay)return;try{prov.olay(kind,src).then(null,function(){})}catch(e){}}
+/* Turnstile: sitekey doluysa explicit render (araç açık görülünce ya da ilk üretimde); boşsa hiç yüklenmez ve ts:'' gider.
+   Sunucu GEN_ENABLED=1'de her üretimi doğrular; sitekey boşken açılırsa üretim 'bot' döner, sitekey açılıştan önce girilmeli. */
+var tsId=null,tsTok='',tsBek=[],tsYuklendi=false;
+function tsYukle(){if(!TS||ORNEK||tsYuklendi||!$('#turnstile'))return;tsYuklendi=true;
+  window.smcTurnstile=function(){try{tsId=turnstile.render('#turnstile',{sitekey:TS,appearance:'interaction-only',size:'flexible',language:dilAl(),callback:function(t){tsTok=t;tsBek.splice(0).forEach(function(f){f(t)})},'expired-callback':function(){tsTok=''},'error-callback':function(){tsTok='';tsBek.splice(0).forEach(function(f){f('')})}})}catch(e){}};
+  var s=d.createElement('script');s.src='https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=smcTurnstile';s.async=true;s.defer=true;d.head.appendChild(s)}
+function tsAl(){if(!TS||ORNEK)return Promise.resolve('');tsYukle();if(tsTok){var t=tsTok;tsTok='';return Promise.resolve(t)}return new Promise(function(ok){var bitti=false;function f(t){if(bitti)return;bitti=true;tsTok='';ok(t||'')}tsBek.push(f);setTimeout(function(){f('')},10000)})}
+function tsSifirla(){tsTok='';if(tsId!=null&&window.turnstile)try{turnstile.reset(tsId)}catch(e){}}
+function yenMetin(){var g='gece yarısı (İstanbul saati)';if(!D.reset)return ORNEK?YEN:g;var dk=Math.max(1,Math.round((Date.parse(D.reset)-Date.now())/6e4));if(!isFinite(dk))return g;return g+', yaklaşık '+Math.floor(dk/60)+' sa '+(dk%60)+' dk sonra'}
+function gonderHata(h){var k=h&&h.kod;return k==='rate'?'Kısa sürede çok gönderim oldu. Birkaç dakika sonra tekrar dene.':k==='ag'?'Bağlantı yok. İnternete bağlanınca tekrar dene.':k==='zaman'?'Yanıt gelmedi. Biraz sonra tekrar dene.':'Gönderilemedi. Alanları kontrol edip tekrar dene.'}
 function alanlar(f){var o={};$$('input[name],textarea[name],select[name]',f).forEach(function(x){if(x.type==='checkbox')o[x.name]=x.checked;else if(x.type!=='radio'||x.checked)o[x.name]=x.value});return o}
 function taslakNorm(a,i){if(a&&a.kanca)return a;var b=ACI[a&&a.angle]||ACIS[i]||ACIS[0];return{id:b.id,no:b.no,ad:b.ad,alt:b.alt,text:String(a&&a.text||''),lang:dilAl()}}
-function hataIsle(h){var k=h.kod||'genel';if(k==='vazgec')return;if(k==='limit'){duvarGoster(h.scope||'anon',true);return}if(k==='not_ready'){duvarGoster('yakinda',true);return}if(k==='llm_limit'){duvarGoster('kapasite',true);return}if(k==='too_large'||k==='slow_down'){durdur();uretMesgul(false);goster(D.kartVar?'sonuc':'bos',false);durum('');if(k==='too_large'){konuHata('Metin çok uzun. Konuyu 300 karaktere indir.');konu.focus()}else{formNot('İstek çok hızlı geldi. Birkaç saniye sonra tekrar dene.');kopru.hidden=true}return}hataGoster(k+(h.charged?'-charged':''),true)}
+function hataIsle(h){var k=h.kod||'genel';if(k==='vazgec')return;var s=typeof h.left==='number';if(s)hakAl(h);if(k==='limit'){duvarGoster(h.scope||'anon',true);return}if(k==='not_ready'){D.acik=false;depo('smc-acik',null);duvarGoster('yakinda',true);return}if(k==='llm_limit'){duvarGoster('kapasite',true);return}if(k==='too_large'||k==='slow_down'){durdur();uretMesgul(false);goster(D.kartVar?'sonuc':'bos',false);durum('');if(k==='too_large'){konuHata('Metin çok uzun. Konuyu 300 karaktere indir.');konu.focus()}else{formNot('İstek çok hızlı geldi. Birkaç saniye sonra tekrar dene.');kopru.hidden=true}return}hataGoster(k+(h.charged?'-charged':''),true,s)}
 
 /* ---- derin bağlantı: #tema=dark&teklif=1; #d=durum yalnız ÖRNEK modunda (ornek.js) ---- */
 function hashOku(){
@@ -566,6 +615,23 @@ if(ORNEK){
   window.SMC={$:$,d:d,D:D,RM:RM,TONLAR:TONLAR,kopru:kopru,durdur:durdur,konuHata:konuHata,alanHata:alanHata,hedef:hedef,hedefHataEl:hedefHataEl,formNot:formNot,dlg:dlg,teklifKapat:teklifKapat,tForm:tForm,bForm:bForm,bTamam:bTamam,bRiza:bRiza,bRizaHata:bRizaHata,bEposta:bEposta,rizaYaz:rizaYaz,uretMesgul:uretMesgul,sonucGoster:sonucGoster,goster:goster,durum:durum,esle:esle,odakla:odakla,konu:konu,konuGuncelle:konuGuncelle,plSec:plSec,duvarGoster:duvarGoster,yukle:yukle,teklifAc:teklifAc,epostaBak:epostaBak,teklifBitti:teklifBitti,rizaHata:rizaHata,bekleBitti:bekleBitti,hataGoster:hataGoster,hashOku:hashOku,mockKur:function(f){mockFn=f},provKur:function(p){prov=p}};
   var bant=$('#ornek-bant');if(bant)bant.hidden=false;
   var os=d.createElement('script');os.src='/assets/ornek.js';d.body.appendChild(os);
-}else{duvarGoster('yakinda',false);esle('limit-yakinda');hashOku()}
+}else{
+  /* GERÇEK mod: api-base doluysa worker'a bağlan. Açılışta Çok yakında (ya da araç önceden açık görüldüyse boş form, hak belli değil);
+     /gen/quota başarılıysa araç açık, hak sayısı sunucudan; 503 not_ready ya da ağ/CORS hatasında Çok yakında + bekleme listesi kalır */
+  if(API)prov=gercekProv();
+  if(API&&depo('smc-acik')==='1'){D.hakBilinmez=true;goster('bos',false);esle('bos')}else{duvarGoster('yakinda',false);esle('limit-yakinda')}
+  hashOku();
+  if(API)prov.quota().then(function(r){
+    var ilk=D.view==='bos'&&!D.kartVar||D.view==='duvar'&&D.scope==='yakinda';
+    D.hakBilinmez=false;D.acik=true;depo('smc-acik','1');hakAl(r);tsYukle();
+    if(!ilk){hakYaz();return}
+    if(D.left<=0){duvarGoster(D.hakScope||'anon',false);esle('limit-'+(D.hakScope||'anon'))}
+    else{D.scope='anon';D.yakinda=false;goster('bos',false);esle('bos')}
+  },function(h){
+    /* not_ready: araç kapalı → Çok yakında. Ağ hatası: araç önceden açık görüldüyse form kalır, hak "belli değil" */
+    var nr=h&&h.kod==='not_ready';if(nr)depo('smc-acik',null);
+    if(nr&&D.view==='bos'&&!D.kartVar){D.hakBilinmez=false;duvarGoster('yakinda',false);esle('limit-yakinda')}else hakYaz();
+  });
+}
 window.addEventListener('hashchange',hashOku);
 })();
