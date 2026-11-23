@@ -29,7 +29,7 @@ const reply = (body, status, origin) => new Response(JSON.stringify(body), {
 });
 
 // Yalnızca platform sitesi (AUTH_HOSTS, varsayılan brandcorner.co) ve onun pages.dev önizlemeleri
-function platformSite(env, origin) {
+export function platformSite(env, origin) {
   if (!origin) return null;
   const hosts = (env.AUTH_HOSTS || "brandcorner.co").split(",");
   if ((env.DEV_ORIGINS || "").split(",").includes(origin)) return hosts[0];

@@ -6,6 +6,7 @@ import { platform, cleanup } from "./platform.js";
 import { metaCallback, oauthCallback, syncDue, ytRetention } from "./oauth.js";
 import { metricsEnabled } from "./metrics.js";
 import { generate, genCleanup } from "./generate.js";
+import { publish, publishTick, PUBLISH_CRON } from "./publish.js";
 
 const MAX_FIELDS = 30, MAX_LEN = 5000, RATE = 5; // 10 dakikada IP başına en fazla RATE gönderim
 
@@ -39,6 +40,8 @@ export default {
     if (url.pathname.startsWith("/oauth/")) return oauthCallback(req, url, env);
     // app.socialmediacorner.co taslak üretimi (src/generate.js); GEN_ENABLED kapalıyken 503 not_ready
     if (url.pathname.startsWith("/gen/")) return generate(req, url, env, origin, ctx);
+    // Onaylı gönderilerin yayın kuyruğu (src/publish.js); PUBLISH_ENABLED kapalıyken 503 not_ready, D1'e dokunmaz
+    if (url.pathname.startsWith("/publish/")) return publish(req, url, env, origin);
     // brandcorner.co platformu: üyelik ve panel
     if (/^\/(auth|app)\//.test(url.pathname)) return platform(req, url, env, origin, deliver);
     if (url.pathname !== "/submit" || req.method !== "POST") return json({ ok: false }, 404, origin);
@@ -66,7 +69,12 @@ export default {
   },
 
   // E-postası gitmemiş kayıtları tekrar dene (binding sonradan açılınca eskiler de gelir)
-  async scheduled(_, env) {
+  async scheduled(event, env) {
+    // 5 dakikalık yayın kuyruğu cron'u (src/publish.js publishTick) yalnız kendi işini yapar; saatlik iş aşağıda aynen
+    if (event?.cron === PUBLISH_CRON) {
+      try { await publishTick(env); } catch (e) { console.log("publish", e?.message?.slice(0, 80)); }
+      return;
+    }
     const { results } = await env.DB.prepare("SELECT * FROM submissions WHERE emailed = 0 ORDER BY id LIMIT 50").all();
     for (const r of results) await deliver(env, { ...r, fields: JSON.parse(r.fields) });
     try { await cleanup(env); } catch (e) { console.log("cleanup", e?.message?.slice(0, 80)); }

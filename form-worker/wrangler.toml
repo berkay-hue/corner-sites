@@ -5,7 +5,10 @@ compatibility_date = "2026-09-01"
 # Sitelerdeki tüm formlar buraya POST eder (/submit). Her gönderim önce D1'e yazılır,
 # sonra e-posta ile iletilir. E-posta gönderilemezse (binding yoksa/hata) saatlik cron tekrar dener.
 [triggers]
-crons = ["17 * * * *"]
+# İkinci ifade yayın kuyruğu (src/publish.js publishTick): her 5 dakikada bir. PUBLISH_ENABLED = "0" iken bu tetik 0 D1
+# sorgusu ve 0 istekle hemen döner; saatlik cron ("17 * * * *") ondan bağımsız ve aynen çalışır. Ücretsiz planda hesap
+# başına cron sayısı sınırı deploy öncesi doğrulanmalı; sınır aşılırsa yalnız "*/5 * * * *" silinir (kod bunu bekler).
+crons = ["17 * * * *", "*/5 * * * *"]
 
 [[d1_databases]]
 binding = "DB"
@@ -44,6 +47,15 @@ GEN_DAILY_CAP = "300"
 GEN_PER_DAY = "3"
 GEN_IP_PER_DAY = "10"
 GEN_MODEL = "claude-sonnet-5-5"
+# Yayın kuyruğu (src/publish.js: /publish/* uçları ve 5 dakikalık cron). "1" yapmadan ÖNCE migrations/0016_publish.sql
+# uygulanmalı. "0" iken uçlar 503 not_ready döner, cron dalı D1'e ve dış API'ye dokunmaz. PUBLISH_SITES ve
+# PUBLISH_PLATFORMS virgüllü izin listeleri (ör. "brandcorner.co" ve "linkedin,instagram"); boşsa hiçbir iş kiralanmaz,
+# uçlar 503 not_ready. PUBLISH_PER_RUN: bir cron turunda en çok kaç iş (kod üst sınırı 6; istek/D1 bütçesinden ayrıca
+# kısılır). LinkedIn/Instagram yazma izinleri (w_member_social, instagram_business_content_publish) ayrı adımdır (A7-2).
+PUBLISH_ENABLED = "0"
+PUBLISH_SITES = ""
+PUBLISH_PLATFORMS = ""
+PUBLISH_PER_RUN = "3"
 
 # cornergroup.co'da Email Routing açık, berkay@saascorner.co doğrulanmış hedef adres
 [[send_email]]
