@@ -476,6 +476,12 @@ async function xfetch(ctx, url, init = {}, cred, timeout) {
   if (gm) return geminiViaClaude(ctx, gm[1], body);
   // AssemblyAI yerine Cloudflare Workers AI Whisper (aynı hesap, CF_AI_TOKEN)
   if (/^https:\/\/api\.assemblyai\.com\/v2\//.test(url)) return assemblyEmu(ctx, url, init.method || "GET", body, headers);
+  // HCTI (infografik PNG) isteğe bağlı: anahtar yoksa veya hata/kota dolduysa boş yanıt, akış infografiksiz sürer.
+  if (/^https:\/\/hcti\.io\//.test(url)) {
+    const skip = () => new Response("{}", { status: 200, headers: { "content-type": "application/json" } });
+    if (!env.HCTI_USER_ID || !env.HCTI_API_KEY) return skip();
+    try { const r = await fetch(url, { method: init.method || "GET", headers: { ...headers, Authorization: "Basic " + btoa(env.HCTI_USER_ID + ":" + env.HCTI_API_KEY) }, body, signal: AbortSignal.timeout(30000) }); return r.status >= 400 ? skip() : r; } catch { return skip(); }
+  }
   if (GOOGLE_CREDS.has(cred)) headers.Authorization = "Bearer " + await googleToken(env);
   else if (cred === "httpBasicAuth") headers.Authorization = "Basic " + btoa((env.HCTI_USER_ID || "") + ":" + (env.HCTI_API_KEY || ""));
   if ((ctx.sub = (ctx.sub || 0) + 1) > 900) throw new Error("Çok fazla dış istek");
