@@ -1421,7 +1421,7 @@ async function rakipTakip(req, env) {
     }
   }
   return J({ success: true, status: "ok", gun, count: rows.length, yorum_html: yorum, mail,
-    rakipler: res.map(r => ({ firma: r.firma, ok: r.ok, kaynak: r.kaynak, feed_url: r.feed_url, error: r.error, toplam: r.toplam, tarihsiz: r.tarihsiz, son: r.son, items: r.items })) });
+    rakipler: res.map(r => ({ firma: r.firma, ok: r.ok, kaynak: r.kaynak, feed_url: r.feed_url, error: r.error, toplam: r.toplam, tarihsiz: r.tarihsiz, son: r.son, ...(r.kaynak === "LinkedIn" ? { ham: r.ham, tani: r.tani } : {}), items: r.items })) });
 }
 
 // ================= n8n akışları (otomatik üretildi: n8n-export/gen/gen.py) =================
