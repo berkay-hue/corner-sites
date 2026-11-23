@@ -24,7 +24,7 @@ h1{font-size:clamp(28px,6vw,40px);line-height:1.2;margin:48px 0 8px}h2{font-size
 label{display:block;font-size:13px;color:var(--mute);margin:0 0 4px}
 input,select{width:100%;background:#12121a;color:var(--fg);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font:inherit;font-size:15px;min-height:44px}
 input:focus,select:focus{outline:2px solid var(--acc);outline-offset:1px}
-.row{display:grid;grid-template-columns:1fr 1.3fr 1.5fr 44px;gap:8px;align-items:end;margin-bottom:10px}
+.row{display:grid;grid-template-columns:1fr 1.1fr 1.3fr 1.3fr 44px;gap:8px;align-items:end;margin-bottom:10px}
 .grid2{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:8px}
 @media (max-width:640px){.row{grid-template-columns:1fr 1fr;padding-bottom:10px;border-bottom:1px solid var(--line)}.row .feed{grid-column:1/2}.grid2{grid-template-columns:1fr}}
 button{font:inherit;cursor:pointer;border-radius:10px;min-height:44px}
@@ -45,7 +45,7 @@ button{font:inherit;cursor:pointer;border-radius:10px;min-height:44px}
 <header><div class="w"><a href="/">Ana sayfa</a><a href="/hizmetler">Hizmetler</a><a href="/hakkimizda">Hakkımızda</a><a href="/blog">Blog</a><a href="/iletisim">İletişim</a></div></header>
 <main class="w">
 <h1>📡 Rakip Takip</h1>
-<p class="d">Rakiplerinizin blog / RSS akışlarını, site haritalarını ve blog sayfalarını tarar; seçtiğiniz dönemde yayımlanan yeni içerikleri listeler ve AI analist yorumuyla birlikte gösterir. E-posta yazarsanız rapor gelen kutunuza da gönderilir.</p>
+<p class="d">Rakiplerinizin blog / RSS akışlarını, site haritalarını, blog sayfalarını ve LinkedIn şirket sayfası gönderilerini tarar; seçtiğiniz dönemde yayımlanan yeni içerikleri listeler ve AI analist yorumuyla birlikte gösterir. E-posta yazarsanız rapor gelen kutunuza da gönderilir.</p>
 
 <form id="f" class="card" autocomplete="off">
   <div id="rows"></div>
@@ -87,6 +87,7 @@ button{font:inherit;cursor:pointer;border-radius:10px;min-height:44px}
     row.appendChild(field("Firma", "firma", r.firma, "Rakip adı"));
     row.appendChild(field("Site", "site", r.site, "rakip.com"));
     row.appendChild(field("Akış adresi (isteğe bağlı)", "feed", r.feed, "https://rakip.com/feed", "feed"));
+    row.appendChild(field("LinkedIn şirket sayfası (isteğe bağlı)", "linkedin", r.linkedin, "linkedin.com/company/rakip"));
     var b = el("button", "del", "×"); b.type = "button"; b.title = "Kaldır"; b.setAttribute("aria-label", "Rakibi kaldır");
     b.onclick = function(){ row.remove(); sync(); };
     row.appendChild(b); rows.appendChild(row); sync();
@@ -100,9 +101,9 @@ button{font:inherit;cursor:pointer;border-radius:10px;min-height:44px}
     ev.preventDefault();
     var rakipler = [].map.call(rows.children, function(r){
       var g = function(n){ return r.querySelector('[name="'+n+'"]').value.trim(); };
-      return {firma:g("firma"), site:g("site"), feed:g("feed")};
-    }).filter(function(x){ return x.site || x.feed; });
-    if (!rakipler.length) { alert0("En az bir rakip için site veya akış adresi yazın."); return; }
+      return {firma:g("firma"), site:g("site"), feed:g("feed"), linkedin:g("linkedin")};
+    }).filter(function(x){ return x.site || x.feed || x.linkedin; });
+    if (!rakipler.length) { alert0("En az bir rakip için site, akış adresi veya LinkedIn şirket sayfası yazın."); return; }
     var body = {rakipler:rakipler, gun:+document.getElementById("gun").value, sirket:document.getElementById("sirket").value.trim(), email:document.getElementById("email").value.trim()};
     go.disabled = true; go.textContent = "Taranıyor…";
     fetch("/api/rakip-takip", {method:"POST", headers:{"content-type":"application/json"}, body:JSON.stringify(body)})
@@ -121,7 +122,7 @@ button{font:inherit;cursor:pointer;border-radius:10px;min-height:44px}
     document.getElementById("out").hidden = false;
     var du = document.getElementById("durum"); du.textContent = "";
     (d.rakipler || []).forEach(function(r){
-      var s = el("div", "st"); s.appendChild(el("b", null, r.firma || "—"));
+      var s = el("div", "st"); s.appendChild(el("b", null, (r.firma || "—") + (r.kaynak === "LinkedIn" ? " · LinkedIn" : "")));
       if (!r.ok) s.appendChild(el("span", "tag bad", "bulunamadı"));
       else s.appendChild(el("span", "tag " + (r.items.length ? "ok" : "zero"), r.items.length + " yeni"));
       var info = r.ok ? (r.kaynak + (r.son ? " · son içerik " + r.son : "") + (r.toplam ? " · " + r.toplam + " kayıt tarandı" : "")) : (r.error || "");
@@ -134,7 +135,7 @@ button{font:inherit;cursor:pointer;border-radius:10px;min-height:44px}
     var li = document.getElementById("liste"); li.textContent = "";
     (d.rakipler || []).forEach(function(r){
       if (!r.items || !r.items.length) return;
-      var c = el("div", "card"); c.appendChild(el("b", null, r.firma + " (" + r.items.length + ")"));
+      var c = el("div", "card"); c.appendChild(el("b", null, r.firma + (r.kaynak === "LinkedIn" ? " · LinkedIn" : "") + " (" + r.items.length + ")"));
       r.items.forEach(function(x){
         var it = el("div", "it");
         if (x.link) { var a = el("a", null, x.title || x.link); a.href = x.link; a.target = "_blank"; a.rel = "noopener nofollow"; it.appendChild(a); }
