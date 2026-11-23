@@ -6,6 +6,12 @@
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
   }
+  // Blog sayfaları: derleyicinin eklediği dil kutusundaki karşılık sayfayı başlık/menü/alt bilgi anahtarlarına taşı
+  var alt = document.querySelector('.sk-lang a[hreflang]:not([aria-current])');
+  if (alt) {
+    var href = alt.getAttribute('href');
+    [].forEach.call(document.querySelectorAll('.hdr__end>.lang,.mnav__lang a,.ftr__lang a'), function (a) { a.setAttribute('href', href); });
+  }
   var menu = document.querySelector('.mnav');
   if (!menu) return;
   var sum = menu.querySelector('summary');
