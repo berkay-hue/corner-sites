@@ -65,12 +65,9 @@ export async function platform(req, url, env, origin, deliver) {
     if (route === "POST /auth/forgot") return await forgot(c);
     if (route === "POST /auth/reset") return await reset(c);
 
-    const token = (req.headers.get("authorization") || "").match(/^Bearer ([A-Za-z0-9_-]{43})$/)?.[1];
-    c.user = token && await env.DB.prepare(
-      "SELECT u.* FROM sessions s JOIN users u ON u.id = s.user_id WHERE s.token_hash = ? AND s.expires_at > datetime('now') AND u.site = ?",
-    ).bind(await sha256(token), site).first();
-    // Rolü sitede kabul edilmeyen kullanıcının oturumu yok sayılır (src/sites.js roles; brandcorner.co'da her rol)
-    if (!c.user || !roleAllowed(site, c.user.role)) throw new Bad("auth", 401);
+    const token = bearerToken(req);
+    c.user = await sessionUser(env, token, site);
+    if (!c.user) throw new Bad("auth", 401);
 
     // Yönetici ise admin: true; kendi yetkileri (admin hariç) perms, yoksa alan yok
     if (route === "GET /auth/me") {
@@ -90,6 +87,16 @@ export async function platform(req, url, env, origin, deliver) {
     console.error(e);
     return reply({ ok: false, error: "server" }, 500, origin);
   }
+}
+
+// Oturum çözümleyici (platform() ve /gen/* taslak kaydı, src/generate.js): biçimi bozuk, süresi dolmuş, başka sitenin
+// ya da rolü sitede kabul edilmeyen (src/sites.js roles; brandcorner.co'da her rol) oturum null.
+export const bearerToken = req => (req.headers.get("authorization") || "").match(/^Bearer ([A-Za-z0-9_-]{43})$/)?.[1];
+export async function sessionUser(env, token, site) {
+  const user = token && await env.DB.prepare(
+    "SELECT u.* FROM sessions s JOIN users u ON u.id = s.user_id WHERE s.token_hash = ? AND s.expires_at > datetime('now') AND u.site = ?",
+  ).bind(await sha256(token), site).first();
+  return user && roleAllowed(site, user.role) ? user : null;
 }
 
 const ok = (c, body) => reply({ ok: true, ...body }, 200, c.origin);
