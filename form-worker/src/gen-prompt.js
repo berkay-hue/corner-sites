@@ -378,7 +378,7 @@ export function clean(s) {
 // metne kod noktası başına eşlenen katlanmış kopyaya uygulanır: U+FE00-FE0F ve görünmezler kopyaya alınmaz
 // (özgünde kalır), Türkçe harf, tek kod noktalık NFKC (tam genişlik, "﹤", matematik harfleri), küçük harf ve
 // benzer harf tablosu (Kiril, Yunan). Diğer "<" ve ">" işaretlerine dokunulmaz ("<5 dk", "<adres>").
-const TR = { "İ": "i", "I": "i", "ı": "i", "Ş": "s", "ş": "s", "Ç": "c", "ç": "c", "Ö": "o", "ö": "o", "Ü": "u", "ü": "u", "Ğ": "g", "ğ": "g" };
+export const TR = { "İ": "i", "I": "i", "ı": "i", "Ş": "s", "ş": "s", "Ç": "c", "ç": "c", "Ö": "o", "ö": "o", "Ü": "u", "ü": "u", "Ğ": "g", "ğ": "g" };
 const LOOK = {
   "а": "a", "с": "c", "ԁ": "d", "е": "e", "һ": "h", "і": "i", "ј": "j", "к": "k", "о": "o", "р": "p", "ѕ": "s", "у": "y",
   "α": "a", "ε": "e", "ι": "i", "κ": "k", "ν": "v", "ο": "o", "ρ": "p", "τ": "t", "υ": "u",

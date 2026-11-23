@@ -12,6 +12,7 @@ import { smtpReady, smtpSend, smtpFrom } from "./smtp.js";
 import { metricsEnabled, accountMetrics, linkMetrics, parseAudience } from "./metrics.js";
 import { NICHE_LIST } from "./classify.js";
 import { authHosts, previewSite, resetPath, siteConf, siteRoles, roleAllowed, routeAllowed } from "./sites.js";
+import { TR as TR_FOLD } from "./gen-prompt.js";
 
 const ROLES = ["brand", "influencer", "agency"];
 const PLATFORMS = LISTED; // instagram, tiktok, youtube, x, linkedin, twitch (profil ve bağlantı listesi aynı)
@@ -158,7 +159,8 @@ async function forgot(c) {
   if (await attempts(env, "forgot", "email", email, 60, false) >= 3) return ok(c, {});
   await attempt(env, ip, email, "forgot", 1);
   const user = await env.DB.prepare("SELECT * FROM users WHERE site = ? AND email = ?").bind(site, email).first();
-  if (!user) return ok(c, {});
+  // Rolü sitede kabul edilmeyen (pasif) hesap yok sayılır: login/reset/sessionUser gibi; e-posta gitmez, yanıt aynı
+  if (!user || !roleAllowed(site, user.role)) return ok(c, {});
 
   const token = b64u(crypto.getRandomValues(new Uint8Array(32)));
   await env.DB.batch([
@@ -389,6 +391,12 @@ async function putVoice(c) {
 
 const draftOut = r => ({ id: r.id, platform: r.platform, created_at: r.created_at, topic: r.topic, body: r.body, meta: jsonOr(r.meta, {}) });
 
+// Arama Türkçe harf ve büyük/küçük harf duyarsız: SQLite LIKE ve lower() yalnız ASCII'yi katlar ("İ"/"ı" ≠ "i").
+// Sütun ve terim aynı tabloyla (gen-prompt.js TR, yasak ifade fold'unun Türkçe harf kısmı) katlanır, sonra ASCII
+// küçük harf: SQL tarafı replace(...) + lower(), JS tarafı aynısı. Migration ve ek sütun gerekmez.
+const foldCol = col => `lower(${Object.entries(TR_FOLD).reduce((e, [k, v]) => `replace(${e}, '${k}', '${v}')`, col)})`;
+const foldTerm = s => [...s].map(ch => TR_FOLD[ch] || ch).join("").replace(/[A-Z]/g, ch => ch.toLowerCase());
+
 // ?q= (konu/metin arama, en çok 100), ?platform=linkedin|instagram, ?before=<son id> (id imleci). 50'lik sayfa, next = sonraki before.
 async function listDrafts(c) {
   const { q = "", platform = "", before = "" } = c.query;
@@ -399,8 +407,8 @@ async function listDrafts(c) {
   if (platform) { where.push("platform = ?"); args.push(platform); }
   if (before) { where.push("id < ?"); args.push(Number(before)); }
   if (term) {
-    const like = `%${term.replace(/[\\%_]/g, x => "\\" + x)}%`;
-    where.push("(topic LIKE ? ESCAPE '\\' OR body LIKE ? ESCAPE '\\')");
+    const like = `%${foldTerm(term).replace(/[\\%_]/g, x => "\\" + x)}%`;
+    where.push(`(${foldCol("topic")} LIKE ? ESCAPE '\\' OR ${foldCol("body")} LIKE ? ESCAPE '\\')`);
     args.push(like, like);
   }
   const rows = await listAll(c.env, `SELECT id, platform, created_at, topic, body, meta FROM drafts WHERE ${where.join(" AND ")}
