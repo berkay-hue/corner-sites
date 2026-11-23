@@ -200,8 +200,10 @@ test("drafts tablosu yoksa oturumlu üretim yine 200 (draft_ids yok), hata tek s
   assert.ok(!lines[0].arguments.join(" ").includes(TOKEN));
 });
 
-test("brandcorner.co ve izin listesinde olmayan origin: geçerli oturum olsa da satır yok, yanıt anonimle aynı", async () => {
-  for (const [origin, tok, env] of [[BC, "B".repeat(43), { AUTH_HOSTS: "brandcorner.co" }], ["https://saascorner.co", TOKEN, {}], [null, TOKEN, {}]]) {
+test("brandcorner.co, izin listesinde olmayan origin ve preview kapısında önizleme: geçerli oturum olsa da satır yok, yanıt anonimle aynı", async () => {
+  // Önizleme (<dal>.web-smcapp.pages.dev) "preview" kapısında platformSite'tan app sitesini alır; yazımı yalnız ACCOUNTS_ENABLED === "1" şartı durdurur
+  const PV = "https://f-x.web-smcapp.pages.dev";
+  for (const [origin, tok, env] of [[BC, "B".repeat(43), { AUTH_HOSTS: "brandcorner.co" }], ["https://saascorner.co", TOKEN, {}], [null, TOKEN, {}], [PV, TOKEN, { ACCOUNTS_ENABLED: "preview" }]]) {
     const body = liBody();
     const anon = await setup({ env }).call("/gen/linkedin", body, { origin });
     const s = setup({ env });
