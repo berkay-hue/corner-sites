@@ -1041,8 +1041,14 @@ async function asyncJob(id) { if (/^k[0-9a-f]{32}$/.test(id)) return execGet("jo
 async function n8nApiEmu(ctx, url) {
   const id = decodeURIComponent(url.match(/executions\/([^?]+)/)[1]);
   let rec = await execGet(id);
-  // Başka bir sorgu bu işi çalıştırıyorsa onun ilerleme kaydını döndür; 10 dakikadan eskiyse yeniden başlat.
-  if (rec && !rec.finished && Date.now() - (rec.hb || 0) > 600000) rec = null;
+  // Başka bir sorgu bu işi çalıştırıyorsa onun ilerleme kaydını döndür; kalp atışı 3 dakikadır yoksa (istek öldü) yeniden başlat.
+  // En fazla 2 deneme: CF isteği öldürdüyse (ör. CPU sınırı) ücretli Claude çağrılarını sonsuz tekrar etme.
+  let tries = 0;
+  if (rec && !rec.finished && Date.now() - (rec.hb || 0) > 180000) {
+    tries = rec.tries || 1;
+    rec = tries >= 2 ? { id, finished: true, status: "error", data: { resultData: { error: { message: "Çalıştırma sunucu tarafında yarıda kesildi (2 deneme). Lütfen tekrar deneyin." } } } } : null;
+    if (rec) await execPut(id, rec);
+  }
   if (!rec) {
     const job = await asyncJob(id); const wfName = job && ASYNC_WF[job.p];
     if (!wfName) rec = { id, finished: true, status: "error", data: { resultData: { error: { message: "Bilinmeyen çalıştırma" } } } };
@@ -1050,13 +1056,14 @@ async function n8nApiEmu(ctx, url) {
       const startedAt = new Date().toISOString(); const sub = { env: ctx.env, execId: id, cfctx: ctx.cfctx };
       let lastPut = 0;
       const progress = async (force) => { if (!force && Date.now() - lastPut < 4000) return; lastPut = Date.now();
-        await execPut(id, { id, finished: false, status: "running", mode: "webhook", startedAt, hb: Date.now(), data: { resultData: { runData: __runDataLite(sub.runData) } } }); };
+        await execPut(id, { id, finished: false, status: "running", mode: "webhook", startedAt, hb: Date.now(), tries: tries + 1, data: { resultData: { runData: __runDataLite(sub.runData) } } }); };
       await progress(true); sub.onStep = () => progress(false);
+      const beat = setInterval(() => progress(true), 60000); // uzun tek düğümde de kayıt taze kalsın
       try {
         const r = await runWorkflow(sub, wfName, WF[wfName].start[job.p], [{ json: { headers: job.h || {}, params: {}, query: job.q || {}, body: job.b, executionMode: "production" } }]);
         rec = { id, finished: true, status: "success", mode: "webhook", startedAt, stoppedAt: new Date().toISOString(), data: { resultData: { runData: __runDataOut(sub.runData), lastNodeExecuted: r.lastName } } };
       } catch (e) { console.log("uzun akış hatası", wfName, e?.node, e?.stack || e); rec = { id, finished: true, status: "error", startedAt, stoppedAt: new Date().toISOString(), data: { resultData: { error: { message: e.message, node: e.node }, runData: {} } } }; }
-      sub.onStep = null;
+      clearInterval(beat); sub.onStep = null;
       await execPut(id, rec);
     }
   }
