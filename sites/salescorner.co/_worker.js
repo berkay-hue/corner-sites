@@ -712,6 +712,28 @@ EX.googleSheets = async (ctx, n, items) => {
     await gjson(ctx, `https://sheets.googleapis.com/v4/spreadsheets/${id}/values/${encodeURIComponent(A1(title))}:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS`, { method: "POST", body: JSON.stringify({ values: vals }) });
     return [recs.map(r => ({ json: r }))];
   }
+  if (op === "update") {
+    // n8n v4 "update" (autoMapInputData): eşleşme sütunundaki İLK eşleşen satırı günceller; başlıkta olmayan alanları yok sayar,
+    // eşleşme yoksa sessizce geçer. Yalnızca değişen hücreler tek batchUpdate ile yazılır.
+    const id = __fill(docId(p0.documentId), ctx.env), title = await sheetTitle(ctx, id, p0.sheetName);
+    const d = await gjson(ctx, `https://sheets.googleapis.com/v4/spreadsheets/${id}/values/${encodeURIComponent(A1(title))}?valueRenderOption=UNFORMATTED_VALUE&dateTimeRenderOption=FORMATTED_STRING`);
+    const rows = d.values || []; const head = (rows[0] || []).map(String);
+    const recs = items.map((it, i) => { const p = i ? P(ctx, n, items, i) : p0; return { p, r: p.columns?.mappingMode === "defineBelow" ? (p.columns.value || {}) : it.json }; });
+    const col = k => { let s = "", c = k + 1; while (c > 0) { const m = (c - 1) % 26; s = String.fromCharCode(65 + m) + s; c = Math.floor((c - 1) / 26); } return s; };
+    const data = [];
+    for (const { p, r } of recs) {
+      const key = (p.columns?.matchingColumns || [])[0] || p.columnToMatchOn; const kc = head.indexOf(key);
+      if (kc < 0) throw new Error(`Eşleşme sütunu "${key}" sayfada yok`);
+      const want = String(r[key] ?? ""); if (want === "") continue;
+      let ri = -1; for (let x = 1; x < rows.length; x++) if (String(rows[x]?.[kc] ?? "") === want) { ri = x; break; }
+      if (ri < 0) continue;
+      for (const [k, v] of Object.entries(r)) { const c = head.indexOf(k); if (c < 0 || k === key || k === "row_number") continue;
+        const val = v == null ? "" : typeof v === "object" ? JSON.stringify(v) : v;
+        data.push({ range: A1(title) + "!" + col(c) + (ri + 1), values: [[val]] }); (rows[ri] ||= [])[c] = val; }
+    }
+    if (data.length) await gjson(ctx, `https://sheets.googleapis.com/v4/spreadsheets/${id}/values:batchUpdate`, { method: "POST", body: JSON.stringify({ valueInputOption: "USER_ENTERED", data }) });
+    return [recs.map(x => ({ json: x.r }))];
+  }
   throw new Error("Desteklenmeyen Sheets işlemi: " + op);
 };
 
@@ -11531,8 +11553,1520 @@ return {
 })()}},"cred":null},"Status Respond":{"name":"Status Respond","t":"respondToWebhook","p":{"respondWith":"json","responseBody":__X(function($json,$,$input,$env,$execution,$binary,$itemIndex,$now,$node){try{return ($json
 )}catch(e){return undefined}}),"options":{"responseCode":200}},"cred":null},"18.5 Slides Public Yap":{"name":"18.5 Slides Public Yap","t":"httpRequest","p":{"method":"POST","url":__X(function($json,$,$input,$env,$execution,$binary,$itemIndex,$now,$node){return "https://www.googleapis.com/drive/v3/files/"+__t(()=>($('16. Create Slides').first().json.presentationId
 ))+"/permissions"}),"authentication":"predefinedCredentialType","nodeCredentialType":"googleSlidesOAuth2Api","sendBody":true,"specifyBody":"json","jsonBody":__X(function($json,$,$input,$env,$execution,$binary,$itemIndex,$now,$node){try{return (JSON.stringify({ role: "reader", type: "anyone" })
-)}catch(e){return undefined}}),"options":{"timeout":10000}},"cred":"googleSlidesOAuth2Api"}},"conn":{"Webhook":[[["0. Bot Guard",0]]],"0. Bot Guard":[[["1. Input Validasyon & Değişkenler",0]]],"1. Input Validasyon & Değişkenler":[[["Respond to Webhook",0],["2. Kendi Sitemizi Scrape Et",0]]],"2. Kendi Sitemizi Scrape Et":[[["3. HTML Temizle",0]]],"3. HTML Temizle":[[["3.5 Firma Analiz Prompt",0]]],"3.5 Firma Analiz Prompt":[[["4. Firmamızı Analiz Et (Gemini)",0]]],"4. Firmamızı Analiz Et (Gemini)":[[["5. Profili Parse Et",0]]],"5. Profili Parse Et":[[["6. Manuel Rakipler Hazırla",0]]],"6. Manuel Rakipler Hazırla":[[["8. Rakip Sitesini Scrape Et",0]]],"8. Rakip Sitesini Scrape Et":[[["9. Rakip HTML Temizle",0]]],"9. Rakip HTML Temizle":[[["9.5 Rakip Analiz Prompt",0]]],"9.5 Rakip Analiz Prompt":[[["10. Rakibi Detaylı Analiz Et",0]]],"10. Rakibi Detaylı Analiz Et":[[["11. Analizi Parse Et",0]]],"11. Analizi Parse Et":[[["12.5 Rapor Prompt Hazırla",0]]],"12.5 Rapor Prompt Hazırla":[[["13. Karşılaştırmalı Rapor (Gemini)",0]]],"13. Karşılaştırmalı Rapor (Gemini)":[[["14. Raporu Parse Et",0]]],"14. Raporu Parse Et":[[["15. Slides Data Builder",0]]],"15. Slides Data Builder":[[["16. Create Slides",0]]],"16. Create Slides":[[["17. Prepare Batch",0]]],"17. Prepare Batch":[[["18. Build Slides",0]]],"18. Build Slides":[[["18.5 Slides Public Yap",0]]],"19. Output Link":[[["20. Email Data Hazırla",0]]],"20. Email Data Hazırla":[[["20.1 Gmail Gönder",0]]],"Status Webhook":[[["Status Validate",0]]],"Status Validate":[[["Status API Sorgula",0]]],"Status API Sorgula":[[["Status Parse",0]]],"Status Parse":[[["Status Respond",0]]],"18.5 Slides Public Yap":[[["19. Output Link",0]]]},"ai":{},"start":{"/api/rakip-analizi-pro-v5":"Webhook","/api/rakip-analizi-status":"Status Webhook"}}};
-const ROUTES = [{"path":"/api/analiz","method":"POST","wf":"analiz","node":"Webhook","respond":null,"mode":"lastNode"},{"path":"/api/briefing","method":"POST","wf":"briefing","node":"Webhook Trigger","respond":"Webhook Response","mode":"responseNode"},{"path":"/api/seo-analyze","method":"POST","wf":"seo","node":"Webhook","respond":null,"mode":"lastNode"},{"path":"/api/cv-analiz","method":"POST","wf":"cv","node":"CV Webhook","respond":null,"mode":"lastNode"},{"path":"/api/deneme-photo","method":"POST","wf":"photo","node":"Webhook","respond":"Respond to Webhook","mode":"responseNode"},{"path":"/api/linkedin-oauth-photo","method":"POST","wf":"photo","node":"LinkedIn OAuth Webhook","respond":null,"mode":"lastNode"},{"path":"/api/linkedin-share-photo","method":"POST","wf":"photo","node":"LinkedIn Share Webhook","respond":null,"mode":"lastNode"},{"path":"/api/photo-enhance-v2","method":"POST","wf":"photo","node":"Photo Upload Webhook","respond":"Photo Respond","mode":"responseNode"},{"path":"/api/deneme","method":"POST","wf":"deneme","node":"Webhook","respond":"Respond to Webhook","mode":"responseNode"},{"path":"/api/linkedin-oauth","method":"POST","wf":"deneme","node":"LinkedIn OAuth Webhook","respond":null,"mode":"lastNode"},{"path":"/api/linkedin-share","method":"POST","wf":"deneme","node":"LinkedIn Share Webhook","respond":null,"mode":"lastNode"},{"path":"/api/keyword-check","method":"POST","wf":"kwc","node":"Webhook","respond":"Respond to Webhook","mode":"responseNode"},{"path":"/api/keyword-scanner-pro","method":"POST","wf":"kws","node":"Webhook","respond":"Response","mode":"responseNode"},{"path":"/api/sekans","method":"POST","wf":"sekans","node":"Webhook Trigger","respond":"Respond to Webhook","mode":"responseNode"},{"path":"/api/sekans-status","method":"GET","wf":"sekans","node":"Status Webhook","respond":"Status Respond","mode":"responseNode"},{"path":"/api/rakip-analizi-pro-v5","method":"POST","wf":"rakip","node":"Webhook","respond":"Respond to Webhook","mode":"responseNode"},{"path":"/api/rakip-analizi-status","method":"GET","wf":"rakip","node":"Status Webhook","respond":"Status Respond","mode":"responseNode"}];
+)}catch(e){return undefined}}),"options":{"timeout":10000}},"cred":"googleSlidesOAuth2Api"}},"conn":{"Webhook":[[["0. Bot Guard",0]]],"0. Bot Guard":[[["1. Input Validasyon & Değişkenler",0]]],"1. Input Validasyon & Değişkenler":[[["Respond to Webhook",0],["2. Kendi Sitemizi Scrape Et",0]]],"2. Kendi Sitemizi Scrape Et":[[["3. HTML Temizle",0]]],"3. HTML Temizle":[[["3.5 Firma Analiz Prompt",0]]],"3.5 Firma Analiz Prompt":[[["4. Firmamızı Analiz Et (Gemini)",0]]],"4. Firmamızı Analiz Et (Gemini)":[[["5. Profili Parse Et",0]]],"5. Profili Parse Et":[[["6. Manuel Rakipler Hazırla",0]]],"6. Manuel Rakipler Hazırla":[[["8. Rakip Sitesini Scrape Et",0]]],"8. Rakip Sitesini Scrape Et":[[["9. Rakip HTML Temizle",0]]],"9. Rakip HTML Temizle":[[["9.5 Rakip Analiz Prompt",0]]],"9.5 Rakip Analiz Prompt":[[["10. Rakibi Detaylı Analiz Et",0]]],"10. Rakibi Detaylı Analiz Et":[[["11. Analizi Parse Et",0]]],"11. Analizi Parse Et":[[["12.5 Rapor Prompt Hazırla",0]]],"12.5 Rapor Prompt Hazırla":[[["13. Karşılaştırmalı Rapor (Gemini)",0]]],"13. Karşılaştırmalı Rapor (Gemini)":[[["14. Raporu Parse Et",0]]],"14. Raporu Parse Et":[[["15. Slides Data Builder",0]]],"15. Slides Data Builder":[[["16. Create Slides",0]]],"16. Create Slides":[[["17. Prepare Batch",0]]],"17. Prepare Batch":[[["18. Build Slides",0]]],"18. Build Slides":[[["18.5 Slides Public Yap",0]]],"19. Output Link":[[["20. Email Data Hazırla",0]]],"20. Email Data Hazırla":[[["20.1 Gmail Gönder",0]]],"Status Webhook":[[["Status Validate",0]]],"Status Validate":[[["Status API Sorgula",0]]],"Status API Sorgula":[[["Status Parse",0]]],"Status Parse":[[["Status Respond",0]]],"18.5 Slides Public Yap":[[["19. Output Link",0]]]},"ai":{},"start":{"/api/rakip-analizi-pro-v5":"Webhook","/api/rakip-analizi-status":"Status Webhook"}},"li_berkay":{"nodes":{"Webhook Queue GET":{"name":"Webhook Queue GET","t":"webhook","p":{"path":"linkedin-queue-berkay","responseMode":"responseNode","options":{}},"cred":null},"Pass Queue":{"name":"Pass Queue","t":"code","p":{"code":async function($input,$,$json,$env,$execution,$itemIndex,helpers,Buffer,items,$node){return (async()=>{
+// Ic kullanim icin auth kapali.
+// Bu node sadece akisi gecirir; API key gerekmez.
+return $input.all();
+})()}},"cred":null},"Read Leads":{"name":"Read Leads","t":"googleSheets","p":{"documentId":{"__rl":true,"value":"__ENV_SHEET_ID_4__","mode":"id"},"sheetName":{"__rl":true,"value":1535908742,"mode":"list"},"options":{}},"cred":"googleSheetsOAuth2Api"},"Build Queue Payload":{"name":"Build Queue Payload","t":"code","p":{"code":async function($input,$,$json,$env,$execution,$itemIndex,helpers,Buffer,items,$node){return (async()=>{
+// SAAS Corner — Build Queue Payload v4.1
+// n8n Code node (typeVersion 2). Bu kodu CANLI workflow'daki "Build Queue Payload"
+// node'una yapıştır. Sheet'ten lead'leri okuyup extension için iş kuyruğu üretir.
+//  • Aksiyona özel id (leadId_action) → durum değişince iş bayatlamaz
+//  • Mesaj hash'i ile idempotency → aynı mesaj iki kez gitmez
+//  • failed_retryable için attempts sayacı + MAX_ATTEMPTS'te kalıcı durdurma (sonsuz döngü yok)
+const rows = $input.all().map(i => i.json);
+const items = [];
+const CHECK_INTERVAL_MINUTES = 5;
+const MAX_ATTEMPTS = 3;
+
+function cleanUrl(v){ if(!v) return ''; let u=String(v).trim(); if(!u.startsWith('http')) u='https://'+u.replace(/^\/+/,''); return u.split('?')[0].split('#')[0].replace(/\/$/,''); }
+function text(v){ return String(v==null?'':v).trim(); }
+function normMsg(v){ return String(v||'').normalize('NFKC').replace(/[\u200B-\u200D\uFEFF]/g,'').replace(/\s+/g,' ').trim().toLowerCase(); }
+function hashMsg(v){ const n=normMsg(v); if(!n) return ''; let h=2166136261; for(let i=0;i<n.length;i++){ h^=n.charCodeAt(i); h=Math.imul(h,16777619);} return (h>>>0).toString(16).padStart(8,'0'); }
+function esc(v){ return String(v).replace(/[-\/\\^$*+?.()|[\]{}]/g,'\\$&'); }
+function parseDate(v){ if(!v) return null; const r=String(v).trim(); const d=new Date(r.includes('T')?r:r.replace(' ','T')); return Number.isFinite(d.getTime())?d:null; }
+function token(notes,key){ const m=String(notes||'').match(new RegExp('(?:^|\\|)\\s*'+esc(key)+'=([^|]+)','i')); return m?m[1].trim():''; }
+function lastCheck(row){ const v=token(row.notlar,'last_connection_check'); return v?parseDate(v):null; }
+function attemptsOf(row){ const n=parseInt(token(row.notlar,'attempts'),10); return Number.isFinite(n)?n:0; }
+function leadIdFor(row){ const slug=cleanUrl(row.linkedin_url||row.profileUrl||'').split('/in/')[1]?.replace(/\/$/,'')||''; return text(row.lead_id||row.id||row.leadId||slug); }
+function sentSame(row,hash){ if(!hash) return false; const notes=String(row.notlar||''); const ex=text(row.last_message_hash||row.message_hash); if(ex && ex===hash) return true; return new RegExp('(?:last_message_hash|message_hash)='+esc(hash)+'(?:\\b|$)','i').test(notes); }
+
+function pushJob(row, action, step, extra={}) {
+  const profileUrl = cleanUrl(row.linkedin_url||row.profileUrl||'');
+  const leadId = leadIdFor(row);
+  if(!leadId || !profileUrl.includes('linkedin.com/in/')) return;
+  const connectionNote = text(row.personal_note||row.connectionNote||row.connection_note).slice(0,300);
+  const followUpMessage = text(row.follow_up_message||row.followUpMessage||row.message||row.mesaj);
+  const messageHash = followUpMessage ? hashMsg(followUpMessage) : '';
+  if(action==='message'){ if(!followUpMessage) return; if(sentSame(row,messageHash)) return; }
+  items.push({
+    id: extra.id || (leadId+'_'+action),
+    lead_id: leadId, action, step,
+    profileUrl, linkedin_url: profileUrl,
+    connectionNote, personal_note: connectionNote,
+    followUpMessage, follow_up_message: followUpMessage,
+    message: action==='message' ? followUpMessage : connectionNote,
+    messageHash, message_hash: messageHash,
+    attempts: attemptsOf(row),
+    acceptedAt: row.kabul_tarih||row.acceptedAt||extra.acceptedAt||'',
+    leadName: row.ad_soyad||row.leadName||row.full_name||'',
+    generatedAt: new Date().toISOString(),
+    ...extra
+  });
+}
+
+for (const row of rows) {
+  const profileUrl = cleanUrl(row.linkedin_url||row.profileUrl||'');
+  if(!profileUrl.includes('linkedin.com/in/')) continue;
+
+  const status = text(row.durum||row.status).toLowerCase();
+  const follow = text(row.follow_up_message||row.followUpMessage||row.message||row.mesaj);
+  const followHash = hashMsg(follow);
+  const acceptedAt = text(row.kabul_tarih||row.acceptedAt);
+
+  // Kalıcı durdurma durumları (failed_final dahil → başarısız lead tekrar denenmez)
+  const hardStop = ['paused','reply','replied','message_sent','followup_sent','done','do_not_contact','blacklist','failed_final'].includes(status);
+  if(hardStop) continue;
+
+  // Çok denenip hâlâ başarısızsa kalıcı durdur (sonsuz döngü yok)
+  if(status==='failed_retryable' && attemptsOf(row) >= MAX_ATTEMPTS) continue;
+
+  // 1) Davet atılmış, kabul bekleniyor → periyodik bağlantı kontrolü
+  if(['connect_sent','sent','invite_sent'].includes(status) && follow && !acceptedAt){
+    const last=lastCheck(row);
+    const due=!last || (Date.now()-last.getTime()) >= CHECK_INTERVAL_MINUTES*60*1000;
+    if(due) pushJob(row,'check_connection',1,{ id: leadIdFor(row)+'_check_connection' });
+    continue;
+  }
+
+  // 2) Bağlantı kabul edildi → takip mesajı (aynı mesaj atılmadıysa)
+  if(['accepted','queued_followup'].includes(status) && follow && !sentSame(row,followHash)){
+    pushJob(row,'message',2,{ acceptedAt: acceptedAt || new Date().toISOString() });
+    continue;
+  }
+
+  // 3) Yeni / boş / retryable → auto (extension profilde karar verir: bağlıysa mesaj, değilse davet)
+  if(!status || ['new','ready','approved','queued','failed_retryable'].includes(status)){
+    pushJob(row,'auto',1);
+  }
+}
+
+return [{ json: { ok:true, count:items.length, items, generatedAt:new Date().toISOString() } }];
+
+})()}},"cred":null},"Respond Queue":{"name":"Respond Queue","t":"respondToWebhook","p":{"respondWith":"allIncomingItems","options":{"responseHeaders":{"entries":[{"name":"Content-Type","value":"application/json"},{"name":"Access-Control-Allow-Origin","value":"*"},{"name":"Access-Control-Allow-Methods","value":"GET, OPTIONS"},{"name":"Access-Control-Allow-Headers","value":"Content-Type, X-API-Key"}]}}},"cred":null},"Webhook Result POST":{"name":"Webhook Result POST","t":"webhook","p":{"httpMethod":"POST","path":"linkedin-result-berkay","responseMode":"responseNode","options":{}},"cred":null},"Pass Result":{"name":"Pass Result","t":"code","p":{"code":async function($input,$,$json,$env,$execution,$itemIndex,helpers,Buffer,items,$node){return (async()=>{
+// Ic kullanim icin auth kapali.
+// Bu node sadece akisi gecirir; API key gerekmez.
+return $input.all();
+})()}},"cred":null},"Parse Result":{"name":"Parse Result","t":"code","p":{"code":async function($input,$,$json,$env,$execution,$itemIndex,helpers,Buffer,items,$node){return (async()=>{
+// SAAS Corner — Parse Result v4.1
+// n8n Code node (typeVersion 2). Bu kodu CANLI workflow'daki "Parse Result"
+// node'una yapıştır. Extension'dan gelen POST sonucunu sheet güncellemesine çevirir.
+//  • failed_retryable + attempts → MAX'a kadar otomatik yeniden dener (Build Queue 3'te durdurur)
+//  • connect başarısında notlar SİLİNMEZ (throttle/iz korunur)
+//  • mesaj hash'i notlar'a yazılır → aynı mesaj bir daha gönderilmez (idempotency)
+const body = $json.body || $json;
+const rawLeadId = String(body.lead_id || body.leadId || body.id || '');
+const leadId = rawLeadId.replace(/_(connect|message|followup|check_connection|auto)$/i, '');
+
+// Aksiyonu belirle: önce makine alanı (resolvedAction/status), yoksa Türkçe metinden çıkar.
+let action = String(body.resolvedAction || body.action || '').toLowerCase();
+const detail = String(body.detail || body.action || '').toLowerCase();
+if (!['connect', 'message', 'check_connection'].includes(action)) {
+  if (action.includes('davet') || action.includes('bağlant') || detail.includes('davet') || detail.includes('bağlant')) {
+    action = 'connect';
+  } else if (action.includes('mesaj') || detail.includes('mesaj')) {
+    action = 'message';
+  }
+}
+
+const reason = String(body.reason || '').toLowerCase();
+const now = new Date().toISOString().slice(0, 16).replace('T', ' ');
+const messageHash = String(body.messageHash || body.message_hash || '').trim();
+const alreadySent = Boolean(body.alreadySent || body.already_sent);
+const attempts = Number(body.attempts) || 0;
+const status = String(body.status || '').toLowerCase();
+
+const out = { lead_id: leadId, durum: '', notlar: '' };
+
+if (body.success) {
+  if (action === 'message') {
+    out.durum = 'message_sent';
+    out.notlar = (alreadySent ? 'message_already_sent ' : 'message_sent ') + now + (messageHash ? ' | last_message_hash=' + messageHash : '');
+  } else if (action === 'connect') {
+    out.durum = 'connect_sent';
+    out.gonderildi_tarih = now;
+    out.notlar = 'connect_sent ' + now;        // notlar'ı BOŞALTMA (eski sürüm boşaltıyordu)
+  } else if (action === 'check_connection') {
+    out.durum = 'accepted';
+    out.kabul_tarih = now;
+    out.notlar = 'connection_detected ' + now;
+  } else {
+    out.durum = 'done';
+    out.notlar = 'done ' + now;
+  }
+} else if (reason.includes('already_connected')) {
+  out.durum = 'accepted';
+  out.kabul_tarih = now;
+  out.notlar = 'already_connected ' + now;
+} else if (reason === 'not_connected_yet') {
+  out.durum = 'connect_sent';
+  out.notlar = 'last_connection_check=' + now + ' | not_connected_yet';
+} else if (status === 'failed_retryable') {
+  // Geçici hata → bir sonraki turda tekrar denenir (Build Queue attempts>=3 olunca durdurur)
+  out.durum = 'failed_retryable';
+  out.notlar = (body.reason || 'unknown') + ' | attempts=' + attempts + ' | ' + now;
+} else {
+  out.durum = 'failed_final';
+  out.notlar = (body.reason || 'unknown') + ' | attempts=' + attempts + ' | ' + now;
+}
+
+return [{ json: out }];
+
+})()}},"cred":null},"Update Lead":{"name":"Update Lead","t":"googleSheets","p":{"operation":"update","documentId":{"__rl":true,"value":"__ENV_SHEET_ID_4__","mode":"id"},"sheetName":{"__rl":true,"value":1535908742,"mode":"list"},"columns":{"mappingMode":"autoMapInputData","value":{},"matchingColumns":["lead_id"],"schema":[{"id":"lead_id","displayName":"lead_id","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true,"removed":false},{"id":"linkedin_url","displayName":"linkedin_url","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"personal_note","displayName":"personal_note","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"follow_up_message","displayName":"follow_up_message","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"durum","displayName":"durum","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"gonderildi_tarih","displayName":"gonderildi_tarih","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"kabul_tarih","displayName":"kabul_tarih","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"notlar","displayName":"notlar","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"row_number","displayName":"row_number","required":false,"defaultMatch":false,"display":true,"type":"number","canBeUsedToMatch":true,"readOnly":true,"removed":true}],"attemptToConvertTypes":false,"convertFieldsToString":false},"options":{}},"cred":"googleSheetsOAuth2Api"},"Respond Result":{"name":"Respond Result","t":"respondToWebhook","p":{"respondWith":"json","responseBody":__X(function($json,$,$input,$env,$execution,$binary,$itemIndex,$now,$node){try{return ({ ok: true, lead_id: $json.lead_id, durum: $json.durum }
+)}catch(e){return undefined}}),"options":{"responseHeaders":{"entries":[{"name":"Access-Control-Allow-Origin","value":"*"}]}}},"cred":null}},"conn":{"Webhook Queue GET":[[["Pass Queue",0]]],"Pass Queue":[[["Read Leads",0]]],"Read Leads":[[["Build Queue Payload",0]]],"Build Queue Payload":[[["Respond Queue",0]]],"Webhook Result POST":[[["Pass Result",0]]],"Pass Result":[[["Parse Result",0]]],"Parse Result":[[["Update Lead",0]]],"Update Lead":[[["Respond Result",0]]]},"ai":{},"start":{"/api/li/berkay/queue":"Webhook Queue GET","/api/li/berkay/result":"Webhook Result POST"}},"li_yasin":{"nodes":{"Respond Result":{"name":"Respond Result","t":"respondToWebhook","p":{"respondWith":"json","responseBody":__X(function($json,$,$input,$env,$execution,$binary,$itemIndex,$now,$node){try{return ({ ok: true, lead_id: $json.lead_id, durum: $json.durum }
+)}catch(e){return undefined}}),"options":{"responseHeaders":{"entries":[{"name":"Access-Control-Allow-Origin","value":"*"}]}}},"cred":null},"Update Lead":{"name":"Update Lead","t":"googleSheets","p":{"operation":"update","documentId":{"__rl":true,"value":"__ENV_SHEET_ID_5__","mode":"id"},"sheetName":{"__rl":true,"value":1535908742,"mode":"list"},"columns":{"mappingMode":"autoMapInputData","value":{},"matchingColumns":["lead_id"],"schema":[{"id":"lead_id","displayName":"lead_id","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true,"removed":false},{"id":"linkedin_url","displayName":"linkedin_url","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"personal_note","displayName":"personal_note","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"follow_up_message","displayName":"follow_up_message","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"durum","displayName":"durum","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"gonderildi_tarih","displayName":"gonderildi_tarih","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"kabul_tarih","displayName":"kabul_tarih","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"notlar","displayName":"notlar","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"row_number","displayName":"row_number","required":false,"defaultMatch":false,"display":true,"type":"number","canBeUsedToMatch":true,"readOnly":true,"removed":true}],"attemptToConvertTypes":false,"convertFieldsToString":false},"options":{}},"cred":"googleSheetsOAuth2Api"},"Parse Result":{"name":"Parse Result","t":"code","p":{"code":async function($input,$,$json,$env,$execution,$itemIndex,helpers,Buffer,items,$node){return (async()=>{
+// SAAS Corner — Parse Result v4.1
+// n8n Code node (typeVersion 2). Bu kodu CANLI workflow'daki "Parse Result"
+// node'una yapıştır. Extension'dan gelen POST sonucunu sheet güncellemesine çevirir.
+//  • failed_retryable + attempts → MAX'a kadar otomatik yeniden dener (Build Queue 3'te durdurur)
+//  • connect başarısında notlar SİLİNMEZ (throttle/iz korunur)
+//  • mesaj hash'i notlar'a yazılır → aynı mesaj bir daha gönderilmez (idempotency)
+const body = $json.body || $json;
+const rawLeadId = String(body.lead_id || body.leadId || body.id || '');
+const leadId = rawLeadId.replace(/_(connect|message|followup|check_connection|auto)$/i, '');
+
+// Aksiyonu belirle: önce makine alanı (resolvedAction/status), yoksa Türkçe metinden çıkar.
+let action = String(body.resolvedAction || body.action || '').toLowerCase();
+const detail = String(body.detail || body.action || '').toLowerCase();
+if (!['connect', 'message', 'check_connection'].includes(action)) {
+  if (action.includes('davet') || action.includes('bağlant') || detail.includes('davet') || detail.includes('bağlant')) {
+    action = 'connect';
+  } else if (action.includes('mesaj') || detail.includes('mesaj')) {
+    action = 'message';
+  }
+}
+
+const reason = String(body.reason || '').toLowerCase();
+const now = new Date().toISOString().slice(0, 16).replace('T', ' ');
+const messageHash = String(body.messageHash || body.message_hash || '').trim();
+const alreadySent = Boolean(body.alreadySent || body.already_sent);
+const attempts = Number(body.attempts) || 0;
+const status = String(body.status || '').toLowerCase();
+
+const out = { lead_id: leadId, durum: '', notlar: '' };
+
+if (body.success) {
+  if (action === 'message') {
+    out.durum = 'message_sent';
+    out.notlar = (alreadySent ? 'message_already_sent ' : 'message_sent ') + now + (messageHash ? ' | last_message_hash=' + messageHash : '');
+  } else if (action === 'connect') {
+    out.durum = 'connect_sent';
+    out.gonderildi_tarih = now;
+    out.notlar = 'connect_sent ' + now;        // notlar'ı BOŞALTMA (eski sürüm boşaltıyordu)
+  } else if (action === 'check_connection') {
+    out.durum = 'accepted';
+    out.kabul_tarih = now;
+    out.notlar = 'connection_detected ' + now;
+  } else {
+    out.durum = 'done';
+    out.notlar = 'done ' + now;
+  }
+} else if (reason.includes('already_connected')) {
+  out.durum = 'accepted';
+  out.kabul_tarih = now;
+  out.notlar = 'already_connected ' + now;
+} else if (reason === 'not_connected_yet') {
+  out.durum = 'connect_sent';
+  out.notlar = 'last_connection_check=' + now + ' | not_connected_yet';
+} else if (status === 'failed_retryable') {
+  // Geçici hata → bir sonraki turda tekrar denenir (Build Queue attempts>=3 olunca durdurur)
+  out.durum = 'failed_retryable';
+  out.notlar = (body.reason || 'unknown') + ' | attempts=' + attempts + ' | ' + now;
+} else {
+  out.durum = 'failed_final';
+  out.notlar = (body.reason || 'unknown') + ' | attempts=' + attempts + ' | ' + now;
+}
+
+return [{ json: out }];
+
+})()}},"cred":null},"Pass Result":{"name":"Pass Result","t":"code","p":{"code":async function($input,$,$json,$env,$execution,$itemIndex,helpers,Buffer,items,$node){return (async()=>{
+// Ic kullanim icin auth kapali.
+// Bu node sadece akisi gecirir; API key gerekmez.
+return $input.all();
+})()}},"cred":null},"Webhook Result POST":{"name":"Webhook Result POST","t":"webhook","p":{"httpMethod":"POST","path":"linkedin-result-yasin","responseMode":"responseNode","options":{}},"cred":null},"Respond Queue":{"name":"Respond Queue","t":"respondToWebhook","p":{"respondWith":"allIncomingItems","options":{"responseHeaders":{"entries":[{"name":"Content-Type","value":"application/json"},{"name":"Access-Control-Allow-Origin","value":"*"},{"name":"Access-Control-Allow-Methods","value":"GET, OPTIONS"},{"name":"Access-Control-Allow-Headers","value":"Content-Type, X-API-Key"}]}}},"cred":null},"Build Queue Payload":{"name":"Build Queue Payload","t":"code","p":{"code":async function($input,$,$json,$env,$execution,$itemIndex,helpers,Buffer,items,$node){return (async()=>{
+// SAAS Corner — Build Queue Payload v4.1
+// n8n Code node (typeVersion 2). Bu kodu CANLI workflow'daki "Build Queue Payload"
+// node'una yapıştır. Sheet'ten lead'leri okuyup extension için iş kuyruğu üretir.
+//  • Aksiyona özel id (leadId_action) → durum değişince iş bayatlamaz
+//  • Mesaj hash'i ile idempotency → aynı mesaj iki kez gitmez
+//  • failed_retryable için attempts sayacı + MAX_ATTEMPTS'te kalıcı durdurma (sonsuz döngü yok)
+const rows = $input.all().map(i => i.json);
+const items = [];
+const CHECK_INTERVAL_MINUTES = 5;
+const MAX_ATTEMPTS = 3;
+
+function cleanUrl(v){ if(!v) return ''; let u=String(v).trim(); if(!u.startsWith('http')) u='https://'+u.replace(/^\/+/,''); return u.split('?')[0].split('#')[0].replace(/\/$/,''); }
+function text(v){ return String(v==null?'':v).trim(); }
+function normMsg(v){ return String(v||'').normalize('NFKC').replace(/[\u200B-\u200D\uFEFF]/g,'').replace(/\s+/g,' ').trim().toLowerCase(); }
+function hashMsg(v){ const n=normMsg(v); if(!n) return ''; let h=2166136261; for(let i=0;i<n.length;i++){ h^=n.charCodeAt(i); h=Math.imul(h,16777619);} return (h>>>0).toString(16).padStart(8,'0'); }
+function esc(v){ return String(v).replace(/[-\/\\^$*+?.()|[\]{}]/g,'\\$&'); }
+function parseDate(v){ if(!v) return null; const r=String(v).trim(); const d=new Date(r.includes('T')?r:r.replace(' ','T')); return Number.isFinite(d.getTime())?d:null; }
+function token(notes,key){ const m=String(notes||'').match(new RegExp('(?:^|\\|)\\s*'+esc(key)+'=([^|]+)','i')); return m?m[1].trim():''; }
+function lastCheck(row){ const v=token(row.notlar,'last_connection_check'); return v?parseDate(v):null; }
+function attemptsOf(row){ const n=parseInt(token(row.notlar,'attempts'),10); return Number.isFinite(n)?n:0; }
+function leadIdFor(row){ const slug=cleanUrl(row.linkedin_url||row.profileUrl||'').split('/in/')[1]?.replace(/\/$/,'')||''; return text(row.lead_id||row.id||row.leadId||slug); }
+function sentSame(row,hash){ if(!hash) return false; const notes=String(row.notlar||''); const ex=text(row.last_message_hash||row.message_hash); if(ex && ex===hash) return true; return new RegExp('(?:last_message_hash|message_hash)='+esc(hash)+'(?:\\b|$)','i').test(notes); }
+
+function pushJob(row, action, step, extra={}) {
+  const profileUrl = cleanUrl(row.linkedin_url||row.profileUrl||'');
+  const leadId = leadIdFor(row);
+  if(!leadId || !profileUrl.includes('linkedin.com/in/')) return;
+  const connectionNote = text(row.personal_note||row.connectionNote||row.connection_note).slice(0,300);
+  const followUpMessage = text(row.follow_up_message||row.followUpMessage||row.message||row.mesaj);
+  const messageHash = followUpMessage ? hashMsg(followUpMessage) : '';
+  if(action==='message'){ if(!followUpMessage) return; if(sentSame(row,messageHash)) return; }
+  items.push({
+    id: extra.id || (leadId+'_'+action),
+    lead_id: leadId, action, step,
+    profileUrl, linkedin_url: profileUrl,
+    connectionNote, personal_note: connectionNote,
+    followUpMessage, follow_up_message: followUpMessage,
+    message: action==='message' ? followUpMessage : connectionNote,
+    messageHash, message_hash: messageHash,
+    attempts: attemptsOf(row),
+    acceptedAt: row.kabul_tarih||row.acceptedAt||extra.acceptedAt||'',
+    leadName: row.ad_soyad||row.leadName||row.full_name||'',
+    generatedAt: new Date().toISOString(),
+    ...extra
+  });
+}
+
+for (const row of rows) {
+  const profileUrl = cleanUrl(row.linkedin_url||row.profileUrl||'');
+  if(!profileUrl.includes('linkedin.com/in/')) continue;
+
+  const status = text(row.durum||row.status).toLowerCase();
+  const follow = text(row.follow_up_message||row.followUpMessage||row.message||row.mesaj);
+  const followHash = hashMsg(follow);
+  const acceptedAt = text(row.kabul_tarih||row.acceptedAt);
+
+  // Kalıcı durdurma durumları (failed_final dahil → başarısız lead tekrar denenmez)
+  const hardStop = ['paused','reply','replied','message_sent','followup_sent','done','do_not_contact','blacklist','failed_final'].includes(status);
+  if(hardStop) continue;
+
+  // Çok denenip hâlâ başarısızsa kalıcı durdur (sonsuz döngü yok)
+  if(status==='failed_retryable' && attemptsOf(row) >= MAX_ATTEMPTS) continue;
+
+  // 1) Davet atılmış, kabul bekleniyor → periyodik bağlantı kontrolü
+  if(['connect_sent','sent','invite_sent'].includes(status) && follow && !acceptedAt){
+    const last=lastCheck(row);
+    const due=!last || (Date.now()-last.getTime()) >= CHECK_INTERVAL_MINUTES*60*1000;
+    if(due) pushJob(row,'check_connection',1,{ id: leadIdFor(row)+'_check_connection' });
+    continue;
+  }
+
+  // 2) Bağlantı kabul edildi → takip mesajı (aynı mesaj atılmadıysa)
+  if(['accepted','queued_followup'].includes(status) && follow && !sentSame(row,followHash)){
+    pushJob(row,'message',2,{ acceptedAt: acceptedAt || new Date().toISOString() });
+    continue;
+  }
+
+  // 3) Yeni / boş / retryable → auto (extension profilde karar verir: bağlıysa mesaj, değilse davet)
+  if(!status || ['new','ready','approved','queued','failed_retryable'].includes(status)){
+    pushJob(row,'auto',1);
+  }
+}
+
+return [{ json: { ok:true, count:items.length, items, generatedAt:new Date().toISOString() } }];
+
+})()}},"cred":null},"Read Leads":{"name":"Read Leads","t":"googleSheets","p":{"documentId":{"__rl":true,"value":"__ENV_SHEET_ID_5__","mode":"id"},"sheetName":{"__rl":true,"value":1535908742,"mode":"list"},"options":{}},"cred":"googleSheetsOAuth2Api"},"Pass Queue":{"name":"Pass Queue","t":"code","p":{"code":async function($input,$,$json,$env,$execution,$itemIndex,helpers,Buffer,items,$node){return (async()=>{
+// Ic kullanim icin auth kapali.
+// Bu node sadece akisi gecirir; API key gerekmez.
+return $input.all();
+})()}},"cred":null},"Webhook Queue GET":{"name":"Webhook Queue GET","t":"webhook","p":{"path":"linkedin-queue-yasin","responseMode":"responseNode","options":{}},"cred":null},"Webhook Stats GET":{"name":"Webhook Stats GET","t":"webhook","p":{"path":"198bbf6e-1c61-4e23-9682-4b1dd276c754","responseMode":"responseNode","options":{"allowedOrigins":"*"}},"cred":null},"Read Leads (Stats)":{"name":"Read Leads (Stats)","t":"googleSheets","p":{"documentId":{"__rl":true,"value":"__ENV_SHEET_ID_6__","mode":"id"},"sheetName":{"__rl":true,"value":1535908742,"mode":"list"},"options":{}},"cred":"googleSheetsOAuth2Api"},"Build Stats":{"name":"Build Stats","t":"code","p":{"code":async function($input,$,$json,$env,$execution,$itemIndex,helpers,Buffer,items,$node){return (async()=>{
+// SAAS Corner — Lead Manager · Build Stats (GET /webhook/linkedin-stats)
+// "Read Leads" (Google Sheets) çıktısını alır → sayımları döndürür.
+const rows = $input.all().map(i => i.json);
+const by = {};
+let total = 0, todayConnect = 0, todayMessage = 0;
+const today = new Date().toISOString().slice(0, 10);
+const dayOf = (v) => String(v || '').slice(0, 10);
+
+for (const r of rows) {
+  const url = String(r.linkedin_url || '');
+  if (!url.includes('linkedin.com/in/')) continue;
+  total++;
+  const durum = (String(r.durum || '').trim().toLowerCase()) || 'new';
+  by[durum] = (by[durum] || 0) + 1;
+
+  if (dayOf(r.gonderildi_tarih) === today) todayConnect++;
+  const m = String(r.notlar || '').match(/message_sent\s+(\d{4}-\d{2}-\d{2})/i);
+  if (m && m[1] === today) todayMessage++;
+}
+
+return [{ json: {
+  ok: true,
+  total,
+  byStatus: by,
+  today: { connect: todayConnect, message: todayMessage },
+  generatedAt: new Date().toISOString()
+} }];
+
+})()}},"cred":null},"Respond Stats":{"name":"Respond Stats","t":"respondToWebhook","p":{"respondWith":"json","responseBody":__X(function($json,$,$input,$env,$execution,$binary,$itemIndex,$now,$node){try{return ($json
+)}catch(e){return undefined}}),"options":{}},"cred":null},"Webhook AddLeads POST":{"name":"Webhook AddLeads POST","t":"webhook","p":{"httpMethod":"POST","path":"620631f1-3e27-4cb6-95ee-0d366bb16e02","responseMode":"responseNode","options":{"allowedOrigins":"*"}},"cred":null},"Prepare Rows":{"name":"Prepare Rows","t":"code","p":{"code":async function($input,$,$json,$env,$execution,$itemIndex,helpers,Buffer,items,$node){return (async()=>{
+// SAAS Corner — Lead Manager · Prepare Rows (POST /webhook/linkedin-add-leads)
+// Gövde: { leads:[{linkedin_url, personal_note, follow_up_message}], batch? }
+// Çıktı: sheet'e eklenecek satırlar (durum=new). "Append Leads" node'u bunları ekler.
+const body = $json.body || $json;
+const leads = Array.isArray(body.leads) ? body.leads : (body.leads ? [body.leads] : []);
+const batch = String(body.batch || '').trim();
+
+function cleanUrl(v){ if(!v) return ''; let u=String(v).trim(); if(!u.startsWith('http')) u='https://'+u.replace(/^\/+/,''); return u.split('?')[0].split('#')[0].replace(/\/$/,''); }
+function slug(u){ const m=cleanUrl(u).match(/\/in\/([^/?#]+)/); return m?decodeURIComponent(m[1]).toLowerCase():''; }
+
+const out = [];
+const seen = new Set();
+for (const l of leads) {
+  const url = cleanUrl(l.linkedin_url || l.url || '');
+  if (!url.includes('linkedin.com/in/')) continue;
+  const lead_id = String(l.lead_id || slug(url)).trim();
+  if (!lead_id || seen.has(lead_id)) continue;
+  seen.add(lead_id);
+  out.push({ json: {
+    lead_id,
+    linkedin_url: url,
+    personal_note: String(l.personal_note || l.note || '').slice(0, 300),
+    follow_up_message: String(l.follow_up_message || l.message || ''),
+    durum: 'new',
+    gonderildi_tarih: '',
+    kabul_tarih: '',
+    notlar: batch ? ('batch=' + batch) : ''
+  }});
+}
+
+if (!out.length) throw new Error('Geçerli LinkedIn /in/ URL bulunamadı');
+return out;
+
+})()}},"cred":null},"Append Leads":{"name":"Append Leads","t":"googleSheets","p":{"operation":"append","documentId":{"__rl":true,"value":"__ENV_SHEET_ID_6__","mode":"id"},"sheetName":{"__rl":true,"value":1535908742,"mode":"list"},"columns":{"mappingMode":"autoMapInputData","value":{},"matchingColumns":[],"schema":[{"id":"lead_id","displayName":"lead_id","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"linkedin_url","displayName":"linkedin_url","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"personal_note","displayName":"personal_note","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"follow_up_message","displayName":"follow_up_message","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"durum","displayName":"durum","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"gonderildi_tarih","displayName":"gonderildi_tarih","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"kabul_tarih","displayName":"kabul_tarih","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"notlar","displayName":"notlar","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true}]},"options":{}},"cred":"googleSheetsOAuth2Api"},"Respond Add":{"name":"Respond Add","t":"respondToWebhook","p":{"respondWith":"json","responseBody":__X(function($json,$,$input,$env,$execution,$binary,$itemIndex,$now,$node){try{return ({ ok: true, added: $('Prepare Rows').all().length }
+)}catch(e){return undefined}}),"options":{}},"cred":null},"Webhook DeleteLeads POST":{"name":"Webhook DeleteLeads POST","t":"webhook","p":{"httpMethod":"POST","path":"f0f60fd5-0d56-4ba3-938c-0f0ee9b84c06","responseMode":"responseNode","options":{"allowedOrigins":"*"}},"cred":null},"Read Leads (Delete)":{"name":"Read Leads (Delete)","t":"googleSheets","p":{"documentId":{"__rl":true,"value":"__ENV_SHEET_ID_6__","mode":"id"},"sheetName":{"__rl":true,"value":1535908742,"mode":"list"},"options":{}},"cred":"googleSheetsOAuth2Api"},"Find Matching":{"name":"Find Matching","t":"code","p":{"code":async function($input,$,$json,$env,$execution,$itemIndex,helpers,Buffer,items,$node){return (async()=>{
+// SAAS Corner — Lead Manager · Find Matching (POST /webhook/linkedin-delete-leads)
+// Gövde: { batch } veya { lead_ids:[...] }
+// "Read Leads" çıktısını alır → eşleşenleri durum=paused yapar. "Update Leads" yazar.
+// (Fiziksel silme yerine PASSIVE eder → güvenli; extension kuyruğundan ~90sn'de düşer.)
+const body = $('Webhook DeleteLeads POST').first().json.body || {};
+const batch = String(body.batch || '').trim().toLowerCase();
+const ids = Array.isArray(body.lead_ids) ? body.lead_ids.map(x => String(x).trim()) : [];
+
+// notlar içindeki batch DEĞERİNİ çıkar ve BİREBİR karşılaştır.
+// (Regex \b sınırı "acme" ile "acme-2"yi karıştırıyordu → exact eşitlik kullan.)
+function batchOf(notlar){
+  const m = String(notlar || '').match(/(?:^|\|)\s*batch=([^|]+)/i);
+  return m ? m[1].trim().toLowerCase() : '';
+}
+
+const rows = $input.all().map(i => i.json);
+const out = [];
+for (const r of rows) {
+  const lead_id = String(r.lead_id || '').trim();
+  if (!lead_id) continue;
+  const notlar = String(r.notlar || '');
+  const inBatch = batch && batchOf(notlar) === batch;
+  const inIds = ids.length && ids.includes(lead_id);
+  if (inBatch || inIds) {
+    out.push({ json: { lead_id, durum: 'paused', notlar: (notlar ? notlar + ' | ' : '') + 'paused_via_dashboard' } });
+  }
+}
+
+if (!out.length) throw new Error('Eşleşen lead yok (batch/lead_ids kontrol et)');
+return out;
+
+})()}},"cred":null},"Update Leads":{"name":"Update Leads","t":"googleSheets","p":{"operation":"update","documentId":{"__rl":true,"value":"__ENV_SHEET_ID_6__","mode":"id"},"sheetName":{"__rl":true,"value":1535908742,"mode":"list"},"columns":{"mappingMode":"autoMapInputData","value":{},"matchingColumns":["lead_id"],"schema":[{"id":"lead_id","displayName":"lead_id","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"linkedin_url","displayName":"linkedin_url","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"personal_note","displayName":"personal_note","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"follow_up_message","displayName":"follow_up_message","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"durum","displayName":"durum","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"gonderildi_tarih","displayName":"gonderildi_tarih","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"kabul_tarih","displayName":"kabul_tarih","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"notlar","displayName":"notlar","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true}]},"options":{}},"cred":"googleSheetsOAuth2Api"},"Respond Delete":{"name":"Respond Delete","t":"respondToWebhook","p":{"respondWith":"json","responseBody":__X(function($json,$,$input,$env,$execution,$binary,$itemIndex,$now,$node){try{return ({ ok: true, affected: $('Find Matching').all().length }
+)}catch(e){return undefined}}),"options":{}},"cred":null}},"conn":{"Update Lead":[[["Respond Result",0]]],"Parse Result":[[["Update Lead",0]]],"Pass Result":[[["Parse Result",0]]],"Webhook Result POST":[[["Pass Result",0]]],"Build Queue Payload":[[["Respond Queue",0]]],"Read Leads":[[["Build Queue Payload",0]]],"Pass Queue":[[["Read Leads",0]]],"Webhook Queue GET":[[["Pass Queue",0]]],"Webhook Stats GET":[[["Read Leads (Stats)",0]]],"Read Leads (Stats)":[[["Build Stats",0]]],"Build Stats":[[["Respond Stats",0]]],"Webhook AddLeads POST":[[["Prepare Rows",0]]],"Prepare Rows":[[["Append Leads",0]]],"Append Leads":[[["Respond Add",0]]],"Webhook DeleteLeads POST":[[["Read Leads (Delete)",0]]],"Read Leads (Delete)":[[["Find Matching",0]]],"Find Matching":[[["Update Leads",0]]],"Update Leads":[[["Respond Delete",0]]]},"ai":{},"start":{"/api/li/yasin/result":"Webhook Result POST","/api/li/yasin/queue":"Webhook Queue GET","/api/li/yasin/stats":"Webhook Stats GET","/api/li/yasin/add-leads":"Webhook AddLeads POST","/api/li/yasin/delete-leads":"Webhook DeleteLeads POST"}},"li_izzet":{"nodes":{"Respond Result":{"name":"Respond Result","t":"respondToWebhook","p":{"respondWith":"json","responseBody":__X(function($json,$,$input,$env,$execution,$binary,$itemIndex,$now,$node){try{return ({ ok: true, lead_id: $json.lead_id, durum: $json.durum }
+)}catch(e){return undefined}}),"options":{"responseHeaders":{"entries":[{"name":"Access-Control-Allow-Origin","value":"*"}]}}},"cred":null},"Update Lead":{"name":"Update Lead","t":"googleSheets","p":{"operation":"update","documentId":{"__rl":true,"value":"__ENV_SHEET_ID_7__","mode":"id"},"sheetName":{"__rl":true,"value":1535908742,"mode":"list"},"columns":{"mappingMode":"autoMapInputData","value":{},"matchingColumns":["lead_id"],"schema":[{"id":"lead_id","displayName":"lead_id","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true,"removed":false},{"id":"linkedin_url","displayName":"linkedin_url","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"personal_note","displayName":"personal_note","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"follow_up_message","displayName":"follow_up_message","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"durum","displayName":"durum","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"gonderildi_tarih","displayName":"gonderildi_tarih","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"kabul_tarih","displayName":"kabul_tarih","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"notlar","displayName":"notlar","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"row_number","displayName":"row_number","required":false,"defaultMatch":false,"display":true,"type":"number","canBeUsedToMatch":true,"readOnly":true,"removed":true}],"attemptToConvertTypes":false,"convertFieldsToString":false},"options":{}},"cred":"googleSheetsOAuth2Api"},"Parse Result":{"name":"Parse Result","t":"code","p":{"code":async function($input,$,$json,$env,$execution,$itemIndex,helpers,Buffer,items,$node){return (async()=>{
+// SAAS Corner — Parse Result v4.1
+// n8n Code node (typeVersion 2). Bu kodu CANLI workflow'daki "Parse Result"
+// node'una yapıştır. Extension'dan gelen POST sonucunu sheet güncellemesine çevirir.
+//  • failed_retryable + attempts → MAX'a kadar otomatik yeniden dener (Build Queue 3'te durdurur)
+//  • connect başarısında notlar SİLİNMEZ (throttle/iz korunur)
+//  • mesaj hash'i notlar'a yazılır → aynı mesaj bir daha gönderilmez (idempotency)
+const body = $json.body || $json;
+const rawLeadId = String(body.lead_id || body.leadId || body.id || '');
+const leadId = rawLeadId.replace(/_(connect|message|followup|check_connection|auto)$/i, '');
+
+// Aksiyonu belirle: önce makine alanı (resolvedAction/status), yoksa Türkçe metinden çıkar.
+let action = String(body.resolvedAction || body.action || '').toLowerCase();
+const detail = String(body.detail || body.action || '').toLowerCase();
+if (!['connect', 'message', 'check_connection'].includes(action)) {
+  if (action.includes('davet') || action.includes('bağlant') || detail.includes('davet') || detail.includes('bağlant')) {
+    action = 'connect';
+  } else if (action.includes('mesaj') || detail.includes('mesaj')) {
+    action = 'message';
+  }
+}
+
+const reason = String(body.reason || '').toLowerCase();
+const now = new Date().toISOString().slice(0, 16).replace('T', ' ');
+const messageHash = String(body.messageHash || body.message_hash || '').trim();
+const alreadySent = Boolean(body.alreadySent || body.already_sent);
+const attempts = Number(body.attempts) || 0;
+const status = String(body.status || '').toLowerCase();
+
+const out = { lead_id: leadId, durum: '', notlar: '' };
+
+if (body.success) {
+  if (action === 'message') {
+    out.durum = 'message_sent';
+    out.notlar = (alreadySent ? 'message_already_sent ' : 'message_sent ') + now + (messageHash ? ' | last_message_hash=' + messageHash : '');
+  } else if (action === 'connect') {
+    out.durum = 'connect_sent';
+    out.gonderildi_tarih = now;
+    out.notlar = 'connect_sent ' + now;        // notlar'ı BOŞALTMA (eski sürüm boşaltıyordu)
+  } else if (action === 'check_connection') {
+    out.durum = 'accepted';
+    out.kabul_tarih = now;
+    out.notlar = 'connection_detected ' + now;
+  } else {
+    out.durum = 'done';
+    out.notlar = 'done ' + now;
+  }
+} else if (reason.includes('already_connected')) {
+  out.durum = 'accepted';
+  out.kabul_tarih = now;
+  out.notlar = 'already_connected ' + now;
+} else if (reason === 'not_connected_yet') {
+  out.durum = 'connect_sent';
+  out.notlar = 'last_connection_check=' + now + ' | not_connected_yet';
+} else if (status === 'failed_retryable') {
+  // Geçici hata → bir sonraki turda tekrar denenir (Build Queue attempts>=3 olunca durdurur)
+  out.durum = 'failed_retryable';
+  out.notlar = (body.reason || 'unknown') + ' | attempts=' + attempts + ' | ' + now;
+} else {
+  out.durum = 'failed_final';
+  out.notlar = (body.reason || 'unknown') + ' | attempts=' + attempts + ' | ' + now;
+}
+
+return [{ json: out }];
+
+})()}},"cred":null},"Pass Result":{"name":"Pass Result","t":"code","p":{"code":async function($input,$,$json,$env,$execution,$itemIndex,helpers,Buffer,items,$node){return (async()=>{
+// Ic kullanim icin auth kapali.
+// Bu node sadece akisi gecirir; API key gerekmez.
+return $input.all();
+})()}},"cred":null},"Webhook Result POST":{"name":"Webhook Result POST","t":"webhook","p":{"httpMethod":"POST","path":"linkedin-result-izzet","responseMode":"responseNode","options":{}},"cred":null},"Respond Queue":{"name":"Respond Queue","t":"respondToWebhook","p":{"respondWith":"allIncomingItems","options":{"responseHeaders":{"entries":[{"name":"Content-Type","value":"application/json"},{"name":"Access-Control-Allow-Origin","value":"*"},{"name":"Access-Control-Allow-Methods","value":"GET, OPTIONS"},{"name":"Access-Control-Allow-Headers","value":"Content-Type, X-API-Key"}]}}},"cred":null},"Build Queue Payload":{"name":"Build Queue Payload","t":"code","p":{"code":async function($input,$,$json,$env,$execution,$itemIndex,helpers,Buffer,items,$node){return (async()=>{
+// SAAS Corner — Build Queue Payload v4.1
+// n8n Code node (typeVersion 2). Bu kodu CANLI workflow'daki "Build Queue Payload"
+// node'una yapıştır. Sheet'ten lead'leri okuyup extension için iş kuyruğu üretir.
+//  • Aksiyona özel id (leadId_action) → durum değişince iş bayatlamaz
+//  • Mesaj hash'i ile idempotency → aynı mesaj iki kez gitmez
+//  • failed_retryable için attempts sayacı + MAX_ATTEMPTS'te kalıcı durdurma (sonsuz döngü yok)
+const rows = $input.all().map(i => i.json);
+const items = [];
+const CHECK_INTERVAL_MINUTES = 5;
+const MAX_ATTEMPTS = 3;
+
+function cleanUrl(v){ if(!v) return ''; let u=String(v).trim(); if(!u.startsWith('http')) u='https://'+u.replace(/^\/+/,''); return u.split('?')[0].split('#')[0].replace(/\/$/,''); }
+function text(v){ return String(v==null?'':v).trim(); }
+function normMsg(v){ return String(v||'').normalize('NFKC').replace(/[\u200B-\u200D\uFEFF]/g,'').replace(/\s+/g,' ').trim().toLowerCase(); }
+function hashMsg(v){ const n=normMsg(v); if(!n) return ''; let h=2166136261; for(let i=0;i<n.length;i++){ h^=n.charCodeAt(i); h=Math.imul(h,16777619);} return (h>>>0).toString(16).padStart(8,'0'); }
+function esc(v){ return String(v).replace(/[-\/\\^$*+?.()|[\]{}]/g,'\\$&'); }
+function parseDate(v){ if(!v) return null; const r=String(v).trim(); const d=new Date(r.includes('T')?r:r.replace(' ','T')); return Number.isFinite(d.getTime())?d:null; }
+function token(notes,key){ const m=String(notes||'').match(new RegExp('(?:^|\\|)\\s*'+esc(key)+'=([^|]+)','i')); return m?m[1].trim():''; }
+function lastCheck(row){ const v=token(row.notlar,'last_connection_check'); return v?parseDate(v):null; }
+function attemptsOf(row){ const n=parseInt(token(row.notlar,'attempts'),10); return Number.isFinite(n)?n:0; }
+function leadIdFor(row){ const slug=cleanUrl(row.linkedin_url||row.profileUrl||'').split('/in/')[1]?.replace(/\/$/,'')||''; return text(row.lead_id||row.id||row.leadId||slug); }
+function sentSame(row,hash){ if(!hash) return false; const notes=String(row.notlar||''); const ex=text(row.last_message_hash||row.message_hash); if(ex && ex===hash) return true; return new RegExp('(?:last_message_hash|message_hash)='+esc(hash)+'(?:\\b|$)','i').test(notes); }
+
+function pushJob(row, action, step, extra={}) {
+  const profileUrl = cleanUrl(row.linkedin_url||row.profileUrl||'');
+  const leadId = leadIdFor(row);
+  if(!leadId || !profileUrl.includes('linkedin.com/in/')) return;
+  const connectionNote = text(row.personal_note||row.connectionNote||row.connection_note).slice(0,300);
+  const followUpMessage = text(row.follow_up_message||row.followUpMessage||row.message||row.mesaj);
+  const messageHash = followUpMessage ? hashMsg(followUpMessage) : '';
+  if(action==='message'){ if(!followUpMessage) return; if(sentSame(row,messageHash)) return; }
+  items.push({
+    id: extra.id || (leadId+'_'+action),
+    lead_id: leadId, action, step,
+    profileUrl, linkedin_url: profileUrl,
+    connectionNote, personal_note: connectionNote,
+    followUpMessage, follow_up_message: followUpMessage,
+    message: action==='message' ? followUpMessage : connectionNote,
+    messageHash, message_hash: messageHash,
+    attempts: attemptsOf(row),
+    acceptedAt: row.kabul_tarih||row.acceptedAt||extra.acceptedAt||'',
+    leadName: row.ad_soyad||row.leadName||row.full_name||'',
+    generatedAt: new Date().toISOString(),
+    ...extra
+  });
+}
+
+for (const row of rows) {
+  const profileUrl = cleanUrl(row.linkedin_url||row.profileUrl||'');
+  if(!profileUrl.includes('linkedin.com/in/')) continue;
+
+  const status = text(row.durum||row.status).toLowerCase();
+  const follow = text(row.follow_up_message||row.followUpMessage||row.message||row.mesaj);
+  const followHash = hashMsg(follow);
+  const acceptedAt = text(row.kabul_tarih||row.acceptedAt);
+
+  // Kalıcı durdurma durumları (failed_final dahil → başarısız lead tekrar denenmez)
+  const hardStop = ['paused','reply','replied','message_sent','followup_sent','done','do_not_contact','blacklist','failed_final'].includes(status);
+  if(hardStop) continue;
+
+  // Çok denenip hâlâ başarısızsa kalıcı durdur (sonsuz döngü yok)
+  if(status==='failed_retryable' && attemptsOf(row) >= MAX_ATTEMPTS) continue;
+
+  // 1) Davet atılmış, kabul bekleniyor → periyodik bağlantı kontrolü
+  if(['connect_sent','sent','invite_sent'].includes(status) && follow && !acceptedAt){
+    const last=lastCheck(row);
+    const due=!last || (Date.now()-last.getTime()) >= CHECK_INTERVAL_MINUTES*60*1000;
+    if(due) pushJob(row,'check_connection',1,{ id: leadIdFor(row)+'_check_connection' });
+    continue;
+  }
+
+  // 2) Bağlantı kabul edildi → takip mesajı (aynı mesaj atılmadıysa)
+  if(['accepted','queued_followup'].includes(status) && follow && !sentSame(row,followHash)){
+    pushJob(row,'message',2,{ acceptedAt: acceptedAt || new Date().toISOString() });
+    continue;
+  }
+
+  // 3) Yeni / boş / retryable → auto (extension profilde karar verir: bağlıysa mesaj, değilse davet)
+  if(!status || ['new','ready','approved','queued','failed_retryable'].includes(status)){
+    pushJob(row,'auto',1);
+  }
+}
+
+return [{ json: { ok:true, count:items.length, items, generatedAt:new Date().toISOString() } }];
+
+})()}},"cred":null},"Read Leads":{"name":"Read Leads","t":"googleSheets","p":{"documentId":{"__rl":true,"value":"__ENV_SHEET_ID_7__","mode":"id"},"sheetName":{"__rl":true,"value":1535908742,"mode":"list"},"options":{}},"cred":"googleSheetsOAuth2Api"},"Pass Queue":{"name":"Pass Queue","t":"code","p":{"code":async function($input,$,$json,$env,$execution,$itemIndex,helpers,Buffer,items,$node){return (async()=>{
+// Ic kullanim icin auth kapali.
+// Bu node sadece akisi gecirir; API key gerekmez.
+return $input.all();
+})()}},"cred":null},"Webhook Queue GET":{"name":"Webhook Queue GET","t":"webhook","p":{"path":"linkedin-queue-izzet","responseMode":"responseNode","options":{}},"cred":null}},"conn":{"Update Lead":[[["Respond Result",0]]],"Parse Result":[[["Update Lead",0]]],"Pass Result":[[["Parse Result",0]]],"Webhook Result POST":[[["Pass Result",0]]],"Build Queue Payload":[[["Respond Queue",0]]],"Read Leads":[[["Build Queue Payload",0]]],"Pass Queue":[[["Read Leads",0]]],"Webhook Queue GET":[[["Pass Queue",0]]]},"ai":{},"start":{"/api/li/izzet/result":"Webhook Result POST","/api/li/izzet/queue":"Webhook Queue GET"}},"li_sukriye":{"nodes":{"Respond Result":{"name":"Respond Result","t":"respondToWebhook","p":{"respondWith":"json","responseBody":__X(function($json,$,$input,$env,$execution,$binary,$itemIndex,$now,$node){try{return ({ ok: true, lead_id: $json.lead_id, durum: $json.durum }
+)}catch(e){return undefined}}),"options":{"responseHeaders":{"entries":[{"name":"Access-Control-Allow-Origin","value":"*"}]}}},"cred":null},"Update Lead":{"name":"Update Lead","t":"googleSheets","p":{"operation":"update","documentId":{"__rl":true,"value":"__ENV_SHEET_ID_8__","mode":"id"},"sheetName":{"__rl":true,"value":1535908742,"mode":"list"},"columns":{"mappingMode":"autoMapInputData","value":{},"matchingColumns":["lead_id"],"schema":[{"id":"lead_id","displayName":"lead_id","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true,"removed":false},{"id":"linkedin_url","displayName":"linkedin_url","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"personal_note","displayName":"personal_note","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"follow_up_message","displayName":"follow_up_message","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"durum","displayName":"durum","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"gonderildi_tarih","displayName":"gonderildi_tarih","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"kabul_tarih","displayName":"kabul_tarih","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"notlar","displayName":"notlar","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"row_number","displayName":"row_number","required":false,"defaultMatch":false,"display":true,"type":"number","canBeUsedToMatch":true,"readOnly":true,"removed":true}],"attemptToConvertTypes":false,"convertFieldsToString":false},"options":{}},"cred":"googleSheetsOAuth2Api"},"Parse Result":{"name":"Parse Result","t":"code","p":{"code":async function($input,$,$json,$env,$execution,$itemIndex,helpers,Buffer,items,$node){return (async()=>{
+// SAAS Corner — Parse Result v4.1
+// n8n Code node (typeVersion 2). Bu kodu CANLI workflow'daki "Parse Result"
+// node'una yapıştır. Extension'dan gelen POST sonucunu sheet güncellemesine çevirir.
+//  • failed_retryable + attempts → MAX'a kadar otomatik yeniden dener (Build Queue 3'te durdurur)
+//  • connect başarısında notlar SİLİNMEZ (throttle/iz korunur)
+//  • mesaj hash'i notlar'a yazılır → aynı mesaj bir daha gönderilmez (idempotency)
+const body = $json.body || $json;
+const rawLeadId = String(body.lead_id || body.leadId || body.id || '');
+const leadId = rawLeadId.replace(/_(connect|message|followup|check_connection|auto)$/i, '');
+
+// Aksiyonu belirle: önce makine alanı (resolvedAction/status), yoksa Türkçe metinden çıkar.
+let action = String(body.resolvedAction || body.action || '').toLowerCase();
+const detail = String(body.detail || body.action || '').toLowerCase();
+if (!['connect', 'message', 'check_connection'].includes(action)) {
+  if (action.includes('davet') || action.includes('bağlant') || detail.includes('davet') || detail.includes('bağlant')) {
+    action = 'connect';
+  } else if (action.includes('mesaj') || detail.includes('mesaj')) {
+    action = 'message';
+  }
+}
+
+const reason = String(body.reason || '').toLowerCase();
+const now = new Date().toISOString().slice(0, 16).replace('T', ' ');
+const messageHash = String(body.messageHash || body.message_hash || '').trim();
+const alreadySent = Boolean(body.alreadySent || body.already_sent);
+const attempts = Number(body.attempts) || 0;
+const status = String(body.status || '').toLowerCase();
+
+const out = { lead_id: leadId, durum: '', notlar: '' };
+
+if (body.success) {
+  if (action === 'message') {
+    out.durum = 'message_sent';
+    out.notlar = (alreadySent ? 'message_already_sent ' : 'message_sent ') + now + (messageHash ? ' | last_message_hash=' + messageHash : '');
+  } else if (action === 'connect') {
+    out.durum = 'connect_sent';
+    out.gonderildi_tarih = now;
+    out.notlar = 'connect_sent ' + now;        // notlar'ı BOŞALTMA (eski sürüm boşaltıyordu)
+  } else if (action === 'check_connection') {
+    out.durum = 'accepted';
+    out.kabul_tarih = now;
+    out.notlar = 'connection_detected ' + now;
+  } else {
+    out.durum = 'done';
+    out.notlar = 'done ' + now;
+  }
+} else if (reason.includes('already_connected')) {
+  out.durum = 'accepted';
+  out.kabul_tarih = now;
+  out.notlar = 'already_connected ' + now;
+} else if (reason === 'not_connected_yet') {
+  out.durum = 'connect_sent';
+  out.notlar = 'last_connection_check=' + now + ' | not_connected_yet';
+} else if (status === 'failed_retryable') {
+  // Geçici hata → bir sonraki turda tekrar denenir (Build Queue attempts>=3 olunca durdurur)
+  out.durum = 'failed_retryable';
+  out.notlar = (body.reason || 'unknown') + ' | attempts=' + attempts + ' | ' + now;
+} else {
+  out.durum = 'failed_final';
+  out.notlar = (body.reason || 'unknown') + ' | attempts=' + attempts + ' | ' + now;
+}
+
+return [{ json: out }];
+
+})()}},"cred":null},"Pass Result":{"name":"Pass Result","t":"code","p":{"code":async function($input,$,$json,$env,$execution,$itemIndex,helpers,Buffer,items,$node){return (async()=>{
+// Ic kullanim icin auth kapali.
+// Bu node sadece akisi gecirir; API key gerekmez.
+return $input.all();
+})()}},"cred":null},"Webhook Result POST":{"name":"Webhook Result POST","t":"webhook","p":{"httpMethod":"POST","path":"linkedin-result-sukriye","responseMode":"responseNode","options":{}},"cred":null},"Respond Queue":{"name":"Respond Queue","t":"respondToWebhook","p":{"respondWith":"allIncomingItems","options":{"responseHeaders":{"entries":[{"name":"Content-Type","value":"application/json"},{"name":"Access-Control-Allow-Origin","value":"*"},{"name":"Access-Control-Allow-Methods","value":"GET, OPTIONS"},{"name":"Access-Control-Allow-Headers","value":"Content-Type, X-API-Key"}]}}},"cred":null},"Build Queue Payload":{"name":"Build Queue Payload","t":"code","p":{"code":async function($input,$,$json,$env,$execution,$itemIndex,helpers,Buffer,items,$node){return (async()=>{
+// SAAS Corner — Build Queue Payload v4.1
+// n8n Code node (typeVersion 2). Bu kodu CANLI workflow'daki "Build Queue Payload"
+// node'una yapıştır. Sheet'ten lead'leri okuyup extension için iş kuyruğu üretir.
+//  • Aksiyona özel id (leadId_action) → durum değişince iş bayatlamaz
+//  • Mesaj hash'i ile idempotency → aynı mesaj iki kez gitmez
+//  • failed_retryable için attempts sayacı + MAX_ATTEMPTS'te kalıcı durdurma (sonsuz döngü yok)
+const rows = $input.all().map(i => i.json);
+const items = [];
+const CHECK_INTERVAL_MINUTES = 5;
+const MAX_ATTEMPTS = 3;
+
+function cleanUrl(v){ if(!v) return ''; let u=String(v).trim(); if(!u.startsWith('http')) u='https://'+u.replace(/^\/+/,''); return u.split('?')[0].split('#')[0].replace(/\/$/,''); }
+function text(v){ return String(v==null?'':v).trim(); }
+function normMsg(v){ return String(v||'').normalize('NFKC').replace(/[\u200B-\u200D\uFEFF]/g,'').replace(/\s+/g,' ').trim().toLowerCase(); }
+function hashMsg(v){ const n=normMsg(v); if(!n) return ''; let h=2166136261; for(let i=0;i<n.length;i++){ h^=n.charCodeAt(i); h=Math.imul(h,16777619);} return (h>>>0).toString(16).padStart(8,'0'); }
+function esc(v){ return String(v).replace(/[-\/\\^$*+?.()|[\]{}]/g,'\\$&'); }
+function parseDate(v){ if(!v) return null; const r=String(v).trim(); const d=new Date(r.includes('T')?r:r.replace(' ','T')); return Number.isFinite(d.getTime())?d:null; }
+function token(notes,key){ const m=String(notes||'').match(new RegExp('(?:^|\\|)\\s*'+esc(key)+'=([^|]+)','i')); return m?m[1].trim():''; }
+function lastCheck(row){ const v=token(row.notlar,'last_connection_check'); return v?parseDate(v):null; }
+function attemptsOf(row){ const n=parseInt(token(row.notlar,'attempts'),10); return Number.isFinite(n)?n:0; }
+function leadIdFor(row){ const slug=cleanUrl(row.linkedin_url||row.profileUrl||'').split('/in/')[1]?.replace(/\/$/,'')||''; return text(row.lead_id||row.id||row.leadId||slug); }
+function sentSame(row,hash){ if(!hash) return false; const notes=String(row.notlar||''); const ex=text(row.last_message_hash||row.message_hash); if(ex && ex===hash) return true; return new RegExp('(?:last_message_hash|message_hash)='+esc(hash)+'(?:\\b|$)','i').test(notes); }
+
+function pushJob(row, action, step, extra={}) {
+  const profileUrl = cleanUrl(row.linkedin_url||row.profileUrl||'');
+  const leadId = leadIdFor(row);
+  if(!leadId || !profileUrl.includes('linkedin.com/in/')) return;
+  const connectionNote = text(row.personal_note||row.connectionNote||row.connection_note).slice(0,300);
+  const followUpMessage = text(row.follow_up_message||row.followUpMessage||row.message||row.mesaj);
+  const messageHash = followUpMessage ? hashMsg(followUpMessage) : '';
+  if(action==='message'){ if(!followUpMessage) return; if(sentSame(row,messageHash)) return; }
+  items.push({
+    id: extra.id || (leadId+'_'+action),
+    lead_id: leadId, action, step,
+    profileUrl, linkedin_url: profileUrl,
+    connectionNote, personal_note: connectionNote,
+    followUpMessage, follow_up_message: followUpMessage,
+    message: action==='message' ? followUpMessage : connectionNote,
+    messageHash, message_hash: messageHash,
+    attempts: attemptsOf(row),
+    acceptedAt: row.kabul_tarih||row.acceptedAt||extra.acceptedAt||'',
+    leadName: row.ad_soyad||row.leadName||row.full_name||'',
+    generatedAt: new Date().toISOString(),
+    ...extra
+  });
+}
+
+for (const row of rows) {
+  const profileUrl = cleanUrl(row.linkedin_url||row.profileUrl||'');
+  if(!profileUrl.includes('linkedin.com/in/')) continue;
+
+  const status = text(row.durum||row.status).toLowerCase();
+  const follow = text(row.follow_up_message||row.followUpMessage||row.message||row.mesaj);
+  const followHash = hashMsg(follow);
+  const acceptedAt = text(row.kabul_tarih||row.acceptedAt);
+
+  // Kalıcı durdurma durumları (failed_final dahil → başarısız lead tekrar denenmez)
+  const hardStop = ['paused','reply','replied','message_sent','followup_sent','done','do_not_contact','blacklist','failed_final'].includes(status);
+  if(hardStop) continue;
+
+  // Çok denenip hâlâ başarısızsa kalıcı durdur (sonsuz döngü yok)
+  if(status==='failed_retryable' && attemptsOf(row) >= MAX_ATTEMPTS) continue;
+
+  // 1) Davet atılmış, kabul bekleniyor → periyodik bağlantı kontrolü
+  if(['connect_sent','sent','invite_sent'].includes(status) && follow && !acceptedAt){
+    const last=lastCheck(row);
+    const due=!last || (Date.now()-last.getTime()) >= CHECK_INTERVAL_MINUTES*60*1000;
+    if(due) pushJob(row,'check_connection',1,{ id: leadIdFor(row)+'_check_connection' });
+    continue;
+  }
+
+  // 2) Bağlantı kabul edildi → takip mesajı (aynı mesaj atılmadıysa)
+  if(['accepted','queued_followup'].includes(status) && follow && !sentSame(row,followHash)){
+    pushJob(row,'message',2,{ acceptedAt: acceptedAt || new Date().toISOString() });
+    continue;
+  }
+
+  // 3) Yeni / boş / retryable → auto (extension profilde karar verir: bağlıysa mesaj, değilse davet)
+  if(!status || ['new','ready','approved','queued','failed_retryable'].includes(status)){
+    pushJob(row,'auto',1);
+  }
+}
+
+return [{ json: { ok:true, count:items.length, items, generatedAt:new Date().toISOString() } }];
+
+})()}},"cred":null},"Read Leads":{"name":"Read Leads","t":"googleSheets","p":{"documentId":{"__rl":true,"value":"__ENV_SHEET_ID_8__","mode":"id"},"sheetName":{"__rl":true,"value":1535908742,"mode":"list"},"options":{}},"cred":"googleSheetsOAuth2Api"},"Pass Queue":{"name":"Pass Queue","t":"code","p":{"code":async function($input,$,$json,$env,$execution,$itemIndex,helpers,Buffer,items,$node){return (async()=>{
+// Ic kullanim icin auth kapali.
+// Bu node sadece akisi gecirir; API key gerekmez.
+return $input.all();
+})()}},"cred":null},"Webhook Queue GET":{"name":"Webhook Queue GET","t":"webhook","p":{"path":"linkedin-queue-sukriye","responseMode":"responseNode","options":{}},"cred":null},"Webhook Stats GET":{"name":"Webhook Stats GET","t":"webhook","p":{"path":"ed5f7e25-b228-447c-aa39-1294bd8944ba","responseMode":"responseNode","options":{"allowedOrigins":"*"}},"cred":null},"Read Leads (Stats)":{"name":"Read Leads (Stats)","t":"googleSheets","p":{"documentId":{"__rl":true,"value":"__ENV_SHEET_ID_8__","mode":"id"},"sheetName":{"__rl":true,"value":1535908742,"mode":"list"},"options":{}},"cred":"googleSheetsOAuth2Api"},"Build Stats":{"name":"Build Stats","t":"code","p":{"code":async function($input,$,$json,$env,$execution,$itemIndex,helpers,Buffer,items,$node){return (async()=>{
+// SAAS Corner — Lead Manager · Build Stats (GET /webhook/linkedin-stats)
+// "Read Leads" (Google Sheets) çıktısını alır → sayımları döndürür.
+const rows = $input.all().map(i => i.json);
+const by = {};
+let total = 0, todayConnect = 0, todayMessage = 0;
+const today = new Date().toISOString().slice(0, 10);
+const dayOf = (v) => String(v || '').slice(0, 10);
+
+for (const r of rows) {
+  const url = String(r.linkedin_url || '');
+  if (!url.includes('linkedin.com/in/')) continue;
+  total++;
+  const durum = (String(r.durum || '').trim().toLowerCase()) || 'new';
+  by[durum] = (by[durum] || 0) + 1;
+
+  if (dayOf(r.gonderildi_tarih) === today) todayConnect++;
+  const m = String(r.notlar || '').match(/message_sent\s+(\d{4}-\d{2}-\d{2})/i);
+  if (m && m[1] === today) todayMessage++;
+}
+
+return [{ json: {
+  ok: true,
+  total,
+  byStatus: by,
+  today: { connect: todayConnect, message: todayMessage },
+  generatedAt: new Date().toISOString()
+} }];
+
+})()}},"cred":null},"Respond Stats":{"name":"Respond Stats","t":"respondToWebhook","p":{"respondWith":"json","responseBody":__X(function($json,$,$input,$env,$execution,$binary,$itemIndex,$now,$node){try{return ($json
+)}catch(e){return undefined}}),"options":{}},"cred":null},"Webhook AddLeads POST":{"name":"Webhook AddLeads POST","t":"webhook","p":{"httpMethod":"POST","path":"4770dec9-a1fc-4c10-97f5-a325de7e12ca","responseMode":"responseNode","options":{"allowedOrigins":"*"}},"cred":null},"Prepare Rows":{"name":"Prepare Rows","t":"code","p":{"code":async function($input,$,$json,$env,$execution,$itemIndex,helpers,Buffer,items,$node){return (async()=>{
+// SAAS Corner — Lead Manager · Prepare Rows (POST /webhook/linkedin-add-leads)
+// Gövde: { leads:[{linkedin_url, personal_note, follow_up_message}], batch? }
+// Çıktı: sheet'e eklenecek satırlar (durum=new). "Append Leads" node'u bunları ekler.
+const body = $json.body || $json;
+const leads = Array.isArray(body.leads) ? body.leads : (body.leads ? [body.leads] : []);
+const batch = String(body.batch || '').trim();
+
+function cleanUrl(v){ if(!v) return ''; let u=String(v).trim(); if(!u.startsWith('http')) u='https://'+u.replace(/^\/+/,''); return u.split('?')[0].split('#')[0].replace(/\/$/,''); }
+function slug(u){ const m=cleanUrl(u).match(/\/in\/([^/?#]+)/); return m?decodeURIComponent(m[1]).toLowerCase():''; }
+
+const out = [];
+const seen = new Set();
+for (const l of leads) {
+  const url = cleanUrl(l.linkedin_url || l.url || '');
+  if (!url.includes('linkedin.com/in/')) continue;
+  const lead_id = String(l.lead_id || slug(url)).trim();
+  if (!lead_id || seen.has(lead_id)) continue;
+  seen.add(lead_id);
+  out.push({ json: {
+    lead_id,
+    linkedin_url: url,
+    personal_note: String(l.personal_note || l.note || '').slice(0, 300),
+    follow_up_message: String(l.follow_up_message || l.message || ''),
+    durum: 'new',
+    gonderildi_tarih: '',
+    kabul_tarih: '',
+    notlar: batch ? ('batch=' + batch) : ''
+  }});
+}
+
+if (!out.length) throw new Error('Geçerli LinkedIn /in/ URL bulunamadı');
+return out;
+
+})()}},"cred":null},"Append Leads":{"name":"Append Leads","t":"googleSheets","p":{"operation":"append","documentId":{"__rl":true,"value":"__ENV_SHEET_ID_8__","mode":"id"},"sheetName":{"__rl":true,"value":1535908742,"mode":"list"},"columns":{"mappingMode":"autoMapInputData","value":{},"matchingColumns":[],"schema":[{"id":"lead_id","displayName":"lead_id","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"linkedin_url","displayName":"linkedin_url","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"personal_note","displayName":"personal_note","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"follow_up_message","displayName":"follow_up_message","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"durum","displayName":"durum","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"gonderildi_tarih","displayName":"gonderildi_tarih","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"kabul_tarih","displayName":"kabul_tarih","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"notlar","displayName":"notlar","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true}],"attemptToConvertTypes":false,"convertFieldsToString":false},"options":{}},"cred":"googleSheetsOAuth2Api"},"Respond Add":{"name":"Respond Add","t":"respondToWebhook","p":{"respondWith":"json","responseBody":__X(function($json,$,$input,$env,$execution,$binary,$itemIndex,$now,$node){try{return ({ ok: true, added: $('Prepare Rows').all().length }
+)}catch(e){return undefined}}),"options":{}},"cred":null},"Webhook DeleteLeads POST":{"name":"Webhook DeleteLeads POST","t":"webhook","p":{"httpMethod":"POST","path":"b235d3e7-3b6e-4b9c-8368-ee287262985b","responseMode":"responseNode","options":{"allowedOrigins":"*"}},"cred":null},"Read Leads (Delete)":{"name":"Read Leads (Delete)","t":"googleSheets","p":{"documentId":{"__rl":true,"value":"__ENV_SHEET_ID_8__","mode":"id"},"sheetName":{"__rl":true,"value":1535908742,"mode":"list"},"options":{}},"cred":"googleSheetsOAuth2Api"},"Find Matching":{"name":"Find Matching","t":"code","p":{"code":async function($input,$,$json,$env,$execution,$itemIndex,helpers,Buffer,items,$node){return (async()=>{
+// SAAS Corner — Lead Manager · Find Matching (POST /webhook/linkedin-delete-leads)
+// Gövde: { batch } veya { lead_ids:[...] }
+// "Read Leads" çıktısını alır → eşleşenleri durum=paused yapar. "Update Leads" yazar.
+// (Fiziksel silme yerine PASSIVE eder → güvenli; extension kuyruğundan ~90sn'de düşer.)
+const body = $('Webhook DeleteLeads POST').first().json.body || {};
+const batch = String(body.batch || '').trim().toLowerCase();
+const ids = Array.isArray(body.lead_ids) ? body.lead_ids.map(x => String(x).trim()) : [];
+
+// notlar içindeki batch DEĞERİNİ çıkar ve BİREBİR karşılaştır.
+// (Regex \b sınırı "acme" ile "acme-2"yi karıştırıyordu → exact eşitlik kullan.)
+function batchOf(notlar){
+  const m = String(notlar || '').match(/(?:^|\|)\s*batch=([^|]+)/i);
+  return m ? m[1].trim().toLowerCase() : '';
+}
+
+const rows = $input.all().map(i => i.json);
+const out = [];
+for (const r of rows) {
+  const lead_id = String(r.lead_id || '').trim();
+  if (!lead_id) continue;
+  const notlar = String(r.notlar || '');
+  const inBatch = batch && batchOf(notlar) === batch;
+  const inIds = ids.length && ids.includes(lead_id);
+  if (inBatch || inIds) {
+    out.push({ json: { lead_id, durum: 'paused', notlar: (notlar ? notlar + ' | ' : '') + 'paused_via_dashboard' } });
+  }
+}
+
+if (!out.length) throw new Error('Eşleşen lead yok (batch/lead_ids kontrol et)');
+return out;
+
+})()}},"cred":null},"Update Leads":{"name":"Update Leads","t":"googleSheets","p":{"operation":"update","documentId":{"__rl":true,"value":"__ENV_SHEET_ID_8__","mode":"id"},"sheetName":{"__rl":true,"value":1535908742,"mode":"list"},"columns":{"mappingMode":"autoMapInputData","value":{},"matchingColumns":["lead_id"],"schema":[{"id":"lead_id","displayName":"lead_id","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true,"removed":false},{"id":"linkedin_url","displayName":"linkedin_url","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"personal_note","displayName":"personal_note","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"follow_up_message","displayName":"follow_up_message","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"durum","displayName":"durum","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"gonderildi_tarih","displayName":"gonderildi_tarih","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"kabul_tarih","displayName":"kabul_tarih","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"notlar","displayName":"notlar","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"row_number","displayName":"row_number","required":false,"defaultMatch":false,"display":true,"type":"number","canBeUsedToMatch":true,"readOnly":true,"removed":true}],"attemptToConvertTypes":false,"convertFieldsToString":false},"options":{}},"cred":"googleSheetsOAuth2Api"},"Respond Delete":{"name":"Respond Delete","t":"respondToWebhook","p":{"respondWith":"json","responseBody":__X(function($json,$,$input,$env,$execution,$binary,$itemIndex,$now,$node){try{return ({ ok: true, affected: $('Find Matching').all().length }
+)}catch(e){return undefined}}),"options":{}},"cred":null}},"conn":{"Update Lead":[[["Respond Result",0]]],"Parse Result":[[["Update Lead",0]]],"Pass Result":[[["Parse Result",0]]],"Webhook Result POST":[[["Pass Result",0]]],"Build Queue Payload":[[["Respond Queue",0]]],"Read Leads":[[["Build Queue Payload",0]]],"Pass Queue":[[["Read Leads",0]]],"Webhook Queue GET":[[["Pass Queue",0]]],"Webhook Stats GET":[[["Read Leads (Stats)",0]]],"Read Leads (Stats)":[[["Build Stats",0]]],"Build Stats":[[["Respond Stats",0]]],"Webhook AddLeads POST":[[["Prepare Rows",0]]],"Prepare Rows":[[["Append Leads",0]]],"Append Leads":[[["Respond Add",0]]],"Webhook DeleteLeads POST":[[["Read Leads (Delete)",0]]],"Read Leads (Delete)":[[["Find Matching",0]]],"Find Matching":[[["Update Leads",0]]],"Update Leads":[[["Respond Delete",0]]]},"ai":{},"start":{"/api/li/sukriye/result":"Webhook Result POST","/api/li/sukriye/queue":"Webhook Queue GET","/api/li/sukriye/stats":"Webhook Stats GET","/api/li/sukriye/add-leads":"Webhook AddLeads POST","/api/li/sukriye/delete-leads":"Webhook DeleteLeads POST"}},"li_burcak":{"nodes":{"Respond Result":{"name":"Respond Result","t":"respondToWebhook","p":{"respondWith":"json","responseBody":__X(function($json,$,$input,$env,$execution,$binary,$itemIndex,$now,$node){try{return ({ ok: true, lead_id: $json.lead_id, durum: $json.durum }
+)}catch(e){return undefined}}),"options":{"responseHeaders":{"entries":[{"name":"Access-Control-Allow-Origin","value":"*"}]}}},"cred":null},"Update Lead":{"name":"Update Lead","t":"googleSheets","p":{"operation":"update","documentId":{"__rl":true,"value":"__ENV_SHEET_ID_9__","mode":"id"},"sheetName":{"__rl":true,"value":1535908742,"mode":"list"},"columns":{"mappingMode":"autoMapInputData","value":{},"matchingColumns":["lead_id"],"schema":[{"id":"lead_id","displayName":"lead_id","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true,"removed":false},{"id":"linkedin_url","displayName":"linkedin_url","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"personal_note","displayName":"personal_note","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"follow_up_message","displayName":"follow_up_message","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"durum","displayName":"durum","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"gonderildi_tarih","displayName":"gonderildi_tarih","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"kabul_tarih","displayName":"kabul_tarih","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"notlar","displayName":"notlar","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"row_number","displayName":"row_number","required":false,"defaultMatch":false,"display":true,"type":"number","canBeUsedToMatch":true,"readOnly":true,"removed":true}],"attemptToConvertTypes":false,"convertFieldsToString":false},"options":{}},"cred":"googleSheetsOAuth2Api"},"Parse Result":{"name":"Parse Result","t":"code","p":{"code":async function($input,$,$json,$env,$execution,$itemIndex,helpers,Buffer,items,$node){return (async()=>{
+// SAAS Corner — Parse Result v4.1
+// n8n Code node (typeVersion 2). Bu kodu CANLI workflow'daki "Parse Result"
+// node'una yapıştır. Extension'dan gelen POST sonucunu sheet güncellemesine çevirir.
+//  • failed_retryable + attempts → MAX'a kadar otomatik yeniden dener (Build Queue 3'te durdurur)
+//  • connect başarısında notlar SİLİNMEZ (throttle/iz korunur)
+//  • mesaj hash'i notlar'a yazılır → aynı mesaj bir daha gönderilmez (idempotency)
+const body = $json.body || $json;
+const rawLeadId = String(body.lead_id || body.leadId || body.id || '');
+const leadId = rawLeadId.replace(/_(connect|message|followup|check_connection|auto)$/i, '');
+
+// Aksiyonu belirle: önce makine alanı (resolvedAction/status), yoksa Türkçe metinden çıkar.
+let action = String(body.resolvedAction || body.action || '').toLowerCase();
+const detail = String(body.detail || body.action || '').toLowerCase();
+if (!['connect', 'message', 'check_connection'].includes(action)) {
+  if (action.includes('davet') || action.includes('bağlant') || detail.includes('davet') || detail.includes('bağlant')) {
+    action = 'connect';
+  } else if (action.includes('mesaj') || detail.includes('mesaj')) {
+    action = 'message';
+  }
+}
+
+const reason = String(body.reason || '').toLowerCase();
+const now = new Date().toISOString().slice(0, 16).replace('T', ' ');
+const messageHash = String(body.messageHash || body.message_hash || '').trim();
+const alreadySent = Boolean(body.alreadySent || body.already_sent);
+const attempts = Number(body.attempts) || 0;
+const status = String(body.status || '').toLowerCase();
+
+const out = { lead_id: leadId, durum: '', notlar: '' };
+
+if (body.success) {
+  if (action === 'message') {
+    out.durum = 'message_sent';
+    out.notlar = (alreadySent ? 'message_already_sent ' : 'message_sent ') + now + (messageHash ? ' | last_message_hash=' + messageHash : '');
+  } else if (action === 'connect') {
+    out.durum = 'connect_sent';
+    out.gonderildi_tarih = now;
+    out.notlar = 'connect_sent ' + now;        // notlar'ı BOŞALTMA (eski sürüm boşaltıyordu)
+  } else if (action === 'check_connection') {
+    out.durum = 'accepted';
+    out.kabul_tarih = now;
+    out.notlar = 'connection_detected ' + now;
+  } else {
+    out.durum = 'done';
+    out.notlar = 'done ' + now;
+  }
+} else if (reason.includes('already_connected')) {
+  out.durum = 'accepted';
+  out.kabul_tarih = now;
+  out.notlar = 'already_connected ' + now;
+} else if (reason === 'not_connected_yet') {
+  out.durum = 'connect_sent';
+  out.notlar = 'last_connection_check=' + now + ' | not_connected_yet';
+} else if (status === 'failed_retryable') {
+  // Geçici hata → bir sonraki turda tekrar denenir (Build Queue attempts>=3 olunca durdurur)
+  out.durum = 'failed_retryable';
+  out.notlar = (body.reason || 'unknown') + ' | attempts=' + attempts + ' | ' + now;
+} else {
+  out.durum = 'failed_final';
+  out.notlar = (body.reason || 'unknown') + ' | attempts=' + attempts + ' | ' + now;
+}
+
+return [{ json: out }];
+
+})()}},"cred":null},"Pass Result":{"name":"Pass Result","t":"code","p":{"code":async function($input,$,$json,$env,$execution,$itemIndex,helpers,Buffer,items,$node){return (async()=>{
+// Ic kullanim icin auth kapali.
+// Bu node sadece akisi gecirir; API key gerekmez.
+return $input.all();
+})()}},"cred":null},"Webhook Result POST":{"name":"Webhook Result POST","t":"webhook","p":{"httpMethod":"POST","path":"linkedin-result-burcak","responseMode":"responseNode","options":{}},"cred":null},"Respond Queue":{"name":"Respond Queue","t":"respondToWebhook","p":{"respondWith":"allIncomingItems","options":{"responseHeaders":{"entries":[{"name":"Content-Type","value":"application/json"},{"name":"Access-Control-Allow-Origin","value":"*"},{"name":"Access-Control-Allow-Methods","value":"GET, OPTIONS"},{"name":"Access-Control-Allow-Headers","value":"Content-Type, X-API-Key"}]}}},"cred":null},"Build Queue Payload":{"name":"Build Queue Payload","t":"code","p":{"code":async function($input,$,$json,$env,$execution,$itemIndex,helpers,Buffer,items,$node){return (async()=>{
+// SAAS Corner — Build Queue Payload v4.1
+// n8n Code node (typeVersion 2). Bu kodu CANLI workflow'daki "Build Queue Payload"
+// node'una yapıştır. Sheet'ten lead'leri okuyup extension için iş kuyruğu üretir.
+//  • Aksiyona özel id (leadId_action) → durum değişince iş bayatlamaz
+//  • Mesaj hash'i ile idempotency → aynı mesaj iki kez gitmez
+//  • failed_retryable için attempts sayacı + MAX_ATTEMPTS'te kalıcı durdurma (sonsuz döngü yok)
+const rows = $input.all().map(i => i.json);
+const items = [];
+const CHECK_INTERVAL_MINUTES = 5;
+const MAX_ATTEMPTS = 3;
+
+function cleanUrl(v){ if(!v) return ''; let u=String(v).trim(); if(!u.startsWith('http')) u='https://'+u.replace(/^\/+/,''); return u.split('?')[0].split('#')[0].replace(/\/$/,''); }
+function text(v){ return String(v==null?'':v).trim(); }
+function normMsg(v){ return String(v||'').normalize('NFKC').replace(/[\u200B-\u200D\uFEFF]/g,'').replace(/\s+/g,' ').trim().toLowerCase(); }
+function hashMsg(v){ const n=normMsg(v); if(!n) return ''; let h=2166136261; for(let i=0;i<n.length;i++){ h^=n.charCodeAt(i); h=Math.imul(h,16777619);} return (h>>>0).toString(16).padStart(8,'0'); }
+function esc(v){ return String(v).replace(/[-\/\\^$*+?.()|[\]{}]/g,'\\$&'); }
+function parseDate(v){ if(!v) return null; const r=String(v).trim(); const d=new Date(r.includes('T')?r:r.replace(' ','T')); return Number.isFinite(d.getTime())?d:null; }
+function token(notes,key){ const m=String(notes||'').match(new RegExp('(?:^|\\|)\\s*'+esc(key)+'=([^|]+)','i')); return m?m[1].trim():''; }
+function lastCheck(row){ const v=token(row.notlar,'last_connection_check'); return v?parseDate(v):null; }
+function attemptsOf(row){ const n=parseInt(token(row.notlar,'attempts'),10); return Number.isFinite(n)?n:0; }
+function leadIdFor(row){ const slug=cleanUrl(row.linkedin_url||row.profileUrl||'').split('/in/')[1]?.replace(/\/$/,'')||''; return text(row.lead_id||row.id||row.leadId||slug); }
+function sentSame(row,hash){ if(!hash) return false; const notes=String(row.notlar||''); const ex=text(row.last_message_hash||row.message_hash); if(ex && ex===hash) return true; return new RegExp('(?:last_message_hash|message_hash)='+esc(hash)+'(?:\\b|$)','i').test(notes); }
+
+function pushJob(row, action, step, extra={}) {
+  const profileUrl = cleanUrl(row.linkedin_url||row.profileUrl||'');
+  const leadId = leadIdFor(row);
+  if(!leadId || !profileUrl.includes('linkedin.com/in/')) return;
+  const connectionNote = text(row.personal_note||row.connectionNote||row.connection_note).slice(0,300);
+  const followUpMessage = text(row.follow_up_message||row.followUpMessage||row.message||row.mesaj);
+  const messageHash = followUpMessage ? hashMsg(followUpMessage) : '';
+  if(action==='message'){ if(!followUpMessage) return; if(sentSame(row,messageHash)) return; }
+  items.push({
+    id: extra.id || (leadId+'_'+action),
+    lead_id: leadId, action, step,
+    profileUrl, linkedin_url: profileUrl,
+    connectionNote, personal_note: connectionNote,
+    followUpMessage, follow_up_message: followUpMessage,
+    message: action==='message' ? followUpMessage : connectionNote,
+    messageHash, message_hash: messageHash,
+    attempts: attemptsOf(row),
+    acceptedAt: row.kabul_tarih||row.acceptedAt||extra.acceptedAt||'',
+    leadName: row.ad_soyad||row.leadName||row.full_name||'',
+    generatedAt: new Date().toISOString(),
+    ...extra
+  });
+}
+
+for (const row of rows) {
+  const profileUrl = cleanUrl(row.linkedin_url||row.profileUrl||'');
+  if(!profileUrl.includes('linkedin.com/in/')) continue;
+
+  const status = text(row.durum||row.status).toLowerCase();
+  const follow = text(row.follow_up_message||row.followUpMessage||row.message||row.mesaj);
+  const followHash = hashMsg(follow);
+  const acceptedAt = text(row.kabul_tarih||row.acceptedAt);
+
+  // Kalıcı durdurma durumları (failed_final dahil → başarısız lead tekrar denenmez)
+  const hardStop = ['paused','reply','replied','message_sent','followup_sent','done','do_not_contact','blacklist','failed_final'].includes(status);
+  if(hardStop) continue;
+
+  // Çok denenip hâlâ başarısızsa kalıcı durdur (sonsuz döngü yok)
+  if(status==='failed_retryable' && attemptsOf(row) >= MAX_ATTEMPTS) continue;
+
+  // 1) Davet atılmış, kabul bekleniyor → periyodik bağlantı kontrolü
+  if(['connect_sent','sent','invite_sent'].includes(status) && follow && !acceptedAt){
+    const last=lastCheck(row);
+    const due=!last || (Date.now()-last.getTime()) >= CHECK_INTERVAL_MINUTES*60*1000;
+    if(due) pushJob(row,'check_connection',1,{ id: leadIdFor(row)+'_check_connection' });
+    continue;
+  }
+
+  // 2) Bağlantı kabul edildi → takip mesajı (aynı mesaj atılmadıysa)
+  if(['accepted','queued_followup'].includes(status) && follow && !sentSame(row,followHash)){
+    pushJob(row,'message',2,{ acceptedAt: acceptedAt || new Date().toISOString() });
+    continue;
+  }
+
+  // 3) Yeni / boş / retryable → auto (extension profilde karar verir: bağlıysa mesaj, değilse davet)
+  if(!status || ['new','ready','approved','queued','failed_retryable'].includes(status)){
+    pushJob(row,'auto',1);
+  }
+}
+
+return [{ json: { ok:true, count:items.length, items, generatedAt:new Date().toISOString() } }];
+
+})()}},"cred":null},"Read Leads":{"name":"Read Leads","t":"googleSheets","p":{"documentId":{"__rl":true,"value":"__ENV_SHEET_ID_9__","mode":"id"},"sheetName":{"__rl":true,"value":1535908742,"mode":"list"},"options":{}},"cred":"googleSheetsOAuth2Api"},"Pass Queue":{"name":"Pass Queue","t":"code","p":{"code":async function($input,$,$json,$env,$execution,$itemIndex,helpers,Buffer,items,$node){return (async()=>{
+// Ic kullanim icin auth kapali.
+// Bu node sadece akisi gecirir; API key gerekmez.
+return $input.all();
+})()}},"cred":null},"Webhook Queue GET":{"name":"Webhook Queue GET","t":"webhook","p":{"path":"linkedin-queue-burcak","responseMode":"responseNode","options":{}},"cred":null},"Webhook Stats GET":{"name":"Webhook Stats GET","t":"webhook","p":{"path":"4248e12b-b915-4fab-9227-87f4d01a007a","responseMode":"responseNode","options":{"allowedOrigins":"*"}},"cred":null},"Read Leads (Stats)":{"name":"Read Leads (Stats)","t":"googleSheets","p":{"documentId":{"__rl":true,"value":"__ENV_SHEET_ID_6__","mode":"id"},"sheetName":{"__rl":true,"value":1535908742,"mode":"list"},"options":{}},"cred":"googleSheetsOAuth2Api"},"Build Stats":{"name":"Build Stats","t":"code","p":{"code":async function($input,$,$json,$env,$execution,$itemIndex,helpers,Buffer,items,$node){return (async()=>{
+// SAAS Corner — Lead Manager · Build Stats (GET /webhook/linkedin-stats)
+// "Read Leads" (Google Sheets) çıktısını alır → sayımları döndürür.
+const rows = $input.all().map(i => i.json);
+const by = {};
+let total = 0, todayConnect = 0, todayMessage = 0;
+const today = new Date().toISOString().slice(0, 10);
+const dayOf = (v) => String(v || '').slice(0, 10);
+
+for (const r of rows) {
+  const url = String(r.linkedin_url || '');
+  if (!url.includes('linkedin.com/in/')) continue;
+  total++;
+  const durum = (String(r.durum || '').trim().toLowerCase()) || 'new';
+  by[durum] = (by[durum] || 0) + 1;
+
+  if (dayOf(r.gonderildi_tarih) === today) todayConnect++;
+  const m = String(r.notlar || '').match(/message_sent\s+(\d{4}-\d{2}-\d{2})/i);
+  if (m && m[1] === today) todayMessage++;
+}
+
+return [{ json: {
+  ok: true,
+  total,
+  byStatus: by,
+  today: { connect: todayConnect, message: todayMessage },
+  generatedAt: new Date().toISOString()
+} }];
+
+})()}},"cred":null},"Respond Stats":{"name":"Respond Stats","t":"respondToWebhook","p":{"respondWith":"json","responseBody":__X(function($json,$,$input,$env,$execution,$binary,$itemIndex,$now,$node){try{return ($json
+)}catch(e){return undefined}}),"options":{}},"cred":null},"Webhook AddLeads POST":{"name":"Webhook AddLeads POST","t":"webhook","p":{"httpMethod":"POST","path":"e5bc8ca7-f834-423b-9be8-c12a79c25e95","responseMode":"responseNode","options":{"allowedOrigins":"*"}},"cred":null},"Prepare Rows":{"name":"Prepare Rows","t":"code","p":{"code":async function($input,$,$json,$env,$execution,$itemIndex,helpers,Buffer,items,$node){return (async()=>{
+// SAAS Corner — Lead Manager · Prepare Rows (POST /webhook/linkedin-add-leads)
+// Gövde: { leads:[{linkedin_url, personal_note, follow_up_message}], batch? }
+// Çıktı: sheet'e eklenecek satırlar (durum=new). "Append Leads" node'u bunları ekler.
+const body = $json.body || $json;
+const leads = Array.isArray(body.leads) ? body.leads : (body.leads ? [body.leads] : []);
+const batch = String(body.batch || '').trim();
+
+function cleanUrl(v){ if(!v) return ''; let u=String(v).trim(); if(!u.startsWith('http')) u='https://'+u.replace(/^\/+/,''); return u.split('?')[0].split('#')[0].replace(/\/$/,''); }
+function slug(u){ const m=cleanUrl(u).match(/\/in\/([^/?#]+)/); return m?decodeURIComponent(m[1]).toLowerCase():''; }
+
+const out = [];
+const seen = new Set();
+for (const l of leads) {
+  const url = cleanUrl(l.linkedin_url || l.url || '');
+  if (!url.includes('linkedin.com/in/')) continue;
+  const lead_id = String(l.lead_id || slug(url)).trim();
+  if (!lead_id || seen.has(lead_id)) continue;
+  seen.add(lead_id);
+  out.push({ json: {
+    lead_id,
+    linkedin_url: url,
+    personal_note: String(l.personal_note || l.note || '').slice(0, 300),
+    follow_up_message: String(l.follow_up_message || l.message || ''),
+    durum: 'new',
+    gonderildi_tarih: '',
+    kabul_tarih: '',
+    notlar: batch ? ('batch=' + batch) : ''
+  }});
+}
+
+if (!out.length) throw new Error('Geçerli LinkedIn /in/ URL bulunamadı');
+return out;
+
+})()}},"cred":null},"Append Leads":{"name":"Append Leads","t":"googleSheets","p":{"operation":"append","documentId":{"__rl":true,"value":"__ENV_SHEET_ID_6__","mode":"id"},"sheetName":{"__rl":true,"value":1535908742,"mode":"list"},"columns":{"mappingMode":"autoMapInputData","value":{},"matchingColumns":[],"schema":[{"id":"lead_id","displayName":"lead_id","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"linkedin_url","displayName":"linkedin_url","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"personal_note","displayName":"personal_note","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"follow_up_message","displayName":"follow_up_message","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"durum","displayName":"durum","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"gonderildi_tarih","displayName":"gonderildi_tarih","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"kabul_tarih","displayName":"kabul_tarih","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"notlar","displayName":"notlar","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true}]},"options":{}},"cred":"googleSheetsOAuth2Api"},"Respond Add":{"name":"Respond Add","t":"respondToWebhook","p":{"respondWith":"json","responseBody":__X(function($json,$,$input,$env,$execution,$binary,$itemIndex,$now,$node){try{return ({ ok: true, added: $('Prepare Rows').all().length }
+)}catch(e){return undefined}}),"options":{}},"cred":null},"Webhook DeleteLeads POST":{"name":"Webhook DeleteLeads POST","t":"webhook","p":{"httpMethod":"POST","path":"98e9207a-a19a-4223-b021-f598cb18f6b2","responseMode":"responseNode","options":{"allowedOrigins":"*"}},"cred":null},"Read Leads (Delete)":{"name":"Read Leads (Delete)","t":"googleSheets","p":{"documentId":{"__rl":true,"value":"__ENV_SHEET_ID_6__","mode":"id"},"sheetName":{"__rl":true,"value":1535908742,"mode":"list"},"options":{}},"cred":"googleSheetsOAuth2Api"},"Find Matching":{"name":"Find Matching","t":"code","p":{"code":async function($input,$,$json,$env,$execution,$itemIndex,helpers,Buffer,items,$node){return (async()=>{
+// SAAS Corner — Lead Manager · Find Matching (POST /webhook/linkedin-delete-leads)
+// Gövde: { batch } veya { lead_ids:[...] }
+// "Read Leads" çıktısını alır → eşleşenleri durum=paused yapar. "Update Leads" yazar.
+// (Fiziksel silme yerine PASSIVE eder → güvenli; extension kuyruğundan ~90sn'de düşer.)
+const body = $('Webhook DeleteLeads POST').first().json.body || {};
+const batch = String(body.batch || '').trim().toLowerCase();
+const ids = Array.isArray(body.lead_ids) ? body.lead_ids.map(x => String(x).trim()) : [];
+
+// notlar içindeki batch DEĞERİNİ çıkar ve BİREBİR karşılaştır.
+// (Regex \b sınırı "acme" ile "acme-2"yi karıştırıyordu → exact eşitlik kullan.)
+function batchOf(notlar){
+  const m = String(notlar || '').match(/(?:^|\|)\s*batch=([^|]+)/i);
+  return m ? m[1].trim().toLowerCase() : '';
+}
+
+const rows = $input.all().map(i => i.json);
+const out = [];
+for (const r of rows) {
+  const lead_id = String(r.lead_id || '').trim();
+  if (!lead_id) continue;
+  const notlar = String(r.notlar || '');
+  const inBatch = batch && batchOf(notlar) === batch;
+  const inIds = ids.length && ids.includes(lead_id);
+  if (inBatch || inIds) {
+    out.push({ json: { lead_id, durum: 'paused', notlar: (notlar ? notlar + ' | ' : '') + 'paused_via_dashboard' } });
+  }
+}
+
+if (!out.length) throw new Error('Eşleşen lead yok (batch/lead_ids kontrol et)');
+return out;
+
+})()}},"cred":null},"Update Leads":{"name":"Update Leads","t":"googleSheets","p":{"operation":"update","documentId":{"__rl":true,"value":"__ENV_SHEET_ID_6__","mode":"id"},"sheetName":{"__rl":true,"value":1535908742,"mode":"list"},"columns":{"mappingMode":"autoMapInputData","value":{},"matchingColumns":["lead_id"],"schema":[{"id":"lead_id","displayName":"lead_id","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"linkedin_url","displayName":"linkedin_url","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"personal_note","displayName":"personal_note","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"follow_up_message","displayName":"follow_up_message","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"durum","displayName":"durum","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"gonderildi_tarih","displayName":"gonderildi_tarih","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"kabul_tarih","displayName":"kabul_tarih","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"notlar","displayName":"notlar","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true}]},"options":{}},"cred":"googleSheetsOAuth2Api"},"Respond Delete":{"name":"Respond Delete","t":"respondToWebhook","p":{"respondWith":"json","responseBody":__X(function($json,$,$input,$env,$execution,$binary,$itemIndex,$now,$node){try{return ({ ok: true, affected: $('Find Matching').all().length }
+)}catch(e){return undefined}}),"options":{}},"cred":null}},"conn":{"Update Lead":[[["Respond Result",0]]],"Parse Result":[[["Update Lead",0]]],"Pass Result":[[["Parse Result",0]]],"Webhook Result POST":[[["Pass Result",0]]],"Build Queue Payload":[[["Respond Queue",0]]],"Read Leads":[[["Build Queue Payload",0]]],"Pass Queue":[[["Read Leads",0]]],"Webhook Queue GET":[[["Pass Queue",0]]],"Webhook Stats GET":[[["Read Leads (Stats)",0]]],"Read Leads (Stats)":[[["Build Stats",0]]],"Build Stats":[[["Respond Stats",0]]],"Webhook AddLeads POST":[[["Prepare Rows",0]]],"Prepare Rows":[[["Append Leads",0]]],"Append Leads":[[["Respond Add",0]]],"Webhook DeleteLeads POST":[[["Read Leads (Delete)",0]]],"Read Leads (Delete)":[[["Find Matching",0]]],"Find Matching":[[["Update Leads",0]]],"Update Leads":[[["Respond Delete",0]]]},"ai":{},"start":{"/api/li/burcak/result":"Webhook Result POST","/api/li/burcak/queue":"Webhook Queue GET","/api/li/burcak/stats":"Webhook Stats GET","/api/li/burcak/add-leads":"Webhook AddLeads POST","/api/li/burcak/delete-leads":"Webhook DeleteLeads POST"}},"li_toprak":{"nodes":{"Respond Result":{"name":"Respond Result","t":"respondToWebhook","p":{"respondWith":"json","responseBody":__X(function($json,$,$input,$env,$execution,$binary,$itemIndex,$now,$node){try{return ({ ok: true, lead_id: $json.lead_id, durum: $json.durum }
+)}catch(e){return undefined}}),"options":{"responseHeaders":{"entries":[{"name":"Access-Control-Allow-Origin","value":"*"}]}}},"cred":null},"Update Lead":{"name":"Update Lead","t":"googleSheets","p":{"operation":"update","documentId":{"__rl":true,"value":"__ENV_SHEET_ID_10__","mode":"id"},"sheetName":{"__rl":true,"value":1535908742,"mode":"list"},"columns":{"mappingMode":"autoMapInputData","value":{},"matchingColumns":["lead_id"],"schema":[{"id":"lead_id","displayName":"lead_id","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true,"removed":false},{"id":"linkedin_url","displayName":"linkedin_url","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"personal_note","displayName":"personal_note","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"follow_up_message","displayName":"follow_up_message","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"durum","displayName":"durum","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"gonderildi_tarih","displayName":"gonderildi_tarih","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"kabul_tarih","displayName":"kabul_tarih","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"notlar","displayName":"notlar","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"row_number","displayName":"row_number","required":false,"defaultMatch":false,"display":true,"type":"number","canBeUsedToMatch":true,"readOnly":true,"removed":true}],"attemptToConvertTypes":false,"convertFieldsToString":false},"options":{}},"cred":"googleSheetsOAuth2Api"},"Parse Result":{"name":"Parse Result","t":"code","p":{"code":async function($input,$,$json,$env,$execution,$itemIndex,helpers,Buffer,items,$node){return (async()=>{
+// SAAS Corner — Parse Result v4.1
+// n8n Code node (typeVersion 2). Bu kodu CANLI workflow'daki "Parse Result"
+// node'una yapıştır. Extension'dan gelen POST sonucunu sheet güncellemesine çevirir.
+//  • failed_retryable + attempts → MAX'a kadar otomatik yeniden dener (Build Queue 3'te durdurur)
+//  • connect başarısında notlar SİLİNMEZ (throttle/iz korunur)
+//  • mesaj hash'i notlar'a yazılır → aynı mesaj bir daha gönderilmez (idempotency)
+const body = $json.body || $json;
+const rawLeadId = String(body.lead_id || body.leadId || body.id || '');
+const leadId = rawLeadId.replace(/_(connect|message|followup|check_connection|auto)$/i, '');
+
+// Aksiyonu belirle: önce makine alanı (resolvedAction/status), yoksa Türkçe metinden çıkar.
+let action = String(body.resolvedAction || body.action || '').toLowerCase();
+const detail = String(body.detail || body.action || '').toLowerCase();
+if (!['connect', 'message', 'check_connection'].includes(action)) {
+  if (action.includes('davet') || action.includes('bağlant') || detail.includes('davet') || detail.includes('bağlant')) {
+    action = 'connect';
+  } else if (action.includes('mesaj') || detail.includes('mesaj')) {
+    action = 'message';
+  }
+}
+
+const reason = String(body.reason || '').toLowerCase();
+const now = new Date().toISOString().slice(0, 16).replace('T', ' ');
+const messageHash = String(body.messageHash || body.message_hash || '').trim();
+const alreadySent = Boolean(body.alreadySent || body.already_sent);
+const attempts = Number(body.attempts) || 0;
+const status = String(body.status || '').toLowerCase();
+
+const out = { lead_id: leadId, durum: '', notlar: '' };
+
+if (body.success) {
+  if (action === 'message') {
+    out.durum = 'message_sent';
+    out.notlar = (alreadySent ? 'message_already_sent ' : 'message_sent ') + now + (messageHash ? ' | last_message_hash=' + messageHash : '');
+  } else if (action === 'connect') {
+    out.durum = 'connect_sent';
+    out.gonderildi_tarih = now;
+    out.notlar = 'connect_sent ' + now;        // notlar'ı BOŞALTMA (eski sürüm boşaltıyordu)
+  } else if (action === 'check_connection') {
+    out.durum = 'accepted';
+    out.kabul_tarih = now;
+    out.notlar = 'connection_detected ' + now;
+  } else {
+    out.durum = 'done';
+    out.notlar = 'done ' + now;
+  }
+} else if (reason.includes('already_connected')) {
+  out.durum = 'accepted';
+  out.kabul_tarih = now;
+  out.notlar = 'already_connected ' + now;
+} else if (reason === 'not_connected_yet') {
+  out.durum = 'connect_sent';
+  out.notlar = 'last_connection_check=' + now + ' | not_connected_yet';
+} else if (status === 'failed_retryable') {
+  // Geçici hata → bir sonraki turda tekrar denenir (Build Queue attempts>=3 olunca durdurur)
+  out.durum = 'failed_retryable';
+  out.notlar = (body.reason || 'unknown') + ' | attempts=' + attempts + ' | ' + now;
+} else {
+  out.durum = 'failed_final';
+  out.notlar = (body.reason || 'unknown') + ' | attempts=' + attempts + ' | ' + now;
+}
+
+return [{ json: out }];
+
+})()}},"cred":null},"Pass Result":{"name":"Pass Result","t":"code","p":{"code":async function($input,$,$json,$env,$execution,$itemIndex,helpers,Buffer,items,$node){return (async()=>{
+// Ic kullanim icin auth kapali.
+// Bu node sadece akisi gecirir; API key gerekmez.
+return $input.all();
+})()}},"cred":null},"Webhook Result POST":{"name":"Webhook Result POST","t":"webhook","p":{"httpMethod":"POST","path":"linkedin-result-toprak","responseMode":"responseNode","options":{}},"cred":null},"Respond Queue":{"name":"Respond Queue","t":"respondToWebhook","p":{"respondWith":"allIncomingItems","options":{"responseHeaders":{"entries":[{"name":"Content-Type","value":"application/json"},{"name":"Access-Control-Allow-Origin","value":"*"},{"name":"Access-Control-Allow-Methods","value":"GET, OPTIONS"},{"name":"Access-Control-Allow-Headers","value":"Content-Type, X-API-Key"}]}}},"cred":null},"Build Queue Payload":{"name":"Build Queue Payload","t":"code","p":{"code":async function($input,$,$json,$env,$execution,$itemIndex,helpers,Buffer,items,$node){return (async()=>{
+// SAAS Corner — Build Queue Payload v4.1
+// n8n Code node (typeVersion 2). Bu kodu CANLI workflow'daki "Build Queue Payload"
+// node'una yapıştır. Sheet'ten lead'leri okuyup extension için iş kuyruğu üretir.
+//  • Aksiyona özel id (leadId_action) → durum değişince iş bayatlamaz
+//  • Mesaj hash'i ile idempotency → aynı mesaj iki kez gitmez
+//  • failed_retryable için attempts sayacı + MAX_ATTEMPTS'te kalıcı durdurma (sonsuz döngü yok)
+const rows = $input.all().map(i => i.json);
+const items = [];
+const CHECK_INTERVAL_MINUTES = 5;
+const MAX_ATTEMPTS = 3;
+
+function cleanUrl(v){ if(!v) return ''; let u=String(v).trim(); if(!u.startsWith('http')) u='https://'+u.replace(/^\/+/,''); return u.split('?')[0].split('#')[0].replace(/\/$/,''); }
+function text(v){ return String(v==null?'':v).trim(); }
+function normMsg(v){ return String(v||'').normalize('NFKC').replace(/[\u200B-\u200D\uFEFF]/g,'').replace(/\s+/g,' ').trim().toLowerCase(); }
+function hashMsg(v){ const n=normMsg(v); if(!n) return ''; let h=2166136261; for(let i=0;i<n.length;i++){ h^=n.charCodeAt(i); h=Math.imul(h,16777619);} return (h>>>0).toString(16).padStart(8,'0'); }
+function esc(v){ return String(v).replace(/[-\/\\^$*+?.()|[\]{}]/g,'\\$&'); }
+function parseDate(v){ if(!v) return null; const r=String(v).trim(); const d=new Date(r.includes('T')?r:r.replace(' ','T')); return Number.isFinite(d.getTime())?d:null; }
+function token(notes,key){ const m=String(notes||'').match(new RegExp('(?:^|\\|)\\s*'+esc(key)+'=([^|]+)','i')); return m?m[1].trim():''; }
+function lastCheck(row){ const v=token(row.notlar,'last_connection_check'); return v?parseDate(v):null; }
+function attemptsOf(row){ const n=parseInt(token(row.notlar,'attempts'),10); return Number.isFinite(n)?n:0; }
+function leadIdFor(row){ const slug=cleanUrl(row.linkedin_url||row.profileUrl||'').split('/in/')[1]?.replace(/\/$/,'')||''; return text(row.lead_id||row.id||row.leadId||slug); }
+function sentSame(row,hash){ if(!hash) return false; const notes=String(row.notlar||''); const ex=text(row.last_message_hash||row.message_hash); if(ex && ex===hash) return true; return new RegExp('(?:last_message_hash|message_hash)='+esc(hash)+'(?:\\b|$)','i').test(notes); }
+
+function pushJob(row, action, step, extra={}) {
+  const profileUrl = cleanUrl(row.linkedin_url||row.profileUrl||'');
+  const leadId = leadIdFor(row);
+  if(!leadId || !profileUrl.includes('linkedin.com/in/')) return;
+  const connectionNote = text(row.personal_note||row.connectionNote||row.connection_note).slice(0,300);
+  const followUpMessage = text(row.follow_up_message||row.followUpMessage||row.message||row.mesaj);
+  const messageHash = followUpMessage ? hashMsg(followUpMessage) : '';
+  if(action==='message'){ if(!followUpMessage) return; if(sentSame(row,messageHash)) return; }
+  items.push({
+    id: extra.id || (leadId+'_'+action),
+    lead_id: leadId, action, step,
+    profileUrl, linkedin_url: profileUrl,
+    connectionNote, personal_note: connectionNote,
+    followUpMessage, follow_up_message: followUpMessage,
+    message: action==='message' ? followUpMessage : connectionNote,
+    messageHash, message_hash: messageHash,
+    attempts: attemptsOf(row),
+    acceptedAt: row.kabul_tarih||row.acceptedAt||extra.acceptedAt||'',
+    leadName: row.ad_soyad||row.leadName||row.full_name||'',
+    generatedAt: new Date().toISOString(),
+    ...extra
+  });
+}
+
+for (const row of rows) {
+  const profileUrl = cleanUrl(row.linkedin_url||row.profileUrl||'');
+  if(!profileUrl.includes('linkedin.com/in/')) continue;
+
+  const status = text(row.durum||row.status).toLowerCase();
+  const follow = text(row.follow_up_message||row.followUpMessage||row.message||row.mesaj);
+  const followHash = hashMsg(follow);
+  const acceptedAt = text(row.kabul_tarih||row.acceptedAt);
+
+  // Kalıcı durdurma durumları (failed_final dahil → başarısız lead tekrar denenmez)
+  const hardStop = ['paused','reply','replied','message_sent','followup_sent','done','do_not_contact','blacklist','failed_final'].includes(status);
+  if(hardStop) continue;
+
+  // Çok denenip hâlâ başarısızsa kalıcı durdur (sonsuz döngü yok)
+  if(status==='failed_retryable' && attemptsOf(row) >= MAX_ATTEMPTS) continue;
+
+  // 1) Davet atılmış, kabul bekleniyor → periyodik bağlantı kontrolü
+  if(['connect_sent','sent','invite_sent'].includes(status) && follow && !acceptedAt){
+    const last=lastCheck(row);
+    const due=!last || (Date.now()-last.getTime()) >= CHECK_INTERVAL_MINUTES*60*1000;
+    if(due) pushJob(row,'check_connection',1,{ id: leadIdFor(row)+'_check_connection' });
+    continue;
+  }
+
+  // 2) Bağlantı kabul edildi → takip mesajı (aynı mesaj atılmadıysa)
+  if(['accepted','queued_followup'].includes(status) && follow && !sentSame(row,followHash)){
+    pushJob(row,'message',2,{ acceptedAt: acceptedAt || new Date().toISOString() });
+    continue;
+  }
+
+  // 3) Yeni / boş / retryable → auto (extension profilde karar verir: bağlıysa mesaj, değilse davet)
+  if(!status || ['new','ready','approved','queued','failed_retryable'].includes(status)){
+    pushJob(row,'auto',1);
+  }
+}
+
+return [{ json: { ok:true, count:items.length, items, generatedAt:new Date().toISOString() } }];
+
+})()}},"cred":null},"Read Leads":{"name":"Read Leads","t":"googleSheets","p":{"documentId":{"__rl":true,"value":"__ENV_SHEET_ID_10__","mode":"id"},"sheetName":{"__rl":true,"value":1535908742,"mode":"list"},"options":{}},"cred":"googleSheetsOAuth2Api"},"Pass Queue":{"name":"Pass Queue","t":"code","p":{"code":async function($input,$,$json,$env,$execution,$itemIndex,helpers,Buffer,items,$node){return (async()=>{
+// Ic kullanim icin auth kapali.
+// Bu node sadece akisi gecirir; API key gerekmez.
+return $input.all();
+})()}},"cred":null},"Webhook Queue GET":{"name":"Webhook Queue GET","t":"webhook","p":{"path":"linkedin-queue-toprak","responseMode":"responseNode","options":{}},"cred":null}},"conn":{"Update Lead":[[["Respond Result",0]]],"Parse Result":[[["Update Lead",0]]],"Pass Result":[[["Parse Result",0]]],"Webhook Result POST":[[["Pass Result",0]]],"Build Queue Payload":[[["Respond Queue",0]]],"Read Leads":[[["Build Queue Payload",0]]],"Pass Queue":[[["Read Leads",0]]],"Webhook Queue GET":[[["Pass Queue",0]]]},"ai":{},"start":{"/api/li/toprak/result":"Webhook Result POST","/api/li/toprak/queue":"Webhook Queue GET"}},"li_nazan":{"nodes":{"Respond Result":{"name":"Respond Result","t":"respondToWebhook","p":{"respondWith":"json","responseBody":__X(function($json,$,$input,$env,$execution,$binary,$itemIndex,$now,$node){try{return ({ ok: true, lead_id: $json.lead_id, durum: $json.durum }
+)}catch(e){return undefined}}),"options":{"responseHeaders":{"entries":[{"name":"Access-Control-Allow-Origin","value":"*"}]}}},"cred":null},"Update Lead":{"name":"Update Lead","t":"googleSheets","p":{"operation":"update","documentId":{"__rl":true,"value":"__ENV_SHEET_ID_6__","mode":"id"},"sheetName":{"__rl":true,"value":1535908742,"mode":"list"},"columns":{"mappingMode":"autoMapInputData","value":{},"matchingColumns":["lead_id"],"schema":[{"id":"lead_id","displayName":"lead_id","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true,"removed":false},{"id":"linkedin_url","displayName":"linkedin_url","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"personal_note","displayName":"personal_note","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"follow_up_message","displayName":"follow_up_message","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"durum","displayName":"durum","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"gonderildi_tarih","displayName":"gonderildi_tarih","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"kabul_tarih","displayName":"kabul_tarih","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"notlar","displayName":"notlar","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"row_number","displayName":"row_number","required":false,"defaultMatch":false,"display":true,"type":"number","canBeUsedToMatch":true,"readOnly":true,"removed":true}],"attemptToConvertTypes":false,"convertFieldsToString":false},"options":{}},"cred":"googleSheetsOAuth2Api"},"Parse Result":{"name":"Parse Result","t":"code","p":{"code":async function($input,$,$json,$env,$execution,$itemIndex,helpers,Buffer,items,$node){return (async()=>{
+// SAAS Corner — Parse Result v4.1
+// n8n Code node (typeVersion 2). Bu kodu CANLI workflow'daki "Parse Result"
+// node'una yapıştır. Extension'dan gelen POST sonucunu sheet güncellemesine çevirir.
+//  • failed_retryable + attempts → MAX'a kadar otomatik yeniden dener (Build Queue 3'te durdurur)
+//  • connect başarısında notlar SİLİNMEZ (throttle/iz korunur)
+//  • mesaj hash'i notlar'a yazılır → aynı mesaj bir daha gönderilmez (idempotency)
+const body = $json.body || $json;
+const rawLeadId = String(body.lead_id || body.leadId || body.id || '');
+const leadId = rawLeadId.replace(/_(connect|message|followup|check_connection|auto)$/i, '');
+
+// Aksiyonu belirle: önce makine alanı (resolvedAction/status), yoksa Türkçe metinden çıkar.
+let action = String(body.resolvedAction || body.action || '').toLowerCase();
+const detail = String(body.detail || body.action || '').toLowerCase();
+if (!['connect', 'message', 'check_connection'].includes(action)) {
+  if (action.includes('davet') || action.includes('bağlant') || detail.includes('davet') || detail.includes('bağlant')) {
+    action = 'connect';
+  } else if (action.includes('mesaj') || detail.includes('mesaj')) {
+    action = 'message';
+  }
+}
+
+const reason = String(body.reason || '').toLowerCase();
+const now = new Date().toISOString().slice(0, 16).replace('T', ' ');
+const messageHash = String(body.messageHash || body.message_hash || '').trim();
+const alreadySent = Boolean(body.alreadySent || body.already_sent);
+const attempts = Number(body.attempts) || 0;
+const status = String(body.status || '').toLowerCase();
+
+const out = { lead_id: leadId, durum: '', notlar: '' };
+
+if (body.success) {
+  if (action === 'message') {
+    out.durum = 'message_sent';
+    out.notlar = (alreadySent ? 'message_already_sent ' : 'message_sent ') + now + (messageHash ? ' | last_message_hash=' + messageHash : '');
+  } else if (action === 'connect') {
+    out.durum = 'connect_sent';
+    out.gonderildi_tarih = now;
+    out.notlar = 'connect_sent ' + now;        // notlar'ı BOŞALTMA (eski sürüm boşaltıyordu)
+  } else if (action === 'check_connection') {
+    out.durum = 'accepted';
+    out.kabul_tarih = now;
+    out.notlar = 'connection_detected ' + now;
+  } else {
+    out.durum = 'done';
+    out.notlar = 'done ' + now;
+  }
+} else if (reason.includes('already_connected')) {
+  out.durum = 'accepted';
+  out.kabul_tarih = now;
+  out.notlar = 'already_connected ' + now;
+} else if (reason === 'not_connected_yet') {
+  out.durum = 'connect_sent';
+  out.notlar = 'last_connection_check=' + now + ' | not_connected_yet';
+} else if (status === 'failed_retryable') {
+  // Geçici hata → bir sonraki turda tekrar denenir (Build Queue attempts>=3 olunca durdurur)
+  out.durum = 'failed_retryable';
+  out.notlar = (body.reason || 'unknown') + ' | attempts=' + attempts + ' | ' + now;
+} else {
+  out.durum = 'failed_final';
+  out.notlar = (body.reason || 'unknown') + ' | attempts=' + attempts + ' | ' + now;
+}
+
+return [{ json: out }];
+
+})()}},"cred":null},"Pass Result":{"name":"Pass Result","t":"code","p":{"code":async function($input,$,$json,$env,$execution,$itemIndex,helpers,Buffer,items,$node){return (async()=>{
+// Ic kullanim icin auth kapali.
+// Bu node sadece akisi gecirir; API key gerekmez.
+return $input.all();
+})()}},"cred":null},"Webhook Result POST":{"name":"Webhook Result POST","t":"webhook","p":{"httpMethod":"POST","path":"linkedin-result","responseMode":"responseNode","options":{}},"cred":null},"Respond Queue":{"name":"Respond Queue","t":"respondToWebhook","p":{"respondWith":"allIncomingItems","options":{"responseHeaders":{"entries":[{"name":"Content-Type","value":"application/json"},{"name":"Access-Control-Allow-Origin","value":"*"},{"name":"Access-Control-Allow-Methods","value":"GET, OPTIONS"},{"name":"Access-Control-Allow-Headers","value":"Content-Type, X-API-Key"}]}}},"cred":null},"Build Queue Payload":{"name":"Build Queue Payload","t":"code","p":{"code":async function($input,$,$json,$env,$execution,$itemIndex,helpers,Buffer,items,$node){return (async()=>{
+// SAAS Corner — Build Queue Payload v4.1
+// n8n Code node (typeVersion 2). Bu kodu CANLI workflow'daki "Build Queue Payload"
+// node'una yapıştır. Sheet'ten lead'leri okuyup extension için iş kuyruğu üretir.
+//  • Aksiyona özel id (leadId_action) → durum değişince iş bayatlamaz
+//  • Mesaj hash'i ile idempotency → aynı mesaj iki kez gitmez
+//  • failed_retryable için attempts sayacı + MAX_ATTEMPTS'te kalıcı durdurma (sonsuz döngü yok)
+const rows = $input.all().map(i => i.json);
+const items = [];
+const CHECK_INTERVAL_MINUTES = 5;
+const MAX_ATTEMPTS = 3;
+
+function cleanUrl(v){ if(!v) return ''; let u=String(v).trim(); if(!u.startsWith('http')) u='https://'+u.replace(/^\/+/,''); return u.split('?')[0].split('#')[0].replace(/\/$/,''); }
+function text(v){ return String(v==null?'':v).trim(); }
+function normMsg(v){ return String(v||'').normalize('NFKC').replace(/[\u200B-\u200D\uFEFF]/g,'').replace(/\s+/g,' ').trim().toLowerCase(); }
+function hashMsg(v){ const n=normMsg(v); if(!n) return ''; let h=2166136261; for(let i=0;i<n.length;i++){ h^=n.charCodeAt(i); h=Math.imul(h,16777619);} return (h>>>0).toString(16).padStart(8,'0'); }
+function esc(v){ return String(v).replace(/[-\/\\^$*+?.()|[\]{}]/g,'\\$&'); }
+function parseDate(v){ if(!v) return null; const r=String(v).trim(); const d=new Date(r.includes('T')?r:r.replace(' ','T')); return Number.isFinite(d.getTime())?d:null; }
+function token(notes,key){ const m=String(notes||'').match(new RegExp('(?:^|\\|)\\s*'+esc(key)+'=([^|]+)','i')); return m?m[1].trim():''; }
+function lastCheck(row){ const v=token(row.notlar,'last_connection_check'); return v?parseDate(v):null; }
+function attemptsOf(row){ const n=parseInt(token(row.notlar,'attempts'),10); return Number.isFinite(n)?n:0; }
+function leadIdFor(row){ const slug=cleanUrl(row.linkedin_url||row.profileUrl||'').split('/in/')[1]?.replace(/\/$/,'')||''; return text(row.lead_id||row.id||row.leadId||slug); }
+function sentSame(row,hash){ if(!hash) return false; const notes=String(row.notlar||''); const ex=text(row.last_message_hash||row.message_hash); if(ex && ex===hash) return true; return new RegExp('(?:last_message_hash|message_hash)='+esc(hash)+'(?:\\b|$)','i').test(notes); }
+
+function pushJob(row, action, step, extra={}) {
+  const profileUrl = cleanUrl(row.linkedin_url||row.profileUrl||'');
+  const leadId = leadIdFor(row);
+  if(!leadId || !profileUrl.includes('linkedin.com/in/')) return;
+  const connectionNote = text(row.personal_note||row.connectionNote||row.connection_note).slice(0,300);
+  const followUpMessage = text(row.follow_up_message||row.followUpMessage||row.message||row.mesaj);
+  const messageHash = followUpMessage ? hashMsg(followUpMessage) : '';
+  if(action==='message'){ if(!followUpMessage) return; if(sentSame(row,messageHash)) return; }
+  items.push({
+    id: extra.id || (leadId+'_'+action),
+    lead_id: leadId, action, step,
+    profileUrl, linkedin_url: profileUrl,
+    connectionNote, personal_note: connectionNote,
+    followUpMessage, follow_up_message: followUpMessage,
+    message: action==='message' ? followUpMessage : connectionNote,
+    messageHash, message_hash: messageHash,
+    attempts: attemptsOf(row),
+    acceptedAt: row.kabul_tarih||row.acceptedAt||extra.acceptedAt||'',
+    leadName: row.ad_soyad||row.leadName||row.full_name||'',
+    generatedAt: new Date().toISOString(),
+    ...extra
+  });
+}
+
+for (const row of rows) {
+  const profileUrl = cleanUrl(row.linkedin_url||row.profileUrl||'');
+  if(!profileUrl.includes('linkedin.com/in/')) continue;
+
+  const status = text(row.durum||row.status).toLowerCase();
+  const follow = text(row.follow_up_message||row.followUpMessage||row.message||row.mesaj);
+  const followHash = hashMsg(follow);
+  const acceptedAt = text(row.kabul_tarih||row.acceptedAt);
+
+  // Kalıcı durdurma durumları (failed_final dahil → başarısız lead tekrar denenmez)
+  const hardStop = ['paused','reply','replied','message_sent','followup_sent','done','do_not_contact','blacklist','failed_final'].includes(status);
+  if(hardStop) continue;
+
+  // Çok denenip hâlâ başarısızsa kalıcı durdur (sonsuz döngü yok)
+  if(status==='failed_retryable' && attemptsOf(row) >= MAX_ATTEMPTS) continue;
+
+  // 1) Davet atılmış, kabul bekleniyor → periyodik bağlantı kontrolü
+  if(['connect_sent','sent','invite_sent'].includes(status) && follow && !acceptedAt){
+    const last=lastCheck(row);
+    const due=!last || (Date.now()-last.getTime()) >= CHECK_INTERVAL_MINUTES*60*1000;
+    if(due) pushJob(row,'check_connection',1,{ id: leadIdFor(row)+'_check_connection' });
+    continue;
+  }
+
+  // 2) Bağlantı kabul edildi → takip mesajı (aynı mesaj atılmadıysa)
+  if(['accepted','queued_followup'].includes(status) && follow && !sentSame(row,followHash)){
+    pushJob(row,'message',2,{ acceptedAt: acceptedAt || new Date().toISOString() });
+    continue;
+  }
+
+  // 3) Yeni / boş / retryable → auto (extension profilde karar verir: bağlıysa mesaj, değilse davet)
+  if(!status || ['new','ready','approved','queued','failed_retryable'].includes(status)){
+    pushJob(row,'auto',1);
+  }
+}
+
+return [{ json: { ok:true, count:items.length, items, generatedAt:new Date().toISOString() } }];
+
+})()}},"cred":null},"Read Leads":{"name":"Read Leads","t":"googleSheets","p":{"documentId":{"__rl":true,"value":"__ENV_SHEET_ID_6__","mode":"id"},"sheetName":{"__rl":true,"value":1535908742,"mode":"list"},"options":{}},"cred":"googleSheetsOAuth2Api"},"Pass Queue":{"name":"Pass Queue","t":"code","p":{"code":async function($input,$,$json,$env,$execution,$itemIndex,helpers,Buffer,items,$node){return (async()=>{
+// Ic kullanim icin auth kapali.
+// Bu node sadece akisi gecirir; API key gerekmez.
+return $input.all();
+})()}},"cred":null},"Webhook Queue GET":{"name":"Webhook Queue GET","t":"webhook","p":{"path":"linkedin-queue","responseMode":"responseNode","options":{}},"cred":null},"Webhook Stats GET":{"name":"Webhook Stats GET","t":"webhook","p":{"path":"linkedin-stats","responseMode":"responseNode","options":{"allowedOrigins":"*"}},"cred":null},"Read Leads (Stats)":{"name":"Read Leads (Stats)","t":"googleSheets","p":{"documentId":{"__rl":true,"value":"__ENV_SHEET_ID_6__","mode":"id"},"sheetName":{"__rl":true,"value":1535908742,"mode":"list"},"options":{}},"cred":"googleSheetsOAuth2Api"},"Build Stats":{"name":"Build Stats","t":"code","p":{"code":async function($input,$,$json,$env,$execution,$itemIndex,helpers,Buffer,items,$node){return (async()=>{
+// SAAS Corner — Lead Manager · Build Stats (GET /webhook/linkedin-stats)
+// "Read Leads" (Google Sheets) çıktısını alır → sayımları döndürür.
+const rows = $input.all().map(i => i.json);
+const by = {};
+let total = 0, todayConnect = 0, todayMessage = 0;
+const today = new Date().toISOString().slice(0, 10);
+const dayOf = (v) => String(v || '').slice(0, 10);
+
+for (const r of rows) {
+  const url = String(r.linkedin_url || '');
+  if (!url.includes('linkedin.com/in/')) continue;
+  total++;
+  const durum = (String(r.durum || '').trim().toLowerCase()) || 'new';
+  by[durum] = (by[durum] || 0) + 1;
+
+  if (dayOf(r.gonderildi_tarih) === today) todayConnect++;
+  const m = String(r.notlar || '').match(/message_sent\s+(\d{4}-\d{2}-\d{2})/i);
+  if (m && m[1] === today) todayMessage++;
+}
+
+return [{ json: {
+  ok: true,
+  total,
+  byStatus: by,
+  today: { connect: todayConnect, message: todayMessage },
+  generatedAt: new Date().toISOString()
+} }];
+
+})()}},"cred":null},"Respond Stats":{"name":"Respond Stats","t":"respondToWebhook","p":{"respondWith":"json","responseBody":__X(function($json,$,$input,$env,$execution,$binary,$itemIndex,$now,$node){try{return ($json
+)}catch(e){return undefined}}),"options":{}},"cred":null},"Webhook AddLeads POST":{"name":"Webhook AddLeads POST","t":"webhook","p":{"httpMethod":"POST","path":"linkedin-add-leads","responseMode":"responseNode","options":{"allowedOrigins":"*"}},"cred":null},"Prepare Rows":{"name":"Prepare Rows","t":"code","p":{"code":async function($input,$,$json,$env,$execution,$itemIndex,helpers,Buffer,items,$node){return (async()=>{
+// SAAS Corner — Lead Manager · Prepare Rows (POST /webhook/linkedin-add-leads)
+// Gövde: { leads:[{linkedin_url, personal_note, follow_up_message}], batch? }
+// Çıktı: sheet'e eklenecek satırlar (durum=new). "Append Leads" node'u bunları ekler.
+const body = $json.body || $json;
+const leads = Array.isArray(body.leads) ? body.leads : (body.leads ? [body.leads] : []);
+const batch = String(body.batch || '').trim();
+
+function cleanUrl(v){ if(!v) return ''; let u=String(v).trim(); if(!u.startsWith('http')) u='https://'+u.replace(/^\/+/,''); return u.split('?')[0].split('#')[0].replace(/\/$/,''); }
+function slug(u){ const m=cleanUrl(u).match(/\/in\/([^/?#]+)/); return m?decodeURIComponent(m[1]).toLowerCase():''; }
+
+const out = [];
+const seen = new Set();
+for (const l of leads) {
+  const url = cleanUrl(l.linkedin_url || l.url || '');
+  if (!url.includes('linkedin.com/in/')) continue;
+  const lead_id = String(l.lead_id || slug(url)).trim();
+  if (!lead_id || seen.has(lead_id)) continue;
+  seen.add(lead_id);
+  out.push({ json: {
+    lead_id,
+    linkedin_url: url,
+    personal_note: String(l.personal_note || l.note || '').slice(0, 300),
+    follow_up_message: String(l.follow_up_message || l.message || ''),
+    durum: 'new',
+    gonderildi_tarih: '',
+    kabul_tarih: '',
+    notlar: batch ? ('batch=' + batch) : ''
+  }});
+}
+
+if (!out.length) throw new Error('Geçerli LinkedIn /in/ URL bulunamadı');
+return out;
+
+})()}},"cred":null},"Append Leads":{"name":"Append Leads","t":"googleSheets","p":{"operation":"append","documentId":{"__rl":true,"value":"__ENV_SHEET_ID_6__","mode":"id"},"sheetName":{"__rl":true,"value":1535908742,"mode":"list"},"columns":{"mappingMode":"autoMapInputData","value":{},"matchingColumns":[],"schema":[{"id":"lead_id","displayName":"lead_id","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"linkedin_url","displayName":"linkedin_url","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"personal_note","displayName":"personal_note","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"follow_up_message","displayName":"follow_up_message","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"durum","displayName":"durum","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"gonderildi_tarih","displayName":"gonderildi_tarih","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"kabul_tarih","displayName":"kabul_tarih","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"notlar","displayName":"notlar","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true}]},"options":{}},"cred":"googleSheetsOAuth2Api"},"Respond Add":{"name":"Respond Add","t":"respondToWebhook","p":{"respondWith":"json","responseBody":__X(function($json,$,$input,$env,$execution,$binary,$itemIndex,$now,$node){try{return ({ ok: true, added: $('Prepare Rows').all().length }
+)}catch(e){return undefined}}),"options":{}},"cred":null},"Webhook DeleteLeads POST":{"name":"Webhook DeleteLeads POST","t":"webhook","p":{"httpMethod":"POST","path":"linkedin-delete-leads","responseMode":"responseNode","options":{"allowedOrigins":"*"}},"cred":null},"Read Leads (Delete)":{"name":"Read Leads (Delete)","t":"googleSheets","p":{"documentId":{"__rl":true,"value":"__ENV_SHEET_ID_6__","mode":"id"},"sheetName":{"__rl":true,"value":1535908742,"mode":"list"},"options":{}},"cred":"googleSheetsOAuth2Api"},"Find Matching":{"name":"Find Matching","t":"code","p":{"code":async function($input,$,$json,$env,$execution,$itemIndex,helpers,Buffer,items,$node){return (async()=>{
+// SAAS Corner — Lead Manager · Find Matching (POST /webhook/linkedin-delete-leads)
+// Gövde: { batch } veya { lead_ids:[...] }
+// "Read Leads" çıktısını alır → eşleşenleri durum=paused yapar. "Update Leads" yazar.
+// (Fiziksel silme yerine PASSIVE eder → güvenli; extension kuyruğundan ~90sn'de düşer.)
+const body = $('Webhook DeleteLeads POST').first().json.body || {};
+const batch = String(body.batch || '').trim().toLowerCase();
+const ids = Array.isArray(body.lead_ids) ? body.lead_ids.map(x => String(x).trim()) : [];
+
+// notlar içindeki batch DEĞERİNİ çıkar ve BİREBİR karşılaştır.
+// (Regex \b sınırı "acme" ile "acme-2"yi karıştırıyordu → exact eşitlik kullan.)
+function batchOf(notlar){
+  const m = String(notlar || '').match(/(?:^|\|)\s*batch=([^|]+)/i);
+  return m ? m[1].trim().toLowerCase() : '';
+}
+
+const rows = $input.all().map(i => i.json);
+const out = [];
+for (const r of rows) {
+  const lead_id = String(r.lead_id || '').trim();
+  if (!lead_id) continue;
+  const notlar = String(r.notlar || '');
+  const inBatch = batch && batchOf(notlar) === batch;
+  const inIds = ids.length && ids.includes(lead_id);
+  if (inBatch || inIds) {
+    out.push({ json: { lead_id, durum: 'paused', notlar: (notlar ? notlar + ' | ' : '') + 'paused_via_dashboard' } });
+  }
+}
+
+if (!out.length) throw new Error('Eşleşen lead yok (batch/lead_ids kontrol et)');
+return out;
+
+})()}},"cred":null},"Update Leads":{"name":"Update Leads","t":"googleSheets","p":{"operation":"update","documentId":{"__rl":true,"value":"__ENV_SHEET_ID_6__","mode":"id"},"sheetName":{"__rl":true,"value":1535908742,"mode":"list"},"columns":{"mappingMode":"autoMapInputData","value":{},"matchingColumns":["lead_id"],"schema":[{"id":"lead_id","displayName":"lead_id","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"linkedin_url","displayName":"linkedin_url","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"personal_note","displayName":"personal_note","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"follow_up_message","displayName":"follow_up_message","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"durum","displayName":"durum","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"gonderildi_tarih","displayName":"gonderildi_tarih","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"kabul_tarih","displayName":"kabul_tarih","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"notlar","displayName":"notlar","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true}]},"options":{}},"cred":"googleSheetsOAuth2Api"},"Respond Delete":{"name":"Respond Delete","t":"respondToWebhook","p":{"respondWith":"json","responseBody":__X(function($json,$,$input,$env,$execution,$binary,$itemIndex,$now,$node){try{return ({ ok: true, affected: $('Find Matching').all().length }
+)}catch(e){return undefined}}),"options":{}},"cred":null}},"conn":{"Update Lead":[[["Respond Result",0]]],"Parse Result":[[["Update Lead",0]]],"Pass Result":[[["Parse Result",0]]],"Webhook Result POST":[[["Pass Result",0]]],"Build Queue Payload":[[["Respond Queue",0]]],"Read Leads":[[["Build Queue Payload",0]]],"Pass Queue":[[["Read Leads",0]]],"Webhook Queue GET":[[["Pass Queue",0]]],"Webhook Stats GET":[[["Read Leads (Stats)",0]]],"Read Leads (Stats)":[[["Build Stats",0]]],"Build Stats":[[["Respond Stats",0]]],"Webhook AddLeads POST":[[["Prepare Rows",0]]],"Prepare Rows":[[["Append Leads",0]]],"Append Leads":[[["Respond Add",0]]],"Webhook DeleteLeads POST":[[["Read Leads (Delete)",0]]],"Read Leads (Delete)":[[["Find Matching",0]]],"Find Matching":[[["Update Leads",0]]],"Update Leads":[[["Respond Delete",0]]]},"ai":{},"start":{"/api/li/nazan/result":"Webhook Result POST","/api/li/nazan/queue":"Webhook Queue GET","/api/li/nazan/stats":"Webhook Stats GET","/api/li/nazan/add-leads":"Webhook AddLeads POST","/api/li/nazan/delete-leads":"Webhook DeleteLeads POST"}}};
+const ROUTES = [{"path":"/api/analiz","method":"POST","wf":"analiz","node":"Webhook","respond":null,"mode":"lastNode"},{"path":"/api/briefing","method":"POST","wf":"briefing","node":"Webhook Trigger","respond":"Webhook Response","mode":"responseNode"},{"path":"/api/seo-analyze","method":"POST","wf":"seo","node":"Webhook","respond":null,"mode":"lastNode"},{"path":"/api/cv-analiz","method":"POST","wf":"cv","node":"CV Webhook","respond":null,"mode":"lastNode"},{"path":"/api/deneme-photo","method":"POST","wf":"photo","node":"Webhook","respond":"Respond to Webhook","mode":"responseNode"},{"path":"/api/linkedin-oauth-photo","method":"POST","wf":"photo","node":"LinkedIn OAuth Webhook","respond":null,"mode":"lastNode"},{"path":"/api/linkedin-share-photo","method":"POST","wf":"photo","node":"LinkedIn Share Webhook","respond":null,"mode":"lastNode"},{"path":"/api/photo-enhance-v2","method":"POST","wf":"photo","node":"Photo Upload Webhook","respond":"Photo Respond","mode":"responseNode"},{"path":"/api/deneme","method":"POST","wf":"deneme","node":"Webhook","respond":"Respond to Webhook","mode":"responseNode"},{"path":"/api/linkedin-oauth","method":"POST","wf":"deneme","node":"LinkedIn OAuth Webhook","respond":null,"mode":"lastNode"},{"path":"/api/linkedin-share","method":"POST","wf":"deneme","node":"LinkedIn Share Webhook","respond":null,"mode":"lastNode"},{"path":"/api/keyword-check","method":"POST","wf":"kwc","node":"Webhook","respond":"Respond to Webhook","mode":"responseNode"},{"path":"/api/keyword-scanner-pro","method":"POST","wf":"kws","node":"Webhook","respond":"Response","mode":"responseNode"},{"path":"/api/sekans","method":"POST","wf":"sekans","node":"Webhook Trigger","respond":"Respond to Webhook","mode":"responseNode"},{"path":"/api/sekans-status","method":"GET","wf":"sekans","node":"Status Webhook","respond":"Status Respond","mode":"responseNode"},{"path":"/api/rakip-analizi-pro-v5","method":"POST","wf":"rakip","node":"Webhook","respond":"Respond to Webhook","mode":"responseNode"},{"path":"/api/rakip-analizi-status","method":"GET","wf":"rakip","node":"Status Webhook","respond":"Status Respond","mode":"responseNode"},{"path":"/api/li/berkay/queue","method":"GET","wf":"li_berkay","node":"Webhook Queue GET","respond":"Respond Queue","mode":"responseNode","li":"berkay"},{"path":"/api/li/berkay/result","method":"POST","wf":"li_berkay","node":"Webhook Result POST","respond":"Respond Result","mode":"responseNode","li":"berkay"},{"path":"/api/li/yasin/result","method":"POST","wf":"li_yasin","node":"Webhook Result POST","respond":"Respond Result","mode":"responseNode","li":"yasin"},{"path":"/api/li/yasin/queue","method":"GET","wf":"li_yasin","node":"Webhook Queue GET","respond":"Respond Queue","mode":"responseNode","li":"yasin"},{"path":"/api/li/yasin/stats","method":"GET","wf":"li_yasin","node":"Webhook Stats GET","respond":"Respond Stats","mode":"responseNode","li":"yasin"},{"path":"/api/li/yasin/add-leads","method":"POST","wf":"li_yasin","node":"Webhook AddLeads POST","respond":"Respond Add","mode":"responseNode","li":"yasin"},{"path":"/api/li/yasin/delete-leads","method":"POST","wf":"li_yasin","node":"Webhook DeleteLeads POST","respond":"Respond Delete","mode":"responseNode","li":"yasin"},{"path":"/api/li/izzet/result","method":"POST","wf":"li_izzet","node":"Webhook Result POST","respond":"Respond Result","mode":"responseNode","li":"izzet"},{"path":"/api/li/izzet/queue","method":"GET","wf":"li_izzet","node":"Webhook Queue GET","respond":"Respond Queue","mode":"responseNode","li":"izzet"},{"path":"/api/li/sukriye/result","method":"POST","wf":"li_sukriye","node":"Webhook Result POST","respond":"Respond Result","mode":"responseNode","li":"sukriye"},{"path":"/api/li/sukriye/queue","method":"GET","wf":"li_sukriye","node":"Webhook Queue GET","respond":"Respond Queue","mode":"responseNode","li":"sukriye"},{"path":"/api/li/sukriye/stats","method":"GET","wf":"li_sukriye","node":"Webhook Stats GET","respond":"Respond Stats","mode":"responseNode","li":"sukriye"},{"path":"/api/li/sukriye/add-leads","method":"POST","wf":"li_sukriye","node":"Webhook AddLeads POST","respond":"Respond Add","mode":"responseNode","li":"sukriye"},{"path":"/api/li/sukriye/delete-leads","method":"POST","wf":"li_sukriye","node":"Webhook DeleteLeads POST","respond":"Respond Delete","mode":"responseNode","li":"sukriye"},{"path":"/api/li/burcak/result","method":"POST","wf":"li_burcak","node":"Webhook Result POST","respond":"Respond Result","mode":"responseNode","li":"burcak"},{"path":"/api/li/burcak/queue","method":"GET","wf":"li_burcak","node":"Webhook Queue GET","respond":"Respond Queue","mode":"responseNode","li":"burcak"},{"path":"/api/li/burcak/stats","method":"GET","wf":"li_burcak","node":"Webhook Stats GET","respond":"Respond Stats","mode":"responseNode","li":"burcak"},{"path":"/api/li/burcak/add-leads","method":"POST","wf":"li_burcak","node":"Webhook AddLeads POST","respond":"Respond Add","mode":"responseNode","li":"burcak"},{"path":"/api/li/burcak/delete-leads","method":"POST","wf":"li_burcak","node":"Webhook DeleteLeads POST","respond":"Respond Delete","mode":"responseNode","li":"burcak"},{"path":"/api/li/toprak/result","method":"POST","wf":"li_toprak","node":"Webhook Result POST","respond":"Respond Result","mode":"responseNode","li":"toprak"},{"path":"/api/li/toprak/queue","method":"GET","wf":"li_toprak","node":"Webhook Queue GET","respond":"Respond Queue","mode":"responseNode","li":"toprak"},{"path":"/api/li/nazan/result","method":"POST","wf":"li_nazan","node":"Webhook Result POST","respond":"Respond Result","mode":"responseNode","li":"nazan"},{"path":"/api/li/nazan/queue","method":"GET","wf":"li_nazan","node":"Webhook Queue GET","respond":"Respond Queue","mode":"responseNode","li":"nazan"},{"path":"/api/li/nazan/stats","method":"GET","wf":"li_nazan","node":"Webhook Stats GET","respond":"Respond Stats","mode":"responseNode","li":"nazan"},{"path":"/api/li/nazan/add-leads","method":"POST","wf":"li_nazan","node":"Webhook AddLeads POST","respond":"Respond Add","mode":"responseNode","li":"nazan"},{"path":"/api/li/nazan/delete-leads","method":"POST","wf":"li_nazan","node":"Webhook DeleteLeads POST","respond":"Respond Delete","mode":"responseNode","li":"nazan"}];
 const ASYNC_WF = {"/api/sekans":"sekans","/api/rakip-analizi-pro-v5":"rakip"};
 
 // ---------- yönlendirme ----------
@@ -11566,11 +13100,34 @@ async function keepAlive(p) {
   return new Response(readable, { headers: { "content-type": "application/json", "cache-control": "no-store" } });
 }
 
+// ---------- kişiye özel LinkedIn uçları (Chrome uzantısı + Lead Manager panosu) ----------
+// Uzantı başka kökenden çağırır: sameSite yerine kişinin kendi anahtarı (X-API-Key = env.LI_KEY_<KİŞİ>) aranır.
+const LI_CORS = { "access-control-allow-origin": "*", "access-control-allow-methods": "GET, POST, OPTIONS", "access-control-allow-headers": "Content-Type, X-API-Key", "access-control-max-age": "86400" };
+function liJson(o, s) { return new Response(JSON.stringify(o), { status: s, headers: { "content-type": "application/json; charset=utf-8", "cache-control": "no-store", ...LI_CORS } }); }
+async function keyOk(given, want) {
+  const h = async s => new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(s)));
+  const a = await h(given), b = await h(want); let d = 0; for (let i = 0; i < a.length; i++) d |= a[i] ^ b[i]; return d === 0;
+}
+async function liRoute(req, env, url, path, cfctx) {
+  if (req.method === "OPTIONS") return new Response(null, { status: 204, headers: LI_CORS });
+  const r = ROUTES.find(x => x.li && x.path === path && x.method === req.method);
+  if (!r) return liJson({ ok: false, error: "Bulunamadı." }, 404);
+  const want = env["LI_KEY_" + r.li.toUpperCase()];
+  if (!want || !env.GOOGLE_REFRESH_TOKEN) return liJson({ ok: false, error: "Bu kişi için uç henüz açılmadı." }, 503);
+  if (!(await keyOk(req.headers.get("x-api-key") || "", want))) return liJson({ ok: false, error: "Geçersiz API anahtarı." }, 401);
+  try {
+    const res = await runHook(r, req, env, url, cfctx);
+    const h = new Headers(res.headers); for (const [k, v] of Object.entries(LI_CORS)) h.set(k, v); h.set("cache-control", "no-store");
+    return new Response(res.body, { status: res.status, headers: h });
+  } catch (e) { console.log(path, e?.node, e?.message); return liJson({ ok: false, error: String(e?.message || "İşlem sırasında hata oluştu.").slice(0, 300) }, 500); }
+}
+
 export default {
   async fetch(req, env, cfctx) {
     const url = new URL(req.url), path = url.pathname.replace(/\/+$/, "");
     if (!path.startsWith("/api/")) return env.ASSETS.fetch(req);
     if (path === "/api/rapor") return new Response(VIEWER, { headers: { "content-type": "text/html; charset=utf-8", "x-robots-tag": "noindex", "cache-control": "public, max-age=300" } });
+    if (path.startsWith("/api/li/")) return liRoute(req, env, url, path, cfctx);
     if (req.method === "OPTIONS") return new Response(null, { status: 204 });
     // n8n akışlarının birebir kopyası (Gemini düğümleri Claude ile): Claude + Google anahtarları tanımlıysa bunlar çalışır.
     if (env.ANTHROPIC_API_KEY && env.GOOGLE_REFRESH_TOKEN) {
