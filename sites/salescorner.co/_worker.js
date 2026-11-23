@@ -550,6 +550,13 @@ EX.start = async (ctx, n, items) => [items];
 EX.noOp = async (ctx, n, items) => [items];
 EX.manualTrigger = EX.start;
 
+// Kod düğümü girdiyi değiştirebilir: nesne/dizi kopyalanır, metinler (değişmez) paylaşılır — structuredClone büyük HTML'i kopyalıyordu.
+function __dclone(v) {
+  if (v === null || typeof v !== "object") return v;
+  if (Array.isArray(v)) { const a = new Array(v.length); for (let i = 0; i < v.length; i++) a[i] = __dclone(v[i]); return a; }
+  const pr = Object.getPrototypeOf(v); if (pr !== Object.prototype && pr !== null) { try { return structuredClone(v); } catch { return v; } }
+  const o = {}; for (const k in v) o[k] = __dclone(v[k]); return o;
+}
 EX.code = async (ctx, n, items) => {
   const helpers = makeHelpers(ctx);
   const norm = (r, i) => {
@@ -558,7 +565,7 @@ EX.code = async (ctx, n, items) => {
     if (typeof r === "object" && r.json && typeof r.json === "object") return [{ json: r.json, binary: r.binary }];
     return [{ json: r }];
   };
-  items = items.map(x => ({ json: structuredClone(x.json), binary: x.binary }));
+  items = items.map(x => ({ json: __dclone(x.json), binary: x.binary }));
   const call = async i => { const a = exprArgs(ctx, items, i); return n.p.code(a[2], ctx.$, a[0], ctx.env, a[4], i, helpers, __Buf, items, n.name); };
   if (n.p.mode === "runOnceForEachItem") { const out = []; for (let i = 0; i < items.length; i++) { const r = await call(i); if (r != null) out.push(...norm(r, i).map(x => ({ ...x, binary: x.binary || items[i].binary }))); } return [out]; }
   return [norm(await call(0), 0)];
@@ -1008,17 +1015,24 @@ function startPlan(wf, from, to) {
   for (const n of only) for (const t of (wf.conn[n] || [])) for (const [c] of (t || [])) if (!only.has(c) && wf.nodes[c] && wf.nodes[c].t === "code") leaf.add(c);
   return { only, leaf };
 }
-async function runWorkflow(ctx, wfName, startNode, startItems, stopAfter, plan) {
+// Akış durumu (S) JSON'a yazılabilir: durum sorgusu akışı parça parça yürütebilsin (CF ücretsiz plan 10 ms CPU).
+const wfState = (startNode, startItems) => ({ stack: [{ name: startNode, items: startItems }], waiting: {}, steps: 0, lastName: null });
+async function runWorkflow(ctx, wfName, startNode, startItems, stopAfter, plan) { const S = wfState(startNode, startItems); const r = await runSome(ctx, wfName, S, stopAfter, plan); return r; }
+// yieldIO: dış istek yapan bir düğümden sonra (ör. Claude, ScrapingBee) dur; kalan iş S'de kalır.
+async function runSome(ctx, wfName, S, stopAfter, plan, yieldIO) {
   const wf = ctx.wf = WF[wfName]; ctx.wfName = wfName; ctx.runData ||= {}; ctx.sib ||= {}; ctx.$ = nodeAccessor(ctx);
-  const stack = [{ name: startNode, items: startItems }]; const waiting = {}; let lastName = null, lastOut = null, steps = 0;
+  const { stack, waiting } = S; let lastOut = null, io = false;
   while (stack.length || Object.keys(waiting).length) {
+    if (yieldIO && io) return { lastName: S.lastName, lastOut, done: false };
     let job = stack.shift();
     if (!job) { const k = Object.keys(waiting)[0]; job = { name: k, inputs: waiting[k] }; delete waiting[k]; }
-    if (++steps > 5000) throw new Error("Akış döngüsü sınırı aşıldı");
+    if (++S.steps > 5000) throw new Error("Akış döngüsü sınırı aşıldı");
     const n = wf.nodes[job.name];
     const inputs = job.inputs || [job.items]; const items = job.inputs ? [].concat(...job.inputs.map(x => x || [])) : job.items;
+    const sub0 = ctx.sub || 0;
     const outs = await runNode(ctx, job.name, items, inputs);
-    (ctx.runData[job.name] ||= []).push(outs); lastName = job.name; lastOut = outs;
+    if ((ctx.sub || 0) > sub0) io = true;
+    (ctx.runData[job.name] ||= []).push(outs); S.lastName = job.name; lastOut = outs;
     if (ctx.onStep) await ctx.onStep();
     if (stopAfter && job.name === stopAfter) break;
     const kids = [];
@@ -1032,7 +1046,7 @@ async function runWorkflow(ctx, wfName, startNode, startItems, stopAfter, plan) 
       } });
     stack.unshift(...kids);
   }
-  return { lastName, lastOut };
+  return { lastName: S.lastName, lastOut, done: true };
 }
 
 // ---- gelen isteği webhook öğesine çevir ----
@@ -1055,41 +1069,59 @@ function lastNodeResponse(ctx, wh, r) {
 const __execKey = async id => "https://salescorner.co/__n8n_exec/" + __b64e(new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(id)))).replace(/[+/=]/g, "_");
 async function execGet(id) { try { const r = await caches.default.match(await __execKey(id)); return r ? r.json() : null; } catch { return null; } }
 async function execPut(id, rec) { try { await caches.default.put(await __execKey(id), new Response(JSON.stringify(rec), { headers: { "content-type": "application/json", "cache-control": "max-age=86400" } })); } catch {} }
-const __runDataOut = rd => { const o = {}; for (const [k, runs] of Object.entries(rd || {})) o[k] = runs.map(x => ({ data: { main: x.map(y => (y || []).map(z => ({ json: z.json }))) } })); return o; };
+// Akışta $('Düğüm') ile başvurulan düğümler (kaynak metninden); başvurulmayanların çıktısı ara kayıtta tutulmaz.
+const __refMemo = {};
+function __wfRefs(wfName) {
+  if (__refMemo[wfName]) return __refMemo[wfName];
+  const wf = WF[wfName]; const srcOf = {};
+  for (const [nn, n] of Object.entries(wf.nodes)) { const src = []; const walk = v => { if (typeof v === "function") src.push(v.toString()); else if (typeof v === "string") src.push(v); else if (Array.isArray(v)) v.forEach(walk); else if (v && typeof v === "object") Object.values(v).forEach(walk); }; walk(n.p); srcOf[nn] = src.join("\n"); }
+  // ad -> o adı kaynağında anan düğümler
+  const ref = new Map();
+  for (const name of Object.keys(wf.nodes)) { const q = ["'" + name + "'", '"' + name + '"', "`" + name + "`"]; const by = Object.keys(srcOf).filter(o => o !== name && q.some(x => srcOf[o].includes(x))); if (by.length) ref.set(name, by); }
+  return __refMemo[wfName] = ref;
+}
+// Çıktı yalnız onu anan bir düğüm akışın kalanında (yığından erişilebilir) varsa ya da durum akışının okuduğu "Output" düğümüyse saklanır.
+const __runDataKeep = (rd, wfName, S) => {
+  const wf = WF[wfName], ref = __wfRefs(wfName), ahead = new Set(), q = [...S.stack.map(j => j.name), ...Object.keys(S.waiting || {})];
+  while (q.length) { const n = q.pop(); if (ahead.has(n)) continue; ahead.add(n); for (const t of (wf.conn[n] || [])) for (const [c] of (t || [])) q.push(c); }
+  const o = {}; for (const [k, runs] of Object.entries(rd || {})) { const by = ref.get(k); o[k] = (by && by.some(b => ahead.has(b))) || /output/i.test(k) ? runs : runs.map(() => [[]]); } return o; };
+// Bitiş kaydı: durum akışları yalnız "Output" düğümlerini ve son düğümü okur; kalanların adı (ilerleme için) yeter.
+const __runDataFinal = (rd, last) => { const o = {}; for (const [k, runs] of Object.entries(rd || {})) o[k] = (k === last || /output/i.test(k)) ? runs.map(x => ({ data: { main: x.map(y => (y || []).map(z => ({ json: z.json }))) } })) : [{ data: { main: [[]] } }]; return o; };
 const __runDataLite = rd => { const o = {}; for (const k of Object.keys(rd || {})) o[k] = [{ data: { main: [[]] } }]; return o; };
 // Uzun iş kimliği: kısa gövde kimliğin içine sıkıştırılır (her bölgede çalışır); uzunsa önbellekte tutulur.
 async function asyncId(job) { const id = await packId(job); if (id.length <= 6000) return id; const k = "k" + crypto.randomUUID().replace(/-/g, ""); await execPut("job:" + k, job); return k; }
 async function asyncJob(id) { if (/^k[0-9a-f]{32}$/.test(id)) return execGet("job:" + id); return unpackId(id).catch(() => null); }
+// Her durum sorgusu akışın yalnız bir dış çağrılık parçasını yürütür (kilit + kalp atışı), ara durum önbellekte ("st:" kaydı).
+// Kilit 3 dakikadır tazelenmediyse (istek öldü, ör. CPU sınırı) aynı parça yeniden denenir; parça başına en fazla 2 deneme.
 async function n8nApiEmu(ctx, url) {
   const id = decodeURIComponent(url.match(/executions\/([^?]+)/)[1]);
+  const J = r => new Response(JSON.stringify(r), { headers: { "content-type": "application/json" } });
+  const fail = async (message, node, startedAt) => { const r = { id, finished: true, status: "error", startedAt, stoppedAt: new Date().toISOString(), data: { resultData: { error: { message, node }, runData: {} } } }; await execPut(id, r); return J(r); };
   let rec = await execGet(id);
-  // Başka bir sorgu bu işi çalıştırıyorsa onun ilerleme kaydını döndür; kalp atışı 3 dakikadır yoksa (istek öldü) yeniden başlat.
-  // En fazla 2 deneme: CF isteği öldürdüyse (ör. CPU sınırı) ücretli Claude çağrılarını sonsuz tekrar etme.
-  let tries = 0;
-  if (rec && !rec.finished && Date.now() - (rec.hb || 0) > 180000) {
-    tries = rec.tries || 1;
-    rec = tries >= 2 ? { id, finished: true, status: "error", data: { resultData: { error: { message: "Çalıştırma sunucu tarafında yarıda kesildi (2 deneme). Lütfen tekrar deneyin." } } } } : null;
-    if (rec) await execPut(id, rec);
-  }
-  if (!rec) {
+  if (rec && rec.finished) return J(rec);
+  if (rec && rec.lock && Date.now() - (rec.hb || 0) <= 180000) return J(rec);
+  let tries = 1;
+  if (rec && rec.lock) { tries = (rec.tries || 1) + 1; if (tries > 2) return fail("Çalıştırma sunucu tarafında yarıda kesildi (2 deneme). Lütfen tekrar deneyin.", rec.node, rec.startedAt); }
+  let st = rec ? await execGet("st:" + id) : null;
+  if (rec && !st) return fail("Çalıştırma durumu kayboldu. Lütfen tekrar deneyin.", null, rec.startedAt);
+  if (!st) {
     const job = await asyncJob(id); const wfName = job && ASYNC_WF[job.p];
-    if (!wfName) rec = { id, finished: true, status: "error", data: { resultData: { error: { message: "Bilinmeyen çalıştırma" } } } };
-    else {
-      const startedAt = new Date().toISOString(); const sub = { env: ctx.env, execId: id, cfctx: ctx.cfctx };
-      let lastPut = 0;
-      const progress = async (force) => { if (!force && Date.now() - lastPut < 4000) return; lastPut = Date.now();
-        await execPut(id, { id, finished: false, status: "running", mode: "webhook", startedAt, hb: Date.now(), tries: tries + 1, data: { resultData: { runData: __runDataLite(sub.runData) } } }); };
-      await progress(true); sub.onStep = () => progress(false);
-      const beat = setInterval(() => progress(true), 60000); // uzun tek düğümde de kayıt taze kalsın
-      try {
-        const r = await runWorkflow(sub, wfName, WF[wfName].start[job.p], [{ json: { headers: job.h || {}, params: {}, query: job.q || {}, body: job.b, executionMode: "production" } }]);
-        rec = { id, finished: true, status: "success", mode: "webhook", startedAt, stoppedAt: new Date().toISOString(), data: { resultData: { runData: __runDataOut(sub.runData), lastNodeExecuted: r.lastName } } };
-      } catch (e) { console.log("uzun akış hatası", wfName, e?.node, e?.stack || e); rec = { id, finished: true, status: "error", startedAt, stoppedAt: new Date().toISOString(), data: { resultData: { error: { message: e.message, node: e.node }, runData: {} } } }; }
-      clearInterval(beat); sub.onStep = null;
-      await execPut(id, rec);
-    }
+    if (!wfName) return J({ id, finished: true, status: "error", data: { resultData: { error: { message: "Bilinmeyen çalıştırma" } } } });
+    st = { wfName, startedAt: new Date().toISOString(), S: wfState(WF[wfName].start[job.p], [{ json: { headers: job.h || {}, params: {}, query: job.q || {}, body: job.b, executionMode: "production" } }]), rd: {}, sib: {}, sub: 0 };
   }
-  return new Response(JSON.stringify(rec), { headers: { "content-type": "application/json" } });
+  const { wfName, startedAt, S } = st;
+  const sub = { env: ctx.env, execId: id, cfctx: ctx.cfctx, runData: st.rd, sib: st.sib, sub: st.sub };
+  const running = lock => ({ id, finished: false, status: "running", mode: "webhook", startedAt, hb: Date.now(), lock, tries: lock ? tries : 0, node: S.stack[0]?.name, data: { resultData: { runData: __runDataLite(sub.runData), lastNodeExecuted: S.lastName } } });
+  await execPut(id, running(true));
+  const beat = setInterval(() => execPut(id, running(true)), 60000); // uzun tek düğümde (Claude) kilit taze kalsın
+  try {
+    const r = await runSome(sub, wfName, S, null, null, true);
+    if (r.done) rec = { id, finished: true, status: "success", mode: "webhook", startedAt, stoppedAt: new Date().toISOString(), data: { resultData: { runData: __runDataFinal(sub.runData, r.lastName), lastNodeExecuted: r.lastName } } };
+    else { await execPut("st:" + id, { wfName, startedAt, S, rd: __runDataKeep(sub.runData, wfName, S), sib: sub.sib, sub: sub.sub || 0 }); rec = running(false); }
+  } catch (e) { console.log("uzun akış hatası", wfName, e?.node, e?.stack || e); rec = { id, finished: true, status: "error", startedAt, stoppedAt: new Date().toISOString(), data: { resultData: { error: { message: e.message, node: e.node }, runData: {} } } }; }
+  clearInterval(beat);
+  await execPut(id, rec);
+  return J(rec);
 }
 
 // ---- HTTP uçlarını akışlara bağla ----
