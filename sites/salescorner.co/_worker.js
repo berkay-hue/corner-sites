@@ -1325,9 +1325,11 @@ async function rtLinkedIn(c, slug, since, gun, env) {
   // Önce şirketin kendi gönderi yolunu, az sonuç gelirse adı geçen gönderileri arar.
   const seen = new Set(), all = [], tani = [];
   let ham = 0, hata = "";
-  const qs = [`site:linkedin.com/posts/${slug}_`, `site:linkedin.com/posts "${slug}"`];
+  // after: sorgu metninde Google operatörüdür (tbs değil); reddedilirse ya da yetmezse sade sorgulara düşer.
+  const after = " after:" + new Date(since - 864e5).toISOString().slice(0, 10);
+  const qs = [`site:linkedin.com/posts/${slug}_` + after, `site:linkedin.com/posts/${slug}_`, `site:linkedin.com/posts "${slug}"` + after];
   for (const q of qs) {
-    if (all.length >= 3) break;
+    if (all.filter(x => x.t >= since).length >= 3) break;
     let d;
     try {
       const r = await fetch("https://google.serper.dev/search", { method: "POST", headers: { "X-API-KEY": env.SERPER_API_KEY, "content-type": "application/json" },
