@@ -424,7 +424,7 @@ document.addEventListener("click",function(e){go(e.clientX>innerWidth/3?i+1:i-1)
 </script></body></html>`;
 
 // ================= n8n uyumlu akış motoru =================
-// n8n akışları (Gemini, Sheets, Slides, Gmail, HTTP, kod düğümleri) burada n8n'deki gibi çalışır.
+// n8n akışları (Gemini düğümleri Claude'a, AssemblyAI Whisper'a çevrilir; Sheets, Slides, Gmail, HTTP, kod düğümleri) burada n8n'deki gibi çalışır.
 // Gizli değerler kodda __ENV_AD__ yer tutucusudur; giden her istekte env'den doldurulur.
 const __X = f => (f.__x = 1, f);
 const __cat = v => v == null ? "" : typeof v === "object" ? JSON.stringify(v) : String(v);
@@ -471,12 +471,12 @@ async function xfetch(ctx, url, init = {}, cred, timeout) {
   const headers = {}; for (const [k, v] of Object.entries(init.headers || {})) if (v != null) headers[k] = __fill(String(v), env);
   let body = init.body; if (typeof body === "string") body = __fill(body, env);
   if (cred === "n8nApi" || /\.app\.n8n\.cloud\/api\/v1\/executions\//.test(url)) return n8nApiEmu(ctx, url);
-  // Vertex AI -> Gemini API anahtarı (rakip)
-  const vx = url.match(/aiplatform\.googleapis\.com\/.*\/models\/([^/:]+):(\w+)/);
-  if (vx) { url = `https://generativelanguage.googleapis.com/v1beta/models/${vx[1]}:${vx[2]}`; cred = "googlePalmApi"; }
-  if (cred === "googlePalmApi" || (/generativelanguage\.googleapis\.com/.test(url) && !headers["x-goog-api-key"] && !/[?&]key=/.test(url))) headers["x-goog-api-key"] = env.GEMINI_API_KEY || "";
-  else if (GOOGLE_CREDS.has(cred)) headers.Authorization = "Bearer " + await googleToken(env);
-  else if (cred === "httpHeaderAuth") headers.Authorization = env.ASSEMBLYAI_API_KEY || "";
+  // Gemini (AI Studio + Vertex) istekleri Claude'a gider; yanıt Gemini biçiminde döner, akışın geri kalanı değişmez.
+  const gm = url.match(/(?:generativelanguage|aiplatform)\.googleapis\.com\/.*\/models\/([^/:?]+):(?:generateContent|streamGenerateContent)/);
+  if (gm) return geminiViaClaude(ctx, gm[1], body);
+  // AssemblyAI yerine Cloudflare Workers AI Whisper (aynı hesap, CF_AI_TOKEN)
+  if (/^https:\/\/api\.assemblyai\.com\/v2\//.test(url)) return assemblyEmu(ctx, url, init.method || "GET", body, headers);
+  if (GOOGLE_CREDS.has(cred)) headers.Authorization = "Bearer " + await googleToken(env);
   else if (cred === "httpBasicAuth") headers.Authorization = "Basic " + btoa((env.HCTI_USER_ID || "") + ":" + (env.HCTI_API_KEY || ""));
   if ((ctx.sub = (ctx.sub || 0) + 1) > 900) throw new Error("Çok fazla dış istek");
   const ac = new AbortController(); const tm = timeout ? setTimeout(() => ac.abort(), timeout) : null;
@@ -620,7 +620,7 @@ EX.splitInBatches = async (ctx, n, items) => {
   if (st.q.length) return [[], st.q.splice(0, size)];
   const all = st.done; delete ctx.sib[n.name]; return [all, []];
 };
-EX.wait = async (ctx, n, items) => { const p = P(ctx, n, items, 0); const u = p.unit || "seconds"; const ms = Number(p.amount ?? 1) * ({ seconds: 1e3, minutes: 6e4, hours: 36e5, days: 864e5 }[u] || 1e3); await __sleep(Math.min(ms, 120000)); return [items]; };
+EX.wait = async (ctx, n, items) => { const p = P(ctx, n, items, 0); const u = p.unit || "seconds"; const ms = Number(p.amount ?? 1) * ({ seconds: 1e3, minutes: 6e4, hours: 36e5, days: 864e5 }[u] || 1e3); if (!(ctx.aaiDone && n.name === "Wait for Processing")) await __sleep(Math.min(ms, 120000)); return [items]; };
 
 EX.respondToWebhook = async (ctx, n, items) => {
   const p = P(ctx, n, items, 0); const w = p.respondWith || "firstIncomingItem"; let body, ct = "application/json; charset=utf-8";
@@ -746,42 +746,209 @@ EX.gmail = async (ctx, n, items) => {
   return [out];
 };
 
-// ---- AI Agent (Gemini + Google Sheets aracı) ----
-const toolName = s => String(s).replace(/[^a-zA-Z0-9_-]/g, "_").slice(0, 64);
-async function gemini(ctx, model, payload) {
-  const r = await xfetch(ctx, `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(payload) }, "googlePalmApi", 300000);
-  if (r.status >= 400) throw await errFrom(r); return r.json();
+// ---- Claude (n8n'deki Gemini düğümlerinin yerine) ----
+const CLAUDE_MODEL = "claude-opus-5-5";
+const __TXT_RE = /"type":"text_delta","text":("(?:[^"\\]|\\.)*")/g;
+async function claudeRaw(ctx, body) {
+  const env = ctx.env;
+  if (!env.ANTHROPIC_API_KEY) throw new HttpErr("ANTHROPIC_API_KEY tanımlı değil", 500);
+  for (let attempt = 0; ; attempt++) {
+    if ((ctx.sub = (ctx.sub || 0) + 1) > 900) throw new Error("Çok fazla dış istek");
+    const ac = new AbortController(); const tm = setTimeout(() => ac.abort(), 600000);
+    let r, txt;
+    try {
+      r = await fetch("https://api.anthropic.com/v1/messages", { method: "POST", signal: ac.signal,
+        headers: { "x-api-key": env.ANTHROPIC_API_KEY, "anthropic-version": "2023-06-01", "content-type": "application/json" },
+        body: JSON.stringify({ ...body, stream: true }) });
+      txt = await r.text();
+    } catch (e) { if (attempt < 2) { await __sleep(2000); continue; } throw new HttpErr(ac.signal.aborted ? "Claude zaman aşımı" : (e.message || String(e)), 0); }
+    finally { clearTimeout(tm); }
+    const sseErr = r.status < 400 && /^event: error/m.test(txt);
+    const busy = [429, 500, 502, 503, 529].includes(r.status) || (sseErr && /overloaded_error|api_error/.test(txt));
+    if (busy && attempt < 3) { await __sleep(3000 * (attempt + 1)); continue; }
+    if (r.status >= 400 || sseErr) { let b = txt; try { b = JSON.parse(txt); } catch {} throw new HttpErr(`Claude ${r.status} - ${String(txt).slice(0, 500)}`, r.status >= 400 ? r.status : 500, b); }
+    return txt;
+  }
 }
+// Akıştaki olaylardan içerik bloklarını kur (yalnız araç çağrısı / pause_turn olduğunda gerekir).
+function sseBlocks(txt) {
+  const blocks = [];
+  for (const line of txt.split("\n")) {
+    if (!line.startsWith("data: ")) continue;
+    let e; try { e = JSON.parse(line.slice(6)); } catch { continue; }
+    if (e.type === "content_block_start") {
+      const b = { ...e.content_block };
+      if (b.type === "tool_use" || b.type === "server_tool_use") b._in = "";
+      if (b.type === "text") b.text = b.text || "";
+      if (b.type === "thinking") { b.thinking = b.thinking || ""; b.signature = b.signature || ""; }
+      blocks[e.index] = b;
+    } else if (e.type === "content_block_delta") {
+      const b = blocks[e.index], d = e.delta; if (!b) continue;
+      if (d.type === "text_delta") b.text += d.text;
+      else if (d.type === "thinking_delta") b.thinking += d.thinking;
+      else if (d.type === "signature_delta") b.signature = (b.signature || "") + d.signature;
+      else if (d.type === "input_json_delta") b._in += d.partial_json;
+      else if (d.type === "citations_delta") (b.citations || (b.citations = [])).push(d.citation);
+    } else if (e.type === "content_block_stop") {
+      const b = blocks[e.index];
+      if (b && "_in" in b) { try { b.input = b._in ? JSON.parse(b._in) : (b.input || {}); } catch { b.input = {}; } delete b._in; }
+    }
+  }
+  return blocks.filter(Boolean);
+}
+// Tek Claude çağrısı; pause_turn (web araması uzun sürerse) en fazla 5 kez sürdürülür.
+async function claudeMsg(ctx, req) {
+  const messages = req.messages.slice();
+  let text = "", stop = "", inT = 0, outT = 0, blocks = [], tail = null;
+  for (let k = 0; k < 6; k++) {
+    const body = { model: CLAUDE_MODEL, max_tokens: req.max_tokens || 16000, messages, output_config: { effort: req.effort || "low" } };
+    if (req.system) body.system = req.system;
+    if (req.tools && req.tools.length) body.tools = req.tools;
+    const txt = await claudeRaw(ctx, body);
+    const sm = txt.match(/"stop_reason":"\w+"/g); stop = sm ? sm[sm.length - 1].slice(15, -1) : "";
+    const it = txt.match(/"input_tokens":(\d+)/); if (it) inT += +it[1];
+    const ot = txt.match(/"output_tokens":(\d+)/g); if (ot) outT += +ot[ot.length - 1].slice(16);
+    if (stop === "tool_use" || stop === "pause_turn") {
+      blocks = sseBlocks(txt);
+      text += blocks.filter(b => b.type === "text").map(b => b.text).join("");
+      if (stop === "pause_turn") {
+        if (tail) tail.content.push(...blocks); else { tail = { role: "assistant", content: blocks }; messages.push(tail); }
+        continue;
+      }
+    } else for (const m of txt.matchAll(__TXT_RE)) text += JSON.parse(m[1]);
+    break;
+  }
+  return { text, blocks, stop, usage: { inT, outT } };
+}
+const __imgType = (d, m) => {
+  const s = String(d).slice(0, 8);
+  if (s.startsWith("/9j/")) return "image/jpeg"; if (s.startsWith("iVBOR")) return "image/png";
+  if (s.startsWith("R0lG")) return "image/gif"; if (s.startsWith("UklGR")) return "image/webp";
+  if (s.startsWith("JVBER")) return "application/pdf";
+  return String(m || "image/jpeg").toLowerCase();
+};
+const __maxTok = n => Math.min(128000, Math.max(16000, Math.round((Number(n) || 8192) * 1.5) + 8000));
+// Gemini generateContent isteğini Claude'a çevirir, yanıtı Gemini biçiminde döndürür.
+async function geminiViaClaude(ctx, model, body) {
+  const J = (o, s = 200) => new Response(JSON.stringify(o), { status: s, headers: { "content-type": "application/json" } });
+  const gErr = (s, m) => J({ error: { code: s, message: m, status: s === 429 ? "RESOURCE_EXHAUSTED" : s >= 500 ? "INTERNAL" : "INVALID_ARGUMENT" } }, s);
+  let g;
+  try { g = typeof body === "string" ? JSON.parse(body) : body instanceof Uint8Array ? JSON.parse(new TextDecoder().decode(body)) : (body || {}); }
+  catch { return gErr(400, "Geçersiz istek gövdesi"); }
+  const conv = parts => [].concat(parts || []).map(p => {
+    if (!p) return null;
+    if (p.text != null) return p.thought ? null : { type: "text", text: String(p.text) };
+    const d = p.inline_data || p.inlineData;
+    if (d && d.data) {
+      const mt = __imgType(d.data, d.mime_type || d.mimeType);
+      if (mt === "application/pdf") return { type: "document", source: { type: "base64", media_type: mt, data: d.data } };
+      if (/^image\/(jpeg|png|gif|webp)$/.test(mt)) return { type: "image", source: { type: "base64", media_type: mt, data: d.data } };
+      return { type: "text", text: `[desteklenmeyen dosya türü: ${mt}]` };
+    }
+    return null;
+  }).filter(x => x && !(x.type === "text" && !x.text.trim()));
+  const messages = [];
+  for (const c of [].concat(g.contents || [])) {
+    const role = c.role === "model" ? "assistant" : "user"; const content = conv(c.parts);
+    if (!content.length) continue;
+    const last = messages[messages.length - 1];
+    if (last && last.role === role) last.content.push(...content); else messages.push({ role, content });
+  }
+  if (!messages.length) return gErr(400, "İstekte içerik yok");
+  if (messages[0].role !== "user") messages.unshift({ role: "user", content: [{ type: "text", text: "Devam et." }] });
+  if (messages[messages.length - 1].role !== "user") messages.push({ role: "user", content: [{ type: "text", text: "Devam et." }] });
+  const si = g.systemInstruction || g.system_instruction;
+  let system = si ? conv(si.parts || si).filter(x => x.type === "text").map(x => x.text).join("\n") : "";
+  const gc = g.generationConfig || g.generation_config || {};
+  if (/json/i.test(gc.responseMimeType || gc.response_mime_type || ""))
+    system = (system ? system + "\n\n" : "") + "Yanıtı yalnızca geçerli JSON olarak ver; markdown kod bloğu veya açıklama ekleme.";
+  const search = [].concat(g.tools || []).some(t => t && (t.googleSearch || t.google_search || t.googleSearchRetrieval || t.google_search_retrieval));
+  let res;
+  try {
+    res = await claudeMsg(ctx, { system, messages, max_tokens: __maxTok(gc.maxOutputTokens || gc.max_output_tokens),
+      effort: /pro/i.test(model) ? "medium" : "low", tools: search ? [{ type: "web_search_20260209", name: "web_search", max_uses: 10 }] : null });
+  } catch (e) { return gErr(e.status || 500, e.message || String(e)); }
+  const cand = { content: { role: "model", parts: [{ text: res.text }] }, finishReason: { max_tokens: "MAX_TOKENS", refusal: "SAFETY" }[res.stop] || "STOP", index: 0 };
+  if (search) cand.groundingMetadata = { webSearchQueries: [] };
+  return J({ candidates: [cand], usageMetadata: { promptTokenCount: res.usage.inT, candidatesTokenCount: res.usage.outT, totalTokenCount: res.usage.inT + res.usage.outT }, modelVersion: CLAUDE_MODEL });
+}
+
+// ---- AI Agent (Claude + Google Sheets aracı) ----
+const toolName = s => String(s).replace(/[^a-zA-Z0-9_-]/g, "_").slice(0, 64);
 async function agentRun(ctx, n, items) {
   const wf = ctx.wf, link = wf.ai[n.name] || {}; const lm = link.lm && wf.nodes[link.lm];
   const out = [];
   for (let i = 0; i < items.length; i++) {
     const p = P(ctx, n, items, i); const lp = lm ? P(ctx, lm, items, i) : {};
-    const model = String(lp.modelName || ctx.env.GEMINI_MODEL || "gemini-2.5-flash").replace(/^models\//, "");
-    const gc = {}; if (lp.options?.temperature != null) gc.temperature = lp.options.temperature; if (lp.options?.maxOutputTokens) gc.maxOutputTokens = lp.options.maxOutputTokens; if (lp.options?.topP != null) gc.topP = lp.options.topP; if (lp.options?.topK != null) gc.topK = lp.options.topK;
+    const model = String(lp.modelName || "");
     const text = p.promptType === "define" || p.text != null ? __cat(p.text) : __cat(items[i].json.chatInput ?? items[i].json.text);
     const sys = p.options?.systemMessage ?? (p.agent === "conversationalAgent" ? "" : "You are a helpful assistant");
     const tools = (link.tools || []).map(t => ({ name: toolName(t), node: wf.nodes[t] }));
-    const payload = { contents: [{ role: "user", parts: [{ text }] }], generationConfig: gc };
-    if (sys) payload.systemInstruction = { parts: [{ text: sys }] };
-    if (tools.length) payload.tools = [{ functionDeclarations: tools.map(t => ({ name: t.name, description: (t.node.p.toolDescription && typeof t.node.p.toolDescription === "string" ? t.node.p.toolDescription : "Get row(s) in sheet in Google Sheets") + ` (${t.node.name})` })) }];
+    const ctools = tools.map(t => ({ name: t.name, input_schema: { type: "object", properties: {} },
+      description: (t.node.p.toolDescription && typeof t.node.p.toolDescription === "string" ? t.node.p.toolDescription : "Get row(s) in sheet in Google Sheets") + ` (${t.node.name})` }));
+    const messages = [{ role: "user", content: [{ type: "text", text: text || "Devam et." }] }];
     let answer = "";
     for (let step = 0; step < 8; step++) {
-      const j = await gemini(ctx, model, payload); const c = j.candidates?.[0]; const parts = c?.content?.parts || [];
-      const calls = parts.filter(x => x.functionCall);
-      if (!calls.length) { answer = parts.filter(x => x.text && !x.thought).map(x => x.text).join(""); if (!answer && c?.finishReason && c.finishReason !== "STOP") throw new Error("Gemini yanıtı boş: " + c.finishReason); break; }
-      payload.contents.push({ role: "model", parts });
+      const r = await claudeMsg(ctx, { system: sys, messages, tools: ctools, max_tokens: __maxTok(lp.options?.maxOutputTokens), effort: /pro/i.test(model) ? "medium" : "low" });
+      if (r.stop !== "tool_use") { answer = r.text; if (!answer && r.stop !== "end_turn") throw new Error("Claude yanıtı boş: " + r.stop); break; }
+      messages.push({ role: "assistant", content: r.blocks });
       const resp = [];
-      for (const fc of calls) { const t = tools.find(x => x.name === fc.functionCall.name); let res;
+      for (const b of r.blocks.filter(x => x.type === "tool_use")) {
+        const t = tools.find(x => x.name === b.name); let res;
         try { res = t ? await sheetRows(ctx, P(ctx, t.node, items, i)) : { error: "tool not found" }; } catch (e) { res = { error: e.message }; }
-        resp.push({ functionResponse: { name: fc.functionCall.name, response: { result: JSON.stringify(res) } } }); }
-      payload.contents.push({ role: "user", parts: resp });
+        resp.push({ type: "tool_result", tool_use_id: b.id, content: JSON.stringify(res).slice(0, 400000) });
+      }
+      messages.push({ role: "user", content: resp });
     }
     out.push({ json: { output: answer } });
   }
   return [out];
 }
 EX.agent = agentRun;
+
+// ---- AssemblyAI taklidi: dosya Cloudflare Workers AI Whisper ile yazıya dökülür ----
+const WHISPER_URL = "https://api.cloudflare.com/client/v4/accounts/9994ba71270a67fcb0ef182e943402ef/ai/run/@cf/openai/whisper-large-v3-turbo";
+const WHISPER_MAX = 20 * 1024 * 1024;
+async function whisper(ctx, bytes, lang) {
+  const env = ctx.env, tok = env.CF_AI_TOKEN || env.CF_AI_TOKEN_2;
+  if (!tok) throw new Error("CF_AI_TOKEN tanımlı değil");
+  if ((ctx.sub = (ctx.sub || 0) + 1) > 900) throw new Error("Çok fazla dış istek");
+  const r = await fetch(WHISPER_URL, { method: "POST", headers: { Authorization: "Bearer " + tok, "content-type": "application/json" },
+    body: JSON.stringify({ audio: __b64e(bytes), language: String(lang || "tr").slice(0, 2), task: "transcribe" }) });
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok || j.success === false) throw new Error(`Whisper hatası ${r.status}: ${(j.errors && j.errors[0] && j.errors[0].message) || ""}`);
+  const ti = (j.result && j.result.transcription_info) || {};
+  return { text: (j.result && j.result.text) || "", duration: Math.round(ti.duration || 0), language: ti.language };
+}
+async function assemblyEmu(ctx, url, method, body) {
+  const J = (o, s = 200) => new Response(JSON.stringify(o), { status: s, headers: { "content-type": "application/json" } });
+  const st = ctx.aai || (ctx.aai = { files: {}, tr: {} });
+  const path = url.replace(/^https:\/\/api\.assemblyai\.com\/v2/, "").split("?")[0];
+  method = String(method).toUpperCase();
+  if (method === "POST" && path === "/upload") {
+    const bytes = body instanceof Uint8Array ? body : body instanceof ArrayBuffer ? new Uint8Array(body) : typeof body === "string" ? new TextEncoder().encode(body) : new Uint8Array(0);
+    const id = crypto.randomUUID(); st.files[id] = bytes;
+    return J({ upload_url: "https://local.assemblyai/" + id });
+  }
+  if (method === "POST" && path === "/transcript") {
+    let q = {}; try { q = typeof body === "string" ? JSON.parse(body) : JSON.parse(new TextDecoder().decode(body)); } catch {}
+    const id = crypto.randomUUID(), fid = String(q.audio_url || "").replace("https://local.assemblyai/", "");
+    let rec;
+    // Hata olsa da "completed" döner: n8n'deki "Is Completed?" döngüsü sonsuza dönmesin.
+    try {
+      const bytes = st.files[fid];
+      if (!bytes || !bytes.length) throw new Error("Ses/video dosyası bulunamadı");
+      if (bytes.length > WHISPER_MAX) throw new Error("Dosya 20 MB'den büyük; sesi m4a/mp3 olarak yükleyin");
+      const w = await whisper(ctx, bytes, q.language_code);
+      rec = { id, status: "completed", text: w.text, audio_duration: w.duration, language_code: q.language_code || w.language };
+    } catch (e) { rec = { id, status: "completed", text: "", audio_duration: 0, error: e.message || String(e) }; }
+    delete st.files[fid]; st.tr[id] = rec; ctx.aaiDone = true;
+    return J(rec);
+  }
+  const m = path.match(/^\/transcript\/([^/]+)$/);
+  if (m) return J(st.tr[m[1]] || { id: m[1], status: "completed", text: "", audio_duration: 0, error: "Kayıt bulunamadı" });
+  return J({ error: "Desteklenmeyen AssemblyAI ucu: " + path }, 404);
+}
 
 // ================= çalıştırıcı =================
 const NOUT = { if: 2, splitInBatches: 2 };
@@ -11370,8 +11537,8 @@ export default {
     if (!path.startsWith("/api/")) return env.ASSETS.fetch(req);
     if (path === "/api/rapor") return new Response(VIEWER, { headers: { "content-type": "text/html; charset=utf-8", "x-robots-tag": "noindex", "cache-control": "public, max-age=300" } });
     if (req.method === "OPTIONS") return new Response(null, { status: 204 });
-    // n8n akışlarının birebir kopyası: Gemini + Google anahtarları tanımlıysa bunlar çalışır.
-    if (env.GEMINI_API_KEY && env.GOOGLE_REFRESH_TOKEN) {
+    // n8n akışlarının birebir kopyası (Gemini düğümleri Claude ile): Claude + Google anahtarları tanımlıysa bunlar çalışır.
+    if (env.ANTHROPIC_API_KEY && env.GOOGLE_REFRESH_TOKEN) {
       const r = ROUTES.find(x => x.path === path && x.method === req.method);
       if (!r) return fail("Bulunamadı.", 404);
       if (!sameSite(req)) return fail("Bu uç yalnızca salescorner.co üzerinden kullanılabilir.", 403);
