@@ -4197,6 +4197,13 @@ test("A5-3: hesap silme: yanlış şifre 401 invalid, doğru şifre bütün sat�
   const post = Number(db.prepare("INSERT INTO posts (user_id, url, platform, type, date) VALUES (?, 'https://instagram.com/p/1', 'instagram', 'post', '2026-11-01')")
     .run(a.id).lastInsertRowid);
   db.prepare("INSERT INTO post_snaps (post_id, at, likes) VALUES (?, '2026-11-02', 3)").run(post);
+  // Yayın işleri: a'nın kendi işi (olayıyla) silinir; a'nın onayladığı b işi kalır, approved_by NULL olur (FK CASCADE'siz)
+  const bacc = Number(db.prepare("INSERT INTO social_accounts (user_id, platform, handle, external_id, status) VALUES (?, 'linkedin', 'hb', 'e2', 'connected')")
+    .run(b.id).lastInsertRowid);
+  const job = (uid, accId, plat, by) => Number(db.prepare(`INSERT INTO publish_jobs (user_id, site, account_id, account_external_id, platform, body, body_hash, approved_by)
+    VALUES (?, 'app.socialmediacorner.co', ?, 'x', ?, 'metin', 'h', ?)`).run(uid, accId, plat, by).lastInsertRowid);
+  const aj = job(a.id, acc, "instagram", a.id), bj = job(b.id, bacc, "linkedin", a.id);
+  db.prepare("INSERT INTO publish_events (job_id, actor, to_state) VALUES (?, ?, 'planlandi')").run(aj, a.id);
   db.prepare("INSERT INTO password_resets (token_hash, user_id, expires_at) VALUES ('h1', ?, datetime('now', '+1 hour'))").run(a.id);
   db.prepare("INSERT INTO user_perms (user_id, perm) VALUES (?, 'admin')").run(a.id);
   const del = (token, password, ip = "10.0.7.1") => call("POST", "/app/account/delete", { token, ip, body: { password } });
@@ -4214,6 +4221,8 @@ test("A5-3: hesap silme: yanlış şifre 401 invalid, doğru şifre bütün sat�
     assert.equal(left(t), 0, t);
   assert.deepEqual([count(db, "metric_snapshots"), count(db, "post_snaps"), db.prepare("SELECT COUNT(*) n FROM users WHERE id = ?").get(a.id).n], [0, 0, 0]);
   assert.equal(db.prepare("SELECT COUNT(*) n FROM submissions WHERE fields LIKE '%a@x.co%'").get().n, 0);
+  assert.deepEqual([left("publish_jobs"), db.prepare("SELECT COUNT(*) n FROM publish_events WHERE job_id = ?").get(aj).n], [0, 0]);
+  assert.deepEqual({ ...db.prepare("SELECT user_id, approved_by FROM publish_jobs WHERE id = ?").get(bj) }, { user_id: b.id, approved_by: null });
   // Diğer kullanıcı dokunulmadan kalır
   assert.equal((await call("GET", "/auth/me", { token: b.token })).status, 200);
   assert.deepEqual((await call("GET", "/app/drafts", { token: b.token })).body.drafts.map(x => x.id), [bd]);
