@@ -1,0 +1,60 @@
+// Hesaplı siteler (A5-1): üyelik ve panel API'sini (platform.js) kullanan her sitenin marka adı, Pages önizleme
+// projesi ve sayfa yolları. Tek kaynak: şifre sıfırlama e-postası (platform.js resetMail, link) ve OAuth dönüş adresi
+// (oauth.js startOAuth) buradan okur. Yollar istekten hiç alınmaz, yalnız bu sabit tablodan (açık yönlendirme yok).
+// Tabloda olmayan bir AUTH_HOSTS sitesi brandcorner.co değerlerini alır (A5-1'den önceki davranış).
+//
+// gate: site yalnız bu ortam değişkeni açıkken hesap sitesi olur (wrangler.toml ACCOUNTS_ENABLED, varsayılan "0").
+//   "1"       → canlı alan adı ve Pages önizlemesi; AUTH_HOSTS'a yazılmasa da eklenmiş sayılır.
+//   "preview" → yalnız Pages önizlemesi (<dal>.web-smcapp.pages.dev); canlı alan adı 403 origin kalır.
+//   başka her değer → site AUTH_HOSTS'ta yazsa da hesap sitesi değildir: 403 origin (A5-1'den önceki davranış).
+export const DEFAULT_SITE = "brandcorner.co";
+
+export const SITES = {
+  "brandcorner.co": {
+    name: "Brand Corner",
+    preview: "web-brandcorner",
+    reset: { tr: "/sifre-yenile", en: "/reset-password" },
+    back: { tr: "/panel", en: "/panel" },
+  },
+  "app.socialmediacorner.co": {
+    name: "Social Media Corner",
+    preview: "web-smcapp",
+    gate: "ACCOUNTS_ENABLED",
+    reset: { tr: "/hesap/sifre-yenile", en: "/en/hesap/reset-password" },
+    back: { tr: "/hesap/baglantilar", en: "/en/hesap/connections" },
+  },
+};
+
+export const siteConf = site => (Object.hasOwn(SITES, site) ? SITES[site] : SITES[DEFAULT_SITE]);
+const byLang = (paths, lang) => paths[lang === "en" ? "en" : "tr"];
+// Şifre sıfırlama sayfası ve OAuth dönüşünde açılacak sayfa (yol, "/" ile başlar)
+export const resetPath = (site, lang) => byLang(siteConf(site).reset, lang);
+export const backPath = (site, lang) => byLang(siteConf(site).back, lang);
+
+// "on" | "preview" | "off"; kapısı olmayan site her zaman "on"
+export function gateMode(env, site) {
+  const gate = siteConf(site).gate;
+  if (!gate) return "on";
+  const v = env?.[gate];
+  return v === "1" ? "on" : v === "preview" ? "preview" : "off";
+}
+
+// Canlı alan adıyla açık hesap siteleri. Sıra AUTH_HOSTS'taki gibi (hosts[0] DEV_ORIGINS'in ve web-brandcorner
+// önizlemesinin sitesi); kapısı "1" olan site AUTH_HOSTS'ta yoksa sona eklenir, kapısı kapalı olan çıkarılır.
+export function authHosts(env) {
+  const hosts = String(env?.AUTH_HOSTS || DEFAULT_SITE).split(",").map(h => h.trim()).filter(h => h && gateMode(env, h) === "on");
+  for (const d of Object.keys(SITES)) if (SITES[d].gate && gateMode(env, d) === "on" && !hosts.includes(d)) hosts.push(d);
+  return hosts;
+}
+
+// Pages önizlemesi (<proje>.pages.dev ya da <dal>.<proje>.pages.dev): web-brandcorner bugünkü gibi hosts[0]'a gider;
+// kapılı site kendi önizlemesinden yalnız kapısı "1" ya da "preview" iken açılır. Eşleşme yoksa null.
+export function previewSite(env, hostname, hosts = authHosts(env)) {
+  for (const d of Object.keys(SITES)) {
+    const s = SITES[d];
+    if (!new RegExp(`^(?:[a-z0-9-]+\\.)?${s.preview}\\.pages\\.dev$`).test(hostname)) continue;
+    if (!s.gate) return hosts[0] || null;
+    return gateMode(env, d) === "off" ? null : d;
+  }
+  return null;
+}

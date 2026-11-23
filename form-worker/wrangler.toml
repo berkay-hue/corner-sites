@@ -44,6 +44,10 @@ GEN_DAILY_CAP = "300"
 GEN_PER_DAY = "3"
 GEN_IP_PER_DAY = "10"
 GEN_MODEL = "claude-sonnet-5-5"
+# app.socialmediacorner.co hesapları (/auth/*, /app/*; src/sites.js, A5-1). AUTH_HOSTS burada yazılmaz, varsayılan
+# brandcorner.co kalır. "0": app 403 origin (bugünkü davranış). "preview": yalnız <dal>.web-smcapp.pages.dev önizlemesi.
+# "1": canlı app.socialmediacorner.co da eklenir. Açmadan önce A5-2 ve Ana'nın "taken"/0015 kararı gerekir.
+ACCOUNTS_ENABLED = "0"
 
 # cornergroup.co'da Email Routing açık, berkay@saascorner.co doğrulanmış hedef adres
 [[send_email]]
