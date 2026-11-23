@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rakip Takip | Sales Corner</title>
+<meta name="description" content="Rakiplerinizin blog ve içerik akışlarını tek tıkla tarayın; yeni içerikleri ve AI analist yorumunu görün, isterseniz e-postanıza alın.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="canonical" href="https://salescorner.co/rakip-takip">
+<link href="/_a/fr/images/yaO2oRoUboEyRi1HXwHDHwBe1Q.webp" rel="icon">
+<link rel="apple-touch-icon" href="/_a/fr/images/CVipIegf1b4aKtLR23J6oqBRk.png">
+<style>
+:root{--bg:#0a0a0f;--fg:#e8e8ee;--mute:rgba(255,255,255,.62);--line:rgba(255,255,255,.1);--card:rgba(255,255,255,.04);--acc:#7c8cff;--ok:#5fd38d;--bad:#ff7a7a;--warn:#f5c26b}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.7 Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+a{color:var(--acc)}header,footer{border-color:var(--line);border-style:solid;border-width:0}
+header{border-bottom-width:1px}footer{border-top-width:1px;margin-top:64px}
+.w{max-width:860px;margin:0 auto;padding:0 16px}
+header .w,footer .w{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:center;padding-top:16px;padding-bottom:16px}
+header a,footer a{color:var(--mute);text-decoration:none;min-height:44px;display:inline-flex;align-items:center}
+header a:first-child{color:var(--fg);font-weight:600;margin-right:auto}
+h1{font-size:clamp(28px,6vw,40px);line-height:1.2;margin:48px 0 8px}h2{font-size:20px;margin:36px 0 12px}
+.d{color:var(--mute);font-size:14px}footer small{color:var(--mute);width:100%}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;margin:16px 0}
+label{display:block;font-size:13px;color:var(--mute);margin:0 0 4px}
+input,select{width:100%;background:#12121a;color:var(--fg);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font:inherit;font-size:15px;min-height:44px}
+input:focus,select:focus{outline:2px solid var(--acc);outline-offset:1px}
+.row{display:grid;grid-template-columns:1fr 1.3fr 1.5fr 44px;gap:8px;align-items:end;margin-bottom:10px}
+.grid2{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:8px}
+@media (max-width:640px){.row{grid-template-columns:1fr 1fr;padding-bottom:10px;border-bottom:1px solid var(--line)}.row .feed{grid-column:1/2}.grid2{grid-template-columns:1fr}}
+button{font:inherit;cursor:pointer;border-radius:10px;min-height:44px}
+.del{background:transparent;border:1px solid var(--line);color:var(--mute);font-size:20px;line-height:1}
+.add{background:transparent;border:1px dashed var(--line);color:var(--fg);padding:8px 14px}
+.go{background:var(--acc);border:0;color:#0a0a0f;font-weight:600;padding:12px 22px;margin-top:18px;width:100%}
+.go[disabled]{opacity:.6;cursor:wait}
+.st{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:baseline;padding:10px 0;border-bottom:1px solid var(--line)}
+.st:last-child{border-bottom:0}.st b{min-width:120px}
+.tag{font-size:12px;border-radius:999px;padding:1px 9px;border:1px solid var(--line)}
+.tag.ok{color:var(--ok);border-color:rgba(95,211,141,.4)}.tag.bad{color:var(--bad);border-color:rgba(255,122,122,.4)}.tag.zero{color:var(--warn);border-color:rgba(245,194,107,.4)}
+.yorum ul,.yorum ol{padding-left:20px}.yorum li{margin:6px 0}
+.it{padding:8px 0;border-bottom:1px solid var(--line)}.it:last-child{border-bottom:0}.it .d{display:block}
+.err{color:var(--bad)}
+</style>
+</head>
+<body>
+<header><div class="w"><a href="/">Ana sayfa</a><a href="/hizmetler">Hizmetler</a><a href="/hakkimizda">Hakkımızda</a><a href="/blog">Blog</a><a href="/iletisim">İletişim</a></div></header>
+<main class="w">
+<h1>📡 Rakip Takip</h1>
+<p class="d">Rakiplerinizin blog / RSS akışlarını, site haritalarını ve blog sayfalarını tarar; seçtiğiniz dönemde yayımlanan yeni içerikleri listeler ve AI analist yorumuyla birlikte gösterir. E-posta yazarsanız rapor gelen kutunuza da gönderilir.</p>
+
+<form id="f" class="card" autocomplete="off">
+  <div id="rows"></div>
+  <button type="button" class="add" id="add">+ Rakip ekle</button> <span class="d" id="lim">En fazla 6 rakip.</span>
+  <div class="grid2">
+    <div><label for="gun">Dönem</label><select id="gun"><option value="1">Son 1 gün</option><option value="7" selected>Son 7 gün</option><option value="14">Son 14 gün</option><option value="30">Son 30 gün</option></select></div>
+    <div><label for="sirket">Şirketiniz (isteğe bağlı)</label><input id="sirket" maxlength="120" placeholder="ör. Sales Corner"></div>
+    <div><label for="email">E-posta (isteğe bağlı)</label><input id="email" type="email" maxlength="200" placeholder="rapor@firma.com"></div>
+  </div>
+  <button class="go" id="go" type="submit">Rakipleri tara</button>
+  <p class="d" style="margin:10px 0 0">Tarama genelde 15–60 saniye sürer. Akış adresi boşsa site üzerinden otomatik bulunur.</p>
+</form>
+
+<div id="out" hidden>
+  <h2>Kaynak durumu</h2><div class="card" id="durum"></div>
+  <h2>🧠 Analist yorumu</h2><div class="card yorum" id="yorum"></div>
+  <h2>📋 Yeni içerikler</h2><div id="liste"></div>
+</div>
+</main>
+<footer><div class="w"><a href="/gizlilik-politikasi">Gizlilik</a><a href="/kvkk">KVKK</a><a href="/iletisim">İletişim</a><small>© Sales Corner · Corner Group</small></div></footer>
+<script>
+(function(){
+  var MAX = 6;
+  var VARS = [
+    {firma:"LeoDessa", site:"leodessa.co", feed:"https://leodessa.co/feed/"},
+    {firma:"MarketStar", site:"marketstar.com", feed:"https://www.marketstar.com/growth-hub-resources/blogs/rss.xml"},
+    {firma:"DevCommX", site:"devcommx.com", feed:"https://medium.com/feed/@devcommxsocial"}
+  ];
+  var rows = document.getElementById("rows");
+  function el(tag, cls, txt){ var e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; }
+  function field(lbl, name, val, ph, cls){
+    var d = el("div", cls); var l = el("label", null, lbl); var i = el("input"); i.name = name; i.value = val || ""; i.placeholder = ph; i.maxLength = 300;
+    d.appendChild(l); d.appendChild(i); return d;
+  }
+  function addRow(r){
+    if (rows.children.length >= MAX) return;
+    r = r || {};
+    var row = el("div", "row");
+    row.appendChild(field("Firma", "firma", r.firma, "Rakip adı"));
+    row.appendChild(field("Site", "site", r.site, "rakip.com"));
+    row.appendChild(field("Akış adresi (isteğe bağlı)", "feed", r.feed, "https://rakip.com/feed", "feed"));
+    var b = el("button", "del", "×"); b.type = "button"; b.title = "Kaldır"; b.setAttribute("aria-label", "Rakibi kaldır");
+    b.onclick = function(){ row.remove(); sync(); };
+    row.appendChild(b); rows.appendChild(row); sync();
+  }
+  function sync(){ document.getElementById("add").disabled = rows.children.length >= MAX; }
+  VARS.forEach(addRow);
+  document.getElementById("add").onclick = function(){ addRow(); };
+
+  var go = document.getElementById("go");
+  document.getElementById("f").onsubmit = function(ev){
+    ev.preventDefault();
+    var rakipler = [].map.call(rows.children, function(r){
+      var g = function(n){ return r.querySelector('[name="'+n+'"]').value.trim(); };
+      return {firma:g("firma"), site:g("site"), feed:g("feed")};
+    }).filter(function(x){ return x.site || x.feed; });
+    if (!rakipler.length) { alert0("En az bir rakip için site veya akış adresi yazın."); return; }
+    var body = {rakipler:rakipler, gun:+document.getElementById("gun").value, sirket:document.getElementById("sirket").value.trim(), email:document.getElementById("email").value.trim()};
+    go.disabled = true; go.textContent = "Taranıyor…";
+    fetch("/api/rakip-takip", {method:"POST", headers:{"content-type":"application/json"}, body:JSON.stringify(body)})
+      .then(function(r){ return r.text().then(function(t){ var d; try { d = JSON.parse(t.trim()); } catch(e) { d = {success:false, error:"Sunucudan beklenmeyen yanıt (" + r.status + ")."}; } return d; }); })
+      .then(show)
+      .catch(function(){ alert0("Bağlantı hatası, lütfen tekrar deneyin."); })
+      .then(function(){ go.disabled = false; go.textContent = "Rakipleri tara"; });
+  };
+  function alert0(msg){
+    var out = document.getElementById("out"); out.hidden = false;
+    var d = document.getElementById("durum"); d.textContent = ""; d.appendChild(el("p", "err", msg));
+    document.getElementById("yorum").textContent = "—"; document.getElementById("liste").textContent = "";
+  }
+  function show(d){
+    if (!d || d.success === false) { alert0((d && (d.error || d.message)) || "İşlem başarısız oldu."); return; }
+    document.getElementById("out").hidden = false;
+    var du = document.getElementById("durum"); du.textContent = "";
+    (d.rakipler || []).forEach(function(r){
+      var s = el("div", "st"); s.appendChild(el("b", null, r.firma || "—"));
+      if (!r.ok) s.appendChild(el("span", "tag bad", "bulunamadı"));
+      else s.appendChild(el("span", "tag " + (r.items.length ? "ok" : "zero"), r.items.length + " yeni"));
+      var info = r.ok ? (r.kaynak + (r.son ? " · son içerik " + r.son : "") + (r.toplam ? " · " + r.toplam + " kayıt tarandı" : "")) : (r.error || "");
+      s.appendChild(el("span", "d", info)); du.appendChild(s);
+    });
+    if (d.mail) du.appendChild(el("p", "d", "✉️ Rapor e-postanıza gönderildi."));
+    var y = document.getElementById("yorum");
+    if (d.yorum_html) y.innerHTML = d.yorum_html; // sunucuda izinli etiketlere süzülmüş (rtSafeHtml)
+    else y.textContent = d.count ? "Yorum üretilemedi." : "Seçilen dönemde yeni içerik yok; yorum üretilmedi. Dönemi uzatmayı deneyin.";
+    var li = document.getElementById("liste"); li.textContent = "";
+    (d.rakipler || []).forEach(function(r){
+      if (!r.items || !r.items.length) return;
+      var c = el("div", "card"); c.appendChild(el("b", null, r.firma + " (" + r.items.length + ")"));
+      r.items.forEach(function(x){
+        var it = el("div", "it");
+        if (x.link) { var a = el("a", null, x.title || x.link); a.href = x.link; a.target = "_blank"; a.rel = "noopener nofollow"; it.appendChild(a); }
+        else it.appendChild(el("span", null, x.title));
+        it.appendChild(el("span", "d", x.tarih)); c.appendChild(it);
+      });
+      li.appendChild(c);
+    });
+    if (!li.children.length) li.appendChild(el("p", "d", "Seçilen dönemde yeni içerik bulunamadı."));
+    document.getElementById("out").scrollIntoView({behavior:"smooth"});
+  }
+})();
+</script>
+</body>
+</html>
