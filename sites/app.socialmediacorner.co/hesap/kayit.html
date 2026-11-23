@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="robots" content="noindex, nofollow">
+<title>Hesap aç · Social Media Corner</title>
+<meta name="api-base" content="https://corner-forms.berkay-999.workers.dev">
+<link rel="icon" href="data:,">
+<script src="/assets/theme.js"></script>
+<link rel="preload" href="/assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/tokens.css">
+<link rel="stylesheet" href="/assets/bilesenler.css">
+<link rel="stylesheet" href="/assets/smc-hesap.css">
+<script src="/assets/smc-hesap.js" defer></script>
+</head>
+<body data-sayfa="kayit">
+<a class="atla" href="#icerik">İçeriğe geç</a>
+<p class="bant" hidden><strong>ÖRNEK</strong><span>Örnek mod: hiçbir şey gönderilmez, hesap açılmaz, bağlantı kurulmaz.</span></p>
+
+<header class="ust">
+  <div class="ust-ic">
+    <a class="logo" href="/" aria-label="Social Media Corner Taslak Masası, ana sayfa">
+      <span class="kose" aria-hidden="true"></span>
+      <span class="logo-ad">Social Media Corner</span><span class="logo-ayir" aria-hidden="true">·</span>
+      <span>Taslak Masası</span>
+    </a>
+    <div class="ust-sag">
+      <a class="duz" href="/en/hesap/register" hreflang="en" lang="en" aria-label="English">EN</a>
+      <button type="button" class="duz tema" id="tema" aria-pressed="false" aria-label="Koyu tema"><span class="tema-ikon" aria-hidden="true"></span></button>
+    </div>
+  </div>
+</header>
+
+<main id="icerik" class="ana" tabindex="-1" aria-busy="true">
+  <div id="not" class="bildirim" role="status" aria-live="polite"></div>
+  <noscript><p class="bildirim bildirim-uyari">Bu sayfa JavaScript ile çalışır. Tarayıcında JavaScript’i açıp yeniden dene.</p></noscript>
+
+  <section class="auth" data-ekran="ana" aria-labelledby="h-kayit" hidden>
+    <div class="kol-dar">
+      <div class="ekran-bas">
+        <p class="ust-etiket">Hesaplı beta</p>
+        <h1 id="h-kayit" tabindex="-1">Hesap aç</h1>
+        <p class="giris-p">Bir dakikalık kayıt; ardından marka sesini birlikte kuralım.</p>
+      </div>
+      <form class="sheet form" id="f-kayit" novalidate aria-labelledby="h-kayit">
+        <div class="alan-k">
+          <label class="etiket" for="k-ad">Ad soyad</label>
+          <input class="kutu" id="k-ad" name="name" type="text" autocomplete="name" maxlength="120" required aria-describedby="k-ad-hata">
+          <p class="alan-hata" id="k-ad-hata"></p>
+        </div>
+        <div class="alan-k">
+          <label class="etiket" for="k-eposta">E-posta</label>
+          <input class="kutu" id="k-eposta" name="email" type="email" autocomplete="email" inputmode="email" required aria-describedby="k-eposta-ipucu k-eposta-hata" spellcheck="false">
+          <p class="ipucu" id="k-eposta-ipucu">Brand Corner hesabın burada geçmez; bu site için ayrı hesap açılır.</p>
+          <p class="alan-hata" id="k-eposta-hata"></p>
+        </div>
+        <div class="alan-k">
+          <label class="etiket" for="k-sifre">Şifre</label>
+          <div class="sira">
+            <input class="kutu" id="k-sifre" name="password" type="password" autocomplete="new-password" minlength="8" maxlength="200" required aria-describedby="k-sifre-ipucu k-sifre-hata">
+            <button type="button" class="btn btn-cizgi btn-kucuk goster" aria-pressed="false" aria-controls="k-sifre" aria-label="Şifreyi göster">Göster</button>
+          </div>
+          <p class="ipucu" id="k-sifre-ipucu">En az 8 karakter. Başka sitede kullandığın şifreyi seçme.</p>
+          <p class="alan-hata" id="k-sifre-hata"></p>
+        </div>
+        <div class="sr" aria-hidden="true"><label for="k-hp">Bu alanı boş bırak</label><input id="k-hp" name="hp" type="text" tabindex="-1" autocomplete="off"></div>
+        <div class="alan-k onay-k">
+          <label class="onay"><input type="checkbox" id="k-riza" name="terms" required aria-describedby="k-riza-hata"><span>Hesap koşullarını kabul ediyorum.</span></label>
+          <p class="alan-hata" id="k-riza-hata"></p>
+        </div>
+        <p class="kvkk">Kişisel verilerin KVKK Aydınlatma Metni’ne göre işlenir.</p>
+        <button type="submit" class="btn btn-ana btn-tam">Hesap aç</button>
+      </form>
+      <p class="alt-gecis">Zaten hesabın var mı? <a class="bag" href="/hesap/giris">Giriş yap</a></p>
+    </div>
+    <aside class="auth-yan" aria-labelledby="h-yan-k">
+      <h2 id="h-yan-k">Hesapla ne değişir?</h2>
+      <ul>
+        <li>Marka sesin her taslakta hatırlanır.</li>
+        <li>Ürettiğin taslaklar Geçmiş’te durur; arar, kopyalarsın.</li>
+        <li>LinkedIn ve Instagram bağlantını tek yerden yönetirsin.</li>
+      </ul>
+    </aside>
+  </section>
+
+  <section data-ekran="kapali" aria-labelledby="h-kapali" hidden>
+    <div class="sheet hata acilis">
+      <p class="ust-etiket">Hesaplı beta</p>
+      <h1 id="h-kapali" tabindex="-1">Hesaplar henüz açılmadı</h1>
+      <p>Hesaplı beta hazırlanıyor. Giriş, kayıt ve bağlantılar açıldığında bu sayfa çalışacak; o zamana kadar Taslak Masası’nı hesapsız kullanabilirsin.</p>
+      <div class="alt-sira">
+        <a class="btn btn-ana" href="/">Taslak Masası’nı aç</a>
+      </div>
+    </div>
+  </section>
+
+  <section data-ekran="hata" aria-labelledby="h-hata" hidden>
+    <div class="sheet sheet-hata hata" role="alert">
+      <p class="ust-etiket">Bağlantı sorunu</p>
+      <h1 id="h-hata" tabindex="-1">Hesabına şu an ulaşamıyoruz</h1>
+      <p>Sunucu yanıt vermedi. Taslakların ve bağlantıların yerinde; birkaç dakika sonra yeniden dene.</p>
+      <p class="kod" id="hata-kod"></p>
+      <div class="alt-sira">
+        <button type="button" class="btn btn-ana" id="hata-tekrar">Yeniden dene</button>
+        <a class="bag" href="/">Taslak Masası’nı hesapsız kullan</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="alt">
+  <div class="alt-ic">
+    <div class="alt-site">
+      <a class="bag" href="/">Taslak Masası</a>
+      <span>© 2026 Social Media Corner</span>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="robots" content="noindex, nofollow">
+<title>Geçmiş · Social Media Corner</title>
+<meta name="api-base" content="https://corner-forms.berkay-999.workers.dev">
+<link rel="icon" href="data:,">
+<script src="/assets/theme.js"></script>
+<link rel="preload" href="/assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/tokens.css">
+<link rel="stylesheet" href="/assets/bilesenler.css">
+<link rel="stylesheet" href="/assets/smc-hesap.css">
+<script src="/assets/smc-hesap.js" defer></script>
+</head>
+<body data-sayfa="gecmis" data-korumali>
+<a class="atla" href="#icerik">İçeriğe geç</a>
+<p class="bant" hidden><strong>ÖRNEK</strong><span>Örnek mod: hiçbir şey gönderilmez, hesap açılmaz, bağlantı kurulmaz.</span></p>
+
+<header class="ust">
+  <div class="ust-ic">
+    <a class="logo" href="/" aria-label="Social Media Corner Taslak Masası, ana sayfa">
+      <span class="kose" aria-hidden="true"></span>
+      <span class="logo-ad">Social Media Corner</span><span class="logo-ayir" aria-hidden="true">·</span>
+      <span>Taslak Masası</span>
+    </a>
+    <div class="ust-sag">
+      <button type="button" class="duz" id="cikis" data-oturum hidden>Çıkış yap</button>
+      <a class="duz" href="/en/hesap/history" hreflang="en" lang="en" aria-label="English">EN</a>
+      <button type="button" class="duz tema" id="tema" aria-pressed="false" aria-label="Koyu tema"><span class="tema-ikon" aria-hidden="true"></span></button>
+    </div>
+  </div>
+  <nav class="sekmeler" aria-label="Hesap" data-oturum hidden>
+    <div class="sekme-ic">
+      <a class="sekme" href="/hesap/gecmis" aria-current="page">Geçmiş</a>
+      <a class="sekme" href="/hesap/baglantilar">Bağlantılar</a>
+      <a class="sekme" href="/hesap/kurulum">Marka sesi</a>
+      <a class="sekme" href="/hesap/ayarlar">Ayarlar</a>
+    </div>
+  </nav>
+</header>
+
+<main id="icerik" class="ana" tabindex="-1" aria-busy="true">
+  <div id="not" class="bildirim" role="status" aria-live="polite"></div>
+  <noscript><p class="bildirim bildirim-uyari">Bu sayfa JavaScript ile çalışır. Tarayıcında JavaScript’i açıp yeniden dene.</p></noscript>
+
+  <section data-ekran="ana" aria-labelledby="h-gecmis" hidden>
+    <div class="kol">
+      <div class="ekran-bas">
+        <h1 id="h-gecmis" tabindex="-1">Geçmiş</h1>
+        <p class="giris-p">Hesabınla ürettiğin taslaklar burada. Ara, kopyala, gerekmeyeni sil.</p>
+      </div>
+      <form class="sheet suzgec" id="f-suzgec" role="search" aria-label="Taslakları süz" novalidate>
+        <div class="alan-k">
+          <label class="etiket" for="ara">Taslaklarda ara</label>
+          <input class="kutu" id="ara" type="search" autocomplete="off" placeholder="Konu ya da metin" maxlength="100">
+        </div>
+        <fieldset class="secim-grup">
+          <legend>Platform</legend>
+          <div class="segment">
+            <span class="secim"><input type="radio" id="p-hepsi" name="plat" value="hepsi" checked><label for="p-hepsi">Tümü</label></span>
+            <span class="secim"><input type="radio" id="p-li" name="plat" value="linkedin"><label for="p-li">LinkedIn</label></span>
+            <span class="secim"><input type="radio" id="p-ig" name="plat" value="instagram"><label for="p-ig">Instagram</label></span>
+          </div>
+        </fieldset>
+      </form>
+      <p class="sonuc-say" id="sonuc-say" role="status"></p>
+      <div class="kayitlar" id="kayitlar"></div>
+      <div class="bos" id="bulunamadi" hidden>
+        <h2>Aramana uyan taslak yok</h2>
+        <p>Başka bir kelime dene ya da süzgeçleri temizle.</p>
+        <button type="button" class="btn btn-cizgi" id="temizle">Süzgeçleri temizle</button>
+      </div>
+      <div class="bos" id="gecmis-bos" hidden>
+        <p class="ust-etiket">Henüz boş</p>
+        <h2>İlk taslağını üret</h2>
+        <p>Giriş yapmışken Taslak Masası’nda ürettiğin her taslak buraya kaydedilir. Marka sesin de hesaba katılır.</p>
+        <a class="btn btn-ana" href="/">Taslak Masası’nı aç</a>
+      </div>
+      <div class="daha" id="daha">
+        <button type="button" class="btn btn-cizgi" id="daha-btn">Daha eski taslakları göster</button>
+        <p class="ince" id="daha-not" tabindex="-1"></p>
+      </div>
+      <p class="ince saklama">Taslaklar 180 gün saklanır, sonra kendiliğinden silinir. Hepsini <button type="button" class="btn btn-metin" data-indir>JSON olarak indir</button>.</p>
+    </div>
+  </section>
+
+  <section data-ekran="kapali" aria-labelledby="h-kapali" hidden>
+    <div class="sheet hata acilis">
+      <p class="ust-etiket">Hesaplı beta</p>
+      <h1 id="h-kapali" tabindex="-1">Hesaplar henüz açılmadı</h1>
+      <p>Hesaplı beta hazırlanıyor. Giriş, kayıt ve bağlantılar açıldığında bu sayfa çalışacak; o zamana kadar Taslak Masası’nı hesapsız kullanabilirsin.</p>
+      <div class="alt-sira">
+        <a class="btn btn-ana" href="/">Taslak Masası’nı aç</a>
+      </div>
+    </div>
+  </section>
+
+  <section data-ekran="yakinda" aria-labelledby="h-yakinda" hidden>
+    <div class="sheet hata acilis">
+      <p class="ust-etiket">Hesaplı beta</p>
+      <h1 id="h-yakinda" tabindex="-1">Bu bölüm yakında</h1>
+      <p>Bu bölüm hesaplı betanın sonraki adımında açılacak. Hesabın hazır; şimdilik Taslak Masası’nı kullanmaya devam edebilirsin.</p>
+      <div class="alt-sira">
+        <a class="btn btn-ana" href="/">Taslak Masası’nı aç</a>
+        <a class="bag" href="/hesap/baglantilar">Bağlantılara git</a>
+      </div>
+    </div>
+  </section>
+
+  <section data-ekran="hata" aria-labelledby="h-hata" hidden>
+    <div class="sheet sheet-hata hata" role="alert">
+      <p class="ust-etiket">Bağlantı sorunu</p>
+      <h1 id="h-hata" tabindex="-1">Hesabına şu an ulaşamıyoruz</h1>
+      <p>Sunucu yanıt vermedi. Taslakların ve bağlantıların yerinde; birkaç dakika sonra yeniden dene.</p>
+      <p class="kod" id="hata-kod"></p>
+      <div class="alt-sira">
+        <button type="button" class="btn btn-ana" id="hata-tekrar">Yeniden dene</button>
+        <a class="bag" href="/">Taslak Masası’nı hesapsız kullan</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<dialog class="dlg-k" id="dlg-sil" aria-labelledby="dlg-sil-b" aria-describedby="dlg-sil-a">
+  <div class="sheet dlg">
+    <h2 class="dlg-baslik" id="dlg-sil-b" tabindex="-1">Bu taslak silinsin mi?</h2>
+    <p id="dlg-sil-a"><span id="dlg-sil-konu" class="kullanici"></span> <span>Silinen taslak geri gelmez.</span></p>
+    <div class="dlg-alt">
+      <button type="button" class="btn btn-tehlike" id="sil-evet">Taslağı sil</button>
+      <button type="button" class="btn btn-cizgi" data-kapat>Vazgeç</button>
+    </div>
+  </div>
+</dialog>
+
+<footer class="alt">
+  <div class="alt-ic">
+    <div class="alt-hesap" data-oturum hidden>
+      <p class="alt-kim"><span>Hesap:</span> <span class="kullanici"></span></p>
+      <div class="alt-eylem">
+        <button type="button" class="btn btn-metin" data-indir>Verilerimi indir</button>
+        <a class="btn btn-metin alt-sil" href="/hesap/ayarlar#sil">Hesabı sil</a>
+      </div>
+    </div>
+    <div class="alt-site">
+      <a class="bag" href="/">Taslak Masası</a>
+      <span>© 2026 Social Media Corner</span>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

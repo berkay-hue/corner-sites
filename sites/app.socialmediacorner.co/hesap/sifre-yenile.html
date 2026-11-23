@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="robots" content="noindex, nofollow">
+<title>Yeni şifre belirle · Social Media Corner</title>
+<meta name="api-base" content="https://corner-forms.berkay-999.workers.dev">
+<link rel="icon" href="data:,">
+<script src="/assets/theme.js"></script>
+<link rel="preload" href="/assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/tokens.css">
+<link rel="stylesheet" href="/assets/bilesenler.css">
+<link rel="stylesheet" href="/assets/smc-hesap.css">
+<script src="/assets/smc-hesap.js" defer></script>
+</head>
+<body data-sayfa="sifre-yenile">
+<a class="atla" href="#icerik">İçeriğe geç</a>
+<p class="bant" hidden><strong>ÖRNEK</strong><span>Örnek mod: hiçbir şey gönderilmez, hesap açılmaz, bağlantı kurulmaz.</span></p>
+
+<header class="ust">
+  <div class="ust-ic">
+    <a class="logo" href="/" aria-label="Social Media Corner Taslak Masası, ana sayfa">
+      <span class="kose" aria-hidden="true"></span>
+      <span class="logo-ad">Social Media Corner</span><span class="logo-ayir" aria-hidden="true">·</span>
+      <span>Taslak Masası</span>
+    </a>
+    <div class="ust-sag">
+      <a class="duz" href="/en/hesap/reset-password" hreflang="en" lang="en" aria-label="English">EN</a>
+      <button type="button" class="duz tema" id="tema" aria-pressed="false" aria-label="Koyu tema"><span class="tema-ikon" aria-hidden="true"></span></button>
+    </div>
+  </div>
+</header>
+
+<main id="icerik" class="ana" tabindex="-1" aria-busy="true">
+  <div id="not" class="bildirim" role="status" aria-live="polite"></div>
+  <noscript><p class="bildirim bildirim-uyari">Bu sayfa JavaScript ile çalışır. Tarayıcında JavaScript’i açıp yeniden dene.</p></noscript>
+
+  <section data-ekran="ana" aria-labelledby="h-sifre-yeni" hidden>
+    <div class="kol-dar">
+      <div class="ekran-bas">
+        <h1 id="h-sifre-yeni" tabindex="-1">Yeni şifre belirle</h1>
+        <p class="giris-p">Bu sayfaya e-postandaki bağlantıyla geldin. Bağlantı 1 saat geçerli ve tek kullanımlık.</p>
+      </div>
+      <div class="sheet hata sheet-hata" id="yenile-hata" role="alert" hidden>
+        <p>Bu bağlantı geçersiz ya da süresi dolmuş.</p>
+        <div class="alt-sira"><a class="btn btn-ana" href="/hesap/sifre-unuttum">Yeni bağlantı iste</a></div>
+      </div>
+      <form class="sheet form" id="f-sifre-yeni" novalidate aria-labelledby="h-sifre-yeni">
+        <div class="alan-k">
+          <label class="etiket" for="y-sifre">Yeni şifre</label>
+          <input class="kutu" id="y-sifre" name="password" type="password" autocomplete="new-password" minlength="8" maxlength="200" required aria-describedby="y-sifre-ipucu y-sifre-hata">
+          <p class="ipucu" id="y-sifre-ipucu">En az 8 karakter.</p>
+          <p class="alan-hata" id="y-sifre-hata"></p>
+        </div>
+        <div class="alan-k">
+          <label class="etiket" for="y-sifre2">Yeni şifre (tekrar)</label>
+          <input class="kutu" id="y-sifre2" name="password2" type="password" autocomplete="new-password" required aria-describedby="y-sifre2-hata">
+          <p class="alan-hata" id="y-sifre2-hata"></p>
+        </div>
+        <button type="submit" class="btn btn-ana btn-tam">Şifreyi kaydet</button>
+      </form>
+    </div>
+  </section>
+
+  <section data-ekran="kapali" aria-labelledby="h-kapali" hidden>
+    <div class="sheet hata acilis">
+      <p class="ust-etiket">Hesaplı beta</p>
+      <h1 id="h-kapali" tabindex="-1">Hesaplar henüz açılmadı</h1>
+      <p>Hesaplı beta hazırlanıyor. Giriş, kayıt ve bağlantılar açıldığında bu sayfa çalışacak; o zamana kadar Taslak Masası’nı hesapsız kullanabilirsin.</p>
+      <div class="alt-sira">
+        <a class="btn btn-ana" href="/">Taslak Masası’nı aç</a>
+      </div>
+    </div>
+  </section>
+
+  <section data-ekran="hata" aria-labelledby="h-hata" hidden>
+    <div class="sheet sheet-hata hata" role="alert">
+      <p class="ust-etiket">Bağlantı sorunu</p>
+      <h1 id="h-hata" tabindex="-1">Hesabına şu an ulaşamıyoruz</h1>
+      <p>Sunucu yanıt vermedi. Taslakların ve bağlantıların yerinde; birkaç dakika sonra yeniden dene.</p>
+      <p class="kod" id="hata-kod"></p>
+      <div class="alt-sira">
+        <button type="button" class="btn btn-ana" id="hata-tekrar">Yeniden dene</button>
+        <a class="bag" href="/">Taslak Masası’nı hesapsız kullan</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="alt">
+  <div class="alt-ic">
+    <div class="alt-site">
+      <a class="bag" href="/">Taslak Masası</a>
+      <span>© 2026 Social Media Corner</span>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
