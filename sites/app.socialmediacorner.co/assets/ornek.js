@@ -102,7 +102,13 @@ var SETLER={reels:REELS_ORNEK,ig:IG_ORNEK,li:{ticaret:ACILAR,
 
 /* ---- mock durum seçici: 37 durum (404 → /404.html), seçici + #d=durum ---- */
 var ORNEK_KONU='İlk 100 müşteriye ulaştık';
+/* A4-2c: örnek marka sesi profili (sahte); ses-* durumları yalnız IG/Reels sayfalarında */
+var SES=window.SMCSes,SES_VAR=!!(SES&&SES.ac)&&(S.ARAC==='ig'||S.ARAC==='reels');
+var ORNEK_SES={name:'Köşe Kahve',sector:'E-ticaret',audience:'Evde kahve demleyen, yeni çekirdek deneyen 25-40 yaş arası kişiler',adjectives:['sicak','esprili','yalin'],banned:['kaçırma','son şans'],sample:'Bu hafta Etiyopya geldi. Çiçeksi, hafif, sabahları tam kıvamında. Demlerken ne dinliyorsun?',address:'sen',emoji:'few'};
+function sesSifirla(){if(!SES_VAR)return;SES.kapat();SES.depoAc();SES.notYaz('');SES.satirYaz()}
+function sesYaz(){SES.yaz(ORNEK_SES);SES.satirYaz()}
 function sifirla(){
+  sesSifirla();
   durdur();konuHata('');alanHata(hedef,hedefHataEl,'');formNot('');
   if(dlg.open)teklifKapat();
   tForm.reset();
@@ -149,6 +155,13 @@ function mock(v){
   case 'teklif-gonderim-hata':kartlarKur(2);teklifAc('result',null);$('#t-eposta').value='ad@sirket.com';$('#t-hata').textContent='Gönderilemedi. Alanları kontrol edip tekrar dene.';break;
   case 'bekleme-riza':duvarGoster('anon',false);bEposta.value='ad@sirket.com';rizaHata(false);break;
   case 'bekleme-tamam':duvarGoster('anon',false);bekleBitti(false);break;
+  /* A4-2c marka sesi (G9) */
+  case 'ses-bos':SES.sil();SES.satirYaz();bosGoster();break;
+  case 'ses-dolu':sesYaz();bosGoster();SES.ac($('#ses-ac'));break;
+  case 'ses-hata':sesYaz();bosGoster();SES.ac($('#ses-ac'));(function(){var b={};for(var x in ORNEK_SES)b[x]=ORNEK_SES[x];b.name='Köşe Kahve Kavurma Atölyesi ve Mahalle Fincanı, Moda Şubesi Ekibi';b.banned=['kaçırma','bu fırsatı sakın kaçırma stoklar tükeniyor'];SES.forma(b);SES.hataGoster(SES.dogrula(b).hatalar)})();break;
+  case 'ses-saklanamaz':SES.depoKapat();sesYaz();SES.notYaz(SES.DEPO_MSJ,'uyari');bosGoster();SES.ac($('#ses-ac'));break;
+  case 'ses-silindi':sesYaz();SES.sil();SES.satirYaz();SES.notYaz('Marka sesi silindi.','ok');bosGoster();break;
+  case 'sonuc-ses':sesYaz();kartlarKur(2);SES.notYaz('ÖRNEK: Bu taslaklar örnek marka sesi profiliyle istendi.');break;
   default:
     if(v.indexOf('hata-')===0)hataGoster(v.slice(5),false);
     else if(v.indexOf('limit-')===0)duvarGoster(v.slice(6),false);
@@ -159,17 +172,20 @@ function mock(v){
 
 /* sahte sağlayıcı: prototipteki gecikmeler (1800/420/400/600 ms) */
 function gec(ms,v){return new Promise(function(r){setTimeout(function(){r(v)},RM&&ms<1000?0:ms)})}
+/* testte gövde incelemesi: son sahte istek (yalnız ÖRNEK; hiçbir yere gönderilmez) */
+function kaydet(q){try{S.sonIstek=q?JSON.parse(JSON.stringify(q)):null}catch(e){S.sonIstek=null}}
 S.provKur({
-  linkedin:function(q){return gec(1800).then(function(){return{drafts:SETLER.li[SEKTOR[q.sector]]||SETLER.li.ticaret}})},
-  instagram:function(q){return gec(1800).then(function(){return{drafts:q&&q.kind==='reels'?SETLER.reels.map(function(x){var o={angle:x.angle,text:x.text,say:x.say};if(x.flags)o.flags=x.flags.slice();return o}):SETLER.ig.map(function(x){return{angle:x.angle,text:x.text}})}})},
+  linkedin:function(q){kaydet(q);return gec(1800).then(function(){return{drafts:SETLER.li[SEKTOR[q.sector]]||SETLER.li.ticaret}})},
+  instagram:function(q){kaydet(q);return gec(1800).then(function(){return{drafts:q&&q.kind==='reels'?SETLER.reels.map(function(x){var o={angle:x.angle,text:x.text,say:x.say};if(x.flags)o.flags=x.flags.slice();return o}):SETLER.ig.map(function(x){return{angle:x.angle,text:x.text}})}})},
   /* LI: {} → yerel düzey; IG (kind:caption): sahte metin; Reels (kind:reels): sahte text+say, flags:[] (uyarı kalkar) */
-  refine:function(q){return gec(420,q&&q.kind==='reels'?reelsRefine(q):q&&q.kind==='caption'?{text:igRefine(q)}:{})},
+  refine:function(q){kaydet(q);return gec(420,q&&q.kind==='reels'?reelsRefine(q):q&&q.kind==='caption'?{text:igRefine(q)}:{})},
   quota:function(){return gec(400).then(function(){return{left:D.left}})},
   submit:function(){return gec(600,{ok:true})}
 });
 
 /* durum seçici (prototipteki #durumlar; DOM API ile) */
 var OPS=["bos","bos-hak0","hata-alan","yukleniyor","yukleniyor-8","yukleniyor-20","vazgecildi","sonuc","sonuc-1","sonuc-0","sonuc-uyari","duzenlendi","duzenleme-hata","duzenleme-sinir","kopya-elle","hata-bad_input","hata-too_large","hata-origin","hata-bot","hata-slow_down","hata-refused","hata-refused-charged","hata-llm_fail","hata-llm_fail-charged","hata-llm_busy","hata-ag","hata-zaman","limit-anon","limit-ip","limit-global","kapasite","limit-yakinda","teklif-hata","teklif-tamam","teklif-gonderim-hata","bekleme-riza","bekleme-tamam","404"];
+if(SES_VAR)OPS.splice(OPS.length-1,0,'ses-bos','ses-dolu','ses-hata','ses-saklanamaz','ses-silindi','sonuc-ses');
 function yazi(s){return d.createTextNode(s)}
 var sec=d.createElement('section'),pn=d.createElement('p'),gs=d.createElement('strong'),cd=d.createElement('code'),lb=d.createElement('label'),sel=d.createElement('select');
 sec.className='proto';sec.id='durumlar';sec.tabIndex=-1;sec.setAttribute('aria-label','Prototip durum seçici');

@@ -402,8 +402,8 @@ function kart(a){
     /* /gen/refine: {anon, op, tone (yalnız op=tone), text, lang, angle}; Turnstile ve rid yok, üretim hakkı düşmez */
     var rq={anon:anonAl(),op:op,text:pl.reels?st.kanca:st.metin,lang:dilAl()};if(op==='tone')rq.tone=hton;if((ARAC==='reels'?ACI_R:ACI)[a.id])rq.angle=a.id;
     /* IG: /gen/refine kind:caption (+üretimdeki format); say gönderilmez. Reels: kind:reels + say, format yok */
-    if(ARAC==='ig'){rq.kind='caption';var fm=D.uretFmt||D.format;if(fm)rq.format=fm}
-    if(ARAC==='reels'){rq.kind='reels';rq.say=st.soz}
+    if(ARAC==='ig'){rq.kind='caption';var fm=D.uretFmt||D.format;if(fm)rq.format=fm;sesEkle(rq)}
+    if(ARAC==='reels'){rq.kind='reels';rq.say=st.soz;sesEkle(rq)}
     prov.refine(rq).then(function(r){if(r&&typeof r.text==='string')st.yeni=r.text;if(ARAC!=='li'&&r){if(ARAC==='reels'&&typeof r.say==='string')st.yeniSay=r.say;if(Array.isArray(r.flags))st.yeniF=r.flags}bit()},function(h){
       /* düzenleme sınırı (anon 9/gün, bağlantı ya da günlük toplam): düğmeler kilitlenir, taslak aynı kalır */
       if(h&&h.kod==='limit'){mesgul=false;art.removeAttribute('aria-busy');btn.textContent=eski;once=null;D.refine=9;ks.textContent='';kh.textContent=h.scope==='ip'||h.scope==='global'?DUVAR[h.scope].b:SINIR;D.kartApi.forEach(function(x){x.yenile()});return}
@@ -606,11 +606,13 @@ function gunAl(){try{var p={};new Intl.DateTimeFormat('en-US',{timeZone:'Europe/
 /* ret: ilk üretim ret0; önceki üretim günü dün ret1, 2-7 gün ret2_7, 8+ ret8; aynı gün ya da bilinmiyorsa null */
 function retAl(){var s=depo('smc-son'),b=gunAl();if(!b)return null;if(!/^\d{4}-\d\d-\d\d$/.test(s||''))return 'ret0';var f=Math.round((Date.parse(b)-Date.parse(s))/864e5);return !(f>0)?null:f===1?'ret1':f<=7?'ret2_7':'ret8'}
 function dilAl(){return root.lang==='en'?'en':'tr'}
+/* A4-2c: IG ve Reels gövdesine marka sesi (smc-ses.js varsa ve profil doluysa); LinkedIn'e eklenmez */
+function sesEkle(q){var v=window.SMCSes&&SMCSes.voice&&SMCSes.voice();if(v)q.voice=v}
 function istekKur(){var g=hedef.value.replace(/\s+/g,' ').trim(),hp=$('input[name="website"]',form);var q={anon:anonAl(),topic:konu.value.replace(/\s+/g,' ').trim(),sector:D.sektor,tone:D.tone,lang:dilAl(),t:Date.now()-T0,hp:hp?hp.value:'',ret:retAl(),rid:D.rid||(D.rid=yeniRid()),ts:''};
   /* /gen/instagram: kind:caption, format post|carousel|reels, cta isteğe bağlı; goal yok */
-  if(ARAC==='ig'){q.kind='caption';q.format=D.format||'post';if(D.cta)q.cta=D.cta;return q}
+  if(ARAC==='ig'){q.kind='caption';q.format=D.format||'post';if(D.cta)q.cta=D.cta;sesEkle(q);return q}
   /* /gen/instagram kind:reels: format ve cta gönderilmez (sunucu 400); video isteğe bağlı talk|product|before_after|howto */
-  if(ARAC==='reels'){q.kind='reels';if(D.video)q.video=D.video;return q}
+  if(ARAC==='reels'){q.kind='reels';if(D.video)q.video=D.video;sesEkle(q);return q}
   if(g)q.goal=g;return q}
 function hakAl(r){if(!r)return;if(typeof r.left==='number'){D.left=Math.max(0,r.left);D.hakBilinmez=false}if(typeof r.cap==='number'&&r.cap>0)D.cap=r.cap;if(typeof r.reset_at==='string')D.reset=r.reset_at;if(r.scope==='anon'||r.scope==='ip'||r.scope==='global')D.hakScope=r.scope}
 /* tek POST yardımcısı: başarı → gövde; hata → {kod, scope, charged, left, cap, reset_at, field}; ağ → ag; süre → zaman */
@@ -645,7 +647,7 @@ function yenMetin(){var g='gece yarısı (İstanbul saati)';if(!D.reset)return O
 function gonderHata(h){var k=h&&h.kod;return k==='rate'?'Kısa sürede çok gönderim oldu. Birkaç dakika sonra tekrar dene.':k==='ag'?'Bağlantı yok. İnternete bağlanınca tekrar dene.':k==='zaman'?'Yanıt gelmedi. Biraz sonra tekrar dene.':'Gönderilemedi. Alanları kontrol edip tekrar dene.'}
 function alanlar(f){var o={};$$('input[name],textarea[name],select[name]',f).forEach(function(x){if(x.type==='checkbox')o[x.name]=x.checked;else if(x.type!=='radio'||x.checked)o[x.name]=x.value});return o}
 function taslakNorm(a,i){if(a&&a.kanca)return a;var rl=ARAC==='reels',L=rl?ACIS_R:ACIS,b=(rl?ACI_R:ACI)[a&&a.angle]||L[i]||L[0],o={id:b.id,no:b.no,ad:b.ad,alt:b.alt,text:String(a&&a.text||''),lang:dilAl()};if(rl)o.say=String(a&&a.say||'');if(a&&Array.isArray(a.flags)&&a.flags.length)o.flags=a.flags.slice(0,5);return o}
-function hataIsle(h){var k=h.kod||'genel';if(k==='vazgec')return;var s=typeof h.left==='number';if(s)hakAl(h);if(k==='limit'){duvarGoster(h.scope||'anon',true);return}if(k==='not_ready'){D.acik=false;depo('smc-acik',null);duvarGoster('yakinda',true);return}if(k==='llm_limit'){duvarGoster('kapasite',true);return}if(k==='too_large'||k==='slow_down'){durdur();uretMesgul(false);goster(D.kartVar?'sonuc':'bos',false);durum('');if(k==='too_large'){konuHata('Metin çok uzun. Konuyu 300 karaktere indir.');konu.focus()}else{formNot('İstek çok hızlı geldi. Birkaç saniye sonra tekrar dene.');kopru.hidden=true}return}hataGoster(k+(h.charged?'-charged':''),true,s)}
+function hataIsle(h){var k=h.kod||'genel';if(k==='vazgec')return;var s=typeof h.left==='number';if(s)hakAl(h);if(k==='limit'){duvarGoster(h.scope||'anon',true);return}if(k==='not_ready'){D.acik=false;depo('smc-acik',null);duvarGoster('yakinda',true);return}if(k==='llm_limit'){duvarGoster('kapasite',true);return}if(k==='bad_input'&&/^voice/.test(h.field||'')&&window.SMCSes&&SMCSes.sunucuHata){durdur();uretMesgul(false);goster(D.kartVar?'sonuc':'bos',false);durum('');SMCSes.sunucuHata(h.field);return}if(k==='too_large'||k==='slow_down'){durdur();uretMesgul(false);goster(D.kartVar?'sonuc':'bos',false);durum('');if(k==='too_large'){konuHata('Metin çok uzun. Konuyu 300 karaktere indir.');konu.focus()}else{formNot('İstek çok hızlı geldi. Birkaç saniye sonra tekrar dene.');kopru.hidden=true}return}hataGoster(k+(h.charged?'-charged':''),true,s)}
 
 /* ---- derin bağlantı: #tema=dark&teklif=1; #d=durum yalnız ÖRNEK modunda (ornek.js) ---- */
 function hashOku(){

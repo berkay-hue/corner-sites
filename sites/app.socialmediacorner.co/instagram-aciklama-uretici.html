@@ -19,6 +19,7 @@
 <link rel="stylesheet" href="/assets/tokens.css">
 <link rel="stylesheet" href="/assets/bilesenler.css">
 <link rel="stylesheet" href="/assets/smc-app.css">
+<script src="/assets/smc-ses.js" defer></script>
 <script src="/assets/smc-app.js" defer></script>
 </head>
 <body data-arac="ig">
@@ -112,6 +113,11 @@
             </div>
           </fieldset>
         </div>
+      </div>
+
+      <div class="ses-satir" id="ses-satir">
+        <p class="ses-durum"><span id="ses-etiket">Marka sesi:</span> <span class="ses-ad" id="ses-ad">yok</span> <span aria-hidden="true">·</span> <button type="button" class="btn btn-cizgi btn-kucuk" id="ses-ac" aria-haspopup="dialog" aria-describedby="ses-etiket ses-ad">Ekle</button></p>
+        <p class="not" id="ses-not" role="status" hidden></p>
       </div>
 
       <div class="sr" aria-hidden="true"><label>Bu alanı boş bırak <input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
@@ -322,6 +328,94 @@
       <p class="kvkk">Bilgilerin yalnız teklif hazırlamak için kullanılır. <a href="https://socialmediacorner.co/kvkk">KVKK Aydınlatma Metni</a></p>
     </form>
     <p class="not not-ok" id="t-tamam" role="status" tabindex="-1" hidden></p>
+  </div>
+</dialog>
+<dialog id="ses" class="ses-dlg" aria-labelledby="ses-baslik">
+  <div class="sheet dlg">
+    <div class="dlg-bas">
+      <h2 id="ses-baslik" tabindex="-1">Marka sesi</h2>
+      <button type="button" class="btn btn-cizgi btn-kucuk" id="ses-kapat">Kapat</button>
+    </div>
+    <p class="ipucu">İsteğe bağlı. Taslaklar markanın diliyle yazılır; profil olmadan da üretebilirsin.</p>
+    <p class="not not-uyari" id="ses-depo" role="status" hidden></p>
+    <form id="ses-form" data-sk-noform novalidate>
+      <div class="alan-k">
+        <label for="ses-ad-g">Marka adı <span class="zor">(isteğe bağlı)</span></label>
+        <input type="text" id="ses-ad-g" name="name" maxlength="60" autocomplete="organization" aria-describedby="ses-name-hata">
+        <p class="alan-hata" id="ses-name-hata" role="alert" hidden></p>
+      </div>
+      <div class="alan-k">
+        <label for="ses-sektor">Sektör <span class="zor">(isteğe bağlı)</span></label>
+        <select id="ses-sektor" name="sector" aria-describedby="ses-sektor-ipucu"><option value="">Seçme</option><option value="Genel">Genel</option><option value="E-ticaret">E-ticaret</option><option value="Yazılım">Yazılım</option><option value="Danışmanlık">Danışmanlık</option><option value="Eğitim">Eğitim</option><option value="Sağlık">Sağlık</option><option value="Gayrimenkul">Gayrimenkul</option><option value="Üretim">Üretim</option></select>
+        <p class="ipucu" id="ses-sektor-ipucu">Kaydedince formdaki sektör çipi seçilir.</p>
+      </div>
+      <div class="alan-k">
+        <label for="ses-kitle">Hedef kitle <span class="zor">(isteğe bağlı)</span></label>
+        <input type="text" id="ses-kitle" name="audience" maxlength="160" autocomplete="off" placeholder="Örn. ilk evini alan genç aileler" aria-describedby="ses-audience-hata">
+        <p class="alan-hata" id="ses-audience-hata" role="alert" hidden></p>
+      </div>
+      <fieldset class="cipler ses-sifat" aria-describedby="ses-adjectives-hata">
+        <legend>Ses sıfatları <span class="zor">(en çok 3)</span> <span class="sayac" id="ses-sifat-say">0/3</span></legend>
+        <div class="ses-cipler">
+            <span class="cip"><input type="checkbox" name="adjectives" id="sf-sicak" value="sicak"><label for="sf-sicak">Sıcak</label></span>
+            <span class="cip"><input type="checkbox" name="adjectives" id="sf-esprili" value="esprili"><label for="sf-esprili">Esprili</label></span>
+            <span class="cip"><input type="checkbox" name="adjectives" id="sf-yalin" value="yalin"><label for="sf-yalin">Yalın</label></span>
+            <span class="cip"><input type="checkbox" name="adjectives" id="sf-sakin" value="sakin"><label for="sf-sakin">Sakin</label></span>
+            <span class="cip"><input type="checkbox" name="adjectives" id="sf-enerjik" value="enerjik"><label for="sf-enerjik">Enerjik</label></span>
+            <span class="cip"><input type="checkbox" name="adjectives" id="sf-uzman" value="uzman"><label for="sf-uzman">Uzman</label></span>
+            <span class="cip"><input type="checkbox" name="adjectives" id="sf-oyuncu" value="oyuncu"><label for="sf-oyuncu">Oyuncu</label></span>
+            <span class="cip"><input type="checkbox" name="adjectives" id="sf-zarif" value="zarif"><label for="sf-zarif">Zarif</label></span>
+            <span class="cip"><input type="checkbox" name="adjectives" id="sf-dogrudan" value="dogrudan"><label for="sf-dogrudan">Doğrudan</label></span>
+            <span class="cip"><input type="checkbox" name="adjectives" id="sf-guven_veren" value="guven_veren"><label for="sf-guven_veren">Güven veren</label></span>
+            <span class="cip"><input type="checkbox" name="adjectives" id="sf-merakli" value="merakli"><label for="sf-merakli">Meraklı</label></span>
+            <span class="cip"><input type="checkbox" name="adjectives" id="sf-mutevazi" value="mutevazi"><label for="sf-mutevazi">Mütevazı</label></span>
+        </div>
+        <p class="alan-hata" id="ses-adjectives-hata" role="alert" hidden></p>
+      </fieldset>
+      <div class="alan-k">
+        <label for="ses-yasak">Yasak kelimeler <span class="zor">(isteğe bağlı)</span></label>
+        <input type="text" id="ses-yasak" name="banned" autocomplete="off" placeholder="Örn. ucuz, kaçırma" aria-describedby="ses-yasak-ipucu ses-banned-hata">
+        <p class="ipucu" id="ses-yasak-ipucu">Virgülle ayır; en çok 10 kelime, her biri en çok 30 karakter.</p>
+        <p class="alan-hata" id="ses-banned-hata" role="alert" hidden></p>
+      </div>
+      <div class="alan-k">
+        <label for="ses-ornek">Örnek gönderi <span class="zor">(isteğe bağlı)</span></label>
+        <textarea id="ses-ornek" name="sample" rows="4" maxlength="600" aria-describedby="ses-ornek-ipucu ses-sample-hata"></textarea>
+        <p class="ses-alt"><span class="ipucu" id="ses-ornek-ipucu">Markanın daha önce paylaştığı bir metin.</span> <span class="sayac" id="ses-ornek-say">0/600</span></p>
+        <p class="alan-hata" id="ses-sample-hata" role="alert" hidden></p>
+      </div>
+      <fieldset class="cipler">
+        <legend>Hitap</legend>
+        <div class="ses-cipler">
+            <span class="cip"><input type="radio" name="address" id="ses-address-yok" value="" checked><label for="ses-address-yok">Belirtme</label></span>
+            <span class="cip"><input type="radio" name="address" id="ses-address-sen" value="sen"><label for="ses-address-sen">Sen</label></span>
+            <span class="cip"><input type="radio" name="address" id="ses-address-siz" value="siz"><label for="ses-address-siz">Siz</label></span>
+        </div>
+      </fieldset>
+      <fieldset class="cipler">
+        <legend>Emoji</legend>
+        <div class="ses-cipler">
+            <span class="cip"><input type="radio" name="emoji" id="ses-emoji-yok" value="" checked><label for="ses-emoji-yok">Belirtme</label></span>
+            <span class="cip"><input type="radio" name="emoji" id="ses-emoji-none" value="none"><label for="ses-emoji-none">Yok</label></span>
+            <span class="cip"><input type="radio" name="emoji" id="ses-emoji-few" value="few"><label for="ses-emoji-few">Az</label></span>
+        </div>
+      </fieldset>
+      <p class="sayac ses-toplam">Toplam <span id="ses-toplam">0/1200</span> · marka adı, hedef kitle, yasak kelimeler ve örnek gönderi</p>
+      <p class="not not-hata" id="ses-hata" role="alert" hidden></p>
+      <div class="dlg-alt">
+        <button type="submit" class="btn btn-ana">Kaydet</button>
+        <button type="button" class="btn btn-cizgi" id="ses-vazgec">Vazgeç</button>
+        <button type="button" class="btn btn-cizgi ses-sil" id="ses-sil" hidden>Profili sil</button>
+      </div>
+      <p class="kvkk">Profil yalnız bu tarayıcıda durur; sunucuda saklanmaz. Üretimde taslak için yapay zekâ sağlayıcısına (ABD) iletilir. Kişisel veri yazma. <a href="https://socialmediacorner.co/kvkk">KVKK Aydınlatma Metni</a></p>
+    </form>
+    <div class="ses-onay" id="ses-onay" hidden>
+      <p><b>Profil silinsin mi?</b> Bu tarayıcıdaki marka sesi kaldırılır; geri alınamaz.</p>
+      <div class="dlg-alt">
+        <button type="button" class="btn btn-tehlike" id="ses-sil-evet">Evet, sil</button>
+        <button type="button" class="btn btn-cizgi" id="ses-sil-hayir">Vazgeç</button>
+      </div>
+    </div>
   </div>
 </dialog>
 </body>
