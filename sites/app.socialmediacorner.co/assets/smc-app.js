@@ -407,6 +407,8 @@ function kart(a){
     prov.refine(rq).then(function(r){if(r&&typeof r.text==='string')st.yeni=r.text;if(ARAC!=='li'&&r){if(ARAC==='reels'&&typeof r.say==='string')st.yeniSay=r.say;if(Array.isArray(r.flags))st.yeniF=r.flags}bit()},function(h){
       /* düzenleme sınırı (anon 9/gün, bağlantı ya da günlük toplam): düğmeler kilitlenir, taslak aynı kalır */
       if(h&&h.kod==='limit'){mesgul=false;art.removeAttribute('aria-busy');btn.textContent=eski;once=null;D.refine=9;ks.textContent='';kh.textContent=h.scope==='ip'||h.scope==='global'?DUVAR[h.scope].b:SINIR;D.kartApi.forEach(function(x){x.yenile()});return}
+      /* A4-2c-nav: IG/Reels'te sunucu voice.* alanını reddederse (400 bad_input) üretimdeki gibi marka sesi satırında söylenir; taslak aynı kalır. LI bu dala girmez */
+      if(ARAC!=='li'&&h&&h.kod==='bad_input'&&/^voice/.test(h.field||'')&&window.SMCSes&&SMCSes.sunucuHata){mesgul=false;art.removeAttribute('aria-busy');btn.textContent=eski;once=null;yenile();ks.textContent='';SMCSes.sunucuHata(h.field);return}
       hataSirada=true;bit()});
   }
   bKisalt.addEventListener('click',function(){if(pasif(bKisalt)){neden(bKisalt);return}duzenle(function(){st.lv--},bKisalt,'Kısaltılıyor…','Kısaltıldı.')});
