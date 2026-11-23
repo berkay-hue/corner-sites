@@ -1215,7 +1215,7 @@ function rtDate(s) {
   return 0;
 }
 // RSS/site haritası yoksa blog liste sayfası: /blog/<yazı> biçimli bağlantılar + kartın içindeki tarih.
-const RT_BLOG = /^\/(?:[a-z]{2}\/)?(blog|yazilar|yazi|makale|makaleler|insights|news|haber|haberler|resources|articles|posts?|icerik|kaynaklar)\/[^/]+\/?$/i;
+const RT_BLOG = /^\/(?:[a-z]{2}\/)?(blog|yazilar|yazi|makale|makaleler|insights|news|haber|haberler|resources|articles|posts?|icerik|kaynaklar|magazine)\/[^/]+\/?$/i;
 function rtHtmlList(html, base) {
   let host; try { host = new URL(base).hostname; } catch { return []; }
   const by = new Map();
@@ -1263,22 +1263,42 @@ async function rtRakip(c, since, budget) {
   if (!p) for (const path of ["/feed", "/rss.xml", "/blog/feed", "/sitemap.xml"]) { if (!origin || budget.n <= 0) break; if (await tryUrl(origin + path)) break; }
   // Site haritası dizini: yazı/blog haritası seçilir
   if (p?.kind === "index") {
-    const sub = p.subs.find(x => /post|blog|article|news|haber|yazi|makale/i.test(x)) || p.subs[0];
+    const sub = p.subs.find(x => /post|blog|magazine|article|news|haber|yazi|makale/i.test(x)) || p.subs[0];
     p = null; if (sub) await tryUrl(sub);
     if (p?.kind === "index") p = null;
   }
   // Son çare: blog liste sayfası
-  if (!p && origin) {
-    let bp = page && /\/(blog|yazilar|makale|insights|news|haber|resources|articles)/i.test(new URL(page.url).pathname) ? page : null;
+  const blogPage = async () => {
+    let bp = page && /\/(blog|yazilar|makale|insights|news|haber|resources|articles|magazine)/i.test(new URL(page.url).pathname) ? page : null;
     if (!bp && budget.n > 0) { try { const r = await rtGet(origin + "/blog", budget); if (rtIsHtml(r)) bp = r; } catch {} }
     const items = bp ? rtHtmlList(bp.text, bp.url) : [];
-    if (items.length >= 2) { p = { kind: "html", items }; out.feed_url = bp.url; }
-  }
+    if (items.length >= 2) { out.feed_url = bp.url; return { kind: "html", items }; }
+    return null;
+  };
+  if (!p && origin) p = await blogPage();
   if (!p) { out.error = out.error || "RSS / site haritası / blog sayfası bulunamadı"; return out; }
-  // Site haritasında her gün güncellenen pazarlama sayfaları gürültü: blog/yazı adresleri varsa yalnız onlar
-  if (p.kind === "sitemap") {
-    const isPost = x => { try { return /\/(blog|post|posts|article|articles|news|insights|resources|haber|yazi|yazilar|makale|makaleler)\/[^/]+/i.test(new URL(x.link).pathname); } catch { return false; } };
-    if (p.items.filter(isPost).length >= 3) p.items = p.items.filter(isPost);
+  // Site haritası temizliği:
+  // 1) Aynı ana (gece yarısı olmayan) 5+ sayfaya basılmış tarih, haritanın üretim damgasıdır; tarih yok sayılır.
+  // 2) Blog/yazı adresleri varsa yalnız onlar kalır.
+  const isPost = x => { try { return /\/(blog|blogs|post|posts|article|articles|news|insights|resources|magazine|haber|yazi|yazilar|makale|makaleler)\/[^/]+/i.test(new URL(x.link).pathname); } catch { return false; } };
+  const clean = q => {
+    const cnt = new Map(); for (const x of q.items) if (x.t) cnt.set(x.t, (cnt.get(x.t) || 0) + 1);
+    for (const x of q.items) if (x.t && x.t % 864e5 && cnt.get(x.t) >= 5) x.t = 0;
+    const posts = q.items.filter(isPost); if (posts.length >= 3) q.items = posts;
+    return posts.length >= 3 && q.items.some(x => x.t);
+  };
+  // Ana haritada tarihli blog yazısı yoksa robots.txt'teki blog/dergi haritası denenir
+  if (p.kind === "sitemap" && !clean(p) && origin && budget.n > 1) {
+    const keep = p, kurl = out.feed_url;
+    try {
+      const r = await rtGet(origin + "/robots.txt", budget);
+      const subs = r.ok ? [...r.text.matchAll(/^\s*sitemap:\s*(\S+)/gim)].map(m => m[1]) : [];
+      const sub = subs.find(x => /blog|magazine|post|article/i.test(x)) || subs.find(x => /news|insight|resource|haber|yazi|makale/i.test(x));
+      if (sub) { p = null; await tryUrl(sub); if (p?.kind === "index") { const s2 = p.subs.find(x => /post|blog|article/i.test(x)) || p.subs[0]; p = null; if (s2) await tryUrl(s2); } }
+    } catch {}
+    if (p?.kind === "sitemap" && (clean(p) || p.items.some(x => x.t))) {} else { p = keep; out.feed_url = kurl; }
+    // Haritada hiç gerçek tarih kalmadıysa güvenilmez: blog sayfası denenir
+    if (!p.items.some(x => x.t)) { const h = await blogPage(); if (h) p = h; else out.feed_url = kurl; }
   }
   out.ok = true; out.error = ""; out.kaynak = p.kind === "sitemap" ? "site haritası" : p.kind === "html" ? "blog sayfası" : "blog/RSS";
   out.toplam = p.items.length; out.tarihsiz = p.items.filter(x => !x.t).length;
