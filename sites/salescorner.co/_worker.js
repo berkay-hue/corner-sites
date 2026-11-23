@@ -1327,7 +1327,10 @@ async function rtLinkedIn(c, slug, since, gun, env) {
   try {
     const q = `site:linkedin.com/posts "${slug}"`;
     let r = await ara({ q, num: 20, tbs: gun <= 7 ? "qdr:w" : "qdr:m" });
-    if (r.status === 400) r = await ara({ q });
+    if (r.status === 400) {
+      out.tani = "ilk:" + String((await r.json().catch(() => ({})))?.message || "").replace(/[A-Za-z0-9_-]{24,}/g, "…").slice(0, 80);
+      r = await ara({ q });
+    }
     if (!r.ok) {
       const m = String((await r.json().catch(() => ({})))?.message || "").replace(/[A-Za-z0-9_-]{24,}/g, "…").slice(0, 80);
       console.log("rakip-takip serper", r.status, m);
@@ -1350,7 +1353,7 @@ async function rtLinkedIn(c, slug, since, gun, env) {
     if (title.length < 25 && snip.length > title.length) title = snip;
     all.push({ t, title: (title || "LinkedIn gönderisi").slice(0, 200), link: "https://www.linkedin.com" + u.pathname });
   }
-  out.ok = true; out.toplam = all.length;
+  out.ok = true; out.toplam = all.length; out.ham = (d?.organic || []).length;
   const newest = all.reduce((m, x) => Math.max(m, x.t), 0);
   if (newest) out.son = new Date(newest).toISOString().slice(0, 10);
   const now = Date.now() + 864e5;
