@@ -41,8 +41,9 @@ YT_ANALYTICS = "1"
 # migrations/0014_gen.sql uygulanmalı; tablo yoksa 503 not_ready. Gizli değerler `wrangler secret put` ile girilir
 # (değer burada yok): ANTHROPIC_API_KEY, GEN_SALT, TURNSTILE_SECRET; biri eksikse de 503 not_ready.
 # GEN_MODEL Berkay'ın kararı, A2-3 ölçümünden sonra kesinleşir. app.socialmediacorner.co ALLOWED_HOSTS'ta (A3-1:
-# bekleme listesi/teklif /submit'i ve not_ready yanıtının CORS'u için); "1" yapmak ayrı adımdır (A3-3).
-GEN_ENABLED = "0"
+# bekleme listesi/teklif /submit'i ve not_ready yanıtının CORS'u için). A3-3: 23.11 Berkay onayıyla "1" (istem kuralları
+# A2/A4 önerileri gibi, limitler 3/10/300); kapatmak için "0" + wrangler deploy.
+GEN_ENABLED = "1"
 GEN_DAILY_CAP = "300"
 GEN_PER_DAY = "3"
 GEN_IP_PER_DAY = "10"
