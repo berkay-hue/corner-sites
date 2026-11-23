@@ -259,6 +259,25 @@ test("başka kullanıcının işi ve hesabı 404; başka sitenin oturumu 401", a
   assert.equal(s.row(id).state, "planlandi");
 });
 
+test("rolü sitede kabul edilmeyen (pasif) hesabın oturumu 401 auth (platform.js sessionUser ile aynı); brand geri dönünce açılır", async () => {
+  const APP = "https://app.socialmediacorner.co";
+  const s = setup({ ACCOUNTS_ENABLED: "1", PUBLISH_SITES: `${SITE},app.socialmediacorner.co` });
+  const a = s.user("a@x.co", "app.socialmediacorner.co"), bc = s.user("b@x.co");
+  await s.connect(a, "linkedin", "aa");
+  const id = ok(await s.call("POST", "/publish/jobs", { token: a.token, origin: APP, body: { rid: "app-1", platform: "linkedin", body: "Merhaba" } })).body.job.id;
+  for (const role of ["influencer", "agency", "Brand", ""]) {
+    s.db.prepare("UPDATE users SET role = ? WHERE id IN (?, ?)").run(role, a.id, bc.id);
+    for (const [m, p, body] of [["GET", "/publish/jobs"], ["GET", `/publish/jobs/${id}`], ["PUT", `/publish/jobs/${id}`, { body: "x" }],
+      ["POST", "/publish/jobs", { rid: `r-${role}`, platform: "linkedin", body: "x" }], ["POST", `/publish/jobs/${id}/cancel`]])
+      fails(await s.call(m, p, { token: a.token, body, origin: APP }), 401, "auth");
+    // brandcorner.co'da rol kısıtı yok: oturum her rolde geçer (bugünkü davranış)
+    ok(await s.call("GET", "/publish/jobs", { token: bc.token }));
+  }
+  assert.equal(s.row(id).state, "taslak");
+  s.db.prepare("UPDATE users SET role = 'brand' WHERE id = ?").run(a.id);
+  assert.equal(ok(await s.call("GET", "/publish/jobs", { token: a.token, origin: APP })).body.jobs.length, 1);
+});
+
 test("durum makinesi: tablo dışı geçiş 409; onay kuralları (run_at, IG görseli)", async () => {
   assert.equal(canMove("onay_bekliyor", "planlandi"), true);
   assert.equal(canMove("taslak", "planlandi"), false);
