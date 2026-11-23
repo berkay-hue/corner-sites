@@ -82,6 +82,7 @@ var EN={"1 taslak":"1 draft",
 "Veri odaklı":"Data-driven",
 "Verilerin JSON dosyası olarak indirildi.":"Your data was downloaded as a JSON file.",
 "Yasaklı kelime":"Banned words",
+"Yasaklı kelimede | işaretini kullanma.":"Don't use the | character in banned words.",
 "Yeni bağlantılar şu an kapalı. Açıldığında bu düğme çalışır.":"New connections are closed right now. This button will work once they open.",
 "Yeniden dene":"Try again",
 "Yeniden yetkilendir":"Re-authorise",
@@ -405,6 +406,7 @@ function kelimeCiz(){
 function kelimeEkle(){
   var i=$('#kelime'),yeni=i.value.split(',').map(function(x){return x.trim().toLocaleLowerCase('tr')}).filter(Boolean),hata='',kalan=[];
   yeni.forEach(function(k){
+    if(/[|\n\r\u0085\u2028\u2029]/.test(k)){hata=hata||'Yasaklı kelimede | işaretini kullanma.';kalan.push(k);return}
     if(k.length>40){hata='Bir kelime en fazla 40 karakter olabilir.';kalan.push(k);return}
     if(kelimeler.indexOf(k)>=0){hata=hata||'Bu kelime zaten listede.';kalan.push(k);return}
     if(kelimeler.length>=30){hata='En fazla 30 kelime ekleyebilirsin.';kalan.push(k);return}
