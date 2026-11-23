@@ -339,3 +339,19 @@ dialog::backdrop{background:var(--ortu)}
 /* A4-2c-nav: gezinti yatay kaymaz; sığmadığı her genişlikte (360 px, 480–590 px arası TR, büyük yazı boyutu) temizce satırlara sarılır;
    "Marka sesi" son satırın sağında kalır. Denetim: yalnız <480 px kuralı 480–590 px'te "Marka sesi"ni kayan şeridin dışında kırpıyordu */
 .araclar{flex-wrap:wrap;row-gap:0;overflow-x:visible}
+
+/* A7-kvkk: hukuki metin sayfaları (/kvkk, /kosullar, /en/privacy, /en/terms); yalnız token */
+.belge{max-width:72ch;margin:0 auto;padding:var(--s6) var(--kenar) var(--s8);overflow-wrap:anywhere}
+.belge h1{margin-top:0}
+.belge-tarih{margin-top:var(--s2);color:var(--ink2);font-size:.875rem}
+.belge-ozet{margin-top:var(--s5);padding:var(--s4);border:1px solid var(--line);border-radius:var(--r-kagit);background:var(--surface)}
+.belge-ozet h2{font-size:1.0625rem}
+.belge h2{margin-top:var(--s7);scroll-margin-top:var(--s4)}
+.belge h3{margin-top:var(--s5);font:700 1rem/1.4 var(--baslik)}
+.belge p,.belge ul,.belge ol{margin-top:var(--s3)}
+.belge ul{list-style:disc;padding-left:1.25em}
+.belge ol{list-style:decimal;padding-left:1.5em}
+.belge li+li{margin-top:var(--s1)}
+.belge code{font-size:.875em;overflow-wrap:anywhere}
+.belge-icindekiler{margin-top:var(--s5)}
+.belge-icindekiler a{display:inline-block;padding:2px 0}
