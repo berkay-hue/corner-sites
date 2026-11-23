@@ -1436,10 +1436,10 @@ async function rakipTakip(req, env) {
 }
 
 // ---------- Sales Corner SaaS paneli (app.salescorner.co, /api/app/*) ----------
-// Oturum: Supabase (udhprgrkbdeodokxrdsi). Ön yüz kullanıcının erişim jetonunu (Bearer) ve projenin herkese açık
+// Oturum: Supabase (jqllcrmwjxnuzxbzfydu). Ön yüz kullanıcının erişim jetonunu (Bearer) ve projenin herkese açık
 // apikey'ini gönderir; worker bunları yalnızca Supabase RPC'lerine aynen iletir (worker'da Supabase anahtarı yok).
 // Kota: app_kontrol (çalıştırmadan önce) → mevcut işleyici (iç istek) → başarıda app_kullan (1 hak düşer).
-const SB_URL = "https://udhprgrkbdeodokxrdsi.supabase.co";
+const SB_URL = "https://jqllcrmwjxnuzxbzfydu.supabase.co";
 const APP_MOD = {
   rakip: "/api/rakip-analizi-pro-v5",
   sekans: "/api/sekans",
