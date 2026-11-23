@@ -250,6 +250,16 @@ CREATE TABLE IF NOT EXISTS drafts (
 CREATE INDEX IF NOT EXISTS drafts_user ON drafts (user_id, id DESC);
 CREATE INDEX IF NOT EXISTS drafts_age ON drafts (created_at);
 
+-- app plan kotaları (migrations/0018_plans.sql ile aynı tablo; users.plan ve users.plan_limits sütunları yalnız 0018'de).
+-- Aylık üretim sayacı: month 'YYYY-MM' (Europe/Istanbul), kind lb (LinkedIn + blog) | vg (video + görsel).
+CREATE TABLE IF NOT EXISTS gen_month (
+  month TEXT NOT NULL,
+  user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  kind TEXT NOT NULL CHECK (kind IN ('lb','vg')),
+  n INTEGER NOT NULL DEFAULT 0,
+  PRIMARY KEY (month, user_id, kind)
+) WITHOUT ROWID;
+
 -- Sosyal metrikler bu dosyada değil, migrations/ altında; bu dosyadan sonra sırayla uygulanır:
 --   0001_metrics.sql  sosyal hesaplar ve metrik tabloları
 --   0002_oauth.sql    OAuth akışı, şifreli token, social_accounts (platform, external_id) UNIQUE
@@ -267,7 +277,9 @@ CREATE INDEX IF NOT EXISTS drafts_age ON drafts (created_at);
 --   0014_gen.sql          app taslak üretimi: gen_usage (günlük sayaçlar), gen_daily (günlük ölçüm) (yukarıdakiyle aynı tablolar)
 --   0016_publish.sql      yayın kuyruğu: publish_jobs, publish_events (yukarıdakiyle aynı tablolar; 0015 başka dala ayrıldı)
 --   0017_accounts.sql     app marka sesi + taslak geçmişi: brand_voice, drafts (yukarıdakiyle aynı tablolar; 0015 Ana'ya ayrıldı)
+--   0018_plans.sql        app plan kotaları: users.plan, users.plan_limits, gen_month (aylık sayaç; tablo yukarıdakiyle aynı)
 -- Uygula (form-worker/ klasöründen çalıştır): npx wrangler d1 migrations apply corner-forms --remote
 -- 0002 uygulanmadan da bağ koparma çalışır; 0003–0014 yeni kodla deploy'dan ÖNCE uygulanmalı.
 -- 0016 PUBLISH_ENABLED = "1" yapılmadan ÖNCE uygulanmalı; bayrak kapalıyken kod bu tablolara dokunmaz.
 -- 0017 uygulanmadan /app/voice ve /app/drafts 503 not_ready döner; /app/export ve /app/account/delete tabloyu atlar.
+-- 0018 uygulanmadan girişli üretim anonim akışa düşer ve /gen/stock herkese 403 plan döner (Pexels kapalı).

@@ -10,7 +10,7 @@ function $$(s,k){return Array.prototype.slice.call((k||d).querySelectorAll(s))}
 function el(t,c,x){var e=d.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e}
 function metaAl(n){var m=$('meta[name="'+n+'"]');return m?(m.getAttribute('content')||'').trim():''}
 var API=metaAl('api-base').replace(/\/+$/,''),TS=metaAl('turnstile-sitekey'),T0=Date.now();
-var JETON_YOL=/^\/gen\/(linkedin|instagram|refine|blog|video)$/,GOVDE_MAX=12288,STIL_MAX=3000,KONU_MAX=300;
+var JETON_YOL=/^\/gen\/(linkedin|instagram|refine|blog|video|quota)$/,GOVDE_MAX=12288,STIL_MAX=3000,KONU_MAX=300;
 var D={anon:null,left:null,cap:3,reset:'',hakScope:'anon',hakBilinmez:true,acik:false,rid:null,deneme:0,kartVar:false,
   view:'',hata:'',scope:'',mesgul:false,istek:0,yakinda:false,ac:null,vazgec:false,son:null,sonGovde:null};
 var cfg=null;
@@ -41,6 +41,13 @@ var DUVAR={
   kapasite:{h:T('Kapasite doldu','Capacity is full'),b:T('Kapasite doldu.','Capacity is full.'),
     m:T('Araç şu an yeni taslak üretemiyor. Ne zaman açılacağı henüz belli değil; daha sonra yeniden deneyebilirsin.','The tool can’t write new drafts right now. We don’t know yet when it will reopen; you can try again later.'),
     d:[[T('Yenilenme','Renews'),T('belli değil','not known yet')],[T('Senden istenen','Asked of you'),T('hiçbir şey','nothing')]]},
+  /* A9b: girişli kullanıcı (plan). Metinde tek başına "3" yok: duvarHazirla 3'ü günlük cap ile değiştirir */
+  plan:{h:T('Bu ayki hakkın doldu','This month’s allowance is used up'),b:T('Planındaki bu ayki üretim hakkını kullandın.','You’ve used this month’s generations in your plan.'),
+    m:T('Hak ayın ilk günü (İstanbul saati) yenilenir. Daha fazlası için planları karşılaştırabilirsin.','It renews on the 1st of the month (Istanbul time). To get more, you can compare the plans.'),
+    d:[[T('Sınır','Limit'),T('planının aylık hakkı','your plan’s monthly allowance')],[T('Yenilenme','Renews'),T('ayın ilk günü','the 1st of the month')],[T('Planlar','Plans'),EN?'/en/pricing':'/fiyatlar']]},
+  user:{h:T('Bugünlük bu kadar','That’s it for today'),b:T('Hesabının bugünkü üretim sınırına ulaştın.','You’ve reached your account’s generation limit for today.'),
+    m:T('Bu sınır kötüye kullanıma karşı; aylık hakkın yerinde duruyor. Gece yarısı yeniden üretebilirsin.','This limit guards against abuse; your monthly allowance is untouched. You can generate again after midnight.'),
+    d:[[T('Sınır','Limit'),T('hesap başına günlük','per account, per day')],[T('Yenilenme','Renews'),YEN],[T('Senden istenen','Asked of you'),T('hiçbir şey','nothing')]]},
   yakinda:{h:T('Çok yakında','Coming soon'),b:T('Çok yakında.','Coming soon.'),m:T('Araç henüz açılmadı. Açılınca haber verelim mi?','The tool isn’t open yet. Shall we let you know when it opens?'),d:[]}
 };
 var KAYNAK={top:'top',error:'error',limit:'limit',footer:'footer',result:'result',cap:'cap',calendly:'calendly'};
@@ -57,24 +64,34 @@ function oturumJeton(){var ds=[];try{ds.push(window.sessionStorage)}catch(e){}tr
   for(var i=0;i<ds.length;i++){var v=null;try{v=ds[i]&&ds[i].getItem('smc-oturum')}catch(e){v=null}if(!v)continue;var t=v;
     if(v.charAt(0)==='{'){try{t=JSON.parse(v).token}catch(e){t=null}}if(typeof t==='string'&&/^[A-Za-z0-9_-]{43}$/.test(t))return t}
   return null}
-function hakAl(r){if(!r)return;if(typeof r.left==='number'){D.left=Math.max(0,r.left);D.hakBilinmez=false}if(typeof r.cap==='number'&&r.cap>0)D.cap=r.cap;if(typeof r.reset_at==='string')D.reset=r.reset_at;if(r.scope==='anon'||r.scope==='ip'||r.scope==='global')D.hakScope=r.scope;if(typeof r.stock==='boolean')D.stock=r.stock}
+/* A9b: girişliyken (plan basic|pro|enterprise) yanıt month taşır; left = aylık (bu sayfanın türü) ∧ kullanıcı günlük ∧ global.
+   Quota tür bilmez (iki türün büyüğünü verir); sayfanın türü cfg.yol'dan, kalan buradan daraltılır. */
+var AY_TUR={'/gen/linkedin':'linkedin_blog','/gen/blog':'linkedin_blog','/gen/video':'video_gorsel','/gen/instagram':'video_gorsel'};
+var AY_AD={linkedin_blog:'LinkedIn+Blog',video_gorsel:T('Video+Görsel','Video+Visual')};
+function ayBilgi(){var k=cfg&&AY_TUR[cfg.yol],a=k&&D.ay&&D.ay[k];if(!a||typeof a.limit!=='number'||typeof a.used!=='number')return null;
+  return {kalan:Math.max(0,a.limit-a.used),limit:a.limit,ad:AY_AD[k]}}
+function hakAl(r){if(!r)return;if(typeof r.left==='number'){D.left=Math.max(0,r.left);D.hakBilinmez=false}if(typeof r.cap==='number'&&r.cap>0)D.cap=r.cap;if(typeof r.reset_at==='string')D.reset=r.reset_at;if(/^(anon|ip|global|plan|user)$/.test(r.scope||''))D.hakScope=r.scope;if(typeof r.stock==='boolean')D.stock=r.stock;
+  if(typeof r.plan==='string'){D.plan=r.plan;if(r.plan==='anon')D.ay=null}if(r.month&&typeof r.month==='object')D.ay=r.month;
+  var a=D.plan&&D.plan!=='anon'?ayBilgi():null;if(a&&typeof D.left==='number'&&a.kalan<=D.left){D.left=a.kalan;D.hakScope='plan'}}
+function duvarSc(){return /^(ip|global|plan|user)$/.test(D.hakScope)?D.hakScope:'anon'}
 
-/* ---- istek: jeton yalnız üretim uçlarına; dış AbortController (Vazgeç) verilebilir ---- */
+/* ---- istek: jeton yalnız üretim uçlarına ve /gen/quota'ya (A9b: plan ve aylık hak); dış AbortController (Vazgeç) verilebilir ---- */
 function post(yol,govde,ms,kalici,dis){
   if(!window.fetch||!API)return Promise.reject({kod:'ag'});
   var ac=dis||(window.AbortController?new AbortController():null),tm=ac&&ms?setTimeout(function(){ac.abort()},ms):null,
       o={method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(govde),credentials:'omit',cache:'no-store'};
   if(ac)o.signal=ac.signal;if(kalici)o.keepalive=true;
   if(JETON_YOL.test(yol)){var tk=oturumJeton();if(tk)o.headers.authorization='Bearer '+tk}
-  return fetch(API+yol,o).then(function(r){clearTimeout(tm);if(r.status===204)return {};return r.json().then(function(j){if(r.ok&&j&&j.ok!==false)return j;j=j||{};throw {kod:j.error||'genel',scope:j.scope,charged:!!j.charged,left:j.left,cap:j.cap,reset_at:j.reset_at,field:j.field}},function(){throw {kod:'genel'}})},
+  return fetch(API+yol,o).then(function(r){clearTimeout(tm);if(r.status===204)return {};return r.json().then(function(j){if(r.ok&&j&&j.ok!==false)return j;j=j||{};throw {kod:j.error||'genel',scope:j.scope,charged:!!j.charged,left:j.left,cap:j.cap,reset_at:j.reset_at,field:j.field,plan:j.plan,month:j.month,kind:j.kind}},function(){throw {kod:'genel'}})},
     function(e){clearTimeout(tm);throw {kod:D.vazgec?'vazgec':e&&e.name==='AbortError'?'zaman':'ag'}});
 }
-/* GET: yalnız /gen/stock (Pexels araması; hak düşmez, jeton gönderilmez) */
+/* GET: yalnız /gen/stock (Pexels araması; hak düşmez). A9b: Pexels Pro/Enterprise'da; girişliyse Bearer jeton gider, anonimde gitmez.
+   403 plan → {kod:'plan',need:'pro'} (kurgu kilidi gösterir) */
 function al(yol,ms,dis){
   if(!window.fetch||!API)return Promise.reject({kod:'ag'});
   var ac=dis||(window.AbortController?new AbortController():null),tm=ac&&ms?setTimeout(function(){ac.abort()},ms):null,o={method:'GET',credentials:'omit',cache:'no-store'};
-  if(ac)o.signal=ac.signal;
-  return fetch(API+yol,o).then(function(r){clearTimeout(tm);return r.json().then(function(j){if(r.ok&&j&&j.ok!==false)return j;j=j||{};throw {kod:j.error||'genel',scope:j.scope}},function(){throw {kod:'genel'}})},
+  if(ac)o.signal=ac.signal;var tk=oturumJeton();if(tk)o.headers={authorization:'Bearer '+tk};
+  return fetch(API+yol,o).then(function(r){clearTimeout(tm);return r.json().then(function(j){if(r.ok&&j&&j.ok!==false)return j;j=j||{};throw {kod:j.error||'genel',scope:j.scope,need:j.need}},function(){throw {kod:'genel'}})},
     function(e){clearTimeout(tm);throw {kod:e&&e.name==='AbortError'?'zaman':'ag'}});
 }
 function olay(kind,src){if(!D.acik||!API)return;var b={anon:anonAl(),kind:kind};if(src)b.src=src;try{post('/gen/event',b,8000,true).then(null,function(){})}catch(e){}}
@@ -118,11 +135,19 @@ function yenMetin(){var g=T('gece yarısı (İstanbul saati)','midnight (Istanbu
   return g+T(', yaklaşık '+Math.floor(dk/60)+' sa '+(dk%60)+' dk sonra',', in about '+Math.floor(dk/60)+' h '+(dk%60)+' min')}
 function hakYaz(){
   var p=$('#hak'),y=$('#hak-yazi'),bl=$('#hak-balon');if(!p||!y)return;
-  var bel=!!D.hakBilinmez||D.view==='hata'&&(HATA[D.hata]||HATA.genel).e==='istemci',sc=D.view==='duvar'?D.scope:'',ust,alt,veri;
+  var bel=!!D.hakBilinmez||D.view==='hata'&&(HATA[D.hata]||HATA.genel).e==='istemci',sc=D.view==='duvar'?D.scope:'',ust,alt,veri,ay;
   if(sc==='yakinda'){ust=T('Çok yakında','Coming soon');alt=T('Araç henüz açılmadı.','The tool isn’t open yet.');veri='?'}
   else if(sc==='kapasite'){ust=T('Kapasite doldu','Capacity is full');alt=DUVAR.kapasite.m;veri='0'}
-  else if(sc==='ip'||sc==='global'){ust=T('Bugünlük kapalı','Closed for today');alt=DUVAR[sc].b+' '+T('Yenilenme: ','Renews: ')+yenMetin()+'.';veri='0'}
+  else if(sc==='ip'||sc==='global'||sc==='user'){ust=T('Bugünlük kapalı','Closed for today');alt=DUVAR[sc].b+' '+T('Yenilenme: ','Renews: ')+yenMetin()+'.';veri='0'}
+  else if(sc==='plan'){ust=T('Bu ay doldu','Used up this month');alt=DUVAR.plan.b+' '+DUVAR.plan.m;veri='0'}
   else if(bel||D.left==null){ust=T('Hak: belli değil','Credits: unknown');alt=T('Her üretim 1 hak kullanır. Günde '+D.cap+' hak; yenilenme: ','Each generation uses 1 credit. '+D.cap+' credits a day; renews: ')+yenMetin()+'.';veri='?'}
+  else if((ay=D.plan&&D.plan!=='anon'?ayBilgi():null)){
+    /* A9b: girişli → aylık hak ("Bu ay 37/40 LinkedIn+Blog"); günlük/global sınır daha darsa balonda söylenir */
+    ust=T('Bu ay '+ay.kalan+'/'+ay.limit+' '+ay.ad,'This month '+ay.kalan+'/'+ay.limit+' '+ay.ad);
+    alt=T('Planındaki aylık '+ay.ad+' hakkı '+ay.limit+'; '+ay.kalan+' kaldı. Her üretim 1 hak kullanır; hak ayın ilk günü yenilenir.','Your plan’s monthly '+ay.ad+' allowance is '+ay.limit+'; '+ay.kalan+' left. Each generation uses 1 credit; it renews on the 1st of the month.');
+    if(D.left<ay.kalan)alt+=' '+T('Bugün en çok '+D.left+' üretim daha yapabilirsin; yenilenme: ','You can make at most '+D.left+' more today; renews: ')+yenMetin()+'.';
+    veri=D.left<=0?'0':D.left===1?'1':'2';
+  }
   else{
     ust=D.left===1?T('1 hak kaldı','1 credit left'):T(D.left+' hak kaldı',D.left+' credits left');
     alt=(D.left<=0?T('Bugünkü '+D.cap+' hakkını kullandın.','You’ve used today’s '+D.cap+' credits.'):T('Her üretim 1 hak kullanır; bugün '+D.cap+' hakkından '+D.left+' kaldı.','Each generation uses 1 credit; '+D.left+' of today’s '+D.cap+' left.'))+' '+T('Yenilenme: ','Renews: ')+yenMetin()+'.';
@@ -203,7 +228,7 @@ function yukBasla(){
 function durdur(){clearInterval(yukT);yukT=null}
 
 /* ---- üretim ---- */
-function hakYok(){duvarGoster(D.hakScope==='ip'||D.hakScope==='global'?D.hakScope:'anon',true)}
+function hakYok(){duvarGoster(duvarSc(),true)}
 function uret(){
   if(!cfg||D.mesgul)return;
   if(!dogrula())return;
@@ -252,7 +277,8 @@ function hataGoster(kod,odak,hakBilgi){
   $('#hata-baslik').textContent=h.b;var hm=$('#hata-metin');hm.textContent=h.m||'';hm.hidden=!h.m;
   var ik=$('#d-hata .st-simge');if(ik){ik.classList.toggle('st-simge-uyari',h.e==='istemci');ik.classList.toggle('st-simge-hata',h.e!=='istemci')}
   var hk=$('#hata-hak');
-  hk.textContent=ch&&typeof D.left==='number'?T('Bu deneme 1 hak kullandı. Bugün '+D.cap+' hakkından '+D.left+' kaldı.','This attempt used 1 credit. '+D.left+' of today’s '+D.cap+' left.'):h.e==='istemci'?T('Hakkının düşüp düşmediği henüz belli değil. Tekrar denersen aynı istek gider; hak iki kez düşmez.','We can’t tell yet whether a credit was used. Trying again sends the same request; you won’t be charged twice.'):T('Hakkın düşmedi.','No credit used.');
+  var ay=D.plan&&D.plan!=='anon'?ayBilgi():null;
+  hk.textContent=ch&&ay?T('Bu deneme 1 hak kullandı. Bu ay '+ay.limit+' hakkından '+ay.kalan+' kaldı.','This attempt used 1 credit. '+ay.kalan+' of this month’s '+ay.limit+' left.'):ch&&typeof D.left==='number'?T('Bu deneme 1 hak kullandı. Bugün '+D.cap+' hakkından '+D.left+' kaldı.','This attempt used 1 credit. '+D.left+' of today’s '+D.cap+' left.'):h.e==='istemci'?T('Hakkının düşüp düşmediği henüz belli değil. Tekrar denersen aynı istek gider; hak iki kez düşmez.','We can’t tell yet whether a credit was used. Trying again sends the same request; you won’t be charged twice.'):T('Hakkın düşmedi.','No credit used.');
   var b=$('#hata-tekrar');b.setAttribute('data-e',h.e);b.removeAttribute('aria-label');
   if(h.e==='duzenle')b.textContent=T('Konuyu düzenle','Edit topic');
   else if(h.e==='yenile')b.textContent=T('Sayfayı yenile','Refresh page');
@@ -276,13 +302,15 @@ function duvarHazirla(sc){
   var v=DUVAR[sc]||DUVAR.anon;D.scope=sc;D.yakinda=sc==='yakinda';if(sc!=='yakinda'&&sc!=='kapasite')D.left=0;
   $('#duvar-baslik').textContent=v.h;$('#duvar-metin').textContent=(v.b+' '+v.m).replace(/\b3\b/g,String(D.cap||3));
   var dl=$('#duvar-dokum');dl.textContent='';dl.hidden=!v.d.length;
-  v.d.forEach(function(x){var w=el('div'),dt=el('dt',null,x[0]),dd=el('dd',null,x[1]===YEN?yenMetin():x[0]===T('Kullandığın','Used')?D.cap+' / '+D.cap+T(' hak',' credits'):x[1]);w.appendChild(dt);w.appendChild(dd);dl.appendChild(w)});
+  v.d.forEach(function(x){var w=el('div'),dt=el('dt',null,x[0]),dd=el('dd',null,x[1]===YEN?yenMetin():x[0]===T('Kullandığın','Used')?D.cap+' / '+D.cap+T(' hak',' credits'):/^\/(fiyatlar|en\/pricing)$/.test(x[1])?'':x[1]);
+    if(!dd.textContent){var a=el('a',null,T('Planları karşılaştır','Compare plans'));a.href=x[1];dd.appendChild(a)}w.appendChild(dt);w.appendChild(dd);dl.appendChild(w)});
   var tsk=$('#duvar-taslak');if(tsk)tsk.hidden=!D.kartVar;
   var ik=$('#d-duvar .st-simge');if(ik)ik.classList.toggle('st-simge-uyari',sc!=='yakinda');
   var cb=$('#c-bekle'),bv=$('#b-vaat'),br=$('#b-riza-yazi');
   if(cb)cb.textContent=D.yakinda?T('Açılış için bekleme listesi','Waitlist for the launch'):T('Hesaplı sürüm için bekleme listesi','Waitlist for the account version');
   if(bv)bv.textContent=D.yakinda?T('Araç açılınca ilk sen haber al.','Be the first to hear when the tool opens.'):T('Hesaplı sürüm açılınca ilk sen haber al: marka sesi, takvim, ekip onayı.','Be the first to hear when the account version opens: brand voice, calendar, team approval.');
   if(br)br.textContent=D.yakinda?T('E-posta adresimin açılış duyurusu için işlenmesini kabul ediyorum.','I agree to my e-mail address being processed for the launch announcement.'):T('E-posta adresimin hesaplı sürüm duyurusu için işlenmesini kabul ediyorum.','I agree to my e-mail address being processed for the account-version announcement.');
+  var bk=$('#bekleme');if(bk)bk.hidden=sc==='plan'||sc==='user'; /* A9b: hesabı olan kullanıcıya hesaplı sürüm bekleme listesi gösterilmez */
   var cz=$('#c-biz'),czs=cz&&cz.closest('section');if(czs)czs.hidden=D.yakinda;
   var tb=czs&&$('[data-teklif]',czs);if(tb)tb.setAttribute('data-teklif',sc==='kapasite'?'cap':'limit');
   if(uretB){if(sc==='yakinda'||sc==='kapasite')uretB.setAttribute('aria-disabled','true');}
@@ -354,7 +382,7 @@ function quotaSor(ilk){
     try{d.dispatchEvent(new CustomEvent('studyo:hak'))}catch(e){}
     if(uretB&&D.scope!=='kapasite')uretB.removeAttribute('aria-disabled');
     if(ilk&&D.view==='duvar'&&D.scope==='yakinda')goster(D.kartVar?'sonuc':'bos',false);
-    if(ilk&&D.left<=0&&D.view!=='sonuc'){duvarGoster(D.hakScope==='ip'||D.hakScope==='global'?D.hakScope:'anon',false);return}
+    if(ilk&&D.left<=0&&D.view!=='sonuc'){duvarGoster(duvarSc(),false);return}
     hakYaz();
   },function(h){
     if(h&&h.kod==='not_ready'){D.acik=false;depo('smc-acik',null);if(D.view==='bos'&&!D.kartVar||D.view==='duvar')duvarGoster('yakinda',false);return}
@@ -410,7 +438,7 @@ window.Studyo={
   kaydet:function(c){cfg=c;if(c.hedefMax==null)c.hedefMax=0},
   uret:uret,
   refine:function(q){return post('/gen/refine',q,30000).then(function(r){hakAl(r);hakYaz();kayitNot(r);var a=r&&r.drafts&&r.drafts[0];return {text:a&&typeof a.text==='string'?a.text:null}})},
-  hak:function(){return {left:D.left,cap:D.cap,reset:D.reset,scope:D.hakScope,bilinmez:D.hakBilinmez}},
+  hak:function(){return {left:D.left,cap:D.cap,reset:D.reset,scope:D.hakScope,bilinmez:D.hakBilinmez,plan:D.plan||null,ay:D.ay||null}},
   stok:function(q,dis){return al('/gen/stock?'+q,12000,dis)},
   hakYaz:hakYaz,olay:olay,hata:hataIsle,kopyala:kopyala,toast:toast,durum:durum,dil:dilAl,T:T,goster:goster,
   D:D,el:el,$:$,$$:$$,depo:depo,oturumDepo:oturumDepo,yenMetin:yenMetin,cp:cp,azHareket:azHareket,

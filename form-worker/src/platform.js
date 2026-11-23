@@ -447,6 +447,8 @@ async function exportData(c) {
     posts: await listOr(env, `SELECT id, platform, url, type, date, caption, created_at FROM posts WHERE user_id = ? ORDER BY id LIMIT ${EXPORT_MAX}`, user.id),
     publish_jobs: await listOr(env, `SELECT id, platform, state, body, run_at, created_at, updated_at FROM publish_jobs WHERE user_id = ? AND site = ?
       ORDER BY id LIMIT ${EXPORT_MAX}`, user.id, site),
+    // A9b aylık üretim sayaçları (0018 gen_month; tablo yoksa boş)
+    usage: await listOr(env, "SELECT month, kind, n FROM gen_month WHERE user_id = ? ORDER BY month, kind", user.id),
   };
   return new Response(JSON.stringify(body), {
     status: 200,
@@ -499,6 +501,7 @@ async function deleteAccount(c) {
   add(["post_edits"], q("DELETE FROM post_edits WHERE user_id = ?", id));
   add(["brand_voice"], q("DELETE FROM brand_voice WHERE user_id = ?", id));
   add(["drafts"], q("DELETE FROM drafts WHERE user_id = ?", id));
+  add(["gen_month"], q("DELETE FROM gen_month WHERE user_id = ?", id));
   // Yeni üye bildirimi (register: site + '/kayit' + fields içinde ["E-posta", email])
   steps.push(q("DELETE FROM submissions WHERE site = ? AND page = '/kayit' AND instr(fields, ?) > 0", site, JSON.stringify(["E-posta", user.email])));
   steps.push(q("DELETE FROM password_resets WHERE user_id = ?", id), q("DELETE FROM sessions WHERE user_id = ?", id));
