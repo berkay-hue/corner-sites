@@ -1310,6 +1310,47 @@ async function rtRakip(c, since, budget) {
     .map(x => ({ title: x.title, link: /^https?:\/\//i.test(x.link) ? x.link : "", tarih: new Date(x.t).toISOString().slice(0, 10) }));
   return out;
 }
+// LinkedIn şirket sayfası sunucu isteğine 403 verir; gönderiler Google araması (Serper) ile bulunur.
+// Gönderi linkindeki activity ID'nin üst bitleri yayın anının milisaniyesidir (id >> 22).
+function rtLiSlug(s) {
+  s = String(s || "").trim();
+  const m = s.match(/linkedin\.com\/(?:company|showcase)\/([^/?#\s]+)/i);
+  try { s = m ? decodeURIComponent(m[1]) : s; } catch { return ""; }
+  return /^[a-z0-9][a-z0-9._-]{1,99}$/i.test(s) ? s.toLowerCase() : "";
+}
+async function rtLinkedIn(c, slug, since, gun, env) {
+  const out = { firma: c.firma, site: "", feed_url: "https://www.linkedin.com/company/" + slug + "/", kaynak: "LinkedIn", ok: false, error: "", toplam: 0, tarihsiz: 0, son: "", items: [] };
+  if (!env.SERPER_API_KEY) { out.error = "arama anahtarı tanımlı değil"; return out; }
+  let d;
+  try {
+    const r = await fetch("https://google.serper.dev/search", { method: "POST", headers: { "X-API-KEY": env.SERPER_API_KEY, "content-type": "application/json" },
+      body: JSON.stringify({ q: `site:linkedin.com/posts "${slug}"`, num: 20, tbs: gun <= 7 ? "qdr:w" : "qdr:m" }), signal: AbortSignal.timeout(15000) });
+    if (!r.ok) { out.error = "LinkedIn araması başarısız (" + r.status + ")"; return out; }
+    d = await r.json();
+  } catch (e) { out.error = "LinkedIn araması başarısız"; return out; }
+  const seen = new Set(), all = [];
+  for (const o of d?.organic || []) {
+    let u; try { u = new URL(String(o.link || "")); } catch { continue; }
+    if (!/(^|\.)linkedin\.com$/i.test(u.hostname)) continue;
+    let path; try { path = decodeURIComponent(u.pathname); } catch { continue; }
+    if (!path.toLowerCase().startsWith("/posts/" + slug + "_")) continue;
+    const id = path.match(/activity-(\d{16,20})/)?.[1];
+    if (!id || seen.has(id)) continue;
+    seen.add(id);
+    const t = Number(BigInt(id) >> 22n);
+    let title = rtDecode(o.title).replace(/\s*\|\s*LinkedIn\s*$/i, "").replace(/^.{0,80}?\s(?:on LinkedIn|LinkedIn'de|adlı kullanıcının LinkedIn gönderisi)\s*:\s*/i, "").trim();
+    const snip = rtDecode(o.snippet);
+    if (title.length < 25 && snip.length > title.length) title = snip;
+    all.push({ t, title: (title || "LinkedIn gönderisi").slice(0, 200), link: "https://www.linkedin.com" + u.pathname });
+  }
+  out.ok = true; out.toplam = all.length;
+  const newest = all.reduce((m, x) => Math.max(m, x.t), 0);
+  if (newest) out.son = new Date(newest).toISOString().slice(0, 10);
+  const now = Date.now() + 864e5;
+  out.items = all.filter(x => x.t >= since && x.t <= now).sort((a, b) => b.t - a.t).slice(0, 10)
+    .map(x => ({ title: x.title, link: x.link, tarih: new Date(x.t).toISOString().slice(0, 10) }));
+  return out;
+}
 // Model çıktısında yalnız basit biçim etiketleri kalır (öznitelik yok); geri kalan her şey kaçışlanır.
 function rtSafeHtml(h) {
   return String(h || "").replace(/```(?:html)?/gi, "").split(/(<[^>]*>)/).map((x, i) => {
@@ -1339,14 +1380,17 @@ async function rtMail(env, to, subject, html) {
 async function rakipTakip(req, env) {
   const b = await readBody(req);
   const gun = Math.min(30, Math.max(1, Math.round(num(b.gun) || 7)));
-  const list = arr(b.rakipler, 6).map(x => ({ firma: str(x?.firma, 80), site: str(x?.site, 300), feed: str(x?.feed, 500) })).filter(x => normUrl(x.feed || x.site));
-  if (!list.length) return fail("En az bir rakip sitesi ya da RSS adresi girin.");
-  for (const x of list) if (!x.firma) x.firma = rtHost(x.site || x.feed) || "Rakip";
+  const list = arr(b.rakipler, 6).map(x => ({ firma: str(x?.firma, 80), site: str(x?.site, 300), feed: str(x?.feed, 500), li: rtLiSlug(str(x?.linkedin, 300)) }))
+    .filter(x => normUrl(x.feed || x.site) || x.li);
+  if (!list.length) return fail("En az bir rakip sitesi, RSS adresi ya da LinkedIn şirket sayfası girin.");
+  for (const x of list) if (!x.firma) x.firma = rtHost(x.site || x.feed) || x.li || "Rakip";
   const email = str(b.email, 200);
   if (email && !RT_EMAIL.test(email)) return fail("E-posta adresi geçersiz.");
   const sirket = str(b.sirket, 120).replace(/[\r\n]+/g, " ");
   const budget = { n: 40 }, since = Date.now() - gun * 864e5;
-  const res = await Promise.all(list.map(c => rtRakip(c, since, budget)));
+  const res = await Promise.all(list.flatMap(c => [
+    ...(normUrl(c.feed || c.site) ? [rtRakip(c, since, budget)] : []),
+    ...(c.li ? [rtLinkedIn(c, c.li, since, gun, env)] : [])]));
   const rows = res.flatMap(r => r.items.map(x => ({ firma: r.firma, kaynak: r.kaynak, ...x }))).sort((a, b) => b.tarih.localeCompare(a.tarih));
   let yorum = "";
   if (rows.length && env.ANTHROPIC_API_KEY) {
