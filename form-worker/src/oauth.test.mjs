@@ -3833,3 +3833,182 @@ test("app.socialmediacorner.co (ACCOUNTS_ENABLED=1): ayrı hesaplar, sıfırlama
   assert.match((await callback(env, `/oauth/instagram/callback?code=k&state=${bcState}`)).headers.get("location"),
     /^https:\/\/brandcorner\.co\/panel\?oauth=instagram&result=pending#ticket=/);
 });
+
+// ---- app.socialmediacorner.co rol zorlaması ve uç izin listesi (A5-2w) ----
+
+const { APP_ROUTES } = await import("./sites.js");
+const PREVIEW = "https://pr-1.web-smcapp.pages.dev";
+// A5-2w öncesi (main e1b4ff46) platform.js'in bütün uçları: brandcorner.co'da hepsi çalışmaya devam eder
+const OLD_AUTH = ["POST /auth/register", "POST /auth/login", "POST /auth/forgot", "POST /auth/reset", "GET /auth/me", "POST /auth/logout"];
+const OLD_APP = [
+  "GET profile", "POST profile", "GET connections", "POST connect", "POST connect/finish", "POST disconnect", "GET stats",
+  "GET influencers", "GET campaigns", "POST campaigns", "GET campaigns/:id", "POST campaigns/:id", "POST campaigns/:id/apply",
+  "POST campaigns/:id/invite", "GET applications", "POST applications/:id", "GET metrics", "GET metrics/:id",
+  "GET applications/:id/metrics", "GET niches", "GET matches", "GET notify", "PUT notify", "GET posts", "POST posts/manual",
+  "POST posts/import", "POST posts/older", "POST posts/:id/audience", "GET admin", "GET admin/:id/posts", "POST admin/:id/perm",
+  "POST admin/:id/snap",
+];
+const APP_OK = ["GET profile", "POST profile", "GET connections", "POST connect", "POST connect/finish", "POST disconnect"];
+// "POST campaigns/:id/apply" → ["POST", "/app/campaigns/7/apply"]
+const appPath = k => { const [method, p] = k.split(" "); return [method, `/app/${p.replace(":id", "7")}`]; };
+const bodyFor = method => (method === "GET" ? undefined : {});
+// İstek başına D1 ifadesi sayılır: yönlendiricinin 404'ü yalnız oturum sorgusunu (1) yapar; işleyiciye ulaşan istek ya
+// başka bir yanıt döner ya da en az bir ifade daha çalıştırır
+const countedApi = (env, origin) => {
+  const k = counted(env.DB), call = api({ ...env, DB: k.DB }, origin);
+  return async (...a) => { const n = k.n(), r = await call(...a); return { ...r, n: k.n() - n }; };
+};
+const routed = r => !(r.status === 404 && r.body.error === "not_found" && r.n <= 1);
+
+test("A5-2w: brandcorner.co'da eski uçların hepsi yönlendirilir, üç rol de kaydolur; bayrağın her değerinde aynı", async t => {
+  t.mock.method(console, "error", () => {});
+  t.mock.method(console, "log", () => {});
+  t.mock.method(globalThis, "fetch", async () => { throw new Error("testte ağ yok"); });
+  assert.equal(OLD_APP.length, 32);
+  for (const flag of [{}, { ACCOUNTS_ENABLED: "0" }, { ACCOUNTS_ENABLED: "preview" }, { ACCOUNTS_ENABLED: "1" }]) {
+    const { env, join, call } = await setup({ ...flag, ...IG_ENV, OAUTH_TOKEN_KEY: KEY, POSTS_ENABLED: "1" });
+    const users = { brand: await join("brand", "b@x.co"), influencer: await join("influencer", "i@x.co"), agency: await join("agency", "a@x.co") };
+    for (const [role, u] of Object.entries(users)) assert.equal((await call("GET", "/auth/me", { token: u.token })).body.user.role, role);
+    // Rol yine istemciden gelir ve doğrulanır
+    let ip = 50;
+    for (const role of [undefined, "", "admin", "Brand", "__proto__", ["brand"]])
+      assert.deepEqual(fail(await call("POST", "/auth/register", { ip: `10.0.9.${++ip}`, body: { name: "x", email: `r${ip}@x.co`, password: "sifre-12345", role, consent: true, hp: "", t: 2000 } })), [400, "role"], String(role));
+    for (const origin of [ORIGIN, BC, "https://www.brandcorner.co", "https://web-brandcorner.pages.dev"]) {
+      const call2 = countedApi(env, origin);
+      for (const u of Object.values(users))
+        for (const k of OLD_APP) {
+          const [method, path] = appPath(k);
+          const r = await call2(method, path, { token: u.token, body: bodyFor(method) });
+          assert.ok(routed(r), `${JSON.stringify(flag)} ${origin} ${k}: ${r.status} ${r.body.error} n=${r.n}`);
+        }
+      // Ayırıcının kendisi: tabloda olmayan uç yönlendiricinin 404'ünü alır (yalnız oturum sorgusu)
+      for (const [method, path] of [["GET", "/app/nope"], ["PUT", "/app/profile"], ["GET", "/app/connect/finish"], ["DELETE", "/app/profile"]]) {
+        const r = await call2(method, path, { token: users.brand.token });
+        assert.deepEqual([r.status, r.body.error, r.n], [404, "not_found", 1], `${method} ${path}`);
+      }
+      // Oturumsuz istek bugünkü gibi 401 (izin listesi brandcorner'da yok, 404'e dönmez)
+      assert.deepEqual(fail(await call2("GET", "/app/campaigns")), [401, "auth"]);
+      assert.deepEqual(fail(await call2("GET", "/app/nope")), [401, "auth"]);
+      // /auth/* uçları (SMTP yok: forgot işleyicisi 503 mail)
+      assert.equal((await call2("GET", "/auth/me", { token: users.agency.token })).status, 200);
+      assert.deepEqual(fail(await call2("POST", "/auth/forgot", { body: { email: "nobody@x.co" } })), [503, "mail"]);
+      assert.deepEqual(fail(await call2("POST", "/auth/reset", { body: { token: "x", password: "yeni-sifre-1" } })), [400, "reset_invalid"]);
+      assert.equal((await call2("POST", "/auth/login", { ip: "10.0.8.1", body: { email: "i@x.co", password: "sifre-12345" } })).body.user.role, "influencer");
+    }
+    // Gövde sınırı değişmez: posts/import 400 KB'a kadar, diğerleri 20 KB'tan büyükse 413
+    const big = { rows: "x".repeat(30000) };
+    assert.notEqual((await call("POST", "/app/posts/import", { token: users.influencer.token, body: big })).status, 413);
+    assert.deepEqual(fail(await call("POST", "/app/profile", { token: users.influencer.token, body: big })), [413, "size"]);
+    assert.equal((await call("POST", "/auth/logout", { token: users.brand.token })).status, 200);
+    assert.deepEqual(fail(await call("GET", "/auth/me", { token: users.brand.token })), [401, "auth"]);
+  }
+});
+
+test("A5-2w: APP_ROUTES izin listesi yalnız mevcut hesap uçları", () => {
+  assert.deepEqual([...APP_ROUTES].sort(), [...OLD_AUTH, ...APP_OK.map(k => k.replace(" ", " /app/"))].sort());
+  assert.ok(Object.isFrozen(APP_ROUTES));
+});
+
+test("A5-2w: app (preview ve 1) izin listesi dışı uç 404, D1'e dokunmadan; kayıtta rol sunucuda brand", async t => {
+  t.mock.method(console, "error", () => {});
+  t.mock.method(globalThis, "fetch", async () => { throw new Error("testte ağ yok"); });
+  const cases = [[{ ACCOUNTS_ENABLED: "preview" }, PREVIEW], [{ ACCOUNTS_ENABLED: "1" }, APP], [{ ACCOUNTS_ENABLED: "1" }, PREVIEW],
+    [{ ACCOUNTS_ENABLED: "1", AUTH_HOSTS: "brandcorner.co,app.socialmediacorner.co" }, "https://www.app.socialmediacorner.co"]];
+  for (const [flag, origin] of cases) {
+    const label = `${JSON.stringify(flag)} ${origin}`;
+    const { db, env } = await setup({ ...flag, ...IG_ENV, OAUTH_TOKEN_KEY: KEY, POSTS_ENABLED: "1" });
+    const call = countedApi(env, origin);
+    let ip = 0;
+    const reg = (email, extra) => call("POST", "/auth/register", {
+      ip: `10.0.3.${++ip}`, body: { name: email, email, password: "sifre-12345", consent: true, hp: "", t: 2000, ...extra },
+    });
+    // Rol istemciden alınmaz: influencer, agency, eksik, geçersiz ya da dizi gelse de brand yazılır
+    const roles = [{ role: "influencer" }, { role: "agency" }, {}, { role: "admin" }, { role: "__proto__" }, { role: ["influencer"] }, { role: "brand" }];
+    const toks = [];
+    for (const [i, extra] of roles.entries()) {
+      const r = await reg(`u${i}@x.co`, extra);
+      assert.equal(r.status, 200, `${label} ${JSON.stringify(extra)} ${JSON.stringify(r.body)}`);
+      assert.equal(r.body.user.role, "brand", label);
+      toks.push(r.body.token);
+    }
+    assert.deepEqual(db.prepare("SELECT DISTINCT role, site FROM users").all().map(r => ({ ...r })), [{ role: "brand", site: "app.socialmediacorner.co" }], label);
+    // Yeni üye bildirimindeki rol de sunucunun yazdığı
+    const rols = db.prepare("SELECT fields FROM submissions").all().map(r => Object.fromEntries(JSON.parse(r.fields)).Rol);
+    assert.deepEqual(rols, roles.map(() => "brand"), label);
+    // Diğer kayıt kontrolleri sürer
+    assert.deepEqual(fail(await reg("u0@x.co", { role: "influencer" })), [409, "exists"], label);
+    assert.deepEqual(fail(await reg("bad", {})), [400, "email"], label);
+    const token = toks[0];
+    // İzin listesi dışı: oturumlu, oturumsuz ve büyük gövdeli istekte 404; D1 sorgusu yok
+    for (const k of OLD_APP.filter(k => !APP_OK.includes(k))) {
+      const [method, path] = appPath(k);
+      for (const opts of [{ token, body: bodyFor(method) }, { body: bodyFor(method) }, { token, body: method === "GET" ? undefined : { x: "y".repeat(500000) } }]) {
+        const r = await call(method, path, opts);
+        assert.deepEqual([r.status, r.body.error, r.n], [404, "not_found", 0], `${label} ${k}`);
+      }
+    }
+    for (const [method, path] of [["GET", "/app/nope"], ["PUT", "/app/profile"], ["GET", "/app/connect/finish"], ["DELETE", "/app/profile"], ["GET", "/auth/register"], ["POST", "/auth/nope"], ["POST", "/auth/me"]]) {
+      const r = await call(method, path, { token, body: bodyFor(method) });
+      assert.deepEqual([r.status, r.body.error, r.n], [404, "not_found", 0], `${label} ${method} ${path}`);
+    }
+    // İzinli uçlar çalışır
+    assert.equal((await call("GET", "/auth/me", { token })).body.user.role, "brand", label);
+    assert.equal((await call("GET", "/app/profile", { token })).status, 200, label);
+    const prof = await call("POST", "/app/profile", { token, body: { name: "Yeni", profile: { company: "Acme", listed: true, platforms: [{ platform: "instagram", handle: "x" }] } } });
+    assert.equal(prof.status, 200, label);
+    assert.deepEqual([prof.body.user.name, prof.body.user.profile.company, prof.body.user.profile.listed, prof.body.user.profile.platforms], ["Yeni", "Acme", undefined, undefined], label);
+    assert.deepEqual((await call("GET", "/app/connections", { token })).body.connectable, CONNECTABLE.brand, label);
+    const conn = await call("POST", "/app/connect", { token, body: { platform: "instagram" } });
+    assert.equal(conn.status, 200, `${label} ${JSON.stringify(conn.body)}`);
+    assert.deepEqual(fail(await call("POST", "/app/connect/finish", { token, body: {} })), [400, "ticket"], label);
+    assert.equal((await call("POST", "/app/disconnect", { token, body: { platform: "instagram" } })).status, 200, label);
+    assert.deepEqual(fail(await call("POST", "/auth/forgot", { body: { email: "u1@x.co" } })), [503, "mail"], label);
+    assert.deepEqual(fail(await call("POST", "/auth/reset", { body: { token: "x", password: "yeni-sifre-1" } })), [400, "reset_invalid"], label);
+    const login = await call("POST", "/auth/login", { ip: "10.0.4.1", body: { email: "u1@x.co", password: "sifre-12345" } });
+    assert.deepEqual([login.status, login.body.user.role], [200, "brand"], label);
+    assert.equal((await call("POST", "/auth/logout", { token: login.body.token })).status, 200, label);
+    assert.deepEqual(fail(await call("GET", "/auth/me", { token: login.body.token })), [401, "auth"], label);
+  }
+});
+
+test("A5-2w: app'te rolü brand olmayan hesap (elle yazılmış satır) giriş yapamaz, oturumu 401; brandcorner'da influencer/agency çalışır", async () => {
+  const { db, env, join } = await setup({ ACCOUNTS_ENABLED: "1" });
+  const app = api(env, APP), bc = api(env, BC);
+  const r = await app("POST", "/auth/register", { body: { name: "a", email: "a@x.co", password: "sifre-12345", role: "influencer", consent: true, hp: "", t: 2000 } });
+  assert.equal(r.status, 200);
+  const inf = await join("influencer", "a@x.co"), ag = await join("agency", "ag@x.co");
+  for (const role of ["influencer", "agency", "Brand", ""]) {
+    db.prepare("UPDATE users SET role = ? WHERE site = 'app.socialmediacorner.co'").run(role);
+    db.prepare("DELETE FROM auth_attempts").run();
+    for (const [m, p, b] of [["GET", "/auth/me"], ["GET", "/app/profile"], ["GET", "/app/connections"], ["POST", "/app/profile", {}], ["POST", "/auth/logout", {}]])
+      assert.deepEqual(fail(await app(m, p, { token: r.body.token, body: b })), [401, "auth"], `${role} ${p}`);
+    assert.deepEqual(fail(await app("POST", "/auth/login", { body: { email: "a@x.co", password: "sifre-12345" } })), [401, "invalid"], role);
+    // Başarısız deneme olarak sayılır (hız sınırı yanlış şifredeki gibi işler)
+    assert.equal(db.prepare("SELECT ok FROM auth_attempts WHERE kind = 'login'").get().ok, 0);
+  }
+  db.prepare("UPDATE users SET role = 'brand' WHERE site = 'app.socialmediacorner.co'").run();
+  assert.equal((await app("GET", "/auth/me", { token: r.body.token })).status, 200);
+  // brandcorner'da aynı e-postanın influencer hesabı ve ajans etkilenmez
+  for (const u of [inf, ag]) assert.equal((await bc("GET", "/app/profile", { token: u.token })).status, 200);
+  assert.equal((await bc("GET", "/app/applications", { token: inf.token })).status, 200);
+  assert.equal((await bc("POST", "/auth/login", { body: { email: "a@x.co", password: "sifre-12345" } })).body.user.role, "influencer");
+});
+
+test("A5-2w: bayrak kapalıyken ('0', yok, 'true', ' 1') app ve önizlemesi her uçta 403 origin, D1'e dokunmaz", async () => {
+  for (const flag of [{ ACCOUNTS_ENABLED: "0" }, {}, { ACCOUNTS_ENABLED: "true" }, { ACCOUNTS_ENABLED: " 1" }, { ACCOUNTS_ENABLED: "0", AUTH_HOSTS: "brandcorner.co,app.socialmediacorner.co" }]) {
+    const { env, join } = await setup(flag);
+    const bcTok = (await join("brand", "b@x.co")).token;
+    for (const origin of [APP, PREVIEW, "https://web-smcapp.pages.dev"]) {
+      const call = countedApi(env, origin);
+      for (const k of [...OLD_AUTH, ...OLD_APP.map(k => k.replace(" ", " /app/"))]) {
+        const [method, p] = k.split(" "), path = p.replace(":id", "7");
+        const r = await call(method, path, { token: bcTok, body: bodyFor(method) });
+        assert.deepEqual([r.status, r.body.error, r.n], [403, "origin", 0], `${JSON.stringify(flag)} ${origin} ${k}`);
+      }
+    }
+  }
+  // preview iken canlı app alan adı da 403
+  const { env } = await setup({ ACCOUNTS_ENABLED: "preview" });
+  assert.deepEqual(fail(await api(env, APP)("GET", "/app/campaigns")), [403, "origin"]);
+  assert.deepEqual(fail(await api(env, APP)("POST", "/auth/login", { body: { email: "a@x.co", password: "x" } })), [403, "origin"]);
+});

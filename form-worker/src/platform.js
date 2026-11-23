@@ -11,7 +11,7 @@ import { OAUTH, LISTED, CONNECTABLE, oauthReady, listConnections, startOAuth, fi
 import { smtpReady, smtpSend, smtpFrom } from "./smtp.js";
 import { metricsEnabled, accountMetrics, linkMetrics, parseAudience } from "./metrics.js";
 import { NICHE_LIST } from "./classify.js";
-import { authHosts, previewSite, resetPath, siteConf } from "./sites.js";
+import { authHosts, previewSite, resetPath, siteConf, siteRoles, roleAllowed, routeAllowed } from "./sites.js";
 
 const ROLES = ["brand", "influencer", "agency"];
 const PLATFORMS = LISTED; // instagram, tiktok, youtube, x, linkedin, twitch (profil ve bağlantı listesi aynı)
@@ -48,6 +48,11 @@ export async function platform(req, url, env, origin, deliver) {
   if (!site) return reply({ ok: false, error: "origin" }, 403, null);
   const c = { env, origin, api: url.origin, site, deliver, ip:req.headers.get("cf-connecting-ip") || "", body: {}, query: Object.fromEntries(url.searchParams) };
   try {
+    const route = `${req.method} ${url.pathname.replace(/\/+$/, "")}`;
+    const m = route.match(/^(GET|POST|PUT) \/app\/([a-z]+)(?:\/(\d+))?(?:\/([a-z]+))?$/);
+    const key = m && `${m[2]}${m[3] ? "/:id" : ""}${m[4] ? "/" + m[4] : ""}`; // APP anahtarının yol kısmı
+    // Sitenin uç izin listesi (src/sites.js routes; brandcorner.co'da yok): listede olmayan uç oturuma ve gövdeye bakılmadan 404
+    if (!routeAllowed(site, m ? `${m[1]} /app/${key}` : route)) throw new Bad("not_found", 404);
     if (req.method === "POST" || req.method === "PUT") {
       const text = await req.text();
       // Gönderi aktarımı 50 satır x (2200 karakter açıklama + iki url) taşır; diğer uçlar MAX_BODY
@@ -55,7 +60,6 @@ export async function platform(req, url, env, origin, deliver) {
       try { c.body = text ? JSON.parse(text) : {}; } catch { throw new Bad("json"); }
       if (!c.body || typeof c.body !== "object" || Array.isArray(c.body)) throw new Bad("json");
     }
-    const route = `${req.method} ${url.pathname.replace(/\/+$/, "")}`;
     if (route === "POST /auth/register") return await register(c);
     if (route === "POST /auth/login") return await login(c);
     if (route === "POST /auth/forgot") return await forgot(c);
@@ -65,7 +69,8 @@ export async function platform(req, url, env, origin, deliver) {
     c.user = token && await env.DB.prepare(
       "SELECT u.* FROM sessions s JOIN users u ON u.id = s.user_id WHERE s.token_hash = ? AND s.expires_at > datetime('now') AND u.site = ?",
     ).bind(await sha256(token), site).first();
-    if (!c.user) throw new Bad("auth", 401);
+    // Rolü sitede kabul edilmeyen kullanıcının oturumu yok sayılır (src/sites.js roles; brandcorner.co'da her rol)
+    if (!c.user || !roleAllowed(site, c.user.role)) throw new Bad("auth", 401);
 
     // Yönetici ise admin: true; kendi yetkileri (admin hariç) perms, yoksa alan yok
     if (route === "GET /auth/me") {
@@ -76,8 +81,7 @@ export async function platform(req, url, env, origin, deliver) {
       await env.DB.prepare("DELETE FROM sessions WHERE token_hash = ?").bind(await sha256(token)).run();
       return ok(c, {});
     }
-    const m = route.match(/^(GET|POST|PUT) \/app\/([a-z]+)(?:\/(\d+))?(?:\/([a-z]+))?$/);
-    const handler = m && APP[`${m[1]} ${m[2]}${m[3] ? "/:id" : ""}${m[4] ? "/" + m[4] : ""}`];
+    const handler = m && APP[`${m[1]} ${key}`];
     if (!handler) throw new Bad("not_found", 404);
     return await handler(c, m[3] && Number(m[3]));
   } catch (e) {
@@ -94,11 +98,13 @@ const ok = (c, body) => reply({ ok: true, ...body }, 200, c.origin);
 async function register(c) {
   const { env, site, ip, body } = c;
   const name = text(body.name, 100), email = String(body.email ?? "").trim().toLowerCase();
-  const password = String(body.password ?? ""), role = body.role, lang = body.lang === "en" ? "en" : "tr";
+  // Tek rollü sitede (app.socialmediacorner.co: brand) rol istemciden alınmaz, gövdedeki role yok sayılır
+  const only = siteRoles(site), role = only?.length === 1 ? only[0] : body.role;
+  const password = String(body.password ?? ""), lang = body.lang === "en" ? "en" : "tr";
   if (!name) throw new Bad("name");
   if (email.length > 254 || !EMAIL_RE.test(email)) throw new Bad("email");
   if (password.length < 8 || password.length > 200) throw new Bad("password");
-  if (!ROLES.includes(role)) throw new Bad("role");
+  if (!ROLES.includes(role) || !roleAllowed(site, role)) throw new Bad("role");
   if (body.consent !== true) throw new Bad("consent");
   // Bot koruması: gizli alan doluysa ya da form 1,5 sn'den kısa sürede gönderildiyse kayıt, e-posta ve deneme kaydı yok
   if (String(body.hp ?? "") !== "" || !(Number(body.t) >= 1500)) throw new Bad("bad");
@@ -124,7 +130,8 @@ async function login(c) {
   if (!email || !password) throw new Bad("missing");
   if (await attempts(env, "login", "email", email, 15, true) >= 5 || await attempts(env, "login", "ip", ip, 15, true) >= 20) throw new Bad("rate", 429);
   const user = await env.DB.prepare("SELECT * FROM users WHERE site = ? AND email = ?").bind(site, email).first();
-  const good = await checkPass(password, user?.pass);
+  // Rolü sitede kabul edilmeyen hesap yanlış şifre gibi reddedilir (brandcorner.co'da her rol kabul)
+  const good = await checkPass(password, user?.pass) && roleAllowed(site, user.role);
   await attempt(env, ip, email, "login", good ? 1 : 0);
   if (!good) throw new Bad("invalid", 401);
   if (Number(user.pass.split("$")[1]) < iterations(env))
