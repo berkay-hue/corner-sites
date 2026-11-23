@@ -23,7 +23,10 @@ var depoYok=false,bellek=null,zorla=false;/* zorla: yalnız ÖRNEK ses-saklanama
 
 /* ---- saklama ve doğrulama (DOM'suz) ---- */
 function temiz(s){return String(s==null?'':s).normalize('NFC').replace(/\r\n?/g,'\n').replace(/\t/g,' ').replace(CTRL,'').replace(INVIS,'').trim().replace(/\n{3,}/g,'\n\n')}
-function katla(s){var f='';for(var c of String(s).normalize('NFKC')){f+=TRK[c]||c.toLowerCase()}return f}
+/* sunucu gen-prompt.js fold ile aynı: U+FE00-FE0F atlanır, harf başına TR → tek kod noktalık NFKC → küçük harf → LOOK */
+var LOOK={'а':'a','с':'c','ԁ':'d','е':'e','һ':'h','і':'i','ј':'j','к':'k','о':'o','р':'p','ѕ':'s','у':'y','α':'a','ε':'e','ι':'i','κ':'k','ν':'v','ο':'o','ρ':'p','τ':'t','υ':'u'};
+function katla1(c){if(TRK[c])return TRK[c];var n=c.normalize('NFKC');if([...n].length===1)c=n;if(TRK[c])c=TRK[c];else{var l=c.toLowerCase();if([...l].length===1)c=l}return LOOK[c]||c}
+function katla(s){var f='';for(var c of String(s)){var k=c.codePointAt(0);if(!(k>=0xFE00&&k<=0xFE0F))f+=katla1(c)}return f}/* görünmezler temiz()'de gitti */
 function kopya(p){return JSON.parse(JSON.stringify(p))}
 function dizi(v){return Array.isArray(v)?v:typeof v==='string'&&v?v.split(','):[]}
 /* tek nokta: sunucuya giden alanlar + yerel sektör; {ok, p, hatalar:{alan:mesaj}, toplam} */
