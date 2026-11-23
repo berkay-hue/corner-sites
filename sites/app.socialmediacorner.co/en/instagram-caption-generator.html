@@ -20,6 +20,7 @@
 <link rel="stylesheet" href="/assets/bilesenler.css">
 <link rel="stylesheet" href="/assets/smc-app.css">
 <script src="/assets/smc-en.js" defer></script>
+<script src="/assets/smc-ses.js" defer></script>
 <script src="/assets/smc-app.js" defer></script>
 </head>
 <body data-arac="ig">
@@ -41,7 +42,7 @@
       <button type="button" class="duz tema" id="tema" aria-pressed="false" aria-label="Dark theme"><span class="tema-ikon" aria-hidden="true"></span><span class="tema-yazi" aria-hidden="true">Dark theme</span></button>
     </div>
   </div>
-  <nav class="araclar" aria-label="Tools"><a href="/en/">LinkedIn post</a><a href="/en/instagram-caption-generator" aria-current="page">Instagram caption</a></nav>
+  <nav class="araclar" aria-label="Tools"><a href="/en/">LinkedIn post</a><a href="/en/instagram-caption-generator" aria-current="page">Instagram caption</a><a href="/en/reels-hook-generator">Reels hook</a><button type="button" class="ses-nav" id="ses-nav" aria-haspopup="dialog">Brand voice</button></nav>
 </header>
 
 <main id="icerik" class="masa" tabindex="-1">
@@ -113,6 +114,11 @@
             </div>
           </fieldset>
         </div>
+      </div>
+
+      <div class="ses-satir" id="ses-satir">
+        <p class="ses-durum"><span id="ses-etiket">Brand voice:</span> <span class="ses-ad" id="ses-ad">none</span> <span aria-hidden="true">·</span> <button type="button" class="btn btn-cizgi btn-kucuk" id="ses-ac" aria-haspopup="dialog" aria-describedby="ses-etiket ses-ad">Add</button></p>
+        <p class="not" id="ses-not" role="status" hidden></p>
       </div>
 
       <div class="sr" aria-hidden="true"><label>Leave this field empty <input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
@@ -323,6 +329,94 @@
       <p class="kvkk">Your details are used only to prepare the quote. <a href="https://socialmediacorner.co/kvkk">KVKK privacy notice</a></p>
     </form>
     <p class="not not-ok" id="t-tamam" role="status" tabindex="-1" hidden></p>
+  </div>
+</dialog>
+<dialog id="ses" class="ses-dlg" aria-labelledby="ses-baslik">
+  <div class="sheet dlg">
+    <div class="dlg-bas">
+      <h2 id="ses-baslik" tabindex="-1">Brand voice</h2>
+      <button type="button" class="btn btn-cizgi btn-kucuk" id="ses-kapat">Close</button>
+    </div>
+    <p class="ipucu">Optional. Drafts are written in your brand’s voice; you can generate without a profile too.</p>
+    <p class="not not-uyari" id="ses-depo" role="status" hidden></p>
+    <form id="ses-form" data-sk-noform novalidate>
+      <div class="alan-k">
+        <label for="ses-ad-g">Brand name <span class="zor">(optional)</span></label>
+        <input type="text" id="ses-ad-g" name="name" maxlength="60" autocomplete="organization" aria-describedby="ses-name-hata">
+        <p class="alan-hata" id="ses-name-hata" role="alert" hidden></p>
+      </div>
+      <div class="alan-k">
+        <label for="ses-sektor">Sector <span class="zor">(optional)</span></label>
+        <select id="ses-sektor" name="sector" aria-describedby="ses-sektor-ipucu"><option value="">None</option><option value="Genel">General</option><option value="E-ticaret">E-commerce</option><option value="Yazılım">Software</option><option value="Danışmanlık">Consulting</option><option value="Eğitim">Education</option><option value="Sağlık">Healthcare</option><option value="Gayrimenkul">Real estate</option><option value="Üretim">Manufacturing</option></select>
+        <p class="ipucu" id="ses-sektor-ipucu">Saving selects this sector chip in the form.</p>
+      </div>
+      <div class="alan-k">
+        <label for="ses-kitle">Target audience <span class="zor">(optional)</span></label>
+        <input type="text" id="ses-kitle" name="audience" maxlength="160" autocomplete="off" placeholder="E.g. young families buying their first home" aria-describedby="ses-audience-hata">
+        <p class="alan-hata" id="ses-audience-hata" role="alert" hidden></p>
+      </div>
+      <fieldset class="cipler ses-sifat" aria-describedby="ses-adjectives-hata">
+        <legend>Voice adjectives <span class="zor">(up to 3)</span> <span class="sayac" id="ses-sifat-say">0/3</span></legend>
+        <div class="ses-cipler">
+            <span class="cip"><input type="checkbox" name="adjectives" id="sf-sicak" value="sicak"><label for="sf-sicak">Warm</label></span>
+            <span class="cip"><input type="checkbox" name="adjectives" id="sf-esprili" value="esprili"><label for="sf-esprili">Witty</label></span>
+            <span class="cip"><input type="checkbox" name="adjectives" id="sf-yalin" value="yalin"><label for="sf-yalin">Plain</label></span>
+            <span class="cip"><input type="checkbox" name="adjectives" id="sf-sakin" value="sakin"><label for="sf-sakin">Calm</label></span>
+            <span class="cip"><input type="checkbox" name="adjectives" id="sf-enerjik" value="enerjik"><label for="sf-enerjik">Energetic</label></span>
+            <span class="cip"><input type="checkbox" name="adjectives" id="sf-uzman" value="uzman"><label for="sf-uzman">Expert</label></span>
+            <span class="cip"><input type="checkbox" name="adjectives" id="sf-oyuncu" value="oyuncu"><label for="sf-oyuncu">Playful</label></span>
+            <span class="cip"><input type="checkbox" name="adjectives" id="sf-zarif" value="zarif"><label for="sf-zarif">Elegant</label></span>
+            <span class="cip"><input type="checkbox" name="adjectives" id="sf-dogrudan" value="dogrudan"><label for="sf-dogrudan">Direct</label></span>
+            <span class="cip"><input type="checkbox" name="adjectives" id="sf-guven_veren" value="guven_veren"><label for="sf-guven_veren">Reassuring</label></span>
+            <span class="cip"><input type="checkbox" name="adjectives" id="sf-merakli" value="merakli"><label for="sf-merakli">Curious</label></span>
+            <span class="cip"><input type="checkbox" name="adjectives" id="sf-mutevazi" value="mutevazi"><label for="sf-mutevazi">Modest</label></span>
+        </div>
+        <p class="alan-hata" id="ses-adjectives-hata" role="alert" hidden></p>
+      </fieldset>
+      <div class="alan-k">
+        <label for="ses-yasak">Banned words <span class="zor">(optional)</span></label>
+        <input type="text" id="ses-yasak" name="banned" autocomplete="off" placeholder="E.g. cheap, don’t miss" aria-describedby="ses-yasak-ipucu ses-banned-hata">
+        <p class="ipucu" id="ses-yasak-ipucu">Separate with commas; up to 10 words, each up to 30 characters.</p>
+        <p class="alan-hata" id="ses-banned-hata" role="alert" hidden></p>
+      </div>
+      <div class="alan-k">
+        <label for="ses-ornek">Sample post <span class="zor">(optional)</span></label>
+        <textarea id="ses-ornek" name="sample" rows="4" maxlength="600" aria-describedby="ses-ornek-ipucu ses-sample-hata"></textarea>
+        <p class="ses-alt"><span class="ipucu" id="ses-ornek-ipucu">A text your brand has posted before.</span> <span class="sayac" id="ses-ornek-say">0/600</span></p>
+        <p class="alan-hata" id="ses-sample-hata" role="alert" hidden></p>
+      </div>
+      <fieldset class="cipler">
+        <legend>Form of address</legend>
+        <div class="ses-cipler">
+            <span class="cip"><input type="radio" name="address" id="ses-address-yok" value="" checked><label for="ses-address-yok">Not set</label></span>
+            <span class="cip"><input type="radio" name="address" id="ses-address-sen" value="sen"><label for="ses-address-sen">Informal (sen)</label></span>
+            <span class="cip"><input type="radio" name="address" id="ses-address-siz" value="siz"><label for="ses-address-siz">Formal (siz)</label></span>
+        </div>
+      </fieldset>
+      <fieldset class="cipler">
+        <legend>Emoji</legend>
+        <div class="ses-cipler">
+            <span class="cip"><input type="radio" name="emoji" id="ses-emoji-yok" value="" checked><label for="ses-emoji-yok">Not set</label></span>
+            <span class="cip"><input type="radio" name="emoji" id="ses-emoji-none" value="none"><label for="ses-emoji-none">None</label></span>
+            <span class="cip"><input type="radio" name="emoji" id="ses-emoji-few" value="few"><label for="ses-emoji-few">A few</label></span>
+        </div>
+      </fieldset>
+      <p class="sayac ses-toplam">Total <span id="ses-toplam">0/1200</span> · brand name, audience, banned words and sample post</p>
+      <p class="not not-hata" id="ses-hata" role="alert" hidden></p>
+      <div class="dlg-alt">
+        <button type="submit" class="btn btn-ana">Save</button>
+        <button type="button" class="btn btn-cizgi" id="ses-vazgec">Cancel</button>
+        <button type="button" class="btn btn-cizgi ses-sil" id="ses-sil" hidden>Delete profile</button>
+      </div>
+      <p class="kvkk">The profile stays only in this browser; it is not stored on the server. When generating, it is sent to an AI provider (USA) to produce the drafts. Don’t enter personal data. <a href="https://socialmediacorner.co/kvkk">KVKK privacy notice</a></p>
+    </form>
+    <div class="ses-onay" id="ses-onay" hidden>
+      <p><b>Delete the profile?</b> The brand voice in this browser is removed; this can’t be undone.</p>
+      <div class="dlg-alt">
+        <button type="button" class="btn btn-tehlike" id="ses-sil-evet">Yes, delete</button>
+        <button type="button" class="btn btn-cizgi" id="ses-sil-hayir">Cancel</button>
+      </div>
+    </div>
   </div>
 </dialog>
 </body>
