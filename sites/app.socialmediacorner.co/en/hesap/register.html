@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="robots" content="noindex, nofollow">
+<title>Create account · Social Media Corner</title>
+<meta name="api-base" content="https://corner-forms.berkay-999.workers.dev">
+<link rel="icon" href="data:,">
+<script src="/assets/theme.js"></script>
+<link rel="preload" href="/assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/tokens.css">
+<link rel="stylesheet" href="/assets/bilesenler.css">
+<link rel="stylesheet" href="/assets/smc-hesap.css">
+<script src="/assets/smc-hesap.js" defer></script>
+</head>
+<body data-sayfa="kayit">
+<a class="atla" href="#icerik">Skip to content</a>
+<p class="bant" hidden><strong>SAMPLE</strong><span>Sample mode: nothing is sent, no account is created, nothing is connected.</span></p>
+
+<header class="ust">
+  <div class="ust-ic">
+    <a class="logo" href="/en/" aria-label="Social Media Corner Draft Desk, home">
+      <span class="kose" aria-hidden="true"></span>
+      <span class="logo-ad">Social Media Corner</span><span class="logo-ayir" aria-hidden="true">·</span>
+      <span>Draft Desk</span>
+    </a>
+    <div class="ust-sag">
+      <a class="duz" href="/hesap/kayit" hreflang="tr" lang="tr" aria-label="Türkçe">TR</a>
+      <button type="button" class="duz tema" id="tema" aria-pressed="false" aria-label="Dark theme"><span class="tema-ikon" aria-hidden="true"></span></button>
+    </div>
+  </div>
+</header>
+
+<main id="icerik" class="ana" tabindex="-1" aria-busy="true">
+  <div id="not" class="bildirim" role="status" aria-live="polite"></div>
+  <noscript><p class="bildirim bildirim-uyari">This page needs JavaScript. Turn on JavaScript in your browser and try again.</p></noscript>
+
+  <section class="auth" data-ekran="ana" aria-labelledby="h-kayit" hidden>
+    <div class="kol-dar">
+      <div class="ekran-bas">
+        <p class="ust-etiket">Account beta</p>
+        <h1 id="h-kayit" tabindex="-1">Create account</h1>
+        <p class="giris-p">A one-minute sign-up, then we set up your brand voice together.</p>
+      </div>
+      <form class="sheet form" id="f-kayit" novalidate aria-labelledby="h-kayit">
+        <div class="alan-k">
+          <label class="etiket" for="k-ad">Full name</label>
+          <input class="kutu" id="k-ad" name="name" type="text" autocomplete="name" maxlength="120" required aria-describedby="k-ad-hata">
+          <p class="alan-hata" id="k-ad-hata"></p>
+        </div>
+        <div class="alan-k">
+          <label class="etiket" for="k-eposta">Email</label>
+          <input class="kutu" id="k-eposta" name="email" type="email" autocomplete="email" inputmode="email" required aria-describedby="k-eposta-ipucu k-eposta-hata" spellcheck="false">
+          <p class="ipucu" id="k-eposta-ipucu">A Brand Corner account does not work here; this site needs its own account.</p>
+          <p class="alan-hata" id="k-eposta-hata"></p>
+        </div>
+        <div class="alan-k">
+          <label class="etiket" for="k-sifre">Password</label>
+          <div class="sira">
+            <input class="kutu" id="k-sifre" name="password" type="password" autocomplete="new-password" minlength="8" maxlength="200" required aria-describedby="k-sifre-ipucu k-sifre-hata">
+            <button type="button" class="btn btn-cizgi btn-kucuk goster" aria-pressed="false" aria-controls="k-sifre" aria-label="Show password">Show</button>
+          </div>
+          <p class="ipucu" id="k-sifre-ipucu">At least 8 characters. Don’t reuse a password from another site.</p>
+          <p class="alan-hata" id="k-sifre-hata"></p>
+        </div>
+        <div class="sr" aria-hidden="true"><label for="k-hp">Leave this field empty</label><input id="k-hp" name="hp" type="text" tabindex="-1" autocomplete="off"></div>
+        <div class="alan-k onay-k">
+          <label class="onay"><input type="checkbox" id="k-riza" name="terms" required aria-describedby="k-riza-hata"><span>I accept the account terms.</span></label>
+          <p class="alan-hata" id="k-riza-hata"></p>
+        </div>
+        <p class="kvkk">Your personal data is processed under the KVKK Privacy Notice.</p>
+        <button type="submit" class="btn btn-ana btn-tam">Create account</button>
+      </form>
+      <p class="alt-gecis">Already have an account? <a class="bag" href="/en/hesap/login">Log in</a></p>
+    </div>
+    <aside class="auth-yan" aria-labelledby="h-yan-k">
+      <h2 id="h-yan-k">What an account adds</h2>
+      <ul>
+        <li>Your brand voice is remembered in every draft.</li>
+        <li>Your drafts stay in History; search and copy them.</li>
+        <li>Manage your LinkedIn and Instagram connections in one place.</li>
+      </ul>
+    </aside>
+  </section>
+
+  <section data-ekran="kapali" aria-labelledby="h-kapali" hidden>
+    <div class="sheet hata acilis">
+      <p class="ust-etiket">Account beta</p>
+      <h1 id="h-kapali" tabindex="-1">Accounts are not open yet</h1>
+      <p>The account beta is being prepared. This page will work once sign-in, registration and connections open; until then you can use Draft Desk without an account.</p>
+      <div class="alt-sira">
+        <a class="btn btn-ana" href="/en/">Open Draft Desk</a>
+      </div>
+    </div>
+  </section>
+
+  <section data-ekran="hata" aria-labelledby="h-hata" hidden>
+    <div class="sheet sheet-hata hata" role="alert">
+      <p class="ust-etiket">Connection problem</p>
+      <h1 id="h-hata" tabindex="-1">We can’t reach your account right now</h1>
+      <p>The server did not respond. Your drafts and connections are safe; try again in a few minutes.</p>
+      <p class="kod" id="hata-kod"></p>
+      <div class="alt-sira">
+        <button type="button" class="btn btn-ana" id="hata-tekrar">Try again</button>
+        <a class="bag" href="/en/">Use Draft Desk without an account</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="alt">
+  <div class="alt-ic">
+    <div class="alt-site">
+      <a class="bag" href="/en/">Draft Desk</a>
+      <span>© 2026 Social Media Corner</span>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
