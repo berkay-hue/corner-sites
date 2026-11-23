@@ -5,13 +5,22 @@
 //   fail    zaman aşımı, max_tokens, diğer 4xx, JSON/şema/sayı hatası → faturalanmış olabilir
 //   refusal stop_reason "refusal" ya da bütün text alanları boş (ret işareti) → faturalanmış olabilir
 // Sağlayıcının ham hata metni kullanıcıya gitmez; yalnız kısaltılmış log.
-import { ANGLES } from "./gen-prompt.js";
+import { ANGLES, REELS_ANGLES } from "./gen-prompt.js";
 
 const API = "https://api.anthropic.com/v1/messages";
 const TIMEOUT = 30000; // iki denemenin toplamı dahil
 const RETRY_IF_UNDER = 10000; // ilk deneme bundan uzun sürdüyse yeniden denenmez
 const RETRY_BUDGET = 15000; // geçen süre + bekleme bunu aşarsa yeniden denenmez
-const MAX_TEXT = 3000;
+
+// Çıktı biçimleri. li: A2 (UTF-16, text ≤3000). caption ve reels: ISTEM-IG §1.7, kod noktasıyla
+// (Instagram sayacı); reels'te ret işareti ve uzunluk text ile say birlikte. Sınırlar sert (llm_fail);
+// reels'in 60/140 hedefi ve long_hook işareti generate.js'te.
+const cp = s => [...s].length;
+export const SPECS = {
+  li: { angles: ANGLES, fields: ["text"], max: { text: 3000 }, len: s => s.length },
+  caption: { angles: ANGLES, fields: ["text"], max: { text: 2200 }, len: cp },
+  reels: { angles: REELS_ANGLES, fields: ["text", "say"], max: { text: 80, say: 200 }, len: cp },
+};
 
 export class LlmError extends Error {
   constructor(kind, why, usage) {
@@ -60,7 +69,8 @@ async function attempt(env, f, body, ms) {
 }
 
 // ISTEM §5.4 adım 2-4: önce stop_reason, sonra text bloğu, JSON, ret işareti, sayı/açı/uzunluk
-export function parse(data, count, angle) {
+export function parse(data, count, angle, spec = SPECS.li) {
+  const { angles, fields, max, len } = spec;
   const usage = { input_tokens: Number(data?.usage?.input_tokens) || 0, output_tokens: Number(data?.usage?.output_tokens) || 0 };
   const stop = data?.stop_reason;
   if (stop === "refusal") {
@@ -72,15 +82,15 @@ export function parse(data, count, angle) {
   let obj;
   try { obj = JSON.parse(block.text); } catch { throw new LlmError("fail", "json", usage); }
   const d = obj?.drafts;
-  if (!Array.isArray(d) || !d.length || d.some(x => !x || typeof x.text !== "string" || typeof x.angle !== "string")) throw new LlmError("fail", "shape", usage);
-  const empty = d.map(x => x.text.trim() === "");
-  if (empty.every(Boolean)) throw new LlmError("refusal", "empty", usage);
-  if (empty.some(Boolean)) throw new LlmError("fail", "partial_empty", usage);
-  const drafts = d.map(x => ({ angle: x.angle, text: x.text.trim() }));
-  if (drafts.some(x => x.text.length > MAX_TEXT || !ANGLES.includes(x.angle))) throw new LlmError("fail", "length_or_angle", usage);
+  if (!Array.isArray(d) || !d.length || d.some(x => !x || typeof x.angle !== "string" || fields.some(k => typeof x[k] !== "string"))) throw new LlmError("fail", "shape", usage);
+  const blank = d.map(x => fields.map(k => x[k].trim() === ""));
+  if (blank.every(b => b.every(Boolean))) throw new LlmError("refusal", "empty", usage);
+  if (blank.some(b => b.some(Boolean))) throw new LlmError("fail", "partial_empty", usage);
+  const drafts = d.map(x => { const o = { angle: x.angle }; for (const k of fields) o[k] = x[k].trim(); return o; });
+  if (drafts.some(x => fields.some(k => len(x[k]) > max[k]) || !angles.includes(x.angle))) throw new LlmError("fail", "length_or_angle", usage);
   if (count === 3) {
     if (drafts.length !== 3 || new Set(drafts.map(x => x.angle)).size !== 3) throw new LlmError("fail", "count", usage);
-    drafts.sort((a, b) => ANGLES.indexOf(a.angle) - ANGLES.indexOf(b.angle));
+    drafts.sort((a, b) => angles.indexOf(a.angle) - angles.indexOf(b.angle));
   } else {
     if (drafts.length !== 1) throw new LlmError("fail", "count", usage);
     if (angle && drafts[0].angle !== angle) { console.log("gen refine angle", drafts[0].angle, "->", angle); drafts[0].angle = angle; }
@@ -88,7 +98,7 @@ export function parse(data, count, angle) {
   return { drafts, usage, stop, model: String(data.model || "") };
 }
 
-async function call(env, f, { system, user, schema, maxTokens, count, angle }) {
+async function call(env, f, { system, user, schema, maxTokens, count, angle, spec }) {
   const body = JSON.stringify({
     model: env.GEN_MODEL,
     max_tokens: maxTokens,
@@ -109,17 +119,20 @@ async function call(env, f, { system, user, schema, maxTokens, count, angle }) {
   const ms = Date.now() - t0;
   if (r.retry) { console.log("gen llm busy", r.why, ms); throw new LlmError("busy", r.why); }
   if (r.err) { console.log("gen llm", r.err, r.why, ms); throw new LlmError(r.err, r.why); }
-  const out = parse(r.data, count, angle);
+  const out = parse(r.data, count, angle, spec);
   console.log("gen llm ok", out.model, ms, out.usage.input_tokens, out.usage.output_tokens);
   return out;
 }
 
 // Yalnız yerel geliştirme: GEN_PROVIDER=fake, DEV_ORIGINS de tanımlıysa (canlıda DEV_ORIGINS yok).
 const fake = {
-  async generate({ count, angle }) {
+  async generate({ count, angle, spec = SPECS.li }) {
     await sleep(600);
-    const a = count === 3 ? ANGLES : [angle || ANGLES[0]];
-    return { drafts: a.map(x => ({ angle: x, text: `ÖRNEK taslak (${x}).\n\nBu metin sahte sağlayıcıdan geldi; gerçek model çağrılmadı.` })), usage: { input_tokens: 0, output_tokens: 0 }, stop: "end_turn", model: "fake" };
+    const a = count === 3 ? spec.angles : [angle || spec.angles[0]];
+    const one = x => spec.fields.includes("say")
+      ? { angle: x, text: `ÖRNEK kanca (${x})`, say: "Bu kanca sahte sağlayıcıdan geldi; gerçek model çağrılmadı." }
+      : { angle: x, text: `ÖRNEK taslak (${x}).\n\nBu metin sahte sağlayıcıdan geldi; gerçek model çağrılmadı.` };
+    return { drafts: a.map(one), usage: { input_tokens: 0, output_tokens: 0 }, stop: "end_turn", model: "fake" };
   },
 };
 
