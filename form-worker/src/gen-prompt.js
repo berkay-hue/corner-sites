@@ -383,7 +383,9 @@ const LOOK = {
   "а": "a", "с": "c", "ԁ": "d", "е": "e", "һ": "h", "і": "i", "ј": "j", "к": "k", "о": "o", "р": "p", "ѕ": "s", "у": "y",
   "α": "a", "ε": "e", "ι": "i", "κ": "k", "ν": "v", "ο": "o", "ρ": "p", "τ": "t", "υ": "u",
 };
-const TAG = /<(?=\s*\/?\s*(girdi|konu|sektor|ton|hedef|hedef_ton|dil|islem|aci|metin|bicim|cagri|video|marka_sesi|ad|kitle|sifatlar|yasak|hitap|emoji|ornek|ekran_metni|soz)\b)/g;
+// ISTEM-IG §3.2 ifadesinin dil eşdeğeri: "\s*\/?\s*" yerine "\s*(?:\/\s*)?". Aynı dizgileri eşler;
+// "<" ardından uzun boşlukta karesel geri izleme yapmaz (3000 boşlukta ≈7 ms → <1 ms).
+const TAG = /<(?=\s*(?:\/\s*)?(girdi|konu|sektor|ton|hedef|hedef_ton|dil|islem|aci|metin|bicim|cagri|video|marka_sesi|ad|kitle|sifatlar|yasak|hitap|emoji|ornek|ekran_metni|soz)\b)/g;
 function fold1(c) {
   if (TR[c]) return TR[c];
   const n = c.normalize("NFKC");

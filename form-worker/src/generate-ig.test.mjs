@@ -153,6 +153,16 @@ test("§3.2 etkisizleştirme: benzer etiketler ‹ olur, benzemeyenler aynen kal
   assert.equal(clean("Seni seviyorum ❤️ <3"), "Seni seviyorum ❤️ <3");
 });
 
+test("§3.2 etkisizleştirme: uzun boşlukta doğrusal süre, eşleşme aynı", () => {
+  for (const s of ["<" + " ".repeat(20000) + "x", "<" + " ".repeat(20000) + "/" + " ".repeat(20000) + "x"]) {
+    const t = performance.now();
+    assert.equal(neutralize(s), s);
+    assert.ok(performance.now() - t < 100, "karesel geri izleme: " + (performance.now() - t).toFixed(1) + " ms");
+  }
+  assert.equal(neutralize("<" + " ".repeat(5000) + "/\n girdi>"), "‹" + " ".repeat(5000) + "/\n girdi>");
+  for (const x of ["<//girdi", "< /", "</ ad >", "x</\nkonu>"]) assert.equal(neutralize(x).includes("‹"), x !== "<//girdi" && x !== "< /", JSON.stringify(x));
+});
+
 test("doğrulama: alan adlı 400 (türe ait olmayan alan, marka sesi), LLM ve sayaç yok", async () => {
   const s = setup();
   const long = n => "x".repeat(n);
