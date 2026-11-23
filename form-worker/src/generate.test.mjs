@@ -125,7 +125,7 @@ test("index.js /gen/* yönlendirmesi: canlı varsayılan (GEN_ENABLED 0) → 503
   assert.equal((await res.json()).error, "not_ready");
 });
 
-test("index.js önizleme origin'i yalnız harfli web-*.pages.dev (A0 §2); canlı ALLOWED_HOSTS'la app izinli değil", async () => {
+test("index.js önizleme origin'i yalnız harfli web-*.pages.dev (A0 §2); app yalnız ALLOWED_HOSTS'ta yazılıysa izinli (canlı wrangler.toml'da var, A3-1)", async () => {
   const env = { DB: d1(freshDb()), ALLOWED_HOSTS: "socialmediacorner.co", GEN_ENABLED: "0" };
   const acao = async o => (await worker.fetch(new Request("https://forms.test/submit", { method: "OPTIONS", headers: { origin: o } }), env, { waitUntil() {} })).headers.get("access-control-allow-origin");
   assert.equal(await acao("https://web-smcapp.pages.dev"), "https://web-smcapp.pages.dev");
