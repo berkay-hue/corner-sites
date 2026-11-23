@@ -52,7 +52,7 @@
     <div class="kol">
       <div class="ekran-bas">
         <h1 id="h-bag" tabindex="-1">Bağlantılar</h1>
-        <p class="giris-p">Hesabının adını ve gönderi ölçümlerini okumak için bağlanırız. Senin adına paylaşım yapmayız; bağı istediğin an koparırsın.</p>
+        <p class="giris-p">LinkedIn ve Instagram hesabını bağla; <a class="bag" href="/yayin-kuyrugu">yayın kuyruğunda</a> planladığın taslaklar seçtiğin gün ve saatte bu hesaba otomatik paylaşılır. Otomatik paylaşım Pro planda; bağlantıyı istediğin an kaldırırsın.</p>
       </div>
       <div class="baglar" id="baglar"></div>
       <details class="acilir izinler">
@@ -60,7 +60,8 @@
         <ul>
           <li>Profil ya da sayfa adı ve fotoğrafı</li>
           <li>Gönderi ölçümleri (yalnız okuma)</li>
-          <li>Paylaşım ya da mesaj izni istenmez</li>
+          <li>Paylaşım izni: otomatik paylaşım açılınca ayrıca istenir; yalnız senin planladığın taslaklar paylaşılır</li>
+          <li>Mesaj izni istenmez</li>
         </ul>
       </details>
     </div>
@@ -105,10 +106,10 @@
 
 <dialog class="dlg-k" id="dlg-kopar" aria-labelledby="dlg-kopar-b" aria-describedby="dlg-kopar-a">
   <div class="sheet dlg">
-    <h2 class="dlg-baslik" id="dlg-kopar-b" tabindex="-1">Bağ koparılsın mı?</h2>
+    <h2 class="dlg-baslik" id="dlg-kopar-b" tabindex="-1">Bağlantı kaldırılsın mı?</h2>
     <p id="dlg-kopar-a"></p>
     <div class="dlg-alt">
-      <button type="button" class="btn btn-tehlike" id="kopar-evet">Bağı kopar</button>
+      <button type="button" class="btn btn-tehlike" id="kopar-evet">Bağlantıyı kaldır</button>
       <button type="button" class="btn btn-cizgi" data-kapat>Vazgeç</button>
     </div>
   </div>

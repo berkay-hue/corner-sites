@@ -7,7 +7,7 @@ var d=document,T=S.T,$=S.$,$$=S.$$,el=S.el,EN=S.dil()==='en';
 var KAT=210,LI_MAX=3000;
 var ACI={hikaye:T('Hikâye','Story'),liste:T('Liste','List'),gorus:T('Görüş','Opinion')};
 var TON={samimi:T('Samimi','Friendly'),profesyonel:T('Profesyonel','Professional'),ogretici:T('Öğretici','Educational'),cesur:T('Cesur','Bold')};
-var st={ds:[],i:0,acik:false,duzen:false,onceki:null,mesgul:false,q:null};
+var st={ds:[],i:0,acik:false,duzen:false,onceki:null,mesgul:false,q:null,tids:[],oncekiId:null};
 
 function profil(){try{return window.SMCSes&&SMCSes.oku&&SMCSes.oku()||null}catch(e){return null}}
 function basHarf(ad){var p=(ad||'').trim().split(/\s+/).filter(Boolean);if(!p.length)return EN?'YN':'AD';return (p[0].charAt(0)+(p.length>1?p[p.length-1].charAt(0):'')).toLocaleUpperCase(EN?'en':'tr')}
@@ -51,7 +51,7 @@ function sekmeYaz(){
 }
 function sec(n,odak){
   if(st.duzen)duzenBitir();
-  st.i=n;st.acik=false;st.onceki=null;geriYaz();sekmeYaz();govdeYaz();olcuYaz();not('');
+  st.i=n;st.acik=false;st.onceki=null;geriYaz();sekmeYaz();govdeYaz();olcuYaz();not('');S.planlaYaz(st.tids[n]);
   if(odak){var b=$('#sekme-'+n);if(b)b.focus()}
 }
 function not(m,tur){var e=$('#cubuk-not');e.textContent=m||'';e.className='st-cubuk-not not'+(m&&tur?' not-'+tur:'')}
@@ -132,7 +132,7 @@ function kur(){
   var tm=$('#li-tm');
   tm.addEventListener('keydown',function(e){if(e.key==='Escape'&&tm.open){e.preventDefault();tm.open=false;$('summary',tm).focus()}});
   d.addEventListener('click',function(e){if(tm.open&&!tm.contains(e.target))tm.open=false});
-  $('#li-geri').addEventListener('click',function(){if(!st.onceki)return;st.ds[st.onceki.i].text=st.onceki.text;var i=st.onceki.i;st.onceki=null;sec(i,false);not(T('Geri alındı.','Undone.'),'ok');$('#li-kopya').focus()});
+  $('#li-geri').addEventListener('click',function(){if(!st.onceki)return;st.ds[st.onceki.i].text=st.onceki.text;var i=st.onceki.i;if(st.oncekiId)st.tids[i]=st.oncekiId;st.oncekiId=null;st.onceki=null;sec(i,false);not(T('Geri alındı.','Undone.'),'ok');$('#li-kopya').focus()});
   $('#li-gorsel').addEventListener('click',function(){
     if(st.duzen)duzenBitir();var k=kanca(metin());if(!k)return;
     S.oturumDepo('studyo-kanca',k);location.href=EN?'/en/visual':'/gorsel';
@@ -149,9 +149,11 @@ S.kaydet({
   yuk:[[0,'Konunu okuyoruz…','Reading your topic…'],[4,'Üç farklı açı seçiliyor…','Picking three different angles…'],[10,'Hikâye, liste ve görüş taslakları yazılıyor…','Writing story, list and opinion drafts…'],[22,'Son kontroller yapılıyor…','Running final checks…'],[36,'Biraz uzun sürdü; hâlâ yazıyoruz…','Taking a bit longer; still writing…']],
   goster:function(r,q){
     st.q=q;st.ton=q.tone;st.ds=r.drafts.slice(0,3).map(function(x){return {angle:x.angle,text:typeof x.text==='string'?x.text:''}});
-    st.i=0;st.acik=false;st.onceki=null;if(st.duzen)duzenBitir();
+    st.i=0;st.acik=false;st.onceki=null;st.tids=[];st.oncekiId=null;if(st.duzen)duzenBitir();
     kartBas();sekmeYaz();govdeYaz();olcuYaz();geriYaz();tonYaz();not('');
   },
+  /* Planla: üretimde 3 kimlik sekmelerle aynı sırada; düzenleme (refine) seçili sekmeye yeni kimlik yazar, geri al eskisine döner */
+  taslakId:function(ids,tek){if(tek){st.oncekiId=st.tids[st.i]||null;st.tids[st.i]=ids[0]}else{st.tids=ids.slice(0,3);st.oncekiId=null}return st.tids[st.i]},
   basla:kur
 });
 })();

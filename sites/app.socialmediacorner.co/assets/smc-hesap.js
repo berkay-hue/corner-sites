@@ -6,21 +6,30 @@
 'use strict';
 var d=document,root=d.documentElement,body=d.body;
 var EN={"1 taslak":"1 draft",
+"Bağla":"Connect",
+"Bağlantı ve kayıtlı yetki burada silinir; {p} tarafındaki izni {p} ayarlarından kaldırırsın. Bu hesaba otomatik paylaşım yapılmaz. Geçmiş’teki taslakların silinmez; istediğin an yeniden bağlarsın.":"The connection and stored access are deleted here; you remove the permission in your {p} settings. Nothing will be shared to this account automatically. Your drafts in History stay; you can reconnect any time.",
+"Bağlantılar ya da Panel sayfasında bu hesabın bağlantısını kaldır.":"Remove this account’s connection on the Connections or Panel page.",
+"Bağlantıyı kaldır":"Remove connection",
+"Bağlantıyı nasıl kaldırırım?":"How do I remove the connection?",
+"Bu {p} hesabı başka bir Corner sitesindeki (örneğin Brand Corner) ya da başka bir kullanıcıdaki hesaba bağlı. Önce orada bağlantıyı kaldır, sonra burada yeniden dene.":"This {p} account is linked to an account on another Corner site (for example Brand Corner) or to another user. Remove the connection there first, then try again here.",
+"Kaldırılıyor…":"Removing…",
+"Otomatik paylaşım Pro planda.":"Auto-sharing is on the Pro plan.",
+"Planlanan taslaklar bu hesaba otomatik paylaşılır.":"Scheduled drafts are shared to this account automatically.",
+"Planları gör":"See plans",
+"Yakında":"Coming soon",
+"{p} bağlantısı kaldırıldı.":"The {p} connection was removed.",
+"{p} bağlantısı kaldırılsın mı?":"Remove the {p} connection?",
+"{p} bağlantısını kaldır":"Remove the {p} connection",
 "Ad en fazla 100 karakter olabilir.":"Name can be at most 100 characters.",
 "Adım {n} / 3":"Step {n} of 3",
 "Adını yaz.":"Enter your name.",
-"Bağ ve kayıtlı yetki burada silinir; {p} tarafındaki izni {p} ayarlarından kaldırırsın. Geçmiş’teki taslakların silinmez; istediğin an yeniden bağlarsın.":"The connection and stored access are deleted here; you remove the permission in your {p} settings. Your drafts in History stay; you can reconnect any time.",
-"Bağladığında hesabının adını ve gönderi ölçümlerini okuruz.":"Once connected, we read your account name and post metrics.",
 "Bağlanamadı":"Couldn’t connect",
 "Bağlantı yeniden gönderildi.":"Link sent again.",
-"Bağlantılar ya da Panel sayfasında bu hesabın bağını kopar.":"Disconnect this account on the Connections or Panel page.",
 "Bağlantının süresi doldu. Yeniden bağlanmayı dene.":"The connection expired. Try connecting again.",
 "Bağlanıyor":"Connecting",
 "Bağlı":"Connected",
 "Bağlı değil":"Not connected",
 "Bağlı olduğu Corner hesabında oturum aç.":"Log in to the Corner account it is linked to.",
-"Bağı kopar":"Disconnect",
-"Bağı nasıl koparırım?":"How do I disconnect it?",
 "Başka taslak yok.":"No more drafts.",
 "Başlıksız taslak":"Untitled draft",
 "Bir kelime en fazla 40 karakter olabilir.":"Each word can be at most 40 characters.",
@@ -30,7 +39,6 @@ var EN={"1 taslak":"1 draft",
 "Bu e-postayla bir hesap var. Giriş yap ya da şifreni sıfırla.":"An account with this email already exists. Log in or reset your password.",
 "Bu hesap başka bir Corner hesabına bağlı.":"This account is linked to another Corner account.",
 "Bu kelime zaten listede.":"This word is already on the list.",
-"Bu {p} hesabı başka bir Corner sitesindeki (örneğin Brand Corner) ya da başka bir kullanıcıdaki hesaba bağlı. Önce orada bağı kopar, sonra burada yeniden dene.":"This {p} account is linked to an account on another Corner site (for example Brand Corner) or to another user. Disconnect it there first, then try again here.",
 "Buraya dönüp Yeniden dene düğmesine bas.":"Come back here and press Try again.",
 "Deneniyor…":"Trying…",
 "Devam":"Continue",
@@ -55,9 +63,10 @@ var EN={"1 taslak":"1 draft",
 "Kayıt tamamlanamadı. Sayfayı yenileyip yeniden dene.":"Registration couldn’t be completed. Refresh the page and try again.",
 "Kod: taken":"Code: taken",
 "Kod: {k}":"Code: {k}",
-"Koparılıyor…":"Disconnecting…",
 "Kopyala":"Copy",
 "Kopyala: {k}":"Copy: {k}",
+"Planla":"Schedule",
+"Planla: {k}":"Schedule: {k}",
 "Kopyalanamadı. Metni seçip elle kopyala.":"Couldn’t copy. Select the text and copy it manually.",
 "Kopyalandı.":"Copied.",
 "Kurulumu bitir":"Finish setup",
@@ -101,8 +110,6 @@ var EN={"1 taslak":"1 draft",
 "{p} bağlantısı tamamlanamadı. Yeniden bağlanmayı dene.":"The {p} connection couldn’t be completed. Try connecting again.",
 "{p} bağlantısı şu an başlatılamadı.":"The {p} connection couldn’t be started right now.",
 "{p} bağlantısını onaylamadın. İstediğin zaman yeniden deneyebilirsin.":"You didn’t approve the {p} connection. You can try again any time.",
-"{p} bağı koparıldı.":"{p} disconnected.",
-"{p} bağı koparılsın mı?":"Disconnect {p}?",
 "{p} hesabını bağla":"Connect {p}",
 "{p} yetkisinin süresi doldu.":"{p} access has expired.",
 "{p} şu an yanıt vermedi. Biraz sonra yeniden dene.":"{p} didn’t respond just now. Try again in a little while.",
@@ -118,7 +125,6 @@ var EN={"1 taslak":"1 draft",
 "Örnek gönderi":"Sample posts",
 "Öğretici":"Educational",
 "İlham verici":"Inspiring",
-"İzin bekleniyor":"Awaiting approval",
 "Şifre en az 8 karakter olmalı.":"The password must be at least 8 characters.",
 "Şifre en fazla 200 karakter olabilir.":"Password can be at most 200 characters.",
 "Şifre hatalı.":"Incorrect password.",
@@ -131,7 +137,7 @@ var dil=root.getAttribute('lang')==='en'?'en':'tr';
 var SAYFA=body.getAttribute('data-sayfa')||'';
 var KORUMALI=body.hasAttribute('data-korumali');
 var T0=Date.now();
-var YOL={giris:['/hesap/giris','/en/hesap/login'],kayit:['/hesap/kayit','/en/hesap/register'],kurulum:['/hesap/kurulum','/en/hesap/setup'],baglantilar:['/hesap/baglantilar','/en/hesap/connections'],gecmis:['/hesap/gecmis','/en/hesap/history'],ayarlar:['/hesap/ayarlar','/en/hesap/settings']};
+var YOL={giris:['/hesap/giris','/en/hesap/login'],kayit:['/hesap/kayit','/en/hesap/register'],kurulum:['/hesap/kurulum','/en/hesap/setup'],baglantilar:['/hesap/baglantilar','/en/hesap/connections'],gecmis:['/hesap/gecmis','/en/hesap/history'],ayarlar:['/hesap/ayarlar','/en/hesap/settings'],kuyruk:['/yayin-kuyrugu','/en/publish-queue']};
 var ACIK_SAYFA=/\/(giris|kayit|sifre-unuttum|sifre-yenile|login|register|forgot-password|reset-password)$/;
 var TOKEN_RE=/^[A-Za-z0-9_-]{43}$/,R_RE=/^\/(en\/)?hesap\/[a-z-]+$/,EPOSTA=/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 var meta=d.querySelector('meta[name="api-base"]');
@@ -467,7 +473,15 @@ function kurulumYukle(){
 }
 
 /* ---- bağlantılar ---- */
-var ROZET={bagli:['rozet rozet-ok','Bağlı'],yok:['rozet','Bağlı değil'],yenile:['rozet rozet-uyari','Yetki yenilenmeli'],izin:['rozet rozet-bilgi','İzin bekleniyor'],hazir:['rozet','Hazırlanıyor'],kapali:['rozet','Bağlı değil'],taken:['rozet rozet-uyari','Bağlanamadı'],bekliyor:['rozet rozet-bilgi','Bağlanıyor']};
+/* Kart: platform ikonu, durum çipi (Bağlı / Bağlı değil / Yakında), neden bağlanır, Pro rozeti + Planlar bağlantısı.
+   Uçlar aynı: /app/connections, /app/connect (OAuth başlangıcı), /app/connect/finish, /app/disconnect. */
+var ROZET={bagli:['rozet rozet-ok','Bağlı'],yok:['rozet','Bağlı değil'],yenile:['rozet rozet-uyari','Yetki yenilenmeli'],izin:['rozet rozet-uyari','Yakında'],hazir:['rozet rozet-uyari','Yakında'],kapali:['rozet rozet-uyari','Yakında'],taken:['rozet rozet-uyari','Bağlanamadı'],bekliyor:['rozet rozet-bilgi','Bağlanıyor']};
+var SVGNS='http://www.w3.org/2000/svg';
+/* sade çizgi ikonlar; marka logosu dosyası yok */
+var PIKON={linkedin:[['rect',{x:3,y:3,width:18,height:18,rx:3}],['path',{d:'M8 10.5V17M8 7.25v.01M12 17v-6.5M12 13.5a2.5 2.5 0 0 1 5 0V17'}]],
+  instagram:[['rect',{x:3,y:3,width:18,height:18,rx:5}],['circle',{cx:12,cy:12,r:4}],['path',{d:'M17.5 6.5v.01'}]]};
+function ikonYap(parca){var v=d.createElementNS(SVGNS,'svg');v.setAttribute('class','ikon');v.setAttribute('viewBox','0 0 24 24');v.setAttribute('aria-hidden','true');v.setAttribute('focusable','false');
+  parca.forEach(function(x){var e=d.createElementNS(SVGNS,x[0]);Object.keys(x[1]).forEach(function(k){e.setAttribute(k,String(x[1][k]))});v.appendChild(e)});return v}
 var bag={},koparP=null;
 function bagDurum(p,r,kapali){
   if(!r)return {s:kapali?'kapali':'hazir'};
@@ -481,25 +495,31 @@ function bagDurum(p,r,kapali){
 function bagCiz(){
   var kap=$('#baglar');kap.textContent='';
   ['linkedin','instagram'].forEach(function(p){
-    var B=bag[p]||{s:'hazir'},s=B.s,ad=PAD[p],k=el('article','sheet bag-kart'+(s==='taken'?' sheet-hata':''),null,{'aria-labelledby':'bk-'+p});
-    var bas=el('div','bag-bas');bas.appendChild(el('h2','bag-ad',ad,{id:'bk-'+p,tabindex:'-1'}));bas.appendChild(el('span',ROZET[s][0],t(ROZET[s][1])));k.appendChild(bas);
+    var B=bag[p]||{s:'hazir'},s=B.s,ad=PAD[p],k=el('article','sheet bag-kart'+(s==='taken'?' sheet-hata':''),null,{'aria-labelledby':'bk-'+p,'aria-describedby':'bn-'+p});
+    var bas=el('div','bag-bas'),sim=el('span','bag-simge bag-simge-'+p);sim.appendChild(ikonYap(PIKON[p]));bas.appendChild(sim);
+    var adK=el('div','bag-ad-k');adK.appendChild(el('h2','bag-ad',ad,{id:'bk-'+p,tabindex:'-1'}));adK.appendChild(el('span','pl-et pl-et-pro','Pro'));bas.appendChild(adK);
+    bas.appendChild(el('span',ROZET[s][0],t(ROZET[s][1])));k.appendChild(bas);
+    k.appendChild(el('p','bag-neden',t('Planlanan taslaklar bu hesaba otomatik paylaşılır.'),{id:'bn-'+p}));
+    var pl=el('p','ince bag-plan',t('Otomatik paylaşım Pro planda.')+' ');pl.appendChild(el('a','bag',t('Planları gör'),{href:dil==='en'?'/en/pricing':'/fiyatlar'}));k.appendChild(pl);
     var ey=el('div','eylemler');
-    if(s==='bagli'||s==='yenile'){if(B.kul){var kim=el('p');kim.appendChild(el('span','bag-kim kullanici',B.kul));k.appendChild(kim)}
+    function kaldirB(){return btn('btn-cizgi btn-kucuk','Bağlantıyı kaldır',null,function(b){koparAc(p,b)})}
+    if(s==='bagli'||s==='yenile'){if(B.kul){var kim=el('p','bag-kim-sira');kim.appendChild(el('span','bag-kim kullanici',B.kul));k.appendChild(kim)}
       var tt=tarih(B.tarih);if(tt)k.appendChild(el('p','ince',t('Son güncelleme: {t}',{t:tt})))}
-    if(s==='bagli')ey.appendChild(btn('btn-cizgi btn-kucuk','Bağı kopar',null,function(b){koparAc(p,b)}));
+    if(s==='bagli'){var kb=kaldirB();kb.setAttribute('aria-label',t('{p} bağlantısını kaldır',{p:ad}));ey.appendChild(kb)}
     if(s==='yenile'){var u=el('div','bildirim bildirim-uyari');u.appendChild(el('strong',null,t('{p} yetkisinin süresi doldu.',{p:ad})));u.appendChild(el('p',null,t('Yeniden yetkilendirince ölçümler kaldığı yerden sürer. Taslakların etkilenmez.')));k.appendChild(u);
-      ey.appendChild(btn('btn-ink btn-kucuk','Yeniden yetkilendir',null,function(b){baglan(p,b)}));ey.appendChild(btn('btn-cizgi btn-kucuk','Bağı kopar',null,function(b){koparAc(p,b)}))}
-    if(s==='yok'||s==='bekliyor'){k.appendChild(el('p','ince',t('Bağladığında hesabının adını ve gönderi ölçümlerini okuruz.')));
-      var bb=btn('btn-ink btn-kucuk','{p} hesabını bağla',{p:ad},function(b){baglan(p,b)});if(s==='bekliyor'){bb.textContent=t('Yönlendiriliyor…');bb.setAttribute('aria-busy','true');bb.setAttribute('aria-disabled','true')}ey.appendChild(bb)}
+      ey.appendChild(btn('btn-ink btn-kucuk','Yeniden yetkilendir',null,function(b){baglan(p,b)}));var kb2=kaldirB();kb2.setAttribute('aria-label',t('{p} bağlantısını kaldır',{p:ad}));ey.appendChild(kb2)}
+    if(s==='yok'||s==='bekliyor'){
+      var bb=btn('btn-ink btn-kucuk','Bağla',null,function(b){baglan(p,b)});bb.setAttribute('aria-label',t('{p} hesabını bağla',{p:ad}));
+      if(s==='bekliyor'){bb.textContent=t('Yönlendiriliyor…');bb.setAttribute('aria-busy','true');bb.setAttribute('aria-disabled','true')}ey.appendChild(bb)}
     if(s==='izin'||s==='hazir'||s==='kapali'){
       var acik=s==='izin'?'Instagram bağlantısı Meta’nın uygulama incelemesini bekliyor. İnceleme bitince bu düğme açılır.':s==='kapali'?'Yeni bağlantılar şu an kapalı. Açıldığında bu düğme çalışır.':'{p} bağlantısı henüz hazır değil. Hazır olunca bu düğme açılır.';
-      k.appendChild(el('p','ince',t(acik,{p:ad}),{id:'izin-'+p}));
-      var ib=btn('btn-ink btn-kucuk','{p} hesabını bağla',{p:ad});ib.setAttribute('aria-disabled','true');ib.setAttribute('aria-describedby','izin-'+p);ey.appendChild(ib)}
+      var ib=btn('btn-ink btn-kucuk','Yakında');ib.setAttribute('aria-disabled','true');ib.setAttribute('aria-label',t('{p} hesabını bağla',{p:ad})+' — '+t('Yakında'));ib.setAttribute('aria-describedby','izin-'+p);ey.appendChild(ib);
+      k.appendChild(ey);k.appendChild(el('p','ince bag-acik',t(acik,{p:ad}),{id:'izin-'+p}));kap.appendChild(k);return}
     if(s==='taken'){var h=el('div','bildirim bildirim-hata');h.appendChild(el('strong',null,t('Bu hesap başka bir Corner hesabına bağlı.')));
-      h.appendChild(el('p',null,t('Bu {p} hesabı başka bir Corner sitesindeki (örneğin Brand Corner) ya da başka bir kullanıcıdaki hesaba bağlı. Önce orada bağı kopar, sonra burada yeniden dene.',{p:ad})));
+      h.appendChild(el('p',null,t('Bu {p} hesabı başka bir Corner sitesindeki (örneğin Brand Corner) ya da başka bir kullanıcıdaki hesaba bağlı. Önce orada bağlantıyı kaldır, sonra burada yeniden dene.',{p:ad})));
       h.appendChild(el('p','kod',t('Kod: taken')));k.appendChild(h);
-      var det=el('details','acilir');det.appendChild(el('summary',null,t('Bağı nasıl koparırım?')));var ol=el('ol');
-      ['Bağlı olduğu Corner hesabında oturum aç.','Bağlantılar ya da Panel sayfasında bu hesabın bağını kopar.','Buraya dönüp Yeniden dene düğmesine bas.'].forEach(function(x){ol.appendChild(el('li',null,t(x)))});det.appendChild(ol);
+      var det=el('details','acilir');det.appendChild(el('summary',null,t('Bağlantıyı nasıl kaldırırım?')));var ol=el('ol');
+      ['Bağlı olduğu Corner hesabında oturum aç.','Bağlantılar ya da Panel sayfasında bu hesabın bağlantısını kaldır.','Buraya dönüp Yeniden dene düğmesine bas.'].forEach(function(x){ol.appendChild(el('li',null,t(x)))});det.appendChild(ol);
       ey.appendChild(btn('btn-ink btn-kucuk','Yeniden dene',null,function(b){baglan(p,b)}));k.appendChild(ey);k.appendChild(det);kap.appendChild(k);return}
     k.appendChild(ey);kap.appendChild(k);
   });
@@ -519,14 +539,14 @@ function baglan(p){
     genelHata(j);
   });
 }
-function koparAc(p,tetik){koparP=p;var ad=PAD[p];$('#dlg-kopar-b').textContent=t('{p} bağı koparılsın mı?',{p:ad});
-  $('#dlg-kopar-a').textContent=t('Bağ ve kayıtlı yetki burada silinir; {p} tarafındaki izni {p} ayarlarından kaldırırsın. Geçmiş’teki taslakların silinmez; istediğin an yeniden bağlarsın.',{p:ad});dlgAc($('#dlg-kopar'),tetik)}
+function koparAc(p,tetik){koparP=p;var ad=PAD[p];$('#dlg-kopar-b').textContent=t('{p} bağlantısı kaldırılsın mı?',{p:ad});
+  $('#dlg-kopar-a').textContent=t('Bağlantı ve kayıtlı yetki burada silinir; {p} tarafındaki izni {p} ayarlarından kaldırırsın. Bu hesaba otomatik paylaşım yapılmaz. Geçmiş’teki taslakların silinmez; istediğin an yeniden bağlarsın.',{p:ad});dlgAc($('#dlg-kopar'),tetik)}
 function baglarKur(){
   if(!$('#baglar'))return;
   $('#kopar-evet').addEventListener('click',function(){var b=this,p=koparP;if(!p||bosMu(b))return;
-    function bitti(){$('#dlg-kopar').close();bag[p]={s:ORNEK?'yok':'yok'};bagCiz();bildir('{p} bağı koparıldı.','ok',{p:PAD[p]});odakKart(p)}
+    function bitti(){$('#dlg-kopar').close();bag[p]={s:'yok'};bagCiz();bildir('{p} bağlantısı kaldırıldı.','ok',{p:PAD[p]});odakKart(p)}
     if(ORNEK){bitti();return}
-    var bitir=mesgul(b,'Koparılıyor…');
+    var bitir=mesgul(b,'Kaldırılıyor…');
     istek('/app/disconnect','POST',{platform:p}).then(function(j){bitir();if(j._s===200){bitti();baglarGetir();return}$('#dlg-kopar').close();genelHata(j)});
   });
 }
@@ -598,6 +618,8 @@ function gecmisCiz(){
     tb.addEventListener('click',function(){var ac=tb.getAttribute('aria-expanded')!=='true';tb.setAttribute('aria-expanded',ac?'true':'false');m.classList.toggle('kisa',!ac);tb.textContent=t(ac?'Kısalt':'Tamamını göster')});a.appendChild(tb);
     var ey=el('div','eylemler'),durumP=el('p','kart-durum ince',null,{role:'status'});
     var kb=btn('btn-ink btn-kucuk','Kopyala',null,function(){kopyala(x,durumP)});kb.setAttribute('aria-label',t('Kopyala: {k}',{k:konu}));ey.appendChild(kb);
+    // Planla: yalnız LinkedIn/Instagram taslağı; kuyruk sayfası ?taslak=<id> (EN ?draft=<id>) ile taslağı forma doldurur
+    if(PAD[x.p]&&/^[1-9]\d{0,14}$/.test(String(x.id))){ey.appendChild(el('a','btn btn-cizgi btn-kucuk',t('Planla'),{href:yol('kuyruk')+(dil==='en'?'?draft=':'?taslak=')+x.id+(ORNEK&&MOCKHOST?'#ornek':''),'aria-label':t('Planla: {k}',{k:konu})}))}
     ey.appendChild(durumP);
     var sb=btn('btn-cizgi btn-kucuk','Sil',null,function(b){silAc(x,b)});sb.setAttribute('aria-label',t('Sil: {k}',{k:konu}));ey.appendChild(sb);
     a.appendChild(ey);kap.appendChild(a);

@@ -256,8 +256,17 @@ function yukle(q){
   },function(h){if(no!==D.istek)return;durdur();tsSifirla();uretMesgul(false);hataIsle(h||{kod:'genel'})});
 }
 function vazgec(){D.vazgec=true;D.istek++;if(D.ac)try{D.ac.abort()}catch(e){}durdur();uretMesgul(false);goster(D.kartVar?'sonuc':'bos',false);durum(T('Vazgeçildi.','Cancelled.'));quotaSor();konu.focus()}
-function kayitNot(r){var n=$('#kayit-not');if(!n)return;n.textContent='';n.hidden=true;
-  if(r&&Array.isArray(r.draft_ids)&&r.draft_ids.length){n.appendChild(d.createTextNode(T('Geçmiş’e kaydedildi. ','Saved to History. ')));var a=el('a',null,T('Geçmişi aç','Open History'));a.href=EN?'/en/hesap/history':'/hesap/gecmis';n.appendChild(a);n.hidden=false}}
+/* Planla: worker yalnız LinkedIn/Instagram taslağına draft_ids döner; sayfa cfg.taslakId ile seçili sekmenin kimliğini verir.
+   Bağlantı kuyruk sayfasına gider (?taslak=<id>, EN ?draft=<id>); kuyruk taslağı Geçmiş'ten okuyup formu doldurur. */
+var TASLAK_RE=/^[1-9]\d{0,14}$/;
+function planlaYaz(id){var a=$('#kayit-planla');if(!a)return;id=String(id==null?'':id);
+  if(!TASLAK_RE.test(id)){a.hidden=true;a.removeAttribute('href');return}
+  a.href=(EN?'/en/publish-queue?draft=':'/yayin-kuyrugu?taslak=')+id;a.hidden=false}
+function kayitNot(r,tek){var n=$('#kayit-not');if(!n)return;n.textContent='';n.hidden=true;
+  if(r&&Array.isArray(r.draft_ids)&&r.draft_ids.length){n.appendChild(d.createTextNode(T('Geçmiş’e kaydedildi. ','Saved to History. ')));var a=el('a',null,T('Geçmişi aç','Open History'));a.href=EN?'/en/hesap/history':'/hesap/gecmis';n.appendChild(a);
+    if(cfg&&typeof cfg.taslakId==='function'){var p=el('a',null,T('Planla','Schedule'));p.id='kayit-planla';p.setAttribute('aria-label',T('Seçili taslağı yayın kuyruğunda planla','Schedule the selected draft in the publishing queue'));
+      n.appendChild(d.createTextNode(' · '));n.appendChild(p);planlaYaz(cfg.taslakId(r.draft_ids,!!tek))}
+    n.hidden=false}}
 
 function hataIsle(h){
   var k=h.kod||'genel';if(k==='vazgec')return;var s=typeof h.left==='number';if(s)hakAl(h);
@@ -437,10 +446,10 @@ function basla(){
 window.Studyo={
   kaydet:function(c){cfg=c;if(c.hedefMax==null)c.hedefMax=0},
   uret:uret,
-  refine:function(q){return post('/gen/refine',q,30000).then(function(r){hakAl(r);hakYaz();kayitNot(r);var a=r&&r.drafts&&r.drafts[0];return {text:a&&typeof a.text==='string'?a.text:null}})},
+  refine:function(q){return post('/gen/refine',q,30000).then(function(r){hakAl(r);hakYaz();kayitNot(r,true);var a=r&&r.drafts&&r.drafts[0];return {text:a&&typeof a.text==='string'?a.text:null}})},
   hak:function(){return {left:D.left,cap:D.cap,reset:D.reset,scope:D.hakScope,bilinmez:D.hakBilinmez,plan:D.plan||null,ay:D.ay||null}},
   stok:function(q,dis){return al('/gen/stock?'+q,12000,dis)},
-  hakYaz:hakYaz,olay:olay,hata:hataIsle,kopyala:kopyala,toast:toast,durum:durum,dil:dilAl,T:T,goster:goster,
+  hakYaz:hakYaz,planlaYaz:planlaYaz,olay:olay,hata:hataIsle,kopyala:kopyala,toast:toast,durum:durum,dil:dilAl,T:T,goster:goster,
   D:D,el:el,$:$,$$:$$,depo:depo,oturumDepo:oturumDepo,yenMetin:yenMetin,cp:cp,azHareket:azHareket,
   DUVAR:DUVAR,SINIR:T('Bugünkü 9 düzenleme hakkın doldu; gece yarısı yenilenir.','You’ve used today’s 9 edits; they renew at midnight.')
 };
