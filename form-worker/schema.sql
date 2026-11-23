@@ -135,6 +135,44 @@ CREATE TABLE IF NOT EXISTS meta_events (
   matched INTEGER NOT NULL
 );
 
+-- app taslak üretimi (0014_gen.sql ile aynı tablolar; src/generate.js). Günlük sayaç: key sha256(salt|day|kind|değer) ya da 'all'
+CREATE TABLE IF NOT EXISTS gen_usage (
+  day TEXT NOT NULL,
+  key TEXT NOT NULL,
+  kind TEXT NOT NULL,
+  n INTEGER NOT NULL DEFAULT 0,
+  PRIMARY KEY (day, key)
+) WITHOUT ROWID;
+-- Günde tek satır, kişisel olmayan sayılar (sonuç, kullanıcı, kart olayları, teklif tıkı)
+CREATE TABLE IF NOT EXISTS gen_daily (
+  day TEXT PRIMARY KEY,
+  ok INTEGER NOT NULL DEFAULT 0,
+  fail INTEGER NOT NULL DEFAULT 0,
+  refused INTEGER NOT NULL DEFAULT 0,
+  busy INTEGER NOT NULL DEFAULT 0,
+  refine_ok INTEGER NOT NULL DEFAULT 0,
+  tok_in INTEGER NOT NULL DEFAULT 0,
+  tok_out INTEGER NOT NULL DEFAULT 0,
+  uniq_anon INTEGER NOT NULL DEFAULT 0,
+  anon_full INTEGER NOT NULL DEFAULT 0,
+  ip_full INTEGER NOT NULL DEFAULT 0,
+  cap_hit INTEGER NOT NULL DEFAULT 0,
+  ret0 INTEGER NOT NULL DEFAULT 0,
+  ret1 INTEGER NOT NULL DEFAULT 0,
+  ret2_7 INTEGER NOT NULL DEFAULT 0,
+  ret8 INTEGER NOT NULL DEFAULT 0,
+  copy_ok INTEGER NOT NULL DEFAULT 0,
+  copy_fb INTEGER NOT NULL DEFAULT 0,
+  share INTEGER NOT NULL DEFAULT 0,
+  qc_limit INTEGER NOT NULL DEFAULT 0,
+  qc_result INTEGER NOT NULL DEFAULT 0,
+  qc_error INTEGER NOT NULL DEFAULT 0,
+  qc_cap INTEGER NOT NULL DEFAULT 0,
+  qc_top INTEGER NOT NULL DEFAULT 0,
+  qc_footer INTEGER NOT NULL DEFAULT 0,
+  qc_calendly INTEGER NOT NULL DEFAULT 0
+) WITHOUT ROWID;
+
 -- Sosyal metrikler bu dosyada değil, migrations/ altında; bu dosyadan sonra sırayla uygulanır:
 --   0001_metrics.sql  sosyal hesaplar ve metrik tabloları
 --   0002_oauth.sql    OAuth akışı, şifreli token, social_accounts (platform, external_id) UNIQUE
@@ -149,5 +187,6 @@ CREATE TABLE IF NOT EXISTS meta_events (
 --   0011_meta_scoped.sql   Instagram hesabının uygulamaya özel kimliği (Meta deauthorize / veri silme eşleşmesi)
 --   0012_admin.sql         yönetim paneli: user_perms, perm_log, post_edits, meta_events (yukarıdakiyle aynı tablolar)
 --   0013_linkedin_posts.sql LinkedIn ek toplamlar (kaydetme, gönderme, bağlantı tıklaması, içerikten takipçi ve profil görüntüleme) ve posts.synced_at
+--   0014_gen.sql          app taslak üretimi: gen_usage (günlük sayaçlar), gen_daily (günlük ölçüm) (yukarıdakiyle aynı tablolar)
 -- Uygula (form-worker/ klasöründen çalıştır): npx wrangler d1 migrations apply corner-forms --remote
--- 0002 uygulanmadan da bağ koparma çalışır; 0003–0013 yeni kodla deploy'dan ÖNCE uygulanmalı.
+-- 0002 uygulanmadan da bağ koparma çalışır; 0003–0014 yeni kodla deploy'dan ÖNCE uygulanmalı.
