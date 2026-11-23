@@ -1325,9 +1325,8 @@ async function rtLinkedIn(c, slug, since, gun, env) {
   // Önce şirketin kendi gönderi yolunu, az sonuç gelirse adı geçen gönderileri arar.
   const seen = new Set(), all = [], tani = [];
   let ham = 0, hata = "";
-  // after: sorgu metninde Google operatörüdür (tbs değil); reddedilirse ya da yetmezse sade sorgulara düşer.
-  const after = " after:" + new Date(since - 864e5).toISOString().slice(0, 10);
-  const qs = [`site:linkedin.com/posts/${slug}_` + after, `site:linkedin.com/posts/${slug}_`, `site:linkedin.com/posts "${slug}"` + after];
+  // after: operatörü LinkedIn gönderilerinde hiç sonuç vermedi (24.11 canlı); kullanılmaz.
+  const qs = [`site:linkedin.com/posts/${slug}_`, `site:linkedin.com/posts "${slug}"`];
   for (const q of qs) {
     if (all.filter(x => x.t >= since).length >= 3) break;
     let d;
@@ -1357,7 +1356,8 @@ async function rtLinkedIn(c, slug, since, gun, env) {
       if (title.length < 25 && snip.length > title.length) title = snip;
       all.push({ t, title: (title || "LinkedIn gönderisi").slice(0, 200), link: "https://www.linkedin.com" + u.pathname });
     }
-    tani.push((d?.organic || []).length + ">" + (all.length - once));
+    const ornek = all.length === once && (d?.organic || [])[0] ? " ör:" + String(d.organic[0].link || "").replace(/^https?:\/\//, "").slice(0, 70) : "";
+    tani.push((d?.organic || []).length + ">" + (all.length - once) + ornek);
   }
   out.tani = tani.join(" "); out.ham = ham;
   if (!all.length && hata) { out.error = hata; return out; }
