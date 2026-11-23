@@ -1071,10 +1071,12 @@ async function execGet(id) { try { const r = await caches.default.match(await __
 async function execPut(id, rec) { try { await caches.default.put(await __execKey(id), new Response(JSON.stringify(rec), { headers: { "content-type": "application/json", "cache-control": "max-age=86400" } })); } catch {} }
 // Akışta $('Düğüm') ile başvurulan düğümler (kaynak metninden); başvurulmayanların çıktısı ara kayıtta tutulmaz.
 const __refMemo = {};
+// Pages paketleyicisi (esbuild) ASCII dışı harfleri \uXXXX yapar; düğüm adlarını bulabilmek için kaynağı geri çöz.
+const __unesc = t => t.replace(/\\u\{([0-9a-fA-F]+)\}|\\u([0-9a-fA-F]{4})|\\x([0-9a-fA-F]{2})/g, (_, a, b, c) => String.fromCodePoint(parseInt(a || b || c, 16)));
 function __wfRefs(wfName) {
   if (__refMemo[wfName]) return __refMemo[wfName];
   const wf = WF[wfName]; const srcOf = {};
-  for (const [nn, n] of Object.entries(wf.nodes)) { const src = []; const walk = v => { if (typeof v === "function") src.push(v.toString()); else if (typeof v === "string") src.push(v); else if (Array.isArray(v)) v.forEach(walk); else if (v && typeof v === "object") Object.values(v).forEach(walk); }; walk(n.p); srcOf[nn] = src.join("\n"); }
+  for (const [nn, n] of Object.entries(wf.nodes)) { const src = []; const walk = v => { if (typeof v === "function") src.push(__unesc(v.toString())); else if (typeof v === "string") src.push(v); else if (Array.isArray(v)) v.forEach(walk); else if (v && typeof v === "object") Object.values(v).forEach(walk); }; walk(n.p); srcOf[nn] = src.join("\n"); }
   // ad -> o adı kaynağında anan düğümler
   const ref = new Map();
   for (const name of Object.keys(wf.nodes)) { const q = ["'" + name + "'", '"' + name + '"', "`" + name + "`"]; const by = Object.keys(srcOf).filter(o => o !== name && q.some(x => srcOf[o].includes(x))); if (by.length) ref.set(name, by); }
@@ -1084,7 +1086,7 @@ function __wfRefs(wfName) {
 const __runDataKeep = (rd, wfName, S) => {
   const wf = WF[wfName], ref = __wfRefs(wfName), ahead = new Set(), q = [...S.stack.map(j => j.name), ...Object.keys(S.waiting || {})];
   while (q.length) { const n = q.pop(); if (ahead.has(n)) continue; ahead.add(n); for (const t of (wf.conn[n] || [])) for (const [c] of (t || [])) q.push(c); }
-  const o = {}; for (const [k, runs] of Object.entries(rd || {})) { const by = ref.get(k); o[k] = (by && by.some(b => ahead.has(b))) || /output/i.test(k) ? runs : runs.map(() => [[]]); } return o; };
+  const o = {}; for (const [k, runs] of Object.entries(rd || {})) { const by = ref.get(k); o[k] = (by && by.some(b => ahead.has(b))) || /output/i.test(k) || JSON.stringify(runs).length < 20000 ? runs : runs.map(() => [[]]); } return o; };
 // Bitiş kaydı: durum akışları yalnız "Output" düğümlerini ve son düğümü okur; kalanların adı (ilerleme için) yeter.
 const __runDataFinal = (rd, last) => { const o = {}; for (const [k, runs] of Object.entries(rd || {})) o[k] = (k === last || /output/i.test(k)) ? runs.map(x => ({ data: { main: x.map(y => (y || []).map(z => ({ json: z.json }))) } })) : [{ data: { main: [[]] } }]; return o; };
 const __runDataLite = rd => { const o = {}; for (const k of Object.keys(rd || {})) o[k] = [{ data: { main: [[]] } }]; return o; };
