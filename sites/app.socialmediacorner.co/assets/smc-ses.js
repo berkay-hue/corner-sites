@@ -141,6 +141,19 @@ function kur(){
     if(hit&&!hit.checked){hit.checked=true;hit.dispatchEvent(new Event('change',{bubbles:true}))}
   }
   ac.addEventListener('click',function(){sesAc(ac)});
+  /* A4-2c-nav: üst gezintideki "Marka sesi" aynı dialogu açar; odak kapanınca o düğmeye döner */
+  var navB=$('#ses-nav');if(navB)navB.addEventListener('click',function(){sesAc(navB)});
+  /* #ses derin bağlantısı (LinkedIn sayfasındaki gezinti bağlantısı): diğer anahtarlar (#ornek, #d=, #tema=) korunur, yalnız ses düşer */
+  function hashSes(){
+    var h=location.hash.replace(/^#/,'');if(!h)return;var p=h.split('&'),k=p.filter(function(x){return x.split('=')[0]!=='ses'});
+    if(k.length===p.length)return;
+    var y=k.length?'#'+k.join('&'):location.pathname+location.search;
+    try{history.replaceState(null,'',y)}catch(e){}
+    if(!dlg.open)sesAc(navB||ac);
+  }
+  /* sayfa yüklemesi bitince açılır: smc-app.js ve ÖRNEK (ornek.js) ilk durumunu kurmuş olur, odak dialogda kalır */
+  if(d.readyState==='complete')hashSes();else window.addEventListener('load',hashSes);
+  window.addEventListener('hashchange',hashSes);
   $('#ses-kapat').addEventListener('click',sesKapat);
   $('#ses-vazgec').addEventListener('click',sesKapat);
   dlg.addEventListener('close',kapandi);
