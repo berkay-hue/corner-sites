@@ -681,8 +681,11 @@ body {
   )
 
   const { data } = await supabase.auth.getSession()
+  const email = (data.session?.user?.email || '').toLowerCase()
   if (!data.session && location.pathname !== '/login') {
     window.location.href = '/login'
+  } else if (email && email !== 'berkay@saascorner.co') {
+    location.replace('/app/')
   }
 </script><!-- SnippetEnd: O6knMBCh5 -->
 

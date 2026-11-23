@@ -1,1 +1,1 @@
-{"version":1,"include":["/api/*","/webhook/*"],"exclude":[]}
+{"version":1,"include":["/","/robots.txt","/api/*","/webhook/*"],"exclude":[]}
