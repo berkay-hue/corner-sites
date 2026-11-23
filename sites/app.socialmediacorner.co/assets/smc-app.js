@@ -531,7 +531,7 @@ function etkinTema(){
   var a=root.getAttribute('data-theme');if(a==='dark'||a==='light')return a;
   return window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
 }
-function temaYaz(){temaBtn.setAttribute('aria-pressed',etkinTema()==='dark'?'true':'false')}
+function temaYaz(){var k=etkinTema()==='dark',m=k?'Açık temaya geç':'Koyu temaya geç';temaBtn.removeAttribute('aria-pressed');temaBtn.setAttribute('data-tema-etkin',k?'dark':'light');temaBtn.setAttribute('aria-label',m);temaBtn.setAttribute('title',m)}
 temaBtn.addEventListener('click',function(){
   var t=etkinTema()==='dark'?'light':'dark';root.setAttribute('data-theme',t);
   try{localStorage.setItem('smc-tema',t)}catch(e){}

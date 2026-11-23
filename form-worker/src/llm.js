@@ -5,10 +5,10 @@
 //   fail    zaman aşımı, max_tokens, diğer 4xx, JSON/şema/sayı hatası → faturalanmış olabilir
 //   refusal stop_reason "refusal" ya da bütün text alanları boş (ret işareti) → faturalanmış olabilir
 // Sağlayıcının ham hata metni kullanıcıya gitmez; yalnız kısaltılmış log.
-import { ANGLES, REELS_ANGLES } from "./gen-prompt.js";
+import { ANGLES, REELS_ANGLES, STUDIO_MAX } from "./gen-prompt.js";
 
 const API = "https://api.anthropic.com/v1/messages";
-const TIMEOUT = 30000; // iki denemenin toplamı dahil
+const TIMEOUT = 30000; // iki denemenin toplamı dahil; istek timeout verirse o geçerli (A8 blog/video)
 const RETRY_IF_UNDER = 10000; // ilk deneme bundan uzun sürdüyse yeniden denenmez
 const RETRY_BUDGET = 15000; // geçen süre + bekleme bunu aşarsa yeniden denenmez
 
@@ -20,7 +20,47 @@ export const SPECS = {
   li: { angles: ANGLES, fields: ["text"], max: { text: 3000 }, len: s => s.length },
   caption: { angles: ANGLES, fields: ["text"], max: { text: 2200 }, len: cp },
   reels: { angles: REELS_ANGLES, fields: ["text", "say"], max: { text: 80, say: 200 }, len: cp },
+  // A8 blog: kod noktasıyla. H1 satırı düşürülür (title'ın tekrarı ilk satırdaysa silinir, diğerleri "## " olur);
+  // tek satır title ve en az bir "## " ara başlık zorunlu, yoksa llm_fail.
+  blog: {
+    angles: ["blog"], fields: ["title", "meta", "text"], len: cp,
+    max: { title: STUDIO_MAX.title, meta: STUDIO_MAX.meta, text: STUDIO_MAX.blogText },
+    check: d => {
+      if (/\n/.test(d.title)) return "title_line";
+      d.meta = d.meta.replace(/\s*\n\s*/g, " ");
+      const lines = d.text.split("\n");
+      if (/^#\s/.test(lines[0])) { lines.shift(); while (lines.length && !lines[0].trim()) lines.shift(); }
+      d.text = lines.map(l => l.replace(/^#\s+/, "## ")).join("\n").trim();
+      if (!d.text) return "partial_empty";
+      if (!/^##\s+\S/m.test(d.text)) return "no_heading";
+      return null;
+    },
+  },
 };
+
+// A8 video/carousel: sahne sayısı ve secs uzunluğa bağlı olduğu için istek başına üretilir. Video: 15→4-5, 30→6-8,
+// 60→10-14 sahne, secs 2..8 tam sayı, toplam uzunluğun ±%25'i içinde. Carousel: slayt sayısı = length, secs 0'a
+// sabitlenir. Sahne text'i tek satır ≤70, sub ≤120 kod noktası. Biri tutmazsa llm_fail.
+const VIDEO_SCENES = { 15: [4, 5], 30: [6, 8], 60: [10, 14] };
+export function videoSpec(kind, length) {
+  const L = Number(length);
+  const [lo, hi] = kind === "video" ? VIDEO_SCENES[L] : [L, L];
+  return {
+    angles: [kind], fields: ["title", "caption"], len: cp, scenes: true,
+    max: { title: STUDIO_MAX.videoTitle, caption: STUDIO_MAX.caption },
+    count: [lo, hi], kind, length: L,
+    check: d => {
+      if (/\n/.test(d.title)) return "title_line";
+      const sc = d.scenes;
+      if (sc.length < lo || sc.length > hi) return "scene_count";
+      if (sc.some(x => /\n/.test(x.text) || cp(x.text) > STUDIO_MAX.scene || cp(x.sub) > STUDIO_MAX.sub)) return "scene_length";
+      if (kind === "carousel") { for (const x of sc) x.secs = 0; return null; }
+      if (sc.some(x => x.secs < 2 || x.secs > 8)) return "secs";
+      const sum = sc.reduce((a, x) => a + x.secs, 0);
+      return Math.abs(sum - L) > Math.ceil(L / 4) ? "secs_sum" : null;
+    },
+  };
+}
 
 export class LlmError extends Error {
   constructor(kind, why, usage) {
@@ -70,7 +110,7 @@ async function attempt(env, f, body, ms) {
 
 // ISTEM §5.4 adım 2-4: önce stop_reason, sonra text bloğu, JSON, ret işareti, sayı/açı/uzunluk
 export function parse(data, count, angle, spec = SPECS.li) {
-  const { angles, fields, max, len } = spec;
+  const { angles, fields, max, len, scenes } = spec;
   const usage = { input_tokens: Number(data?.usage?.input_tokens) || 0, output_tokens: Number(data?.usage?.output_tokens) || 0 };
   const stop = data?.stop_reason;
   if (stop === "refusal") {
@@ -82,12 +122,22 @@ export function parse(data, count, angle, spec = SPECS.li) {
   let obj;
   try { obj = JSON.parse(block.text); } catch { throw new LlmError("fail", "json", usage); }
   const d = obj?.drafts;
-  if (!Array.isArray(d) || !d.length || d.some(x => !x || typeof x.angle !== "string" || fields.some(k => typeof x[k] !== "string"))) throw new LlmError("fail", "shape", usage);
-  const blank = d.map(x => fields.map(k => x[k].trim() === ""));
-  if (blank.every(b => b.every(Boolean))) throw new LlmError("refusal", "empty", usage);
+  const sceneOk = s => s && typeof s.text === "string" && typeof s.sub === "string" && Number.isInteger(s.secs);
+  if (!Array.isArray(d) || !d.length || d.some(x => !x || typeof x.angle !== "string" || fields.some(k => typeof x[k] !== "string")
+    || (scenes && (!Array.isArray(x.scenes) || !x.scenes.every(sceneOk))))) throw new LlmError("fail", "shape", usage);
+  // sahneli çıktıda ret işareti: alanlar boş ve sahne yok (ya da hepsinin text'i boş); sahne text'i boşsa eksik sayılır
+  const blank = d.map(x => [...fields.map(k => x[k].trim() === ""), ...(scenes ? [!x.scenes.length || x.scenes.some(s => s.text.trim() === "")] : [])]);
+  const allBlank = x => !scenes || x.scenes.every(s => s.text.trim() === "");
+  if (blank.every(b => b.every(Boolean)) && d.every(allBlank)) throw new LlmError("refusal", "empty", usage);
   if (blank.some(b => b.some(Boolean))) throw new LlmError("fail", "partial_empty", usage);
-  const drafts = d.map(x => { const o = { angle: x.angle }; for (const k of fields) o[k] = x[k].trim(); return o; });
+  const drafts = d.map(x => {
+    const o = { angle: x.angle };
+    for (const k of fields) o[k] = x[k].trim();
+    if (scenes) o.scenes = x.scenes.map(s => ({ text: s.text.trim(), sub: s.sub.trim(), secs: s.secs }));
+    return o;
+  });
   if (drafts.some(x => fields.some(k => len(x[k]) > max[k]) || !angles.includes(x.angle))) throw new LlmError("fail", "length_or_angle", usage);
+  if (spec.check) for (const x of drafts) { const why = spec.check(x); if (why) throw new LlmError("fail", why, usage); }
   if (count === 3) {
     if (drafts.length !== 3 || new Set(drafts.map(x => x.angle)).size !== 3) throw new LlmError("fail", "count", usage);
     drafts.sort((a, b) => angles.indexOf(a.angle) - angles.indexOf(b.angle));
@@ -98,7 +148,8 @@ export function parse(data, count, angle, spec = SPECS.li) {
   return { drafts, usage, stop, model: String(data.model || "") };
 }
 
-async function call(env, f, { system, user, schema, maxTokens, count, angle, spec }) {
+async function call(env, f, { system, user, schema, maxTokens, count, angle, spec, timeout }) {
+  const T = timeout || TIMEOUT;
   const body = JSON.stringify({
     model: env.GEN_MODEL,
     max_tokens: maxTokens,
@@ -108,12 +159,12 @@ async function call(env, f, { system, user, schema, maxTokens, count, angle, spe
     stream: false,
   });
   const t0 = Date.now();
-  let r = await attempt(env, f, body, TIMEOUT);
+  let r = await attempt(env, f, body, T);
   if (r.retry) {
     const elapsed = Date.now() - t0;
     if (elapsed < RETRY_IF_UNDER && elapsed + r.wait <= RETRY_BUDGET) {
       if (r.wait) await sleep(r.wait);
-      r = await attempt(env, f, body, Math.max(1000, TIMEOUT - (Date.now() - t0)));
+      r = await attempt(env, f, body, Math.max(1000, T - (Date.now() - t0)));
     }
   }
   const ms = Date.now() - t0;
@@ -125,9 +176,28 @@ async function call(env, f, { system, user, schema, maxTokens, count, angle, spe
 }
 
 // Yalnız yerel geliştirme: GEN_PROVIDER=fake, DEV_ORIGINS de tanımlıysa (canlıda DEV_ORIGINS yok).
+// A8 blog/video: sahte taslak gerçek yanıt gibi parse'tan geçer (sözleşmeye uyduğu denetlenir).
+function fakeStudio(spec) {
+  if (spec === SPECS.blog) return {
+    angle: "blog", title: "ÖRNEK blog başlığı", meta: "Bu açıklama sahte sağlayıcıdan geldi; gerçek model çağrılmadı. Arayüzü ve kaydı denemek için yeterince uzun bir örnek cümle.",
+    text: "ÖRNEK giriş paragrafı. Bu metin sahte sağlayıcıdan geldi; gerçek model çağrılmadı.\n\n## Birinci bölüm\n\nBölüm paragrafı.\n\n### Alt başlık\n\n- Birinci madde\n- İkinci madde\n\n## Sonuç\n\nKapanış paragrafı.",
+  };
+  const n = spec.count[0], L = spec.length, video = spec.kind === "video";
+  const secs = i => (video ? Math.floor(L / n) + (i >= n - (L % n) ? 1 : 0) : 0);
+  return {
+    angle: spec.kind, title: `ÖRNEK ${video ? "video" : "carousel"} taslağı`,
+    scenes: Array.from({ length: n }, (_, i) => ({ text: i === 0 ? "ÖRNEK kanca" : i === n - 1 ? "ÖRNEK çağrı" : `ÖRNEK sahne ${i + 1}`, sub: i === 0 ? "" : "Sahte sağlayıcıdan geldi.", secs: secs(i) })),
+    caption: "ÖRNEK açıklama. Bu metin sahte sağlayıcıdan geldi; gerçek model çağrılmadı.\n\n#örnek #taslak #deneme",
+  };
+}
+
 const fake = {
   async generate({ count, angle, spec = SPECS.li }) {
     await sleep(600);
+    if (spec === SPECS.blog || spec.scenes) {
+      const data = { stop_reason: "end_turn", model: "fake", usage: { input_tokens: 0, output_tokens: 0 }, content: [{ type: "text", text: JSON.stringify({ drafts: [fakeStudio(spec)] }) }] };
+      return parse(data, count, angle, spec);
+    }
     const a = count === 3 ? spec.angles : [angle || spec.angles[0]];
     const one = x => spec.fields.includes("say")
       ? { angle: x, text: `ÖRNEK kanca (${x})`, say: "Bu kanca sahte sağlayıcıdan geldi; gerçek model çağrılmadı." }

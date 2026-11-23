@@ -27,7 +27,7 @@ button,input,select,textarea{font:inherit;color:inherit}
 .duz{display:inline-flex;align-items:center;justify-content:center;gap:var(--s2);min-width:var(--dokunma);min-height:var(--dokunma);padding:0 10px;background:transparent;border:0;border-radius:var(--r-rozet);color:var(--ink);font:var(--f-etiket);cursor:pointer}
 .duz:hover{background:var(--sunken)}
 .tema-ikon{width:16px;height:16px;border:2px solid currentColor;border-radius:50%;box-shadow:inset 6px 0 0 currentColor}
-.tema[aria-pressed="true"] .tema-ikon{background:currentColor}
+.tema[data-tema-etkin="dark"] .tema-ikon{background:currentColor}
 .sekmeler{border-top:1px solid var(--line)}
 .sekme-ic{display:flex;gap:var(--s1);max-width:var(--icerik-en);margin:0 auto;padding:0 calc(var(--kenar) - var(--s2));overflow-x:auto;scrollbar-width:none}
 .sekme{display:inline-flex;align-items:center;flex:none;min-height:var(--dokunma);padding:0 var(--s2);border-bottom:var(--odak-kalin) solid transparent;color:var(--ink2);font:var(--f-etiket);font-weight:500;text-decoration:none}

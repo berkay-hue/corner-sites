@@ -18,7 +18,15 @@
     if (a === 'dark' || a === 'light') return a;
     return window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
   }
-  function temaYaz() { if (temaBtn) temaBtn.setAttribute('aria-pressed', etkinTema() === 'dark' ? 'true' : 'false'); }
+  /* Hedef eylem etiketi (aria-pressed yok); ikon .tema[data-tema-etkin] ile çizilir. */
+  function temaYaz() {
+    if (!temaBtn) return;
+    var k = etkinTema() === 'dark', m = k ? (EN ? 'Switch to light theme' : 'Açık temaya geç') : (EN ? 'Switch to dark theme' : 'Koyu temaya geç');
+    temaBtn.removeAttribute('aria-pressed');
+    temaBtn.setAttribute('data-tema-etkin', k ? 'dark' : 'light');
+    temaBtn.setAttribute('aria-label', m);
+    temaBtn.setAttribute('title', m);
+  }
   if (temaBtn) {
     temaBtn.addEventListener('click', function () {
       var t = etkinTema() === 'dark' ? 'light' : 'dark';

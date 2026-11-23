@@ -224,7 +224,7 @@ function btn(cls,tr,p,f){var b=el('button','btn '+cls,t(tr,p),{type:'button'});i
 function temaKur(){
   var b=$('#tema');if(!b)return;
   function etkin(){var a=root.getAttribute('data-theme');if(a==='dark'||a==='light')return a;return window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}
-  function yaz(){b.setAttribute('aria-pressed',etkin()==='dark'?'true':'false')}
+  function yaz(){var k=etkin()==='dark',m=k?(dil==='en'?'Switch to light theme':'Açık temaya geç'):(dil==='en'?'Switch to dark theme':'Koyu temaya geç');b.removeAttribute('aria-pressed');b.setAttribute('data-tema-etkin',k?'dark':'light');b.setAttribute('aria-label',m);b.setAttribute('title',m)}
   b.addEventListener('click',function(){var v=etkin()==='dark'?'light':'dark';root.setAttribute('data-theme',v);try{localStorage.setItem('smc-tema',v)}catch(e){}yaz()});
   if(window.matchMedia){var mq=matchMedia('(prefers-color-scheme: dark)');if(mq.addEventListener)mq.addEventListener('change',yaz)}
   yaz();

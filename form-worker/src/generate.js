@@ -1,18 +1,24 @@
-// app.socialmediacorner.co taslak üretimi (A0-KARAR §1, §3-§5): POST /gen/linkedin, /gen/instagram, /gen/refine, /gen/quota, /gen/event.
+// app.socialmediacorner.co taslak üretimi (A0-KARAR §1, §3-§5): POST /gen/linkedin, /gen/instagram, /gen/blog, /gen/video,
+// /gen/refine, /gen/quota, /gen/event.
 // /gen/instagram (A4 ISTEM-IG): kind caption|reels, isteğe bağlı marka sesi; kota, Turnstile, harcama, iade ve gen_daily
 // /gen/linkedin ile ortak yoldan (produce). /gen/refine kind li|caption|reels (yoksa li).
 // Bayrak GEN_ENABLED="1" + ANTHROPIC_API_KEY, GEN_SALT, TURNSTILE_SECRET + migrations/0014_gen.sql; biri yoksa 503 not_ready.
 // Sayaçlar gen_usage'ta (gün Europe/Istanbul, sabit UTC+3; anahtar sha256(salt|gün|tür|değer), global 'all'), ölçüm gen_daily'de.
 // Her yanıt `charged` (anon üretim hakkı düştü mü) taşır; sayaç okunduysa {left, cap, reset_at, scope} de.
 // LLM sonrası yazımlar (gen_daily, iade) ctx.waitUntil ile. io.fetch testlerde sahte verilir.
+// A8 stüdyo (Desktop/app-smc/A8/SOZLESME.md): POST /gen/blog (tek Markdown yazı; length short|medium|long) ve POST /gen/video
+// (kind video|carousel; sahne listesi + açıklama) aynı produce yolundan, 1 anon hak. /gen/linkedin, /gen/blog, /gen/video
+// isteğe bağlı `style` (0..3000, örnek metin: yalnız ses taklit edilir) alır; temizlenir, nötrlenir, <stil> bloğunda gider.
+// Blog/video için refine yok. Çıktı llm.js SPECS.blog / videoSpec ile sıkı denetlenir; tutmazsa llm_fail.
 // A5-4: ACCOUNTS_ENABLED="1" iken app sitesinde geçerli Bearer oturumu varsa başarılı üretim drafts'a da yazılır (saveDrafts);
 // oturum yoksa/geçersizse yanıt anonimle bire bir aynı (401 yok), drafts hatası yutulur.
 import {
   SYSTEM_GEN, SYSTEM_REFINE, SYSTEM_IG_CAPTION, SYSTEM_IG_REELS, SYSTEM_IG_CAPTION_REFINE, SYSTEM_IG_REELS_REFINE, SCHEMA, SCHEMA_REELS,
+  SYSTEM_BLOG, SYSTEM_VIDEO, SCHEMA_BLOG, SCHEMA_VIDEO, BLOG_LENGTHS, VIDEO_KINDS, VIDEO_LENGTHS, STUDIO_MAX, withStyle, userBlog, userVideo,
   SECTORS, TONES, LANGS, OPS, ANGLES, MAX, IG_KINDS, FORMATS, CTAS, VIDEOS, ADJECTIVES, ADDRESS, EMOJI, REELS_ANGLES, IG_OPS, IG_MAX,
   clean, fold, neutralize, banMatch, userGen, userRefine, userIg, userIgRefine,
 } from "./gen-prompt.js";
-import { makeLlm, LlmError, SPECS } from "./llm.js";
+import { makeLlm, LlmError, SPECS, videoSpec } from "./llm.js";
 import { platformSite, bearerToken, sessionUser } from "./platform.js";
 import { siteConf } from "./sites.js";
 
@@ -26,7 +32,8 @@ const DAILY = new Set(["ok", "fail", "refused", "busy", "refine_ok", "tok_in", "
   ...RET, "copy_ok", "copy_fb", "share", ...SRCS.map(s => "qc_" + s)]);
 const GEN_UNITS = 3, REFINE_UNITS = 1, MIN_T = 1500, EV_PER_DAY = 30;
 // ISTEM-IG §3.2 madde 1: /gen/instagram gövdesi 8 KB (marka sesi)
-const BODY_MAX = { linkedin: 4096, instagram: 8192, refine: 16384, quota: 4096, event: 4096 };
+// A8: linkedin/blog/video 12 KB (3000 karakterlik style, Türkçe 2 bayt/karakter + öbür alanlar sığsın)
+const BODY_MAX = { linkedin: 12288, blog: 12288, video: 12288, instagram: 8192, refine: 16384, quota: 4096, event: 4096 };
 const LLM_ERR = { busy: ["llm_busy", 503], limit: ["llm_limit", 503], fail: ["llm_fail", 502], refusal: ["refused", 422] };
 
 const json = (body, status, origin) => new Response(status === 204 ? null : JSON.stringify(body), {
@@ -162,7 +169,9 @@ const pick = (v, list) => typeof v === "string" && list.includes(v.normalize("NF
 const has = v => v !== undefined && v !== null && v !== "";
 const cp = s => [...s].length;
 
-function validateGen(b) {
+// /gen/linkedin, /gen/blog, /gen/video ortak gövdesi. goalMax 0 ise goal okunmaz (video). style A8: 0..3000 UTF-16
+// (temizlikten sonra), boş = yok. Alan sırası hata önceliğidir: json, hp, anon, topic, sector, tone, goal, lang, style, rid.
+function validateGen(b, goalMax = MAX.goal) {
   if (!b || typeof b !== "object" || Array.isArray(b)) return { field: "json" };
   if (b.hp !== undefined && b.hp !== null && b.hp !== "") return { field: "hp" };
   if (typeof b.anon !== "string" || !UUID.test(b.anon)) return { field: "anon" };
@@ -172,13 +181,33 @@ function validateGen(b) {
   if (!sector) return { field: "sector" };
   const tone = pick(b.tone, TONES);
   if (!tone) return { field: "tone" };
-  const goal = text(b.goal, 0, MAX.goal);
+  const goal = goalMax ? text(b.goal, 0, goalMax) : "";
   if (goal === null) return { field: "goal" };
   if (topic.length + goal.length > MAX.total) return { field: "topic" };
   const lang = pick(b.lang, LANGS);
   if (!lang) return { field: "lang" };
+  const style = text(b.style, 0, STUDIO_MAX.style);
+  if (style === null) return { field: "style" };
   if (typeof b.rid !== "string" || !UUID.test(b.rid)) return { field: "rid" };
-  return { v: { anon: b.anon, topic, sector, tone, goal, lang, rid: b.rid, ret: RET.includes(b.ret) ? b.ret : null, t: b.t, ts: b.ts } };
+  return { v: { anon: b.anon, topic, sector, tone, goal, lang, style, rid: b.rid, ret: RET.includes(b.ret) ? b.ret : null, t: b.t, ts: b.ts } };
+}
+
+// A8 /gen/blog: goal 0..300, length short|medium|long
+function validateBlog(b) {
+  const r = validateGen(b, STUDIO_MAX.blogGoal);
+  if (r.field) return r;
+  const length = pick(b.length, BLOG_LENGTHS);
+  return length ? { v: { ...r.v, length } } : { field: "length" };
+}
+
+// A8 /gen/video: kind video|carousel, length kind'a göre ("15"|"30"|"60" saniye ya da "5"|"7"|"10" slayt); goal yok
+function validateVideo(b) {
+  const r = validateGen(b, 0);
+  if (r.field) return r;
+  const kind = pick(b.kind, VIDEO_KINDS);
+  if (!kind) return { field: "kind" };
+  const length = pick(b.length, VIDEO_LENGTHS[kind]);
+  return length ? { v: { ...r.v, kind, length } } : { field: "length" };
 }
 
 function validateRefine(b) {
@@ -374,13 +403,37 @@ function refineReq(v) {
   };
 }
 
+// style yoksa system ve user A2 ile bit bit aynı (stil bloğu ve <stil> etiketi yalnız doluysa)
+const styleOf = v => (v.style ? neutralize(v.style) : "");
 async function linkedin(c) {
   const { field, v } = validateGen(c.body);
   if (field) return fail("bad_input", 400, c.origin, { field });
   return produce(c, v, {
-    system: SYSTEM_GEN, schema: SCHEMA, maxTokens: 3500, count: 3,
-    user: userGen({ topic: neutralize(v.topic), sector: v.sector, tone: v.tone, goal: v.goal ? neutralize(v.goal) : "", lang: v.lang }),
-  }, undefined, { platform: "linkedin", topic: v.topic, max: MAX.topic, meta: { kind: "li", tone: v.tone, sector: v.sector, lang: v.lang } });
+    system: withStyle(SYSTEM_GEN, v.style), schema: SCHEMA, maxTokens: 3500, count: 3,
+    user: userGen({ topic: neutralize(v.topic), sector: v.sector, tone: v.tone, goal: v.goal ? neutralize(v.goal) : "", lang: v.lang, style: styleOf(v) }),
+  }, undefined, { platform: "linkedin", topic: v.topic, max: MAX.topic, meta: pickMeta({ kind: "li", tone: v.tone, sector: v.sector, lang: v.lang, style: v.style ? true : null }) });
+}
+
+// A8 blog: tek yazı. max_tokens/timeout uzunluğa göre (Türkçe ~2 token/kelime + JSON kaçışları + pay); 120 sn tavan
+// Worker'ın istemci beklemesinin içinde. Model kotası sayacı yok: produce'un gen_daily ok/tok_in/tok_out'u yeter.
+const BLOG_RUN = { short: { maxTokens: 3000, timeout: 60000 }, medium: { maxTokens: 4500, timeout: 90000 }, long: { maxTokens: 6500, timeout: 120000 } };
+async function blog(c) {
+  const { field, v } = validateBlog(c.body);
+  if (field) return fail("bad_input", 400, c.origin, { field });
+  return produce(c, v, {
+    system: withStyle(SYSTEM_BLOG, v.style), schema: SCHEMA_BLOG, count: 1, spec: SPECS.blog, ...BLOG_RUN[v.length],
+    user: userBlog({ topic: neutralize(v.topic), sector: v.sector, tone: v.tone, goal: v.goal ? neutralize(v.goal) : "", length: v.length, lang: v.lang, style: styleOf(v) }),
+  }, undefined, { platform: "blog", topic: v.topic, max: MAX.topic, meta: pickMeta({ kind: "blog", tone: v.tone, sector: v.sector, lang: v.lang, length: v.length, style: v.style ? true : null }) });
+}
+
+// A8 video/carousel: tek taslak, en çok 14 sahne × (70+120) + 700 açıklama ≈ 1500 token; 2500 pay bırakır
+async function video(c) {
+  const { field, v } = validateVideo(c.body);
+  if (field) return fail("bad_input", 400, c.origin, { field });
+  return produce(c, v, {
+    system: withStyle(SYSTEM_VIDEO, v.style), schema: SCHEMA_VIDEO, count: 1, spec: videoSpec(v.kind, v.length), maxTokens: 2500, timeout: 60000,
+    user: userVideo({ kind: v.kind, topic: neutralize(v.topic), sector: v.sector, tone: v.tone, length: v.length, lang: v.lang, style: styleOf(v) }),
+  }, undefined, { platform: "video", topic: v.topic, max: MAX.topic, meta: pickMeta({ kind: v.kind, tone: v.tone, sector: v.sector, lang: v.lang, length: v.length, style: v.style ? true : null }) });
 }
 
 // ISTEM-IG §5.1: caption max_tokens 3000 (SCHEMA, A2 ile aynı), reels 1200 (SCHEMA_REELS)
@@ -406,14 +459,21 @@ async function instagram(c) {
 // yalnız şu üçü birlikteyse yazılır: ACCOUNTS_ENABLED "1"; origin'in hesap sitesinin uç listesinde GET /app/drafts var
 // (src/sites.js APP_ROUTES: yalnız app.socialmediacorner.co); Authorization: Bearer geçerli oturum (platform.js sessionUser).
 // Biri eksikse ya da jeton geçersizse anonim akış bit bit aynı: 401 yok, yanıtta draft_ids yok. Üretim bir satır başına
-// bir varyant (linkedin/instagram 3, refine 1); reels gövdesi "kanca\n\nsöz". meta yalnız sabit listeli kodlar (tür, açı,
+// bir varyant (linkedin/instagram 3, refine/blog/video 1); reels gövdesi "kanca\n\nsöz", blog "başlık\n\nMarkdown",
+// video/carousel sahne satırları ("metin — alt yazı") + "\n\n" + açıklama; meta'ya başlık/sahne/style metni girmez. meta yalnız sabit listeli kodlar (tür, açı,
 // ton, dil, sektör, biçim, işaretler); jeton, IP, e-posta, anon kimliği ve marka sesi metni girmez. Yazım hatası (0017 yok,
 // D1) yutulur, konsola tek satır; üretim yanıtı yine 200.
 const DRAFT_SQL = "INSERT INTO drafts (user_id, site, platform, topic, body, meta) VALUES (?, ?, ?, ?, ?, ?) RETURNING id";
-const draftBody = d => (typeof d.say === "string" ? `${d.text}\n\n${d.say}` : d.text);
+// 0017'deki CHECK (platform IN ('linkedin','instagram')) blog/video satırını reddeder; göç eklenmedi (A8 S1 kuralı).
+// 0018 (CHECK genişletme, SQLite'ta tablo yeniden kurulumu) + platform.js DRAFT_PLATFORMS gelene dek blog/video yazılmaz:
+// oturum sorgusu ve kesin başarısız INSERT yapılmaz, yanıtta draft_ids olmaz. Gövde/meta biçimi hazır (draftBody).
+const DRAFT_DB = ["linkedin", "instagram"];
+const sceneLine = x => (x.sub ? `${x.text} — ${x.sub}` : x.text);
+export const draftBody = d => Array.isArray(d.scenes) ? `${d.scenes.map(sceneLine).join("\n")}\n\n${d.caption}`
+  : typeof d.meta === "string" ? `${d.title}\n\n${d.text}` : typeof d.say === "string" ? `${d.text}\n\n${d.say}` : d.text;
 async function saveDrafts(c, save, drafts) {
   const { env, db, origin, token } = c;
-  if (!save || env.ACCOUNTS_ENABLED !== "1" || !token) return null;
+  if (!save || env.ACCOUNTS_ENABLED !== "1" || !token || !DRAFT_DB.includes(save.platform)) return null;
   try {
     const site = platformSite(env, origin);
     if (!site || !siteConf(site).routes?.includes("GET /app/drafts")) return null;
@@ -593,7 +653,7 @@ async function event(c) {
   return json(null, 204, origin);
 }
 
-const ROUTES = { "/gen/linkedin": ["linkedin", linkedin], "/gen/instagram": ["instagram", instagram], "/gen/refine": ["refine", refine], "/gen/quota": ["quota", quotaRoute], "/gen/event": ["event", event] };
+const ROUTES = { "/gen/linkedin": ["linkedin", linkedin], "/gen/instagram": ["instagram", instagram], "/gen/blog": ["blog", blog], "/gen/video": ["video", video], "/gen/refine": ["refine", refine], "/gen/quota": ["quota", quotaRoute], "/gen/event": ["event", event] };
 
 export async function generate(req, url, env, origin, ctx, io = {}) {
   const route = ROUTES[url.pathname];

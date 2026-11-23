@@ -192,12 +192,12 @@ test("doğrulama: alan adlı 400 (türe ait olmayan alan, marka sesi), LLM ve sa
   assert.deepEqual(s.usage("anon"), []);
 });
 
-test("gövde sınırı 8 KB: ~5 KB kabul (linkedin 413), 8 KB üstü 413", async () => {
+test("gövde sınırı 8 KB: ~5 KB kabul (linkedin 12 KB üstü 413), 8 KB üstü 413", async () => {
   const s = setup();
   const pad = (b, n) => { const j = JSON.stringify(b); return j + " ".repeat(n - Buffer.byteLength(j)); };
   const r = await s.call("/gen/instagram", null, { raw: pad(s.igBody(), 5000) });
   assert.equal(r.status, 200);
-  const l = await s.call("/gen/linkedin", null, { raw: pad({ anon: ANON, topic: "x", sector: "Yazılım", tone: "samimi", lang: "tr", rid: rid(), t: 4000, ts: "tok" }, 5000) });
+  const l = await s.call("/gen/linkedin", null, { raw: pad({ anon: ANON, topic: "x", sector: "Yazılım", tone: "samimi", lang: "tr", rid: rid(), t: 4000, ts: "tok" }, 12289) });
   assert.equal(l.status, 413);
   const big = await s.call("/gen/instagram", null, { raw: pad(s.igBody(), 8193) });
   assert.deepEqual([big.status, big.body.error], [413, "too_large"]);
