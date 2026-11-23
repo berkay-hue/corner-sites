@@ -16,7 +16,7 @@ registerHooks({
 });
 
 const { generate } = await import("./generate.js");
-const { ANGLES, REELS_ANGLES, SYSTEM_IG_REELS, SYSTEM_REFINE } = await import("./gen-prompt.js");
+const { ANGLES, REELS_ANGLES, SYSTEM_IG_REELS, SYSTEM_REFINE, SYSTEM_BLOG, SYSTEM_VIDEO } = await import("./gen-prompt.js");
 const worker = (await import("./index.js")).default;
 
 const SCHEMA = readFileSync(new URL("../schema.sql", import.meta.url), "utf8");
@@ -62,7 +62,10 @@ function fakeFetch() {
     if (url === "https://api.anthropic.com/v1/messages") {
       const body = JSON.parse(init.body);
       calls.llm.push(body);
-      const drafts = body.system === SYSTEM_IG_REELS ? reelDrafts() : body.system === SYSTEM_REFINE ? [{ angle: ANGLES[0], text: "Kısa hali" }] : liDrafts();
+      const drafts = body.system === SYSTEM_IG_REELS ? reelDrafts() : body.system === SYSTEM_REFINE ? [{ angle: ANGLES[0], text: "Kısa hali" }]
+        : body.system.startsWith(SYSTEM_BLOG) ? [{ angle: "blog", title: "Başlık", meta: "Açıklama", text: "## Bölüm\n\nParagraf." }]
+        : body.system.startsWith(SYSTEM_VIDEO) ? [{ angle: "video", title: "Başlık", scenes: Array.from({ length: 6 }, (_, i) => ({ text: `Sahne ${i}`, sub: "", secs: 5 })), caption: "Açıklama" }]
+        : liDrafts();
       return new Response(JSON.stringify(llmBody(drafts)), { status: 200 });
     }
     throw new Error("beklenmeyen fetch " + url);
@@ -119,6 +122,26 @@ test("oturumlu /gen/linkedin: 3 satır (varyant başına), user_id/site/konu do�
     assert.deepEqual([x.user_id, x.site, x.platform, x.topic, x.body], [1, "app.socialmediacorner.co", "linkedin", "Yeni ürün lansmanı", b.drafts[i].text]);
     assert.deepEqual(JSON.parse(x.meta), { kind: "li", tone: "samimi", sector: "Yazılım", lang: "tr", angle: b.drafts[i].angle });
     noSecret(x.meta);
+  }
+});
+
+test("A8: oturumlu /gen/blog ve /gen/video 200 ama satır yazmaz (0017 CHECK, 0018 yok); linkedin style meta'da yalnız işaret", async () => {
+  const s = setup();
+  const common = { anon: ANON, topic: "Yeni ürün", sector: "Yazılım", tone: "samimi", lang: "tr", t: 4000, ts: "tok", hp: "" };
+  const b = await s.call("/gen/blog", { ...common, length: "short", rid: rid() }, { auth: `Bearer ${TOKEN}` });
+  const v = await s.call("/gen/video", { ...common, kind: "video", length: "30", rid: rid() }, { auth: `Bearer ${TOKEN}` });
+  for (const r of [b, v]) {
+    assert.equal(r.status, 200);
+    assert.equal(JSON.parse(r.body).draft_ids, undefined);
+  }
+  assert.equal(s.rows().length, 0);
+  const l = await s.call("/gen/linkedin", { ...liBody(), style: "gizli stil örneği" }, { auth: `Bearer ${TOKEN}` });
+  assert.equal(l.status, 200);
+  const rows = s.rows();
+  assert.equal(rows.length, 3);
+  for (const x of rows) {
+    assert.deepEqual(JSON.parse(x.meta), { kind: "li", tone: "samimi", sector: "Yazılım", lang: "tr", style: true, angle: JSON.parse(x.meta).angle });
+    assert.ok(!x.meta.includes("gizli stil"));
   }
 });
 

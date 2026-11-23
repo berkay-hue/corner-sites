@@ -40,7 +40,8 @@ button,input,select,textarea{font:inherit;color:inherit}
 .duz:hover{background:var(--sunken)}
 .tema{text-decoration:none;font-weight:500}
 .tema-ikon{width:16px;height:16px;border:2px solid currentColor;border-radius:50%;box-shadow:inset 6px 0 0 currentColor}
-.tema[aria-pressed="true"] .tema-ikon{background:currentColor}
+.tema[data-tema-etkin="dark"] .tema-ikon{background:currentColor}
+/* S3b: tema düğmesi her genişlikte yalnız ikon; ad aria-label/title'da ("Koyu temaya geç"). */
 .tema-yazi{display:none}
 
 /* Yerleşim */
@@ -239,7 +240,7 @@ dialog::backdrop{background:var(--ortu)}
   /* boşluk tokenları ve --ust-boy (64) tokens.css 768 sorgusunda büyür */
   .logo-ad{display:inline-block}
   .logo-urun{padding-left:10px;border-left:1px solid var(--edge);font:400 .875rem/1.1 var(--govde);letter-spacing:0;color:var(--ink2)}
-  /* tur-2: üst bar 768–1079'da ikinci satıra kırılmaz; "Koyu tema" yazısı 1080'de açılır */
+  /* tur-2: üst bar 768–1079'da ikinci satıra kırılmaz */
   .logo-ad,.logo-urun,.hak,.ust .duz{white-space:nowrap}
   .hak{display:inline-flex}
   .masa{padding:var(--s8) var(--kenar) var(--s9)}
@@ -255,7 +256,6 @@ dialog::backdrop{background:var(--ortu)}
   .alt{padding:var(--s6) var(--kenar) var(--s8)}
 }
 @media (min-width:1080px){
-  .tema-yazi{display:inline}
   .masa{grid-template-columns:minmax(0,420px) minmax(0,1fr);max-width:1200px;align-items:start}
   .acilar{grid-template-columns:minmax(0,1fr)}
   .aci{grid-template-columns:auto minmax(0,1fr)}

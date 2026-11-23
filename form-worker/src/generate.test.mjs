@@ -157,13 +157,14 @@ test("yol, yöntem, origin", async () => {
 
 test("413: content-length yok, büyük ya da yalan; okumadan reddedilir", async () => {
   const s = setup();
-  const big = JSON.stringify({ anon: ANON, topic: "x".repeat(5000) });
+  // linkedin sınırı A8'de 12 KB (style için); refine 16 KB
+  const big = JSON.stringify({ anon: ANON, topic: "x".repeat(13000) });
   for (const opts of [{ cl: null }, { raw: big }, { raw: big, cl: "100" }]) {
     const r = await s.call("/gen/linkedin", undefined, opts);
     assert.equal(r.status, 413, JSON.stringify(opts.cl));
     assert.deepEqual([r.body.error, r.body.charged], ["too_large", false]);
   }
-  // refine sınırı 16 KB: 5 KB gövde geçer (doğrulamaya kadar)
+  // refine sınırı 16 KB: 13 KB gövde geçer (doğrulamaya kadar)
   const r = await s.call("/gen/refine", undefined, { raw: big });
   assert.notEqual(r.status, 413);
   assert.equal(s.calls.verify.length + s.calls.llm.length, 0);
