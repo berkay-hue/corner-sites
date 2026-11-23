@@ -6053,7 +6053,7 @@ return { json: {
 }};
 
 })()}},"cred":null},"FLUX Photo":{"name":"FLUX Photo","t":"httpRequest","p":{"method":"POST","url":"https://api.cloudflare.com/client/v4/accounts/9994ba71270a67fcb0ef182e943402ef/ai/run/@cf/black-forest-labs/flux-1-schnell","sendHeaders":true,"headerParameters":{"parameters":[{"name":"Authorization","value":"Bearer __ENV_CF_AI_TOKEN__"},{"name":"Content-Type","value":"application/json"}]},"sendBody":true,"specifyBody":"json","jsonBody":__X(function($json,$,$input,$env,$execution,$binary,$itemIndex,$now,$node){return "{\"prompt\": \""+__t(()=>($json.fluxPhotoPrompt.replace(/\"/g, '')
-))+"\", \"num_steps\": 4, \"guidance\": 3.5}"}),"options":{}},"cred":null},"Build Infographic HTML":{"name":"Build Infographic HTML","t":"code","p":{"code":async function($input,$,$json,$env,$execution,$itemIndex,helpers,Buffer,items,$node){return (async()=>{
+))+"\", \"steps\": 4}"}),"options":{}},"cred":null},"Build Infographic HTML":{"name":"Build Infographic HTML","t":"code","p":{"code":async function($input,$,$json,$env,$execution,$itemIndex,helpers,Buffer,items,$node){return (async()=>{
 
 const scoreData = $('Score Top3 Images').first().json;
 const d = scoreData.infographicData || {};
@@ -7173,7 +7173,7 @@ return { json: {
 }};
 
 })()}},"cred":null},"FLUX Photo":{"name":"FLUX Photo","t":"httpRequest","p":{"method":"POST","url":"https://api.cloudflare.com/client/v4/accounts/9994ba71270a67fcb0ef182e943402ef/ai/run/@cf/black-forest-labs/flux-1-schnell","sendHeaders":true,"headerParameters":{"parameters":[{"name":"Authorization","value":"Bearer __ENV_CF_AI_TOKEN_2__"},{"name":"Content-Type","value":"application/json"}]},"sendBody":true,"specifyBody":"json","jsonBody":__X(function($json,$,$input,$env,$execution,$binary,$itemIndex,$now,$node){return "{\"prompt\": \""+__t(()=>($json.fluxPhotoPrompt.replace(/\"/g, '')
-))+"\", \"num_steps\": 4, \"guidance\": 3.5}"}),"options":{}},"cred":null},"Build Infographic HTML":{"name":"Build Infographic HTML","t":"code","p":{"code":async function($input,$,$json,$env,$execution,$itemIndex,helpers,Buffer,items,$node){return (async()=>{
+))+"\", \"steps\": 4}"}),"options":{}},"cred":null},"Build Infographic HTML":{"name":"Build Infographic HTML","t":"code","p":{"code":async function($input,$,$json,$env,$execution,$itemIndex,helpers,Buffer,items,$node){return (async()=>{
 
 const scoreData = $('Score Top3 Images').first().json;
 const webhookBody = $('Webhook').first().json.body || {};
