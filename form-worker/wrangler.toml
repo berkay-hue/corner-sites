@@ -34,6 +34,16 @@ POSTS_ENABLED = "1"
 # projesinde YouTube Analytics API açık ve izin OAuth onay ekranında (24 Eki 2026); mevcut bağlantılar yeniden bağlanınca veri alır.
 # "0": yalnız youtube.readonly; kitle raporu 403 döner, panel "yeniden bağlanınca" der.
 YT_ANALYTICS = "1"
+# app.socialmediacorner.co taslak üretimi (src/generate.js, POST /gen/*). "1" yapmadan önce
+# migrations/0014_gen.sql uygulanmalı; tablo yoksa 503 not_ready. Gizli değerler `wrangler secret put` ile girilir
+# (değer burada yok): ANTHROPIC_API_KEY, GEN_SALT, TURNSTILE_SECRET; biri eksikse de 503 not_ready.
+# GEN_MODEL Berkay'ın kararı, A2-3 ölçümünden sonra kesinleşir. app.socialmediacorner.co ALLOWED_HOSTS'a
+# "1" ile aynı adımda eklenir (A3-3); o zamana kadar /submit ve CORS davranışı değişmez.
+GEN_ENABLED = "0"
+GEN_DAILY_CAP = "300"
+GEN_PER_DAY = "3"
+GEN_IP_PER_DAY = "10"
+GEN_MODEL = "claude-sonnet-5-5"
 
 # cornergroup.co'da Email Routing açık, berkay@saascorner.co doğrulanmış hedef adres
 [[send_email]]
