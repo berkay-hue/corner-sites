@@ -1,10 +1,16 @@
-// app.socialmediacorner.co taslak üretimi (A0-KARAR §1, §3-§5): POST /gen/linkedin, /gen/refine, /gen/quota, /gen/event.
+// app.socialmediacorner.co taslak üretimi (A0-KARAR §1, §3-§5): POST /gen/linkedin, /gen/instagram, /gen/refine, /gen/quota, /gen/event.
+// /gen/instagram (A4 ISTEM-IG): kind caption|reels, isteğe bağlı marka sesi; kota, Turnstile, harcama, iade ve gen_daily
+// /gen/linkedin ile ortak yoldan (produce). /gen/refine kind li|caption|reels (yoksa li).
 // Bayrak GEN_ENABLED="1" + ANTHROPIC_API_KEY, GEN_SALT, TURNSTILE_SECRET + migrations/0014_gen.sql; biri yoksa 503 not_ready.
 // Sayaçlar gen_usage'ta (gün Europe/Istanbul, sabit UTC+3; anahtar sha256(salt|gün|tür|değer), global 'all'), ölçüm gen_daily'de.
 // Her yanıt `charged` (anon üretim hakkı düştü mü) taşır; sayaç okunduysa {left, cap, reset_at, scope} de.
 // LLM sonrası yazımlar (gen_daily, iade) ctx.waitUntil ile. io.fetch testlerde sahte verilir.
-import { SYSTEM_GEN, SYSTEM_REFINE, SCHEMA, SECTORS, TONES, LANGS, OPS, ANGLES, MAX, clean, neutralize, userGen, userRefine } from "./gen-prompt.js";
-import { makeLlm, LlmError } from "./llm.js";
+import {
+  SYSTEM_GEN, SYSTEM_REFINE, SYSTEM_IG_CAPTION, SYSTEM_IG_REELS, SYSTEM_IG_CAPTION_REFINE, SYSTEM_IG_REELS_REFINE, SCHEMA, SCHEMA_REELS,
+  SECTORS, TONES, LANGS, OPS, ANGLES, MAX, IG_KINDS, FORMATS, CTAS, VIDEOS, ADJECTIVES, ADDRESS, EMOJI, REELS_ANGLES, IG_OPS, IG_MAX,
+  clean, fold, neutralize, banMatch, userGen, userRefine, userIg, userIgRefine,
+} from "./gen-prompt.js";
+import { makeLlm, LlmError, SPECS } from "./llm.js";
 
 export const genEnabled = env => env?.GEN_ENABLED === "1" && Boolean(env.ANTHROPIC_API_KEY && env.GEN_SALT && env.TURNSTILE_SECRET);
 
@@ -15,7 +21,8 @@ const SRCS = ["limit", "result", "error", "cap", "top", "footer", "calendly"];
 const DAILY = new Set(["ok", "fail", "refused", "busy", "refine_ok", "tok_in", "tok_out", "uniq_anon", "anon_full", "ip_full", "cap_hit",
   ...RET, "copy_ok", "copy_fb", "share", ...SRCS.map(s => "qc_" + s)]);
 const GEN_UNITS = 3, REFINE_UNITS = 1, MIN_T = 1500, EV_PER_DAY = 30;
-const BODY_MAX = { linkedin: 4096, refine: 16384, quota: 4096, event: 4096 };
+// ISTEM-IG §3.2 madde 1: /gen/instagram gövdesi 8 KB (marka sesi)
+const BODY_MAX = { linkedin: 4096, instagram: 8192, refine: 16384, quota: 4096, event: 4096 };
 const LLM_ERR = { busy: ["llm_busy", 503], limit: ["llm_limit", 503], fail: ["llm_fail", 502], refusal: ["refused", 422] };
 
 const json = (body, status, origin) => new Response(status === 204 ? null : JSON.stringify(body), {
@@ -148,6 +155,8 @@ function text(v, min, max) {
   return s.length >= min && s.length <= max ? s : null;
 }
 const pick = (v, list) => typeof v === "string" && list.includes(v.normalize("NFC")) ? v.normalize("NFC") : null;
+const has = v => v !== undefined && v !== null && v !== "";
+const cp = s => [...s].length;
 
 function validateGen(b) {
   if (!b || typeof b !== "object" || Array.isArray(b)) return { field: "json" };
@@ -171,6 +180,10 @@ function validateGen(b) {
 function validateRefine(b) {
   if (!b || typeof b !== "object" || Array.isArray(b)) return { field: "json" };
   if (typeof b.anon !== "string" || !UUID.test(b.anon)) return { field: "anon" };
+  // ISTEM-IG §4.1: kind yoksa li (A2 geriye uyumlu)
+  const kind = has(b.kind) ? pick(b.kind, ["li", ...IG_KINDS]) : "li";
+  if (!kind) return { field: "kind" };
+  if (kind !== "li") return validateIgRefine(b, kind);
   const op = pick(b.op, OPS);
   if (!op) return { field: "op" };
   const tone = op === "tone" ? pick(b.tone, TONES) : null;
@@ -181,13 +194,212 @@ function validateRefine(b) {
   if (!lang) return { field: "lang" };
   let angle = null;
   if (b.angle !== undefined && b.angle !== null && b.angle !== "") { angle = pick(b.angle, ANGLES); if (!angle) return { field: "angle" }; }
-  return { v: { anon: b.anon, op, tone, text: t, lang, angle } };
+  return { v: { kind, anon: b.anon, op, tone, text: t, lang, angle } };
+}
+
+// ISTEM-IG §1.2 marka sesi: serbest alanlar §3.3 adım 2-6'dan geçer ve UTF-16 ile ölçülür; aşımda kesilmez, 400 alan
+// adıyla döner (ör. voice.sample). Bütün alt alanlar boşsa voice null (blok yazılmaz). filled yalnız loga gider.
+const ONE_LINE = s => s.replace(/\s*\n\s*/g, " ");
+const BRAND = /social[\s._-]*media[\s._-]*corner/;
+function validateVoice(x) {
+  if (x === undefined || x === null) return { voice: null, filled: [], size: 0 };
+  if (typeof x !== "object" || Array.isArray(x)) return { field: "voice" };
+  const name = text(x.name, 0, IG_MAX.name);
+  // S7 önerisi: anonim modda ürün adı marka adı olarak kullanılamaz (katlanmış karşılaştırma)
+  if (name === null || BRAND.test(fold(name).f)) return { field: "voice.name" };
+  const audience = text(x.audience, 0, IG_MAX.audience);
+  if (audience === null) return { field: "voice.audience" };
+  const adjectives = [];
+  if (has(x.adjectives)) {
+    if (!Array.isArray(x.adjectives) || x.adjectives.length > IG_MAX.adjectives) return { field: "voice.adjectives" };
+    for (const a of x.adjectives) {
+      const p = pick(a, ADJECTIVES);
+      if (!p) return { field: "voice.adjectives" };
+      if (!adjectives.includes(p)) adjectives.push(p);
+    }
+  }
+  const banned = [];
+  if (has(x.banned)) {
+    if (!Array.isArray(x.banned) || x.banned.length > IG_MAX.banned) return { field: "voice.banned" };
+    for (const raw of x.banned) {
+      // §3.2 madde 4: ayırıcıyla ya da satır sonuyla sahte alan kurulamaz
+      if (typeof raw !== "string" || /[|\n\r\u0085\u2028\u2029]/.test(raw)) return { field: "voice.banned" };
+      const s = text(raw, 1, IG_MAX.bannedItem);
+      if (s === null) return { field: "voice.banned" };
+      banned.push(s);
+    }
+  }
+  const sample = text(x.sample, 0, IG_MAX.sample);
+  if (sample === null) return { field: "voice.sample" };
+  const address = has(x.address) ? pick(x.address, ADDRESS) : "";
+  if (address === null) return { field: "voice.address" };
+  const emoji = has(x.emoji) ? pick(x.emoji, EMOJI) : "";
+  if (emoji === null) return { field: "voice.emoji" };
+  const size = name.length + audience.length + banned.reduce((a, s) => a + s.length, 0) + sample.length;
+  if (size > IG_MAX.voiceTotal) return { field: "voice" };
+  const voice = { name: ONE_LINE(name), audience: ONE_LINE(audience), adjectives, banned, sample, address, emoji };
+  const filled = Object.keys(voice).filter(k => voice[k].length > 0);
+  return { voice: filled.length ? voice : null, filled, size };
+}
+
+// ISTEM-IG §1.1: türüne ait olmayan alan (reels + format/cta, caption + video) ve bilinmeyen sabit değer 400
+function validateIg(b) {
+  if (!b || typeof b !== "object" || Array.isArray(b)) return { field: "json" };
+  if (has(b.hp)) return { field: "hp" };
+  if (typeof b.anon !== "string" || !UUID.test(b.anon)) return { field: "anon" };
+  const kind = pick(b.kind, IG_KINDS);
+  if (!kind) return { field: "kind" };
+  const topic = text(b.topic, 1, IG_MAX.topic);
+  if (topic === null) return { field: "topic" };
+  const sector = pick(b.sector, Object.keys(SECTORS));
+  if (!sector) return { field: "sector" };
+  const tone = pick(b.tone, TONES);
+  if (!tone) return { field: "tone" };
+  const lang = pick(b.lang, LANGS);
+  if (!lang) return { field: "lang" };
+  const cap = kind === "caption";
+  if (!cap && has(b.format)) return { field: "format" };
+  if (!cap && has(b.cta)) return { field: "cta" };
+  if (cap && has(b.video)) return { field: "video" };
+  const format = cap ? pick(b.format, FORMATS) : null;
+  if (cap && !format) return { field: "format" };
+  const cta = cap && has(b.cta) ? pick(b.cta, CTAS) : null;
+  if (cap && has(b.cta) && !cta) return { field: "cta" };
+  const video = !cap && has(b.video) ? pick(b.video, VIDEOS) : null;
+  if (!cap && has(b.video) && !video) return { field: "video" };
+  const { field, voice, filled, size } = validateVoice(b.voice);
+  if (field) return { field };
+  if (topic.length + size > IG_MAX.total) return { field: "topic" };
+  if (typeof b.rid !== "string" || !UUID.test(b.rid)) return { field: "rid" };
+  return { v: { anon: b.anon, kind, topic, sector, tone, lang, format, cta, video, voice, filled, rid: b.rid, ret: RET.includes(b.ret) ? b.ret : null, t: b.t, ts: b.ts } };
+}
+
+// ISTEM-IG §4.1: text ve say kod noktasıyla (üretimin §1.7 sayımı; emojili 2200'lük caption 400 almaz).
+// Reels'te lengthen yok, say zorunlu; caption'da say, reels'te format gelirse 400.
+function cpText(x, max) {
+  const s = text(x, 1, Infinity);
+  return s !== null && cp(s) <= max ? s : null;
+}
+function validateIgRefine(b, kind) {
+  const cap = kind === "caption";
+  const op = pick(b.op, IG_OPS[kind]);
+  if (!op) return { field: "op" };
+  const tone = op === "tone" ? pick(b.tone, TONES) : null;
+  if (op === "tone" && !tone) return { field: "tone" };
+  const t = cpText(b.text, cap ? IG_MAX.caption : IG_MAX.hook);
+  if (t === null) return { field: "text" };
+  if (cap && has(b.say)) return { field: "say" };
+  const say = cap ? null : cpText(b.say, IG_MAX.say);
+  if (!cap && say === null) return { field: "say" };
+  if (!cap && has(b.format)) return { field: "format" };
+  const format = cap && has(b.format) ? pick(b.format, FORMATS) : null;
+  if (cap && has(b.format) && !format) return { field: "format" };
+  const lang = pick(b.lang, LANGS);
+  if (!lang) return { field: "lang" };
+  let angle = null;
+  if (has(b.angle)) { angle = pick(b.angle, cap ? ANGLES : REELS_ANGLES); if (!angle) return { field: "angle" }; }
+  const { field, voice, filled, size } = validateVoice(b.voice);
+  if (field) return { field };
+  if (cp(t) + (say ? cp(say) : 0) + size > IG_MAX.refineTotal) return { field: "text" };
+  return { v: { kind, anon: b.anon, op, tone, text: t, say, format, lang, angle, voice, filled } };
+}
+
+// §3.2 madde 2: marka sesinin her serbest alanı ayrı etkisizleştirilir; sabit kodlar (sıfat, hitap, emoji) dokunulmaz
+const neutralVoice = x => x && { ...x, name: neutralize(x.name), audience: neutralize(x.audience), banned: x.banned.map(neutralize), sample: neutralize(x.sample) };
+// §1.2: logda yalnız voice:true/false ve doldurulan alt alanların adları
+const voiceLog = v => (v.voice ? "voice:true " + v.filled.join(",") : "voice:false");
+
+// ISTEM-IG §1.7 deterministik düzeltme ve işaretler. Caption: son satırdaki hashtag'lerden yasak ifade içerenler
+// silinir, kalanların 5'ten fazlası sondan silinir; gövdede yasak ifade → flags:["banned"]. Reels: text >60 ya da
+// say >140 kod noktası → flags:["long_hook"] (>80/>200 llm.js'te llm_fail). Kalite sinyalleri yalnız sayı olarak loglanır.
+const TAG_RE = /#[\p{L}\p{N}_]+/gu;
+const PROMISE = /ucretsiz|bedava|sinirsiz|garanti|(?<!feel )\bfree\b|unlimited|guarantee/;
+const URL_AT = /https?:\/\/|www\.|@[\p{L}\p{N}_.]+/u;
+function fixTags(s, banned, sig) {
+  const i = s.lastIndexOf("\n"), last = s.slice(i + 1);
+  let keep = 0, line = "", pos = 0;
+  for (const m of last.matchAll(TAG_RE)) {
+    const ban = banned.length > 0 && banMatch(m[0], banned);
+    if (!ban && keep < IG_MAX.hashtags) { keep++; continue; }
+    sig[ban ? "tags_ban" : "tags_cut"]++;
+    line += last.slice(pos, m.index);
+    pos = m.index + m[0].length;
+  }
+  if (keep < 3) sig.few_tags++;
+  if (!pos) return s;
+  line = (line + last.slice(pos)).replace(/[ \t ]{2,}/g, " ").trim();
+  return (s.slice(0, i + 1) + line).trimEnd() || s;
+}
+function igPost(drafts, v) {
+  const banned = v.voice?.banned || [];
+  const sig = { tags_ban: 0, tags_cut: 0, few_tags: 0, banned: 0, long_hook: 0, first_long: 0, promise: 0, brand: 0, url: 0 };
+  const out = drafts.map(d => {
+    const o = { ...d }, flags = [];
+    if (v.kind === "caption") {
+      o.text = fixTags(o.text, banned, sig);
+      if (cp(o.text.split("\n")[0]) > 125) sig.first_long++;
+    } else if (cp(o.text) > IG_MAX.hookTarget || cp(o.say) > IG_MAX.sayTarget) flags.push("long_hook");
+    const all = v.kind === "caption" ? o.text : o.text + "\n" + o.say;
+    if (banned.length && banMatch(all, banned)) flags.push("banned");
+    const f = fold(all).f;
+    if (PROMISE.test(f)) sig.promise++;
+    if (BRAND.test(f)) sig.brand++;
+    if (URL_AT.test(all)) sig.url++;
+    for (const x of flags) sig[x]++;
+    if (flags.length) o.flags = flags;
+    return o;
+  });
+  console.log("gen ig post", v.kind, Object.entries(sig).filter(([, n]) => n).map(([k, n]) => k + ":" + n).join(" ") || "-");
+  return out;
+}
+
+// ISTEM-IG §5.1: refine max_tokens li 1200, caption 1500, reels 800
+function refineReq(v) {
+  if (v.kind === "li") return {
+    system: SYSTEM_REFINE, schema: SCHEMA, maxTokens: 1200, count: 1, angle: v.angle,
+    user: userRefine({ op: v.op, angle: v.angle, tone: v.tone, lang: v.lang, text: neutralize(v.text) }),
+  };
+  const cap = v.kind === "caption";
+  return {
+    system: cap ? SYSTEM_IG_CAPTION_REFINE : SYSTEM_IG_REELS_REFINE, schema: cap ? SCHEMA : SCHEMA_REELS,
+    maxTokens: cap ? 1500 : 800, count: 1, angle: v.angle, spec: SPECS[v.kind],
+    user: userIgRefine({
+      kind: v.kind, op: v.op, angle: v.angle, tone: v.tone, format: v.format, lang: v.lang, voice: neutralVoice(v.voice),
+      text: neutralize(v.text), say: v.say === null ? null : neutralize(v.say),
+    }),
+  };
 }
 
 async function linkedin(c) {
-  const { env, db, body, origin, ctx, io, ip } = c;
-  const { field, v } = validateGen(body);
-  if (field) return fail("bad_input", 400, origin, { field });
+  const { field, v } = validateGen(c.body);
+  if (field) return fail("bad_input", 400, c.origin, { field });
+  return produce(c, v, {
+    system: SYSTEM_GEN, schema: SCHEMA, maxTokens: 3500, count: 3,
+    user: userGen({ topic: neutralize(v.topic), sector: v.sector, tone: v.tone, goal: v.goal ? neutralize(v.goal) : "", lang: v.lang }),
+  });
+}
+
+// ISTEM-IG §5.1: caption max_tokens 3000 (SCHEMA, A2 ile aynı), reels 1200 (SCHEMA_REELS)
+async function instagram(c) {
+  const { field, v } = validateIg(c.body);
+  if (field) return fail("bad_input", 400, c.origin, { field });
+  const cap = v.kind === "caption";
+  console.log("gen ig", v.kind, voiceLog(v));
+  return produce(c, v, {
+    system: cap ? SYSTEM_IG_CAPTION : SYSTEM_IG_REELS, schema: cap ? SCHEMA : SCHEMA_REELS,
+    maxTokens: cap ? 3000 : 1200, count: 3, spec: SPECS[v.kind],
+    user: userIg({
+      kind: v.kind, topic: neutralize(v.topic), sector: v.sector, tone: v.tone, format: v.format, cta: v.cta, video: v.video,
+      lang: v.lang, voice: neutralVoice(v.voice),
+    }),
+  }, d => igPost(d, v));
+}
+
+// Üretim uçlarının ortak yolu (A0 §3-§5): yavaşlık, sayaç okuma, Turnstile, ayırma, LLM, gen_daily, iade. Sayaçlar
+// (anon/ip/all/rid, GEN_UNITS) ve gen_daily sütunları iki uçta ortak. req makeLlm().generate'e aynen gider; post
+// başarılı taslakları yanıttan önce işler (atarsa llm_fail yoluna düşer).
+async function produce(c, v, req, post = d => d) {
+  const { env, db, origin, ctx, io, ip } = c;
   if (!Number.isFinite(v.t) || v.t < MIN_T) return fail("slow_down", 429, origin);
 
   const L = limits(env), day = genDay();
@@ -225,10 +437,8 @@ async function linkedin(c) {
 
   let out, err;
   try {
-    out = await makeLlm(env, io.fetch).generate({
-      system: SYSTEM_GEN, schema: SCHEMA, maxTokens: 3500, count: 3,
-      user: userGen({ topic: neutralize(v.topic), sector: v.sector, tone: v.tone, goal: v.goal ? neutralize(v.goal) : "", lang: v.lang }),
-    });
+    const o = await makeLlm(env, io.fetch).generate(req);
+    out = { ...o, drafts: post(o.drafts) };
   } catch (e) {
     err = e instanceof LlmError ? e : new LlmError("fail", e?.message?.slice(0, 60) || "error");
   }
@@ -267,6 +477,7 @@ async function refine(c) {
   const { env, db, body, origin, ctx, io, ip } = c;
   const { field, v } = validateRefine(body);
   if (field) return fail("bad_input", 400, origin, { field });
+  if (v.kind !== "li") console.log("gen ig refine", v.kind, voiceLog(v));
 
   const L = limits(env), day = genDay(), ipv = ipPrefix(ip);
   const [anonK, ipK, allK, raK, riK] = await Promise.all([
@@ -292,10 +503,8 @@ async function refine(c) {
 
   let out, err;
   try {
-    out = await makeLlm(env, io.fetch).generate({
-      system: SYSTEM_REFINE, schema: SCHEMA, maxTokens: 1200, count: 1, angle: v.angle,
-      user: userRefine({ op: v.op, angle: v.angle, tone: v.tone, lang: v.lang, text: neutralize(v.text) }),
-    });
+    const o = await makeLlm(env, io.fetch).generate(refineReq(v));
+    out = v.kind === "li" ? o : { ...o, drafts: igPost(o.drafts, v) };
   } catch (e) {
     err = e instanceof LlmError ? e : new LlmError("fail", e?.message?.slice(0, 60) || "error");
   }
@@ -343,7 +552,7 @@ async function event(c) {
   return json(null, 204, origin);
 }
 
-const ROUTES = { "/gen/linkedin": ["linkedin", linkedin], "/gen/refine": ["refine", refine], "/gen/quota": ["quota", quotaRoute], "/gen/event": ["event", event] };
+const ROUTES = { "/gen/linkedin": ["linkedin", linkedin], "/gen/instagram": ["instagram", instagram], "/gen/refine": ["refine", refine], "/gen/quota": ["quota", quotaRoute], "/gen/event": ["event", event] };
 
 export async function generate(req, url, env, origin, ctx, io = {}) {
   const route = ROUTES[url.pathname];
