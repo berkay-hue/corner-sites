@@ -7,7 +7,7 @@
 // Token, metin ve sağlayıcı yanıtı log'a ve olaylara yazılmaz; yalnız kısa kodlar.
 
 import { decrypt, encrypt, refreshToken, ProviderError, errText } from "./oauth.js";
-import { platformSite } from "./platform.js";
+import { platformSite, sessionUser } from "./platform.js";
 import { PROVIDERS, COST, PREP_TIMEOUT } from "./publish-providers.js";
 
 export const PUBLISH_CRON = "*/5 * * * *"; // wrangler.toml ikinci cron; saatlik iş "17 * * * *" aynen kalır
@@ -116,7 +116,7 @@ const ROUTE = /^\/publish\/jobs(?:\/(\d{1,12}))?(?:\/(submit|approve|cancel|retr
 
 export async function publish(req, url, env, origin) {
   const site = platformSite(env, origin);
-  if (!site) return reply({ ok: false, error: "origin" }, 403, null);
+  if (!site) return reply({ ok: false, error: "origin" }, 403, origin); // origin index.js süzgecinden: izinli değilse null
   const g = gates(env);
   if (!g || !g.sites.includes(site)) return reply({ ok: false, error: "not_ready" }, 503, origin); // 0 D1
   try {
@@ -128,9 +128,8 @@ export async function publish(req, url, env, origin) {
       if (!body || typeof body !== "object" || Array.isArray(body)) throw new Bad("json");
     }
     const token = (req.headers.get("authorization") || "").match(/^Bearer ([A-Za-z0-9_-]{43})$/)?.[1];
-    const user = token && await env.DB.prepare(
-      "SELECT u.* FROM sessions s JOIN users u ON u.id = s.user_id WHERE s.token_hash = ? AND s.expires_at > datetime('now') AND u.site = ?",
-    ).bind(await sha256(token), site).first();
+    // Oturum platform.js ile aynı yoldan: rolü sitede kabul edilmeyen (pasif) hesap 401 auth (src/sites.js roles)
+    const user = await sessionUser(env, token, site);
     if (!user) throw new Bad("auth", 401);
     const m = url.pathname.replace(/\/+$/, "").match(ROUTE);
     if (!m) throw new Bad("not_found", 404);

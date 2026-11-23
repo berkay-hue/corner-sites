@@ -4046,6 +4046,32 @@ test("A5-2w denetim: app'te rolü brand olmayan hesap şifre sıfırlamayla da o
   assert.equal((await bc("GET", "/app/applications", { token: ok2.body.token })).status, 200);
 });
 
+test("düşük not 4: app'te rolü brand olmayan (pasif) hesaba şifre sıfırlama e-postası gitmez, yanıt kayıtsız adresle aynı", async t => {
+  const sent = fakeSmtp();
+  t.after(() => { delete globalThis.__smtpConnect; });
+  const { db, env } = await setup({ ACCOUNTS_ENABLED: "1", SMTP_USER: "noreply@brandcorner.co", SMTP_PASS: "test-sifre" });
+  const app = api(env, APP);
+  const r = await app("POST", "/auth/register", { body: { name: "a", email: "a@x.co", password: "sifre-12345", consent: true, hp: "", t: 2000 } });
+  assert.equal(r.status, 200);
+  const forgot = async email => {
+    db.prepare("DELETE FROM auth_attempts").run();
+    const res = await app("POST", "/auth/forgot", { body: { email } });
+    return [res.status, JSON.stringify(res.body)];
+  };
+  const none = await forgot("kayitsiz@x.co");
+  assert.equal(sent.length, 0);
+  for (const role of ["influencer", "agency", "Brand", ""]) {
+    db.prepare("UPDATE users SET role = ? WHERE id = ?").run(role, r.body.user.id);
+    assert.deepEqual(await forgot("a@x.co"), none, role);
+    assert.equal(sent.length, 0, role);
+    assert.equal(count(db, "password_resets"), 0, role);
+  }
+  db.prepare("UPDATE users SET role = 'brand' WHERE id = ?").run(r.body.user.id);
+  assert.deepEqual(await forgot("a@x.co"), none);
+  assert.equal(sent.length, 1);
+  assert.equal(count(db, "password_resets"), 1);
+});
+
 // ---- app hesap bölümleri: marka sesi, taslak geçmişi, dışa aktarma, hesap silme (A5-3; migrations/0017_accounts.sql) ----
 
 // app'te kayıtlı kullanıcılar (rol sunucuda brand); call app origin'iyle, bc brandcorner.co (DEV_ORIGINS) ile
@@ -4127,10 +4153,14 @@ test("A5-3: taslak geçmişi: 50'lik sayfa + before imleci, platform ve q süzge
   // % ve _ harfiyen aranır; başka kullanıcının ve başka sitenin satırı gelmez
   assert.deepEqual((await call("GET", "/app/drafts?q=%25100", { token: a.token })).body.drafts.map(x => x.id), [pct]);
   assert.deepEqual((await call("GET", "/app/drafts?q=_", { token: a.token })).body.drafts.map(x => x.id), [und]);
-  // ASCII harflerde büyük/küçük harf duyarsız (SQLite LIKE); platform süzgeciyle birlikte
+  // Büyük/küçük harf duyarsız (Türkçe fold + lower); platform süzgeciyle birlikte
   assert.deepEqual((await call("GET", "/app/drafts?q=METIN+5&platform=instagram", { token: a.token })).body.drafts
     .map(x => x.topic), ["konu 59", "konu 57", "konu 55", "konu 53", "konu 51", "konu 5"]);
   assert.deepEqual((await call("GET", "/app/drafts?q=yok-boyle-bir-sey", { token: a.token })).body, { ok: true, drafts: [], next: null });
+  // Türkçe harfler de katlanır (İ/I/ı → i, Ş → s, Ç → c, Ğ → g, Ö → o, Ü → u): sorgu da sütun da aynı fold'dan geçer
+  const trd = addDraft(db, a.id, { topic: "İstanbul ışık", body: "Çağrı ÖZÜ ŞİMDİ" });
+  for (const q of ["istanbul", "ISTANBUL", "ISIK", "ışık", "cagri", "ÇAĞRI", "ozu", "öZü", "simdi", "ŞİMDİ"])
+    assert.deepEqual((await call("GET", `/app/drafts?q=${encodeURIComponent(q)}`, { token: a.token })).body.drafts.map(x => x.id), [trd], q);
   assert.equal((await call("GET", "/app/drafts", { token: b.token })).body.drafts.length, 1);
   for (const [qs, err] of [["platform=tiktok", "platform"], ["before=abc", "before"], ["before=0", "before"], ["before=-1", "before"],
     ["before=1e3", "before"], ["before=12345678901234567", "before"]])
