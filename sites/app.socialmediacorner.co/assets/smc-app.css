@@ -299,4 +299,6 @@ dialog::backdrop{background:var(--ortu)}
 .araclar a{display:inline-flex;align-items:center;min-height:var(--dokunma);padding:0 var(--s2);color:var(--ink2);text-decoration:none;border-bottom:2px solid transparent;white-space:nowrap}
 .araclar a:hover{color:var(--ink)}
 .araclar a[aria-current="page"]{color:var(--ink);border-bottom-color:var(--accent)}
+/* overflow-x:auto dikeyde de kırpar: odak çerçevesi bağlantının içine çizilir (denetim) */
+.araclar a:focus-visible{outline-offset:calc(-1 * var(--odak-kalin))}
 .taslak-bayrak{margin:0 0 var(--s2)}
