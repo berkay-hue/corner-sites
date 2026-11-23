@@ -57,7 +57,7 @@ function oturumJeton(){var ds=[];try{ds.push(window.sessionStorage)}catch(e){}tr
   for(var i=0;i<ds.length;i++){var v=null;try{v=ds[i]&&ds[i].getItem('smc-oturum')}catch(e){v=null}if(!v)continue;var t=v;
     if(v.charAt(0)==='{'){try{t=JSON.parse(v).token}catch(e){t=null}}if(typeof t==='string'&&/^[A-Za-z0-9_-]{43}$/.test(t))return t}
   return null}
-function hakAl(r){if(!r)return;if(typeof r.left==='number'){D.left=Math.max(0,r.left);D.hakBilinmez=false}if(typeof r.cap==='number'&&r.cap>0)D.cap=r.cap;if(typeof r.reset_at==='string')D.reset=r.reset_at;if(r.scope==='anon'||r.scope==='ip'||r.scope==='global')D.hakScope=r.scope}
+function hakAl(r){if(!r)return;if(typeof r.left==='number'){D.left=Math.max(0,r.left);D.hakBilinmez=false}if(typeof r.cap==='number'&&r.cap>0)D.cap=r.cap;if(typeof r.reset_at==='string')D.reset=r.reset_at;if(r.scope==='anon'||r.scope==='ip'||r.scope==='global')D.hakScope=r.scope;if(typeof r.stock==='boolean')D.stock=r.stock}
 
 /* ---- istek: jeton yalnız üretim uçlarına; dış AbortController (Vazgeç) verilebilir ---- */
 function post(yol,govde,ms,kalici,dis){
@@ -68,6 +68,14 @@ function post(yol,govde,ms,kalici,dis){
   if(JETON_YOL.test(yol)){var tk=oturumJeton();if(tk)o.headers.authorization='Bearer '+tk}
   return fetch(API+yol,o).then(function(r){clearTimeout(tm);if(r.status===204)return {};return r.json().then(function(j){if(r.ok&&j&&j.ok!==false)return j;j=j||{};throw {kod:j.error||'genel',scope:j.scope,charged:!!j.charged,left:j.left,cap:j.cap,reset_at:j.reset_at,field:j.field}},function(){throw {kod:'genel'}})},
     function(e){clearTimeout(tm);throw {kod:D.vazgec?'vazgec':e&&e.name==='AbortError'?'zaman':'ag'}});
+}
+/* GET: yalnız /gen/stock (Pexels araması; hak düşmez, jeton gönderilmez) */
+function al(yol,ms,dis){
+  if(!window.fetch||!API)return Promise.reject({kod:'ag'});
+  var ac=dis||(window.AbortController?new AbortController():null),tm=ac&&ms?setTimeout(function(){ac.abort()},ms):null,o={method:'GET',credentials:'omit',cache:'no-store'};
+  if(ac)o.signal=ac.signal;
+  return fetch(API+yol,o).then(function(r){clearTimeout(tm);return r.json().then(function(j){if(r.ok&&j&&j.ok!==false)return j;j=j||{};throw {kod:j.error||'genel',scope:j.scope}},function(){throw {kod:'genel'}})},
+    function(e){clearTimeout(tm);throw {kod:e&&e.name==='AbortError'?'zaman':'ag'}});
 }
 function olay(kind,src){if(!D.acik||!API)return;var b={anon:anonAl(),kind:kind};if(src)b.src=src;try{post('/gen/event',b,8000,true).then(null,function(){})}catch(e){}}
 
@@ -354,6 +362,7 @@ function quotaSor(ilk){
   if(!API)return;
   post('/gen/quota',{anon:anonAl()},10000).then(function(r){
     D.acik=true;depo('smc-acik','1');hakAl(r);D.hakBilinmez=false;tsYukle();
+    try{d.dispatchEvent(new CustomEvent('studyo:hak'))}catch(e){}
     if(uretB&&D.scope!=='kapasite')uretB.removeAttribute('aria-disabled');
     if(ilk&&D.view==='duvar'&&D.scope==='yakinda')goster(D.kartVar?'sonuc':'bos',false);
     if(ilk&&D.left<=0&&D.view!=='sonuc'){duvarGoster(D.hakScope==='ip'||D.hakScope==='global'?D.hakScope:'anon',false);return}
@@ -413,6 +422,7 @@ window.Studyo={
   uret:uret,
   refine:function(q){return post('/gen/refine',q,30000).then(function(r){hakAl(r);hakYaz();kayitNot(r);var a=r&&r.drafts&&r.drafts[0];return {text:a&&typeof a.text==='string'?a.text:null}})},
   hak:function(){return {left:D.left,cap:D.cap,reset:D.reset,scope:D.hakScope,bilinmez:D.hakBilinmez}},
+  stok:function(q,dis){return al('/gen/stock?'+q,12000,dis)},
   hakYaz:hakYaz,olay:olay,hata:hataIsle,kopyala:kopyala,toast:toast,durum:durum,dil:dilAl,T:T,goster:goster,
   D:D,el:el,$:$,$$:$$,depo:depo,oturumDepo:oturumDepo,yenMetin:yenMetin,cp:cp,azHareket:azHareket,
   DUVAR:DUVAR,SINIR:T('Bugünkü 9 düzenleme hakkın doldu; gece yarısı yenilenir.','You’ve used today’s 9 edits; they renew at midnight.')

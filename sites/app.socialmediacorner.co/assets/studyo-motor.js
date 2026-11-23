@@ -1,6 +1,7 @@
 /* studyo-motor.js — SmcMotor: tarayıcıda şablon video + görsel/carousel motoru (yalnız <canvas>, bağımlılık yok).
    Klasik <script defer> ile yüklenir; tek genel ad window.SmcMotor. CSP: script-src 'self', font-src 'self' yeterli.
-   Sahne verisi /gen/video sözleşmesiyle aynı: scenes:[{text, sub, secs}]. Metinde *yıldız* arası kelimeler vurgulanır. */
+   Sahne verisi /gen/video sözleşmesiyle aynı: scenes:[{text, sub, secs}]. Metinde *yıldız* arası kelimeler vurgulanır.
+   İsteğe bağlı scenes[].image (yüklenmiş, CORS temiz <img>): o sahnenin arka planı; okunurluk perdesi şablonun bgImage perdesiyle aynı. */
 (function () {
   'use strict';
   if (window.SmcMotor) return;
@@ -332,7 +333,7 @@
     }
     let pat = GPAT.get(ctx);
     if (!pat) { pat = ctx.createPattern(GRAIN, 'repeat'); GPAT.set(ctx, pat); }
-    ctx.save(); ctx.globalAlpha = a; ctx.globalCompositeOperation = 'overlay'; ctx.fillStyle = pat; ctx.fillRect(0, 0, P.W, P.H); ctx.restore();
+    ctx.save(); ctx.globalAlpha *= a; ctx.globalCompositeOperation = 'overlay'; ctx.fillStyle = pat; ctx.fillRect(0, 0, P.W, P.H); ctx.restore();
   }
   function baseBg(ctx, P, gt, scrimA) {
     ctx.fillStyle = css(P.bg); ctx.fillRect(0, 0, P.W, P.H);
@@ -713,9 +714,9 @@
     let scenes = (Array.isArray(p.scenes) ? p.scenes : []).slice(0, 30).map(function (s) {
       s = s || {};
       const secs = Number(s.secs);
-      return { text: String(s.text == null ? '' : s.text).trim(), sub: String(s.sub == null ? '' : s.sub).trim(), secs: secs > 0 ? clamp(secs, 1.5, 15) : 3.5 };
+      return { text: String(s.text == null ? '' : s.text).trim(), sub: String(s.sub == null ? '' : s.sub).trim(), secs: secs > 0 ? clamp(secs, 1.5, 15) : 3.5, img: isDrawable(s.image) ? s.image : null };
     });
-    if (!scenes.length) scenes = [{ text: '', sub: '', secs: 3.5 }];
+    if (!scenes.length) scenes = [{ text: '', sub: '', secs: 3.5, img: null }];
     const starts = []; let acc = 0; scenes.forEach(function (s) { starts.push(acc); acc += s.secs; });
     const b = p.brand || {};
     const dark = lum(bg) < 0.3;
@@ -727,7 +728,7 @@
       font: p.font === 'serif' || p.font === 'sans' ? p.font : tpl.font,
       lang: p.lang === 'en' ? 'en' : 'tr', autoHl: p.autoHighlight !== false,
       brand: { name: String(b.name || '').trim().slice(0, 60), handle: fmtHandle(b.handle) },
-      logo: isDrawable(p.logo) ? p.logo : null, bgImage: isDrawable(p.bgImage) ? p.bgImage : null,
+      logo: isDrawable(p.logo) ? p.logo : null, bgImage: isDrawable(p.bgImage) ? p.bgImage : null, bg0: isDrawable(p.bgImage) ? p.bgImage : null,
       scenes: scenes, starts: starts, total: acc, showProgress: p.showProgress !== false
     };
   }
@@ -749,15 +750,22 @@
     if (stat) { i = clamp(Math.floor(+slideIdx) || 0, 0, n - 1); local = Infinity; gt = null; }
     else { gt = clamp(+t || 0, 0, P.total); i = sceneIndex(P, gt); local = gt - P.starts[i]; }
     const dur = P.scenes[i].secs;
-    T.bg(ctx, P, gt, i);
+    // Arka plan: sahnenin kendi görseli (scenes[].image), yoksa genel bgImage. Geçişte görsel değişiyorsa çapraz geçiş.
+    const cur = P.scenes[i].img || P.bg0, inTr = !stat && i > 0 && local < T.tr, prv = inTr ? (P.scenes[i - 1].img || P.bg0) : cur;
+    if (prv !== cur) {
+      P.bgImage = prv; T.bg(ctx, P, gt, i - 1);
+      ctx.save(); ctx.globalAlpha = E.inOutCubic(clamp(local / T.tr, 0, 1)); P.bgImage = cur; T.bg(ctx, P, gt, i); ctx.restore();
+    } else { P.bgImage = cur; T.bg(ctx, P, gt, i); }
     let k = 1, lt = local;
-    if (!stat && i > 0 && local < T.tr) {
+    if (inTr) {
       k = local / T.tr;
       const pd = P.scenes[i - 1].secs;
+      P.bgImage = prv;
       // Eski sahne geçişin ilk ~%55'inde çıkar; yeni sahne biraz gecikmeli girer (üst üste binme olmaz).
       T.scene(ctx, P, { idx: i - 1, t: pd + local, dur: pd, exit: T.rawExit ? k : Math.min(1, k / 0.55), stat: false, n: n });
     }
     if (!stat && i > 0 && !T.rawExit) lt = local - T.tr * 0.3;
+    P.bgImage = cur;
     T.scene(ctx, P, { idx: i, t: lt, dur: dur, exit: 0, stat: stat, n: n });
     T.chrome(ctx, P, { i: i, n: n, local: local, dur: dur, gt: gt, stat: stat, k: E.inOutCubic(k), prev: i - 1 });
     ctx.restore();

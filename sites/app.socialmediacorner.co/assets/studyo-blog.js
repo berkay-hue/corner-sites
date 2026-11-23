@@ -105,7 +105,10 @@ function ciz(r){
   st.baslik=String(x.title||'').trim();st.meta=String(x.meta||'').trim();st.md=String(x.text||'').trim();
   var B=ayristir(st.md);
   var k=$('#bl-makale');k.textContent='';
-  if(st.baslik)k.appendChild(el('h1',null,st.baslik));
+  /* sayfanın tek H1'i başlık çubuğunda; makale başlığı önizlemede h2 (dışa aktarılan HTML/Markdown'da H1 kalır) */
+  var ok=k.closest?k.closest('.bl-okur'):null;
+  if(st.baslik){var h=el('h2','bl-baslik',st.baslik);h.id='bl-baslik';k.appendChild(h);if(ok)ok.setAttribute('aria-labelledby','bl-baslik')}
+  else if(ok)ok.removeAttribute('aria-labelledby');
   if(st.meta)k.appendChild(el('p','bl-ozet',st.meta));
   blokDom(k,B);
   st.html=(st.baslik?'<h1>'+kac(st.baslik)+'</h1>\n':'')+blokHtml(B)+'\n';

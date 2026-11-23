@@ -442,7 +442,7 @@ test("refine sınırı ve busy iadesi", async () => {
 test("quota: sayaç okur, yazmaz", async () => {
   const s = setup();
   const q0 = await s.call("/gen/quota", { anon: ANON });
-  assert.deepEqual(q0.body, { ok: true, charged: false, left: 3, cap: 3, reset_at: resetAt(), scope: "anon" });
+  assert.deepEqual(q0.body, { ok: true, charged: false, left: 3, cap: 3, reset_at: resetAt(), scope: "anon", stock: false });
   await s.gen();
   const q1 = await s.call("/gen/quota", { anon: ANON });
   assert.equal(q1.body.left, 2);
