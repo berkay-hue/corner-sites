@@ -280,20 +280,21 @@ function render() {
 const TITLES = { giris: "Giriş", kayit: "Kayıt ol", sifre: "Şifre sıfırlama", "yeni-sifre": "Yeni şifre", panel: "Panel", rakip: "Rakip Analizi", sekans: "Sekans Yazarı", seo: "SEO Analizi", briefing: "Toplantı Briefingi", fireflies: "Toplantı Analizi", fiyatlar: "Fiyatlar", hesap: "Hesabım", admin: "Yönetim" };
 
 // ---------- Giriş ekranları ----------
-const LOGO = `<span class="logo" aria-hidden="true">SC</span>`;
+const LOGO = `<img class="lg" src="/img/sales-corner-logo.png?v=1" width="495" height="178" alt="Sales Corner">`;
+const LOGO_D = `<img class="lg" src="/img/sales-corner-logo-dark.png?v=1" width="495" height="178" alt="Sales Corner">`;
 function authLayout(inner) {
   $app.innerHTML = `<div class="auth">
   <aside class="auth-art">
-    <a class="brand" href="${SITE}/">${LOGO}Sales Corner</a>
+    <a class="brand" href="${SITE}/">${LOGO_D}</a>
     <div>
       <h1>Satışın ağır işini yapay zekâya bırakın.</h1>
       <p class="lead">Rakip analizi, kişiye özel sekanslar, SEO raporu, toplantı briefingi ve görüşme analizi tek panelde, dakikalar içinde.</p>
       <ul class="feat">${MODS.map(m => `<li><i aria-hidden="true">${m.ic}</i><div><b>${esc(m.ad)}</b><span>${esc(m.d)}</span></div></li>`).join("")}</ul>
     </div>
-    <small>© ${new Date().getFullYear()} Sales Corner · <a href="${SITE}/kvkk" style="color:inherit">KVKK</a> · <a href="${SITE}/gizlilik-politikasi" style="color:inherit">Gizlilik</a></small>
+    <small>© ${new Date().getFullYear()} Sales Corner · <a href="${SITE}/kvkk" style="color:inherit">KVKK</a> · <a href="${SITE}/gizlilik-politikasi" style="color:inherit">Gizlilik</a> · <a href="${SITE}/cerez-politikasi" style="color:inherit">Çerez Politikası</a></small>
   </aside>
   <main class="auth-main"><div class="auth-card">
-    <a class="brand" href="${SITE}/">${LOGO}Sales Corner</a>
+    <a class="brand" href="${SITE}/">${LOGO}</a>
     ${inner}
   </div></main>
 </div>`;
@@ -349,7 +350,7 @@ async function pageKayit() {
     </div>
     <div class="f"><label for="em">İş e-postası</label><input class="in" id="em" type="email" autocomplete="email" required></div>
     ${pwField("pw", "Şifre", "new-password", 'minlength="8"')}
-    <div class="f"><label style="display:flex;gap:8px;align-items:flex-start;font-weight:500;color:var(--mute)"><input type="checkbox" id="ok" required style="margin-top:4px"><span><a href="${SITE}/kullanim-kosullari" target="_blank" rel="noopener">Kullanım koşullarını</a> ve <a href="${SITE}/kvkk" target="_blank" rel="noopener">KVKK aydınlatma metnini</a> okudum, kabul ediyorum.</span></label></div>
+    <div class="f"><label style="display:flex;gap:8px;align-items:flex-start;font-weight:500;color:var(--mute)"><input type="checkbox" id="ok" required style="margin-top:4px"><span><a href="${SITE}/kullanim-kosullari" target="_blank" rel="noopener">Kullanım koşullarını</a> kabul ediyorum. <a href="${SITE}/kvkk" target="_blank" rel="noopener">KVKK aydınlatma metnini</a> okudum.</span></label></div>
     <button class="btn btn-p btn-w" type="submit">Ücretsiz hesap oluştur</button>
   </form>`);
   const f = document.getElementById("f");
@@ -422,14 +423,15 @@ function pageYeniSifre() {
 
 // ---------- Uygulama kabuğu ----------
 const ICON_OUT = `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>`;
+const ICON_SIDE = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/></svg>`;
 function shell(content) {
   const b = S.ben, name = b.ad || b.email;
-  const nav = (n, ic, ad, extra = "") => `<a href="#/${n}"${n === route ? ' aria-current="page"' : ""}><span class="ic" aria-hidden="true">${ic}</span>${esc(ad)}${extra}</a>`;
+  const nav = (n, ic, ad, extra = "") => `<a href="#/${n}" title="${esc(ad)}"${n === route ? ' aria-current="page"' : ""}><span class="ic" aria-hidden="true">${ic}</span><span class="lb">${esc(ad)}</span>${extra}</a>`;
   const badge = k => (JOBS[k]?.state === "run" ? '<span class="lock" title="Hazırlanıyor"><span class="spin s"></span></span>' : durum(k).neden === "plan" ? '<span class="lock" title="Planınıza dahil değil">🔒</span>' : "");
   const kalan = daysLeft(b.bitis);
-  $app.innerHTML = `<div class="shell" id="shell">
+  $app.innerHTML = `<div class="shell${store.get("side_mini", false) ? " mini" : ""}" id="shell">
   <aside class="side" aria-label="Menü">
-    <a class="brand" href="#/panel">${LOGO}Sales Corner</a>
+    <div class="side-head"><button class="iconbtn side-tog" type="button" data-side aria-label="Menüyü daralt" title="Menüyü daralt / genişlet">${ICON_SIDE}</button><a class="brand" href="#/panel">${LOGO}</a></div>
     <nav class="nav">
       ${nav("panel", "🏠", "Panel")}
       <div class="nav-h">Araçlar</div>
@@ -442,12 +444,12 @@ function shell(content) {
     <div class="side-foot">
       <div class="plan-box"><b>${esc(b.plan_ad || b.plan)}</b><span>${!b.aktif ? "Süre doldu" : b.plan === "deneme" ? `Denemede ${kalan} gün kaldı` : `Geçerlilik: ${fmtD(b.bitis)}`}</span>
         ${b.plan !== "ozel" ? `<a class="btn btn-p btn-s btn-w" href="#/fiyatlar">${b.plan === "deneme" || !b.aktif ? "Plan seç" : "Planı yükselt"}</a>` : ""}</div>
-      <div class="me"><span class="av" aria-hidden="true">${esc(initials(name))}</span><div class="t"><b>${esc(name)}</b><span>${esc(b.email)}</span></div><button class="iconbtn" data-logout title="Çıkış yap" aria-label="Çıkış yap">${ICON_OUT}</button></div>
+      <div class="me"><span class="av" aria-hidden="true">${esc(initials(name))}</span><div class="t" title="${esc(b.email)}"><b>${esc(name)}</b><span>${esc(b.email)}</span></div><button class="iconbtn" data-logout title="Çıkış yap" aria-label="Çıkış yap">${ICON_OUT}</button></div>
     </div>
   </aside>
   <div>
     <div class="scrim" data-menu></div>
-    <header class="top"><button class="iconbtn" data-menu aria-label="Menüyü aç">☰</button><a class="brand" href="#/panel">${LOGO}Sales Corner</a><span class="av" aria-hidden="true">${esc(initials(name))}</span></header>
+    <header class="top"><button class="iconbtn" data-menu aria-label="Menüyü aç">☰</button><a class="brand" href="#/panel">${LOGO}</a><span class="av" aria-hidden="true">${esc(initials(name))}</span></header>
     <main class="main"><div class="wrap">${content}</div></main>
   </div>
 </div>`;
@@ -456,7 +458,7 @@ const ph = (t, p, right = "") => `<div class="ph"><div><h1>${t}</h1>${p ? `<p>${
 function errorPage() {
   const setup = S.setupErr;
   $app.innerHTML = `<div class="auth-main" style="min-height:100vh"><div class="auth-card" style="text-align:center">
-    <a class="brand" href="${SITE}/" style="display:flex;justify-content:center">${LOGO}Sales Corner</a>
+    <a class="brand" href="${SITE}/" style="display:flex;justify-content:center">${LOGO}</a>
     <h2>${setup ? "Panel kurulumu tamamlanıyor" : "Hesap bilgileri alınamadı"}</h2>
     <p class="sub" style="margin-top:8px">${setup ? "Sistem kısa süre içinde hazır olacak. Lütfen biraz sonra tekrar deneyin." : esc(S.benErr || "Lütfen tekrar deneyin.")}</p>
     <div class="row" style="justify-content:center"><button class="btn btn-p" id="re">Tekrar dene</button><button class="btn btn-g" data-logout>Çıkış yap</button></div>
@@ -967,10 +969,16 @@ const PAGES = { giris: pageGiris, kayit: pageKayit, sifre: pageSifre, "yeni-sifr
 
 // ---------- Genel olaylar ----------
 document.addEventListener("click", async e => {
-  const t = e.target.closest("[data-go],[data-eye],[data-menu],[data-logout],[data-copy],[data-copy-el],[data-reset],.nav a,#seo-show,#seo-dl");
+  const t = e.target.closest("[data-go],[data-eye],[data-side],[data-menu],[data-logout],[data-copy],[data-copy-el],[data-reset],.nav a,#seo-show,#seo-dl");
   if (!t) return;
   if (t.dataset.go) { e.preventDefault(); go(t.dataset.go); }
   else if (t.dataset.eye) { const i = document.getElementById(t.dataset.eye); const show = i.type === "password"; i.type = show ? "text" : "password"; t.textContent = show ? "Gizle" : "Göster"; t.setAttribute("aria-label", show ? "Şifreyi gizle" : "Şifreyi göster"); }
+  else if (t.hasAttribute("data-side")) {
+    const sh = document.getElementById("shell");
+    if (!sh) return;
+    if (matchMedia("(max-width:860px)").matches) sh.classList.remove("open");
+    else { const mini = sh.classList.toggle("mini"); store.set("side_mini", mini); }
+  }
   else if (t.hasAttribute("data-menu")) document.getElementById("shell")?.classList.toggle("open");
   else if (t.hasAttribute("data-logout")) { await sb.auth.signOut(); S.session = null; S.ben = null; ADM = { rows: null, err: "", q: "" }; FF = { list: null, err: "", sel: "" }; go("giris"); }
   else if (t.dataset.copy || t.dataset.copyEl) {
