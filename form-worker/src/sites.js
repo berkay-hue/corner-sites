@@ -14,13 +14,14 @@
 export const DEFAULT_SITE = "brandcorner.co";
 
 // app.socialmediacorner.co'nun uçları: yalnız hesap için gerekenler (giriş, kayıt, çıkış, ben, şifre sıfırlama,
-// profil, bağlantılar, bağlama ve bağı koparma). Biçim "YÖNTEM /yol"; /app/* yolundaki sayısal id ":id" yazılır.
+// profil, bağlantılar, bağlama ve bağı koparma; A5-3: marka sesi, taslak geçmişi, veri dışa aktarma, hesap silme).
+// Biçim "YÖNTEM /yol"; /app/* yolundaki sayısal id ":id" yazılır.
 // Kampanya, başvuru, influencer arama, eşleşme, istatistik, metrics, gönderi, bildirim ve admin uçları yok (404).
-// TEKNIK-PLAN'daki voice, drafts, export ve account/delete uçları henüz yazılmadı; yazılınca buraya eklenir.
 export const APP_ROUTES = Object.freeze([
   "POST /auth/register", "POST /auth/login", "POST /auth/logout", "GET /auth/me", "POST /auth/forgot", "POST /auth/reset",
   "GET /app/profile", "POST /app/profile",
   "GET /app/connections", "POST /app/connect", "POST /app/connect/finish", "POST /app/disconnect",
+  "GET /app/voice", "PUT /app/voice", "GET /app/drafts", "POST /app/drafts/:id/delete", "GET /app/export", "POST /app/account/delete",
 ]);
 
 export const SITES = {

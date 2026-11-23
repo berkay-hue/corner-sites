@@ -5,12 +5,16 @@
 // Sayaçlar gen_usage'ta (gün Europe/Istanbul, sabit UTC+3; anahtar sha256(salt|gün|tür|değer), global 'all'), ölçüm gen_daily'de.
 // Her yanıt `charged` (anon üretim hakkı düştü mü) taşır; sayaç okunduysa {left, cap, reset_at, scope} de.
 // LLM sonrası yazımlar (gen_daily, iade) ctx.waitUntil ile. io.fetch testlerde sahte verilir.
+// A5-4: ACCOUNTS_ENABLED="1" iken app sitesinde geçerli Bearer oturumu varsa başarılı üretim drafts'a da yazılır (saveDrafts);
+// oturum yoksa/geçersizse yanıt anonimle bire bir aynı (401 yok), drafts hatası yutulur.
 import {
   SYSTEM_GEN, SYSTEM_REFINE, SYSTEM_IG_CAPTION, SYSTEM_IG_REELS, SYSTEM_IG_CAPTION_REFINE, SYSTEM_IG_REELS_REFINE, SCHEMA, SCHEMA_REELS,
   SECTORS, TONES, LANGS, OPS, ANGLES, MAX, IG_KINDS, FORMATS, CTAS, VIDEOS, ADJECTIVES, ADDRESS, EMOJI, REELS_ANGLES, IG_OPS, IG_MAX,
   clean, fold, neutralize, banMatch, userGen, userRefine, userIg, userIgRefine,
 } from "./gen-prompt.js";
 import { makeLlm, LlmError, SPECS } from "./llm.js";
+import { platformSite, bearerToken, sessionUser } from "./platform.js";
+import { siteConf } from "./sites.js";
 
 export const genEnabled = env => env?.GEN_ENABLED === "1" && Boolean(env.ANTHROPIC_API_KEY && env.GEN_SALT && env.TURNSTILE_SECRET);
 
@@ -376,7 +380,7 @@ async function linkedin(c) {
   return produce(c, v, {
     system: SYSTEM_GEN, schema: SCHEMA, maxTokens: 3500, count: 3,
     user: userGen({ topic: neutralize(v.topic), sector: v.sector, tone: v.tone, goal: v.goal ? neutralize(v.goal) : "", lang: v.lang }),
-  });
+  }, undefined, { platform: "linkedin", topic: v.topic, max: MAX.topic, meta: { kind: "li", tone: v.tone, sector: v.sector, lang: v.lang } });
 }
 
 // ISTEM-IG §5.1: caption max_tokens 3000 (SCHEMA, A2 ile aynı), reels 1200 (SCHEMA_REELS)
@@ -392,13 +396,44 @@ async function instagram(c) {
       kind: v.kind, topic: neutralize(v.topic), sector: v.sector, tone: v.tone, format: v.format, cta: v.cta, video: v.video,
       lang: v.lang, voice: neutralVoice(v.voice),
     }),
-  }, d => igPost(d, v));
+  }, d => igPost(d, v), {
+    platform: "instagram", topic: v.topic, max: IG_MAX.topic,
+    meta: pickMeta({ kind: v.kind, tone: v.tone, sector: v.sector, lang: v.lang, format: v.format, cta: v.cta, video: v.video, voice: Boolean(v.voice) }),
+  });
 }
+
+// A5-4 taslak geçmişi (migrations/0017_accounts.sql drafts; okuma/silme/dışa aktarma src/platform.js ACCT). Başarılı üretim
+// yalnız şu üçü birlikteyse yazılır: ACCOUNTS_ENABLED "1"; origin'in hesap sitesinin uç listesinde GET /app/drafts var
+// (src/sites.js APP_ROUTES: yalnız app.socialmediacorner.co); Authorization: Bearer geçerli oturum (platform.js sessionUser).
+// Biri eksikse ya da jeton geçersizse anonim akış bit bit aynı: 401 yok, yanıtta draft_ids yok. Üretim bir satır başına
+// bir varyant (linkedin/instagram 3, refine 1); reels gövdesi "kanca\n\nsöz". meta yalnız sabit listeli kodlar (tür, açı,
+// ton, dil, sektör, biçim, işaretler); jeton, IP, e-posta, anon kimliği ve marka sesi metni girmez. Yazım hatası (0017 yok,
+// D1) yutulur, konsola tek satır; üretim yanıtı yine 200.
+const DRAFT_SQL = "INSERT INTO drafts (user_id, site, platform, topic, body, meta) VALUES (?, ?, ?, ?, ?, ?) RETURNING id";
+const draftBody = d => (typeof d.say === "string" ? `${d.text}\n\n${d.say}` : d.text);
+async function saveDrafts(c, save, drafts) {
+  const { env, db, origin, token } = c;
+  if (!save || env.ACCOUNTS_ENABLED !== "1" || !token) return null;
+  try {
+    const site = platformSite(env, origin);
+    if (!site || !siteConf(site).routes?.includes("GET /app/drafts")) return null;
+    const user = await sessionUser(env, token, site);
+    if (!user) return null;
+    const topic = String(save.topic || "").slice(0, save.max);
+    const res = await db.batch(drafts.map(d => db.prepare(DRAFT_SQL).bind(user.id, site, save.platform, topic, draftBody(d),
+      JSON.stringify({ ...save.meta, angle: d.angle, ...(d.flags && { flags: d.flags }) }))));
+    return res.map(r => Number(r.results[0].id));
+  } catch (e) {
+    console.log("gen drafts", e?.message?.slice(0, 80));
+    return null;
+  }
+}
+const pickMeta = o => Object.fromEntries(Object.entries(o).filter(([, x]) => x !== null && x !== undefined && x !== ""));
 
 // Üretim uçlarının ortak yolu (A0 §3-§5): yavaşlık, sayaç okuma, Turnstile, ayırma, LLM, gen_daily, iade. Sayaçlar
 // (anon/ip/all/rid, GEN_UNITS) ve gen_daily sütunları iki uçta ortak. req makeLlm().generate'e aynen gider; post
 // başarılı taslakları yanıttan önce işler (atarsa llm_fail yoluna düşer).
-async function produce(c, v, req, post = d => d) {
+async function produce(c, v, req, post = d => d, save) {
   const { env, db, origin, ctx, io, ip } = c;
   if (!Number.isFinite(v.t) || v.t < MIN_T) return fail("slow_down", 429, origin);
 
@@ -450,7 +485,8 @@ async function produce(c, v, req, post = d => d) {
     if (charged && after.ip === L.ip) inc.ip_full = 1;
     if (L.cap - (after.all - GEN_UNITS) >= GEN_UNITS && L.cap - after.all < GEN_UNITS) inc.cap_hit = 1;
     await batchLater(ctx, db, [daily(db, day, inc)]);
-    return json({ ok: true, drafts: out.drafts, charged, ...quota(L, after) }, 200, origin);
+    const ids = await saveDrafts(c, save, out.drafts);
+    return json({ ok: true, drafts: out.drafts, charged, ...quota(L, after), ...(ids && { draft_ids: ids }) }, 200, origin);
   }
 
   const [code, status] = LLM_ERR[err.kind] || LLM_ERR.fail;
@@ -512,7 +548,12 @@ async function refine(c) {
     const inc = { refine_ok: 1, tok_in: out.usage.input_tokens, tok_out: out.usage.output_tokens };
     if (L.cap - (after.all - REFINE_UNITS) >= GEN_UNITS && L.cap - after.all < GEN_UNITS) inc.cap_hit = 1;
     await batchLater(ctx, db, [daily(db, day, inc)]);
-    return json({ ok: true, drafts: out.drafts, charged: false, ...quota(L, after) }, 200, origin);
+    // Refine sonucu da geçmişe yeni satır olur (kullanıcının kopyaladığı çoğu zaman son hâli); konu gövdede yok, boş kalır
+    const ids = await saveDrafts(c, {
+      platform: v.kind === "li" ? "linkedin" : "instagram", topic: "", max: 0,
+      meta: pickMeta({ kind: v.kind, op: v.op, tone: v.tone, format: v.format, lang: v.lang }),
+    }, out.drafts);
+    return json({ ok: true, drafts: out.drafts, charged: false, ...quota(L, after), ...(ids && { draft_ids: ids }) }, 200, origin);
   }
   const [code, status] = LLM_ERR[err.kind] || LLM_ERR.fail;
   // refine üretim hakkı düşürmez; faturalanmamış hatada üç sayaç iade, diğerinde iade yok
@@ -563,7 +604,7 @@ export async function generate(req, url, env, origin, ctx, io = {}) {
   const { tooLarge, body } = await readBody(req, BODY_MAX[name]);
   if (tooLarge) return fail("too_large", 413, origin);
   try {
-    return await handler({ env, db: env.DB, body, origin, ctx, io: { fetch: io.fetch || fetch }, ip: req.headers.get("cf-connecting-ip") || "" });
+    return await handler({ env, db: env.DB, body, origin, ctx, io: { fetch: io.fetch || fetch }, ip: req.headers.get("cf-connecting-ip") || "", token: bearerToken(req) });
   } catch (e) {
     // 0014 uygulanmadıysa tablo yok
     if (/no such (table|column)/i.test(e?.message || "")) return fail("not_ready", 503, origin);

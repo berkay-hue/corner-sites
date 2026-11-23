@@ -3849,6 +3849,8 @@ const OLD_APP = [
   "POST admin/:id/snap",
 ];
 const APP_OK = ["GET profile", "POST profile", "GET connections", "POST connect", "POST connect/finish", "POST disconnect"];
+// A5-3 hesap bölümleri: yalnız app izin listesinde; brandcorner.co'da APP'te yok (404)
+const ACCT_OK = ["GET voice", "PUT voice", "GET drafts", "POST drafts/:id/delete", "GET export", "POST account/delete"];
 // "POST campaigns/:id/apply" → ["POST", "/app/campaigns/7/apply"]
 const appPath = k => { const [method, p] = k.split(" "); return [method, `/app/${p.replace(":id", "7")}`]; };
 const bodyFor = method => (method === "GET" ? undefined : {});
@@ -3904,8 +3906,8 @@ test("A5-2w: brandcorner.co'da eski uçların hepsi yönlendirilir, üç rol de 
   }
 });
 
-test("A5-2w: APP_ROUTES izin listesi yalnız mevcut hesap uçları", () => {
-  assert.deepEqual([...APP_ROUTES].sort(), [...OLD_AUTH, ...APP_OK.map(k => k.replace(" ", " /app/"))].sort());
+test("A5-2w: APP_ROUTES izin listesi yalnız mevcut hesap uçları (A5-3 ile hesap bölümleri)", () => {
+  assert.deepEqual([...APP_ROUTES].sort(), [...OLD_AUTH, ...[...APP_OK, ...ACCT_OK].map(k => k.replace(" ", " /app/"))].sort());
   assert.ok(Object.isFrozen(APP_ROUTES));
 });
 
@@ -4042,4 +4044,242 @@ test("A5-2w denetim: app'te rolü brand olmayan hesap şifre sıfırlamayla da o
   const ok2 = await bc("POST", "/auth/reset", body("d".repeat(43)));
   assert.deepEqual([ok2.status, ok2.body.user.role], [200, "influencer"]);
   assert.equal((await bc("GET", "/app/applications", { token: ok2.body.token })).status, 200);
+});
+
+// ---- app hesap bölümleri: marka sesi, taslak geçmişi, dışa aktarma, hesap silme (A5-3; migrations/0017_accounts.sql) ----
+
+// app'te kayıtlı kullanıcılar (rol sunucuda brand); call app origin'iyle, bc brandcorner.co (DEV_ORIGINS) ile
+async function appSetup(extra = {}) {
+  const s = await setup({ ACCOUNTS_ENABLED: "1", ...IG_ENV, OAUTH_TOKEN_KEY: KEY, ...extra });
+  const call = api(s.env, APP);
+  let ip = 0;
+  const join = async email => {
+    const r = await call("POST", "/auth/register", {
+      ip: `10.0.5.${++ip}`, body: { name: email, email, password: "sifre-12345", consent: true, hp: "", t: 2000 },
+    });
+    assert.equal(r.status, 200, JSON.stringify(r.body));
+    return { token: r.body.token, id: r.body.user.id, email };
+  };
+  return { ...s, call, bc: s.call, join };
+}
+const addDraft = (db, userId, { site = "app.socialmediacorner.co", platform = "linkedin", topic = "konu", body = "metin", meta = "{}" } = {}) =>
+  Number(db.prepare("INSERT INTO drafts (user_id, site, platform, topic, body, meta) VALUES (?, ?, ?, ?, ?, ?)")
+    .run(userId, site, platform, topic, body, meta).lastInsertRowid);
+const ACCT_PATHS = [["GET", "/app/voice"], ["PUT", "/app/voice"], ["GET", "/app/drafts"], ["POST", "/app/drafts/1/delete"],
+  ["GET", "/app/export"], ["POST", "/app/account/delete"]];
+
+test("A5-3: marka sesi GET/PUT: boş başlar, kaydedilir, normalleşir; geçersiz alan 400 voice; kullanıcılar karışmaz", async () => {
+  const { db, call, join } = await appSetup();
+  const a = await join("a@x.co"), b = await join("b@x.co");
+  assert.deepEqual((await call("GET", "/app/voice", { token: a.token })).body, { ok: true, voice: null });
+  const put = await call("PUT", "/app/voice", { token: a.token, body: {
+    sector: "tech", tones: ["samimi", "net", "samimi"], samples: ["  ilk örnek\nikinci satır  ", ""], banned: ["İSTANBUL", " kampanya ", "kampanya"],
+  } });
+  assert.equal(put.status, 200, JSON.stringify(put.body));
+  const want = { sector: "tech", tones: ["samimi", "net"], samples: ["ilk örnek\nikinci satır"], banned: ["istanbul", "kampanya"] };
+  const { updated_at, ...v } = put.body.voice;
+  assert.deepEqual(v, want);
+  assert.match(updated_at, /^\d{4}-\d\d-\d\d \d\d:\d\d:\d\d$/);
+  const got = await call("GET", "/app/voice", { token: a.token });
+  assert.deepEqual({ ...got.body.voice, updated_at: undefined }, { ...want, updated_at: undefined });
+  assert.equal(db.prepare("SELECT site FROM brand_voice WHERE user_id = ?").get(a.id).site, "app.socialmediacorner.co");
+  // Sınırların tam üstü ve biçim hataları 400 voice; kayıt değişmez
+  const bad = [
+    { sector: "uzay" }, { sector: 3 }, { tones: "samimi" }, { tones: ["samimi", "net", "veri", "ilham"] }, { tones: ["kaba"] },
+    { samples: ["a", "b", "c", "d"] }, { samples: ["x".repeat(2201)] }, { samples: [5] }, { samples: "metin" },
+    { banned: Array.from({ length: 31 }, (_, i) => `k${i}`) }, { banned: ["x".repeat(41)] }, { banned: ["a|b"] }, { banned: ["a\nb"] },
+    { banned: [7] }, { banned: ["   "] },
+  ];
+  for (const body of bad) assert.deepEqual(fail(await call("PUT", "/app/voice", { token: a.token, body })), [400, "voice"], JSON.stringify(body));
+  // Tam sınır kabul edilir
+  const edge = { sector: "", tones: ["veri", "ilham", "ogretici"], samples: ["x".repeat(2200), "y", "z"],
+    banned: Array.from({ length: 30 }, (_, i) => `${"k".repeat(38)}${String(i).padStart(2, "0")}`) };
+  assert.equal((await call("PUT", "/app/voice", { token: b.token, body: edge })).status, 200);
+  assert.deepEqual({ ...(await call("GET", "/app/voice", { token: a.token })).body.voice, updated_at: undefined }, { ...want, updated_at: undefined });
+  assert.deepEqual((await call("GET", "/app/voice", { token: b.token })).body.voice.tones, ["veri", "ilham", "ogretici"]);
+  assert.equal(count(db, "brand_voice"), 2);
+  // Oturumsuz 401 auth (uç izin listesinde)
+  assert.deepEqual(fail(await call("GET", "/app/voice")), [401, "auth"]);
+});
+
+test("A5-3: taslak geçmişi: 50'lik sayfa + before imleci, platform ve q süzgeci (LIKE kaçışlı), site ve kullanıcı ayrımı", async () => {
+  const { db, call, join } = await appSetup();
+  const a = await join("a@x.co"), b = await join("b@x.co");
+  const ids = [];
+  for (let i = 0; i < 60; i++) ids.push(addDraft(db, a.id, { platform: i % 2 ? "instagram" : "linkedin", topic: `konu ${i}`, body: `metin ${i}`,
+    meta: JSON.stringify({ tone: "net" }) }));
+  const pct = addDraft(db, a.id, { topic: "%100 indirim", body: "yüzde" });
+  const und = addDraft(db, a.id, { topic: "a_b", body: "alt çizgi" });
+  addDraft(db, b.id, { topic: "%100 başkası" });
+  addDraft(db, a.id, { site: "brandcorner.co", topic: "%100 başka site" });
+  const p1 = await call("GET", "/app/drafts", { token: a.token });
+  assert.equal(p1.status, 200);
+  assert.equal(p1.body.drafts.length, 50);
+  assert.deepEqual(p1.body.drafts.slice(0, 2).map(x => x.id), [und, pct]);
+  assert.deepEqual(Object.keys(p1.body.drafts[2]).sort(), ["body", "created_at", "id", "meta", "platform", "topic"]);
+  assert.deepEqual(p1.body.drafts[2].meta, { tone: "net" });
+  assert.equal(p1.body.next, p1.body.drafts[49].id);
+  const p2 = await call("GET", `/app/drafts?before=${p1.body.next}`, { token: a.token });
+  assert.deepEqual([p2.body.drafts.length, p2.body.next], [12, null]);
+  assert.deepEqual([...p1.body.drafts, ...p2.body.drafts].map(x => x.id).sort((x, y) => x - y), [...ids, pct, und]);
+  const ig = await call("GET", "/app/drafts?platform=instagram", { token: a.token });
+  assert.ok(ig.body.drafts.length === 30 && ig.body.drafts.every(x => x.platform === "instagram"));
+  // % ve _ harfiyen aranır; başka kullanıcının ve başka sitenin satırı gelmez
+  assert.deepEqual((await call("GET", "/app/drafts?q=%25100", { token: a.token })).body.drafts.map(x => x.id), [pct]);
+  assert.deepEqual((await call("GET", "/app/drafts?q=_", { token: a.token })).body.drafts.map(x => x.id), [und]);
+  // ASCII harflerde büyük/küçük harf duyarsız (SQLite LIKE); platform süzgeciyle birlikte
+  assert.deepEqual((await call("GET", "/app/drafts?q=METIN+5&platform=instagram", { token: a.token })).body.drafts
+    .map(x => x.topic), ["konu 59", "konu 57", "konu 55", "konu 53", "konu 51", "konu 5"]);
+  assert.deepEqual((await call("GET", "/app/drafts?q=yok-boyle-bir-sey", { token: a.token })).body, { ok: true, drafts: [], next: null });
+  assert.equal((await call("GET", "/app/drafts", { token: b.token })).body.drafts.length, 1);
+  for (const [qs, err] of [["platform=tiktok", "platform"], ["before=abc", "before"], ["before=0", "before"], ["before=-1", "before"],
+    ["before=1e3", "before"], ["before=12345678901234567", "before"]])
+    assert.deepEqual(fail(await call("GET", `/app/drafts?${qs}`, { token: a.token })), [400, err], qs);
+});
+
+test("A5-3: taslak silme: kendi taslağı 200, başkasının ve başka sitenin 404, ikinci silme 404", async () => {
+  const { db, call, join } = await appSetup();
+  const a = await join("a@x.co"), b = await join("b@x.co");
+  const mine = addDraft(db, a.id), theirs = addDraft(db, b.id), other = addDraft(db, a.id, { site: "brandcorner.co" });
+  assert.deepEqual(fail(await call("POST", `/app/drafts/${theirs}/delete`, { token: a.token, body: {} })), [404, "not_found"]);
+  assert.deepEqual(fail(await call("POST", `/app/drafts/${other}/delete`, { token: a.token, body: {} })), [404, "not_found"]);
+  assert.deepEqual(fail(await call("POST", "/app/drafts/999999/delete", { token: a.token, body: {} })), [404, "not_found"]);
+  assert.equal(count(db, "drafts"), 3);
+  assert.deepEqual((await call("POST", `/app/drafts/${mine}/delete`, { token: a.token, body: {} })).body, { ok: true });
+  assert.deepEqual(fail(await call("POST", `/app/drafts/${mine}/delete`, { token: a.token, body: {} })), [404, "not_found"]);
+  assert.deepEqual(db.prepare("SELECT id FROM drafts ORDER BY id").all().map(r => r.id), [theirs, other]);
+  // GET ya da id'siz yol izin listesinde değil
+  assert.deepEqual(fail(await call("GET", `/app/drafts/${theirs}/delete`, { token: a.token })), [404, "not_found"]);
+  assert.deepEqual(fail(await call("POST", "/app/drafts/x/delete", { token: a.token, body: {} })), [404, "not_found"]);
+});
+
+test("A5-3: dışa aktarma: attachment, profil + ses + taslak + bağlantı; token, şifre özeti ve hesap kimliği yok", async () => {
+  const { db, env, call, join } = await appSetup();
+  const a = await join("a@x.co"), b = await join("b@x.co");
+  await call("PUT", "/app/voice", { token: a.token, body: { sector: "food", tones: ["samimi"], samples: ["örnek"], banned: ["kötü"] } });
+  addDraft(db, a.id, { topic: "benim konum" });
+  addDraft(db, b.id, { topic: "başkasının konusu" });
+  db.prepare("INSERT INTO social_accounts (user_id, platform, handle, external_id, status, connected_at, scoped_id) VALUES (?, 'instagram', 'kafe', 'EXT-GIZLI-1', 'connected', datetime('now'), 'SCOPED-GIZLI-1')")
+    .run(a.id);
+  db.prepare("INSERT INTO oauth_tokens (user_id, platform, access_token, refresh_token) VALUES (?, 'instagram', 'ACCESS-GIZLI-1', 'REFRESH-GIZLI-1')").run(a.id);
+  const req = new Request("https://forms.test/app/export", { headers: { authorization: `Bearer ${a.token}`, "cf-connecting-ip": "10.0.0.1" } });
+  const res = await platform(req, new URL(req.url), env, APP, async () => {});
+  assert.equal(res.status, 200);
+  assert.equal(res.headers.get("content-disposition"), 'attachment; filename="smc-verilerim.json"');
+  assert.equal(res.headers.get("cache-control"), "no-store");
+  assert.equal(res.headers.get("access-control-allow-origin"), APP);
+  const raw = await res.text(), j = JSON.parse(raw);
+  for (const secret of ["ACCESS-GIZLI", "REFRESH-GIZLI", "EXT-GIZLI", "SCOPED-GIZLI", "pbkdf2", a.token, "başkasının", "b@x.co", "token"])
+    assert.ok(!raw.includes(secret), secret);
+  assert.equal(j.ok, true);
+  assert.deepEqual([j.profile.email, j.profile.role, j.site], ["a@x.co", "brand", "app.socialmediacorner.co"]);
+  assert.ok(j.profile.created_at && j.profile.consent_at);
+  assert.deepEqual([j.voice.sector, j.voice.banned], ["food", ["kötü"]]);
+  assert.deepEqual(j.drafts.map(x => x.topic), ["benim konum"]);
+  assert.deepEqual(Object.keys(j.connections[0]).sort(), ["connected_at", "created_at", "handle", "platform", "status", "updated_at"]);
+  assert.deepEqual([j.connections[0].platform, j.connections[0].handle], ["instagram", "kafe"]);
+  assert.deepEqual([j.posts, j.publish_jobs], [[], []]);
+});
+
+test("A5-3: hesap silme: yanlış şifre 401 invalid, doğru şifre bütün satırları ve oturumları siler, /auth/me 401", async t => {
+  t.mock.method(console, "log", () => {});
+  t.mock.method(globalThis, "fetch", async () => { throw new Error("testte ağ yok"); });
+  const { db, call, join } = await appSetup();
+  const a = await join("a@x.co"), b = await join("b@x.co");
+  const second = (await call("POST", "/auth/login", { ip: "10.0.6.1", body: { email: "a@x.co", password: "sifre-12345" } })).body.token;
+  await call("PUT", "/app/voice", { token: a.token, body: { sector: "tech" } });
+  await call("PUT", "/app/voice", { token: b.token, body: { sector: "food" } });
+  addDraft(db, a.id); addDraft(db, a.id); const bd = addDraft(db, b.id);
+  const acc = Number(db.prepare("INSERT INTO social_accounts (user_id, platform, handle, external_id, status) VALUES (?, 'instagram', 'h', 'e1', 'connected')")
+    .run(a.id).lastInsertRowid);
+  db.prepare("INSERT INTO oauth_tokens (user_id, platform, access_token) VALUES (?, 'instagram', 'x')").run(a.id);
+  db.prepare("INSERT INTO metric_snapshots (account_id, followers) VALUES (?, 10)").run(acc);
+  const post = Number(db.prepare("INSERT INTO posts (user_id, url, platform, type, date) VALUES (?, 'https://instagram.com/p/1', 'instagram', 'post', '2026-11-01')")
+    .run(a.id).lastInsertRowid);
+  db.prepare("INSERT INTO post_snaps (post_id, at, likes) VALUES (?, '2026-11-02', 3)").run(post);
+  // Yayın işleri: a'nın kendi işi (olayıyla) silinir; a'nın onayladığı b işi kalır, approved_by NULL olur (FK CASCADE'siz)
+  const bacc = Number(db.prepare("INSERT INTO social_accounts (user_id, platform, handle, external_id, status) VALUES (?, 'linkedin', 'hb', 'e2', 'connected')")
+    .run(b.id).lastInsertRowid);
+  const job = (uid, accId, plat, by) => Number(db.prepare(`INSERT INTO publish_jobs (user_id, site, account_id, account_external_id, platform, body, body_hash, approved_by)
+    VALUES (?, 'app.socialmediacorner.co', ?, 'x', ?, 'metin', 'h', ?)`).run(uid, accId, plat, by).lastInsertRowid);
+  const aj = job(a.id, acc, "instagram", a.id), bj = job(b.id, bacc, "linkedin", a.id);
+  db.prepare("INSERT INTO publish_events (job_id, actor, to_state) VALUES (?, ?, 'planlandi')").run(aj, a.id);
+  db.prepare("INSERT INTO password_resets (token_hash, user_id, expires_at) VALUES ('h1', ?, datetime('now', '+1 hour'))").run(a.id);
+  db.prepare("INSERT INTO user_perms (user_id, perm) VALUES (?, 'admin')").run(a.id);
+  const del = (token, password, ip = "10.0.7.1") => call("POST", "/app/account/delete", { token, ip, body: { password } });
+
+  assert.deepEqual(fail(await del(a.token, "yanlis-sifre")), [401, "invalid"]);
+  assert.deepEqual(fail(await del(a.token, "")), [400, "missing"]);
+  assert.equal((await call("GET", "/auth/me", { token: a.token })).status, 200);
+  assert.equal(db.prepare("SELECT COUNT(*) n FROM auth_attempts WHERE kind = 'delete' AND email = 'a@x.co' AND ok = 0").get().n, 1);
+  assert.deepEqual((await del(a.token, "sifre-12345")).body, { ok: true });
+  assert.deepEqual(fail(await call("GET", "/auth/me", { token: a.token })), [401, "auth"]);
+  assert.deepEqual(fail(await call("GET", "/auth/me", { token: second })), [401, "auth"]);
+  assert.deepEqual(fail(await call("POST", "/auth/login", { ip: "10.0.6.2", body: { email: "a@x.co", password: "sifre-12345" } })), [401, "invalid"]);
+  const left = t => db.prepare(`SELECT COUNT(*) n FROM ${t} WHERE user_id = ?`).get(a.id).n;
+  for (const t of ["sessions", "password_resets", "brand_voice", "drafts", "social_accounts", "oauth_tokens", "posts", "user_perms"])
+    assert.equal(left(t), 0, t);
+  assert.deepEqual([count(db, "metric_snapshots"), count(db, "post_snaps"), db.prepare("SELECT COUNT(*) n FROM users WHERE id = ?").get(a.id).n], [0, 0, 0]);
+  assert.equal(db.prepare("SELECT COUNT(*) n FROM submissions WHERE fields LIKE '%a@x.co%'").get().n, 0);
+  assert.deepEqual([left("publish_jobs"), db.prepare("SELECT COUNT(*) n FROM publish_events WHERE job_id = ?").get(aj).n], [0, 0]);
+  assert.deepEqual({ ...db.prepare("SELECT user_id, approved_by FROM publish_jobs WHERE id = ?").get(bj) }, { user_id: b.id, approved_by: null });
+  // Diğer kullanıcı dokunulmadan kalır
+  assert.equal((await call("GET", "/auth/me", { token: b.token })).status, 200);
+  assert.deepEqual((await call("GET", "/app/drafts", { token: b.token })).body.drafts.map(x => x.id), [bd]);
+  assert.equal((await call("GET", "/app/voice", { token: b.token })).body.voice.sector, "food");
+  assert.equal(db.prepare("SELECT COUNT(*) n FROM submissions WHERE fields LIKE '%b@x.co%'").get().n, 1);
+  // Aynı e-postayla yeniden kayıt olunabilir (UNIQUE satırı kalmadı)
+  assert.equal((await call("POST", "/auth/register", { ip: "10.0.8.1",
+    body: { name: "A", email: "a@x.co", password: "sifre-12345", consent: true, hp: "", t: 2000 } })).status, 200);
+});
+
+test("A5-3: hesap silme hız sınırı: e-posta başına 15 dakikada 5 yanlış şifre, sonra doğru şifre de 429", async () => {
+  const { db, call, join } = await appSetup();
+  const a = await join("a@x.co");
+  for (let i = 0; i < 5; i++)
+    assert.deepEqual(fail(await call("POST", "/app/account/delete", { token: a.token, ip: `10.0.9.${i}`, body: { password: `yanlis-${i}` } })),
+      [401, "invalid"]);
+  assert.deepEqual(fail(await call("POST", "/app/account/delete", { token: a.token, ip: "10.0.9.9", body: { password: "sifre-12345" } })), [429, "rate"]);
+  assert.equal(db.prepare("SELECT COUNT(*) n FROM users WHERE id = ?").get(a.id).n, 1);
+  assert.equal((await call("GET", "/auth/me", { token: a.token })).status, 200);
+  // Giriş sayacı ayrı: hesap silme denemeleri girişi kilitlemez
+  assert.equal((await call("POST", "/auth/login", { ip: "10.0.9.10", body: { email: "a@x.co", password: "sifre-12345" } })).status, 200);
+});
+
+test("A5-3: brandcorner.co'da yeni uçlar 404 (eski davranış), kapalı bayrakta app 403 origin, 0017 yoksa 503 not_ready", async t => {
+  t.mock.method(console, "error", () => {});
+  const { db, env, call, bc, join } = await appSetup();
+  const a = await join("a@x.co");
+  const r = await bc("POST", "/auth/register", { ip: "10.0.10.1",
+    body: { name: "a@x.co", email: "a@x.co", password: "sifre-12345", role: "brand", consent: true, hp: "", t: 2000 } });
+  assert.equal(r.status, 200);
+  const bcTok = r.body.token;
+  addDraft(db, r.body.user.id, { site: "brandcorner.co" });
+  for (const [m, p] of ACCT_PATHS) {
+    assert.deepEqual(fail(await bc(m, p, { token: bcTok, body: m === "GET" ? undefined : { password: "sifre-12345" } })), [404, "not_found"], `${m} ${p}`);
+    assert.deepEqual(fail(await bc(m, p, { body: m === "GET" ? undefined : {} })), [401, "auth"], `${m} ${p} oturumsuz`);
+    // app oturumu brandcorner'da geçersiz, brandcorner oturumu app'te geçersiz
+    assert.deepEqual(fail(await bc(m, p, { token: a.token, body: m === "GET" ? undefined : {} })), [401, "auth"]);
+    assert.deepEqual(fail(await call(m, p, { token: bcTok, body: m === "GET" ? undefined : {} })), [401, "auth"]);
+  }
+  assert.equal(count(db, "users"), 2);
+  assert.equal(count(db, "drafts"), 1);
+  for (const flag of [{}, { ACCOUNTS_ENABLED: "0" }, { ACCOUNTS_ENABLED: "true" }]) {
+    const off = api({ ...env, ...flag, ACCOUNTS_ENABLED: flag.ACCOUNTS_ENABLED }, APP);
+    for (const [m, p] of ACCT_PATHS)
+      assert.deepEqual(fail(await off(m, p, { token: a.token, body: m === "GET" ? undefined : { password: "sifre-12345" } })), [403, "origin"],
+        `${JSON.stringify(flag)} ${m} ${p}`);
+  }
+  assert.equal(count(db, "users"), 2);
+  // 0017 uygulanmamış D1: ses ve taslak 503 not_ready, dışa aktarma ve hesap silme tabloyu atlar
+  db.exec("DROP TABLE brand_voice; DROP TABLE drafts;");
+  assert.deepEqual(fail(await call("GET", "/app/voice", { token: a.token })), [503, "not_ready"]);
+  assert.deepEqual(fail(await call("PUT", "/app/voice", { token: a.token, body: {} })), [503, "not_ready"]);
+  assert.deepEqual(fail(await call("GET", "/app/drafts", { token: a.token })), [503, "not_ready"]);
+  assert.deepEqual(fail(await call("POST", "/app/drafts/1/delete", { token: a.token, body: {} })), [503, "not_ready"]);
+  const ex = await call("GET", "/app/export", { token: a.token });
+  assert.deepEqual([ex.status, ex.body.voice, ex.body.drafts], [200, null, []]);
+  assert.equal((await call("POST", "/app/account/delete", { token: a.token, body: { password: "sifre-12345" } })).status, 200);
+  assert.deepEqual(fail(await call("GET", "/auth/me", { token: a.token })), [401, "auth"]);
+  assert.equal(count(db, "users"), 1);
 });
