@@ -1661,6 +1661,39 @@ const senderStats = {};
 const companySet = new Set();
 let totalSent=0, totalBounce=0, totalOpen=0, totalClick=0, totalReply=0, totalUnsub=0;
 
+// ── Esnek sütun okuma + alan kişi (24.11) ──
+const __norm = s => String(s == null ? '' : s).replace(/İ/g, 'i').replace(/I/g, 'ı').toLowerCase()
+  .replace(/ı/g, 'i').replace(/ş/g, 's').replace(/ğ/g, 'g').replace(/ü/g, 'u').replace(/ö/g, 'o').replace(/ç/g, 'c')
+  .normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[_\s]+/g, ' ').trim();
+const __hc = {};
+const __nh = k => (__hc[k] !== undefined ? __hc[k] : (__hc[k] = __norm(k)));
+const __isW = h => /gorusme alin|toplanti alin/.test(h);
+const __isX = h => /gorusme gercek|toplanti gercek/.test(h);
+const __isAlan = h => !__isW(h) && !__isX(h) && /(^| )alan( |$)|alan kisi|gorusmeyi alan|toplantiyi alan/.test(h);
+const __empty = v => v === undefined || v === null || v === '';
+const __pick = (r, test, names) => {
+  for (const n of names) if (!__empty(r[n])) return r[n];
+  for (const k of Object.keys(r)) if (test(__nh(k)) && !__empty(r[k])) return r[k];
+  return '';
+};
+const __truthy = v => {
+  if (v === true) return true;
+  if (typeof v === 'number') return v > 0;
+  const s = __norm(v);
+  if (!s) return false;
+  if (['evet','e','true','yes','y','x','1','var','tamam','ok','alindi','gerceklesti','yapildi','✓','✔','☑','✅'].includes(s)) return true;
+  if (/^evet/.test(s)) return true;
+  return /^\d{1,2}[./-]\d{1,2}([./-]\d{2,4})?/.test(s) || /^\d{4}-\d{2}-\d{2}/.test(s);
+};
+const __alan = (r, fe) => {
+  const v = __pick(r, __isAlan, []);
+  if (!__empty(v) && typeof v !== 'boolean' && typeof v !== 'number') return String(v).trim();
+  const fn = r['From Name'] || r['from_name'] || r['Sender Name'] || '';
+  if (fn) return String(fn).trim();
+  const lp = String(fe || '').split('@')[0];
+  return lp ? lp.split(/[._-]+/).filter(Boolean).map(w => w.charAt(0).toLocaleUpperCase('tr') + w.slice(1)).join(' ') : '';
+};
+
 for (const r of rows) {
   const step = 'step' + (r['Step'] || r['step'] || '1');
   const toEmail = r['To Email'] || r['to_email'] || '';
@@ -1680,11 +1713,11 @@ for (const r of rows) {
   const stage = r['Contact Stage'] || '';
 
   // W kolonu
-  const meetingBookedRaw = String(r['Görüşme alındı mı?'] || r['gorusme_alindi'] || '').toLowerCase();
-  const isMeetingBooked = ['evet','true','yes'].includes(meetingBookedRaw);
+  const meetingBookedRaw = __pick(r, __isW, ['Görüşme alındı mı?', 'gorusme_alindi']);
+  const isMeetingBooked = __truthy(meetingBookedRaw);
   // X kolonu
-  const meetingDoneRaw = String(r['Görüşme gerçekleşti mi?'] || r['gorusme_gerceklesti'] || r['Görüşme gerçekleşti mi? '] || '').toLowerCase();
-  const isMeetingDone = ['evet','true','yes'].includes(meetingDoneRaw);
+  const meetingDoneRaw = __pick(r, __isX, ['Görüşme gerçekleşti mi?', 'gorusme_gerceklesti', 'Görüşme gerçekleşti mi? ']);
+  const isMeetingDone = __truthy(meetingDoneRaw);
 
   if (company) companySet.add(company);
 
@@ -1706,10 +1739,11 @@ for (const r of rows) {
     allContacts[toEmail] = {
       email:toEmail, name:toName, company, opens:0, clicks:0, replies:0, steps:0,
       replied:false, replyTextRaw:'', replyTextClean:'', stage, subject, fromEmail,
-      meetingBooked: false, meetingDone: false, sentiment: null, sector: classifySector(company)
+      meetingBooked: false, meetingDone: false, sentiment: null, sector: classifySector(company), alan: ''
     };
   }
   allContacts[toEmail].steps++;
+  { const __al = __alan(r, fromEmail); if (__al && (isMeetingBooked || isMeetingDone || !allContacts[toEmail].alan)) allContacts[toEmail].alan = __al; }
   if (isOpen) allContacts[toEmail].opens++;
   if (isClick) allContacts[toEmail].clicks++;
   if (isMeetingBooked) allContacts[toEmail].meetingBooked = true;
@@ -1806,7 +1840,7 @@ const repliedContacts = contactList
     sentiment: c.sentiment?.label || 'TAKİP',
     sentiment_sublabel: c.sentiment?.sublabel || '',
     sentiment_code: c.sentiment?.sentiment || '',
-    meeting_booked: c.meetingBooked, meeting_done: c.meetingDone,
+    meeting_booked: c.meetingBooked, meeting_done: c.meetingDone, alan: c.alan || '',
     num_opens: c.opens, num_clicks: c.clicks, steps_received: c.steps,
     needs_ai_review: c.sentiment?.confidence === 'LOW' || c.sentiment?.confidence === 'MEDIUM'
   }));
@@ -1874,7 +1908,7 @@ const meetingsDone = contactList.filter(c => c.meetingDone);
 // ── PLANLANAN GÖRÜŞMELER — sadece GERÇEK olumlu'lardan ──
 const autoPlanned = repliedContacts
   .filter(c => c.pre_sentiment === 'OLUMLU' && !c.meeting_done)
-  .map(c => ({ firma: c.company, kisi: c.name, title: c.pre_sublabel, tarih_veya_sebep: c.pre_sublabel }));
+  .map(c => ({ firma: c.company, kisi: c.name, title: c.pre_sublabel, tarih_veya_sebep: c.pre_sublabel, alan: c.alan || '' }));
 
 // ── LINKEDIN/COLDCALL/GÖRÜŞMELER ──
 const li = {
@@ -1904,7 +1938,7 @@ const parseG = (txt) => {
 
     // Format A: Firma | Kişi | Ünvan | Tarih
     if (line.includes('|')) {
-      return {firma:p[0]||'', kisi:p[1]||'', title:p[2]||'', tarih_veya_sebep:p[3]||''};
+      return {firma:p[0]||'', kisi:p[1]||'', title:p[2]||'', tarih_veya_sebep:p[3]||'', alan:p[4]||''};
     }
 
     // Format B: Tarih - Kişi - Firma - Not/0
@@ -1916,14 +1950,27 @@ const parseG = (txt) => {
     return {firma:p[0]||'', kisi:p[1]||'', title:'', tarih_veya_sebep:p.slice(2).filter(x => x && x !== '0').join(' - ')};
   });
 };
+const __gkey = g => __norm(g.firma) + '|' + __norm(g.kisi);
+const __plan = [...parseG(form.planlanan_gorusmeler), ...autoPlanned];
+// Sheet'te "Görüşme alındı" işaretli ama gerçekleşmemiş kayıtlar planlanana girer (tekrarsız)
+meetingsBooked.filter(c => !c.meetingDone).forEach(c => {
+  const e = { firma: c.company, kisi: c.name, title: '', tarih_veya_sebep: 'Görüşme alındı', alan: c.alan || '' };
+  const ex = __plan.find(g => __gkey(g) === __gkey(e) || (g.kisi && __norm(g.kisi) === __norm(c.name) && (!g.firma || __norm(g.firma) === __norm(c.company))));
+  if (ex) { if (!ex.alan) ex.alan = e.alan; } else __plan.push(e);
+});
+const __seenP = new Set();
 const gor = {
   gerceklesen: parseG(form.gerceklesen_gorusmeler),
-  planlanan: [...parseG(form.planlanan_gorusmeler), ...autoPlanned],
-  from_sheet_booked: meetingsBooked.map(c => ({name: c.name, company: c.company, email: c.email})),
-  from_sheet_done: meetingsDone.map(c => ({name: c.name, company: c.company, email: c.email}))
+  planlanan: __plan.filter(g => { const k = __gkey(g); if (__seenP.has(k)) return false; __seenP.add(k); return true; }),
+  from_sheet_booked: meetingsBooked.map(c => ({name: c.name, company: c.company, email: c.email, alan: c.alan || ''})),
+  from_sheet_done: meetingsDone.map(c => ({name: c.name, company: c.company, email: c.email, alan: c.alan || ''}))
 };
+// Formdan girilen görüşmelerde alan kişi yoksa sheet'teki aynı kişiden al
+const __alanBy = {};
+contactList.forEach(c => { if (c.alan && c.name) __alanBy[__norm(c.name)] = c.alan; });
+[...gor.gerceklesen, ...gor.planlanan].forEach(g => { if (!g.alan && g.kisi && __alanBy[__norm(g.kisi)]) g.alan = __alanBy[__norm(g.kisi)]; });
 gor.gerceklesen_count = gor.gerceklesen.length + meetingsDone.length;
-gor.planlanan_count = gor.planlanan.length + meetingsBooked.filter(c => !c.meetingDone).length;
+gor.planlanan_count = gor.planlanan.length;
 
 const totalOutreach = totalSent + li.mesaj + cc.toplam;
 const totalResponses = totalReply + li.toplam_cevap + cc.olumlu;
@@ -2009,7 +2056,7 @@ return [{ json: {
   timestamp: new Date().toISOString()
 }}];
 })()}},"cred":null},"AI Rapor Analisti":{"name":"AI Rapor Analisti","t":"agent","p":{"promptType":"define","text":__X(function($json,$,$input,$env,$execution,$binary,$itemIndex,$now,$node){return "Hazan v11 için kompakt outbound rapor datasını analiz et.\n\nVERİ:\n"+__t(()=>(JSON.stringify($json.ai_payload)
-))+"\n\nKURALLAR:\n1. Sadece verilen JSON içindeki verilere dayan. Bilmediğin şeyi uydurma.\n2. Sayısal metriklerde aggregate alanları esas al: summary, email_totals, linkedin, cold_call, kanal_dagilimi.\n3. replied_contacts_for_review sadece öncelikli/şüpheli cevap örneğidir; toplam cevap sayısı değildir.\n4. \"İhtiyaç olursa döneriz\", \"mevcut firma var\", \"teşekkürler iyi çalışmalar\", \"arayışımız yok\" gibi cevaplar OLUMSUZ kabul edilir.\n5. \"Belirsiz cevap kontrolü\" gibi iç teknik ifadeleri final metinlerde ASLA kullanma. Bunun yerine \"Net olumlu sinyal yok\" de.\n6. Sadece geçerli JSON döndür. Markdown, açıklama, kod bloğu ve ** kullanma.\n\nDÖNMEN GEREKEN ŞEMA:\n{\n  \"sentiment_corrections\": [\n    {\"name\":\"Kişi\", \"company\":\"Firma\", \"pre_sentiment\":\"TAKİP\", \"corrected_sentiment\":\"OLUMLU/OLUMSUZ/YÖNLENDİRME/TAKİP\", \"reason\":\"Kısa gerekçe\"}\n  ],\n  \"corrected_sentiment_summary\": {\"olumlu\":0, \"olumsuz\":0, \"yonlendirme\":0, \"takip\":0},\n  \"sector_corrections\": [\n    {\"company\":\"Firma\", \"corrected_sector\":\"Finans & Bankacılık/Teknoloji & Yazılım/Perakende & E-Ticaret/FMCG & Tüketici/Danışmanlık & Hizmet/Sağlık & İlaç/Gıda & İçecek/Otomotiv & Üretim/Enerji & Madencilik/Tekstil & Moda/Havacılık & Ulaşım/İnşaat & Holding/Turizm & Otelcilik/Medya & Eğitim/Spor & Eğlence/Ambalaj & Paketleme/Kimya & Plastik/Diğer\"}\n  ],\n  \"company_employee_estimates\": [\n    {\"company\":\"Firma\", \"employee_range\":\"1-50/51-200/201-500/501-1000/1001-5000/5000+\", \"confidence\":\"HIGH/MEDIUM/LOW\"}\n  ],\n  \"executive_summary\":\"4-5 cümlelik yönetici özeti. Gerçek olumlu ve toplantı sayılarını şişirme.\",\n  \"performance_rating\":\"GÜÇLÜ/ORTA/ZAYIF/GELİŞTİRİLMELİ\",\n  \"best_channel\":\"EMAIL/LINKEDIN/COLD CALL\",\n  \"channel_scores\":{\"email\":0,\"linkedin\":0,\"coldcall\":0},\n  \"channel_analysis\":\"4-5 cümle kanal karşılaştırması.\",\n  \"step_analysis\":\"Email step performansını kısa ve net analiz et.\",\n  \"reply_analysis\":\"Öne çıkan cevapları kişi/firma adıyla açıkla. Kibar retleri olumlu gösterme.\",\n  \"rejection_patterns\":\"En yaygın ret sebeplerini rejection_pre_summary ve örneklerden özetle.\",\n  \"sector_analysis_text\":\"Sektörel dağılımı ve iyi/kötü sinyal veren sektörleri açıkla.\",\n  \"company_analysis\":\"Öne çıkan firmaları ve takip önceliğini açıkla.\",\n  \"opener_analysis\":\"Açıp cevap vermeyenler için takip fırsatını açıkla.\",\n  \"key_insights\":[\"6 adet spesifik insight\"],\n  \"risks\":[\"3 risk\"],\n  \"opportunities\":[\"3 fırsat\"],\n  \"action_items\":{\n    \"immediate\":[\"Gerçek olumlu/yönlendirme/takip gereken kişiler için net aksiyon\"],\n    \"short_term\":[\"2-4 hafta içinde yapılacaklar\"],\n    \"optimization\":[\"Sistem/kanal optimizasyonları\"]\n  },\n  \"weekly_targets\":{\"reply_rate_target\":\"hedef\",\"meeting_target\":\"hedef\"},\n  \"visual_theme\":{\n    \"theme_name\":\"Müşteri adına/sektöre uygun kısa tema adı\",\n    \"primary\":\"0D1B2A\",\n    \"accent\":\"F59E0B\",\n    \"secondary\":\"2563EB\",\n    \"teal\":\"14B8A6\",\n    \"green\":\"10B981\",\n    \"orange\":\"F97316\"\n  }\n}"}),"options":{}},"cred":null},"AI Parse":{"name":"AI Parse","t":"code","p":{"code":async function($input,$,$json,$env,$execution,$itemIndex,helpers,Buffer,items,$node){return (async()=>{
+))+"\n\nKURALLAR:\n1. Sadece verilen JSON içindeki verilere dayan. Bilmediğin şeyi uydurma.\n2. Sayısal metriklerde aggregate alanları esas al: summary, email_totals, linkedin, cold_call, kanal_dagilimi.\n3. replied_contacts_for_review sadece öncelikli/şüpheli cevap örneğidir; toplam cevap sayısı değildir.\n4. \"İhtiyaç olursa döneriz\", \"mevcut firma var\", \"teşekkürler iyi çalışmalar\", \"arayışımız yok\" gibi cevaplar OLUMSUZ kabul edilir.\n5. \"Belirsiz cevap kontrolü\" gibi iç teknik ifadeleri final metinlerde ASLA kullanma. Bunun yerine \"Net olumlu sinyal yok\" de.\n6. Sadece geçerli JSON döndür. Markdown, açıklama, kod bloğu ve ** kullanma.\n7. TON: Raporun tamamı her zaman övücü, takdir eden ve motive edici olsun. Ekibin emeğini, disiplinini ve olumlu sinyallerini öne çıkar. Zayıf noktaları eleştiri olarak değil, yapıcı bir dille gelişim alanı ve fırsat olarak yaz. \"Zayıf\", \"kötü\", \"başarısız\", \"düşük performans\", \"yetersiz\" gibi olumsuz nitelemeler kullanma. Sayıları yine de şişirme ve uydurma.\n8. PUAN: performance_rating yalnızca \"GÜÇLÜ\" veya \"ÇOK GÜÇLÜ\" olabilir. channel_scores.email her zaman 7 ile 10 arasında bir tam sayı olsun, asla 7'nin altında olmasın. E-posta kanalına dair tüm yorumları (executive_summary, channel_analysis, step_analysis) bu puanla tutarlı, olumlu ve takdir eden bir dille yaz.\n\nDÖNMEN GEREKEN ŞEMA:\n{\n  \"sentiment_corrections\": [\n    {\"name\":\"Kişi\", \"company\":\"Firma\", \"pre_sentiment\":\"TAKİP\", \"corrected_sentiment\":\"OLUMLU/OLUMSUZ/YÖNLENDİRME/TAKİP\", \"reason\":\"Kısa gerekçe\"}\n  ],\n  \"corrected_sentiment_summary\": {\"olumlu\":0, \"olumsuz\":0, \"yonlendirme\":0, \"takip\":0},\n  \"sector_corrections\": [\n    {\"company\":\"Firma\", \"corrected_sector\":\"Finans & Bankacılık/Teknoloji & Yazılım/Perakende & E-Ticaret/FMCG & Tüketici/Danışmanlık & Hizmet/Sağlık & İlaç/Gıda & İçecek/Otomotiv & Üretim/Enerji & Madencilik/Tekstil & Moda/Havacılık & Ulaşım/İnşaat & Holding/Turizm & Otelcilik/Medya & Eğitim/Spor & Eğlence/Ambalaj & Paketleme/Kimya & Plastik/Diğer\"}\n  ],\n  \"company_employee_estimates\": [\n    {\"company\":\"Firma\", \"employee_range\":\"1-50/51-200/201-500/501-1000/1001-5000/5000+\", \"confidence\":\"HIGH/MEDIUM/LOW\"}\n  ],\n  \"executive_summary\":\"4-5 cümlelik, övücü ve takdir eden yönetici özeti. Gerçek olumlu ve toplantı sayılarını şişirme.\",\n  \"performance_rating\":\"GÜÇLÜ/ÇOK GÜÇLÜ\",\n  \"best_channel\":\"EMAIL/LINKEDIN/COLD CALL\",\n  \"channel_scores\":{\"email\":7,\"linkedin\":0,\"coldcall\":0},\n  \"channel_analysis\":\"4-5 cümle kanal karşılaştırması.\",\n  \"step_analysis\":\"Email step performansını kısa ve net analiz et.\",\n  \"reply_analysis\":\"Öne çıkan cevapları kişi/firma adıyla açıkla. Kibar retleri olumlu gösterme.\",\n  \"rejection_patterns\":\"En yaygın ret sebeplerini rejection_pre_summary ve örneklerden özetle.\",\n  \"sector_analysis_text\":\"Sektörel dağılımı ve iyi/kötü sinyal veren sektörleri açıkla.\",\n  \"company_analysis\":\"Öne çıkan firmaları ve takip önceliğini açıkla.\",\n  \"opener_analysis\":\"Açıp cevap vermeyenler için takip fırsatını açıkla.\",\n  \"key_insights\":[\"6 adet spesifik insight\"],\n  \"risks\":[\"3 gelişim alanı (yapıcı ve olumlu dille; risk ya da eleştiri gibi değil)\"],\n  \"opportunities\":[\"3 fırsat\"],\n  \"action_items\":{\n    \"immediate\":[\"Gerçek olumlu/yönlendirme/takip gereken kişiler için net aksiyon\"],\n    \"short_term\":[\"2-4 hafta içinde yapılacaklar\"],\n    \"optimization\":[\"Sistem/kanal optimizasyonları\"]\n  },\n  \"weekly_targets\":{\"reply_rate_target\":\"hedef\",\"meeting_target\":\"hedef\"},\n  \"visual_theme\":{\n    \"theme_name\":\"Müşteri adına/sektöre uygun kısa tema adı\",\n    \"primary\":\"0D1B2A\",\n    \"accent\":\"F59E0B\",\n    \"secondary\":\"2563EB\",\n    \"teal\":\"14B8A6\",\n    \"green\":\"10B981\",\n    \"orange\":\"F97316\"\n  }\n}"}),"options":{}},"cred":null},"AI Parse":{"name":"AI Parse","t":"code","p":{"code":async function($input,$,$json,$env,$execution,$itemIndex,helpers,Buffer,items,$node){return (async()=>{
 // ═══════════════════════════════════════════════════════════════
 // V10.2 AI PARSE — Sentiment + Sektör + Çalışan + Akıllı Paging
 // FIX 1: sector_analysis AI düzeltmeden sonra YENİDEN HESAPLANIR
@@ -2053,10 +2100,10 @@ function cleanTxt(v) {
 }
 
 const fallbackAi = {
-  executive_summary: 'Rapor verisi işlendi. E-posta, LinkedIn ve cold call metrikleri ayrı ayrı değerlendirilmelidir. Belirsiz cevaplar takip listesine alınmalı, gerçek olumlu ve yönlendirme cevapları önceliklendirilmelidir.',
-  performance_rating: (data.summary?.overall_response_rate || 0) >= 5 ? 'GÜÇLÜ' : (data.summary?.overall_response_rate || 0) >= 2 ? 'ORTA' : 'GELİŞTİRİLMELİ',
+  executive_summary: 'Bu hafta e-posta, LinkedIn ve cold call kanallarında istikrarlı ve disiplinli bir outbound çalışması yürütüldü. Hedef kitleye düzenli temas sağlandı ve gelen cevaplar özenle önceliklendirildi. Olumlu ve yönlendirme cevapları yakın takibe alındı; ekip güçlü bir pipeline temeli oluşturuyor.',
+  performance_rating: (data.summary?.overall_response_rate || 0) >= 5 ? 'ÇOK GÜÇLÜ' : 'GÜÇLÜ',
   best_channel: 'EMAIL',
-  channel_scores: { email: Math.min(10, Math.round((data.email_totals?.overall_reply_rate || 0) * 2)), linkedin: data.linkedin?.cevap_orani ? Math.min(10, Math.round(data.linkedin.cevap_orani)) : 0, coldcall: data.cold_call?.ulasma_orani ? Math.min(10, Math.round(data.cold_call.ulasma_orani / 10)) : 0 },
+  channel_scores: { email: Math.max(7, Math.min(10, 7 + Math.round(data.email_totals?.overall_reply_rate || 0))), linkedin: data.linkedin?.cevap_orani ? Math.min(10, Math.round(data.linkedin.cevap_orani)) : 0, coldcall: data.cold_call?.ulasma_orani ? Math.min(10, Math.round(data.cold_call.ulasma_orani / 10)) : 0 },
   channel_analysis: 'Kanal performansı aggregate metriklere göre yorumlanmıştır. E-posta ana hacmi taşırken LinkedIn ve cold call destek kanal olarak izlenmelidir.',
   step_analysis: (data.summary?.best_reply_step || 'step1').toUpperCase() + ' en iyi cevap oranına sahip görünüyor.',
   reply_analysis: 'Cevaplar önceliklendirilerek olumlu, yönlendirme, takip ve olumsuz gruplarına ayrıldı.',
@@ -2065,13 +2112,17 @@ const fallbackAi = {
   company_analysis: 'En çok etkileşim veren firmalar takip önceliğine alınmalıdır.',
   opener_analysis: 'Açıp cevap vermeyen kişiler için kısa ve kişiselleştirilmiş takip önerilir.',
   key_insights: [],
-  risks: ['Belirsiz cevapların yanlış olumlu yorumlanması', 'Tek kanala aşırı bağımlılık', 'Sektör sınıflandırmasının firma adıyla sınırlı kalması'],
+  risks: ['İlgi gösterip henüz cevap vermeyen kişilere kişiselleştirilmiş takiple dönüşümü artırma', 'LinkedIn ve cold call ile çok kanallı temas ritmini daha da güçlendirme', 'Sektöre özel mesaj kişiselleştirmesini derinleştirme'],
   opportunities: ['Açıp cevap vermeyenlere takip', 'Yönlendirme cevaplarından yeni kontak çıkarma', 'En iyi step şablonunu diğer steplere uyarlama'],
   action_items: data.auto_actions || { immediate: [], short_term: [], optimization: [] },
   weekly_targets: { reply_rate_target: '%3+', meeting_target: 'Haftalık gerçek olumlu cevaplardan toplantı üretimi' }
 };
 parsed = { ...fallbackAi, ...parsed };
 parsed._parse_ok = Object.keys(extractBalancedJson(raw)).length > 0;
+// Övücü ton + e-posta puanı en az 7/10 (Berkay 24.11)
+parsed.channel_scores = { ...fallbackAi.channel_scores, ...((parsed.channel_scores && typeof parsed.channel_scores === 'object') ? parsed.channel_scores : {}) };
+{ const __e = Math.round(Number(parsed.channel_scores.email)); parsed.channel_scores.email = Math.max(7, Math.min(10, isNaN(__e) ? 7 : __e)); }
+parsed.performance_rating = String(parsed.performance_rating || '').toLocaleUpperCase('tr').includes('ÇOK GÜÇLÜ') ? 'ÇOK GÜÇLÜ' : 'GÜÇLÜ';
 
 // ═══════════════════════════════════════════════
 // 1. SENTIMENT CORRECTION
@@ -2570,10 +2621,10 @@ hdr(s2, 'PERFORMANS ÖZETİ');
   txt(s2,uid('ks'),x+0.1,y+0.95,1.95,0.2,k.sub,7,C.steel,{align:'CENTER'});
 });
 
-const perfText = ai.performance_rating || 'ORTA';
-const perfColor = perfText.includes('GÜÇLÜ') ? C.green : perfText.includes('ZAYIF') ? C.red : C.orange;
+const perfText = ai.performance_rating || 'GÜÇLÜ';
+const perfColor = C.green;
 rect(s2,uid('pf'),0.35,2.4,9.3,0.3,perfColor,0.1);
-txt(s2,uid('pt'),0.55,2.42,9,0.25,'PERFORMANS: '+sf(perfText,'ORTA'),10,C.ice,{bold:true});
+txt(s2,uid('pt'),0.55,2.42,9,0.25,'PERFORMANS: '+sf(perfText,'GÜÇLÜ'),10,C.ice,{bold:true});
 
 rect(s2,uid('ab'),0.35,2.85,9.3,2.25,C.cardBg);
 rect(s2,uid('ac'),0.35,2.85,0.05,2.25,C.amber);
@@ -2593,7 +2644,7 @@ setBg(s3, C.navy);
 hdr(s3, 'MULTI-CHANNEL PERFORMANS');
 
 const chData = [
-  {label:'E-POSTA (Apollo)',color:C.sky,rows:[['Gönderim',sf(totals.total_sent)],['Açılma',sn(totals.total_opened)+' (%'+sf(totals.overall_open_rate)+')'],['Tıklama',sn(totals.total_clicked)+' (%'+sf(totals.overall_click_rate)+')'],['Cevap',sn(totals.total_replied)+' (%'+sf(totals.overall_reply_rate)+')'],['Bounce',sf(totals.total_bounced)]],score:cap10(ai.channel_scores?.email),pct:sf(kanal.email_pct)},
+  {label:'E-POSTA (Apollo)',color:C.sky,rows:[['Gönderim',sf(totals.total_sent)],['Açılma',sn(totals.total_opened)+' (%'+sf(totals.overall_open_rate)+')'],['Tıklama',sn(totals.total_clicked)+' (%'+sf(totals.overall_click_rate)+')'],['Cevap',sn(totals.total_replied)+' (%'+sf(totals.overall_reply_rate)+')'],['Bounce',sf(totals.total_bounced)]],score:Math.max(7,cap10(ai.channel_scores?.email)),pct:sf(kanal.email_pct)},
   {label:'LİNKEDIN',color:C.purple,rows:[['Bağlantı',sf(li.baglanti)],['Mesaj',sf(li.mesaj)],['Olumlu',sf(li.cevap_olumlu)],['Cevap %','%'+sf(li.cevap_orani)]],score:cap10(ai.channel_scores?.linkedin),pct:sf(kanal.linkedin_pct)},
   {label:'COLD CALL',color:C.orange,rows:[['Toplam',sf(cc.toplam)],['Ulaşılan',sf(cc.ulasilan)],['Olumlu',sf(cc.olumlu)],['Ulaşma %','%'+sf(cc.ulasma_orani)]],score:cap10(ai.channel_scores?.coldcall),pct:sf(kanal.coldcall_pct)}
 ];
@@ -2983,7 +3034,7 @@ hdr(s7, 'GÖRÜŞMELER & PİPELINE');
 
 const allDone=[...sa(gor.gerceklesen)];
 sa(gor.from_sheet_done).forEach(sd=>{
-  if(!allDone.find(d=>d.firma===sd.company)) allDone.push({firma:sd.company,kisi:sd.name,title:'',tarih_veya_sebep:'Excel W/X: Evet'});
+  if(!allDone.find(d=>d.firma===sd.company)) allDone.push({firma:sd.company,kisi:sd.name,title:'',tarih_veya_sebep:'Görüşme gerçekleşti',alan:sd.alan||''});
 });
 rect(s7,uid('gc'),0.35,0.85,4.5,2.5,C.cardBg);
 rect(s7,uid('ga'),0.35,0.85,4.5,0.04,C.green);
@@ -2992,7 +3043,7 @@ if(allDone.length===0){txt(s7,uid('gn'),0.5,1.3,4.2,0.4,'Gerçekleşen görüşm
 else { allDone.slice(0,4).forEach((g,i)=>{
   const y=1.3+(i*0.5);
   txt(s7,uid('gf'),0.55,y,2.5,0.22,(g.firma||'').toUpperCase(),8,C.white,{bold:true});
-  txt(s7,uid('gk'),0.55,y+0.22,2.0,0.2,sf(g.kisi,'-'),8,C.amber);
+  txt(s7,uid('gk'),0.55,y+0.22,2.5,0.2,sf(g.kisi,'-')+(g.alan?'  ·  Alan: '+g.alan:''),8,C.amber);
   txt(s7,uid('gd'),3.1,y+0.1,1.6,0.2,sf(g.tarih_veya_sebep || g.title,''),7,C.green);
 }); }
 
@@ -3004,7 +3055,7 @@ if(allPlan.length===0){txt(s7,uid('pn'),5.3,1.3,4.2,0.4,'Planlanan görüşme yo
 else { allPlan.slice(0,4).forEach((g,i)=>{
   const y=1.3+(i*0.5);
   txt(s7,uid('pf'),5.3,y,2.5,0.22,(g.firma||'').toUpperCase(),8,C.white,{bold:true});
-  txt(s7,uid('pk'),5.3,y+0.22,2.0,0.2,sf(g.kisi,'-'),8,C.amber);
+  txt(s7,uid('pk'),5.3,y+0.22,2.55,0.2,sf(g.kisi,'-')+(g.alan?'  ·  Alan: '+g.alan:''),8,C.amber);
   txt(s7,uid('pd'),7.9,y+0.1,1.6,0.2,sf(g.tarih_veya_sebep || g.title,''),7,C.orange);
 }); }
 
@@ -3139,11 +3190,11 @@ ins.slice(0,6).forEach((item,i) => {
 
 const roY=0.9+(Math.min(ins.length,6)*0.48)+0.1;
 
-rect(s10,uid('rb'),0.35,roY,4.5,1.2,C.redBg,0.15);
-rect(s10,uid('ra'),0.35,roY,0.05,1.2,C.red);
-txt(s10,uid('rl'),0.55,roY+0.05,3,0.22,'RİSKLER',10,C.red,{bold:true});
+rect(s10,uid('rb'),0.35,roY,4.5,1.2,C.cardBg,0.15);
+rect(s10,uid('ra'),0.35,roY,0.05,1.2,C.amber);
+txt(s10,uid('rl'),0.55,roY+0.05,3,0.22,'GELİŞİM ALANLARI',10,C.amber,{bold:true});
 sa(ai.risks).slice(0,3).forEach((r,i)=>{
-  txt(s10,uid('rt'),0.55,roY+0.3+(i*0.28),4.1,0.25,'! '+cleanTxt(r).substring(0,170),7,C.ice);
+  txt(s10,uid('rt'),0.55,roY+0.3+(i*0.28),4.1,0.25,'→ '+cleanTxt(r).substring(0,170),7,C.ice);
 });
 
 rect(s10,uid('ob'),5.15,roY,4.5,1.2,C.greenBg,0.15);
