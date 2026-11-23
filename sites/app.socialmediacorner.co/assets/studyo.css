@@ -685,3 +685,27 @@ dialog.kr-stok-dlg{width:min(760px,calc(100% - var(--g3)))}
   .kr-nokta[aria-current="true"]::before{background:Highlight}
   .kr-stok-foto{border:1px solid ButtonText}
 }
+
+/* ---- A9a: üst çubukta Planlar + misafir (Giriş yap/Kayıt ol) ↔ üye (hesap menüsü); durum assets/ust-hesap.js'te ---- */
+.st-ust-link{display:inline-flex;align-items:center;min-height:var(--dokunma);padding:0 var(--s3);border-radius:var(--r-m);color:var(--ink2);font:600 .875rem/1 var(--govde);text-decoration:none;white-space:nowrap}
+.st-ust-link:hover{background:var(--yuzey-hover);color:var(--ink)}
+.st-ust-link[aria-current="page"]{color:var(--accent-strong);box-shadow:inset 0 -2px 0 var(--accent)}
+.st-misafir{display:flex;align-items:center;gap:var(--s2);margin-left:var(--s1)}
+.btn-ust{padding:0 var(--s3);font-size:.875rem;white-space:nowrap}
+.st-ust[data-hesap="misafir"] [data-m="uye"],.st-ust[data-hesap="uye"] [data-m="misafir"],.st-ust[data-hesap="uye"] .st-misafir{display:none}
+.st-ust[data-hesap="misafir"] .st-hesap-k{display:none}
+.st-hesap-d .st-av-harf{font:800 .875rem/1 var(--baslik)}
+.st-menu-kim{margin:0 0 var(--s2);padding:var(--s2) var(--s3) var(--s3);border-bottom:1px solid var(--line);color:var(--ink3);font:var(--f-ipucu);overflow-wrap:anywhere}
+.st-menu [aria-busy="true"]{cursor:progress;color:var(--ink3)}
+@media (max-width:1023px){.st-ust[data-hesap="misafir"] .st-teklif-ust{display:none}}
+@media (max-width:768px){
+  .st-ust-link{display:none}
+  .st-ust[data-hesap="misafir"] .st-hesap-k{display:block}
+}
+@media (max-width:640px){.st-misafir{display:none}}
+/* dar ekran: ikon düğmeleri 44px altına sıkışmaz; ≤400px'te logo yazısı yalnız görsel olarak gizlenir (bağlantının adı kalır), 360px'te yatay taşma olmaz */
+.st-ikon-d,.st-hesap-k{flex:none}
+@media (max-width:400px){.st-logo{min-width:var(--dokunma);justify-content:center}.st-logo-yazi{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}}
+.st-dil{min-width:var(--dokunma)}
+/* çok dar ekranda uzun hak metni (ör. "Credits: unknown") taşırmak yerine kısalır; tam metin balonda */
+@media (max-width:400px){.st-ust-sag{min-width:0}.st-hak-k{min-width:0;flex:0 1 auto}.st-hak{max-width:100%}#hak-yazi{min-width:0;overflow:hidden;text-overflow:ellipsis}}

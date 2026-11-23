@@ -107,20 +107,9 @@ function temaKur(){var b=$('#tema');if(!b)return;temaYaz();
   b.addEventListener('click',function(){var t=etkinTema()==='dark'?'light':'dark';root.setAttribute('data-theme',t);depo('smc-tema',t);temaYaz()});
   if(mq){var f=function(){temaYaz()};if(mq.addEventListener)mq.addEventListener('change',f);else if(mq.addListener)mq.addListener(f)}}
 
-/* ---- hesap menüsü: düğme + açılır liste; Esc ve dış tıklama kapatır ---- */
-function menuKur(){var b=$('#hesap-dugme'),m=$('#hesap-menu');if(!b||!m)return;
-  function ac(ac_){m.hidden=!ac_;b.setAttribute('aria-expanded',ac_?'true':'false');if(ac_){var i=$('a,button',m);if(i)i.focus()}}
-  b.addEventListener('click',function(){ac(m.hidden)});
-  d.addEventListener('click',function(e){if(!m.hidden&&!m.contains(e.target)&&!b.contains(e.target))ac(false)});
-  m.addEventListener('keydown',function(e){
-    var o=$$('a,button',m),i=o.indexOf(d.activeElement);
-    if(e.key==='Escape'){e.preventDefault();ac(false);b.focus()}
-    else if(e.key==='ArrowDown'){e.preventDefault();o[(i+1)%o.length].focus()}
-    else if(e.key==='ArrowUp'){e.preventDefault();o[(i-1+o.length)%o.length].focus()}
-    else if(e.key==='Tab'&&((!e.shiftKey&&i===o.length-1)||(e.shiftKey&&i===0)))ac(false);
-  });
-  m.addEventListener('click',function(e){if(e.target.closest('a,button'))setTimeout(function(){ac(false)},0)});
-  /* menüdeki "Marka sesi": smc-ses yalnız #ses-ac/#ses-nav bağlar; burada #ses-ac'e yönlendirilir */
+/* ---- hesap menüsü: aç/kapa, klavye ve misafir/üye görünümü assets/ust-hesap.js'te (A9a).
+   Burada yalnız menüdeki "Marka sesi" kalır: smc-ses yalnız #ses-ac/#ses-nav bağlar; [data-ses] #ses-ac'e yönlendirilir ---- */
+function menuKur(){
   $$('[data-ses]').forEach(function(x){x.addEventListener('click',function(){var a=$('#ses-ac');if(a)setTimeout(function(){a.click()},0)})});
 }
 
