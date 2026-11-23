@@ -11537,6 +11537,28 @@ const POST = {
 const GET = { "/api/sekans-status": sekansStatus, "/api/rakip-analizi-status": rakipStatus };
 const NOT_YET = new Set(["/api/linkedin-oauth", "/api/linkedin-share"]);
 
+// Cloudflare yanıtsız ~2 dakikada 524 verip isteği (ve içinde çalışan akışı) keser.
+// 90 sn'de biten istekler olduğu gibi döner; daha uzunsa yanıt hemen başlar, 15 sn'de bir boşlukla canlı tutulur,
+// sonuç gelince JSON yazılır (JSON.parse baştaki boşluğu yok sayar).
+async function keepAlive(p) {
+  let t;
+  const first = await Promise.race([p.then(r => ({ r }), e => ({ e })), new Promise(res => { t = setTimeout(() => res(null), 90000); })]);
+  clearTimeout(t);
+  if (first) { if (first.e) throw first.e; return first.r; }
+  const { readable, writable } = new TransformStream(), w = writable.getWriter(), enc = new TextEncoder();
+  const ping = () => w.write(enc.encode(" ")).catch(() => {});
+  ping();
+  const iv = setInterval(ping, 15000);
+  (async () => {
+    let body;
+    try { body = await (await p).text(); }
+    catch (e) { console.log("uzun istek hatası", e?.node, e?.stack || e); body = await fail("İşlem sırasında hata oluştu, lütfen tekrar deneyin.", 500).text(); }
+    clearInterval(iv);
+    try { await w.write(enc.encode(body)); await w.close(); } catch {}
+  })();
+  return new Response(readable, { headers: { "content-type": "application/json", "cache-control": "no-store" } });
+}
+
 export default {
   async fetch(req, env, cfctx) {
     const url = new URL(req.url), path = url.pathname.replace(/\/+$/, "");
@@ -11548,7 +11570,7 @@ export default {
       const r = ROUTES.find(x => x.path === path && x.method === req.method);
       if (!r) return fail("Bulunamadı.", 404);
       if (!sameSite(req)) return fail("Bu uç yalnızca salescorner.co üzerinden kullanılabilir.", 403);
-      try { return await runHook(r, req, env, url, cfctx); }
+      try { return await keepAlive(runHook(r, req, env, url, cfctx)); }
       catch (e) { console.log(path, e?.node, e?.stack || e); return fail("İşlem sırasında hata oluştu, lütfen tekrar deneyin.", 500); }
     }
     // Yedek: anahtarlar yoksa Claude tabanlı ilk sürüm.
