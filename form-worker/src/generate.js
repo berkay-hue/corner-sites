@@ -629,7 +629,7 @@ async function quotaRoute(c) {
   const L = limits(env), day = genDay();
   const [anonK, ipK, allK] = await Promise.all([keyOf(env, day, "anon", body.anon), keyOf(env, day, "ip", ipPrefix(ip)), keyOf(env, day, "all")]);
   const n = await counts(db, day, { anon: anonK, ip: ipK, all: allK });
-  return json({ ok: true, charged: false, ...quota(L, n) }, 200, origin);
+  return json({ ok: true, charged: false, ...quota(L, n), stock: Boolean(env.PEXELS_API_KEY) }, 200, origin);
 }
 
 async function event(c) {
@@ -653,18 +653,76 @@ async function event(c) {
   return json(null, 204, origin);
 }
 
-const ROUTES = { "/gen/linkedin": ["linkedin", linkedin], "/gen/instagram": ["instagram", instagram], "/gen/blog": ["blog", blog], "/gen/video": ["video", video], "/gen/refine": ["refine", refine], "/gen/quota": ["quota", quotaRoute], "/gen/event": ["event", event] };
+// /gen/stock (GET): Pexels fotoğraf araması; kullanıcı Stüdyo'da sahneye görseli kendi seçer. Anahtar yalnız sunucuda
+// (PEXELS_API_KEY secret); yoksa 503 not_ready. Hak düşürmez; IP başına ve günlük toplam sayaçla sınırlı (st / sa).
+// Yanıt ince: yalnız kimlik, boyut, alt, fotoğrafçı, Pexels sayfası ve src çeşitleri; üst akış hatası ayrıntısız 502.
+const STOCK_URL = "https://api.pexels.com/v1/search";
+const STOCK_ORIENT = ["landscape", "portrait", "square"];
+const STOCK_SRC = ["original", "large2x", "large", "medium", "small", "portrait", "landscape", "tiny"];
+const STOCK_PER_PAGE = 15, STOCK_TIMEOUT = 8000;
+const stockSrc = u => typeof u === "string" && /^https:\/\/images\.pexels\.com\//.test(u) ? u : null;
+const stockLink = u => typeof u === "string" && /^https:\/\/(www\.)?pexels\.com\//.test(u) ? u : null;
+function stockPhoto(p) {
+  if (!p || typeof p !== "object" || !Number.isFinite(p.id) || !p.src || typeof p.src !== "object") return null;
+  const src = {};
+  for (const k of STOCK_SRC) { const u = stockSrc(p.src[k]); if (u) src[k] = u; }
+  if (!src.medium && !src.large) return null;
+  const str = (v, m) => typeof v === "string" ? v.slice(0, m) : "";
+  return {
+    id: p.id, width: Number(p.width) || 0, height: Number(p.height) || 0, alt: str(p.alt, 300),
+    photographer: str(p.photographer, 120), photographer_url: stockLink(p.photographer_url), url: stockLink(p.url), src,
+  };
+}
+async function stockRoute(c) {
+  const { env, db, origin, ip, query, io } = c;
+  const q = (query.get("q") || "").normalize("NFC").replace(/[\u0000-\u001f\u007f]+/g, " ").replace(/\s+/g, " ").trim();
+  if (!q || cp(q) > 100) return fail("bad_input", 400, origin, { field: "q" });
+  const o = query.get("orientation");
+  if (o && !STOCK_ORIENT.includes(o)) return fail("bad_input", 400, origin, { field: "orientation" });
+  const pg = query.get("page");
+  const page = pg == null || pg === "" ? 1 : /^\d{1,3}$/.test(pg) && +pg >= 1 && +pg <= 100 ? +pg : 0;
+  if (!page) return fail("bad_input", 400, origin, { field: "page" });
+  if (!env.PEXELS_API_KEY) return fail("not_ready", 503, origin);
+  const day = genDay();
+  const [ipK, allK] = await Promise.all([keyOf(env, day, "st", ipPrefix(ip)), keyOf(env, day, "sa", "global")]);
+  const r = await reserve(db, day, [
+    { name: "ip", kind: "st", key: ipK, inc: 1, max: int(env.GEN_STOCK_IP_PER_DAY, 120) },
+    { name: "all", kind: "sa", key: allK, inc: 1, max: int(env.GEN_STOCK_PER_DAY, 2000) },
+  ]);
+  if (!r.ok) return fail("limit", 429, origin, { scope: r.failed.includes("ip") ? "ip" : "global" });
+  const u = new URL(STOCK_URL);
+  u.searchParams.set("query", q);
+  u.searchParams.set("per_page", String(STOCK_PER_PAGE));
+  u.searchParams.set("page", String(page));
+  if (o) u.searchParams.set("orientation", o);
+  let data;
+  try {
+    const res = await io.fetch(u.toString(), { method: "GET", headers: { authorization: env.PEXELS_API_KEY, accept: "application/json" }, signal: AbortSignal.timeout(STOCK_TIMEOUT) });
+    if (!res.ok) { console.log("stock", res.status); return fail("upstream", 502, origin); }
+    data = await res.json();
+  } catch (e) {
+    console.log("stock", e?.name || "error");
+    return fail("upstream", 502, origin);
+  }
+  if (!data || !Array.isArray(data.photos)) return fail("upstream", 502, origin);
+  const photos = data.photos.slice(0, STOCK_PER_PAGE).map(stockPhoto).filter(Boolean);
+  const total = Number.isFinite(data.total_results) ? data.total_results : photos.length;
+  return json({ ok: true, photos, page, per_page: STOCK_PER_PAGE, total_results: total, next: Boolean(data.next_page) && page < 100 }, 200, origin);
+}
+
+const ROUTES = { "/gen/stock": ["stock", stockRoute], "/gen/linkedin": ["linkedin", linkedin], "/gen/instagram": ["instagram", instagram], "/gen/blog": ["blog", blog], "/gen/video": ["video", video], "/gen/refine": ["refine", refine], "/gen/quota": ["quota", quotaRoute], "/gen/event": ["event", event] };
 
 export async function generate(req, url, env, origin, ctx, io = {}) {
   const route = ROUTES[url.pathname];
-  if (!route || req.method !== "POST") return fail("not_found", 404, origin);
+  const isGet = route?.[0] === "stock";
+  if (!route || req.method !== (isGet ? "GET" : "POST")) return fail("not_found", 404, origin);
   if (!genEnabled(env) || !env.DB) return fail("not_ready", 503, origin);
   if (!origin) return fail("origin", 403, null);
   const [name, handler] = route;
-  const { tooLarge, body } = await readBody(req, BODY_MAX[name]);
+  const { tooLarge, body } = isGet ? { tooLarge: false, body: null } : await readBody(req, BODY_MAX[name]);
   if (tooLarge) return fail("too_large", 413, origin);
   try {
-    return await handler({ env, db: env.DB, body, origin, ctx, io: { fetch: io.fetch || fetch }, ip: req.headers.get("cf-connecting-ip") || "", token: bearerToken(req) });
+    return await handler({ env, db: env.DB, body, query: url.searchParams, origin, ctx, io: { fetch: io.fetch || fetch }, ip: req.headers.get("cf-connecting-ip") || "", token: bearerToken(req) });
   } catch (e) {
     // 0014 uygulanmadıysa tablo yok
     if (/no such (table|column)/i.test(e?.message || "")) return fail("not_ready", 503, origin);

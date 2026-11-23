@@ -41,6 +41,11 @@ button,input,select,textarea{font:inherit;color:inherit}
 .tema{text-decoration:none;font-weight:500}
 .tema-ikon{width:16px;height:16px;border:2px solid currentColor;border-radius:50%;box-shadow:inset 6px 0 0 currentColor}
 .tema[data-tema-etkin="dark"] .tema-ikon{background:currentColor}
+/* Tema düğmesi ikonu Stüdyo #tema ile aynı çizim: açık temada ay (koyuya geç), koyu temada güneş (açığa geç) */
+.tema-svg{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
+.tema .ikon-gunes{display:none}
+.tema[data-tema-etkin="dark"] .ikon-gunes{display:block}
+.tema[data-tema-etkin="dark"] .ikon-ay{display:none}
 /* S3b: tema düğmesi her genişlikte yalnız ikon; ad aria-label/title'da ("Koyu temaya geç"). */
 .tema-yazi{display:none}
 
