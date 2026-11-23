@@ -181,7 +181,9 @@ async function reset(c) {
   // Token tek kullanımlık: kontrol edilirken silinir
   const row = await env.DB.prepare("DELETE FROM password_resets WHERE token_hash = ? AND expires_at > datetime('now') RETURNING user_id")
     .bind(await sha256(token)).first();
-  const user = row && await env.DB.prepare("SELECT * FROM users WHERE id = ? AND site = ?").bind(row.user_id, site).first();
+  let user = row && await env.DB.prepare("SELECT * FROM users WHERE id = ? AND site = ?").bind(row.user_id, site).first();
+  // Rolü sitede kabul edilmeyen hesap (yalnız elle DB) yok sayılır: şifre değişmez, oturum açılmaz (brandcorner.co'da her rol)
+  if (user && !roleAllowed(site, user.role)) user = null;
   await attempt(env, ip, user ? user.email : null, "reset", user ? 1 : 0);
   if (!user) throw new Bad("reset_invalid");
   // Şifre değişince açık oturumlar kapanır

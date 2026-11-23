@@ -4012,3 +4012,34 @@ test("A5-2w: bayrak kapalıyken ('0', yok, 'true', ' 1') app ve önizlemesi her 
   assert.deepEqual(fail(await api(env, APP)("GET", "/app/campaigns")), [403, "origin"]);
   assert.deepEqual(fail(await api(env, APP)("POST", "/auth/login", { body: { email: "a@x.co", password: "x" } })), [403, "origin"]);
 });
+
+test("A5-2w denetim: app'te rolü brand olmayan hesap şifre sıfırlamayla da oturum alamaz; brandcorner'da sıfırlama aynı", async () => {
+  const { db, env, join } = await setup({ ACCOUNTS_ENABLED: "1" });
+  const app = api(env, APP), bc = api(env, BC);
+  const r = await app("POST", "/auth/register", { body: { name: "a", email: "a@x.co", password: "sifre-12345", consent: true, hp: "", t: 2000 } });
+  assert.equal(r.status, 200);
+  const id = r.body.user.id, inf = await join("influencer", "i@x.co");
+  const pass = uid => db.prepare("SELECT pass FROM users WHERE id = ?").get(uid).pass;
+  const link = (uid, tok) => db.prepare("INSERT INTO password_resets (token_hash, user_id, expires_at) VALUES (?, ?, datetime('now', '+60 minutes'))").run(hash(tok), uid);
+  const body = tok => ({ body: { token: tok, password: "yeni-sifre-1" } });
+  for (const role of ["influencer", "agency", "Brand", ""]) {
+    db.prepare("UPDATE users SET role = ? WHERE id = ?").run(role, id);
+    const before = pass(id), n = count(db, "sessions"), tok = `${role || "bos"}`.padEnd(43, "x");
+    link(id, tok);
+    assert.deepEqual(fail(await app("POST", "/auth/reset", body(tok))), [400, "reset_invalid"], role);
+    // Şifre değişmez, oturum açılmaz, bağlantı tek kullanımlık kalır
+    assert.equal(pass(id), before, role);
+    assert.equal(count(db, "sessions"), n, role);
+    assert.deepEqual(fail(await app("POST", "/auth/reset", body(tok))), [400, "reset_invalid"], role);
+  }
+  // Rol brand'a dönünce app'te sıfırlama çalışır; brandcorner.co'da influencer sıfırlaması bugünkü gibi
+  db.prepare("UPDATE users SET role = 'brand' WHERE id = ?").run(id);
+  link(id, "c".repeat(43));
+  const ok1 = await app("POST", "/auth/reset", body("c".repeat(43)));
+  assert.deepEqual([ok1.status, ok1.body.user.role], [200, "brand"]);
+  assert.equal((await app("GET", "/auth/me", { token: ok1.body.token })).status, 200);
+  link(inf.id, "d".repeat(43));
+  const ok2 = await bc("POST", "/auth/reset", body("d".repeat(43)));
+  assert.deepEqual([ok2.status, ok2.body.user.role], [200, "influencer"]);
+  assert.equal((await bc("GET", "/app/applications", { token: ok2.body.token })).status, 200);
+});
