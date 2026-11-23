@@ -10,9 +10,11 @@
 // hesap bağlanınca bu gönderiler silinir.
 // Akış: POST /app/connect → sağlayıcı → GET /oauth/<platform>/callback (index.js; OAUTH_REDIRECT_BASE yoksa
 // worker'ın kendi adresi) → panel /panel?oauth=<p>&result=pending#ticket=<bilet> → POST /app/connect/finish.
+// (/panel brandcorner.co'nun dönüş yolu; diğer hesap siteleri src/sites.js backPath.)
 // Token takası yalnızca bileti getiren oturum akışı başlatan kullanıcıysa yapılır; callback'i açan tarayıcı
 // başka birinin olsa bile (RFC 6749 §10.12) hesap ona bağlanmaz.
 import { metricsEnabled, parseAudience } from "./metrics.js";
+import { backPath } from "./sites.js";
 
 export const NOT_CONFIGURED = "yapılandırılmadı", NO_DATA = "veri yok";
 // OAUTH: bağlanabilen (OAuth akışı var). SYNCED: metrikleri senkronlanan. LISTED: bağlantı listesi (sıra).
@@ -179,17 +181,19 @@ export function returnBase(env, origin, site) {
   return `https://${site}`;
 }
 
-// Tek kullanımlık state üretir, sağlayıcının onay sayfası adresini döndürür. c: {api, origin, site}
-// origin platform()'un izin verdiği site (brandcorner.co ya da önizlemesi); dönüş adresi returnBase ile kaydedilir.
+// Tek kullanımlık state üretir, sağlayıcının onay sayfası adresini döndürür. c: {api, origin, site, user}
+// origin platform()'un izin verdiği site (brandcorner.co, ACCOUNTS_ENABLED açıkken app.socialmediacorner.co ya da
+// önizlemeleri); dönüş adresi returnBase + sitenin sabit dönüş yolu (src/sites.js backPath, kullanıcının diline göre;
+// brandcorner /panel). Yol istekten alınmaz; callback yalnız burada kaydedilen adrese yönlendirir (açık yönlendirme yok).
 // PKCE'li sağlayıcıda code_verifier şifreli olarak state satırına yazılır, takasta (finishOAuth) gönderilir.
-export async function startOAuth(env, userId, p, { api, origin, site }) {
+export async function startOAuth(env, userId, p, { api, origin, site, user }) {
   const state = b64u(crypto.getRandomValues(new Uint8Array(32))), redirect = redirectUri(env, api, p);
   const verifier = PROVIDERS[p].pkce ? b64u(crypto.getRandomValues(new Uint8Array(32))) : null;
   await env.DB.batch([
     env.DB.prepare("DELETE FROM oauth_states WHERE expires_at <= datetime('now')"),
     env.DB.prepare(
       "INSERT INTO oauth_states (state_hash, user_id, platform, return_to, redirect_uri, code_verifier, expires_at) VALUES (?, ?, ?, ?, ?, ?, datetime('now', ?))",
-    ).bind(await sha256(state), userId, p, `${returnBase(env, origin, site)}/panel`, redirect,
+    ).bind(await sha256(state), userId, p, `${returnBase(env, origin, site)}${backPath(site, user?.lang)}`, redirect,
       verifier && await encrypt(env, verifier), `+${STATE_MINUTES} minutes`),
   ]);
   return authorizeUrl(env, p, state, redirect, verifier && await pkceChallenge(verifier));
@@ -1406,7 +1410,7 @@ const redirect = to => new Response(null, { status: 302, headers: { location: to
 const EXPIRED = "Bağlantı geçersiz ya da süresi dolmuş. Panelden yeniden bağlanmayı deneyin.";
 
 // Callback hiçbir hesabı bağlamaz. Sağlayıcının kodunu şifreli saklar, state'i tek kullanımlık bir bilete
-// çevirir ve paneli /panel?oauth=<p>&result=pending#ticket=<bilet> adresine gönderir (bilet sunucu
+// çevirir ve paneli <return_to>?oauth=<p>&result=pending#ticket=<bilet> adresine gönderir (brandcorner /panel; bilet sunucu
 // loglarına ve Referer'a düşmesin diye fragment'ta). Red: result=denied. State ikinci kez kullanılamaz.
 export async function oauthCallback(req, url, env) {
   const p = /^\/oauth\/([a-z]+)\/callback$/.exec(url.pathname)?.[1];

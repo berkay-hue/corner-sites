@@ -40,7 +40,27 @@ var ACILAR=[
 var SEKTOR={'Yazılım':'yazilim','Danışmanlık':'hizmet','Eğitim':'hizmet','Sağlık':'hizmet'};
 function setKur(ham){return ham.map(function(x,i){var b=ACILAR[i],k={};TONLAR.forEach(function(t,j){k[t[0]]=x.k[j]});
  return {id:b.id,no:b.no,ad:b.ad,alt:b.alt,kanca:k,govde:x.g,ek:x.e,kapanis:x.s,reels:x.r,etiket:x.h}})}
-var SETLER={li:{ticaret:ACILAR,
+/* Faz 2 (A4-2a): IG açıklama örnekleri — /gen/instagram yanıt biçiminde ({angle,text}); sahte, sabit, "örnek" etiketli */
+var IG_ORNEK=[
+ {angle:'hikaye',text:'Geçen salı gece yarısına doğru yüzüncü sipariş geldi. İlk aklıma gelen, ilk müşterimizin “kargoyu üç gün bekledim” mesajıydı. 📦\n\nO mesajdan sonra paketlemeyi baştan kurduk; bugün siparişler ertesi gün yolda.\n\nYüz siparişin arkasında tek bir dürüst geri bildirim var. Bu gönderiyi, bize ilk yazan o müşteriye ithaf ediyoruz.\n\nSenin dönüm noktan hangi mesajdı? Yorumlarda anlat.\n\n#örnek #eticaret #girişimcilik'},
+ {angle:'liste',text:'İlk 100 müşteriden öğrendiğimiz 3 şey 👇\n\n1. Hız, indirimden daha çok konuşuluyor.\n2. Paketin içindeki el yazısı not, en çok paylaşılan fotoğraf oluyor.\n3. Soruya bir saat içinde dönmek, yorumların tonunu değiştiriyor.\n\nListeyi kaydet; ikinci yüz için kendine hatırlat.\n\n#örnek #küçükişletme #müşterideneyimi'},
+ {angle:'gorus',text:'Yüzüncü müşteriyi kutlamadık. ✋\n\nÇünkü asıl eşik yüzüncü değil, neredeyse kaybettiğimiz birinci müşteriydi. Büyümeyi sayılar değil, geri dönen insanlar anlatır.\n\nKatılıyor musun? Fikrini yorumlara yaz.\n\n#örnek #girişimcilik #marka'}
+];
+function igRefine(q){var t=String(q.text||''),c=t.split('\n\n');
+ if(q.op==='shorten')return c.length>3?c.slice(0,2).concat(c.slice(-1)).join('\n\n'):t;
+ if(q.op==='lengthen'){c.splice(Math.max(1,c.length-1),0,'Örnek ek paragraf: bu satır yalnız ÖRNEK modunda eklenir.');return c.join('\n\n')}
+ return '['+(q.tone||'ton')+' · örnek] '+t}
+/* Faz 2 (A4-2b): Reels kanca örnekleri — /gen/instagram kind:reels yanıt biçiminde ({angle,text,say,flags?}); sahte, "örnek" etiketli.
+   merak: ekran metni 60 kod noktasını aşar → sunucudaki gibi flags:["long_hook"] (ölçü satırı hedef uyarısı) */
+var REELS_ORNEK=[
+ {angle:'soru',text:'Yüzüncü siparişi ne getirdi, biliyor musun? (örnek)',say:'Reklam değil, bir şikâyet. İlk müşterimizin mesajını ciddiye aldık ve paketlemeyi baştan kurduk. Bu bir örnek konuşma satırı.'},
+ {angle:'iddia',text:'İndirim değil, hız satıyor. (örnek)',say:'İlk yüz müşteriden öğrendiğimiz tek şey bu: ertesi gün kargo, yüzde yirmi indirimden daha çok konuşuluyor. (örnek)'},
+ {angle:'merak',text:'Yüzüncü müşteriyi kutlamadık; nedenini videonun sonunda söylüyorum (örnek)',say:'Çünkü asıl eşik yüzüncü değil, neredeyse kaybettiğimiz birinci müşteriydi. Sonuna kadar izle. (örnek)',flags:['long_hook']}
+];
+function reelsRefine(q){var t=String(q.text||''),y=String(q.say||'');
+ if(q.op==='shorten'){var c=t.indexOf(';');return{text:c>0?t.slice(0,c)+' (örnek)':t,say:(y.split('. ')[0]||y).replace(/\.?$/,'.')+' (örnek)',flags:[]}}
+ return{text:('['+(q.tone||'ton')+' · örnek] '+t).slice(0,80),say:y,flags:[]}}
+var SETLER={reels:REELS_ORNEK,ig:IG_ORNEK,li:{ticaret:ACILAR,
  yazilim:setKur([
   {k:['Yüzüncü ücretli hesap açıldığında ekipçe ekrana baktık, kimse bir şey demedi. Hepimiz aynı şeyi düşünüyorduk: ilk demoda ürün çökmüştü.',
    'Bu ay yüzüncü ücretli müşterimize ulaştık. Bu eşiğe gelmemizi sağlayan karar, ilk demoda yaşadığımız bir çöküşün ardından verildi.',
@@ -82,7 +102,13 @@ var SETLER={li:{ticaret:ACILAR,
 
 /* ---- mock durum seçici: 37 durum (404 → /404.html), seçici + #d=durum ---- */
 var ORNEK_KONU='İlk 100 müşteriye ulaştık';
+/* A4-2c: örnek marka sesi profili (sahte); ses-* durumları yalnız IG/Reels sayfalarında */
+var SES=window.SMCSes,SES_VAR=!!(SES&&SES.ac)&&(S.ARAC==='ig'||S.ARAC==='reels');
+var ORNEK_SES={name:'Köşe Kahve',sector:'E-ticaret',audience:'Evde kahve demleyen, yeni çekirdek deneyen 25-40 yaş arası kişiler',adjectives:['sicak','esprili','yalin'],banned:['kaçırma','son şans'],sample:'Bu hafta Etiyopya geldi. Çiçeksi, hafif, sabahları tam kıvamında. Demlerken ne dinliyorsun?',address:'sen',emoji:'few'};
+function sesSifirla(){if(!SES_VAR)return;SES.kapat();SES.depoAc();SES.notYaz('');SES.satirYaz()}
+function sesYaz(){SES.yaz(ORNEK_SES);SES.satirYaz()}
 function sifirla(){
+  sesSifirla();
   durdur();konuHata('');alanHata(hedef,hedefHataEl,'');formNot('');
   if(dlg.open)teklifKapat();
   tForm.reset();
@@ -90,7 +116,10 @@ function sifirla(){
   alanHata(bRiza,bRizaHata,'');alanHata(bEposta,$('#b-eposta-hata'),'');rizaYaz();
   uretMesgul(false);D.scope='anon';D.deneme=0;D.refine=0;D.kartVar=false;D.left=3;D.rid=null;D.taslaklar=null;
 }
-function kartlarKur(n){D.left=n;D.taslaklar=SETLER.li[SEKTOR[D.sektor]]||SETLER.li.ticaret;sonucGoster(false)}
+function kartlarKur(n,uyari){D.left=n;D.taslaklar=S.ARAC==='reels'?SETLER.reels.slice():S.ARAC==='ig'?SETLER.ig.slice():(SETLER.li[SEKTOR[D.sektor]]||SETLER.li.ticaret).slice();
+ /* sonuc-uyari: ilk taslakta sunucu flags'i varmış gibi (kart kısa uyarı gösterir) */
+ if(uyari){var a=D.taslaklar[0],k={},x;for(x in a)if(Object.prototype.hasOwnProperty.call(a,x))k[x]=a[x];k.flags=['banned'];D.taslaklar[0]=k}
+ sonucGoster(false)}
 function bosGoster(){goster('bos',false);durum('Konunu yaz; aynı konuya üç ayrı açıdan taslak gelsin.')}
 function mock(v){
   sifirla();
@@ -100,7 +129,7 @@ function mock(v){
   if(/^(bos|hata-alan|limit-yakinda|vazgecildi)/.test(v)){if(D.ornekKonu&&konu.value===ORNEK_KONU)konu.value='';D.ornekKonu=false}
   else if(!konu.value.trim()){konu.value=ORNEK_KONU;konu.lang='tr';D.ornekKonu=true}
   konuGuncelle();
-  plSec('li');
+  plSec(S.ARAC||'li');
   var k0=D.kartApi;
   switch(v){
   case 'bos':bosGoster();break;
@@ -113,6 +142,7 @@ function mock(v){
   case 'sonuc':kartlarKur(2);break;
   case 'sonuc-1':kartlarKur(1);break;
   case 'sonuc-0':kartlarKur(0);break;
+  case 'sonuc-uyari':kartlarKur(2,true);break;
   case 'duzenlendi':kartlarKur(2);D.kartApi[0].kisalt();break;
   case 'duzenleme-hata':kartlarKur(2);D.kartApi[0].hata();break;
   case 'duzenleme-sinir':D.refine=9;kartlarKur(2);D.kartApi[0].sinir();break;
@@ -125,6 +155,13 @@ function mock(v){
   case 'teklif-gonderim-hata':kartlarKur(2);teklifAc('result',null);$('#t-eposta').value='ad@sirket.com';$('#t-hata').textContent='Gönderilemedi. Alanları kontrol edip tekrar dene.';break;
   case 'bekleme-riza':duvarGoster('anon',false);bEposta.value='ad@sirket.com';rizaHata(false);break;
   case 'bekleme-tamam':duvarGoster('anon',false);bekleBitti(false);break;
+  /* A4-2c marka sesi (G9) */
+  case 'ses-bos':SES.sil();SES.satirYaz();bosGoster();break;
+  case 'ses-dolu':sesYaz();bosGoster();SES.ac($('#ses-ac'));break;
+  case 'ses-hata':sesYaz();bosGoster();SES.ac($('#ses-ac'));(function(){var b={};for(var x in ORNEK_SES)b[x]=ORNEK_SES[x];b.name='Köşe Kahve Kavurma Atölyesi ve Mahalle Fincanı, Moda Şubesi Ekibi';b.banned=['kaçırma','bu fırsatı sakın kaçırma stoklar tükeniyor'];SES.forma(b);SES.hataGoster(SES.dogrula(b).hatalar)})();break;
+  case 'ses-saklanamaz':SES.depoKapat();sesYaz();SES.notYaz(SES.DEPO_MSJ,'uyari');bosGoster();SES.ac($('#ses-ac'));break;
+  case 'ses-silindi':sesYaz();SES.sil();SES.satirYaz();SES.notYaz('Marka sesi silindi.','ok');bosGoster();break;
+  case 'sonuc-ses':sesYaz();kartlarKur(2);SES.notYaz('ÖRNEK: Bu taslaklar örnek marka sesi profiliyle istendi.');break;
   default:
     if(v.indexOf('hata-')===0)hataGoster(v.slice(5),false);
     else if(v.indexOf('limit-')===0)duvarGoster(v.slice(6),false);
@@ -135,15 +172,20 @@ function mock(v){
 
 /* sahte sağlayıcı: prototipteki gecikmeler (1800/420/400/600 ms) */
 function gec(ms,v){return new Promise(function(r){setTimeout(function(){r(v)},RM&&ms<1000?0:ms)})}
+/* testte gövde incelemesi: son sahte istek (yalnız ÖRNEK; hiçbir yere gönderilmez) */
+function kaydet(q){try{S.sonIstek=q?JSON.parse(JSON.stringify(q)):null}catch(e){S.sonIstek=null}}
 S.provKur({
-  linkedin:function(q){return gec(1800).then(function(){return{drafts:SETLER.li[SEKTOR[q.sector]]||SETLER.li.ticaret}})},
-  refine:function(){return gec(420,{})},
+  linkedin:function(q){kaydet(q);return gec(1800).then(function(){return{drafts:SETLER.li[SEKTOR[q.sector]]||SETLER.li.ticaret}})},
+  instagram:function(q){kaydet(q);return gec(1800).then(function(){return{drafts:q&&q.kind==='reels'?SETLER.reels.map(function(x){var o={angle:x.angle,text:x.text,say:x.say};if(x.flags)o.flags=x.flags.slice();return o}):SETLER.ig.map(function(x){return{angle:x.angle,text:x.text}})}})},
+  /* LI: {} → yerel düzey; IG (kind:caption): sahte metin; Reels (kind:reels): sahte text+say, flags:[] (uyarı kalkar) */
+  refine:function(q){kaydet(q);return gec(420,q&&q.kind==='reels'?reelsRefine(q):q&&q.kind==='caption'?{text:igRefine(q)}:{})},
   quota:function(){return gec(400).then(function(){return{left:D.left}})},
   submit:function(){return gec(600,{ok:true})}
 });
 
 /* durum seçici (prototipteki #durumlar; DOM API ile) */
-var OPS=["bos","bos-hak0","hata-alan","yukleniyor","yukleniyor-8","yukleniyor-20","vazgecildi","sonuc","sonuc-1","sonuc-0","duzenlendi","duzenleme-hata","duzenleme-sinir","kopya-elle","hata-bad_input","hata-too_large","hata-origin","hata-bot","hata-slow_down","hata-refused","hata-refused-charged","hata-llm_fail","hata-llm_fail-charged","hata-llm_busy","hata-ag","hata-zaman","limit-anon","limit-ip","limit-global","kapasite","limit-yakinda","teklif-hata","teklif-tamam","teklif-gonderim-hata","bekleme-riza","bekleme-tamam","404"];
+var OPS=["bos","bos-hak0","hata-alan","yukleniyor","yukleniyor-8","yukleniyor-20","vazgecildi","sonuc","sonuc-1","sonuc-0","sonuc-uyari","duzenlendi","duzenleme-hata","duzenleme-sinir","kopya-elle","hata-bad_input","hata-too_large","hata-origin","hata-bot","hata-slow_down","hata-refused","hata-refused-charged","hata-llm_fail","hata-llm_fail-charged","hata-llm_busy","hata-ag","hata-zaman","limit-anon","limit-ip","limit-global","kapasite","limit-yakinda","teklif-hata","teklif-tamam","teklif-gonderim-hata","bekleme-riza","bekleme-tamam","404"];
+if(SES_VAR)OPS.splice(OPS.length-1,0,'ses-bos','ses-dolu','ses-hata','ses-saklanamaz','ses-silindi','sonuc-ses');
 function yazi(s){return d.createTextNode(s)}
 var sec=d.createElement('section'),pn=d.createElement('p'),gs=d.createElement('strong'),cd=d.createElement('code'),lb=d.createElement('label'),sel=d.createElement('select');
 sec.className='proto';sec.id='durumlar';sec.tabIndex=-1;sec.setAttribute('aria-label','Prototip durum seçici');

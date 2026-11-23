@@ -1,0 +1,423 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="robots" content="noindex">
+<title>Instagram Caption Drafts · Social Media Corner</title>
+<meta name="description" content="Write your topic in one sentence and get three Instagram caption drafts: a story, a list and a take.">
+<link rel="canonical" href="https://app.socialmediacorner.co/en/instagram-caption-generator">
+<link rel="alternate" hreflang="tr" href="https://app.socialmediacorner.co/instagram-aciklama-uretici">
+<link rel="alternate" hreflang="en" href="https://app.socialmediacorner.co/en/instagram-caption-generator">
+<link rel="alternate" hreflang="x-default" href="https://app.socialmediacorner.co/instagram-aciklama-uretici">
+<meta name="api-base" content="https://corner-forms.berkay-999.workers.dev">
+<meta name="turnstile-sitekey" content="">
+<link rel="icon" href="data:,">
+<script src="/assets/theme.js"></script>
+<link rel="preload" href="/assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/tokens.css">
+<link rel="stylesheet" href="/assets/bilesenler.css">
+<link rel="stylesheet" href="/assets/smc-app.css">
+<script src="/assets/smc-en.js" defer></script>
+<script src="/assets/smc-ses.js" defer></script>
+<script src="/assets/smc-app.js" defer></script>
+</head>
+<body data-arac="ig">
+<a class="atla" href="#icerik">Skip to content</a>
+
+<p class="bant" id="ornek-bant" hidden><strong>SAMPLE</strong><span>This is a prototype — the data is sample.</span><a href="#durumlar">States</a></p>
+
+<header class="ust">
+  <div class="ust-ic">
+    <a class="logo" href="https://socialmediacorner.co/en/" aria-label="Social Media Corner Draft Desk, home">
+      <span class="kose" aria-hidden="true"></span>
+      <span class="logo-ad">Social Media Corner</span>
+      <span class="logo-urun">Draft Desk</span>
+    </a>
+    <div class="ust-sag">
+      <p class="hak"><span class="pips" aria-hidden="true"><i></i><i></i><i></i></span><span id="hak-ust">Today 3 / 3 credits</span></p>
+      <button type="button" class="duz" data-teklif="top">Get a quote</button>
+      <a href="/instagram-aciklama-uretici" hreflang="tr" lang="tr" class="duz dil" aria-label="Türkçe" data-sabit>TR</a>
+      <button type="button" class="duz tema" id="tema" aria-pressed="false" aria-label="Dark theme"><span class="tema-ikon" aria-hidden="true"></span><span class="tema-yazi" aria-hidden="true">Dark theme</span></button>
+    </div>
+  </div>
+  <nav class="araclar" aria-label="Tools"><a href="/en/">LinkedIn post</a><a href="/en/instagram-caption-generator" aria-current="page">Instagram caption</a><a href="/en/reels-hook-generator">Reels hook</a></nav>
+</header>
+
+<main id="icerik" class="masa" tabindex="-1">
+  <div class="brif-kol">
+    <h1>Your topic. Three drafts from us.</h1>
+    <p class="giris" id="giris">A story, a list and a take for your Instagram caption.</p>
+    <noscript><p class="not not-uyari js-yok">This tool runs on JavaScript. <a href="https://socialmediacorner.co/en/">Go to Social Media Corner</a></p></noscript>
+
+    <form id="form" class="sheet brif" method="post" data-sk-noform novalidate aria-label="Draft brief">
+      <div class="alan">
+        <label class="alan-etiket" for="konu">What do you want to post about?</label>
+        <textarea id="konu" name="topic" rows="2" maxlength="300" required aria-required="true" aria-describedby="konu-ipucu konu-hata" placeholder="E.g. We reached our first 100 customers"></textarea>
+        <div class="alan-alt">
+          <p class="ipucu" id="konu-ipucu">One sentence is enough.<span class="sr"> 300 characters at most.</span></p>
+          <span class="sayac" id="konu-sayac" aria-hidden="true">0 / 300</span>
+        </div>
+        <p class="sr" id="konu-sayac-duyuru" role="status"></p>
+        <p class="alan-hata" id="konu-hata" role="alert" hidden></p>
+      </div>
+
+      <div class="kunye" id="kunye">
+        <button type="button" class="kunye-ozet" id="kunye-dugme" aria-expanded="false" aria-controls="kunye-panel"><b>Format, industry, tone</b><span id="kunye-ozet">Instagram · Single post · General · Friendly</span><u>Change</u></button>
+        <div class="kunye-panel" id="kunye-panel">
+          <fieldset class="secim-grup platform">
+            <legend>Platform</legend>
+            <div class="segment">
+              <span class="secim"><input type="radio" name="platform" id="p-ig" value="ig" checked><label for="p-ig">Instagram</label></span>
+            </div>
+          </fieldset>
+          <fieldset class="secim-grup format">
+            <legend>Format</legend>
+            <div class="segment">
+              <span class="secim"><input type="radio" name="format" id="f-post" value="post" checked><label for="f-post">Single post</label></span>
+              <span class="secim"><input type="radio" name="format" id="f-carousel" value="carousel"><label for="f-carousel">Carousel</label></span>
+              <span class="secim"><input type="radio" name="format" id="f-reels" value="reels"><label for="f-reels">Reels caption</label></span>
+            </div>
+          </fieldset>
+          <fieldset class="cipler">
+            <legend>Industry</legend>
+            <div class="cip-sira">
+              <span class="cip"><input type="radio" name="sector" id="s-genel" value="Genel" checked><label for="s-genel">General</label></span>
+              <span class="cip"><input type="radio" name="sector" id="s-eticaret" value="E-ticaret"><label for="s-eticaret">E-commerce</label></span>
+              <span class="cip"><input type="radio" name="sector" id="s-yazilim" value="Yazılım"><label for="s-yazilim">Software</label></span>
+              <span class="cip"><input type="radio" name="sector" id="s-danisman" value="Danışmanlık"><label for="s-danisman">Consulting</label></span>
+              <span class="cip"><input type="radio" name="sector" id="s-egitim" value="Eğitim"><label for="s-egitim">Education</label></span>
+              <span class="cip"><input type="radio" name="sector" id="s-saglik" value="Sağlık"><label for="s-saglik">Healthcare</label></span>
+              <span class="cip"><input type="radio" name="sector" id="s-emlak" value="Gayrimenkul"><label for="s-emlak">Real estate</label></span>
+              <span class="cip"><input type="radio" name="sector" id="s-uretim" value="Üretim"><label for="s-uretim">Manufacturing</label></span>
+            </div>
+          </fieldset>
+          <fieldset class="cipler">
+            <legend>Tone</legend>
+            <div class="cip-sira">
+              <span class="cip"><input type="radio" name="tone" id="t-samimi" value="samimi" checked><label for="t-samimi">Friendly</label></span>
+              <span class="cip"><input type="radio" name="tone" id="t-profesyonel" value="profesyonel"><label for="t-profesyonel">Professional</label></span>
+              <span class="cip"><input type="radio" name="tone" id="t-ogretici" value="ogretici"><label for="t-ogretici">Educational</label></span>
+              <span class="cip"><input type="radio" name="tone" id="t-cesur" value="cesur"><label for="t-cesur">Bold</label></span>
+            </div>
+          </fieldset>
+          <fieldset class="cipler">
+            <legend>Call to action (optional)</legend>
+            <div class="cip-sira">
+              <span class="cip"><input type="radio" name="cta" id="c-yok" value="" checked><label for="c-yok">None</label></span>
+              <span class="cip"><input type="radio" name="cta" id="c-save" value="save"><label for="c-save">Save</label></span>
+              <span class="cip"><input type="radio" name="cta" id="c-comment" value="comment"><label for="c-comment">Comment</label></span>
+              <span class="cip"><input type="radio" name="cta" id="c-profile" value="profile"><label for="c-profile">Profile</label></span>
+              <span class="cip"><input type="radio" name="cta" id="c-dm" value="dm"><label for="c-dm">DM</label></span>
+              <span class="cip"><input type="radio" name="cta" id="c-link" value="link"><label for="c-link">Link</label></span>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+
+      <div class="ses-satir" id="ses-satir">
+        <p class="ses-durum"><span id="ses-etiket">Brand voice:</span> <span class="ses-ad" id="ses-ad">none</span> <span aria-hidden="true">·</span> <button type="button" class="btn btn-cizgi btn-kucuk" id="ses-ac" aria-haspopup="dialog" aria-describedby="ses-etiket ses-ad">Add</button></p>
+        <p class="not" id="ses-not" role="status" hidden></p>
+      </div>
+
+      <div class="sr" aria-hidden="true"><label>Leave this field empty <input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
+
+      <div class="gonder">
+        <button type="submit" class="btn btn-ana" id="uret" aria-label="Write three drafts, 1 credit" aria-describedby="hak-alt"><span class="uret-yazi">Write three drafts</span><span class="ayirici" aria-hidden="true">│</span><span class="bedel">1 credit</span></button>
+        <p class="gonder-not"><span class="pips" aria-hidden="true"><i></i><i></i><i></i></span><span id="hak-alt">Uses 1 credit · 3 of 3 left today</span></p>
+        <p class="ipucu" id="uret-not" hidden>Your current three drafts will be replaced by new ones.</p>
+        <p class="not not-uyari" id="form-not" role="alert" hidden></p>
+      </div>
+      <div class="turnstile" id="turnstile"></div>
+      <div class="ornekler" id="ornekler" role="group" aria-label="Sample topics">
+        <span id="ornek-etiket" aria-hidden="true">Examples:</span>
+        <button type="button" class="ornek" data-ornek="İlk 100 müşteriye ulaştık">First 100 customers</button>
+        <button type="button" class="ornek" data-ornek="Yeni ofisimize taşındık">New office</button>
+        <button type="button" class="ornek" data-ornek="Bir teslimat hatasından çıkardığımız ders">Lesson from a mistake</button>
+      </div>
+      <p class="kvkk">Your topic text is not stored; it is sent to an AI provider (USA) to produce the drafts. Don’t enter personal data. <a href="https://socialmediacorner.co/kvkk">KVKK privacy notice</a></p>
+    </form>
+  </div>
+
+  <section id="sonuc" aria-labelledby="sonuc-baslik">
+    <div class="sonuc-bas">
+      <h2 id="sonuc-baslik" tabindex="-1">Your drafts will appear here</h2>
+      <p class="durum" id="durum" role="status" aria-live="polite">Write your topic; get drafts from three different angles.</p>
+    </div>
+
+    <div id="p-bos">
+      <ol class="acilar">
+        <li class="aci"><span class="no" aria-hidden="true">01</span><h3>Story</h3><p>Opens with a moment, closes with a lesson.</p></li>
+        <li class="aci"><span class="no" aria-hidden="true">02</span><h3>List</h3><p>Skimmable points; worth saving.</p></li>
+        <li class="aci"><span class="no" aria-hidden="true">03</span><h3>Take</h3><p>A clear claim; it invites comments.</p></li>
+      </ol>
+      <p class="bos-not">Copy the one you like and finish it in your own voice.</p>
+      <div class="kat-ornek">
+        <p>Each draft shows a fold line:</p>
+        <div class="fold" aria-hidden="true"><span id="kat-devam">… more</span></div>
+        <p id="kat-bos">In the Instagram feed only the first ~125 characters of the caption show; the rest sits behind “… more”.</p>
+      </div>
+    </div>
+
+    <div id="p-yukleniyor" class="yigin" hidden>
+      <!-- tur-1: Vazgeç iskeletlerin üstünde; 360×640 ve tablette kaydırmadan görünür -->
+      <div class="alt-sira"><button type="button" class="btn btn-cizgi btn-kucuk" id="vazgec">Cancel</button></div>
+      <div class="sheet iskelet" aria-hidden="true"><span class="no">01</span><h3>Story</h3><div class="satirlar"><div class="satir"></div><div class="satir"></div><div class="satir"></div><div class="satir"></div></div></div>
+      <div class="sheet iskelet" aria-hidden="true"><span class="no">02</span><h3>List</h3><div class="satirlar"><div class="satir"></div><div class="satir"></div><div class="satir"></div><div class="satir"></div></div></div>
+      <div class="sheet iskelet" aria-hidden="true"><span class="no">03</span><h3>Take</h3><div class="satirlar"><div class="satir"></div><div class="satir"></div><div class="satir"></div><div class="satir"></div></div></div>
+    </div>
+
+    <!-- tur-1: role=alert kalktı; tek duyuru #durum'dan (ya da odaklanan başlıktan), kod satırı canlı bölge dışında. D2: Tekrar dene mürekkep düğme -->
+    <div id="hata-yuva">
+      <div id="p-hata" hidden>
+        <div class="sheet hata">
+          <h3 id="hata-baslik" tabindex="-1">It didn’t work this time; try again.</h3>
+          <p id="hata-metin"></p>
+          <p class="hak-cumle" id="hata-hak">No credit used.</p>
+          <div class="alt-sira">
+            <button type="button" class="btn btn-ink" id="hata-tekrar">Try again</button>
+          </div>
+          <p class="sessiz"><a href="#teklif-yedek" data-teklif="error">If you’d rather not wait, you can get a quote from the team.</a></p>
+          <p class="kod" id="hata-kod">Code: llm_fail · Request no: 7f3a91c2</p>
+        </div>
+      </div>
+    </div>
+
+    <div id="p-sonuc" class="yigin" hidden>
+      <p class="not" id="uyari" hidden></p>
+      <p class="ipucu" id="kat-ipucu">Kesik çizgi kat çizgisidir: Instagram akışında ilk ~125 karakter görünür. Metinler örnektir; konuna göre değişmez.</p>
+      <div class="yigin" id="kartlar" aria-live="off" aria-busy="false"></div>
+      <div class="alt-sira">
+        <button type="button" class="btn btn-cizgi" id="yeniden" aria-label="Regenerate, 1 credit" aria-describedby="yeniden-not"><span>Regenerate</span><span class="ayirici" aria-hidden="true">│</span><span class="bedel">1 credit</span></button>
+        <p class="ipucu" id="yeniden-not">Your current three drafts will be replaced by new ones. <span id="yeniden-hak">2 of 3 left today.</span></p>
+      </div>
+    </div>
+
+    <div id="p-duvar" hidden>
+      <div class="sheet duvar">
+        <h3 id="duvar-baslik" tabindex="-1">You’ve used today’s 3 credits; they renew at midnight.</h3>
+        <p id="duvar-metin">You don’t need to do anything; 3 credits open again tomorrow. If you’d rather not wait, there are two more options, both optional.</p>
+        <dl class="dokum" id="duvar-dokum">
+          <div><dt>Used</dt><dd>3 / 3 credits</dd></div>
+          <div><dt>Renews</dt><dd>midnight (Istanbul time)</dd></div>
+          <div><dt>Asked of you</dt><dd>nothing</dd></div>
+        </dl>
+        <p class="ipucu" id="duvar-taslak" hidden>The drafts you made today are above. Copying needs no credit.</p>
+      </div>
+    </div>
+
+    <div id="cikislar" class="cikislar" hidden>
+      <section class="cikis sheet" id="bekleme" aria-labelledby="c-bekle">
+        <h4 class="cikis-baslik" id="c-bekle" tabindex="-1">Waitlist for the account version</h4>
+        <p id="b-vaat">Be the first to hear when the account version opens: brand voice, calendar, team approval.</p>
+        <p class="ipucu" id="b-durust">No date yet. This list is used only for that announcement.</p>
+        <form id="b-form" method="post" data-sk-noform novalidate>
+          <div class="alan-k">
+            <label for="b-eposta">E-mail <span class="zor">(required)</span></label>
+            <input type="email" id="b-eposta" name="email" autocomplete="email" inputmode="email" required pattern=".+@[^@]+\.[^@.]{2,}" aria-describedby="b-eposta-hata">
+            <p class="alan-hata" id="b-eposta-hata" role="alert" hidden></p>
+          </div>
+          <details>
+            <summary>Add name and role (optional)</summary>
+            <div class="alan-k">
+              <label for="b-ad">Name</label>
+              <input type="text" id="b-ad" name="name" autocomplete="name">
+            </div>
+            <fieldset class="cipler cipler-ara">
+              <legend>Role</legend>
+              <div class="cip-sira">
+                <span class="cip"><input type="radio" name="role" id="r-isletme" value="isletme"><label for="r-isletme">Business</label></span>
+                <span class="cip"><input type="radio" name="role" id="r-ajans" value="ajans"><label for="r-ajans">Agency</label></span>
+                <span class="cip"><input type="radio" name="role" id="r-serbest" value="serbest"><label for="r-serbest">Freelancer</label></span>
+              </div>
+            </fieldset>
+          </details>
+          <div>
+            <label class="onay" for="b-riza">
+              <input type="checkbox" id="b-riza" name="consent" aria-describedby="b-riza-hata">
+              <span><b>Explicit consent.</b> <span id="b-riza-yazi">I agree to my e-mail address being processed for the account-version announcement.</span> <span class="zor">(required)</span></span>
+            </label>
+            <p class="kvkk"><a href="https://socialmediacorner.co/kvkk">KVKK privacy notice</a></p>
+            <p class="alan-hata" id="b-riza-hata" role="alert" hidden></p>
+          </div>
+          <label class="onay" for="b-ileti">
+            <input type="checkbox" id="b-ileti" name="marketing">
+            <span><b>Marketing permission (optional).</b> I’d also like content and campaign e-mails from Social Media Corner.</span>
+          </label>
+          <button type="submit" class="btn btn-ana" id="b-gonder" aria-disabled="true" aria-describedby="b-ipucu">Add me to the list</button>
+          <p class="ipucu" id="b-ipucu">The button unlocks once you tick the explicit consent box.</p>
+        </form>
+        <p class="not not-ok" id="b-tamam" role="status" tabindex="-1" hidden></p>
+      </section>
+      <section class="cikis sheet" aria-labelledby="c-biz">
+        <h4 class="cikis-baslik" id="c-biz" tabindex="-1">Get a quote from the team</h4>
+        <p>Strategy, visuals and account management sit with the Social Media Corner team. Leave your e-mail and we’ll prepare a quote for your brand.</p>
+        <p><button type="button" class="btn btn-cizgi" data-teklif="limit">Get a quote</button></p>
+      </section>
+    </div>
+  </section>
+</main>
+
+<aside class="kopru ters" id="kopru" aria-labelledby="kopru-b">
+  <div class="kopru-ic">
+    <div>
+      <p class="ust-etiket">DONE FOR YOU</p>
+      <h2 id="kopru-b">A draft is a start. The rest is teamwork.</h2>
+      <p>This tool writes the first draft. Strategy, visuals and account management stay with the Social Media Corner team.</p>
+    </div>
+    <button type="button" class="btn btn-ters" data-teklif="footer">Get a quote</button>
+  </div>
+</aside>
+
+<section id="teklif-yedek" class="teklif-yedek" aria-labelledby="ty-baslik">
+  <h2 id="ty-baslik" tabindex="-1">Get a quote</h2>
+  <p>The team replies by e-mail; the quote is prepared around your needs. Your topic text is not attached to this form.</p>
+  <p><a href="https://socialmediacorner.co/en/contact#form">Open the quote form on socialmediacorner.co</a></p>
+</section>
+
+<footer class="alt">
+  <span>© 2026 Social Media Corner, a Corner Group company</span>
+  <a href="https://socialmediacorner.co/kvkk">KVKK privacy notice</a>
+  <a href="https://socialmediacorner.co/en/">socialmediacorner.co</a>
+</footer>
+
+<dialog id="teklif" aria-labelledby="teklif-baslik">
+  <div class="sheet dlg">
+    <div class="dlg-bas">
+      <h2 id="teklif-baslik" tabindex="-1">Get a quote</h2>
+      <button type="button" class="btn btn-cizgi btn-kucuk" id="teklif-kapat" hidden>Close</button>
+    </div>
+    <p class="not not-hata" id="t-hata" role="alert"></p>
+    <form id="t-form" method="post" data-sk-noform novalidate>
+      <p class="ipucu">The team replies by e-mail; the quote is prepared around your needs.</p>
+      <div class="alan-k">
+        <label for="t-eposta">E-mail <span class="zor">(required)</span></label>
+        <input type="email" id="t-eposta" name="email" autocomplete="email" inputmode="email" required pattern=".+@[^@]+\.[^@.]{2,}" aria-describedby="t-eposta-hata">
+        <p class="alan-hata" id="t-eposta-hata" role="alert" hidden></p>
+      </div>
+      <div class="alan-k">
+        <label for="t-ad">Name <span class="zor">(optional)</span></label>
+        <input type="text" id="t-ad" name="name" autocomplete="name">
+      </div>
+      <div class="alan-k">
+        <label for="t-sirket">Company <span class="zor">(optional)</span></label>
+        <input type="text" id="t-sirket" name="company" autocomplete="organization">
+      </div>
+      <div class="alan-k">
+        <label for="t-sektor">Industry <span class="zor">(optional)</span></label>
+        <select id="t-sektor" name="sector">
+          <option value="">Select</option>
+          <option>E-commerce</option><option>Software</option><option>Consulting</option><option>Education</option><option>Healthcare</option><option>Real estate</option><option>Manufacturing</option><option>Other</option>
+        </select>
+      </div>
+      <input type="hidden" id="t-kaynak" name="src" value="">
+      <p class="ipucu">Your topic text is not attached to this form.</p>
+      <div class="dlg-alt">
+        <button type="submit" class="btn btn-ana">Request a quote</button>
+        <button type="button" class="btn btn-cizgi" id="teklif-vazgec">Cancel</button>
+      </div>
+      <div class="sonra">
+        <p><b>What happens next</b></p>
+        <ol>
+          <li>You send the form; your topic text is not attached.</li>
+          <li>The team replies by e-mail.</li>
+          <li>You get a quote built around your needs. You don’t have to accept it.</li>
+        </ol>
+      </div>
+      <p class="sessiz" hidden>Prefer to talk instead of writing? <a href="https://socialmediacorner.co/en/contact" target="_blank" rel="noopener" data-src="calendly">pick a time (new tab)</a></p>
+      <p class="kvkk">Your details are used only to prepare the quote. <a href="https://socialmediacorner.co/kvkk">KVKK privacy notice</a></p>
+    </form>
+    <p class="not not-ok" id="t-tamam" role="status" tabindex="-1" hidden></p>
+  </div>
+</dialog>
+<dialog id="ses" class="ses-dlg" aria-labelledby="ses-baslik">
+  <div class="sheet dlg">
+    <div class="dlg-bas">
+      <h2 id="ses-baslik" tabindex="-1">Brand voice</h2>
+      <button type="button" class="btn btn-cizgi btn-kucuk" id="ses-kapat">Close</button>
+    </div>
+    <p class="ipucu">Optional. Drafts are written in your brand’s voice; you can generate without a profile too.</p>
+    <p class="not not-uyari" id="ses-depo" role="status" hidden></p>
+    <form id="ses-form" data-sk-noform novalidate>
+      <div class="alan-k">
+        <label for="ses-ad-g">Brand name <span class="zor">(optional)</span></label>
+        <input type="text" id="ses-ad-g" name="name" maxlength="60" autocomplete="organization" aria-describedby="ses-name-hata">
+        <p class="alan-hata" id="ses-name-hata" role="alert" hidden></p>
+      </div>
+      <div class="alan-k">
+        <label for="ses-sektor">Sector <span class="zor">(optional)</span></label>
+        <select id="ses-sektor" name="sector" aria-describedby="ses-sektor-ipucu"><option value="">None</option><option value="Genel">General</option><option value="E-ticaret">E-commerce</option><option value="Yazılım">Software</option><option value="Danışmanlık">Consulting</option><option value="Eğitim">Education</option><option value="Sağlık">Healthcare</option><option value="Gayrimenkul">Real estate</option><option value="Üretim">Manufacturing</option></select>
+        <p class="ipucu" id="ses-sektor-ipucu">Saving selects this sector chip in the form.</p>
+      </div>
+      <div class="alan-k">
+        <label for="ses-kitle">Target audience <span class="zor">(optional)</span></label>
+        <input type="text" id="ses-kitle" name="audience" maxlength="160" autocomplete="off" placeholder="E.g. young families buying their first home" aria-describedby="ses-audience-hata">
+        <p class="alan-hata" id="ses-audience-hata" role="alert" hidden></p>
+      </div>
+      <fieldset class="cipler ses-sifat" aria-describedby="ses-adjectives-hata">
+        <legend>Voice adjectives <span class="zor">(up to 3)</span> <span class="sayac" id="ses-sifat-say">0/3</span></legend>
+        <div class="ses-cipler">
+            <span class="cip"><input type="checkbox" name="adjectives" id="sf-sicak" value="sicak"><label for="sf-sicak">Warm</label></span>
+            <span class="cip"><input type="checkbox" name="adjectives" id="sf-esprili" value="esprili"><label for="sf-esprili">Witty</label></span>
+            <span class="cip"><input type="checkbox" name="adjectives" id="sf-yalin" value="yalin"><label for="sf-yalin">Plain</label></span>
+            <span class="cip"><input type="checkbox" name="adjectives" id="sf-sakin" value="sakin"><label for="sf-sakin">Calm</label></span>
+            <span class="cip"><input type="checkbox" name="adjectives" id="sf-enerjik" value="enerjik"><label for="sf-enerjik">Energetic</label></span>
+            <span class="cip"><input type="checkbox" name="adjectives" id="sf-uzman" value="uzman"><label for="sf-uzman">Expert</label></span>
+            <span class="cip"><input type="checkbox" name="adjectives" id="sf-oyuncu" value="oyuncu"><label for="sf-oyuncu">Playful</label></span>
+            <span class="cip"><input type="checkbox" name="adjectives" id="sf-zarif" value="zarif"><label for="sf-zarif">Elegant</label></span>
+            <span class="cip"><input type="checkbox" name="adjectives" id="sf-dogrudan" value="dogrudan"><label for="sf-dogrudan">Direct</label></span>
+            <span class="cip"><input type="checkbox" name="adjectives" id="sf-guven_veren" value="guven_veren"><label for="sf-guven_veren">Reassuring</label></span>
+            <span class="cip"><input type="checkbox" name="adjectives" id="sf-merakli" value="merakli"><label for="sf-merakli">Curious</label></span>
+            <span class="cip"><input type="checkbox" name="adjectives" id="sf-mutevazi" value="mutevazi"><label for="sf-mutevazi">Modest</label></span>
+        </div>
+        <p class="alan-hata" id="ses-adjectives-hata" role="alert" hidden></p>
+      </fieldset>
+      <div class="alan-k">
+        <label for="ses-yasak">Banned words <span class="zor">(optional)</span></label>
+        <input type="text" id="ses-yasak" name="banned" autocomplete="off" placeholder="E.g. cheap, don’t miss" aria-describedby="ses-yasak-ipucu ses-banned-hata">
+        <p class="ipucu" id="ses-yasak-ipucu">Separate with commas; up to 10 words, each up to 30 characters.</p>
+        <p class="alan-hata" id="ses-banned-hata" role="alert" hidden></p>
+      </div>
+      <div class="alan-k">
+        <label for="ses-ornek">Sample post <span class="zor">(optional)</span></label>
+        <textarea id="ses-ornek" name="sample" rows="4" maxlength="600" aria-describedby="ses-ornek-ipucu ses-sample-hata"></textarea>
+        <p class="ses-alt"><span class="ipucu" id="ses-ornek-ipucu">A text your brand has posted before.</span> <span class="sayac" id="ses-ornek-say">0/600</span></p>
+        <p class="alan-hata" id="ses-sample-hata" role="alert" hidden></p>
+      </div>
+      <fieldset class="cipler">
+        <legend>Form of address</legend>
+        <div class="ses-cipler">
+            <span class="cip"><input type="radio" name="address" id="ses-address-yok" value="" checked><label for="ses-address-yok">Not set</label></span>
+            <span class="cip"><input type="radio" name="address" id="ses-address-sen" value="sen"><label for="ses-address-sen">Informal (sen)</label></span>
+            <span class="cip"><input type="radio" name="address" id="ses-address-siz" value="siz"><label for="ses-address-siz">Formal (siz)</label></span>
+        </div>
+      </fieldset>
+      <fieldset class="cipler">
+        <legend>Emoji</legend>
+        <div class="ses-cipler">
+            <span class="cip"><input type="radio" name="emoji" id="ses-emoji-yok" value="" checked><label for="ses-emoji-yok">Not set</label></span>
+            <span class="cip"><input type="radio" name="emoji" id="ses-emoji-none" value="none"><label for="ses-emoji-none">None</label></span>
+            <span class="cip"><input type="radio" name="emoji" id="ses-emoji-few" value="few"><label for="ses-emoji-few">A few</label></span>
+        </div>
+      </fieldset>
+      <p class="sayac ses-toplam">Total <span id="ses-toplam">0/1200</span> · brand name, audience, banned words and sample post</p>
+      <p class="not not-hata" id="ses-hata" role="alert" hidden></p>
+      <div class="dlg-alt">
+        <button type="submit" class="btn btn-ana">Save</button>
+        <button type="button" class="btn btn-cizgi" id="ses-vazgec">Cancel</button>
+        <button type="button" class="btn btn-cizgi ses-sil" id="ses-sil" hidden>Delete profile</button>
+      </div>
+      <p class="kvkk">The profile stays only in this browser; it is not stored on the server. When generating, it is sent to an AI provider (USA) to produce the drafts. Don’t enter personal data. <a href="https://socialmediacorner.co/kvkk">KVKK privacy notice</a></p>
+    </form>
+    <div class="ses-onay" id="ses-onay" hidden>
+      <p><b>Delete the profile?</b> The brand voice in this browser is removed; this can’t be undone.</p>
+      <div class="dlg-alt">
+        <button type="button" class="btn btn-tehlike" id="ses-sil-evet">Yes, delete</button>
+        <button type="button" class="btn btn-cizgi" id="ses-sil-hayir">Cancel</button>
+      </div>
+    </div>
+  </div>
+</dialog>
+</body>
+</html>

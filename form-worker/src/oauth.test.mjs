@@ -3611,3 +3611,225 @@ test("syncDue: post_edits yoksa yalnız isolate'in ilk senkronu bir batch fazla 
   for (const p of IG_POSTS) assert.deepEqual(snapsOf(miss.db, p.url), snapsOf(base.db, p.url));
   assert.equal(count(again.db, "post_snaps"), count(base.db, "post_snaps"));
 });
+
+// ---- hesaplı siteler (A5-1): marka adı, dönüş yolu, ACCOUNTS_ENABLED kapısı ----
+
+const { resetMail, platformSite } = await import("./platform.js");
+const { authHosts } = await import("./sites.js");
+const APP = "https://app.socialmediacorner.co", BC = "https://brandcorner.co";
+
+// A5-1 öncesi resetMail'in birebir kopyası (main 4de9b585): brandcorner.co çıktısı bit bit aynı kalmalı
+const LEGACY_RESET_TEXT = {
+  tr: {
+    subject: "Brand Corner şifre sıfırlama",
+    hi: "Merhaba",
+    body: "Brand Corner hesabınız için şifre sıfırlama isteği aldık. Yeni şifrenizi aşağıdaki linkten belirleyebilirsiniz. Link 1 saat geçerli ve tek kullanımlıktır.",
+    button: "Yeni şifre belirle",
+    ignore: "Bu isteği siz yapmadıysanız bu e-postayı dikkate almayın; şifreniz değişmez.",
+  },
+  en: {
+    subject: "Reset your Brand Corner password",
+    hi: "Hi",
+    body: "We received a request to reset the password of your Brand Corner account. You can set a new password with the link below. The link is valid for 1 hour and works once.",
+    button: "Set a new password",
+    ignore: "If you did not ask for this, you can ignore this email; your password stays the same.",
+  },
+};
+const legacyEsc = s => String(s).replace(/[&<>"]/g, ch => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[ch]);
+function legacyResetMail(env, lang, user, link) {
+  const t = LEGACY_RESET_TEXT[lang] || LEGACY_RESET_TEXT.tr, hi = `${t.hi} ${user.name},`, esc = legacyEsc;
+  return {
+    to: user.email,
+    from: { email: env.SMTP_FROM || env.SMTP_USER, name: "Brand Corner" },
+    subject: t.subject,
+    text: `${hi}\n\n${t.body}\n\n${link}\n\n${t.ignore}\n\nBrand Corner\n`,
+    html: `<div style="font-family:Arial,sans-serif;font-size:15px;line-height:1.5;color:#111;max-width:520px">
+<p>${esc(hi)}</p><p>${esc(t.body)}</p>
+<p><a href="${esc(link)}" style="display:inline-block;background:#111;color:#fff;padding:12px 20px;border-radius:8px;text-decoration:none">${esc(t.button)}</a></p>
+<p style="font-size:13px;color:#555;word-break:break-all">${esc(link)}</p>
+<p style="font-size:13px;color:#555">${esc(t.ignore)}</p><p>Brand Corner</p></div>`,
+  };
+}
+
+test("resetMail: brandcorner.co çıktısı A5-1 öncesiyle birebir; tabloda olmayan site Brand Corner; app kendi adıyla", () => {
+  const user = { email: "ayse@x.co", name: `Ayşe <b>"&' Çağ` };
+  const link = `https://brandcorner.co/sifre-yenile#t=${"A".repeat(43)}`;
+  for (const env of [{ SMTP_USER: "noreply@brandcorner.co" }, { SMTP_USER: "u@x.co", SMTP_FROM: "from@x.co" }]) {
+    for (const lang of ["tr", "en", "de", undefined]) {
+      const want = legacyResetMail(env, lang, user, link);
+      for (const site of ["brandcorner.co", "ornek.example", "__proto__", "constructor", undefined])
+        assert.deepEqual(resetMail(env, lang, user, link, site), want, `${lang} ${site}`);
+    }
+  }
+  const env = { SMTP_USER: "noreply@brandcorner.co" };
+  const tr = resetMail(env, "tr", user, link, "app.socialmediacorner.co"), en = resetMail(env, "en", user, link, "app.socialmediacorner.co");
+  assert.deepEqual([tr.from.name, tr.subject, en.subject], ["Social Media Corner", "Social Media Corner şifre sıfırlama", "Reset your Social Media Corner password"]);
+  for (const m of [tr, en]) for (const s of [m.text, m.html]) {
+    assert.ok(s.includes("Social Media Corner"));
+    assert.equal(s.includes("Brand Corner"), false);
+  }
+  assert.ok(tr.text.endsWith("\n\nSocial Media Corner\n"));
+  assert.ok(en.html.endsWith("<p>Social Media Corner</p></div>"));
+});
+
+test("ACCOUNTS_ENABLED: app varsayılan kapalı (403 origin); preview yalnız önizleme, 1 canlı da; brandcorner etkilenmez", async () => {
+  const both = "brandcorner.co,app.socialmediacorner.co";
+  const cases = [
+    // [ortam, Origin, beklenen site]
+    [{}, BC, "brandcorner.co"],
+    [{}, "https://www.brandcorner.co", "brandcorner.co"],
+    [{}, "https://pr-7.web-brandcorner.pages.dev", "brandcorner.co"],
+    [{}, ORIGIN, "brandcorner.co"],
+    [{}, APP, null],
+    [{}, "https://web-smcapp.pages.dev", null],
+    [{}, "https://pr-1.web-smcapp.pages.dev", null],
+    [{ ACCOUNTS_ENABLED: "0" }, APP, null],
+    [{ ACCOUNTS_ENABLED: "true" }, APP, null],
+    [{ ACCOUNTS_ENABLED: " 1" }, APP, null],
+    // AUTH_HOSTS'a yazmak kapıyı açmaz
+    [{ ACCOUNTS_ENABLED: "0", AUTH_HOSTS: both }, APP, null],
+    [{ ACCOUNTS_ENABLED: "0", AUTH_HOSTS: both }, "https://pr-1.web-smcapp.pages.dev", null],
+    [{ ACCOUNTS_ENABLED: "0", AUTH_HOSTS: both }, BC, "brandcorner.co"],
+    [{ ACCOUNTS_ENABLED: "preview" }, "https://pr-1.web-smcapp.pages.dev", "app.socialmediacorner.co"],
+    [{ ACCOUNTS_ENABLED: "preview" }, "https://web-smcapp.pages.dev", "app.socialmediacorner.co"],
+    [{ ACCOUNTS_ENABLED: "preview" }, APP, null],
+    [{ ACCOUNTS_ENABLED: "preview", AUTH_HOSTS: both }, APP, null],
+    [{ ACCOUNTS_ENABLED: "preview" }, BC, "brandcorner.co"],
+    [{ ACCOUNTS_ENABLED: "preview" }, "https://pr-7.web-brandcorner.pages.dev", "brandcorner.co"],
+    [{ ACCOUNTS_ENABLED: "preview" }, ORIGIN, "brandcorner.co"],
+    [{ ACCOUNTS_ENABLED: "1" }, APP, "app.socialmediacorner.co"],
+    [{ ACCOUNTS_ENABLED: "1" }, "https://pr-1.web-smcapp.pages.dev", "app.socialmediacorner.co"],
+    [{ ACCOUNTS_ENABLED: "1", AUTH_HOSTS: both }, APP, "app.socialmediacorner.co"],
+    [{ ACCOUNTS_ENABLED: "1" }, BC, "brandcorner.co"],
+    [{ ACCOUNTS_ENABLED: "1" }, "https://pr-7.web-brandcorner.pages.dev", "brandcorner.co"],
+    // DEV_ORIGINS ve web-brandcorner önizlemesi AUTH_HOSTS'un ilkine (brandcorner) gitmeye devam eder
+    [{ ACCOUNTS_ENABLED: "1" }, ORIGIN, "brandcorner.co"],
+    // Benzer adlar
+    [{ ACCOUNTS_ENABLED: "1" }, "https://evil.example", null],
+    [{ ACCOUNTS_ENABLED: "1" }, "https://app.socialmediacorner.co.evil.example", null],
+    [{ ACCOUNTS_ENABLED: "1" }, "https://evilapp.socialmediacorner.co", null],
+    [{ ACCOUNTS_ENABLED: "1" }, "https://socialmediacorner.co", null],
+    [{ ACCOUNTS_ENABLED: "1" }, "https://x.web-smcapp-1a2.pages.dev", null],
+    [{ ACCOUNTS_ENABLED: "1" }, "https://a.b.web-smcapp.pages.dev", null],
+    [{ ACCOUNTS_ENABLED: "1" }, "https://web-smcapp.pages.dev.evil.example", null],
+    [{ ACCOUNTS_ENABLED: "1" }, "https://xweb-smcapp.pages.dev", null],
+    [{ ACCOUNTS_ENABLED: "1" }, "", null],
+  ];
+  for (const [extra, origin, want] of cases)
+    assert.equal(platformSite({ DEV_ORIGINS: ORIGIN, ...extra }, origin), want, `${JSON.stringify(extra)} ${origin}`);
+  assert.deepEqual(authHosts({}), ["brandcorner.co"]);
+  assert.deepEqual(authHosts({ ACCOUNTS_ENABLED: "preview", AUTH_HOSTS: both }), ["brandcorner.co"]);
+  assert.deepEqual(authHosts({ ACCOUNTS_ENABLED: "1" }), ["brandcorner.co", "app.socialmediacorner.co"]);
+  assert.deepEqual(authHosts({ ACCOUNTS_ENABLED: "1", AUTH_HOSTS: " app.socialmediacorner.co , brandcorner.co" }), ["app.socialmediacorner.co", "brandcorner.co"]);
+
+  // Uçta: kapalıyken kayıt 403 origin, kullanıcı yazılmaz
+  const reg = { name: "a", email: "a@x.co", password: "sifre-12345", role: "brand", consent: true, hp: "", t: 2000 };
+  const { db, env } = await setup();
+  for (const o of [APP, "https://pr-1.web-smcapp.pages.dev"]) assert.deepEqual(fail(await api(env, o)("POST", "/auth/register", { body: reg })), [403, "origin"], o);
+  const pre = await setup({ ACCOUNTS_ENABLED: "preview" });
+  assert.deepEqual(fail(await api(pre.env, APP)("POST", "/auth/register", { body: reg })), [403, "origin"]);
+  assert.equal((await api(pre.env, "https://pr-1.web-smcapp.pages.dev")("POST", "/auth/register", { body: reg })).status, 200);
+  assert.deepEqual([count(db, "users"), pre.db.prepare("SELECT site FROM users").get().site], [0, "app.socialmediacorner.co"]);
+});
+
+test("app.socialmediacorner.co (ACCOUNTS_ENABLED=1): ayrı hesaplar, sıfırlama e-postası ve OAuth dönüşü kendi sitesine", async t => {
+  const sent = fakeSmtp();
+  t.after(() => { delete globalThis.__smtpConnect; });
+  const { db, env, join } = await setup({ ACCOUNTS_ENABLED: "1", SMTP_USER: "noreply@brandcorner.co", SMTP_PASS: "test-sifre", ...IG_ENV, OAUTH_TOKEN_KEY: KEY });
+  const app = api(env, APP), bcCall = api(env, BC);
+  const bc = await join("influencer", "ortak@x.co");
+  let ip = 0;
+  const appJoin = async (email, lang) => {
+    const r = await app("POST", "/auth/register", {
+      ip: `10.0.2.${++ip}`, body: { name: email, email, password: "sifre-12345", role: "influencer", lang, consent: true, hp: "", t: 2000 },
+    });
+    assert.equal(r.status, 200, JSON.stringify(r.body));
+    return { token: r.body.token, id: r.body.user.id };
+  };
+  // Aynı e-posta iki sitede ayrı hesap; oturum yalnız kendi sitesinde geçer
+  const tr = await appJoin("ortak@x.co", "tr"), en = await appJoin("en@x.co", "en");
+  assert.deepEqual(db.prepare("SELECT site FROM users WHERE email = 'ortak@x.co' ORDER BY id").all().map(r => r.site), ["brandcorner.co", "app.socialmediacorner.co"]);
+  assert.equal((await app("GET", "/auth/me", { token: tr.token })).status, 200);
+  assert.deepEqual(fail(await bcCall("GET", "/auth/me", { token: tr.token })), [401, "auth"]);
+  assert.deepEqual(fail(await app("GET", "/auth/me", { token: bc.token })), [401, "auth"]);
+
+  // Şifre sıfırlama: link sitenin sayfasına, marka adı sitenin adı
+  const mailFor = async (call, email, lang) => {
+    db.prepare("DELETE FROM auth_attempts").run();
+    const before = sent.length;
+    const r = await call("POST", "/auth/forgot", { body: { email, ...(lang !== undefined && { lang }) } });
+    assert.equal(r.status, 200, JSON.stringify(r.body));
+    assert.equal(sent.length, before + 1, email);
+    const msg = sent.at(-1), [text, html] = mailParts(msg);
+    const from = Buffer.from(msg.match(/^From: =\?UTF-8\?B\?([A-Za-z0-9+/=]+)\?= </m)[1], "base64").toString("utf8");
+    return { text, html, from, link: text.match(/https?:\/\/\S+#t=([A-Za-z0-9_-]{43})/) };
+  };
+  const SMC = "Social Media Corner";
+  const m1 = await mailFor(app, "ortak@x.co");
+  assert.match(m1.link[0], /^https:\/\/app\.socialmediacorner\.co\/hesap\/sifre-yenile#t=[A-Za-z0-9_-]{43}$/);
+  assert.equal(m1.from, SMC);
+  for (const s of [m1.text, m1.html]) { assert.ok(s.includes(SMC)); assert.equal(s.includes("Brand Corner"), false); }
+  const m2 = await mailFor(app, "en@x.co");
+  assert.match(m2.link[0], /^https:\/\/app\.socialmediacorner\.co\/en\/hesap\/reset-password#t=/);
+  assert.ok(m2.text.includes(`your ${SMC} account`));
+  assert.match((await mailFor(app, "en@x.co", "tr")).link[0], /^https:\/\/app\.socialmediacorner\.co\/hesap\/sifre-yenile#t=/);
+  // İstekteki dil tr/en değilse kayıtlı dil; yol hep tablodan
+  assert.match((await mailFor(app, "ortak@x.co", "../../evil.example")).link[0], /^https:\/\/app\.socialmediacorner\.co\/hesap\/sifre-yenile#t=/);
+  // Şema ya da port saldırganınsa doğrulanmış siteye düşer
+  for (const o of ["http://app.socialmediacorner.co", "https://app.socialmediacorner.co:8443", "https://evil.example@app.socialmediacorner.co"])
+    assert.match((await mailFor(api(env, o), "ortak@x.co")).link[0], /^https:\/\/app\.socialmediacorner\.co\/hesap\/sifre-yenile#t=/, o);
+  // brandcorner değişmedi
+  const b = await mailFor(bcCall, "ortak@x.co");
+  assert.match(b.link[0], /^https:\/\/brandcorner\.co\/sifre-yenile#t=/);
+  assert.equal(b.from, "Brand Corner");
+  assert.equal(b.text.includes(SMC) || b.html.includes(SMC), false);
+  // app'in sıfırlama bileti brandcorner'da geçmez; kendi sitesinde geçer
+  const cross = await mailFor(app, "ortak@x.co");
+  assert.deepEqual(fail(await bcCall("POST", "/auth/reset", { body: { token: cross.link[1], password: "yeni-sifre-1" } })), [400, "reset_invalid"]);
+  const own = await mailFor(app, "ortak@x.co");
+  assert.equal((await app("POST", "/auth/reset", { body: { token: own.link[1], password: "yeni-sifre-1" } })).status, 200);
+
+  // OAuth: dönüş adresi sitenin sabit yolu, kullanıcının diline göre
+  const backTo = async (call, token, body = {}) => {
+    const r = await call("POST", "/app/connect", { token, body: { platform: "instagram", ...body } });
+    assert.equal(r.status, 200, JSON.stringify(r.body));
+    const state = new URL(r.body.url).searchParams.get("state");
+    return [state, db.prepare("SELECT return_to FROM oauth_states WHERE state_hash = ?").get(hash(state)).return_to];
+  };
+  const trTok = (await app("POST", "/auth/login", { body: { email: "ortak@x.co", password: "yeni-sifre-1" } })).body.token;
+  assert.equal((await backTo(app, trTok))[1], `${APP}/hesap/baglantilar`);
+  assert.equal((await backTo(app, en.token))[1], `${APP}/en/hesap/connections`);
+  assert.equal((await backTo(bcCall, bc.token))[1], `${BC}/panel`);
+  assert.equal((await backTo(api(env, "https://pr-1.web-smcapp.pages.dev"), trTok))[1], "https://pr-1.web-smcapp.pages.dev/hesap/baglantilar");
+  // Açık yönlendirme yok: gövdedeki adres/yol alanları yok sayılır
+  const evil = { return_to: "https://evil.example/x", returnTo: "//evil.example", next: "https://evil.example", back: "/\\evil.example", redirect: "https://evil.example", lang: "en" };
+  assert.equal((await backTo(app, trTok, evil))[1], `${APP}/hesap/baglantilar`);
+  assert.equal((await backTo(bcCall, bc.token, evil))[1], `${BC}/panel`);
+  // Şema, port, kullanıcı ya da yol saldırganınsa doğrulanmış siteye düşer
+  for (const o of ["http://app.socialmediacorner.co", "https://app.socialmediacorner.co:8443", "https://x@app.socialmediacorner.co", "https://app.socialmediacorner.co/x?y=", "http://pr-1.web-smcapp.pages.dev"])
+    assert.equal((await backTo(api(env, o), trTok))[1], `${APP}/hesap/baglantilar`, o);
+  // Başka alan adı: 403, state yazılmaz
+  const states = count(db, "oauth_states");
+  for (const o of ["https://evil.example", "https://app.socialmediacorner.co.evil.example", "https://x.web-smcapp-1a2.pages.dev"])
+    assert.deepEqual(fail(await api(env, o)("POST", "/app/connect", { token: trTok, body: { platform: "instagram" } })), [403, "origin"], o);
+  assert.equal(count(db, "oauth_states"), states);
+  // Kayıtlı dil beklenmedik bir değerse tr yolu (dil yol olarak kullanılmaz)
+  db.prepare("UPDATE users SET lang = '//evil.example' WHERE id = ?").run(en.id);
+  assert.equal((await backTo(app, en.token))[1], `${APP}/hesap/baglantilar`);
+
+  // Sağlayıcı dönüşü bileti (ve reddi) kaydedilen adrese götürür
+  const [state] = await backTo(app, trTok);
+  const r = await callback(env, `/oauth/instagram/callback?code=k&state=${state}`);
+  assert.equal(r.status, 302);
+  assert.match(r.headers.get("location"), /^https:\/\/app\.socialmediacorner\.co\/hesap\/baglantilar\?oauth=instagram&result=pending#ticket=[A-Za-z0-9_-]{43}$/);
+  const [denied] = await backTo(app, en.token);
+  db.prepare("UPDATE users SET lang = 'en' WHERE id = ?").run(en.id);
+  const [enState] = await backTo(app, en.token);
+  assert.equal((await callback(env, `/oauth/instagram/callback?error=access_denied&state=${denied}`)).headers.get("location"),
+    `${APP}/hesap/baglantilar?oauth=instagram&result=denied`);
+  assert.equal((await callback(env, `/oauth/instagram/callback?error=access_denied&state=${enState}`)).headers.get("location"),
+    `${APP}/en/hesap/connections?oauth=instagram&result=denied`);
+  const [bcState] = await backTo(bcCall, bc.token);
+  assert.match((await callback(env, `/oauth/instagram/callback?code=k&state=${bcState}`)).headers.get("location"),
+    /^https:\/\/brandcorner\.co\/panel\?oauth=instagram&result=pending#ticket=/);
+});

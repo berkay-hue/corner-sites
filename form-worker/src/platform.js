@@ -1,4 +1,5 @@
-// brandcorner.co platformu: üyelik (/auth/*) ve panel (/app/*) API'si.
+// brandcorner.co platformu: üyelik (/auth/*) ve panel (/app/*) API'si. ACCOUNTS_ENABLED açıkken app.socialmediacorner.co
+// da aynı uçları kullanır (src/sites.js); kullanıcı ve oturumlar users.site ile siteye bağlı, siteler birbirini görmez.
 // Oturum: rastgele 32 baytlık token; D1'de yalnızca SHA-256 özeti tutulur. Ön yüz token'ı
 // "Authorization: Bearer <token>" başlığıyla gönderir (site ile worker farklı alan adında, çerez yok).
 // Şifre: PBKDF2-SHA256 + 16 bayt tuz. Tur sayısı özetin içinde saklanır; PBKDF2_ITER artırılırsa
@@ -10,6 +11,7 @@ import { OAUTH, LISTED, CONNECTABLE, oauthReady, listConnections, startOAuth, fi
 import { smtpReady, smtpSend, smtpFrom } from "./smtp.js";
 import { metricsEnabled, accountMetrics, linkMetrics, parseAudience } from "./metrics.js";
 import { NICHE_LIST } from "./classify.js";
+import { authHosts, previewSite, resetPath, siteConf } from "./sites.js";
 
 const ROLES = ["brand", "influencer", "agency"];
 const PLATFORMS = LISTED; // instagram, tiktok, youtube, x, linkedin, twitch (profil ve bağlantı listesi aynı)
@@ -28,16 +30,17 @@ const reply = (body, status, origin) => new Response(JSON.stringify(body), {
   headers: { "content-type": "application/json", "cache-control": "no-store", ...(origin && { "access-control-allow-origin": origin, vary: "Origin" }) },
 });
 
-// Yalnızca platform sitesi (AUTH_HOSTS, varsayılan brandcorner.co) ve onun pages.dev önizlemeleri
+// Yalnızca hesap siteleri (AUTH_HOSTS, varsayılan brandcorner.co; app.socialmediacorner.co yalnız ACCOUNTS_ENABLED
+// açıkken, src/sites.js) ve onların pages.dev önizlemeleri
 export function platformSite(env, origin) {
   if (!origin) return null;
-  const hosts = (env.AUTH_HOSTS || "brandcorner.co").split(",");
-  if ((env.DEV_ORIGINS || "").split(",").includes(origin)) return hosts[0];
+  const hosts = authHosts(env);
+  if ((env.DEV_ORIGINS || "").split(",").includes(origin)) return hosts[0] || null;
   let h;
   try { h = new URL(origin).hostname; } catch { return null; }
   const site = hosts.find(d => h === d || h === "www." + d);
   if (site) return site;
-  return /^(?:[a-z0-9-]+\.)?web-brandcorner\.pages\.dev$/.test(h) ? hosts[0] : null;
+  return previewSite(env, h, hosts);
 }
 
 export async function platform(req, url, env, origin, deliver) {
@@ -151,9 +154,10 @@ async function forgot(c) {
   const lang = ["tr", "en"].includes(body.lang) ? body.lang : user.lang;
   // Token URL'nin # kısmında: sunucu loglarına ve Referer'a düşmez. Adres ham Origin'den değil doğrulanmış
   // siteden kurulur: boşluk ya da yol içeren, http ya da başka portlu bir Origin e-postaya başka bir adres sokamaz.
-  const link = `${returnBase(env, c.origin, site)}/${lang === "en" ? "reset-password" : "sifre-yenile"}#t=${token}`;
+  // Sayfa yolu siteye göre sabit tablodan (src/sites.js): brandcorner /sifre-yenile, /reset-password.
+  const link = `${returnBase(env, c.origin, site)}${resetPath(site, lang)}#t=${token}`;
   try {
-    await smtpSend(env, resetMail(env, lang, user, link));
+    await smtpSend(env, resetMail(env, lang, user, link, site));
   } catch (e) {
     console.error("reset mail", e);
     throw new Bad("mail", 503);
@@ -182,35 +186,36 @@ async function reset(c) {
   return ok(c, { token: await newSession(env, user.id), user: me(user) });
 }
 
+// Metinlerde marka adı siteden gelir (src/sites.js; brandcorner.co için "Brand Corner", çıktı A5-1'den öncekiyle aynı)
 const RESET_TEXT = {
-  tr: {
-    subject: "Brand Corner şifre sıfırlama",
+  tr: b => ({
+    subject: `${b} şifre sıfırlama`,
     hi: "Merhaba",
-    body: "Brand Corner hesabınız için şifre sıfırlama isteği aldık. Yeni şifrenizi aşağıdaki linkten belirleyebilirsiniz. Link 1 saat geçerli ve tek kullanımlıktır.",
+    body: `${b} hesabınız için şifre sıfırlama isteği aldık. Yeni şifrenizi aşağıdaki linkten belirleyebilirsiniz. Link 1 saat geçerli ve tek kullanımlıktır.`,
     button: "Yeni şifre belirle",
     ignore: "Bu isteği siz yapmadıysanız bu e-postayı dikkate almayın; şifreniz değişmez.",
-  },
-  en: {
-    subject: "Reset your Brand Corner password",
+  }),
+  en: b => ({
+    subject: `Reset your ${b} password`,
     hi: "Hi",
-    body: "We received a request to reset the password of your Brand Corner account. You can set a new password with the link below. The link is valid for 1 hour and works once.",
+    body: `We received a request to reset the password of your ${b} account. You can set a new password with the link below. The link is valid for 1 hour and works once.`,
     button: "Set a new password",
     ignore: "If you did not ask for this, you can ignore this email; your password stays the same.",
-  },
+  }),
 };
 
-function resetMail(env, lang, user, link) {
-  const t = RESET_TEXT[lang] || RESET_TEXT.tr, hi = `${t.hi} ${user.name},`;
+export function resetMail(env, lang, user, link, site) {
+  const brand = siteConf(site).name, t = (RESET_TEXT[lang] || RESET_TEXT.tr)(brand), hi = `${t.hi} ${user.name},`;
   return {
     to: user.email,
-    from: { email: smtpFrom(env), name: "Brand Corner" },
+    from: { email: smtpFrom(env), name: brand },
     subject: t.subject,
-    text: `${hi}\n\n${t.body}\n\n${link}\n\n${t.ignore}\n\nBrand Corner\n`,
+    text: `${hi}\n\n${t.body}\n\n${link}\n\n${t.ignore}\n\n${brand}\n`,
     html: `<div style="font-family:Arial,sans-serif;font-size:15px;line-height:1.5;color:#111;max-width:520px">
 <p>${esc(hi)}</p><p>${esc(t.body)}</p>
 <p><a href="${esc(link)}" style="display:inline-block;background:#111;color:#fff;padding:12px 20px;border-radius:8px;text-decoration:none">${esc(t.button)}</a></p>
 <p style="font-size:13px;color:#555;word-break:break-all">${esc(link)}</p>
-<p style="font-size:13px;color:#555">${esc(t.ignore)}</p><p>Brand Corner</p></div>`,
+<p style="font-size:13px;color:#555">${esc(t.ignore)}</p><p>${esc(brand)}</p></div>`,
   };
 }
 

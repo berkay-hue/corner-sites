@@ -1,7 +1,9 @@
 /* EN katmanı (yalnız /en/): statik metin derlemede çevrildi; JS'in yazdığı TR metin ve aria-label/placeholder/title/data-genis
    sözlükle çevrilir (prototip YON-KARAR §5.2 motoru). Taslak gövdeleri (.metin) ve Reels kancası çevrilmez. */
 (function(){'use strict';var d=document;
-var EN={'© 2026 Social Media Corner, bir Corner Group şirketi':'© 2026 Social Media Corner, a Corner Group company','… devamı':'… more','… devamını gör':'… see more',
+var EN={
+/* A4-2c marka sesi */'yok':'none','Ekle':'Add','Düzenle':'Edit','adsız profil':'unnamed profile','Bu tarayıcı saklamaya izin vermiyor; sekme kapanınca silinir.':'This browser doesn’t allow storage; the profile is deleted when the tab closes.','Marka sesi kaydedildi.':'Brand voice saved.','Marka sesi silindi.':'Brand voice deleted.','Marka sesi kabul edilmedi. Profili düzenleyip tekrar dene.':'The brand voice wasn’t accepted. Edit the profile and try again.','Marka adı en çok 60 karakter olabilir.':'Brand name can be up to 60 characters.','Bu ad kullanılamaz. Kendi markanın adını yaz.':'This name can’t be used. Enter your own brand’s name.','Hedef kitle en çok 160 karakter olabilir.':'Target audience can be up to 160 characters.','En çok 3 sıfat seç.':'Choose up to 3 adjectives.','En çok 10 yasak kelime yaz.':'Enter up to 10 banned words.','Her yasak kelime en çok 30 karakter olabilir.':'Each banned word can be up to 30 characters.','Yasak kelimelerde | işaretini kullanma.':'Don’t use the | character in banned words.','Örnek gönderi en çok 600 karakter olabilir.':'Sample post can be up to 600 characters.','Profil çok uzun. Marka adı, hedef kitle, yasak kelimeler ve örnek gönderi toplamı en çok 1200 karakter olabilir.':'The profile is too long. Brand name, audience, banned words and sample post can total up to 1200 characters.','Profil boş. En az bir alanı doldur.':'The profile is empty. Fill in at least one field.','ÖRNEK: Bu taslaklar örnek marka sesi profiliyle istendi.':'SAMPLE: These drafts were requested with the sample brand voice profile.',
+'© 2026 Social Media Corner, bir Corner Group şirketi':'© 2026 Social Media Corner, a Corner Group company','… devamı':'… more','… devamını gör':'… see more',
 '· Tüm metinler örnektir; hiçbir şey gönderilmez, yapay zekâ çağrılmaz. Her durum':'· All text is sample; nothing is sent and no AI is called. Each state also opens with the','bağlantısıyla da açılır.':'link.',
 '(isteğe bağlı)':'(optional)','(zorunlu)':'(required)','Koyu tema':'Dark theme','Açık tema':'Light theme','Örn. demo talebi gelsin':'E.g. get demo requests','Örn. İlk 100 müşteriye ulaştık':'E.g. we reached our first 100 customers','Örn. İlk 100 müşteriye ulaştık':'E.g. We reached our first 100 customers',
 'Örnek konular':'Sample topics','Prototip durum seçici':'Prototype state picker','Sahte örnek metin':'Fake sample text','Social Media Corner Taslak Masası, ana sayfa':'Social Media Corner Draft Desk, home','Taslak brifi':'Draft brief',
@@ -64,6 +66,21 @@ var EN={'© 2026 Social Media Corner, bir Corner Group şirketi':'© 2026 Social
 'Yoğunluk var, 1 dakika sonra dene.':'It’s busy right now; try again in a minute.','Sınıra yakın.':'Near the limit.','Tamamı akışta görünür.':'All of it shows in the feed.',
 'Taslak Masası · Social Media Corner — ÖRNEK mock (Yön 2: marka-önce)':'Draft Desk · Social Media Corner — SAMPLE mock (Direction 2: brand-first)'};
 EN["Bu araç JavaScript ile çalışır."]="This tool runs on JavaScript.";EN["Taslak Masası · Social Media Corner"]="Draft Desk · Social Media Corner";
+/* Faz 2 (A4-2a): Instagram açıklama aracı */
+EN["Instagram açıklaman için hikâye, liste ve görüş."]="A story, a list and a take for your Instagram caption.";EN["En çok 5 etiket; sayaç emojiyi tek karakter sayar."]="Up to 5 hashtags; the counter counts an emoji as one character.";EN["Bu taslakta kaçınman gereken bir ifade olabilir; paylaşmadan önce kontrol et."]="This draft may contain a phrase you should avoid; check it before you share.";EN["Format, sektör, ton"]="Format, industry, tone";EN["Tekli gönderi"]="Single post";EN["Reels açıklaması"]="Reels caption";EN["Harekete çağrı (isteğe bağlı)"]="Call to action (optional)";EN["Yorum"]="Comment";EN["Profil"]="Profile";EN["Yok"]="None";EN["Kaydet"]="Save";EN["Araçlar"]="Tools";EN["LinkedIn gönderisi"]="LinkedIn post";EN["Instagram açıklaması"]="Instagram caption";EN["Instagram Açıklama Taslakları · Social Media Corner"]="Instagram Caption Drafts · Social Media Corner";
+/* Faz 2 (A4-2b): Reels kanca aracı */
+(function(){var r={'Reels videon için soru, iddia ve merak kancası.':'A question, a claim and a curiosity hook for your Reels video.',
+'Ekran metni ilk 3 saniyede okunur: hedef 60, en çok 80 karakter. Konuşma satırı hedefi 140, en çok 200 karakter. Süre rozeti konuşma satırını saniyede ~2,5 kelimeyle hesaplar.':'On-screen text is read in the first 3 seconds: aim for 60, at most 80 characters. Aim for 140 characters on the spoken line, at most 200. The time badge counts the spoken line at ~2.5 words per second.',
+'Reels’te izleyici ilk 3 saniyede kalır ya da kaydırır. Ekran metni videonun üstünde yazılı durur; konuşma satırını aynı anda kendi sesinle söylersin.':'On Reels, viewers stay or scroll within the first 3 seconds. The on-screen text sits over the video; you say the spoken line in your own voice at the same time.',
+'Soru':'Question','İddia':'Claim','Merak':'Curiosity','Bir soruyla durdurur.':'Stops the scroll with a question.','Net bir iddiayla açılır.':'Opens with a bold claim.','Merak boşluğu bırakır.':'Leaves a curiosity gap.',
+'Ekran metni':'On-screen text','Konuşma satırı':'Spoken line','Konuşma satırının yaklaşık süresi (saniyede ~2,5 kelime)':'Approximate length of the spoken line (~2.5 words per second)',
+'Kısalt ve Ton hak düşürmez.':'Shorten and Tone don’t use credits.',
+'Ekran metnini videoya ekle, konuşma satırını kendi sesinle söyle.':'Add the on-screen text to your video and say the spoken line in your own voice.',
+'Bu taslak yalnız metin. Videoyu çekmek ve kurgulamak gerekirse ekip yapar.':'This draft is text only. If you need the video shot and edited, the team does it.','Videoyu çekmek ve kurgulamak gerekirse ekip yapar.':'If you need the video shot and edited, the team does it.',
+'Sınırı aşıyor; kısalt.':'Over the limit; shorten it.','Hedeften uzun; Kısalt ile sıkılaştır.':'Longer than the target; tighten it with Shorten.',
+'Yok':'None','Konuşma':'Talking','Ürün':'Product','Önce-sonra':'Before/after','Nasıl yapılır':'How-to','Video türü (isteğe bağlı)':'Video type (optional)','Video, sektör, ton':'Video, industry, tone',
+'Reels kancası':'Reels hook','Instagram açıklaması':'Instagram caption','LinkedIn gönderisi':'LinkedIn post','Her taslakta 9:16 bir önizleme görürsün:':'Each draft shows a 9:16 preview:','Reels Kanca Taslakları · Social Media Corner':'Reels Hook Drafts · Social Media Corner'};
+for(var k in r)if(!Object.prototype.hasOwnProperty.call(EN,k))EN[k]=r[k]})();
 function virgul(s){return s.replace(/\./g,',')}
 var ENR=[
  [/^([\d.]+) \/ ([\d.]+) karakter · akışta ilk ~(\d+) görünür$/,function(m,a,b,c){return virgul(a)+' / '+virgul(b)+' characters · first ~'+c+' show in the feed'}],
@@ -77,6 +94,9 @@ var ENR=[
  [/^Kod: (.+) · İstek no: (.+)$/,'Code: $1 · Request no: $2'],
  [/^Kod: ([a-z_]+)$/,'Code: $1'],
  [/^Taslak (\d) eylemleri$/,'Draft $1 actions'],
+ [/^~(\d+) sn$/,'~$1 s'],
+ [/^Ekran metni ([\d.]+) \/ ([\d.]+) karakter$/,function(m,a,b){return 'On-screen text '+virgul(a)+' / '+virgul(b)+' characters'}],
+ [/^konuşma ([\d.]+) \/ ([\d.]+) karakter$/,function(m,a,b){return 'spoken '+virgul(a)+' / '+virgul(b)+' characters'}],
  [/^gece yarısı \(İstanbul saati\), yaklaşık (\d+) sa (\d+) dk sonra$/,'midnight (Istanbul time), in about $1 h $2 min']];
 function enTek(t){
   if(Object.prototype.hasOwnProperty.call(EN,t))return EN[t];
