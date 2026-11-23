@@ -697,7 +697,8 @@ async function stockRoute(c) {
   if (o) u.searchParams.set("orientation", o);
   let data;
   try {
-    const res = await io.fetch(u.toString(), { method: "GET", headers: { authorization: env.PEXELS_API_KEY, accept: "application/json" }, signal: AbortSignal.timeout(STOCK_TIMEOUT) });
+    const get = io.fetch; // ayrık çağrı: Workers fetch'i nesne metodu olarak çağrılınca "Illegal invocation" (TypeError) verir
+    const res = await get(u.toString(), { method: "GET", headers: { authorization: env.PEXELS_API_KEY, accept: "application/json" }, signal: AbortSignal.timeout(STOCK_TIMEOUT) });
     if (!res.ok) { console.log("stock", res.status); return fail("upstream", 502, origin); }
     data = await res.json();
   } catch (e) {
@@ -722,7 +723,7 @@ export async function generate(req, url, env, origin, ctx, io = {}) {
   const { tooLarge, body } = isGet ? { tooLarge: false, body: null } : await readBody(req, BODY_MAX[name]);
   if (tooLarge) return fail("too_large", 413, origin);
   try {
-    return await handler({ env, db: env.DB, body, query: url.searchParams, origin, ctx, io: { fetch: io.fetch || fetch }, ip: req.headers.get("cf-connecting-ip") || "", token: bearerToken(req) });
+    return await handler({ env, db: env.DB, body, query: url.searchParams, origin, ctx, io: { fetch: io.fetch || ((u, i) => fetch(u, i)) }, ip: req.headers.get("cf-connecting-ip") || "", token: bearerToken(req) });
   } catch (e) {
     // 0014 uygulanmadıysa tablo yok
     if (/no such (table|column)/i.test(e?.message || "")) return fail("not_ready", 503, origin);

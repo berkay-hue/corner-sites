@@ -52,7 +52,9 @@ const photo = (id, extra = {}) => ({
 
 function fakeFetch(reply = () => ({ status: 200, body: { page: 1, per_page: 15, total_results: 2, photos: [photo(1), photo(2)], next_page: "https://api.pexels.com/v1/search/?page=2" } })) {
   const calls = [];
-  const f = async (url, init) => {
+  // Workers gibi: fetch nesne metodu olarak (this dolu) çağrılırsa TypeError: Illegal invocation
+  const f = async function (url, init) {
+    if (this !== undefined) throw new TypeError("Illegal invocation");
     if (!String(url).startsWith("https://api.pexels.com/v1/search")) throw new Error("beklenmeyen fetch " + url);
     calls.push({ url: new URL(url), init });
     const r = await reply(calls.length);
