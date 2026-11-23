@@ -18,7 +18,7 @@ MAIL_TO = "berkay@saascorner.co"
 MAIL_FROM = "form@cornergroup.co"
 RAKIP_START = "https://smcorner.app.n8n.cloud/webhook/rakip-analizi-pro-v5"
 RAKIP_STATUS = "https://smcorner.app.n8n.cloud/webhook/rakip-analizi-status"
-ALLOWED_HOSTS ="saascorner.co,cornergroup.co,socialmediacorner.co,salescorner.co,yalcinberkay.com.tr,brandcorner.co,wishceo.com"
+ALLOWED_HOSTS ="saascorner.co,cornergroup.co,socialmediacorner.co,salescorner.co,yalcinberkay.com.tr,brandcorner.co,wishceo.com,app.socialmediacorner.co"
 # brandcorner.co şifre sıfırlama e-postaları (src/smtp.js): bu Google Workspace hesabından Gmail SMTP ile, ücretsiz.
 # Hesabın uygulama şifresi secret olarak girilir: wrangler secret put SMTP_PASS --name corner-forms
 SMTP_USER = "berkay@saascorner.co"
@@ -37,8 +37,8 @@ YT_ANALYTICS = "1"
 # app.socialmediacorner.co taslak üretimi (src/generate.js, POST /gen/*). "1" yapmadan önce
 # migrations/0014_gen.sql uygulanmalı; tablo yoksa 503 not_ready. Gizli değerler `wrangler secret put` ile girilir
 # (değer burada yok): ANTHROPIC_API_KEY, GEN_SALT, TURNSTILE_SECRET; biri eksikse de 503 not_ready.
-# GEN_MODEL Berkay'ın kararı, A2-3 ölçümünden sonra kesinleşir. app.socialmediacorner.co ALLOWED_HOSTS'a
-# "1" ile aynı adımda eklenir (A3-3); o zamana kadar /submit ve CORS davranışı değişmez.
+# GEN_MODEL Berkay'ın kararı, A2-3 ölçümünden sonra kesinleşir. app.socialmediacorner.co ALLOWED_HOSTS'ta (A3-1:
+# bekleme listesi/teklif /submit'i ve not_ready yanıtının CORS'u için); "1" yapmak ayrı adımdır (A3-3).
 GEN_ENABLED = "0"
 GEN_DAILY_CAP = "300"
 GEN_PER_DAY = "3"
