@@ -644,14 +644,14 @@ function post(yol,govde,ms,kalici){
   return fetch(API+yol,o).then(function(r){clearTimeout(tm);if(r.status===204)return {};return r.json().then(function(j){if(r.ok&&j&&j.ok!==false)return j;j=j||{};throw {kod:j.error||'genel',scope:j.scope,charged:!!j.charged,left:j.left,cap:j.cap,reset_at:j.reset_at,field:j.field}},function(){throw {kod:'genel'}})},function(e){clearTimeout(tm);throw {kod:e&&e.name==='AbortError'?'zaman':'ag'}});
 }
 /* /submit (index.js): {page, fields:[[etiket, değer]], hp}; site origin'den gelir. Boş alanlar gönderilmez. */
-var ROL={isletme:'işletme',ajans:'ajans',serbest:'serbest'},RIZA='Evet — metin v1 (https://socialmediacorner.co/kvkk)';
+var ROL={isletme:'işletme',ajans:'ajans',serbest:'serbest'};function RIZA(){return 'Evet — metin v1 (https://app.socialmediacorner.co/'+(dilAl()==='en'?'en/privacy':'kvkk')+')'}
 function gercekProv(){return{
   linkedin:function(q){return tsAl().then(function(ts){q.ts=ts;return post('/gen/linkedin',q,46000)}).then(function(r){tsSifirla();D.acik=true;depo('smc-acik','1');var g=gunAl();if(g)depo('smc-son',g);return r},function(h){tsSifirla();throw h})},
   instagram:function(q){return tsAl().then(function(ts){q.ts=ts;return post('/gen/instagram',q,46000)}).then(function(r){tsSifirla();D.acik=true;depo('smc-acik','1');var g=gunAl();if(g)depo('smc-son',g);return r},function(h){tsSifirla();throw h})},
   refine:function(q){return post('/gen/refine',q,30000).then(function(r){hakAl(r);if(kayitVar(r)){D.kayit=true;kayitNot()}var a=r&&r.drafts&&r.drafts[0];return{text:a&&typeof a.text==='string'?a.text:null,say:a&&typeof a.say==='string'?a.say:null,flags:a?(Array.isArray(a.flags)?a.flags.slice(0,5):[]):null}})},
   quota:function(){return post('/gen/quota',{anon:anonAl()},10000)},
   olay:function(kind,src){var b={anon:anonAl(),kind:kind};if(src)b.src=src;return post('/gen/event',b,8000,true)},
-  submit:function(tur,o){var f=tur==='bekleme'?[['E-posta',o.email],['Ad',o.name],['Rol',ROL[o.role]||''],['Açık rıza',o.consent?RIZA:''],['Ticari ileti izni',o.marketing?'Evet — v1':'']]:[['E-posta',o.email],['Ad',o.name],['Şirket',o.company],['Sektör',o.sector],['Kaynak',o.src],['Dil',dilAl()]];
+  submit:function(tur,o){var f=tur==='bekleme'?[['E-posta',o.email],['Ad',o.name],['Rol',ROL[o.role]||''],['Açık rıza',o.consent?RIZA():''],['Ticari ileti izni',o.marketing?'Evet — v1':'']]:[['E-posta',o.email],['Ad',o.name],['Şirket',o.company],['Sektör',o.sector],['Kaynak',o.src],['Dil',dilAl()]];
     return post('/submit',{page:tur==='bekleme'?'/bekleme-listesi':'/teklif',fields:f.filter(function(x){return x[1]}),hp:o.website||''},15000)}
 }}
 /* ölçüm olayı (/gen/event): yalnız anon + tür + kaynak; kişisel veri yok; sunucu o gün üretim yapmamış anon'u yok sayar */
