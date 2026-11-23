@@ -5,6 +5,7 @@ import { EmailMessage } from "cloudflare:email";
 import { platform, cleanup } from "./platform.js";
 import { metaCallback, oauthCallback, syncDue, ytRetention } from "./oauth.js";
 import { metricsEnabled } from "./metrics.js";
+import { generate, genCleanup } from "./generate.js";
 
 const MAX_FIELDS = 30, MAX_LEN = 5000, RATE = 5; // 10 dakikada IP başına en fazla RATE gönderim
 
@@ -14,7 +15,7 @@ function allowedOrigin(env, origin) {
   if ((env.DEV_ORIGINS || "").split(",").includes(origin)) return origin;
   let h;
   try { h = new URL(origin).hostname; } catch { return null; }
-  const ok = env.ALLOWED_HOSTS.split(",").some(d => h === d || h === "www." + d) || /^web-[a-z]+\.pages\.dev$|\.web-[a-z]+\.pages\.dev$/.test(h);
+  const ok = env.ALLOWED_HOSTS.split(",").some(d => h === d || h === "www." + d) || /^web-[a-z]+(-[a-z0-9]+)?\.pages\.dev$|\.web-[a-z]+(-[a-z0-9]+)?\.pages\.dev$/.test(h);
   return ok ? origin : null;
 }
 
@@ -24,7 +25,7 @@ const json = (body, status, origin) => new Response(JSON.stringify(body), {
 });
 
 export default {
-  async fetch(req, env) {
+  async fetch(req, env, ctx) {
     const url = new URL(req.url);
     const origin = allowedOrigin(env, req.headers.get("origin"));
     if (req.method === "OPTIONS") return new Response(null, {
@@ -36,6 +37,8 @@ export default {
     if (/^\/oauth\/instagram\/(deauthorize|delete)$/.test(url.pathname)) return metaCallback(req, url, env);
     // Sosyal hesap bağlama dönüşü (src/oauth.js): sağlayıcı yönlendirmesinde Origin yok, platform() dışında
     if (url.pathname.startsWith("/oauth/")) return oauthCallback(req, url, env);
+    // app.socialmediacorner.co taslak üretimi (src/generate.js); GEN_ENABLED kapalıyken 503 not_ready
+    if (url.pathname.startsWith("/gen/")) return generate(req, url, env, origin, ctx);
     // brandcorner.co platformu: üyelik ve panel
     if (/^\/(auth|app)\//.test(url.pathname)) return platform(req, url, env, origin, deliver);
     if (url.pathname !== "/submit" || req.method !== "POST") return json({ ok: false }, 404, origin);
@@ -69,11 +72,14 @@ export default {
     try { await cleanup(env); } catch (e) { console.log("cleanup", e?.message?.slice(0, 80)); }
     // YouTube saklama kuralı (src/oauth.js ytRetention): METRICS_ENABLED kapansa da kalan veri süresi dolunca silinir
     try { await ytRetention(env); } catch (e) { console.log("retention", e?.message?.slice(0, 80)); }
+    // Taslak sayaçları (src/generate.js genCleanup): 2 günden eski gen_usage satırları
+    try { await genCleanup(env); } catch (e) { console.log("gen cleanup", e?.message?.slice(0, 80)); }
     // Günlük metrik senkronu (src/oauth.js syncDue), METRICS_ENABLED "1" ise. Ücretsiz plan çağrı başına 50 alt
     // istek ve 50 D1 sorgusu veriyor; gönderilen her e-postayı bir istek sayıp kalanı senkrona bırakıyoruz. D1'de
-    // bekleyen listesi (1), e-posta başına işaret (1), cleanup (4 ifade) ve YouTube saklama (5 ifade) düşülür.
+    // bekleyen listesi (1), e-posta başına işaret (1), cleanup (4 ifade), YouTube saklama (5 ifade)
+    // ve taslak temizliği (1) düşülür.
     if (metricsEnabled(env)) {
-      const d1 = 50 - 1 - results.length - 4 - 5;
+      const d1 = 50 - 1 - results.length - 4 - 5 - 1;
       try { await syncDue(env, fetch, { budget: 40 - results.length, d1 }); } catch (e) { console.log("sync", e?.message?.slice(0, 80)); }
     }
   },
