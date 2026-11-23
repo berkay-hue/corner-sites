@@ -336,5 +336,6 @@ dialog::backdrop{background:var(--ortu)}
 .araclar .ses-nav{display:inline-flex;align-items:center;min-height:var(--dokunma);margin-left:auto;padding:0 var(--s2);background:transparent;border:0;border-bottom:2px solid transparent;border-radius:0;color:var(--ink2);text-decoration:none;white-space:nowrap;cursor:pointer}
 .araclar .ses-nav:hover{color:var(--ink)}
 .araclar .ses-nav:focus-visible{outline-offset:calc(-1 * var(--odak-kalin))}
-/* A4-2c-nav: dar ekranda (360 px) gezinti yatay kaymaz, temizce iki satıra sarılır; "Marka sesi" son satırın sağında kalır */
-@media (max-width:479.98px){.araclar{flex-wrap:wrap;row-gap:0;overflow-x:visible}}
+/* A4-2c-nav: gezinti yatay kaymaz; sığmadığı her genişlikte (360 px, 480–590 px arası TR, büyük yazı boyutu) temizce satırlara sarılır;
+   "Marka sesi" son satırın sağında kalır. Denetim: yalnız <480 px kuralı 480–590 px'te "Marka sesi"ni kayan şeridin dışında kırpıyordu */
+.araclar{flex-wrap:wrap;row-gap:0;overflow-x:visible}
