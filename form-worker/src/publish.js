@@ -116,7 +116,7 @@ const ROUTE = /^\/publish\/jobs(?:\/(\d{1,12}))?(?:\/(submit|approve|cancel|retr
 
 export async function publish(req, url, env, origin) {
   const site = platformSite(env, origin);
-  if (!site) return reply({ ok: false, error: "origin" }, 403, null);
+  if (!site) return reply({ ok: false, error: "origin" }, 403, origin); // origin index.js süzgecinden: izinli değilse null
   const g = gates(env);
   if (!g || !g.sites.includes(site)) return reply({ ok: false, error: "not_ready" }, 503, origin); // 0 D1
   try {

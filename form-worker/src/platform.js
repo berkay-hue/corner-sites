@@ -46,7 +46,9 @@ export function platformSite(env, origin) {
 
 export async function platform(req, url, env, origin, deliver) {
   const site = platformSite(env, origin);
-  if (!site) return reply({ ok: false, error: "origin" }, 403, null);
+  // origin index.js'te ALLOWED_HOSTS/DEV_ORIGINS süzgecinden geçmiştir (yoksa null): izinli ama hesap sitesi olmayan
+  // (ya da bayrağı kapalı) origin 403'ü CORS başlığıyla alır, istemci "origin" kodunu okuyabilir (smc-hesap.js kapali ekranı)
+  if (!site) return reply({ ok: false, error: "origin" }, 403, origin);
   const c = { env, origin, api: url.origin, site, deliver, ip:req.headers.get("cf-connecting-ip") || "", body: {}, query: Object.fromEntries(url.searchParams) };
   try {
     const route = `${req.method} ${url.pathname.replace(/\/+$/, "")}`;

@@ -821,3 +821,20 @@ test("index.js /publish/ rotası: bayrak kapalıyken 503 not_ready (CORS ile, D1
   assert.equal(res.status, 403);
   assert.deepEqual([c.n.prepare, c.n.batch], [0, 0]);
 });
+
+test("düşük not 5: izinli ama hesap sitesi olmayan origin'in 403 origin yanıtı CORS'lu (istemci okur); izinsiz/yok origin CORS'suz", async () => {
+  const c = counted(d1(freshDb()));
+  const env = { DB: c.db, ALLOWED_HOSTS: `${SITE},saascorner.co,app.socialmediacorner.co`, ACCOUNTS_ENABLED: "0", ...ON };
+  const get = (path, origin) => worker.fetch(new Request(`https://forms.test${path}`, { headers: origin ? { origin } : {} }), env, {});
+  for (const path of ["/publish/jobs", "/auth/me", "/app/profile"]) {
+    for (const o of ["https://saascorner.co", "https://app.socialmediacorner.co"]) {
+      const res = await get(path, o);
+      assert.deepEqual([res.status, (await res.json()).error, res.headers.get("access-control-allow-origin")], [403, "origin", o], `${path} ${o}`);
+    }
+    for (const o of ["https://evil.example", null]) {
+      const res = await get(path, o);
+      assert.deepEqual([res.status, res.headers.get("access-control-allow-origin")], [403, null], `${path} ${o}`);
+    }
+  }
+  assert.deepEqual([c.n.prepare, c.n.batch], [0, 0]);
+});
