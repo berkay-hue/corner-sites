@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="robots" content="noindex">
+<title>Instagram Açıklama Taslakları · Social Media Corner</title>
+<meta name="description" content="Konunu bir cümleyle yaz, Instagram açıklaman için hikâye, liste ve görüş açısından üç taslak al.">
+<link rel="canonical" href="https://app.socialmediacorner.co/instagram-aciklama-uretici">
+<link rel="alternate" hreflang="tr" href="https://app.socialmediacorner.co/instagram-aciklama-uretici">
+<link rel="alternate" hreflang="en" href="https://app.socialmediacorner.co/en/instagram-caption-generator">
+<link rel="alternate" hreflang="x-default" href="https://app.socialmediacorner.co/instagram-aciklama-uretici">
+<meta name="api-base" content="https://corner-forms.berkay-999.workers.dev">
+<meta name="turnstile-sitekey" content="">
+<link rel="icon" href="data:,">
+<script src="/assets/theme.js"></script>
+<link rel="preload" href="/assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/tokens.css">
+<link rel="stylesheet" href="/assets/bilesenler.css">
+<link rel="stylesheet" href="/assets/smc-app.css">
+<script src="/assets/smc-app.js" defer></script>
+</head>
+<body data-arac="ig">
+<a class="atla" href="#icerik">İçeriğe geç</a>
+
+<p class="bant" id="ornek-bant" hidden><strong>ÖRNEK</strong><span>Bu bir prototip — veriler örnek.</span><a href="#durumlar">Durumlar</a></p>
+
+<header class="ust">
+  <div class="ust-ic">
+    <a class="logo" href="https://socialmediacorner.co/" aria-label="Social Media Corner Taslak Masası, ana sayfa">
+      <span class="kose" aria-hidden="true"></span>
+      <span class="logo-ad">Social Media Corner</span>
+      <span class="logo-urun">Taslak Masası</span>
+    </a>
+    <div class="ust-sag">
+      <p class="hak"><span class="pips" aria-hidden="true"><i></i><i></i><i></i></span><span id="hak-ust">Bugün 3 / 3 hak</span></p>
+      <button type="button" class="duz" data-teklif="top">Teklif al</button>
+      <a href="/en/instagram-caption-generator" hreflang="en" lang="en" class="duz dil" aria-label="English" data-sabit>EN</a>
+      <button type="button" class="duz tema" id="tema" aria-pressed="false" aria-label="Koyu tema"><span class="tema-ikon" aria-hidden="true"></span><span class="tema-yazi" aria-hidden="true">Koyu tema</span></button>
+    </div>
+  </div>
+  <nav class="araclar" aria-label="Araçlar"><a href="/">LinkedIn gönderisi</a><a href="/instagram-aciklama-uretici" aria-current="page">Instagram açıklaması</a></nav>
+</header>
+
+<main id="icerik" class="masa" tabindex="-1">
+  <div class="brif-kol">
+    <h1>Konu senden, üç taslak bizden.</h1>
+    <p class="giris" id="giris">Instagram açıklaman için hikâye, liste ve görüş.</p>
+    <noscript><p class="not not-uyari js-yok">Bu araç JavaScript ile çalışır. <a href="https://socialmediacorner.co/">Social Media Corner’a git</a></p></noscript>
+
+    <form id="form" class="sheet brif" method="post" data-sk-noform novalidate aria-label="Taslak brifi">
+      <div class="alan">
+        <label class="alan-etiket" for="konu">Ne hakkında paylaşacaksın?</label>
+        <textarea id="konu" name="topic" rows="2" maxlength="300" required aria-required="true" aria-describedby="konu-ipucu konu-hata" placeholder="Örn. İlk 100 müşteriye ulaştık"></textarea>
+        <div class="alan-alt">
+          <p class="ipucu" id="konu-ipucu">Bir cümle yeter.<span class="sr"> En çok 300 karakter.</span></p>
+          <span class="sayac" id="konu-sayac" aria-hidden="true">0 / 300</span>
+        </div>
+        <p class="sr" id="konu-sayac-duyuru" role="status"></p>
+        <p class="alan-hata" id="konu-hata" role="alert" hidden></p>
+      </div>
+
+      <div class="kunye" id="kunye">
+        <button type="button" class="kunye-ozet" id="kunye-dugme" aria-expanded="false" aria-controls="kunye-panel"><b>Format, sektör, ton</b><span id="kunye-ozet">Instagram · Tekli gönderi · Genel · Samimi</span><u>Değiştir</u></button>
+        <div class="kunye-panel" id="kunye-panel">
+          <fieldset class="secim-grup platform">
+            <legend>Platform</legend>
+            <div class="segment">
+              <span class="secim"><input type="radio" name="platform" id="p-ig" value="ig" checked><label for="p-ig">Instagram</label></span>
+            </div>
+          </fieldset>
+          <fieldset class="secim-grup format">
+            <legend>Format</legend>
+            <div class="segment">
+              <span class="secim"><input type="radio" name="format" id="f-post" value="post" checked><label for="f-post">Tekli gönderi</label></span>
+              <span class="secim"><input type="radio" name="format" id="f-carousel" value="carousel"><label for="f-carousel">Carousel</label></span>
+              <span class="secim"><input type="radio" name="format" id="f-reels" value="reels"><label for="f-reels">Reels açıklaması</label></span>
+            </div>
+          </fieldset>
+          <fieldset class="cipler">
+            <legend>Sektör</legend>
+            <div class="cip-sira">
+              <span class="cip"><input type="radio" name="sector" id="s-genel" value="Genel" checked><label for="s-genel">Genel</label></span>
+              <span class="cip"><input type="radio" name="sector" id="s-eticaret" value="E-ticaret"><label for="s-eticaret">E-ticaret</label></span>
+              <span class="cip"><input type="radio" name="sector" id="s-yazilim" value="Yazılım"><label for="s-yazilim">Yazılım</label></span>
+              <span class="cip"><input type="radio" name="sector" id="s-danisman" value="Danışmanlık"><label for="s-danisman">Danışmanlık</label></span>
+              <span class="cip"><input type="radio" name="sector" id="s-egitim" value="Eğitim"><label for="s-egitim">Eğitim</label></span>
+              <span class="cip"><input type="radio" name="sector" id="s-saglik" value="Sağlık"><label for="s-saglik">Sağlık</label></span>
+              <span class="cip"><input type="radio" name="sector" id="s-emlak" value="Gayrimenkul"><label for="s-emlak">Gayrimenkul</label></span>
+              <span class="cip"><input type="radio" name="sector" id="s-uretim" value="Üretim"><label for="s-uretim">Üretim</label></span>
+            </div>
+          </fieldset>
+          <fieldset class="cipler">
+            <legend>Ton</legend>
+            <div class="cip-sira">
+              <span class="cip"><input type="radio" name="tone" id="t-samimi" value="samimi" checked><label for="t-samimi">Samimi</label></span>
+              <span class="cip"><input type="radio" name="tone" id="t-profesyonel" value="profesyonel"><label for="t-profesyonel">Profesyonel</label></span>
+              <span class="cip"><input type="radio" name="tone" id="t-ogretici" value="ogretici"><label for="t-ogretici">Öğretici</label></span>
+              <span class="cip"><input type="radio" name="tone" id="t-cesur" value="cesur"><label for="t-cesur">Cesur</label></span>
+            </div>
+          </fieldset>
+          <fieldset class="cipler">
+            <legend>Harekete çağrı (isteğe bağlı)</legend>
+            <div class="cip-sira">
+              <span class="cip"><input type="radio" name="cta" id="c-yok" value="" checked><label for="c-yok">Yok</label></span>
+              <span class="cip"><input type="radio" name="cta" id="c-save" value="save"><label for="c-save">Kaydet</label></span>
+              <span class="cip"><input type="radio" name="cta" id="c-comment" value="comment"><label for="c-comment">Yorum</label></span>
+              <span class="cip"><input type="radio" name="cta" id="c-profile" value="profile"><label for="c-profile">Profil</label></span>
+              <span class="cip"><input type="radio" name="cta" id="c-dm" value="dm"><label for="c-dm">DM</label></span>
+              <span class="cip"><input type="radio" name="cta" id="c-link" value="link"><label for="c-link">Link</label></span>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+
+      <div class="sr" aria-hidden="true"><label>Bu alanı boş bırak <input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
+
+      <div class="gonder">
+        <button type="submit" class="btn btn-ana" id="uret" aria-label="Üç taslak üret, 1 hak" aria-describedby="hak-alt"><span class="uret-yazi">Üç taslak üret</span><span class="ayirici" aria-hidden="true">│</span><span class="bedel">1 hak</span></button>
+        <p class="gonder-not"><span class="pips" aria-hidden="true"><i></i><i></i><i></i></span><span id="hak-alt">1 hak kullanır · bugün 3 hakkından 3 kaldı</span></p>
+        <p class="ipucu" id="uret-not" hidden>Şimdiki üç taslak yenileriyle değişir.</p>
+        <p class="not not-uyari" id="form-not" role="alert" hidden></p>
+      </div>
+      <div class="turnstile" id="turnstile"></div>
+      <div class="ornekler" id="ornekler" role="group" aria-label="Örnek konular">
+        <span id="ornek-etiket" aria-hidden="true">Örnek:</span>
+        <button type="button" class="ornek" data-ornek="İlk 100 müşteriye ulaştık">İlk 100 müşteri</button>
+        <button type="button" class="ornek" data-ornek="Yeni ofisimize taşındık">Yeni ofis</button>
+        <button type="button" class="ornek" data-ornek="Bir teslimat hatasından çıkardığımız ders">Hatadan çıkan ders</button>
+      </div>
+      <p class="kvkk">Konu metnin saklanmaz; taslak için yapay zekâ sağlayıcısına (ABD) iletilir. Kişisel veri yazma. <a href="https://socialmediacorner.co/kvkk">KVKK Aydınlatma Metni</a></p>
+    </form>
+  </div>
+
+  <section id="sonuc" aria-labelledby="sonuc-baslik">
+    <div class="sonuc-bas">
+      <h2 id="sonuc-baslik" tabindex="-1">Taslakların burada belirecek</h2>
+      <p class="durum" id="durum" role="status" aria-live="polite">Konunu yaz; aynı konuya üç ayrı açıdan taslak gelsin.</p>
+    </div>
+
+    <div id="p-bos">
+      <ol class="acilar">
+        <li class="aci"><span class="no" aria-hidden="true">01</span><h3>Hikâye</h3><p>Bir anla açılır, bir dersle kapanır.</p></li>
+        <li class="aci"><span class="no" aria-hidden="true">02</span><h3>Liste</h3><p>Taranabilir maddeler; kaydetmelik.</p></li>
+        <li class="aci"><span class="no" aria-hidden="true">03</span><h3>Görüş</h3><p>Net bir tez; yorum çağırır.</p></li>
+      </ol>
+      <p class="bos-not">Beğendiğini kopyala, kendi sesinle bitir.</p>
+      <div class="kat-ornek">
+        <p>Her taslakta bir kat çizgisi görürsün:</p>
+        <div class="fold" aria-hidden="true"><span id="kat-devam">… devamı</span></div>
+        <p id="kat-bos">Instagram akışında açıklamanın yalnız ilk ~125 karakteri görünür; gerisi “… devamı” ardında kalır.</p>
+      </div>
+    </div>
+
+    <div id="p-yukleniyor" class="yigin" hidden>
+      <!-- tur-1: Vazgeç iskeletlerin üstünde; 360×640 ve tablette kaydırmadan görünür -->
+      <div class="alt-sira"><button type="button" class="btn btn-cizgi btn-kucuk" id="vazgec">Vazgeç</button></div>
+      <div class="sheet iskelet" aria-hidden="true"><span class="no">01</span><h3>Hikâye</h3><div class="satirlar"><div class="satir"></div><div class="satir"></div><div class="satir"></div><div class="satir"></div></div></div>
+      <div class="sheet iskelet" aria-hidden="true"><span class="no">02</span><h3>Liste</h3><div class="satirlar"><div class="satir"></div><div class="satir"></div><div class="satir"></div><div class="satir"></div></div></div>
+      <div class="sheet iskelet" aria-hidden="true"><span class="no">03</span><h3>Görüş</h3><div class="satirlar"><div class="satir"></div><div class="satir"></div><div class="satir"></div><div class="satir"></div></div></div>
+    </div>
+
+    <!-- tur-1: role=alert kalktı; tek duyuru #durum'dan (ya da odaklanan başlıktan), kod satırı canlı bölge dışında. D2: Tekrar dene mürekkep düğme -->
+    <div id="hata-yuva">
+      <div id="p-hata" hidden>
+        <div class="sheet hata">
+          <h3 id="hata-baslik" tabindex="-1">Bu sefer olmadı, tekrar dene.</h3>
+          <p id="hata-metin"></p>
+          <p class="hak-cumle" id="hata-hak">Hakkın düşmedi.</p>
+          <div class="alt-sira">
+            <button type="button" class="btn btn-ink" id="hata-tekrar">Tekrar dene</button>
+          </div>
+          <p class="sessiz"><a href="#teklif-yedek" data-teklif="error">Beklemek istemezsen ekipten teklif alabilirsin.</a></p>
+          <p class="kod" id="hata-kod">Kod: llm_fail · İstek no: 7f3a91c2</p>
+        </div>
+      </div>
+    </div>
+
+    <div id="p-sonuc" class="yigin" hidden>
+      <p class="not" id="uyari" hidden></p>
+      <p class="ipucu" id="kat-ipucu">Kesik çizgi kat çizgisidir: Instagram akışında ilk ~125 karakter görünür. Metinler örnektir; konuna göre değişmez.</p>
+      <div class="yigin" id="kartlar" aria-live="off" aria-busy="false"></div>
+      <div class="alt-sira">
+        <button type="button" class="btn btn-cizgi" id="yeniden" aria-label="Yeniden üret, 1 hak" aria-describedby="yeniden-not"><span>Yeniden üret</span><span class="ayirici" aria-hidden="true">│</span><span class="bedel">1 hak</span></button>
+        <p class="ipucu" id="yeniden-not">Şimdiki üç taslak yenileriyle değişir. <span id="yeniden-hak">Bugün 3 hakkından 2 kaldı.</span></p>
+      </div>
+    </div>
+
+    <div id="p-duvar" hidden>
+      <div class="sheet duvar">
+        <h3 id="duvar-baslik" tabindex="-1">Bugünkü 3 hakkını kullandın, gece yarısı yenilenir.</h3>
+        <p id="duvar-metin">Bir şey yapman gerekmez; yarın 3 hak yeniden açılır. Beklemek istemezsen iki seçenek daha var, ikisi de isteğe bağlı.</p>
+        <dl class="dokum" id="duvar-dokum">
+          <div><dt>Kullandığın</dt><dd>3 / 3 hak</dd></div>
+          <div><dt>Yenilenme</dt><dd>gece yarısı (İstanbul saati)</dd></div>
+          <div><dt>Senden istenen</dt><dd>hiçbir şey</dd></div>
+        </dl>
+        <p class="ipucu" id="duvar-taslak" hidden>Bugün ürettiğin taslaklar yukarıda duruyor. Kopyalamak hak istemez.</p>
+      </div>
+    </div>
+
+    <div id="cikislar" class="cikislar" hidden>
+      <section class="cikis sheet" id="bekleme" aria-labelledby="c-bekle">
+        <h4 class="cikis-baslik" id="c-bekle" tabindex="-1">Hesaplı sürüm için bekleme listesi</h4>
+        <p id="b-vaat">Hesaplı sürüm açılınca ilk sen haber al: marka sesi, takvim, ekip onayı.</p>
+        <p class="ipucu" id="b-durust">Tarih henüz belli değil. Bu liste yalnız o duyuru için kullanılır.</p>
+        <form id="b-form" method="post" data-sk-noform novalidate>
+          <div class="alan-k">
+            <label for="b-eposta">E-posta <span class="zor">(zorunlu)</span></label>
+            <input type="email" id="b-eposta" name="email" autocomplete="email" inputmode="email" required pattern=".+@[^@]+\.[^@.]{2,}" aria-describedby="b-eposta-hata">
+            <p class="alan-hata" id="b-eposta-hata" role="alert" hidden></p>
+          </div>
+          <details>
+            <summary>Ad ve rol ekle (isteğe bağlı)</summary>
+            <div class="alan-k">
+              <label for="b-ad">Ad</label>
+              <input type="text" id="b-ad" name="name" autocomplete="name">
+            </div>
+            <fieldset class="cipler cipler-ara">
+              <legend>Rol</legend>
+              <div class="cip-sira">
+                <span class="cip"><input type="radio" name="role" id="r-isletme" value="isletme"><label for="r-isletme">İşletme</label></span>
+                <span class="cip"><input type="radio" name="role" id="r-ajans" value="ajans"><label for="r-ajans">Ajans</label></span>
+                <span class="cip"><input type="radio" name="role" id="r-serbest" value="serbest"><label for="r-serbest">Serbest çalışan</label></span>
+              </div>
+            </fieldset>
+          </details>
+          <div>
+            <label class="onay" for="b-riza">
+              <input type="checkbox" id="b-riza" name="consent" aria-describedby="b-riza-hata">
+              <span><b>Açık rıza.</b> <span id="b-riza-yazi">E-posta adresimin hesaplı sürüm duyurusu için işlenmesini kabul ediyorum.</span> <span class="zor">(zorunlu)</span></span>
+            </label>
+            <p class="kvkk"><a href="https://socialmediacorner.co/kvkk">KVKK Aydınlatma Metni</a></p>
+            <p class="alan-hata" id="b-riza-hata" role="alert" hidden></p>
+          </div>
+          <label class="onay" for="b-ileti">
+            <input type="checkbox" id="b-ileti" name="marketing">
+            <span><b>Ticari ileti izni (isteğe bağlı).</b> Social Media Corner’dan içerik ve kampanya e-postası da almak istiyorum.</span>
+          </label>
+          <button type="submit" class="btn btn-ana" id="b-gonder" aria-disabled="true" aria-describedby="b-ipucu">Listeye ekle</button>
+          <p class="ipucu" id="b-ipucu">Düğme, açık rıza kutusunu işaretleyince açılır.</p>
+        </form>
+        <p class="not not-ok" id="b-tamam" role="status" tabindex="-1" hidden></p>
+      </section>
+      <section class="cikis sheet" aria-labelledby="c-biz">
+        <h4 class="cikis-baslik" id="c-biz" tabindex="-1">Ekipten teklif al</h4>
+        <p>Strateji, görsel üretim ve hesap yönetimi Social Media Corner ekibinde. E-postanı bırak, markana göre teklif hazırlayalım.</p>
+        <p><button type="button" class="btn btn-cizgi" data-teklif="limit">Teklif al</button></p>
+      </section>
+    </div>
+  </section>
+</main>
+
+<aside class="kopru ters" id="kopru" aria-labelledby="kopru-b">
+  <div class="kopru-ic">
+    <div>
+      <p class="ust-etiket">BİZ YAPALIM</p>
+      <h2 id="kopru-b">Taslak bir başlangıç. Gerisi ekip işi.</h2>
+      <p>Bu araç ilk taslağı yazar. Strateji, görsel üretim ve hesap yönetimi Social Media Corner ekibinde kalır.</p>
+    </div>
+    <button type="button" class="btn btn-ters" data-teklif="footer">Teklif al</button>
+  </div>
+</aside>
+
+<section id="teklif-yedek" class="teklif-yedek" aria-labelledby="ty-baslik">
+  <h2 id="ty-baslik" tabindex="-1">Teklif al</h2>
+  <p>Ekip e-postayla döner; teklif ihtiyaca göre hazırlanır. Konu metnin bu forma eklenmez.</p>
+  <p><a href="https://socialmediacorner.co/iletisim#form">Teklif formunu socialmediacorner.co’da aç</a></p>
+</section>
+
+<footer class="alt">
+  <span>© 2026 Social Media Corner, bir Corner Group şirketi</span>
+  <a href="https://socialmediacorner.co/kvkk">KVKK Aydınlatma Metni</a>
+  <a href="https://socialmediacorner.co/">socialmediacorner.co</a>
+</footer>
+
+<dialog id="teklif" aria-labelledby="teklif-baslik">
+  <div class="sheet dlg">
+    <div class="dlg-bas">
+      <h2 id="teklif-baslik" tabindex="-1">Teklif al</h2>
+      <button type="button" class="btn btn-cizgi btn-kucuk" id="teklif-kapat" hidden>Kapat</button>
+    </div>
+    <p class="not not-hata" id="t-hata" role="alert"></p>
+    <form id="t-form" method="post" data-sk-noform novalidate>
+      <p class="ipucu">Ekip e-postayla döner; teklif ihtiyaca göre hazırlanır.</p>
+      <div class="alan-k">
+        <label for="t-eposta">E-posta <span class="zor">(zorunlu)</span></label>
+        <input type="email" id="t-eposta" name="email" autocomplete="email" inputmode="email" required pattern=".+@[^@]+\.[^@.]{2,}" aria-describedby="t-eposta-hata">
+        <p class="alan-hata" id="t-eposta-hata" role="alert" hidden></p>
+      </div>
+      <div class="alan-k">
+        <label for="t-ad">Ad <span class="zor">(isteğe bağlı)</span></label>
+        <input type="text" id="t-ad" name="name" autocomplete="name">
+      </div>
+      <div class="alan-k">
+        <label for="t-sirket">Şirket <span class="zor">(isteğe bağlı)</span></label>
+        <input type="text" id="t-sirket" name="company" autocomplete="organization">
+      </div>
+      <div class="alan-k">
+        <label for="t-sektor">Sektör <span class="zor">(isteğe bağlı)</span></label>
+        <select id="t-sektor" name="sector">
+          <option value="">Seç</option>
+          <option>E-ticaret</option><option>Yazılım</option><option>Danışmanlık</option><option>Eğitim</option><option>Sağlık</option><option>Gayrimenkul</option><option>Üretim</option><option>Diğer</option>
+        </select>
+      </div>
+      <input type="hidden" id="t-kaynak" name="src" value="">
+      <p class="ipucu">Konu metnin bu forma eklenmez.</p>
+      <div class="dlg-alt">
+        <button type="submit" class="btn btn-ana">Teklif iste</button>
+        <button type="button" class="btn btn-cizgi" id="teklif-vazgec">Vazgeç</button>
+      </div>
+      <div class="sonra">
+        <p><b>Sonra ne olur</b></p>
+        <ol>
+          <li>Formu gönderirsin; konu metnin forma eklenmez.</li>
+          <li>Ekip e-postayla döner.</li>
+          <li>İhtiyaca göre teklif gelir. Kabul etmek zorunda değilsin.</li>
+        </ol>
+      </div>
+      <p class="sessiz" hidden>Yazmak yerine konuşmak istersen: <a href="https://socialmediacorner.co/iletisim" target="_blank" rel="noopener" data-src="calendly">görüşme saati seç (yeni sekme)</a></p>
+      <p class="kvkk">Bilgilerin yalnız teklif hazırlamak için kullanılır. <a href="https://socialmediacorner.co/kvkk">KVKK Aydınlatma Metni</a></p>
+    </form>
+    <p class="not not-ok" id="t-tamam" role="status" tabindex="-1" hidden></p>
+  </div>
+</dialog>
+</body>
+</html>

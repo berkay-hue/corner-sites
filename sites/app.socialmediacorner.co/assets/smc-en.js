@@ -64,6 +64,8 @@ var EN={'© 2026 Social Media Corner, bir Corner Group şirketi':'© 2026 Social
 'Yoğunluk var, 1 dakika sonra dene.':'It’s busy right now; try again in a minute.','Sınıra yakın.':'Near the limit.','Tamamı akışta görünür.':'All of it shows in the feed.',
 'Taslak Masası · Social Media Corner — ÖRNEK mock (Yön 2: marka-önce)':'Draft Desk · Social Media Corner — SAMPLE mock (Direction 2: brand-first)'};
 EN["Bu araç JavaScript ile çalışır."]="This tool runs on JavaScript.";EN["Taslak Masası · Social Media Corner"]="Draft Desk · Social Media Corner";
+/* Faz 2 (A4-2a): Instagram açıklama aracı */
+EN["Instagram açıklaman için hikâye, liste ve görüş."]="A story, a list and a take for your Instagram caption.";EN["En çok 5 etiket; sayaç emojiyi tek karakter sayar."]="Up to 5 hashtags; the counter counts an emoji as one character.";EN["Bu taslakta kaçınman gereken bir ifade olabilir; paylaşmadan önce kontrol et."]="This draft may contain a phrase you should avoid; check it before you share.";EN["Format, sektör, ton"]="Format, industry, tone";EN["Tekli gönderi"]="Single post";EN["Reels açıklaması"]="Reels caption";EN["Harekete çağrı (isteğe bağlı)"]="Call to action (optional)";EN["Yorum"]="Comment";EN["Profil"]="Profile";EN["Yok"]="None";EN["Kaydet"]="Save";EN["Araçlar"]="Tools";EN["LinkedIn gönderisi"]="LinkedIn post";EN["Instagram açıklaması"]="Instagram caption";EN["Instagram Açıklama Taslakları · Social Media Corner"]="Instagram Caption Drafts · Social Media Corner";
 function virgul(s){return s.replace(/\./g,',')}
 var ENR=[
  [/^([\d.]+) \/ ([\d.]+) karakter · akışta ilk ~(\d+) görünür$/,function(m,a,b,c){return virgul(a)+' / '+virgul(b)+' characters · first ~'+c+' show in the feed'}],
