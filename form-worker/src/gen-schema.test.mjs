@@ -54,7 +54,13 @@ test("schema.sql aynı tabloları içerir ve 0014'ten sonra yeniden çalışır"
   const b = new DatabaseSync(":memory:");
   b.exec(SCHEMA);
   b.exec(MIG);
-  for (const t of ["gen_usage", "gen_daily"]) assert.deepEqual(cols(b, t), cols(a, t), t);
+  for (const t of ["gen_usage", "gen_daily"]) {
+    assert.deepEqual(cols(b, t), cols(a, t), t);
+    // table_info WITHOUT ROWID farkını göstermez (gen_usage'da bileşik PK zaten NOT NULL); wr/strict ayrıca karşılaştırılır
+    const kind = (db) => ({ ...db.prepare(`PRAGMA table_list(${t})`).get() });
+    assert.deepEqual(kind(b), kind(a), t);
+    assert.equal(kind(b).wr, 1, t);
+  }
   assert.match(SCHEMA, /0014_gen\.sql/);
   assert.match(SCHEMA, /0003–0014/);
   assert.doesNotMatch(SCHEMA, /0003–0013/);
