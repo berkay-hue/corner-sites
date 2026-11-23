@@ -159,8 +159,15 @@ select.kutu{cursor:pointer}
 /* ---- bağlantılar ---- */
 .baglar{display:grid;gap:var(--g2)}
 .bag-kart{display:grid;gap:var(--s3);align-content:start;padding:var(--g3)}
-.bag-bas{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:var(--s2)}
+.bag-bas{display:flex;flex-wrap:wrap;align-items:center;gap:var(--s2) var(--s3)}
+.bag-simge{display:inline-flex;align-items:center;justify-content:center;flex:none;width:44px;height:44px;border-radius:var(--r-m);background:var(--accent-soft);color:var(--accent-strong)}
+.bag-simge .ikon{width:24px;height:24px}
+.bag-ad-k{display:flex;flex-wrap:wrap;align-items:center;gap:var(--s1);flex:1 1 auto;min-width:0}
+.bag-ad-k .pl-et{margin-left:0}
 .bag-ad{font:800 1.25rem/1.3 var(--baslik);letter-spacing:-.01em}
+.bag-neden{color:var(--ink);font-weight:var(--fw-etiket)}
+.bag-plan{color:var(--ink2)}
+.bag-acik{color:var(--ink2)}
 .bag-kim{font-weight:var(--fw-etiket)}
 .bag-kart .bildirim{display:grid;gap:var(--s2)}
 .bag-kart .eylemler{margin-top:0}
@@ -289,4 +296,5 @@ select.kutu{cursor:pointer}
   .rozet::before{forced-color-adjust:none;background:CanvasText}
   .metin.kisa{-webkit-mask-image:none;mask-image:none}
   .pl-kart-one{border-color:Highlight}
+  .bag-simge{border:1px solid CanvasText}
 }
