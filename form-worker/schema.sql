@@ -222,6 +222,34 @@ CREATE TABLE IF NOT EXISTS publish_events (
 );
 CREATE INDEX IF NOT EXISTS publish_events_job ON publish_events (job_id, id);
 
+-- app hesap bölümleri (migrations/0017_accounts.sql ile aynı tablolar).
+-- Marka sesi: kullanıcı başına tek satır. Diziler JSON metin (tones ≤3, samples ≤3 × ≤2200, banned ≤30 × ≤40);
+-- sınırları platform.js voiceIn() uygular. site, satırın hangi sitenin hesabına ait olduğunu sorgularda ikinci kez süzer.
+CREATE TABLE IF NOT EXISTS brand_voice (
+  user_id INTEGER PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
+  site TEXT NOT NULL,
+  sector TEXT NOT NULL DEFAULT '',
+  tones TEXT NOT NULL DEFAULT '[]',
+  samples TEXT NOT NULL DEFAULT '[]',
+  banned TEXT NOT NULL DEFAULT '[]',
+  updated_at TEXT NOT NULL DEFAULT (datetime('now'))
+) WITHOUT ROWID;
+
+-- Taslak geçmişi: üretilen LinkedIn/Instagram taslakları (yazan uç sonraki adımda; bu sürüm okur, siler, dışa aktarır).
+-- Sayfalama id imleciyle (before), arama topic/body LIKE ile. meta JSON (tone vb.).
+CREATE TABLE IF NOT EXISTS drafts (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  site TEXT NOT NULL,
+  created_at TEXT NOT NULL DEFAULT (datetime('now')),
+  platform TEXT NOT NULL CHECK (platform IN ('linkedin','instagram')),
+  topic TEXT NOT NULL DEFAULT '',
+  body TEXT NOT NULL,
+  meta TEXT NOT NULL DEFAULT '{}'
+);
+CREATE INDEX IF NOT EXISTS drafts_user ON drafts (user_id, id DESC);
+CREATE INDEX IF NOT EXISTS drafts_age ON drafts (created_at);
+
 -- Sosyal metrikler bu dosyada değil, migrations/ altında; bu dosyadan sonra sırayla uygulanır:
 --   0001_metrics.sql  sosyal hesaplar ve metrik tabloları
 --   0002_oauth.sql    OAuth akışı, şifreli token, social_accounts (platform, external_id) UNIQUE
@@ -238,6 +266,8 @@ CREATE INDEX IF NOT EXISTS publish_events_job ON publish_events (job_id, id);
 --   0013_linkedin_posts.sql LinkedIn ek toplamlar (kaydetme, gönderme, bağlantı tıklaması, içerikten takipçi ve profil görüntüleme) ve posts.synced_at
 --   0014_gen.sql          app taslak üretimi: gen_usage (günlük sayaçlar), gen_daily (günlük ölçüm) (yukarıdakiyle aynı tablolar)
 --   0016_publish.sql      yayın kuyruğu: publish_jobs, publish_events (yukarıdakiyle aynı tablolar; 0015 başka dala ayrıldı)
+--   0017_accounts.sql     app marka sesi + taslak geçmişi: brand_voice, drafts (yukarıdakiyle aynı tablolar; 0015 Ana'ya ayrıldı)
 -- Uygula (form-worker/ klasöründen çalıştır): npx wrangler d1 migrations apply corner-forms --remote
 -- 0002 uygulanmadan da bağ koparma çalışır; 0003–0014 yeni kodla deploy'dan ÖNCE uygulanmalı.
 -- 0016 PUBLISH_ENABLED = "1" yapılmadan ÖNCE uygulanmalı; bayrak kapalıyken kod bu tablolara dokunmaz.
+-- 0017 uygulanmadan /app/voice ve /app/drafts 503 not_ready döner; /app/export ve /app/account/delete tabloyu atlar.
