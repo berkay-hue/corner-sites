@@ -1367,6 +1367,9 @@ async function rtLinkedIn(c, slug, since, gun, env) {
   const now = Date.now() + 864e5;
   out.items = all.filter(x => x.t >= since && x.t <= now).sort((a, b) => b.t - a.t).slice(0, 10)
     .map(x => ({ title: x.title, link: x.link, tarih: new Date(x.t).toISOString().slice(0, 10) }));
+  // Ücretsiz aramada tarih filtresi yok; dönem dışı son gönderiler yalnız ekranda gösterilir (rapora/yoruma girmez).
+  out.onceki = all.filter(x => x.t < since).sort((a, b) => b.t - a.t).slice(0, 5)
+    .map(x => ({ title: x.title, link: x.link, tarih: new Date(x.t).toISOString().slice(0, 10) }));
   return out;
 }
 // Model çıktısında yalnız basit biçim etiketleri kalır (öznitelik yok); geri kalan her şey kaçışlanır.
@@ -1429,7 +1432,7 @@ async function rakipTakip(req, env) {
     }
   }
   return J({ success: true, status: "ok", gun, count: rows.length, yorum_html: yorum, mail,
-    rakipler: res.map(r => ({ firma: r.firma, ok: r.ok, kaynak: r.kaynak, feed_url: r.feed_url, error: r.error, toplam: r.toplam, tarihsiz: r.tarihsiz, son: r.son, ...(r.kaynak === "LinkedIn" ? { ham: r.ham, tani: r.tani } : {}), items: r.items })) });
+    rakipler: res.map(r => ({ firma: r.firma, ok: r.ok, kaynak: r.kaynak, feed_url: r.feed_url, error: r.error, toplam: r.toplam, tarihsiz: r.tarihsiz, son: r.son, ...(r.kaynak === "LinkedIn" ? { ham: r.ham, tani: r.tani, onceki: r.onceki || [] } : {}), items: r.items })) });
 }
 
 // ================= n8n akışları (otomatik üretildi: n8n-export/gen/gen.py) =================

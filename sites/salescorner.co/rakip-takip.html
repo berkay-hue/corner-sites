@@ -144,6 +144,18 @@ button{font:inherit;cursor:pointer;border-radius:10px;min-height:44px}
       });
       li.appendChild(c);
     });
+    (d.rakipler || []).forEach(function(r){
+      if (r.kaynak !== "LinkedIn" || !r.onceki || !r.onceki.length) return;
+      var c = el("div", "card"); c.style.opacity = ".75";
+      c.appendChild(el("b", null, r.firma + " · LinkedIn · dönemden önceki son gönderiler"));
+      r.onceki.forEach(function(x){
+        var it = el("div", "it");
+        if (x.link) { var a = el("a", null, x.title || x.link); a.href = x.link; a.target = "_blank"; a.rel = "noopener nofollow"; it.appendChild(a); }
+        else it.appendChild(el("span", null, x.title));
+        it.appendChild(el("span", "d", x.tarih)); c.appendChild(it);
+      });
+      li.appendChild(c);
+    });
     if (!li.children.length) li.appendChild(el("p", "d", "Seçilen dönemde yeni içerik bulunamadı."));
     document.getElementById("out").scrollIntoView({behavior:"smooth"});
   }
