@@ -1,0 +1,100 @@
+/* Social Media Corner Stüdyo — giriş / kayıt / şifre sayfaları: bölünmüş ekran (A10b).
+   Yalnız hesap/giris, kayit, sifre-unuttum, sifre-yenile ve EN eşlerinde, studyo-hesap.css'ten sonra yüklenir.
+   Sol: marka paneli (lacivert → mavi → mor geçiş). Sağ: yüzey zemin, ortada ~440px kart.
+   ≤899px: sol panel üstte kısa şerit (logo + başlık), form hemen ardından. */
+
+.au-govde{
+  --au-z1:#0e1c29;--au-z2:#14305a;--au-z3:#2d2572;
+  --au-isik:color-mix(in srgb,var(--accent) 42%,transparent);
+  --au-tik:color-mix(in srgb,var(--ters-accent) 18%,transparent);
+  --au-cizgi:color-mix(in srgb,var(--ters-ink) 16%,transparent);
+  --au-kart-en:440px;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]) .au-govde{--au-z1:#0b1730;--au-z2:#122650;--au-z3:#261f60;--au-isik:color-mix(in srgb,var(--accent) 30%,transparent)}
+}
+:root[data-theme="dark"] .au-govde{--au-z1:#0b1730;--au-z2:#122650;--au-z3:#261f60;--au-isik:color-mix(in srgb,var(--accent) 30%,transparent)}
+
+.au{position:relative;flex:1 0 auto;display:grid;grid-template-columns:minmax(0,45fr) minmax(0,55fr);min-height:100vh;min-height:100dvh}
+
+/* ---- sol panel ---- */
+.au-sol{position:sticky;top:0;align-self:start;display:flex;flex-direction:column;gap:var(--g4);height:100vh;height:100dvh;overflow-y:auto;padding:var(--g4) clamp(32px,5vw,72px);background-color:var(--au-z1);background-image:radial-gradient(70% 55% at 90% 4%,var(--au-isik),transparent 70%),radial-gradient(60% 45% at 0% 100%,color-mix(in srgb,var(--au-z2) 80%,transparent),transparent 75%),linear-gradient(160deg,var(--au-z1) 0%,var(--au-z2) 58%,var(--au-z3) 100%);color:var(--ters-ink)}
+.au-logo{display:inline-flex;align-items:center;gap:10px;align-self:flex-start;min-height:var(--dokunma);color:var(--ters-ink);text-decoration:none}
+.au-logo:hover{color:var(--ters-ink)}
+.au-logo .st-isaret{flex:none}
+.au-logo-yazi{display:flex;flex-direction:column;gap:3px;line-height:1}
+.au-logo-ad{font:800 1rem/1 var(--baslik);letter-spacing:-.01em}
+.au-logo-urun{font:600 .75rem/1 var(--govde);color:var(--ters-ink2);letter-spacing:.01em}
+
+.au-tanit{display:grid;gap:var(--g2);max-width:34rem;margin:auto 0}
+.au-etiket{justify-self:start;padding:6px var(--s3);border:1px solid color-mix(in srgb,var(--ters-accent) 45%,transparent);border-radius:var(--r-hap);color:var(--ters-accent);font:700 .75rem/1.2 var(--govde);letter-spacing:var(--ls-ust);text-transform:uppercase}
+.au-slogan{max-width:20ch;color:var(--ters-ink);font:800 clamp(1.875rem,1.05rem + 1.9vw,2.75rem)/1.12 var(--baslik);letter-spacing:-.025em;text-wrap:balance}
+.au-acik{max-width:46ch;color:var(--ters-ink2);font:400 1.0625rem/1.55 var(--govde)}
+.au-liste{display:grid;gap:var(--s4);margin:var(--s2) 0 0;padding:var(--g3) 0 0;border-top:1px solid var(--au-cizgi);list-style:none}
+.au-liste li{display:grid;grid-template-columns:28px minmax(0,1fr);gap:var(--s3);align-items:start;color:var(--ters-ink);font:500 1rem/1.5 var(--govde)}
+.au-tik{display:grid;place-items:center;width:28px;height:28px;margin-top:-2px;border-radius:50%;background:var(--au-tik);color:var(--ters-accent)}
+.au-tik .ikon{width:16px;height:16px;stroke-width:2.5}
+.au-dene{color:var(--ters-ink2);font:var(--f-ipucu)}
+.au-dene a{display:inline-block;padding:12px 0;margin:-12px 0;color:var(--ters-ink);font-weight:700;text-decoration:underline;text-underline-offset:3px}
+.au-dene a:hover{color:var(--ters-accent)}
+
+/* ---- sağ taraf ---- */
+.au-sag{display:flex;flex-direction:column;min-width:0;min-height:100vh;min-height:100dvh;background:var(--bg)}
+.au-ust{display:flex;align-items:center;justify-content:flex-end;gap:var(--s1);padding:var(--s3) var(--g3) 0}
+.au-ust .st-ust-link{display:inline-flex}
+.au-ana{flex:1 0 auto;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:var(--g2);width:100%;padding:var(--g4) var(--g3) var(--g6)}
+.au-ana>*{width:100%;max-width:var(--au-kart-en)}
+.au-ana>#not{margin:0}
+
+.au-kart{display:grid;gap:var(--g3);padding:var(--g5) var(--g4);background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:var(--r-xl);box-shadow:var(--yuk-2)}
+.au-kart>.ekran-bas{margin:0;gap:var(--s2)}
+.au-kart>.ekran-bas h1{font:800 1.75rem/1.15 var(--baslik);letter-spacing:-.02em}
+.au-kart>.bildirim{margin:0}
+.au-form{padding:0}
+.au-kart>.alt-gecis{margin:0;padding-top:var(--g2);border-top:1px solid var(--line)}
+
+/* kapalı / hata: aynı kart, ikonlu */
+.au-durum{justify-items:start;gap:var(--g2)}
+.au-durum .st-simge{margin-bottom:var(--s1)}
+.au-kart.au-durum>.ekran-bas h1{font-size:1.5rem;line-height:1.2;letter-spacing:-.015em}
+.au-durum .btn-tam{margin-top:var(--s2)}
+.au-durum>.alt-gecis{justify-self:stretch;margin:0}
+.au-durum-hata{border-top:3px solid var(--danger)}
+.au-durum-hata .ust-etiket{color:var(--danger)}
+
+.au-alt{margin-top:0}
+.au-alt .alt-ic{max-width:none;padding-left:var(--g3);padding-right:var(--g3)}
+
+/* ---- dar ekran: sol panel kısa şerit ---- */
+@media (max-width:899px){
+  .au{display:block}
+  .au-sol{position:relative;height:auto;overflow:visible;gap:var(--g2);padding:var(--s3) var(--g2) var(--g3)}
+  .au-tanit{gap:0;margin:0}
+  .au-etiket,.au-acik,.au-liste,.au-dene{display:none}
+  .au-slogan{max-width:24ch;font-size:clamp(1.25rem,1rem + 1.4vw,1.625rem);line-height:1.2;letter-spacing:-.02em}
+  .au-logo-ad{font-size:.9375rem}
+  .au-sag{min-height:0}
+  .au-ust{position:absolute;top:var(--s3);right:var(--s2);gap:2px;padding:0;--focus:var(--ters-accent)}
+  .au-ust .st-ust-link,.au-ust .st-ikon-d{color:var(--ters-ink)}
+  .au-ust .st-ust-link{padding:0 var(--s2)}
+  .au-ust .st-ust-link:hover,.au-ust .st-ikon-d:hover{background:color-mix(in srgb,var(--ters-ink) 12%,transparent);color:var(--ters-ink)}
+  .au-ana{justify-content:flex-start;padding:var(--g3) var(--g2) var(--g5)}
+  .au-alt .alt-ic{padding-left:var(--g2);padding-right:var(--g2)}
+}
+@media (max-width:520px){
+  .au-kart{gap:var(--g2);padding:var(--g3) var(--g2)}
+  .au-kart>.ekran-bas h1{font-size:1.5rem}
+}
+/* çok dar: logo yazısı yalnız görsel olarak gizlenir (bağlantının adı kalır), üst düğmelerle çakışmaz */
+@media (max-width:379px){
+  .au-logo-yazi{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+}
+
+@media (forced-colors:active){
+  .au-sol{border-right:1px solid CanvasText}
+  .au-tik{border:1px solid CanvasText}
+  .au-kart{border-color:CanvasText}
+}
+@media (forced-colors:active) and (max-width:899px){
+  .au-sol{border-right:0;border-bottom:1px solid CanvasText}
+}

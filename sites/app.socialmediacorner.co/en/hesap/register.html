@@ -17,34 +17,48 @@
 <link rel="stylesheet" href="/assets/tokens.css">
 <link rel="stylesheet" href="/assets/studyo.css">
 <link rel="stylesheet" href="/assets/studyo-hesap.css">
+<link rel="stylesheet" href="/assets/studyo-auth.css">
 <script src="/assets/smc-hesap.js" defer></script>
 </head>
-<body class="hs-govde" data-sayfa="kayit">
+<body class="hs-govde au-govde" data-sayfa="kayit">
 <a class="atla" href="#icerik">Skip to content</a>
 <p class="bant" hidden><strong>SAMPLE</strong><span>Sample mode: nothing is sent, no account is created, nothing is connected.</span></p>
 
-<header class="st-ust">
-  <a class="st-logo" href="/en/"><span class="st-isaret"><svg class="ikon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 5h16v11H9l-5 4z"/></svg></span><span class="st-logo-yazi"><span class="st-logo-ad">Social Media Corner</span><span class="st-logo-urun">Studio</span></span></a>
-  <div class="st-ust-sag">
+<div class="au">
+<header class="au-sol ters">
+  <a class="au-logo" href="/en/"><span class="st-isaret"><svg class="ikon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 5h16v11H9l-5 4z"/></svg></span><span class="au-logo-yazi"><span class="au-logo-ad">Social Media Corner</span><span class="au-logo-urun">Studio</span></span></a>
+  <div class="au-tanit">
+    <p class="au-etiket">Account beta</p>
+    <p class="au-slogan">Create social media content with AI in minutes.</p>
+    <p class="au-acik">Define your brand voice once; Studio drafts for LinkedIn, your blog and Instagram, and you have the final say.</p>
+    <ul class="au-liste">
+      <li><span class="au-tik" aria-hidden="true"><svg class="ikon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span>LinkedIn posts and blog drafts — in your brand voice</span></li>
+      <li><span class="au-tik" aria-hidden="true"><svg class="ikon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span>Instagram captions, Reels hooks and video scripts</span></li>
+      <li><span class="au-tik" aria-hidden="true"><svg class="ikon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span>Enrich them with free images from Pexels (Pro)</span></li>
+      <li><span class="au-tik" aria-hidden="true"><svg class="ikon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span>Approve a draft and plan it — publishing queue coming soon</span></li>
+    </ul>
+  </div>
+  <p class="au-dene">Try it without an account <span aria-hidden="true">→</span> <a href="/en/">Open Studio</a></p>
+</header>
+
+<div class="au-sag">
+<div class="au-ust">
     <a class="st-ust-link" href="/en/pricing">Plans</a>
     <a class="st-ikon-d st-dil" href="/hesap/kayit" hreflang="tr" lang="tr" aria-label="Türkçe">TR</a>
     <button type="button" class="st-ikon-d st-tema" id="tema" aria-label="Switch to dark theme" title="Switch to dark theme"><svg class="ikon ikon-gunes" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="ikon ikon-ay" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
-  </div>
-</header>
+</div>
 
-<main id="icerik" class="ana" tabindex="-1" aria-busy="true">
+<main id="icerik" class="au-ana" tabindex="-1" aria-busy="true">
   <div id="not" class="bildirim" role="status" aria-live="polite"></div>
   <noscript><p class="bildirim bildirim-uyari">This page needs JavaScript. Turn on JavaScript in your browser and try again.</p></noscript>
 
   <section class="auth" data-ekran="ana" aria-labelledby="h-kayit" hidden>
-    <div class="kol-dar">
+    <div class="au-kart">
       <div class="ekran-bas">
-        <p class="hs-marka"><span class="st-isaret" aria-hidden="true"><svg class="ikon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 5h16v11H9l-5 4z"/></svg></span><span>Social Media Corner Studio</span></p>
-        <p class="ust-etiket">Account beta</p>
         <h1 id="h-kayit" tabindex="-1">Create account</h1>
         <p class="giris-p">A one-minute sign-up, then we set up your brand voice together.</p>
       </div>
-      <form data-sk-noform class="sheet form" id="f-kayit" novalidate aria-labelledby="h-kayit">
+      <form data-sk-noform class="form au-form" id="f-kayit" novalidate aria-labelledby="h-kayit">
         <div class="alan-k">
           <label class="etiket" for="k-ad">Full name</label>
           <input class="kutu" id="k-ad" name="name" type="text" autocomplete="name" maxlength="120" required aria-describedby="k-ad-hata">
@@ -79,31 +93,34 @@
   </section>
 
   <section data-ekran="kapali" aria-labelledby="h-kapali" hidden>
-    <div class="sheet hata acilis">
-      <p class="ust-etiket">Account beta</p>
-      <h1 id="h-kapali" tabindex="-1">Accounts are not open yet</h1>
-      <p>The account beta is being prepared. This page will work once sign-in, registration and connections open; until then you can use Studio without an account.</p>
-      <div class="alt-sira">
-        <a class="btn btn-ana" href="/en/">Open Studio</a>
+    <div class="au-kart au-durum">
+      <span class="st-simge" aria-hidden="true"><svg class="ikon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+      <div class="ekran-bas">
+        <p class="ust-etiket">Account beta</p>
+        <h1 id="h-kapali" tabindex="-1">Accounts are opening soon</h1>
+        <p class="giris-p">We’re making the final preparations for the account beta. In the meantime, you can try Studio without an account.</p>
       </div>
+      <a class="btn btn-ana btn-tam" href="/en/">Open Studio</a>
+      <p class="alt-gecis"><a class="bag" href="/en/pricing">See plans</a></p>
     </div>
   </section>
 
   <section data-ekran="hata" aria-labelledby="h-hata" hidden>
-    <div class="sheet sheet-hata hata" role="alert">
-      <p class="ust-etiket">Connection problem</p>
-      <h1 id="h-hata" tabindex="-1">We can’t reach your account right now</h1>
-      <p>The server did not respond. Your drafts and connections are safe; try again in a few minutes.</p>
-      <p class="kod" id="hata-kod"></p>
-      <div class="alt-sira">
-        <button type="button" class="btn btn-ana" id="hata-tekrar">Try again</button>
-        <a class="bag" href="/en/">Use Studio without an account</a>
+    <div class="au-kart au-durum au-durum-hata" role="alert">
+      <span class="st-simge st-simge-hata" aria-hidden="true"><svg class="ikon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg></span>
+      <div class="ekran-bas">
+        <p class="ust-etiket">Connection problem</p>
+        <h1 id="h-hata" tabindex="-1">We can’t reach your account right now</h1>
+        <p class="giris-p">The server did not respond. Your drafts and connections are safe; try again in a few minutes.</p>
       </div>
+      <p class="kod" id="hata-kod"></p>
+      <button type="button" class="btn btn-ana btn-tam" id="hata-tekrar">Try again</button>
+      <p class="alt-gecis"><a class="bag" href="/en/">Use Studio without an account</a></p>
     </div>
   </section>
 </main>
 
-<footer class="alt">
+<footer class="alt au-alt">
   <div class="alt-ic">
     <div class="alt-site">
       <a class="bag" href="/en/">Studio</a>
@@ -114,5 +131,7 @@
     </div>
   </div>
 </footer>
+</div>
+</div>
 </body>
 </html>
