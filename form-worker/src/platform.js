@@ -81,7 +81,8 @@ export async function platform(req, url, env, origin, deliver) {
       await env.DB.prepare("DELETE FROM sessions WHERE token_hash = ?").bind(await sha256(token)).run();
       return ok(c, {});
     }
-    const handler = m && APP[`${m[1]} ${key}`];
+    // Hesap bölümleri (ACCT) yalnız uç izin listesi olan sitede; brandcorner.co'da eskisi gibi 404
+    const handler = m && (APP[`${m[1]} ${key}`] || (siteConf(site).routes ? ACCT[`${m[1]} ${key}`] : undefined));
     if (!handler) throw new Bad("not_found", 404);
     return await handler(c, m[3] && Number(m[3]));
   } catch (e) {
@@ -310,6 +311,184 @@ const APP = {
 
 const isOwnerRole = u => u.role === "brand" || u.role === "agency";
 const need = (cond, code = "forbidden", status = 403) => { if (!cond) throw new Bad(code, status); };
+
+// ---- app hesap bölümleri (migrations/0017_accounts.sql; A5-3) ----
+// Yalnız uç izin listesi olan sitede (app.socialmediacorner.co ve önizlemesi, src/sites.js APP_ROUTES) çalışır;
+// brandcorner.co'da bu anahtarlar APP'te olmadığı için eskisi gibi 404. Her sorgu user_id = ? AND site = ? ile süzülür.
+// Arayüz sözleşmesi: sites/app.socialmediacorner.co/assets/smc-hesap.js (sesDoldur, taslakGetir, verileriIndir, hesapSil).
+const VOICE_SECTORS = ["", "agency", "ecom", "edu", "estate", "fin", "food", "health", "industry", "other", "services", "tech", "travel"];
+const VOICE_TONES = ["samimi", "kurumsal", "esprili", "ogretici", "ilham", "net", "veri"];
+const VOICE_MAX = { tones: 3, samples: 3, sample: 2200, banned: 30, word: 40 };
+const DRAFT_PLATFORMS = ["linkedin", "instagram"], DRAFT_PAGE = 50, EXPORT_MAX = 10000;
+const missingSchema = e => /no such (table|column)/i.test(String(e && e.message));
+// 0017 uygulanmadıysa tablo yok: arayüz 503 not_ready'yi "Bu bölüm yakında" gösterir
+const acct = fn => async (c, id) => {
+  try { return await fn(c, id); } catch (e) { if (missingSchema(e)) throw new Bad("not_ready", 503); throw e; }
+};
+const ACCT = {
+  "GET voice": acct(getVoice),
+  "PUT voice": acct(putVoice),
+  "GET drafts": acct(listDrafts),
+  "POST drafts/:id/delete": acct(deleteDraft),
+  "GET export": acct(exportData),
+  "POST account/delete": acct(deleteAccount),
+};
+
+const jsonOr = (s, d) => { try { return JSON.parse(s); } catch { return d; } };
+const voiceOut = r => r && { sector: r.sector, tones: jsonOr(r.tones, []), samples: jsonOr(r.samples, []), banned: jsonOr(r.banned, []), updated_at: r.updated_at };
+const readVoice = c => c.env.DB.prepare("SELECT sector, tones, samples, banned, updated_at FROM brand_voice WHERE user_id = ? AND site = ?")
+  .bind(c.user.id, c.site).first();
+
+async function getVoice(c) {
+  return ok(c, { voice: voiceOut(await readVoice(c)) });
+}
+
+// Geçersiz herhangi bir alan 400 voice (arayüz "Alanları kontrol et" der); kırpma yok, sessiz düzeltme yalnız boşluk/tekrar
+function voiceIn(b) {
+  const bad = () => { throw new Bad("voice"); };
+  const sector = b.sector ?? "";
+  if (!VOICE_SECTORS.includes(sector)) bad();
+  const tones = b.tones ?? [];
+  if (!Array.isArray(tones) || !tones.every(x => VOICE_TONES.includes(x))) bad();
+  const t = [...new Set(tones)];
+  if (t.length > VOICE_MAX.tones) bad();
+  const samples = b.samples ?? [];
+  if (!Array.isArray(samples) || samples.length > VOICE_MAX.samples || !samples.every(x => typeof x === "string")) bad();
+  const s = samples.map(x => x.trim()).filter(Boolean);
+  if (s.some(x => x.length > VOICE_MAX.sample)) bad();
+  const banned = b.banned ?? [];
+  if (!Array.isArray(banned) || banned.length > VOICE_MAX.banned) bad();
+  const w = [];
+  for (const raw of banned) {
+    if (typeof raw !== "string" || /[|\n\r\u0085\u2028\u2029]/.test(raw)) bad();
+    const k = raw.trim().toLocaleLowerCase("tr");
+    if (!k || k.length > VOICE_MAX.word) bad();
+    if (!w.includes(k)) w.push(k);
+  }
+  return { sector, tones: t, samples: s, banned: w };
+}
+
+async function putVoice(c) {
+  const v = voiceIn(c.body);
+  const row = await c.env.DB.prepare(
+    `INSERT INTO brand_voice (user_id, site, sector, tones, samples, banned) VALUES (?, ?, ?, ?, ?, ?)
+     ON CONFLICT (user_id) DO UPDATE SET sector = excluded.sector, tones = excluded.tones, samples = excluded.samples,
+       banned = excluded.banned, updated_at = datetime('now') WHERE brand_voice.site = excluded.site
+     RETURNING sector, tones, samples, banned, updated_at`,
+  ).bind(c.user.id, c.site, v.sector, JSON.stringify(v.tones), JSON.stringify(v.samples), JSON.stringify(v.banned)).first();
+  if (!row) throw new Bad("not_found", 404);
+  return ok(c, { voice: voiceOut(row) });
+}
+
+const draftOut = r => ({ id: r.id, platform: r.platform, created_at: r.created_at, topic: r.topic, body: r.body, meta: jsonOr(r.meta, {}) });
+
+// ?q= (konu/metin arama, en çok 100), ?platform=linkedin|instagram, ?before=<son id> (id imleci). 50'lik sayfa, next = sonraki before.
+async function listDrafts(c) {
+  const { q = "", platform = "", before = "" } = c.query;
+  if (platform && !DRAFT_PLATFORMS.includes(platform)) throw new Bad("platform");
+  if (before && !/^[1-9]\d{0,15}$/.test(before)) throw new Bad("before");
+  const term = String(q).trim().slice(0, 100);
+  const where = ["user_id = ?", "site = ?"], args = [c.user.id, c.site];
+  if (platform) { where.push("platform = ?"); args.push(platform); }
+  if (before) { where.push("id < ?"); args.push(Number(before)); }
+  if (term) {
+    const like = `%${term.replace(/[\\%_]/g, x => "\\" + x)}%`;
+    where.push("(topic LIKE ? ESCAPE '\\' OR body LIKE ? ESCAPE '\\')");
+    args.push(like, like);
+  }
+  const rows = await listAll(c.env, `SELECT id, platform, created_at, topic, body, meta FROM drafts WHERE ${where.join(" AND ")}
+    ORDER BY id DESC LIMIT ${DRAFT_PAGE + 1}`, ...args);
+  const page = rows.slice(0, DRAFT_PAGE);
+  return ok(c, { drafts: page.map(draftOut), next: rows.length > DRAFT_PAGE ? page[page.length - 1].id : null });
+}
+
+// Başkasının ya da başka sitenin taslağı yokmuş gibi 404
+async function deleteDraft(c, id) {
+  const r = await c.env.DB.prepare("DELETE FROM drafts WHERE id = ? AND user_id = ? AND site = ?").bind(id, c.user.id, c.site).run();
+  if (!r.meta?.changes) throw new Bad("not_found", 404);
+  return ok(c, {});
+}
+
+const firstOr = async (q, d) => { try { return await q.first(); } catch (e) { if (noTable(e)) return d; throw e; } };
+
+// Kullanıcının verileri tek JSON dosyası olarak (KVKK m.11 / GDPR m.20). Şifre özeti, token, oturum, sağlayıcı
+// hesap kimliği (external_id, scoped_id) ve hata metinleri hiç seçilmez; yalnız aşağıdaki sütunlar.
+async function exportData(c) {
+  const { env, user, site } = c;
+  const u = await env.DB.prepare("SELECT created_at, consent_at FROM users WHERE id = ? AND site = ?").bind(user.id, site).first();
+  const body = {
+    ok: true,
+    exported_at: new Date().toISOString(),
+    site,
+    profile: { ...me(user), created_at: u?.created_at ?? null, consent_at: u?.consent_at ?? null },
+    voice: voiceOut(await firstOr(env.DB.prepare("SELECT sector, tones, samples, banned, updated_at FROM brand_voice WHERE user_id = ? AND site = ?")
+      .bind(user.id, site), null)),
+    drafts: (await listOr(env, `SELECT id, platform, created_at, topic, body, meta FROM drafts WHERE user_id = ? AND site = ? ORDER BY id DESC LIMIT ${EXPORT_MAX}`,
+      user.id, site)).map(draftOut),
+    connections: await listOr(env, "SELECT platform, handle, status, connected_at, created_at, updated_at FROM social_accounts WHERE user_id = ? ORDER BY platform",
+      user.id),
+    posts: await listOr(env, `SELECT id, platform, url, type, date, caption, created_at FROM posts WHERE user_id = ? ORDER BY id LIMIT ${EXPORT_MAX}`, user.id),
+    publish_jobs: await listOr(env, `SELECT id, platform, state, body, run_at, created_at, updated_at FROM publish_jobs WHERE user_id = ? AND site = ?
+      ORDER BY id LIMIT ${EXPORT_MAX}`, user.id, site),
+  };
+  return new Response(JSON.stringify(body), {
+    status: 200,
+    headers: {
+      "content-type": "application/json", "cache-control": "no-store",
+      "content-disposition": 'attachment; filename="smc-verilerim.json"',
+      ...(c.origin && { "access-control-allow-origin": c.origin, vary: "Origin" }),
+    },
+  });
+}
+
+// Hesabı kalıcı siler: şifre doğrulanır (giriş gibi; yanlışsa 401 invalid, hız sınırı auth_attempts "delete"),
+// bağlı hesaplar koparılır (token silinir, destekleyen sağlayıcıda iptal), sonra kullanıcının bütün satırları tek
+// batch'te silinir. Yalnız var olan tablolar (eski migration'ı uygulanmamış D1'de sorgu düşmesin). auth_attempts
+// kalır (24 saatte cleanup siler; hız sınırının silmeyle sıfırlanmaması için).
+async function deleteAccount(c) {
+  const { env, site, ip, body, user } = c;
+  const password = String(body.password ?? "").slice(0, 200);
+  if (!password) throw new Bad("missing");
+  if (await attempts(env, "delete", "email", user.email, 15, true) >= 5 || await attempts(env, "delete", "ip", ip, 15, true) >= 20)
+    throw new Bad("rate", 429);
+  const good = await checkPass(password, user.pass);
+  await attempt(env, ip, user.email, "delete", good ? 1 : 0);
+  if (!good) throw new Bad("invalid", 401);
+
+  for (const { platform: p } of await listOr(env, "SELECT DISTINCT platform FROM social_accounts WHERE user_id = ?", user.id))
+    if (OAUTH.includes(p)) await disconnectOAuth(env, user.id, p);
+
+  const have = new Set((await listAll(env, "SELECT name FROM sqlite_master WHERE type = 'table'")).map(r => r.name));
+  const q = (sql, ...args) => env.DB.prepare(sql).bind(...args);
+  const id = user.id, steps = [];
+  const add = (tables, ...stmts) => { if (tables.every(t => have.has(t))) steps.push(...stmts); };
+  add(["post_snaps", "posts"], q("DELETE FROM post_snaps WHERE post_id IN (SELECT id FROM posts WHERE user_id = ?)", id));
+  add(["posts"], q("DELETE FROM posts WHERE user_id = ?", id));
+  add(["metric_snapshots", "social_accounts"], q("DELETE FROM metric_snapshots WHERE account_id IN (SELECT id FROM social_accounts WHERE user_id = ?)", id));
+  add(["link_snapshots", "social_accounts"],
+    q("UPDATE link_snapshots SET account_id = NULL WHERE account_id IN (SELECT id FROM social_accounts WHERE user_id = ?)", id));
+  add(["link_snapshots", "applications", "campaigns"], q(`DELETE FROM link_snapshots WHERE application_id IN (SELECT id FROM applications WHERE user_id = ?
+    OR campaign_id IN (SELECT id FROM campaigns WHERE owner_id = ?))`, id, id));
+  add(["publish_events", "publish_jobs"], q("DELETE FROM publish_events WHERE job_id IN (SELECT id FROM publish_jobs WHERE user_id = ?)", id));
+  add(["publish_jobs"], q("DELETE FROM publish_jobs WHERE user_id = ?", id), q("UPDATE publish_jobs SET approved_by = NULL WHERE approved_by = ?", id));
+  add(["oauth_tokens"], q("DELETE FROM oauth_tokens WHERE user_id = ?", id));
+  add(["oauth_states"], q("DELETE FROM oauth_states WHERE user_id = ?", id));
+  add(["social_accounts"], q("DELETE FROM social_accounts WHERE user_id = ?", id));
+  add(["applications", "campaigns"],
+    q("DELETE FROM applications WHERE user_id = ? OR campaign_id IN (SELECT id FROM campaigns WHERE owner_id = ?)", id, id));
+  add(["campaigns"], q("DELETE FROM campaigns WHERE owner_id = ?", id));
+  add(["user_perms"], q("DELETE FROM user_perms WHERE user_id = ?", id));
+  add(["perm_log"], q("DELETE FROM perm_log WHERE user_id = ?", id));
+  add(["post_edits"], q("DELETE FROM post_edits WHERE user_id = ?", id));
+  add(["brand_voice"], q("DELETE FROM brand_voice WHERE user_id = ?", id));
+  add(["drafts"], q("DELETE FROM drafts WHERE user_id = ?", id));
+  // Yeni üye bildirimi (register: site + '/kayit' + fields içinde ["E-posta", email])
+  steps.push(q("DELETE FROM submissions WHERE site = ? AND page = '/kayit' AND instr(fields, ?) > 0", site, JSON.stringify(["E-posta", user.email])));
+  steps.push(q("DELETE FROM password_resets WHERE user_id = ?", id), q("DELETE FROM sessions WHERE user_id = ?", id));
+  steps.push(q("DELETE FROM users WHERE id = ? AND site = ?", id, site));
+  await env.DB.batch(steps);
+  return ok(c, {});
+}
 
 async function updateProfile(c) {
   const { env, user, body } = c;
