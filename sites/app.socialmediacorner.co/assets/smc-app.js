@@ -662,8 +662,6 @@ function hashOku(){
   });
 }
 kunyeOzet();konuGuncelle();hakYaz();temaYaz();rizaYaz();
-/* A4-2b: dar ekranda araç gezintisi kayar; geçerli araç görünür kalsın */
-(function(){var n=$('.araclar [aria-current="page"]'),k=n&&n.parentNode;if(k&&k.scrollWidth>k.clientWidth){var f=n.getBoundingClientRect().right-k.getBoundingClientRect().right;if(f>0)k.scrollLeft+=f}})();
 try{var kk=JSON.parse(sessionStorage.getItem('smc-konu')||'null');sessionStorage.removeItem('smc-konu');if(kk){konu.value=kk[0]||'';hedef.value=kk[1]||'';konuGuncelle()}}catch(e){}
 if(ORNEK){
   /* ÖRNEK modu: bant görünür, sahte veri + durum seçici ornek.js'te */
