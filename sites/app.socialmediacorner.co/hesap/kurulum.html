@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="robots" content="noindex, nofollow">
+<title>Marka sesi · Social Media Corner</title>
+<meta name="api-base" content="https://corner-forms.berkay-999.workers.dev">
+<link rel="icon" href="data:,">
+<script src="/assets/theme.js"></script>
+<link rel="preload" href="/assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/tokens.css">
+<link rel="stylesheet" href="/assets/bilesenler.css">
+<link rel="stylesheet" href="/assets/smc-hesap.css">
+<script src="/assets/smc-hesap.js" defer></script>
+</head>
+<body data-sayfa="kurulum" data-korumali>
+<a class="atla" href="#icerik">İçeriğe geç</a>
+<p class="bant" hidden><strong>ÖRNEK</strong><span>Örnek mod: hiçbir şey gönderilmez, hesap açılmaz, bağlantı kurulmaz.</span></p>
+
+<header class="ust">
+  <div class="ust-ic">
+    <a class="logo" href="/" aria-label="Social Media Corner Taslak Masası, ana sayfa">
+      <span class="kose" aria-hidden="true"></span>
+      <span class="logo-ad">Social Media Corner</span><span class="logo-ayir" aria-hidden="true">·</span>
+      <span>Taslak Masası</span>
+    </a>
+    <div class="ust-sag">
+      <button type="button" class="duz" id="cikis" data-oturum hidden>Çıkış yap</button>
+      <a class="duz" href="/en/hesap/setup" hreflang="en" lang="en" aria-label="English">EN</a>
+      <button type="button" class="duz tema" id="tema" aria-pressed="false" aria-label="Koyu tema"><span class="tema-ikon" aria-hidden="true"></span></button>
+    </div>
+  </div>
+  <nav class="sekmeler" aria-label="Hesap" data-oturum hidden>
+    <div class="sekme-ic">
+      <a class="sekme" href="/hesap/gecmis">Geçmiş</a>
+      <a class="sekme" href="/hesap/baglantilar">Bağlantılar</a>
+      <a class="sekme" href="/hesap/kurulum" aria-current="page">Marka sesi</a>
+      <a class="sekme" href="/hesap/ayarlar">Ayarlar</a>
+    </div>
+  </nav>
+</header>
+
+<main id="icerik" class="ana" tabindex="-1" aria-busy="true">
+  <div id="not" class="bildirim" role="status" aria-live="polite"></div>
+  <noscript><p class="bildirim bildirim-uyari">Bu sayfa JavaScript ile çalışır. Tarayıcında JavaScript’i açıp yeniden dene.</p></noscript>
+
+  <section data-ekran="ana" aria-labelledby="h-kurulum" hidden>
+    <div class="kol">
+      <div class="ekran-bas">
+        <p class="ust-etiket" id="k-adim">Adım 1 / 3</p>
+        <h1 id="h-kurulum" tabindex="-1">Marka sesini tanıt</h1>
+        <p class="giris-p">Üç kısa adım. Taslaklar bu bilgiyle senin gibi yazar. Her adımı atlayabilir, sonra değiştirebilirsin.</p>
+      </div>
+      <ol class="adimlar" aria-label="Kurulum adımları">
+        <li data-adim="1"><span class="adim-no">1</span><span>Sektör ve ton</span></li>
+        <li data-adim="2"><span class="adim-no">2</span><span>Örnek gönderiler</span></li>
+        <li data-adim="3"><span class="adim-no">3</span><span>Yasaklı kelimeler</span></li>
+      </ol>
+      <form class="sheet form" id="f-kurulum" novalidate aria-labelledby="h-kurulum">
+        <div class="form" data-panel="1">
+          <h2 id="h-panel-1" tabindex="-1">Sektör ve ton</h2>
+          <div class="alan-k">
+            <label class="etiket" for="sektor">Sektör</label>
+            <select class="kutu" id="sektor" name="sector" aria-describedby="sektor-ipucu">
+              <option value="">Sektör seç</option>
+              <option value="tech">Teknoloji ve SaaS</option>
+              <option value="ecom">E-ticaret ve perakende</option>
+              <option value="health">Sağlık</option>
+              <option value="edu">Eğitim</option>
+              <option value="fin">Finans ve sigorta</option>
+              <option value="estate">Gayrimenkul ve inşaat</option>
+              <option value="food">Yiyecek ve içecek</option>
+              <option value="travel">Turizm ve otelcilik</option>
+              <option value="industry">Üretim ve sanayi</option>
+              <option value="services">Profesyonel hizmetler</option>
+              <option value="agency">Ajans ve danışmanlık</option>
+              <option value="other">Diğer</option>
+            </select>
+            <p class="ipucu" id="sektor-ipucu">Örnekler ve terimler sektörüne göre seçilir.</p>
+          </div>
+          <fieldset class="secim-grup">
+            <legend>Ton (en fazla 3)</legend>
+            <div class="secim-sira" id="tonlar">
+              <span class="secim"><input type="checkbox" id="ton-samimi" name="tone" aria-describedby="ton-sayac ton-hata" value="samimi"><label for="ton-samimi">Samimi</label></span>
+              <span class="secim"><input type="checkbox" id="ton-kurumsal" name="tone" aria-describedby="ton-sayac ton-hata" value="kurumsal"><label for="ton-kurumsal">Kurumsal</label></span>
+              <span class="secim"><input type="checkbox" id="ton-esprili" name="tone" aria-describedby="ton-sayac ton-hata" value="esprili"><label for="ton-esprili">Esprili</label></span>
+              <span class="secim"><input type="checkbox" id="ton-ogretici" name="tone" aria-describedby="ton-sayac ton-hata" value="ogretici"><label for="ton-ogretici">Öğretici</label></span>
+              <span class="secim"><input type="checkbox" id="ton-ilham" name="tone" aria-describedby="ton-sayac ton-hata" value="ilham"><label for="ton-ilham">İlham verici</label></span>
+              <span class="secim"><input type="checkbox" id="ton-net" name="tone" aria-describedby="ton-sayac ton-hata" value="net"><label for="ton-net">Net ve kısa</label></span>
+              <span class="secim"><input type="checkbox" id="ton-veri" name="tone" aria-describedby="ton-sayac ton-hata" value="veri"><label for="ton-veri">Veri odaklı</label></span>
+            </div>
+            <div class="alan-alt"><p class="alan-hata" id="ton-hata" role="status"></p><p class="sayac" id="ton-sayac">0 / 3</p></div>
+          </fieldset>
+        </div>
+
+        <div class="form" data-panel="2" hidden>
+          <h2 id="h-panel-2" tabindex="-1">Örnek gönderiler</h2>
+          <p class="ince">Beğendiğin ya da daha önce paylaştığın en fazla 3 gönderiyi yapıştır. Taslaklar yalnız tonunu ve ritmini örnek alır; içeriği kopyalanmaz.</p>
+          <div class="bildirim bildirim-uyari"><p><strong>Kişisel veri yapıştırma.</strong> Müşteri adı, telefon ya da e-posta varsa önce sil. Örnekler talimat olarak okunmaz, yalnız örnek sayılır.</p></div>
+          <div class="alan-k ornek-alan" data-ornek="1">
+            <label class="etiket" for="ornek-1">1. örnek gönderi</label>
+            <textarea class="kutu" id="ornek-1" name="sample" rows="4" maxlength="2200" aria-describedby="ornek-1-say"></textarea>
+            <div class="alan-alt"><span class="ipucu">İsteğe bağlı</span><span class="sayac" id="ornek-1-say">0 / 2.200</span></div>
+          </div>
+          <div class="alan-k ornek-alan" data-ornek="2" hidden>
+            <label class="etiket" for="ornek-2">2. örnek gönderi</label>
+            <textarea class="kutu" id="ornek-2" name="sample" rows="4" maxlength="2200" aria-describedby="ornek-2-say"></textarea>
+            <div class="alan-alt"><span class="ipucu">İsteğe bağlı</span><span class="sayac" id="ornek-2-say">0 / 2.200</span></div>
+          </div>
+          <div class="alan-k ornek-alan" data-ornek="3" hidden>
+            <label class="etiket" for="ornek-3">3. örnek gönderi</label>
+            <textarea class="kutu" id="ornek-3" name="sample" rows="4" maxlength="2200" aria-describedby="ornek-3-say"></textarea>
+            <div class="alan-alt"><span class="ipucu">İsteğe bağlı</span><span class="sayac" id="ornek-3-say">0 / 2.200</span></div>
+          </div>
+          <p><button type="button" class="btn btn-cizgi" id="ornek-ekle">Bir örnek daha ekle</button></p>
+        </div>
+
+        <div class="form" data-panel="3" hidden>
+          <h2 id="h-panel-3" tabindex="-1">Yasaklı kelimeler</h2>
+          <p class="ince">Taslaklarda hiç görmek istemediğin kelimeler. Virgülle ayırarak birden çok ekleyebilirsin.</p>
+          <div class="alan-k">
+            <label class="etiket" for="kelime">Kelime ekle</label>
+            <div class="sira">
+              <input class="kutu" id="kelime" type="text" maxlength="400" autocomplete="off" aria-describedby="kelime-hata kelime-say" placeholder="Örn. garanti, mucize">
+              <button type="button" class="btn btn-ink btn-kucuk" id="kelime-ekle">Ekle</button>
+            </div>
+            <div class="alan-alt"><p class="alan-hata" id="kelime-hata" role="status"></p><p class="sayac" id="kelime-say">0 / 30</p></div>
+          </div>
+          <ul class="kelimeler" id="kelimeler" aria-label="Eklenen kelimeler"></ul>
+          <div class="ozet" aria-labelledby="h-ozet">
+            <h3 id="h-ozet">Marka sesin</h3>
+            <dl class="dokum" id="ozet"></dl>
+          </div>
+        </div>
+
+        <div class="kurulum-alt">
+          <button type="submit" class="btn btn-ana" id="k-devam"><span id="k-devam-yazi">Devam</span></button>
+          <button type="button" class="btn btn-cizgi" id="k-geri">Geri</button>
+          <a class="btn btn-metin" href="/hesap/gecmis" id="k-atla">Kurulumu sonra tamamla</a>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <section data-ekran="kapali" aria-labelledby="h-kapali" hidden>
+    <div class="sheet hata acilis">
+      <p class="ust-etiket">Hesaplı beta</p>
+      <h1 id="h-kapali" tabindex="-1">Hesaplar henüz açılmadı</h1>
+      <p>Hesaplı beta hazırlanıyor. Giriş, kayıt ve bağlantılar açıldığında bu sayfa çalışacak; o zamana kadar Taslak Masası’nı hesapsız kullanabilirsin.</p>
+      <div class="alt-sira">
+        <a class="btn btn-ana" href="/">Taslak Masası’nı aç</a>
+      </div>
+    </div>
+  </section>
+
+  <section data-ekran="yakinda" aria-labelledby="h-yakinda" hidden>
+    <div class="sheet hata acilis">
+      <p class="ust-etiket">Hesaplı beta</p>
+      <h1 id="h-yakinda" tabindex="-1">Bu bölüm yakında</h1>
+      <p>Bu bölüm hesaplı betanın sonraki adımında açılacak. Hesabın hazır; şimdilik Taslak Masası’nı kullanmaya devam edebilirsin.</p>
+      <div class="alt-sira">
+        <a class="btn btn-ana" href="/">Taslak Masası’nı aç</a>
+        <a class="bag" href="/hesap/baglantilar">Bağlantılara git</a>
+      </div>
+    </div>
+  </section>
+
+  <section data-ekran="hata" aria-labelledby="h-hata" hidden>
+    <div class="sheet sheet-hata hata" role="alert">
+      <p class="ust-etiket">Bağlantı sorunu</p>
+      <h1 id="h-hata" tabindex="-1">Hesabına şu an ulaşamıyoruz</h1>
+      <p>Sunucu yanıt vermedi. Taslakların ve bağlantıların yerinde; birkaç dakika sonra yeniden dene.</p>
+      <p class="kod" id="hata-kod"></p>
+      <div class="alt-sira">
+        <button type="button" class="btn btn-ana" id="hata-tekrar">Yeniden dene</button>
+        <a class="bag" href="/">Taslak Masası’nı hesapsız kullan</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="alt">
+  <div class="alt-ic">
+    <div class="alt-hesap" data-oturum hidden>
+      <p class="alt-kim"><span>Hesap:</span> <span class="kullanici"></span></p>
+      <div class="alt-eylem">
+        <button type="button" class="btn btn-metin" data-indir>Verilerimi indir</button>
+        <a class="btn btn-metin alt-sil" href="/hesap/ayarlar#sil">Hesabı sil</a>
+      </div>
+    </div>
+    <div class="alt-site">
+      <a class="bag" href="/">Taslak Masası</a>
+      <span>© 2026 Social Media Corner</span>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

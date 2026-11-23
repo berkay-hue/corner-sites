@@ -17,3 +17,7 @@
 /hesap/*
   X-Robots-Tag: noindex, nofollow
   Cache-Control: no-store
+
+/en/hesap/*
+  X-Robots-Tag: noindex, nofollow
+  Cache-Control: no-store

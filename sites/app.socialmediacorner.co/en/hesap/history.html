@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="robots" content="noindex, nofollow">
+<title>History · Social Media Corner</title>
+<meta name="api-base" content="https://corner-forms.berkay-999.workers.dev">
+<link rel="icon" href="data:,">
+<script src="/assets/theme.js"></script>
+<link rel="preload" href="/assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/tokens.css">
+<link rel="stylesheet" href="/assets/bilesenler.css">
+<link rel="stylesheet" href="/assets/smc-hesap.css">
+<script src="/assets/smc-hesap.js" defer></script>
+</head>
+<body data-sayfa="gecmis" data-korumali>
+<a class="atla" href="#icerik">Skip to content</a>
+<p class="bant" hidden><strong>SAMPLE</strong><span>Sample mode: nothing is sent, no account is created, nothing is connected.</span></p>
+
+<header class="ust">
+  <div class="ust-ic">
+    <a class="logo" href="/en/" aria-label="Social Media Corner Draft Desk, home">
+      <span class="kose" aria-hidden="true"></span>
+      <span class="logo-ad">Social Media Corner</span><span class="logo-ayir" aria-hidden="true">·</span>
+      <span>Draft Desk</span>
+    </a>
+    <div class="ust-sag">
+      <button type="button" class="duz" id="cikis" data-oturum hidden>Log out</button>
+      <a class="duz" href="/hesap/gecmis" hreflang="tr" lang="tr" aria-label="Türkçe">TR</a>
+      <button type="button" class="duz tema" id="tema" aria-pressed="false" aria-label="Dark theme"><span class="tema-ikon" aria-hidden="true"></span></button>
+    </div>
+  </div>
+  <nav class="sekmeler" aria-label="Account" data-oturum hidden>
+    <div class="sekme-ic">
+      <a class="sekme" href="/en/hesap/history" aria-current="page">History</a>
+      <a class="sekme" href="/en/hesap/connections">Connections</a>
+      <a class="sekme" href="/en/hesap/setup">Brand voice</a>
+      <a class="sekme" href="/en/hesap/settings">Settings</a>
+    </div>
+  </nav>
+</header>
+
+<main id="icerik" class="ana" tabindex="-1" aria-busy="true">
+  <div id="not" class="bildirim" role="status" aria-live="polite"></div>
+  <noscript><p class="bildirim bildirim-uyari">This page needs JavaScript. Turn on JavaScript in your browser and try again.</p></noscript>
+
+  <section data-ekran="ana" aria-labelledby="h-gecmis" hidden>
+    <div class="kol">
+      <div class="ekran-bas">
+        <h1 id="h-gecmis" tabindex="-1">History</h1>
+        <p class="giris-p">Drafts you created with your account live here. Search, copy, delete what you don’t need.</p>
+      </div>
+      <form class="sheet suzgec" id="f-suzgec" role="search" aria-label="Filter drafts" novalidate>
+        <div class="alan-k">
+          <label class="etiket" for="ara">Search drafts</label>
+          <input class="kutu" id="ara" type="search" autocomplete="off" placeholder="Topic or text" maxlength="100">
+        </div>
+        <fieldset class="secim-grup">
+          <legend>Platform</legend>
+          <div class="segment">
+            <span class="secim"><input type="radio" id="p-hepsi" name="plat" value="hepsi" checked><label for="p-hepsi">All</label></span>
+            <span class="secim"><input type="radio" id="p-li" name="plat" value="linkedin"><label for="p-li">LinkedIn</label></span>
+            <span class="secim"><input type="radio" id="p-ig" name="plat" value="instagram"><label for="p-ig">Instagram</label></span>
+          </div>
+        </fieldset>
+      </form>
+      <p class="sonuc-say" id="sonuc-say" role="status"></p>
+      <div class="kayitlar" id="kayitlar"></div>
+      <div class="bos" id="bulunamadi" hidden>
+        <h2>No drafts match your search</h2>
+        <p>Try another word or clear the filters.</p>
+        <button type="button" class="btn btn-cizgi" id="temizle">Clear filters</button>
+      </div>
+      <div class="bos" id="gecmis-bos" hidden>
+        <p class="ust-etiket">Empty for now</p>
+        <h2>Create your first draft</h2>
+        <p>Every draft you create in Draft Desk while logged in is saved here, written in your brand voice.</p>
+        <a class="btn btn-ana" href="/en/">Open Draft Desk</a>
+      </div>
+      <div class="daha" id="daha">
+        <button type="button" class="btn btn-cizgi" id="daha-btn">Show older drafts</button>
+        <p class="ince" id="daha-not" tabindex="-1"></p>
+      </div>
+      <p class="ince saklama">Drafts are kept for 180 days, then deleted automatically. Download them all <button type="button" class="btn btn-metin" data-indir>as JSON</button>.</p>
+    </div>
+  </section>
+
+  <section data-ekran="kapali" aria-labelledby="h-kapali" hidden>
+    <div class="sheet hata acilis">
+      <p class="ust-etiket">Account beta</p>
+      <h1 id="h-kapali" tabindex="-1">Accounts are not open yet</h1>
+      <p>The account beta is being prepared. This page will work once sign-in, registration and connections open; until then you can use Draft Desk without an account.</p>
+      <div class="alt-sira">
+        <a class="btn btn-ana" href="/en/">Open Draft Desk</a>
+      </div>
+    </div>
+  </section>
+
+  <section data-ekran="yakinda" aria-labelledby="h-yakinda" hidden>
+    <div class="sheet hata acilis">
+      <p class="ust-etiket">Account beta</p>
+      <h1 id="h-yakinda" tabindex="-1">This section is coming soon</h1>
+      <p>This section opens in the next step of the account beta. Your account is ready; for now you can keep using Draft Desk.</p>
+      <div class="alt-sira">
+        <a class="btn btn-ana" href="/en/">Open Draft Desk</a>
+        <a class="bag" href="/en/hesap/connections">Go to connections</a>
+      </div>
+    </div>
+  </section>
+
+  <section data-ekran="hata" aria-labelledby="h-hata" hidden>
+    <div class="sheet sheet-hata hata" role="alert">
+      <p class="ust-etiket">Connection problem</p>
+      <h1 id="h-hata" tabindex="-1">We can’t reach your account right now</h1>
+      <p>The server did not respond. Your drafts and connections are safe; try again in a few minutes.</p>
+      <p class="kod" id="hata-kod"></p>
+      <div class="alt-sira">
+        <button type="button" class="btn btn-ana" id="hata-tekrar">Try again</button>
+        <a class="bag" href="/en/">Use Draft Desk without an account</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<dialog class="dlg-k" id="dlg-sil" aria-labelledby="dlg-sil-b" aria-describedby="dlg-sil-a">
+  <div class="sheet dlg">
+    <h2 class="dlg-baslik" id="dlg-sil-b" tabindex="-1">Delete this draft?</h2>
+    <p id="dlg-sil-a"><span id="dlg-sil-konu" class="kullanici"></span> <span>A deleted draft can’t be restored.</span></p>
+    <div class="dlg-alt">
+      <button type="button" class="btn btn-tehlike" id="sil-evet">Delete draft</button>
+      <button type="button" class="btn btn-cizgi" data-kapat>Cancel</button>
+    </div>
+  </div>
+</dialog>
+
+<footer class="alt">
+  <div class="alt-ic">
+    <div class="alt-hesap" data-oturum hidden>
+      <p class="alt-kim"><span>Account:</span> <span class="kullanici"></span></p>
+      <div class="alt-eylem">
+        <button type="button" class="btn btn-metin" data-indir>Download my data</button>
+        <a class="btn btn-metin alt-sil" href="/en/hesap/settings#sil">Delete account</a>
+      </div>
+    </div>
+    <div class="alt-site">
+      <a class="bag" href="/en/">Draft Desk</a>
+      <span>© 2026 Social Media Corner</span>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

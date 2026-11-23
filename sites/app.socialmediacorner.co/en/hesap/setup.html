@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="robots" content="noindex, nofollow">
+<title>Brand voice · Social Media Corner</title>
+<meta name="api-base" content="https://corner-forms.berkay-999.workers.dev">
+<link rel="icon" href="data:,">
+<script src="/assets/theme.js"></script>
+<link rel="preload" href="/assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/tokens.css">
+<link rel="stylesheet" href="/assets/bilesenler.css">
+<link rel="stylesheet" href="/assets/smc-hesap.css">
+<script src="/assets/smc-hesap.js" defer></script>
+</head>
+<body data-sayfa="kurulum" data-korumali>
+<a class="atla" href="#icerik">Skip to content</a>
+<p class="bant" hidden><strong>SAMPLE</strong><span>Sample mode: nothing is sent, no account is created, nothing is connected.</span></p>
+
+<header class="ust">
+  <div class="ust-ic">
+    <a class="logo" href="/en/" aria-label="Social Media Corner Draft Desk, home">
+      <span class="kose" aria-hidden="true"></span>
+      <span class="logo-ad">Social Media Corner</span><span class="logo-ayir" aria-hidden="true">·</span>
+      <span>Draft Desk</span>
+    </a>
+    <div class="ust-sag">
+      <button type="button" class="duz" id="cikis" data-oturum hidden>Log out</button>
+      <a class="duz" href="/hesap/kurulum" hreflang="tr" lang="tr" aria-label="Türkçe">TR</a>
+      <button type="button" class="duz tema" id="tema" aria-pressed="false" aria-label="Dark theme"><span class="tema-ikon" aria-hidden="true"></span></button>
+    </div>
+  </div>
+  <nav class="sekmeler" aria-label="Account" data-oturum hidden>
+    <div class="sekme-ic">
+      <a class="sekme" href="/en/hesap/history">History</a>
+      <a class="sekme" href="/en/hesap/connections">Connections</a>
+      <a class="sekme" href="/en/hesap/setup" aria-current="page">Brand voice</a>
+      <a class="sekme" href="/en/hesap/settings">Settings</a>
+    </div>
+  </nav>
+</header>
+
+<main id="icerik" class="ana" tabindex="-1" aria-busy="true">
+  <div id="not" class="bildirim" role="status" aria-live="polite"></div>
+  <noscript><p class="bildirim bildirim-uyari">This page needs JavaScript. Turn on JavaScript in your browser and try again.</p></noscript>
+
+  <section data-ekran="ana" aria-labelledby="h-kurulum" hidden>
+    <div class="kol">
+      <div class="ekran-bas">
+        <p class="ust-etiket" id="k-adim">Step 1 of 3</p>
+        <h1 id="h-kurulum" tabindex="-1">Introduce your brand voice</h1>
+        <p class="giris-p">Three short steps. Drafts use this to sound like you. You can skip any step and change it later.</p>
+      </div>
+      <ol class="adimlar" aria-label="Setup steps">
+        <li data-adim="1"><span class="adim-no">1</span><span>Sector and tone</span></li>
+        <li data-adim="2"><span class="adim-no">2</span><span>Sample posts</span></li>
+        <li data-adim="3"><span class="adim-no">3</span><span>Banned words</span></li>
+      </ol>
+      <form class="sheet form" id="f-kurulum" novalidate aria-labelledby="h-kurulum">
+        <div class="form" data-panel="1">
+          <h2 id="h-panel-1" tabindex="-1">Sector and tone</h2>
+          <div class="alan-k">
+            <label class="etiket" for="sektor">Sector</label>
+            <select class="kutu" id="sektor" name="sector" aria-describedby="sektor-ipucu">
+              <option value="">Choose a sector</option>
+              <option value="tech">Technology &amp; SaaS</option>
+              <option value="ecom">E-commerce &amp; retail</option>
+              <option value="health">Healthcare</option>
+              <option value="edu">Education</option>
+              <option value="fin">Finance &amp; insurance</option>
+              <option value="estate">Real estate &amp; construction</option>
+              <option value="food">Food &amp; beverage</option>
+              <option value="travel">Tourism &amp; hospitality</option>
+              <option value="industry">Manufacturing &amp; industry</option>
+              <option value="services">Professional services</option>
+              <option value="agency">Agency &amp; consulting</option>
+              <option value="other">Other</option>
+            </select>
+            <p class="ipucu" id="sektor-ipucu">Examples and terms are picked for your sector.</p>
+          </div>
+          <fieldset class="secim-grup">
+            <legend>Tone (up to 3)</legend>
+            <div class="secim-sira" id="tonlar">
+              <span class="secim"><input type="checkbox" id="ton-samimi" name="tone" aria-describedby="ton-sayac ton-hata" value="samimi"><label for="ton-samimi">Friendly</label></span>
+              <span class="secim"><input type="checkbox" id="ton-kurumsal" name="tone" aria-describedby="ton-sayac ton-hata" value="kurumsal"><label for="ton-kurumsal">Corporate</label></span>
+              <span class="secim"><input type="checkbox" id="ton-esprili" name="tone" aria-describedby="ton-sayac ton-hata" value="esprili"><label for="ton-esprili">Witty</label></span>
+              <span class="secim"><input type="checkbox" id="ton-ogretici" name="tone" aria-describedby="ton-sayac ton-hata" value="ogretici"><label for="ton-ogretici">Educational</label></span>
+              <span class="secim"><input type="checkbox" id="ton-ilham" name="tone" aria-describedby="ton-sayac ton-hata" value="ilham"><label for="ton-ilham">Inspiring</label></span>
+              <span class="secim"><input type="checkbox" id="ton-net" name="tone" aria-describedby="ton-sayac ton-hata" value="net"><label for="ton-net">Short and clear</label></span>
+              <span class="secim"><input type="checkbox" id="ton-veri" name="tone" aria-describedby="ton-sayac ton-hata" value="veri"><label for="ton-veri">Data-driven</label></span>
+            </div>
+            <div class="alan-alt"><p class="alan-hata" id="ton-hata" role="status"></p><p class="sayac" id="ton-sayac">0 / 3</p></div>
+          </fieldset>
+        </div>
+
+        <div class="form" data-panel="2" hidden>
+          <h2 id="h-panel-2" tabindex="-1">Sample posts</h2>
+          <p class="ince">Paste up to 3 posts you like or have shared before. Drafts only follow their tone and rhythm; the content is not copied.</p>
+          <div class="bildirim bildirim-uyari"><p><strong>Don’t paste personal data.</strong> Remove customer names, phone numbers or emails first. Samples are never read as instructions, only as examples.</p></div>
+          <div class="alan-k ornek-alan" data-ornek="1">
+            <label class="etiket" for="ornek-1">Sample post 1</label>
+            <textarea class="kutu" id="ornek-1" name="sample" rows="4" maxlength="2200" aria-describedby="ornek-1-say"></textarea>
+            <div class="alan-alt"><span class="ipucu">Optional</span><span class="sayac" id="ornek-1-say">0 / 2.200</span></div>
+          </div>
+          <div class="alan-k ornek-alan" data-ornek="2" hidden>
+            <label class="etiket" for="ornek-2">Sample post 2</label>
+            <textarea class="kutu" id="ornek-2" name="sample" rows="4" maxlength="2200" aria-describedby="ornek-2-say"></textarea>
+            <div class="alan-alt"><span class="ipucu">Optional</span><span class="sayac" id="ornek-2-say">0 / 2.200</span></div>
+          </div>
+          <div class="alan-k ornek-alan" data-ornek="3" hidden>
+            <label class="etiket" for="ornek-3">Sample post 3</label>
+            <textarea class="kutu" id="ornek-3" name="sample" rows="4" maxlength="2200" aria-describedby="ornek-3-say"></textarea>
+            <div class="alan-alt"><span class="ipucu">Optional</span><span class="sayac" id="ornek-3-say">0 / 2.200</span></div>
+          </div>
+          <p><button type="button" class="btn btn-cizgi" id="ornek-ekle">Add another sample</button></p>
+        </div>
+
+        <div class="form" data-panel="3" hidden>
+          <h2 id="h-panel-3" tabindex="-1">Banned words</h2>
+          <p class="ince">Words you never want in your drafts. Separate several with commas.</p>
+          <div class="alan-k">
+            <label class="etiket" for="kelime">Add a word</label>
+            <div class="sira">
+              <input class="kutu" id="kelime" type="text" maxlength="400" autocomplete="off" aria-describedby="kelime-hata kelime-say" placeholder="e.g. guaranteed, miracle">
+              <button type="button" class="btn btn-ink btn-kucuk" id="kelime-ekle">Add</button>
+            </div>
+            <div class="alan-alt"><p class="alan-hata" id="kelime-hata" role="status"></p><p class="sayac" id="kelime-say">0 / 30</p></div>
+          </div>
+          <ul class="kelimeler" id="kelimeler" aria-label="Added words"></ul>
+          <div class="ozet" aria-labelledby="h-ozet">
+            <h3 id="h-ozet">Your brand voice</h3>
+            <dl class="dokum" id="ozet"></dl>
+          </div>
+        </div>
+
+        <div class="kurulum-alt">
+          <button type="submit" class="btn btn-ana" id="k-devam"><span id="k-devam-yazi">Continue</span></button>
+          <button type="button" class="btn btn-cizgi" id="k-geri">Back</button>
+          <a class="btn btn-metin" href="/en/hesap/history" id="k-atla">Finish setup later</a>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <section data-ekran="kapali" aria-labelledby="h-kapali" hidden>
+    <div class="sheet hata acilis">
+      <p class="ust-etiket">Account beta</p>
+      <h1 id="h-kapali" tabindex="-1">Accounts are not open yet</h1>
+      <p>The account beta is being prepared. This page will work once sign-in, registration and connections open; until then you can use Draft Desk without an account.</p>
+      <div class="alt-sira">
+        <a class="btn btn-ana" href="/en/">Open Draft Desk</a>
+      </div>
+    </div>
+  </section>
+
+  <section data-ekran="yakinda" aria-labelledby="h-yakinda" hidden>
+    <div class="sheet hata acilis">
+      <p class="ust-etiket">Account beta</p>
+      <h1 id="h-yakinda" tabindex="-1">This section is coming soon</h1>
+      <p>This section opens in the next step of the account beta. Your account is ready; for now you can keep using Draft Desk.</p>
+      <div class="alt-sira">
+        <a class="btn btn-ana" href="/en/">Open Draft Desk</a>
+        <a class="bag" href="/en/hesap/connections">Go to connections</a>
+      </div>
+    </div>
+  </section>
+
+  <section data-ekran="hata" aria-labelledby="h-hata" hidden>
+    <div class="sheet sheet-hata hata" role="alert">
+      <p class="ust-etiket">Connection problem</p>
+      <h1 id="h-hata" tabindex="-1">We can’t reach your account right now</h1>
+      <p>The server did not respond. Your drafts and connections are safe; try again in a few minutes.</p>
+      <p class="kod" id="hata-kod"></p>
+      <div class="alt-sira">
+        <button type="button" class="btn btn-ana" id="hata-tekrar">Try again</button>
+        <a class="bag" href="/en/">Use Draft Desk without an account</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="alt">
+  <div class="alt-ic">
+    <div class="alt-hesap" data-oturum hidden>
+      <p class="alt-kim"><span>Account:</span> <span class="kullanici"></span></p>
+      <div class="alt-eylem">
+        <button type="button" class="btn btn-metin" data-indir>Download my data</button>
+        <a class="btn btn-metin alt-sil" href="/en/hesap/settings#sil">Delete account</a>
+      </div>
+    </div>
+    <div class="alt-site">
+      <a class="bag" href="/en/">Draft Desk</a>
+      <span>© 2026 Social Media Corner</span>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
