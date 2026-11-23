@@ -50,7 +50,17 @@ function igRefine(q){var t=String(q.text||''),c=t.split('\n\n');
  if(q.op==='shorten')return c.length>3?c.slice(0,2).concat(c.slice(-1)).join('\n\n'):t;
  if(q.op==='lengthen'){c.splice(Math.max(1,c.length-1),0,'Örnek ek paragraf: bu satır yalnız ÖRNEK modunda eklenir.');return c.join('\n\n')}
  return '['+(q.tone||'ton')+' · örnek] '+t}
-var SETLER={ig:IG_ORNEK,li:{ticaret:ACILAR,
+/* Faz 2 (A4-2b): Reels kanca örnekleri — /gen/instagram kind:reels yanıt biçiminde ({angle,text,say,flags?}); sahte, "örnek" etiketli.
+   merak: ekran metni 60 kod noktasını aşar → sunucudaki gibi flags:["long_hook"] (ölçü satırı hedef uyarısı) */
+var REELS_ORNEK=[
+ {angle:'soru',text:'Yüzüncü siparişi ne getirdi, biliyor musun? (örnek)',say:'Reklam değil, bir şikâyet. İlk müşterimizin mesajını ciddiye aldık ve paketlemeyi baştan kurduk. Bu bir örnek konuşma satırı.'},
+ {angle:'iddia',text:'İndirim değil, hız satıyor. (örnek)',say:'İlk yüz müşteriden öğrendiğimiz tek şey bu: ertesi gün kargo, yüzde yirmi indirimden daha çok konuşuluyor. (örnek)'},
+ {angle:'merak',text:'Yüzüncü müşteriyi kutlamadık; nedenini videonun sonunda söylüyorum (örnek)',say:'Çünkü asıl eşik yüzüncü değil, neredeyse kaybettiğimiz birinci müşteriydi. Sonuna kadar izle. (örnek)',flags:['long_hook']}
+];
+function reelsRefine(q){var t=String(q.text||''),y=String(q.say||'');
+ if(q.op==='shorten'){var c=t.indexOf(';');return{text:c>0?t.slice(0,c)+' (örnek)':t,say:(y.split('. ')[0]||y).replace(/\.?$/,'.')+' (örnek)',flags:[]}}
+ return{text:('['+(q.tone||'ton')+' · örnek] '+t).slice(0,80),say:y,flags:[]}}
+var SETLER={reels:REELS_ORNEK,ig:IG_ORNEK,li:{ticaret:ACILAR,
  yazilim:setKur([
   {k:['Yüzüncü ücretli hesap açıldığında ekipçe ekrana baktık, kimse bir şey demedi. Hepimiz aynı şeyi düşünüyorduk: ilk demoda ürün çökmüştü.',
    'Bu ay yüzüncü ücretli müşterimize ulaştık. Bu eşiğe gelmemizi sağlayan karar, ilk demoda yaşadığımız bir çöküşün ardından verildi.',
@@ -100,7 +110,7 @@ function sifirla(){
   alanHata(bRiza,bRizaHata,'');alanHata(bEposta,$('#b-eposta-hata'),'');rizaYaz();
   uretMesgul(false);D.scope='anon';D.deneme=0;D.refine=0;D.kartVar=false;D.left=3;D.rid=null;D.taslaklar=null;
 }
-function kartlarKur(n,uyari){D.left=n;D.taslaklar=S.ARAC==='ig'?SETLER.ig.slice():(SETLER.li[SEKTOR[D.sektor]]||SETLER.li.ticaret).slice();
+function kartlarKur(n,uyari){D.left=n;D.taslaklar=S.ARAC==='reels'?SETLER.reels.slice():S.ARAC==='ig'?SETLER.ig.slice():(SETLER.li[SEKTOR[D.sektor]]||SETLER.li.ticaret).slice();
  /* sonuc-uyari: ilk taslakta sunucu flags'i varmış gibi (kart kısa uyarı gösterir) */
  if(uyari){var a=D.taslaklar[0],k={},x;for(x in a)if(Object.prototype.hasOwnProperty.call(a,x))k[x]=a[x];k.flags=['banned'];D.taslaklar[0]=k}
  sonucGoster(false)}
@@ -151,9 +161,9 @@ function mock(v){
 function gec(ms,v){return new Promise(function(r){setTimeout(function(){r(v)},RM&&ms<1000?0:ms)})}
 S.provKur({
   linkedin:function(q){return gec(1800).then(function(){return{drafts:SETLER.li[SEKTOR[q.sector]]||SETLER.li.ticaret}})},
-  instagram:function(q){return gec(1800).then(function(){return{drafts:SETLER.ig.map(function(x){return{angle:x.angle,text:x.text}})}})},
-  /* LI: {} → yerel düzey; IG (kind:caption): sahte metin döner */
-  refine:function(q){return gec(420,q&&q.kind==='caption'?{text:igRefine(q)}:{})},
+  instagram:function(q){return gec(1800).then(function(){return{drafts:q&&q.kind==='reels'?SETLER.reels.map(function(x){var o={angle:x.angle,text:x.text,say:x.say};if(x.flags)o.flags=x.flags.slice();return o}):SETLER.ig.map(function(x){return{angle:x.angle,text:x.text}})}})},
+  /* LI: {} → yerel düzey; IG (kind:caption): sahte metin; Reels (kind:reels): sahte text+say, flags:[] (uyarı kalkar) */
+  refine:function(q){return gec(420,q&&q.kind==='reels'?reelsRefine(q):q&&q.kind==='caption'?{text:igRefine(q)}:{})},
   quota:function(){return gec(400).then(function(){return{left:D.left}})},
   submit:function(){return gec(600,{ok:true})}
 });

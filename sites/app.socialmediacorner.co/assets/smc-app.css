@@ -302,3 +302,11 @@ dialog::backdrop{background:var(--ortu)}
 /* overflow-x:auto dikeyde de kırpar: odak çerçevesi bağlantının içine çizilir (denetim) */
 .araclar a:focus-visible{outline-offset:calc(-1 * var(--odak-kalin))}
 .taslak-bayrak{margin:0 0 var(--s2)}
+
+/* Faz 2 (A4-2b): Reels kanca kartı — 9:16 önizleme çerçevesi, yalnız CSS ve token */
+.reels-cerceve{display:flex;flex-direction:column;justify-content:center;align-items:center;gap:var(--s2);box-sizing:border-box;width:min(100%,calc(var(--s8) * 5));aspect-ratio:9/16;margin:var(--s3) auto 0;padding:var(--s4);background:var(--ters-bg);color:var(--ters-ink);border-radius:var(--r-kagit);overflow:hidden;overflow-wrap:anywhere;text-align:center}
+.reels-etiket{font:var(--f-sayac);color:var(--ters-ink2)}
+.reels-cerceve .reels-ekran,.reels-cerceve .reels-ekran .kanca{color:var(--ters-ink);font-weight:700;max-width:100%}
+.reels-bas{display:flex;flex-wrap:wrap;align-items:center;gap:var(--s2);margin:var(--s4) 0 var(--s1)}
+.reels-bas b{font:var(--f-etiket)}
+.reels-say{margin:0}
