@@ -56,7 +56,10 @@ var DUVAR={
  ip:{h:'Bu bağlantı bugün doldu',b:'Bu bağlantıdan bugün çok üretim yapıldı (ortak ağlarda olur).',m:'Ofis, okul ya da kafe ağında aynı bağlantıyı çok kişi kullanır; sınır kişiye değil bağlantıya aittir. Başka bir ağdan deneyebilir ya da gece yarısını bekleyebilirsin.',d:[['Sınır','bağlantıya ait'],['Yenilenme',YEN],['Senden istenen','hiçbir şey']]},
  global:{h:'Bugünkü kapasite doldu',b:'Bugünkü kapasite doldu.',m:'Bu senin kullanımınla ilgili değil: aracın bugünkü toplam üretim payı bitti. Gece yarısı yenilenir.',d:[['Sınır','aracın günlük toplamı'],['Yenilenme',YEN],['Senden istenen','hiçbir şey']]},
  kapasite:{h:'Kapasite doldu',b:'Kapasite doldu.',m:'Araç şu an yeni taslak üretemiyor. Ne zaman açılacağı henüz belli değil; daha sonra yeniden deneyebilirsin.',d:[['Yenilenme','belli değil'],['Senden istenen','hiçbir şey']]},
- yakinda:{h:'Çok yakında',b:'Çok yakında.',m:'Araç henüz açılmadı. Açılınca haber verelim mi?',d:[]}
+ yakinda:{h:'Çok yakında',b:'Çok yakında.',m:'Araç henüz açılmadı. Açılınca haber verelim mi?',d:[]},
+ /* A9b: girişli kullanıcının sınırları (jetonlu üretim yanıtı 429 scope plan|user); bu eski sayfada yalnız düşmesin diye kısa duvar */
+ plan:{h:'Bu ay doldu',b:'Bu ayki plan hakkın doldu.',m:'Planındaki aylık hak bitti; ayın ilk günü yenilenir. Planları Stüdyo’da karşılaştırabilirsin.',d:[['Sınır','planın aylık hakkı'],['Yenilenme','ayın ilk günü'],['Senden istenen','hiçbir şey']]},
+ user:{h:'Bugünlük bu kadar',b:'Hesabının bugünkü hakkı doldu.',m:'Hesap başına günlük sınıra ulaştın; gece yarısı yenilenir.',d:[['Sınır','hesabın günlük toplamı'],['Yenilenme',YEN],['Senden istenen','hiçbir şey']]}
 };
 /* ?src= eşlemesi (KAYNAK) */
 var KAYNAK={top:'top',error:'error',limit:'limit',footer:'footer',result:'result',cap:'cap',calendly:'calendly'};
@@ -85,7 +88,7 @@ function hakYaz(){
   var bel=!!D.hakBilinmez||D.view==='hata'&&(HATA[D.hata]||HATA.genel).e==='istemci',sc=D.view==='duvar'?D.scope:'';
   /* tur-4: "Çok yakında"da hak sayılmaz; dolu 3/3 göstergesi "Araç henüz açılmadı" ile çelişir */
   $$('.pips').forEach(function(p){p.classList.toggle('pips-gizli',!!(bel||sc==='yakinda'));$$('i',p).forEach(function(i,n){i.className=n<D.left?'dolu':''})});
-  var kapali=sc==='ip'||sc==='global',ust='Bugün '+D.left+' / '+D.cap+' hak',alt;
+  var kapali=sc==='ip'||sc==='global'||sc==='plan'||sc==='user',ust='Bugün '+D.left+' / '+D.cap+' hak',alt;
   if(sc==='yakinda'){ust='Çok yakında';alt='Araç henüz açılmadı.'}
   else if(kapali){ust='Bugünlük kapalı';alt=DUVAR[sc].b}
   else if(bel){ust='Hak: belli değil';alt='1 hak kullanır'}
@@ -517,6 +520,8 @@ function duvarHazirla(scope){
   w.d.forEach(function(x){var g=el('div');g.appendChild(el('dt',null,x[0]));g.appendChild(el('dd',null,x[1]===YEN?yenMetin():x[0]==='Kullandığın'?D.cap+' / '+D.cap+' hak':x[1]));dl.appendChild(g)});
   $('#duvar-taslak').hidden=!D.kartVar;
   var yk=scope==='yakinda';D.yakinda=yk;
+  /* A9b: girişli kullanıcıya hesaplı sürüm bekleme listesi gösterilmez */
+  var bk=$('#bekleme');if(bk)bk.hidden=scope==='plan'||scope==='user';
   $('#c-bekle').textContent=yk?'Açılış için bekleme listesi':'Hesaplı sürüm için bekleme listesi';
   $('#b-vaat').textContent=yk?'Araç açılınca ilk sen haber al.':'Hesaplı sürüm açılınca ilk sen haber al: marka sesi, takvim, ekip onayı.';
   $('#b-riza-yazi').textContent=yk?'E-posta adresimin açılış duyurusu için işlenmesini kabul ediyorum.':'E-posta adresimin hesaplı sürüm duyurusu için işlenmesini kabul ediyorum.';
@@ -626,7 +631,7 @@ function istekKur(){var g=hedef.value.replace(/\s+/g,' ').trim(),hp=$('input[nam
   /* /gen/instagram kind:reels: format ve cta gönderilmez (sunucu 400); video isteğe bağlı talk|product|before_after|howto */
   if(ARAC==='reels'){q.kind='reels';if(D.video)q.video=D.video;sesEkle(q);return q}
   if(g)q.goal=g;return q}
-function hakAl(r){if(!r)return;if(typeof r.left==='number'){D.left=Math.max(0,r.left);D.hakBilinmez=false}if(typeof r.cap==='number'&&r.cap>0)D.cap=r.cap;if(typeof r.reset_at==='string')D.reset=r.reset_at;if(r.scope==='anon'||r.scope==='ip'||r.scope==='global')D.hakScope=r.scope}
+function hakAl(r){if(!r)return;if(typeof r.left==='number'){D.left=Math.max(0,r.left);D.hakBilinmez=false}if(typeof r.cap==='number'&&r.cap>0)D.cap=r.cap;if(typeof r.reset_at==='string')D.reset=r.reset_at;if(r.scope==='anon'||r.scope==='ip'||r.scope==='global'||r.scope==='plan'||r.scope==='user')D.hakScope=r.scope}
 /* A5-4: oturum jetonu smc-oturum (smc-hesap.js yazar; önce sessionStorage, sonra localStorage; düz ya da {"token":…}, smc-yayin.js ile aynı okuma).
    Yalnız okunur; depo kapalıysa ya da biçim dışıysa null → istek jetonsuz, bugünkü gibi. Sunucu geçersiz jetonda anonime düşer (401 yok). */
 function oturumJeton(){var ds=[];try{ds.push(window.sessionStorage)}catch(e){}try{ds.push(window.localStorage)}catch(e){}

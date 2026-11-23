@@ -125,7 +125,7 @@ test("oturumlu /gen/linkedin: 3 satır (varyant başına), user_id/site/konu do�
   }
 });
 
-test("A8: oturumlu /gen/blog ve /gen/video 200 ama satır yazmaz (0017 CHECK, 0018 yok); linkedin style meta'da yalnız işaret", async () => {
+test("A8: oturumlu /gen/blog ve /gen/video 200 ama satır yazmaz (0017 CHECK, genişletme göçü yok); linkedin style meta'da yalnız işaret", async () => {
   const s = setup();
   const common = { anon: ANON, topic: "Yeni ürün", sector: "Yazılım", tone: "samimi", lang: "tr", t: 4000, ts: "tok", hp: "" };
   const b = await s.call("/gen/blog", { ...common, length: "short", rid: rid() }, { auth: `Bearer ${TOKEN}` });

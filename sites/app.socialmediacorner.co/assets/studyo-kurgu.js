@@ -21,7 +21,8 @@ var IK={
   tasarim:'M12 3a9 9 0 1 0 0 18c1 0 1.6-.7 1.6-1.5 0-.4-.2-.8-.4-1.1-.3-.3-.4-.7-.4-1.1 0-.8.7-1.5 1.5-1.5H16a5 5 0 0 0 5-5c0-4.3-4-7.8-9-7.8zM7.5 11.5h.01M10 7.5h.01M14.5 7.5h.01',
   marka:'M3 12V4a1 1 0 0 1 1-1h8l9 9-9 9zM7.5 7.5h.01',sahne:'M4 6h16M4 12h16M4 18h10',aciklama:'M5 5h14v10H9l-4 4z',
   video:'M3 5h13v14H3zM16 10l5-3v10l-5-3',tekrar:'M4 12a8 8 0 1 0 2.3-5.6M4 4v4h4',
-  arama:'M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM20 20l-4.2-4.2'
+  arama:'M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM20 20l-4.2-4.2',
+  kilit:'M7 11V8a5 5 0 0 1 10 0v3M5 11h14v10H5zM12 15v2'
 };
 
 function ikon(ad,cls){
@@ -609,9 +610,19 @@ function sil(i){
   S.durum(T(tekil(i)+' silindi.',tekil(i)+' deleted.'));
 }
 
-/* ---- Pexels görselleri (isteğe bağlı; kullanıcı seçmeden hiçbir sahneye görsel eklenmez) ---- */
+/* ---- Pexels görselleri (isteğe bağlı; kullanıcı seçmeden hiçbir sahneye görsel eklenmez) ----
+   A9b: Pexels yalnız Pro/Enterprise. Quota plan anon|basic dediyse ya da /gen/stock 403 plan döndüyse seçici açılmaz,
+   satırda kilit durumu çıkar ("Pro'da var" + kısa açıklama + planlar bağlantısı). Plan bilinmiyorsa (eski worker) eski davranış. */
 var PX='https://www.pexels.com',SK=null;
 function stokVar(){return !!(S.D&&S.D.stock===true)}
+function stokKilit(){var D=S.D||{};return !stokVar()&&(D.stokKilit===true||D.plan==='anon'||D.plan==='basic')}
+function kilitSatir(i){
+  var k=el('div','kr-so-gorsel kr-gorsel-kilit'),id='kr-kilit-'+MOD+'-'+i;
+  var r=el('span','kr-pro-rozet');r.appendChild(ikon('kilit'));r.appendChild(el('span',null,T('Pro’da var','In Pro')));k.appendChild(r);
+  var m=el('span','ipucu kr-gorsel-ipucu',T('Sahnelere Pexels fotoğrafı ekleme Pro ve Enterprise planlarında.','Adding Pexels photos to scenes comes with the Pro and Enterprise plans.'));m.id=id;k.appendChild(m);
+  var a=el('a','kr-kilit-bag',T('Planları gör','See plans'));a.href=EN?'/en/pricing':'/fiyatlar';a.setAttribute('aria-describedby',id);k.appendChild(a);
+  return k;
+}
 function kaynakAdlari(){var a=[];st.sahneler.forEach(function(s){var n=s.gorsel&&s.gorsel.photographer;if(n&&a.indexOf(n)<0)a.push(n)});return a}
 function kaynakMetni(){
   var a=kaynakAdlari();if(!a.length)return '';
@@ -626,6 +637,7 @@ function kunye(g){
   return p;
 }
 function gorselSatir(s,i){
+  if(!s.gorsel&&stokKilit())return kilitSatir(i);
   if(!s.gorsel&&!stokVar())return null;
   var k=el('div','kr-so-gorsel');
   if(!s.gorsel){
@@ -660,6 +672,7 @@ function stokYonu(){var a=st.t.aspect;return a==='16:9'?'landscape':a==='1:1'?'s
 function stokHata(e){
   var k=e&&e.kod;
   if(k==='not_ready')return T('Görsel arama şu an kullanılamıyor.','Image search isn’t available right now.');
+  if(k==='plan')return T('Görsel arama Pro ve Enterprise planlarında var.','Image search comes with the Pro and Enterprise plans.');
   if(k==='limit')return e.scope==='global'?T('Görsel arama bugün çok yoğun. Biraz sonra tekrar dene.','Image search is very busy today. Try again a little later.'):T('Bugünkü görsel arama hakkın doldu; yarın yenilenir.','You’ve used today’s image searches; they renew tomorrow.');
   if(k==='bad_input')return T('Aramayı 1 ile 100 karakter arasında yaz.','Keep the search between 1 and 100 characters.');
   return T('Görseller yüklenemedi. Bağlantını kontrol edip tekrar dene.','Couldn’t load images. Check your connection and try again.');
@@ -751,6 +764,11 @@ function ara(sayfa){
   },function(e){
     if(sira!==x.sira)return;x.ac=null;
     if(e&&e.kod==='not_ready'){S.D.stock=false;stokYayin()}
+    if(e&&e.kod==='plan'){
+      /* 403 plan: seçici kapanır, satırlar kilide döner, odak o satırın planlar bağlantısına gider */
+      S.D.stock=false;S.D.stokKilit=true;x.odak=null;stokYayin();
+      var li=R.liste&&R.liste.querySelector('[data-i="'+x.i+'"]');x.odak=li&&li.querySelector('.kr-kilit-bag');
+      x.kapat();S.durum(stokHata(e));return}
     x.izgara.removeAttribute('aria-busy');if(sayfa===1)x.izgara.textContent='';
     x.daha.hidden=!(sayfa>1&&x.sonraki);pasif(x.daha,false);x.daha.removeAttribute('aria-busy');
     var m=stokHata(e);seciciDurum('hata',m);x.durum.textContent=m;
@@ -813,8 +831,8 @@ function secici(i,tetik){
 /* kota yanıtı stock bilgisini getirir; durum değişince yalnız görsel satırları yeniden çizilir (yazılan metne dokunulmaz) */
 var sonStok=null;
 function stokYayin(){
-  var v=stokVar();if(v===sonStok)return;sonStok=v;
-  if(!v&&SK&&SK.dlg.open){/* açık seçici hatayı gösterir; kapatınca satırlar güncellenir */}
+  var v=stokVar()?'acik':stokKilit()?'kilit':'yok';if(v===sonStok)return;sonStok=v;
+  if(v!=='acik'&&SK&&SK.dlg.open){/* açık seçici hatayı gösterir; kapatınca satırlar güncellenir */}
   if(!st||!R.liste)return;st.sahneler.forEach(function(s,i){gorselYenile(i)});
 }
 d.addEventListener('studyo:hak',stokYayin);

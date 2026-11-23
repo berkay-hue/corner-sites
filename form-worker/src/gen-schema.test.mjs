@@ -101,3 +101,61 @@ test("gen_daily tek upsert toplar", { skip }, () => {
   const r = db.prepare("SELECT ok, tok_in, fail, qc_calendly FROM gen_daily WHERE day = ?").get("2026-11-23");
   assert.deepEqual({ ...r }, { ok: 2, tok_in: 1200, fail: 0, qc_calendly: 0 });
 });
+
+// A9b: migrations/0018_plans.sql — users.plan/plan_limits + gen_month aylık sayaç; schema.sql gen_month'u aynalar
+const MIG18 = readFileSync(new URL("../migrations/0018_plans.sql", import.meta.url), "utf8");
+
+test("0018 schema.sql üstüne uygulanır: plan sütunları, gen_month, varsayılan basic", { skip }, () => {
+  const db = new DatabaseSync(":memory:");
+  db.exec(SCHEMA);
+  db.exec(MIG18);
+  const u = Object.fromEntries(cols(db, "users").map((c) => [c.name, c]));
+  assert.equal(u.plan.type, "TEXT");
+  assert.equal(u.plan.notnull, 1);
+  assert.equal(u.plan.dflt_value, "'basic'");
+  assert.equal(u.plan_limits.type, "TEXT");
+  assert.equal(u.plan_limits.notnull, 0);
+  assert.deepEqual(cols(db, "gen_month").map((c) => c.name), ["month", "user_id", "kind", "n"]);
+  assert.throws(() => db.prepare("SELECT rowid FROM gen_month").all());
+  db.prepare("INSERT INTO users (site, email, name, role, pass) VALUES (?, ?, ?, ?, ?)").run("app.socialmediacorner.co", "a@b.co", "A", "brand", "x");
+  const row = db.prepare("SELECT plan, plan_limits FROM users").get();
+  assert.deepEqual({ ...row }, { plan: "basic", plan_limits: null });
+  // kind yalnız lb | vg
+  assert.throws(() => db.prepare("INSERT INTO gen_month (month, user_id, kind, n) VALUES ('2026-11', 1, 'xx', 1)").run());
+  // ALTER tekrar çalışmaz (wrangler takip eder); CREATE kısmı ise IF NOT EXISTS
+  assert.throws(() => db.exec(MIG18));
+});
+
+test("schema.sql gen_month'u 0018 ile aynı tanımlar ve 0018'i anar", { skip }, () => {
+  const a = new DatabaseSync(":memory:");
+  a.exec(SCHEMA.replace(/CREATE TABLE IF NOT EXISTS gen_month[\s\S]*?WITHOUT ROWID;/, ""));
+  a.exec(MIG18);
+  const b = new DatabaseSync(":memory:");
+  b.exec(SCHEMA);
+  assert.deepEqual(cols(b, "gen_month"), cols(a, "gen_month"));
+  const kind = (db) => ({ ...db.prepare("PRAGMA table_list(gen_month)").get() });
+  assert.deepEqual(kind(b), kind(a));
+  assert.equal(kind(b).wr, 1);
+  assert.match(SCHEMA, /0018_plans\.sql/);
+});
+
+test("gen_month koşullu artış sınırda durur, ay/kind ayrı sayılır, kullanıcı silinince gider", { skip }, () => {
+  const db = new DatabaseSync(":memory:");
+  // CASCADE'i yalın bir users tablosunda dene (schema.sql'deki users'a başka migration'ların tabloları da bağlı)
+  db.exec("PRAGMA foreign_keys = ON");
+  db.exec("CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT)");
+  db.exec(MIG18);
+  db.prepare("INSERT INTO users DEFAULT VALUES").run();
+  const inc = db.prepare(
+    `INSERT INTO gen_month (month, user_id, kind, n) VALUES (?, ?, ?, ?)
+     ON CONFLICT(month, user_id, kind) DO UPDATE SET n = gen_month.n + excluded.n
+     WHERE gen_month.n + excluded.n <= ? RETURNING n`,
+  );
+  const got = [];
+  for (let i = 0; i < 12; i++) got.push(inc.get("2026-11", 1, "vg", 1, 10)?.n ?? null);
+  assert.deepEqual(got, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, null, null]);
+  assert.equal(inc.get("2026-12", 1, "vg", 1, 10).n, 1);
+  assert.equal(inc.get("2026-11", 1, "lb", 1, 40).n, 1);
+  db.prepare("DELETE FROM users WHERE id = 1").run();
+  assert.equal(db.prepare("SELECT COUNT(*) AS c FROM gen_month").get().c, 0);
+});

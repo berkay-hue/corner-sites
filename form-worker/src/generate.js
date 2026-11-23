@@ -12,6 +12,9 @@
 // Blog/video için refine yok. Çıktı llm.js SPECS.blog / videoSpec ile sıkı denetlenir; tutmazsa llm_fail.
 // A5-4: ACCOUNTS_ENABLED="1" iken app sitesinde geçerli Bearer oturumu varsa başarılı üretim drafts'a da yazılır (saveDrafts);
 // oturum yoksa/geçersizse yanıt anonimle bire bir aynı (401 yok), drafts hatası yutulur.
+// A9b plan: aynı koşullarla girişli kullanıcı (account) ve users.plan varsa (migrations/0018_plans.sql) üretim aylık plan
+// sayacından (gen_month, src/plans.js) düşer; anon/IP günlük hakları yerine kullanıcı günlük tavanı (GEN_USER_PER_DAY) ve global
+// tavan. /gen/stock yalnız pro|enterprise; /gen/quota plan, month, stock (anahtar + plan) taşır. 0018 yoksa anonim akış.
 import {
   SYSTEM_GEN, SYSTEM_REFINE, SYSTEM_IG_CAPTION, SYSTEM_IG_REELS, SYSTEM_IG_CAPTION_REFINE, SYSTEM_IG_REELS_REFINE, SCHEMA, SCHEMA_REELS,
   SYSTEM_BLOG, SYSTEM_VIDEO, SCHEMA_BLOG, SCHEMA_VIDEO, BLOG_LENGTHS, VIDEO_KINDS, VIDEO_LENGTHS, STUDIO_MAX, withStyle, userBlog, userVideo,
@@ -21,6 +24,7 @@ import {
 import { makeLlm, LlmError, SPECS, videoSpec } from "./llm.js";
 import { platformSite, bearerToken, sessionUser } from "./platform.js";
 import { siteConf } from "./sites.js";
+import { MONTH_KIND, KIND_NAME, planLimits } from "./plans.js";
 
 export const genEnabled = env => env?.GEN_ENABLED === "1" && Boolean(env.ANTHROPIC_API_KEY && env.GEN_SALT && env.TURNSTILE_SECRET);
 
@@ -110,21 +114,48 @@ async function counts(db, day, keys) {
 
 const UPSERT = "INSERT INTO gen_usage (day, key, kind, n) VALUES (?, ?, ?, ?) ON CONFLICT(day, key) DO UPDATE SET n = gen_usage.n + excluded.n WHERE gen_usage.n + excluded.n <= ? RETURNING n";
 const DECR = "UPDATE gen_usage SET n = MAX(0, n - ?) WHERE day = ? AND key = ?";
+// A9b aylık plan sayacı (0018 gen_month): aynı koşullu artış deseni; item'da month varsa bu tabloya gider
+const M_UPSERT = "INSERT INTO gen_month (month, user_id, kind, n) VALUES (?, ?, ?, ?) ON CONFLICT(month, user_id, kind) DO UPDATE SET n = gen_month.n + excluded.n WHERE gen_month.n + excluded.n <= ? RETURNING n";
+const M_DECR = "UPDATE gen_month SET n = MAX(0, n - ?) WHERE month = ? AND user_id = ? AND kind = ?";
+const up = (db, day, i) => i.month ? db.prepare(M_UPSERT).bind(i.month, i.user, i.kind, i.inc, i.max) : db.prepare(UPSERT).bind(day, i.key, i.kind, i.inc, i.max);
+const down = (db, day, i) => i.month ? db.prepare(M_DECR).bind(i.inc, i.month, i.user, i.kind) : db.prepare(DECR).bind(i.inc, day, i.key);
 
 // Koşullu artışlar tek db.batch'te; satır dönmeyen varsa artanlar aynı day/key ile geri alınır.
-// items: [{name, kind, key, inc, max}] → { ok, n:{name:yeni değer}, failed:[name] }
+// items: [{name, kind, key, inc, max}] (aylık: {name, month, user, kind, inc, max}) → { ok, n:{name:yeni değer}, failed:[name] }
 async function reserve(db, day, items) {
-  const res = await db.batch(items.map(i => db.prepare(UPSERT).bind(day, i.key, i.kind, i.inc, i.max)));
+  const res = await db.batch(items.map(i => up(db, day, i)));
   const n = {}, failed = [];
   items.forEach((i, x) => { const row = res[x]?.results?.[0]; if (row) n[i.name] = Number(row.n); else failed.push(i.name); });
   if (failed.length) {
     const back = items.filter(i => n[i.name] !== undefined);
-    if (back.length) await db.batch(back.map(i => db.prepare(DECR).bind(i.inc, day, i.key)));
+    if (back.length) await db.batch(back.map(i => down(db, day, i)));
   }
   return { ok: !failed.length, n, failed };
 }
 
-const decr = (db, day, items) => items.map(i => db.prepare(DECR).bind(i.inc, day, i.key));
+const decr = (db, day, items) => items.map(i => down(db, day, i));
+
+// Girişli kullanıcının bu ayki sayaçları {lb, vg}; 0018 yoksa "no such table" atar
+async function monthCounts(db, month, uid) {
+  const { results } = await db.prepare("SELECT kind, n FROM gen_month WHERE month = ? AND user_id = ?").bind(month, uid).all();
+  const m = { lb: 0, vg: 0 };
+  for (const r of results || []) if (Object.hasOwn(m, r.kind)) m[r.kind] = Number(r.n) || 0;
+  return m;
+}
+const noTable = e => /no such table/i.test(e?.message || "");
+
+// Girişli kalan: min(bu türün aylık kalanı (tür yoksa iki türün büyüğü), kullanıcı günlük tavanı, global/3).
+// cap = kullanıcı günlük tavanı (reset_at günlük); aylık sayılar month'ta.
+function planQuota(L, U, P, n, m, mk) {
+  const rem = k => P[KIND_NAME[k]] - (m[k] || 0);
+  const p = mk ? rem(mk) : Math.max(rem("lb"), rem("vg"));
+  const d = U - (n.u || 0), g = Math.floor((L.cap - (n.all || 0)) / GEN_UNITS);
+  const scope = p <= d && p <= g ? "plan" : d <= g ? "user" : "global";
+  return {
+    left: Math.max(0, Math.min(p, d, g)), cap: U, reset_at: resetAt(), scope, plan: P.plan,
+    month: { linkedin_blog: { used: m.lb || 0, limit: P.linkedin_blog }, video_gorsel: { used: m.vg || 0, limit: P.video_gorsel } },
+  };
+}
 
 // gen_daily tek upsert; sütun adları DAILY sabit listesinden
 function daily(db, day, inc) {
@@ -465,20 +496,37 @@ async function instagram(c) {
 // D1) yutulur, konsola tek satır; üretim yanıtı yine 200.
 const DRAFT_SQL = "INSERT INTO drafts (user_id, site, platform, topic, body, meta) VALUES (?, ?, ?, ?, ?, ?) RETURNING id";
 // 0017'deki CHECK (platform IN ('linkedin','instagram')) blog/video satırını reddeder; göç eklenmedi (A8 S1 kuralı).
-// 0018 (CHECK genişletme, SQLite'ta tablo yeniden kurulumu) + platform.js DRAFT_PLATFORMS gelene dek blog/video yazılmaz:
+// Sonraki bir göç (CHECK genişletme, SQLite'ta tablo yeniden kurulumu) + platform.js DRAFT_PLATFORMS gelene dek blog/video yazılmaz:
 // oturum sorgusu ve kesin başarısız INSERT yapılmaz, yanıtta draft_ids olmaz. Gövde/meta biçimi hazır (draftBody).
 const DRAFT_DB = ["linkedin", "instagram"];
 const sceneLine = x => (x.sub ? `${x.text} — ${x.sub}` : x.text);
 export const draftBody = d => Array.isArray(d.scenes) ? `${d.scenes.map(sceneLine).join("\n")}\n\n${d.caption}`
   : typeof d.meta === "string" ? `${d.title}\n\n${d.text}` : typeof d.say === "string" ? `${d.text}\n\n${d.say}` : d.text;
-async function saveDrafts(c, save, drafts) {
-  const { env, db, origin, token } = c;
-  if (!save || env.ACCOUNTS_ENABLED !== "1" || !token || !DRAFT_DB.includes(save.platform)) return null;
+// Girişli kullanıcı: yukarıdaki üç koşul + sessionUser. { user, site, P } (P = planLimits: 0018 yoksa null) ya da null.
+// İstek başına bir kez sorulur (c.acct); oturum sorgusu hatası yutulur → anonim.
+async function account(c) {
+  if (c.acct !== undefined) return c.acct;
+  c.acct = null;
+  const { env, origin, token } = c;
+  if (env.ACCOUNTS_ENABLED !== "1" || !token) return null;
   try {
     const site = platformSite(env, origin);
     if (!site || !siteConf(site).routes?.includes("GET /app/drafts")) return null;
     const user = await sessionUser(env, token, site);
-    if (!user) return null;
+    if (user) c.acct = { user, site, P: planLimits(user) };
+  } catch (e) {
+    console.log("gen acct", e?.message?.slice(0, 80));
+  }
+  return c.acct;
+}
+
+async function saveDrafts(c, save, drafts) {
+  const { env, db, token } = c;
+  if (!save || env.ACCOUNTS_ENABLED !== "1" || !token || !DRAFT_DB.includes(save.platform)) return null;
+  try {
+    const a = await account(c);
+    if (!a) return null;
+    const { user, site } = a;
     const topic = String(save.topic || "").slice(0, save.max);
     const res = await db.batch(drafts.map(d => db.prepare(DRAFT_SQL).bind(user.id, site, save.platform, topic, draftBody(d),
       JSON.stringify({ ...save.meta, angle: d.angle, ...(d.flags && { flags: d.flags }) }))));
@@ -496,6 +544,11 @@ const pickMeta = o => Object.fromEntries(Object.entries(o).filter(([, x]) => x !
 async function produce(c, v, req, post = d => d, save) {
   const { env, db, origin, ctx, io, ip } = c;
   if (!Number.isFinite(v.t) || v.t < MIN_T) return fail("slow_down", 429, origin);
+  const a = MONTH_KIND[save?.platform] ? await account(c) : null;
+  if (a?.P) {
+    const res = await producePlan(c, v, req, post, save, a);
+    if (res) return res;
+  }
 
   const L = limits(env), day = genDay();
   const [anonK, ipK, allK, ridK] = await Promise.all([
@@ -569,12 +622,95 @@ async function produce(c, v, req, post = d => d, save) {
   return json({ ok: false, error: code, charged: stillCharged, ...quota(L, after) }, status, origin);
 }
 
+// A9b girişli üretim (account + users.plan). Anon/IP günlük deneme sayaçları UYGULANMAZ (ofis IP'si planı kilitlemesin);
+// yerine aylık plan sayacı (gen_month lb|vg, src/plans.js) + kullanıcı başına günlük kötüye kullanım tavanı (gen_usage kind 'u',
+// GEN_USER_PER_DAY, varsayılan 40) + global tavan (all, GEN_DAILY_CAP) aynen. Turnstile, rid tekrarı (rid anahtarı kullanıcıya
+// bağlı) ve iade kuralları anonimle aynı; aylık sayaç iadeye dahil. charged = aylık hak düştü mü. 0018 yarım (gen_month yok)
+// ise null döner, çağıran anonim akışa düşer (üretim kırılmaz). gen_daily'de anon'a özgü ölçümler (uniq_anon, anon/ip_full) yazılmaz.
+async function producePlan(c, v, req, post, save, a) {
+  const { env, db, origin, ctx, io, ip } = c;
+  const L = limits(env), U = int(env.GEN_USER_PER_DAY, 40), day = genDay(), month = day.slice(0, 7);
+  const uid = a.user.id, P = a.P, mk = MONTH_KIND[save.platform], mmax = P[KIND_NAME[mk]];
+  let m;
+  try { m = await monthCounts(db, month, uid); } catch (e) { if (noTable(e)) return null; throw e; }
+  const [uK, allK, ridK] = await Promise.all([keyOf(env, day, "u", uid), keyOf(env, day, "all"), keyOf(env, day, "rid", `u:${uid}:${v.rid}`)]);
+  const n = await counts(db, day, { u: uK, all: allK, rid: ridK });
+  const pq = (nn, mo) => planQuota(L, U, P, nn, { ...m, [mk]: mo }, mk);
+  const limit = (scope, nn, mo) => fail("limit", 429, origin, { ...pq(nn, mo), scope, ...(scope === "plan" && { kind: KIND_NAME[mk] }) });
+  // aynı rid ile 1 tekrar: aylık hak ve kullanıcı günlük tavanından düşmez, global'den düşer
+  const retry = n.rid === 1;
+  const full = !retry && m[mk] + 1 > mmax ? "plan" : !retry && n.u + 1 > U ? "user" : n.all + GEN_UNITS > L.cap ? "global" : null;
+  if (full) return limit(full, n, m[mk]);
+
+  if (!(await turnstile(env, io.fetch, v.ts, ip))) return fail("bot", 403, origin);
+
+  const it = {
+    mo: { name: "mo", month, user: uid, kind: mk, inc: 1, max: mmax },
+    u: { name: "u", kind: "u", key: uK, inc: 1, max: U },
+    all: { name: "all", kind: "all", key: allK, inc: GEN_UNITS, max: L.cap },
+    rid: { name: "rid", kind: "rid", key: ridK, inc: 1, max: 2 },
+  };
+  let mode = retry ? "retry" : "normal";
+  const tasi = md => md === "retry" ? [it.all, it.rid] : [it.mo, it.u, it.all, ...(n.rid < 2 ? [it.rid] : [])];
+  let r = await reserve(db, day, tasi(mode));
+  if (!r.ok && r.failed.length === 1 && r.failed[0] === "rid") { mode = "normal"; n.rid = 2; r = await reserve(db, day, tasi(mode)); }
+  if (!r.ok) {
+    const top = { mo: mmax, u: U, all: L.cap }, base = { mo: m[mk], u: n.u, all: n.all };
+    const cur = name => r.failed.includes(name) ? top[name] : r.n[name] !== undefined ? r.n[name] - it[name].inc : base[name];
+    const scope = r.failed.includes("mo") ? "plan" : r.failed.includes("u") ? "user" : "global";
+    return limit(scope, { u: cur("u"), all: cur("all") }, cur("mo"));
+  }
+  const charged = mode === "normal";
+  const after = { mo: charged ? r.n.mo : m[mk], u: charged ? r.n.u : n.u, all: r.n.all };
+  const reserved = tasi(mode);
+
+  let out, err;
+  try {
+    const o = await makeLlm(env, io.fetch).generate(req);
+    out = { ...o, drafts: post(o.drafts) };
+  } catch (e) {
+    err = e instanceof LlmError ? e : new LlmError("fail", e?.message?.slice(0, 60) || "error");
+  }
+
+  if (out) {
+    const inc = { ok: 1, tok_in: out.usage.input_tokens, tok_out: out.usage.output_tokens };
+    if (L.cap - (after.all - GEN_UNITS) >= GEN_UNITS && L.cap - after.all < GEN_UNITS) inc.cap_hit = 1;
+    await batchLater(ctx, db, [daily(db, day, inc)]);
+    const ids = await saveDrafts(c, save, out.drafts);
+    return json({ ok: true, drafts: out.drafts, charged, ...pq(after, after.mo), ...(ids && { draft_ids: ids }) }, 200, origin);
+  }
+
+  const [code, status] = LLM_ERR[err.kind] || LLM_ERR.fail;
+  const inc = { [err.kind === "refusal" ? "refused" : err.kind === "fail" ? "fail" : "busy"]: 1, tok_in: err.usage?.input_tokens || 0, tok_out: err.usage?.output_tokens || 0 };
+  let refund = [];
+  if (err.kind === "busy" || err.kind === "limit") {
+    // faturalanmamış: ayrılan her şey (aylık, rid dahil) iade
+    refund = reserved;
+  } else if (charged) {
+    // faturalanmış olabilir: global iade edilmez; aylık hak + kullanıcı günlük yalnız günün ilk böyle olayında (rf satırı, kullanıcıya bağlı)
+    try {
+      const rfK = await keyOf(env, day, "rf", `u:${uid}`);
+      const res = await db.prepare(UPSERT).bind(day, rfK, "rf", 1, 1).all();
+      if (res?.results?.length) refund = [it.mo, it.u];
+    } catch (e) { console.log("gen rf", e?.message?.slice(0, 80)); }
+  }
+  for (const i of refund) if (after[i.name] !== undefined) after[i.name] = Math.max(0, after[i.name] - i.inc);
+  await batchLater(ctx, db, [...decr(db, day, refund), daily(db, day, inc)]);
+  const stillCharged = charged && !refund.includes(it.mo);
+  return json({ ok: false, error: code, charged: stillCharged, ...pq(after, after.mo) }, status, origin);
+}
+
 async function refine(c) {
   const { env, db, body, origin, ctx, io, ip } = c;
   const { field, v } = validateRefine(body);
   if (field) return fail("bad_input", 400, origin, { field });
   if (v.kind !== "li") console.log("gen ig refine", v.kind, voiceLog(v));
 
+  const a = await account(c);
+  if (a?.P) {
+    const res = await refinePlan(c, v, a);
+    if (res) return res;
+  }
   const L = limits(env), day = genDay(), ipv = ipPrefix(ip);
   const [anonK, ipK, allK, raK, riK] = await Promise.all([
     keyOf(env, day, "anon", v.anon), keyOf(env, day, "ip", ipv), keyOf(env, day, "all"), keyOf(env, day, "ra", v.anon), keyOf(env, day, "ri", ipv),
@@ -623,13 +759,75 @@ async function refine(c) {
   return json({ ok: false, error: code, charged: false, ...quota(L, after) }, status, origin);
 }
 
+// A9b girişli refine: aylık plandan DÜŞMEZ (plan "taslak üretimi" sayar; refine var olan taslağı düzeltir, A9.md'de ayrı hak
+// yok, ayrıca düşseydi kullanıcı düzeltmekten kaçınırdı). Sınırlar aynen: GEN_REFINE_PER_DAY ('ra') + global (REFINE_UNITS).
+// Fark: 'ra' anahtarı anon kimliği yerine kullanıcıya bağlı (cihaz değiştirince sıfırlanmasın) ve IP sayacı ('ri') uygulanmaz
+// (üretimdeki gibi ofis IP'si planı kilitlemesin; kötüye kullanımı kullanıcı başına 'ra' sınırlar). Ön şart: o gün en az bir
+// üretim (girişli 'u' ya da aynı tarayıcıdan anonim). 0018 yarımsa null → anonim refine.
+async function refinePlan(c, v, a) {
+  const { env, db, origin, ctx, io } = c;
+  const L = limits(env), U = int(env.GEN_USER_PER_DAY, 40), day = genDay(), uid = a.user.id;
+  let m;
+  try { m = await monthCounts(db, day.slice(0, 7), uid); } catch (e) { if (noTable(e)) return null; throw e; }
+  const [uK, anonK, allK, raK] = await Promise.all([
+    keyOf(env, day, "u", uid), keyOf(env, day, "anon", v.anon), keyOf(env, day, "all"), keyOf(env, day, "ra", `u:${uid}`),
+  ]);
+  const n = await counts(db, day, { u: uK, anon: anonK, all: allK, ra: raK });
+  const pq = nn => planQuota(L, U, a.P, nn, m);
+  if (n.u < 1 && n.anon < 1) return fail("bad_input", 400, origin, { field: "anon", ...pq(n) });
+  const full = n.ra + 1 > L.ra ? "user" : n.all + REFINE_UNITS > L.cap ? "global" : null;
+  if (full) return fail("limit", 429, origin, { ...pq(n), scope: full });
+
+  const items = [
+    { name: "ra", kind: "ra", key: raK, inc: 1, max: L.ra },
+    { name: "all", kind: "all", key: allK, inc: REFINE_UNITS, max: L.cap },
+  ];
+  const r = await reserve(db, day, items);
+  if (!r.ok) return fail("limit", 429, origin, { ...pq(n), scope: r.failed.includes("ra") ? "user" : "global" });
+  const after = { u: n.u, all: r.n.all };
+
+  let out, err;
+  try {
+    const o = await makeLlm(env, io.fetch).generate(refineReq(v));
+    out = v.kind === "li" ? o : { ...o, drafts: igPost(o.drafts, v) };
+  } catch (e) {
+    err = e instanceof LlmError ? e : new LlmError("fail", e?.message?.slice(0, 60) || "error");
+  }
+  if (out) {
+    const inc = { refine_ok: 1, tok_in: out.usage.input_tokens, tok_out: out.usage.output_tokens };
+    if (L.cap - (after.all - REFINE_UNITS) >= GEN_UNITS && L.cap - after.all < GEN_UNITS) inc.cap_hit = 1;
+    await batchLater(ctx, db, [daily(db, day, inc)]);
+    const ids = await saveDrafts(c, {
+      platform: v.kind === "li" ? "linkedin" : "instagram", topic: "", max: 0,
+      meta: pickMeta({ kind: v.kind, op: v.op, tone: v.tone, format: v.format, lang: v.lang }),
+    }, out.drafts);
+    return json({ ok: true, drafts: out.drafts, charged: false, ...pq(after), ...(ids && { draft_ids: ids }) }, 200, origin);
+  }
+  const [code, status] = LLM_ERR[err.kind] || LLM_ERR.fail;
+  const refund = err.kind === "busy" || err.kind === "limit" ? items : [];
+  if (refund.length) after.all = Math.max(0, after.all - REFINE_UNITS);
+  await batchLater(ctx, db, [...decr(db, day, refund), daily(db, day, { tok_in: err.usage?.input_tokens || 0, tok_out: err.usage?.output_tokens || 0 })]);
+  return json({ ok: false, error: code, charged: false, ...pq(after) }, status, origin);
+}
+
 async function quotaRoute(c) {
   const { env, db, body, origin, ip } = c;
   if (!body || typeof body.anon !== "string" || !UUID.test(body.anon)) return fail("bad_input", 400, origin, { field: "anon" });
   const L = limits(env), day = genDay();
+  // A9b: girişli + plan → kullanıcı sayaçları, plan, month; stock = anahtar var VE plan izin veriyor (anonimde false)
+  const a = await account(c);
+  if (a?.P) {
+    let m = null;
+    try { m = await monthCounts(db, day.slice(0, 7), a.user.id); } catch (e) { if (!noTable(e)) throw e; }
+    if (m) {
+      const [uK, allK] = await Promise.all([keyOf(env, day, "u", a.user.id), keyOf(env, day, "all")]);
+      const n = await counts(db, day, { u: uK, all: allK });
+      return json({ ok: true, charged: false, ...planQuota(L, int(env.GEN_USER_PER_DAY, 40), a.P, n, m), stock: Boolean(env.PEXELS_API_KEY) && a.P.stock }, 200, origin);
+    }
+  }
   const [anonK, ipK, allK] = await Promise.all([keyOf(env, day, "anon", body.anon), keyOf(env, day, "ip", ipPrefix(ip)), keyOf(env, day, "all")]);
   const n = await counts(db, day, { anon: anonK, ip: ipK, all: allK });
-  return json({ ok: true, charged: false, ...quota(L, n), stock: Boolean(env.PEXELS_API_KEY) }, 200, origin);
+  return json({ ok: true, charged: false, ...quota(L, n), plan: "anon", stock: false }, 200, origin);
 }
 
 async function event(c) {
@@ -654,7 +852,8 @@ async function event(c) {
 }
 
 // /gen/stock (GET): Pexels fotoğraf araması; kullanıcı Stüdyo'da sahneye görseli kendi seçer. Anahtar yalnız sunucuda
-// (PEXELS_API_KEY secret); yoksa 503 not_ready. Hak düşürmez; IP başına ve günlük toplam sayaçla sınırlı (st / sa).
+// (PEXELS_API_KEY secret); yoksa 503 not_ready. A9b: yalnız pro|enterprise planlı girişli kullanıcı (Bearer), öbürüne 403 plan
+// {need:"pro"}. Hak düşürmez; IP başına ve günlük toplam sayaçla sınırlı (st / sa).
 // Yanıt ince: yalnız kimlik, boyut, alt, fotoğrafçı, Pexels sayfası ve src çeşitleri; üst akış hatası ayrıntısız 502.
 const STOCK_URL = "https://api.pexels.com/v1/search";
 const STOCK_ORIENT = ["landscape", "portrait", "square"];
@@ -683,6 +882,9 @@ async function stockRoute(c) {
   const page = pg == null || pg === "" ? 1 : /^\d{1,3}$/.test(pg) && +pg >= 1 && +pg <= 100 ? +pg : 0;
   if (!page) return fail("bad_input", 400, origin, { field: "page" });
   if (!env.PEXELS_API_KEY) return fail("not_ready", 503, origin);
+  // A9b: yalnız pro|enterprise (Bearer oturum + 0018). Anonim, basic, ACCOUNTS kapalı ya da 0018 yok → 403 plan.
+  const a = await account(c);
+  if (!a?.P?.stock) return fail("plan", 403, origin, { need: "pro" });
   const day = genDay();
   const [ipK, allK] = await Promise.all([keyOf(env, day, "st", ipPrefix(ip)), keyOf(env, day, "sa", "global")]);
   const r = await reserve(db, day, [
@@ -732,12 +934,15 @@ export async function generate(req, url, env, origin, ctx, io = {}) {
   }
 }
 
-// Saatlik cron (index.js scheduled): 2 günden eski sayaç satırları silinir; gen_daily süresiz kalır. 1 D1 ifadesi.
+// Saatlik cron (index.js scheduled): 2 günden eski sayaç satırları ve 13 aydan eski aylık plan sayaçları (0018 gen_month)
+// silinir; gen_daily süresiz kalır. 2 D1 ifadesi; tablo yoksa sessiz.
 export async function genCleanup(env) {
   if (!env?.DB) return;
-  try {
-    await env.DB.prepare("DELETE FROM gen_usage WHERE day < date('now', '-2 days')").run();
-  } catch (e) {
-    if (!/no such table/i.test(e?.message || "")) throw e;
+  for (const sql of ["DELETE FROM gen_usage WHERE day < date('now', '-2 days')", "DELETE FROM gen_month WHERE month < strftime('%Y-%m', 'now', '-13 months')"]) {
+    try {
+      await env.DB.prepare(sql).run();
+    } catch (e) {
+      if (!noTable(e)) throw e;
+    }
   }
 }

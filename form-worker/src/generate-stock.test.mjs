@@ -1,9 +1,12 @@
 // node --test src/generate-stock.test.mjs — /gen/stock (Pexels arama vekili) ve /gen/quota stock bayrağı.
 // Gerçek ağ çağrısı yok: fetch sahte verilir, api.pexels.com dışında bir URL gelirse hata fırlatır. D1 yerine node:sqlite.
+// A9b: /gen/stock yalnız pro|enterprise planlı girişli kullanıcı (Bearer); şema schema.sql + migrations/0018_plans.sql.
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { DatabaseSync } from "node:sqlite";
 import { registerHooks } from "node:module";
+import { readFileSync } from "node:fs";
+import { createHash } from "node:crypto";
 
 registerHooks({
   resolve(spec, ctx, next) {
@@ -16,7 +19,24 @@ registerHooks({
 const { generate } = await import("./generate.js");
 const worker = (await import("./index.js")).default;
 
-const SQL = `CREATE TABLE IF NOT EXISTS gen_usage (day TEXT NOT NULL, key TEXT NOT NULL, kind TEXT NOT NULL, n INTEGER NOT NULL DEFAULT 0, PRIMARY KEY (day, key)) WITHOUT ROWID;`;
+const SCHEMA = readFileSync(new URL("../schema.sql", import.meta.url), "utf8");
+const MIG18 = readFileSync(new URL("../migrations/0018_plans.sql", import.meta.url), "utf8");
+const hash = t => createHash("sha256").update(t).digest("hex");
+// plan başına bir app kullanıcısı + oturum; jeton 43 karakter base64url
+const TOK = { pro: "P".repeat(43), basic: "B".repeat(43), enterprise: "E".repeat(43) };
+const BEARER = plan => `Bearer ${TOK[plan]}`;
+function freshDb({ mig18 = true } = {}) {
+  const db = new DatabaseSync(":memory:");
+  db.exec(SCHEMA);
+  if (mig18) db.exec(MIG18);
+  for (const plan of Object.keys(TOK)) {
+    const cols = mig18 ? "site, email, name, role, pass, plan" : "site, email, name, role, pass";
+    const vals = mig18 ? [`${plan}@ornek.test`, plan] : [`${plan}@ornek.test`];
+    const uid = Number(db.prepare(`INSERT INTO users (${cols}) VALUES ('app.socialmediacorner.co', ?, 'Ad', 'brand', 'x'${mig18 ? ", ?" : ""})`).run(...vals).lastInsertRowid);
+    db.prepare("INSERT INTO sessions (token_hash, user_id, expires_at) VALUES (?, ?, datetime('now', '+30 days'))").run(hash(TOK[plan]), uid);
+  }
+  return db;
+}
 function d1(db) {
   const stmt = (sql, args = []) => ({
     sql, args,
@@ -64,13 +84,14 @@ function fakeFetch(reply = () => ({ status: 200, body: { page: 1, per_page: 15, 
   return { f, calls };
 }
 
-function setup({ env: extra = {}, fetch: ff = fakeFetch() } = {}) {
-  const db = new DatabaseSync(":memory:");
-  db.exec(SQL);
-  const env = { DB: d1(db), GEN_ENABLED: "1", ANTHROPIC_API_KEY: "k", GEN_SALT: "salt", TURNSTILE_SECRET: "t", PEXELS_API_KEY: KEY, ...extra };
+function setup({ env: extra = {}, fetch: ff = fakeFetch(), db = freshDb() } = {}) {
+  const env = { DB: d1(db), GEN_ENABLED: "1", ACCOUNTS_ENABLED: "1", ANTHROPIC_API_KEY: "k", GEN_SALT: "salt", TURNSTILE_SECRET: "t", PEXELS_API_KEY: KEY, ...extra };
   const ctx = { waitUntil() {} };
-  const call = async (qs, { method = "GET", origin = ORIGIN, ip = "203.0.113.7" } = {}) => {
-    const req = new Request(`https://forms.test/gen/stock${qs}`, { method, headers: { "cf-connecting-ip": ip }, body: method === "GET" ? undefined : "{}" });
+  // varsayılan: pro oturum; auth null → başlık yok (anonim)
+  const call = async (qs, { method = "GET", origin = ORIGIN, ip = "203.0.113.7", auth = BEARER("pro") } = {}) => {
+    const headers = { "cf-connecting-ip": ip };
+    if (auth) headers.authorization = auth;
+    const req = new Request(`https://forms.test/gen/stock${qs}`, { method, headers, body: method === "GET" ? undefined : "{}" });
     const res = await generate(req, new URL(req.url), env, origin, ctx, { fetch: ff.f });
     const text = await res.text();
     return { status: res.status, body: text ? JSON.parse(text) : null, headers: res.headers };
@@ -170,16 +191,42 @@ test("IP başına günlük sınır → 429 limit (scope ip); başka IP etkilenme
   assert.deepEqual(s.usage("sa"), [3]);
 });
 
-test("quota stock bayrağı: anahtar varsa true, yoksa false", async () => {
-  for (const [key, want] of [[KEY, true], ["", false], [undefined, false]]) {
-    const db = new DatabaseSync(":memory:");
-    db.exec(SQL);
-    const env = { DB: d1(db), GEN_ENABLED: "1", ANTHROPIC_API_KEY: "k", GEN_SALT: "salt", TURNSTILE_SECRET: "t", PEXELS_API_KEY: key };
+test("plan kilidi: anonim, basic, jeton geçersiz, ACCOUNTS kapalı, 0018 yok → 403 plan need pro; pro ve enterprise → 200", async () => {
+  const s = setup();
+  for (const auth of [null, BEARER("basic"), `Bearer ${"Z".repeat(43)}`, "Basic abc"]) {
+    const r = await s.call("?q=kedi", { auth });
+    assert.equal(r.status, 403, String(auth));
+    assert.deepEqual(r.body, { ok: false, error: "plan", charged: false, need: "pro" });
+    assert.equal(r.headers.get("access-control-allow-origin"), ORIGIN);
+  }
+  assert.equal(s.calls.length, 0);
+  assert.deepEqual(s.usage("st"), []); // 403'te sayaç dokunulmaz
+  assert.equal((await s.call("?q=kedi")).status, 200);
+  assert.equal((await s.call("?q=kedi", { auth: BEARER("enterprise") })).status, 200);
+  assert.equal(s.calls.length, 2);
+  const off = setup({ env: { ACCOUNTS_ENABLED: "0" } });
+  assert.deepEqual([(await off.call("?q=kedi")).status, off.calls.length], [403, 0]);
+  const old = setup({ db: freshDb({ mig18: false }) });
+  assert.deepEqual([(await old.call("?q=kedi")).status, old.calls.length], [403, 0]);
+  // sıra: doğrulama 400 ve anahtar 503 plan kontrolünden önce
+  assert.equal((await s.call("", { auth: null })).status, 400);
+  assert.equal((await setup({ env: { PEXELS_API_KEY: "" } }).call("?q=kedi", { auth: null })).status, 503);
+});
+
+test("quota stock bayrağı: anahtar var VE plan izin veriyor (pro/enterprise); anonim/basic false", async () => {
+  const cases = [[KEY, "pro", true], [KEY, "enterprise", true], [KEY, "basic", false], [KEY, null, false], ["", "pro", false], [undefined, "pro", false]];
+  for (const [key, plan, want] of cases) {
+    const db = freshDb();
+    const env = { DB: d1(db), GEN_ENABLED: "1", ACCOUNTS_ENABLED: "1", ANTHROPIC_API_KEY: "k", GEN_SALT: "salt", TURNSTILE_SECRET: "t", PEXELS_API_KEY: key };
     const b = JSON.stringify({ anon: "11111111-2222-4333-8444-555555555555" });
-    const req = new Request("https://forms.test/gen/quota", { method: "POST", headers: { "content-type": "application/json", "content-length": String(Buffer.byteLength(b)) }, body: b });
+    const headers = { "content-type": "application/json", "content-length": String(Buffer.byteLength(b)) };
+    if (plan) headers.authorization = BEARER(plan);
+    const req = new Request("https://forms.test/gen/quota", { method: "POST", headers, body: b });
     const res = await generate(req, new URL(req.url), env, ORIGIN, { waitUntil() {} }, { fetch: () => { throw new Error("ağ yok"); } });
     assert.equal(res.status, 200);
-    assert.equal((await res.json()).stock, want);
+    const j = await res.json();
+    assert.equal(j.stock, want, `${key} ${plan}`);
+    assert.equal(j.plan, plan || "anon");
   }
 });
 

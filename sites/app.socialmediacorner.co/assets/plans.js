@@ -1,5 +1,6 @@
-/* A9a · plan hakları (Planlar sayfasındaki sayılarla aynı; tek kaynak olarak ileride sayaç/rozetler kullanır).
-   Yalnız veri: hiçbir özelliği kilitlemez (Pexels seçici herkese açık kalır), fiyat içermez, ağ isteği atmaz.
+/* A9a · plan hakları (Planlar sayfasındaki sayılarla aynı). Zorlama sunucuda: form-worker/src/plans.js aynı sayıları
+   taşır (plans.test.mjs ikisinin eşitliğini denetler); aylık sayaç ve Pexels kilidi (/gen/stock yalnız pro/enterprise)
+   oradan gelir, Stüdyo kilidi /gen/quota yanıtındaki plan/stock ile gösterir. Bu dosya yalnız veri: fiyat içermez, ağ isteği atmaz.
    Aylık haklar: linkedin_blog = LinkedIn + blog taslağı, video_gorsel = video + görsel taslağı.
    kuyruk/otomatik_paylasim 'yakinda' = LinkedIn/Meta onayı bekleniyor. Enterprise hakları sözleşmeye göre. */
 (function(){'use strict';
