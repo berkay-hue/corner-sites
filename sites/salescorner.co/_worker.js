@@ -1435,6 +1435,197 @@ async function rakipTakip(req, env) {
     rakipler: res.map(r => ({ firma: r.firma, ok: r.ok, kaynak: r.kaynak, feed_url: r.feed_url, error: r.error, toplam: r.toplam, tarihsiz: r.tarihsiz, son: r.son, ...(r.kaynak === "LinkedIn" ? { ham: r.ham, tani: r.tani, onceki: r.onceki || [] } : {}), items: r.items })) });
 }
 
+// ---------- Sales Corner SaaS paneli (app.salescorner.co, /api/app/*) ----------
+// Oturum: Supabase (udhprgrkbdeodokxrdsi). Ön yüz kullanıcının erişim jetonunu (Bearer) ve projenin herkese açık
+// apikey'ini gönderir; worker bunları yalnızca Supabase RPC'lerine aynen iletir (worker'da Supabase anahtarı yok).
+// Kota: app_kontrol (çalıştırmadan önce) → mevcut işleyici (iç istek) → başarıda app_kullan (1 hak düşer).
+const SB_URL = "https://udhprgrkbdeodokxrdsi.supabase.co";
+const APP_MOD = {
+  rakip: "/api/rakip-analizi-pro-v5",
+  sekans: "/api/sekans",
+  seo: "/api/seo-analyze",
+  briefing: "/api/briefing",
+};
+const appAuth = req => {
+  const a = req.headers.get("authorization") || "", k = req.headers.get("apikey") || "";
+  return /^Bearer [\w-]+\.[\w-]+\.[\w-]+$/.test(a) && /^[\w.-]{20,}$/.test(k) ? { a, k } : null;
+};
+async function sbRpc(au, fn, args) {
+  const r = await fetch(`${SB_URL}/rest/v1/rpc/${fn}`, {
+    method: "POST",
+    headers: { authorization: au.a, apikey: au.k, "content-type": "application/json" },
+    body: JSON.stringify(args || {}),
+  });
+  const t = await r.text();
+  let j = null; try { j = t ? JSON.parse(t) : null; } catch {}
+  return { ok: r.ok, status: r.status, j };
+}
+// Jetonu Supabase doğruladıktan sonra (app_kontrol başarılı) içindeki e-posta okunur
+function jwtEmail(au) {
+  try {
+    const p = au.a.split(" ")[1].split(".")[1];
+    return str(JSON.parse(new TextDecoder().decode(unb64u(p))).email, 200).toLowerCase();
+  } catch { return ""; }
+}
+const APP_NEDEN = {
+  sure: "Deneme ya da plan süreniz doldu. Devam etmek için bir plan seçin.",
+  plan: "Bu araç mevcut planınızda yok. Planınızı yükselterek açabilirsiniz.",
+  kota: "Bu ayki kullanım hakkınız doldu. Haklar ay başında yenilenir ya da planınızı yükseltebilirsiniz.",
+};
+// Kota/oturum denetimi: { au, d } ya da hata yanıtı
+async function appGate(req, modul) {
+  const au = appAuth(req);
+  if (!au) return { res: fail("Oturum gerekli. Lütfen tekrar giriş yapın.", 401) };
+  const k = await sbRpc(au, "app_kontrol", { p_modul: modul });
+  if (k.status === 401 || k.status === 403) return { res: fail("Oturum gerekli. Lütfen tekrar giriş yapın.", 401) };
+  if (!k.ok || !k.j) { console.log("app_kontrol", k.status, JSON.stringify(k.j).slice(0, 200)); return { res: fail("Hesap bilgisi alınamadı, lütfen tekrar deneyin.", 502) }; }
+  if (!k.j.ok) return { res: J({ success: false, neden: k.j.neden, message: APP_NEDEN[k.j.neden] || "Bu işlem şu an yapılamıyor." }, k.j.neden === "plan" ? 403 : 402) };
+  return { au, d: k.j };
+}
+async function appCharge(au, modul) {
+  const u = await sbRpc(au, "app_kullan", { p_modul: modul });
+  if (!u.ok || !u.j) { console.log("app_kullan", u.status); return null; }
+  return u.j.ok ? { limit: u.j.limit, kalan: u.j.kalan } : { limit: u.j.limit ?? 0, kalan: 0 };
+}
+function appBody(modul, b, email) {
+  const ep = b.eposta === true ? email : "";
+  if (modul === "rakip") return {
+    company_name: str(b.company_name, 150), company_website: str(b.company_website, 300),
+    manual_competitor_urls: arr(b.manual_competitor_urls, 5).map(x => str(x, 300)).filter(Boolean),
+    email_to: ep, country: "Turkey", language: "tr", _formLoadedAt: String(Date.now() - 5000), website2: "",
+  };
+  if (modul === "sekans") {
+    const pdf = b.source_type === "pdf";
+    return {
+      token: "sc_sekans_2026_prod", company_name: str(b.company_name, 150), source_type: pdf ? "pdf" : "website",
+      ...(pdf ? { pdf_text: str(b.pdf_text, 6000) } : { domain: str(b.domain, 300) }),
+      source_notes: str(b.source_notes, 3000), writer_name: str(b.writer_name, 100), recipient_email: ep,
+    };
+  }
+  if (modul === "seo") return { website_url: str(b.website_url, 300) };
+  return {
+    firma_adi: str(b.firma_adi, 150), firma_website: str(b.firma_website, 300), firma_linkedin: str(b.firma_linkedin, 300),
+    kisi_adi: str(b.kisi_adi, 120), kisi_email: str(b.kisi_email, 200), kisi_linkedin: str(b.kisi_linkedin, 300),
+    toplanti_tarihi: str(b.toplanti_tarihi, 20), toplanti_saati: str(b.toplanti_saati, 10), toplanti_konusu: str(b.toplanti_konusu, 1000),
+    bildirim_email: email,
+  };
+}
+function appValid(modul, x) {
+  if (modul === "rakip") return !x.company_name || !normUrl(x.company_website) ? "Firma adı ve web sitesi gerekli."
+    : !x.manual_competitor_urls.some(u => normUrl(u)) ? "En az bir geçerli rakip adresi girin." : "";
+  if (modul === "sekans") return !x.company_name ? "Firma adı gerekli." : x.source_type === "pdf" ? (x.pdf_text ? "" : "PDF metni okunamadı.") : (normUrl(x.domain) ? "" : "Geçerli bir web sitesi girin.");
+  if (modul === "seo") return normUrl(x.website_url) ? "" : "Geçerli bir web sitesi girin.";
+  return x.firma_adi || x.kisi_adi ? "" : "Firma ya da kişi adı gerekli.";
+}
+// Mevcut işleyiciyi (akış ya da yedek) aynı sunucu içinde çağırır; tarayıcının user-agent'ı ve origin'i korunur
+async function appInner(req, env, url, cfctx, target, body) {
+  const h = new Headers(req.headers);
+  h.delete("authorization"); h.delete("apikey"); h.delete("content-length");
+  h.set("content-type", "application/json");
+  const iu = new URL(target, url.origin);
+  const ir = new Request(iu, { method: "POST", headers: h, body: JSON.stringify(body) });
+  if (env.ANTHROPIC_API_KEY && env.GOOGLE_REFRESH_TOKEN) {
+    const r = ROUTES.find(x => x.path === target && x.method === "POST");
+    if (r) return runHook(r, ir, env, iu, cfctx);
+  }
+  return POST[target](ir, env, url.origin);
+}
+async function appRun(req, env, url, cfctx, modul, au, b) {
+  const x = appBody(modul, b, jwtEmail(au));
+  const bad = appValid(modul, x);
+  if (bad) return fail(bad, 400);
+  let j = null, st = 0;
+  try {
+    const r = await appInner(req, env, url, cfctx, APP_MOD[modul], x);
+    st = r.status; const t = (await r.text()).trim();
+    try { j = t ? JSON.parse(t) : null; } catch {}
+  } catch (e) { console.log("app", modul, e?.node, e?.stack || e); }
+  const ok = j && typeof j === "object" && !Array.isArray(j) && st < 400 && j.success !== false && j.status !== "error" && !j.error
+    && (modul === "rakip" || modul === "sekans" ? !!j.executionId && j.executionId !== "x" : true);
+  if (!ok) return J({ success: false, message: str(j?.message || j?.error, 300) || "İşlem tamamlanamadı, lütfen tekrar deneyin. Hakkınızdan düşülmedi." }, 200);
+  return J({ success: true, sonuc: j, kota: await appCharge(au, modul) });
+}
+
+// ---------- Fireflies ----------
+async function ffGql(key, query, variables) {
+  const r = await fetch("https://api.fireflies.ai/graphql", {
+    method: "POST",
+    headers: { "content-type": "application/json", authorization: "Bearer " + key },
+    body: JSON.stringify({ query, variables: variables || {} }),
+    signal: AbortSignal.timeout(25000),
+  });
+  let j = null; try { j = await r.json(); } catch {}
+  if (r.status === 401 || r.status === 403 || /auth|token|api key/i.test(j?.errors?.[0]?.message || "") && !j?.data)
+    throw Object.assign(new Error("Fireflies anahtarı geçersiz ya da yetkisiz."), { kullanici: true });
+  if (!r.ok || !j?.data) throw new Error("Fireflies " + r.status + " " + str(j?.errors?.[0]?.message, 160));
+  return j.data;
+}
+async function ffKey(au) {
+  const k = await sbRpc(au, "app_fireflies_anahtar", {});
+  if (k.status === 401 || k.status === 403) return { res: fail("Oturum gerekli. Lütfen tekrar giriş yapın.", 401) };
+  if (!k.ok) return { res: fail("Hesap bilgisi alınamadı, lütfen tekrar deneyin.", 502) };
+  const key = typeof k.j === "string" ? k.j.trim() : "";
+  return key ? { key } : { res: fail("Fireflies hesabınız bağlı değil. Hesabım sayfasından API anahtarınızı ekleyin.", 400) };
+}
+async function ffListe(req) {
+  const au = appAuth(req);
+  if (!au) return fail("Oturum gerekli. Lütfen tekrar giriş yapın.", 401);
+  const k = await ffKey(au); if (k.res) return k.res;
+  try {
+    const d = await ffGql(k.key, "query { transcripts(limit: 20) { id title date duration participants } }");
+    const toplantilar = arr(d.transcripts, 20).map(t => ({ id: str(t?.id, 80), title: str(t?.title, 200), date: t?.date ?? null, duration: Number(t?.duration) || 0, participants: arr(t?.participants, 30).map(p => str(p, 120)) })).filter(t => t.id);
+    return J({ success: true, toplantilar });
+  } catch (e) { console.log("ff liste", e?.message); return fail(e?.kullanici ? e.message : "Fireflies'a ulaşılamadı, lütfen tekrar deneyin.", e?.kullanici ? 400 : 502); }
+}
+const FF_SYS = "Sen deneyimli bir B2B satış koçusun. Sana bir satış toplantısının dökümü verilecek. Satış temsilcisinin performansını tarafsız ve somut biçimde değerlendir; dökümde olmayan bilgiyi uydurma, emin olmadığın yerde 'belirtilmedi' yaz. Türkçe yaz. Yalnızca istenen JSON nesnesini döndür, başka metin yazma.";
+async function ffAnaliz(req, env, au) {
+  const b = await readBody(req), id = str(b.id, 80);
+  if (!/^[\w-]{4,80}$/.test(id)) return fail("Toplantı seçilmedi.", 400);
+  if (!env.ANTHROPIC_API_KEY) return fail("Toplantı analizi şu an kullanılamıyor.", 503);
+  const k = await ffKey(au); if (k.res) return k.res;
+  let t;
+  try {
+    t = (await ffGql(k.key, "query T($id: String!) { transcript(id: $id) { title date duration sentences { speaker_name text } summary { overview action_items keywords } } }", { id })).transcript;
+  } catch (e) { console.log("ff transcript", e?.message); return fail(e?.kullanici ? e.message : "Fireflies'tan toplantı alınamadı, lütfen tekrar deneyin.", e?.kullanici ? 400 : 502); }
+  const sents = arr(t?.sentences, 6000);
+  if (!t || !sents.length) return fail("Bu toplantının dökümü henüz hazır değil ya da boş.", 400);
+  const say = {}; let top = 0, dokum = "", son = "";
+  for (const s of sents) {
+    const ad = str(s?.speaker_name, 80) || "Konuşmacı", tx = str(s?.text, 1500);
+    if (!tx) continue;
+    say[ad] = (say[ad] || 0) + tx.length; top += tx.length;
+    if (dokum.length < 120000) { dokum += (ad === son ? " " : `\n${ad}: `) + tx; son = ad; }
+  }
+  const oranlar = Object.entries(say).sort((a, c) => c[1] - a[1]).slice(0, 8).map(([ad, n]) => ({ ad, pay: top ? Math.round((n / top) * 1000) / 10 : 0 }));
+  const sm = t.summary || {};
+  const prompt = `Toplantı: ${str(t.title, 200) || "Adsız"}\nSüre: ${Math.round(Number(t.duration) || 0)} dk\nKonuşma payları: ${oranlar.map(o => `${o.ad} %${o.pay}`).join(", ")}\n`
+    + (sm.overview ? `Fireflies özeti: ${str(sm.overview, 3000)}\n` : "")
+    + `\nDÖKÜM:\n${dokum.trim()}\n\n`
+    + `Şu JSON'u döndür: {"skor": 0-100 arası tam sayı (temsilcinin genel performansı), "skor_gerekce": "1-2 cümle", "ozet": "3-5 cümle toplantı özeti", "asama": "keşif|demo|teklif|pazarlık|kapanış|takip|diğer", "guclu": ["en fazla 5 madde"], "gelisim": ["en fazla 5 somut öneri"], "itirazlar": [{"itiraz": "", "nasil_yanitlandi": "", "oneri": ""}], "bant": {"butce": "", "yetki": "", "ihtiyac": "", "zamanlama": ""}, "sonraki_adimlar": [{"adim": "", "sorumlu": "", "tarih": ""}], "riskler": ["en fazla 4"], "takip_epostasi": "müşteriye gönderilecek kısa, kişisel takip e-postası taslağı (konu satırı dahil)"}`;
+  let a;
+  try { a = await claude(env, prompt, { system: FF_SYS, max: 6000 }); }
+  catch (e) { console.log("ff claude", e?.message); return J({ success: false, message: "Analiz oluşturulamadı, lütfen tekrar deneyin. Hakkınızdan düşülmedi." }); }
+  const kota = await appCharge(au, "fireflies");
+  return J({ success: true, analiz: a, meta: { title: str(t.title, 200), date: t.date ?? null, duration: Number(t.duration) || 0, oranlar }, kota });
+}
+
+async function appRoute(req, env, url, path, cfctx) {
+  if (req.method === "OPTIONS") return new Response(null, { status: 204 });
+  if (!sameSite(req)) return fail("Bu uç yalnızca salescorner.co üzerinden kullanılabilir.", 403);
+  const sub = path.slice("/api/app/".length);
+  try {
+    if (sub === "fireflies/liste" && req.method === "GET") return await ffListe(req);
+    if (req.method !== "POST") return fail("Bulunamadı.", 404);
+    const modul = sub === "fireflies/analiz" ? "fireflies" : APP_MOD[sub] ? sub : "";
+    if (!modul) return fail("Bulunamadı.", 404);
+    const g = await appGate(req, modul);
+    if (g.res) return g.res;
+    if (modul === "fireflies") return await keepAlive(ffAnaliz(req, env, g.au));
+    const b = await readBody(req);
+    return await keepAlive(appRun(req, env, url, cfctx, modul, g.au, b));
+  } catch (e) { console.log(path, e?.stack || e); return fail("İşlem sırasında hata oluştu, lütfen tekrar deneyin.", 500); }
+}
+
 // ================= n8n akışları (otomatik üretildi: n8n-export/gen/gen.py) =================
 const WF = {"analiz":{"nodes":{"Webhook":{"name":"Webhook","t":"webhook","p":{"httpMethod":"POST","path":"analiz","responseMode":"lastNode","options":{"responseHeaders":{"entries":[{"name":"Access-Control-Allow-Origin","value":"*"}]}}},"cred":null},"Read CSV Sheet":{"name":"Read CSV Sheet","t":"googleSheets","p":{"documentId":{"__rl":true,"value":__X(function($json,$,$input,$env,$execution,$binary,$itemIndex,$now,$node){try{return ($json.body.google_sheet_url
 )}catch(e){return undefined}}),"mode":"url"},"sheetName":{"__rl":true,"value":__X(function($json,$,$input,$env,$execution,$binary,$itemIndex,$now,$node){try{return ($json.body.sheet_name
@@ -13497,7 +13688,13 @@ export default {
     const url = new URL(req.url), path = url.pathname.replace(/\/+$/, "");
     // Eski n8n yolları (/webhook/…, bazıları UUID) da kabul edilir: uzantıda yalnız n8nBase değişsin. Fazla "/" (base sonunda "/") tolere edilir.
     { const lp = path.replace(/^\/{2,}/, "/"); if (lp.startsWith("/api/li/") || lp.startsWith("/webhook/")) return liRoute(req, env, url, lp, cfctx); }
+    // SaaS paneli: app.salescorner.co kökü /app/ içeriğini gösterir, arama motorlarına kapalıdır
+    if (url.hostname === "app.salescorner.co") {
+      if (path === "" || path === "/index.html") return env.ASSETS.fetch(new Request(new URL("/app/", url), req));
+      if (path === "/robots.txt") return new Response("User-agent: *\nDisallow: /\n", { headers: { "content-type": "text/plain; charset=utf-8" } });
+    }
     if (!path.startsWith("/api/")) return env.ASSETS.fetch(req);
+    if (path.startsWith("/api/app/")) return appRoute(req, env, url, path, cfctx);
     if (path === "/api/rapor") return new Response(VIEWER, { headers: { "content-type": "text/html; charset=utf-8", "x-robots-tag": "noindex", "cache-control": "public, max-age=300" } });
     if (req.method === "OPTIONS") return new Response(null, { status: 204 });
     // Rakip Takip (Rakip Radar v2 uyarlaması, rakip_takip.js): akış tablosundan bağımsız el yazımı uç.
