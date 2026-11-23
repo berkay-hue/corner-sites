@@ -1322,10 +1322,17 @@ async function rtLinkedIn(c, slug, since, gun, env) {
   const out = { firma: c.firma, site: "", feed_url: "https://www.linkedin.com/company/" + slug + "/", kaynak: "LinkedIn", ok: false, error: "", toplam: 0, tarihsiz: 0, son: "", items: [] };
   if (!env.SERPER_API_KEY) { out.error = "arama anahtarı tanımlı değil"; return out; }
   let d;
+  const ara = body => fetch("https://google.serper.dev/search", { method: "POST", headers: { "X-API-KEY": env.SERPER_API_KEY, "content-type": "application/json" },
+    body: JSON.stringify(body), signal: AbortSignal.timeout(15000) });
   try {
-    const r = await fetch("https://google.serper.dev/search", { method: "POST", headers: { "X-API-KEY": env.SERPER_API_KEY, "content-type": "application/json" },
-      body: JSON.stringify({ q: `site:linkedin.com/posts "${slug}"`, num: 20, tbs: gun <= 7 ? "qdr:w" : "qdr:m" }), signal: AbortSignal.timeout(15000) });
-    if (!r.ok) { out.error = "LinkedIn araması başarısız (" + r.status + ")"; return out; }
+    const q = `site:linkedin.com/posts "${slug}"`;
+    let r = await ara({ q, num: 20, tbs: gun <= 7 ? "qdr:w" : "qdr:m" });
+    if (r.status === 400) r = await ara({ q });
+    if (!r.ok) {
+      const m = String((await r.json().catch(() => ({})))?.message || "").replace(/[A-Za-z0-9_-]{24,}/g, "…").slice(0, 80);
+      console.log("rakip-takip serper", r.status, m);
+      out.error = "LinkedIn araması başarısız (" + r.status + (m ? ": " + m : "") + ")"; return out;
+    }
     d = await r.json();
   } catch (e) { out.error = "LinkedIn araması başarısız"; return out; }
   const seen = new Set(), all = [];
