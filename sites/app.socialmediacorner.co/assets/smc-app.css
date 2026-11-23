@@ -302,3 +302,40 @@ dialog::backdrop{background:var(--ortu)}
 /* overflow-x:auto dikeyde de kırpar: odak çerçevesi bağlantının içine çizilir (denetim) */
 .araclar a:focus-visible{outline-offset:calc(-1 * var(--odak-kalin))}
 .taslak-bayrak{margin:0 0 var(--s2)}
+
+/* Faz 2 (A4-2b): Reels kanca kartı — 9:16 önizleme çerçevesi, yalnız CSS ve token */
+.reels-cerceve{display:flex;flex-direction:column;justify-content:center;align-items:center;gap:var(--s2);box-sizing:border-box;width:min(100%,calc(var(--s8) * 5));aspect-ratio:9/16;margin:var(--s3) auto 0;padding:var(--s4);background:var(--ters-bg);color:var(--ters-ink);border-radius:var(--r-kagit);overflow:hidden;overflow-wrap:anywhere;text-align:center}
+.reels-etiket{font:var(--f-sayac);color:var(--ters-ink2)}
+.reels-cerceve .reels-ekran,.reels-cerceve .reels-ekran .kanca{color:var(--ters-ink);font-weight:700;max-width:100%}
+.reels-bas{display:flex;flex-wrap:wrap;align-items:center;gap:var(--s2);margin:var(--s4) 0 var(--s1)}
+.reels-bas b{font:var(--f-etiket)}
+.reels-say{margin:0}
+
+/* A4-2c: marka sesi (G9) — form satırı + dialog; yalnız token. 360'ta tam ekran */
+.ses-satir{margin-top:var(--s3)}
+.ses-durum{display:flex;flex-wrap:wrap;align-items:center;gap:var(--s1) var(--s2);margin:0;color:var(--ink2)}
+.ses-ad{min-width:0;overflow-wrap:anywhere;color:var(--ink);font-weight:600}
+.ses-satir .not{margin-top:var(--s2)}
+#ses-form{display:grid;gap:14px;min-width:0}
+#ses-form>*,#ses .dlg>*{min-width:0}
+.ses-toplam{white-space:normal}
+#ses-form input[type="text"],#ses-form select,#ses-form textarea{width:100%;max-width:100%}
+.ses-cipler{display:flex;flex-wrap:wrap;gap:var(--s2)}
+.ses-alt{display:flex;flex-wrap:wrap;justify-content:space-between;gap:var(--s2)}
+.ses-onay{display:grid;gap:var(--s3)}
+.ses-onay[hidden],#ses-form[hidden]{display:none}
+.ses-sil{color:var(--danger);border-color:var(--danger)}
+#ses .dlg{scroll-padding-bottom:88px}
+#ses .dlg-alt{position:sticky;bottom:calc(-1 * var(--kagit-ic));z-index:1;padding:8px 0 var(--kagit-ic);background:var(--surface)}
+@media (max-width:479.98px){
+  #ses{width:100%;max-width:100%;height:100dvh;max-height:100dvh;margin:0}
+  #ses .dlg{min-height:100dvh;max-height:100dvh;border-radius:0}
+}
+
+/* A4-2c-nav: gezintide sağda "Marka sesi" (IG/Reels: dialog düğmesi, LI: IG sayfasına bağlantı) — yalnız token */
+.araclar .ses-nav{display:inline-flex;align-items:center;min-height:var(--dokunma);margin-left:auto;padding:0 var(--s2);background:transparent;border:0;border-bottom:2px solid transparent;border-radius:0;color:var(--ink2);text-decoration:none;white-space:nowrap;cursor:pointer}
+.araclar .ses-nav:hover{color:var(--ink)}
+.araclar .ses-nav:focus-visible{outline-offset:calc(-1 * var(--odak-kalin))}
+/* A4-2c-nav: gezinti yatay kaymaz; sığmadığı her genişlikte (360 px, 480–590 px arası TR, büyük yazı boyutu) temizce satırlara sarılır;
+   "Marka sesi" son satırın sağında kalır. Denetim: yalnız <480 px kuralı 480–590 px'te "Marka sesi"ni kayan şeridin dışında kırpıyordu */
+.araclar{flex-wrap:wrap;row-gap:0;overflow-x:visible}
