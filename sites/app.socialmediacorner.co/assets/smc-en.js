@@ -72,6 +72,7 @@ EN["Instagram açıklaman için hikâye, liste ve görüş."]="A story, a list a
 'Reels’te izleyici ilk 3 saniyede kalır ya da kaydırır. Ekran metni videonun üstünde yazılı durur; konuşma satırını aynı anda kendi sesinle söylersin.':'On Reels, viewers stay or scroll within the first 3 seconds. The on-screen text sits over the video; you say the spoken line in your own voice at the same time.',
 'Soru':'Question','İddia':'Claim','Merak':'Curiosity','Bir soruyla durdurur.':'Stops the scroll with a question.','Net bir iddiayla açılır.':'Opens with a bold claim.','Merak boşluğu bırakır.':'Leaves a curiosity gap.',
 'Ekran metni':'On-screen text','Konuşma satırı':'Spoken line','Konuşma satırının yaklaşık süresi (saniyede ~2,5 kelime)':'Approximate length of the spoken line (~2.5 words per second)',
+'Kısalt ve Ton hak düşürmez.':'Shorten and Tone don’t use credits.',
 'Ekran metnini videoya ekle, konuşma satırını kendi sesinle söyle.':'Add the on-screen text to your video and say the spoken line in your own voice.',
 'Bu taslak yalnız metin. Videoyu çekmek ve kurgulamak gerekirse ekip yapar.':'This draft is text only. If you need the video shot and edited, the team does it.','Videoyu çekmek ve kurgulamak gerekirse ekip yapar.':'If you need the video shot and edited, the team does it.',
 'Sınırı aşıyor; kısalt.':'Over the limit; shorten it.','Hedeften uzun; Kısalt ile sıkılaştır.':'Longer than the target; tighten it with Shorten.',

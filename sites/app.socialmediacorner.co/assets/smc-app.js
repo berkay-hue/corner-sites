@@ -451,7 +451,7 @@ function sonucGoster(odak){
   kartlar.textContent='';D.kartApi=[];
   (D.taslaklar||[]).forEach(function(a,i){kartlar.appendChild(kart(taslakNorm(a,i)))});
   uyari.className='not not-uyari';
-  if(D.left===1){uyari.hidden=false;uyari.textContent='Son hakkın: bugün 3 hakkından 1 kaldı. Kısalt, Uzat ve Ton hak düşürmez.'}
+  if(D.left===1){uyari.hidden=false;uyari.textContent='Son hakkın: bugün 3 hakkından 1 kaldı. '+(ARAC==='reels'?'Kısalt ve Ton hak düşürmez.':'Kısalt, Uzat ve Ton hak düşürmez.')}
   else{uyari.hidden=true;uyari.textContent=''}
   /* S3c: son hak kullanıldıysa taslaklar + G6 (anon) + G7; odak h2'de */
   if(D.left<=0){var hs=D.hakScope||'anon';duvarHazirla(hs);goster('duvar',odak);durum('3 taslak hazır. '+DUVAR[hs].b);return}
