@@ -7,7 +7,21 @@
 //   "1"       → canlı alan adı ve Pages önizlemesi; AUTH_HOSTS'a yazılmasa da eklenmiş sayılır.
 //   "preview" → yalnız Pages önizlemesi (<dal>.web-smcapp.pages.dev); canlı alan adı 403 origin kalır.
 //   başka her değer → site AUTH_HOSTS'ta yazsa da hesap sitesi değildir: 403 origin (A5-1'den önceki davranış).
+// roles (A5-2w): sitenin kabul ettiği roller. Tek rol varsa kayıtta rol istemciden alınmaz, sunucu onu yazar;
+//   listede olmayan roldeki kullanıcı bu sitede giriş yapamaz, oturumu 401 auth alır. Yoksa platform.js'in tüm rolleri.
+// routes (A5-2w): sitede çalışan uçların izin listesi; listede olmayan uç 404 not_found döner (oturuma ve gövdeye
+//   bakılmadan). Yoksa her uç açık. brandcorner.co'da ikisi de yok: A5-1'den önceki davranış.
 export const DEFAULT_SITE = "brandcorner.co";
+
+// app.socialmediacorner.co'nun uçları: yalnız hesap için gerekenler (giriş, kayıt, çıkış, ben, şifre sıfırlama,
+// profil, bağlantılar, bağlama ve bağı koparma). Biçim "YÖNTEM /yol"; /app/* yolundaki sayısal id ":id" yazılır.
+// Kampanya, başvuru, influencer arama, eşleşme, istatistik, metrics, gönderi, bildirim ve admin uçları yok (404).
+// TEKNIK-PLAN'daki voice, drafts, export ve account/delete uçları henüz yazılmadı; yazılınca buraya eklenir.
+export const APP_ROUTES = Object.freeze([
+  "POST /auth/register", "POST /auth/login", "POST /auth/logout", "GET /auth/me", "POST /auth/forgot", "POST /auth/reset",
+  "GET /app/profile", "POST /app/profile",
+  "GET /app/connections", "POST /app/connect", "POST /app/connect/finish", "POST /app/disconnect",
+]);
 
 export const SITES = {
   "brandcorner.co": {
@@ -22,6 +36,8 @@ export const SITES = {
     gate: "ACCOUNTS_ENABLED",
     reset: { tr: "/hesap/sifre-yenile", en: "/en/hesap/reset-password" },
     back: { tr: "/hesap/baglantilar", en: "/en/hesap/connections" },
+    roles: Object.freeze(["brand"]),
+    routes: APP_ROUTES,
   },
 };
 
@@ -30,6 +46,11 @@ const byLang = (paths, lang) => paths[lang === "en" ? "en" : "tr"];
 // Şifre sıfırlama sayfası ve OAuth dönüşünde açılacak sayfa (yol, "/" ile başlar)
 export const resetPath = (site, lang) => byLang(siteConf(site).reset, lang);
 export const backPath = (site, lang) => byLang(siteConf(site).back, lang);
+// Rol kısıtı olan sitede yalnız listedeki roller; kısıtsız sitede her rol (rolün geçerliliğine platform.js bakar)
+export const siteRoles = site => siteConf(site).roles || null;
+export const roleAllowed = (site, role) => !siteRoles(site) || siteRoles(site).includes(role);
+// key: "YÖNTEM /yol" (/app/* için id ":id"); izin listesi olmayan sitede her uç açık
+export const routeAllowed = (site, key) => { const r = siteConf(site).routes; return !r || r.includes(key); };
 
 // "on" | "preview" | "off"; kapısı olmayan site her zaman "on"
 export function gateMode(env, site) {
