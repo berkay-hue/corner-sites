@@ -173,6 +173,55 @@ CREATE TABLE IF NOT EXISTS gen_daily (
   qc_calendly INTEGER NOT NULL DEFAULT 0
 ) WITHOUT ROWID;
 
+-- Yayın kuyruğu (0016_publish.sql ile aynı tablolar; src/publish.js). PUBLISH_ENABLED = "1" ile açılır.
+-- Durumlar: taslak → onay_bekliyor → planlandi → yayinlaniyor → yayinlandi | basarisiz | kontrol; iptal.
+-- Geçişi yalnız publish.js move() yapar (koşullu UPDATE + aynı batch'te publish_events). Saatler UTC, SQLite biçimi
+-- 'YYYY-MM-DD HH:MM:SS' (datetime('now') ile karşılaştırılır); arayüz Europe/Istanbul gösterir.
+-- idem_key = sha256(account_id‖approved_hash‖run_at): onayda yazılır, onay düşünce NULL (aynı hesap + metin + saat iki kez
+-- planlanamaz). rid: istemcinin istek kimliği (çift kuyruğa alma). lease_until: cron kirası (syncDue düzeni).
+-- body: yayınlanan/iptal işlerde 90 gün sonra boşaltılır. last_error yalnız kısa kod (token ve metin yazılmaz).
+CREATE TABLE IF NOT EXISTS publish_jobs (
+  id INTEGER PRIMARY KEY,
+  user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  site TEXT NOT NULL,
+  account_id INTEGER NOT NULL REFERENCES social_accounts(id) ON DELETE CASCADE,
+  account_external_id TEXT NOT NULL,
+  platform TEXT NOT NULL CHECK (platform IN ('linkedin', 'instagram')),
+  body TEXT NOT NULL CHECK (length(body) <= CASE platform WHEN 'instagram' THEN 2200 ELSE 3000 END),
+  media_url TEXT,
+  body_hash TEXT NOT NULL,
+  state TEXT NOT NULL DEFAULT 'taslak' CHECK (state IN ('taslak', 'onay_bekliyor', 'planlandi', 'yayinlaniyor',
+    'yayinlandi', 'basarisiz', 'kontrol', 'iptal')),
+  run_at TEXT,
+  approved_by INTEGER REFERENCES users(id),
+  approved_at TEXT,
+  approved_hash TEXT,
+  attempts INTEGER NOT NULL DEFAULT 0,
+  next_try_at TEXT,
+  lease_until TEXT,
+  idem_key TEXT UNIQUE,
+  rid TEXT UNIQUE,
+  remote_id TEXT,
+  container_id TEXT,
+  last_error TEXT,
+  created_at TEXT NOT NULL DEFAULT (datetime('now')),
+  updated_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+CREATE INDEX IF NOT EXISTS publish_due ON publish_jobs (state, next_try_at);
+CREATE INDEX IF NOT EXISTS publish_user ON publish_jobs (user_id, id);
+
+-- Denetim izi: actor NULL = sistem (cron); note kısa neden kodu.
+CREATE TABLE IF NOT EXISTS publish_events (
+  id INTEGER PRIMARY KEY,
+  job_id INTEGER NOT NULL REFERENCES publish_jobs(id) ON DELETE CASCADE,
+  at TEXT NOT NULL DEFAULT (datetime('now')),
+  actor INTEGER,
+  from_state TEXT,
+  to_state TEXT NOT NULL,
+  note TEXT
+);
+CREATE INDEX IF NOT EXISTS publish_events_job ON publish_events (job_id, id);
+
 -- Sosyal metrikler bu dosyada değil, migrations/ altında; bu dosyadan sonra sırayla uygulanır:
 --   0001_metrics.sql  sosyal hesaplar ve metrik tabloları
 --   0002_oauth.sql    OAuth akışı, şifreli token, social_accounts (platform, external_id) UNIQUE
@@ -188,5 +237,7 @@ CREATE TABLE IF NOT EXISTS gen_daily (
 --   0012_admin.sql         yönetim paneli: user_perms, perm_log, post_edits, meta_events (yukarıdakiyle aynı tablolar)
 --   0013_linkedin_posts.sql LinkedIn ek toplamlar (kaydetme, gönderme, bağlantı tıklaması, içerikten takipçi ve profil görüntüleme) ve posts.synced_at
 --   0014_gen.sql          app taslak üretimi: gen_usage (günlük sayaçlar), gen_daily (günlük ölçüm) (yukarıdakiyle aynı tablolar)
+--   0016_publish.sql      yayın kuyruğu: publish_jobs, publish_events (yukarıdakiyle aynı tablolar; 0015 başka dala ayrıldı)
 -- Uygula (form-worker/ klasöründen çalıştır): npx wrangler d1 migrations apply corner-forms --remote
 -- 0002 uygulanmadan da bağ koparma çalışır; 0003–0014 yeni kodla deploy'dan ÖNCE uygulanmalı.
+-- 0016 PUBLISH_ENABLED = "1" yapılmadan ÖNCE uygulanmalı; bayrak kapalıyken kod bu tablolara dokunmaz.
