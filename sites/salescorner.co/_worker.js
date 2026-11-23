@@ -1321,39 +1321,45 @@ function rtLiSlug(s) {
 async function rtLinkedIn(c, slug, since, gun, env) {
   const out = { firma: c.firma, site: "", feed_url: "https://www.linkedin.com/company/" + slug + "/", kaynak: "LinkedIn", ok: false, error: "", toplam: 0, tarihsiz: 0, son: "", items: [] };
   if (!env.SERPER_API_KEY) { out.error = "arama anahtarı tanımlı değil"; return out; }
-  let d;
-  const ara = body => fetch("https://google.serper.dev/search", { method: "POST", headers: { "X-API-KEY": env.SERPER_API_KEY, "content-type": "application/json" },
-    body: JSON.stringify(body), signal: AbortSignal.timeout(15000) });
-  try {
-    const q = `site:linkedin.com/posts "${slug}"`;
-    let r = await ara({ q, num: 20, tbs: gun <= 7 ? "qdr:w" : "qdr:m" });
-    if (r.status === 400) {
-      out.tani = "ilk:" + String((await r.json().catch(() => ({})))?.message || "").replace(/[A-Za-z0-9_-]{24,}/g, "…").slice(0, 80);
-      r = await ara({ q });
+  // Serper ücretsiz hesabı tarih filtresine (tbs) ve num>10'a izin vermez; sıralama alaka sırasıdır.
+  // Önce şirketin kendi gönderi yolunu, az sonuç gelirse adı geçen gönderileri arar.
+  const seen = new Set(), all = [], tani = [];
+  let ham = 0, hata = "";
+  const qs = [`site:linkedin.com/posts/${slug}_`, `site:linkedin.com/posts "${slug}"`];
+  for (const q of qs) {
+    if (all.length >= 3) break;
+    let d;
+    try {
+      const r = await fetch("https://google.serper.dev/search", { method: "POST", headers: { "X-API-KEY": env.SERPER_API_KEY, "content-type": "application/json" },
+        body: JSON.stringify({ q }), signal: AbortSignal.timeout(15000) });
+      if (!r.ok) {
+        const m = String((await r.json().catch(() => ({})))?.message || "").replace(/[A-Za-z0-9_-]{24,}/g, "…").slice(0, 80);
+        console.log("rakip-takip serper", r.status, m);
+        hata = "LinkedIn araması başarısız (" + r.status + (m ? ": " + m : "") + ")"; tani.push("hata"); continue;
+      }
+      d = await r.json();
+    } catch (e) { hata = "LinkedIn araması başarısız"; tani.push("hata"); continue; }
+    const once = all.length;
+    ham += (d?.organic || []).length;
+    for (const o of d?.organic || []) {
+      let u; try { u = new URL(String(o.link || "")); } catch { continue; }
+      if (!/(^|\.)linkedin\.com$/i.test(u.hostname)) continue;
+      let path; try { path = decodeURIComponent(u.pathname); } catch { continue; }
+      if (!path.toLowerCase().startsWith("/posts/" + slug + "_")) continue;
+      const id = path.match(/activity-(\d{16,20})/)?.[1];
+      if (!id || seen.has(id)) continue;
+      seen.add(id);
+      const t = Number(BigInt(id) >> 22n);
+      let title = rtDecode(o.title).replace(/\s*\|\s*LinkedIn\s*$/i, "").replace(/^.{0,80}?\s(?:on LinkedIn|LinkedIn'de|adlı kullanıcının LinkedIn gönderisi)\s*:\s*/i, "").trim();
+      const snip = rtDecode(o.snippet);
+      if (title.length < 25 && snip.length > title.length) title = snip;
+      all.push({ t, title: (title || "LinkedIn gönderisi").slice(0, 200), link: "https://www.linkedin.com" + u.pathname });
     }
-    if (!r.ok) {
-      const m = String((await r.json().catch(() => ({})))?.message || "").replace(/[A-Za-z0-9_-]{24,}/g, "…").slice(0, 80);
-      console.log("rakip-takip serper", r.status, m);
-      out.error = "LinkedIn araması başarısız (" + r.status + (m ? ": " + m : "") + ")"; return out;
-    }
-    d = await r.json();
-  } catch (e) { out.error = "LinkedIn araması başarısız"; return out; }
-  const seen = new Set(), all = [];
-  for (const o of d?.organic || []) {
-    let u; try { u = new URL(String(o.link || "")); } catch { continue; }
-    if (!/(^|\.)linkedin\.com$/i.test(u.hostname)) continue;
-    let path; try { path = decodeURIComponent(u.pathname); } catch { continue; }
-    if (!path.toLowerCase().startsWith("/posts/" + slug + "_")) continue;
-    const id = path.match(/activity-(\d{16,20})/)?.[1];
-    if (!id || seen.has(id)) continue;
-    seen.add(id);
-    const t = Number(BigInt(id) >> 22n);
-    let title = rtDecode(o.title).replace(/\s*\|\s*LinkedIn\s*$/i, "").replace(/^.{0,80}?\s(?:on LinkedIn|LinkedIn'de|adlı kullanıcının LinkedIn gönderisi)\s*:\s*/i, "").trim();
-    const snip = rtDecode(o.snippet);
-    if (title.length < 25 && snip.length > title.length) title = snip;
-    all.push({ t, title: (title || "LinkedIn gönderisi").slice(0, 200), link: "https://www.linkedin.com" + u.pathname });
+    tani.push((d?.organic || []).length + ">" + (all.length - once));
   }
-  out.ok = true; out.toplam = all.length; out.ham = (d?.organic || []).length;
+  out.tani = tani.join(" "); out.ham = ham;
+  if (!all.length && hata) { out.error = hata; return out; }
+  out.ok = true; out.toplam = all.length;
   const newest = all.reduce((m, x) => Math.max(m, x.t), 0);
   if (newest) out.son = new Date(newest).toISOString().slice(0, 10);
   const now = Date.now() + 864e5;
