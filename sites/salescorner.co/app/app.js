@@ -108,8 +108,9 @@ const kucuk = s => s.split(" ").map(w => w.length > 1 && w === w.toLocaleUpperCa
 
 // ---------- Sunucu çağrıları ----------
 async function rpc(fn, args) {
-  const { data, error } = await sb.rpc(fn, args || {});
+  const { data, error, status } = await sb.rpc(fn, args || {});
   if (error) {
+    error.status = status;
     if (/PGRST202|could not find the function|does not exist/i.test(`${error.code} ${error.message}`)) S.setupErr = true;
     throw error;
   }
@@ -117,7 +118,14 @@ async function rpc(fn, args) {
 }
 async function loadBen() {
   try { S.ben = await rpc("app_ben"); S.benErr = ""; S.setupErr = false; }
-  catch (e) { S.ben = null; S.benErr = trErr(e); }
+  catch (e) {
+    S.ben = null; S.benErr = trErr(e);
+    // sunucu oturumu reddetti (iptal/silinmiş oturum): hata ekranında bırakma, yerel oturumu kapat → giriş
+    if (e?.status === 401 || /PGRST30[123]|jwt/i.test(`${e?.code} ${e?.message}`)) {
+      S.session = null; S.authErr = "Oturumunuzun süresi doldu. Lütfen yeniden giriş yapın.";
+      try { await sb.auth.signOut({ scope: "local" }); } catch {}
+    }
+  }
 }
 async function loadPlanlar() {
   if (S.planlar) return S.planlar;
@@ -1091,7 +1099,7 @@ document.addEventListener("keydown", e => { if (e.key === "Escape") document.get
 sb.auth.onAuthStateChange((ev, session) => {
   S.session = session;
   if (ev === "PASSWORD_RECOVERY") { S.recovery = true; setTimeout(() => go("yeni-sifre"), 0); }
-  if (ev === "SIGNED_OUT") { S.ben = null; setTimeout(render, 0); }
+  if (ev === "SIGNED_OUT") { S.ben = null; if (route && !AUTH_ROUTES.has(route)) setTimeout(render, 0); }
 });
 {
   const { data } = await sb.auth.getSession();
