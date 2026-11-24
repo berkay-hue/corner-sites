@@ -14,7 +14,16 @@ function yaz(ust,alt,veri){y.textContent=ust;p.setAttribute('data-hak',veri);if(
 function belirsiz(){yaz(T('Hak: belli değil','Credits: unknown'),T('Her üretim 1 hak kullanır; hak ayın ilk günü yenilenir.','Each generation uses 1 credit; credits renew on the 1st of the month.'),'?')}
 function goster(r){
   var m=r&&r.month||{},ay=m.linkedin_blog,vg=m.video_gorsel;
+  if(r&&r.trial_ended===true){yaz(T('Deneme bitti','Trial ended'),T('14 günlük ücretsiz denemen sona erdi; taslakların hesabında duruyor. Plan için bizimle iletişime geç.','Your 14-day free trial has ended; your drafts stay in your account. Contact us for a plan.'),'0');return}
   if(!ay||ay.limit==null){belirsiz();return}
+  if(r.plan==='demo'){
+    var dk=Math.max(0,(ay.limit|0)-(ay.used|0)),son='';
+    if(typeof r.trial_ends_at==='string'){try{var dt=new Date(r.trial_ends_at);if(!isNaN(dt))son=dt.toLocaleDateString(EN?'en-GB':'tr-TR',{day:'numeric',month:'long',year:'numeric',timeZone:'Europe/Istanbul'})}catch(e){}}
+    var da=T('14 gün ücretsiz deneme: '+AD.linkedin_blog+' '+dk+'/'+ay.limit+' kaldı.','14-day free trial: '+AD.linkedin_blog+' '+dk+'/'+ay.limit+' left.');
+    if(vg&&vg.limit!=null)da+=' '+AD.video_gorsel+': '+Math.max(0,(vg.limit|0)-(vg.used|0))+'/'+vg.limit+'.';
+    da+=' '+T('Deneme hakkı yenilenmez.','Trial credits don’t renew.');if(son)da+=' '+T('Deneme bitişi: '+son+'.','Trial ends: '+son+'.');
+    yaz(T('Deneme '+dk+'/'+ay.limit+' '+AD.linkedin_blog,'Trial '+dk+'/'+ay.limit+' '+AD.linkedin_blog),da,dk<=0?'0':dk===1?'1':'2');return;
+  }
   var kalan=Math.max(0,(ay.limit|0)-(ay.used|0)),alt=T('Planındaki aylık '+AD.linkedin_blog+' hakkı '+ay.limit+'; '+kalan+' kaldı.','Your plan’s monthly '+AD.linkedin_blog+' allowance is '+ay.limit+'; '+kalan+' left.');
   if(vg&&vg.limit!=null)alt+=' '+T(AD.video_gorsel+': '+Math.max(0,(vg.limit|0)-(vg.used|0))+'/'+vg.limit+'.',AD.video_gorsel+': '+Math.max(0,(vg.limit|0)-(vg.used|0))+'/'+vg.limit+'.');
   alt+=' '+T('Her üretim 1 hak kullanır; hak ayın ilk günü yenilenir.','Each generation uses 1 credit; it renews on the 1st of the month.');

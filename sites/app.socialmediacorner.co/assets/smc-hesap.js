@@ -6,6 +6,7 @@
 'use strict';
 var d=document,root=d.documentElement,body=d.body;
 var EN={"Yönetim":"Admin","1 taslak":"1 draft",
+"Demo · {n} gün kaldı":"Demo · {n} days left","Demo · 1 gün kaldı":"Demo · 1 day left","Deneme bitti — plan için iletişime geç":"Trial ended — contact us for a plan","Teklif al":"Get a quote",
 "Bağla":"Connect",
 "Bağlantı ve kayıtlı yetki burada silinir; {p} tarafındaki izni {p} ayarlarından kaldırırsın. Bu hesaba otomatik paylaşım yapılmaz. Geçmiş’teki taslakların silinmez; istediğin an yeniden bağlarsın.":"The connection and stored access are deleted here; you remove the permission in your {p} settings. Nothing will be shared to this account automatically. Your drafts in History stay; you can reconnect any time.",
 "Bağlantılar ya da Panel sayfasında bu hesabın bağlantısını kaldır.":"Remove this account’s connection on the Connections or Panel page.",
@@ -428,6 +429,30 @@ function oturumKur(u){
   /* ray: Hesap grubuna Yönetim (admin.html kendi bağlantısını taşır) */
   var gs=$$('.st-rail .st-grup'),g=gs[gs.length-1];
   if(KULLANICI.admin===true&&g&&!$('.st-link[href="/hesap/admin"]',g)){var ra=el('a','st-link',null,{href:'/hesap/admin'});var sp=el('span','st-link-ad',t('Yönetim'));ra.innerHTML='<svg class="ikon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z"/></svg>';ra.appendChild(sp);g.appendChild(ra)}
+  planRozet();
+}
+/* A15 plan rozeti: /auth/me user.plan (yalnız smc, 0018 varsa); demo'da trial_ends_at (ISO) + trial_ended. Plan yoksa rozet yok.
+   Hesap menüsünde e-postanın altında, Ayarlar'da Ad/E-posta dökümünde ayrı satır. Deneme bittiyse üst çubuktaki Teklif al adresi. */
+var PLAN_AD={demo:'Demo',basic:'Basic',pro:'Pro',enterprise:'Enterprise'};
+function teklifAdres(){var a=$('.st-teklif-ust');return (a&&a.getAttribute('href'))||(dil==='en'?'https://socialmediacorner.co/en/contact#form':'https://socialmediacorner.co/iletisim#form')}
+function planDurum(u){
+  var p=u&&u.plan;if(!p||typeof p!=='string')return null;
+  if(p!=='demo')return {m:PLAN_AD[p]||p,c:'rozet'};
+  if(u.trial_ended===true)return {m:t('Deneme bitti — plan için iletişime geç'),c:'rozet rozet-uyari',bitti:true};
+  var b=Date.parse(u.trial_ends_at||''),n=isNaN(b)?0:Math.max(1,Math.ceil((b-Date.now())/864e5));
+  return {m:!n?'Demo':n===1?t('Demo · 1 gün kaldı'):t('Demo · {n} gün kaldı',{n:sayi(n)}),c:'rozet rozet-bilgi'};
+}
+function planRozet(){
+  $$('.smc-plan').forEach(function(x){x.parentNode.removeChild(x)});
+  var s=planDurum(KULLANICI);if(!s)return;
+  function teklif(cls){return el('a',cls,t('Teklif al'),{href:teklifAdres()})}
+  var kim=$('#hesap-menu .st-menu-kim');
+  if(kim){var w=el('span','smc-plan');w.appendChild(d.createElement('br'));w.appendChild(el('span',s.c,s.m));kim.appendChild(w);
+    if(s.bitti)kim.parentNode.insertBefore(teklif('smc-plan'),kim.nextSibling)}
+  var e=$('#a-eposta'),sat=e&&e.parentNode;
+  if(sat&&sat.parentNode){var r=el('div','smc-plan'),dd=el('dd');r.appendChild(el('dt',null,'Plan'));dd.appendChild(el('span',s.c,s.m));
+    if(s.bitti){dd.appendChild(d.createTextNode(' '));dd.appendChild(teklif('bag'))}
+    r.appendChild(dd);sat.parentNode.insertBefore(r,sat.nextSibling)}
 }
 function cikisKur(){$$('#cikis,#cikis-2').forEach(function(b){b.addEventListener('click',function(){
   if(bosMu(b))return;
@@ -777,7 +802,8 @@ function yukle(){
   else ekran('ana');
 }
 function korumaliBasla(){
-  if(ORNEK){oturumKur({name:'Deniz Yılmaz',email:'deniz@ornekajans.com.tr'});yukle();return}
+  /* ÖRNEK: demo planı, 10 gün kaldı; adreste #ornek&bitti varsa deneme bitmiş görünür */
+  if(ORNEK){var bt=/(^|&)bitti(=|&|$)/.test(location.hash.slice(1));oturumKur({name:'Deniz Yılmaz',email:'deniz@ornekajans.com.tr',plan:'demo',trial_ends_at:new Date(Date.now()+(bt?-1:10)*864e5).toISOString(),trial_ended:bt});yukle();return}
   if(!tokenAl()){location.replace(girisYolu());return}
   yokla().then(function(r){
     if(r.d==='acik'){oturumBitti();return}

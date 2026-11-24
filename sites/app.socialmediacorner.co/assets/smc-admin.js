@@ -6,7 +6,7 @@ var d=document;
 function $(s,k){return (k||d).querySelector(s)}
 function $$(s,k){return Array.prototype.slice.call((k||d).querySelectorAll(s))}
 function el(tag,cls,txt){var e=d.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=String(txt);return e}
-var PLAN_AD={basic:'Basic',pro:'Pro',enterprise:'Enterprise'};
+var PLAN_AD={demo:'Demo',basic:'Basic',pro:'Pro',enterprise:'Enterprise'};
 var DURUM={taslak:'Taslak',onay_bekliyor:'Onay bekliyor',planlandi:'Planlandı',yayinlaniyor:'Yayınlanıyor',yayinlandi:'Yayınlandı',basarisiz:'Başarısız',kontrol:'Kontrol',iptal:'İptal'};
 var HATA={bad_plan:'Geçersiz plan.',bad_limits:'Enterprise için iki kotayı da 1 ile 100000 arasında tam sayı olarak yaz.',not_found:'Kullanıcı bulunamadı.'};
 function sayi(n){return (n==null||n==='')?'—':Number(n).toLocaleString('tr-TR')}
@@ -18,6 +18,17 @@ function zaman(s){
   try{return new Intl.DateTimeFormat('tr-TR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',timeZone:'Europe/Istanbul'}).format(x)}catch(e){return String(s)}
 }
 function kota(n,l){return sayi(n)+' / '+(typeof l==='number'&&isFinite(l)?sayi(l):'—')}
+/* A15 demo: limits.trial_ends_at (ISO) + trial_ended; bitiş günü İstanbul tarihiyle */
+function gun(s){var x=new Date(s);if(!s||isNaN(x.getTime()))return '';try{return new Intl.DateTimeFormat('tr-TR',{day:'2-digit',month:'2-digit',year:'numeric',timeZone:'Europe/Istanbul'}).format(x)}catch(e){return String(s)}}
+function planMetin(u){
+  if(!u.plan)return '—';
+  var ad=PLAN_AD[u.plan]||u.plan,l=u.limits||{};
+  if(u.plan!=='demo')return ad;
+  if(l.trial_ended===true)return ad+' · bitti';
+  var g=gun(l.trial_ends_at);return g?ad+' · bitiş '+g:ad;
+}
+/* demo hakkı deneme boyunca toplam; satırdaki sayaç yalnız bu ayı gösterir */
+function kotaU(u,k){var t=kota(u.month&&u.month[k],u.limits&&u.limits[k]);return u.plan==='demo'?t+' · bu ay':t}
 
 /* tablo: kolonlar [{b:başlık, s:sınıf, v:function(satır)->metin|Node}] */
 function tablo(kap,kol,satirlar,bosMetin){
@@ -52,7 +63,7 @@ window.smcAdminBasla=function(api){
   function ozetCiz(j){
     var dl=$('#ad-ozet');dl.textContent='';
     var p=j.plans||{},gm=j.gen_month||{},top=0;Object.keys(p).forEach(function(k){top+=Number(p[k])||0});
-    var kart=[['Hesap',top],['Basic',p.basic||0],['Pro',p.pro||0],['Enterprise',p.enterprise||0],
+    var kart=[['Hesap',top],['Demo',p.demo||0],['Basic',p.basic||0],['Pro',p.pro||0],['Enterprise',p.enterprise||0],
       ['LinkedIn ve blog (ay)',gm.linkedin_blog?gm.linkedin_blog.n:0],['Video ve görsel (ay)',gm.video_gorsel?gm.video_gorsel.n:0]];
     kart.forEach(function(k){var w=el('div','sheet ad-kutu');w.appendChild(el('dt',null,k[0]));w.appendChild(el('dd',null,sayi(k[1])));dl.appendChild(w)});
     $('#ad-ay').textContent=j.month||'';
@@ -79,9 +90,9 @@ window.smcAdminBasla=function(api){
   var KOL_KULLANICI=[
     {b:'E-posta',s:'ad-eposta',v:function(u){var s=el('span',null,u.email);if(u.admin){var f=d.createDocumentFragment();f.appendChild(s);f.appendChild(el('span','ad-rozet','Yönetici'));return f}return s}},
     {b:'Ad',v:function(u){return u.name||'—'}},
-    {b:'Plan',v:function(u){return u.plan?(PLAN_AD[u.plan]||u.plan):'—'}},
-    {b:'LinkedIn ve blog (ay)',s:'ad-sayi',v:function(u){return kota(u.month&&u.month.linkedin_blog,u.limits&&u.limits.linkedin_blog)}},
-    {b:'Video ve görsel (ay)',s:'ad-sayi',v:function(u){return kota(u.month&&u.month.video_gorsel,u.limits&&u.limits.video_gorsel)}},
+    {b:'Plan',v:planMetin},
+    {b:'LinkedIn ve blog (ay)',s:'ad-sayi',v:function(u){return kotaU(u,'linkedin_blog')}},
+    {b:'Video ve görsel (ay)',s:'ad-sayi',v:function(u){return kotaU(u,'video_gorsel')}},
     {b:'Taslak',s:'ad-sayi',v:function(u){return sayi(u.drafts)}},
     /* A14: cms {sites,aktif,duraklatildi,hata} (kaldırılanlar hariç); alan yoksa ya da site yoksa boş */
     {b:'Blog sitesi',s:'ad-sayi',v:function(u){var c=u.cms;if(!c||!(Number(c.sites)>0))return '';

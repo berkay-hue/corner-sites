@@ -15,6 +15,10 @@
 // A9b plan: aynı koşullarla girişli kullanıcı (account) ve users.plan varsa (migrations/0018_plans.sql) üretim aylık plan
 // sayacından (gen_month, src/plans.js) düşer; anon/IP günlük hakları yerine kullanıcı günlük tavanı (GEN_USER_PER_DAY) ve global
 // tavan. /gen/stock yalnız pro|enterprise; /gen/quota plan, month, stock (anahtar + plan) taşır. 0018 yoksa anonim akış.
+// A15: GEN_LOGIN_REQUIRED="1" (wrangler.toml) → oturumsuz /gen/* 401 login_required, /gen/quota plan "anon" left 0; anon/IP
+// günlük hakları (GEN_PER_DAY) bu bayrakla fiilen kullanılmaz. demo planı (src/plans.js): aylık değil deneme boyunca TOPLAM
+// (planCounts: created_at ayından bu yana gen_month toplamı, ay dönümünde sıfırlanmaz); deneme bitince üretim/refine
+// 403 trial_ended; /gen/quota demo'da trial_ends_at + trial_ended taşır (bittiyse left 0).
 import {
   SYSTEM_GEN, SYSTEM_REFINE, SYSTEM_IG_CAPTION, SYSTEM_IG_REELS, SYSTEM_IG_CAPTION_REFINE, SYSTEM_IG_REELS_REFINE, SCHEMA, SCHEMA_REELS,
   SYSTEM_BLOG, SYSTEM_VIDEO, SCHEMA_BLOG, SCHEMA_VIDEO, BLOG_LENGTHS, VIDEO_KINDS, VIDEO_LENGTHS, STUDIO_MAX, withStyle, userBlog, userVideo,
@@ -24,7 +28,7 @@ import {
 import { makeLlm, LlmError, SPECS, videoSpec } from "./llm.js";
 import { platformSite, bearerToken, sessionUser } from "./platform.js";
 import { siteConf } from "./sites.js";
-import { MONTH_KIND, KIND_NAME, planLimits } from "./plans.js";
+import { MONTH_KIND, KIND_NAME, planLimits, trialMonth } from "./plans.js";
 
 export const genEnabled = env => env?.GEN_ENABLED === "1" && Boolean(env.ANTHROPIC_API_KEY && env.GEN_SALT && env.TURNSTILE_SECRET);
 
@@ -144,16 +148,36 @@ async function monthCounts(db, month, uid) {
 }
 const noTable = e => /no such table/i.test(e?.message || "");
 
+// A15 plan sayaçları: { m, off }. m = sayılan kullanım {lb, vg}; off = m'nin bu ay dışındaki payı. Demo'da deneme boyunca toplam
+// (trialMonth(created_at) .. bu ay; deneme 14 gün, en çok iki ay) → ay dönümünde sıfırlanmaz; bu ayın gen_month satırının rezerv
+// tavanı limit - off olur. Öbür planlarda (ya da created_at okunamazsa) yalnız bu ay, off 0. 0018 yoksa "no such table" atar.
+export async function planCounts(db, month, uid, user, P) {
+  const since = P?.plan === "demo" ? trialMonth(user) : null;
+  if (!since || since >= month) return { m: await monthCounts(db, month, uid), off: { lb: 0, vg: 0 } };
+  const { results } = await db.prepare("SELECT month, kind, n FROM gen_month WHERE user_id = ? AND month >= ? AND month <= ?").bind(uid, since, month).all();
+  const m = { lb: 0, vg: 0 }, off = { lb: 0, vg: 0 };
+  for (const r of results || []) {
+    if (!Object.hasOwn(m, r.kind)) continue;
+    const k = Number(r.n) || 0;
+    m[r.kind] += k;
+    if (r.month !== month) off[r.kind] += k;
+  }
+  return { m, off };
+}
+// demo deneme alanları (yalnız demo'da; öbür planların yanıtı aynen)
+const trialOut = P => P?.plan === "demo" ? { trial_ends_at: P.trial_ends_at, trial_ended: P.trial_ended } : {};
+
 // Girişli kalan: min(bu türün aylık kalanı (tür yoksa iki türün büyüğü), kullanıcı günlük tavanı, global/3).
 // cap = kullanıcı günlük tavanı (reset_at günlük); aylık sayılar month'ta.
 function planQuota(L, U, P, n, m, mk) {
   const rem = k => P[KIND_NAME[k]] - (m[k] || 0);
-  const p = mk ? rem(mk) : Math.max(rem("lb"), rem("vg"));
+  const p = P.trial_ended ? 0 : mk ? rem(mk) : Math.max(rem("lb"), rem("vg"));
   const d = U - (n.u || 0), g = Math.floor((L.cap - (n.all || 0)) / GEN_UNITS);
   const scope = p <= d && p <= g ? "plan" : d <= g ? "user" : "global";
   return {
     left: Math.max(0, Math.min(p, d, g)), cap: U, reset_at: resetAt(), scope, plan: P.plan,
     month: { linkedin_blog: { used: m.lb || 0, limit: P.linkedin_blog }, video_gorsel: { used: m.vg || 0, limit: P.video_gorsel } },
+    ...trialOut(P),
   };
 }
 
@@ -633,8 +657,10 @@ async function producePlan(c, v, req, post, save, a) {
   const { env, db, origin, ctx, io, ip } = c;
   const L = limits(env), U = int(env.GEN_USER_PER_DAY, 40), day = genDay(), month = day.slice(0, 7);
   const uid = a.user.id, P = a.P, mk = MONTH_KIND[save.platform], mmax = P[KIND_NAME[mk]];
-  let m;
-  try { m = await monthCounts(db, month, uid); } catch (e) { if (noTable(e)) return null; throw e; }
+  // A15: demo süresi dolduysa sayaç/Turnstile/LLM yok
+  if (P.trial_ended) return fail("trial_ended", 403, origin, { plan: P.plan, ...trialOut(P) });
+  let m, off;
+  try { ({ m, off } = await planCounts(db, month, uid, a.user, P)); } catch (e) { if (noTable(e)) return null; throw e; }
   const [uK, allK, ridK] = await Promise.all([keyOf(env, day, "u", uid), keyOf(env, day, "all"), keyOf(env, day, "rid", `u:${uid}:${v.rid}`)]);
   const n = await counts(db, day, { u: uK, all: allK, rid: ridK });
   const pq = (nn, mo) => planQuota(L, U, P, nn, { ...m, [mk]: mo }, mk);
@@ -647,7 +673,7 @@ async function producePlan(c, v, req, post, save, a) {
   if (!(await turnstile(env, io.fetch, v.ts, ip))) return fail("bot", 403, origin);
 
   const it = {
-    mo: { name: "mo", month, user: uid, kind: mk, inc: 1, max: mmax },
+    mo: { name: "mo", month, user: uid, kind: mk, inc: 1, max: mmax - off[mk] },
     u: { name: "u", kind: "u", key: uK, inc: 1, max: U },
     all: { name: "all", kind: "all", key: allK, inc: GEN_UNITS, max: L.cap },
     rid: { name: "rid", kind: "rid", key: ridK, inc: 1, max: 2 },
@@ -658,12 +684,12 @@ async function producePlan(c, v, req, post, save, a) {
   if (!r.ok && r.failed.length === 1 && r.failed[0] === "rid") { mode = "normal"; n.rid = 2; r = await reserve(db, day, tasi(mode)); }
   if (!r.ok) {
     const top = { mo: mmax, u: U, all: L.cap }, base = { mo: m[mk], u: n.u, all: n.all };
-    const cur = name => r.failed.includes(name) ? top[name] : r.n[name] !== undefined ? r.n[name] - it[name].inc : base[name];
+    const cur = name => r.failed.includes(name) ? top[name] : r.n[name] !== undefined ? r.n[name] - it[name].inc + (name === "mo" ? off[mk] : 0) : base[name];
     const scope = r.failed.includes("mo") ? "plan" : r.failed.includes("u") ? "user" : "global";
     return limit(scope, { u: cur("u"), all: cur("all") }, cur("mo"));
   }
   const charged = mode === "normal";
-  const after = { mo: charged ? r.n.mo : m[mk], u: charged ? r.n.u : n.u, all: r.n.all };
+  const after = { mo: charged ? r.n.mo + off[mk] : m[mk], u: charged ? r.n.u : n.u, all: r.n.all };
   const reserved = tasi(mode);
 
   let out, err;
@@ -769,8 +795,9 @@ async function refine(c) {
 async function refinePlan(c, v, a) {
   const { env, db, origin, ctx, io } = c;
   const L = limits(env), U = int(env.GEN_USER_PER_DAY, 40), day = genDay(), uid = a.user.id;
+  if (a.P.trial_ended) return fail("trial_ended", 403, origin, { plan: a.P.plan, ...trialOut(a.P) });
   let m;
-  try { m = await monthCounts(db, day.slice(0, 7), uid); } catch (e) { if (noTable(e)) return null; throw e; }
+  try { ({ m } = await planCounts(db, day.slice(0, 7), uid, a.user, a.P)); } catch (e) { if (noTable(e)) return null; throw e; }
   const [uK, anonK, allK, raK] = await Promise.all([
     keyOf(env, day, "u", uid), keyOf(env, day, "anon", v.anon), keyOf(env, day, "all"), keyOf(env, day, "ra", `u:${uid}`),
   ]);
@@ -820,7 +847,7 @@ async function quotaRoute(c) {
   const a = await account(c);
   if (a?.P) {
     let m = null;
-    try { m = await monthCounts(db, day.slice(0, 7), a.user.id); } catch (e) { if (!noTable(e)) throw e; }
+    try { ({ m } = await planCounts(db, day.slice(0, 7), a.user.id, a.user, a.P)); } catch (e) { if (!noTable(e)) throw e; }
     if (m) {
       const [uK, allK] = await Promise.all([keyOf(env, day, "u", a.user.id), keyOf(env, day, "all")]);
       const n = await counts(db, day, { u: uK, all: allK });

@@ -3,7 +3,12 @@
 // linkedin_blog: LinkedIn + blog taslağı (gen_month kind 'lb'); video_gorsel: video + görsel/Instagram taslağı (kind 'vg').
 // Enterprise sayıları users.plan_limits JSON'undan ({"linkedin_blog":N,"video_gorsel":N}); yoksa/geçersizse pro sayıları.
 // A14 cms_sites: bağlanabilecek müşteri sitesi (CMS) sayısı; enterprise plan_limits.cms_sites, yoksa 10.
+// A15 demo: app.socialmediacorner.co kaydının varsayılanı (platform.js register), basic'in yarısı; users.created_at'ten
+// TRIAL_DAYS gün geçerli (trialEndsAt/trialEnded). Demo hakları aylık değil, deneme boyunca TOPLAM: generate.js sayaçları
+// created_at ayından bu yana gen_month satırlarını toplar (ay dönümünde sıfırlanmaz). Marka sesi kullanıcı başına tek satır (brand_voice).
+export const TRIAL_DAYS = 14;
 export const PLANS = Object.freeze({
+  demo: Object.freeze({ linkedin_blog: 4, video_gorsel: 1, stock: false, cms_sites: 1 }),
   basic: Object.freeze({ linkedin_blog: 8, video_gorsel: 2, stock: false, cms_sites: 1 }),
   pro: Object.freeze({ linkedin_blog: 40, video_gorsel: 12, stock: true, cms_sites: 3 }),
   enterprise: Object.freeze({ linkedin_blog: null, video_gorsel: null, stock: true, cms_sites: null }),
@@ -23,10 +28,34 @@ const pos = v => Number.isSafeInteger(v) && v > 0 ? v : null;
 
 export const ENTERPRISE_CMS_SITES = 10;
 
-// {plan, linkedin_blog, video_gorsel, stock, cms_sites}; plan null ise null
-export function planLimits(user) {
+// SQLite datetime('now') ("YYYY-MM-DD HH:MM:SS", UTC) ya da ISO → ms; okunamazsa null
+export function parseUtc(s) {
+  if (typeof s !== "string" || !s) return null;
+  const t = Date.parse(/[zZ]|[+-]\d\d:?\d\d$/.test(s) ? s.replace(" ", "T") : s.replace(" ", "T") + "Z");
+  return Number.isFinite(t) ? t : null;
+}
+
+// Deneme bitişi (ISO) = created_at + TRIAL_DAYS gün; created_at okunamazsa null
+export function trialEndsAt(user) {
+  const t = parseUtc(user?.created_at);
+  return t === null ? null : new Date(t + TRIAL_DAYS * 864e5).toISOString();
+}
+// Deneme bitti mi (yalnız demo planı için anlamlı); bitiş bilinmiyorsa false
+export function trialEnded(user, now = Date.now()) {
+  const e = trialEndsAt(user);
+  return e !== null && now >= Date.parse(e);
+}
+// Demo sayaçlarının başladığı ay ('YYYY-MM', Europe/Istanbul sabit UTC+3, generate.js genDay ile aynı); okunamazsa null
+export function trialMonth(user) {
+  const t = parseUtc(user?.created_at);
+  return t === null ? null : new Date(t + 3 * 3600e3).toISOString().slice(0, 7);
+}
+
+// {plan, linkedin_blog, video_gorsel, stock, cms_sites}; plan null ise null. demo'da ayrıca trial_ends_at, trial_ended.
+export function planLimits(user, now = Date.now()) {
   const plan = planOf(user);
   if (!plan) return null;
+  if (plan === "demo") return { plan, ...PLANS.demo, trial_ends_at: trialEndsAt(user), trial_ended: trialEnded(user, now) };
   if (plan !== "enterprise") return { plan, ...PLANS[plan] };
   let j = null;
   try { j = JSON.parse(user.plan_limits || "null"); } catch { j = null; }

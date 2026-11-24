@@ -81,10 +81,11 @@ export async function platform(req, url, env, origin, deliver) {
     c.user ||= await sessionUser(env, token, site);
     if (!c.user) throw new Bad("auth", 401);
 
-    // Yönetici ise admin: true; kendi yetkileri (admin hariç) perms, yoksa alan yok
+    // Yönetici ise admin: true; kendi yetkileri (admin hariç) perms, yoksa alan yok. A15: yalnız app.socialmediacorner.co'da
+    // (0018 plan sütunu varsa) plan; demo'da ayrıca trial_ends_at (ISO) + trial_ended. Öbür sitelerin yanıtı aynen.
     if (route === "GET /auth/me") {
       const p = await perms(c) || [], own = p.filter(x => x !== "admin");
-      return ok(c, { user: { ...me(c.user), ...(p.includes("admin") && { admin: true }), ...(own.length && { perms: own }) } });
+      return ok(c, { user: { ...me(c.user), ...(site === SMC_APP && planOut(c.user)), ...(p.includes("admin") && { admin: true }), ...(own.length && { perms: own }) } });
     }
     if (route === "POST /auth/logout") {
       await env.DB.prepare("DELETE FROM sessions WHERE token_hash = ?").bind(await sha256(token)).run();
@@ -165,9 +166,16 @@ async function register(c) {
   }
   await attempt(env, ip, email, "register", 1);
 
-  const user = await env.DB.prepare(
-    "INSERT INTO users (site, email, name, role, lang, pass, consent_at) VALUES (?, ?, ?, ?, ?, ?, datetime('now')) ON CONFLICT DO NOTHING RETURNING *",
-  ).bind(site, email, name, role, lang, await hashPass(env, password)).first();
+  // A15: app.socialmediacorner.co kaydı plan='demo' (14 günlük deneme, src/plans.js); öbür siteler sütun varsayılanında (0018
+  // 'basic'). 0018 uygulanmamışsa (plan sütunu yok) demo'suz eski INSERT'e düşülür: kullanıcı plansız, üretim anonim akışta.
+  const pass = await hashPass(env, password);
+  const insert = withPlan => env.DB.prepare(
+    `INSERT INTO users (site, email, name, role, lang, pass, consent_at${withPlan ? ", plan" : ""}) VALUES (?, ?, ?, ?, ?, ?, datetime('now')${withPlan ? ", 'demo'" : ""}) ON CONFLICT DO NOTHING RETURNING *`,
+  ).bind(site, email, name, role, lang, pass).first();
+  let user;
+  if (smc) {
+    try { user = await insert(true); } catch (e) { if (!/no (such )?column|has no column named plan/i.test(String(e?.message))) throw e; user = await insert(false); }
+  } else user = await insert(false);
   if (!user) throw new Bad("exists", 409);
 
   // Yeni üye bildirimi: form kayıtlarıyla aynı yoldan Berkay'a e-posta (gitmezse cron tekrar dener)
@@ -300,6 +308,11 @@ async function newSession(env, userId) {
 }
 
 const me = u => ({ id: u.id, name: u.name, email: u.email, role: u.role, lang: u.lang, profile: JSON.parse(u.profile || "{}") });
+// A15 /auth/me plan alanları (yalnız smc çağırır): plan sütunu yoksa boş; demo'da deneme bitişi + bitti mi
+const planOut = u => {
+  const P = planLimits(u);
+  return P ? { plan: P.plan, ...(P.plan === "demo" && { trial_ends_at: P.trial_ends_at, trial_ended: P.trial_ended }) } : {};
+};
 
 // Yetkiler (migrations/0012_admin.sql user_perms): istek başına tek SELECT, c.perms'te tutulur.
 // Tablo yoksa null: yönetici yok, edit_metrics kapısı açık (0012'den önceki davranış).
@@ -1424,9 +1437,10 @@ const smcAdminJobs = adminRoute(async c => {
   return ok(c, { jobs: page, events, next });
 });
 
-// Gövde: {plan: basic|pro|enterprise, limits?: {linkedin_blog, video_gorsel, cms_sites?}}. Enterprise'ta limits zorunlu (1..100000 tam sayı;
+// Gövde: {plan: demo|basic|pro|enterprise, limits?: {linkedin_blog, video_gorsel, cms_sites?}}. Enterprise'ta limits zorunlu (1..100000 tam sayı;
 // A14 cms_sites isteğe bağlı, yoksa plans.js varsayılanı 10),
 // diğerlerinde verilirse 400 bad_limits; plan_limits enterprise dışında NULL. Hedef bu sitenin kullanıcısı değilse 404.
+// A15 demo: deneme created_at + 14 günden sayılır (yeniden demo vermek süreyi uzatmaz); basic|pro|enterprise deneme sınırını kaldırır.
 // Plan gerçekten değişiyorsa perm_log'a 'plan:<plan>' satırı (değişiklikten önce, aynı batch'te; perm_log yoksa günlüksüz).
 const smcAdminPlan = adminRoute(async (c, id) => {
   const { env } = c, b = c.body;
@@ -1444,6 +1458,6 @@ const smcAdminPlan = adminRoute(async (c, id) => {
     WHERE NOT EXISTS (SELECT 1 FROM users WHERE id = ? AND plan = ? AND plan_limits IS ?)`).bind(c.user.id, id, b.plan, id, b.plan, limits);
   const change = env.DB.prepare("UPDATE users SET plan = ?, plan_limits = ? WHERE id = ? AND site = ?").bind(b.plan, limits, id, c.site);
   await batchOr(env, "perm_log", ed => ed ? [log, change] : [change]);
-  const u = await env.DB.prepare("SELECT plan, plan_limits FROM users WHERE id = ? AND site = ?").bind(id, c.site).first();
+  const u = await env.DB.prepare("SELECT plan, plan_limits, created_at FROM users WHERE id = ? AND site = ?").bind(id, c.site).first();
   return ok(c, { user_id: id, plan: u.plan, plan_limits: jsonOr(u.plan_limits, null), limits: planLimits(u) });
 });
