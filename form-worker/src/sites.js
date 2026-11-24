@@ -3,7 +3,7 @@
 // (oauth.js startOAuth) buradan okur. Yollar istekten hiç alınmaz, yalnız bu sabit tablodan (açık yönlendirme yok).
 // Tabloda olmayan bir AUTH_HOSTS sitesi brandcorner.co değerlerini alır (A5-1'den önceki davranış).
 //
-// gate: site yalnız bu ortam değişkeni açıkken hesap sitesi olur (wrangler.toml ACCOUNTS_ENABLED, varsayılan "0").
+// gate: site yalnız bu ortam değişkeni açıkken hesap sitesi olur (wrangler.toml ACCOUNTS_ENABLED, A13 ile "1").
 //   "1"       → canlı alan adı ve Pages önizlemesi; AUTH_HOSTS'a yazılmasa da eklenmiş sayılır.
 //   "preview" → yalnız Pages önizlemesi (<dal>.web-smcapp.pages.dev); canlı alan adı 403 origin kalır.
 //   başka her değer → site AUTH_HOSTS'ta yazsa da hesap sitesi değildir: 403 origin (A5-1'den önceki davranış).
@@ -16,12 +16,14 @@ export const DEFAULT_SITE = "brandcorner.co";
 // app.socialmediacorner.co'nun uçları: yalnız hesap için gerekenler (giriş, kayıt, çıkış, ben, şifre sıfırlama,
 // profil, bağlantılar, bağlama ve bağı koparma; A5-3: marka sesi, taslak geçmişi, veri dışa aktarma, hesap silme).
 // Biçim "YÖNTEM /yol"; /app/* yolundaki sayısal id ":id" yazılır.
-// Kampanya, başvuru, influencer arama, eşleşme, istatistik, metrics, gönderi, bildirim ve admin uçları yok (404).
+// Kampanya, başvuru, influencer arama, eşleşme, istatistik, metrics, gönderi ve bildirim uçları yok (404). Yönetim uçları (A13)
+// smc'nin kendisi (src/platform.js smcAdmin*): yöneticisi olmayana yine 404; brandcorner.co'nun admin/:id/perm|posts|snap uçları yok.
 export const APP_ROUTES = Object.freeze([
   "POST /auth/register", "POST /auth/login", "POST /auth/logout", "GET /auth/me", "POST /auth/forgot", "POST /auth/reset",
   "GET /app/profile", "POST /app/profile",
   "GET /app/connections", "POST /app/connect", "POST /app/connect/finish", "POST /app/disconnect",
   "GET /app/voice", "PUT /app/voice", "GET /app/drafts", "POST /app/drafts/:id/delete", "GET /app/export", "POST /app/account/delete",
+  "GET /app/admin", "GET /app/admin/users", "GET /app/admin/submissions", "GET /app/admin/drafts", "GET /app/admin/jobs", "POST /app/admin/:id/plan",
 ]);
 
 export const SITES = {
@@ -39,6 +41,8 @@ export const SITES = {
     back: { tr: "/hesap/baglantilar", en: "/en/hesap/connections" },
     roles: Object.freeze(["brand"]),
     routes: APP_ROUTES,
+    // Yönetim panelinin form gönderileri listesi (src/index.js /submit site = origin alanı): pazarlama sitesi + uygulama
+    submitSites: Object.freeze(["socialmediacorner.co", "app.socialmediacorner.co"]),
   },
 };
 

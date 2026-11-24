@@ -118,45 +118,45 @@ const GEN = {
 };
 const gen = (s, platform, opt) => { const [p, b] = GEN[platform](); return s.call(p, b, opt); };
 
-test("basic: 40. LinkedIn+Blog üretimi geçer, 41. → 429 limit scope plan kind linkedin_blog; LLM çağrılmaz; video_gorsel ayrı (10)", async () => {
+test("basic: 8. LinkedIn+Blog üretimi geçer, 9. → 429 limit scope plan kind linkedin_blog; LLM çağrılmaz; video_gorsel ayrı (2)", async () => {
   const s = setup();
-  for (let i = 1; i <= 40; i++) {
+  for (let i = 1; i <= 8; i++) {
     const r = await gen(s, i % 4 === 0 ? "blog" : "linkedin", auth("basic"));
     assert.equal(r.status, 200, `üretim ${i}`);
     assert.equal(r.body.charged, true);
-    assert.deepEqual(r.body.month.linkedin_blog, { used: i, limit: 40 });
+    assert.deepEqual(r.body.month.linkedin_blog, { used: i, limit: 8 });
     assert.equal(r.body.plan, "basic");
   }
-  assert.equal(s.month(1, "lb"), 40);
+  assert.equal(s.month(1, "lb"), 8);
   const llm = s.calls.llm;
   const r = await gen(s, "linkedin", auth("basic"));
   assert.equal(r.status, 429);
   assert.deepEqual([r.body.error, r.body.scope, r.body.kind, r.body.left, r.body.charged], ["limit", "plan", "linkedin_blog", 0, false]);
-  assert.deepEqual(r.body.month, { linkedin_blog: { used: 40, limit: 40 }, video_gorsel: { used: 0, limit: 10 } });
+  assert.deepEqual(r.body.month, { linkedin_blog: { used: 8, limit: 8 }, video_gorsel: { used: 0, limit: 2 } });
   assert.equal((await gen(s, "blog", auth("basic"))).body.kind, "linkedin_blog");
   assert.equal(s.calls.llm, llm);
   // görsel + video aynı 'vg' sayacından
-  for (let i = 1; i <= 10; i++) assert.equal((await gen(s, i % 2 ? "video" : "instagram", auth("basic"))).status, 200, `vg ${i}`);
+  for (let i = 1; i <= 2; i++) assert.equal((await gen(s, i % 2 ? "video" : "instagram", auth("basic"))).status, 200, `vg ${i}`);
   const v = await gen(s, "instagram", auth("basic"));
   assert.deepEqual([v.status, v.body.scope, v.body.kind], [429, "plan", "video_gorsel"]);
-  assert.equal(s.month(1, "vg"), 10);
+  assert.equal(s.month(1, "vg"), 2);
   // girişli yol anon/IP sayaçlarına dokunmaz
   assert.deepEqual([s.usage("anon"), s.usage("ip")], [[], []]);
-  assert.deepEqual(s.usage("u"), [50]);
+  assert.deepEqual(s.usage("u"), [10]);
 });
 
-test("pro: 200 LinkedIn+Blog ve 60 video+görsel; sonrası 429 plan; başka kullanıcının sayacı ayrı", async () => {
+test("pro: 40 LinkedIn+Blog ve 12 video+görsel; sonrası 429 plan; başka kullanıcının sayacı ayrı", async () => {
   const s = setup();
-  for (let i = 1; i <= 200; i++) assert.equal((await gen(s, i % 2 ? "linkedin" : "blog", auth("pro"))).status, 200, `lb ${i}`);
+  for (let i = 1; i <= 40; i++) assert.equal((await gen(s, i % 2 ? "linkedin" : "blog", auth("pro"))).status, 200, `lb ${i}`);
   const r = await gen(s, "linkedin", auth("pro"));
   assert.deepEqual([r.status, r.body.scope, r.body.kind, r.body.plan], [429, "plan", "linkedin_blog", "pro"]);
-  s.seed(2, "vg", 59);
+  s.seed(2, "vg", 11);
   const ok = await gen(s, "video", auth("pro"));
   assert.equal(ok.status, 200);
-  assert.deepEqual(ok.body.month.video_gorsel, { used: 60, limit: 60 });
+  assert.deepEqual(ok.body.month.video_gorsel, { used: 12, limit: 12 });
   assert.equal((await gen(s, "instagram", auth("pro"))).body.scope, "plan");
   assert.equal((await gen(s, "linkedin", auth("basic"))).status, 200);
-  assert.deepEqual([s.month(2, "lb"), s.month(2, "vg"), s.month(1, "lb")], [200, 60, 1]);
+  assert.deepEqual([s.month(2, "lb"), s.month(2, "vg"), s.month(1, "lb")], [40, 12, 1]);
 });
 
 test("enterprise: plan_limits sözleşme sayıları; JSON bozuksa pro sayıları; stock açık", async () => {
@@ -166,7 +166,7 @@ test("enterprise: plan_limits sözleşme sayıları; JSON bozuksa pro sayıları
   assert.deepEqual([r.status, r.body.scope, r.body.plan], [429, "plan", "enterprise"]);
   assert.deepEqual(r.body.month, { linkedin_blog: { used: 5, limit: 5 }, video_gorsel: { used: 0, limit: 2 } });
   const q = await s.call("/gen/quota", { anon: ANON }, auth("ent0"));
-  assert.deepEqual([q.body.plan, q.body.month.linkedin_blog.limit, q.body.month.video_gorsel.limit, q.body.stock], ["enterprise", 200, 60, true]);
+  assert.deepEqual([q.body.plan, q.body.month.linkedin_blog.limit, q.body.month.video_gorsel.limit, q.body.stock], ["enterprise", 40, 12, true]);
 });
 
 test("ay dönümü (Europe/Istanbul): 30 Kasım 23:59'da dolu hak 1 Aralık 00:00'da sıfırdan başlar", async () => {
@@ -174,14 +174,14 @@ test("ay dönümü (Europe/Istanbul): 30 Kasım 23:59'da dolu hak 1 Aralık 00:0
   try {
     Date.now = () => Date.parse("2026-11-30T20:59:00Z"); // İstanbul 23:59
     const s = setup();
-    s.seed(1, "lb", 40, "2026-11");
+    s.seed(1, "lb", 8, "2026-11");
     const a = await gen(s, "linkedin", auth("basic"));
     assert.deepEqual([a.status, a.body.scope], [429, "plan"]);
     Date.now = () => Date.parse("2026-11-30T21:00:00Z"); // İstanbul 1 Aralık 00:00
     const b = await gen(s, "linkedin", auth("basic"));
     assert.equal(b.status, 200);
-    assert.deepEqual(b.body.month.linkedin_blog, { used: 1, limit: 40 });
-    assert.deepEqual([s.month(1, "lb", "2026-11"), s.month(1, "lb", "2026-12")], [40, 1]);
+    assert.deepEqual(b.body.month.linkedin_blog, { used: 1, limit: 8 });
+    assert.deepEqual([s.month(1, "lb", "2026-11"), s.month(1, "lb", "2026-12")], [8, 1]);
   } finally {
     Date.now = real;
   }
@@ -219,11 +219,14 @@ test("kullanıcı günlük tavanı (GEN_USER_PER_DAY) → 429 scope user; varsay
   assert.deepEqual([s.month(2, "lb"), s.month(2, "vg"), s.usage("u")[0]], [1, 1, 2]);
   // başka kullanıcı etkilenmez
   assert.equal((await gen(s, "linkedin", auth("basic"))).status, 200);
-  // varsayılan 40
+  // varsayılan 40 (A13: pro aylık 40 olduğundan günlük tavanı görmek için 1 günlük kullanım tohumlanır)
   const d = setup({ env: { GEN_USER_PER_DAY: undefined } });
   d.db.prepare("INSERT INTO gen_month (month, user_id, kind, n) VALUES (?, 2, 'lb', 0)").run(genDay().slice(0, 7));
+  const q0 = await d.call("/gen/quota", { anon: ANON }, auth("pro"));
+  assert.deepEqual([q0.body.cap, q0.body.left, q0.body.scope], [40, 40, "plan"]);
+  assert.equal((await gen(d, "video", auth("pro"))).status, 200);
   const q = await d.call("/gen/quota", { anon: ANON }, auth("pro"));
-  assert.deepEqual([q.body.cap, q.body.left, q.body.scope], [40, 40, "user"]);
+  assert.deepEqual([q.body.cap, q.body.left, q.body.scope], [40, 39, "user"]);
 });
 
 test("aynı rid tekrarı: aylık hak ve kullanıcı tavanından düşmez (charged false), global düşer", async () => {
@@ -239,15 +242,15 @@ test("iade: llm_busy → aylık + günlük + global + rid tam iade; llm_fail gü
   const busy = { status: 529, body: { type: "error", error: { type: "overloaded_error" } }, headers: { "retry-after": "0" } };
   const s = setup({ fetch: fakeFetch({ llm: () => busy }) });
   const r = await gen(s, "linkedin", auth("basic"));
-  assert.deepEqual([r.status, r.body.error, r.body.charged, r.body.left], [503, "llm_busy", false, 40]);
-  assert.deepEqual(r.body.month.linkedin_blog, { used: 0, limit: 40 });
+  assert.deepEqual([r.status, r.body.error, r.body.charged, r.body.left], [503, "llm_busy", false, 8]);
+  assert.deepEqual(r.body.month.linkedin_blog, { used: 0, limit: 8 });
   assert.deepEqual([s.month(1, "lb"), s.usage("u"), s.usage("all"), s.usage("rid")], [0, [0], [0], [0]]);
 
   const bad = { status: 200, body: { ...llmBody(drafts("")), stop_reason: "max_tokens" } };
   const f = setup({ fetch: fakeFetch({ llm: () => bad }) });
   const a = await gen(f, "video", auth("basic"));
   assert.deepEqual([a.status, a.body.error, a.body.charged], [502, "llm_fail", false]);
-  assert.deepEqual(a.body.month.video_gorsel, { used: 0, limit: 10 });
+  assert.deepEqual(a.body.month.video_gorsel, { used: 0, limit: 2 });
   assert.deepEqual([f.month(1, "vg"), f.usage("u"), f.usage("all")], [0, [0], [3]]);
   const b = await gen(f, "video", auth("basic"));
   assert.deepEqual([b.status, b.body.error, b.body.charged], [502, "llm_fail", true]);
@@ -275,7 +278,7 @@ test("refine girişli: aylık plandan düşmez, IP sayacı yok, kullanıcıya ba
   assert.equal((await gen(s, "linkedin", auth("basic"))).status, 200);
   const a = await s.call("/gen/refine", ref, auth("basic"));
   assert.deepEqual([a.status, a.body.charged, a.body.plan], [200, false, "basic"]);
-  assert.deepEqual(a.body.month.linkedin_blog, { used: 1, limit: 40 });
+  assert.deepEqual(a.body.month.linkedin_blog, { used: 1, limit: 8 });
   assert.equal((await s.call("/gen/refine", ref, auth("basic"))).status, 200); // ri=1 olsaydı burada takılırdı
   const c = await s.call("/gen/refine", ref, auth("basic"));
   assert.deepEqual([c.status, c.body.scope], [429, "user"]);
@@ -290,10 +293,11 @@ test("/gen/quota: girişli plan + month + cap (kullanıcı günlük); anonimde p
   const q = await s.call("/gen/quota", { anon: ANON }, auth("basic"));
   assert.equal(q.status, 200);
   assert.deepEqual(Object.keys(q.body).sort(), ["cap", "charged", "left", "month", "ok", "plan", "reset_at", "scope", "stock"]);
-  assert.deepEqual([q.body.plan, q.body.stock, q.body.cap, q.body.left, q.body.scope], ["basic", false, 40, 36, "user"]);
-  assert.deepEqual(q.body.month, { linkedin_blog: { used: 3, limit: 40 }, video_gorsel: { used: 1, limit: 10 } });
+  // A13: basic aylık 8/2 günlük 40'tan dar → left = iki türün büyük kalanı (8-3=5), scope plan; cap yine günlük tavan
+  assert.deepEqual([q.body.plan, q.body.stock, q.body.cap, q.body.left, q.body.scope], ["basic", false, 40, 5, "plan"]);
+  assert.deepEqual(q.body.month, { linkedin_blog: { used: 3, limit: 8 }, video_gorsel: { used: 1, limit: 2 } });
   const p = await s.call("/gen/quota", { anon: ANON }, auth("pro"));
-  assert.deepEqual([p.body.plan, p.body.stock, p.body.month.linkedin_blog.limit], ["pro", true, 200]);
+  assert.deepEqual([p.body.plan, p.body.stock, p.body.month.linkedin_blog.limit, p.body.month.video_gorsel.limit], ["pro", true, 40, 12]);
   const n = await s.call("/gen/quota", { anon: ANON });
   assert.deepEqual(Object.keys(n.body).sort(), ["cap", "charged", "left", "ok", "plan", "reset_at", "scope", "stock"]);
   assert.deepEqual([n.body.plan, n.body.stock, n.body.left, n.body.cap, n.body.scope], ["anon", false, 3, 3, "anon"]);

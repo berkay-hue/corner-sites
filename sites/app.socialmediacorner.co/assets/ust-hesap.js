@@ -75,6 +75,10 @@ function durum(s,u){
   var ad=String(u.name||u.email||'').trim(),ilk=ad?Array.from(ad)[0].toLocaleUpperCase(EN?'en':'tr'):'';
   if(av&&ilk){av.textContent=ilk;av.classList.add('st-av-harf')}
   if(kim){kim.textContent=String(u.email||u.name||'');kim.hidden=!kim.textContent}
+  /* A13: /auth/me admin:true → Geçmiş'in ardına Yönetim (sayfa yalnız TR) */
+  var m=$('#hesap-menu');
+  if(u.admin===true&&m&&!$('#hesap-admin')){var g=$('a[data-m="uye"][href$="/gecmis"],a[data-m="uye"][href$="/history"]',m),y=d.createElement('a');
+    y.href='/hesap/admin';y.id='hesap-admin';y.setAttribute('data-m','uye');y.textContent=T('Yönetim','Admin');m.insertBefore(y,g?g.nextSibling:$('hr',m))}
 }
 function cikisKur(){
   $$('[data-cikis]').forEach(function(b){b.addEventListener('click',function(){

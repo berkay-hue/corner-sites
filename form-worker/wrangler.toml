@@ -59,8 +59,8 @@ PUBLISH_PLATFORMS = ""
 PUBLISH_PER_RUN = "3"
 # app.socialmediacorner.co hesapları (/auth/*, /app/*; src/sites.js, A5-1). AUTH_HOSTS burada yazılmaz, varsayılan
 # brandcorner.co kalır. "0": app 403 origin (bugünkü davranış). "preview": yalnız <dal>.web-smcapp.pages.dev önizlemesi.
-# "1": canlı app.socialmediacorner.co da eklenir. Açmadan önce A5-2 ve Ana'nın "taken"/0015 kararı gerekir.
-ACCOUNTS_ENABLED = "0"
+# "1": canlı app.socialmediacorner.co da eklenir (A13'te açıldı; 0015..0018 uygulanmış olmalı, etkisi wrangler deploy ile).
+ACCOUNTS_ENABLED = "1"
 
 # cornergroup.co'da Email Routing açık, berkay@saascorner.co doğrulanmış hedef adres
 [[send_email]]

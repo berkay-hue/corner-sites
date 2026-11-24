@@ -100,7 +100,7 @@
 }
 
 /* A11-2 kayıt: ücretsiz üyelik kutusu, iki onay, Turnstile alanı, giriş sayfası CTA'sı, Stüdyo ana sayfa kartı.
-   Yalnız gerçek plan bilgisi (Basic): ayda 40 LinkedIn/blog, 10 video/görsel taslağı, 1 marka sesi. */
+   Yalnız gerçek plan bilgisi (Basic): ayda 8 LinkedIn/blog, 2 video/görsel taslağı, 1 marka sesi. */
 .au-etiket>span[hidden]{display:none}
 
 .au-uye{display:grid;gap:var(--s3);padding:var(--g2);border:1px solid color-mix(in srgb,var(--accent) 22%,var(--line));border-radius:var(--r-l);background:var(--accent-soft)}

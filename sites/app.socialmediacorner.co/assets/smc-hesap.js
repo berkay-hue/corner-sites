@@ -5,7 +5,7 @@
 (function(){
 'use strict';
 var d=document,root=d.documentElement,body=d.body;
-var EN={"1 taslak":"1 draft",
+var EN={"Yönetim":"Admin","1 taslak":"1 draft",
 "Bağla":"Connect",
 "Bağlantı ve kayıtlı yetki burada silinir; {p} tarafındaki izni {p} ayarlarından kaldırırsın. Bu hesaba otomatik paylaşım yapılmaz. Geçmiş’teki taslakların silinmez; istediğin an yeniden bağlarsın.":"The connection and stored access are deleted here; you remove the permission in your {p} settings. Nothing will be shared to this account automatically. Your drafts in History stay; you can reconnect any time.",
 "Bağlantılar ya da Panel sayfasında bu hesabın bağlantısını kaldır.":"Remove this account’s connection on the Connections or Panel page.",
@@ -419,6 +419,9 @@ function oturumKur(u){
   $$('[data-oturum]').forEach(function(x){x.hidden=false});
   $$('.alt-kim .kullanici').forEach(function(x){x.textContent=KULLANICI.email||KULLANICI.name||''});
   var a=$('#a-ad'),e=$('#a-eposta');if(a)a.textContent=KULLANICI.name||'';if(e)e.textContent=KULLANICI.email||'';
+  /* A13: yalnız /auth/me admin:true ise menüye Yönetim bağlantısı (sayfa TR; EN menüde "Admin") */
+  var m=$('#hesap-menu'),hr=m&&$('hr',m);
+  if(KULLANICI.admin===true&&m&&!$('#hesap-admin')){var y=el('a',null,t('Yönetim'),{href:'/hesap/admin',id:'hesap-admin'});if(SAYFA==='admin')y.setAttribute('aria-current','page');m.insertBefore(y,hr||null)}
 }
 function cikisKur(){$$('#cikis,#cikis-2').forEach(function(b){b.addEventListener('click',function(){
   if(bosMu(b))return;
@@ -761,6 +764,8 @@ function yukle(){
   if(SAYFA==='kurulum')kurulumYukle();
   else if(SAYFA==='baglantilar')baglarYukle();
   else if(SAYFA==='gecmis')gecmisYukle();
+  else if(SAYFA==='admin'){if(ORNEK||!KULLANICI||KULLANICI.admin!==true||typeof window.smcAdminBasla!=='function'){ekran('yok',true);return}
+    window.smcAdminBasla({istek:istek,ekran:ekran,bildir:bildir,genelHata:genelHata,hataGoster:hataGoster,mesgul:mesgul,bosMu:bosMu})}
   else ekran('ana');
 }
 function korumaliBasla(){
