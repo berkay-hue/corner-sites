@@ -82,7 +82,7 @@ a:hover{color:var(--ink)}
   .st-grup+.st-grup{margin-top:var(--s3)}
   .st-grup-ad{padding:0 var(--s3) var(--s1);font-size:.6875rem}
   .st-link{min-height:36px;gap:var(--s2);font-size:.875rem}
-  .st-link .ikon{width:18px;height:18px}
+  .st-link .ikon{display:none}
   .st-teklif-kart{margin-top:var(--s3);padding:var(--s3)}
   .st-teklif-kart a{min-height:32px}
 }
