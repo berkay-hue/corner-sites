@@ -48,8 +48,25 @@ var DUVAR={
   user:{h:T('Bugünlük bu kadar','That’s it for today'),b:T('Hesabının bugünkü üretim sınırına ulaştın.','You’ve reached your account’s generation limit for today.'),
     m:T('Bu sınır kötüye kullanıma karşı; aylık hakkın yerinde duruyor. Gece yarısı yeniden üretebilirsin.','This limit guards against abuse; your monthly allowance is untouched. You can generate again after midnight.'),
     d:[[T('Sınır','Limit'),T('hesap başına günlük','per account, per day')],[T('Yenilenme','Renews'),YEN],[T('Senden istenen','Asked of you'),T('hiçbir şey','nothing')]]},
-  yakinda:{h:T('Çok yakında','Coming soon'),b:T('Çok yakında.','Coming soon.'),m:T('Araç henüz açılmadı. Açılınca haber verelim mi?','The tool isn’t open yet. Shall we let you know when it opens?'),d:[]}
+  yakinda:{h:T('Çok yakında','Coming soon'),b:T('Çok yakında.','Coming soon.'),m:T('Araç henüz açılmadı. Açılınca haber verelim mi?','The tool isn’t open yet. Shall we let you know when it opens?'),d:[]},
+  /* A15: üretim yalnız girişli (401 login_required / quota login_required); KAYIT ve GIRIS duvarHazirla'da ?r= dönüş yoluyla bağlantı olur */
+  giris:{h:T('Üretmek için giriş yap','Sign in to generate'),b:T('Üretmek için ücretsiz kayıt ol ya da giriş yap.','Sign up for free or sign in to generate.'),
+    m:T('Kayıtla 14 gün ücretsiz deneme başlar: 4 LinkedIn ve blog taslağı, 1 video ve görsel taslağı, 1 marka sesi. Girişten sonra bu sayfaya dönersin.','Signing up starts a 14-day free trial: 4 LinkedIn and blog drafts, 1 video and image draft, 1 brand voice. You’ll come back to this page after signing in.'),
+    d:[[T('Yeni misin?','New here?'),'KAYIT'],[T('Hesabın var mı?','Have an account?'),'GIRIS']]},
+  /* A15: deneme süresi bitti (403 trial_ended ya da quota trial_ended) */
+  deneme:{h:T('Deneme bitti — plan için iletişime geç','Your trial has ended — contact us for a plan'),b:T('14 günlük ücretsiz denemen sona erdi.','Your 14-day free trial has ended.'),
+    m:T('Taslakların hesabında duruyor. Üretmeye devam etmek için ekipten teklif al ya da planları karşılaştır.','Your drafts stay in your account. To keep generating, get a quote from the team or compare the plans.'),
+    d:[[T('Deneme','Trial'),'BITIS'],[T('Planlar','Plans'),EN?'/en/pricing':'/fiyatlar']]},
+  /* A15: deneme sürerken deneme hakkı bitti (demo planı ayda yenilenmez) */
+  demo:{h:T('Deneme hakkın doldu','Your trial allowance is used up'),b:T('14 günlük denemedeki bu türden üretim hakkını kullandın.','You’ve used this kind of generation in your 14-day trial.'),
+    m:T('Deneme hakkı yenilenmez. Devam etmek için ekipten teklif al ya da planları karşılaştır.','The trial allowance doesn’t renew. To keep going, get a quote from the team or compare the plans.'),
+    d:[[T('Deneme','Trial'),T('4 LinkedIn+blog, 1 video+görsel','4 LinkedIn+blog, 1 video+image')],[T('Deneme bitişi','Trial ends'),'BITIS'],[T('Planlar','Plans'),EN?'/en/pricing':'/fiyatlar']]}
 };
+/* A15: giriş/kayıt bağlantısı; ?r= smc-hesap.js R_RE kuralına uyarsa eklenir (giris-kapisi.js ile aynı yol biçimi) */
+var DONUS_RE=/^\/(en\/?)?(hesap\/[a-z-]+|video|gorsel|visual|blog|yayin-kuyrugu|publish-queue)?$/;
+function hesapYol(kayit){var y=location.pathname.replace(/\.html$/,'').replace(/\/index$/,'/'),b=EN?(kayit?'/en/hesap/register':'/en/hesap/login'):(kayit?'/hesap/kayit':'/hesap/giris');
+  return DONUS_RE.test(y)?b+'?r='+encodeURIComponent(y):b}
+function tarihMetin(s){var t=Date.parse(s||'');if(!isFinite(t))return '';try{return new Date(t).toLocaleDateString(EN?'en-GB':'tr-TR',{day:'numeric',month:'long',year:'numeric',timeZone:'Europe/Istanbul'})}catch(e){return ''}}
 var KAYNAK={top:'top',error:'error',limit:'limit',footer:'footer',result:'result',cap:'cap',calendly:'calendly'};
 
 /* ---- yerel depo, kimlik, gün ---- */
@@ -72,8 +89,10 @@ function ayBilgi(){var k=cfg&&AY_TUR[cfg.yol],a=k&&D.ay&&D.ay[k];if(!a||typeof a
   return {kalan:Math.max(0,a.limit-a.used),limit:a.limit,ad:AY_AD[k]}}
 function hakAl(r){if(!r)return;if(typeof r.left==='number'){D.left=Math.max(0,r.left);D.hakBilinmez=false}if(typeof r.cap==='number'&&r.cap>0)D.cap=r.cap;if(typeof r.reset_at==='string')D.reset=r.reset_at;if(/^(anon|ip|global|plan|user)$/.test(r.scope||''))D.hakScope=r.scope;if(typeof r.stock==='boolean')D.stock=r.stock;
   if(typeof r.plan==='string'){D.plan=r.plan;if(r.plan==='anon')D.ay=null}if(r.month&&typeof r.month==='object')D.ay=r.month;
+  if(r.login_required===true)D.giris=true;else if(typeof r.plan==='string'&&r.plan!=='anon')D.giris=false;
+  if(typeof r.trial_ended==='boolean')D.dBitti=r.trial_ended;if(typeof r.trial_ends_at==='string')D.dSon=r.trial_ends_at;
   var a=D.plan&&D.plan!=='anon'?ayBilgi():null;if(a&&typeof D.left==='number'&&a.kalan<=D.left){D.left=a.kalan;D.hakScope='plan'}}
-function duvarSc(){return /^(ip|global|plan|user)$/.test(D.hakScope)?D.hakScope:'anon'}
+function duvarSc(){if(D.giris)return 'giris';if(D.dBitti)return 'deneme';if(D.hakScope==='plan'&&D.plan==='demo')return 'demo';return /^(ip|global|plan|user)$/.test(D.hakScope)?D.hakScope:'anon'}
 
 /* ---- istek: jeton yalnız üretim uçlarına ve /gen/quota'ya (A9b: plan ve aylık hak); dış AbortController (Vazgeç) verilebilir ---- */
 function post(yol,govde,ms,kalici,dis){
@@ -82,7 +101,7 @@ function post(yol,govde,ms,kalici,dis){
       o={method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(govde),credentials:'omit',cache:'no-store'};
   if(ac)o.signal=ac.signal;if(kalici)o.keepalive=true;
   if(JETON_YOL.test(yol)){var tk=oturumJeton();if(tk)o.headers.authorization='Bearer '+tk}
-  return fetch(API+yol,o).then(function(r){clearTimeout(tm);if(r.status===204)return {};return r.json().then(function(j){if(r.ok&&j&&j.ok!==false)return j;j=j||{};throw {kod:j.error||'genel',scope:j.scope,charged:!!j.charged,left:j.left,cap:j.cap,reset_at:j.reset_at,field:j.field,plan:j.plan,month:j.month,kind:j.kind}},function(){throw {kod:'genel'}})},
+  return fetch(API+yol,o).then(function(r){clearTimeout(tm);if(r.status===204)return {};return r.json().then(function(j){if(r.ok&&j&&j.ok!==false)return j;j=j||{};throw {kod:j.error||'genel',scope:j.scope,charged:!!j.charged,left:j.left,cap:j.cap,reset_at:j.reset_at,field:j.field,plan:j.plan,month:j.month,kind:j.kind,trial_ended:j.trial_ended,trial_ends_at:j.trial_ends_at}},function(){throw {kod:'genel'}})},
     function(e){clearTimeout(tm);throw {kod:D.vazgec?'vazgec':e&&e.name==='AbortError'?'zaman':'ag'}});
 }
 /* GET: yalnız /gen/stock (Pexels araması; hak düşmez). A9b: Pexels Pro/Enterprise'da; girişliyse Bearer jeton gider, anonimde gitmez.
@@ -137,14 +156,20 @@ function hakYaz(){
   var p=$('#hak'),y=$('#hak-yazi'),bl=$('#hak-balon');if(!p||!y)return;
   var bel=!!D.hakBilinmez||D.view==='hata'&&(HATA[D.hata]||HATA.genel).e==='istemci',sc=D.view==='duvar'?D.scope:'',ust,alt,veri,ay;
   if(sc==='yakinda'){ust=T('Çok yakında','Coming soon');alt=T('Araç henüz açılmadı.','The tool isn’t open yet.');veri='?'}
+  else if(D.giris||sc==='giris'){ust=T('Giriş yap · 14 gün ücretsiz dene','Sign in · 14-day free trial');alt=DUVAR.giris.b+' '+DUVAR.giris.m;veri='0'}
+  else if(D.dBitti||sc==='deneme'){ust=T('Deneme bitti','Trial ended');alt=DUVAR.deneme.b+' '+DUVAR.deneme.m;veri='0'}
+  else if(sc==='demo'){ust=T('Deneme hakkı doldu','Trial allowance used');alt=DUVAR.demo.b+' '+DUVAR.demo.m;veri='0'}
   else if(sc==='kapasite'){ust=T('Kapasite doldu','Capacity is full');alt=DUVAR.kapasite.m;veri='0'}
   else if(sc==='ip'||sc==='global'||sc==='user'){ust=T('Bugünlük kapalı','Closed for today');alt=DUVAR[sc].b+' '+T('Yenilenme: ','Renews: ')+yenMetin()+'.';veri='0'}
   else if(sc==='plan'){ust=T('Bu ay doldu','Used up this month');alt=DUVAR.plan.b+' '+DUVAR.plan.m;veri='0'}
   else if(bel||D.left==null){ust=T('Hak: belli değil','Credits: unknown');alt=T('Her üretim 1 hak kullanır. Günde '+D.cap+' hak; yenilenme: ','Each generation uses 1 credit. '+D.cap+' credits a day; renews: ')+yenMetin()+'.';veri='?'}
   else if((ay=D.plan&&D.plan!=='anon'?ayBilgi():null)){
-    /* A9b: girişli → aylık hak ("Bu ay 7/8 LinkedIn+Blog"); günlük/global sınır daha darsa balonda söylenir */
-    ust=T('Bu ay '+ay.kalan+'/'+ay.limit+' '+ay.ad,'This month '+ay.kalan+'/'+ay.limit+' '+ay.ad);
-    alt=T('Planındaki aylık '+ay.ad+' hakkı '+ay.limit+'; '+ay.kalan+' kaldı. Her üretim 1 hak kullanır; hak ayın ilk günü yenilenir.','Your plan’s monthly '+ay.ad+' allowance is '+ay.limit+'; '+ay.kalan+' left. Each generation uses 1 credit; it renews on the 1st of the month.');
+    /* A9b: girişli → aylık hak ("Bu ay 7/8 LinkedIn+Blog"); günlük/global sınır daha darsa balonda söylenir.
+       A15: demo (14 günlük deneme) hakkı ayda yenilenmez → "Deneme 3/4 LinkedIn+Blog" */
+    if(D.plan==='demo'){var bt=tarihMetin(D.dSon);ust=T('Deneme '+ay.kalan+'/'+ay.limit+' '+ay.ad,'Trial '+ay.kalan+'/'+ay.limit+' '+ay.ad);
+      alt=T('14 günlük ücretsiz denemede '+ay.ad+' hakkı '+ay.limit+'; '+ay.kalan+' kaldı. Deneme hakkı yenilenmez','Your 14-day free trial includes '+ay.limit+' '+ay.ad+'; '+ay.kalan+' left. The trial allowance doesn’t renew')+(bt?T('; deneme '+bt+' tarihinde biter.','; the trial ends on '+bt+'.'):'.')}
+    else{ust=T('Bu ay '+ay.kalan+'/'+ay.limit+' '+ay.ad,'This month '+ay.kalan+'/'+ay.limit+' '+ay.ad);
+    alt=T('Planındaki aylık '+ay.ad+' hakkı '+ay.limit+'; '+ay.kalan+' kaldı. Her üretim 1 hak kullanır; hak ayın ilk günü yenilenir.','Your plan’s monthly '+ay.ad+' allowance is '+ay.limit+'; '+ay.kalan+' left. Each generation uses 1 credit; it renews on the 1st of the month.')}
     if(D.left<ay.kalan)alt+=' '+T('Bugün en çok '+D.left+' üretim daha yapabilirsin; yenilenme: ','You can make at most '+D.left+' more today; renews: ')+yenMetin()+'.';
     veri=D.left<=0?'0':D.left===1?'1':'2';
   }
@@ -270,7 +295,10 @@ function kayitNot(r,tek){var n=$('#kayit-not');if(!n)return;n.textContent='';n.h
 
 function hataIsle(h){
   var k=h.kod||'genel';if(k==='vazgec')return;var s=typeof h.left==='number';if(s)hakAl(h);
-  if(k==='limit'){duvarGoster(h.scope||'anon',true);return}
+  /* A15: oturum yok/süresi dolmuş → giriş duvarı; deneme bitti → teklif + planlar */
+  if(k==='login_required'){D.giris=true;D.left=0;D.hakBilinmez=false;duvarGoster('giris',true);return}
+  if(k==='trial_ended'){D.dBitti=true;if(typeof h.trial_ends_at==='string')D.dSon=h.trial_ends_at;if(typeof h.plan==='string')D.plan=h.plan;D.left=0;D.hakBilinmez=false;duvarGoster('deneme',true);return}
+  if(k==='limit'){duvarGoster(h.scope==='plan'&&D.plan==='demo'?'demo':(h.scope||'anon'),true);return}
   if(k==='not_ready'){D.acik=false;depo('smc-acik',null);duvarGoster('yakinda',true);return}
   if(k==='llm_limit'){duvarGoster('kapasite',true);return}
   if(k==='too_large'||k==='slow_down'||(k==='bad_input'&&/^(topic|goal|style)$/.test(h.field||''))){
@@ -287,7 +315,7 @@ function hataGoster(kod,odak,hakBilgi){
   var ik=$('#d-hata .st-simge');if(ik){ik.classList.toggle('st-simge-uyari',h.e==='istemci');ik.classList.toggle('st-simge-hata',h.e!=='istemci')}
   var hk=$('#hata-hak');
   var ay=D.plan&&D.plan!=='anon'?ayBilgi():null;
-  hk.textContent=ch&&ay?T('Bu deneme 1 hak kullandı. Bu ay '+ay.limit+' hakkından '+ay.kalan+' kaldı.','This attempt used 1 credit. '+ay.kalan+' of this month’s '+ay.limit+' left.'):ch&&typeof D.left==='number'?T('Bu deneme 1 hak kullandı. Bugün '+D.cap+' hakkından '+D.left+' kaldı.','This attempt used 1 credit. '+D.left+' of today’s '+D.cap+' left.'):h.e==='istemci'?T('Hakkının düşüp düşmediği henüz belli değil. Tekrar denersen aynı istek gider; hak iki kez düşmez.','We can’t tell yet whether a credit was used. Trying again sends the same request; you won’t be charged twice.'):T('Hakkın düşmedi.','No credit used.');
+  hk.textContent=ch&&ay&&D.plan==='demo'?T('Bu istek 1 hak kullandı. Denemedeki '+ay.limit+' hakkından '+ay.kalan+' kaldı.','This attempt used 1 credit. '+ay.kalan+' of your trial’s '+ay.limit+' left.'):ch&&ay?T('Bu deneme 1 hak kullandı. Bu ay '+ay.limit+' hakkından '+ay.kalan+' kaldı.','This attempt used 1 credit. '+ay.kalan+' of this month’s '+ay.limit+' left.'):ch&&typeof D.left==='number'?T('Bu deneme 1 hak kullandı. Bugün '+D.cap+' hakkından '+D.left+' kaldı.','This attempt used 1 credit. '+D.left+' of today’s '+D.cap+' left.'):h.e==='istemci'?T('Hakkının düşüp düşmediği henüz belli değil. Tekrar denersen aynı istek gider; hak iki kez düşmez.','We can’t tell yet whether a credit was used. Trying again sends the same request; you won’t be charged twice.'):T('Hakkın düşmedi.','No credit used.');
   var b=$('#hata-tekrar');b.setAttribute('data-e',h.e);b.removeAttribute('aria-label');
   if(h.e==='duzenle')b.textContent=T('Konuyu düzenle','Edit topic');
   else if(h.e==='yenile')b.textContent=T('Sayfayı yenile','Refresh page');
@@ -311,16 +339,19 @@ function duvarHazirla(sc){
   var v=DUVAR[sc]||DUVAR.anon;D.scope=sc;D.yakinda=sc==='yakinda';if(sc!=='yakinda'&&sc!=='kapasite')D.left=0;
   $('#duvar-baslik').textContent=v.h;$('#duvar-metin').textContent=(v.b+' '+v.m).replace(/\b3\b/g,String(D.cap||3));
   var dl=$('#duvar-dokum');dl.textContent='';dl.hidden=!v.d.length;
-  v.d.forEach(function(x){var w=el('div'),dt=el('dt',null,x[0]),dd=el('dd',null,x[1]===YEN?yenMetin():x[0]===T('Kullandığın','Used')?D.cap+' / '+D.cap+T(' hak',' credits'):/^\/(fiyatlar|en\/pricing)$/.test(x[1])?'':x[1]);
-    if(!dd.textContent){var a=el('a',null,T('Planları karşılaştır','Compare plans'));a.href=x[1];dd.appendChild(a)}w.appendChild(dt);w.appendChild(dd);dl.appendChild(w)});
+  var bt=tarihMetin(D.dSon);
+  v.d.forEach(function(x){var w=el('div'),dt=el('dt',null,x[0]),lk=/^(KAYIT|GIRIS)$/.test(x[1]),
+      dd=el('dd',null,lk?'':x[1]==='BITIS'?(sc==='deneme'?(bt?T(bt+' tarihinde bitti','ended on '+bt):T('14 gün · bitti','14 days · ended')):(bt||T('14 gün sonunda','after 14 days'))):x[1]===YEN?yenMetin():x[0]===T('Kullandığın','Used')?D.cap+' / '+D.cap+T(' hak',' credits'):/^\/(fiyatlar|en\/pricing)$/.test(x[1])?'':x[1]);
+    if(lk){var g=el('a',null,x[1]==='KAYIT'?T('Ücretsiz kayıt ol','Sign up free'):T('Giriş yap','Sign in'));g.href=hesapYol(x[1]==='KAYIT');dd.appendChild(g)}
+    else if(!dd.textContent){var a=el('a',null,T('Planları karşılaştır','Compare plans'));a.href=x[1];dd.appendChild(a)}w.appendChild(dt);w.appendChild(dd);dl.appendChild(w)});
   var tsk=$('#duvar-taslak');if(tsk)tsk.hidden=!D.kartVar;
   var ik=$('#d-duvar .st-simge');if(ik)ik.classList.toggle('st-simge-uyari',sc!=='yakinda');
   var cb=$('#c-bekle'),bv=$('#b-vaat'),br=$('#b-riza-yazi');
   if(cb)cb.textContent=D.yakinda?T('Açılış için bekleme listesi','Waitlist for the launch'):T('Hesaplı sürüm için bekleme listesi','Waitlist for the account version');
   if(bv)bv.textContent=D.yakinda?T('Araç açılınca ilk sen haber al.','Be the first to hear when the tool opens.'):T('Hesaplı sürüm açılınca ilk sen haber al: marka sesi, takvim, ekip onayı.','Be the first to hear when the account version opens: brand voice, calendar, team approval.');
   if(br)br.textContent=D.yakinda?T('E-posta adresimin açılış duyurusu için işlenmesini kabul ediyorum.','I agree to my e-mail address being processed for the launch announcement.'):T('E-posta adresimin hesaplı sürüm duyurusu için işlenmesini kabul ediyorum.','I agree to my e-mail address being processed for the account-version announcement.');
-  var bk=$('#bekleme');if(bk)bk.hidden=sc==='plan'||sc==='user'; /* A9b: hesabı olan kullanıcıya hesaplı sürüm bekleme listesi gösterilmez */
-  var cz=$('#c-biz'),czs=cz&&cz.closest('section');if(czs)czs.hidden=D.yakinda;
+  var bk=$('#bekleme');if(bk)bk.hidden=/^(plan|user|giris|deneme|demo)$/.test(sc); /* A9b: hesabı olan kullanıcıya hesaplı sürüm bekleme listesi gösterilmez; A15: giriş/deneme duvarında da */
+  var cz=$('#c-biz'),czs=cz&&cz.closest('section');if(czs)czs.hidden=D.yakinda||sc==='giris'; /* A15: deneme bitti → mevcut Teklif al kalır */
   var tb=czs&&$('[data-teklif]',czs);if(tb)tb.setAttribute('data-teklif',sc==='kapasite'?'cap':'limit');
   if(uretB){if(sc==='yakinda'||sc==='kapasite')uretB.setAttribute('aria-disabled','true');}
 }

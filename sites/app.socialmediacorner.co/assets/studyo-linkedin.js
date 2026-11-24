@@ -78,6 +78,8 @@ var RMESAJ={
 };
 function refineHata(h){
   var k=h&&h.kod;
+  if(k==='login_required')return S.DUVAR.giris.b;
+  if(k==='trial_ended')return S.DUVAR.deneme.h+'.';
   if(k==='limit')return h.scope==='ip'||h.scope==='global'?S.DUVAR[h.scope].b:S.SINIR;
   if(k==='bad_input'&&h.field==='text')return T('Metin düzenlenemedi; 1–3000 karakter olmalı.','The text couldn’t be edited; it must be 1–3,000 characters.');
   if(k==='bad_input'&&h.field==='anon')return T('Düzenleme için önce bugün bir taslak üret.','Write a draft today before editing.');

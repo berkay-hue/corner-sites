@@ -7,7 +7,7 @@
 import { PROVIDERS, UNSUPPORTED, ERROR_HELP, slugify } from "./cms-providers.js";
 import { encrypt, decrypt, redirectUri, returnBase } from "./oauth.js";
 import { planLimits, PLANS } from "./plans.js";
-import { genDay, genEnabled, keyOf, reserve, UPSERT, blogRequest, STOCK_URL, STOCK_TIMEOUT, stockPhoto } from "./generate.js";
+import { genDay, genEnabled, keyOf, reserve, UPSERT, blogRequest, STOCK_URL, STOCK_TIMEOUT, stockPhoto, planCounts } from "./generate.js";
 import { TONES, SECTORS, STUDIO_MAX } from "./gen-prompt.js";
 import { makeLlm, LlmError } from "./llm.js";
 import { backPath } from "./sites.js";
@@ -202,6 +202,15 @@ async function mySite(c, id) {
 const activeCount = async c => Number((await c.env.DB.prepare("SELECT COUNT(*) AS n FROM cms_sites WHERE user_id = ? AND site = ? AND state != 'kaldirildi'")
   .bind(c.user.id, c.site).first())?.n) || 0;
 const siteLimit = user => planLimits(user)?.cms_sites ?? PLANS.basic.cms_sites;
+// A15 demo: blog hakkı deneme boyunca TOPLAM (generate.js planCounts). Bu ayın gen_month 'lb' satırı için rezerv tavanı:
+// { max } (öbür planlarda aynen P.linkedin_blog), deneme bittiyse { ended: true }, toplam hak dolduysa { max: null }.
+async function lbCap(db, user, P, month) {
+  if (P.plan !== "demo") return { max: P.linkedin_blog };
+  if (P.trial_ended) return { ended: true, max: null };
+  const { off } = await planCounts(db, month, user.id, user, P);
+  const max = P.linkedin_blog - off.lb;
+  return { max: max > 0 ? max : null };
+}
 const userPosts = c => c.env.DB.prepare(
   "SELECT p.* FROM cms_posts p JOIN cms_sites s ON s.id = p.cms_site_id WHERE p.user_id = ? AND s.site = ? ORDER BY p.created_at DESC, p.id DESC LIMIT ?",
 ).bind(c.user.id, c.site, LIST_POSTS).all();
@@ -215,7 +224,7 @@ async function list(c) {
   ]);
   const P = planLimits(c.user), month = genDay().slice(0, 7);
   let lb_used = 0;
-  try { lb_used = Number((await env.DB.prepare("SELECT n FROM gen_month WHERE month = ? AND user_id = ? AND kind = 'lb'").bind(month, uid).first())?.n) || 0; }
+  try { lb_used = (await planCounts(env.DB, month, uid, c.user, P)).m.lb; } // demo'da deneme toplamı, öbürlerinde bu ay
   catch (e) { if (!NO_TABLE.test(String(e?.message || ""))) throw e; }
   const providers = Object.values(PROVIDERS).map(p => ({
     id: p.id, name: p.name, auth: p.auth, ...readyOf(env, p), notes_tr: p.notes_tr || "", notes_en: p.notes_en || "", fields: p.fields || [],
@@ -224,7 +233,7 @@ async function list(c) {
     providers, unsupported: UNSUPPORTED, error_help: ERROR_HELP,
     sites: (sites || []).map(siteOut), posts: (posts || []).map(postOut),
     limits: { sites: siteLimit(c.user), used: (sites || []).filter(s => s.state !== "kaldirildi").length },
-    quota: { lb_used, lb_limit: P?.linkedin_blog ?? 0 },
+    quota: { lb_used, lb_limit: P?.linkedin_blog ?? 0, ...(P?.plan === "demo" && { trial_ends_at: P.trial_ends_at, trial_ended: P.trial_ended }) },
   });
 }
 
@@ -299,8 +308,11 @@ async function run(c, id) {
   const P = planLimits(c.user);
   if (!P) fail("not_ready", 503);
   const day = genDay(), month = day.slice(0, 7), U = parseInt(env.GEN_USER_PER_DAY, 10) > 0 ? parseInt(env.GEN_USER_PER_DAY, 10) : 40;
+  const cap = await lbCap(env.DB, c.user, P, month);
+  if (cap.ended) fail("trial_ended", 403);
+  if (cap.max === null) fail("quota", 402);
   const items = [
-    { name: "mo", month, user: uid, kind: "lb", inc: 1, max: P.linkedin_blog },
+    { name: "mo", month, user: uid, kind: "lb", inc: 1, max: cap.max },
     { name: "u", kind: "u", key: await keyOf(env, day, "u", uid), inc: 1, max: U },
   ];
   const r = await reserve(env.DB, day, items);
@@ -665,8 +677,9 @@ export async function cmsTick(env, f = fetch, { d1 = 30, sub = 20, log = m => co
       const P = user ? planLimits(user) : null;
       if (P) {
         const day = genDay(now()), month = day.slice(0, 7), ukey = await keyOf(env, day, "u", s.user_id);
-        const r = await reserve(db, day, [
-          { name: "mo", month, user: s.user_id, kind: "lb", inc: 1, max: P.linkedin_blog },
+        const cap = await lbCap(db, user, P, month);
+        const r = cap.max === null ? { ok: false, failed: ["mo"] } : await reserve(db, day, [
+          { name: "mo", month, user: s.user_id, kind: "lb", inc: 1, max: cap.max },
           { name: "u", kind: "u", key: ukey, inc: 1, max: userCap(env) },
         ]);
         const mode = s.auto_publish ? "publish" : "draft";
@@ -674,7 +687,7 @@ export async function cmsTick(env, f = fetch, { d1 = 30, sub = 20, log = m => co
           await db.prepare(
             `INSERT INTO cms_posts (cms_site_id, user_id, slot, state, mode, charged, month, day, last_error) VALUES (?, ?, ?, 'kota', ?, 0, ?, ?, ?)
              ON CONFLICT(cms_site_id, slot) DO NOTHING`,
-          ).bind(s.id, s.user_id, slot, mode, month, day, r.failed.includes("mo") ? "quota" : "rate").run();
+          ).bind(s.id, s.user_id, slot, mode, month, day, cap.ended ? "trial_ended" : r.failed.includes("mo") ? "quota" : "rate").run();
           out.quota++;
         } else {
           const row = await db.prepare(
