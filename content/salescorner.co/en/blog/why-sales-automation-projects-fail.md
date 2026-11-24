@@ -64,7 +64,7 @@ One more thing to keep in mind: data cleanup is not a one-off project. People ch
 
 ## Unclear Pipeline Stages and Lead Definitions
 
-Automation largely works on an "when something happens, do this" logic. For that logic to work, the "something" has to be clearly defined. When does an opportunity move to the "Qualified" stage? What exactly does the "Proposal Sent" stage mean? Under what conditions is a lead handed off from marketing to sales?
+Automation largely works on a "when something happens, do this" logic. For that logic to work, the "something" has to be clearly defined. When does an opportunity move to the "Qualified" stage? What exactly does the "Proposal Sent" stage mean? Under what conditions is a lead handed off from marketing to sales?
 
 If the answers to these questions are unclear, the automation's triggers will be unclear too. For example, a rule like "Create an automatic follow-up task 3 days after an opportunity moves to the Proposal stage" will produce inconsistent results if one rep moves the opportunity to that stage on the day the proposal is sent and another moves it on the day they start preparing the proposal. A customer could receive a follow-up email before they've even received a proposal.
 
