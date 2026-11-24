@@ -98,3 +98,59 @@
 @media (forced-colors:active) and (max-width:899px){
   .au-sol{border-right:0;border-bottom:1px solid CanvasText}
 }
+
+/* A11-2 kayıt: ücretsiz üyelik kutusu, iki onay, Turnstile alanı, giriş sayfası CTA'sı, Stüdyo ana sayfa kartı.
+   Yalnız gerçek plan bilgisi (Basic): ayda 40 LinkedIn/blog, 10 video/görsel taslağı, 1 marka sesi. */
+.au-etiket>span[hidden]{display:none}
+
+.au-uye{display:grid;gap:var(--s3);padding:var(--g2);border:1px solid color-mix(in srgb,var(--accent) 22%,var(--line));border-radius:var(--r-l);background:var(--accent-soft)}
+.au-uye-bas{color:var(--ink);font:700 .9375rem/1.35 var(--govde)}
+.au-uye-liste{display:grid;gap:var(--s2);margin:0;padding:0;list-style:none}
+.au-uye-liste li{display:grid;grid-template-columns:24px minmax(0,1fr);gap:var(--s2);align-items:start;color:var(--ink);font:500 .9375rem/1.45 var(--govde)}
+.au-uye .au-tik{width:24px;height:24px;margin-top:-1px;background:var(--surface);color:var(--accent-strong)}
+.au-uye .au-tik .ikon{width:14px;height:14px}
+.au-uye-not{margin:0;font:var(--f-ipucu)}
+
+.au-form .onay-k+.onay-k{margin-top:calc(var(--s1) * -1)}
+.au-ts{min-height:0}
+.au-ts-kutu{display:block;width:100%;min-height:0;border-radius:var(--r-m)}
+.au-ts-kutu:empty{display:none}
+.au-ts-kutu:focus-visible{outline:2px solid var(--focus,var(--accent));outline-offset:3px}
+.au-ts>.alan-hata{margin-top:var(--s1)}
+.au-ts>.alan-hata:empty{display:none}
+
+.au-uye-cta{display:grid;gap:var(--s2);margin:0;padding-top:var(--g2);border-top:1px solid var(--line)}
+.au-uye-cta-bas{color:var(--ink2);font:600 .9375rem/1.4 var(--govde)}
+.au-uye-cta>.ipucu{margin:0}
+
+/* Stüdyo ana sayfa kartı (studyo.css + panel.css arasında yüklenir; .au-govde değişkenlerine bağlı değil) */
+.uy-kart{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:var(--g2) var(--g4);align-items:center;max-width:1240px;margin:0 0 var(--g3);padding:var(--g3) var(--g4);border:1px solid color-mix(in srgb,var(--accent) 24%,var(--line));border-radius:var(--r-xl);background:var(--accent-soft);color:var(--ink)}
+.uy-kart[hidden],.uy-kart [hidden]{display:none}
+.uy-metin{display:grid;gap:var(--s2);min-width:0}
+.uy-etiket{color:var(--accent-strong);font:700 .75rem/1.2 var(--govde);letter-spacing:var(--ls-ust);text-transform:uppercase}
+.uy-kart h2{color:var(--ink);font:800 1.25rem/1.25 var(--baslik);letter-spacing:-.01em}
+.uy-liste{display:flex;flex-wrap:wrap;gap:var(--s2) var(--g3);margin:var(--s1) 0 0;padding:0;list-style:none}
+.uy-liste li{display:flex;align-items:center;gap:var(--s2);color:var(--ink);font:500 .9375rem/1.4 var(--govde)}
+.uy-tik{display:grid;place-items:center;flex:none;width:22px;height:22px;border-radius:50%;background:var(--surface);color:var(--accent-strong)}
+.uy-tik .ikon{width:13px;height:13px;stroke-width:2.5}
+.uy-eylem{display:grid;justify-items:center;gap:var(--s2);min-width:200px}
+.uy-eylem .btn{white-space:nowrap}
+.uy-yakin{max-width:28ch;color:var(--ink2);font:var(--f-ipucu);text-align:center}
+.uy-plan{font:var(--f-ipucu);font-weight:600}
+@media (max-width:899px){
+  .uy-kart{grid-template-columns:minmax(0,1fr);padding:var(--g3)}
+  .uy-liste{display:grid}
+  .uy-eylem{justify-items:stretch;min-width:0}
+  .uy-eylem .btn{white-space:normal}
+  .uy-yakin{max-width:none;text-align:left}
+  .uy-plan{justify-self:start}
+}
+@media (max-width:520px){
+  .uy-kart{gap:var(--g2);margin-bottom:var(--g2);padding:var(--g2)}
+  .uy-kart h2{font-size:1.125rem}
+  .au-uye{padding:var(--s3) var(--g2)}
+}
+@media (forced-colors:active){
+  .au-uye,.uy-kart{border-color:CanvasText}
+  .uy-tik,.au-uye .au-tik{border:1px solid CanvasText}
+}

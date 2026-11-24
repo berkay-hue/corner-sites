@@ -132,7 +132,17 @@ var EN={"1 taslak":"1 draft",
 "Şifren yenilendi.":"Your password has been reset.",
 "Şifren yenilendi. Yeni şifrenle giriş yap.":"Your password was reset. Log in with the new one.",
 "Şifreni yaz.":"Enter your password.",
-"Şu an e-posta gönderemiyoruz. Biraz sonra yeniden dene.":"We can’t send email right now. Try again in a little while."};
+"Şu an e-posta gönderemiyoruz. Biraz sonra yeniden dene.":"We can’t send email right now. Try again in a little while.",
+"Devam etmek için KVKK onay kutusunu işaretle.":"Tick the KVKK consent box to continue.",
+"Devam etmek için yapay zekâ onay kutusunu işaretle.":"Tick the AI consent box to continue.",
+"Güvenlik doğrulaması yüklenemedi. Sayfayı yenileyip yeniden dene.":"The security check couldn’t load. Refresh the page and try again.",
+"Güvenlik doğrulaması bitmedi. Birkaç saniye bekleyip yeniden dene.":"The security check isn’t finished yet. Wait a few seconds and try again.",
+"Güvenlik doğrulaması tamamlanamadı. Biraz bekleyip yeniden dene.":"The security check couldn’t be completed. Wait a moment and try again.",
+"Güvenlik doğrulaması başarısız oldu. Doğrulamayı yeniden tamamlayıp tekrar dene.":"The security check failed. Complete it again and retry.",
+"Bu e-posta zaten kayıtlı.":"This email is already registered.",
+"Giriş yap":"Log in",
+"Çok fazla deneme yapıldı. Biraz sonra yeniden dene.":"Too many attempts. Try again in a little while.",
+"Üyelik çok yakında açılıyor. Şimdilik Stüdyo’yu hesapsız deneyebilirsin.":"Accounts are opening very soon. Until then, you can try Studio without an account."};
 var dil=root.getAttribute('lang')==='en'?'en':'tr';
 var SAYFA=body.getAttribute('data-sayfa')||'';
 var KORUMALI=body.hasAttribute('data-korumali');
@@ -279,29 +289,73 @@ function girisKur(){
 }
 
 /* ---- kayıt ---- */
+/* ---- üyelik durumu (A11-2): data-uyelik="bekle|acik|kapali" öğeleri /auth durumuna göre görünür ---- */
+function uyelikDurum(s){$$('[data-uyelik]').forEach(function(x){x.hidden=x.getAttribute('data-uyelik').split(' ').indexOf(s)<0})}
+
+/* ---- Turnstile (kayıt): açık render; jeton tek kullanımlık, her başarısız denemeden sonra sıfırlanır ---- */
+var TS=(function(){var m=d.querySelector('meta[name="turnstile-sitekey"]');return ((m&&m.getAttribute('content'))||'').trim()})();
+var tsId=null,tsTok='',tsHal='';
+function tsHataYaz(tr){var h=$('#k-turnstile-hata');if(h)h.textContent=tr?t(tr):''}
+function tsSifirla(){tsTok='';if(tsId!==null&&window.turnstile){try{window.turnstile.reset(tsId)}catch(e){}}}
+function tsYuklenemedi(){tsHal='yok';tsTok='';tsHataYaz('Güvenlik doğrulaması yüklenemedi. Sayfayı yenileyip yeniden dene.')}
+function tsYukle(){
+  var k=$('#k-turnstile');if(!k||!TS||ORNEK||tsHal)return;
+  tsHal='yukleniyor';
+  window.smcKayitTs=function(){
+    try{
+      tsId=window.turnstile.render(k,{sitekey:TS,appearance:'always',size:'flexible',language:dil,
+        callback:function(v){tsTok=typeof v==='string'?v:'';tsHataYaz('')},
+        'expired-callback':function(){tsSifirla()},
+        'error-callback':function(){tsTok='';tsHataYaz('Güvenlik doğrulaması tamamlanamadı. Biraz bekleyip yeniden dene.');return true}});
+      tsHal='hazir';
+    }catch(e){tsYuklenemedi()}
+  };
+  var s=d.createElement('script');s.src='https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=smcKayitTs';s.async=true;s.defer=true;
+  s.onerror=tsYuklenemedi;d.head.appendChild(s);
+}
+/* odak: widget çizildiyse kutuya, çizilmediyse (kutu boş ve gizli) hata metnine */
+function tsOdak(tr){tsHataYaz(tr);var k=$('#k-turnstile'),h=$('#k-turnstile-hata'),o=(k&&k.firstChild)?k:h;if(!o)return;if(o===h)h.setAttribute('tabindex','-1');o.focus()}
+
+/* ---- kayıt ---- */
 function kayitKur(){
   var f=$('#f-kayit');if(!f)return;
-  var r=$('#k-riza');r.addEventListener('change',function(){if(r.checked)hataYaz(r,'')});
+  var kv=$('#k-kvkk'),ai=$('#k-ai');
+  [kv,ai].forEach(function(c){c.addEventListener('change',function(){if(c.checked)hataYaz(c,'')})});
   f.addEventListener('submit',function(e){
     e.preventDefault();var b=$('[type=submit]',f);if(bosMu(b))return;
     var ad=$('#k-ad'),ep=$('#k-eposta'),s=$('#k-sifre');
     var adv=ad.value.trim();hataYaz(ad,!adv?'Adını yaz.':adv.length>100?'Ad en fazla 100 karakter olabilir.':'');epostaBak(ep);
     hataYaz(s,s.value.length<8?'Şifre en az 8 karakter olmalı.':s.value.length>200?'Şifre en fazla 200 karakter olabilir.':'');
-    hataYaz(r,r.checked?'':'Devam etmek için kutuyu işaretle.');
+    hataYaz(kv,kv.checked?'':'Devam etmek için KVKK onay kutusunu işaretle.');
+    hataYaz(ai,ai.checked?'':'Devam etmek için yapay zekâ onay kutusunu işaretle.');
     if(!ilkHata(f))return;bildir('');
+    if(TS&&!ORNEK){
+      if(tsHal==='yok'){tsOdak('Güvenlik doğrulaması yüklenemedi. Sayfayı yenileyip yeniden dene.');return}
+      if(!tsTok){tsOdak('Güvenlik doğrulaması bitmedi. Birkaç saniye bekleyip yeniden dene.');return}
+    }
     var bitir=mesgul(b,'Hesap açılıyor…');
     if(ORNEK){zaman(function(){bitir();notBirak('Hesabın açıldı. Şimdi marka sesini tanıt.','ok');gitYol(yol('kurulum'))},700);return}
-    istek('/auth/register','POST',{name:adv,email:ep.value.trim(),password:s.value,role:'brand',consent:true,hp:$('#k-hp').value,t:Date.now()-T0,lang:dil}).then(function(j){
+    var ts=tsTok;tsTok='';
+    istek('/auth/register','POST',{name:adv,email:ep.value.trim(),password:s.value,role:'brand',consent:true,ai_consent:true,ts:ts,hp:$('#k-hp').value,t:Date.now()-T0,lang:dil}).then(function(j){
       bitir();
       if(j._s===200&&j.token){tokenYaz(j.token,false);notBirak('Hesabın açıldı. Şimdi marka sesini tanıt.','ok');location.assign(yol('kurulum'));return}
-      if(j._s===409){hataYaz(ep,'Bu e-postayla bir hesap var. Giriş yap ya da şifreni sıfırla.');ep.focus();return}
+      tsSifirla();
+      if(j._s===409){
+        hataYaz(ep,'Bu e-postayla bir hesap var. Giriş yap ya da şifreni sıfırla.');
+        bildir('Bu e-posta zaten kayıtlı.','uyari');var n=$('#not p');if(n){n.appendChild(d.createTextNode(' '));n.appendChild(el('a','bag',t('Giriş yap'),{href:yol('giris')}))}
+        ep.focus();return;
+      }
       if(j._s===400){
         if(j.error==='name'){hataYaz(ad,'Adını yaz.');ad.focus();return}
         if(j.error==='email'){hataYaz(ep,'Geçerli bir e-posta yaz, örneğin ad@sirket.com.');ep.focus();return}
         if(j.error==='password'){hataYaz(s,'Şifre en az 8 karakter olmalı.');s.focus();return}
-        if(j.error==='consent'){hataYaz(r,'Devam etmek için kutuyu işaretle.');r.focus();return}
+        if(j.error==='consent'){kv.checked=false;hataYaz(kv,'Devam etmek için KVKK onay kutusunu işaretle.');kv.focus();return}
+        if(j.error==='ai_consent'){ai.checked=false;hataYaz(ai,'Devam etmek için yapay zekâ onay kutusunu işaretle.');ai.focus();return}
         bildir('Kayıt tamamlanamadı. Sayfayı yenileyip yeniden dene.','hata');return;
       }
+      if(j._s===429){bildir('Çok fazla deneme yapıldı. Biraz sonra yeniden dene.','hata');return}
+      if(j._s===403&&j.error==='bot'){bildir('Güvenlik doğrulaması başarısız oldu. Doğrulamayı yeniden tamamlayıp tekrar dene.','hata');tsOdak('');return}
+      if(j._s===503&&j.error==='not_ready'){uyelikDurum('kapali');bildir('Üyelik çok yakında açılıyor. Şimdilik Stüdyo’yu hesapsız deneyebilirsin.','uyari');return}
       genelHata(j);
     });
   });
@@ -717,14 +771,15 @@ function korumaliBasla(){
   });
 }
 function acikBasla(){
-  if(ORNEK){ekran('ana');return}
+  if(ORNEK){uyelikDurum('acik');ekran('ana');return}
   var tok=tokenAl();
   yokla().then(function(r){
     if(r.d==='oturum'&&(SAYFA==='giris'||SAYFA==='kayit')){location.replace(hedefYol());return}
-    if(r.d==='kapali'){ekran('kapali');return}
+    if(r.d==='kapali'){uyelikDurum('kapali');ekran('kapali');return}
     if(r.d==='hata'){hataGoster(r.kod);return}
-    if(r.d==='acik'&&tok)tokenSil();
+    if(r.d==='acik'){uyelikDurum('acik');if(tok)tokenSil()}
     ekran('ana');
+    if(SAYFA==='kayit')tsYukle();
   });
 }
 temaKur();dilKur();dlgKur();formOrtak();hataTekrarKur();

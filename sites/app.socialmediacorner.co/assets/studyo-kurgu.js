@@ -637,8 +637,9 @@ function kunye(g){
   return p;
 }
 function gorselSatir(s,i){
-  if(!s.gorsel&&stokKilit())return kilitSatir(i);
+  if(!s.gorsel&&stokKilit())return GS&&i>0?null:kilitSatir(i);
   if(!s.gorsel&&!stokVar())return null;
+  if(!s.gorsel&&gTercih()==='yok')return null;
   var k=el('div','kr-so-gorsel');
   if(!s.gorsel){
     var b=dugme('btn-cizgi kr-gorsel-ekle','resim',T('Görsel ekle','Add image'));
@@ -831,11 +832,67 @@ function secici(i,tetik){
 /* kota yanıtı stock bilgisini getirir; durum değişince yalnız görsel satırları yeniden çizilir (yazılan metne dokunulmaz) */
 var sonStok=null;
 function stokYayin(){
+  gYaz();
   var v=stokVar()?'acik':stokKilit()?'kilit':'yok';if(v===sonStok)return;sonStok=v;
   if(v!=='acik'&&SK&&SK.dlg.open){/* açık seçici hatayı gösterir; kapatınca satırlar güncellenir */}
   if(!st||!R.liste)return;st.sahneler.forEach(function(s,i){gorselYenile(i)});
 }
-d.addEventListener('studyo:hak',stokYayin);
+d.addEventListener('studyo:hak',function(){gHak=true;stokYayin()});
+
+/* ---- A11-4: formdaki "Sahne görselleri" seçimi (Görselsiz / Görselli · Pexels) ----
+   Yalnız tarayıcıda: /gen/video gövdesine girmez (worker'da görsel alanı yok; kabuk alanları tek tek okur). Seçim, taslaktaki
+   sahne satırlarında "Görsel ekle"yi açar/kapar; taslak geldikten sonra değişirse satırlar hemen yenilenir.
+   Durum: bekle (kota yanıtı yok) · acik (stock true) · kilit (anon/basic ya da 403 plan) · yok (anahtar yok / plan bilinmiyor).
+   Erişim yoksa "Görselli" gizlenmez: kilit ikonu + nedeni görünür, odaklanabilir kalır (aria-disabled), seçilince geri alınıp
+   nedeni duyurulur. Form yoksa (görsel/karusel sayfası) eski davranış: stock açıksa her satırda "Görsel ekle". */
+var GS=$('#gorsel-secim'),GTK='smc-gorsel-'+MOD,gHak=false,gSon='';
+var gYok=GS&&GS.querySelector('input[value="yok"]'),gStok=GS&&GS.querySelector('input[value="stok"]'),gNot=GS&&$('#gorsel-not');
+function gTercih(){if(!GS)return 'stok';return gStok&&gStok.checked&&stokVar()?'stok':'yok'}
+function gDurum(){return stokVar()?'acik':stokKilit()?'kilit':gHak?'yok':'bekle'}
+function gUye(){var u=$('.st-ust[data-hesap]');return !!(u&&u.getAttribute('data-hesap')==='uye')}
+function gNeden(){
+  var dr=gDurum();
+  if(dr==='kilit')return T('Görselli seçenek Pro ve Enterprise planlarıyla açılır.','The image option comes with the Pro and Enterprise plans.');
+  if(dr==='yok')return T('Görsel arama şu an kullanılamıyor; taslak görselsiz hazırlanır.','Image search isn’t available right now; the draft is made without images.');
+  return T('Plan bilgisi alınıyor…','Checking your plan…');
+}
+function gNotYaz(){
+  if(!gNot)return;var dr=gDurum();gNot.textContent='';
+  if(dr==='acik'){
+    gNot.textContent=gStok.checked
+      ?T('Taslak gelince her sahnede “Görsel ekle” çıkar; fotoğrafı Pexels’ten sen seçersin, seçmediğin sahne görselsiz kalır.','When the draft arrives, each scene gets “Add image”; you pick the Pexels photo, and scenes you skip stay image-free.')
+      :T('Sahneler yalnız metin ve renkle hazırlanır. Görsel istersen “Görselli”yi seç.','Scenes use text and color only. Pick “With images” if you want photos.');
+    return;
+  }
+  if(dr==='kilit'){
+    gNot.appendChild(d.createTextNode(T('Görselli: her sahneye Pexels stok fotoğrafı. Bu seçenek Pro ve Enterprise planlarıyla açılır','With images: a Pexels stock photo on each scene. This option comes with the Pro and Enterprise plans')+
+      (gUye()?T('; hesabında şu an bu planlardan biri tanımlı değil. ','; your account isn’t on one of these plans yet. '):'. ')));
+    var a=el('a','st-gorsel-bag',T('Planları gör','See plans'));a.href=EN?'/en/pricing':'/fiyatlar';gNot.appendChild(a);
+    return;
+  }
+  gNot.textContent=gNeden();
+}
+function gYaz(){
+  if(!GS)return;var dr=gDurum(),ilk=gSon!==dr&&dr==='acik';
+  GS.setAttribute('data-durum',dr);
+  if(dr==='acik'){
+    gStok.removeAttribute('aria-disabled');
+    if(ilk){var k=null;try{k=S.depo(GTK)}catch(e){}(k==='yok'?gYok:gStok).checked=true}
+  }else{gStok.setAttribute('aria-disabled','true');if(gStok.checked)gYok.checked=true}
+  gSon=dr;gNotYaz();
+}
+if(GS){
+  [gYok,gStok].forEach(function(r){r.addEventListener('change',function(){
+    if(gStok.checked&&gDurum()!=='acik'){gYok.checked=true;var m=gNeden();S.durum(m);S.toast(m);gNotYaz();return}
+    try{S.depo(GTK,gStok.checked?'stok':'yok')}catch(e){}
+    gNotYaz();
+    if(st&&R.liste)st.sahneler.forEach(function(s,i){gorselYenile(i)});
+    S.durum(gStok.checked?T('Görselli seçildi: sahnelere Pexels fotoğrafı ekleyebilirsin.','With images: you can add Pexels photos to scenes.'):T('Görselsiz seçildi: sahneler yalnız metin ve renkle.','No images: scenes use text and color only.'));
+  })});
+  setTimeout(function(){if(!gHak){gHak=true;gYaz()}},12000);
+  var gU=$('.st-ust[data-hesap]');if(gU&&window.MutationObserver)new MutationObserver(function(){if(gDurum()==='kilit')gNotYaz()}).observe(gU,{attributes:true,attributeFilter:['data-hesap']});
+  gYaz();
+}
 
 /* Açıklama */
 function aciklamaKur(arac){

@@ -716,3 +716,17 @@ dialog.kr-stok-dlg{width:min(760px,calc(100% - var(--g3)))}
 .st-dil{min-width:var(--dokunma)}
 /* çok dar ekranda uzun hak metni (ör. "Credits: unknown") taşırmak yerine kısalır; tam metin balonda */
 @media (max-width:400px){.st-ust-sag{min-width:0}.st-hak-k{min-width:0;flex:0 1 auto}.st-hak{max-width:100%}#hak-yazi{min-width:0;overflow:hidden;text-overflow:ellipsis}}
+/* A11-4 (24.11): formdaki "Sahne görselleri" seçimi (Görselsiz / Görselli · Pexels). Süre çipleriyle aynı dil; erişim yoksa
+   "Görselli" gizlenmez: kesik kenar + kilit ikonu + altta nedeni ve plan bağlantısı. data-durum: bekle | acik | kilit | yok */
+.st-gorsel .st-bolum{grid-template-columns:repeat(2,minmax(0,1fr))}
+.st-gorsel-ad{display:inline-flex;align-items:center;gap:4px}
+.st-gorsel-kilit{display:none;width:14px;height:14px;flex:none}
+.st-gorsel[data-durum="kilit"] .st-gorsel-kilit,.st-gorsel[data-durum="yok"] .st-gorsel-kilit{display:inline-block}
+.st-gorsel .cip input[aria-disabled="true"]{cursor:not-allowed}
+.st-gorsel .cip input[aria-disabled="true"]+label{border-style:dashed;background:var(--yuzey-2);color:var(--ink2);cursor:not-allowed}
+.st-gorsel .cip input[aria-disabled="true"]:hover+label{background:var(--yuzey-2)}
+.st-gorsel[data-durum="bekle"] .cip input[aria-disabled="true"]+label{cursor:progress}
+.st-gorsel-not{margin:var(--s2) 0 0;color:var(--ink2)}
+.st-gorsel-not a{color:var(--accent-strong);font-weight:600;text-decoration:underline;text-underline-offset:2px}
+.st-gorsel-not a:focus-visible{outline:none;box-shadow:var(--odak-halka);border-radius:4px}
+@media (forced-colors:active){.st-gorsel .cip input[aria-disabled="true"]+label{color:GrayText;border-color:GrayText}}

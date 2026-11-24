@@ -131,3 +131,61 @@
     });
   });
 })();
+/* A11 çerez/KVKK bandı: site yalnız zorunlu çerez kullanır (analitik/izleyici yok). Seçim localStorage 'smc-ck'
+   ('all' | 'ess'); depolama yoksa bant her sayfada yeniden görünür. Alt bilgiye "Çerez tercihleri" düğmesi ekler.
+   Çerez Politikası ayrı sayfa değil, KVKK/Privacy sayfasındaki bölüm: /kvkk#cerez, /en/privacy#cookies.
+   O bölümdeki [data-ck-open] düğmeleri (JS'siz gizli) bandı yeniden açar. */
+(function () {
+  var KEY = 'smc-ck';
+  var en = /^en/i.test(document.documentElement.lang || '');
+  var T = en ? {
+    label: 'Cookie notice',
+    pre: 'Our site uses only the cookies strictly necessary for it to work. I have read and understood the ',
+    links: [['Privacy Notice', '/en/privacy'], ' and the ', ['Cookie Policy', '/en/privacy#cookies']], post: ', and I accept.',
+    yes: 'I accept', ess: 'Essential only', open: 'Cookie preferences'
+  } : {
+    label: 'Çerez bildirimi',
+    pre: 'Sitemiz yalnızca çalışması için gerekli zorunlu çerezleri kullanır. ',
+    links: [['KVKK Aydınlatma Metni', '/kvkk'], ' ve ', ['Çerez Politikası', '/kvkk#cerez']], post: '’nı okudum, anladım, kabul ediyorum.',
+    yes: 'Kabul ediyorum', ess: 'Yalnız zorunlu', open: 'Çerez tercihleri'
+  };
+  var get = function () { try { return window.localStorage.getItem(KEY); } catch (e) { return null; } };
+  var set = function (v) { try { window.localStorage.setItem(KEY, v); } catch (e) { /* depolama kapalı */ } };
+  var bar = null;
+  var build = function () {
+    bar = document.createElement('div');
+    bar.className = 'ckb';
+    bar.setAttribute('role', 'region');
+    bar.setAttribute('aria-label', T.label);
+    var p = document.createElement('p');
+    p.appendChild(document.createTextNode(T.pre));
+    T.links.forEach(function (l) {
+      if (typeof l === 'string') { p.appendChild(document.createTextNode(l)); return; }
+      var a = document.createElement('a'); a.href = l[1]; a.textContent = l[0]; p.appendChild(a);
+    });
+    p.appendChild(document.createTextNode(T.post));
+    var btns = document.createElement('div'); btns.className = 'ckb__btns';
+    var mk = function (txt, cls, val) {
+      var b = document.createElement('button'); b.type = 'button'; b.className = 'btn ' + cls; b.textContent = txt;
+      b.addEventListener('click', function () { set(val); bar.hidden = true; });
+      return b;
+    };
+    btns.appendChild(mk(T.ess, 'btn--ghost', 'ess'));
+    btns.appendChild(mk(T.yes, 'btn--primary', 'all'));
+    bar.appendChild(p); bar.appendChild(btns);
+    document.body.appendChild(bar);
+  };
+  var show = function () { if (!bar) build(); bar.hidden = false; };
+  if (!get()) show();
+  var reopen = function () { show(); var f = bar.querySelector('button'); if (f) f.focus(); };
+  var meta = document.querySelector('.ftr__meta');
+  if (meta) {
+    var o = document.createElement('button'); o.type = 'button'; o.className = 'ckb-open'; o.textContent = T.open;
+    o.addEventListener('click', reopen);
+    meta.appendChild(o);
+  }
+  [].forEach.call(document.querySelectorAll('[data-ck-open]'), function (b) {
+    b.hidden = false;
+    b.addEventListener('click', reopen);
+  });
+})();

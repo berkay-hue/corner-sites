@@ -13,12 +13,13 @@
 <link rel="alternate" hreflang="x-default" href="https://app.socialmediacorner.co/instagram-aciklama-uretici">
 <meta name="api-base" content="https://corner-forms.berkay-999.workers.dev">
 <meta name="turnstile-sitekey" content="0x4AAAAAAGOs60y7keKP6Myf">
-<link rel="icon" href="data:,">
+<link rel="icon" href="/assets/mark.svg" type="image/svg+xml">
 <script src="/assets/theme.js"></script>
 <link rel="preload" href="/assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/assets/tokens.css">
 <link rel="stylesheet" href="/assets/bilesenler.css">
 <link rel="stylesheet" href="/assets/smc-app.css">
+<link rel="stylesheet" href="/assets/panel.css">
 <script src="/assets/smc-en.js" defer></script>
 <script src="/assets/smc-ses.js" defer></script>
 <script src="/assets/smc-app.js" defer></script>
@@ -30,10 +31,10 @@
 
 <header class="ust">
   <div class="ust-ic">
+    <button type="button" class="pn-menu" id="pn-menu" aria-controls="araclar" aria-expanded="false" aria-label="Menu"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
     <a class="logo" href="https://socialmediacorner.co/en/" aria-label="Social Media Corner Draft Desk, home">
-      <span class="kose" aria-hidden="true"></span>
-      <span class="logo-ad">Social Media Corner</span>
-      <span class="logo-urun">Draft Desk</span>
+      <span class="lg"><img class="lg-acik" src="/assets/logo.svg" alt="" width="109" height="36"><img class="lg-koyu" src="/assets/logo-dark.svg" alt="" width="109" height="36"><img class="lg-isaret" src="/assets/mark.svg" alt="" width="32" height="32"></span>
+      <span class="lg-urun">Draft Desk</span>
     </a>
     <div class="ust-sag">
       <p class="hak"><span class="pips" aria-hidden="true"><i></i><i></i><i></i></span><span id="hak-ust">Today 3 / 3 credits</span></p>
@@ -42,7 +43,7 @@
       <button type="button" class="duz tema" id="tema" aria-label="Switch to dark theme" title="Switch to dark theme"><span class="tema-ikon" aria-hidden="true"></span><span class="tema-yazi" aria-hidden="true">Dark theme</span></button>
     </div>
   </div>
-  <nav class="araclar" aria-label="Tools"><a href="/en/">LinkedIn post</a><a href="/en/instagram-caption-generator" aria-current="page">Instagram caption</a><a href="/en/reels-hook-generator">Reels hook</a><a href="/en/publish-queue">Publishing queue</a><button type="button" class="ses-nav" id="ses-nav" aria-haspopup="dialog">Brand voice</button><a href="/en/hesap/login">Account</a></nav>
+  <nav class="araclar" id="araclar" aria-label="Tools"><a href="/en/">LinkedIn post</a><a href="/en/instagram-caption-generator" aria-current="page">Instagram caption</a><a href="/en/reels-hook-generator">Reels hook</a><a href="/en/publish-queue">Publishing queue</a><button type="button" class="ses-nav" id="ses-nav" aria-haspopup="dialog">Brand voice</button><a href="/en/hesap/login">Account</a></nav>
 </header>
 
 <main id="icerik" class="masa" tabindex="-1">
@@ -277,7 +278,8 @@
 </section>
 
 <footer class="alt">
-  <span>© 2026 Social Media Corner, a Corner Group company</span>
+  <nav class="cg" aria-label="Corner Group companies"><p class="cg-bas">Corner Group companies</p><ul class="cg-liste"><li><a class="cg-cg" href="https://cornergroup.co/" target="_blank" rel="noopener"><b>Corner Group</b><span>B2B growth ecosystem</span></a></li><li><a class="cg-saas" href="https://saascorner.co/" target="_blank" rel="noopener"><b>SaaS Corner</b><span>B2B lead generation</span></a></li><li><a class="cg-sales" href="https://salescorner.co/" target="_blank" rel="noopener"><b>Sales Corner</b><span>Sales operations and outbound</span></a></li><li><a class="cg-crm" href="https://crmcorner.co/" target="_blank" rel="noopener"><b>CRM Corner</b><span>CRM and process automation</span></a></li><li><a class="cg-brand" href="https://brandcorner.co/" target="_blank" rel="noopener"><b>Brand Corner</b><span>Influencer marketing platform</span></a></li></ul></nav>
+  <span>© 2026 Social Media Corner — a Corner Group company</span>
   <a href="/en/privacy">KVKK privacy notice</a>
   <a href="/en/terms">Terms</a>
   <a href="https://socialmediacorner.co/en/">socialmediacorner.co</a>
