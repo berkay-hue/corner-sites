@@ -7,11 +7,15 @@
 html{scroll-padding-top:calc(var(--st-ust) + var(--s4))}
 .hs-govde{min-height:100vh;min-height:100dvh;display:flex;flex-direction:column}
 .hs-govde>main{flex:1 0 auto}
+/* panel kabuğu (yayın kuyruğu düzeni): ray + içerik; eski sekmeler ve tam genişlik alt bilgi kalktı */
+.hs-govde>.st-kabuk{flex:1 0 auto;width:100%}
+.st-icerik>.ana{padding:0;margin:0 auto}
+.hs-alt{display:grid;gap:var(--s2)}
 [tabindex="-1"]:focus{outline:0}
 [tabindex="-1"]:focus-visible{outline:var(--odak-kalin) solid var(--focus);outline-offset:var(--odak-aralik)}
 .bant strong{flex:none;letter-spacing:var(--ls-ust)}
 .bant a{display:inline-flex;align-items:center;min-height:var(--dokunma)}
-.hs-govde .st-ust{padding-left:var(--g2)}
+.hs-govde .st-ust:not(:has(.pn-menu)){padding-left:var(--g2)}
 
 /* ---- hesap sekmeleri (üst çubuğun altında) ---- */
 .sekmeler{background:var(--surface);border-bottom:1px solid var(--line)}
@@ -219,11 +223,11 @@ select.kutu{cursor:pointer}
 /* ---- alt bilgi ---- */
 .alt{margin-top:var(--g4);border-top:1px solid var(--line)}
 .alt-ic{display:grid;gap:var(--s2);max-width:var(--icerik-en);margin:0 auto;padding:var(--g2) var(--kenar);font:var(--f-kvkk);color:var(--ink3)}
-.alt-ic .btn-metin{min-height:var(--dokunma);padding:0;font:inherit}
-.alt-ic .bag{color:inherit;margin:0;padding:0}
+.alt-ic .btn-metin,.hs-alt .btn-metin{min-height:var(--dokunma);padding:0;font:inherit}
+.alt-ic .bag,.hs-alt .bag{color:inherit;margin:0;padding:0}
 .alt-hesap{display:flex;flex-wrap:wrap;align-items:center;gap:0 var(--g2);padding-bottom:var(--s2);border-bottom:1px solid var(--line)}
-.alt .alt-kim{flex:1 1 100%;min-width:0}
-.alt .alt-kim .kullanici{color:var(--ink);font-weight:var(--fw-etiket)}
+.alt .alt-kim,.hs-alt .alt-kim{flex:1 1 100%;min-width:0}
+.alt .alt-kim .kullanici,.hs-alt .alt-kim .kullanici{color:var(--ink);font-weight:var(--fw-etiket)}
 .alt-eylem,.alt-site{display:flex;flex-wrap:wrap;align-items:center;gap:0 var(--g2)}
 .alt-sil{color:var(--ink2)}
 .alt-sil:hover{color:var(--danger)}
@@ -272,7 +276,7 @@ select.kutu{cursor:pointer}
   .kurulum-alt .btn-ana{flex:0 0 auto;order:3;margin-left:auto}
   .kurulum-alt .btn-metin{flex:0 0 auto}
   .suzgec{grid-template-columns:minmax(0,1fr) auto;align-items:end}
-  .alt .alt-kim{flex:1 1 auto}
+  .alt .alt-kim,.hs-alt .alt-kim{flex:1 1 auto}
   .alt-site>span{margin-left:auto}
 }
 @media (min-width:960px){.pl-kartlar{grid-template-columns:repeat(3,minmax(0,1fr))}}

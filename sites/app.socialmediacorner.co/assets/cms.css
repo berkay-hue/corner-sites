@@ -60,6 +60,9 @@
 .rozet-gri{background:var(--yuzey-2);color:var(--ink2)}
 .rozet-gri::before{background:var(--ink3)}
 
+/* panel kabuğu: dar ekranda bağlantı kartlarıyla (.bag-kart) aynı iç boşluk */
+@media (max-width:520px){.cms-form{padding:var(--g2)}}
+
 @media (forced-colors:active){
   .cms-pl-sec[aria-pressed="true"]{outline:2px solid Highlight}
   .rozet-hata::before,.rozet-gri::before{forced-color-adjust:none;background:CanvasText}

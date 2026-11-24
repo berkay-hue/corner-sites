@@ -142,14 +142,14 @@ var EN={"Yönetim":"Admin","1 taslak":"1 draft",
 "Bu e-posta zaten kayıtlı.":"This email is already registered.",
 "Giriş yap":"Log in",
 "Çok fazla deneme yapıldı. Biraz sonra yeniden dene.":"Too many attempts. Try again in a little while.",
-"Üyelik çok yakında açılıyor. Şimdilik Stüdyo’yu hesapsız deneyebilirsin.":"Accounts are opening very soon. Until then, you can try Studio without an account."};
+"Üyelik çok yakında açılıyor.":"Accounts are opening very soon."};
 var dil=root.getAttribute('lang')==='en'?'en':'tr';
 var SAYFA=body.getAttribute('data-sayfa')||'';
 var KORUMALI=body.hasAttribute('data-korumali');
 var T0=Date.now();
 var YOL={giris:['/hesap/giris','/en/hesap/login'],kayit:['/hesap/kayit','/en/hesap/register'],kurulum:['/hesap/kurulum','/en/hesap/setup'],baglantilar:['/hesap/baglantilar','/en/hesap/connections'],gecmis:['/hesap/gecmis','/en/hesap/history'],ayarlar:['/hesap/ayarlar','/en/hesap/settings'],kuyruk:['/yayin-kuyrugu','/en/publish-queue']};
 var ACIK_SAYFA=/\/(giris|kayit|sifre-unuttum|sifre-yenile|login|register|forgot-password|reset-password)$/;
-var TOKEN_RE=/^[A-Za-z0-9_-]{43}$/,R_RE=/^\/(en\/)?hesap\/[a-z-]+$/,EPOSTA=/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+var TOKEN_RE=/^[A-Za-z0-9_-]{43}$/,R_RE=/^\/(en\/?)?(hesap\/[a-z-]+|video|gorsel|visual|blog|yayin-kuyrugu|publish-queue)?$/,EPOSTA=/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 var meta=d.querySelector('meta[name="api-base"]');
 var API=((meta&&meta.getAttribute('content'))||'').trim().replace(/\/+$/,'');
 var MOCKHOST=/^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname)||/\.pages\.dev$/.test(location.hostname);
@@ -418,10 +418,16 @@ function oturumKur(u){
   KULLANICI=u||{};
   $$('[data-oturum]').forEach(function(x){x.hidden=false});
   $$('.alt-kim .kullanici').forEach(function(x){x.textContent=KULLANICI.email||KULLANICI.name||''});
+  /* üst çubuk avatarı: adın/e-postanın ilk harfi (stüdyo ile aynı) */
+  var av=$('#hesap-dugme .st-av'),ad=String(KULLANICI.name||KULLANICI.email||'').trim(),ilk=ad?Array.from(ad)[0].toLocaleUpperCase(dil==='en'?'en':'tr'):'';
+  if(av&&ilk){av.textContent=ilk;av.classList.add('st-av-harf')}
   var a=$('#a-ad'),e=$('#a-eposta');if(a)a.textContent=KULLANICI.name||'';if(e)e.textContent=KULLANICI.email||'';
   /* A13: yalnız /auth/me admin:true ise menüye Yönetim bağlantısı (sayfa TR; EN menüde "Admin") */
   var m=$('#hesap-menu'),hr=m&&$('hr',m);
   if(KULLANICI.admin===true&&m&&!$('#hesap-admin')){var y=el('a',null,t('Yönetim'),{href:'/hesap/admin',id:'hesap-admin'});if(SAYFA==='admin')y.setAttribute('aria-current','page');m.insertBefore(y,hr||null)}
+  /* ray: Hesap grubuna Yönetim (admin.html kendi bağlantısını taşır) */
+  var gs=$$('.st-rail .st-grup'),g=gs[gs.length-1];
+  if(KULLANICI.admin===true&&g&&!$('.st-link[href="/hesap/admin"]',g)){var ra=el('a','st-link',null,{href:'/hesap/admin'});var sp=el('span','st-link-ad',t('Yönetim'));ra.innerHTML='<svg class="ikon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z"/></svg>';ra.appendChild(sp);g.appendChild(ra)}
 }
 function cikisKur(){$$('#cikis,#cikis-2').forEach(function(b){b.addEventListener('click',function(){
   if(bosMu(b))return;
@@ -796,5 +802,7 @@ temaKur();dilKur();dlgKur();formOrtak();hataTekrarKur();
 if(ORNEK)ornekKur();
 girisKur();kayitKur();sifreKur();yeniKur();cikisKur();indirKur();kurulumKur();baglarKur();gecmisKur();ayarKur();
 notAl();
+// Giriş ↔ kayıt geçişinde ?r= dönüş yolu korunur (stüdyo kapısı kayda ?r= ile yollar).
+(function(){var r='';try{r=new URLSearchParams(location.search).get('r')||''}catch(e){}if(!R_RE.test(r)||ACIK_SAYFA.test(r))return;[yol('giris'),yol('kayit')].forEach(function(p){var l=document.querySelectorAll('a[href="'+p+'"]');for(var i=0;i<l.length;i++)l[i].setAttribute('href',p+'?r='+encodeURIComponent(r))})})();
 if(KORUMALI)korumaliBasla();else acikBasla();
 })();

@@ -47,6 +47,8 @@ GEN_ENABLED = "1"
 GEN_DAILY_CAP = "300"
 GEN_PER_DAY = "3"
 GEN_IP_PER_DAY = "10"
+# A15: 1 = /gen/* yalnız girişli kullanıcıya (ziyaretçi 401 login_required; /gen/quota left 0); ziyaretçi hakkı GEN_PER_DAY o zaman etkisiz.
+GEN_LOGIN_REQUIRED = "1"
 GEN_MODEL = "claude-sonnet-5-5"
 # Yayın kuyruğu (src/publish.js: /publish/* uçları ve 5 dakikalık cron). "1" yapmadan ÖNCE migrations/0016_publish.sql
 # uygulanmalı. "0" iken uçlar 503 not_ready döner, cron dalı D1'e ve dış API'ye dokunmaz. PUBLISH_SITES ve
