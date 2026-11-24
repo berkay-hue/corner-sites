@@ -22,6 +22,7 @@ const MODS = [
   { k: "seo", ad: "SEO Analizi", ic: "📈", bg: "#ecfdf3", d: "SEO puanı, eksikler, anahtar kelime hacimleri ve hazır içerik önerisi." },
   { k: "briefing", ad: "Toplantı Briefingi", ic: "🗂️", bg: "#fffbeb", d: "Görüşme öncesi firma ve kişi araştırması, fırsat puanı ve briefing sunumu." },
   { k: "fireflies", ad: "Toplantı Analizi", ic: "🎙️", bg: "#f0f9ff", d: "Fireflies kayıtlarınızı satış koçu gözüyle puanlar; itirazlar, BANT ve takip e-postası." },
+  { k: "takip", ad: "Rakip Takip", ic: "📡", bg: "#fef3f2", d: "Rakiplerinizin blog, RSS ve LinkedIn paylaşımlarını firma firma haftalık izler; özet ve aksiyon önerisi e-postanıza gelir." },
 ];
 const MOD = Object.fromEntries(MODS.map(m => [m.k, m]));
 const STEPS = {
@@ -34,11 +35,11 @@ const STEPS = {
 const EST = { rakip: 240, sekans: 150, seo: 45, briefing: 120, fireflies: 60 };
 const estDk = k => `${Math.round(EST[k] / 60) || 1}–${Math.ceil((EST[k] * 1.6) / 60)}`;
 const PLAN_FALLBACK = [
-  { kod: "deneme", ad: "Deneme (14 gün)", aylik_tl: 0, koltuk: 1, kota: { rakip: 3, sekans: 5, seo: 5, briefing: 5, fireflies: 3 } },
-  { kod: "baslangic", ad: "Başlangıç", aylik_tl: 1490, koltuk: 1, kota: { rakip: 10, sekans: 30, seo: 20, briefing: 20 } },
-  { kod: "profesyonel", ad: "Profesyonel", aylik_tl: 3490, koltuk: 1, kota: { rakip: 40, sekans: 150, seo: 80, briefing: 100, fireflies: 40 } },
-  { kod: "ekip", ad: "Ekip", aylik_tl: 8990, koltuk: 5, kota: { rakip: 150, sekans: 600, seo: 300, briefing: 400, fireflies: 200 } },
-  { kod: "ozel", ad: "Özel AI", aylik_tl: null, koltuk: 0, kota: { rakip: -1, sekans: -1, seo: -1, briefing: -1, fireflies: -1 } },
+  { kod: "deneme", ad: "Deneme (14 gün)", aylik_tl: 0, koltuk: 1, kota: { rakip: 1, sekans: 1, seo: 1, briefing: 1, fireflies: 1, takip: 1 } },
+  { kod: "baslangic", ad: "Başlangıç", aylik_tl: 149, koltuk: 1, kota: { rakip: 1, sekans: 3, seo: 2, briefing: 2, takip: 1 } },
+  { kod: "profesyonel", ad: "Profesyonel", aylik_tl: 349, koltuk: 1, kota: { rakip: 4, sekans: 15, seo: 8, briefing: 10, fireflies: 4, takip: 3 } },
+  { kod: "ekip", ad: "Ekip", aylik_tl: 899, koltuk: 5, kota: { rakip: 15, sekans: 60, seo: 30, briefing: 40, fireflies: 20, takip: 10 } },
+  { kod: "ozel", ad: "Özel AI", aylik_tl: null, koltuk: 0, kota: { rakip: -1, sekans: -1, seo: -1, briefing: -1, fireflies: -1, takip: -1 } },
 ];
 const PLAN_META = {
   baslangic: { d: "Tek başına satış yapanlar için temel araçlar." },
@@ -165,7 +166,7 @@ function applyKota(k, q) {
 function durum(k) {
   const b = S.ben;
   if (!b) return { ok: false, neden: "yok", lim: 0, kul: 0 };
-  const lim = Number((b.kota || {})[k] ?? 0), kul = Number((b.kullanim || {})[k] || 0);
+  const lim = Number((b.kota || {})[k] ?? 0), kul = Number(k === "takip" ? b.takip_adet || 0 : (b.kullanim || {})[k] || 0);
   if (!b.aktif) return { ok: false, neden: "sure", lim, kul };
   if (!lim) return { ok: false, neden: "plan", lim, kul };
   if (lim > 0 && kul >= lim) return { ok: false, neden: "kota", lim, kul };
@@ -174,7 +175,7 @@ function durum(k) {
 const NEDEN = {
   sure: () => (S.ben?.plan === "deneme" ? "14 günlük deneme süreniz doldu." : "Plan süreniz doldu."),
   plan: k => `${MOD[k]?.ad || "Bu araç"} mevcut planınıza dahil değil.`,
-  kota: k => `Bu ayki ${MOD[k]?.ad || ""} kullanım hakkınız doldu.`,
+  kota: k => (k === "takip" ? "Planınızdaki takip edilen firma sınırına ulaştınız." : `Bu ayki ${MOD[k]?.ad || ""} kullanım hakkınız doldu.`),
 };
 
 // ---------- İşler (arka planda süren analizler) ----------
@@ -286,7 +287,7 @@ function render() {
   PAGES[n]();
   if (changed) { window.scrollTo(0, 0); document.title = (TITLES[n] ? TITLES[n] + " · " : "") + "Sales Corner"; }
 }
-const TITLES = { giris: "Giriş", kayit: "Kayıt ol", sifre: "Şifre sıfırlama", "yeni-sifre": "Yeni şifre", panel: "Panel", rakip: "Rakip Analizi", sekans: "Sekans Yazarı", seo: "SEO Analizi", briefing: "Toplantı Briefingi", fireflies: "Toplantı Analizi", fiyatlar: "Fiyatlar", hesap: "Hesabım", admin: "Yönetim", ozel: "Size özel çözümler" };
+const TITLES = { giris: "Giriş", kayit: "Kayıt ol", sifre: "Şifre sıfırlama", "yeni-sifre": "Yeni şifre", panel: "Panel", rakip: "Rakip Analizi", sekans: "Sekans Yazarı", seo: "SEO Analizi", briefing: "Toplantı Briefingi", fireflies: "Toplantı Analizi", takip: "Rakip Takip", fiyatlar: "Fiyatlar", hesap: "Hesabım", admin: "Yönetim", ozel: "Size özel çözümler" };
 
 // ---------- Giriş ekranları ----------
 const LOGO = `<img class="lg" src="/img/sales-corner-logo.png?v=1" width="495" height="178" alt="Sales Corner">`;
@@ -298,7 +299,7 @@ function authLayout(inner) {
     <div>
       <h1>Satışın ağır işini yapay zekâya bırakın.</h1>
       <p class="lead">Rakip analizi, kişiye özel sekanslar, SEO raporu, toplantı briefingi ve görüşme analizi tek panelde, dakikalar içinde.</p>
-      <ul class="feat">${MODS.map(m => `<li><i aria-hidden="true">${m.ic}</i><div><b>${esc(m.ad)}</b><span>${esc(m.d)}</span></div></li>`).join("")}</ul>
+      <ul class="feat">${MODS.filter(m => m.k !== "takip").map(m => `<li><i aria-hidden="true">${m.ic}</i><div><b>${esc(m.ad)}</b><span>${esc(m.d)}</span></div></li>`).join("")}</ul>
     </div>
     <small>© ${new Date().getFullYear()} Sales Corner · <a href="${SITE}/kvkk" style="color:inherit">KVKK</a> · <a href="${SITE}/gizlilik-politikasi" style="color:inherit">Gizlilik</a> · <a href="${SITE}/cerez-politikasi" style="color:inherit">Çerez Politikası</a></small>
   </aside>
@@ -349,7 +350,7 @@ async function resend(email) {
 function denemeOzet() {
   const deneme = (S.planlar || PLAN_FALLBACK).find(p => p.kod === "deneme") || PLAN_FALLBACK[0];
   const q = deneme.kota || {};
-  return `Denemede bütün araçlar açık: ${MODS.filter(m => q[m.k]).map(m => `${q[m.k]} ${kucuk(m.ad)}`).join(", ")}.`;
+  return `Denemede bütün araçlar açık: ${MODS.filter(m => q[m.k]).map(m => m.k === "takip" ? `${q[m.k]} firma için rakip takibi` : `${q[m.k]} ${kucuk(m.ad)}`).join(", ")}.`;
 }
 async function pageKayit() {
   authLayout(`<h2>14 gün ücretsiz deneyin</h2><p class="sub">Kredi kartı gerekmez. Dakikalar içinde ilk analizinizi alın.</p>${tabs("kayit")}
@@ -493,10 +494,12 @@ function pagePanel() {
   const hist = store.get("hist", []);
   const card = m => {
     const d = durum(m.k), lim = d.lim, pct = lim > 0 ? Math.min(100, (d.kul / lim) * 100) : 0;
+    const tk = m.k === "takip";
     const foot = d.neden === "plan" ? `<span class="pill">🔒 Planınıza dahil değil</span><span>Planı yükselt →</span>`
-      : lim < 0 ? `<span class="pill ok">Sınırsız</span><span>Aç →</span>`
-      : `<div class="meter${d.kul >= lim ? " full" : ""}" aria-hidden="true"><i style="width:${pct}%"></i></div><span>${d.kul} / ${lim} bu ay</span>`;
-    return `<a class="card mod${d.ok ? "" : " off"}" href="#/${d.neden === "plan" ? "fiyatlar" : m.k}">
+      : lim < 0 ? `<span class="pill ok">Sınırsız</span><span>${tk ? `${d.kul} firma takipte · ` : ""}Aç →</span>`
+      : `<div class="meter${d.kul >= lim ? " full" : ""}" aria-hidden="true"><i style="width:${pct}%"></i></div><span>${d.kul} / ${lim} ${tk ? "firma · haftalık" : "bu ay"}</span>`;
+    const off = !d.ok && !(tk && d.neden === "kota");
+    return `<a class="card mod${off ? " off" : ""}" href="#/${d.neden === "plan" ? "fiyatlar" : m.k}">
       <div class="row" style="justify-content:flex-start"><span class="mi" style="background:${m.bg}" aria-hidden="true">${m.ic}</span><h3>${esc(m.ad)}</h3>${JOBS[m.k]?.state === "run" ? '<span class="pill acc" style="margin-left:auto"><span class="spin s"></span>Hazırlanıyor</span>' : ""}</div>
       <p>${esc(m.d)}</p><div class="foot">${foot}</div></a>`;
   };
@@ -918,6 +921,7 @@ async function pageFiyatlar() {
   const b = S.ben, y = S.yillik;
   const satir = (q, k) => {
     const v = Number((q || {})[k] || 0);
+    if (k === "takip") return v < 0 ? `<li>Sınırsız firma için haftalık rakip takibi</li>` : v ? `<li>${fmtN(v)} firma için haftalık rakip takibi</li>` : `<li class="no">${esc(MOD[k].ad)}</li>`;
     return v < 0 ? `<li>Sınırsız ${esc(kucuk(MOD[k].ad))}</li>` : v ? `<li>Ayda ${fmtN(v)} ${esc(kucuk(MOD[k].ad))}</li>` : `<li class="no">${esc(MOD[k].ad)}</li>`;
   };
   const card = p => {
@@ -939,7 +943,7 @@ async function pageFiyatlar() {
   <div class="faq">
     <h2 style="margin-bottom:4px">Sık sorulanlar</h2>
     <details><summary>Plan seçince ne oluyor?</summary><p>“Bu planı seç” ile iletişim formundan talebinizi iletin; ödeme ve fatura bilgisini sizinle netleştirip planınızı hesabınıza tanımlıyoruz. Plan tanımlandığı anda yeni kotalar panelde görünür.</p></details>
-    <details><summary>Kullanım hakları nasıl sayılıyor?</summary><p>Her başarılı analiz, sekans, SEO raporu, briefing ya da toplantı analizi o ayın hakkından bir düşer. Haklar her ayın başında (Türkiye saatiyle) yenilenir; kullanılmayan haklar devretmez.</p></details>
+    <details><summary>Kullanım hakları nasıl sayılıyor?</summary><p>Her başarılı analiz, sekans, SEO raporu, briefing ya da toplantı analizi o ayın hakkından bir düşer. Haklar her ayın başında (Türkiye saatiyle) yenilenir; kullanılmayan haklar devretmez. Rakip takipte ise aylık hak yerine aynı anda takip edebileceğiniz firma sayısı sınırlıdır; her firma haftada bir otomatik taranır.</p></details>
     <details><summary>Yıllık ödemede ne kazanırım?</summary><p>Yıllık faturalamada aylık fiyata göre %20 indirim uygulanır.</p></details>
     <details><summary>İptal edebilir miyim?</summary><p>Evet. Aylık planlarda dönem sonunda yenilemeyi durdurursunuz; hesabınız ve geçmiş çalışmalarınız silinmez.</p></details>
     <details><summary>Verilerim güvende mi?</summary><p>Girdiğiniz bilgiler yalnızca istediğiniz çıktıyı üretmek için işlenir. Fireflies anahtarınız hesabınıza bağlı saklanır, sadece sizin toplantılarınızı okumak için kullanılır ve istediğiniz an kaldırabilirsiniz.</p></details>
@@ -947,6 +951,164 @@ async function pageFiyatlar() {
   </div>`);
   document.querySelectorAll("[data-bill]").forEach(x => (x.onclick = () => { S.yillik = x.dataset.bill === "1"; pageFiyatlar(); }));
   if (!S.planlar) { await loadPlanlar(); if (route === "fiyatlar") pageFiyatlar(); }
+}
+
+// ---------- Rakip Takip (firma firma haftalık) ----------
+let TK = { list: null, err: "", edit: null, sil: "", run: {} };
+async function loadTK() {
+  TK.err = "";
+  try { const r = await rpc("app_takip_liste"); TK.list = Array.isArray(r) ? r : []; }
+  catch (e) { TK.err = trErr(e); TK.list = []; }
+}
+// Yapay zekâ yorumu: yalnız basit biçim etiketleri kalır, bağlantılar güvenli
+function tkHtml(h) {
+  const ok = new Set(["P", "UL", "OL", "LI", "B", "STRONG", "I", "EM", "BR", "H3", "H4", "A"]);
+  let doc;
+  try { doc = new DOMParser().parseFromString(`<div>${String(h || "")}</div>`, "text/html"); } catch { return esc(h); }
+  const walk = n => [...n.childNodes].map(c => {
+    if (c.nodeType === 3) return esc(c.textContent);
+    if (c.nodeType !== 1 || /^(SCRIPT|STYLE|NOSCRIPT|TEMPLATE|IFRAME|OBJECT|SVG|MATH)$/i.test(c.tagName)) return "";
+    const inner = walk(c);
+    if (!ok.has(c.tagName)) return inner;
+    const t = c.tagName.toLowerCase();
+    if (t === "br") return "<br>";
+    if (t === "a") { const u = safeUrl(c.getAttribute("href")); return u ? `<a href="${esc(u)}" target="_blank" rel="noopener">${inner}</a>` : inner; }
+    return `<${t}>${inner}</${t}>`;
+  }).join("");
+  return walk(doc.body.firstChild || doc.body);
+}
+function tkSonuc(s) {
+  if (!s) return `<p class="tk-mute">Henüz tarama yapılmadı. İlk tarama planlanan saatte otomatik çalışır.</p>`;
+  if (s.hata) return msg("err", `Son tarama tamamlanamadı: ${esc(s.hata)}`);
+  const rk = Array.isArray(s.rakipler) ? s.rakipler : [];
+  return `${s.yorum_html ? `<div class="tk-yorum">${tkHtml(s.yorum_html)}</div>` : ""}
+  ${rk.map(r => {
+    const it = Array.isArray(r.items) ? r.items : [];
+    return `<div class="tk-rk"><div class="row" style="justify-content:flex-start;gap:8px"><b>${esc(r.firma || "Rakip")}</b>
+      ${r.ok === false ? `<span class="pill bad">Okunamadı</span>` : `<span class="pill">${esc(String(r.toplam ?? it.length))} yeni içerik</span>`}${r.kaynak ? `<span class="tk-mute" style="font-size:12.5px">${esc(r.kaynak)}</span>` : ""}</div>
+      ${r.error ? `<p class="tk-mute" style="font-size:13px">${esc(r.error)}</p>` : ""}
+      ${it.length ? `<ul class="tk-items">${it.slice(0, 8).map(x => { const u = safeUrl(x.link); return `<li>${u ? `<a href="${esc(u)}" target="_blank" rel="noopener">${esc(x.title || u)}</a>` : esc(x.title || "")}${x.tarih ? ` <span class="tk-mute">· ${fmtD(x.tarih)}</span>` : ""}</li>`; }).join("")}</ul>` : r.ok === false ? "" : `<p class="tk-mute" style="font-size:13px">Bu hafta yeni paylaşım yok.</p>`}</div>`;
+  }).join("")}
+  ${s.tarih ? `<p class="tk-mute" style="font-size:12.5px">Tarama: ${fmtDT(s.tarih)}${s.mail ? " · Özet e-postanıza gönderildi" : ""}</p>` : ""}`;
+}
+function tkKart(t) {
+  const rk = Array.isArray(t.rakipler) ? t.rakipler : [];
+  const sil = TK.sil === t.id, rn = TK.run[t.id];
+  return `<article class="card pad tk-card" data-tk-id="${esc(t.id)}">
+    <div class="row"><div><h3>${esc(t.firma)}</h3><div class="tk-chips">${rk.map(r => `<span class="pill">${esc(r.firma || (safeUrl(r.site) ? new URL(r.site).hostname : "Rakip"))}</span>`).join("")}</div></div>
+      ${t.calisiyor ? `<span class="pill acc"><span class="spin s"></span>Taranıyor</span>` : t.aktif === false ? `<span class="pill warn">Duraklatıldı</span>` : `<span class="pill ok">Haftalık</span>`}</div>
+    <div class="tk-meta"><span>Son tarama: <b>${fmtDT(t.son_calisma)}</b></span><span>Sonraki tarama: <b>${fmtDT(t.sonraki)}</b></span></div>
+    ${rn ? msg(rn.kind, rn.html) : ""}
+    <div class="row tk-acts">
+      ${sil ? `<span style="font-size:14px">Bu firmanın takibi silinsin mi?</span><span class="row" style="gap:8px"><button type="button" class="btn btn-s" data-tk-silok style="background:var(--bad);color:#fff">Evet, sil</button><button type="button" class="btn btn-g btn-s" data-tk-silno>Vazgeç</button></span>`
+      : `<span class="row" style="gap:8px;justify-content:flex-start"><button type="button" class="btn btn-p btn-s" data-tk-run${durum("takip").neden === "sure" || durum("takip").neden === "plan" || t.calisiyor ? " disabled" : ""}>Şimdi tara</button><button type="button" class="btn btn-g btn-s" data-tk-edit>Düzenle</button></span><button type="button" class="linkbtn" data-tk-sil style="color:var(--bad)">Sil</button>`}
+    </div>
+    <details class="tk-son"><summary>Son tarama sonucu</summary><div class="tk-body">${tkSonuc(t.son_sonuc)}</div></details>
+  </article>`;
+}
+function tkForm(t) {
+  return `<form id="tkf" class="card pad">
+    <h3 style="margin-bottom:12px">${t ? "Takibi düzenle" : "Yeni firma takibi"}</h3>
+    <div class="f"><label for="tkfirma">Firma adı <span class="hint">(kendi firmanız ya da müşteriniz)</span></label><input class="in" id="tkfirma" required maxlength="150" value="${esc(t ? t.firma : S.ben.sirket || "")}"></div>
+    <div class="f"><label>Rakipler <span class="hint">(1–6; her rakip için site, RSS ya da LinkedIn adreslerinden en az biri)</span></label><div id="tkrows" style="display:grid;gap:10px"></div>
+      <button type="button" class="linkbtn" id="tkadd" style="justify-self:start">+ Rakip ekle</button></div>
+    <div id="tkm"></div>
+    <div class="row" style="justify-content:flex-start;gap:8px"><button class="btn btn-p" type="submit">${t ? "Kaydet" : "Takibe al"}</button><button class="btn btn-g" type="button" id="tkvaz">Vazgeç</button></div>
+  </form>`;
+}
+function pageTakip() {
+  const d = durum("takip"), lim = d.lim, kul = d.kul;
+  const dolu = lim > 0 && kul >= lim, kapali = d.neden === "sure" || d.neden === "plan";
+  const sayac = lim < 0 ? `${kul} firma takipte · <span class="pill ok">Sınırsız</span>` : lim ? `${kul} / ${lim} firma takipte` : "";
+  const ekleBtn = `<button type="button" class="btn btn-p" data-tk-new${kapali || dolu || TK.edit ? " disabled" : ""}>+ Yeni firma ekle</button>`;
+  const liste = TK.list === null ? `<div class="empty" style="padding:24px"><div class="spin"></div></div>`
+    : TK.err ? msg("err", esc(TK.err) + ` <button type="button" class="linkbtn" data-tk-yenile>Tekrar dene</button>`)
+    : !TK.list.length && !TK.edit ? `<div class="card pad empty"><div style="font-size:30px" aria-hidden="true">📡</div><h3>Henüz takip edilen firma yok</h3><p class="tk-mute" style="max-width:460px;margin:6px auto 0">Bir firma ve rakiplerini ekleyin. Her hafta rakiplerin blog, RSS ve LinkedIn paylaşımları taranır; özet ve aksiyon önerisi e-postanıza gelir.</p></div>`
+    : `<div class="tk-list">${TK.list.filter(t => !TK.edit || TK.edit.id !== t.id).map(tkKart).join("")}</div>`;
+  shell(`${ph(`<span aria-hidden="true">📡</span> Rakip Takip`, esc(MOD.takip.d), kapali ? "" : ekleBtn)}${kapali ? gate("takip") : ""}
+    ${sayac ? `<div class="quota" style="margin-bottom:16px"><span>${sayac}</span>${lim > 0 ? `<div class="meter${dolu ? " full" : ""}" aria-hidden="true"><i style="width:${Math.min(100, (kul / lim) * 100)}%"></i></div>` : ""}</div>` : ""}
+    ${dolu && !kapali ? msg("warn", `<span aria-hidden="true">ℹ️</span><span>${esc(NEDEN.kota("takip"))} Yeni firma eklemek için bir takibi silin ya da <a href="#/fiyatlar">planınızı yükseltin →</a></span>`) : ""}
+    ${TK.edit ? tkForm(TK.edit.id ? TK.edit : null) : ""}
+    ${liste}
+    <p class="tk-mute" style="font-size:13px;margin-top:16px">Her firma haftada bir otomatik taranır. İsterseniz “Şimdi tara” ile elle de başlatabilirsiniz (firma başına 20 saatte bir).</p>`);
+  const main = document.querySelector(".main");
+  main.onclick = async e => {
+    const el = e.target.closest("[data-tk-new],[data-tk-edit],[data-tk-sil],[data-tk-silno],[data-tk-silok],[data-tk-run],[data-tk-yenile]");
+    if (!el || el.disabled) return;
+    const id = el.closest("[data-tk-id]")?.dataset.tkId;
+    const t = id && (TK.list || []).find(x => x.id === id);
+    if (el.hasAttribute("data-tk-new")) { TK.edit = { id: null }; TK.sil = ""; render(); document.getElementById("tkfirma")?.focus(); }
+    else if (el.hasAttribute("data-tk-yenile")) { TK.list = null; render(); await loadTK(); if (route === "takip") render(); }
+    else if (el.hasAttribute("data-tk-edit") && t) { TK.edit = t; TK.sil = ""; render(); window.scrollTo({ top: 0, behavior: "smooth" }); }
+    else if (el.hasAttribute("data-tk-sil")) { TK.sil = id; render(); }
+    else if (el.hasAttribute("data-tk-silno")) { TK.sil = ""; render(); }
+    else if (el.hasAttribute("data-tk-silok")) {
+      busy(el, true, "Siliniyor…");
+      try { await rpc("app_takip_sil", { p_id: id }); TK.sil = ""; await Promise.all([loadTK(), loadBen()]); toast("Takip silindi"); }
+      catch (err) { TK.run[id] = { kind: "err", html: esc(trErr(err)) }; TK.sil = ""; }
+      if (route === "takip") render();
+    } else if (el.hasAttribute("data-tk-run")) {
+      busy(el, true, "Taranıyor…"); delete TK.run[id];
+      const r = await api("/api/app/takip/calistir", { id });
+      if (r.success) { TK.run[id] = { kind: "ok", html: "Tarama tamamlandı. Sonuç aşağıda; özet e-postanıza da gönderildi." }; await loadTK(); }
+      else TK.run[id] = { kind: r.neden === "erken" ? "warn" : "err", html: esc(r.message || "Tarama başlatılamadı.") + (r.ne_zaman ? ` Bir sonraki elle tarama: <b>${fmtDT(r.ne_zaman)}</b>.` : "") };
+      if (route === "takip") { render(); document.querySelector(`[data-tk-id="${CSS.escape(id)}"] details`)?.setAttribute("open", ""); }
+    }
+  };
+  const f = document.getElementById("tkf");
+  if (f) {
+    const box = document.getElementById("tkrows"), addB = document.getElementById("tkadd");
+    const add = (r = {}) => {
+      if (box.children.length >= 6) return;
+      const i = box.children.length + 1;
+      box.insertAdjacentHTML("beforeend", `<div class="tk-row" data-tk-row><div class="row" style="flex-wrap:nowrap;gap:8px"><input class="in" data-k="firma" maxlength="80" placeholder="Rakip ${i} adı" aria-label="Rakip ${i} adı" value="${esc(r.firma || "")}"><button type="button" class="iconbtn" data-tk-rm aria-label="Rakip ${i}'i kaldır">✕</button></div>
+        <div class="tk-row3"><input class="in" data-k="site" inputmode="url" maxlength="300" placeholder="Site / blog (rakip.com)" aria-label="Rakip ${i} sitesi" value="${esc(r.site || "")}"><input class="in" data-k="feed" inputmode="url" maxlength="500" placeholder="RSS adresi (isteğe bağlı)" aria-label="Rakip ${i} RSS" value="${esc(r.feed || "")}"><input class="in" data-k="linkedin" inputmode="url" maxlength="300" placeholder="LinkedIn şirket sayfası" aria-label="Rakip ${i} LinkedIn" value="${esc(r.linkedin || "")}"></div></div>`);
+      addB.hidden = box.children.length >= 6;
+    };
+    const ilk = TK.edit && Array.isArray(TK.edit.rakipler) && TK.edit.rakipler.length ? TK.edit.rakipler : [{}];
+    ilk.forEach(add);
+    addB.onclick = () => { add(); box.lastElementChild.querySelector("input").focus(); };
+    box.onclick = e => { const x = e.target.closest("[data-tk-rm]"); if (x && box.children.length > 1) { x.closest("[data-tk-row]").remove(); addB.hidden = false; } };
+    document.getElementById("tkvaz").onclick = () => { TK.edit = null; render(); };
+    f.onsubmit = async e => {
+      e.preventDefault();
+      const firma = f.tkfirma.value.trim();
+      if (!firma) return setMsg("tkm", "err", "Firma adını girin.");
+      const rakipler = [];
+      for (const row of box.querySelectorAll("[data-tk-row]")) {
+        const v = k => row.querySelector(`[data-k="${k}"]`).value.trim();
+        const r = { firma: v("firma") }, bos = !v("site") && !v("feed") && !v("linkedin");
+        if (bos && !r.firma) continue;
+        if (bos) return setMsg("tkm", "err", `“${esc(r.firma)}” için site, RSS ya da LinkedIn adreslerinden en az birini girin.`);
+        for (const k of ["site", "feed", "linkedin"]) {
+          if (!v(k)) continue;
+          const u = normUrl(v(k));
+          if (!u) return setMsg("tkm", "err", `“${esc(v(k))}” geçerli bir adres değil.`);
+          if (k === "linkedin" && !/linkedin\.com\//i.test(u)) return setMsg("tkm", "err", "LinkedIn alanına linkedin.com/company/… biçiminde bir adres girin.");
+          r[k] = u;
+        }
+        if (!r.firma) r.firma = new URL(r.site || r.feed || r.linkedin).hostname.replace(/^www\./, "");
+        rakipler.push(r);
+      }
+      if (!rakipler.length) return setMsg("tkm", "err", "En az bir rakip ekleyin.");
+      const btn = f.querySelector("[type=submit]");
+      busy(btn, true, "Kaydediliyor…"); setMsg("tkm");
+      try {
+        const r = await rpc("app_takip_kaydet", { p_id: TK.edit?.id || null, p_firma: firma, p_rakipler: rakipler });
+        if (r && r.ok === false) {
+          const m = { sure: NEDEN.sure(), plan: NEDEN.plan("takip"), kota: `Planınız en fazla ${r.limit ?? lim} firmayı takip etmeye izin veriyor.`, firma: "Firma adını kontrol edin.", rakip: "Rakip bilgilerini kontrol edin (1–6 rakip, her biri için en az bir adres).", yok: "Bu takip bulunamadı; sayfayı yenileyin." };
+          busy(btn, false);
+          return setMsg("tkm", "err", esc(m[r.neden] || "Kaydedilemedi.") + (r.neden === "kota" || r.neden === "plan" ? ` <a href="#/fiyatlar">Planlar →</a>` : ""));
+        }
+        const yeni = !TK.edit?.id;
+        TK.edit = null;
+        await Promise.all([loadTK(), loadBen()]);
+        toast(yeni ? "Firma takibe alındı ✓" : "Takip güncellendi ✓");
+        if (route === "takip") render();
+      } catch (err) { busy(btn, false); setMsg("tkm", "err", esc(trErr(err))); }
+    };
+  }
+  if (TK.list === null && !TK.err) loadTK().then(() => { if (route === "takip") render(); });
 }
 
 // ---------- Hesabım ----------
@@ -962,7 +1124,7 @@ function pageHesap() {
         <button class="btn btn-p" type="submit">Kaydet</button></form></section>
     <section class="card pad"><div class="row" style="margin-bottom:14px"><h3>Plan ve kullanım</h3><span class="pill ${b.aktif ? "acc" : "warn"}">${esc(b.plan_ad || b.plan)} · ${b.aktif ? "Geçerlilik: " + fmtD(b.bitis) : "süre doldu"}</span></div>
       <div class="scroll-x"><table class="tbl"><thead><tr><th>Araç</th><th>Bu ay (${esc(b.ay || "")})</th><th>Aylık hak</th></tr></thead><tbody>
-      ${MODS.map(m => { const d = durum(m.k); return `<tr><td>${m.ic} ${esc(m.ad)}</td><td>${d.kul}</td><td>${d.lim < 0 ? "Sınırsız" : d.lim ? d.lim : "Plana dahil değil"}</td></tr>`; }).join("")}
+      ${MODS.map(m => { const d = durum(m.k); return `<tr><td>${m.ic} ${esc(m.ad)}</td><td>${d.kul}${m.k === "takip" ? " firma" : ""}</td><td>${d.lim < 0 ? "Sınırsız" : d.lim ? d.lim + (m.k === "takip" ? " firma (haftalık)" : "") : "Plana dahil değil"}</td></tr>`; }).join("")}
       </tbody></table></div><a class="btn btn-g btn-s" href="#/fiyatlar" style="margin-top:14px">Planları gör</a></section>
     <section class="card pad"><div class="row" style="margin-bottom:6px"><h3>Fireflies bağlantısı</h3><span class="pill ${b.fireflies ? "ok" : ""}">${b.fireflies ? "Bağlı" : "Bağlı değil"}</span></div>
       ${b.fireflies ? `<p style="color:var(--mute);margin-bottom:14px">Toplantı analizi için Fireflies hesabınız bağlı. Anahtarı değiştirmek için yenisini kaydedin.</p><div id="fkm"></div><div class="row" style="justify-content:flex-start"><button class="btn btn-d btn-s" id="ffdel">Bağlantıyı kaldır</button></div><details style="margin-top:14px"><summary style="cursor:pointer;font-weight:600">Anahtarı değiştir</summary><div style="margin-top:12px">${ffConnect(true)}</div></details>` : ffConnect(true)}
@@ -1009,7 +1171,7 @@ async function pageAdmin() {
   const vis = (rows || []).filter(r => !q || [r.email, r.ad, r.sirket, r.plan].join(" ").toLocaleLowerCase("tr-TR").includes(q));
   const now = Date.now();
   const say = f => (rows || []).filter(f).length;
-  const kisa = { rakip: "R", sekans: "S", seo: "SEO", briefing: "B", fireflies: "F" };
+  const kisa = { rakip: "R", sekans: "S", seo: "SEO", briefing: "B", fireflies: "F", takip: "T" };
   shell(`${ph("Yönetim", "Kullanıcılar, planlar ve bu ayki kullanım.", `<a class="btn btn-g btn-s" href="${SITE}/dashboard">Eski panel ↗</a>`)}
   <div class="stats">
     <div class="card stat"><span>Toplam kullanıcı</span><b>${rows ? fmtN(rows.length) : "…"}</b></div>
@@ -1057,7 +1219,7 @@ async function loadAdm() {
   catch (e) { ADM.err = trErr(e); }
 }
 
-const PAGES = { giris: pageGiris, kayit: pageKayit, sifre: pageSifre, "yeni-sifre": pageYeniSifre, panel: pagePanel, rakip: pageRakip, sekans: pageSekans, seo: pageSeo, briefing: pageBriefing, fireflies: pageFireflies, fiyatlar: pageFiyatlar, hesap: pageHesap, admin: pageAdmin, ozel: pageOzel };
+const PAGES = { giris: pageGiris, kayit: pageKayit, sifre: pageSifre, "yeni-sifre": pageYeniSifre, panel: pagePanel, rakip: pageRakip, sekans: pageSekans, seo: pageSeo, briefing: pageBriefing, fireflies: pageFireflies, takip: pageTakip, fiyatlar: pageFiyatlar, hesap: pageHesap, admin: pageAdmin, ozel: pageOzel };
 
 // ---------- Genel olaylar ----------
 document.addEventListener("click", async e => {
@@ -1072,7 +1234,7 @@ document.addEventListener("click", async e => {
     else { const mini = sh.classList.toggle("mini"); store.set("side_mini", mini); }
   }
   else if (t.hasAttribute("data-menu")) document.getElementById("shell")?.classList.toggle("open");
-  else if (t.hasAttribute("data-logout")) { await sb.auth.signOut(); S.session = null; S.ben = null; ADM = { rows: null, err: "", q: "" }; FF = { list: null, err: "", sel: "" }; go("giris"); }
+  else if (t.hasAttribute("data-logout")) { await sb.auth.signOut(); S.session = null; S.ben = null; ADM = { rows: null, err: "", q: "" }; FF = { list: null, err: "", sel: "" }; TK = { list: null, err: "", edit: null, sil: "", run: {} }; go("giris"); }
   else if (t.dataset.copy || t.dataset.copyEl) {
     const txt = t.dataset.copy || document.getElementById(t.dataset.copyEl)?.innerText || "";
     try { await navigator.clipboard.writeText(txt); toast("Kopyalandı ✓"); } catch { toast("Kopyalanamadı; metni seçip kopyalayın."); }
