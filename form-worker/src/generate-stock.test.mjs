@@ -1,6 +1,7 @@
 // node --test src/generate-stock.test.mjs — /gen/stock (Pexels arama vekili) ve /gen/quota stock bayrağı.
 // Gerçek ağ çağrısı yok: fetch sahte verilir, api.pexels.com dışında bir URL gelirse hata fırlatır. D1 yerine node:sqlite.
-// A9b: /gen/stock yalnız pro|enterprise planlı girişli kullanıcı (Bearer); şema schema.sql + migrations/0018_plans.sql.
+// A9b: /gen/stock pro|enterprise planlı girişli kullanıcıya sınırsız (Bearer); şema schema.sql + migrations/0018_plans.sql.
+// 25.11: demo/basic ömür boyu 1 deneme görseli — arama hak kullanılana dek açık, POST /gen/stock/use hakkı atomik düşürür.
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { DatabaseSync } from "node:sqlite";
@@ -23,7 +24,7 @@ const SCHEMA = readFileSync(new URL("../schema.sql", import.meta.url), "utf8");
 const MIG18 = readFileSync(new URL("../migrations/0018_plans.sql", import.meta.url), "utf8");
 const hash = t => createHash("sha256").update(t).digest("hex");
 // plan başına bir app kullanıcısı + oturum; jeton 43 karakter base64url
-const TOK = { pro: "P".repeat(43), basic: "B".repeat(43), enterprise: "E".repeat(43) };
+const TOK = { pro: "P".repeat(43), basic: "B".repeat(43), enterprise: "E".repeat(43), demo: "D".repeat(43) };
 const BEARER = plan => `Bearer ${TOK[plan]}`;
 function freshDb({ mig18 = true } = {}) {
   const db = new DatabaseSync(":memory:");
@@ -96,8 +97,18 @@ function setup({ env: extra = {}, fetch: ff = fakeFetch(), db = freshDb() } = {}
     const text = await res.text();
     return { status: res.status, body: text ? JSON.parse(text) : null, headers: res.headers };
   };
+  // POST /gen/stock/use (gövde JSON, content-length şart)
+  const use = async ({ auth = BEARER("pro"), body = { id: 1 }, origin = ORIGIN } = {}) => {
+    const b = body === undefined ? "" : JSON.stringify(body);
+    const headers = { "content-type": "application/json", "content-length": String(Buffer.byteLength(b)) };
+    if (auth) headers.authorization = auth;
+    const req = new Request("https://forms.test/gen/stock/use", { method: "POST", headers, body: b || undefined });
+    const res = await generate(req, new URL(req.url), env, origin, ctx, { fetch: ff.f });
+    const text = await res.text();
+    return { status: res.status, body: text ? JSON.parse(text) : null };
+  };
   const usage = kind => db.prepare("SELECT n FROM gen_usage WHERE kind = ?").all(kind).map(r => Number(r.n));
-  return { env, call, usage, calls: ff.calls };
+  return { env, db, call, use, usage, calls: ff.calls };
 }
 
 test("başarılı arama: Pexels'e anahtar başlıkta, sorgu/yön/sayfa doğru; yanıt ince", async () => {
@@ -251,11 +262,12 @@ test("oturum yok → 401 login_required (başlık yok, jeton geçersiz, Bearer d
   assert.deepEqual([s.usage("st"), s.usage("su"), s.usage("sa")], [[], [], []]);
 });
 
-test("plan kilidi: basic, 0018 yok → 403 plan need pro; pro ve enterprise → 200", async () => {
+test("plan kilidi: deneme hakkı kullanılmış basic, 0018 yok → 403 plan need pro; pro ve enterprise → 200", async () => {
   const s = setup();
+  assert.equal((await s.use({ auth: BEARER("basic") })).status, 200); // tek deneme hakkı düştü
   const r = await s.call("?q=kedi", { auth: BEARER("basic") });
   assert.equal(r.status, 403);
-  assert.deepEqual(r.body, { ok: false, error: "plan", charged: false, need: "pro" });
+  assert.deepEqual(r.body, { ok: false, error: "plan", charged: false, need: "pro", trial_used: true, stock_trial: { limit: 1, used: 1 } });
   assert.equal(r.headers.get("access-control-allow-origin"), ORIGIN);
   assert.equal(s.calls.length, 0);
   assert.deepEqual(s.usage("st"), []); // 403'te sayaç dokunulmaz
@@ -263,16 +275,22 @@ test("plan kilidi: basic, 0018 yok → 403 plan need pro; pro ve enterprise → 
   assert.equal((await s.call("?q=kedi", { auth: BEARER("enterprise") })).status, 200);
   assert.equal(s.calls.length, 2);
   const old = setup({ db: freshDb({ mig18: false }) });
-  assert.deepEqual([(await old.call("?q=kedi")).status, old.calls.length], [403, 0]);
+  const o = await old.call("?q=kedi");
+  assert.deepEqual([o.status, o.body, old.calls.length], [403, { ok: false, error: "plan", charged: false, need: "pro" }, 0]);
+  assert.deepEqual((await old.use()).body, { ok: false, error: "plan", charged: false, need: "pro" });
   // sıra: doğrulama 400 ve anahtar 503 plan kontrolünden önce
   assert.equal((await s.call("", { auth: null })).status, 400);
   assert.equal((await setup({ env: { PEXELS_API_KEY: "" } }).call("?q=kedi", { auth: null })).status, 503);
 });
 
-test("quota stock bayrağı: anahtar var VE plan izin veriyor (pro/enterprise); anonim/basic false", async () => {
-  const cases = [[KEY, "pro", true], [KEY, "enterprise", true], [KEY, "basic", false], [KEY, null, false], ["", "pro", false], [undefined, "pro", false]];
-  for (const [key, plan, want] of cases) {
+test("quota stock bayrağı: anahtar var VE (pro/enterprise ya da kullanılmamış deneme); anonim, denemesi bitmiş basic false", async () => {
+  const cases = [[KEY, "pro", true], [KEY, "enterprise", true], [KEY, "basic", true, 0], [KEY, "demo", true, 0], [KEY, "basic", false, 1], [KEY, null, false], ["", "pro", false], ["", "basic", false, 0], [undefined, "pro", false]];
+  for (const [key, plan, want, used] of cases) {
     const db = freshDb();
+    if (used) {
+      const uid = db.prepare("SELECT id FROM users WHERE plan = ?").get(plan).id;
+      db.prepare("INSERT INTO gen_usage (day, key, kind, n) VALUES ('stock_trial', ?, 'pt', 1)").run(createHash("sha256").update(`salt|stock_trial|pt|${uid}`).digest("hex"));
+    }
     const env = { DB: d1(db), GEN_ENABLED: "1", ACCOUNTS_ENABLED: "1", ANTHROPIC_API_KEY: "k", GEN_SALT: "salt", TURNSTILE_SECRET: "t", PEXELS_API_KEY: key };
     const b = JSON.stringify({ anon: "11111111-2222-4333-8444-555555555555" });
     const headers = { "content-type": "application/json", "content-length": String(Buffer.byteLength(b)) };
@@ -281,8 +299,9 @@ test("quota stock bayrağı: anahtar var VE plan izin veriyor (pro/enterprise); 
     const res = await generate(req, new URL(req.url), env, ORIGIN, { waitUntil() {} }, { fetch: () => { throw new Error("ağ yok"); } });
     assert.equal(res.status, 200);
     const j = await res.json();
-    assert.equal(j.stock, want, `${key} ${plan}`);
+    assert.equal(j.stock, want, `${key} ${plan} ${used}`);
     assert.equal(j.plan, plan || "anon");
+    assert.deepEqual(j.stock_trial, used === undefined ? undefined : { limit: 1, used }, `${key} ${plan} stock_trial`);
   }
 });
 
@@ -297,4 +316,90 @@ test("index.js: GET /gen/stock CORS başlıklı; OPTIONS GET'e izin verir; izins
   assert.equal(r.headers.get("access-control-allow-origin"), ORIGIN);
   const x = await worker.fetch(new Request("https://forms.test/gen/stock?q=a", { headers: { origin: "https://evil.example" } }), env, { waitUntil() {} });
   assert.equal(x.status, 403);
+});
+
+// 25.11 Pexels deneme hakkı (demo/basic ömür boyu 1 görsel)
+test("deneme: demo arar (sayaçlar su/st/sa çalışır), use hakkı düşürür, ikinci use 403 trial_used, sonra arama 403 trial_used", async () => {
+  const s = setup();
+  const r = await s.call("?q=kedi", { auth: BEARER("demo") });
+  assert.equal(r.status, 200);
+  assert.deepEqual(r.body.stock_trial, { limit: 1, used: 0 });
+  assert.equal((await s.call("?q=kopek&page=2", { auth: BEARER("demo") })).status, 200); // arama hak düşürmez
+  assert.deepEqual([s.usage("su"), s.usage("pt")], [[2], []]);
+  const u = await s.use({ auth: BEARER("demo"), body: { id: 1 } });
+  assert.deepEqual([u.status, u.body], [200, { ok: true, charged: false, stock_trial: { limit: 1, used: 1 } }]);
+  assert.deepEqual(s.usage("pt"), [1]);
+  const u2 = await s.use({ auth: BEARER("demo"), body: { id: 2 } });
+  assert.deepEqual([u2.status, u2.body], [403, { ok: false, error: "plan", charged: false, need: "pro", trial_used: true, stock_trial: { limit: 1, used: 1 } }]);
+  assert.deepEqual(s.usage("pt"), [1]);
+  const r2 = await s.call("?q=kedi", { auth: BEARER("demo") });
+  assert.deepEqual([r2.status, r2.body.error, r2.body.trial_used, r2.body.need], [403, "plan", true, "pro"]);
+  assert.equal(s.calls.length, 2);
+  // hak kullanıcıya bağlı: basic'in kendi hakkı duruyor
+  assert.equal((await s.call("?q=kedi", { auth: BEARER("basic") })).status, 200);
+  assert.equal((await s.use({ auth: BEARER("basic"), body: {} })).status, 200);
+  assert.deepEqual(s.usage("pt"), [1, 1]);
+  // satır tarih değil: ömür boyu, genCleanup silmez (gün dönümünde sıfırlanmaz)
+  const { genCleanup } = await import("./generate.js");
+  s.db.prepare("INSERT INTO gen_usage (day, key, kind, n) VALUES ('2000-01-01', 'eski', 'su', 1)").run();
+  await genCleanup(s.env);
+  assert.deepEqual(s.usage("pt"), [1, 1]);
+  assert.deepEqual(s.db.prepare("SELECT key FROM gen_usage WHERE key = 'eski'").all(), []);
+});
+
+test("deneme: demo/basic günlük arama tavanı GEN_STOCK_TRIAL_PER_DAY (varsayılan 20, kullanıcı tavanını aşmaz); pro etkilenmez", async () => {
+  const s = setup({ env: { GEN_STOCK_TRIAL_PER_DAY: "2", GEN_STOCK_IP_PER_DAY: "50" } });
+  assert.equal((await s.call("?q=a", { auth: BEARER("demo") })).status, 200);
+  assert.equal((await s.call("?q=b", { auth: BEARER("demo") })).status, 200);
+  const l = await s.call("?q=c", { auth: BEARER("demo") });
+  assert.deepEqual([l.status, l.body.error, l.body.scope], [429, "limit", "user"]);
+  for (const q of ["d", "e", "f"]) assert.equal((await s.call("?q=" + q, { auth: BEARER("pro") })).status, 200);
+  const v = setup({ env: { GEN_STOCK_IP_PER_DAY: "50" } });
+  for (let i = 0; i < 20; i++) assert.equal((await v.call("?q=x" + i, { auth: BEARER("basic") })).status, 200);
+  assert.equal((await v.call("?q=son", { auth: BEARER("basic") })).body.scope, "user");
+  const k = setup({ env: { GEN_STOCK_TRIAL_PER_DAY: "9", GEN_STOCK_USER_PER_DAY: "1" } });
+  assert.equal((await k.call("?q=a", { auth: BEARER("demo") })).status, 200);
+  assert.equal((await k.call("?q=b", { auth: BEARER("demo") })).status, 429);
+});
+
+test("deneme: pro/enterprise use sınırsız (sayaç yok, ok unlimited); arama 200", async () => {
+  const s = setup();
+  for (let i = 0; i < 5; i++) {
+    for (const p of ["pro", "enterprise"]) {
+      const u = await s.use({ auth: BEARER(p), body: { id: i + 1 } });
+      assert.deepEqual([u.status, u.body], [200, { ok: true, charged: false, unlimited: true }], p);
+    }
+  }
+  assert.deepEqual(s.usage("pt"), []);
+  assert.equal((await s.call("?q=kedi")).status, 200);
+  assert.equal((await s.call("?q=kedi")).body.stock_trial, undefined);
+});
+
+test("deneme: iki eşzamanlı use → yalnız biri geçer (koşullu atomik UPSERT)", async () => {
+  for (const plan of ["demo", "basic"]) {
+    const s = setup();
+    const res = await Promise.all([s.use({ auth: BEARER(plan), body: { id: 1 } }), s.use({ auth: BEARER(plan), body: { id: 2 } })]);
+    assert.deepEqual(res.map(r => r.status).sort(), [200, 403], plan);
+    assert.equal(res.find(r => r.status === 403).body.trial_used, true);
+    assert.deepEqual(s.usage("pt"), [1], plan);
+  }
+});
+
+test("deneme use: oturum yok 401, anahtar yok 503, bozuk id 400, GET 404, gövdesiz (content-length yok) 413; demo denemesi bittiyse 403", async () => {
+  const s = setup();
+  assert.deepEqual((await s.use({ auth: null })).body, { ok: false, error: "login_required", charged: false });
+  assert.equal((await setup({ env: { PEXELS_API_KEY: "" } }).use({ auth: BEARER("demo") })).status, 503);
+  for (const id of ["1", -3, 1.5, null]) assert.deepEqual([(await s.use({ auth: BEARER("demo"), body: { id } })).body.field], ["id"], String(id));
+  assert.equal((await s.use({ auth: BEARER("demo"), body: undefined })).status, 200); // boş gövde (content-length 0) geçerli
+  const g = await generate(new Request("https://forms.test/gen/stock/use", { headers: { authorization: BEARER("demo") } }), new URL("https://forms.test/gen/stock/use"), s.env, ORIGIN, {}, {});
+  assert.equal(g.status, 404);
+  const n = await generate(new Request("https://forms.test/gen/stock/use", { method: "POST", headers: { authorization: BEARER("demo") } }), new URL("https://forms.test/gen/stock/use"), s.env, ORIGIN, {}, {});
+  assert.equal(n.status, 413);
+  // 14 günlük demo denemesi bitti → deneme görseli de yok
+  const db = freshDb();
+  db.prepare("UPDATE users SET created_at = datetime('now', '-20 days') WHERE plan = 'demo'").run();
+  const e = setup({ db });
+  const r = await e.call("?q=kedi", { auth: BEARER("demo") });
+  assert.deepEqual([r.status, r.body.error, r.body.trial_ended], [403, "plan", true]);
+  assert.deepEqual([(await e.use({ auth: BEARER("demo") })).status, e.usage("pt"), e.calls.length], [403, [], 0]);
 });

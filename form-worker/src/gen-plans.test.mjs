@@ -292,12 +292,15 @@ test("/gen/quota: girişli plan + month + cap (kullanıcı günlük); anonimde p
   await gen(s, "video", auth("basic"));
   const q = await s.call("/gen/quota", { anon: ANON }, auth("basic"));
   assert.equal(q.status, 200);
-  assert.deepEqual(Object.keys(q.body).sort(), ["cap", "charged", "left", "month", "ok", "plan", "reset_at", "scope", "stock"]);
+  assert.deepEqual(Object.keys(q.body).sort(), ["cap", "charged", "left", "month", "ok", "plan", "reset_at", "scope", "stock", "stock_trial"]);
   // A13: basic aylık 8/2 günlük 40'tan dar → left = iki türün büyük kalanı (8-3=5), scope plan; cap yine günlük tavan
-  assert.deepEqual([q.body.plan, q.body.stock, q.body.cap, q.body.left, q.body.scope], ["basic", false, 40, 5, "plan"]);
+  // 25.11: basic'in kullanılmamış Pexels deneme hakkı → stock true, stock_trial {limit 1, used 0}
+  assert.deepEqual([q.body.plan, q.body.stock, q.body.cap, q.body.left, q.body.scope], ["basic", true, 40, 5, "plan"]);
+  assert.deepEqual(q.body.stock_trial, { limit: 1, used: 0 });
   assert.deepEqual(q.body.month, { linkedin_blog: { used: 3, limit: 8 }, video_gorsel: { used: 1, limit: 2 } });
   const p = await s.call("/gen/quota", { anon: ANON }, auth("pro"));
   assert.deepEqual([p.body.plan, p.body.stock, p.body.month.linkedin_blog.limit, p.body.month.video_gorsel.limit], ["pro", true, 40, 12]);
+  assert.equal(p.body.stock_trial, undefined);
   const n = await s.call("/gen/quota", { anon: ANON });
   assert.deepEqual(Object.keys(n.body).sort(), ["cap", "charged", "left", "ok", "plan", "reset_at", "scope", "stock"]);
   assert.deepEqual([n.body.plan, n.body.stock, n.body.left, n.body.cap, n.body.scope], ["anon", false, 3, 3, "anon"]);

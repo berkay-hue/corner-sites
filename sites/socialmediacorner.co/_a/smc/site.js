@@ -132,8 +132,10 @@
     });
   });
 })();
-/* A11 çerez/KVKK bandı: site yalnız zorunlu çerez kullanır (analitik/izleyici yok). Seçim localStorage 'smc-ck'
-   ('all' | 'ess'); depolama yoksa bant her sayfada yeniden görünür. Alt bilgiye "Çerez tercihleri" düğmesi ekler.
+/* A11 çerez/KVKK bandı: site yalnız zorunlu çerez kullanır (analitik/izleyici yok), bu yüzden bant bir bildirimdir,
+   tek düğme ("Anladım" / "Got it") localStorage 'smc-ck' = 'ess' yazar. Eski iki düğmeli sürümden kalan 'all' değeri de
+   dolu sayılır, o ziyaretçiye bant yeniden çıkmaz. Depolama yoksa bant her sayfada yeniden görünür.
+   Alt bilgiye "Çerez bildirimi" düğmesi ekler.
    Çerez Politikası ayrı sayfa değil, KVKK/Privacy sayfasındaki bölüm: /kvkk#cerez, /en/privacy#cookies.
    O bölümdeki [data-ck-open] düğmeleri (JS'siz gizli) bandı yeniden açar. */
 (function () {
@@ -141,14 +143,14 @@
   var en = /^en/i.test(document.documentElement.lang || '');
   var T = en ? {
     label: 'Cookie notice',
-    pre: 'Our site uses only the cookies strictly necessary for it to work. I have read and understood the ',
-    links: [['Privacy Notice', '/en/privacy'], ' and the ', ['Cookie Policy', '/en/privacy#cookies']], post: ', and I accept.',
-    yes: 'I accept', ess: 'Essential only', open: 'Cookie preferences'
+    pre: 'Our site uses only the cookies strictly necessary for it to work; no analytics, advertising or tracking cookies. Details: ',
+    links: [['Privacy Notice', '/en/privacy'], ' and ', ['Cookie Policy', '/en/privacy#cookies']], post: '.',
+    ok: 'Got it', open: 'Cookie notice'
   } : {
     label: 'Çerez bildirimi',
-    pre: 'Sitemiz yalnızca çalışması için gerekli zorunlu çerezleri kullanır. ',
-    links: [['KVKK Aydınlatma Metni', '/kvkk'], ' ve ', ['Çerez Politikası', '/kvkk#cerez']], post: '’nı okudum, anladım, kabul ediyorum.',
-    yes: 'Kabul ediyorum', ess: 'Yalnız zorunlu', open: 'Çerez tercihleri'
+    pre: 'Sitemiz yalnızca çalışması için gerekli zorunlu çerezleri kullanır; analitik, reklam veya izleme çerezi kullanmaz. Ayrıntılar: ',
+    links: [['KVKK Aydınlatma Metni', '/kvkk'], ' ve ', ['Çerez Politikası', '/kvkk#cerez']], post: '.',
+    ok: 'Anladım', open: 'Çerez bildirimi'
   };
   var get = function () { try { return window.localStorage.getItem(KEY); } catch (e) { return null; } };
   var set = function (v) { try { window.localStorage.setItem(KEY, v); } catch (e) { /* depolama kapalı */ } };
@@ -171,8 +173,7 @@
       b.addEventListener('click', function () { set(val); bar.hidden = true; pad(); });
       return b;
     };
-    btns.appendChild(mk(T.ess, 'btn--ghost', 'ess'));
-    btns.appendChild(mk(T.yes, 'btn--primary', 'all'));
+    btns.appendChild(mk(T.ok, 'btn--primary', 'ess'));
     bar.appendChild(p); bar.appendChild(btns);
     /* bant sabit konumlu; DOM'da skip link'ten hemen sonra durur ki klavye/ekran okuyucu ona sayfa sonunda değil başta ulaşsın */
     var skip = document.querySelector('body > .skip');
