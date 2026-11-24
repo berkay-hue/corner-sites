@@ -37,13 +37,13 @@
 
 <main id="icerik" class="belge" tabindex="-1">
   <h1>Privacy notice (KVKK)</h1>
-  <p class="belge-tarih">Last updated: 23 November 2026 · Text version: v1</p>
+  <p class="belge-tarih">Last updated: 24 November 2026 · Text version: v1</p>
   <p>This notice explains how your personal data is processed when you use the Draft Desk (app.socialmediacorner.co). It is provided under Article 10 of the Turkish Personal Data Protection Law No. 6698 (“KVKK”). If this English text and the <a href="/kvkk" hreflang="tr" lang="tr">Turkish text</a> differ, the Turkish text prevails.</p>
 
   <section class="belge-ozet" aria-labelledby="ozet">
     <h2 id="ozet">In short</h2>
     <ul>
-      <li>Without an account, the topic you type is not stored on our servers. It is sent to an AI provider (USA) to write the drafts.</li>
+      <li>The tools work only when you are signed in to your account. The topic you type is sent to an AI provider (USA) to write the drafts; the drafts and their topic are saved to your account’s history.</li>
       <li>If you open an account, your name, email, brand voice and drafts are kept until you delete them.</li>
       <li>You can download your data and delete your account in Settings.</li>
       <li>Your data is not sold and is not used for advertising.</li>
@@ -75,11 +75,11 @@
 
   <h2 id="veriler">2. What data we process</h2>
 
-  <h3>Using the tools without an account</h3>
+  <h3>Using the tools</h3>
   <ul>
-    <li><strong>Topic and choices:</strong> The topic you type and the choices you make in the tool (platform, angle, tone and similar) are processed to write drafts. They are not stored on our servers.</li>
-    <li><strong>Brand voice kept in your browser:</strong> The brand voice you set up without an account stays in your browser only. It is sent with each draft request. It is not stored on our servers.</li>
-    <li><strong>Usage limit data:</strong> Your IP address and a random browser ID are used to count your daily allowance. Neither is stored in raw form on our servers. We keep only a salted, one-way summary (hash). For IPv6 addresses only the first 64 bits are used.</li>
+    <li><strong>Topic and choices:</strong> The topic you type and the choices you make in the tool (platform, angle, tone and similar) are processed to write drafts. The drafts and their topic are saved to your draft history.</li>
+    <li><strong>Brand voice kept in your browser:</strong> The profile you enter in the Brand voice dialog stays in your browser only. It is sent with each draft request. It is not stored on our servers.</li>
+    <li><strong>Usage limit data:</strong> Your allowance is counted per account.</li>
     <li><strong>Bot check:</strong> We use Cloudflare Turnstile to prevent abuse. The check token and your IP address are sent to Cloudflare for this check.</li>
     <li><strong>Technical logs and measurement:</strong> The site runs on Cloudflare. Cloudflare processes technical data such as IP address and browser details to deliver and protect the service. Cloudflare Web Analytics, which does not use cookies, may be used to count page views in aggregate.</li>
   </ul>
@@ -159,7 +159,7 @@
   <h2 id="yapay-zeka">6. AI draft generation</h2>
   <ul>
     <li>When you ask for drafts, your topic, your choices and, if set, your brand voice are sent to Anthropic’s AI service. That service writes the drafts automatically.</li>
-    <li>Without an account, this content is not stored on our servers. With an account, the drafts and their topic are saved to your draft history.</li>
+    <li>The tools work only with an account. The drafts and their topic are saved to your draft history.</li>
     <li><strong>Do not enter personal data in the topic field or brand voice samples.</strong> This includes other people’s names, contact details, customer information, health data or other special categories of data.</li>
     <li>AI output can be wrong, incomplete or unsuitable. Read and edit a draft before you share it.</li>
     <li>Draft generation only suggests text. No automated decision with legal effect is made about you.</li>
@@ -187,7 +187,7 @@
   <ul>
     <li><code>smc-cerez</code> (localStorage): your choice in the cookie notice (<code>all</code> or <code>ess</code>), so the notice does not appear on every page.</li>
     <li><code>smc-oturum</code>: your session key. Kept in localStorage until you log out if you chose “Remember me”, otherwise in sessionStorage until the tab closes.</li>
-    <li><code>smc-anon</code> (localStorage): a random browser ID, sent with requests to count the daily allowance when you use the tools without an account. It does not contain your name or email.</li>
+    <li><code>smc-anon</code> (localStorage): a random browser ID, sent with your requests. It does not contain your name or email.</li>
     <li><code>smc-son</code> (localStorage): the last day drafts were generated.</li>
     <li><code>smc-acik</code> (localStorage): whether draft generation is open. Removed when the service reports it is closed.</li>
     <li><code>smc-uyelik</code> (sessionStorage): whether sign-up is currently open. Used for the “Try it free for 14 days” card on the home page, kept for at most 10 minutes and removed when the tab closes.</li>
@@ -197,7 +197,7 @@
   <ul>
     <li><code>smc-tema</code>, <code>smc-dil</code> (localStorage): your theme and language.</li>
     <li><code>smc-ray</code> (localStorage): whether you collapsed the side menu on desktop.</li>
-    <li><code>smc-ses-v1</code> (localStorage): your brand voice without an account, in this browser only.</li>
+    <li><code>smc-ses-v1</code> (localStorage): the profile you enter in the Brand voice dialog, in this browser only.</li>
     <li><code>smc-kurgu-video</code>, <code>smc-kurgu-gorsel</code> (localStorage): the template, aspect ratio, colours, brand name and handle you picked in the Video and Visual studios.</li>
     <li><code>smc-gorsel-video</code>, <code>smc-gorsel-gorsel</code> (localStorage): whether you want stock images.</li>
     <li><code>smc-konu</code>, <code>studyo-konu</code>, <code>studyo-kanca</code> (sessionStorage): keep your topic and hook when you move between tools or the page reloads. Removed when the tab closes.</li>
