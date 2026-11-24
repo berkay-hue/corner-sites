@@ -209,4 +209,4 @@ Because most tools are priced in foreign currency, lira-based budgets are sensit
 
 The cost of sales automation isn't just the sum of your tool invoices. The real picture emerges only when data, sending infrastructure, AI usage, setup, maintenance and internal team time are calculated together. In Turkey, local factors such as exchange rate risk, tax processes, KVKK compliance and Turkish data coverage are added on top. The right approach is to start with the single process that wastes the most time, define success criteria up front, measure results with a short pilot, and only then expand the scope.
 
-If you'd like to build a realistic automation budget for your team and see which process will deliver the fastest return, [schedule a call](/en/iletisim) with the Sales Corner team. Let's review your current process together and build a roadmap tailored to you.
+If you'd like to build a realistic automation budget for your team and see which process will deliver the fastest return, [schedule a call](/en/contact) with the Sales Corner team. Let's review your current process together and build a roadmap tailored to you.

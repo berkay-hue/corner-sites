@@ -218,4 +218,4 @@ Because cleanup fixes the past; it doesn't close the entry points. If your forms
 
 Duplicate records in your CRM do more than make your database look messy. They lead to duplicate emails reaching the same customer, assignment conflicts between reps and unreliable pipeline reports. An effective cleanup consists of backups, standardization, clear matching rules, consistent master record selection and a controlled merge process that starts with a pilot. Making that cleanup last depends on prevention automations at your import, form and integration points.
 
-If you want to clean up your CRM data and set up automations that stop duplicates at the source, let's assess your current setup together. You can take the first step by [booking a call](/en/iletisim) with the Sales Corner team.
+If you want to clean up your CRM data and set up automations that stop duplicates at the source, let's assess your current setup together. You can take the first step by [booking a call](/en/contact) with the Sales Corner team.

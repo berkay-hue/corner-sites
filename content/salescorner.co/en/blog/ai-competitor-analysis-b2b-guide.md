@@ -203,4 +203,4 @@ The most effective format is one-page battlecards accessible in the CRM or in a 
 
 Set up properly, competitor analysis with AI becomes a living system your sales team uses every day. The formula is simple: start with 3–5 main competitors, combine external sources with your own loss and call data, have AI summarize using fixed templates and constraints that prevent fabrication, turn the output into one-page battlecards and automate monitoring. Then put that knowledge to active use in targeting, email sequences and proposals.
 
-If you want to build a setup that connects competitor monitoring workflows to your CRM, call recordings and outbound campaigns, Sales Corner can help. [Schedule a call with us](/en/iletisim) to review your current process together.
+If you want to build a setup that connects competitor monitoring workflows to your CRM, call recordings and outbound campaigns, Sales Corner can help. [Schedule a call with us](/en/contact) to review your current process together.

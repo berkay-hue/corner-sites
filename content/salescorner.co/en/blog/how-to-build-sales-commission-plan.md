@@ -282,4 +282,4 @@ A comprehensive review once a year, alongside the new budget cycle, is enough. D
 
 A good sales commission plan comes from clear decisions, not complex formulas. First, define the company's top priority for the year. Then define a single purpose for each role. Next, calculate OTE, quota and commission rate so they are consistent with one another, and put the threshold, accelerator, payout and clawback rules in writing. Finally, connect the plan to your CRM and accounting data so it can be tracked automatically. That way, your team sees clearly what is being rewarded, and your company protects its profitability.
 
-If you'd like to integrate your commission plan with your CRM data, automate collection-based calculations or give your reps real-time performance visibility, Sales Corner can help. [Schedule a meeting](/en/iletisim) to review your current sales process together.
+If you'd like to integrate your commission plan with your CRM data, automate collection-based calculations or give your reps real-time performance visibility, Sales Corner can help. [Schedule a meeting](/en/contact) to review your current sales process together.

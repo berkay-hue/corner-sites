@@ -207,4 +207,4 @@ With an off-the-shelf platform, basic setup can be completed within a few days. 
 
 Beyond saving reps hours every week, automating sales call notes with AI fundamentally changes the consistency and reliability of your CRM data. The key to success lies in design, not tools. A fixed template that fits your methodology, clear rules that prevent fabrication, a human-approved transition process and measurable goals are the core building blocks of that design. Start with a single call type, test with your real recordings and develop the system together with your reps.
 
-If you want to manage your call notes with an automation that's connected to your CRM, works in Turkish and fits your team's methodology, let's evaluate your current process together. [Schedule a call with the Sales Corner team](/en/iletisim) and let's take the first step together.
+If you want to manage your call notes with an automation that's connected to your CRM, works in Turkish and fits your team's methodology, let's evaluate your current process together. [Schedule a call with the Sales Corner team](/en/contact) and let's take the first step together.

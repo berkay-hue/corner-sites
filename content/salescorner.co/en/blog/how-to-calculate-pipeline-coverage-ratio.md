@@ -234,4 +234,4 @@ Pipeline coverage ratio is one of the most practical leading indicators of wheth
 
 As we saw in the example, a number that "looks good," like 2.8x, can hide a gap worth millions of lira when read together with the win rate. Spotting that gap early means buying the time you need to close it.
 
-If you want to automate coverage tracking, clean up your pipeline data, or build the outbound workflows to close the gap, Sales Corner can help with AI-powered sales automation. [Schedule a call with us](/en/iletisim) to review your current pipeline structure together.
+If you want to automate coverage tracking, clean up your pipeline data, or build the outbound workflows to close the gap, Sales Corner can help with AI-powered sales automation. [Schedule a call with us](/en/contact) to review your current pipeline structure together.

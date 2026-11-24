@@ -202,4 +202,4 @@ For a narrowly scoped use case, it's possible to start with a pilot lasting a fe
 
 A sales AI agent is goal-oriented software that uses tools to research, communicate and choose its next step based on results. When set up correctly, it takes over the tasks where your sales team loses the most time and lets reps focus on the conversations where they truly create value. The key to success lies more in process than in technology: start with a narrow use case, clarify your ICP, feed it clean data, keep human approval checkpoints in place and measure regularly.
 
-If you'd like to explore together where and how to integrate AI agents into your sales process, [schedule a call with the Sales Corner team](/en/iletisim). We'll review your current workflow and identify the automation steps that will deliver value for you the fastest.
+If you'd like to explore together where and how to integrate AI agents into your sales process, [schedule a call with the Sales Corner team](/en/contact). We'll review your current workflow and identify the automation steps that will deliver value for you the fastest.

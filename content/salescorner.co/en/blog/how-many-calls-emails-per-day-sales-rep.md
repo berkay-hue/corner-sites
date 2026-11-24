@@ -227,4 +227,4 @@ Start by reviewing targeting, data quality and messaging. Listening to call reco
 
 The short answer to "How many calls and emails should a sales rep make a day?" is roughly 40-60 calls and 30-80 targeted emails for SDRs. The real answer, however, lies in working backwards from your own targets and conversion rates. Activity count is an important input, but it won't produce results on its own if your data quality, targeting, messaging and deliverability aren't solid. AI and automation, meanwhile, free reps from research and data entry so they can make higher-quality touches in the same amount of time.
 
-If you want to build the right activity model for your team, automate your prospecting and CRM processes, or redesign your outbound cadence, Sales Corner is ready to help. [Schedule a call](/en/iletisim) to review your current process together.
+If you want to build the right activity model for your team, automate your prospecting and CRM processes, or redesign your outbound cadence, Sales Corner is ready to help. [Schedule a call](/en/contact) to review your current process together.

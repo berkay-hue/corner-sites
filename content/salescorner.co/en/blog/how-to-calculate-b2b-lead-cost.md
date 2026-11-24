@@ -280,4 +280,4 @@ Start from customer lifetime gross profit and your target LTV:CAC ratio to find 
 
 When set up correctly, B2B lead cost is one of the clearest indicators of which channels deserve your budget. This requires three things: written definitions of your lead stages, an honest allocation of all costs (including people's time) across channels, and channel comparisons based on meetings, opportunities and pipeline value rather than raw CPL. Viewed through this framework, it quickly becomes clear that "cheap" channels can turn out to be expensive, and "expensive" ones can be profitable.
 
-If you want to automate your data, targeting and follow-up processes to lower your lead cost, we can review your current channels together and pinpoint where to start. [Schedule a call with the Sales Corner team](/en/iletisim).
+If you want to automate your data, targeting and follow-up processes to lower your lead cost, we can review your current channels together and pinpoint where to start. [Schedule a call with the Sales Corner team](/en/contact).

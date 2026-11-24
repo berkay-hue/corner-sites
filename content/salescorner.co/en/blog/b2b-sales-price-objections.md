@@ -197,4 +197,4 @@ Yes. Talking to companies that fit your ideal customer profile, sharing price ea
 
 In B2B sales, a price objection isn't the end of the deal; it's a sign that the buyer needs more reassurance. The right response consists of acknowledging and clarifying the objection, diagnosing its source with questions, building value with the customer's own numbers, moving the comparison onto fair ground, offering flexibility only in exchange for a trade, and putting the next step on the calendar. Once this discipline becomes a team habit, both win rate and profit margin are protected together.
 
-If you'd like to automate processes such as objection analysis from call notes, customer-specific ROI calculations, and post-pricing follow-up sequences, we at Sales Corner can help. [Schedule a call with us](/en/iletisim) to review your team's current sales workflow together.
+If you'd like to automate processes such as objection analysis from call notes, customer-specific ROI calculations, and post-pricing follow-up sequences, we at Sales Corner can help. [Schedule a call with us](/en/contact) to review your team's current sales workflow together.

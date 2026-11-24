@@ -205,4 +205,4 @@ No, the best results come from using both together. AI detects risky opportuniti
 
 A realistic sales forecast is not the sum of well-intentioned rep estimates; it is the output of a disciplined process. Defining stages with verifiable criteria, calculating your own conversion rates, cleaning your pipeline regularly, factoring in timing and checking multiple methods against one another permanently improve forecast accuracy. When you measure accuracy and bias at the end of each period, the process becomes a self-improving system.
 
-If you want to build an infrastructure that automatically collects your pipeline data, flags risky opportunities early and prepares your weekly forecast for you, [schedule a call](/en/iletisim) with our team and we can review your current process together.
+If you want to build an infrastructure that automatically collects your pipeline data, flags risky opportunities early and prepares your weekly forecast for you, [schedule a call](/en/contact) with our team and we can review your current process together.

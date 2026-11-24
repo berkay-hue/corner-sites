@@ -265,4 +265,4 @@ Yes. A domain that hasn't sent email in a long time has no recent sending histor
 
 Domain warm-up is the least visible but most decisive infrastructure work in outbound. When correctly configured SPF, DKIM and DMARC records, a secondary domain strategy, a gradual 4-6 week volume ramp-up, verified lists and continuously monitored metrics come together, your emails reach the inbox. Only then can the quality of your message turn into results. Teams that don't build this discipline lose even their best-written emails to the spam folder.
 
-If you want to set up your domain infrastructure, automate the warm-up process and make your outbound workflows scalable, the Sales Corner team can help. To discuss your needs, reach out to us via our [Book a call](/en/iletisim) page.
+If you want to set up your domain infrastructure, automate the warm-up process and make your outbound workflows scalable, the Sales Corner team can help. To discuss your needs, reach out to us via our [Book a call](/en/contact) page.
