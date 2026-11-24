@@ -1399,14 +1399,18 @@ async function rtMail(env, to, subject, html) {
   if (!r.ok) throw new Error("Gmail " + r.status);
 }
 async function rakipTakip(req, env) {
-  const b = await readBody(req);
+  const s = await rtCalis(env, await readBody(req));
+  return s.hata ? fail(s.hata) : J(s);
+}
+// Rakip Takip çekirdeği: düz nesne alır, sonuç nesnesi ya da { hata } döner (form ucu + panel haftalık takibi ortak kullanır)
+async function rtCalis(env, b) {
   const gun = Math.min(30, Math.max(1, Math.round(num(b.gun) || 7)));
   const list = arr(b.rakipler, 6).map(x => ({ firma: str(x?.firma, 80), site: str(x?.site, 300), feed: str(x?.feed, 500), li: rtLiSlug(str(x?.linkedin, 300)) }))
     .filter(x => normUrl(x.feed || x.site) || x.li);
-  if (!list.length) return fail("En az bir rakip sitesi, RSS adresi ya da LinkedIn şirket sayfası girin.");
+  if (!list.length) return { hata: "En az bir rakip sitesi, RSS adresi ya da LinkedIn şirket sayfası girin." };
   for (const x of list) if (!x.firma) x.firma = rtHost(x.site || x.feed) || x.li || "Rakip";
   const email = str(b.email, 200);
-  if (email && !RT_EMAIL.test(email)) return fail("E-posta adresi geçersiz.");
+  if (email && !RT_EMAIL.test(email)) return { hata: "E-posta adresi geçersiz." };
   const sirket = str(b.sirket, 120).replace(/[\r\n]+/g, " ");
   const budget = { n: 40 }, since = Date.now() - gun * 864e5;
   const res = await Promise.all(list.flatMap(c => [
@@ -1431,13 +1435,14 @@ async function rakipTakip(req, env) {
       catch (e) { console.log("rakip-takip mail", e?.message); mail = "E-posta gönderilemedi."; }
     }
   }
-  return J({ success: true, status: "ok", gun, count: rows.length, yorum_html: yorum, mail,
-    rakipler: res.map(r => ({ firma: r.firma, ok: r.ok, kaynak: r.kaynak, feed_url: r.feed_url, error: r.error, toplam: r.toplam, tarihsiz: r.tarihsiz, son: r.son, ...(r.kaynak === "LinkedIn" ? { ham: r.ham, tani: r.tani, onceki: r.onceki || [] } : {}), items: r.items })) });
+  return { success: true, status: "ok", gun, count: rows.length, yorum_html: yorum, mail,
+    rakipler: res.map(r => ({ firma: r.firma, ok: r.ok, kaynak: r.kaynak, feed_url: r.feed_url, error: r.error, toplam: r.toplam, tarihsiz: r.tarihsiz, son: r.son, ...(r.kaynak === "LinkedIn" ? { ham: r.ham, tani: r.tani, onceki: r.onceki || [] } : {}), items: r.items })) };
 }
 
 // ---------- Sales Corner SaaS paneli (app.salescorner.co, /api/app/*) ----------
 // Oturum: Supabase (jqllcrmwjxnuzxbzfydu). Ön yüz kullanıcının erişim jetonunu (Bearer) ve projenin herkese açık
-// apikey'ini gönderir; worker bunları yalnızca Supabase RPC'lerine aynen iletir (worker'da Supabase anahtarı yok).
+// apikey'ini gönderir; worker bunları yalnızca Supabase RPC'lerine aynen iletir (worker'da gizli Supabase anahtarı yok;
+// yalnız haftalık takip için herkese açık anon anahtarı SB_ANON_W var).
 // Kota: app_kontrol (çalıştırmadan önce) → mevcut işleyici (iç istek) → başarıda app_kullan (1 hak düşer).
 const SB_URL = "https://jqllcrmwjxnuzxbzfydu.supabase.co";
 const APP_MOD = {
@@ -1609,11 +1614,66 @@ async function ffAnaliz(req, env, au) {
   return J({ success: true, analiz: a, meta: { title: str(t.title, 200), date: t.date ?? null, duration: Number(t.duration) || 0, oranlar }, kota });
 }
 
+// ---------- Panel: haftalık Rakip Takip (app_takip) ----------
+// Supabase pg_cron saatte bir vadesi gelen takiplere tek kullanımlık jeton (48 hex, 1 saat) yazar ve /api/app/takip-run'a
+// { id, token } gönderir. Worker jetonu herkese açık anon anahtarla app_takip_is'e sorar; geçerliyse rakipleri tarar,
+// özeti yalnız hesap e-postasına yollar ve sonucu app_takip_bitir ile kaydeder (jeton orada silinir, tekrar kullanılamaz).
+const SB_ANON_W = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpxbGxjcm13anhudXp4YnpmeWR1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTU0NzE2NzcsImV4cCI6MjExMTA0NzY3N30.kn2IDDNLcI3bjSOXlNWvx9ISHcvN9xkIezFh70xiqiw";
+const SB_ANON_AU = { a: "Bearer " + SB_ANON_W, k: SB_ANON_W };
+const TAKIP_NEDEN = {
+  sure: "Deneme süreniz ya da aboneliğiniz sona erdi.",
+  yok: "Takip bulunamadı.",
+  calisiyor: "Bu takip şu anda çalışıyor, birkaç dakika sonra sonucu görürsünüz.",
+  erken: "Bu takip son 20 saat içinde çalıştı. Haftalık takip otomatik devam ediyor.",
+};
+function takipOzet(s) {
+  return {
+    tarih: new Date().toISOString(), gun: s.gun, count: s.count, yorum_html: str(s.yorum_html, 20000), mail: s.mail,
+    rakipler: (s.rakipler || []).map(r => ({ firma: str(r.firma, 80), ok: !!r.ok, kaynak: str(r.kaynak, 40), error: str(r.error, 300), toplam: Number(r.toplam) || 0,
+      items: (r.items || []).slice(0, 15).map(x => ({ title: str(x.title, 300), link: str(x.link, 600), tarih: str(x.tarih, 40) })) })),
+  };
+}
+async function takipYap(env, is, token) {
+  let s;
+  try { s = await rtCalis(env, { rakipler: is.rakipler, email: is.email, sirket: is.sirket, gun: 7 }); }
+  catch (e) { console.log("takip", e?.stack || e); s = { hata: "Tarama sırasında hata oluştu." }; }
+  const sonuc = s.hata ? { tarih: new Date().toISOString(), hata: s.hata } : takipOzet(s);
+  try { await sbRpc(SB_ANON_AU, "app_takip_bitir", { p_id: is.id, p_token: token, p_sonuc: sonuc }); }
+  catch (e) { console.log("takip bitir", e?.message); }
+  return s.hata ? J({ success: false, status: "error", message: s.hata, error: s.hata, takip: sonuc }) : J({ success: true, takip: sonuc });
+}
+async function takipRun(req, env) {
+  const b = await readBody(req);
+  const id = str(b.id, 40), token = str(b.token, 60);
+  if (!/^[0-9a-f-]{36}$/i.test(id) || !/^[0-9a-f]{48}$/.test(token)) return fail("Geçersiz istek.", 400);
+  const r = await sbRpc(SB_ANON_AU, "app_takip_is", { p_id: id, p_token: token });
+  if (!r.ok || !r.j?.ok) return fail("Geçersiz ya da süresi dolmuş iş.", 403);
+  return keepAlive(takipYap(env, r.j, token));
+}
+async function takipCalistir(req, env) {
+  const au = appAuth(req);
+  if (!au) return fail("Oturumunuz sona erdi, lütfen yeniden giriş yapın.", 401);
+  const b = await readBody(req);
+  const id = str(b.id, 40);
+  if (!/^[0-9a-f-]{36}$/i.test(id)) return fail("Geçersiz istek.", 400);
+  const r = await sbRpc(au, "app_takip_al", { p_id: id });
+  if (r.status === 401 || r.j?.code === "28000") return fail("Oturumunuz sona erdi, lütfen yeniden giriş yapın.", 401);
+  if (!r.ok || !r.j) return fail("Takip başlatılamadı, lütfen tekrar deneyin.", 502);
+  if (!r.j.ok) return J({ success: false, status: "error", neden: r.j.neden, ne_zaman: r.j.ne_zaman || null, message: TAKIP_NEDEN[r.j.neden] || "Takip başlatılamadı.", error: TAKIP_NEDEN[r.j.neden] || "Takip başlatılamadı." }, 409);
+  return keepAlive(takipYap(env, r.j, r.j.token));
+}
+
 async function appRoute(req, env, url, path, cfctx) {
   if (req.method === "OPTIONS") return new Response(null, { status: 204 });
-  if (!sameSite(req)) return fail("Bu uç yalnızca salescorner.co üzerinden kullanılabilir.", 403);
   const sub = path.slice("/api/app/".length);
+  // Cron (Supabase pg_net) çağrısı: kökeni yok, tek kullanımlık jetonla doğrulanır
+  if (sub === "takip-run" && req.method === "POST") {
+    try { return await takipRun(req, env); }
+    catch (e) { console.log(path, e?.stack || e); return fail("İşlem sırasında hata oluştu.", 500); }
+  }
+  if (!sameSite(req)) return fail("Bu uç yalnızca salescorner.co üzerinden kullanılabilir.", 403);
   try {
+    if (sub === "takip/calistir" && req.method === "POST") return await takipCalistir(req, env);
     if (sub === "fireflies/liste" && req.method === "GET") return await ffListe(req);
     if (req.method !== "POST") return fail("Bulunamadı.", 404);
     const modul = sub === "fireflies/analiz" ? "fireflies" : APP_MOD[sub] ? sub : "";

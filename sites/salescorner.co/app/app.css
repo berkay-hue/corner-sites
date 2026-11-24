@@ -332,3 +332,22 @@ textarea.in{min-height:96px;resize:vertical}
 @media (max-width:960px){.oz-hero{grid-template-columns:1fr}.oz-tags{justify-content:flex-start}.oz-steps{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:560px){.oz-hero{padding:24px 20px}.oz-hero h2{font-size:21px}.oz-hero .row .btn{width:100%}.oz-tags span{font-size:12px;padding:6px 10px}.oz-plans .plan ul{grid-template-columns:1fr}.oz-steps{grid-template-columns:1fr}.oz-teaser{grid-template-columns:1fr}.oz-teaser .btn{width:100%}.oz-bar{flex-direction:column;align-items:stretch;bottom:10px}.oz-bar .btn{width:100%}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation-duration:1.5s!important}}
+/* Rakip Takip */
+.tk-mute{color:var(--mute)}
+.tk-list{display:grid;gap:14px}
+.tk-card h3{margin:0 0 6px}
+.tk-chips{display:flex;flex-wrap:wrap;gap:6px}
+.tk-meta{display:flex;flex-wrap:wrap;gap:6px 20px;font-size:13.5px;color:var(--mute);margin:12px 0}
+.tk-meta b{color:var(--fg);font-weight:600}
+.tk-acts{gap:8px;margin-bottom:4px}
+.tk-son{border-top:1px solid var(--line);margin-top:12px;padding-top:10px}
+.tk-son summary{cursor:pointer;font-weight:600;font-size:14px}
+.tk-body{display:grid;gap:12px;margin-top:10px;font-size:14px}
+.tk-yorum{background:var(--acc-soft);border-radius:var(--r-s);padding:12px 14px;line-height:1.55}
+.tk-yorum>:first-child{margin-top:0}.tk-yorum>:last-child{margin-bottom:0}
+.tk-rk{border:1px solid var(--line);border-radius:var(--r-s);padding:10px 12px}
+.tk-items{margin:8px 0 0;padding-left:18px;display:grid;gap:4px}
+.tk-items a{color:var(--acc)}
+.tk-row{border:1px solid var(--line);border-radius:var(--r-s);padding:10px;display:grid;gap:8px}
+.tk-row3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+@media (max-width:720px){.tk-row3{grid-template-columns:1fr}}
