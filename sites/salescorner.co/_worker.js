@@ -464,6 +464,8 @@ function __slideFit(runs, w, h, o = {}) {
   return out;
 }
 // Tek parça yazı için: [yazı, punto]
+// Aynı slayttaki kardeş kutular tek puntoda dursun: her kutuya sığan puntonun en küçüğü
+const __ortakFs = (items, o = {}) => { const v = items.filter(i => String(i.text || "").trim()).map(i => (__slideFit([{ text: __noEmoji(String(i.text)), fontSize: i.fs, fontFamily: i.font, bold: i.bold }], i.w, i.h, { strict: true, ...o })[0] || {}).fontSize || i.fs); return v.length ? Math.min(...v) : (items[0] ? items[0].fs : 10); };
 const __fitTxt = (t, fs, w, h, o = {}) => { const rs = __slideFit(__noEmoji(t).split("\n").map(p => ({ text: p, fontSize: fs })), w, h, o); return [rs.map(r => r.text).join("\n"), rs[0] ? rs[0].fontSize : fs]; };
 
 // ---- Buffer (kod düğümleri için küçük uyarlama) ----
@@ -520,10 +522,37 @@ async function xfetch(ctx, url, init = {}, cred, timeout) {
   if (GOOGLE_CREDS.has(cred)) headers.Authorization = "Bearer " + await googleToken(env);
   else if (cred === "httpBasicAuth") headers.Authorization = "Basic " + btoa((env.HCTI_USER_ID || "") + ":" + (env.HCTI_API_KEY || ""));
   if ((ctx.sub = (ctx.sub || 0) + 1) > 900) throw new Error("Çok fazla dış istek");
+  if (/^https:\/\/app\.scrapingbee\.com\/api\/v1/.test(url) && !init.__sbIc) return sbYedekli(ctx, url, init, headers, body, timeout);
   const ac = new AbortController(); const tm = timeout ? setTimeout(() => ac.abort(), timeout) : null;
   try { return await fetch(url, { method: init.method || "GET", headers, body, redirect: "follow", signal: ac.signal }); }
   catch (e) { if (ac.signal.aborted) throw new HttpErr(`timeout of ${timeout}ms exceeded`, 0); throw new HttpErr(e.message || String(e), 0); }
   finally { if (tm) clearTimeout(tm); }
+}
+// ScrapingBee hata/kredi/zaman aşımı → diğer ScrapingBee anahtarı → hedef siteye doğrudan istek (rakip/sekans çekimi düşmesin)
+async function sbYedekli(ctx, url, init, headers, body, timeout) {
+  const env = ctx.env, u = new URL(url), key = u.searchParams.get("api_key") || "", target = u.searchParams.get("url") || "";
+  const bad = ctx.__sbBad || (ctx.__sbBad = new Set());
+  const tek = (uu, to, h = headers, b = body, m = init.method || "GET") => xfetch(ctx, uu, { method: m, headers: h, body: b, __sbIc: 1 }, null, to);
+  let ilk = null, hata = null;
+  if (!bad.has(key)) {
+    try { const r = await tek(url, timeout); if (r.status < 400) return r; ilk = new Response(await r.text(), { status: r.status, headers: r.headers }); if ([401, 402, 403, 429].includes(r.status)) bad.add(key); }
+    catch (e) { hata = e; }
+  }
+  for (const k of [env.SCRAPINGBEE_API_KEY, env.SCRAPINGBEE_API_KEY_2]) {
+    if (!k || k === key || bad.has(k)) continue;
+    u.searchParams.set("api_key", k);
+    try { const r = await tek(u.toString(), timeout); if (r.status < 400) return r; if ([401, 402, 403, 429].includes(r.status)) bad.add(k); else await r.body?.cancel(); }
+    catch (e) { hata ||= e; }
+  }
+  if (/^https?:\/\//.test(target)) {
+    try {
+      const r = await tek(target, 20000, { "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36", accept: "text/html,application/xhtml+xml,*/*;q=0.8", "accept-language": "tr-TR,tr;q=0.9,en;q=0.8" }, undefined, "GET");
+      const t = await r.text();
+      if (r.status < 400 && t.length > 300) return new Response(t, { status: 200, headers: { "content-type": r.headers.get("content-type") || "text/html; charset=utf-8" } });
+    } catch {}
+  }
+  if (ilk) return ilk;
+  throw hata || new HttpErr("ScrapingBee yanıt vermedi", 0);
 }
 async function errFrom(r) { const t = await r.text(); let b = t; try { b = JSON.parse(t); } catch {} return new HttpErr(`${r.status} - ${JSON.stringify(b)}`, r.status, b); }
 
@@ -9395,7 +9424,7 @@ function addTextBox(slideId, boxId, x, y, w, h, textRuns, opts = {}) {
   }
   const __hb = t => String(t == null ? "" : t).replace(/\{\{#if[^}]*\}\}([\s\S]*?)(?:\{\{else\}\}[\s\S]*?)?\{\{\/if\}\}/g, "$1").replace(/\{\{(?:else|\/if|#if[^}]*)\}\}/g, "");
   textRuns = textRuns.map(r => ({ ...r, text: __noEmoji(__hb(r.text)) }));
-  if (!opts.noFit) textRuns = __slideFit(textRuns, w, h, { strict: !!opts.fillColor, grow: opts.grow, maxFs: opts.maxFs });
+  if (!opts.noFit) textRuns = __slideFit(textRuns, w, h, { strict: !!opts.fillColor || !!opts.strict, grow: opts.grow, maxFs: opts.maxFs });
 
   let insertionIndex = 0;
   for (let i = 0; i < textRuns.length; i++) {
@@ -9637,34 +9666,36 @@ const s3 = makeContentSlide("🎯 Detaylı Analiz");
 
 // Left panel
 addShape(s3, uid("lpanel"), 0.5, 1.1, 4.3, 4.1, C.white);
-addTextBox(s3, uid("prodlbl"), 0.7, 1.2, 3.9, 0.3, [
+const s3vals = [
+  { text: safeStr(analysis.product_service), fs: 11, font: "Calibri", w: 3.9, h: 1.3 },
+  { text: safeStr(analysis.value_proposition), fs: 11, font: "Calibri", w: 3.9, h: 1.85 },
+  { text: safeStr(analysis.target_audience), fs: 11, font: "Calibri", w: 3.9, h: 1.3 },
+  { text: analysis.pricing_model ? safeStr(analysis.pricing_model) : "", fs: 11, font: "Calibri", w: 3.9, h: 1.85 }
+];
+const s3fs = __ortakFs(s3vals, { grow: 1.15, maxFs: 12 });
+const s3val = (id, x, y, v) => addTextBox(s3, uid(id), x, y, v.w, v.h, [
+  { text: v.text, fontSize: s3fs, fontFamily: "Calibri", color: C.darkText }
+], { strict: true });
+addTextBox(s3, uid("prodlbl"), 0.7, 1.18, 3.9, 0.3, [
   { text: "💼 Ürün / Hizmet", fontSize: 13, fontFamily: "Trebuchet MS", color: C.primary, bold: true }
 ]);
-addTextBox(s3, uid("prodval"), 0.7, 1.55, 3.9, 1.2, [
-  { text: safeStr(analysis.product_service), fontSize: 10, fontFamily: "Calibri", color: C.darkText }
-]);
-addTextBox(s3, uid("vplbl"), 0.7, 2.85, 3.9, 0.3, [
+s3val("prodval", 0.7, 1.5, s3vals[0]);
+addTextBox(s3, uid("vplbl"), 0.7, 2.9, 3.9, 0.3, [
   { text: "✨ Değer Önerisi", fontSize: 13, fontFamily: "Trebuchet MS", color: C.success, bold: true }
 ]);
-addTextBox(s3, uid("vpval"), 0.7, 3.2, 3.9, 1.5, [
-  { text: safeStr(analysis.value_proposition), fontSize: 10, fontFamily: "Calibri", color: C.darkText }
-]);
+s3val("vpval", 0.7, 3.22, s3vals[1]);
 
 // Right panel
 addShape(s3, uid("rpanel"), 5.2, 1.1, 4.3, 4.1, C.white);
-addTextBox(s3, uid("talbl"), 5.4, 1.2, 3.9, 0.3, [
+addTextBox(s3, uid("talbl"), 5.4, 1.18, 3.9, 0.3, [
   { text: "👥 Hedef Kitle", fontSize: 13, fontFamily: "Trebuchet MS", color: C.accent, bold: true }
 ]);
-addTextBox(s3, uid("taval"), 5.4, 1.55, 3.9, 1.2, [
-  { text: safeStr(analysis.target_audience), fontSize: 10, fontFamily: "Calibri", color: C.darkText }
-]);
+s3val("taval", 5.4, 1.5, s3vals[2]);
 if (analysis.pricing_model) {
-  addTextBox(s3, uid("pricelbl"), 5.4, 2.85, 3.9, 0.3, [
+  addTextBox(s3, uid("pricelbl"), 5.4, 2.9, 3.9, 0.3, [
     { text: "💰 Fiyatlandırma", fontSize: 13, fontFamily: "Trebuchet MS", color: C.warning, bold: true }
   ]);
-  addTextBox(s3, uid("priceval"), 5.4, 3.2, 3.9, 1.5, [
-    { text: analysis.pricing_model, fontSize: 10, fontFamily: "Calibri", color: C.darkText }
-  ]);
+  s3val("priceval", 5.4, 3.22, s3vals[3]);
 }
 
 
@@ -9765,7 +9796,7 @@ if (emailSeq.length > 0) {
     const emailBodyFont = emailBodyText.length > 950 ? 10 : emailBodyText.length > 700 ? 11 : 12;
     addTextBox(sid, uid("bodytext"), 0.7, 2.15, 8.6, 2.55, [
       { text: emailBodyText, fontSize: emailBodyFont, fontFamily: "Calibri", color: C.darkText }
-    ], { grow: 1.3, maxFs: 13 });
+    ], { grow: 1.3, maxFs: 13, strict: true });
     
     // CTA
     addShape(sid, uid("ctabg"), 0.5, 4.85, 4.3, 0.45, C.accentLight);
@@ -9871,16 +9902,19 @@ if (coldCall.opening) {
   if (objKeys.length > 0) {
     const sObj = makeContentSlide("🛡️ İtiraz Yönetimi");
     
-    objKeys.slice(0, 4).forEach((key, idx) => {
+    const objTop = objKeys.slice(0, 4);
+    const objKeyFs = __ortakFs(objTop.map(k => ({ text: `"${k}"`, fs: 11, font: "Trebuchet MS", bold: true, w: 8.5, h: 0.27 })));
+    const objValFs = __ortakFs(objTop.map(k => ({ text: `✅ ${String(objections[k]).substring(0, 360)}`, fs: 10, font: "Calibri", w: 8.5, h: 0.6 })), { min: 8 });
+    objTop.forEach((key, idx) => {
       const y = 1.0 + idx * 1.05;
       addShape(sObj, uid("objbg"), 0.5, y, 9, 0.95, C.white);
       addShape(sObj, uid("objacc"), 0.5, y, 0.06, 0.95, C.danger);
       addTextBox(sObj, uid("objkey"), 0.75, y + 0.05, 8.5, 0.25, [
-        { text: `❌ "${key}"`, fontSize: 11, fontFamily: "Trebuchet MS", color: C.danger, bold: true }
-      ]);
+        { text: `❌ "${key}"`, fontSize: objKeyFs, fontFamily: "Trebuchet MS", color: C.danger, bold: true }
+      ], { strict: true });
       addTextBox(sObj, uid("objval"), 0.75, y + 0.32, 8.5, 0.6, [
-        { text: `✅ ${String(objections[key]).substring(0, 360)}`, fontSize: 10, fontFamily: "Calibri", color: C.darkText }
-      ]);
+        { text: `✅ ${String(objections[key]).substring(0, 360)}`, fontSize: objValFs, fontFamily: "Calibri", color: C.darkText }
+      ], { strict: true, min: 8 });
     });
   }
 }
