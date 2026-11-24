@@ -432,7 +432,7 @@ const __t = f => { try { return __cat(f()); } catch { return ""; } };
 const __sleep = ms => new Promise(r => setTimeout(r, ms));
 // ---- Slayt metni: emojisiz, kutuya sığan yazı (Slides API'de otomatik sığdırma yok, taşan yazı alttaki öğenin üstüne biner) ----
 const __noEmoji = s => String(s ?? "").replace(/(?![★☆✓✔✗])[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{2B00}-\u{2BFF}]|[\u{FE0F}\u{200D}\u{20E3}]/gu, "").replace(/^[ \t]+/gm, "").replace(/[ \t]{2,}/g, " ");
-const __cw = f => /consolas|courier|mono/i.test(f || "") ? 0.6 : /trebuchet|verdana|arial|montserrat/i.test(f || "") ? 0.56 : 0.52;
+const __cw = f => /consolas|courier|mono/i.test(f || "") ? 0.6 : /bebas|oswald|condensed/i.test(f || "") ? 0.42 : /trebuchet|verdana|arial|montserrat|inter/i.test(f || "") ? 0.56 : 0.52;
 // runs: [{text, fontSize, fontFamily, bold, spacingBefore, spacingAfter}], w/h inç. Sığmazsa önce yazıyı (en az 7pt) küçültür, sonra en uzun parçayı kelime sınırında kısaltır.
 function __slideFit(runs, w, h, o = {}) {
   const W = Math.max(0.3, w - 0.2 - (o.indent || 0)) * 72, H = Math.max(0.15, h - 0.1) * 72;
@@ -9340,25 +9340,29 @@ function hexToRgb(hex) {
 }
 
 const C = {
-  primary: hexToRgb("6366F1"),
-  primaryDark: hexToRgb("4338CA"),
-  accent: hexToRgb("8B5CF6"),
-  accentLight: hexToRgb("EEF2FF"),
-  dark: hexToRgb("1E1B4B"),
-  darkText: hexToRgb("1F2937"),
-  midText: hexToRgb("4B5563"),
-  lightText: hexToRgb("9CA3AF"),
+  // SAAS Corner firma sunumu şablonu: krem zemin, sarı (FEBC2D) + camgöbeği (00AFCA) vurgu, siyah metin
+  primary: hexToRgb("0093AB"),
+  primaryDark: hexToRgb("006F82"),
+  accent: hexToRgb("C98A00"),
+  accentLight: hexToRgb("FFF3D1"),
+  dark: hexToRgb("111111"),
+  darkText: hexToRgb("111111"),
+  midText: hexToRgb("45483F"),
+  lightText: hexToRgb("7A7D72"),
   white: hexToRgb("FFFFFF"),
-  offWhite: hexToRgb("F9FAFB"),
-  lightBg: hexToRgb("F3F4F6"),
-  success: hexToRgb("10B981"),
-  warning: hexToRgb("F59E0B"),
-  danger: hexToRgb("EF4444"),
-  info: hexToRgb("0EA5E9"),
+  offWhite: hexToRgb("F5F4EB"),
+  lightBg: hexToRgb("EEEDE2"),
+  gold: hexToRgb("FEBC2D"),
+  cyan: hexToRgb("00AFCA"),
+  blob: hexToRgb("E9EDC9"),
+  success: hexToRgb("2E9E5B"),
+  warning: hexToRgb("D98A00"),
+  danger: hexToRgb("DC2626"),
+  info: hexToRgb("0093AB"),
   linkedin: hexToRgb("0A66C2"),
   greenBg: hexToRgb("F0FDF4"),
-  yellowBg: hexToRgb("FEF3C7"),
-  blueBg: hexToRgb("EFF6FF"),
+  yellowBg: hexToRgb("FFF1CC"),
+  blueBg: hexToRgb("E3F6F9"),
   redBg: hexToRgb("FEE2E2"),
   greenTag: hexToRgb("ECFDF5"),
   greenTagText: hexToRgb("065F46"),
@@ -9565,24 +9569,45 @@ function addTextBox(slideId, boxId, x, y, w, h, textRuns, opts = {}) {
 }
 
 // === SLIDE TEMPLATE HELPERS ===
+// Şablondaki yumuşak lekeler + iki satırlık logo + sarı köşe braketi + "Sayfa NN"
+function addBlobs(sid) {
+  addShape(sid, uid("blob"), 7.4, -1.9, 4.4, 3.6, C.blob, { shapeType: "ELLIPSE", alpha: 0.55 });
+  addShape(sid, uid("blob"), 8.2, -1.3, 2.8, 2.4, C.blob, { shapeType: "ELLIPSE", alpha: 0.6 });
+  addShape(sid, uid("blob"), -1.8, 4.1, 3.6, 2.8, C.blob, { shapeType: "ELLIPSE", alpha: 0.45 });
+}
+function addLogo(sid, x, y, fs) {
+  fs = fs || 8; const h = fs / 72 * 2.3, w = fs / 72 * 4.6;
+  addTextBox(sid, uid("logo"), x, y, w + 0.25, h, [
+    { text: "SALES", fontSize: fs, fontFamily: "Inter", color: C.dark, bold: true },
+    { text: "CORNER", fontSize: fs, fontFamily: "Inter", color: C.dark, bold: true }
+  ]);
+  addShape(sid, uid("brk"), x + w, y + 0.03, 0.16, 0.025, C.gold);
+  addShape(sid, uid("brk"), x + w + 0.135, y + 0.03, 0.025, h - 0.08, C.gold);
+}
+function addPageNo(sid) {
+  addTextBox(sid, uid("pg"), 8.2, 0.16, 1.3, 0.22, [
+    { text: "Sayfa " + String(slideIds.length).padStart(2, "0"), fontSize: 8, fontFamily: "Inter", color: C.lightText, alignment: "END" }
+  ]);
+}
 
 function makeSectionSlide(title, subtitle) {
   const sid = uid("section");
   createSlide(sid);
-  setBackground(sid, C.dark);
-  
-  // Decorative circles
-  addShape(sid, uid("deco"), 7.5, -1.5, 4, 4, C.primary, { alpha: 0.15 });
-  addShape(sid, uid("deco"), -1.5, 3, 3.5, 3.5, C.accent, { alpha: 0.1 });
+  setBackground(sid, C.offWhite);
+  addBlobs(sid);
+  addShape(sid, uid("deco"), 7.2, 2.2, 1.9, 1.9, C.gold, { shapeType: "ELLIPSE", alpha: 0.9 });
+  addShape(sid, uid("deco"), 8.4, 3.7, 0.9, 0.9, C.cyan, { shapeType: "ELLIPSE", alpha: 0.85 });
+  addLogo(sid, 0.5, 0.3, 9);
+  addPageNo(sid);
   
   // Title
   addTextBox(sid, uid("title"), 0.5, 2.0, 9, 1, [
-    { text: title, fontSize: 36, fontFamily: "Trebuchet MS", color: C.white, bold: true, alignment: "CENTER" }
+    { text: title, fontSize: 34, fontFamily: "Inter", color: C.darkText, bold: true, alignment: "CENTER" }
   ]);
   
   // Subtitle
   addTextBox(sid, uid("sub"), 1, 3.2, 8, 0.6, [
-    { text: subtitle, fontSize: 16, fontFamily: "Calibri", color: C.lightText, alignment: "CENTER" }
+    { text: subtitle, fontSize: 16, fontFamily: "Inter", color: C.lightText, alignment: "CENTER" }
   ]);
   
   return sid;
@@ -9592,22 +9617,21 @@ function makeContentSlide(title) {
   const sid = uid("content");
   createSlide(sid);
   setBackground(sid, C.offWhite);
-  
-  // Top accent bar
-  addShape(sid, uid("bar"), 0, 0, 10, 0.08, C.primary);
+  addBlobs(sid);
+  addLogo(sid, 0.5, 0.14, 6.5);
+  addPageNo(sid);
   
   // Title
-  addTextBox(sid, uid("title"), 0.5, 0.25, 9, 0.6, [
-    { text: title, fontSize: 22, fontFamily: "Trebuchet MS", color: C.darkText, bold: true }
+  addTextBox(sid, uid("title"), 0.5, 0.46, 9, 0.56, [
+    { text: title, fontSize: 20, fontFamily: "Inter", color: C.darkText, bold: true }
   ]);
   
-  // Footer bar
-  addShape(sid, uid("footer"), 0, 5.45, 10, 0.18, C.dark);
-  addTextBox(sid, uid("ftl"), 0.3, 5.45, 4, 0.18, [
-    { text: "Sales Corner • salescorner.co", fontSize: 7, fontFamily: "Calibri", color: C.white }
+  // Footer
+  addTextBox(sid, uid("ftl"), 0.3, 5.42, 4, 0.18, [
+    { text: "Sales Corner • salescorner.co", fontSize: 7, fontFamily: "Inter", color: C.lightText }
   ], { valign: "MIDDLE" });
   addTextBox(sid, uid("ftr"), 5.5, 5.45, 4, 0.18, [
-    { text: safeStr(actualData.company), fontSize: 7, fontFamily: "Calibri", color: C.lightText, alignment: "END" }
+    { text: safeStr(actualData.company), fontSize: 7, fontFamily: "Inter", color: C.lightText, alignment: "END" }
   ], { valign: "MIDDLE" });
   
   return sid;
@@ -9620,11 +9644,11 @@ function makeInfoCard(sid, x, y, w, h, label, value, accentColor) {
   addShape(sid, uid("accent"), x, y, 0.06, h, accentColor || C.primary);
   // Label
   addTextBox(sid, uid("lbl"), x + 0.2, y + 0.08, w - 0.3, 0.22, [
-    { text: label.toUpperCase(), fontSize: 8, fontFamily: "Calibri", color: C.primary, bold: true }
+    { text: label.toUpperCase(), fontSize: 8, fontFamily: "Inter", color: C.primary, bold: true }
   ]);
   // Value
   addTextBox(sid, uid("val"), x + 0.2, y + 0.32, w - 0.3, h - 0.4, [
-    { text: String(value), fontSize: 11, fontFamily: "Calibri", color: C.darkText }
+    { text: String(value), fontSize: 11, fontFamily: "Inter", color: C.darkText }
   ]);
 }
 
@@ -9643,32 +9667,31 @@ if (companyLower.includes('lead generation') || companyLower.includes('nitelikli
 // ====================================================
 const s1 = uid("cover");
 createSlide(s1);
-setBackground(s1, C.dark);
+setBackground(s1, C.offWhite);
+addBlobs(s1);
+addShape(s1, uid("deco"), 6.9, 0.9, 2.6, 2.6, C.gold, { shapeType: "ELLIPSE", alpha: 0.9 });
+addShape(s1, uid("deco"), 7.75, 2.75, 1.3, 1.3, C.cyan, { shapeType: "ELLIPSE", alpha: 0.85 });
 
-// Decorative circles
-addShape(s1, uid("deco"), 7, -2, 6, 6, C.primary, { alpha: 0.2 });
-addShape(s1, uid("deco"), 8.5, -0.5, 3, 3, C.accent, { alpha: 0.15 });
-addShape(s1, uid("deco"), -2, 3.5, 5, 5, C.primaryDark, { alpha: 0.15 });
+// Şablon logosu + sayfa no
+addLogo(s1, 0.6, 0.42, 11);
+addPageNo(s1);
 
-// SAAS CORNER logo text
-addTextBox(s1, uid("logo"), 0.7, 0.4, 4, 0.5, [
-  { text: "SALES CORNER", fontSize: 14, fontFamily: "Trebuchet MS", color: C.accent, bold: true }
+// Ana başlık (şablondaki büyük dar başlık)
+addTextBox(s1, uid("maintitle"), 0.6, 1.2, 6.6, 2.3, [
+  { text: String(__srcTitle).toLocaleUpperCase("tr-TR"), fontSize: (String(__srcTitle).length > 14 ? 46 : 60), fontFamily: "Bebas Neue", color: C.darkText },
+  { text: "ANALİZ RAPORU", fontSize: (String(__srcTitle).length > 14 ? 46 : 60), fontFamily: "Bebas Neue", color: C.darkText }
+]);
+addShape(s1, uid("rule"), 0.65, 3.55, 1.6, 0.05, C.gold);
+
+// Firma adı
+addTextBox(s1, uid("company"), 0.6, 3.68, 6.4, 0.5, [
+  { text: safeStr(actualData.company), fontSize: 20, fontFamily: "Inter", color: C.darkText, bold: true }
 ]);
 
-// Main title
-addTextBox(s1, uid("maintitle"), 0.7, 1.3, 7, 2.2, [
-  { text: __srcTitle, fontSize: 44, fontFamily: "Trebuchet MS", color: C.white, bold: true },
-  { text: "Analiz Raporu", fontSize: 44, fontFamily: "Trebuchet MS", color: C.white, bold: true }
-]);
-
-// Company name
-addTextBox(s1, uid("company"), 0.7, 3.5, 6, 0.6, [
-  { text: safeStr(actualData.company), fontSize: 22, fontFamily: "Calibri", color: C.accent }
-]);
-
-// Date & Industry
-addTextBox(s1, uid("meta"), 0.7, 4.2, 6, 0.4, [
-  { text: `${safeStr(actualData.detected_industry)}  •  ${dateStr}`, fontSize: 13, fontFamily: "Calibri", color: C.lightText }
+// Created by / Tarih (şablon kapak alt satırı)
+addTextBox(s1, uid("meta"), 0.6, 4.55, 6.4, 0.6, [
+  { text: `Sektör : ${safeStr(actualData.detected_industry)}`, fontSize: 10, fontFamily: "Inter", color: C.darkText },
+  { text: `Tarih : ${dateStr}`, fontSize: 10, fontFamily: "Inter", color: C.darkText }
 ]);
 
 
@@ -9703,10 +9726,10 @@ if (__wsText) {
   addShape(s2, uid("wsbg"), 0.5, 3.8, 9, 1.3, C.white);
   addShape(s2, uid("wsacc"), 0.5, 3.8, 0.06, 1.3, C.info);
   addTextBox(s2, uid("wslbl"), 0.75, 3.85, 8.5, 0.2, [
-    { text: "SİTEDEKİ ANA MESAJLAR", fontSize: 8, fontFamily: "Calibri", color: C.info, bold: true }
+    { text: "SİTEDEKİ ANA MESAJLAR", fontSize: 8, fontFamily: "Inter", color: C.info, bold: true }
   ]);
   addTextBox(s2, uid("wsval"), 0.75, 4.1, 8.5, 0.9, [
-    { text: __wsText.substring(0, 420), fontSize: 11, fontFamily: "Calibri", color: C.midText }
+    { text: __wsText.substring(0, 420), fontSize: 11, fontFamily: "Inter", color: C.midText }
   ]);
 }
 
@@ -9719,33 +9742,33 @@ const s3 = makeContentSlide("🎯 Detaylı Analiz");
 // Left panel
 addShape(s3, uid("lpanel"), 0.5, 1.1, 4.3, 4.1, C.white);
 const s3vals = [
-  { text: safeStr(analysis.product_service), fs: 11, font: "Calibri", w: 3.9, h: 1.3 },
-  { text: safeStr(analysis.value_proposition), fs: 11, font: "Calibri", w: 3.9, h: 1.85 },
-  { text: safeStr(analysis.target_audience), fs: 11, font: "Calibri", w: 3.9, h: 1.3 },
-  { text: analysis.pricing_model ? safeStr(analysis.pricing_model) : "", fs: 11, font: "Calibri", w: 3.9, h: 1.85 }
+  { text: safeStr(analysis.product_service), fs: 11, font: "Inter", w: 3.9, h: 1.3 },
+  { text: safeStr(analysis.value_proposition), fs: 11, font: "Inter", w: 3.9, h: 1.85 },
+  { text: safeStr(analysis.target_audience), fs: 11, font: "Inter", w: 3.9, h: 1.3 },
+  { text: analysis.pricing_model ? safeStr(analysis.pricing_model) : "", fs: 11, font: "Inter", w: 3.9, h: 1.85 }
 ];
 const s3fs = __ortakFs(s3vals, { grow: 1.15, maxFs: 12 });
 const s3val = (id, x, y, v) => addTextBox(s3, uid(id), x, y, v.w, v.h, [
-  { text: v.text, fontSize: s3fs, fontFamily: "Calibri", color: C.darkText }
+  { text: v.text, fontSize: s3fs, fontFamily: "Inter", color: C.darkText }
 ], { strict: true });
 addTextBox(s3, uid("prodlbl"), 0.7, 1.18, 3.9, 0.3, [
-  { text: "💼 Ürün / Hizmet", fontSize: 13, fontFamily: "Trebuchet MS", color: C.primary, bold: true }
+  { text: "💼 Ürün / Hizmet", fontSize: 13, fontFamily: "Inter", color: C.primary, bold: true }
 ]);
 s3val("prodval", 0.7, 1.5, s3vals[0]);
 addTextBox(s3, uid("vplbl"), 0.7, 2.9, 3.9, 0.3, [
-  { text: "✨ Değer Önerisi", fontSize: 13, fontFamily: "Trebuchet MS", color: C.success, bold: true }
+  { text: "✨ Değer Önerisi", fontSize: 13, fontFamily: "Inter", color: C.success, bold: true }
 ]);
 s3val("vpval", 0.7, 3.22, s3vals[1]);
 
 // Right panel
 addShape(s3, uid("rpanel"), 5.2, 1.1, 4.3, 4.1, C.white);
 addTextBox(s3, uid("talbl"), 5.4, 1.18, 3.9, 0.3, [
-  { text: "👥 Hedef Kitle", fontSize: 13, fontFamily: "Trebuchet MS", color: C.accent, bold: true }
+  { text: "👥 Hedef Kitle", fontSize: 13, fontFamily: "Inter", color: C.accent, bold: true }
 ]);
 s3val("taval", 5.4, 1.5, s3vals[2]);
 if (analysis.pricing_model) {
   addTextBox(s3, uid("pricelbl"), 5.4, 2.9, 3.9, 0.3, [
-    { text: "💰 Fiyatlandırma", fontSize: 13, fontFamily: "Trebuchet MS", color: C.warning, bold: true }
+    { text: "💰 Fiyatlandırma", fontSize: 13, fontFamily: "Inter", color: C.warning, bold: true }
   ]);
   s3val("priceval", 5.4, 3.22, s3vals[3]);
 }
@@ -9764,12 +9787,12 @@ if (painPoints.length > 0 || advantages.length > 0) {
   addShape(s4, uid("ppbg"), 0.5, 1.1, 4.3, 4.1, C.white);
   addShape(s4, uid("ppheader"), 0.5, 1.1, 4.3, 0.45, C.danger);
   addTextBox(s4, uid("pplbl"), 0.7, 1.1, 3.9, 0.45, [
-    { text: "⚡ Müşteri Sorun Noktaları", fontSize: 12, fontFamily: "Trebuchet MS", color: C.white, bold: true }
+    { text: "⚡ Müşteri Sorun Noktaları", fontSize: 12, fontFamily: "Inter", color: C.white, bold: true }
   ], { valign: "MIDDLE" });
   
   if (painPoints.length > 0) {
     const ppRuns = painPoints.map(p => ({
-      text: `• ${p}`, fontSize: 10, fontFamily: "Calibri", color: C.darkText, spacingAfter: 6
+      text: `• ${p}`, fontSize: 10, fontFamily: "Inter", color: C.darkText, spacingAfter: 6
     }));
     addTextBox(s4, uid("pplist"), 0.7, 1.7, 3.9, 3.3, ppRuns);
   }
@@ -9778,12 +9801,12 @@ if (painPoints.length > 0 || advantages.length > 0) {
   addShape(s4, uid("advbg"), 5.2, 1.1, 4.3, 4.1, C.white);
   addShape(s4, uid("advheader"), 5.2, 1.1, 4.3, 0.45, C.success);
   addTextBox(s4, uid("advlbl"), 5.4, 1.1, 3.9, 0.45, [
-    { text: "🏆 Rekabet Avantajları", fontSize: 12, fontFamily: "Trebuchet MS", color: C.white, bold: true }
+    { text: "🏆 Rekabet Avantajları", fontSize: 12, fontFamily: "Inter", color: C.white, bold: true }
   ], { valign: "MIDDLE" });
   
   if (advantages.length > 0) {
     const advRuns = advantages.map(a => ({
-      text: `• ${a}`, fontSize: 10, fontFamily: "Calibri", color: C.darkText, spacingAfter: 6
+      text: `• ${a}`, fontSize: 10, fontFamily: "Inter", color: C.darkText, spacingAfter: 6
     }));
     addTextBox(s4, uid("advlist"), 5.4, 1.7, 3.9, 3.3, advRuns);
   }
@@ -9808,10 +9831,10 @@ if (useCases.length > 0) {
     addShape(s5, uid("ucbg"), x, y, 2.8, 1.7, C.white);
     addShape(s5, uid("ucbar"), x, y, 2.8, 0.35, clr);
     addTextBox(s5, uid("ucnum"), x + 0.1, y, 2.6, 0.35, [
-      { text: `Senaryo ${idx + 1}`, fontSize: 9, fontFamily: "Trebuchet MS", color: C.white, bold: true }
+      { text: `Senaryo ${idx + 1}`, fontSize: 9, fontFamily: "Inter", color: C.white, bold: true }
     ], { valign: "MIDDLE" });
     addTextBox(s5, uid("uctext"), x + 0.1, y + 0.45, 2.6, 1.15, [
-      { text: uc, fontSize: 11, fontFamily: "Calibri", color: C.darkText }
+      { text: uc, fontSize: 11, fontFamily: "Inter", color: C.darkText }
     ]);
   });
 }
@@ -9831,13 +9854,13 @@ if (emailSeq.length > 0) {
     addShape(sid, uid("subjacc"), 0.5, 1.1, 0.06, 0.85, C.primary);
     
     const subjRuns = [
-      { text: "Konu A: ", fontSize: 10, fontFamily: "Calibri", color: C.primary, bold: true },
-      { text: email.subject_line || "", fontSize: 11, fontFamily: "Calibri", color: C.darkText }
+      { text: "Konu A: ", fontSize: 10, fontFamily: "Inter", color: C.primary, bold: true },
+      { text: email.subject_line || "", fontSize: 11, fontFamily: "Inter", color: C.darkText }
     ];
     if (email.subject_line_b) {
       subjRuns.push(
-        { text: "Konu B: ", fontSize: 10, fontFamily: "Calibri", color: C.warning, bold: true },
-        { text: email.subject_line_b, fontSize: 11, fontFamily: "Calibri", color: C.darkText }
+        { text: "Konu B: ", fontSize: 10, fontFamily: "Inter", color: C.warning, bold: true },
+        { text: email.subject_line_b, fontSize: 11, fontFamily: "Inter", color: C.darkText }
       );
     }
     addTextBox(sid, uid("subjtxt"), 0.75, 1.15, 8.5, 0.75, subjRuns);
@@ -9847,13 +9870,13 @@ if (emailSeq.length > 0) {
     const emailBodyText = safeStr(email.body).substring(0, 1150);
     const emailBodyFont = emailBodyText.length > 950 ? 10 : emailBodyText.length > 700 ? 11 : 12;
     addTextBox(sid, uid("bodytext"), 0.7, 2.15, 8.6, 2.55, [
-      { text: emailBodyText, fontSize: emailBodyFont, fontFamily: "Calibri", color: C.darkText }
+      { text: emailBodyText, fontSize: emailBodyFont, fontFamily: "Inter", color: C.darkText }
     ], { grow: 1.3, maxFs: 13, strict: true });
     
     // CTA
     addShape(sid, uid("ctabg"), 0.5, 4.85, 4.3, 0.45, C.accentLight);
     addTextBox(sid, uid("ctatext"), 0.7, 4.85, 3.9, 0.45, [
-      { text: `🎯 CTA: ${email.cta || ""}`, fontSize: 9, fontFamily: "Calibri", color: C.primaryDark, bold: true }
+      { text: `🎯 CTA: ${email.cta || ""}`, fontSize: 9, fontFamily: "Inter", color: C.primaryDark, bold: true }
     ], { valign: "MIDDLE" });
     
     // Personalization tokens
@@ -9861,7 +9884,7 @@ if (emailSeq.length > 0) {
     if (tokens.length > 0) {
       addShape(sid, uid("tokbg"), 5.2, 4.85, 4.3, 0.45, C.yellowBg);
       addTextBox(sid, uid("toktxt"), 5.4, 4.85, 3.9, 0.45, [
-        { text: `🔑 ${tokens.join(", ")}`, fontSize: 8, fontFamily: "Calibri", color: C.yellowTagText }
+        { text: `🔑 ${tokens.join(", ")}`, fontSize: 8, fontFamily: "Inter", color: C.yellowTagText }
       ], { valign: "MIDDLE" });
     }
   });
@@ -9885,10 +9908,10 @@ if (linkedinSeq.length > 0) {
     addShape(sLi, uid("libg"), 0.5, y, 9, 1.2, C.white);
     addShape(sLi, uid("liacc"), 0.5, y, 0.06, 1.2, C.linkedin);
     addTextBox(sLi, uid("liheader"), 0.75, y + 0.05, 8.5, 0.3, [
-      { text: `Adım ${step.step || idx + 1}: ${actionLabel}  •  Gün ${step.delay_days || 0}`, fontSize: 11, fontFamily: "Trebuchet MS", color: C.linkedin, bold: true }
+      { text: `Adım ${step.step || idx + 1}: ${actionLabel}  •  Gün ${step.delay_days || 0}`, fontSize: 11, fontFamily: "Inter", color: C.linkedin, bold: true }
     ]);
     addTextBox(sLi, uid("limsg"), 0.75, y + 0.38, 8.5, 0.75, [
-      { text: step.message || "", fontSize: 11, fontFamily: "Calibri", color: C.darkText }
+      { text: step.message || "", fontSize: 11, fontFamily: "Inter", color: C.darkText }
     ], { grow: 1.25, maxFs: 13 });
   });
 }
@@ -9906,20 +9929,20 @@ if (coldCall.opening) {
   addShape(sCC, uid("openbg"), 0.5, 1.1, 9, 1.0, C.greenBg);
   addShape(sCC, uid("openacc"), 0.5, 1.1, 0.06, 1.0, C.success);
   addTextBox(sCC, uid("openlbl"), 0.75, 1.12, 8.5, 0.22, [
-    { text: "🎬 Açılış", fontSize: 11, fontFamily: "Trebuchet MS", color: C.success, bold: true }
+    { text: "🎬 Açılış", fontSize: 11, fontFamily: "Inter", color: C.success, bold: true }
   ]);
   addTextBox(sCC, uid("openval"), 0.75, 1.38, 8.5, 0.65, [
-    { text: coldCall.opening, fontSize: 9, fontFamily: "Calibri", color: C.darkText }
+    { text: coldCall.opening, fontSize: 9, fontFamily: "Inter", color: C.darkText }
   ], { strict: true });
   
   // Pain point questions
   const ppQuestions = safeArr(coldCall.pain_point_questions);
   if (ppQuestions.length > 0) {
     addTextBox(sCC, uid("qslbl"), 0.5, 2.3, 9, 0.25, [
-      { text: "❓ Sorun Tespiti Soruları", fontSize: 11, fontFamily: "Trebuchet MS", color: C.primary, bold: true }
+      { text: "❓ Sorun Tespiti Soruları", fontSize: 11, fontFamily: "Inter", color: C.primary, bold: true }
     ]);
     const qRuns = ppQuestions.slice(0, 5).map(q => ({
-      text: `• ${q}`, fontSize: 9, fontFamily: "Calibri", color: C.darkText, spacingAfter: 2
+      text: `• ${q}`, fontSize: 9, fontFamily: "Inter", color: C.darkText, spacingAfter: 2
     }));
     addTextBox(sCC, uid("qslist"), 0.7, 2.55, 8.5, 1.12, qRuns, { strict: true });
   }
@@ -9928,19 +9951,19 @@ if (coldCall.opening) {
   if (coldCall.value_pitch) {
     addShape(sCC, uid("vpbg"), 0.5, 3.74, 4.3, 1.42, C.blueBg);
     addTextBox(sCC, uid("vplbl"), 0.65, 3.78, 4, 0.2, [
-      { text: "💎 Değer Sunumu", fontSize: 9, fontFamily: "Trebuchet MS", color: C.info, bold: true }
+      { text: "💎 Değer Sunumu", fontSize: 9, fontFamily: "Inter", color: C.info, bold: true }
     ]);
     addTextBox(sCC, uid("vpval"), 0.65, 4.0, 4, 1.12, [
-      { text: coldCall.value_pitch, fontSize: 9.5, fontFamily: "Calibri", color: C.darkText }
+      { text: coldCall.value_pitch, fontSize: 9.5, fontFamily: "Inter", color: C.darkText }
     ], { strict: true });
   }
   if (coldCall.closing) {
     addShape(sCC, uid("clbg"), 5.2, 3.74, 4.3, 1.42, C.yellowBg);
     addTextBox(sCC, uid("cllbl"), 5.35, 3.78, 4, 0.2, [
-      { text: "🎯 Kapanış", fontSize: 9, fontFamily: "Trebuchet MS", color: C.yellowTagText, bold: true }
+      { text: "🎯 Kapanış", fontSize: 9, fontFamily: "Inter", color: C.yellowTagText, bold: true }
     ]);
     addTextBox(sCC, uid("clval"), 5.35, 4.0, 4, 1.12, [
-      { text: coldCall.closing, fontSize: 9.5, fontFamily: "Calibri", color: C.darkText }
+      { text: coldCall.closing, fontSize: 9.5, fontFamily: "Inter", color: C.darkText }
     ], { strict: true });
   }
   
@@ -9955,17 +9978,17 @@ if (coldCall.opening) {
     const sObj = makeContentSlide("🛡️ İtiraz Yönetimi");
     
     const objTop = objKeys.slice(0, 4);
-    const objKeyFs = __ortakFs(objTop.map(k => ({ text: `"${k}"`, fs: 11, font: "Trebuchet MS", bold: true, w: 8.5, h: 0.27 })));
-    const objValFs = __ortakFs(objTop.map(k => ({ text: `✅ ${String(objections[k]).substring(0, 360)}`, fs: 10, font: "Calibri", w: 8.5, h: 0.6 })), { min: 8 });
+    const objKeyFs = __ortakFs(objTop.map(k => ({ text: `"${k}"`, fs: 11, font: "Inter", bold: true, w: 8.5, h: 0.27 })));
+    const objValFs = __ortakFs(objTop.map(k => ({ text: `✅ ${String(objections[k]).substring(0, 360)}`, fs: 10, font: "Inter", w: 8.5, h: 0.6 })), { min: 8 });
     objTop.forEach((key, idx) => {
       const y = 1.0 + idx * 1.05;
       addShape(sObj, uid("objbg"), 0.5, y, 9, 0.95, C.white);
       addShape(sObj, uid("objacc"), 0.5, y, 0.06, 0.95, C.danger);
       addTextBox(sObj, uid("objkey"), 0.75, y + 0.05, 8.5, 0.25, [
-        { text: `❌ "${key}"`, fontSize: objKeyFs, fontFamily: "Trebuchet MS", color: C.danger, bold: true }
+        { text: `❌ "${key}"`, fontSize: objKeyFs, fontFamily: "Inter", color: C.danger, bold: true }
       ], { strict: true });
       addTextBox(sObj, uid("objval"), 0.75, y + 0.32, 8.5, 0.6, [
-        { text: `✅ ${String(objections[key]).substring(0, 360)}`, fontSize: objValFs, fontFamily: "Calibri", color: C.darkText }
+        { text: `✅ ${String(objections[key]).substring(0, 360)}`, fontSize: objValFs, fontFamily: "Inter", color: C.darkText }
       ], { strict: true, min: 8 });
     });
   }
@@ -9994,11 +10017,11 @@ if (jobTitles.length > 0 || industries.length > 0) {
   sections.forEach((section) => {
     if (section.items.length === 0) return;
     addTextBox(sTarget, uid("tglbl"), 0.5, curY, 9, 0.3, [
-      { text: section.label, fontSize: 12, fontFamily: "Trebuchet MS", color: C.darkText, bold: true }
+      { text: section.label, fontSize: 12, fontFamily: "Inter", color: C.darkText, bold: true }
     ]);
     curY += 0.35;
     addTextBox(sTarget, uid("tgval"), 0.6, curY, 8.8, 0.5, [
-      { text: section.items.map(v => String(v).replace(/^(\d+)\s*,\s*\+$/, "$1+").replace(/^(\d+)\s*,\s*(\d+)$/, "$1-$2")).join("  •  "), fontSize: 10.5, fontFamily: "Calibri", color: section.textColor }
+      { text: section.items.map(v => String(v).replace(/^(\d+)\s*,\s*\+$/, "$1+").replace(/^(\d+)\s*,\s*(\d+)$/, "$1-$2")).join("  •  "), fontSize: 10.5, fontFamily: "Inter", color: section.textColor }
     ], { fillColor: section.bgColor });
     curY += 0.7;
   });
@@ -10017,7 +10040,7 @@ if (apolloTitles.length > 0 || apolloIndustries.length > 0) {
   
   addShape(sApollo, uid("apnote"), 0.5, 1.08, 9, 0.4, C.yellowBg);
   addTextBox(sApollo, uid("apnotetxt"), 0.7, 1.08, 8.6, 0.4, [
-    { text: "⚡ Bu filtreler doğrudan Apollo.io'ya kopyalanıp kullanılabilir", fontSize: 10, fontFamily: "Calibri", color: C.yellowTagText, bold: true }
+    { text: "⚡ Bu filtreler doğrudan Apollo.io'ya kopyalanıp kullanılabilir", fontSize: 10, fontFamily: "Inter", color: C.yellowTagText, bold: true }
   ], { valign: "MIDDLE" });
   
   let apY = 1.6;
@@ -10030,7 +10053,7 @@ if (apolloTitles.length > 0 || apolloIndustries.length > 0) {
   apSections.forEach((section) => {
     if (section.items.length === 0) return;
     addTextBox(sApollo, uid("aplbl"), 0.5, apY, 9, 0.26, [
-      { text: section.label, fontSize: 11, fontFamily: "Trebuchet MS", color: C.primary, bold: true }
+      { text: section.label, fontSize: 11, fontFamily: "Inter", color: C.primary, bold: true }
     ]);
     apY += 0.27;
     const apTxt = section.items.join(", ");
@@ -10045,7 +10068,7 @@ if (apolloTitles.length > 0 || apolloIndustries.length > 0) {
   // LinkedIn search
   if (typeof implementation === 'object' && implementation.linkedin_search_operators) {
     addTextBox(sApollo, uid("lislbl"), 0.5, apY, 9, 0.26, [
-      { text: "🔗 LinkedIn Search Query", fontSize: 11, fontFamily: "Trebuchet MS", color: C.linkedin, bold: true }
+      { text: "🔗 LinkedIn Search Query", fontSize: 11, fontFamily: "Inter", color: C.linkedin, bold: true }
     ]);
     apY += 0.27;
     const lisH = Math.max(0.42, 5.15 - apY);
@@ -10076,10 +10099,10 @@ if (apolloTitles.length > 0 || apolloIndustries.length > 0) {
       addShape(sML, uid("recbg"), x, 1.2, colW, 4.0, C.white);
       addShape(sML, uid("recbar"), x, 1.2, colW, 0.06, c.color);
       addTextBox(sML, uid("reclbl"), x + 0.2, 1.35, colW - 0.4, 0.4, [
-        { text: c.t, fontSize: 14, fontFamily: "Trebuchet MS", color: c.color, bold: true }
+        { text: c.t, fontSize: 14, fontFamily: "Inter", color: c.color, bold: true }
       ]);
       addTextBox(sML, uid("reclist"), x + 0.2, 1.8, colW - 0.4, 3.3, c.items.map(it => ({
-        text: `• ${it}`, fontSize: 11, fontFamily: "Calibri", color: C.darkText, spacingAfter: 6
+        text: `• ${it}`, fontSize: 11, fontFamily: "Inter", color: C.darkText, spacingAfter: 6
       })));
     });
   }
@@ -10091,25 +10114,35 @@ if (apolloTitles.length > 0 || apolloIndustries.length > 0) {
 // ====================================================
 const sEnd = uid("closing");
 createSlide(sEnd);
-setBackground(sEnd, C.dark);
+setBackground(sEnd, C.offWhite);
+addBlobs(sEnd);
+addLogo(sEnd, 0.6, 0.42, 11);
+addPageNo(sEnd);
 
-addShape(sEnd, uid("deco"), 6.5, -1, 5, 5, C.primary, { alpha: 0.15 });
-addShape(sEnd, uid("deco"), -1.5, 3, 4, 4, C.accent, { alpha: 0.1 });
-
-addTextBox(sEnd, uid("endlogo"), 0.5, 1.0, 9, 0.6, [
-  { text: "SALES CORNER", fontSize: 16, fontFamily: "Trebuchet MS", color: C.accent, bold: true, alignment: "CENTER" }
+// Şablon kapanışı: soru çağrısı + çizgi + iletişim sütunları
+addTextBox(sEnd, uid("endq"), 0.6, 1.45, 8.6, 1.4, [
+  { text: "Sorularınız için bizimle", fontSize: 30, fontFamily: "Inter", color: C.darkText, bold: true },
+  { text: "iletişime geçin.", fontSize: 30, fontFamily: "Inter", color: C.darkText, bold: true }
 ]);
-addTextBox(sEnd, uid("endsub"), 0.5, 1.6, 9, 0.5, [
-  { text: "Veri Odaklı B2B Satış ve Lead Generation", fontSize: 14, fontFamily: "Calibri", color: C.lightText, alignment: "CENTER" }
-]);
-addTextBox(sEnd, uid("endthanks"), 0.5, 2.4, 9, 1.2, [
-  { text: "Teşekkürler", fontSize: 44, fontFamily: "Trebuchet MS", color: C.white, bold: true, alignment: "CENTER" }
-]);
-addTextBox(sEnd, uid("endcontact"), 0.5, 3.8, 9, 0.5, [
-  { text: "salescorner.co", fontSize: 14, fontFamily: "Calibri", color: C.lightText, alignment: "CENTER" }
-]);
-addTextBox(sEnd, uid("enddate"), 0.5, 4.5, 9, 0.5, [
-  { text: `Bu rapor otomatik analiz sistemi tarafından oluşturulmuştur.\n${dateStr}`, fontSize: 9, fontFamily: "Calibri", color: C.lightText, alignment: "CENTER" }
+addShape(sEnd, uid("endline"), 0.6, 3.15, 8.8, 0.02, C.dark);
+const __endCols = [
+  ["Hazırlayan", "Sales Corner"],
+  ["Tarih", dateStr],
+  ["Website", "salescorner.co"]
+];
+__endCols.forEach((c, i) => {
+  const x = 0.6 + i * 3.0;
+  addShape(sEnd, uid("endnum"), x, 3.45, 0.42, 0.42, i === 1 ? C.cyan : C.gold, { shapeType: "ELLIPSE" });
+  addTextBox(sEnd, uid("endnt"), x, 3.45, 0.42, 0.42, [
+    { text: String(i + 1).padStart(2, "0"), fontSize: 10, fontFamily: "Inter", color: C.darkText, bold: true, alignment: "CENTER" }
+  ], { valign: "MIDDLE" });
+  addTextBox(sEnd, uid("endct"), x + 0.52, 3.38, 2.4, 0.6, [
+    { text: c[0], fontSize: 10, fontFamily: "Inter", color: C.lightText },
+    { text: c[1], fontSize: 13, fontFamily: "Inter", color: C.darkText, bold: true }
+  ]);
+});
+addTextBox(sEnd, uid("enddate"), 0.6, 4.85, 8.8, 0.3, [
+  { text: "Bu rapor Sales Corner otomatik analiz sistemi tarafından oluşturulmuştur.", fontSize: 8, fontFamily: "Inter", color: C.lightText }
 ]);
 
 
@@ -11774,7 +11807,7 @@ if (!parsed) {
 return { rapor: parsed };
 
 })()}},"cred":null},"15. Slides Data Builder":{"name":"15. Slides Data Builder","t":"code","p":{"code":async function($input,$,$json,$env,$execution,$itemIndex,helpers,Buffer,items,$node){return (async()=>{
-// 15. Slides Data Builder — v7 PREMIUM (token-safe, 32 slayt)
+// 15. Slides Data Builder — v8 SAAS Corner şablonu (açık krem tema, 33 slayt)
 const R = ($input.first().json && $input.first().json.rapor) || {};
 const es=R.executive_summary||{}, fp=R.firma_profilleri||{}, dk=R.detayli_karsilastirma||{};
 const swot=R.swot_analizi||{}, so=R.stratejik_oneriler||{}, ip=R.izleme_plani||{}, sonuc=R.sonuc_ve_tavsiyeler||{};
@@ -11789,7 +11822,7 @@ const hk=dk.hizmet_kapsami||{}, hp=dk.hedef_pazar||{}, fy=dk.fiyatlandirma||{}, 
 const DATE = es.rapor_tarihi || new Date().toISOString().split("T")[0];
 const RIVAL = String(es.rakip_adi || "Rakip");
 const BRAND = String(es.bizim_firma || "Firmamiz");
-const TOTAL = 32;
+const TOTAL = 33;
 
 const safe = (v, fb) => (v === 0 ? "0" : (v || fb || "N/A"));
 const arr = (a) => Array.isArray(a) ? a.filter(x => x !== undefined && x !== null && String(x).trim() !== "") : [];
@@ -11800,15 +11833,19 @@ function threatPct(t){ t=String(t||"").toLowerCase(); if(t.indexOf("kritik")>-1)
 
 // ---- palette / fonts ----
 function rgb(h){ return { red:parseInt(h.slice(0,2),16)/255, green:parseInt(h.slice(2,4),16)/255, blue:parseInt(h.slice(4,6),16)/255 }; }
+// SAAS Corner firma sunumu şablonu: krem zemin, sarı/camgöbeği vurgu, siyah metin
 const C = {
-  bg:rgb("0B1020"), bg2:rgb("0E152C"), panel:rgb("141C36"), panel2:rgb("1C2750"),
-  line:rgb("2A3560"), gold:rgb("E9C46A"), us:rgb("2DD4BF"), usDk:rgb("0D9488"),
-  them:rgb("FB7185"), themDk:rgb("E11D48"), green:rgb("34D399"), blue:rgb("60A5FA"),
-  purple:rgb("A78BFA"), orange:rgb("FBBF24"), red:rgb("F87171"),
-  white:rgb("FFFFFF"), ice:rgb("CBD5E1"), muted:rgb("8A97B8"), dark:rgb("070B16")
+  bg:rgb("F5F4EB"), bg2:rgb("E9EDC9"), panel:rgb("FFFFFF"), panel2:rgb("EEEDE2"),
+  line:rgb("DCDACB"), gold:rgb("FEBC2D"), us:rgb("00AFCA"), usDk:rgb("008CA3"),
+  them:rgb("E5484D"), themDk:rgb("DC2626"), green:rgb("2E9E5B"), blue:rgb("2F7FD8"),
+  purple:rgb("7C5CD6"), orange:rgb("F59E0B"), red:rgb("D93636"),
+  white:rgb("111111"), ice:rgb("33363D"), muted:rgb("7A7D72"), dark:rgb("111111"), paper:rgb("FFFFFF")
 };
-const FH = "Montserrat";
-const FB = "Lato";
+// Krem zeminde küçük yazıda açık vurgu renkleri okunmaz; metinde koyu tonları kullan (büyük rakamlar parlak kalır)
+const TXT = new Map([[C.gold,rgb("A86F00")],[C.us,rgb("00849A")],[C.orange,rgb("B45309")],[C.green,rgb("23784A")]]);
+const FH = "Inter";
+const FB = "Inter";
+const FD = "Bebas Neue";
 function avColor(a){ a=String(a||"").toLowerCase(); if(a.indexOf("biz")>-1)return C.us; if(a.indexOf("rakip")>-1)return C.them; return C.muted; }
 
 // ---- request builders ----
@@ -11819,6 +11856,9 @@ const EMU = 914400; const E = (v) => Math.round(v*EMU);
 function newSlide(bgc){ const id=ID(); SID.push(id);
   REQ.push({ createSlide:{ objectId:id, insertionIndex:SID.length-1, slideLayoutReference:{ predefinedLayout:"BLANK" } } });
   REQ.push({ updatePageProperties:{ objectId:id, pageProperties:{ pageBackgroundFill:{ solidFill:{ color:{ rgbColor:(bgc||C.bg) } } } }, fields:"pageBackgroundFill" } });
+  // Şablondaki yumuşak sarı-yeşil lekeler (sağ üst + sol alt, sayfa dışına taşan)
+  oval(id,7.4,-1.9,4.4,3.6,C.bg2,0.55,null); oval(id,8.2,-1.3,2.8,2.4,C.bg2,0.6,null);
+  oval(id,-1.8,4.1,3.6,2.8,C.bg2,0.45,null);
   return id; }
 function shape(sid,type,x,y,w,h,fill,alpha,outline){ const id=ID();
   REQ.push({ createShape:{ objectId:id, shapeType:type, elementProperties:{ pageObjectId:sid, size:{ width:{magnitude:E(w),unit:"EMU"}, height:{magnitude:E(h),unit:"EMU"} }, transform:{ scaleX:1, scaleY:1, translateX:E(x), translateY:E(y), unit:"EMU" } } } });
@@ -11837,6 +11877,7 @@ const oval = (sid,x,y,w,h,fill,alpha,outline)=>shape(sid,"ELLIPSE",x,y,w,h,fill,
 
 function text(sid,x,y,w,h,str,size,color,o){ o=o||{};
   let t=(str===0?"0":(str||"")); t=String(t); if(t.length===0)t=" "; if(t.length>1900)t=t.slice(0,1900);
+  if(size<20 && TXT.has(color)) color=TXT.get(color);
   if(!o.noFit){ [t,size]=__fitTxt(t,size,w,h,{ font:(o.font||FB), bold:o.bold, ls:(o.ls||100), para:(o.spaceBelow||0), indent:(o.indent||0), grow:o.grow, maxFs:o.maxFs, strict:!!o.strict }); if(!t.trim())t=" "; }
   const id=ID();
   REQ.push({ createShape:{ objectId:id, shapeType:"TEXT_BOX", elementProperties:{ pageObjectId:sid, size:{ width:{magnitude:E(w),unit:"EMU"}, height:{magnitude:E(h),unit:"EMU"} }, transform:{ scaleX:1, scaleY:1, translateX:E(x), translateY:E(y), unit:"EMU" } } } });
@@ -11857,17 +11898,19 @@ function bullets(sid,x,y,w,h,items,size,color,o){ o=o||{};
   return id; }
 
 // ---- components ----
+// Şablondaki iki satırlık logo + sarı köşe braketi
+function logo(sid,x,y,fs){ fs=fs||9; const h=fs/72*2.25, w=fs/72*4.6;
+  text(sid,x,y,w+0.2,h,"SALES\nCORNER",fs,C.dark,{bold:true,font:FH,ls:86,noFit:true});
+  rect(sid,x+w-0.02,y+0.03,0.16,0.025,C.gold); rect(sid,x+w+0.115,y+0.03,0.025,h-0.1,C.gold); }
 function header(sid,kicker,title){
-  rect(sid,0.55,0.45,0.07,0.62,C.gold);
-  text(sid,0.78,0.43,7.4,0.24,String(kicker||"").toUpperCase(),9.5,C.gold,{bold:true,font:FH});
-  text(sid,0.76,0.63,8.0,0.5,title,21,C.white,{bold:true,font:FH});
-  text(sid,8.35,0.5,1.1,0.3,("0"+SID.length).slice(-2)+" / "+TOTAL,9,C.muted,{align:"END",font:FH});
-  rect(sid,0.55,1.3,8.9,0.014,C.line);
+  logo(sid,0.55,0.3,9);
+  text(sid,1.55,0.36,6.4,0.22,String(kicker||"").toUpperCase(),8,C.muted,{bold:true,font:FH});
+  text(sid,0.55,0.74,8.0,0.52,title,19,C.dark,{bold:true,font:FH});
+  text(sid,8.15,0.3,1.3,0.24,"Sayfa "+("0"+SID.length).slice(-2),8.5,C.muted,{align:"END",font:FH});
 }
 function footer(sid){
-  rect(sid,0.55,5.28,8.9,0.012,C.line);
-  text(sid,0.55,5.33,6,0.22,BRAND+"   ·   Rakip Analizi   ·   GİZLİ",7.5,C.muted,{font:FH});
-  text(sid,6.45,5.33,3.0,0.22,DATE+"   ·   salescorner.co",7.5,C.muted,{align:"END",font:FH});
+  text(sid,0.55,5.32,6,0.2,BRAND+"   ·   Rakip Analizi   ·   GİZLİ",7,C.muted,{font:FH});
+  text(sid,6.45,5.32,3.0,0.2,DATE+"   ·   salescorner.co",7,C.muted,{align:"END",font:FH});
 }
 function panel(sid,x,y,w,h,fill){ return round(sid,x,y,w,h,(fill||C.panel),1,{color:C.line,w:1}); }
 function cardHead(sid,x,y,w,label,accent){
@@ -11896,19 +11939,17 @@ function trow(sid,y,cells,ws,head,alt){ let x=0.55; const h=head?0.46:0.5; const
 
 // ════════ SLIDE 1 — KAPAK ════════
 let s=newSlide(C.bg);
-oval(s,6.6,-1.6,5.2,5.2,C.bg2,1,null);
-oval(s,7.7,-0.5,3.2,3.2,C.panel,1,null);
-oval(s,8.5,1.9,1.8,1.8,C.gold,0.12,null);
-rect(s,0,0,0.14,5.625,C.gold);
-text(s,0.9,1.05,7.5,0.3,"STRATEJİK REKABET ANALİZİ",12,C.gold,{bold:true,font:FH});
-text(s,0.85,1.45,8.2,0.95,"RAKİP ANALİZ",46,C.white,{bold:true,font:FH,ls:96});
-text(s,0.85,2.35,8.2,0.95,"RAPORU",46,C.gold,{bold:true,font:FH,ls:96});
-rect(s,0.9,3.5,2.4,0.05,C.us);
-text(s,0.9,3.68,8.0,0.4,RIVAL+"  ·  "+BRAND+" bakış açısıyla",15,C.ice,{font:FB});
-text(s,0.9,4.12,8.0,0.3,"ScrapingBee çift taraf veri + AI destekli stratejik istihbarat",11,C.muted,{font:FB});
-rect(s,0,4.95,10,0.014,C.line);
-text(s,0.9,5.15,6,0.3,"Hazırlayan: "+BRAND,10,C.ice,{bold:true,font:FH});
-text(s,5.5,5.15,3.6,0.3,DATE+"  ·  GİZLİ",10,C.muted,{align:"END",font:FH});
+oval(s,6.9,0.9,2.6,2.6,C.gold,0.9,null); oval(s,7.75,2.75,1.3,1.3,C.us,0.85,null);
+logo(s,0.6,0.42,11);
+text(s,8.15,0.42,1.3,0.24,"Sayfa 01",8.5,C.muted,{align:"END",font:FH});
+text(s,0.58,1.25,6.4,0.3,"STRATEJİK REKABET ANALİZİ",10,C.muted,{bold:true,font:FH});
+text(s,0.55,1.55,6.6,1.0,"RAKİP ANALİZ",66,C.dark,{font:FD,maxFs:66});
+text(s,0.55,2.45,6.6,1.0,"RAPORU",66,C.dark,{font:FD,maxFs:66});
+rect(s,0.6,3.55,1.6,0.05,C.gold);
+text(s,0.6,3.7,6.6,0.36,RIVAL+"  ·  "+BRAND+" bakış açısıyla",14,C.ice,{font:FB});
+text(s,0.6,4.08,6.6,0.28,"Çift taraflı web verisi + AI destekli stratejik istihbarat",10,C.muted,{font:FB});
+text(s,0.6,4.72,6,0.26,"Hazırlayan: "+BRAND,10,C.dark,{bold:true,font:FH});
+text(s,0.6,4.98,6,0.26,"Tarih : "+DATE+"   ·   GİZLİ",10,C.dark,{font:FH});
 
 // ════════ SLIDE 2 — YÖNETİCİ ÖZETİ ════════
 s=newSlide(C.bg); header(s,"Genel Değerlendirme","Yönetici Özeti"); footer(s);
@@ -11946,7 +11987,7 @@ thRows.forEach((r,i)=>{ const y=2.18+i*0.47; text(s,5.38,y,1.45,0.42,r[0],8,C.th
 
 // ════════ SLIDE 5 — STRATEJİK SCORECARD ════════
 s=newSlide(C.bg); header(s,"Stratejik Scorecard","Çok Kriterli Puanlama"); footer(s);
-chip(s,3.15,1.37,1.0,0.22,"BİZ",C.dark,C.us); chip(s,4.25,1.37,1.0,0.22,"RAKİP",C.white,C.them);
+chip(s,3.15,1.37,1.0,0.22,"BİZ",C.dark,C.us); chip(s,4.25,1.37,1.0,0.22,"RAKİP",C.paper,C.them);
 const scRows=sc.slice(0,5).map(r=>({k:safe(r.kriter),u:score10(r.bizim_skor),t:score10(r.rakip_skor),av:safe(r.avantaj,"")}));
 if(scRows.length){
   let uSum=0,tSum=0;
@@ -11954,7 +11995,7 @@ if(scRows.length){
     text(s,0.6,y,2.45,0.5,r.k,9,C.ice,{bold:true,valign:"MIDDLE",font:FB});
     miniBar(s,3.15,y+0.05,3.35,0.14,r.u/10,C.us); text(s,6.56,y-0.01,0.5,0.26,r.u.toFixed(1),9,C.us,{bold:true,font:FH});
     miniBar(s,3.15,y+0.25,3.35,0.14,r.t/10,C.them); text(s,6.56,y+0.19,0.5,0.26,r.t.toFixed(1),9,C.them,{bold:true,font:FH});
-    chip(s,7.2,y+0.05,2.2,0.3,(r.av||"-"),(avColor(r.av)===C.muted?C.ice:C.dark),avColor(r.av));
+    chip(s,7.2,y+0.05,2.2,0.3,(r.av||"-"),(avColor(r.av)===C.muted?C.paper:C.dark),avColor(r.av));
   });
   const ua=uSum/scRows.length, ta=tSum/scRows.length;
   panel(s,0.55,4.5,8.9,0.66);
@@ -12128,15 +12169,25 @@ panel(s,5.6,2.72,3.85,2.42); cardHead(s,5.8,2.86,3.5,"Sonraki Adımlar",C.green)
 
 // ════════ SLIDE 32 — METODOLOJİ ════════
 s=newSlide(C.bg); header(s,"Metodoloji","Kanıt Kalitesi & Kapsam"); footer(s);
-const meth=[["ScrapingBee Çift Taraf","Hem bizim hem rakip site render edilerek içerik, meta, CTA, fiyat ve sosyal sinyaller çıkarıldı."],["Arama Motoru Araştırması","Şirket, ürün, yorum, fiyat, LinkedIn ve case study aramaları yapıldı."],["Müşteri Yorum Analizi","Google, Trustpilot, Şikayetvar ve sektör platformları tarandı."],["LinkedIn & Organizasyon","Takipçi, çalışan, işe alım ve büyüme sinyalleri değerlendirildi."],["AI Sentez","Gemini 2.5 ile çok aşamalı analiz ve karşılaştırma."],["Kanıt Kalitesi","Güven skoru: "+safe(dq.genel_guven_skoru)+"  ·  Belirsiz: "+arr(dq.belirsiz_alanlar).slice(0,2).join(", ")]];
+const meth=[["Çift Taraflı Web Verisi","Hem bizim hem rakip site doğrudan çekim ve Claude web_fetch ile okunarak (gerekirse yedek tarayıcı) içerik, meta, CTA, fiyat ve sosyal sinyaller çıkarıldı."],["Arama Motoru Araştırması","Şirket, ürün, yorum, fiyat, LinkedIn ve case study aramaları yapıldı."],["Müşteri Yorum Analizi","Google, Trustpilot, Şikayetvar ve sektör platformları tarandı."],["LinkedIn & Organizasyon","Takipçi, çalışan, işe alım ve büyüme sinyalleri değerlendirildi."],["AI Sentez","Gemini 2.5 ile çok aşamalı analiz ve karşılaştırma."],["Kanıt Kalitesi","Güven skoru: "+safe(dq.genel_guven_skoru)+"  ·  Belirsiz: "+arr(dq.belirsiz_alanlar).slice(0,2).join(", ")]];
 meth.forEach((m,i)=>{ const col=i%2; const rw=Math.floor(i/2); const x=col===0?0.55:5.05; const y=1.5+rw*1.12; panel(s,x,y,4.4,0.98); rect(s,x,y+0.12,0.06,0.74,C.gold); text(s,x+0.2,y+0.14,4.0,0.24,m[0].toUpperCase(),8.5,C.gold,{bold:true,font:FH}); text(s,x+0.2,y+0.42,4.05,0.5,cut(m[1],240),8.6,C.ice,{font:FB,ls:108}); });
 const at=sa.slice(0,2).map((a,i)=>(i+1)+". "+safe(a.iddia)+" ["+safe(a.guven)+"]").join("   |   ");
-text(s,0.55,5.06,8.9,0.18,at||("Kaynak: kamuya açık veriler + ScrapingBee + AI · Tarih: "+DATE),7,C.muted,{align:"CENTER",font:FB});
+text(s,0.55,5.06,8.9,0.18,at||("Kaynak: kamuya açık web verileri + AI · Tarih: "+DATE),7,C.muted,{align:"CENTER",font:FB});
+
+// ════════ SLIDE 33 — KAPANIŞ (şablondaki iletişim sayfası) ════════
+s=newSlide(C.bg); logo(s,0.55,0.3,9);
+text(s,8.15,0.3,1.3,0.24,"Sayfa "+("0"+SID.length).slice(-2),8.5,C.muted,{align:"END",font:FH});
+text(s,0.55,1.55,8.6,1.3,"Sorularınız için bizimle iletişime geçin.",30,C.dark,{font:FH,ls:104});
+rect(s,0.55,3.25,8.9,0.012,C.dark);
+[["Hazırlayan",BRAND,C.gold],["Tarih",DATE,C.us],["Website","salescorner.co",C.gold]].forEach((c,i)=>{ const x=0.55+i*3.0;
+  oval(s,x,3.55,0.4,0.4,c[2],1,null); text(s,x,3.55,0.4,0.4,String(i+1),11,C.dark,{bold:true,align:"CENTER",valign:"MIDDLE",font:FH});
+  text(s,x+0.55,3.5,2.3,0.26,c[0],12,C.dark,{bold:true,font:FH}); text(s,x+0.55,3.78,2.3,0.26,c[1],10,C.muted,{font:FB}); });
+text(s,0.55,4.7,8.9,0.3,RIVAL+" rakip analizi  ·  GİZLİ  ·  salescorner.co",8,C.muted,{font:FH});
 
 // ════════ ÇIKTI ════════
 return { json: {
   requests: REQ,
-  presentationTitle: "Rakip Analizi Pro v7 — " + RIVAL + " — " + DATE,
+  presentationTitle: "Rakip Analizi Pro v8 — " + RIVAL + " — " + DATE,
   company: RIVAL,
   slideCount: SID.length,
   slideIds: SID,
