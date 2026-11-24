@@ -418,10 +418,16 @@ function oturumKur(u){
   KULLANICI=u||{};
   $$('[data-oturum]').forEach(function(x){x.hidden=false});
   $$('.alt-kim .kullanici').forEach(function(x){x.textContent=KULLANICI.email||KULLANICI.name||''});
+  /* üst çubuk avatarı: adın/e-postanın ilk harfi (stüdyo ile aynı) */
+  var av=$('#hesap-dugme .st-av'),ad=String(KULLANICI.name||KULLANICI.email||'').trim(),ilk=ad?Array.from(ad)[0].toLocaleUpperCase(dil==='en'?'en':'tr'):'';
+  if(av&&ilk){av.textContent=ilk;av.classList.add('st-av-harf')}
   var a=$('#a-ad'),e=$('#a-eposta');if(a)a.textContent=KULLANICI.name||'';if(e)e.textContent=KULLANICI.email||'';
   /* A13: yalnız /auth/me admin:true ise menüye Yönetim bağlantısı (sayfa TR; EN menüde "Admin") */
   var m=$('#hesap-menu'),hr=m&&$('hr',m);
   if(KULLANICI.admin===true&&m&&!$('#hesap-admin')){var y=el('a',null,t('Yönetim'),{href:'/hesap/admin',id:'hesap-admin'});if(SAYFA==='admin')y.setAttribute('aria-current','page');m.insertBefore(y,hr||null)}
+  /* ray: Hesap grubuna Yönetim (admin.html kendi bağlantısını taşır) */
+  var g=$('.st-rail .st-grup:last-of-type');
+  if(KULLANICI.admin===true&&g&&!$('.st-link[href="/hesap/admin"]',g)){var ra=el('a','st-link',null,{href:'/hesap/admin'});var sp=el('span','st-link-ad',t('Yönetim'));ra.innerHTML='<svg class="ikon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z"/></svg>';ra.appendChild(sp);g.appendChild(ra)}
 }
 function cikisKur(){$$('#cikis,#cikis-2').forEach(function(b){b.addEventListener('click',function(){
   if(bosMu(b))return;
