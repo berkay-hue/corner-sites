@@ -785,9 +785,10 @@ function yazilarCiz(){
     if(meta)li.appendChild(el('p','ince',meta));
     if(p.state==='kota'){var kp=el('p','ince cms-yazi-acik',hataMetni('quota')+' ');kp.appendChild(el('a','bag',L('Planları gör','See plans'),{href:PLANLAR}));li.appendChild(kp)}
     else if(p.state==='basarisiz'&&p.last_error)li.appendChild(el('p','alan-hata cms-yazi-acik',hataMetni(p.last_error)));
+    if(p.content_deleted)li.appendChild(el('p','ince cms-yazi-acik',L('İçerik 3 gün sonra silindi.','Content deleted after 3 days.')));
     var ey=el('div','eylemler'),u=guvenliUrl(p.remote_url);
     if(u)ey.appendChild(disBag(u,L('Sitede aç','Open on site')));
-    if(p.state==='basarisiz'&&!kilitli()){var rb=el('button','btn btn-cizgi btn-kucuk',L('Yeniden gönder','Send again'),{type:'button'});rb.addEventListener('click',function(){yenidenGonder(p,rb,li)});ey.appendChild(rb)}
+    if(p.state==='basarisiz'&&!p.content_deleted&&!kilitli()){var rb=el('button','btn btn-cizgi btn-kucuk',L('Yeniden gönder','Send again'),{type:'button'});rb.addEventListener('click',function(){yenidenGonder(p,rb,li)});ey.appendChild(rb)}
     if(ey.childNodes.length)li.appendChild(ey);
     li.appendChild(el('div','bildirim',null,{role:'status','aria-live':'polite'}));
     ul.appendChild(li);
@@ -836,7 +837,8 @@ function ornekVeri(){
     posts:[
       {id:11,cms_site_id:1,title:'LinkedIn içerik takvimi nasıl hazırlanır?',state:'gonderildi',mode:'draft',remote_url:'https://ornek.com/?p=42',last_error:null,created_at:dz2(simdi-2*gun)},
       {id:10,cms_site_id:1,title:'B2B satışta sosyal medya',state:'basarisiz',mode:'draft',remote_url:null,last_error:'timeout',created_at:dz2(simdi-4*gun)},
-      {id:9,cms_site_id:1,title:'',state:'kota',mode:'draft',remote_url:null,last_error:null,created_at:dz2(simdi-30*gun)}],
+      {id:9,cms_site_id:1,title:'',state:'kota',mode:'draft',remote_url:null,last_error:null,created_at:dz2(simdi-30*gun)},
+      {id:8,cms_site_id:1,title:'Instagram’da B2B hikâye fikirleri',state:'yayinlandi',mode:'publish',remote_url:'https://ornek.com/?p=40',last_error:null,created_at:dz2(simdi-35*gun),content_deleted:true}],
     limits:{sites:1,used:1,per_week_max:3,plan_required:null},quota:{lb_used:2,lb_limit:8}};
   return ORNEK_VERI;
 }

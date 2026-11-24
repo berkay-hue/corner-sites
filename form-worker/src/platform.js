@@ -341,6 +341,27 @@ export async function cleanup(env) {
   }
 }
 
+// app taslak geçmişi ve otomatik blog yazıları 3 gün saklanır (A15). Saatlik cron'dan; tam 2 D1 ifadesi (index.js bütçesi).
+// drafts: 3 günden eski satır silinir (listDrafts zaten göstermez). cms_posts: satır silinmez (kota/liste geçmişi), son
+// durumdaki yazının gövdesi (markdown) son değişiklikten 3 gün sonra boşaltılır; başlık/slug/durum/uzak URL kalır.
+// uretiliyor/hazir/gonderiliyor dokunulmaz (gönderilecek gövde). Tablo yoksa (0017/0019 uygulanmamış) sessiz geçilir.
+export const DRAFT_KEEP_DAYS = 3;
+const KEEP = `-${DRAFT_KEEP_DAYS} days`;
+export const CMS_DONE_STATES = ["gonderildi", "yayinlandi", "basarisiz", "kota", "iptal"];
+export async function keepDays(env) {
+  const out = { drafts: 0, cms_posts: 0 };
+  try {
+    const r = await env.DB.prepare("DELETE FROM drafts WHERE created_at < datetime('now', ?)").bind(KEEP).run();
+    out.drafts = Number(r?.meta?.changes) || 0;
+  } catch (e) { if (!noTable(e)) console.log("keep drafts", e?.message?.slice(0, 80)); }
+  try {
+    const r = await env.DB.prepare(`UPDATE cms_posts SET markdown = NULL WHERE markdown IS NOT NULL
+      AND state IN (${CMS_DONE_STATES.map(x => `'${x}'`).join(", ")}) AND updated_at < datetime('now', ?)`).bind(KEEP).run();
+    out.cms_posts = Number(r?.meta?.changes) || 0;
+  } catch (e) { if (!noTable(e)) console.log("keep cms_posts", e?.message?.slice(0, 80)); }
+  return out;
+}
+
 // ---- panel ----
 
 const APP = {
@@ -388,7 +409,8 @@ const need = (cond, code = "forbidden", status = 403) => { if (!cond) throw new 
 const VOICE_SECTORS = ["", "agency", "ecom", "edu", "estate", "fin", "food", "health", "industry", "other", "services", "tech", "travel"];
 const VOICE_TONES = ["samimi", "kurumsal", "esprili", "ogretici", "ilham", "net", "veri"];
 const VOICE_MAX = { tones: 3, samples: 3, sample: 2200, banned: 30, word: 40 };
-const DRAFT_PLATFORMS = ["linkedin", "instagram"], DRAFT_PAGE = 50, EXPORT_MAX = 10000;
+// generate.js DRAFT_DB ile aynı (0020 CHECK); karusel video, reels instagram satırıdır (meta.kind)
+const DRAFT_PLATFORMS = ["linkedin", "instagram", "blog", "video"], DRAFT_PAGE = 50, EXPORT_MAX = 10000;
 const missingSchema = e => /no such (table|column)/i.test(String(e && e.message));
 // 0017 uygulanmadıysa tablo yok: arayüz 503 not_ready'yi "Bu bölüm yakında" gösterir
 const acct = fn => async (c, id) => {
@@ -468,13 +490,14 @@ const draftOut = r => ({ id: r.id, platform: r.platform, created_at: r.created_a
 const foldCol = col => `lower(${Object.entries(TR_FOLD).reduce((e, [k, v]) => `replace(${e}, '${k}', '${v}')`, col)})`;
 const foldTerm = s => [...s].map(ch => TR_FOLD[ch] || ch).join("").replace(/[A-Z]/g, ch => ch.toLowerCase());
 
-// ?q= (konu/metin arama, en çok 100), ?platform=linkedin|instagram, ?before=<son id> (id imleci). 50'lik sayfa, next = sonraki before.
+// ?q= (konu/metin arama, en çok 100), ?platform=linkedin|instagram|blog|video, ?before=<son id> (id imleci). 50'lik sayfa,
+// next = sonraki before. DRAFT_KEEP_DAYS'ten eski satır cron silmeden de görünmez.
 async function listDrafts(c) {
   const { q = "", platform = "", before = "" } = c.query;
   if (platform && !DRAFT_PLATFORMS.includes(platform)) throw new Bad("platform");
   if (before && !/^[1-9]\d{0,15}$/.test(before)) throw new Bad("before");
   const term = String(q).trim().slice(0, 100);
-  const where = ["user_id = ?", "site = ?"], args = [c.user.id, c.site];
+  const where = ["user_id = ?", "site = ?", "created_at >= datetime('now', ?)"], args = [c.user.id, c.site, KEEP];
   if (platform) { where.push("platform = ?"); args.push(platform); }
   if (before) { where.push("id < ?"); args.push(Number(before)); }
   if (term) {
@@ -509,8 +532,8 @@ async function exportData(c) {
     profile: { ...me(user), created_at: u?.created_at ?? null, consent_at: u?.consent_at ?? null },
     voice: voiceOut(await firstOr(env.DB.prepare("SELECT sector, tones, samples, banned, updated_at FROM brand_voice WHERE user_id = ? AND site = ?")
       .bind(user.id, site), null)),
-    drafts: (await listOr(env, `SELECT id, platform, created_at, topic, body, meta FROM drafts WHERE user_id = ? AND site = ? ORDER BY id DESC LIMIT ${EXPORT_MAX}`,
-      user.id, site)).map(draftOut),
+    drafts: (await listOr(env, `SELECT id, platform, created_at, topic, body, meta FROM drafts WHERE user_id = ? AND site = ?
+      AND created_at >= datetime('now', ?) ORDER BY id DESC LIMIT ${EXPORT_MAX}`, user.id, site, KEEP)).map(draftOut),
     connections: await listOr(env, "SELECT platform, handle, status, connected_at, created_at, updated_at FROM social_accounts WHERE user_id = ? ORDER BY platform",
       user.id),
     posts: await listOr(env, `SELECT id, platform, url, type, date, caption, created_at FROM posts WHERE user_id = ? ORDER BY id LIMIT ${EXPORT_MAX}`, user.id),

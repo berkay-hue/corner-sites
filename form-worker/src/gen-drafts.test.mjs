@@ -55,6 +55,7 @@ const liDrafts = () => ANGLES.map(a => ({ angle: a, text: `Taslak ${a}` }));
 const reelDrafts = () => REELS_ANGLES.map(a => ({ angle: a, text: `Kanca ${a}`, say: `Söz ${a}` }));
 const llmBody = drafts => ({ id: "msg_x", model: "claude-sonnet-5-5", stop_reason: "end_turn", content: [{ type: "text", text: JSON.stringify({ drafts }) }], usage: { input_tokens: 100, output_tokens: 200 } });
 
+let vidKind = "video"; // sahte LLM'in video/karusel yanıtı (karusel: slayt sayısı = length)
 function fakeFetch() {
   const calls = { llm: [] };
   const f = async (url, init) => {
@@ -64,7 +65,7 @@ function fakeFetch() {
       calls.llm.push(body);
       const drafts = body.system === SYSTEM_IG_REELS ? reelDrafts() : body.system === SYSTEM_REFINE ? [{ angle: ANGLES[0], text: "Kısa hali" }]
         : body.system.startsWith(SYSTEM_BLOG) ? [{ angle: "blog", title: "Başlık", meta: "Açıklama", text: "## Bölüm\n\nParagraf." }]
-        : body.system.startsWith(SYSTEM_VIDEO) ? [{ angle: "video", title: "Başlık", scenes: Array.from({ length: 6 }, (_, i) => ({ text: `Sahne ${i}`, sub: "", secs: 5 })), caption: "Açıklama" }]
+        : body.system.startsWith(SYSTEM_VIDEO) ? [{ angle: vidKind, title: "Başlık", scenes: Array.from({ length: vidKind === "carousel" ? 5 : 6 }, (_, i) => ({ text: `Sahne ${i}`, sub: "", secs: 5 })), caption: "Açıklama" }]
         : liDrafts();
       return new Response(JSON.stringify(llmBody(drafts)), { status: 200 });
     }
@@ -125,16 +126,52 @@ test("oturumlu /gen/linkedin: 3 satır (varyant başına), user_id/site/konu do�
   }
 });
 
-test("A8: oturumlu /gen/blog ve /gen/video 200 ama satır yazmaz (0017 CHECK, genişletme göçü yok); linkedin style meta'da yalnız işaret", async () => {
+test("A15: oturumlu /gen/blog ve /gen/video (video + karusel) geçmişe yazılır, draft_ids döner; anonim blog/video yanıtı değişmez", async () => {
   const s = setup();
   const common = { anon: ANON, topic: "Yeni ürün", sector: "Yazılım", tone: "samimi", lang: "tr", t: 4000, ts: "tok", hp: "" };
-  const b = await s.call("/gen/blog", { ...common, length: "short", rid: rid() }, { auth: `Bearer ${TOKEN}` });
-  const v = await s.call("/gen/video", { ...common, kind: "video", length: "30", rid: rid() }, { auth: `Bearer ${TOKEN}` });
-  for (const r of [b, v]) {
+  const bodies = [["/gen/blog", { ...common, length: "short" }], ["/gen/video", { ...common, kind: "video", length: "30" }],
+    ["/gen/video", { ...common, kind: "carousel", length: "5" }]];
+  const out = [];
+  for (const [path, body] of bodies) {
+    vidKind = body.kind || "video";
+    const r = await s.call(path, { ...body, rid: rid() }, { auth: `Bearer ${TOKEN}` });
+    out.push(r.status === 200 ? JSON.parse(r.body) : r);
+  }
+  const rows = s.rows();
+  assert.equal(rows.length, 3, JSON.stringify(out));
+  assert.deepEqual(out.map(b => b.draft_ids), rows.map(x => [x.id]));
+  assert.deepEqual(rows.map(x => [x.user_id, x.site, x.platform, x.topic]), [[1, "app.socialmediacorner.co", "blog", "Yeni ürün"],
+    [1, "app.socialmediacorner.co", "video", "Yeni ürün"], [1, "app.socialmediacorner.co", "video", "Yeni ürün"]]);
+  assert.deepEqual(rows.map(x => JSON.parse(x.meta).kind), ["blog", "video", "carousel"]);
+  assert.equal(rows[0].body, "Başlık\n\n## Bölüm\n\nParagraf.");
+  assert.ok(rows[1].body.startsWith("Sahne 0\nSahne 1") && rows[1].body.endsWith("\n\nAçıklama"), rows[1].body);
+  for (const x of rows) noSecret(x.meta);
+  // anonim: aynı istek, draft_ids yok, satır yok
+  const a = setup();
+  for (const [path, body] of bodies) {
+    vidKind = body.kind || "video";
+    const r = await a.call(path, { ...body, rid: rid() });
     assert.equal(r.status, 200);
     assert.equal(JSON.parse(r.body).draft_ids, undefined);
   }
+  assert.equal(a.rows().length, 0);
+  vidKind = "video";
+});
+
+test("A15: 0020 uygulanmamışsa (eski CHECK) blog satırı yazılmaz, yanıt 200 draft_ids'siz; LinkedIn yazılır; style metni meta'ya girmez", async t => {
+  const db = new DatabaseSync(":memory:");
+  db.exec(SCHEMA.replace("CHECK (platform IN ('linkedin','instagram','blog','video'))", "CHECK (platform IN ('linkedin','instagram'))"));
+  const fresh = freshDb();
+  for (const r of fresh.prepare("SELECT * FROM users").all()) db.prepare("INSERT INTO users (id, site, email, name, role, pass) VALUES (?, ?, ?, 'Ad', ?, 'x')").run(r.id, r.site, r.email, r.role);
+  for (const r of fresh.prepare("SELECT * FROM sessions").all()) db.prepare("INSERT INTO sessions (token_hash, user_id, expires_at) VALUES (?, ?, ?)").run(r.token_hash, r.user_id, r.expires_at);
+  const s = setup({ db });
+  const log = t.mock.method(console, "log", () => {});
+  const b = await s.call("/gen/blog", { anon: ANON, topic: "Yeni ürün", sector: "Yazılım", tone: "samimi", lang: "tr", t: 4000, ts: "tok", hp: "", length: "short", rid: rid(), style: "gizli stil örneği" }, { auth: `Bearer ${TOKEN}` });
+  log.mock.restore();
+  assert.equal(b.status, 200);
+  assert.equal(JSON.parse(b.body).draft_ids, undefined);
   assert.equal(s.rows().length, 0);
+  assert.equal(log.mock.calls.filter(c => c.arguments[0] === "gen drafts").length, 1);
   const l = await s.call("/gen/linkedin", { ...liBody(), style: "gizli stil örneği" }, { auth: `Bearer ${TOKEN}` });
   assert.equal(l.status, 200);
   const rows = s.rows();

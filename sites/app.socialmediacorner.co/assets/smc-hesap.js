@@ -5,7 +5,7 @@
 (function(){
 'use strict';
 var d=document,root=d.documentElement,body=d.body;
-var EN={"Yönetim":"Admin","Gizle":"Hide","Göster":"Show","Şifreyi gizle":"Hide password","Şifreyi göster":"Show password","1 taslak":"1 draft",
+var EN={"Yönetim":"Admin","Gizle":"Hide","Göster":"Show","Şifreyi gizle":"Hide password","Şifreyi göster":"Show password","1 taslak":"1 draft","Karusel":"Carousel","Silinmesine {n} gün":"Deleted in {n} days","Silinmesine 1 gün":"Deleted in 1 day","Bugün silinecek":"Deleted today",
 "Demo · {n} gün kaldı":"Demo · {n} days left","Demo · 1 gün kaldı":"Demo · 1 day left","Deneme bitti — plan için iletişime geç":"Trial ended — contact us for a plan","Teklif al":"Get a quote",
 "Bağla":"Connect",
 "Bağlantı ve kayıtlı yetki burada silinir; {p} tarafındaki izni {p} ayarlarından kaldırırsın. Bu hesaba otomatik paylaşım yapılmaz. Geçmiş’teki taslakların silinmez; istediğin an yeniden bağlarsın.":"The connection and stored access are deleted here; you remove the permission in your {p} settings. Nothing will be shared to this account automatically. Your drafts in History stay; you can reconnect any time.",
@@ -157,6 +157,10 @@ var MOCKHOST=/^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname)||/\.pa
 var ORNEK=!API||(MOCKHOST&&/(^|&)ornek(=|&|$)/.test(location.hash.slice(1)));
 var TON={samimi:'Samimi',kurumsal:'Kurumsal',esprili:'Esprili',ogretici:'Öğretici',ilham:'İlham verici',net:'Net ve kısa',veri:'Veri odaklı'};
 var PAD={linkedin:'LinkedIn',instagram:'Instagram'};
+/* A15: geçmiş rozeti; blog/video satırı da gelir, karusel video, Reels instagram satırıdır (meta.kind). Saklama 3 gün (sunucu DRAFT_KEEP_DAYS). */
+var SAKLA_GUN=3;
+function padAd(x){var k=x.tur;if(x.p==='video')return k==='carousel'?t('Karusel'):'Video';if(x.p==='blog')return 'Blog';if(x.p==='instagram'&&k==='reels')return 'Reels';return PAD[x.p]||String(x.p||'')}
+function kalanGun(s){var x=tarihNesne(s),ms=x.getTime()+SAKLA_GUN*864e5-Date.now();if(isNaN(ms)||ms<=0)return '';var n=Math.ceil(ms/864e5);return n<=1&&ms<36e5*12?t('Bugün silinecek'):n===1?t('Silinmesine 1 gün'):t('Silinmesine {n} gün',{n:n})}
 
 /* ---- yardımcılar ---- */
 function $(s,k){return (k||d).querySelector(s)}
@@ -698,6 +702,8 @@ function baglarYukle(){
 
 /* ---- geçmiş ---- */
 var TASLAK=[
+ {id:8,p:'blog',tur:'blog',tarih:'2026-11-22',ton:'Öğretici',konu:'KOBİ’ler için LinkedIn rehberi',metin:'KOBİ’ler için LinkedIn rehberi\n\n## Profil önce gelir\n\nŞirket sayfası, kurucunun profili kadar güven vermez. İlk adım kurucu profilini düzenlemek.\n\n## Haftada iki gönderi yeter\n\nDüzen, sıklıktan önemlidir. Aynı gün ve saatte paylaşmak takipçiye ritim kazandırır.'},
+ {id:7,p:'video',tur:'carousel',tarih:'2026-11-22',ton:'',konu:'Müşteri kaybını azaltmanın 5 yolu',metin:'1. İlk 14 gün\n2. Kurulum görüşmesi\n3. Haftalık kullanım listesi\n4. Tek soruluk iptal anketi\n5. Eksik özelliği önceliklendir'},
  {id:6,p:'linkedin',tarih:'2026-11-21',ton:'Samimi',konu:'İlk 100 müşteriye ulaştık',metin:'Bugün 100. müşterimizi karşıladık.\n\nİki yıl önce üç kişilik bir ekiptik ve ilk satışı yapmak dört ay sürdü. Bu sürede öğrendiğimiz en önemli şey şuydu: müşteri ürünü değil, sorununun çözüldüğünü hissetmeyi satın alıyor.\n\nİlk on müşterimizin yedisi bugün hâlâ bizimle. Rakamdan çok bu oran içimi rahatlatıyor.\n\nYolu birlikte yürüdüğümüz herkese teşekkürler.'},
  {id:5,p:'instagram',tarih:'2026-11-20',ton:'Esprili',konu:'Yeni ofisimize taşındık',metin:'Kutular açıldı, kahve makinesi kuruldu, Wi-Fi şifresini hâlâ kimse bilmiyor.\n\nYeni ofisimizden ilk merhaba! Kadıköy’deyiz; uğrarsanız çay bizden.\n\n#yeniofis #ekip #kadıköy'},
  {id:4,p:'linkedin',tarih:'2026-11-18',ton:'Öğretici',konu:'Müşteri kaybını nasıl yarıya indirdik',metin:'Altı ayda müşteri kaybını %8’den %4’e indirdik. Üç adımda:\n\n1. İlk 14 günü yeniden tasarladık. Kurulum görüşmesini isteğe bağlı değil, varsayılan yaptık.\n2. Kullanmayan hesapları haftalık listeyle izledik ve sorun büyümeden aradık.\n3. İptal nedenini tek soruyla sorduk; cevapların yarısı aynı eksik özelliği gösterdi.\n\nEn büyük ders: kayıp iptal gününde değil, ilk hafta başlıyor.'},
@@ -706,7 +712,7 @@ var TASLAK=[
  {id:1,p:'linkedin',tarih:'2026-11-04',ton:'Veri odaklı',konu:'KOBİ’lerde dijital pazarlama: görüşme notları',metin:'Görüştüğümüz 40 KOBİ’den 31’i sosyal medyayı satış kanalı olarak görüyor, ama yalnız 9’u düzenli ölçüm yapıyor.\n\nEn sık duyduğumuz engel zaman. İkinci sırada ne paylaşacağını bilmemek geliyor.\n\nGörüşme notlarının tamamını önümüzdeki hafta paylaşacağız.'}
 ];
 var liste=[],q='',plat='hepsi',dahaVar=false,silHedef=null,araZ=null;
-function taslakCevir(x){var m=x.meta&&typeof x.meta==='object'?x.meta:{};return {id:String(x.id),p:x.platform,tarih:x.created_at,ton:m.tone||'',konu:String(x.topic||''),metin:String(x.body||'')}}
+function taslakCevir(x){var m=x.meta&&typeof x.meta==='object'?x.meta:{};return {id:String(x.id),p:x.platform,tur:typeof m.kind==='string'?m.kind:'',tarih:x.created_at,ton:m.tone||'',konu:String(x.topic||''),metin:String(x.body||'')}}
 function suzulmus(){if(!ORNEK)return liste;var qq=q.toLocaleLowerCase(LOC());return liste.filter(function(x){return (plat==='hepsi'||x.p===plat)&&(!qq||(x.konu+'\n'+x.metin).toLocaleLowerCase(LOC()).indexOf(qq)>=0)})}
 function gecmisCiz(){
   var f=suzulmus(),suz=!!q||plat!=='hepsi',bos=!suz&&(ORNEK?liste.length===0:f.length===0),kap=$('#kayitlar');kap.textContent='';
@@ -716,7 +722,8 @@ function gecmisCiz(){
   $('#bulunamadi').hidden=bos||f.length>0;
   f.forEach(function(x){
     var tid=String(x.id).replace(/[^A-Za-z0-9_-]/g,''),a=el('article','sheet kayit',null,{'aria-labelledby':'kt-'+tid}),u=el('p','kayit-ust');
-    u.appendChild(el('span','rozet',PAD[x.p]||String(x.p||'')));var tt=tarih(x.tarih);if(tt)u.appendChild(el('span',null,tt));
+    u.appendChild(el('span','rozet',padAd(x)));var tt=tarih(x.tarih);if(tt)u.appendChild(el('span',null,tt));
+    var kg=ORNEK?'':kalanGun(x.tarih);if(kg)u.appendChild(el('span',null,kg));
     if(x.ton)u.appendChild(el('span',null,t('Ton: {t}',{t:tonAd(x.ton)})));u.appendChild(el('span',null,t('{n} karakter',{n:sayi(x.metin.length)})));a.appendChild(u);
     var konu=x.konu||t('Başlıksız taslak');
     a.appendChild(el('h2','kayit-ad',konu,{id:'kt-'+tid,tabindex:'-1'}));
@@ -779,7 +786,7 @@ function gecmisKur(){
   });
 }
 function gecmisYukle(){
-  if(ORNEK){liste=TASLAK.map(function(x){return {id:String(x.id),p:x.p,tarih:x.tarih,ton:x.ton,konu:x.konu,metin:x.metin}});ekran('ana');gecmisCiz();return}
+  if(ORNEK){liste=TASLAK.map(function(x){return {id:String(x.id),p:x.p,tur:x.tur||'',tarih:x.tarih,ton:x.ton,konu:x.konu,metin:x.metin}});ekran('ana');gecmisCiz();return}
   taslakGetir(false).then(function(j){
     if(j._s===200){ekran('ana');gecmisCiz();return}
     if(bolumYok(j)){ekran('yakinda');return}

@@ -718,7 +718,7 @@
       kok.appendChild(h('p', { class: 'bildirim bildirim-uyari', text: L('Bu gönderi planlandı. Kaydedersen onay düşer ve gönderi yeniden onayını bekler; onaylamadan yayınlanmaz.', 'This post is scheduled. If you save, the approval is removed and the post waits for your approval again; it is not published without it.') }));
     }
     if (on && on.yok) {
-      kok.appendChild(h('p', { class: 'bildirim bildirim-uyari', text: L('#' + on.id + ' taslağı bulunamadı ya da LinkedIn/Instagram taslağı değil. Metni aşağıya kendin yazabilirsin.', 'Draft #' + on.id + ' was not found or is not a LinkedIn/Instagram draft. You can write the text below yourself.') }));
+      kok.appendChild(h('p', { class: 'bildirim bildirim-uyari', text: L('#' + on.id + ' taslağı bulunamadı (taslaklar 3 gün saklanır) ya da LinkedIn/Instagram taslağı değil. Metni aşağıya kendin yazabilirsin.', 'Draft #' + on.id + ' was not found (drafts are kept for 3 days) or is not a LinkedIn/Instagram draft. You can write the text below yourself.') }));
     } else if (on) {
       kok.appendChild(h('p', { class: 'bildirim bildirim-bilgi', text: L('Geçmiş\'teki #' + on.id + ' taslağından dolduruldu. Metni gözden geçir, gün ve saat seç, onaya gönder.', 'Filled from draft #' + on.id + ' in History. Review the text, pick a day and time, and send it for approval.') }));
     }

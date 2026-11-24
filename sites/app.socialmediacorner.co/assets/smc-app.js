@@ -456,7 +456,7 @@ function kart(a){
 function kayitVar(r){return !!(r&&Array.isArray(r.draft_ids)&&r.draft_ids.length)}
 function kayitNot(){var p=$('#kayit-not');
   if(!D.kayit){if(p)p.hidden=true;return}
-  if(!p){p=el('p','ipucu');p.id='kayit-not';p.appendChild(d.createTextNode('Geçmiş’e kaydedildi.'));p.appendChild(d.createTextNode(' '));
+  if(!p){p=el('p','ipucu');p.id='kayit-not';p.appendChild(d.createTextNode('Geçmiş’e kaydedildi, 3 gün saklanır.'));p.appendChild(d.createTextNode(' '));
     var a=el('a',null,'Geçmişi aç');a.href=dilAl()==='en'?'/en/hesap/history':'/hesap/gecmis';p.appendChild(a);
     kartlar.parentNode.insertBefore(p,kartlar.nextSibling)}
   p.hidden=false}

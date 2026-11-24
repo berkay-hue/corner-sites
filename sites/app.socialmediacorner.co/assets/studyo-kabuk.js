@@ -288,14 +288,15 @@ function yukle(q){
   },function(h){if(no!==D.istek)return;durdur();tsSifirla();uretMesgul(false);hataIsle(h||{kod:'genel'})});
 }
 function vazgec(){D.vazgec=true;D.istek++;if(D.ac)try{D.ac.abort()}catch(e){}durdur();uretMesgul(false);goster(D.kartVar?'sonuc':'bos',false);durum(T('Vazgeçildi.','Cancelled.'));quotaSor();konu.focus()}
-/* Planla: worker yalnız LinkedIn/Instagram taslağına draft_ids döner; sayfa cfg.taslakId ile seçili sekmenin kimliğini verir.
+/* Oturumlu üretimde worker LinkedIn, Instagram, blog ve video (karusel dahil) taslağı için draft_ids döner (geçmişte 3 gün kalır).
+   Planla yalnız cfg.taslakId veren sayfada (LinkedIn/Instagram); sayfa seçili sekmenin kimliğini verir.
    Bağlantı kuyruk sayfasına gider (?taslak=<id>, EN ?draft=<id>); kuyruk taslağı Geçmiş'ten okuyup formu doldurur. */
 var TASLAK_RE=/^[1-9]\d{0,14}$/;
 function planlaYaz(id){var a=$('#kayit-planla');if(!a)return;id=String(id==null?'':id);
   if(!TASLAK_RE.test(id)){a.hidden=true;a.removeAttribute('href');return}
   a.href=(EN?'/en/publish-queue?draft=':'/yayin-kuyrugu?taslak=')+id;a.hidden=false}
 function kayitNot(r,tek){var n=$('#kayit-not');if(!n)return;n.textContent='';n.hidden=true;
-  if(r&&Array.isArray(r.draft_ids)&&r.draft_ids.length){n.appendChild(d.createTextNode(T('Geçmiş’e kaydedildi. ','Saved to History. ')));var a=el('a',null,T('Geçmişi aç','Open History'));a.href=EN?'/en/hesap/history':'/hesap/gecmis';n.appendChild(a);
+  if(r&&Array.isArray(r.draft_ids)&&r.draft_ids.length){n.appendChild(d.createTextNode(T('Geçmiş’e kaydedildi, 3 gün saklanır. ','Saved to History for 3 days. ')));var a=el('a',null,T('Geçmişi aç','Open History'));a.href=EN?'/en/hesap/history':'/hesap/gecmis';n.appendChild(a);
     if(cfg&&typeof cfg.taslakId==='function'){var p=el('a',null,T('Planla','Schedule'));p.id='kayit-planla';p.setAttribute('aria-label',T('Seçili taslağı yayın kuyruğunda planla','Schedule the selected draft in the publishing queue'));
       n.appendChild(d.createTextNode(' · '));n.appendChild(p);planlaYaz(cfg.taslakId(r.draft_ids,!!tek))}
     n.hidden=false}}
