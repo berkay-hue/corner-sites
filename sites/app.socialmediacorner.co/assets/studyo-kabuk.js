@@ -142,7 +142,7 @@ function hakYaz(){
   else if(sc==='plan'){ust=T('Bu ay doldu','Used up this month');alt=DUVAR.plan.b+' '+DUVAR.plan.m;veri='0'}
   else if(bel||D.left==null){ust=T('Hak: belli değil','Credits: unknown');alt=T('Her üretim 1 hak kullanır. Günde '+D.cap+' hak; yenilenme: ','Each generation uses 1 credit. '+D.cap+' credits a day; renews: ')+yenMetin()+'.';veri='?'}
   else if((ay=D.plan&&D.plan!=='anon'?ayBilgi():null)){
-    /* A9b: girişli → aylık hak ("Bu ay 37/40 LinkedIn+Blog"); günlük/global sınır daha darsa balonda söylenir */
+    /* A9b: girişli → aylık hak ("Bu ay 7/8 LinkedIn+Blog"); günlük/global sınır daha darsa balonda söylenir */
     ust=T('Bu ay '+ay.kalan+'/'+ay.limit+' '+ay.ad,'This month '+ay.kalan+'/'+ay.limit+' '+ay.ad);
     alt=T('Planındaki aylık '+ay.ad+' hakkı '+ay.limit+'; '+ay.kalan+' kaldı. Her üretim 1 hak kullanır; hak ayın ilk günü yenilenir.','Your plan’s monthly '+ay.ad+' allowance is '+ay.limit+'; '+ay.kalan+' left. Each generation uses 1 credit; it renews on the 1st of the month.');
     if(D.left<ay.kalan)alt+=' '+T('Bugün en çok '+D.left+' üretim daha yapabilirsin; yenilenme: ','You can make at most '+D.left+' more today; renews: ')+yenMetin()+'.';

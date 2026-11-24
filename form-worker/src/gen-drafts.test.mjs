@@ -236,11 +236,11 @@ test("brandcorner.co, izin listesinde olmayan origin ve preview kapısında öni
   }
 });
 
-test("CORS: /gen/* önuçuşu app origin'ine authorization başlığını zaten izinli verir; wrangler bayrakları 0", async () => {
+test("CORS: /gen/* önuçuşu app origin'ine authorization başlığını zaten izinli verir; A13'ten beri ACCOUNTS_ENABLED 1", async () => {
   const hosts = WRANGLER.match(/^ALLOWED_HOSTS\s*=\s*"([^"]*)"/m)[1];
   const env = { DB: d1(freshDb()), ALLOWED_HOSTS: hosts, GEN_ENABLED: "0" };
   const res = await worker.fetch(new Request("https://forms.test/gen/linkedin", { method: "OPTIONS", headers: { origin: APP } }), env, { waitUntil() {} });
   assert.equal(res.headers.get("access-control-allow-origin"), APP);
   assert.ok(res.headers.get("access-control-allow-headers").split(/,\s*/).includes("authorization"));
-  assert.match(WRANGLER, /^ACCOUNTS_ENABLED\s*=\s*"0"/m);
+  assert.match(WRANGLER, /^ACCOUNTS_ENABLED\s*=\s*"1"/m);
 });

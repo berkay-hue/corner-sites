@@ -1,10 +1,10 @@
-// A9b plan hakları (Desktop/app-smc/A9.md): aylık üretim sayısı ve Pexels erişimi. Sayılar
+// A9b plan hakları (Desktop/app-smc/A9.md): aylık üretim sayısı ve Pexels erişimi; A13'te ÷5 (basic 8/2, pro 40/12). Sayılar
 // sites/app.socialmediacorner.co/assets/plans.js (window.SMC_PLANS, Planlar sayfası) ile aynıdır; plans.test.mjs ikisini karşılaştırır.
 // linkedin_blog: LinkedIn + blog taslağı (gen_month kind 'lb'); video_gorsel: video + görsel/Instagram taslağı (kind 'vg').
 // Enterprise sayıları users.plan_limits JSON'undan ({"linkedin_blog":N,"video_gorsel":N}); yoksa/geçersizse pro sayıları.
 export const PLANS = Object.freeze({
-  basic: Object.freeze({ linkedin_blog: 40, video_gorsel: 10, stock: false }),
-  pro: Object.freeze({ linkedin_blog: 200, video_gorsel: 60, stock: true }),
+  basic: Object.freeze({ linkedin_blog: 8, video_gorsel: 2, stock: false }),
+  pro: Object.freeze({ linkedin_blog: 40, video_gorsel: 12, stock: true }),
   enterprise: Object.freeze({ linkedin_blog: null, video_gorsel: null, stock: true }),
 });
 

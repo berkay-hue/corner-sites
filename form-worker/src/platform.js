@@ -13,6 +13,7 @@ import { metricsEnabled, accountMetrics, linkMetrics, parseAudience } from "./me
 import { NICHE_LIST } from "./classify.js";
 import { authHosts, previewSite, resetPath, siteConf, siteRoles, roleAllowed, routeAllowed } from "./sites.js";
 import { TR as TR_FOLD } from "./gen-prompt.js";
+import { PLANS, KIND_NAME, planLimits } from "./plans.js";
 
 const ROLES = ["brand", "influencer", "agency"];
 const PLATFORMS = LISTED; // instagram, tiktok, youtube, x, linkedin, twitch (profil ve bağlantı listesi aynı)
@@ -56,6 +57,12 @@ export async function platform(req, url, env, origin, deliver) {
     const key = m && `${m[2]}${m[3] ? "/:id" : ""}${m[4] ? "/" + m[4] : ""}`; // APP anahtarının yol kısmı
     // Sitenin uç izin listesi (src/sites.js routes; brandcorner.co'da yok): listede olmayan uç oturuma ve gövdeye bakılmadan 404
     if (!routeAllowed(site, m ? `${m[1]} /app/${key}` : route)) throw new Bad("not_found", 404);
+    // İzin listeli sitede (smc) yönetim uçları: oturum ve admin yetkisi gövdeden önce; oturumsuz, başka sitenin oturumu,
+    // yönetici olmayan ve gövdesi bozuk/büyük istek aynı 404'ü alır (uçların varlığı belli olmaz). brandcorner.co değişmez.
+    if (m && m[2] === "admin" && siteConf(site).routes) {
+      c.user = await sessionUser(env, bearerToken(req), site);
+      if (!c.user || !(await isAdmin(c))) throw new Bad("not_found", 404);
+    }
     if (req.method === "POST" || req.method === "PUT") {
       const text = await req.text();
       // Gönderi aktarımı 50 satır x (2200 karakter açıklama + iki url) taşır; diğer uçlar MAX_BODY
@@ -69,7 +76,7 @@ export async function platform(req, url, env, origin, deliver) {
     if (route === "POST /auth/reset") return await reset(c);
 
     const token = bearerToken(req);
-    c.user = await sessionUser(env, token, site);
+    c.user ||= await sessionUser(env, token, site);
     if (!c.user) throw new Bad("auth", 401);
 
     // Yönetici ise admin: true; kendi yetkileri (admin hariç) perms, yoksa alan yok
@@ -81,8 +88,8 @@ export async function platform(req, url, env, origin, deliver) {
       await env.DB.prepare("DELETE FROM sessions WHERE token_hash = ?").bind(await sha256(token)).run();
       return ok(c, {});
     }
-    // Hesap bölümleri (ACCT) yalnız uç izin listesi olan sitede; brandcorner.co'da eskisi gibi 404
-    const handler = m && (APP[`${m[1]} ${key}`] || (siteConf(site).routes ? ACCT[`${m[1]} ${key}`] : undefined));
+    // Hesap bölümleri (ACCT) yalnız uç izin listesi olan sitede ve APP'ten önce (smc'nin GET admin'i ACCT'te); brandcorner.co'da ACCT yok sayılır
+    const handler = m && ((siteConf(site).routes && ACCT[`${m[1]} ${key}`]) || APP[`${m[1]} ${key}`]);
     if (!handler) throw new Bad("not_found", 404);
     return await handler(c, m[3] && Number(m[3]));
   } catch (e) {
@@ -379,6 +386,13 @@ const ACCT = {
   "POST drafts/:id/delete": acct(deleteDraft),
   "GET export": acct(exportData),
   "POST account/delete": acct(deleteAccount),
+  // A13 yönetim (aşağıda smcAdmin*; adminRoute kendi 404/503 kapısını uygular)
+  "GET admin": c => smcAdminHome(c),
+  "GET admin/users": c => smcAdminUsers(c),
+  "GET admin/submissions": c => smcAdminSubmissions(c),
+  "GET admin/drafts": c => smcAdminDrafts(c),
+  "GET admin/jobs": c => smcAdminJobs(c),
+  "POST admin/:id/plan": (c, id) => smcAdminPlan(c, id),
 };
 
 const jsonOr = (s, d) => { try { return JSON.parse(s); } catch { return d; } };
@@ -1282,4 +1296,130 @@ const adminSnap = adminRoute(async (c, id) => {
     views = COALESCE(excluded.views, views), reach = COALESCE(excluded.reach, reach)`).bind(post.id, at, set.likes, set.comments, set.views, set.reach)],
   { actor: c.user.id, uid: post.user_id, rows: [{ url: post.url, snap }], source: "admin", cur });
   return ok(c, { snap: { post_id: String(post.id), ...snap }, changed });
+});
+
+// ---- app.socialmediacorner.co yönetimi (A13; migrations/0012 user_perms + 0016/0017/0018 tabloları) ----
+// Kapı brandcorner.co ile aynı (adminRoute): user_perms'te admin satırı olmayana 404, tablo/sütun yoksa 503 not_ready.
+// Kullanıcı site başına (users.site, oturum u.site = ? ile çözülür): başka sitenin yöneticisi burada oturum açamaz, her sorgu
+// c.site ile süzülür. Form gönderileri smc'nin iki alanından (src/sites.js submitSites); IP maskeli, user agent hiç seçilmez.
+// Uçlar yalnız izin listesi olan sitede (ACCT, src/sites.js APP_ROUTES); brandcorner.co'nun GET admin'i APP'te, değişmedi.
+const SMC_ADMIN_PAGE = 50, LIMIT_MAX = 100000;
+const smcMonth = () => new Date(Date.now() + 3 * 3600e3).toISOString().slice(0, 7); // gen_month ayı (UTC+3, src/generate.js genDay)
+const smcDay = back => new Date(Date.now() + 3 * 3600e3 - back * 864e5).toISOString().slice(0, 10);
+// ?before=<son id> imleci; boşsa ilk sayfa
+const beforeOf = c => {
+  const b = c.query.before ?? "";
+  if (b === "") return null;
+  need(/^[1-9]\d{0,15}$/.test(b) && Number.isSafeInteger(Number(b)), "before", 400);
+  return Number(b);
+};
+const pageOf = rows => { const page = rows.slice(0, SMC_ADMIN_PAGE); return { page, next: rows.length > SMC_ADMIN_PAGE ? page[page.length - 1].id : null }; };
+// IPv4 ilk iki sekizli, IPv6 ilk iki grup; gerisi gizli
+export const maskIp = ip => {
+  const s = String(ip || "");
+  if (!s) return "";
+  if (s.includes(":")) return s.split(":").slice(0, 2).join(":") + ":…";
+  const p = s.split(".");
+  return p.length === 4 ? `${p[0]}.${p[1]}.x.x` : "x";
+};
+const submitSites = c => JSON.stringify(siteConf(c.site).submitSites || [c.site]);
+
+const smcUserOut = u => ({
+  id: u.id, email: u.email, name: u.name, plan: u.plan, plan_limits: jsonOr(u.plan_limits, null), limits: planLimits(u),
+  created_at: u.created_at, last_login: u.last_login, drafts: u.drafts, month: { linkedin_blog: u.lb || 0, video_gorsel: u.vg || 0 },
+  ...(u.admin && { admin: true }),
+});
+async function smcUsers(c, before) {
+  const month = smcMonth();
+  const rows = await listAll(c.env, `SELECT u.id, u.email, u.name, u.plan, u.plan_limits, u.created_at,
+    (SELECT MAX(created_at) FROM sessions WHERE user_id = u.id) last_login,
+    (SELECT COUNT(*) FROM drafts WHERE user_id = u.id AND site = u.site) drafts,
+    (SELECT n FROM gen_month WHERE month = ? AND user_id = u.id AND kind = 'lb') lb,
+    (SELECT n FROM gen_month WHERE month = ? AND user_id = u.id AND kind = 'vg') vg,
+    EXISTS (SELECT 1 FROM user_perms WHERE user_id = u.id AND perm = 'admin') admin
+    FROM users u WHERE u.site = ?${before ? " AND u.id < ?" : ""} ORDER BY u.id DESC LIMIT ${SMC_ADMIN_PAGE + 1}`,
+  month, month, c.site, ...(before ? [before] : []));
+  const { page, next } = pageOf(rows);
+  return { users: page.map(smcUserOut), next };
+}
+
+// Panelin ilk isteği: kullanıcıların ilk sayfası, plan dağılımı, bu ayın sayaç toplamı, son 30 günün gen_daily'si, plan geçmişi
+const smcAdminHome = adminRoute(async c => {
+  const { env, site } = c, month = smcMonth();
+  const [users, plans, monthTotals, daily, planLog] = await Promise.all([
+    smcUsers(c, null),
+    listAll(env, "SELECT plan, COUNT(*) n FROM users WHERE site = ? GROUP BY plan ORDER BY plan", site),
+    listAll(env, `SELECT g.kind, SUM(g.n) n, COUNT(DISTINCT g.user_id) users FROM gen_month g JOIN users u ON u.id = g.user_id AND u.site = ?
+      WHERE g.month = ? GROUP BY g.kind ORDER BY g.kind`, site, month),
+    // gen_daily sitesizdir (yalnız app.socialmediacorner.co üretir); tablo yoksa boş
+    listOr(env, `SELECT day, ok, fail, refused, busy, refine_ok, tok_in, tok_out, uniq_anon, anon_full, ip_full, cap_hit, copy_ok, share
+      FROM gen_daily WHERE day >= ? ORDER BY day DESC`, smcDay(29)),
+    listOr(env, `SELECT l.id, l.at, l.actor_id, a.email actor_email, l.user_id, u.email, substr(l.perm, 6) plan
+      FROM perm_log l JOIN users u ON u.id = l.user_id AND u.site = ? LEFT JOIN users a ON a.id = l.actor_id
+      WHERE l.perm LIKE 'plan:%' ORDER BY l.id DESC LIMIT 100`, site),
+  ]);
+  return ok(c, {
+    month, ...users,
+    plans: Object.fromEntries(plans.map(r => [r.plan, r.n])),
+    gen_month: Object.fromEntries(monthTotals.map(r => [KIND_NAME[r.kind] || r.kind, { n: r.n, users: r.users }])),
+    gen_daily: daily, plan_log: planLog,
+  });
+});
+
+const smcAdminUsers = adminRoute(async c => ok(c, await smcUsers(c, beforeOf(c))));
+
+// Form gönderileri (index.js /submit ve /auth/register'ın /kayit satırı): smc alanları, en yeni önce
+const smcAdminSubmissions = adminRoute(async c => {
+  const before = beforeOf(c);
+  const rows = await listAll(c.env, `SELECT id, created_at, site, page, fields, ip, emailed FROM submissions
+    WHERE site IN (SELECT value FROM json_each(?))${before ? " AND id < ?" : ""} ORDER BY id DESC LIMIT ${SMC_ADMIN_PAGE + 1}`,
+  submitSites(c), ...(before ? [before] : []));
+  const { page, next } = pageOf(rows);
+  return ok(c, { submissions: page.map(r => ({ id: r.id, created_at: r.created_at, site: r.site, page: r.page, fields: jsonOr(r.fields, []), ip: maskIp(r.ip), emailed: !!r.emailed })), next });
+});
+
+// Son taslaklar: kullanıcı, platform, konu ve metnin başı (tam metin dışa aktarılmaz)
+const smcAdminDrafts = adminRoute(async c => {
+  const before = beforeOf(c);
+  const rows = await listAll(c.env, `SELECT d.id, d.created_at, d.user_id, u.email, d.platform, d.topic, substr(d.body, 1, 280) body, length(d.body) len
+    FROM drafts d JOIN users u ON u.id = d.user_id AND u.site = ? WHERE d.site = ?${before ? " AND d.id < ?" : ""} ORDER BY d.id DESC LIMIT ${SMC_ADMIN_PAGE + 1}`,
+  c.site, c.site, ...(before ? [before] : []));
+  const { page, next } = pageOf(rows);
+  return ok(c, { drafts: page, next });
+});
+
+// Yayın kuyruğu ve olayları (0016). Token, hesap kimliği, uzak kimlik seçilmez; metnin yalnız başı.
+const smcAdminJobs = adminRoute(async c => {
+  const before = beforeOf(c);
+  const rows = await listAll(c.env, `SELECT j.id, j.user_id, u.email, j.platform, j.state, j.run_at, j.attempts, j.next_try_at, substr(j.body, 1, 200) body,
+    j.last_error, j.created_at, j.updated_at FROM publish_jobs j JOIN users u ON u.id = j.user_id AND u.site = ?
+    WHERE j.site = ?${before ? " AND j.id < ?" : ""} ORDER BY j.id DESC LIMIT ${SMC_ADMIN_PAGE + 1}`,
+  c.site, c.site, ...(before ? [before] : []));
+  const { page, next } = pageOf(rows);
+  const events = page.length ? await listAll(c.env, `SELECT e.id, e.job_id, e.at, e.actor, e.from_state, e.to_state, e.note FROM publish_events e
+    JOIN publish_jobs j ON j.id = e.job_id AND j.site = ? WHERE e.job_id IN (SELECT value FROM json_each(?)) ORDER BY e.id DESC LIMIT 500`,
+  c.site, JSON.stringify(page.map(j => j.id))) : [];
+  return ok(c, { jobs: page, events, next });
+});
+
+// Gövde: {plan: basic|pro|enterprise, limits?: {linkedin_blog, video_gorsel}}. Enterprise'ta limits zorunlu (1..100000 tam sayı),
+// diğerlerinde verilirse 400 bad_limits; plan_limits enterprise dışında NULL. Hedef bu sitenin kullanıcısı değilse 404.
+// Plan gerçekten değişiyorsa perm_log'a 'plan:<plan>' satırı (değişiklikten önce, aynı batch'te; perm_log yoksa günlüksüz).
+const smcAdminPlan = adminRoute(async (c, id) => {
+  const { env } = c, b = c.body;
+  need(typeof b.plan === "string" && Object.hasOwn(PLANS, b.plan), "bad_plan", 400);
+  let limits = null;
+  if (b.plan === "enterprise") {
+    const l = b.limits;
+    need(l && typeof l === "object" && !Array.isArray(l) && Object.keys(l).every(k => k === "linkedin_blog" || k === "video_gorsel"), "bad_limits", 400);
+    need(["linkedin_blog", "video_gorsel"].every(k => Number.isSafeInteger(l[k]) && l[k] > 0 && l[k] <= LIMIT_MAX), "bad_limits", 400);
+    limits = JSON.stringify({ linkedin_blog: l.linkedin_blog, video_gorsel: l.video_gorsel });
+  } else need(b.limits === undefined || b.limits === null, "bad_limits", 400);
+  need(await siteUser(c, id), "not_found", 404);
+  const log = env.DB.prepare(`INSERT INTO perm_log (actor_id, user_id, perm, granted) SELECT ?, ?, 'plan:' || ?, 1
+    WHERE NOT EXISTS (SELECT 1 FROM users WHERE id = ? AND plan = ? AND plan_limits IS ?)`).bind(c.user.id, id, b.plan, id, b.plan, limits);
+  const change = env.DB.prepare("UPDATE users SET plan = ?, plan_limits = ? WHERE id = ? AND site = ?").bind(b.plan, limits, id, c.site);
+  await batchOr(env, "perm_log", ed => ed ? [log, change] : [change]);
+  const u = await env.DB.prepare("SELECT plan, plan_limits FROM users WHERE id = ? AND site = ?").bind(id, c.site).first();
+  return ok(c, { user_id: id, plan: u.plan, plan_limits: jsonOr(u.plan_limits, null), limits: planLimits(u) });
 });

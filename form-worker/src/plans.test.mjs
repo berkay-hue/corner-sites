@@ -31,6 +31,13 @@ test("plans.js metnindeki sayılar regex ile de aynı (değerlendirme dışı ye
   }
 });
 
+test("A13: kotalar ÷5 — basic 8/2, pro 40/12 (worker ve site)", () => {
+  const S = site();
+  assert.deepEqual([PLANS.basic.linkedin_blog, PLANS.basic.video_gorsel, PLANS.pro.linkedin_blog, PLANS.pro.video_gorsel], [8, 2, 40, 12]);
+  assert.deepEqual([S.basic.linkedin_blog, S.basic.video_gorsel, S.pro.linkedin_blog, S.pro.video_gorsel], [8, 2, 40, 12]);
+  assert.deepEqual([S.basic.marka_sesi, S.pro.marka_sesi], [1, 3]);
+});
+
 test("planOf / planLimits: 0018 yok → null, bilinmeyen → basic, enterprise plan_limits ya da pro sayıları", () => {
   assert.equal(planOf(null), null);
   assert.equal(planOf({ id: 1 }), null);
@@ -38,12 +45,12 @@ test("planOf / planLimits: 0018 yok → null, bilinmeyen → basic, enterprise p
   assert.equal(planOf({ plan: "gold" }), "basic");
   assert.equal(planOf({ plan: "toString" }), "basic");
   assert.equal(planLimits({ id: 1 }), null);
-  assert.deepEqual(planLimits({ plan: "basic" }), { plan: "basic", linkedin_blog: 40, video_gorsel: 10, stock: false });
-  assert.deepEqual(planLimits({ plan: "pro" }), { plan: "pro", linkedin_blog: 200, video_gorsel: 60, stock: true });
+  assert.deepEqual(planLimits({ plan: "basic" }), { plan: "basic", linkedin_blog: 8, video_gorsel: 2, stock: false });
+  assert.deepEqual(planLimits({ plan: "pro" }), { plan: "pro", linkedin_blog: 40, video_gorsel: 12, stock: true });
   assert.deepEqual(planLimits({ plan: "enterprise", plan_limits: '{"linkedin_blog":500,"video_gorsel":120}' }), { plan: "enterprise", linkedin_blog: 500, video_gorsel: 120, stock: true });
-  assert.deepEqual(planLimits({ plan: "enterprise", plan_limits: '{"linkedin_blog":0,"video_gorsel":"9"}' }), { plan: "enterprise", linkedin_blog: 200, video_gorsel: 60, stock: true });
-  assert.deepEqual(planLimits({ plan: "enterprise", plan_limits: "{bozuk" }), { plan: "enterprise", linkedin_blog: 200, video_gorsel: 60, stock: true });
-  assert.deepEqual(planLimits({ plan: "enterprise", plan_limits: null }), { plan: "enterprise", linkedin_blog: 200, video_gorsel: 60, stock: true });
+  assert.deepEqual(planLimits({ plan: "enterprise", plan_limits: '{"linkedin_blog":0,"video_gorsel":"9"}' }), { plan: "enterprise", linkedin_blog: 40, video_gorsel: 12, stock: true });
+  assert.deepEqual(planLimits({ plan: "enterprise", plan_limits: "{bozuk" }), { plan: "enterprise", linkedin_blog: 40, video_gorsel: 12, stock: true });
+  assert.deepEqual(planLimits({ plan: "enterprise", plan_limits: null }), { plan: "enterprise", linkedin_blog: 40, video_gorsel: 12, stock: true });
   assert.deepEqual(MONTH_KIND, { linkedin: "lb", blog: "lb", video: "vg", instagram: "vg" });
   assert.deepEqual(KIND_NAME, { lb: "linkedin_blog", vg: "video_gorsel" });
 });

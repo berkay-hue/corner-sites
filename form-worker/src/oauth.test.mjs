@@ -3863,6 +3863,8 @@ const OLD_APP = [
 const APP_OK = ["GET profile", "POST profile", "GET connections", "POST connect", "POST connect/finish", "POST disconnect"];
 // A5-3 hesap bölümleri: yalnız app izin listesinde; brandcorner.co'da APP'te yok (404)
 const ACCT_OK = ["GET voice", "PUT voice", "GET drafts", "POST drafts/:id/delete", "GET export", "POST account/delete"];
+// A13 smc yönetimi: izin listesinde, kapı işleyicide (yönetici olmayana 404, src/smc-admin.test.mjs); brandcorner'ın admin/:id/* uçları yok
+const ADMIN_OK = ["GET admin", "GET admin/users", "GET admin/submissions", "GET admin/drafts", "GET admin/jobs", "POST admin/:id/plan"];
 // "POST campaigns/:id/apply" → ["POST", "/app/campaigns/7/apply"]
 const appPath = k => { const [method, p] = k.split(" "); return [method, `/app/${p.replace(":id", "7")}`]; };
 const bodyFor = method => (method === "GET" ? undefined : {});
@@ -3919,7 +3921,7 @@ test("A5-2w: brandcorner.co'da eski uçların hepsi yönlendirilir, üç rol de 
 });
 
 test("A5-2w: APP_ROUTES izin listesi yalnız mevcut hesap uçları (A5-3 ile hesap bölümleri)", () => {
-  assert.deepEqual([...APP_ROUTES].sort(), [...OLD_AUTH, ...[...APP_OK, ...ACCT_OK].map(k => k.replace(" ", " /app/"))].sort());
+  assert.deepEqual([...APP_ROUTES].sort(), [...OLD_AUTH, ...[...APP_OK, ...ACCT_OK, ...ADMIN_OK].map(k => k.replace(" ", " /app/"))].sort());
   assert.ok(Object.isFrozen(APP_ROUTES));
 });
 
@@ -3954,7 +3956,7 @@ test("A5-2w: app (preview ve 1) izin listesi dışı uç 404, D1'e dokunmadan; k
     assert.deepEqual(fail(await reg("bad", {})), [400, "email"], label);
     const token = toks[0];
     // İzin listesi dışı: oturumlu, oturumsuz ve büyük gövdeli istekte 404; D1 sorgusu yok
-    for (const k of OLD_APP.filter(k => !APP_OK.includes(k))) {
+    for (const k of OLD_APP.filter(k => !APP_OK.includes(k) && !ADMIN_OK.includes(k))) {
       const [method, path] = appPath(k);
       for (const opts of [{ token, body: bodyFor(method) }, { body: bodyFor(method) }, { token, body: method === "GET" ? undefined : { x: "y".repeat(500000) } }]) {
         const r = await call(method, path, opts);
