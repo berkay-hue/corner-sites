@@ -437,25 +437,26 @@ function pageYeniSifre() {
 
 // ---------- Uygulama kabuğu ----------
 const ICON_OUT = `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>`;
-const ICON_SIDE = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/></svg>`;
+const ICON_X = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="M6 6l12 12"/></svg>`;
+const ICON_LOCK = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>`;
 function shell(content) {
   const b = S.ben, name = b.ad || b.email;
-  const nav = (n, ic, ad, extra = "") => `<a href="#/${n}" title="${esc(ad)}"${n === route ? ' aria-current="page"' : ""}><span class="ic" aria-hidden="true">${ic}</span><span class="lb">${esc(ad)}</span>${extra}</a>`;
-  const badge = k => (JOBS[k]?.state === "run" ? '<span class="lock" title="Hazırlanıyor"><span class="spin s"></span></span>' : durum(k).neden === "plan" ? '<span class="lock" title="Planınıza dahil değil">🔒</span>' : "");
+  const nav = (n, ad, extra = "") => `<a href="#/${n}"${n === route ? ' aria-current="page"' : ""}><span class="lb">${esc(ad)}</span>${extra}</a>`;
+  const badge = k => (JOBS[k]?.state === "run" ? '<span class="lock" title="Hazırlanıyor"><span class="spin s"></span></span>' : durum(k).neden === "plan" ? `<span class="lock" title="Planınıza dahil değil">${ICON_LOCK}</span>` : "");
   const kalan = daysLeft(b.bitis);
-  $app.innerHTML = `<div class="shell${store.get("side_mini", false) ? " mini" : ""}" id="shell">
+  $app.innerHTML = `<div class="shell" id="shell">
   <aside class="side" aria-label="Menü">
-    <div class="side-head"><button class="iconbtn side-tog" type="button" data-side aria-label="Menüyü daralt" title="Menüyü daralt / genişlet">${ICON_SIDE}</button><a class="brand" href="#/panel">${LOGO}</a></div>
+    <div class="side-head"><button class="iconbtn side-tog" type="button" data-side aria-label="Menüyü kapat" title="Menüyü kapat">${ICON_X}</button><a class="brand" href="#/panel">${LOGO}</a></div>
     <nav class="nav">
-      ${nav("panel", "🏠", "Panel")}
+      ${nav("panel", "Panel")}
       <div class="nav-h">Araçlar</div>
-      ${MODS.map(m => nav(m.k, m.ic, m.ad, badge(m.k))).join("")}
+      ${MODS.map(m => nav(m.k, m.ad, badge(m.k))).join("")}
       <div class="nav-h">Size özel</div>
-      ${nav("ozel", "✨", "Size özel çözümler")}
+      ${nav("ozel", "Size özel çözümler")}
       <div class="nav-h">Hesap</div>
-      ${nav("fiyatlar", "💎", "Planlar ve fiyatlar")}
-      ${nav("hesap", "⚙️", "Hesabım")}
-      ${b.admin ? nav("admin", "🛡️", "Yönetim") : ""}
+      ${nav("fiyatlar", "Planlar ve fiyatlar")}
+      ${nav("hesap", "Hesabım")}
+      ${b.admin ? nav("admin", "Yönetim") : ""}
     </nav>
     <div class="side-foot">
       <div class="plan-box"><b>${esc(b.plan_ad || b.plan)}</b><span>${!b.aktif ? "Süre doldu" : b.plan === "deneme" ? `Denemede ${kalan} gün kaldı` : `Geçerlilik: ${fmtD(b.bitis)}`}</span>
@@ -1293,8 +1294,7 @@ document.addEventListener("click", async e => {
   else if (t.hasAttribute("data-side")) {
     const sh = document.getElementById("shell");
     if (!sh) return;
-    if (matchMedia("(max-width:860px)").matches) sh.classList.remove("open");
-    else { const mini = sh.classList.toggle("mini"); store.set("side_mini", mini); }
+    sh.classList.remove("open");
   }
   else if (t.hasAttribute("data-menu")) document.getElementById("shell")?.classList.toggle("open");
   else if (t.hasAttribute("data-logout")) { await sb.auth.signOut(); S.session = null; S.ben = null; ADM = { rows: null, err: "", q: "" }; FF = { list: null, err: "", sel: "" }; TK = { list: null, err: "", edit: null, sil: "", run: {} }; go("giris"); }
