@@ -79,6 +79,24 @@ function durum(s,u){
   var m=$('#hesap-menu');
   if(u.admin===true&&m&&!$('#hesap-admin')){var g=$('a[data-m="uye"][href$="/gecmis"],a[data-m="uye"][href$="/history"]',m),y=d.createElement('a');
     y.href='/hesap/admin';y.id='hesap-admin';y.setAttribute('data-m','uye');y.textContent=T('Yönetim','Admin');m.insertBefore(y,g?g.nextSibling:$('hr',m))}
+  planKutu(u);
+}
+/* ray altı plan kutusu: üyede teklif kartı yerine plan adı + durum + Planı yükselt (Enterprise'da düğme yok) */
+var PLAN_AD={demo:'Demo',basic:'Basic',pro:'Pro',enterprise:'Enterprise'};
+function planKutu(u){
+  var k=$('.st-rail .st-teklif-kart'),p=u&&u.plan;
+  if(!k||!p||typeof p!=='string')return;
+  var b=d.createElement('b'),s=d.createElement('p'),dur;
+  b.textContent=T((PLAN_AD[p]||p)+' plan',(PLAN_AD[p]||p)+' plan');
+  if(p==='demo'){
+    if(u.trial_ended===true)dur=T('Deneme süresi bitti','Trial ended');
+    else{var t=Date.parse(u.trial_ends_at||''),n=isNaN(t)?0:Math.max(1,Math.ceil((t-Date.now())/864e5));
+      dur=n?T(n+' gün deneme kaldı',n+(n===1?' trial day left':' trial days left')):T('Deneme sürümü','Trial')}
+  }else dur=T('Aktif plan','Active plan');
+  s.textContent=dur;
+  while(k.firstChild)k.removeChild(k.firstChild);
+  k.appendChild(b);k.appendChild(s);k.classList.add('st-plan');
+  if(p!=='enterprise'){var a=d.createElement('a');a.className='st-plan-btn';a.href=EN?'/en/pricing':'/fiyatlar';a.textContent=T('Planı yükselt','Upgrade plan');k.appendChild(a)}
 }
 function cikisKur(){
   $$('[data-cikis]').forEach(function(b){b.addEventListener('click',function(){
@@ -107,7 +125,7 @@ function uyelikYokla(){
 function studyoBasla(){
   if(!ust)return;
   cikisKur();
-  if(ORNEK){durum('uye',{name:'Deniz Yılmaz',email:'deniz@ornekajans.com.tr'});return}
+  if(ORNEK){durum('uye',{name:'Deniz Yılmaz',email:'deniz@ornekajans.com.tr',plan:'pro'});return}
   if(!API||!tokenAl()){durum('misafir');uyelikYokla();return}
   durum('uye');
   istek('/auth/me').then(function(j){
