@@ -4,6 +4,8 @@
    Plan kilidi (C2): limits.plan_required doluysa ya da limits.sites 0 ise (demo/basic) sayfa kilitli: bağlanma formu gizli,
    Pro'ya yükselt kutusu; var olan siteler görünür (yalnız Duraklat/Kaldır). last_error "plan_required" = plan nedeniyle duraklatıldı.
    Sağlayıcı adı site.provider'dan (Cloudflare Pages satırı platform "github" + provider "cloudflare").
+   Site sınırı (24.11): Pro ve Enterprise tek site (limits.sites; enterprise'a ek site iletişimle). Sınır doluysa platform
+   kartları ve form gizlenir, yerine "ek site için bizimle iletişime geç" kutusu (ILETISIM, başlıktaki Teklif al ile aynı adres).
    Veri yalnız textContent/createElement ile yazılır; innerHTML yok. Satır içi stil yok (CSP style-src 'self'). */
 (function(){
 'use strict';
@@ -18,6 +20,7 @@ function dz(x){return Array.isArray(x)?x:[]}
 function str(x){return x==null?'':String(x)}
 function yerel(o,k){return o?str(EN?(o[k+'_en']||o[k+'_tr']):(o[k+'_tr']||o[k+'_en'])):''}
 var PLANLAR=EN?'/en/pricing':'/fiyatlar';
+var ILETISIM=EN?'https://socialmediacorner.co/en/contact#form':'https://socialmediacorner.co/iletisim#form';
 var GUNLER=[[1,'Pzt','Mon','Pazartesi','Monday'],[2,'Sal','Tue','Salı','Tuesday'],[3,'Çar','Wed','Çarşamba','Wednesday'],[4,'Per','Thu','Perşembe','Thursday'],[5,'Cum','Fri','Cuma','Friday'],[6,'Cmt','Sat','Cumartesi','Saturday'],[7,'Paz','Sun','Pazar','Sunday']];
 /* DOĞRULANMALI: gün numarası 1=Pazartesi … 7=Pazar (ISO) varsayıldı; çekirdek next_run_at hesabı aynı ölçeği kullanmalı. */
 var VARSAYILAN_GUN={1:[2],2:[2,4],3:[1,3,5],7:[1,2,3,4,5,6,7]};
@@ -44,7 +47,7 @@ var HATA={
   server:['Sunucuda bir sorun oldu. Biraz sonra yeniden dene.','Something went wrong on our side. Try again shortly.'],
   not_ready:['Bu bölüm yakında açılıyor.','This section opens soon.'],
   network:['Sunucuya ulaşılamadı. Bağlantını kontrol edip yeniden dene.','Couldn’t reach the server. Check your connection and retry.'],
-  site_limit:['Planındaki site sınırına ulaştın.','You have reached your plan’s site limit.'],
+  site_limit:['Planındaki site hakkını kullandın. Ek site için bizimle iletişime geç.','You’ve used your plan’s site allowance. Need more sites? Contact us.'],
   quota:['Bu ayki blog yazısı hakkın bitti. Hakkın gelecek ay yenilenir.','You’ve used this month’s blog posts. Your allowance renews next month.'],
   plan_required:['Otomatik blog Pro ve Enterprise planlarda. Kullanmak için Pro’ya yükselt.','Blog autopilot is on the Pro and Enterprise plans. Upgrade to Pro to use it.'],
   plan_frequency:['Bu sıklık planında yok. Günde 1 yazı yalnız Enterprise planda; diğer planlarda haftada en çok 3 yazı seçebilirsin.','This frequency isn’t in your plan. Daily posts are on the Enterprise plan only; other plans allow up to 3 posts a week.']
@@ -123,7 +126,7 @@ function not(kutu,metin,tur,bag){
 function hataNot(kutu,j){
   var k=j.error||(j._s===0?'network':j._s===429?'rate':j._s>=500?'server':'');
   if(j._s===401||(j._s===403&&j.error==='origin')){api.genelHata(j);return}
-  var bag=(k==='site_limit'||k==='quota'||k==='plan_required'||k==='plan_frequency')?[L('Planları gör','See plans'),PLANLAR]:null;
+  var bag=k==='site_limit'?[L('İletişime geç','Contact us'),ILETISIM]:(k==='quota'||k==='plan_required'||k==='plan_frequency')?[L('Planları gör','See plans'),PLANLAR]:null;
   var m=hataMetni(k||String(j._s));
   if(k==='plan_frequency'&&siklikOk(+j.max)&&+j.max<7)m=(EN?'Your plan allows up to '+j.max+' post'+(+j.max>1?'s':'')+' a week. Daily posts are on the Enterprise plan.':'Planın haftada en çok '+j.max+' yazıya izin veriyor. Günde 1 yazı Enterprise planda.');
   not(kutu,m,'hata',bag);
@@ -146,6 +149,8 @@ function siteBul(id){for(var i=0;i<veri.sites.length;i++)if(String(veri.sites[i]
 function siteKoy(s){if(!s||s.id==null)return;for(var i=0;i<veri.sites.length;i++)if(String(veri.sites[i].id)===String(s.id)){veri.sites[i]=s;return}veri.sites.unshift(s)}
 function yaziKoy(p){if(!p||p.id==null)return;for(var i=0;i<veri.posts.length;i++)if(String(veri.posts[i].id)===String(p.id)){veri.posts[i]=p;return}veri.posts.unshift(p)}
 function kullanilan(){return veri.sites.filter(function(s){return s.state!=='kaldirildi'}).length}
+function dolu(){var lim=veri.limits;return lim.sites>0&&(lim.used||kullanilan())>=lim.sites}
+function siteSayisi(n){return EN?n+' site'+(n>1?'s':''):n+' site'}
 
 /* ---- başlangıç ---- */
 window.smcCmsBasla=function(a){
@@ -211,6 +216,7 @@ function ciz(){
   K.siteler=el('div','cms-siteler');
   K.ekleB=el('h3','cms-h3',L('Site bağla','Connect a site'));
   K.platform=el('div','cms-pl-izgara');
+  K.dolu=el('div','bildirim',null,{hidden:''});
   K.form=el('div','cms-form-k');
   K.siraB=el('h3','cms-h3',L('Sıradaki yazılar','Upcoming posts'));
   K.sira=el('div','cms-sira');
@@ -224,19 +230,19 @@ function ciz(){
     sitelerCiz();yazilarCiz();
     return;
   }
-  ekle(g,K.ozet,K.not,K.sitelerB,K.siteler,K.siraB,K.sira,K.ekleB,K.platform,K.form,K.yazilarB,K.yazilar);
-  ozetCiz();sitelerCiz();platformCiz();yazilarCiz();
+  ekle(g,K.ozet,K.not,K.sitelerB,K.siteler,K.siraB,K.sira,K.ekleB,K.dolu,K.platform,K.form,K.yazilarB,K.yazilar);
+  ozetCiz();sitelerCiz();platformCiz();doluCiz();yazilarCiz();
 }
 function kilitKutu(){
   var k=el('section','sheet cms-plan-kilit',null,{'aria-labelledby':'cms-kilit-b'});
   ekle(k,el('h3','cms-h3',L('Otomatik blog Pro ve Enterprise planlarda','Blog autopilot is on the Pro and Enterprise plans'),{id:'cms-kilit-b'}),
-    el('p','ince',L('Web sitene bağlan, blog yazıları planladığın gün ve saatte otomatik hazırlanıp gönderilsin. Pro planda 3 site ve haftada 3 yazıya kadar seçebilirsin.','Connect your website and have blog posts written and sent on the days and times you pick. The Pro plan covers up to 3 sites and 3 posts a week.')),
+    el('p','ince',L('Web sitene bağlan, blog yazıları planladığın gün ve saatte otomatik hazırlanıp gönderilsin. Pro planda 1 site bağlar, haftada 3 yazıya kadar seçersin; ek site için bizimle iletişime geç.','Connect your website and have blog posts written and sent on the days and times you pick. The Pro plan covers 1 site and up to 3 posts a week; need more sites? Contact us.')),
     ekle(el('div','eylemler'),el('a','btn btn-ink',L('Pro’ya yükselt','Upgrade to Pro'),{href:PLANLAR+'#pl-pro'}),el('a','bag',L('Planları gör','See plans'),{href:PLANLAR})));
   return k;
 }
 function icinde(k){var a=d.activeElement;return !!(a&&k&&k.contains(a)&&a!==d.body)}
 function yenile(){
-  ozetCiz();
+  ozetCiz();if(!kilitli())doluCiz();
   if(!icinde(K.siteler)&&!K.siteler.querySelector('.cms-duzen:not([hidden])'))sitelerCiz();
   siraCiz();
   if(!icinde(K.yazilar))yazilarCiz();
@@ -255,10 +261,21 @@ function ozetCiz(){
     var p=el('span',null,L('Planında blog yazısı yok. ','Your plan has no blog posts. '));p.appendChild(el('a','bag',L('Planları gör','See plans'),{href:PLANLAR}));s2.appendChild(p);
   }
   ekle(o,s1,s2);
-  if(lim.sites>0&&used>=lim.sites){
-    var u=el('p','ince cms-tam');u.textContent=L('Site sınırına ulaştın. Yeni site için birini kaldır ya da planını yükselt: ','You have reached the site limit. Remove one or upgrade to add another: ');
-    u.appendChild(el('a','bag',L('Planlar','Plans'),{href:PLANLAR}));o.appendChild(u);
+  /* sınır doluysa açıklama K.dolu kutusunda (Site bağla başlığı altında) */
+  if(lim.sites>0&&used<lim.sites){
+    var u=el('p','ince cms-tam');
+    u.textContent=L('Planında '+siteSayisi(lim.sites)+' bağlanabilir. Ek site için ','Your plan includes '+siteSayisi(lim.sites)+'. Need more sites? ');
+    u.appendChild(el('a','bag',L('bizimle iletişime geç','Contact us'),{href:ILETISIM}));u.appendChild(d.createTextNode('.'));o.appendChild(u);
   }
+}
+/* sınır doluysa: platform kartları ve form gizli, yerine iletişim kutusu (K.dolu); bağlı site kaldırılınca kartlar geri gelir */
+function doluCiz(){
+  var t=dolu();K.dolu.textContent='';K.dolu.hidden=!t;K.platform.hidden=t;
+  if(!t)return;
+  if(akis)formKapat();
+  var lim=veri.limits,p=el('p',null,L('Planındaki '+siteSayisi(lim.sites)+' hakkını kullanıyorsun. Başka bir site bağlamak için bağlı siteyi kaldır ya da ek site için ','Your plan’s site allowance ('+siteSayisi(lim.sites)+') is in use. To connect a different site, remove the connected one; for extra sites, '));
+  p.appendChild(el('a','bag',L('bizimle iletişime geç','contact us'),{href:ILETISIM}));p.appendChild(d.createTextNode('.'));
+  K.dolu.appendChild(p);
 }
 
 /* ---- platform kartları ---- */
@@ -546,7 +563,7 @@ function kaydet(b){
     bitti();if(akis!==a)return;
     if(j._s===200&&j.site){
       siteKoy(j.site);veri.limits.used=Math.max(veri.limits.used,kullanilan());
-      a.inputs=null;formKapat();ozetCiz();sitelerCiz();
+      a.inputs=null;formKapat();ozetCiz();sitelerCiz();doluCiz();
       var s=j.site,ne=ist(s.next_run_at);
       not(K.not,str(s.label||sitePlat(s))+' '+L('bağlandı.','is connected.')+(ne?' '+L('İlk yazı: ','First post: ')+ne+'.':''),'ok');
       odakSite(s.id);return;
@@ -742,7 +759,7 @@ function kaldirKur(){
     var bitti=api.mesgul(ev,L('Kaldırılıyor…','Removing…'));
     cagir('/app/cms/'+encodeURIComponent(s.id)+'/disconnect','POST',{}).then(function(j){
       bitti();x.close();kaldirHedef=null;
-      if(j._s===200&&j.site){siteKoy(j.site);veri.limits.used=kullanilan();ozetCiz();sitelerCiz();not(K.not,str(s.label||sitePlat(s))+' '+L('bağlantısı kaldırıldı.','was disconnected.'),'ok');K.not.setAttribute('tabindex','-1');K.not.focus();return}
+      if(j._s===200&&j.site){siteKoy(j.site);veri.limits.used=kullanilan();ozetCiz();sitelerCiz();if(K.dolu)doluCiz();not(K.not,str(s.label||sitePlat(s))+' '+L('bağlantısı kaldırıldı.','was disconnected.'),'ok');K.not.setAttribute('tabindex','-1');K.not.focus();return}
       hataNot(K.not,j);
     });
   });
@@ -820,7 +837,7 @@ function ornekVeri(){
       {id:11,cms_site_id:1,title:'LinkedIn içerik takvimi nasıl hazırlanır?',state:'gonderildi',mode:'draft',remote_url:'https://ornek.com/?p=42',last_error:null,created_at:dz2(simdi-2*gun)},
       {id:10,cms_site_id:1,title:'B2B satışta sosyal medya',state:'basarisiz',mode:'draft',remote_url:null,last_error:'timeout',created_at:dz2(simdi-4*gun)},
       {id:9,cms_site_id:1,title:'',state:'kota',mode:'draft',remote_url:null,last_error:null,created_at:dz2(simdi-30*gun)}],
-    limits:{sites:3,used:1,per_week_max:3,plan_required:null},quota:{lb_used:2,lb_limit:8}};
+    limits:{sites:1,used:1,per_week_max:3,plan_required:null},quota:{lb_used:2,lb_limit:8}};
   return ORNEK_VERI;
 }
 function ornekIstek(yol,yontem,govde){

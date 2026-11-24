@@ -1438,7 +1438,7 @@ const smcAdminJobs = adminRoute(async c => {
 });
 
 // Gövde: {plan: demo|basic|pro|enterprise, limits?: {linkedin_blog, video_gorsel, cms_sites?}}. Enterprise'ta limits zorunlu (1..100000 tam sayı;
-// A14 cms_sites isteğe bağlı, yoksa plans.js varsayılanı 10),
+// A14 cms_sites isteğe bağlı, yoksa plans.js varsayılanı 1; ek site iletişimle buradan verilir),
 // diğerlerinde verilirse 400 bad_limits; plan_limits enterprise dışında NULL. Hedef bu sitenin kullanıcısı değilse 404.
 // A15 demo: deneme created_at + 14 günden sayılır (yeniden demo vermek süreyi uzatmaz); basic|pro|enterprise deneme sınırını kaldırır.
 // Plan gerçekten değişiyorsa perm_log'a 'plan:<plan>' satırı (değişiklikten önce, aynı batch'te; perm_log yoksa günlüksüz).

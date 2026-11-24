@@ -128,7 +128,8 @@ test("0019 uygulanmamış (tablo yok) → 503 not_ready", async () => {
 });
 
 // ---- plan site sınırı ----
-for (const [plan, limit, limits] of [["pro", 3], ["enterprise", 10, '{"linkedin_blog":50}']]) {
+// 24.11: pro ve enterprise tek site; enterprise'a ek site plan_limits.cms_sites ile (iletişimle) verilir
+for (const [plan, limit, limits] of [["pro", 1], ["enterprise", 1, '{"linkedin_blog":50}'], ["enterprise", 3, '{"cms_sites":3}']]) {
   test(`connect plan sınırı: ${plan} ${limit}, fazlası 403 site_limit`, async t => {
     stubProviders(t);
     const { db, call } = setup();
@@ -144,6 +145,28 @@ for (const [plan, limit, limits] of [["pro", 3], ["enterprise", 10, '{"linkedin_
     assert.deepEqual(l.body.limits, { sites: limit, used: limit, per_week_max: plan === "enterprise" ? 7 : 3, plan_required: null });
   });
 }
+
+// 24.11 öncesi 2 sitesi olan pro kullanıcı: siteler görünür ve yönetilir, yeni bağlantı 403 (0'a inene dek)
+test("sınır 1'e indi, 2 etkin site: GET used 2, pause/resume/disconnect 200, connect 0'a dek 403", async t => {
+  stubProviders(t);
+  const { db, call } = setup();
+  db.prepare("UPDATE users SET plan = 'enterprise', plan_limits = '{\"cms_sites\":2}' WHERE id = 1").run();
+  const a = (await connect(call)).body.site, b = (await connect(call)).body.site;
+  assert.ok(a?.id && b?.id);
+  db.prepare("UPDATE users SET plan = 'pro', plan_limits = NULL WHERE id = 1").run();
+  const l = await call("GET", "/app/cms");
+  assert.deepEqual([l.status, l.body.sites.length, l.body.limits.sites, l.body.limits.used], [200, 2, 1, 2]);
+  assert.deepEqual((await connect(call)).body.error, "site_limit");
+  const pz = await call("POST", `/app/cms/${a.id}/pause`, { body: {} });
+  assert.deepEqual([pz.status, pz.body.site.state], [200, "duraklatildi"]);
+  const rs = await call("POST", `/app/cms/${a.id}/resume`, { body: {} });
+  assert.deepEqual([rs.status, rs.body.site.state], [200, "aktif"]);
+  assert.equal((await call("POST", `/app/cms/${a.id}/disconnect`, { body: {} })).status, 200);
+  const over = await connect(call);
+  assert.deepEqual([over.status, over.body.error], [403, "site_limit"]);
+  assert.equal((await call("POST", `/app/cms/${b.id}/disconnect`, { body: {} })).status, 200);
+  assert.equal((await connect(call)).status, 200);
+});
 
 // ---- C1 plan kapısı: demo/basic (cms_sites 0) ve plan yok → 403 plan_required {plan:"pro"}; okuma, duraklatma, kaldırma serbest ----
 for (const plan of ["demo", "basic", "bilinmeyen"]) {
@@ -210,6 +233,8 @@ test("cloudflare: providers'ta github'ın ardından (stored_as github); connect 
     config: { owner: inputs.owner, repo: inputs.repo, branch: "main", ssg: "hugo", path_template: "content/posts/{slug}.md" }, creds: { token: inputs.token } });
   t.after(() => { gh.probe = orig; });
   const { db, call } = setup();
+  // iki site bağlanıyor: pro tek site (24.11), ek site enterprise plan_limits.cms_sites ile
+  db.prepare("UPDATE users SET plan = 'enterprise', plan_limits = '{\"cms_sites\":3}' WHERE id = 1").run();
   const l0 = await call("GET", "/app/cms");
   const ids = l0.body.providers.map(p => p.id);
   assert.equal(ids[ids.indexOf("github") + 1], "cloudflare");
