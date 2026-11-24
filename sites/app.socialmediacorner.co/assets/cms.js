@@ -1,5 +1,9 @@
-/* Social Media Corner Stüdyo — "Web siteniz (blog)" bölümü (A14).
-   Bağlantılar sayfasında (TR + EN) yüklenir; smc-hesap.js baglarYukle içinden window.smcCmsBasla(api) çağırır.
+/* Social Media Corner Stüdyo — Otomatik blog (A14; B3: ayrı sayfa).
+   /blog-otomatik ve /en/blog-autopilot sayfalarında yüklenir; smc-hesap.js window.smcCmsBasla(api) çağırır.
+   Sıklık: haftada 1/2/3 ya da günde 1 (7); planın üst sınırı limits.per_week_max (yoksa 3).
+   Plan kilidi (C2): limits.plan_required doluysa ya da limits.sites 0 ise (demo/basic) sayfa kilitli: bağlanma formu gizli,
+   Pro'ya yükselt kutusu; var olan siteler görünür (yalnız Duraklat/Kaldır). last_error "plan_required" = plan nedeniyle duraklatıldı.
+   Sağlayıcı adı site.provider'dan (Cloudflare Pages satırı platform "github" + provider "cloudflare").
    Veri yalnız textContent/createElement ile yazılır; innerHTML yok. Satır içi stil yok (CSP style-src 'self'). */
 (function(){
 'use strict';
@@ -16,7 +20,9 @@ function yerel(o,k){return o?str(EN?(o[k+'_en']||o[k+'_tr']):(o[k+'_tr']||o[k+'_
 var PLANLAR=EN?'/en/pricing':'/fiyatlar';
 var GUNLER=[[1,'Pzt','Mon','Pazartesi','Monday'],[2,'Sal','Tue','Salı','Tuesday'],[3,'Çar','Wed','Çarşamba','Wednesday'],[4,'Per','Thu','Perşembe','Thursday'],[5,'Cum','Fri','Cuma','Friday'],[6,'Cmt','Sat','Cumartesi','Saturday'],[7,'Paz','Sun','Pazar','Sunday']];
 /* DOĞRULANMALI: gün numarası 1=Pazartesi … 7=Pazar (ISO) varsayıldı; çekirdek next_run_at hesabı aynı ölçeği kullanmalı. */
-var VARSAYILAN_GUN={1:[2],2:[2,4],3:[1,3,5]};
+var VARSAYILAN_GUN={1:[2],2:[2,4],3:[1,3,5],7:[1,2,3,4,5,6,7]};
+var SIKLIK=[[1,'Haftada 1','1 a week'],[2,'Haftada 2','2 a week'],[3,'Haftada 3','3 a week'],[7,'Günde 1','Daily']];
+function siklikOk(n){return n===1||n===2||n===3||n===7}
 var UZUNLUK=[['short','Kısa','Short'],['medium','Orta','Medium'],['long','Uzun','Long']];
 var TON=[['samimi','Samimi','Friendly'],['profesyonel','Profesyonel','Professional'],['ogretici','Öğretici','Educational'],['cesur','Cesur','Bold']];
 var DIL=[['tr','Türkçe','Turkish'],['en','İngilizce','English']];
@@ -40,8 +46,24 @@ var HATA={
   network:['Sunucuya ulaşılamadı. Bağlantını kontrol edip yeniden dene.','Couldn’t reach the server. Check your connection and retry.'],
   site_limit:['Planındaki site sınırına ulaştın.','You have reached your plan’s site limit.'],
   quota:['Bu ayki blog yazısı hakkın bitti. Hakkın gelecek ay yenilenir.','You’ve used this month’s blog posts. Your allowance renews next month.'],
-  plan_required:['Bu özellik planında yok.','This feature isn’t in your plan.']
+  plan_required:['Otomatik blog Pro ve Enterprise planlarda. Kullanmak için Pro’ya yükselt.','Blog autopilot is on the Pro and Enterprise plans. Upgrade to Pro to use it.'],
+  plan_frequency:['Bu sıklık planında yok. Günde 1 yazı yalnız Enterprise planda; diğer planlarda haftada en çok 3 yazı seçebilirsin.','This frequency isn’t in your plan. Daily posts are on the Enterprise plan only; other plans allow up to 3 posts a week.']
 };
+/* sitenin last_error alanı plan_frequency ise: plan düştü, site duraklatıldı */
+var PLAN_DUSTU=['Planın bu sıklığa izin vermediği için bu site duraklatıldı. Ayarlardan haftada en çok {max} yazı seçip devam ettir ya da planını yükselt.','This site was paused because your plan doesn’t allow this frequency. Pick up to {max} posts a week in the settings and resume, or upgrade your plan.'];
+function siklikMax(){var m=veri&&veri.limits?+veri.limits.per_week_max:0;return siklikOk(m)?m:3}
+function planDustuMetni(){return L(PLAN_DUSTU[0],PLAN_DUSTU[1]).replace('{max}',String(siklikMax()))}
+/* kilitteyken sitenin last_error alanı plan_required ise: plan nedeniyle duraklatıldı */
+var PLAN_KILIT_SITE=['Otomatik blog Pro ve Enterprise planlarda olduğu için bu site duraklatıldı. Yeniden yazı göndermek için Pro’ya yükselt, sonra devam ettir.','This site was paused because blog autopilot is on the Pro and Enterprise plans. Upgrade to Pro, then resume it to send posts again.'];
+var PLAN_KILIT_AKTIF=['Planında otomatik blog yok; bu siteye yeni yazı hazırlanmaz ve site sıradaki yazı zamanında duraklatılır. Devam etmek için Pro’ya yükselt.','Your plan doesn’t include blog autopilot; no new posts are prepared for this site and it will be paused at its next scheduled post. Upgrade to Pro to keep it running.'];
+/* kilitte plan nedeniyle olmayan (elle duraklatılmış ya da hatalı) site için kısa not */
+var PLAN_KILIT_NOT=['Planında otomatik blog yok; bu siteye yazı göndermek için Pro’ya yükselt.','Your plan doesn’t include blog autopilot; upgrade to Pro to send posts to this site.'];
+/* plan nedeniyle duraklatılmış site, plan artık otomatik blogu içeriyorsa */
+var PLAN_ACILDI_SITE=['Planın artık otomatik blogu içeriyor. Yeniden yazı göndermek için Devam ettir’e bas.','Your plan now includes blog autopilot. Press Resume to start sending posts again.'];
+/* Cloudflare Pages: sunucu notu boş gelirse gösterilen açıklama */
+var CF_NOT=['Cloudflare Pages projen bir GitHub deposuna bağlı olmalı (Git entegrasyonu). Yazıyı bu depoya commit olarak ekleriz; Pages her commit’te siteni kendisi derleyip yayınlar. Aşağıya deponun GitHub bilgilerini gir.\nDirect Upload (wrangler ya da sürükle-bırak) ile kurulan projeler desteklenmiyor: bu projelerde değiştirebileceğimiz bir depo yok, her yayında sitenin tamamı yeniden yüklenir ve tek yazı eklenemez. Projeni Git’e bağlayıp yeniden dene.\nGitLab’a bağlı Pages projeleri şimdilik desteklenmiyor.','Your Cloudflare Pages project must be connected to a GitHub repository (Git integration). We add each post to that repo as a commit, and Pages builds and deploys your site on every commit. Enter the repo’s GitHub details below.\nDirect Upload projects (wrangler or drag-and-drop) aren’t supported: there is no repo we can change, and every deploy re-uploads the whole site, so a single post can’t be added. Connect the project to Git and try again.\nGitLab-connected Pages projects aren’t supported yet.'];
+function kilitli(){return !!(veri&&veri.limits&&veri.limits.kilit)}
+function sitePlat(s){return platAd(s.provider||s.platform)}
 
 var api=null,ORNEK=false,kok=null,veri=null,hataYardim={},akis=null,yoklaSay=0,yoklaZ=null,bekleyenRid={},kaldirHedef=null,basladi=false;
 
@@ -101,8 +123,10 @@ function not(kutu,metin,tur,bag){
 function hataNot(kutu,j){
   var k=j.error||(j._s===0?'network':j._s===429?'rate':j._s>=500?'server':'');
   if(j._s===401||(j._s===403&&j.error==='origin')){api.genelHata(j);return}
-  var bag=(k==='site_limit'||k==='quota'||k==='plan_required')?[L('Planları gör','See plans'),PLANLAR]:null;
-  not(kutu,hataMetni(k||String(j._s)),'hata',bag);
+  var bag=(k==='site_limit'||k==='quota'||k==='plan_required'||k==='plan_frequency')?[L('Planları gör','See plans'),PLANLAR]:null;
+  var m=hataMetni(k||String(j._s));
+  if(k==='plan_frequency'&&siklikOk(+j.max)&&+j.max<7)m=(EN?'Your plan allows up to '+j.max+' post'+(+j.max>1?'s':'')+' a week. Daily posts are on the Enterprise plan.':'Planın haftada en çok '+j.max+' yazıya izin veriyor. Günde 1 yazı Enterprise planda.');
+  not(kutu,m,'hata',bag);
 }
 
 /* ---- veri ---- */
@@ -113,7 +137,8 @@ function normal(j){
     unsupported:dz(j.unsupported).filter(function(p){return p&&p.id}),
     sites:dz(j.sites).filter(function(s){return s&&s.id!=null}),
     posts:dz(j.posts).filter(function(p){return p&&p.id!=null}),
-    limits:{sites:+lim.sites||0,used:+lim.used||0},
+    limits:{sites:+lim.sites||0,used:+lim.used||0,per_week_max:siklikOk(+lim.per_week_max)?+lim.per_week_max:3,
+      kilit:!!lim.plan_required||(lim.sites!=null&&lim.sites!==''&&+lim.sites===0)},
     quota:{lb_used:+kota.lb_used||0,lb_limit:+kota.lb_limit||0}
   };
 }
@@ -187,15 +212,33 @@ function ciz(){
   K.ekleB=el('h3','cms-h3',L('Site bağla','Connect a site'));
   K.platform=el('div','cms-pl-izgara');
   K.form=el('div','cms-form-k');
-  K.yazilarB=el('h3','cms-h3',L('Son yazılar','Recent posts'));
+  K.siraB=el('h3','cms-h3',L('Sıradaki yazılar','Upcoming posts'));
+  K.sira=el('div','cms-sira');
+  K.yazilarB=el('h3','cms-h3',L('Hazırlanan ve gönderilen yazılar','Prepared and sent posts'));
   K.yazilar=el('div','cms-yazilar');
-  ekle(g,K.ozet,K.not,K.sitelerB,K.siteler,K.ekleB,K.platform,K.form,K.yazilarB,K.yazilar);
+  if(kilitli()){
+    /* plan kilidi: özet, sıradaki, platform kartları ve form eklenmez (ozetCiz/siraCiz bağsız öğelere yazar) */
+    akis=null;
+    ekle(g,kilitKutu(),K.not,K.sitelerB,K.siteler);
+    if(veri.posts.length)ekle(g,K.yazilarB,K.yazilar);
+    sitelerCiz();yazilarCiz();
+    return;
+  }
+  ekle(g,K.ozet,K.not,K.sitelerB,K.siteler,K.siraB,K.sira,K.ekleB,K.platform,K.form,K.yazilarB,K.yazilar);
   ozetCiz();sitelerCiz();platformCiz();yazilarCiz();
+}
+function kilitKutu(){
+  var k=el('section','sheet cms-plan-kilit',null,{'aria-labelledby':'cms-kilit-b'});
+  ekle(k,el('h3','cms-h3',L('Otomatik blog Pro ve Enterprise planlarda','Blog autopilot is on the Pro and Enterprise plans'),{id:'cms-kilit-b'}),
+    el('p','ince',L('Web sitene bağlan, blog yazıları planladığın gün ve saatte otomatik hazırlanıp gönderilsin. Pro planda 3 site ve haftada 3 yazıya kadar seçebilirsin.','Connect your website and have blog posts written and sent on the days and times you pick. The Pro plan covers up to 3 sites and 3 posts a week.')),
+    ekle(el('div','eylemler'),el('a','btn btn-ink',L('Pro’ya yükselt','Upgrade to Pro'),{href:PLANLAR+'#pl-pro'}),el('a','bag',L('Planları gör','See plans'),{href:PLANLAR})));
+  return k;
 }
 function icinde(k){var a=d.activeElement;return !!(a&&k&&k.contains(a)&&a!==d.body)}
 function yenile(){
   ozetCiz();
   if(!icinde(K.siteler)&&!K.siteler.querySelector('.cms-duzen:not([hidden])'))sitelerCiz();
+  siraCiz();
   if(!icinde(K.yazilar))yazilarCiz();
 }
 function ozetCiz(){
@@ -228,7 +271,7 @@ function platformCiz(){
       k.appendChild(y);return;
     }
     var b=el('button','sheet cms-pl cms-pl-sec',null,{type:'button','aria-pressed':akis&&akis.p.id===p.id?'true':'false','data-pl':p.id});
-    ekle(b,el('strong','cms-pl-ad',str(p.name)),el('span','ince',p.auth==='oauth'?L('Hesabınla giriş yaparak bağlan','Connect by signing in'):L('Anahtarınla bağlan','Connect with your key')));
+    ekle(b,el('strong','cms-pl-ad',str(p.name)),el('span','ince',p.auth==='oauth'?L('Hesabınla giriş yaparak bağlan','Connect by signing in'):p.id==='cloudflare'?L('Bağlı GitHub deposuyla bağlan','Connect through its GitHub repo'):L('Anahtarınla bağlan','Connect with your key')));
     b.addEventListener('click',function(){formAc(p)});
     k.appendChild(b);
   });
@@ -295,8 +338,9 @@ function radyoGrup(baslik,ad,liste,deger,cls){
 function radyoDeger(kap,ad){var r=kap.querySelector('input[name="'+ad+'"]:checked');return r?r.value:''}
 function ayarBlok(s,onerilenAd){
   s=s||{};var ad=uid('g'),kap=el('div','cms-ayar'),hk;
-  var pw=[1,2,3].indexOf(+s.per_week)>=0?+s.per_week:1;
-  var gunler=gunDizi(s.days);if(!gunler.length)gunler=VARSAYILAN_GUN[pw].slice();
+  var mx=siklikMax(),pw=siklikOk(+s.per_week)?+s.per_week:1,pwIlk=pw;
+  if(pw>mx){pw=[3,2,1].filter(function(n){return n<=mx})[0]||1}
+  var gunler=pw===pwIlk?gunDizi(s.days):[];if(gunler.length!==pw)gunler=VARSAYILAN_GUN[pw].slice();
   var saat=(s.hour!=null&&s.hour!==''&&+s.hour>=0&&+s.hour<=23)?+s.hour:10;
   var dil=(s.lang==='tr'||s.lang==='en')?s.lang:(EN?'en':'tr');
   var uz=['short','medium','long'].indexOf(s.length)>=0?s.length:'medium';
@@ -307,16 +351,31 @@ function ayarBlok(s,onerilenAd){
   var lh=el('p','alan-hata',null,{id:lid+'-hata'});li.setAttribute('aria-describedby',lh.id);
   ekle(lk,el('label','etiket',L('Site adı','Site name'),{'for':lid}),li,el('p','ipucu',L('Yalnız sende görünür; listede siteyi tanıman için.','Only you see this; it helps you spot the site in the list.')),lh);
 
-  var pwG=radyoGrup(L('Haftada kaç yazı?','Posts per week'),ad+'-pw',[[1,'1','1'],[2,'2','2'],[3,'3','3']],pw);
+  var pwG=radyoGrup(L('Ne sıklıkla yazılsın?','How often?'),ad+'-pw',SIKLIK,pw,'segment cms-siklik');
+  Array.prototype.forEach.call(pwG.querySelectorAll('input'),function(i){if(+i.value>mx){i.disabled=true;i.parentNode.classList.add('cms-kilitli')}});
+  if(mx<7){
+    var kid=uid('k'),kl=el('p','ince cms-kilit',null,{id:kid});
+    ekle(kl,el('span','rozet rozet-bilgi',L('Enterprise planda','Enterprise plan')),d.createTextNode(L('Günde 1 yazı yalnız Enterprise planda. ','Daily posts are on the Enterprise plan only. ')),el('a','bag',L('Planlar','Plans'),{href:PLANLAR}));
+    pwG.appendChild(kl);
+    var g7=pwG.querySelector('input[value="7"]');if(g7)g7.setAttribute('aria-describedby',kid);
+  }
 
   var gfs=el('fieldset','secim-grup'),gs=el('div','secim-sira'),gh=el('p','alan-hata',null,{id:uid('gh')});
   gfs.appendChild(el('legend',null,L('Hangi günler?','Which days?')));
-  var gunEl=[],gunDokundu=!!gunDizi(s.days).length;
+  gfs.hidden=pw===7;
+  var gunEl=[],gunDokundu=pw===pwIlk&&!!gunDizi(s.days).length&&pw!==7;
   GUNLER.forEach(function(gn){var id=uid('d'),sp=el('span','secim'),i=el('input',null,null,{type:'checkbox',id:id,value:String(gn[0]),'aria-describedby':gh.id});
     i.checked=gunler.indexOf(gn[0])>=0;i.addEventListener('change',function(){gunDokundu=true;gh.textContent=''});
     ekle(sp,i,el('label',null,L(gn[1],gn[2]),{'for':id,title:L(gn[3],gn[4])}));gs.appendChild(sp);gunEl.push(i)});
   ekle(gfs,gs,gh);
-  pwG.addEventListener('change',function(){if(gunDokundu)return;var n=+radyoDeger(pwG,ad+'-pw')||1,v=VARSAYILAN_GUN[n];gunEl.forEach(function(i){i.checked=v.indexOf(+i.value)>=0})});
+  var pwOnce=pw;
+  pwG.addEventListener('change',function(){
+    var n=+radyoDeger(pwG,ad+'-pw')||1,onceki=pwOnce;pwOnce=n;
+    gfs.hidden=n===7;gh.textContent='';
+    if(n===7||onceki===7)gunDokundu=false;
+    if(gunDokundu)return;
+    var v=VARSAYILAN_GUN[n]||VARSAYILAN_GUN[1];gunEl.forEach(function(i){i.checked=v.indexOf(+i.value)>=0});
+  });
 
   var sid=uid('h'),sk=el('div','alan-k'),ss=el('select','kutu cms-saat',null,{id:sid});
   for(var h=0;h<24;h++)ss.appendChild(el('option',null,iki(h)+':00',{value:String(h)}));ss.value=String(saat);
@@ -349,9 +408,10 @@ function ayarBlok(s,onerilenAd){
     var gec=true,ilk=null,label=li.value.trim().slice(0,80);
     hataYaz(li,lh,'');
     var per=+radyoDeger(pwG,ad+'-pw')||1;
-    var gs2=gunEl.filter(function(i){return i.checked}).map(function(i){return +i.value});
+    var gs2=per===7?[1,2,3,4,5,6,7]:gunEl.filter(function(i){return i.checked}).map(function(i){return +i.value});
     gh.textContent='';
-    if(!gs2.length){gh.textContent=L('En az bir gün seç.','Pick at least one day.');gec=false;ilk=ilk||gunEl[0]}
+    if(per>siklikMax()){gec=false;ilk=ilk||pwG.querySelector('input:not([disabled])')}
+    else if(!gs2.length){gh.textContent=L('En az bir gün seç.','Pick at least one day.');gec=false;ilk=ilk||gunEl[0]}
     else if(gs2.length!==per){gh.textContent=EN?('Pick '+per+' day'+(per>1?'s':'')+' for '+per+' post'+(per>1?'s':'')+' a week.'):('Haftada '+per+' yazı için '+per+' gün seç.');gec=false;ilk=ilk||gunEl[0]}
     var sat=konuDizi(ta.value),uzun=sat.filter(function(x){return x.length>160});
     if(sat.length>30){hataYaz(ta,th,L('En çok 30 konu yazabilirsin.','You can add up to 30 topics.'));gec=false;ilk=ilk||ta}
@@ -374,6 +434,7 @@ function formAc(p){
   kapat.addEventListener('click',function(){var dn=K.platform.querySelector('[data-pl="'+p.id+'"]');formKapat();if(dn)dn.focus()});
   ekle(bas,h3,kapat);fr.appendChild(bas);
   var notlar=yerel(p,'notes');
+  if(!notlar&&p.id==='cloudflare')notlar=L(CF_NOT[0],CF_NOT[1]);
   if(notlar){var nb=el('div','bildirim cms-notlar');notlar.split(/\n+/).filter(function(x){return x.trim()}).forEach(function(x){nb.appendChild(el('p',null,x.trim()))});fr.appendChild(nb)}
   var alanlar=dz(p.fields).map(alanCiz),akap=el('div','cms-alanlar');
   alanlar.forEach(function(a){akap.appendChild(a.kok)});fr.appendChild(akap);
@@ -487,19 +548,21 @@ function kaydet(b){
       siteKoy(j.site);veri.limits.used=Math.max(veri.limits.used,kullanilan());
       a.inputs=null;formKapat();ozetCiz();sitelerCiz();
       var s=j.site,ne=ist(s.next_run_at);
-      not(K.not,str(s.label||platAd(s.platform))+' '+L('bağlandı.','is connected.')+(ne?' '+L('İlk yazı: ','First post: ')+ne+'.':''),'ok');
+      not(K.not,str(s.label||sitePlat(s))+' '+L('bağlandı.','is connected.')+(ne?' '+L('İlk yazı: ','First post: ')+ne+'.':''),'ok');
       odakSite(s.id);return;
     }
     if(bolumYok(j)){not(a.fnot,hataMetni('not_ready'),'uyari');return}
     hataNot(a.fnot,j);
   });
 }
+/* OAuth dönüşü bu sayfaya: worker izin listesi /blog-otomatik, /en/blog-autopilot, /hesap/baglantilar, /en/hesap/connections */
+function donusYolu(){var p=str(location.pathname).replace(/\.html$/,'').replace(/\/+$/,'');return p||'/'}
 function oauthBasla(b){
   if(api.bosMu(b))return;not(akis.fnot,'');
   var inp=girdiTopla();if(!inp)return;
   var ay=akis.ayar.oku();if(!ay.ok)return;
   var a=akis,bitti=api.mesgul(b,L('Yönlendiriliyor…','Redirecting…'));
-  cagir('/app/cmsoauth/start','POST',{platform:a.p.id,inputs:inp,settings:ay.settings}).then(function(j){
+  cagir('/app/cmsoauth/start','POST',{platform:a.p.id,inputs:inp,settings:ay.settings,back:donusYolu()}).then(function(j){
     if(j._s===200&&j.url){
       var u=str(j.url);
       if(/^https:\/\//i.test(u)){if(ORNEK){bitti();not(a.fnot,L('Örnek modda yönlendirme yapılmaz.','No redirect in sample mode.'),'uyari');return}location.assign(u);return}
@@ -516,7 +579,8 @@ function odakSite(id){var k=K.siteler.querySelector('[data-site="'+String(id).re
 function plan(s){
   var gs=gunDizi(s.days).map(function(n){return L(GUNLER[n-1][1],GUNLER[n-1][2])}).join(', ');
   var h=(s.hour!=null&&s.hour!=='')?iki(+s.hour)+':00':'';
-  var p=[(EN?(+s.per_week||1)+' a week':'Haftada '+(+s.per_week||1)),gs,h,etiketBul(DIL,s.lang),etiketBul(UZUNLUK,s.length||'medium'),etiketBul(TON,s.tone||'samimi')].filter(Boolean);
+  var n=+s.per_week||1;if(n===7)gs='';
+  var p=[(n===7?L('Günde 1','Daily'):EN?n+' a week':'Haftada '+n),gs,h,etiketBul(DIL,s.lang),etiketBul(UZUNLUK,s.length||'medium'),etiketBul(TON,s.tone||'samimi')].filter(Boolean);
   return p.join(' · ');
 }
 function sitelerCiz(){
@@ -524,42 +588,95 @@ function sitelerCiz(){
   var liste=veri.sites.slice().sort(function(a,b){return (a.state==='kaldirildi')-(b.state==='kaldirildi')});
   K.sitelerB.hidden=!liste.length;k.hidden=!liste.length;
   liste.forEach(function(s){k.appendChild(siteKart(s))});
+  siraCiz();
+}
+
+/* ---- sıradaki yazılar: next_run_at'tan başlayıp gün/saat planına göre sonraki zamanlar (İstanbul = UTC+3, yaz saati yok) ---- */
+var IST_MS=3*36e5;
+function slotlar(s,adet){
+  var t0=zamanCoz(s.next_run_at);if(!t0)return [];
+  var gunler=+s.per_week===7?[1,2,3,4,5,6,7]:gunDizi(s.days);
+  var saat=(s.hour!=null&&s.hour!==''&&+s.hour>=0&&+s.hour<=23)?Math.floor(+s.hour):null;
+  var out=[t0.getTime()];
+  if(!gunler.length||saat==null)return out;
+  var y=new Date(t0.getTime()+IST_MS),yil=y.getUTCFullYear(),ay=y.getUTCMonth(),gun=y.getUTCDate();
+  for(var i=0;i<7*adet+7&&out.length<adet;i++){
+    var iso=(new Date(Date.UTC(yil,ay,gun+i)).getUTCDay()+6)%7+1;
+    if(gunler.indexOf(iso)<0)continue;
+    var an=Date.UTC(yil,ay,gun+i,saat)-IST_MS;
+    if(an>out[0])out.push(an);
+  }
+  return out;
+}
+function siraCiz(){
+  var k=K.sira;if(!k)return;k.textContent='';
+  var aktif=veri.sites.filter(function(s){return s.state==='aktif'});
+  if(!aktif.length){
+    k.appendChild(el('p','ince',veri.sites.some(function(s){return s.state!=='kaldirildi'})?L('Etkin site yok. Duraklatılmış bir siteyi devam ettirince sıradaki yazılar burada görünür.','No active sites. Resume a paused site to see upcoming posts here.'):L('Site bağladığında sıradaki yazıların tarihi ve saati burada görünür.','Once you connect a site, the dates and times of upcoming posts appear here.')));
+    return;
+  }
+  var q=veri.quota;
+  if(q.lb_limit>0&&q.lb_used>=q.lb_limit){var u=el('p','bildirim bildirim-uyari');u.textContent=hataMetni('quota')+' ';u.appendChild(el('a','bag',L('Planları gör','See plans'),{href:PLANLAR}));k.appendChild(u)}
+  aktif.forEach(function(s){
+    var kutu=el('div','sheet cms-sira-k');
+    var bas=el('div','cms-yazi-bas');
+    ekle(bas,el('h4','cms-h4',str(s.label||sitePlat(s))),el('span','ince',(+s.auto_publish||s.auto_publish===true)?L('Doğrudan yayınlanır','Published directly'):L('Taslak olarak gider','Sent as a draft')));
+    kutu.appendChild(bas);
+    var sl=slotlar(s,5);
+    if(!sl.length)kutu.appendChild(el('p','ince',L('Sonraki yazı zamanı hesaplanıyor.','Next post time is being scheduled.')));
+    else{var ol=el('ol','cms-sira-liste');sl.forEach(function(t){ol.appendChild(el('li','cms-sira-o',ist(t)))});kutu.appendChild(ol)}
+    k.appendChild(kutu);
+  });
+  k.appendChild(el('p','ipucu',L('Saatler İstanbul saatidir. Yazı o saatte hazırlanmaya başlar, birkaç dakika içinde sitene gider.','Times are Istanbul time. Each post starts being written then and reaches your site within a few minutes.')));
 }
 function siteKart(s){
   var kart=el('article','sheet bag-kart cms-site',null,{'data-site':String(s.id)}),dur=SITE_DURUM[s.state]||[str(s.state),str(s.state),'rozet-gri'];
   var adk=el('div','bag-ad-k');
-  ekle(adk,el('h4','bag-ad',str(s.label||platAd(s.platform)),{tabindex:'-1'}),el('span','ince cms-pl-et',platAd(s.platform)));
+  ekle(adk,el('h4','bag-ad',str(s.label||sitePlat(s)),{tabindex:'-1'}),el('span','ince cms-pl-et',sitePlat(s)));
   kart.appendChild(ekle(el('div','bag-bas'),adk,el('span','rozet '+dur[2],L(dur[0],dur[1]))));
   var bu=guvenliUrl(s.base_url);
   if(bu)kart.appendChild(ekle(el('p','cms-url'),disBag(bu,bu.replace(/^https?:\/\//i,'').replace(/\/$/,''))));
   else if(s.base_url)kart.appendChild(el('p','ince cms-url',str(s.base_url)));
   if(s.state==='kaldirildi'){kart.appendChild(el('p','ince',L('Bağlantı kaldırıldı; anahtar silindi. Eski yazıların aşağıda kalır.','Connection removed; the key was deleted. Earlier posts stay listed below.')));return kart}
   if(s.hint)kart.appendChild(el('p','ince',L('Anahtar: ','Key: ')+'••••'+str(s.hint)));
-  if(s.last_error&&(s.state==='hata'||s.state==='aktif')){
+  var kl=kilitli();
+  if(kl){
+    /* kilit: etkin site → yakında duraklar; plan nedeniyle duraklatılmış → yükselt + devam ettir; öteki (elle duraklatılmış/hata) → kısa not, hata metni korunur */
+    var pm=s.state==='aktif'?PLAN_KILIT_AKTIF:(s.last_error==='plan_required'?PLAN_KILIT_SITE:PLAN_KILIT_NOT);
+    var pk=el('div','bildirim bildirim-uyari'),pq=el('p',null,L(pm[0],pm[1])+' ');pq.appendChild(el('a','bag',L('Planları gör','See plans'),{href:PLANLAR}));pk.appendChild(pq);kart.appendChild(pk);
+    if(s.state==='hata'&&s.last_error&&s.last_error!=='plan_required'){var kh=el('div','bildirim bildirim-hata');kh.appendChild(el('p',null,hataMetni(s.last_error)));kart.appendChild(kh)}
+  }else if(s.last_error==='plan_required'){
+    if(s.state!=='aktif'){var pa=el('div','bildirim bildirim-uyari');pa.appendChild(el('p',null,L(PLAN_ACILDI_SITE[0],PLAN_ACILDI_SITE[1])));kart.appendChild(pa)}
+  }else if(s.last_error==='plan_frequency'&&s.state!=='aktif'){
+    var pf=el('div','bildirim bildirim-uyari'),pp=el('p',null,planDustuMetni()+' ');pp.appendChild(el('a','bag',L('Planları gör','See plans'),{href:PLANLAR}));pf.appendChild(pp);kart.appendChild(pf);
+  }else if(s.last_error&&(s.state==='hata'||s.state==='aktif')){
     var hb=el('div','bildirim '+(s.state==='hata'?'bildirim-hata':'bildirim-uyari'));hb.appendChild(el('p',null,hataMetni(s.last_error)));kart.appendChild(hb);
   }
-  if(s.state==='aktif'){var ne=ist(s.next_run_at);kart.appendChild(el('p','bag-kim',ne?L('Sonraki yazı: ','Next post: ')+ne+' '+L('(İstanbul)','(Istanbul)'):L('Sonraki yazı zamanı hesaplanıyor.','Next post time is being scheduled.')))}
-  else if(s.state==='duraklatildi')kart.appendChild(el('p','ince',L('Duraklatıldı: yeni yazı hazırlanmaz.','Paused: no new posts are prepared.')));
+  if(!kl&&s.state==='aktif'){var ne=ist(s.next_run_at);kart.appendChild(el('p','bag-kim',ne?L('Sonraki yazı: ','Next post: ')+ne+' '+L('(İstanbul)','(Istanbul)'):L('Sonraki yazı zamanı hesaplanıyor.','Next post time is being scheduled.')))}
+  else if(!kl&&s.state==='duraklatildi')kart.appendChild(el('p','ince',L('Duraklatıldı: yeni yazı hazırlanmaz.','Paused: no new posts are prepared.')));
   kart.appendChild(el('p','ince',plan(s)));
 
+  /* plan kilidinde: yalnız Duraklat (etkin ya da hatalıysa) ve Kaldır; doğrudan yayın, Şimdi yaz, Ayarlar, Devam ettir yok (sunucu 403 plan_required döner) */
+  if(!kl){
   var ok=el('div','onay-k'),oid=uid('ap'),ol=el('label','onay',null,{'for':oid}),oi=el('input',null,null,{type:'checkbox',id:oid,'aria-describedby':oid+'-i'});
   oi.checked=!!(+s.auto_publish||s.auto_publish===true);
   ekle(ol,oi,el('span',null,L('Yazıları doğrudan yayınla','Publish posts directly')));
   ekle(ok,ol,el('p','ipucu',L('Kapalıyken taslak olarak gönderilir.','When off, posts are sent as drafts.'),{id:oid+'-i'}));
   oi.addEventListener('change',function(){otoDegis(s,oi)});
   kart.appendChild(ok);
+  }
 
-  var ey=el('div','eylemler');
-  if(s.state==='aktif'){var yb=el('button','btn btn-ink btn-kucuk',L('Şimdi yaz','Write now'),{type:'button'});yb.addEventListener('click',function(){simdiYaz(s,yb)});ey.appendChild(yb)}
-  var db=el('button','btn btn-cizgi btn-kucuk',L('Ayarları düzenle','Edit settings'),{type:'button','aria-expanded':'false'});ey.appendChild(db);
-  if(s.state==='aktif'){var pb=el('button','btn btn-cizgi btn-kucuk',L('Duraklat','Pause'),{type:'button'});pb.addEventListener('click',function(){durum(s,'pause',pb)});ey.appendChild(pb)}
-  else{var rb=el('button','btn btn-cizgi btn-kucuk',L('Devam ettir','Resume'),{type:'button'});rb.addEventListener('click',function(){durum(s,'resume',rb)});ey.appendChild(rb)}
+  var ey=el('div','eylemler'),db=null;
+  if(!kl&&s.state==='aktif'){var yb=el('button','btn btn-ink btn-kucuk',L('Şimdi yaz','Write now'),{type:'button'});yb.addEventListener('click',function(){simdiYaz(s,yb)});ey.appendChild(yb)}
+  if(!kl){db=el('button','btn btn-cizgi btn-kucuk',L('Ayarları düzenle','Edit settings'),{type:'button','aria-expanded':'false'});ey.appendChild(db)}
+  if(s.state==='aktif'||(kl&&s.state==='hata')){var pb=el('button','btn btn-cizgi btn-kucuk',L('Duraklat','Pause'),{type:'button'});pb.addEventListener('click',function(){durum(s,'pause',pb)});ey.appendChild(pb)}
+  else if(!kl){var rb=el('button','btn btn-cizgi btn-kucuk',L('Devam ettir','Resume'),{type:'button'});rb.addEventListener('click',function(){durum(s,'resume',rb)});ey.appendChild(rb)}
   var kb=el('button','btn btn-metin btn-kucuk cms-kaldir',L('Kaldır','Remove'),{type:'button'});kb.addEventListener('click',function(){kaldirAc(s,kb)});ey.appendChild(kb);
   kart.appendChild(ey);
 
   var sn=el('div','bildirim',null,{role:'status','aria-live':'polite'});kart.appendChild(sn);
   var duz=el('form','cms-duzen',null,{hidden:'',novalidate:''});kart.appendChild(duz);
-  db.addEventListener('click',function(){
+  if(db)db.addEventListener('click',function(){
     if(!duz.hidden){duz.hidden=true;duz.textContent='';db.setAttribute('aria-expanded','false');return}
     duz.textContent='';var ab=ayarBlok(s,'');
     var kay=el('button','btn btn-ink btn-kucuk',L('Ayarları kaydet','Save settings'),{type:'submit'}),vz=el('button','btn btn-cizgi btn-kucuk',L('Vazgeç','Cancel'),{type:'button'});
@@ -601,7 +718,7 @@ function simdiYaz(s,b){
   cagir('/app/cms/'+encodeURIComponent(s.id)+'/run','POST',{rid:r}).then(function(j){
     bitti();
     if(j._s!==0)delete bekleyenRid[anahtar];
-    if(j._s===200&&j.post){yaziKoy(j.post);if(veri.quota.lb_limit>0&&j.post.state!=='kota')veri.quota.lb_used=Math.min(veri.quota.lb_used+1,veri.quota.lb_limit);ozetCiz();yazilarCiz();
+    if(j._s===200&&j.post){yaziKoy(j.post);if(veri.quota.lb_limit>0&&j.post.state!=='kota')veri.quota.lb_used=Math.min(veri.quota.lb_used+1,veri.quota.lb_limit);ozetCiz();siraCiz();yazilarCiz();
       if(sn)not(sn,j.post.state==='kota'?hataMetni('quota'):L('Yazı hazırlanıyor. Birkaç dakika içinde aşağıdaki listede durumu güncellenir.','Your post is being written. Its status updates in the list below within a few minutes.'),j.post.state==='kota'?'uyari':'ok');
       yoklaBastan();return}
     if(sn)hataNot(sn,j);
@@ -625,7 +742,7 @@ function kaldirKur(){
     var bitti=api.mesgul(ev,L('Kaldırılıyor…','Removing…'));
     cagir('/app/cms/'+encodeURIComponent(s.id)+'/disconnect','POST',{}).then(function(j){
       bitti();x.close();kaldirHedef=null;
-      if(j._s===200&&j.site){siteKoy(j.site);veri.limits.used=kullanilan();ozetCiz();sitelerCiz();not(K.not,str(s.label||platAd(s.platform))+' '+L('bağlantısı kaldırıldı.','was disconnected.'),'ok');K.not.setAttribute('tabindex','-1');K.not.focus();return}
+      if(j._s===200&&j.site){siteKoy(j.site);veri.limits.used=kullanilan();ozetCiz();sitelerCiz();not(K.not,str(s.label||sitePlat(s))+' '+L('bağlantısı kaldırıldı.','was disconnected.'),'ok');K.not.setAttribute('tabindex','-1');K.not.focus();return}
       hataNot(K.not,j);
     });
   });
@@ -633,7 +750,7 @@ function kaldirKur(){
 function kaldirAc(s,tetik){
   var x=$('#dlg-cms-kaldir'),a=$('#dlg-cms-kaldir-a');if(!x)return;
   kaldirHedef=s;
-  if(a)a.textContent=(EN?'“'+str(s.label||platAd(s.platform))+'” will be disconnected and its key deleted. Posts already on your site stay there.':'“'+str(s.label||platAd(s.platform))+'” bağlantısı kaldırılır ve anahtarı silinir. Sitene gönderilmiş yazılar orada kalır.');
+  if(a)a.textContent=(EN?'“'+str(s.label||sitePlat(s))+'” will be disconnected and its key deleted. Posts already on your site stay there.':'“'+str(s.label||sitePlat(s))+'” bağlantısı kaldırılır ve anahtarı silinir. Sitene gönderilmiş yazılar orada kalır.');
   api.dlgAc(x,tetik);
 }
 
@@ -647,13 +764,13 @@ function yazilarCiz(){
     var et=L(dur[0],dur[1]);if(p.state==='gonderildi'&&p.mode==='draft')et+=L(' (taslak)',' (draft)');
     var s=siteBul(p.cms_site_id);
     ekle(li,ekle(el('div','cms-yazi-bas'),el('strong','cms-yazi-ad',str(p.title)||L('(başlıksız)','(untitled)')),el('span','rozet '+dur[2],et)));
-    var meta=[s?str(s.label||platAd(s.platform)):'',ist(p.created_at)].filter(Boolean).join(' · ');
+    var meta=[s?str(s.label||sitePlat(s)):'',ist(p.created_at)].filter(Boolean).join(' · ');
     if(meta)li.appendChild(el('p','ince',meta));
     if(p.state==='kota'){var kp=el('p','ince cms-yazi-acik',hataMetni('quota')+' ');kp.appendChild(el('a','bag',L('Planları gör','See plans'),{href:PLANLAR}));li.appendChild(kp)}
     else if(p.state==='basarisiz'&&p.last_error)li.appendChild(el('p','alan-hata cms-yazi-acik',hataMetni(p.last_error)));
     var ey=el('div','eylemler'),u=guvenliUrl(p.remote_url);
     if(u)ey.appendChild(disBag(u,L('Sitede aç','Open on site')));
-    if(p.state==='basarisiz'){var rb=el('button','btn btn-cizgi btn-kucuk',L('Yeniden gönder','Send again'),{type:'button'});rb.addEventListener('click',function(){yenidenGonder(p,rb,li)});ey.appendChild(rb)}
+    if(p.state==='basarisiz'&&!kilitli()){var rb=el('button','btn btn-cizgi btn-kucuk',L('Yeniden gönder','Send again'),{type:'button'});rb.addEventListener('click',function(){yenidenGonder(p,rb,li)});ey.appendChild(rb)}
     if(ey.childNodes.length)li.appendChild(ey);
     li.appendChild(el('div','bildirim',null,{role:'status','aria-live':'polite'}));
     ul.appendChild(li);
@@ -684,6 +801,12 @@ function ornekVeri(){
         {key:'app_password',label_tr:'Uygulama şifresi',label_en:'Application password',type:'secret',required:true,help_tr:'wp-admin’e gir.\nKullanıcılar > Profil sayfasını aç.\nUygulama Şifreleri bölümünde bir ad yaz ve Ekle’ye bas.\nGösterilen şifreyi kopyala; yalnız bir kez gösterilir.',help_en:'Sign in to wp-admin.\nOpen Users > Profile.\nIn Application Passwords, enter a name and click Add.\nCopy the password shown; it appears only once.'}]},
       {id:'webflow',name:'Webflow',auth:'key',ready:true,notes_tr:'Webflow’da CMS planı gerekir.',notes_en:'Webflow needs a CMS plan.',fields:[
         {key:'token',label_tr:'Site API anahtarı',label_en:'Site API token',type:'secret',required:true,help_tr:'Site ayarları > Apps & integrations > API access.',help_en:'Site settings > Apps & integrations > API access.'}]},
+      {id:'cloudflare',name:'Cloudflare Pages',auth:'key',ready:true,stored_as:'github',notes_tr:'',notes_en:'',fields:[
+        {key:'owner',label_tr:'Sahip (kullanıcı/kuruluş)',label_en:'Owner (user/org)',type:'text',required:true,help_tr:'github.com/<sahip>/<depo> adresindeki sahip adı.',help_en:'The owner in github.com/<owner>/<repo>.'},
+        {key:'repo',label_tr:'Depo',label_en:'Repository',type:'text',required:true,help_tr:'github.com/<sahip>/<depo> adresindeki depo adı.',help_en:'The repository in github.com/<owner>/<repo>.'},
+        {key:'token',label_tr:'Fine-grained token',label_en:'Fine-grained token',type:'secret',required:true},
+        {key:'branch',label_tr:'Dal',label_en:'Branch',type:'text',required:false,placeholder:'main'},
+        {key:'base_url',label_tr:'Pages site adresi',label_en:'Pages site address',type:'text',required:false,placeholder:'https://site.pages.dev'}]},
       {id:'ideasoft',name:'IdeaSoft',auth:'oauth',ready:true,fields:[
         {key:'store',label_tr:'Mağaza adresi',label_en:'Store address',type:'url',required:true,placeholder:'https://magaza.myideasoft.com',help_tr:'Mağazanın açıldığı adres.',help_en:'The address your store opens at.'}]},
       {id:'wpcom',name:'WordPress.com',auth:'oauth',ready:false,reason:'not_ready',fields:[]}
@@ -697,7 +820,7 @@ function ornekVeri(){
       {id:11,cms_site_id:1,title:'LinkedIn içerik takvimi nasıl hazırlanır?',state:'gonderildi',mode:'draft',remote_url:'https://ornek.com/?p=42',last_error:null,created_at:dz2(simdi-2*gun)},
       {id:10,cms_site_id:1,title:'B2B satışta sosyal medya',state:'basarisiz',mode:'draft',remote_url:null,last_error:'timeout',created_at:dz2(simdi-4*gun)},
       {id:9,cms_site_id:1,title:'',state:'kota',mode:'draft',remote_url:null,last_error:null,created_at:dz2(simdi-30*gun)}],
-    limits:{sites:3,used:1},quota:{lb_used:2,lb_limit:8}};
+    limits:{sites:3,used:1,per_week_max:3,plan_required:null},quota:{lb_used:2,lb_limit:8}};
   return ORNEK_VERI;
 }
 function ornekIstek(yol,yontem,govde){
@@ -709,8 +832,9 @@ function ornekIstek(yol,yontem,govde){
       body_field:{label_tr:'Yazı alanı (Rich text)',label_en:'Body field (Rich text)',required:true,items:[{id:'f1',label:'Post Body',parent:'c1'},{id:'f2',label:'Content',parent:'c2'}]},
       image_field:{label_tr:'Kapak görseli alanı',label_en:'Cover image field',required:false,items:[{id:'i1',label:'Main Image',parent:'c1'}]}}})
     :yan({ok:true,account:{name:'Örnek Blog',url:str(govde.inputs&&govde.inputs.site_url)||'https://ornek.com'},options:{category:{label_tr:'Kategori',label_en:'Category',required:false,items:[{id:'1',label:'Genel'},{id:'5',label:'Pazarlama'}]}}});
+  else if((yol==='/app/cms/connect'||yol==='/app/cmsoauth/start'||/\/settings$/.test(yol))&&+((govde&&govde.settings)||govde||{}).per_week>v.limits.per_week_max)j=yan({error:'plan_frequency',max:v.limits.per_week_max},403);
   else if(yol==='/app/cms/connect'){if(v.sites.filter(function(s){return s.state!=='kaldirildi'}).length>=v.limits.sites)j=yan({error:'site_limit'},403);
-    else{var st=govde.settings||{},s={id:Date.now(),platform:govde.platform,label:st.label||platAd(govde.platform),base_url:str((govde.inputs||{}).site_url)||null,hint:'9z8y',state:'aktif',last_error:null,auto_publish:st.auto_publish?1:0,per_week:st.per_week,days:st.days,hour:st.hour,lang:st.lang,length:st.length,tone:st.tone,brief:st.brief,topics:st.topics,choices:govde.choices,next_run_at:new Date(Date.now()+2*864e5).toISOString(),created_at:new Date().toISOString()};
+    else{var st=govde.settings||{},gp=saglayici(govde.platform),gi=govde.inputs||{},s={id:Date.now(),platform:(gp&&gp.stored_as)||govde.platform,provider:govde.platform,label:st.label||platAd(govde.platform),base_url:str(gi.site_url||gi.base_url)||null,hint:'9z8y',state:'aktif',last_error:null,auto_publish:st.auto_publish?1:0,per_week:st.per_week,days:st.days,hour:st.hour,lang:st.lang,length:st.length,tone:st.tone,brief:st.brief,topics:st.topics,choices:govde.choices,next_run_at:new Date(Date.now()+2*864e5).toISOString(),created_at:new Date().toISOString()};
       v.sites.unshift(s);v.limits.used+=1;j=yan({ok:true,site:JSON.parse(JSON.stringify(s))})}}
   else if(yol==='/app/cmsoauth/start')j=yan({ok:true,url:'https://example.com/oauth'});
   else if(yol==='/app/cmsoauth/finish'){if(!/^[A-Za-z0-9_-]{43}$/.test(str(govde&&govde.ticket)))j=yan({error:'forbidden'},403);

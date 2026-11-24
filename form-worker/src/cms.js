@@ -6,11 +6,11 @@
 // elle çalıştırma kotayı burada önden düşer (charged=1, month/day yazılı); cmsTick bu satırda yeniden düşmez, LLM hatasında iade eder.
 import { PROVIDERS, UNSUPPORTED, ERROR_HELP, slugify } from "./cms-providers.js";
 import { encrypt, decrypt, redirectUri, returnBase } from "./oauth.js";
-import { planLimits, PLANS } from "./plans.js";
+import { planLimits, PLANS, CMS_FREQS } from "./plans.js";
 import { genDay, genEnabled, keyOf, reserve, UPSERT, blogRequest, STOCK_URL, STOCK_TIMEOUT, stockPhoto, planCounts } from "./generate.js";
 import { TONES, SECTORS, STUDIO_MAX } from "./gen-prompt.js";
 import { makeLlm, LlmError } from "./llm.js";
-import { backPath } from "./sites.js";
+import { cmsBackPath } from "./sites.js";
 
 export class CmsError extends Error {
   constructor(code, status = 400, extra = null) { super(code); this.code = code; this.status = status; this.extra = extra; }
@@ -47,14 +47,25 @@ const gate = fn => async (c, id) => {
 const jsonOr = (s, d) => { try { const v = JSON.parse(s ?? "null"); return v ?? d; } catch { return d; } };
 const str = v => (typeof v === "string" ? v : v == null ? "" : String(v));
 
+// ---- sıklık (blog otomatiği, Desktop/app-smc/BLOG-OTOMATIK.md): per_week ∈ CMS_FREQS (1/2/3/7; 7 = günde 1), plan tavanı cms_per_week ----
+// 0019'daki CHECK (per_week BETWEEN 1 AND 3) D1'de tablo yeniden kurulmadan gevşetilemez (cms_posts ON DELETE CASCADE ile bağlı):
+// sütuna en çok 3 yazılır (dbWeek), gerçek sıklık days uzunluğudur (settingsOf days.length === per_week'i zorlar) → weekOf.
+const dbWeek = n => Math.min(n, 3);
+export function weekOf(r) {
+  const d = jsonOr(r?.days, null);
+  return Array.isArray(d) && d.length ? d.length : Number(r?.per_week) || 1;
+}
+const freqMax = user => planLimits(user)?.cms_per_week ?? PLANS.basic.cms_per_week;
+
 // ---- çıktı (beyaz liste: config toptan, secret_box, token_box asla) ----
 export function siteOut(r) {
   const cfg = jsonOr(r.config, {}), opts = cfg && typeof cfg[OPTS] === "object" ? cfg[OPTS] : {};
   const choices = {};
   for (const k of Object.keys(opts || {})) if (cfg[k] != null) choices[k] = cfg[k];
   return {
-    id: r.id, platform: r.platform, label: r.label, base_url: r.base_url, hint: r.hint, state: r.state, last_error: r.last_error,
-    auto_publish: r.auto_publish ? 1 : 0, per_week: r.per_week, days: jsonOr(r.days, []), hour: r.hour, lang: r.lang, length: r.length,
+    // provider: istemcinin kart/ad için kullandığı sağlayıcı id'si (Cloudflare Pages satırı platform "github" + config.host "cloudflare")
+    id: r.id, platform: r.platform, provider: r.platform === "github" && cfg?.host === "cloudflare" ? "cloudflare" : r.platform, label: r.label, base_url: r.base_url, hint: r.hint, state: r.state, last_error: r.last_error,
+    auto_publish: r.auto_publish ? 1 : 0, per_week: weekOf(r), days: jsonOr(r.days, []), hour: r.hour, lang: r.lang, length: r.length,
     tone: r.tone, brief: r.brief, topics: jsonOr(r.topics, []), choices, next_run_at: r.next_run_at, created_at: r.created_at, updated_at: r.updated_at,
   };
 }
@@ -78,14 +89,16 @@ export function nextRunAt(days, hour, from = Date.now()) {
 
 // ---- doğrulama ----
 const bad = field => fail("bad_input", 400, { field });
-// Ayarlar: base (mevcut satır ya da varsayılan) üstüne gövde; tamamı denetlenir
-function settingsOf(body, base) {
+// Ayarlar: base (mevcut satır ya da varsayılan) üstüne gövde; tamamı denetlenir. max (planın cms_per_week) verilmişse
+// per_week > max → 403 plan_frequency {max} (OAuth geri çağrısında kullanıcı yok: max verilmez, finish yeniden denetler).
+function settingsOf(body, base, max) {
   const b = body && typeof body === "object" && !Array.isArray(body) ? body : {};
   const pick = k => (b[k] !== undefined ? b[k] : base[k]);
   const label = str(pick("label")).trim();
   if (label.length > 80) bad("label");
   const per_week = Number(pick("per_week"));
-  if (!Number.isInteger(per_week) || per_week < 1 || per_week > 3) bad("per_week");
+  if (!CMS_FREQS.includes(per_week)) bad("per_week");
+  if (max != null && per_week > max) fail("plan_frequency", 403, { max });
   const rawDays = pick("days");
   if (!Array.isArray(rawDays)) bad("days");
   const days = rawDays.map(Number);
@@ -110,7 +123,7 @@ function settingsOf(body, base) {
 }
 const DEFAULTS = { label: "", auto_publish: 0, per_week: 1, days: [2], hour: 10, lang: "tr", length: "medium", tone: "samimi", brief: "", topics: [] };
 const rowSettings = r => ({
-  label: r.label ?? "", auto_publish: r.auto_publish, per_week: r.per_week, days: jsonOr(r.days, [2]), hour: r.hour, lang: r.lang,
+  label: r.label ?? "", auto_publish: r.auto_publish, per_week: weekOf(r), days: jsonOr(r.days, [2]), hour: r.hour, lang: r.lang,
   length: r.length, tone: r.tone || "samimi", brief: r.brief ?? "", topics: jsonOr(r.topics, []),
 });
 
@@ -202,6 +215,11 @@ async function mySite(c, id) {
 const activeCount = async c => Number((await c.env.DB.prepare("SELECT COUNT(*) AS n FROM cms_sites WHERE user_id = ? AND site = ? AND state != 'kaldirildi'")
   .bind(c.user.id, c.site).first())?.n) || 0;
 const siteLimit = user => planLimits(user)?.cms_sites ?? PLANS.basic.cms_sites;
+// C1 (24.11): blog otomatiği Pro'dan itibaren. cms_sites 0 olan planda (demo, basic, plan yok) kullanım uçları 403 plan_required
+// {plan:"pro"}; GET cms/cmsposts, pause ve disconnect açık kalır (kullanıcı görebilsin, durdurabilsin, silebilsin).
+const UPGRADE_PLAN = "pro";
+const cmsAllowed = user => siteLimit(user) > 0;
+const needPlan = c => { if (!cmsAllowed(c.user)) fail("plan_required", 403, { plan: UPGRADE_PLAN }); };
 // A15 demo: blog hakkı deneme boyunca TOPLAM (generate.js planCounts). Bu ayın gen_month 'lb' satırı için rezerv tavanı:
 // { max } (öbür planlarda aynen P.linkedin_blog), deneme bittiyse { ended: true }, toplam hak dolduysa { max: null }.
 async function lbCap(db, user, P, month) {
@@ -227,12 +245,16 @@ async function list(c) {
   try { lb_used = (await planCounts(env.DB, month, uid, c.user, P)).m.lb; } // demo'da deneme toplamı, öbürlerinde bu ay
   catch (e) { if (!NO_TABLE.test(String(e?.message || ""))) throw e; }
   const providers = Object.values(PROVIDERS).map(p => ({
-    id: p.id, name: p.name, auth: p.auth, ...readyOf(env, p), notes_tr: p.notes_tr || "", notes_en: p.notes_en || "", fields: p.fields || [],
+    id: p.id, name: p.name, auth: p.auth, stored_as: p.stored_as || p.id, ...readyOf(env, p),
+    notes_tr: p.notes_tr || "", notes_en: p.notes_en || "", fields: p.fields || [],
   }));
   return ok(c, {
     providers, unsupported: UNSUPPORTED, error_help: ERROR_HELP,
     sites: (sites || []).map(siteOut), posts: (posts || []).map(postOut),
-    limits: { sites: siteLimit(c.user), used: (sites || []).filter(s => s.state !== "kaldirildi").length },
+    limits: {
+      sites: siteLimit(c.user), used: (sites || []).filter(s => s.state !== "kaldirildi").length, per_week_max: freqMax(c.user),
+      plan_required: cmsAllowed(c.user) ? null : UPGRADE_PLAN,
+    },
     quota: { lb_used, lb_limit: P?.linkedin_blog ?? 0, ...(P?.plan === "demo" && { trial_ends_at: P.trial_ends_at, trial_ended: P.trial_ended }) },
   });
 }
@@ -243,6 +265,7 @@ async function postList(c) {
 }
 
 async function probe(c) {
+  needPlan(c);
   const prov = providerOf(c.body.platform), inputs = inputsOf(prov, c.body.inputs);
   await probeLimit(c);
   const r = await runProbe(c, prov, inputs);
@@ -250,8 +273,9 @@ async function probe(c) {
 }
 
 async function connect(c) {
+  needPlan(c);
   const prov = providerOf(c.body.platform), inputs = inputsOf(prov, c.body.inputs);
-  const set = settingsOf(c.body.settings, DEFAULTS);
+  const set = settingsOf(c.body.settings, DEFAULTS, freqMax(c.user));
   if (await activeCount(c) >= siteLimit(c.user)) fail("site_limit", 403);
   await probeLimit(c);
   const r = await runProbe(c, prov, inputs);
@@ -262,12 +286,13 @@ async function connect(c) {
   const secret = (prov.fields || []).find(f => f.type === "secret" && inputs[f.key]);
   const sv = secret ? inputs[secret.key] : "", hint = sv.length >= 12 ? sv.slice(-4) : null;
   const acc = account(r), label = set.label || acc.name || prov.name;
-  // Sınır yarışında (iki eşzamanlı bağlantı) ekleme koşulu sayacı yeniden denetler
+  // Sınır yarışında (iki eşzamanlı bağlantı) ekleme koşulu sayacı yeniden denetler. Saklanan platform stored_as (cloudflare →
+  // github; 0019 CHECK listesinde cloudflare yok, ayrım config.host'ta)
   const row = await c.env.DB.prepare(
     `INSERT INTO cms_sites (user_id, site, platform, label, base_url, config, secret_box, hint, state, auto_publish, per_week, days, hour, lang, length, tone, brief, topics, next_run_at)
      SELECT ?, ?, ?, ?, ?, ?, ?, ?, 'aktif', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
      WHERE (SELECT COUNT(*) FROM cms_sites WHERE user_id = ? AND site = ? AND state != 'kaldirildi') < ? RETURNING *`,
-  ).bind(c.user.id, c.site, prov.id, label, acc.url || null, JSON.stringify(config), box, hint, set.auto_publish, set.per_week, JSON.stringify(set.days),
+  ).bind(c.user.id, c.site, prov.stored_as || prov.id, label, acc.url || null, JSON.stringify(config), box, hint, set.auto_publish, dbWeek(set.per_week), JSON.stringify(set.days),
     set.hour, set.lang, set.length, set.tone, set.brief || null, JSON.stringify(set.topics), nextRunAt(set.days, set.hour),
     c.user.id, c.site, siteLimit(c.user)).first();
   if (!row) fail("site_limit", 403);
@@ -275,9 +300,10 @@ async function connect(c) {
 }
 
 async function settings(c, id) {
+  needPlan(c);
   const s = await mySite(c, id);
   if (s.state === "kaldirildi") fail("not_found", 404);
-  const set = settingsOf(c.body, rowSettings(s));
+  const set = settingsOf(c.body, rowSettings(s), freqMax(c.user));
   let config = s.config;
   if (c.body.choices !== undefined) {
     const cfg = jsonOr(s.config, {}), opts = cfg[OPTS] && typeof cfg[OPTS] === "object" ? cfg[OPTS] : {};
@@ -289,7 +315,7 @@ async function settings(c, id) {
   const row = await c.env.DB.prepare(
     `UPDATE cms_sites SET label = ?, auto_publish = ?, per_week = ?, days = ?, hour = ?, lang = ?, length = ?, tone = ?, brief = ?, topics = ?, config = ?,
      next_run_at = ?, updated_at = datetime('now') WHERE id = ? AND user_id = ? AND state != 'kaldirildi' RETURNING *`,
-  ).bind(set.label || s.label, set.auto_publish, set.per_week, JSON.stringify(set.days), set.hour, set.lang, set.length, set.tone, set.brief || null,
+  ).bind(set.label || s.label, set.auto_publish, dbWeek(set.per_week), JSON.stringify(set.days), set.hour, set.lang, set.length, set.tone, set.brief || null,
     JSON.stringify(set.topics), config, next, s.id, c.user.id).first();
   if (!row) fail("not_found", 404);
   return ok(c, { site: siteOut(row) });
@@ -297,6 +323,7 @@ async function settings(c, id) {
 
 // Elle çalıştırma: aynı rid tekrarı aynı yazıyı döner (slot UNIQUE). Kota önden düşülür; üretim cmsTick'te (K2).
 async function run(c, id) {
+  needPlan(c);
   const env = c.env, uid = c.user.id, rid = str(c.body.rid);
   if (!RID.test(rid)) bad("rid");
   const s = await mySite(c, id);
@@ -332,9 +359,12 @@ async function run(c, id) {
 }
 
 async function setState(c, id, from, to) {
+  if (to === "aktif") needPlan(c); // durdurma her planda açık
   const s = await mySite(c, id);
   if (s.state === "kaldirildi") fail("not_found", 404);
   if (!from.includes(s.state)) return ok(c, { site: siteOut(s) }); // zaten o durumda: idempotent
+  // Plan düştüyse (cmsTick duraklattı) sıklık düşürülmeden yeniden başlamaz
+  if (to === "aktif" && weekOf(s) > freqMax(c.user)) fail("plan_frequency", 403, { max: freqMax(c.user) });
   const next = to === "aktif" ? nextRunAt(jsonOr(s.days, [2]), s.hour) : null;
   const row = await c.env.DB.prepare(
     "UPDATE cms_sites SET state = ?, next_run_at = ?, last_error = CASE WHEN ? = 'aktif' THEN NULL ELSE last_error END, updated_at = datetime('now') WHERE id = ? AND user_id = ? RETURNING *",
@@ -360,6 +390,7 @@ async function disconnect(c, id) {
 
 // Yeniden dene: yalnız gönderimi başarısız ve içeriği duran yazı; yeniden üretim ve kota yok, cmsTick gönderir
 async function retry(c, id) {
+  needPlan(c);
   const p = await c.env.DB.prepare(
     "SELECT p.*, s.state AS site_state FROM cms_posts p JOIN cms_sites s ON s.id = p.cms_site_id WHERE p.id = ? AND p.user_id = ? AND s.site = ?",
   ).bind(id, c.user.id, c.site).first();
@@ -408,12 +439,13 @@ function autoChoices(opts) {
 }
 
 async function oauthStart(c) {
+  needPlan(c);
   const env = c.env, prov = oauthProv(c.body.platform);
   if (!prov) bad("platform");
   if (!oauthReady(env, prov)) fail("not_configured", 503);
   const inputs = inputsOf(prov, c.body.inputs);
   for (const f of prov.fields || []) if (f.required && !inputs[f.key]) bad(f.key);
-  const set = settingsOf(c.body.settings, DEFAULTS);
+  const set = settingsOf(c.body.settings, DEFAULTS, freqMax(c.user));
   if (await activeCount(c) >= siteLimit(c.user)) fail("site_limit", 403);
   await probeLimit(c);
   const state = b64u(crypto.getRandomValues(new Uint8Array(32))), p = `cms/${prov.id}`, redirectTo = redirectUri(env, c.api, p);
@@ -425,7 +457,7 @@ async function oauthStart(c) {
     env.DB.prepare("DELETE FROM oauth_states WHERE platform LIKE 'cms/%' AND expires_at <= datetime('now')"),
     env.DB.prepare(
       "INSERT INTO oauth_states (state_hash, user_id, platform, return_to, redirect_uri, code_verifier, expires_at) VALUES (?, ?, ?, ?, ?, ?, datetime('now', ?))",
-    ).bind(await sha256(state), c.user.id, p, `${returnBase(env, c.origin, c.site)}${backPath(c.site, c.user?.lang)}`, redirectTo, box, `+${STATE_MINUTES} minutes`),
+    ).bind(await sha256(state), c.user.id, p, `${returnBase(env, c.origin, c.site)}${cmsBackPath(c.site, c.user?.lang, c.body.back)}`, redirectTo, box, `+${STATE_MINUTES} minutes`),
   ]);
   return ok(c, { url });
 }
@@ -490,6 +522,7 @@ export async function cmsOAuthCallback(request, env, platform) {
 // POST /app/cmsoauth/finish {ticket}: bilet tek kullanımlıktır, her durumda silinir. Bilet yok / süresi geçmiş / akışı başka
 // kullanıcı ya da başka site başlatmış → 403 forbidden, hiçbir şey bağlanmaz. Aksi hâlde connect ile aynı kurallar (site sınırı).
 async function oauthFinish(c) {
+  needPlan(c); // bilet yakılmadan (plan yükseltilince 10 dk içinde yeniden denenebilir)
   const ticket = str(c.body.ticket);
   if (!TOKEN_RE.test(ticket)) fail("forbidden", 403);
   const st = await c.env.DB.prepare(
@@ -502,7 +535,7 @@ async function oauthFinish(c) {
   let pl;
   try { pl = JSON.parse(await decrypt(c.env, st.code)); } catch { fail("not_ready", 503); }
   if (!pl || pl.platform !== prov.id || str(pl.site) !== c.site) fail("forbidden", 403);
-  const set = settingsOf(pl.settings, DEFAULTS);
+  const set = settingsOf(pl.settings, DEFAULTS, freqMax(c.user));
   if (await activeCount(c) >= siteLimit(c.user)) fail("site_limit", 403);
   let box;
   try { box = await encrypt(c.env, JSON.stringify(pl.creds || {})); } catch { fail("not_ready", 503); }
@@ -511,7 +544,7 @@ async function oauthFinish(c) {
      SELECT ?, ?, ?, ?, ?, ?, ?, ?, 'aktif', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
      WHERE (SELECT COUNT(*) FROM cms_sites WHERE user_id = ? AND site = ? AND state != 'kaldirildi') < ? RETURNING *`,
   ).bind(c.user.id, c.site, prov.id, str(pl.label) || prov.name, pl.base_url || null, JSON.stringify(pl.config || {}), box, pl.hint || null,
-    set.auto_publish, set.per_week, JSON.stringify(set.days), set.hour, set.lang, set.length, set.tone, set.brief || null, JSON.stringify(set.topics),
+    set.auto_publish, dbWeek(set.per_week), JSON.stringify(set.days), set.hour, set.lang, set.length, set.tone, set.brief || null, JSON.stringify(set.topics),
     nextRunAt(set.days, set.hour), c.user.id, c.site, siteLimit(c.user)).first();
   if (!row) fail("site_limit", 403);
   return ok(c, { site: siteOut(row) });
@@ -565,7 +598,7 @@ export async function cmsPurge(env) {
 }
 
 export async function cmsTick(env, f = fetch, { d1 = 30, sub = 20, log = m => console.log(m), now = () => Date.now() } = {}) {
-  const out = { stale: 0, cancelled: 0, purged: 0, pushed: 0, push_failed: 0, scheduled: 0, quota: 0, produced: 0, produce_failed: 0 };
+  const out = { stale: 0, cancelled: 0, purged: 0, pushed: 0, push_failed: 0, scheduled: 0, quota: 0, plan_paused: 0, produced: 0, produce_failed: 0 };
   if (env?.CMS_ENABLED !== "1" || !env.DB) return out;
   const B = { d1, sub };
   const take = (q, s = 0) => { if (B.d1 < q || B.sub < s) return false; B.d1 -= q; B.sub -= s; return true; };
@@ -675,6 +708,17 @@ export async function cmsTick(env, f = fetch, { d1 = 30, sub = 20, log = m => co
       const slot = s.next_run_at, next = nextRunAt(jsonOr(s.days, []), Number(s.hour), now());
       const user = await db.prepare("SELECT * FROM users WHERE id = ?").bind(s.user_id).first();
       const P = user ? planLimits(user) : null;
+      // Plan düştü: blog otomatiği yok (cms_sites 0 → plan_required) ya da site sıklığı > planın cms_per_week (plan_frequency).
+      // Bu slotta üretim yok, site duraklatılır (istemci last_error'u açıklar)
+      const why = P && !((P.cms_sites ?? PLANS.basic.cms_sites) > 0) ? "plan_required"
+        : P && weekOf(s) > (P.cms_per_week ?? PLANS.basic.cms_per_week) ? "plan_frequency" : null;
+      if (why) {
+        await db.prepare(
+          "UPDATE cms_sites SET state = 'duraklatildi', last_error = ?, next_run_at = NULL, lease_until = NULL, updated_at = datetime('now') WHERE id = ? AND state = 'aktif'",
+        ).bind(why, s.id).run();
+        out.plan_paused++;
+        return;
+      }
       if (P) {
         const day = genDay(now()), month = day.slice(0, 7), ukey = await keyOf(env, day, "u", s.user_id);
         const cap = await lbCap(db, user, P, month);

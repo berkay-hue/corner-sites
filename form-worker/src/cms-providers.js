@@ -1143,6 +1143,41 @@ const github = {
   },
 };
 
+// ================================================================= Cloudflare Pages (Git bağlı proje → GitHub deposu)
+// Pages'in yazı yükleme API'si yok: Git bağlı projede yazı GitHub deposuna commit edilir, Pages kendisi derler (taslak modunda
+// dal + PR → Pages önizleme adresi). DB'de platform "github" (0019 CHECK listesinde cloudflare yok, migration yok), ayrım
+// config.host = "cloudflare"; gönderim github.push. Direct Upload (wrangler/sürükle-bırak) ve GitLab bağlı projeler desteklenmez.
+const cloudflare = {
+  id: "cloudflare", name: "Cloudflare Pages", auth: "key", stored_as: "github",
+  notes_tr: "Git'e bağlı Pages projesi (GitHub deposu) gerekir: yazı depoya commit edilir, Cloudflare Pages siteyi kendisi derleyip yayınlar. Taslak modunda yeni dal + Pull Request açılır (Pages önizleme adresi verir, birleştirince yayına girer); yayın modunda doğrudan üretim dalına commit edilir. Direct Upload (wrangler / sürükle-bırak) projeleri desteklenmez: her yayında sitenin tamamı yüklenir, tek yazı eklenemez; projeyi Git'e bağlayın. GitLab'a bağlı Pages projeleri şimdilik desteklenmez.",
+  notes_en: "Needs a Git-connected Pages project (GitHub repo): the post is committed to the repo and Cloudflare Pages builds and deploys the site itself. Draft mode opens a new branch + Pull Request (Pages gives a preview URL, goes live when merged); publish mode commits straight to the production branch. Direct Upload projects (wrangler / drag-and-drop) are not supported: every deploy uploads the whole site, a single post cannot be added; connect the project to Git. GitLab-connected Pages projects are not supported yet.",
+  fields: [
+    ...github.fields,
+    field("base_url", "text", false, "Pages site adresi", "Pages site address",
+      "Sitenin adresi (örn. proje.pages.dev ya da kendi alan adınız); boşsa GitHub depo adresi gösterilir.",
+      "Your site address (e.g. project.pages.dev or your own domain); empty = the GitHub repo address is shown.", { placeholder: "https://site.pages.dev" }),
+  ],
+
+  async probe(inputs, io) {
+    let site = null;
+    const raw = str(inputs?.base_url, 300);
+    if (raw) {
+      const s = safeUrl(raw);
+      if (!s.ok) return pfail(s.error);
+      site = s.url;
+    }
+    const r = await github.probe(inputs, io);
+    if (!r.ok) return r;
+    return {
+      ...r,
+      account: { ...r.account, url: site || r.account.url },
+      config: { ...r.config, host: "cloudflare", ...(site && { pages_url: site }) },
+    };
+  },
+
+  push: (post, ctx, io) => github.push(post, ctx, io),
+};
+
 // ================================================================= IdeaSoft (OAuth authorization_code; müşterinin kendi API istemcisi)
 function ideaStore(raw) {
   const s = safeUrl(str(raw, 300));
@@ -1330,4 +1365,4 @@ const wpcom = {
   },
 };
 
-export const PROVIDERS = { wordpress, webflow, ghost, shopify, hubspot, wix, github, ideasoft, wpcom };
+export const PROVIDERS = { wordpress, webflow, ghost, shopify, hubspot, wix, github, cloudflare, ideasoft, wpcom };

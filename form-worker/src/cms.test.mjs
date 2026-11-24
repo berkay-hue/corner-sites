@@ -71,6 +71,8 @@ function freshDb({ cms = true } = {}) {
   s(tok("A"), u(SMC, "a@ornek.test"));
   s(tok("M"), u(SMC, "m@ornek.test"));
   s(tok("B"), u("brandcorner.co", "b@ornek.test"));
+  // C1: blog otomatiği Pro'dan itibaren (demo/basic cms_sites 0 → 403 plan_required); testlerin varsayılanı pro
+  db.exec("UPDATE users SET plan = 'pro'");
   return db;
 }
 
@@ -126,7 +128,7 @@ test("0019 uygulanmamış (tablo yok) → 503 not_ready", async () => {
 });
 
 // ---- plan site sınırı ----
-for (const [plan, limit, limits] of [["basic", 1], ["pro", 3], ["enterprise", 10, '{"linkedin_blog":50}']]) {
+for (const [plan, limit, limits] of [["pro", 3], ["enterprise", 10, '{"linkedin_blog":50}']]) {
   test(`connect plan sınırı: ${plan} ${limit}, fazlası 403 site_limit`, async t => {
     stubProviders(t);
     const { db, call } = setup();
@@ -139,13 +141,110 @@ for (const [plan, limit, limits] of [["basic", 1], ["pro", 3], ["enterprise", 10
     assert.deepEqual([over.status, over.body.error], [403, "site_limit"]);
     assert.equal(db.prepare("SELECT COUNT(*) AS n FROM cms_sites WHERE user_id = 1").get().n, limit);
     const l = await call("GET", "/app/cms");
-    assert.deepEqual(l.body.limits, { sites: limit, used: limit });
+    assert.deepEqual(l.body.limits, { sites: limit, used: limit, per_week_max: plan === "enterprise" ? 7 : 3, plan_required: null });
   });
 }
 
+// ---- C1 plan kapısı: demo/basic (cms_sites 0) ve plan yok → 403 plan_required {plan:"pro"}; okuma, duraklatma, kaldırma serbest ----
+for (const plan of ["demo", "basic", "bilinmeyen"]) {
+  test(`plan kapısı: ${plan} → yazan uçlar 403 plan_required; GET/pause/disconnect serbest; limits kilitli`, async t => {
+    stubProviders(t);
+    const { db, call } = setup();
+    const s = (await connect(call)).body.site; // pro iken bağlandı
+    db.prepare("UPDATE users SET plan = ?, created_at = datetime('now') WHERE id = 1").run(plan);
+    const gated = [
+      ["/app/cms/probe", { platform: "hubspot", inputs: { api_key: KEY } }],
+      ["/app/cms/connect", { platform: "hubspot", inputs: { api_key: KEY }, settings: DAILY }], // plan_frequency/site_limit'ten önce
+      [`/app/cms/${s.id}/settings`, { per_week: 1, days: [1] }],
+      [`/app/cms/${s.id}/run`, { rid: RID }],
+      [`/app/cms/${s.id}/resume`, {}],
+      ["/app/cmsposts/999/retry", {}],
+      ["/app/cmsoauth/start", { platform: "wpcom" }],
+      ["/app/cmsoauth/finish", { ticket: "x".repeat(43) }],
+    ];
+    for (const [p, body] of gated) {
+      const r = await call("POST", p, { body });
+      assert.deepEqual([r.status, r.body.ok, r.body.error, r.body.plan], [403, false, "plan_required", "pro"], p);
+    }
+    assert.equal(db.prepare("SELECT COUNT(*) AS n FROM cms_sites").get().n, 1);
+    assert.equal(db.prepare("SELECT COUNT(*) AS n FROM cms_posts").get().n, 0);
+    const l = await call("GET", "/app/cms");
+    assert.equal(l.status, 200);
+    assert.deepEqual(l.body.limits, { sites: 0, used: 1, per_week_max: 0, plan_required: "pro" });
+    assert.equal((await call("GET", "/app/cmsposts")).status, 200);
+    const pz = await call("POST", `/app/cms/${s.id}/pause`, { body: {} });
+    assert.deepEqual([pz.status, pz.body.site.state], [200, "duraklatildi"]);
+    assert.equal((await call("POST", `/app/cms/${s.id}/disconnect`, { body: {} })).status, 200);
+    // Pro'ya geçince yeniden bağlanır
+    db.prepare("UPDATE users SET plan = 'pro' WHERE id = 1").run();
+    assert.equal((await connect(call)).status, 200);
+    assert.equal((await call("GET", "/app/cms")).body.limits.plan_required, null);
+  });
+}
+
+test("plan kapısı: cmsTick basic'e düşen kullanıcının aktif sitesini üretmeden duraklatır (plan_required); Pro'da resume", async t => {
+  stubProviders(t);
+  const { db, env, call } = setup();
+  const s = (await connect(call)).body.site;
+  db.prepare("UPDATE users SET plan = 'basic' WHERE id = 1").run();
+  db.prepare("UPDATE cms_sites SET next_run_at = datetime('now', '-1 minutes') WHERE id = ?").run(s.id);
+  const calls = [];
+  const out = await cmsTick(env, async url => { calls.push(String(url)); return LLM_OK(); }, { log: () => {} });
+  assert.equal(out.plan_paused, 1, JSON.stringify(out));
+  assert.deepEqual([out.scheduled, out.quota, out.produced, calls.length], [0, 0, 0, 0]);
+  assert.deepEqual(counters(db), { lb: 0, u: 0 });
+  const row = db.prepare("SELECT state, last_error, next_run_at, lease_until FROM cms_sites WHERE id = ?").get(s.id);
+  assert.deepEqual({ ...row }, { state: "duraklatildi", last_error: "plan_required", next_run_at: null, lease_until: null });
+  const l = await call("GET", "/app/cms");
+  assert.deepEqual([l.body.sites[0].state, l.body.sites[0].last_error], ["duraklatildi", "plan_required"]);
+  assert.deepEqual((await call("POST", `/app/cms/${s.id}/resume`, { body: {} })).body.error, "plan_required");
+  db.prepare("UPDATE users SET plan = 'pro' WHERE id = 1").run();
+  const res = await call("POST", `/app/cms/${s.id}/resume`, { body: {} });
+  assert.deepEqual([res.status, res.body.site.state, res.body.site.last_error], [200, "aktif", null]);
+});
+
+// ---- C1 Cloudflare Pages: DB'de platform github + config.host cloudflare; çıktıda provider "cloudflare" ----
+test("cloudflare: providers'ta github'ın ardından (stored_as github); connect platform github + config.host; site.provider cloudflare", async t => {
+  const gh = PROVIDERS.github, orig = gh.probe;
+  gh.probe = async inputs => ({ ok: true, account: { name: `${inputs.owner}/${inputs.repo}`, url: `https://github.com/${inputs.owner}/${inputs.repo}` }, options: {},
+    config: { owner: inputs.owner, repo: inputs.repo, branch: "main", ssg: "hugo", path_template: "content/posts/{slug}.md" }, creds: { token: inputs.token } });
+  t.after(() => { gh.probe = orig; });
+  const { db, call } = setup();
+  const l0 = await call("GET", "/app/cms");
+  const ids = l0.body.providers.map(p => p.id);
+  assert.equal(ids[ids.indexOf("github") + 1], "cloudflare");
+  const cf = l0.body.providers.find(p => p.id === "cloudflare");
+  assert.deepEqual([cf.name, cf.auth, cf.stored_as], ["Cloudflare Pages", "key", "github"]);
+  assert.ok(cf.fields.some(f => f.key === "base_url" && f.required === false));
+  for (const p of l0.body.providers) assert.equal(p.stored_as, p.id === "cloudflare" ? "github" : p.id, p.id);
+  const inputs = { owner: "acme", repo: "site", token: "github_pat_" + "z".repeat(20), ssg: "hugo", base_url: "acme.pages.dev" };
+  const pr = await call("POST", "/app/cms/probe", { body: { platform: "cloudflare", inputs } });
+  assert.deepEqual([pr.status, pr.body.account.url], [200, "https://acme.pages.dev/"], JSON.stringify(pr.body));
+  const c = await call("POST", "/app/cms/connect", { body: { platform: "cloudflare", inputs } });
+  assert.equal(c.status, 200, JSON.stringify(c.body));
+  assert.deepEqual([c.body.site.platform, c.body.site.provider, c.body.site.base_url], ["github", "cloudflare", "https://acme.pages.dev/"]);
+  const row = db.prepare("SELECT platform, config FROM cms_sites WHERE id = ?").get(c.body.site.id);
+  assert.equal(row.platform, "github");
+  const cfg = JSON.parse(row.config);
+  assert.deepEqual([cfg.host, cfg.pages_url, cfg.repo], ["cloudflare", "https://acme.pages.dev/", "site"]);
+  // düz GitHub satırı provider = platform
+  const g = await call("POST", "/app/cms/connect", { body: { platform: "github", inputs: { ...inputs, base_url: undefined } } });
+  assert.deepEqual([g.status, g.body.site.platform, g.body.site.provider], [200, "github", "github"]);
+  const l = await call("GET", "/app/cms");
+  assert.deepEqual(l.body.sites.map(s => s.provider).sort(), ["cloudflare", "github"]);
+  // ayar değişikliği config.host'u korur
+  const st = await call("POST", `/app/cms/${c.body.site.id}/settings`, { body: { per_week: 1, days: [2] } });
+  assert.deepEqual([st.status, st.body.site.provider], [200, "cloudflare"]);
+  // geçersiz Pages adresi → 400 benzeri hata, satır eklenmez
+  const bad = await call("POST", "/app/cms/connect", { body: { platform: "cloudflare", inputs: { ...inputs, base_url: "http://127.0.0.1" } } });
+  assert.equal(bad.body.ok, false);
+  assert.equal(db.prepare("SELECT COUNT(*) AS n FROM cms_sites").get().n, 2);
+});
+
 test("kaldırılan site sınıra sayılmaz", async t => {
   stubProviders(t);
-  const { call } = setup();
+  const { db, call } = setup();
+  db.prepare("UPDATE users SET plan = 'enterprise', plan_limits = '{\"cms_sites\":1}' WHERE id = 1").run();
   const a = await connect(call);
   assert.equal((await connect(call)).status, 403);
   assert.equal((await call("POST", `/app/cms/${a.body.site.id}/disconnect`, { body: {} })).status, 200);
@@ -229,7 +328,7 @@ test("run: geçersiz rid 400; aylık kota doluysa 402 quota", async t => {
   const s = (await connect(call)).body.site;
   assert.equal((await call("POST", `/app/cms/${s.id}/run`, { body: { rid: "x" } })).status, 400);
   const month = new Date(Date.now() + 3 * 3600e3).toISOString().slice(0, 7);
-  db.prepare("INSERT INTO gen_month (month, user_id, kind, n) VALUES (?, 1, 'lb', 8)").run(month);
+  db.prepare("INSERT INTO gen_month (month, user_id, kind, n) VALUES (?, 1, 'lb', 40)").run(month);
   const r = await call("POST", `/app/cms/${s.id}/run`, { body: { rid: RID } });
   assert.deepEqual([r.status, r.body.error], [402, "quota"]);
   assert.equal(db.prepare("SELECT COUNT(*) AS n FROM cms_posts").get().n, 0);
@@ -266,6 +365,106 @@ test("cmsPurge: 90 günden eski gövde boşalır, yeni kalır; eski hazir iptal"
   assert.equal(await cmsPurge(env), 0);
 });
 
+// ---- sıklık (blog otomatiği): per_week ∈ {1,2,3,7}, plan tavanı cms_per_week (demo/basic 0, pro 3, enterprise 7) ----
+const DAILY = { per_week: 7, days: [1, 2, 3, 4, 5, 6, 7], hour: 9, lang: "tr" };
+
+test("sıklık: enterprise per_week 7 (günde 1) bağlanır; sütunda 3, yanıtta 7; limits.per_week_max 7", async t => {
+  stubProviders(t);
+  const { db, call } = setup();
+  db.prepare("UPDATE users SET plan = 'enterprise' WHERE id = 1").run();
+  const r = await connect(call, tok("A"), { settings: DAILY });
+  assert.equal(r.status, 200, JSON.stringify(r.body));
+  assert.deepEqual([r.body.site.per_week, r.body.site.days], [7, [1, 2, 3, 4, 5, 6, 7]]);
+  assert.equal(db.prepare("SELECT per_week FROM cms_sites WHERE id = ?").get(r.body.site.id).per_week, 3); // 0019 CHECK 1..3
+  const l = await call("GET", "/app/cms");
+  assert.equal(l.body.limits.per_week_max, 7);
+  assert.equal(l.body.sites[0].per_week, 7);
+  // ayarlardan haftada 2'ye inip yeniden günde 1'e çıkabilir
+  const s2 = await call("POST", `/app/cms/${r.body.site.id}/settings`, { body: { per_week: 2, days: [1, 4] } });
+  assert.deepEqual([s2.status, s2.body.site.per_week], [200, 2]);
+  const s7 = await call("POST", `/app/cms/${r.body.site.id}/settings`, { body: { per_week: 7, days: [7, 6, 5, 4, 3, 2, 1] } });
+  assert.deepEqual([s7.status, s7.body.site.per_week, s7.body.site.days], [200, 7, [1, 2, 3, 4, 5, 6, 7]]);
+});
+
+test("sıklık: enterprise plan_limits.cms_per_week 2 → per_week_max 2, 3 reddedilir", async t => {
+  stubProviders(t);
+  const { db, call } = setup();
+  db.prepare("UPDATE users SET plan = 'enterprise', plan_limits = '{\"cms_per_week\":2}' WHERE id = 1").run();
+  assert.equal((await call("GET", "/app/cms")).body.limits.per_week_max, 2);
+  const r = await connect(call, tok("A"), { settings: { per_week: 3, days: [1, 3, 5], hour: 9, lang: "tr" } });
+  assert.deepEqual([r.status, r.body.error, r.body.max], [403, "plan_frequency", 2]);
+});
+
+for (const plan of ["pro"]) {
+  test(`sıklık: ${plan} per_week 7 → 403 plan_frequency {max 3}; 3 olur; per_week_max 3`, async t => {
+    stubProviders(t);
+    const { db, call } = setup();
+    db.prepare("UPDATE users SET plan = ?, created_at = datetime('now') WHERE id = 1").run(plan);
+    const r = await connect(call, tok("A"), { settings: DAILY });
+    assert.deepEqual([r.status, r.body.error, r.body.max], [403, "plan_frequency", 3]);
+    assert.equal(db.prepare("SELECT COUNT(*) AS n FROM cms_sites").get().n, 0);
+    assert.equal((await call("GET", "/app/cms")).body.limits.per_week_max, 3);
+    const ok3 = await connect(call, tok("A"), { settings: { per_week: 3, days: [1, 3, 5], hour: 9, lang: "tr" } });
+    assert.equal(ok3.status, 200, JSON.stringify(ok3.body));
+    const up = await call("POST", `/app/cms/${ok3.body.site.id}/settings`, { body: DAILY });
+    assert.deepEqual([up.status, up.body.error, up.body.max], [403, "plan_frequency", 3]);
+  });
+}
+
+test("sıklık: pro'da oauth start da 403 plan_frequency", async t => {
+  stubProviders(t);
+  const { db, call } = setup();
+  db.prepare("UPDATE users SET plan = 'pro' WHERE id = 1").run();
+  const st = await call("POST", "/app/cmsoauth/start", { body: { platform: "wpcom", settings: DAILY } });
+  assert.deepEqual([st.status, st.body.error, st.body.max], [403, "plan_frequency", 3]);
+  assert.equal(db.prepare("SELECT COUNT(*) AS n FROM oauth_states").get().n, 0);
+});
+
+test("sıklık: per_week 1/2/3/7 dışı 400 per_week; days uzunluğu per_week'e eşit olmalı", async t => {
+  stubProviders(t);
+  const { db, call } = setup();
+  db.prepare("UPDATE users SET plan = 'enterprise' WHERE id = 1").run();
+  for (const pw of [0, 4, 5, 6, 8, "x"]) {
+    const r = await connect(call, tok("A"), { settings: { per_week: pw, days: [1], hour: 9, lang: "tr" } });
+    assert.deepEqual([r.status, r.body.error, r.body.field], [400, "bad_input", "per_week"], String(pw));
+  }
+  for (const [pw, days] of [[7, [1, 2, 3, 4, 5, 6]], [2, [1]], [3, [1, 2, 3, 4]], [7, [1, 1, 2, 3, 4, 5, 6]], [1, []]]) {
+    const r = await connect(call, tok("A"), { settings: { per_week: pw, days, hour: 9, lang: "tr" } });
+    assert.deepEqual([r.status, r.body.error, r.body.field], [400, "bad_input", "days"], JSON.stringify([pw, days]));
+  }
+  assert.equal(db.prepare("SELECT COUNT(*) AS n FROM cms_sites").get().n, 0);
+});
+
+test("sıklık: cmsTick plan düşmüşse üretmez, siteyi duraklatildi + plan_frequency yapar; resume 403", async t => {
+  stubProviders(t);
+  const { db, env, call } = setup();
+  db.prepare("UPDATE users SET plan = 'enterprise' WHERE id = 1").run();
+  const s = (await connect(call, tok("A"), { settings: DAILY })).body.site;
+  db.prepare("UPDATE users SET plan = 'pro' WHERE id = 1").run();
+  db.prepare("UPDATE cms_sites SET next_run_at = datetime('now', '-1 minutes') WHERE id = ?").run(s.id);
+  const calls = [];
+  const out = await cmsTick(env, async url => { calls.push(String(url)); return LLM_OK(); }, { log: () => {} });
+  assert.equal(out.plan_paused, 1, JSON.stringify(out));
+  assert.deepEqual([out.scheduled, out.quota, out.produced], [0, 0, 0]);
+  assert.equal(calls.length, 0);
+  assert.equal(db.prepare("SELECT COUNT(*) AS n FROM cms_posts").get().n, 0);
+  assert.deepEqual(counters(db), { lb: 0, u: 0 });
+  const row = db.prepare("SELECT state, last_error, next_run_at, lease_until FROM cms_sites WHERE id = ?").get(s.id);
+  assert.deepEqual({ ...row }, { state: "duraklatildi", last_error: "plan_frequency", next_run_at: null, lease_until: null });
+  const l = await call("GET", "/app/cms");
+  assert.deepEqual([l.body.sites[0].state, l.body.sites[0].last_error, l.body.sites[0].per_week], ["duraklatildi", "plan_frequency", 7]);
+  const res = await call("POST", `/app/cms/${s.id}/resume`, { body: {} });
+  assert.deepEqual([res.status, res.body.error, res.body.max], [403, "plan_frequency", 3]);
+  // sıklığı düşürünce yeniden başlar
+  assert.equal((await call("POST", `/app/cms/${s.id}/settings`, { body: { per_week: 3, days: [1, 3, 5] } })).status, 200);
+  const res2 = await call("POST", `/app/cms/${s.id}/resume`, { body: {} });
+  assert.deepEqual([res2.status, res2.body.site.state, res2.body.site.last_error], [200, "aktif", null]);
+  // planı yeten site tikte normal zamanlanır
+  db.prepare("UPDATE cms_sites SET next_run_at = datetime('now', '-1 minutes') WHERE id = ?").run(s.id);
+  const out2 = await cmsTick(env, async () => LLM_OK(), { log: () => {} });
+  assert.deepEqual([out2.plan_paused, out2.scheduled], [0, 1], JSON.stringify(out2));
+});
+
 // ---- OAuth (WordPress.com) ----
 async function oauthFlow(t, call, env, token = tok("A")) {
   const st = await call("POST", "/app/cmsoauth/start", { token, body: { platform: "wpcom" } });
@@ -294,6 +493,25 @@ test("OAuth callback cms_sites'a yazmaz, bilet döner; doğru kullanıcı finish
   assert.equal(db.prepare("SELECT COUNT(*) AS n FROM oauth_states WHERE ticket_hash = ?").get(hash(ticket)).n, 0);
   // tek kullanımlık
   assert.equal((await call("POST", "/app/cmsoauth/finish", { body: { ticket } })).status, 403);
+});
+
+test("OAuth dönüş yolu: varsayılan /blog-otomatik (en: /en/blog-autopilot); body.back yalnız izin listesinden", async t => {
+  stubProviders(t);
+  const { db, call } = setup();
+  const ret = async (body, lang) => {
+    db.exec("DELETE FROM oauth_states");
+    if (lang) db.prepare("UPDATE users SET lang = ? WHERE id = 1").run(lang);
+    const st = await call("POST", "/app/cmsoauth/start", { body: { platform: "wpcom", ...body } });
+    assert.equal(st.status, 200, JSON.stringify(st.body));
+    return new URL(db.prepare("SELECT return_to FROM oauth_states").get().return_to).pathname;
+  };
+  assert.equal(await ret({}), "/blog-otomatik");
+  assert.equal(await ret({ back: "/hesap/baglantilar" }), "/hesap/baglantilar");
+  assert.equal(await ret({ back: "/en/blog-autopilot" }), "/en/blog-autopilot");
+  assert.equal(await ret({ back: "https://evil.test/x" }), "/blog-otomatik");
+  assert.equal(await ret({ back: "//evil.test" }), "/blog-otomatik");
+  const hasLang = db.prepare("SELECT COUNT(*) AS n FROM pragma_table_info('users') WHERE name = 'lang'").get().n;
+  if (hasLang) assert.equal(await ret({}, "en"), "/en/blog-autopilot");
 });
 
 test("OAuth finish başka kullanıcının biletiyle → 403, bilet yanar, hiçbir şey bağlanmaz", async t => {

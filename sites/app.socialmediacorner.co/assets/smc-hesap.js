@@ -148,9 +148,9 @@ var dil=root.getAttribute('lang')==='en'?'en':'tr';
 var SAYFA=body.getAttribute('data-sayfa')||'';
 var KORUMALI=body.hasAttribute('data-korumali');
 var T0=Date.now();
-var YOL={giris:['/hesap/giris','/en/hesap/login'],kayit:['/hesap/kayit','/en/hesap/register'],kurulum:['/hesap/kurulum','/en/hesap/setup'],baglantilar:['/hesap/baglantilar','/en/hesap/connections'],gecmis:['/hesap/gecmis','/en/hesap/history'],ayarlar:['/hesap/ayarlar','/en/hesap/settings'],kuyruk:['/yayin-kuyrugu','/en/publish-queue']};
+var YOL={giris:['/hesap/giris','/en/hesap/login'],kayit:['/hesap/kayit','/en/hesap/register'],kurulum:['/hesap/kurulum','/en/hesap/setup'],baglantilar:['/hesap/baglantilar','/en/hesap/connections'],gecmis:['/hesap/gecmis','/en/hesap/history'],ayarlar:['/hesap/ayarlar','/en/hesap/settings'],kuyruk:['/yayin-kuyrugu','/en/publish-queue'],'blog-otomatik':['/blog-otomatik','/en/blog-autopilot']};
 var ACIK_SAYFA=/\/(giris|kayit|sifre-unuttum|sifre-yenile|login|register|forgot-password|reset-password)$/;
-var TOKEN_RE=/^[A-Za-z0-9_-]{43}$/,R_RE=/^\/(en\/?)?(hesap\/[a-z-]+|video|gorsel|visual|blog|yayin-kuyrugu|publish-queue)?$/,EPOSTA=/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+var TOKEN_RE=/^[A-Za-z0-9_-]{43}$/,R_RE=/^\/(en\/?)?(hesap\/[a-z-]+|video|gorsel|visual|blog|blog-otomatik|blog-autopilot|yayin-kuyrugu|publish-queue)?$/,EPOSTA=/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 var meta=d.querySelector('meta[name="api-base"]');
 var API=((meta&&meta.getAttribute('content'))||'').trim().replace(/\/+$/,'');
 var MOCKHOST=/^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname)||/\.pages\.dev$/.test(location.hostname);
@@ -656,7 +656,7 @@ function donusOku(){
   adresTemizle();
   return {p:p,r:r,bilet:m?m[1]:''};
 }
-/* A14: "Web siteniz (blog)" bölümü cms.js içinde; ortak yardımcılar buradan verilir. */
+/* A14: "Web siteniz (blog)" bölümü cms.js içinde (B3: ayrı sayfa /blog-otomatik); ortak yardımcılar buradan verilir. */
 function cmsBasla(){if(typeof window.smcCmsBasla==='function')window.smcCmsBasla({istek:istek,bildir:bildir,genelHata:genelHata,mesgul:mesgul,bosMu:bosMu,dlgAc:dlgAc,ORNEK:ORNEK,dil:dil})}
 function baglarYukle(){
   if(ORNEK){bag={linkedin:{s:'bagli',kul:t('Örnek Ajans'),tarih:'2026-11-12'},instagram:{s:'izin'}};bagCiz();ekran('ana');cmsBasla();return}
@@ -795,8 +795,9 @@ function ayarKur(){
 function hataTekrarKur(){var b=$('#hata-tekrar');if(b)b.addEventListener('click',function(){if(bosMu(b))return;mesgul(b,'Deneniyor…');location.reload()})}
 function yukle(){
   if(SAYFA==='kurulum')kurulumYukle();
-  else if(SAYFA==='baglantilar')baglarYukle();
+  else if(SAYFA==='baglantilar'){if(/[?&]cms(_bilet)?=/.test(location.search)){location.replace(yol('blog-otomatik')+location.search);return}baglarYukle()}
   else if(SAYFA==='gecmis')gecmisYukle();
+  else if(SAYFA==='blog-otomatik'){ekran('ana');cmsBasla()}
   else if(SAYFA==='admin'){if(ORNEK||!KULLANICI||KULLANICI.admin!==true||typeof window.smcAdminBasla!=='function'){ekran('yok',true);return}
     window.smcAdminBasla({istek:istek,ekran:ekran,bildir:bildir,genelHata:genelHata,hataGoster:hataGoster,mesgul:mesgul,bosMu:bosMu})}
   else ekran('ana');

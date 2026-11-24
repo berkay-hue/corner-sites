@@ -43,6 +43,9 @@ export const SITES = {
     gate: "ACCOUNTS_ENABLED",
     reset: { tr: "/hesap/sifre-yenile", en: "/en/hesap/reset-password" },
     back: { tr: "/hesap/baglantilar", en: "/en/hesap/connections" },
+    // Blog otomatiği OAuth dönüşü (src/cms.js oauthStart): varsayılan dile göre ayrı sayfa; istemci body.back ile bu listeden birini seçebilir
+    cmsBack: { tr: "/blog-otomatik", en: "/en/blog-autopilot" },
+    cmsBackAllow: Object.freeze(["/blog-otomatik", "/en/blog-autopilot", "/hesap/baglantilar", "/en/hesap/connections"]),
     roles: Object.freeze(["brand"]),
     routes: APP_ROUTES,
     // Yönetim panelinin form gönderileri listesi (src/index.js /submit site = origin alanı): pazarlama sitesi + uygulama
@@ -55,6 +58,12 @@ const byLang = (paths, lang) => paths[lang === "en" ? "en" : "tr"];
 // Şifre sıfırlama sayfası ve OAuth dönüşünde açılacak sayfa (yol, "/" ile başlar)
 export const resetPath = (site, lang) => byLang(siteConf(site).reset, lang);
 export const backPath = (site, lang) => byLang(siteConf(site).back, lang);
+// Blog otomatiği (CMS) OAuth dönüş yolu: istenen yol sitenin cmsBackAllow listesindeyse o, yoksa cmsBack (dile göre), o da yoksa backPath
+export function cmsBackPath(site, lang, wanted) {
+  const conf = siteConf(site);
+  if (typeof wanted === "string" && conf.cmsBackAllow?.includes(wanted)) return wanted;
+  return conf.cmsBack ? byLang(conf.cmsBack, lang) : backPath(site, lang);
+}
 // Rol kısıtı olan sitede yalnız listedeki roller; kısıtsız sitede her rol (rolün geçerliliğine platform.js bakar)
 export const siteRoles = site => siteConf(site).roles || null;
 export const roleAllowed = (site, role) => !siteRoles(site) || siteRoles(site).includes(role);
