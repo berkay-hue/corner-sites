@@ -532,28 +532,76 @@ async function xfetch(ctx, url, init = {}, cred, timeout) {
   catch (e) { if (ac.signal.aborted) throw new HttpErr(`timeout of ${timeout}ms exceeded`, 0); throw new HttpErr(e.message || String(e), 0); }
   finally { if (tm) clearTimeout(tm); }
 }
-// ScrapingBee hata/kredi/zaman aşımı → diğer ScrapingBee anahtarı → hedef siteye doğrudan istek (rakip/sekans çekimi düşmesin)
+// Site çekimi sırası: 1) hedef siteye doğrudan istek (içerik kalite kontrolüyle) → 2) Claude web_fetch (ANTHROPIC_API_KEY) → 3) ScrapingBee anahtarları (JS çizimi gereken siteler için son çare)
+const __UA = { "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36", accept: "text/html,application/xhtml+xml,*/*;q=0.8", "accept-language": "tr-TR,tr;q=0.9,en;q=0.8" };
+// Bot duvarı / boş JS kabuğu değil, okunur metni olan bir HTML mi?
+function __htmlOk(t) {
+  if (!t || t.length < 500) return false;
+  const s = t.length > 150000 ? t.slice(0, 150000) : t;
+  if (s.length < 60000 && /cf-chl-|challenge-platform|Just a moment\.\.\.|Attention Required!|captcha-delivery|px-captcha|Access Denied|Checking your browser/i.test(s.slice(0, 30000))) return false;
+  const txt = s.replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>|<noscript[\s\S]*?<\/noscript>/gi, " ").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ");
+  return txt.length >= 400;
+}
+const __esc = x => String(x).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+// Claude'un döndürdüğü düz metni/markdown'ı çekim tüketicilerinin beklediği en küçük HTML'e sarar (title, meta description, başlık, paragraf, bağlantı)
+function __md2html(md, target) {
+  const lines = String(md).replace(/\r/g, "").split("\n").map(l => l.trim()).filter(Boolean).slice(0, 600);
+  const strip = l => l.replace(/^#+\s*/, "").replace(/\*\*|__/g, "").replace(/\[([^\]]*)\]\([^)]*\)/g, "$1");
+  const title = strip((lines.find(l => /^#\s/.test(l)) || lines[0] || target).slice(0, 160));
+  const desc = strip((lines.find(l => !/^#|^[-*•]\s|^\|/.test(l) && l.length > 60) || "").slice(0, 300));
+  const inl = l => __esc(l).replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>").replace(/\[([^\]]*)\]\((https?:\/\/[^)\s]+|\/[^)\s]*)\)/g, (m, tx, h) => `<a href="${h}">${tx}</a>`);
+  const body = lines.map(l => { const h = l.match(/^(#{1,4})\s+(.*)$/); if (h) return `<h${h[1].length}>${inl(h[2])}</h${h[1].length}>`; if (/^[-*•]\s/.test(l)) return `<li>${inl(l.replace(/^[-*•]\s+/, ""))}</li>`; return `<p>${inl(l)}</p>`; }).join("\n");
+  return `<!doctype html><html><head><meta charset="utf-8"><title>${__esc(title)}</title><meta name="description" content="${__esc(desc)}"></head><body><main>\n${body}\n</main></body></html>`;
+}
+// Claude web_fetch ile sayfa metni; hata/boş içerikte null (zincir ScrapingBee'ye geçer)
+async function __claudeFetch(env, target) {
+  if (!env.ANTHROPIC_API_KEY || !/^https?:\/\//.test(target)) return null;
+  try {
+    const r = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: { "content-type": "application/json", "x-api-key": env.ANTHROPIC_API_KEY, "anthropic-version": "2023-06-01" },
+      body: JSON.stringify({
+        model: "claude-sonnet-5-5", max_tokens: 4000, output_config: { effort: "low" },
+        tools: [{ type: "web_fetch_20260209", name: "web_fetch", max_uses: 2 }],
+        messages: [{ role: "user", content: `web_fetch aracıyla şu sayfayı bir kez getir: ${target}\nSonra sayfada görünen metni yorum eklemeden, markdown olarak yaz: ilk satır "# " ile sayfa başlığı; ardından meta açıklaması, menü/navigasyon bağlantıları [metin](url) biçiminde, başlıklar, ana paragraflar, fiyat/paket bilgileri, buton ve CTA metinleri. En çok 2500 kelime. Sayfa getirilemezse yalnızca HATA yaz.` }],
+      }),
+      signal: AbortSignal.timeout(60000),
+    });
+    if (!r.ok) { await r.body?.cancel(); return null; }
+    const j = await r.json();
+    let src = "", txt = "";
+    for (const c of j.content || []) {
+      if (c.type === "web_fetch_tool_result" && c.content?.type === "web_fetch_result") { const d = c.content.content?.source?.data; if (typeof d === "string" && d.length > src.length) src = d; }
+      else if (c.type === "text") txt += c.text || "";
+    }
+    txt = txt.trim();
+    if (/^<!doctype html|^<html/i.test(src.trim()) && __htmlOk(src)) return src;
+    const md = txt.length >= 300 && !/^HATA\b/.test(txt) ? txt : src.length >= 300 ? src : "";
+    return md ? __md2html(md, target) : null;
+  } catch { return null; }
+}
 async function sbYedekli(ctx, url, init, headers, body, timeout) {
   const env = ctx.env, u = new URL(url), key = u.searchParams.get("api_key") || "", target = u.searchParams.get("url") || "";
   const bad = ctx.__sbBad || (ctx.__sbBad = new Set());
   const tek = (uu, to, h = headers, b = body, m = init.method || "GET") => xfetch(ctx, uu, { method: m, headers: h, body: b, __sbIc: 1 }, null, to);
-  let ilk = null, hata = null;
-  if (!bad.has(key)) {
-    try { const r = await tek(url, timeout); if (r.status < 400) return r; ilk = new Response(await r.text(), { status: r.status, headers: r.headers }); if ([401, 402, 403, 429].includes(r.status)) bad.add(key); }
-    catch (e) { hata = e; }
-  }
-  for (const k of [env.SCRAPINGBEE_API_KEY, env.SCRAPINGBEE_API_KEY_2]) {
-    if (!k || k === key || bad.has(k)) continue;
-    u.searchParams.set("api_key", k);
-    try { const r = await tek(u.toString(), timeout); if (r.status < 400) return r; if ([401, 402, 403, 429].includes(r.status)) bad.add(k); else await r.body?.cancel(); }
-    catch (e) { hata ||= e; }
-  }
+  const html = (t, kaynak) => new Response(t, { status: 200, headers: { "content-type": "text/html; charset=utf-8", "x-cekim-kaynak": kaynak } });
   if (/^https?:\/\//.test(target)) {
+    // 1) Doğrudan istek
+    try { const r = await tek(target, 15000, __UA, undefined, "GET"); const t = await r.text(); if (r.status < 400 && __htmlOk(t)) return html(t, "dogrudan"); } catch {}
+    // 2) Claude web_fetch
+    const c = await __claudeFetch(env, target); if (c) return html(c, "claude");
+  }
+  // 3) ScrapingBee (istekteki anahtar, sonra diğerleri; 401/402/403/429 veren anahtar bu yürütmede bir daha denenmez)
+  let ilk = null, hata = null;
+  for (const k of [...new Set([key, env.SCRAPINGBEE_API_KEY, env.SCRAPINGBEE_API_KEY_2])]) {
+    if (!k || bad.has(k)) continue;
+    u.searchParams.set("api_key", k);
     try {
-      const r = await tek(target, 20000, { "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36", accept: "text/html,application/xhtml+xml,*/*;q=0.8", "accept-language": "tr-TR,tr;q=0.9,en;q=0.8" }, undefined, "GET");
-      const t = await r.text();
-      if (r.status < 400 && t.length > 300) return new Response(t, { status: 200, headers: { "content-type": r.headers.get("content-type") || "text/html; charset=utf-8" } });
-    } catch {}
+      const r = await tek(u.toString(), timeout);
+      if (r.status < 400) return r;
+      if ([401, 402, 403, 429].includes(r.status)) bad.add(k);
+      if (!ilk) ilk = new Response(await r.text(), { status: r.status, headers: r.headers }); else await r.body?.cancel();
+    } catch (e) { hata ||= e; }
   }
   if (ilk) return ilk;
   throw hata || new HttpErr("ScrapingBee yanıt vermedi", 0);
