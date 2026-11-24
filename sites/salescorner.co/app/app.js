@@ -1163,60 +1163,123 @@ function pageHesap() {
 }
 
 // ---------- Yönetim (yalnızca admin) ----------
-let ADM = { rows: null, err: "", q: "" };
+let ADM = { rows: null, err: "", q: "", tab: "kul", ilt: null, iltErr: "", iq: "", yeni: false };
+const admDurum = (r, now) => {
+  if (!r.onayli) return ["E-posta onaysız", "warn"];
+  if (!r.plan) return ["Hesap açılmadı", ""];
+  if (new Date(r.bitis) <= now) return ["Süresi doldu", "bad"];
+  return r.plan === "deneme" ? ["Denemede", "acc"] : ["Ücretli", "ok"];
+};
+const admLow = s => String(s ?? "").toLocaleLowerCase("tr-TR");
+function admCsv(rows, planlar) {
+  const now = Date.now();
+  const cell = v => { let s = String(v ?? ""); if (/^[=+\-@\t\r]/.test(s)) s = "'" + s; return `"${s.replace(/"/g, '""')}"`; };
+  const head = ["E-posta", "Ad", "Şirket", "Durum", "Plan", "Bitiş", "Kayıt", "Son giriş", "Takip", "Bu ay kullanım", "Admin"];
+  const lines = rows.map(r => [r.email, r.ad, r.sirket, admDurum(r, now)[0], r.plan ? ((planlar.find(p => p.kod === r.plan) || {}).ad || r.plan) : "", r.bitis ? new Date(r.bitis).toISOString().slice(0, 10) : "", r.kayit ? new Date(r.kayit).toISOString().slice(0, 10) : "", r.son_giris ? new Date(r.son_giris).toISOString().slice(0, 16).replace("T", " ") : "", r.takip_adet ?? 0, Object.entries(r.kullanim || {}).map(([k, v]) => `${k}:${v}`).join(" "), r.admin ? "evet" : ""].map(cell).join(";"));
+  const blob = new Blob(["﻿" + [head.map(cell).join(";"), ...lines].join("\r\n")], { type: "text/csv;charset=utf-8" });
+  const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = `salescorner-kullanicilar-${today()}.csv`;
+  document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+}
 async function pageAdmin() {
   const planlar = S.planlar || PLAN_FALLBACK;
-  const rows = ADM.rows;
-  const q = ADM.q.toLocaleLowerCase("tr-TR");
-  const vis = (rows || []).filter(r => !q || [r.email, r.ad, r.sirket, r.plan].join(" ").toLocaleLowerCase("tr-TR").includes(q));
+  const rows = ADM.rows, ilt = ADM.ilt;
   const now = Date.now();
   const say = f => (rows || []).filter(f).length;
+  const yeniSay = (ilt || []).filter(m => !m.okundu).length;
   const kisa = { rakip: "R", sekans: "S", seo: "SEO", briefing: "B", fireflies: "F", takip: "T" };
-  shell(`${ph("Yönetim", "Kullanıcılar, planlar ve bu ayki kullanım.", `<a class="btn btn-g btn-s" href="${SITE}/dashboard">Eski panel ↗</a>`)}
-  <div class="stats">
-    <div class="card stat"><span>Toplam kullanıcı</span><b>${rows ? fmtN(rows.length) : "…"}</b></div>
-    <div class="card stat"><span>Denemede</span><b>${rows ? say(r => r.plan === "deneme" && new Date(r.bitis) > now) : "…"}</b></div>
-    <div class="card stat"><span>Ücretli plan</span><b>${rows ? say(r => r.plan !== "deneme" && new Date(r.bitis) > now) : "…"}</b></div>
-    <div class="card stat"><span>Süresi dolan</span><b>${rows ? say(r => new Date(r.bitis) <= now) : "…"}</b></div>
-  </div>
-  <section class="card pad" style="margin-bottom:16px"><h3 style="margin-bottom:12px">Plan ata</h3><div id="am"></div>
-    <form id="af" data-sk-noform><div style="display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1.2fr) minmax(0,1fr) auto;gap:10px;align-items:end" class="adm-grid">
+  const planAd = r => (planlar.find(p => p.kod === r.plan) || {}).ad || r.plan;
+  const aktif = r => r.plan && new Date(r.bitis) > now;
+  const tabs = `<div class="tabs adm-tabs" role="tablist"><button type="button" role="tab" aria-selected="${ADM.tab === "kul"}" data-atab="kul">Kullanıcılar${rows ? ` (${fmtN(rows.length)})` : ""}</button><button type="button" role="tab" aria-selected="${ADM.tab === "ilt"}" data-atab="ilt">İletişim formları${yeniSay ? ` <span class="pill bad">${fmtN(yeniSay)} yeni</span>` : ""}</button></div>`;
+  let body;
+  if (ADM.tab === "ilt") {
+    const q = admLow(ADM.iq);
+    const vis = (ilt || []).filter(m => (!ADM.yeni || !m.okundu) && (!q || admLow([m.ad, m.email, m.konu, m.telefon, m.mesaj, m.sayfa].join(" ")).includes(q)));
+    body = `<section class="card"><div class="res-h adm-bar"><h3>İletişim formları</h3><div class="adm-f"><label class="adm-chk"><input type="checkbox" id="iy" ${ADM.yeni ? "checked" : ""}> Yalnız okunmamış</label><input class="in" id="iq" placeholder="Ara: ad, e-posta, konu, mesaj" value="${esc(ADM.iq)}"></div></div>
+    ${ADM.iltErr ? `<div class="res-b">${msg("err", esc(ADM.iltErr))}</div>` : !ilt ? `<div class="empty"><div class="spin"></div></div>` : !ilt.length ? `<div class="res-b"><p style="color:var(--mute);margin:0">Henüz form gönderen yok. salescorner.co/iletisim ve /en/contact formundan gelen yeni mesajlar burada görünür.</p></div>` : `<div class="adm-ilt">${vis.map(m => {
+      const tel = String(m.telefon || "").replace(/[^\d+]/g, "");
+      const uzun = String(m.mesaj || "").length > 260;
+      return `<article class="adm-msg${m.okundu ? "" : " yeni"}"><div class="adm-mh"><div><b>${esc(m.ad || "İsimsiz")}</b>${m.okundu ? "" : ` <span class="pill bad">Yeni</span>`}<div class="adm-sub">${fmtDT(m.olusturma)} · ${esc(m.sayfa || "—")}${m.dil === "en" ? " · EN" : ""}</div></div>
+        <button class="btn btn-g btn-s" data-okundu="${esc(m.id)}" data-v="${m.okundu ? "0" : "1"}">${m.okundu ? "Okunmadı yap" : "Okundu ✓"}</button></div>
+        <div class="adm-mc">${m.email ? `<a href="mailto:${esc(m.email)}">${esc(m.email)}</a>` : ""}${tel ? `<a href="tel:${esc(tel)}">${esc(m.telefon)}</a>` : m.telefon ? `<span>${esc(m.telefon)}</span>` : ""}${m.konu ? `<span class="pill acc">${esc(m.konu)}</span>` : ""}</div>
+        ${m.mesaj ? (uzun ? `<details class="adm-mt"><summary>${esc(String(m.mesaj).slice(0, 220))}… <u>devamı</u></summary><p>${esc(m.mesaj)}</p></details>` : `<p class="adm-mt">${esc(m.mesaj)}</p>`) : ""}</article>`;
+    }).join("") || `<p style="color:var(--mute);padding:16px 20px;margin:0">Sonuç yok.</p>`}</div>`}
+    <p class="hint adm-not">Bu liste yönetim paneli kurulduktan sonra gelen mesajları gösterir; önceki form gönderimleri ayrı form kayıt sisteminde duruyor.</p></section>`;
+  } else {
+    const q = admLow(ADM.q);
+    const vis = (rows || []).filter(r => !q || admLow([r.email, r.ad, r.sirket, r.plan, admDurum(r, now)[0]].join(" ")).includes(q));
+    body = `<section class="card pad" style="margin-bottom:16px"><h3 style="margin-bottom:12px">Plan ata</h3><div id="am"></div>
+    <form id="af" data-sk-noform><div class="adm-grid">
       <div class="f" style="margin:0"><label for="ae">Kullanıcı e-postası</label><input class="in" id="ae" type="email" required></div>
       <div class="f" style="margin:0"><label for="ap">Plan</label><select class="in" id="ap">${planlar.map(p => `<option value="${esc(p.kod)}">${esc(p.ad)}</option>`).join("")}</select></div>
       <div class="f" style="margin:0"><label for="ag">Gün</label><input class="in" id="ag" type="number" min="1" max="3660" placeholder="Değişmesin"></div>
       <button class="btn btn-p" type="submit">Ata</button></div>
       <p class="hint" style="font-size:12.5px;color:var(--mute);margin-top:8px">Gün boş bırakılırsa mevcut bitiş tarihi korunur. Ör. aylık plan için 30, yıllık için 365. Kullanıcının önce kayıt olmuş olması gerekir.</p></form></section>
-  <section class="card"><div class="res-h"><h3>Kullanıcılar</h3><input class="in" id="aq" placeholder="Ara: e-posta, ad, şirket, plan" style="max-width:280px" value="${esc(ADM.q)}"></div>
-  ${ADM.err ? `<div class="res-b">${msg("err", esc(ADM.err))}</div>` : !rows ? `<div class="empty"><div class="spin"></div></div>` : `<div class="scroll-x"><table class="tbl"><thead><tr><th>Kullanıcı</th><th>Plan</th><th>Bitiş</th><th>Bu ay</th><th>Son giriş</th><th></th></tr></thead><tbody>
-  ${vis.map(r => { const act = new Date(r.bitis) > now; return `<tr><td><b>${esc(r.email)}</b><br><span style="font-size:12.5px;color:var(--mute)">${esc([r.ad, r.sirket].filter(Boolean).join(" · ") || "—")}</span></td>
-    <td><span class="pill ${r.plan === "deneme" ? "" : "acc"}">${esc((planlar.find(p => p.kod === r.plan) || {}).ad || r.plan)}</span></td>
-    <td>${act ? `${fmtD(r.bitis)}<br><span style="font-size:12.5px;color:var(--mute)">${daysLeft(r.bitis)} gün</span>` : `<span class="pill warn">Doldu</span>`}</td>
+  <section class="card"><div class="res-h adm-bar"><h3>Kullanıcılar</h3><div class="adm-f"><input class="in" id="aq" placeholder="Ara: e-posta, ad, şirket, durum" value="${esc(ADM.q)}"><button class="btn btn-g btn-s" id="acsv" type="button" ${rows && rows.length ? "" : "disabled"}>CSV indir</button></div></div>
+  ${ADM.err ? `<div class="res-b">${msg("err", esc(ADM.err))}</div>` : !rows ? `<div class="empty"><div class="spin"></div></div>` : `<div class="scroll-x"><table class="tbl"><thead><tr><th>Kullanıcı</th><th>Durum</th><th>Kayıt</th><th>Bitiş</th><th>Bu ay</th><th>Takip</th><th>Son giriş</th><th></th></tr></thead><tbody>
+  ${vis.map(r => { const [dt, dc] = admDurum(r, now); return `<tr><td><b>${esc(r.email)}</b>${r.admin ? ` <span class="pill acc">Admin</span>` : ""}<br><span class="adm-sub">${esc([r.ad, r.sirket].filter(Boolean).join(" · ") || "Ad / şirket girilmemiş")}</span></td>
+    <td><span class="pill ${dc}">${esc(dt)}</span>${r.plan ? `<br><span class="adm-sub">${esc(planAd(r))}</span>` : ""}</td>
+    <td style="font-size:13px">${fmtD(r.kayit)}</td>
+    <td style="font-size:13px">${!r.plan ? "—" : aktif(r) ? `${fmtD(r.bitis)}<br><span class="adm-sub">${daysLeft(r.bitis)} gün kaldı</span>` : fmtD(r.bitis)}</td>
     <td style="font-size:13px">${Object.entries(r.kullanim || {}).map(([k, v]) => `${kisa[k] || esc(k)} ${esc(v)}`).join(" · ") || "—"}</td>
+    <td style="font-size:13px">${esc(r.takip_adet ?? 0)}</td>
     <td style="font-size:13px">${fmtDT(r.son_giris)}</td>
-    <td><button class="btn btn-g btn-s" data-edit="${esc(r.email)}" data-plan="${esc(r.plan)}">Düzenle</button></td></tr>`; }).join("") || `<tr><td colspan="6" style="color:var(--mute)">Sonuç yok.</td></tr>`}
-  </tbody></table></div>`}</section>
-  <style>@media (max-width:860px){.adm-grid{grid-template-columns:1fr!important}}</style>`);
-  const af = document.getElementById("af");
-  af.onsubmit = async e => {
-    e.preventDefault();
-    const btn = af.querySelector("[type=submit]");
-    busy(btn, true, "Atanıyor…");
-    const gun = af.ag.value ? parseInt(af.ag.value, 10) : null;
-    try {
-      await rpc("app_admin_ata", { p_email: af.ae.value.trim(), p_plan: af.ap.value, p_gun: gun });
-      toast("Plan atandı ✓");
-      ADM.rows = null; await loadAdm();
+    <td><button class="btn btn-g btn-s" data-edit="${esc(r.email)}" data-plan="${esc(r.plan || "deneme")}">Düzenle</button></td></tr>`; }).join("") || `<tr><td colspan="8" style="color:var(--mute)">Sonuç yok.</td></tr>`}
+  </tbody></table></div>`}</section>`;
+  }
+  shell(`${ph("Yönetim", "Kayıtlı kullanıcılar, planları, kullanım ve iletişim formları.", `<button class="btn btn-g btn-s" id="ayen" type="button">Yenile</button>`)}
+  <div class="stats adm-stats">
+    <div class="card stat"><span>Toplam kullanıcı</span><b>${rows ? fmtN(rows.length) : "…"}</b></div>
+    <div class="card stat"><span>Denemede</span><b>${rows ? say(r => aktif(r) && r.plan === "deneme") : "…"}</b></div>
+    <div class="card stat"><span>Ücretli plan</span><b>${rows ? say(r => aktif(r) && r.plan !== "deneme") : "…"}</b></div>
+    <div class="card stat"><span>Süresi dolan</span><b>${rows ? say(r => r.plan && !aktif(r)) : "…"}</b></div>
+    <div class="card stat"><span>Son 7 gün kayıt</span><b>${rows ? say(r => r.kayit && now - new Date(r.kayit) < 7 * 864e5) : "…"}</b></div>
+    <div class="card stat"><span>Okunmamış mesaj</span><b>${ilt ? fmtN(yeniSay) : ADM.iltErr ? "—" : "…"}</b></div>
+  </div>
+  ${tabs}${body}`);
+  document.querySelectorAll("[data-atab]").forEach(b => (b.onclick = () => { ADM.tab = b.dataset.atab; pageAdmin(); }));
+  document.getElementById("ayen").onclick = async e => { busy(e.currentTarget, true, "Yenileniyor…"); ADM.rows = null; ADM.ilt = null; await Promise.all([loadAdm(), loadIlt()]); if (route === "admin") pageAdmin(); };
+  const keepFocus = (id, set) => { const el = document.getElementById(id); if (!el) return; el.oninput = () => { set(el.value); const pos = el.selectionStart; pageAdmin(); const n = document.getElementById(id); n.focus(); n.setSelectionRange(pos, pos); }; };
+  if (ADM.tab === "ilt") {
+    keepFocus("iq", v => (ADM.iq = v));
+    const iy = document.getElementById("iy"); if (iy) iy.onchange = () => { ADM.yeni = iy.checked; pageAdmin(); };
+    document.querySelectorAll("[data-okundu]").forEach(b => (b.onclick = async () => {
+      const id = Number(b.dataset.okundu), v = b.dataset.v === "1";
+      const m = (ADM.ilt || []).find(x => Number(x.id) === id); if (!m) return;
+      busy(b, true, "…");
+      try { await rpc("app_admin_iletisim_okundu", { p_id: id, p_okundu: v }); m.okundu = v; toast(v ? "Okundu olarak işaretlendi" : "Okunmadı olarak işaretlendi"); }
+      catch (err) { toast(trErr(err)); }
       if (route === "admin") pageAdmin();
-    } catch (err) { busy(btn, false); setMsg("am", "err", esc(trErr(err))); }
-  };
-  const aq = document.getElementById("aq");
-  aq.oninput = () => { ADM.q = aq.value; const pos = aq.selectionStart; pageAdmin(); const n = document.getElementById("aq"); n.focus(); n.setSelectionRange(pos, pos); };
-  document.querySelectorAll("[data-edit]").forEach(x => (x.onclick = () => { af.ae.value = x.dataset.edit; af.ap.value = x.dataset.plan; af.ag.focus(); af.scrollIntoView({ behavior: "smooth", block: "center" }); }));
-  if (!rows && !ADM.err) { await Promise.all([loadAdm(), loadPlanlar()]); if (route === "admin") pageAdmin(); }
+    }));
+  } else {
+    const af = document.getElementById("af");
+    af.onsubmit = async e => {
+      e.preventDefault();
+      const btn = af.querySelector("[type=submit]");
+      busy(btn, true, "Atanıyor…");
+      const gun = af.ag.value ? parseInt(af.ag.value, 10) : null;
+      try {
+        await rpc("app_admin_ata", { p_email: af.ae.value.trim(), p_plan: af.ap.value, p_gun: gun });
+        toast("Plan atandı ✓");
+        ADM.rows = null; await loadAdm();
+        if (route === "admin") pageAdmin();
+      } catch (err) { busy(btn, false); setMsg("am", "err", esc(trErr(err))); }
+    };
+    keepFocus("aq", v => (ADM.q = v));
+    const csv = document.getElementById("acsv"); if (csv) csv.onclick = () => admCsv(ADM.rows || [], planlar);
+    document.querySelectorAll("[data-edit]").forEach(x => (x.onclick = () => { af.ae.value = x.dataset.edit; af.ap.value = x.dataset.plan; af.ag.focus(); af.scrollIntoView({ behavior: "smooth", block: "center" }); }));
+  }
+  if ((!rows && !ADM.err) || (!ilt && !ADM.iltErr)) {
+    await Promise.all([!rows && !ADM.err ? loadAdm() : null, !ilt && !ADM.iltErr ? loadIlt() : null, rows ? null : loadPlanlar()]);
+    if (route === "admin") pageAdmin();
+  }
 }
 async function loadAdm() {
   try { ADM.rows = (await rpc("app_admin_liste")) || []; ADM.err = ""; }
   catch (e) { ADM.err = trErr(e); }
+}
+async function loadIlt() {
+  try { ADM.ilt = (await rpc("app_admin_iletisim")) || []; ADM.iltErr = ""; }
+  catch (e) { ADM.iltErr = trErr(e); }
 }
 
 const PAGES = { giris: pageGiris, kayit: pageKayit, sifre: pageSifre, "yeni-sifre": pageYeniSifre, panel: pagePanel, rakip: pageRakip, sekans: pageSekans, seo: pageSeo, briefing: pageBriefing, fireflies: pageFireflies, takip: pageTakip, fiyatlar: pageFiyatlar, hesap: pageHesap, admin: pageAdmin, ozel: pageOzel };

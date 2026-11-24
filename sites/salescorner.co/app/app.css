@@ -268,7 +268,7 @@ textarea.in{min-height:96px;resize:vertical}
   .auth-art{display:none}
   .auth-card .brand{display:flex}
   .auth-legal{display:block}
-  .shell{grid-template-columns:1fr}
+  .shell{grid-template-columns:minmax(0,1fr)}
   .side{position:fixed;inset:0 auto 0 0;width:min(84vw,300px);z-index:40;transform:translateX(-100%);transition:transform .2s;box-shadow:var(--sh-l)}
   .shell.open .side{transform:none}
   .scrim{position:fixed;inset:0;background:rgba(15,23,42,.35);z-index:39;display:none}
@@ -351,3 +351,28 @@ textarea.in{min-height:96px;resize:vertical}
 .tk-row{border:1px solid var(--line);border-radius:var(--r-s);padding:10px;display:grid;gap:8px}
 .tk-row3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 @media (max-width:720px){.tk-row3{grid-template-columns:1fr}}
+/* Yönetim paneli */
+.adm-grid{display:grid;grid-template-columns:2fr 1.4fr 1fr auto;gap:12px;align-items:end}
+.adm-tabs{max-width:520px}
+.adm-tabs .pill{margin-left:4px;padding:1px 7px}
+.adm-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+.adm-f{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.adm-f .in{width:260px;max-width:100%}
+.adm-chk{display:inline-flex;gap:6px;align-items:center;font-size:13.5px;color:var(--mute);cursor:pointer}
+.adm-sub{font-size:12.5px;color:var(--mute)}
+.adm-ilt{display:flex;flex-direction:column}
+.adm-msg{padding:16px 20px;border-top:1px solid var(--line)}
+.adm-msg.yeni{background:var(--acc-soft)}
+.adm-mh{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.adm-mc{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;margin-top:8px;font-size:13.5px;word-break:break-all}
+.adm-mt{margin:10px 0 0;white-space:pre-wrap;word-break:break-word;font-size:14px}
+.adm-mt summary{cursor:pointer;list-style:none}
+.adm-mt summary u{color:var(--acc);text-decoration:none;font-weight:600}
+.adm-mt[open] summary{display:none}
+.adm-mt p{margin:0}
+.adm-not{font-size:12.5px;color:var(--mute);margin:0;padding:12px 20px;border-top:1px solid var(--line)}
+.stats .stat b{word-break:break-word}
+@media (max-width:860px){.adm-grid{grid-template-columns:1fr}.adm-f,.adm-f .in{width:100%}}
+.adm-stats{grid-template-columns:repeat(auto-fit,minmax(140px,1fr))}
+.adm-mh>div{min-width:0;overflow-wrap:anywhere}
+.adm-mh button{flex:none}
