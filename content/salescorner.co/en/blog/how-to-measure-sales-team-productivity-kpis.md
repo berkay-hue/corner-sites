@@ -229,7 +229,7 @@ Yes. Even on a team of 2-3 people, knowing at which stage opportunities are lost
 
 No. Looking only at meeting count leads to more poorly qualified meetings. Alongside meeting count, the rate of meetings accepted by AEs and the pipeline value sourced by the SDR should always be tracked.
 
-You can see what Sales Corner does in sales automation and outbound on our [services page](/hizmetler) (in Turkish).
+You can see the sales automation and outbound workflows Sales Corner builds in our [automation library](/en/#otomasyonlar).
 
 ## Conclusion
 

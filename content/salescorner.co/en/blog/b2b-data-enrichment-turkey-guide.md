@@ -232,7 +232,7 @@ Records entering an active email sequence should be verified before every send. 
 
 Most of the normalization, waterfall queries, email verification, AI classification and CRM writing steps can be automated. However, manual checks on high-value accounts and quality audits through random sampling are always necessary. The best results come from a hybrid model in which automation handles volume and people manage quality.
 
-You can see what Sales Corner does in sales automation and outbound on our [services page](/hizmetler) (in Turkish).
+You can see the sales automation and outbound workflows Sales Corner builds in our [automation library](/en/#otomasyonlar).
 
 ## Conclusion
 

@@ -225,7 +225,7 @@ Once you've defined your stages, these metrics show you the health of the system
 
 Review these metrics monthly at the rep level as well. If a rep's post-demo conversion is clearly below the team average, the problem most likely lies in the demo structure or in information left uncovered during discovery.
 
-You can see what Sales Corner does in sales automation and outbound on our [services page](/hizmetler) (in Turkish).
+You can see the sales automation and outbound workflows Sales Corner builds in our [automation library](/en/#otomasyonlar).
 
 ## Conclusion
 

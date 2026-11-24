@@ -199,7 +199,7 @@ Before launching a campaign, you should be able to answer "yes" to all of these 
 
 If you'd rather have your entire outbound operation managed externally instead of building this infrastructure in-house, our group company focused on B2B SaaS companies, [SAAS Corner's outbound sales and lead generation service](https://saascorner.co), can take on the process end to end, from list building to sequence management.
 
-You can see what Sales Corner does in sales automation and outbound on our [services page](/hizmetler) (in Turkish).
+You can see the sales automation and outbound workflows Sales Corner builds in our [automation library](/en/#otomasyonlar).
 
 ## Conclusion
 

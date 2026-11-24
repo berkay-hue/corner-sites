@@ -187,7 +187,7 @@ If you answer "no" to several of these questions, closing those gaps before star
 
 In some cases, a company's priority is filling the pipeline quickly rather than building automation infrastructure from scratch. For B2B SaaS companies in particular, outsourcing outbound capacity can be a faster route. [SAAS Corner's outbound sales and lead generation service built for B2B SaaS](https://saascorner.co) is an alternative designed for this need.
 
-You can see what Sales Corner does in sales automation and outbound on our [services page](/hizmetler) (in Turkish).
+You can see the sales automation and outbound workflows Sales Corner builds in our [automation library](/en/#otomasyonlar).
 
 ## Conclusion
 

@@ -288,7 +288,7 @@ The reasons lead scoring projects fail are usually similar:
 
 Especially for SaaS companies, lead scoring delivers the highest return when considered together with outbound strategy. For teams that want both to sharpen their ICP and to systematically reach accounts with high fit scores, [SAAS Corner, which provides outbound sales and lead generation services specifically for B2B SaaS](https://saascorner.co), offers an approach that tackles both sides together.
 
-You can see what Sales Corner does in sales automation and outbound on our [services page](/hizmetler) (in Turkish).
+You can see the sales automation and outbound workflows Sales Corner builds in our [automation library](/en/#otomasyonlar).
 
 ## Conclusion
 
