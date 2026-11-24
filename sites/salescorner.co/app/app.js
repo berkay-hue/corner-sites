@@ -277,7 +277,7 @@ function render() {
   PAGES[n]();
   if (changed) { window.scrollTo(0, 0); document.title = (TITLES[n] ? TITLES[n] + " · " : "") + "Sales Corner"; }
 }
-const TITLES = { giris: "Giriş", kayit: "Kayıt ol", sifre: "Şifre sıfırlama", "yeni-sifre": "Yeni şifre", panel: "Panel", rakip: "Rakip Analizi", sekans: "Sekans Yazarı", seo: "SEO Analizi", briefing: "Toplantı Briefingi", fireflies: "Toplantı Analizi", fiyatlar: "Fiyatlar", hesap: "Hesabım", admin: "Yönetim" };
+const TITLES = { giris: "Giriş", kayit: "Kayıt ol", sifre: "Şifre sıfırlama", "yeni-sifre": "Yeni şifre", panel: "Panel", rakip: "Rakip Analizi", sekans: "Sekans Yazarı", seo: "SEO Analizi", briefing: "Toplantı Briefingi", fireflies: "Toplantı Analizi", fiyatlar: "Fiyatlar", hesap: "Hesabım", admin: "Yönetim", ozel: "Size özel çözümler" };
 
 // ---------- Giriş ekranları ----------
 const LOGO = `<img class="lg" src="/img/sales-corner-logo.png?v=1" width="495" height="178" alt="Sales Corner">`;
@@ -436,6 +436,8 @@ function shell(content) {
       ${nav("panel", "🏠", "Panel")}
       <div class="nav-h">Araçlar</div>
       ${MODS.map(m => nav(m.k, m.ic, m.ad, badge(m.k))).join("")}
+      <div class="nav-h">Size özel</div>
+      ${nav("ozel", "✨", "Size özel çözümler")}
       <div class="nav-h">Hesap</div>
       ${nav("fiyatlar", "💎", "Planlar ve fiyatlar")}
       ${nav("hesap", "⚙️", "Hesabım")}
@@ -496,10 +498,87 @@ function pagePanel() {
     <div class="card stat"><span>Fireflies</span><b>${b.fireflies ? "Bağlı ✓" : `<a href="#/fireflies" style="font-size:16px">Bağla →</a>`}</b></div>
   </div>
   <div class="cards">${MODS.map(card).join("")}</div>
+  <a class="card oz-teaser" href="#/ozel"><div><span class="pill acc">✨ Size özel</span><h3>Hazır araçların ötesine geçin</h3><p>HTML sorgusu, canlı satış destek eklentisi, keyword scanner, CRM entegrasyonu… Ekibinize özel otomasyonları biz geliştirelim.</p></div><div class="oz-mini" aria-hidden="true">${OZ_KAT.slice(0, 4).map(x => `<span><i style="background:${x.bg}">${x.ic}</i>${esc(x.ad)}</span>`).join("")}</div><span class="btn btn-p">Paketleri gör →</span></a>
   ${hist.length ? `<h2 style="margin:30px 0 12px">Son çalışmalarınız <span class="pill" style="vertical-align:middle">bu cihaz</span></h2>
   <div class="card scroll-x"><table class="tbl"><thead><tr><th>Araç</th><th>Konu</th><th>Tarih</th><th></th></tr></thead><tbody>
   ${hist.map(h => `<tr><td>${MOD[h.k] ? MOD[h.k].ic + " " + esc(MOD[h.k].ad) : ""}</td><td>${esc(h.title)}</td><td>${fmtDT(h.at)}</td><td style="text-align:right">${safeUrl(h.url) ? `<a class="btn btn-g btn-s" href="${esc(safeUrl(h.url))}" target="_blank" rel="noopener">Aç ↗</a>` : ""}</td></tr>`).join("")}
   </tbody></table></div>` : ""}`);
+}
+
+// ---------- Size özel ----------
+const OZ_PAKET = [
+  { k: "hiz", ad: "Satış Hızlandırma", ic: "⚡", d: "Görüşme anında ekibinizin yanında duran araçlar.", li: ["Canlı satış destek Chrome eklentisi", "Görüşmede itiraz cevapları ve konuşma ipuçları", "Toplantı öncesi otomatik briefing", "Görüşme notlarının CRM'e aktarımı"] },
+  { k: "veri", ad: "Lead ve Veri", ic: "🔎", hot: true, d: "Hedef pazarınızı tarar, temiz ve kullanılabilir veri çıkarır.", li: ["HTML sorgusu ile web'den düzenli veri", "Keyword scanner ile fırsat ve sinyal takibi", "Rakip fiyat ve içerik izleme", "Google Sheets veya CRM'e otomatik aktarım"] },
+  { k: "ai", ad: "Entegrasyon ve Kişisel AI", ic: "🧠", d: "Satış sürecinizin tamamına bağlanan, size özel yapay zekâ.", li: ["HubSpot, Pipedrive, Salesforce entegrasyonu", "Şirket verinizle çalışan kişisel AI asistan", "Teklif ve e-posta taslağı üretici", "Slack / Teams bildirim botları"] },
+];
+const OZ_KAT = [
+  { k: "html", ad: "HTML sorgusu", ic: "🧩", bg: "#eef0ff", d: "Herhangi bir web sayfasından firma, ürün, fiyat ve iletişim bilgisini düzenli tabloya çevirir." },
+  { k: "ext", ad: "Canlı satış destek eklentisi", ic: "🎧", bg: "#fdf2f8", d: "Görüşme sırasında tarayıcıda itiraz cevapları, fiyat bilgisi ve sıradaki adım önerisi gösterir." },
+  { k: "kw", ad: "Keyword scanner", ic: "🔑", bg: "#ecfdf3", d: "Siteleri, haberleri ve ilanları anahtar kelimelerinize göre tarar; fırsat çıkınca haber verir." },
+  { k: "crm", ad: "CRM entegrasyonu", ic: "🔗", bg: "#f0f9ff", d: "Panel çıktılarını HubSpot, Pipedrive veya Salesforce kayıtlarına otomatik yazar." },
+  { k: "rakip", ad: "Rakip izleme", ic: "📡", bg: "#fffbeb", d: "Rakiplerin fiyat, kampanya ve sayfa değişikliklerini takip eder, haftalık özet gönderir." },
+  { k: "sekans", ad: "E-posta ve sekans otomasyonu", ic: "📬", bg: "#f5f3ff", d: "Segmentinize göre kişiselleştirilmiş takip e-postalarını hazırlar ve sıraya koyar." },
+  { k: "rapor", ad: "Otomatik satış raporu", ic: "📊", bg: "#ecfeff", d: "Pipeline ve aktivite verinizi haftalık rapora çevirip yöneticinize iletir." },
+  { k: "bot", ad: "Bildirim botu", ic: "🔔", bg: "#fef2f2", d: "Sıcak lead, yeni form ya da fırsat değişikliğinde Slack, Teams veya WhatsApp'a bildirim düşer." },
+  { k: "teklif", ad: "Teklif üretici", ic: "📝", bg: "#f7fee7", d: "Görüşme notlarından markanıza uygun teklif dokümanı taslağı çıkarır." },
+];
+const OZ_ADIM = [
+  ["Keşif", "30 dakikalık görüşmede sürecinizi ve hedefinizi dinliyoruz."],
+  ["Prototip", "İlk çalışan sürümü kısa sürede sizinle birlikte deniyoruz."],
+  ["Kurulum", "Ekibinizin araçlarına bağlıyor, kullanımı anlatıyoruz."],
+  ["Destek", "Ölçüyor, iyileştiriyor ve yeni ihtiyaçlara göre büyütüyoruz."],
+];
+const OZ_SEL = new Set();
+function ozLink(adlar) {
+  const msj = "Panelden size özel çözüm talebi:\n" + adlar.map(a => "- " + a).join("\n") + "\n\nKısaca ihtiyacımız: ";
+  return `${SITE}/iletisim?konu=${encodeURIComponent("AI otomasyonu")}&mesaj=${encodeURIComponent(msj)}#form`;
+}
+function ozSecilen() {
+  return [...OZ_PAKET.filter(p => OZ_SEL.has("p:" + p.k)).map(p => p.ad + " paketi"), ...OZ_KAT.filter(x => OZ_SEL.has("k:" + x.k)).map(x => x.ad)];
+}
+function ozBar() {
+  const s = ozSecilen(), bar = document.getElementById("oz-bar");
+  if (!bar) return;
+  bar.querySelector(".oz-sel").innerHTML = s.length ? s.map(a => `<span class="pill acc">${esc(a)}</span>`).join("") : `<span class="oz-hint">Paket veya çözüm seçin; ihtiyacınızı teklif formunda birlikte netleştirelim.</span>`;
+  bar.querySelector("b").textContent = s.length ? `${s.length} seçim` : "Size özel teklif";
+  document.getElementById("oz-cta").href = ozLink(s.length ? s : ["Size özel çözüm"]);
+  document.querySelectorAll("[data-oz]").forEach(x => {
+    const on = OZ_SEL.has(x.dataset.oz);
+    x.setAttribute("aria-pressed", on);
+    const l = x.querySelector(".oz-pick");
+    if (l) l.textContent = on ? "✓ Listede" : "+ Listeye ekle";
+  });
+}
+function pageOzel() {
+  const paket = p => `<div class="card plan${p.hot ? " hot" : ""}">${p.hot ? `<span class="pill acc tag">En çok istenen</span>` : ""}
+    <span class="oz-ic" aria-hidden="true">${p.ic}</span><h3>${esc(p.ad)}</h3><p>${esc(p.d)}</p>
+    <div class="price"><b>Teklif ile</b></div>
+    <ul>${p.li.map(t => `<li>${esc(t)}</li>`).join("")}</ul>
+    <div class="oz-pact"><button type="button" class="btn btn-g btn-w" data-oz="p:${p.k}" aria-pressed="false"><span class="oz-pick">+ Listeye ekle</span></button>
+    <a class="btn ${p.hot ? "btn-p" : "btn-g"} btn-w" href="${esc(ozLink([p.ad + " paketi"]))}" target="_blank" rel="noopener">Bu paket için teklif al</a></div></div>`;
+  const item = x => `<button type="button" class="card mod oz-item" data-oz="k:${x.k}" aria-pressed="false">
+    <span class="row" style="justify-content:flex-start"><span class="mi" style="background:${x.bg}" aria-hidden="true">${x.ic}</span><h3>${esc(x.ad)}</h3></span>
+    <p>${esc(x.d)}</p><span class="foot"><span class="pill">Size özel</span><span class="oz-pick">+ Listeye ekle</span></span></button>`;
+  shell(`${ph(`<span aria-hidden="true">✨</span> Size özel çözümler`, "Hazır araçların ötesinde: satış sürecinize göre geliştirdiğimiz otomasyonlar, eklentiler ve entegrasyonlar.")}
+  <section class="oz-hero">
+    <div><span class="oz-kick">Sales Corner Özel Geliştirme</span>
+      <h2>İhtiyacınız olan satış aracını sizin için geliştirelim.</h2>
+      <p>HTML sorgusundan canlı satış destek eklentisine, keyword scanner'dan CRM entegrasyonuna kadar; ekibinizin her gün tekrarladığı işi otomasyona çeviriyoruz.</p>
+      <div class="row"><a class="btn oz-btn" href="${esc(ozLink(["Size özel çözüm"]))}" target="_blank" rel="noopener">Ücretsiz keşif görüşmesi →</a><button type="button" class="btn oz-btn2" data-oz-to="oz-paket">Hazır paketleri gör</button></div>
+    </div>
+    <div class="oz-tags" aria-hidden="true">${OZ_KAT.map(x => `<span>${x.ic} ${esc(x.ad)}</span>`).join("")}</div>
+  </section>
+  <div class="oz-h" id="oz-paket"><div><h2>Hazır size özel paketler</h2><p>En sık istenen çözümleri paketledik; kapsamı şirketinize göre uyarlıyoruz.</p></div></div>
+  <div class="plans oz-plans">${OZ_PAKET.map(paket).join("")}</div>
+  <div class="oz-h"><div><h2>Geliştirebileceklerimiz</h2><p>İhtiyacınız olanları listeye ekleyin, teklifinizi buna göre hazırlayalım.</p></div></div>
+  <div class="cards">${OZ_KAT.map(item).join("")}</div>
+  <div class="oz-h"><div><h2>Nasıl çalışıyoruz?</h2><p>Fikirden çalışan araca dört adım.</p></div></div>
+  <ol class="oz-steps">${OZ_ADIM.map((a, i) => `<li class="card"><span class="oz-n">${i + 1}</span><b>${a[0]}</b><p>${a[1]}</p></li>`).join("")}</ol>
+  <div class="card oz-more"><span aria-hidden="true">💬</span><div><b>Listede olmayan bir fikriniz mi var?</b><p>Satış ekibinizin elle yaptığı, tekrar eden her iş otomasyon adayıdır. Anlatın, uygulanabilir mi birlikte bakalım.</p></div></div>
+  <div class="oz-bar" id="oz-bar" aria-live="polite"><div class="oz-bt"><b>Size özel teklif</b><div class="oz-sel"></div></div><a class="btn btn-p" id="oz-cta" href="#" target="_blank" rel="noopener">Teklif iste →</a></div>`);
+  document.querySelectorAll("[data-oz]").forEach(x => (x.onclick = () => { const k = x.dataset.oz; OZ_SEL.has(k) ? OZ_SEL.delete(k) : OZ_SEL.add(k); ozBar(); }));
+  document.querySelectorAll("[data-oz-to]").forEach(x => (x.onclick = () => document.getElementById(x.dataset.ozTo)?.scrollIntoView({ behavior: "smooth", block: "start" })));
+  ozBar();
 }
 
 // ---------- Araç sayfaları (ortak) ----------
@@ -965,7 +1044,7 @@ async function loadAdm() {
   catch (e) { ADM.err = trErr(e); }
 }
 
-const PAGES = { giris: pageGiris, kayit: pageKayit, sifre: pageSifre, "yeni-sifre": pageYeniSifre, panel: pagePanel, rakip: pageRakip, sekans: pageSekans, seo: pageSeo, briefing: pageBriefing, fireflies: pageFireflies, fiyatlar: pageFiyatlar, hesap: pageHesap, admin: pageAdmin };
+const PAGES = { giris: pageGiris, kayit: pageKayit, sifre: pageSifre, "yeni-sifre": pageYeniSifre, panel: pagePanel, rakip: pageRakip, sekans: pageSekans, seo: pageSeo, briefing: pageBriefing, fireflies: pageFireflies, fiyatlar: pageFiyatlar, hesap: pageHesap, admin: pageAdmin, ozel: pageOzel };
 
 // ---------- Genel olaylar ----------
 document.addEventListener("click", async e => {

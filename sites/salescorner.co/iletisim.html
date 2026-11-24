@@ -897,6 +897,7 @@ function sc(){if(h)h.classList.toggle('sc',window.scrollY>8)}sc();window.addEven
 </script><script>
 (function(){
 var f=document.getElementById('ct-form');if(!f)return;
+try{var Q=new URLSearchParams(location.search),qk=Q.get('konu'),qm=Q.get('mesaj');if(qk){var qr=[].slice.call(f.querySelectorAll('input[name=konu]')).filter(function(x){return x.value===qk})[0];if(qr)qr.checked=true}if(qm){var qt=document.getElementById('f-msg');if(qt&&!qt.value)qt.value=qm.slice(0,4000)}}catch(e){}
 var M=JSON.parse(f.getAttribute('data-msg')),box=f.querySelector('.fmsg'),btn=f.querySelector('button[type=submit]'),bt=btn.innerHTML;
 function err(t){box.textContent=t;box.hidden=false}
 f.addEventListener('submit',function(e){
