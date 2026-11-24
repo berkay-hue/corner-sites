@@ -925,7 +925,13 @@ export async function generate(req, url, env, origin, ctx, io = {}) {
   const { tooLarge, body } = isGet ? { tooLarge: false, body: null } : await readBody(req, BODY_MAX[name]);
   if (tooLarge) return fail("too_large", 413, origin);
   try {
-    return await handler({ env, db: env.DB, body, query: url.searchParams, origin, ctx, io: { fetch: io.fetch || ((u, i) => fetch(u, i)) }, ip: req.headers.get("cf-connecting-ip") || "", token: bearerToken(req) });
+    const c = { env, db: env.DB, body, query: url.searchParams, origin, ctx, io: { fetch: io.fetch || ((u, i) => fetch(u, i)) }, ip: req.headers.get("cf-connecting-ip") || "", token: bearerToken(req) };
+    // A15: GEN_LOGIN_REQUIRED=1 → ziyaretçi (oturumsuz) üretim yok; /gen/event ölçümü açık kalır.
+    if (env.GEN_LOGIN_REQUIRED === "1" && name !== "event" && !(await account(c))) {
+      if (name === "quota") return json({ ok: true, charged: false, left: 0, cap: 0, plan: "anon", stock: false, login_required: true }, 200, origin);
+      return fail("login_required", 401, origin);
+    }
+    return await handler(c);
   } catch (e) {
     // 0014 uygulanmadıysa tablo yok
     if (/no such (table|column)/i.test(e?.message || "")) return fail("not_ready", 503, origin);

@@ -112,7 +112,10 @@ function studyoBasla(){
   durum('uye');
   istek('/auth/me').then(function(j){
     if(j._s===200&&j.user&&typeof j.user==='object'){durum('uye',j.user);return}
-    if(j._s===401){tokenSil();durum('misafir');uyelikYaz('acik');return}
+    if(j._s===401){tokenSil();
+      /* A15: kapılı stüdyo sayfasında süresi dolmuş oturum → girişe, ?r= ile geri */
+      if(document.querySelector('script[src="/assets/giris-kapisi.js"]')){var en=/^\/en(\/|$)/.test(location.pathname);location.replace((en?'/en/hesap/login':'/hesap/giris')+'?r='+encodeURIComponent(location.pathname.replace(/\.html$/,'').replace(/\/index$/,'/')));return}
+      durum('misafir');uyelikYaz('acik');return}
     if((j._s===403&&j.error==='origin')||j._s===404||(j._s===503&&j.error==='not_ready')){durum('misafir');uyelikYaz('kapali');return}
     /* ağ ya da beklenmeyen hata: üye görünümü kalır, avatar genel ikon */
   });

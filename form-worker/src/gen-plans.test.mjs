@@ -333,3 +333,37 @@ test("genCleanup 13 aydan eski aylık sayaçları siler, yenileri kalır; 0018 y
   old.exec("CREATE TABLE gen_usage (day TEXT NOT NULL, key TEXT NOT NULL, kind TEXT NOT NULL, n INTEGER NOT NULL DEFAULT 0, PRIMARY KEY (day, key)) WITHOUT ROWID;");
   await genCleanup({ DB: d1(old) });
 });
+
+test("A15 GEN_LOGIN_REQUIRED=1: oturumsuz /gen/* 401 login_required (LLM/Turnstile çağrılmaz), /gen/quota left 0 + login_required, /gen/event 401 değil; girişli geçer; bayrak yoksa anonim akış aynen", async () => {
+  const s = setup({ env: { GEN_LOGIN_REQUIRED: "1" } });
+  for (const p of Object.keys(GEN)) {
+    const r = await gen(s, p);
+    assert.equal(r.status, 401, p);
+    assert.deepEqual([r.body.ok, r.body.error], [false, "login_required"], p);
+  }
+  for (const [path, body] of [["/gen/refine", { anon: ANON, text: "Metin", op: "shorter", lang: "tr", rid: rid() }]]) {
+    const r = await s.call(path, body);
+    assert.equal(r.status, 401, path);
+    assert.equal(r.body.error, "login_required", path);
+  }
+  // bozuk/bilinmeyen jeton da oturumsuz sayılır
+  assert.equal((await gen(s, "linkedin", { auth: `Bearer ${"Z".repeat(43)}` })).status, 401);
+  assert.deepEqual(s.calls, { verify: 0, llm: 0 });
+  assert.deepEqual(s.usage("anon"), []);
+  const q = await s.call("/gen/quota", { anon: ANON });
+  assert.equal(q.status, 200);
+  assert.deepEqual([q.body.ok, q.body.left, q.body.plan, q.body.login_required, q.body.charged], [true, 0, "anon", true, false]);
+  const req = new Request("https://forms.test/gen/event", { method: "POST", headers: { "content-type": "application/json", "cf-connecting-ip": IP }, body: JSON.stringify({ anon: ANON, kind: "copy_ok" }) });
+  const ev = await generate(req, new URL(req.url), s.env, APP, { waitUntil() {} }, { fetch: fakeFetch().f });
+  assert.notEqual(ev.status, 401);
+  // girişli kullanıcı etkilenmez
+  const ok = await gen(s, "linkedin", auth("basic"));
+  assert.equal(ok.status, 200);
+  assert.equal(ok.body.plan, "basic");
+  const qb = await s.call("/gen/quota", { anon: ANON }, auth("basic"));
+  assert.equal(qb.body.plan, "basic");
+  assert.equal(qb.body.login_required, undefined);
+  // bayrak kapalı: ziyaretçi eskisi gibi üretir
+  const t = setup();
+  assert.equal((await gen(t, "linkedin")).status, 200);
+});
