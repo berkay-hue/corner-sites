@@ -321,9 +321,10 @@ f.addEventListener('submit',function(e){
  var top=f.querySelector('input[name=konu]:checked');
  var fields=[[M.k[0],v('ad')],[M.k[1],v('eposta')],[M.k[2],top?top.value:''],[M.k[3],v('telefon')],[M.k[4],v('mesaj')],[M.k[5],f.elements.onay.checked?M.yes:'']].filter(function(x){return x[1]});
  btn.disabled=true;btn.textContent=M.sending;
- fetch(f.getAttribute('action'),{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({page:f.getAttribute('data-page'),fields:fields,hp:v('website')})})
- .then(function(r){return r.json().catch(function(){return {}}).then(function(j){return {s:r.status,j:j}})})
- .then(function(r){
+ var post=function(u,b){return fetch(u,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(b)}).then(function(r){return r.json().catch(function(){return {}}).then(function(j){return {s:r.status,j:j}})},function(){return {s:0,j:{}}})};
+ Promise.all([post(f.getAttribute('action'),{page:f.getAttribute('data-page'),fields:fields,hp:v('website')}),post('/api/iletisim',{sayfa:f.getAttribute('data-page'),ad:v('ad'),email:v('eposta'),konu:top?top.value:'',telefon:v('telefon'),mesaj:v('mesaj'),hp:v('website')})])
+ .then(function(rs){
+  var r={s:rs[0].s===429||rs[1].s===429?429:rs[0].s,j:{ok:rs.some(function(x){return x.j&&x.j.ok})}};
   if(r.j&&r.j.ok){var d=document.getElementById('ct-done');f.hidden=true;d.hidden=false;d.focus();if(window.gtag)try{gtag('event','generate_lead',{form:'iletisim'})}catch(_){};return}
   err(r.s===429?M.rate:M.fail);
  })

@@ -13757,6 +13757,23 @@ export default {
     if (path.startsWith("/api/app/")) return appRoute(req, env, url, path, cfctx);
     if (path === "/api/rapor") return new Response(VIEWER, { headers: { "content-type": "text/html; charset=utf-8", "x-robots-tag": "noindex", "cache-control": "public, max-age=300" } });
     if (req.method === "OPTIONS") return new Response(null, { status: 204 });
+    // İletişim formu kopyası: corner-forms'a ek olarak Supabase app_iletisim'e yazılır (yönetim panelinde görünür).
+    if (path === "/api/iletisim" && req.method === "POST") {
+      if (!sameSite(req)) return fail("Bu uç yalnızca salescorner.co üzerinden kullanılabilir.", 403);
+      let b; try { b = await req.json(); } catch { return fail("Geçersiz istek.", 400); }
+      if (!b || typeof b !== "object") return fail("Geçersiz istek.", 400);
+      if (str(b.hp, 200)) return J({ ok: true });
+      const p = { sayfa: str(b.sayfa, 80), ad: str(b.ad, 200), email: str(b.email, 200), konu: str(b.konu, 200), telefon: str(b.telefon, 40), mesaj: str(b.mesaj, 5000) };
+      try {
+        const r = await sbRpc(SB_ANON_AU, "app_iletisim_ekle", { p });
+        if (r.ok && r.j?.ok) return J({ ok: true });
+        const code = r.j?.code;
+        if (code === "54000") return J({ ok: false, error: "Çok fazla deneme, lütfen biraz sonra tekrar deneyin." }, 429);
+        if (code === "22023" || r.status === 400) return J({ ok: false, error: "Lütfen e-posta ve mesajı kontrol edin." }, 400);
+        console.log(path, r.status, code);
+        return J({ ok: false, error: "Kaydedilemedi." }, 502);
+      } catch (e) { console.log(path, e?.message); return J({ ok: false, error: "Kaydedilemedi." }, 502); }
+    }
     // Rakip Takip (Rakip Radar v2 uyarlaması, rakip_takip.js): akış tablosundan bağımsız el yazımı uç.
     if (path === "/api/rakip-takip" && req.method === "POST") {
       if (!sameSite(req)) return fail("Bu uç yalnızca salescorner.co üzerinden kullanılabilir.", 403);
