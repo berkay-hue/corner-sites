@@ -321,7 +321,8 @@ test("A15 admin: demo (bitmiş) → basic sonrası deneme sınırı kalkar, basi
 
 // ---- CMS (otomatik blog) demo ----
 
-test("A15 CMS run demo: önceki ayın toplamı sayılır (402 quota), deneme bitince 403 trial_ended; liste quota trial alanları", async t => {
+// C1 (24.11): blog otomatiği Pro'dan itibaren; demo cms_sites 0 → connect/run 403 plan_required {plan:"pro"}, sayaç düşmez
+test("A15 CMS demo: connect ve run 403 plan_required (pro); liste limits kilitli + quota trial alanları; disconnect serbest", async t => {
   const hp = PROVIDERS.hubspot, orig = hp.probe;
   hp.probe = async inputs => ({ ok: true, account: { name: "Blog", url: "https://blog.example.test" }, options: {}, config: {}, creds: { api_key: inputs.api_key } });
   t.after(() => { hp.probe = orig; });
@@ -329,22 +330,25 @@ test("A15 CMS run demo: önceki ayın toplamı sayılır (402 quota), deneme bit
   await at("2026-12-02T09:00:00Z", async () => {
     const s = setup();
     const d = addDemo(s.db, "D", Date.parse("2026-11-25T09:00:00Z"));
-    const c = await s.pcall("POST", "/app/cms/connect", { token: d.token, body: { platform: "hubspot", inputs: { api_key: "x".repeat(16) + "ABCD" } } });
-    assert.equal(c.status, 200, JSON.stringify(c.body));
-    const id = c.body.site.id;
-    s.seed(d.id, "lb", 3, "2026-11");
-    const ok = await s.pcall("POST", `/app/cms/${id}/run`, { token: d.token, body: { rid: RID } });
+    const body = { platform: "hubspot", inputs: { api_key: "x".repeat(16) + "ABCD" } };
+    const c = await s.pcall("POST", "/app/cms/connect", { token: d.token, body });
+    assert.deepEqual([c.status, c.body.ok, c.body.error, c.body.plan], [403, false, "plan_required", "pro"]);
+    assert.equal(s.db.prepare("SELECT COUNT(*) AS n FROM cms_sites").get().n, 0);
+    // pro iken bağlanmış site, demoya düşünce üretmez
+    s.db.prepare("UPDATE users SET plan = 'pro' WHERE id = ?").run(d.id);
+    const ok = await s.pcall("POST", "/app/cms/connect", { token: d.token, body });
     assert.equal(ok.status, 200, JSON.stringify(ok.body));
-    assert.equal(s.month(d.id, "lb", "2026-12"), 1);
-    const full = await s.pcall("POST", `/app/cms/${id}/run`, { token: d.token, body: { rid: "123e4567-e89b-42d3-a456-426614174001" } });
-    assert.deepEqual([full.status, full.body.error], [402, "quota"]);
+    s.db.prepare("UPDATE users SET plan = 'demo' WHERE id = ?").run(d.id);
+    const id = ok.body.site.id;
+    const run = await s.pcall("POST", `/app/cms/${id}/run`, { token: d.token, body: { rid: RID } });
+    assert.deepEqual([run.status, run.body.error, run.body.plan], [403, "plan_required", "pro"]);
+    assert.equal(s.month(d.id, "lb", "2026-12"), 0);
     const l = await s.pcall("GET", "/app/cms", { token: d.token });
-    assert.deepEqual([l.body.quota.lb_used, l.body.quota.lb_limit, l.body.quota.trial_ended], [4, 4, false]);
-
-    Date.now = () => Date.parse("2026-12-09T09:00:01Z"); // created_at + 14 gün geçti
-    const end = await s.pcall("POST", `/app/cms/${id}/run`, { token: d.token, body: { rid: "123e4567-e89b-42d3-a456-426614174002" } });
-    assert.deepEqual([end.status, end.body.error], [403, "trial_ended"]);
-    assert.equal((await s.pcall("GET", "/app/cms", { token: d.token })).body.quota.trial_ended, true);
-    assert.equal(s.month(d.id, "lb", "2026-12"), 1);
+    assert.equal(l.status, 200);
+    assert.deepEqual(l.body.limits, { sites: 0, used: 1, per_week_max: 0, plan_required: "pro" });
+    assert.deepEqual([l.body.quota.lb_limit, l.body.quota.trial_ended], [4, false]);
+    assert.ok(l.body.quota.trial_ends_at);
+    const dis = await s.pcall("POST", `/app/cms/${id}/disconnect`, { token: d.token, body: {} });
+    assert.equal(dis.status, 200, JSON.stringify(dis.body));
   });
 });

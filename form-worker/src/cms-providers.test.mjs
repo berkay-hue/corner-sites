@@ -56,7 +56,9 @@ const POST = {
 
 // ---------------------------------------------------------------- sözleşme şekli
 test("PROVIDERS/UNSUPPORTED/ERROR_HELP şekli", () => {
-  assert.deepEqual(Object.keys(PROVIDERS), ["wordpress", "webflow", "ghost", "shopify", "hubspot", "wix", "github", "ideasoft", "wpcom"]);
+  assert.deepEqual(Object.keys(PROVIDERS), ["wordpress", "webflow", "ghost", "shopify", "hubspot", "wix", "github", "cloudflare", "ideasoft", "wpcom"]);
+  assert.equal(PROVIDERS.cloudflare.stored_as, "github");
+  for (const [id, p] of Object.entries(PROVIDERS)) if (id !== "cloudflare") assert.equal(p.stored_as, undefined, id);
   for (const [id, p] of Object.entries(PROVIDERS)) {
     assert.equal(p.id, id);
     assert.ok(p.name && (p.auth === "key" || p.auth === "oauth"));
@@ -631,6 +633,38 @@ test("github push: doğrudan commit (yayın) ve zaman aşımı", async () => {
   assert.equal(jbody(calls[0]).branch, "main");
   const t = mkIo(ghRoutes([[/PUT/, { throw: "timeout" }]]));
   assert.deepEqual(await PROVIDERS.github.push(POST, { config: cfg, creds: { token: GH_TOK }, mode: "publish" }, t.io), { ok: false, error: "unknown_result", retry: false });
+});
+
+// ---------------------------------------------------------------- Cloudflare Pages (GitHub deposu üstünden)
+test("cloudflare probe: github alanları + base_url, config.host, push github ile aynı", async () => {
+  const cf = PROVIDERS.cloudflare;
+  assert.deepEqual(cf.fields.map(f => f.key), [...PROVIDERS.github.fields.map(f => f.key), "base_url"]);
+  assert.equal(cf.fields.at(-1).required, false);
+  assert.ok(/Direct Upload/.test(cf.notes_tr) && /Direct Upload/.test(cf.notes_en) && /GitLab/.test(cf.notes_tr) && /GitLab/.test(cf.notes_en));
+  const { io, logs } = mkIo(ghRoutes());
+  const r = await cf.probe({ owner: "acme", repo: "site", token: GH_TOK, ssg: "astro", base_url: "proje.pages.dev" }, io);
+  assert.equal(r.ok, true);
+  assert.deepEqual(r.config, { owner: "acme", repo: "site", branch: "main", ssg: "astro", path_template: "src/content/blog/{slug}.md", host: "cloudflare", pages_url: "https://proje.pages.dev/" });
+  assert.deepEqual(r.account, { name: "acme/site", url: "https://proje.pages.dev/" });
+  noSecret([GH_TOK], logs, r.account, r.config);
+  // base_url yok → depo adresi; config.host yine cloudflare
+  const b = mkIo(ghRoutes());
+  const r2 = await cf.probe({ owner: "acme", repo: "site", token: GH_TOK, ssg: "hugo" }, b.io);
+  assert.equal(r2.account.url, "https://github.com/acme/site");
+  assert.equal(r2.config.host, "cloudflare");
+  assert.equal(r2.config.pages_url, undefined);
+  // geçersiz base_url → ağ isteği yok
+  const c = mkIo(ghRoutes());
+  assert.deepEqual(await cf.probe({ owner: "acme", repo: "site", token: GH_TOK, ssg: "hugo", base_url: "http://127.0.0.1" }, c.io), { ok: false, error: "ssrf" });
+  assert.deepEqual(await cf.probe({ owner: "acme", repo: "site", token: GH_TOK, ssg: "hugo", base_url: "javascript:alert(1)" }, c.io), { ok: false, error: "bad_input" });
+  assert.equal(c.calls.length, 0);
+  // github hatası olduğu gibi döner
+  const d = mkIo(ghRoutes([[/repos\/acme\/site$/, { status: 401 }]]));
+  assert.deepEqual(await cf.probe({ owner: "acme", repo: "site", token: GH_TOK, ssg: "hugo", base_url: "proje.pages.dev" }, d.io), { ok: false, error: "auth" });
+  // push: github ile aynı (yayın modu doğrudan commit)
+  const p = mkIo(ghRoutes());
+  const pr = await cf.push(POST, { config: { ...r.config }, creds: { token: GH_TOK }, mode: "publish" }, p.io);
+  assert.deepEqual(pr, { ok: true, remote_id: "src/content/blog/sirketler-icin-icerik-stratejisi.md", url: "https://github.com/acme/site/blob/main/x.md" });
 });
 
 // ---------------------------------------------------------------- IdeaSoft

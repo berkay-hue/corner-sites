@@ -4,7 +4,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import vm from "node:vm";
-import { PLANS, MONTH_KIND, KIND_NAME, planOf, planLimits, ENTERPRISE_CMS_SITES } from "./plans.js";
+import { PLANS, MONTH_KIND, KIND_NAME, planOf, planLimits, ENTERPRISE_CMS_SITES, CMS_FREQS, ENTERPRISE_CMS_PER_WEEK } from "./plans.js";
 
 const SRC = readFileSync(new URL("../../sites/app.socialmediacorner.co/assets/plans.js", import.meta.url), "utf8");
 const site = () => { const window = {}; vm.runInNewContext(SRC, { window }); return window.SMC_PLANS; };
@@ -45,19 +45,33 @@ test("planOf / planLimits: 0018 yok → null, bilinmeyen → basic, enterprise p
   assert.equal(planOf({ plan: "gold" }), "basic");
   assert.equal(planOf({ plan: "toString" }), "basic");
   assert.equal(planLimits({ id: 1 }), null);
-  assert.deepEqual(planLimits({ plan: "basic" }), { plan: "basic", linkedin_blog: 8, video_gorsel: 2, stock: false, cms_sites: 1 });
-  assert.deepEqual(planLimits({ plan: "pro" }), { plan: "pro", linkedin_blog: 40, video_gorsel: 12, stock: true, cms_sites: 3 });
-  assert.deepEqual(planLimits({ plan: "enterprise", plan_limits: '{"linkedin_blog":500,"video_gorsel":120}' }), { plan: "enterprise", linkedin_blog: 500, video_gorsel: 120, stock: true, cms_sites: 10 });
-  assert.deepEqual(planLimits({ plan: "enterprise", plan_limits: '{"linkedin_blog":0,"video_gorsel":"9"}' }), { plan: "enterprise", linkedin_blog: 40, video_gorsel: 12, stock: true, cms_sites: 10 });
-  assert.deepEqual(planLimits({ plan: "enterprise", plan_limits: "{bozuk" }), { plan: "enterprise", linkedin_blog: 40, video_gorsel: 12, stock: true, cms_sites: 10 });
-  assert.deepEqual(planLimits({ plan: "enterprise", plan_limits: null }), { plan: "enterprise", linkedin_blog: 40, video_gorsel: 12, stock: true, cms_sites: 10 });
+  assert.deepEqual(planLimits({ plan: "basic" }), { plan: "basic", linkedin_blog: 8, video_gorsel: 2, stock: false, cms_sites: 0, cms_per_week: 0 });
+  assert.deepEqual(planLimits({ plan: "pro" }), { plan: "pro", linkedin_blog: 40, video_gorsel: 12, stock: true, cms_sites: 3, cms_per_week: 3 });
+  assert.deepEqual(planLimits({ plan: "enterprise", plan_limits: '{"linkedin_blog":500,"video_gorsel":120}' }), { plan: "enterprise", linkedin_blog: 500, video_gorsel: 120, stock: true, cms_sites: 10, cms_per_week: 7 });
+  assert.deepEqual(planLimits({ plan: "enterprise", plan_limits: '{"linkedin_blog":0,"video_gorsel":"9"}' }), { plan: "enterprise", linkedin_blog: 40, video_gorsel: 12, stock: true, cms_sites: 10, cms_per_week: 7 });
+  assert.deepEqual(planLimits({ plan: "enterprise", plan_limits: "{bozuk" }), { plan: "enterprise", linkedin_blog: 40, video_gorsel: 12, stock: true, cms_sites: 10, cms_per_week: 7 });
+  assert.deepEqual(planLimits({ plan: "enterprise", plan_limits: null }), { plan: "enterprise", linkedin_blog: 40, video_gorsel: 12, stock: true, cms_sites: 10, cms_per_week: 7 });
   assert.equal(planLimits({ plan: "enterprise", plan_limits: '{"linkedin_blog":5,"video_gorsel":5,"cms_sites":25}' }).cms_sites, 25);
   assert.deepEqual(MONTH_KIND, { linkedin: "lb", blog: "lb", video: "vg", instagram: "vg" });
   assert.deepEqual(KIND_NAME, { lb: "linkedin_blog", vg: "video_gorsel" });
 });
 
-test("A14 cms_sites: basic 1, pro 3, enterprise plan_limits ya da 10 (worker ve site)", () => {
+test("A14 cms_sites: demo/basic 0 (C1 blog otomatiği Pro'dan), pro 3, enterprise plan_limits ya da 10 (worker ve site)", () => {
   const S = site();
-  assert.deepEqual([PLANS.basic.cms_sites, PLANS.pro.cms_sites, PLANS.enterprise.cms_sites, ENTERPRISE_CMS_SITES], [1, 3, null, 10]);
-  assert.deepEqual([S.basic.cms_sites, S.pro.cms_sites, S.enterprise.cms_sites], [1, 3, ENTERPRISE_CMS_SITES]);
+  assert.deepEqual([PLANS.demo.cms_sites, PLANS.basic.cms_sites, PLANS.pro.cms_sites, PLANS.enterprise.cms_sites, ENTERPRISE_CMS_SITES], [0, 0, 3, null, 10]);
+  assert.deepEqual([S.demo.cms_sites, S.basic.cms_sites, S.pro.cms_sites, S.enterprise.cms_sites], [0, 0, 3, ENTERPRISE_CMS_SITES]);
+  assert.equal(planLimits({ plan: "demo", created_at: "2026-11-01 00:00:00" }).cms_sites, 0);
+});
+
+test("cms_per_week: demo/basic 0, pro 3, enterprise 7 ya da plan_limits (1/2/3/7); worker ve site aynı", () => {
+  const S = site();
+  for (const p of Object.keys(PLANS)) assert.equal(S[p].cms_per_week, PLANS[p].cms_per_week, `${p} cms_per_week`);
+  assert.deepEqual([PLANS.demo.cms_per_week, PLANS.basic.cms_per_week, PLANS.pro.cms_per_week, PLANS.enterprise.cms_per_week], [0, 0, 3, 7]);
+  assert.deepEqual(CMS_FREQS, [1, 2, 3, 7]);
+  assert.equal(ENTERPRISE_CMS_PER_WEEK, 7);
+  assert.equal(planLimits({ plan: "demo", created_at: "2026-11-01 00:00:00" }).cms_per_week, 0);
+  assert.equal(planLimits({ plan: "enterprise" }).cms_per_week, 7);
+  assert.equal(planLimits({ plan: "enterprise", plan_limits: '{"cms_per_week":2}' }).cms_per_week, 2);
+  assert.equal(planLimits({ plan: "enterprise", plan_limits: '{"cms_per_week":5}' }).cms_per_week, 7);
+  assert.equal(planLimits({ plan: "enterprise", plan_limits: '{"cms_per_week":"3"}' }).cms_per_week, 7);
 });
