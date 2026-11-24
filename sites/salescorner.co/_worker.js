@@ -437,13 +437,20 @@ const __cw = f => /consolas|courier|mono/i.test(f || "") ? 0.6 : /trebuchet|verd
 function __slideFit(runs, w, h, o = {}) {
   const W = Math.max(0.3, w - 0.2 - (o.indent || 0)) * 72, H = Math.max(0.15, h - 0.1) * 72;
   const ls = (o.ls || 100) / 100;
-  const sz = (r, k) => { const b = r.fontSize || 18, floor = o.min || Math.max(8, b * 0.6); return Math.max(Math.min(b, floor), Math.round(b * k * 2) / 2); };
+  const sz = (r, k) => { const b = r.fontSize || 18, floor = o.min || Math.max(7, b * 0.55); return Math.max(Math.min(b, floor), Math.round(b * k * 2) / 2); };
   const est = (rs, k) => rs.reduce((s, r) => {
     const fs = sz(r, k), cpl = Math.max(3, Math.floor(W / (fs * __cw(r.fontFamily || o.font) * (r.bold || o.bold ? 1.06 : 1)) * 0.93));
     const ps = String(r.text ?? "").split("\n");
     return s + ps.reduce((a, p) => a + Math.max(1, Math.ceil(p.length / cpl)), 0) * fs * 1.22 * ls + ps.length * (o.para || 0) + (r.spacingBefore || 0) + (r.spacingAfter || 0);
   }, 0);
   const lim = o.strict ? H : H * 1.1 + 2;
+  if (o.grow && est(runs, 1) < H * 0.6) {
+    // Kısa metin büyük kutuda kaybolmasın: kutunun ~%80'ini dolduracak kadar büyüt (en çok o.grow kat, 16 pt)
+    const big = (r, k) => ({ ...r, fontSize: Math.min(o.maxFs || 16, Math.round((r.fontSize || 18) * k * 2) / 2) });
+    let k = 1;
+    while (k < o.grow && est(runs.map(r => big(r, k + 0.05)), 1) <= H * 0.8) k = Math.round((k + 0.05) * 100) / 100;
+    return k > 1 ? runs.map(r => big(r, k)) : runs;
+  }
   if (est(runs, 1) <= lim) return runs;
   let k = 1;
   while (k > 0.3 && est(runs, k) > lim) k = Math.round((k - 0.05) * 100) / 100;
@@ -9386,8 +9393,9 @@ function addTextBox(slideId, boxId, x, y, w, h, textRuns, opts = {}) {
   if (!Array.isArray(textRuns)) {
     textRuns = [{ text: textRuns }];
   }
-  textRuns = textRuns.map(r => ({ ...r, text: __noEmoji(r.text) }));
-  if (!opts.noFit) textRuns = __slideFit(textRuns, w, h, { strict: !!opts.fillColor });
+  const __hb = t => String(t == null ? "" : t).replace(/\{\{#if[^}]*\}\}([\s\S]*?)(?:\{\{else\}\}[\s\S]*?)?\{\{\/if\}\}/g, "$1").replace(/\{\{(?:else|\/if|#if[^}]*)\}\}/g, "");
+  textRuns = textRuns.map(r => ({ ...r, text: __noEmoji(__hb(r.text)) }));
+  if (!opts.noFit) textRuns = __slideFit(textRuns, w, h, { strict: !!opts.fillColor, grow: opts.grow, maxFs: opts.maxFs });
 
   let insertionIndex = 0;
   for (let i = 0; i < textRuns.length; i++) {
@@ -9604,14 +9612,20 @@ infoItems.forEach((item, idx) => {
 });
 
 // Website summary
-if (actualData.website_summary) {
+const __wsSeen = new Set();
+const __wsText = String(actualData.website_summary || "").split(/\n+|\s+·\s+/)
+  .map(l => l.replace(/^[\s•·\-–]+/, "").replace(/^ANA BAŞLIKLAR\s*:?\s*/i, "").replace(/([?!])(?=[A-ZÇĞİÖŞÜ])/g, "$1 ").trim())
+  .filter(l => l && !/^(ŞİRKET|DOMAIN|SİTE|URL)\s*:/i.test(l))
+  .filter(l => { const k = l.toLowerCase().replace(/[^a-z0-9çğıöşü]+/g, ""); if (!k || __wsSeen.has(k)) return false; __wsSeen.add(k); return true; })
+  .slice(0, 8).join("   •   ");
+if (__wsText) {
   addShape(s2, uid("wsbg"), 0.5, 3.8, 9, 1.3, C.white);
   addShape(s2, uid("wsacc"), 0.5, 3.8, 0.06, 1.3, C.info);
   addTextBox(s2, uid("wslbl"), 0.75, 3.85, 8.5, 0.2, [
-    { text: "WEBSİTE ÖZETİ", fontSize: 8, fontFamily: "Calibri", color: C.info, bold: true }
+    { text: "SİTEDEKİ ANA MESAJLAR", fontSize: 8, fontFamily: "Calibri", color: C.info, bold: true }
   ]);
   addTextBox(s2, uid("wsval"), 0.75, 4.1, 8.5, 0.9, [
-    { text: String(actualData.website_summary).replace(/\s*\n+\s*/g, " · ").substring(0, 400), fontSize: 10, fontFamily: "Calibri", color: C.midText }
+    { text: __wsText.substring(0, 420), fontSize: 11, fontFamily: "Calibri", color: C.midText }
   ]);
 }
 
@@ -9735,12 +9749,12 @@ if (emailSeq.length > 0) {
     
     const subjRuns = [
       { text: "Konu A: ", fontSize: 10, fontFamily: "Calibri", color: C.primary, bold: true },
-      { text: email.subject_line || "", fontSize: 10, fontFamily: "Calibri", color: C.darkText }
+      { text: email.subject_line || "", fontSize: 11, fontFamily: "Calibri", color: C.darkText }
     ];
     if (email.subject_line_b) {
       subjRuns.push(
         { text: "Konu B: ", fontSize: 10, fontFamily: "Calibri", color: C.warning, bold: true },
-        { text: email.subject_line_b, fontSize: 10, fontFamily: "Calibri", color: C.darkText }
+        { text: email.subject_line_b, fontSize: 11, fontFamily: "Calibri", color: C.darkText }
       );
     }
     addTextBox(sid, uid("subjtxt"), 0.75, 1.15, 8.5, 0.75, subjRuns);
@@ -9748,10 +9762,10 @@ if (emailSeq.length > 0) {
     // Email body
     addShape(sid, uid("bodybg"), 0.5, 2.1, 9, 2.6, C.white);
     const emailBodyText = safeStr(email.body).substring(0, 1150);
-    const emailBodyFont = emailBodyText.length > 950 ? 7 : emailBodyText.length > 700 ? 8 : 9;
+    const emailBodyFont = emailBodyText.length > 950 ? 10 : emailBodyText.length > 700 ? 11 : 12;
     addTextBox(sid, uid("bodytext"), 0.7, 2.15, 8.6, 2.55, [
       { text: emailBodyText, fontSize: emailBodyFont, fontFamily: "Calibri", color: C.darkText }
-    ]);
+    ], { grow: 1.3, maxFs: 13 });
     
     // CTA
     addShape(sid, uid("ctabg"), 0.5, 4.85, 4.3, 0.45, C.accentLight);
@@ -9791,8 +9805,8 @@ if (linkedinSeq.length > 0) {
       { text: `Adım ${step.step || idx + 1}: ${actionLabel}  •  Gün ${step.delay_days || 0}`, fontSize: 11, fontFamily: "Trebuchet MS", color: C.linkedin, bold: true }
     ]);
     addTextBox(sLi, uid("limsg"), 0.75, y + 0.38, 8.5, 0.75, [
-      { text: step.message || "", fontSize: 9, fontFamily: "Calibri", color: C.darkText }
-    ]);
+      { text: step.message || "", fontSize: 11, fontFamily: "Calibri", color: C.darkText }
+    ], { grow: 1.25, maxFs: 13 });
   });
 }
 
@@ -9824,26 +9838,26 @@ if (coldCall.opening) {
     const qRuns = ppQuestions.map(q => ({
       text: `• ${q}`, fontSize: 9, fontFamily: "Calibri", color: C.darkText, spacingAfter: 4
     }));
-    addTextBox(sCC, uid("qslist"), 0.7, 2.6, 8.5, 1.2, qRuns);
+    addTextBox(sCC, uid("qslist"), 0.7, 2.55, 8.5, 1.12, qRuns);
   }
   
   // Value pitch + Closing
   if (coldCall.value_pitch) {
-    addShape(sCC, uid("vpbg"), 0.5, 4.0, 4.3, 1.1, C.blueBg);
-    addTextBox(sCC, uid("vplbl"), 0.65, 4.02, 4, 0.2, [
+    addShape(sCC, uid("vpbg"), 0.5, 3.74, 4.3, 1.42, C.blueBg);
+    addTextBox(sCC, uid("vplbl"), 0.65, 3.78, 4, 0.2, [
       { text: "💎 Değer Sunumu", fontSize: 9, fontFamily: "Trebuchet MS", color: C.info, bold: true }
     ]);
-    addTextBox(sCC, uid("vpval"), 0.65, 4.25, 4, 0.75, [
-      { text: coldCall.value_pitch, fontSize: 8, fontFamily: "Calibri", color: C.darkText }
+    addTextBox(sCC, uid("vpval"), 0.65, 4.0, 4, 1.12, [
+      { text: coldCall.value_pitch, fontSize: 9.5, fontFamily: "Calibri", color: C.darkText }
     ]);
   }
   if (coldCall.closing) {
-    addShape(sCC, uid("clbg"), 5.2, 4.0, 4.3, 1.1, C.yellowBg);
-    addTextBox(sCC, uid("cllbl"), 5.35, 4.02, 4, 0.2, [
+    addShape(sCC, uid("clbg"), 5.2, 3.74, 4.3, 1.42, C.yellowBg);
+    addTextBox(sCC, uid("cllbl"), 5.35, 3.78, 4, 0.2, [
       { text: "🎯 Kapanış", fontSize: 9, fontFamily: "Trebuchet MS", color: C.yellowTagText, bold: true }
     ]);
-    addTextBox(sCC, uid("clval"), 5.35, 4.25, 4, 0.75, [
-      { text: coldCall.closing, fontSize: 8, fontFamily: "Calibri", color: C.darkText }
+    addTextBox(sCC, uid("clval"), 5.35, 4.0, 4, 1.12, [
+      { text: coldCall.closing, fontSize: 9.5, fontFamily: "Calibri", color: C.darkText }
     ]);
   }
   
@@ -9864,8 +9878,8 @@ if (coldCall.opening) {
       addTextBox(sObj, uid("objkey"), 0.75, y + 0.05, 8.5, 0.25, [
         { text: `❌ "${key}"`, fontSize: 11, fontFamily: "Trebuchet MS", color: C.danger, bold: true }
       ]);
-      addTextBox(sObj, uid("objval"), 0.75, y + 0.35, 8.5, 0.7, [
-        { text: `✅ ${String(objections[key]).substring(0, 360)}`, fontSize: 8, fontFamily: "Calibri", color: C.darkText }
+      addTextBox(sObj, uid("objval"), 0.75, y + 0.32, 8.5, 0.6, [
+        { text: `✅ ${String(objections[key]).substring(0, 360)}`, fontSize: 10, fontFamily: "Calibri", color: C.darkText }
       ]);
     });
   }
@@ -9898,7 +9912,7 @@ if (jobTitles.length > 0 || industries.length > 0) {
     ]);
     curY += 0.35;
     addTextBox(sTarget, uid("tgval"), 0.6, curY, 8.8, 0.5, [
-      { text: section.items.join("  •  "), fontSize: 9, fontFamily: "Calibri", color: section.textColor }
+      { text: section.items.map(v => String(v).replace(/^(\d+)\s*,\s*\+$/, "$1+").replace(/^(\d+)\s*,\s*(\d+)$/, "$1-$2")).join("  •  "), fontSize: 10.5, fontFamily: "Calibri", color: section.textColor }
     ], { fillColor: section.bgColor });
     curY += 0.7;
   });
@@ -9910,17 +9924,17 @@ if (jobTitles.length > 0 || industries.length > 0) {
 // ====================================================
 const apolloTitles = safeArr(apollo.person_titles);
 const apolloIndustries = safeArr(apollo.organization_industries);
-const apolloSizes = safeArr(apollo.organization_num_employees_ranges);
+const apolloSizes = safeArr(apollo.organization_num_employees_ranges).map(v => String(v).replace(/^(\d+)\s*,\s*\+$/, "$1+").replace(/^(\d+)\s*,\s*(\d+)$/, "$1-$2"));
 
 if (apolloTitles.length > 0 || apolloIndustries.length > 0) {
   const sApollo = makeContentSlide("🔍 Apollo.io Uygulama Rehberi");
   
-  addShape(sApollo, uid("apnote"), 0.5, 1.1, 9, 0.5, C.yellowBg);
-  addTextBox(sApollo, uid("apnotetxt"), 0.7, 1.1, 8.6, 0.5, [
+  addShape(sApollo, uid("apnote"), 0.5, 1.08, 9, 0.4, C.yellowBg);
+  addTextBox(sApollo, uid("apnotetxt"), 0.7, 1.08, 8.6, 0.4, [
     { text: "⚡ Bu filtreler doğrudan Apollo.io'ya kopyalanıp kullanılabilir", fontSize: 10, fontFamily: "Calibri", color: C.yellowTagText, bold: true }
   ], { valign: "MIDDLE" });
   
-  let apY = 1.8;
+  let apY = 1.6;
   const apSections = [
     { label: "📋 Person Titles", items: apolloTitles },
     { label: "🏭 Industries", items: apolloIndustries },
@@ -9929,25 +9943,28 @@ if (apolloTitles.length > 0 || apolloIndustries.length > 0) {
   
   apSections.forEach((section) => {
     if (section.items.length === 0) return;
-    addTextBox(sApollo, uid("aplbl"), 0.5, apY, 9, 0.3, [
+    addTextBox(sApollo, uid("aplbl"), 0.5, apY, 9, 0.26, [
       { text: section.label, fontSize: 11, fontFamily: "Trebuchet MS", color: C.primary, bold: true }
     ]);
-    apY += 0.32;
-    addShape(sApollo, uid("apbg"), 0.5, apY, 9, 0.42, C.lightBg);
-    addTextBox(sApollo, uid("apval"), 0.7, apY, 8.6, 0.42, [
-      { text: section.items.join(", "), fontSize: 9, fontFamily: "Consolas", color: C.darkText }
+    apY += 0.27;
+    const apTxt = section.items.join(", ");
+    const apH = apTxt.length > 105 ? 0.52 : 0.36;
+    addShape(sApollo, uid("apbg"), 0.5, apY, 9, apH, C.lightBg);
+    addTextBox(sApollo, uid("apval"), 0.7, apY, 8.6, apH, [
+      { text: apTxt, fontSize: 9, fontFamily: "Consolas", color: C.darkText }
     ], { valign: "MIDDLE" });
-    apY += 0.6;
+    apY += apH + 0.1;
   });
   
   // LinkedIn search
   if (typeof implementation === 'object' && implementation.linkedin_search_operators) {
-    addTextBox(sApollo, uid("lislbl"), 0.5, apY, 9, 0.3, [
+    addTextBox(sApollo, uid("lislbl"), 0.5, apY, 9, 0.26, [
       { text: "🔗 LinkedIn Search Query", fontSize: 11, fontFamily: "Trebuchet MS", color: C.linkedin, bold: true }
     ]);
-    apY += 0.32;
-    addShape(sApollo, uid("lisbg"), 0.5, apY, 9, 0.42, C.lightBg);
-    addTextBox(sApollo, uid("lisval"), 0.7, apY, 8.6, 0.42, [
+    apY += 0.27;
+    const lisH = Math.max(0.42, 5.15 - apY);
+    addShape(sApollo, uid("lisbg"), 0.5, apY, 9, lisH, C.lightBg);
+    addTextBox(sApollo, uid("lisval"), 0.7, apY + 0.04, 8.6, lisH - 0.08, [
       { text: implementation.linkedin_search_operators, fontSize: 9, fontFamily: "Consolas", color: C.darkText }
     ], { valign: "MIDDLE" });
   }
@@ -11734,7 +11751,7 @@ const oval = (sid,x,y,w,h,fill,alpha,outline)=>shape(sid,"ELLIPSE",x,y,w,h,fill,
 
 function text(sid,x,y,w,h,str,size,color,o){ o=o||{};
   let t=(str===0?"0":(str||"")); t=String(t); if(t.length===0)t=" "; if(t.length>1900)t=t.slice(0,1900);
-  if(!o.noFit){ [t,size]=__fitTxt(t,size,w,h,{ font:(o.font||FB), bold:o.bold, ls:(o.ls||100), para:(o.spaceBelow||0), indent:(o.indent||0) }); if(!t.trim())t=" "; }
+  if(!o.noFit){ [t,size]=__fitTxt(t,size,w,h,{ font:(o.font||FB), bold:o.bold, ls:(o.ls||100), para:(o.spaceBelow||0), indent:(o.indent||0), grow:o.grow, maxFs:o.maxFs }); if(!t.trim())t=" "; }
   const id=ID();
   REQ.push({ createShape:{ objectId:id, shapeType:"TEXT_BOX", elementProperties:{ pageObjectId:sid, size:{ width:{magnitude:E(w),unit:"EMU"}, height:{magnitude:E(h),unit:"EMU"} }, transform:{ scaleX:1, scaleY:1, translateX:E(x), translateY:E(y), unit:"EMU" } } } });
   REQ.push({ insertText:{ objectId:id, text:t, insertionIndex:0 } });
@@ -11773,7 +11790,10 @@ function cardHead(sid,x,y,w,label,accent){
 }
 function chip(sid,x,y,w,h,label,fg,bg){ round(sid,x,y,w,h,bg,1,null); text(sid,x,y,w,h,label,8.5,fg,{bold:true,align:"CENTER",valign:"MIDDLE",font:FH}); }
 function miniBar(sid,x,y,w,h,pct,color){ round(sid,x,y,w,h,C.panel2,1,null); const fw=Math.max(0.06,w*Math.max(0,Math.min(1,pct))); round(sid,x,y,fw,h,color,1,null); }
-function stat(sid,x,y,w,h,value,label,accent){ panel(sid,x,y,w,h); rect(sid,x,y+0.12,0.06,h-0.24,(accent||C.gold)); text(sid,x+0.2,y+0.12,w-0.32,0.4,value,16,C.white,{bold:true,valign:"MIDDLE",font:FH}); text(sid,x+0.2,y+h-0.32,w-0.32,0.24,String(label).toUpperCase(),7.5,C.muted,{font:FH}); }
+function stat(sid,x,y,w,h,value,label,accent){ panel(sid,x,y,w,h); rect(sid,x,y+0.1,0.06,h-0.2,(accent||C.gold));
+  // Etiket üstte, değer altında kalan alana sığdırılır (üst üste binme olmasın)
+  text(sid,x+0.2,y+0.05,w-0.32,0.2,String(label).toUpperCase(),7,C.muted,{font:FH,bold:true});
+  text(sid,x+0.2,y+0.24,w-0.32,Math.max(0.24,h-0.28),value,13,C.white,{bold:true,valign:"MIDDLE",font:FH}); }
 function vsBadge(sid,x,y){ oval(sid,x,y,0.62,0.62,C.gold,1,null); text(sid,x,y,0.62,0.62,"VS",13,C.dark,{bold:true,align:"CENTER",valign:"MIDDLE",font:FH}); }
 function duo(sid,y,h,lt,lbody,rt,rbody,lc,rc){
   panel(sid,0.55,y,4.32,h); rect(sid,0.55,y+0.14,0.07,h-0.28,(lc||C.us));
@@ -11806,18 +11826,18 @@ text(s,5.5,5.15,3.6,0.3,DATE+"  ·  GİZLİ",10,C.muted,{align:"END",font:FH});
 
 // ════════ SLIDE 2 — YÖNETİCİ ÖZETİ ════════
 s=newSlide(C.bg); header(s,"Genel Değerlendirme","Yönetici Özeti"); footer(s);
-panel(s,0.55,1.5,5.55,1.85); cardHead(s,0.75,1.66,5.2,"Rakip Profili",C.them);
-text(s,0.78,2.06,5.1,1.2,cut(es.rakip_profil_ozeti,520),9.5,C.ice,{ls:116,font:FB});
+panel(s,0.55,1.5,5.55,1.7); cardHead(s,0.75,1.66,5.2,"Rakip Profili",C.them);
+text(s,0.78,2.04,5.1,1.1,cut(es.rakip_profil_ozeti,520),9.5,C.ice,{ls:116,font:FB});
 const tp=threatPct(es.tehdit_seviyesi); const tc=(tp>=.85?C.red:tp>=.6?C.orange:tp>=.4?C.gold:C.green);
-panel(s,6.35,1.5,3.1,1.85); cardHead(s,6.55,1.66,2.8,"Tehdit Seviyesi",tc);
-text(s,6.55,2.04,2.7,0.5,safe(es.tehdit_seviyesi),20,C.white,{bold:true,font:FH});
-miniBar(s,6.55,2.64,2.6,0.16,tp,tc);
-text(s,6.55,2.9,2.7,0.3,"Önem: "+safe(es.onem_derecesi),9,C.muted,{font:FB});
-panel(s,0.55,3.5,8.9,1.0); cardHead(s,0.75,3.64,8.5,"Stratejik Değerlendirme",C.gold);
-text(s,0.78,4.0,8.6,0.5,cut(es.genel_degerlendirme,640),9.5,C.ice,{ls:114,font:FB});
-stat(s,0.55,4.62,2.86,0.6,safe(es.bizim_sektor),"Sektör",C.us);
-stat(s,3.57,4.62,2.86,0.6,safe(dq.genel_guven_skoru),"Veri Güven Skoru",C.blue);
-stat(s,6.59,4.62,2.86,0.6,safe(es.onem_derecesi),"Önem Derecesi",C.gold);
+panel(s,6.35,1.5,3.1,1.7); cardHead(s,6.55,1.66,2.8,"Tehdit Seviyesi",tc);
+text(s,6.55,2.0,2.7,0.48,safe(es.tehdit_seviyesi),18,C.white,{bold:true,font:FH,valign:"MIDDLE"});
+miniBar(s,6.55,2.56,2.6,0.16,tp,tc);
+text(s,6.55,2.8,2.7,0.3,"Önem: "+safe(es.onem_derecesi),9,C.muted,{font:FB});
+panel(s,0.55,3.32,8.9,1.08); cardHead(s,0.75,3.44,8.5,"Stratejik Değerlendirme",C.gold);
+text(s,0.78,3.74,8.6,0.62,cut(es.genel_degerlendirme,640),9.5,C.ice,{ls:114,font:FB});
+stat(s,0.55,4.5,2.86,0.68,safe(es.bizim_sektor),"Sektör",C.us);
+stat(s,3.57,4.5,2.86,0.68,safe(dq.genel_guven_skoru),"Veri Güven Skoru",C.blue);
+stat(s,6.59,4.5,2.86,0.68,safe(es.onem_derecesi),"Önem Derecesi",C.gold);
 
 // ════════ SLIDE 3 — İÇİNDEKİLER ════════
 s=newSlide(C.bg); header(s,"İçindekiler","Rapor Akışı"); footer(s);
@@ -11840,7 +11860,7 @@ thRows.forEach((r,i)=>{ const y=2.18+i*0.47; text(s,5.38,y,1.45,0.42,r[0],8,C.th
 
 // ════════ SLIDE 5 — STRATEJİK SCORECARD ════════
 s=newSlide(C.bg); header(s,"Stratejik Scorecard","Çok Kriterli Puanlama"); footer(s);
-chip(s,6.05,0.6,1.4,0.26,"BİZ",C.dark,C.us); chip(s,7.55,0.6,1.7,0.26,"RAKİP",C.white,C.them);
+chip(s,3.15,1.37,1.0,0.22,"BİZ",C.dark,C.us); chip(s,4.25,1.37,1.0,0.22,"RAKİP",C.white,C.them);
 const scRows=sc.slice(0,5).map(r=>({k:safe(r.kriter),u:score10(r.bizim_skor),t:score10(r.rakip_skor),av:safe(r.avantaj,"")}));
 if(scRows.length){
   let uSum=0,tSum=0;
@@ -11901,26 +11921,26 @@ dsec.forEach((d,i)=>{ const y=1.5+i*1.18; panel(s,0.55,y,8.9,1.04); rect(s,0.55,
 // ════════ SLIDE 13 — SEO & TRAFİK ════════
 s=newSlide(C.bg); header(s,"SEO & Trafik","Organik Görünürlük"); footer(s);
 panel(s,0.55,1.5,8.9,3.5); cardHead(s,0.78,1.66,8.4,"SEO Analizi",C.us);
-text(s,0.8,2.12,8.6,2.8,cut(dv.seo_karsilastirma,1700),10.5,C.ice,{ls:122,font:FB});
+text(s,0.8,2.12,8.6,2.8,cut(dv.seo_karsilastirma,1700),10.5,C.ice,{ls:122,font:FB,grow:1.45,maxFs:14.5});
 
 // ════════ SLIDE 14 — SOSYAL MEDYA ════════
 s=newSlide(C.bg); header(s,"Sosyal Medya","Platform Karşılaştırması"); footer(s);
 panel(s,0.55,1.5,8.9,3.5); cardHead(s,0.78,1.66,8.4,"Sosyal Medya Analizi",C.blue);
-text(s,0.8,2.12,8.6,2.8,cut(dv.sosyal_medya_karsilastirma,1700),10.5,C.ice,{ls:122,font:FB});
+text(s,0.8,2.12,8.6,2.8,cut(dv.sosyal_medya_karsilastirma,1700),10.5,C.ice,{ls:122,font:FB,grow:1.45,maxFs:14.5});
 
 // ════════ SLIDE 15 — İÇERİK & BRAND VOICE ════════
 s=newSlide(C.bg); header(s,"İçerik & Brand Voice","İletişim Tonu"); footer(s);
-duo(s,1.5,1.55,"Biz — "+safe(ibv.bizim_ton),"Türler: "+safe(ibv.bizim_icerik_turleri)+"\nSıklık: "+safe(ibv.bizim_paylasim_sikligi),"Rakip — "+safe(ibv.rakip_ton),"Türler: "+safe(ibv.rakip_icerik_turleri)+"\nSıklık: "+safe(ibv.rakip_paylasim_sikligi),C.us,C.them);
-panel(s,0.55,3.25,8.9,1.65); cardHead(s,0.75,3.4,8.5,"İçerik Kalitesi & Fırsatlar",C.gold);
-text(s,0.78,3.78,8.6,0.4,cut(ibv.icerik_kalitesi_karsilastirma,340),9.3,C.ice,{ls:110,font:FB});
-bullets(s,0.78,4.2,8.6,0.66,arr(ibv.icerik_firsatlari).slice(0,3),9,C.ice,{});
+duo(s,1.5,1.4,"Biz — "+safe(ibv.bizim_ton),"Türler: "+safe(ibv.bizim_icerik_turleri)+"\nSıklık: "+safe(ibv.bizim_paylasim_sikligi),"Rakip — "+safe(ibv.rakip_ton),"Türler: "+safe(ibv.rakip_icerik_turleri)+"\nSıklık: "+safe(ibv.rakip_paylasim_sikligi),C.us,C.them);
+panel(s,0.55,3.02,8.9,2.1); cardHead(s,0.75,3.16,8.5,"İçerik Kalitesi & Fırsatlar",C.gold);
+text(s,0.78,3.5,8.6,0.52,cut(ibv.icerik_kalitesi_karsilastirma,340),9.3,C.ice,{ls:110,font:FB});
+bullets(s,0.78,4.04,8.6,1.04,arr(ibv.icerik_firsatlari).slice(0,3),9,C.ice,{});
 
 // ════════ SLIDE 16 — TEKNOLOJİ STACK ════════
 s=newSlide(C.bg); header(s,"Teknoloji Stack","Altyapı Karşılaştırması"); footer(s);
 const tw=[1.7,2.7,2.7,1.8];
 trow(s,1.5,["Alan",BRAND,RIVAL,"Avantaj"],tw,true);
-["cms","analytics","crm","otomasyon","site_performans"].forEach((k,i)=>{ const r=tKar[k]||{}; trow(s,2.04+i*0.52,[k.toUpperCase(),safe(r.bizim),safe(r.rakip),safe(r.avantaj)],tw,false,i%2===0); });
-panel(s,0.55,4.7,8.9,0.45); text(s,0.78,4.7,8.5,0.45,"Genel: "+cut(tKar.genel_degerlendirme,360),8.5,C.muted,{valign:"MIDDLE",font:FB});
+["cms","analytics","crm","otomasyon","site_performans"].forEach((k,i)=>{ const r=tKar[k]||{}; trow(s,1.98+i*0.5,[k.toUpperCase(),safe(r.bizim),safe(r.rakip),safe(r.avantaj)],tw,false,i%2===0); });
+panel(s,0.55,4.56,8.9,0.62); text(s,0.78,4.58,8.5,0.58,"Genel: "+cut(tKar.genel_degerlendirme,360),8.5,C.muted,{valign:"MIDDLE",font:FB});
 
 // ════════ SLIDE 17 — FİYATLANDIRMA ════════
 s=newSlide(C.bg); header(s,"Fiyatlandırma","Fiyat Stratejisi"); footer(s);
@@ -11930,15 +11950,15 @@ text(s,0.78,4.22,8.6,0.6,"Fiyat farkı: "+safe(fy.fiyat_farki)+"   ·   "+cut(fy
 
 // ════════ SLIDE 18 — MÜŞTERİ DENEYİMİ ════════
 s=newSlide(C.bg); header(s,"Müşteri Deneyimi","Online İtibar"); footer(s);
-duo(s,1.5,1.7,BRAND,safe(md.bizim_durum),RIVAL,safe(md.rakip_durum),C.us,C.them);
-panel(s,0.55,3.4,8.9,1.5); cardHead(s,0.75,3.55,8.5,"Kritik Farklar",C.orange);
-bullets(s,0.78,3.95,8.6,0.9,arr(md.kritik_farklar).slice(0,4),9.3,C.ice,{});
+duo(s,1.5,1.45,BRAND,safe(md.bizim_durum),RIVAL,safe(md.rakip_durum),C.us,C.them);
+panel(s,0.55,3.07,8.9,2.05); cardHead(s,0.75,3.21,8.5,"Kritik Farklar",C.orange);
+bullets(s,0.78,3.56,8.6,1.5,arr(md.kritik_farklar).slice(0,4),9.3,C.ice,{});
 
 // ════════ SLIDE 19 — MÜŞTERİ YOLCULUĞU ════════
 s=newSlide(C.bg); header(s,"Müşteri Yolculuğu","Farkındalık → Sadakat"); footer(s);
-text(s,2.05,1.45,3.2,0.24,BRAND,9,C.us,{bold:true,font:FH}); text(s,5.45,1.45,3.2,0.24,RIVAL,9,C.them,{bold:true,font:FH});
+text(s,2.05,1.45,3.0,0.24,BRAND,9,C.us,{bold:true,font:FH}); text(s,5.15,1.45,3.0,0.24,RIVAL,9,C.them,{bold:true,font:FH});
 const stages=[["Farkındalık","farkindalik",C.us],["Değerlendirme","degerlendirme",C.blue],["Satın Alma","satin_alma",C.gold],["Sadakat","sadakat",C.green]];
-stages.forEach((st,i)=>{ const y=1.75+i*0.82; const r=myol[st[1]]||{}; panel(s,0.55,y,8.9,0.72); rect(s,0.55,y+0.1,0.07,0.52,st[2]); text(s,0.74,y+0.1,1.45,0.52,st[0],8.5,st[2],{bold:true,valign:"MIDDLE",font:FH}); text(s,2.05,y+0.08,3.3,0.56,cut(r.bizim,300),8.3,C.ice,{font:FB,ls:104}); text(s,5.45,y+0.08,3.25,0.56,cut(r.rakip,300),8.3,C.ice,{font:FB,ls:104}); text(s,8.72,y+0.1,0.68,0.52,cut(r.avantaj,30),7.5,C.gold,{bold:true,valign:"MIDDLE",align:"END",font:FH}); });
+stages.forEach((st,i)=>{ const y=1.75+i*0.82; const r=myol[st[1]]||{}; panel(s,0.55,y,8.9,0.72); rect(s,0.55,y+0.1,0.07,0.52,st[2]); text(s,0.74,y+0.1,1.45,0.52,st[0],8.5,st[2],{bold:true,valign:"MIDDLE",font:FH}); text(s,2.05,y+0.06,3.05,0.6,cut(r.bizim,300),8.3,C.ice,{font:FB,ls:104}); text(s,5.15,y+0.06,3.0,0.6,cut(r.rakip,300),8.3,C.ice,{font:FB,ls:104}); text(s,8.2,y+0.1,1.18,0.52,cut(r.avantaj,40),7.5,C.gold,{bold:true,valign:"MIDDLE",align:"END",font:FH}); });
 
 // ════════ SLIDE 20 — SWOT ÖZET ════════
 s=newSlide(C.bg); header(s,"SWOT Analizi",BRAND+" Perspektifi"); footer(s);
@@ -11948,38 +11968,38 @@ quad.forEach(q=>{ panel(s,q[3],q[4],4.32,1.74); rect(s,q[3],q[4]+0.12,0.07,1.5,q
 // ════════ SLIDE 21 — SWOT DETAY (G/Z) ════════
 s=newSlide(C.bg); header(s,"SWOT Detay","Güçlü & Zayıf Yönler"); footer(s);
 panel(s,0.55,1.5,4.32,3.55); cardHead(s,0.75,1.66,4.0,"Güçlü Yönler",C.green);
-arr(swot.guclu_yonler).slice(0,5).forEach((g,i)=>{ const y=2.06+i*0.6; const o=(typeof g==="object"&&g); text(s,0.78,y,4.0,0.22,(o?safe(g.alan):asText(g))+((o&&g.puan)?"  ["+g.puan+"]":""),9,C.green,{bold:true,font:FH}); text(s,0.78,y+0.22,4.0,0.34,o?cut(g.detay,240):"",8.3,C.ice,{font:FB,ls:104}); });
+arr(swot.guclu_yonler).slice(0,5).forEach((g,i)=>{ const y=2.06+i*0.6; const o=(typeof g==="object"&&g); text(s,0.78,y,4.0,0.22,(o?safe(g.alan):asText(g))+((o&&g.puan)?"  ["+g.puan+"]":""),9,C.green,{bold:true,font:FH}); text(s,0.78,y+0.2,4.0,0.4,o?cut(g.detay,240):"",8.3,C.ice,{font:FB,ls:104}); });
 panel(s,5.13,1.5,4.32,3.55); cardHead(s,5.33,1.66,4.0,"Zayıf Yönler",C.red);
-arr(swot.zayif_yonler).slice(0,5).forEach((z,i)=>{ const y=2.06+i*0.6; const o=(typeof z==="object"&&z); text(s,5.36,y,4.0,0.22,(o?safe(z.alan):asText(z))+((o&&z.aciliyet)?"  ["+z.aciliyet+"]":""),9,C.red,{bold:true,font:FH}); text(s,5.36,y+0.22,4.0,0.34,o?cut(z.detay,240):"",8.3,C.ice,{font:FB,ls:104}); });
+arr(swot.zayif_yonler).slice(0,5).forEach((z,i)=>{ const y=2.06+i*0.6; const o=(typeof z==="object"&&z); text(s,5.36,y,4.0,0.22,(o?safe(z.alan):asText(z))+((o&&z.aciliyet)?"  ["+z.aciliyet+"]":""),9,C.red,{bold:true,font:FH}); text(s,5.36,y+0.2,4.0,0.4,o?cut(z.detay,240):"",8.3,C.ice,{font:FB,ls:104}); });
 
 // ════════ SLIDE 22 — SWOT DETAY (F/T) ════════
 s=newSlide(C.bg); header(s,"SWOT Detay","Fırsatlar & Tehditler"); footer(s);
 panel(s,0.55,1.5,4.32,3.55); cardHead(s,0.75,1.66,4.0,"Fırsatlar",C.gold);
-arr(swot.firsatlar).slice(0,5).forEach((g,i)=>{ const y=2.06+i*0.6; const o=(typeof g==="object"&&g); text(s,0.78,y,4.0,0.22,(o?safe(g.firsat):asText(g))+((o&&g.potansiyel_etki)?"  ["+g.potansiyel_etki+"]":""),9,C.gold,{bold:true,font:FH}); text(s,0.78,y+0.22,4.0,0.34,o?cut(g.detay,240):"",8.3,C.ice,{font:FB,ls:104}); });
+arr(swot.firsatlar).slice(0,5).forEach((g,i)=>{ const y=2.06+i*0.6; const o=(typeof g==="object"&&g); text(s,0.78,y,4.0,0.22,(o?safe(g.firsat):asText(g))+((o&&g.potansiyel_etki)?"  ["+g.potansiyel_etki+"]":""),9,C.gold,{bold:true,font:FH}); text(s,0.78,y+0.2,4.0,0.4,o?cut(g.detay,240):"",8.3,C.ice,{font:FB,ls:104}); });
 panel(s,5.13,1.5,4.32,3.55); cardHead(s,5.33,1.66,4.0,"Tehditler",C.orange);
-arr(swot.tehditler).slice(0,5).forEach((t,i)=>{ const y=2.06+i*0.6; const o=(typeof t==="object"&&t); text(s,5.36,y,4.0,0.22,(o?safe(t.tehdit):asText(t))+((o&&t.olasilik)?"  ["+t.olasilik+"]":""),9,C.orange,{bold:true,font:FH}); text(s,5.36,y+0.22,4.0,0.34,o?cut(t.detay,240):"",8.3,C.ice,{font:FB,ls:104}); });
+arr(swot.tehditler).slice(0,5).forEach((t,i)=>{ const y=2.06+i*0.6; const o=(typeof t==="object"&&t); text(s,5.36,y,4.0,0.22,(o?safe(t.tehdit):asText(t))+((o&&t.olasilik)?"  ["+t.olasilik+"]":""),9,C.orange,{bold:true,font:FH}); text(s,5.36,y+0.2,4.0,0.4,o?cut(t.detay,240):"",8.3,C.ice,{font:FB,ls:104}); });
 
 // ════════ SLIDE 23 — KONUMLANDIRMA HARİTASI ════════
 s=newSlide(C.bg); header(s,"Konumlandırma Haritası","Rekabet Alanı"); footer(s);
 panel(s,1.3,1.5,7.4,3.35);
 rect(s,5.0,1.62,0.012,3.1,C.line); rect(s,1.45,3.16,7.1,0.012,C.line);
-text(s,4.35,1.54,2,0.2,"Güçlü Dijital ↑",7.5,C.muted,{font:FB});
-text(s,4.35,4.5,2,0.2,"Zayıf Dijital ↓",7.5,C.muted,{font:FB});
+text(s,5.08,1.56,2,0.2,"Güçlü Dijital ↑",7.5,C.muted,{font:FB});
+text(s,5.08,4.5,2,0.2,"Zayıf Dijital ↓",7.5,C.muted,{font:FB});
 text(s,1.5,3.2,2,0.2,"← Dar Hizmet",7.5,C.muted,{font:FB});
 text(s,6.6,3.2,1.9,0.2,"Geniş Hizmet →",7.5,C.muted,{align:"END",font:FB});
 oval(s,6.0,3.45,1.0,1.0,C.them,0.45,null); text(s,5.6,4.5,1.8,0.22,RIVAL,8,C.them,{bold:true,align:"CENTER",font:FH});
 oval(s,3.1,2.5,0.9,0.9,C.us,0.5,null); text(s,2.55,3.42,2.0,0.22,BRAND+" (Bugün)",7.5,C.us,{bold:true,align:"CENTER",font:FH});
-oval(s,4.25,1.85,1.0,1.0,C.gold,0.3,null); text(s,3.85,1.66,1.8,0.2,BRAND+" (Hedef)",7.5,C.gold,{bold:true,align:"CENTER",font:FH});
+oval(s,4.25,1.85,1.0,1.0,C.gold,0.3,null); text(s,5.32,2.24,1.9,0.22,BRAND+" (Hedef)",7.5,C.gold,{bold:true,font:FH});
 
 // ════════ SLIDE 24 — SALES BATTLECARD ════════
 s=newSlide(C.bg); header(s,"Sales Battlecard","Satış Rehberi"); footer(s);
-panel(s,0.55,1.5,8.9,0.8); cardHead(s,0.75,1.62,8.5,"Rakibe Karşı Ana Mesaj",C.gold);
-text(s,0.78,1.96,8.6,0.32,cut(battle.rakibe_karsi_ana_mesaj,300),10,C.white,{bold:true,font:FB});
-panel(s,0.55,2.45,4.32,2.6); cardHead(s,0.75,2.6,4.0,"Kazanma Koşulları",C.green);
-bullets(s,0.78,3.02,3.95,1.95,arr(battle.kazanma_kosullari).slice(0,5),8.7,C.ice,{});
-panel(s,5.13,2.45,4.32,2.6); cardHead(s,5.33,2.6,4.0,"İtiraz → Cevap",C.us);
+panel(s,0.55,1.5,8.9,0.95); cardHead(s,0.75,1.62,8.5,"Rakibe Karşı Ana Mesaj",C.gold);
+text(s,0.78,1.92,8.6,0.5,cut(battle.rakibe_karsi_ana_mesaj,300),10,C.white,{bold:true,font:FB});
+panel(s,0.55,2.58,4.32,2.5); cardHead(s,0.75,2.72,4.0,"Kazanma Koşulları",C.green);
+bullets(s,0.78,3.1,3.95,1.92,arr(battle.kazanma_kosullari).slice(0,5),8.7,C.ice,{});
+panel(s,5.13,2.58,4.32,2.5); cardHead(s,5.33,2.72,4.0,"İtiraz → Cevap",C.us);
 const objc=Array.isArray(battle.itiraz_cevaplari)?battle.itiraz_cevaplari.slice(0,4):[];
-bullets(s,5.36,3.02,3.95,1.95,objc.map(o=>safe(o.itiraz)+" → "+safe(o.cevap)),8.5,C.ice,{});
+bullets(s,5.36,3.1,3.95,1.92,objc.map(o=>safe(o.itiraz)+" → "+safe(o.cevap)),8.5,C.ice,{});
 
 // ════════ SLIDE 25 — NEDEN BİZ ════════
 s=newSlide(C.bg); header(s,"Neden Biz?","Rekabet Avantajı"); footer(s);
@@ -11989,9 +12009,9 @@ text(s,0.6,4.96,8.8,0.24,cut(nBiz.ozet_mesaj,260),8.5,C.muted,{align:"CENTER",it
 
 // ════════ SLIDE 26 — STRATEJİK ÖNERİLER ════════
 s=newSlide(C.bg); header(s,"Stratejik Öneriler","Genel Strateji"); footer(s);
-panel(s,0.55,1.5,8.9,0.85); cardHead(s,0.75,1.62,8.5,"Genel Strateji",C.gold); text(s,0.78,1.97,8.6,0.34,cut(so.genel_strateji,420),9.2,C.ice,{ls:110,font:FB});
+panel(s,0.55,1.5,8.9,0.95); cardHead(s,0.75,1.62,8.5,"Genel Strateji",C.gold); text(s,0.78,1.93,8.6,0.48,cut(so.genel_strateji,420),9.2,C.ice,{ls:110,font:FB});
 const tl=[["Kısa Vade (0-3 Ay)",arr(so.kisa_vade),C.green],["Orta Vade (3-12 Ay)",arr(so.orta_vade),C.gold],["Uzun Vade (12+ Ay)",arr(so.uzun_vade),C.blue]];
-tl.forEach((t,i)=>{ const y=2.5+i*0.86; panel(s,0.55,y,8.9,0.74); rect(s,0.55,y+0.1,0.07,0.54,t[2]); text(s,0.78,y+0.1,3.5,0.24,t[0],9.5,t[2],{bold:true,font:FH}); text(s,0.78,y+0.36,8.6,0.36,t[1].slice(0,2).map(it=>(typeof it==="object"?(safe(it.oneri)+": "+cut(it.detay,170)):String(it))).join("   ·   "),8.4,C.ice,{ls:106,font:FB}); });
+tl.forEach((t,i)=>{ const y=2.56+i*0.86; panel(s,0.55,y,8.9,0.78); rect(s,0.55,y+0.1,0.07,0.58,t[2]); text(s,0.78,y+0.08,3.5,0.24,t[0],9.5,t[2],{bold:true,font:FH}); text(s,0.78,y+0.32,8.6,0.44,t[1].slice(0,2).map(it=>(typeof it==="object"?(safe(it.oneri)+": "+cut(it.detay,170)):String(it))).join("   ·   "),8.4,C.ice,{ls:106,font:FB}); });
 
 // ════════ SLIDE 27 — YOL HARİTASI ════════
 s=newSlide(C.bg); header(s,"Yol Haritası","Kısa / Orta / Uzun Vade"); footer(s);
@@ -12006,19 +12026,19 @@ else { panel(s,0.55,1.6,8.9,3.0); text(s,0.8,1.9,8.4,2.5,"Aksiyon planı verisi 
 // ════════ SLIDE 29 — KPI & İZLEME ════════
 s=newSlide(C.bg); header(s,"KPI & İzleme","Ölçüm Metrikleri"); footer(s);
 const kw=[4.7,2.7,1.5]; trow(s,1.5,["Metrik","Hedef","Sıklık"],kw,true);
-arr(ip.kpi_listesi).slice(0,5).forEach((k,i)=>trow(s,2.04+i*0.52,[safe(k.metrik),safe(k.hedef),safe(k.siklik)],kw,false,i%2===0));
-const ri=ip.rakip_izleme||{}; panel(s,0.55,4.7,8.9,0.45); text(s,0.78,4.7,8.5,0.45,"Rakip izleme: "+arr(ri.izlenecek_alanlar).slice(0,5).join("  ·  "),8.3,C.muted,{valign:"MIDDLE",font:FB});
+arr(ip.kpi_listesi).slice(0,5).forEach((k,i)=>trow(s,1.98+i*0.5,[safe(k.metrik),safe(k.hedef),safe(k.siklik)],kw,false,i%2===0));
+const ri=ip.rakip_izleme||{}; panel(s,0.55,4.56,8.9,0.62); text(s,0.78,4.58,8.5,0.58,"Rakip izleme: "+arr(ri.izlenecek_alanlar).slice(0,5).join("  ·  "),8.3,C.muted,{valign:"MIDDLE",font:FB});
 
 // ════════ SLIDE 30 — RİSK ════════
 s=newSlide(C.bg); header(s,"Risk Değerlendirmesi","Tehdit & Savunma"); footer(s);
-arr(swot.tehditler).slice(0,4).forEach((t,i)=>{ const y=1.5+i*0.72; const o=(typeof t==="object"&&t); panel(s,0.55,y,8.9,0.62); rect(s,0.55,y+0.1,0.07,0.42,C.red); text(s,0.78,y+0.08,6.8,0.24,o?safe(t.tehdit):asText(t),9.3,C.red,{bold:true,font:FH}); text(s,0.78,y+0.32,7.0,0.26,o?cut(t.detay,260):"",8.3,C.ice,{font:FB,ls:104}); if(o&&t.olasilik){ chip(s,7.95,y+0.16,1.45,0.3,String(t.olasilik),C.dark,C.orange); } });
-round(s,0.55,4.55,8.9,0.55,C.themDk,0.22,{color:C.red,w:1}); text(s,0.78,4.55,8.6,0.55,"RİSK: "+cut(sonuc.risk_degerlendirmesi,360),8.6,C.red,{bold:true,valign:"MIDDLE",font:FB});
+arr(swot.tehditler).slice(0,4).forEach((t,i)=>{ const y=1.5+i*0.74; const o=(typeof t==="object"&&t); panel(s,0.55,y,8.9,0.66); rect(s,0.55,y+0.1,0.07,0.46,C.red); text(s,0.78,y+0.06,6.8,0.24,o?safe(t.tehdit):asText(t),9.3,C.red,{bold:true,font:FH}); text(s,0.78,y+0.28,7.0,0.36,o?cut(t.detay,260):"",8.3,C.ice,{font:FB,ls:104}); if(o&&t.olasilik){ chip(s,7.95,y+0.16,1.45,0.3,String(t.olasilik),C.dark,C.orange); } });
+round(s,0.55,4.5,8.9,0.64,C.themDk,0.22,{color:C.red,w:1}); text(s,0.78,4.52,8.6,0.6,"RİSK: "+cut(sonuc.risk_degerlendirmesi,360),8.6,C.red,{bold:true,valign:"MIDDLE",font:FB});
 
 // ════════ SLIDE 31 — SONUÇ ════════
 s=newSlide(C.bg); header(s,"Sonuç & Tavsiyeler","Yönetici Kapanışı"); footer(s);
-panel(s,0.55,1.5,8.9,1.2); cardHead(s,0.75,1.64,8.5,"Özet",C.gold); text(s,0.78,2.0,8.6,0.65,cut(sonuc.ozet,640),9.5,C.ice,{ls:116,font:FB});
-panel(s,0.55,2.85,5.55,2.2); cardHead(s,0.75,2.99,5.2,"Kritik Kararlar",C.us); bullets(s,0.78,3.42,5.2,1.55,(arr(sonuc.kritik_kararlar).length?arr(sonuc.kritik_kararlar):arr(sonuc.sonraki_adimlar)).slice(0,5),9,C.ice,{});
-panel(s,6.35,2.85,3.1,2.2); cardHead(s,6.55,2.99,2.8,"Sonraki Adımlar",C.green); bullets(s,6.55,3.42,2.8,1.55,arr(sonuc.sonraki_adimlar).slice(0,5),8.6,C.ice,{});
+panel(s,0.55,1.5,8.9,1.1); cardHead(s,0.75,1.62,8.5,"Özet",C.gold); text(s,0.78,1.92,8.6,0.64,cut(sonuc.ozet,640),9.5,C.ice,{ls:116,font:FB});
+panel(s,0.55,2.72,4.9,2.42); cardHead(s,0.75,2.86,4.6,"Kritik Kararlar",C.us); bullets(s,0.78,3.22,4.55,1.88,(arr(sonuc.kritik_kararlar).length?arr(sonuc.kritik_kararlar):arr(sonuc.sonraki_adimlar)).slice(0,5),9,C.ice,{});
+panel(s,5.6,2.72,3.85,2.42); cardHead(s,5.8,2.86,3.5,"Sonraki Adımlar",C.green); bullets(s,5.8,3.22,3.55,1.88,arr(sonuc.sonraki_adimlar).slice(0,5),8.6,C.ice,{});
 
 // ════════ SLIDE 32 — METODOLOJİ ════════
 s=newSlide(C.bg); header(s,"Metodoloji","Kanıt Kalitesi & Kapsam"); footer(s);
