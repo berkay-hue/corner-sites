@@ -160,7 +160,7 @@ When fed the right data, AI can catch patterns the human eye misses. For example
 
 There is one critical condition, however: the model is only as good as the data entered into the CRM. In an environment where meetings aren't logged, emails aren't connected to the CRM and stages are updated arbitrarily, AI simply processes bad data faster. That's why you first need an infrastructure in which activities are logged automatically. At this point, it's important to understand that the CRM is a system of record, while automation is the layer that feeds those records and puts them into action.
 
-In Sales Corner's approach, AI doesn't make decisions on the rep's behalf; it flags risky opportunities early, reports close date inconsistencies and turns the forecast meeting from a "walk through every opportunity" session into an "discuss the exceptions" session.
+In Sales Corner's approach, AI doesn't make decisions on the rep's behalf; it flags risky opportunities early, reports close date inconsistencies and turns the forecast meeting from a "walk through every opportunity" session into a "discuss the exceptions" session.
 
 ## How do you measure forecast accuracy?
 

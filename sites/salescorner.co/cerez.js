@@ -68,13 +68,58 @@
       opener = (a && a !== document.body && a !== document.documentElement && !b.contains(a)) ? a : null;
     }
     b.hidden = false;
+    pad();
     if (focus) { try { b.focus({ preventScroll: true }); } catch (e) { b.focus(); } }
   }
+
+  // Band açıkken sayfa içeriği ve Tab odağı bandın altında kalmasın (WCAG 2.4.11):
+  // html'e scroll-padding-bottom, sayfanın sonuna bant yüksekliğinde aria-hidden boşluk.
+  // (body bazı sayfalarda height:100% olduğu için body padding'i işe yaramıyor; ara div kullanılır.)
+  // Kapanınca boşluk gizlenir, scroll-padding eski değerine döner.
+  var spacer = null, padOn = false, padOldHtml = '';
+  function pad() {
+    if (!box || box.hidden) return;
+    var de = document.documentElement;
+    if (!spacer) {
+      spacer = document.createElement('div');
+      spacer.setAttribute('aria-hidden', 'true');
+      spacer.style.cssText = 'width:1px;margin:0;padding:0;pointer-events:none';
+      document.body.insertBefore(spacer, box);
+    }
+    if (!padOn) { padOn = true; padOldHtml = de.style.scrollPaddingBottom; }
+    var h = Math.ceil(box.offsetHeight + 16);
+    de.style.scrollPaddingBottom = (h + 8) + 'px';
+    spacer.style.height = h + 'px';
+    spacer.hidden = false;
+  }
+  function unpad() {
+    if (!padOn) return;
+    padOn = false;
+    if (spacer) spacer.hidden = true;
+    if (box) box.style.bottom = '';
+    document.documentElement.style.scrollPaddingBottom = padOldHtml;
+  }
+  window.addEventListener('resize', function () { if (box && !box.hidden) pad(); });
+  document.addEventListener('focusin', function (e) {
+    var t = e.target;
+    if (!box || box.hidden || !t || !t.getBoundingClientRect || box.contains(t)) return;
+    box.style.bottom = '';
+    if (t.getBoundingClientRect().bottom > box.getBoundingClientRect().top) {
+      try { t.scrollIntoView({ block: 'center' }); } catch (x) { t.scrollIntoView(false); }
+      // Sabit (fixed) öğeler (ör. alttaki TR/EN seçici) kaydırmayla açılmaz: hâlâ örtülüyorsa bandı öğenin üstüne kaldır.
+      var r = t.getBoundingClientRect(), br = box.getBoundingClientRect();
+      if (r.bottom > br.top && r.top < br.bottom && r.right > br.left && r.left < br.right) {
+        var lift = Math.ceil(window.innerHeight - r.top + 8);
+        if (lift + box.offsetHeight <= window.innerHeight) box.style.bottom = lift + 'px';
+      }
+    }
+  });
   function hide() {
     if (!box || box.hidden) return;
     var ae = document.activeElement;
     var had = !ae || ae === document.body || box.contains(ae);
     box.hidden = true;
+    unpad();
     var o = opener; opener = null;
     if (had && o && document.contains(o)) { try { o.focus({ preventScroll: true }); } catch (e) { o.focus(); } }
   }

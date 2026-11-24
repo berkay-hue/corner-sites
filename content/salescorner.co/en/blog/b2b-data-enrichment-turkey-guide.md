@@ -67,9 +67,9 @@ Before you start enriching, put in writing who you are targeting. Which industri
 
 Derive a **data schema** from your ICP: which fields are required, which are optional, and what format each field will use? For example:
 
-- `calisan_araligi`: 1-10, 11-50, 51-200, 201-500, 501-1000, 1000+
-- `kidem`: C-Level, VP/Director, Manager, Specialist
-- `departman`: Sales, Marketing, Operations, Finance, IT, HR, Purchasing
+- `employee_range`: 1-10, 11-50, 51-200, 201-500, 501-1000, 1000+
+- `seniority`: C-Level, VP/Director, Manager, Specialist
+- `department`: Sales, Marketing, Operations, Finance, IT, HR, Purchasing
 
 ### 2. Audit your existing data
 

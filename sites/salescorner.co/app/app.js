@@ -32,6 +32,7 @@ const STEPS = {
   fireflies: ["Transkript alınıyor", "Konuşma oranları hesaplanıyor", "Satış koçu analizi yapılıyor"],
 };
 const EST = { rakip: 240, sekans: 150, seo: 45, briefing: 120, fireflies: 60 };
+const estDk = k => `${Math.round(EST[k] / 60) || 1}–${Math.ceil((EST[k] * 1.6) / 60)}`;
 const PLAN_FALLBACK = [
   { kod: "deneme", ad: "Deneme (14 gün)", aylik_tl: 0, koltuk: 1, kota: { rakip: 3, sekans: 5, seo: 5, briefing: 5, fireflies: 3 } },
   { kod: "baslangic", ad: "Başlangıç", aylik_tl: 1490, koltuk: 1, kota: { rakip: 10, sekans: 30, seo: 20, briefing: 20 } },
@@ -304,6 +305,7 @@ function authLayout(inner) {
   <main class="auth-main"><div class="auth-card">
     <a class="brand" href="${SITE}/">${LOGO}</a>
     ${inner}
+    <p class="auth-legal"><a href="${SITE}/kvkk">KVKK</a> · <a href="${SITE}/gizlilik-politikasi">Gizlilik</a> · <a href="${SITE}/cerez-politikasi">Çerez Politikası</a></p>
   </div></main>
 </div>`;
 }
@@ -344,12 +346,14 @@ async function resend(email) {
   const { error } = await sb.auth.resend({ type: "signup", email, options: { emailRedirectTo: redirectTo() } });
   setMsg("m", error ? "err" : "ok", esc(error ? trErr(error) : "Doğrulama e-postası tekrar gönderildi. Gelen kutunuzu (ve spam klasörünü) kontrol edin."));
 }
-async function pageKayit() {
+function denemeOzet() {
   const deneme = (S.planlar || PLAN_FALLBACK).find(p => p.kod === "deneme") || PLAN_FALLBACK[0];
   const q = deneme.kota || {};
-  const ozet = MODS.filter(m => q[m.k]).map(m => `${q[m.k]} ${kucuk(m.ad)}`).join(", ");
+  return `Denemede bütün araçlar açık: ${MODS.filter(m => q[m.k]).map(m => `${q[m.k]} ${kucuk(m.ad)}`).join(", ")}.`;
+}
+async function pageKayit() {
   authLayout(`<h2>14 gün ücretsiz deneyin</h2><p class="sub">Kredi kartı gerekmez. Dakikalar içinde ilk analizinizi alın.</p>${tabs("kayit")}
-  <div class="trial-note"><span aria-hidden="true">🎁</span><span>Denemede bütün araçlar açık: ${esc(ozet)}.</span></div>
+  <div class="trial-note"><span aria-hidden="true">🎁</span><span id="trial-ozet">${esc(denemeOzet())}</span></div>
   <div id="m"></div>
   <form id="f" data-sk-noform>
     <div class="grid2">
@@ -382,7 +386,7 @@ async function pageKayit() {
     setMsg("m", "ok", `<div><b>Neredeyse hazır!</b><br><b>${esc(email)}</b> adresine bir doğrulama bağlantısı gönderdik. Bağlantıya tıklayınca paneliniz açılır.<br><button type="button" class="linkbtn" id="rs" style="margin-top:8px">E-posta gelmedi mi? Tekrar gönder</button></div>`);
     document.getElementById("rs").onclick = () => resend(email);
   };
-  if (!S.planlar) loadPlanlar().then(() => { if (route === "kayit" && !document.getElementById("f").hidden && !document.getElementById("em").value) pageKayit(); });
+  if (!S.planlar) loadPlanlar().then(() => { const o = document.getElementById("trial-ozet"); if (o) o.textContent = denemeOzet(); });
 }
 function pageSifre() {
   authLayout(`<h2>Şifrenizi sıfırlayın</h2><p class="sub">E-posta adresinizi girin, size bir sıfırlama bağlantısı gönderelim.</p>
@@ -399,7 +403,8 @@ function pageSifre() {
     busy(btn, true, "Gönderiliyor…");
     const { error } = await sb.auth.resetPasswordForEmail(f.em.value.trim(), { redirectTo: redirectTo() });
     busy(btn, false);
-    if (error && /rate|too many|security purposes/i.test(error.message)) return setMsg("m", "err", esc(trErr(error)));
+    // Hesap varlığını sızdırmamak için "kullanıcı yok" türü hatalar başarı gibi gösterilir; ağ/5xx/SMTP/rate-limit hataları gösterilir, form açık kalır.
+    if (error && !/not.?found|no user|(does not|doesn't) exist/i.test(error.message || "")) return setMsg("m", "err", esc(trErr(error)));
     f.hidden = true;
     setMsg("m", "ok", "Bu adresle kayıtlı bir hesap varsa sıfırlama bağlantısı birkaç dakika içinde gelecek. Spam klasörünü de kontrol edin.");
   };
@@ -628,7 +633,7 @@ function renderJob(k) {
       <div class="meter" style="max-width:320px;width:100%;flex:none"><i data-bar style="width:3%"></i></div>
       <ol class="steps">${STEPS[k].map(s => `<li>${esc(s)}</li>`).join("")}</ol>
       ${j.step ? `<p style="font-size:13.5px;color:var(--mute)">${esc(j.step)}</p>` : ""}
-      <p style="font-size:13px;color:var(--soft)">Geçen süre <span data-el>${mmss(el)}</span> · genellikle ${Math.round(EST[k] / 60) || 1}–${Math.ceil((EST[k] * 1.6) / 60)} dk${j.sync ? "" : " · Bu sekme açık kaldığı sürece devam eder; başka sayfalara geçebilirsiniz."}</p></div>`;
+      <p style="font-size:13px;color:var(--soft)">Geçen süre <span data-el>${mmss(el)}</span> · genellikle ${estDk(k)} dk${j.sync ? "" : " · Bu sekme açık kaldığı sürece devam eder; başka sayfalara geçebilirsiniz."}</p></div>`;
     return;
   }
   const again = `<button class="btn btn-g btn-s" data-reset="${k}">Yeni ${k === "fireflies" ? "analiz" : "çalışma"}</button>`;
@@ -801,7 +806,7 @@ function pageBriefing() {
     <div class="f"><label for="tk">Toplantı konusu</label><input class="in" id="tk" maxlength="300" placeholder="Ör. CRM entegrasyonu demo görüşmesi"></div>
     <div id="m"></div>
     <button class="btn btn-p btn-w" type="submit">Briefing hazırla</button>
-    <p class="hint" style="margin-top:10px;font-size:12.5px;color:var(--mute)">1–3 dakika sürer; sonuç e-postanıza da gelir.</p>
+    <p class="hint" style="margin-top:10px;font-size:12.5px;color:var(--mute)">${estDk("briefing")} dakika sürer; sonuç e-postanıza da gelir.</p>
   </form>`);
   const f = document.getElementById("f");
   f.onsubmit = e => {
@@ -862,7 +867,7 @@ function pageFireflies() {
   const items = FF.list === null ? `<div class="empty" style="padding:24px"><div class="spin"></div></div>`
     : FF.err ? msg("err", esc(FF.err) + ` <a href="#/hesap">Anahtarı kontrol edin →</a>`)
     : !FF.list.length ? `<p style="color:var(--mute)">Fireflies hesabınızda henüz kayıtlı toplantı yok.</p>`
-    : `<div class="list" role="listbox" aria-label="Toplantılar">${FF.list.map(t => `<button type="button" class="li" data-ff="${esc(t.id)}" aria-pressed="${FF.sel === t.id}"><span aria-hidden="true">🎧</span><span class="t"><b>${esc(t.title || "Adsız toplantı")}</b><span>${fmtDT(t.date)}${t.duration ? " · " + fmtDur(t.duration) : ""}${t.participants?.length ? ` · ${t.participants.length} katılımcı` : ""}</span></span></button>`).join("")}</div>`;
+    : `<div class="list" role="group" aria-label="Toplantılar">${FF.list.map(t => `<button type="button" class="li" data-ff="${esc(t.id)}" aria-pressed="${FF.sel === t.id}"><span aria-hidden="true">🎧</span><span class="t"><b>${esc(t.title || "Adsız toplantı")}</b><span>${fmtDT(t.date)}${t.duration ? " · " + fmtDur(t.duration) : ""}${t.participants?.length ? ` · ${t.participants.length} katılımcı` : ""}</span></span></button>`).join("")}</div>`;
   toolShell("fireflies", `<form id="f" data-sk-noform>
     <div class="row" style="margin-bottom:12px"><h3>Son toplantılarınız</h3><button type="button" class="iconbtn" id="ffr" title="Yenile" aria-label="Listeyi yenile">↻</button></div>
     <div style="max-height:420px;overflow:auto;margin-bottom:14px">${items}</div>
@@ -955,7 +960,7 @@ function pageHesap() {
         <div class="f"><label for="sr">Şirket</label><input class="in" id="sr" maxlength="160" value="${esc(b.sirket || "")}"></div></div>
         <div class="f"><label for="em">E-posta</label><input class="in" id="em" value="${esc(b.email)}" disabled></div>
         <button class="btn btn-p" type="submit">Kaydet</button></form></section>
-    <section class="card pad"><div class="row" style="margin-bottom:14px"><h3>Plan ve kullanım</h3><span class="pill ${b.aktif ? "acc" : "warn"}">${esc(b.plan_ad || b.plan)} · ${b.aktif ? fmtD(b.bitis) + "'e kadar" : "süre doldu"}</span></div>
+    <section class="card pad"><div class="row" style="margin-bottom:14px"><h3>Plan ve kullanım</h3><span class="pill ${b.aktif ? "acc" : "warn"}">${esc(b.plan_ad || b.plan)} · ${b.aktif ? "Geçerlilik: " + fmtD(b.bitis) : "süre doldu"}</span></div>
       <div class="scroll-x"><table class="tbl"><thead><tr><th>Araç</th><th>Bu ay (${esc(b.ay || "")})</th><th>Aylık hak</th></tr></thead><tbody>
       ${MODS.map(m => { const d = durum(m.k); return `<tr><td>${m.ic} ${esc(m.ad)}</td><td>${d.kul}</td><td>${d.lim < 0 ? "Sınırsız" : d.lim ? d.lim : "Plana dahil değil"}</td></tr>`; }).join("")}
       </tbody></table></div><a class="btn btn-g btn-s" href="#/fiyatlar" style="margin-top:14px">Planları gör</a></section>
