@@ -67,9 +67,9 @@ const EST = { rakip: 240, sekans: 150, seo: 45, briefing: 120, fireflies: 60 };
 const estDk = k => `${Math.round(EST[k] / 60) || 1}–${Math.ceil((EST[k] * 1.6) / 60)}`;
 const PLAN_FALLBACK = [
   { kod: "deneme", ad: "Deneme (14 gün)", aylik_tl: 0, koltuk: 1, kota: { rakip: 1, sekans: 1, seo: 1, briefing: 1, fireflies: 1, takip: 1 } },
-  { kod: "baslangic", ad: "Başlangıç", aylik_tl: 149, koltuk: 1, kota: { rakip: 1, sekans: 3, seo: 2, briefing: 2, takip: 1 } },
-  { kod: "profesyonel", ad: "Profesyonel", aylik_tl: 349, koltuk: 1, kota: { rakip: 4, sekans: 15, seo: 8, briefing: 10, fireflies: 4, takip: 3 } },
-  { kod: "ekip", ad: "Ekip", aylik_tl: 899, koltuk: 5, kota: { rakip: 15, sekans: 60, seo: 30, briefing: 40, fireflies: 20, takip: 10 } },
+  { kod: "baslangic", ad: "Başlangıç", aylik_tl: 1490, koltuk: 1, kota: { rakip: 1, sekans: 3, seo: 2, briefing: 2, takip: 1 } },
+  { kod: "profesyonel", ad: "Profesyonel", aylik_tl: 3490, koltuk: 1, kota: { rakip: 4, sekans: 15, seo: 8, briefing: 10, fireflies: 4, takip: 3 } },
+  { kod: "ekip", ad: "Ekip", aylik_tl: 8990, koltuk: 5, kota: { rakip: 15, sekans: 60, seo: 30, briefing: 40, fireflies: 20, takip: 10 } },
   { kod: "ozel", ad: "Özel AI", aylik_tl: null, koltuk: 0, kota: { rakip: -1, sekans: -1, seo: -1, briefing: -1, fireflies: -1, takip: -1 } },
 ];
 const PLAN_META = {
@@ -591,9 +591,14 @@ const OZ_ADIM = [
   ["Destek", "Ölçüyor, iyileştiriyor ve yeni ihtiyaçlara göre büyütüyoruz."],
 ];
 const OZ_SEL = new Set();
+// Teklif formu aynı origin'de (/iletisim) ve aynı sekmede açılır: Supabase oturumu localStorage'da olduğundan
+// iletişim sayfası girişli kullanıcıyı tanır ve "Panele dön" gösterir. Dönüş adresi sessionStorage'a yazılır.
+function teklifLink(msj, konu) {
+  return `/iletisim?${konu ? `konu=${encodeURIComponent(konu)}&` : ""}mesaj=${encodeURIComponent(msj)}#form`;
+}
 function ozLink(adlar) {
   const msj = "Panelden size özel çözüm talebi:\n" + adlar.map(a => "- " + a).join("\n") + "\n\nKısaca ihtiyacımız: ";
-  return `${SITE}/iletisim?konu=${encodeURIComponent("AI otomasyonu")}&mesaj=${encodeURIComponent(msj)}#form`;
+  return teklifLink(msj, "AI otomasyonu");
 }
 function ozSecilen() {
   return [...OZ_PAKET.filter(p => OZ_SEL.has("p:" + p.k)).map(p => p.ad + " paketi"), ...OZ_KAT.filter(x => OZ_SEL.has("k:" + x.k)).map(x => x.ad)];
@@ -617,7 +622,7 @@ function pageOzel() {
     <div class="price"><b>Teklif ile</b></div>
     <ul>${p.li.map(t => `<li>${esc(t)}</li>`).join("")}</ul>
     <div class="oz-pact"><button type="button" class="btn btn-g btn-w" data-oz="p:${p.k}" aria-pressed="false"><span class="oz-pick">+ Listeye ekle</span></button>
-    <a class="btn ${p.hot ? "btn-p" : "btn-g"} btn-w" href="${esc(ozLink([p.ad + " paketi"]))}" target="_blank" rel="noopener">Bu paket için teklif al</a></div></div>`;
+    <a class="btn ${p.hot ? "btn-p" : "btn-g"} btn-w" href="${esc(ozLink([p.ad + " paketi"]))}" data-teklif>Bu paket için teklif al</a></div></div>`;
   const item = x => `<button type="button" class="card mod oz-item" data-oz="k:${x.k}" aria-pressed="false">
     <span class="row" style="justify-content:flex-start"><span class="mi" aria-hidden="true">${x.ic}</span><h3>${esc(x.ad)}</h3></span>
     <p>${esc(x.d)}</p><span class="foot"><span class="pill">Size özel</span><span class="oz-pick">+ Listeye ekle</span></span></button>`;
@@ -626,7 +631,7 @@ function pageOzel() {
     <div><span class="oz-kick">Sales Corner Özel Geliştirme</span>
       <h2>İhtiyacınız olan satış aracını sizin için geliştirelim.</h2>
       <p>HTML sorgusundan canlı satış destek eklentisine, keyword scanner'dan CRM entegrasyonuna kadar; ekibinizin her gün tekrarladığı işi otomasyona çeviriyoruz.</p>
-      <div class="row"><a class="btn oz-btn" href="${esc(ozLink(["Size özel çözüm"]))}" target="_blank" rel="noopener">Ücretsiz keşif görüşmesi →</a><button type="button" class="btn oz-btn2" data-oz-to="oz-paket">Hazır paketleri gör</button></div>
+      <div class="row"><a class="btn oz-btn" href="${esc(ozLink(["Size özel çözüm"]))}" data-teklif>Ücretsiz keşif görüşmesi →</a><button type="button" class="btn oz-btn2" data-oz-to="oz-paket">Hazır paketleri gör</button></div>
     </div>
     <div class="oz-tags" aria-hidden="true">${OZ_KAT.map(x => `<span>${esc(x.ad)}</span>`).join("")}</div>
   </section>
@@ -637,7 +642,7 @@ function pageOzel() {
   <div class="oz-h"><div><h2>Nasıl çalışıyoruz?</h2><p>Fikirden çalışan araca dört adım.</p></div></div>
   <ol class="oz-steps">${OZ_ADIM.map((a, i) => `<li class="card"><span class="oz-n">${i + 1}</span><b>${a[0]}</b><p>${a[1]}</p></li>`).join("")}</ol>
   <div class="card oz-more"><span aria-hidden="true">${ic("chat", 22)}</span><div><b>Listede olmayan bir fikriniz mi var?</b><p>Satış ekibinizin elle yaptığı, tekrar eden her iş otomasyon adayıdır. Anlatın, uygulanabilir mi birlikte bakalım.</p></div></div>
-  <div class="oz-bar" id="oz-bar" aria-live="polite"><div class="oz-bt"><b>Size özel teklif</b><div class="oz-sel"></div></div><a class="btn btn-p" id="oz-cta" href="#" target="_blank" rel="noopener">Teklif iste →</a></div>`);
+  <div class="oz-bar" id="oz-bar" aria-live="polite"><div class="oz-bt"><b>Size özel teklif</b><div class="oz-sel"></div></div><a class="btn btn-p" id="oz-cta" href="#" data-teklif>Teklif iste →</a></div>`);
   document.querySelectorAll("[data-oz]").forEach(x => (x.onclick = () => { const k = x.dataset.oz; OZ_SEL.has(k) ? OZ_SEL.delete(k) : OZ_SEL.add(k); ozBar(); }));
   document.querySelectorAll("[data-oz-to]").forEach(x => (x.onclick = () => document.getElementById(x.dataset.ozTo)?.scrollIntoView({ behavior: "smooth", block: "start" })));
   ozBar();
@@ -973,7 +978,7 @@ async function pageFiyatlar() {
   const card = p => {
     const meta = PLAN_META[p.kod] || {}, cur = b.plan === p.kod && b.aktif;
     const cta = cur ? `<span class="btn btn-g btn-w" aria-disabled="true">Mevcut planınız</span>`
-      : `<a class="btn ${meta.hot ? "btn-p" : p.kod === "ozel" ? "btn-g" : "btn-g"} btn-w" href="${SITE}/iletisim" target="_blank" rel="noopener">${p.kod === "ozel" ? "Teklif alın" : "Bu planı seç"}</a>`;
+      : `<a class="btn ${meta.hot ? "btn-p" : p.kod === "ozel" ? "btn-g" : "btn-g"} btn-w" href="${esc(p.kod === "ozel" ? ozLink([p.ad + " paketi"]) : teklifLink(`Panelden plan talebi: ${p.ad} (${y ? "yıllık" : "aylık"} faturalama)\n\nNotumuz: `))}" data-teklif>${p.kod === "ozel" ? "Teklif alın" : "Bu planı seç"}</a>`;
     if (p.kod === "ozel") return `<div class="card plan dark"><h3>${esc(p.ad)}</h3><p>${esc(meta.d)}</p><div class="price"><b>Teklif ile</b></div>
       <ul><li>Bütün araçlar, sınırsız kullanım</li><li>CRM entegrasyonu (HubSpot, Pipedrive, Salesforce…)</li><li>Şirketinize özel kişisel AI asistan</li><li>Kendi süreçlerinize göre iş akışları</li><li>Özel hesap yöneticisi</li></ul>${cta}</div>`;
     const m = Number(p.aylik_tl) || 0, fiyat = y ? Math.round((m * 0.8) / 10) * 10 : m;
@@ -1331,6 +1336,9 @@ async function loadIlt() {
 const PAGES = { giris: pageGiris, kayit: pageKayit, sifre: pageSifre, "yeni-sifre": pageYeniSifre, panel: pagePanel, rakip: pageRakip, sekans: pageSekans, seo: pageSeo, briefing: pageBriefing, fireflies: pageFireflies, takip: pageTakip, fiyatlar: pageFiyatlar, hesap: pageHesap, admin: pageAdmin, ozel: pageOzel };
 
 // ---------- Genel olaylar ----------
+document.addEventListener("click", e => {
+  if (e.target.closest("a[data-teklif]")) try { sessionStorage.setItem("sc_app_ret", location.pathname + location.hash); } catch {}
+});
 document.addEventListener("click", async e => {
   const t = e.target.closest("[data-go],[data-eye],[data-side],[data-menu],[data-logout],[data-copy],[data-copy-el],[data-reset],.nav a,#seo-show,#seo-dl");
   if (!t) return;

@@ -13812,7 +13812,19 @@ export default {
       const p = { sayfa: str(b.sayfa, 80), ad: str(b.ad, 200), email: str(b.email, 200), konu: str(b.konu, 200), telefon: str(b.telefon, 40), mesaj: str(b.mesaj, 5000) };
       try {
         const r = await sbRpc(SB_ANON_AU, "app_iletisim_ekle", { p });
-        if (r.ok && r.j?.ok) return J({ ok: true });
+        if (r.ok && r.j?.ok) {
+          // Panelden gelen teklif (app.salescorner.co/iletisim, oturum korunsun diye aynı köken): corner-forms
+          // ALLOWED_HOSTS bu alt alanı kabul etmediği için tarayıcıdaki kopya reddedilir; e-posta bildirimi
+          // kaybolmasın diye kayıt Supabase'e düştükten sonra corner-forms'a sunucudan iletilir.
+          if (url.hostname === "app.salescorner.co" && cfctx?.waitUntil) {
+            const fields = [["Ad Soyad", p.ad], ["E-posta", p.email], ["Konu", p.konu], ["Telefon", p.telefon], ["Mesaj", p.mesaj], ["Onay", "Evet"]].filter(x => x[1]);
+            cfctx.waitUntil(fetch("https://corner-forms.berkay-999.workers.dev/submit", {
+              method: "POST", headers: { "content-type": "application/json", origin: "https://salescorner.co" },
+              body: JSON.stringify({ page: p.sayfa || "/iletisim", fields, hp: "" }),
+            }).then(x => { if (!x.ok) console.log("corner-forms relay", x.status); }, e => console.log("corner-forms relay", e?.message)));
+          }
+          return J({ ok: true });
+        }
         const code = r.j?.code;
         if (code === "54000") return J({ ok: false, error: "Çok fazla deneme, lütfen biraz sonra tekrar deneyin." }, 429);
         if (code === "22023" || r.status === 400) return J({ ok: false, error: "Lütfen e-posta ve mesajı kontrol edin." }, 400);
