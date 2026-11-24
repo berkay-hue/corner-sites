@@ -25,6 +25,7 @@ header{border-bottom-width:1px}footer{border-top-width:1px;margin-top:64px}
 header .w,footer .w{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:center;padding-top:16px;padding-bottom:16px}
 header a,footer a{color:var(--mute);text-decoration:none;min-height:44px;display:inline-flex;align-items:center}
 header a:first-child{color:var(--fg);font-weight:600;margin-right:auto}
+@media(max-width:600px){header .w{flex-wrap:nowrap;gap:0 12px;padding-top:6px;padding-bottom:6px;font-size:13.5px;overflow-x:auto;scrollbar-width:none}header .w::-webkit-scrollbar{display:none}header a{white-space:nowrap;flex:none}}
 main{flex:1}
 .code{margin:64px 0 0;font-size:14px;font-weight:600;letter-spacing:.12em;color:var(--mute)}
 h1{font-size:clamp(28px,6vw,40px);line-height:1.2;margin:8px 0 12px}
