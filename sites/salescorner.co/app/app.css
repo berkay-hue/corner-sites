@@ -49,6 +49,17 @@ p{margin:0}
 .feat span{opacity:.8;font-size:13.5px}
 .feat i{font-style:normal;font-size:18px;line-height:1.3}
 .auth-art small{opacity:.7}
+/* Sol panel tek ekrana sığsın: yükseklikle ölçeklenir, 2 sütun özellik kartı, sağ form uzarsa yapışık kalır */
+.auth-art{position:sticky;top:0;height:100vh;height:100dvh;padding:clamp(20px,4.5vh,48px) clamp(28px,4vw,56px);gap:clamp(12px,2.5vh,24px)}
+.auth-art h1{font-size:clamp(24px,4.4vh,36px);margin-bottom:clamp(6px,1.4vh,14px)}
+.auth-art .lead{font-size:clamp(14px,2vh,16px)}
+.feat{grid-template-columns:repeat(2,minmax(0,1fr));max-width:620px;gap:10px;margin-top:clamp(12px,3vh,28px)}
+.feat li{padding:10px 12px;gap:10px}
+.feat span{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:13px;line-height:1.4}
+.feat li:last-child:nth-child(odd){grid-column:1/-1}
+@media (max-width:1100px){.feat{grid-template-columns:1fr}.feat li:last-child:nth-child(odd){grid-column:auto}.feat span{display:none}}
+@media (max-height:760px){.feat span{display:none}.feat li{align-items:center;padding:9px 12px}}
+@media (max-height:600px){.auth-art .lead{display:none}}
 .auth-main{display:flex;align-items:center;justify-content:center;padding:40px 24px;background:var(--card)}
 .auth-card{width:100%;max-width:400px}
 .auth-card .brand{display:none;margin-bottom:28px}
