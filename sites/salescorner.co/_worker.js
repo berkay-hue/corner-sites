@@ -355,7 +355,7 @@ ${site.text ? `Web sitesi (${q.d}): ${site.text}` : ""}
 JSON: {"slides":[{"baslik":"...","maddeler":["..."],"not":"tam metin (e-posta gövdesi vb.)"}]}
 Slaytlar: Firma ve alıcı analizi, Değer önerisi ve ana mesaj, sonra 5 adımlık sekans (E-posta 1 – Gün 1, LinkedIn bağlantı notu – Gün 2, E-posta 2 – Gün 4, Cold call senaryosu – Gün 6, E-posta 3 (son) – Gün 9). Adım slaytlarında maddeler: konu satırı + amaç; "not": gönderilecek tam metin.`, { system: SYS, max: 9000 });
     const slides = aiSlides(ai.slides);
-    const links = reportLinks(origin, { t: `${q.c} · Satış Sekansı`, s: q.w ? `Hazırlayan: ${q.w}` : "", d: new Date().toISOString().slice(0, 10), sl: slides });
+    const links = reportLinks(origin, { t: `${q.c} · Satış Sekansı`, s: q.w ? `Hazırlayan: ${q.w}` : "", d: new Date().toLocaleDateString("sv-SE", { timeZone: "Europe/Istanbul" }), sl: slides });
     return J({ status: "completed", company: q.c, ...links, publicUrl: links.presentationViewUrl, slideCount: slides.length });
   } catch (e) { console.log("sekans", e.message); return J({ status: "error", error: "Sekans üretilemedi, lütfen tekrar deneyin." }); }
 }
@@ -382,7 +382,7 @@ ${rivals.map((p, i) => `Rakip ${i + 1}: ${p.url || q.c[i]}\nMetin: ${p.text || "
 JSON: {"rakip_adi":"rakiplerin kısa adları, virgülle","slides":[{"baslik":"...","maddeler":["..."],"not":"..."}]}
 Slaytlar: Pazar ve konumlanma özeti, her rakip için bir slayt (sunduğu, hedef kitle, fiyat sinyali, güçlü/zayıf yön), Karşılaştırma (mesaj, teklif, kanıt), Bizim için fırsatlar, 30 günlük aksiyon planı.`, { system: SYS, max: 9000 });
     const slides = aiSlides(ai.slides);
-    const l = reportLinks(origin, { t: `${q.n || own.url} · Rakip Analizi`, s: str(ai.rakip_adi, 200), d: new Date().toISOString().slice(0, 10), sl: slides });
+    const l = reportLinks(origin, { t: `${q.n || own.url} · Rakip Analizi`, s: str(ai.rakip_adi, 200), d: new Date().toLocaleDateString("sv-SE", { timeZone: "Europe/Istanbul" }), sl: slides });
     return J({ status: "completed", rakip_adi: str(ai.rakip_adi, 200), slideCount: slides.length, slides_url: l.presentationUrl, slides_view_url: l.presentationViewUrl, slides_pdf_url: l.presentationViewUrl });
   } catch (e) { console.log("rakip", e.message); return J({ status: "error", error: "Analiz üretilemedi, lütfen tekrar deneyin." }); }
 }
@@ -9328,7 +9328,7 @@ const objections = coldCall.objection_handling || {};
 const productPortfolio = safeArr(actualData.product_portfolio || analysis.product_portfolio);
 
 const dateStr = new Date(actualData.generated_at || new Date()).toLocaleDateString("tr-TR", {
-  year: "numeric", month: "long", day: "numeric"
+  timeZone: "Europe/Istanbul", year: "numeric", month: "long", day: "numeric"
 });
 
 // === RENK PALETİ (Google Slides RGB 0-1 formatı) ===
@@ -11442,7 +11442,7 @@ JSON formatında DETAYLI ver (\`\`\`json code block kullan):
 
 {
   "executive_summary": {
-    "rapor_tarihi": "${new Date().toISOString().split('T')[0]}",
+    "rapor_tarihi": "${new Date().toLocaleDateString('sv-SE', { timeZone: 'Europe/Istanbul' })}",
     "rakip_adi": "${safe(data.genel_bilgiler?.sirket_adi)}",
     "rakip_website": "${safe(data.genel_bilgiler?.website)}",
     "bizim_firma": "${safe(bizimFirma.company_name)}",
@@ -11820,7 +11820,7 @@ const sa=Array.isArray(R.source_audit)?R.source_audit:[];
 const biz=fp.bizim||{}, rak=fp.rakip||{};
 const hk=dk.hizmet_kapsami||{}, hp=dk.hedef_pazar||{}, fy=dk.fiyatlandirma||{}, md=dk.musteri_deneyimi||{}, dv=dk.dijital_varlik||{};
 
-const DATE = es.rapor_tarihi || new Date().toISOString().split("T")[0];
+const DATE = es.rapor_tarihi || new Date().toLocaleDateString("sv-SE", { timeZone: "Europe/Istanbul" });
 const RIVAL = String(es.rakip_adi || "Rakip");
 const BRAND = String(es.bizim_firma || "Firmamiz");
 const TOTAL = 33;
