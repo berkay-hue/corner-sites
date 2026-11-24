@@ -178,7 +178,7 @@
   <p>Hesabını sildiğinde hesabına bağlı tüm kayıtlar hemen silinir. Bağlı platformların erişim anahtarları da silinir. Uygulamaya verdiğin izni LinkedIn ya da Instagram ayarlarından ayrıca kaldırabilirsin. Güvenlik kayıtları ise 1 gün içinde kendiliğinden silinir.</p>
 
   <h2 id="cerez">8. Çerezler ve tarayıcında tutulanlar</h2>
-  <p>Bu bölüm aynı zamanda panelin <strong>Çerez Politikası</strong>’dır. Panel reklam, profilleme ya da izleme çerezi kullanmaz ve kendi çerezini koymaz; oturumun bile çerezde değil, tarayıcının yerel deposunda (localStorage ya da sessionStorage) durur. Aşağıdaki bilgiler yalnız panelin çalışması ve tercihlerini hatırlaması içindir. Bunlardan yalnız <code>smc-anon</code> ve <code>smc-oturum</code> isteklerle birlikte sunucumuza gider; ötekiler tarayıcından çıkmaz.</p>
+  <p>Bu bölüm aynı zamanda panelin <strong>Çerez Politikası</strong>’dır. Panel reklam, profilleme ya da izleme çerezi kullanmaz ve kendi çerezini koymaz; oturumun bile çerezde değil, tarayıcının yerel deposunda (localStorage ya da sessionStorage) durur. Aşağıdaki bilgiler yalnız panelin çalışması ve tercihlerini hatırlaması içindir. Bunlardan <code>smc-anon</code> ve <code>smc-oturum</code> isteklerle birlikte sunucumuza gider; <code>smc-ses-v1</code> içindeki marka sesi profili de taslak isteğiyle birlikte gönderilir. Ötekiler tarayıcından çıkmaz.</p>
   <p>Ziyaretleri Cloudflare Web Analytics ile çerezsiz ölçeriz. Giriş ve kayıt formlarındaki Cloudflare Turnstile bot doğrulaması, yalnız bu doğrulama için Cloudflare’in zorunlu çerezlerini kullanabilir (5. bölüm).</p>
   <p>Çerez bandında “Kabul ediyorum” ya da “Yalnız zorunlu” seçebilirsin. Bugün zorunlu olmayan bir çerez kullanmadığımız için iki seçim de panelin çalışmasını değiştirmez; seçimin yalnız kaydedilir. İleride isteğe bağlı bir çerez eklersek bu metni güncelleriz ve senden yeniden onay isteriz.</p>
   <p><button type="button" class="ckb-ac" data-ckb-ac hidden>Çerez tercihlerini aç</button></p>
@@ -197,7 +197,7 @@
   <ul>
     <li><code>smc-tema</code>, <code>smc-dil</code> (localStorage): tema ve dil tercihin.</li>
     <li><code>smc-ray</code> (localStorage): masaüstünde sol menüyü daralttıysan bu tercih.</li>
-    <li><code>smc-ses-v1</code> (localStorage): Marka sesi penceresinde girdiğin profil, yalnız bu tarayıcıda.</li>
+    <li><code>smc-ses-v1</code> (localStorage): Marka sesi penceresinde girdiğin profil. Bu tarayıcıda saklanır; taslak isteğiyle birlikte sunucumuza gönderilir.</li>
     <li><code>smc-kurgu-video</code>, <code>smc-kurgu-gorsel</code> (localStorage): Video ve Görsel stüdyosunda seçtiğin şablon, en-boy oranı, renkler, marka adı ve kullanıcı adı.</li>
     <li><code>smc-gorsel-video</code>, <code>smc-gorsel-gorsel</code> (localStorage): stok görsel kullanıp kullanmama tercihin.</li>
     <li><code>smc-konu</code>, <code>studyo-konu</code>, <code>studyo-kanca</code> (sessionStorage): bir araçtan ötekine geçerken ya da sayfa yenilenince konunun ve kancanın kaybolmaması için. Sekme kapanınca silinir.</li>

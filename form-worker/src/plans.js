@@ -2,8 +2,9 @@
 // sites/app.socialmediacorner.co/assets/plans.js (window.SMC_PLANS, Planlar sayfası) ile aynıdır; plans.test.mjs ikisini karşılaştırır.
 // linkedin_blog: LinkedIn + blog taslağı (gen_month kind 'lb'); video_gorsel: video + görsel/Instagram taslağı (kind 'vg').
 // Enterprise sayıları users.plan_limits JSON'undan ({"linkedin_blog":N,"video_gorsel":N}); yoksa/geçersizse pro sayıları.
-// A14 cms_sites: bağlanabilecek müşteri sitesi (CMS) sayısı; enterprise plan_limits.cms_sites, yoksa 10. 24.11 (C1): demo/basic 0
-// = blog otomatiği yok (cms.js 403 plan_required {plan:"pro"}), pro 3.
+// A14 cms_sites: bağlanabilecek müşteri sitesi (CMS) sayısı; enterprise plan_limits.cms_sites, yoksa 1. 24.11 (C1): demo/basic 0
+// = blog otomatiği yok (cms.js 403 plan_required {plan:"pro"}). 24.11: pro ve enterprise tek site (önce 3/10); ek site
+// iletişimle verilir (enterprise plan_limits.cms_sites), arayüz "ek site için iletişime geç" der.
 // cms_per_week (blog otomatiği): sitenin haftalık otomatik yazı sıklığı tavanı (Desktop/app-smc/BLOG-OTOMATIK.md). İzinli sıklıklar
 // CMS_FREQS (1/2/3/7; 7 = günde 1). demo/basic 0, pro 3, enterprise 7 (plan_limits.cms_per_week CMS_FREQS'ten biriyse o).
 // A15 demo: app.socialmediacorner.co kaydının varsayılanı (platform.js register), basic'in yarısı; users.created_at'ten
@@ -13,7 +14,7 @@ export const TRIAL_DAYS = 14;
 export const PLANS = Object.freeze({
   demo: Object.freeze({ linkedin_blog: 4, video_gorsel: 1, stock: false, cms_sites: 0, cms_per_week: 0 }),
   basic: Object.freeze({ linkedin_blog: 8, video_gorsel: 2, stock: false, cms_sites: 0, cms_per_week: 0 }),
-  pro: Object.freeze({ linkedin_blog: 40, video_gorsel: 12, stock: true, cms_sites: 3, cms_per_week: 3 }),
+  pro: Object.freeze({ linkedin_blog: 40, video_gorsel: 12, stock: true, cms_sites: 1, cms_per_week: 3 }),
   enterprise: Object.freeze({ linkedin_blog: null, video_gorsel: null, stock: true, cms_sites: null, cms_per_week: 7 }),
 });
 
@@ -29,7 +30,7 @@ export function planOf(user) {
 
 const pos = v => Number.isSafeInteger(v) && v > 0 ? v : null;
 
-export const ENTERPRISE_CMS_SITES = 10;
+export const ENTERPRISE_CMS_SITES = 1;
 export const CMS_FREQS = Object.freeze([1, 2, 3, 7]);
 export const ENTERPRISE_CMS_PER_WEEK = 7;
 
