@@ -313,7 +313,7 @@ var M=JSON.parse(f.getAttribute('data-msg')),box=f.querySelector('.fmsg'),btn=f.
 function err(t){box.textContent=t;box.hidden=false}
 f.addEventListener('submit',function(e){
  e.preventDefault();box.hidden=true;
- if(!f.reportValidity())return;
+ if(!f.checkValidity()){var bad=f.querySelector("input:invalid,textarea:invalid");if(bad)bad.focus();return}
  var v=function(n){var x=f.elements[n];return x?String(x.value||'').trim():''};
  var top=f.querySelector('input[name=konu]:checked');
  var fields=[[M.k[0],v('ad')],[M.k[1],v('eposta')],[M.k[2],top?top.value:''],[M.k[3],v('telefon')],[M.k[4],v('mesaj')],[M.k[5],f.elements.onay.checked?M.yes:'']].filter(function(x){return x[1]});
