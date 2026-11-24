@@ -9858,7 +9858,7 @@ if (coldCall.opening) {
   ]);
   addTextBox(sCC, uid("openval"), 0.75, 1.38, 8.5, 0.65, [
     { text: coldCall.opening, fontSize: 9, fontFamily: "Calibri", color: C.darkText }
-  ]);
+  ], { strict: true });
   
   // Pain point questions
   const ppQuestions = safeArr(coldCall.pain_point_questions);
@@ -9869,7 +9869,7 @@ if (coldCall.opening) {
     const qRuns = ppQuestions.map(q => ({
       text: `• ${q}`, fontSize: 9, fontFamily: "Calibri", color: C.darkText, spacingAfter: 4
     }));
-    addTextBox(sCC, uid("qslist"), 0.7, 2.55, 8.5, 1.12, qRuns);
+    addTextBox(sCC, uid("qslist"), 0.7, 2.55, 8.5, 1.12, qRuns, { strict: true });
   }
   
   // Value pitch + Closing
@@ -9880,7 +9880,7 @@ if (coldCall.opening) {
     ]);
     addTextBox(sCC, uid("vpval"), 0.65, 4.0, 4, 1.12, [
       { text: coldCall.value_pitch, fontSize: 9.5, fontFamily: "Calibri", color: C.darkText }
-    ]);
+    ], { strict: true });
   }
   if (coldCall.closing) {
     addShape(sCC, uid("clbg"), 5.2, 3.74, 4.3, 1.42, C.yellowBg);
@@ -9889,7 +9889,7 @@ if (coldCall.opening) {
     ]);
     addTextBox(sCC, uid("clval"), 5.35, 4.0, 4, 1.12, [
       { text: coldCall.closing, fontSize: 9.5, fontFamily: "Calibri", color: C.darkText }
-    ]);
+    ], { strict: true });
   }
   
   // İtiraz Yönetimi slide
