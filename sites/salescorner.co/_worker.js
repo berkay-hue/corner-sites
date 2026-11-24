@@ -9478,7 +9478,7 @@ function addTextBox(slideId, boxId, x, y, w, h, textRuns, opts = {}) {
   if (!Array.isArray(textRuns)) {
     textRuns = [{ text: textRuns }];
   }
-  const __hb = t => String(t == null ? "" : t).replace(/\{\{#if[^}]*\}\}([\s\S]*?)(?:\{\{else\}\}[\s\S]*?)?\{\{\/if\}\}/g, "$1").replace(/\{\{(?:else|\/if|#if[^}]*)\}\}/g, "");
+  const __hb = t => String(t == null ? "" : t).replace(/\{\{#if[^}]*\}\}([\s\S]*?)(?:\{\{else\}\}[\s\S]*?)?\{\{\/if\}\}/g, "$1").replace(/\{\{(?:else|\/if|#if[^}]*|\/?endif)\}\}/g, "");
   textRuns = textRuns.map(r => ({ ...r, text: __noEmoji(__hb(r.text)) }));
   if (!opts.noFit) textRuns = __slideFit(textRuns, w, h, { strict: !!opts.fillColor || !!opts.strict, grow: opts.grow, maxFs: opts.maxFs });
 
@@ -9577,10 +9577,11 @@ function addBlobs(sid) {
 }
 function addLogo(sid, x, y, fs) {
   fs = fs || 8; const h = fs / 72 * 2.3, w = fs / 72 * 4.6;
-  addTextBox(sid, uid("logo"), x, y, w + 0.25, h, [
+  // noFit: sığdırma ikinci satırı ("CORNER") atıyordu; kutu iç boşluğu için yükseklik payı
+  addTextBox(sid, uid("logo"), x, y, w + 0.25, h + 0.12, [
     { text: "SALES", fontSize: fs, fontFamily: "Inter", color: C.dark, bold: true },
     { text: "CORNER", fontSize: fs, fontFamily: "Inter", color: C.dark, bold: true }
-  ]);
+  ], { noFit: true });
   addShape(sid, uid("brk"), x + w, y + 0.03, 0.16, 0.025, C.gold);
   addShape(sid, uid("brk"), x + w + 0.135, y + 0.03, 0.025, h - 0.08, C.gold);
 }
@@ -9595,8 +9596,8 @@ function makeSectionSlide(title, subtitle) {
   createSlide(sid);
   setBackground(sid, C.offWhite);
   addBlobs(sid);
-  addShape(sid, uid("deco"), 7.2, 2.2, 1.9, 1.9, C.gold, { shapeType: "ELLIPSE", alpha: 0.9 });
-  addShape(sid, uid("deco"), 8.4, 3.7, 0.9, 0.9, C.cyan, { shapeType: "ELLIPSE", alpha: 0.85 });
+  addShape(sid, uid("deco"), 7.7, 3.55, 1.45, 1.45, C.gold, { shapeType: "ELLIPSE", alpha: 0.9 });
+  addShape(sid, uid("deco"), 8.85, 4.6, 0.7, 0.7, C.cyan, { shapeType: "ELLIPSE", alpha: 0.85 });
   addLogo(sid, 0.5, 0.3, 9);
   addPageNo(sid);
   
