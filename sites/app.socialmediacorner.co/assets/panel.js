@@ -1,5 +1,5 @@
 /* A11-2 panel ortak davranış (theme.js head'den enjekte eder; her sayfada bir kez çalışır, tekrar çalışması zararsızdır).
-   - panel.css yoksa ekler (video sayfaları), favicon = /assets/mark.svg
+   - panel.css yoksa ekler (video sayfaları), favicon = /assets/favicon.svg
    - eski logo kaldıysa yeni logoya çevirir; Corner Group bandı yoksa footer'a ekler; hamburger yoksa ekler
    - hamburger: ≥1024 ray daralt/genişlet (smc-ray), ≤1023 perdeli çekmece; araç sayfalarında <768 nav.araclar aç/kapa */
 (function(){
@@ -33,7 +33,7 @@
   function favicon(){
     var ic=d.querySelector('link[rel~="icon"]');
     if(!ic){ic=el('link');ic.rel='icon';d.head.appendChild(ic)}
-    if(ic.getAttribute('href')!=='/assets/mark.svg'){ic.setAttribute('href','/assets/mark.svg');ic.setAttribute('type','image/svg+xml')}
+    if(ic.getAttribute('href')!=='/assets/favicon.svg'){ic.setAttribute('href','/assets/favicon.svg');ic.setAttribute('type','image/svg+xml')}
   }
 
   function lgYap(ters){
