@@ -66,7 +66,7 @@ p{margin:0}
 .auth-card h2{font-size:24px;margin-bottom:6px}
 .auth-card .sub{color:var(--mute);margin-bottom:24px}
 .tabs{display:grid;grid-template-columns:1fr 1fr;background:var(--hover);border-radius:12px;padding:4px;margin-bottom:22px}
-.tabs button{border:0;background:none;padding:9px;border-radius:9px;font-weight:600;color:var(--mute);cursor:pointer}
+.tabs button{border:0;background:none;padding:9px;border-radius:9px;font-weight:600;color:#475569;cursor:pointer}
 .tabs button[aria-selected=true]{background:var(--card);color:var(--fg);box-shadow:var(--sh)}
 .trial-note{display:flex;gap:8px;align-items:center;background:var(--acc-soft);color:#3730a3;border-radius:10px;padding:10px 12px;font-size:13.5px;margin-bottom:16px}
 
@@ -226,7 +226,7 @@ textarea.in{min-height:96px;resize:vertical}
 
 /* ---------- Fiyatlar ---------- */
 .bill{display:inline-flex;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:4px}
-.bill button{border:0;background:none;padding:8px 14px;border-radius:9px;font-weight:600;color:var(--mute);cursor:pointer}
+.bill button{border:0;background:none;padding:8px 14px;border-radius:9px;font-weight:600;color:#475569;cursor:pointer}
 .bill button[aria-pressed=true]{background:var(--acc-soft);color:#3730a3}
 .bill em{font-style:normal;font-size:11.5px;color:var(--ok);margin-left:4px}
 .plans{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-top:20px}
