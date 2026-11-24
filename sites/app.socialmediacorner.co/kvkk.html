@@ -37,13 +37,13 @@
 
 <main id="icerik" class="belge" tabindex="-1">
   <h1>KVKK Aydınlatma Metni</h1>
-  <p class="belge-tarih">Son güncelleme: 23 Kasım 2026 · Metin sürümü: v1</p>
+  <p class="belge-tarih">Son güncelleme: 24 Kasım 2026 · Metin sürümü: v1</p>
   <p>Bu metin, Taslak Masası’nı (app.socialmediacorner.co) kullanırken kişisel verilerinin nasıl işlendiğini 6698 sayılı Kişisel Verilerin Korunması Kanunu’nun (KVKK) 10. maddesi uyarınca anlatır.</p>
 
   <section class="belge-ozet" aria-labelledby="ozet">
     <h2 id="ozet">Kısaca</h2>
     <ul>
-      <li>Hesapsız kullanımda yazdığın konu sunucuda saklanmaz. Taslak üretmek için yapay zekâ sağlayıcısına (ABD) iletilir.</li>
+      <li>Araçlar yalnız hesabınla giriş yaptığında çalışır. Yazdığın konu taslak üretmek için yapay zekâ sağlayıcısına (ABD) iletilir; taslaklar konusuyla birlikte hesabındaki geçmişe kaydedilir.</li>
       <li>Hesap açarsan adın, e-postan, marka sesin ve taslakların sen silene kadar saklanır.</li>
       <li>Verilerini Ayarlar’dan indirebilir, hesabını aynı yerden silebilirsin.</li>
       <li>Verilerin satılmaz ve reklam için kullanılmaz.</li>
@@ -75,11 +75,11 @@
 
   <h2 id="veriler">2. Hangi verileri işliyoruz</h2>
 
-  <h3>Hesapsız araç kullanımı</h3>
+  <h3>Araç kullanımı</h3>
   <ul>
-    <li><strong>Konu ve seçimler:</strong> Yazdığın konu ve araçta yaptığın seçimler (platform, açı, ton gibi) taslak üretmek için işlenir. Sunucumuzda saklanmaz.</li>
-    <li><strong>Tarayıcıda tuttuğun marka sesi:</strong> Hesapsız marka sesi yalnız tarayıcında durur. Taslak isterken o istekle birlikte gönderilir. Sunucumuzda saklanmaz.</li>
-    <li><strong>Kullanım sınırı bilgisi:</strong> Günlük kullanım hakkını saymak için IP adresin ve tarayıcının rastgele kimliği kullanılır. Sunucuda bunların ham hâli tutulmaz. Yalnız geri çevrilemeyen, tuzlanmış bir özeti (hash) saklanır. IPv6 adreslerinde yalnız ilk 64 bit kullanılır.</li>
+    <li><strong>Konu ve seçimler:</strong> Yazdığın konu ve araçta yaptığın seçimler (platform, açı, ton gibi) taslak üretmek için işlenir. Üretilen taslaklar konusu ile birlikte taslak geçmişine yazılır.</li>
+    <li><strong>Tarayıcıda tuttuğun marka sesi:</strong> Marka sesi penceresinde girdiğin profil yalnız tarayıcında durur. Taslak isterken o istekle birlikte gönderilir. Sunucumuzda saklanmaz.</li>
+    <li><strong>Kullanım sınırı bilgisi:</strong> Kullanım hakkın hesabına göre sayılır.</li>
     <li><strong>Bot doğrulaması:</strong> Kötüye kullanımı önlemek için Cloudflare Turnstile kullanılır. Doğrulama anahtarı ve IP adresin bu kontrol için Cloudflare’e iletilir.</li>
     <li><strong>Teknik kayıtlar ve ölçüm:</strong> Site Cloudflare altyapısında çalışır. Cloudflare, hizmeti sunmak ve korumak için IP adresi ve tarayıcı bilgisi gibi teknik verileri işler. Sayfa görüntülemelerini toplu olarak ölçmek için çerez kullanmayan Cloudflare Web Analytics kullanılabilir.</li>
   </ul>
@@ -159,7 +159,7 @@
   <h2 id="yapay-zeka">6. Yapay zekâ ile taslak üretimi</h2>
   <ul>
     <li>Taslak istediğinde konu metnin, seçimlerin ve varsa marka sesin Anthropic’in yapay zekâ hizmetine gönderilir. Taslaklar bu hizmette otomatik olarak üretilir.</li>
-    <li>Hesapsız kullanımda bu içerik bizim sunucumuzda saklanmaz. Hesaplı kullanımda üretilen taslaklar konusu ile birlikte senin taslak geçmişine yazılır.</li>
+    <li>Araçlar yalnız hesabınla çalışır. Üretilen taslaklar konusu ile birlikte senin taslak geçmişine yazılır.</li>
     <li><strong>Konu alanına ve marka sesi örneklerine kişisel veri yazma.</strong> Bunlara başkalarının adı, iletişim bilgisi, müşteri bilgisi, sağlık ya da diğer özel nitelikli veriler dahildir.</li>
     <li>Yapay zekâ çıktıları yanlış, eksik veya uygunsuz olabilir. Bir taslağı paylaşmadan önce oku ve düzelt.</li>
     <li>Taslak üretimi yalnız metin önerisidir. Hakkında hukuki sonuç doğuran otomatik bir karar verilmez.</li>
@@ -187,7 +187,7 @@
   <ul>
     <li><code>smc-cerez</code> (localStorage): çerez bandındaki seçimin (<code>all</code> ya da <code>ess</code>). Bant her sayfada yeniden çıkmasın diye.</li>
     <li><code>smc-oturum</code>: oturum anahtarın. “Beni hatırla”yı seçtiysen localStorage’da çıkış yapana kadar, seçmediysen sessionStorage’da sekme kapanana kadar tutulur.</li>
-    <li><code>smc-anon</code> (localStorage): rastgele tarayıcı kimliği. Hesapsız kullanımda günlük kullanım hakkını saymak için isteklerle gönderilir; adını ya da e-postanı içermez.</li>
+    <li><code>smc-anon</code> (localStorage): rastgele tarayıcı kimliği. İsteklerle birlikte gönderilir; adını ya da e-postanı içermez.</li>
     <li><code>smc-son</code> (localStorage): son taslak üretilen gün.</li>
     <li><code>smc-acik</code> (localStorage): taslak üretiminin açık olduğu bilgisi. Servis kapalı yanıtı gelince silinir.</li>
     <li><code>smc-uyelik</code> (sessionStorage): üyeliğin şu an açık olup olmadığı. Ana sayfadaki “14 gün ücretsiz dene” kartı için en çok 10 dakika tutulur, sekme kapanınca silinir.</li>
@@ -197,7 +197,7 @@
   <ul>
     <li><code>smc-tema</code>, <code>smc-dil</code> (localStorage): tema ve dil tercihin.</li>
     <li><code>smc-ray</code> (localStorage): masaüstünde sol menüyü daralttıysan bu tercih.</li>
-    <li><code>smc-ses-v1</code> (localStorage): hesapsız marka sesin, yalnız bu tarayıcıda.</li>
+    <li><code>smc-ses-v1</code> (localStorage): Marka sesi penceresinde girdiğin profil, yalnız bu tarayıcıda.</li>
     <li><code>smc-kurgu-video</code>, <code>smc-kurgu-gorsel</code> (localStorage): Video ve Görsel stüdyosunda seçtiğin şablon, en-boy oranı, renkler, marka adı ve kullanıcı adı.</li>
     <li><code>smc-gorsel-video</code>, <code>smc-gorsel-gorsel</code> (localStorage): stok görsel kullanıp kullanmama tercihin.</li>
     <li><code>smc-konu</code>, <code>studyo-konu</code>, <code>studyo-kanca</code> (sessionStorage): bir araçtan ötekine geçerken ya da sayfa yenilenince konunun ve kancanın kaybolmaması için. Sekme kapanınca silinir.</li>

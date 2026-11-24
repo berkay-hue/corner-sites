@@ -7,7 +7,7 @@
    smc-hesap.js cikisKur'da kalır. Burada yalnız menü klavye/fare davranışı kurulur.
    Menü: aria-expanded, Esc (odak düğmeye döner), dış tıklama, ↑/↓/Home/End, Tab ile çıkınca kapanır.
    Yerel inceleme: localhost/127.0.0.1/*.pages.dev üzerinde #oturum → örnek üye görünümü, hiçbir istek gönderilmez.
-   A11-2 "Ücretsiz hesap oluştur" kartı (#uy-kart, Stüdyo ana sayfa): üyeye gizlenir. Misafirde /auth/me (tokensiz) ile üyelik
+   A11-2 "14 gün ücretsiz dene" kartı (#uy-kart, Stüdyo ana sayfa): üyeye gizlenir. Misafirde /auth/me (tokensiz) ile üyelik
    durumu okunur: 401 → açık · 403 origin/404/503 not_ready → yakında · diğerleri → nötr (CTA kalır). Sonuç 10 dk sessionStorage'da. */
 (function(){'use strict';
 var d=document,root=d.documentElement,EN=root.getAttribute('lang')==='en';
