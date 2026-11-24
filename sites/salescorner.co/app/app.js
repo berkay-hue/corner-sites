@@ -15,14 +15,45 @@ const S = { session: null, ben: null, benErr: "", setupErr: false, planlar: null
   if (m) S.authErr = decodeURIComponent(m[1].replace(/\+/g, " "));
 }
 
+// ---------- İkonlar (tek renk çizgi, currentColor) ----------
+const ico = (d, z = 20) => `<svg class="ico" width="${z}" height="${z}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
+const P = {
+  target: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/>',
+  pen: '<path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/>',
+  trend: '<path d="M22 7l-8.5 8.5-5-5L2 17"/><path d="M16 7h6v6"/>',
+  clip: '<rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4M12 16h4M8 11h.01M8 16h.01"/>',
+  mic: '<rect x="9" y="2" width="6" height="12" rx="3"/><path d="M19 10v1a7 7 0 0 1-14 0v-1"/><path d="M12 18v4"/>',
+  radar: '<path d="M4.9 19.1C1 15.2 1 8.8 4.9 4.9"/><path d="M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.5"/><circle cx="12" cy="12" r="2"/><path d="M16.2 7.8c2.3 2.3 2.3 6.1 0 8.5"/><path d="M19.1 4.9C23 8.8 23 15.1 19.1 19"/>',
+  zap: '<path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/>',
+  search: '<circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/>',
+  cpu: '<rect x="5" y="5" width="14" height="14" rx="2"/><rect x="9" y="9" width="6" height="6" rx="1"/><path d="M9 2v3M15 2v3M9 19v3M15 19v3M2 9h3M2 15h3M19 9h3M19 15h3"/>',
+  code: '<path d="m16 18 6-6-6-6"/><path d="m8 6-6 6 6 6"/>',
+  head: '<path d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 18 0v7a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3"/>',
+  scan: '<path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><circle cx="11.5" cy="11.5" r="3.5"/><path d="m16 16-2-2"/>',
+  link: '<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>',
+  mail: '<rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/>',
+  chart: '<path d="M3 3v18h18"/><path d="M18 17V9M13 17V5M8 17v-3"/>',
+  bell: '<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>',
+  file: '<path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/>',
+  chat: '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
+  alert: '<circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/>',
+  info: '<circle cx="12" cy="12" r="9"/><path d="M12 16v-4M12 8h.01"/>',
+  shield: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+  gift: '<rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5C11 3 12 8 12 8s1-5 4.5-5a2.5 2.5 0 0 1 0 5"/>',
+  check: '<path d="M20 6 9 17l-5-5"/>',
+  up: '<path d="M7 17 17 7M7 7h10v10"/>',
+  menu: '<path d="M4 6h16M4 12h16M4 18h16"/>',
+};
+const ic = (k, z) => ico(P[k], z);
+
 // ---------- Modüller ----------
 const MODS = [
-  { k: "rakip", ad: "Rakip Analizi", ic: "🎯", bg: "#eef0ff", d: "Rakip sitelerinizi tarar, güçlü/zayıf yönleri karşılaştırır ve hazır bir sunum çıkarır." },
-  { k: "sekans", ad: "Sekans Yazarı", ic: "✍️", bg: "#fdf2f8", d: "Hedef firmaya özel cold call senaryosu ve LinkedIn mesaj sekansı yazar." },
-  { k: "seo", ad: "SEO Analizi", ic: "📈", bg: "#ecfdf3", d: "SEO puanı, eksikler, anahtar kelime hacimleri ve hazır içerik önerisi." },
-  { k: "briefing", ad: "Toplantı Briefingi", ic: "🗂️", bg: "#fffbeb", d: "Görüşme öncesi firma ve kişi araştırması, fırsat puanı ve briefing sunumu." },
-  { k: "fireflies", ad: "Toplantı Analizi", ic: "🎙️", bg: "#f0f9ff", d: "Fireflies kayıtlarınızı satış koçu gözüyle puanlar; itirazlar, BANT ve takip e-postası." },
-  { k: "takip", ad: "Rakip Takip", ic: "📡", bg: "#fef3f2", d: "Rakiplerinizin blog, RSS ve LinkedIn paylaşımlarını firma firma haftalık izler; özet ve aksiyon önerisi e-postanıza gelir." },
+  { k: "rakip", ad: "Rakip Analizi", ic: ic("target"), bg: "#eef0ff", d: "Rakip sitelerinizi tarar, güçlü/zayıf yönleri karşılaştırır ve hazır bir sunum çıkarır." },
+  { k: "sekans", ad: "Sekans Yazarı", ic: ic("pen"), bg: "#fdf2f8", d: "Hedef firmaya özel cold call senaryosu ve LinkedIn mesaj sekansı yazar." },
+  { k: "seo", ad: "SEO Analizi", ic: ic("trend"), bg: "#ecfdf3", d: "SEO puanı, eksikler, anahtar kelime hacimleri ve hazır içerik önerisi." },
+  { k: "briefing", ad: "Toplantı Briefingi", ic: ic("clip"), bg: "#fffbeb", d: "Görüşme öncesi firma ve kişi araştırması, fırsat puanı ve briefing sunumu." },
+  { k: "fireflies", ad: "Toplantı Analizi", ic: ic("mic"), bg: "#f0f9ff", d: "Fireflies kayıtlarınızı satış koçu gözüyle puanlar; itirazlar, BANT ve takip e-postası." },
+  { k: "takip", ad: "Rakip Takip", ic: ic("radar"), bg: "#fef3f2", d: "Rakiplerinizin blog, RSS ve LinkedIn paylaşımlarını firma firma haftalık izler; özet ve aksiyon önerisi e-postanıza gelir." },
 ];
 const MOD = Object.fromEntries(MODS.map(m => [m.k, m]));
 const STEPS = {
@@ -354,7 +385,7 @@ function denemeOzet() {
 }
 async function pageKayit() {
   authLayout(`<h2>14 gün ücretsiz deneyin</h2><p class="sub">Kredi kartı gerekmez. Dakikalar içinde ilk analizinizi alın.</p>${tabs("kayit")}
-  <div class="trial-note"><span aria-hidden="true">🎁</span><span id="trial-ozet">${esc(denemeOzet())}</span></div>
+  <div class="trial-note">${ic("gift", 16)}<span id="trial-ozet">${esc(denemeOzet())}</span></div>
   <div id="m"></div>
   <form id="f" data-sk-noform>
     <div class="grid2">
@@ -466,7 +497,7 @@ function shell(content) {
   </aside>
   <div>
     <div class="scrim" data-menu></div>
-    <header class="top"><button class="iconbtn" data-menu aria-label="Menüyü aç">☰</button><a class="brand" href="#/panel">${LOGO}</a><span class="av" aria-hidden="true">${esc(initials(name))}</span></header>
+    <header class="top"><button class="iconbtn" data-menu aria-label="Menüyü aç">${ic("menu")}</button><a class="brand" href="#/panel">${LOGO}</a><span class="av" aria-hidden="true">${esc(initials(name))}</span></header>
     <main class="main"><div class="wrap">${content}</div></main>
   </div>
 </div>`;
@@ -496,17 +527,17 @@ function pagePanel() {
   const card = m => {
     const d = durum(m.k), lim = d.lim, pct = lim > 0 ? Math.min(100, (d.kul / lim) * 100) : 0;
     const tk = m.k === "takip";
-    const foot = d.neden === "plan" ? `<span class="pill">🔒 Planınıza dahil değil</span><span>Planı yükselt →</span>`
+    const foot = d.neden === "plan" ? `<span class="pill">${ICON_LOCK} Planınıza dahil değil</span><span>Planı yükselt →</span>`
       : lim < 0 ? `<span class="pill ok">Sınırsız</span><span>${tk ? `${d.kul} firma takipte · ` : ""}Aç →</span>`
       : `<div class="meter${d.kul >= lim ? " full" : ""}" aria-hidden="true"><i style="width:${pct}%"></i></div><span>${d.kul} / ${lim} ${tk ? "firma · haftalık" : "bu ay"}</span>`;
     const off = !d.ok && !(tk && d.neden === "kota");
     return `<a class="card mod${off ? " off" : ""}" href="#/${d.neden === "plan" ? "fiyatlar" : m.k}">
-      <div class="row" style="justify-content:flex-start"><span class="mi" style="background:${m.bg}" aria-hidden="true">${m.ic}</span><h3>${esc(m.ad)}</h3>${JOBS[m.k]?.state === "run" ? '<span class="pill acc" style="margin-left:auto"><span class="spin s"></span>Hazırlanıyor</span>' : ""}</div>
+      <div class="row" style="justify-content:flex-start"><span class="mi" aria-hidden="true">${m.ic}</span><h3>${esc(m.ad)}</h3>${JOBS[m.k]?.state === "run" ? '<span class="pill acc" style="margin-left:auto"><span class="spin s"></span>Hazırlanıyor</span>' : ""}</div>
       <p>${esc(m.d)}</p><div class="foot">${foot}</div></a>`;
   };
-  shell(`${ph(`Merhaba${ad ? ", " + esc(ad) : ""} 👋`, "Bugün hangi satış işini hızlandıralım?")}
+  shell(`${ph(`Merhaba${ad ? ", " + esc(ad) : ""}`, "Bugün hangi satış işini hızlandıralım?")}
   ${banner}
-  ${b.admin ? msg("info", `🛡️ Yönetici hesabıyla girdiniz. <a href="#/admin">Kullanıcılar ve planlar</a> · <a href="${SITE}/dashboard">Eski panele dön</a>`) : ""}
+  ${b.admin ? msg("info", `${ic("shield", 16)}<span>Yönetici hesabıyla girdiniz. <a href="#/admin">Kullanıcılar ve planlar</a> · <a href="${SITE}/dashboard">Eski panele dön</a></span>`) : ""}
   ${run.map(m => msg("info", `<span class="spin s"></span><span><b>${esc(m.ad)}</b> arka planda hazırlanıyor. Bu sekme açık kaldığı sürece devam eder. <a href="#/${m.k}">İzle →</a></span>`)).join("")}
   <div class="stats">
     <div class="card stat"><span>Plan</span><b>${esc(b.plan_ad || b.plan)}</b></div>
@@ -515,29 +546,29 @@ function pagePanel() {
     <div class="card stat"><span>Fireflies</span><b>${b.fireflies ? "Bağlı ✓" : `<a href="#/fireflies" style="font-size:16px">Bağla →</a>`}</b></div>
   </div>
   <div class="cards">${MODS.map(card).join("")}</div>
-  <a class="card oz-teaser" href="#/ozel"><div><span class="pill acc">✨ Size özel</span><h3>Hazır araçların ötesine geçin</h3><p>HTML sorgusu, canlı satış destek eklentisi, keyword scanner, CRM entegrasyonu… Ekibinize özel otomasyonları biz geliştirelim.</p></div><div class="oz-mini" aria-hidden="true">${OZ_KAT.slice(0, 4).map(x => `<span><i style="background:${x.bg}">${x.ic}</i>${esc(x.ad)}</span>`).join("")}</div><span class="btn btn-p">Paketleri gör →</span></a>
+  <a class="card oz-teaser" href="#/ozel"><div><span class="pill acc">Size özel</span><h3>Hazır araçların ötesine geçin</h3><p>HTML sorgusu, canlı satış destek eklentisi, keyword scanner, CRM entegrasyonu… Ekibinize özel otomasyonları biz geliştirelim.</p></div><div class="oz-mini" aria-hidden="true">${OZ_KAT.slice(0, 4).map(x => `<span><i>${x.ic}</i>${esc(x.ad)}</span>`).join("")}</div><span class="btn btn-p">Paketleri gör →</span></a>
   ${hist.length ? `<h2 style="margin:30px 0 12px">Son çalışmalarınız <span class="pill" style="vertical-align:middle">bu cihaz</span></h2>
   <div class="card scroll-x"><table class="tbl"><thead><tr><th>Araç</th><th>Konu</th><th>Tarih</th><th></th></tr></thead><tbody>
-  ${hist.map(h => `<tr><td>${MOD[h.k] ? MOD[h.k].ic + " " + esc(MOD[h.k].ad) : ""}</td><td>${esc(h.title)}</td><td>${fmtDT(h.at)}</td><td style="text-align:right">${safeUrl(h.url) ? `<a class="btn btn-g btn-s" href="${esc(safeUrl(h.url))}" target="_blank" rel="noopener">Aç ↗</a>` : ""}</td></tr>`).join("")}
+  ${hist.map(h => `<tr><td>${MOD[h.k] ? esc(MOD[h.k].ad) : ""}</td><td>${esc(h.title)}</td><td>${fmtDT(h.at)}</td><td style="text-align:right">${safeUrl(h.url) ? `<a class="btn btn-g btn-s" href="${esc(safeUrl(h.url))}" target="_blank" rel="noopener">Aç ↗</a>` : ""}</td></tr>`).join("")}
   </tbody></table></div>` : ""}`);
 }
 
 // ---------- Size özel ----------
 const OZ_PAKET = [
-  { k: "hiz", ad: "Satış Hızlandırma", ic: "⚡", d: "Görüşme anında ekibinizin yanında duran araçlar.", li: ["Canlı satış destek Chrome eklentisi", "Görüşmede itiraz cevapları ve konuşma ipuçları", "Toplantı öncesi otomatik briefing", "Görüşme notlarının CRM'e aktarımı"] },
-  { k: "veri", ad: "Lead ve Veri", ic: "🔎", hot: true, d: "Hedef pazarınızı tarar, temiz ve kullanılabilir veri çıkarır.", li: ["HTML sorgusu ile web'den düzenli veri", "Keyword scanner ile fırsat ve sinyal takibi", "Rakip fiyat ve içerik izleme", "Google Sheets veya CRM'e otomatik aktarım"] },
-  { k: "ai", ad: "Entegrasyon ve Kişisel AI", ic: "🧠", d: "Satış sürecinizin tamamına bağlanan, size özel yapay zekâ.", li: ["HubSpot, Pipedrive, Salesforce entegrasyonu", "Şirket verinizle çalışan kişisel AI asistan", "Teklif ve e-posta taslağı üretici", "Slack / Teams bildirim botları"] },
+  { k: "hiz", ad: "Satış Hızlandırma", ic: ic("zap", 22), d: "Görüşme anında ekibinizin yanında duran araçlar.", li: ["Canlı satış destek Chrome eklentisi", "Görüşmede itiraz cevapları ve konuşma ipuçları", "Toplantı öncesi otomatik briefing", "Görüşme notlarının CRM'e aktarımı"] },
+  { k: "veri", ad: "Lead ve Veri", ic: ic("search", 22), hot: true, d: "Hedef pazarınızı tarar, temiz ve kullanılabilir veri çıkarır.", li: ["HTML sorgusu ile web'den düzenli veri", "Keyword scanner ile fırsat ve sinyal takibi", "Rakip fiyat ve içerik izleme", "Google Sheets veya CRM'e otomatik aktarım"] },
+  { k: "ai", ad: "Entegrasyon ve Kişisel AI", ic: ic("cpu", 22), d: "Satış sürecinizin tamamına bağlanan, size özel yapay zekâ.", li: ["HubSpot, Pipedrive, Salesforce entegrasyonu", "Şirket verinizle çalışan kişisel AI asistan", "Teklif ve e-posta taslağı üretici", "Slack / Teams bildirim botları"] },
 ];
 const OZ_KAT = [
-  { k: "html", ad: "HTML sorgusu", ic: "🧩", bg: "#eef0ff", d: "Herhangi bir web sayfasından firma, ürün, fiyat ve iletişim bilgisini düzenli tabloya çevirir." },
-  { k: "ext", ad: "Canlı satış destek eklentisi", ic: "🎧", bg: "#fdf2f8", d: "Görüşme sırasında tarayıcıda itiraz cevapları, fiyat bilgisi ve sıradaki adım önerisi gösterir." },
-  { k: "kw", ad: "Keyword scanner", ic: "🔑", bg: "#ecfdf3", d: "Siteleri, haberleri ve ilanları anahtar kelimelerinize göre tarar; fırsat çıkınca haber verir." },
-  { k: "crm", ad: "CRM entegrasyonu", ic: "🔗", bg: "#f0f9ff", d: "Panel çıktılarını HubSpot, Pipedrive veya Salesforce kayıtlarına otomatik yazar." },
-  { k: "rakip", ad: "Rakip izleme", ic: "📡", bg: "#fffbeb", d: "Rakiplerin fiyat, kampanya ve sayfa değişikliklerini takip eder, haftalık özet gönderir." },
-  { k: "sekans", ad: "E-posta ve sekans otomasyonu", ic: "📬", bg: "#f5f3ff", d: "Segmentinize göre kişiselleştirilmiş takip e-postalarını hazırlar ve sıraya koyar." },
-  { k: "rapor", ad: "Otomatik satış raporu", ic: "📊", bg: "#ecfeff", d: "Pipeline ve aktivite verinizi haftalık rapora çevirip yöneticinize iletir." },
-  { k: "bot", ad: "Bildirim botu", ic: "🔔", bg: "#fef2f2", d: "Sıcak lead, yeni form ya da fırsat değişikliğinde Slack, Teams veya WhatsApp'a bildirim düşer." },
-  { k: "teklif", ad: "Teklif üretici", ic: "📝", bg: "#f7fee7", d: "Görüşme notlarından markanıza uygun teklif dokümanı taslağı çıkarır." },
+  { k: "html", ad: "HTML sorgusu", ic: ic("code"), bg: "#eef0ff", d: "Herhangi bir web sayfasından firma, ürün, fiyat ve iletişim bilgisini düzenli tabloya çevirir." },
+  { k: "ext", ad: "Canlı satış destek eklentisi", ic: ic("head"), bg: "#fdf2f8", d: "Görüşme sırasında tarayıcıda itiraz cevapları, fiyat bilgisi ve sıradaki adım önerisi gösterir." },
+  { k: "kw", ad: "Keyword scanner", ic: ic("scan"), bg: "#ecfdf3", d: "Siteleri, haberleri ve ilanları anahtar kelimelerinize göre tarar; fırsat çıkınca haber verir." },
+  { k: "crm", ad: "CRM entegrasyonu", ic: ic("link"), bg: "#f0f9ff", d: "Panel çıktılarını HubSpot, Pipedrive veya Salesforce kayıtlarına otomatik yazar." },
+  { k: "rakip", ad: "Rakip izleme", ic: ic("radar"), bg: "#fffbeb", d: "Rakiplerin fiyat, kampanya ve sayfa değişikliklerini takip eder, haftalık özet gönderir." },
+  { k: "sekans", ad: "E-posta ve sekans otomasyonu", ic: ic("mail"), bg: "#f5f3ff", d: "Segmentinize göre kişiselleştirilmiş takip e-postalarını hazırlar ve sıraya koyar." },
+  { k: "rapor", ad: "Otomatik satış raporu", ic: ic("chart"), bg: "#ecfeff", d: "Pipeline ve aktivite verinizi haftalık rapora çevirip yöneticinize iletir." },
+  { k: "bot", ad: "Bildirim botu", ic: ic("bell"), bg: "#fef2f2", d: "Sıcak lead, yeni form ya da fırsat değişikliğinde Slack, Teams veya WhatsApp'a bildirim düşer." },
+  { k: "teklif", ad: "Teklif üretici", ic: ic("file"), bg: "#f7fee7", d: "Görüşme notlarından markanıza uygun teklif dokümanı taslağı çıkarır." },
 ];
 const OZ_ADIM = [
   ["Keşif", "30 dakikalık görüşmede sürecinizi ve hedefinizi dinliyoruz."],
@@ -574,16 +605,16 @@ function pageOzel() {
     <div class="oz-pact"><button type="button" class="btn btn-g btn-w" data-oz="p:${p.k}" aria-pressed="false"><span class="oz-pick">+ Listeye ekle</span></button>
     <a class="btn ${p.hot ? "btn-p" : "btn-g"} btn-w" href="${esc(ozLink([p.ad + " paketi"]))}" target="_blank" rel="noopener">Bu paket için teklif al</a></div></div>`;
   const item = x => `<button type="button" class="card mod oz-item" data-oz="k:${x.k}" aria-pressed="false">
-    <span class="row" style="justify-content:flex-start"><span class="mi" style="background:${x.bg}" aria-hidden="true">${x.ic}</span><h3>${esc(x.ad)}</h3></span>
+    <span class="row" style="justify-content:flex-start"><span class="mi" aria-hidden="true">${x.ic}</span><h3>${esc(x.ad)}</h3></span>
     <p>${esc(x.d)}</p><span class="foot"><span class="pill">Size özel</span><span class="oz-pick">+ Listeye ekle</span></span></button>`;
-  shell(`${ph(`<span aria-hidden="true">✨</span> Size özel çözümler`, "Hazır araçların ötesinde: satış sürecinize göre geliştirdiğimiz otomasyonlar, eklentiler ve entegrasyonlar.")}
+  shell(`${ph(`Size özel çözümler`, "Hazır araçların ötesinde: satış sürecinize göre geliştirdiğimiz otomasyonlar, eklentiler ve entegrasyonlar.")}
   <section class="oz-hero">
     <div><span class="oz-kick">Sales Corner Özel Geliştirme</span>
       <h2>İhtiyacınız olan satış aracını sizin için geliştirelim.</h2>
       <p>HTML sorgusundan canlı satış destek eklentisine, keyword scanner'dan CRM entegrasyonuna kadar; ekibinizin her gün tekrarladığı işi otomasyona çeviriyoruz.</p>
       <div class="row"><a class="btn oz-btn" href="${esc(ozLink(["Size özel çözüm"]))}" target="_blank" rel="noopener">Ücretsiz keşif görüşmesi →</a><button type="button" class="btn oz-btn2" data-oz-to="oz-paket">Hazır paketleri gör</button></div>
     </div>
-    <div class="oz-tags" aria-hidden="true">${OZ_KAT.map(x => `<span>${x.ic} ${esc(x.ad)}</span>`).join("")}</div>
+    <div class="oz-tags" aria-hidden="true">${OZ_KAT.map(x => `<span>${esc(x.ad)}</span>`).join("")}</div>
   </section>
   <div class="oz-h" id="oz-paket"><div><h2>Hazır size özel paketler</h2><p>En sık istenen çözümleri paketledik; kapsamı şirketinize göre uyarlıyoruz.</p></div></div>
   <div class="plans oz-plans">${OZ_PAKET.map(paket).join("")}</div>
@@ -591,7 +622,7 @@ function pageOzel() {
   <div class="cards">${OZ_KAT.map(item).join("")}</div>
   <div class="oz-h"><div><h2>Nasıl çalışıyoruz?</h2><p>Fikirden çalışan araca dört adım.</p></div></div>
   <ol class="oz-steps">${OZ_ADIM.map((a, i) => `<li class="card"><span class="oz-n">${i + 1}</span><b>${a[0]}</b><p>${a[1]}</p></li>`).join("")}</ol>
-  <div class="card oz-more"><span aria-hidden="true">💬</span><div><b>Listede olmayan bir fikriniz mi var?</b><p>Satış ekibinizin elle yaptığı, tekrar eden her iş otomasyon adayıdır. Anlatın, uygulanabilir mi birlikte bakalım.</p></div></div>
+  <div class="card oz-more"><span aria-hidden="true">${ic("chat", 22)}</span><div><b>Listede olmayan bir fikriniz mi var?</b><p>Satış ekibinizin elle yaptığı, tekrar eden her iş otomasyon adayıdır. Anlatın, uygulanabilir mi birlikte bakalım.</p></div></div>
   <div class="oz-bar" id="oz-bar" aria-live="polite"><div class="oz-bt"><b>Size özel teklif</b><div class="oz-sel"></div></div><a class="btn btn-p" id="oz-cta" href="#" target="_blank" rel="noopener">Teklif iste →</a></div>`);
   document.querySelectorAll("[data-oz]").forEach(x => (x.onclick = () => { const k = x.dataset.oz; OZ_SEL.has(k) ? OZ_SEL.delete(k) : OZ_SEL.add(k); ozBar(); }));
   document.querySelectorAll("[data-oz-to]").forEach(x => (x.onclick = () => document.getElementById(x.dataset.ozTo)?.scrollIntoView({ behavior: "smooth", block: "start" })));
@@ -602,7 +633,7 @@ function pageOzel() {
 function gate(k) {
   const d = durum(k);
   if (d.ok) return "";
-  return msg("warn", `<span aria-hidden="true">⚠️</span><span>${esc(NEDEN[d.neden] ? NEDEN[d.neden](k) : "")} <a href="#/fiyatlar">Planları inceleyin →</a></span>`);
+  return msg("warn", `${ic("alert", 16)}<span>${esc(NEDEN[d.neden] ? NEDEN[d.neden](k) : "")} <a href="#/fiyatlar">Planları inceleyin →</a></span>`);
 }
 function quota(k) {
   const d = durum(k);
@@ -612,7 +643,7 @@ function quota(k) {
 }
 function toolShell(k, form, intro) {
   const m = MOD[k];
-  shell(`${ph(`<span aria-hidden="true">${m.ic}</span> ${esc(m.ad)}`, esc(intro || m.d))}${gate(k)}
+  shell(`${ph(esc(m.ad), esc(intro || m.d))}${gate(k)}
   <div class="tool"><div class="card pad">${form}${quota(k)}</div><section class="card out" id="out" aria-live="polite"></section></div>`);
   renderJob(k);
   const f = document.getElementById("f");
@@ -620,17 +651,17 @@ function toolShell(k, form, intro) {
   if (f && JOBS[k]?.state === "run") f.querySelectorAll("[type=submit]").forEach(b => { b.disabled = true; b.textContent = "Hazırlanıyor…"; });
 }
 const EMPTY = {
-  rakip: ["🎯", "Rakip analiziniz burada görünecek", "Firmanızı ve 1–5 rakibi girin. Yapay zekâ siteleri tarar; konumlandırma, fiyat, mesaj ve fırsatları karşılaştıran bir Google Slides sunumu hazırlar."],
-  sekans: ["✍️", "Sekansınız burada görünecek", "Hedef firmanın sitesini ya da elinizdeki dokümanı verin; cold call senaryosu ve çok adımlı LinkedIn mesajları hazırlansın."],
-  seo: ["📈", "SEO raporunuz burada görünecek", "Bir sayfa adresi girin; SEO puanı, eksikler, anahtar kelime hacimleri ve yayına hazır içerik önerisi çıkarılsın."],
-  briefing: ["🗂️", "Briefingeniz burada görünecek", "Görüşeceğiniz firma ve kişiyi girin; toplantıdan önce okuyacağınız araştırma ve fırsat puanı hazırlansın."],
-  fireflies: ["🎙️", "Toplantı analizi burada görünecek", "Soldan bir toplantı seçip analiz edin: puan, itirazlar, BANT ve takip e-postası."],
+  rakip: ["", "Rakip analiziniz burada görünecek", "Firmanızı ve 1–5 rakibi girin. Yapay zekâ siteleri tarar; konumlandırma, fiyat, mesaj ve fırsatları karşılaştıran bir Google Slides sunumu hazırlar."],
+  sekans: ["", "Sekansınız burada görünecek", "Hedef firmanın sitesini ya da elinizdeki dokümanı verin; cold call senaryosu ve çok adımlı LinkedIn mesajları hazırlansın."],
+  seo: ["", "SEO raporunuz burada görünecek", "Bir sayfa adresi girin; SEO puanı, eksikler, anahtar kelime hacimleri ve yayına hazır içerik önerisi çıkarılsın."],
+  briefing: ["", "Briefingeniz burada görünecek", "Görüşeceğiniz firma ve kişiyi girin; toplantıdan önce okuyacağınız araştırma ve fırsat puanı hazırlansın."],
+  fireflies: ["", "Toplantı analizi burada görünecek", "Soldan bir toplantı seçip analiz edin: puan, itirazlar, BANT ve takip e-postası."],
 };
 function renderJob(k) {
   const out = document.getElementById("out");
   if (!out) return;
   const j = JOBS[k];
-  if (!j) { const [ic, t, p] = EMPTY[k]; out.innerHTML = `<div class="empty"><div class="big" aria-hidden="true">${ic}</div><h3>${t}</h3><p style="max-width:420px">${p}</p></div>`; return; }
+  if (!j) { const [, t, p] = EMPTY[k]; out.innerHTML = `<div class="empty"><div class="big" aria-hidden="true">${ico(P[{ rakip: "target", sekans: "pen", seo: "trend", briefing: "clip", fireflies: "mic" }[k]], 26)}</div><h3>${t}</h3><p style="max-width:420px">${p}</p></div>`; return; }
   if (j.state === "run") {
     const el = (Date.now() - j.t0) / 1000;
     out.innerHTML = `<div class="prog"><div class="spin"></div><div><h3>${esc(MOD[k].ad)} hazırlanıyor</h3><p style="color:var(--mute);margin-top:4px">${esc(j.title)}</p></div>
@@ -642,7 +673,7 @@ function renderJob(k) {
   }
   const again = `<button class="btn btn-g btn-s" data-reset="${k}">Yeni ${k === "fireflies" ? "analiz" : "çalışma"}</button>`;
   if (j.state === "err") {
-    out.innerHTML = `<div class="res-b">${msg("err", `<span aria-hidden="true">⚠️</span><span>${esc(j.err || "İşlem tamamlanamadı.")}${j.neden ? ` <a href="#/fiyatlar">Planları inceleyin →</a>` : ""}</span>`)}${again}</div>`;
+    out.innerHTML = `<div class="res-b">${msg("err", `${ic("alert", 16)}<span>${esc(j.err || "İşlem tamamlanamadı.")}${j.neden ? ` <a href="#/fiyatlar">Planları inceleyin →</a>` : ""}</span>`)}${again}</div>`;
     return;
   }
   out.innerHTML = RESULT[k](j) + "";
@@ -698,13 +729,13 @@ const RESULT = {
     const r = j.res || {};
     return `${resHead("Rakip analizi hazır", r.slideCount ? `<span class="pill acc">${esc(r.slideCount)} slayt</span>` : "")}
     <div class="res-b"><div class="sec">${kv([["Analiz", j.title], ["Öne çıkan rakip", r.rakip_adi], ["Süre", mmss(((j.res && r.elapsed_seconds) || (Date.now() - j.t0) / 1000))]])}</div>
-    <div class="sec"><h4>Sunum</h4><div class="row" style="justify-content:flex-start">${linkBtn(r.slides_view_url, "▶ Sunumu aç", "btn-p")}${linkBtn(r.slides_pdf_url, "⬇ PDF indir")}${linkBtn(r.slides_url, "✎ Google Slides'ta düzenle")}</div></div>
+    <div class="sec"><h4>Sunum</h4><div class="row" style="justify-content:flex-start">${linkBtn(r.slides_view_url, "Sunumu aç", "btn-p")}${linkBtn(r.slides_pdf_url, "PDF indir")}${linkBtn(r.slides_url, "Google Slides'ta düzenle")}</div></div>
     <p style="color:var(--mute);font-size:13.5px">Sunum Google Slides'ta oluşturuldu; düzenleyip müşterinizle paylaşabilirsiniz.</p></div>`;
   },
   sekans: j => {
     const r = j.res || {}, pub = safeUrl(r.publicUrl);
     return `${resHead("Sekans hazır", r.company ? `<span class="pill acc">${esc(r.company)}</span>` : "")}
-    <div class="res-b"><div class="sec"><h4>Sekans dokümanı</h4><div class="row" style="justify-content:flex-start">${linkBtn(r.presentationViewUrl || r.presentationUrl, "▶ Sekansı aç", "btn-p")}${linkBtn(r.presentationUrl, "✎ Düzenle")}${pub ? `<button class="btn btn-g btn-s" data-copy="${esc(pub)}">🔗 Paylaşım linkini kopyala</button>` : ""}</div></div>
+    <div class="res-b"><div class="sec"><h4>Sekans dokümanı</h4><div class="row" style="justify-content:flex-start">${linkBtn(r.presentationViewUrl || r.presentationUrl, "Sekansı aç", "btn-p")}${linkBtn(r.presentationUrl, "Düzenle")}${pub ? `<button class="btn btn-g btn-s" data-copy="${esc(pub)}">Paylaşım linkini kopyala</button>` : ""}</div></div>
     <p style="color:var(--mute);font-size:13.5px">Dokümanda cold call senaryosu, itiraz karşılama cümleleri ve LinkedIn mesaj adımları yer alır.</p></div>`;
   },
   seo: j => seoResult(j.res.sonuc || {}),
@@ -712,7 +743,7 @@ const RESULT = {
     const r = j.res.sonuc || {};
     return `${resHead("Briefing hazır", r.deal_pct_label ? `<span class="pill ok">${esc(r.deal_pct_label)}</span>` : "")}
     <div class="res-b"><div class="sec">${kv([["Firma", r.firma_adi || r.company], ["Kişi", r.kisi_adi || r.person], ["Toplantı", r.toplanti_tarihi], ["En uygun hizmet", r.en_uygun_hizmet], ["Firma skoru", r.f_skor], ["Kişi skoru", r.k_skor], ["Slayt", r.slideCount]])}</div>
-    <div class="sec"><h4>Briefing sunumu</h4><div class="row" style="justify-content:flex-start">${linkBtn(r.presentationViewUrl || r.presentationUrl, "▶ Briefingi aç", "btn-p")}${linkBtn(r.presentationUrl, "✎ Düzenle")}</div></div>
+    <div class="sec"><h4>Briefing sunumu</h4><div class="row" style="justify-content:flex-start">${linkBtn(r.presentationViewUrl || r.presentationUrl, "Briefingi aç", "btn-p")}${linkBtn(r.presentationUrl, "Düzenle")}</div></div>
     ${r.message ? `<p style="color:var(--mute);font-size:13.5px">${esc(r.message)}</p>` : ""}</div>`;
   },
   fireflies: j => ffResult(j),
@@ -788,7 +819,7 @@ function seoResult(r) {
       <div class="box"><button class="btn btn-g btn-s copy" data-copy-el="seo-meta">Kopyala</button><div id="seo-meta" class="pre"><b>SEO başlığı:</b> ${esc(g.seo_title)}\n<b>Meta açıklama:</b> ${esc(g.meta_description)}${g.slug ? `\n<b>URL:</b> /${esc(String(g.slug).replace(/^\//, ""))}` : ""}</div></div>
       ${c.intro || (c.sections || []).length ? `<details class="box"><summary style="cursor:pointer;font-weight:600">Makale taslağını göster</summary><div id="seo-art" class="md" style="margin-top:12px">${c.intro ? `<p>${esc(c.intro)}</p>` : ""}${(c.sections || []).map(s => `<h3>${esc(s.h2)}</h3><p class="pre">${esc(s.content)}</p>`).join("")}${(c.faq || []).length ? `<h3>Sık sorulan sorular</h3>${c.faq.map(q => `<p><b>${esc(q.question)}</b><br>${esc(q.answer)}</p>`).join("")}` : ""}${c.conclusion ? `<p>${esc(c.conclusion)}</p>` : ""}</div><button class="btn btn-g btn-s" data-copy-el="seo-art" style="margin-top:8px">Taslağı kopyala</button></details>` : ""}
     </div>` : ""}
-    ${r.html_report ? `<div class="sec"><h4>Tam rapor</h4><div class="row" style="justify-content:flex-start"><button class="btn btn-g btn-s" id="seo-show">Raporu göster</button><button class="btn btn-g btn-s" id="seo-dl">⬇ HTML indir</button></div><div id="seo-frame"></div></div>` : ""}
+    ${r.html_report ? `<div class="sec"><h4>Tam rapor</h4><div class="row" style="justify-content:flex-start"><button class="btn btn-g btn-s" id="seo-show">Raporu göster</button><button class="btn btn-g btn-s" id="seo-dl">HTML indir</button></div><div id="seo-frame"></div></div>` : ""}
   </div>`;
 }
 
@@ -864,14 +895,14 @@ async function loadFF(force) {
 function pageFireflies() {
   const b = S.ben;
   if (!b.fireflies) {
-    shell(`${ph(`<span aria-hidden="true">🎙️</span> Toplantı Analizi`, esc(MOD.fireflies.d))}${gate("fireflies")}<div style="max-width:620px">${ffConnect()}</div>`);
+    shell(`${ph(`Toplantı Analizi`, esc(MOD.fireflies.d))}${gate("fireflies")}<div style="max-width:620px">${ffConnect()}</div>`);
     return bindFfKey(render);
   }
   const fmtDur = d => (d ? `${Math.round(Number(d))} dk` : "");
   const items = FF.list === null ? `<div class="empty" style="padding:24px"><div class="spin"></div></div>`
     : FF.err ? msg("err", esc(FF.err) + ` <a href="#/hesap">Anahtarı kontrol edin →</a>`)
     : !FF.list.length ? `<p style="color:var(--mute)">Fireflies hesabınızda henüz kayıtlı toplantı yok.</p>`
-    : `<div class="list" role="group" aria-label="Toplantılar">${FF.list.map(t => `<button type="button" class="li" data-ff="${esc(t.id)}" aria-pressed="${FF.sel === t.id}"><span aria-hidden="true">🎧</span><span class="t"><b>${esc(t.title || "Adsız toplantı")}</b><span>${fmtDT(t.date)}${t.duration ? " · " + fmtDur(t.duration) : ""}${t.participants?.length ? ` · ${t.participants.length} katılımcı` : ""}</span></span></button>`).join("")}</div>`;
+    : `<div class="list" role="group" aria-label="Toplantılar">${FF.list.map(t => `<button type="button" class="li" data-ff="${esc(t.id)}" aria-pressed="${FF.sel === t.id}"><span class="ff-ic" aria-hidden="true">${ic("mic", 16)}</span><span class="t"><b>${esc(t.title || "Adsız toplantı")}</b><span>${fmtDT(t.date)}${t.duration ? " · " + fmtDur(t.duration) : ""}${t.participants?.length ? ` · ${t.participants.length} katılımcı` : ""}</span></span></button>`).join("")}</div>`;
   toolShell("fireflies", `<form id="f" data-sk-noform>
     <div class="row" style="margin-bottom:12px"><h3>Son toplantılarınız</h3><button type="button" class="iconbtn" id="ffr" title="Yenile" aria-label="Listeyi yenile">↻</button></div>
     <div style="max-height:420px;overflow:auto;margin-bottom:14px">${items}</div>
@@ -897,7 +928,7 @@ function pageFireflies() {
 function ffResult(j) {
   const a = (j.res && j.res.analiz) || {}, meta = (j.res && j.res.meta) || {};
   const skor = Number(a.skor);
-  const list = (arr, ic) => (Array.isArray(arr) && arr.length ? `<ul style="margin:0;padding-left:0;list-style:none;display:grid;gap:6px">${arr.map(x => `<li style="display:flex;gap:8px"><span aria-hidden="true">${ic}</span><span>${esc(asText(x))}</span></li>`).join("")}</ul>` : `<p style="color:var(--mute)">—</p>`);
+  const list = (arr, ic) => (Array.isArray(arr) && arr.length ? `<ul style="margin:0;padding-left:0;list-style:none;display:grid;gap:6px">${arr.map(x => `<li style="display:flex;gap:8px"><span class="li-ic" aria-hidden="true">${ic}</span><span>${esc(asText(x))}</span></li>`).join("")}</ul>` : `<p style="color:var(--mute)">—</p>`);
   const oran = Array.isArray(meta.oranlar) ? meta.oranlar : [];
   const bant = a.bant || {};
   const itr = Array.isArray(a.itirazlar) ? a.itirazlar : [];
@@ -907,11 +938,11 @@ function ffResult(j) {
     <div class="sec">${kv([["Toplantı", meta.title || j.title], ["Tarih", meta.date ? fmtDT(meta.date) : ""], ["Süre", meta.duration ? Math.round(meta.duration) + " dk" : ""], ["Satış aşaması", a.asama]])}</div>
     ${a.ozet ? `<div class="sec"><h4>Özet</h4><p>${esc(a.ozet)}</p>${a.skor_gerekce ? `<p style="color:var(--mute);margin-top:6px;font-size:14px">${esc(a.skor_gerekce)}</p>` : ""}</div>` : ""}
     ${oran.length ? `<div class="sec"><h4>Konuşma oranı</h4><div style="display:grid;gap:8px">${oran.map(o => `<div class="row" style="flex-wrap:nowrap"><span style="width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(o.ad)}</span><div class="meter" style="max-width:none"><i style="width:${Math.max(0, Math.min(100, Number(o.pay) || 0))}%"></i></div><b style="width:44px;text-align:right">%${Math.round(Number(o.pay) || 0)}</b></div>`).join("")}</div></div>` : ""}
-    <div class="sec grid2" style="gap:14px"><div><h4>Güçlü yönler</h4>${list(a.guclu, "✅")}</div><div><h4>Gelişim alanları</h4>${list(a.gelisim, "🎯")}</div></div>
+    <div class="sec grid2" style="gap:14px"><div><h4>Güçlü yönler</h4>${list(a.guclu, `<b style="color:#16a34a">${ic("check", 16)}</b>`)}</div><div><h4>Gelişim alanları</h4>${list(a.gelisim, `<b style="color:var(--acc)">${ic("up", 16)}</b>`)}</div></div>
     ${itr.length ? `<div class="sec"><h4>İtirazlar</h4>${itr.map(i => `<div class="box"><h5>“${esc(i.itiraz)}”</h5>${i.nasil_yanitlandi ? `<p style="font-size:14px;color:var(--mute)">Verilen yanıt: ${esc(i.nasil_yanitlandi)}</p>` : ""}${i.oneri ? `<p style="font-size:14px;margin-top:4px"><b>Öneri:</b> ${esc(i.oneri)}</p>` : ""}</div>`).join("")}</div>` : ""}
     ${Object.keys(bant).length ? `<div class="sec"><h4>BANT</h4>${kv([["Bütçe", bant.butce], ["Yetki", bant.yetki], ["İhtiyaç", bant.ihtiyac], ["Zamanlama", bant.zamanlama]])}</div>` : ""}
     ${adim.length ? `<div class="sec"><h4>Sonraki adımlar</h4><div class="card scroll-x" style="box-shadow:none"><table class="tbl"><thead><tr><th>Adım</th><th>Sorumlu</th><th>Tarih</th></tr></thead><tbody>${adim.map(s => `<tr><td>${esc(asText(s.adim || s))}</td><td>${esc(s.sorumlu || "")}</td><td>${esc(s.tarih || "")}</td></tr>`).join("")}</tbody></table></div></div>` : ""}
-    ${Array.isArray(a.riskler) && a.riskler.length ? `<div class="sec"><h4>Riskler</h4>${list(a.riskler, "⚠️")}</div>` : ""}
+    ${Array.isArray(a.riskler) && a.riskler.length ? `<div class="sec"><h4>Riskler</h4>${list(a.riskler, `<b style="color:#d97706">${ic("alert", 16)}</b>`)}</div>` : ""}
     ${a.takip_epostasi ? `<div class="sec"><h4>Takip e-postası taslağı</h4><div class="box"><button class="btn btn-g btn-s copy" data-copy-el="ff-mail">Kopyala</button><div id="ff-mail" class="pre" style="padding-right:80px">${esc(a.takip_epostasi)}</div></div></div>` : ""}
   </div>`;
 }
@@ -938,7 +969,7 @@ async function pageFiyatlar() {
       <ul>${MODS.map(x => satir(p.kota, x.k)).join("")}${(meta.ek || []).map(t => `<li>${esc(t)}</li>`).join("")}</ul>${cta}</div>`;
   };
   shell(`${ph("Planlar ve fiyatlar", "Ekibinizin büyüklüğüne göre seçin; istediğiniz zaman yükseltin.", `<div class="bill" role="group" aria-label="Faturalama"><button type="button" data-bill="0" aria-pressed="${!y}">Aylık</button><button type="button" data-bill="1" aria-pressed="${y}">Yıllık<em>%20 indirim</em></button></div>`)}
-  ${b.plan === "deneme" && b.aktif ? msg("info", `🎁 Ücretsiz denemedesiniz: ${daysLeft(b.bitis)} gün kaldı. Plan seçtiğinizde kalan kullanım haklarınız yeni planınıza göre güncellenir.`) : ""}
+  ${b.plan === "deneme" && b.aktif ? msg("info", `${ic("gift", 16)}<span>Ücretsiz denemedesiniz: ${daysLeft(b.bitis)} gün kaldı. Plan seçtiğinizde kalan kullanım haklarınız yeni planınıza göre güncellenir.</span>`) : ""}
   ${!b.aktif ? msg("warn", esc(NEDEN.sure()) + " Bir plan seçerek kaldığınız yerden devam edebilirsiniz.") : ""}
   <div class="plans">${planlar.filter(p => p.kod !== "deneme").map(card).join("")}</div>
   <div class="faq">
@@ -1024,11 +1055,11 @@ function pageTakip() {
   const ekleBtn = `<button type="button" class="btn btn-p" data-tk-new${kapali || dolu || TK.edit ? " disabled" : ""}>+ Yeni firma ekle</button>`;
   const liste = TK.list === null ? `<div class="empty" style="padding:24px"><div class="spin"></div></div>`
     : TK.err ? msg("err", esc(TK.err) + ` <button type="button" class="linkbtn" data-tk-yenile>Tekrar dene</button>`)
-    : !TK.list.length && !TK.edit ? `<div class="card pad empty"><div style="font-size:30px" aria-hidden="true">📡</div><h3>Henüz takip edilen firma yok</h3><p class="tk-mute" style="max-width:460px;margin:6px auto 0">Bir firma ve rakiplerini ekleyin. Her hafta rakiplerin blog, RSS ve LinkedIn paylaşımları taranır; özet ve aksiyon önerisi e-postanıza gelir.</p></div>`
+    : !TK.list.length && !TK.edit ? `<div class="card pad empty"><div class="big" aria-hidden="true">${ic("radar", 26)}</div><h3>Henüz takip edilen firma yok</h3><p class="tk-mute" style="max-width:460px;margin:6px auto 0">Bir firma ve rakiplerini ekleyin. Her hafta rakiplerin blog, RSS ve LinkedIn paylaşımları taranır; özet ve aksiyon önerisi e-postanıza gelir.</p></div>`
     : `<div class="tk-list">${TK.list.filter(t => !TK.edit || TK.edit.id !== t.id).map(tkKart).join("")}</div>`;
-  shell(`${ph(`<span aria-hidden="true">📡</span> Rakip Takip`, esc(MOD.takip.d), kapali ? "" : ekleBtn)}${kapali ? gate("takip") : ""}
+  shell(`${ph(`Rakip Takip`, esc(MOD.takip.d), kapali ? "" : ekleBtn)}${kapali ? gate("takip") : ""}
     ${sayac ? `<div class="quota" style="margin-bottom:16px"><span>${sayac}</span>${lim > 0 ? `<div class="meter${dolu ? " full" : ""}" aria-hidden="true"><i style="width:${Math.min(100, (kul / lim) * 100)}%"></i></div>` : ""}</div>` : ""}
-    ${dolu && !kapali ? msg("warn", `<span aria-hidden="true">ℹ️</span><span>${esc(NEDEN.kota("takip"))} Yeni firma eklemek için bir takibi silin ya da <a href="#/fiyatlar">planınızı yükseltin →</a></span>`) : ""}
+    ${dolu && !kapali ? msg("warn", `${ic("info", 16)}<span>${esc(NEDEN.kota("takip"))} Yeni firma eklemek için bir takibi silin ya da <a href="#/fiyatlar">planınızı yükseltin →</a></span>`) : ""}
     ${TK.edit ? tkForm(TK.edit.id ? TK.edit : null) : ""}
     ${liste}
     <p class="tk-mute" style="font-size:13px;margin-top:16px">Her firma haftada bir otomatik taranır. İsterseniz “Şimdi tara” ile elle de başlatabilirsiniz (firma başına 20 saatte bir).</p>`);
@@ -1125,7 +1156,7 @@ function pageHesap() {
         <button class="btn btn-p" type="submit">Kaydet</button></form></section>
     <section class="card pad"><div class="row" style="margin-bottom:14px"><h3>Plan ve kullanım</h3><span class="pill ${b.aktif ? "acc" : "warn"}">${esc(b.plan_ad || b.plan)} · ${b.aktif ? "Geçerlilik: " + fmtD(b.bitis) : "süre doldu"}</span></div>
       <div class="scroll-x"><table class="tbl"><thead><tr><th>Araç</th><th>Bu ay (${esc(b.ay || "")})</th><th>Aylık hak</th></tr></thead><tbody>
-      ${MODS.map(m => { const d = durum(m.k); return `<tr><td>${m.ic} ${esc(m.ad)}</td><td>${d.kul}${m.k === "takip" ? " firma" : ""}</td><td>${d.lim < 0 ? "Sınırsız" : d.lim ? d.lim + (m.k === "takip" ? " firma (haftalık)" : "") : "Plana dahil değil"}</td></tr>`; }).join("")}
+      ${MODS.map(m => { const d = durum(m.k); return `<tr><td>${esc(m.ad)}</td><td>${d.kul}${m.k === "takip" ? " firma" : ""}</td><td>${d.lim < 0 ? "Sınırsız" : d.lim ? d.lim + (m.k === "takip" ? " firma (haftalık)" : "") : "Plana dahil değil"}</td></tr>`; }).join("")}
       </tbody></table></div><a class="btn btn-g btn-s" href="#/fiyatlar" style="margin-top:14px">Planları gör</a></section>
     <section class="card pad"><div class="row" style="margin-bottom:6px"><h3>Fireflies bağlantısı</h3><span class="pill ${b.fireflies ? "ok" : ""}">${b.fireflies ? "Bağlı" : "Bağlı değil"}</span></div>
       ${b.fireflies ? `<p style="color:var(--mute);margin-bottom:14px">Toplantı analizi için Fireflies hesabınız bağlı. Anahtarı değiştirmek için yenisini kaydedin.</p><div id="fkm"></div><div class="row" style="justify-content:flex-start"><button class="btn btn-d btn-s" id="ffdel">Bağlantıyı kaldır</button></div><details style="margin-top:14px"><summary style="cursor:pointer;font-weight:600">Anahtarı değiştir</summary><div style="margin-top:12px">${ffConnect(true)}</div></details>` : ffConnect(true)}
