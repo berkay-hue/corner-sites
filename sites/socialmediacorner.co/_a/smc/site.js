@@ -15,7 +15,8 @@
   var menu = document.querySelector('.mnav');
   if (!menu) return;
   var sum = menu.querySelector('summary');
-  var sync = function () { sum.setAttribute('aria-expanded', menu.open ? 'true' : 'false'); };
+  /* html.mnav-open: CSS sayfanın üstüne yarı saydam örtü koyar; örtüye tıklama aşağıdaki dış tıklama ile menüyü kapatır */
+  var sync = function () { sum.setAttribute('aria-expanded', menu.open ? 'true' : 'false'); document.documentElement.classList.toggle('mnav-open', menu.open); };
   var close = function () { if (menu.open) { menu.open = false; } };
   sync();
   menu.addEventListener('toggle', sync);
@@ -167,7 +168,7 @@
     var btns = document.createElement('div'); btns.className = 'ckb__btns';
     var mk = function (txt, cls, val) {
       var b = document.createElement('button'); b.type = 'button'; b.className = 'btn ' + cls; b.textContent = txt;
-      b.addEventListener('click', function () { set(val); bar.hidden = true; });
+      b.addEventListener('click', function () { set(val); bar.hidden = true; pad(); });
       return b;
     };
     btns.appendChild(mk(T.ess, 'btn--ghost', 'ess'));
@@ -177,7 +178,11 @@
     var skip = document.querySelector('body > .skip');
     document.body.insertBefore(bar, skip ? skip.nextSibling : document.body.firstChild);
   };
-  var show = function () { if (!bar) build(); bar.hidden = false; };
+  /* bant açıkken alt bilgiye bant yüksekliği kadar boşluk: en alta kaydırınca dil anahtarı ve bağlantılar bandın altında kalmasın */
+  var ftr = document.querySelector('.ftr');
+  var pad = function () { if (ftr) ftr.style.paddingBottom = bar && !bar.hidden ? (bar.offsetHeight + 44) + 'px' : ''; };
+  var show = function () { if (!bar) build(); bar.hidden = false; pad(); };
+  window.addEventListener('resize', function () { if (bar && !bar.hidden) pad(); });
   if (!get()) show();
   var reopen = function () { show(); var f = bar.querySelector('button'); if (f) f.focus(); };
   var meta = document.querySelector('.ftr__meta');

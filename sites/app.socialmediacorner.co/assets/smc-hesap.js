@@ -5,7 +5,7 @@
 (function(){
 'use strict';
 var d=document,root=d.documentElement,body=d.body;
-var EN={"Yönetim":"Admin","1 taslak":"1 draft",
+var EN={"Yönetim":"Admin","Gizle":"Hide","Göster":"Show","Şifreyi gizle":"Hide password","Şifreyi göster":"Show password","1 taslak":"1 draft",
 "Demo · {n} gün kaldı":"Demo · {n} days left","Demo · 1 gün kaldı":"Demo · 1 day left","Deneme bitti — plan için iletişime geç":"Trial ended — contact us for a plan","Teklif al":"Get a quote",
 "Bağla":"Connect",
 "Bağlantı ve kayıtlı yetki burada silinir; {p} tarafındaki izni {p} ayarlarından kaldırırsın. Bu hesaba otomatik paylaşım yapılmaz. Geçmiş’teki taslakların silinmez; istediğin an yeniden bağlarsın.":"The connection and stored access are deleted here; you remove the permission in your {p} settings. Nothing will be shared to this account automatically. Your drafts in History stay; you can reconnect any time.",
@@ -217,7 +217,7 @@ function bolumYok(j){return j._s===404||(j._s===503&&j.error==='not_ready')}
 function ekran(ad,odak){
   $$('[data-ekran]').forEach(function(s){s.hidden=s.getAttribute('data-ekran')!==ad});
   var ic=$('#icerik');if(ic)ic.removeAttribute('aria-busy');
-  if(odak){var s=$('[data-ekran="'+ad+'"]'),h=s&&$('h1',s);if(h)h.focus()}
+  if(odak){var s=$('[data-ekran="'+ad+'"]'),h=s&&$('h1',s);if(h)h.focus({focusVisible:false})}
 }
 function hataGoster(kod,odak){$('#hata-kod').textContent=t('Kod: {k}',{k:kod||'network'});ekran('hata',odak)}
 function bildir(tr,tur,p){var n=$('#not');if(!n)return;n.className='bildirim'+(tur?' bildirim-'+tur:'');n.textContent='';if(tr)n.appendChild(el('p',null,t(tr,p)))}
@@ -254,7 +254,7 @@ function ornekKur(){
 
 /* ---- ortak form davranışı ---- */
 function formOrtak(){
-  $$('.goster').forEach(function(b){b.addEventListener('click',function(){var i=$('#'+b.getAttribute('aria-controls')),ac=b.getAttribute('aria-pressed')!=='true';if(!i)return;i.type=ac?'text':'password';b.setAttribute('aria-pressed',ac?'true':'false')})});
+  $$('.goster').forEach(function(b){b.addEventListener('click',function(){var i=$('#'+b.getAttribute('aria-controls')),ac=b.getAttribute('aria-pressed')!=='true';if(!i)return;i.type=ac?'text':'password';b.setAttribute('aria-pressed',ac?'true':'false');b.textContent=t(ac?'Gizle':'Göster');b.setAttribute('aria-label',t(ac?'Şifreyi gizle':'Şifreyi göster'))})});
   $$('.kutu').forEach(function(i){i.addEventListener('input',function(){if(i.getAttribute('aria-invalid')==='true')hataYaz(i,'')})});
 }
 

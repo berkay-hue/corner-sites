@@ -10,7 +10,7 @@ var ORNEK=!API||(MOCK&&/(^|&)ornek(=|&|$)/.test(location.hash.slice(1)));
 var AD={linkedin_blog:T('LinkedIn+Blog','LinkedIn+Blog'),video_gorsel:T('Video+Görsel','Video+Visual')};
 function tok(){var r=null;[function(){return sessionStorage},function(){return localStorage}].some(function(f){try{var v=f().getItem('smc-oturum');if(v&&/^[A-Za-z0-9_-]{43}$/.test(v)){r=v;return true}}catch(e){}return false});return r}
 function anon(){try{return localStorage.getItem('smc-anon')||''}catch(e){return ''}}
-function yaz(ust,alt,veri){y.textContent=ust;p.setAttribute('data-hak',veri);if(bl)bl.textContent=alt}
+function yaz(ust,alt,veri,tur){y.textContent=ust;if(tur){var s=d.createElement('span');s.className='hak-tur';s.textContent=' · '+tur;y.appendChild(s)}p.setAttribute('data-hak',veri);if(bl)bl.textContent=alt}
 function belirsiz(){yaz(T('Hak: belli değil','Credits: unknown'),T('Her üretim 1 hak kullanır; hak ayın ilk günü yenilenir.','Each generation uses 1 credit; credits renew on the 1st of the month.'),'?')}
 function goster(r){
   var m=r&&r.month||{},ay=m.linkedin_blog,vg=m.video_gorsel;
@@ -22,12 +22,12 @@ function goster(r){
     var da=T('14 gün ücretsiz deneme: '+AD.linkedin_blog+' '+dk+'/'+ay.limit+' kaldı.','14-day free trial: '+AD.linkedin_blog+' '+dk+'/'+ay.limit+' left.');
     if(vg&&vg.limit!=null)da+=' '+AD.video_gorsel+': '+Math.max(0,(vg.limit|0)-(vg.used|0))+'/'+vg.limit+'.';
     da+=' '+T('Deneme hakkı yenilenmez.','Trial credits don’t renew.');if(son)da+=' '+T('Deneme bitişi: '+son+'.','Trial ends: '+son+'.');
-    yaz(T('Deneme '+dk+'/'+ay.limit+' '+AD.linkedin_blog,'Trial '+dk+'/'+ay.limit+' '+AD.linkedin_blog),da,dk<=0?'0':dk===1?'1':'2');return;
+    yaz(T('Deneme: '+dk+'/'+ay.limit+' kaldı','Trial: '+dk+'/'+ay.limit+' left'),da,dk<=0?'0':dk===1?'1':'2',AD.linkedin_blog);return;
   }
   var kalan=Math.max(0,(ay.limit|0)-(ay.used|0)),alt=T('Planındaki aylık '+AD.linkedin_blog+' hakkı '+ay.limit+'; '+kalan+' kaldı.','Your plan’s monthly '+AD.linkedin_blog+' allowance is '+ay.limit+'; '+kalan+' left.');
   if(vg&&vg.limit!=null)alt+=' '+T(AD.video_gorsel+': '+Math.max(0,(vg.limit|0)-(vg.used|0))+'/'+vg.limit+'.',AD.video_gorsel+': '+Math.max(0,(vg.limit|0)-(vg.used|0))+'/'+vg.limit+'.');
   alt+=' '+T('Her üretim 1 hak kullanır; hak ayın ilk günü yenilenir.','Each generation uses 1 credit; it renews on the 1st of the month.');
-  yaz(T('Bu ay '+kalan+'/'+ay.limit+' '+AD.linkedin_blog,'This month '+kalan+'/'+ay.limit+' '+AD.linkedin_blog),alt,kalan<=0?'0':kalan===1?'1':'2');
+  yaz(T('Bu ay '+kalan+'/'+ay.limit+' kaldı',kalan+'/'+ay.limit+' left this month'),alt,kalan<=0?'0':kalan===1?'1':'2',AD.linkedin_blog);
 }
 p.addEventListener('click',function(){var a=!k.classList.contains('acik');k.classList.toggle('acik',a);p.setAttribute('aria-expanded',a?'true':'false')});
 d.addEventListener('click',function(e){if(!k.contains(e.target)){k.classList.remove('acik');p.setAttribute('aria-expanded','false')}});

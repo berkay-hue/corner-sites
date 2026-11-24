@@ -253,7 +253,7 @@ function ozetCiz(){
   var s1=el('div','cms-ozet-k');
   ekle(s1,el('span','ince',L('Bağlı site','Connected sites')),el('strong','cms-sayi',used+' / '+lim.sites));
   var q=veri.quota,s2=el('div','cms-ozet-k');
-  s2.appendChild(el('span','ince',L('Bu ay blog yazısı','Blog posts this month'),{id:'cms-kota-e'}));
+  s2.appendChild(el('span','ince',L('Bu ay kullanılan blog hakkı','Blog credits used this month'),{id:'cms-kota-e'}));
   if(q.lb_limit>0){
     var pr=el('progress','cms-kota',null,{max:String(q.lb_limit),value:String(Math.min(q.lb_used,q.lb_limit)),'aria-labelledby':'cms-kota-e'});
     ekle(s2,pr,el('strong','cms-sayi',q.lb_used+' / '+q.lb_limit));
