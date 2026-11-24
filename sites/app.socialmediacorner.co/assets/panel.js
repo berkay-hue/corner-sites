@@ -27,8 +27,8 @@
   function el(ad,sinif,metin){var e=d.createElement(ad);if(sinif)e.className=sinif;if(metin!=null)e.textContent=metin;return e}
 
   /* panel.css: statik bağlantı yoksa ekle; DOM bitince head'in sonuna taşı ki studyo.css'ten sonra gelsin */
-  var cssLink=d.querySelector('link[rel="stylesheet"][href="/assets/panel.css"]'),cssEklendi=false;
-  if(!cssLink&&d.head){cssLink=el('link');cssLink.rel='stylesheet';cssLink.href='/assets/panel.css';d.head.appendChild(cssLink);cssEklendi=true}
+  var cssLink=d.querySelector('link[rel="stylesheet"][href^="/assets/panel.css"]'),cssEklendi=false;
+  if(!cssLink&&d.head){cssLink=el('link');cssLink.rel='stylesheet';cssLink.href='/assets/panel.css?v=bt1';d.head.appendChild(cssLink);cssEklendi=true}
 
   function favicon(){
     if(d.querySelector('link[rel~="icon"][href="/assets/favicon.svg"]'))return;

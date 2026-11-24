@@ -174,6 +174,7 @@ select.kutu{cursor:pointer}
 .bag-acik{color:var(--ink2)}
 .bag-kim{font-weight:var(--fw-etiket)}
 .bag-kart .bildirim{display:grid;gap:var(--s2)}
+.bag-kart .bildirim:empty{display:none}
 .bag-kart .eylemler{margin-top:0}
 .acilir{padding-top:var(--s2);border-top:1px solid var(--line)}
 .acilir summary{display:flex;align-items:center;min-height:var(--dokunma);border-radius:var(--r-s);color:var(--accent-strong);font-weight:var(--fw-etiket);cursor:pointer}

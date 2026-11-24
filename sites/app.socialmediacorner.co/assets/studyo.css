@@ -48,6 +48,8 @@ a:hover{color:var(--ink)}
 .st-hak[data-hak="?"]::before{background:var(--ink3)}
 .st-balon{position:absolute;right:0;top:calc(100% + var(--s2));z-index:var(--z-bildirim);width:max-content;max-width:280px;padding:var(--s2) var(--s3);border-radius:var(--r-s);background:var(--ters-bg);color:var(--ters-ink);font:var(--f-ipucu);box-shadow:var(--yuk-2);opacity:0;visibility:hidden;transform:translateY(-2px);transition:opacity var(--sure-hizli) var(--egri),transform var(--sure-hizli) var(--egri),visibility 0s linear var(--sure-hizli)}
 .st-hak-k:hover .st-balon,.st-hak:focus-visible+.st-balon,.st-hak-k.acik .st-balon{opacity:1;visibility:visible;transform:none;transition-delay:0s}
+/* dar ekranda balon çipin sağ kenarına göre açılınca sol ekran dışına taşar; üst çubuğun altında tam genişlik açılır */
+@media (max-width:520px){.st-balon{position:fixed;left:var(--g2);right:var(--g2);top:calc(var(--st-ust) + var(--s2));width:auto;max-width:none}}
 
 /* hesap menüsü */
 .st-hesap-k{position:relative}
@@ -475,6 +477,9 @@ dialog::backdrop{background:var(--ortu)}
 .st-teklif-ust{display:inline-flex;align-items:center;min-height:var(--dokunma);padding:0 var(--s3);border-radius:var(--r-m);color:var(--ink2);font:600 .875rem/1 var(--govde);text-decoration:none;white-space:nowrap}
 .st-teklif-ust:hover{background:var(--yuzey-hover);color:var(--ink)}
 @media (max-width:520px){.st-teklif-ust{display:none}}
+/* üye plan kutusundaki teklif bağlantısı yalnız dar ekranda (üst çubuktaki gizlenince) görünür */
+.st-teklif-kart .st-plan-teklif{display:none}
+@media (max-width:520px){.st-teklif-kart .st-plan-teklif{display:inline-flex;margin-left:var(--s4)}.hak-tur{display:none}}
 
 /* medya yedek görünümü */
 #sb-yer{display:flex;flex-direction:column;gap:var(--g2)}

@@ -154,7 +154,7 @@ function yenMetin(){var g=T('gece yarısı (İstanbul saati)','midnight (Istanbu
   return g+T(', yaklaşık '+Math.floor(dk/60)+' sa '+(dk%60)+' dk sonra',', in about '+Math.floor(dk/60)+' h '+(dk%60)+' min')}
 function hakYaz(){
   var p=$('#hak'),y=$('#hak-yazi'),bl=$('#hak-balon');if(!p||!y)return;
-  var bel=!!D.hakBilinmez||D.view==='hata'&&(HATA[D.hata]||HATA.genel).e==='istemci',sc=D.view==='duvar'?D.scope:'',ust,alt,veri,ay;
+  var bel=!!D.hakBilinmez||D.view==='hata'&&(HATA[D.hata]||HATA.genel).e==='istemci',sc=D.view==='duvar'?D.scope:'',ust,alt,veri,ay,tur='';
   if(sc==='yakinda'){ust=T('Çok yakında','Coming soon');alt=T('Araç henüz açılmadı.','The tool isn’t open yet.');veri='?'}
   else if(D.giris||sc==='giris'){ust=T('Giriş yap · 14 gün ücretsiz dene','Sign in · 14-day free trial');alt=DUVAR.giris.b+' '+DUVAR.giris.m;veri='0'}
   else if(D.dBitti||sc==='deneme'){ust=T('Deneme bitti','Trial ended');alt=DUVAR.deneme.b+' '+DUVAR.deneme.m;veri='0'}
@@ -162,13 +162,17 @@ function hakYaz(){
   else if(sc==='kapasite'){ust=T('Kapasite doldu','Capacity is full');alt=DUVAR.kapasite.m;veri='0'}
   else if(sc==='ip'||sc==='global'||sc==='user'){ust=T('Bugünlük kapalı','Closed for today');alt=DUVAR[sc].b+' '+T('Yenilenme: ','Renews: ')+yenMetin()+'.';veri='0'}
   else if(sc==='plan'){ust=T('Bu ay doldu','Used up this month');alt=DUVAR.plan.b+' '+DUVAR.plan.m;veri='0'}
-  else if(bel||D.left==null){ust=T('Hak: belli değil','Credits: unknown');alt=T('Her üretim 1 hak kullanır. Günde '+D.cap+' hak; yenilenme: ','Each generation uses 1 credit. '+D.cap+' credits a day; renews: ')+yenMetin()+'.';veri='?'}
+  else if(bel||D.left==null){ust=T('Hak: belli değil','Credits: unknown');veri='?';
+    /* girişli kullanıcının hakkı aylık (deneme: yenilenmez); "günde N hak" yalnız girişsiz deneme için doğru */
+    alt=D.plan==='demo'?T('Her üretim 1 hak kullanır; deneme hakkı yenilenmez.','Each generation uses 1 credit; trial credits don’t renew.'):D.plan&&D.plan!=='anon'?T('Her üretim 1 hak kullanır; hak ayın ilk günü yenilenir.','Each generation uses 1 credit; credits renew on the 1st of the month.'):T('Her üretim 1 hak kullanır. Günde '+D.cap+' hak; yenilenme: ','Each generation uses 1 credit. '+D.cap+' credits a day; renews: ')+yenMetin()+'.'}
   else if((ay=D.plan&&D.plan!=='anon'?ayBilgi():null)){
     /* A9b: girişli → aylık hak ("Bu ay 7/8 LinkedIn+Blog"); günlük/global sınır daha darsa balonda söylenir.
        A15: demo (14 günlük deneme) hakkı ayda yenilenmez → "Deneme 3/4 LinkedIn+Blog" */
-    if(D.plan==='demo'){var bt=tarihMetin(D.dSon);ust=T('Deneme '+ay.kalan+'/'+ay.limit+' '+ay.ad,'Trial '+ay.kalan+'/'+ay.limit+' '+ay.ad);
+    /* hapta kalan hak açıkça "kaldı" der (blog kartındaki sayaç kullanılanı gösterir); tür etiketi dar ekranda gizlenir */
+    tur=ay.ad;
+    if(D.plan==='demo'){var bt=tarihMetin(D.dSon);ust=T('Deneme: '+ay.kalan+'/'+ay.limit+' kaldı','Trial: '+ay.kalan+'/'+ay.limit+' left');
       alt=T('14 günlük ücretsiz denemede '+ay.ad+' hakkı '+ay.limit+'; '+ay.kalan+' kaldı. Deneme hakkı yenilenmez','Your 14-day free trial includes '+ay.limit+' '+ay.ad+'; '+ay.kalan+' left. The trial allowance doesn’t renew')+(bt?T('; deneme '+bt+' tarihinde biter.','; the trial ends on '+bt+'.'):'.')}
-    else{ust=T('Bu ay '+ay.kalan+'/'+ay.limit+' '+ay.ad,'This month '+ay.kalan+'/'+ay.limit+' '+ay.ad);
+    else{ust=T('Bu ay '+ay.kalan+'/'+ay.limit+' kaldı',ay.kalan+'/'+ay.limit+' left this month');
     alt=T('Planındaki aylık '+ay.ad+' hakkı '+ay.limit+'; '+ay.kalan+' kaldı. Her üretim 1 hak kullanır; hak ayın ilk günü yenilenir.','Your plan’s monthly '+ay.ad+' allowance is '+ay.limit+'; '+ay.kalan+' left. Each generation uses 1 credit; it renews on the 1st of the month.')}
     if(D.left<ay.kalan)alt+=' '+T('Bugün en çok '+D.left+' üretim daha yapabilirsin; yenilenme: ','You can make at most '+D.left+' more today; renews: ')+yenMetin()+'.';
     veri=D.left<=0?'0':D.left===1?'1':'2';
@@ -178,7 +182,7 @@ function hakYaz(){
     alt=(D.left<=0?T('Bugünkü '+D.cap+' hakkını kullandın.','You’ve used today’s '+D.cap+' credits.'):T('Her üretim 1 hak kullanır; bugün '+D.cap+' hakkından '+D.left+' kaldı.','Each generation uses 1 credit; '+D.left+' of today’s '+D.cap+' left.'))+' '+T('Yenilenme: ','Renews: ')+yenMetin()+'.';
     veri=D.left<=0?'0':D.left===1?'1':'2';
   }
-  y.textContent=ust;p.setAttribute('data-hak',veri);if(bl)bl.textContent=alt;
+  y.textContent=ust;if(tur)y.appendChild(el('span','hak-tur',' · '+tur));p.setAttribute('data-hak',veri);if(bl)bl.textContent=alt;
   var bd=$('.st-bedel');if(bd)bd.textContent=T('1 hak','1 credit');
 }
 function hakKur(){var k=$('#hak-k'),p=$('#hak');if(!k||!p)return;

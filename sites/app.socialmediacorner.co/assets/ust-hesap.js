@@ -94,9 +94,12 @@ function planKutu(u){
       dur=n?T(n+' gün deneme kaldı',n+(n===1?' trial day left':' trial days left')):T('Deneme sürümü','Trial')}
   }else dur=T('Aktif plan','Active plan');
   s.textContent=dur;
+  var tk=$('a[data-teklif]',k),tkHref=tk&&tk.getAttribute('href');
   while(k.firstChild)k.removeChild(k.firstChild);
   k.appendChild(b);k.appendChild(s);k.classList.add('st-plan');
   if(p!=='enterprise'){var a=d.createElement('a');a.className='st-plan-btn';a.href=EN?'/en/pricing':'/fiyatlar';a.textContent=T('Planı yükselt','Upgrade plan');k.appendChild(a)}
+  /* ≤520px'te üst çubuktaki "Teklif al" gizli; üye kartı teklif kartının yerini alınca çekmecede de kalmıyordu (CSS yalnız dar ekranda gösterir) */
+  if(tkHref&&!$('.st-plan-teklif',k)){var q=d.createElement('a');q.className='st-plan-teklif';q.href=tkHref;q.setAttribute('data-teklif','footer');q.textContent=T('Teklif al','Get a quote');k.appendChild(q)}
 }
 function cikisKur(){
   $$('[data-cikis]').forEach(function(b){b.addEventListener('click',function(){

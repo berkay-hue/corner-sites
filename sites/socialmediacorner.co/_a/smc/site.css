@@ -78,6 +78,10 @@ ul,ol{margin:0;padding:0;list-style:none}
 .mnav__panel nav a{display:flex;align-items:center;min-height:48px;padding:0 4px;border-bottom:1px solid var(--line-2);color:var(--ink);font-weight:650;font-size:16px;text-decoration:none}
 .mnav__cta{display:grid;gap:10px;margin-top:16px}
 .mnav__lang{display:flex;justify-content:center;margin-top:8px}
+/* menü açıkken sayfa örtüsü (başlığın altında); başlıkta görünen düğmeler menüde tekrar etmesin */
+html.mnav-open body::after{content:"";position:fixed;inset:0;z-index:40;background:rgba(16,49,77,.28)}
+@media (min-width:600px){.mnav__cta,.mnav__lang{display:none}}
+@media (max-width:599px){.mnav__cta .btn--ghost{display:none}}
 @media (max-width:1139px){
   .nav{display:none}
   .mnav{display:block}
