@@ -7,7 +7,7 @@
 import { PROVIDERS, UNSUPPORTED, ERROR_HELP, slugify } from "./cms-providers.js";
 import { encrypt, decrypt, redirectUri, returnBase } from "./oauth.js";
 import { planLimits, PLANS, CMS_FREQS } from "./plans.js";
-import { genDay, genEnabled, keyOf, reserve, UPSERT, blogRequest, STOCK_URL, STOCK_TIMEOUT, stockPhoto, planCounts } from "./generate.js";
+import { genDay, genEnabled, keyOf, reserve, UPSERT, blogRequest, STOCK_URL, STOCK_TIMEOUT, STOCK_DAY_MAX, stockPhoto, planCounts } from "./generate.js";
 import { TONES, SECTORS, STUDIO_MAX } from "./gen-prompt.js";
 import { makeLlm, LlmError } from "./llm.js";
 import { cmsBackPath } from "./sites.js";
@@ -808,7 +808,7 @@ export async function cmsTick(env, f = fetch, { d1 = 30, sub = 20, log = m => co
       if (P?.stock && env.PEXELS_API_KEY && take(1, 1)) {
         try {
           const day = genDay(now());
-          const rs = await reserve(db, day, [{ name: "all", kind: "sa", key: await keyOf(env, day, "sa", "global"), inc: 1, max: intEnv(env.GEN_STOCK_PER_DAY, 2000) }]);
+          const rs = await reserve(db, day, [{ name: "all", kind: "sa", key: await keyOf(env, day, "sa", "global"), inc: 1, max: intEnv(env.GEN_STOCK_PER_DAY, STOCK_DAY_MAX) }]);
           if (rs.ok) {
             const q = new URLSearchParams({ query: (queued || title).slice(0, 100), per_page: "5", orientation: "landscape" });
             const res = await f(`${STOCK_URL}?${q}`, { headers: { authorization: env.PEXELS_API_KEY, accept: "application/json" }, signal: AbortSignal.timeout(STOCK_TIMEOUT) });

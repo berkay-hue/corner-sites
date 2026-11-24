@@ -119,14 +119,47 @@ test("başarılı arama: Pexels'e anahtar başlıkta, sorgu/yön/sayfa doğru; y
   assert.deepEqual(Object.keys(r.body.photos[0]).sort(), ["alt", "height", "id", "photographer", "photographer_url", "src", "url", "width"]);
   assert.equal(r.body.photos[0].photographer, "Ayşe Fotoğraf");
   assert.equal(r.body.photos[0].url, "https://www.pexels.com/photo/x-1/");
-  assert.ok(r.body.photos[0].src.large.startsWith("https://images.pexels.com/"));
+  assert.deepEqual(Object.keys(r.body.photos[0].src).sort(), ["large", "large2x", "medium"]);
+  for (const u of Object.values(r.body.photos[0].src)) assert.ok(u.startsWith("https://images.pexels.com/"), u);
+  assert.equal(url.searchParams.get("locale"), null); // lang verilmezse locale gönderilmez
   assert.ok(!JSON.stringify(r.body).includes(KEY));
   assert.ok(!("avg_color" in r.body.photos[0]) && !("liked" in r.body.photos[0]));
 });
 
-test("sorgu doğrulama: boş, 100 karakterden uzun, geçersiz yön ya da sayfa → 400, Pexels çağrılmaz", async () => {
+test("lang=tr|en → Pexels locale tr-TR / en-US", async () => {
   const s = setup();
-  for (const [qs, field] of [["", "q"], ["?q=%20%20", "q"], [`?q=${"a".repeat(101)}`, "q"], ["?q=kedi&orientation=wide", "orientation"], ["?q=kedi&page=0", "page"], ["?q=kedi&page=abc", "page"], ["?q=kedi&page=101", "page"]]) {
+  assert.equal((await s.call("?q=kahve&lang=tr")).status, 200);
+  assert.equal((await s.call("?q=coffee&lang=en")).status, 200);
+  assert.deepEqual(s.calls.map(c => c.url.searchParams.get("locale")), ["tr-TR", "en-US"]);
+});
+
+test("src alan adı doğrulaması: images.pexels.com dışı ya da http src atılır; medium ve large yoksa öğe düşer", async () => {
+  const bad = [
+    photo(1, { src: { medium: "https://images.pexels.com.evil.example/a.jpg", large: "https://evil.example/images.pexels.com/a.jpg", large2x: "//images.pexels.com/a.jpg" } }),
+    photo(2, { src: { medium: "https://images.pexels.com/ok-m.jpg", large: "http://images.pexels.com/a.jpg", large2x: "https://images.pexels.com@evil.example/a.jpg", tiny: "https://images.pexels.com/t.jpg" } }),
+    photo(3, { src: { large2x: "https://images.pexels.com/only-2x.jpg" } }),
+  ];
+  const s = setup({ fetch: fakeFetch(() => ({ status: 200, body: { total_results: 3, photos: bad } })) });
+  const r = await s.call("?q=kedi");
+  assert.equal(r.status, 200);
+  assert.deepEqual(r.body.photos.map(p => p.id), [2]);
+  assert.deepEqual(r.body.photos[0].src, { medium: "https://images.pexels.com/ok-m.jpg" });
+});
+
+test("kullanıcı başına günlük sınır → 429 limit (scope user); başka kullanıcı etkilenmez", async () => {
+  const s = setup({ env: { GEN_STOCK_USER_PER_DAY: "2" } });
+  assert.equal((await s.call("?q=a")).status, 200);
+  assert.equal((await s.call("?q=b", { ip: "198.51.100.9" })).status, 200);
+  const l = await s.call("?q=c", { ip: "192.0.2.44" }); // IP değişse de kullanıcı sayacı dolu
+  assert.deepEqual([l.status, l.body.error, l.body.scope], [429, "limit", "user"]);
+  assert.equal((await s.call("?q=d", { auth: BEARER("enterprise") })).status, 200);
+  assert.equal(s.calls.length, 3);
+  assert.deepEqual(s.usage("su").sort(), [1, 2]);
+});
+
+test("sorgu doğrulama: boş, 100 karakterden uzun, geçersiz yön, sayfa ya da dil → 400, Pexels çağrılmaz", async () => {
+  const s = setup();
+  for (const [qs, field] of [["", "q"], ["?q=%20%20", "q"], [`?q=${"a".repeat(101)}`, "q"], ["?q=kedi&orientation=wide", "orientation"], ["?q=kedi&page=0", "page"], ["?q=kedi&page=abc", "page"], ["?q=kedi&page=101", "page"], ["?q=kedi&lang=de", "lang"], ["?q=kedi&lang=__proto__", "lang"]]) {
     const r = await s.call(qs);
     assert.equal(r.status, 400, qs);
     assert.deepEqual([r.body.error, r.body.field], ["bad_input", field], qs);
@@ -147,10 +180,10 @@ test("anahtar yok → 503 not_ready; bayrak kapalı → 503; origin yok → 403;
   assert.equal(a.calls.length + b.calls.length + c.calls.length, 0);
 });
 
-test("üst akış hatası → 502 upstream, ayrıntı sızmaz (durum, bozuk JSON, ağ hatası, eksik photos)", async () => {
+test("üst akış hatası → 502 upstream, ayrıntı sızmaz (durum, bozuk JSON, ağ hatası, eksik photos); sayaçlar iade", async () => {
   const replies = [
     { status: 401, body: { error: "Unauthorized secret detail" } },
-    { status: 429, body: "rate limited detail" },
+    { status: 500, body: "server secret detail" },
     { status: 200, body: "<html>not json" },
     new Error("network secret detail"),
     { status: 200, body: { page: 1 } },
@@ -161,6 +194,19 @@ test("üst akış hatası → 502 upstream, ayrıntı sızmaz (durum, bozuk JSON
     assert.equal(r.status, 502);
     assert.deepEqual(r.body, { ok: false, error: "upstream", charged: false });
   }
+  // her başarısız deneme sayacı geri aldı: "Tekrar dene" hak yemez
+  assert.deepEqual([s.usage("su"), s.usage("st"), s.usage("sa")], [[0], [0], [0]]);
+});
+
+test("Pexels oran sınırı (429) → 429 limit scope global, ayrıntı sızmaz; sayaçlar iade, sonraki başarılı arama sayılır", async () => {
+  const replies = [{ status: 429, body: "rate limited detail" }, undefined];
+  const s = setup({ fetch: fakeFetch(n => replies[n - 1] || { status: 200, body: { total_results: 1, photos: [photo(1)] } }) });
+  const r = await s.call("?q=kedi");
+  assert.equal(r.status, 429);
+  assert.deepEqual(r.body, { ok: false, error: "limit", charged: false, scope: "global" });
+  assert.deepEqual([s.usage("su"), s.usage("st"), s.usage("sa")], [[0], [0], [0]]);
+  assert.equal((await s.call("?q=kedi")).status, 200);
+  assert.deepEqual([s.usage("su"), s.usage("st"), s.usage("sa")], [[1], [1], [1]]);
 });
 
 test("bozuk ya da yabancı alan adlı fotoğraf öğeleri ayıklanır; en çok 15 öğe", async () => {
@@ -191,21 +237,31 @@ test("IP başına günlük sınır → 429 limit (scope ip); başka IP etkilenme
   assert.deepEqual(s.usage("sa"), [3]);
 });
 
-test("plan kilidi: anonim, basic, jeton geçersiz, ACCOUNTS kapalı, 0018 yok → 403 plan need pro; pro ve enterprise → 200", async () => {
+test("oturum yok → 401 login_required (başlık yok, jeton geçersiz, Bearer değil, ACCOUNTS kapalı); Pexels çağrılmaz, sayaç dokunulmaz", async () => {
   const s = setup();
-  for (const auth of [null, BEARER("basic"), `Bearer ${"Z".repeat(43)}`, "Basic abc"]) {
+  for (const auth of [null, `Bearer ${"Z".repeat(43)}`, "Basic abc"]) {
     const r = await s.call("?q=kedi", { auth });
-    assert.equal(r.status, 403, String(auth));
-    assert.deepEqual(r.body, { ok: false, error: "plan", charged: false, need: "pro" });
+    assert.equal(r.status, 401, String(auth));
+    assert.deepEqual(r.body, { ok: false, error: "login_required", charged: false });
     assert.equal(r.headers.get("access-control-allow-origin"), ORIGIN);
   }
+  const off = setup({ env: { ACCOUNTS_ENABLED: "0" } });
+  assert.equal((await off.call("?q=kedi")).status, 401);
+  assert.equal(s.calls.length + off.calls.length, 0);
+  assert.deepEqual([s.usage("st"), s.usage("su"), s.usage("sa")], [[], [], []]);
+});
+
+test("plan kilidi: basic, 0018 yok → 403 plan need pro; pro ve enterprise → 200", async () => {
+  const s = setup();
+  const r = await s.call("?q=kedi", { auth: BEARER("basic") });
+  assert.equal(r.status, 403);
+  assert.deepEqual(r.body, { ok: false, error: "plan", charged: false, need: "pro" });
+  assert.equal(r.headers.get("access-control-allow-origin"), ORIGIN);
   assert.equal(s.calls.length, 0);
   assert.deepEqual(s.usage("st"), []); // 403'te sayaç dokunulmaz
   assert.equal((await s.call("?q=kedi")).status, 200);
   assert.equal((await s.call("?q=kedi", { auth: BEARER("enterprise") })).status, 200);
   assert.equal(s.calls.length, 2);
-  const off = setup({ env: { ACCOUNTS_ENABLED: "0" } });
-  assert.deepEqual([(await off.call("?q=kedi")).status, off.calls.length], [403, 0]);
   const old = setup({ db: freshDb({ mig18: false }) });
   assert.deepEqual([(await old.call("?q=kedi")).status, old.calls.length], [403, 0]);
   // sıra: doğrulama 400 ve anahtar 503 plan kontrolünden önce
