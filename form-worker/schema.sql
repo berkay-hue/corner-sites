@@ -235,14 +235,15 @@ CREATE TABLE IF NOT EXISTS brand_voice (
   updated_at TEXT NOT NULL DEFAULT (datetime('now'))
 ) WITHOUT ROWID;
 
--- Taslak geçmişi: üretilen LinkedIn/Instagram taslakları (yazan uç sonraki adımda; bu sürüm okur, siler, dışa aktarır).
+-- Taslak geçmişi: girişli kullanıcının ürettiği LinkedIn/Instagram/blog/video taslakları; 3 gün saklanır (platform.js DRAFT_KEEP_DAYS,
+-- saatlik cron siler). Karusel video, Reels instagram satırıdır (meta.kind). CHECK 0020_drafts_3gun.sql ile aynı.
 -- Sayfalama id imleciyle (before), arama topic/body LIKE ile. meta JSON (tone vb.).
 CREATE TABLE IF NOT EXISTS drafts (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   site TEXT NOT NULL,
   created_at TEXT NOT NULL DEFAULT (datetime('now')),
-  platform TEXT NOT NULL CHECK (platform IN ('linkedin','instagram')),
+  platform TEXT NOT NULL CHECK (platform IN ('linkedin','instagram','blog','video')),
   topic TEXT NOT NULL DEFAULT '',
   body TEXT NOT NULL,
   meta TEXT NOT NULL DEFAULT '{}'
@@ -278,8 +279,11 @@ CREATE TABLE IF NOT EXISTS gen_month (
 --   0016_publish.sql      yayın kuyruğu: publish_jobs, publish_events (yukarıdakiyle aynı tablolar; 0015 başka dala ayrıldı)
 --   0017_accounts.sql     app marka sesi + taslak geçmişi: brand_voice, drafts (yukarıdakiyle aynı tablolar; 0015 Ana'ya ayrıldı)
 --   0018_plans.sql        app plan kotaları: users.plan, users.plan_limits, gen_month (aylık sayaç; tablo yukarıdakiyle aynı)
+--   0019_cms.sql          otomatik blog yazarı: cms_sites, cms_posts (yalnız migrations/ altında)
+--   0020_drafts_3gun.sql  drafts.platform CHECK'ine blog ve video (tablo yeniden kurulur; tablo yukarıdakiyle aynı)
 -- Uygula (form-worker/ klasöründen çalıştır): npx wrangler d1 migrations apply corner-forms --remote
 -- 0002 uygulanmadan da bağ koparma çalışır; 0003–0014 yeni kodla deploy'dan ÖNCE uygulanmalı.
 -- 0016 PUBLISH_ENABLED = "1" yapılmadan ÖNCE uygulanmalı; bayrak kapalıyken kod bu tablolara dokunmaz.
 -- 0017 uygulanmadan /app/voice ve /app/drafts 503 not_ready döner; /app/export ve /app/account/delete tabloyu atlar.
 -- 0018 uygulanmadan girişli üretim anonim akışa düşer ve /gen/stock herkese 403 plan döner (Pexels kapalı).
+-- 0020 uygulanmadan blog/video taslağı geçmişe yazılmaz (CHECK reddeder, saveDrafts yutar); LinkedIn/Instagram etkilenmez.

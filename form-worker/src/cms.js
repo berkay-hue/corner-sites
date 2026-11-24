@@ -71,6 +71,8 @@ export function siteOut(r) {
 }
 export const postOut = p => ({
   id: p.id, cms_site_id: p.cms_site_id, title: p.title, state: p.state, mode: p.mode, remote_url: p.remote_url, last_error: p.last_error, created_at: p.created_at,
+  // içerik vardı ama saklama süresi doldu (platform.js keepDays 3 gün, cmsPurge 90 gün): istemci "silindi" yazar, yeniden göndermeyi gizler
+  content_deleted: !p.markdown && ["gonderildi", "yayinlandi", "basarisiz"].includes(p.state),
 });
 
 // ---- zamanlama: İstanbul sabit UTC+3; days ISO (1=Pzt..7=Paz), hour İstanbul saati; from'dan kesin sonraki ilk an ----

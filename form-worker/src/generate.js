@@ -523,10 +523,10 @@ async function instagram(c) {
 // ton, dil, sektör, biçim, işaretler); jeton, IP, e-posta, anon kimliği ve marka sesi metni girmez. Yazım hatası (0017 yok,
 // D1) yutulur, konsola tek satır; üretim yanıtı yine 200.
 const DRAFT_SQL = "INSERT INTO drafts (user_id, site, platform, topic, body, meta) VALUES (?, ?, ?, ?, ?, ?) RETURNING id";
-// 0017'deki CHECK (platform IN ('linkedin','instagram')) blog/video satırını reddeder; göç eklenmedi (A8 S1 kuralı).
-// Sonraki bir göç (CHECK genişletme, SQLite'ta tablo yeniden kurulumu) + platform.js DRAFT_PLATFORMS gelene dek blog/video yazılmaz:
-// oturum sorgusu ve kesin başarısız INSERT yapılmaz, yanıtta draft_ids olmaz. Gövde/meta biçimi hazır (draftBody).
-const DRAFT_DB = ["linkedin", "instagram"];
+// CHECK migrations/0020_drafts_3gun.sql ile blog/video'yu da kabul eder (karusel video, reels instagram satırı; ayrım meta.kind).
+// 0020 uygulanmadan blog/video INSERT'i CHECK'e takılır, aşağıdaki catch yutar (draft_ids yok). Liste platform.js DRAFT_PLATFORMS ile aynı.
+// Satırlar 3 gün saklanır (platform.js DRAFT_KEEP_DAYS; saatlik cron siler).
+const DRAFT_DB = ["linkedin", "instagram", "blog", "video"];
 const sceneLine = x => (x.sub ? `${x.text} — ${x.sub}` : x.text);
 export const draftBody = d => Array.isArray(d.scenes) ? `${d.scenes.map(sceneLine).join("\n")}\n\n${d.caption}`
   : typeof d.meta === "string" ? `${d.title}\n\n${d.text}` : typeof d.say === "string" ? `${d.text}\n\n${d.say}` : d.text;

@@ -4201,6 +4201,30 @@ test("A5-3: taslak silme: kendi taslağı 200, başkasının ve başka sitenin 4
   assert.deepEqual(fail(await call("POST", "/app/drafts/x/delete", { token: a.token, body: {} })), [404, "not_found"]);
 });
 
+test("A15: taslak geçmişi 3 gün: blog/video listelenir ve süzülür, 3 günden eski satır listede ve dışa aktarmada yok", async () => {
+  const { db, call, join } = await appSetup();
+  const a = await join("a@x.co");
+  const at = (id, age) => db.prepare("UPDATE drafts SET created_at = datetime('now', ?) WHERE id = ?").run(age, id);
+  const li = addDraft(db, a.id, { topic: "yeni li" });
+  const blog = addDraft(db, a.id, { platform: "blog", topic: "yeni blog", meta: '{"kind":"blog"}' });
+  const kar = addDraft(db, a.id, { platform: "video", topic: "karusel", meta: '{"kind":"carousel"}' });
+  const vid = addDraft(db, a.id, { platform: "video", topic: "sınırda video", meta: '{"kind":"video"}' });
+  at(vid, "-71 hours");
+  const eski = [addDraft(db, a.id, { topic: "eski li" }), addDraft(db, a.id, { platform: "blog", topic: "eski blog" }),
+    addDraft(db, a.id, { platform: "video", topic: "eski video" })];
+  at(eski[0], "-4 days"); at(eski[1], "-73 hours"); at(eski[2], "-30 days");
+  const all = (await call("GET", "/app/drafts", { token: a.token })).body;
+  assert.deepEqual(all.drafts.map(x => x.id), [vid, kar, blog, li]);
+  assert.deepEqual(all.drafts.find(x => x.id === kar).meta, { kind: "carousel" });
+  assert.deepEqual((await call("GET", "/app/drafts?platform=blog", { token: a.token })).body.drafts.map(x => x.id), [blog]);
+  assert.deepEqual((await call("GET", "/app/drafts?platform=video", { token: a.token })).body.drafts.map(x => x.id), [vid, kar]);
+  assert.deepEqual((await call("GET", "/app/drafts?q=eski", { token: a.token })).body.drafts, []);
+  assert.deepEqual((await call("GET", "/app/export", { token: a.token })).body.drafts.map(x => x.topic).sort(),
+    ["karusel", "sınırda video", "yeni blog", "yeni li"]);
+  // eski satır silinmemiş olsa da (cron saatlik) silme ucu kendi satırını yine siler
+  assert.deepEqual((await call("POST", `/app/drafts/${eski[0]}/delete`, { token: a.token, body: {} })).body, { ok: true });
+});
+
 test("A5-3: dışa aktarma: attachment, profil + ses + taslak + bağlantı; token, şifre özeti ve hesap kimliği yok", async () => {
   const { db, env, call, join } = await appSetup();
   const a = await join("a@x.co"), b = await join("b@x.co");

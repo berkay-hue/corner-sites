@@ -2,7 +2,7 @@
 //   { page: "/iletisim", fields: [["Ad", "..."], ["E-posta", "..."]], hp: "" }
 // Kayıt D1'e yazılır; e-posta MAIL binding'i (Email Routing) üzerinden MAIL_TO adresine gider.
 import { EmailMessage } from "cloudflare:email";
-import { platform, cleanup } from "./platform.js";
+import { platform, cleanup, keepDays } from "./platform.js";
 import { metaCallback, oauthCallback, syncDue, ytRetention } from "./oauth.js";
 import { metricsEnabled } from "./metrics.js";
 import { generate, genCleanup } from "./generate.js";
@@ -88,14 +88,16 @@ export default {
     try { await cleanup(env); } catch (e) { console.log("cleanup", e?.message?.slice(0, 80)); }
     // YouTube saklama kuralı (src/oauth.js ytRetention): METRICS_ENABLED kapansa da kalan veri süresi dolunca silinir
     try { await ytRetention(env); } catch (e) { console.log("retention", e?.message?.slice(0, 80)); }
-    // Taslak sayaçları (src/generate.js genCleanup): 2 günden eski gen_usage satırları
+    // Taslak sayaçları (src/generate.js genCleanup): 2 günden eski gen_usage, 13 aydan eski gen_month satırları
     try { await genCleanup(env); } catch (e) { console.log("gen cleanup", e?.message?.slice(0, 80)); }
+    // 3 gün saklama (src/platform.js keepDays): eski taslaklar silinir, son durumdaki blog yazılarının gövdesi boşaltılır
+    try { await keepDays(env); } catch (e) { console.log("keep days", e?.message?.slice(0, 80)); }
     // Günlük metrik senkronu (src/oauth.js syncDue), METRICS_ENABLED "1" ise. Ücretsiz plan çağrı başına 50 alt
     // istek ve 50 D1 sorgusu veriyor; gönderilen her e-postayı bir istek sayıp kalanı senkrona bırakıyoruz. D1'de
-    // bekleyen listesi (1), e-posta başına işaret (1), cleanup (4 ifade), YouTube saklama (5 ifade)
-    // ve taslak temizliği (1) düşülür.
+    // bekleyen listesi (1), e-posta başına işaret (1), cleanup (4 ifade), YouTube saklama (5 ifade),
+    // taslak sayaç temizliği (2 ifade) ve 3 gün saklama (2 ifade) düşülür.
     if (metricsEnabled(env)) {
-      const d1 = 50 - 1 - results.length - 4 - 5 - 1;
+      const d1 = 50 - 1 - results.length - 4 - 5 - 2 - 2;
       try { await syncDue(env, fetch, { budget: 40 - results.length, d1 }); } catch (e) { console.log("sync", e?.message?.slice(0, 80)); }
     }
   },
