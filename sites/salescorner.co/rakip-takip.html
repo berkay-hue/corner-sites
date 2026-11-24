@@ -9,6 +9,8 @@
 <link rel="canonical" href="https://salescorner.co/rakip-takip">
 <link href="/_a/fr/images/yaO2oRoUboEyRi1HXwHDHwBe1Q.webp" rel="icon">
 <link rel="apple-touch-icon" href="/_a/fr/images/CVipIegf1b4aKtLR23J6oqBRk.png">
+<link rel="preload" href="/_a/fr/assets/GrgcKwrN6d3Uz8EwcLHZxwEfC4.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/_a/fonts.css">
 <style>
 :root{--bg:#f8fafc;--fg:#1e293b;--mute:#64748b;--line:#e2e8f0;--card:#fff;--acc:#667eea;--ok:#15803d;--bad:#dc2626;--warn:#b45309}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.7 Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
@@ -44,6 +46,7 @@ button{font:inherit;cursor:pointer;border-radius:10px;min-height:44px}
 .yorum ul,.yorum ol{padding-left:20px}.yorum li{margin:6px 0}
 .it{padding:8px 0;border-bottom:1px solid var(--line)}.it:last-child{border-bottom:0}.it .d{display:block}
 .err{color:var(--bad)}
+.sr{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 </style>
 </head>
 <body>
@@ -61,6 +64,7 @@ button{font:inherit;cursor:pointer;border-radius:10px;min-height:44px}
     <div><label for="email">E-posta (isteğe bağlı)</label><input id="email" type="email" maxlength="200" placeholder="rapor@firma.com"></div>
   </div>
   <button class="go" id="go" type="submit">Rakipleri tara</button>
+  <p id="hata" class="sr" role="alert"></p><p id="bilgi" class="sr" role="status"></p>
   <p class="d" style="margin:10px 0 0">Tarama genelde 15–60 saniye sürer. Akış adresi boşsa site üzerinden otomatik bulunur.</p>
 </form>
 
@@ -81,8 +85,10 @@ button{font:inherit;cursor:pointer;border-radius:10px;min-height:44px}
   ];
   var rows = document.getElementById("rows");
   function el(tag, cls, txt){ var e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; }
+  var uid = 0;
   function field(lbl, name, val, ph, cls){
     var d = el("div", cls); var l = el("label", null, lbl); var i = el("input"); i.name = name; i.value = val || ""; i.placeholder = ph; i.maxLength = 300;
+    i.id = "rk-" + name + "-" + (++uid); l.htmlFor = i.id;
     d.appendChild(l); d.appendChild(i); return d;
   }
   function addRow(r){
@@ -108,16 +114,28 @@ button{font:inherit;cursor:pointer;border-radius:10px;min-height:44px}
       var g = function(n){ return r.querySelector('[name="'+n+'"]').value.trim(); };
       return {firma:g("firma"), site:g("site"), feed:g("feed"), linkedin:g("linkedin")};
     }).filter(function(x){ return x.site || x.feed || x.linkedin; });
-    if (!rakipler.length) { alert0("En az bir rakip için site, akış adresi veya LinkedIn şirket sayfası yazın."); return; }
+    clearInvalid();
+    if (!rakipler.length) {
+      alert0("En az bir rakip için site, akış adresi veya LinkedIn şirket sayfası yazın.");
+      var ilk = rows.querySelector('[name="site"]');
+      if (ilk) { ilk.setAttribute("aria-invalid", "true"); ilk.setAttribute("aria-describedby", "hata"); ilk.focus(); }
+      return;
+    }
     var body = {rakipler:rakipler, gun:+document.getElementById("gun").value, sirket:document.getElementById("sirket").value.trim(), email:document.getElementById("email").value.trim()};
-    go.disabled = true; go.textContent = "Taranıyor…";
+    go.disabled = true; go.textContent = "Taranıyor…"; document.getElementById("bilgi").textContent = "Taranıyor, lütfen bekleyin.";
     fetch("/api/rakip-takip", {method:"POST", headers:{"content-type":"application/json"}, body:JSON.stringify(body)})
       .then(function(r){ return r.text().then(function(t){ var d; try { d = JSON.parse(t.trim()); } catch(e) { d = {success:false, error:"Sunucudan beklenmeyen yanıt (" + r.status + ")."}; } return d; }); })
       .then(show)
       .catch(function(){ alert0("Bağlantı hatası, lütfen tekrar deneyin."); })
       .then(function(){ go.disabled = false; go.textContent = "Rakipleri tara"; });
   };
+  function clearInvalid(){
+    document.getElementById("hata").textContent = "";
+    [].forEach.call(rows.querySelectorAll('[aria-invalid]'), function(x){ x.removeAttribute("aria-invalid"); x.removeAttribute("aria-describedby"); });
+  }
   function alert0(msg){
+    document.getElementById("bilgi").textContent = "";
+    document.getElementById("hata").textContent = msg;
     var out = document.getElementById("out"); out.hidden = false;
     var d = document.getElementById("durum"); d.textContent = ""; d.appendChild(el("p", "err", msg));
     document.getElementById("yorum").textContent = "—"; document.getElementById("liste").textContent = "";
@@ -125,6 +143,7 @@ button{font:inherit;cursor:pointer;border-radius:10px;min-height:44px}
   function show(d){
     if (!d || d.success === false) { alert0((d && (d.error || d.message)) || "İşlem başarısız oldu."); return; }
     document.getElementById("out").hidden = false;
+    document.getElementById("bilgi").textContent = (function(){ var n = 0; (d.rakipler || []).forEach(function(r){ n += (r.items || []).length; }); return "Tarama tamamlandı. " + (n ? n + " yeni içerik bulundu." : "Seçilen dönemde yeni içerik yok."); })();
     var du = document.getElementById("durum"); du.textContent = "";
     (d.rakipler || []).forEach(function(r){
       var s = el("div", "st"); s.appendChild(el("b", null, (r.firma || "—") + (r.kaynak === "LinkedIn" ? " · LinkedIn" : "")));
