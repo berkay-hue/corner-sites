@@ -9575,15 +9575,12 @@ function addBlobs(sid) {
   addShape(sid, uid("blob"), 8.2, -1.3, 2.8, 2.4, C.blob, { shapeType: "ELLIPSE", alpha: 0.6 });
   addShape(sid, uid("blob"), -1.8, 4.1, 3.6, 2.8, C.blob, { shapeType: "ELLIPSE", alpha: 0.45 });
 }
+// Gerçek marka logosu (sitedeki PNG, 495x178); metinle taklit etme
 function addLogo(sid, x, y, fs) {
-  fs = fs || 8; const h = fs / 72 * 2.3, w = fs / 72 * 4.6;
-  // noFit: sığdırma ikinci satırı ("CORNER") atıyordu; kutu iç boşluğu için yükseklik payı
-  addTextBox(sid, uid("logo"), x, y, w + 0.25, h + 0.12, [
-    { text: "SALES", fontSize: fs, fontFamily: "Inter", color: C.dark, bold: true },
-    { text: "CORNER", fontSize: fs, fontFamily: "Inter", color: C.dark, bold: true }
-  ], { noFit: true });
-  addShape(sid, uid("brk"), x + w, y + 0.03, 0.16, 0.025, C.gold);
-  addShape(sid, uid("brk"), x + w + 0.135, y + 0.03, 0.025, h - 0.08, C.gold);
+  fs = fs || 8; const w = fs / 72 * 6.1, h = w * 178 / 495;
+  requests.push({ createImage: { objectId: uid("logo"), url: "https://salescorner.co/img/sales-corner-logo.png",
+    elementProperties: { pageObjectId: sid, size: { width: { magnitude: inchToEmu(w), unit: "EMU" }, height: { magnitude: inchToEmu(h), unit: "EMU" } },
+      transform: { scaleX: 1, scaleY: 1, translateX: inchToEmu(x), translateY: inchToEmu(y), unit: "EMU" } } } });
 }
 function addPageNo(sid) {
   addTextBox(sid, uid("pg"), 8.2, 0.16, 1.3, 0.22, [
@@ -11899,10 +11896,9 @@ function bullets(sid,x,y,w,h,items,size,color,o){ o=o||{};
   return id; }
 
 // ---- components ----
-// Şablondaki iki satırlık logo + sarı köşe braketi
-function logo(sid,x,y,fs){ fs=fs||9; const h=fs/72*2.25, w=fs/72*4.6;
-  text(sid,x,y,w+0.2,h,"SALES\nCORNER",fs,C.dark,{bold:true,font:FH,ls:86,noFit:true});
-  rect(sid,x+w-0.02,y+0.03,0.16,0.025,C.gold); rect(sid,x+w+0.115,y+0.03,0.025,h-0.1,C.gold); }
+// Gerçek marka logosu (sitedeki PNG, 495x178); metinle taklit etme
+function logo(sid,x,y,fs){ fs=fs||9; const w=fs/72*6.1, h=w*178/495;
+  REQ.push({ createImage:{ objectId:ID(), url:"https://salescorner.co/img/sales-corner-logo.png", elementProperties:{ pageObjectId:sid, size:{ width:{magnitude:E(w),unit:"EMU"}, height:{magnitude:E(h),unit:"EMU"} }, transform:{ scaleX:1, scaleY:1, translateX:E(x), translateY:E(y), unit:"EMU" } } } }); }
 function header(sid,kicker,title){
   logo(sid,0.55,0.3,9);
   text(sid,1.55,0.36,6.4,0.22,String(kicker||"").toUpperCase(),8,C.muted,{bold:true,font:FH});
