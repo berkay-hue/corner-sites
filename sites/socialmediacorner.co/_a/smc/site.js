@@ -173,7 +173,9 @@
     btns.appendChild(mk(T.ess, 'btn--ghost', 'ess'));
     btns.appendChild(mk(T.yes, 'btn--primary', 'all'));
     bar.appendChild(p); bar.appendChild(btns);
-    document.body.appendChild(bar);
+    /* bant sabit konumlu; DOM'da skip link'ten hemen sonra durur ki klavye/ekran okuyucu ona sayfa sonunda değil başta ulaşsın */
+    var skip = document.querySelector('body > .skip');
+    document.body.insertBefore(bar, skip ? skip.nextSibling : document.body.firstChild);
   };
   var show = function () { if (!bar) build(); bar.hidden = false; };
   if (!get()) show();
