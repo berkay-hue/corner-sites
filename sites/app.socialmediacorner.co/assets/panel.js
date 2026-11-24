@@ -164,6 +164,8 @@
     function degisti(){if(masa.matches)kapat(false);durum()}
     if(masa.addEventListener){masa.addEventListener('change',degisti);genisEkran.addEventListener('change',durum)}
     else if(masa.addListener){masa.addListener(degisti);genisEkran.addListener(durum)}
+    /* change olayı geç gelebilir; geniş ekranda açık kalan çekmece + kaydırma kilidi resize'da da kapanır */
+    window.addEventListener('resize',function(){if(masa.matches&&cekmece())degisti()});
     durum();
   }
 

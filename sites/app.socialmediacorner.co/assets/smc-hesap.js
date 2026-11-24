@@ -283,6 +283,7 @@ function girisKur(){
       if(j._s===429){bildir('Çok fazla hatalı deneme. 15 dakika bekleyip yeniden dene.','hata');return}
       if(j._s===400&&j.error==='email'){hataYaz(ep,'Geçerli bir e-posta yaz, örneğin ad@sirket.com.');ep.focus();return}
       if(j._s===400){hataYaz(s,'Şifreni yaz.');s.focus();return}
+      if(bolumYok(j)){uyelikKapali();return}
       genelHata(j);
     });
   });
@@ -291,6 +292,8 @@ function girisKur(){
 /* ---- kayıt ---- */
 /* ---- üyelik durumu (A11-2): data-uyelik="bekle|acik|kapali" öğeleri /auth durumuna göre görünür ---- */
 function uyelikDurum(s){$$('[data-uyelik]').forEach(function(x){x.hidden=x.getAttribute('data-uyelik').split(' ').indexOf(s)<0})}
+/* gönderimde üyelik kapalı (503 not_ready) ya da uç yok (404): açılıştaki gibi 'kapalı' ekranına geç, form yeniden gönderilmesin */
+function uyelikKapali(){uyelikDurum('kapali');bildir('');ekran('kapali',true)}
 
 /* ---- Turnstile (kayıt): açık render; jeton tek kullanımlık, her başarısız denemeden sonra sıfırlanır ---- */
 var TS=(function(){var m=d.querySelector('meta[name="turnstile-sitekey"]');return ((m&&m.getAttribute('content'))||'').trim()})();
@@ -355,7 +358,7 @@ function kayitKur(){
       }
       if(j._s===429){bildir('Çok fazla deneme yapıldı. Biraz sonra yeniden dene.','hata');return}
       if(j._s===403&&j.error==='bot'){bildir('Güvenlik doğrulaması başarısız oldu. Doğrulamayı yeniden tamamlayıp tekrar dene.','hata');tsOdak('');return}
-      if(j._s===503&&j.error==='not_ready'){uyelikDurum('kapali');bildir('Üyelik çok yakında açılıyor. Şimdilik Stüdyo’yu hesapsız deneyebilirsin.','uyari');return}
+      if(bolumYok(j)){uyelikKapali();return}
       genelHata(j);
     });
   });
