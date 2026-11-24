@@ -430,6 +430,21 @@ function oturumKur(u){
   var gs=$$('.st-rail .st-grup'),g=gs[gs.length-1];
   if(KULLANICI.admin===true&&g&&!$('.st-link[href="/hesap/admin"]',g)){var ra=el('a','st-link',null,{href:'/hesap/admin'});var sp=el('span','st-link-ad',t('Yönetim'));ra.innerHTML='<svg class="ikon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z"/></svg>';ra.appendChild(sp);g.appendChild(ra)}
   planRozet();
+  planKutu();
+}
+/* ray altı plan kutusu (ust-hesap.js ile aynı): teklif kartı yerine plan adı + durum + Planı yükselt; Enterprise'da düğme yok */
+function planKutu(){
+  var k=$('.st-rail .st-teklif-kart'),u=KULLANICI,p=u&&u.plan,en=dil==='en';
+  if(!k||!p||typeof p!=='string')return;
+  var b=el('b',null,(PLAN_AD[p]||p)+' plan'),dur;
+  if(p==='demo'){
+    if(u.trial_ended===true)dur=en?'Trial ended':'Deneme süresi bitti';
+    else{var z=Date.parse(u.trial_ends_at||''),n=isNaN(z)?0:Math.max(1,Math.ceil((z-Date.now())/864e5));
+      dur=!n?(en?'Trial':'Deneme sürümü'):en?n+(n===1?' trial day left':' trial days left'):n+' gün deneme kaldı'}
+  }else dur=en?'Active plan':'Aktif plan';
+  while(k.firstChild)k.removeChild(k.firstChild);
+  k.appendChild(b);k.appendChild(el('p',null,dur));k.classList.add('st-plan');
+  if(p!=='enterprise')k.appendChild(el('a','st-plan-btn',en?'Upgrade plan':'Planı yükselt',{href:en?'/en/pricing':'/fiyatlar'}));
 }
 /* A15 plan rozeti: /auth/me user.plan (yalnız smc, 0018 varsa); demo'da trial_ends_at (ISO) + trial_ended. Plan yoksa rozet yok.
    Hesap menüsünde e-postanın altında, Ayarlar'da Ad/E-posta dökümünde ayrı satır. Deneme bittiyse üst çubuktaki Teklif al adresi. */
