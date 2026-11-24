@@ -17,7 +17,7 @@
   };
   var CG=[
     ['cg-cg','https://cornergroup.co/','Corner Group','B2B büyüme ekosistemi','B2B growth ecosystem'],
-    ['cg-saas','https://saascorner.co/','SaaS Corner','B2B müşteri bulma','B2B lead generation'],
+    ['cg-saas','https://saascorner.co/','SAAS Corner','B2B müşteri bulma','B2B lead generation'],
     ['cg-sales','https://salescorner.co/','Sales Corner','Satış operasyonu ve outbound','Sales operations and outbound'],
     ['cg-crm','https://crmcorner.co/','CRM Corner','CRM ve süreç otomasyonu','CRM and process automation'],
     ['cg-brand','https://brandcorner.co/','Brand Corner','Influencer pazarlama platformu','Influencer marketing platform']
