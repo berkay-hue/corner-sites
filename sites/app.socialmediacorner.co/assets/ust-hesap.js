@@ -79,6 +79,10 @@ function durum(s,u){
   var m=$('#hesap-menu');
   if(u.admin===true&&m&&!$('#hesap-admin')){var g=$('a[data-m="uye"][href$="/gecmis"],a[data-m="uye"][href$="/history"]',m),y=d.createElement('a');
     y.href='/hesap/admin';y.id='hesap-admin';y.setAttribute('data-m','uye');y.textContent=T('Yönetim','Admin');m.insertBefore(y,g?g.nextSibling:$('hr',m))}
+  /* ray: Hesap grubuna Yönetim — stüdyo sayfalarında da (smc-hesap.js hesap sayfalarında aynısını ekler; çift eklenmez) */
+  var gs=$$('.st-rail .st-grup'),rg=gs[gs.length-1];
+  if(u.admin===true&&rg&&!$('.st-link[href="/hesap/admin"]',rg)){var ra=d.createElement('a'),sp=d.createElement('span');ra.className='st-link';ra.href='/hesap/admin';
+    ra.innerHTML='<svg class="ikon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z"/></svg>';sp.className='st-link-ad';sp.textContent=T('Yönetim','Admin');ra.appendChild(sp);rg.appendChild(ra)}
   planKutu(u);
 }
 /* ray altı plan kutusu: üyede teklif kartı yerine plan adı + durum + Planı yükselt (Enterprise'da düğme yok) */
