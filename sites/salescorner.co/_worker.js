@@ -2896,7 +2896,7 @@ function hdr(sid, title) {
 }
 function ftr(sid) {
   rect(sid, uid('fb'), 0, 5.25, 10, 0.375, C.darkBg);
-  txt(sid, uid('fl'), 0.4, 5.28, 3, 0.25, 'SAAS CORNER', 7, C.amber, {bold:true});
+  txt(sid, uid('fl'), 0.4, 5.28, 3, 0.25, 'SALES CORNER', 7, C.amber, {bold:true});
   txt(sid, uid('fr'), 4, 5.28, 5.5, 0.25, 'Gizli — Dahili Kullanım', 7, C.steel, {align:'END'});
 }
 function badge(sid, label, x, y, color) {
@@ -2913,11 +2913,11 @@ const s1 = createSlide('sl_kapak');
 setBg(s1, C.navy);
 rect(s1, uid('lp'), 0, 0, 3.8, 5.625, C.darkBg);
 rect(s1, uid('vl'), 3.8, 0, 0.04, 5.625, C.amber);
-txt(s1, uid('br'), 0.5, 0.6, 3, 0.35, 'SAAS CORNER', 11, C.amber, {bold:true});
+txt(s1, uid('br'), 0.5, 0.6, 3, 0.35, 'SALES CORNER', 11, C.amber, {bold:true});
 rect(s1, uid('bl'), 0.5, 0.92, 1.2, 0.02, C.amber);
 txt(s1, uid('rt'), 0.5, 1.2, 3, 0.9, 'MULTI-CHANNEL\nPERFORMANS\nRAPORU', 18, C.white, {bold:true});
 txt(s1, uid('pd'), 0.5, 2.3, 3, 0.25, dateStr, 10, C.muted);
-txt(s1, uid('by'), 0.5, 2.6, 3, 0.25, 'Hazırlayan: SAAS Corner', 9, C.steel);
+txt(s1, uid('by'), 0.5, 2.6, 3, 0.25, 'Hazırlayan: Sales Corner', 9, C.steel);
 rect(s1, uid('ms'), 0.3, 4.0, 3.2, 1.0, C.cardBg, 0.5);
 txt(s1, uid('ml'), 0.5, 4.05, 2.8, 0.2, 'BU HAFTA ÖNE ÇIKANLAR', 6, C.amber, {bold:true});
 txt(s1, uid('v1'), 0.5, 4.3, 1.4, 0.3, sf(summary.total_outreach), 20, C.white, {bold:true});
@@ -2938,7 +2938,7 @@ txt(s1, uid('cs'), 4.2, 2.5, 5.3, 0.35, 'Apollo + LinkedIn + Cold Call', 14, C.a
   txt(s1,uid('pl'),x+0.1,4.45,1.55,0.2,k.l,7,C.muted,{align:'CENTER'});
 });
 rect(s1,uid('ff'),0,5.25,10,0.375,C.darkBg,0.7);
-txt(s1,uid('ft'),0.5,5.28,9,0.25,'saascorner.co — B2B Lead Generation Agency',7,C.steel,{align:'CENTER'});
+txt(s1,uid('ft'),0.5,5.28,9,0.25,'salescorner.co — Veri Odaklı B2B Satış ve Lead Generation',7,C.steel,{align:'CENTER'});
 
 
 // ============================================================
@@ -3670,13 +3670,13 @@ const s12 = createSlide('sl_close');
 setBg(s12, C.navy);
 rect(s12,uid('lp'),0,0,4,5.625,C.darkBg);
 rect(s12,uid('vl'),4,0,0.04,5.625,C.amber);
-txt(s12,uid('br'),0.5,0.8,3.2,0.35,'SAAS CORNER',12,C.amber,{bold:true});
+txt(s12,uid('br'),0.5,0.8,3.2,0.35,'SALES CORNER',12,C.amber,{bold:true});
 rect(s12,uid('bl'),0.5,1.1,1.0,0.02,C.amber);
 txt(s12,uid('th'),0.5,1.5,3.2,0.8,'Teşekkürler',36,C.white,{bold:true});
 txt(s12,uid('sb'),0.5,2.3,3.2,0.4,'Sorularınız için\nbize ulaşın',12,C.muted);
 [
   {l:'E-posta',v:m.sorumlu_email||'berkay@saascorner.co',c:C.sky},
-  {l:'Website',v:'saascorner.co',c:C.amber},
+  {l:'Website',v:'salescorner.co',c:C.amber},
 ].forEach((ci,i) => {
   const y=1.2+(i*1.2);
   rect(s12,uid('cc'),4.5,y,5,0.9,C.cardBg);
@@ -3685,7 +3685,7 @@ txt(s12,uid('sb'),0.5,2.3,3.2,0.4,'Sorularınız için\nbize ulaşın',12,C.mute
   txt(s12,uid('cv'),4.7,y+0.4,4.6,0.35,ci.v,14,C.white);
 });
 rect(s12,uid('cf'),0,4.8,10,0.825,C.darkBg,0.5);
-txt(s12,uid('ct'),0.5,5.0,9,0.3,'SAAS Corner — B2B Lead Generation Agency | saascorner.co',9,C.steel,{align:'CENTER'});
+txt(s12,uid('ct'),0.5,5.0,9,0.3,'Sales Corner — Veri Odaklı B2B Satış ve Lead Generation | salescorner.co',9,C.steel,{align:'CENTER'});
 
 
 // ============================================================
@@ -4471,7 +4471,7 @@ function hdr(sid, title, color) {
 // Footer
 function footer(sid) {
   rect(sid, uid('fb'), 0, H-0.28, W, 0.28, C.navy);
-  txt(sid, uid('ft'), 0, H-0.26, W, 0.24, 'SAAS Corner  •  Toplantı Briefing Sistemi  •  saascorner.co', 7, C.gray, { align:'CENTER' });
+  txt(sid, uid('ft'), 0, H-0.26, W, 0.24, 'Sales Corner  •  Toplantı Briefing Sistemi  •  salescorner.co', 7, C.gray, { align:'CENTER' });
 }
 
 // Score bar
@@ -4596,7 +4596,7 @@ const euFont = euVal.length > 35 ? 8 : euVal.length > 22 ? 9.5 : 11;
 kpi(s1, 6.3, 3.0, 3.2, 0.85, 'En Uygun Hizmet', euVal, C.gold);
 
 rect(s1, uid('fb'), 0, H-0.32, W, 0.32, hex('0A1628'));
-txt(s1, uid('ft'), 0, H-0.28, W, 0.25, 'SAAS Corner  •  saascorner.co', 8, C.gray, { align:'CENTER' });
+txt(s1, uid('ft'), 0, H-0.28, W, 0.25, 'Sales Corner  •  salescorner.co', 8, C.gray, { align:'CENTER' });
 
 
 // ================================================================
@@ -4990,7 +4990,7 @@ if (refStr10) {
   txt(s10, uid('rbt'), rx10+0.15, 4.71, W-rx10-0.5, 0.32, '⭐ '+refStr10, 7.5, hex('94A3B8'));
 }
 rect(s10, uid('fb2'), 0, H-0.28, W, 0.28, hex('0A1628'));
-txt(s10, uid('ft2'), 0, H-0.24, W, 0.22, 'SAAS Corner  •  saascorner.co', 7.5, C.grayMid, { align:'CENTER' });
+txt(s10, uid('ft2'), 0, H-0.24, W, 0.22, 'Sales Corner  •  salescorner.co', 7.5, C.grayMid, { align:'CENTER' });
 
 
 // ================================================================
@@ -5903,7 +5903,7 @@ const skor = genel_skor;
 addShape(s1, uid('circ'), 3.75, 3.3, 1.5, 1.5, skorRenk(skor), { shapeType: 'ELLIPSE' });
 addText(s1, uid('sv'), 3.75, 3.5, 1.5, 0.65, String(skor), 28, C.white, { bold: true, alignment: 'CENTER' });
 addText(s1, uid('sl'), 3.75, 4.05, 1.5, 0.25, 'GENEL SKOR', 6, C.white, { alignment: 'CENTER' });
-addText(s1, uid('f'), 0.6, 5.1, 8.8, 0.3, 'SAAS Corner • CV Analiz Sistemi • saascorner.co', 7, hexToRgb('64748B'), { alignment: 'CENTER' });
+addText(s1, uid('f'), 0.6, 5.1, 8.8, 0.3, 'Sales Corner • CV Analiz Sistemi • salescorner.co', 7, hexToRgb('64748B'), { alignment: 'CENTER' });
 
 // ====================================================
 //  SLIDE 2: PROFIL + GENEL DEGERLENDIRME
@@ -5932,7 +5932,7 @@ addText(s2, uid('gg'), 5.2, 2.45, 4.5, 0.25, '🎯 Geliştirilebilir Alanlar', 1
 const gelistirText = gelistir.map((g,i) => (i+1)+'. '+g).join('\n') || '-';
 addText(s2, uid('gv'), 5.2, 2.73, 4.5, 1.1, gelistirText, 8.5, C.textDark, { bgColor: C.lightYellow });
 
-addText(s2, uid('f'), 0, 5.2, SLIDE_W, 0.3, 'SAAS Corner • CV Analiz Raporu', 6, C.gray, { alignment: 'CENTER' });
+addText(s2, uid('f'), 0, 5.2, SLIDE_W, 0.3, 'Sales Corner • CV Analiz Raporu • salescorner.co', 6, C.gray, { alignment: 'CENTER' });
 
 // ====================================================
 //  SLIDE 3: BECERİLER
@@ -5973,7 +5973,7 @@ bY += 0.28;
 addText(s3, uid('dl'), 0.3, bY, 4.5, 0.35, diller.join(' • ') || '-', 9, C.textDark, { bgColor: C.lightBlue });
 addText(s3, uid('sv2'), 5.2, bY, 4.5, 0.35, (beceriler.sertifikalar||[]).join(', ') || '-', 9, C.textDark, { bgColor: C.indigo });
 
-addText(s3, uid('f'), 0, 5.2, SLIDE_W, 0.3, 'SAAS Corner • CV Analiz Raporu', 6, C.gray, { alignment: 'CENTER' });
+addText(s3, uid('f'), 0, 5.2, SLIDE_W, 0.3, 'Sales Corner • CV Analiz Raporu • salescorner.co', 6, C.gray, { alignment: 'CENTER' });
 
 // ====================================================
 //  SLIDE 4: DENEYİM TİMELINE
@@ -6000,7 +6000,7 @@ let dY = 0.65;
   dY += cardH + 0.1;
 });
 
-addText(s4, uid('f'), 0, 5.2, SLIDE_W, 0.3, 'SAAS Corner • CV Analiz Raporu', 6, C.gray, { alignment: 'CENTER' });
+addText(s4, uid('f'), 0, 5.2, SLIDE_W, 0.3, 'Sales Corner • CV Analiz Raporu • salescorner.co', 6, C.gray, { alignment: 'CENTER' });
 
 // ====================================================
 //  SLIDE 5: İŞ UYGUNLUĞU SKOR TABLOSI
@@ -6028,7 +6028,7 @@ let iuY = 0.65;
   iuY += cardH + 0.08;
 });
 
-addText(s5, uid('f'), 0, 5.2, SLIDE_W, 0.3, 'SAAS Corner • CV Analiz Raporu', 6, C.gray, { alignment: 'CENTER' });
+addText(s5, uid('f'), 0, 5.2, SLIDE_W, 0.3, 'Sales Corner • CV Analiz Raporu • salescorner.co', 6, C.gray, { alignment: 'CENTER' });
 
 // ====================================================
 //  SLIDE 6: UZMAN TAVSİYELER
@@ -6052,7 +6052,7 @@ let tY = 0.7;
   tY += cardH + 0.1;
 });
 
-addText(s6, uid('f'), 0, 5.2, SLIDE_W, 0.3, 'SAAS Corner • CV Analiz Raporu', 6, C.gray, { alignment: 'CENTER' });
+addText(s6, uid('f'), 0, 5.2, SLIDE_W, 0.3, 'Sales Corner • CV Analiz Raporu • salescorner.co', 6, C.gray, { alignment: 'CENTER' });
 
 
 return {
@@ -9556,7 +9556,7 @@ function makeContentSlide(title) {
   // Footer bar
   addShape(sid, uid("footer"), 0, 5.45, 10, 0.18, C.dark);
   addTextBox(sid, uid("ftl"), 0.3, 5.45, 4, 0.18, [
-    { text: "SAAS Corner • saascorner.co", fontSize: 7, fontFamily: "Calibri", color: C.white }
+    { text: "Sales Corner • salescorner.co", fontSize: 7, fontFamily: "Calibri", color: C.white }
   ], { valign: "MIDDLE" });
   addTextBox(sid, uid("ftr"), 5.5, 5.45, 4, 0.18, [
     { text: safeStr(actualData.company), fontSize: 7, fontFamily: "Calibri", color: C.lightText, alignment: "END" }
@@ -9604,7 +9604,7 @@ addShape(s1, uid("deco"), -2, 3.5, 5, 5, C.primaryDark, { alpha: 0.15 });
 
 // SAAS CORNER logo text
 addTextBox(s1, uid("logo"), 0.7, 0.4, 4, 0.5, [
-  { text: "SAAS CORNER", fontSize: 14, fontFamily: "Trebuchet MS", color: C.accent, bold: true }
+  { text: "SALES CORNER", fontSize: 14, fontFamily: "Trebuchet MS", color: C.accent, bold: true }
 ]);
 
 // Main title
@@ -10049,16 +10049,16 @@ addShape(sEnd, uid("deco"), 6.5, -1, 5, 5, C.primary, { alpha: 0.15 });
 addShape(sEnd, uid("deco"), -1.5, 3, 4, 4, C.accent, { alpha: 0.1 });
 
 addTextBox(sEnd, uid("endlogo"), 0.5, 1.0, 9, 0.6, [
-  { text: "SAAS CORNER", fontSize: 16, fontFamily: "Trebuchet MS", color: C.accent, bold: true, alignment: "CENTER" }
+  { text: "SALES CORNER", fontSize: 16, fontFamily: "Trebuchet MS", color: C.accent, bold: true, alignment: "CENTER" }
 ]);
 addTextBox(sEnd, uid("endsub"), 0.5, 1.6, 9, 0.5, [
-  { text: "B2B Lead Generation Agency", fontSize: 14, fontFamily: "Calibri", color: C.lightText, alignment: "CENTER" }
+  { text: "Veri Odaklı B2B Satış ve Lead Generation", fontSize: 14, fontFamily: "Calibri", color: C.lightText, alignment: "CENTER" }
 ]);
 addTextBox(sEnd, uid("endthanks"), 0.5, 2.4, 9, 1.2, [
   { text: "Teşekkürler", fontSize: 44, fontFamily: "Trebuchet MS", color: C.white, bold: true, alignment: "CENTER" }
 ]);
 addTextBox(sEnd, uid("endcontact"), 0.5, 3.8, 9, 0.5, [
-  { text: "saascorner.co  •  info@saascorner.co", fontSize: 14, fontFamily: "Calibri", color: C.lightText, alignment: "CENTER" }
+  { text: "salescorner.co", fontSize: 14, fontFamily: "Calibri", color: C.lightText, alignment: "CENTER" }
 ]);
 addTextBox(sEnd, uid("enddate"), 0.5, 4.5, 9, 0.5, [
   { text: `Bu rapor otomatik analiz sistemi tarafından oluşturulmuştur.\n${dateStr}`, fontSize: 9, fontFamily: "Calibri", color: C.lightText, alignment: "CENTER" }
@@ -11819,7 +11819,7 @@ function header(sid,kicker,title){
 function footer(sid){
   rect(sid,0.55,5.28,8.9,0.012,C.line);
   text(sid,0.55,5.33,6,0.22,BRAND+"   ·   Rakip Analizi   ·   GİZLİ",7.5,C.muted,{font:FH});
-  text(sid,6.45,5.33,3.0,0.22,DATE,7.5,C.muted,{align:"END",font:FH});
+  text(sid,6.45,5.33,3.0,0.22,DATE+"   ·   salescorner.co",7.5,C.muted,{align:"END",font:FH});
 }
 function panel(sid,x,y,w,h,fill){ return round(sid,x,y,w,h,(fill||C.panel),1,{color:C.line,w:1}); }
 function cardHead(sid,x,y,w,label,accent){
