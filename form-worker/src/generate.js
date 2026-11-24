@@ -14,7 +14,9 @@
 // oturum yoksa/geçersizse yanıt anonimle bire bir aynı (401 yok), drafts hatası yutulur.
 // A9b plan: aynı koşullarla girişli kullanıcı (account) ve users.plan varsa (migrations/0018_plans.sql) üretim aylık plan
 // sayacından (gen_month, src/plans.js) düşer; anon/IP günlük hakları yerine kullanıcı günlük tavanı (GEN_USER_PER_DAY) ve global
-// tavan. /gen/stock yalnız pro|enterprise; /gen/quota plan, month, stock (anahtar + plan) taşır. 0018 yoksa anonim akış.
+// tavan. /gen/stock pro|enterprise'da sınırsız; demo/basic'te ömür boyu stock_trial (1) deneme görseli: arama hak kullanılana
+// dek açık, hak POST /gen/stock/use ile düşer (gen_usage day STOCK_TRIAL_DAY, kind 'pt'). /gen/quota plan, month, stock (anahtar +
+// plan ya da kullanılmamış deneme) ve deneme planında stock_trial {limit, used} taşır. 0018 yoksa anonim akış.
 // A15: GEN_LOGIN_REQUIRED="1" (wrangler.toml) → oturumsuz /gen/* 401 login_required, /gen/quota plan "anon" left 0; anon/IP
 // günlük hakları (GEN_PER_DAY) bu bayrakla fiilen kullanılmaz. demo planı (src/plans.js): aylık değil deneme boyunca TOPLAM
 // (planCounts: created_at ayından bu yana gen_month toplamı, ay dönümünde sıfırlanmaz); deneme bitince üretim/refine
@@ -41,7 +43,7 @@ const DAILY = new Set(["ok", "fail", "refused", "busy", "refine_ok", "tok_in", "
 export const GEN_UNITS = 3, REFINE_UNITS = 1, MIN_T = 1500, EV_PER_DAY = 30;
 // ISTEM-IG §3.2 madde 1: /gen/instagram gövdesi 8 KB (marka sesi)
 // A8: linkedin/blog/video 12 KB (3000 karakterlik style, Türkçe 2 bayt/karakter + öbür alanlar sığsın)
-const BODY_MAX = { linkedin: 12288, blog: 12288, video: 12288, instagram: 8192, refine: 16384, quota: 4096, event: 4096 };
+const BODY_MAX = { linkedin: 12288, blog: 12288, video: 12288, instagram: 8192, refine: 16384, quota: 4096, event: 4096, stock_use: 1024 };
 const LLM_ERR = { busy: ["llm_busy", 503], limit: ["llm_limit", 503], fail: ["llm_fail", 502], refusal: ["refused", 422] };
 
 const json = (body, status, origin) => new Response(status === 204 ? null : JSON.stringify(body), {
@@ -851,7 +853,9 @@ async function quotaRoute(c) {
     if (m) {
       const [uK, allK] = await Promise.all([keyOf(env, day, "u", a.user.id), keyOf(env, day, "all")]);
       const n = await counts(db, day, { u: uK, all: allK });
-      return json({ ok: true, charged: false, ...planQuota(L, int(env.GEN_USER_PER_DAY, 40), a.P, n, m), stock: Boolean(env.PEXELS_API_KEY) && a.P.stock }, 200, origin);
+      const t = await stockTrial(c, a);
+      const stock = Boolean(env.PEXELS_API_KEY) && (a.P.stock || Boolean(t && t.used < t.limit));
+      return json({ ok: true, charged: false, ...planQuota(L, int(env.GEN_USER_PER_DAY, 40), a.P, n, m), stock, ...(t && { stock_trial: trialView(t) }) }, 200, origin);
     }
   }
   const [anonK, ipK, allK] = await Promise.all([keyOf(env, day, "anon", body.anon), keyOf(env, day, "ip", ipPrefix(ip)), keyOf(env, day, "all")]);
@@ -882,7 +886,8 @@ async function event(c) {
 
 // /gen/stock (GET): Pexels fotoğraf araması; kullanıcı Stüdyo'da sahneye görseli kendi seçer. Anahtar yalnız sunucuda
 // (PEXELS_API_KEY secret); yoksa 503 not_ready. Oturumsuz (Bearer yok/geçersiz, ACCOUNTS kapalı) → 401 login_required;
-// A9b: girişli ama plan pro|enterprise değil (ya da 0018 yok) → 403 plan {need:"pro"}. Hak düşürmez; kullanıcı, IP ve günlük
+// A9b: girişli ama plan pro|enterprise değil (ya da 0018 yok) → 403 plan {need:"pro"}; 25.11: demo/basic deneme hakkı
+// (stock_trial) kullanılmamışsa arama açık, kullanıldıysa 403 plan {need:"pro", trial_used:true}. Arama hak düşürmez; kullanıcı, IP ve günlük
 // toplam sayaçla sınırlı (su / st / sa). lang=tr|en → Pexels locale (tr-TR / en-US): Türkçe konularda daha iyi sonuç.
 // Yanıt ince: yalnız kimlik, boyut, alt, fotoğrafçı, Pexels sayfası ve src.medium/large/large2x (yalnız images.pexels.com);
 // üst akış hatası ayrıntısız 502; Pexels'in kendi oran sınırı (429) → 429 limit {scope:"global"}. Üst akış başarısızsa üç sayaç
@@ -918,14 +923,21 @@ async function stockRoute(c) {
   const lg = query.get("lang");
   if (lg && !Object.hasOwn(STOCK_LOCALE, lg)) return fail("bad_input", 400, origin, { field: "lang" });
   if (!env.PEXELS_API_KEY) return fail("not_ready", 503, origin);
-  // Oturum şart (Bearer); A9b: yalnız pro|enterprise (0018). Basic/demo ya da 0018 yok → 403 plan.
+  // Oturum şart (Bearer); A9b: pro|enterprise sınırsız (0018). 0018 yok → 403 plan; demo/basic yalnız deneme hakkı kullanılmamışken.
   const a = await account(c);
   if (!a) return fail("login_required", 401, origin);
-  if (!a.P?.stock) return fail("plan", 403, origin, { need: "pro" });
+  let trial = null;
+  if (!a.P?.stock) {
+    trial = a.P ? await stockTrial(c, a) : null;
+    if (!trial) return fail("plan", 403, origin, { need: "pro", ...(a.P?.trial_ended && { trial_ended: true }) });
+    if (trial.used >= trial.limit) return fail("plan", 403, origin, { need: "pro", trial_used: true, stock_trial: trialView(trial) });
+  }
   const day = genDay();
   const [uK, ipK, allK] = await Promise.all([keyOf(env, day, "su", String(a.user.id)), keyOf(env, day, "st", ipPrefix(ip)), keyOf(env, day, "sa", "global")]);
   const items = [
-    { name: "user", kind: "su", key: uK, inc: 1, max: int(env.GEN_STOCK_USER_PER_DAY, 100) },
+    // deneme kullanıcısı (demo/basic) hak harcanana kadar arayabilir; ücretsiz hesaplar Pro'nun paylaştığı günlük toplamı
+    // tüketmesin diye günlük arama tavanı GEN_STOCK_TRIAL_PER_DAY (varsayılan 20) ile daraltılır
+    { name: "user", kind: "su", key: uK, inc: 1, max: trial ? Math.min(int(env.GEN_STOCK_USER_PER_DAY, 100), int(env.GEN_STOCK_TRIAL_PER_DAY, 20)) : int(env.GEN_STOCK_USER_PER_DAY, 100) },
     { name: "ip", kind: "st", key: ipK, inc: 1, max: int(env.GEN_STOCK_IP_PER_DAY, 120) },
     { name: "all", kind: "sa", key: allK, inc: 1, max: int(env.GEN_STOCK_PER_DAY, STOCK_DAY_MAX) },
   ];
@@ -959,14 +971,47 @@ async function stockRoute(c) {
   if (!data || !Array.isArray(data.photos)) return iade("upstream", 502);
   const photos = data.photos.slice(0, STOCK_PER_PAGE).map(stockPhoto).filter(Boolean);
   const total = Number.isFinite(data.total_results) ? data.total_results : photos.length;
-  return json({ ok: true, photos, page, per_page: STOCK_PER_PAGE, total_results: total, next: Boolean(data.next_page) && page < 100 }, 200, origin);
+  return json({ ok: true, photos, page, per_page: STOCK_PER_PAGE, total_results: total, next: Boolean(data.next_page) && page < 100, ...(trial && { stock_trial: trialView(trial) }) }, 200, origin);
 }
 
-const ROUTES = { "/gen/stock": ["stock", stockRoute], "/gen/linkedin": ["linkedin", linkedin], "/gen/instagram": ["instagram", instagram], "/gen/blog": ["blog", blog], "/gen/video": ["video", video], "/gen/refine": ["refine", refine], "/gen/quota": ["quota", quotaRoute], "/gen/event": ["event", event] };
+// 25.11 Pexels deneme hakkı: stock false olan planda (demo/basic) hesap başına ÖMÜR BOYU P.stock_trial görsel. Sayaç gen_usage'ta
+// sabit day STOCK_TRIAL_DAY ('stock_trial'; tarih değil → genCleanup silmez), kind 'pt', anahtar keyOf(salt|stock_trial|pt|uid);
+// göç gerekmez. Demo denemesi bittiyse (trial_ended) hak yok. Dönüş {limit, used, key} ya da null (deneme yok / sınırsız plan).
+export const STOCK_TRIAL_DAY = "stock_trial";
+async function stockTrial(c, a) {
+  const limit = Number(a?.P?.stock_trial) || 0;
+  if (!a?.P || a.P.stock || limit <= 0 || a.P.trial_ended) return null;
+  const key = await keyOf(c.env, STOCK_TRIAL_DAY, "pt", String(a.user.id));
+  const n = await counts(c.db, STOCK_TRIAL_DAY, { t: key });
+  return { limit, used: Math.min(limit, n.t), key };
+}
+const trialView = t => ({ limit: t.limit, used: t.used });
+
+// POST /gen/stock/use: kullanıcı görseli sahneye EKLEDİĞİ an çağrılır. pro|enterprise → {ok, unlimited:true} (sayaç yok);
+// deneme planı → koşullu tek UPSERT (n + 1 <= limit) ile atomik düşüm: iki eşzamanlı çağrıdan yalnız biri geçer; hak bittiyse
+// 403 plan {need:"pro", trial_used:true}. Gövde isteğe bağlı ({id}: Pexels fotoğraf kimliği; yalnız biçim denetlenir, saklanmaz).
+async function stockUseRoute(c) {
+  const { env, db, origin, body } = c;
+  if (body && body.id !== undefined && !(Number.isSafeInteger(body.id) && body.id > 0)) return fail("bad_input", 400, origin, { field: "id" });
+  if (!env.PEXELS_API_KEY) return fail("not_ready", 503, origin);
+  const a = await account(c);
+  if (!a) return fail("login_required", 401, origin);
+  if (a.P?.stock) return json({ ok: true, charged: false, unlimited: true }, 200, origin);
+  const t = a.P ? await stockTrial(c, a) : null;
+  if (!t) return fail("plan", 403, origin, { need: "pro", ...(a.P?.trial_ended && { trial_ended: true }) });
+  const used = { need: "pro", trial_used: true, stock_trial: { limit: t.limit, used: t.limit } };
+  if (t.used >= t.limit) return fail("plan", 403, origin, used);
+  const r = await reserve(db, STOCK_TRIAL_DAY, [{ name: "t", kind: "pt", key: t.key, inc: 1, max: t.limit }]);
+  if (!r.ok) return fail("plan", 403, origin, used);
+  return json({ ok: true, charged: false, stock_trial: { limit: t.limit, used: r.n.t } }, 200, origin);
+}
+
+// [ad, işleyici, yöntem (yoksa POST)]
+const ROUTES = { "/gen/stock": ["stock", stockRoute, "GET"], "/gen/stock/use": ["stock_use", stockUseRoute], "/gen/linkedin": ["linkedin", linkedin], "/gen/instagram": ["instagram", instagram], "/gen/blog": ["blog", blog], "/gen/video": ["video", video], "/gen/refine": ["refine", refine], "/gen/quota": ["quota", quotaRoute], "/gen/event": ["event", event] };
 
 export async function generate(req, url, env, origin, ctx, io = {}) {
   const route = ROUTES[url.pathname];
-  const isGet = route?.[0] === "stock";
+  const isGet = route?.[2] === "GET";
   if (!route || req.method !== (isGet ? "GET" : "POST")) return fail("not_found", 404, origin);
   if (!genEnabled(env) || !env.DB) return fail("not_ready", 503, origin);
   if (!origin) return fail("origin", 403, null);
@@ -990,10 +1035,11 @@ export async function generate(req, url, env, origin, ctx, io = {}) {
 }
 
 // Saatlik cron (index.js scheduled): 2 günden eski sayaç satırları ve 13 aydan eski aylık plan sayaçları (0018 gen_month)
-// silinir; gen_daily süresiz kalır. 2 D1 ifadesi; tablo yoksa sessiz.
+// silinir; gen_daily süresiz kalır. 2 D1 ifadesi; tablo yoksa sessiz. Pexels deneme sayacı (day STOCK_TRIAL_DAY, tarih değil)
+// ömür boyu kalır: yalnız tarih biçimli günler silinir.
 export async function genCleanup(env) {
   if (!env?.DB) return;
-  for (const sql of ["DELETE FROM gen_usage WHERE day < date('now', '-2 days')", "DELETE FROM gen_month WHERE month < strftime('%Y-%m', 'now', '-13 months')"]) {
+  for (const sql of ["DELETE FROM gen_usage WHERE day GLOB '[0-9]*' AND day < date('now', '-2 days')", "DELETE FROM gen_month WHERE month < strftime('%Y-%m', 'now', '-13 months')"]) {
     try {
       await env.DB.prepare(sql).run();
     } catch (e) {

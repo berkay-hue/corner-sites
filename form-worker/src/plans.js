@@ -10,12 +10,15 @@
 // A15 demo: app.socialmediacorner.co kaydının varsayılanı (platform.js register), basic'in yarısı; users.created_at'ten
 // TRIAL_DAYS gün geçerli (trialEndsAt/trialEnded). Demo hakları aylık değil, deneme boyunca TOPLAM: generate.js sayaçları
 // created_at ayından bu yana gen_month satırlarını toplar (ay dönümünde sıfırlanmaz). Marka sesi kullanıcı başına tek satır (brand_voice).
+// stock_trial (25.11): Pexels deneme hakkı. stock false olan planda (demo/basic) hesap başına ÖMÜR BOYU stock_trial görsel (aylık
+// sıfırlanmaz); arama hak kullanılana dek açık, hak görsel sahneye eklenince POST /gen/stock/use ile düşer (generate.js).
+// stock true olan planda (pro/enterprise) sınırsız, stock_trial 0. Sitedeki karşılığı SMC_PLANS.<plan>.pexels_deneme.
 export const TRIAL_DAYS = 14;
 export const PLANS = Object.freeze({
-  demo: Object.freeze({ linkedin_blog: 4, video_gorsel: 1, stock: false, cms_sites: 0, cms_per_week: 0 }),
-  basic: Object.freeze({ linkedin_blog: 8, video_gorsel: 2, stock: false, cms_sites: 0, cms_per_week: 0 }),
-  pro: Object.freeze({ linkedin_blog: 40, video_gorsel: 12, stock: true, cms_sites: 1, cms_per_week: 3 }),
-  enterprise: Object.freeze({ linkedin_blog: null, video_gorsel: null, stock: true, cms_sites: null, cms_per_week: 7 }),
+  demo: Object.freeze({ linkedin_blog: 4, video_gorsel: 1, stock: false, stock_trial: 1, cms_sites: 0, cms_per_week: 0 }),
+  basic: Object.freeze({ linkedin_blog: 8, video_gorsel: 2, stock: false, stock_trial: 1, cms_sites: 0, cms_per_week: 0 }),
+  pro: Object.freeze({ linkedin_blog: 40, video_gorsel: 12, stock: true, stock_trial: 0, cms_sites: 1, cms_per_week: 3 }),
+  enterprise: Object.freeze({ linkedin_blog: null, video_gorsel: null, stock: true, stock_trial: 0, cms_sites: null, cms_per_week: 7 }),
 });
 
 // üretim platformu → aylık sayaç türü
@@ -57,7 +60,7 @@ export function trialMonth(user) {
   return t === null ? null : new Date(t + 3 * 3600e3).toISOString().slice(0, 7);
 }
 
-// {plan, linkedin_blog, video_gorsel, stock, cms_sites, cms_per_week}; plan null ise null. demo'da ayrıca trial_ends_at, trial_ended.
+// {plan, linkedin_blog, video_gorsel, stock, stock_trial, cms_sites, cms_per_week}; plan null ise null. demo'da ayrıca trial_ends_at, trial_ended.
 export function planLimits(user, now = Date.now()) {
   const plan = planOf(user);
   if (!plan) return null;
@@ -70,6 +73,7 @@ export function planLimits(user, now = Date.now()) {
     linkedin_blog: pos(j?.linkedin_blog) ?? PLANS.pro.linkedin_blog,
     video_gorsel: pos(j?.video_gorsel) ?? PLANS.pro.video_gorsel,
     stock: true,
+    stock_trial: 0,
     cms_sites: pos(j?.cms_sites) ?? ENTERPRISE_CMS_SITES,
     cms_per_week: CMS_FREQS.includes(j?.cms_per_week) ? j.cms_per_week : ENTERPRISE_CMS_PER_WEEK,
   };

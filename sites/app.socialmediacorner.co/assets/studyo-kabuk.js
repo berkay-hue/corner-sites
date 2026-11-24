@@ -10,7 +10,7 @@ function $$(s,k){return Array.prototype.slice.call((k||d).querySelectorAll(s))}
 function el(t,c,x){var e=d.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e}
 function metaAl(n){var m=$('meta[name="'+n+'"]');return m?(m.getAttribute('content')||'').trim():''}
 var API=metaAl('api-base').replace(/\/+$/,''),TS=metaAl('turnstile-sitekey'),T0=Date.now();
-var JETON_YOL=/^\/gen\/(linkedin|instagram|refine|blog|video|quota)$/,GOVDE_MAX=12288,STIL_MAX=3000,KONU_MAX=300;
+var JETON_YOL=/^\/gen\/(linkedin|instagram|refine|blog|video|quota|stock\/use)$/,GOVDE_MAX=12288,STIL_MAX=3000,KONU_MAX=300;
 var D={anon:null,left:null,cap:3,reset:'',hakScope:'anon',hakBilinmez:true,acik:false,rid:null,deneme:0,kartVar:false,
   view:'',hata:'',scope:'',mesgul:false,istek:0,yakinda:false,ac:null,vazgec:false,son:null,sonGovde:null};
 var cfg=null;
@@ -88,10 +88,12 @@ var AY_AD={linkedin_blog:'LinkedIn+Blog',video_gorsel:T('Video+Görsel','Video+V
 function ayBilgi(){var k=cfg&&AY_TUR[cfg.yol],a=k&&D.ay&&D.ay[k];if(!a||typeof a.limit!=='number'||typeof a.used!=='number')return null;
   return {kalan:Math.max(0,a.limit-a.used),limit:a.limit,ad:AY_AD[k]}}
 function hakAl(r){if(!r)return;if(typeof r.left==='number'){D.left=Math.max(0,r.left);D.hakBilinmez=false}if(typeof r.cap==='number'&&r.cap>0)D.cap=r.cap;if(typeof r.reset_at==='string')D.reset=r.reset_at;if(/^(anon|ip|global|plan|user)$/.test(r.scope||''))D.hakScope=r.scope;if(typeof r.stock==='boolean')D.stock=r.stock;
-  if(typeof r.plan==='string'){D.plan=r.plan;if(r.plan==='anon')D.ay=null}if(r.month&&typeof r.month==='object')D.ay=r.month;
+  if(typeof r.plan==='string'){D.plan=r.plan;if(r.plan==='anon')D.ay=null}stokDenemeAl(r.stock_trial);if(r.month&&typeof r.month==='object')D.ay=r.month;
   if(r.login_required===true)D.giris=true;else if(typeof r.plan==='string'&&r.plan!=='anon')D.giris=false;
   if(typeof r.trial_ended==='boolean')D.dBitti=r.trial_ended;if(typeof r.trial_ends_at==='string')D.dSon=r.trial_ends_at;
   var a=D.plan&&D.plan!=='anon'?ayBilgi():null;if(a&&typeof D.left==='number'&&a.kalan<=D.left){D.left=a.kalan;D.hakScope='plan'}}
+/* 25.11 Pexels deneme: Demo/Basic'te ömür boyu 1 görsel; {limit,used} yoksa null (Pro/Enterprise/anon) */
+function stokDenemeAl(t){if(t&&typeof t.limit==='number'&&typeof t.used==='number')D.stokDeneme={limit:t.limit,used:t.used};else if(t===undefined&&D.plan&&D.plan!=='demo'&&D.plan!=='basic')D.stokDeneme=null}
 function duvarSc(){if(D.giris)return 'giris';if(D.dBitti)return 'deneme';if(D.hakScope==='plan'&&D.plan==='demo')return 'demo';return /^(ip|global|plan|user)$/.test(D.hakScope)?D.hakScope:'anon'}
 
 /* ---- istek: jeton yalnız üretim uçlarına ve /gen/quota'ya (A9b: plan ve aylık hak); dış AbortController (Vazgeç) verilebilir ---- */
@@ -101,16 +103,17 @@ function post(yol,govde,ms,kalici,dis){
       o={method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(govde),credentials:'omit',cache:'no-store'};
   if(ac)o.signal=ac.signal;if(kalici)o.keepalive=true;
   if(JETON_YOL.test(yol)){var tk=oturumJeton();if(tk)o.headers.authorization='Bearer '+tk}
-  return fetch(API+yol,o).then(function(r){clearTimeout(tm);if(r.status===204)return {};return r.json().then(function(j){if(r.ok&&j&&j.ok!==false)return j;j=j||{};throw {kod:j.error||'genel',scope:j.scope,charged:!!j.charged,left:j.left,cap:j.cap,reset_at:j.reset_at,field:j.field,plan:j.plan,month:j.month,kind:j.kind,trial_ended:j.trial_ended,trial_ends_at:j.trial_ends_at}},function(){throw {kod:'genel'}})},
+  return fetch(API+yol,o).then(function(r){clearTimeout(tm);if(r.status===204)return {};return r.json().then(function(j){if(r.ok&&j&&j.ok!==false)return j;j=j||{};throw {kod:j.error||'genel',scope:j.scope,charged:!!j.charged,left:j.left,cap:j.cap,reset_at:j.reset_at,field:j.field,plan:j.plan,month:j.month,kind:j.kind,trial_ended:j.trial_ended,trial_ends_at:j.trial_ends_at,need:j.need,trial_used:j.trial_used,stock_trial:j.stock_trial}},function(){throw {kod:'genel'}})},
     function(e){clearTimeout(tm);throw {kod:D.vazgec?'vazgec':e&&e.name==='AbortError'?'zaman':'ag'}});
 }
 /* GET: yalnız /gen/stock (Pexels araması; hak düşmez). A9b: Pexels Pro/Enterprise'da; girişliyse Bearer jeton gider, anonimde gitmez.
-   403 plan → {kod:'plan',need:'pro'} (kurgu kilidi gösterir) */
+   25.11: Demo/Basic'te 1 deneme görseli; ekleme öncesi POST /gen/stock/use (Studyo.stokKullan) hakkı düşer.
+   403 plan → {kod:'plan',need:'pro',trial_used?} (kurgu kilidi gösterir) */
 function al(yol,ms,dis){
   if(!window.fetch||!API)return Promise.reject({kod:'ag'});
   var ac=dis||(window.AbortController?new AbortController():null),tm=ac&&ms?setTimeout(function(){ac.abort()},ms):null,o={method:'GET',credentials:'omit',cache:'no-store'};
   if(ac)o.signal=ac.signal;var tk=oturumJeton();if(tk)o.headers={authorization:'Bearer '+tk};
-  return fetch(API+yol,o).then(function(r){clearTimeout(tm);return r.json().then(function(j){if(r.ok&&j&&j.ok!==false)return j;j=j||{};throw {kod:j.error||'genel',scope:j.scope,need:j.need}},function(){throw {kod:'genel'}})},
+  return fetch(API+yol,o).then(function(r){clearTimeout(tm);return r.json().then(function(j){if(r.ok&&j&&j.ok!==false)return j;j=j||{};throw {kod:j.error||'genel',scope:j.scope,need:j.need,trial_used:j.trial_used,trial_ended:j.trial_ended,stock_trial:j.stock_trial}},function(){throw {kod:'genel'}})},
     function(e){clearTimeout(tm);throw {kod:e&&e.name==='AbortError'?'zaman':'ag'}});
 }
 function olay(kind,src){if(!D.acik||!API)return;var b={anon:anonAl(),kind:kind};if(src)b.src=src;try{post('/gen/event',b,8000,true).then(null,function(){})}catch(e){}}
@@ -483,7 +486,9 @@ window.Studyo={
   uret:uret,
   refine:function(q){return post('/gen/refine',q,30000).then(function(r){hakAl(r);hakYaz();kayitNot(r,true);var a=r&&r.drafts&&r.drafts[0];return {text:a&&typeof a.text==='string'?a.text:null}})},
   hak:function(){return {left:D.left,cap:D.cap,reset:D.reset,scope:D.hakScope,bilinmez:D.hakBilinmez,plan:D.plan||null,ay:D.ay||null}},
-  stok:function(q,dis){return al('/gen/stock?'+q,12000,dis)},
+  stok:function(q,dis){return al('/gen/stock?'+q,12000,dis).then(function(r){if(r)stokDenemeAl(r.stock_trial);return r},function(e){if(e&&e.stock_trial)stokDenemeAl(e.stock_trial);throw e})},
+  /* 25.11: deneme görselini harca; ok → {stock_trial:{limit,used}} ya da {unlimited:true} */
+  stokKullan:function(id){return post('/gen/stock/use',id?{id:id}:{},10000).then(function(r){if(r&&r.stock_trial){stokDenemeAl(r.stock_trial);if(r.stock_trial.used>=r.stock_trial.limit)D.stock=false}return r},function(e){if(e&&e.stock_trial)stokDenemeAl(e.stock_trial);if(e&&e.trial_used)D.stock=false;throw e})},
   hakYaz:hakYaz,planlaYaz:planlaYaz,olay:olay,hata:hataIsle,kopyala:kopyala,toast:toast,durum:durum,dil:dilAl,T:T,goster:goster,
   D:D,el:el,$:$,$$:$$,depo:depo,oturumDepo:oturumDepo,yenMetin:yenMetin,cp:cp,azHareket:azHareket,
   DUVAR:DUVAR,SINIR:T('Bugünkü 9 düzenleme hakkın doldu; gece yarısı yenilenir.','You’ve used today’s 9 edits; they renew at midnight.')

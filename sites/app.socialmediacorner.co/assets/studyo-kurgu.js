@@ -612,14 +612,21 @@ function sil(i){
 
 /* ---- Pexels görselleri (isteğe bağlı; kullanıcı seçmeden hiçbir sahneye görsel eklenmez) ----
    A9b: Pexels yalnız Pro/Enterprise. Quota plan anon|basic dediyse ya da /gen/stock 403 plan döndüyse seçici açılmaz,
-   satırda kilit durumu çıkar ("Pro'da var" + kısa açıklama + planlar bağlantısı). Plan bilinmiyorsa (eski worker) eski davranış. */
+   satırda kilit durumu çıkar ("Pro'da var" + kısa açıklama + planlar bağlantısı). Plan bilinmiyorsa (eski worker) eski davranış.
+   25.11: Demo/Basic'te ömür boyu 1 deneme görseli (kota stock_trial {limit,used}). Hak varken stock true gelir, seçici açılır;
+   fotoğraf seçilince önce POST /gen/stock/use (S.stokKullan) — yalnız ok gelirse sahneye eklenir. Hak bitince kilit
+   "Deneme görseli kullanıldı — Pro’da sınırsız" der. */
 var PX='https://www.pexels.com',SK=null;
 function stokVar(){return !!(S.D&&S.D.stock===true)}
-function stokKilit(){var D=S.D||{};return !stokVar()&&(D.stokKilit===true||D.plan==='anon'||D.plan==='basic')}
+function stokKilit(){var D=S.D||{};return !stokVar()&&(D.stokKilit===true||D.plan==='anon'||D.plan==='basic'||D.plan==='demo')}
+/* deneme durumu: 'var' (kalan hak, seçici açık) · 'bitti' (hak kullanıldı) · '' (Pro/Enterprise/anon ya da eski worker) */
+function denemeDurum(){var t=S.D&&S.D.stokDeneme;if(!t||!(t.limit>0))return '';return t.used>=t.limit?'bitti':stokVar()?'var':''}
+function denemeKalan(){var t=S.D&&S.D.stokDeneme;return t?Math.max(0,t.limit-t.used):0}
+var DENEME_BITTI=T('Deneme görseli kullanıldı — Pro’da sınırsız','Trial image used — unlimited on Pro');
 function kilitSatir(i){
-  var k=el('div','kr-so-gorsel kr-gorsel-kilit'),id='kr-kilit-'+MOD+'-'+i;
+  var k=el('div','kr-so-gorsel kr-gorsel-kilit'),id='kr-kilit-'+MOD+'-'+i,bt=denemeDurum()==='bitti';
   var r=el('span','kr-pro-rozet');r.appendChild(ikon('kilit'));r.appendChild(el('span',null,T('Pro’da var','In Pro')));k.appendChild(r);
-  var m=el('span','ipucu kr-gorsel-ipucu',T('Sahnelere Pexels fotoğrafı ekleme Pro ve Enterprise planlarında.','Adding Pexels photos to scenes comes with the Pro and Enterprise plans.'));m.id=id;k.appendChild(m);
+  var m=el('span','ipucu kr-gorsel-ipucu',bt?DENEME_BITTI+'.':T('Sahnelere Pexels fotoğrafı ekleme Pro ve Enterprise planlarında.','Adding Pexels photos to scenes comes with the Pro and Enterprise plans.'));m.id=id;k.appendChild(m);
   var a=el('a','kr-kilit-bag',T('Planları gör','See plans'));a.href=EN?'/en/pricing':'/fiyatlar';a.setAttribute('aria-describedby',id);k.appendChild(a);
   return k;
 }
@@ -660,7 +667,8 @@ function gorselSatir(s,i){
     st.sahneler[i].gorsel=null;gorselYenile(i,'.kr-gorsel-ekle');guncelle();
     S.durum(T(tekil(i)+' görseli kaldırıldı.',tekil(i)+' image removed.'));
   });
-  ar.appendChild(dg);ar.appendChild(kl);k.appendChild(ar);
+  /* deneme görseli kullanıldıysa değiştirme yok (yeni fotoğraf yeni hak ister); kaldırma serbest */
+  if(stokVar())ar.appendChild(dg);ar.appendChild(kl);k.appendChild(ar);
   return k;
 }
 function gorselYenile(i,odak){
@@ -681,7 +689,7 @@ function stokHata(e){
   var k=e&&e.kod;
   if(k==='not_ready')return T('Görsel arama şu an kullanılamıyor.','Image search isn’t available right now.');
   if(k==='login_required')return T('Görsel aramak için giriş yap.','Sign in to search images.');
-  if(k==='plan')return T('Görsel arama Pro ve Enterprise planlarında var.','Image search comes with the Pro and Enterprise plans.');
+  if(k==='plan')return e.trial_used?DENEME_BITTI+'.':T('Görsel arama Pro ve Enterprise planlarında var.','Image search comes with the Pro and Enterprise plans.');
   if(k==='limit')return e.scope==='global'?T('Görsel arama bugün çok yoğun. Biraz sonra tekrar dene.','Image search is very busy today. Try again a little later.'):T('Bugünkü görsel arama hakkın doldu; yarın yenilenir.','You’ve used today’s image searches; they renew tomorrow.');
   if(k==='bad_input')return T('Aramayı 1 ile 100 karakter arasında yaz.','Keep the search between 1 and 100 characters.');
   return T('Görseller yüklenemedi. Bağlantını kontrol edip tekrar dene.','Couldn’t load images. Check your connection and try again.');
@@ -693,6 +701,9 @@ function seciciKur(){
   var bas=el('div','dlg-bas');var h=el('h2',null,T('Görsel seç','Choose an image'));h.id='kr-stok-h';h.tabIndex=-1;bas.appendChild(h);
   var kp=dugme('btn-hafif kr-ikon-d kr-stok-kapat','kapat',null,T('Kapat','Close'));bas.appendChild(kp);ic.appendChild(bas);
   x.hedef=el('p','ipucu kr-stok-hedef');x.hedef.id='kr-stok-hedef';ic.appendChild(x.hedef);
+  /* 25.11: Demo/Basic deneme başlığı; secici() her açılışta doldurur/gizler */
+  x.deneme=el('div','kr-stok-deneme');x.deneme.hidden=true;x.denemeB=el('p','kr-stok-deneme-b');x.deneme.appendChild(x.denemeB);
+  x.deneme.appendChild(el('p','ipucu',T('Seçtiğin fotoğraf bu hakkı kullanır; Pro’da sınırsız.','The photo you pick uses it; unlimited on Pro.')));ic.appendChild(x.deneme);
   var f=el('form','kr-stok-ara');f.setAttribute('role','search');f.setAttribute('data-sk-noform','');f.noValidate=true;
   var l=el('label','sr',T('Görsel ara','Search images'));l.htmlFor='kr-stok-q';f.appendChild(l);
   var q=el('input','st-girdi kr-stok-q');q.type='search';q.id='kr-stok-q';q.maxLength=100;q.autocomplete='off';q.spellcheck=false;q.placeholder=T('Örn. kahve, ofis, deniz','e.g. coffee, office, sea');f.appendChild(q);
@@ -776,15 +787,28 @@ function ara(sayfa){
   },function(e){
     if(sira!==x.sira)return;x.ac=null;
     if(e&&e.kod==='not_ready'){S.D.stock=false;stokYayin()}
-    if(e&&e.kod==='plan'){
-      /* 403 plan: seçici kapanır, satırlar kilide döner, odak o satırın planlar bağlantısına gider */
-      S.D.stock=false;S.D.stokKilit=true;x.odak=null;stokYayin();
-      var li=R.liste&&R.liste.querySelector('[data-i="'+x.i+'"]');x.odak=li&&li.querySelector('.kr-kilit-bag');
-      x.kapat();S.durum(stokHata(e));return}
+    if(e&&e.kod==='plan'){planKilidi(e);return}
     x.izgara.removeAttribute('aria-busy');if(sayfa===1)x.izgara.textContent='';
     x.daha.hidden=!(sayfa>1&&x.sonraki);pasif(x.daha,false);x.daha.removeAttribute('aria-busy');
     var m=stokHata(e);seciciDurum('hata',m);x.durum.textContent=m;
   });
+}
+/* 403 plan (arama ya da deneme harcama): seçici kapanır, satırlar kilide döner, odak o satırın planlar bağlantısına gider.
+   25.11: trial_used → deneme bitti sayılır, kilit "Deneme görseli kullanıldı — Pro’da sınırsız" der */
+function planKilidi(e){
+  var x=SK;S.D.stock=false;S.D.stokKilit=true;
+  if(e&&e.trial_used){var t=S.D.stokDeneme;if(!t||!(t.used>=t.limit))S.D.stokDeneme={limit:t&&t.limit>0?t.limit:1,used:t&&t.limit>0?t.limit:1}}
+  x.odak=null;stokYayin();
+  var li=R.liste&&R.liste.querySelector('[data-i="'+x.i+'"]');x.odak=li&&li.querySelector('.kr-kilit-bag');
+  var m=stokHata(e);x.kapat();S.durum(m);if(e&&e.trial_used)S.toast(m);
+}
+/* deneme hakkı harcanamadıysa (ağ, zaman aşımı, oturum, sunucu): görsel eklenmez, seçici açık kalır */
+function kullanHata(e){
+  var k=e&&e.kod;
+  if(k==='login_required')return T('Görsel eklemek için giriş yap.','Sign in to add an image.');
+  if(k==='not_ready')return T('Görsel ekleme şu an kullanılamıyor; görsel eklenmedi.','Adding images isn’t available right now; no image was added.');
+  if(k==='zaman'||k==='ag')return T('Bağlantı kurulamadı; görsel eklenmedi. Bağlantını kontrol edip tekrar seç.','Couldn’t connect; no image was added. Check your connection and pick again.');
+  return T('Deneme görseli şu an eklenemedi; görsel eklenmedi. Biraz sonra tekrar seç.','The trial image couldn’t be added right now; no image was added. Pick again in a moment.');
 }
 function izgaraYaz(ilkYeni,ekle){
   var x=SK;x.izgara.removeAttribute('aria-busy');if(!ekle)x.izgara.textContent='';
@@ -804,23 +828,43 @@ function izgaraYaz(ilkYeni,ekle){
   if(ekle&&bt[ilkYeni])odakla(bt,ilkYeni);
 }
 function sec(p,b){
-  var x=SK,i=x.i,s=st&&st.sahneler[i];if(!s||b.getAttribute('aria-busy')==='true')return;
+  var x=SK,i=x.i,s=st&&st.sahneler[i];if(!s||b.getAttribute('aria-busy')==='true'||x.harciyor)return;
   var u=p.src&&(p.src.large2x||p.src.large||p.src.medium);if(!u)return;
   b.setAttribute('aria-busy','true');b.classList.add('kr-stok-yukleniyor');
   x.durum.textContent=T('Fotoğraf yükleniyor…','Loading the photo…');
   var im=new Image();im.crossOrigin='anonymous';im.decoding='async';
   var sira=x.sira;
+  function bitir(){b.removeAttribute('aria-busy');b.classList.remove('kr-stok-yukleniyor')}
+  /* 25.11: fotoğraf önce yüklenir (bozuk fotoğraf deneme hakkını yakmasın), sonra deneme planında POST /gen/stock/use;
+     yalnız ok gelirse sahneye eklenir. Pro/Enterprise'da (stokDeneme yok) çağrı yapılmaz. */
   im.onload=function(){
-    b.removeAttribute('aria-busy');b.classList.remove('kr-stok-yukleniyor');
-    if(sira!==x.sira||!st||st.sahneler[i]!==s)return;
+    if(sira!==x.sira||!st||st.sahneler[i]!==s){bitir();return}
     if(!(im.naturalWidth>0)){im.onerror();return}
+    if(denemeDurum()!=='var'||!S.stokKullan){bitir();ekle();return}
+    /* harcama sürerken başka fotoğraf seçilmez (ikinci istek 403 alıp ilkini kapatmasın) */
+    x.harciyor=true;x.durum.textContent=T('Deneme görseli ekleniyor…','Adding the trial image…');
+    S.stokKullan(typeof p.id==='number'?p.id:0).then(function(){
+      /* hak harcandı: seçici bu arada kapandıysa da görsel sahneye eklenir (hak boşa gitmesin) */
+      x.harciyor=false;bitir();if(!st||st.sahneler[i]!==s)return;ekle(sira!==x.sira);
+    },function(e){
+      x.harciyor=false;bitir();
+      if(e&&e.kod==='plan'){if(sira===x.sira)planKilidi(e);else{S.D.stock=false;S.D.stokKilit=true;stokYayin()}return}
+      if(sira!==x.sira)return;
+      var m=kullanHata(e);x.durum.textContent=m;S.toast(m);
+      if(e&&e.kod==='login_required'){seciciDurum('hata',T('Görsel aramak için giriş yap.','Sign in to search images.'))}
+    });
+  };
+  function ekle(sessiz){
     s.gorsel={img:im,id:p.id,photographer:String(p.photographer||''),photographer_url:p.photographer_url||'',url:p.url||PX,alt:String(p.alt||''),thumb:(p.src&&p.src.medium)||u};
-    x.odak=null;gorselYenile(i);
-    var li=R.liste.querySelector('[data-i="'+i+'"]');x.odak=li&&li.querySelector('.kr-gorsel-degis');
+    /* deneme hakkı bittiyse (kabuk stock=false yaptı) tüm satırlar yeniden çizilir: ötekiler kilide döner */
+    function satirlar(){if(stokVar())gorselYenile(i);else stokYayin()}
+    if(sessiz){satirlar();guncelle();S.durum(T(tekil(i)+' için deneme görseli eklendi.','Trial image added to '+tekil(i).toLowerCase()+'.'));return}
+    x.odak=null;satirlar();
+    var li=R.liste.querySelector('[data-i="'+i+'"]');x.odak=li&&(li.querySelector('.kr-gorsel-degis')||li.querySelector('.kr-gorsel-kaldir'));
     x.kapat();guncelle();
     if(VID)sahneyeGit(i);else slaytGit(i);
-    S.durum(T(tekil(i)+' için görsel eklendi. Fotoğraf: '+s.gorsel.photographer+' (Pexels).','Image added to '+tekil(i).toLowerCase()+'. Photo by '+s.gorsel.photographer+' on Pexels.'));
-  };
+    S.durum(T(tekil(i)+' için görsel eklendi. Fotoğraf: '+s.gorsel.photographer+' (Pexels).','Image added to '+tekil(i).toLowerCase()+'. Photo by '+s.gorsel.photographer+' on Pexels.')+(denemeDurum()==='bitti'?' '+DENEME_BITTI+'.':''));
+  }
   im.onerror=function(){
     b.removeAttribute('aria-busy');b.classList.remove('kr-stok-yukleniyor');if(sira!==x.sira)return;
     var m=T('Bu fotoğraf yüklenemedi; başka birini seç.','This photo couldn’t load; pick another one.');x.durum.textContent=m;S.toast(m);
@@ -835,6 +879,8 @@ function secici(i,tetik){
   var kay=!on?'':st.konu?(VID?T('Arama kutusu videonun konusuyla dolu; istersen değiştir. ','The search starts with your video’s topic; change it if you like. '):T('Arama kutusu karuselin konusuyla dolu; istersen değiştir. ','The search starts with your carousel’s topic; change it if you like. ')):T('Arama kutusu içerikten dolduruldu; istersen değiştir. ','The search is prefilled from your content; change it if you like. ');
   x.hedef.textContent=T(tekil(i)+' için arka plan. '+kay+'Sen seçmedikçe görsel eklenmez.','Background for '+tekil(i).toLowerCase()+'. '+kay+'Nothing is added unless you pick a photo.');
   x.vazgec.textContent=s.gorsel?T('Vazgeç','Cancel'):T('Görselsiz devam','Continue without an image');
+  var dn=denemeDurum()==='var';x.deneme.hidden=!dn;
+  if(dn){var kl=denemeKalan();x.denemeB.textContent=T(kl+' deneme görseli hakkın var','You have '+kl+' trial image'+(kl===1?'':'s'))}
   x.q.value=on;
   x.izgara.textContent='';x.sonuc=[];x.sayfa=1;x.daha.hidden=true;seciciDurum('');
   if(x.dlg.showModal){if(!x.dlg.open)x.dlg.showModal()}else x.dlg.setAttribute('open','');
@@ -864,7 +910,7 @@ function gDurum(){return stokVar()?'acik':stokKilit()?'kilit':gHak?'yok':'bekle'
 function gUye(){var u=$('.st-ust[data-hesap]');return !!(u&&u.getAttribute('data-hesap')==='uye')}
 function gNeden(){
   var dr=gDurum();
-  if(dr==='kilit')return T('Görselli seçenek Pro ve Enterprise planlarıyla açılır.','The image option comes with the Pro and Enterprise plans.');
+  if(dr==='kilit')return denemeDurum()==='bitti'?DENEME_BITTI+'.':T('Görselli seçenek Pro ve Enterprise planlarıyla açılır.','The image option comes with the Pro and Enterprise plans.');
   if(dr==='yok')return T('Görsel arama şu an kullanılamıyor; taslak görselsiz hazırlanır.','Image search isn’t available right now; the draft is made without images.');
   return T('Plan bilgisi alınıyor…','Checking your plan…');
 }
@@ -874,6 +920,12 @@ function gNotYaz(){
     gNot.textContent=gStok.checked
       ?T('Taslak gelince her sahnede “Görsel ekle” çıkar; fotoğrafı Pexels’ten sen seçersin, seçmediğin sahne görselsiz kalır.','When the draft arrives, each scene gets “Add image”; you pick the Pexels photo, and scenes you skip stay image-free.')
       :T('Sahneler yalnız metin ve renkle hazırlanır. Görsel istersen “Görselli”yi seç.','Scenes use text and color only. Pick “With images” if you want photos.');
+    if(denemeDurum()==='var'){var kl=denemeKalan();gNot.textContent+=' '+T(kl+' deneme görseli hakkın var; Pro’da sınırsız.','You have '+kl+' trial image'+(kl===1?'':'s')+'; unlimited on Pro.')}
+    return;
+  }
+  if(dr==='kilit'&&denemeDurum()==='bitti'){
+    gNot.appendChild(d.createTextNode(DENEME_BITTI+'. '));
+    var ab=el('a','st-gorsel-bag',T('Planları gör','See plans'));ab.href=EN?'/en/pricing':'/fiyatlar';gNot.appendChild(ab);
     return;
   }
   if(dr==='kilit'){

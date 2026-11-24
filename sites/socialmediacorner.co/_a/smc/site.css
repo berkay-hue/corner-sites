@@ -258,8 +258,11 @@ html.mnav-open body::after{content:"";position:fixed;inset:0;z-index:40;backgrou
 .stat__n small{font-size:.5em;font-weight:750;color:var(--ink-3);letter-spacing:0;margin-left:4px}
 .stat p{margin-top:10px;color:var(--ink-2);font-size:14.5px;line-height:1.5}
 .res__img{margin:0;padding:12px;display:flex;flex-direction:column}
-.res__img img{width:100%;border-radius:10px;border:1px solid var(--line-2);flex:1;object-fit:cover;object-position:top}
+/* Reels ekran görüntüsü 1170x1062; iki kutu satırı y=1038'de biter, altında 3. satırın dilimi var. Oran 1170/1036 ile
+   üstten kırpılır (border-box 1px kenarlık payı dahil) ki her genişlikte tam iki satır görünsün, yarım satır görünmesin. */
+.res__img img{width:100%;height:auto;aspect-ratio:1170/1036;border-radius:10px;border:1px solid var(--line-2);object-fit:cover;object-position:top}
 .res__img figcaption{padding:10px 4px 2px;color:var(--ink-3);font-size:13px;font-weight:600}
+.res__img figcaption small{display:block;margin-top:2px;font-size:12px;font-weight:500}
 @media (max-width:999px){.res{grid-template-columns:1fr}.res__img{max-width:560px}}
 @media (max-width:479px){.stats{grid-template-columns:1fr}}
 

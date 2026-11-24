@@ -678,6 +678,11 @@ dialog.kr-stok-dlg{width:min(760px,calc(100% - var(--g3)))}
 .kr-stok-daha{align-self:center}
 .kr-stok-alt{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:var(--s2) var(--s3);padding-top:var(--s3);border-top:1px solid var(--line)}
 .kr-stok-pexels{font:500 .875rem/1.4 var(--govde);color:var(--ink2)}
+/* 25.11: Demo/Basic deneme görseli başlığı (seçici üstünde) */
+.kr-stok-deneme{display:flex;flex-direction:column;gap:2px;padding:var(--s2) var(--s3);border-radius:var(--r-m);background:var(--accent-soft)}
+.kr-stok-deneme[hidden]{display:none}
+.kr-stok-deneme-b{font:700 .9375rem/1.4 var(--govde);color:var(--accent-strong)}
+@media (forced-colors:active){.kr-stok-deneme{border:1px solid CanvasText}}
 .kr-stok-pexels a{display:inline-flex;align-items:center;min-height:var(--dokunma);color:var(--accent-strong);font-weight:700;text-decoration:underline;text-underline-offset:3px}
 @media (max-width:520px){
   dialog.kr-stok-dlg{width:100%;max-width:100%;height:100%;max-height:100%;margin:0;border-radius:0}
