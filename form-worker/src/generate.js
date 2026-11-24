@@ -34,7 +34,7 @@ const EVENTS = ["copy_ok", "copy_fb", "share", "quote_click"];
 const SRCS = ["limit", "result", "error", "cap", "top", "footer", "calendly"];
 const DAILY = new Set(["ok", "fail", "refused", "busy", "refine_ok", "tok_in", "tok_out", "uniq_anon", "anon_full", "ip_full", "cap_hit",
   ...RET, "copy_ok", "copy_fb", "share", ...SRCS.map(s => "qc_" + s)]);
-const GEN_UNITS = 3, REFINE_UNITS = 1, MIN_T = 1500, EV_PER_DAY = 30;
+export const GEN_UNITS = 3, REFINE_UNITS = 1, MIN_T = 1500, EV_PER_DAY = 30;
 // ISTEM-IG §3.2 madde 1: /gen/instagram gövdesi 8 KB (marka sesi)
 // A8: linkedin/blog/video 12 KB (3000 karakterlik style, Türkçe 2 bayt/karakter + öbür alanlar sığsın)
 const BODY_MAX = { linkedin: 12288, blog: 12288, video: 12288, instagram: 8192, refine: 16384, quota: 4096, event: 4096 };
@@ -47,7 +47,7 @@ const json = (body, status, origin) => new Response(status === 204 ? null : JSON
 const fail = (error, status, origin, extra) => json({ ok: false, error, charged: false, ...extra }, status, origin);
 
 const int = (v, d) => { const n = parseInt(v, 10); return Number.isFinite(n) && n > 0 ? n : d; };
-const limits = env => ({
+export const limits = env => ({
   anon: int(env.GEN_PER_DAY, 3), ip: int(env.GEN_IP_PER_DAY, 10), cap: int(env.GEN_DAILY_CAP, 300),
   ra: int(env.GEN_REFINE_PER_DAY, 9), ri: int(env.GEN_REFINE_IP_PER_DAY, 30),
 });
@@ -76,7 +76,7 @@ async function sha(s) {
   const b = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(s));
   return [...new Uint8Array(b)].map(x => x.toString(16).padStart(2, "0")).join("");
 }
-const keyOf = (env, day, kind, value) => kind === "all" ? Promise.resolve("all") : sha(`${env.GEN_SALT}|${day}|${kind}|${value}`);
+export const keyOf = (env, day, kind, value) => kind === "all" ? Promise.resolve("all") : sha(`${env.GEN_SALT}|${day}|${kind}|${value}`);
 
 // content-length yoksa ya da sınırı aşıyorsa okumadan 413; gövde bayt sayılarak okunur
 async function readBody(req, max) {
@@ -112,17 +112,17 @@ async function counts(db, day, keys) {
   return Object.fromEntries(Object.entries(keys).map(([name, k]) => [name, byKey[k] || 0]));
 }
 
-const UPSERT = "INSERT INTO gen_usage (day, key, kind, n) VALUES (?, ?, ?, ?) ON CONFLICT(day, key) DO UPDATE SET n = gen_usage.n + excluded.n WHERE gen_usage.n + excluded.n <= ? RETURNING n";
-const DECR = "UPDATE gen_usage SET n = MAX(0, n - ?) WHERE day = ? AND key = ?";
+export const UPSERT = "INSERT INTO gen_usage (day, key, kind, n) VALUES (?, ?, ?, ?) ON CONFLICT(day, key) DO UPDATE SET n = gen_usage.n + excluded.n WHERE gen_usage.n + excluded.n <= ? RETURNING n";
+export const DECR = "UPDATE gen_usage SET n = MAX(0, n - ?) WHERE day = ? AND key = ?";
 // A9b aylık plan sayacı (0018 gen_month): aynı koşullu artış deseni; item'da month varsa bu tabloya gider
-const M_UPSERT = "INSERT INTO gen_month (month, user_id, kind, n) VALUES (?, ?, ?, ?) ON CONFLICT(month, user_id, kind) DO UPDATE SET n = gen_month.n + excluded.n WHERE gen_month.n + excluded.n <= ? RETURNING n";
-const M_DECR = "UPDATE gen_month SET n = MAX(0, n - ?) WHERE month = ? AND user_id = ? AND kind = ?";
+export const M_UPSERT = "INSERT INTO gen_month (month, user_id, kind, n) VALUES (?, ?, ?, ?) ON CONFLICT(month, user_id, kind) DO UPDATE SET n = gen_month.n + excluded.n WHERE gen_month.n + excluded.n <= ? RETURNING n";
+export const M_DECR = "UPDATE gen_month SET n = MAX(0, n - ?) WHERE month = ? AND user_id = ? AND kind = ?";
 const up = (db, day, i) => i.month ? db.prepare(M_UPSERT).bind(i.month, i.user, i.kind, i.inc, i.max) : db.prepare(UPSERT).bind(day, i.key, i.kind, i.inc, i.max);
 const down = (db, day, i) => i.month ? db.prepare(M_DECR).bind(i.inc, i.month, i.user, i.kind) : db.prepare(DECR).bind(i.inc, day, i.key);
 
 // Koşullu artışlar tek db.batch'te; satır dönmeyen varsa artanlar aynı day/key ile geri alınır.
 // items: [{name, kind, key, inc, max}] (aylık: {name, month, user, kind, inc, max}) → { ok, n:{name:yeni değer}, failed:[name] }
-async function reserve(db, day, items) {
+export async function reserve(db, day, items) {
   const res = await db.batch(items.map(i => up(db, day, i)));
   const n = {}, failed = [];
   items.forEach((i, x) => { const row = res[x]?.results?.[0]; if (row) n[i.name] = Number(row.n); else failed.push(i.name); });
@@ -447,14 +447,16 @@ async function linkedin(c) {
 
 // A8 blog: tek yazı. max_tokens/timeout uzunluğa göre (Türkçe ~2 token/kelime + JSON kaçışları + pay); 120 sn tavan
 // Worker'ın istemci beklemesinin içinde. Model kotası sayacı yok: produce'un gen_daily ok/tok_in/tok_out'u yeter.
-const BLOG_RUN = { short: { maxTokens: 3000, timeout: 60000 }, medium: { maxTokens: 4500, timeout: 90000 }, long: { maxTokens: 6500, timeout: 120000 } };
+export const BLOG_RUN = { short: { maxTokens: 3000, timeout: 60000 }, medium: { maxTokens: 4500, timeout: 90000 }, long: { maxTokens: 6500, timeout: 120000 } };
+// Ortak blog isteği (/gen/blog ve A14 cms.js aynı istemi kullanır; kopya istem yok). v: {topic, sector, tone, goal?, length, lang, style?}
+export const blogRequest = v => ({
+  system: withStyle(SYSTEM_BLOG, v.style), schema: SCHEMA_BLOG, count: 1, spec: SPECS.blog, ...BLOG_RUN[v.length],
+  user: userBlog({ topic: neutralize(v.topic), sector: v.sector, tone: v.tone, goal: v.goal ? neutralize(v.goal) : "", length: v.length, lang: v.lang, style: styleOf(v) }),
+});
 async function blog(c) {
   const { field, v } = validateBlog(c.body);
   if (field) return fail("bad_input", 400, c.origin, { field });
-  return produce(c, v, {
-    system: withStyle(SYSTEM_BLOG, v.style), schema: SCHEMA_BLOG, count: 1, spec: SPECS.blog, ...BLOG_RUN[v.length],
-    user: userBlog({ topic: neutralize(v.topic), sector: v.sector, tone: v.tone, goal: v.goal ? neutralize(v.goal) : "", length: v.length, lang: v.lang, style: styleOf(v) }),
-  }, undefined, { platform: "blog", topic: v.topic, max: MAX.topic, meta: pickMeta({ kind: "blog", tone: v.tone, sector: v.sector, lang: v.lang, length: v.length, style: v.style ? true : null }) });
+  return produce(c, v, blogRequest(v), undefined, { platform: "blog", topic: v.topic, max: MAX.topic, meta: pickMeta({ kind: "blog", tone: v.tone, sector: v.sector, lang: v.lang, length: v.length, style: v.style ? true : null }) });
 }
 
 // A8 video/carousel: tek taslak, en çok 14 sahne × (70+120) + 700 açıklama ≈ 1500 token; 2500 pay bırakır
@@ -855,13 +857,13 @@ async function event(c) {
 // (PEXELS_API_KEY secret); yoksa 503 not_ready. A9b: yalnız pro|enterprise planlı girişli kullanıcı (Bearer), öbürüne 403 plan
 // {need:"pro"}. Hak düşürmez; IP başına ve günlük toplam sayaçla sınırlı (st / sa).
 // Yanıt ince: yalnız kimlik, boyut, alt, fotoğrafçı, Pexels sayfası ve src çeşitleri; üst akış hatası ayrıntısız 502.
-const STOCK_URL = "https://api.pexels.com/v1/search";
+export const STOCK_URL = "https://api.pexels.com/v1/search";
 const STOCK_ORIENT = ["landscape", "portrait", "square"];
 const STOCK_SRC = ["original", "large2x", "large", "medium", "small", "portrait", "landscape", "tiny"];
-const STOCK_PER_PAGE = 15, STOCK_TIMEOUT = 8000;
+export const STOCK_PER_PAGE = 15, STOCK_TIMEOUT = 8000;
 const stockSrc = u => typeof u === "string" && /^https:\/\/images\.pexels\.com\//.test(u) ? u : null;
 const stockLink = u => typeof u === "string" && /^https:\/\/(www\.)?pexels\.com\//.test(u) ? u : null;
-function stockPhoto(p) {
+export function stockPhoto(p) {
   if (!p || typeof p !== "object" || !Number.isFinite(p.id) || !p.src || typeof p.src !== "object") return null;
   const src = {};
   for (const k of STOCK_SRC) { const u = stockSrc(p.src[k]); if (u) src[k] = u; }

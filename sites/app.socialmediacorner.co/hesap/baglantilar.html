@@ -15,12 +15,14 @@
 <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
 <script src="/assets/theme.js"></script>
 <link rel="preload" href="/assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/tokens.css">
-<link rel="stylesheet" href="/assets/studyo.css">
-<link rel="stylesheet" href="/assets/studyo-hesap.css">
-<link rel="stylesheet" href="/assets/panel.css">
-<script src="/assets/smc-hesap.js" defer></script>
-<script src="/assets/ust-hesap.js" defer></script>
+<link rel="stylesheet" href="/assets/tokens.css?v=a14">
+<link rel="stylesheet" href="/assets/studyo.css?v=a14">
+<link rel="stylesheet" href="/assets/studyo-hesap.css?v=a14">
+<link rel="stylesheet" href="/assets/panel.css?v=a14">
+<link rel="stylesheet" href="/assets/cms.css?v=a14">
+<script src="/assets/cms.js?v=a14b" defer></script>
+<script src="/assets/smc-hesap.js?v=a14" defer></script>
+<script src="/assets/ust-hesap.js?v=a14" defer></script>
 <script src="/assets/hak-cip.js?v=1" defer></script>
 </head>
 <body class="hs-govde" data-sayfa="baglantilar" data-korumali>
@@ -67,6 +69,11 @@
           <li>Mesaj izni istenmez</li>
         </ul>
       </details>
+      <section class="cms" id="cms" aria-labelledby="h-cms" hidden>
+        <h2 id="h-cms" tabindex="-1">Web siteniz (blog)</h2>
+        <p class="giris-p">Siteni bağla; seçtiğin gün ve saatte senin için bir blog yazısı hazırlanır ve sitene gönderilir. Varsayılan olarak taslak gider, sen okuyup yayınlarsın. Anahtarın şifreli saklanır, istediğin an bağlantıyı kaldırırsın.</p>
+        <div id="cms-govde"></div>
+      </section>
     </div>
   </section>
 
@@ -133,6 +140,17 @@
     <p id="dlg-kopar-a"></p>
     <div class="dlg-alt">
       <button type="button" class="btn btn-tehlike" id="kopar-evet">Bağlantıyı kaldır</button>
+      <button type="button" class="btn btn-cizgi" data-kapat>Vazgeç</button>
+    </div>
+  </div>
+</dialog>
+
+<dialog class="dlg-k" id="dlg-cms-kaldir" aria-labelledby="dlg-cms-kaldir-b" aria-describedby="dlg-cms-kaldir-a">
+  <div class="sheet dlg">
+    <h2 class="dlg-baslik" id="dlg-cms-kaldir-b" tabindex="-1">Site bağlantısı kaldırılsın mı?</h2>
+    <p id="dlg-cms-kaldir-a"></p>
+    <div class="dlg-alt">
+      <button type="button" class="btn btn-tehlike" id="cms-kaldir-evet">Bağlantıyı kaldır</button>
       <button type="button" class="btn btn-cizgi" data-kapat>Vazgeç</button>
     </div>
   </div>

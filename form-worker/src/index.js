@@ -7,6 +7,7 @@ import { metaCallback, oauthCallback, syncDue, ytRetention } from "./oauth.js";
 import { metricsEnabled } from "./metrics.js";
 import { generate, genCleanup } from "./generate.js";
 import { publish, publishTick, PUBLISH_CRON } from "./publish.js";
+import { cmsTick, cmsOAuthCallback } from "./cms.js";
 
 const MAX_FIELDS = 30, MAX_LEN = 5000, RATE = 5; // 10 dakikada IP başına en fazla RATE gönderim
 
@@ -36,6 +37,9 @@ export default {
     if (url.pathname.startsWith("/rakip/")) return rakip(req, url, env, origin);
     // Meta'nın deauthorize ve veri silme geri çağrıları (src/oauth.js; imzalı, sunucudan sunucuya)
     if (/^\/oauth\/instagram\/(deauthorize|delete)$/.test(url.pathname)) return metaCallback(req, url, env);
+    // A14 blog sitesi bağlama dönüşü (src/cms.js; WordPress.com vb.): genel /oauth/ dönüşünden önce
+    const cmsCb = url.pathname.match(/^\/oauth\/cms\/([a-z]+)\/callback$/);
+    if (cmsCb) return cmsOAuthCallback(req, env, cmsCb[1]);
     // Sosyal hesap bağlama dönüşü (src/oauth.js): sağlayıcı yönlendirmesinde Origin yok, platform() dışında
     if (url.pathname.startsWith("/oauth/")) return oauthCallback(req, url, env);
     // app.socialmediacorner.co taslak üretimi (src/generate.js); GEN_ENABLED kapalıyken 503 not_ready
@@ -72,7 +76,11 @@ export default {
   async scheduled(event, env) {
     // 5 dakikalık yayın kuyruğu cron'u (src/publish.js publishTick) yalnız kendi işini yapar; saatlik iş aşağıda aynen
     if (event?.cron === PUBLISH_CRON) {
-      try { await publishTick(env); } catch (e) { console.log("publish", e?.message?.slice(0, 80)); }
+      // Ücretsiz plan çağrı başına 50 alt istek + 50 D1 sorgusu: publishTick'in harcadığı düşülür, kalan cmsTick'e (A14, src/cms.js).
+      // publishTick hata atarsa harcaması bilinmez: tam bütçe harcanmış sayılır, cmsTick o tur çalışmaz.
+      let used = { sub: 50, d1: 50 };
+      try { const r = await publishTick(env); used = { sub: r?.sub || 0, d1: r?.d1 || 0 }; } catch (e) { console.log("publish", e?.message?.slice(0, 80)); }
+      try { await cmsTick(env, fetch, { d1: Math.max(0, 50 - used.d1), sub: Math.max(0, 50 - used.sub) }); } catch (e) { console.log("cms", e?.message?.slice(0, 80)); }
       return;
     }
     const { results } = await env.DB.prepare("SELECT * FROM submissions WHERE emailed = 0 ORDER BY id LIMIT 50").all();
