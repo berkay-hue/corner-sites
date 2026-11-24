@@ -455,8 +455,12 @@ function __slideFit(runs, w, h, o = {}) {
   let k = 1;
   while (k > 0.3 && est(runs, k) > lim) k = Math.round((k - 0.05) * 100) / 100;
   const out = runs.map(r => ({ ...r, fontSize: sz(r, k) }));
+  // Yalnız birden çok satıra yayılan parçayı kısalt: tek satırlık parçayı kısaltmak yüksekliği düşürmez, yazıyı "Yeni bir…" kırıntısına çevirir.
+  // Hepsi tek satırsa son parçayı (madde) bütün olarak düşür.
+  const nl = r => { const fs = r.fontSize || 18, cpl = Math.max(3, Math.floor(W / (fs * __cw(r.fontFamily || o.font) * (r.bold || o.bold ? 1.06 : 1)) * 0.93)); return String(r.text ?? "").split("\n").reduce((a, p) => a + Math.max(1, Math.ceil(p.length / cpl)), 0); };
   for (let g = 0; g < 60 && est(out, 1) > lim; g++) {
-    let i = 0; out.forEach((r, j) => { if (String(r.text ?? "").length > String(out[i].text ?? "").length) i = j; });
+    let i = -1; out.forEach((r, j) => { if (nl(r) > 1 && (i < 0 || String(r.text ?? "").length > String(out[i].text ?? "").length)) i = j; });
+    if (i < 0) { if (out.length > 1) { out.pop(); continue; } break; }
     const t = String(out[i].text ?? "").replace(/…$/, ""); if (t.length < 12) break;
     let c = t.slice(0, Math.floor(t.length * 0.88)); const sp = c.lastIndexOf(" "); if (sp > c.length * 0.6) c = c.slice(0, sp);
     out[i] = { ...out[i], text: c.replace(/[\s,;:.\-–•·]+$/, "") + "…" };
@@ -9866,8 +9870,8 @@ if (coldCall.opening) {
     addTextBox(sCC, uid("qslbl"), 0.5, 2.3, 9, 0.25, [
       { text: "❓ Sorun Tespiti Soruları", fontSize: 11, fontFamily: "Trebuchet MS", color: C.primary, bold: true }
     ]);
-    const qRuns = ppQuestions.map(q => ({
-      text: `• ${q}`, fontSize: 9, fontFamily: "Calibri", color: C.darkText, spacingAfter: 4
+    const qRuns = ppQuestions.slice(0, 5).map(q => ({
+      text: `• ${q}`, fontSize: 9, fontFamily: "Calibri", color: C.darkText, spacingAfter: 2
     }));
     addTextBox(sCC, uid("qslist"), 0.7, 2.55, 8.5, 1.12, qRuns, { strict: true });
   }
