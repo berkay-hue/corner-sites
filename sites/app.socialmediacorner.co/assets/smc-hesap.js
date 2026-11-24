@@ -142,7 +142,7 @@ var EN={"Yönetim":"Admin","1 taslak":"1 draft",
 "Bu e-posta zaten kayıtlı.":"This email is already registered.",
 "Giriş yap":"Log in",
 "Çok fazla deneme yapıldı. Biraz sonra yeniden dene.":"Too many attempts. Try again in a little while.",
-"Üyelik çok yakında açılıyor. Şimdilik Stüdyo’yu hesapsız deneyebilirsin.":"Accounts are opening very soon. Until then, you can try Studio without an account."};
+"Üyelik çok yakında açılıyor.":"Accounts are opening very soon."};
 var dil=root.getAttribute('lang')==='en'?'en':'tr';
 var SAYFA=body.getAttribute('data-sayfa')||'';
 var KORUMALI=body.hasAttribute('data-korumali');
