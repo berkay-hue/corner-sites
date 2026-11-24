@@ -1,0 +1,152 @@
+/* A11-2 panel ortak katman: logo, hamburger (ray daralt / çekmece), Corner Group bandı.
+   Tüm panel sayfalarında son stil dosyası olarak yüklenir (video sayfalarında panel.js ekler). Satır içi stil yok, yalnız token. */
+
+/* ---- Logo: açık/koyu tam logo + ≤400 px'te yalnız işaret ---- */
+.lg{display:inline-flex;align-items:center;flex:none;line-height:0}
+.lg>img{display:block;width:auto;height:36px}
+.lg>.lg-isaret{width:32px;height:32px}
+.lg>.lg-koyu,.lg>.lg-isaret{display:none}
+:root[data-theme="dark"] .lg>.lg-acik{display:none}
+:root[data-theme="dark"] .lg>.lg-koyu{display:block}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]) .lg>.lg-acik{display:none}
+  :root:not([data-theme="light"]) .lg>.lg-koyu{display:block}
+}
+/* auth sol paneli her temada koyu: hep koyu zemin logosu */
+.lg.lg-ters>.lg-acik{display:none}
+.lg.lg-ters>.lg-koyu{display:block}
+.lg-urun{padding-left:10px;border-left:1px solid var(--edge);font:600 .875rem/1.1 var(--govde);letter-spacing:0;color:var(--ink2);white-space:nowrap}
+.au-logo .lg-urun{border-left-color:color-mix(in srgb,var(--ters-ink) 28%,transparent);color:var(--ters-ink2)}
+.st-logo,.au-logo,.ust .logo{gap:10px}
+/* video sayfaları: eski işaret panel.js yeni logoyu koyana kadar görünmez */
+.st-logo>.st-isaret,.st-logo>.st-logo-yazi{display:none}
+@media (max-width:400px){
+  /* koyu tema kuralları (:root[data-theme] …) daha özgül; burada her temada yalnız işaret */
+  .lg>img:not(.lg-isaret){display:none!important}
+  .lg>.lg-isaret{display:block}
+  .lg-urun{position:absolute;width:1px;height:1px;padding:0;border:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+}
+
+/* ---- Hamburger düğmesi ---- */
+.pn-menu{display:inline-grid;place-items:center;flex:none;width:var(--dokunma);height:var(--dokunma);margin:0;padding:0;border:0;border-radius:var(--r-m);background:transparent;color:var(--ink);cursor:pointer}
+.pn-menu:hover{background:var(--yuzey-hover)}
+.pn-menu svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
+.st-ust>.pn-menu{margin-left:calc(var(--s2) * -1)}
+html:not(.js) .pn-menu{display:none}
+
+/* ---- ≥1024: ray daralt (tercih smc-ray=dar, theme.js ilk boyamadan önce html.ray-dar koyar) ---- */
+@media (min-width:1024px){
+  html.ray-dar .st-kabuk{grid-template-columns:var(--rail-dar) minmax(0,1fr)}
+  html.ray-dar .st-rail{padding:var(--s3) var(--s2);align-items:center}
+  html.ray-dar .st-grup{align-items:center;width:100%}
+  html.ray-dar .st-grup-ad,html.ray-dar .st-teklif-kart,html.ray-dar .st-rozet{display:none}
+  html.ray-dar .st-grup+.st-grup{margin-top:var(--s3);padding-top:var(--s3);border-top:1px solid var(--line)}
+  html.ray-dar .st-link{justify-content:center;width:48px;height:48px;padding:0}
+  html.ray-dar .st-link .st-link-ad{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+}
+
+/* ---- ≤1023: çekmece (geniş ray, perdeli; üst çubuk açık kalır) ---- */
+.pn-perde{position:fixed;left:0;right:0;bottom:0;top:var(--st-ust);z-index:calc(var(--z-yapiskan) + 1);background:color-mix(in srgb,#0b1020 45%,transparent)}
+.pn-perde[hidden]{display:none}
+html.pn-kilit,html.pn-kilit body{overflow:hidden}
+@media (max-width:1023px){
+  html.pn-cekmece .st-rail{display:flex;position:fixed;top:var(--st-ust);left:0;bottom:0;z-index:calc(var(--z-yapiskan) + 2);width:min(85vw,280px);height:auto;padding:var(--g2) var(--s3) calc(var(--g2) + env(safe-area-inset-bottom));align-items:stretch;overscroll-behavior:contain;box-shadow:var(--yuk-2)}
+  html.pn-cekmece .st-grup{align-items:stretch;width:auto}
+  html.pn-cekmece .st-grup-ad,html.pn-cekmece .st-teklif-kart{display:block}
+  html.pn-cekmece .st-rozet{display:inline-block}
+  html.pn-cekmece .st-grup+.st-grup{margin-top:var(--g2);padding-top:0;border-top:0}
+  html.pn-cekmece .st-link{justify-content:flex-start;width:100%;height:auto;padding:0 var(--s3)}
+  html.pn-cekmece .st-link .st-link-ad{position:static;width:auto;height:auto;overflow:visible;clip-path:none;white-space:normal}
+}
+@media (min-width:769px) and (max-width:1023px){
+  /* ray sabitlenince içerik 72 px'lik sütuna kaymasın */
+  html.pn-cekmece .st-icerik{grid-column:2}
+}
+@media (min-width:1024px){.pn-perde{display:none}}
+
+/* ---- Taslak Masası araç sayfaları: <768'de nav.araclar aç/kapa ---- */
+.ust-ic>.pn-menu{display:none;margin-left:calc(var(--s2) * -1)}
+.ust-ic>.pn-menu+.logo{margin-right:auto}
+@media (max-width:767px){
+  .js .ust-ic>.pn-menu{display:inline-grid}
+  .js .araclar.pn-kapali{display:none}
+}
+
+/* ---- Corner Group bandı (site ile aynı beş şirket) ---- */
+.cg{flex:1 1 100%;width:100%;margin:0 0 var(--s2);padding:0;color:var(--ink2)}
+.cg-bas{margin:0 0 var(--s3);font:700 .75rem/1.2 var(--govde);letter-spacing:.06em;text-transform:uppercase;color:var(--ink3)}
+.cg-liste{display:grid;grid-template-columns:repeat(auto-fill,minmax(176px,1fr));gap:var(--s2);margin:0;padding:0;list-style:none}
+.cg-liste>li{margin:0;padding:0}
+.cg-liste>li>a{display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:2px;height:100%;min-height:var(--dokunma);padding:var(--s2) var(--s3);border:1px solid var(--line);border-left:3px solid var(--cg);border-radius:var(--r-s);background:var(--surface);color:var(--ink);text-decoration:none}
+.cg-liste>li>a:hover{border-color:var(--cg);background:var(--yuzey-hover);color:var(--ink)}
+.cg-liste>li>a>b{font:700 .875rem/1.2 var(--govde);color:var(--ink)}
+.cg-liste>li>a>span{display:block;min-height:0;font:400 .75rem/1.3 var(--govde);color:var(--ink2)}
+.cg-cg{--cg:#0b1020}
+.cg-saas{--cg:#5b5bd6}
+.cg-sales{--cg:#ea580c}
+.cg-crm{--cg:#0891b2}
+.cg-brand{--cg:#16a34a}
+:root[data-theme="dark"] .cg-cg{--cg:#9aa4bf}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .cg-cg{--cg:#9aa4bf}}
+/* footer yerleşimleri */
+.st-alt-bilgi>.cg{margin-bottom:var(--s3)}
+.alt-ic>.cg{padding:var(--s2) 0;border-bottom:1px solid var(--line)}
+footer.alt>.cg{margin-bottom:var(--s2)}
+
+@media (forced-colors:active){
+  .cg-liste>li>a{border-left-color:CanvasText}
+  .pn-perde{background:Canvas;opacity:.6}
+}
+@media print{
+  .pn-menu,.pn-perde,.cg{display:none!important}
+}
+
+/* A11-2 çerez — çerez/KVKK bandı (panel.js cerez()); sitedeki .ckb ile aynı davranış. Yalnız token, satır içi stil yok. */
+.ckb{position:fixed;left:var(--s4);right:var(--s4);bottom:var(--s4);z-index:var(--z-yapiskan);box-sizing:border-box;max-width:760px;margin:0 auto;display:flex;flex-wrap:wrap;align-items:center;gap:var(--s3) var(--s4);padding:var(--s4) var(--s4) var(--s4) calc(var(--s4) + 2px);border:1px solid var(--edge);border-radius:var(--r-l);background:var(--surface);box-shadow:var(--yuk-3);color:var(--ink2);font:400 .875rem/1.5 var(--govde)}
+.ckb[hidden],.ckb-bosluk[hidden],.ckb-ac[hidden]{display:none!important}
+.ckb-ic{flex:1 1 320px;min-width:0}
+.ckb-metin,.ckb-simdi{margin:0}
+.ckb-simdi{margin-top:var(--s1);font-weight:600;color:var(--ink)}
+.ckb a{color:var(--accent-strong);font-weight:700;text-decoration:underline;text-underline-offset:2px}
+.ckb-dugmeler{display:flex;flex-wrap:wrap;gap:var(--s2)}
+.ckb-btn{display:inline-flex;align-items:center;justify-content:center;min-height:var(--dokunma);margin:0;padding:0 var(--s4);border:1px solid var(--edge);border-radius:var(--r-dugme);background:transparent;color:var(--ink);font:600 .9375rem/1.2 var(--govde);cursor:pointer;white-space:nowrap}
+.ckb-btn:hover{background:var(--yuzey-hover)}
+.ckb-btn.ckb-birincil{border-color:var(--accent-strong);background:var(--accent-strong);color:var(--on-accent)}
+.ckb-btn.ckb-birincil:hover{background:var(--accent);border-color:var(--accent)}
+.ckb a:focus-visible,.ckb-btn:focus-visible,.ckb-ac:focus-visible{outline:none;box-shadow:var(--odak-halka)}
+.ckb-bosluk{display:block;width:100%}
+/* hamburger çekmecesi açıkken bant gizlenir (perde/ray ile çakışmaz, odak tuzağına girmez) */
+html.pn-cekmece .ckb{display:none}
+/* alt bilgideki "Çerez tercihleri" düğmesi: yanındaki bağlantılar gibi görünür */
+.ckb-ac{appearance:none;display:inline-flex;align-items:center;min-height:24px;margin:0;padding:0;border:0;background:none;color:inherit;font:inherit;text-decoration:underline;text-underline-offset:2px;cursor:pointer}
+.ckb-ac:hover{color:var(--accent-strong)}
+footer.alt .ckb-ac,.alt-site .ckb-ac{min-height:var(--dokunma)}
+footer.alt>.ckb-ac{color:var(--accent-strong)}
+.st-alt-bilgi>.ckb-ac{display:block;min-height:0}
+@media (max-width:768px){
+  /* Stüdyo alt sekme çubuğunun üstünde dur */
+  .ckb.ckb-sekme{bottom:calc(var(--alt-bar) + var(--s2) + env(safe-area-inset-bottom))}
+}
+@media (max-width:479px){
+  .ckb{left:var(--s2);right:var(--s2);bottom:calc(var(--s2) + env(safe-area-inset-bottom));gap:var(--s3);padding:var(--s3) var(--s3) var(--s3) var(--s4);font-size:.8125rem;line-height:1.45}
+  .ckb-ic{flex-basis:100%}
+  .ckb-dugmeler{width:100%}
+  .ckb-btn{flex:1 1 0;padding:0 var(--s2)}
+}
+@media (min-width:900px){
+  /* giriş/kayıt: sol tanıtım paneli yapışkan ve tam yükseklik; bant yalnız sağ sütunda dursun, sol alttaki bağlantıyı örtmesin */
+  .au-govde .ckb{left:calc(45% + var(--s4))}
+}
+@media (forced-colors:active){
+  .ckb{border-color:CanvasText}
+  .ckb-btn{border-color:ButtonText}
+}
+@media print{
+  .ckb,.ckb-bosluk,.ckb-ac{display:none!important}
+}
+
+/* A11-2 doğrulama — dar ekranda blog "Uzunluk" seçenekleri (studyo.css'teki nowrap) taşmasın; yalnız .st-bolum, yalnız ≤479px */
+@media (max-width:479px){
+  .st-bolum .cip{min-width:0}
+  .st-bolum .cip label{min-width:0;white-space:normal;overflow-wrap:anywhere}
+}

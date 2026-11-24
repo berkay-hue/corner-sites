@@ -6,7 +6,9 @@
    Hesap sayfaları (body[data-sayfa]): istek atılmaz; menü smc-hesap.js'in [data-oturum] açmasıyla görünür, Çıkış #cikis ile
    smc-hesap.js cikisKur'da kalır. Burada yalnız menü klavye/fare davranışı kurulur.
    Menü: aria-expanded, Esc (odak düğmeye döner), dış tıklama, ↑/↓/Home/End, Tab ile çıkınca kapanır.
-   Yerel inceleme: localhost/127.0.0.1/*.pages.dev üzerinde #oturum → örnek üye görünümü, hiçbir istek gönderilmez. */
+   Yerel inceleme: localhost/127.0.0.1/*.pages.dev üzerinde #oturum → örnek üye görünümü, hiçbir istek gönderilmez.
+   A11-2 "Ücretsiz hesap oluştur" kartı (#uy-kart, Stüdyo ana sayfa): üyeye gizlenir. Misafirde /auth/me (tokensiz) ile üyelik
+   durumu okunur: 401 → açık · 403 origin/404/503 not_ready → yakında · diğerleri → nötr (CTA kalır). Sonuç 10 dk sessionStorage'da. */
 (function(){'use strict';
 var d=document,root=d.documentElement,EN=root.getAttribute('lang')==='en';
 function T(tr,en){return EN?en:tr}
@@ -63,7 +65,9 @@ function menuKur(){
 
 /* ---- Stüdyo/Planlar: misafir ↔ üye ---- */
 var ust=$('.st-ust[data-hesap]');
+var kart=$('#uy-kart');
 function durum(s,u){
+  if(kart)kart.hidden=s==='uye';
   if(!ust)return;ust.setAttribute('data-hesap',s);
   var av=$('#hesap-dugme .st-av'),kim=$('#hesap-kim'),b=$('#hesap-dugme');
   if(b)b.setAttribute('aria-label',s==='uye'?T('Hesap menüsü','Account menu'):T('Hesap ve menü','Account and menu'));
@@ -82,16 +86,30 @@ function cikisKur(){
     istek('/auth/logout','POST').then(git);
   })});
 }
+/* ---- üyelik durumu (kart) ---- */
+var UY_ANAHTAR='smc-uyelik',UY_SURE=600000;
+function uyelikGoster(s){if(!kart)return;$$('[data-uyelik]',kart).forEach(function(x){x.hidden=x.getAttribute('data-uyelik').split(' ').indexOf(s)<0})}
+function uyelikEsle(j){
+  if(j._s===401)return 'acik';
+  if((j._s===403&&j.error==='origin')||j._s===404||(j._s===503&&j.error==='not_ready'))return 'kapali';
+  return '';
+}
+function uyelikYaz(s){if(!s)return;uyelikGoster(s);try{sessionStorage.setItem(UY_ANAHTAR,JSON.stringify({s:s,z:Date.now()}))}catch(e){}}
+function uyelikYokla(){
+  if(!kart||!API)return;
+  try{var v=JSON.parse(sessionStorage.getItem(UY_ANAHTAR)||'null'),n=Date.now();if(v&&(v.s==='acik'||v.s==='kapali')&&n>=v.z&&n-v.z<UY_SURE){uyelikGoster(v.s);return}}catch(e){}
+  istek('/auth/me').then(function(j){uyelikYaz(uyelikEsle(j))});
+}
 function studyoBasla(){
   if(!ust)return;
   cikisKur();
   if(ORNEK){durum('uye',{name:'Deniz Yılmaz',email:'deniz@ornekajans.com.tr'});return}
-  if(!API||!tokenAl()){durum('misafir');return}
+  if(!API||!tokenAl()){durum('misafir');uyelikYokla();return}
   durum('uye');
   istek('/auth/me').then(function(j){
     if(j._s===200&&j.user&&typeof j.user==='object'){durum('uye',j.user);return}
-    if(j._s===401){tokenSil();durum('misafir');return}
-    if((j._s===403&&j.error==='origin')||j._s===404||(j._s===503&&j.error==='not_ready')){durum('misafir');return}
+    if(j._s===401){tokenSil();durum('misafir');uyelikYaz('acik');return}
+    if((j._s===403&&j.error==='origin')||j._s===404||(j._s===503&&j.error==='not_ready')){durum('misafir');uyelikYaz('kapali');return}
     /* ağ ya da beklenmeyen hata: üye görünümü kalır, avatar genel ikon */
   });
 }

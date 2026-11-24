@@ -106,8 +106,35 @@ const ok = (c, body) => reply({ ok: true, ...body }, 200, c.origin);
 
 // ---- üyelik ----
 
+// A11: app.socialmediacorner.co kaydı (canlı ve önizleme, site aynı) ayrıca AI kullanım onayı (body.ai_consent) ve
+// Turnstile (body.ts) ister; diğer hesap siteleri (brandcorner.co) eskisi gibi.
+const SMC_APP = "app.socialmediacorner.co";
+
+// Cloudflare Turnstile doğrulaması (src/generate.js turnstile ile aynı kalıp; döngüsel import olmasın diye küçük kopya).
+// fetch genel fetch: testte t.mock.method(globalThis, "fetch") ile sahtesi verilir.
+async function turnstile(env, token, ip) {
+  if (typeof token !== "string" || !token || token.length > 2048) return false;
+  try {
+    const r = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
+      method: "POST",
+      headers: { "content-type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({ secret: env.TURNSTILE_SECRET, response: token, ...(ip && { remoteip: ip }) }),
+      signal: AbortSignal.timeout(5000),
+    });
+    const d = await r.json();
+    if (d?.success !== true) console.log("register bot", (d?.["error-codes"] || []).join(",").slice(0, 80));
+    return d?.success === true;
+  } catch (e) {
+    console.log("register siteverify", e?.name);
+    return false;
+  }
+}
+
 async function register(c) {
   const { env, site, ip, body } = c;
+  const smc = site === SMC_APP;
+  // Turnstile gizli anahtarı yoksa kayıt kapalı: Turnstile'sız sessizce geçilmez
+  if (smc && !env.TURNSTILE_SECRET) throw new Bad("not_ready", 503);
   const name = text(body.name, 100), email = String(body.email ?? "").trim().toLowerCase();
   // Tek rollü sitede (app.socialmediacorner.co: brand) rol istemciden alınmaz, gövdedeki role yok sayılır
   const only = siteRoles(site), role = only?.length === 1 ? only[0] : body.role;
@@ -117,9 +144,16 @@ async function register(c) {
   if (password.length < 8 || password.length > 200) throw new Bad("password");
   if (!ROLES.includes(role) || !roleAllowed(site, role)) throw new Bad("role");
   if (body.consent !== true) throw new Bad("consent");
+  if (smc && body.ai_consent !== true) throw new Bad("ai_consent");
   // Bot koruması: gizli alan doluysa ya da form 1,5 sn'den kısa sürede gönderildiyse kayıt, e-posta ve deneme kaydı yok
   if (String(body.hp ?? "") !== "" || !(Number(body.t) >= 1500)) throw new Bad("bad");
+  // IP sınırı Turnstile'dan önce: sınırdaki IP siteverify'ı tetikleyemez. Başarısız Turnstile da deneme sayılır (ok = 0),
+  // yoksa aynı IP sınırsız siteverify çağrısı yaptırabilirdi.
   if (await attempts(env, "register", "ip", ip, 60, false) >= 5) throw new Bad("rate", 429);
+  if (smc && !(await turnstile(env, body.ts, ip))) {
+    await attempt(env, ip, null, "register", 0);
+    throw new Bad("bot", 403);
+  }
   await attempt(env, ip, email, "register", 1);
 
   const user = await env.DB.prepare(
@@ -128,7 +162,9 @@ async function register(c) {
   if (!user) throw new Bad("exists", 409);
 
   // Yeni üye bildirimi: form kayıtlarıyla aynı yoldan Berkay'a e-posta (gitmezse cron tekrar dener)
-  const fields = [["Ad", name], ["E-posta", email], ["Rol", role], ["Dil", lang]];
+  // app.socialmediacorner.co: şema değişmedi (migration yok). users.consent_at bu sürümden (A11) sonra kaydolanlarda
+  // iki onayın da (KVKK+Çerez+Koşullar ve AI kullanımı) zamanıdır; ikisi de zorunlu olduğundan tek sütun yeter.
+  const fields = [["Ad", name], ["E-posta", email], ["Rol", role], ["Dil", lang], ...(smc ? [["Onaylar", "KVKK+Çerez+Koşullar; AI kullanımı"]] : [])];
   const row = await env.DB.prepare("INSERT INTO submissions (site, page, fields, ip) VALUES (?, '/kayit', ?, ?) RETURNING id, created_at")
     .bind(site, JSON.stringify(fields), ip).first();
   await c.deliver(env, { ...row, site, page: "/kayit", fields });

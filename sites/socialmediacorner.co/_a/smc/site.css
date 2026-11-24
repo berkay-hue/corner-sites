@@ -501,3 +501,36 @@ body .sk-lang[data-sk-lang]{display:none!important}
 .art__more{padding-top:24px}
 .art__more .sec__head{max-width:none;margin-bottom:20px}
 @media (min-width:640px) and (max-width:999px){.bgrid--rel>:nth-child(3){display:none}}
+
+/* A11 logo: SVG logo (368x122) başlık/alt bilgi */
+.brand img.brand__logo{width:auto;height:40px;border-radius:0}
+.brand img.brand__logo--ftr{height:44px}
+@media (max-width:599px){.brand img.brand__logo{height:34px}.brand img.brand__logo--ftr{height:40px}}
+
+/* A11 Corner Group */
+.grp{margin-top:40px;padding:24px;border-radius:var(--r-lg);background:linear-gradient(135deg,#f5f9ff,#f4fbfd 55%,#fbf7ff);border:1px solid var(--line-2)}
+.grp__h{display:flex;align-items:baseline;flex-wrap:wrap;gap:6px 14px;margin-bottom:16px}
+.grp__h h2{margin:0}
+.grp__h p{margin:0;color:var(--ink-3);font-size:13.5px}
+.grp__g{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
+.grp__g a{position:relative;display:flex;flex-direction:column;gap:3px;min-height:44px;padding:14px 14px 14px 18px;border-radius:var(--r);background:#fff;border:1px solid var(--line-2);color:var(--ink);text-decoration:none;overflow:hidden;transition:transform .2s,box-shadow .2s,border-color .2s}
+.grp__g a::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--c)}
+.grp__g a:hover{transform:translateY(-2px);box-shadow:var(--sh);border-color:var(--line);color:var(--ink)}
+.grp__g b{font-size:14.5px;font-weight:750;letter-spacing:-.01em}
+.grp__g b::after{content:" \2197";color:var(--c);font-weight:600}
+.grp__g span{color:var(--ink-3);font-size:12.5px;line-height:1.4}
+.grp__g small{color:var(--ink-3);font-size:12px;font-weight:600;overflow-wrap:anywhere}
+@media (max-width:1080px){.grp__g{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:640px){.grp{padding:18px 14px}.grp__g{grid-template-columns:1fr 1fr;gap:10px}.grp__g a{padding:12px 10px 12px 14px}}
+@media (prefers-reduced-motion:reduce){.grp__g a{transition:none}.grp__g a:hover{transform:none}}
+
+/* A11 çerez/KVKK bandı (site.js ekler) */
+.ckb{position:fixed;left:16px;right:16px;bottom:16px;z-index:60;max-width:760px;margin:0 auto;display:flex;flex-wrap:wrap;align-items:center;gap:12px 18px;padding:16px 18px;border-radius:var(--r-lg);background:#fff;border:1px solid var(--line);box-shadow:var(--sh-lg);color:var(--ink-2);font-size:14px;line-height:1.5}
+.ckb[hidden]{display:none}
+.ckb p{flex:1 1 320px;margin:0}
+.ckb a{color:var(--blue-700);font-weight:700;text-decoration:underline;text-underline-offset:2px}
+.ckb__btns{display:flex;flex-wrap:wrap;gap:8px}
+.ckb__btns .btn{--h:42px}
+.ftr__meta .ckb-open{appearance:none;border:0;background:none;padding:0;min-height:36px;font:inherit;font-weight:700;color:var(--ink-2);cursor:pointer}
+.ftr__meta .ckb-open:hover{color:var(--blue-700)}
+@media (max-width:479px){.ckb{left:8px;right:8px;bottom:8px;padding:14px}.ckb__btns{width:100%}.ckb__btns .btn{flex:1 1 0}}

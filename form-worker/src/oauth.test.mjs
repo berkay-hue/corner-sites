@@ -15,7 +15,7 @@ registerHooks({
       : next(spec, ctx);
   },
 });
-const { platform, cleanup } = await import("./platform.js");
+const { platform, cleanup, platformSite: siteOf } = await import("./platform.js");
 const {
   ytRetention, YT_RETAIN_DAYS,
   NOT_CONFIGURED, NO_DATA, OAUTH, ProviderError, oauthReady, redirectUri, listConnections, authorizeUrl,
@@ -799,18 +799,30 @@ test("token şifreleme: gidiş-dönüş, her seferinde farklı, yanlış anahtar
 // ---- uçlar ve sağlayıcı dönüşü ----
 
 const ORIGIN = "http://localhost:8788";
+// A11: app.socialmediacorner.co kaydı ai_consent + Turnstile (ts) ister. Bu yardımcıyla yapılan app kayıtlarına ikisi
+// eklenir (gövdede varsa gövdedeki kalır) ve siteverify isteği başarılı yanıtlanır; diğer istekler testin kendi fetch'ine
+// gider. A11 kuralları ayrı testlerde ham çağrıyla (a11Register) sınanır.
+const SITEVERIFY = "https://challenges.cloudflare.com/turnstile/v0/siteverify";
+async function withSiteverify(run) {
+  const prev = globalThis.fetch;
+  globalThis.fetch = async (u, init) => (String(u) === SITEVERIFY ? Response.json({ success: true }) : prev(u, init));
+  try { return await run(); } finally { globalThis.fetch = prev; }
+}
 function api(env, origin = ORIGIN) {
   return async (method, path, { token, body, ip = "10.0.0.1" } = {}) => {
+    const smcReg = method === "POST" && path === "/auth/register" && body && siteOf(env, origin) === "app.socialmediacorner.co";
+    if (smcReg) body = { ai_consent: true, ts: "ts-ok", ...body };
     const headers = { "cf-connecting-ip": ip, "content-type": "application/json" };
     if (token) headers.authorization = `Bearer ${token}`;
     const req = new Request(`https://forms.test${path}`, { method, headers, body: body === undefined ? undefined : JSON.stringify(body) });
-    const res = await platform(req, new URL(req.url), env, origin, async () => {});
+    const go = () => platform(req, new URL(req.url), env, origin, async () => {});
+    const res = await (smcReg ? withSiteverify(go) : go());
     return { status: res.status, body: await res.json() };
   };
 }
 
 async function setup(extraEnv = {}, db = freshDb()) {
-  const env = { DB: d1(db), DEV_ORIGINS: ORIGIN, PBKDF2_ITER: "10000", METRICS_ENABLED: "1", ...extraEnv };
+  const env = { DB: d1(db), DEV_ORIGINS: ORIGIN, PBKDF2_ITER: "10000", METRICS_ENABLED: "1", TURNSTILE_SECRET: "ts-gizli", ...extraEnv };
   const call = api(env);
   let ip = 0;
   const join = async (role, email) => {
@@ -4312,4 +4324,157 @@ test("A5-3: brandcorner.co'da yeni uçlar 404 (eski davranış), kapalı bayrakt
   assert.equal((await call("POST", "/app/account/delete", { token: a.token, body: { password: "sifre-12345" } })).status, 200);
   assert.deepEqual(fail(await call("GET", "/auth/me", { token: a.token })), [401, "auth"]);
   assert.equal(count(db, "users"), 1);
+});
+
+// ---- A11: app.socialmediacorner.co kaydında AI kullanım onayı + Turnstile; brandcorner.co değişmez ----
+
+// Ham kayıt çağrısı: api() yardımcısının A11 eklemeleri (ai_consent, ts, sahte siteverify) olmadan
+const a11Register = (env, origin) => async (body, ip = "10.0.20.1") => {
+  const req = new Request("https://forms.test/auth/register", { method: "POST", headers: { "cf-connecting-ip": ip, "content-type": "application/json" }, body: JSON.stringify(body) });
+  const res = await platform(req, new URL(req.url), env, origin, async () => {});
+  return { status: res.status, body: await res.json() };
+};
+const A11_BODY = { name: "Ad", email: "a@x.co", password: "sifre-12345", consent: true, hp: "", t: 2000 };
+// siteverify sahtesi: çağrıları kaydeder; yanıt verify(token) ile belirlenir (true/false ya da fırlatır)
+const a11Net = (t, verify = () => true) => {
+  const calls = [];
+  t.mock.method(globalThis, "fetch", async (u, init) => {
+    assert.equal(String(u), SITEVERIFY);
+    const form = Object.fromEntries(new URLSearchParams(String(init.body)));
+    calls.push(form);
+    const v = verify(form.response);
+    return Response.json(v ? { success: true } : { success: false, "error-codes": ["invalid-input-response"] });
+  });
+  return calls;
+};
+const attemptsOf = db => db.prepare("SELECT ip, email, kind, ok FROM auth_attempts ORDER BY id").all().map(r => ({ ...r }));
+
+test("A11: app kaydı ai_consent ister (canlı ve önizleme); eksik/yanlışsa 400 ai_consent, siteverify ve D1 yazımı yok", async t => {
+  t.mock.method(console, "log", () => {});
+  const calls = a11Net(t);
+  for (const origin of [APP, PREVIEW]) {
+    const { db, env } = await setup({ ACCOUNTS_ENABLED: "1" });
+    const reg = a11Register(env, origin);
+    for (const extra of [{}, { ai_consent: false }, { ai_consent: "true" }, { ai_consent: 1 }, { ai_consent: null }])
+      assert.deepEqual(fail(await reg({ ...A11_BODY, ts: "ts-ok", ...extra })), [400, "ai_consent"], `${origin} ${JSON.stringify(extra)}`);
+    // Sıra: KVKK onayı (consent) ai_consent'ten önce, alan doğrulamaları ikisinden önce
+    assert.deepEqual(fail(await reg({ ...A11_BODY, consent: false, ts: "ts-ok" })), [400, "consent"]);
+    assert.deepEqual(fail(await reg({ ...A11_BODY, email: "x", ts: "ts-ok" })), [400, "email"]);
+    // ai_consent honeypot/süre kontrolünden önce
+    assert.deepEqual(fail(await reg({ ...A11_BODY, hp: "x", ts: "ts-ok" })), [400, "ai_consent"]);
+    assert.deepEqual(fail(await reg({ ...A11_BODY, hp: "x", ts: "ts-ok", ai_consent: true })), [400, "bad"]);
+    assert.deepEqual([count(db, "users"), count(db, "auth_attempts"), count(db, "submissions")], [0, 0, 0], origin);
+  }
+  assert.equal(calls.length, 0);
+});
+
+test("A11: app kaydında ts eksik ya da siteverify başarısız → 403 bot; deneme ok=0 yazılır, kullanıcı yazılmaz", async t => {
+  t.mock.method(console, "log", () => {});
+  const calls = a11Net(t, token => {
+    if (token === "ag-hatasi") throw new Error("ağ");
+    return token === "ts-ok";
+  });
+  const { db, env } = await setup({ ACCOUNTS_ENABLED: "1" });
+  const reg = a11Register(env, APP);
+  const body = { ...A11_BODY, ai_consent: true };
+  let ip = 0;
+  // Token yok, boş, dize değil ya da çok uzun: siteverify'a gidilmeden 403
+  for (const ts of [undefined, "", 42, ["ts-ok"], "x".repeat(2049)])
+    assert.deepEqual(fail(await reg({ ...body, ...(ts !== undefined && { ts }) }, `10.0.21.${++ip}`)), [403, "bot"], JSON.stringify(ts));
+  assert.equal(calls.length, 0);
+  // siteverify success:false ya da ağ hatası (fetch fırlatır): 403
+  assert.deepEqual(fail(await reg({ ...body, ts: "sahte" }, "10.0.21.50")), [403, "bot"]);
+  assert.deepEqual(fail(await reg({ ...body, ts: "ag-hatasi" }, "10.0.21.51")), [403, "bot"]);
+  // siteverify'a gizli anahtar, token ve istemci IP'si gider
+  assert.deepEqual(calls, [
+    { secret: "ts-gizli", response: "sahte", remoteip: "10.0.21.50" },
+    { secret: "ts-gizli", response: "ag-hatasi", remoteip: "10.0.21.51" },
+  ]);
+  assert.equal(count(db, "users"), 0);
+  assert.equal(count(db, "submissions"), 0);
+  // Her başarısız Turnstile denemesi IP sınırına sayılır (e-posta yazılmaz)
+  const rows = attemptsOf(db);
+  assert.equal(rows.length, 7);
+  assert.ok(rows.every(r => r.kind === "register" && r.ok === 0 && r.email === null), JSON.stringify(rows));
+});
+
+test("A11: siteverify başarılı → 200; kullanıcı app sitesine, bildirimde Onaylar satırı", async t => {
+  t.mock.method(console, "log", () => {});
+  const calls = a11Net(t);
+  const { db, env } = await setup({ ACCOUNTS_ENABLED: "1" });
+  const delivered = [];
+  const req = new Request("https://forms.test/auth/register", {
+    method: "POST", headers: { "cf-connecting-ip": "10.0.22.1", "content-type": "application/json" },
+    body: JSON.stringify({ ...A11_BODY, role: "influencer", ai_consent: true, ts: "ts-ok" }),
+  });
+  const res = await platform(req, new URL(req.url), env, APP, async (_env, row) => { delivered.push(row); });
+  const b = await res.json();
+  assert.equal(res.status, 200, JSON.stringify(b));
+  assert.equal(b.user.role, "brand");
+  assert.match(b.token, /^[A-Za-z0-9_-]{43}$/);
+  assert.equal(calls.length, 1);
+  const u = db.prepare("SELECT site, email, consent_at FROM users").get();
+  assert.deepEqual([u.site, u.email, Boolean(u.consent_at)], ["app.socialmediacorner.co", "a@x.co", true]);
+  const want = [["Ad", "Ad"], ["E-posta", "a@x.co"], ["Rol", "brand"], ["Dil", "tr"], ["Onaylar", "KVKK+Çerez+Koşullar; AI kullanımı"]];
+  assert.deepEqual(JSON.parse(db.prepare("SELECT fields FROM submissions").get().fields), want);
+  assert.deepEqual(delivered.map(r => [r.site, r.page, r.fields]), [["app.socialmediacorner.co", "/kayit", want]]);
+  assert.deepEqual(attemptsOf(db), [{ ip: "10.0.22.1", email: "a@x.co", kind: "register", ok: 1 }]);
+  // Aynı e-posta ikinci kez: Turnstile geçer, 409 exists
+  assert.deepEqual(fail(await a11Register(env, APP)({ ...A11_BODY, ai_consent: true, ts: "ts-ok" }, "10.0.22.2")), [409, "exists"]);
+});
+
+test("A11: TURNSTILE_SECRET yoksa app kaydı 503 not_ready (Turnstile'sız geçilmez); brandcorner etkilenmez", async t => {
+  t.mock.method(console, "log", () => {});
+  const calls = a11Net(t);
+  for (const secret of [undefined, ""]) {
+    const { db, env } = await setup({ ACCOUNTS_ENABLED: "1", TURNSTILE_SECRET: secret });
+    for (const origin of [APP, PREVIEW])
+      assert.deepEqual(fail(await a11Register(env, origin)({ ...A11_BODY, ai_consent: true, ts: "ts-ok" })), [503, "not_ready"], origin);
+    assert.deepEqual([count(db, "users"), count(db, "auth_attempts")], [0, 0]);
+    assert.equal((await a11Register(env, BC)({ ...A11_BODY, role: "brand" })).status, 200);
+  }
+  assert.equal(calls.length, 0);
+});
+
+test("A11: brandcorner.co kaydı ts/ai_consent olmadan eskisi gibi; siteverify yok, bildirim alanları aynı", async t => {
+  const calls = a11Net(t);
+  for (const flag of [{}, { ACCOUNTS_ENABLED: "1" }]) {
+    const { db, env } = await setup(flag);
+    let ip = 0;
+    for (const origin of [BC, ORIGIN]) {
+      for (const role of ["brand", "influencer", "agency"]) {
+        const r = await a11Register(env, origin)({ ...A11_BODY, email: `${role}${++ip}@x.co`, role }, `10.0.23.${ip}`);
+        assert.equal(r.status, 200, `${JSON.stringify(flag)} ${origin} ${role} ${JSON.stringify(r.body)}`);
+        assert.equal(r.body.user.role, role);
+      }
+    }
+    assert.deepEqual(db.prepare("SELECT DISTINCT site FROM users").all().map(r => r.site), ["brandcorner.co"]);
+    for (const { fields } of db.prepare("SELECT fields FROM submissions").all())
+      assert.deepEqual(JSON.parse(fields).map(f => f[0]), ["Ad", "E-posta", "Rol", "Dil"]);
+    // ai_consent: false gönderilse de brandcorner'da yok sayılır
+    assert.equal((await a11Register(env, BC)({ ...A11_BODY, email: "z@x.co", role: "brand", ai_consent: false }, "10.0.23.99")).status, 200);
+  }
+  assert.equal(calls.length, 0);
+});
+
+test("A11: IP sınırı Turnstile'dan önce: 5 başarısız denemeden sonra 429 ve siteverify çağrılmaz", async t => {
+  t.mock.method(console, "log", () => {});
+  const calls = a11Net(t, token => token === "ts-ok");
+  const { db, env } = await setup({ ACCOUNTS_ENABLED: "1" });
+  const reg = a11Register(env, APP);
+  for (let i = 0; i < 5; i++)
+    assert.deepEqual(fail(await reg({ ...A11_BODY, email: `b${i}@x.co`, ai_consent: true, ts: "sahte" }, "10.0.24.1")), [403, "bot"]);
+  assert.equal(calls.length, 5);
+  // Geçerli token da olsa sınırdaki IP siteverify'a ulaşamaz
+  for (const ts of ["sahte", "ts-ok"])
+    assert.deepEqual(fail(await reg({ ...A11_BODY, ai_consent: true, ts }, "10.0.24.1")), [429, "rate"]);
+  assert.equal(calls.length, 5);
+  assert.equal(count(db, "auth_attempts"), 5);
+  // Başka IP etkilenmez
+  assert.equal((await reg({ ...A11_BODY, ai_consent: true, ts: "ts-ok" }, "10.0.24.2")).status, 200);
+  assert.equal(calls.length, 6);
+  // Başarılı kayıtlar da sayılır (eski kural): aynı IP'den 5 kayıttan sonra 6.sı siteverify'sız 429
+  for (let i = 0; i < 4; i++) assert.equal((await reg({ ...A11_BODY, email: `c${i}@x.co`, ai_consent: true, ts: "ts-ok" }, "10.0.24.2")).status, 200);
+  assert.deepEqual(fail(await reg({ ...A11_BODY, email: "c9@x.co", ai_consent: true, ts: "ts-ok" }, "10.0.24.2")), [429, "rate"]);
+  assert.equal(calls.length, 10);
 });

@@ -11,12 +11,13 @@
 <link rel="alternate" hreflang="tr" href="https://app.socialmediacorner.co/kvkk">
 <link rel="alternate" hreflang="en" href="https://app.socialmediacorner.co/en/privacy">
 <link rel="alternate" hreflang="x-default" href="https://app.socialmediacorner.co/kvkk">
-<link rel="icon" href="data:,">
+<link rel="icon" href="/assets/mark.svg" type="image/svg+xml">
 <script src="/assets/theme.js"></script>
 <link rel="preload" href="/assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/assets/tokens.css">
 <link rel="stylesheet" href="/assets/bilesenler.css">
 <link rel="stylesheet" href="/assets/smc-app.css">
+<link rel="stylesheet" href="/assets/panel.css">
 </head>
 <body>
 <a class="atla" href="#icerik">İçeriğe geç</a>
@@ -24,9 +25,8 @@
 <header class="ust">
   <div class="ust-ic">
     <a class="logo" href="/" aria-label="Social Media Corner Taslak Masası, ana sayfa">
-      <span class="kose" aria-hidden="true"></span>
-      <span class="logo-ad">Social Media Corner</span>
-      <span class="logo-urun">Taslak Masası</span>
+      <span class="lg"><img class="lg-acik" src="/assets/logo.svg" alt="" width="109" height="36"><img class="lg-koyu" src="/assets/logo-dark.svg" alt="" width="109" height="36"><img class="lg-isaret" src="/assets/mark.svg" alt="" width="32" height="32"></span>
+      <span class="lg-urun">Taslak Masası</span>
     </a>
     <div class="ust-sag">
       <a href="/en/privacy" hreflang="en" lang="en" class="duz dil" aria-label="English">EN</a>
@@ -59,7 +59,7 @@
       <li><a href="#aktarim">Kimlere aktarıyoruz</a></li>
       <li><a href="#yapay-zeka">Yapay zekâ ile taslak üretimi</a></li>
       <li><a href="#saklama">Ne kadar saklıyoruz</a></li>
-      <li><a href="#tarayici">Tarayıcında tutulanlar</a></li>
+      <li><a href="#cerez">Çerezler ve tarayıcında tutulanlar</a></li>
       <li><a href="#haklar">KVKK kapsamındaki hakların</a></li>
       <li><a href="#basvuru">Nasıl başvurursun</a></li>
       <li><a href="#degisiklik">Bu metindeki değişiklikler</a></li>
@@ -92,7 +92,7 @@
 
   <h3>Hesaplı kullanım</h3>
   <ul>
-    <li><strong>Hesap bilgileri:</strong> ad soyad, e-posta, rol ve dil tercihi. Ayrıca koşulları kabul ettiğin zaman kaydedilir. Şifren düz metin olarak tutulmaz, yalnız geri çevrilemeyen özeti saklanır.</li>
+    <li><strong>Hesap bilgileri:</strong> ad soyad, e-posta, rol ve dil tercihi. Ayrıca kayıtta verdiğin iki zorunlu onayın zamanı kaydedilir: Hesap koşullarını kabul etmen ve yapay zekâ ile taslak üretimini bildiğini onaylaman. İkisi de zorunlu olduğundan birlikte verilir ve tek bir zaman olarak tutulur. Şifren düz metin olarak tutulmaz, yalnız geri çevrilemeyen özeti saklanır.</li>
     <li><strong>Kurulum ve marka sesi:</strong> Kurulumda girdiğin profil bilgileri, sektör, ton seçimleri, örnek metinler ve kaçınılacak kelimeler.</li>
     <li><strong>Taslak geçmişi:</strong> Ürettiğin taslaklar ile bunların platformu, konusu ve oluşturulma zamanı.</li>
     <li><strong>Oturum:</strong> Giriş yaptığında bir oturum anahtarı oluşur. Sunucuda bu anahtarın yalnız özeti tutulur.</li>
@@ -176,17 +176,38 @@
   </ul>
   <p>Hesabını sildiğinde hesabına bağlı tüm kayıtlar hemen silinir. Bağlı platformların erişim anahtarları da silinir. Uygulamaya verdiğin izni LinkedIn ya da Instagram ayarlarından ayrıca kaldırabilirsin. Güvenlik kayıtları ise 1 gün içinde kendiliğinden silinir.</p>
 
-  <h2 id="tarayici">8. Tarayıcında tutulanlar</h2>
-  <p>Bu site kendi çerezlerini kullanmaz. Aşağıdaki bilgiler tarayıcının yerel depolamasında (localStorage veya sessionStorage) tutulur. Tarayıcı verilerini sildiğinde bunlar da silinir.</p>
+  <h2 id="cerez">8. Çerezler ve tarayıcında tutulanlar</h2>
+  <p>Bu bölüm aynı zamanda panelin <strong>Çerez Politikası</strong>’dır. Panel reklam, profilleme ya da izleme çerezi kullanmaz ve kendi çerezini koymaz; oturumun bile çerezde değil, tarayıcının yerel deposunda (localStorage ya da sessionStorage) durur. Aşağıdaki bilgiler yalnız panelin çalışması ve tercihlerini hatırlaması içindir. Bunlardan yalnız <code>smc-anon</code> ve <code>smc-oturum</code> isteklerle birlikte sunucumuza gider; ötekiler tarayıcından çıkmaz.</p>
+  <p>Ziyaretleri Cloudflare Web Analytics ile çerezsiz ölçeriz. Giriş ve kayıt formlarındaki Cloudflare Turnstile bot doğrulaması, yalnız bu doğrulama için Cloudflare’in zorunlu çerezlerini kullanabilir (5. bölüm).</p>
+  <p>Çerez bandında “Kabul ediyorum” ya da “Yalnız zorunlu” seçebilirsin. Bugün zorunlu olmayan bir çerez kullanmadığımız için iki seçim de panelin çalışmasını değiştirmez; seçimin yalnız kaydedilir. İleride isteğe bağlı bir çerez eklersek bu metni güncelleriz ve senden yeniden onay isteriz.</p>
+  <p><button type="button" class="ckb-ac" data-ckb-ac hidden>Çerez tercihlerini aç</button></p>
+
+  <h3 id="tarayici">Zorunlu: panelin çalışması için</h3>
   <ul>
-    <li><code>smc-anon</code>: rastgele tarayıcı kimliği, günlük kullanım hakkı için.</li>
-    <li><code>smc-son</code>: son taslak üretilen gün.</li>
-    <li><code>smc-acik</code>: aracı daha önce açtığın bilgisi.</li>
-    <li><code>smc-tema</code>, <code>smc-dil</code>: tema ve dil tercihin.</li>
-    <li><code>smc-ses-v1</code>: hesapsız marka sesin, yalnız bu tarayıcıda.</li>
-    <li><code>smc-konu</code>: sayfa yenilenirse konunun kaybolmaması için. Sekme kapanınca silinir.</li>
-    <li><code>smc-hesap-not</code>: hesap ekranlarında gösterilecek kısa bildirim. Sekme kapanınca silinir.</li>
-    <li><code>smc-oturum</code>: oturum anahtarın. “Beni hatırla”yı seçtiysen çıkış yapana kadar, seçmediysen sekme kapanana kadar tutulur.</li>
+    <li><code>smc-cerez</code> (localStorage): çerez bandındaki seçimin (<code>all</code> ya da <code>ess</code>). Bant her sayfada yeniden çıkmasın diye.</li>
+    <li><code>smc-oturum</code>: oturum anahtarın. “Beni hatırla”yı seçtiysen localStorage’da çıkış yapana kadar, seçmediysen sessionStorage’da sekme kapanana kadar tutulur.</li>
+    <li><code>smc-anon</code> (localStorage): rastgele tarayıcı kimliği. Hesapsız kullanımda günlük kullanım hakkını saymak için isteklerle gönderilir; adını ya da e-postanı içermez.</li>
+    <li><code>smc-son</code> (localStorage): son taslak üretilen gün.</li>
+    <li><code>smc-acik</code> (localStorage): taslak üretiminin açık olduğu bilgisi. Servis kapalı yanıtı gelince silinir.</li>
+    <li><code>smc-uyelik</code> (sessionStorage): üyeliğin şu an açık olup olmadığı. Ana sayfadaki “Ücretsiz hesap oluştur” kartı için en çok 10 dakika tutulur, sekme kapanınca silinir.</li>
+    <li><code>smc-hesap-not</code> (sessionStorage): hesap ekranlarında bir kez gösterilecek kısa bildirim, örneğin “Çıkış yaptın.” Sekme kapanınca silinir.</li>
+  </ul>
+  <h3>Tercihler: senin seçtiğin ayarlar</h3>
+  <ul>
+    <li><code>smc-tema</code>, <code>smc-dil</code> (localStorage): tema ve dil tercihin.</li>
+    <li><code>smc-ray</code> (localStorage): masaüstünde sol menüyü daralttıysan bu tercih.</li>
+    <li><code>smc-ses-v1</code> (localStorage): hesapsız marka sesin, yalnız bu tarayıcıda.</li>
+    <li><code>smc-kurgu-video</code>, <code>smc-kurgu-gorsel</code> (localStorage): Video ve Görsel stüdyosunda seçtiğin şablon, en-boy oranı, renkler, marka adı ve kullanıcı adı.</li>
+    <li><code>smc-gorsel-video</code>, <code>smc-gorsel-gorsel</code> (localStorage): stok görsel kullanıp kullanmama tercihin.</li>
+    <li><code>smc-konu</code>, <code>studyo-konu</code>, <code>studyo-kanca</code> (sessionStorage): bir araçtan ötekine geçerken ya da sayfa yenilenince konunun ve kancanın kaybolmaması için. Sekme kapanınca silinir.</li>
+  </ul>
+  <h3>Nasıl silinir</h3>
+  <ul>
+    <li><strong>Hepsi birden:</strong> tarayıcının ayarlarından bu sitenin verilerini (site verileri, çerezler ve depolanan veriler) sil. Chrome’da adres çubuğundaki site simgesine tıklayıp “Çerezler ve site verileri” bölümünden de yapabilirsin.</li>
+    <li><strong>sessionStorage:</strong> sekmeyi ya da tarayıcıyı kapatınca kendiliğinden silinir.</li>
+    <li><strong>Oturum:</strong> çıkış yaptığında <code>smc-oturum</code> silinir.</li>
+    <li><strong>Marka sesi:</strong> Marka sesi penceresindeki “Profili sil” düğmesiyle silebilirsin.</li>
+    <li><strong>Çerez seçimin:</strong> sayfanın altındaki “Çerez tercihleri” düğmesiyle istediğin zaman değiştirebilirsin.</li>
   </ul>
 
   <h2 id="haklar">9. KVKK kapsamındaki hakların</h2>
@@ -227,7 +248,8 @@
 </main>
 
 <footer class="alt">
-  <span>© 2026 Social Media Corner, bir Corner Group şirketi</span>
+  <nav class="cg" aria-label="Corner Group şirketleri"><p class="cg-bas">Corner Group şirketleri</p><ul class="cg-liste"><li><a class="cg-cg" href="https://cornergroup.co/" target="_blank" rel="noopener"><b>Corner Group</b><span>B2B büyüme ekosistemi</span></a></li><li><a class="cg-saas" href="https://saascorner.co/" target="_blank" rel="noopener"><b>SaaS Corner</b><span>B2B müşteri bulma</span></a></li><li><a class="cg-sales" href="https://salescorner.co/" target="_blank" rel="noopener"><b>Sales Corner</b><span>Satış operasyonu ve outbound</span></a></li><li><a class="cg-crm" href="https://crmcorner.co/" target="_blank" rel="noopener"><b>CRM Corner</b><span>CRM ve süreç otomasyonu</span></a></li><li><a class="cg-brand" href="https://brandcorner.co/" target="_blank" rel="noopener"><b>Brand Corner</b><span>Influencer pazarlama platformu</span></a></li></ul></nav>
+  <span>© 2026 Social Media Corner — bir Corner Group şirketi</span>
   <a href="/kvkk" aria-current="page">KVKK Aydınlatma Metni</a>
   <a href="/kosullar">Hesap koşulları</a>
   <a href="https://socialmediacorner.co/">socialmediacorner.co</a>
