@@ -34,7 +34,7 @@ LinkedIn supports five basic constructs. Operators must be written in **uppercas
 
 LinkedIn processes them in this order of precedence: quoted phrases, parentheses, NOT, AND, and finally OR. Without parentheses, a query like `CTO OR CIO AND yazılım` won't work the way you expect. That's why **wrapping every OR group in parentheses** is the safest habit.
 
-It's also important to know what isn't supported. LinkedIn does not officially support the asterisk (*) wildcard. So you can't type `pazarlama*` to catch variants like "pazarlamacı" (marketer) or "pazarlamada" (in marketing); you need to add each variant individually with OR. Likewise, use AND and NOT instead of the `+` and `-` symbols.
+It's also important to know what isn't supported. LinkedIn does not officially support the asterisk (∗) wildcard. So you can't type "pazarlama∗" to catch variants like "pazarlamacı" (marketer) or "pazarlamada" (in marketing); you need to add each variant individually with OR. Likewise, use AND and NOT instead of the plus (+) and minus (−) symbols.
 
 ## Where do you enter a Boolean query? Free LinkedIn vs. Sales Navigator
 
@@ -211,7 +211,7 @@ As your team grows, the question of "who will use the tool and who will update t
 
 Yes, Boolean queries typed into the search bar also work on a free account. However, because of the monthly commercial use limit, results may be restricted when you search heavily. Advanced filters such as company size and seniority level are only available in Sales Navigator.
 
-### Does the asterisk (*) wildcard work in LinkedIn Boolean search?
+### Does the asterisk (∗) wildcard work in LinkedIn Boolean search?
 
 No, LinkedIn does not officially support the asterisk wildcard. If you want to capture different variants of a word, you need to write each one separately with the OR operator. For example, you can create a group like `pazarlama OR pazarlamacı OR marketing`.
 

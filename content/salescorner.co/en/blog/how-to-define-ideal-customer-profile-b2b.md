@@ -108,7 +108,7 @@ Yes. Separate ICPs can be defined for different products, markets or sales motio
 
 It is good practice to review the ICP at regular intervals, for example every quarter, based on won and lost opportunities. It should be updated right away when a major feature is added to the product, pricing changes or you enter a new market.
 
-You can see what Sales Corner does in sales automation and outbound on our [services page](/hizmetler) (in Turkish).
+You can see the sales automation and outbound workflows Sales Corner builds in our [automation library](/en/#otomasyonlar).
 
 ## Conclusion
 

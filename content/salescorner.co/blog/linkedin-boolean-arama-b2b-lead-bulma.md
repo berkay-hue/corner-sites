@@ -34,7 +34,7 @@ LinkedIn beş temel yapıyı destekler. Operatörlerin **büyük harfle** yazıl
 
 LinkedIn'in işlem önceliği sırasıyla şöyledir: tırnak içindeki ifadeler, parantezler, NOT, AND ve en son OR. Parantez kullanmadığınızda `CTO OR CIO AND yazılım` gibi bir sorgu beklediğiniz gibi çalışmaz. Bu yüzden **her OR grubunu parantez içine almak** en güvenli alışkanlıktır.
 
-Desteklenmeyenleri de bilmek gerekir. LinkedIn yıldız (*) joker karakterini resmî olarak desteklemez. Bu yüzden `pazarlama*` yazarak "pazarlamacı", "pazarlamada" gibi türevleri yakalayamazsınız ve türevleri OR ile tek tek eklemeniz gerekir. `+` ve `-` sembolleri yerine de AND ve NOT kullanılmalıdır.
+Desteklenmeyenleri de bilmek gerekir. LinkedIn yıldız (∗) joker karakterini resmî olarak desteklemez. Bu yüzden "pazarlama∗" yazarak "pazarlamacı", "pazarlamada" gibi türevleri yakalayamazsınız ve türevleri OR ile tek tek eklemeniz gerekir. artı (+) ve eksi (−) sembolleri yerine de AND ve NOT kullanılmalıdır.
 
 ## Boolean sorgu nereye yazılır? Ücretsiz LinkedIn ile Sales Navigator farkı
 
@@ -211,7 +211,7 @@ Ekibiniz büyüdükçe "aracı kim kullanacak, sorguları kim güncelleyecek" so
 
 Evet, ücretsiz hesapta da arama çubuğuna yazılan Boolean sorgular çalışır. Ancak aylık ticari kullanım sınırı nedeniyle yoğun aramalarda sonuçlar kısıtlanabilir. Şirket büyüklüğü ve kıdem seviyesi gibi gelişmiş filtreler de yalnızca Sales Navigator'da bulunur.
 
-### LinkedIn Boolean aramada yıldız (*) joker karakteri çalışır mı?
+### LinkedIn Boolean aramada yıldız (∗) joker karakteri çalışır mı?
 
 Hayır, LinkedIn yıldız joker karakterini resmî olarak desteklemez. Kelimenin farklı türevlerini yakalamak istiyorsanız her birini OR operatörüyle ayrı ayrı yazmanız gerekir. Örneğin `pazarlama OR pazarlamacı OR marketing` şeklinde bir grup oluşturabilirsiniz.
 

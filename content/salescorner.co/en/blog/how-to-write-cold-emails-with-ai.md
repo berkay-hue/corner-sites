@@ -3,7 +3,7 @@ title: "How to Write Cold Emails with AI"
 description: "How to use AI when writing B2B cold emails: personalization, subject lines and follow-up sequences, explained with examples."
 date: "2026-10-10"
 updated: "2026-10-16"
-category: "AI"
+category: "Artificial Intelligence"
 image: "https://images.pexels.com/photos/7971661/pexels-photo-7971661.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
 imageAlt: "How to Write Cold Emails with AI"
 alt: "yapay-zekayla-soguk-eposta-nasil-yazilir"
@@ -192,7 +192,7 @@ A simple loop for iteration: test a single variable each week. One week change t
 
 Another powerful practice is classifying replies with AI. Sorting incoming replies into categories such as "interested", "not now", "wrong person", "not interested" and "unsubscribe" speeds up follow-up. It also builds a valuable dataset on which message triggers which objection.
 
-You can see what Sales Corner does in sales automation and outbound on our [services page](/hizmetler) (in Turkish).
+You can see the sales automation and outbound workflows Sales Corner builds in our [automation library](/en/#otomasyonlar).
 
 ## Conclusion
 

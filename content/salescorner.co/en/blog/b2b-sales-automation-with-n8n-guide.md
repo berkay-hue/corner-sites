@@ -100,7 +100,7 @@ No. Automation takes over repetitive work such as data entry, research and remin
 
 A single-purpose workflow such as lead capture and CRM entry can usually be tested and launched within a few days, provided access to the tools is ready. Multi-step workflows with an AI layer require a longer testing period.
 
-You can see what Sales Corner does in sales automation and outbound on our [services page](/hizmetler) (in Turkish).
+You can see the sales automation and outbound workflows Sales Corner builds in our [automation library](/en/#otomasyonlar).
 
 ## Conclusion
 

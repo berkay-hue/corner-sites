@@ -2,7 +2,7 @@
 title: "What Is a Sales AI Agent? How Does It Work?"
 description: "What is a sales AI agent and how does it differ from automation? This guide explains how it works, use cases and risks for B2B teams."
 date: "2026-11-23"
-category: "AI"
+category: "Artificial Intelligence"
 image: "https://images.pexels.com/photos/15096572/pexels-photo-15096572.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
 imageAlt: "What Is a Sales AI Agent? How Does It Work?"
 alt: "satis-yapay-zeka-ajani-nedir"

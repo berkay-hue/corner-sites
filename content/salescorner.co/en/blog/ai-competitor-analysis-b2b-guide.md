@@ -2,7 +2,7 @@
 title: "How to Do Competitor Analysis with AI: A B2B Guide"
 description: "A guide for B2B sales teams to AI-powered competitor analysis: steps, data sources, an output template and KVKK data privacy limits, with examples."
 date: "2026-11-15"
-category: "AI"
+category: "Artificial Intelligence"
 image: "https://images.pexels.com/photos/7109288/pexels-photo-7109288.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
 imageAlt: "How to Do Competitor Analysis with AI: A B2B Guide"
 alt: "yapay-zekayla-rakip-analizi-nasil-yapilir"
