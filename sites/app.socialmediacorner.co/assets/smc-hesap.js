@@ -426,7 +426,7 @@ function oturumKur(u){
   var m=$('#hesap-menu'),hr=m&&$('hr',m);
   if(KULLANICI.admin===true&&m&&!$('#hesap-admin')){var y=el('a',null,t('Yönetim'),{href:'/hesap/admin',id:'hesap-admin'});if(SAYFA==='admin')y.setAttribute('aria-current','page');m.insertBefore(y,hr||null)}
   /* ray: Hesap grubuna Yönetim (admin.html kendi bağlantısını taşır) */
-  var g=$('.st-rail .st-grup:last-of-type');
+  var gs=$$('.st-rail .st-grup'),g=gs[gs.length-1];
   if(KULLANICI.admin===true&&g&&!$('.st-link[href="/hesap/admin"]',g)){var ra=el('a','st-link',null,{href:'/hesap/admin'});var sp=el('span','st-link-ad',t('Yönetim'));ra.innerHTML='<svg class="ikon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z"/></svg>';ra.appendChild(sp);g.appendChild(ra)}
 }
 function cikisKur(){$$('#cikis,#cikis-2').forEach(function(b){b.addEventListener('click',function(){
