@@ -31,6 +31,7 @@
   if(!cssLink&&d.head){cssLink=el('link');cssLink.rel='stylesheet';cssLink.href='/assets/panel.css';d.head.appendChild(cssLink);cssEklendi=true}
 
   function favicon(){
+    if(d.querySelector('link[rel~="icon"][href="/assets/favicon.svg"]'))return;
     var ic=d.querySelector('link[rel~="icon"]');
     if(!ic){ic=el('link');ic.rel='icon';d.head.appendChild(ic)}
     if(ic.getAttribute('href')!=='/assets/favicon.svg'){ic.setAttribute('href','/assets/favicon.svg');ic.setAttribute('type','image/svg+xml')}
