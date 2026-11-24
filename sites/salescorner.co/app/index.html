@@ -16,6 +16,13 @@
 <div id="app"><div class="boot" role="status" aria-label="Yükleniyor"><div class="spin"></div></div></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <noscript><p style="padding:24px">Sales Corner paneli için JavaScript gerekli.</p></noscript>
-<script type="module" src="/app/app.js?v=7"></script>
+<script>
+/* Yedek: app.js (ya da esm.sh'teki Supabase) gelmezse spinner sonsuza kadar dönmesin */
+(function(){var done=false;function fail(){if(done)return;var a=document.getElementById('app'),b=a&&a.querySelector('.boot');if(!b)return;done=true;
+b.setAttribute('aria-label','Panel yüklenemedi');b.innerHTML='<div style="text-align:center;padding:24px;max-width:340px"><p style="margin:0 0 14px;font-weight:600">Panel yüklenemedi.</p><p style="margin:0 0 18px;color:#475569;font-size:14px">Bağlantınızı kontrol edip sayfayı yenileyin.</p><button type="button" style="font:inherit;font-weight:600;padding:10px 18px;border-radius:10px;border:0;background:#5b5bd6;color:#fff;cursor:pointer">Yenile</button></div>';
+b.querySelector('button').onclick=function(){location.reload()};}
+window.__appBootFail=fail;setTimeout(fail,12000);})();
+</script>
+<script type="module" src="/app/app.js?v=7" onerror="window.__appBootFail&&window.__appBootFail()"></script>
 </body>
 </html>
