@@ -257,4 +257,4 @@ The short answer to the question of the best time and day for cold calling is cl
 
 To do this, log your calls systematically and test time blocks in a controlled way. Review results by role and industry, protect your call blocks and build a sequence coordinated with email and LinkedIn touchpoints. When you support this process with automation, your reps spend their most productive hours on real conversations instead of building lists.
 
-If you want to optimize your calling schedule with data, enrich your lead lists and bring calls, emails and LinkedIn touchpoints together in a single automated flow, you can talk to the Sales Corner team. [Schedule a call now](/en/iletisim) to work out the right setup for your team's needs together.
+If you want to optimize your calling schedule with data, enrich your lead lists and bring calls, emails and LinkedIn touchpoints together in a single automated flow, you can talk to the Sales Corner team. [Schedule a call now](/en/contact) to work out the right setup for your team's needs together.

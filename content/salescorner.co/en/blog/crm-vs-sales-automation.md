@@ -204,4 +204,4 @@ The difference between CRM and sales automation is the difference between keepin
 
 Successful B2B sales teams don't choose one over the other; they build both in the right order: first a clear process and a clean CRM, then automation, step by step, starting with the task that wastes the most time. This sequence both prevents wasted investment and helps the team trust the new system.
 
-If you want to turn your CRM into a sales engine that actually works, let's review your current process together. [Schedule a call with the Sales Corner team](/en/iletisim) to discuss which tasks can be automated and where you should start.
+If you want to turn your CRM into a sales engine that actually works, let's review your current process together. [Schedule a call with the Sales Corner team](/en/contact) to discuss which tasks can be automated and where you should start.

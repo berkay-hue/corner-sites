@@ -227,4 +227,4 @@ The clearest indicator is the number of sales opportunities created from nurture
 
 B2B lead nurturing is the most systematic way to make prospects who say "not now" sales-ready without losing them. A successful program rests on nine core steps: selecting the right leads, segmenting by role and stage, building a content map for each segment, using channels together, strengthening a calendar-based sequence with behavior-based triggers, keeping data clean, clearly defining the handoff point to sales, and measuring the right metrics. Starting with a small segment and expanding as you measure results is the fastest and least risky path.
 
-If you want to build your lead nurturing flows with AI-powered automation and bring data enrichment and sales handoff processes together in a single system, the Sales Corner team is ready to help. [Book a call](/en/iletisim) to review your current process together.
+If you want to build your lead nurturing flows with AI-powered automation and bring data enrichment and sales handoff processes together in a single system, the Sales Corner team is ready to help. [Book a call](/en/contact) to review your current process together.

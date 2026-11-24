@@ -247,4 +247,4 @@ Because B2B data decays quickly, it's good practice to re-verify lists right bef
 
 Reducing your email bounce rate isn't possible with a single tool; it takes an interconnected discipline: a reliable data source, pre-send verification, separate management of catch-all addresses, correctly configured SPF/DKIM/DMARC, controlled domain warm-up, and automatically adding bounces to a suppression list. Once you build these steps into your workflow, your bounce rate stays low on its own. Your domain reputation is protected, and your well-written emails actually reach your target contacts' inboxes.
 
-If you want to automate data verification, bounce management and deliverability monitoring in your outbound processes, you can [schedule a call](/en/iletisim) with the Sales Corner team to review your current setup together.
+If you want to automate data verification, bounce management and deliverability monitoring in your outbound processes, you can [schedule a call](/en/contact) with the Sales Corner team to review your current setup together.

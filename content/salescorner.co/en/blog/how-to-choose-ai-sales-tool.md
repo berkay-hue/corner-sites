@@ -188,4 +188,4 @@ Prepare a control list of 30-50 people whose correct details you already know, a
 
 Choosing an AI tool for sales is less about buying software and more about making a process decision. First identify your bottleneck, then evaluate candidates against the six criteria: the problem it solves, data quality, integration, KVKK and security, total cost and measurability. Then make the final decision with a pilot run on your own data, with a control group and with metrics defined in advance. This discipline keeps you from spending budget on the wrong tool and ensures the right tool is genuinely adopted by your team.
 
-If you'd like to identify which AI tools fit your sales processes, set up integrations or design an end-to-end automation workflow, the Sales Corner team can help. [Schedule a call](/en/iletisim) to review your current setup together.
+If you'd like to identify which AI tools fit your sales processes, set up integrations or design an end-to-end automation workflow, the Sales Corner team can help. [Schedule a call](/en/contact) to review your current setup together.

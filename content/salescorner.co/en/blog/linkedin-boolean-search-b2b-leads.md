@@ -227,4 +227,4 @@ They can. Some users fill out their profiles without using Turkish characters. A
 
 Boolean search on LinkedIn is one of the lowest-cost, highest-leverage skills in B2B lead generation. A good query is built on three things: a clearly defined ICP, a title dictionary that covers Turkish and English variations, and a disciplined NOT group that clears out the noise. The profiles you find only become a real lead list once they've gone through enrichment, verification, deduplication and prioritization.
 
-If you want to move this process beyond manual steps and fully automate it end to end with enrichment, CRM import and personalized outbound workflows, [schedule a call](/en/iletisim) with our team. Let's design a workflow tailored to you together.
+If you want to move this process beyond manual steps and fully automate it end to end with enrichment, CRM import and personalized outbound workflows, [schedule a call](/en/contact) with our team. Let's design a workflow tailored to you together.

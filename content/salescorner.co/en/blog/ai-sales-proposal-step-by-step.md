@@ -207,4 +207,4 @@ It wouldn't be accurate to guarantee a direct increase. The impact is usually in
 
 When set up correctly, preparing sales proposals with AI turns one of the biggest time sinks for sales teams into a fast, consistent and customer-specific process. The formula is simple: a strong discovery call, a fixed proposal structure, an approved content library, section-by-section draft generation, rule-based pricing and mandatory human review. Add regular measurement and loss analysis on top, and every proposal gets better than the last.
 
-If you want to turn your proposal process into end-to-end automation connected to your CRM, we can assess your current setup together. [Schedule a call](/en/iletisim) with the Sales Corner team, and let's work out the right proposal automation setup for you together.
+If you want to turn your proposal process into end-to-end automation connected to your CRM, we can assess your current setup together. [Schedule a call](/en/contact) with the Sales Corner team, and let's work out the right proposal automation setup for you together.

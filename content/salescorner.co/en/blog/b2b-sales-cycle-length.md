@@ -200,4 +200,4 @@ Yes, when applied in the right places. The biggest impact comes in stages where 
 
 In Türkiye, the B2B sales cycle can range from a few weeks to more than a year. What matters is not memorizing a general average, but measuring your own cycle by segment and stage, seeing where time is lost and focusing on those points. Teams that account for local factors such as budget cycles, public holidays, currency uncertainty and procurement processes, start with the right customer, build relationships with multiple decision-makers and don't leave post-proposal follow-up to chance can shorten their cycles meaningfully.
 
-If you want to measure your sales cycle, identify bottlenecks and speed up your follow-up processes with AI-powered automation, [schedule a call with Sales Corner](/en/iletisim) to assess your team's needs together.
+If you want to measure your sales cycle, identify bottlenecks and speed up your follow-up processes with AI-powered automation, [schedule a call with Sales Corner](/en/contact) to assess your team's needs together.

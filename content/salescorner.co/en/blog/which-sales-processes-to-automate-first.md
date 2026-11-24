@@ -227,4 +227,4 @@ Starting sales automation with the right process determines the fate of the proj
 
 Build your inventory first, then score, measure your baselines and start with a small pilot. The visible wins you achieve in the first 90 days will help your team embrace automation and clear the way for the waves that follow.
 
-If you'd like to work out together which process your sales team should start with, [schedule a call with the Sales Corner team](/en/iletisim). We'll review your current processes with you and build an automation roadmap tailored to your business.
+If you'd like to work out together which process your sales team should start with, [schedule a call with the Sales Corner team](/en/contact). We'll review your current processes with you and build an automation roadmap tailored to your business.

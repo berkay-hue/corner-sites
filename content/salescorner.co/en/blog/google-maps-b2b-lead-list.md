@@ -239,4 +239,4 @@ Google Maps is a powerful and often overlooked lead source for B2B teams targeti
 
 Accepting the limits from the outset is just as important as the steps themselves: Follow the terms of service, stay within the KVKK framework and use Google Maps only when it genuinely fits your target audience.
 
-If you want to take this process, from Google Maps through enrichment, scoring and outreach, out of manual work and turn it into an automated workflow, [book a call](/en/iletisim) with our team, and let's design a lead generation flow tailored to your segment together.
+If you want to take this process, from Google Maps through enrichment, scoring and outreach, out of manual work and turn it into an automated workflow, [book a call](/en/contact) with our team, and let's design a lead generation flow tailored to your segment together.
