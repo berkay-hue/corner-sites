@@ -881,13 +881,18 @@ async function event(c) {
 }
 
 // /gen/stock (GET): Pexels fotoğraf araması; kullanıcı Stüdyo'da sahneye görseli kendi seçer. Anahtar yalnız sunucuda
-// (PEXELS_API_KEY secret); yoksa 503 not_ready. A9b: yalnız pro|enterprise planlı girişli kullanıcı (Bearer), öbürüne 403 plan
-// {need:"pro"}. Hak düşürmez; IP başına ve günlük toplam sayaçla sınırlı (st / sa).
-// Yanıt ince: yalnız kimlik, boyut, alt, fotoğrafçı, Pexels sayfası ve src çeşitleri; üst akış hatası ayrıntısız 502.
+// (PEXELS_API_KEY secret); yoksa 503 not_ready. Oturumsuz (Bearer yok/geçersiz, ACCOUNTS kapalı) → 401 login_required;
+// A9b: girişli ama plan pro|enterprise değil (ya da 0018 yok) → 403 plan {need:"pro"}. Hak düşürmez; kullanıcı, IP ve günlük
+// toplam sayaçla sınırlı (su / st / sa). lang=tr|en → Pexels locale (tr-TR / en-US): Türkçe konularda daha iyi sonuç.
+// Yanıt ince: yalnız kimlik, boyut, alt, fotoğrafçı, Pexels sayfası ve src.medium/large/large2x (yalnız images.pexels.com);
+// üst akış hatası ayrıntısız 502; Pexels'in kendi oran sınırı (429) → 429 limit {scope:"global"}. Üst akış başarısızsa üç sayaç
+// iade edilir ("Tekrar dene" hak yemez). Günlük toplam varsayılanı STOCK_DAY_MAX: Pexels varsayılan kotası 200/saat, 20.000/ay;
+// cms blog kapakları da aynı anahtar ve aynı "sa" sayacıyla çalışır (600 × 30 = 18.000 < 20.000).
 export const STOCK_URL = "https://api.pexels.com/v1/search";
 const STOCK_ORIENT = ["landscape", "portrait", "square"];
-const STOCK_SRC = ["original", "large2x", "large", "medium", "small", "portrait", "landscape", "tiny"];
-export const STOCK_PER_PAGE = 15, STOCK_TIMEOUT = 8000;
+const STOCK_SRC = ["large2x", "large", "medium"];
+const STOCK_LOCALE = { tr: "tr-TR", en: "en-US" };
+export const STOCK_PER_PAGE = 15, STOCK_TIMEOUT = 8000, STOCK_DAY_MAX = 600;
 const stockSrc = u => typeof u === "string" && /^https:\/\/images\.pexels\.com\//.test(u) ? u : null;
 const stockLink = u => typeof u === "string" && /^https:\/\/(www\.)?pexels\.com\//.test(u) ? u : null;
 export function stockPhoto(p) {
@@ -910,33 +915,48 @@ async function stockRoute(c) {
   const pg = query.get("page");
   const page = pg == null || pg === "" ? 1 : /^\d{1,3}$/.test(pg) && +pg >= 1 && +pg <= 100 ? +pg : 0;
   if (!page) return fail("bad_input", 400, origin, { field: "page" });
+  const lg = query.get("lang");
+  if (lg && !Object.hasOwn(STOCK_LOCALE, lg)) return fail("bad_input", 400, origin, { field: "lang" });
   if (!env.PEXELS_API_KEY) return fail("not_ready", 503, origin);
-  // A9b: yalnız pro|enterprise (Bearer oturum + 0018). Anonim, basic, ACCOUNTS kapalı ya da 0018 yok → 403 plan.
+  // Oturum şart (Bearer); A9b: yalnız pro|enterprise (0018). Basic/demo ya da 0018 yok → 403 plan.
   const a = await account(c);
-  if (!a?.P?.stock) return fail("plan", 403, origin, { need: "pro" });
+  if (!a) return fail("login_required", 401, origin);
+  if (!a.P?.stock) return fail("plan", 403, origin, { need: "pro" });
   const day = genDay();
-  const [ipK, allK] = await Promise.all([keyOf(env, day, "st", ipPrefix(ip)), keyOf(env, day, "sa", "global")]);
-  const r = await reserve(db, day, [
+  const [uK, ipK, allK] = await Promise.all([keyOf(env, day, "su", String(a.user.id)), keyOf(env, day, "st", ipPrefix(ip)), keyOf(env, day, "sa", "global")]);
+  const items = [
+    { name: "user", kind: "su", key: uK, inc: 1, max: int(env.GEN_STOCK_USER_PER_DAY, 100) },
     { name: "ip", kind: "st", key: ipK, inc: 1, max: int(env.GEN_STOCK_IP_PER_DAY, 120) },
-    { name: "all", kind: "sa", key: allK, inc: 1, max: int(env.GEN_STOCK_PER_DAY, 2000) },
-  ]);
-  if (!r.ok) return fail("limit", 429, origin, { scope: r.failed.includes("ip") ? "ip" : "global" });
+    { name: "all", kind: "sa", key: allK, inc: 1, max: int(env.GEN_STOCK_PER_DAY, STOCK_DAY_MAX) },
+  ];
+  const r = await reserve(db, day, items);
+  if (!r.ok) return fail("limit", 429, origin, { scope: r.failed.includes("user") ? "user" : r.failed.includes("ip") ? "ip" : "global" });
   const u = new URL(STOCK_URL);
   u.searchParams.set("query", q);
   u.searchParams.set("per_page", String(STOCK_PER_PAGE));
   u.searchParams.set("page", String(page));
   if (o) u.searchParams.set("orientation", o);
+  if (lg) u.searchParams.set("locale", STOCK_LOCALE[lg]);
+  // üst akış başarısız: üç sayaç iade (iade yazılamazsa yanıt değişmez), sonra hata
+  const iade = async (code, status, extra) => {
+    try { await db.batch(decr(db, day, items)); } catch (e) { console.log("stock iade", e?.message?.slice(0, 80)); }
+    return fail(code, status, origin, extra);
+  };
   let data;
   try {
     const get = io.fetch; // ayrık çağrı: Workers fetch'i nesne metodu olarak çağrılınca "Illegal invocation" (TypeError) verir
     const res = await get(u.toString(), { method: "GET", headers: { authorization: env.PEXELS_API_KEY, accept: "application/json" }, signal: AbortSignal.timeout(STOCK_TIMEOUT) });
-    if (!res.ok) { console.log("stock", res.status); return fail("upstream", 502, origin); }
+    if (!res.ok) {
+      console.log("stock", res.status);
+      // Pexels kotası doldu: istemci "çok yoğun, biraz sonra" der (bağlantı hatası değil)
+      return res.status === 429 ? iade("limit", 429, { scope: "global" }) : iade("upstream", 502);
+    }
     data = await res.json();
   } catch (e) {
     console.log("stock", e?.name || "error");
-    return fail("upstream", 502, origin);
+    return iade("upstream", 502);
   }
-  if (!data || !Array.isArray(data.photos)) return fail("upstream", 502, origin);
+  if (!data || !Array.isArray(data.photos)) return iade("upstream", 502);
   const photos = data.photos.slice(0, STOCK_PER_PAGE).map(stockPhoto).filter(Boolean);
   const total = Number.isFinite(data.total_results) ? data.total_results : photos.length;
   return json({ ok: true, photos, page, per_page: STOCK_PER_PAGE, total_results: total, next: Boolean(data.next_page) && page < 100 }, 200, origin);
