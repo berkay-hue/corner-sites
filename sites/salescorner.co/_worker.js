@@ -799,13 +799,16 @@ EX.gmail = async (ctx, n, items) => {
   const out = []; for (let i = 0; i < items.length; i++) { const p = P(ctx, n, items, i);
     if ((p.operation || "send") !== "send") throw new Error("Desteklenmeyen Gmail işlemi");
     const html = (p.emailType || "html") === "html";
-    const to = String(p.sendTo || "").split(",").map(s => s.trim()).filter(Boolean).join(", ");
+    const to = String(p.sendTo || "").split(",").map(s => s.trim()).filter(s => /^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+$/.test(s)).join(", ");
+    if (!to) { out.push({ json: { sent: false, skipped: "alıcı yok" } }); continue; }
     const hdr = [`To: ${to}`, `Subject: ${__mimeWord(__cat(p.subject))}`, "MIME-Version: 1.0", `Content-Type: ${html ? "text/html" : "text/plain"}; charset="UTF-8"`, "Content-Transfer-Encoding: base64"];
     if (p.options?.senderName) hdr.unshift(`From: ${__mimeWord(p.options.senderName)} <me>`);
     if (p.options?.ccList) hdr.push(`Cc: ${p.options.ccList}`); if (p.options?.bccList) hdr.push(`Bcc: ${p.options.bccList}`); if (p.options?.replyTo) hdr.push(`Reply-To: ${p.options.replyTo}`);
     const raw = hdr.join("\r\n") + "\r\n\r\n" + __b64e(new TextEncoder().encode(__cat(p.message))).replace(/.{76}/g, "$&\r\n");
-    const r = await xfetch(ctx, "https://gmail.googleapis.com/gmail/v1/users/me/messages/send", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ raw: __b64e(new TextEncoder().encode(raw)).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "") }) }, "gmailOAuth2", 60000);
-    if (r.status >= 400) throw await errFrom(r); const j = await r.json(); out.push({ json: { id: j.id, threadId: j.threadId, labelIds: j.labelIds } }); }
+    let r; try { r = await xfetch(ctx, "https://gmail.googleapis.com/gmail/v1/users/me/messages/send", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ raw: __b64e(new TextEncoder().encode(raw)).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "") }) }, "gmailOAuth2", 60000); } catch (e) { console.error("gmail gönderilemedi", n.name, String(e?.name || "hata")); out.push({ json: { sent: false } }); continue; }
+    // E-posta son adım: gönderilemezse iş başarısız sayılmaz (sunum zaten hazır), hata CF günlüğüne düşer
+    if (r.status >= 400) { console.error("gmail gönderilemedi", n.name, r.status); out.push({ json: { sent: false, status: r.status } }); continue; }
+    const j = await r.json(); out.push({ json: { id: j.id, threadId: j.threadId, labelIds: j.labelIds } }); }
   return [out];
 };
 
@@ -10320,7 +10323,7 @@ if (finished && isSuccess) {
 
 if (isError || (finished && !isSuccess)) {
   const __en = String(exec.data?.resultData?.error?.node?.name || exec.data?.resultData?.error?.node || exec.data?.resultData?.lastNodeExecuted || '').slice(0, 80);
-  const __em = /zaman aşımı|iade/i.test(String(exec.data?.resultData?.error?.message || '')) ? 'İş zaman aşımına uğradı.' : /Scrape|HTML|Sayfa|Site/i.test(__en) ? 'Web sitesine erişilemedi.' : /Gemini|Analiz|Rapor|Claude|AI/i.test(__en) ? 'Yapay zekâ yanıtı alınamadı.' : /Slide|Sunum|PDF/i.test(__en) ? 'Sunum oluşturulamadı.' : '';
+  const __em = /zaman aşımı|iade/i.test(String(exec.data?.resultData?.error?.message || '')) ? 'İş zaman aşımına uğradı.' : /Scrape|HTML|Sayfa|Site/i.test(__en) ? 'Web sitesine erişilemedi.' : /Gmail|E-?posta|Email/i.test(__en) ? 'E-posta gönderilemedi.' : /Gemini|Analiz|Rapor|Claude|\bAI\b/.test(__en) ? 'Yapay zekâ yanıtı alınamadı.' : /Slide|Sunum|PDF/i.test(__en) ? 'Sunum oluşturulamadı.' : '';
   return {
     success: false,
     executionId: execId,
@@ -12160,7 +12163,7 @@ if (finished && success) {
 
 if (exec.status === 'error' || (finished && !success)) {
   const __en = String(exec.data?.resultData?.error?.node?.name || exec.data?.resultData?.error?.node || exec.data?.resultData?.lastNodeExecuted || '').slice(0, 80);
-  const __em = /zaman aşımı|iade/i.test(String(exec.data?.resultData?.error?.message || '')) ? 'İş zaman aşımına uğradı.' : /Scrape|HTML|Sayfa|Site/i.test(__en) ? 'Web sitesine erişilemedi.' : /Gemini|Analiz|Rapor|Claude|AI/i.test(__en) ? 'Yapay zekâ yanıtı alınamadı.' : /Slide|Sunum|PDF/i.test(__en) ? 'Sunum oluşturulamadı.' : '';
+  const __em = /zaman aşımı|iade/i.test(String(exec.data?.resultData?.error?.message || '')) ? 'İş zaman aşımına uğradı.' : /Scrape|HTML|Sayfa|Site/i.test(__en) ? 'Web sitesine erişilemedi.' : /Gmail|E-?posta|Email/i.test(__en) ? 'E-posta gönderilemedi.' : /Gemini|Analiz|Rapor|Claude|\bAI\b/.test(__en) ? 'Yapay zekâ yanıtı alınamadı.' : /Slide|Sunum|PDF/i.test(__en) ? 'Sunum oluşturulamadı.' : '';
   return {
     success: false,
     executionId: execId,
