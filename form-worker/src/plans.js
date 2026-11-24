@@ -2,10 +2,11 @@
 // sites/app.socialmediacorner.co/assets/plans.js (window.SMC_PLANS, Planlar sayfası) ile aynıdır; plans.test.mjs ikisini karşılaştırır.
 // linkedin_blog: LinkedIn + blog taslağı (gen_month kind 'lb'); video_gorsel: video + görsel/Instagram taslağı (kind 'vg').
 // Enterprise sayıları users.plan_limits JSON'undan ({"linkedin_blog":N,"video_gorsel":N}); yoksa/geçersizse pro sayıları.
+// A14 cms_sites: bağlanabilecek müşteri sitesi (CMS) sayısı; enterprise plan_limits.cms_sites, yoksa 10.
 export const PLANS = Object.freeze({
-  basic: Object.freeze({ linkedin_blog: 8, video_gorsel: 2, stock: false }),
-  pro: Object.freeze({ linkedin_blog: 40, video_gorsel: 12, stock: true }),
-  enterprise: Object.freeze({ linkedin_blog: null, video_gorsel: null, stock: true }),
+  basic: Object.freeze({ linkedin_blog: 8, video_gorsel: 2, stock: false, cms_sites: 1 }),
+  pro: Object.freeze({ linkedin_blog: 40, video_gorsel: 12, stock: true, cms_sites: 3 }),
+  enterprise: Object.freeze({ linkedin_blog: null, video_gorsel: null, stock: true, cms_sites: null }),
 });
 
 // üretim platformu → aylık sayaç türü
@@ -20,7 +21,9 @@ export function planOf(user) {
 
 const pos = v => Number.isSafeInteger(v) && v > 0 ? v : null;
 
-// {plan, linkedin_blog, video_gorsel, stock}; plan null ise null
+export const ENTERPRISE_CMS_SITES = 10;
+
+// {plan, linkedin_blog, video_gorsel, stock, cms_sites}; plan null ise null
 export function planLimits(user) {
   const plan = planOf(user);
   if (!plan) return null;
@@ -32,5 +35,6 @@ export function planLimits(user) {
     linkedin_blog: pos(j?.linkedin_blog) ?? PLANS.pro.linkedin_blog,
     video_gorsel: pos(j?.video_gorsel) ?? PLANS.pro.video_gorsel,
     stock: true,
+    cms_sites: pos(j?.cms_sites) ?? ENTERPRISE_CMS_SITES,
   };
 }

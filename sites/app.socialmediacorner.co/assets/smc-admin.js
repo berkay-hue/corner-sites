@@ -83,6 +83,9 @@ window.smcAdminBasla=function(api){
     {b:'LinkedIn ve blog (ay)',s:'ad-sayi',v:function(u){return kota(u.month&&u.month.linkedin_blog,u.limits&&u.limits.linkedin_blog)}},
     {b:'Video ve görsel (ay)',s:'ad-sayi',v:function(u){return kota(u.month&&u.month.video_gorsel,u.limits&&u.limits.video_gorsel)}},
     {b:'Taslak',s:'ad-sayi',v:function(u){return sayi(u.drafts)}},
+    /* A14: cms {sites,aktif,duraklatildi,hata} (kaldırılanlar hariç); alan yoksa ya da site yoksa boş */
+    {b:'Blog sitesi',s:'ad-sayi',v:function(u){var c=u.cms;if(!c||!(Number(c.sites)>0))return '';
+      var t='CMS '+sayi(c.sites);if(Number(c.duraklatildi)>0)t+=' · '+sayi(c.duraklatildi)+' duraklatıldı';if(Number(c.hata)>0)t+=' · '+sayi(c.hata)+' hata';return t}},
     {b:'Kayıt',v:function(u){return zaman(u.created_at)}},
     {b:'Son oturum',v:function(u){return zaman(u.last_login)}},
     {b:'İşlem',v:function(u){var b=el('button','btn btn-cizgi btn-kucuk','Planı değiştir');b.type='button';b.setAttribute('aria-label','Planı değiştir: '+u.email);b.addEventListener('click',function(){planAc(u.id)});return b}}

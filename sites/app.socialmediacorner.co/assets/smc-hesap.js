@@ -625,15 +625,17 @@ function donusOku(){
   adresTemizle();
   return {p:p,r:r,bilet:m?m[1]:''};
 }
+/* A14: "Web siteniz (blog)" bölümü cms.js içinde; ortak yardımcılar buradan verilir. */
+function cmsBasla(){if(typeof window.smcCmsBasla==='function')window.smcCmsBasla({istek:istek,bildir:bildir,genelHata:genelHata,mesgul:mesgul,bosMu:bosMu,dlgAc:dlgAc,ORNEK:ORNEK,dil:dil})}
 function baglarYukle(){
-  if(ORNEK){bag={linkedin:{s:'bagli',kul:t('Örnek Ajans'),tarih:'2026-11-12'},instagram:{s:'izin'}};bagCiz();ekran('ana');return}
+  if(ORNEK){bag={linkedin:{s:'bagli',kul:t('Örnek Ajans'),tarih:'2026-11-12'},instagram:{s:'izin'}};bagCiz();ekran('ana');cmsBasla();return}
   var don=donusOku();
   var once=Promise.resolve(null);
   if(don&&don.r==='pending'&&don.bilet)once=istek('/app/connect/finish','POST',{ticket:don.bilet});
   once.then(function(f){
     return baglarGetir().then(function(j){
       if(j._s!==200){if(bolumYok(j)){ekran('yakinda');return}if(j._s===401){oturumBitti();return}hataGoster(j.error||String(j._s));return}
-      ekran('ana');
+      ekran('ana');cmsBasla();
       if(!don)return;
       var ad=PAD[don.p];
       if(don.r==='denied'){bildir('{p} bağlantısını onaylamadın. İstediğin zaman yeniden deneyebilirsin.','uyari',{p:ad});return}

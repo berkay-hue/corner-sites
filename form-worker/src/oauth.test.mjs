@@ -3865,6 +3865,9 @@ const APP_OK = ["GET profile", "POST profile", "GET connections", "POST connect"
 const ACCT_OK = ["GET voice", "PUT voice", "GET drafts", "POST drafts/:id/delete", "GET export", "POST account/delete"];
 // A13 smc yönetimi: izin listesinde, kapı işleyicide (yönetici olmayana 404, src/smc-admin.test.mjs); brandcorner'ın admin/:id/* uçları yok
 const ADMIN_OK = ["GET admin", "GET admin/users", "GET admin/submissions", "GET admin/drafts", "GET admin/jobs", "POST admin/:id/plan"];
+// A14 otomatik blog yazarı (src/cms.js CMS_ROUTES): yalnız app izin listesinde
+const { CMS_ROUTES } = await import("./cms.js");
+const CMS_OK = Object.keys(CMS_ROUTES);
 // "POST campaigns/:id/apply" → ["POST", "/app/campaigns/7/apply"]
 const appPath = k => { const [method, p] = k.split(" "); return [method, `/app/${p.replace(":id", "7")}`]; };
 const bodyFor = method => (method === "GET" ? undefined : {});
@@ -3921,7 +3924,8 @@ test("A5-2w: brandcorner.co'da eski uçların hepsi yönlendirilir, üç rol de 
 });
 
 test("A5-2w: APP_ROUTES izin listesi yalnız mevcut hesap uçları (A5-3 ile hesap bölümleri)", () => {
-  assert.deepEqual([...APP_ROUTES].sort(), [...OLD_AUTH, ...[...APP_OK, ...ACCT_OK, ...ADMIN_OK].map(k => k.replace(" ", " /app/"))].sort());
+  assert.deepEqual([...APP_ROUTES].sort(), [...OLD_AUTH, ...[...APP_OK, ...ACCT_OK, ...ADMIN_OK, ...CMS_OK].map(k => k.replace(" ", " /app/"))].sort());
+  assert.equal(CMS_OK.length, 12);
   assert.ok(Object.isFrozen(APP_ROUTES));
 });
 

@@ -15,12 +15,14 @@
 <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
 <script src="/assets/theme.js"></script>
 <link rel="preload" href="/assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/tokens.css">
-<link rel="stylesheet" href="/assets/studyo.css">
-<link rel="stylesheet" href="/assets/studyo-hesap.css">
-<link rel="stylesheet" href="/assets/panel.css">
-<script src="/assets/smc-hesap.js" defer></script>
-<script src="/assets/ust-hesap.js" defer></script>
+<link rel="stylesheet" href="/assets/tokens.css?v=a14">
+<link rel="stylesheet" href="/assets/studyo.css?v=a14">
+<link rel="stylesheet" href="/assets/studyo-hesap.css?v=a14">
+<link rel="stylesheet" href="/assets/panel.css?v=a14">
+<link rel="stylesheet" href="/assets/cms.css?v=a14">
+<script src="/assets/cms.js?v=a14b" defer></script>
+<script src="/assets/smc-hesap.js?v=a14" defer></script>
+<script src="/assets/ust-hesap.js?v=a14" defer></script>
 </head>
 <body class="hs-govde" data-sayfa="baglantilar" data-korumali>
 <a class="atla" href="#icerik">Skip to content</a>
@@ -66,6 +68,11 @@
           <li>No messaging permission is requested</li>
         </ul>
       </details>
+      <section class="cms" id="cms" aria-labelledby="h-cms" hidden>
+        <h2 id="h-cms" tabindex="-1">Your website (blog)</h2>
+        <p class="giris-p">Connect your site and a blog post is written for you and sent to it on the days and time you pick. Posts arrive as drafts by default, so you review and publish them. Your key is stored encrypted, and you can remove the connection at any time.</p>
+        <div id="cms-govde"></div>
+      </section>
     </div>
   </section>
 
@@ -112,6 +119,17 @@
     <p id="dlg-kopar-a"></p>
     <div class="dlg-alt">
       <button type="button" class="btn btn-tehlike" id="kopar-evet">Remove connection</button>
+      <button type="button" class="btn btn-cizgi" data-kapat>Cancel</button>
+    </div>
+  </div>
+</dialog>
+
+<dialog class="dlg-k" id="dlg-cms-kaldir" aria-labelledby="dlg-cms-kaldir-b" aria-describedby="dlg-cms-kaldir-a">
+  <div class="sheet dlg">
+    <h2 class="dlg-baslik" id="dlg-cms-kaldir-b" tabindex="-1">Remove the site connection?</h2>
+    <p id="dlg-cms-kaldir-a"></p>
+    <div class="dlg-alt">
+      <button type="button" class="btn btn-tehlike" id="cms-kaldir-evet">Remove connection</button>
       <button type="button" class="btn btn-cizgi" data-kapat>Cancel</button>
     </div>
   </div>

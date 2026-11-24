@@ -14,6 +14,8 @@ import { NICHE_LIST } from "./classify.js";
 import { authHosts, previewSite, resetPath, siteConf, siteRoles, roleAllowed, routeAllowed } from "./sites.js";
 import { TR as TR_FOLD } from "./gen-prompt.js";
 import { PLANS, KIND_NAME, planLimits } from "./plans.js";
+// Döngü: cms.js → generate.js → platform.js. CMS_ROUTES modül tepesinde okunmaz/yayılmaz (TDZ); yalnız istek anında bakılır.
+import { CMS_ROUTES, siteOut } from "./cms.js";
 
 const ROLES = ["brand", "influencer", "agency"];
 const PLATFORMS = LISTED; // instagram, tiktok, youtube, x, linkedin, twitch (profil ve bağlantı listesi aynı)
@@ -89,7 +91,7 @@ export async function platform(req, url, env, origin, deliver) {
       return ok(c, {});
     }
     // Hesap bölümleri (ACCT) yalnız uç izin listesi olan sitede ve APP'ten önce (smc'nin GET admin'i ACCT'te); brandcorner.co'da ACCT yok sayılır
-    const handler = m && ((siteConf(site).routes && ACCT[`${m[1]} ${key}`]) || APP[`${m[1]} ${key}`]);
+    const handler = m && ((siteConf(site).routes && (ACCT[`${m[1]} ${key}`] || cmsHandler(`${m[1]} ${key}`))) || APP[`${m[1]} ${key}`]);
     if (!handler) throw new Bad("not_found", 404);
     return await handler(c, m[3] && Number(m[3]));
   } catch (e) {
@@ -395,6 +397,10 @@ const ACCT = {
   "POST admin/:id/plan": (c, id) => smcAdminPlan(c, id),
 };
 
+// A14 otomatik blog yazarı (src/cms.js): uçlar yalnız izin listeli sitede (ACCT gibi), kendi kapısı (CMS_ENABLED, 503) ile.
+// CMS_ROUTES döngüsel import yüzünden istek anında okunur.
+const cmsHandler = k => (Object.hasOwn(CMS_ROUTES, k) ? acct(CMS_ROUTES[k]) : null);
+
 const jsonOr = (s, d) => { try { return JSON.parse(s); } catch { return d; } };
 const voiceOut = r => r && { sector: r.sector, tones: jsonOr(r.tones, []), samples: jsonOr(r.samples, []), banned: jsonOr(r.banned, []), updated_at: r.updated_at };
 const readVoice = c => c.env.DB.prepare("SELECT sector, tones, samples, banned, updated_at FROM brand_voice WHERE user_id = ? AND site = ?")
@@ -499,6 +505,12 @@ async function exportData(c) {
       ORDER BY id LIMIT ${EXPORT_MAX}`, user.id, site),
     // A9b aylık üretim sayaçları (0018 gen_month; tablo yoksa boş)
     usage: await listOr(env, "SELECT month, kind, n FROM gen_month WHERE user_id = ? ORDER BY month, kind", user.id),
+    // A14 bağlı blog siteleri (0019; secret_box/token_box/hint hiç seçilmez, hata kodu yok) ve yazıları
+    cms_sites: (await listOr(env, `SELECT id, platform, label, base_url, config, state, auto_publish, per_week, days, hour, lang, length, tone, brief,
+      topics, next_run_at, created_at, updated_at FROM cms_sites WHERE user_id = ? AND site = ? ORDER BY id`, user.id, site))
+      .map(r => { const { last_error, hint, ...o } = siteOut(r); return o; }),
+    cms_posts: await listOr(env, `SELECT id, cms_site_id, title, slug, markdown, cover_url, cover_credit, state, mode, remote_url, created_at, updated_at
+      FROM cms_posts WHERE user_id = ? ORDER BY id LIMIT ${EXPORT_MAX}`, user.id),
   };
   return new Response(JSON.stringify(body), {
     status: 200,
@@ -552,6 +564,8 @@ async function deleteAccount(c) {
   add(["brand_voice"], q("DELETE FROM brand_voice WHERE user_id = ?", id));
   add(["drafts"], q("DELETE FROM drafts WHERE user_id = ?", id));
   add(["gen_month"], q("DELETE FROM gen_month WHERE user_id = ?", id));
+  add(["cms_posts"], q("DELETE FROM cms_posts WHERE user_id = ?", id));
+  add(["cms_sites"], q("DELETE FROM cms_sites WHERE user_id = ?", id));
   // Yeni üye bildirimi (register: site + '/kayit' + fields içinde ["E-posta", email])
   steps.push(q("DELETE FROM submissions WHERE site = ? AND page = '/kayit' AND instr(fields, ?) > 0", site, JSON.stringify(["E-posta", user.email])));
   steps.push(q("DELETE FROM password_resets WHERE user_id = ?", id), q("DELETE FROM sessions WHERE user_id = ?", id));
@@ -1327,6 +1341,7 @@ const submitSites = c => JSON.stringify(siteConf(c.site).submitSites || [c.site]
 const smcUserOut = u => ({
   id: u.id, email: u.email, name: u.name, plan: u.plan, plan_limits: jsonOr(u.plan_limits, null), limits: planLimits(u),
   created_at: u.created_at, last_login: u.last_login, drafts: u.drafts, month: { linkedin_blog: u.lb || 0, video_gorsel: u.vg || 0 },
+  cms: u.cms || { sites: 0, aktif: 0, duraklatildi: 0, hata: 0 },
   ...(u.admin && { admin: true }),
 });
 async function smcUsers(c, before) {
@@ -1340,6 +1355,13 @@ async function smcUsers(c, before) {
     FROM users u WHERE u.site = ?${before ? " AND u.id < ?" : ""} ORDER BY u.id DESC LIMIT ${SMC_ADMIN_PAGE + 1}`,
   month, month, c.site, ...(before ? [before] : []));
   const { page, next } = pageOf(rows);
+  // A14 bağlı blog siteleri (kaldırılanlar hariç) durum sayıları; 0019 yoksa boş (liste 503'e düşmesin)
+  if (page.length) {
+    const ids = page.map(u => u.id), cms = new Map((await listOr(c.env, `SELECT user_id, COUNT(*) sites, SUM(state = 'aktif') aktif,
+      SUM(state = 'duraklatildi') duraklatildi, SUM(state = 'hata') hata FROM cms_sites WHERE site = ? AND state != 'kaldirildi'
+      AND user_id IN (${ids.map(() => "?").join(",")}) GROUP BY user_id`, c.site, ...ids)).map(r => [r.user_id, r]));
+    for (const u of page) { const r = cms.get(u.id); if (r) u.cms = { sites: r.sites, aktif: r.aktif || 0, duraklatildi: r.duraklatildi || 0, hata: r.hata || 0 }; }
+  }
   return { users: page.map(smcUserOut), next };
 }
 
@@ -1402,7 +1424,8 @@ const smcAdminJobs = adminRoute(async c => {
   return ok(c, { jobs: page, events, next });
 });
 
-// Gövde: {plan: basic|pro|enterprise, limits?: {linkedin_blog, video_gorsel}}. Enterprise'ta limits zorunlu (1..100000 tam sayı),
+// Gövde: {plan: basic|pro|enterprise, limits?: {linkedin_blog, video_gorsel, cms_sites?}}. Enterprise'ta limits zorunlu (1..100000 tam sayı;
+// A14 cms_sites isteğe bağlı, yoksa plans.js varsayılanı 10),
 // diğerlerinde verilirse 400 bad_limits; plan_limits enterprise dışında NULL. Hedef bu sitenin kullanıcısı değilse 404.
 // Plan gerçekten değişiyorsa perm_log'a 'plan:<plan>' satırı (değişiklikten önce, aynı batch'te; perm_log yoksa günlüksüz).
 const smcAdminPlan = adminRoute(async (c, id) => {
@@ -1411,9 +1434,10 @@ const smcAdminPlan = adminRoute(async (c, id) => {
   let limits = null;
   if (b.plan === "enterprise") {
     const l = b.limits;
-    need(l && typeof l === "object" && !Array.isArray(l) && Object.keys(l).every(k => k === "linkedin_blog" || k === "video_gorsel"), "bad_limits", 400);
-    need(["linkedin_blog", "video_gorsel"].every(k => Number.isSafeInteger(l[k]) && l[k] > 0 && l[k] <= LIMIT_MAX), "bad_limits", 400);
-    limits = JSON.stringify({ linkedin_blog: l.linkedin_blog, video_gorsel: l.video_gorsel });
+    need(l && typeof l === "object" && !Array.isArray(l) && Object.keys(l).every(k => k === "linkedin_blog" || k === "video_gorsel" || k === "cms_sites"), "bad_limits", 400);
+    const keys = ["linkedin_blog", "video_gorsel", ...(l.cms_sites === undefined ? [] : ["cms_sites"])];
+    need(keys.every(k => Number.isSafeInteger(l[k]) && l[k] > 0 && l[k] <= LIMIT_MAX), "bad_limits", 400);
+    limits = JSON.stringify(Object.fromEntries(keys.map(k => [k, l[k]])));
   } else need(b.limits === undefined || b.limits === null, "bad_limits", 400);
   need(await siteUser(c, id), "not_found", 404);
   const log = env.DB.prepare(`INSERT INTO perm_log (actor_id, user_id, perm, granted) SELECT ?, ?, 'plan:' || ?, 1
