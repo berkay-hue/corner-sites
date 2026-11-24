@@ -235,7 +235,7 @@ async function poll(k) {
   let fails = 0;
   await wait(Math.max(0, 5000 - (Date.now() - j.t0)));
   while (JOBS[k] === j && j.state === "run") {
-    if (Date.now() - j.t0 > 12 * 60e3) { j.state = "err"; j.err = "İşlem beklenenden uzun sürdü. Lütfen tekrar deneyin; hakkınız iade edilmezse bize yazın."; break; }
+    if (Date.now() - j.t0 > 12 * 60e3) { j.state = "err"; j.err = "İşlem beklenenden uzun sürdü. Lütfen tekrar deneyin."; break; }
     let r = null, http = 0;
     try { const res = await fetch(STATUS[k] + encodeURIComponent(j.id), { headers: { accept: "application/json" } }); http = res.status; r = await readJSON(res); } catch {}
     if (JOBS[k] !== j) break;
@@ -259,10 +259,24 @@ async function poll(k) {
   }
   if (polling[k] === j) polling[k] = null;
   saveJobs();
+  if (j.state === "err") await iade(k, j);
   if (JOBS[k] === j) {
     if (j.state === "done") toast(`${MOD[k].ad} hazır ✓`);
     if (route === k) render(); else if (S.ben && $app.querySelector(".shell")) render();
   }
+}
+// Yarım kalan/başarısız iş için kullanım hakkı bir kez iade edilir (sunucu işin gerçekten başarısız olduğunu doğrular).
+async function iade(k, j) {
+  if (!j || !j.id || j.iade || j.state !== "err") return;
+  j.iade = 1; saveJobs();
+  const r = await api("/api/app/iade", { modul: k, executionId: j.id }).catch(() => null);
+  if (!r || !r.success) return;
+  j.iade = 2;
+  if (r.kota) applyKota(k, r.kota);
+  j.err = (j.err || "İşlem tamamlanamadı.") + " Kullanım hakkınız iade edildi.";
+  saveJobs();
+  toast("Kullanım hakkınız iade edildi");
+  if (route === k || (S.ben && $app.querySelector(".shell"))) render();
 }
 async function startAsync(k, body, title) {
   const res = await api("/api/app/" + k, body);
@@ -1370,5 +1384,5 @@ sb.auth.onAuthStateChange((ev, session) => {
     history.replaceState(null, "", location.pathname + location.search + "#/" + (S.recovery && S.session ? "yeni-sifre" : S.session ? "panel" : "giris"));
   window.addEventListener("hashchange", render);
   render();
-  for (const k of Object.keys(JOBS)) if (JOBS[k].state === "run") poll(k);
+  for (const k of Object.keys(JOBS)) if (JOBS[k].state === "run") poll(k); else if (S.session && JOBS[k].state === "err" && !JOBS[k].iade) iade(k, JOBS[k]);
 }

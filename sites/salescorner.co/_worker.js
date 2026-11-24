@@ -430,6 +430,34 @@ const __X = f => (f.__x = 1, f);
 const __cat = v => v == null ? "" : typeof v === "object" ? JSON.stringify(v) : String(v);
 const __t = f => { try { return __cat(f()); } catch { return ""; } };
 const __sleep = ms => new Promise(r => setTimeout(r, ms));
+// ---- Slayt metni: emojisiz, kutuya sığan yazı (Slides API'de otomatik sığdırma yok, taşan yazı alttaki öğenin üstüne biner) ----
+const __noEmoji = s => String(s ?? "").replace(/(?![★☆✓✔✗])[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{2B00}-\u{2BFF}]|[\u{FE0F}\u{200D}\u{20E3}]/gu, "").replace(/^[ \t]+/gm, "").replace(/[ \t]{2,}/g, " ");
+const __cw = f => /consolas|courier|mono/i.test(f || "") ? 0.6 : /trebuchet|verdana|arial|montserrat/i.test(f || "") ? 0.56 : 0.52;
+// runs: [{text, fontSize, fontFamily, bold, spacingBefore, spacingAfter}], w/h inç. Sığmazsa önce yazıyı (en az 7pt) küçültür, sonra en uzun parçayı kelime sınırında kısaltır.
+function __slideFit(runs, w, h, o = {}) {
+  const W = Math.max(0.3, w - 0.2 - (o.indent || 0)) * 72, H = Math.max(0.15, h - 0.1) * 72;
+  const ls = (o.ls || 100) / 100;
+  const sz = (r, k) => { const b = r.fontSize || 18, floor = o.min || Math.max(8, b * 0.6); return Math.max(Math.min(b, floor), Math.round(b * k * 2) / 2); };
+  const est = (rs, k) => rs.reduce((s, r) => {
+    const fs = sz(r, k), cpl = Math.max(3, Math.floor(W / (fs * __cw(r.fontFamily || o.font) * (r.bold || o.bold ? 1.06 : 1)) * 0.93));
+    const ps = String(r.text ?? "").split("\n");
+    return s + ps.reduce((a, p) => a + Math.max(1, Math.ceil(p.length / cpl)), 0) * fs * 1.22 * ls + ps.length * (o.para || 0) + (r.spacingBefore || 0) + (r.spacingAfter || 0);
+  }, 0);
+  const lim = o.strict ? H : H * 1.1 + 2;
+  if (est(runs, 1) <= lim) return runs;
+  let k = 1;
+  while (k > 0.3 && est(runs, k) > lim) k = Math.round((k - 0.05) * 100) / 100;
+  const out = runs.map(r => ({ ...r, fontSize: sz(r, k) }));
+  for (let g = 0; g < 60 && est(out, 1) > lim; g++) {
+    let i = 0; out.forEach((r, j) => { if (String(r.text ?? "").length > String(out[i].text ?? "").length) i = j; });
+    const t = String(out[i].text ?? "").replace(/…$/, ""); if (t.length < 12) break;
+    let c = t.slice(0, Math.floor(t.length * 0.88)); const sp = c.lastIndexOf(" "); if (sp > c.length * 0.6) c = c.slice(0, sp);
+    out[i] = { ...out[i], text: c.replace(/[\s,;:.\-–•·]+$/, "") + "…" };
+  }
+  return out;
+}
+// Tek parça yazı için: [yazı, punto]
+const __fitTxt = (t, fs, w, h, o = {}) => { const rs = __slideFit(__noEmoji(t).split("\n").map(p => ({ text: p, fontSize: fs })), w, h, o); return [rs.map(r => r.text).join("\n"), rs[0] ? rs[0].fontSize : fs]; };
 
 // ---- Buffer (kod düğümleri için küçük uyarlama) ----
 const __b64e = u8 => { let s = ""; for (let i = 0; i < u8.length; i += 0x8000) s += String.fromCharCode.apply(null, u8.subarray(i, i + 0x8000)); return btoa(s); };
@@ -1487,8 +1515,9 @@ async function appGate(req, modul) {
   if (!k.j.ok) return { res: J({ success: false, neden: k.j.neden, message: APP_NEDEN[k.j.neden] || "Bu işlem şu an yapılamıyor." }, k.j.neden === "plan" ? 403 : 402) };
   return { au, d: k.j };
 }
-async function appCharge(au, modul) {
-  const u = await sbRpc(au, "app_kullan", { p_modul: modul });
+const __hex = async t => [...new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(t)))].map(b => b.toString(16).padStart(2, "0")).join("");
+async function appCharge(au, modul, execId) {
+  const u = execId ? await sbRpc(au, "app_kullan_is", { p_modul: modul, p_is: await __hex(execId) }) : await sbRpc(au, "app_kullan", { p_modul: modul });
   if (!u.ok || !u.j) { console.log("app_kullan", u.status); return null; }
   return u.j.ok ? { limit: u.j.limit, kalan: u.j.kalan } : { limit: u.j.limit ?? 0, kalan: 0 };
 }
@@ -1548,7 +1577,23 @@ async function appRun(req, env, url, cfctx, modul, au, b) {
   const ok = j && typeof j === "object" && !Array.isArray(j) && st < 400 && j.success !== false && j.status !== "error" && !j.error
     && (modul === "rakip" || modul === "sekans" ? !!j.executionId && j.executionId !== "x" : true);
   if (!ok) return J({ success: false, message: str(j?.message || j?.error, 300) || "İşlem tamamlanamadı, lütfen tekrar deneyin. Hakkınızdan düşülmedi." }, 200);
-  return J({ success: true, sonuc: j, kota: await appCharge(au, modul) });
+  return J({ success: true, sonuc: j, kota: await appCharge(au, modul, modul === "rakip" || modul === "sekans" ? j.executionId : "") });
+}
+// Uzun iş (rakip/sekans) hatayla bittiyse ya da yarıda öldüyse düşülen hak geri verilir (iş başına bir kez, 2 saat içinde).
+// Durum uç noktası iş yürüttüğü için burada yalnız önbellekteki çalıştırma kaydı okunur.
+async function appIade(req) {
+  const au = appAuth(req);
+  if (!au) return fail("Oturum gerekli. Lütfen tekrar giriş yapın.", 401);
+  const b = await readBody(req);
+  const id = typeof b.executionId === "string" ? b.executionId.slice(0, 8000) : "";
+  if (!id || !(b.modul === "rakip" || b.modul === "sekans")) return fail("Geçersiz istek.", 400);
+  const rec = await execGet(id);
+  const olu = rec && !rec.finished && (Date.now() - (rec.hb || 0) > 600000 || Date.now() - (Date.parse(rec.startedAt) || Date.now()) > 660000);
+  if (!rec || !(olu || (rec.finished && rec.status === "error"))) return J({ success: false, message: "Bu iş için hak iadesi yapılamadı." });
+  const r = await sbRpc(au, "app_iade", { p_is: await __hex(id) });
+  if (!r.ok || !r.j || !r.j.ok) return J({ success: false, message: "Bu iş için hak iadesi yapılamadı." });
+  if (olu) await execPut(id, { id, finished: true, status: "error", startedAt: rec.startedAt, stoppedAt: new Date().toISOString(), data: { resultData: { error: { message: "İş zaman aşımına uğradı; hak iade edildi." }, runData: {} } } });
+  return J({ success: true, kota: { limit: r.j.limit, kalan: r.j.kalan } });
 }
 
 // ---------- Fireflies ----------
@@ -1676,6 +1721,7 @@ async function appRoute(req, env, url, path, cfctx) {
     if (sub === "takip/calistir" && req.method === "POST") return await takipCalistir(req, env);
     if (sub === "fireflies/liste" && req.method === "GET") return await ffListe(req);
     if (req.method !== "POST") return fail("Bulunamadı.", 404);
+    if (sub === "iade") return await appIade(req);
     const modul = sub === "fireflies/analiz" ? "fireflies" : APP_MOD[sub] ? sub : "";
     if (!modul) return fail("Bulunamadı.", 404);
     const g = await appGate(req, modul);
@@ -2791,6 +2837,7 @@ function txt(sid, id, x, y, w, h, text, fs, color, opts) {
   opts = opts || {};
   if (!text || String(text).length === 0) text = ' ';
   text = String(text).substring(0, 3000);
+  if (!opts.noFit) { [text, fs] = __fitTxt(text, fs, w, h, { font: 'Arial', bold: opts.bold }); if (!text.trim()) text = ' '; }
   requests.push({ createShape:{ objectId:id, shapeType:'TEXT_BOX', elementProperties:{ pageObjectId:sid, size:{ width:{magnitude:ie(w),unit:'EMU'}, height:{magnitude:ie(h),unit:'EMU'} }, transform:{ scaleX:1,scaleY:1,translateX:ie(x),translateY:ie(y),unit:'EMU' } } } });
   requests.push({ insertText:{ objectId:id, text:text, insertionIndex:0 } });
   requests.push({ updateTextStyle:{ objectId:id, style:{ fontSize:{magnitude:fs,unit:'PT'}, foregroundColor:{opaqueColor:{rgbColor:color}}, bold:opts.bold||false, italic:opts.italic||false, fontFamily:'Arial' }, textRange:{type:'ALL'}, fields:'fontSize,foregroundColor,bold,italic,fontFamily' } });
@@ -4339,6 +4386,7 @@ function txt(sid, id, x, y, w, h, text, size, color, opts) {
   if (text===null||text===undefined) text=' ';
   text = String(text);
   if (!text.trim()) text=' ';
+  if (!opts.noFit) { [text, size] = __fitTxt(text, size, w, h, { font: opts.font, bold: opts.bold }); if (!text.trim()) text = ' '; }
   const rid = id || uid('t');
   rect(sid, rid, x, y, w, h, opts.bg||null, opts);
   requests.push({ insertText: { objectId: rid, text: text, insertionIndex: 0 } });
@@ -5752,6 +5800,7 @@ function addText(sid, id, x, y, w, h, text, fs, color, opts) {
   opts = opts || {};
   if (!text && text !== 0) text = ' ';
   text = String(text);
+  if (!opts.noFit) { [text, fs] = __fitTxt(text, fs, w, h, { font: opts.fontFamily || 'Montserrat', bold: opts.bold }); if (!text.trim()) text = ' '; }
   const shapeId = id || uid('tb');
   addShape(sid, shapeId, x, y, w, h, opts.bgColor || null, opts);
   requests.push({ insertText: { objectId: shapeId, text: text, insertionIndex: 0 } });
@@ -9156,6 +9205,10 @@ return {
 
 const data = $input.first().json;
 const actualData = Array.isArray(data) ? data[0] : data;
+let __srcType = 'video';
+try { __srcType = String($('Format Video Data').first().json.source_type || actualData.source_type || 'video').toLowerCase(); } catch (e) { __srcType = String(actualData.source_type || 'video').toLowerCase(); }
+const __srcTitle = __srcType === 'website' ? 'Satış Sekansı' : __srcType === 'pdf' ? 'Doküman' : 'Ses Kaydı';
+const __srcShort = __srcType === 'website' ? 'Satış Sekansı' : __srcType === 'pdf' ? 'Doküman Analizi' : 'Ses Analizi';
 
 // Sektör override — domain/company/title'dan kritik sektör düzeltmesi
 const _indCheck = ((actualData.company || '') + ' ' + (actualData.domain || '') + ' ' + (actualData.website_meta_title || '') + ' ' + (actualData.website_summary || '')).toLowerCase();
@@ -9330,6 +9383,8 @@ function addTextBox(slideId, boxId, x, y, w, h, textRuns, opts = {}) {
   if (!Array.isArray(textRuns)) {
     textRuns = [{ text: textRuns }];
   }
+  textRuns = textRuns.map(r => ({ ...r, text: __noEmoji(r.text) }));
+  if (!opts.noFit) textRuns = __slideFit(textRuns, w, h, { strict: !!opts.fillColor });
 
   let insertionIndex = 0;
   for (let i = 0; i < textRuns.length; i++) {
@@ -9510,7 +9565,7 @@ addTextBox(s1, uid("logo"), 0.7, 0.4, 4, 0.5, [
 
 // Main title
 addTextBox(s1, uid("maintitle"), 0.7, 1.3, 7, 2.2, [
-  { text: "Ses Kaydı", fontSize: 44, fontFamily: "Trebuchet MS", color: C.white, bold: true },
+  { text: __srcTitle, fontSize: 44, fontFamily: "Trebuchet MS", color: C.white, bold: true },
   { text: "Analiz Raporu", fontSize: 44, fontFamily: "Trebuchet MS", color: C.white, bold: true }
 ]);
 
@@ -9553,7 +9608,7 @@ if (actualData.website_summary) {
     { text: "WEBSİTE ÖZETİ", fontSize: 8, fontFamily: "Calibri", color: C.info, bold: true }
   ]);
   addTextBox(s2, uid("wsval"), 0.75, 4.1, 8.5, 0.9, [
-    { text: actualData.website_summary.substring(0, 400), fontSize: 10, fontFamily: "Calibri", color: C.midText }
+    { text: String(actualData.website_summary).replace(/\s*\n+\s*/g, " · ").substring(0, 400), fontSize: 10, fontFamily: "Calibri", color: C.midText }
   ]);
 }
 
@@ -9656,7 +9711,7 @@ if (useCases.length > 0) {
       { text: `Senaryo ${idx + 1}`, fontSize: 9, fontFamily: "Trebuchet MS", color: C.white, bold: true }
     ], { valign: "MIDDLE" });
     addTextBox(s5, uid("uctext"), x + 0.1, y + 0.45, 2.6, 1.15, [
-      { text: uc, fontSize: 9, fontFamily: "Calibri", color: C.darkText }
+      { text: uc, fontSize: 11, fontFamily: "Calibri", color: C.darkText }
     ]);
   });
 }
@@ -9899,49 +9954,28 @@ if (apolloTitles.length > 0 || apolloIndustries.length > 0) {
 // ====================================================
 // ML ANALİZ ÖZETİ
 // ====================================================
-if (actualData.ml_stats) {
-  const sML = makeContentSlide("🤖 ML Analiz Özeti");
-  
-  const stats = [
-    { label: "HAFIZA / KURAL KAYDI", value: String(actualData.ml_stats.pattern_count || actualData.ml_stats.emails_analyzed || 0), color: C.success },
-    { label: "KALİTE MODU", value: actualData.memory_mode === 'quality_engine' ? 'V8' : String(actualData.ml_stats.winners || 0), color: C.warning },
-    { label: "DURUM", value: actualData.ml_stats.memory_note ? 'Aktif' : 'N/A', color: C.accent },
-  ];
-  
-  stats.forEach((stat, idx) => {
-    const x = 0.6 + idx * 3.1;
-    addShape(sML, uid("statbg"), x, 1.4, 2.8, 2.2, C.white);
-    addShape(sML, uid("statbar"), x, 1.4, 2.8, 0.06, stat.color);
-    addTextBox(sML, uid("statval"), x, 1.7, 2.8, 1.0, [
-      { text: stat.value, fontSize: 48, fontFamily: "Trebuchet MS", color: stat.color, bold: true, alignment: "CENTER" }
-    ]);
-    addTextBox(sML, uid("statlbl"), x, 2.8, 2.8, 0.4, [
-      { text: stat.label, fontSize: 10, fontFamily: "Calibri", color: C.midText, alignment: "CENTER" }
-    ]);
-  });
-  
-  // Best practices + A/B
-  const bestPractices = safeArr(implementation.best_practices);
-  const abSuggestions = safeArr(implementation.ab_testing_suggestions);
-  
-  if (bestPractices.length > 0) {
-    addTextBox(sML, uid("bplbl"), 0.5, 3.9, 4.5, 0.25, [
-      { text: "✅ En İyi Uygulamalar", fontSize: 10, fontFamily: "Trebuchet MS", color: C.success, bold: true }
-    ]);
-    const bpRuns = bestPractices.map(bp => ({
-      text: `• ${bp}`, fontSize: 8, fontFamily: "Calibri", color: C.darkText, spacingAfter: 3
-    }));
-    addTextBox(sML, uid("bplist"), 0.7, 4.2, 4.3, 1.0, bpRuns);
-  }
-  
-  if (abSuggestions.length > 0) {
-    addTextBox(sML, uid("ablbl"), 5.2, 3.9, 4.5, 0.25, [
-      { text: "🧪 A/B Test Önerileri", fontSize: 10, fontFamily: "Trebuchet MS", color: C.accent, bold: true }
-    ]);
-    const abRuns = abSuggestions.map(ab => ({
-      text: `• ${ab}`, fontSize: 8, fontFamily: "Calibri", color: C.darkText, spacingAfter: 3
-    }));
-    addTextBox(sML, uid("ablist"), 5.4, 4.2, 4.3, 1.0, abRuns);
+{
+  // Uygulama önerileri (eski "ML Analiz Özeti": iç sayaçlar müşteriye gösterilmez)
+  const bestPractices = safeArr(implementation.best_practices).slice(0, 6);
+  const abSuggestions = safeArr(implementation.ab_testing_suggestions).slice(0, 6);
+  if (bestPractices.length > 0 || abSuggestions.length > 0) {
+    const sML = makeContentSlide("Uygulama Önerileri");
+    const both = bestPractices.length > 0 && abSuggestions.length > 0;
+    const colW = both ? 4.4 : 9.0;
+    const cols = [];
+    if (bestPractices.length > 0) cols.push({ t: "En İyi Uygulamalar", items: bestPractices, color: C.success });
+    if (abSuggestions.length > 0) cols.push({ t: "A/B Test Önerileri", items: abSuggestions, color: C.accent });
+    cols.forEach((c, idx) => {
+      const x = 0.5 + idx * 4.6;
+      addShape(sML, uid("recbg"), x, 1.2, colW, 4.0, C.white);
+      addShape(sML, uid("recbar"), x, 1.2, colW, 0.06, c.color);
+      addTextBox(sML, uid("reclbl"), x + 0.2, 1.35, colW - 0.4, 0.4, [
+        { text: c.t, fontSize: 14, fontFamily: "Trebuchet MS", color: c.color, bold: true }
+      ]);
+      addTextBox(sML, uid("reclist"), x + 0.2, 1.8, colW - 0.4, 3.3, c.items.map(it => ({
+        text: `• ${it}`, fontSize: 11, fontFamily: "Calibri", color: C.darkText, spacingAfter: 6
+      })));
+    });
   }
 }
 
@@ -9978,7 +10012,7 @@ addTextBox(sEnd, uid("enddate"), 0.5, 4.5, 9, 0.5, [
 // ====================================================
 return {
   json: {
-    presentationTitle: `Ses Analizi - ${safeStr(actualData.company)} - ${dateStr}`,
+    presentationTitle: `${__srcShort} - ${safeStr(actualData.company)} - ${dateStr}`,
     requests: requests,
     totalSlides: slideIds.length,
     company: safeStr(actualData.company),
@@ -9988,7 +10022,7 @@ return {
 };
 })()}},"cred":null},"1. Create Google Slides":{"name":"1. Create Google Slides","t":"httpRequest","p":{"method":"POST","url":"https://slides.googleapis.com/v1/presentations","authentication":"predefinedCredentialType","nodeCredentialType":"googleSlidesOAuth2Api","sendBody":true,"specifyBody":"json","jsonBody":__X(function($json,$,$input,$env,$execution,$binary,$itemIndex,$now,$node){return "{\n  \"title\": \""+__t(()=>($json.presentationTitle
 ))+"\"\n}"}),"options":{}},"cred":"googleSlidesOAuth2Api"},"2. Build All Slides":{"name":"2. Build All Slides","t":"httpRequest","p":{"method":"POST","url":__X(function($json,$,$input,$env,$execution,$binary,$itemIndex,$now,$node){return "https://slides.googleapis.com/v1/presentations/"+__t(()=>($('1. Create Google Slides').item.json.presentationId
-))+":batchUpdate"}),"authentication":"predefinedCredentialType","nodeCredentialType":"googleSlidesOAuth2Api","sendBody":true,"specifyBody":"json","jsonBody":__X(function($json,$,$input,$env,$execution,$binary,$itemIndex,$now,$node){try{return (JSON.stringify({ requests: $('Google Slides Data Builder').first().json.requests })
+))+":batchUpdate"}),"authentication":"predefinedCredentialType","nodeCredentialType":"googleSlidesOAuth2Api","sendBody":true,"specifyBody":"json","jsonBody":__X(function($json,$,$input,$env,$execution,$binary,$itemIndex,$now,$node){try{return (JSON.stringify({ requests: (() => { const rq = $('Google Slides Data Builder').first().json.requests || []; let d0 = null; try { d0 = (($('1. Create Google Slides').first().json.slides || [])[0] || {}).objectId || null; } catch (e) {} return d0 ? rq.concat([{ deleteObject: { objectId: d0 } }]) : rq; })() })
 )}catch(e){return undefined}}),"options":{"timeout":30000}},"cred":"googleSlidesOAuth2Api"},"3. Output Slides Link":{"name":"3. Output Slides Link","t":"code","p":{"code":async function($input,$,$json,$env,$execution,$itemIndex,helpers,Buffer,items,$node){return (async()=>{
 const presentationId = $('1. Create Google Slides').first().json.presentationId;
 const company = $('Google Slides Data Builder').first().json.company || $('Bot Protection').first().json.company_name || 'Unknown';
@@ -10285,11 +10319,15 @@ if (finished && isSuccess) {
 }
 
 if (isError || (finished && !isSuccess)) {
+  const __en = String(exec.data?.resultData?.error?.node?.name || exec.data?.resultData?.error?.node || exec.data?.resultData?.lastNodeExecuted || '').slice(0, 80);
+  const __em = /zaman aşımı|iade/i.test(String(exec.data?.resultData?.error?.message || '')) ? 'İş zaman aşımına uğradı.' : /Scrape|HTML|Sayfa|Site/i.test(__en) ? 'Web sitesine erişilemedi.' : /Gemini|Analiz|Rapor|Claude|AI/i.test(__en) ? 'Yapay zekâ yanıtı alınamadı.' : /Slide|Sunum|PDF/i.test(__en) ? 'Sunum oluşturulamadı.' : '';
   return {
     success: false,
     executionId: execId,
     status: 'error',
-    error: 'İşlem sırasında hata oluştu'
+    error_node: __en,
+    error_kind: (m => /zaman|timeout|timed out|abort/i.test(m) ? 'zaman_asimi' : /yarıda kesildi/i.test(m) ? 'kesildi' : /kayboldu/i.test(m) ? 'kayip' : /429|rate|overload|529|RESOURCE/i.test(m) ? 'yogunluk' : /JSON|Unexpected token|parse/i.test(m) ? 'bicim' : /\b5\d\d\b|INTERNAL/i.test(m) ? 'sunucu' : /\b4\d\d\b/.test(m) ? 'istek' : m ? 'diger' : '')(String(exec.data?.resultData?.error?.message || '')),
+    error: 'İşlem sırasında hata oluştu' + (__em ? ': ' + __em : '')
   };
 }
 
@@ -11693,6 +11731,7 @@ const oval = (sid,x,y,w,h,fill,alpha,outline)=>shape(sid,"ELLIPSE",x,y,w,h,fill,
 
 function text(sid,x,y,w,h,str,size,color,o){ o=o||{};
   let t=(str===0?"0":(str||"")); t=String(t); if(t.length===0)t=" "; if(t.length>1900)t=t.slice(0,1900);
+  if(!o.noFit){ [t,size]=__fitTxt(t,size,w,h,{ font:(o.font||FB), bold:o.bold, ls:(o.ls||100), para:(o.spaceBelow||0), indent:(o.indent||0) }); if(!t.trim())t=" "; }
   const id=ID();
   REQ.push({ createShape:{ objectId:id, shapeType:"TEXT_BOX", elementProperties:{ pageObjectId:sid, size:{ width:{magnitude:E(w),unit:"EMU"}, height:{magnitude:E(h),unit:"EMU"} }, transform:{ scaleX:1, scaleY:1, translateX:E(x), translateY:E(y), unit:"EMU" } } } });
   REQ.push({ insertText:{ objectId:id, text:t, insertionIndex:0 } });
@@ -11707,7 +11746,7 @@ function text(sid,x,y,w,h,str,size,color,o){ o=o||{};
   return id; }
 function bullets(sid,x,y,w,h,items,size,color,o){ o=o||{};
   const a=arr(items); const t=a.length? a.map(z=>String(z).slice(0,260)).join("\n") : " ";
-  const id=text(sid,x,y,w,h,t,size,color,{ font:(o.font||FB), ls:(o.ls||118), spaceBelow:(o.spaceBelow!==undefined?o.spaceBelow:5), bold:o.bold, align:o.align });
+  const id=text(sid,x,y,w,h,t,size,color,{ font:(o.font||FB), ls:(o.ls||118), spaceBelow:(o.spaceBelow!==undefined?o.spaceBelow:5), bold:o.bold, align:o.align, indent:(a.length?0.3:0) });
   if(a.length){ REQ.push({ createParagraphBullets:{ objectId:id, textRange:{ type:"ALL" }, bulletPreset:(o.preset||"BULLET_DISC_CIRCLE_SQUARE") } }); }
   return id; }
 
@@ -12120,11 +12159,15 @@ if (finished && success) {
 }
 
 if (exec.status === 'error' || (finished && !success)) {
+  const __en = String(exec.data?.resultData?.error?.node?.name || exec.data?.resultData?.error?.node || exec.data?.resultData?.lastNodeExecuted || '').slice(0, 80);
+  const __em = /zaman aşımı|iade/i.test(String(exec.data?.resultData?.error?.message || '')) ? 'İş zaman aşımına uğradı.' : /Scrape|HTML|Sayfa|Site/i.test(__en) ? 'Web sitesine erişilemedi.' : /Gemini|Analiz|Rapor|Claude|AI/i.test(__en) ? 'Yapay zekâ yanıtı alınamadı.' : /Slide|Sunum|PDF/i.test(__en) ? 'Sunum oluşturulamadı.' : '';
   return {
     success: false,
     executionId: execId,
     status: 'error',
-    error: 'Analiz sırasında hata oluştu'
+    error_node: __en,
+    error_kind: (m => /zaman|timeout|timed out|abort/i.test(m) ? 'zaman_asimi' : /yarıda kesildi/i.test(m) ? 'kesildi' : /kayboldu/i.test(m) ? 'kayip' : /429|rate|overload|529|RESOURCE/i.test(m) ? 'yogunluk' : /JSON|Unexpected token|parse/i.test(m) ? 'bicim' : /\b5\d\d\b|INTERNAL/i.test(m) ? 'sunucu' : /\b4\d\d\b/.test(m) ? 'istek' : m ? 'diger' : '')(String(exec.data?.resultData?.error?.message || '')),
+    error: 'Analiz sırasında hata oluştu' + (__em ? ': ' + __em : '')
   };
 }
 
