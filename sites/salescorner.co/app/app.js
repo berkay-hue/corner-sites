@@ -588,7 +588,7 @@ function pagePanel() {
   shell(`${ph(`Merhaba${ad ? ", " + esc(ad) : ""}`, "Bugün hangi satış işini hızlandıralım?")}
   ${banner}
   ${profil}
-  ${b.admin ? msg("info", `${ic("shield", 16)}<span>Yönetici hesabıyla girdiniz. <a href="#/admin">Kullanıcılar ve planlar</a> · <a href="${SITE}/dashboard">Eski panele dön</a></span>`) : ""}
+  ${b.admin ? msg("info", `${ic("shield", 16)}<span>Yönetici hesabıyla girdiniz. <a href="#/admin">Kullanıcılar ve planlar</a></span>`) : ""}
   ${run.map(m => msg("info", `<span class="spin s"></span><span><b>${esc(m.ad)}</b> arka planda hazırlanıyor. Bu sekme açık kaldığı sürece devam eder. <a href="#/${m.k}">İzle →</a></span>`)).join("")}
   <div class="stats">
     <div class="card stat"><span>Plan</span><b>${esc(b.plan_ad || b.plan)}</b></div>
