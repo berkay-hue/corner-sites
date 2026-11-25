@@ -402,3 +402,19 @@ summary .fy-ck{color:var(--bad);font-weight:700}
 .sk-st .sk-k span,.sk-st .sk-a{color:var(--mute)}
 .sk-st details{margin-top:8px}
 .sk-m{margin-top:8px;font-size:13.5px;line-height:1.55;border-top:1px solid var(--line);padding-top:8px}
+/* Toplu briefing */
+.tb-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.tb-li{display:grid;grid-template-columns:26px minmax(0,1fr) auto;gap:10px;align-items:center;border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.tb-n{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:var(--hover);color:var(--mute);font-size:12px;font-weight:600}
+.tb-t{min-width:0;display:flex;flex-direction:column}
+.tb-t b{font-size:14.5px;overflow-wrap:anywhere}
+.tb-t span{font-size:12.5px;color:var(--mute);overflow-wrap:anywhere}
+.tb-t .tb-e{color:var(--bad);margin-top:2px}
+.tb-s{display:flex;gap:6px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+.tb-s .pill{white-space:nowrap}
+.tb-ele{margin:0;padding-left:18px;font-size:13.5px;color:var(--mute);display:flex;flex-direction:column;gap:4px}
+.tb-ele span{color:var(--soft)}
+.tb-ele b{color:var(--fg);font-weight:600}
+[data-tb-bar]{transition:width .6s linear}
+.meter.tb-m{max-width:none;width:100%;flex:none}
+@media (max-width:520px){.tb-li{grid-template-columns:22px minmax(0,1fr)}.tb-n{width:22px;height:22px}.tb-s{grid-column:2;justify-content:flex-start}}
