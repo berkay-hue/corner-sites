@@ -761,3 +761,35 @@ dialog.kr-stok-dlg{width:min(760px,calc(100% - var(--g3)))}
 .st-gorsel-not a{color:var(--accent-strong);font-weight:600;text-decoration:underline;text-underline-offset:2px}
 .st-gorsel-not a:focus-visible{outline:none;box-shadow:var(--odak-halka);border-radius:4px}
 @media (forced-colors:active){.st-gorsel .cip input[aria-disabled="true"]+label{color:GrayText;border-color:GrayText}}
+/* ortak Pexels künyesi (Studyo.stokKunye) */
+.st-stok-kunye{margin:var(--s1) 0 0;font:var(--f-ipucu);color:var(--ink2);overflow-wrap:anywhere}
+.st-stok-kunye a{color:var(--ink);font-weight:600;text-decoration:underline;text-decoration-color:var(--edge);text-underline-offset:2px}
+.st-stok-kunye a:hover{text-decoration-color:currentColor}
+.st-stok-kunye a:focus-visible{outline:none;box-shadow:var(--odak-halka);border-radius:4px}
+/* gorselli:linkedin — gönderi kartında görsel (LinkedIn önizlemesi gibi tam genişlik), altında künye + araçlar */
+.li-gorsel{margin:var(--s2) 0 0;background:var(--yuzey-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.li-gorsel img{display:block;width:100%;height:auto;max-height:520px;object-fit:cover}
+.li-gorsel-isk{display:block;width:100%;aspect-ratio:1.91/1;border-radius:0}
+.li-gorsel-alt{display:flex;flex-direction:column;gap:var(--s2);max-width:555px;margin:var(--s3) auto 0}
+.li-gorsel-alt:focus-visible{outline:none;box-shadow:var(--odak-halka);border-radius:var(--r-s)}
+.li-gorsel-alt .st-stok-kunye,.li-gorsel-alt .not{margin:0}
+.li-gorsel-arac{gap:var(--s2)}
+.li-gorsel-bilgi{margin:0;font:var(--f-ipucu);color:var(--ink2)}
+.li-gorsel-kaldir:hover{color:var(--danger);background:var(--danger-soft)}
+.li-gorsel-arac .btn[aria-busy="true"]{cursor:progress;opacity:.7}
+@media (max-width:640px){.li-gorsel-alt{margin-top:var(--s2)}}
+/* gorselli:blog — makale önizlemesinde kapak + bölüm görselleri, altında künye + araçlar; üstte durum/uyarı satırı */
+.bl-makale .bl-gorsel{margin:0 0 var(--g3)}
+.bl-makale .bl-gorsel img{display:block;width:100%;height:auto;max-height:min(70vh,520px);object-fit:cover;border-radius:var(--r-m);background:var(--yuzey-2)}
+.bl-makale .bl-gorsel figcaption{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:var(--s1) var(--s3);margin-top:var(--s2)}
+.bl-makale .bl-gorsel .st-stok-kunye{margin:0}
+.bl-gorsel-arac{display:flex;flex-wrap:wrap;gap:var(--s1);margin-top:var(--s1)}
+.bl-gorsel-kaldir:hover{color:var(--danger);background:var(--danger-soft)}
+.bl-gorsel-not{display:flex;flex-wrap:wrap;align-items:center;gap:var(--s2) var(--s3)}
+.bl-gorsel-not[hidden]{display:none}
+.bl-gorsel-not[aria-busy="true"]{color:var(--ink2)}
+/* gorselli:kurgu */
+.kr-oto{display:flex;flex-wrap:wrap;align-items:center;gap:var(--s2) var(--s3)}
+.kr-oto span{flex:1 1 200px}
+.kr-oto[hidden]{display:none}
+.bl-gorsel-geri{display:flex;flex-wrap:wrap;align-items:center;gap:var(--s2) var(--s3);margin:0 0 var(--g3);padding:var(--s2) var(--s3);border:1px dashed var(--line);border-radius:var(--r-m);color:var(--ink2)}

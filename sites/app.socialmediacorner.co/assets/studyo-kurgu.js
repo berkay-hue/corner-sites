@@ -108,7 +108,7 @@ function durumKur(det){
 
 /* ================= DÜZENLEYİCİ ================= */
 function kur(det){
-  M=window.SmcMotor;
+  M=window.SmcMotor;otoDur();
   if(st&&st.oynat){try{st.oynat.stop()}catch(e){}}
   if(st&&st.iptal){try{st.iptal.abort()}catch(e){}}
   if(R.ro){try{R.ro.disconnect()}catch(e){}}
@@ -666,11 +666,14 @@ function gorselSatir(s,i){
   dg.addEventListener('click',function(){secici(i,dg)});
   var kl=dugme('btn-hafif kr-gorsel-kaldir','kapat',T('Kaldır','Remove'));kl.appendChild(el('span','sr',' · '+tekil(i)));
   kl.addEventListener('click',function(){
-    st.sahneler[i].gorsel=null;if(stokVar())gorselYenile(i,'.kr-gorsel-ekle');else gorselTumu(i);guncelle();
+    st.sahneler[i].gorsel=null;st.sahneler[i].elle=true;if(stokVar())gorselYenile(i,'.kr-gorsel-ekle');else gorselTumu(i);guncelle();
     S.durum(T(tekil(i)+' görseli kaldırıldı.',tekil(i)+' image removed.'));
   });
   /* deneme görseli kullanıldıysa değiştirme yok (yeni fotoğraf yeni hak ister); kaldırma serbest */
-  if(stokVar())ar.appendChild(dg);ar.appendChild(kl);k.appendChild(ar);
+  if(stokVar())ar.appendChild(dg);
+  /* Pro: otomatik aramanın listesinden sıradaki fotoğraf (çağrı yok); deneme planında yok */
+  var o=st.oto;if(o&&o.fotolar&&o.fotolar.length>1&&S.stokDurum&&S.stokDurum()==='acik')ar.appendChild(baskaDugme(s,i));
+  ar.appendChild(kl);k.appendChild(ar);
   return k;
 }
 /* tüm görsel satırları; i verilirse odak o satırın eklemesine/kilit bağlantısına (yoksa metnine) */
@@ -837,7 +840,7 @@ function izgaraYaz(ilkYeni,ekle){
 function sec(p,b){
   var x=SK,i=x.i,s=st&&st.sahneler[i];if(!s||b.getAttribute('aria-busy')==='true')return;
   /* deneme seçimi sürüyor (fotoğraf yükleniyor ya da /use bekleniyor): ikinci seçim yok sayılır */
-  if(x.harciyor){x.durum.textContent=T('Deneme görseli ekleniyor; bitince başka fotoğraf seçebilirsin.','Adding the trial image; you can pick another photo when it’s done.');return}
+  if(x.harciyor||OTO&&OTO.harciyor){x.durum.textContent=T('Deneme görseli ekleniyor; bitince başka fotoğraf seçebilirsin.','Adding the trial image; you can pick another photo when it’s done.');return}
   var u=p.src&&(p.src.large2x||p.src.large||p.src.medium);if(!u)return;
   /* deneme planında kilit seçim anında alınır (yükleme bitmeden ikinci fotoğraf ikinci /use açmasın); Pro'da kilit yok */
   var kt=denemeDurum()==='var'&&S.stokKullan?{yukle:true}:null;if(kt)x.harciyor=kt;
@@ -871,7 +874,7 @@ function sec(p,b){
     });
   };
   function ekle(sessiz){
-    s.gorsel={img:im,id:p.id,photographer:String(p.photographer||''),photographer_url:p.photographer_url||'',url:p.url||PX,alt:String(p.alt||''),thumb:(p.src&&p.src.medium)||u};
+    s.gorsel=gorselNesne(p,im);s.elle=true;
     /* deneme hakkı bittiyse (kabuk stock=false yaptı) tüm satırlar yeniden çizilir: ötekiler kilide döner */
     function satirlar(){if(stokVar())gorselYenile(i);else stokYayin(true)}
     if(sessiz){satirlar();guncelle();S.durum(T(tekil(i)+' için deneme görseli eklendi.','Trial image added to '+tekil(i).toLowerCase()+'.'));return}
@@ -914,12 +917,184 @@ function stokYayin(zorla){
 }
 d.addEventListener('studyo:hak',function(){gHak=true;stokYayin()});
 
+/* ---- 25.11: Görselli otomatik doldurma (OTO) ----
+   Taslak hazır olunca (Görselli + stok 'acik' ya da 'deneme') konuyla tek S.stokOtomatik araması; liste sayfada tutulur
+   (deneme bitince durum kilit olur, yeniden arama yapılamaz). Pro: görselsiz ve elle dokunulmamış her karta/sahneye sırayla
+   farklı fotoğraf. Deneme: yalnız ilk karta/sahneye 1 fotoğraf — önce yüklenir, sonra S.stokHarca; ok gelirse eklenir.
+   Elle seçim/kaldırma (s.elle) kazanır. Yeni taslak (kur) eski işi iptal eder. Sonuç seçicinin önbelleğine de yazılır. */
+var OTO=null;
+function otoDur(){var o=OTO;OTO=null;if(o&&o.ac){try{o.ac.abort()}catch(e){}o.ac=null}}
+function otoGecerli(o){return !!o&&OTO===o&&!!st&&st===o.st}
+function gorselNesne(p,im){
+  var u=p.src&&(p.src.large2x||p.src.large||p.src.medium)||'';
+  return {img:im,id:p.id,photographer:String(p.photographer||''),photographer_url:p.photographer_url||'',url:p.url||PX,alt:String(p.alt||''),thumb:(p.src&&p.src.medium)||u};
+}
+function kartAd(n){return VID?T(n+' sahneye',n+(n===1?' scene':' scenes')):T(n+' karta',n+(n===1?' card':' cards'))}
+function otoYukMetni(o){return o.tek?T('Deneme görseli ekleniyor…','Adding the trial image…'):T('Görseller ekleniyor…','Adding images…')}
+/* panelin üstündeki not; duyurular S.durum ile (not canlı bölge değil) */
+function otoNot(tur,m,ek){
+  if(!R.kr)return null;var n=R.oto;
+  if(!n){var pn=R.kr.querySelector('.kr-panel');if(!pn)return null;n=el('div');n.tabIndex=-1;pn.insertBefore(n,pn.firstChild);R.oto=n}
+  /* not gizlenirken odak içindeyse kaybolmasın: ilk görsel düğmesine taşı */
+  var od=!m&&n.contains(d.activeElement);
+  n.className='not kr-oto'+(tur?' not-'+tur:'');n.textContent='';n.hidden=!m;
+  if(od){var hb=R.liste&&R.liste.querySelector('.kr-gorsel-degis,.kr-gorsel-ekle,.kr-kilit-bag');if(hb)hb.focus()}
+  if(m){n.appendChild(el('span',null,m));if(ek)n.appendChild(ek)}
+  return n;
+}
+function planBag(){var a=el('a','st-gorsel-bag',T('Planları gör','See plans'));a.href=EN?'/en/pricing':'/fiyatlar';return a}
+function otoTekrar(o){
+  var b=dugme('btn-cizgi btn-kucuk','tekrar',T('Tekrar dene','Try again'));
+  b.addEventListener('click',function(){
+    if(!otoGecerli(o)||o.harciyor)return;o.bozuk={};
+    var n=otoAra(o);if(n&&n.focus)n.focus();
+  });
+  return b;
+}
+function otoKontrol(){
+  if(!GS||!st||gTercih()!=='stok'||!S.stokOtomatik||!S.stokHarca||!S.stokDurum)return;
+  var dr=S.stokDurum();if(dr!=='acik'&&dr!=='deneme')return;
+  /* deneme mi: harcamadan önce, iş başında okunur */
+  var o={st:st,ac:null,fotolar:null,tek:dr==='deneme',secilen:null,secilenIm:null,sira:0,ayrilan:{},bozuk:{},harciyor:false};
+  OTO=o;st.oto=o;otoAra(o);
+}
+/* liste varsa yeniden aramaz (Tekrar dene aynı listeyle); notu döndürür (odak için) */
+function otoAra(o){
+  if(!otoGecerli(o))return null;
+  if(o.fotolar)return otoDagit(o);
+  var q=st.konu||aramaMetni(st.taslak&&st.taslak.title),yon=stokYonu(),m=otoYukMetni(o);
+  var n=otoNot('',m);S.durum(m);
+  o.ac=window.AbortController?new AbortController():null;
+  S.stokOtomatik(q,{yon:yon,ac:o.ac}).then(function(r){
+    if(!otoGecerli(o))return;o.ac=null;
+    if(!r||!r.photos||!r.photos.length){otoHata(o,r||{});return}
+    o.fotolar=r.photos.slice();
+    /* seçici aynı aramayı yeniden yapmasın */
+    var x=seciciKur(),an=aramaMetni(q).toLocaleLowerCase(EN?'en':'tr')+'|'+yon+'|1';
+    if(!x.onbellek[an])x.onbellek[an]={photos:r.photos.slice(),next:r.photos.length>=10};
+    otoDagit(o);
+  });
+  return n;
+}
+function otoHata(o,r){
+  if(!otoGecerli(o))return;
+  var k=r&&r.kod,m=(r&&r.hata)||S.stokHataMetni(r),ek=null,tur='hata';
+  if(k==='plan'){ek=planBag();stokYayin(true)}
+  else if(k==='login_required'){ek=el('a','st-gorsel-bag',T('Giriş yap','Sign in'));ek.href=girisYol()}
+  else if(k==='bos'||k==='bad_input'){tur='uyari';if(stokVar())m+=' '+(VID?T('Sahnelerde “Görsel ekle” ile kendin arayabilirsin.','You can search yourself with “Add image” on each scene.'):T('Kartlarda “Görsel ekle” ile kendin arayabilirsin.','You can search yourself with “Add image” on each card.'))}
+  /* günlük kişi limiti yarın yenilenir: Tekrar dene yok; genel yoğunlukta (scope global) var */
+  else if(k!=='not_ready'&&!(k==='limit'&&r.scope!=='global'))ek=otoTekrar(o);
+  otoNot(tur,m,ek);S.durum(m);
+}
+/* sıradaki fotoğraf: bozuk, ayrılmış (yükleniyor), bir sahnede kullanılan ve haric dışında; hepsi kullanıldıysa yinelenebilir */
+function siradaki(o,haric){
+  var a=o.fotolar||[],n=a.length,kul={},k,j,p,id;
+  st.sahneler.forEach(function(s){if(s.gorsel)kul[String(s.gorsel.id)]=1});
+  for(k=0;k<n;k++){j=(o.sira+k)%n;p=a[j];id=String(p.id);if(o.bozuk[id]||o.ayrilan[id]||kul[id]||id===haric)continue;o.sira=j+1;return p}
+  for(k=0;k<n;k++){j=(o.sira+k)%n;p=a[j];id=String(p.id);if(o.bozuk[id]||id===haric)continue;o.sira=j+1;return p}
+  return null;
+}
+/* fotoğrafı yükler (crossOrigin: tuvale çizilip dışa aktarılabilsin); bozuksa/15 sn'de gelmezse sıradakine geçer.
+   cb(p,im) ya da cb(null) (yüklenebilir fotoğraf kalmadı); gecerli() false olursa cb çağrılmaz */
+function otoYukle(o,gecerli,cb,haric){
+  var p=siradaki(o,haric);if(!p){cb(null);return}
+  var id=String(p.id),im=new Image(),bitti=false,z=0;o.ayrilan[id]=true;
+  function son(ok){
+    if(bitti)return;bitti=true;clearTimeout(z);im.onload=im.onerror=null;
+    if(!gecerli()){delete o.ayrilan[id];return}
+    if(ok){delete o.ayrilan[id];cb(p,im);return}
+    o.bozuk[id]=true;delete o.ayrilan[id];otoYukle(o,gecerli,cb,haric);
+  }
+  im.crossOrigin='anonymous';im.decoding='async';
+  im.onload=function(){son(im.naturalWidth>0)};im.onerror=function(){son(false)};
+  z=setTimeout(function(){son(false)},15000);
+  im.src=S.stokSrc(p);
+}
+function otoDagit(o){
+  if(o.tek)return otoDeneme(o);
+  var hedef=st.sahneler.filter(function(s){return !s.gorsel&&!s.elle});
+  if(!hedef.length){otoNot('','');return null}
+  var m=otoYukMetni(o),n=otoNot('',m);S.durum(m);
+  var kalan=hedef.length,eklenen=0,olmadi=0,zam=0;
+  function gecerli(){return otoGecerli(o)}
+  hedef.forEach(function(s){
+    otoYukle(o,gecerli,function(p,im){
+      if(!p)olmadi++;
+      else{
+        var i=st.sahneler.indexOf(s);
+        /* bu arada elle seçildi/kaldırıldı ya da sahne silindi: dokunma */
+        if(i>=0&&!s.gorsel&&!s.elle){s.gorsel=gorselNesne(p,im);s.oto=true;eklenen++;gorselYenile(i);clearTimeout(zam);zam=setTimeout(function(){if(st===o.st)guncelle()},120)}
+      }
+      if(--kalan===0)otoBitti(o,eklenen,olmadi);
+    });
+  });
+  return n;
+}
+function otoBitti(o,eklenen,olmadi){
+  if(!otoGecerli(o))return;
+  if(!olmadi){otoNot('','');if(eklenen)S.durum(T(kartAd(eklenen)+' görsel eklendi. İstersen değiştir ya da kaldır.','Images added to '+kartAd(eklenen)+'. You can change or remove them.'));return}
+  var m=eklenen?T(kartAd(olmadi)+' görsel eklenemedi; fotoğraflar yüklenmedi.','Couldn’t add images to '+kartAd(olmadi)+'; the photos didn’t load.')
+    :T('Görseller yüklenemedi. Bağlantını kontrol edip tekrar dene.','Couldn’t load images. Check your connection and try again.');
+  otoNot(eklenen?'uyari':'hata',m,otoTekrar(o));S.durum(m);
+}
+/* deneme: yalnız ilk kart/sahne; fotoğraf önce yüklenir (bozuk fotoğraf hakkı yakmasın), sonra S.stokHarca */
+function otoDeneme(o){
+  var s=st.sahneler[0];
+  if(!s||s.gorsel||s.elle){otoNot('','');return null}
+  var m=otoYukMetni(o),n=otoNot('',m);S.durum(m);
+  function harca(p,im){
+    /* bu arada elle seçim başladı/bitti, sahne silindi ya da hak durumu değişti: harcama yok */
+    if(!otoGecerli(o)||st.sahneler.indexOf(s)<0||s.gorsel||s.elle||(SK&&SK.harciyor)||S.stokDurum()!=='deneme'){otoNot('','');return}
+    o.harciyor=true;
+    S.stokHarca(p).then(function(ok){
+      o.harciyor=false;
+      if(ok){
+        var yer=!!st&&st===o.st&&st.sahneler.indexOf(s)>=0&&!s.gorsel;
+        if(yer){s.gorsel=gorselNesne(p,im);s.oto=true}
+        stokYayin(true);
+        if(!otoGecerli(o))return;
+        otoNot('','');if(yer){guncelle();S.durum(T((VID?'İlk sahneye':'İlk karta')+' deneme görseli eklendi. ','Trial image added to the first '+(VID?'scene':'card')+'. ')+DENEME_BITTI+'.')}
+        return;
+      }
+      if(!otoGecerli(o))return;
+      var h=(S.stokHarcaHata&&S.stokHarcaHata())||T('Deneme görseli şu an eklenemedi.','The trial image couldn’t be added right now.');
+      if(S.stokDurum()==='kilit'){stokYayin(true);otoNot('hata',h,planBag())}
+      else otoNot('hata',h,otoTekrar(o));
+      S.durum(h);
+    });
+  }
+  /* Tekrar dene: aynı fotoğraf nesnesi (aynı id yeniden harcanmaz) */
+  if(o.secilen&&o.secilenIm){harca(o.secilen,o.secilenIm);return n}
+  otoYukle(o,function(){return otoGecerli(o)},function(p,im){
+    if(!p){var e=T('Deneme görseli yüklenemedi. Bağlantını kontrol edip tekrar dene.','Couldn’t load the trial image. Check your connection and try again.');otoNot('hata',e,otoTekrar(o));S.durum(e);return}
+    o.secilen=p;o.secilenIm=im;harca(p,im);
+  });
+  return n;
+}
+/* Pro: aynı listeden sıradaki fotoğraf, çağrı yok */
+function baskaDugme(s,i){
+  var b=dugme('btn-hafif kr-gorsel-baska','tekrar',T('Başka görsel','Another image'));b.appendChild(el('span','sr',' · '+tekil(i)));
+  b.addEventListener('click',function(){
+    var o=st&&st.oto;if(!o||pasifMi(b)||!s.gorsel||st.sahneler[i]!==s)return;
+    function gecerli(){return !!st&&st.oto===o&&st.sahneler[i]===s}
+    pasif(b,true);b.setAttribute('aria-busy','true');S.durum(T('Başka fotoğraf yükleniyor…','Loading another photo…'));
+    otoYukle(o,gecerli,function(p,im){
+      if(!p){pasif(b,false);b.removeAttribute('aria-busy');S.durum(T('Başka fotoğraf yüklenemedi.','Couldn’t load another photo.'));return}
+      s.gorsel=gorselNesne(p,im);s.elle=true;gorselYenile(i,'.kr-gorsel-baska');guncelle();
+      S.durum(T(tekil(i)+' için başka görsel eklendi. Fotoğraf: '+s.gorsel.photographer+' (Pexels).','Another image added to '+tekil(i).toLowerCase()+'. Photo by '+s.gorsel.photographer+' on Pexels.'));
+    },String(s.gorsel.id));
+  });
+  return b;
+}
+
 /* ---- A11-4: formdaki "Sahne görselleri" seçimi (Görselsiz / Görselli · Pexels) ----
    Yalnız tarayıcıda: /gen/video gövdesine girmez (worker'da görsel alanı yok; kabuk alanları tek tek okur). Seçim, taslaktaki
    sahne satırlarında "Görsel ekle"yi açar/kapar; taslak geldikten sonra değişirse satırlar hemen yenilenir.
    Durum: bekle (kota yanıtı yok) · acik (stock true) · kilit (anon/basic ya da 403 plan) · yok (anahtar yok / plan bilinmiyor).
    Erişim yoksa "Görselli" gizlenmez: kilit ikonu + nedeni görünür, odaklanabilir kalır (aria-disabled), seçilince geri alınıp
-   nedeni duyurulur. Form yoksa (görsel/karusel sayfası) eski davranış: stock açıksa her satırda "Görsel ekle". */
+   nedeni duyurulur. Form yoksa eski davranış: stock açıksa her satırda "Görsel ekle".
+   25.11: varsayılan Görselsiz. Görselli + stok açık iken taslak hazır olunca otomatik doldurma (aşağıda OTO): tek arama,
+   Pro'da her karta/sahneye sırayla farklı fotoğraf, denemede yalnız ilk karta/sahneye 1 fotoğraf. Elle seçim/kaldırma kazanır. */
 var GS=$('#gorsel-secim'),GTK='smc-gorsel-'+MOD,gHak=false,gSon='';
 var gYok=GS&&GS.querySelector('input[value="yok"]'),gStok=GS&&GS.querySelector('input[value="stok"]'),gNot=GS&&$('#gorsel-not');
 function gTercih(){if(!GS)return 'stok';return gStok&&gStok.checked&&stokVar()?'stok':'yok'}
@@ -934,9 +1109,16 @@ function gNeden(){
 function gNotYaz(){
   if(!gNot)return;var dr=gDurum();gNot.textContent='';
   if(dr==='acik'){
-    gNot.textContent=gStok.checked
-      ?T('Taslak gelince her sahnede “Görsel ekle” çıkar; fotoğrafı Pexels’ten sen seçersin, seçmediğin sahne görselsiz kalır.','When the draft arrives, each scene gets “Add image”; you pick the Pexels photo, and scenes you skip stay image-free.')
-      :T('Sahneler yalnız metin ve renkle hazırlanır. Görsel istersen “Görselli”yi seç.','Scenes use text and color only. Pick “With images” if you want photos.');
+    if(gStok.checked){
+      gNot.textContent=denemeDurum()==='var'
+        ?(VID?T('Taslak hazır olunca ilk sahneye 1 deneme görseli otomatik eklenir; istersen kaldırırsın. Pro’da sınırsız.','When the draft is ready, the first scene gets 1 trial image automatically; you can remove it. Unlimited on Pro.')
+             :T('Taslak hazır olunca ilk karta 1 deneme görseli otomatik eklenir; istersen kaldırırsın. Pro’da sınırsız.','When the draft is ready, the first card gets 1 trial image automatically; you can remove it. Unlimited on Pro.'))
+        :(VID?T('Taslak hazır olunca her sahneye Pexels’ten otomatik fotoğraf eklenir; istersen değiştirir ya da kaldırırsın.','When the draft is ready, each scene gets a Pexels photo automatically; you can change or remove it.')
+             :T('Taslak hazır olunca her karta Pexels’ten otomatik fotoğraf eklenir; istersen değiştirir ya da kaldırırsın.','When the draft is ready, each card gets a Pexels photo automatically; you can change or remove it.'));
+      return;
+    }
+    gNot.textContent=VID?T('Sahneler yalnız metin ve renkle hazırlanır. Görsel istersen “Görselli”yi seç.','Scenes use text and color only. Pick “With images” if you want photos.')
+      :T('Kartlar yalnız metin ve renkle hazırlanır. Görsel istersen “Görselli”yi seç.','Cards use text and color only. Pick “With images” if you want photos.');
     if(denemeDurum()==='var'){var kl=denemeKalan();gNot.textContent+=' '+T(kl+' deneme görseli hakkın var; Pro’da sınırsız.','You have '+kl+' trial image'+(kl===1?'':'s')+'; unlimited on Pro.')}
     return;
   }
@@ -946,7 +1128,8 @@ function gNotYaz(){
     return;
   }
   if(dr==='kilit'){
-    gNot.appendChild(d.createTextNode(T('Görselli: her sahneye Pexels stok fotoğrafı. Bu seçenek Pro ve Enterprise planlarıyla açılır','With images: a Pexels stock photo on each scene. This option comes with the Pro and Enterprise plans')+
+    gNot.appendChild(d.createTextNode((VID?T('Görselli: her sahneye Pexels stok fotoğrafı. Bu seçenek Pro ve Enterprise planlarıyla açılır','With images: a Pexels stock photo on each scene. This option comes with the Pro and Enterprise plans')
+      :T('Görselli: her karta Pexels stok fotoğrafı. Bu seçenek Pro ve Enterprise planlarıyla açılır','With images: a Pexels stock photo on each card. This option comes with the Pro and Enterprise plans'))+
       (gUye()?T('; hesabında şu an bu planlardan biri tanımlı değil. ','; your account isn’t on one of these plans yet. '):'. ')));
     var a=el('a','st-gorsel-bag',T('Planları gör','See plans'));a.href=EN?'/en/pricing':'/fiyatlar';gNot.appendChild(a);
     return;
@@ -958,7 +1141,7 @@ function gYaz(){
   GS.setAttribute('data-durum',dr);
   if(dr==='acik'){
     gStok.removeAttribute('aria-disabled');
-    if(ilk){var k=null;try{k=S.depo(GTK)}catch(e){}(k==='yok'?gYok:gStok).checked=true}
+    if(ilk){var k=null;try{k=S.depo(GTK)}catch(e){}(k==='stok'?gStok:gYok).checked=true}
   }else{gStok.setAttribute('aria-disabled','true');if(gStok.checked)gYok.checked=true}
   gSon=dr;gNotYaz();
 }
@@ -966,9 +1149,15 @@ if(GS){
   [gYok,gStok].forEach(function(r){r.addEventListener('change',function(){
     if(gStok.checked&&gDurum()!=='acik'){gYok.checked=true;var m=gNeden();S.durum(m);S.toast(m);gNotYaz();return}
     try{S.depo(GTK,gStok.checked?'stok':'yok')}catch(e){}
+    /* Görselsiz: süren otomatik ekleme durur (deneme hakkı harcanıyorsa bitmesi beklenir) */
+    if(!gStok.checked&&OTO&&!OTO.harciyor){otoDur();otoNot('','')}
     gNotYaz();
     if(st&&R.liste)st.sahneler.forEach(function(s,i){gorselYenile(i)});
-    S.durum(gStok.checked?T('Görselli seçildi: sahnelere Pexels fotoğrafı ekleyebilirsin.','With images: you can add Pexels photos to scenes.'):T('Görselsiz seçildi: sahneler yalnız metin ve renkle.','No images: scenes use text and color only.'));
+    var dn=denemeDurum()==='var';
+    S.durum(gStok.checked
+      ?(VID?(dn?T('Görselli seçildi: taslak hazır olunca ilk sahneye 1 deneme görseli otomatik eklenir.','With images: the first scene gets 1 trial image automatically when the draft is ready.'):T('Görselli seçildi: taslak hazır olunca sahnelere Pexels fotoğrafı otomatik eklenir.','With images: scenes get Pexels photos automatically when the draft is ready.'))
+           :(dn?T('Görselli seçildi: taslak hazır olunca ilk karta 1 deneme görseli otomatik eklenir.','With images: the first card gets 1 trial image automatically when the draft is ready.'):T('Görselli seçildi: taslak hazır olunca kartlara Pexels fotoğrafı otomatik eklenir.','With images: cards get Pexels photos automatically when the draft is ready.')))
+      :(VID?T('Görselsiz seçildi: sahneler yalnız metin ve renkle.','No images: scenes use text and color only.'):T('Görselsiz seçildi: kartlar yalnız metin ve renkle.','No images: cards use text and color only.')));
   })});
   setTimeout(function(){if(!gHak){gHak=true;gYaz()}},12000);
   var gU=$('.st-ust[data-hesap]');if(gU&&window.MutationObserver)new MutationObserver(function(){if(gDurum()==='kilit')gNotYaz()}).observe(gU,{attributes:true,attributeFilter:['data-hesap']});
@@ -993,7 +1182,7 @@ function hataGoster(det,e){
   n.appendChild(el('span',null,T('Önizleme açılamadı; sahneleri aşağıda düz liste olarak görüyorsun.','The preview couldn’t open; the scenes are listed below as plain text.')));
   var b=dugme('btn-cizgi btn-kucuk','tekrar',T('Tekrar dene','Try again'));
   b.addEventListener('click',function(){
-    try{kur(det);var y=$('#sb-yer');if(y){y.textContent='';y.hidden=true}n.remove();if(R.tuval)R.tuval.focus({preventScroll:true})}
+    try{kur(det);var y=$('#sb-yer');if(y){y.textContent='';y.hidden=true}n.remove();if(R.tuval)R.tuval.focus({preventScroll:true});otoKontrol()}
     catch(x){var kr=kok.querySelector('.kr');if(kr)kr.remove();var yer=kok.querySelector('.st-motor-yer');if(yer)yer.hidden=true;S.durum(T('Önizleme yine açılamadı.','The preview still couldn’t open.'))}
   });
   n.appendChild(b);
@@ -1003,13 +1192,15 @@ function hataGoster(det,e){
 kok.addEventListener('studyo:taslak',function(e){
   var det=e.detail||{};
   if(!window.SmcMotor||!det.draft)return;
-  try{kur(det);e.preventDefault()}
-  catch(x){
+  var tm=false;
+  try{kur(det);e.preventDefault();tm=true}
+  catch(x){otoDur();
     var kr=kok.querySelector('.kr');if(kr)kr.remove();
     if(st&&st.oynat){try{st.oynat.stop()}catch(z){}}
     var arac=kok.querySelector('.st-arac');if(arac&&arac.parentNode!==kok)kok.appendChild(arac);
     st=null;hataGoster(det,x);
   }
+  if(tm)otoKontrol();
 });
 /* sonuç gizlenince önizlemeyi durdur */
 var sonucEl=$('#d-sonuc');
