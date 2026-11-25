@@ -128,6 +128,18 @@
 .row__b ul.tl-ul{display:grid;gap:8px;padding-left:20px;list-style:disc;color:var(--ink-2)}
 @media (max-width:899px){.tl-tool{grid-template-columns:1fr}.tl-out{border-left:0;border-top:1px solid var(--line)}}
 @media (max-width:599px){.tl-in,.tl-out{padding:20px 16px}.tl-grid{grid-template-columns:1fr}.tl-acts .btn{flex:1 1 auto}.tl-tbl{font-size:13.5px}.tl-tbl th,.tl-tbl td{padding:8px}}
+.tl-signup{display:grid;gap:16px 28px;margin-top:20px;padding:22px;border:1px solid var(--line);border-radius:var(--r-lg);background:linear-gradient(135deg,var(--blue-50),var(--violet-50))}
+.tl-signup h2{margin:0 0 6px;font-size:1.25rem;line-height:1.3;color:var(--ink)}
+.tl-signup p{color:var(--ink-2);font-size:15px;line-height:1.55}
+.tl-signup .tl-signup__eye{margin-bottom:6px;font-size:12.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--violet)}
+.tl-signup__list{display:flex;flex-wrap:wrap;gap:6px 18px;margin:12px 0 0;padding:0;list-style:none;font-size:14px;font-weight:650;color:var(--ink)}
+.tl-signup__list li::before{content:"✓";margin-right:6px;font-weight:800;color:var(--green)}
+.tl-signup__go{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:10px}
+.tl-signup__go .btn{white-space:normal;text-align:center}
+.tl-signup .tl-signup__note{max-width:300px;font-size:13px;line-height:1.5;color:var(--ink-3)}
+.tl-signup__note a{color:var(--blue-700);font-weight:650}
+@media (min-width:900px){.tl-signup{grid-template-columns:minmax(0,1fr) auto;align-items:center;padding:28px}}
+.tl-su{padding:0 0 8px}
 </style>
 </head>
 <body>
@@ -135,7 +147,7 @@
 <header class="hdr">
 <div class="wrap hdr__in">
 <a class="brand" href="/"><img class="brand__logo" src="/_a/smc/logo.svg" width="121" height="40" alt="Social Media Corner"></a>
-<nav class="nav" aria-label="Ana menü"><a href="/#hizmetler">Hizmetler</a><a href="/#studyo">Yapay Zeka Stüdyo</a><a href="/#sonuclar">Sonuçlar</a><a href="/fiyatlar">Fiyatlar</a><a href="/blog">Blog</a><div class="nav__dd"><a href="/araclar">Ücretsiz araçlar<svg class="nav__chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4.5l3 3 3-3"/></svg></a><div class="nav__menu"><div class="nav__box"><a href="/araclar/etkilesim-orani-hesaplayici" aria-current="page">Etkileşim oranı hesaplayıcı<span>Instagram ve LinkedIn etkileşim oranınızı ölçün</span></a><a href="/araclar/linkedin-gonderi-denetleyici">LinkedIn gönderi denetleyici<span>Kanca, uzunluk ve CTA kontrolü, canlı önizleme</span></a><a href="/araclar/instagram-aciklama-denetleyici">Instagram açıklama denetleyici<span>İlk 125 karakter, hashtag ve satır düzeni</span></a><a href="/araclar/sosyal-medya-reklam-butcesi-hesaplayici">Reklam bütçesi hesaplayıcı<span>Bütçeden gösterim, tıklama ve lead tahmini</span></a><a class="nav__all" href="/araclar">Tüm ücretsiz araçlar →</a></div></div></div><a href="/iletisim">İletişim</a></nav>
+<nav class="nav" aria-label="Ana menü"><a href="/#hizmetler">Hizmetler</a><a href="/#studyo">Yapay Zeka Stüdyo</a><a href="/#sonuclar">Sonuçlar</a><a href="/fiyatlar">Fiyatlar</a><a href="/blog">Blog</a><div class="nav__dd"><a href="/araclar">Ücretsiz araçlar<svg class="nav__chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4.5l3 3 3-3"/></svg></a><div class="nav__menu"><div class="nav__box"><a href="/araclar/etkilesim-orani-hesaplayici" aria-current="page">Etkileşim oranı hesaplayıcı<span>Instagram ve LinkedIn etkileşim oranınızı ölçün</span></a><a href="/araclar/linkedin-gonderi-denetleyici">LinkedIn gönderi denetleyici<span>Kanca, uzunluk ve CTA kontrolü, canlı önizleme</span></a><a href="/araclar/instagram-aciklama-denetleyici">Instagram açıklama denetleyici<span>İlk 125 karakter, hashtag ve satır düzeni</span></a><a href="/araclar/sosyal-medya-reklam-butcesi-hesaplayici">Reklam bütçesi hesaplayıcı<span>Bütçeden gösterim, tıklama ve lead tahmini</span></a><a href="/araclar/seo-analizi">SEO analizi<span>Başlık, meta, anahtar kelime ve okunabilirlik</span></a><a class="nav__all" href="/araclar">Tüm ücretsiz araçlar →</a></div></div></div><a href="/iletisim">İletişim</a></nav>
 <div class="hdr__end">
 <a class="lang" href="/en/" hreflang="en" lang="en" aria-label="English version"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="8" cy="8" r="6.5"/><path d="M1.5 8h13M8 1.5c1.8 1.8 2.6 4 2.6 6.5S9.8 12.7 8 14.5C6.2 12.7 5.4 10.5 5.4 8S6.2 3.3 8 1.5z"/></svg>EN</a>
 <a class="btn btn--ghost btn--sm" href="https://app.socialmediacorner.co/hesap/giris">Giriş yap</a>
@@ -144,7 +156,7 @@
 <summary aria-label="Menü" aria-controls="mnav-panel"><svg class="i-menu" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M3 6h14M3 10h14M3 14h14"/></svg><svg class="i-x" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M5 5l10 10M15 5L5 15"/></svg></summary>
 <div class="mnav__panel" id="mnav-panel">
 <div class="wrap">
-<nav aria-label="Mobil menü"><a href="/#hizmetler">Hizmetler</a><a href="/#studyo">Yapay Zeka Stüdyo</a><a href="/#sonuclar">Sonuçlar</a><a href="/fiyatlar">Fiyatlar</a><a href="/blog">Blog</a><a href="/araclar">Ücretsiz araçlar</a><div class="mnav__sub"><a href="/araclar/etkilesim-orani-hesaplayici" aria-current="page">Etkileşim oranı hesaplayıcı</a><a href="/araclar/linkedin-gonderi-denetleyici">LinkedIn gönderi denetleyici</a><a href="/araclar/instagram-aciklama-denetleyici">Instagram açıklama denetleyici</a><a href="/araclar/sosyal-medya-reklam-butcesi-hesaplayici">Reklam bütçesi hesaplayıcı</a></div><a href="/iletisim">İletişim</a></nav>
+<nav aria-label="Mobil menü"><a href="/#hizmetler">Hizmetler</a><a href="/#studyo">Yapay Zeka Stüdyo</a><a href="/#sonuclar">Sonuçlar</a><a href="/fiyatlar">Fiyatlar</a><a href="/blog">Blog</a><a href="/araclar">Ücretsiz araçlar</a><div class="mnav__sub"><a href="/araclar/etkilesim-orani-hesaplayici" aria-current="page">Etkileşim oranı hesaplayıcı</a><a href="/araclar/linkedin-gonderi-denetleyici">LinkedIn gönderi denetleyici</a><a href="/araclar/instagram-aciklama-denetleyici">Instagram açıklama denetleyici</a><a href="/araclar/sosyal-medya-reklam-butcesi-hesaplayici">Reklam bütçesi hesaplayıcı</a><a href="/araclar/seo-analizi">SEO analizi</a></div><a href="/iletisim">İletişim</a></nav>
 <div class="mnav__cta"><a class="btn btn--ghost btn--block" href="https://app.socialmediacorner.co/hesap/giris">Giriş yap</a><a class="btn btn--primary btn--block" href="https://app.socialmediacorner.co/">Ücretsiz dene</a></div>
 <div class="mnav__lang"><a class="lang" href="/en/" hreflang="en" lang="en"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="8" cy="8" r="6.5"/><path d="M1.5 8h13M8 1.5c1.8 1.8 2.6 4 2.6 6.5S9.8 12.7 8 14.5C6.2 12.7 5.4 10.5 5.4 8S6.2 3.3 8 1.5z"/></svg>English</a></div>
 </div>
@@ -187,6 +199,20 @@
 </div>
 </div>
 </div></section>
+<section class="tl-su"><div class="wrap">
+<aside class="tl-signup" aria-labelledby="h-signup">
+<div>
+<p class="tl-signup__eye">Ücretsiz hesap</p>
+<h2 id="h-signup">Devamı için ücretsiz hesap oluşturun</h2>
+<p>Kontrolü yaptınız; sıra içeriği yazmakta. Hesabınızla Yapay Zeka Stüdyo’da LinkedIn ve blog taslakları hazırlayın, marka sesinizi kaydedin, paylaşımlarınızı tek yerden planlayın.</p>
+<ul class="tl-signup__list"><li>14 gün ücretsiz deneme</li><li>4 LinkedIn veya blog taslağı</li><li>1 görsel veya video taslağı</li><li>1 marka sesi</li></ul>
+</div>
+<div class="tl-signup__go">
+<a class="btn btn--primary btn--lg" href="https://app.socialmediacorner.co/hesap/kayit">Ücretsiz hesap oluştur →</a>
+<p class="tl-signup__note">Bu araç ücretsizdir ve yapay zeka kullanmaz; kayıt olmadan kullanmaya devam edebilirsiniz. Hesabınız var mı? <a href="https://app.socialmediacorner.co/hesap/giris">Giriş yapın</a></p>
+</div>
+</aside>
+</div></section>
 <section class="page"><div class="wrap">
 <div class="row"><h2>Etkileşim oranı nasıl hesaplanır?</h2><div class="row__b">
 <p>Etkileşim oranı, bir gönderiyi gören ya da hesabı takip eden kişilerin ne kadarının içerikle aktif olarak ilgilendiğini yüzde olarak gösterir. Hesaplayıcı yaygın kullanılan formülleri birlikte uygular:</p>
@@ -223,10 +249,10 @@
 <p>Etkileşimi iş sonucuna da bağlayın: profil ziyaretleri, web sitesi tıklamaları ve gelen talepler, yüksek oranın gerçekten işe yarayıp yaramadığını gösterir. Oranı aylık raporunuzda bu metriklerle birlikte izleyin.</p>
 </div></div>
 <div class="row"><h2>İlgili yazılar</h2><div class="row__b"><p class="rlist"><a href="/blog/instagram-analitigi-nasil-okunur">Instagram Analitiği Nasıl Okunur? B2B Metrikleri</a><a href="/blog/linkedin-sayfa-analitigi-nasil-okunur">LinkedIn Sayfa Analitiği Nasıl Okunur? Önemli Metrikler</a><a href="/blog/b2b-sosyal-medya-kpi-rehberi">B2B Sosyal Medya KPI’ları: Hangileri Takip Edilmeli?</a><a href="/blog/b2b-sosyal-medya-raporu-nasil-hazirlanir">B2B Sosyal Medya Raporu Nasıl Hazırlanır?</a><a href="/blog/linkedin-algoritmasi-nasil-calisir-b2b-rehberi">LinkedIn Algoritması Nasıl Çalışır? B2B Rehberi</a></p></div></div>
-<div class="row"><h2>Diğer ücretsiz araçlar</h2><div class="row__b"><p class="rlist"><a href="/araclar/linkedin-gonderi-denetleyici">LinkedIn Gönderi Denetleyici</a><a href="/araclar/instagram-aciklama-denetleyici">Instagram Açıklama Denetleyici</a><a href="/araclar/sosyal-medya-reklam-butcesi-hesaplayici">Sosyal Medya Reklam Bütçesi Hesaplayıcı</a><a href="/araclar">Tüm ücretsiz araçlar</a></p></div></div>
+<div class="row"><h2>Diğer ücretsiz araçlar</h2><div class="row__b"><p class="rlist"><a href="/araclar/linkedin-gonderi-denetleyici">LinkedIn Gönderi Denetleyici</a><a href="/araclar/instagram-aciklama-denetleyici">Instagram Açıklama Denetleyici</a><a href="/araclar/sosyal-medya-reklam-butcesi-hesaplayici">Sosyal Medya Reklam Bütçesi Hesaplayıcı</a><a href="/araclar/seo-analizi">SEO Analizi Aracı</a><a href="/araclar">Tüm ücretsiz araçlar</a></p></div></div>
 </div></section>
 <section class="sec sec--m sec--alt" id="sss" aria-labelledby="h-faq"><div class="wrap faq"><div class="faq__aside"><p class="eyebrow">SSS</p><h2 class="h2" id="h-faq">Sık sorulan sorular</h2></div><div class="qa"><details open><summary><h3>Etkileşim oranı nedir?</h3></summary><p>Etkileşim oranı, bir gönderiye gelen beğeni, yorum, kaydetme ve paylaşım gibi etkileşimlerin takipçi, erişim ya da gösterim sayısına oranının yüzde olarak ifadesidir. İçeriğin kitlede ne kadar karşılık bulduğunu gösterir.</p></details><details open><summary><h3>İyi bir Instagram etkileşim oranı kaçtır?</h3></summary><p>Kesin bir sınır yoktur. Kabaca, takipçiye göre %1–3 arası ortalama, %3’ün üzeri iyi kabul edilir. Oran sektöre, hesap büyüklüğüne ve içerik formatına göre değişir; en sağlıklı kıyas kendi geçmiş ortalamanızdır.</p></details><details open><summary><h3>LinkedIn etkileşim oranı nasıl hesaplanır?</h3></summary><p>LinkedIn’de yaygın formül (tepki + yorum + yeniden paylaşım + tıklama) ÷ gösterim × 100’dür. Tepki, yorum ve yeniden paylaşım sayıları gönderinin analitiğinde görünür; tıklama verisi ise genellikle yalnızca şirket sayfası gönderilerinin analitiğinde yer alır. Kişisel profilde tıklama görünmüyorsa formülü tıklama olmadan uygulayın.</p></details><details open><summary><h3>Erişim ile gösterim arasındaki fark nedir?</h3></summary><p>Erişim, içeriği gören tekil hesap sayısıdır; gösterim ise içeriğin toplam kaç kez görüntülendiğidir. Aynı kişi gönderiyi iki kez görürse erişim 1, gösterim 2 artar. Bu yüzden gösterim bazlı oran genellikle erişim bazlı orandan düşük çıkar.</p></details><details open><summary><h3>Rakip hesapların etkileşim oranını hesaplayabilir miyim?</h3></summary><p>Takipçi bazlı oranın yalnızca herkese açık kısmını, yani (beğeni + yorum) ÷ takipçi × 100 değerini hesaplayabilirsiniz; takipçi, yorum ve çoğu zaman beğeni sayıları herkese açıktır. Kaydetme ve paylaşım sayıları ile erişim ve gösterim genelde yalnızca hesap sahibine görünür; bu yüzden rakipler için bu araçtaki tam oran ve erişim bazlı oran hesaplanamaz. Bu kısmi oranı yalnızca aynı yöntemle hesaplanmış başka kısmi oranlarla kıyaslayın.</p></details><details open><summary><h3>Girdiğim veriler bir yere kaydediliyor mu?</h3></summary><p>Hayır. Hesaplama tamamen tarayıcınızda yapılır; girdiğiniz sayılar hiçbir sunucuya gönderilmez ve kaydedilmez.</p></details></div></div></section>
-<section class="sec sec--tight"><div class="wrap"><div class="cta"><div><h2 id="h-cta">Etkileşimi birlikte büyütelim</h2><p>LinkedIn ve Instagram hesaplarınızı B2B kitlenize uygun içerikle yönetiyor, etkileşimi ve gelen talepleri düzenli raporlarla takip ediyoruz.</p><p class="cta__alt">Kendiniz yapın: <a href="https://app.socialmediacorner.co/">Yapay Zeka Stüdyo’da etkileşim alan gönderiler hazırlayın →</a></p></div><div class="cta__btns"><a class="btn btn--light btn--lg" href="/iletisim">İletişime geçin</a></div></div></div></section>
+<section class="sec sec--tight"><div class="wrap"><div class="cta"><div><h2 id="h-cta">Etkileşimi birlikte büyütelim</h2><p>LinkedIn ve Instagram hesaplarınızı B2B kitlenize uygun içerikle yönetiyor, etkileşimi ve gelen talepleri düzenli raporlarla takip ediyoruz.</p><p class="cta__alt">Devamı için: <a href="https://app.socialmediacorner.co/hesap/kayit">Ücretsiz hesap oluşturun →</a></p></div><div class="cta__btns"><a class="btn btn--light btn--lg" href="/iletisim">İletişime geçin</a></div></div></div></section>
 <script>
 (function(){
 "use strict";
