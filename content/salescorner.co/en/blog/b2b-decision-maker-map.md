@@ -238,4 +238,4 @@ Ideally, the map should be updated after every significant conversation. For str
 
 A decision-maker map turns the B2B sales habit of "talking to one person and hoping for a deal" into a structured, repeatable process. Clarifying the scope of the opportunity, listing the relevant people, assigning each a role, scoring influence and attitude, identifying gaps, creating personalized engagement plans and keeping the map live all tangibly increase your chances of closing. When set up correctly, this process also makes your pipeline forecasts more realistic.
 
-If you want to automate research, contact data enrichment and stakeholder-based outbound workflows with AI, [schedule a call with us](/en/iletisim) to design a setup that fits your team's structure. At Sales Corner, let us help you make decision-maker mapping a natural part of your sales process.
+If you want to automate research, contact data enrichment and stakeholder-based outbound workflows with AI, [schedule a call with us](/en/contact) to design a setup that fits your team's structure. At Sales Corner, let us help you make decision-maker mapping a natural part of your sales process.

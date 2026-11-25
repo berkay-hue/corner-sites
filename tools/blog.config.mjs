@@ -67,7 +67,9 @@ export default {
     origin: "https://salescorner.co", brand: "Sales Corner", titleSuffix: " | Sales Corner", author: "Sales Corner",
     pClass: "sk-p", cardSelector: "sk-card", lang: "tr", dateLocale: "tr-TR",
     regions: { readTime: "ReadTime" }, cardFields: { summary: ".sk-sum", readTime: ".sk-rt" },
-    variants: { en: { lang: "en", dateLocale: "en-US", prefix: "/en" } },
+    // Yazılar dilin kendi Blog düğümüne isPartOf ile bağlanır (şablonlarda tanımlı @id)
+    blogId: "https://salescorner.co/blog#blog",
+    variants: { en: { lang: "en", dateLocale: "en-US", prefix: "/en", blogId: "https://salescorner.co/en/blog#blog" } },
     // Sitede ayrı hizmet sayfası yok; linkler ana sayfa bölümleri ve iletişim sayfası
     services: {
       tr: { title: "Hizmetlerimiz", links: [["Hazır satış otomasyonları kütüphanesi", "/#otomasyonlar"], ["Size özel AI satış otomasyonu", "/#custom"], ["Otomasyon mimarisi", "/#mimari"], ["Satış otomasyonu için iletişim", "/iletisim"]] },
