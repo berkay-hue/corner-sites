@@ -73,6 +73,8 @@ S.kaydet({
     var y=$('#sb-yer');
     if(devraldi){if(y){y.textContent='';y.hidden=true}}else yedekCiz(t);
   },
+  /* tek taslak (draft_ids[0]); Planla kuyrukta açıklamayı Instagram metni yapar (studyo-kuyruk.js taslakOn) */
+  taslakId:function(ids){return ids[0]},
   basla:kur
 });
 })();

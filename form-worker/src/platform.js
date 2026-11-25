@@ -420,6 +420,7 @@ const ACCT = {
   "GET voice": acct(getVoice),
   "PUT voice": acct(putVoice),
   "GET drafts": acct(listDrafts),
+  "GET drafts/:id": acct(getDraft),
   "POST drafts/:id/delete": acct(deleteDraft),
   "GET export": acct(exportData),
   "POST account/delete": acct(deleteAccount),
@@ -509,6 +510,14 @@ async function listDrafts(c) {
     ORDER BY id DESC LIMIT ${DRAFT_PAGE + 1}`, ...args);
   const page = rows.slice(0, DRAFT_PAGE);
   return ok(c, { drafts: page.map(draftOut), next: rows.length > DRAFT_PAGE ? page[page.length - 1].id : null });
+}
+
+// Tek taslak: başkasının, başka sitenin ya da DRAFT_KEEP_DAYS'ten eski taslak yokmuş gibi 404 (listDrafts ile aynı süzgeç)
+async function getDraft(c, id) {
+  const r = await c.env.DB.prepare(`SELECT id, platform, created_at, topic, body, meta FROM drafts
+    WHERE id = ? AND user_id = ? AND site = ? AND created_at >= datetime('now', ?)`).bind(id, c.user.id, c.site, KEEP).first();
+  if (!r) throw new Bad("not_found", 404);
+  return ok(c, { draft: draftOut(r) });
 }
 
 // Başkasının ya da başka sitenin taslağı yokmuş gibi 404

@@ -262,7 +262,9 @@ test("başka kullanıcının işi ve hesabı 404; başka sitenin oturumu 401", a
 test("rolü sitede kabul edilmeyen (pasif) hesabın oturumu 401 auth (platform.js sessionUser ile aynı); brand geri dönünce açılır", async () => {
   const APP = "https://app.socialmediacorner.co";
   const s = setup({ ACCOUNTS_ENABLED: "1", PUBLISH_SITES: `${SITE},app.socialmediacorner.co` });
+  s.db.exec(read("../migrations/0018_plans.sql")); // smc'de kuyruk planlıdır (pro): plan sütunu
   const a = s.user("a@x.co", "app.socialmediacorner.co"), bc = s.user("b@x.co");
+  s.db.prepare("UPDATE users SET plan = 'pro' WHERE id = ?").run(a.id);
   await s.connect(a, "linkedin", "aa");
   const id = ok(await s.call("POST", "/publish/jobs", { token: a.token, origin: APP, body: { rid: "app-1", platform: "linkedin", body: "Merhaba" } })).body.job.id;
   for (const role of ["influencer", "agency", "Brand", ""]) {
@@ -350,12 +352,14 @@ test("aynı idem_key (hesap + metin + saat) ikinci onayda 409 duplicate; iptal a
 test("kira seçmez: yazma kapsamı yok, onaysız, approved_hash ≠ body_hash, site ya da platform listede değil", async () => {
   const s = setup();
   const u1 = s.user("1@x.co"), u2 = s.user("2@x.co"), u3 = s.user("3@x.co"), u4 = s.user("4@x.co"), u5 = s.user("5@x.co");
-  await s.connect(u1, "linkedin", "l1", { scope: "r_basicprofile" });
+  await s.connect(u1, "linkedin", "l1");
   await s.connect(u2, "linkedin", "l2");
   await s.connect(u3, "linkedin", "l3");
   await s.connect(u4, "instagram", "i4");
   await s.connect(u5, "linkedin", "l5");
   const j1 = await s.job(u1, "linkedin");
+  // Onaydan sonra kapsam geri alınmış (onay artık kapsamsız token'ı reconnect_required ile reddeder; kira kapısı yine durur)
+  s.db.prepare("UPDATE oauth_tokens SET scope = 'r_basicprofile' WHERE user_id = ?").run(u1.id);
   const j2 = await s.job(u2, "linkedin", { approve: false });
   ok(await s.call("POST", `/publish/jobs/${j2}/submit`, { token: u2.token }));
   const j3 = await s.job(u3, "linkedin");
@@ -490,7 +494,7 @@ test("LinkedIn 201 → yayinlandi + remote_id; tek istek, kaçışlı metin, say
   const f = fakeProvider([LI_OK()]);
   const logs = [];
   const r = await s.tick(f, { log: l => logs.push(l) });
-  assert.deepEqual(r, { leased: 1, done: [{ id, to: "yayinlandi", code: null }], released: 0, sub: 1, d1: 11 });
+  assert.deepEqual(r, { leased: 1, done: [{ id, to: "yayinlandi", code: null }], released: 0, sub: 1, d1: 13 });
   const j = s.row(id);
   assert.deepEqual([j.state, j.remote_id, j.lease_until, j.attempts, j.next_try_at], ["yayinlandi", "urn:li:share:7001", null, 0, null]);
   assert.equal(f.calls.length, 1);
@@ -522,7 +526,7 @@ test("IG: konteyner IN_PROGRESS → planlandi (60 sn, deneme değil); sonraki tu
   const f1 = fakeProvider([IG_LIMIT(), { body: { id: "C77" } }, { body: { status_code: "IN_PROGRESS" } }, { body: { status_code: "IN_PROGRESS" } }]);
   const r1 = await s.tick(f1);
   assert.deepEqual(r1.done, [{ id, to: "planlandi", code: "ig_in_progress" }]);
-  assert.equal(r1.d1, 12);
+  assert.equal(r1.d1, 14);
   assert.deepEqual([s.row(id).container_id, s.row(id).attempts], ["C77", 0]);
   near(s.inSec(id), 60);
   assert.equal(f1.calls[0].url.startsWith(`${IG_API}/1789/content_publishing_limit?`), true);
@@ -708,7 +712,7 @@ test("bütçe: LIMIT alt istek ve D1'den hesaplanır (sub 14 → 2, d1 21 → 1,
   s = await mk();
   f = fakeProvider(() => LI_OK());
   r = await s.tick(f, { sub: 5 });
-  assert.deepEqual(r, { leased: 0, done: [], released: 0, sub: 0, d1: 7 });
+  assert.deepEqual(r, { leased: 0, done: [], released: 0, sub: 0, d1: 9 });
   assert.equal(f.calls.length, 0);
   // Varsayılan bütçede en kötü durum 50'yi aşmaz: 6 IG işi
   s = setup({ PUBLISH_PER_RUN: "6", PUBLISH_PLATFORMS: "instagram" });
@@ -741,7 +745,7 @@ test("kirası alınıp işlenmeyen iş planlandi'ya döner: süre (deadline) ve 
   const f = fakeProvider(() => { t += 25000; return LI_OK(); });
   const r = await s.tick(f, { clock: () => t });
   assert.deepEqual([r.leased, r.released, r.done.map(d => d.id)], [3, 2, [ids[0]]]);
-  assert.equal(r.d1, 7 + 1 + 1 + 2 + 2);
+  assert.equal(r.d1, 9 + 1 + 1 + 2 + 2);
   for (const id of ids.slice(1)) {
     assert.deepEqual([s.row(id).state, s.row(id).lease_until, s.row(id).attempts], ["planlandi", null, 0]);
     assert.deepEqual(s.lastEvent(id), { from_state: "yayinlaniyor", to_state: "planlandi", note: "deadline", actor: null });
@@ -837,4 +841,186 @@ test("düşük not 5: izinli ama hesap sitesi olmayan origin'in 403 origin yanı
     }
   }
   assert.deepEqual([c.n.prepare, c.n.batch], [0, 0]);
+});
+
+// ---- 25.11: plan kapısı (smc), yazma kapsamı onayda, OAuth yazma kapsamı yalnız kuyruk açıkken ----
+
+test("smc kuyruk planı: demo/basic/plan yok 403 plan_required {plan:'pro'}; pro/enterprise açar; eski işler görülür, düzenlenir, iptal edilir; brandcorner değişmez", async () => {
+  const APP = "https://app.socialmediacorner.co", SMC = "app.socialmediacorner.co";
+  // 0018 yok (plan sütunu yok): planOf null, kapalı kalır
+  const s0 = setup({ ACCOUNTS_ENABLED: "1", PUBLISH_SITES: `${SITE},${SMC}` });
+  const z = s0.user("z@x.co", SMC);
+  await s0.connect(z, "linkedin", "zz");
+  const r0 = await s0.call("POST", "/publish/jobs", { token: z.token, origin: APP, body: { rid: "z1", platform: "linkedin", body: "x" } });
+  fails(r0, 403, "plan_required");
+  assert.equal(r0.body.plan, "pro");
+
+  const s = setup({ ACCOUNTS_ENABLED: "1", PUBLISH_SITES: `${SITE},${SMC}` });
+  s.db.exec(read("../migrations/0018_plans.sql"));
+  const as = (u, plan) => s.db.prepare("UPDATE users SET plan = ? WHERE id = ?").run(plan, u.id);
+  const call = (u, m, p, body) => s.call(m, p, { token: u.token, origin: APP, body });
+  const users = {};
+  for (const plan of ["demo", "basic", "bilinmeyen", "pro", "enterprise"]) {
+    users[plan] = s.user(`${plan}@x.co`, SMC);
+    as(users[plan], plan);
+    await s.connect(users[plan], "linkedin", `li-${plan}`);
+  }
+  for (const plan of ["demo", "basic", "bilinmeyen"]) {
+    const u = users[plan];
+    const r = await call(u, "POST", "/publish/jobs", { rid: `r-${plan}`, platform: "linkedin", body: "Merhaba" });
+    fails(r, 403, "plan_required");
+    assert.equal(r.body.plan, "pro");
+    const l = ok(await call(u, "GET", "/publish/jobs"));
+    assert.deepEqual([l.body.jobs, l.body.plan_required], [[], "pro"]);
+  }
+  const planned = {};
+  for (const plan of ["pro", "enterprise"]) {
+    const u = users[plan];
+    const id = ok(await call(u, "POST", "/publish/jobs", { rid: `r-${plan}`, platform: "linkedin", body: "Merhaba" })).body.job.id;
+    ok(await call(u, "POST", `/publish/jobs/${id}/submit`));
+    ok(await call(u, "POST", `/publish/jobs/${id}/approve`, { run_at: isoAgo(60) }));
+    assert.equal(s.row(id).state, "planlandi");
+    planned[plan] = id;
+    assert.equal(ok(await call(u, "GET", "/publish/jobs")).body.plan_required, null);
+  }
+  // pro → basic: açık işler kalır; görme, düzenleme, iptal açık; gönderme/onay/yeniden deneme 403
+  const u = users.pro;
+  const a = ok(await call(u, "POST", "/publish/jobs", { rid: "pro-a", platform: "linkedin", body: "Taslak" })).body.job.id;
+  const b = ok(await call(u, "POST", "/publish/jobs", { rid: "pro-b", platform: "linkedin", body: "Onay bekleyen" })).body.job.id;
+  ok(await call(u, "POST", `/publish/jobs/${b}/submit`));
+  const c = ok(await call(u, "POST", "/publish/jobs", { rid: "pro-c", platform: "linkedin", body: "Başarısız" })).body.job.id;
+  s.db.prepare("UPDATE publish_jobs SET state = 'basarisiz' WHERE id = ?").run(c);
+  as(u, "basic");
+  assert.equal(ok(await call(u, "GET", "/publish/jobs")).body.jobs.length, 4);
+  ok(await call(u, "GET", `/publish/jobs/${a}`));
+  ok(await call(u, "PUT", `/publish/jobs/${a}`, { body: "Düzeltilmiş" }));
+  for (const [id, act] of [[a, "submit"], [b, "approve"], [c, "retry"]]) {
+    const r = await call(u, "POST", `/publish/jobs/${id}/${act}`, { run_at: isoAgo(60) });
+    fails(r, 403, "plan_required");
+    assert.equal(r.body.plan, "pro");
+  }
+  assert.deepEqual([a, b, c].map(id => s.row(id).state), ["taslak", "onay_bekliyor", "basarisiz"]);
+  ok(await call(u, "POST", `/publish/jobs/${b}/cancel`));
+  assert.equal(s.row(b).state, "iptal");
+  // brandcorner.co'da plan kapısı yok: basic (0018 varsayılanı) kullanıcı da kuyruğu kullanır, listede plan alanı yok
+  const bc = s.user("bc@x.co");
+  await s.connect(bc, "linkedin", "bc1");
+  const id = await s.job(bc, "linkedin");
+  assert.equal(s.row(id).state, "planlandi");
+  assert.equal("plan_required" in ok(await s.call("GET", "/publish/jobs", { token: bc.token })).body, false);
+
+  // Cron: plan düşen kullanıcının planlandi işi kiralanmaz; onay_bekliyor'a döner, onay silinir, last_error plan_required.
+  // enterprise (smc) ve brandcorner basic işleri yayınlanır.
+  const p = planned.pro;
+  assert.ok(s.row(p).approved_at && s.row(p).idem_key);
+  let f = fakeProvider(() => LI_OK());
+  let r = await s.tick(f);
+  assert.deepEqual(r.done.map(d => d.id).sort((x, y) => x - y), [planned.enterprise, id].sort((x, y) => x - y));
+  assert.equal(f.calls.length, 2);
+  const j = s.row(p);
+  assert.deepEqual([j.state, j.last_error, j.approved_by, j.approved_at, j.approved_hash, j.idem_key, j.lease_until],
+    ["onay_bekliyor", "plan_required", null, null, null, null, null]);
+  assert.deepEqual(s.lastEvent(p), { from_state: "planlandi", to_state: "onay_bekliyor", note: "plan_required", actor: null });
+  assert.deepEqual([s.row(planned.enterprise).state, s.row(id).state], ["yayinlandi", "yayinlandi"]);
+  // basic'te yeniden onay 403; sonraki tur bir şey yapmaz
+  fails(await call(u, "POST", `/publish/jobs/${p}/approve`, { run_at: isoAgo(60) }), 403, "plan_required");
+  r = await s.tick(f);
+  assert.equal(r.leased, 0);
+  assert.equal(s.events(p).filter(e => e.note === "plan_required").length, 1);
+  // Pro'ya dönünce yeniden onaylanır ve yayınlanır
+  as(u, "pro");
+  ok(await call(u, "POST", `/publish/jobs/${p}/approve`, { run_at: isoAgo(60) }));
+  f = fakeProvider(() => LI_OK());
+  r = await s.tick(f);
+  assert.deepEqual(r.done, [{ id: p, to: "yayinlandi", code: null }]);
+  // Deneme bitti (demo) ya da bilinmeyen plan da düşüş sayılır
+  for (const plan of ["demo", "bilinmeyen"]) {
+    as(u, "pro");
+    const q = ok(await call(u, "POST", "/publish/jobs", { rid: `cron-${plan}`, platform: "linkedin", body: `Plan ${plan}` })).body.job.id;
+    ok(await call(u, "POST", `/publish/jobs/${q}/submit`));
+    ok(await call(u, "POST", `/publish/jobs/${q}/approve`, { run_at: isoAgo(60) }));
+    as(u, plan);
+    assert.equal((await s.tick(fakeProvider(() => LI_OK()))).leased, 0);
+    assert.deepEqual([s.row(q).state, s.row(q).last_error], ["onay_bekliyor", "plan_required"]);
+  }
+});
+
+test("cron plan kapısı: users.plan okunamazsa (0018 yok) smc işleri kiralanmaz, brandcorner sürer", async () => {
+  const APP = "https://app.socialmediacorner.co", SMC = "app.socialmediacorner.co";
+  const s = setup({ ACCOUNTS_ENABLED: "1", PUBLISH_SITES: `${SITE},${SMC}` });
+  s.db.exec(read("../migrations/0018_plans.sql"));
+  const u = s.user("p@x.co", SMC);
+  s.db.prepare("UPDATE users SET plan = 'pro' WHERE id = ?").run(u.id);
+  await s.connect(u, "linkedin", "p1");
+  const call = (m, p, body) => s.call(m, p, { token: u.token, origin: APP, body });
+  const a = ok(await call("POST", "/publish/jobs", { rid: "p-1", platform: "linkedin", body: "Merhaba" })).body.job.id;
+  ok(await call("POST", `/publish/jobs/${a}/submit`));
+  ok(await call("POST", `/publish/jobs/${a}/approve`, { run_at: isoAgo(60) }));
+  const bc = s.user("bc@x.co");
+  await s.connect(bc, "linkedin", "bc1");
+  const b = await s.job(bc, "linkedin");
+  s.db.exec("ALTER TABLE users DROP COLUMN plan");
+  const logs = [];
+  const r = await s.tick(fakeProvider(() => LI_OK()), { log: l => logs.push(l) });
+  assert.deepEqual(r.done, [{ id: b, to: "yayinlandi", code: null }]);
+  assert.equal(s.row(a).state, "planlandi");
+  assert.ok(logs.some(l => JSON.parse(l).ev === "publish_plan_check"));
+});
+
+test("onay ve yeniden deneme yazma kapsamını ister: yoksa 409 reconnect_required, iş yerinde kalır; virgüllü IG kapsamı okunur", async () => {
+  const s = setup();
+  const u = s.user("a@x.co"), t = s.user("t@x.co");
+  await s.connect(u, "linkedin", "l1", { scope: "r_basicprofile r_organization_social" });
+  await s.connect(u, "instagram", "i1", { scope: "instagram_business_basic,instagram_business_content_publish" });
+  const li = await s.job(u, "linkedin", { approve: false });
+  const act = (id, a, body) => s.call("POST", `/publish/jobs/${id}/${a}`, { token: u.token, body });
+  ok(await act(li, "submit"));
+  fails(await act(li, "approve", { run_at: isoAgo(60) }), 409, "reconnect_required");
+  assert.equal(s.row(li).state, "onay_bekliyor");
+  assert.deepEqual(s.events(li).map(e => e.note), ["created", "submitted"]);
+  // kapsam bir metnin parçası olarak sayılmaz
+  s.db.prepare("UPDATE oauth_tokens SET scope = 'r_basicprofile xw_member_social' WHERE user_id = ? AND platform = 'linkedin'").run(u.id);
+  fails(await act(li, "approve", { run_at: isoAgo(60) }), 409, "reconnect_required");
+  // yeniden bağlanınca (yazma kapsamı geldi) onay geçer
+  s.db.prepare("UPDATE oauth_tokens SET scope = 'r_basicprofile w_member_social' WHERE user_id = ? AND platform = 'linkedin'").run(u.id);
+  ok(await act(li, "approve", { run_at: isoAgo(60) }));
+  const ig = await s.job(u, "instagram");
+  assert.equal(s.row(ig).state, "planlandi");
+  // yeniden deneme: kapsam geri alınmış token'la 409, iş basarisiz'da kalır
+  s.db.prepare("UPDATE publish_jobs SET state = 'basarisiz' WHERE id = ?").run(ig);
+  s.db.prepare("UPDATE oauth_tokens SET scope = 'instagram_business_basic' WHERE user_id = ? AND platform = 'instagram'").run(u.id);
+  fails(await act(ig, "retry"), 409, "reconnect_required");
+  assert.equal(s.row(ig).state, "basarisiz");
+  // token satırı hiç yoksa da yeniden bağlanmalı
+  await s.connect(t, "linkedin", "t1");
+  const tj = await s.job(t, "linkedin", { approve: false });
+  ok(await s.call("POST", `/publish/jobs/${tj}/submit`, { token: t.token }));
+  s.db.prepare("DELETE FROM oauth_tokens WHERE user_id = ?").run(t.id);
+  fails(await s.call("POST", `/publish/jobs/${tj}/approve`, { token: t.token, body: { run_at: isoAgo(60) } }), 409, "reconnect_required");
+});
+
+test("OAuth yazma kapsamını yalnız kuyruk o site ve platform için açıkken ister (IG virgülle, LinkedIn boşlukla); kapalıyken izin ekranı aynı", async () => {
+  const { authorizeUrl, startOAuth, writeScope, hasWriteScope } = await import("./oauth.js");
+  const scopeOf = url => new URL(url).searchParams.get("scope");
+  const off = { LINKEDIN_CLIENT_ID: "li", INSTAGRAM_CLIENT_ID: "ig" };
+  const base = { li: scopeOf(authorizeUrl(off, "linkedin", "s", "https://r")), ig: scopeOf(authorizeUrl(off, "instagram", "s", "https://r")) };
+  assert.equal(base.li.includes("w_member_social"), false);
+  assert.equal(base.ig.includes("content_publish"), false);
+  const on = { ...off, ...ON };
+  assert.equal(writeScope(on, SITE, "linkedin"), "w_member_social");
+  assert.equal(writeScope(on, SITE, "instagram"), "instagram_business_content_publish");
+  for (const [env, site, p] of [[off, SITE, "linkedin"], [{ ...on, PUBLISH_ENABLED: "0" }, SITE, "linkedin"], [on, "saascorner.co", "linkedin"],
+    [{ ...on, PUBLISH_PLATFORMS: "linkedin" }, SITE, "instagram"], [on, SITE, "youtube"], [on, SITE, "tiktok"]])
+    assert.equal(writeScope(env, site, p), null, `${site} ${p}`);
+  assert.equal(scopeOf(authorizeUrl(on, "linkedin", "s", "https://r", null, writeScope(on, SITE, "linkedin"))), `${base.li} w_member_social`);
+  assert.equal(scopeOf(authorizeUrl(on, "instagram", "s", "https://r", null, writeScope(on, SITE, "instagram"))), `${base.ig},instagram_business_content_publish`);
+  assert.deepEqual(["w_member_social", "a,w_member_social", "a w_member_social b", "xw_member_social", "", null].map(x => hasWriteScope(x, "linkedin")),
+    [true, true, true, false, false, false]);
+  assert.equal(hasWriteScope("w_member_social", "youtube"), false);
+  // startOAuth siteyi geçirir: açık sitede kapsam eklenir, başka sitede eklenmez
+  const s = setup(off);
+  const u = s.user("a@x.co");
+  const go = async site => scopeOf(await startOAuth(s.env, u.id, "linkedin", { api: "https://forms.test", origin: ORIGIN, site, user: {} }));
+  assert.equal(await go(SITE), `${base.li} w_member_social`);
+  assert.equal(await go("saascorner.co"), base.li);
 });

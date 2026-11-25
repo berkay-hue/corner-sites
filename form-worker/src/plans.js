@@ -21,6 +21,11 @@ export const PLANS = Object.freeze({
   enterprise: Object.freeze({ linkedin_blog: null, video_gorsel: null, stock: true, stock_trial: 0, cms_sites: null, cms_per_week: 7 }),
 });
 
+// Yayın kuyruğu (src/publish.js, app.socialmediacorner.co) yalnız bu planlarda; fiyat sayfası ve assets/plans.js kuyruk
+// alanı ile aynı (demo/basic false). planOf null ise (0018 yok) kapalı.
+export const QUEUE_PLANS = Object.freeze(["pro", "enterprise"]);
+export const queueAllowed = user => QUEUE_PLANS.includes(planOf(user));
+
 // üretim platformu → aylık sayaç türü
 export const MONTH_KIND = Object.freeze({ linkedin: "lb", blog: "lb", video: "vg", instagram: "vg" });
 export const KIND_NAME = Object.freeze({ lb: "linkedin_blog", vg: "video_gorsel" });

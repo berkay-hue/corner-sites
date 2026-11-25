@@ -527,7 +527,9 @@ const DRAFT_SQL = "INSERT INTO drafts (user_id, site, platform, topic, body, met
 // 0020 uygulanmadan blog/video INSERT'i CHECK'e takılır, aşağıdaki catch yutar (draft_ids yok). Liste platform.js DRAFT_PLATFORMS ile aynı.
 // Satırlar 3 gün saklanır (platform.js DRAFT_KEEP_DAYS; saatlik cron siler).
 const DRAFT_DB = ["linkedin", "instagram", "blog", "video"];
-const sceneLine = x => (x.sub ? `${x.text} — ${x.sub}` : x.text);
+// Sahne satırı tek satır: ilk "\n\n" sahnelerle açıklamayı ayırır (kuyruk ?taslak= açıklamayı bu ayraçtan alır, studyo-kuyruk.js taslakOn).
+const oneLine = v => String(v ?? "").replace(/\s+/g, " ").trim();
+const sceneLine = x => (oneLine(x.sub) ? `${oneLine(x.text)} — ${oneLine(x.sub)}` : oneLine(x.text));
 export const draftBody = d => Array.isArray(d.scenes) ? `${d.scenes.map(sceneLine).join("\n")}\n\n${d.caption}`
   : typeof d.meta === "string" ? `${d.title}\n\n${d.text}` : typeof d.say === "string" ? `${d.text}\n\n${d.say}` : d.text;
 // Girişli kullanıcı: yukarıdaki üç koşul + sessionUser. { user, site, P } (P = planLimits: 0018 yoksa null) ya da null.

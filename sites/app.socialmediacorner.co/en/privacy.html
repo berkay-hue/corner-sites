@@ -37,7 +37,7 @@
 
 <main id="icerik" class="belge" tabindex="-1">
   <h1>Privacy notice (KVKK)</h1>
-  <p class="belge-tarih">Last updated: 24 November 2026 · Text version: v1</p>
+  <p class="belge-tarih">Last updated: 25 November 2026 · Text version: v2</p>
   <p>This notice explains how your personal data is processed when you use Social Media Corner Studio (app.socialmediacorner.co). It is provided under Article 10 of the Turkish Personal Data Protection Law No. 6698 (“KVKK”). If this English text and the <a href="/kvkk" hreflang="tr" lang="tr">Turkish text</a> differ, the Turkish text prevails.</p>
 
   <section class="belge-ozet" aria-labelledby="ozet">
@@ -82,6 +82,7 @@
     <li><strong>Usage limit data:</strong> Your allowance is counted per account.</li>
     <li><strong>Bot check:</strong> We use Cloudflare Turnstile to prevent abuse. The check token and your IP address are sent to Cloudflare for this check.</li>
     <li><strong>Technical logs and measurement:</strong> The site runs on Cloudflare. Cloudflare processes technical data such as IP address and browser details to deliver and protect the service. Cloudflare Web Analytics, which does not use cookies, may be used to count page views in aggregate.</li>
+    <li><strong>Stock images (Pexels):</strong> When you choose the with-images option in Studio or add a photo to a scene, the words you search for or your draft’s topic are sent from our server to Pexels as a search query. We do not add your name, email or IP address to that query. In Studio, photos are not copied to our server; your browser loads them directly from Pexels’ servers (images.pexels.com). When it does, your IP address, browser details and the panel’s address reach Pexels. For cover images in the blog autopilot, see the “Blog autopilot” item below.</li>
   </ul>
 
   <h3>Waitlist and quote form</h3>
@@ -113,6 +114,13 @@
         <li>the result of publishing.</li>
       </ul>
       No post is published without your approval.</li>
+    <li><strong>Blog autopilot:</strong> If you connect your blog, we process:
+      <ul>
+        <li>your site’s address and platform, and the settings you choose (days, time, language, tone, site description and topic list),</li>
+        <li>the keys you give us to connect to the site, or the access keys the platform issues (encrypted),</li>
+        <li>the title, text and cover image of the posts we write, and the result of sending them.</li>
+      </ul>
+      Posts are written on the days you choose without you having to do anything else, and sent to your site as drafts or (if you chose this) to be published. On plans with stock images, the post’s title or the next queued topic is sent from our server to Pexels as a search query to find a cover, without you picking anything; we do not add your name, email or IP address to that query. On self-hosted WordPress and IdeaSoft, the chosen cover is downloaded from Pexels through our server and uploaded to your site; it is not stored as a file on our server. On other platforms, the cover’s Pexels link is passed to your site, and the platform or your site’s visitors load the image from Pexels (no cover is sent to WordPress.com). If you do not connect a site, this data is not processed.</li>
   </ul>
 
   <h2 id="amac">3. Purposes and legal bases</h2>
@@ -150,7 +158,9 @@
     <li><strong>Cloudflare, Inc. (USA):</strong> hosting, database, bot check (Turnstile), cookie-less measurement (Web Analytics) and email routing.</li>
     <li><strong>Anthropic, PBC (USA):</strong> AI draft generation. See section 6.</li>
     <li><strong>Google LLC (Google Workspace):</strong> sending account emails such as password resets, and keeping the form and sign-up notices sent to our team in its mailbox.</li>
+    <li><strong>Pexels GmbH (Germany):</strong> When you use stock images, or when a cover is picked for a blog autopilot post on a plan with stock images, to search for photos and load them. The search query is sent from our server. In Studio, when a photo loads, your IP address and browser details go from your browser straight to Pexels (see section 2).</li>
     <li><strong>LinkedIn Corporation and Meta Platforms, Inc. (Instagram):</strong> Only if you connect your account: to set up the connection, fetch statistics within the permissions you grant and publish posts you approve.</li>
+    <li><strong>The blog platform you connect (such as WordPress, Ghost, Webflow, Shopify, HubSpot, Wix, GitHub or IdeaSoft):</strong> Only if you connect your site for the blog autopilot: to send posts and cover images to your site.</li>
     <li><strong>Competent public authorities:</strong> Only where the law requires it.</li>
   </ul>
   <p>These providers’ servers are located abroad, mainly in the USA. Your data is therefore transferred abroad. We transfer it in line with the conditions and procedures in Article 9 of KVKK.</p>
@@ -169,7 +179,7 @@
   <ul>
     <li><strong>Draft history:</strong> 3 days, then deleted automatically. You can also delete drafts one by one before that.</li>
     <li><strong>Automatic blog post text:</strong> deleted 3 days after the post is sent, published, cancelled or fails; the title and status record remain.</li>
-    <li><strong>Account details, brand voice, connected accounts and publish jobs:</strong> until you delete them or delete your account.</li>
+    <li><strong>Account details, brand voice, connected accounts, connected blogs and publish jobs:</strong> until you delete them or delete your account. When you disconnect a blog, its keys are deleted right away.</li>
     <li><strong>Session:</strong> up to 30 days, or until you sign out.</li>
     <li><strong>Security records (IP address and email):</strong> 1 day.</li>
     <li><strong>Password reset and account connection links:</strong> deleted when they expire.</li>

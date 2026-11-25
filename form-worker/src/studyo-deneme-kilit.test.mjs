@@ -72,7 +72,7 @@ test("a) css: meşgulken seçili çip seçili görünür (dashed disabled kural�
 });
 
 test("c) ?v=: studyo.css, studyo-kabuk.js, studyo-kurgu.js her HTML'de (TR + en/) tek ve güncel sürüm", () => {
-  const beklenen = { "studyo.css": "gs3", "studyo-kabuk.js": "ak1", "studyo-kurgu.js": "gs2" };
+  const beklenen = { "studyo.css": "gs3", "studyo-kabuk.js": "ak3", "studyo-kurgu.js": "gs2" };
   const sayi = {};
   for (const p of htmller()) {
     const h = readFileSync(p, "utf8");

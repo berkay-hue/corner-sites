@@ -692,6 +692,23 @@ test("OAuth callback cms_sites'a yazmaz, bilet döner; doğru kullanıcı finish
   assert.equal((await call("POST", "/app/cmsoauth/finish", { body: { ticket } })).status, 403);
 });
 
+test("W5: CMS bileti sosyal bağlantı bitişinde (/app/connect/finish) yanmaz: 400 ticket, satır kalır, cmsoauth/finish yine bağlar", async t => {
+  stubProviders(t);
+  const { db, env, call } = setup(freshDb(), { METRICS_ENABLED: "1" }); // sosyal bağlantı uçları açık
+  const ticket = await oauthFlow(t, call, env);
+  const left = () => db.prepare("SELECT COUNT(*) AS n FROM oauth_states WHERE ticket_hash = ?").get(hash(ticket)).n;
+  for (let i = 0; i < 2; i++) {
+    const r = await call("POST", "/app/connect/finish", { body: { ticket } });
+    assert.deepEqual([r.status, r.body.error], [400, "ticket"], JSON.stringify(r.body));
+    assert.equal(left(), 1);
+  }
+  assert.equal(db.prepare("SELECT COUNT(*) AS n FROM social_accounts").get().n, 0);
+  assert.equal(db.prepare("SELECT COUNT(*) AS n FROM oauth_tokens").get().n, 0);
+  const f = await call("POST", "/app/cmsoauth/finish", { body: { ticket } });
+  assert.equal(f.status, 200, JSON.stringify(f.body));
+  assert.equal(left(), 0);
+});
+
 test("OAuth dönüş yolu: varsayılan /blog-otomatik (en: /en/blog-autopilot); body.back yalnız izin listesinden", async t => {
   stubProviders(t);
   const { db, call } = setup();
