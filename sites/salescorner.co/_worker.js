@@ -1271,6 +1271,9 @@ async function n8nApiEmu(ctx, url) {
   if (!st) {
     const job = await asyncJob(id); const wfName = job && ASYNC_WF[job.p];
     if (!wfName) return J({ id, finished: true, status: "error", data: { resultData: { error: { message: "Bilinmeyen çalıştırma" } } } });
+    // İş kimliği imzasız: elle üretilmiş kimlik yalnız kendi logo ucumuzu gösterebilsin, başka adres atılır.
+    const jb = job.b && typeof job.b === "object" ? job.b : null;
+    if (jb && jb.logo_url != null) { const lm = /^https:\/\/salescorner\.co\/api\/app\/logo\/([0-9a-f-]{36})\.png$/.exec(String(jb.logo_url)); if (!lm || !LOGO_RE.test(lm[1])) { delete jb.logo_url; delete jb.logo_oran; } }
     st = { wfName, startedAt: new Date().toISOString(), S: wfState(WF[wfName].start[job.p], [{ json: { headers: job.h || {}, params: {}, query: job.q || {}, body: job.b, executionMode: "production" } }]), rd: {}, sib: {}, sub: 0 };
   }
   const { wfName, startedAt, S } = st;
@@ -1289,9 +1292,11 @@ async function n8nApiEmu(ctx, url) {
 }
 
 // ---- HTTP uçlarını akışlara bağla ----
-async function runHook(route, req, env, url, cfctx) {
+async function runHook(route, req, env, url, cfctx, guvenli = false) {
   const wfName = route.wf, wf = WF[wfName], wh = wf.nodes[route.node];
   const item = await webhookItem(req, url);
+  // Logo alanlarına yalnız /api/app (Pro kontrolünden geçmiş) yolunda güvenilir; açık uçlarda atılır.
+  if (!guvenli && item.json.body && typeof item.json.body === "object") { delete item.json.body.logo_url; delete item.json.body.logo_oran; }
   const ctx = { env, cfctx, execId: String(Date.now()) };
   if (ASYNC_WF[route.path]) ctx.execId = await asyncId({ p: route.path, b: item.json.body, q: item.json.query, h: { "user-agent": item.json.headers["user-agent"] || "" } });
   const mode = wh.p.responseMode || "onReceived";
@@ -1723,15 +1728,45 @@ async function appInner(req, env, url, cfctx, target, body) {
   const ir = new Request(iu, { method: "POST", headers: h, body: JSON.stringify(body) });
   if (env.ANTHROPIC_API_KEY && env.GOOGLE_REFRESH_TOKEN) {
     const r = ROUTES.find(x => x.path === target && x.method === "POST");
-    if (r) return runHook(r, ir, env, iu, cfctx);
+    if (r) return runHook(r, ir, env, iu, cfctx, true);
   }
   return POST[target](ir, env, url.origin);
 }
+// Pro planlarda (profesyonel/ekip/ozel) firma profiline yüklenen logo sunumlarda SalesCorner logosunun yerine geçer.
+// Google Slides görseli adresten çektiği için herkese açık, tahmin edilemez anahtarlı bir adres verilir.
+const LOGO_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
+function logoOf(f) {
+  if (!f || f.logo_pro !== true || typeof f.logo_anahtar !== "string" || !LOGO_RE.test(f.logo_anahtar)) return null;
+  const o = Number(f.logo_oran);
+  return { logo_url: `https://salescorner.co/api/app/logo/${f.logo_anahtar}.png`, logo_oran: o >= 0.2 && o <= 10 ? Math.round(o * 1000) / 1000 : 3 };
+}
+// Slides görseli batchUpdate anında çeker; o arada logo değişmiş/kaldırılmış ya da plan bitmiş olabilir.
+// Bu durumda 404 tüm sunumu düşürür, bu yüzden geçerli biçimli her anahtar için yedek olarak Sales Corner logosu döner.
+// Edge önbelleği (anahtar her kayıtta değişir): logo 1 gün, yedek logo 5 dk tutulur.
+async function appLogo(req, env, sub, cfctx) {
+  const m = /^logo\/([0-9a-f-]{36})\.png$/.exec(sub);
+  if (!m || !LOGO_RE.test(m[1])) return new Response("Bulunamadı", { status: 404, headers: { "cache-control": "public, max-age=300" } });
+  const key = new Request(`https://salescorner.co/api/app/logo/${m[1]}.png`);
+  try { const c = await caches.default.match(key); if (c) return c; } catch {}
+  const koy = (res) => { try { const p = caches.default.put(key, res.clone()); if (cfctx?.waitUntil) cfctx.waitUntil(p.catch(() => {})); } catch {} return res; };
+  const hd = (cc) => ({ "content-type": "image/png", "cache-control": cc, "x-content-type-options": "nosniff" });
+  let r = null;
+  try { r = await sbRpc(SB_ANON_AU, "app_logo_getir", { p_anahtar: m[1] }); } catch {}
+  const d = r && r.ok && typeof r.j === "string" ? /^data:image\/png;base64,([A-Za-z0-9+/]+={0,2})$/.exec(r.j) : null;
+  if (d) return koy(new Response(__b64d(d[1]), { headers: hd("public, max-age=86400") }));
+  const y = await env.ASSETS.fetch(new Request(new URL("/img/sales-corner-logo.png", req.url)));
+  if (!y.ok) return new Response("Bulunamadı", { status: 404, headers: { "cache-control": "no-store" } });
+  const res = new Response(y.body, { headers: hd(r && r.ok ? "public, max-age=300" : "no-store") });
+  return r && r.ok ? koy(res) : res;
+}
 async function appRun(req, env, url, cfctx, modul, au, b) {
-  const firma = modul === "briefing" || modul === "sekans" ? saticiOf(await appFirma(au)) : null;
+  const ham = await appFirma(au);
+  const firma = modul === "briefing" || modul === "sekans" ? saticiOf(ham) : null;
   const x = appBody(modul, b, jwtEmail(au), firma);
   const bad = appValid(modul, x);
   if (bad) return fail(bad, 400);
+  const lg = logoOf(ham);
+  if (lg) Object.assign(x, lg);
   let j = null, st = 0;
   try {
     const r = await appInner(req, env, url, cfctx, APP_MOD[modul], x);
@@ -1876,6 +1911,11 @@ async function appRoute(req, env, url, path, cfctx) {
   if (req.method === "OPTIONS") return new Response(null, { status: 204 });
   const sub = path.slice("/api/app/".length);
   // Cron (Supabase pg_net) çağrısı: kökeni yok, tek kullanımlık jetonla doğrulanır
+  // Sunum logosu: Google Slides sunucusu çeker (kökeni yok), herkese açık
+  if (sub.startsWith("logo/") && (req.method === "GET" || req.method === "HEAD")) {
+    try { return await appLogo(req, env, sub, cfctx); }
+    catch (e) { console.log(path, e?.stack || e); return new Response("Hata", { status: 500 }); }
+  }
   if (sub === "takip-run" && req.method === "POST") {
     try { return await takipRun(req, env); }
     catch (e) { console.log(path, e?.stack || e); return fail("İşlem sırasında hata oluştu.", 500); }
@@ -3015,9 +3055,14 @@ function hdr(sid, title) {
   rect(sid, uid('db'), 7.2, 0.12, 2.5, 0.44, C.amber, 0.12);
   txt(sid, uid('dt'), 7.2, 0.15, 2.5, 0.38, dateStr, 9, C.amber, {bold:true,align:'CENTER'});
 }
+// Gerçek marka logosu (koyu zemin için açık renkli PNG, 495x178); metinle taklit etme
+function logoImg(sid, x, y, w) {
+  const h = w * 178 / 495;
+  requests.push({ createImage:{ objectId:uid('logo'), url:'https://salescorner.co/img/sales-corner-logo-dark.png', elementProperties:{ pageObjectId:sid, size:{ width:{magnitude:ie(w),unit:'EMU'}, height:{magnitude:ie(h),unit:'EMU'} }, transform:{ scaleX:1,scaleY:1,translateX:ie(x),translateY:ie(y),unit:'EMU' } } } });
+}
 function ftr(sid) {
   rect(sid, uid('fb'), 0, 5.25, 10, 0.375, C.darkBg);
-  txt(sid, uid('fl'), 0.4, 5.28, 3, 0.25, 'SALES CORNER', 7, C.amber, {bold:true});
+  logoImg(sid, 0.4, 5.33, 0.6);
   txt(sid, uid('fr'), 4, 5.28, 5.5, 0.25, 'Gizli — Dahili Kullanım', 7, C.steel, {align:'END'});
 }
 function badge(sid, label, x, y, color) {
@@ -3034,7 +3079,7 @@ const s1 = createSlide('sl_kapak');
 setBg(s1, C.navy);
 rect(s1, uid('lp'), 0, 0, 3.8, 5.625, C.darkBg);
 rect(s1, uid('vl'), 3.8, 0, 0.04, 5.625, C.amber);
-txt(s1, uid('br'), 0.5, 0.6, 3, 0.35, 'SALES CORNER', 11, C.amber, {bold:true});
+logoImg(s1, 0.5, 0.3, 1.5);
 rect(s1, uid('bl'), 0.5, 0.92, 1.2, 0.02, C.amber);
 txt(s1, uid('rt'), 0.5, 1.2, 3, 0.9, 'MULTI-CHANNEL\nPERFORMANS\nRAPORU', 18, C.white, {bold:true});
 txt(s1, uid('pd'), 0.5, 2.3, 3, 0.25, dateStr, 10, C.muted);
@@ -3804,7 +3849,7 @@ const s12 = createSlide('sl_close');
 setBg(s12, C.navy);
 rect(s12,uid('lp'),0,0,4,5.625,C.darkBg);
 rect(s12,uid('vl'),4,0,0.04,5.625,C.amber);
-txt(s12,uid('br'),0.5,0.8,3.2,0.35,'SALES CORNER',12,C.amber,{bold:true});
+logoImg(s12, 0.5, 0.48, 1.5);
 rect(s12,uid('bl'),0.5,1.1,1.0,0.02,C.amber);
 txt(s12,uid('th'),0.5,1.5,3.2,0.8,'Teşekkürler',36,C.white,{bold:true});
 txt(s12,uid('sb'),0.5,2.3,3.2,0.4,'Sorularınız için\nbize ulaşın',12,C.muted);
@@ -4647,7 +4692,24 @@ function scoreCircle(sid, x, y, r, score, label) {
 // Header bar
 function hdr(sid, title, color) {
   rect(sid, uid('hb'), 0, 0, W, 0.58, color||C.navy);
-  txt(sid, uid('ht'), 0.4, 0.1, W-0.8, 0.38, title, 17, C.white, { bold:true });
+  txt(sid, uid('ht'), 0.4, 0.1, W-2.1, 0.38, title, 17, C.white, { bold:true });
+  logoSag(sid, W-0.3, 0.02, 0.8);
+}
+
+// Logo: lacivert zeminde açık renkli SalesCorner logosu; Pro planda kullanıcının kendi logosu beyaz zemin üstünde
+const __LOGO = (() => { try { const b = $('Webhook Trigger').first().json.body || {}; const o = Number(b.logo_oran);
+  if (/^https:\/\/salescorner\.co\/api\/app\/logo\/[0-9a-f-]{36}\.png$/.test(String(b.logo_url || "")) && o >= 0.2 && o <= 10) return { url: b.logo_url, oran: o }; } catch (e) {} return null; })();
+function __img(sid, url, x, y, w, h) {
+  requests.push({ createImage: { objectId: uid('logo'), url: url, elementProperties: { pageObjectId: sid, size: { width:{magnitude:emu(w),unit:'EMU'}, height:{magnitude:emu(h),unit:'EMU'} }, transform: { scaleX:1, scaleY:1, translateX:emu(x), translateY:emu(y), unit:'EMU' } } } });
+}
+// (xr, y): logonun sağ üst köşesi; w×h SalesCorner logosunun kutusu
+function logoSag(sid, xr, y, w) {
+  const h = w * 178 / 495;
+  if (!__LOGO) { __img(sid, 'https://salescorner.co/img/sales-corner-logo-dark.png', xr - w, y, w, h); return; }
+  const BW = w * 1.2, BH = h * 1.4, p = 0.07;
+  const lw = __LOGO.oran >= BW / BH ? BW : BH * __LOGO.oran, lh = lw / __LOGO.oran;
+  rect(sid, uid('lgb'), xr - lw - 2 * p, y, lw + 2 * p, lh + 2 * p, C.white, { shape: 'ROUND_RECTANGLE' });
+  __img(sid, __LOGO.url, xr - lw - p, y + p, lw, lh);
 }
 
 // Footer
@@ -4755,8 +4817,9 @@ const konularArr   = Array.isArray(strat.konular) ? strat.konular : arrOf(actual
 const s1 = slide(uid('s'));
 bg(s1, C.navy);
 rect(s1, uid('st'), 0, 0, W, 0.07, C.gold);
-txt(s1, uid('ti'), 0.5, 0.25, 9, 0.6, '🎯  Toplantı Öncesi Briefing', 28, C.white, { bold:true });
-txt(s1, uid('su'), 0.5, 0.88, 9, 0.38, firma + '   •   ' + kisi, 15, C.gold, { bold:true });
+txt(s1, uid('ti'), 0.5, 0.25, 7.3, 0.6, '🎯  Toplantı Öncesi Briefing', 28, C.white, { bold:true });
+logoSag(s1, 9.5, 0.3, 1.5);
+txt(s1, uid('su'), 0.5, 0.88, __LOGO ? 7.0 : 9, 0.38, firma + '   •   ' + kisi, 15, C.gold, { bold:true });
 txt(s1, uid('dt'), 0.5, 1.28, 9, 0.3, '📅  ' + tarih + '     📋  ' + konu, 11, hex('94A3B8'));
 
 const dealR = 0.72;
@@ -5691,6 +5754,9 @@ return [{
 }];
 })()}},"cred":null},"HTML Rapor Olustur":{"name":"HTML Rapor Olustur","t":"code","p":{"code":async function($input,$,$json,$env,$execution,$itemIndex,helpers,Buffer,items,$node){return (async()=>{
 const d = $input.first().json;
+// Rapor başlığında logo: Pro planda kullanıcının kendi logosu, yoksa SalesCorner (adres katı kalıpla doğrulanır)
+const __logoUrl = (() => { try { const b = $('Webhook').first().json.body || {}; const o = Number(b.logo_oran);
+  if (/^https:\/\/salescorner\.co\/api\/app\/logo\/[0-9a-f-]{36}\.png$/.test(String(b.logo_url || "")) && o >= 0.2 && o <= 10) return b.logo_url; } catch (e) {} return "https://salescorner.co/img/sales-corner-logo.png"; })();
 
 const scoreColor = d.seo_score.color === 'green'  ? '#22c55e'
                  : d.seo_score.color === 'blue'   ? '#3b82f6'
@@ -5744,6 +5810,7 @@ const html = `<!DOCTYPE html>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f8fafc;color:#1e293b;padding:32px 16px}
 .wrap{max-width:960px;margin:0 auto}
+.brand{margin-bottom:18px}.brand img{display:block;max-height:44px;max-width:200px;width:auto;height:auto}
 h1{font-size:22px;font-weight:700;margin-bottom:4px}
 .sub{color:#64748b;font-size:13px;margin-bottom:28px}
 .card{background:#fff;border-radius:12px;border:1px solid #e2e8f0;padding:24px;margin-bottom:20px}
@@ -5774,6 +5841,7 @@ li{margin-bottom:6px;font-size:14px;color:#475569}
 </head>
 <body>
 <div class="wrap">
+  <div class="brand"><img src="${__logoUrl}" alt="Logo"></div>
   <h1>SEO Analiz Raporu</h1>
   <p class="sub">URL: <strong>${d.url}</strong> — ${new Date(d.analyzed_at).toLocaleString('tr-TR')}</p>
 
@@ -6071,9 +6139,21 @@ const seviye = cv.kariyer_seviyesi || '';
 // ====================================================
 //  SLIDE 1: KAPAK
 // ====================================================
+const __LOGO = (() => { try { const b = $('CV Webhook').first().json.body || {}; const o = Number(b.logo_oran);
+  if (/^https:\/\/salescorner\.co\/api\/app\/logo\/[0-9a-f-]{36}\.png$/.test(String(b.logo_url || "")) && o >= 0.2 && o <= 10) return { url: b.logo_url, oran: o }; } catch (e) {} return null; })();
+function __img(sid, url, x, y, w, h) { requests.push({ createImage: { objectId: uid('logo'), url, elementProperties: { pageObjectId: sid, size: { width: { magnitude: ie(w), unit: 'EMU' }, height: { magnitude: ie(h), unit: 'EMU' } }, transform: { scaleX: 1, scaleY: 1, translateX: ie(x), translateY: ie(y), unit: 'EMU' } } } }); }
+function logoSol(sid, x, y, w) {
+  const h = w * 178 / 495;
+  if (!__LOGO) { __img(sid, 'https://salescorner.co/img/sales-corner-logo-dark.png', x, y, w, h); return; }
+  const BW = w * 1.2, BH = h * 1.4, p = 0.07;
+  const lw = __LOGO.oran >= BW / BH ? BW : BH * __LOGO.oran, lh = lw / __LOGO.oran;
+  addShape(sid, uid('lgb'), x, y, lw + 2 * p, lh + 2 * p, C.white, { shapeType: 'ROUND_RECTANGLE' });
+  __img(sid, __LOGO.url, x + p, y + p, lw, lh);
+}
 const s1 = createSlide('cv_kapak');
 setBg(s1, C.veryDark);
 addShape(s1, uid('grad'), 0, 0, SLIDE_W, 0.08, C.saasYellow);
+logoSol(s1, 0.6, 0.15, 1.2);
 addText(s1, uid('t'), 0.6, 0.9, 8.8, 0.8, '📄 CV Analiz Raporu', 30, C.white, { bold: true });
 addText(s1, uid('n'), 0.6, 1.85, 8.8, 0.5, adayAd, 22, C.saasYellow, { bold: true });
 addText(s1, uid('p'), 0.6, 2.45, 8.8, 0.3, aday.mevcut_pozisyon || '', 12, hexToRgb('94A3B8'));
@@ -9431,6 +9511,15 @@ return {
 
 const data = $input.first().json;
 const actualData = Array.isArray(data) ? data[0] : data;
+// Pro planda kullanıcının kendi logosu (Hesabım > Firma profili) SalesCorner logosunun yerine geçer
+const __LOGO = (() => { try { const b = $('Webhook Trigger').first().json.body || {}; const o = Number(b.logo_oran);
+  if (/^https:\/\/salescorner\.co\/api\/app\/logo\/[0-9a-f-]{36}\.png$/.test(String(b.logo_url || "")) && o >= 0.2 && o <= 10) return { url: b.logo_url, oran: o }; } catch (e) {} return null; })();
+// SalesCorner logosunun kutusu (w×h inç) → kullanıcı logosu oranını koruyarak en çok 1.2w × 1.4h kutuya sığar
+function __logoBox(w, h) {
+  if (!__LOGO) return { url: "https://salescorner.co/img/sales-corner-logo.png", w, h };
+  const W = w * 1.2, H = h * 1.4;
+  return __LOGO.oran >= W / H ? { url: __LOGO.url, w: W, h: W / __LOGO.oran } : { url: __LOGO.url, w: H * __LOGO.oran, h: H };
+}
 let __srcType = 'video';
 try { __srcType = String($('Format Video Data').first().json.source_type || actualData.source_type || 'video').toLowerCase(); } catch (e) { __srcType = String(actualData.source_type || 'video').toLowerCase(); }
 const __srcTitle = __srcType === 'website' ? 'Satış Sekansı' : __srcType === 'pdf' ? 'Doküman' : 'Ses Kaydı';
@@ -9712,8 +9801,8 @@ function addBlobs(sid) {
 }
 // Gerçek marka logosu (sitedeki PNG, 495x178); metinle taklit etme
 function addLogo(sid, x, y, fs) {
-  fs = fs || 8; const w = fs / 72 * 6.1, h = w * 178 / 495;
-  requests.push({ createImage: { objectId: uid("logo"), url: "https://salescorner.co/img/sales-corner-logo.png",
+  fs = fs || 8; const L = __logoBox(fs / 72 * 6.1, fs / 72 * 6.1 * 178 / 495), w = L.w, h = L.h;
+  requests.push({ createImage: { objectId: uid("logo"), url: L.url,
     elementProperties: { pageObjectId: sid, size: { width: { magnitude: inchToEmu(w), unit: "EMU" }, height: { magnitude: inchToEmu(h), unit: "EMU" } },
       transform: { scaleX: 1, scaleY: 1, translateX: inchToEmu(x), translateY: inchToEmu(y), unit: "EMU" } } } });
 }
@@ -12032,8 +12121,17 @@ function bullets(sid,x,y,w,h,items,size,color,o){ o=o||{};
 
 // ---- components ----
 // Gerçek marka logosu (sitedeki PNG, 495x178); metinle taklit etme
-function logo(sid,x,y,fs){ fs=fs||9; const w=fs/72*6.1, h=w*178/495;
-  REQ.push({ createImage:{ objectId:ID(), url:"https://salescorner.co/img/sales-corner-logo.png", elementProperties:{ pageObjectId:sid, size:{ width:{magnitude:E(w),unit:"EMU"}, height:{magnitude:E(h),unit:"EMU"} }, transform:{ scaleX:1, scaleY:1, translateX:E(x), translateY:E(y), unit:"EMU" } } } }); }
+// Pro planda kullanıcının kendi logosu (Hesabım > Firma profili) SalesCorner logosunun yerine geçer
+const __LOGO = (() => { try { const b = $('Webhook').first().json.body || {}; const o = Number(b.logo_oran);
+  if (/^https:\/\/salescorner\.co\/api\/app\/logo\/[0-9a-f-]{36}\.png$/.test(String(b.logo_url || "")) && o >= 0.2 && o <= 10) return { url: b.logo_url, oran: o }; } catch (e) {} return null; })();
+// SalesCorner logosunun kutusu (w×h inç) → kullanıcı logosu oranını koruyarak en çok 1.2w × 1.4h kutuya sığar
+function __logoBox(w, h) {
+  if (!__LOGO) return { url: "https://salescorner.co/img/sales-corner-logo.png", w, h };
+  const W = w * 1.2, H = h * 1.4;
+  return __LOGO.oran >= W / H ? { url: __LOGO.url, w: W, h: W / __LOGO.oran } : { url: __LOGO.url, w: H * __LOGO.oran, h: H };
+}
+function logo(sid,x,y,fs){ fs=fs||9; const L=__logoBox(fs/72*6.1, fs/72*6.1*178/495), w=L.w, h=L.h;
+  REQ.push({ createImage:{ objectId:ID(), url:L.url, elementProperties:{ pageObjectId:sid, size:{ width:{magnitude:E(w),unit:"EMU"}, height:{magnitude:E(h),unit:"EMU"} }, transform:{ scaleX:1, scaleY:1, translateX:E(x), translateY:E(y), unit:"EMU" } } } }); }
 function header(sid,kicker,title){
   logo(sid,0.55,0.3,9);
   text(sid,1.55,0.36,6.4,0.22,String(kicker||"").toUpperCase(),8,C.muted,{bold:true,font:FH});
