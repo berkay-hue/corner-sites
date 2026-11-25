@@ -124,6 +124,8 @@ Pratik bir dağılım örneği:
 - 1–2 niş/çözüm hashtag'i (düşük hacim)
 - Varsa 1 etkinlik veya kampanya hashtag'i
 
+Açıklamanızdaki hashtag sayısını, ilk 125 karakteri ve satır düzenini paylaşmadan önce ücretsiz [Instagram Açıklama Denetleyici](/araclar/instagram-aciklama-denetleyici) aracıyla kontrol edebilirsiniz.
+
 ## Türkçe mi, İngilizce mi hashtag kullanmalı?
 
 Bu sorunun cevabı hedef pazarınıza bağlı.

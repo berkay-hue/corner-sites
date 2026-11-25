@@ -59,6 +59,8 @@ LinkedIn'in sayfa analitiğinde gösterdiği **etkileşim oranı**, kabaca şu f
 
 Örnek: Bir gönderi 3.000 gösterim almış olsun. Bu gönderiye 60 tıklama, 45 tepki, 8 yorum, 4 yeniden paylaşım ve 3 yeni takip gelmiş olsun. Toplam etkileşim 120, etkileşim oranı da 120 / 3.000 = **%4**'tür.
 
+Aynı hesabı kendi gönderileriniz için ücretsiz [Etkileşim Oranı Hesaplayıcı](/araclar/etkilesim-orani-hesaplayici) aracıyla saniyeler içinde yapabilirsiniz.
+
 Burada dikkat edilmesi gereken iki nokta var:
 
 - **Etkileşim türleri eşit değerde değildir.** Bir yorum, özellikle hedef kitlenizden bir karar vericiden geliyorsa, onlarca tepkiden daha değerlidir. Yeniden paylaşım ise içeriğinizi yeni ağlara taşıdığı için ayrıca önemlidir.

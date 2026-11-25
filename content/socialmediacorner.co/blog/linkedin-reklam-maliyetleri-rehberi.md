@@ -135,6 +135,8 @@ Lead başına maliyet (CPL) sektöre, hedef kitleye, reklam formatına ve dönem
 
 Bu hesaplama, B2B satış döngülerinin uzun olduğu gerçeğini de görünür kılar. LinkedIn kampanyalarını birkaç haftalık performansa göre yargılamak yerine, satış döngünüzün uzunluğuna uygun bir değerlendirme penceresi belirlemelisiniz.
 
+Bu adımları kendi CPM, CTR ve dönüşüm varsayımlarınızla hızlıca denemek için ücretsiz [Sosyal Medya Reklam Bütçesi Hesaplayıcı](/araclar/sosyal-medya-reklam-butcesi-hesaplayici) aracını kullanabilirsiniz.
+
 ### Minimum Bütçe Hakkında Not
 
 LinkedIn, kampanyalar için platform tarafından belirlenen minimum günlük ve toplam bütçe sınırları uygular. Bu sınırlar zaman zaman güncellenebilir, bu yüzden güncel değerleri Campaign Manager'dan kontrol etmek gerekir. Pratikte asıl sınırlayıcı faktör platform minimumu değildir. Asıl sınırlayıcı, **anlamlı veri toplamaya yetecek bütçedir.** Günde yalnızca birkaç tıklama alan bir kampanya, haftalar geçse bile hangi reklamın işe yaradığını anlamanıza yetecek veri üretmez. Bütçeniz sınırlıysa onu çok sayıda kampanyaya bölmek yerine bir iki kampanyada yoğunlaştırın.
