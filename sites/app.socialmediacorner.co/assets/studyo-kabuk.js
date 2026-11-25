@@ -426,7 +426,7 @@ function bekleKur(){
 function quotaSor(ilk){
   if(!API)return;
   post('/gen/quota',{anon:anonAl()},10000).then(function(r){
-    D.acik=true;depo('smc-acik','1');hakAl(r);D.hakBilinmez=false;tsYukle();
+    D.acik=true;depo('smc-acik','1');hakAl(r);D.hakBilinmez=false;hakGeldi=true;tsYukle();
     try{d.dispatchEvent(new CustomEvent('studyo:hak'))}catch(e){}
     if(uretB&&D.scope!=='kapasite')uretB.removeAttribute('aria-disabled');
     if(ilk&&D.view==='duvar'&&D.scope==='yakinda')goster(D.kartVar?'sonuc':'bos',false);
@@ -482,16 +482,177 @@ function basla(){
   if(cfg&&cfg.basla)cfg.basla();
 }
 
+/* ---- ortak görsel yardımcıları (Görselli/Görselsiz; blog, LinkedIn, görsel, video aynı API) ----
+   Tercih worker'a gitmez (istekKur yalnız adlı alanları okur). Görselsiz'de hiç çağrı yok: stokOtomatik/stokHarca'yı sayfa yalnız 'stok' tercihinde çağırır. */
+var PX='https://www.pexels.com',hakGeldi=false,harcaP=null,harcaId='',harcaHata='',harcanan={};
+var DENEME_BITTI=T('Deneme görseli kullanıldı — Pro’da sınırsız','Trial image used — unlimited on Pro');
+function stokDenemeVar(){var t=D.stokDeneme;return D.stock===true&&!!t&&t.limit>0&&t.used<t.limit}
+function stokDenemeBitti(){var t=D.stokDeneme;return !!(t&&t.limit>0&&t.used>=t.limit)}
+function stokDenemeKalan(){var t=D.stokDeneme;return t?Math.max(0,t.limit-t.used):0}
+/* 'deneme' (Demo/Basic, kalan deneme hakkı) · 'acik' (Pro/Enterprise) · 'kilit' (plan yok ya da deneme bitti) · 'yok' (hak bilindi, arama kapalı) · 'bekle' */
+function stokDurum(){
+  if(D.stock===true)return stokDenemeVar()?'deneme':'acik';
+  /* Basic/Demo'da deneme hakkı varken stock:false → sunucuda arama kapalı (anahtar yok); plan kilidi değil */
+  var t=D.stokDeneme;if(D.stock===false&&D.stokKilit!==true&&(D.plan==='basic'||D.plan==='demo')&&t&&t.limit>0&&t.used<t.limit)return 'yok';
+  if(D.stokKilit===true||D.plan==='anon'||D.plan==='basic'||D.plan==='demo')return 'kilit';
+  return hakGeldi?'yok':'bekle';
+}
+function stokYayinla(){try{d.dispatchEvent(new CustomEvent('studyo:hak',{detail:{kaynak:'stok'}}))}catch(e){}}
+/* 403 plan: kilide geç; trial_used → deneme bitti sayılır */
+function stokKilitle(e){
+  D.stock=false;D.stokKilit=true;
+  if(e&&e.trial_used){var t=D.stokDeneme;if(!t||!(t.used>=t.limit))D.stokDeneme={limit:t&&t.limit>0?t.limit:1,used:t&&t.limit>0?t.limit:1}}
+  stokYayinla();
+}
+function stokHataMetni(e){
+  var k=e&&e.kod;
+  if(k==='not_ready')return T('Görsel arama şu an kullanılamıyor.','Image search isn’t available right now.');
+  if(k==='login_required')return T('Görsel aramak için giriş yap.','Sign in to search images.');
+  if(k==='plan')return e.trial_used?DENEME_BITTI+'.':T('Görsel arama Pro ve Enterprise planlarında var.','Image search comes with the Pro and Enterprise plans.');
+  if(k==='limit')return e.scope==='global'?T('Görsel arama bugün çok yoğun. Biraz sonra tekrar dene.','Image search is very busy today. Try again a little later.'):T('Bugünkü görsel arama hakkın doldu; yarın yenilenir.','You’ve used today’s image searches; they renew tomorrow.');
+  if(k==='bad_input')return T('Aramayı 1 ile 100 karakter arasında yaz.','Keep the search between 1 and 100 characters.');
+  return T('Görseller yüklenemedi. Bağlantını kontrol edip tekrar dene.','Couldn’t load images. Check your connection and try again.');
+}
+/* deneme hakkı harcanamadı (kurgu kullanHata ile aynı metinler) */
+function stokHarcaHataMetni(e){
+  var k=e&&e.kod;
+  if(k==='plan')return stokHataMetni(e);
+  if(k==='login_required')return T('Görsel eklemek için giriş yap.','Sign in to add an image.');
+  if(k==='not_ready')return T('Görsel ekleme şu an kullanılamıyor; görsel eklenmedi.','Adding images isn’t available right now; no image was added.');
+  if(k==='zaman'||k==='ag')return T('Bağlantı kurulamadı; görsel eklenmedi. Bağlantını kontrol edip tekrar dene.','Couldn’t connect; no image was added. Check your connection and try again.');
+  return T('Deneme görseli şu an eklenemedi; görsel eklenmedi. Biraz sonra tekrar dene.','The trial image couldn’t be added right now; no image was added. Try again in a moment.');
+}
+/* arama metni: vurgu yıldızları atılır, ≤100 karakter, sözcük sınırında kısaltılır */
+function stokAramaMetni(v){
+  var t=String(v||'').replace(/\*/g,'').replace(/\s+/g,' ').trim();if(t.length<=100)return t;
+  t=t.slice(0,100);var b=t.lastIndexOf(' ');return(b>40?t.slice(0,b):t).replace(/[\s.,;:!?…\-–—]+$/,'');
+}
+function stokSrc(f){var s=f&&f.src;return s&&(s.large2x||s.large||s.medium)||''}
+function stokAra(q,dis){return al('/gen/stock?'+q,12000,dis).then(function(r){if(r)stokDenemeAl(r.stock_trial);return r},function(e){if(e&&e.stock_trial)stokDenemeAl(e.stock_trial);throw e})}
+/* tek arama → {photos:[…]} ya da {photos:[],hata,kod}; asla reddetmez */
+function stokOtomatik(sorgu,ayar){
+  ayar=ayar||{};var dr=stokDurum();
+  if(dr!=='acik'&&dr!=='deneme')return Promise.resolve({photos:[],hata:dr==='kilit'?stokHataMetni({kod:'plan',trial_used:stokDenemeBitti()}):stokHataMetni({kod:'not_ready'}),kod:dr==='kilit'?'plan':'not_ready'});
+  var q=stokAramaMetni(sorgu);if(!q)return Promise.resolve({photos:[],hata:stokHataMetni({kod:'bad_input'}),kod:'bad_input'});
+  var yon=/^(landscape|portrait|square)$/.test(ayar.yon||'')?ayar.yon:'landscape';
+  return stokAra('q='+encodeURIComponent(q)+'&orientation='+yon+'&page=1&lang='+dilAl(),ayar.ac).then(function(r){
+    var a=(r&&r.photos||[]).filter(function(f){return f&&f.id!=null&&!!stokSrc(f)});
+    return a.length?{photos:a}:{photos:[],hata:T('Bu konu için uygun fotoğraf bulunamadı.','No suitable photo was found for this topic.'),kod:'bos'};
+  },function(e){if(e&&e.kod==='plan')stokKilitle(e);return {photos:[],hata:stokHataMetni(e),kod:e&&e.kod||'genel',scope:e&&e.scope||''}});
+}
+/* deneme hakkını harca (yalnız 'deneme' durumunda POST /gen/stock/use); Pro'da hemen true.
+   Aynı anda ikinci çağrı aynı promise'i alır; harcanmış fotoğraf (aynı id) yeniden harcanmaz → Tekrar dene hakkı ikinci kez düşürmez. */
+function stokHarca(foto){
+  /* worker id'yi pozitif tam sayı ister (Number.isSafeInteger); metin id 400 bad_input döner */
+  var n=foto?Number(foto.id):0,id=isFinite(n)&&n>0&&n%1===0&&n<=9007199254740991?n:0,an=id?String(id):'';
+  if(an&&harcanan[an])return Promise.resolve(true);
+  /* aynı anda ikinci çağrı: aynı istek beklenir; başarılıysa bu foto da harcanmış sayılır (tek deneme hakkı) */
+  if(harcaP){if(!an||an===harcaId)return harcaP;return harcaP.then(function(ok){if(ok)harcanan[an]=true;return ok})}
+  var dr=stokDurum();harcaHata='';
+  if(dr==='acik')return Promise.resolve(true);
+  if(dr!=='deneme'){harcaHata=dr==='kilit'?stokHataMetni({kod:'plan',trial_used:stokDenemeBitti()}):stokHarcaHataMetni({kod:'not_ready'});return Promise.resolve(false)}
+  harcaId=an;
+  harcaP=post('/gen/stock/use',id?{id:id}:{},10000).then(function(r){
+    if(r&&r.stock_trial){stokDenemeAl(r.stock_trial);if(r.stock_trial.used>=r.stock_trial.limit)D.stock=false}
+    if(an)harcanan[an]=true;harcaP=null;harcaId='';stokYayinla();return true;
+  },function(e){
+    harcaP=null;harcaId='';if(e&&e.stock_trial)stokDenemeAl(e.stock_trial);if(e&&e.trial_used)D.stock=false;
+    if(e&&e.kod==='plan')stokKilitle(e);
+    harcaHata=stokHarcaHataMetni(e);return false;
+  });
+  return harcaP;
+}
+/* künye: TR "Fotoğraf: <x> / Pexels", EN "Photo by <x> on Pexels"; yalnız https bağlantı */
+function stokUrl(u,yedek){return typeof u==='string'&&/^https:\/\/[^\s"'<>]+$/.test(u)?u:yedek}
+function stokKunyeParca(g){g=g||{};var fu=stokUrl(g.url,PX);return {ad:g.photographer?String(g.photographer):'Pexels',adUrl:stokUrl(g.photographer_url,fu),pxUrl:fu}}
+function disBag(href,metin){var a=el('a',null,metin);a.href=href;a.target='_blank';a.rel='noopener noreferrer';return a}
+function stokKunye(g){
+  var k=stokKunyeParca(g),p=el('p','st-stok-kunye');
+  p.appendChild(d.createTextNode(T('Fotoğraf: ','Photo by ')));p.appendChild(disBag(k.adUrl,k.ad));
+  p.appendChild(d.createTextNode(T(' / ',' on ')));p.appendChild(disBag(k.pxUrl,'Pexels'));
+  return p;
+}
+function kacis(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
+function stokKunyeHtml(g){
+  var k=stokKunyeParca(g);function a(h,m){return '<a href="'+kacis(h)+'" target="_blank" rel="noopener noreferrer">'+kacis(m)+'</a>'}
+  return T('Fotoğraf: ','Photo by ')+a(k.adUrl,k.ad)+T(' / ',' on ')+a(k.pxUrl,'Pexels');
+}
+function stokKunyeMd(g){
+  var k=stokKunyeParca(g);
+  /* ad: Markdown işaretleri kaçırılır; HTML'e çevrilen MD'de etiket olmasın diye < > & varlığa döner, satır sonu boşluk olur */
+  function m(s){return String(s).replace(/\s+/g,' ').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/([\\\[\]()*_`])/g,'\\$1')}
+  function u(s){return String(s).replace(/\(/g,'%28').replace(/\)/g,'%29').replace(/ /g,'%20')}
+  return T('Fotoğraf: ','Photo by ')+'['+m(k.ad)+']('+u(k.adUrl)+')'+T(' / ',' on ')+'[Pexels]('+u(k.pxUrl)+')';
+}
+/* #gorsel-secim fieldset'i: data-durum (bekle|acik|kilit|yok; deneme 'acik' sayılır), stok radyosunda aria-disabled, not metni, tercih belleği.
+   ayar: {anahtar:'smc-gorsel-blog', birim:T('kapak ve bölüm görselleri','cover and section images'), degis?:fn(tercih)} */
+function gorselSecim(fs,ayar){
+  ayar=ayar||{};
+  var yok=fs&&fs.querySelector('input[value="yok"]'),stk=fs&&fs.querySelector('input[value="stok"]');
+  if(!fs||!yok||!stk)return {tercih:function(){return 'yok'},guncelle:function(){},durum:stokDurum};
+  var not=fs.querySelector('.st-gorsel-not')||$('#gorsel-not'),ank=ayar.anahtar||'',bir=ayar.birim||T('görseller','images'),son='';
+  function acikMi(){var x=stokDurum();return x==='acik'||x==='deneme'}
+  function fsDurum(){var x=stokDurum();return x==='deneme'?'acik':x}
+  function tercih(){return stk.checked&&acikMi()?'stok':'yok'}
+  function uye(){var u=$('.st-ust[data-hesap]');return !!(u&&u.getAttribute('data-hesap')==='uye')}
+  function neden(){
+    var x=stokDurum();
+    if(x==='kilit')return stokDenemeBitti()?DENEME_BITTI+'.':T('Görselli seçenek Pro ve Enterprise planlarıyla açılır.','The image option comes with the Pro and Enterprise plans.');
+    if(x==='yok')return T('Görsel arama şu an kullanılamıyor; taslak görselsiz hazırlanır.','Image search isn’t available right now; the draft is made without images.');
+    return T('Plan bilgisi alınıyor…','Checking your plan…');
+  }
+  function bag(){var a=el('a','st-gorsel-bag',T('Planları gör','See plans'));a.href=EN?'/en/pricing':'/fiyatlar';return a}
+  function notYaz(){
+    if(!not)return;var x=stokDurum(),kl=stokDenemeKalan();not.textContent='';
+    if(x==='acik'){not.textContent=stk.checked
+      ?T('Taslak hazır olunca '+bir+' Pexels stok fotoğraflarından otomatik eklenir; istersen değiştirir ya da kaldırırsın.','When the draft is ready, '+bir+' are added automatically from Pexels stock photos; you can change or remove them.')
+      :T('Taslak yalnız metinle hazırlanır. Görsel istersen “Görselli”yi seç.','The draft is text only. Pick “With images” if you want photos.');return}
+    if(x==='deneme'){not.textContent=stk.checked
+      ?T('Taslak hazır olunca Pexels’ten 1 stok fotoğraf eklenir. '+kl+' deneme görselin var; bu üretimde 1 tanesi kullanılır. Pro’da '+bir+' sınırsız.','When the draft is ready, 1 Pexels stock photo is added. You have '+kl+' trial image'+(kl===1?'':'s')+'; this generation uses one. Pro has unlimited '+bir+'.')
+      :T('Taslak yalnız metinle hazırlanır. '+kl+' deneme görselin var; “Görselli”yi seçersen bu üretimde kullanılır.','The draft is text only. You have '+kl+' trial image'+(kl===1?'':'s')+'; pick “With images” to use it in this generation.');return}
+    if(x==='kilit'&&stokDenemeBitti()){not.appendChild(d.createTextNode(DENEME_BITTI+'. '));not.appendChild(bag());return}
+    if(x==='kilit'){
+      not.appendChild(d.createTextNode(T('Görselli: '+bir+' için Pexels stok fotoğrafı. Bu seçenek Pro ve Enterprise planlarıyla açılır','With images: Pexels stock photos for the '+bir+'. This option comes with the Pro and Enterprise plans')+
+        (uye()?T('; hesabında şu an bu planlardan biri tanımlı değil. ','; your account isn’t on one of these plans yet. '):'. ')));
+      not.appendChild(bag());return;
+    }
+    not.textContent=neden();
+  }
+  function guncelle(){
+    var x=fsDurum(),ilk=son!=='acik'&&x==='acik';
+    fs.setAttribute('data-durum',x);
+    if(x==='acik'){stk.removeAttribute('aria-disabled');if(ilk){var k=ank?depo(ank):null;(k==='stok'?stk:yok).checked=true}}
+    else{stk.setAttribute('aria-disabled','true');if(stk.checked)yok.checked=true}
+    son=x;notYaz();
+  }
+  [yok,stk].forEach(function(r){r.addEventListener('change',function(){
+    if(stk.checked&&!acikMi()){yok.checked=true;var m=neden();durum(m);toast(m);notYaz();return}
+    if(ank)depo(ank,stk.checked?'stok':'yok');
+    notYaz();
+    durum(stk.checked?T('Görselli seçildi: taslak hazır olunca '+bir+' Pexels’ten eklenir.','With images: '+bir+' from Pexels are added when the draft is ready.'):T('Görselsiz seçildi: taslak yalnız metinle hazırlanır.','No images: the draft is text only.'));
+    if(typeof ayar.degis==='function')try{ayar.degis(tercih())}catch(e){}
+  })});
+  d.addEventListener('studyo:hak',function(){hakGeldi=true;guncelle()});
+  setTimeout(function(){if(!hakGeldi){hakGeldi=true;guncelle()}},12000);
+  var u=$('.st-ust[data-hesap]');if(u&&window.MutationObserver)new MutationObserver(function(){if(stokDurum()==='kilit')notYaz()}).observe(u,{attributes:true,attributeFilter:['data-hesap']});
+  guncelle();
+  return {tercih:tercih,guncelle:guncelle,durum:stokDurum};
+}
+
 window.Studyo={
   kaydet:function(c){cfg=c;if(c.hedefMax==null)c.hedefMax=0},
   uret:uret,
   refine:function(q){return post('/gen/refine',q,30000).then(function(r){hakAl(r);hakYaz();kayitNot(r,true);var a=r&&r.drafts&&r.drafts[0];return {text:a&&typeof a.text==='string'?a.text:null}})},
   hak:function(){return {left:D.left,cap:D.cap,reset:D.reset,scope:D.hakScope,bilinmez:D.hakBilinmez,plan:D.plan||null,ay:D.ay||null}},
-  stok:function(q,dis){return al('/gen/stock?'+q,12000,dis).then(function(r){if(r)stokDenemeAl(r.stock_trial);return r},function(e){if(e&&e.stock_trial)stokDenemeAl(e.stock_trial);throw e})},
+  stok:stokAra,
   /* 25.11: deneme görselini harca; ok → {stock_trial:{limit,used}} ya da {unlimited:true} */
   stokKullan:function(id){return post('/gen/stock/use',id?{id:id}:{},10000).then(function(r){if(r&&r.stock_trial){stokDenemeAl(r.stock_trial);if(r.stock_trial.used>=r.stock_trial.limit)D.stock=false}return r},function(e){if(e&&e.stock_trial)stokDenemeAl(e.stock_trial);if(e&&e.trial_used)D.stock=false;throw e})},
   hakYaz:hakYaz,planlaYaz:planlaYaz,olay:olay,hata:hataIsle,kopyala:kopyala,toast:toast,durum:durum,dil:dilAl,T:T,goster:goster,
   D:D,el:el,$:$,$$:$$,depo:depo,oturumDepo:oturumDepo,yenMetin:yenMetin,cp:cp,azHareket:azHareket,
+  /* ortak görsel yardımcıları (Görselli/Görselsiz; yukarıdaki blok) */
+  gorselSecim:gorselSecim,stokDurum:stokDurum,stokDenemeVar:stokDenemeVar,stokDenemeKalan:stokDenemeKalan,stokOtomatik:stokOtomatik,stokHarca:stokHarca,
+  stokHarcaHata:function(){return harcaHata},stokHataMetni:stokHataMetni,stokAramaMetni:stokAramaMetni,stokSrc:stokSrc,
+  stokKunye:stokKunye,stokKunyeHtml:stokKunyeHtml,stokKunyeMd:stokKunyeMd,
   DUVAR:DUVAR,SINIR:T('Bugünkü 9 düzenleme hakkın doldu; gece yarısı yenilenir.','You’ve used today’s 9 edits; they renew at midnight.')
 };
 /* defer sırası: smc-ses.js → studyo-kabuk.js → sayfa modülü; kurulum modül kaydından sonra (DOMContentLoaded).

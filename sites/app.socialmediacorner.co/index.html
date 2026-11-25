@@ -19,7 +19,7 @@
 <script src="/assets/giris-kapisi.js"></script>
 <link rel="preload" href="/assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/assets/tokens.css">
-<link rel="stylesheet" href="/assets/studyo.css?v=px2">
+<link rel="stylesheet" href="/assets/studyo.css?v=gs1">
 <link rel="stylesheet" href="/assets/studyo-auth.css">
 <link rel="stylesheet" href="/assets/panel.css?v=bt1">
 </head>
@@ -73,6 +73,14 @@
           <p class="alan-hata" id="konu-hata" role="alert" hidden></p>
           <p class="not" id="aktarim-not" hidden></p>
         </div>
+        <fieldset class="cipler st-gorsel" id="gorsel-secim" data-durum="bekle" aria-describedby="gorsel-not">
+          <legend class="st-etiket">Gönderi görseli</legend>
+          <div class="cip-sira st-bolum">
+            <span class="cip"><input type="radio" name="gorsel" id="g-yok" value="yok" checked><label for="g-yok">Görselsiz<small>yalnız metin</small></label></span>
+            <span class="cip"><input type="radio" name="gorsel" id="g-stok" value="stok" aria-disabled="true" aria-describedby="gorsel-not"><label for="g-stok"><span class="st-gorsel-ad"><svg class="ikon st-gorsel-kilit" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 11V8a5 5 0 0 1 10 0v3M5 11h14v10H5zM12 15v2"/></svg>Görselli</span><small>Pexels stok fotoğraf</small></label></span>
+          </div>
+          <p class="ipucu st-gorsel-not" id="gorsel-not">Plan bilgisi alınıyor…</p>
+        </fieldset>
         <details class="st-acilir">
           <summary><svg class="ikon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></svg>Sektör ve ton<span class="st-ozet" data-ozet="sector,tone"></span></summary>
           <div class="st-acilir-ic">
@@ -157,8 +165,10 @@
                 </div>
                 <div class="li-govde" id="li-govde" tabindex="-1" data-sabit></div>
                 <textarea class="li-duzen" id="li-duzen" aria-label="Gönderi metnini düzenle" hidden></textarea>
+                <figure class="li-gorsel" id="li-gorsel-alan" hidden></figure>
                 <div class="li-tepki" aria-hidden="true"><span><svg class="ikon ikon-k" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 11v9H4v-9zM7 11l4-7a2 2 0 0 1 3 2l-1 4h6a2 2 0 0 1 2 2.3l-1.2 6A2 2 0 0 1 17.8 20H7"/></svg>Beğen</span><span><svg class="ikon ikon-k" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M21 12a8 8 0 0 1-11.5 7.2L4 21l1.8-5.5A8 8 0 1 1 21 12z"/></svg>Yorum yap</span><span><svg class="ikon ikon-k" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M17 2l4 4-4 4"/><path d="M3 11V9a3 3 0 0 1 3-3h15M7 22l-4-4 4-4"/><path d="M21 13v2a3 3 0 0 1-3 3H3"/></svg>Yeniden paylaş</span><span><svg class="ikon ikon-k" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4z"/></svg>Gönder</span></div>
               </article>
+              <div class="li-gorsel-alt" id="li-gorsel-alt" role="group" aria-label="Gönderi görseli" tabindex="-1" hidden></div>
             </div>
             <p class="li-olcu" id="li-olcu"></p>
             <div class="st-arac" id="li-arac" role="group" aria-label="Taslak araçları">
@@ -387,8 +397,8 @@
 </dialog>
 
 <script src="/assets/smc-ses.js" defer></script>
-<script src="/assets/studyo-kabuk.js?v=px2" defer></script>
+<script src="/assets/studyo-kabuk.js?v=gs1" defer></script>
 <script src="/assets/ust-hesap.js?v=bt2" defer></script>
-<script src="/assets/studyo-linkedin.js?v=a15" defer></script>
+<script src="/assets/studyo-linkedin.js?v=gs1" defer></script>
 </body>
 </html>
