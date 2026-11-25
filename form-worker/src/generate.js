@@ -15,7 +15,7 @@
 // A9b plan: aynı koşullarla girişli kullanıcı (account) ve users.plan varsa (migrations/0018_plans.sql) üretim aylık plan
 // sayacından (gen_month, src/plans.js) düşer; anon/IP günlük hakları yerine kullanıcı günlük tavanı (GEN_USER_PER_DAY) ve global
 // tavan. /gen/stock pro|enterprise'da sınırsız; demo/basic'te ömür boyu stock_trial (1) deneme görseli: arama hak kullanılana
-// dek açık, hak POST /gen/stock/use ile düşer (gen_usage day STOCK_TRIAL_DAY, kind 'pt'). /gen/quota plan, month, stock (anahtar +
+// dek açık, hak POST /gen/stock/use ile düşer (gen_usage day STOCK_TRIAL_DAY, kind 'pt'; foto başına tekrar kaydı 'pi'). /gen/quota plan, month, stock (anahtar +
 // plan ya da kullanılmamış deneme) ve deneme planında stock_trial {limit, used} taşır. 0018 yoksa anonim akış.
 // A15: GEN_LOGIN_REQUIRED="1" (wrangler.toml) → oturumsuz /gen/* 401 login_required, /gen/quota plan "anon" left 0; anon/IP
 // günlük hakları (GEN_PER_DAY) bu bayrakla fiilen kullanılmaz. demo planı (src/plans.js): aylık değil deneme boyunca TOPLAM
@@ -978,18 +978,30 @@ async function stockRoute(c) {
 // sabit day STOCK_TRIAL_DAY ('stock_trial'; tarih değil → genCleanup silmez), kind 'pt', anahtar keyOf(salt|stock_trial|pt|uid);
 // göç gerekmez. Demo denemesi bittiyse (trial_ended) hak yok. Dönüş {limit, used, key} ya da null (deneme yok / sınırsız plan).
 export const STOCK_TRIAL_DAY = "stock_trial";
-async function stockTrial(c, a) {
+// pid verilirse (Pexels fotoğraf kimliği) aynı sorguda o fotoğrafın "harcandı" kaydı da okunur: {pkey, pdone} (bkz. stockUseRoute).
+async function stockTrial(c, a, pid) {
   const limit = Number(a?.P?.stock_trial) || 0;
   if (!a?.P || a.P.stock || limit <= 0 || a.P.trial_ended) return null;
-  const key = await keyOf(c.env, STOCK_TRIAL_DAY, "pt", String(a.user.id));
-  const n = await counts(c.db, STOCK_TRIAL_DAY, { t: key });
-  return { limit, used: Math.min(limit, n.t), key };
+  const uid = String(a.user.id);
+  const key = await keyOf(c.env, STOCK_TRIAL_DAY, "pt", uid);
+  const pkey = pid ? await keyOf(c.env, STOCK_TRIAL_DAY, "pi", `${uid}|${pid}`) : null;
+  const n = await counts(c.db, STOCK_TRIAL_DAY, pkey ? { t: key, p: pkey } : { t: key });
+  return { limit, used: Math.min(limit, n.t), key, ...(pkey && { pkey, pdone: n.p > 0 }) };
 }
 const trialView = t => ({ limit: t.limit, used: t.used });
 
 // POST /gen/stock/use: kullanıcı görseli sahneye EKLEDİĞİ an çağrılır. pro|enterprise → {ok, unlimited:true} (sayaç yok);
 // deneme planı → koşullu tek UPSERT (n + 1 <= limit) ile atomik düşüm: iki eşzamanlı çağrıdan yalnız biri geçer; hak bittiyse
-// 403 plan {need:"pro", trial_used:true}. Gövde isteğe bağlı ({id}: Pexels fotoğraf kimliği; yalnız biçim denetlenir, saklanmaz).
+// 403 plan {need:"pro", trial_used:true}. Gövde isteğe bağlı ({id}: Pexels fotoğraf kimliği).
+// 25.11 tekrar güvenliği (göçsüz): id verilirse hak düşümüyle AYNI db.batch'te gen_usage'a "harcandı" kaydı yazılır
+// (day STOCK_TRIAL_DAY, kind 'pi', anahtar keyOf(salt|stock_trial|pi|uid|id), tavan 1; ham id saklanmaz). Yanıtı zaman aşımına
+// uğrayan istemci aynı id ile yeniden denerse hak bitmiş olsa da {ok, charged:false, repeat:true, stock_trial} döner, ikinci
+// düşüm olmaz. Eşzamanlı aynı-id iki çağrı: biri düşer, öbürününki geri alınır → kayıt görülür, repeat. Farklı id ile hak
+// bittiyse 403 (eskisi gibi). id'siz çağrı eskisi gibi (kayıt yok, tekrar 403).
+// "Harcandı" kaydı YALNIZ hak düşümü (pt) aynı batch'te başarılıysa yazılır (PI_UPSERT: changes() > 0 koşulu; batch tek işlem,
+// bir önceki deyim pt). Böylece hak düşmeyen bir istek kısa süre de olsa 'pi' kaydı bırakmaz; aynı anda aynı id ile gelen
+// başka istek onu "tekrar" sayıp hak düşmeden 200 alamaz.
+export const PI_UPSERT = "INSERT INTO gen_usage (day, key, kind, n) SELECT ?, ?, ?, ? WHERE changes() > 0 ON CONFLICT(day, key) DO UPDATE SET n = gen_usage.n + excluded.n WHERE gen_usage.n + excluded.n <= ? RETURNING n";
 async function stockUseRoute(c) {
   const { env, db, origin, body } = c;
   if (body && body.id !== undefined && !(Number.isSafeInteger(body.id) && body.id > 0)) return fail("bad_input", 400, origin, { field: "id" });
@@ -997,13 +1009,37 @@ async function stockUseRoute(c) {
   const a = await account(c);
   if (!a) return fail("login_required", 401, origin);
   if (a.P?.stock) return json({ ok: true, charged: false, unlimited: true }, 200, origin);
-  const t = a.P ? await stockTrial(c, a) : null;
+  const pid = body?.id;
+  const t = a.P ? await stockTrial(c, a, pid) : null;
   if (!t) return fail("plan", 403, origin, { need: "pro", ...(a.P?.trial_ended && { trial_ended: true }) });
   const used = { need: "pro", trial_used: true, stock_trial: { limit: t.limit, used: t.limit } };
+  const repeat = async () => {
+    const n = await counts(db, STOCK_TRIAL_DAY, { t: t.key });
+    return json({ ok: true, charged: false, repeat: true, stock_trial: { limit: t.limit, used: Math.min(t.limit, Math.max(1, n.t)) } }, 200, origin);
+  };
+  if (t.pdone) return repeat();
   if (t.used >= t.limit) return fail("plan", 403, origin, used);
-  const r = await reserve(db, STOCK_TRIAL_DAY, [{ name: "t", kind: "pt", key: t.key, inc: 1, max: t.limit }]);
-  if (!r.ok) return fail("plan", 403, origin, used);
-  return json({ ok: true, charged: false, stock_trial: { limit: t.limit, used: r.n.t } }, 200, origin);
+  if (!t.pkey) {
+    const r = await reserve(db, STOCK_TRIAL_DAY, [{ name: "t", kind: "pt", key: t.key, inc: 1, max: t.limit }]);
+    if (!r.ok) return fail("plan", 403, origin, used);
+    return json({ ok: true, charged: false, stock_trial: { limit: t.limit, used: r.n.t } }, 200, origin);
+  }
+  const pdone = async () => (await counts(db, STOCK_TRIAL_DAY, { p: t.pkey })).p > 0;
+  const res = await db.batch([
+    db.prepare(UPSERT).bind(STOCK_TRIAL_DAY, t.key, "pt", 1, t.limit),
+    db.prepare(PI_UPSERT).bind(STOCK_TRIAL_DAY, t.pkey, "pi", 1, 1),
+  ]);
+  const ptRow = res[0]?.results?.[0], piRow = res[1]?.results?.[0];
+  // hak düşmedi (pi de yazılmadı): eşzamanlı aynı-id çağrı önce düşürdüyse kayıt var → repeat; yoksa hak bitmiş
+  if (!ptRow) return (await pdone()) ? repeat() : fail("plan", 403, origin, used);
+  if (!piRow) {
+    // hak düştü ama kayıt yazılamadı: eşzamanlı aynı-id çağrı önce işaretledi → bizim düşümümüzü geri al, repeat
+    const back = () => db.prepare(DECR).bind(1, STOCK_TRIAL_DAY, t.key).run().then(repeat);
+    if (await pdone()) return back();
+    // kayıt yok (changes() beklenmedik 0 döndü): hak düşmüş kalsın, kaydı ayrıca yaz; arada aynı id işaretlediyse geri al
+    if (!(await db.prepare(UPSERT).bind(STOCK_TRIAL_DAY, t.pkey, "pi", 1, 1).first())) return back();
+  }
+  return json({ ok: true, charged: false, stock_trial: { limit: t.limit, used: Number(ptRow.n) } }, 200, origin);
 }
 
 // [ad, işleyici, yöntem (yoksa POST)]

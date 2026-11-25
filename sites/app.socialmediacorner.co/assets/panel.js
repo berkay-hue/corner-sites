@@ -28,7 +28,7 @@
 
   /* panel.css: statik bağlantı yoksa ekle; DOM bitince head'in sonuna taşı ki studyo.css'ten sonra gelsin */
   var cssLink=d.querySelector('link[rel="stylesheet"][href^="/assets/panel.css"]'),cssEklendi=false;
-  if(!cssLink&&d.head){cssLink=el('link');cssLink.rel='stylesheet';cssLink.href='/assets/panel.css?v=bt1';d.head.appendChild(cssLink);cssEklendi=true}
+  if(!cssLink&&d.head){cssLink=el('link');cssLink.rel='stylesheet';cssLink.href='/assets/panel.css?v=ak1';d.head.appendChild(cssLink);cssEklendi=true}
 
   function favicon(){
     if(d.querySelector('link[rel~="icon"][href="/assets/favicon.svg"]'))return;
@@ -214,7 +214,8 @@
   function ckAl(){try{return localStorage.getItem(CK)}catch(e){return null}}
   function ckYaz(v){try{localStorage.setItem(CK,v)}catch(e){/* depolama kapalı */}}
   function cerez(){
-    if(d.querySelector('.ckb'))return;
+    /* body yoksa (ör. giris-kapisi.js <head>'de yönlendirdi, eski belge yarım kaldı) bant kurulmaz */
+    if(!d.body||d.querySelector('.ckb'))return;
     var bar=null,bosluk=null,simdi=null,donus=null,ro=null;
     function boy(){if(bar&&bosluk&&!bar.hidden)bosluk.style.height=Math.ceil(bar.getBoundingClientRect().height+16)+'px'}
     function kur2(){
@@ -242,7 +243,7 @@
       if(window.ResizeObserver){ro=new ResizeObserver(boy);ro.observe(bar)}else window.addEventListener('resize',boy);
     }
     function goster(odak,kaynak){
-      if(!bar)kur2();
+      if(!bar){if(!d.body)return;kur2()}
       var v=ckAl();
       if(v==='all'||v==='ess'){simdi.textContent=CT.simdi+(v==='all'?CT.all:CT.essAd);simdi.hidden=false}else simdi.hidden=true;
       bar.hidden=false;bosluk.hidden=false;r.classList.add('ckb-acik');boy();

@@ -1,4 +1,4 @@
-# app.socialmediacorner.co — Taslak Masası
+# app.socialmediacorner.co — Social Media Corner Stüdyo
 # A3-1: script-src ve frame-src'de https://challenges.cloudflare.com (Turnstile, sitekey girilince yüklenir), connect-src'de
 #       corner-forms worker'ı (/gen/*, /submit); CF Web Analytics için static.cloudflareinsights.com + cloudflareinsights.com.
 # A3-4: açılışta X-Robots-Tag satırı ve sayfalardaki meta robots noindex kaldırılır (/hesap/* kalıcı noindex).
