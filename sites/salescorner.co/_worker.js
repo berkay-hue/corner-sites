@@ -1557,9 +1557,10 @@ function rtMailHtml(gun, rows, yorum, tarih) {
     + `<h2 style="font-size:16px;margin:0 0 4px">📋 Tüm Yeni İçerikler</h2>${list}`
     + `<p style="color:#888;font-size:12px;margin-top:22px">Sales Corner Rakip Takip · <a href="https://salescorner.co/rakip-takip" style="color:#888">salescorner.co/rakip-takip</a></p></div></div>`;
 }
-async function rtMail(env, to, subject, html) {
+async function rtMail(env, to, subject, html, ekBaslik) {
   const tok = await googleToken(env);
-  const raw = [`To: ${to}`, `Subject: ${__mimeWord(subject)}`, "MIME-Version: 1.0", 'Content-Type: text/html; charset="UTF-8"', "Content-Transfer-Encoding: base64"].join("\r\n")
+  const ek = Object.entries(ekBaslik || {}).filter(([k, v]) => /^[A-Za-z-]{1,40}$/.test(k) && typeof v === "string" && !/[\r\n]/.test(v)).map(([k, v]) => `${k}: ${v}`);
+  const raw = [`To: ${to}`, `Subject: ${__mimeWord(subject)}`, ...ek, "MIME-Version: 1.0", 'Content-Type: text/html; charset="UTF-8"', "Content-Transfer-Encoding: base64"].join("\r\n")
     + "\r\n\r\n" + __b64e(new TextEncoder().encode(html)).replace(/.{76}/g, "$&\r\n");
   const r = await fetch("https://gmail.googleapis.com/gmail/v1/users/me/messages/send", { method: "POST", headers: { authorization: "Bearer " + tok, "content-type": "application/json" },
     body: JSON.stringify({ raw: __b64e(new TextEncoder().encode(raw)).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "") }), signal: AbortSignal.timeout(30000) });
@@ -2041,6 +2042,143 @@ async function fiyatRun(req, env, cfctx) {
   return keepAlive(fiyatYap(env, cfctx, r.j, token));
 }
 
+// ---- Deneme hatırlatma e-postaları (gün 1, 7, 12, 14) ----
+// pg_cron (app-deneme-hatirlat) her gün 07:05 UTC'de adayları 15'lik paketlere böler, /api/app/deneme-hatirlat'a { id, token } gönderir.
+// Tekrar koruması veritabanında (app_mail_log unique(user_id, tur)); en çok 1 gün geç gönderilir, geçmiş e-postalar topluca gitmez.
+const DH_SITE = "https://salescorner.co", DH_APP = DH_SITE + "/app/#/";
+const DH_MOD = [
+  ["rakip", "Rakip Analizi", "Rakip sitelerinizi tarar, güçlü/zayıf yönleri karşılaştırır ve hazır bir sunum çıkarır."],
+  ["sekans", "Sekans Yazarı", "Hedef firmaya özel cold call senaryosu ve LinkedIn mesaj sekansı yazar."],
+  ["seo", "SEO Analizi", "SEO puanı, eksikler, anahtar kelime hacimleri ve içerik önerisi."],
+  ["briefing", "Toplantı Briefingi", "Görüşme öncesi firma ve kişi araştırması, fırsat puanı ve briefing sunumu."],
+  ["fireflies", "Toplantı Analizi", "Fireflies kayıtlarınızı satış koçu gözüyle puanlar; itirazlar, BANT ve takip e-postası."],
+  ["takip", "Rakip Takip", "Rakiplerinizin blog, RSS ve LinkedIn paylaşımlarını haftalık izler, özeti e-postanıza gönderir."],
+];
+const DH_TUR = new Set(["d1", "d7", "d12", "d14"]);
+function dhKonu(u) {
+  const k = Math.max(0, Number(u.kalan) || 0);
+  if (u.tur === "d1") return "Sales Corner'a hoş geldiniz: ilk adımlar";
+  if (u.tur === "d7") return `Denemenizin yarısı geride kaldı: ${k} gün kaldı`;
+  if (u.tur === "d12") return k <= 1 ? "Deneme sürenizin bitmesine 1 gün kaldı" : `Deneme sürenizin bitmesine ${k} gün kaldı`;
+  return "Sales Corner denemenizin bugün son günü";
+}
+const dhBtn = (href, t, ikincil) => `<a href="${href}" style="display:inline-block;background:${ikincil ? "#fff" : "#3b4cca"};color:${ikincil ? "#3b4cca" : "#fff"};border:1px solid #3b4cca;text-decoration:none;padding:11px 18px;border-radius:8px;font-weight:700;font-size:15px;margin:4px 8px 4px 0">${t}</a>`;
+const dhKutu = (ic, renk = "#f5f6ff") => `<div style="background:${renk};border-radius:10px;padding:14px 16px;margin:16px 0">${ic}</div>`;
+function dhModListe(mods, isaret) {
+  return mods.map(([k, ad, d]) => `<div style="padding:10px 0;border-top:1px solid #eee"><a href="${DH_APP}${k}" style="color:#3b4cca;font-weight:700;text-decoration:none">${isaret} ${rtEsc(ad)}</a><div style="color:#555;font-size:14px">${rtEsc(d)}</div></div>`).join("");
+}
+function dhPlanlar(planlar) {
+  const ps = (Array.isArray(planlar) ? planlar : []).filter(p => p && p.kod !== "deneme" && p.kod !== "ozel" && Number(p.aylik_tl) > 0).slice(0, 4);
+  if (!ps.length) return "";
+  const kota = q => DH_MOD.filter(([k]) => Number(q?.[k]) !== 0 && q?.[k] != null).map(([k, ad]) => {
+    const v = Number(q[k]);
+    return k === "takip" ? (v < 0 ? "sınırsız firma takibi" : `${v} firma takibi`) : (v < 0 ? `sınırsız ${ad}` : `ayda ${v} ${ad}`);
+  }).join(" · ");
+  return `<h3 style="font-size:16px;margin:20px 0 6px">Planlar</h3>` + ps.map(p => `<div style="border:1px solid #e5e5ea;border-radius:10px;padding:12px 14px;margin:8px 0">`
+    + `<div style="font-weight:700;font-size:15px">${rtEsc(str(p.ad, 40))} <span style="color:#3b4cca">₺${Number(p.aylik_tl).toLocaleString("tr-TR")}/ay</span> <span style="color:#888;font-weight:400;font-size:12px">KDV hariç</span></div>`
+    + `<div style="color:#555;font-size:13px;margin-top:2px">${rtEsc(kota(p.kota))}${Number(p.koltuk) > 1 ? ` · ${Number(p.koltuk)} kullanıcı` : ""}</div></div>`).join("")
+    + `<p style="color:#555;font-size:13px;margin:6px 0 0">Yıllık faturalamada %20 indirim var. Şirketinize özel kurulum için Özel AI paketine teklif alabilirsiniz.</p>`;
+}
+// u: app_deneme_is satırı (kişiselleştirme), planlar: app_planlar (yalnız d12'de kullanılır)
+function dhMailHtml(u, planlar) {
+  const ad = str(u.ad, 60).trim(), sirket = str(u.sirket, 80).trim(), k = Math.max(0, Number(u.kalan) || 0);
+  const kul = new Set((Array.isArray(u.kullanilan) ? u.kullanilan : []).filter(x => typeof x === "string"));
+  const denenen = DH_MOD.filter(([m]) => kul.has(m)), denenmeyen = DH_MOD.filter(([m]) => !kul.has(m));
+  const cikis = `${DH_SITE}/api/app/bildirim-cikis/${u.cikis}`;
+  const firma = u.firma_dolu ? "" : dhKutu(`<b>Firma profilinizi doldurun.</b><div style="color:#444;font-size:14px;margin:4px 0 10px">Firmanızı, ürünlerinizi ve hedef müşterinizi bir kez girdiğinizde sekans ve briefing çıktıları sizin adınıza kişiselleşir.</div>${dhBtn(DH_APP + "hesap", "Firma profilini doldur", true)}`, "#fffbeb");
+  let bas, alt, govde;
+  if (u.tur === "d1") {
+    bas = "Hoş geldiniz!"; alt = "14 günlük ücretsiz denemeniz başladı";
+    const ilk = denenmeyen.find(([m]) => m !== "fireflies") || denenmeyen[0];
+    govde = `<p>Sales Corner hesabınız${sirket ? ` <b>${rtEsc(sirket)}</b> için` : ""} hazır. Deneme süresince her araç ücretsiz; başlamak için üç kısa adım:</p>`
+      + `<ol style="padding-left:20px;margin:10px 0">`
+      + `<li style="margin:6px 0">${u.firma_dolu ? "Firma profiliniz hazır ✓" : `<a href="${DH_APP}hesap" style="color:#3b4cca">Firma profilinizi</a> doldurun (2 dakika).`}</li>`
+      + `<li style="margin:6px 0">${ilk ? `İlk denemeniz için <a href="${DH_APP}${ilk[0]}" style="color:#3b4cca">${rtEsc(ilk[1])}</a> aracını çalıştırın.` : "Araçlardan birini çalıştırın."}</li>`
+      + `<li style="margin:6px 0"><a href="${DH_APP}takip" style="color:#3b4cca">Rakip Takip</a> ile bir rakibinizi haftalık izlemeye alın.</li></ol>`
+      + `<p style="margin:16px 0 4px">${dhBtn(DH_APP + "panel", "Panele git")}</p>`
+      + firma
+      + `<h3 style="font-size:16px;margin:20px 0 4px">Denemenizdeki araçlar</h3>` + dhModListe(DH_MOD, "→");
+  } else if (u.tur === "d7") {
+    bas = "Denemenizin yarısı geride"; alt = `${k} gün kaldı`;
+    govde = `<p>Ücretsiz denemenizin ilk haftası doldu, <b>${k} gününüz</b> kaldı.${denenen.length ? ` Şimdiye kadar ${denenen.length} aracı denediniz.` : " Henüz hiçbir aracı denemediniz; birkaç dakikanızı ayırmanız yeterli."}</p>`
+      + (denenen.length ? `<h3 style="font-size:16px;margin:18px 0 4px">Denedikleriniz</h3>` + dhModListe(denenen, "✓") : "")
+      + (denenmeyen.length ? `<h3 style="font-size:16px;margin:18px 0 4px">Henüz denemedikleriniz</h3>` + dhModListe(denenmeyen, "→")
+        : dhKutu("<b>Bütün araçları denediniz.</b> Hangi planın size uyduğunu fiyatlar sayfasında karşılaştırabilirsiniz."))
+      + firma
+      + `<p style="margin:18px 0 4px">${dhBtn(DH_APP + "panel", "Panele git")}${dhBtn(DH_APP + "fiyatlar", "Planları gör", true)}</p>`;
+  } else if (u.tur === "d12") {
+    bas = `Denemenizin bitmesine ${k} gün kaldı`; alt = "Size uyan planı seçin";
+    govde = `<p>Ücretsiz denemeniz <b>${k} gün</b> sonra sona eriyor. Deneme bittiğinde araçları kullanmak için bir plan seçmeniz gerekir; verileriniz ve geçmiş çalışmalarınız korunur.</p>`
+      + dhPlanlar(planlar)
+      + `<p style="margin:18px 0 4px">${dhBtn(DH_APP + "fiyatlar", "Planları karşılaştır")}</p>`
+      + (denenmeyen.length ? `<p style="margin:18px 0 0;color:#444">Bitmeden deneyebileceğiniz araçlar: ${denenmeyen.map(([m, a]) => `<a href="${DH_APP}${m}" style="color:#3b4cca">${rtEsc(a)}</a>`).join(", ")}.</p>` : "")
+      + firma;
+  } else {
+    bas = "Bugün denemenizin son günü"; alt = "Kaldığınız yerden devam edin";
+    govde = `<p>14 günlük ücretsiz denemeniz bugün sona eriyor. Bir plan seçtiğinizde araçlar kesintisiz çalışmaya devam eder; verileriniz, sunumlarınız ve geçmiş çalışmalarınız korunur.</p>`
+      + (denenen.length ? `<p style="color:#444">Denemede kullandığınız araçlar: ${denenen.map(([, a]) => rtEsc(a)).join(", ")}.</p>` : "")
+      + `<p style="margin:18px 0 4px">${dhBtn(DH_APP + "fiyatlar", "Plan seç")}${dhBtn(DH_APP + "panel", "Panele git", true)}</p>`
+      + `<p style="color:#444;font-size:14px">Sorunuz varsa bu e-postayı yanıtlayabilirsiniz.</p>`;
+  }
+  const on = rtEsc(dhKonu(u));
+  return `<!doctype html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${on}</title></head>`
+    + `<body style="margin:0;padding:0;background:#f4f4f7"><span style="display:none;max-height:0;overflow:hidden;opacity:0">${rtEsc(alt)}</span>`
+    + `<div style="font-family:Arial,Helvetica,sans-serif;max-width:600px;margin:0 auto;padding:16px 12px;color:#222;line-height:1.55;font-size:15px">`
+    + `<div style="background:#0a0a0f;color:#fff;padding:18px 20px;border-radius:10px 10px 0 0"><div style="font-size:13px;opacity:.7;letter-spacing:.3px">SALES CORNER</div><div style="font-size:20px;font-weight:700;margin-top:4px">${rtEsc(bas)}</div><div style="opacity:.75;font-size:14px">${rtEsc(alt)}</div></div>`
+    + `<div style="background:#fff;border:1px solid #e5e5ea;border-top:0;padding:18px 20px;border-radius:0 0 10px 10px">`
+    + `<p style="margin:0 0 10px">Merhaba${ad ? " " + rtEsc(ad) : ""},</p>` + govde
+    + `<p style="margin:22px 0 0">Kolay gelsin,<br>Sales Corner</p></div>`
+    + `<p style="color:#888;font-size:12px;margin:14px 4px 0;line-height:1.5">Bu e-postayı Sales Corner deneme hesabınız olduğu için alıyorsunuz. Deneme hatırlatmalarını almak istemiyorsanız <a href="${cikis}" style="color:#888">buradan çıkabilir</a> ya da <a href="${DH_APP}hesap" style="color:#888">Hesabım</a> sayfasından kapatabilirsiniz.</p>`
+    + `</div></body></html>`;
+}
+const dhMaske = e => { const [a, d] = String(e || "").split("@"); return d ? `${a.slice(0, 2)}***@${d}` : "***"; };
+async function denemeYap(env, is, id, token) {
+  const liste = (Array.isArray(is.liste) ? is.liste : []).filter(u => u && DH_TUR.has(u.tur)).slice(0, 20);
+  let planlar = null;
+  if (liste.some(u => u.tur === "d12")) {
+    try { const p = await sbRpc(SB_ANON_AU, "app_planlar", {}); if (p.ok && Array.isArray(p.j)) planlar = p.j; } catch {}
+  }
+  const gonderilen = [], hata = [], atlanan = [], ozet = [];
+  for (const u of liste) {
+    const ref = { u: str(u.user_id, 40), t: u.tur };
+    if (!RT_EMAIL.test(str(u.email, 200)) || !/^[0-9a-f]{48}$/.test(str(u.cikis, 60))) { atlanan.push(ref); continue; }
+    const konu = dhKonu(u), html = dhMailHtml(u, planlar);
+    if (is.dry) { ozet.push({ email: dhMaske(u.email), tur: u.tur, gun: u.gun, konu, boyut: html.length }); continue; }
+    const cikis = `<${DH_SITE}/api/app/bildirim-cikis/${u.cikis}>`;
+    try { await rtMail(env, u.email, konu, html, { "List-Unsubscribe": cikis, "List-Unsubscribe-Post": "List-Unsubscribe=One-Click" }); gonderilen.push(ref); }
+    catch (e) { console.log("deneme mail", u.tur, e?.message); hata.push(ref); }
+  }
+  const sonuc = is.dry ? { dry: true, n: ozet.length } : { gonderilen, hata, atlanan: atlanan.length };
+  try { await sbRpc(SB_ANON_AU, "app_deneme_bitir", { p_id: id, p_token: token, p_sonuc: sonuc }); }
+  catch (e) { console.log("deneme bitir", e?.message); }
+  return J(is.dry ? { success: true, dry: true, liste: ozet } : { success: true, gonderilen: gonderilen.length, hata: hata.length, atlanan: atlanan.length });
+}
+async function denemeRun(req, env) {
+  const b = await readBody(req);
+  const id = str(b.id, 40), token = str(b.token, 60);
+  if (!/^[0-9a-f-]{36}$/i.test(id) || !/^[0-9a-f]{48}$/.test(token)) return fail("Geçersiz istek.", 400);
+  const r = await sbRpc(SB_ANON_AU, "app_deneme_is", { p_id: id, p_token: token });
+  if (!r.ok || !r.j?.ok) return fail("Geçersiz ya da süresi dolmuş iş.", 403);
+  return keepAlive(denemeYap(env, r.j, id, token));
+}
+// Abonelikten çıkma: GET onay sayfası (bağlantı önizleyicileri tek başına çıkarmasın), POST çıkarır (RFC 8058 tek tık dahil).
+function dhSayfa(baslik, ic, s = 200) {
+  const html = `<!doctype html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>${rtEsc(baslik)} · Sales Corner</title>`
+    + `<style>body{margin:0;background:#f4f4f7;font-family:Arial,Helvetica,sans-serif;color:#222;line-height:1.55}main{max-width:520px;margin:48px auto;padding:0 16px}.k{background:#fff;border:1px solid #e5e5ea;border-radius:12px;padding:24px}h1{font-size:21px;margin:0 0 10px}p{margin:0 0 14px;color:#444}button,.b{display:inline-block;background:#3b4cca;color:#fff;border:0;text-decoration:none;padding:11px 18px;border-radius:8px;font-weight:700;font-size:15px;cursor:pointer;font-family:inherit}.g{background:#fff;color:#3b4cca;border:1px solid #3b4cca}small{color:#888}</style></head>`
+    + `<body><main><div class="k">${ic}</div><p style="margin-top:14px"><small>Sales Corner · salescorner.co</small></p></main></body></html>`;
+  return new Response(html, { status: s, headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-store", "x-robots-tag": "noindex", "referrer-policy": "no-referrer",
+    "content-security-policy": "default-src 'none'; style-src 'unsafe-inline'; form-action 'self'; frame-ancestors 'none'; base-uri 'none'" } });
+}
+async function bildirimCikis(req, sub) {
+  const jeton = sub.slice("bildirim-cikis/".length);
+  if (!/^[0-9a-f]{48}$/.test(jeton)) return dhSayfa("Bağlantı geçersiz", `<h1>Bağlantı geçersiz</h1><p>Bu bağlantı eksik ya da hatalı görünüyor. Hatırlatma tercihinizi Hesabım sayfasından değiştirebilirsiniz.</p><a class="b" href="${DH_APP}hesap">Hesabım</a>`, 400);
+  if (req.method === "GET" || req.method === "HEAD") return dhSayfa("Hatırlatmalardan çık", `<h1>Deneme hatırlatma e-postaları</h1><p>Deneme süreniz boyunca gönderilen hatırlatma e-postalarını artık almak istemiyor musunuz?</p><form method="post"><button type="submit">Hatırlatmalardan çık</button></form>`);
+  const r = await sbRpc(SB_ANON_AU, "app_bildirim_cikis", { p_jeton: jeton });
+  if (!r.ok) return dhSayfa("Bir sorun oluştu", `<h1>Bir sorun oluştu</h1><p>İsteğiniz şu an işlenemedi. Lütfen biraz sonra tekrar deneyin ya da Hesabım sayfasından kapatın.</p><a class="b g" href="${DH_APP}hesap">Hesabım</a>`, 500);
+  if (!r.j?.ok) return dhSayfa("Bağlantı geçersiz", `<h1>Bağlantı geçersiz</h1><p>Bu bağlantıya ait bir kayıt bulunamadı. Hatırlatma tercihinizi Hesabım sayfasından değiştirebilirsiniz.</p><a class="b g" href="${DH_APP}hesap">Hesabım</a>`, 404);
+  return dhSayfa("Çıkış yapıldı", `<h1>Hatırlatmalardan çıktınız</h1><p>Deneme hatırlatma e-postaları artık size gönderilmeyecek. Fikrinizi değiştirirseniz Hesabım sayfasından yeniden açabilirsiniz.</p><a class="b g" href="${DH_APP}hesap">Hesabım</a>`);
+}
+
 async function appRoute(req, env, url, path, cfctx) {
   if (req.method === "OPTIONS") return new Response(null, { status: 204 });
   const sub = path.slice("/api/app/".length);
@@ -2057,6 +2195,15 @@ async function appRoute(req, env, url, path, cfctx) {
   if (sub === "fiyat-run" && req.method === "POST") {
     try { return await fiyatRun(req, env, cfctx); }
     catch (e) { console.log(path, e?.stack || e); return fail("İşlem sırasında hata oluştu.", 500); }
+  }
+  if (sub === "deneme-hatirlat" && req.method === "POST") {
+    try { return await denemeRun(req, env); }
+    catch (e) { console.log(path, e?.stack || e); return fail("İşlem sırasında hata oluştu.", 500); }
+  }
+  // E-postadaki abonelikten çıkma bağlantısı: e-posta istemcileri kökensiz POST atar (RFC 8058)
+  if (sub.startsWith("bildirim-cikis/") && ["GET", "HEAD", "POST"].includes(req.method)) {
+    try { return await bildirimCikis(req, sub); }
+    catch (e) { console.log(path, e?.stack || e); return dhSayfa("Bir sorun oluştu", "<h1>Bir sorun oluştu</h1><p>Lütfen biraz sonra tekrar deneyin.</p>", 500); }
   }
   if (!sameSite(req)) return fail("Bu uç yalnızca salescorner.co üzerinden kullanılabilir.", 403);
   try {
