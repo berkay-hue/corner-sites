@@ -794,7 +794,7 @@ const RESULT = {
     const r = j.res || {}, pub = safeUrl(r.publicUrl);
     return `${resHead("Sekans hazır", r.company ? `<span class="pill acc">${esc(r.company)}</span>` : "")}
     <div class="res-b"><div class="sec"><h4>Sekans dokümanı</h4><div class="row" style="justify-content:flex-start">${linkBtn(r.presentationViewUrl || r.presentationUrl, "Sekansı aç", "btn-p")}${linkBtn(r.presentationUrl, "Düzenle")}${pub ? `<button class="btn btn-g btn-s" data-copy="${esc(pub)}">Paylaşım linkini kopyala</button>` : ""}</div></div>
-    <p style="color:var(--mute);font-size:13.5px">Dokümanda cold call senaryosu, itiraz karşılama cümleleri ve LinkedIn mesaj adımları yer alır.</p></div>`;
+    <p style="color:var(--mute);font-size:13.5px">Dokümanda cold call senaryosu, itiraz karşılama cümleleri ve LinkedIn mesaj adımları yer alır.</p>${skExportHtml(r)}</div>`;
   },
   seo: j => seoResult(j.res.sonuc || {}),
   briefing: j => {
@@ -840,6 +840,157 @@ function pageSekans() {
     if (!res.success) { busy(btn, false); return setMsg("m", "err", esc(res.message) + (res.neden ? ` <a href="#/fiyatlar">Planlar →</a>` : "")); }
     render();
   };
+}
+
+// ---------- Sekans dışa aktarma (tamamı tarayıcıda; sunucuya istek yok, hak düşmez) ----------
+// Sekans verisi rapor bağlantısının # kısmında taşınır: base64url(JSON {t, s, d, sl:[{b başlık, m maddeler, n metin}]})
+function skData(r) {
+  const u = String((r && (r.presentationUrl || r.presentationViewUrl || r.publicUrl)) || ""), i = u.indexOf("#");
+  if (i < 0 || !/\/api\/rapor/.test(u.slice(0, i))) return null;
+  try {
+    const bin = atob(u.slice(i + 1).replace(/-/g, "+").replace(/_/g, "/"));
+    const o = JSON.parse(new TextDecoder().decode(Uint8Array.from(bin, c => c.charCodeAt(0))));
+    return o && Array.isArray(o.sl) ? o : null;
+  } catch { return null; }
+}
+const SK_KANAL = { email: "E-posta", linkedin: "LinkedIn", call: "Telefon", diger: "Adım" };
+const skTrim = s => String(s ?? "").replace(/\r\n?/g, "\n").trim();
+const skUnq = s => skTrim(s).replace(/^["“”'‘’«]+|["“”'‘’»]+$/g, "").trim();
+function skSteps(rep) {
+  const out = [];
+  for (const x of (rep && rep.sl) || []) {
+    const b = skTrim(x && x.b), m = Array.isArray(x && x.m) ? x.m.map(skTrim).filter(Boolean) : [];
+    let metin = skTrim(x && x.n);
+    const gm = b.match(/g[üu]n\s*(\d{1,2})/i);
+    const kanal = /linked\s*in/i.test(b) ? "linkedin" : /cold\s*call|arama|telefon|çağrı/i.test(b) ? "call" : /e-?\s?posta|e-?mail|\bmail\b/i.test(b) ? "email" : "diger";
+    if (!gm && (kanal === "diger" || !metin)) continue; // analiz/değer önerisi slaytları adım değildir
+    let konu = "", amac = "";
+    const rest = [];
+    for (const it of m) {
+      const k = it.match(/^(?:konu(?:\s*satırı)?|subject)\s*[:：–-]\s*(.+)$/is), a = it.match(/^(?:amaç|amac|hedef)\s*[:：–-]\s*(.+)$/is);
+      if (k && !konu) konu = skUnq(k[1]); else if (a && !amac) amac = skTrim(a[1]); else rest.push(it);
+    }
+    const ilk = metin.match(/^(?:konu(?:\s*satırı)?|subject)\s*[:：]\s*(.+)\n+/i);
+    if (ilk) { if (!konu) konu = skUnq(ilk[1]); metin = metin.slice(ilk[0].length).trim(); }
+    if (kanal === "email" && !konu && rest.length) konu = skUnq(rest.shift());
+    out.push({ gun: gm ? Number(gm[1]) : null, kanal, baslik: b, konu, amac, metin: metin || rest.join("\n") });
+  }
+  return out;
+}
+// Kişiselleştirme yer tutucuları: [Ad], {{ad}}, {Firma Adı}, {{first_name}}… → hedef aracın sözdizimi
+const skFold = s => String(s).toLocaleLowerCase("tr").replace(/ı/g, "i").replace(/ş/g, "s").replace(/ğ/g, "g").replace(/ü/g, "u").replace(/ö/g, "o").replace(/ç/g, "c").replace(/â/g, "a").replace(/[^a-z0-9]/g, "");
+const SK_ALIAS = {};
+for (const [t, ks] of Object.entries({
+  first: "ad adi isim ismi firstname name kisiadi kisininadi aliciadi alici ilgilikisi yetkili yetkiliadi contactfirstname",
+  full: "adsoyad adisoyadi adsoyadi isimsoyisim isimsoyad fullname kisiadisoyadi aliciadisoyadi",
+  last: "soyad soyadi soyisim lastname contactlastname",
+  company: "firma firmaadi firmaismi firmaniz sirket sirketadi sirketismi company companyname organization organizationname kurum kurumadi accountname",
+  title: "unvan unvani pozisyon pozisyonu title jobtitle gorev gorevi rol",
+  sender: "gonderen gonderenadi adiniz adinizsoyadiniz sizinadiniz imza sendername senderfirstname isminiz",
+})) for (const k of ks.split(" ")) SK_ALIAS[k] = t;
+const SK_TOK = {
+  apollo: { first: "{{first_name}}", last: "{{last_name}}", company: "{{company}}", title: "{{title}}" },
+  lemlist: { first: "{{firstName}}", last: "{{lastName}}", company: "{{companyName}}", title: "{{jobTitle}}" },
+  csv: { first: "{{first_name}}", last: "{{last_name}}", company: "{{company}}", title: "{{title}}" },
+  insan: { first: "[Ad]", last: "[Soyad]", company: "[Firma]", title: "[Unvan]" },
+};
+function skPh(text, arac, ctx = {}) {
+  const T = SK_TOK[arac];
+  return String(text ?? "").replace(/\{\{\s*([^{}\n]{1,40}?)\s*\}\}|\{\s*([^{}\n]{1,40}?)\s*\}|\[\s*([^\[\]\n]{1,40}?)\s*\]/g, (all, a, b, c) => {
+    const t = SK_ALIAS[skFold(a || b || c)];
+    if (!t) return all;
+    if (t === "full") return `${T.first} ${T.last}`;
+    if (t === "sender") return ctx.yazar || all;
+    if (t === "company" && arac === "insan" && ctx.firma) return ctx.firma;
+    return T[t];
+  });
+}
+function skCtx(r, rep) {
+  const yazar = (String(rep.s || "").match(/^Hazırlayan:\s*(.+)$/) || [])[1] || "";
+  return { firma: String(r.company || "").trim(), yazar: yazar.trim() };
+}
+const skSlug = s => skFold(String(s || "").replace(/\s+/g, "-").replace(/[^\p{L}\p{N}-]/gu, "")).slice(0, 40) || "sekans";
+// CSV: RFC 4180 kaçışlama, UTF-8 BOM (Excel'de Türkçe karakterler bozulmasın), formül enjeksiyonuna karşı koruma
+const csvCell = v => {
+  let s = String(v ?? "").replace(/\r\n?/g, "\n");
+  // "-2+3+cmd|…" gibi DDE yükleri de yakalanır; yalnız düz sayı ("-1", "-1,5") ve "- madde" dokunulmaz
+  if (/^[=+@\t\r]/.test(s) || (/^-/.test(s) && !/^-\s/.test(s) && !/^-?\d+(?:[.,]\d+)?$/.test(s))) s = "'" + s;
+  return /[",\n]|^\s|\s$/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+};
+const toCsv = rows => "\uFEFF" + rows.map(r => r.map(csvCell).join(",")).join("\r\n") + "\r\n";
+function skLeadCsv(arac, r, rep, steps) {
+  const ctx = skCtx(r, rep);
+  const bas = arac === "apollo" ? ["First Name", "Last Name", "Email", "Title", "Company"] : ["email", "firstName", "lastName", "companyName", "jobTitle"];
+  const ornek = arac === "apollo" ? ["", "", "", "", ctx.firma] : ["", "", "", ctx.firma, ""];
+  steps.forEach((s, i) => { bas.push(`step${i + 1}_subject`, `step${i + 1}_body`); ornek.push(skPh(s.konu, arac, ctx), skPh(s.metin, arac, ctx)); });
+  return toCsv([bas, ornek]);
+}
+function skStepCsv(r, rep, steps) {
+  const ctx = skCtx(r, rep);
+  return toCsv([["Adım", "Gün", "Kanal", "Başlık", "Konu", "Amaç", "Metin"], ...steps.map((s, i) => [i + 1, s.gun ?? "", SK_KANAL[s.kanal], s.baslik, skPh(s.konu, "csv", ctx), s.amac, skPh(s.metin, "csv", ctx)])]);
+}
+// .eml: gönderilmemiş taslak (X-Unsent: 1), konu RFC 2047 encoded-word, gövde UTF-8 base64
+const b64Bytes = u8 => { let bin = ""; for (let i = 0; i < u8.length; i += 8192) bin += String.fromCharCode(...u8.subarray(i, i + 8192)); return btoa(bin); };
+function rfc2047(s) {
+  s = String(s || "").replace(/[\r\n]+/g, " ").trim();
+  if (/^[\x20-\x7e]*$/.test(s) && s.length <= 66 && !/=\?/.test(s)) return s;
+  const enc = new TextEncoder(), parts = [];
+  let cur = [];
+  for (const ch of s) {
+    const b = enc.encode(ch);
+    if (cur.length + b.length > 39) { parts.push(cur); cur = []; }
+    cur.push(...b);
+  }
+  if (cur.length) parts.push(cur);
+  return parts.map(p => `=?UTF-8?B?${b64Bytes(Uint8Array.from(p))}?=`).join("\r\n ");
+}
+function skEml(r, rep, s) {
+  const ctx = skCtx(r, rep);
+  const konu = skPh(s.konu || s.baslik, "insan", ctx);
+  const govde = skPh(s.metin, "insan", ctx).replace(/\r\n?/g, "\n").replace(/\n/g, "\r\n");
+  const b64 = b64Bytes(new TextEncoder().encode(govde)).replace(/.{1,76}/g, "$&\r\n");
+  return ["X-Unsent: 1", `Subject: ${rfc2047(konu)}`, "MIME-Version: 1.0", "Content-Type: text/plain; charset=UTF-8", "Content-Transfer-Encoding: base64", "", b64].join("\r\n");
+}
+const skHead = s => s.gun && !/g[üu]n\s*\d/i.test(s.baslik) ? `Gün ${s.gun} · ${s.baslik}` : s.baslik;
+function skText(r, rep, list) {
+  const ctx = skCtx(r, rep);
+  return list.map(s => [skHead(s), s.konu ? `Konu: ${skPh(s.konu, "insan", ctx)}` : "", "", skPh(s.metin, "insan", ctx)].filter((x, i) => i !== 1 || x).join("\n")).join("\n\n———\n\n");
+}
+function dlFile(name, data, type) {
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([data], { type }));
+  a.download = name; a.style.display = "none";
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+}
+function skExportHtml(r) {
+  const rep = skData(r), steps = rep ? skSteps(rep) : [];
+  if (!steps.length) return "";
+  const mails = steps.map((s, i) => [s, i]).filter(([s]) => s.kanal === "email");
+  const ctx = skCtx(r, rep);
+  return `<div class="sec sk-exp"><h4>Dışa aktar</h4><div class="row" style="justify-content:flex-start;gap:8px">
+      <button class="btn btn-g btn-s" data-exp="apollo">Apollo CSV</button><button class="btn btn-g btn-s" data-exp="lemlist">Lemlist CSV</button><button class="btn btn-g btn-s" data-exp="csv">CSV</button>${mails.length ? `<button class="btn btn-g btn-s" data-exp="eml:${mails[0][1]}">E-posta taslağı (.eml)</button>` : ""}<button class="btn btn-g btn-s" data-exp="kopya">Tümünü kopyala</button></div>
+    <details class="sk-how"><summary>Nasıl içe aktarılır?</summary>
+      <p>Apollo ve Lemlist sekans adımlarını CSV'den almaz; bu dosyalar <b>kişi içe aktarma şablonudur</b>. Örnek satırı kendi alıcılarınızla çoğaltın (e-posta zorunlu). Her adımın metni <code>step1_subject</code>, <code>step1_body</code>… sütunlarındadır.</p>
+      <p><b>Apollo:</b> kişiler için bu sütun adlarıyla çok satırlı özel alanlar oluşturun, CSV'yi kişi olarak içe aktarırken sütunları bu alanlara eşleyin, sekans adımlarında alanı <code>{ }</code> değişken menüsünden ekleyin.</p>
+      <p><b>Lemlist:</b> kampanyaya CSV ile lead ekleyin; email, firstName, lastName, companyName varsayılan alanlara, diğer sütunlar aynı adla özel değişkene dönüşür. Adımlarda <code>{{step1_subject}}</code> gibi kullanın (büyük/küçük harf duyarlı).</p>
+      <p>Metinlerdeki ad, firma gibi yer tutucular aracın sözdizimine çevrildi (Apollo <code>{{first_name}}</code>, Lemlist <code>{{firstName}}</code>). Bir değişkenin içindeki değişkeni her araç işlemeyebilir; emin değilseniz metni adım düzenleyicisine doğrudan yapıştırın. <b>.eml</b> dosyası Outlook'ta gönderilmemiş taslak olarak açılır; diğer programlarda metni kopyalayın.</p>
+    </details></div>
+    <div class="sec"><h4>Sekans adımları (${steps.length})</h4>${steps.map((s, i) => `<div class="box sk-st"><div class="row"><b>${esc(skHead(s))}</b><span class="row" style="gap:6px;justify-content:flex-end"><button class="btn btn-g btn-s" data-exp="kopya:${i}" aria-label="${i + 1}. adımı kopyala">Kopyala</button>${s.kanal === "email" ? `<button class="btn btn-g btn-s" data-exp="eml:${i}" aria-label="${i + 1}. adımı .eml taslağı olarak indir">.eml</button>` : ""}</span></div>
+      ${s.konu ? `<p class="sk-k"><span>Konu:</span> ${esc(skPh(s.konu, "insan", ctx))}</p>` : ""}${s.amac ? `<p class="sk-a">${esc(s.amac)}</p>` : ""}
+      ${s.metin ? `<details><summary>Metni göster</summary><div class="pre sk-m">${esc(skPh(s.metin, "insan", ctx))}</div></details>` : ""}</div>`).join("")}</div>`;
+}
+async function skExport(act) {
+  const r = JOBS.sekans?.res, rep = skData(r), steps = rep ? skSteps(rep) : [];
+  if (!steps.length) return toast("Sekans adımları okunamadı.");
+  const [k, n] = act.split(":"), slug = skSlug(r.company || rep.t);
+  if (k === "apollo" || k === "lemlist") { dlFile(`sekans-${slug}-${k}.csv`, skLeadCsv(k, r, rep, steps), "text/csv;charset=utf-8"); toast(`${k === "apollo" ? "Apollo" : "Lemlist"} CSV indirildi`); }
+  else if (k === "csv") { dlFile(`sekans-${slug}.csv`, skStepCsv(r, rep, steps), "text/csv;charset=utf-8"); toast("CSV indirildi"); }
+  else if (k === "eml") { const s = steps[Number(n)]; if (!s) return; dlFile(`sekans-${slug}-adim${Number(n) + 1}.eml`, skEml(r, rep, s), "message/rfc822"); toast("E-posta taslağı indirildi"); }
+  else if (k === "kopya") {
+    const list = n === undefined ? steps : [steps[Number(n)]].filter(Boolean);
+    try { await navigator.clipboard.writeText(skText(r, rep, list)); toast("Kopyalandı ✓"); } catch { toast("Kopyalanamadı; metni seçip kopyalayın."); }
+  }
 }
 
 // ---------- SEO ----------
@@ -1512,7 +1663,7 @@ document.addEventListener("click", e => {
   if (e.target.closest("a[data-teklif]")) try { sessionStorage.setItem("sc_app_ret", location.pathname + location.hash); } catch {}
 });
 document.addEventListener("click", async e => {
-  const t = e.target.closest("[data-go],[data-eye],[data-side],[data-menu],[data-logout],[data-firma-yenile],[data-copy],[data-copy-el],[data-reset],.nav a,#seo-show,#seo-dl");
+  const t = e.target.closest("[data-go],[data-eye],[data-side],[data-menu],[data-logout],[data-firma-yenile],[data-copy],[data-copy-el],[data-reset],[data-exp],.nav a,#seo-show,#seo-dl");
   if (!t) return;
   if (t.dataset.go) { e.preventDefault(); go(t.dataset.go); }
   else if (t.dataset.eye) { const i = document.getElementById(t.dataset.eye); const show = i.type === "password"; i.type = show ? "text" : "password"; t.textContent = show ? "Gizle" : "Göster"; t.setAttribute("aria-label", show ? "Şifreyi gizle" : "Şifreyi göster"); }
@@ -1528,6 +1679,7 @@ document.addEventListener("click", async e => {
     const txt = t.dataset.copy || document.getElementById(t.dataset.copyEl)?.innerText || "";
     try { await navigator.clipboard.writeText(txt); toast("Kopyalandı ✓"); } catch { toast("Kopyalanamadı; metni seçip kopyalayın."); }
   }
+  else if (t.dataset.exp) skExport(t.dataset.exp);
   else if (t.dataset.reset) { const k = t.dataset.reset; delete JOBS[k]; saveJobs(); render(); }
   else if (t.matches(".nav a")) document.getElementById("shell")?.classList.remove("open");
   else if (t.id === "seo-show" || t.id === "seo-dl") {
