@@ -610,6 +610,7 @@ function __cekimKaydet(ctx, target, kaynak, t0, detay) {
   const p = sbRpc(SB_ANON_AU, "app_cekim_kaydet", { p_host: host.slice(0, 253), p_kaynak: kaynak, p_ms: Date.now() - t0, p_detay: detay || null }).catch(() => {});
   try { ctx.cfctx?.waitUntil?.(p); } catch {}
 }
+const CEKIM_TEST_SITELER = new Set(["leodessa.co", "saascorner.co", "salescorner.co", "apollo.io", "www.g2.com", "example.com"]);
 async function sbYedekli(ctx, url, init, headers, body, timeout) {
   const env = ctx.env, u = new URL(url), key = u.searchParams.get("api_key") || "", target = u.searchParams.get("url") || "";
   const bad = ctx.__sbBad || (ctx.__sbBad = new Set());
@@ -13990,6 +13991,22 @@ export default {
     }
     if (!path.startsWith("/api/")) return env.ASSETS.fetch(req);
     if (path.startsWith("/api/app/")) return appRoute(req, env, url, path, cfctx);
+    // Browser Run tanı ucu: zinciri atlayıp doğrudan isteği ve Cloudflare tarayıcısını ayrı ayrı dener; HTML döndürmez, yalnız durum kodları.
+    // Kötüye kullanılmasın diye yalnız sabit test sitelerine açıktır (ücretsiz plan günde 10 tarayıcı dakikası).
+    if (path === "/api/cekim-test" && req.method === "GET") {
+      const site = (url.searchParams.get("site") || "").toLowerCase();
+      const json = (o, st = 200) => new Response(JSON.stringify(o), { status: st, headers: { "content-type": "application/json; charset=utf-8", "cache-control": "no-store", "x-robots-tag": "noindex" } });
+      if (!CEKIM_TEST_SITELER.has(site)) return json({ hata: "izinsiz site", izinli: [...CEKIM_TEST_SITELER] }, 400);
+      const target = `https://${site}/`, ctx = { env, cfctx }, out = { site };
+      let t0 = Date.now();
+      try { const r = await fetch(target, { headers: __UA, redirect: "follow", signal: AbortSignal.timeout(15000) }); const t = await r.text(); out.dogrudan = { durum: r.status, html: __htmlOk(t), ms: Date.now() - t0 }; }
+      catch (e) { out.dogrudan = { durum: e?.name === "TimeoutError" ? "zaman" : "hata", ms: Date.now() - t0 }; }
+      t0 = Date.now();
+      const b = await __cfBrowser(ctx, target);
+      out.tarayici = { sonuc: b.n, uzunluk: b.t ? b.t.length : 0, ms: Date.now() - t0, token: env.CF_BR_TOKEN ? "CF_BR_TOKEN" : env.CF_AI_TOKEN ? "CF_AI_TOKEN" : "yok" };
+      __cekimKaydet(ctx, target, b.t ? "tarayici" : "hata", t0, "test b:" + b.n);
+      return json(out);
+    }
     if (path === "/api/rapor") return new Response(VIEWER, { headers: { "content-type": "text/html; charset=utf-8", "x-robots-tag": "noindex", "cache-control": "public, max-age=300" } });
     if (req.method === "OPTIONS") return new Response(null, { status: 204 });
     // İletişim formu kopyası: corner-forms'a ek olarak Supabase app_iletisim'e yazılır (yönetim panelinde görünür).
