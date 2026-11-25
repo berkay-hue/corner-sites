@@ -349,6 +349,24 @@ textarea.in{min-height:96px;resize:vertical}
 .tk-row{border:1px solid var(--line);border-radius:var(--r-s);padding:10px;display:grid;gap:8px}
 .tk-row3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 @media (max-width:720px){.tk-row3{grid-template-columns:1fr}}
+/* Rakip fiyat alarmı */
+.tk-fy .tk-body{gap:10px}
+.fy-row{border:1px solid var(--line);border-radius:var(--r-s);padding:10px 12px;display:grid;gap:4px;min-width:0}
+.fy-bas{gap:8px;flex-wrap:wrap}
+.fy-row .tk-meta{margin:2px 0 0;font-size:13px}
+.fy-url{color:var(--acc);font-size:13px;overflow-wrap:anywhere}
+.fy-in{display:flex;gap:8px;align-items:center;margin-top:6px}
+.fy-in .in{flex:1;min-width:0}
+@media (max-width:520px){.fy-in{flex-wrap:wrap}.fy-in .in{flex-basis:100%}}
+.fy-fark{margin-top:6px;font-size:13.5px}
+.fy-fark summary{cursor:pointer;font-weight:600}
+.fy-fark ul{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:4px}
+.fy-fark li{padding:4px 8px;border-radius:6px;overflow-wrap:anywhere}
+li.fy-ek{background:var(--ok-soft);color:#166534}
+li.fy-ck{background:var(--bad-soft);color:#991b1b}
+li.fy-ck s{text-decoration-thickness:1px}
+summary .fy-ek{color:var(--ok);font-weight:700}
+summary .fy-ck{color:var(--bad);font-weight:700}
 /* Yönetim paneli */
 .adm-grid{display:grid;grid-template-columns:2fr 1.4fr 1fr auto;gap:12px;align-items:end}
 .adm-tabs{max-width:520px}
