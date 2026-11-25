@@ -22,7 +22,7 @@ const { ytRetention } = await import("./oauth.js");
 
 const read = p => readFileSync(new URL(p, import.meta.url), "utf8");
 const SCHEMA = read("../schema.sql");
-const MIG = ["0001_metrics", "0002_oauth", "0003_sync", "0004_sync_changes", "0006_posts", "0014_gen", "0018_plans", "0019_cms"].map(n => read(`../migrations/${n}.sql`));
+const MIG = ["0001_metrics", "0002_oauth", "0003_sync", "0004_sync_changes", "0006_posts", "0014_gen", "0018_plans", "0019_cms", "0021_cms_send_now"].map(n => read(`../migrations/${n}.sql`));
 const M0017 = read("../migrations/0017_accounts.sql");
 const M0020 = read("../migrations/0020_drafts_3gun.sql");
 
