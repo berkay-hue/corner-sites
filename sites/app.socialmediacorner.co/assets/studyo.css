@@ -750,6 +750,8 @@ dialog.kr-stok-dlg{width:min(760px,calc(100% - var(--g3)))}
 /* A11-4 (24.11): formdaki "Sahne görselleri" seçimi (Görselsiz / Görselli · Pexels). Süre çipleriyle aynı dil; erişim yoksa
    "Görselli" gizlenmez: kesik kenar + kilit ikonu + altta nedeni ve plan bağlantısı. data-durum: bekle | acik | kilit | yok */
 .st-gorsel .st-bolum{grid-template-columns:repeat(2,minmax(0,1fr))}
+.st-gorsel .st-bolum .cip{min-width:0}
+.st-gorsel .st-bolum .cip label{min-width:0;white-space:normal;overflow-wrap:break-word}
 .st-gorsel-ad{display:inline-flex;align-items:center;gap:4px}
 .st-gorsel-kilit{display:none;width:14px;height:14px;flex:none}
 .st-gorsel[data-durum="kilit"] .st-gorsel-kilit,.st-gorsel[data-durum="yok"] .st-gorsel-kilit{display:inline-block}
