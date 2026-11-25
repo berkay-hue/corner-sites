@@ -532,7 +532,8 @@ async function xfetch(ctx, url, init = {}, cred, timeout) {
   catch (e) { if (ac.signal.aborted) throw new HttpErr(`timeout of ${timeout}ms exceeded`, 0); throw new HttpErr(e.message || String(e), 0); }
   finally { if (tm) clearTimeout(tm); }
 }
-// Site çekimi sırası: 1) hedef siteye doğrudan istek (içerik kalite kontrolüyle) → 2) Claude web_fetch (ANTHROPIC_API_KEY) → 3) ScrapingBee anahtarları (JS çizimi gereken siteler için son çare)
+// Site çekimi sırası: 1) hedef siteye doğrudan istek (içerik kalite kontrolüyle) → 2) Claude web_fetch (ANTHROPIC_API_KEY) → 3) Cloudflare Browser Run (gerçek Chromium, JS çizer; CF_BR_TOKEN || CF_AI_TOKEN) → 4) ScrapingBee anahtarları (son çare)
+// Her çekimin hangi kaynaktan geldiği Supabase app_cekim_log tablosuna arka planda yazılır (yalnız alan adı, kişisel veri yok)
 const __UA = { "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36", accept: "text/html,application/xhtml+xml,*/*;q=0.8", "accept-language": "tr-TR,tr;q=0.9,en;q=0.8" };
 // Bot duvarı / boş JS kabuğu değil, okunur metni olan bir HTML mi?
 function __htmlOk(t) {
@@ -580,29 +581,63 @@ async function __claudeFetch(env, target) {
     return md ? __md2html(md, target) : null;
   } catch { return null; }
 }
+// Cloudflare Browser Run /content: sayfayı gerçek tarayıcıda açıp çizilmiş HTML'i döndürür. Ücretsiz plan: 10 sn'de 1 istek, günde 10 tarayıcı dakikası.
+// 401/403 (token yetkisiz) veya 429 (sınır doldu) gelirse bu istekte bir daha denenmez; her hata durumunda null döner ve zincir ScrapingBee'ye geçer.
+async function __cfBrowser(ctx, target) {
+  const env = ctx.env, tok = env.CF_BR_TOKEN || env.CF_AI_TOKEN;
+  if (!tok || ctx.__brOff) return { t: null, n: tok ? "kapali" : "yok" };
+  try {
+    const r = await fetch("https://api.cloudflare.com/client/v4/accounts/9994ba71270a67fcb0ef182e943402ef/browser-rendering/content?cacheTTL=3600", {
+      method: "POST",
+      headers: { authorization: `Bearer ${tok}`, "content-type": "application/json" },
+      body: JSON.stringify({
+        url: target, userAgent: __UA["user-agent"], setExtraHTTPHeaders: { "Accept-Language": __UA["accept-language"] },
+        rejectResourceTypes: ["image", "media", "font", "stylesheet"], gotoOptions: { waitUntil: "networkidle2", timeout: 30000 }, bestAttempt: true,
+      }),
+      signal: AbortSignal.timeout(45000),
+    });
+    if ([401, 403, 429].includes(r.status)) ctx.__brOff = true;
+    if (!r.ok) { await r.body?.cancel(); return { t: null, n: String(r.status) }; }
+    const j = await r.json();
+    const t = j && j.success && typeof j.result === "string" ? j.result : "";
+    return __htmlOk(t) ? { t, n: "ok" } : { t: null, n: "bos" };
+  } catch (e) { return { t: null, n: e?.name === "TimeoutError" ? "zaman" : "hata" }; }
+}
+// Çekim kaynağını arka planda kaydeder; yanıtı bekletmez, hatası yutulur
+function __cekimKaydet(ctx, target, kaynak, t0, detay) {
+  let host = ""; try { host = new URL(target).hostname.toLowerCase(); } catch {}
+  if (!host) return;
+  const p = sbRpc(SB_ANON_AU, "app_cekim_kaydet", { p_host: host.slice(0, 253), p_kaynak: kaynak, p_ms: Date.now() - t0, p_detay: detay || null }).catch(() => {});
+  try { ctx.cfctx?.waitUntil?.(p); } catch {}
+}
 async function sbYedekli(ctx, url, init, headers, body, timeout) {
   const env = ctx.env, u = new URL(url), key = u.searchParams.get("api_key") || "", target = u.searchParams.get("url") || "";
   const bad = ctx.__sbBad || (ctx.__sbBad = new Set());
   const tek = (uu, to, h = headers, b = body, m = init.method || "GET") => xfetch(ctx, uu, { method: m, headers: h, body: b, __sbIc: 1 }, null, to);
-  const html = (t, kaynak) => new Response(t, { status: 200, headers: { "content-type": "text/html; charset=utf-8", "x-cekim-kaynak": kaynak } });
+  const t0 = Date.now(), iz = [];
+  const html = (t, kaynak) => { __cekimKaydet(ctx, target, kaynak, t0, iz.join(" ")); return new Response(t, { status: 200, headers: { "content-type": "text/html; charset=utf-8", "x-cekim-kaynak": kaynak } }); };
   if (/^https?:\/\//.test(target)) {
     // 1) Doğrudan istek
-    try { const r = await tek(target, 15000, __UA, undefined, "GET"); const t = await r.text(); if (r.status < 400 && __htmlOk(t)) return html(t, "dogrudan"); } catch {}
+    try { const r = await tek(target, 15000, __UA, undefined, "GET"); const t = await r.text(); if (r.status < 400 && __htmlOk(t)) return html(t, "dogrudan"); iz.push("d:" + r.status); } catch { iz.push("d:hata"); }
     // 2) Claude web_fetch
-    const c = await __claudeFetch(env, target); if (c) return html(c, "claude");
+    const c = await __claudeFetch(env, target); if (c) return html(c, "claude"); iz.push("c:yok");
+    // 3) Cloudflare Browser Run
+    const b = await __cfBrowser(ctx, target); if (b.t) return html(b.t, "tarayici"); iz.push("b:" + b.n);
   }
-  // 3) ScrapingBee (istekteki anahtar, sonra diğerleri; 401/402/403/429 veren anahtar bu yürütmede bir daha denenmez)
+  // 4) ScrapingBee (istekteki anahtar, sonra diğerleri; 401/402/403/429 veren anahtar bu yürütmede bir daha denenmez)
   let ilk = null, hata = null;
   for (const k of [...new Set([key, env.SCRAPINGBEE_API_KEY, env.SCRAPINGBEE_API_KEY_2])]) {
     if (!k || bad.has(k)) continue;
     u.searchParams.set("api_key", k);
     try {
       const r = await tek(u.toString(), timeout);
-      if (r.status < 400) return r;
+      if (r.status < 400) { __cekimKaydet(ctx, target, "scrapingbee", t0, iz.join(" ")); return r; }
+      iz.push("s:" + r.status);
       if ([401, 402, 403, 429].includes(r.status)) bad.add(k);
       if (!ilk) ilk = new Response(await r.text(), { status: r.status, headers: r.headers }); else await r.body?.cancel();
-    } catch (e) { hata ||= e; }
+    } catch (e) { hata ||= e; iz.push("s:hata"); }
   }
+  __cekimKaydet(ctx, target, "hata", t0, iz.join(" "));
   if (ilk) return ilk;
   throw hata || new HttpErr("ScrapingBee yanıt vermedi", 0);
 }
