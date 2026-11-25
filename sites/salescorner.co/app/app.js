@@ -75,8 +75,8 @@ const PLAN_FALLBACK = [
 ];
 const PLAN_META = {
   baslangic: { d: "Tek başına satış yapanlar için temel araçlar." },
-  profesyonel: { d: "Aktif satış yapan profesyoneller için tam paket.", hot: true },
-  ekip: { d: "Satış ekipleri için yüksek kota.", ek: ["5 kullanıcıya kadar", "Öncelikli destek"] },
+  profesyonel: { d: "Aktif satış yapan profesyoneller için tam paket.", hot: true, ek: ["Sunumlarda kendi logonuz"] },
+  ekip: { d: "Satış ekipleri için yüksek kota.", ek: ["5 kullanıcıya kadar", "Öncelikli destek", "Sunumlarda kendi logonuz"] },
   ozel: { d: "Şirketinize özel kurulan yapay zekâ altyapısı." },
 };
 
@@ -132,6 +132,9 @@ function trErr(e) {
     [/geçersiz anahtar/i, "Anahtar 10–300 karakter olmalı."],
     [/kullanıcı bulunamadı/i, "Bu e-posta ile kayıtlı kullanıcı yok. Önce kişinin kayıt olması gerekir."],
     [/yetki yok/i, "Bu işlem için yetkiniz yok."],
+    [/pro_gerekli/i, "Kendi logonuzu eklemek Profesyonel ve üstü planlarda var."],
+    [/gecersiz_logo/i, "Logo okunamadı ya da çok büyük. Daha küçük bir PNG/JPG deneyin."],
+    [/gecersiz_oran/i, "Logo çok ince ya da çok uzun. Daha dengeli oranlı bir logo deneyin."],
   ];
   for (const [rx, t] of map) if (rx.test(m)) return t;
   return m || "Beklenmeyen bir hata oluştu.";
@@ -1021,7 +1024,7 @@ async function pageFiyatlar() {
     const cta = cur ? `<span class="btn btn-g btn-w" aria-disabled="true">Mevcut planınız</span>`
       : `<a class="btn ${meta.hot ? "btn-p" : p.kod === "ozel" ? "btn-g" : "btn-g"} btn-w" href="${esc(p.kod === "ozel" ? ozLink([p.ad + " paketi"]) : teklifLink(`Panelden plan talebi: ${p.ad} (${y ? "yıllık" : "aylık"} faturalama)\n\nNotumuz: `))}" data-teklif>${p.kod === "ozel" ? "Teklif alın" : "Bu planı seç"}</a>`;
     if (p.kod === "ozel") return `<div class="card plan dark"><h3>${esc(p.ad)}</h3><p>${esc(meta.d)}</p><div class="price"><b>Teklif ile</b></div>
-      <ul><li>Bütün araçlar, sınırsız kullanım</li><li>CRM entegrasyonu (HubSpot, Pipedrive, Salesforce…)</li><li>Şirketinize özel kişisel AI asistan</li><li>Kendi süreçlerinize göre iş akışları</li><li>Özel hesap yöneticisi</li></ul>${cta}</div>`;
+      <ul><li>Bütün araçlar, sınırsız kullanım</li><li>CRM entegrasyonu (HubSpot, Pipedrive, Salesforce…)</li><li>Şirketinize özel kişisel AI asistan</li><li>Kendi süreçlerinize göre iş akışları</li><li>Sunumlarda kendi logonuz</li><li>Özel hesap yöneticisi</li></ul>${cta}</div>`;
     const m = Number(p.aylik_tl) || 0, fiyat = y ? Math.round((m * 0.8) / 10) * 10 : m;
     return `<div class="card plan${meta.hot ? " hot" : ""}">${meta.hot ? `<span class="pill acc tag">En çok tercih edilen</span>` : ""}<h3>${esc(p.ad)}</h3><p>${esc(meta.d || "")}</p>
       <div class="price"><b>₺${fmtN(fiyat)}</b><span>/ay${y ? " · yıllık" : ""}</span></div>
@@ -1222,9 +1225,92 @@ function firmaBolum(b) {
       ${ta("deger", "Değer önerisi", 800, "Müşteriniz sizi neden seçiyor? Rakiplerden farkınız ne?")}
       <div class="grid2">${inp("rakipler", "Başlıca rakipler", 400, "rakip1.com, rakip2.com", "", "(virgülle)")}${inp("referanslar", "Referans müşteriler", 600, "Firma A, Firma B", "", "(virgülle)")}</div>
       <button class="btn btn-p" type="submit">Firma profilini kaydet</button>
-    </form></section>`;
+    </form>${logoBolum(b, f)}</section>`;
+}
+// Sunum logosu: Profesyonel/Ekip/Özel (ve admin) kendi logosunu yükler; diğerlerinde sunumlarda Sales Corner logosu çıkar
+const logoPro = b => !!(b && (b.admin || (["profesyonel", "ekip", "ozel"].includes(b.plan) && b.aktif)));
+const LOGO_AK = /^[0-9a-f-]{36}$/;
+let LOGO_YENI = null; // { veri, oran } — seçilip henüz kaydedilmemiş logo
+function logoBolum(b, f) {
+  const ak = LOGO_AK.test(String(f.logo_anahtar || "")) ? f.logo_anahtar : "";
+  const kutu = src => `<div style="display:flex;align-items:center;justify-content:center;min-height:76px;padding:12px 16px;border:1px solid var(--line);border-radius:12px;background:#fff">${src}</div>`;
+  const bas = `<div class="row" style="margin-bottom:6px"><h3>Sunum logosu</h3><span class="pill acc">Pro</span></div>`;
+  if (!logoPro(b)) return `<div id="flogo" style="margin-top:22px;padding-top:18px;border-top:1px solid var(--line)">${bas}
+    <p style="color:var(--mute);font-size:14px;margin-bottom:12px">Sunum ve raporlarınızda Sales Corner logosu yer alır. Profesyonel ve üstü planlarda kendi firma logonuzu koyabilirsiniz.</p>
+    <a class="btn btn-g btn-s" href="#/fiyatlar">Planları gör</a></div>`;
+  const yeni = LOGO_YENI;
+  const gor = yeni ? `<img src="${yeni.veri}" alt="Yeni logo önizleme" style="max-height:56px;max-width:240px;display:block">`
+    : ak ? `<img src="/api/app/logo/${ak}.png" alt="Firma logosu" style="max-height:56px;max-width:240px;display:block">`
+    : `<span style="color:var(--mute);font-size:13px">Henüz logo yok. Sunumlarda Sales Corner logosu kullanılır.</span>`;
+  return `<div id="flogo" style="margin-top:22px;padding-top:18px;border-top:1px solid var(--line)">${bas}
+    <p style="color:var(--mute);font-size:14px;margin-bottom:12px">Logonuz briefing, rakip analizi, sekans ve SEO çıktılarında Sales Corner logosunun yerine çıkar. PNG, JPG ya da WEBP; şeffaf arka planlı PNG en iyi sonucu verir.</p>
+    <div id="flm"></div>
+    ${kutu(gor)}
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">
+      <label class="btn btn-g btn-s" style="cursor:pointer">${ak || yeni ? "Başka logo seç" : "Logo seç"}<input type="file" id="flin" accept="image/png,image/jpeg,image/webp" hidden></label>
+      ${yeni ? `<button class="btn btn-p btn-s" type="button" data-logo-kaydet>Logoyu kaydet</button><button class="btn btn-g btn-s" type="button" data-logo-vazgec>Vazgeç</button>` : ""}
+      ${ak && !yeni ? `<button class="btn btn-g btn-s" type="button" data-logo-kaldir>Logoyu kaldır</button>` : ""}
+    </div></div>`;
+}
+// Seçilen görseli tarayıcıda en fazla 600×300 PNG'ye küçültür (sunucu sınırı 400 bin karakter)
+function logoHazirla(file) {
+  return new Promise((ok, no) => {
+    if (!file || !/^image\/(png|jpeg|webp)$/.test(file.type)) return no(new Error("PNG, JPG ya da WEBP bir görsel seçin."));
+    if (file.size > 8 * 1024 * 1024) return no(new Error("Görsel en fazla 8 MB olabilir."));
+    const url = URL.createObjectURL(file), img = new Image();
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      const w0 = img.naturalWidth, h0 = img.naturalHeight;
+      if (!w0 || !h0) return no(new Error("Görsel okunamadı."));
+      const oran = w0 / h0;
+      if (oran < 0.2 || oran > 10) return no(new Error("Logo çok ince ya da çok uzun. Daha dengeli oranlı bir logo deneyin."));
+      let k = Math.min(1, 600 / w0, 300 / h0), veri = "";
+      for (let i = 0; i < 6; i++) {
+        const c = document.createElement("canvas");
+        c.width = Math.max(1, Math.round(w0 * k)); c.height = Math.max(1, Math.round(h0 * k));
+        c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+        veri = c.toDataURL("image/png");
+        if (veri.length <= 390000) return ok({ veri, oran: c.width / c.height });
+        k *= 0.75;
+      }
+      no(new Error("Logo çok büyük. Daha sade ya da küçük bir görsel deneyin."));
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); no(new Error("Görsel okunamadı.")); };
+    img.src = url;
+  });
+}
+function logoCiz() {
+  const el = document.getElementById("flogo");
+  if (el && S.ben) { el.outerHTML = logoBolum(S.ben, FIRMA.v || {}); bindLogo(); }
+}
+function bindLogo() {
+  const el = document.getElementById("flogo"), inp = document.getElementById("flin");
+  if (!el || !inp) return;
+  inp.onchange = async () => {
+    const file = inp.files && inp.files[0];
+    if (!file) return;
+    try { LOGO_YENI = await logoHazirla(file); logoCiz(); }
+    catch (err) { setMsg("flm", "err", esc(err.message || "Görsel okunamadı.")); }
+  };
+  const kaydet = async (p_logo, p_oran, btn, yazi, tamam) => {
+    busy(btn, true, yazi); setMsg("flm");
+    const o = FIRMA; // istek sürerken çıkış/hesap değişirse sonucu yeni oturuma yazma
+    try {
+      const r = await rpc("app_firma_logo_kaydet", { p_logo, p_oran });
+      if (o !== FIRMA) return;
+      FIRMA = { v: r && typeof r === "object" ? r : o.v, yuk: false, err: "" };
+      LOGO_YENI = null; logoCiz(); toast(tamam);
+    } catch (err) { if (o !== FIRMA) return; busy(btn, false); setMsg("flm", "err", esc(trErr(err))); }
+  };
+  const k = el.querySelector("[data-logo-kaydet]");
+  if (k) k.onclick = () => LOGO_YENI && kaydet(LOGO_YENI.veri, LOGO_YENI.oran, k, "Kaydediliyor…", "Logo kaydedildi ✓");
+  const v = el.querySelector("[data-logo-vazgec]");
+  if (v) v.onclick = () => { LOGO_YENI = null; logoCiz(); };
+  const d = el.querySelector("[data-logo-kaldir]");
+  if (d) d.onclick = () => kaydet(null, null, d, "Kaldırılıyor…", "Logo kaldırıldı");
 }
 function bindFirma() {
+  bindLogo();
   const ff = document.getElementById("fpf");
   if (!ff) return;
   ff.onsubmit = async e => {
@@ -1237,12 +1323,14 @@ function bindFirma() {
     if (urunler.some(x => x.length > 120)) return setMsg("fpm", "err", "Her ürün satırı en fazla 120 karakter olabilir.");
     const btn = ff.querySelector("[type=submit]");
     busy(btn, true, "Kaydediliyor…"); setMsg("fpm");
+    const o = FIRMA;
     try {
       const r = await rpc("app_firma_kaydet", { p: { firma_adi: v("firma_adi"), web: web ? normUrl(web) : "", sektor: v("sektor"), urunler: urunler.join("\n"), hedef: v("hedef"), deger: v("deger"), rakipler: v("rakipler"), referanslar: v("referanslar") } });
+      if (o !== FIRMA) return;
       FIRMA = { v: r && typeof r === "object" ? r : null, yuk: false, err: "" };
-      if (!S.ben.sirket && FIRMA.v?.firma_adi) S.ben.sirket = FIRMA.v.firma_adi;
+      if (S.ben && !S.ben.sirket && FIRMA.v?.firma_adi) S.ben.sirket = FIRMA.v.firma_adi;
       toast("Firma profili kaydedildi ✓"); render();
-    } catch (err) { busy(btn, false); setMsg("fpm", "err", esc(trErr(err))); }
+    } catch (err) { if (o !== FIRMA) return; busy(btn, false); setMsg("fpm", "err", esc(trErr(err))); }
   };
 }
 function pageHesap() {
@@ -1434,7 +1522,7 @@ document.addEventListener("click", async e => {
     sh.classList.remove("open");
   }
   else if (t.hasAttribute("data-menu")) document.getElementById("shell")?.classList.toggle("open");
-  else if (t.hasAttribute("data-logout")) { await sb.auth.signOut(); S.session = null; S.ben = null; FIRMA = { v: undefined, yuk: false, err: "" }; ADM = { rows: null, err: "", q: "" }; FF = { list: null, err: "", sel: "" }; TK = { list: null, err: "", edit: null, sil: "", run: {} }; go("giris"); }
+  else if (t.hasAttribute("data-logout")) { await sb.auth.signOut(); S.session = null; S.ben = null; FIRMA = { v: undefined, yuk: false, err: "" }; LOGO_YENI = null; ADM = { rows: null, err: "", q: "" }; FF = { list: null, err: "", sel: "" }; TK = { list: null, err: "", edit: null, sil: "", run: {} }; go("giris"); }
   else if (t.hasAttribute("data-firma-yenile")) { FIRMA = { v: undefined, yuk: false, err: "" }; render(); }
   else if (t.dataset.copy || t.dataset.copyEl) {
     const txt = t.dataset.copy || document.getElementById(t.dataset.copyEl)?.innerText || "";
@@ -1467,7 +1555,7 @@ document.addEventListener("keydown", e => { if (e.key === "Escape") document.get
 sb.auth.onAuthStateChange((ev, session) => {
   S.session = session;
   if (ev === "PASSWORD_RECOVERY") { S.recovery = true; setTimeout(() => go("yeni-sifre"), 0); }
-  if (ev === "SIGNED_OUT") { S.ben = null; FIRMA = { v: undefined, yuk: false, err: "" }; if (route && !AUTH_ROUTES.has(route)) setTimeout(render, 0); }
+  if (ev === "SIGNED_OUT") { S.ben = null; FIRMA = { v: undefined, yuk: false, err: "" }; LOGO_YENI = null; if (route && !AUTH_ROUTES.has(route)) setTimeout(render, 0); }
 });
 {
   const { data } = await sb.auth.getSession();
