@@ -137,6 +137,8 @@ Teoriyi uygulamaya dökmek için aşağıdaki süreci kendi ekibinize uyarlayabi
 8. **Çalışanları sürece dahil edin, ama kopyala-yapıştır olmadan.** Ekip üyelerinden kendi bakış açılarını eklemelerini isteyin.
 9. **48 saat sonra değerlendirin.** Gösterim, etkileşim oranı, yorum sayısı ve kaydetmeleri bir tabloya işleyin. Hangi açılış cümlesinin, hangi formatın ve hangi konunun işe yaradığını görün.
 
+Taslağınızın açılış satırını, uzunluğunu ve çağrı cümlesini yayınlamadan önce ücretsiz [LinkedIn Gönderi Denetleyici](/araclar/linkedin-gonderi-denetleyici) aracıyla kontrol edebilirsiniz.
+
 ## Somut bir örnek: Aynı içerik, iki farklı kurgu
 
 Bir B2B yazılım şirketinin yeni bir müşteri vaka çalışması yayınladığını düşünelim.

@@ -75,7 +75,7 @@ export const postOut = p => ({
   // publish_at (UTC 'YYYY-MM-DD HH:MM:SS'): 'hazir' yazının gönderileceği an; zamanlanmış 'uretiliyor' yazının hedef slotu. Elle tetikte null.
   slot: str(p.slot).startsWith("manual:") ? null : p.slot || null,
   publish_at: p.state === "hazir" ? p.next_try_at || null : p.state === "uretiliyor" && Number.isFinite(slotMs(p.slot)) ? p.slot : null,
-  has_content: !!p.markdown,
+  has_content: !!p.markdown, send_now: p.send_now ? 1 : 0,
   // içerik vardı ama saklama süresi doldu (platform.js keepDays 3 gün, cmsPurge 90 gün): istemci "silindi" yazar, yeniden göndermeyi gizler
   content_deleted: !p.markdown && ["gonderildi", "yayinlandi", "basarisiz"].includes(p.state),
 });
@@ -107,6 +107,39 @@ async function nextAfterPending(db, siteId, days, hour) {
   let from = Date.now();
   if (Number.isFinite(sm)) { const local = sm + IST; from = Math.max(from, local - (local % DAY) + DAY - IST - 1); }
   return nextRunAt(days, hour, from);
+}
+// Yeniden başlatma (26.11, B): duraklatılmışken vakti geçen 'hazir' yazılar hemen gitmez; sıradaki boş yuvalara (İstanbul günü başına
+// bir) dizilir. Elle gönderilen (send_now = 1) yazı ayrı: kullanıcı onu zaten şimdi istedi. Dolu günler: gelecekteki 'hazir' yazının
+// gönderim anı ve planlı 'uretiliyor' slotu. Döner: taşınacaklar [{id, at}] ve sitenin yeni next_run_at'ı (en son dolu günden sonra).
+const istDay = ms => { const l = ms + IST; return l - (l % DAY); };
+export function replanLate(posts, days, hour, t = Date.now()) {
+  const late = [], busy = new Set();
+  let last = NaN;
+  for (const p of posts) {
+    const at = slotMs(p.state === "hazir" ? p.next_try_at : p.slot);
+    if (p.state === "hazir" && !p.send_now && !(at > t)) { late.push({ id: p.id, at }); continue; }
+    if (p.state === "hazir" && p.send_now && !(at > t)) continue; // gitmek üzere: gün tutmaz
+    if (Number.isFinite(at)) { busy.add(istDay(at)); last = Number.isFinite(last) ? Math.max(last, at) : at; }
+  }
+  late.sort((a, b) => (a.at || 0) - (b.at || 0) || a.id - b.id);
+  const moves = [];
+  let from = t;
+  for (const p of late) {
+    let x = null;
+    for (let i = 0; i < 64; i++) {
+      x = nextRunAt(days, hour, from);
+      if (!x || !busy.has(istDay(slotMs(x)))) break;
+      from = slotMs(x);
+    }
+    if (!x) break; // takvim yok: yazı olduğu gibi kalır
+    const xm = slotMs(x);
+    busy.add(istDay(xm));
+    last = Number.isFinite(last) ? Math.max(last, xm) : xm;
+    moves.push({ id: p.id, at: x });
+    from = xm;
+  }
+  const next = nextRunAt(days, hour, Number.isFinite(last) ? Math.max(t, istDay(last) + DAY - IST - 1) : t);
+  return { moves, next };
 }
 
 // ---- doğrulama ----
@@ -404,11 +437,23 @@ async function setState(c, id, from, to) {
   if (!from.includes(s.state)) return ok(c, { site: siteOut(s) }); // zaten o durumda: idempotent
   // Plan düştüyse (cmsTick duraklattı) sıklık düşürülmeden yeniden başlamaz
   if (to === "aktif" && weekOf(s) > freqMax(c.user)) fail("plan_frequency", 403, { max: freqMax(c.user) });
-  const next = to === "aktif" ? await nextAfterPending(c.env.DB, s.id, jsonOr(s.days, [2]), s.hour) : null;
-  const row = await c.env.DB.prepare(
-    "UPDATE cms_sites SET state = ?, next_run_at = ?, last_error = CASE WHEN ? = 'aktif' THEN NULL ELSE last_error END, updated_at = datetime('now') WHERE id = ? AND user_id = ? RETURNING *",
-  ).bind(to, next, to, s.id, c.user.id).first();
-  return ok(c, { site: siteOut(row || s) });
+  let next = null, moves = [];
+  if (to === "aktif") {
+    const { results } = await c.env.DB.prepare(
+      "SELECT id, state, slot, next_try_at, send_now FROM cms_posts WHERE cms_site_id = ? AND state IN ('uretiliyor', 'hazir')",
+    ).bind(s.id).all();
+    ({ next, moves } = replanLate(results || [], jsonOr(s.days, [2]), s.hour));
+  }
+  // Yazılar site satırından önce: site 'aktif' olduğu an tik eski zamanla göndermesin. CAS: arada elle gönderilen (send_now) yazıya dokunulmaz
+  const br = await c.env.DB.batch([
+    ...moves.map(m => c.env.DB.prepare("UPDATE cms_posts SET next_try_at = ?, updated_at = datetime('now') WHERE id = ? AND state = 'hazir' AND send_now = 0").bind(m.at, m.id)),
+    c.env.DB.prepare(
+      "UPDATE cms_sites SET state = ?, next_run_at = ?, last_error = CASE WHEN ? = 'aktif' THEN NULL ELSE last_error END, updated_at = datetime('now') WHERE id = ? AND user_id = ? RETURNING *",
+    ).bind(to, next, to, s.id, c.user.id),
+  ]);
+  const moved = moves.filter((m, i) => Number(br?.[i]?.meta?.changes) > 0);
+  const row = br?.[br.length - 1]?.results?.[0];
+  return ok(c, { site: siteOut(row || s), ...(to === "aktif" ? { moved: moved.length, moved_first: moved[0]?.at || null } : {}) });
 }
 const pause = (c, id) => setState(c, id, ["aktif", "hata"], "duraklatildi");
 const resume = (c, id) => setState(c, id, ["duraklatildi", "hata"], "aktif");
@@ -427,7 +472,8 @@ async function disconnect(c, id) {
   return ok(c, { site: siteOut(results?.[0] || { ...s, hint: null, state: "kaldirildi", next_run_at: null }) });
 }
 
-// Yeniden dene: yalnız gönderimi başarısız ve içeriği duran yazı; yeniden üretim ve kota yok, cmsTick gönderir
+// Yeniden dene: yalnız gönderimi başarısız ve içeriği duran yazı; yeniden üretim ve kota yok, cmsTick gönderir (elle istek: send_now,
+// site duraklatılmış olsa da)
 async function retry(c, id) {
   needPlan(c);
   const p = await c.env.DB.prepare(
@@ -436,7 +482,7 @@ async function retry(c, id) {
   if (!p) fail("not_found", 404);
   if (p.state !== "basarisiz" || p.site_state === "kaldirildi" || !p.markdown) bad("state");
   const row = await c.env.DB.prepare(
-    "UPDATE cms_posts SET state = 'hazir', attempts = 0, next_try_at = datetime('now'), lease_until = NULL, last_error = NULL, updated_at = datetime('now') WHERE id = ? AND user_id = ? AND state = 'basarisiz' RETURNING *",
+    "UPDATE cms_posts SET state = 'hazir', attempts = 0, send_now = 1, next_try_at = datetime('now'), lease_until = NULL, last_error = NULL, updated_at = datetime('now') WHERE id = ? AND user_id = ? AND state = 'basarisiz' RETURNING *",
   ).bind(p.id, c.user.id).first();
   return ok(c, { post: postOut(row || p) });
 }
@@ -484,13 +530,15 @@ async function skip(c, id) {
   if (!row) bad("state");
   return ok(c, { post: postOut(row) });
 }
+// Şimdi paylaş (26.11): elle istek site duraklatılmış ya da 'hata' durumundayken de gider (send_now = 1); kaldırılmış sitede asla
+const SEND_STATES = ["aktif", "duraklatildi", "hata"];
 async function sendNow(c, id) {
   needPlan(c);
   const p = await ownPost(c, id);
   if (p.state !== "hazir") bad("state");
-  if (p.site_state !== "aktif") fail("site_state", 409, { state: p.site_state });
+  if (!SEND_STATES.includes(p.site_state)) fail("site_state", 409, { state: p.site_state });
   const row = await c.env.DB.prepare(
-    "UPDATE cms_posts SET next_try_at = datetime('now'), updated_at = datetime('now') WHERE id = ? AND user_id = ? AND state = 'hazir' RETURNING *",
+    "UPDATE cms_posts SET send_now = 1, next_try_at = datetime('now'), updated_at = datetime('now') WHERE id = ? AND user_id = ? AND state = 'hazir' RETURNING *",
   ).bind(p.id, c.user.id).first();
   if (!row) bad("state");
   return ok(c, { post: postOut(row) });
@@ -502,7 +550,7 @@ async function reschedule(c, id) {
   const p = await ownPost(c, id);
   if (p.state !== "hazir" || p.site_state === "kaldirildi") bad("state");
   const row = await c.env.DB.prepare(
-    "UPDATE cms_posts SET next_try_at = ?, updated_at = datetime('now') WHERE id = ? AND user_id = ? AND state = 'hazir' RETURNING *",
+    "UPDATE cms_posts SET next_try_at = ?, send_now = 0, updated_at = datetime('now') WHERE id = ? AND user_id = ? AND state = 'hazir' RETURNING *",
   ).bind(sqlTime(Math.max(at, t)), p.id, c.user.id).first();
   if (!row) bad("state");
   return ok(c, { post: postOut(row) });
@@ -849,7 +897,7 @@ export async function cmsTick(env, f = fetch, { d1 = 30, sub = 20, log = m => co
   });
   if (new Date(now()).getUTCMinutes() < 5) await step("purge", async () => { if (take(1)) out.purged = await cmsPurge(env); });
 
-  // 2) gönderim: 'hazir' + site aktif; kira + attempts önce yazılır
+  // 2) gönderim: 'hazir' + site aktif (ya da elle istenmiş: send_now + site duraklatılmış/hata); kira + attempts önce yazılır
   for (let i = 0; i < PUSH_PER_TICK; i++) {
     let more = false;
     await step("push", async () => {
@@ -858,7 +906,7 @@ export async function cmsTick(env, f = fetch, { d1 = 30, sub = 20, log = m => co
       const p = await db.prepare(
         `UPDATE cms_posts SET state = 'gonderiliyor', lease_until = ?, attempts = attempts + 1, updated_at = datetime('now')
          WHERE id = (SELECT p.id FROM cms_posts p JOIN cms_sites s ON s.id = p.cms_site_id
-                     WHERE p.state = 'hazir' AND (p.next_try_at IS NULL OR p.next_try_at <= ?) AND s.state = 'aktif' ORDER BY p.next_try_at LIMIT 1)
+                     WHERE p.state = 'hazir' AND (p.next_try_at IS NULL OR p.next_try_at <= ?) AND (s.state = 'aktif' OR (p.send_now = 1 AND s.state IN ('duraklatildi', 'hata'))) ORDER BY p.next_try_at LIMIT 1)
            AND state = 'hazir' RETURNING *`,
       ).bind(lease(), t).first();
       if (!p) return;
@@ -866,7 +914,7 @@ export async function cmsTick(env, f = fetch, { d1 = 30, sub = 20, log = m => co
       const s = await db.prepare("SELECT * FROM cms_sites WHERE id = ?").bind(p.cms_site_id).first();
       const prov = s && Object.hasOwn(PROVIDERS, str(s.platform)) ? PROVIDERS[s.platform] : null;
       let res, creds = null;
-      if (!s || s.state !== "aktif" || !prov) res = { ok: false, error: "not_ready", retry: false };
+      if (!s || !(s.state === "aktif" || (p.send_now && SEND_STATES.includes(s.state))) || !prov) res = { ok: false, error: "not_ready", retry: false };
       else {
         try { creds = JSON.parse(await decrypt(env, s.secret_box) || "{}"); } catch { creds = null; }
         if (!creds) res = { ok: false, error: "auth", retry: false };

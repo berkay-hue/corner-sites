@@ -118,6 +118,8 @@ Toplam etkileşim; beğeni, yorum, kaydetme ve paylaşmanın toplamıdır.
 - Toplam etkileşim: 71
 - Etkileşim oranı: 71 / 1.800 × 100 = **%3,9**
 
+Kendi gönderilerinizin oranını elle hesaplamak yerine ücretsiz [Etkileşim Oranı Hesaplayıcı](/araclar/etkilesim-orani-hesaplayici) aracına rakamları girip sonucu hemen görebilirsiniz.
+
 Ancak B2B'de tek bir oran yerine **ağırlıklı etkileşim skoru** kullanmak daha anlamlı olabilir. Örneğin kendi ekibiniz için şu ağırlıkları belirleyebilirsiniz:
 
 - Beğeni: 1 puan

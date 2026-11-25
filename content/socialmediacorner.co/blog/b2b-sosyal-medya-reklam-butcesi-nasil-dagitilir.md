@@ -41,6 +41,8 @@ Böylece çeyreklik toplam bütçe yaklaşık **460.000 TL**, aylık ortalama 15
 
 Geçmiş veriniz yoksa ilk 4-8 haftayı bir **öğrenme dönemi** olarak planlayın ve bu dönemde daha mütevazı bir bütçeyle gerçek CPL ve dönüşüm oranlarınızı çıkarın. Ardından hesabı gerçek verilerle yeniden yapın. Reklam harcamasının işe katkısını bu şekilde baştan modellemek, ileride [B2B sosyal medya ROI'sini ölçerken](/blog/b2b-sosyal-medya-roi-nasil-olculur) de elinizi güçlendirir.
 
+Belirlediğiniz bütçenin kabaca kaç gösterim, tıklama ve lead getirebileceğini görmek için ücretsiz [Sosyal Medya Reklam Bütçesi Hesaplayıcı](/araclar/sosyal-medya-reklam-butcesi-hesaplayici) aracında kendi varsayımlarınızı deneyebilirsiniz.
+
 ## Huni aşamalarına göre bütçe nasıl bölünür?
 
 B2B alıcıların büyük kısmı, bir reklamı ilk gördükleri anda form doldurmaya hazır değildir. Bu nedenle bütçenin tamamını "hemen demo alın" mesajına ayırmak, kısa vadede yüksek CPL, uzun vadede de kuruyan bir lead havuzu demektir. Bütçeyi huni aşamalarına göre düşünmek bu sorunu çözer.

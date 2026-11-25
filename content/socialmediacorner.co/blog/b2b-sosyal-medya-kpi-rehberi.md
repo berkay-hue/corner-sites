@@ -70,6 +70,8 @@ Standart formül şöyledir:
 
 Bazı ekipler paydada takipçi sayısını kullanır. Hangisini seçerseniz seçin, **tutarlı olun**; formülü değiştirdiğiniz anda aylar arası karşılaştırma anlamını yitirir.
 
+Gösterim ve takipçi bazlı oranı yan yana görmek için ücretsiz [Etkileşim Oranı Hesaplayıcı](/araclar/etkilesim-orani-hesaplayici) aracını kullanabilirsiniz.
+
 ### Ağırlıklı etkileşim skoru
 
 B2B için daha anlamlı bir yaklaşım, etkileşim türlerine ağırlık vermektir. Örnek bir puanlama:

@@ -32,7 +32,7 @@ const { PLANS, TRIAL_DAYS } = await import("./plans.js");
 
 const read = p => readFileSync(new URL(p, import.meta.url), "utf8");
 const SCHEMA = read("../schema.sql");
-const MIGS = ["0001_metrics", "0002_oauth", "0003_sync", "0004_sync_changes", "0006_posts", "0018_plans", "0019_cms"].map(n => read(`../migrations/${n}.sql`));
+const MIGS = ["0001_metrics", "0002_oauth", "0003_sync", "0004_sync_changes", "0006_posts", "0018_plans", "0019_cms", "0021_cms_send_now"].map(n => read(`../migrations/${n}.sql`));
 
 // D1 taklidi: generate.js (batch sonuçları results), platform.js ve cms.js (meta.changes) için ortak
 function d1(db) {
