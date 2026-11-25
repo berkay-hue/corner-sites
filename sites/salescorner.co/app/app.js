@@ -1753,6 +1753,40 @@ function bindFirma() {
     } catch (err) { if (o !== FIRMA) return; busy(btn, false); setMsg("fpm", "err", esc(trErr(err))); }
   };
 }
+// Deneme hatırlatma e-postaları tercihi (yalnız deneme planında görünür; okunamazsa bölüm gizlenir)
+let BILD = { v: undefined, yuk: false };
+function bildBolum(b) {
+  if (b.plan !== "deneme" || !b.aktif || BILD.v === null) return "";
+  return `<section class="card pad" id="bild-sec"><h3 style="margin-bottom:10px">E-posta bildirimleri</h3>
+      <label style="display:flex;gap:8px;align-items:center;font-weight:500"><input type="checkbox" id="bild-dh" ${BILD.v !== false ? "checked" : ""} ${BILD.v === undefined ? "disabled" : ""}> Deneme hatırlatma e-postaları</label>
+      <p style="color:var(--mute);font-size:14px;margin-top:6px">Denemenizin 1., 7., 12. ve 14. gününde ilk adımlar, henüz denemediğiniz araçlar ve planlar hakkında kısa birer e-posta gönderilir.</p></section>`;
+}
+function bindBild() {
+  const cb = document.getElementById("bild-dh");
+  if (!cb) return;
+  const uygula = () => {
+    const sec = document.getElementById("bild-sec"), c = document.getElementById("bild-dh");
+    if (!sec || !c) return;
+    if (BILD.v === null) { sec.remove(); return; }
+    c.checked = BILD.v !== false; c.disabled = BILD.v === undefined;
+  };
+  if (BILD.v === undefined && !BILD.yuk) {
+    BILD.yuk = true;
+    sb.rpc("app_bildirim").then(({ data, error }) => { BILD.v = error || !data ? null : data.deneme_hatirlat !== false; }, () => { BILD.v = null; })
+      .finally(() => { BILD.yuk = false; uygula(); });
+  }
+  cb.onchange = async () => {
+    const v = cb.checked;
+    cb.disabled = true;
+    try {
+      const { data, error } = await sb.rpc("app_bildirim", { p_deneme: v });
+      if (error || !data) throw error || new Error("yok");
+      BILD.v = data.deneme_hatirlat !== false;
+      toast(BILD.v ? "Deneme hatırlatmaları açıldı ✓" : "Deneme hatırlatmaları kapatıldı");
+    } catch { cb.checked = !v; toast("Tercih kaydedilemedi; biraz sonra tekrar deneyin."); }
+    cb.disabled = false;
+  };
+}
 function pageHesap() {
   const b = S.ben;
   shell(`${ph("Hesabım", "Profil, plan ve bağlantı ayarlarınız.")}
@@ -1772,6 +1806,7 @@ function pageHesap() {
       ${b.fireflies ? `<p style="color:var(--mute);margin-bottom:14px">Toplantı analizi için Fireflies hesabınız bağlı. Anahtarı değiştirmek için yenisini kaydedin.</p><div id="fkm"></div><div class="row" style="justify-content:flex-start"><button class="btn btn-d btn-s" id="ffdel">Bağlantıyı kaldır</button></div><details style="margin-top:14px"><summary style="cursor:pointer;font-weight:600">Anahtarı değiştir</summary><div style="margin-top:12px">${ffConnect(true)}</div></details>` : ffConnect(true)}
     </section>
     ${payBolum()}
+    ${bildBolum(b)}
     <section class="card pad"><h3 style="margin-bottom:14px">Şifre değiştir</h3><div id="sm"></div>
       <form id="sf" data-sk-noform>${pwField("p1", "Yeni şifre", "new-password", 'minlength="8"')}${pwField("p2", "Yeni şifre (tekrar)", "new-password", 'minlength="8"')}<button class="btn btn-g" type="submit">Şifreyi güncelle</button></form></section>
     <section class="card pad row"><div><h3>Oturumu kapat</h3><p style="color:var(--mute);font-size:14px">Bu cihazdaki oturumunuz kapanır.</p></div><button class="btn btn-g" data-logout>Çıkış yap</button></section>
@@ -1785,6 +1820,7 @@ function pageHesap() {
     catch (err) { busy(btn, false); setMsg("pm", "err", esc(trErr(err))); }
   };
   bindFirma();
+  bindBild();
   bindFfKey(render);
   const del = document.getElementById("ffdel");
   if (del) del.onclick = async () => {
@@ -1833,9 +1869,20 @@ async function pageAdmin() {
   const kisa = { rakip: "R", sekans: "S", seo: "SEO", briefing: "B", fireflies: "F", takip: "T" };
   const planAd = r => (planlar.find(p => p.kod === r.plan) || {}).ad || r.plan;
   const aktif = r => r.plan && new Date(r.bitis) > now;
-  const tabs = `<div class="tabs adm-tabs" role="tablist"><button type="button" role="tab" aria-selected="${ADM.tab === "kul"}" data-atab="kul">Kullanıcılar${rows ? ` (${fmtN(rows.length)})` : ""}</button><button type="button" role="tab" aria-selected="${ADM.tab === "ilt"}" data-atab="ilt">İletişim formları${yeniSay ? ` <span class="pill bad">${fmtN(yeniSay)} yeni</span>` : ""}</button></div>`;
+  const tabs = `<div class="tabs adm-tabs" role="tablist"><button type="button" role="tab" aria-selected="${ADM.tab === "kul"}" data-atab="kul">Kullanıcılar${rows ? ` (${fmtN(rows.length)})` : ""}</button><button type="button" role="tab" aria-selected="${ADM.tab === "ilt"}" data-atab="ilt">İletişim formları${yeniSay ? ` <span class="pill bad">${fmtN(yeniSay)} yeni</span>` : ""}</button><button type="button" role="tab" aria-selected="${ADM.tab === "mail"}" data-atab="mail">E-posta kayıtları</button></div>`;
   let body;
-  if (ADM.tab === "ilt") {
+  if (ADM.tab === "mail") {
+    const ml = ADM.mail, TUR = { d1: "1. gün · hoş geldiniz", d7: "7. gün · yarı yol", d12: "12. gün · 2 gün kaldı", d14: "14. gün · son gün" };
+    const turAd = t => TUR[t] || t;
+    body = `<section class="card"><div class="res-h adm-bar"><h3>Deneme hatırlatma e-postaları</h3></div>
+    ${ADM.mailErr ? `<div class="res-b">${msg("err", esc(ADM.mailErr))}</div>` : !ml ? `<div class="empty"><div class="spin"></div></div>` : `<div class="res-b">
+      <p style="color:var(--mute);margin:0 0 12px;font-size:14px">Her gün 07:05 UTC'de (10:05 TSİ) deneme planındaki kullanıcılara 1., 7., 12. ve 14. günde birer e-posta gider; aynı e-posta ikinci kez gönderilmez. Hatırlatmalardan çıkan: <b>${fmtN(ml.cikan || 0)}</b></p>
+      <h4 style="margin:0 0 8px">Bugünkü adaylar (${fmtN((ml.aday || []).length)})</h4>
+      ${(ml.aday || []).length ? `<div class="scroll-x"><table class="tbl"><thead><tr><th>Kullanıcı</th><th>E-posta</th><th>Deneme günü</th></tr></thead><tbody>${ml.aday.map(a => `<tr><td>${esc(a.email)}</td><td>${esc(turAd(a.tur))}</td><td>${esc(a.gun)}</td></tr>`).join("")}</tbody></table></div>` : `<p style="color:var(--mute);margin:0 0 4px">Bugün gönderilecek hatırlatma yok.</p>`}
+      <h4 style="margin:18px 0 8px">Son gönderimler</h4>
+      ${(ml.log || []).length ? `<div class="scroll-x"><table class="tbl"><thead><tr><th>Kullanıcı</th><th>E-posta</th><th>Durum</th><th>Zaman</th></tr></thead><tbody>${ml.log.map(l => `<tr><td>${esc(l.email || "Silinmiş hesap")}${l.plan ? `<br><span class="adm-sub">${esc(l.plan)}</span>` : ""}</td><td>${esc(turAd(l.tur))}</td><td><span class="pill ${l.durum === "gonderildi" ? "ok" : "warn"}">${l.durum === "gonderildi" ? "Gönderildi" : "Bekliyor"}</span></td><td style="font-size:13px">${fmtDT(l.gonderim)}</td></tr>`).join("")}</tbody></table></div>` : `<p style="color:var(--mute);margin:0">Henüz gönderilmiş hatırlatma yok.</p>`}
+    </div>`}</section>`;
+  } else if (ADM.tab === "ilt") {
     const q = admLow(ADM.iq);
     const vis = (ilt || []).filter(m => (!ADM.yeni || !m.okundu) && (!q || admLow([m.ad, m.email, m.konu, m.telefon, m.mesaj, m.sayfa].join(" ")).includes(q)));
     body = `<section class="card"><div class="res-h adm-bar"><h3>İletişim formları</h3><div class="adm-f"><label class="adm-chk"><input type="checkbox" id="iy" ${ADM.yeni ? "checked" : ""}> Yalnız okunmamış</label><input class="in" id="iq" placeholder="Ara: ad, e-posta, konu, mesaj" value="${esc(ADM.iq)}"></div></div>
@@ -1881,7 +1928,7 @@ async function pageAdmin() {
   </div>
   ${tabs}${body}`);
   document.querySelectorAll("[data-atab]").forEach(b => (b.onclick = () => { ADM.tab = b.dataset.atab; pageAdmin(); }));
-  document.getElementById("ayen").onclick = async e => { busy(e.currentTarget, true, "Yenileniyor…"); ADM.rows = null; ADM.ilt = null; await Promise.all([loadAdm(), loadIlt()]); if (route === "admin") pageAdmin(); };
+  document.getElementById("ayen").onclick = async e => { busy(e.currentTarget, true, "Yenileniyor…"); ADM.rows = null; ADM.ilt = null; ADM.mail = null; ADM.mailErr = ""; await Promise.all([loadAdm(), loadIlt(), ADM.tab === "mail" ? loadMail() : null]); if (route === "admin") pageAdmin(); };
   const keepFocus = (id, set) => { const el = document.getElementById(id); if (!el) return; el.oninput = () => { set(el.value); const pos = el.selectionStart; pageAdmin(); const n = document.getElementById(id); n.focus(); n.setSelectionRange(pos, pos); }; };
   if (ADM.tab === "ilt") {
     keepFocus("iq", v => (ADM.iq = v));
@@ -1894,7 +1941,7 @@ async function pageAdmin() {
       catch (err) { toast(trErr(err)); }
       if (route === "admin") pageAdmin();
     }));
-  } else {
+  } else if (ADM.tab !== "mail") {
     const af = document.getElementById("af");
     af.onsubmit = async e => {
       e.preventDefault();
@@ -1912,10 +1959,20 @@ async function pageAdmin() {
     const csv = document.getElementById("acsv"); if (csv) csv.onclick = () => admCsv(ADM.rows || [], planlar);
     document.querySelectorAll("[data-edit]").forEach(x => (x.onclick = () => { af.ae.value = x.dataset.edit; af.ap.value = x.dataset.plan; af.ag.focus(); af.scrollIntoView({ behavior: "smooth", block: "center" }); }));
   }
-  if ((!rows && !ADM.err) || (!ilt && !ADM.iltErr)) {
-    await Promise.all([!rows && !ADM.err ? loadAdm() : null, !ilt && !ADM.iltErr ? loadIlt() : null, rows ? null : loadPlanlar()]);
+  const mailYukle = ADM.tab === "mail" && !ADM.mail && !ADM.mailErr && !ADM.mailYuk;
+  if ((!rows && !ADM.err) || (!ilt && !ADM.iltErr) || mailYukle) {
+    await Promise.all([!rows && !ADM.err ? loadAdm() : null, !ilt && !ADM.iltErr ? loadIlt() : null, rows ? null : loadPlanlar(), mailYukle ? loadMail() : null]);
     if (route === "admin") pageAdmin();
   }
+}
+async function loadMail() {
+  ADM.mailYuk = true;
+  try {
+    const { data, error } = await sb.rpc("app_admin_mail_log");
+    if (error) throw error;
+    ADM.mail = data || { log: [], aday: [], cikan: 0 }; ADM.mailErr = "";
+  } catch (e) { ADM.mailErr = trErr(e); }
+  ADM.mailYuk = false;
 }
 async function loadAdm() {
   try { ADM.rows = (await rpc("app_admin_liste")) || []; ADM.err = ""; }
@@ -1944,7 +2001,7 @@ document.addEventListener("click", async e => {
     sh.classList.remove("open");
   }
   else if (t.hasAttribute("data-menu")) document.getElementById("shell")?.classList.toggle("open");
-  else if (t.hasAttribute("data-logout")) { await sb.auth.signOut(); S.session = null; S.ben = null; FIRMA = { v: undefined, yuk: false, err: "" }; LOGO_YENI = null; ADM = { rows: null, err: "", q: "" }; FF = { list: null, err: "", sel: "" }; TK = { list: null, err: "", edit: null, sil: "", run: {} }; PAY = { list: null, err: "", yuk: false }; go("giris"); }
+  else if (t.hasAttribute("data-logout")) { await sb.auth.signOut(); S.session = null; S.ben = null; FIRMA = { v: undefined, yuk: false, err: "" }; LOGO_YENI = null; BILD = { v: undefined, yuk: false }; ADM = { rows: null, err: "", q: "" }; FF = { list: null, err: "", sel: "" }; TK = { list: null, err: "", edit: null, sil: "", run: {} }; PAY = { list: null, err: "", yuk: false }; go("giris"); }
   else if (t.hasAttribute("data-firma-yenile")) { FIRMA = { v: undefined, yuk: false, err: "" }; render(); }
   else if (t.dataset.paylas) paylas(t.dataset.paylas, t);
   else if (t.dataset.payKapat) payKapat(t.dataset.payKapat, t);
@@ -1981,7 +2038,7 @@ document.addEventListener("keydown", e => { if (e.key === "Escape") document.get
 sb.auth.onAuthStateChange((ev, session) => {
   S.session = session;
   if (ev === "PASSWORD_RECOVERY") { S.recovery = true; setTimeout(() => go("yeni-sifre"), 0); }
-  if (ev === "SIGNED_OUT") { S.ben = null; FIRMA = { v: undefined, yuk: false, err: "" }; LOGO_YENI = null; PAY = { list: null, err: "", yuk: false }; if (route && !AUTH_ROUTES.has(route)) setTimeout(render, 0); }
+  if (ev === "SIGNED_OUT") { S.ben = null; FIRMA = { v: undefined, yuk: false, err: "" }; LOGO_YENI = null; BILD = { v: undefined, yuk: false }; PAY = { list: null, err: "", yuk: false }; if (route && !AUTH_ROUTES.has(route)) setTimeout(render, 0); }
 });
 {
   const { data } = await sb.auth.getSession();
