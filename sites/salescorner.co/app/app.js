@@ -1,6 +1,6 @@
 // Sales Corner — SaaS paneli (app.salescorner.co ve salescorner.co/app/)
 // Oturum Supabase'de; kota/plan kontrolü sunucuda (Supabase RPC + worker /api/app/*). Bu dosya yalnızca arayüzdür.
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.4";
+import { createClient } from "/_a/vendor/supabase-js-2.49.4.js";
 
 const SB_URL = "https://jqllcrmwjxnuzxbzfydu.supabase.co";
 const SB_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpxbGxjcm13anhudXp4YnpmeWR1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTU0NzE2NzcsImV4cCI6MjExMTA0NzY3N30.kn2IDDNLcI3bjSOXlNWvx9ISHcvN9xkIezFh70xiqiw";
