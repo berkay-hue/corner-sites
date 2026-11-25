@@ -39,7 +39,7 @@ GitHub deposunda (Settings > Secrets > Actions) `CLOUDFLARE_API_TOKEN` olmalı: 
 - Yerelde: `npm run dev`, ardından `curl "http://localhost:8787/__scheduled"`.
 
 ## Yeni site eklemek
-`wrangler.toml` içindeki `SITES` listesine bir kayıt ekleyin. Sitenin `tools/blog.config.mjs` içinde de kaydı olmalı.
+`src/sites.js` içindeki site listesine bir kayıt ekleyin. Sitenin `tools/blog.config.mjs` içinde de kaydı olmalı.
 
 ## Canlıya geçişte
 n8n'deki workflow'u **kapatın**. Kapatmazsanız aynı gün iki yazı çıkar.
