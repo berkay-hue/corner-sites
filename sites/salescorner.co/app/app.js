@@ -69,13 +69,13 @@ const estDk = k => `${Math.round(EST[k] / 60) || 1}–${Math.ceil((EST[k] * 1.6)
 const PLAN_FALLBACK = [
   { kod: "deneme", ad: "Deneme (14 gün)", aylik_tl: 0, koltuk: 1, kota: { rakip: 1, sekans: 1, seo: 1, briefing: 1, fireflies: 1, takip: 1 } },
   { kod: "baslangic", ad: "Başlangıç", aylik_tl: 1490, koltuk: 1, kota: { rakip: 1, sekans: 3, seo: 2, briefing: 2, takip: 1 } },
-  { kod: "profesyonel", ad: "Profesyonel", aylik_tl: 3490, koltuk: 1, kota: { rakip: 4, sekans: 15, seo: 8, briefing: 10, fireflies: 4, takip: 3 } },
+  { kod: "profesyonel", ad: "Profesyonel", aylik_tl: 3490, koltuk: 3, kota: { rakip: 4, sekans: 15, seo: 8, briefing: 10, fireflies: 4, takip: 3 } },
   { kod: "ekip", ad: "Ekip", aylik_tl: 8990, koltuk: 5, kota: { rakip: 15, sekans: 60, seo: 30, briefing: 40, fireflies: 20, takip: 10 } },
   { kod: "ozel", ad: "Özel AI", aylik_tl: null, koltuk: 0, kota: { rakip: -1, sekans: -1, seo: -1, briefing: -1, fireflies: -1, takip: -1 } },
 ];
 const PLAN_META = {
   baslangic: { d: "Tek başına satış yapanlar için temel araçlar." },
-  profesyonel: { d: "Aktif satış yapan profesyoneller için tam paket.", hot: true, ek: ["Sunumlarda kendi logonuz"] },
+  profesyonel: { d: "Aktif satış yapan profesyoneller için tam paket.", hot: true, ek: ["3 kullanıcıya kadar", "Sunumlarda kendi logonuz"] },
   ekip: { d: "Satış ekipleri için yüksek kota.", ek: ["5 kullanıcıya kadar", "Öncelikli destek", "Sunumlarda kendi logonuz"] },
   ozel: { d: "Şirketinize özel kurulan yapay zekâ altyapısı." },
 };
@@ -350,10 +350,26 @@ setInterval(() => {
 let route = "";
 const AUTH_ROUTES = new Set(["giris", "kayit", "sifre", "yeni-sifre"]);
 function go(n) { if (location.hash !== "#/" + n) location.hash = "#/" + n; else render(); }
+// Ekip daveti: e-postadaki /app/#/davet/<jeton> bağlantısı. Jeton adres çubuğunda kalmasın diye hemen
+// yerel depoya alınır, adres #/davet olur. Oturum yoksa kayıt/giriş sonrası kabul ekranına dönülür.
+const DAVET_RX = /^#\/davet\/([0-9a-f]{48})\/?$/;
+function davetYakala() {
+  const m = location.hash.match(DAVET_RX);
+  if (!m) return;
+  store.set("davet", { j: m[1], t: Date.now() });
+  history.replaceState(null, "", location.pathname + location.search + "#/davet");
+}
+function davetBekleyen() {
+  const d = store.get("davet", null);
+  if (!d || typeof d !== "object" || !/^[0-9a-f]{48}$/.test(String(d.j || "")) || !(Date.now() - Number(d.t) < 14 * 864e5)) return "";
+  return d.j;
+}
+const sonraki = () => (davetBekleyen() ? "davet" : "panel");
 function render() {
+  davetYakala();
   let n = (location.hash.match(/^#\/([\w-]+)/) || [])[1] || "";
   if (S.recovery && S.session) n = "yeni-sifre";
-  else if (!S.session) { if (!AUTH_ROUTES.has(n) || n === "yeni-sifre") n = n === "kayit" || n === "sifre" ? n : "giris"; }
+  else if (!S.session) { if (n === "davet") n = davetBekleyen() ? "kayit" : "giris"; else if (!AUTH_ROUTES.has(n) || n === "yeni-sifre") n = n === "kayit" || n === "sifre" ? n : "giris"; }
   else if (AUTH_ROUTES.has(n) || !PAGES[n]) n = "panel";
   if (location.hash !== "#/" + n) history.replaceState(null, "", location.pathname + location.search + "#/" + n);
   const changed = route !== n;
@@ -363,7 +379,7 @@ function render() {
   PAGES[n]();
   if (changed) { window.scrollTo(0, 0); document.title = (TITLES[n] ? TITLES[n] + " · " : "") + "Sales Corner"; }
 }
-const TITLES = { giris: "Giriş", kayit: "Kayıt ol", sifre: "Şifre sıfırlama", "yeni-sifre": "Yeni şifre", panel: "Panel", rakip: "Rakip Analizi", sekans: "Sekans Yazarı", seo: "SEO Analizi", briefing: "Toplantı Briefingi", fireflies: "Toplantı Analizi", takip: "Rakip Takip", fiyatlar: "Fiyatlar", hesap: "Hesabım", admin: "Yönetim", ozel: "Size özel çözümler" };
+const TITLES = { giris: "Giriş", kayit: "Kayıt ol", sifre: "Şifre sıfırlama", "yeni-sifre": "Yeni şifre", panel: "Panel", rakip: "Rakip Analizi", sekans: "Sekans Yazarı", seo: "SEO Analizi", briefing: "Toplantı Briefingi", fireflies: "Toplantı Analizi", takip: "Rakip Takip", fiyatlar: "Fiyatlar", hesap: "Hesabım", admin: "Yönetim", ozel: "Size özel çözümler", davet: "Ekip daveti", klasor: "Ekip klasörü" };
 
 // ---------- Giriş ekranları ----------
 const LOGO = `<img class="lg" src="/img/sales-corner-logo.png?v=1" width="495" height="178" alt="Sales Corner">`;
@@ -389,9 +405,11 @@ function authLayout(inner) {
 const tabs = on => `<div class="tabs" role="tablist"><button type="button" role="tab" aria-selected="${on === "giris"}" data-go="giris">Giriş yap</button><button type="button" role="tab" aria-selected="${on === "kayit"}" data-go="kayit">Ücretsiz dene</button></div>`;
 const pwField = (id, label, ac, extra = "") => `<div class="f"><label for="${id}">${label}</label><div class="pw"><input class="in" id="${id}" type="password" autocomplete="${ac}" required ${extra}><button type="button" data-eye="${id}" aria-label="Şifreyi göster">Göster</button></div></div>`;
 const redirectTo = () => location.origin + location.pathname;
+const davetNot = t => (davetBekleyen() ? `<div class="trial-note">${ic("mail", 16)}<span>${t}</span></div>` : "");
 
 function pageGiris() {
   authLayout(`<h2>Tekrar hoş geldiniz</h2><p class="sub">Hesabınıza giriş yapın.</p>${tabs("giris")}
+  ${davetNot("Ekip davetiniz hazır. Davetin geldiği e-posta adresiyle giriş yapın; hesabınız yoksa “Ücretsiz dene” ile kayıt olun.")}
   <div id="m">${S.authErr ? msg("err", esc(trErr(S.authErr))) : ""}</div>
   <form id="f" data-sk-noform>
     <div class="f"><label for="em">E-posta</label><input class="in" id="em" type="email" autocomplete="email" required></div>
@@ -416,7 +434,7 @@ function pageGiris() {
     }
     S.session = data.session;
     await loadBen();
-    go("panel");
+    go(sonraki());
   };
 }
 async function resend(email) {
@@ -430,6 +448,7 @@ function denemeOzet() {
 }
 async function pageKayit() {
   authLayout(`<h2>14 gün ücretsiz deneyin</h2><p class="sub">Kredi kartı gerekmez. Dakikalar içinde ilk analizinizi alın.</p>${tabs("kayit")}
+  ${davetNot("Ekip davetiniz hazır. Davetin geldiği e-posta adresiyle kayıt olun; hesabınız varsa “Giriş yap” sekmesinden girin.")}
   <div class="trial-note">${ic("gift", 16)}<span id="trial-ozet">${esc(denemeOzet())}</span></div>
   <div id="m"></div>
   <form id="f" data-sk-noform>
@@ -457,7 +476,7 @@ async function pageKayit() {
       S.session = data.session;
       await loadBen();
       if (S.ben && (f.ad.value.trim() || f.sr.value.trim())) { try { S.ben = await rpc("app_profil", { p_ad: f.ad.value.trim(), p_sirket: f.sr.value.trim() }); } catch {} }
-      return go("panel");
+      return go(sonraki());
     }
     f.hidden = true;
     setMsg("m", "ok", `<div><b>Neredeyse hazır!</b><br><b>${esc(email)}</b> adresine bir doğrulama bağlantısı gönderdik. Bağlantıya tıklayınca paneliniz açılır.<br><button type="button" class="linkbtn" id="rs" style="margin-top:8px">E-posta gelmedi mi? Tekrar gönder</button></div>`);
@@ -507,7 +526,7 @@ function pageYeniSifre() {
     S.recovery = false;
     await loadBen();
     toast("Şifreniz güncellendi ✓");
-    go("panel");
+    go(sonraki());
   };
 }
 
@@ -525,6 +544,7 @@ function shell(content) {
     <div class="side-head"><button class="iconbtn side-tog" type="button" data-side aria-label="Menüyü kapat" title="Menüyü kapat">${ICON_X}</button><a class="brand" href="#/panel">${LOGO}</a></div>
     <nav class="nav">
       ${nav("panel", "Panel")}
+      ${nav("klasor", klasorAd())}
       <div class="nav-h">Araçlar</div>
       ${MODS.map(m => nav(m.k, m.ad, badge(m.k))).join("")}
       <div class="nav-h">Size özel</div>
@@ -535,8 +555,8 @@ function shell(content) {
       ${b.admin ? nav("admin", "Yönetim") : ""}
     </nav>
     <div class="side-foot">
-      <div class="plan-box"><b>${esc(b.plan_ad || b.plan)}</b><span>${!b.aktif ? "Süre doldu" : b.plan === "deneme" ? `Denemede ${kalan} gün kaldı` : `Geçerlilik: ${fmtD(b.bitis)}`}</span>
-        ${b.plan !== "ozel" ? `<a class="btn btn-p btn-s btn-w" href="#/fiyatlar">${b.plan === "deneme" || !b.aktif ? "Plan seç" : "Planı yükselt"}</a>` : ""}</div>
+      <div class="plan-box"><b>${esc(b.plan_ad || b.plan)}</b><span>${b.ekip_uye ? `${esc(ekipAd(b.ekip_uye))} ekibi` : !b.aktif ? "Süre doldu" : b.plan === "deneme" ? `Denemede ${kalan} gün kaldı` : `Geçerlilik: ${fmtD(b.bitis)}`}</span>
+        ${b.plan !== "ozel" && !b.ekip_uye ? `<a class="btn btn-p btn-s btn-w" href="#/fiyatlar">${b.plan === "deneme" || !b.aktif ? "Plan seç" : "Planı yükselt"}</a>` : ""}</div>
       <div class="me"><span class="av" aria-hidden="true">${esc(initials(name))}</span><div class="t" title="${esc(b.email)}"><b>${esc(name)}</b><span>${esc(b.email)}</span></div><button class="iconbtn" data-logout title="Çıkış yap" aria-label="Çıkış yap">${ICON_OUT}</button></div>
     </div>
   </aside>
@@ -734,7 +754,7 @@ function renderJob(k) {
   }
   out.innerHTML = RESULT[k](j) + "";
   out.querySelector(".res-h")?.insertAdjacentHTML("beforeend", again);
-  out.querySelector(".res-b")?.insertAdjacentHTML("beforeend", paySec(k));
+  out.querySelector(".res-b")?.insertAdjacentHTML("beforeend", paySec(k) + klasorSec(k));
 }
 const linkBtn = (u, t, cls = "btn-g") => (safeUrl(u) ? `<a class="btn ${cls} btn-s" href="${esc(safeUrl(u))}" target="_blank" rel="noopener">${t}</a>` : "");
 const kv = rows => `<div class="kv">${rows.filter(r => r[1] !== undefined && r[1] !== null && r[1] !== "").map(([a, v]) => `<div><span>${esc(a)}</span><b>${esc(v)}</b></div>`).join("")}</div>`;
@@ -969,6 +989,334 @@ async function payKapat(id, btn) {
     setMsg("paym", "err", esc(payErr(e)));
   }
 }
+
+// ---------- Ekip ve ekip klasörü ----------
+// Yeni RPC'ler doğrudan sb.rpc ile çağrılır: rpc() PGRST202'de bütün paneli "kurulum" ekranına alır
+async function erpc(fn, args) {
+  const { data, error } = await sb.rpc(fn, args || {});
+  if (error) throw error;
+  return data;
+}
+const ekipAd = o => (o && (o.sirket || o.ad || o.email)) || "Ekip";
+const klasorEkip = () => Number(S.ben?.koltuk) > 1 || !!S.ben?.ekip_uye;
+const klasorAd = () => (klasorEkip() ? "Ekip klasörü" : "Klasörüm");
+const klasorA = () => (klasorEkip() ? "Ekip klasörüne" : "Klasörüme");
+function ekErr(e, gen) {
+  const c = String((e && e.code) || ""), m = String((e && e.message) || "");
+  if (c === "54000") return "Bugünkü kayıt sınırına ulaştınız (günde 30; paylaşım linkleriyle ortak). Yarın tekrar deneyin.";
+  if (c === "22023") return "Çıktı boş ya da kaydetmek için çok uzun.";
+  if (c === "P0002") return "Bu kayıt bulunamadı; liste yenilendi.";
+  if (c === "PGRST202" || /could not find the function/i.test(m)) return "Bu özellik şu an hazırlanıyor. Biraz sonra tekrar deneyin.";
+  if (c === "28000" || /jwt|not authenticated|auth session missing/i.test(m)) return "Oturumunuzun süresi doldu. Lütfen yeniden giriş yapın.";
+  if (/failed to fetch|networkerror|load failed/i.test(m)) return "Bağlantı kurulamadı. İnternetinizi kontrol edip tekrar deneyin.";
+  return gen || "İşlem şu an yapılamadı. Biraz sonra tekrar deneyin.";
+}
+
+// --- Davet kabul ekranı (#/davet) ---
+const DAVET_NEDEN = {
+  gecersiz: ["err", "Bu davet geçersiz ya da süresi dolmuş. Ekip sahibinden yeni bir davet isteyin.", true],
+  kendi: ["err", "Bu davet sizin ekibinize ait; kendi davetinizi kabul edemezsiniz.", true],
+  onay: ["warn", "Daveti kabul etmeden önce e-posta adresinizi doğrulayın. Gelen kutunuzdaki doğrulama bağlantısına tıklayıp tekrar deneyin.", false],
+  eposta: ["warn", "Bu davet başka bir e-posta adresine gönderilmiş. Davetin geldiği e-posta adresiyle giriş yapın.", false],
+  baska_ekip: ["err", "Zaten başka bir ekiptesiniz. Bu daveti kabul etmek için önce Hesabım › Ekip bölümünden mevcut ekipten ayrılın.", true],
+  sahip: ["err", "Kendi ekibinizde kullanıcılar var; başka bir ekibe katılamazsınız.", true],
+  sahip_plan: ["err", "Ekip sahibinin planı şu an etkin değil. Ekip sahibiyle iletişime geçin.", true],
+  koltuk: ["err", "Bu ekip dolu. Ekip sahibinin yer açması gerekiyor.", true],
+};
+let DAVET = { sonuc: null };
+function pageDavet() {
+  const j = davetBekleyen(), b = S.ben, r = DAVET.sonuc;
+  let body;
+  if (r && r.ok) {
+    body = `${msg("ok", `<b>${esc(ekipAd(r.sahip))}</b> ekibine katıldınız. Araçlardaki kullanımınız ekip planından düşer; ekip klasörünü birlikte kullanırsınız.`)}
+      <div class="row" style="justify-content:flex-start;margin-top:14px"><a class="btn btn-p" href="#/panel">Panele git</a><a class="btn btn-g" href="#/klasor">Ekip klasörünü aç</a></div>`;
+  } else if (!j) {
+    body = `${msg("info", "Bekleyen bir ekip davetiniz yok. Davet bağlantısını e-postanızdan yeniden açabilirsiniz.")}
+      <div class="row" style="justify-content:flex-start;margin-top:14px"><a class="btn btn-g" href="#/panel">Panele git</a></div>`;
+  } else {
+    body = `<p style="margin-bottom:10px">Sales Corner'da bir ekibe davet edildiniz. Daveti <b>${esc(b.email)}</b> hesabıyla kabul ediyorsunuz.</p>
+      <ul style="margin:0 0 16px;padding-left:18px;color:var(--mute);font-size:14px;display:grid;gap:4px">
+        <li>Araçları kullandığınızda kullanım ekip sahibinin plan hakkından düşer.</li>
+        <li>Ekip klasörüne kaydettiğiniz çıktıları ekipteki herkes görür.</li>
+        <li>İstediğiniz zaman Hesabım › Ekip bölümünden ayrılabilirsiniz.</li></ul>
+      <div id="dvm"></div>
+      <div class="row" style="justify-content:flex-start"><button class="btn btn-p" type="button" data-davet-kabul>Daveti kabul et</button><button class="btn btn-g" type="button" data-davet-red>Vazgeç</button></div>`;
+  }
+  shell(`${ph("Ekip daveti", "Ekip arkadaşlarınızla aynı planı ve klasörü kullanın.")}<section class="card pad" style="max-width:640px">${body}</section>`);
+}
+async function davetKabul(btn) {
+  const j = davetBekleyen();
+  if (!j) return render();
+  setMsg("dvm", "", "");
+  busy(btn, true, "Katılıyorsunuz…");
+  let r;
+  try { r = await erpc("app_ekip_kabul", { p_jeton: j }); }
+  catch (e) { busy(btn, false); return setMsg("dvm", "err", esc(ekErr(e, "Davet şu an kabul edilemedi. Biraz sonra tekrar deneyin."))); }
+  if (r && r.ok) {
+    store.set("davet", null);
+    DAVET = { sonuc: r };
+    EKIP = ekipBos(); KLASOR = klasorBos();
+    await loadBen();
+    if (!S.ben) return render();
+    toast(r.zaten ? "Zaten bu ekiptesiniz ✓" : "Ekibe katıldınız ✓");
+    if (route === "davet") pageDavet(); else go("davet");
+    return;
+  }
+  const n = DAVET_NEDEN[r && r.neden] || ["err", "Davet şu an kabul edilemedi. Biraz sonra tekrar deneyin.", false];
+  busy(btn, false);
+  if (n[2]) store.set("davet", null);
+  setMsg("dvm", n[0], esc(n[1]) + (n[2] ? "" : `<div class="row" style="justify-content:flex-start;margin-top:10px"><button class="btn btn-g btn-s" type="button" data-logout>Başka hesapla giriş yap</button></div>`));
+  if (n[2] && btn) btn.remove();
+}
+
+// --- Ekip klasörü (#/klasor) ---
+const klasorBos = () => ({ v: null, err: "", yuk: false, acik: "", ic: {}, icErr: "", sil: "" });
+let KLASOR = klasorBos();
+function pageKlasor() {
+  const ekip = klasorEkip();
+  shell(`${ph(esc(klasorAd()), ekip ? "Ekipteki herkesin kaydettiği çıktılar burada toplanır." : "Kaydettiğiniz çıktılar burada saklanır. Profesyonel planda ekip arkadaşlarınızla paylaşılır.")}<div id="klasor-ic" style="max-width:820px">${klasorIc()}</div>`);
+}
+function klasorIc() {
+  const o = KLASOR;
+  if (o.v === null && !o.err && !o.yuk) klasorYukle();
+  if (o.err) return `${msg("err", esc(o.err))}<button class="btn btn-g btn-s" type="button" data-klasor-yenile style="margin-top:12px">Tekrar dene</button>`;
+  if (!o.v) return `<div class="empty" style="padding:28px"><div class="spin"></div></div>`;
+  const ls = Array.isArray(o.v.liste) ? o.v.liste : [];
+  if (!ls.length) return `<div class="card pad"><div class="empty" style="padding:18px 8px">${ic("file", 28)}<p style="margin-top:10px">Klasör henüz boş.</p><p style="color:var(--mute);font-size:14px">Bir aracı çalıştırdıktan sonra sonucun altındaki <b>"${esc(klasorA())} kaydet"</b> düğmesiyle çıktıyı buraya ekleyebilirsiniz.</p></div></div>`;
+  return `<div id="klm"></div><div class="card pad">${ls.map(klasorRow).join("")}</div>`;
+}
+// data-* öznitelikleri metin döner; RPC kimlikleri sayı. Karşılaştırma String ile, gönderim sayı ile.
+const ekNum = v => (/^\d+$/.test(String(v)) ? Number(v) : v);
+function klasorRow(x) {
+  const o = KLASOR, acik = o.acik !== "" && String(o.acik) === String(x.id), id = esc(x.id);
+  const kim = o.v && o.v.ekip ? ` · ${x.ben ? "Siz" : esc(x.kaydeden || "")}` : "";
+  let icerik = "";
+  if (acik) {
+    const t = o.ic[x.id];
+    icerik = o.icErr ? `<div style="margin-top:10px">${msg("err", esc(o.icErr))}</div>`
+      : t === undefined ? `<div class="empty" style="padding:14px"><div class="spin"></div></div>`
+      : `<div class="box" id="kic-${id}" style="white-space:pre-wrap;overflow-wrap:anywhere;font-size:14px;margin-top:10px;max-height:520px;overflow:auto">${esc(t)}</div>
+        <div class="row" style="justify-content:flex-start;margin-top:8px"><button class="btn btn-g btn-s" type="button" data-copy-el="kic-${id}">Metni kopyala</button></div>`;
+  }
+  const sil = o.sil !== "" && String(o.sil) === String(x.id)
+    ? `<span style="font-size:14px;font-weight:600">Silinsin mi?</span><button class="btn btn-d btn-s" type="button" data-klasor-sil="${id}">Evet, sil</button><button class="btn btn-g btn-s" type="button" data-klasor-vazgec>Vazgeç</button>`
+    : x.silinebilir ? `<button class="btn btn-g btn-s" type="button" data-klasor-sor="${id}">Sil</button>` : "";
+  return `<div class="box" style="margin-bottom:10px"><div style="min-width:0"><b style="overflow-wrap:anywhere">${esc(x.baslik)}</b>
+    <div style="color:var(--mute);font-size:13px;margin-top:2px">${esc(MOD[x.modul]?.ad || x.modul)} · ${esc(fmtDT(x.olusturma))}${kim}</div></div>
+    <div class="row" style="justify-content:flex-start;margin-top:10px"><button class="btn btn-g btn-s" type="button" data-klasor-ac="${id}" aria-expanded="${acik}">${acik ? "Kapat" : "Aç"}</button>${sil}</div>${icerik}</div>`;
+}
+async function klasorYukle() {
+  const o = KLASOR;
+  o.yuk = true; o.err = "";
+  try { const r = await erpc("app_klasor_liste"); o.v = r && typeof r === "object" ? r : { liste: [] }; }
+  catch (e) { o.v = null; o.err = ekErr(e, "Klasör yüklenemedi. Biraz sonra tekrar deneyin."); }
+  o.yuk = false;
+  if (o === KLASOR) klasorCiz();
+}
+function klasorCiz() { const el = document.getElementById("klasor-ic"); if (el && route === "klasor") el.innerHTML = klasorIc(); }
+async function klasorAc(id) {
+  id = String(id);
+  const o = KLASOR;
+  o.sil = "";
+  if (o.acik === id) { o.acik = ""; return klasorCiz(); }
+  o.acik = id; o.icErr = "";
+  klasorCiz();
+  if (o.ic[id] !== undefined) return;
+  try {
+    const r = await erpc("app_klasor_getir", { p_id: ekNum(id) });
+    if (o !== KLASOR) return;
+    o.ic[id] = String((r && r.icerik) || "");
+  } catch (e) {
+    if (o !== KLASOR) return;
+    if (String(e && e.code) === "P0002") { toast(ekErr(e)); KLASOR = klasorBos(); return klasorCiz(); }
+    if (o.acik === id) o.icErr = ekErr(e, "Çıktı açılamadı. Biraz sonra tekrar deneyin.");
+  }
+  klasorCiz();
+}
+async function klasorSil(id, btn) {
+  id = String(id);
+  const o = KLASOR;
+  busy(btn, true, "Siliniyor…");
+  try {
+    await erpc("app_klasor_sil", { p_id: ekNum(id) });
+    if (o !== KLASOR) return;
+    if (o.v && Array.isArray(o.v.liste)) o.v.liste = o.v.liste.filter(x => String(x.id) !== id);
+    delete o.ic[id]; o.sil = ""; if (o.acik === id) o.acik = "";
+    for (const k of Object.keys(JOBS)) if (JOBS[k] && String(JOBS[k].klasor) === id) { delete JOBS[k].klasor; delete JOBS[k].klasorU; }
+    saveJobs();
+    klasorCiz();
+    toast("Silindi");
+  } catch (e) {
+    if (o !== KLASOR) return;
+    if (String(e && e.code) === "P0002") { toast(ekErr(e)); KLASOR = klasorBos(); return klasorCiz(); }
+    busy(btn, false);
+    setMsg("klm", "err", esc(ekErr(e, "Silinemedi. Biraz sonra tekrar deneyin.")));
+  }
+}
+// Araç sonucunun altındaki "Ekip klasörüne kaydet" bölümü
+function klasorSec(k) {
+  const j = JOBS[k];
+  if (!j || j.state !== "done" || !PAY_MD[k]) return "";
+  const ad = klasorAd(), ekip = klasorEkip();
+  if (j.klasor && j.klasorU === S.session?.user?.id)
+    return `<div class="sec" id="klasor-sec"><h4>${esc(ad)}</h4><p style="display:flex;align-items:center;gap:6px;font-size:14px">${ic("check", 16)}Bu çıktı ${ekip ? "ekip klasörüne" : "klasörünüze"} kaydedildi.</p>
+      <div class="row" style="justify-content:flex-start;margin-top:10px"><a class="btn btn-g btn-s" href="#/klasor">Klasörü aç</a></div></div>`;
+  return `<div class="sec" id="klasor-sec"><h4>${esc(ad)}</h4>
+    <p style="color:var(--mute);font-size:13.5px;margin-bottom:10px">${ekip ? "Çıktının bir kopyasını ekip klasörüne ekler; ekipteki herkes görür." : "Çıktının bir kopyasını klasörünüze ekler; menüdeki Klasörüm sayfasından açabilirsiniz."} Kullanım hakkınızdan düşmez.</p>
+    <div id="klasor-m"></div><button class="btn btn-g btn-s" type="button" data-klasor="${esc(k)}">${esc(klasorA())} kaydet</button></div>`;
+}
+async function klasorKaydet(k, btn) {
+  const j = JOBS[k];
+  if (!j || j.state !== "done" || !PAY_MD[k]) return;
+  let o = null;
+  try { o = PAY_MD[k](j); } catch {}
+  const m = o ? mdT(o.m) : "";
+  if (!m) return setMsg("klasor-m", "err", "Bu çıktıda kaydedilecek içerik bulunamadı.");
+  if (new TextEncoder().encode(m).length > 204800) return setMsg("klasor-m", "err", "Çıktı kaydetmek için çok uzun (en fazla 200 KB).");
+  const uid = S.session?.user?.id;
+  setMsg("klasor-m", "", "");
+  busy(btn, true, "Kaydediliyor…");
+  try {
+    const r = await erpc("app_klasor_kaydet", { p_modul: k, p_baslik: mdLine(o.b).slice(0, 200) || MOD[k].ad, p_icerik: m });
+    if (!r || !r.ok || !r.id) throw new Error("gecersiz_yanit");
+    if (JOBS[k] !== j || S.session?.user?.id !== uid) return;
+    j.klasor = r.id; j.klasorU = uid; saveJobs();
+    KLASOR = klasorBos();
+    if (route === k) renderJob(k);
+    toast("Klasöre kaydedildi ✓");
+  } catch (e) {
+    busy(btn, false);
+    if (JOBS[k] === j && route === k) setMsg("klasor-m", "err", esc(ekErr(e, "Kaydedilemedi. Biraz sonra tekrar deneyin.")));
+  }
+}
+
+// --- Hesabım › Ekip ---
+const ekipBos = () => ({ v: null, err: "", yuk: false, sor: "", ayril: false, not: null });
+let EKIP = ekipBos();
+function ekipBolum() {
+  const o = EKIP;
+  if (o.v === null && !o.err && !o.yuk) ekipYukle();
+  let body, pill = "";
+  const not = o.not ? msg(o.not[0], esc(o.not[1])) : "";
+  if (o.err) body = `${msg("err", esc(o.err))}<button class="btn btn-g btn-s" type="button" data-ekip-yenile style="margin-top:12px">Tekrar dene</button>`;
+  else if (!o.v) body = `<div class="empty" style="padding:18px"><div class="spin"></div></div>`;
+  else if (o.v.uye) {
+    const u = o.v.uye;
+    body = `<p><b>${esc(ekipAd(u))}</b> ekibindesiniz${u.sirket || u.ad ? ` <span style="color:var(--mute)">(${esc(u.email)})</span>` : ""}. Araçlardaki kullanımınız ekip planından düşer; ekip klasörünü birlikte kullanırsınız.</p>
+      ${u.etkin ? "" : `<div style="margin-top:10px">${msg("warn", "Ekip sahibinin planı şu an etkin değil; bu sürede kendi planınız geçerli.")}</div>`}
+      <div class="row" style="justify-content:flex-start;margin-top:12px">${o.ayril
+        ? `<span style="font-size:14px;font-weight:600">Ekipten ayrılınsın mı?</span><button class="btn btn-d btn-s" type="button" data-ekip-ayril>Evet, ayrıl</button><button class="btn btn-g btn-s" type="button" data-ekip-vazgec>Vazgeç</button>`
+        : `<a class="btn btn-g btn-s" href="#/klasor">Ekip klasörü</a><button class="btn btn-g btn-s" type="button" data-ekip-ayril-sor>Ekipten ayrıl</button>`}</div>`;
+    pill = `<span class="pill acc">Ekip üyesi</span>`;
+  } else if (Number(o.v.koltuk) > 1) {
+    const ls = Array.isArray(o.v.uyeler) ? o.v.uyeler : [], dolu = 1 + ls.length, k = Number(o.v.koltuk);
+    pill = `<span class="pill ${dolu < k ? "acc" : "warn"}">${dolu}/${k} kullanıcı</span>`;
+    const satir = x => {
+      const akt = x.durum === "aktif";
+      const sag = EKIP.sor !== "" && String(EKIP.sor) === String(x.id)
+        ? `<span style="font-size:14px;font-weight:600">${akt ? "Ekipten çıkarılsın mı?" : "Davet iptal edilsin mi?"}</span><button class="btn btn-d btn-s" type="button" data-ekip-cikar="${esc(x.id)}">${akt ? "Evet, çıkar" : "Evet, iptal et"}</button><button class="btn btn-g btn-s" type="button" data-ekip-vazgec>Vazgeç</button>`
+        : `<button class="btn btn-g btn-s" type="button" data-ekip-sor="${esc(x.id)}">${akt ? "Çıkar" : "Daveti iptal et"}</button>`;
+      return `<div class="box" style="margin-bottom:8px"><div class="row" style="flex-wrap:nowrap;align-items:flex-start"><div style="min-width:0"><b style="overflow-wrap:anywhere">${esc(x.ad || x.email)}</b>
+        <div style="color:var(--mute);font-size:13px;margin-top:2px;overflow-wrap:anywhere">${x.ad ? esc(x.email) + " · " : ""}${akt ? "Katıldı: " + esc(fmtD(x.kabul || x.olusturma)) : "Davet: " + esc(fmtD(x.olusturma)) + " · 14 gün geçerli"}</div></div>
+        <span class="pill ${akt ? "ok" : "warn"}">${akt ? "Aktif" : "Bekliyor"}</span></div>
+        <div class="row" style="justify-content:flex-start;margin-top:10px">${sag}</div></div>`;
+    };
+    const form = o.v.davet_edebilir && dolu < k
+      ? `<form id="ekip-f" data-sk-noform style="margin-top:14px"><div class="f"><label for="ekip-em">Ekip arkadaşınızın e-postası</label><input class="in" id="ekip-em" type="email" maxlength="254" autocomplete="off" required></div>
+          <button class="btn btn-p btn-s" type="submit">Davet gönder</button></form>`
+      : !o.v.aktif ? `<div style="margin-top:12px">${msg("warn", "Planınızın süresi dolduğu için ekip şu an pasif. Planı yenilediğinizde ekip arkadaşlarınız yeniden kullanabilir.")}</div>`
+      : dolu >= k ? `<p style="color:var(--mute);font-size:14px;margin-top:12px">Ekip dolu. Yeni biri için bir kullanıcıyı çıkarın ya da bekleyen bir daveti iptal edin.</p>` : "";
+    body = `<p style="color:var(--mute);font-size:14px;margin-bottom:12px">${esc(o.v.plan_ad || "Planınız")} ile toplam ${k} kullanıcı (siz + ${k - 1} davet). Ekip arkadaşlarınızın kullanımı planınızın aylık hakkından düşer.</p>
+      <div class="box" style="margin-bottom:8px"><div class="row" style="flex-wrap:nowrap"><div style="min-width:0"><b>Siz</b><div style="color:var(--mute);font-size:13px;margin-top:2px;overflow-wrap:anywhere">${esc(S.ben?.email || "")}</div></div><span class="pill acc">Ekip sahibi</span></div></div>
+      ${ls.map(satir).join("")}${form}`;
+  } else {
+    body = `<p style="color:var(--mute);font-size:14px">${o.v.plan === "ozel" ? "Özel planınızda ekip kullanıcıları için bizimle iletişime geçin." : "Profesyonel planda 3 kişiye kadar, Ekip planında 5 kişiye kadar kullanıcı ekleyebilirsiniz. Ekip arkadaşlarınız aynı plan hakkını ve ortak klasörü kullanır."}</p>
+      ${o.v.plan === "ozel" ? "" : `<a class="btn btn-g btn-s" href="#/fiyatlar" style="margin-top:12px">Planları gör</a>`}`;
+  }
+  return `<section class="card pad" id="ekip-bolum"><div class="row" style="margin-bottom:10px"><h3>Ekip</h3>${pill}</div><div id="ekm">${not}</div>${body}</section>`;
+}
+async function ekipYukle() {
+  const o = EKIP;
+  o.yuk = true; o.err = "";
+  try { const r = await erpc("app_ekip_liste"); o.v = r && typeof r === "object" ? r : null; if (!o.v) throw new Error("gecersiz_yanit"); }
+  catch (e) { o.v = null; o.err = ekErr(e, "Ekip bilgisi yüklenemedi. Biraz sonra tekrar deneyin."); }
+  o.yuk = false;
+  if (o === EKIP) ekipCiz();
+}
+function ekipCiz() {
+  const el = document.getElementById("ekip-bolum");
+  if (!el) return;
+  const inp = document.getElementById("ekip-em"), yazi = inp ? inp.value : "", odak = document.activeElement === inp;
+  el.outerHTML = ekipBolum();
+  const yeni = document.getElementById("ekip-em");
+  if (yeni && yazi) { yeni.value = yazi; if (odak) yeni.focus(); }
+}
+async function ekipCikar(id, btn) {
+  const o = EKIP;
+  busy(btn, true, "Lütfen bekleyin…");
+  let r;
+  try { r = await erpc("app_ekip_cikar", { p_id: ekNum(id) }); }
+  catch (e) { if (o !== EKIP) return; busy(btn, false); return setMsg("ekm", "err", esc(ekErr(e))); }
+  if (o !== EKIP) return;
+  EKIP = ekipBos();
+  EKIP.not = r && r.ok ? ["ok", "Güncellendi."] : ["info", "Bu kayıt zaten kaldırılmış; liste yenilendi."];
+  KLASOR = klasorBos();
+  ekipCiz();
+}
+async function ekipAyril(btn) {
+  const o = EKIP;
+  busy(btn, true, "Ayrılıyorsunuz…");
+  let r;
+  try { r = await erpc("app_ekip_ayril"); }
+  catch (e) { if (o !== EKIP) return; busy(btn, false); return setMsg("ekm", "err", esc(ekErr(e))); }
+  if (o !== EKIP) return;
+  EKIP = ekipBos(); KLASOR = klasorBos();
+  EKIP.not = r && r.ok ? ["ok", "Ekipten ayrıldınız. Artık kendi planınız geçerli."] : ["info", "Zaten bir ekipte değilsiniz."];
+  const not = EKIP.not;
+  await loadBen();
+  if (!S.ben) return render();
+  EKIP.not = not;
+  if (route === "hesap") render();
+}
+const EPOSTA_RX = /^[^\s@<>"]+@[^\s@<>"]+\.[^\s@<>"]{2,}$/;
+async function ekipDavet(f) {
+  const inp = f.querySelector("#ekip-em"), btn = f.querySelector("[type=submit]");
+  const email = String(inp.value || "").trim().toLowerCase();
+  if (!EPOSTA_RX.test(email) || email.length > 254) return setMsg("ekm", "err", "Geçerli bir e-posta adresi girin.");
+  if (email === String(S.ben?.email || "").toLowerCase()) return setMsg("ekm", "err", "Kendinizi davet edemezsiniz.");
+  setMsg("ekm", "", "");
+  busy(btn, true, "Davet gönderiliyor…");
+  const o = EKIP;
+  const r = await api("/api/app/ekip-davet", { email });
+  if (o !== EKIP) return;
+  if (!r.success) { busy(btn, false); return setMsg("ekm", "err", esc(r.message || "Davet gönderilemedi.")); }
+  EKIP = ekipBos();
+  EKIP.not = r.mail === "gonderildi" ? ["ok", `Davet ${email} adresine gönderildi. Bağlantı 14 gün geçerli.`]
+    : ["warn", "Davet oluşturuldu ancak e-posta şu an gönderilemedi. Daveti iptal edip biraz sonra yeniden gönderin."];
+  ekipCiz();
+}
+document.addEventListener("submit", e => {
+  if (e.target && e.target.id === "ekip-f") { e.preventDefault(); ekipDavet(e.target); }
+});
+document.addEventListener("click", e => {
+  const t = e.target.closest("[data-klasor],[data-klasor-ac],[data-klasor-sor],[data-klasor-sil],[data-klasor-vazgec],[data-klasor-yenile],[data-ekip-sor],[data-ekip-cikar],[data-ekip-vazgec],[data-ekip-ayril-sor],[data-ekip-ayril],[data-ekip-yenile],[data-davet-kabul],[data-davet-red]");
+  if (!t) return;
+  const d = t.dataset;
+  if (d.klasor) klasorKaydet(d.klasor, t);
+  else if (d.klasorAc) klasorAc(d.klasorAc);
+  else if (d.klasorSor) { KLASOR.sil = d.klasorSor; klasorCiz(); }
+  else if (d.klasorSil) klasorSil(d.klasorSil, t);
+  else if (t.hasAttribute("data-klasor-vazgec")) { KLASOR.sil = ""; klasorCiz(); }
+  else if (t.hasAttribute("data-klasor-yenile")) { KLASOR = klasorBos(); klasorCiz(); }
+  else if (d.ekipSor) { EKIP.sor = d.ekipSor; EKIP.not = null; ekipCiz(); }
+  else if (d.ekipCikar) ekipCikar(d.ekipCikar, t);
+  else if (t.hasAttribute("data-ekip-vazgec")) { EKIP.sor = ""; EKIP.ayril = false; ekipCiz(); }
+  else if (t.hasAttribute("data-ekip-ayril-sor")) { EKIP.ayril = true; EKIP.not = null; ekipCiz(); }
+  else if (t.hasAttribute("data-ekip-ayril")) ekipAyril(t);
+  else if (t.hasAttribute("data-ekip-yenile")) { EKIP = ekipBos(); ekipCiz(); }
+  else if (t.hasAttribute("data-davet-kabul")) davetKabul(t);
+  else if (t.hasAttribute("data-davet-red")) { store.set("davet", null); go("panel"); }
+});
 
 // ---------- Sekans ----------
 function pageSekans() {
@@ -1802,6 +2150,7 @@ function pageHesap() {
       <div class="scroll-x"><table class="tbl"><thead><tr><th>Araç</th><th>Bu ay (${esc(b.ay || "")})</th><th>Aylık hak</th></tr></thead><tbody>
       ${MODS.map(m => { const d = durum(m.k); return `<tr><td>${esc(m.ad)}</td><td>${d.kul}${m.k === "takip" ? " firma" : ""}</td><td>${d.lim < 0 ? "Sınırsız" : d.lim ? d.lim + (m.k === "takip" ? " firma (haftalık)" : "") : "Plana dahil değil"}</td></tr>`; }).join("")}
       </tbody></table></div><a class="btn btn-g btn-s" href="#/fiyatlar" style="margin-top:14px">Planları gör</a></section>
+    ${ekipBolum()}
     <section class="card pad"><div class="row" style="margin-bottom:6px"><h3>Fireflies bağlantısı</h3><span class="pill ${b.fireflies ? "ok" : ""}">${b.fireflies ? "Bağlı" : "Bağlı değil"}</span></div>
       ${b.fireflies ? `<p style="color:var(--mute);margin-bottom:14px">Toplantı analizi için Fireflies hesabınız bağlı. Anahtarı değiştirmek için yenisini kaydedin.</p><div id="fkm"></div><div class="row" style="justify-content:flex-start"><button class="btn btn-d btn-s" id="ffdel">Bağlantıyı kaldır</button></div><details style="margin-top:14px"><summary style="cursor:pointer;font-weight:600">Anahtarı değiştir</summary><div style="margin-top:12px">${ffConnect(true)}</div></details>` : ffConnect(true)}
     </section>
@@ -1983,7 +2332,7 @@ async function loadIlt() {
   catch (e) { ADM.iltErr = trErr(e); }
 }
 
-const PAGES = { giris: pageGiris, kayit: pageKayit, sifre: pageSifre, "yeni-sifre": pageYeniSifre, panel: pagePanel, rakip: pageRakip, sekans: pageSekans, seo: pageSeo, briefing: pageBriefing, fireflies: pageFireflies, takip: pageTakip, fiyatlar: pageFiyatlar, hesap: pageHesap, admin: pageAdmin, ozel: pageOzel };
+const PAGES = { giris: pageGiris, kayit: pageKayit, sifre: pageSifre, "yeni-sifre": pageYeniSifre, panel: pagePanel, rakip: pageRakip, sekans: pageSekans, seo: pageSeo, briefing: pageBriefing, fireflies: pageFireflies, takip: pageTakip, fiyatlar: pageFiyatlar, hesap: pageHesap, admin: pageAdmin, ozel: pageOzel, davet: pageDavet, klasor: pageKlasor };
 
 // ---------- Genel olaylar ----------
 document.addEventListener("focusin", e => { if (e.target.matches?.("[data-pay-in]")) e.target.select(); });
@@ -2001,7 +2350,7 @@ document.addEventListener("click", async e => {
     sh.classList.remove("open");
   }
   else if (t.hasAttribute("data-menu")) document.getElementById("shell")?.classList.toggle("open");
-  else if (t.hasAttribute("data-logout")) { await sb.auth.signOut(); S.session = null; S.ben = null; FIRMA = { v: undefined, yuk: false, err: "" }; LOGO_YENI = null; BILD = { v: undefined, yuk: false }; ADM = { rows: null, err: "", q: "" }; FF = { list: null, err: "", sel: "" }; TK = { list: null, err: "", edit: null, sil: "", run: {} }; PAY = { list: null, err: "", yuk: false }; go("giris"); }
+  else if (t.hasAttribute("data-logout")) { await sb.auth.signOut(); S.session = null; S.ben = null; FIRMA = { v: undefined, yuk: false, err: "" }; LOGO_YENI = null; BILD = { v: undefined, yuk: false }; ADM = { rows: null, err: "", q: "" }; FF = { list: null, err: "", sel: "" }; TK = { list: null, err: "", edit: null, sil: "", run: {} }; PAY = { list: null, err: "", yuk: false }; EKIP = ekipBos(); KLASOR = klasorBos(); DAVET = { sonuc: null }; go("giris"); }
   else if (t.hasAttribute("data-firma-yenile")) { FIRMA = { v: undefined, yuk: false, err: "" }; render(); }
   else if (t.dataset.paylas) paylas(t.dataset.paylas, t);
   else if (t.dataset.payKapat) payKapat(t.dataset.payKapat, t);
@@ -2038,14 +2387,14 @@ document.addEventListener("keydown", e => { if (e.key === "Escape") document.get
 sb.auth.onAuthStateChange((ev, session) => {
   S.session = session;
   if (ev === "PASSWORD_RECOVERY") { S.recovery = true; setTimeout(() => go("yeni-sifre"), 0); }
-  if (ev === "SIGNED_OUT") { S.ben = null; FIRMA = { v: undefined, yuk: false, err: "" }; LOGO_YENI = null; BILD = { v: undefined, yuk: false }; PAY = { list: null, err: "", yuk: false }; if (route && !AUTH_ROUTES.has(route)) setTimeout(render, 0); }
+  if (ev === "SIGNED_OUT") { S.ben = null; FIRMA = { v: undefined, yuk: false, err: "" }; LOGO_YENI = null; BILD = { v: undefined, yuk: false }; PAY = { list: null, err: "", yuk: false }; EKIP = ekipBos(); KLASOR = klasorBos(); DAVET = { sonuc: null }; if (route &&!AUTH_ROUTES.has(route)) setTimeout(render, 0); }
 });
 {
   const { data } = await sb.auth.getSession();
   S.session = data.session;
   if (S.session) await loadBen();
   if (/access_token|error_description|[?#&]type=/.test(initialHash))
-    history.replaceState(null, "", location.pathname + location.search + "#/" + (S.recovery && S.session ? "yeni-sifre" : S.session ? "panel" : "giris"));
+    history.replaceState(null, "", location.pathname + location.search + "#/" + (S.recovery && S.session ? "yeni-sifre" : S.session ? sonraki() : "giris"));
   window.addEventListener("hashchange", render);
   render();
   for (const k of Object.keys(JOBS)) if (JOBS[k].state === "run") poll(k); else if (S.session && JOBS[k].state === "err" && !JOBS[k].iade) iade(k, JOBS[k]);

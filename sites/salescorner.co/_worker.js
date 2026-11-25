@@ -2179,6 +2179,49 @@ async function bildirimCikis(req, sub) {
   return dhSayfa("Çıkış yapıldı", `<h1>Hatırlatmalardan çıktınız</h1><p>Deneme hatırlatma e-postaları artık size gönderilmeyecek. Fikrinizi değiştirirseniz Hesabım sayfasından yeniden açabilirsiniz.</p><a class="b g" href="${DH_APP}hesap">Hesabım</a>`);
 }
 
+// ---- Ekip daveti: kayıt veritabanında (app_ekip_davet), davet e-postası buradan gider. Jeton yalnız e-postada, yanıtta yok. ----
+const EKIP_NEDEN = {
+  uye: "Başka bir ekibin üyesisiniz; davet gönderemezsiniz.",
+  sure: "Planınızın süresi dolmuş. Davet göndermek için planınızı yenileyin.",
+  plan: "Ekip daveti Profesyonel (3 kişi) ve Ekip (5 kişi) planlarında var.",
+  email: "Geçerli bir e-posta adresi girin.",
+  kendi: "Kendinizi davet edemezsiniz.",
+  var: "Bu adrese zaten bir davet gönderilmiş ya da kişi ekibinizde.",
+  koltuk: "Planınızdaki kullanıcı sınırına ulaştınız. Bekleyen bir daveti iptal edebilir ya da planınızı yükseltebilirsiniz.",
+  gunluk: "Bugün için davet sınırına ulaştınız. Yarın tekrar deneyin.",
+};
+function ekipMailHtml(sahip, link) {
+  const kim = [str(sahip.ad, 60).trim(), str(sahip.sirket, 80).trim()].filter(Boolean);
+  const kimS = kim.length ? rtEsc(kim[0]) + (kim[1] ? ` (${rtEsc(kim[1])})` : "") : rtEsc(str(sahip.email, 120));
+  const bas = "Sales Corner ekibine davet edildiniz";
+  return `<!doctype html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${bas}</title></head>`
+    + `<body style="margin:0;padding:0;background:#f4f4f7"><div style="font-family:Arial,Helvetica,sans-serif;max-width:600px;margin:0 auto;padding:16px 12px;color:#222;line-height:1.55;font-size:15px">`
+    + `<div style="background:#0a0a0f;color:#fff;padding:18px 20px;border-radius:10px 10px 0 0"><div style="font-size:13px;opacity:.7;letter-spacing:.3px">SALES CORNER</div><div style="font-size:20px;font-weight:700;margin-top:4px">${bas}</div></div>`
+    + `<div style="background:#fff;border:1px solid #e5e5ea;border-top:0;padding:18px 20px;border-radius:0 0 10px 10px">`
+    + `<p style="margin:0 0 10px">Merhaba,</p><p><b>${kimS}</b> sizi Sales Corner ekibine davet etti. Daveti kabul ettiğinizde ekibin planındaki araç haklarını birlikte kullanır, çıktılarınızı ortak ekip klasöründe paylaşırsınız.</p>`
+    + dhKutu(`<div style="color:#444;font-size:14px">Daveti bu e-postanın gönderildiği adresle açtığınız hesapla kabul edebilirsiniz. Hesabınız yoksa bağlantıdan birkaç adımda oluşturabilirsiniz.</div>`)
+    + `<p style="margin:18px 0 4px">${dhBtn(link, "Daveti kabul et")}</p>`
+    + `<p style="color:#555;font-size:13px;margin:14px 0 0">Bağlantı 14 gün geçerlidir. Bu daveti beklemiyorsanız e-postayı yok sayabilirsiniz.</p>`
+    + `<p style="margin:22px 0 0">Kolay gelsin,<br>Sales Corner</p></div></div></body></html>`;
+}
+async function appEkipDavet(req, env) {
+  const au = appAuth(req);
+  if (!au) return fail("Oturum gerekli. Lütfen tekrar giriş yapın.", 401);
+  const b = await readBody(req);
+  const email = str(b.email, 254).trim().toLowerCase();
+  if (!RT_EMAIL.test(email)) return J({ success: false, neden: "email", message: EKIP_NEDEN.email });
+  const r = await sbRpc(au, "app_ekip_davet", { p_email: email });
+  if (!r.ok || !r.j) return fail(r.status === 401 ? "Oturum gerekli. Lütfen tekrar giriş yapın." : "Davet şu an gönderilemedi, lütfen biraz sonra tekrar deneyin.", r.status === 401 ? 401 : 500);
+  if (!r.j.ok) return J({ success: false, neden: str(r.j.neden, 20), message: EKIP_NEDEN[r.j.neden] || "Davet gönderilemedi." });
+  const jeton = str(r.j.jeton, 60);
+  let mail = "";
+  if (/^[0-9a-f]{48}$/.test(jeton) && RT_EMAIL.test(str(r.j.email, 254))) {
+    try { await rtMail(env, r.j.email, "Sales Corner ekibine davet edildiniz", ekipMailHtml({ ad: r.j.sahip_ad, sirket: r.j.sahip_sirket, email: r.j.sahip_email }, `${DH_APP}davet/${jeton}`)); mail = "gonderildi"; }
+    catch (e) { console.log("ekip davet mail", e?.message); mail = "hata"; }
+  } else mail = "hata";
+  return J({ success: true, mail, message: mail === "gonderildi" ? "Davet e-postası gönderildi." : "Davet oluşturuldu ama e-posta gönderilemedi. Daveti iptal edip yeniden gönderebilirsiniz." });
+}
+
 async function appRoute(req, env, url, path, cfctx) {
   if (req.method === "OPTIONS") return new Response(null, { status: 204 });
   const sub = path.slice("/api/app/".length);
@@ -2211,6 +2254,7 @@ async function appRoute(req, env, url, path, cfctx) {
     if (sub === "fireflies/liste" && req.method === "GET") return await ffListe(req);
     if (req.method !== "POST") return fail("Bulunamadı.", 404);
     if (sub === "iade") return await appIade(req);
+    if (sub === "ekip-davet") return await appEkipDavet(req, env);
     const modul = sub === "fireflies/analiz" ? "fireflies" : APP_MOD[sub] ? sub : "";
     if (!modul) return fail("Bulunamadı.", 404);
     const g = await appGate(req, modul);
