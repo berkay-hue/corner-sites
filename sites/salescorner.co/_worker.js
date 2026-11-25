@@ -3494,32 +3494,36 @@ const s7 = createSlide('sl_meetings');
 setBg(s7, C.navy);
 hdr(s7, 'GÖRÜŞMELER & PİPELINE');
 
+// Formdaki TÜM görüşmeler yazılır (25.11): ilk slaytta 3 satır + "+N", kalanlar devam slaytlarında
+const __gn = s => String(s == null ? '' : s).toLocaleLowerCase('tr').replace(/ı/g,'i').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,' ').trim();
+const __ayniKisi = (d, sd) => (__gn(d.kisi) && __gn(sd.name))
+  ? __gn(d.kisi) === __gn(sd.name) && (!__gn(d.firma) || !__gn(sd.company) || __gn(d.firma) === __gn(sd.company))
+  : __gn(d.firma) === __gn(sd.company);
 const allDone=[...sa(gor.gerceklesen)];
 sa(gor.from_sheet_done).forEach(sd=>{
-  if(!allDone.find(d=>d.firma===sd.company)) allDone.push({firma:sd.company,kisi:sd.name,title:'',tarih_veya_sebep:'Görüşme gerçekleşti',alan:sd.alan||''});
+  if(!allDone.find(d=>__ayniKisi(d,sd))) allDone.push({firma:sd.company,kisi:sd.name,title:'',tarih_veya_sebep:'Görüşme gerçekleşti',alan:sd.alan||''});
 });
-rect(s7,uid('gc'),0.35,0.85,4.5,2.5,C.cardBg);
-rect(s7,uid('ga'),0.35,0.85,4.5,0.04,C.green);
-txt(s7,uid('gl'),0.5,0.95,4.2,0.25,'GERÇEKLEŞEN ('+allDone.length+')',11,C.green,{bold:true});
-if(allDone.length===0){txt(s7,uid('gn'),0.5,1.3,4.2,0.4,'Gerçekleşen görüşme yok',9,C.steel);}
-else { allDone.slice(0,4).forEach((g,i)=>{
-  const y=1.3+(i*0.5);
-  txt(s7,uid('gf'),0.55,y,2.5,0.22,(g.firma||'').toUpperCase(),8,C.white,{bold:true});
-  txt(s7,uid('gk'),0.55,y+0.22,2.5,0.2,sf(g.kisi,'-')+(g.alan?'  ·  Alan: '+g.alan:''),8,C.amber);
-  txt(s7,uid('gd'),3.1,y+0.1,1.6,0.2,sf(g.tarih_veya_sebep || g.title,''),7,C.green);
-}); }
-
 const allPlan=sa(gor.planlanan);
-rect(s7,uid('pc'),5.15,0.85,4.5,2.5,C.cardBg);
-rect(s7,uid('pa'),5.15,0.85,4.5,0.04,C.orange);
-txt(s7,uid('pl'),5.3,0.95,4.2,0.25,'PLANLANAN ('+allPlan.length+')',11,C.orange,{bold:true});
-if(allPlan.length===0){txt(s7,uid('pn'),5.3,1.3,4.2,0.4,'Planlanan görüşme yok',9,C.steel);}
-else { allPlan.slice(0,4).forEach((g,i)=>{
-  const y=1.3+(i*0.5);
-  txt(s7,uid('pf'),5.3,y,2.5,0.22,(g.firma||'').toUpperCase(),8,C.white,{bold:true});
-  txt(s7,uid('pk'),5.3,y+0.22,2.55,0.2,sf(g.kisi,'-')+(g.alan?'  ·  Alan: '+g.alan:''),8,C.amber);
-  txt(s7,uid('pd'),7.9,y+0.1,1.6,0.2,sf(g.tarih_veya_sebep || g.title,''),7,C.orange);
-}); }
+const __ILK=4, __DEVAM=8;
+const __ilkN = n => n > __ILK ? __ILK - 1 : n;
+const gorSatir = (sid, g, x, y, renk) => {
+  txt(sid,uid('gf'),x,y,2.55,0.21,(g.firma||'-').toUpperCase(),8,C.white,{bold:true});
+  txt(sid,uid('gd'),x+2.6,y,1.55,0.21,sf(g.tarih_veya_sebep || g.title,''),7,renk,{align:'END'});
+  txt(sid,uid('gk'),x,y+0.21,4.15,0.22,sf(g.kisi,'-')+(g.alan?'  ·  Alan: '+g.alan:''),8,C.amber);
+};
+const gorKart = (sid, x, cardH, baslik, renk, liste, bas, adet, bosYazi, toplam) => {
+  rect(sid,uid('gc'),x,0.85,4.5,cardH,C.cardBg);
+  rect(sid,uid('ga'),x,0.85,4.5,0.04,renk);
+  txt(sid,uid('gl'),x+0.15,0.95,4.2,0.25,baslik+' ('+toplam+')',11,renk,{bold:true});
+  if(toplam===0){ if(bosYazi) txt(sid,uid('gn'),x+0.15,1.3,4.2,0.4,bosYazi,9,C.steel); return; }
+  liste.slice(bas, bas+adet).forEach((g,i)=>gorSatir(sid,g,x+0.2,1.3+(i*0.47),renk));
+};
+gorKart(s7,0.35,2.5,'GERÇEKLEŞEN',C.green,allDone,0,__ilkN(allDone.length),'Gerçekleşen görüşme yok',allDone.length);
+gorKart(s7,5.15,2.5,'PLANLANAN',C.orange,allPlan,0,__ilkN(allPlan.length),'Planlanan görüşme yok',allPlan.length);
+const __kalanD = allDone.length - __ilkN(allDone.length), __kalanP = allPlan.length - __ilkN(allPlan.length);
+const __devamSay = Math.max(Math.ceil(__kalanD/__DEVAM), Math.ceil(__kalanP/__DEVAM));
+if(__kalanD>0) txt(s7,uid('gm'),0.55,1.3+(3*0.47),4.1,0.3,'+'+__kalanD+' görüşme daha → sonraki slayt',8,C.green,{bold:true});
+if(__kalanP>0) txt(s7,uid('pm'),5.35,1.3+(3*0.47),4.1,0.3,'+'+__kalanP+' görüşme daha → sonraki slayt',8,C.orange,{bold:true});
 
 const plY=3.55;
 rect(s7,uid('pb'),0.35,plY,9.3,1.5,C.darkBg);
@@ -3537,6 +3541,15 @@ const tm=sn(gor.gerceklesen_count)+sn(gor.planlanan_count);
   txt(s7,uid('pt'),ox+0.1,py-0.01,ps.w-0.2,0.22,ps.l+'  '+ps.v,7,C.white,{bold:true});
 });
 ftr(s7);
+for(let __p=0; __p<__devamSay; __p++){
+  const sG = createSlide('sl_meetings_'+(__p+2));
+  setBg(sG, C.navy);
+  hdr(sG, 'GÖRÜŞMELER — DEVAM' + (__devamSay>1 ? ' ('+(__p+1)+'/'+__devamSay+')' : ''));
+  const dB = __ilkN(allDone.length) + __p*__DEVAM, pB = __ilkN(allPlan.length) + __p*__DEVAM;
+  if(dB<allDone.length) gorKart(sG,0.35,4.25,'GERÇEKLEŞEN',C.green,allDone,dB,__DEVAM,'',allDone.length);
+  if(pB<allPlan.length) gorKart(sG,5.15,4.25,'PLANLANAN',C.orange,allPlan,pB,__DEVAM,'',allPlan.length);
+  ftr(sG);
+}
 
 
 // ============================================================
