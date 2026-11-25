@@ -58,6 +58,8 @@ async function claude(env, content, { system, max = 8000, json = true } = {}) {
   catch { throw new Error(`Claude ${stop === "max_tokens" ? "yanıtı yarıda kesildi" : "geçersiz JSON"}`); }
 }
 const SYS = "Sen Sales Corner'ın (salescorner.co) B2B satış analisti ve yazarı yapay zekâsın. Sales Corner hizmetleri: HubSpot entegrasyonu, AI otomasyonu, lead generation (LinkedIn + cold call + e-posta outbound), rakip analizi ve teklif hazırlama. Türkçe, net ve somut yaz; uydurma rakam verme, tahminleri 'tahmini' diye işaretle. Yalnızca istenen JSON nesnesini döndür, başka metin yazma.";
+// Uygulama kullanıcısının firma profili varsa: satıcı kimliği istemdeki SATICI bloğundan gelir
+const SYS_SATICI = "Sen B2B satış analisti ve yazarı bir yapay zekâsın; istemdeki SATICI firma adına çalışırsın. Türkçe, net ve somut yaz; uydurma rakam verme, tahminleri 'tahmini' diye işaretle. Yalnızca istenen JSON nesnesini döndür, başka metin yazma.";
 
 // ---------- web sayfası okuma ----------
 const normUrl = s => {
@@ -150,14 +152,19 @@ async function briefing(req, env, origin) {
   const firma = str(b.firma_adi, 120), kisi = str(b.kisi_adi, 120);
   if (!firma && !b.firma_website) return fail("Firma adı veya web sitesi gerekli.");
   const site = await getPage(b.firma_website, 10000);
-  const ai = await claude(env, `Bir satış toplantısı öncesi brifing hazırla.
+  const sat = saticiOf(b.satici);
+  const ai = await claude(env, `Bir satış toplantısı öncesi brifing hazırla.${sat ? `
+SATICI (biz; önerileri ve SPIN sorularını bizim ürünlerimiz üzerinden kur):
+${saticiMetin(sat)}
+
+Toplantı yapılacak potansiyel müşteri:` : ""}
 Firma: ${firma} · Web: ${site.url || str(b.firma_website, 300)} · LinkedIn: ${str(b.firma_linkedin, 300)}
 Kişi: ${kisi} · ${str(b.kisi_email, 200)} · LinkedIn: ${str(b.kisi_linkedin, 300)}
 Toplantı: ${str(b.toplanti_tarihi, 40)} ${str(b.toplanti_saati, 20)} · Konu: ${str(b.toplanti_konusu, 500)}
 Web sitesi metni (kısaltılmış): ${site.text || "(okunamadı)"}
 
-JSON: {"f_skor":0-100 firma uygunluk puanı,"k_skor":0-100 kişi karar verici puanı,"deal_pct":0-100 kapanış olasılığı,"en_uygun_hizmet":"Sales Corner hizmetlerinden biri","slides":[{"baslik":"...","maddeler":["..."],"not":"..."}]}
-7-8 slayt: Firma özeti, Kişi ve rolü, Olası ihtiyaçlar/acılar, SPIN - Situation soruları, SPIN - Problem soruları, SPIN - Implication soruları, SPIN - Need-payoff soruları, Toplantı akışı ve sonraki adım. LinkedIn sayfalarını göremiyorsun; kişi hakkında tahminlerini 'tahmini' diye işaretle.`, { system: SYS, max: 7000 });
+JSON: {"f_skor":0-100 firma uygunluk puanı,"k_skor":0-100 kişi karar verici puanı,"deal_pct":0-100 kapanış olasılığı,"en_uygun_hizmet":"${sat ? "Satıcı firmanın ürünlerinden biri" : "Sales Corner hizmetlerinden biri"}","slides":[{"baslik":"...","maddeler":["..."],"not":"..."}]}
+7-8 slayt: Firma özeti, Kişi ve rolü, Olası ihtiyaçlar/acılar, SPIN - Situation soruları, SPIN - Problem soruları, SPIN - Implication soruları, SPIN - Need-payoff soruları, Toplantı akışı ve sonraki adım. LinkedIn sayfalarını göremiyorsun; kişi hakkında tahminlerini 'tahmini' diye işaretle.`, { system: sat ? SYS_SATICI : SYS, max: 7000 });
   const slides = aiSlides(ai.slides);
   const f = Math.round(num(ai.f_skor)), k = Math.round(num(ai.k_skor)), d = Math.round(num(ai.deal_pct));
   slides.unshift({ b: `${firma || site.url} · Toplantı Brifingi`, k: [["Firma skoru", f], ["Kişi skoru", k], ["Kapanış olasılığı", `%${d}`], ["En uygun hizmet", str(ai.en_uygun_hizmet, 80)], ["Toplantı", `${str(b.toplanti_tarihi, 40)} ${str(b.toplanti_saati, 20)}`.trim()]] });
@@ -1648,7 +1655,27 @@ async function appCharge(au, modul, execId) {
   if (!u.ok || !u.j) { console.log("app_kullan", u.status); return null; }
   return u.j.ok ? { limit: u.j.limit, kalan: u.j.kalan } : { limit: u.j.limit ?? 0, kalan: 0 };
 }
-function appBody(modul, b, email) {
+// Firma profili (Hesabım > Firma profili): briefing'de "biz" kimiz, sekansta kendi firmamızın bilgisi
+async function appFirma(au) {
+  try { const r = await sbRpc(au, "app_firma_al", {}); return r.ok && r.j && typeof r.j === "object" && !Array.isArray(r.j) ? r.j : null; } catch { return null; }
+}
+function saticiOf(f) {
+  if (!f || typeof f !== "object" || Array.isArray(f)) return null;
+  const t = (v, n) => str(v, n).replace(/\s+/g, " ");
+  const s = {
+    firma_adi: t(f.firma_adi, 160), web: t(f.web, 300), sektor: t(f.sektor, 160),
+    urunler: (Array.isArray(f.urunler) ? f.urunler : String(f.urunler ?? "").split(/\r?\n/)).map(x => t(x, 120)).filter(Boolean).slice(0, 6),
+    hedef: t(f.hedef, 600), deger: t(f.deger, 800), rakipler: t(f.rakipler, 400), referanslar: t(f.referanslar, 600),
+  };
+  return s.firma_adi || s.urunler.length ? s : null;
+}
+function saticiMetin(s) {
+  return [`Firma: ${s.firma_adi || "-"}`, s.web && `Web: ${s.web}`, s.sektor && `Sektör: ${s.sektor}`,
+    s.urunler.length && `Ürün/hizmetler: ${s.urunler.join("; ")}`, s.hedef && `Hedef müşteri: ${s.hedef}`,
+    s.deger && `Değer önerisi: ${s.deger}`, s.rakipler && `Rakipler: ${s.rakipler}`, s.referanslar && `Referans müşteriler: ${s.referanslar}`].filter(Boolean).join("\n");
+}
+const hostOf = u => { const n = normUrl(u); try { return n ? new URL(n).hostname.replace(/^www\./, "").toLowerCase() : ""; } catch { return ""; } };
+function appBody(modul, b, email, firma = null) {
   const ep = b.eposta === true ? email : "";
   if (modul === "rakip") return {
     company_name: str(b.company_name, 150), company_website: str(b.company_website, 300),
@@ -1657,10 +1684,19 @@ function appBody(modul, b, email) {
   };
   if (modul === "sekans") {
     const pdf = b.source_type === "pdf";
+    const ad = str(b.company_name, 150), dom = pdf ? "" : str(b.domain, 300);
+    // Sekanstaki firma satıcıdır: kendi firmamızsa profil bilgisi notların başına eklenir
+    const biz = firma && ((firma.firma_adi && ad && firma.firma_adi.toLocaleLowerCase("tr") === ad.toLocaleLowerCase("tr"))
+      || (firma.web && dom && hostOf(firma.web) && hostOf(firma.web) === hostOf(dom)));
+    const not = str(b.source_notes, 3000);
+    // Kullanıcının notu önceliklidir; profil 3000 sınırında kalan yere sığdırılır
+    const hdr = "Firma profili (kendi firmamız):\n";
+    const pro = biz ? str(saticiMetin(firma), Math.max(0, 3000 - not.length - hdr.length - 2)) : "";
     return {
-      token: "sc_sekans_2026_prod", company_name: str(b.company_name, 150), source_type: pdf ? "pdf" : "website",
-      ...(pdf ? { pdf_text: str(b.pdf_text, 6000) } : { domain: str(b.domain, 300) }),
-      source_notes: str(b.source_notes, 3000), writer_name: str(b.writer_name, 100), recipient_email: ep,
+      token: "sc_sekans_2026_prod", company_name: ad, source_type: pdf ? "pdf" : "website",
+      ...(pdf ? { pdf_text: str(b.pdf_text, 6000) } : { domain: dom }),
+      source_notes: pro ? (not ? `${not}\n\n${hdr}${pro}` : `${hdr}${pro}`) : not,
+      writer_name: str(b.writer_name, 100), recipient_email: ep,
     };
   }
   if (modul === "seo") return { website_url: str(b.website_url, 300) };
@@ -1668,7 +1704,7 @@ function appBody(modul, b, email) {
     firma_adi: str(b.firma_adi, 150), firma_website: str(b.firma_website, 300), firma_linkedin: str(b.firma_linkedin, 300),
     kisi_adi: str(b.kisi_adi, 120), kisi_email: str(b.kisi_email, 200), kisi_linkedin: str(b.kisi_linkedin, 300),
     toplanti_tarihi: str(b.toplanti_tarihi, 20), toplanti_saati: str(b.toplanti_saati, 10), toplanti_konusu: str(b.toplanti_konusu, 1000),
-    bildirim_email: email,
+    bildirim_email: email, satici: firma,
   };
 }
 function appValid(modul, x) {
@@ -1692,7 +1728,8 @@ async function appInner(req, env, url, cfctx, target, body) {
   return POST[target](ir, env, url.origin);
 }
 async function appRun(req, env, url, cfctx, modul, au, b) {
-  const x = appBody(modul, b, jwtEmail(au));
+  const firma = modul === "briefing" || modul === "sekans" ? saticiOf(await appFirma(au)) : null;
+  const x = appBody(modul, b, jwtEmail(au), firma);
   const bad = appValid(modul, x);
   if (bad) return fail(bad, 400);
   let j = null, st = 0;
@@ -3994,7 +4031,16 @@ return [{ json: {
   toplanti_konusu: body.toplanti_konusu || 'Hizmet Sunumu',
   bildirim_email:  body.bildirim_email || 'berkay@saascorner.co',
   _skip: false,
-  _event_id: ''
+  _event_id: '',
+  satici: (function (v) {
+    // Uygulama kullanıcısının firma profili (Hesabım > Firma profili); yoksa null → eski SaaS Corner akışı
+    if (!v || typeof v !== 'object' || Array.isArray(v)) return null;
+    const t = function (x, n) { return String(x == null ? '' : x).replace(/\s+/g, ' ').trim().slice(0, n); };
+    const u = (Array.isArray(v.urunler) ? v.urunler : String(v.urunler || '').split(/\r?\n/)).map(function (x) { return t(x, 120); }).filter(Boolean).slice(0, 6);
+    const s = { firma_adi: t(v.firma_adi, 160), web: t(v.web, 300), sektor: t(v.sektor, 160), urunler: u,
+      hedef: t(v.hedef, 600), deger: t(v.deger, 800), rakipler: t(v.rakipler, 400), referanslar: t(v.referanslar, 600) };
+    return s.firma_adi || u.length ? s : null;
+  })(body.satici)
 }}];
 
 })()}},"cred":null},"Mevcut Müşteriler":{"name":"Mevcut Müşteriler","t":"googleSheets","p":{"documentId":{"__rl":true,"value":"__ENV_SHEET_ID_1__","mode":"id"},"sheetName":{"__rl":true,"value":"gid=0","mode":"list"},"options":{}},"cred":"googleSheetsOAuth2Api","cof":"item"},"Müşteri Kontrol":{"name":"Müşteri Kontrol","t":"code","p":{"code":async function($input,$,$json,$env,$execution,$itemIndex,helpers,Buffer,items,$node){return (async()=>{
@@ -4034,7 +4080,12 @@ try {
   });
 } catch(e) {}
 
-const allClients = HARDCODE_CLIENTS.concat(sheetClients);
+// Uygulama kullanıcısı firma profili verdiyse SaaS Corner müşteri listesi yerine onun referansları kullanılır
+const allClients = form.satici
+  ? String(form.satici.referanslar || '').split(/[,;\n]+/).map(function (x) { return x.trim().toLowerCase(); })
+      .filter(function (x) { return x.length > 1; }).slice(0, 30)
+      .map(function (x) { return { firma: x, domain: '', durum: 'referans' }; })
+  : HARDCODE_CLIENTS.concat(sheetClients);
 
 let matched = false;
 let matchedClient = '';
@@ -4101,9 +4152,29 @@ const apolloPerStr = JSON.stringify({
 const websiteStr = 'Title: ' + (webD.w_title||'') + ' | Meta: ' + (webD.w_meta||'') + ' | Content: ' + (webD.w_text||'').substring(0,1500);
 const clientsStr = clientMatch.client_list_json || '[]';
 const clientMatchStr = JSON.stringify({ firma_matched: clientMatch.firma_matched, matched_client: clientMatch.matched_client });
-const formStr = JSON.stringify(form);
-
-const promptParts = [
+// Satıcı (biz) = uygulama kullanıcısının firma profili; yoksa eski SaaS Corner metni
+const sat = (form && form.satici && typeof form.satici === 'object') ? form.satici : null;
+const formNoSat = Object.assign({}, form); delete formNoSat.satici;
+const formStr = JSON.stringify(formNoSat);
+const HKEY = ['lead_gen', 'influencer', 'sosyal_medya', 'otomasyon'];
+const satUrun = sat ? ((sat.urunler || []).length ? sat.urunler.slice(0, 4) : [(sat.firma_adi || 'Firmamiz') + ' cozumu']) : null;
+const saticiBlok = sat ? [
+  'Sen ' + (sat.firma_adi || 'satici firma') + ' icin toplanti oncesi briefing hazirlayan kidemli satis stratejistisin. SDR ve AE lerin toplantiya hazirlanmasina destek veriyorsun.',
+  'Biz asagidaki SATICI firmayiz; Form Bilgileri icindeki firma toplanti yapacagimiz potansiyel musteridir. Onerileri, itiraz cevaplarini ve email taslagini bizim urunlerimiz uzerinden yaz.',
+  '',
+  'SATICI FIRMA (BIZ):',
+  'Firma: ' + (sat.firma_adi || '-'),
+  sat.web ? 'Web: ' + sat.web : '',
+  sat.sektor ? 'Sektor: ' + sat.sektor : '',
+  sat.hedef ? 'Hedef musteri profilimiz: ' + sat.hedef : '',
+  sat.deger ? 'Deger onerimiz: ' + sat.deger : '',
+  sat.rakipler ? 'Rakiplerimiz: ' + sat.rakipler : '',
+  (sat.urunler || []).length > 4 ? 'Tum urun/hizmetlerimiz (oneri, itiraz cevabi ve email icin hepsini kullanabilirsin): ' + sat.urunler.join('; ') : '',
+  '',
+  'URUN/HIZMETLERIMIZ (JSON hizmet anahtarlarina bu sirayla yaz):',
+].concat(satUrun.map(function (u, i) { return (i + 1) + '. ' + u + '  -> hizmet.' + HKEY[i]; }))
+ .concat(satUrun.length < 4 ? ['Kullanilmayan anahtarlar (' + HKEY.slice(satUrun.length).join(', ') + ') icin skor 0 ve neden "" yaz.'] : [])
+ .filter(function (x, i, a) { return x !== '' || (i > 0 && a[i - 1] !== ''); }) : [
   'Sen SAAS Corner icin toplanti oncesi briefing hazirlayan kidemli satis stratejistisin. SDR ve AE lerin toplantiya hazirlanmasina destek veriyorsun.',
   '',
   'SAAS CORNER HIZMETLERI:',
@@ -4111,8 +4182,22 @@ const promptParts = [
   '2. Brand Corner - Influencer Marketing (marka-influencer eslestirme)',
   '3. CRM Corner - Sosyal Medya ve CRM Yonetimi (LinkedIn icerik uretimi, strateji)',
   '4. Social Media Corner - Satis Otomasyonu (n8n workflow, CRM entegrasyonu, raporlama)',
+];
+const hizmetSkor = sat ? [
+  'HIZMET SKORLARI (urunlerimizin her biri icin 0-100):',
+  'Hedef musteri profilimize uyum: +30 | urunun cozdugu ihtiyacin sinyalleri (website/Apollo): +30 | firma buyuklugu ve butce uyumu: +20 | zamanlama/buyume sinyali: +20',
+  'hizmet.en_uygun alanina urunlerimizden birinin adini yaz.',
+] : [
+  'HIZMET SKORLARI:',
+  'Lead Gen: B2B: +30 | calisan 10+: +20 | satis ekibi: +20 | LI aktif: +15 | website: +15',
+  'Brand Corner/Influencer: B2C urun: +40 | sosyal medya odakli: +30 | dusuk marka: +20 | butce: +10',
+  'CRM Corner/Sosyal Medya: LI takipci <5000: +25 | az icerik: +25 | dusuk marka: +25 | B2B: +15 | kisi LI aktif: +10',
+  'Social Media Corner/Otomasyon: CRM yok/basit: +30 | karmasik surec: +25 | calisan 20+: +20 | zengin tech: +15 | B2B: +10',
+];
+
+const promptParts = saticiBlok.concat([
   '',
-  'MEVCUT MUSTERILER LISTESI: ' + clientsStr,
+  (sat ? 'REFERANS MUSTERILERIMIZ: ' : 'MEVCUT MUSTERILER LISTESI: ') + clientsStr,
   'MUSTERI ESLEME SONUCU: ' + clientMatchStr,
   '',
   'VERILER:',
@@ -4152,11 +4237,7 @@ const promptParts = [
   'deal_pct = (firma_skoru * 0.3 + kisi_skoru * 0.3 + en_yuksek_hizmet_skoru * 0.4)',
   '5 in en yakin katina yuvarla. deal_pct_label = %X',
   '',
-  'HIZMET SKORLARI:',
-  'Lead Gen: B2B: +30 | calisan 10+: +20 | satis ekibi: +20 | LI aktif: +15 | website: +15',
-  'Brand Corner/Influencer: B2C urun: +40 | sosyal medya odakli: +30 | dusuk marka: +20 | butce: +10',
-  'CRM Corner/Sosyal Medya: LI takipci <5000: +25 | az icerik: +25 | dusuk marka: +25 | B2B: +15 | kisi LI aktif: +10',
-  'Social Media Corner/Otomasyon: CRM yok/basit: +30 | karmasik surec: +25 | calisan 20+: +20 | zengin tech: +15 | B2B: +10',
+]).concat(hizmetSkor).concat([
   '',
   'KURAL 3 - ICE BREAKERS (SDR icin kritik):',
   '3 farkli hazir acilis cumlesi. Dogal, samimi konusma dili. [Isim] Bey/Hanim ile baslat.',
@@ -4218,7 +4299,7 @@ const promptParts = [
   '  "referans_potansiyeli": "",',
   '  "email_taslagi": {"konu":"","body":""}',
   '}'
-];
+]);
 
 const promptText = promptParts.join('\n');
 const geminiBody = JSON.stringify({
@@ -4234,6 +4315,7 @@ return [{ json: {
   client_match: clientMatchStr,
   bildirim_email: form.bildirim_email || 'berkay@saascorner.co',
   li_person: '{}', li_posts: '[]', li_co: '{}',
+  satici_urunler: satUrun,
   gemini_body: geminiBody
 }}];
 
@@ -4345,7 +4427,10 @@ return [{json:{
   oto:h.otomasyon?.skor||0,
   en_uygun:h.en_uygun||'',
   cross_sell:h.cross_sell||'',
-  hizmet_detay:`LG:${h.lead_gen?.skor||0} ${h.lead_gen?.neden||''} | INF:${h.influencer?.skor||0} ${h.influencer?.neden||''} | SM:${h.sosyal_medya?.skor||0} ${h.sosyal_medya?.neden||''} | OTO:${h.otomasyon?.skor||0} ${h.otomasyon?.neden||''}`,
+  hizmet_detay:(function(){let ad=null;try{const u=$('Verileri Hazırla').first().json.satici_urunler;if(Array.isArray(u)&&u.length)ad=u;}catch(e){}
+    const k=['lead_gen','influencer','sosyal_medya','otomasyon'],kis=['LG','INF','SM','OTO'];
+    return k.map((x,i)=>ad&&i>=ad.length?'':`${ad?ad[i]:kis[i]}:${h[x]?.skor||0} ${h[x]?.neden||''}`).filter(Boolean).join(' | ');})(),
+  hizmet_adlari:(function(){try{const u=$('Verileri Hazırla').first().json.satici_urunler;return Array.isArray(u)&&u.length?u.slice(0,4):null;}catch(e){return null;}})(),
   // Firma profili — FLAT alanlar (slides builder doğrudan okur)
   f_ozet:f.ozet||'',
   sektor:f.sektor||'',
@@ -4770,20 +4855,21 @@ scoreCircle(s4, 1.9, 1.08, r4, kSkor, 'Kişi');
 if (!isMevcut) scoreCircle(s4, 3.3, 1.08, r4, dealPct, 'Deal %');
 
 txt(s4, uid('sh'), 5.1, 0.7, 4.5, 0.28, '🛠️  Hizmet Skorları', 11, C.navy, { bold:true });
-scorebar(s4, 5.1, 1.05, 4.5, 'Lead Generation',         lgSkor);
-scorebar(s4, 5.1, 1.42, 4.5, 'Brand Corner (Influencer)', infSkor);
-scorebar(s4, 5.1, 1.79, 4.5, 'CRM Corner (Sosyal Medya)', smSkor);
-scorebar(s4, 5.1, 2.16, 4.5, 'Social Media (Otomasyon)',  otoSkor);
+// Firma profili verilmişse (hizmet_adlari) çubuklar kullanıcının kendi ürün adlarıyla çizilir
+const HAD4 = Array.isArray(actualData.hizmet_adlari) && actualData.hizmet_adlari.length ? actualData.hizmet_adlari.slice(0, 4).map(function (x) { return String(x).slice(0, 40); }) : null;
+const HBAR4 = HAD4 ? HAD4.map(function (ad, i) { return [ad, [lgSkor, infSkor, smSkor, otoSkor][i]]; })
+  : [['Lead Generation', lgSkor], ['Brand Corner (Influencer)', infSkor], ['CRM Corner (Sosyal Medya)', smSkor], ['Social Media (Otomasyon)', otoSkor]];
+for (var ib = 0; ib < HBAR4.length; ib++) scorebar(s4, 5.1, 1.05 + ib * 0.37, 4.5, HBAR4[ib][0], HBAR4[ib][1]);
 
 rect(s4, uid('dv'), 0.3, 2.68, W-0.6, 0.01, C.border);
 txt(s4, uid('eu'), 0.3, 2.82, W-0.6, 0.32, '🏆  En Uygun: ' + enUygun, 12, C.navy, { bold:true });
 
 const hizmetDetails4 = [
-  ['Lead Gen',     h.lead_gen     && h.lead_gen.neden     || ''],
-  ['Brand Corner', h.influencer   && h.influencer.neden   || ''],
-  ['CRM Corner',   h.sosyal_medya && h.sosyal_medya.neden || ''],
-  ['Otomasyon',    h.otomasyon    && h.otomasyon.neden    || ''],
-];
+  [HAD4 ? HAD4[0] : 'Lead Gen',     h.lead_gen     && h.lead_gen.neden     || ''],
+  [HAD4 ? HAD4[1] : 'Brand Corner', h.influencer   && h.influencer.neden   || ''],
+  [HAD4 ? HAD4[2] : 'CRM Corner',   h.sosyal_medya && h.sosyal_medya.neden || ''],
+  [HAD4 ? HAD4[3] : 'Otomasyon',    h.otomasyon    && h.otomasyon.neden    || ''],
+].filter(function (r, i) { return !HAD4 || i < HAD4.length; });
 var hy4 = 3.22;
 for (var ih=0; ih<hizmetDetails4.length; ih++) {
   var hlbl=hizmetDetails4[ih][0], hnd=hizmetDetails4[ih][1];

@@ -43,6 +43,7 @@ const P = {
   check: '<path d="M20 6 9 17l-5-5"/>',
   up: '<path d="M7 17 17 7M7 7h10v10"/>',
   menu: '<path d="M4 6h16M4 12h16M4 18h16"/>',
+  user: '<circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/>',
 };
 const ic = (k, z) => ico(P[k], z);
 
@@ -148,6 +149,33 @@ async function rpc(fn, args) {
     throw error;
   }
   return data;
+}
+// Firma profili (Hesabım > Firma profili): briefing/sekans "biz kimiz" bilgisini buradan alır
+let FIRMA = { v: undefined, yuk: false, err: "" };
+const FIRMA_ALAN = [["firma_adi", "Firma adı"], ["web", "Web sitesi"], ["urunler", "Ürün / hizmetler"], ["hedef", "Hedef müşteri"], ["deger", "Değer önerisi"]];
+const firmaEksik = f => FIRMA_ALAN.filter(([k]) => !String(f?.[k] ?? "").trim());
+// Sonucu yalnız başladığı FIRMA nesnesine yazar; arada çıkış yapıldıysa (FIRMA yenilendiyse) false döner
+async function loadFirma() {
+  const o = FIRMA;
+  o.yuk = true; o.err = "";
+  try { const r = await rpc("app_firma_al"); o.v = r && typeof r === "object" && !Array.isArray(r) ? r : null; }
+  catch (e) { o.err = trErr(e); o.v = null; }
+  o.yuk = false;
+  return o === FIRMA;
+}
+// Kullanıcı bir alana yazdıysa geç gelen profil yüzünden sayfayı yeniden çizip yazdığını silmeyelim
+let yaziSay = 0;
+$app.addEventListener("input", () => { yaziSay++; });
+// Sayfa ilk açıldığında profil yoksa bir kez çeker, gelince o sayfadaysak yeniden çizer (hata olursa "Tekrar dene" ile yeniden ister)
+function firmaIste(sayfa) {
+  if (FIRMA.v !== undefined || FIRMA.yuk) return;
+  const y = yaziSay;
+  loadFirma().then(ok => {
+    if (!ok || route !== sayfa) return;
+    if (yaziSay === y) return render();
+    const el = document.getElementById("firma");
+    if (sayfa === "hesap" && el && S.ben) { el.outerHTML = firmaBolum(S.ben); bindFirma(); }
+  });
 }
 async function loadBen() {
   try { S.ben = await rpc("app_ben"); S.benErr = ""; S.setupErr = false; }
@@ -533,6 +561,11 @@ function pagePanel() {
   const b = S.ben, kalan = daysLeft(b.bitis);
   const toplam = Object.values(b.kullanim || {}).reduce((a, n) => a + Number(n || 0), 0);
   const ad = (b.ad || "").split(" ")[0];
+  firmaIste("panel");
+  const eksik = FIRMA.v !== undefined && !FIRMA.err ? firmaEksik(FIRMA.v) : [];
+  const dolu = FIRMA_ALAN.length - eksik.length;
+  const profil = eksik.length ? `<div class="banner trial" style="align-items:center"><div style="flex:1;min-width:240px"><b style="display:flex;align-items:center;gap:6px">${ic("user", 16)}Profilinizi doldurun · %${Math.round((dolu / FIRMA_ALAN.length) * 100)}</b><span>Briefing ve sekanslar firmanızı, ürünlerinizi ve hedef müşterinizi bu bilgilerden tanır. Eksik: ${eksik.map(([, a]) => esc(a)).join(", ")}.</span>
+    <div class="meter" aria-hidden="true" style="margin-top:10px;max-width:320px"><i style="width:${(dolu / FIRMA_ALAN.length) * 100}%"></i></div></div><a class="btn btn-p" href="#/hesap">Profili doldur</a></div>` : "";
   let banner = "";
   if (!b.aktif) banner = `<div class="banner end"><div><b>${esc(NEDEN.sure())}</b><br><span>Araçları kullanmaya devam etmek için bir plan seçin; verileriniz ve geçmişiniz korunur.</span></div><a class="btn btn-p" href="#/fiyatlar">Planları gör</a></div>`;
   else if (b.plan === "deneme") banner = `<div class="banner trial"><div><b>Ücretsiz denemenizin bitmesine ${kalan} gün kaldı.</b><br><span>Bütün araçları deneyin; devam etmek istediğinizde size uygun planı seçin.</span></div><a class="btn btn-g" href="#/fiyatlar">Planları gör</a></div>`;
@@ -551,6 +584,7 @@ function pagePanel() {
   };
   shell(`${ph(`Merhaba${ad ? ", " + esc(ad) : ""}`, "Bugün hangi satış işini hızlandıralım?")}
   ${banner}
+  ${profil}
   ${b.admin ? msg("info", `${ic("shield", 16)}<span>Yönetici hesabıyla girdiniz. <a href="#/admin">Kullanıcılar ve planlar</a> · <a href="${SITE}/dashboard">Eski panele dön</a></span>`) : ""}
   ${run.map(m => msg("info", `<span class="spin s"></span><span><b>${esc(m.ad)}</b> arka planda hazırlanıyor. Bu sekme açık kaldığı sürece devam eder. <a href="#/${m.k}">İzle →</a></span>`)).join("")}
   <div class="stats">
@@ -707,10 +741,11 @@ function urlRows(f) {
 
 // ---------- Rakip analizi ----------
 function pageRakip() {
-  const b = S.ben;
+  const b = S.ben, fp = FIRMA.v || {};
+  firmaIste("rakip");
   toolShell("rakip", `<form id="f" data-sk-noform>
-    <div class="f"><label for="cn">Firma adınız</label><input class="in" id="cn" required maxlength="150" value="${esc(b.sirket || "")}"></div>
-    <div class="f"><label for="cw">Web siteniz</label><input class="in" id="cw" inputmode="url" placeholder="ornek.com" required></div>
+    <div class="f"><label for="cn">Firma adınız</label><input class="in" id="cn" required maxlength="150" value="${esc(fp.firma_adi || b.sirket || "")}"></div>
+    <div class="f"><label for="cw">Web siteniz</label><input class="in" id="cw" inputmode="url" placeholder="ornek.com" required value="${esc(fp.web || "")}"></div>
     <div class="f"><label>Rakip siteleri <span class="hint">(1–5)</span></label><div id="urls" style="display:grid;gap:8px"></div>
       <button type="button" class="linkbtn" id="add" style="justify-self:start">+ Rakip ekle</button></div>
     <div class="f"><label style="display:flex;gap:8px;align-items:center;font-weight:500"><input type="checkbox" id="mail" checked> Sunum linkini e-postama da gönder</label></div>
@@ -724,7 +759,8 @@ function pageRakip() {
     box.insertAdjacentHTML("beforeend", `<div class="row" style="flex-wrap:nowrap"><input class="in" data-url inputmode="url" placeholder="rakip${i}.com" aria-label="Rakip ${i}" value="${esc(v)}"><button type="button" class="iconbtn" data-rm aria-label="Kaldır">✕</button></div>`);
     document.getElementById("add").hidden = box.children.length >= 5;
   };
-  add(); add();
+  const pr = String(fp.rakipler || "").split(/[,;\n]+/).map(x => x.trim()).filter(x => /\.[a-z]{2,}/i.test(x)).slice(0, 5);
+  if (pr.length) pr.forEach(u => add(u)); else { add(); add(); }
   document.getElementById("add").onclick = () => { add(); box.lastElementChild.querySelector("input").focus(); };
   box.onclick = e => { if (e.target.closest("[data-rm]") && box.children.length > 1) { e.target.closest(".row").remove(); document.getElementById("add").hidden = false; } };
   f.onsubmit = async e => {
@@ -777,7 +813,7 @@ function pageSekans() {
     <div class="f"><label>Kaynak</label><div class="tabs" role="tablist" style="margin:0"><button type="button" role="tab" aria-selected="true" data-src="website">Web sitesi</button><button type="button" role="tab" aria-selected="false" data-src="pdf">Metin / doküman</button></div></div>
     <div class="f" data-pane="website"><label for="dm">Firmanın web sitesi</label><input class="in" id="dm" inputmode="url" placeholder="hedeffirma.com"></div>
     <div class="f" data-pane="pdf" hidden><label for="tx">Doküman metni</label><textarea class="in" id="tx" maxlength="6000" placeholder="Sunum, teklif ya da PDF metnini buraya yapıştırın"></textarea><span class="hint"><span id="txn">0</span> / 6000 karakter</span></div>
-    <div class="f"><label for="nt">Notlar <span class="hint">(isteğe bağlı)</span></label><textarea class="in" id="nt" maxlength="3000" placeholder="Ne satıyorsunuz, kime ulaşmak istiyorsunuz, ton tercihi…"></textarea></div>
+    <div class="f"><label for="nt">Notlar <span class="hint">(isteğe bağlı)</span></label><textarea class="in" id="nt" maxlength="3000" placeholder="Ne satıyorsunuz, kime ulaşmak istiyorsunuz, ton tercihi…"></textarea><span class="hint">Hedef firma kendi firmanızsa <a href="#/hesap">firma profilinizdeki</a> bilgiler otomatik eklenir.</span></div>
     <div class="f"><label for="wn">İmzada görünecek ad</label><input class="in" id="wn" maxlength="100" value="${esc(b.ad || "")}" required></div>
     <div class="f"><label style="display:flex;gap:8px;align-items:center;font-weight:500"><input type="checkbox" id="mail" checked> Sonucu e-postama da gönder</label></div>
     <div id="m"></div>
@@ -844,7 +880,12 @@ function seoResult(r) {
 
 // ---------- Briefing ----------
 function pageBriefing() {
-  toolShell("briefing", `<form id="f" data-sk-noform>
+  firmaIste("briefing");
+  const fe = FIRMA.v !== undefined && !FIRMA.err ? firmaEksik(FIRMA.v) : [];
+  const fnot = FIRMA.v === undefined || FIRMA.err ? "" : FIRMA.v && fe.length < FIRMA_ALAN.length
+    ? msg("info", `${ic("user", 16)}<span>Briefing <b>${esc(FIRMA.v.firma_adi || "firmanız")}</b> adına, profilinizdeki ürünlere göre hazırlanır.${fe.length ? ` Eksik alanlar: ${fe.map(([, a]) => esc(a)).join(", ")}.` : ""} <a href="#/hesap">Profili düzenle →</a></span>`)
+    : msg("info", `${ic("user", 16)}<span>Briefing'in sizin ürünlerinize göre öneri vermesi için önce <a href="#/hesap">firma profilinizi doldurun</a>.</span>`);
+  toolShell("briefing", `${fnot}<form id="f" data-sk-noform>
     <div class="f"><label for="fa">Firma adı</label><input class="in" id="fa" required maxlength="150"></div>
     <div class="f"><label for="fw">Firma web sitesi</label><input class="in" id="fw" inputmode="url" placeholder="firma.com" required></div>
     <div class="f"><label for="fl">Firma LinkedIn <span class="hint">(isteğe bağlı)</span></label><input class="in" id="fl" inputmode="url" placeholder="linkedin.com/company/…"></div>
@@ -1163,6 +1204,47 @@ function pageTakip() {
 }
 
 // ---------- Hesabım ----------
+function firmaBolum(b) {
+  firmaIste("hesap");
+  if (FIRMA.v === undefined) return `<section class="card pad" id="firma"><h3>Firma profili</h3><div class="empty" style="padding:18px"><div class="spin"></div></div></section>`;
+  if (FIRMA.err) return `<section class="card pad" id="firma"><h3 style="margin-bottom:10px">Firma profili</h3>${msg("err", `Firma profili yüklenemedi: ${esc(FIRMA.err)}`)}<button class="btn btn-g btn-s" type="button" data-firma-yenile style="margin-top:12px">Tekrar dene</button></section>`;
+  const f = FIRMA.v || {}, eksik = firmaEksik(f);
+  const ta = (id, lab, n, ph, hint = "") => `<div class="f"><label for="${id}">${lab}${hint ? ` <span class="hint">${hint}</span>` : ""}</label><textarea class="in" id="${id}" maxlength="${n}" rows="3" placeholder="${ph}">${esc(f[id] || "")}</textarea></div>`;
+  const inp = (id, lab, n, ph, ex = "", hint = "") => `<div class="f"><label for="${id}">${lab}${hint ? ` <span class="hint">${hint}</span>` : ""}</label><input class="in" id="${id}" maxlength="${n}" placeholder="${ph}" value="${esc(f[id] || (id === "firma_adi" ? b.sirket || "" : ""))}"${ex}></div>`;
+  return `<section class="card pad" id="firma"><div class="row" style="margin-bottom:6px"><h3>Firma profili</h3><span class="pill ${eksik.length ? "warn" : "ok"}">${eksik.length ? `${FIRMA_ALAN.length - eksik.length} / ${FIRMA_ALAN.length} dolu` : "Tamam ✓"}</span></div>
+    <p style="color:var(--mute);font-size:14px;margin-bottom:14px">Briefing ve sekanslar "biz kimiz, ne satıyoruz" bilgisini buradan alır. Bir kez doldurmanız yeterli.</p>
+    <div id="fpm"></div>
+    <form id="fpf" data-sk-noform>
+      <div class="grid2">${inp("firma_adi", "Firma adı", 160, "Ör. Örnek Yazılım A.Ş.", " required")}${inp("web", "Web sitesi", 300, "ornek.com", ' inputmode="url"')}</div>
+      ${inp("sektor", "Sektör", 160, "Ör. B2B SaaS, lojistik, üretim")}
+      ${ta("urunler", "Ürün / hizmetler", 800, "Her satıra bir ürün ya da hizmet", "(satır başına bir tane, en fazla 6)")}
+      ${ta("hedef", "Hedef müşteri", 600, "Hangi sektör, büyüklük ve roldeki kişilere satıyorsunuz?")}
+      ${ta("deger", "Değer önerisi", 800, "Müşteriniz sizi neden seçiyor? Rakiplerden farkınız ne?")}
+      <div class="grid2">${inp("rakipler", "Başlıca rakipler", 400, "rakip1.com, rakip2.com", "", "(virgülle)")}${inp("referanslar", "Referans müşteriler", 600, "Firma A, Firma B", "", "(virgülle)")}</div>
+      <button class="btn btn-p" type="submit">Firma profilini kaydet</button>
+    </form></section>`;
+}
+function bindFirma() {
+  const ff = document.getElementById("fpf");
+  if (!ff) return;
+  ff.onsubmit = async e => {
+    e.preventDefault();
+    const v = k => ff[k].value.trim();
+    const web = v("web");
+    if (web && !normUrl(web)) return setMsg("fpm", "err", "Web sitesini geçerli bir adres olarak girin (ör. ornek.com).");
+    const urunler = ff.urunler.value.split(/\r?\n/).map(x => x.trim()).filter(Boolean);
+    if (urunler.length > 6) return setMsg("fpm", "err", "En fazla 6 ürün ya da hizmet yazın (satır başına bir tane).");
+    if (urunler.some(x => x.length > 120)) return setMsg("fpm", "err", "Her ürün satırı en fazla 120 karakter olabilir.");
+    const btn = ff.querySelector("[type=submit]");
+    busy(btn, true, "Kaydediliyor…"); setMsg("fpm");
+    try {
+      const r = await rpc("app_firma_kaydet", { p: { firma_adi: v("firma_adi"), web: web ? normUrl(web) : "", sektor: v("sektor"), urunler: urunler.join("\n"), hedef: v("hedef"), deger: v("deger"), rakipler: v("rakipler"), referanslar: v("referanslar") } });
+      FIRMA = { v: r && typeof r === "object" ? r : null, yuk: false, err: "" };
+      if (!S.ben.sirket && FIRMA.v?.firma_adi) S.ben.sirket = FIRMA.v.firma_adi;
+      toast("Firma profili kaydedildi ✓"); render();
+    } catch (err) { busy(btn, false); setMsg("fpm", "err", esc(trErr(err))); }
+  };
+}
 function pageHesap() {
   const b = S.ben;
   shell(`${ph("Hesabım", "Profil, plan ve bağlantı ayarlarınız.")}
@@ -1173,6 +1255,7 @@ function pageHesap() {
         <div class="f"><label for="sr">Şirket</label><input class="in" id="sr" maxlength="160" value="${esc(b.sirket || "")}"></div></div>
         <div class="f"><label for="em">E-posta</label><input class="in" id="em" value="${esc(b.email)}" disabled></div>
         <button class="btn btn-p" type="submit">Kaydet</button></form></section>
+    ${firmaBolum(b)}
     <section class="card pad"><div class="row" style="margin-bottom:14px"><h3>Plan ve kullanım</h3><span class="pill ${b.aktif ? "acc" : "warn"}">${esc(b.plan_ad || b.plan)} · ${b.aktif ? "Geçerlilik: " + fmtD(b.bitis) : "süre doldu"}</span></div>
       <div class="scroll-x"><table class="tbl"><thead><tr><th>Araç</th><th>Bu ay (${esc(b.ay || "")})</th><th>Aylık hak</th></tr></thead><tbody>
       ${MODS.map(m => { const d = durum(m.k); return `<tr><td>${esc(m.ad)}</td><td>${d.kul}${m.k === "takip" ? " firma" : ""}</td><td>${d.lim < 0 ? "Sınırsız" : d.lim ? d.lim + (m.k === "takip" ? " firma (haftalık)" : "") : "Plana dahil değil"}</td></tr>`; }).join("")}
@@ -1192,6 +1275,7 @@ function pageHesap() {
     try { S.ben = await rpc("app_profil", { p_ad: pf.ad.value, p_sirket: pf.sr.value }); toast("Profil kaydedildi ✓"); render(); }
     catch (err) { busy(btn, false); setMsg("pm", "err", esc(trErr(err))); }
   };
+  bindFirma();
   bindFfKey(render);
   const del = document.getElementById("ffdel");
   if (del) del.onclick = async () => {
@@ -1340,7 +1424,7 @@ document.addEventListener("click", e => {
   if (e.target.closest("a[data-teklif]")) try { sessionStorage.setItem("sc_app_ret", location.pathname + location.hash); } catch {}
 });
 document.addEventListener("click", async e => {
-  const t = e.target.closest("[data-go],[data-eye],[data-side],[data-menu],[data-logout],[data-copy],[data-copy-el],[data-reset],.nav a,#seo-show,#seo-dl");
+  const t = e.target.closest("[data-go],[data-eye],[data-side],[data-menu],[data-logout],[data-firma-yenile],[data-copy],[data-copy-el],[data-reset],.nav a,#seo-show,#seo-dl");
   if (!t) return;
   if (t.dataset.go) { e.preventDefault(); go(t.dataset.go); }
   else if (t.dataset.eye) { const i = document.getElementById(t.dataset.eye); const show = i.type === "password"; i.type = show ? "text" : "password"; t.textContent = show ? "Gizle" : "Göster"; t.setAttribute("aria-label", show ? "Şifreyi gizle" : "Şifreyi göster"); }
@@ -1350,7 +1434,8 @@ document.addEventListener("click", async e => {
     sh.classList.remove("open");
   }
   else if (t.hasAttribute("data-menu")) document.getElementById("shell")?.classList.toggle("open");
-  else if (t.hasAttribute("data-logout")) { await sb.auth.signOut(); S.session = null; S.ben = null; ADM = { rows: null, err: "", q: "" }; FF = { list: null, err: "", sel: "" }; TK = { list: null, err: "", edit: null, sil: "", run: {} }; go("giris"); }
+  else if (t.hasAttribute("data-logout")) { await sb.auth.signOut(); S.session = null; S.ben = null; FIRMA = { v: undefined, yuk: false, err: "" }; ADM = { rows: null, err: "", q: "" }; FF = { list: null, err: "", sel: "" }; TK = { list: null, err: "", edit: null, sil: "", run: {} }; go("giris"); }
+  else if (t.hasAttribute("data-firma-yenile")) { FIRMA = { v: undefined, yuk: false, err: "" }; render(); }
   else if (t.dataset.copy || t.dataset.copyEl) {
     const txt = t.dataset.copy || document.getElementById(t.dataset.copyEl)?.innerText || "";
     try { await navigator.clipboard.writeText(txt); toast("Kopyalandı ✓"); } catch { toast("Kopyalanamadı; metni seçip kopyalayın."); }
@@ -1382,7 +1467,7 @@ document.addEventListener("keydown", e => { if (e.key === "Escape") document.get
 sb.auth.onAuthStateChange((ev, session) => {
   S.session = session;
   if (ev === "PASSWORD_RECOVERY") { S.recovery = true; setTimeout(() => go("yeni-sifre"), 0); }
-  if (ev === "SIGNED_OUT") { S.ben = null; if (route && !AUTH_ROUTES.has(route)) setTimeout(render, 0); }
+  if (ev === "SIGNED_OUT") { S.ben = null; FIRMA = { v: undefined, yuk: false, err: "" }; if (route && !AUTH_ROUTES.has(route)) setTimeout(render, 0); }
 });
 {
   const { data } = await sb.auth.getSession();
