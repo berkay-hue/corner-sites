@@ -25,7 +25,7 @@ Claude Code sidebar'ındaki **"Corner Sites"** grubunda her site için ayrı bir
 Bu oturumun adı "Corner Sites <HARF>: <SITE>". Sadece bu site üzerinde çalışırsın.
 Repo: /Users/berkayyalcin/corner-sites (berkay-hue/corner-sites).
 Dosyalar: sites/<SITE>, templates/<SITE>, content/<SITE>/blog.
-Blog düzeni: blog-worker/wrangler.toml SITES içindeki "hour" ayarına göre blog-daily.yml her gün yazı üretiyor, sonra blog-deploy.yml host bazında Cloudflare Pages'e (web-<ad>) deploy ediyor.
+Blog düzeni: blog-worker/src/sites.js içindeki "hour" ayarına göre blog-daily.yml her gün yazı üretiyor, sonra blog-deploy.yml host bazında Cloudflare Pages'e (web-<ad>) deploy ediyor.
 Push etmeden önce: git -C /Users/berkayyalcin/corner-sites pull -q --rebase --autostash (bot da commit atıyor).
 Kurallar:
 - API key, token veya şifre kullanmak ve girmek yasak. Secret gerekirse komutu hazırla, Berkay çalıştırır.

@@ -1,5 +1,5 @@
 # Günlük blog yazısı: tools/blog-daily.mjs yazıyı üretir, burada commit edilir ve blog-deploy tetiklenir.
-# Saat başından 17 dk sonra (yoğun saat başı cron'ları düşüyor). 07 UTC = 10:00 TR saascorner, 08 = socialmediacorner, 09 = cornergroup, 10 = yalcinberkay (EN), 11 = salescorner, 12 = yalcinberkay /tr (TR, ayrı konu), 13 = wishceo (16:00 TR), 14 = brandcorner (EN, 17:00 TR) (wrangler.toml SITES "hour"). Kural: her site her gün yazı.
+# Saat başından 17 dk sonra (yoğun saat başı cron'ları düşüyor). 07 UTC = 10:00 TR saascorner, 08 = socialmediacorner, 09 = cornergroup, 10 = yalcinberkay (EN), 11 = salescorner, 12 = yalcinberkay /tr (TR, ayrı konu), 13 = wishceo (16:00 TR), 14 = brandcorner (EN, 17:00 TR) (blog-worker/src/sites.js "hour"). Kural: her site her gün yazı.
 # Secret'lar: ANTHROPIC_API_KEY, PEXELS_API_KEY, (opsiyonel) TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID
 name: blog-daily
 on:

@@ -10,6 +10,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { generate, claude, slugify, fitMeta } from "../blog-worker/src/index.js";
+import SITES from "../blog-worker/src/sites.js";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const arg = name => { const i = process.argv.indexOf(`--${name}`); return i < 0 ? undefined : process.argv[i + 1]; };
@@ -18,8 +19,7 @@ const site = arg("site") || undefined;
 const dry = process.argv.includes("--dry");
 const catchup = process.argv.includes("--catchup");
 
-const toml = fs.readFileSync(path.join(root, "blog-worker/wrangler.toml"), "utf8");
-const sites = JSON.parse(toml.match(/SITES = '''([\s\S]*?)'''/)[1])
+const sites = SITES
   .filter(c => (!site || site.split(",").some(x => new URL(c.siteUrl).host.replace(/^www\./, "") === x.trim().replace(/^www\./, ""))) && (site || (catchup ? c.hour != null : hour === undefined || c.hour === hour)));
 if (!sites.length) { console.log(`Bu çalıştırmada site yok (hour=${hour}, site=${site})`); process.exit(0); }
 

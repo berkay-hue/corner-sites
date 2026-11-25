@@ -5,6 +5,7 @@
 // Secret'lar: ANTHROPIC_API_KEY, PEXELS_API_KEY, GITHUB_TOKEN, (opsiyonel) TELEGRAM_BOT_TOKEN + TELEGRAM_CHAT_ID
 
 import { faqItems } from "../../tools/lib/content.mjs";
+import SITES from "./sites.js";
 
 const TOPIC_TYPES = "araç karşılaştırması, yapay zeka uygulaması, sektör rehberi, vaka çalışması, trend analizi, süreç anlatımı, sık yapılan hatalar";
 const TOPIC_TYPES_EN = "tool comparison, applied AI, industry guide, case study, trend analysis, process walkthrough, common mistakes";
@@ -420,7 +421,7 @@ export async function generate(env, cfg) {
 
 // site: yalnız o host (ör. "saascorner.co"); hour: cron saatinde "hour" alanı eşleşen siteler
 export async function run(env, { dryRun = false, site, hour } = {}) {
-  const sites = JSON.parse(env.SITES).filter(c => (!site || site.split(",").some(x => new URL(c.siteUrl).host.replace(/^www\./, "") === x.trim().replace(/^www\./, ""))) && (hour === undefined || c.hour === hour));
+  const sites = (env.SITES ? JSON.parse(env.SITES) : SITES).filter(c => (!site || site.split(",").some(x => new URL(c.siteUrl).host.replace(/^www\./, "") === x.trim().replace(/^www\./, ""))) && (hour === undefined || c.hour === hour));
   const out = [];
   for (const cfg of sites) {
     try {
