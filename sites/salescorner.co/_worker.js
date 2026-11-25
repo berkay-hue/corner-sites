@@ -1919,6 +1919,7 @@ function fyUrlOk(u) {
   const h = x.hostname.toLowerCase();
   if (!h || h.length > 253 || /[:[\]]/.test(h) || /^[\d.]+$/.test(h)) return false;
   if (/(^|\.)(localhost|localdomain|local|internal|lan|home|corp|intranet|arpa)$/.test(h)) return false;
+  if (/(^|\.)salescorner\.co$/.test(h)) return false; // kendi uçlarımıza istek yok
   return /^[a-z0-9-]+(\.[a-z0-9-]+)*\.([a-z]{2,63}|xn--[a-z0-9-]{1,59})$/.test(h);
 }
 // Yönlendirmeleri elle izler (her adımda URL yeniden denetlenir), gövdeyi en çok FY_MAX bayt okur
@@ -1950,7 +1951,8 @@ async function fyCek(url) {
   return { hata: "yonlendirme" };
 }
 const FY_ENT = { nbsp: " ", amp: "&", quot: '"', apos: "'", lt: "<", gt: ">", euro: "€", pound: "£", dollar: "$", ndash: "-", mdash: "-", middot: "·" };
-const fyKod = n => (n > 0 && n < 0x110000 ? String.fromCodePoint(n) : " ");
+// jsonb tek başına vekil (surrogate) ve NUL kabul etmez; bunlar boşluk olur
+const fyKod = n => (n > 0 && n < 0x110000 && (n < 0xd800 || n > 0xdfff) ? String.fromCodePoint(n) : " ");
 // Görünen metin satırları (blok etiketleri satır sonu olur); tekrarlar atılır, en çok FY_SATIR satır
 function fyMetin(html) {
   const s = String(html || "").slice(0, FY_MAX)
@@ -1958,12 +1960,13 @@ function fyMetin(html) {
     .replace(/<(script|style|noscript|svg|template|head|iframe)\b[\s\S]*?<\/\1\s*>/gi, " ")
     .replace(/<(?:br|hr|\/?(?:p|div|li|ul|ol|tr|td|th|h[1-6]|section|article|header|footer|nav|main|aside|table|tbody|thead|dt|dd|dl|form|button|label|option|figcaption|blockquote|pre|summary|details))\b[^>]*>/gi, "\n")
     .replace(/<[^>]*>/g, " ")
+    .replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]/g, " ")
     .replace(/&(#x[0-9a-f]{1,6}|#\d{1,7}|[a-z]{2,8});/gi, (m, k) => k[0] === "#" ? fyKod(k[1] === "x" || k[1] === "X" ? parseInt(k.slice(2), 16) : +k.slice(1)) : (FY_ENT[k.toLowerCase()] ?? m));
   const gor = new Set(), out = [];
   for (const ham of s.split("\n")) {
     const l = ham.replace(/\s+/g, " ").trim();
     if (l.length < 2 || l.length > 600) continue;
-    const t = l.length > FY_UZ ? l.slice(0, FY_UZ) : l;
+    const t = l.length > FY_UZ ? l.slice(0, FY_UZ).replace(/[\ud800-\udbff]$/, "") : l; // kesim emoji çiftini bölmesin
     const k = fyAnahtar(t);
     if (!k || gor.has(k)) continue;
     gor.add(k); out.push(t);
