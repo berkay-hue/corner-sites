@@ -49,6 +49,9 @@ var HATA={
   network:['Sunucuya ulaşılamadı. Bağlantını kontrol edip yeniden dene.','Couldn’t reach the server. Check your connection and retry.'],
   site_limit:['Planındaki site hakkını kullandın. Ek site için bizimle iletişime geç.','You’ve used your plan’s site allowance. Need more sites? Contact us.'],
   quota:['Bu ayki blog yazısı hakkın bitti. Hakkın gelecek ay yenilenir.','You’ve used this month’s blog posts. Your allowance renews next month.'],
+  daily_limit:['Bu site için bugünkü elle yazı hakkını kullandın (günde 1). Yarın yeniden deneyebilirsin; planlı yazılar takvimine göre sürer.','You’ve used today’s on-demand post for this site (1 a day). Try again tomorrow; scheduled posts continue as planned.'],
+  site_state:['Bu site etkin değil. Yazı istemek için önce siteyi devam ettir ya da bağlantısını düzelt.','This site isn’t active. Resume it or fix its connection before asking for a post.'],
+  trial_ended:['Deneme süren bitti. Otomatik blogu kullanmak için Pro’ya yükselt.','Your trial has ended. Upgrade to Pro to use blog autopilot.'],
   plan_required:['Otomatik blog Pro ve Enterprise planlarda. Kullanmak için Pro’ya yükselt.','Blog autopilot is on the Pro and Enterprise plans. Upgrade to Pro to use it.'],
   plan_frequency:['Bu sıklık planında yok. Günde 1 yazı yalnız Enterprise planda; diğer planlarda haftada en çok 3 yazı seçebilirsin.','This frequency isn’t in your plan. Daily posts are on the Enterprise plan only; other plans allow up to 3 posts a week.']
 };
@@ -126,7 +129,7 @@ function not(kutu,metin,tur,bag){
 function hataNot(kutu,j){
   var k=j.error||(j._s===0?'network':j._s===429?'rate':j._s>=500?'server':'');
   if(j._s===401||(j._s===403&&j.error==='origin')){api.genelHata(j);return}
-  var bag=k==='site_limit'?[L('İletişime geç','Contact us'),ILETISIM]:(k==='quota'||k==='plan_required'||k==='plan_frequency')?[L('Planları gör','See plans'),PLANLAR]:null;
+  var bag=k==='site_limit'?[L('İletişime geç','Contact us'),ILETISIM]:(k==='quota'||k==='plan_required'||k==='plan_frequency'||k==='trial_ended')?[L('Planları gör','See plans'),PLANLAR]:null;
   var m=hataMetni(k||String(j._s));
   if(k==='plan_frequency'&&siklikOk(+j.max)&&+j.max<7)m=(EN?'Your plan allows up to '+j.max+' post'+(+j.max>1?'s':'')+' a week. Daily posts are on the Enterprise plan.':'Planın haftada en çok '+j.max+' yazıya izin veriyor. Günde 1 yazı Enterprise planda.');
   not(kutu,m,'hata',bag);
@@ -684,7 +687,7 @@ function siteKart(s){
   }
 
   var ey=el('div','eylemler'),db=null;
-  if(!kl&&s.state==='aktif'){var yb=el('button','btn btn-ink btn-kucuk',L('Şimdi yaz','Write now'),{type:'button'});yb.addEventListener('click',function(){simdiYaz(s,yb)});ey.appendChild(yb)}
+  if(!kl&&s.state==='aktif'){var yb=el('button','btn btn-ink btn-kucuk',L('Şimdi bir yazı yaz','Write a post now'),{type:'button'});yb.addEventListener('click',function(){simdiYaz(s,yb)});ey.appendChild(yb)}
   if(!kl){db=el('button','btn btn-cizgi btn-kucuk',L('Ayarları düzenle','Edit settings'),{type:'button','aria-expanded':'false'});ey.appendChild(db)}
   if(s.state==='aktif'||(kl&&s.state==='hata')){var pb=el('button','btn btn-cizgi btn-kucuk',L('Duraklat','Pause'),{type:'button'});pb.addEventListener('click',function(){durum(s,'pause',pb)});ey.appendChild(pb)}
   else if(!kl){var rb=el('button','btn btn-cizgi btn-kucuk',L('Devam ettir','Resume'),{type:'button'});rb.addEventListener('click',function(){durum(s,'resume',rb)});ey.appendChild(rb)}
@@ -731,12 +734,12 @@ function otoDegis(s,oi){
 function simdiYaz(s,b){
   if(api.bosMu(b))return;
   var anahtar=String(s.id),r=bekleyenRid[anahtar]||(bekleyenRid[anahtar]=rid());
-  var kart=b.closest('.cms-site'),sn=kart&&kart._not,bitti=api.mesgul(b,L('Başlatılıyor…','Starting…'));
+  var kart=b.closest('.cms-site'),sn=kart&&kart._not,bitti=api.mesgul(b,L('Sıraya alınıyor…','Queuing…'));
   cagir('/app/cms/'+encodeURIComponent(s.id)+'/run','POST',{rid:r}).then(function(j){
     bitti();
     if(j._s!==0)delete bekleyenRid[anahtar];
     if(j._s===200&&j.post){yaziKoy(j.post);if(veri.quota.lb_limit>0&&j.post.state!=='kota')veri.quota.lb_used=Math.min(veri.quota.lb_used+1,veri.quota.lb_limit);ozetCiz();siraCiz();yazilarCiz();
-      if(sn)not(sn,j.post.state==='kota'?hataMetni('quota'):L('Yazı hazırlanıyor. Birkaç dakika içinde aşağıdaki listede durumu güncellenir.','Your post is being written. Its status updates in the list below within a few minutes.'),j.post.state==='kota'?'uyari':'ok');
+      if(sn)not(sn,j.post.state==='kota'?hataMetni('quota'):L('Sıraya alındı; birkaç dakika içinde aşağıdaki “Hazırlanan ve gönderilen yazılar” listesinde görünür.','Queued; it shows up in “Prepared and sent posts” below within a few minutes.'),j.post.state==='kota'?'uyari':'ok');
       yoklaBastan();return}
     if(sn)hataNot(sn,j);
   });
@@ -788,12 +791,24 @@ function yazilarCiz(){
     if(p.content_deleted)li.appendChild(el('p','ince cms-yazi-acik',L('İçerik 3 gün sonra silindi.','Content deleted after 3 days.')));
     var ey=el('div','eylemler'),u=guvenliUrl(p.remote_url);
     if(u)ey.appendChild(disBag(u,L('Sitede aç','Open on site')));
+    if((p.state==='gonderildi'||p.state==='yayinlandi')&&str(p.title).trim()){var kq='?konu='+encodeURIComponent(uyarlaKonu(p));
+      ey.appendChild(el('a','bag',L('LinkedIn\'e uyarla','Adapt for LinkedIn'),{href:(EN?'/en/':'/')+kq}));
+      ey.appendChild(el('a','bag',L('Instagram\'a uyarla','Adapt for Instagram'),{href:(EN?'/en/visual':'/gorsel')+kq}))}
     if(p.state==='basarisiz'&&!p.content_deleted&&!kilitli()){var rb=el('button','btn btn-cizgi btn-kucuk',L('Yeniden gönder','Send again'),{type:'button'});rb.addEventListener('click',function(){yenidenGonder(p,rb,li)});ey.appendChild(rb)}
     if(ey.childNodes.length)li.appendChild(ey);
     li.appendChild(el('div','bildirim',null,{role:'status','aria-live':'polite'}));
     ul.appendChild(li);
   });
   k.appendChild(ul);
+}
+/* "LinkedIn'e / Instagram'a uyarla": stüdyonun konu alanına (?konu=, studyo-kabuk.js urlKonu) başlık + adres; üretim kendiliğinden
+   başlamaz, hak yalnız kullanıcı yazdırınca düşer. Adres yalnız yayınlanmış yazıda (taslağın adresi herkese açık değil);
+   içerik silinmiş (3 gün) yazıda da başlık + adres yeter. Toplam en çok 300 karakter (KONU_MAX). */
+function uyarlaKonu(p){
+  var t=str(p.title).replace(/\s+/g,' ').trim(),u=p.state==='yayinlandi'?guvenliUrl(p.remote_url):'';if(u.length>200)u='';
+  var on=L('Yeni blog yazımızı tanıt: ','Promote our new blog post: '),son=u?' — '+u:'',yer=300-on.length-son.length-2;
+  if(t.length>yer)t=t.slice(0,yer-1).trim()+'…';
+  return on+'“'+t+'”'+son;
 }
 function yenidenGonder(p,b,li){
   if(api.bosMu(b))return;
@@ -865,7 +880,11 @@ function ornekIstek(yol,yontem,govde){
     var s2=null;v.sites.forEach(function(x){if(String(x.id)===m[1])s2=x});
     if(!s2)j=yan({error:'not_found'},404);
     else if(m[2]==='settings'){Object.keys(govde||{}).forEach(function(k){s2[k]=govde[k]});s2.auto_publish=govde.auto_publish?1:0;j=yan({ok:true,site:JSON.parse(JSON.stringify(s2))})}
-    else if(m[2]==='run'){if(v.quota.lb_used>=v.quota.lb_limit)j=yan({error:'quota'},402);else{v.quota.lb_used+=1;var np={id:Date.now(),cms_site_id:s2.id,title:'',state:'uretiliyor',mode:s2.auto_publish?'publish':'draft',remote_url:null,last_error:null,created_at:new Date().toISOString()};v.posts.unshift(np);j=yan({ok:true,post:JSON.parse(JSON.stringify(np))})}}
+    else if(m[2]==='run'){var gun=new Date(Date.now()+108e5).toISOString().slice(0,10);
+      if(s2.state!=='aktif')j=yan({error:'site_state',state:s2.state},409);
+      else if(v.quota.lb_used>=v.quota.lb_limit)j=yan({error:'quota'},402);
+      else if(s2._elle===gun)j=yan({error:'daily_limit'},429);
+      else{s2._elle=gun;v.quota.lb_used+=1;var np={id:Date.now(),cms_site_id:s2.id,title:'',state:'uretiliyor',mode:s2.auto_publish?'publish':'draft',remote_url:null,last_error:null,created_at:new Date().toISOString()};v.posts.unshift(np);j=yan({ok:true,post:JSON.parse(JSON.stringify(np))})}}
     else{s2.state=m[2]==='pause'?'duraklatildi':m[2]==='resume'?'aktif':'kaldirildi';if(m[2]==='disconnect'){s2.hint=null;v.limits.used=Math.max(0,v.limits.used-1)}j=yan({ok:true,site:JSON.parse(JSON.stringify(s2))})}
   }else j=yan({error:'not_found'},404);
   return new Promise(function(r){setTimeout(function(){r(j)},400)});

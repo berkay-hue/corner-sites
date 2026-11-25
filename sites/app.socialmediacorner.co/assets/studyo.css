@@ -642,6 +642,8 @@ dialog::backdrop{background:var(--ortu)}
 .kr-pro-rozet .ikon{width:14px;height:14px}
 .kr-gorsel-kilit .kr-gorsel-ipucu{flex:1 1 12rem;min-width:0}
 .kr-kilit-bag{display:inline-flex;align-items:center;min-height:var(--dokunma);padding:0 var(--s2);border-radius:var(--r-s);color:var(--accent-strong);font-weight:600}
+.kr-gorsel-kisa{gap:var(--s1);color:var(--ink2)}
+.kr-gorsel-kisa .ikon{width:14px;height:14px;flex:none}
 @media (forced-colors:active){.kr-pro-rozet{border:1px solid CanvasText}}
 @container krs (min-width:440px){
   .kr-so-gorsel-var{grid-template-columns:44px minmax(0,1fr) auto;grid-template-areas:"i k a";align-items:center}
@@ -759,6 +761,10 @@ dialog.kr-stok-dlg{width:min(760px,calc(100% - var(--g3)))}
 .st-gorsel .cip input[aria-disabled="true"]+label{border-style:dashed;background:var(--yuzey-2);color:var(--ink2);cursor:not-allowed}
 .st-gorsel .cip input[aria-disabled="true"]:hover+label{background:var(--yuzey-2)}
 .st-gorsel[data-durum="bekle"] .cip input[aria-disabled="true"]+label{cursor:progress}
+/* 25.11 gs3: deneme görseli harcanırken (fieldset aria-busy) seçim kilitli; seçili çip seçili görünür */
+.st-gorsel[aria-busy="true"] .cip input+label{cursor:progress}
+.st-gorsel[aria-busy="true"] .cip input:checked+label,.st-gorsel[aria-busy="true"] .cip input:checked:hover+label{border-style:solid;background:var(--accent);border-color:var(--accent);color:var(--on-accent);font-weight:600}
+@media (forced-colors:active){.st-gorsel[aria-busy="true"] .cip input:checked+label{forced-color-adjust:none;background:Highlight;color:HighlightText;border-color:Highlight}}
 .st-gorsel-not{margin:var(--s2) 0 0;color:var(--ink2)}
 .st-gorsel-not a{color:var(--accent-strong);font-weight:600;text-decoration:underline;text-underline-offset:2px}
 .st-gorsel-not a:focus-visible{outline:none;box-shadow:var(--odak-halka);border-radius:4px}

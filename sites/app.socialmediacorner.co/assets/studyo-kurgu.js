@@ -645,8 +645,14 @@ function kunye(g){
 }
 /* kilit satırı tek: görselsiz ilk sahnede (deneme görseli 1. sahnedeyse 2. sahne neden eklenemediğini söyler) */
 function ilkBos(){for(var k=0;k<st.sahneler.length;k++)if(!st.sahneler[k].gorsel)return k;return -1}
+/* 25.11: deneme görseli kullanıldıysa kilit satırından sonraki görselsiz kartlarda/sahnelerde kısa not (bağlantı yalnız kilit satırında, tekrarlanmaz) */
+function kisaKilit(){
+  var k=el('div','kr-so-gorsel kr-gorsel-kisa');k.appendChild(ikon('kilit'));
+  k.appendChild(el('span','ipucu',VID?T('Diğer sahnelere görsel Pro planda.','Images for other scenes on Pro.'):T('Diğer kartlara görsel Pro planda.','Images for other cards on Pro.')));
+  return k;
+}
 function gorselSatir(s,i){
-  if(!s.gorsel&&stokKilit())return GS&&i!==ilkBos()?null:kilitSatir(i);
+  if(!s.gorsel&&stokKilit()){if(!GS||i===ilkBos())return kilitSatir(i);return denemeDurum()==='bitti'?kisaKilit():null}
   if(!s.gorsel&&!stokVar())return null;
   if(!s.gorsel&&gTercih()==='yok')return null;
   var k=el('div','kr-so-gorsel');
@@ -1047,7 +1053,7 @@ function otoDeneme(o){
     if(!otoGecerli(o)||st.sahneler.indexOf(s)<0||s.gorsel||s.elle||(SK&&SK.harciyor)||S.stokDurum()!=='deneme'){otoNot('','');return}
     o.harciyor=true;
     S.stokHarca(p).then(function(ok){
-      o.harciyor=false;
+      o.harciyor=false;gYaz();
       if(ok){
         var yer=!!st&&st===o.st&&st.sahneler.indexOf(s)>=0&&!s.gorsel;
         if(yer){s.gorsel=gorselNesne(p,im);s.oto=true}
@@ -1099,6 +1105,9 @@ var GS=$('#gorsel-secim'),GTK='smc-gorsel-'+MOD,gHak=false,gSon='';
 var gYok=GS&&GS.querySelector('input[value="yok"]'),gStok=GS&&GS.querySelector('input[value="stok"]'),gNot=GS&&$('#gorsel-not');
 function gTercih(){if(!GS)return 'stok';return gStok&&gStok.checked&&stokVar()?'stok':'yok'}
 function gDurum(){return stokVar()?'acik':stokKilit()?'kilit':gHak?'yok':'bekle'}
+/* 25.11: deneme hakkı harcanıyor (POST /gen/stock/use yolda): seçim kısa süre kilitli; eski kabukta OTO bayrağı */
+var G_MESGUL=S.GORSEL_MESGUL||T('Görsel ekleniyor… Bitince Görselli/Görselsiz seçimini değiştirebilirsin.','Adding the image… You can switch between with and without images when it’s done.');
+function gMesgul(){return typeof S.stokHarciyor==='function'?S.stokHarciyor():!!(OTO&&OTO.harciyor)}
 function gUye(){var u=$('.st-ust[data-hesap]');return !!(u&&u.getAttribute('data-hesap')==='uye')}
 function gNeden(){
   var dr=gDurum();
@@ -1108,6 +1117,7 @@ function gNeden(){
 }
 function gNotYaz(){
   if(!gNot)return;var dr=gDurum();gNot.textContent='';
+  if(gMesgul()){gNot.textContent=G_MESGUL;return}
   if(dr==='acik'){
     if(gStok.checked){
       gNot.textContent=denemeDurum()==='var'
@@ -1143,10 +1153,14 @@ function gYaz(){
     gStok.removeAttribute('aria-disabled');
     if(ilk){var k=null;try{k=S.depo(GTK)}catch(e){}(k==='stok'?gStok:gYok).checked=true}
   }else{gStok.setAttribute('aria-disabled','true');if(gStok.checked)gYok.checked=true}
+  /* harcama sürerken iki seçenek de kilitli (aria-disabled + fieldset aria-busy) */
+  if(gMesgul()){gYok.setAttribute('aria-disabled','true');gStok.setAttribute('aria-disabled','true');GS.setAttribute('aria-busy','true')}
+  else{gYok.removeAttribute('aria-disabled');GS.removeAttribute('aria-busy')}
   gSon=dr;gNotYaz();
 }
 if(GS){
   [gYok,gStok].forEach(function(r){r.addEventListener('change',function(){
+    if(gMesgul()){(r===gYok?gStok:gYok).checked=true;S.durum(G_MESGUL);S.toast(G_MESGUL);gNotYaz();return}
     if(gStok.checked&&gDurum()!=='acik'){gYok.checked=true;var m=gNeden();S.durum(m);S.toast(m);gNotYaz();return}
     try{S.depo(GTK,gStok.checked?'stok':'yok')}catch(e){}
     /* Görselsiz: süren otomatik ekleme durur (deneme hakkı harcanıyorsa bitmesi beklenir) */
@@ -1159,6 +1173,7 @@ if(GS){
            :(dn?T('Görselli seçildi: taslak hazır olunca ilk karta 1 deneme görseli otomatik eklenir.','With images: the first card gets 1 trial image automatically when the draft is ready.'):T('Görselli seçildi: taslak hazır olunca kartlara Pexels fotoğrafı otomatik eklenir.','With images: cards get Pexels photos automatically when the draft is ready.')))
       :(VID?T('Görselsiz seçildi: sahneler yalnız metin ve renkle.','No images: scenes use text and color only.'):T('Görselsiz seçildi: kartlar yalnız metin ve renkle.','No images: cards use text and color only.')));
   })});
+  d.addEventListener('studyo:harca',function(){gYaz()});
   setTimeout(function(){if(!gHak){gHak=true;gYaz()}},12000);
   var gU=$('.st-ust[data-hesap]');if(gU&&window.MutationObserver)new MutationObserver(function(){if(gDurum()==='kilit')gNotYaz()}).observe(gU,{attributes:true,attributeFilter:['data-hesap']});
   gYaz();

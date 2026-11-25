@@ -359,6 +359,178 @@ test("run: geçersiz rid 400; aylık kota doluysa 402 quota", async t => {
   assert.equal(db.prepare("SELECT COUNT(*) AS n FROM cms_posts").get().n, 0);
 });
 
+// ---- "Şimdi bir yazı yaz" (25.11): site başına günde 1 elle tetik, aktif olmayan sitede 409, takvim bozulmaz ----
+const RID2 = "223e4567-e89b-42d3-a456-426614174001", RID3 = "323e4567-e89b-42d3-a456-426614174002";
+const cmN = db => db.prepare("SELECT COALESCE(SUM(n), 0) AS n FROM gen_usage WHERE kind = 'cm'").get().n;
+
+test("şimdi yaz: oturum yok 401, başka kullanıcının sitesi 404, Pro altı plan 403 plan_required", async t => {
+  stubProviders(t);
+  const { db, call } = setup();
+  const s = (await connect(call)).body.site;
+  const anon = await call("POST", `/app/cms/${s.id}/run`, { token: null, body: { rid: RID } });
+  assert.equal(anon.status, 401, JSON.stringify(anon.body));
+  const other = await call("POST", `/app/cms/${s.id}/run`, { token: tok("M"), body: { rid: RID } });
+  assert.deepEqual([other.status, other.body.error], [404, "not_found"]);
+  for (const plan of ["basic", "demo"]) {
+    db.prepare("UPDATE users SET plan = ?, created_at = datetime('now') WHERE id = 1").run(plan);
+    const r = await call("POST", `/app/cms/${s.id}/run`, { body: { rid: RID } });
+    assert.deepEqual([r.status, r.body.error, r.body.plan], [403, "plan_required", "pro"], plan);
+  }
+  assert.equal(db.prepare("SELECT COUNT(*) AS n FROM cms_posts").get().n, 0);
+  assert.deepEqual({ ...counters(db), cm: cmN(db) }, { lb: 0, u: 0, cm: 0 });
+});
+
+test("şimdi yaz: günde 1 tetik → ikinci rid 429 daily_limit (kota düşmez); aynı rid idempotent; başka site ayrı hak", async t => {
+  stubProviders(t);
+  const db = freshDb();
+  db.prepare("UPDATE users SET plan = 'enterprise', plan_limits = '{\"cms_sites\":2}' WHERE id = 1").run();
+  const { call } = setup(db);
+  const s = (await connect(call)).body.site;
+  const r = await call("POST", `/app/cms/${s.id}/run`, { body: { rid: RID } });
+  assert.equal(r.status, 200, JSON.stringify(r.body));
+  assert.equal(r.body.post.state, "uretiliyor");
+  assert.deepEqual({ ...counters(db), cm: cmN(db) }, { lb: 1, u: 1, cm: 1 });
+  const same = await call("POST", `/app/cms/${s.id}/run`, { body: { rid: RID } });
+  assert.deepEqual([same.status, same.body.post.id], [200, r.body.post.id]);
+  const second = await call("POST", `/app/cms/${s.id}/run`, { body: { rid: RID2 } });
+  assert.deepEqual([second.status, second.body.error], [429, "daily_limit"]);
+  assert.match(second.body.reset_at, /^\d{4}-\d{2}-\d{2}T21:00:00/);
+  assert.deepEqual({ ...counters(db), cm: cmN(db) }, { lb: 1, u: 1, cm: 1 });
+  assert.equal(db.prepare("SELECT COUNT(*) AS n FROM cms_posts").get().n, 1);
+  // ikinci site kendi günlük hakkını kullanır
+  const s2 = (await call("POST", "/app/cms/connect", { body: { platform: "hubspot", inputs: { api_key: "z".repeat(16) + "WXYZ" } } })).body.site;
+  assert.ok(s2?.id, "ikinci site");
+  const r2 = await call("POST", `/app/cms/${s2.id}/run`, { body: { rid: RID3 } });
+  assert.equal(r2.status, 200, JSON.stringify(r2.body));
+  assert.deepEqual({ ...counters(db), cm: cmN(db) }, { lb: 2, u: 2, cm: 2 });
+});
+
+test("şimdi yaz: aylık hak doluysa 402 quota (günlük tetik harcanmaz)", async t => {
+  stubProviders(t);
+  const { db, call } = setup();
+  const s = (await connect(call)).body.site;
+  const month = new Date(Date.now() + 3 * 3600e3).toISOString().slice(0, 7);
+  db.prepare("INSERT INTO gen_month (month, user_id, kind, n) VALUES (?, 1, 'lb', 40)").run(month);
+  const r = await call("POST", `/app/cms/${s.id}/run`, { body: { rid: RID } });
+  assert.deepEqual([r.status, r.body.error], [402, "quota"]);
+  assert.equal(cmN(db), 0);
+  db.prepare("DELETE FROM gen_month").run();
+  const ok2 = await call("POST", `/app/cms/${s.id}/run`, { body: { rid: RID2 } });
+  assert.equal(ok2.status, 200, JSON.stringify(ok2.body));
+});
+
+test("şimdi yaz: duraklatılmış / hatalı sitede 409 site_state; kaldırılmış site 404", async t => {
+  stubProviders(t);
+  const { db, call } = setup();
+  const s = (await connect(call)).body.site;
+  for (const st of ["duraklatildi", "hata"]) {
+    db.prepare("UPDATE cms_sites SET state = ? WHERE id = ?").run(st, s.id);
+    const r = await call("POST", `/app/cms/${s.id}/run`, { body: { rid: RID } });
+    assert.deepEqual([r.status, r.body.error, r.body.state], [409, "site_state", st], st);
+  }
+  db.prepare("UPDATE cms_sites SET state = 'aktif' WHERE id = ?").run(s.id);
+  assert.equal((await call("POST", `/app/cms/${s.id}/disconnect`, { body: {} })).status, 200);
+  const gone = await call("POST", `/app/cms/${s.id}/run`, { body: { rid: RID } });
+  assert.ok([404, 409].includes(gone.status), String(gone.status));
+  assert.equal(db.prepare("SELECT COUNT(*) AS n FROM cms_posts").get().n, 0);
+  assert.deepEqual({ ...counters(db), cm: cmN(db) }, { lb: 0, u: 0, cm: 0 });
+});
+
+test("şimdi yaz: takvim (next_run_at) değişmez; cmsTick elle yazıyı üretir, planlı tur da ayrıca çalışır", async t => {
+  stubProviders(t);
+  const { db, env, call } = setup();
+  const s = (await connect(call)).body.site;
+  const before = db.prepare("SELECT next_run_at FROM cms_sites WHERE id = ?").get(s.id).next_run_at;
+  assert.ok(before, "takvim var");
+  const r = await call("POST", `/app/cms/${s.id}/run`, { body: { rid: RID } });
+  assert.equal(r.status, 200);
+  assert.equal(db.prepare("SELECT next_run_at FROM cms_sites WHERE id = ?").get(s.id).next_run_at, before);
+  const out = await cmsTick(env, async () => LLM_OK(), { log: () => {} });
+  assert.equal(out.produced, 1, JSON.stringify(out));
+  assert.equal(db.prepare("SELECT state FROM cms_posts WHERE id = ?").get(r.body.post.id).state, "hazir");
+  assert.equal(db.prepare("SELECT next_run_at FROM cms_sites WHERE id = ?").get(s.id).next_run_at, before, "elle üretim takvimi kaydırmaz");
+  // planlı zaman gelince normal tur yine yazı ekler ve sonraki zamanı takvimden hesaplar
+  db.prepare("UPDATE cms_sites SET next_run_at = datetime('now', '-1 minutes') WHERE id = ?").run(s.id);
+  await cmsTick(env, async () => LLM_OK(), { log: () => {} });
+  const sched = db.prepare("SELECT COUNT(*) AS n FROM cms_posts WHERE cms_site_id = ? AND slot NOT LIKE 'manual:%'").get(s.id).n;
+  assert.equal(sched, 1);
+  const after = db.prepare("SELECT next_run_at FROM cms_sites WHERE id = ?").get(s.id).next_run_at;
+  // sonraki zaman takvimden (gün/saat) yeniden hesaplanır: elle tetik olmasa da aynı olacak yuva, ileride
+  assert.equal(after, before);
+  assert.ok(after > db.prepare("SELECT datetime('now') AS t").get().t);
+});
+
+test("şimdi yaz: üretim başarısız → günlük tetik de iade edilir, aynı gün yeniden denenebilir", async t => {
+  stubProviders(t);
+  const { db, env, call } = setup();
+  const s = (await connect(call)).body.site;
+  const r = await call("POST", `/app/cms/${s.id}/run`, { body: { rid: RID } });
+  assert.equal(r.status, 200);
+  assert.equal(cmN(db), 1);
+  await cmsTick(env, async () => LLM_FAIL(), { log: () => {} });
+  assert.deepEqual({ ...counters(db), cm: cmN(db) }, { lb: 0, u: 0, cm: 0 });
+  const again = await call("POST", `/app/cms/${s.id}/run`, { body: { rid: RID2 } });
+  assert.equal(again.status, 200, JSON.stringify(again.body));
+  assert.equal(cmN(db), 1);
+});
+
+const cuN = db => db.prepare("SELECT COALESCE(SUM(n), 0) AS n FROM gen_usage WHERE kind = 'cu'").get().n;
+
+test("şimdi yaz: aynı rid ile eşzamanlı iki istek → ikisi de aynı yazıyı döner (429 değil), sayaçlar bir kez düşer", async t => {
+  stubProviders(t);
+  const { db, call } = setup();
+  const s = (await connect(call)).body.site;
+  const [a, b] = await Promise.all([1, 2].map(() => call("POST", `/app/cms/${s.id}/run`, { body: { rid: RID } })));
+  assert.deepEqual([a.status, b.status], [200, 200], JSON.stringify([a.body, b.body]));
+  assert.equal(a.body.post.id, b.body.post.id);
+  assert.equal(db.prepare("SELECT COUNT(*) AS n FROM cms_posts").get().n, 1);
+  assert.deepEqual({ ...counters(db), cm: cmN(db), cu: cuN(db) }, { lb: 1, u: 1, cm: 1, cu: 1 });
+});
+
+test("şimdi yaz: tetik sayacı dolu ama aynı rid'in yazısı var → yazı döner (yarışın kaybeden tarafı)", async t => {
+  stubProviders(t);
+  const { db, call } = setup();
+  const s = (await connect(call)).body.site;
+  const r = await call("POST", `/app/cms/${s.id}/run`, { body: { rid: RID } });
+  assert.equal(r.status, 200);
+  // ilk prev kontrolünü kaçırmış ikinci isteği taklit et: ilk SELECT boş döner, sonrakiler gerçek
+  const real = db.prepare.bind(db);
+  let missed = false;
+  db.prepare = sql => {
+    const st = real(sql);
+    if (!missed && /FROM cms_posts WHERE cms_site_id = \? AND slot = \?/.test(sql)) {
+      missed = true;
+      return new Proxy(st, { get: (o, k) => k === "get" ? () => undefined : (typeof o[k] === "function" ? o[k].bind(o) : o[k]) });
+    }
+    return st;
+  };
+  t.after(() => { db.prepare = real; });
+  const b = await call("POST", `/app/cms/${s.id}/run`, { body: { rid: RID } });
+  db.prepare = real;
+  assert.ok(missed, "taklit devreye girdi");
+  assert.deepEqual([b.status, b.body.post?.id], [200, r.body.post.id], JSON.stringify(b.body));
+  assert.deepEqual({ ...counters(db), cm: cmN(db), cu: cuN(db) }, { lb: 1, u: 1, cm: 1, cu: 1 });
+});
+
+test("şimdi yaz: siteyi kaldırıp yeniden bağlamak günlük tetiği sıfırlamaz (Pro, 1 site); üretim hatası iki sayacı da iade eder", async t => {
+  stubProviders(t);
+  const { db, env, call } = setup();
+  const s = (await connect(call)).body.site;
+  assert.equal((await call("POST", `/app/cms/${s.id}/run`, { body: { rid: RID } })).status, 200);
+  assert.equal((await call("POST", `/app/cms/${s.id}/disconnect`, { body: {} })).status, 200);
+  const s2 = (await connect(call)).body.site;
+  assert.ok(s2?.id && s2.id !== s.id, "yeni site kaydı");
+  const r2 = await call("POST", `/app/cms/${s2.id}/run`, { body: { rid: RID2 } });
+  assert.deepEqual([r2.status, r2.body.error], [429, "daily_limit"], JSON.stringify(r2.body));
+  assert.equal(cuN(db), 1);
+  // kaldırılan sitenin bekleyen elle yazısı iptal + iade edilince aynı gün yeni sitede tetik açılır
+  await cmsTick(env, async () => LLM_FAIL(), { log: () => {} });
+  assert.deepEqual({ ...counters(db), cm: cmN(db), cu: cuN(db) }, { lb: 0, u: 0, cm: 0, cu: 0 });
+  const r3 = await call("POST", `/app/cms/${s2.id}/run`, { body: { rid: RID3 } });
+  assert.equal(r3.status, 200, JSON.stringify(r3.body));
+  assert.equal(cuN(db), 1);
+});
+
 // ---- zamanlama ----
 test("nextRunAt: İstanbul (UTC+3) saati ve doğru gün", () => {
   // 2026-11-24 Salı 06:00 UTC = 09:00 İstanbul
@@ -605,4 +777,123 @@ test("APP_ROUTES: smc CMS uçlarına izin verir, brandcorner.co'da yok", async t
   assert.deepEqual([bc.status, bc.body.error], [404, "not_found"]);
   const bc2 = await call("POST", "/app/cms/connect", { token: tok("B"), origin: "https://brandcorner.co", body: { platform: "hubspot", inputs: { api_key: KEY } } });
   assert.equal(bc2.status, 404);
+});
+
+// ---- bildirim e-postası (25.11) ----
+const MAIL_ENV = { SMTP_USER: "bildirim@ornek.test", SMTP_PASS: "sahte" };
+function mailSpy() { const sent = []; return { sent, mail: async (env, m) => { sent.push(m); } }; }
+function stubPush(t, fn) { const hp = PROVIDERS.hubspot, o = hp.push; hp.push = fn; t.after(() => { hp.push = o; }); }
+const insPost = (db, siteId, slot, extra = {}) => {
+  const r = { state: "hazir", title: "Örnek <b>Yazı</b>", markdown: "Gövde.", mode: "draft", user_id: 1, ...extra };
+  return Number(db.prepare("INSERT INTO cms_posts (cms_site_id, user_id, slot, state, title, markdown, mode, lease_until) VALUES (?, ?, ?, ?, ?, ?, ?, ?)")
+    .run(siteId, r.user_id, slot, r.state, r.title, r.markdown, r.mode, r.lease_until ?? null).lastInsertRowid);
+};
+
+test("bildirim: başarılı yayında kullanıcının dilinde e-posta (EN), bağlantı + panel; HTML kaçışlı", async t => {
+  stubProviders(t);
+  stubPush(t, async () => ({ ok: true, remote_id: "9", url: "https://blog.example.test/ornek" }));
+  const { db, env, call } = setup(freshDb(), MAIL_ENV);
+  const s = (await connect(call)).body.site;
+  db.exec("UPDATE users SET lang = 'en', name = 'Ayşe' WHERE id = 1");
+  insPost(db, s.id, "p1", { mode: "publish" });
+  const { sent, mail } = mailSpy();
+  const out = await cmsTick({ ...env, GEN_ENABLED: "0" }, async () => { throw new Error("ağ yok"); }, { log: () => {}, mail });
+  assert.equal(out.pushed, 1, JSON.stringify(out));
+  assert.equal(out.mailed, 1, JSON.stringify(out));
+  assert.equal(sent.length, 1);
+  const m = sent[0];
+  assert.equal(m.to, "a@ornek.test");
+  assert.match(m.subject, /^Your post is live: Örnek <b>Yazı<\/b>$/);
+  assert.ok(!/[\r\n]/.test(m.subject));
+  assert.match(m.text, /Hi Ayşe,/);
+  assert.match(m.text, /https:\/\/blog\.example\.test\/ornek/);
+  assert.match(m.text, /https:\/\/app\.socialmediacorner\.co\/en\//);
+  assert.ok(m.html.includes("&lt;b&gt;Yazı&lt;/b&gt;") && !m.html.includes("<b>Yazı"), m.html);
+  assert.equal(m.from.email, "bildirim@ornek.test");
+});
+
+test("bildirim: taslak gönderimde TR e-posta; SMTP yoksa hiç gönderilmez", async t => {
+  stubProviders(t);
+  stubPush(t, async () => ({ ok: true, remote_id: "9", url: "https://blog.example.test/taslak" }));
+  {
+    const { db, env, call } = setup(freshDb(), MAIL_ENV);
+    const s = (await connect(call)).body.site;
+    insPost(db, s.id, "p1");
+    const { sent, mail } = mailSpy();
+    const out = await cmsTick({ ...env, GEN_ENABLED: "0" }, async () => { throw new Error("ağ yok"); }, { log: () => {}, mail });
+    assert.equal(out.mailed, 1, JSON.stringify(out));
+    assert.match(sent[0].subject, /^Yeni taslak sitende: /);
+    assert.match(sent[0].text, /^Merhaba a,/);
+    assert.match(sent[0].text, /LinkedIn ya da Instagram/);
+  }
+  {
+    const { db, env, call } = setup();
+    const s = (await connect(call)).body.site;
+    insPost(db, s.id, "p1");
+    const { sent, mail } = mailSpy();
+    const out = await cmsTick({ ...env, GEN_ENABLED: "0" }, async () => { throw new Error("ağ yok"); }, { log: () => {}, mail });
+    assert.equal(out.pushed, 1);
+    assert.equal(sent.length, 0);
+    assert.equal(out.mailed, 0);
+  }
+});
+
+test("bildirim: hata e-postası kullanıcı başına günde en çok 1; tik başına en çok 2 e-posta", async t => {
+  stubProviders(t);
+  stubPush(t, async () => ({ ok: false, error: "bad_input", retry: false })); // site düşürmeyen kalıcı hata
+  const { db, env, call } = setup(freshDb(), MAIL_ENV);
+  const s = (await connect(call)).body.site;
+  insPost(db, s.id, "p1");
+  insPost(db, s.id, "p2");
+  const { sent, mail } = mailSpy();
+  const opts = { log: () => {}, mail };
+  const out = await cmsTick({ ...env, GEN_ENABLED: "0" }, async () => { throw new Error("ağ yok"); }, opts);
+  assert.equal(out.push_failed, 2, JSON.stringify(out));
+  assert.equal(sent.length, 1, JSON.stringify(out)); // ikinci hata aynı gün: düşer
+  assert.equal(out.mail_skipped, 1);
+  assert.match(sent[0].subject, /gönderilemedi/);
+  // ertesi gün yeniden 1 hata e-postası
+  insPost(db, s.id, "p3");
+  const later = Date.now() + 26 * 3600e3;
+  await cmsTick({ ...env, GEN_ENABLED: "0" }, async () => { throw new Error("ağ yok"); }, { ...opts, now: () => later });
+  assert.equal(sent.length, 2);
+
+  // tik başına sınır: 3 başarılı gönderim (PUSH_PER_TICK=2 → 2 gönderim) + 2 eski 'gonderiliyor' (sonucu bilinmiyor)
+  stubPush(t, async () => ({ ok: true, remote_id: "1", url: "https://blog.example.test/x" }));
+  const B = setup(freshDb(), MAIL_ENV);
+  const s2 = (await connect(B.call)).body.site;
+  insPost(B.db, s2.id, "q1");
+  insPost(B.db, s2.id, "q2");
+  insPost(B.db, s2.id, "q3", { state: "gonderiliyor", lease_until: "2000-01-01 00:00:00" });
+  const spy2 = mailSpy();
+  const o2 = await cmsTick({ ...B.env, GEN_ENABLED: "0" }, async () => { throw new Error("ağ yok"); }, { log: () => {}, mail: spy2.mail });
+  assert.equal(o2.stale, 1, JSON.stringify(o2));
+  assert.equal(spy2.sent.length, 2, JSON.stringify(o2));
+  assert.equal(o2.mailed + o2.mail_skipped, 3, JSON.stringify(o2));
+  assert.match(spy2.sent[0].subject, /gönderilemedi/); // eski 'gonderiliyor' → sonucu bilinmiyor hatası önce
+});
+
+test("bildirim: üretilemeyen yazıda hata e-postası (hak iade metni); gönderici hatası tiki düşürmez", async t => {
+  stubProviders(t);
+  const { db, env, call } = setup(freshDb(), MAIL_ENV);
+  const s = (await connect(call)).body.site;
+  await call("POST", `/app/cms/${s.id}/run`, { body: { rid: RID } });
+  const sent = [];
+  const out = await cmsTick(env, async () => LLM_FAIL(), { log: () => {}, mail: async (e, m) => { sent.push(m); throw new Error("smtp"); } });
+  assert.equal(out.produce_failed, 1, JSON.stringify(out));
+  assert.equal(sent.length, 1);
+  assert.match(sent[0].subject, /üretilemedi/);
+  assert.match(sent[0].text, /hakkı iade edildi/);
+  assert.equal(out.mailed, 0);
+  assert.equal(out.mail_skipped, 1);
+  // gönderilemeyen hata e-postası günlük hakkı yemez: aynı gün sonraki hata yine e-posta dener
+  const ne = () => db.prepare("SELECT COALESCE(SUM(n), 0) AS n FROM gen_usage WHERE kind = 'ne'").get().n;
+  assert.equal(ne(), 0);
+  db.prepare("UPDATE gen_usage SET n = 0 WHERE kind = 'cm' OR kind = 'cu'").run();
+  assert.equal((await call("POST", `/app/cms/${s.id}/run`, { body: { rid: RID2 } })).status, 200);
+  const { sent: sent2, mail } = mailSpy();
+  const out2 = await cmsTick(env, async () => LLM_FAIL(), { log: () => {}, mail });
+  assert.equal(out2.mailed, 1, JSON.stringify(out2));
+  assert.equal(sent2.length, 1);
+  assert.equal(ne(), 1);
 });

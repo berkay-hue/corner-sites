@@ -4,13 +4,14 @@
 // Güvenlik: secret_box/token_box/creds hiçbir yanıtta ve logda yok; tek iz hint (son 4 karakter). last_error yalnız kısa kod.
 // CMS_ENABLED !== "1" ya da 0019 uygulanmamışsa her uç 503 not_ready. Üretim (LLM) ve gönderim (push) cmsTick'te (K2):
 // elle çalıştırma kotayı burada önden düşer (charged=1, month/day yazılı); cmsTick bu satırda yeniden düşmez, LLM hatasında iade eder.
-import { PROVIDERS, UNSUPPORTED, ERROR_HELP, slugify } from "./cms-providers.js";
+import { PROVIDERS, UNSUPPORTED, ERROR_HELP, slugify, escHtml } from "./cms-providers.js";
 import { encrypt, decrypt, redirectUri, returnBase } from "./oauth.js";
 import { planLimits, PLANS, CMS_FREQS } from "./plans.js";
-import { genDay, genEnabled, keyOf, reserve, UPSERT, blogRequest, STOCK_URL, STOCK_TIMEOUT, STOCK_DAY_MAX, stockPhoto, planCounts } from "./generate.js";
+import { genDay, resetAt, genEnabled, keyOf, reserve, UPSERT, blogRequest, STOCK_URL, STOCK_TIMEOUT, STOCK_DAY_MAX, stockPhoto, planCounts } from "./generate.js";
 import { TONES, SECTORS, STUDIO_MAX } from "./gen-prompt.js";
 import { makeLlm, LlmError } from "./llm.js";
-import { cmsBackPath } from "./sites.js";
+import { cmsBackPath, siteConf } from "./sites.js";
+import { smtpReady, smtpSend, smtpFrom } from "./smtp.js";
 
 export class CmsError extends Error {
   constructor(code, status = 400, extra = null) { super(code); this.code = code; this.status = status; this.extra = extra; }
@@ -324,6 +325,15 @@ async function settings(c, id) {
 }
 
 // Elle çalıştırma: aynı rid tekrarı aynı yazıyı döner (slot UNIQUE). Kota önden düşülür; üretim cmsTick'te (K2).
+// "Şimdi bir yazı yaz" (25.11): istek içinde üretim yok (10 ms CPU); 'uretiliyor' satırı next_try_at=now ile eklenir, cmsTick (*/5)
+// ilk turda üretir. Site takvimine (next_run_at) dokunulmaz. Sınırlar: aylık blog hakkı (gen_month lb, lbCap) + günlük kullanıcı (u)
+// + site başına günde 1 elle tetik (gen_usage kind 'cm', anahtar keyOf(salt|gün|cm|site_id), max 1; göç yok) + kullanıcı başına günde
+// en çok plan site sınırı kadar elle tetik (kind 'cu', anahtar keyOf(salt|gün|cu|user_id), max siteLimit): site kaldırılıp yeniden
+// bağlanınca yeni site_id ile 'cm' sıfırlanır, 'cu' sıfırlanmaz. Tetik doluysa 429 daily_limit {reset_at}; site aktif değilse 409
+// site_state {state}. Üretim başarısız olursa refundBatch hepsini iade eder.
+const MANUAL_PER_DAY = 1;
+const manualKey = (env, day, siteId) => keyOf(env, day, "cm", String(siteId));
+const manualUserKey = (env, day, uid) => keyOf(env, day, "cu", String(uid));
 async function run(c, id) {
   needPlan(c);
   const env = c.env, uid = c.user.id, rid = str(c.body.rid);
@@ -332,7 +342,7 @@ async function run(c, id) {
   const slot = `manual:${rid.toLowerCase()}`;
   const prev = await env.DB.prepare("SELECT * FROM cms_posts WHERE cms_site_id = ? AND slot = ?").bind(s.id, slot).first();
   if (prev) return ok(c, { post: postOut(prev) });
-  if (s.state !== "aktif") bad("state");
+  if (s.state !== "aktif") fail("site_state", 409, { state: s.state });
   if (!genEnabled(env)) fail("not_ready", 503);
   const P = planLimits(c.user);
   if (!P) fail("not_ready", 503);
@@ -343,18 +353,26 @@ async function run(c, id) {
   const items = [
     { name: "mo", month, user: uid, kind: "lb", inc: 1, max: cap.max },
     { name: "u", kind: "u", key: await keyOf(env, day, "u", uid), inc: 1, max: U },
+    { name: "cm", kind: "cm", key: await manualKey(env, day, s.id), inc: 1, max: MANUAL_PER_DAY },
+    { name: "cu", kind: "cu", key: await manualUserKey(env, day, uid), inc: 1, max: Math.max(1, siteLimit(c.user)) },
   ];
   const r = await reserve(env.DB, day, items);
-  if (!r.ok) fail(r.failed.includes("mo") ? "quota" : "rate", r.failed.includes("mo") ? 402 : 429);
+  if (!r.ok) {
+    // Eşzamanlı aynı rid: öteki istek tetik hakkını aldı ve yazıyı ekledi (ya da eklemek üzere) → hata değil, o yazı döner
+    const won = await env.DB.prepare("SELECT * FROM cms_posts WHERE cms_site_id = ? AND slot = ?").bind(s.id, slot).first();
+    if (won) return ok(c, { post: postOut(won) });
+    if (r.failed.includes("cm") || r.failed.includes("cu")) fail("daily_limit", 429, { reset_at: resetAt() });
+    fail(r.failed.includes("mo") ? "quota" : "rate", r.failed.includes("mo") ? 402 : 429);
+  }
   const row = await env.DB.prepare(
     `INSERT INTO cms_posts (cms_site_id, user_id, slot, state, mode, charged, month, day, next_try_at)
      VALUES (?, ?, ?, 'uretiliyor', ?, 1, ?, ?, datetime('now')) ON CONFLICT(cms_site_id, slot) DO NOTHING RETURNING *`,
   ).bind(s.id, uid, slot, s.auto_publish ? "publish" : "draft", month, day).first();
   if (row) return ok(c, { post: postOut(row) });
-  // Eşzamanlı aynı rid: öteki istek ekledi; bu rezervasyonu geri al
+  // Eşzamanlı aynı rid, iki rezervasyon da geçtiyse (ör. öteki isteğin hakkı arada iade edildi): öteki ekledi; bu rezervasyonu geri al
   await env.DB.batch([
     env.DB.prepare("UPDATE gen_month SET n = MAX(0, n - 1) WHERE month = ? AND user_id = ? AND kind = 'lb'").bind(month, uid),
-    env.DB.prepare("UPDATE gen_usage SET n = MAX(0, n - 1) WHERE day = ? AND key = ?").bind(day, items[1].key),
+    ...items.slice(1).map(i => env.DB.prepare("UPDATE gen_usage SET n = MAX(0, n - 1) WHERE day = ? AND key = ?").bind(day, i.key)),
   ]);
   const again = await env.DB.prepare("SELECT * FROM cms_posts WHERE cms_site_id = ? AND slot = ?").bind(s.id, slot).first();
   return ok(c, { post: postOut(again) });
@@ -571,13 +589,18 @@ const SECTOR_MAP = { ecom: "E-ticaret", tech: "Yazılım", services: "Danışman
 const sectorOf = v => { const k = SECTOR_MAP[str(v)]; return k && Object.hasOwn(SECTORS, k) ? k : "Genel"; };
 const styleFrom = samples => { const a = jsonOr(samples, []); return (Array.isArray(a) ? a.filter(x => typeof x === "string") : []).join("\n\n").slice(0, STUDIO_MAX.style); };
 
-// İade: aylık (lb) + günlük kullanıcı (u) sayacı. Atomik ve idempotent: sayaç yalnız satır hâlâ charged=1 ve 'uretiliyor' iken düşer,
-// aynı batch satırı charged=0 + son duruma çeker (iki tik aynı satırı iade edemez).
+// İade: aylık (lb) + günlük kullanıcı (u) sayacı; elle tetikte (slot manual:…) günlük tetik hakları (site cm + kullanıcı cu) da. Atomik ve
+// idempotent: sayaç yalnız satır hâlâ charged=1 ve 'uretiliyor' iken düşer, aynı batch satırı charged=0 + son duruma çeker.
 async function refundBatch(env, p, state, err) {
   const db = env.DB, ukey = await keyOf(env, p.day, "u", p.user_id), still = "EXISTS (SELECT 1 FROM cms_posts WHERE id = ? AND charged = 1 AND state = 'uretiliyor')";
+  const manual = String(p.slot || "").startsWith("manual:") ? [
+    db.prepare(`UPDATE gen_usage SET n = MAX(0, n - 1) WHERE day = ? AND key = ? AND ${still}`).bind(p.day, await manualKey(env, p.day, p.cms_site_id), p.id),
+    db.prepare(`UPDATE gen_usage SET n = MAX(0, n - 1) WHERE day = ? AND key = ? AND ${still}`).bind(p.day, await manualUserKey(env, p.day, p.user_id), p.id),
+  ] : [];
   return db.batch([
     db.prepare(`UPDATE gen_month SET n = MAX(0, n - 1) WHERE month = ? AND user_id = ? AND kind = 'lb' AND ${still}`).bind(p.month, p.user_id, p.id),
     db.prepare(`UPDATE gen_usage SET n = MAX(0, n - 1) WHERE day = ? AND key = ? AND ${still}`).bind(p.day, ukey, p.id),
+    ...manual,
     db.prepare("UPDATE cms_posts SET charged = 0, state = ?, last_error = ?, lease_until = NULL, updated_at = datetime('now') WHERE id = ? AND state = 'uretiliyor'")
       .bind(state, err, p.id),
   ]);
@@ -590,6 +613,69 @@ function excerptOf(md) {
   return t.length > EXCERPT_MAX ? `${t.slice(0, EXCERPT_MAX - 1).replace(/\s+\S*$/, "")}…` : t;
 }
 
+// Bildirim e-postası (25.11): gönderim/yayın başarısı ve hata (gönderilemedi, sonucu bilinmiyor, üretilemedi) sonrası kullanıcıya kısa
+// TR/EN e-posta (dil users.lang), Gmail SMTP (src/smtp.js; SMTP_USER/SMTP_PASS yoksa hiç gönderilmez). Ayar yok: varsayılan açık.
+// Hata e-postası kullanıcı başına günde en çok 1 (gen_usage kind 'ne', göç yok; genCleanup 2 gün sonra siler). Tik başına en çok
+// MAIL_PER_TICK e-posta (CPU/alt istek bütçesi); sığmayan bildirim düşer (kalıcı kuyruk yok; yazının durumu panelde zaten görünür).
+const MAIL_PER_TICK = 2, NOTE_MAX = 8, MAIL_TITLE = 120;
+const MAIL_TEXT = {
+  tr: {
+    hi: n => `Merhaba ${n},`,
+    publish: { subject: t => `Yazın yayınlandı: ${t}`, body: (t, w) => `“${t}” ${w} sitende yayınlandı.` },
+    draft: { subject: t => `Yeni taslak sitende: ${t}`, body: (t, w) => `“${t}” ${w} sitene taslak olarak gönderildi. Göz atıp yayınlayabilirsin.` },
+    push_err: { subject: () => "Blog otomatiği: bir yazı gönderilemedi", body: (t, w) => `“${t}” ${w} sitene gönderilemedi.` },
+    produce_err: { subject: () => "Blog otomatiği: bir yazı üretilemedi", body: (t, w) => `${w} için planlanan yazı üretilemedi. Bu yazının hakkı iade edildi.` },
+    open: "Yazıyı aç",
+    panel: "Blog otomatiğine git",
+    share: "Panelden yazıyı tek tıkla LinkedIn ya da Instagram gönderisine uyarlayabilirsin.",
+    retry: "Ayrıntı ve yeniden deneme panelde. Bugün başka hata e-postası gönderilmez.",
+    why: b => `Bu e-postayı ${b} blog otomatiğin bir siteye bağlı olduğu için aldın.`,
+    untitled: "Başlıksız yazı", site: "bağlı",
+    err: { llm_fail: "Yazı üretimi birkaç denemede de tamamlanamadı.", refused: "Yazı bu konu için üretilemedi; konuyu ya da açıklamayı değiştirmeyi dene." },
+  },
+  en: {
+    hi: n => `Hi ${n},`,
+    publish: { subject: t => `Your post is live: ${t}`, body: (t, w) => `“${t}” was published on your ${w} site.` },
+    draft: { subject: t => `New draft on your site: ${t}`, body: (t, w) => `“${t}” was sent to your ${w} site as a draft. Review it and publish when ready.` },
+    push_err: { subject: () => "Blog autopilot: a post could not be sent", body: (t, w) => `“${t}” could not be sent to your ${w} site.` },
+    produce_err: { subject: () => "Blog autopilot: a post could not be written", body: (t, w) => `The post scheduled for ${w} could not be written. Its credit was refunded.` },
+    open: "Open the post",
+    panel: "Go to blog autopilot",
+    share: "From the panel you can adapt the post into a LinkedIn or Instagram post in one click.",
+    retry: "Details and retry are in the panel. No other error email will be sent today.",
+    why: b => `You got this email because your ${b} blog autopilot is connected to a site.`,
+    untitled: "Untitled post", site: "connected",
+    err: { llm_fail: "Writing the post did not finish after several tries.", refused: "The post could not be written for this topic; try changing the topic or the brief." },
+  },
+};
+const oneLine = (v, max) => { const t = str(v).replace(/[\u0000-\u001f\u007f-\u009f\u2028\u2029]+/g, " ").replace(/\s+/g, " ").trim(); return t.length > max ? `${t.slice(0, max - 1).trim()}…` : t; };
+const siteWord = (row, T) => {
+  const l = oneLine(row.label, 60);
+  if (l) return l;
+  try { return new URL(str(row.base_url)).hostname || T.site; } catch { return T.site; }
+};
+
+// n: { kind: 'publish'|'draft'|'push_err'|'produce_err', title, url, err }; row: users + cms_sites birleşimi
+export function cmsMail(env, n, row) {
+  const lang = row.lang === "en" ? "en" : "tr", T = MAIL_TEXT[lang], K = T[n.kind], site = str(row.site);
+  const brand = siteConf(site).name, title = oneLine(n.title, MAIL_TITLE) || T.untitled, where = siteWord(row, T);
+  const panel = `https://${site}${cmsBackPath(site, lang)}`, url = /^https:\/\/[^\s"'<>]+$/.test(str(n.url)) ? str(n.url).slice(0, 2000) : "";
+  const isErr = n.kind.endsWith("_err"), help = isErr ? (ERROR_HELP[n.err]?.[lang] || T.err[n.err] || "") : "";
+  const hi = T.hi(oneLine(row.name, 80) || (lang === "en" ? "there" : "")).replace(" ,", ","), body = K.body(title, where), extra = isErr ? T.retry : T.share;
+  const lines = [hi, "", body, ...(help ? [help] : []), "", ...(url ? [`${T.open}: ${url}`] : []), `${T.panel}: ${panel}`, "", extra, "", T.why(brand), brand];
+  const btn = (href, txt, dark) => `<a href="${escHtml(href)}" style="display:inline-block;${dark ? "background:#111;color:#fff;" : "color:#111;border:1px solid #111;"}padding:10px 16px;border-radius:8px;text-decoration:none;margin:0 8px 8px 0">${escHtml(txt)}</a>`;
+  return {
+    to: str(row.email),
+    from: { email: smtpFrom(env), name: brand },
+    subject: oneLine(K.subject(title), 160),
+    text: `${lines.join("\n")}\n`,
+    html: `<div style="font-family:Arial,sans-serif;font-size:15px;line-height:1.5;color:#111;max-width:520px">
+<p>${escHtml(hi)}</p><p>${escHtml(body)}${help ? `<br>${escHtml(help)}` : ""}</p>
+<p>${url ? btn(url, T.open, true) : ""}${btn(panel, T.panel, !url)}</p>
+<p style="font-size:13px;color:#555">${escHtml(extra)}</p><p style="font-size:13px;color:#555">${escHtml(T.why(brand))}</p><p>${escHtml(brand)}</p></div>`,
+  };
+}
+
 // 90 günden eski yazıların gövdesi (markdown) boşaltılır, satır kalır (liste/kota geçmişi). Gönderilmemiş eski 'hazir' iptal.
 export async function cmsPurge(env) {
   const r = await env.DB.prepare(
@@ -599,8 +685,8 @@ export async function cmsPurge(env) {
   return Number(r?.meta?.changes) || 0;
 }
 
-export async function cmsTick(env, f = fetch, { d1 = 30, sub = 20, log = m => console.log(m), now = () => Date.now() } = {}) {
-  const out = { stale: 0, cancelled: 0, purged: 0, pushed: 0, push_failed: 0, scheduled: 0, quota: 0, plan_paused: 0, produced: 0, produce_failed: 0 };
+export async function cmsTick(env, f = fetch, { d1 = 30, sub = 20, log = m => console.log(m), now = () => Date.now(), mail = smtpSend } = {}) {
+  const out = { stale: 0, cancelled: 0, purged: 0, pushed: 0, push_failed: 0, scheduled: 0, quota: 0, plan_paused: 0, produced: 0, produce_failed: 0, mailed: 0, mail_skipped: 0 };
   if (env?.CMS_ENABLED !== "1" || !env.DB) return out;
   const B = { d1, sub };
   const take = (q, s = 0) => { if (B.d1 < q || B.sub < s) return false; B.d1 -= q; B.sub -= s; return true; };
@@ -613,20 +699,49 @@ export async function cmsTick(env, f = fetch, { d1 = 30, sub = 20, log = m => co
       return true;
     }
   };
+  // Bildirimler tik boyunca toplanır, gönderim adımından sonra ve tik sonunda gönderilir (en çok MAIL_PER_TICK). Satır CAS ile gerçekten
+  // değiştiyse eklenir (yarışta iki tik aynı yazı için yazmaz). n: { kind, post_id, user_id, site_id, title, url, err }
+  const notes = [], mailOn = smtpReady(env);
+  const note = n => { if (mailOn && notes.length < NOTE_MAX) notes.push(n); else if (mailOn) out.mail_skipped++; };
+  const changed = r => Number(r?.meta?.changes) > 0;
+  const flush = () => step("mail", async () => {
+    while (notes.length) {
+      const n = notes.shift();
+      if (out.mailed >= MAIL_PER_TICK || !take(2, 1)) { out.mail_skipped += 1 + notes.length; notes.length = 0; return; }
+      const row = await db.prepare(
+        "SELECT u.email, u.name, u.lang, s.site, s.label, s.base_url FROM cms_sites s JOIN users u ON u.id = s.user_id WHERE s.id = ? AND s.user_id = ?",
+      ).bind(n.site_id, n.user_id).first();
+      if (!row || !str(row.email).includes("@")) { out.mail_skipped++; continue; }
+      let ne = null; // hata e-postası kullanıcı başına günde 1; gönderilemezse hak iade edilir (o günün sonraki hatası yine e-posta alır)
+      if (n.kind.endsWith("_err")) {
+        const day = genDay(now());
+        ne = { name: "ne", kind: "ne", key: await keyOf(env, day, "ne", String(n.user_id)), inc: 1, max: 1, day };
+        const r = await reserve(db, day, [ne]);
+        if (!r.ok) { out.mail_skipped++; continue; }
+      }
+      try { await mail(env, cmsMail(env, n, row)); out.mailed++; }
+      catch (e) {
+        out.mail_skipped++; log(JSON.stringify({ cms: "tick", phase: "mail", err: str(e?.name).slice(0, 40) }));
+        if (ne) await db.prepare("UPDATE gen_usage SET n = MAX(0, n - 1) WHERE day = ? AND key = ?").bind(ne.day, ne.key).run();
+      }
+    }
+  });
 
   // 1) temizlik: kirası dolmuş gönderim → sonucu bilinmiyor (körlemesine tekrar çift yazı olur; kullanıcı "yeniden dene" ile seçer)
   if (!(await step("stale", async () => {
     if (!take(1)) return;
-    const r = await db.prepare(
-      "UPDATE cms_posts SET state = 'basarisiz', last_error = 'unknown_result', lease_until = NULL, updated_at = datetime('now') WHERE state = 'gonderiliyor' AND lease_until < ?",
-    ).bind(T()).run();
-    out.stale = Number(r?.meta?.changes) || 0;
+    const { results } = await db.prepare(
+      `UPDATE cms_posts SET state = 'basarisiz', last_error = 'unknown_result', lease_until = NULL, updated_at = datetime('now') WHERE state = 'gonderiliyor' AND lease_until < ?
+       RETURNING id, user_id, cms_site_id, title`,
+    ).bind(T()).all();
+    out.stale = (results || []).length;
+    for (const p of results || []) note({ kind: "push_err", post_id: p.id, user_id: p.user_id, site_id: p.cms_site_id, title: p.title, err: "unknown_result" });
   }))) return out;
   // kaldırılmış sitenin üretim bekleyen (kotası düşülmüş) yazıları: iade + iptal
   await step("cancel", async () => {
     if (!take(1)) return;
     const { results } = await db.prepare(
-      "SELECT p.id, p.user_id, p.month, p.day FROM cms_posts p JOIN cms_sites s ON s.id = p.cms_site_id WHERE p.state = 'uretiliyor' AND s.state = 'kaldirildi' LIMIT ?",
+      "SELECT p.id, p.user_id, p.cms_site_id, p.slot, p.month, p.day FROM cms_posts p JOIN cms_sites s ON s.id = p.cms_site_id WHERE p.state = 'uretiliyor' AND s.state = 'kaldirildi' LIMIT ?",
     ).bind(CANCEL_PER_TICK).all();
     for (const p of results || []) {
       if (!take(3)) break;
@@ -673,12 +788,15 @@ export async function cmsTick(env, f = fetch, { d1 = 30, sub = 20, log = m => co
       // Yeni creds (IdeaSoft refresh token her kullanımda değişir) başarısız sonuçta da yazılır; kaldırılmış siteye asla
       if (res.creds && s) st.push(db.prepare("UPDATE cms_sites SET secret_box = ?, updated_at = datetime('now') WHERE id = ? AND state != 'kaldirildi'")
         .bind(await encrypt(env, JSON.stringify(res.creds)), s.id));
+      const at = st.length; // aşağıdaki yazı satırı güncellemesinin batch'teki yeri (CAS sonucu bildirim için)
+      let n = null;
       if (res.ok) {
         st.push(db.prepare(
           "UPDATE cms_posts SET state = ?, remote_id = ?, remote_url = ?, last_error = NULL, lease_until = NULL, updated_at = datetime('now') WHERE id = ? AND state = 'gonderiliyor'",
         ).bind(p.mode === "publish" ? "yayinlandi" : "gonderildi", res.remote_id == null ? null : str(res.remote_id).slice(0, 200),
           /^https:\/\//.test(str(res.url)) ? str(res.url).slice(0, 2000) : null, p.id));
         out.pushed++;
+        n = { kind: p.mode === "publish" ? "publish" : "draft", url: /^https:\/\//.test(str(res.url)) ? str(res.url) : "" };
       } else if (res.retry && RETRYABLE.has(err) && p.attempts < PUSH_MAX) {
         st.push(db.prepare("UPDATE cms_posts SET state = 'hazir', last_error = ?, next_try_at = ?, lease_until = NULL, updated_at = datetime('now') WHERE id = ? AND state = 'gonderiliyor'")
           .bind(err, sqlTime(now() + backoff(p.attempts, p.id) * 1000), p.id));
@@ -687,11 +805,14 @@ export async function cmsTick(env, f = fetch, { d1 = 30, sub = 20, log = m => co
           .bind(err, p.id));
         if (s && SITE_FATAL.has(err)) st.push(db.prepare("UPDATE cms_sites SET state = 'hata', last_error = ?, updated_at = datetime('now') WHERE id = ? AND state = 'aktif'").bind(err, s.id));
         out.push_failed++;
+        n = { kind: "push_err", err };
       }
-      await db.batch(st);
+      const br = await db.batch(st);
+      if (n && changed(br?.[at])) note({ ...n, post_id: p.id, user_id: p.user_id, site_id: p.cms_site_id, title: p.title });
     });
     if (!more) break;
   }
+  await flush(); // gönderim bildirimleri üretimden önce: üretim bütçeyi bitirse de kaybolmasın
 
   if (!gen) return out; // üretim kapalı (GEN_ENABLED/anahtarlar): zamanlama ve üretim yok, gönderim sürer
 
@@ -767,7 +888,12 @@ export async function cmsTick(env, f = fetch, { d1 = 30, sub = 20, log = m => co
            AND state = 'uretiliyor' AND (lease_until IS NULL OR lease_until < ?) RETURNING *`,
       ).bind(lease(), t, t, t).first();
       if (!p) return;
-      if (p.attempts > PRODUCE_MAX) { await refundBatch(env, p, "basarisiz", "llm_fail"); out.produce_failed++; return; }
+      const produceErr = async e => { // iade + basarisiz; yazı satırı gerçekten değiştiyse bildirim
+        const br = await refundBatch(env, p, "basarisiz", e);
+        out.produce_failed++;
+        if (changed(br?.[br.length - 1])) note({ kind: "produce_err", post_id: p.id, user_id: p.user_id, site_id: p.cms_site_id, title: p.title, err: e });
+      };
+      if (p.attempts > PRODUCE_MAX) { await produceErr("llm_fail"); return; }
       const s = await db.prepare("SELECT * FROM cms_sites WHERE id = ?").bind(p.cms_site_id).first();
       if (!s || s.state === "kaldirildi") { await refundBatch(env, p, "iptal", "site_removed"); out.cancelled++; return; }
       let voice = null;
@@ -800,8 +926,7 @@ export async function cmsTick(env, f = fetch, { d1 = 30, sub = 20, log = m => co
           await db.prepare("UPDATE cms_posts SET lease_until = NULL, last_error = 'busy', next_try_at = ?, updated_at = datetime('now') WHERE id = ? AND state = 'uretiliyor'")
             .bind(sqlTime(now() + backoff(p.attempts, p.id) * 1000), p.id).run();
         } else {
-          await refundBatch(env, p, "basarisiz", kind === "refusal" ? "refused" : "llm_fail");
-          out.produce_failed++;
+          await produceErr(kind === "refusal" ? "refused" : "llm_fail");
         }
         return;
       }
@@ -833,6 +958,7 @@ export async function cmsTick(env, f = fetch, { d1 = 30, sub = 20, log = m => co
       out.produced++;
     });
   }
+  await flush();
   return out;
 }
 
