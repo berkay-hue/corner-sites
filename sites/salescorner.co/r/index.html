@@ -66,9 +66,25 @@ footer a{font-weight:600}
       return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
     });
   }
-  // Sunucu zaten maskeler; ikinci savunma olarak burada da a***@alan.com biçimine çevrilir
+  // Sunucu zaten maskeler; ikinci savunma olarak burada da a***@alan.com biçimine çevrilir.
+  // Tek regex (/x[…]*@…/g) uzun harf dizilerinde karesel çalışıp sekmeyi saniyelerce kilitliyordu (200 KB'ta ~25 sn);
+  // burada her "@" için yalnız iki komşu "@" arası taranır, toplam doğrusal.
+  var YEREL = /[A-Za-z0-9._%+-]/, AN = /[A-Za-z0-9]/, ALAN_K = /[A-Za-z0-9.-]/, ALAN = /^[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,}/;
   function maskele(s) {
-    return String(s == null ? "" : s).replace(/([A-Za-z0-9])[A-Za-z0-9._%+-]*@([A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,})/g, "$1***@$2");
+    s = String(s == null ? "" : s);
+    var out = "", son = 0, i = s.indexOf("@");
+    while (i !== -1) {
+      var b = i, e = i + 1, m = null;
+      while (b > son && YEREL.test(s[b - 1])) b--;
+      while (b < i && !AN.test(s[b])) b++;
+      if (b < i) {
+        while (e < s.length && ALAN_K.test(s[e])) e++;
+        m = ALAN.exec(s.slice(i + 1, e));
+      }
+      if (m) { out += s.slice(son, b + 1) + "***@" + m[0]; son = i + 1 + m[0].length; i = s.indexOf("@", son); }
+      else i = s.indexOf("@", i + 1);
+    }
+    return out + s.slice(son);
   }
   // Satır içi: önce kaçışlanmış metin gelir; yalnız **kalın** ve https bağlantılar etikete dönüşür
   function kalin(t) { return t.replace(/\*\*([^*\n]+?)\*\*/g, "<strong>$1</strong>"); }
@@ -87,7 +103,7 @@ footer a{font-weight:600}
       if (liste.length) { html.push("<ul>" + liste.map(function (x) { return "<li>" + satir(x) + "</li>"; }).join("") + "</ul>"); liste = []; }
     }
     satirlar.forEach(function (ham) {
-      var s = ham.replace(/\s+$/, ""), m;
+      var s = ham.trimEnd ? ham.trimEnd() : ham.replace(/\s+$/, ""), m;
       if (!s.trim()) return kapat();
       if ((m = s.match(/^(#{1,4})\s+(.+)$/))) { kapat(); var n = Math.max(2, Math.min(4, m[1].length)); html.push("<h" + n + ">" + satir(m[2]) + "</h" + n + ">"); return; }
       if (/^\s*(-{3,}|\*{3,})\s*$/.test(s)) { kapat(); html.push("<hr>"); return; }
