@@ -27,7 +27,8 @@ export const APP_ROUTES = Object.freeze([
   // A14 otomatik blog yazarı (src/cms.js CMS_ROUTES; CMS_ENABLED kapalı ya da 0019 yoksa 503 not_ready)
   "GET /app/cms", "GET /app/cmsposts", "POST /app/cms/probe", "POST /app/cms/connect", "POST /app/cms/:id/settings", "POST /app/cms/:id/run",
   "POST /app/cms/:id/pause", "POST /app/cms/:id/resume", "POST /app/cms/:id/disconnect", "POST /app/cmsposts/:id/retry", "POST /app/cmsoauth/start",
-  "POST /app/cmsoauth/finish",
+  "POST /app/cmsoauth/finish", "POST /app/cmsposts/:id/view", "POST /app/cmsposts/:id/edit", "POST /app/cmsposts/:id/skip",
+  "POST /app/cmsposts/:id/now", "POST /app/cmsposts/:id/reschedule",
 ]);
 
 export const SITES = {
