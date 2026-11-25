@@ -2,8 +2,9 @@
    smc-yayin.js'in (A7-3) liste/takvim, ayrıntı, kuyruğa al, onayla, iptal, yeniden dene ve "elle yayınlandı" akışı
    aynı /publish/* çağrılarıyla taşındı; tema studyo-kabuk.js'te, üst çubuk ust-hesap.js'te.
    Sayfa durumları tek tek gösterilir: #kq-misafir (oturum yok), #kq-yakinda (503 not_ready, yayın kapalı), #kq-acik (kuyruk).
-   ?taslak=<id> (EN ?draft=<id>): Geçmiş'teki LinkedIn/Instagram taslağı kuyruk formuna doldurulur; publish.js draft_id
-   almaz, iş {rid, platform, body, media_url, run_at} ile açılır.
+   ?taslak=<id> (EN ?draft=<id>): Geçmiş'teki LinkedIn/Instagram taslağı kuyruk formuna doldurulur; video/karusel
+   taslağının (worker gövdesi: sahne satırları + "\n\n" + açıklama) yalnız açıklaması Instagram metni olur. publish.js
+   draft_id almaz, iş {rid, platform, body, media_url, run_at} ile açılır; Instagram tek görselle yayınlanır.
    ÖRNEK kip yalnız yerel ya da önizleme adresinde (#ornek): sahte sunucu bellekte çalışır, hiçbir ağ isteği yapılmaz.
    Kurallar: kullanıcı/sunucu metni yalnız textContent ile yazılır; satır içi stil yok. Oturum anahtarı smc-oturum yalnız
    okunur. Saatler İstanbul saatidir (GMT+3). Metin uzunluğu publish.js gibi kod noktası sayılır. */
@@ -201,6 +202,8 @@
     platform: L('Bu kanal şu an kullanılamıyor.', 'This channel is not available right now.'),
     auth: L('Oturumun kapanmış. Yeniden giriş yap.', 'Your session has ended. Sign in again.'),
     not_ready: L('Otomatik yayın henüz açık değil.', 'Automatic publishing is not open yet.'),
+    plan_required: L('Otomatik paylaşım Pro planda. Planını yükselttikten sonra yeniden dene.', 'Auto-sharing is on the Pro plan. Upgrade your plan, then try again.'),
+    reconnect_required: L('Bu hesabın paylaşım izni yok. Hesabı yeniden bağla.', 'This account has no posting permission. Reconnect the account.'),
     network: L('Bağlantı kurulamadı. İnternetini kontrol edip yeniden dene.', 'Could not connect. Check your connection and try again.')
   };
   function hataMetni(kod) { return HATA[kod] || L('Bir sorun oldu. Biraz sonra yeniden dene.', 'Something went wrong. Try again in a moment.'); }
@@ -212,6 +215,8 @@
       stale: L('Planlanan saatten sonraki 24 saat içinde yayınlanamadı; süre doldu.', 'It could not be published within 24 hours of the scheduled time; the window expired.'),
       lease_expired: L('Yayın sırasında bağlantı koptu; gönderinin çıkıp çıkmadığı bilinmiyor.', 'The connection dropped while publishing; it is unknown whether the post went out.'),
       account_changed: L('Bağlı hesap değişti; bu yüzden onay düştü.', 'The connected account changed, so the approval was removed.'),
+      plan_required: L('Planın Pro olmadığı için onay düştü ve gönderi yayınlanmadı; otomatik paylaşım Pro planda.', 'The approval was removed and the post was not published because your plan is no longer Pro; auto-sharing is on the Pro plan.'),
+      reconnect_required: L('Bu hesabın paylaşım izni yok; hesabı yeniden bağla.', 'This account has no posting permission; reconnect the account.'),
       reconnect: L('Hesap bağlantısının süresi doldu ya da izin geri alındı; hesabı yeniden bağla.', 'The account connection expired or permission was revoked; reconnect the account.'),
       token: L('Hesap bağlantısının süresi doldu ya da izin geri alındı; hesabı yeniden bağla.', 'The account connection expired or permission was revoked; reconnect the account.'),
       ig_refresh: L('Instagram bağlantısı yenilenemedi; hesabı yeniden bağla.', 'The Instagram connection could not be refreshed; reconnect the account.'),
@@ -220,7 +225,7 @@
     };
     return m[k] || L('Bilinmeyen hata', 'Unknown error') + ' (' + k + ').';
   }
-  function yenidenBaglaGerek(kod) { return /(^|:)(reconnect|token|not_connected|account_changed|ig_refresh)$/.test(String(kod || '')); }
+  function yenidenBaglaGerek(kod) { return /(^|:)(reconnect|reconnect_required|token|not_connected|account_changed|ig_refresh)$/.test(String(kod || '')); }
 
   /* ---- Örnek kip: sahte sunucu (ağ yok) ---- */
   var sahte = (function () {
@@ -718,7 +723,9 @@
       kok.appendChild(h('p', { class: 'bildirim bildirim-uyari', text: L('Bu gönderi planlandı. Kaydedersen onay düşer ve gönderi yeniden onayını bekler; onaylamadan yayınlanmaz.', 'This post is scheduled. If you save, the approval is removed and the post waits for your approval again; it is not published without it.') }));
     }
     if (on && on.yok) {
-      kok.appendChild(h('p', { class: 'bildirim bildirim-uyari', text: L('#' + on.id + ' taslağı bulunamadı (taslaklar 3 gün saklanır) ya da LinkedIn/Instagram taslağı değil. Metni aşağıya kendin yazabilirsin.', 'Draft #' + on.id + ' was not found (drafts are kept for 3 days) or is not a LinkedIn/Instagram draft. You can write the text below yourself.') }));
+      kok.appendChild(h('p', { class: 'bildirim bildirim-uyari', text: L('#' + on.id + ' taslağı bulunamadı (taslaklar 3 gün saklanır) ya da LinkedIn, Instagram veya video taslağı değil. Metni aşağıya kendin yazabilirsin.', 'Draft #' + on.id + ' was not found (drafts are kept for 3 days) or is not a LinkedIn, Instagram or video draft. You can write the text below yourself.') }));
+    } else if (on && on.kaynak === 'video') {
+      kok.appendChild(h('p', { class: 'bildirim bildirim-bilgi', text: L('Geçmiş\'teki #' + on.id + ' video/karusel taslağının açıklamasıyla dolduruldu. Instagram gönderisi tek görselle yayınlanır: görsel bağlantısını ekle, gün ve saat seç, onaya gönder.', 'Filled with the caption of video/carousel draft #' + on.id + ' in History. The Instagram post goes out with a single image: add the image link, pick a day and time, and send it for approval.') }));
     } else if (on) {
       kok.appendChild(h('p', { class: 'bildirim bildirim-bilgi', text: L('Geçmiş\'teki #' + on.id + ' taslağından dolduruldu. Metni gözden geçir, gün ve saat seç, onaya gönder.', 'Filled from draft #' + on.id + ' in History. Review the text, pick a day and time, and send it for approval.') }));
     }
@@ -1094,6 +1101,7 @@
         iptalAkis(j, L('Taslağı iptal et', 'Cancel draft'), L('Bu taslak iptal edilsin mi? Geri alınamaz.', 'Cancel this draft? This cannot be undone.'), L('İptal et', 'Cancel draft'))]);
     } else if (j.state === 'onay_bekliyor') {
       if (j.last_error === 'account_changed') eylem.appendChild(h('p', { class: 'bildirim bildirim-uyari', text: sonHata('account_changed') + ' ' + L('Yeniden onayla.', 'Approve again.') }));
+      if (j.last_error === 'plan_required') eylem.appendChild(h('p', { class: 'bildirim bildirim-uyari', text: sonHata('plan_required') + ' ' + L('Pro plana geçince yeniden onayla.', 'Approve again after you move to Pro.') }));
       eylem.appendChild(h('p', { text: L('Onayını bekliyor. Onaylarsan seçilen saatte yayınlanır; onaylamazsan hiçbir şey yayınlanmaz.', 'Waiting for your approval. If you approve, it is published at the chosen time; otherwise nothing is published.') }));
       if (igGorselsiz) {
         add(eylem, [h('p', { class: 'bildirim bildirim-uyari', text: L('Instagram için görsel bağlantısı gerekli. Önce gönderiyi düzenle.', 'Instagram needs an image link. Edit the post first.') }), h('div', { class: 'kq-dugmeler' }, duzenleLink())]);
@@ -1221,6 +1229,16 @@
     body: L('Satış ekibimizin bu çeyrekte öğrendiği 3 şey\n\n1. İlk görüşmede fiyat konuşmak güven veriyor.\n2. Kısa demo, uzun demodan daha çok soru getiriyor.\n3. Teklifi aynı gün göndermek kapanışı hızlandırıyor.\n\nSizde hangisi işe yaradı?',
       '3 things our sales team learned this quarter\n\n1. Talking about price in the first call builds trust.\n2. A short demo brings more questions than a long one.\n3. Sending the proposal the same day speeds up closing.\n\nWhich one worked for you?')
   };
+  // Video/karusel taslağı: gövde "sahne satırları\n\naçıklama" (generate.js draftBody; sahne satırı tek satır), açıklama Instagram'a.
+  function taslakOn(id, x) {
+    var body = x ? String(x.body || '') : '';
+    if (x && x.platform === 'video') {
+      var i = body.indexOf('\n\n');
+      body = i < 0 ? '' : body.slice(i + 2);
+      return body.trim() ? { id: id, platform: 'instagram', body: body, kaynak: 'video' } : { id: id, yok: true };
+    }
+    return x && LIMITS[x.platform] && body.trim() ? { id: id, platform: x.platform, body: body } : { id: id, yok: true };
+  }
   function taslakYukle(id, my) {
     aktifTaslak = id;
     yukleniyor();
@@ -1234,9 +1252,7 @@
       });
     }).then(function (s) {
       if (!s || my !== tur) return;
-      var x = s.d;
-      var on = x && LIMITS[x.platform] && String(x.body || '').trim()
-        ? { id: id, platform: x.platform, body: String(x.body) } : { id: id, yok: true };
+      var on = taslakOn(id, s.d);
       taslakBekliyor = 0;
       aktifTaslak = 0;
       try { history.replaceState(null, '', location.pathname + location.hash); } catch (e) { /* adres aynı kalır */ }

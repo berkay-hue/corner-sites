@@ -320,6 +320,10 @@ test("draftBody: blog başlık + Markdown, video sahne satırları + açıklama;
   assert.equal(draftBody(blogDraft({ text: "## a\n\nb" })), "Blog başlığı\n\n## a\n\nb");
   assert.equal(draftBody({ angle: "video", title: "T", scenes: [{ text: "Kanca", sub: "", secs: 3 }, { text: "Çağrı", sub: "Profili izle", secs: 4 }], caption: "Açıklama #a" }),
     "Kanca\nÇağrı — Profili izle\n\nAçıklama #a");
+  // sahne metnindeki satır sonu tek satıra iner: ilk "\n\n" her zaman sahne/açıklama ayracıdır (kuyruk açıklamayı oradan alır)
+  const b = draftBody({ angle: "video", title: "T", scenes: [{ text: "Kanca\n\nikinci", sub: " alt\nyazı ", secs: 3 }], caption: "Paragraf 1\n\nParagraf 2" });
+  assert.equal(b, "Kanca ikinci — alt yazı\n\nParagraf 1\n\nParagraf 2");
+  assert.equal(b.slice(b.indexOf("\n\n") + 2), "Paragraf 1\n\nParagraf 2");
   assert.equal(draftBody({ angle: "hikaye", text: "Metin" }), "Metin");
   assert.equal(draftBody({ angle: "soru", text: "Kanca", say: "Söz" }), "Kanca\n\nSöz");
 });

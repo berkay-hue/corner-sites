@@ -2475,8 +2475,9 @@ test("LinkedIn: marka bağlar; token şifreli saklanır (yenileme yok), eski tok
   const list = (await call("GET", "/app/connections", { token: brand.token })).body;
   assert.deepEqual(list.connectable, ["instagram", "tiktok", "youtube", "linkedin"]);
   const li = liRow(list.connections);
-  assert.deepEqual({ ...li, updated_at: typeof li.updated_at }, {
+  assert.deepEqual({ ...li, updated_at: typeof li.updated_at, connected_at: typeof li.connected_at }, {
     platform: "linkedin", status: "connected", configured: true, handle: "Ayşe Yılmaz", label: null, label_code: null, updated_at: "string",
+    connected_at: "string",
   });
 
   // İlk senkrondan önce ölçüm yok
@@ -2563,6 +2564,7 @@ test("roller: üç rol de linkedin bağlar (token saklanır, ilk senkrona kadar 
     assert.deepEqual(narrowed.connectable, ["instagram", "tiktok", "youtube"]);
     assert.deepEqual(liRow(narrowed.connections), {
       platform: "linkedin", status: "no_api", configured: false, handle: null, label: NO_DATA, label_code: "no_data", updated_at: null,
+      connected_at: null,
     });
     assert.deepEqual(fail(await finish(call, u.token, ticket)), [400, "no_api"]);
     assert.deepEqual(fail(await finish(call, u.token, ticket)), [400, "ticket"]);
@@ -2626,6 +2628,20 @@ test("korumalar: roller arası taken iki yönde (linkedin dahil), marka bileti b
   assert.equal(db.prepare("SELECT COUNT(*) AS n FROM oauth_tokens WHERE user_id = ?").get(b2.id).n, 0);
 });
 
+test("W4: bağlantı listesi connected_at döner; boşsa created_at'e düşer (göç yok), updated_at aynen kalır", async () => {
+  const { db, call, join } = await setup({ ...ALL, ...LI_ENV });
+  const u = await join("brand", "baglanti@x.co");
+  const ins = db.prepare("INSERT INTO social_accounts (user_id, platform, handle, external_id, status, connected_at, created_at) VALUES (?, ?, ?, ?, 'connected', ?, ?)");
+  ins.run(u.id, "instagram", "kafe", "ig-1", "2026-11-20 10:00:00", "2026-01-01 00:00:00");
+  ins.run(u.id, "youtube", "kanal", "yt-1", null, "2026-02-02 02:02:02");
+  const list = (await call("GET", "/app/connections", { token: u.token })).body.connections;
+  assert.equal(liRow(list, "instagram").connected_at, "2026-11-20 10:00:00");
+  assert.equal(liRow(list, "youtube").connected_at, "2026-02-02 02:02:02");
+  assert.equal(liRow(list, "tiktok").connected_at, null);
+  assert.equal("created_at" in liRow(list, "youtube"), false);
+  assert.equal(typeof liRow(list, "youtube").updated_at, "string");
+});
+
 test("liste: configured her satırda boolean ve kapalı kipten bağımsız; linkedin tek; kapalı kipte bağlı linkedin görünür", async () => {
   const { db, env, call, join } = await setup({ ...ALL, ...LI_ENV });
   const brand = await join("brand", "marka@x.co"), inf = await join("influencer", "inf@x.co");
@@ -2634,7 +2650,7 @@ test("liste: configured her satırda boolean ve kapalı kipten bağımsız; link
     assert.deepEqual(connections.map(c => c.platform), LISTED);
     assert.equal(connections.filter(c => c.platform === "linkedin").length, 1);
     for (const c of connections) {
-      assert.deepEqual(Object.keys(c), ["platform", "status", "configured", "handle", "label", "label_code", "updated_at"]);
+      assert.deepEqual(Object.keys(c), ["platform", "status", "configured", "handle", "label", "label_code", "updated_at", "connected_at"]);
       assert.equal(typeof c.configured, "boolean");
     }
   }
@@ -3862,7 +3878,7 @@ const OLD_APP = [
 ];
 const APP_OK = ["GET profile", "POST profile", "GET connections", "POST connect", "POST connect/finish", "POST disconnect"];
 // A5-3 hesap bölümleri: yalnız app izin listesinde; brandcorner.co'da APP'te yok (404)
-const ACCT_OK = ["GET voice", "PUT voice", "GET drafts", "POST drafts/:id/delete", "GET export", "POST account/delete"];
+const ACCT_OK = ["GET voice", "PUT voice", "GET drafts", "GET drafts/:id", "POST drafts/:id/delete", "GET export", "POST account/delete"];
 // A13 smc yönetimi: izin listesinde, kapı işleyicide (yönetici olmayana 404, src/smc-admin.test.mjs); brandcorner'ın admin/:id/* uçları yok
 const ADMIN_OK = ["GET admin", "GET admin/users", "GET admin/submissions", "GET admin/drafts", "GET admin/jobs", "POST admin/:id/plan"];
 // A14 otomatik blog yazarı (src/cms.js CMS_ROUTES): yalnız app izin listesinde
@@ -4109,7 +4125,7 @@ async function appSetup(extra = {}) {
 const addDraft = (db, userId, { site = "app.socialmediacorner.co", platform = "linkedin", topic = "konu", body = "metin", meta = "{}" } = {}) =>
   Number(db.prepare("INSERT INTO drafts (user_id, site, platform, topic, body, meta) VALUES (?, ?, ?, ?, ?, ?)")
     .run(userId, site, platform, topic, body, meta).lastInsertRowid);
-const ACCT_PATHS = [["GET", "/app/voice"], ["PUT", "/app/voice"], ["GET", "/app/drafts"], ["POST", "/app/drafts/1/delete"],
+const ACCT_PATHS = [["GET", "/app/voice"], ["PUT", "/app/voice"], ["GET", "/app/drafts"], ["GET", "/app/drafts/1"], ["POST", "/app/drafts/1/delete"],
   ["GET", "/app/export"], ["POST", "/app/account/delete"]];
 
 test("A5-3: marka sesi GET/PUT: boş başlar, kaydedilir, normalleşir; geçersiz alan 400 voice; kullanıcılar karışmaz", async () => {
@@ -4199,6 +4215,25 @@ test("A5-3: taslak silme: kendi taslağı 200, başkasının ve başka sitenin 4
   // GET ya da id'siz yol izin listesinde değil
   assert.deepEqual(fail(await call("GET", `/app/drafts/${theirs}/delete`, { token: a.token })), [404, "not_found"]);
   assert.deepEqual(fail(await call("POST", "/app/drafts/x/delete", { token: a.token, body: {} })), [404, "not_found"]);
+});
+
+test("W3: tek taslak GET /app/drafts/:id: kendi taslağı 200 (liste biçimi); başkasının, başka sitenin, 3 günden eski ve olmayan 404; oturumsuz 401", async () => {
+  const { db, call, join } = await appSetup();
+  const a = await join("a@x.co"), b = await join("b@x.co");
+  const mine = addDraft(db, a.id, { topic: "benim", body: "gövde", meta: '{"tone":"net"}' }), theirs = addDraft(db, b.id, { topic: "başkasının" });
+  const other = addDraft(db, a.id, { site: "brandcorner.co" }), old = addDraft(db, a.id, { topic: "eski" });
+  db.prepare("UPDATE drafts SET created_at = datetime('now', '-4 days') WHERE id = ?").run(old);
+  const r = await call("GET", `/app/drafts/${mine}`, { token: a.token });
+  assert.equal(r.status, 200, JSON.stringify(r.body));
+  assert.deepEqual(r.body.draft, (await call("GET", "/app/drafts", { token: a.token })).body.drafts.find(x => x.id === mine));
+  assert.deepEqual([r.body.draft.topic, r.body.draft.body, r.body.draft.meta], ["benim", "gövde", { tone: "net" }]);
+  for (const id of [theirs, other, old, 999999])
+    assert.deepEqual(fail(await call("GET", `/app/drafts/${id}`, { token: a.token })), [404, "not_found"], String(id));
+  assert.equal((await call("GET", `/app/drafts/${theirs}`, { token: b.token })).body.draft.topic, "başkasının");
+  for (const p of ["/app/drafts/x", "/app/drafts/0x1", "/app/drafts/-1"])
+    assert.deepEqual(fail(await call("GET", p, { token: a.token })), [404, "not_found"], p);
+  assert.deepEqual(fail(await call("GET", `/app/drafts/${mine}`)), [401, "auth"]);
+  assert.equal(count(db, "drafts"), 4);
 });
 
 test("A15: taslak geçmişi 3 gün: blog/video listelenir ve süzülür, 3 günden eski satır listede ve dışa aktarmada yok", async () => {

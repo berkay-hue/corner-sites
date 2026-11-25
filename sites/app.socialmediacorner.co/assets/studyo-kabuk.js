@@ -63,7 +63,7 @@ var DUVAR={
     d:[[T('Deneme','Trial'),T('4 LinkedIn+blog, 1 video+görsel','4 LinkedIn+blog, 1 video+image')],[T('Deneme bitişi','Trial ends'),'BITIS'],[T('Planlar','Plans'),EN?'/en/pricing':'/fiyatlar']]}
 };
 /* A15: giriş/kayıt bağlantısı; ?r= smc-hesap.js R_RE kuralına uyarsa eklenir (giris-kapisi.js ile aynı yol biçimi) */
-var DONUS_RE=/^\/(en\/?)?(hesap\/[a-z-]+|video|gorsel|visual|blog|yayin-kuyrugu|publish-queue)?$/;
+var DONUS_RE=/^\/(en\/?)?(hesap\/[a-z-]+|video|gorsel|visual|blog|blog-otomatik|blog-autopilot|yayin-kuyrugu|publish-queue)?$/;
 function hesapYol(kayit){var y=location.pathname.replace(/\.html$/,'').replace(/\/index$/,'/'),b=EN?(kayit?'/en/hesap/register':'/en/hesap/login'):(kayit?'/hesap/kayit':'/hesap/giris');
   return DONUS_RE.test(y)?b+'?r='+encodeURIComponent(y):b}
 function tarihMetin(s){var t=Date.parse(s||'');if(!isFinite(t))return '';try{return new Date(t).toLocaleDateString(EN?'en-GB':'tr-TR',{day:'numeric',month:'long',year:'numeric',timeZone:'Europe/Istanbul'})}catch(e){return ''}}
@@ -289,7 +289,7 @@ function yukle(q){
 }
 function vazgec(){D.vazgec=true;D.istek++;if(D.ac)try{D.ac.abort()}catch(e){}durdur();uretMesgul(false);goster(D.kartVar?'sonuc':'bos',false);durum(T('Vazgeçildi.','Cancelled.'));quotaSor();konu.focus()}
 /* Oturumlu üretimde worker LinkedIn, Instagram, blog ve video (karusel dahil) taslağı için draft_ids döner (geçmişte 3 gün kalır).
-   Planla yalnız cfg.taslakId veren sayfada (LinkedIn/Instagram); sayfa seçili sekmenin kimliğini verir.
+   Planla yalnız cfg.taslakId veren sayfada (LinkedIn, video/görsel); sayfa seçili sekmenin kimliğini verir.
    Bağlantı kuyruk sayfasına gider (?taslak=<id>, EN ?draft=<id>); kuyruk taslağı Geçmiş'ten okuyup formu doldurur. */
 var TASLAK_RE=/^[1-9]\d{0,14}$/;
 function planlaYaz(id){var a=$('#kayit-planla');if(!a)return;id=String(id==null?'':id);

@@ -135,7 +135,7 @@ export async function listConnections(env, userId, role = "influencer") {
   if (env?.DB) {
     try {
       const { results = [] } = await env.DB.prepare(
-        "SELECT platform, handle, status, error, updated_at FROM social_accounts WHERE user_id = ? AND status IN ('connected', 'error')",
+        "SELECT platform, handle, status, error, updated_at, connected_at, created_at FROM social_accounts WHERE user_id = ? AND status IN ('connected', 'error')",
       ).bind(userId).all();
       rows = new Map(results.map(r => [r.platform, r]));
     } catch (e) {
@@ -145,7 +145,8 @@ export async function listConnections(env, userId, role = "influencer") {
   return LISTED.map(p => {
     const configured = !!(CONNECTABLE[role]?.includes(p) && oauthReady(env, p));
     const row = (status, label, label_code, r = null) =>
-      ({ platform: p, status, configured, handle: r?.handle ?? null, label, label_code, updated_at: r?.updated_at ?? null });
+      ({ platform: p, status, configured, handle: r?.handle ?? null, label, label_code, updated_at: r?.updated_at ?? null,
+        connected_at: r?.connected_at ?? r?.created_at ?? null });
     const r = OAUTH.includes(p) ? rows.get(p) : null;
     if (r) {
       const status = r.status === "error" || r.error ? "error" : "connected";
@@ -161,9 +162,11 @@ export async function listConnections(env, userId, role = "influencer") {
 // belgelemiyor (yalnız mobil ve masaüstü), Instagram Login de; ikisine gönderilmez.
 // YT_ANALYTICS "1" ise YouTube'dan kitle raporu izni de istenir (yt-analytics.readonly). GCP'de YouTube Analytics API
 // açılmadan ve izin onay ekranına eklenmeden istenirse Google bağlanan herkese uyarı gösterebilir; o yüzden bayrakla.
-export function authorizeUrl(env, p, state, redirect, challenge = null) {
+// write: yayın kuyruğunun yazma kapsamı (writeScope); verilirse sağlayıcının ayırıcısıyla (IG ",", LinkedIn " ") eklenir.
+export function authorizeUrl(env, p, state, redirect, challenge = null, write = null) {
   const cfg = PROVIDERS[p], u = new URL(cfg.authorize);
-  const scope = p === "youtube" && env?.YT_ANALYTICS === "1" ? `${cfg.scope} ${YT_AUDIENCE}` : cfg.scope;
+  let scope = p === "youtube" && env?.YT_ANALYTICS === "1" ? `${cfg.scope} ${YT_AUDIENCE}` : cfg.scope;
+  if (write) scope = `${scope}${cfg.scope.includes(",") ? "," : " "}${write}`;
   const q = { [cfg.idParam || "client_id"]: env[cfg.id], redirect_uri: redirect, response_type: "code", scope, state, ...cfg.params };
   if (challenge) Object.assign(q, { code_challenge: challenge, code_challenge_method: "S256" });
   for (const [k, v] of Object.entries(q)) u.searchParams.set(k, v);
@@ -196,8 +199,22 @@ export async function startOAuth(env, userId, p, { api, origin, site, user }) {
     ).bind(await sha256(state), userId, p, `${returnBase(env, origin, site)}${backPath(site, user?.lang)}`, redirect,
       verifier && await encrypt(env, verifier), `+${STATE_MINUTES} minutes`),
   ]);
-  return authorizeUrl(env, p, state, redirect, verifier && await pkceChallenge(verifier));
+  return authorizeUrl(env, p, state, redirect, verifier && await pkceChallenge(verifier), writeScope(env, site, p));
 }
+
+// Yayın kuyruğunun yazma kapsamları (publish.js kapı 4: kira SQL'i ve onay bunları token'ın scope'unda arar). OAuth bunları
+// yalnız kuyruk o site ve platform için açıkken ister (PUBLISH_ENABLED "1", site PUBLISH_SITES'ta, platform
+// PUBLISH_PLATFORMS'ta; publish.js gates ile aynı okuma): kapalıyken izin ekranı değişmez. Açmadan önce izinlerin
+// sağlayıcıda onaylı olması gerekir (Meta: instagram_business_content_publish; LinkedIn: w_member_social ürünü).
+export const WRITE_SCOPE = Object.freeze({ linkedin: "w_member_social", instagram: "instagram_business_content_publish" });
+export function writeScope(env, site, p) {
+  if (!Object.hasOwn(WRITE_SCOPE, p) || String(env?.PUBLISH_ENABLED ?? "") !== "1") return null;
+  const list = v => String(v ?? "").split(",").map(x => x.trim().toLowerCase()).filter(Boolean);
+  return list(env.PUBLISH_SITES).includes(site) && list(env.PUBLISH_PLATFORMS).includes(p) ? WRITE_SCOPE[p] : null;
+}
+// Token'ın scope metninde (virgül ya da boşluk ayrılı) yazma kapsamı var mı
+export const hasWriteScope = (scope, p) =>
+  Object.hasOwn(WRITE_SCOPE, p) && String(scope ?? "").split(/[\s,]+/).includes(WRITE_SCOPE[p]);
 export const pkceChallenge = async verifier => b64u(new Uint8Array(await crypto.subtle.digest("SHA-256", enc.encode(verifier))));
 
 // Bağı koparır: token silinir, hesabın ölçümleri (metric_snapshots) ve hesaptan aktarılan gönderiler (posts,
@@ -1507,11 +1524,13 @@ export class OAuthFail extends Error {
 // POST /app/connect/finish {ticket}: bileti getiren oturum akışı başlatan kullanıcı değilse bilet yine
 // yanar ve hiçbir şey bağlanmaz (ticket_owner, 403). Platform hesabı başka kullanıcıya bağlıysa "taken".
 // role verilirse bilet platformu o rolün CONNECTABLE listesinde olmalı (bilet yine yanar).
+// Yalnız sosyal platform biletleri (OAUTH) yanar: CMS bileti (platform "cms/…") burada "ticket" döner ve
+// kendi bitişi (POST /app/cmsoauth/finish) için yerinde kalır.
 export async function finishOAuth(env, userId, ticket, f = fetch, role = null) {
   if (typeof ticket !== "string" || !TOKEN_RE.test(ticket)) throw new OAuthFail("ticket");
   const st = await env.DB.prepare(
-    "DELETE FROM oauth_states WHERE ticket_hash = ? AND expires_at > datetime('now') RETURNING user_id, platform, code, redirect_uri, code_verifier",
-  ).bind(await sha256(ticket)).first();
+    `DELETE FROM oauth_states WHERE ticket_hash = ? AND platform IN (${OAUTH.map(() => "?").join(", ")}) AND expires_at > datetime('now') RETURNING user_id, platform, code, redirect_uri, code_verifier`,
+  ).bind(await sha256(ticket), ...OAUTH).first();
   if (!st) throw new OAuthFail("ticket");
   if (Number(st.user_id) !== Number(userId)) throw new OAuthFail("ticket_owner", 403);
   const p = st.platform;

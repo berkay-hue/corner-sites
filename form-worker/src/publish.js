@@ -6,19 +6,29 @@
 // Saatler UTC, SQLite biçimi ('YYYY-MM-DD HH:MM:SS'); API ISO (…Z) döner, yerel saat girişi Europe/Istanbul sayılır.
 // Token, metin ve sağlayıcı yanıtı log'a ve olaylara yazılmaz; yalnız kısa kodlar.
 
-import { decrypt, encrypt, refreshToken, ProviderError, errText } from "./oauth.js";
+import { decrypt, encrypt, refreshToken, ProviderError, errText, WRITE_SCOPE, hasWriteScope } from "./oauth.js";
 import { platformSite, sessionUser } from "./platform.js";
+import { queueAllowed, QUEUE_PLANS } from "./plans.js";
 import { PROVIDERS, COST, PREP_TIMEOUT } from "./publish-providers.js";
 
 export const PUBLISH_CRON = "*/5 * * * *"; // wrangler.toml ikinci cron; saatlik iş "17 * * * *" aynen kalır
 export const PLATFORMS = ["linkedin", "instagram"];
 export const LIMITS = { linkedin: 3000, instagram: 2200 }; // DOĞRULANMALI: LinkedIn commentary 3000, IG caption 2200
-// Yazma kapsamları (kapı 4). Bugün OAuth yalnız okuma kapsamı istiyor; eklenmeleri A7-2. DOĞRULANMALI.
-export const WRITE_SCOPE = { linkedin: "w_member_social", instagram: "instagram_business_content_publish" };
+// Yazma kapsamları (kapı 4) oauth.js'te: OAuth onları yalnız kuyruk o site/platform için açıkken ister (writeScope).
+// Kapsamsız token'la onay/yeniden deneme 409 reconnect_required (hesap yeniden bağlanmalı). DOĞRULANMALI: kapsam adları.
+export { WRITE_SCOPE };
+// Planlı sitelerde (app.socialmediacorner.co; src/plans.js QUEUE_PLANS) kuyruğa iş açma, gönderme, onay ve yeniden deneme
+// yalnız pro/enterprise'ta: değilse 403 plan_required {plan:"pro"}. Liste, görüntüleme, düzenleme, iptal ve "yayınlandı"
+// işareti her planda açık (eski işler görülür ve iptal edilebilir). brandcorner.co'da plan yok, davranış değişmez.
+// Cron'da da (planDropBatch): plan düşünce planlandi işler kiralanmaz, onay_bekliyor'a döner (onay silinir, plan_required).
+const PLAN_SITES = ["app.socialmediacorner.co"], UPGRADE_PLAN = "pro";
+const planGated = c => PLAN_SITES.includes(c.site) && !queueAllowed(c.user);
+const needPlan = c => { if (planGated(c)) throw new Bad("plan_required", 403, { plan: UPGRADE_PLAN }); };
 export const MAX_PER_RUN = 6, MAX_ATTEMPTS = 5;
-// Çağrı başına D1 ifadesi (her batch ifadesi ayrı sayılır): hazırlık batch'i 7, kira 1, iş başına en çok 6 (token oku,
-// yenileme yazımı ×2 (eskimiş + 401 sonrası), konteyner, sonuç + olay), bırakma batch'i 2. 7 + 1 + 6×6 + 2 = 46 ≤ 50.
-export const PREP_D1 = 7, JOB_D1 = 6, RELEASE_D1 = 2;
+// Çağrı başına D1 ifadesi (her batch ifadesi ayrı sayılır): hazırlık 9 (batch 7 + plan düşüşü batch'i 2), kira 1, iş başına
+// en çok 6 (token oku, yenileme yazımı ×2 (eskimiş + 401 sonrası), konteyner, sonuç + olay), bırakma batch'i 2.
+// 9 + 1 + 6×6 + 2 = 48 ≤ 50.
+export const PREP_D1 = 9, JOB_D1 = 6, RELEASE_D1 = 2;
 // Yeni işe yalnız turun ilk 20 sn'sinde başlanır (IG yoklama beklemesi iş başına ~3 sn). DOĞRULANMALI: cron duvar süresi.
 export const DEADLINE_MS = 20000;
 const MAX_BODY = 16000, MAX_OPEN = 100, MAX_MEDIA = 1000, MAX_DAYS = 180, PAST_GRACE_MS = 5 * 60 * 1000;
@@ -80,7 +90,7 @@ export function parseRunAt(v) {
 
 // ---- HTTP ----
 class Bad extends Error {
-  constructor(code, status = 400) { super(code); this.code = code; this.status = status; }
+  constructor(code, status = 400, extra = null) { super(code); this.code = code; this.status = status; this.extra = extra; }
 }
 const reply = (body, status, origin) => new Response(JSON.stringify(body), {
   status,
@@ -138,7 +148,7 @@ export async function publish(req, url, env, origin) {
     if (!id) {
       if (act) throw new Bad("not_found", 404);
       if (req.method === "GET") return await list(c);
-      if (req.method === "POST") return await create(c);
+      if (req.method === "POST") { needPlan(c); return await create(c); }
       throw new Bad("not_found", 404);
     }
     const job = await own(c, id);
@@ -148,6 +158,7 @@ export async function publish(req, url, env, origin) {
       throw new Bad("not_found", 404);
     }
     if (req.method !== "POST") throw new Bad("not_found", 404);
+    if (act === "submit" || act === "approve" || act === "retry") needPlan(c);
     // Kullanıcı eylemleri tablonun yalnız kendi kısmını kullanır: gönder yalnız taslaktan, "yayınlandı" işareti yalnız
     // kontrol'den (yayinlaniyor'daki iş cron'undur; planlandi → onay_bekliyor yalnız düzenlemeyle, onay silinerek)
     if (act === "submit") await move(env, job.state === "taslak" ? job : { ...job, state: "-" }, "onay_bekliyor", user.id, "submitted");
@@ -157,7 +168,7 @@ export async function publish(req, url, env, origin) {
     else if (act === "done") await move(env, job.state === "kontrol" ? job : { ...job, state: "-" }, "yayinlandi", user.id, "user_done");
     return ok(c, { job: view(await own(c, id)) });
   } catch (e) {
-    if (e instanceof Bad) return reply({ ok: false, error: e.code }, e.status, origin);
+    if (e instanceof Bad) return reply({ ...e.extra, ok: false, error: e.code }, e.status, origin);
     console.error(errText(e));
     return reply({ ok: false, error: "server" }, 500, origin);
   }
@@ -174,7 +185,7 @@ async function own(c, id) {
 
 async function list(c) {
   const { results } = await c.env.DB.prepare("SELECT * FROM publish_jobs WHERE user_id = ? ORDER BY id DESC LIMIT 100").bind(c.user.id).all();
-  return ok(c, { jobs: results.map(view), enabled: true });
+  return ok(c, { jobs: results.map(view), enabled: true, ...(PLAN_SITES.includes(c.site) && { plan_required: planGated(c) ? UPGRADE_PLAN : null }) });
 }
 
 async function show(c, job) {
@@ -267,6 +278,9 @@ async function approve(c, job, retry) {
   const acc = await env.DB.prepare("SELECT external_id FROM social_accounts WHERE id = ? AND user_id = ? AND platform = ? AND status = 'connected'")
     .bind(job.account_id, user.id, job.platform).first();
   if (!acc?.external_id) throw new Bad("not_connected", 409);
+  // Kapı 4 onayda da: yazma kapsamı olmayan token'la planlanan iş kiralanmaz ve 24 sa sonra bayatlardı; şimdiden söylenir
+  const tok = await env.DB.prepare("SELECT scope FROM oauth_tokens WHERE user_id = ? AND platform = ?").bind(user.id, job.platform).first();
+  if (!hasWriteScope(tok?.scope, job.platform)) throw new Bad("reconnect_required", 409);
   const idem = await sha256(`${job.account_id}|${job.body_hash}|${runAt}`);
   try {
     await move(env, job, "planlandi", user.id, retry ? "retry" : "approved",
@@ -281,9 +295,9 @@ async function approve(c, job, retry) {
 
 // ---- cron: publishTick ----
 
-// Hazırlık (kiradan önce, tek batch, PREP_D1 ifade): süresi geçen kira → kontrol (istek gitmiş olabilir); 24 sa bayat
-// planlandi → basarisiz; hesap başka kimlikle yeniden bağlandıysa planlandi → onay_bekliyor (onay silinir); 90 gün
-// saklama. Her geçiş önce olayını yazar (aynı koşul, aynı işlem).
+// Hazırlık (kiradan önce; tek batch 7 ifade, ardından plan düşüşü batch'i 2 ifade, toplam PREP_D1): süresi geçen kira →
+// kontrol (istek gitmiş olabilir); 24 sa bayat planlandi → basarisiz; hesap başka kimlikle yeniden bağlandıysa planlandi →
+// onay_bekliyor (onay silinir); 90 gün saklama. Her geçiş önce olayını yazar (aynı koşul, aynı işlem).
 const EXPIRED = "state = 'yayinlaniyor' AND lease_until <= datetime('now')";
 const STALE = "state = 'planlandi' AND run_at <= datetime('now', '-24 hours')";
 const CHANGED = `state = 'planlandi' AND id IN (SELECT j.id FROM publish_jobs j JOIN social_accounts a ON a.id = j.account_id
@@ -297,6 +311,18 @@ const prepBatch = DB => [
   DB.prepare(`UPDATE publish_jobs SET state = 'onay_bekliyor', approved_by = NULL, approved_at = NULL, approved_hash = NULL, idem_key = NULL,
     last_error = 'account_changed', updated_at = datetime('now') WHERE ${CHANGED}`),
   DB.prepare("UPDATE publish_jobs SET body = '' WHERE state IN ('yayinlandi', 'iptal') AND body <> '' AND updated_at <= datetime('now', '-90 days')"),
+];
+// Plan düşüşü (HTTP plan kapısının cron karşılığı; cms.js plan_required emsali): planlı sitede sahibinin planı artık
+// QUEUE_PLANS'ta değilse (admin düşürdü, deneme bitti, bilinmeyen değer) planlandi iş onay_bekliyor'a döner, onay ve
+// idem_key silinir, last_error 'plan_required'. İş yayınlanmaz, kullanıcı görür; Pro'ya geçince yeniden onaylar (onay
+// HTTP'de planlıdır). users.plan 0018'de: ayrı batch, çünkü 0018'siz ortamda hata ana hazırlığı (brandcorner) düşürmesin.
+const sqlList = a => a.map(v => `'${v}'`).join(", ");
+const PLAN_DROP = `state = 'planlandi' AND site IN (${sqlList(PLAN_SITES)})
+  AND user_id IN (SELECT id FROM users WHERE COALESCE(plan, '') NOT IN (${sqlList(QUEUE_PLANS)}))`;
+const planDropBatch = DB => [
+  DB.prepare(`INSERT INTO publish_events (job_id, actor, from_state, to_state, note) SELECT id, NULL, 'planlandi', 'onay_bekliyor', 'plan_required' FROM publish_jobs WHERE ${PLAN_DROP}`),
+  DB.prepare(`UPDATE publish_jobs SET state = 'onay_bekliyor', approved_by = NULL, approved_at = NULL, approved_hash = NULL, idem_key = NULL,
+    last_error = 'plan_required', updated_at = datetime('now') WHERE ${PLAN_DROP}`),
 ];
 
 // Kira (TEKNIK-PLAN §3 SQL'i + platform eşleşmesi, yazma kapsamı ve art arda 3 başarısızlık kesicisi). Kapılar 4-6 burada;
@@ -418,12 +444,18 @@ export async function publishTick(env, f = fetch, { sub = 50, d1 = 50, clock = D
   const t0 = clock();
   const st = { sub, used: 0, d1: 0 };
   await env.DB.batch(prepBatch(env.DB));
+  // Plan düşüşü okunamazsa (0018 yok ya da hata) planlı siteler bu tur kiralanmaz: HTTP kapısı gibi kapalı kalır
+  let sites = g.sites;
+  try { await env.DB.batch(planDropBatch(env.DB)); } catch (e) {
+    sites = sites.filter(s => !PLAN_SITES.includes(s));
+    if (sites.length < g.sites.length) log(JSON.stringify({ ev: "publish_plan_check", err: errText(e) }));
+  }
   st.d1 += PREP_D1;
   const maxCost = Math.max(...g.platforms.map(p => COST[p]));
   const limit = Math.min(g.perRun, Math.floor(sub / maxCost), Math.floor((d1 - PREP_D1 - 1 - RELEASE_D1) / JOB_D1));
   if (limit < 1) return { leased: 0, done: [], released: 0, sub: 0, d1: st.d1 };
   st.d1++;
-  const { results: jobs } = await env.DB.prepare(LEASE_SQL).bind(JSON.stringify(g.sites), JSON.stringify(g.platforms), limit).all();
+  const { results: jobs } = await env.DB.prepare(LEASE_SQL).bind(JSON.stringify(sites), JSON.stringify(g.platforms), limit).all();
   // RETURNING sırası tanımsız: en erken saatli iş önce denensin (süre/bütçe yetmezse geri bırakılan sonrakiler olur)
   jobs.sort((a, b) => (a.run_at === b.run_at ? a.id - b.id : a.run_at < b.run_at ? -1 : 1));
   // Sayan fetch: her dış istek bütçeden düşer; sinyal verilmemişse hazırlık zaman aşımı
