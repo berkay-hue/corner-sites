@@ -1907,6 +1907,140 @@ async function takipCalistir(req, env) {
   return keepAlive(takipYap(env, r.j, r.j.token));
 }
 
+// ---------- Panel: rakip fiyat alarmı (app_fiyat) ----------
+// pg_cron (app-fiyat-alarm) saatte bir en çok 5 URL'ye tek kullanımlık jeton yazar ve /api/app/fiyat-run'a { id, token } gönderir.
+// Worker sayfayı yalnız doğrudan (ücretsiz) çeker, görünen metni satırlara böler, önceki anlık görüntüyle küme farkı alır;
+// gerçek değişimde hesap e-postasına hemen bildirim yollar. İlk görüntüde, boşluk/tarih/sayaç farklarında alarm yoktur.
+const FY_MAX = 400000, FY_SATIR = 400, FY_UZ = 160, FY_FARK = 20;
+// SSRF: yalnız http(s), 80/443, kimlik bilgisi yok, IP değil, yerel/iç ağ alan adı değil, harfli TLD
+function fyUrlOk(u) {
+  let x; try { x = new URL(u); } catch { return false; }
+  if (!/^https?:$/.test(x.protocol) || x.username || x.password || (x.port && x.port !== "80" && x.port !== "443")) return false;
+  const h = x.hostname.toLowerCase();
+  if (!h || h.length > 253 || /[:[\]]/.test(h) || /^[\d.]+$/.test(h)) return false;
+  if (/(^|\.)(localhost|localdomain|local|internal|lan|home|corp|intranet|arpa)$/.test(h)) return false;
+  if (/(^|\.)salescorner\.co$/.test(h)) return false; // kendi uçlarımıza istek yok
+  return /^[a-z0-9-]+(\.[a-z0-9-]+)*\.([a-z]{2,63}|xn--[a-z0-9-]{1,59})$/.test(h);
+}
+// Yönlendirmeleri elle izler (her adımda URL yeniden denetlenir), gövdeyi en çok FY_MAX bayt okur
+async function fyCek(url) {
+  let u = url;
+  for (let i = 0; i < 4; i++) {
+    if (!fyUrlOk(u)) return { hata: "url" };
+    let r;
+    try { r = await fetch(u, { headers: __UA, redirect: "manual", signal: AbortSignal.timeout(15000) }); }
+    catch (e) { return { hata: e?.name === "TimeoutError" ? "zaman" : "baglanti" }; }
+    if (r.status >= 300 && r.status < 400) {
+      const loc = r.headers.get("location"); await r.body?.cancel();
+      if (!loc) return { hata: "yonlendirme" };
+      try { u = new URL(loc, u).href; } catch { return { hata: "yonlendirme" }; }
+      continue;
+    }
+    if (!r.ok || !r.body) { await r.body?.cancel(); return { hata: "http_" + r.status }; }
+    const ct = r.headers.get("content-type") || "";
+    if (ct && !/html|text\/plain/i.test(ct)) { await r.body.cancel(); return { hata: "tur" }; }
+    const rd = r.body.getReader(), parca = []; let n = 0;
+    try {
+      while (n < FY_MAX) { const { done, value } = await rd.read(); if (done) break; parca.push(value); n += value.length; }
+    } catch { return { hata: "okuma" }; }
+    finally { try { rd.cancel(); } catch {} }
+    const buf = new Uint8Array(Math.min(n, FY_MAX)); let o = 0;
+    for (const p of parca) { if (o >= buf.length) break; const s = p.subarray(0, buf.length - o); buf.set(s, o); o += s.length; }
+    return { html: new TextDecoder("utf-8").decode(buf), url: u };
+  }
+  return { hata: "yonlendirme" };
+}
+const FY_ENT = { nbsp: " ", amp: "&", quot: '"', apos: "'", lt: "<", gt: ">", euro: "€", pound: "£", dollar: "$", ndash: "-", mdash: "-", middot: "·" };
+// jsonb tek başına vekil (surrogate) ve NUL kabul etmez; bunlar boşluk olur
+const fyKod = n => (n > 0 && n < 0x110000 && (n < 0xd800 || n > 0xdfff) ? String.fromCodePoint(n) : " ");
+// Görünen metin satırları (blok etiketleri satır sonu olur); tekrarlar atılır, en çok FY_SATIR satır
+function fyMetin(html) {
+  const s = String(html || "").slice(0, FY_MAX)
+    .replace(/<!--[\s\S]*?-->/g, " ")
+    .replace(/<(script|style|noscript|svg|template|head|iframe)\b[\s\S]*?<\/\1\s*>/gi, " ")
+    .replace(/<(?:br|hr|\/?(?:p|div|li|ul|ol|tr|td|th|h[1-6]|section|article|header|footer|nav|main|aside|table|tbody|thead|dt|dd|dl|form|button|label|option|figcaption|blockquote|pre|summary|details))\b[^>]*>/gi, "\n")
+    .replace(/<[^>]*>/g, " ")
+    .replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]/g, " ")
+    .replace(/&(#x[0-9a-f]{1,6}|#\d{1,7}|[a-z]{2,8});/gi, (m, k) => k[0] === "#" ? fyKod(k[1] === "x" || k[1] === "X" ? parseInt(k.slice(2), 16) : +k.slice(1)) : (FY_ENT[k.toLowerCase()] ?? m));
+  const gor = new Set(), out = [];
+  for (const ham of s.split("\n")) {
+    const l = ham.replace(/\s+/g, " ").trim();
+    if (l.length < 2 || l.length > 600) continue;
+    const t = l.length > FY_UZ ? l.slice(0, FY_UZ).replace(/[\ud800-\udbff]$/, "") : l; // kesim emoji çiftini bölmesin
+    const k = fyAnahtar(t);
+    if (!k || gor.has(k)) continue;
+    gor.add(k); out.push(t);
+    if (out.length >= FY_SATIR) break;
+  }
+  return out;
+}
+const FY_FIYAT = /[₺$€£]|\b(?:tl|try|usd|eur|gbp)\b|\/\s*(?:ay|yıl|yil|month|mo|year|yr|kullanıcı|user|seat)\b|aylık|yıllık|monthly|yearly|annual|per\s+(?:month|year|user|seat)|fiyat|price|pricing|ücret|indirim|discount/i;
+const FY_AY = /\b\d{1,2}\s+(?:ocak|şubat|mart|nisan|mayıs|haziran|temmuz|ağustos|eylül|ekim|kasım|aralık|jan\w*|feb\w*|mar\w*|apr\w*|may|jun\w*|jul\w*|aug\w*|sep\w*|oct\w*|nov\w*|dec\w*)\.?(?:\s+\d{4})?/gi;
+// Karşılaştırma anahtarı: boşluk/büyük-küçük harf, tarih ve saat yok sayılır; fiyat dışı satırlarda sayılar (sayaçlar) da yok sayılır
+function fyAnahtar(l) {
+  let k = l.toLowerCase().replace(/\b\d{1,4}[./-]\d{1,2}[./-]\d{1,4}\b/g, " ").replace(/\b\d{1,2}:\d{2}(?::\d{2})?\b/g, " ").replace(FY_AY, " ");
+  if (!FY_FIYAT.test(k) && !/^[\d.,\s]{1,9}$/.test(k.trim())) k = k.replace(/\d[\d.,]*/g, "#");
+  k = k.replace(/[\s|•·–—-]+/g, " ").trim();
+  return /[a-zçğıöşü₺$€£\d]/i.test(k) ? k : "";
+}
+const fyOnce = a => a.map((l, i) => [FY_FIYAT.test(l) || /\d/.test(l) ? 0 : 1, i, l]).sort((x, y) => x[0] - y[0] || x[1] - y[1]).map(x => x[2]);
+// Küme farkı: anahtarı önceki görüntüde olmayan satırlar eklenen, yeni görüntüde olmayanlar çıkan; fiyat satırları öne, en çok 20+20
+function fyFark(eski, yeni) {
+  const ea = eski.map(fyAnahtar), ya = yeni.map(fyAnahtar), ek = new Set(ea), yk = new Set(ya);
+  const eklenen = yeni.filter((l, i) => !ek.has(ya[i])), cikan = eski.filter((l, i) => !yk.has(ea[i]));
+  return { eklenen: fyOnce(eklenen).slice(0, FY_FARK), cikan: fyOnce(cikan).slice(0, FY_FARK), toplam_eklenen: eklenen.length, toplam_cikan: cikan.length };
+}
+async function fyOzet(satirlar) { return __hex([...new Set(satirlar.map(fyAnahtar))].sort().join("\n")); }
+function fyMailHtml(is, fark) {
+  const li = (xs, renk, ust) => xs.map(x => `<li style="margin:3px 0;color:${renk}${ust ? ";text-decoration:line-through" : ""}">${rtEsc(x)}</li>`).join("");
+  const blok = (bas, xs, n, renk, ust) => xs.length ? `<h3 style="font-size:14px;margin:16px 0 6px">${bas} <span style="color:#888;font-weight:400">(${n})</span></h3><ul style="margin:0;padding-left:18px">${li(xs, renk, ust)}</ul>` : "";
+  return `<div style="font-family:Arial,sans-serif;max-width:680px;margin:0 auto;color:#222;line-height:1.55">`
+    + `<div style="background:#0a0a0f;color:#fff;padding:18px 22px;border-radius:10px 10px 0 0"><div style="font-size:19px;font-weight:700">Rakip fiyat alarmı</div><div style="opacity:.75;font-size:13px">${rtEsc(is.rakip)} · fiyat sayfası değişti</div></div>`
+    + `<div style="border:1px solid #e5e5ea;border-top:0;padding:18px 22px;border-radius:0 0 10px 10px">`
+    + `<p style="margin:0 0 6px"><b>${rtEsc(is.rakip)}</b> fiyat sayfasında son kontrolden bu yana değişiklik var.</p>`
+    + `<p style="margin:0;font-size:13px;word-break:break-all"><a href="${rtEsc(is.url)}" style="color:#3b4cca">${rtEsc(is.url)}</a></p>`
+    + blok("Eklenen satırlar", fark.eklenen, fark.toplam_eklenen, "#1a7f37", false)
+    + blok("Kaldırılan satırlar", fark.cikan, fark.toplam_cikan, "#b42318", true)
+    + `<p style="margin:22px 0 0"><a href="https://salescorner.co/app/#/takip" style="display:inline-block;background:#3b4cca;color:#fff;text-decoration:none;padding:10px 18px;border-radius:8px;font-weight:700">Panelde görüntüle</a></p>`
+    + `<p style="color:#888;font-size:12px;margin-top:22px">Sales Corner · Rakip Takip · fiyat sayfaları günde bir kez kontrol edilir.</p></div></div>`;
+}
+async function fiyatYap(env, cfctx, is, token) {
+  const t0 = Date.now(), ctx = { env, cfctx };
+  let sonuc, fark = null;
+  const c = await fyCek(is.url);
+  if (c.hata || !__htmlOk(c.html)) {
+    sonuc = { durum: "hata", hata: c.hata || "bos" };
+    __cekimKaydet(ctx, is.url, "hata", t0, "fiyat:" + sonuc.hata);
+  } else {
+    const satirlar = fyMetin(c.html);
+    __cekimKaydet(ctx, is.url, "dogrudan", t0, "fiyat");
+    if (satirlar.length < 5) sonuc = { durum: "hata", hata: "bos" };
+    else {
+      const hash = await fyOzet(satirlar), eski = Array.isArray(is.satirlar) ? is.satirlar.filter(x => typeof x === "string") : [];
+      if (is.hash && hash !== is.hash) {
+        const f = fyFark(eski, satirlar);
+        if (f.eklenen.length || f.cikan.length) fark = { ...f, tarih: new Date().toISOString(), mail: false };
+      }
+      if (fark && is.email && RT_EMAIL.test(is.email)) {
+        try { await rtMail(env, is.email, `Rakip fiyat alarmı: ${str(is.rakip, 80)} fiyat sayfası değişti`, fyMailHtml(is, fark)); fark.mail = true; }
+        catch (e) { console.log("fiyat mail", e?.message); }
+      }
+      sonuc = { durum: "ok", satirlar, hash, ...(fark ? { fark } : {}) };
+    }
+  }
+  try { await sbRpc(SB_ANON_AU, "app_fiyat_bitir", { p_id: is.id, p_token: token, p_sonuc: sonuc }); }
+  catch (e) { console.log("fiyat bitir", e?.message); }
+  return J({ success: sonuc.durum === "ok", degisti: !!fark, hata: sonuc.hata || null });
+}
+async function fiyatRun(req, env, cfctx) {
+  const b = await readBody(req);
+  const id = str(b.id, 40), token = str(b.token, 60);
+  if (!/^[0-9a-f-]{36}$/i.test(id) || !/^[0-9a-f]{48}$/.test(token)) return fail("Geçersiz istek.", 400);
+  const r = await sbRpc(SB_ANON_AU, "app_fiyat_is", { p_id: id, p_token: token });
+  if (!r.ok || !r.j?.ok) return fail("Geçersiz ya da süresi dolmuş iş.", 403);
+  return keepAlive(fiyatYap(env, cfctx, r.j, token));
+}
+
 async function appRoute(req, env, url, path, cfctx) {
   if (req.method === "OPTIONS") return new Response(null, { status: 204 });
   const sub = path.slice("/api/app/".length);
@@ -1918,6 +2052,10 @@ async function appRoute(req, env, url, path, cfctx) {
   }
   if (sub === "takip-run" && req.method === "POST") {
     try { return await takipRun(req, env); }
+    catch (e) { console.log(path, e?.stack || e); return fail("İşlem sırasında hata oluştu.", 500); }
+  }
+  if (sub === "fiyat-run" && req.method === "POST") {
+    try { return await fiyatRun(req, env, cfctx); }
     catch (e) { console.log(path, e?.stack || e); return fail("İşlem sırasında hata oluştu.", 500); }
   }
   if (!sameSite(req)) return fail("Bu uç yalnızca salescorner.co üzerinden kullanılabilir.", 403);

@@ -1366,8 +1366,91 @@ async function pageFiyatlar() {
 let TK = { list: null, err: "", edit: null, sil: "", run: {} };
 async function loadTK() {
   TK.err = "";
+  const fy = loadFY();
   try { const r = await rpc("app_takip_liste"); TK.list = Array.isArray(r) ? r : []; }
   catch (e) { TK.err = trErr(e); TK.list = []; }
+  await fy;
+}
+// ---------- Rakip fiyat alarmı (rakip başına isteğe bağlı fiyat sayfası; kota harcamaz) ----------
+// Sunucu işlevi henüz yoksa (göç uygulanmadıysa) bölüm gizlenir; panelin geri kalanı etkilenmez (rpc() yerine doğrudan sb.rpc).
+let FY = { list: null, lim: 0, off: false, edit: "", sil: "", m: {} };
+async function loadFY() {
+  try {
+    const { data, error } = await sb.rpc("app_fiyat_liste");
+    if (error) { FY.off = /PGRST202|could not find the function|does not exist/i.test(`${error.code} ${error.message}`); FY.list = FY.list || []; return; }
+    FY.off = false; FY.list = Array.isArray(data?.fiyatlar) ? data.fiyatlar : []; FY.lim = Number(data?.limit || 0);
+  } catch { FY.list = FY.list || []; }
+}
+// SQL'deki eşleşmeyle aynı: firma adı, yoksa site; kırpılmış, en çok 150 karakter
+const fyRakip = r => String((String(r?.firma || "").trim() || r?.site || "")).trim().slice(0, 150);
+const FY_HATA = {
+  bos: "Sayfa metni okunamadı. Yalnız JavaScript ile çizilen ya da bot korumalı sayfalar okunamaz.",
+  zaman: "Sayfa zamanında yanıt vermedi.", baglanti: "Sayfaya ulaşılamadı.", okuma: "Sayfa okunurken bağlantı kesildi.",
+  url: "Adres güvenli bulunmadı.", yonlendirme: "Sayfa çok fazla ya da geçersiz yönlendirme yapıyor.", tur: "Adres bir web sayfası değil.",
+};
+const fyHata = h => FY_HATA[h] || (/^http_\d{3}$/.test(h || "") ? `Sayfa hata döndürdü (${h.slice(5)}).` : "Sayfa kontrol edilemedi.");
+function fyFarkHtml(fk) {
+  if (!fk || typeof fk !== "object") return "";
+  const ek = Array.isArray(fk.eklenen) ? fk.eklenen : [], ck = Array.isArray(fk.cikan) ? fk.cikan : [];
+  const n1 = Number(fk.toplam_eklenen ?? ek.length), n2 = Number(fk.toplam_cikan ?? ck.length);
+  return `<details class="fy-fark"><summary>Son değişiklik <span class="fy-ek">+${fmtN(n1)}</span> <span class="fy-ck">−${fmtN(n2)}</span>${fk.tarih ? ` <span class="tk-mute">· ${fmtDT(fk.tarih)}</span>` : ""}</summary>
+    <ul>${ek.map(x => `<li class="fy-ek"><span aria-hidden="true">+</span> ${esc(x)}</li>`).join("")}${ck.map(x => `<li class="fy-ck"><span aria-hidden="true">−</span> <s>${esc(x)}</s></li>`).join("")}</ul>
+    ${n1 > ek.length || n2 > ck.length ? `<p class="tk-mute" style="font-size:12.5px;margin:6px 0 0">İlk ${FY_FARK_N} eklenen ve ${FY_FARK_N} kaldırılan satır gösteriliyor; fiyat içeren satırlar önce.</p>` : ""}</details>`;
+}
+const FY_FARK_N = 20;
+function fyDurum(f) {
+  if (f.aktif === false) return `<span class="pill warn">Durduruldu</span>`;
+  if (f.son_hata) return `<span class="pill bad">Okunamadı</span>`;
+  if (!f.son_kontrol) return `<span class="pill">İlk kontrol bekliyor</span>`;
+  if (f.son_degisim) return `<span class="pill acc">Değişti · ${esc(fmtDT(f.son_degisim))}</span>`;
+  return `<span class="pill ok">Değişiklik yok</span>`;
+}
+function fyBolum(t) {
+  if (FY.off || FY.list === null) return "";
+  const rk = Array.isArray(t.rakipler) ? t.rakipler : [];
+  if (!rk.length) return "";
+  const kapali = ["sure", "plan"].includes(durum("takip").neden);
+  const satir = (r, i) => {
+    const ad = fyRakip(r), key = `${t.id}|${i}`, f = FY.list.find(x => x.takip_id === t.id && x.rakip === ad);
+    const m = FY.m[key] ? msg(FY.m[key].kind, FY.m[key].html) : "";
+    const ust = `<b>${esc(String(r.firma || "").trim() || ad || "Rakip")}</b>`;
+    if (FY.edit === key) {
+      return `<form class="fy-row fy-form" data-fy-form="${i}" novalidate><label for="fyu-${esc(key)}">${ust} <span class="hint">fiyat sayfası adresi</span></label>
+        <div class="fy-in"><input class="in" id="fyu-${esc(key)}" name="u" inputmode="url" maxlength="500" placeholder="rakip.com/fiyatlar" value="${esc(FY.v ?? (f ? f.url : ""))}" required>
+        <button class="btn btn-p btn-s" type="submit">Kaydet</button><button class="btn btn-g btn-s" type="button" data-fy-vaz>Vazgeç</button></div>${m}</form>`;
+    }
+    if (!f) {
+      return `<div class="fy-row" data-fy-rk="${i}"><div class="row fy-bas">${ust}${kapali ? "" : `<button type="button" class="linkbtn" data-fy-duz>+ Fiyat sayfası ekle</button>`}</div>${m}</div>`;
+    }
+    const u = safeUrl(f.url), goster = u ? (new URL(u).hostname.replace(/^www\./, "") + new URL(u).pathname.replace(/\/$/, "")).slice(0, 70) : "";
+    const sil = FY.sil === key;
+    return `<div class="fy-row" data-fy-rk="${i}">
+      <div class="row fy-bas"><span class="row" style="gap:8px;justify-content:flex-start">${ust}${fyDurum(f)}</span>
+        ${sil ? `<span class="row" style="gap:8px"><span style="font-size:13.5px">Fiyat alarmı kaldırılsın mı?</span><button type="button" class="btn btn-s" data-fy-silok style="background:var(--bad);color:#fff">Kaldır</button><button type="button" class="btn btn-g btn-s" data-fy-silno>Vazgeç</button></span>`
+        : `<span class="row" style="gap:10px">${kapali ? "" : `<button type="button" class="linkbtn" data-fy-duz>Düzenle</button>`}<button type="button" class="linkbtn" data-fy-sil style="color:var(--bad)">Kaldır</button></span>`}</div>
+      ${u ? `<a class="fy-url" href="${esc(u)}" target="_blank" rel="noopener nofollow">${esc(goster)}</a>` : ""}
+      <div class="tk-meta"><span>Son kontrol: <b>${esc(fmtDT(f.son_kontrol))}</b></span><span>Son değişim: <b>${esc(fmtDT(f.son_degisim))}</b></span></div>
+      ${f.son_hata ? `<p class="tk-mute" style="font-size:13px;margin:4px 0 0">${esc(fyHata(f.son_hata))}${f.aktif === false ? " Kontrol durduruldu; adresi düzenleyip kaydederek yeniden başlatabilirsiniz." : ""}</p>` : !f.son_kontrol ? `<p class="tk-mute" style="font-size:13px;margin:4px 0 0">İlk kontrol bir saat içinde yapılır ve sayfanın ilk görüntüsü kaydedilir; değişiklik olursa e-postanıza bildirim gelir.</p>` : ""}
+      ${fyFarkHtml(f.son_fark)}${m}</div>`;
+  };
+  return `<details class="tk-son tk-fy"${FY.edit.startsWith(t.id + "|") || FY.sil.startsWith(t.id + "|") || Object.keys(FY.m).some(k => k.startsWith(t.id + "|")) ? " open" : ""}><summary>Fiyat alarmı <span class="tk-mute" style="font-weight:400;font-size:13px">· ${rk.filter(r => FY.list.some(x => x.takip_id === t.id && x.rakip === fyRakip(r))).length} / ${rk.length} rakip</span></summary>
+    <div class="tk-body"><p class="tk-mute" style="font-size:13px;margin:0 0 10px">Rakibin fiyat sayfası her gün kontrol edilir; fiyat ya da paket satırları değişince hemen e-posta alırsınız. Kullanım hakkınızdan düşmez.</p>${rk.map(satir).join("")}</div></details>`;
+}
+async function fyKaydet(form, t, i) {
+  const key = `${t.id}|${i}`, ad = fyRakip((t.rakipler || [])[i]), u = normUrl(form.u.value);
+  const btn = form.querySelector("[type=submit]");
+  FY.v = form.u.value;
+  if (!u) { FY.m[key] = { kind: "err", html: "Geçerli bir adres girin (ör. rakip.com/fiyatlar)." }; return render(); }
+  busy(btn, true, "Kaydediliyor…");
+  try {
+    const { data: r, error } = await sb.rpc("app_fiyat_ekle", { p_takip_id: t.id, p_rakip: ad, p_url: u });
+    if (error) throw error;
+    if (r && r.ok === false) {
+      const m = { sure: NEDEN.sure(), plan: NEDEN.plan("takip"), url: "Bu adres kabul edilmedi. Herkese açık bir web sayfası adresi girin (ör. https://rakip.com/fiyatlar).", yok: "Bu takip bulunamadı; sayfayı yenileyin.", rakip: "Bu rakip takipte bulunamadı; sayfayı yenileyin.", kota: `Planınızla en fazla ${r.limit ?? FY.lim} fiyat sayfası izlenebilir.` };
+      FY.m[key] = { kind: "err", html: esc(m[r.neden] || "Kaydedilemedi.") + (r.neden === "kota" || r.neden === "plan" ? ` <a href="#/fiyatlar">Planlar →</a>` : "") };
+    } else { FY.edit = ""; FY.v = undefined; delete FY.m[key]; await loadFY(); toast("Fiyat alarmı kaydedildi ✓"); }
+  } catch (err) { FY.m[key] = { kind: "err", html: esc(trErr(err)) }; }
+  if (route === "takip") render();
 }
 // Yapay zekâ yorumu: yalnız basit biçim etiketleri kalır, bağlantılar güvenli
 function tkHtml(h) {
@@ -1413,6 +1496,7 @@ function tkKart(t) {
       : `<span class="row" style="gap:8px;justify-content:flex-start"><button type="button" class="btn btn-p btn-s" data-tk-run${durum("takip").neden === "sure" || durum("takip").neden === "plan" || t.calisiyor ? " disabled" : ""}>Şimdi tara</button><button type="button" class="btn btn-g btn-s" data-tk-edit>Düzenle</button></span><button type="button" class="linkbtn" data-tk-sil style="color:var(--bad)">Sil</button>`}
     </div>
     <details class="tk-son"><summary>Son tarama sonucu</summary><div class="tk-body">${tkSonuc(t.son_sonuc)}</div></details>
+    ${fyBolum(t)}
   </article>`;
 }
 function tkForm(t) {
@@ -1442,10 +1526,25 @@ function pageTakip() {
     <p class="tk-mute" style="font-size:13px;margin-top:16px">Her firma haftada bir otomatik taranır. İsterseniz “Şimdi tara” ile elle de başlatabilirsiniz (firma başına 20 saatte bir).</p>`);
   const main = document.querySelector(".main");
   main.onclick = async e => {
-    const el = e.target.closest("[data-tk-new],[data-tk-edit],[data-tk-sil],[data-tk-silno],[data-tk-silok],[data-tk-run],[data-tk-yenile]");
+    const el = e.target.closest("[data-tk-new],[data-tk-edit],[data-tk-sil],[data-tk-silno],[data-tk-silok],[data-tk-run],[data-tk-yenile],[data-fy-duz],[data-fy-vaz],[data-fy-sil],[data-fy-silno],[data-fy-silok]");
     if (!el || el.disabled) return;
     const id = el.closest("[data-tk-id]")?.dataset.tkId;
     const t = id && (TK.list || []).find(x => x.id === id);
+    const fyI = el.closest("[data-fy-rk],[data-fy-form]"), fyKey = fyI && id ? `${id}|${fyI.dataset.fyRk ?? fyI.dataset.fyForm}` : "";
+    if (fyKey) {
+      if (el.hasAttribute("data-fy-duz")) { FY.edit = fyKey; FY.sil = ""; FY.v = undefined; delete FY.m[fyKey]; render(); document.getElementById(`fyu-${fyKey}`)?.focus(); }
+      else if (el.hasAttribute("data-fy-vaz")) { FY.edit = ""; FY.v = undefined; delete FY.m[fyKey]; render(); }
+      else if (el.hasAttribute("data-fy-sil")) { FY.sil = fyKey; delete FY.m[fyKey]; render(); }
+      else if (el.hasAttribute("data-fy-silno")) { FY.sil = ""; render(); }
+      else if (el.hasAttribute("data-fy-silok") && t) {
+        const f = (FY.list || []).find(x => x.takip_id === t.id && x.rakip === fyRakip((t.rakipler || [])[+fyKey.split("|")[1]]));
+        busy(el, true, "Kaldırılıyor…");
+        try { if (f) { const { error } = await sb.rpc("app_fiyat_sil", { p_id: f.id }); if (error) throw error; } FY.sil = ""; await loadFY(); toast("Fiyat alarmı kaldırıldı"); }
+        catch (err) { FY.sil = ""; FY.m[fyKey] = { kind: "err", html: esc(trErr(err)) }; }
+        if (route === "takip") render();
+      }
+      return;
+    }
     if (el.hasAttribute("data-tk-new")) { TK.edit = { id: null }; TK.sil = ""; render(); document.getElementById("tkfirma")?.focus(); }
     else if (el.hasAttribute("data-tk-yenile")) { TK.list = null; render(); await loadTK(); if (route === "takip") render(); }
     else if (el.hasAttribute("data-tk-edit") && t) { TK.edit = t; TK.sil = ""; render(); window.scrollTo({ top: 0, behavior: "smooth" }); }
@@ -1463,6 +1562,13 @@ function pageTakip() {
       else TK.run[id] = { kind: r.neden === "erken" ? "warn" : "err", html: esc(r.message || "Tarama başlatılamadı.") + (r.ne_zaman ? ` Bir sonraki elle tarama: <b>${fmtDT(r.ne_zaman)}</b>.` : "") };
       if (route === "takip") { render(); document.querySelector(`[data-tk-id="${CSS.escape(id)}"] details`)?.setAttribute("open", ""); }
     }
+  };
+  main.onsubmit = e => {
+    const fm = e.target.closest?.("[data-fy-form]");
+    if (!fm) return;
+    e.preventDefault();
+    const t = (TK.list || []).find(x => x.id === fm.closest("[data-tk-id]")?.dataset.tkId);
+    if (t) fyKaydet(fm, t, +fm.dataset.fyForm);
   };
   const f = document.getElementById("tkf");
   if (f) {
