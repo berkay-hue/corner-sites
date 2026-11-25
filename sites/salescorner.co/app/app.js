@@ -736,6 +736,7 @@ const EMPTY = {
 function renderJob(k) {
   const out = document.getElementById("out");
   if (!out) return;
+  if (k === "briefing" && BRF_SEKME === "toplu") return tbCiz();
   const j = JOBS[k];
   if (!j) { const [, t, p] = EMPTY[k]; out.innerHTML = `<div class="empty"><div class="big" aria-hidden="true">${ico(P[{ rakip: "target", sekans: "pen", seo: "trend", briefing: "clip", fireflies: "mic" }[k]], 26)}</div><h3>${t}</h3><p style="max-width:420px">${p}</p></div>`; return; }
   if (j.state === "run") {
@@ -1550,7 +1551,8 @@ function pageBriefing() {
   const fnot = FIRMA.v === undefined || FIRMA.err ? "" : FIRMA.v && fe.length < FIRMA_ALAN.length
     ? msg("info", `${ic("user", 16)}<span>Briefing <b>${esc(FIRMA.v.firma_adi || "firmanız")}</b> adına, profilinizdeki ürünlere göre hazırlanır.${fe.length ? ` Eksik alanlar: ${fe.map(([, a]) => esc(a)).join(", ")}.` : ""} <a href="#/hesap">Profili düzenle →</a></span>`)
     : msg("info", `${ic("user", 16)}<span>Briefing'in sizin ürünlerinize göre öneri vermesi için önce <a href="#/hesap">firma profilinizi doldurun</a>.</span>`);
-  toolShell("briefing", `${fnot}<form id="f" data-sk-noform>
+  if (BRF_SEKME === "toplu") return pageToplu(fnot);
+  toolShell("briefing", `${brfSekme()}${fnot}<form id="f" data-sk-noform>
     <div class="f"><label for="fa">Firma adı</label><input class="in" id="fa" required maxlength="150"></div>
     <div class="f"><label for="fw">Firma web sitesi</label><input class="in" id="fw" inputmode="url" placeholder="firma.com" required></div>
     <div class="f"><label for="fl">Firma LinkedIn <span class="hint">(isteğe bağlı)</span></label><input class="in" id="fl" inputmode="url" placeholder="linkedin.com/company/…"></div>
@@ -1568,9 +1570,12 @@ function pageBriefing() {
     <button class="btn btn-p btn-w" type="submit">Briefing hazırla</button>
     <p class="hint" style="margin-top:10px;font-size:12.5px;color:var(--mute)">${estDk("briefing")} dakika sürer; sonuç e-postanıza da gelir.</p>
   </form>`);
+  bindBrfSekme();
   const f = document.getElementById("f");
+  if (tbAktif()) f.querySelectorAll("[type=submit]").forEach(b => { b.disabled = true; b.textContent = "Toplu briefing sürüyor…"; });
   f.onsubmit = e => {
     e.preventDefault();
+    if (tbAktif()) return setMsg("m", "warn", "Toplu briefing sürerken tekil briefing başlatılamaz.");
     const fw = normUrl(f.fw.value);
     if (!fw) return setMsg("m", "err", "Firma web sitesini geçerli bir adres olarak girin.");
     const opt = v => (v.trim() ? normUrl(v) : "");
@@ -1580,6 +1585,489 @@ function pageBriefing() {
       if (url) addHist({ k: "briefing", title: `${body.firma_adi} · ${body.kisi_adi}`, url });
     });
   };
+}
+
+// ---------- Toplu briefing (CSV) ----------
+// Tek briefing akışını (/api/app/briefing) firmalar için sırayla tekrar eder: yeni uç yok, kota sunucuda
+// yalnız başarılı işte düşer (başarısız iş "Hakkınızdan düşülmedi"). Kuyruk bu tarayıcıda saklanır,
+// sayfa yenilenirse "Devam et" ile kalan firmalar yeniden kredi kontrol edilerek sürdürülür.
+const TB_MAX = 20, TB_SATIR = 200, TB_BEKLE = 6 * 60e3, TB_HB = 5e3, TB_TAZE = 15e3, TB_GUN = 7 * 864e5;
+const TB_ST = new Set(["bekle", "calis", "ok", "hata", "kredi"]);
+const TB_SON = ["firma_adi", "company", "kisi_adi", "person", "toplanti_tarihi", "en_uygun_hizmet", "f_skor", "k_skor", "deal_pct_label", "slideCount", "presentationViewUrl", "presentationUrl", "message"];
+let BRF_SEKME = store.get("brf_sekme", "tek") === "toplu" ? "toplu" : "tek";
+let TB = null;       // kuyruk (yerel depo "toplu")
+let TBP = null;      // önizleme: { rows, ele, fazla, ad, kalan, n }
+let TBRUN = null;    // bu sekmede süren çalıştırma
+let TB_ONAY = null;  // "Devam et" sonrası onay bekleyen kredi bilgisi
+let TB_NOT = null;   // [tür, metin]
+
+const brfSekme = () => `<div class="tabs" role="tablist" aria-label="Briefing türü" style="margin:0 0 16px"><button type="button" role="tab" aria-selected="${BRF_SEKME === "tek"}" data-brf="tek">Tek firma</button><button type="button" role="tab" aria-selected="${BRF_SEKME === "toplu"}" data-brf="toplu">Toplu (CSV)</button></div>`;
+function bindBrfSekme() {
+  document.querySelectorAll("[data-brf]").forEach(b => (b.onclick = () => {
+    if (BRF_SEKME === b.dataset.brf) return;
+    BRF_SEKME = b.dataset.brf; store.set("brf_sekme", BRF_SEKME); render();
+  }));
+}
+const tbBaska = () => !TBRUN && !!TB && TB.durum === "calis" && Date.now() - Number(TB.hb) < TB_TAZE;
+const tbAktif = () => !!TBRUN || tbBaska();
+
+// --- CSV okuma ---
+function tbCsv(txt) {
+  txt = String(txt || "").replace(/^﻿/, "");
+  const ilk = txt.split(/\r?\n/).find(l => l.trim()) || "";
+  const ay = ilk.includes("\t") ? "\t" : ilk.split(";").length > ilk.split(",").length ? ";" : ",";
+  const out = [];
+  let row = [], cell = "", q = false;
+  for (let i = 0; i < txt.length; i++) {
+    const c = txt[i];
+    if (q) {
+      if (c !== '"') cell += c;
+      else if (txt[i + 1] === '"') { cell += '"'; i++; }
+      else q = false;
+    } else if (c === '"' && !cell.trim()) { cell = ""; q = true; }
+    else if (c === ay) { row.push(cell); cell = ""; }
+    else if (c === "\n" || c === "\r") {
+      if (c === "\r" && txt[i + 1] === "\n") i++;
+      row.push(cell); out.push(row); row = []; cell = "";
+      if (out.length > TB_SATIR + 1) break;
+    } else cell += c;
+  }
+  if (cell !== "" || row.length) { row.push(cell); out.push(row); }
+  return out.map(r => r.map(x => x.replace(/\s+/g, " ").trim())).filter(r => r.some(Boolean));
+}
+const tbNorm = s => String(s || "").toLocaleLowerCase("tr-TR").replace(/ı/g, "i").normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]/g, "");
+function tbAlan(h) {
+  const n = tbNorm(h);
+  if (!n) return "";
+  if (n.includes("linkedin")) return /kisi|person|contact|yetkili|profil/.test(n) ? "klinkedin" : "flinkedin";
+  if (n.includes("mail")) return "eposta";
+  if (/web|site|url|domain|alanadi/.test(n)) return "web";
+  if (/tarih|date/.test(n)) return "tarih";
+  if (/saat|time/.test(n)) return "saat";
+  if (/konu|topic|subject|gundem|not/.test(n)) return "konu";
+  if (/kisi|contact|person|yetkili|adsoyad|fullname|gorusulecek/.test(n)) return "kisi";
+  if (/firma|sirket|company|kurum|marka|organi|isletme|musteri/.test(n) || /^(name|ad|adi|isim)$/.test(n)) return "firma";
+  return "";
+}
+const tbGun = (y, a, g) => { const d = new Date(Date.UTC(y, a - 1, g)); return y > 2000 && d.getUTCMonth() === a - 1 && d.getUTCDate() === g ? d.toISOString().slice(0, 10) : today(); };
+function tbTarih(s) {
+  s = String(s || "").trim();
+  let m = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+  if (m) return tbGun(+m[1], +m[2], +m[3]);
+  m = s.match(/^(\d{1,2})[./-](\d{1,2})[./-](\d{4})$/);
+  return m ? tbGun(+m[3], +m[2], +m[1]) : today();
+}
+const tbSaat = s => { const m = String(s || "").trim().match(/^(\d{1,2})[:.](\d{2})$/); return m && +m[1] < 24 && +m[2] < 60 ? `${m[1].padStart(2, "0")}:${m[2]}` : "10:00"; };
+const tbHost = u => { try { return new URL(u).hostname.replace(/^www\./i, "").toLowerCase(); } catch { return ""; } };
+function tbAyikla(txt, ad) {
+  const r = tbCsv(txt);
+  const o = { rows: [], ele: [], fazla: 0, ad: String(ad || "").slice(0, 120) };
+  if (!r.length) return o;
+  let map = r[0].map(tbAlan), bas = 1;
+  if (!map.includes("firma") && !map.includes("web")) { map = ["firma", "web", "kisi", "eposta"]; bas = 0; }
+  const gor = new Set();
+  map = map.map(m => (m && !gor.has(m) ? (gor.add(m), m) : ""));
+  o.fazla = Math.max(0, r.length - bas - TB_SATIR);
+  const hostlar = new Set(), adlar = new Set();
+  for (let i = bas; i < r.length && i < bas + TB_SATIR; i++) {
+    const x = {};
+    map.forEach((m, j) => { if (m) x[m] = r[i][j] || ""; });
+    const satir = i + 1, firma = (x.firma || "").slice(0, 150), web = normUrl(x.web);
+    if (!firma) { o.ele.push({ satir, ad: x.web || "—", neden: "Firma adı yok" }); continue; }
+    if (!web) { o.ele.push({ satir, ad: firma, neden: x.web ? "Web sitesi geçersiz" : "Web sitesi yok" }); continue; }
+    const h = tbHost(web), an = tbNorm(firma);
+    if (hostlar.has(h) || (an && adlar.has(an))) { o.ele.push({ satir, ad: firma, neden: "Yinelenen firma" }); continue; }
+    hostlar.add(h); if (an) adlar.add(an);
+    const ep = String(x.eposta || "").trim(), li = v => (String(v || "").trim() ? normUrl(v) : "");
+    o.rows.push({ satir, firma, web, kisi: (x.kisi || "").slice(0, 120), eposta: EPOSTA_RX.test(ep) && ep.length <= 254 ? ep : "", flinkedin: li(x.flinkedin), klinkedin: li(x.klinkedin), tarih: tbTarih(x.tarih), saat: tbSaat(x.saat), konu: (x.konu || "").slice(0, 300) });
+  }
+  return o;
+}
+
+// --- Kredi ---
+function tbKalan() { const d = durum("briefing"); return d.ok ? (d.lim < 0 ? Infinity : Math.max(0, d.lim - d.kul)) : 0; }
+async function tbBenYenile() { try { const b = await rpc("app_ben"); if (b) S.ben = b; return true; } catch { return false; } }
+function tbBilgi(n, kalan, aday, fazla) {
+  if (!n) {
+    const d = durum("briefing");
+    return msg("warn", `${ic("alert", 16)}<span>${esc(d.ok ? "Bu ay briefing krediniz kalmadı." : NEDEN[d.neden] ? NEDEN[d.neden]("briefing") : "Briefing kredisi alınamadı.")} Hiçbir firma çalıştırılmaz. <a href="#/fiyatlar">Planları inceleyin →</a></span>`);
+  }
+  const k = kalan === Infinity ? " · planınız sınırsız" : ` · kalan ${kalan} → ${kalan - n}`;
+  const ek = [aday > n ? `${aday - n} firma için kredi yetmedi; bunlar çalıştırılmaz.` : "", fazla ? `${fazla} firma bir seferdeki ${TB_MAX} firma sınırının dışında kaldı.` : ""].filter(Boolean);
+  return msg(aday > n ? "warn" : "info", `<span><b data-tb-ozet>${n} firma · ${n} briefing kredisi kullanılacak${k}</b>${ek.map(x => `<br>${esc(x)}`).join("")}<br><span style="font-size:13px">Firmalar sırayla hazırlanır; başarısız olan briefing hakkınızdan düşmez. Her briefing e-postanıza da gelir.</span></span>`);
+}
+
+// --- Kuyruk (yerel depo) ---
+function tbOku() {
+  const uid = S.session?.user?.id, t = store.get("toplu", null);
+  if (!uid || !t || typeof t !== "object" || t.v !== 1 || t.uid !== uid || !Array.isArray(t.rows) || !(Date.now() - Number(t.at) < TB_GUN)) return null;
+  t.rows = t.rows.filter(r => r && typeof r === "object" && typeof r.firma === "string").slice(0, TB_MAX);
+  for (const r of t.rows) if (!TB_ST.has(r.st)) r.st = "hata";
+  return t.rows.length ? t : null;
+}
+function tbYukle() {
+  if (TBRUN) return;
+  const t = tbOku();
+  if (t && t.durum === "calis" && !(Date.now() - Number(t.hb) < TB_TAZE)) {
+    for (const r of t.rows) if (r.st === "calis") { r.st = "hata"; r.err = "Sayfa kapandığı için sonucu alınamadı. Briefing tamamlandıysa e-postanıza gelir; kredi yalnız başarılı işte düşer."; }
+    t.durum = "durdu";
+    store.set("toplu", t);
+  }
+  TB = t;
+}
+function tbSakla() { if (!TB) return; if (TBRUN) TB.hb = Date.now(); store.set("toplu", TB); }
+const tbSay = (t, st) => (t ? t.rows.filter(r => r.st === st).length : 0);
+const tbAdaylar = () => (TB ? TB.rows.filter(r => r.st === "bekle" || r.st === "kredi") : []);
+
+// --- Çalıştırma ---
+function tbHata(res) {
+  if (res && res.neden && NEDEN[res.neden]) return NEDEN[res.neden]("briefing") + " Hakkınızdan düşülmedi.";
+  if (/^Bağlantı kurulamadı/.test(String(res?.message || ""))) return "Bağlantı kurulamadı. Briefing tamamlandıysa e-postanıza gelir; kredi yalnız başarılı işte düşer.";
+  return "Briefing hazırlanamadı. Hakkınızdan düşülmedi.";
+}
+function tbKrediBitti(t, neden) {
+  for (const r of t.rows) if (r.st === "bekle") r.st = "kredi";
+  TB_NOT = ["warn", (neden && NEDEN[neden] ? NEDEN[neden]("briefing") : "Briefing krediniz bitti.") + " Kalan firmalar çalıştırılmadı."];
+}
+async function tbKlasor(t, r) {
+  if (!t || t.klasorDur || r.kid || r.st !== "ok") return;
+  let o = null;
+  try { o = PAY_MD.briefing({ res: { sonuc: r.son || {} }, title: r.firma }); } catch {}
+  const m = o ? mdT(o.m) : "";
+  if (!m) { r.kerr = "Kaydedilecek içerik yok."; return; }
+  try {
+    const x = await erpc("app_klasor_kaydet", { p_modul: "briefing", p_baslik: mdLine(`${t.grup} · ${r.firma}`).slice(0, 200), p_icerik: m });
+    if (!x || !x.ok || !x.id) throw new Error("gecersiz_yanit");
+    r.kid = x.id; r.kerr = "";
+    KLASOR = klasorBos();
+  } catch (e) {
+    r.kerr = ekErr(e) || "Klasöre kaydedilemedi.";
+    if (String(e && e.code) === "54000") t.klasorDur = true;
+  }
+}
+async function tbBasari(t, r, res) {
+  applyKota("briefing", res.kota);
+  const s = res.sonuc && typeof res.sonuc === "object" ? res.sonuc : {};
+  r.son = {};
+  for (const k of TB_SON) {
+    const v = s[k];
+    if (v === undefined || v === null || v === "" || typeof v === "object") continue;
+    r.son[k] = typeof v === "number" ? v : String(v).slice(0, k === "message" ? 600 : 400);
+  }
+  r.st = "ok"; r.err = "";
+  const url = safeUrl(r.son.presentationViewUrl || r.son.presentationUrl);
+  if (url) addHist({ k: "briefing", title: `${r.firma}${r.kisi ? " · " + r.kisi : ""}`, url });
+  await tbKlasor(t, r);
+}
+async function tbCalistir() {
+  if (TBRUN || !TB) return;
+  const t = TB, uid = t.uid, run = (TBRUN = { dur: false, t });
+  const kalp = setInterval(() => { if (TB === t) tbSakla(); }, TB_HB);
+  t.durum = "calis"; TB_NOT = null; tbSakla(); tbCiz();
+  try {
+    while (!run.dur && TB === t && S.session?.user?.id === uid) {
+      const r = t.rows.find(x => x.st === "bekle");
+      if (!r) break;
+      if (!durum("briefing").ok) { tbKrediBitti(t, durum("briefing").neden); break; }
+      r.st = "calis"; r.t0 = Date.now(); r.err = ""; tbSakla(); tbCiz();
+      const body = { firma_adi: r.firma, firma_website: r.web, firma_linkedin: r.flinkedin || "", kisi_adi: r.kisi || "", kisi_email: r.eposta || "", kisi_linkedin: r.klinkedin || "", toplanti_tarihi: r.tarih || today(), toplanti_saati: r.saat || "10:00", toplanti_konusu: r.konu || "" };
+      const p = api("/api/app/briefing", body);
+      const res = await Promise.race([p, wait(TB_BEKLE).then(() => null)]);
+      if (TB !== t) break;
+      r.sure = Math.round((Date.now() - r.t0) / 1000);
+      if (res === null) {
+        r.st = "hata"; r.err = "Yanıt çok uzun sürdü; sıradaki firmaya geçildi. Briefing tamamlanırsa e-postanıza gelir.";
+        p.then(async geç => {
+          if (!geç || !geç.success || TB !== t || r.st !== "hata") return;
+          await tbBasari(t, r, geç); tbSakla(); tbCiz();
+        }).catch(() => {});
+      } else if (res.success) await tbBasari(t, r, res);
+      else if (/^Oturumunuzun süresi doldu/.test(String(res.message || ""))) {
+        r.st = "bekle"; r.err = "";
+        TB_NOT = ["err", "Oturumunuzun süresi doldu. Yeniden giriş yapıp kaldığınız yerden devam edin."];
+        break;
+      } else {
+        r.st = "hata"; r.err = tbHata(res);
+        if (res.neden) { tbKrediBitti(t, res.neden); break; }
+      }
+      if (TB === t) { tbSakla(); tbCiz(); }
+    }
+  } finally {
+    clearInterval(kalp);
+    TBRUN = null;
+    if (TB === t) {
+      for (const r of t.rows) if (r.st === "calis") { r.st = "bekle"; r.err = ""; }
+      t.durum = t.rows.some(r => r.st === "bekle") ? "durdu" : "bitti";
+      store.set("toplu", t);
+    }
+  }
+  if (TB !== t) return;
+  await tbBenYenile();
+  const ok = tbSay(t, "ok");
+  toast(run.dur ? `Toplu briefing durduruldu · ${ok} hazır` : `Toplu briefing bitti · ${ok} hazır ✓`);
+  if (route === "briefing" && BRF_SEKME === "toplu") render();
+}
+// Önizlemeden ya da "Devam et"ten: krediyi tazeleyip yeniden hesaplar; sayı değiştiyse başlatmaz, yeni bildirimi gösterir
+async function tbBaslat(btn) {
+  if (tbAktif() || JOBS.briefing?.state === "run") return;
+  const devam = !!TB && !!TB_ONAY;
+  const aday = devam ? tbAdaylar().length : TBP ? Math.min(TBP.rows.length, TB_MAX) : 0;
+  if (!aday) return;
+  busy(btn, true, "Kredi kontrol ediliyor…");
+  const taze = await tbBenYenile();
+  busy(btn, false);
+  const kalan = tbKalan(), n = Math.min(aday, kalan);
+  const eski = devam ? TB_ONAY : TBP;
+  if (!taze) { TB_NOT = ["err", "Kredi bilgisi alınamadı. Bağlantınızı kontrol edip tekrar deneyin."]; return tbCiz(); }
+  if (!eski || eski.n !== n || eski.kalan !== kalan) {
+    if (eski) { eski.n = n; eski.kalan = kalan; }
+    TB_NOT = ["warn", "Kredi durumunuz değişti; güncel bilgiyi kontrol edip yeniden başlatın."];
+    return tbCiz();
+  }
+  if (!n) return;
+  if (devam) {
+    tbAdaylar().forEach((r, i) => { r.st = i < n ? "bekle" : "kredi"; r.err = ""; });
+    TB_ONAY = null;
+  } else {
+    const uid = S.session?.user?.id;
+    if (!uid) return;
+    TB = { v: 1, uid, at: Date.now(), hb: Date.now(), grup: `Toplu briefing — ${new Date().toLocaleDateString("tr-TR")}`, durum: "calis",
+      rows: TBP.rows.slice(0, TB_MAX).map((r, i) => ({ ...r, st: i < n ? "bekle" : "kredi", err: "" })) };
+    TBP = null;
+  }
+  tbCalistir();
+}
+async function tbDevamSor(btn) {
+  if (tbAktif() || !TB) return;
+  busy(btn, true, "Kredi kontrol ediliyor…");
+  const taze = await tbBenYenile();
+  busy(btn, false);
+  if (!taze) { TB_NOT = ["err", "Kredi bilgisi alınamadı. Bağlantınızı kontrol edip tekrar deneyin."]; return tbCiz(); }
+  const kalan = tbKalan();
+  TB_ONAY = { n: Math.min(tbAdaylar().length, kalan), kalan };
+  TB_NOT = null;
+  tbCiz();
+}
+async function tbKaydetKalan(btn) {
+  const t = TB;
+  if (!t || TBRUN) return;
+  t.klasorDur = false;
+  busy(btn, true, "Kaydediliyor…");
+  for (const r of t.rows) if (r.st === "ok" && !r.kid) { await tbKlasor(t, r); if (t.klasorDur) break; }
+  busy(btn, false);
+  if (TB !== t) return;
+  store.set("toplu", t);
+  const kalan = t.rows.filter(r => r.st === "ok" && !r.kid).length;
+  TB_NOT = kalan ? ["warn", `${kalan} briefing kaydedilemedi. ${t.klasorDur ? "Bugünkü kayıt sınırına ulaştınız (günde 30; paylaşım linkleriyle ortak). Yarın tekrar deneyin." : "Biraz sonra tekrar deneyin."}`] : ["ok", `Tümü ${klasorEkip() ? "ekip klasörüne" : "klasörünüze"} kaydedildi.`];
+  tbCiz();
+}
+
+// --- İndirme ---
+const tbDosyaAd = (t, uz) => { const d = new Date(Number(t.at) || Date.now()); return `toplu-briefing-${new Date(d - d.getTimezoneOffset() * 6e4).toISOString().slice(0, 10)}.${uz}`; };
+const TB_DURUM = { bekle: "Sırada", calis: "Hazırlanıyor", ok: "Hazır", hata: "Hata", kredi: "Kredi yetmedi" };
+function tbMd(t) {
+  const ok = t.rows.filter(r => r.st === "ok"), diger = t.rows.filter(r => r.st !== "ok");
+  return mdJoin(`# ${mdLine(t.grup)}`, `${ok.length} briefing hazır${diger.length ? `, ${diger.length} firma hazırlanmadı` : ""}.`,
+    ...ok.map(r => { const o = PAY_MD.briefing({ res: { sonuc: r.son || {} }, title: r.firma }); return `## ${mdLine(r.firma)}\n\n${mdT(o.m).replace(/^## /gm, "### ")}`; }),
+    diger.length ? `## Hazırlanmayan firmalar\n\n${diger.map(r => `- **${mdLine(r.firma)}** (${mdLine(r.web)}): ${TB_DURUM[r.st]}${r.err ? " — " + mdLine(r.err) : ""}`).join("\n")}` : "") + "\n";
+}
+function tbHtml(t) {
+  const sat = (a, v) => (v === undefined || v === null || v === "" ? "" : `<tr><th>${esc(a)}</th><td>${esc(v)}</td></tr>`);
+  const ok = t.rows.filter(r => r.st === "ok"), diger = t.rows.filter(r => r.st !== "ok");
+  const bolum = r => {
+    const s = r.son || {}, u = safeUrl(s.presentationViewUrl || s.presentationUrl);
+    return `<section><h2>${esc(r.firma)}</h2><table>${sat("Web sitesi", r.web)}${sat("Kişi", s.kisi_adi || s.person || r.kisi)}${sat("Toplantı", s.toplanti_tarihi || r.tarih)}${sat("En uygun hizmet", s.en_uygun_hizmet)}${sat("Firma skoru", s.f_skor)}${sat("Kişi skoru", s.k_skor)}${sat("Fırsat", s.deal_pct_label)}${sat("Slayt", s.slideCount)}</table>
+      ${u ? `<p><a href="${esc(u)}" target="_blank" rel="noopener">Briefing sunumunu aç →</a></p>` : ""}${s.message ? `<p class="m">${esc(s.message)}</p>` : ""}</section>`;
+  };
+  return `<!doctype html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(t.grup)}</title>
+<style>body{font-family:Inter,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:#0f172a;background:#f6f7fb;margin:0;padding:24px 16px;line-height:1.55}main{max-width:820px;margin:0 auto}h1{font-size:24px;margin:0 0 4px}h2{font-size:18px;margin:0 0 10px}section{background:#fff;border:1px solid #e5e7ef;border-radius:14px;padding:18px 20px;margin-top:14px}table{border-collapse:collapse;width:100%;font-size:14px}th{text-align:left;color:#64748b;font-weight:600;width:38%;padding:5px 8px 5px 0;vertical-align:top}td{padding:5px 0;overflow-wrap:anywhere}a{color:#5b5bd6}.m{color:#64748b;font-size:13.5px}.ust{color:#64748b;margin:0}ul{padding-left:18px}</style></head>
+<body><main><h1>${esc(t.grup)}</h1><p class="ust">${ok.length} briefing hazır${diger.length ? ` · ${diger.length} firma hazırlanmadı` : ""} · Sales Corner</p>
+${ok.map(bolum).join("")}
+${diger.length ? `<section><h2>Hazırlanmayan firmalar</h2><ul>${diger.map(r => `<li><b>${esc(r.firma)}</b> (${esc(r.web)}): ${esc(TB_DURUM[r.st])}${r.err ? " — " + esc(r.err) : ""}</li>`).join("")}</ul></section>` : ""}
+</main></body></html>`;
+}
+function tbIndir(icerik, ad, tip) {
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([icerik], { type: tip }));
+  a.download = ad; document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+}
+const TB_ORNEK = "Firma adı,Web sitesi,Görüşülecek kişi,E-posta,Toplantı tarihi,Saat,Konu\nÖrnek Yazılım A.Ş.,ornekyazilim.com,Ayşe Yılmaz,,,10:00,CRM entegrasyonu demosu\nDemo Lojistik,demolojistik.com.tr,,,,,\n";
+
+// --- Çizim ---
+function tbForm() {
+  return `<form id="tbf" data-sk-noform>
+    <p style="font-size:14px;color:var(--mute);margin-bottom:14px">Bir CSV dosyası yükleyin ya da Excel / Google Sheets'ten kopyalayıp yapıştırın. Her satır bir firma; bir seferde en fazla ${TB_MAX} firma çalışır.</p>
+    <div class="f"><label for="tbd">CSV dosyası</label><input class="in" id="tbd" type="file" accept=".csv,.tsv,.txt,text/csv,text/plain"></div>
+    <div class="f"><label for="tbt">ya da yapıştırın</label><textarea class="in" id="tbt" rows="7" maxlength="100000" spellcheck="false" placeholder="Firma adı,Web sitesi&#10;Örnek Yazılım A.Ş.,ornekyazilim.com"></textarea>
+      <span class="hint">Firma adı ve web sitesi zorunlu; kişi, e-posta, toplantı tarihi, saat ve konu isteğe bağlı. Başlık satırı yoksa sıra: firma, web sitesi, kişi, e-posta.</span></div>
+    <div id="tbm"></div>
+    <div class="row" style="justify-content:flex-start"><button class="btn btn-p" type="submit">Önizle</button><button class="btn btn-g btn-s" type="button" data-tb="ornek">Örnek CSV indir</button></div>
+  </form><div id="tb-onay" style="margin-top:14px"></div>`;
+}
+function tbOnayHtml() {
+  const not = TB_NOT ? msg(TB_NOT[0], esc(TB_NOT[1])) : "";
+  if (!TBP) return not;
+  const aday = Math.min(TBP.rows.length, TB_MAX);
+  if (!aday) return not + msg("err", `${ic("alert", 16)}<span>Çalıştırılabilecek geçerli satır bulunamadı. Her satırda firma adı ve web sitesi olmalı.</span>`);
+  const tek = JOBS.briefing?.state === "run";
+  return `${not}${tbBilgi(TBP.n, TBP.kalan, aday, Math.max(0, TBP.rows.length - TB_MAX))}
+    <div class="row" style="justify-content:flex-start;margin-top:12px">${TBP.n ? `<button class="btn btn-p" type="button" data-tb="baslat"${tek ? " disabled" : ""}>${TBP.n} briefingi başlat</button>` : ""}<button class="btn btn-g btn-s" type="button" data-tb="iptal">Vazgeç</button></div>
+    ${tek ? `<p class="hint" style="margin-top:8px;font-size:12.5px;color:var(--mute)">Tek firma briefingi bitince başlatabilirsiniz.</p>` : ""}`;
+}
+function tbKontrol() {
+  const t = TB, not = TB_NOT ? msg(TB_NOT[0], esc(TB_NOT[1])) : "";
+  const ok = tbSay(t, "ok"), hata = tbSay(t, "hata"), kredi = tbSay(t, "kredi"), bekle = tbSay(t, "bekle");
+  const ozet = `<div class="kv" style="margin-bottom:14px">${[["Hazır", ok], ["Hata", hata], ["Sırada", bekle + tbSay(t, "calis")], ["Kredi yetmedi", kredi]].filter(x => x[1]).map(([a, v]) => `<div><span>${a}</span><b>${v}</b></div>`).join("")}</div>`;
+  let alt;
+  if (TBRUN) alt = `<button class="btn btn-d btn-w" type="button" data-tb="dur"${TBRUN.dur ? " disabled" : ""}>${TBRUN.dur ? "Durduruluyor… (süren firma bitiyor)" : "Durdur"}</button>
+    <p class="hint" style="margin-top:10px;font-size:12.5px;color:var(--mute)">Bu sekme açık kaldığı sürece devam eder; başka sayfalara geçebilirsiniz. Durdurunca o an hazırlanan firma tamamlanır.</p>`;
+  else if (tbBaska()) alt = msg("info", "Bu liste başka bir sekmede çalışıyor. İlerleme burada da güncellenir.");
+  else {
+    const aday = tbAdaylar().length, tek = JOBS.briefing?.state === "run";
+    const devam = !aday ? "" : TB_ONAY
+      ? `${tbBilgi(TB_ONAY.n, TB_ONAY.kalan, aday, 0)}<div class="row" style="justify-content:flex-start;margin-top:12px">${TB_ONAY.n ? `<button class="btn btn-p" type="button" data-tb="baslat"${tek ? " disabled" : ""}>${TB_ONAY.n} briefingle devam et</button>` : ""}<button class="btn btn-g btn-s" type="button" data-tb="vazgec">Vazgeç</button></div>`
+      : `<p style="font-size:14px;margin-bottom:10px">${aday} firma çalıştırılmadı.</p><button class="btn btn-p btn-w" type="button" data-tb="devam"${tek ? " disabled" : ""}>Devam et</button>`;
+    alt = `${devam}${tek ? `<p class="hint" style="margin-top:8px;font-size:12.5px;color:var(--mute)">Tek firma briefingi sürüyor; bitince devam edebilirsiniz.</p>` : ""}
+      <div class="row" style="justify-content:flex-start;margin-top:14px"><button class="btn btn-g btn-s" type="button" data-tb="yeni">Yeni toplu liste</button></div>`;
+  }
+  return `<div class="sec" style="margin-bottom:0"><h4>${esc(t.grup)}</h4>${ozet}${not}${alt}</div>`;
+}
+function tbSatir(r, i, pill) {
+  const alt = [tbHost(r.web), r.kisi].filter(Boolean).map(esc).join(" · ");
+  return `<li class="tb-li"><span class="tb-n">${i + 1}</span><div class="tb-t"><b>${esc(r.firma)}</b><span>${alt}</span>${r.err ? `<span class="tb-e">${esc(r.err)}</span>` : ""}${r.kerr ? `<span class="tb-e">Klasör: ${esc(r.kerr)}</span>` : ""}</div><div class="tb-s">${pill}</div></li>`;
+}
+function tbPill(r) {
+  if (r.st === "ok") {
+    const u = safeUrl(r.son?.presentationViewUrl || r.son?.presentationUrl);
+    return `${u ? `<a class="btn btn-g btn-s" href="${esc(u)}" target="_blank" rel="noopener">Aç</a>` : ""}<span class="pill ok">Hazır</span>`;
+  }
+  if (r.st === "calis") return `<span class="pill acc"><span class="spin s" aria-hidden="true"></span>Hazırlanıyor</span>`;
+  if (r.st === "hata") return `<span class="pill bad">Hata</span>`;
+  if (r.st === "kredi") return `<span class="pill warn">Kredi yetmedi</span>`;
+  return `<span class="pill">Sırada</span>`;
+}
+function tbSag() {
+  if (TB) {
+    const t = TB, ok = tbSay(t, "ok"), dl = !TBRUN && ok;
+    const kaydedilmedi = t.rows.filter(r => r.st === "ok" && !r.kid).length;
+    return `<div class="res-h"><div style="min-width:0;flex:1"><h3>${esc(t.grup)}</h3><p style="color:var(--mute);font-size:13.5px;margin-top:2px" data-tb-eta>${esc(tbEta())}</p></div></div>
+      <div class="res-b"><div class="meter tb-m" style="margin-bottom:18px" aria-hidden="true"><i data-tb-bar style="width:${tbYuzde().toFixed(1)}%"></i></div>
+      <ol class="tb-list">${t.rows.map((r, i) => tbSatir(r, i, tbPill(r))).join("")}</ol>
+      ${ok ? `<div class="sec" style="margin-top:20px"><h4>Çıktılar</h4><p style="color:var(--mute);font-size:13.5px;margin-bottom:10px">Hazır briefingler "${esc(t.grup)}" başlığıyla ${klasorEkip() ? "ekip klasörüne" : "klasörünüze"} kaydedilir.${kaydedilmedi ? ` ${kaydedilmedi} tanesi kaydedilemedi.` : ""}</p>
+        <div class="row" style="justify-content:flex-start"><button class="btn btn-p btn-s" type="button" data-tb="html"${dl ? "" : " disabled"}>Tümünü indir (.html)</button><button class="btn btn-g btn-s" type="button" data-tb="md"${dl ? "" : " disabled"}>Markdown (.md)</button><a class="btn btn-g btn-s" href="#/klasor">${esc(klasorAd())}</a>${kaydedilmedi && !TBRUN && !tbBaska() ? `<button class="btn btn-g btn-s" type="button" data-tb="kaydet">Kaydedilemeyenleri kaydet</button>` : ""}</div></div>` : ""}</div>`;
+  }
+  if (TBP) {
+    const aday = Math.min(TBP.rows.length, TB_MAX);
+    const pill = i => (i >= TB_MAX ? `<span class="pill">${TB_MAX} sınırı dışında</span>` : i < TBP.n ? `<span class="pill ok">Çalıştırılacak</span>` : `<span class="pill warn">Kredi yetmedi</span>`);
+    return `<div class="res-h"><div style="min-width:0;flex:1"><h3>Önizleme</h3><p style="color:var(--mute);font-size:13.5px;margin-top:2px">${TBP.ad ? esc(TBP.ad) + " · " : ""}${TBP.rows.length} geçerli · ${TBP.ele.length} elendi${aday ? ` · ${TBP.n} çalıştırılacak` : ""}</p></div></div>
+      <div class="res-b">${TBP.rows.length ? `<ol class="tb-list">${TBP.rows.map((r, i) => tbSatir(r, i, pill(i))).join("")}</ol>` : ""}
+      ${TBP.ele.length ? `<div class="sec" style="margin-top:20px"><h4>Elenen satırlar (${TBP.ele.length})</h4><ul class="tb-ele">${TBP.ele.slice(0, 50).map(e => `<li><span>Satır ${e.satir}</span> <b>${esc(String(e.ad).slice(0, 80))}</b> — ${esc(e.neden)}</li>`).join("")}${TBP.ele.length > 50 ? `<li>… ve ${TBP.ele.length - 50} satır daha</li>` : ""}</ul></div>` : ""}
+      ${TBP.fazla ? `<p style="color:var(--mute);font-size:13.5px">Dosyadaki ilk ${TB_SATIR} satır okundu; ${TBP.fazla} satır atlandı.</p>` : ""}</div>`;
+  }
+  return `<div class="empty"><div class="big" aria-hidden="true">${ico(P.clip, 26)}</div><h3>Toplu briefing</h3><p style="max-width:440px">CSV'yi yükleyip önizleyin. Kaç kredi kullanılacağını gördükten sonra başlatırsınız; firmalar sırayla hazırlanır ve klasörünüze kaydedilir.</p></div>`;
+}
+function tbYuzde() {
+  const t = TB;
+  if (!t) return 0;
+  const top = t.rows.filter(r => r.st !== "kredi").length;
+  if (!top) return 0;
+  const bitti = tbSay(t, "ok") + tbSay(t, "hata"), c = t.rows.find(r => r.st === "calis");
+  const kesir = c ? Math.min(0.95, (Date.now() - Number(c.t0 || Date.now())) / 1000 / tbOrt()) : 0;
+  return Math.min(100, ((bitti + kesir) / top) * 100);
+}
+function tbOrt() { const s = TB ? TB.rows.filter(r => r.st === "ok" && r.sure > 0).map(r => r.sure) : []; return s.length ? s.reduce((a, b) => a + b, 0) / s.length : EST.briefing; }
+function tbEta() {
+  const t = TB;
+  if (!t) return "";
+  const ok = tbSay(t, "ok"), top = t.rows.filter(r => r.st !== "kredi").length, bitti = ok + tbSay(t, "hata");
+  const c = t.rows.find(r => r.st === "calis");
+  if (!c && !TBRUN && !tbBaska()) return `${ok} / ${top} briefing hazır${t.durum === "bitti" ? "" : " · durduruldu"}`;
+  const ort = tbOrt(), gec = c ? (Date.now() - Number(c.t0 || Date.now())) / 1000 : 0;
+  const sn = tbSay(t, "bekle") * ort + Math.max(0, ort - gec);
+  return `${bitti} / ${top} tamamlandı · tahmini kalan süre ${sn < 60 ? "1 dakikadan az" : `~${Math.ceil(sn / 60)} dk`}`;
+}
+function tbCiz() {
+  if (route !== "briefing" || BRF_SEKME !== "toplu") return;
+  const sol = document.getElementById("tb-sol"), out = document.getElementById("out");
+  if (!sol || !out) return;
+  const mod = TB ? "kuyruk" : "form";
+  if (sol.dataset.mod !== mod) { sol.dataset.mod = mod; sol.innerHTML = TB ? tbKontrol() : tbForm(); if (!TB) tbFormBagla(); }
+  else if (TB) sol.innerHTML = tbKontrol();
+  const onay = document.getElementById("tb-onay");
+  if (onay) onay.innerHTML = tbOnayHtml();
+  out.innerHTML = tbSag();
+  const q = sol.closest(".card")?.querySelector(".quota"), qh = quota("briefing");
+  if (q && qh && q.outerHTML !== qh) q.outerHTML = qh;
+}
+async function tbOnizle(metin, ad, btn) {
+  const m = String(metin || "");
+  if (!m.trim()) return setMsg("tbm", "err", "CSV dosyası seçin ya da listeyi yapıştırın.");
+  setMsg("tbm", "", "");
+  busy(btn, true, "Kontrol ediliyor…");
+  const o = tbAyikla(m, ad);
+  const taze = await tbBenYenile();
+  busy(btn, false);
+  if (TB) return;
+  o.kalan = tbKalan(); o.n = Math.min(o.rows.length, TB_MAX, o.kalan);
+  TBP = o;
+  TB_NOT = taze ? null : ["warn", "Kredi bilgisi tazelenemedi; başlatırken yeniden kontrol edilir."];
+  tbCiz();
+}
+function tbFormBagla() {
+  const f = document.getElementById("tbf");
+  if (!f) return;
+  let ad = "";
+  f.tbt.addEventListener("input", () => { ad = ""; });
+  f.tbd.onchange = () => {
+    const d = f.tbd.files && f.tbd.files[0];
+    if (!d) return;
+    if (d.size > 512 * 1024) { f.tbd.value = ""; return setMsg("tbm", "err", "Dosya çok büyük (en fazla 512 KB). İlk satırları ayrı bir dosyaya alın."); }
+    const fr = new FileReader();
+    fr.onload = () => { const s = String(fr.result || ""); f.tbt.value = s.slice(0, 100000); ad = d.name; tbOnizle(s, d.name, f.querySelector("[type=submit]")); };
+    fr.onerror = () => setMsg("tbm", "err", "Dosya okunamadı. Tekrar deneyin ya da içeriği yapıştırın.");
+    fr.readAsText(d);
+  };
+  f.onsubmit = e => { e.preventDefault(); tbOnizle(f.tbt.value, ad, f.querySelector("[type=submit]")); };
+}
+function pageToplu(fnot) {
+  tbYukle();
+  toolShell("briefing", `${brfSekme()}${fnot}<div id="tb-sol"></div>`);
+  bindBrfSekme();
+  tbCiz();
+}
+// Saniyelik: ilerleme çubuğu ve tahmini süre; başka sekmede süren listeyi depodan yeniden okur
+let tbOkuT = 0;
+setInterval(() => {
+  if (route !== "briefing" || BRF_SEKME !== "toplu" || !TB) return;
+  if (!TBRUN && TB.durum === "calis" && Date.now() - tbOkuT > 3000) {
+    tbOkuT = Date.now();
+    const eski = JSON.stringify(TB);
+    tbYukle();
+    if (JSON.stringify(TB) !== eski) return tbCiz();
+  }
+  const b = document.querySelector("[data-tb-bar]"); if (b) b.style.width = tbYuzde().toFixed(1) + "%";
+  const e = document.querySelector("[data-tb-eta]"); if (e) e.textContent = tbEta();
+}, 1000);
+document.addEventListener("click", e => {
+  const t = e.target.closest("[data-tb]");
+  if (!t || t.disabled) return;
+  const a = t.dataset.tb;
+  if (a === "baslat") tbBaslat(t);
+  else if (a === "iptal") { TBP = null; TB_NOT = null; tbCiz(); }
+  else if (a === "dur") { if (TBRUN) { TBRUN.dur = true; tbCiz(); } }
+  else if (a === "devam") tbDevamSor(t);
+  else if (a === "vazgec") { TB_ONAY = null; TB_NOT = null; tbCiz(); }
+  else if (a === "yeni") { if (tbAktif()) return; TB = null; TBP = null; TB_ONAY = null; TB_NOT = null; store.set("toplu", null); tbCiz(); }
+  else if (a === "kaydet") tbKaydetKalan(t);
+  else if (a === "html" && TB) tbIndir(tbHtml(TB), tbDosyaAd(TB, "html"), "text/html;charset=utf-8");
+  else if (a === "md" && TB) tbIndir(tbMd(TB), tbDosyaAd(TB, "md"), "text/markdown;charset=utf-8");
+  else if (a === "ornek") tbIndir("﻿" + TB_ORNEK, "toplu-briefing-ornek.csv", "text/csv;charset=utf-8");
+});
+function tbSifirla(sil) {
+  if (TBRUN) TBRUN.dur = true;
+  TB = null; TBP = null; TB_ONAY = null; TB_NOT = null;
+  if (sil) store.set("toplu", null);
 }
 
 // ---------- Fireflies ----------
@@ -2350,7 +2838,7 @@ document.addEventListener("click", async e => {
     sh.classList.remove("open");
   }
   else if (t.hasAttribute("data-menu")) document.getElementById("shell")?.classList.toggle("open");
-  else if (t.hasAttribute("data-logout")) { await sb.auth.signOut(); S.session = null; S.ben = null; FIRMA = { v: undefined, yuk: false, err: "" }; LOGO_YENI = null; BILD = { v: undefined, yuk: false }; ADM = { rows: null, err: "", q: "" }; FF = { list: null, err: "", sel: "" }; TK = { list: null, err: "", edit: null, sil: "", run: {} }; PAY = { list: null, err: "", yuk: false }; EKIP = ekipBos(); KLASOR = klasorBos(); DAVET = { sonuc: null }; go("giris"); }
+  else if (t.hasAttribute("data-logout")) { tbSifirla(true); await sb.auth.signOut(); S.session = null; S.ben = null; FIRMA = { v: undefined, yuk: false, err: "" }; LOGO_YENI = null; BILD = { v: undefined, yuk: false }; ADM = { rows: null, err: "", q: "" }; FF = { list: null, err: "", sel: "" }; TK = { list: null, err: "", edit: null, sil: "", run: {} }; PAY = { list: null, err: "", yuk: false }; EKIP = ekipBos(); KLASOR = klasorBos(); DAVET = { sonuc: null }; go("giris"); }
   else if (t.hasAttribute("data-firma-yenile")) { FIRMA = { v: undefined, yuk: false, err: "" }; render(); }
   else if (t.dataset.paylas) paylas(t.dataset.paylas, t);
   else if (t.dataset.payKapat) payKapat(t.dataset.payKapat, t);
@@ -2387,7 +2875,7 @@ document.addEventListener("keydown", e => { if (e.key === "Escape") document.get
 sb.auth.onAuthStateChange((ev, session) => {
   S.session = session;
   if (ev === "PASSWORD_RECOVERY") { S.recovery = true; setTimeout(() => go("yeni-sifre"), 0); }
-  if (ev === "SIGNED_OUT") { S.ben = null; FIRMA = { v: undefined, yuk: false, err: "" }; LOGO_YENI = null; BILD = { v: undefined, yuk: false }; PAY = { list: null, err: "", yuk: false }; EKIP = ekipBos(); KLASOR = klasorBos(); DAVET = { sonuc: null }; if (route &&!AUTH_ROUTES.has(route)) setTimeout(render, 0); }
+  if (ev === "SIGNED_OUT") { tbSifirla(false); S.ben = null; FIRMA = { v: undefined, yuk: false, err: "" }; LOGO_YENI = null; BILD = { v: undefined, yuk: false }; PAY = { list: null, err: "", yuk: false }; EKIP = ekipBos(); KLASOR = klasorBos(); DAVET = { sonuc: null }; if (route &&!AUTH_ROUTES.has(route)) setTimeout(render, 0); }
 });
 {
   const { data } = await sb.auth.getSession();
