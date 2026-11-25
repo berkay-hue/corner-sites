@@ -567,7 +567,13 @@ function stokHarca(foto){
   if(dr==='acik')return Promise.resolve(true);
   if(dr!=='deneme'){harcaHata=dr==='kilit'?stokHataMetni({kod:'plan',trial_used:stokDenemeBitti()}):stokHarcaHataMetni({kod:'not_ready'});return Promise.resolve(false)}
   harcaId=an;
-  harcaP=post('/gen/stock/use',id?{id:id}:{},10000).then(function(r){
+  harcaP=post('/gen/stock/use',id?{id:id}:{},10000).then(null,function(e){
+    /* zaman aşımı/ağ hatası: worker hakkı düşürmüş olabilir → aynı id ile BİR kez yeniden dene; worker aynı foto için ikinci kez
+       düşürmez, {ok, repeat:true} döner (başarı). Bu istekte dış AbortController yok: 'vazgec' de yalnız bizim zaman aşımımızdır. */
+    var k=e&&e.kod;
+    if(an&&(k==='zaman'||k==='ag'||k==='vazgec'))return new Promise(function(r){setTimeout(r,800)}).then(function(){return post('/gen/stock/use',{id:id},10000)});
+    throw e;
+  }).then(function(r){
     if(r&&r.stock_trial){stokDenemeAl(r.stock_trial);if(r.stock_trial.used>=r.stock_trial.limit)D.stock=false}
     if(an)harcanan[an]=true;harcaP=null;harcaId='';harcaYayinla();stokYayinla();return true;
   },function(e){

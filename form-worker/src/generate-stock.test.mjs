@@ -385,6 +385,137 @@ test("deneme: iki eşzamanlı use → yalnız biri geçer (koşullu atomik UPSER
   }
 });
 
+// 25.11 tekrar güvenliği: yanıtı zaman aşımına uğrayan istemci aynı id ile yeniden dener → hak ikinci kez düşmez
+test("deneme use tekrar: aynı id → 200 repeat (sayaç 1, hak bitmiş olsa da); farklı id → 403; ham id saklanmaz; başka kullanıcı ayrı", async () => {
+  for (const plan of ["demo", "basic"]) {
+    const s = setup();
+    const u = await s.use({ auth: BEARER(plan), body: { id: 77 } });
+    assert.deepEqual([u.status, u.body], [200, { ok: true, charged: false, stock_trial: { limit: 1, used: 1 } }], plan);
+    for (let i = 0; i < 2; i++) {
+      const r = await s.use({ auth: BEARER(plan), body: { id: 77 } });
+      assert.deepEqual([r.status, r.body], [200, { ok: true, charged: false, repeat: true, stock_trial: { limit: 1, used: 1 } }], plan);
+    }
+    assert.deepEqual([s.usage("pt"), s.usage("pi")], [[1], [1]], plan);
+    const f = await s.use({ auth: BEARER(plan), body: { id: 78 } });
+    assert.deepEqual([f.status, f.body.error, f.body.trial_used], [403, "plan", true], plan);
+    assert.deepEqual([s.usage("pt"), s.usage("pi")], [[1], [1]], plan);
+    // kayıt kullanıcıya bağlı: öbür deneme kullanıcısı aynı id ile kendi hakkını düşürür (repeat değil)
+    const other = plan === "demo" ? "basic" : "demo";
+    const o = await s.use({ auth: BEARER(other), body: { id: 77 } });
+    assert.deepEqual([o.status, o.body.repeat], [200, undefined], other);
+    assert.deepEqual([s.usage("pt"), s.usage("pi")], [[1, 1], [1, 1]], plan);
+    // ham fotoğraf kimliği ve kullanıcı kimliği anahtarda yok (sha256); satırlar ömür boyu (genCleanup silmez)
+    for (const r of s.db.prepare("SELECT day, key FROM gen_usage WHERE kind = 'pi'").all()) {
+      assert.equal(r.day, "stock_trial");
+      assert.match(r.key, /^[0-9a-f]{64}$/);
+    }
+    const { genCleanup } = await import("./generate.js");
+    await genCleanup(s.env);
+    assert.deepEqual([s.usage("pt"), s.usage("pi")], [[1, 1], [1, 1]], plan);
+  }
+});
+
+test("deneme use tekrar: iki eşzamanlı aynı id → ikisi de 200 (biri repeat), sayaç 1; aynı id + farklı id eşzamanlı → aynı-id'ler 200, farklı 403", async () => {
+  for (const plan of ["demo", "basic"]) {
+    const s = setup();
+    // gerçek yarış: iki istek de "harcandı" kaydını okumadan hiçbir batch çalışmaz (ikisi de kayıt yokken reserve'e girer)
+    const db0 = s.env.DB;
+    let okunan = 0, ac;
+    const kapi = new Promise(r => { ac = r; });
+    s.env.DB = {
+      prepare: sql => {
+        const st = db0.prepare(sql);
+        if (!/^SELECT key, n FROM gen_usage/.test(sql)) return st;
+        const sar = x => ({ ...x, bind: (...a) => sar(x.bind(...a)), all: async () => { const r = await x.all(); if (++okunan >= 2) ac(); return r; } });
+        return sar(st);
+      },
+      batch: async list => { await kapi; return db0.batch(list); },
+    };
+    const res = await Promise.all([s.use({ auth: BEARER(plan), body: { id: 5 } }), s.use({ auth: BEARER(plan), body: { id: 5 } })]);
+    s.env.DB = db0;
+    assert.deepEqual(res.map(r => r.status), [200, 200], plan);
+    assert.deepEqual(res.map(r => !!r.body.repeat).sort(), [false, true], plan);
+    for (const r of res) assert.deepEqual(r.body.stock_trial, { limit: 1, used: 1 }, plan);
+    assert.deepEqual([s.usage("pt"), s.usage("pi")], [[1], [1]], plan);
+    const k = setup();
+    const r3 = await Promise.all([k.use({ auth: BEARER(plan), body: { id: 9 } }), k.use({ auth: BEARER(plan), body: { id: 8 } }), k.use({ auth: BEARER(plan), body: { id: 9 } })]);
+    const ok = r3.filter(r => r.status === 200), no = r3.filter(r => r.status === 403);
+    assert.equal(k.usage("pt")[0], 1, plan);
+    // kazanan 9 ise iki 9 da 200 + 8 403; kazanan 8 ise 8 200, iki 9 403 — her durumda tek düşüm, karışık sonuç yok
+    assert.ok((ok.length === 2 && no.length === 1) || (ok.length === 1 && no.length === 2), plan);
+    for (const r of no) assert.equal(r.body.trial_used, true);
+    // geri alınan "harcandı" kaydı 0'da kalır, tekrar sayılmaz
+    assert.equal(k.usage("pi").filter(n => n > 0).length, 1, plan);
+  }
+});
+
+// İnceleme bulgusu: hak düşmeyen istek (pt başarısız) 'pi' kaydını batch'te bırakıp ancak sonradan DECR ile siliyordu; o arada aynı
+// id ile gelen istek "tekrar" sayılıp hak düşmeden 200 alıyordu (1 hakla 2 görsel). Artık pi yalnız pt aynı batch'te geçtiyse yazılır.
+test("deneme use: hak düşmeyen isteğin 'pi' kaydı ara durumda bile görünmez → aynı id ile araya giren istek repeat almaz (403)", async () => {
+  for (const plan of ["demo", "basic"]) {
+    const s = setup();
+    const db0 = s.env.DB;
+    let tut, tutuldu, w = null;
+    const bekle = new Promise(r => { tut = r; });
+    const geldi = new Promise(r => { tutuldu = r; });
+    let ilk = true;
+    s.env.DB = {
+      prepare: sql => db0.prepare(sql),
+      batch: async list => {
+        if (!ilk) return db0.batch(list);
+        ilk = false;
+        tutuldu();
+        await bekle; // X used=0 okudu; Z bu arada hakkı düşürür
+        const out = await db0.batch(list);
+        // X'in batch'i bitti, olası geri alma (DECR) henüz çalışmadı: W aynı id ile araya girer
+        s.env.DB = db0;
+        w = await s.use({ auth: BEARER(plan), body: { id: 6 } });
+        // ara durumda id 6 için "harcandı" kaydı olmamalı
+        assert.deepEqual(s.db.prepare("SELECT n FROM gen_usage WHERE kind = 'pi' AND n > 0").all().length, 1, plan);
+        return out;
+      },
+    };
+    const x = s.use({ auth: BEARER(plan), body: { id: 6 } });
+    await geldi;
+    const z = await s.use({ auth: BEARER(plan), body: { id: 5 } });
+    assert.deepEqual([z.status, z.body.repeat], [200, undefined], plan);
+    tut();
+    const xr = await x;
+    s.env.DB = db0;
+    assert.deepEqual([xr.status, xr.body.trial_used], [403, true], plan);
+    assert.deepEqual([w.status, w.body.repeat, w.body.trial_used], [403, undefined, true], plan);
+    assert.deepEqual([s.usage("pt"), s.usage("pi").filter(n => n > 0)], [[1], [1]], plan);
+    // Z'nin kendi tekrarı hâlâ repeat
+    const zr = await s.use({ auth: BEARER(plan), body: { id: 5 } });
+    assert.deepEqual([zr.status, zr.body.repeat], [200, true], plan);
+  }
+});
+
+test("deneme use: changes() koşulu kaydı yazmazsa (D1 farkı) yedek yol kaydı ayrıca yazar → 200, tekrar repeat, sayaç 1", async () => {
+  const s = setup();
+  const db0 = s.env.DB;
+  s.env.DB = { prepare: sql => db0.prepare(sql.replace("WHERE changes() > 0", "WHERE 0")), batch: l => db0.batch(l) };
+  const u = await s.use({ auth: BEARER("demo"), body: { id: 3 } });
+  assert.deepEqual([u.status, u.body], [200, { ok: true, charged: false, stock_trial: { limit: 1, used: 1 } }]);
+  const r = await s.use({ auth: BEARER("demo"), body: { id: 3 } });
+  assert.deepEqual([r.status, r.body.repeat], [200, true]);
+  assert.deepEqual([s.usage("pt"), s.usage("pi")], [[1], [1]]);
+});
+
+test("deneme use id'siz: eskisi gibi — kayıt yazılmaz, ikinci id'siz çağrı 403 trial_used", async () => {
+  const s = setup();
+  const u = await s.use({ auth: BEARER("demo"), body: {} });
+  assert.deepEqual([u.status, u.body], [200, { ok: true, charged: false, stock_trial: { limit: 1, used: 1 } }]);
+  assert.deepEqual([s.usage("pt"), s.usage("pi")], [[1], []]);
+  const u2 = await s.use({ auth: BEARER("demo"), body: {} });
+  assert.deepEqual([u2.status, u2.body.trial_used], [403, true]);
+  const u3 = await s.use({ auth: BEARER("demo"), body: undefined });
+  assert.equal(u3.status, 403);
+  // id'siz harcanan hak sonradan id ile "repeat" sayılmaz
+  assert.equal((await s.use({ auth: BEARER("demo"), body: { id: 1 } })).status, 403);
+  assert.deepEqual([s.usage("pt"), s.usage("pi")], [[1], []]);
+});
+
 test("deneme use: oturum yok 401, anahtar yok 503, bozuk id 400, GET 404, gövdesiz (content-length yok) 413; demo denemesi bittiyse 403", async () => {
   const s = setup();
   assert.deepEqual((await s.use({ auth: null })).body, { ok: false, error: "login_required", charged: false });

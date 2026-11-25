@@ -66,7 +66,7 @@ html.pn-kilit,html.pn-kilit body{overflow:hidden}
 }
 @media (min-width:1024px){.pn-perde{display:none}}
 
-/* ---- Taslak Masası araç sayfaları: <768'de nav.araclar aç/kapa ---- */
+/* ---- Stüdyo araç sayfaları: <768'de nav.araclar aç/kapa ---- */
 .ust-ic>.pn-menu{display:none;margin-left:calc(var(--s2) * -1)}
 .ust-ic>.pn-menu+.logo{margin-right:auto}
 @media (max-width:767px){

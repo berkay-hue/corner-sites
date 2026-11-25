@@ -494,8 +494,8 @@
       kutu = h('section', { class: 'sheet yk-durum-kutu' }, [b,
         h('p', { text: L('Yayın kuyruğu hazırlanıyor. Açıldığında gönderilerini gün ve saatiyle buradan planlayıp onaylayabileceksin. O zamana kadar hiçbir şey otomatik paylaşılmaz.',
           'The publishing queue is being prepared. Once it opens you can schedule and approve your posts here. Until then nothing is shared automatically.') }),
-        h('p', { text: L('Şimdilik metnini Taslak Masası\'nda hazırla ve kendin paylaş.', 'For now, write your text at the Draft Desk and share it yourself.') }),
-        h('div', { class: 'yk-dugmeler' }, h('a', { class: 'btn btn-ana', href: YOL.masa, text: L('Taslak Masası\'na dön', 'Back to the Draft Desk') }))
+        h('p', { text: L('Şimdilik metnini Stüdyo\'da hazırla ve kendin paylaş.', 'For now, write your text in the Studio and share it yourself.') }),
+        h('div', { class: 'yk-dugmeler' }, h('a', { class: 'btn btn-ana', href: YOL.masa, text: L('Stüdyo\'ya dön', 'Back to the Studio') }))
       ]);
     } else if (kod === 'auth') {
       b = h('h2', { text: L('Giriş gerekli', 'Sign-in needed') });
