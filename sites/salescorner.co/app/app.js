@@ -913,10 +913,11 @@ const skSlug = s => skFold(String(s || "").replace(/\s+/g, "-").replace(/[^\p{L}
 // CSV: RFC 4180 kaçışlama, UTF-8 BOM (Excel'de Türkçe karakterler bozulmasın), formül enjeksiyonuna karşı koruma
 const csvCell = v => {
   let s = String(v ?? "").replace(/\r\n?/g, "\n");
-  if (/^[=+@\t]/.test(s) || /^-[^\s\d]/.test(s)) s = "'" + s;
+  // "-2+3+cmd|…" gibi DDE yükleri de yakalanır; yalnız düz sayı ("-1", "-1,5") ve "- madde" dokunulmaz
+  if (/^[=+@\t\r]/.test(s) || (/^-/.test(s) && !/^-\s/.test(s) && !/^-?\d+(?:[.,]\d+)?$/.test(s))) s = "'" + s;
   return /[",\n]|^\s|\s$/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
 };
-const toCsv = rows => "﻿" + rows.map(r => r.map(csvCell).join(",")).join("\r\n") + "\r\n";
+const toCsv = rows => "\uFEFF" + rows.map(r => r.map(csvCell).join(",")).join("\r\n") + "\r\n";
 function skLeadCsv(arac, r, rep, steps) {
   const ctx = skCtx(r, rep);
   const bas = arac === "apollo" ? ["First Name", "Last Name", "Email", "Title", "Company"] : ["email", "firstName", "lastName", "companyName", "jobTitle"];
