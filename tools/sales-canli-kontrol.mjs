@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Sales Corner günlük canlı kontrol (.github/workflows/sales-canli-kontrol.yml, her sabah 08:00 TR).
+// Sales Corner günlük canlı kontrol (.github/workflows/sales-canli-kontrol.yml, her sabah 08:07 TR).
 // Bağımlılıksız: Node 20+ fetch. Yalnız oturumsuz GET atar; ücretli iş tetikleyen hiçbir uca (POST /api/app/<modül>,
 // takip-run, /api/analiz …) istek göndermez.
 // Hata varsa `sales-canli-kontrol` etiketli açık issue'ya yorum ekler (yoksa yeni açar); hepsi geçerse açık issue'yu
@@ -56,7 +56,9 @@ const satirlar = []; // { grup, ad, durum: ok|hata|uyari, kod, ms, ayrinti }
 const ekle = (grup, ad, durum, kod = "", ms = "", ayrinti = "") => satirlar.push({ grup, ad, durum, kod: String(kod), ms, ayrinti });
 const bekle = ms => new Promise(r => setTimeout(r, ms));
 
-// Zaman aşımlı GET; ağ hatası, zaman aşımı ya da 5xx'te bir kez yeniden dener (geçici hatada alarm vermesin)
+// Zaman aşımlı GET; ağ hatası, zaman aşımı ya da 5xx'te bir kez yeniden dener (geçici hatada alarm vermesin).
+// Yeniden deneme hakkı toplamda sınırlı: site topluca zaman aşımına düşerse iş workflow süre sınırını aşıp issue açamadan ölmesin.
+let yenidenHak = 12;
 async function getir(url, { headers = {}, govde = true } = {}) {
   for (let deneme = 0; ; deneme++) {
     const ac = new AbortController(), t = setTimeout(() => ac.abort(), ZAMAN_ASIMI), t0 = Date.now();
@@ -68,7 +70,7 @@ async function getir(url, { headers = {}, govde = true } = {}) {
     } catch (e) {
       s = { kod: 0, ms: Date.now() - t0, text: "", tip: "", yer: "", hata: e?.name === "AbortError" ? `zaman aşımı (${ZAMAN_ASIMI} ms)` : `ağ hatası: ${String(e?.cause?.code || e?.message || e).slice(0, 80)}` };
     } finally { clearTimeout(t); }
-    if (deneme === 0 && (s.kod === 0 || s.kod >= 500)) { await bekle(3000); continue; }
+    if (deneme === 0 && (s.kod === 0 || s.kod >= 500) && yenidenHak-- > 0) { await bekle(3000); continue; }
     return s;
   }
 }
@@ -100,7 +102,7 @@ async function main() {
   await havuz(KRITIK, ESZAMANLI, async k => {
     const url = (k.kok || SITE) + k.yol, ad = k.kok ? url.replace(/^https?:\/\//, "") : k.yol;
     const s = await getir(url);
-    if (!k.kok) sayfalar.set(k.yol, s);
+    sayfalar.set(k.kok ? "app:" + k.yol : k.yol, s); // panel kökü 6. adımda yeniden istenmesin
     if (s.kod !== 200) return ekle("Kritik sayfa", ad, "hata", kodAciklama(s), s.ms, "200 bekleniyordu");
     const eksik = (k.ara || []).filter(x => !bul(s.text, x)).map(x => String(x));
     if (eksik.length) return ekle("Kritik sayfa", ad, "hata", 200, s.ms, "Sayfada yok: " + eksik.join(", "));
@@ -174,9 +176,7 @@ async function main() {
   }
 
   // 6) Panel dosyaları: /app/ ve app.salescorner.co'nun yüklediği app.js?v=N / app.css?v=N
-  const panelHtml = [[SITE, sayfalar.get("/app/")], [APP_SITE, null]];
-  const panelSayfa = await getir(APP_SITE + "/");
-  panelHtml[1][1] = panelSayfa;
+  const panelHtml = [[SITE, sayfalar.get("/app/")], [APP_SITE, sayfalar.get("app:/")]];
   for (const [kok, s] of panelHtml) {
     const ad = kok.replace(/^https?:\/\//, "");
     if (!s || s.kod !== 200) continue; // kritik sayfa satırı hatayı zaten yazdı
@@ -197,9 +197,11 @@ async function main() {
 const SIRA = { hata: 0, uyari: 1, ok: 2 };
 const ROZET = { hata: "❌ Hata", uyari: "⚠️ Uyarı", ok: "✅" };
 const hucre = v => String(v ?? "").replace(/\|/g, "\\|").replace(/\n/g, " ");
-function tablo(liste) {
+// en: issue gövdesi GitHub'ın 65 536 karakter sınırını aşmasın diye satır sınırı (site çökünce 200+ satır çıkar)
+function tablo(liste, en = Infinity) {
   const s = ["| Durum | Grup | Kontrol | Kod | Süre (ms) | Ayrıntı |", "|---|---|---|---|---|---|"];
-  for (const r of liste) s.push(`| ${ROZET[r.durum]} | ${hucre(r.grup)} | ${hucre(r.ad)} | ${hucre(r.kod)} | ${hucre(r.ms)} | ${hucre(r.ayrinti)} |`);
+  for (const r of liste.slice(0, en)) s.push(`| ${ROZET[r.durum]} | ${hucre(r.grup)} | ${hucre(r.ad).slice(0, 160)} | ${hucre(r.kod).slice(0, 120)} | ${hucre(r.ms)} | ${hucre(r.ayrinti).slice(0, 200)} |`);
+  if (liste.length > en) s.push(`| … | | ${liste.length - en} satır daha (tamamı çalışma özetinde) | | | |`);
   return s.join("\n");
 }
 function calismaLinki() {
@@ -258,9 +260,14 @@ const hatalar = satirlar.filter(r => r.durum === "hata"), uyarilar = satirlar.fi
 const link = calismaLinki();
 const ozet = `**${SITE.replace(/^https?:\/\//, "")}** · ${tarih} · ${satirlar.length} kontrol · ${hatalar.length} hata · ${uyarilar.length} uyarı · ${Math.round(sure / 1000)} sn${link ? ` · [çalışma](${link})` : ""}`;
 const baslik = `Sales Corner canlı kontrol: ${hatalar.length} hata (${tarih})`;
-const govde = hatalar.length
-  ? `## ${baslik}\n\n${ozet}\n\n### Hatalar\n\n${tablo(hatalar)}\n${uyarilar.length ? `\n### Uyarılar\n\n${tablo(uyarilar)}\n` : ""}\n<details><summary>Tüm kontroller</summary>\n\n${tablo(satirlar)}\n\n</details>\n\n_Kontrol: tools/sales-canli-kontrol.mjs (her gün 08:00 TR). Hepsi geçince bu issue kendiliğinden kapanır._`
-  : `## Düzeldi ✅\n\n${ozet}\n\nTüm canlı kontroller geçti; issue kapatılıyor.\n${uyarilar.length ? `\n### Uyarılar\n\n${tablo(uyarilar)}\n` : ""}`;
+const govdeYap = detay => `## ${baslik}\n\n${ozet}\n\n### Hatalar\n\n${tablo(hatalar, 60)}\n${uyarilar.length ? `\n### Uyarılar\n\n${tablo(uyarilar, 20)}\n` : ""}` +
+  (detay ? `\n<details><summary>Tüm kontroller</summary>\n\n${tablo(satirlar, 120)}\n\n</details>` : "") +
+  `\n\n_Kontrol: tools/sales-canli-kontrol.mjs (her gün 08:07 TR). Hepsi geçince bu issue kendiliğinden kapanır._`;
+let govde = hatalar.length
+  ? govdeYap(true)
+  : `## Düzeldi ✅\n\n${ozet}\n\nTüm canlı kontroller geçti; issue kapatılıyor.\n${uyarilar.length ? `\n### Uyarılar\n\n${tablo(uyarilar, 20)}\n` : ""}`;
+if (govde.length > 60000) govde = govdeYap(false);
+if (govde.length > 60000) govde = govde.slice(0, 60000) + "\n\n…(kısaltıldı; tamamı çalışma özetinde)";
 
 console.log(ozet + "\n\n" + tablo(satirlar));
 const ozetDosya = process.env.GITHUB_STEP_SUMMARY;

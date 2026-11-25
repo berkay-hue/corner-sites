@@ -1,11 +1,12 @@
-# Sales Corner günlük canlı kontrol: her sabah 08:00 TR (05:00 UTC) salescorner.co'ya yalnız oturumsuz GET atar.
+# Sales Corner günlük canlı kontrol: her sabah 08:07 TR (05:07 UTC) salescorner.co'ya yalnız oturumsuz GET atar.
 # Hata varsa `sales-canli-kontrol` etiketli issue açar/yorum ekler; hepsi geçerse açık issue'yu "düzeldi" diye kapatır.
 # Secret kullanmaz; yalnız GITHUB_TOKEN (issues: write). Betik: tools/sales-canli-kontrol.mjs
 name: sales-canli-kontrol
 
 on:
   schedule:
-    - cron: "0 5 * * *"
+    # Saat başı cron'ları GitHub'da sık düşüyor/gecikiyor (blog-daily.yml notu); 05:07 UTC = 08:07 TR
+    - cron: "7 5 * * *"
   workflow_dispatch:
 
 permissions:
@@ -19,7 +20,7 @@ concurrency:
 jobs:
   kontrol:
     runs-on: ubuntu-24.04
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v5
         with:
