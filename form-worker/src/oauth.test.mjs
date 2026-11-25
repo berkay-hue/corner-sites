@@ -3941,7 +3941,7 @@ test("A5-2w: brandcorner.co'da eski uçların hepsi yönlendirilir, üç rol de 
 
 test("A5-2w: APP_ROUTES izin listesi yalnız mevcut hesap uçları (A5-3 ile hesap bölümleri)", () => {
   assert.deepEqual([...APP_ROUTES].sort(), [...OLD_AUTH, ...[...APP_OK, ...ACCT_OK, ...ADMIN_OK, ...CMS_OK].map(k => k.replace(" ", " /app/"))].sort());
-  assert.equal(CMS_OK.length, 12);
+  assert.equal(CMS_OK.length, 17);
   assert.ok(Object.isFrozen(APP_ROUTES));
 });
 

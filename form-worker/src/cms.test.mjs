@@ -79,7 +79,7 @@ function freshDb({ cms = true } = {}) {
 const ENV = {
   PBKDF2_ITER: "10000", ACCOUNTS_ENABLED: "1", CMS_ENABLED: "1", OAUTH_TOKEN_KEY: Buffer.alloc(32, 7).toString("base64"),
   GEN_ENABLED: "1", ANTHROPIC_API_KEY: "test", GEN_SALT: "salt", TURNSTILE_SECRET: "t", GEN_MODEL: "m",
-  WPCOM_CLIENT_ID: "cid", WPCOM_CLIENT_SECRET: "csecret",
+  WPCOM_CLIENT_ID: "cid", WPCOM_CLIENT_SECRET: "csecret", CMS_LEAD_HOURS: "0", // önden hazırlama kapalı: eski testler saatten bağımsız
 };
 function setup(db = freshDb(), extra = {}) {
   const env = { DB: d1(db), ...ENV, ...extra };
@@ -785,7 +785,8 @@ test("deleteAccount cms_posts ve cms_sites'ı siler", async t => {
 
 // ---- izin listesi ----
 test("APP_ROUTES: smc CMS uçlarına izin verir, brandcorner.co'da yok", async t => {
-  for (const k of ["GET /app/cms", "GET /app/cmsposts", "POST /app/cms/connect", "POST /app/cms/:id/run", "POST /app/cms/:id/disconnect", "POST /app/cmsoauth/start", "POST /app/cmsoauth/finish"])
+  for (const k of ["GET /app/cms", "GET /app/cmsposts", "POST /app/cms/connect", "POST /app/cms/:id/run", "POST /app/cms/:id/disconnect", "POST /app/cmsoauth/start", "POST /app/cmsoauth/finish",
+    "POST /app/cmsposts/:id/view", "POST /app/cmsposts/:id/edit", "POST /app/cmsposts/:id/skip", "POST /app/cmsposts/:id/now", "POST /app/cmsposts/:id/reschedule"])
     assert.ok(APP_ROUTES.includes(k), k);
   stubProviders(t);
   const { call } = setup();
@@ -913,4 +914,187 @@ test("bildirim: üretilemeyen yazıda hata e-postası (hak iade metni); gönderi
   assert.equal(out2.mailed, 1, JSON.stringify(out2));
   assert.equal(sent2.length, 1);
   assert.equal(ne(), 1);
+});
+
+// ---- önden hazırlama + yaklaşan yazı yönetimi (25.11) ----
+const sqlT = ms => new Date(ms).toISOString().slice(0, 19).replace("T", " ");
+const NO_NET = async () => { throw new Error("ağ yok"); };
+
+test("önden hazırlama: yuvadan 3 saat önce üretilir, yuvaya dek bekler, 'yazın hazır' e-postası; yuva gelince gönderilir", async t => {
+  stubProviders(t);
+  let pushes = 0;
+  stubPush(t, async () => { pushes++; return { ok: true, remote_id: "9", url: "https://blog.example.test/x" }; });
+  const { db, env, call } = setup(freshDb(), { ...MAIL_ENV, CMS_LEAD_HOURS: "24" });
+  const s = (await connect(call)).body.site;
+  const slot = sqlT(Date.now() + 3 * 3600e3);
+  db.prepare("UPDATE cms_sites SET next_run_at = ? WHERE id = ?").run(slot, s.id);
+  const { sent, mail } = mailSpy();
+  // tik bütçesi: zamanlama turları üretimi bir sonraki tike (cron'da bir dakika sonra) bırakabilir
+  const tick2 = async () => { const a = await cmsTick(env, async () => LLM_OK(), { log: () => {}, mail }), b = await cmsTick(env, async () => LLM_OK(), { log: () => {}, mail });
+    return Object.fromEntries(Object.keys(a).map(k => [k, a[k] + b[k]])); };
+  const out = await tick2();
+  assert.deepEqual([out.scheduled, out.produced, out.pushed], [1, 1, 0], JSON.stringify(out));
+  const p = db.prepare("SELECT * FROM cms_posts WHERE cms_site_id = ?").get(s.id);
+  assert.deepEqual([p.state, p.slot, p.next_try_at], ["hazir", slot, slot]);
+  assert.ok(db.prepare("SELECT next_run_at FROM cms_sites WHERE id = ?").get(s.id).next_run_at > slot, "sonraki yuva bu yuvadan sonra");
+  assert.equal(sent.length, 1, JSON.stringify(out));
+  assert.match(sent[0].subject, /^Sıradaki yazın hazır: Başlık$/);
+  assert.match(sent[0].text, /taslak olarak gönderilecek/);
+  assert.match(sent[0].text, /erteleyebilir ya da atlayabilirsin/);
+  // panel listesinde yayın zamanı
+  const l = await call("GET", "/app/cmsposts");
+  const lp = l.body.posts.find(x => x.id === p.id);
+  assert.deepEqual([lp.publish_at, lp.slot, lp.has_content], [slot, slot, true]);
+  // yuvadan önce gönderilmez; yuva gelince gider
+  await cmsTick({ ...env, GEN_ENABLED: "0" }, NO_NET, { log: () => {}, now: () => Date.now() + 3600e3 });
+  assert.equal(pushes, 0);
+  const o2 = await cmsTick({ ...env, GEN_ENABLED: "0" }, NO_NET, { log: () => {}, mail, now: () => Date.parse(slot.replace(" ", "T") + "Z") + 60e3 });
+  assert.equal(o2.pushed, 1, JSON.stringify(o2));
+  assert.equal(db.prepare("SELECT state FROM cms_posts WHERE id = ?").get(p.id).state, "gonderildi");
+});
+
+test("önden hazırlama: yuvaya 2 saatten az kaldıysa 'hazır' e-postası yok; geçmiş yuva hemen gönderilebilir", async t => {
+  stubProviders(t);
+  const { db, env, call } = setup(freshDb(), { ...MAIL_ENV, CMS_LEAD_HOURS: "24" });
+  const s = (await connect(call)).body.site;
+  db.prepare("UPDATE cms_sites SET next_run_at = ? WHERE id = ?").run(sqlT(Date.now() + 30 * 60e3), s.id);
+  const { sent, mail } = mailSpy();
+  await cmsTick(env, async () => LLM_OK(), { log: () => {}, mail });
+  const out = await cmsTick(env, async () => LLM_OK(), { log: () => {}, mail });
+  assert.equal(out.produced, 1, JSON.stringify(out));
+  assert.equal(sent.length, 0);
+});
+
+const prepPost = async (t, extra) => {
+  stubProviders(t);
+  const S = setup(freshDb(), extra);
+  const s = (await connect(S.call)).body.site;
+  const id = insPost(S.db, s.id, sqlT(Date.now() + 20 * 3600e3));
+  S.db.prepare("UPDATE cms_posts SET next_try_at = slot WHERE id = ?").run(id);
+  return { ...S, s, id };
+};
+
+test("yönetim: önizle sahibine markdown döner, başkasına 404", async t => {
+  const { call, id } = await prepPost(t);
+  const v = await call("POST", `/app/cmsposts/${id}/view`, { body: {} });
+  assert.deepEqual([v.status, v.body.title, v.body.markdown, v.body.post.state], [200, "Örnek <b>Yazı</b>", "Gövde.", "hazir"]);
+  assert.ok(v.body.post.publish_at);
+  const m = await call("POST", `/app/cmsposts/${id}/view`, { token: tok("M"), body: {} });
+  assert.deepEqual([m.status, m.body.error], [404, "not_found"]);
+  assert.equal((await call("POST", "/app/cmsposts/99999/view", { body: {} })).status, 404);
+});
+
+test("yönetim: düzenle doğrular, günceller; basic plan 403; gönderilmiş yazı 400 state", async t => {
+  const { db, call, id } = await prepPost(t);
+  for (const body of [{ title: "  ", markdown: "x" }, { title: "a".repeat(301), markdown: "x" }, { title: "Yeni", markdown: " " }, { title: "Yeni" }]) {
+    const r = await call("POST", `/app/cmsposts/${id}/edit`, { body });
+    assert.equal(r.status, 400, JSON.stringify(body));
+  }
+  const r = await call("POST", `/app/cmsposts/${id}/edit`, { body: { title: "  Yeni   başlık ", markdown: "## Bölüm\n\nYeni gövde." } });
+  assert.equal(r.status, 200, JSON.stringify(r.body));
+  const p = db.prepare("SELECT title, markdown, slug, state FROM cms_posts WHERE id = ?").get(id);
+  assert.deepEqual([p.title, p.markdown, p.state], ["Yeni başlık", "## Bölüm\n\nYeni gövde.", "hazir"]);
+  assert.ok(p.slug && p.slug.includes("yeni"));
+  assert.equal((await call("POST", `/app/cmsposts/${id}/edit`, { token: tok("M"), body: { title: "x", markdown: "y" } })).status, 404);
+  db.prepare("UPDATE users SET plan = 'basic' WHERE id = 1").run();
+  const g = await call("POST", `/app/cmsposts/${id}/edit`, { body: { title: "x", markdown: "y" } });
+  assert.deepEqual([g.status, g.body.error, g.body.plan], [403, "plan_required", "pro"]);
+  db.prepare("UPDATE users SET plan = 'pro' WHERE id = 1").run();
+  db.prepare("UPDATE cms_posts SET state = 'gonderildi' WHERE id = ?").run(id);
+  const st = await call("POST", `/app/cmsposts/${id}/edit`, { body: { title: "x", markdown: "y" } });
+  assert.deepEqual([st.status, st.body.field], [400, "state"]);
+});
+
+test("yönetim: şimdi gönder next_try_at'ı şimdiye çeker; duraklatılmış sitede 409", async t => {
+  const { db, call, s, id } = await prepPost(t);
+  const r = await call("POST", `/app/cmsposts/${id}/now`, { body: {} });
+  assert.equal(r.status, 200, JSON.stringify(r.body));
+  assert.ok(db.prepare("SELECT next_try_at <= datetime('now') AS d FROM cms_posts WHERE id = ?").get(id).d);
+  db.prepare("UPDATE cms_sites SET state = 'duraklatildi' WHERE id = ?").run(s.id);
+  const z = await call("POST", `/app/cmsposts/${id}/now`, { body: {} });
+  assert.deepEqual([z.status, z.body.error], [409, "site_state"]);
+});
+
+test("yönetim: ertele geçersiz/geçmiş/30 günden uzak → 400; geçerli zaman yazılır", async t => {
+  const { db, call, id } = await prepPost(t);
+  const iso = ms => new Date(ms).toISOString();
+  for (const at of ["yarın", "2026-11-26 10:00", iso(Date.now() - 3600e3), iso(Date.now() + 31 * 86400e3), 12345]) {
+    const r = await call("POST", `/app/cmsposts/${id}/reschedule`, { body: { at } });
+    assert.deepEqual([r.status, r.body.error, r.body.field], [400, "bad_input", "at"], String(at));
+  }
+  const want = Date.now() + 2 * 86400e3;
+  const r = await call("POST", `/app/cmsposts/${id}/reschedule`, { body: { at: iso(want) } });
+  assert.equal(r.status, 200, JSON.stringify(r.body));
+  assert.equal(db.prepare("SELECT next_try_at FROM cms_posts WHERE id = ?").get(id).next_try_at, sqlT(want));
+  assert.equal(r.body.post.publish_at, sqlT(want));
+  const off = await call("POST", `/app/cmsposts/${id}/reschedule`, { body: { at: "2099-01-01T10:00:00+03:00" } });
+  assert.equal(off.status, 400);
+});
+
+test("yönetim: hazır yazıyı atla → iptal (iade yok), ikinci atla 400; üretimdeki yazıyı atla → hak iade", async t => {
+  const { db, call, id, s } = await prepPost(t);
+  const r = await call("POST", `/app/cmsposts/${id}/skip`, { body: {} });
+  assert.deepEqual([r.status, r.body.post.state], [200, "iptal"]);
+  assert.deepEqual(Object.values(db.prepare("SELECT state, last_error FROM cms_posts WHERE id = ?").get(id)), ["iptal", "skipped"]);
+  const again = await call("POST", `/app/cmsposts/${id}/skip`, { body: {} });
+  assert.deepEqual([again.status, again.body.field], [400, "state"]);
+  // üretimdeki (elle tetik) yazı: kota iade edilir
+  const run = await call("POST", `/app/cms/${s.id}/run`, { body: { rid: RID } });
+  assert.equal(run.status, 200, JSON.stringify(run.body));
+  assert.deepEqual(counters(db), { lb: 1, u: 1 });
+  const k = await call("POST", `/app/cmsposts/${run.body.post.id}/skip`, { body: {} });
+  assert.deepEqual([k.status, k.body.post.state], [200, "iptal"], JSON.stringify(k.body));
+  assert.deepEqual(counters(db), { lb: 0, u: 0 });
+  assert.equal((await call("POST", `/app/cmsposts/${run.body.post.id}/skip`, { body: {} })).status, 400);
+});
+
+test("yönetim: önden hazır yazının gününde saat değişse / yeniden başlatılsa da aynı güne ikinci yuva açılmaz", async t => {
+  const { db, call, id, s } = await prepPost(t);
+  const slot = db.prepare("SELECT slot FROM cms_posts WHERE id = ?").get(id).slot;
+  const ist = v => new Date(Date.parse(v.replace(" ", "T") + "Z") + 3 * 3600e3), iso = new Date(ist(slot)).getUTCDay() || 7;
+  const day = v => ist(v).toISOString().slice(0, 10);
+  // aynı gün, daha geç saat: düzeltmesiz bu yuva bekleyen yazının gününe düşerdi
+  const r = await call("POST", `/app/cms/${s.id}/settings`, { body: { per_week: 1, days: [iso], hour: 23 } });
+  assert.equal(r.status, 200, JSON.stringify(r.body));
+  let next = db.prepare("SELECT next_run_at FROM cms_sites WHERE id = ?").get(s.id).next_run_at;
+  assert.ok(next > slot && day(next) !== day(slot), `${slot} → ${next}`);
+  assert.equal(ist(next).getUTCHours(), 23);
+  assert.equal((await call("POST", `/app/cms/${s.id}/pause`, { body: {} })).status, 200);
+  assert.equal((await call("POST", `/app/cms/${s.id}/resume`, { body: {} })).status, 200);
+  next = db.prepare("SELECT next_run_at FROM cms_sites WHERE id = ?").get(s.id).next_run_at;
+  assert.ok(next > slot && day(next) !== day(slot), `resume: ${slot} → ${next}`);
+  // bekleyen yazı atlanınca kısıt kalkar
+  assert.equal((await call("POST", `/app/cmsposts/${id}/skip`, { body: {} })).status, 200);
+  assert.equal((await call("POST", `/app/cms/${s.id}/settings`, { body: { per_week: 1, days: [iso], hour: 23 } })).status, 200);
+  next = db.prepare("SELECT next_run_at FROM cms_sites WHERE id = ?").get(s.id).next_run_at;
+  assert.equal(day(next), day(slot), next);
+});
+
+test("yönetim: üretimdeki elle yazıyı atlamak günlük tetik hakkını iade etmez (tetik→atla döngüsü yok); aylık hak iade", async t => {
+  stubProviders(t);
+  const { db, call } = setup();
+  const s = (await connect(call)).body.site;
+  const run = await call("POST", `/app/cms/${s.id}/run`, { body: { rid: RID } });
+  assert.equal(run.status, 200, JSON.stringify(run.body));
+  assert.equal((await call("POST", `/app/cmsposts/${run.body.post.id}/skip`, { body: {} })).status, 200);
+  assert.deepEqual(counters(db), { lb: 0, u: 0 });
+  const again = await call("POST", `/app/cms/${s.id}/run`, { body: { rid: RID2 } });
+  assert.deepEqual([again.status, again.body.error], [429, "daily_limit"]);
+});
+
+test("üretim sürerken atlanan yazının kuyruk konusu düşmez", async t => {
+  stubProviders(t);
+  const { db, env, call } = setup();
+  const s = (await connect(call)).body.site;
+  db.prepare("UPDATE cms_sites SET topics = ? WHERE id = ?").run(JSON.stringify(["Konu A", "Konu B"]), s.id);
+  const run = await call("POST", `/app/cms/${s.id}/run`, { body: { rid: RID } });
+  assert.equal(run.status, 200, JSON.stringify(run.body));
+  let skipped = false;
+  await cmsTick(env, async () => {
+    if (!skipped) { skipped = true; assert.equal((await call("POST", `/app/cmsposts/${run.body.post.id}/skip`, { body: {} })).status, 200); }
+    return LLM_OK();
+  }, { log: () => {} });
+  assert.ok(skipped);
+  assert.equal(db.prepare("SELECT state FROM cms_posts WHERE id = ?").get(run.body.post.id).state, "iptal");
+  assert.equal(db.prepare("SELECT topics FROM cms_sites WHERE id = ?").get(s.id).topics, JSON.stringify(["Konu A", "Konu B"]));
 });

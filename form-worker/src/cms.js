@@ -72,6 +72,10 @@ export function siteOut(r) {
 }
 export const postOut = p => ({
   id: p.id, cms_site_id: p.cms_site_id, title: p.title, state: p.state, mode: p.mode, remote_url: p.remote_url, last_error: p.last_error, created_at: p.created_at,
+  // publish_at (UTC 'YYYY-MM-DD HH:MM:SS'): 'hazir' yazının gönderileceği an; zamanlanmış 'uretiliyor' yazının hedef slotu. Elle tetikte null.
+  slot: str(p.slot).startsWith("manual:") ? null : p.slot || null,
+  publish_at: p.state === "hazir" ? p.next_try_at || null : p.state === "uretiliyor" && Number.isFinite(slotMs(p.slot)) ? p.slot : null,
+  has_content: !!p.markdown,
   // içerik vardı ama saklama süresi doldu (platform.js keepDays 3 gün, cmsPurge 90 gün): istemci "silindi" yazar, yeniden göndermeyi gizler
   content_deleted: !p.markdown && ["gonderildi", "yayinlandi", "basarisiz"].includes(p.state),
 });
@@ -79,6 +83,11 @@ export const postOut = p => ({
 // ---- zamanlama: İstanbul sabit UTC+3; days ISO (1=Pzt..7=Paz), hour İstanbul saati; from'dan kesin sonraki ilk an ----
 const IST = 3 * 3600 * 1000, DAY = 86400 * 1000;
 const sqlTime = ms => new Date(ms).toISOString().slice(0, 19).replace("T", " ");
+// Zamanlanmış slot (sqlTime biçimi) → ms; elle tetik ('manual:…') ve bozuk değer NaN
+const slotMs = v => (/^\d{4}-\d\d-\d\d \d\d:\d\d:\d\d$/.test(str(v)) ? Date.parse(`${str(v).replace(" ", "T")}Z`) : NaN);
+// Önden hazırlama (25.11): yazı yayın saatinden CMS_LEAD_HOURS (varsayılan 24, 0–72) önce üretilir, 'hazir' olarak slotu bekler;
+// kullanıcı arada önizler, düzenler, erteler ya da atlar. 0 = eski davranış (slot gelince üret, hemen gönder).
+const leadMs = env => { const v = env?.CMS_LEAD_HOURS; const n = v === undefined || v === "" ? 24 : Number(v); return (Number.isInteger(n) && n >= 0 && n <= 72 ? n : 24) * 3600 * 1000; };
 export function nextRunAt(days, hour, from = Date.now()) {
   const set = new Set((Array.isArray(days) ? days : []).map(Number));
   if (!set.size || !Number.isInteger(hour)) return null;
@@ -88,6 +97,16 @@ export function nextRunAt(days, hour, from = Date.now()) {
     if (set.has(iso) && at - IST > from) return sqlTime(at - IST);
   }
   return null;
+}
+// Saat/gün değişince ya da yeniden başlatınca: önden hazırlanmış/üretimdeki planlı yazının İstanbul gününde ikinci yuva açılmaz
+// (aynı güne çift yazı olmasın); sonraki yuva o günün bitiminden sonra aranır
+async function nextAfterPending(db, siteId, days, hour) {
+  const m = await db.prepare("SELECT MAX(slot) m FROM cms_posts WHERE cms_site_id = ? AND state IN ('uretiliyor', 'hazir') AND slot NOT LIKE 'manual:%'")
+    .bind(siteId).first();
+  const sm = slotMs(m?.m);
+  let from = Date.now();
+  if (Number.isFinite(sm)) { const local = sm + IST; from = Math.max(from, local - (local % DAY) + DAY - IST - 1); }
+  return nextRunAt(days, hour, from);
 }
 
 // ---- doğrulama ----
@@ -314,7 +333,7 @@ async function settings(c, id) {
     for (const k of Object.keys(opts)) delete cfg[k];
     config = JSON.stringify({ ...cfg, ...choices });
   }
-  const next = s.state === "aktif" ? nextRunAt(set.days, set.hour) : s.next_run_at;
+  const next = s.state === "aktif" ? await nextAfterPending(c.env.DB, s.id, set.days, set.hour) : s.next_run_at;
   const row = await c.env.DB.prepare(
     `UPDATE cms_sites SET label = ?, auto_publish = ?, per_week = ?, days = ?, hour = ?, lang = ?, length = ?, tone = ?, brief = ?, topics = ?, config = ?,
      next_run_at = ?, updated_at = datetime('now') WHERE id = ? AND user_id = ? AND state != 'kaldirildi' RETURNING *`,
@@ -385,7 +404,7 @@ async function setState(c, id, from, to) {
   if (!from.includes(s.state)) return ok(c, { site: siteOut(s) }); // zaten o durumda: idempotent
   // Plan düştüyse (cmsTick duraklattı) sıklık düşürülmeden yeniden başlamaz
   if (to === "aktif" && weekOf(s) > freqMax(c.user)) fail("plan_frequency", 403, { max: freqMax(c.user) });
-  const next = to === "aktif" ? nextRunAt(jsonOr(s.days, [2]), s.hour) : null;
+  const next = to === "aktif" ? await nextAfterPending(c.env.DB, s.id, jsonOr(s.days, [2]), s.hour) : null;
   const row = await c.env.DB.prepare(
     "UPDATE cms_sites SET state = ?, next_run_at = ?, last_error = CASE WHEN ? = 'aktif' THEN NULL ELSE last_error END, updated_at = datetime('now') WHERE id = ? AND user_id = ? RETURNING *",
   ).bind(to, next, to, s.id, c.user.id).first();
@@ -420,6 +439,73 @@ async function retry(c, id) {
     "UPDATE cms_posts SET state = 'hazir', attempts = 0, next_try_at = datetime('now'), lease_until = NULL, last_error = NULL, updated_at = datetime('now') WHERE id = ? AND user_id = ? AND state = 'basarisiz' RETURNING *",
   ).bind(p.id, c.user.id).first();
   return ok(c, { post: postOut(row || p) });
+}
+
+// ---- Yaklaşan yazı yönetimi (25.11): önden hazırlanan ('hazir') yazıyı önizle/düzenle/şimdi gönder/ertele; 'uretiliyor' ya da 'hazir'
+// yazıyı atla. Hepsi sahiplik (user + site) JOIN'iyle; durum değişikliği CAS (aynı anda tik gönderime aldıysa 400 state).
+const RESCHEDULE_MAX = 30 * DAY;
+const ownPost = async (c, id) => {
+  const p = await c.env.DB.prepare(
+    "SELECT p.*, s.state AS site_state FROM cms_posts p JOIN cms_sites s ON s.id = p.cms_site_id WHERE p.id = ? AND p.user_id = ? AND s.site = ?",
+  ).bind(id, c.user.id, c.site).first();
+  if (!p) fail("not_found", 404);
+  return p;
+};
+async function view(c, id) {
+  const p = await ownPost(c, id);
+  return ok(c, { post: postOut(p), title: p.title, markdown: p.markdown || "", cover_url: p.cover_url, cover_credit: p.cover_credit });
+}
+async function edit(c, id) {
+  needPlan(c);
+  const b = c.body && typeof c.body === "object" ? c.body : {};
+  const title = typeof b.title === "string" ? b.title.replace(/\s+/g, " ").trim() : "", md = typeof b.markdown === "string" ? b.markdown.trim() : "";
+  if (!title || title.length > 300) bad("title");
+  if (!md || md.length > STUDIO_MAX.blogText * 2) bad("markdown");
+  const p = await ownPost(c, id);
+  if (p.state !== "hazir" || p.site_state === "kaldirildi") bad("state");
+  const row = await c.env.DB.prepare(
+    "UPDATE cms_posts SET title = ?, slug = ?, markdown = ?, updated_at = datetime('now') WHERE id = ? AND user_id = ? AND state = 'hazir' RETURNING *",
+  ).bind(title, slugify(title) || null, md, p.id, c.user.id).first();
+  if (!row) bad("state");
+  return ok(c, { post: postOut(row) });
+}
+// Atla: üretimi başlamamış/sürüyorsa hak iade edilir; hazırlanmış yazıda hak harcanmıştır (iade yok), yalnız gönderilmez
+async function skip(c, id) {
+  const p = await ownPost(c, id);
+  if (p.state === "uretiliyor") {
+    const br = await refundBatch(c.env, p, "iptal", "skipped", { manual: false }); // tetik→atla döngüsü bedava üretim olmasın
+    if (!(Number(br?.[br.length - 1]?.meta?.changes) > 0)) bad("state");
+    return ok(c, { post: postOut({ ...p, state: "iptal", last_error: "skipped" }) });
+  }
+  if (p.state !== "hazir") bad("state");
+  const row = await c.env.DB.prepare(
+    "UPDATE cms_posts SET state = 'iptal', last_error = 'skipped', updated_at = datetime('now') WHERE id = ? AND user_id = ? AND state = 'hazir' RETURNING *",
+  ).bind(p.id, c.user.id).first();
+  if (!row) bad("state");
+  return ok(c, { post: postOut(row) });
+}
+async function sendNow(c, id) {
+  needPlan(c);
+  const p = await ownPost(c, id);
+  if (p.state !== "hazir") bad("state");
+  if (p.site_state !== "aktif") fail("site_state", 409, { state: p.site_state });
+  const row = await c.env.DB.prepare(
+    "UPDATE cms_posts SET next_try_at = datetime('now'), updated_at = datetime('now') WHERE id = ? AND user_id = ? AND state = 'hazir' RETURNING *",
+  ).bind(p.id, c.user.id).first();
+  if (!row) bad("state");
+  return ok(c, { post: postOut(row) });
+}
+async function reschedule(c, id) {
+  needPlan(c);
+  const at = Date.parse(str(c.body?.at)), t = Date.now();
+  if (!/^\d{4}-\d\d-\d\dT\d\d:\d\d(:\d\d(\.\d+)?)?(Z|[+-]\d\d:\d\d)$/.test(str(c.body?.at)) || !Number.isFinite(at) || at < t - 60 * 1000 || at > t + RESCHEDULE_MAX) bad("at");
+  const p = await ownPost(c, id);
+  if (p.state !== "hazir" || p.site_state === "kaldirildi") bad("state");
+  const row = await c.env.DB.prepare(
+    "UPDATE cms_posts SET next_try_at = ?, updated_at = datetime('now') WHERE id = ? AND user_id = ? AND state = 'hazir' RETURNING *",
+  ).bind(sqlTime(Math.max(at, t)), p.id, c.user.id).first();
+  if (!row) bad("state");
+  return ok(c, { post: postOut(row) });
 }
 
 // ======================================================================================================================
@@ -591,9 +677,9 @@ const styleFrom = samples => { const a = jsonOr(samples, []); return (Array.isAr
 
 // İade: aylık (lb) + günlük kullanıcı (u) sayacı; elle tetikte (slot manual:…) günlük tetik hakları (site cm + kullanıcı cu) da. Atomik ve
 // idempotent: sayaç yalnız satır hâlâ charged=1 ve 'uretiliyor' iken düşer, aynı batch satırı charged=0 + son duruma çeker.
-async function refundBatch(env, p, state, err) {
+async function refundBatch(env, p, state, err, { manual: withManual = true } = {}) {
   const db = env.DB, ukey = await keyOf(env, p.day, "u", p.user_id), still = "EXISTS (SELECT 1 FROM cms_posts WHERE id = ? AND charged = 1 AND state = 'uretiliyor')";
-  const manual = String(p.slot || "").startsWith("manual:") ? [
+  const manual = withManual && String(p.slot || "").startsWith("manual:") ? [
     db.prepare(`UPDATE gen_usage SET n = MAX(0, n - 1) WHERE day = ? AND key = ? AND ${still}`).bind(p.day, await manualKey(env, p.day, p.cms_site_id), p.id),
     db.prepare(`UPDATE gen_usage SET n = MAX(0, n - 1) WHERE day = ? AND key = ? AND ${still}`).bind(p.day, await manualUserKey(env, p.day, p.user_id), p.id),
   ] : [];
@@ -617,7 +703,9 @@ function excerptOf(md) {
 // TR/EN e-posta (dil users.lang), Gmail SMTP (src/smtp.js; SMTP_USER/SMTP_PASS yoksa hiç gönderilmez). Ayar yok: varsayılan açık.
 // Hata e-postası kullanıcı başına günde en çok 1 (gen_usage kind 'ne', göç yok; genCleanup 2 gün sonra siler). Tik başına en çok
 // MAIL_PER_TICK e-posta (CPU/alt istek bütçesi); sığmayan bildirim düşer (kalıcı kuyruk yok; yazının durumu panelde zaten görünür).
-const MAIL_PER_TICK = 2, NOTE_MAX = 8, MAIL_TITLE = 120;
+const MAIL_PER_TICK = 2, NOTE_MAX = 8, MAIL_TITLE = 120, READY_MAIL_MIN = 2 * 3600 * 1000;
+// İstanbul saatiyle tarih-saat (e-posta metni; yerel ayar/Intl'e bağlı değil)
+const istParts = ms => { const d = new Date(ms + IST), p = n => String(n).padStart(2, "0"); return { y: d.getUTCFullYear(), m: p(d.getUTCMonth() + 1), d: p(d.getUTCDate()), hm: `${p(d.getUTCHours())}:${p(d.getUTCMinutes())}` }; };
 const MAIL_TEXT = {
   tr: {
     hi: n => `Merhaba ${n},`,
@@ -625,6 +713,11 @@ const MAIL_TEXT = {
     draft: { subject: t => `Yeni taslak sitende: ${t}`, body: (t, w) => `“${t}” ${w} sitene taslak olarak gönderildi. Göz atıp yayınlayabilirsin.` },
     push_err: { subject: () => "Blog otomatiği: bir yazı gönderilemedi", body: (t, w) => `“${t}” ${w} sitene gönderilemedi.` },
     produce_err: { subject: () => "Blog otomatiği: bir yazı üretilemedi", body: (t, w) => `${w} için planlanan yazı üretilemedi. Bu yazının hakkı iade edildi.` },
+    ready: {
+      subject: t => `Sıradaki yazın hazır: ${t}`,
+      body: (t, w, n) => { const a = istParts(n.at); return `“${t}” hazır. Gönderim zamanı: ${a.d}.${a.m}.${a.y}, saat ${a.hm}. Yazı ${w} sitene ${n.mode === "publish" ? "yayınlanacak" : "taslak olarak gönderilecek"}.`; },
+    },
+    manage: "Panelden önizleyebilir, düzenleyebilir, erteleyebilir ya da atlayabilirsin. Bir şey yapmazsan zamanında kendiliğinden gider.",
     open: "Yazıyı aç",
     panel: "Blog otomatiğine git",
     share: "Panelden yazıyı tek tıkla LinkedIn ya da Instagram gönderisine uyarlayabilirsin.",
@@ -639,6 +732,11 @@ const MAIL_TEXT = {
     draft: { subject: t => `New draft on your site: ${t}`, body: (t, w) => `“${t}” was sent to your ${w} site as a draft. Review it and publish when ready.` },
     push_err: { subject: () => "Blog autopilot: a post could not be sent", body: (t, w) => `“${t}” could not be sent to your ${w} site.` },
     produce_err: { subject: () => "Blog autopilot: a post could not be written", body: (t, w) => `The post scheduled for ${w} could not be written. Its credit was refunded.` },
+    ready: {
+      subject: t => `Your next post is ready: ${t}`,
+      body: (t, w, n) => { const a = istParts(n.at); return `“${t}” is ready. It will be ${n.mode === "publish" ? "published on" : "sent as a draft to"} your ${w} site on ${a.y}-${a.m}-${a.d} at ${a.hm} (Istanbul time).`; },
+    },
+    manage: "From the panel you can preview, edit, reschedule or skip it. If you do nothing, it goes out on time.",
     open: "Open the post",
     panel: "Go to blog autopilot",
     share: "From the panel you can adapt the post into a LinkedIn or Instagram post in one click.",
@@ -655,13 +753,13 @@ const siteWord = (row, T) => {
   try { return new URL(str(row.base_url)).hostname || T.site; } catch { return T.site; }
 };
 
-// n: { kind: 'publish'|'draft'|'push_err'|'produce_err', title, url, err }; row: users + cms_sites birleşimi
+// n: { kind: 'publish'|'draft'|'push_err'|'produce_err'|'ready', title, url, err, at (ready: ms), mode }; row: users + cms_sites birleşimi
 export function cmsMail(env, n, row) {
   const lang = row.lang === "en" ? "en" : "tr", T = MAIL_TEXT[lang], K = T[n.kind], site = str(row.site);
   const brand = siteConf(site).name, title = oneLine(n.title, MAIL_TITLE) || T.untitled, where = siteWord(row, T);
   const panel = `https://${site}${cmsBackPath(site, lang)}`, url = /^https:\/\/[^\s"'<>]+$/.test(str(n.url)) ? str(n.url).slice(0, 2000) : "";
   const isErr = n.kind.endsWith("_err"), help = isErr ? (ERROR_HELP[n.err]?.[lang] || T.err[n.err] || "") : "";
-  const hi = T.hi(oneLine(row.name, 80) || (lang === "en" ? "there" : "")).replace(" ,", ","), body = K.body(title, where), extra = isErr ? T.retry : T.share;
+  const hi = T.hi(oneLine(row.name, 80) || (lang === "en" ? "there" : "")).replace(" ,", ","), body = K.body(title, where, n), extra = isErr ? T.retry : n.kind === "ready" ? T.manage : T.share;
   const lines = [hi, "", body, ...(help ? [help] : []), "", ...(url ? [`${T.open}: ${url}`] : []), `${T.panel}: ${panel}`, "", extra, "", T.why(brand), brand];
   const btn = (href, txt, dark) => `<a href="${escHtml(href)}" style="display:inline-block;${dark ? "background:#111;color:#fff;" : "color:#111;border:1px solid #111;"}padding:10px 16px;border-radius:8px;text-decoration:none;margin:0 8px 8px 0">${escHtml(txt)}</a>`;
   return {
@@ -825,10 +923,11 @@ export async function cmsTick(env, f = fetch, { d1 = 30, sub = 20, log = m => co
       const s = await db.prepare(
         `UPDATE cms_sites SET lease_until = ? WHERE id = (SELECT id FROM cms_sites WHERE state = 'aktif' AND next_run_at IS NOT NULL AND next_run_at <= ?
            AND (lease_until IS NULL OR lease_until < ?) ORDER BY next_run_at LIMIT 1) AND (lease_until IS NULL OR lease_until < ?) RETURNING *`,
-      ).bind(lease(), t, t, t).first();
+      ).bind(lease(), sqlTime(now() + leadMs(env)), t, t).first();
       if (!s) return;
       more = true;
-      const slot = s.next_run_at, next = nextRunAt(jsonOr(s.days, []), Number(s.hour), now());
+      // Slot önden alındığı için sıradaki slot slotun kendisinden sonra aranır (now'dan değil; yoksa aynı slot tekrar gelir)
+      const slot = s.next_run_at, sm = slotMs(slot), next = nextRunAt(jsonOr(s.days, []), Number(s.hour), Number.isFinite(sm) ? Math.max(sm, now()) : now());
       const user = await db.prepare("SELECT * FROM users WHERE id = ?").bind(s.user_id).first();
       const P = user ? planLimits(user) : null;
       // Plan düştü: blog otomatiği yok (cms_sites 0 → plan_required) ya da site sıklığı > planın cms_per_week (plan_frequency).
@@ -947,15 +1046,19 @@ export async function cmsTick(env, f = fetch, { d1 = 30, sub = 20, log = m => co
           }
         } catch { cover = null; } // kapak isteğe bağlı: hata yazıyı durdurmaz
       }
+      // Gönderim anı: zamanlanmış yazıda slot (geçmişteyse şimdi), elle tetikte şimdi
+      const sm = slotMs(p.slot), pubMs = Number.isFinite(sm) ? Math.max(sm, now()) : now(), pub = sqlTime(pubMs);
       const st = [db.prepare(
         `UPDATE cms_posts SET state = 'hazir', title = ?, slug = ?, markdown = ?, cover_url = ?, cover_credit = ?, attempts = 0, next_try_at = ?, lease_until = NULL,
          last_error = NULL, updated_at = datetime('now') WHERE id = ? AND state = 'uretiliyor'`,
-      ).bind(title, slugify(title) || null, str(d.text).slice(0, STUDIO_MAX.blogText * 2), cover?.url || null, cover?.credit || null, T(), p.id)];
+      ).bind(title, slugify(title) || null, str(d.text).slice(0, STUDIO_MAX.blogText * 2), cover?.url || null, cover?.credit || null, pub, p.id)];
       // Kuyruktaki konu yalnız başarıda düşülür; kullanıcı listeyi bu arada değiştirdiyse (CAS) dokunulmaz
-      if (queued) st.push(db.prepare("UPDATE cms_sites SET topics = ?, updated_at = datetime('now') WHERE id = ? AND topics = ?")
-        .bind(JSON.stringify(topics.slice(1)), s.id, s.topics));
-      await db.batch(st);
+      if (queued) st.push(db.prepare(`UPDATE cms_sites SET topics = ?, updated_at = datetime('now') WHERE id = ? AND topics = ?
+        AND EXISTS (SELECT 1 FROM cms_posts WHERE id = ? AND state = 'hazir')`).bind(JSON.stringify(topics.slice(1)), s.id, s.topics, p.id));
+      const br = await db.batch(st);
       out.produced++;
+      // Önden hazırlandıysa (yayına 2 saatten çok var) "yazın hazır" e-postası: kullanıcı panelden önizler/düzenler/erteler/atlar
+      if (pubMs - now() > READY_MAIL_MIN && changed(br?.[0])) note({ kind: "ready", post_id: p.id, user_id: p.user_id, site_id: p.cms_site_id, title, at: pubMs, mode: p.mode });
     });
   }
   await flush();
@@ -973,6 +1076,11 @@ export const CMS_ROUTES = {
   "POST cms/:id/resume": gate(resume),
   "POST cms/:id/disconnect": gate(disconnect),
   "POST cmsposts/:id/retry": gate(retry),
+  "POST cmsposts/:id/view": gate(view),
+  "POST cmsposts/:id/edit": gate(edit),
+  "POST cmsposts/:id/skip": gate(skip),
+  "POST cmsposts/:id/now": gate(sendNow),
+  "POST cmsposts/:id/reschedule": gate(reschedule),
   "POST cmsoauth/start": gate(oauthStart),
   "POST cmsoauth/finish": gate(oauthFinish),
 };

@@ -296,7 +296,7 @@ const NAMES = { "yalcinberkay.com.tr": "Berkay Yalçın", "wishceo.com": "WishCE
 // Dil blog.config'ten; blogu olmayan sitede html lang
 const EN = (CONFIG[host]?.lang || index.match(/<html[^>]*\slang="([^"]*)"/i)?.[1] || "").startsWith("en");
 const SECTIONS = EN ? { blog: "Blog", industries: "Industries", solutions: "Solutions", tr: "Türkçe" }
-  : { blog: "Blog", "bilgi-merkezi": "Bilgi Merkezi", solutions: "Çözümler", sektor: "Sektörler", "aydinlatma-metni": "Yasal", en: "English" };
+  : { blog: "Blog", "bilgi-merkezi": "Bilgi Merkezi", solutions: "Çözümler", sektor: "Sektörler", "aydinlatma-metni": "Yasal", araclar: "Ücretsiz Araçlar", en: "English" };
 const PAGES = EN ? "Pages" : "Sayfalar";
 const unesc = s => s.replace(/&amp;/g, "&").replace(/&quot;/g, '"').replace(/&#x27;|&#39;/g, "'").replace(/&lt;/g, "<").replace(/&gt;/g, ">").trim();
 const meta = (html, re) => unesc(html.match(re)?.[1] || "");

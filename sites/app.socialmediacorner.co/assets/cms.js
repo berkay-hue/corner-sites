@@ -6,6 +6,9 @@
    Sağlayıcı adı site.provider'dan (Cloudflare Pages satırı platform "github" + provider "cloudflare").
    Site sınırı (24.11): Pro ve Enterprise tek site (limits.sites; enterprise'a ek site iletişimle). Sınır doluysa platform
    kartları ve form gizlenir, yerine "ek site için bizimle iletişime geç" kutusu (ILETISIM, başlıktaki Teklif al ile aynı adres).
+   Yaklaşan yazılar (25.11): yazı yayın saatinden ~24 saat önce hazırlanır ('hazir', publish_at = gönderim anı). Kullanıcı
+   önizler (/view), düzenler (/edit), şimdi yayınlar (/now), erteler (/reschedule, en çok 30 gün) ya da atlar (/skip; henüz
+   yazılıyorsa hak iade edilir). Açık panel ya da odak bu bölümdeyse yoklama yeniden çizmez (girilenler kaybolmasın).
    Veri yalnız textContent/createElement ile yazılır; innerHTML yok. Satır içi stil yok (CSP style-src 'self'). */
 (function(){
 'use strict';
@@ -256,7 +259,7 @@ function durumTazele(id){
     var o=odakAl(),eskiKilit=kilitli();
     hataYardim=(j.error_help&&typeof j.error_help==='object')?j.error_help:{};veri=normal(j);
     if(kilitli()!==eskiKilit)ciz();
-    else{ozetCiz();if(!kilitli())doluCiz();idler.forEach(kartYenile);siraCiz();if(!icinde(K.yazilar))yazilarCiz()}
+    else{ozetCiz();if(!kilitli())doluCiz();idler.forEach(kartYenile);siraCiz();yakinTazele();if(!icinde(K.yazilar))yazilarCiz()}
     odakVer(o);yoklaKur();
     return j;
   });
@@ -296,6 +299,8 @@ function ciz(){
   K.form=el('div','cms-form-k');
   K.siraB=el('h3','cms-h3',L('Sıradaki yazılar','Upcoming posts'));
   K.sira=el('div','cms-sira');
+  K.yakinB=el('h3','cms-h3',L('Yaklaşan yazılar','Upcoming drafts'));
+  K.yakin=el('div','cms-yakin');
   K.yazilarB=el('h3','cms-h3',L('Hazırlanan ve gönderilen yazılar','Prepared and sent posts'));
   K.yazilar=el('div','cms-yazilar');
   if(kilitli()){
@@ -306,8 +311,8 @@ function ciz(){
     sitelerCiz();yazilarCiz();
     return;
   }
-  ekle(g,K.ozet,K.not,K.sitelerB,K.siteler,K.siraB,K.sira,K.ekleB,K.dolu,K.platform,K.form,K.yazilarB,K.yazilar);
-  ozetCiz();sitelerCiz();platformCiz();doluCiz();yazilarCiz();
+  ekle(g,K.ozet,K.not,K.sitelerB,K.siteler,K.siraB,K.sira,K.yakinB,K.yakin,K.ekleB,K.dolu,K.platform,K.form,K.yazilarB,K.yazilar);
+  ozetCiz();sitelerCiz();platformCiz();doluCiz();yakinCiz();yazilarCiz();
 }
 function kilitKutu(){
   var k=el('section','sheet cms-plan-kilit',null,{'aria-labelledby':'cms-kilit-b'});
@@ -320,7 +325,7 @@ function icinde(k){var a=d.activeElement;return !!(a&&k&&k.contains(a)&&a!==d.bo
 function yenile(){
   ozetCiz();if(!kilitli())doluCiz();
   if(!icinde(K.siteler)&&!K.siteler.querySelector('.cms-duzen:not([hidden])'))sitelerCiz();
-  siraCiz();
+  siraCiz();yakinTazele();
   if(!icinde(K.yazilar))yazilarCiz();
 }
 function ozetCiz(){
@@ -720,7 +725,7 @@ function siraCiz(){
     else{var ol=el('ol','cms-sira-liste');sl.forEach(function(t){ol.appendChild(el('li','cms-sira-o',ist(t)))});kutu.appendChild(ol)}
     k.appendChild(kutu);
   });
-  k.appendChild(el('p','ipucu',L('Saatler İstanbul saatidir. Yazı o saatte hazırlanmaya başlar, birkaç dakika içinde sitene gider.','Times are Istanbul time. Each post starts being written then and reaches your site within a few minutes.')));
+  k.appendChild(el('p','ipucu',L('Saatler İstanbul saatidir. Her yazı yayın saatinden bir gün önce hazırlanır; hazır olunca e-posta gelir. Aşağıdan önizleyip düzenleyebilir, erteleyebilir ya da atlayabilirsin.','Times are Istanbul time. Each post is prepared a day before it goes out and you get an email when it is ready. Below you can preview, edit, reschedule or skip it.')));
 }
 function siteKart(s){
   var kart=el('article','sheet bag-kart cms-site',null,{'data-site':String(s.id)}),dur=SITE_DURUM[s.state]||[str(s.state),str(s.state),'rozet-gri'];
@@ -927,6 +932,142 @@ function yenidenGonder(p,b,li){
   });
 }
 
+/* ---- yaklaşan yazılar: hazırlanan (uretiliyor) ve hazır (hazir) yazılar, yayın saatine göre ----
+   Hazır yazı önizlenir, düzenlenir, ertelenir, hemen yayınlanır ya da atlanır; hazırlanmakta olan atlanırsa hak geri verilir. */
+var YAKIN_MAX=32000;
+function yakinListe(){return veri.posts.filter(function(p){return (p.state==='hazir'||p.state==='uretiliyor')&&zamanCoz(p.publish_at)}).sort(function(a,b){return zamanCoz(a.publish_at)-zamanCoz(b.publish_at)})}
+function istGun(t){var y=new Date(t+IST_MS);return Date.UTC(y.getUTCFullYear(),y.getUTCMonth(),y.getUTCDate())}
+function yakinZaman(v){
+  var t=zamanCoz(v);if(!t)return '';t=t.getTime();
+  var fark=Math.round((istGun(t)-istGun(Date.now()))/864e5),y=new Date(t+IST_MS),saat=iki(y.getUTCHours())+':'+iki(y.getUTCMinutes());
+  if(fark===0)return L('Bugün saat '+saat,'today at '+saat);
+  if(fark===1)return L('Yarın saat '+saat,'tomorrow at '+saat);
+  return L(ist(t),'on '+ist(t));
+}
+function yerelGirdi(t){var y=new Date(t+IST_MS);return y.getUTCFullYear()+'-'+iki(y.getUTCMonth()+1)+'-'+iki(y.getUTCDate())+'T'+iki(y.getUTCHours())+':'+iki(y.getUTCMinutes())}
+function yakinTazele(){if(!K.yakin||!K.yakin.isConnected||kilitli())return;if(icinde(K.yakin)||K.yakin.querySelector('.cms-duzen:not([hidden])'))return;yakinCiz()}
+function yakinCiz(){
+  var k=K.yakin;if(!k)return;k.textContent='';
+  var liste=yakinListe();
+  if(!liste.length){k.appendChild(el('p','ince',L('Şu an hazırlanan yazı yok. Her yazı yayın saatinden bir gün önce burada belirir.','No drafts in preparation right now. Each post appears here a day before it goes out.')));return}
+  var ul=el('ul','cms-yazi-liste');
+  liste.forEach(function(p){ul.appendChild(yakinOge(p))});
+  k.appendChild(ul);
+}
+function yakinOge(p){
+  var li=el('li','sheet cms-yazi cms-yakin-o',null,{'data-yazi':String(p.id)}),hazir=p.state==='hazir',s=siteBul(p.cms_site_id);
+  var zm=yakinZaman(p.publish_at),kip=p.mode==='publish'?L('doğrudan','directly'):L('taslak olarak','as a draft');
+  ekle(li,ekle(el('div','cms-yazi-bas'),el('strong','cms-yazi-ad',hazir?(str(p.title)||L('(başlıksız)','(untitled)')):L('Hazırlanıyor…','Being written…')),el('span','rozet '+(hazir?'rozet-ok':'rozet-bilgi'),hazir?L('Hazır','Ready'):L('Yazılıyor','Being written'))));
+  li.appendChild(el('p','cms-yakin-zaman',L(zm+' '+kip+' yayınlanacak','Goes out '+zm+' '+kip)));
+  if(s)li.appendChild(el('p','ince',str(s.label||sitePlat(s))));
+  var sn=el('div','bildirim',null,{role:'status','aria-live':'polite'});
+  var ey=el('div','eylemler'),panel=el('div','cms-duzen cms-yakin-panel',null,{hidden:''});
+  function dugme(tr,en,f,cls){var b=el('button','btn '+(cls||'btn-cizgi')+' btn-kucuk',L(tr,en),{type:'button','aria-expanded':'false'});b.addEventListener('click',function(){if(!api.bosMu(b))f(b)});ey.appendChild(b);return b}
+  function panelAc(b,dol){
+    var acik=b.getAttribute('aria-expanded')==='true';
+    Array.prototype.forEach.call(ey.querySelectorAll('[aria-expanded]'),function(x){x.setAttribute('aria-expanded','false')});
+    panel.textContent='';
+    if(acik){panel.hidden=true;return}
+    b.setAttribute('aria-expanded','true');panel.hidden=false;dol(panel,b);
+  }
+  if(hazir&&!kilitli()){
+    dugme('Önizle','Preview',function(b){panelAc(b,function(pn){yakinOnizle(p,pn,sn)})});
+    dugme('Düzenle','Edit',function(b){panelAc(b,function(pn){yakinDuzenle(p,pn,sn)})});
+    dugme('Ertele','Reschedule',function(b){panelAc(b,function(pn){yakinErtele(p,pn,sn)})});
+    dugme('Şimdi yayınla','Publish now',function(b){yakinCagir(p,'now',{},b,sn,L('Gönderiliyor…','Sending…'))},'btn-ana');
+  }
+  if(!kilitli())dugme('Atla','Skip',function(b){panelAc(b,function(pn){yakinAtla(p,pn,sn)})});
+  ekle(li,ey,panel,sn);
+  return li;
+}
+function yakinYol(p,ne){return '/app/cmsposts/'+encodeURIComponent(p.id)+'/'+ne}
+function yakinHata(sn,j){
+  if(j.error==='bad_input'&&j.field==='state'){yakinYenile(L('Yazının durumu değişti; liste yenilendi.','This post’s status changed; the list has been refreshed.'));return}
+  if(j.error==='not_found'){yakinYenile(L('Bu yazı artık yok; liste yenilendi.','This post no longer exists; the list has been refreshed.'));return}
+  if(j.error==='bad_input'&&j.field==='at'){not(sn,L('Seçtiğin zaman geçersiz. Şu andan sonra ve en çok 30 gün içinde bir zaman seç.','That time isn’t valid. Pick a time after now and within 30 days.'),'hata');return}
+  if(j.error==='bad_input'&&(j.field==='title'||j.field==='markdown')){not(sn,j.field==='title'?L('Başlık boş olamaz ve en çok 300 karakter olabilir.','The title can’t be empty and can be at most 300 characters.'):L('Yazı boş olamaz ve çok uzun olmamalı.','The post can’t be empty or too long.'),'hata');return}
+  hataNot(sn,j);
+}
+// Eski öğe ekranda kalmasın: açık paneller kapanır, veri yeniden alınır, liste her durumda yeniden çizilir, not listenin başına konur
+function yakinYenile(m){
+  if(!K.yakin)return;
+  Array.prototype.forEach.call(K.yakin.querySelectorAll('.cms-duzen'),function(x){x.hidden=true});
+  var son=function(){if(!K.yakin||!K.yakin.isConnected||kilitli())return;yakinCiz();var b=el('div','bildirim',null,{role:'status','aria-live':'polite'});K.yakin.insertBefore(b,K.yakin.firstChild);not(b,m,'uyari')};
+  var s=yukle(true);if(s&&s.then)s.then(son,son);else son();
+}
+function yakinBitti(j,sn,m){
+  yaziKoy(j.post);yakinCiz();yazilarCiz();yoklaBastan();
+  if(!m||!K.yakin)return;
+  var yeni=K.yakin.querySelector('[data-yazi="'+String(j.post.id).replace(/"/g,'')+'"] .bildirim');
+  if(!yeni){yeni=el('div','bildirim',null,{role:'status','aria-live':'polite'});K.yakin.insertBefore(yeni,K.yakin.firstChild)}
+  not(yeni,m,'ok');
+}
+function yakinCagir(p,ne,govde,b,sn,mesg,basari){
+  if(api.bosMu(b))return;
+  var bitti=api.mesgul(b,mesg);not(sn,'');
+  cagir(yakinYol(p,ne),'POST',govde).then(function(j){
+    bitti();
+    if(j._s===200&&j.post){yakinBitti(j,sn,basari);return}
+    yakinHata(sn,j);
+  });
+}
+function yakinOnizle(p,pn,sn){
+  var y=el('p','ince',L('Yükleniyor…','Loading…'));pn.appendChild(y);
+  var no=pn._no=(pn._no||0)+1; // geç gelen eski /view yanıtı sonradan açılan paneli ezmesin
+  cagir(yakinYol(p,'view'),'POST',{}).then(function(j){
+    if(pn.hidden||pn._no!==no)return;pn.textContent='';
+    if(j._s!==200){yakinHata(sn,j);pn.hidden=true;return}
+    var kap=guvenliUrl(j.cover_url);
+    if(kap&&/^https:\/\/images\.pexels\.com\//.test(kap)){
+      var f=el('figure','cms-yakin-kapak');f.appendChild(el('img',null,null,{src:kap,alt:'',loading:'lazy',referrerpolicy:'no-referrer'}));
+      if(j.cover_credit)f.appendChild(el('figcaption','ince',str(j.cover_credit)));pn.appendChild(f);
+    }
+    pn.appendChild(el('h4','cms-h4',str(j.title)||L('(başlıksız)','(untitled)')));
+    pn.appendChild(el('pre','cms-yakin-metin',str(j.markdown)));
+  });
+}
+function yakinDuzenle(p,pn,sn){
+  var y=el('p','ince',L('Yükleniyor…','Loading…'));pn.appendChild(y);
+  var no=pn._no=(pn._no||0)+1; // geç gelen eski /view yanıtı sonradan açılan paneli ezmesin
+  cagir(yakinYol(p,'view'),'POST',{}).then(function(j){
+    if(pn.hidden||pn._no!==no)return;pn.textContent='';
+    if(j._s!==200){yakinHata(sn,j);pn.hidden=true;return}
+    var ti=uid('baslik'),mi=uid('metin');
+    var bi=el('input','kutu',null,{id:ti,type:'text',maxlength:'300',required:''});bi.value=str(j.title);
+    var mt=el('textarea','kutu cms-yakin-alan',null,{id:mi,rows:'14',maxlength:String(YAKIN_MAX),required:''});mt.value=str(j.markdown);
+    ekle(pn,el('label','etiket',L('Başlık','Title'),{for:ti}),bi,el('label','etiket',L('Yazı (Markdown)','Post (Markdown)'),{for:mi}),mt);
+    var kb=el('button','btn btn-ana btn-kucuk',L('Kaydet','Save'),{type:'button'});
+    kb.addEventListener('click',function(){
+      var t=bi.value.trim(),m=mt.value;
+      if(!t||t.length>300){not(sn,L('Başlık boş olamaz ve en çok 300 karakter olabilir.','The title can’t be empty and can be at most 300 characters.'),'hata');bi.focus();return}
+      if(!m.trim()){not(sn,L('Yazı boş olamaz.','The post can’t be empty.'),'hata');mt.focus();return}
+      yakinCagir(p,'edit',{title:t,markdown:m},kb,sn,L('Kaydediliyor…','Saving…'),L('Değişiklikler kaydedildi.','Changes saved.'));
+    });
+    pn.appendChild(ekle(el('div','eylemler'),kb));
+  });
+}
+function yakinErtele(p,pn,sn){
+  var su=Date.now(),id=uid('zaman'),t=zamanCoz(p.publish_at);
+  var g=el('input','kutu',null,{id:id,type:'datetime-local',min:yerelGirdi(su),max:yerelGirdi(su+30*864e5),step:'60'});
+  g.value=yerelGirdi(t?Math.max(t.getTime(),su):su+864e5);
+  ekle(pn,el('label','etiket',L('Yeni yayın zamanı (İstanbul saati)','New publish time (Istanbul time)'),{for:id}),g);
+  var kb=el('button','btn btn-ana btn-kucuk',L('Zamanı kaydet','Save time'),{type:'button'});
+  kb.addEventListener('click',function(){
+    var v=str(g.value);
+    if(!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(v)){not(sn,L('Bir tarih ve saat seç.','Pick a date and time.'),'hata');g.focus();return}
+    var at=v+':00+03:00',ms=Date.parse(at);
+    if(!(ms>Date.now()-6e4&&ms<=Date.now()+30*864e5)){not(sn,L('Şu andan sonra ve en çok 30 gün içinde bir zaman seç.','Pick a time after now and within 30 days.'),'hata');g.focus();return}
+    yakinCagir(p,'reschedule',{at:at},kb,sn,L('Kaydediliyor…','Saving…'),L('Yayın zamanı güncellendi.','Publish time updated.'));
+  });
+  pn.appendChild(ekle(el('div','eylemler'),kb));
+}
+function yakinAtla(p,pn,sn){
+  pn.appendChild(el('p',null,p.state==='uretiliyor'?L('Bu yazı atlanacak ve yazı hakkın geri verilecek. Emin misin?','This post will be skipped and the post credit returned to you. Are you sure?'):L('Bu yazı atlanacak ve gönderilmeyecek. Hak geri verilmez. Emin misin?','This post will be skipped and won’t be sent. The credit isn’t returned. Are you sure?')));
+  var eb=el('button','btn btn-tehlike btn-kucuk',L('Evet, atla','Yes, skip'),{type:'button'});
+  eb.addEventListener('click',function(){yakinCagir(p,'skip',{},eb,sn,L('Atlanıyor…','Skipping…'),L('Yazı atlandı.','Post skipped.'))});
+  pn.appendChild(ekle(el('div','eylemler'),eb));
+}
+
 /* ---- örnek mod (istek gönderilmez) ---- */
 var ORNEK_VERI=null;
 function ornekVeri(){
@@ -941,6 +1082,21 @@ function ornekVeri(){
         {key:'app_password',label_tr:'Uygulama şifresi',label_en:'Application password',type:'secret',required:true,help_tr:'wp-admin’e gir.\nKullanıcılar > Profil sayfasını aç.\nUygulama Şifreleri bölümünde bir ad yaz ve Ekle’ye bas.\nGösterilen şifreyi kopyala; yalnız bir kez gösterilir.',help_en:'Sign in to wp-admin.\nOpen Users > Profile.\nIn Application Passwords, enter a name and click Add.\nCopy the password shown; it appears only once.'}]},
       {id:'webflow',name:'Webflow',auth:'key',ready:true,notes_tr:'Webflow’da CMS planı gerekir.',notes_en:'Webflow needs a CMS plan.',fields:[
         {key:'token',label_tr:'Site API anahtarı',label_en:'Site API token',type:'secret',required:true,help_tr:'Site ayarları > Apps & integrations > API access.',help_en:'Site settings > Apps & integrations > API access.'}]},
+      {id:'ghost',name:'Ghost',auth:'key',ready:true,notes_tr:'Ghost(Pro) Starter planında Admin API yoktur.',notes_en:'Ghost(Pro) Starter has no Admin API.',fields:[
+        {key:'admin_url',label_tr:'Admin API adresi',label_en:'Admin API URL',type:'url',required:true,placeholder:'https://blog.ornek.com'},
+        {key:'admin_key',label_tr:'Admin API anahtarı',label_en:'Admin API key',type:'secret',required:true}]},
+      {id:'shopify',name:'Shopify',auth:'key',ready:true,fields:[
+        {key:'shop',label_tr:'Mağaza alan adı',label_en:'Store domain',type:'text',required:true,placeholder:'magaza.myshopify.com'},
+        {key:'token',label_tr:'Admin API anahtarı',label_en:'Admin API token',type:'secret',required:true}]},
+      {id:'hubspot',name:'HubSpot',auth:'key',ready:true,fields:[
+        {key:'api_key',label_tr:'Service key',label_en:'Service key',type:'secret',required:true}]},
+      {id:'wix',name:'Wix',auth:'key',ready:true,fields:[
+        {key:'api_key',label_tr:'API anahtarı',label_en:'API key',type:'secret',required:true},
+        {key:'site_id',label_tr:'Site ID',label_en:'Site ID',type:'text',required:true}]},
+      {id:'github',name:'GitHub (statik site)',auth:'key',ready:true,fields:[
+        {key:'owner',label_tr:'Sahip (kullanıcı/kuruluş)',label_en:'Owner (user/org)',type:'text',required:true},
+        {key:'repo',label_tr:'Depo',label_en:'Repository',type:'text',required:true},
+        {key:'token',label_tr:'Fine-grained token',label_en:'Fine-grained token',type:'secret',required:true}]},
       {id:'cloudflare',name:'Cloudflare Pages',auth:'key',ready:true,stored_as:'github',notes_tr:'',notes_en:'',fields:[
         {key:'owner',label_tr:'Sahip (kullanıcı/kuruluş)',label_en:'Owner (user/org)',type:'text',required:true,help_tr:'github.com/<sahip>/<depo> adresindeki sahip adı.',help_en:'The owner in github.com/<owner>/<repo>.'},
         {key:'repo',label_tr:'Depo',label_en:'Repository',type:'text',required:true,help_tr:'github.com/<sahip>/<depo> adresindeki depo adı.',help_en:'The repository in github.com/<owner>/<repo>.'},
@@ -957,6 +1113,8 @@ function ornekVeri(){
     error_help:{},
     sites:[{id:1,platform:'wordpress',label:'Örnek Blog',base_url:'https://ornek.com',hint:'a1b2',state:'aktif',last_error:null,auto_publish:0,per_week:2,days:[2,4],hour:9,lang:'tr',length:'medium',tone:'samimi',brief:'',topics:['LinkedIn içerik takvimi','B2B satış'],choices:{},next_run_at:dz2(simdi+gun),created_at:dz2(simdi-5*gun)}],
     posts:[
+      {id:13,cms_site_id:1,title:'',state:'uretiliyor',mode:'draft',remote_url:null,last_error:null,created_at:dz2(simdi),publish_at:dz2(simdi+3*gun),has_content:false},
+      {id:12,cms_site_id:1,title:'B2B şirketler için LinkedIn sayfası nasıl büyütülür?',state:'hazir',mode:'draft',remote_url:null,last_error:null,created_at:dz2(simdi-36e5),publish_at:dz2(simdi+gun),has_content:true},
       {id:11,cms_site_id:1,title:'LinkedIn içerik takvimi nasıl hazırlanır?',state:'gonderildi',mode:'draft',remote_url:'https://ornek.com/?p=42',last_error:null,created_at:dz2(simdi-2*gun)},
       {id:10,cms_site_id:1,title:'B2B satışta sosyal medya',state:'basarisiz',mode:'draft',remote_url:null,last_error:'timeout',created_at:dz2(simdi-4*gun)},
       {id:9,cms_site_id:1,title:'',state:'kota',mode:'draft',remote_url:null,last_error:null,created_at:dz2(simdi-30*gun)},
@@ -982,6 +1140,14 @@ function ornekIstek(yol,yontem,govde){
     else if(v.sites.filter(function(s){return s.state!=='kaldirildi'}).length>=v.limits.sites)j=yan({error:'site_limit'},403);
     else{var so={id:Date.now(),platform:'wpcom',label:'Örnek WordPress.com',base_url:'https://ornek.wordpress.com',hint:null,state:'aktif',last_error:null,auto_publish:0,per_week:1,days:[2],hour:10,lang:'tr',length:'medium',tone:null,brief:null,topics:[],next_run_at:new Date(Date.now()+2*864e5).toISOString(),created_at:new Date().toISOString()};
       v.sites.unshift(so);v.limits.used+=1;j=yan({ok:true,site:JSON.parse(JSON.stringify(so))})}}
+  else if((m=/^\/app\/cmsposts\/([^/]+)\/(view|edit|skip|now|reschedule)$/.exec(yol))){var py=null;v.posts.forEach(function(x){if(String(x.id)===m[1])py=x});
+    if(!py)j=yan({error:'not_found'},404);
+    else if(m[2]==='skip'){if(py.state!=='hazir'&&py.state!=='uretiliyor')j=yan({error:'bad_input',field:'state'},400);else{if(py.state==='uretiliyor')v.quota.lb_used=Math.max(0,v.quota.lb_used-1);py.state='iptal';j=yan({ok:true,post:JSON.parse(JSON.stringify(py))})}}
+    else if(py.state!=='hazir')j=yan({error:'bad_input',field:'state'},400);
+    else if(m[2]==='view'){if(!py._md)py._md='## LinkedIn sayfası neden önemli?\n\nB2B alıcılar karar vermeden önce şirket sayfana bakar. Bu örnek yazı, önizleme ve düzenlemenin nasıl göründüğünü gösterir.\n\n## Ne sıklıkla paylaşmalı?\n\nHaftada iki-üç düzenli gönderi çoğu ekip için yeterlidir.';j=yan({ok:true,post:JSON.parse(JSON.stringify(py)),title:py.title,markdown:py._md,cover_url:null,cover_credit:null})}
+    else if(m[2]==='edit'){py.title=str(govde.title).slice(0,300);py._md=str(govde.markdown);j=yan({ok:true,post:JSON.parse(JSON.stringify(py))})}
+    else if(m[2]==='now'){py.state='gonderildi';py.remote_url='https://ornek.com/?p=44';j=yan({ok:true,post:JSON.parse(JSON.stringify(py))})}
+    else{var at=Date.parse(str(govde.at));if(!(at>Date.now()-6e4&&at<=Date.now()+30*864e5))j=yan({error:'bad_input',field:'at'},400);else{py.publish_at=new Date(at).toISOString().slice(0,19).replace('T',' ');j=yan({ok:true,post:JSON.parse(JSON.stringify(py))})}}}
   else if((m=/^\/app\/cmsposts\/([^/]+)\/retry$/.exec(yol))){var p=null;v.posts.forEach(function(x){if(String(x.id)===m[1])p=x});if(p){p.state='gonderildi';p.last_error=null;p.remote_url='https://ornek.com/?p=43'}j=p?yan({ok:true,post:JSON.parse(JSON.stringify(p))}):yan({error:'not_found'},404)}
   else if((m=/^\/app\/cms\/([^/]+)\/(settings|run|pause|resume|disconnect)$/.exec(yol))){
     var s2=null;v.sites.forEach(function(x){if(String(x.id)===m[1])s2=x});

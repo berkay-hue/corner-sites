@@ -66,6 +66,14 @@
 .cms-sira-k{display:grid;gap:var(--s3);padding:var(--g2)}
 .cms-sira-liste{display:grid;gap:var(--s1);margin:0;padding-left:1.25rem;font-variant-numeric:tabular-nums}
 .cms-sira-o::marker{color:var(--ink3)}
+.cms-yakin{display:grid;gap:var(--s3)}
+.cms-yakin-zaman{color:var(--ink2);font-variant-numeric:tabular-nums}
+.cms-yakin-panel{gap:var(--s3)}
+.cms-yakin-metin{margin:0;max-height:24rem;overflow:auto;padding:var(--s3);border:1px solid var(--line);border-radius:var(--r-m);background:var(--yuzey-2);white-space:pre-wrap;overflow-wrap:anywhere;font:400 .875rem/1.6 var(--govde)}
+.cms-yakin-kapak{margin:0;display:grid;gap:var(--s1)}
+.cms-yakin-kapak img{display:block;max-width:100%;height:auto;border-radius:var(--r-m)}
+.cms-yakin-kapak figcaption{color:var(--ink2);font-size:.8125rem}
+.cms-yakin-alan{min-height:16rem;resize:vertical;font:400 .875rem/1.6 var(--govde)}
 
 /* bağlantılar sayfasındaki yönlendirme kartı */
 .cms-git{display:grid;gap:var(--s3);margin-top:var(--g5);padding:var(--g3)}
