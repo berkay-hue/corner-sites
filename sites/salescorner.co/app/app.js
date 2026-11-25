@@ -734,6 +734,7 @@ function renderJob(k) {
   }
   out.innerHTML = RESULT[k](j) + "";
   out.querySelector(".res-h")?.insertAdjacentHTML("beforeend", again);
+  out.querySelector(".res-b")?.insertAdjacentHTML("beforeend", paySec(k));
 }
 const linkBtn = (u, t, cls = "btn-g") => (safeUrl(u) ? `<a class="btn ${cls} btn-s" href="${esc(safeUrl(u))}" target="_blank" rel="noopener">${t}</a>` : "");
 const kv = rows => `<div class="kv">${rows.filter(r => r[1] !== undefined && r[1] !== null && r[1] !== "").map(([a, v]) => `<div><span>${esc(a)}</span><b>${esc(v)}</b></div>`).join("")}</div>`;
@@ -806,6 +807,168 @@ const RESULT = {
   },
   fireflies: j => ffResult(j),
 };
+
+// ---------- Paylaşım linki (/r/<id>) ----------
+// Çıktı yalnız kullanıcı "Paylaşım linki oluştur"a basınca kaydedilir; içerik sade markdown olarak saklanır,
+// e-postalar sunucuda maskelenir. Paylaşım kullanım hakkından düşmez (araç çağrısı yok, yalnız app_cikti_paylas).
+const PAY_URL = id => `${SITE}/r/${encodeURIComponent(id)}`;
+const mdT = s => String(s ?? "").replace(/\r\n?/g, "\n").replace(/\n{3,}/g, "\n\n").trim();
+const mdLine = s => String(s ?? "").replace(/\s+/g, " ").trim();
+const mdLink = (u, t) => { const x = safeUrl(u); return x && x.startsWith("https://") && x.length <= 2000 ? `[${mdLine(t).replace(/[\[\]]/g, "")}](${x.replace(/\(/g, "%28").replace(/\)/g, "%29")})` : ""; };
+const mdList = arr => (Array.isArray(arr) ? arr.map(x => mdLine(asText(x))).filter(Boolean).map(x => "- " + x).join("\n") : "");
+const mdKv = rows => rows.filter(r => r[1] !== undefined && r[1] !== null && mdLine(r[1]) !== "").map(([a, v]) => `- **${a}:** ${mdLine(v)}`).join("\n");
+const mdSec = (h, body) => (mdT(body) ? `## ${h}\n\n${mdT(body)}` : "");
+const mdJoin = (...p) => p.map(mdT).filter(Boolean).join("\n\n");
+const mdSkor = (v, ek = "") => (v !== "" && v != null && Number.isFinite(Number(v)) ? `${Number(v)}/100${ek}` : "");
+const PAY_MD = {
+  rakip: j => {
+    const r = j.res || {};
+    return { b: `Rakip analizi — ${j.title || r.rakip_adi || ""}`, m: mdJoin(
+      mdKv([["Analiz", j.title], ["Öne çıkan rakip", r.rakip_adi], ["Slayt", r.slideCount]]),
+      mdSec("Sunum", [mdLink(r.slides_view_url, "Sunumu aç"), mdLink(r.slides_pdf_url, "PDF indir")].filter(Boolean).map(x => "- " + x).join("\n"))) };
+  },
+  sekans: j => {
+    const r = j.res || {}, rep = skData(r);
+    const steps = rep ? skSteps(rep) : [];
+    // Gönderen yer tutucusu ([Adınız]) olduğu gibi kalır: paylaşılan sayfada hazırlayanın adı yer almaz
+    const ctx = rep ? { firma: skCtx(r, rep).firma, yazar: "" } : {};
+    const link = String(r.presentationViewUrl || r.presentationUrl || "");
+    return { b: `Satış sekansı${r.company ? " — " + r.company : ""}`, m: mdJoin(
+      mdKv([["Firma", r.company], ["Adım", steps.length || ""]]),
+      ...steps.map((s, i) => `### ${i + 1}. ${mdLine(skHead(s))} (${SK_KANAL[s.kanal] || "Adım"})\n\n${mdJoin(s.konu ? `**Konu:** ${mdLine(skPh(s.konu, "insan", ctx))}` : "", s.amac ? `**Amaç:** ${mdLine(s.amac)}` : "", skPh(s.metin, "insan", ctx))}`),
+      !steps.length && !/\/api\/rapor/.test(link) ? mdLink(link, "Sekans dokümanını aç") : "") };
+  },
+  seo: j => {
+    const r = (j.res && j.res.sonuc) || {}, sc = r.seo_score || {}, pi = r.page_info || {}, g = r.generated_content || {}, c = g.content || {};
+    const kw = Array.isArray(r.keywords && r.keywords.table) ? r.keywords.table.slice(0, 25) : [];
+    let host = ""; try { host = new URL(r.url).hostname; } catch {}
+    return { b: `SEO raporu${host ? " — " + host : ""}`, m: mdJoin(
+      mdKv([["Adres", r.url], ["SEO puanı", mdSkor(sc.total, sc.level ? " · " + sc.level : "")]]),
+      mdSec("Sayfa", mdKv([["Başlık", pi.title || "Başlık yok"], ["Meta açıklama", pi.meta_description || "Meta açıklama yok"], ["H1", pi.h1]])),
+      mdSec("Düzeltilmesi gerekenler", mdList(r.issues)),
+      mdSec("Anahtar kelimeler", kw.map(t => `- **${mdLine(t.keyword)}** — hacim ${mdLine(t.volume) || "—"}, rekabet ${mdLine(t.competition) || "—"}${t.intent ? ", niyet " + mdLine(t.intent) : ""}`).join("\n")),
+      mdSec("Hazır içerik önerisi", mdKv([["SEO başlığı", g.seo_title], ["Meta açıklama", g.meta_description], ["URL", g.slug ? "/" + String(g.slug).replace(/^\//, "") : ""]])),
+      c.intro || (c.sections || []).length ? mdSec("Makale taslağı", mdJoin(c.intro, ...(Array.isArray(c.sections) ? c.sections : []).map(s => `### ${mdLine(s && s.h2)}\n\n${mdT(s && s.content)}`),
+        Array.isArray(c.faq) && c.faq.length ? `### Sık sorulan sorular\n\n${c.faq.map(q => `**${mdLine(q && q.question)}**\n${mdT(q && q.answer)}`).join("\n\n")}` : "", c.conclusion)) : "") };
+  },
+  briefing: j => {
+    const r = (j.res && j.res.sonuc) || {};
+    return { b: `Toplantı briefingi — ${r.firma_adi || r.company || j.title || ""}`, m: mdJoin(
+      mdKv([["Firma", r.firma_adi || r.company], ["Kişi", r.kisi_adi || r.person], ["Toplantı", r.toplanti_tarihi], ["En uygun hizmet", r.en_uygun_hizmet], ["Firma skoru", r.f_skor], ["Kişi skoru", r.k_skor], ["Fırsat", r.deal_pct_label]]),
+      mdSec("Briefing sunumu", mdLink(r.presentationViewUrl, "Briefingi aç")), r.message) };
+  },
+  fireflies: j => {
+    const a = (j.res && j.res.analiz) || {}, meta = (j.res && j.res.meta) || {}, bant = a.bant || {};
+    return { b: `Toplantı analizi — ${meta.title || j.title || ""}`, m: mdJoin(
+      mdKv([["Toplantı", meta.title || j.title], ["Tarih", meta.date ? fmtDT(meta.date) : ""], ["Süre", meta.duration ? Math.round(meta.duration) + " dk" : ""], ["Satış aşaması", a.asama], ["Puan", mdSkor(a.skor)]]),
+      mdSec("Özet", mdJoin(a.ozet, a.skor_gerekce)),
+      mdSec("Konuşma oranı", (Array.isArray(meta.oranlar) ? meta.oranlar : []).map(o => `- ${mdLine(o && o.ad)}: %${Math.round(Number(o && o.pay) || 0)}`).join("\n")),
+      mdSec("Güçlü yönler", mdList(a.guclu)), mdSec("Gelişim alanları", mdList(a.gelisim)),
+      mdSec("İtirazlar", (Array.isArray(a.itirazlar) ? a.itirazlar : []).map(i => mdJoin(`**“${mdLine(i && i.itiraz)}”**`, i && i.nasil_yanitlandi ? `Verilen yanıt: ${mdLine(i.nasil_yanitlandi)}` : "", i && i.oneri ? `**Öneri:** ${mdLine(i.oneri)}` : "")).join("\n\n")),
+      mdSec("BANT", mdKv([["Bütçe", bant.butce], ["Yetki", bant.yetki], ["İhtiyaç", bant.ihtiyac], ["Zamanlama", bant.zamanlama]])),
+      mdSec("Sonraki adımlar", (Array.isArray(a.sonraki_adimlar) ? a.sonraki_adimlar : []).map(s => `- ${mdLine(asText(s && (s.adim || s)))}${s && s.sorumlu ? " — " + mdLine(s.sorumlu) : ""}${s && s.tarih ? " (" + mdLine(s.tarih) + ")" : ""}`).join("\n")),
+      mdSec("Riskler", mdList(a.riskler)),
+      mdSec("Takip e-postası taslağı", a.takip_epostasi)) };
+  },
+};
+function paySec(k) {
+  const j = JOBS[k];
+  if (!j || j.state !== "done" || !PAY_MD[k]) return "";
+  if (j.pay && j.payU === S.session?.user?.id) {
+    const u = PAY_URL(j.pay);
+    return `<div class="sec" id="pay-sec"><h4>Paylaşım linki</h4>
+      <input class="in" readonly value="${esc(u)}" aria-label="Paylaşım linki" data-pay-in style="margin-bottom:10px">
+      <div class="row" style="justify-content:flex-start"><button class="btn btn-p btn-s" type="button" data-copy="${esc(u)}">Kopyala</button>${linkBtn(u, "Aç")}</div>
+      <p style="color:var(--mute);font-size:13.5px;margin-top:8px">Bağlantıyı bilen herkes bu çıktıyı görebilir. Paylaşımı Hesabım › Paylaşılan çıktılar bölümünden kapatabilirsiniz.</p></div>`;
+  }
+  return `<div class="sec" id="pay-sec"><h4>Paylaşım linki</h4>
+    <p style="color:var(--mute);font-size:13.5px;margin-bottom:10px">Bu çıktının herkese açık, salt okunur bir sayfasını oluşturur. E-posta adresleri maskelenir; kullanım hakkınızdan düşmez.</p>
+    <div id="pay-m"></div><button class="btn btn-g btn-s" type="button" data-paylas="${esc(k)}">Paylaşım linki oluştur</button></div>`;
+}
+function payErr(e) {
+  const c = String((e && e.code) || ""), m = String((e && e.message) || "");
+  if (c === "54000") return "Bugünkü paylaşım sınırına ulaştınız (günde 30 link). Yarın tekrar deneyin.";
+  if (c === "22023") return "Çıktı boş ya da paylaşım için çok uzun.";
+  if (c === "P0002") return "Bu paylaşım bulunamadı; liste yenilendi.";
+  if (c === "28000" || /jwt|not authenticated|auth session missing/i.test(m)) return "Oturumunuzun süresi doldu. Lütfen yeniden giriş yapın.";
+  if (/failed to fetch|networkerror|load failed/i.test(m)) return "Bağlantı kurulamadı. İnternetinizi kontrol edip tekrar deneyin.";
+  return "Paylaşım şu an yapılamadı. Biraz sonra tekrar deneyin.";
+}
+async function paylas(k, btn) {
+  const j = JOBS[k];
+  if (!j || j.state !== "done" || !PAY_MD[k]) return;
+  let o = null;
+  try { o = PAY_MD[k](j); } catch {}
+  const m = o ? mdT(o.m) : "";
+  if (!m) return setMsg("pay-m", "err", "Bu çıktıda paylaşılacak içerik bulunamadı.");
+  if (new TextEncoder().encode(m).length > 204800) return setMsg("pay-m", "err", "Çıktı paylaşım için çok uzun (en fazla 200 KB).");
+  const uid = S.session?.user?.id;
+  setMsg("pay-m", "", "");
+  busy(btn, true, "Link oluşturuluyor…");
+  try {
+    const id = await rpc("app_cikti_paylas", { p_modul: k, p_baslik: mdLine(o.b).slice(0, 200) || MOD[k].ad, p_icerik: m });
+    if (!/^[A-Za-z0-9_-]{22}$/.test(String(id))) throw new Error("gecersiz_yanit");
+    if (JOBS[k] !== j || S.session?.user?.id !== uid) return;
+    j.pay = id; j.payU = uid; saveJobs();
+    PAY = { list: null, err: "", yuk: false };
+    if (route === k) renderJob(k);
+    toast("Paylaşım linki hazır ✓");
+  } catch (e) {
+    busy(btn, false);
+    if (JOBS[k] === j && route === k) setMsg("pay-m", "err", esc(payErr(e)));
+  }
+}
+// Hesabım › Paylaşılan çıktılar: yalnız bu bölüm yeniden çizilir (formlara yazılanlar silinmez)
+let PAY = { list: null, err: "", yuk: false };
+function payBolum() {
+  if (PAY.list === null && !PAY.err && !PAY.yuk) payYukle();
+  const acik = PAY.list ? PAY.list.filter(x => !x.paylasim_iptal).length : 0;
+  let body;
+  if (PAY.err) body = `${msg("err", esc(PAY.err))}<button class="btn btn-g btn-s" type="button" data-pay-yenile style="margin-top:12px">Tekrar dene</button>`;
+  else if (!PAY.list) body = `<div class="empty" style="padding:18px"><div class="spin"></div></div>`;
+  else if (!PAY.list.length) body = `<p style="color:var(--mute);font-size:14px">Henüz paylaştığınız bir çıktı yok. Araç sonuçlarındaki "Paylaşım linki oluştur" düğmesiyle bağlantı açabilirsiniz.</p>`;
+  else body = `<div>${PAY.list.map(payRow).join("")}</div>`;
+  return `<section class="card pad" id="pay-bolum"><div class="row" style="margin-bottom:6px"><h3>Paylaşılan çıktılar</h3>${PAY.list && PAY.list.length ? `<span class="pill ${acik ? "acc" : ""}">${acik} açık</span>` : ""}</div>
+    <p style="color:var(--mute);font-size:14px;margin-bottom:14px">Kapattığınız bağlantı hemen geçersiz olur; açan kişi "Bu bağlantı artık geçerli değil" mesajını görür.</p>
+    <div id="paym"></div>${body}</section>`;
+}
+function payRow(x) {
+  const acik = !x.paylasim_iptal, u = PAY_URL(x.paylas_id);
+  return `<div class="box"><div class="row" style="flex-wrap:nowrap;align-items:flex-start"><div style="min-width:0"><b style="overflow-wrap:anywhere">${esc(x.baslik)}</b>
+    <div style="color:var(--mute);font-size:13px;margin-top:2px">${esc(MOD[x.modul]?.ad || x.modul)} · ${esc(fmtDT(x.olusturma))}</div></div><span class="pill ${acik ? "ok" : ""}">${acik ? "Açık" : "Kapalı"}</span></div>
+    ${acik ? `<div class="row" style="justify-content:flex-start;margin-top:10px"><button class="btn btn-g btn-s" type="button" data-copy="${esc(u)}">Linki kopyala</button>${linkBtn(u, "Aç")}<button class="btn btn-d btn-s" type="button" data-pay-kapat="${esc(x.id)}">Paylaşımı kapat</button></div>` : ""}</div>`;
+}
+async function payYukle() {
+  const o = PAY;
+  o.yuk = true; o.err = "";
+  try { const r = await rpc("app_cikti_listem"); o.list = Array.isArray(r) ? r : []; }
+  catch (e) { o.list = null; const t = payErr(e); o.err = /^Paylaşım şu an/.test(t) || /^Bu paylaşım/.test(t) ? "Paylaşılan çıktılar yüklenemedi. Biraz sonra tekrar deneyin." : t; }
+  o.yuk = false;
+  if (o === PAY) payCiz();
+}
+function payCiz() { const el = document.getElementById("pay-bolum"); if (el) el.outerHTML = payBolum(); }
+async function payKapat(id, btn) {
+  const o = PAY;
+  setMsg("paym", "", "");
+  busy(btn, true, "Kapatılıyor…");
+  try {
+    await rpc("app_cikti_iptal", { p_id: id });
+    if (o !== PAY) return;
+    const x = (o.list || []).find(r => r.id === id);
+    if (x) {
+      x.paylasim_iptal = true;
+      for (const k of Object.keys(JOBS)) if (JOBS[k] && JOBS[k].pay === x.paylas_id) { delete JOBS[k].pay; delete JOBS[k].payU; }
+      saveJobs();
+    }
+    payCiz();
+    toast("Paylaşım kapatıldı");
+  } catch (e) {
+    if (o !== PAY) return;
+    if (String(e && e.code) === "P0002") { toast(payErr(e)); PAY = { list: null, err: "", yuk: false }; payCiz(); return; }
+    busy(btn, false);
+    setMsg("paym", "err", esc(payErr(e)));
+  }
+}
 
 // ---------- Sekans ----------
 function pageSekans() {
@@ -1502,6 +1665,7 @@ function pageHesap() {
     <section class="card pad"><div class="row" style="margin-bottom:6px"><h3>Fireflies bağlantısı</h3><span class="pill ${b.fireflies ? "ok" : ""}">${b.fireflies ? "Bağlı" : "Bağlı değil"}</span></div>
       ${b.fireflies ? `<p style="color:var(--mute);margin-bottom:14px">Toplantı analizi için Fireflies hesabınız bağlı. Anahtarı değiştirmek için yenisini kaydedin.</p><div id="fkm"></div><div class="row" style="justify-content:flex-start"><button class="btn btn-d btn-s" id="ffdel">Bağlantıyı kaldır</button></div><details style="margin-top:14px"><summary style="cursor:pointer;font-weight:600">Anahtarı değiştir</summary><div style="margin-top:12px">${ffConnect(true)}</div></details>` : ffConnect(true)}
     </section>
+    ${payBolum()}
     <section class="card pad"><h3 style="margin-bottom:14px">Şifre değiştir</h3><div id="sm"></div>
       <form id="sf" data-sk-noform>${pwField("p1", "Yeni şifre", "new-password", 'minlength="8"')}${pwField("p2", "Yeni şifre (tekrar)", "new-password", 'minlength="8"')}<button class="btn btn-g" type="submit">Şifreyi güncelle</button></form></section>
     <section class="card pad row"><div><h3>Oturumu kapat</h3><p style="color:var(--mute);font-size:14px">Bu cihazdaki oturumunuz kapanır.</p></div><button class="btn btn-g" data-logout>Çıkış yap</button></section>
@@ -1659,11 +1823,12 @@ async function loadIlt() {
 const PAGES = { giris: pageGiris, kayit: pageKayit, sifre: pageSifre, "yeni-sifre": pageYeniSifre, panel: pagePanel, rakip: pageRakip, sekans: pageSekans, seo: pageSeo, briefing: pageBriefing, fireflies: pageFireflies, takip: pageTakip, fiyatlar: pageFiyatlar, hesap: pageHesap, admin: pageAdmin, ozel: pageOzel };
 
 // ---------- Genel olaylar ----------
+document.addEventListener("focusin", e => { if (e.target.matches?.("[data-pay-in]")) e.target.select(); });
 document.addEventListener("click", e => {
   if (e.target.closest("a[data-teklif]")) try { sessionStorage.setItem("sc_app_ret", location.pathname + location.hash); } catch {}
 });
 document.addEventListener("click", async e => {
-  const t = e.target.closest("[data-go],[data-eye],[data-side],[data-menu],[data-logout],[data-firma-yenile],[data-copy],[data-copy-el],[data-reset],[data-exp],.nav a,#seo-show,#seo-dl");
+  const t = e.target.closest("[data-go],[data-eye],[data-side],[data-menu],[data-logout],[data-firma-yenile],[data-copy],[data-copy-el],[data-reset],[data-exp],[data-paylas],[data-pay-kapat],[data-pay-yenile],.nav a,#seo-show,#seo-dl");
   if (!t) return;
   if (t.dataset.go) { e.preventDefault(); go(t.dataset.go); }
   else if (t.dataset.eye) { const i = document.getElementById(t.dataset.eye); const show = i.type === "password"; i.type = show ? "text" : "password"; t.textContent = show ? "Gizle" : "Göster"; t.setAttribute("aria-label", show ? "Şifreyi gizle" : "Şifreyi göster"); }
@@ -1673,8 +1838,11 @@ document.addEventListener("click", async e => {
     sh.classList.remove("open");
   }
   else if (t.hasAttribute("data-menu")) document.getElementById("shell")?.classList.toggle("open");
-  else if (t.hasAttribute("data-logout")) { await sb.auth.signOut(); S.session = null; S.ben = null; FIRMA = { v: undefined, yuk: false, err: "" }; LOGO_YENI = null; ADM = { rows: null, err: "", q: "" }; FF = { list: null, err: "", sel: "" }; TK = { list: null, err: "", edit: null, sil: "", run: {} }; go("giris"); }
+  else if (t.hasAttribute("data-logout")) { await sb.auth.signOut(); S.session = null; S.ben = null; FIRMA = { v: undefined, yuk: false, err: "" }; LOGO_YENI = null; ADM = { rows: null, err: "", q: "" }; FF = { list: null, err: "", sel: "" }; TK = { list: null, err: "", edit: null, sil: "", run: {} }; PAY = { list: null, err: "", yuk: false }; go("giris"); }
   else if (t.hasAttribute("data-firma-yenile")) { FIRMA = { v: undefined, yuk: false, err: "" }; render(); }
+  else if (t.dataset.paylas) paylas(t.dataset.paylas, t);
+  else if (t.dataset.payKapat) payKapat(t.dataset.payKapat, t);
+  else if (t.hasAttribute("data-pay-yenile")) { PAY = { list: null, err: "", yuk: false }; payCiz(); }
   else if (t.dataset.copy || t.dataset.copyEl) {
     const txt = t.dataset.copy || document.getElementById(t.dataset.copyEl)?.innerText || "";
     try { await navigator.clipboard.writeText(txt); toast("Kopyalandı ✓"); } catch { toast("Kopyalanamadı; metni seçip kopyalayın."); }
@@ -1707,7 +1875,7 @@ document.addEventListener("keydown", e => { if (e.key === "Escape") document.get
 sb.auth.onAuthStateChange((ev, session) => {
   S.session = session;
   if (ev === "PASSWORD_RECOVERY") { S.recovery = true; setTimeout(() => go("yeni-sifre"), 0); }
-  if (ev === "SIGNED_OUT") { S.ben = null; FIRMA = { v: undefined, yuk: false, err: "" }; LOGO_YENI = null; if (route && !AUTH_ROUTES.has(route)) setTimeout(render, 0); }
+  if (ev === "SIGNED_OUT") { S.ben = null; FIRMA = { v: undefined, yuk: false, err: "" }; LOGO_YENI = null; PAY = { list: null, err: "", yuk: false }; if (route && !AUTH_ROUTES.has(route)) setTimeout(render, 0); }
 });
 {
   const { data } = await sb.auth.getSession();
