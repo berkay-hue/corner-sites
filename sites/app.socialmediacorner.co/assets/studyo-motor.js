@@ -1,7 +1,9 @@
 /* studyo-motor.js — SmcMotor: tarayıcıda şablon video + görsel/carousel motoru (yalnız <canvas>, bağımlılık yok).
    Klasik <script defer> ile yüklenir; tek genel ad window.SmcMotor. CSP: script-src 'self', font-src 'self' yeterli.
    Sahne verisi /gen/video sözleşmesiyle aynı: scenes:[{text, sub, secs}]. Metinde *yıldız* arası kelimeler vurgulanır.
-   İsteğe bağlı scenes[].image (yüklenmiş, CORS temiz <img>): o sahnenin arka planı; okunurluk perdesi şablonun bgImage perdesiyle aynı. */
+   İsteğe bağlı scenes[].image (yüklenmiş, CORS temiz <img>): o sahnenin arka planı; okunurluk perdesi şablonun bgImage perdesiyle aynı.
+   İsteğe bağlı scenes[].audio (çözülmüş AudioBuffer, ör. AI seslendirme): sahne başında çalar; önizlemede WebAudio,
+   MP4'te captureStream'e eklenen ses izi. Ses hiçbir yere yazılmaz; yalnız bellekte. */
 (function () {
   'use strict';
   if (window.SmcMotor) return;
@@ -339,7 +341,31 @@
     ctx.fillStyle = css(P.bg); ctx.fillRect(0, 0, P.W, P.H);
     if (P.bgImage && cover(ctx, P.bgImage, 0, 0, P.W, P.H, kenBurns(P, gt))) { ctx.fillStyle = css(P.bg, scrimA); ctx.fillRect(0, 0, P.W, P.H); }
   }
-  function kenBurns(P, gt) { return gt == null ? 1.04 : 1.0 + 0.08 * clamp(gt / P.total, 0, 1); }
+  function kenBurns(P, gt) { return isVid(P.bgImage) ? 1 : gt == null ? 1.04 : 1.0 + 0.08 * clamp(gt / P.total, 0, 1); }
+  /* Video klipler (scenes[].image bir <video> olabilir): sahne yerel zamanına göre oynat/sar.
+     Oynatıcı ve MP4 dışa aktarma çağırır; draw/drawSlide/PNG o anki kareyi çizer. */
+  function isVid(x) { return typeof HTMLVideoElement !== 'undefined' && x instanceof HTMLVideoElement; }
+  function vidList(P) { const a = []; P.scenes.forEach(function (s) { if (isVid(s.img) && a.indexOf(s.img) < 0) a.push(s.img); }); return a; }
+  function vidPause(P) { vidList(P).forEach(function (v) { try { v.pause(); } catch (e) { /* yok */ } }); }
+  function syncVid(P, gt, playing, onSeek) {
+    const vs = vidList(P); if (!vs.length) return;
+    const g = clamp(+gt || 0, 0, P.total), i = sceneIndex(P, g), local = g - P.starts[i], want = new Map();
+    if (isVid(P.scenes[i].img)) want.set(P.scenes[i].img, local);
+    if (i > 0 && local < P.tpl.tr && isVid(P.scenes[i - 1].img) && !want.has(P.scenes[i - 1].img)) want.set(P.scenes[i - 1].img, P.scenes[i - 1].secs + local);
+    vs.forEach(function (v) {
+      if (!want.has(v)) { if (!v.paused) try { v.pause(); } catch (e) { /* yok */ } return; }
+      const d = v.duration > 0 && isFinite(v.duration) ? v.duration : 0, tg = d ? want.get(v) % d : want.get(v);
+      let off = Math.abs((v.currentTime || 0) - tg); if (d) off = Math.min(off, d - off);
+      if (playing) {
+        if (off > 0.3 && !v.seeking) { try { v.currentTime = tg; } catch (e) { /* yok */ } }
+        if (v.paused) { const pr = v.play(); if (pr && pr.catch) pr.catch(function () { /* otomatik oynatma engeli: kare yine çizilir */ }); }
+      } else {
+        if (!v.paused) try { v.pause(); } catch (e) { /* yok */ }
+        if (off > 0.04) { try { v.currentTime = tg; if (onSeek) onSeek(v); } catch (e) { /* yok */ } }
+      }
+    });
+  }
+  let EXPORTING = 0;
   function ellipsize(ctx, s, maxW) {
     if (ctx.measureText(s).width <= maxW) return s;
     const g = graphemes(s);
@@ -698,6 +724,28 @@
 
   /* ---------- Proje normalleştirme ---------- */
   function isDrawable(x) { return !!x && typeof x === 'object' && imgW(x) > 0; }
+  function isAudio(x) { return typeof AudioBuffer !== 'undefined' && x instanceof AudioBuffer && x.duration > 0; }
+  function hasAudio(P) { return P.scenes.some(function (s) { return !!s.aud; }); }
+  // Sahne seslerini t anından itibaren ctx'te c0 zamanına hizalı kurar; kurulan kaynakları döner.
+  function audSchedule(ctx, P, t, c0, dest) {
+    const out = [];
+    P.scenes.forEach(function (s, i) {
+      if (!s.aud) return;
+      const st = P.starts[i], len = Math.min(s.aud.duration, s.secs);
+      if (st + len <= t + 0.02) return;
+      const src = ctx.createBufferSource(); src.buffer = s.aud; src.connect(dest);
+      try {
+        if (st >= t) src.start(c0 + (st - t), 0, len);
+        else src.start(c0, t - st, len - (t - st));
+        out.push(src);
+      } catch (e) { /* atla */ }
+    });
+    return out;
+  }
+  function audStop(list) { (list || []).forEach(function (s) { try { s.stop(); } catch (e) { /* yok */ } try { s.disconnect(); } catch (e) { /* yok */ } }); }
+  function audCtxNew() { const C = window.AudioContext || window.webkitAudioContext; return C ? new C() : null; }
+  let PREV_CTX = null;
+  function prevCtx() { if (!PREV_CTX) { try { PREV_CTX = audCtxNew(); } catch (e) { PREV_CTX = null; } } return PREV_CTX; }
   function fmtHandle(h) {
     h = String(h || '').trim().slice(0, 60);
     if (!h || h[0] === '@' || /[\s/]/.test(h) || /\.[a-z]{2,}$/i.test(h)) return h;
@@ -714,9 +762,9 @@
     let scenes = (Array.isArray(p.scenes) ? p.scenes : []).slice(0, 30).map(function (s) {
       s = s || {};
       const secs = Number(s.secs);
-      return { text: String(s.text == null ? '' : s.text).trim(), sub: String(s.sub == null ? '' : s.sub).trim(), secs: secs > 0 ? clamp(secs, 1.5, 15) : 3.5, img: isDrawable(s.image) ? s.image : null };
+      return { text: String(s.text == null ? '' : s.text).trim(), sub: String(s.sub == null ? '' : s.sub).trim(), secs: secs > 0 ? clamp(secs, 1.5, 15) : 3.5, img: isDrawable(s.image) ? s.image : null, aud: isAudio(s.audio) ? s.audio : null };
     });
-    if (!scenes.length) scenes = [{ text: '', sub: '', secs: 3.5, img: null }];
+    if (!scenes.length) scenes = [{ text: '', sub: '', secs: 3.5, img: null, aud: null }];
     const starts = []; let acc = 0; scenes.forEach(function (s) { starts.push(acc); acc += s.secs; });
     const b = p.brand || {};
     const dark = lum(bg) < 0.3;
@@ -781,6 +829,16 @@
     opts = opts || {};
     const ctx = canvas.getContext('2d');
     let proj = project, P = norm(proj), t = clamp(+opts.start || 0, 0, P.total), playing = opts.autoplay !== false, ended = false, alive = true, last = null, dirty = true, raf = 0;
+    // Ses: kaynaklar kuruluyken zaman çizelgesi ses saatine bağlanır (kayma olmaz); duraklat/atla/döngü/proje değişince susar, sonraki karede yeniden kurulur.
+    let srcs = null, a0t = 0, a0c = 0, rsT = 0, muted = !!opts.muted;
+    function aSus() { if (srcs) { audStop(srcs); srcs = null; } }
+    function aKur() {
+      if (srcs || muted || EXPORTING || !playing || !hasAudio(P)) return;
+      const c = prevCtx(); if (!c) return;
+      if (c.state !== 'running') { const n = Date.now(); if (n - rsT > 1000) { rsT = n; try { c.resume(); } catch (e) { /* jest bekler */ } } return; }
+      a0c = c.currentTime + 0.04; a0t = t;
+      srcs = audSchedule(c, P, t, a0c, c.destination);
+    }
     function size() {
       const dpr = window.devicePixelRatio || 1;
       const cssW = opts.width || canvas.clientWidth || 360;
@@ -788,16 +846,21 @@
       const h = Math.round(w * P.H / P.W);
       if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; }
     }
-    function render() { renderFrame(ctx, P, t, null); dirty = false; if (opts.onTime) opts.onTime(t, P.total); }
+    function onSeek(v) { v.addEventListener('seeked', function () { dirty = true; }, { once: true }); }
+    function render() { if (!EXPORTING) syncVid(P, t, playing, onSeek); renderFrame(ctx, P, t, null); dirty = false; if (opts.onTime) opts.onTime(t, P.total); }
     function loop(now) {
       if (!alive) return;
       if (playing) {
-        if (last != null) t += Math.min(0.1, (now - last) / 1000);
+        if (srcs && EXPORTING) aSus();
+        if (srcs && PREV_CTX && PREV_CTX.state === 'running') { t = Math.max(a0t, a0t + (PREV_CTX.currentTime - a0c)); }
+        else if (last != null) t += Math.min(0.1, (now - last) / 1000);
         last = now;
         if (t >= P.total) {
+          aSus();
           if (opts.loop) t = t % P.total;
           else { t = P.total; playing = false; ended = true; render(); if (opts.onEnd) opts.onEnd(); }
         }
+        aKur();
         if (playing) render();
       } else if (dirty) render();
       raf = requestAnimationFrame(loop);
@@ -805,22 +868,26 @@
     size(); render();
     ready().then(function () { if (alive) { dirty = true; last = null; raf = requestAnimationFrame(loop); } });
     return {
-      pause: function () { playing = false; last = null; },
-      resume: function () { if (ended || t >= P.total) { t = 0; ended = false; } playing = true; last = null; },
-      seek: function (x) { t = clamp(+x || 0, 0, P.total); ended = false; dirty = true; last = null; },
-      stop: function () { alive = false; playing = false; cancelAnimationFrame(raf); },
-      setProject: function (p) { proj = p; P = norm(p); t = Math.min(t, P.total); size(); dirty = true; },
+      pause: function () { aSus(); playing = false; last = null; dirty = true; if (!EXPORTING) vidPause(P); },
+      resume: function () { if (ended || t >= P.total) { t = 0; ended = false; } playing = true; last = null; const c = hasAudio(P) && !muted ? prevCtx() : null; if (c && c.state !== 'running') { try { c.resume(); } catch (e) { /* yok */ } } },
+      seek: function (x) { aSus(); t = clamp(+x || 0, 0, P.total); ended = false; dirty = true; last = null; },
+      stop: function () { aSus(); alive = false; playing = false; cancelAnimationFrame(raf); if (!EXPORTING) vidPause(P); },
+      mute: function (x) { muted = !!x; if (muted) aSus(); },
+      setProject: function (p) { aSus(); const eski = vidList(P); proj = p; P = norm(p); t = Math.min(t, P.total); size(); dirty = true; const yeni = vidList(P); if (!EXPORTING) eski.forEach(function (v) { if (yeni.indexOf(v) < 0) try { v.pause(); } catch (e) { /* yok */ } }); },
       resize: function () { size(); dirty = true; },
       get time() { return t; },
       get duration() { return P.total; },
-      get playing() { return playing; }
+      get playing() { return playing; },
+      get muted() { return muted; }
     };
   }
 
   /* ---------- Dışa aktarma ---------- */
-  function videoFormat() {
+  // o.audio: ses izi de olacak; önce H.264+AAC MP4, sonra Opus'lu WebM, en son sessiz liste (tarayıcı varsayılan ses kodeğini seçer).
+  function videoFormat(o) {
     if (typeof MediaRecorder === 'undefined' || typeof HTMLCanvasElement === 'undefined' || !HTMLCanvasElement.prototype.captureStream) return null;
-    const c = [['video/mp4;codecs=avc1.640028', 'mp4'], ['video/mp4;codecs=avc1', 'mp4'], ['video/mp4', 'mp4'], ['video/webm;codecs=vp9', 'webm'], ['video/webm;codecs=vp8', 'webm'], ['video/webm', 'webm']];
+    const A = o && o.audio ? [['video/mp4;codecs=avc1,mp4a', 'mp4'], ['video/mp4;codecs=avc1.640028,mp4a.40.2', 'mp4'], ['video/mp4;codecs=avc1,opus', 'mp4'], ['video/webm;codecs=vp9,opus', 'webm'], ['video/webm;codecs=vp8,opus', 'webm']] : [];
+    const c = A.concat([['video/mp4;codecs=avc1.640028', 'mp4'], ['video/mp4;codecs=avc1', 'mp4'], ['video/mp4', 'mp4'], ['video/webm;codecs=vp9', 'webm'], ['video/webm;codecs=vp8', 'webm'], ['video/webm', 'webm']]);
     for (let i = 0; i < c.length; i++) { try { if (MediaRecorder.isTypeSupported(c[i][0])) return { mime: c[i][0].split(';')[0], codec: c[i][0], ext: c[i][1] }; } catch (e) { /* sıradaki */ } }
     return null;
   }
@@ -831,19 +898,62 @@
     const signal = opts.signal, onProgress = opts.onProgress;
     if (signal && signal.aborted) throw new DOMException('Aborted', 'AbortError');
     await ready();
-    const fmt = videoFormat();
-    if (!fmt) throw new Error('video_unsupported');
-    const P = norm(project), total = P.total;
+    const P = norm(project), total = P.total, vids = vidList(P);
+    // Ses: yeni AudioContext → MediaStreamDestination; ses saati çalışıyorsa kare zamanı ona bağlanır.
+    // Safari yeni bağlamı kullanıcı jesti dışında askıda tutar: o zaman önizlemede açılmış (çalışan) ortak bağlam kullanılır, kapatılmaz.
+    let ac = null, adest = null, asrc = null, acOrtak = false;
+    if (hasAudio(P) && opts.audio !== false) {
+      try {
+        ac = audCtxNew();
+        if (ac) {
+          if (ac.state !== 'running') { try { await withTimeout(ac.resume(), 1500); } catch (e) { /* aşağıda bakılır */ } }
+          if (ac.state === 'running') adest = ac.createMediaStreamDestination();
+          else { try { ac.close(); } catch (e) { /* yok */ } ac = null; }
+        }
+        if (!ac && PREV_CTX && PREV_CTX.state === 'running') { ac = PREV_CTX; acOrtak = true; adest = ac.createMediaStreamDestination(); }
+      } catch (e) { ac = null; adest = null; acOrtak = false; }
+    }
+    const acKapat = function () {
+      audStop(asrc); asrc = null;
+      if (acOrtak) { try { adest.disconnect(); } catch (e) { /* yok */ } }
+      else if (ac) { try { ac.close(); } catch (e) { /* yok */ } }
+      ac = null;
+    };
+    const fmt = videoFormat({ audio: !!adest });
+    if (!fmt) { acKapat(); throw new Error('video_unsupported'); }
+    EXPORTING++;
+    let vbitti = false; const vbirak = function () { if (vbitti) return; vbitti = true; EXPORTING = Math.max(0, EXPORTING - 1); vidPause(P); };
+    if (vids.length) {
+      // Klipleri başa sar, kare hazır olana kadar bekle (en çok 8 sn); sonra gerçek zamanlı oynat + kayma düzelt.
+      try {
+        await Promise.all(vids.map(function (v) {
+          return new Promise(function (res) {
+            let ok = false; const bit = function () { if (ok) return; ok = true; clearTimeout(to); v.removeEventListener('seeked', chk); v.removeEventListener('canplay', chk); res(); };
+            const chk = function () { if (!v.seeking && v.readyState >= 3) bit(); };
+            const to = setTimeout(bit, 8000);
+            try { v.pause(); v.currentTime = 0; } catch (e) { /* yok */ }
+            v.addEventListener('seeked', chk); v.addEventListener('canplay', chk); chk();
+          });
+        }));
+      } catch (e) { /* en kötü: o anki kare */ }
+      if (signal && signal.aborted) { vbirak(); acKapat(); throw new DOMException('Aborted', 'AbortError'); }
+    }
     const cv = fullCanvas(P), ctx = cv.getContext('2d', { alpha: false });
     renderFrame(ctx, P, 0, null);
-    const stream = cv.captureStream(30);
-    const bps = opts.bitrate || Math.round(clamp(P.W * P.H / (1080 * 1920) * 8e6, 5e6, 8e6));
-    const rec = new MediaRecorder(stream, { mimeType: fmt.codec, videoBitsPerSecond: bps });
+    let stream, rec;
+    try {
+      stream = cv.captureStream(30);
+      if (adest) adest.stream.getAudioTracks().forEach(function (tr) { stream.addTrack(tr); });
+      const bps = opts.bitrate || Math.round(clamp(P.W * P.H / (1080 * 1920) * 8e6, 5e6, 8e6));
+      const ro = { mimeType: fmt.codec, videoBitsPerSecond: bps };
+      if (adest) ro.audioBitsPerSecond = 128000;
+      rec = new MediaRecorder(stream, ro);
+    } catch (e) { vbirak(); acKapat(); throw e; }
     const chunks = [];
     rec.ondataavailable = function (e) { if (e.data && e.data.size) chunks.push(e.data); };
     return new Promise(function (resolve, reject) {
-      let t0 = 0, state = 'run', lastP = -1;
-      const cleanup = function () { stream.getTracks().forEach(function (tr) { tr.stop(); }); if (signal) signal.removeEventListener('abort', onAbort); };
+      let t0 = 0, c0 = 0, state = 'run', lastP = -1;
+      const cleanup = function () { stream.getTracks().forEach(function (tr) { tr.stop(); }); if (signal) signal.removeEventListener('abort', onAbort); vbirak(); acKapat(); };
       const onAbort = function () { if (state !== 'run') return; state = 'abort'; try { rec.stop(); } catch (e) { /* zaten durdu */ } cleanup(); reject(new DOMException('Aborted', 'AbortError')); };
       if (signal) signal.addEventListener('abort', onAbort);
       rec.onerror = function (e) { if (state !== 'run') return; state = 'err'; cleanup(); reject((e && e.error) || new Error('recorder_error')); };
@@ -853,12 +963,13 @@
         const blob = new Blob(chunks, { type: fmt.mime });
         if (!blob.size) { reject(new Error('empty_video')); return; }
         if (onProgress) onProgress(1);
-        resolve({ blob: blob, mime: fmt.mime, ext: fmt.ext });
+        resolve({ blob: blob, mime: fmt.mime, ext: fmt.ext, audio: !!adest });
       };
       const schedule = function () { if (document.hidden) setTimeout(tick, 1000 / 30); else requestAnimationFrame(tick); };
       const tick = function () {
         if (state !== 'run') return;
-        const t = (performance.now() - t0) / 1000;
+        const tp = (performance.now() - t0) / 1000, t = ac && ac.state === 'running' ? Math.max(0, ac.currentTime - c0, tp - 1) : tp;
+        if (vids.length) syncVid(P, Math.min(t, total), t < total);
         renderFrame(ctx, P, Math.min(t, total), null);
         const pr = Math.min(0.999, t / total);
         if (onProgress && pr - lastP >= 0.005) { lastP = pr; onProgress(pr); }
@@ -866,6 +977,7 @@
       };
       try { rec.start(1000); } catch (e) { state = 'err'; cleanup(); reject(e); return; }
       t0 = performance.now();
+      if (ac && adest) { c0 = ac.currentTime + 0.05; asrc = audSchedule(ac, P, 0, c0, adest); }
       schedule();
     });
   }
@@ -900,6 +1012,7 @@
     videoFormat: videoFormat,
     exportVideo: exportVideo,
     exportPng: exportPng,
-    exportAllPng: exportAllPng
+    exportAllPng: exportAllPng,
+    audioContext: prevCtx
   });
 })();
