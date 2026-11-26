@@ -71,8 +71,12 @@ test("a) css: meşgulken seçili çip seçili görünür (dashed disabled kural�
   assert.match(CSS, /@media \(forced-colors:active\)\{\.st-gorsel\[aria-busy="true"\] \.cip input:checked\+label\{forced-color-adjust:none;background:Highlight/);
 });
 
-test("c) ?v=: studyo.css, studyo-kabuk.js, studyo-kurgu.js her HTML'de (TR + en/) tek ve güncel sürüm", () => {
-  const beklenen = { "studyo.css": "gs3", "studyo-kabuk.js": "ak3", "studyo-kurgu.js": "gs2" };
+test("c) ?v=: değişen css/js her HTML'de (TR + en/) tek ve güncel sürüm", () => {
+  const beklenen = {
+    "studyo.css": "ap9", "studyo-kabuk.js": "ap9", "studyo-kurgu.js": "ap9", "studyo-medya.js": "ap9",
+    "studyo-blog.js": "ap9", "studyo-linkedin.js": "ap9", "smc-ses.js": "ap9", "smc-ses-hazir.js": "ap9",
+    "smc-hesap.js": "ap9", "ust-hesap.js": "ap9", "studyo-hesap.css": "ap9",
+  };
   const sayi = {};
   for (const p of htmller()) {
     const h = readFileSync(p, "utf8");
@@ -87,4 +91,7 @@ test("c) ?v=: studyo.css, studyo-kabuk.js, studyo-kurgu.js her HTML'de (TR + en/
   assert.ok(sayi["studyo.css"] >= 31, `studyo.css ${sayi["studyo.css"]} sayfada`);
   assert.equal(sayi["studyo-kabuk.js"], 12);
   assert.equal(sayi["studyo-kurgu.js"], 4);
+  assert.equal(sayi["studyo-medya.js"], 4);
+  assert.equal(sayi["smc-ses.js"], 12);
+  assert.equal(sayi["smc-ses-hazir.js"], 8);
 });

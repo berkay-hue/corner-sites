@@ -5,7 +5,7 @@
 (function(){
 'use strict';
 var d=document,root=d.documentElement,body=d.body;
-var EN={"Yönetim":"Admin","Gizle":"Hide","Göster":"Show","Şifreyi gizle":"Hide password","Şifreyi göster":"Show password","1 taslak":"1 draft","Karusel":"Carousel","Silinmesine {n} gün":"Deleted in {n} days","Silinmesine 1 gün":"Deleted in 1 day","Bugün silinecek":"Deleted today",
+var EN={"Yönetim":"Admin","Gizle":"Hide","Göster":"Show","Şifreyi gizle":"Hide password","Şifreyi göster":"Show password","1 taslak":"1 draft","Karusel":"Carousel","Stüdyo’da aç":"Open in Studio","Stüdyo’da aç: {k}":"Open in Studio: {k}","Yüklenen görsel":"Uploaded image","Görsel":"Image","1 görsel":"1 image","{n} görsel":"{n} images","Silinmesine {n} gün":"Deleted in {n} days","Silinmesine 1 gün":"Deleted in 1 day","Bugün silinecek":"Deleted today",
 "Demo · {n} gün kaldı":"Demo · {n} days left","Demo · 1 gün kaldı":"Demo · 1 day left","Deneme bitti — plan için iletişime geç":"Trial ended — contact us for a plan","Teklif al":"Get a quote",
 "Bağla":"Connect",
 "Bağlantı ve kayıtlı yetki burada silinir; {p} tarafındaki izni {p} ayarlarından kaldırırsın. Bu hesaba otomatik paylaşım yapılmaz. Geçmiş’teki taslakların silinmez; istediğin an yeniden bağlarsın.":"The connection and stored access are deleted here; you remove the permission in your {p} settings. Nothing will be shared to this account automatically. Your drafts in History stay; you can reconnect any time.",
@@ -477,11 +477,17 @@ function planRozet(){
     if(s.bitti){dd.appendChild(d.createTextNode(' '));dd.appendChild(teklif('bag'))}
     r.appendChild(dd);sat.parentNode.insertBefore(r,sat.nextSibling)}
 }
+/* D: çıkışta ve hesap silmede bu cihazdaki stüdyo kayıtları silinir (son sonuç, süren blog, yerel medya yedeği, ses seçimi).
+   tokenSil'e bağlanmaz: girişte de çağrılır, misafirin işini silerdi. ust-hesap.js çıkışı aynı listeyi kullanır. */
+var YEREL_ON=['studyo-son-','studyo-bekleyen-','studyo-medya-'],YEREL_TAM=['smc-ses-secim'];
+function yerelTemizle(){['l','s'].forEach(function(k){try{var s=depo(k);if(!s)return;var sil=[];
+  for(var i=0;i<s.length;i++){var a=s.key(i);if(typeof a==='string'&&(YEREL_TAM.indexOf(a)>=0||YEREL_ON.some(function(o){return a.indexOf(o)===0})))sil.push(a)}
+  sil.forEach(function(a){try{s.removeItem(a)}catch(e){}})}catch(e){}})}
 function cikisKur(){$$('#cikis,#cikis-2').forEach(function(b){b.addEventListener('click',function(){
   if(bosMu(b))return;
-  if(ORNEK){notBirak('Çıkış yaptın.','ok');gitYol(yol('giris'));return}
+  if(ORNEK){yerelTemizle();notBirak('Çıkış yaptın.','ok');gitYol(yol('giris'));return}
   var bitir=mesgul(b,'Çıkış yapılıyor…');
-  istek('/auth/logout','POST',{}).then(function(){bitir();tokenSil();notBirak('Çıkış yaptın.','ok');location.assign(yol('giris'))});
+  istek('/auth/logout','POST',{}).then(function(){bitir();tokenSil();yerelTemizle();notBirak('Çıkış yaptın.','ok');location.assign(yol('giris'))});
 })})}
 
 /* ---- veri indirme ---- */
@@ -705,9 +711,17 @@ function baglarYukle(){
 }
 
 /* ---- geçmiş ---- */
+/* ÖRNEK medya: sunucudaki meta.media ile aynı şema (PLAN sözleşmesi); Pexels adresleri gerçek, "y1" fotosu yüklenen görsel yer tutucusunu gösterir */
+function pxOrnek(k,id){return {k:k,id:id,src:'https://images.pexels.com/photos/'+id+'/pexels-photo-'+id+'.jpeg',w:1080,h:1350,alt:'',photographer:'Pexels',url:'https://www.pexels.com/photo/'+id+'/'}}
 var TASLAK=[
- {id:8,p:'blog',tur:'blog',tarih:'2026-11-22',ton:'Öğretici',konu:'KOBİ’ler için LinkedIn rehberi',metin:'KOBİ’ler için LinkedIn rehberi\n\n## Profil önce gelir\n\nŞirket sayfası, kurucunun profili kadar güven vermez. İlk adım kurucu profilini düzenlemek.\n\n## Haftada iki gönderi yeter\n\nDüzen, sıklıktan önemlidir. Aynı gün ve saatte paylaşmak takipçiye ritim kazandırır.'},
- {id:7,p:'video',tur:'carousel',tarih:'2026-11-22',ton:'',konu:'Müşteri kaybını azaltmanın 5 yolu',metin:'1. İlk 14 gün\n2. Kurulum görüşmesi\n3. Haftalık kullanım listesi\n4. Tek soruluk iptal anketi\n5. Eksik özelliği önceliklendir'},
+ {id:9,p:'video',tur:'video',tarih:'2026-11-23',ton:'',konu:'Ekibimizle bir gün',metin:'Sabah 9: kahve ve haftalık plan\nÖğlen: müşteri görüşmesi\nÖğleden sonra: tasarım incelemesi\nAkşam: haftanın özeti',
+  medya:{template:'sinema',aspect:'9:16',palette:'gece',scenes:[{text:'Ekibimizle bir gün',secs:3,video:'v1'},{text:'Sabah 9: kahve ve haftalık plan',secs:3,foto:'a'},{text:'Öğlen: müşteri görüşmesi',secs:3,foto:'b'},{text:'Öğleden sonra: tasarım incelemesi',secs:3,foto:'c'},{text:'Akşam: haftanın özeti',secs:3,foto:'d'},{text:'Bizi takip et',secs:2},{text:'Teşekkürler',secs:2}],
+   photos:[pxOrnek('a',1181244),pxOrnek('b',3182812),pxOrnek('c',7688336),pxOrnek('d',3184418)],
+   videos:[{k:'v1',id:3196344,src:'https://videos.pexels.com/video-files/3196344/3196344-uhd_2160_4096_25fps.mp4',poster:'https://images.pexels.com/videos/3196344/free-video-3196344.jpg',w:1080,h:1920,dur:12,user:'Pexels',url:'https://www.pexels.com/video/3196344/'}]}},
+ {id:8,p:'blog',tur:'blog',tarih:'2026-11-22',ton:'Öğretici',konu:'KOBİ’ler için LinkedIn rehberi',metin:'KOBİ’ler için LinkedIn rehberi\n\n## Profil önce gelir\n\nŞirket sayfası, kurucunun profili kadar güven vermez. İlk adım kurucu profilini düzenlemek.\n\n## Haftada iki gönderi yeter\n\nDüzen, sıklıktan önemlidir. Aynı gün ve saatte paylaşmak takipçiye ritim kazandırır.',
+  medya:{palette:'marka',photos:[pxOrnek('a',6476589),pxOrnek('b',1181406)],blog:{yer:[{k:'a',fotoId:6476589},{k:'b',fotoId:1181406}],tek:false}}},
+ {id:7,p:'video',tur:'carousel',tarih:'2026-11-22',ton:'',konu:'Müşteri kaybını azaltmanın 5 yolu',metin:'1. İlk 14 gün\n2. Kurulum görüşmesi\n3. Haftalık kullanım listesi\n4. Tek soruluk iptal anketi\n5. Eksik özelliği önceliklendir',
+  medya:{template:'liste',aspect:'4:5',palette:'lavanta',brand:{name:'Örnek Ajans',handle:'@ornekajans'},scenes:[{text:'Müşteri kaybını azaltmanın 5 yolu'},{text:'İlk 14 gün',foto:'a'},{text:'Kurulum görüşmesi',foto:'b'},{text:'Haftalık kullanım listesi',foto:'y1'},{text:'Tek soruluk iptal anketi',foto:'c'},{text:'Eksik özelliği önceliklendir'}],photos:[pxOrnek('a',3184465),pxOrnek('b',3183150),pxOrnek('c',3184291)]}},
  {id:6,p:'linkedin',tarih:'2026-11-21',ton:'Samimi',konu:'İlk 100 müşteriye ulaştık',metin:'Bugün 100. müşterimizi karşıladık.\n\nİki yıl önce üç kişilik bir ekiptik ve ilk satışı yapmak dört ay sürdü. Bu sürede öğrendiğimiz en önemli şey şuydu: müşteri ürünü değil, sorununun çözüldüğünü hissetmeyi satın alıyor.\n\nİlk on müşterimizin yedisi bugün hâlâ bizimle. Rakamdan çok bu oran içimi rahatlatıyor.\n\nYolu birlikte yürüdüğümüz herkese teşekkürler.'},
  {id:5,p:'instagram',tarih:'2026-11-20',ton:'Esprili',konu:'Yeni ofisimize taşındık',metin:'Kutular açıldı, kahve makinesi kuruldu, Wi-Fi şifresini hâlâ kimse bilmiyor.\n\nYeni ofisimizden ilk merhaba! Kadıköy’deyiz; uğrarsanız çay bizden.\n\n#yeniofis #ekip #kadıköy'},
  {id:4,p:'linkedin',tarih:'2026-11-18',ton:'Öğretici',konu:'Müşteri kaybını nasıl yarıya indirdik',metin:'Altı ayda müşteri kaybını %8’den %4’e indirdik. Üç adımda:\n\n1. İlk 14 günü yeniden tasarladık. Kurulum görüşmesini isteğe bağlı değil, varsayılan yaptık.\n2. Kullanmayan hesapları haftalık listeyle izledik ve sorun büyümeden aradık.\n3. İptal nedenini tek soruyla sorduk; cevapların yarısı aynı eksik özelliği gösterdi.\n\nEn büyük ders: kayıp iptal gününde değil, ilk hafta başlıyor.'},
@@ -716,8 +730,53 @@ var TASLAK=[
  {id:1,p:'linkedin',tarih:'2026-11-04',ton:'Veri odaklı',konu:'KOBİ’lerde dijital pazarlama: görüşme notları',metin:'Görüştüğümüz 40 KOBİ’den 31’i sosyal medyayı satış kanalı olarak görüyor, ama yalnız 9’u düzenli ölçüm yapıyor.\n\nEn sık duyduğumuz engel zaman. İkinci sırada ne paylaşacağını bilmemek geliyor.\n\nGörüşme notlarının tamamını önümüzdeki hafta paylaşacağız.'}
 ];
 var liste=[],q='',plat='hepsi',dahaVar=false,silHedef=null,araZ=null;
-function taslakCevir(x){var m=x.meta&&typeof x.meta==='object'?x.meta:{};return {id:String(x.id),p:x.platform,tur:typeof m.kind==='string'?m.kind:'',tarih:x.created_at,ton:m.tone||'',konu:String(x.topic||''),metin:String(x.body||'')}}
-function suzulmus(){if(!ORNEK)return liste;var qq=q.toLocaleLowerCase(LOC());return liste.filter(function(x){return (plat==='hepsi'||x.p===plat)&&(!qq||(x.konu+'\n'+x.metin).toLocaleLowerCase(LOC()).indexOf(qq)>=0)})}
+/* D (madde 2): küçük resim şeridi ve "Stüdyo'da aç". medya önce sunucudaki meta.media'dan, yoksa bu cihazdaki
+   studyo-medya-<id> yedeğinden gelir (W canlı değilken uç 404 döner, kabuk yerel yazar). Yalnız Pexels adresleri resim olur;
+   anahtarı çözülemeyen foto/video kullanıcının yüklediği dosyadır (blob saklanmaz) ve yer tutucuyla gösterilir. */
+var KIMLIK=/^[1-9]\d{0,14}$/,HEX6=/^#[0-9a-fA-F]{6}$/,PALET=['marka','lavanta','gece','krem','neon','mercan'],ORAN={'1:1':'kare','4:5':'dikey','9:16':'uzun','16:9':'yatay'};
+var STUDYO={gorsel:['/gorsel','/en/visual'],video:['/video','/en/video'],blog:['/blog','/en/blog']},SERIT_EN=6;
+function studyoHref(x){
+  var k=x.p==='blog'?'blog':x.p==='video'?(x.tur==='carousel'?'gorsel':'video'):'';
+  if(!k||!KIMLIK.test(String(x.id)))return '';
+  return STUDYO[k][dil==='en'?1:0]+'?taslak='+x.id+(ORNEK&&MOCKHOST?'#ornek':'');
+}
+function medyaYerel(id){if(!KIMLIK.test(String(id)))return null;try{var s=depo('l'),v=s&&s.getItem('studyo-medya-'+id);if(!v||v.length>40000)return null;return JSON.parse(v)}catch(e){return null}}
+function pxKucuk(s){if(typeof s!=='string'||s.length>2000)return '';try{var u=new URL(s);if(u.protocol!=='https:'||u.host!=='images.pexels.com'||u.username||u.password)return '';return u.origin+u.pathname+'?auto=compress&cs=tinysrgb&w=240'}catch(e){return ''}}
+function pxVideo(s){if(typeof s!=='string'||s.length>2000)return false;try{var u=new URL(s);return u.protocol==='https:'&&u.host==='videos.pexels.com'}catch(e){return false}}
+function duz(o){return !!o&&typeof o==='object'&&!Array.isArray(o)}
+function medyaDuz(m){
+  if(!duz(m))return null;
+  var fo=Object.create(null),vi=Object.create(null),kar=[],sc=Array.isArray(m.scenes)?m.scenes.slice(0,40):[];
+  (Array.isArray(m.photos)?m.photos.slice(0,40):[]).forEach(function(p){if(duz(p)&&p.k!=null){var s=pxKucuk(p.src);if(s)fo[String(p.k)]=s}});
+  (Array.isArray(m.videos)?m.videos.slice(0,40):[]).forEach(function(v){if(duz(v)&&v.k!=null&&pxVideo(v.src))vi[String(v.k)]={src:pxKucuk(v.poster)}});
+  sc.forEach(function(c){if(!duz(c))return;
+    if(c.video!=null&&c.video!==''){var v=vi[String(c.video)];kar.push(v?{t:'v',src:v.src}:{t:'y'});return}
+    if(c.foto!=null&&c.foto!==''){var f=fo[String(c.foto)];kar.push(f?{t:'f',src:f}:{t:'y'});return}
+    kar.push({t:'k',metin:typeof c.text==='string'?c.text.trim().slice(0,120):''})});
+  if(!sc.length){Object.keys(vi).forEach(function(k){kar.push({t:'v',src:vi[k].src})});Object.keys(fo).forEach(function(k){kar.push({t:'f',src:fo[k]})})}
+  if(!kar.length)return null;
+  var pa=typeof m.palette==='string'?m.palette:duz(m.palette)?m.palette.id:'',vu=typeof m.vurgu==='string'?m.vurgu:duz(m.palette)?m.palette.accent:'';
+  return {pal:PALET.indexOf(pa)>=0?pa:'marka',vurgu:HEX6.test(vu||'')?vu:'',oran:ORAN[m.aspect]||'',kar:kar};
+}
+function yerTutucu(cls,yazi){var s=el('span','gc-kare gc-yer '+cls);s.appendChild(el('span','gc-yazi',yazi));return s}
+function seritCiz(md){
+  var n=md.kar.length,g=n>SERIT_EN?SERIT_EN-1:n,sr=el('div','gc-serit gc-pal-'+md.pal+(md.oran?' gc-o-'+md.oran:''),null,{role:'img','aria-label':n===1?t('1 görsel'):t('{n} görsel',{n:n})});
+  if(md.vurgu)sr.style.setProperty('--gc-vurgu',md.vurgu);
+  md.kar.slice(0,g).forEach(function(k){
+    if(k.t==='y'){sr.appendChild(yerTutucu('gc-yuklenen',t('Yüklenen görsel')));return}
+    if(k.t==='k'){sr.appendChild(yerTutucu('gc-metin',k.metin));return}
+    if(!k.src){sr.appendChild(yerTutucu('gc-video',k.t==='v'?'Video':t('Görsel')));return}
+    var s=el('span','gc-kare'+(k.t==='v'?' gc-video':'')),i=el('img',null,null,{src:k.src,alt:'',loading:'lazy',decoding:'async',referrerpolicy:'no-referrer',width:'120',height:'150'});
+    i.addEventListener('error',function(){if(s.parentNode)s.parentNode.replaceChild(yerTutucu(k.t==='v'?'gc-video':'gc-yuklenen',k.t==='v'?'Video':t('Görsel')),s)});
+    s.appendChild(i);if(k.t==='v')s.appendChild(el('span','gc-oynat'));sr.appendChild(s);
+  });
+  if(n>g)sr.appendChild(el('span','gc-kare gc-fazla','+'+(n-g)));
+  return sr;
+}
+function taslakCevir(x){var m=x.meta&&typeof x.meta==='object'?x.meta:{},id=String(x.id);return {id:id,p:x.platform,tur:typeof m.kind==='string'?m.kind:'',tarih:x.created_at,ton:m.tone||'',konu:String(x.topic||''),metin:String(x.body||''),medya:medyaDuz(m.media)||medyaDuz(medyaYerel(id))}}
+/* Görsel/Karusel süzgeci: karusel video satırıdır (meta.kind=carousel); süzme istemcide de yapılır, W'nin kind süzgeci gelmeden önce de doğru çalışsın */
+function platUyar(x){return plat==='hepsi'||(plat==='gorsel'?x.p==='video'&&x.tur==='carousel':plat==='video'?x.p==='video'&&x.tur!=='carousel':x.p===plat)}
+function suzulmus(){if(!ORNEK)return liste.filter(platUyar);var qq=q.toLocaleLowerCase(LOC());return liste.filter(function(x){return platUyar(x)&&(!qq||(x.konu+'\n'+x.metin).toLocaleLowerCase(LOC()).indexOf(qq)>=0)})}
 function gecmisCiz(){
   var f=suzulmus(),suz=!!q||plat!=='hepsi',bos=!suz&&(ORNEK?liste.length===0:f.length===0),kap=$('#kayitlar');kap.textContent='';
   $('#f-suzgec').hidden=bos;$('#gecmis-bos').hidden=!bos;$('.saklama').hidden=bos;
@@ -735,15 +794,18 @@ function gecmisCiz(){
     if(ORNEK){a.querySelector('.kayit-ad').setAttribute('lang','tr');m.setAttribute('lang','tr')}
     var tb=btn('btn-metin kayit-ac','Tamamını göster');tb.setAttribute('aria-expanded','false');tb.setAttribute('aria-controls','km-'+tid);
     tb.addEventListener('click',function(){var ac=tb.getAttribute('aria-expanded')!=='true';tb.setAttribute('aria-expanded',ac?'true':'false');m.classList.toggle('kisa',!ac);tb.textContent=t(ac?'Kısalt':'Tamamını göster')});a.appendChild(tb);
+    if(x.medya)a.appendChild(seritCiz(x.medya));
     var ey=el('div','eylemler'),durumP=el('p','kart-durum ince',null,{role:'status'});
     var kb=btn('btn-ink btn-kucuk','Kopyala',null,function(){kopyala(x,durumP)});kb.setAttribute('aria-label',t('Kopyala: {k}',{k:konu}));ey.appendChild(kb);
+    // Stüdyo'da aç: karusel /gorsel, video /video, blog /blog; kabuk ?taslak=<id> ile GET /app/drafts/:id okuyup geri yükler (B)
+    var sh=studyoHref(x);if(sh)ey.appendChild(el('a','btn btn-cizgi btn-kucuk',t('Stüdyo’da aç'),{href:sh,'aria-label':t('Stüdyo’da aç: {k}',{k:konu})}));
     // Planla: yalnız LinkedIn/Instagram taslağı; kuyruk sayfası ?taslak=<id> (EN ?draft=<id>) ile taslağı forma doldurur
     if(PAD[x.p]&&/^[1-9]\d{0,14}$/.test(String(x.id))){ey.appendChild(el('a','btn btn-cizgi btn-kucuk',t('Planla'),{href:yol('kuyruk')+(dil==='en'?'?draft=':'?taslak=')+x.id+(ORNEK&&MOCKHOST?'#ornek':''),'aria-label':t('Planla: {k}',{k:konu})}))}
     ey.appendChild(durumP);
     var sb=btn('btn-cizgi btn-kucuk','Sil',null,function(b){silAc(x,b)});sb.setAttribute('aria-label',t('Sil: {k}',{k:konu}));ey.appendChild(sb);
     a.appendChild(ey);kap.appendChild(a);
   });
-  $('#daha').hidden=bos||f.length===0||(!ORNEK&&!dahaVar);
+  $('#daha').hidden=bos||(ORNEK?f.length===0:liste.length===0)||(!ORNEK&&!dahaVar);
   kisaOlc();
 }
 function kisaOlc(){$$('#kayitlar .kayit').forEach(function(a){
@@ -756,7 +818,9 @@ function kopyala(x,p){
 }
 function silAc(x,tetik){silHedef=x;$('#dlg-sil-konu').textContent='“'+(x.konu||t('Başlıksız taslak'))+'”';dlgAc($('#dlg-sil'),tetik)}
 function taslakGetir(ekle){
-  var s=new URLSearchParams();if(q)s.set('q',q);if(plat!=='hepsi')s.set('platform',plat);
+  var s=new URLSearchParams();if(q)s.set('q',q);
+  /* gorsel = video satırı + kind=carousel; video seçilince kind=video. W'den önce sunucu kind'ı yok sayar, platUyar istemcide süzer */
+  if(plat!=='hepsi'){s.set('platform',plat==='gorsel'?'video':plat);if(plat==='gorsel'||plat==='video')s.set('kind',plat==='gorsel'?'carousel':'video')}
   if(ekle&&liste.length)s.set('before',liste[liste.length-1].id);
   var qs=s.toString();
   return istek('/app/drafts'+(qs?'?'+qs:'')).then(function(j){
@@ -790,7 +854,7 @@ function gecmisKur(){
   });
 }
 function gecmisYukle(){
-  if(ORNEK){liste=TASLAK.map(function(x){return {id:String(x.id),p:x.p,tur:x.tur||'',tarih:x.tarih,ton:x.ton,konu:x.konu,metin:x.metin}});ekran('ana');gecmisCiz();return}
+  if(ORNEK){liste=TASLAK.map(function(x){return {id:String(x.id),p:x.p,tur:x.tur||'',tarih:x.tarih,ton:x.ton,konu:x.konu,metin:x.metin,medya:medyaDuz(x.medya)||medyaDuz(medyaYerel(x.id))}});ekran('ana');gecmisCiz();return}
   taslakGetir(false).then(function(j){
     if(j._s===200){ekran('ana');gecmisCiz();return}
     if(bolumYok(j)){ekran('yakinda');return}
@@ -807,10 +871,10 @@ function ayarKur(){
     e.preventDefault();var b=$('[type=submit]',f),s=$('#hs-sifre');if(bosMu(b))return;
     hataYaz(s,s.value?'':'Şifreni yaz.');if(!s.value){s.focus();return}
     var bitir=mesgul(b,'Siliniyor…');
-    if(ORNEK){zaman(function(){bitir();notBirak('ÖRNEK: Hesabın silindi. Bağların ve kayıtlı yetkiler de silindi.','ok');gitYol(yol('giris'))},700);return}
+    if(ORNEK){zaman(function(){bitir();yerelTemizle();notBirak('ÖRNEK: Hesabın silindi. Bağların ve kayıtlı yetkiler de silindi.','ok');gitYol(yol('giris'))},700);return}
     istek('/app/account/delete','POST',{password:s.value}).then(function(j){
       bitir();
-      if(j._s===200){tokenSil();notBirak('Hesabın silindi. Bağların ve kayıtlı yetkiler de silindi.','ok');location.assign(yol('giris'));return}
+      if(j._s===200){tokenSil();yerelTemizle();notBirak('Hesabın silindi. Bağların ve kayıtlı yetkiler de silindi.','ok');location.assign(yol('giris'));return}
       if(j._s===401&&j.error==='invalid'){hataYaz(s,'Şifre hatalı.');s.focus();return}
       $('#dlg-hesap').close();genelHata(j);
     });

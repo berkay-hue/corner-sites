@@ -228,6 +228,8 @@ function istekKur(){
   if(hedef&&cfg.hedefMax){var g=hedef.value.replace(/\s+/g,' ').trim();if(g)q.goal=g}
   var ln=secili('length');if(ln)q.length=ln;
   if(stil&&stil.value.trim())q.style=stil.value.trim();
+  /* PLAN 1 · seçili marka sesi (smc-ses.js): örnek + kaçınılacak kelimeler style'a eklenir; #stil metni önce gelir, toplam ≤ STIL_MAX */
+  if(window.SMCSes&&SMCSes.stilAl){var sv=SMCSes.stilAl(STIL_MAX-(q.style?q.style.length+2:0));if(sv&&sv.style)q.style=(q.style?q.style+'\n\n':'')+sv.style}
   if(cfg.govde)cfg.govde(q);
   return q;
 }
@@ -278,16 +280,17 @@ function yukle(q){
   tsAl().then(function(tok){if(no!==D.istek)throw {kod:'vazgec'};q.ts=tok;q.t=Date.now()-T0;return post(cfg.yol,q,cfg.ms,false,D.ac)}).then(function(r){
     if(no!==D.istek)return;
     durdur();tsSifirla();hakAl(r);D.acik=true;depo('smc-acik','1');var g=gunAl();if(g)depo('smc-son',g);
-    D.deneme=0;D.rid=null;uretMesgul(false);
+    D.deneme=0;D.rid=null;uretMesgul(false);uretBitti();
     var ds=r&&Array.isArray(r.drafts)?r.drafts:[];
     if(!ds.length){hataGoster('llm_fail',true,false);return}
     D.kartVar=true;D.son={r:r,q:q};
     cfg.goster(r,q);goster('sonuc',true);
+    sonKaydet(r,q);
     kayitNot(r);
     durum(cfg.hazirMetin?T(cfg.hazirMetin[0],cfg.hazirMetin[1]):T('Taslak hazır.','Draft ready.'));
-  },function(h){if(no!==D.istek)return;durdur();tsSifirla();uretMesgul(false);hataIsle(h||{kod:'genel'})});
+  },function(h){if(no!==D.istek)return;durdur();tsSifirla();uretMesgul(false);uretBitti();hataIsle(h||{kod:'genel'});sonKoru()});
 }
-function vazgec(){D.vazgec=true;D.istek++;if(D.ac)try{D.ac.abort()}catch(e){}durdur();uretMesgul(false);goster(D.kartVar?'sonuc':'bos',false);durum(T('Vazgeçildi.','Cancelled.'));quotaSor();konu.focus()}
+function vazgec(){D.vazgec=true;D.istek++;if(D.ac)try{D.ac.abort()}catch(e){}durdur();uretMesgul(false);uretBitti();goster(D.kartVar?'sonuc':'bos',false);durum(T('Vazgeçildi.','Cancelled.'));quotaSor();konu.focus()}
 /* Oturumlu üretimde worker LinkedIn, Instagram, blog ve video (karusel dahil) taslağı için draft_ids döner (geçmişte 3 gün kalır).
    Planla yalnız cfg.taslakId veren sayfada (LinkedIn, video/görsel); sayfa seçili sekmenin kimliğini verir.
    Bağlantı kuyruk sayfasına gider (?taslak=<id>, EN ?draft=<id>); kuyruk taslağı Geçmiş'ten okuyup formu doldurur. */
@@ -453,9 +456,9 @@ function urlKonu(){
 }
 function aktarimAl(){
   var anah=cfg&&cfg.aktarim||['studyo-konu','studyo-kanca','smc-konu'],v='',uk=konu?urlKonu():'',n=$('#aktarim-not');
-  if(uk){if(!konu.value.trim()){konu.value=uk;sayacYaz(konu,konuSay,KONU_MAX);if(n){n.textContent=blogdanMi()?T('Blog yazından aktarıldı; istersen düzenle. Yazdırana kadar hakkından bir şey düşmez.','Carried over from your blog post; edit it if you like. Nothing is used from your allowance until you start writing.'):T('Konu açtığın bağlantıdan geldi; yazdırmadan önce kontrol et, istersen düzenle. Yazdırana kadar hakkından bir şey düşmez.','This topic came from the link you opened; check it before you start writing and edit it if you like. Nothing is used from your allowance until you start writing.');n.hidden=false}}return}
+  if(uk){if(!konu.value.trim()){konu.value=uk;sayacYaz(konu,konuSay,KONU_MAX);if(n){n.textContent=blogdanMi()?T('Blog yazından aktarıldı; istersen düzenle. Yazdırana kadar hakkından bir şey düşmez.','Carried over from your blog post; edit it if you like. Nothing is used from your allowance until you start writing.'):T('Konu açtığın bağlantıdan geldi; yazdırmadan önce kontrol et, istersen düzenle. Yazdırana kadar hakkından bir şey düşmez.','This topic came from the link you opened; check it before you start writing and edit it if you like. Nothing is used from your allowance until you start writing.');n.hidden=false}aktarildi=true}return}
   anah.concat(['smc-konu']).some(function(k){var x=oturumDepo(k);if(x){oturumDepo(k,null);v=x;return true}return false});
-  if(v&&konu&&!konu.value.trim()){konu.value=v.slice(0,KONU_MAX+50);sayacYaz(konu,konuSay,KONU_MAX);if(n){n.textContent=T('Önceki taslaktan aktarıldı; istersen düzenle.','Carried over from your previous draft; edit it if you like.');n.hidden=false}}
+  if(v&&konu&&!konu.value.trim()){aktarildi=true;konu.value=v.slice(0,KONU_MAX+50);sayacYaz(konu,konuSay,KONU_MAX);if(n){n.textContent=T('Önceki taslaktan aktarıldı; istersen düzenle.','Carried over from your previous draft; edit it if you like.');n.hidden=false}}
 }
 
 /* ---- hash: #tema=…, #teklif ---- */
@@ -483,6 +486,102 @@ function formKur(){
   var yd=$('#yeni-taslak');if(yd)yd.addEventListener('click',function(){konu.focus();konu.select()});
   sayacYaz(konu,konuSay,KONU_MAX);if(stil)sayacYaz(stil,stilSay,STIL_MAX);ozetYaz();
 }
+/* ---- B (madde 3): son sonuç kalır. Sayfa modülü cfg.sonVer verirse (opt-in) son sonuç studyo-son-<kind>'a yazılır,
+   sayfa açılınca (3 günden yeniyse, aynı dil) geri gelir; ?taslak=<id> (EN ?draft=<id>) Geçmiş'teki taslağı açar (giriş gerekir).
+   Görsel kurgusu (cfg.sonAl → media) POST /app/drafts/:id/media'ya gider; uç yoksa/hata verirse studyo-medya-<id>'de kalır (sessiz).
+   Üretim ya da sayfanın bildirdiği iş sürerken (mesgulAyar) sayfadan çıkışta onay sorulur. Anahtarları çıkışta D (oturum) temizler. */
+var SON_GUN=3*864e5,aktarildi=false,mesgulNeden={},cikisOnay=0,medyaT={},medyaB={},medyaS={};
+function uretBitti(){if(cfg&&typeof cfg.uretBitti==='function')try{cfg.uretBitti()}catch(e){}}
+function sonAnah(){return 'studyo-son-'+(cfg&&cfg.kind||'')}
+function jsonOku(k){var v=depo(k);if(!v)return null;try{var j=JSON.parse(v);return j&&typeof j==='object'?j:null}catch(e){return null}}
+function sonAcik(){return !!(cfg&&cfg.kind&&typeof cfg.sonVer==='function')}
+function sonMedya(){if(!cfg||typeof cfg.sonAl!=='function')return null;try{var m=cfg.sonAl();return m&&typeof m==='object'?m:null}catch(e){return null}}
+function sonYaz(){var k=D.sonKayit;if(!k||!sonAcik())return;k.media=sonMedya();
+  try{localStorage.setItem(sonAnah(),JSON.stringify(k))}catch(e){try{var y={};for(var a in k)y[a]=k[a];y.media=null;localStorage.setItem(sonAnah(),JSON.stringify(y))}catch(e2){}}}
+function sonKaydet(r,q){if(!sonAcik()||!r||!Array.isArray(r.drafts)||!r.drafts.length)return;sonNotKaldir();q=q||{};var qq={};
+  ['topic','sector','tone','goal','length'].forEach(function(a){if(typeof q[a]==='string'||typeof q[a]==='number')qq[a]=q[a]});
+  D.sonKayit={v:1,ts:Date.now(),lang:dilAl(),r:{drafts:r.drafts,draft_ids:Array.isArray(r.draft_ids)?r.draft_ids:[]},q:qq,media:null};sonYaz()}
+function sonOku(){var an=sonAnah(),ham=depo(an);if(!ham)return null;var k=jsonOku(an);
+  if(!k||k.v!==1||typeof k.ts!=='number'||!k.r||!Array.isArray(k.r.drafts)||!k.r.drafts.length){depo(an,null);return null}
+  var y=Date.now()-k.ts;if(y>SON_GUN||y<-6e4){depo(an,null);return null}
+  if(k.lang!==dilAl())return null;return k}
+function sonSil(){D.sonKayit=null;if(cfg&&cfg.kind)depo(sonAnah(),null)}
+function sonGuncelle(){if(D.sonKayit)sonYaz()}
+function sonNotKaldir(){var n=$('#son-not');if(n&&n.parentNode)n.parentNode.removeChild(n)}
+function sonNot(tarih){sonNotKaldir();var yer=$('#kayit-not');if(!yer||!yer.parentNode)return;
+  var p=el('p','not son-not');p.id='son-not';p.appendChild(d.createTextNode(T('Son taslağın','Your last draft')+(tarih?' · '+tarih:'')+' '));
+  var b=el('button','son-temizle',T('Temizle','Clear'));b.type='button';b.id='son-temizle';b.setAttribute('aria-label',T('Son taslağı ekrandan ve bu tarayıcıdan temizle','Clear the last draft from the screen and this browser'));
+  b.addEventListener('click',sonTemizle);p.appendChild(b);yer.parentNode.insertBefore(p,yer)}
+function sonTemizle(){sonSil();if(cfg&&typeof cfg.temizle==='function')try{cfg.temizle()}catch(e){}
+  sonNotKaldir();D.kartVar=false;D.son=null;D.sonGovde=null;var kn=$('#kayit-not');if(kn)kn.hidden=true;sonKoru();
+  goster('bos',false);durum(T('Son taslak temizlendi.','The last draft was cleared.'));if(konu)konu.focus()}
+/* hata/duvar görünümü sonucu gizler; son taslak varsa "Son taslağa dön" ile geri gelinir (taslak silinmez) */
+function sonKoru(){
+  [['#d-hata .st-hata-alt','hata-son'],['#duvar-taslak','duvar-son']].forEach(function(x){
+    var b=$('#'+x[1]);
+    if(!b){var yer=$(x[0]);if(!yer||!yer.parentNode)return;b=el('button','btn btn-cizgi son-don',T('Son taslağa dön','Back to your last draft'));b.type='button';b.id=x[1];
+      b.addEventListener('click',function(){if(!D.kartVar)return;goster('sonuc',true);durum(T('Son taslağın ekranda.','Your last draft is on screen.'))});
+      if(x[1]==='hata-son')yer.insertBefore(b,$('.st-kod',yer));else yer.parentNode.insertBefore(b,yer.nextSibling)}
+    b.hidden=!D.kartVar});
+}
+function urlTaslak(){var v='';
+  try{var q=new URLSearchParams(location.search);if(!q.has('taslak')&&!q.has('draft'))return '';v=q.get('taslak')||q.get('draft')||'';q.delete('taslak');q.delete('draft');var s=q.toString();history.replaceState(history.state,'',location.pathname+(s?'?'+s:'')+location.hash)}catch(e){return ''}
+  v=v.trim();return TASLAK_RE.test(v)?v:''}
+function aktarimNot(m,giris){var n=$('#aktarim-not');if(!n)return;n.textContent=m;if(giris){var a=el('a',null,T('Giriş yap','Sign in'));a.href=hesapYol(false);n.appendChild(d.createTextNode(' '));n.appendChild(a)}n.hidden=false}
+function geriYukle(){if(!sonAcik()||!form)return;var id=urlTaslak();if(id){taslakAc(id);return}
+  if(aktarildi||D.view==='duvar'||D.kartVar||D.mesgul)return;var k=sonOku();if(k)sonUygula(k,new Date(k.ts).toISOString())}
+function sonUygula(k,tarih){
+  var r=k.r,q=k.q||{};D.kartVar=true;D.son={r:r,q:q};D.sonKayit=k;
+  if(konu&&!konu.value.trim()&&typeof q.topic==='string'){konu.value=q.topic.slice(0,KONU_MAX);sayacYaz(konu,konuSay,KONU_MAX)}
+  try{cfg.goster(r,q,{geri:true})}catch(e){D.kartVar=false;D.son=null;D.sonKayit=null;return false}
+  goster('sonuc',false);kayitNot(r);
+  try{cfg.sonVer(k.media||null)}catch(e){}
+  sonNot(tarihMetin(tarih));sonKoru();durum(T('Son taslağın geri getirildi.','Your last draft was restored.'));return true}
+/* zorla: sayfa modülü (blog bekleyen yoklaması) eski geri getirilmiş sonucun yerine yeni taslağı açar */
+function taslakAc(id,zorla){
+  if(!oturumJeton()){aktarimNot(T('Geçmiş’teki taslağı açmak için giriş yap.','Sign in to open the draft from your History.'),true);return}
+  al('/app/drafts/'+id,12000).then(function(j){
+    if(D.mesgul||(D.kartVar&&!zorla))return;var x=j&&j.draft;if(!x||typeof x.body!=='string'){aktarimNot(T('Taslak açılamadı.','The draft couldn’t be opened.'));return}
+    var dr=null;if(typeof cfg.taslakCevir==='function'){try{dr=cfg.taslakCevir(x)}catch(e){dr=null}}
+    else if(x.platform===cfg.kind){if(cfg.kind==='blog'){var i=x.body.indexOf('\n\n');dr=i>0?{title:x.body.slice(0,i).replace(/^#+\s*/,'').trim(),meta:'',text:x.body.slice(i+2)}:{title:'',meta:'',text:x.body}}else dr={text:x.body}}
+    if(!dr){aktarimNot(T('Bu taslak bu sayfaya ait değil; Geçmiş’ten kendi sayfasında aç.','This draft belongs to another page; open it from History on its own page.'));return}
+    var meta=x.meta&&typeof x.meta==='object'?x.meta:{},media=meta.media&&typeof meta.media==='object'?meta.media:medyaYerel(id);
+    var ts=Date.parse(String(x.created_at||'').replace(' ','T')+'Z');if(!isFinite(ts))ts=Date.now();
+    var k={v:1,ts:ts,lang:dilAl(),r:{drafts:[dr],draft_ids:[Number(id)]},q:{topic:typeof x.topic==='string'?x.topic:''},media:media||null};
+    if(sonUygula(k,new Date(ts).toISOString()))sonYaz();
+  },function(h){var c=h&&h.kod;
+    if(c==='not_found')aktarimNot(T('Taslak bulunamadı ya da 3 günlük saklama süresi doldu.','The draft wasn’t found, or its 3-day storage has ended.'));
+    else if(c==='auth'||c==='login_required'||c==='invalid')aktarimNot(T('Oturumun kapanmış; taslağı açmak için yeniden giriş yap.','Your session has ended; sign in again to open the draft.'),true);
+    else aktarimNot(T('Taslak şu an açılamadı; biraz sonra sayfayı yenile.','The draft couldn’t be opened right now; refresh the page in a moment.'))});
+}
+function medyaYerel(id){return jsonOku('studyo-medya-'+id)}
+function medyaYerelYaz(id,m){if(m==null)depo('studyo-medya-'+id,null);else try{localStorage.setItem('studyo-medya-'+id,JSON.stringify(m))}catch(e){}}
+function medyaKaydet(id,m){id=String(id==null?'':id);if(!TASLAK_RE.test(id))return;medyaB[id]=m===undefined?null:m;clearTimeout(medyaT[id]);medyaT[id]=setTimeout(function(){medyaGonder(id,false)},1500)}
+/* önce yerel kopya; sunucu kabul ederse (uç canlıysa) yerel kopya silinir. 404/405/413/ağ hatası sessiz: yerel kopya kalır */
+function medyaGonder(id,kalici){clearTimeout(medyaT[id]);delete medyaT[id];if(!Object.prototype.hasOwnProperty.call(medyaB,id))return;
+  var m=medyaB[id];delete medyaB[id];medyaYerelYaz(id,m);
+  var tk=oturumJeton();if(!tk||!window.fetch||!API)return;var no=medyaS[id]=(medyaS[id]||0)+1;
+  try{fetch(API+'/app/drafts/'+id+'/media',{method:'POST',headers:{'content-type':'application/json',authorization:'Bearer '+tk},body:JSON.stringify({media:m}),credentials:'omit',cache:'no-store',keepalive:!!kalici})
+    .then(function(r){if(!r.ok)return;return r.json().then(function(j){if(j&&j.ok!==false&&medyaS[id]===no&&!Object.prototype.hasOwnProperty.call(medyaB,id))medyaYerelYaz(id,null)},function(){})},function(){})}catch(e){}}
+function medyaHepsi(){Object.keys(medyaT).forEach(function(id){medyaGonder(id,true)})}
+function mesgulAyar(ad,v){if(v)mesgulNeden[ad]=1;else delete mesgulNeden[ad]}
+function sayfaMesgul(){return !!D.mesgul||Object.keys(mesgulNeden).length>0}
+var CIKIS=T('Taslak hâlâ hazırlanıyor. Sayfadan çıkarsan bu sekmede yarıda kalabilir. Yine de çıkılsın mı?','Your draft is still being prepared. If you leave, it may stop halfway in this tab. Leave anyway?');
+function cikisKur(){
+  window.addEventListener('beforeunload',function(e){if(sayfaMesgul()&&Date.now()>=cikisOnay){e.preventDefault();e.returnValue='';return ''}});
+  d.addEventListener('click',function(e){
+    if(!sayfaMesgul()||e.defaultPrevented||e.button!==0||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey)return;
+    var a=e.target&&e.target.closest?e.target.closest('a[href]'):null;if(!a||a.hasAttribute('download'))return;
+    var tg=a.getAttribute('target');if(tg&&tg!=='_self')return;
+    var h=a.getAttribute('href')||'';if(!h||h.charAt(0)==='#')return;
+    var u;try{u=new URL(a.href,location.href)}catch(x){return}
+    if(u.protocol!=='http:'&&u.protocol!=='https:')return;
+    if(u.origin===location.origin&&u.pathname===location.pathname&&u.search===location.search)return;
+    if(window.confirm(CIKIS))cikisOnay=Date.now()+3000;else e.preventDefault()},true);
+  window.addEventListener('pagehide',medyaHepsi);
+  d.addEventListener('visibilitychange',function(){if(d.visibilityState==='hidden')medyaHepsi()});
+}
+
 function basla(){
   temaKur();menuKur();hakKur();teklifKur();bekleKur();formKur();tekrarKur();
   if(!form)return;
@@ -493,6 +592,7 @@ function basla(){
   hashOku();window.addEventListener('hashchange',hashOku);
   quotaSor(true);
   if(cfg&&cfg.basla)cfg.basla();
+  cikisKur();geriYukle();
 }
 
 /* ---- ortak görsel yardımcıları (Görselli/Görselsiz; blog, LinkedIn, görsel, video aynı API) ----
@@ -616,7 +716,7 @@ function gorselSecim(fs,ayar){
   var not=fs.querySelector('.st-gorsel-not')||$('#gorsel-not'),ank=ayar.anahtar||'',bir=ayar.birim||T('görseller','images'),son='';
   function acikMi(){var x=stokDurum();return x==='acik'||x==='deneme'}
   function fsDurum(){var x=stokDurum();return x==='deneme'?'acik':x}
-  function tercih(){return stk.checked&&acikMi()?'stok':'yok'}
+  function tercih(){return stk.checked&&(acikMi()||stokDurum()==='bekle')?'stok':'yok'}
   function uye(){var u=$('.st-ust[data-hesap]');return !!(u&&u.getAttribute('data-hesap')==='uye')}
   function neden(){
     var x=stokDurum();
@@ -646,7 +746,7 @@ function gorselSecim(fs,ayar){
     var x=fsDurum(),ilk=son!=='acik'&&x==='acik';
     fs.setAttribute('data-durum',x);
     if(x==='acik'){stk.removeAttribute('aria-disabled');if(ilk){var k=ank?depo(ank):null;(k==='stok'?stk:yok).checked=true}}
-    else{stk.setAttribute('aria-disabled','true');if(stk.checked)yok.checked=true}
+    else{stk.setAttribute('aria-disabled','true');if(stk.checked&&!(x==='bekle'&&ank&&depo(ank)==='stok'))yok.checked=true}
     /* deneme hakkı harcanırken iki seçenek de kilitli (aria-disabled + aria-busy): Görselsiz'e geçiş, harcanan hakkın görselini düşürmesin */
     if(harcaP){yok.setAttribute('aria-disabled','true');stk.setAttribute('aria-disabled','true');fs.setAttribute('aria-busy','true')}
     else{yok.removeAttribute('aria-disabled');fs.removeAttribute('aria-busy')}
@@ -654,7 +754,7 @@ function gorselSecim(fs,ayar){
   }
   [yok,stk].forEach(function(r){r.addEventListener('change',function(){
     if(harcaP){(r===yok?stk:yok).checked=true;durum(MESGUL);toast(MESGUL);notYaz();return}
-    if(stk.checked&&!acikMi()){yok.checked=true;var m=neden();durum(m);toast(m);notYaz();return}
+    if(stk.checked&&!acikMi()&&stokDurum()!=='bekle'){yok.checked=true;var m=neden();durum(m);toast(m);notYaz();return}
     if(ank)depo(ank,stk.checked?'stok':'yok');
     notYaz();
     durum(stk.checked?T('Görselli seçildi: taslak hazır olunca '+bir+' Pexels’ten eklenir.','With images: '+bir+' from Pexels are added when the draft is ready.'):T('Görselsiz seçildi: taslak yalnız metinle hazırlanır.','No images: the draft is text only.'));
@@ -683,6 +783,8 @@ window.Studyo={
   stokHarciyor:function(){return !!harcaP},GORSEL_MESGUL:MESGUL,
   stokHarcaHata:function(){return harcaHata},stokHataMetni:stokHataMetni,stokAramaMetni:stokAramaMetni,stokSrc:stokSrc,
   stokKunye:stokKunye,stokKunyeHtml:stokKunyeHtml,stokKunyeMd:stokKunyeMd,
+  /* B: son sonuç / medya kaydı / çıkış uyarısı */
+  sonKaydet:sonKaydet,sonGuncelle:sonGuncelle,sonSil:sonSil,medyaKaydet:medyaKaydet,medyaYerel:medyaYerel,mesgulAyar:mesgulAyar,taslakAc:taslakAc,al:al,oturumJeton:oturumJeton,tarihMetin:tarihMetin,
   DUVAR:DUVAR,SINIR:T('Bugünkü 9 düzenleme hakkın doldu; gece yarısı yenilenir.','You’ve used today’s 9 edits; they renew at midnight.')
 };
 /* defer sırası: smc-ses.js → studyo-kabuk.js → sayfa modülü; kurulum modül kaydından sonra (DOMContentLoaded).

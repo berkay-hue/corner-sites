@@ -1,7 +1,8 @@
 /* Stüdyo · LinkedIn (A8-S2): /gen/linkedin sonucu gerçekçi gönderi kartı, 3 seçenek sekmesi, satır içi düzenleme,
    kopyala, /gen/refine (kısalt/uzat/ton), "Görsele dönüştür" (sessionStorage studyo-kanca → /gorsel).
    Görselli (25.11): #gorsel-secim 'stok' ise taslak gelince konu ile tek Pexels araması; görsel 3 sekmede ortak.
-   Kullanıcı metni yalnız textContent/value ile yazılır. */
+   Kullanıcı metni yalnız textContent/value ile yazılır.
+   B (26.11): son sonuç kalır (cfg.sonAl/sonVer): eklenen görsel (ya da kaldırıldı durumu) sayfa değişince geri gelir; yeni arama/harcama yok. */
 (function(){'use strict';
 var S=window.Studyo;if(!S)return;
 var d=document,T=S.T,$=S.$,$$=S.$$,el=S.el,EN=S.dil()==='en';
@@ -12,6 +13,7 @@ var st={ds:[],i:0,acik:false,duzen:false,onceki:null,mesgul:false,q:null,tids:[]
 /* görsel işi: no (iş sayacı), ac (AbortController), konu, tek (deneme: 1 görsel), ds (fotoğraflar), i, foto (gösterilen), dr (yuk|hazir|hata|kaldir), hata, kod */
 var g={no:0,ac:null,konu:'',tek:false,ds:[],i:0,foto:null,dr:'',hata:'',kod:'',kapsam:'',kirik:0};
 var secim=null,gIs=null;
+var PX_IMG=/^https:\/\/images\.pexels\.com\/[^\s"'<>\\]*$/,PX_SAY=/^https:\/\/(www\.)?pexels\.com\/[^\s"'<>\\]*$/;
 
 function profil(){try{return window.SMCSes&&SMCSes.oku&&SMCSes.oku()||null}catch(e){return null}}
 function basHarf(ad){var p=(ad||'').trim().split(/\s+/).filter(Boolean);if(!p.length)return EN?'YN':'AD';return (p[0].charAt(0)+(p.length>1?p[p.length-1].charAt(0):'')).toLocaleUpperCase(EN?'en':'tr')}
@@ -208,7 +210,7 @@ function gHarca(no,odak,den){
       g.harciyor=false;
       if(no!==g.no)return;
       if(!ok){g.dr='hata';g.hata=S.stokHarcaHata();g.kod=S.stokDurum()==='kilit'?'plan':'harca';gYaz(odak?'tekrar':null);S.durum(T('Görsel eklenemedi.','No image was added.'));return}
-      g.foto=f;g.dr='hazir';gYaz(odak);S.durum(T('Gönderi görseli eklendi.','Post image added.'));
+      g.foto=f;g.dr='hazir';gYaz(odak);S.sonGuncelle();S.durum(T('Gönderi görseli eklendi.','Post image added.'));
     });
   };
   im.onerror=function(){
@@ -229,8 +231,32 @@ function gTekrar(){
 }
 function gBaska(){
   if(g.tek||g.ds.length<2)return;
-  g.i=(g.i+1)%g.ds.length;g.foto=g.ds[g.i];g.dr='hazir';gYaz('baska');
+  g.i=(g.i+1)%g.ds.length;g.foto=g.ds[g.i];g.dr='hazir';gYaz('baska');S.sonGuncelle();
   S.durum(T('Başka görsel gösteriliyor ('+(g.i+1)+' / '+g.ds.length+').','Showing another image ('+(g.i+1)+' of '+g.ds.length+').'));
+}
+/* ---- B: son sonuç — yalnız yerleşmiş görsel saklanır (worker mediaIn: src images.pexels.com, url pexels.com sayfası) ---- */
+function kisa(x,n){return String(x==null?'':x).slice(0,n)}
+function fotoKisa(f){
+  if(!f)return null;var id=Number(f.id),src=gSrc(f);
+  if(!(id>0)||typeof src!=='string'||!PX_IMG.test(src))return null;
+  var o={id:id,src:src,w:f.width>0?Math.round(f.width):0,h:f.height>0?Math.round(f.height):0,alt:kisa(f.alt,120),photographer:kisa(f.photographer,80)};
+  if(typeof f.url==='string'&&PX_SAY.test(f.url))o.url=f.url;
+  if(typeof f.photographer_url==='string'&&PX_SAY.test(f.photographer_url))o.photographer_url=f.photographer_url;
+  return o;
+}
+function fotoAc(o){
+  if(!o||typeof o!=='object')return null;var id=Number(o.id),s=o.src;
+  if(!(id>0)||typeof s!=='string'||!PX_IMG.test(s))return null;
+  return {id:id,src:{large2x:s,large:s,medium:s},width:Number(o.w)||0,height:Number(o.h)||0,alt:kisa(o.alt,120),photographer:kisa(o.photographer,80),
+    url:typeof o.url==='string'&&PX_SAY.test(o.url)?o.url:'',photographer_url:typeof o.photographer_url==='string'&&PX_SAY.test(o.photographer_url)?o.photographer_url:''};
+}
+function sonAl(){
+  if((g.dr!=='hazir'&&g.dr!=='kaldir')||!g.foto)return null;
+  var o=fotoKisa(g.foto);return o?{photos:[o],li:{tek:!!g.tek,kaldir:g.dr==='kaldir'}}:null;
+}
+function sonVer(m){
+  var b=m&&m.li,f=b&&Array.isArray(m.photos)?fotoAc(m.photos[0]):null;if(!f)return;
+  gIptal();g.konu='';g.ds=[f];g.i=0;g.foto=f;g.dr=b.kaldir?'kaldir':'hazir';g.tek=!!b.tek;g.hata='';g.kod='';g.kapsam='';g.kirik=0;gYaz();
 }
 /* indir: canvas → JPG; CORS/çizim olmazsa görsel yeni sekmede açılır */
 function gIndir(b){
@@ -275,8 +301,8 @@ function gKur(){
     var k=b.getAttribute('data-g');
     if(k==='indir')gIndir(b);
     else if(k==='baska')gBaska();
-    else if(k==='kaldir'){g.dr='kaldir';not('');gYaz('geri');S.durum(T('Görsel kaldırıldı.','Image removed.'))}
-    else if(k==='geri'&&g.foto){g.dr='hazir';gYaz('kaldir');S.durum(T('Görsel geri eklendi.','Image added back.'))}
+    else if(k==='kaldir'){g.dr='kaldir';not('');gYaz('geri');S.sonGuncelle();S.durum(T('Görsel kaldırıldı.','Image removed.'))}
+    else if(k==='geri'&&g.foto){g.dr='hazir';gYaz('kaldir');S.sonGuncelle();S.durum(T('Görsel geri eklendi.','Image added back.'))}
     else if(k==='tekrar')gTekrar();
   });
 }
@@ -321,10 +347,16 @@ S.kaydet({
     kartBas();sekmeYaz();govdeYaz();olcuYaz();geriYaz();tonYaz();not('');
     /* görsel: yalnız bu formdan üretilen istekte Görselli seçildiyse (geçmişten açılan/Görselsiz → çağrı yok) */
     var gl=!!(gIs&&gIs.q===q&&gIs.gorselli);
-    if(gl&&q.topic)gBasla(q.topic);else gSifir();
+    if(!(gl&&q.topic)){gSifir();return}
+    /* Görselli kota yüklenirken ('bekle') seçilebilir: kotayı bekle; kilit/yok çıkarsa sessizce görselsiz (hata kartı yok) */
+    var git=function(){var x=S.stokDurum();if(st.q!==q)return;if(x==='acik'||x==='deneme')gBasla(q.topic);else gSifir()};
+    if(S.stokDurum()!=='bekle'){git();return}
+    gSifir();var bitti=false,t=0,son=function(){if(bitti)return;bitti=true;clearTimeout(t);d.removeEventListener('studyo:hak',son);git()};
+    d.addEventListener('studyo:hak',son);t=setTimeout(son,13000);
   },
   /* tercih worker'a gitmez: q'ya alan eklenmez, yalnız bu isteğe not düşülür */
   govde:function(q){gIs={q:q,gorselli:!!(secim&&secim.tercih()==='stok')}},
+  sonAl:sonAl,sonVer:sonVer,temizle:function(){gSifir()},
   /* Planla: üretimde 3 kimlik sekmelerle aynı sırada; düzenleme (refine) seçili sekmeye yeni kimlik yazar, geri al eskisine döner */
   taslakId:function(ids,tek){if(tek){st.oncekiId=st.tids[st.i]||null;st.tids[st.i]=ids[0]}else{st.tids=ids.slice(0,3);st.oncekiId=null}return st.tids[st.i]},
   basla:kur

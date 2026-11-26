@@ -109,6 +109,8 @@ a:hover{color:var(--ink)}
 .st-bas h1{font:800 1.625rem/1.2 var(--baslik);letter-spacing:-.015em}
 .st-bas p{margin-top:var(--s1);color:var(--ink2);font-size:.9375rem;line-height:1.5}
 .st-izgara{display:grid;grid-template-columns:minmax(320px,var(--yaz-en)) minmax(0,1fr);gap:var(--g3);align-items:start;max-width:1240px}
+/* C1·7: video/görsel stüdyosunda geniş ekranda önizleme alanı büyür */
+@media (min-width:1280px){.st-izgara:has(#studyo-medya){grid-template-columns:minmax(300px,380px) minmax(0,1fr);max-width:1640px}}
 
 /* ---- yazma paneli ---- */
 .st-yaz{display:flex;flex-direction:column;gap:var(--g3);padding:var(--g3);border:1px solid var(--line);border-radius:var(--r-l);background:var(--surface);box-shadow:var(--yuk-1)}
@@ -164,6 +166,14 @@ textarea.st-girdi,.alan-k textarea{resize:vertical}
 .ses-satir{display:flex;flex-direction:column;gap:var(--s2)}
 .ses-durum{display:flex;align-items:center;gap:var(--s2);flex-wrap:wrap;font:var(--f-ipucu);color:var(--ink2)}
 .ses-ad{font-weight:600;color:var(--ink)}
+/* PLAN 1 · ses seçici: hesap / tarayıcı profili / hazır sesler / yok */
+.ses-secim{display:flex;align-items:center;gap:var(--s2);flex-wrap:wrap;margin:0}
+.ses-secim label{font:var(--f-ipucu);font-weight:600;color:var(--ink)}
+.ses-sec{min-height:var(--dokunma);max-width:100%;padding:8px var(--s3);border:1px solid var(--edge);border-radius:var(--r-girdi);background:var(--surface);color:var(--ink);font:var(--f-ipucu)}
+.ses-sec:hover{border-color:var(--ink2)}
+.ses-sec:focus-visible{outline:none;border-color:var(--accent);box-shadow:var(--odak-halka)}
+.ses-sec-ozet{flex-basis:100%;font:var(--f-ipucu);color:var(--ink2)}
+.ses-sec-ozet:empty{display:none}
 
 /* üret düğmesi + Turnstile + KVKK */
 .st-gonder{display:flex;flex-direction:column;gap:var(--s3)}
@@ -494,7 +504,18 @@ dialog::backdrop{background:var(--ortu)}
 .kr-sahne-ust{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:2px var(--s3);min-width:0}
 .kr-baslik{font:var(--f-ust);letter-spacing:var(--ls-ust);text-transform:uppercase;color:var(--ink3)}
 .kr-meta{font:var(--f-sayac);color:var(--ink3);font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
-.kr-cerceve{--kr-oran:.5625;position:relative;align-self:center;width:min(100%,calc(min(68vh,620px) * var(--kr-oran)));aspect-ratio:var(--kr-oran);border-radius:var(--r-m);overflow:hidden;background:var(--ters-bg);box-shadow:var(--yuk-2)}
+.kr-cerceve{--kr-oran:.5625;position:relative;align-self:center;width:min(100%,calc(min(78vh,900px) * var(--kr-oran)));aspect-ratio:var(--kr-oran);border-radius:var(--r-m);overflow:hidden;background:var(--ters-bg);box-shadow:var(--yuk-2)}
+.kr-cerceve[data-aspect="16:9"]{width:100%}
+/* C1·6 büyüt: çerçeve + kontroller tek sarmal; tam ekran (API) ya da <dialog> yedeği aynı sarmalı büyütür */
+.kr-oyn-sar{display:flex;flex-direction:column;gap:var(--s3);min-width:0}
+.kr-oyn-sar.kr-tam{justify-content:center;height:100%;padding:16px;background:var(--surface)}
+.kr-oyn-sar.kr-tam .kr-cerceve{width:min(100%,calc((100vh - 96px) * var(--kr-oran)));width:min(100%,calc((100dvh - 96px) * var(--kr-oran)));align-self:center}
+.kr-oyn-sar.kr-tam .kr-kontrol{width:min(100%,900px);align-self:center}
+.kr-oyn-sar:fullscreen{justify-content:center;padding:16px;background:var(--surface)}
+.kr-oyn-sar:-webkit-full-screen{justify-content:center;padding:16px;background:var(--surface)}
+dialog.kr-buyut-dlg{width:100vw;max-width:none;height:100vh;height:100dvh;max-height:none;margin:0;padding:0;border:0;border-radius:0;background:var(--surface);color:var(--ink)}
+dialog.kr-buyut-dlg::backdrop{background:rgba(10,10,14,.6)}
+.kr-kirp-not{margin-top:var(--s2)}
 .kr-isk{position:absolute;inset:0;border-radius:0}
 .kr-cerceve.hazir .kr-isk{display:none}
 .kr-tuval{position:absolute;inset:0;display:block;width:100%;height:100%;cursor:pointer}
@@ -705,15 +726,15 @@ dialog.kr-stok-dlg{width:min(760px,calc(100% - var(--g3)))}
   .kr-bos .kr-ornek{grid-area:o;align-self:center;max-width:none}
 }
 @container kr (min-width:640px){
-  .kr-izgara{grid-template-columns:minmax(0,1.1fr) minmax(280px,1fr)}
+  .kr-izgara{grid-template-columns:minmax(0,1.35fr) minmax(280px,1fr)}
   .kr-sahne-k{position:sticky;top:calc(var(--st-ust) + var(--g2))}
 }
 @container kr (min-width:900px){
-  .kr-izgara{grid-template-columns:minmax(0,1.25fr) minmax(320px,1fr)}
+  .kr-izgara{grid-template-columns:minmax(0,1.4fr) minmax(320px,1fr)}
 }
 @media (max-width:768px){
   .kr-sahne-k{padding:var(--s3)}
-  .kr-cerceve{width:min(100%,calc(62vh * var(--kr-oran)))}
+  .kr-cerceve{width:min(100%,calc(70vh * var(--kr-oran)));width:min(100%,calc(70svh * var(--kr-oran)))}
   .kr-bos .kr-ornek{max-width:220px;align-self:center}
   .kr-oranlar label{min-height:76px}
 }
@@ -796,6 +817,18 @@ dialog.kr-stok-dlg{width:min(760px,calc(100% - var(--g3)))}
 .bl-gorsel-not{display:flex;flex-wrap:wrap;align-items:center;gap:var(--s2) var(--s3)}
 .bl-gorsel-not[hidden]{display:none}
 .bl-gorsel-not[aria-busy="true"]{color:var(--ink2)}
+/* B: son taslak notu (kabuk, tüm sayfalar) + blog MP4 ilerlemesi */
+.son-not{display:flex;flex-wrap:wrap;align-items:center;gap:var(--s1) var(--s3)}
+.son-temizle{padding:2px 6px;border:0;background:none;font:inherit;color:var(--accent);text-decoration:underline;text-underline-offset:2px;cursor:pointer;border-radius:var(--r-s,4px)}
+.son-temizle:hover{color:var(--danger)}
+.son-temizle:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.bl-mp4{margin-top:var(--s3);padding:var(--s3);border:1px solid var(--line);border-radius:var(--r-m);background:var(--surface)}
+.bl-mp4[hidden]{display:none}
+.bl-mp4-ust{display:flex;flex-wrap:wrap;align-items:center;gap:var(--s2) var(--s3)}
+.bl-mp4 progress{flex:1 1 160px;min-width:0;height:8px;accent-color:var(--accent)}
+.bl-mp4-yuzde{min-width:3.5ch;font:var(--f-sayac);color:var(--ink2);font-variant-numeric:tabular-nums;text-align:right}
+.bl-mp4-bilgi{margin:var(--s2) 0 0;font:var(--f-ipucu);color:var(--ink2)}
+#bl-video[aria-disabled="true"]{opacity:.6;cursor:progress}
 /* gorselli:kurgu */
 .kr-oto{display:flex;flex-wrap:wrap;align-items:center;gap:var(--s2) var(--s3)}
 .kr-oto span{flex:1 1 200px}

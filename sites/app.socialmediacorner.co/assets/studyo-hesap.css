@@ -195,6 +195,27 @@ select.kutu{cursor:pointer}
 .kayit-ac{justify-self:start;margin:calc(var(--s2) * -1) 0 0 calc(var(--s2) * -1)}
 .kayit .eylemler{margin-top:var(--s2)}
 .kayit .eylemler>.kart-durum{flex:1 1 0;min-width:0;margin:0}
+/* D: küçük resim şeridi. Palet renkleri studyo-motor.js şablon paletleriyle aynı (temadan bağımsız şablon rengi);
+   vurgu özelse smc-hesap.js --gc-vurgu'yu CSSOM ile yazar. Yüklenen görsel yer tutucusu tema belirteçlerini kullanır. */
+.gc-serit{--gc-bg:#140f2c;--gc-fg:#f7f4ff;--gc-vurgu:#8a63f2;--gc-oran:4/5;display:flex;gap:var(--s2);min-width:0;overflow-x:auto;padding-bottom:2px;scrollbar-width:thin}
+.gc-pal-lavanta{--gc-bg:#f3effe;--gc-fg:#1b1236;--gc-vurgu:#774be5}
+.gc-pal-gece{--gc-bg:#0b1622;--gc-fg:#f2f7fb;--gc-vurgu:#5fd3a6}
+.gc-pal-krem{--gc-bg:#f3ede3;--gc-fg:#1f1b16;--gc-vurgu:#c8502a}
+.gc-pal-neon{--gc-bg:#0e0e10;--gc-fg:#fff;--gc-vurgu:#d4ff3a}
+.gc-pal-mercan{--gc-bg:#fff3ee;--gc-fg:#2b1611;--gc-vurgu:#ff5a36}
+.gc-o-kare{--gc-oran:1/1}
+.gc-o-dikey{--gc-oran:4/5}
+.gc-o-uzun{--gc-oran:9/16}
+.gc-o-yatay{--gc-oran:16/9}
+.gc-kare{position:relative;flex:0 0 auto;height:96px;aspect-ratio:var(--gc-oran);overflow:hidden;border:1px solid var(--line);border-radius:var(--r-s);background:var(--gc-bg);color:var(--gc-fg)}
+.gc-kare img{display:block;width:100%;height:100%;object-fit:cover}
+.gc-yer{display:flex;align-items:center;justify-content:center;padding:6px;text-align:center}
+.gc-yazi{display:-webkit-box;overflow:hidden;-webkit-box-orient:vertical;-webkit-line-clamp:5;font:600 .6875rem/1.25 var(--govde);overflow-wrap:anywhere}
+.gc-metin{box-shadow:inset 0 3px 0 var(--gc-vurgu)}
+.gc-yuklenen{border-style:dashed;border-color:var(--edge,var(--line));background:var(--yuzey-2);color:var(--ink2)}
+.gc-oynat{position:absolute;top:50%;left:50%;width:26px;height:26px;margin:-13px 0 0 -13px;border-radius:50%;background:rgba(0,0,0,.6)}
+.gc-oynat::after{content:"";position:absolute;top:7px;left:10px;border-style:solid;border-width:6px 0 6px 9px;border-color:transparent transparent transparent #fff}
+.gc-fazla{display:flex;align-items:center;justify-content:center;background:var(--yuzey-2);color:var(--ink);font:700 .875rem/1 var(--govde);font-variant-numeric:tabular-nums}
 .bos{display:grid;gap:var(--s3);justify-items:start;padding:var(--g3);border:1px solid var(--line);border-radius:var(--r-l);background:var(--yuzey-2)}
 .bos h2{font:800 1.25rem/1.3 var(--baslik)}
 .bos p{color:var(--ink2)}
