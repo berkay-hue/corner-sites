@@ -289,8 +289,12 @@ function kwRx(kw){var parts=(fold(kw).match(RX_TOK)||[]).map(p=>p.replace(/['’
   if(SOFT[last]&&((stripped&&stem.length>=4)||(!stripped&&stem.length>=5)))body=esc(stem.slice(0,-1))+SOFT[last];
   if(!stripped&&stem.length<=3)return body+"(?:['’]\\p{L}*)?(?![\\p{L}\\p{N}])";
   return body+"[\\p{L}\\p{N}'’]*";});
- return new RegExp("(^|[^\\p{L}\\p{N}])("+src.join("[\\s\\-–]+")+")","gu");}
-function count(rx,s){if(!rx)return 0;rx.lastIndex=0;var m=fold(s).match(rx);return m?m.length:0;}
+ /* Sayıyla başlıyorsa: "1.500" → "11.500"/"2.1.500" içinde, "500" → "1.500" içinde sayılmaz (önünde rakam+ayırıcı) */
+ var pre=/^\p{N}/u.test(parts[0])?"(^|[^\\p{L}\\p{N}.,:\\/]|(?:^|[^\\p{N}])[.,:\\/])":"(^|[^\\p{L}\\p{N}])";
+ return new RegExp(pre+"("+src.join("[\\s\\-–]+")+")","gu");}
+/* Sonraki aramayı eşleşmenin son karakterinden başlat: "5g/5g", "1.500 kişi,1.500 kişi" gibi boşluksuz yazımda önek o karakteri kullanabilsin */
+function nextAt(rx,m){rx.lastIndex=Math.max(m.index+m[1].length+m[2].length-1,m.index+1);}
+function count(rx,s){if(!rx)return 0;var t=fold(s),n=0,m;rx.lastIndex=0;while((m=rx.exec(t))){n++;nextAt(rx,m);}return n;}
 function firstAt(rx,s){if(!rx)return -1;rx.lastIndex=0;var m=rx.exec(fold(s));return m?m.index+m[1].length:-1;}
 
 /* URL */
@@ -551,10 +555,17 @@ function analyze(inp){
     }
   }
 
-  /* Mobilde kesilme riski: yalnız bilgi notu, durum ve puan değişmez */
+  /* Mobilde kesilme riski: yalnız bilgi notu, durum ve puan değişmez; not seçili önizleme cihazına göre */
+  var mob=inp.dev==="m";
+  function mnote(p,dl,ml){
+    if(!p)return "";
+    var lim=" (≈ "+f(p)+" px; telefonda sınır ≈ "+f(ml)+" px)";
+    if(!mob)return p>ml?" Not: mobilde kısalabilir"+lim+".":"";
+    return p>ml?" Not: mobil önizlemede kesilir"+lim+".":p>dl?" Not: telefonda sığar"+lim+"; masaüstünde kesilebilir.":"";
+  }
   checks.forEach(function(c){
-    if(tpx>T_PX_M&&/^Başlık (uzunluğu|kısa|uzun|piksel)/.test(c.t))c.d+=" Not: mobilde kısalabilir (≈ "+f(tpx)+" px; telefonda sınır ≈ "+f(T_PX_M)+" px).";
-    if(mpx>M_PX_M&&/^Meta açıklama (uzunluğu|kısa|uzun|piksel)/.test(c.t))c.d+=" Not: mobilde kısalabilir (≈ "+f(mpx)+" px; telefonda sınır ≈ "+f(M_PX_M)+" px).";
+    if(/^Başlık (uzunluğu|kısa|uzun|piksel)/.test(c.t))c.d+=mnote(tpx,T_PX,T_PX_M);
+    if(/^Meta açıklama (uzunluğu|kısa|uzun|piksel)/.test(c.t))c.d+=mnote(mpx,M_PX,M_PX_M);
   });
   var raw=total?Math.round(earned/total*100):0;
   var cap=100,cm="";
@@ -570,7 +581,7 @@ function analyze(inp){
     url:pu,hasUrl:!!url,sugg:sugg,words:w,h2:b.h2.length,avg:b.avg,sents:b.sents,dens:dens,occ:occ,lo:lo,hi:hi,read:rd,links:b.links,
     mins:Math.max(1,Math.round(w/200))};
 }
-if(typeof module!=="undefined"&&module.exports)module.exports={analyze:analyze,slugify:slugify,parseBody:parseBody,kwRx:kwRx,fold:fold,parseUrl:parseUrl,splitSents:splitSents,readability:readability};
+if(typeof module!=="undefined"&&module.exports)module.exports={analyze:analyze,slugify:slugify,parseBody:parseBody,kwRx:kwRx,fold:fold,parseUrl:parseUrl,splitSents:splitSents,readability:readability,count:count,bolded:bolded};
 
 if(typeof document==="undefined"||!document.getElementById("seo-body"))return;
 function $(id){return document.getElementById(id);}
@@ -625,7 +636,7 @@ function bolded(el,text,kw){
     if(st<i){continue;}
     el.appendChild(document.createTextNode(text.slice(i,st)));
     var bb=document.createElement("b");bb.textContent=text.slice(st,en);el.appendChild(bb);
-    i=en;if(rx.lastIndex<en)rx.lastIndex=en;
+    i=en;nextAt(rx,m);
   }
   el.appendChild(document.createTextNode(text.slice(i)));
 }
@@ -661,7 +672,7 @@ function printFill(r){
 
 var STATS=["s-words","s-title","s-meta","s-occ","s-h2","s-sent","s-read","s-links","s-time"];
 function update(){
-  var r=analyze({kw:val("kw"),title:val("title"),meta:val("meta"),url:val("url"),body:val("body"),measure:measure});lastR=r;
+  var r=analyze({kw:val("kw"),title:val("title"),meta:val("meta"),url:val("url"),body:val("body"),measure:measure,dev:dev});lastR=r;
   var D=DEV[dev],ring=$("seo-ring"),emp=$("seo-empty");
   cnt("seo-title-cnt",r.tl,r.tpx,T_MIN,T_MAX,70,25,T_PX,D.t);
   cnt("seo-meta-cnt",r.ml,r.mpx,M_MIN,M_MAX,180,70,M_PX,D.m);
