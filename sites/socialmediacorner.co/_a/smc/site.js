@@ -215,8 +215,8 @@
   });
 })();
 
-/* İletişim formu: ?konu=… (ör. Fiyatlar'daki "Satın al") Konu alanını doldurur. Yalnız düz metin: denetim karakterleri
-   atılır, uzunluk alanın maxlength'iyle (en çok 150) sınırlanır, değer .value ile yazılır (HTML olarak hiç yorumlanmaz). */
+/* İletişim formu: ?konu=… (ör. Fiyatlar'daki "Satın al") Konu alanını doldurur. Yalnız düz metin: denetim ve yön (bidi)
+   karakterleri atılır, uzunluk alanın maxlength'iyle (en çok 150) sınırlanır, değer .value ile yazılır (HTML olarak hiç yorumlanmaz). */
 (function () {
   var f = document.querySelector('form[data-sk-form]');
   if (!f) return;
@@ -225,7 +225,7 @@
   var k = null;
   try { k = new URLSearchParams(window.location.search).get('konu'); } catch (e) { return; }
   if (!k) return;
-  k = k.replace(/[\u0000-\u001F\u007F-\u009F\u2028\u2029]/g, ' ').replace(/\s+/g, ' ').trim();
+  k = k.replace(/[\u0000-\u001F\u007F-\u009F\u2028\u2029]/g, ' ').replace(/[\u200E\u200F\u202A-\u202E\u2066-\u2069]/g, '').replace(/\s+/g, ' ').trim();
   var max = parseInt(inp.getAttribute('maxlength'), 10);
   k = k.slice(0, Math.min(max > 0 ? max : 150, 150)).trim();
   if (k) inp.value = k;
