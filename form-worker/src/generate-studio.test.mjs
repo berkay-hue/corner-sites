@@ -15,7 +15,7 @@ registerHooks({
 });
 
 const { generate, draftBody } = await import("./generate.js");
-const { SPECS, videoSpec, parse } = await import("./llm.js");
+const { SPECS, videoSpec, parse, qOk } = await import("./llm.js");
 const { SYSTEM_GEN, SYSTEM_BLOG, SYSTEM_VIDEO, SCHEMA_BLOG, SCHEMA_VIDEO, ANGLES, withStyle } = await import("./gen-prompt.js");
 
 const SQL_0014 = `
@@ -233,7 +233,8 @@ test("/gen/video video: sahne sayısı/secs/toplam denetimi, istek şeması ve m
   const s = setup({ llm: () => ok([videoDraft({ scenes: scenes(6, 5, { text: "  Kanca  ", sub: " alt " }) })]) });
   const r = await s.video({ style: "Ses örneği" });
   assert.equal(r.status, 200);
-  assert.deepEqual(r.body.drafts, [videoDraft({ scenes: scenes(6, 5, { text: "Kanca", sub: "alt" }) })]);
+  // 27.11 E5: q verilmediyse sahne ve taslak q'su "" (taslak reddedilmez)
+  assert.deepEqual(r.body.drafts, [videoDraft({ scenes: scenes(6, 5, { text: "Kanca", sub: "alt", q: "" }), q: "" })]);
   assert.deepEqual([r.body.charged, r.body.left], [true, 2]);
   const b = s.calls.llm[0];
   assert.equal(b.system, withStyle(SYSTEM_VIDEO, "x"));
@@ -326,4 +327,25 @@ test("draftBody: blog başlık + Markdown, video sahne satırları + açıklama;
   assert.equal(b.slice(b.indexOf("\n\n") + 2), "Paragraf 1\n\nParagraf 2");
   assert.equal(draftBody({ angle: "hikaye", text: "Metin" }), "Metin");
   assert.equal(draftBody({ angle: "soru", text: "Kanca", say: "Söz" }), "Kanca\n\nSöz");
+});
+
+test("E5 (27.11) q: sahne ve taslak stok sorgusu şemada zorunlu; qOk geçerli İngilizceyi tekleştirip geçirir, Türkçe/uzun/7 kelime → \"\"", async () => {
+  const sc = SCHEMA_VIDEO.properties.drafts.items;
+  assert.deepEqual(sc.properties.q, { type: "string" });
+  assert.ok(sc.required.includes("q"));
+  assert.deepEqual(sc.properties.scenes.items.properties.q, { type: "string" });
+  assert.ok(sc.properties.scenes.items.required.includes("q"));
+  assert.ok(SYSTEM_VIDEO.includes("q her zaman İngilizcedir"));
+  const qs = ["  hands   typing on\tlaptop ", "kahve dökülüyor", "a".repeat(61), "one two three four five six seven", "barista pouring coffee", 5];
+  const s = setup({ llm: () => ok([videoDraft({ q: "office desk, laptop", scenes: scenes(6, 5).map((x, i) => ({ ...x, q: qs[i] })) })]) });
+  const r = await s.video({});
+  assert.equal(r.status, 200);
+  const d = r.body.drafts[0];
+  assert.equal(d.q, "office desk, laptop");
+  assert.deepEqual(d.scenes.map(x => x.q), ["hands typing on laptop", "", "", "", "barista pouring coffee", ""]);
+  assert.equal(qOk("ab"), "ab");
+  assert.equal(qOk("a"), "");
+  assert.equal(qOk("a".repeat(60)), "a".repeat(60));
+  assert.equal(qOk("rock & roll - it's live"), "rock & roll - it's live");
+  for (const bad of ["çay bardağı", "hands \"typing\"", "#office", "desk.", null, undefined, {}, "one two three four five six seven"]) assert.equal(qOk(bad), "", String(bad));
 });

@@ -15,13 +15,19 @@
 // stock true olan planda (pro/enterprise) sınırsız, stock_trial 0. Sitedeki karşılığı SMC_PLANS.<plan>.pexels_deneme.
 // ekip_hazirlar (26.11, yalnız enterprise): false = Enterprise'da da içeriği kullanıcı hazırlar, ekip üretmez; sitedeki
 // SMC_PLANS.enterprise.ekip_hazirlar ile aynı (plans.test.mjs). Bilgi alanı: planLimits'e girmez, zorlama yok.
+// seslendirme (27.11): ayda seslendirilebilen video sayısı (1 hak = BİR videonun tüm sahneleri; "Dinle" örneği hak harcamaz).
+// demo 0 (deneme boyunca), basic 1, pro 6; enterprise users.plan_limits.seslendirme (0 geçerli), yoksa/geçersizse pro sayısı.
+// Ay dönümünde (Europe/Istanbul, genDay ayı) sıfırlanır; sayaç gen_usage day "ses:YYYY-MM" key "u:<id>" kind 'ss' (generate.js ttsRoute).
+// SES_EK: ek paket (+6 hak, 299 TL / $7, KDV dahil); ödeme akışı yok, hak elle verilir (gen_usage day "ses_ek" kind 'se' bakiye).
+// Sitedeki karşılığı SMC_PLANS.<plan>.seslendirme ve SMC_PLANS.seslendirme_ek (plans.test.mjs).
 export const TRIAL_DAYS = 14;
 export const PLANS = Object.freeze({
-  demo: Object.freeze({ linkedin_blog: 4, video_gorsel: 1, stock: false, stock_trial: 1, cms_sites: 0, cms_per_week: 0 }),
-  basic: Object.freeze({ linkedin_blog: 8, video_gorsel: 2, stock: false, stock_trial: 1, cms_sites: 0, cms_per_week: 0 }),
-  pro: Object.freeze({ linkedin_blog: 40, video_gorsel: 12, stock: true, stock_trial: 0, cms_sites: 1, cms_per_week: 3 }),
-  enterprise: Object.freeze({ linkedin_blog: null, video_gorsel: null, stock: true, stock_trial: 0, cms_sites: null, cms_per_week: 7, ekip_hazirlar: false }),
+  demo: Object.freeze({ linkedin_blog: 4, video_gorsel: 1, stock: false, stock_trial: 1, cms_sites: 0, cms_per_week: 0, seslendirme: 0 }),
+  basic: Object.freeze({ linkedin_blog: 8, video_gorsel: 2, stock: false, stock_trial: 1, cms_sites: 0, cms_per_week: 0, seslendirme: 1 }),
+  pro: Object.freeze({ linkedin_blog: 40, video_gorsel: 12, stock: true, stock_trial: 0, cms_sites: 1, cms_per_week: 3, seslendirme: 6 }),
+  enterprise: Object.freeze({ linkedin_blog: null, video_gorsel: null, stock: true, stock_trial: 0, cms_sites: null, cms_per_week: 7, seslendirme: null, ekip_hazirlar: false }),
 });
+export const SES_EK = Object.freeze({ adet: 6, tl: 299, usd: 7 });
 
 // Yayın kuyruğu (src/publish.js, app.socialmediacorner.co) yalnız bu planlarda; fiyat sayfası ve assets/plans.js kuyruk
 // alanı ile aynı (demo/basic false). planOf null ise (0018 yok) kapalı.
@@ -39,6 +45,8 @@ export function planOf(user) {
 }
 
 const pos = v => Number.isSafeInteger(v) && v > 0 ? v : null;
+// 0 dahil (enterprise seslendirme: 0 = kapalı geçerli bir sözleşme değeri); en çok 1000
+const nonneg = v => Number.isSafeInteger(v) && v >= 0 && v <= 1000 ? v : null;
 
 export const ENTERPRISE_CMS_SITES = 1;
 export const CMS_FREQS = Object.freeze([1, 2, 3, 7]);
@@ -67,7 +75,7 @@ export function trialMonth(user) {
   return t === null ? null : new Date(t + 3 * 3600e3).toISOString().slice(0, 7);
 }
 
-// {plan, linkedin_blog, video_gorsel, stock, stock_trial, cms_sites, cms_per_week}; plan null ise null. demo'da ayrıca trial_ends_at, trial_ended.
+// {plan, linkedin_blog, video_gorsel, stock, stock_trial, cms_sites, cms_per_week, seslendirme}; plan null ise null. demo'da ayrıca trial_ends_at, trial_ended.
 export function planLimits(user, now = Date.now()) {
   const plan = planOf(user);
   if (!plan) return null;
@@ -83,5 +91,6 @@ export function planLimits(user, now = Date.now()) {
     stock_trial: 0,
     cms_sites: pos(j?.cms_sites) ?? ENTERPRISE_CMS_SITES,
     cms_per_week: CMS_FREQS.includes(j?.cms_per_week) ? j.cms_per_week : ENTERPRISE_CMS_PER_WEEK,
+    seslendirme: nonneg(j?.seslendirme) ?? PLANS.pro.seslendirme,
   };
 }

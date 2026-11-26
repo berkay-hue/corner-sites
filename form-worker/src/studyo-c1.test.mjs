@@ -39,7 +39,8 @@ test('C1·7 oran: formda #oran-secim (TR + en/), kurgu oranSec ile tasarım pane
   assert.match(KURGU, /function oranSec\(a\)/);
   assert.match(KURGU, /oranSec\(a\);S\.durum/);
   assert.match(KURGU, /kr-kirp-not/);
-  assert.match(CSS, /\.kr-cerceve\[data-aspect="16:9"\]\{width:100%\}/);
+  assert.match(CSS, /\.kr-cerceve\[data-aspect="16:9"\]\{width:100%;[^}]*calc\(\(100dvh - var\(--kr-pay\)\) \* 16 \/ 9\)\)\}/);
+  assert.match(CSS, /\.kr-cerceve\{--kr-oran:\.5625;--kr-pay:330px;/);
   assert.match(CSS, /\.st-izgara:has\(#studyo-medya\)/);
 });
 

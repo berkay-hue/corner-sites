@@ -295,3 +295,40 @@ test("hesap/admin.html ve smc-admin.js: noindex, kabuk, Bulunamadı ekranı; ver
   assert.match(kabuk, /SAYFA==='admin'\)\{if\(ORNEK\|\|!KULLANICI\|\|KULLANICI\.admin!==true/);
   for (const s of [kabuk, ust]) assert.match(s, /\.admin===true&&m&&!\$\('#hesap-admin'\)/);
 });
+
+test("27.11 seslendirme: enterprise limits.seslendirme 0..100 tam sayı (isteğe bağlı); dışı 400 bad_limits; limits JSON'una yazılır", async () => {
+  const { db, call } = setup();
+  const post = body => call("POST", "/app/admin/2/plan", { token: tok("A"), body });
+  const L = ses => ({ linkedin_blog: 5, video_gorsel: 5, seslendirme: ses });
+  for (const ses of [-1, 101, "3", 1.5, null, true])
+    assert.deepEqual(fail(await post({ plan: "enterprise", limits: L(ses) })), [400, "bad_limits"], JSON.stringify(ses));
+  assert.equal(db.prepare("SELECT plan FROM users WHERE id = 2").get().plan, "basic");
+  for (const ses of [0, 10, 100]) {
+    const r = await post({ plan: "enterprise", limits: L(ses) });
+    assert.equal(r.status, 200, JSON.stringify(r.body));
+    assert.deepEqual(r.body.plan_limits, L(ses));
+    assert.equal(r.body.limits.seslendirme, ses);
+    assert.deepEqual(JSON.parse(db.prepare("SELECT plan_limits FROM users WHERE id = 2").get().plan_limits), L(ses));
+  }
+  // verilmezse JSON'da alan yok; plans.js varsayılanı (Pro'nun 6'sı)
+  const r = await post({ plan: "enterprise", limits: { linkedin_blog: 5, video_gorsel: 5 } });
+  assert.deepEqual([r.status, r.body.plan_limits, r.body.limits.seslendirme], [200, { linkedin_blog: 5, video_gorsel: 5 }, 6]);
+  assert.deepEqual(fail(await post({ plan: "pro", limits: { seslendirme: 3 } })), [400, "bad_limits"]);
+});
+
+test("27.11 deleteAccount: kullanıcının ses:YYYY-MM ve ses_ek satırları silinir; başkasının ve günlük sayaçlar kalır", async () => {
+  const { pbkdf2Sync } = await import("node:crypto");
+  const db = freshDb();
+  db.exec("CREATE TABLE IF NOT EXISTS gen_usage (day TEXT NOT NULL, key TEXT NOT NULL, kind TEXT NOT NULL, n INTEGER NOT NULL DEFAULT 0, PRIMARY KEY (day, key)) WITHOUT ROWID");
+  const salt = Buffer.alloc(16, 7), pw = "parola-12345";
+  db.prepare("UPDATE users SET pass = ? WHERE id = 2").run(`pbkdf2$10000$${salt.toString("base64url")}$${pbkdf2Sync(pw, salt, 10000, 32, "sha256").toString("base64url")}`);
+  const ins = db.prepare("INSERT INTO gen_usage (day, key, kind, n) VALUES (?, ?, ?, ?)");
+  for (const [d, k, kind, n] of [[`ses:${MONTH}`, "u:2", "ss", 2], ["ses:2026-10", "u:2", "ss", 6], ["ses_ek", "u:2", "se", 4],
+    [`ses:${MONTH}`, "u:3", "ss", 1], ["ses_ek", "u:3", "se", 6], ["ses_ek", "u:22", "se", 5], [TODAY, "u:2", "u", 3]]) ins.run(d, k, kind, n);
+  const { call } = setup(db);
+  const r = await call("POST", "/app/account/delete", { token: tok("M"), body: { password: pw } });
+  assert.equal(r.status, 200, JSON.stringify(r.body));
+  const rows = db.prepare("SELECT day, key FROM gen_usage").all().map(x => `${x.day}|${x.key}`).sort();
+  assert.deepEqual(rows, [`${TODAY}|u:2`, `ses:${MONTH}|u:3`, "ses_ek|u:3", "ses_ek|u:22"].sort());
+  assert.equal(db.prepare("SELECT COUNT(*) AS n FROM users WHERE id = 2").get().n, 0);
+});
