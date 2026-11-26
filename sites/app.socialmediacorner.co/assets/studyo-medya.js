@@ -3,7 +3,9 @@
    S3b sözleşmesi: her yeni taslakta #studyo-medya üzerinde iptal edilebilir 'studyo:taslak' olayı (bubbles) atılır:
      detail = {kind, mod, draft:{angle,title,scenes:[{text,sub,secs}],caption}, body:{…istek}, lang:'tr'|'en', marka:{name}}
    Dinleyici e.preventDefault() derse yedek sahne listesi çizilmez; dinleyici yoksa ya da iptal etmezse
-   #sb-yer içine sade bir sahne listesi + açıklama çizilir. Son taslak Studyo.medya.taslak'ta durur. */
+   #sb-yer içine sade bir sahne listesi + açıklama çizilir. Son taslak Studyo.medya.taslak'ta durur.
+   C1: detail.geri=true → kabuk son taslağı geri yüklüyor (goster(r,q,{geri:true})); ardından cfg.sonVer(media) kayıtlı
+   kurguyu (studyo-kurgu.js S.medya.sonVer) uygular. cfg.sonAl() kaydedilecek medyayı verir. Taslak no: Studyo.medya.taslakId. */
 (function(){'use strict';
 var S=window.Studyo;if(!S)return;
 var T=S.T,$=S.$,el=S.el,d=document,EN=S.dil()==='en';
@@ -25,7 +27,7 @@ function yedekCiz(t){
   var oz=el('p','sb-ozet');
   oz.appendChild(el('span',null,KIND==='video'?T(t.scenes.length+' sahne',t.scenes.length+(t.scenes.length===1?' scene':' scenes')):T(t.scenes.length+' kart',t.scenes.length+(t.scenes.length===1?' card':' cards'))));
   if(KIND==='video'&&toplam)oz.appendChild(el('span',null,T('toplam ~'+toplam+' sn','~'+toplam+' s total')));
-  oz.appendChild(el('span',null,KIND==='video'?'9:16':'4:5'));
+  oz.appendChild(el('span',null,yedekOran()));
   y.appendChild(oz);
   if(t.title){var h=el('h3','sb-baslik',t.title);y.appendChild(h)}
   var ol=el('ol','sb-sahneler');ol.setAttribute('aria-label',KIND==='video'?T('Sahneler','Scenes'):T('Kartlar','Cards'));
@@ -46,6 +48,11 @@ function yedekCiz(t){
   }
 }
 
+/* yedek görünümde oran: kurgunun tercihi (smc-kurgu-<mod>), yoksa türün varsayılanı */
+function yedekOran(){
+  var a='';try{var x=JSON.parse(S.depo('smc-kurgu-'+MOD)||'{}');a=x&&typeof x.aspect==='string'?x.aspect:''}catch(e){}
+  return ['9:16','1:1','4:5','16:9'].indexOf(a)>=0?a:(KIND==='video'?'9:16':'4:5');
+}
 function kopya(metin,okM){
   if(!metin)return;
   S.kopyala(metin,function(){not(okM,'ok');S.toast(okM);S.olay('copy_ok')},function(){not(T('Kopyalanamadı; metni seçip elle kopyala.','Couldn’t copy; select the text and copy it by hand.'),'hata');S.olay('copy_fb')});
@@ -65,16 +72,20 @@ S.kaydet({
     ?[[0,'Konunu okuyoruz…','Reading your topic…'],[5,'Kart sırası planlanıyor…','Planning the card order…'],[14,'Kart metinleri yazılıyor…','Writing the card text…'],[30,'Açıklama yazılıyor…','Writing the caption…'],[55,'Biraz uzun sürdü; hâlâ yazıyoruz…','Taking a bit longer; still writing…']]
     :[[0,'Konunu okuyoruz…','Reading your topic…'],[5,'Açılış kancası seçiliyor…','Picking the opening hook…'],[14,'Sahneler ve süreleri yazılıyor…','Writing the scenes and timings…'],[30,'Açıklama yazılıyor…','Writing the caption…'],[55,'Biraz uzun sürdü; hâlâ yazıyoruz…','Taking a bit longer; still writing…']],
   govde:function(q){q.kind=KIND;delete q.goal},
-  goster:function(r,q){
+  goster:function(r,q,o){
     var t=temizle(r.drafts[0]||{});api.taslak=t;api.govde=q;not('');
+    api.taslakId=(r&&Array.isArray(r.draft_ids)&&r.draft_ids[0])||null;
     var ad=(window.SMCSes&&SMCSes.oku&&(SMCSes.oku()||{}).name)||'';
-    var ev;try{ev=new CustomEvent('studyo:taslak',{bubbles:true,cancelable:true,detail:{kind:KIND,mod:MOD,draft:t,body:q,lang:S.dil(),marka:{name:ad}}})}catch(e){ev=null}
+    var ev;try{ev=new CustomEvent('studyo:taslak',{bubbles:true,cancelable:true,detail:{kind:KIND,mod:MOD,draft:t,body:q,lang:S.dil(),marka:{name:ad},geri:!!(o&&o.geri)}})}catch(e){ev=null}
     var devraldi=false;if(ev&&kok)devraldi=!kok.dispatchEvent(ev);
     var y=$('#sb-yer');
     if(devraldi){if(y){y.textContent='';y.hidden=true}}else yedekCiz(t);
   },
   /* tek taslak (draft_ids[0]); Planla kuyrukta açıklamayı Instagram metni yapar (studyo-kuyruk.js taslakOn) */
   taslakId:function(ids){return ids[0]},
+  /* C1·3: kabuk (B) son taslağı kaydederken/geri yüklerken; kurgu yoksa no-op */
+  sonAl:function(){return typeof api.sonAl==='function'?api.sonAl():null},
+  sonVer:function(m){if(typeof api.sonVer==='function')api.sonVer(m)},
   basla:kur
 });
 })();

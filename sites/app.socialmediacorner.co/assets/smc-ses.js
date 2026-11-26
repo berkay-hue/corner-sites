@@ -73,6 +73,134 @@ function voice(){
 var API={oku:oku,yaz:yaz,sil:sil,voice:voice,dogrula:dogrula,MAX:MAX,DEPO_MSJ:DEPO_MSJ,depoKapali:function(){return depoYok}};
 window.SMCSes=API;
 
+/* ---- PLAN madde 1 · etkin ses: hesap (GET /app/voice) | yerel (smc-ses-v1) | hazır (smc-ses-hazir.js) | yok ----
+   Seçim localStorage['smc-ses-secim'] = {tur, id}; bütün stüdyo sayfaları aynı seçimi okur. Seçilen ses #stil kutusuna
+   yazılmaz (elle yazılan ezilmesin); kabuk istekKur() gövdeyi kurarken SMCSes.stilAl() çıktısını style'a ekler.
+   Hesap sesi: girişliyse bir kez GET; 401/404/503/ağ hatasında seçenek gizli kalır, kullanıcıya hata gösterilmez. */
+var EN=d.documentElement.lang==='en',SECIM_KEY='smc-ses-secim',STIL_MAX=3000,TURLER=['hesap','yerel','hazir','yok'],
+    /* fw/cms.js SECTOR_MAP istemci kopyası: brand_voice.sector → stüdyo sektör çipi; listede olmayan dolu değer Genel */
+    SEKTOR_ESLE={ecom:'E-ticaret',tech:'Yazılım',services:'Danışmanlık',agency:'Danışmanlık',fin:'Danışmanlık',edu:'Eğitim',health:'Sağlık',estate:'Gayrimenkul',industry:'Üretim'},
+    SEKTOR_TERS={'E-ticaret':'ecom','Yazılım':'tech','Danışmanlık':'services','Eğitim':'edu','Sağlık':'health','Gayrimenkul':'estate','Üretim':'industry'},
+    /* onboarding tonu (fw/platform.js VOICE_TONES) → stüdyo ton çipi */
+    TON_ESLE={samimi:'samimi',kurumsal:'profesyonel',net:'profesyonel',veri:'profesyonel',ogretici:'ogretici',esprili:'cesur',ilham:'cesur'},
+    TON_AD={samimi:['samimi','friendly'],kurumsal:['kurumsal','corporate'],esprili:['esprili','witty'],ogretici:['öğretici','educational'],ilham:['ilham verici','inspiring'],net:['net ve kısa','clear and brief'],veri:['veri odaklı','data-driven']},
+    /* yerel profil sıfatı → stüdyo ton çipi (ilk sıfat) ve → sunucu tonu (PUT) */
+    SIFAT_TON={sicak:'samimi',esprili:'cesur',yalin:'profesyonel',sakin:'profesyonel',enerjik:'cesur',uzman:'ogretici',oyuncu:'cesur',zarif:'profesyonel',dogrudan:'profesyonel',guven_veren:'profesyonel',merakli:'ogretici',mutevazi:'samimi'},
+    SIFAT_SUNUCU={sicak:'samimi',esprili:'esprili',yalin:'net',sakin:'kurumsal',enerjik:'ilham',uzman:'ogretici',oyuncu:'esprili',zarif:'kurumsal',dogrudan:'net',guven_veren:'kurumsal',merakli:'ogretici',mutevazi:'samimi'},
+    SIFAT_AD={sicak:['sıcak','warm'],esprili:['esprili','witty'],yalin:['yalın','plain'],sakin:['sakin','calm'],enerjik:['enerjik','energetic'],uzman:['uzman','expert'],oyuncu:['oyuncu','playful'],zarif:['zarif','elegant'],dogrudan:['doğrudan','direct'],guven_veren:['güven veren','reassuring'],merakli:['meraklı','curious'],mutevazi:['mütevazı','modest']},
+    /* fw/platform.js VOICE_MAX ve listeleri (validateVoice) */
+    V_SEKTOR=['','agency','ecom','edu','estate','fin','food','health','industry','other','services','tech','travel'],
+    V_TON=['samimi','kurumsal','esprili','ogretici','ilham','net','veri'],VMAX={tones:3,samples:3,sample:2200,banned:30,word:40};
+var hesap={durum:'bilinmez',voice:null},secimBellek=null;/* durum: bilinmez | acik (GET 200) | kapali */
+function T(tr,en){return EN?en:tr}
+function hazirlar(){var h=window.SMCSesHazir;return Array.isArray(h)?h:[]}
+function hazirBul(id){return hazirlar().filter(function(x){return x&&x.id===id})[0]||null}
+function dil(o){return o&&typeof o==='object'?(EN?o.en:o.tr):o}
+function secimOku(){
+  var s=secimBellek;try{var v=localStorage.getItem(SECIM_KEY);if(v)s=JSON.parse(v)}catch(e){}
+  if(!s||typeof s!=='object'||TURLER.indexOf(s.tur)<0)return null;
+  return {tur:s.tur,id:s.tur==='hazir'&&typeof s.id==='string'?s.id:null};
+}
+function secimYaz(s){secimBellek={tur:s.tur,id:s.id||null};try{localStorage.setItem(SECIM_KEY,JSON.stringify(secimBellek))}catch(e){}}
+function yerelVar(){var p=oku();return !!(p&&(dolu(p)||p.sector))}
+function hesapDolu(v){return !!(v&&(v.sector||v.tones.length||v.samples.length||v.banned.length))}
+/* sunucu yanıtı güvenilmez veri: yalnız beklenen şekil alınır */
+function sesTemiz(v){
+  if(!v||typeof v!=='object')return null;
+  function liste(a,n,m){return (Array.isArray(a)?a:[]).filter(function(x){return typeof x==='string'&&x.trim()}).map(function(x){return temiz(x).slice(0,m)}).filter(Boolean).slice(0,n)}
+  return {sector:typeof v.sector==='string'&&V_SEKTOR.indexOf(v.sector)>=0?v.sector:'',
+    tones:liste(v.tones,VMAX.tones,20).filter(function(x){return V_TON.indexOf(x)>=0}),
+    samples:liste(v.samples,VMAX.samples,VMAX.sample),banned:liste(v.banned,VMAX.banned,VMAX.word)};
+}
+/* kayıtlı seçim kullanılamıyorsa (hesap yüklenmedi, profil silindi, hazır ses kalktı) kayıt korunur, yedek seçilir */
+function etkin(){
+  var s=secimOku();
+  if(s){
+    if(s.tur==='yok')return {tur:'yok',id:null};
+    if(s.tur==='hazir'&&hazirBul(s.id))return s;
+    if(s.tur==='yerel'&&yerelVar())return s;
+    if(s.tur==='hesap'&&hesapDolu(hesap.voice))return s;
+  }
+  if(yerelVar())return {tur:'yerel',id:null};
+  if(hesapDolu(hesap.voice))return {tur:'hesap',id:null};
+  return {tur:'yok',id:null};
+}
+/* etkin sesin ortak biçimi: {ad, sector (çip değeri), tone (çip değeri), satirlar[], ornekler[], yasak[]} */
+function kaynak(e){
+  e=e||etkin();var k={ad:'',sector:'',tone:'',satirlar:[],ornekler:[],yasak:[]};
+  if(e.tur==='hazir'){var h=hazirBul(e.id);if(!h)return null;
+    k.ad=dil(h.ad)||'';k.sector=h.sector||'';k.tone=h.tone||'';var oz=dil(h.ozet);if(oz)k.satirlar.push(T('Ses: ','Voice: ')+oz);
+    var o=dil(h.ornek);if(o)k.ornekler.push(o);k.yasak=(dil(h.yasak)||[]).slice();return k}
+  if(e.tur==='hesap'){var v=hesap.voice;if(!hesapDolu(v))return null;
+    k.ad=T('Hesabımdaki marka sesi','My account’s brand voice');
+    k.sector=v.sector?(SEKTOR_ESLE[v.sector]||'Genel'):'';k.tone=v.tones.length?(TON_ESLE[v.tones[0]]||''):'';
+    if(v.tones.length)k.satirlar.push(T('Ses: ','Voice: ')+v.tones.map(function(t){var a=TON_AD[t];return a?a[EN?1:0]:t}).join(', '));
+    k.ornekler=v.samples.slice();k.yasak=v.banned.slice();return k}
+  if(e.tur==='yerel'){var p=oku();if(!p)return null;
+    k.ad=p.name||T('Bu tarayıcıdaki profil','This browser’s profile');k.sector=p.sector||'';k.tone=p.adjectives.length?(SIFAT_TON[p.adjectives[0]]||''):'';
+    if(p.audience)k.satirlar.push(T('Hedef kitle: ','Audience: ')+p.audience.replace(/\s*\n\s*/g,' '));
+    if(p.adjectives.length)k.satirlar.push(T('Ses: ','Voice: ')+p.adjectives.map(function(a){var x=SIFAT_AD[a];return x?x[EN?1:0]:a}).join(', '));
+    if(p.address)k.satirlar.push(T('Hitap: ','Address the reader as: ')+(p.address==='sen'?T('sen','informal you'):T('siz','formal you')));
+    if(p.emoji)k.satirlar.push(T('Emoji: ','Emoji: ')+(p.emoji==='none'?T('kullanma','none'):T('az','a few')));
+    if(p.sample)k.ornekler.push(p.sample);k.yasak=p.banned.slice();return k}
+  return null;
+}
+/* kelime sınırında kes; üç nokta sınıra dahil */
+function kes(s,n){if(s.length<=n)return s;if(n<2)return '';var k=s.slice(0,n-1),b=k.search(/\s\S*$/);if(b>n*0.6)k=k.slice(0,b);return k.replace(/\s+$/,'')+'…'}
+/* style metni: başlık satırları + "Kaçınılacak kelimeler" önce (kısalınca korunur), örnekler sonra; toplam ≤ max */
+function stilMetni(k,max){
+  var bas=k.satirlar.slice();if(k.yasak.length)bas.push(T('Kaçınılacak kelimeler: ','Words to avoid: ')+k.yasak.join(', '));
+  var b=kes(bas.join('\n'),max),kalan=max-b.length,parca=[];
+  k.ornekler.forEach(function(o){
+    var ayr=(b||parca.length)?2:0;if(kalan-ayr<40)return;
+    var x=kes(o,kalan-ayr);if(x){parca.push(x);kalan-=x.length+ayr}
+  });
+  return [b].concat(parca).filter(Boolean).join('\n\n');
+}
+/* {sector?, tone?, style} ya da null (Yok). max: kullanıcının #stil metninden kalan yer */
+function stilAl(max){
+  max=typeof max==="number"?Math.max(0,Math.min(max,STIL_MAX)):STIL_MAX;
+  var k;try{k=kaynak(etkin())}catch(e){k=null}if(!k)return null;
+  var o={style:stilMetni(k,max)};if(k.sector)o.sector=k.sector;if(k.tone)o.tone=k.tone;return o;
+}
+function apiTaban(){var m=d.querySelector('meta[name="api-base"]');return ((m&&m.getAttribute('content'))||'').trim().replace(/\/+$/,'')}
+/* studyo-kabuk.js oturumJeton ile aynı okuma (kabuk dışa açmıyor; bu betik kabuktan önce yüklenir) */
+function jeton(){var ds=[];try{ds.push(window.sessionStorage)}catch(e){}try{ds.push(window.localStorage)}catch(e){}
+  for(var i=0;i<ds.length;i++){var v=null;try{v=ds[i]&&ds[i].getItem('smc-oturum')}catch(e){v=null}if(!v)continue;var t=v;
+    if(v.charAt(0)==='{'){try{t=JSON.parse(v).token}catch(e){t=null}}if(typeof t==='string'&&/^[A-Za-z0-9_-]{43}$/.test(t))return t}
+  return null}
+function sesIstek(yontem,govde){
+  var api=apiTaban(),tk=jeton();if(!api||!tk||typeof fetch!=='function')return Promise.resolve({s:0,j:null});
+  var o={method:yontem,headers:{'Accept':'application/json',authorization:'Bearer '+tk},credentials:'omit',cache:'no-store',mode:'cors'},z=null;
+  if(govde){o.headers['Content-Type']='application/json';o.body=JSON.stringify(govde)}
+  if(typeof AbortController==='function'){var ac=new AbortController();o.signal=ac.signal;z=setTimeout(function(){ac.abort()},10000)}
+  return fetch(api+'/app/voice',o).then(function(r){return r.text().then(function(x){var j=null;try{j=x?JSON.parse(x):null}catch(e){j=null}return {s:r.status,j:j}})})
+    .catch(function(){return {s:0,j:null}}).then(function(r){if(z)clearTimeout(z);return r});
+}
+function hesapYukle(){
+  return sesIstek('GET').then(function(r){
+    if(r.s===200&&r.j&&typeof r.j==='object'){hesap.durum='acik';hesap.voice=sesTemiz('voice' in r.j?r.j.voice:r.j)}
+    else{hesap.durum='kapali';hesap.voice=null}
+    return hesap.voice;
+  });
+}
+/* dialog kaydı → hesap sesi: yalnız GET 200 verdiyse (girişli + uç canlı). Boş yerel alan sunucudakini korur; hata sessiz. */
+function hesabaYaz(p){
+  if(hesap.durum!=='acik'||!p)return Promise.resolve(false);
+  var v=hesap.voice||{sector:'',tones:[],samples:[],banned:[]},g={};
+  var sv=SEKTOR_TERS[p.sector];
+  g.sector=sv?(SEKTOR_ESLE[v.sector]===p.sector?v.sector:sv):(p.sector==='Genel'?(v.sector&&SEKTOR_ESLE[v.sector]?'other':v.sector):v.sector);
+  var tn=[];p.adjectives.forEach(function(a){var t=SIFAT_SUNUCU[a];if(t&&tn.indexOf(t)<0)tn.push(t)});g.tones=(tn.length?tn:v.tones).slice(0,VMAX.tones);
+  var or=[];if(p.sample)or.push(p.sample.slice(0,VMAX.sample));v.samples.forEach(function(x){if(or.indexOf(x)<0)or.push(x)});g.samples=or.slice(0,VMAX.samples);
+  var ys=[];p.banned.concat(v.banned).forEach(function(x){x=String(x).replace(/[|\n\r\u0085\u2028\u2029]/g,' ').trim().toLocaleLowerCase('tr');if(x&&x.length<=VMAX.word&&ys.indexOf(x)<0)ys.push(x)});g.banned=ys.slice(0,VMAX.banned);
+  return sesIstek('PUT',g).then(function(r){
+    if(r.s!==200)return false;
+    hesap.voice=sesTemiz(r.j&&typeof r.j==='object'&&r.j.voice?r.j.voice:g);return true;
+  });
+}
+API.stilAl=stilAl;API.etkin=etkin;API.kaynak=function(){return kaynak(etkin())};API.hazirlar=hazirlar;
+API.secim=secimOku;API.hesapDurum=function(){return hesap.durum};
+
 /* ---- arayüz: form satırı + G9 dialog ---- */
 function $(s,k){return (k||d).querySelector(s)}
 function $$(s,k){return Array.prototype.slice.call((k||d).querySelectorAll(s))}
@@ -189,7 +317,66 @@ function kur(){
   API.ac=sesAc;API.kapat=sesKapat;API.satirYaz=satirYaz;API.forma=forma;API.formdan=formdan;API.hataGoster=hataGoster;API.notYaz=function(m,t){notYaz(satirNot,m,t)};
   API.depoKapat=function(){zorla=true;depoYok=true};API.depoAc=function(){zorla=false;depoYok=false;bellek=null};
   API.sunucuHata=function(){notYaz(satirNot,'Marka sesi kabul edilmedi. Profili düzenleyip tekrar dene.','hata');ac.focus()};
-  satirYaz();sektorUygula(oku());
+  satirYaz();
+  /* stüdyo sayfaları (#ses-sec var): çipler seçimden gelir; IG/Reels: eski davranış, profil sektörü */
+  if(!secimKur())sektorUygula(oku());
+}
+/* ---- PLAN madde 1 · ses seçici (#ses-sec): Hesabımdaki marka sesi | Bu tarayıcıdaki profil | hazır sesler | Yok ---- */
+var secEl=null,secOzet=null,secSon='';
+function secAnahtar(e){return e.tur+':'+(e.id||'')}
+function secenek(deger,metin,sabit){var o=d.createElement('option');o.value=deger;o.textContent=metin;if(sabit)o.setAttribute('data-sabit','');return o}
+/* seçenekleri o anki duruma göre kurar: hesap yalnız GET 200 + dolu ses; yerel yalnız profil varsa */
+function secDoldur(){
+  if(!secEl)return;var e=etkin();while(secEl.firstChild)secEl.removeChild(secEl.firstChild);
+  if(hesapDolu(hesap.voice))secEl.appendChild(secenek('hesap:',T('Hesabımdaki marka sesi','My account’s brand voice')));
+  if(yerelVar()){var p=oku();secEl.appendChild(secenek('yerel:',T('Bu tarayıcıdaki profil','This browser’s profile')+(p&&p.name?' · '+p.name:''),true))}
+  var hz=hazirlar();if(hz.length){var g=d.createElement('optgroup');g.label=T('Hazır sesler','Preset voices');
+    hz.forEach(function(h){if(h&&h.id)g.appendChild(secenek('hazir:'+h.id,dil(h.ad)||h.id))});secEl.appendChild(g)}
+  secEl.appendChild(secenek('yok:',T('Yok','None')));
+  secEl.value=secAnahtar(e);if(secEl.value!==secAnahtar(e))secEl.value='yok:';
+}
+function cipEtiket(form,ad,deger){
+  var i=$$('input[name="'+ad+'"]',form).filter(function(x){return x.value===deger})[0];if(!i)return '';
+  var l=i.id?d.querySelector('label[for="'+i.id+'"]'):i.closest('label');return l?l.textContent.replace(/\s+/g,' ').trim():deger;
+}
+/* seçilen sesi sektör + ton çiplerine uygular (#stil'e dokunmaz); özet satırını yazar */
+function secUygula(){
+  var k=null;try{k=kaynak(etkin())}catch(e){k=null}var form=$('#form'),parca=[];
+  if(k&&form){
+    [['sector',k.sector],['tone',k.tone]].forEach(function(x){
+      if(!x[1])return;var hit=$$('input[name="'+x[0]+'"]',form).filter(function(i){return i.value===x[1]})[0];
+      if(hit&&!hit.checked){hit.checked=true;hit.dispatchEvent(new Event('change',{bubbles:true}))}
+    });
+    if(k.sector)parca.push(T('Sektör: ','Industry: ')+cipEtiket(form,'sector',k.sector));
+    if(k.tone)parca.push(T('Ton: ','Tone: ')+cipEtiket(form,'tone',k.tone));
+    if(k.ornekler.length||k.yasak.length||k.satirlar.length)parca.push(T('üslup isteğe eklenir','style is added to the request'));
+  }
+  if(secOzet){secOzet.setAttribute('data-sabit','');secOzet.textContent=parca.join(' · ')}
+  secSon=secAnahtar(etkin());
+}
+function secimKur(){
+  secEl=$('#ses-sec');if(!secEl)return false;secOzet=$('#ses-sec-ozet');
+  secEl.setAttribute('data-sabit','');/* smc-en.js sözlüğü seçenekleri çevirmesin; metin zaten sayfa dilinde */
+  secDoldur();secUygula();
+  secEl.addEventListener('change',function(){
+    var v=String(secEl.value||'yok:'),i=v.indexOf(':'),tur=v.slice(0,i),id=v.slice(i+1)||null;
+    if(TURLER.indexOf(tur)<0)return;secimYaz({tur:tur,id:tur==='hazir'?id:null});secUygula();
+  });
+  /* dialog kaydı → bu tarayıcıdaki profil seçilir; hesap sesi açıksa sunucuya da yazılır (sessiz) */
+  var f=$('#ses-form');
+  if(f)f.addEventListener('submit',function(){
+    setTimeout(function(){
+      var dl=$('#ses');if(dl&&(dl.open||dl.hasAttribute('open')))return;/* doğrulama hatası: dialog açık kalır, kayıt yok */
+      var p=oku();if(!p||!(dolu(p)||p.sector))return;
+      secimYaz({tur:'yerel',id:null});secDoldur();secUygula();
+      hesabaYaz(p).then(function(ok){if(ok)secDoldur()}).catch(function(){});
+    },0);
+  });
+  var evet=$('#ses-sil-evet');if(evet)evet.addEventListener('click',function(){setTimeout(function(){secDoldur();secUygula()},0)});
+  if(jeton())hesapYukle().then(function(){var once=secSon;secDoldur();if(secAnahtar(etkin())!==once)secUygula()}).catch(function(){});
+  /* geri/ileri (bfcache) dönüşünde seçim başka sekmede değişmiş olabilir: ekranı istekle aynı tut */
+  window.addEventListener('pageshow',function(e){if(e&&e.persisted){if(API.satirYaz)API.satirYaz();var once=secSon;secDoldur();if(secAnahtar(etkin())!==once)secUygula()}});
+  return true;
 }
 /* defer betikleri DOMContentLoaded'dan önce çalışır: smc-app.js'in change dinleyicisi kurulduktan sonra sektör uygulanır */
 if(d.readyState==='loading')d.addEventListener('DOMContentLoaded',kur);else kur();

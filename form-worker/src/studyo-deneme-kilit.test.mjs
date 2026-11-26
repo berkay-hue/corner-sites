@@ -71,15 +71,23 @@ test("a) css: meşgulken seçili çip seçili görünür (dashed disabled kural�
   assert.match(CSS, /@media \(forced-colors:active\)\{\.st-gorsel\[aria-busy="true"\] \.cip input:checked\+label\{forced-color-adjust:none;background:Highlight/);
 });
 
-test("c) ?v=: studyo.css, studyo-kabuk.js, studyo-kurgu.js her HTML'de (TR + en/) tek ve güncel sürüm", () => {
-  const beklenen = { "studyo.css": "gs3", "studyo-kabuk.js": "ak3", "studyo-kurgu.js": "gs2" };
+test("c) ?v=: değişen css/js her HTML'de (TR + en/) tek ve güncel sürüm", () => {
+  const beklenen = {
+    "studyo.css": "ap9", "studyo-kabuk.js": "ap9", "studyo-kurgu.js": "ap9", "studyo-medya.js": "ap9",
+    "studyo-blog.js": "ap9", "studyo-linkedin.js": "ap9", "smc-ses.js": "ap9", "smc-ses-hazir.js": "ap9",
+    "smc-hesap.js": "ap9", "ust-hesap.js": "ap9", "studyo-hesap.css": "ap9",
+  };
+  // GEÇİCİ: fiyatlar.html / en/pricing.html ayrı dalda (f/smc-fiyat-*) değişiyor; o dal birleşince ap9'a çekilip bu istisna silinir.
+  const fiyatEski = { "studyo.css": "gs3", "studyo-kabuk.js": "ak3", "ust-hesap.js": "bt2", "studyo-hesap.css": "bt1" };
+  const fiyatSayfa = (p) => /(^|[\\/])(fiyatlar|pricing)\.html$/.test(p);
   const sayi = {};
   for (const p of htmller()) {
     const h = readFileSync(p, "utf8");
     for (const [ad, v] of Object.entries(beklenen)) {
       const re = new RegExp(`/assets/${ad.replace(/\./g, "\\.")}(\\?v=([A-Za-z0-9._-]+))?["']`, "g");
       for (const m of h.matchAll(re)) {
-        assert.equal(m[2], v, `${p.slice(APP.length)}: ${ad}?v=${m[2] || "(yok)"}`);
+        const izin = fiyatSayfa(p) && fiyatEski[ad] ? [v, fiyatEski[ad]] : [v];
+        assert.ok(izin.includes(m[2]), `${p.slice(APP.length)}: ${ad}?v=${m[2] || "(yok)"}`);
         sayi[ad] = (sayi[ad] || 0) + 1;
       }
     }
@@ -87,4 +95,7 @@ test("c) ?v=: studyo.css, studyo-kabuk.js, studyo-kurgu.js her HTML'de (TR + en/
   assert.ok(sayi["studyo.css"] >= 31, `studyo.css ${sayi["studyo.css"]} sayfada`);
   assert.equal(sayi["studyo-kabuk.js"], 12);
   assert.equal(sayi["studyo-kurgu.js"], 4);
+  assert.equal(sayi["studyo-medya.js"], 4);
+  assert.equal(sayi["smc-ses.js"], 12);
+  assert.equal(sayi["smc-ses-hazir.js"], 8);
 });

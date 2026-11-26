@@ -25,6 +25,11 @@ var GIRIS=EN?'/en/hesap/login':'/hesap/giris';
 function depo(k){try{return k==='l'?window.localStorage:window.sessionStorage}catch(e){return null}}
 function tokenAl(){var r=null;['s','l'].some(function(k){try{var s=depo(k),v=s&&s.getItem('smc-oturum');if(v&&TOKEN_RE.test(v)){r=v;return true}}catch(e){}return false});return r}
 function tokenSil(){['s','l'].forEach(function(k){try{var s=depo(k);if(s)s.removeItem('smc-oturum')}catch(e){}})}
+/* D: çıkışta stüdyo kayıtları da silinir (smc-hesap.js yerelTemizle ile aynı liste; ikisi birlikte değişir) */
+var YEREL_ON=['studyo-son-','studyo-bekleyen-','studyo-medya-'],YEREL_TAM=['smc-ses-secim'];
+function yerelTemizle(){['l','s'].forEach(function(k){try{var s=depo(k);if(!s)return;var sil=[];
+  for(var i=0;i<s.length;i++){var a=s.key(i);if(typeof a==='string'&&(YEREL_TAM.indexOf(a)>=0||YEREL_ON.some(function(o){return a.indexOf(o)===0})))sil.push(a)}
+  sil.forEach(function(a){try{s.removeItem(a)}catch(e){}})}catch(e){}})}
 function istek(yol,yontem){
   var tok=tokenAl(),h={'Accept':'application/json'},o={method:yontem||'GET',headers:h,credentials:'omit',cache:'no-store',mode:'cors'},z=null;
   if(tok)h.Authorization='Bearer '+tok;
@@ -110,7 +115,7 @@ function cikisKur(){
     if(b.getAttribute('aria-busy')==='true')return;
     b.setAttribute('aria-busy','true');b.setAttribute('aria-disabled','true');b.textContent=T('Çıkış yapılıyor…','Logging out…');
     /* not TR yazılır; giriş sayfasında smc-hesap.js dile göre çevirir */
-    var git=function(){tokenSil();try{sessionStorage.setItem('smc-hesap-not',JSON.stringify(['Çıkış yaptın.','ok',null]))}catch(e){}location.assign(GIRIS+(ORNEK?'#ornek':''))};
+    var git=function(){tokenSil();yerelTemizle();try{sessionStorage.setItem('smc-hesap-not',JSON.stringify(['Çıkış yaptın.','ok',null]))}catch(e){}location.assign(GIRIS+(ORNEK?'#ornek':''))};
     if(ORNEK||!API){git();return}
     istek('/auth/logout','POST').then(git);
   })});
