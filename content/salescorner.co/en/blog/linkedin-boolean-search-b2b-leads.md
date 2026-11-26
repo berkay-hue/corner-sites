@@ -102,7 +102,7 @@ The number of results your query returns gives you a sense of its precision. The
 - **If there are too few results** (for example, a few dozen): The query is too narrow. Expand your title dictionary and check whether your quoted phrases are too specific.
 - **Review the first 25 results one by one.** If the vast majority match your target audience, the query is working well. Find what the mismatches have in common and add it as a new NOT term.
 
-Repeating this loop two or three times significantly improves your first draft.
+Repeating this loop two or three times significantly improves your first draft. To build and tweak these queries faster, use our free [LinkedIn Boolean search builder](/en/tools/linkedin-boolean-builder).
 
 ## Ready-to-use Boolean queries for the Turkish market
 

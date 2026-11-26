@@ -1,6 +1,6 @@
 ---
 title: "E-Posta Bounce Oranı Nasıl Düşürülür? B2B Rehberi"
-description: "Soğuk e-postalarınızın hard bounce oranını düşürmek için doğrulama, alan adı ısıtma ve liste hijyeni adımlarını Türkiye B2B örnekleriyle anlatıyoruz."
+description: "Soğuk e-postalarda hard bounce oranını düşürmek için veri kaynağı, doğrulama, catch-all yönetimi ve liste hijyenini Türkiye B2B örnekleriyle anlatıyoruz."
 date: "2026-11-05"
 category: "Outbound"
 image: "https://images.pexels.com/photos/7580647/pexels-photo-7580647.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
@@ -137,17 +137,9 @@ Temiz bir liste, yanlış kurulmuş bir altyapıyı kurtaramaz. Şu kontrolleri 
 - **Ayrı outbound domaini:** Soğuk e-postaları ana şirket domaininizden değil, benzer bir ikincil domainden gönderin. Örneğin sirket.com yerine sirket.co ya da sirketmail.com kullanabilirsiniz. Böylece bir sorun yaşanırsa ana domaininizin itibarı korunur.
 - **Özel takip domaini (custom tracking domain):** Açılma ve tıklama takibi kullanıyorsanız, aracın paylaşılan takip domaini yerine kendi alt domaininizi kullanın.
 
-### Adım 6: Domainleri ısıtın ve hacmi kontrollü artırın
+### Adım 6: Hacmi itibarla birlikte artırın
 
-Yeni bir domainden ilk gün yüzlerce soğuk e-posta göndermek, alıcı sunucularda şüphe uyandırır ve reddedilmelere yol açar. Isınma (warm-up) sürecinde domain, kademeli olarak artan hacimde ve olumlu etkileşim alan e-postalarla itibar kazanır.
-
-Örnek bir ısınma planı şöyle olabilir:
-- **1. hafta:** Günde 10–20 e-posta, ağırlıklı olarak etkileşim alan iç ve dost adreslere
-- **2. hafta:** Günde 20–30 e-posta, küçük bir soğuk segment eklenerek
-- **3–4. hafta:** Günde 30–50 e-posta
-- **Sonrası:** Gönderim hesabı başına günde 50 civarında bir üst sınırda kalmak, birçok ekip için güvenli bir pratik olarak görülür.
-
-Daha fazla hacim gerekiyorsa tek hesabın limitini zorlamak yerine birden fazla gönderim hesabına ve domaine yayılmak daha sağlıklıdır.
+Yeni bir domainden bir anda yüksek hacimle göndermek, iyi bir listede bile ret ve spam sinyallerini artırır. Hacim büyüdükçe gönderimi birden fazla hesaba ve domaine yaymak daha sağlıklıdır. Haftalık hacim planı ve kontrol listesi için [yeni satış domaini için adım adım e-posta warm-up rehberimize](/blog/outbound-e-posta-domain-isinma-warm-up-rehberi) bakın.
 
 ### Adım 7: Bounce'ları otomatik yönetin
 

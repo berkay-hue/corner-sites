@@ -106,7 +106,7 @@ Tipik bir Türkiye waterfall'u şöyle görünebilir:
 4. **Yerel kamuya açık kaynaklar:** Halka açık şirketler için kamuyu aydınlatma bildirimleri, ticaret sicili ilanları, sektör derneklerinin üye listeleri, fuar katılımcı listeleri.
 5. **Manuel araştırma:** Yüksek değerli hesaplar için, kalan boşlukları bir araştırmacının doldurması.
 
-Waterfall'un mantığı maliyet ile kapsam arasında denge kurmaktır. Ucuz ve geniş kaynaklar başa, pahalı veya emek yoğun kaynaklar sona konur. Böylece pahalı adımlar yalnızca gerçekten ihtiyaç duyulan kayıtlar için çalışır.
+Waterfall'un mantığı maliyet ile kapsam arasında denge kurmaktır. Ucuz ve geniş kaynaklar başa, pahalı veya emek yoğun kaynaklar sona konur. Böylece pahalı adımlar yalnızca gerçekten ihtiyaç duyulan kayıtlar için çalışır. Apollo gibi bir veritabanı ile Sales Corner'ın AI modülleri arasındaki farkı [Apollo.io alternatifi karşılaştırmamızda](/karsilastirma/apollo-alternatifi) ayrıntılı anlattık.
 
 ### 5. E-postaları ve kişileri doğrulayın
 

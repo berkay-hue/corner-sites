@@ -130,6 +130,8 @@ The plan below is designed for a new inbox created on Google Workspace or Micros
 - Hold steady at 30-50 total emails per inbox per day.
 - **Don't turn off warm-up.** Keeping low-volume warm-up traffic running in the background helps protect your reputation.
 
+To turn this plan into a day-by-day schedule for your own mailboxes, use our free [domain warm-up planner](/en/tools/domain-warmup-planner).
+
 ## How many emails should you send per inbox per day?
 
 For a warmed-up inbox, the safe zone is **30-50 cold emails** per day. Technically, you can send more. But in outbound, the goal isn't maximum sends, it's maximum inbox placement. When your volume needs grow, increase **the number of inboxes and domains**, not the volume per inbox.

@@ -1,6 +1,6 @@
 ---
 title: "Satış Ekibi Verimliliği Nasıl Ölçülür? KPI Rehberi"
-description: "B2B satış ekibinin verimliliğini ölçmek için izlenecek temel KPI'lar, hesaplama yöntemleri ve sık yapılan hatalar."
+description: "Satış ekibi verimliliği nasıl ölçülür? B2B satış ekibi için temel KPI'lar, hesaplama formülleri, hedef aralıkları ve ölçümde sık yapılan hatalar tek rehberde."
 date: "2026-10-16"
 category: "Satış"
 image: "https://images.pexels.com/photos/39205099/pexels-photo-39205099.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"

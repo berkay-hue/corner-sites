@@ -133,15 +133,9 @@ Instead of presenting a single number to leadership, present a range:
 
 In our example, this range is roughly between 2.5 million and 4.5 million TL, with a realistic expectation of 3.4 million TL. This framework makes resource planning easier for leadership and makes the "did the forecast hit or not?" discussion more productive.
 
-## How much pipeline coverage do you need?
+## How does pipeline coverage feed into your forecast?
 
-The common rule that "pipeline should be 3x the target" is a starting point, but it isn't universal. The right coverage ratio depends on your win rate:
-
-**Required coverage = 1 / Win rate**
-
-- If your win rate is 33 percent, roughly 3x coverage is enough.
-- If your win rate is 20 percent, you need 5x coverage.
-- If your win rate is 40 percent, 2.5x may be enough.
+If your weighted forecast doesn't cover the remaining gap to target, the problem is usually pipeline volume. To calculate the multiple you need from your own win rate, see [how to calculate pipeline coverage ratio and derive your target from win rate](/blog/how-to-calculate-pipeline-coverage-ratio).
 
 It's more meaningful to calculate coverage against the **remaining gap** rather than the total target. For example, if you are 3 million TL short of target in the middle of the quarter and your win rate on opportunities that can close this period is 30 percent, you need at least 10 million TL of pipeline with suitable timing.
 

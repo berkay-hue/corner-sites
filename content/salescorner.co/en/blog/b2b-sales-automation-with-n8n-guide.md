@@ -2,7 +2,7 @@
 title: "B2B Sales Automation with n8n: A Beginner's Guide"
 description: "How do you automate B2B sales processes with n8n? A step-by-step guide to lead capture, CRM sync, follow-up emails and the AI layer."
 date: "2026-10-11"
-updated: "2026-10-16"
+updated: "2026-11-26"
 category: "Automation"
 image: "https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
 imageAlt: "B2B sales automation with n8n"
@@ -24,9 +24,9 @@ For sales teams, three features make n8n stand out:
 - **Data control:** Because you can run it on your own server (self-hosted), customer data doesn't have to live on a third-party automation platform.
 - **AI nodes:** You can place large language models inside the workflow as a step and have them classify, summarize and generate text.
 
-## Which Sales Processes Should You Start With?
+## Which n8n Workflows Should You Build First?
 
-Trying to automate everything at once is the most common reason automation projects stall. To start, pick processes that meet three criteria: they **repeat often**, their **rules are clear**, and the **cost of an error is low**. The sales processes that fit these criteria best are:
+Trying to automate everything at once is the most common reason automation projects stall. For a scoring method that ranks processes by impact and implementation cost, see [how to prioritize which sales processes to automate first](/blog/which-sales-processes-to-automate-first). Below are the five workflows that are quickest to build in n8n:
 
 1. **Lead capture and CRM entry:** Automatically saving a contact from a web form, a LinkedIn form or an event list into the CRM and merging duplicate records.
 2. **Data enrichment:** Filling in details such as industry, headcount and location from the company domain on the record.

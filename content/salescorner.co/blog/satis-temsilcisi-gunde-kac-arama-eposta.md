@@ -77,6 +77,8 @@ Burada önemli bir ayrıntı var: 48 yeni kişi, 48 e-posta demek değildir. Her
 
 Bu hesaplamanın en değerli yanı, hangi kaldıracın daha etkili olduğunu göstermesidir. Olumlu yanıt oranını %2'den %3'e çıkarmak, gereken yeni kişi sayısını üçte bir oranında azaltır. Bu artışı sağlamak, temsilciye günde 30 kişi daha fazla yazdırmaktan çoğu zaman daha kolaydır.
 
+Kendi hedef ve dönüşüm oranlarınızla hesaplamak için ücretsiz [satış hedefi hesaplayıcısını](/araclar/satis-hedefi-hesaplayici) kullanabilirsiniz.
+
 ## Günde kaç arama yapılmalı?
 
 Arama hedefi konulurken genellikle göz ardı edilen şey **zaman matematiğidir**. Bir aramanın gerçek maliyeti yalnızca çalma süresi değildir. Numarayı bulmak, kişiyi kısaca araştırmak, aramak, sesli mesaj bırakmak ya da konuşmak, ardından CRM'e not girmek de bu maliyete dahildir.
@@ -103,7 +105,7 @@ E-posta tarafında soru ikiye ayrılır: **temsilcinin manuel olarak yazdığı 
 
 ### Otomatik diziler ve teslim edilebilirlik sınırı
 
-Otomatik dizilerde darboğaz temsilcinin zamanı değil, **gelen kutusu itibarıdır**. Soğuk e-posta için kullanılan bir posta kutusundan günde çok yüksek hacimde gönderim yapmak, spam klasörüne düşme riskini ciddi biçimde artırır. Pratikte birçok ekip ihtiyatlı davranıp ısıtılmış her posta kutusu için günlük soğuk gönderimi **30-50 civarında** tutuyor ve hacmi birden fazla kutuya ve alan adına yayıyor. Yeni bir alan adında ise gönderim birkaç hafta boyunca kademeli olarak artırılmalıdır.
+Otomatik dizilerde darboğaz temsilcinin zamanı değil, **gelen kutusu itibarıdır**: birçok ekip ısıtılmış her posta kutusu için günlük soğuk gönderimi **30-50 civarında** tutup hacmi birden fazla kutuya ve alan adına yayıyor. Gönderim kutusu başına güvenli limit ve ısınma takvimi için [outbound e-posta domain ısınma (warm-up) rehberimize](/blog/outbound-e-posta-domain-isinma-warm-up-rehberi) bakın.
 
 Hacmi artırmadan önce kontrol edilmesi gerekenler:
 

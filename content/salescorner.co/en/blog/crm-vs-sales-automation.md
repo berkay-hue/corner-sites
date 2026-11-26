@@ -146,16 +146,13 @@ The most common problem is the two systems overwriting each other. If the automa
 
 Because automation increases sending volume, it also increases legal risk. When sending cold emails in Türkiye, you are required to comply with the KVKK (Turkey's Personal Data Protection Law) and the regulations on commercial electronic messages. Every sequence should include a mechanism that automatically processes opt-out requests, stops communication and logs this in the CRM.
 
-## How much does it cost?
+## What does running a CRM and automation together cost?
 
-Giving an exact figure would be misleading. Costs vary widely depending on the number of users, the tools you choose and the complexity of your workflows. But defining the cost items correctly lets you plan a realistic budget:
+Giving an exact figure would be misleading. Costs vary widely depending on the number of users, the tools you choose and the complexity of your workflows. But defining the cost items correctly lets you plan a realistic budget.
 
-- **CRM license:** Usually billed monthly per user. Since automation features are in higher-tier plans, your choice of plan has a significant impact on cost.
-- **Data and enrichment:** Priced by credits or records. The more leads you process, the more you pay.
-- **Email sending infrastructure:** Sending accounts, warm-up tools, domains.
-- **Orchestration tool:** You can reduce licensing costs by running open-source tools like n8n on your own server. Cloud-based tools, by contrast, charge based on the number of operations.
-- **AI usage:** Model APIs are priced by usage. The cost per lead is usually low, but it adds up with volume.
-- **Setup and maintenance effort:** This is the biggest overlooked cost. Designing and testing workflows, and maintaining them as tools are updated, takes time.
+For a line-by-line budget with sample monthly scenarios, see [a line-by-line sales automation budget for B2B teams in Turkey](/blog/sales-automation-cost-turkey).
+
+In short, a CRM is usually billed per user per month, and automation features tend to sit in higher-tier plans. The automation layer (data credits, sending infrastructure, an orchestration tool like n8n and AI APIs) is priced by usage and setup effort instead, and the setup and maintenance time is the cost teams most often overlook.
 
 When evaluating cost, the right question isn't "How much does this system cost?" but "How much does it cost us to do the same work without this system?" As in the example above, multiply the hours your team spends on data entry by the cost of a rep. In most cases, this simple calculation makes it clear how quickly the automation investment pays for itself. To do this calculation properly, you first need to measure your current productivity. For that, see our [KPI guide to measuring sales team productivity](/blog/how-to-measure-sales-team-productivity-kpis).
 
@@ -184,7 +181,7 @@ Another option is to outsource the entire outbound process as a service. Especia
 
 ### Can you set up sales automation without a CRM?
 
-Technically, yes, but it's not recommended. Without a central place to permanently record the activities, replies and opportunities that automation generates, data gets lost across scattered tools and reporting becomes impossible. Even a small team should start with a simple CRM on a free tier and build automation on top of it.
+Technically, yes, but it's not recommended. Without a central place to permanently record the activities, replies and opportunities that automation generates, data gets lost across scattered tools and reporting becomes impossible. Even a small team should start with a simple CRM on a free tier and build automation on top of it. For small teams that are just starting out, a lightweight setup can work for a while; we explain when and how in [sales automation without a CRM](/blog/sales-automation-without-crm).
 
 ### Will sales automation replace sales reps?
 

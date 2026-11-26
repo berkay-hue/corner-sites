@@ -129,7 +129,7 @@ A quota isn't just a revenue figure. Reversed, it is also a **pipeline requireme
 
 This reverse calculation tells you something important: for the quota to hold, you need to know in advance what volume the SDR team, marketing and outbound campaigns must generate. To see how quickly pipeline turns into revenue, you can use the formula in our [pipeline velocity calculation guide](/blog/how-to-calculate-pipeline-velocity) alongside your quota plan.
 
-If generating the target opportunity volume in-house is difficult, external support is also an option. For example, [SAAS Corner, part of our group, provides outbound sales and lead generation services for B2B SaaS companies](https://saascorner.co), focusing on closing the pipeline gap.
+If generating the target opportunity volume in-house is difficult, external support is also an option. For example, [SAAS Corner, part of our group, provides outbound sales and lead generation services for B2B SaaS companies](https://saascorner.co), focusing on closing the pipeline gap. You can run this calculation with our [sales target calculator](/en/tools/sales-target-calculator) and model payouts with the [commission calculator](/en/tools/commission-calculator).
 
 ## How do you distribute quota fairly across reps?
 
@@ -171,7 +171,7 @@ Key points to watch in your commission structure:
 
 A revenue quota measures the outcome. An activity quota measures the path to the outcome. Activity and pipeline quotas are especially useful for SDR teams, newly hired reps and products with long sales cycles, because revenue results only show up months later.
 
-Set activity quotas using the reverse calculation as well. For example, if an SDR is expected to book 20 qualified meetings a month and roughly 2% of contacted prospects convert to a meeting, the SDR needs to reach about 1,000 people per month. When these prospects are approached through a sequence with multiple touchpoints, the number of activities grows even further.
+Set activity quotas using the reverse calculation as well. For example, if an SDR is expected to book 20 qualified meetings a month and roughly 2% of contacted prospects convert to a meeting, the SDR needs to reach about 1,000 people per month. When these prospects are approached through a sequence with multiple touchpoints, the number of activities grows even further. We break these numbers down by role in [how many calls and emails per day](/blog/how-many-calls-emails-per-day-sales-rep).
 
 A word of caution, though: if an activity quota rewards volume over quality, the team starts sending templated messages to poorly targeted lists. That lowers both reply rates and domain reputation. So always pair activity quotas with an outcome metric such as **meetings or qualified opportunities**.
 

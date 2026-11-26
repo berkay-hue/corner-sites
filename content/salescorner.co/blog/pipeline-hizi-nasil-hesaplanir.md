@@ -1,6 +1,6 @@
 ---
 title: "Pipeline Hızı Nasıl Hesaplanır? Formül ve Örnek"
-description: "Pipeline hızını formülüyle hesaplayın, darboğazları bulun ve gerçekçi satış hedefleri belirleyin."
+description: "Pipeline hızı nasıl hesaplanır? Formülü örnek hesapla uygulayın, darboğaz aşamaları bulun ve B2B ekibiniz için gerçekçi satış hedefleri belirleyin."
 date: "2026-10-23"
 category: "Pipeline"
 image: "https://images.pexels.com/photos/9034283/pexels-photo-9034283.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
@@ -192,6 +192,8 @@ Dört değişkenin her biri için uygulanabilir taktikler şunlardır.
 - **Takipleri otomatikleştirin.** Görüşme sonrası özet e-postaları, hatırlatmalar ve hareketsiz kalan fırsatlar için uyarılar insan hafızasına bırakılmamalı. Bir fırsatın 7 gün hareketsiz kalması durumunda temsilciye otomatik görev açan basit bir iş akışı bile döngüde fark yaratır.
 - **Karar vericileri erken dahil edin.** Döngüyü uzatan en yaygın etken, sürecin sonunda ortaya çıkan yeni paydaşlardır. Keşif aşamasında satın alma sürecini ve onay zincirini netleştirin.
 - **Satış materyallerini hazır tutun.** Güvenlik dokümanları, referans vakaları ve standart sözleşme şablonları gibi materyallerin her seferinde baştan hazırlanması günler kaybettirir.
+
+Döngüyü kısaltmanın 8 somut yolu ve Türkiye'ye özgü gecikme nedenleri için [B2B satış döngüsü kaç gün sürer ve nasıl kısaltılır rehberimize](/blog/b2b-satis-dongusu-kac-gun-surer) bakın.
 
 ## Pipeline hızı otomatik olarak nasıl takip edilir?
 

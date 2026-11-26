@@ -1,8 +1,8 @@
 ---
 title: "Yapay Zekayla Soğuk E-Posta Nasıl Yazılır?"
-description: "B2B soğuk e-postada yapay zekayı nasıl kullanırsınız? Kişiselleştirme, konu satırı ve takip dizisi adımları örneklerle."
+description: "Yapay zekayla soğuk e-posta nasıl yazılır? B2B soğuk e-postada AI ile kişiselleştirme, konu satırı ve takip metinlerini örnek istemlerle anlatıyoruz."
 date: "2026-10-10"
-updated: "2026-10-16"
+updated: "2026-11-26"
 category: "Yapay Zeka"
 image: "https://images.pexels.com/photos/7971661/pexels-photo-7971661.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
 imageAlt: "Yapay Zekayla Soğuk E-Posta Nasıl Yazılır?"
@@ -132,14 +132,9 @@ Yapay zekadan her segment için 5-10 konu satırı üretmesini isteyin, en iyi 2
 
 Yazdığınız konu satırını uzunluk, kişiselleştirme ve spam riski açısından puanlamak için ücretsiz [Konu Satırı Puanlayıcı](/araclar/konu-satiri-puanlayici) aracını kullanabilirsiniz.
 
-## E-Posta Dizisi Kurgusu: Tek E-Posta Yetmez
+## Takip E-Postalarını Yapay Zekayla Kişiselleştirmek
 
-Soğuk e-postaya gelen yanıtların önemli bir kısmı ilk mesajdan değil, takip mesajlarından gelir. Alıcı ilk e-postayı görmüş ama o an cevap verecek vakti bulamamış olabilir. Bu yüzden her kampanyayı bir **dizi (sequence)** olarak planlayın. Tipik bir 4 adımlı dizi şöyle kurgulanabilir:
-
-1. **1. gün, ilk e-posta:** Tetikleyici, problem ve düşük eforlu soru.
-2. **3. veya 4. gün, kısa takip:** Aynı konu altında 2-3 cümle. Yeni bir açı ekleyin, örneğin benzer bir şirket tipinde sık görülen bir sorunu anlatın.
-3. **8. gün, değer odaklı e-posta:** Kısa bir içgörü, bir kontrol listesi ya da süreçle ilgili somut bir öneri. Satış yapmadan fayda sunun.
-4. **14. gün, kapanış e-postası:** Kibar bir "şu an önceliğiniz değilse sorun değil" mesajı. Bu tür e-postalar çoğu zaman şaşırtıcı ölçüde yanıt alır.
+Soğuk e-postaya gelen yanıtların önemli bir kısmı ilk mesajdan değil, takip mesajlarından gelir. Alıcı ilk e-postayı görmüş ama o an cevap verecek vakti bulamamış olabilir. Bu yüzden her kampanyayı bir **dizi (sequence)** olarak planlayın. Adım sayısı ve gün aralıkları için [outbound dizisinde adım sayısı ve gün aralıkları rehberimize](/blog/outbound-eposta-dizisi-kac-adim-olmali) bakın.
 
 Yapay zeka, dizideki her adım için **farklı bir açı** üretmekte çok başarılı. Ancak promptta önceki e-postaları da bağlam olarak vermeyi unutmayın. Aksi halde model her takip mesajında aynı cümleleri farklı kelimelerle tekrarlar.
 
@@ -168,7 +163,7 @@ Yapay zekayla e-posta üretim hızınız arttıkça, gönderim altyapısına dah
 
 Yapay zekanın burada dolaylı bir katkısı da var: Her e-postanın metni birbirinden farklı olduğu için, tamamen aynı içeriğin toplu gönderiminden kaynaklanan kalıp tespitine takılma riski azalır.
 
-E-postanızı göndermeden önce [Soğuk E-posta Denetleyici](/araclar/soguk-eposta-denetleyici) ile kontrol edebilir, yeni bir domain kullanıyorsanız gönderim hacmini [Domain Isınma Planlayıcı](/araclar/domain-isinma-planlayici) ile kademeli olarak artırabilirsiniz.
+E-postanızı göndermeden önce [Soğuk E-posta Denetleyici](/araclar/soguk-eposta-denetleyici) ile kontrol edebilir, yeni bir domain kullanıyorsanız gönderim hacmini [Domain Isınma Planlayıcı](/araclar/domain-isinma-planlayici) ile kademeli olarak artırabilirsiniz. Ayrıntılı rehberler için [satış domaini için warm-up planı](/blog/outbound-e-posta-domain-isinma-warm-up-rehberi) ve [soğuk e-postada bounce oranını düşürme rehberi](/blog/eposta-bounce-orani-nasil-dusurulur) yazılarımıza bakın.
 
 ## Sık Yapılan Hatalar
 

@@ -146,7 +146,7 @@ This workflow has at least five separate problems: an unclear legal basis, data 
 
 The second version is not entirely risk-free either. But in an audit you can show what you did and why. That is what ultimately counts in KVKK compliance. What's more, with narrower and more precise targeting, the second version usually delivers a better response rate.
 
-## What questions should you ask when choosing an AI tool?
+## Which KVKK questions should you ask an AI vendor?
 
 At the procurement or trial stage, ask the provider the following questions in writing:
 

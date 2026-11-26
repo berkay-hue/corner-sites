@@ -180,7 +180,7 @@ The following example is designed for an AE responsible for new customer acquisi
 - 300,000 TL × 16% = 48,000 TL
 - Total: **222,000 TL**
 
-Put this table into the plan document exactly as is. Reps should be able to calculate where they stand within minutes.
+Put this table into the plan document exactly as is. Reps should be able to calculate where they stand within minutes. To run these numbers with your own quota and rates, use our free [commission calculator](/en/tools/commission-calculator).
 
 ## How should SDR commission be structured?
 

@@ -2,7 +2,7 @@
 title: "Satış Otomasyonu Projesi Neden Başarısız Olur?"
 description: "Satış otomasyonu projeleri çoğu zaman araç yüzünden değil, süreç ve veri eksikliğinden başarısız olur. Sık hatalar ve çözümleri."
 date: "2026-10-15"
-updated: "2026-10-16"
+updated: "2026-11-26"
 category: "Satış Otomasyonu"
 image: "https://images.pexels.com/photos/7654193/pexels-photo-7654193.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
 imageAlt: "Satış Otomasyonu Projesi Neden Başarısız Olur?"
@@ -81,6 +81,8 @@ Bu hatanın iki yaygın sonucu vardır:
 
 **Ne yapmalı?** Önce süreci ve veri akışını çizin. Hangi veri nereden gelir, nerede zenginleşir, hangi sistemde ana kayıt tutulur, hangi olay hangi aksiyonu tetikler? Bu harita hazır olduktan sonra araç seçimi çok daha kolaylaşır. Farklı sistemleri birbirine bağlamak için esnek bir iş akışı aracı genellikle iyi bir başlangıçtır. [n8n ile B2B satış otomasyonuna başlama rehberimiz](/blog/n8n-ile-b2b-satis-otomasyonu-rehberi), CRM, veri kaynakları ve e-posta araçlarını tek bir akışta birleştirmenin pratik yollarını anlatıyor. Her biri tek bir işe odaklanan küçük modüllerle başlamanın nasıl göründüğünü [Sales Corner modül panelinde](/#otomasyonlar) inceleyebilirsiniz.
 
+Aracı kendiniz mi kuracağınızı yoksa bir ajansla mı çalışacağınızı tartıyorsanız, seçenekleri maliyet, kontrol, hız ve veri sahipliğine göre [ajans mı, araç mı karşılaştırmamızda](/karsilastirma/ajans-mi-arac-mi) karar ağacıyla inceleyebilirsiniz.
+
 ## Kişiselleştirmeyi Hacme Feda Etmek
 
 Otomasyonun cazibesi, aynı sürede çok daha fazla kişiye ulaşabilmektir. Bu cazibe çoğu zaman bir tuzağa dönüşür. Ekip, haftada 100 kişiye özenle hazırlanmış e-posta göndermek yerine 3.000 kişiye genel bir şablon göndermeye başlar. İlk haftalarda gönderim sayısı etkileyici görünür. Ancak yanıt oranları düşer, spam şikayetleri artar, alan adının itibarı zedelenir ve birkaç hafta sonra e-postalar gelen kutusuna bile ulaşamaz hale gelir.
@@ -158,7 +160,7 @@ Her aşamanın sonunda kısa bir değerlendirme yapın: Hedeflenen metrik deği�
 
 Yukarıdaki başarısızlık nedenlerini tersine çevirdiğimizde, sağlam bir satış otomasyonu projesinin adımları ortaya çıkar:
 
-1. **Problemi tanımlayın.** Tek ve ölçülebilir bir problemle başlayın. Mevcut durumu rakamla ölçün.
+1. **Problemi tanımlayın.** Tek ve ölçülebilir bir problemle başlayın. Mevcut durumu rakamla ölçün. Hangi süreçten başlayacağınızı seçmek için [satış otomasyonuna hangi süreçten başlanacağını önceliklendirme rehberimize](/blog/satis-otomasyonu-nereden-baslamali) bakın.
 2. **Süreci yazın.** Otomatikleştirmek istediğiniz süreci adım adım, tetikleyicileri ve sorumlularıyla belgeleyin. Gerekirse birkaç hafta manuel olarak test edin.
 3. **Tanımları netleştirin.** Pipeline aşamalarını, lead kriterlerini ve devir kurallarını yazılı hale getirin.
 4. **Veriyi hazırlayın.** Kritik alanları standartlaştırın, mükerrer kayıtları temizleyin ve zenginleştirme kaynağınızı belirleyin.

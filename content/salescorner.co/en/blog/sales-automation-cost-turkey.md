@@ -31,7 +31,7 @@ A realistic budget addresses each of the following items separately. Skipping an
 
 ### 1. CRM and pipeline management
 
-A CRM usually sits at the center of automation. Monthly per-user fees start at a few tens of dollars for entry-level plans. For plans with advanced automation, custom fields and reporting, they can exceed a hundred dollars per user per month. A common mistake here is moving the entire team to the most expensive plan just because automation features are needed. In reality, some automations can be built more cheaply outside the CRM using an external workflow tool.
+A CRM usually sits at the center of automation. Monthly per-user fees start at a few tens of dollars for entry-level plans. For plans with advanced automation, custom fields and reporting, they can exceed a hundred dollars per user per month. A common mistake here is moving the entire team to the most expensive plan just because automation features are needed. In reality, some automations can be built more cheaply outside the CRM using an external workflow tool. We explain which work belongs in the CRM and which in the automation layer in [how a CRM and sales automation split the work](/blog/crm-vs-sales-automation).
 
 ### 2. Data and contact information
 
@@ -106,7 +106,7 @@ Picture a B2B company where the founder is also involved in sales and wants to r
 - **Total tool cost: roughly $150–500 per month**
 - Setup: a few weeks of part-time effort if you build it yourself; a one-time project fee if you outsource it
 
-At this scale, the biggest risk is buying too many tools and fully using none of them. Starting with a single, clearly defined workflow (for example, "lead list → enrichment → personalized email sequence") protects the budget.
+At this scale, the biggest risk is buying too many tools and fully using none of them. Starting with a single, clearly defined workflow (for example, "lead list → enrichment → personalized email sequence") protects the budget. If you don't have a CRM yet, [a low-cost setup for SMEs without a CRM](/blog/sales-automation-without-crm) is an even leaner starting point.
 
 ### Scenario 2: 5–10 person sales team, structured outbound
 
@@ -174,7 +174,7 @@ Let's say you have a team of 4 SDRs, and each spends an average of 2 hours a day
 4. **Monetary value:** 112 × X TL is the monthly value automation delivers from time savings alone.
 5. **Comparison:** Compare this value with your monthly tool and maintenance costs. Then divide the setup fee by the net monthly gain to find the payback period (in months).
 
-But the real value lies in where those 112 freed-up hours go. If that time turns into more conversations, better-prepared meetings and more disciplined follow-up, the impact on revenue will be far greater than the time savings. To measure this, you need to track the same metrics before and after automation: weekly conversations per rep, reply rate, meeting conversion rate and opportunity value added to the pipeline. You can find which metrics to track in [our KPI guide to measuring sales team productivity](/blog/how-to-measure-sales-team-productivity-kpis).
+But the real value lies in where those 112 freed-up hours go. If that time turns into more conversations, better-prepared meetings and more disciplined follow-up, the impact on revenue will be far greater than the time savings. To measure this, you need to track the same metrics before and after automation: weekly conversations per rep, reply rate, meeting conversion rate and opportunity value added to the pipeline. You can find which metrics to track in [our KPI guide to measuring sales team productivity](/blog/how-to-measure-sales-team-productivity-kpis). Run it for your own team with our [sales ROI calculator](/en/tools/sales-roi-calculator) and compare acquisition costs with the [CAC and LTV calculator](/en/tools/cac-ltv-calculator).
 
 ## How do you plan a sales automation budget step by step?
 

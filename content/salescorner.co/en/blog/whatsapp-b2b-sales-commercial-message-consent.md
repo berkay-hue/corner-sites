@@ -26,11 +26,11 @@ A quick test makes things easier:
 - **"Here's the link for our meeting tomorrow at 2:00 PM."** → Information about an existing business relationship, generally not considered a commercial message.
 - **"Our offer expires on Friday, and we've added an extra discount."** → A mix of information and marketing; it's safer to treat it as a commercial message.
 
-## In B2B, is it allowed to message merchants without consent?
+## Can you message merchants on WhatsApp in B2B without consent?
 
 This is the question B2B teams ask most often. The answer: **partly yes on paper, but risky in practice.**
 
-Law No. 6563 states that commercial electronic messages may only be sent with the recipient's prior consent. The same article also states that commercial electronic messages may be sent to **tradespeople and merchants without prior consent**. This exemption matters for B2B, but it has three limits.
+Law No. 6563 states that commercial electronic messages may only be sent with the recipient's prior consent. The same article also states that commercial electronic messages may be sent to **tradespeople and merchants without prior consent**. This exemption matters for B2B, but it has three limits. For how the same exemption applies to email, see our [KVKK-compliant B2B cold email guide](/blog/kvkk-compliant-b2b-cold-email).
 
 ### 1. Who owns the number?
 

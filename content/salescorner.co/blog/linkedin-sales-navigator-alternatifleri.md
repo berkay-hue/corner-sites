@@ -58,7 +58,7 @@ Aşağıdaki araçların hiçbiri Sales Navigator'ın birebir kopyası değildir
 
 ### Apollo.io: keşif ve iletişim verisi bir arada
 
-Sales Navigator'a en yakın "tek çatı" alternatifi Apollo'dur. Unvan, sektör, şirket büyüklüğü, lokasyon, teknoloji kullanımı ve işe alım sinyalleri gibi filtrelerle arama yapabilir, bulduğunuz kişilerin e-posta adresini ve bazı durumlarda telefon numarasını görebilirsiniz. Üstüne yerleşik e-posta dizisi (sequence) özelliği de sunar.
+Sales Navigator'a en yakın "tek çatı" alternatifi Apollo'dur. Unvan, sektör, şirket büyüklüğü, lokasyon, teknoloji kullanımı ve işe alım sinyalleri gibi filtrelerle arama yapabilir, bulduğunuz kişilerin e-posta adresini ve bazı durumlarda telefon numarasını görebilirsiniz. Üstüne yerleşik e-posta dizisi (sequence) özelliği de sunar. Apollo ile Sales Corner arasındaki farkı (veritabanı ya da AI modüller) [Apollo.io alternatifi karşılaştırmamızda](/karsilastirma/apollo-alternatifi) ayrıntılı anlattık.
 
 **Türkiye'de güçlü olduğu yer:** Teknoloji, SaaS, danışmanlık, finans ve kurumsal şirketlerde kapsamı genellikle tatmin edicidir. Ücretsiz paketiyle küçük ölçekte test yapmak kolaydır. Bu da Türkiye'deki ekipler için büyük avantaj.
 

@@ -85,7 +85,7 @@ Before purchasing, check the following together with your security and legal tea
 - **How are access permissions managed?** Is there role-based access control, single sign-on (SSO) and audit logging?
 - **How are deletion requests handled?** When a person requests deletion of their data, can you remove the record from all integrated systems?
 
-For tools that record calls, notifying the other party of the recording and the duty to inform also come into play. For tools that send cold emails, the regulations on commercial electronic messages and how the right to opt out is provided are important. We discussed these boundaries in detail in our article on [KVKK-compliant B2B cold email](/blog/kvkk-compliant-b2b-cold-email). Of course, this information does not replace legal advice; make the final assessment with your legal team.
+For tools that record calls, notifying the other party of the recording and the duty to inform also come into play. For tools that send cold emails, the regulations on commercial electronic messages and how the right to opt out is provided are important. We discussed these boundaries in detail in our article on [KVKK-compliant B2B cold email](/blog/kvkk-compliant-b2b-cold-email). Of course, this information does not replace legal advice; make the final assessment with your legal team. For the data protection risks to check with a vendor, see [KVKK risks of using AI in sales](/blog/kvkk-risks-ai-in-sales).
 
 ## Criterion 5: How much does it cost, and does it actually pay off?
 

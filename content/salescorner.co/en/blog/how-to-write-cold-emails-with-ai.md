@@ -1,8 +1,8 @@
 ---
 title: "How to Write Cold Emails with AI"
-description: "How to use AI when writing B2B cold emails: personalization, subject lines and follow-up sequences, explained with examples."
+description: "How to use AI when writing B2B cold emails: prompts, personalization levels and subject lines, explained with practical examples."
 date: "2026-10-10"
-updated: "2026-10-16"
+updated: "2026-11-26"
 category: "Artificial Intelligence"
 image: "https://images.pexels.com/photos/7971661/pexels-photo-7971661.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
 imageAlt: "How to Write Cold Emails with AI"
@@ -128,16 +128,11 @@ The subject line is the first filter that decides whether an email gets opened. 
 - **Reference the context:** For example "sales team openings", "{company} + automation" or "new austin office".
 - **Spark curiosity, but don't mislead:** Subject lines that fake a continuation, like "Re:" or "about our meeting", get opens in the short term but damage trust and domain reputation in the long term.
 
-Ask AI to generate 5-10 subject lines for each segment, pick the best 2-3 and A/B test them.
+Ask AI to generate 5-10 subject lines for each segment, pick the best 2-3 and A/B test them. Before testing, run your candidates through our free [subject line scorer](/en/tools/subject-line-scorer).
 
-## Building the Email Sequence: One Email Isn't Enough
+## Using AI to Write a Different Angle for Each Follow-Up
 
-A large share of cold email replies come not from the first message but from the follow-ups. The recipient may have seen the first email but not had time to reply at that moment. So plan every campaign as a **sequence**. A typical 4-step sequence can look like this:
-
-1. **Day 1, first email:** Trigger, problem and a low-effort question.
-2. **Day 3 or 4, short follow-up:** 2-3 sentences in the same thread. Add a new angle, for example a problem that's common for a similar type of company.
-3. **Day 8, value-focused email:** A short insight, a checklist or a concrete suggestion about the process. Offer value without selling.
-4. **Day 14, breakup email:** A polite "no problem if this isn't a priority right now" message. These emails often get a surprising number of replies.
+A large share of cold email replies come not from the first message but from the follow-ups. The recipient may have seen the first email but not had time to reply at that moment. So plan every campaign as a **sequence**. For the step count and day-by-day spacing, see [day-by-day timing for a 4-6 step outbound sequence](/blog/outbound-email-sequence-steps-timing).
 
 AI is very good at producing **a different angle** for each step of the sequence. But don't forget to include the previous emails as context in the prompt. Otherwise the model will repeat the same sentences in different words in every follow-up.
 
@@ -164,7 +159,7 @@ As AI speeds up your email production, you need to pay more attention to your se
 - **Don't skip list verification.** A high bounce rate is one of the fastest ways to damage domain reputation.
 - **Minimize links and images.** Avoiding links, images and attachments in the first email supports deliverability.
 
-AI also helps indirectly here: because the text of every email is different, the risk of being caught by pattern detection triggered by bulk sends of identical content goes down.
+AI also helps indirectly here: because the text of every email is different, the risk of being caught by pattern detection triggered by bulk sends of identical content goes down. You can check length, readability and the call to action with our [cold email checker](/en/tools/cold-email-checker).
 
 ## Common Mistakes
 

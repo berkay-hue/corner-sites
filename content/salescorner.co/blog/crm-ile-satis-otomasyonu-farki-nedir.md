@@ -107,7 +107,7 @@ Otomasyon, üzerinde çalışacağı düzenli bir veri yapısına ihtiyaç duyar
 1. **Süreci tanımlayın:** ICP'niz kim, pipeline aşamalarınız neler, bir lead hangi koşulda "nitelikli" sayılıyor?
 2. **CRM'i bu sürece göre kurun:** Gereksiz alanları silin, zorunlu alanları belirleyin, aşamaları netleştirin.
 3. **Veriyi temizleyin:** Mükerrer kayıtları birleştirin, eksikleri zenginleştirin.
-4. **En çok zaman yiyen tek bir işi otomatikleştirin:** Genellikle bu lead listeleme ve zenginleştirme ya da takip e-postalarıdır.
+4. **En çok zaman yiyen tek bir işi otomatikleştirin:** Genellikle bu lead listeleme ve zenginleştirme ya da takip e-postalarıdır (bkz. [otomasyona hangi süreçten başlanacağını seçme rehberimiz](/blog/satis-otomasyonu-nereden-baslamali)).
 5. **Ölçün, sonra genişletin:** İlk otomasyonun etkisini gördükten sonra bir sonraki adıma geçin.
 
 Bazı şirketler ise tam tersini yaşar: CRM'leri yıllardır var ama kimse düzgün kullanmıyor, çünkü veri girmek zahmetli. Bu durumda otomasyon, CRM'in kendisini kurtaran şey olabilir. Veri girişi otomatik hâle geldiğinde CRM sonunda güvenilir bir kaynağa dönüşür.
@@ -146,16 +146,11 @@ En sık yaşanan sorun, iki sistemin birbirinin üzerine yazmasıdır. Otomasyon
 
 Otomasyon, gönderim hacmini artırdığı için yasal riskleri de büyütür. Türkiye'de soğuk e-posta gönderirken KVKK ve ticari elektronik ileti mevzuatına uygun hareket etmek zorunludur. Ret talebini otomatik işleyen, iletişimi durduran ve bunu CRM'e kaydeden bir mekanizma her dizide olmalıdır.
 
-## Maliyeti ne kadar?
+## CRM ve otomasyonun maliyeti nasıl ayrışır?
 
-Kesin rakam vermek yanıltıcı olur. Maliyet, kullanıcı sayısına, seçilen araçlara ve iş akışlarının karmaşıklığına göre geniş bir aralıkta değişir. Ama maliyet kalemlerini doğru tanımlamak, bütçeyi gerçekçi planlamanızı sağlar:
+Kesin rakam vermek yanıltıcı olur. Maliyet, kullanıcı sayısına, seçilen araçlara ve iş akışlarının karmaşıklığına göre geniş bir aralıkta değişir. Kalem kalem lisans, kurulum ve aylık bütçe senaryoları için [Türkiye'de satış otomasyonu maliyeti rehberimize](/blog/satis-otomasyonu-maliyeti-turkiye) bakın.
 
-- **CRM lisansı:** Genellikle kullanıcı başına aylık ücretlendirilir. Otomasyon özellikleri üst paketlerde olduğu için paket seçimi maliyeti ciddi biçimde etkiler.
-- **Veri ve zenginleştirme:** Kredi veya kayıt bazlı fiyatlandırılır. Ne kadar çok lead işlerseniz o kadar artar.
-- **E-posta gönderim altyapısı:** Gönderim hesapları, ısınma araçları, alan adları.
-- **Orkestrasyon aracı:** n8n gibi açık kaynak araçları kendi sunucunuzda çalıştırarak lisans maliyetini düşürebilirsiniz. Bulut tabanlı araçlar ise işlem sayısına göre ücretlendirir.
-- **Yapay zeka kullanımı:** Model API'leri kullanım miktarına göre fiyatlandırılır. Lead başına maliyet genellikle düşüktür ama hacimle birlikte toplanır.
-- **Kurulum ve bakım emeği:** Gözden kaçan en büyük kalem budur. İş akışlarının tasarlanması, test edilmesi ve araçlar güncellendikçe bakımının yapılması zaman ister.
+Özetle CRM lisansı genellikle kullanıcı başına aylık ücretlendirilir ve otomasyon özellikleri üst paketlerde olduğu için paket seçimi maliyeti belirler. Otomasyon katmanı ise kullanıcı sayısına değil kullanıma göre fiyatlanır: işlenen lead, veri kredisi, gönderim hacmi ve yapay zeka çağrıları arttıkça maliyet de artar. Bu katmanda gözden kaçan en büyük kalem, iş akışlarını tasarlama, test etme ve bakımını yapma emeğidir.
 
 Maliyeti değerlendirirken doğru soru "Bu sistem ne kadar tutuyor?" değil, "Bu sistem olmadan aynı işi yapmak bize ne kadara mal oluyor?" sorusudur. Yukarıdaki örnekte olduğu gibi, ekibinizin veri girişine harcadığı saatleri temsilci maliyetiyle çarpın. Çoğu zaman otomasyon yatırımının kendini ne kadar sürede amorti ettiği bu basit hesapla netleşir. Bu hesabı doğru yapabilmek için önce mevcut verimliliğinizi ölçmeniz gerekir. Bunun için [satış ekibi verimliliğini ölçmeye yönelik KPI rehberimize](/blog/satis-ekibi-verimlilik-kpi-rehberi) bakabilirsiniz.
 
@@ -182,9 +177,9 @@ Bir başka seçenek de outbound sürecin tamamını bir hizmet olarak almak. Öz
 
 ## Sık sorulan sorular
 
-### CRM olmadan satış otomasyonu kurulabilir mi?
+### Hiç CRM'i olmayan bir ekip otomasyona nereden başlamalı?
 
-Teknik olarak kurulabilir, ancak önerilmez. Otomasyonun ürettiği aktivitelerin, yanıtların ve fırsatların kalıcı olarak kaydedileceği bir merkez olmadığında veriler dağınık araçlarda kaybolur ve raporlama imkânsız hâle gelir. Küçük bir ekip bile basit, ücretsiz katmanlı bir CRM ile başlayıp otomasyonu onun üzerine kurmalıdır.
+Küçük ekipler Google Sheets/Airtable tabanlı bir yapıyla başlayıp süreç oturunca CRM'e geçebilir. Adımlar için [CRM olmadan Google Sheets ve n8n ile satış otomasyonu kurma rehberimize](/blog/crm-olmadan-satis-otomasyonu-nasil-kurulur) bakın.
 
 ### Satış otomasyonu satış temsilcilerinin yerini alır mı?
 

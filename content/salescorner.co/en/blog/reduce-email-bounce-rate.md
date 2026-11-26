@@ -1,6 +1,6 @@
 ---
 title: "How to Reduce Email Bounce Rate: A B2B Guide"
-description: "Lower the hard bounce rate of your cold emails with verification, domain warm-up and list hygiene, illustrated with B2B examples from Turkey."
+description: "Lower the hard bounce rate of your cold emails with email verification, list hygiene and bounce code diagnosis, illustrated with B2B examples from Turkey."
 date: "2026-11-05"
 category: "Outbound"
 image: "https://images.pexels.com/photos/7580647/pexels-photo-7580647.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
@@ -147,7 +147,7 @@ A sample warm-up plan might look like this:
 - **Weeks 3–4:** 30–50 emails per day
 - **After that:** Staying at an upper limit of around 50 emails per day per sending account is considered a safe practice by many teams.
 
-If you need more volume, spreading it across multiple sending accounts and domains is healthier than pushing a single account's limit.
+If you need more volume, spreading it across multiple sending accounts and domains is healthier than pushing a single account's limit. For a full week-by-week schedule, see our [email domain warm-up guide](/blog/email-domain-warm-up-outbound).
 
 ### Step 7: Manage bounces automatically
 
