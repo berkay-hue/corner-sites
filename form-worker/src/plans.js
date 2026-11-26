@@ -13,12 +13,14 @@
 // stock_trial (25.11): Pexels deneme hakkı. stock false olan planda (demo/basic) hesap başına ÖMÜR BOYU stock_trial görsel (aylık
 // sıfırlanmaz); arama hak kullanılana dek açık, hak görsel sahneye eklenince POST /gen/stock/use ile düşer (generate.js).
 // stock true olan planda (pro/enterprise) sınırsız, stock_trial 0. Sitedeki karşılığı SMC_PLANS.<plan>.pexels_deneme.
+// ekip_hazirlar (26.11, yalnız enterprise): false = Enterprise'da da içeriği kullanıcı hazırlar, ekip üretmez; sitedeki
+// SMC_PLANS.enterprise.ekip_hazirlar ile aynı (plans.test.mjs). Bilgi alanı: planLimits'e girmez, zorlama yok.
 export const TRIAL_DAYS = 14;
 export const PLANS = Object.freeze({
   demo: Object.freeze({ linkedin_blog: 4, video_gorsel: 1, stock: false, stock_trial: 1, cms_sites: 0, cms_per_week: 0 }),
   basic: Object.freeze({ linkedin_blog: 8, video_gorsel: 2, stock: false, stock_trial: 1, cms_sites: 0, cms_per_week: 0 }),
   pro: Object.freeze({ linkedin_blog: 40, video_gorsel: 12, stock: true, stock_trial: 0, cms_sites: 1, cms_per_week: 3 }),
-  enterprise: Object.freeze({ linkedin_blog: null, video_gorsel: null, stock: true, stock_trial: 0, cms_sites: null, cms_per_week: 7 }),
+  enterprise: Object.freeze({ linkedin_blog: null, video_gorsel: null, stock: true, stock_trial: 0, cms_sites: null, cms_per_week: 7, ekip_hazirlar: false }),
 });
 
 // Yayın kuyruğu (src/publish.js, app.socialmediacorner.co) yalnız bu planlarda; fiyat sayfası ve assets/plans.js kuyruk

@@ -21,6 +21,7 @@
 // günlük hakları (GEN_PER_DAY) bu bayrakla fiilen kullanılmaz. demo planı (src/plans.js): aylık değil deneme boyunca TOPLAM
 // (planCounts: created_at ayından bu yana gen_month toplamı, ay dönümünde sıfırlanmaz); deneme bitince üretim/refine
 // 403 trial_ended; /gen/quota demo'da trial_ends_at + trial_ended taşır (bittiyse left 0).
+// W2 (26.11): POST /gen/tts (Azure Speech seslendirme, audio/mpeg) + GET /gen/tts/sesler; ayrıntı ttsRoute üstünde.
 import {
   SYSTEM_GEN, SYSTEM_REFINE, SYSTEM_IG_CAPTION, SYSTEM_IG_REELS, SYSTEM_IG_CAPTION_REFINE, SYSTEM_IG_REELS_REFINE, SCHEMA, SCHEMA_REELS,
   SYSTEM_BLOG, SYSTEM_VIDEO, SCHEMA_BLOG, SCHEMA_VIDEO, BLOG_LENGTHS, VIDEO_KINDS, VIDEO_LENGTHS, STUDIO_MAX, withStyle, userBlog, userVideo,
@@ -43,7 +44,7 @@ const DAILY = new Set(["ok", "fail", "refused", "busy", "refine_ok", "tok_in", "
 export const GEN_UNITS = 3, REFINE_UNITS = 1, MIN_T = 1500, EV_PER_DAY = 30;
 // ISTEM-IG §3.2 madde 1: /gen/instagram gövdesi 8 KB (marka sesi)
 // A8: linkedin/blog/video 12 KB (3000 karakterlik style, Türkçe 2 bayt/karakter + öbür alanlar sığsın)
-const BODY_MAX = { linkedin: 12288, blog: 12288, video: 12288, instagram: 8192, refine: 16384, quota: 4096, event: 4096, stock_use: 1024 };
+const BODY_MAX = { linkedin: 12288, blog: 12288, video: 12288, instagram: 8192, refine: 16384, quota: 4096, event: 4096, stock_use: 1024, tts: 8192 };
 const LLM_ERR = { busy: ["llm_busy", 503], limit: ["llm_limit", 503], fail: ["llm_fail", 502], refusal: ["refused", 422] };
 
 const json = (body, status, origin) => new Response(status === 204 ? null : JSON.stringify(body), {
@@ -123,8 +124,9 @@ export const DECR = "UPDATE gen_usage SET n = MAX(0, n - ?) WHERE day = ? AND ke
 // A9b aylık plan sayacı (0018 gen_month): aynı koşullu artış deseni; item'da month varsa bu tabloya gider
 export const M_UPSERT = "INSERT INTO gen_month (month, user_id, kind, n) VALUES (?, ?, ?, ?) ON CONFLICT(month, user_id, kind) DO UPDATE SET n = gen_month.n + excluded.n WHERE gen_month.n + excluded.n <= ? RETURNING n";
 export const M_DECR = "UPDATE gen_month SET n = MAX(0, n - ?) WHERE month = ? AND user_id = ? AND kind = ?";
-const up = (db, day, i) => i.month ? db.prepare(M_UPSERT).bind(i.month, i.user, i.kind, i.inc, i.max) : db.prepare(UPSERT).bind(day, i.key, i.kind, i.inc, i.max);
-const down = (db, day, i) => i.month ? db.prepare(M_DECR).bind(i.inc, i.month, i.user, i.kind) : db.prepare(DECR).bind(i.inc, day, i.key);
+// item.day verilirse o satır çağrının gününü değil kendi gününü kullanır (W2 /gen/tts aylık karakter bütçesi "tts:YYYY-MM")
+const up = (db, day, i) => i.month ? db.prepare(M_UPSERT).bind(i.month, i.user, i.kind, i.inc, i.max) : db.prepare(UPSERT).bind(i.day || day, i.key, i.kind, i.inc, i.max);
+const down = (db, day, i) => i.month ? db.prepare(M_DECR).bind(i.inc, i.month, i.user, i.kind) : db.prepare(DECR).bind(i.inc, i.day || day, i.key);
 
 // Koşullu artışlar tek db.batch'te; satır dönmeyen varsa artanlar aynı day/key ile geri alınır.
 // items: [{name, kind, key, inc, max}] (aylık: {name, month, user, kind, inc, max}) → { ok, n:{name:yeni değer}, failed:[name] }
@@ -1080,8 +1082,87 @@ async function stockUseRoute(c) {
   return json({ ok: true, charged: false, stock_trial: { limit: t.limit, used: Number(ptRow.n) } }, 200, origin);
 }
 
+// W2 (26.11) seslendirme: POST /gen/tts {metin, ses} → Azure Speech REST (audio-24khz-48kbitrate-mono-mp3), yanıt audio/mpeg.
+// Secret'lar AZURE_SPEECH_KEY + AZURE_SPEECH_REGION (wrangler secret; biri yoksa 503 {hata:"tts_kapali"}). Ses yalnız TTS_VOICES
+// beyaz listesinden; SSML xml:lang sesten türetilir, metin XML kaçışlı, en çok TTS_MAX (1500) karakter (aşarsa 400 metin_uzun).
+// Oturum şart (Bearer; GEN_LOGIN_REQUIRED=1 iken yönlendirici zaten 401 verir, kapalıyken de burada 401). Göç yok: sayaçlar
+// gen_usage'ta yeni türlerle — kullanıcı başına günlük istek 'tu' (GEN_TTS_USER_PER_DAY, varsayılan 60), global günlük istek
+// 'ta' (GEN_TTS_PER_DAY, 600), global AYLIK karakter bütçesi 'tc' (GEN_TTS_CHARS_PER_MONTH, 450000; Azure F0 ayda 500 bin
+// karakter ücretsiz) — 'tc' satırının day'i "tts:YYYY-MM" (tarih biçimli değil → genCleanup silmez, ayda bir satır).
+// Azure hatası/zaman aşımı → üç sayaç iade, 502 {hata:"tts_hata"}. GET /gen/tts/sesler oturumsuz: {ok, acik, sesler}; acik yalnız
+// iki secret'ın VAR olup olmadığı (değer dönmez). İki uç src/sites.js APP_ROUTES'ta; POST /gen/tts yalnız uç listesinde
+// "POST /gen/tts" olan sitenin oturumuyla çalışır.
+export const TTS_VOICES = Object.freeze([
+  Object.freeze({ id: "tr-TR-EmelNeural", dil: "tr-TR", ad: "Emel", cinsiyet: "kadin" }),
+  Object.freeze({ id: "tr-TR-AhmetNeural", dil: "tr-TR", ad: "Ahmet", cinsiyet: "erkek" }),
+  Object.freeze({ id: "en-US-JennyNeural", dil: "en-US", ad: "Jenny", cinsiyet: "kadin" }),
+  Object.freeze({ id: "en-US-GuyNeural", dil: "en-US", ad: "Guy", cinsiyet: "erkek" }),
+]);
+export const TTS_MAX = 1500;
+const TTS_TIMEOUT = 20000;
+const TTS_FORMAT = "audio-24khz-48kbitrate-mono-mp3";
+// bölge yalnız küçük harf/rakam (URL'ye girer: başka ana makineye yönlendirme olmasın)
+const ttsOn = env => Boolean(env.AZURE_SPEECH_KEY && env.AZURE_SPEECH_REGION && /^[a-z0-9]{2,40}$/.test(String(env.AZURE_SPEECH_REGION)));
+const ttsFail = (hata, status, origin, extra) => fail(hata, status, origin, { hata, ...extra });
+const XML_ESC = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&apos;" };
+export const xmlEscape = s => String(s).replace(/[&<>"']/g, ch => XML_ESC[ch]);
+export const ttsSsml = (metin, v) => `<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='${v.dil}'><voice name='${v.id}'>${xmlEscape(metin)}</voice></speak>`;
+// Metin: NFC; XML 1.0'da geçersiz kontrol karakterleri (satır sonu ve sekme dışı) boşluk; kenar boşluğu kırpılır.
+const ttsText = v => typeof v === "string" ? v.normalize("NFC").replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f\ufffe\uffff]/g, " ").trim() : null;
+
+function ttsVoicesRoute(c) {
+  return json({ ok: true, acik: ttsOn(c.env), sesler: TTS_VOICES.map(v => ({ ...v })) }, 200, c.origin);
+}
+
+async function ttsRoute(c) {
+  const { env, db, origin, body, io } = c;
+  if (!ttsOn(env)) return ttsFail("tts_kapali", 503, origin);
+  const a = await account(c);
+  if (!a || !siteConf(a.site).routes?.includes("POST /gen/tts")) return ttsFail("login_required", 401, origin);
+  const metin = ttsText(body?.metin);
+  if (!metin) return ttsFail("metin_bos", 400, origin, { field: "metin" });
+  const n = cp(metin);
+  if (n > TTS_MAX) return ttsFail("metin_uzun", 400, origin, { field: "metin", max: TTS_MAX });
+  const v = TTS_VOICES.find(x => x.id === body?.ses);
+  if (!v) return ttsFail("ses_gecersiz", 400, origin, { field: "ses" });
+  const day = genDay(), month = "tts:" + day.slice(0, 7);
+  const [uK, allK, cK] = await Promise.all([keyOf(env, day, "tu", String(a.user.id)), keyOf(env, day, "ta", "global"), keyOf(env, month, "tc", "global")]);
+  const items = [
+    { name: "user", kind: "tu", key: uK, inc: 1, max: int(env.GEN_TTS_USER_PER_DAY, 60) },
+    { name: "all", kind: "ta", key: allK, inc: 1, max: int(env.GEN_TTS_PER_DAY, 600) },
+    { name: "chars", kind: "tc", key: cK, inc: n, max: int(env.GEN_TTS_CHARS_PER_MONTH, 450000), day: month },
+  ];
+  const r = await reserve(db, day, items);
+  if (!r.ok) return ttsFail("tts_limit", 429, origin, { scope: r.failed.includes("user") ? "user" : r.failed.includes("chars") ? "month" : "global" });
+  // Azure başarısız: üç sayaç iade (iade yazılamazsa yanıt değişmez), sonra 502
+  const iade = async () => {
+    try { await db.batch(decr(db, day, items)); } catch (e) { console.log("tts iade", e?.message?.slice(0, 80)); }
+    return ttsFail("tts_hata", 502, origin);
+  };
+  let audio;
+  try {
+    const get = io.fetch; // ayrık çağrı (Illegal invocation)
+    const res = await get(`https://${env.AZURE_SPEECH_REGION}.tts.speech.microsoft.com/cognitiveservices/v1`, {
+      method: "POST",
+      headers: { "Ocp-Apim-Subscription-Key": env.AZURE_SPEECH_KEY, "Content-Type": "application/ssml+xml", "X-Microsoft-OutputFormat": TTS_FORMAT, "User-Agent": "corner-forms-tts" },
+      body: ttsSsml(metin, v),
+      signal: AbortSignal.timeout(TTS_TIMEOUT),
+    });
+    if (!res.ok) { console.log("tts", res.status); return iade(); }
+    audio = await res.arrayBuffer();
+  } catch (e) {
+    console.log("tts", e?.name || "error");
+    return iade();
+  }
+  if (!audio || !audio.byteLength) return iade();
+  return new Response(audio, {
+    status: 200,
+    headers: { "content-type": "audio/mpeg", "cache-control": "no-store", ...(origin && { "access-control-allow-origin": origin, vary: "Origin" }) },
+  });
+}
+
 // [ad, işleyici, yöntem (yoksa POST)]
-const ROUTES = { "/gen/stock": ["stock", stockRoute, "GET"], "/gen/stock/use": ["stock_use", stockUseRoute], "/gen/linkedin": ["linkedin", linkedin], "/gen/instagram": ["instagram", instagram], "/gen/blog": ["blog", blog], "/gen/video": ["video", video], "/gen/refine": ["refine", refine], "/gen/quota": ["quota", quotaRoute], "/gen/event": ["event", event] };
+const ROUTES = { "/gen/stock": ["stock", stockRoute, "GET"], "/gen/stock/use": ["stock_use", stockUseRoute], "/gen/tts": ["tts", ttsRoute], "/gen/tts/sesler": ["tts_voices", ttsVoicesRoute, "GET"], "/gen/linkedin": ["linkedin", linkedin], "/gen/instagram": ["instagram", instagram], "/gen/blog": ["blog", blog], "/gen/video": ["video", video], "/gen/refine": ["refine", refine], "/gen/quota": ["quota", quotaRoute], "/gen/event": ["event", event] };
 
 export async function generate(req, url, env, origin, ctx, io = {}) {
   const route = ROUTES[url.pathname];
@@ -1094,8 +1175,8 @@ export async function generate(req, url, env, origin, ctx, io = {}) {
   if (tooLarge) return fail("too_large", 413, origin);
   try {
     const c = { env, db: env.DB, body, query: url.searchParams, origin, ctx, io: { fetch: io.fetch || ((u, i) => fetch(u, i)) }, ip: req.headers.get("cf-connecting-ip") || "", token: bearerToken(req) };
-    // A15: GEN_LOGIN_REQUIRED=1 → ziyaretçi (oturumsuz) üretim yok; /gen/event ölçümü açık kalır.
-    if (env.GEN_LOGIN_REQUIRED === "1" && name !== "event" && !(await account(c))) {
+    // A15: GEN_LOGIN_REQUIRED=1 → ziyaretçi (oturumsuz) üretim yok; /gen/event ölçümü ve W2 ses listesi açık kalır.
+    if (env.GEN_LOGIN_REQUIRED === "1" && name !== "event" && name !== "tts_voices" && !(await account(c))) {
       if (name === "quota") return json({ ok: true, charged: false, left: 0, cap: 0, plan: "anon", stock: false, login_required: true }, 200, origin);
       return fail("login_required", 401, origin);
     }

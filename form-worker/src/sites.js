@@ -29,6 +29,9 @@ export const APP_ROUTES = Object.freeze([
   "POST /app/cms/:id/pause", "POST /app/cms/:id/resume", "POST /app/cms/:id/disconnect", "POST /app/cmsposts/:id/retry", "POST /app/cmsoauth/start",
   "POST /app/cmsoauth/finish", "POST /app/cmsposts/:id/view", "POST /app/cmsposts/:id/edit", "POST /app/cmsposts/:id/skip",
   "POST /app/cmsposts/:id/now", "POST /app/cmsposts/:id/reschedule",
+  // W2 seslendirme (src/generate.js ttsRoute): /gen/* yönlendiricisi bu listeye bakmaz; ttsRoute oturumun sitesinde
+  // "POST /gen/tts" arar (brandcorner.co'da yok → 401). Ses listesi oturumsuz.
+  "POST /gen/tts", "GET /gen/tts/sesler",
 ]);
 
 export const SITES = {
