@@ -271,7 +271,7 @@ html,body{background:#fbfbfe!important}
 <noscript><p class="warn">Bu araç tarayıcınızda JavaScript ile çalışır; puanı görmek için JavaScript'i açın.</p></noscript></section>
 <h2>Puan nasıl hesaplanıyor?</h2>
 <p>Puan altı kriterin toplamıdır. Ağırlıklar, B2B soğuk e-postada açılma ve yanıt oranını en çok etkileyen etkenlere göre belirlendi:</p>
-<ul><li><b>Uzunluk (25 puan):</b> 20–50 karakter tam puan alır. Mobil gelen kutusu konu satırının yalnızca ilk 35–45 karakterini gösterir.</li><li><b>Spam riski (25 puan):</b> "ücretsiz", "garanti", "acil", "free", "act now" gibi Türkçe ve İngilizce tetikleyiciler ile sahte "Re:/Fwd:" ön ekinin her biri puan düşürür.</li><li><b>Kişiselleştirme (15 puan):</b> {{ad}}, [şirket] gibi bir etiket ya da "Ayşe Hanım" gibi doğrudan hitap tam puan alır; yalnızca "siz/ekibiniz" kullanımı kısmi puan alır.</li><li><b>Soru veya sayı (15 puan):</b> Kısa bir soru ve somut bir sayı konu satırını taranabilir kılar.</li><li><b>Büyük harf (10 puan):</b> Tamamen büyük harfle yazılmış kelimeler puan düşürür; B2B, CRM, KVKK gibi kısaltmalar hariç tutulur.</li><li><b>Noktalama ve emoji (10 puan):</b> Ünlem, emoji ve sembol yığınları puan düşürür.</li></ul>
+<ul><li><b>Uzunluk (25 puan):</b> 20–50 karakter tam puan alır. Mobil gelen kutusu konu satırının yalnızca ilk 35–45 karakterini gösterir.</li><li><b>Spam riski (25 puan):</b> "ücretsiz", "garanti", "acil", "free", "act now" gibi Türkçe ve İngilizce tetikleyiciler ile sahte "Re:/Fwd:" ön ekinin her biri puan düşürür.</li><li><b>Kişiselleştirme (15 puan):</b> {{ad}}, [şirket] gibi bir etiket ya da "Ayşe Hanım" gibi doğrudan hitap tam puan alır; yalnızca "siz/ekibiniz" kullanımı kısmi puan alır.</li><li><b>Soru veya sayı (15 puan):</b> Kısa bir soru ve somut bir sayı konu satırını taranabilir kılar.</li><li><b>Büyük harf (10 puan):</b> Tamamen büyük harfle yazılmış kelimeler puan düşürür; B2B, CRM, KVKK gibi kısaltmalar hariç tutulur.</li><li><b>Noktalama ve emoji (10 puan):</b> Ünlem, emoji ve sembol yığınları puan düşürür.</li><li><b>Anlam kontrolü:</b> Tekrarlanan harfler, klavye tuşu dizileri ya da yalnızca rakam ve sembolden oluşan metin anlamlı sayılmaz ve 0 puan alır.</li></ul>
 <p>80 ve üzeri <b>güçlü</b>, 60–79 <b>iyi</b>, 40–59 <b>geliştirilmeli</b>, 40'ın altı <b>zayıf</b> sayılır. Puan bir başlangıç kontrolüdür; en iyi konu satırını yine de gerçek listenizde A/B testiyle bulursunuz.</p>
 <h2>İyi bir soğuk e-posta konu satırı nasıl olur?</h2>
 <p>İyi bir konu satırı alıcıya ait bir şeyden bahseder (şirketi, rolü, hedefi), bir şey satmaya çalışıyormuş gibi görünmez ve bir meslektaştan gelmiş kadar sade okunur. "{{şirket}} için kısa bir soru" ya da "Q4 satış hedefiniz için 2 fikir" gibi kalıplar, "Satışlarınızı %300 artırın!" gibi vaatlerden daha iyi açılır. Konu satırının vaadini e-postanın ilk cümlesi karşılamalıdır; aksi halde açılma artar ama yanıt oranı düşer.</p>
@@ -379,6 +379,31 @@ var MERGE = /\{\{\s*[^{}]+?\s*\}\}|\[[^\[\]]{2,30}\]|%[A-Za-zÇĞİÖŞÜçğı�
 var NAME = /\p{Lu}\p{Ll}+\s+(Bey|Hanım)(?![\p{L}])/u;
 var FAKE = /^\s*(re|fw|fwd|ynt|ilt|yn|cvp)\s*:/i;
 
+var MERGE_G = new RegExp(MERGE.source, 'g');
+var VOW = /[aeiouyıöüâêîôûàèìòùáéíóúäëï]/g;
+var KB = ['asdf', 'sdfg', 'dfgh', 'fghj', 'ghjk', 'hjkl', 'qwer', 'rtyu', 'tyui', 'yuio', 'uiop', 'zxcv', 'xcvb', 'cvbn', 'vbnm'];
+function anlam(s) {
+  var t = s.replace(MERGE_G, ' ').trim();
+  if (!t) return '';
+  var low = t.toLocaleLowerCase('tr'), L = low.replace(/[^\p{L}]/gu, '');
+  if (!L.length) return 'Yalnızca rakam ya da işaretten oluşuyor.';
+  var sym = (t.match(/[^\p{L}\p{N}\s.,;:?!'’"“”%&\/()+\-–—]/gu) || []).length;
+  if (sym > L.length) return 'Çoğunlukla sembol ya da emojiden oluşuyor.';
+  var uniq = {}; Array.from(L).forEach(function (c) { uniq[c] = 1; });
+  var nu = Object.keys(uniq).length;
+  if ((L.length >= 5 && nu <= 2) || (L.length >= 8 && nu / L.length < 0.25)) return 'Metin birkaç harfin tekrarından oluşuyor.';
+  var ws = t.match(/\p{L}+/gu) || [], bad = 0, tek = 0;
+  ws.forEach(function (w) {
+    var lw = w.toLocaleLowerCase('tr'), n = Array.from(lw).length, v = (lw.match(VOW) || []).length;
+    if (/(\p{L})\1{3,}/u.test(lw) || /(\p{L}{2,4})\1{2,}/u.test(lw)) { bad += n; tek++; return; }
+    var kisa = w === w.toLocaleUpperCase('tr') && n <= 5;
+    if ((n >= 3 && !v && !kisa) || (n >= 6 && v / n < 0.2) || KB.some(function (k) { return lw.indexOf(k) > -1; })) bad += n;
+  });
+  if (bad * 2 >= Array.from(L).length) return tek ? 'Aynı harf ya da hece art arda tekrarlanıyor.' : 'Rastgele harf dizisi ya da klavye tuşları gibi görünüyor.';
+  if (ws.length === 1 && !/\s/.test(t) && Array.from(L).length > 15) return 'Boşluksuz, çok uzun tek bir harf dizisi.';
+  return '';
+}
+
 function analiz(s) {
   var chars = Array.from(s.trim()).length;
   var words = (s.match(/[\p{L}\p{N}][\p{L}\p{N}'’-]*/gu) || []);
@@ -444,6 +469,13 @@ function analiz(s) {
   else if (!q) o.push('Soru biçimini test edin; kısa sorular yanıt almayı kolaylaştırır.');
   else if (!n) o.push('Somut bir sayı ekleyin (süre, adım, oran); sayılar konu satırını taranabilir kılar.');
 
+  var an = anlam(s);
+  if (an) {
+    k.forEach(function (x) { x.p = 0; x.t = (x.ad === 'Uzunluk' ? chars + ' karakter; ' : '') + 'Anlamlı kelime olmadığı için puan verilmedi.'; });
+    k.unshift({ ad: 'Anlam', p: 0, m: 0, t: 'Konu satırı anlamlı kelimeler içermiyor. ' + an });
+    o = ['Gerçek kelimelerle yazın: alıcının şirketi, rolü ya da çözdüğünüz somut sorun (ör. "{{ad}}, Q4 pipeline hedefiniz için 3 fikir"). Anlamsız metin spam filtresine takılmasa da açılmaz.'];
+  }
+
   var total = k.reduce(function (a, b) { return a + b.p; }, 0);
   return { total: total, k: k, o: o, chars: chars };
 }
@@ -484,7 +516,7 @@ function ciz() {
   $('etiket').className = e[1];
   $('bar').style.width = r.total + '%';
   $('bar').className = e[1];
-  list($('kriter'), r.k.map(function (x) { return { b: x.ad + ' ' + x.p + '/' + x.m + ':', t: x.t, c: durum(x.p, x.m) }; }));
+  list($('kriter'), r.k.map(function (x) { return x.m ? { b: x.ad + ' ' + x.p + '/' + x.m + ':', t: x.t, c: durum(x.p, x.m) } : { b: x.ad + ':', t: x.t, c: 'bad' }; }));
   list($('oneri'), (r.o.length ? r.o : ['Konu satırınız temel kontrollerden geçti. Yine de iki farklı versiyonu küçük bir listede A/B test edin.']).map(function (t) { return { t: t }; }));
   $('pv-m').textContent = kes(s, 40);
   $('pv-d').textContent = kes(s, 70);

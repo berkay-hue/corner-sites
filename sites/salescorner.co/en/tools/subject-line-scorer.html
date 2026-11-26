@@ -271,7 +271,7 @@ html,body{background:#fbfbfe!important}
 <noscript><p class="warn">This tool runs in your browser with JavaScript; turn JavaScript on to see the score.</p></noscript></section>
 <h2>How is the score calculated?</h2>
 <p>The score is the sum of six criteria. The weights reflect the factors that most affect open and reply rates in B2B cold email:</p>
-<ul><li><b>Length (25 points):</b> 20–50 characters earns full points. Mobile inboxes show only the first 35–45 characters of a subject line.</li><li><b>Spam risk (25 points):</b> Each trigger such as "free", "guaranteed", "urgent" or "act now", and a fake "Re:/Fwd:" prefix, lowers the score.</li><li><b>Personalization (15 points):</b> A tag like {{first_name}} or [company], or a direct greeting like "Hi Sarah", earns full points; using only "you/your team" earns partial points.</li><li><b>Question or number (15 points):</b> A short question and a concrete number make the subject line scannable.</li><li><b>Capitals (10 points):</b> Words written entirely in capitals lower the score; acronyms like B2B, CRM and GDPR are excluded.</li><li><b>Punctuation and emoji (10 points):</b> Piles of exclamation marks, emoji and symbols lower the score.</li></ul>
+<ul><li><b>Length (25 points):</b> 20–50 characters earns full points. Mobile inboxes show only the first 35–45 characters of a subject line.</li><li><b>Spam risk (25 points):</b> Each trigger such as "free", "guaranteed", "urgent" or "act now", and a fake "Re:/Fwd:" prefix, lowers the score.</li><li><b>Personalization (15 points):</b> A tag like {{first_name}} or [company], or a direct greeting like "Hi Sarah", earns full points; using only "you/your team" earns partial points.</li><li><b>Question or number (15 points):</b> A short question and a concrete number make the subject line scannable.</li><li><b>Capitals (10 points):</b> Words written entirely in capitals lower the score; acronyms like B2B, CRM and GDPR are excluded.</li><li><b>Punctuation and emoji (10 points):</b> Piles of exclamation marks, emoji and symbols lower the score.</li><li><b>Meaning check:</b> Text made of repeated letters, keyboard mashes or only numbers and symbols is not treated as a real subject line and scores 0.</li></ul>
 <p>80 and above counts as <b>strong</b>, 60–79 as <b>good</b>, 40–59 as <b>needs work</b> and below 40 as <b>weak</b>. The score is a first check; you still find the best subject line by A/B testing on your real list.</p>
 <h2>What makes a good cold email subject line?</h2>
 <p>A good subject line mentions something that belongs to the recipient (their company, role or goal), doesn't look like it is trying to sell something, and reads as plainly as a note from a colleague. Patterns like "A quick question for {{company}}" or "2 ideas for your Q4 sales target" get opened more than promises like "Boost your sales by 300%!". The first sentence of the email must deliver on the subject line's promise; otherwise opens go up but reply rates drop.</p>
@@ -374,6 +374,31 @@ var MERGE = /\{\{\s*[^{}]+?\s*\}\}|\[[^\[\]]{2,30}\]|%[A-Za-z_]{2,30}%/;
 var NAME = /(^|[^\p{L}])(?:(?:Hi|Hey|Hello|Dear)\s+\p{Lu}\p{Ll}+|(?:Mr|Ms|Mrs|Dr)\.?\s+\p{Lu}\p{Ll}+)(?![\p{L}])|^\s*\p{Lu}\p{Ll}+\s*,/u;
 var FAKE = /^\s*(re|fw|fwd)\s*:/i;
 
+var MERGE_G = new RegExp(MERGE.source, 'g');
+var VOW = /[aeiouyıöüâêîôûàèìòùáéíóúäëï]/g;
+var KB = ['asdf', 'sdfg', 'dfgh', 'fghj', 'ghjk', 'hjkl', 'qwer', 'rtyu', 'tyui', 'yuio', 'uiop', 'zxcv', 'xcvb', 'cvbn', 'vbnm'];
+function anlam(s) {
+  var t = s.replace(MERGE_G, ' ').trim();
+  if (!t) return '';
+  var low = t.toLowerCase(), L = low.replace(/[^\p{L}]/gu, '');
+  if (!L.length) return 'It is made only of numbers or punctuation.';
+  var sym = (t.match(/[^\p{L}\p{N}\s.,;:?!'’"“”%&\/()+\-–—]/gu) || []).length;
+  if (sym > L.length) return 'It is mostly symbols or emoji.';
+  var uniq = {}; Array.from(L).forEach(function (c) { uniq[c] = 1; });
+  var nu = Object.keys(uniq).length;
+  if ((L.length >= 5 && nu <= 2) || (L.length >= 8 && nu / L.length < 0.25)) return 'It is just a few letters repeated.';
+  var ws = t.match(/\p{L}+/gu) || [], bad = 0, tek = 0;
+  ws.forEach(function (w) {
+    var lw = w.toLowerCase(), n = Array.from(lw).length, v = (lw.match(VOW) || []).length;
+    if (/(\p{L})\1{3,}/u.test(lw) || /(\p{L}{2,4})\1{2,}/u.test(lw)) { bad += n; tek++; return; }
+    var kisa = w === w.toUpperCase() && n <= 5;
+    if ((n >= 3 && !v && !kisa) || (n >= 6 && v / n < 0.2) || KB.some(function (k) { return lw.indexOf(k) > -1; })) bad += n;
+  });
+  if (bad * 2 >= Array.from(L).length) return tek ? 'The same letter or syllable repeats over and over.' : 'It looks like random letters or a keyboard mash.';
+  if (ws.length === 1 && !/\s/.test(t) && Array.from(L).length > 15) return 'It is a single, very long string of letters with no spaces.';
+  return '';
+}
+
 function analiz(s) {
   var chars = Array.from(s.trim()).length;
   var words = (s.match(/[\p{L}\p{N}][\p{L}\p{N}'’-]*/gu) || []);
@@ -438,6 +463,13 @@ function analiz(s) {
   else if (!q) o.push('Test a question format; short questions make replying easier.');
   else if (!n) o.push('Add a concrete number (time, steps, a rate); numbers make the subject line scannable.');
 
+  var an = anlam(s);
+  if (an) {
+    k.forEach(function (x) { x.p = 0; x.t = (x.ad === 'Length' ? chars + ' characters; ' : '') + 'No points, because there are no meaningful words.'; });
+    k.unshift({ ad: 'Meaning', p: 0, m: 0, t: 'The subject line contains no meaningful words. ' + an });
+    o = ['Write it with real words: the recipient\'s company, role or the concrete problem you solve (e.g. "{{first_name}}, 3 ideas for your Q4 pipeline target"). Nonsense may slip past spam filters, but nobody opens it.'];
+  }
+
   var total = k.reduce(function (a, b) { return a + b.p; }, 0);
   return { total: total, k: k, o: o, chars: chars };
 }
@@ -478,7 +510,7 @@ function ciz() {
   $('etiket').className = e[1];
   $('bar').style.width = r.total + '%';
   $('bar').className = e[1];
-  list($('kriter'), r.k.map(function (x) { return { b: x.ad + ' ' + x.p + '/' + x.m + ':', t: x.t, c: durum(x.p, x.m) }; }));
+  list($('kriter'), r.k.map(function (x) { return x.m ? { b: x.ad + ' ' + x.p + '/' + x.m + ':', t: x.t, c: durum(x.p, x.m) } : { b: x.ad + ':', t: x.t, c: 'bad' }; }));
   list($('oneri'), (r.o.length ? r.o : ['Your subject line passed the basic checks. Still, A/B test two versions on a small list.']).map(function (t) { return { t: t }; }));
   $('pv-m').textContent = kes(s, 40);
   $('pv-d').textContent = kes(s, 70);
