@@ -534,3 +534,150 @@ test("deneme use: oturum yok 401, anahtar yok 503, bozuk id 400, GET 404, gövde
   assert.deepEqual([r.status, r.body.error, r.body.trial_ended], [403, "plan", true]);
   assert.deepEqual([(await e.use({ auth: BEARER("demo") })).status, e.usage("pt"), e.calls.length], [403, [], 0]);
 });
+
+// ── 26.11 ?type=video: Pexels video araması (aynı anahtar, plan kapısı, sayaçlar ve iade) ──
+const vfile = (id, w, h, extra = {}) => ({ id: id * 10 + w, quality: h >= 720 || w >= 720 ? "hd" : "sd", file_type: "video/mp4", width: w, height: h, fps: 25,
+  link: `https://videos.pexels.com/video-files/${id}/${id}-${w}_${h}_25fps.mp4`, ...extra });
+const video = (id, extra = {}) => ({
+  id, width: 1080, height: 1920, duration: 14, url: `https://www.pexels.com/video/x-${id}/`, image: `https://images.pexels.com/videos/${id}/pictures/preview-0.jpg`,
+  full_res: null, tags: [], avg_color: null, user: { id: 7, name: "Ali Video", url: "https://www.pexels.com/@ali" },
+  video_files: [vfile(id, 360, 640), vfile(id, 720, 1280), vfile(id, 1080, 1920), vfile(id, 1920, 1080), vfile(id, 2160, 3840)],
+  video_pictures: [{ id: 1, nr: 0, picture: "https://images.pexels.com/videos/x/pictures/p-0.jpg" }],
+  ...extra,
+});
+function videoFetch(reply = () => ({ status: 200, body: { page: 1, per_page: 15, total_results: 2, videos: [video(1), video(2)], next_page: "https://api.pexels.com/videos/search/?page=2" } })) {
+  const calls = [];
+  const f = async function (url, init) {
+    if (this !== undefined) throw new TypeError("Illegal invocation");
+    if (!String(url).startsWith("https://api.pexels.com/videos/search")) throw new Error("beklenmeyen fetch " + url);
+    calls.push({ url: new URL(url), init });
+    const r = await reply(calls.length);
+    if (r instanceof Error) throw r;
+    return new Response(typeof r.body === "string" ? r.body : JSON.stringify(r.body), { status: r.status });
+  };
+  return { f, calls };
+}
+
+test("type=video: Pexels videos/search'e anahtar başlıkta, sorgu/yön/sayfa/dil aynı; yanıt ince {type, videos}", async () => {
+  const s = setup({ fetch: videoFetch() });
+  const r = await s.call("?type=video&q=%20ofis%20&orientation=portrait&page=2&lang=tr");
+  assert.equal(r.status, 200, JSON.stringify(r.body));
+  assert.equal(r.headers.get("access-control-allow-origin"), ORIGIN);
+  const { url, init } = s.calls[0];
+  assert.equal(url.origin + url.pathname, "https://api.pexels.com/videos/search");
+  assert.deepEqual(Object.fromEntries(url.searchParams), { query: "ofis", per_page: "15", page: "2", orientation: "portrait", locale: "tr-TR" });
+  assert.equal(init.headers.authorization, KEY);
+  assert.deepEqual(Object.keys(r.body).sort(), ["next", "ok", "page", "per_page", "total_results", "type", "videos"]);
+  assert.deepEqual([r.body.type, r.body.next, r.body.page, r.body.total_results, r.body.videos.length], ["video", true, 2, 2, 2]);
+  const v = r.body.videos[0];
+  assert.deepEqual(Object.keys(v).sort(), ["duration", "file", "height", "id", "poster", "src", "url", "user", "user_url", "width"]);
+  assert.deepEqual(v, {
+    id: 1, width: 1080, height: 1920, duration: 14, poster: "https://images.pexels.com/videos/1/pictures/preview-0.jpg", url: "https://www.pexels.com/video/x-1/",
+    user: "Ali Video", user_url: "https://www.pexels.com/@ali", src: "https://videos.pexels.com/video-files/1/1-1080_1920_25fps.mp4",
+    file: { width: 1080, height: 1920, quality: "hd", fps: 25 },
+  });
+  assert.ok(!JSON.stringify(r.body).includes(KEY) && !("photos" in r.body) && !("video_pictures" in v) && !("video_files" in v));
+  // sayaçlar fotoğrafla ortak
+  assert.deepEqual([s.usage("su"), s.usage("st"), s.usage("sa")], [[1], [1], [1]]);
+  // type yok ya da photo → eski fotoğraf yanıtı (type alanı eklenmez)
+  const p = setup();
+  for (const qs of ["?q=kedi", "?q=kedi&type=photo", "?q=kedi&type="]) {
+    const pr = await p.call(qs);
+    assert.equal(pr.status, 200, qs);
+    assert.ok(Array.isArray(pr.body.photos) && !("type" in pr.body) && !("videos" in pr.body), qs);
+  }
+  assert.ok(p.calls.every(c => c.url.pathname === "/v1/search"));
+});
+
+test("type=video süzgeç: yalnız videos.pexels.com mp4; 720/1080 içinden hedef orana en yakın, eşitlikte 1080; 4K seçilmez; uygun dosya yoksa video düşer", async () => {
+  const S = id => `https://videos.pexels.com/video-files/${id}/`;
+  const vids = [
+    // 1: dikey hedef → 1080x1920 (720x1280 aynı oranda ama 1080 öncelikli); 1920x1080 yatay elenir
+    video(1),
+    // 2: yatay hedefte dikey video bile olsa en yatay dosya: 1920x1080
+    video(2, { width: 1920, height: 1080 }),
+    // 3: yalnız 720p uygun (1080 linki yabancı alan adı, http, video/webm)
+    video(3, { video_files: [vfile(3, 1080, 1920, { link: "https://player.vimeo.com/external/3.mp4" }), vfile(3, 1080, 1920, { link: "http://videos.pexels.com/a.mp4" }),
+      vfile(3, 1080, 1920, { file_type: "video/webm" }), vfile(3, 720, 1280), vfile(3, 2160, 3840)] }),
+    // 4: 720/1080 yok → kısa kenarı ≤1080 en büyük (540x960), 4K değil
+    video(4, { video_files: [vfile(4, 360, 640), vfile(4, 540, 960), vfile(4, 2160, 3840)] }),
+    // 5: yalnız 4K → düşer
+    video(5, { video_files: [vfile(5, 2160, 3840)] }),
+    // 6: hiç güvenli link yok → düşer
+    video(6, { video_files: [vfile(6, 1080, 1920, { link: "https://videos.pexels.com.evil.example/a.mp4" }), vfile(6, 720, 1280, { link: "https://videos.pexels.com/a b.mp4" }),
+      vfile(6, 720, 1280, { link: "https://videos.pexels.com/a\".mp4" }), vfile(6, 0, 0)] }),
+    // 7: bozuk öğeler
+    { id: "x", video_files: [] }, { id: 8 }, null,
+    // 9: poster/sayfa/kullanıcı yabancı → null; kullanıcı adı 120'ye kırpılır; file_type yoksa kabul
+    video(9, { image: "https://evil.example/p.jpg", url: "javascript:alert(1)", user: { name: "a".repeat(200), url: "https://evil.example/@u" },
+      video_files: [vfile(9, 1080, 1920, { file_type: undefined })] }),
+  ];
+  const s = setup({ fetch: videoFetch(() => ({ status: 200, body: { total_results: 10, videos: vids } })) });
+  const port = await s.call("?type=video&q=kedi&orientation=portrait");
+  assert.equal(port.status, 200);
+  const by = Object.fromEntries(port.body.videos.map(v => [v.id, v]));
+  assert.deepEqual(Object.keys(by).map(Number).sort((a, b) => a - b), [1, 2, 3, 4, 9]);
+  assert.equal(by[1].src, S(1) + "1-1080_1920_25fps.mp4");
+  assert.equal(by[2].src, S(2) + "2-1080_1920_25fps.mp4");
+  assert.equal(by[3].src, S(3) + "3-720_1280_25fps.mp4");
+  assert.equal(by[4].src, S(4) + "4-540_960_25fps.mp4");
+  assert.deepEqual([by[9].poster, by[9].url, by[9].user_url, by[9].user.length], [null, null, null, 120]);
+  for (const v of port.body.videos) assert.match(v.src, /^https:\/\/videos\.pexels\.com\//);
+  const land = await s.call("?type=video&q=kedi&orientation=landscape");
+  const lb = Object.fromEntries(land.body.videos.map(v => [v.id, v]));
+  assert.equal(lb[1].src, S(1) + "1-1920_1080_25fps.mp4");
+  assert.equal(lb[2].src, S(2) + "2-1920_1080_25fps.mp4");
+  // yön verilmezse videonun kendi oranı: 1 dikey → 1080x1920, 2 yatay → 1920x1080
+  const own = await s.call("?type=video&q=kedi");
+  const ob = Object.fromEntries(own.body.videos.map(v => [v.id, v]));
+  assert.deepEqual([ob[1].file.width, ob[1].file.height, ob[2].file.width, ob[2].file.height], [1080, 1920, 1920, 1080]);
+  // kare hedef: dikey ve yatay dosyalar orana eşit uzak → eşitlikte kısa kenarı 1080 olan seçilir (720 değil)
+  const sq = await s.call("?type=video&q=kedi&orientation=square");
+  assert.equal(Math.min(sq.body.videos.find(v => v.id === 1).file.width, sq.body.videos.find(v => v.id === 1).file.height), 1080);
+});
+
+test("type=video: en çok 15 öğe; eksik videos → 502 upstream ve sayaç iadesi; geçersiz type → 400 field type, Pexels çağrılmaz", async () => {
+  const many = Array.from({ length: 20 }, (_, i) => video(i + 1));
+  const s = setup({ fetch: videoFetch(n => n === 1 ? { status: 200, body: { total_results: 20, videos: many } } : { status: 200, body: { photos: [photo(1)] } }) });
+  const r = await s.call("?type=video&q=kedi");
+  assert.deepEqual([r.status, r.body.videos.length, r.body.next], [200, 15, false]);
+  const bad = await s.call("?type=video&q=kedi"); // fotoğraf yanıtı videos değil
+  assert.deepEqual([bad.status, bad.body], [502, { ok: false, error: "upstream", charged: false }]);
+  assert.deepEqual([s.usage("su"), s.usage("st"), s.usage("sa")], [[1], [1], [1]]);
+  for (const t of ["gif", "VIDEO", "videos", "__proto__", "photo,video"]) {
+    const x = await s.call(`?type=${encodeURIComponent(t)}&q=kedi`);
+    assert.deepEqual([x.status, x.body.error, x.body.field], [400, "bad_input", "type"], t);
+  }
+  // type doğrulaması q'dan önce
+  assert.equal((await s.call("?type=gif")).body.field, "type");
+  assert.equal(s.calls.length, 2);
+});
+
+test("type=video Pexels 429 → 429 limit scope global, sayaçlar iade; 5xx/ağ hatası → 502 iade; sonraki başarılı arama sayılır", async () => {
+  const replies = [{ status: 429, body: "rate limited detail" }, { status: 500, body: "secret" }, new Error("network secret")];
+  const s = setup({ fetch: videoFetch(n => replies[n - 1] || { status: 200, body: { total_results: 1, videos: [video(1)] } }) });
+  const r = await s.call("?type=video&q=kedi");
+  assert.deepEqual([r.status, r.body], [429, { ok: false, error: "limit", charged: false, scope: "global" }]);
+  assert.deepEqual([s.usage("su"), s.usage("st"), s.usage("sa")], [[0], [0], [0]]);
+  for (let i = 0; i < 2; i++) assert.deepEqual((await s.call("?type=video&q=kedi")).body, { ok: false, error: "upstream", charged: false });
+  assert.deepEqual([s.usage("su"), s.usage("st"), s.usage("sa")], [[0], [0], [0]]);
+  assert.equal((await s.call("?type=video&q=kedi")).status, 200);
+  assert.deepEqual([s.usage("su"), s.usage("st"), s.usage("sa")], [[1], [1], [1]]);
+});
+
+test("type=video plan kapısı ve sınırlar fotoğrafla aynı: oturumsuz 401, denemesi bitmiş basic 403, kullanıcı tavanı ortak (foto + video)", async () => {
+  const s = setup({ fetch: videoFetch(), env: { GEN_STOCK_USER_PER_DAY: "2" } });
+  assert.equal((await s.call("?type=video&q=kedi", { auth: null })).status, 401);
+  assert.equal((await s.use({ auth: BEARER("basic") })).status, 200);
+  const p = await s.call("?type=video&q=kedi", { auth: BEARER("basic") });
+  assert.deepEqual([p.status, p.body.error, p.body.need, p.body.trial_used], [403, "plan", "pro", true]);
+  const d = await s.call("?type=video&q=kedi", { auth: BEARER("demo") });
+  assert.deepEqual([d.status, d.body.stock_trial], [200, { limit: 1, used: 0 }]);
+  assert.equal((await s.call("?type=video&q=kedi")).status, 200);
+  assert.equal((await s.call("?type=video&q=kopek")).status, 200);
+  const l = await s.call("?type=video&q=kus");
+  assert.deepEqual([l.status, l.body.error, l.body.scope], [429, "limit", "user"]);
+  assert.equal(s.calls.length, 3);
+  const none = setup({ fetch: videoFetch(), env: { PEXELS_API_KEY: "" } });
+  assert.deepEqual([(await none.call("?type=video&q=kedi")).status, none.calls.length], [503, 0]);
+});

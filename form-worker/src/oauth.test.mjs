@@ -3878,7 +3878,7 @@ const OLD_APP = [
 ];
 const APP_OK = ["GET profile", "POST profile", "GET connections", "POST connect", "POST connect/finish", "POST disconnect"];
 // A5-3 hesap bölümleri: yalnız app izin listesinde; brandcorner.co'da APP'te yok (404)
-const ACCT_OK = ["GET voice", "PUT voice", "GET drafts", "GET drafts/:id", "POST drafts/:id/delete", "GET export", "POST account/delete"];
+const ACCT_OK = ["GET voice", "PUT voice", "GET drafts", "GET drafts/:id", "POST drafts/:id/delete", "POST drafts/:id/media", "GET export", "POST account/delete"];
 // A13 smc yönetimi: izin listesinde, kapı işleyicide (yönetici olmayana 404, src/smc-admin.test.mjs); brandcorner'ın admin/:id/* uçları yok
 const ADMIN_OK = ["GET admin", "GET admin/users", "GET admin/submissions", "GET admin/drafts", "GET admin/jobs", "POST admin/:id/plan"];
 // A14 otomatik blog yazarı (src/cms.js CMS_ROUTES): yalnız app izin listesinde
@@ -4125,7 +4125,7 @@ async function appSetup(extra = {}) {
 const addDraft = (db, userId, { site = "app.socialmediacorner.co", platform = "linkedin", topic = "konu", body = "metin", meta = "{}" } = {}) =>
   Number(db.prepare("INSERT INTO drafts (user_id, site, platform, topic, body, meta) VALUES (?, ?, ?, ?, ?, ?)")
     .run(userId, site, platform, topic, body, meta).lastInsertRowid);
-const ACCT_PATHS = [["GET", "/app/voice"], ["PUT", "/app/voice"], ["GET", "/app/drafts"], ["GET", "/app/drafts/1"], ["POST", "/app/drafts/1/delete"],
+const ACCT_PATHS = [["GET", "/app/voice"], ["PUT", "/app/voice"], ["GET", "/app/drafts"], ["GET", "/app/drafts/1"], ["POST", "/app/drafts/1/delete"], ["POST", "/app/drafts/1/media"],
   ["GET", "/app/export"], ["POST", "/app/account/delete"]];
 
 test("A5-3: marka sesi GET/PUT: boş başlar, kaydedilir, normalleşir; geçersiz alan 400 voice; kullanıcılar karışmaz", async () => {

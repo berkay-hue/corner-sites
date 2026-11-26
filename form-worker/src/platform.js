@@ -411,6 +411,8 @@ const VOICE_TONES = ["samimi", "kurumsal", "esprili", "ogretici", "ilham", "net"
 const VOICE_MAX = { tones: 3, samples: 3, sample: 2200, banned: 30, word: 40 };
 // generate.js DRAFT_DB ile aynı (0020 CHECK); karusel video, reels instagram satırıdır (meta.kind)
 const DRAFT_PLATFORMS = ["linkedin", "instagram", "blog", "video"], DRAFT_PAGE = 50, EXPORT_MAX = 10000;
+// generate.js'in meta.kind değerleri (linkedin li, blog, video/carousel, instagram caption/reels)
+const DRAFT_KINDS = ["li", "blog", "video", "carousel", "caption", "reels"];
 const missingSchema = e => /no such (table|column)/i.test(String(e && e.message));
 // 0017 uygulanmadıysa tablo yok: arayüz 503 not_ready'yi "Bu bölüm yakında" gösterir
 const acct = fn => async (c, id) => {
@@ -422,6 +424,7 @@ const ACCT = {
   "GET drafts": acct(listDrafts),
   "GET drafts/:id": acct(getDraft),
   "POST drafts/:id/delete": acct(deleteDraft),
+  "POST drafts/:id/media": acct(draftMedia),
   "GET export": acct(exportData),
   "POST account/delete": acct(deleteAccount),
   // A13 yönetim (aşağıda smcAdmin*; adminRoute kendi 404/503 kapısını uygular)
@@ -491,15 +494,20 @@ const draftOut = r => ({ id: r.id, platform: r.platform, created_at: r.created_a
 const foldCol = col => `lower(${Object.entries(TR_FOLD).reduce((e, [k, v]) => `replace(${e}, '${k}', '${v}')`, col)})`;
 const foldTerm = s => [...s].map(ch => TR_FOLD[ch] || ch).join("").replace(/[A-Z]/g, ch => ch.toLowerCase());
 
-// ?q= (konu/metin arama, en çok 100), ?platform=linkedin|instagram|blog|video, ?before=<son id> (id imleci). 50'lik sayfa,
+// ?q= (konu/metin arama, en çok 100), ?platform=linkedin|instagram|blog|video, ?kind=li|blog|video|carousel|caption|reels
+// (meta.kind; "linkedin" = li, kind'ı olmayan eski LinkedIn satırları li sayılır), ?before=<son id> (id imleci). 50'lik sayfa,
 // next = sonraki before. DRAFT_KEEP_DAYS'ten eski satır cron silmeden de görünmez.
 async function listDrafts(c) {
   const { q = "", platform = "", before = "" } = c.query;
+  const kind = c.query.kind === "linkedin" ? "li" : c.query.kind || "";
   if (platform && !DRAFT_PLATFORMS.includes(platform)) throw new Bad("platform");
+  if (kind && !DRAFT_KINDS.includes(kind)) throw new Bad("kind");
   if (before && !/^[1-9]\d{0,15}$/.test(before)) throw new Bad("before");
   const term = String(q).trim().slice(0, 100);
   const where = ["user_id = ?", "site = ?", "created_at >= datetime('now', ?)"], args = [c.user.id, c.site, KEEP];
   if (platform) { where.push("platform = ?"); args.push(platform); }
+  if (kind === "li") where.push("(json_extract(meta, '$.kind') = 'li' OR (platform = 'linkedin' AND json_extract(meta, '$.kind') IS NULL))");
+  else if (kind) { where.push("json_extract(meta, '$.kind') = ?"); args.push(kind); }
   if (before) { where.push("id < ?"); args.push(Number(before)); }
   if (term) {
     const like = `%${foldTerm(term).replace(/[\\%_]/g, x => "\\" + x)}%`;
@@ -518,6 +526,77 @@ async function getDraft(c, id) {
     WHERE id = ? AND user_id = ? AND site = ? AND created_at >= datetime('now', ?)`).bind(id, c.user.id, c.site, KEEP).first();
   if (!r) throw new Bad("not_found", 404);
   return ok(c, { draft: draftOut(r) });
+}
+
+// Taslağın görsel kurgusu (karusel/video şablonu, sahneler, Pexels foto/video seçimi, blog görsel yerleşimi) meta.media'ya
+// yazılır; GET /app/drafts(/:id) onu meta içinde döndürür. Gövde {media:{...}} (null = sil). Yalnız düz JSON (en çok 4 kat,
+// dizi ≤ 40, nesne ≤ 30 anahtar, metin ≤ 2000); adres taşıyan anahtarlar (src/poster/url/href/link/image/img/thumb/logo/
+// bgImage) yalnız Pexels: photos[].src ve poster images.pexels.com, videos[].src videos.pexels.com, sayfa bağlantısı
+// www.pexels.com. ≤ MEDIA_PHOTOS foto, ≤ MEDIA_VIDEOS video, ≤ MEDIA_SCENES sahne, UTF-8 JSON ≤ MEDIA_BYTES (413 size).
+// Başkasının, başka sitenin ya da süresi dolmuş taslağı yokmuş gibi 404. meta'nın öteki alanlarına (kind, tone ...) dokunulmaz.
+const MEDIA_BYTES = 8192, MEDIA_PHOTOS = 12, MEDIA_VIDEOS = 12, MEDIA_SCENES = 30;
+const MEDIA_LIM = { depth: 4, arr: 40, keys: 30, str: 2000, key: 40 };
+const PX_IMG = "https://images.pexels.com/", PX_VID = "https://videos.pexels.com/", PX_PAGE = ["https://www.pexels.com/", "https://pexels.com/"];
+// adres anahtarı: bu adlar ve bunlarla biten her ad (photographer_url, user_url, bgImage, thumbSrc ...; istemci photographer_url'i <a href>'e koyar)
+const MEDIA_URL_KEYS = new Set(["src", "poster", "url", "href", "link", "image", "img", "thumb", "logo", "bgImage"]);
+const urlKey = k => MEDIA_URL_KEYS.has(k) || /(src|url|href|link|poster|image|img|thumb|logo)$/i.test(k);
+const MEDIA_BAD_KEYS = new Set(["__proto__", "constructor", "prototype"]);
+const urlOk = (s, hosts) => typeof s === "string" && s.length <= MEDIA_LIM.str && !/[\s"'<>\\]/.test(s) && hosts.some(h => s.startsWith(h));
+const plain = o => !!o && typeof o === "object" && !Array.isArray(o);
+function mediaWalk(v, depth, key) {
+  if (v === null || typeof v === "boolean") return;
+  if (typeof v === "number") { if (!Number.isFinite(v)) throw new Bad("media"); return; }
+  if (typeof v === "string") {
+    if (v.length > MEDIA_LIM.str) throw new Bad("media");
+    if (urlKey(key) && v !== "" && !urlOk(v, [PX_IMG, PX_VID, ...PX_PAGE])) throw new Bad("host");
+    return;
+  }
+  if (depth >= MEDIA_LIM.depth || typeof v !== "object") throw new Bad("media");
+  if (Array.isArray(v)) {
+    if (v.length > MEDIA_LIM.arr) throw new Bad("media");
+    for (const x of v) mediaWalk(x, depth + 1, key);
+    return;
+  }
+  const ks = Object.keys(v);
+  if (ks.length > MEDIA_LIM.keys) throw new Bad("media");
+  for (const k of ks) {
+    if (k.length > MEDIA_LIM.key || !/^[A-Za-z_][A-Za-z0-9_]*$/.test(k) || MEDIA_BAD_KEYS.has(k)) throw new Bad("media");
+    mediaWalk(v[k], depth + 1, k);
+  }
+}
+const listOf = (v, max, code) => {
+  if (v === undefined || v === null) return [];
+  if (!Array.isArray(v) || v.length > max) throw new Bad(code);
+  return v;
+};
+export function mediaIn(m) {
+  if (!plain(m)) throw new Bad("media");
+  mediaWalk(m, 0, "");
+  for (const p of listOf(m.photos, MEDIA_PHOTOS, "photos")) {
+    if (!plain(p) || !urlOk(p.src, [PX_IMG])) throw new Bad(plain(p) ? "host" : "media");
+    if (p.url && !urlOk(p.url, PX_PAGE)) throw new Bad("host");
+  }
+  for (const x of listOf(m.videos, MEDIA_VIDEOS, "videos")) {
+    if (!plain(x) || !urlOk(x.src, [PX_VID])) throw new Bad(plain(x) ? "host" : "media");
+    if (x.poster && !urlOk(x.poster, [PX_IMG])) throw new Bad("host");
+    if (x.url && !urlOk(x.url, PX_PAGE)) throw new Bad("host");
+  }
+  if (listOf(m.scenes, MEDIA_SCENES, "scenes").some(x => !plain(x))) throw new Bad("media");
+  if (m.brand !== undefined && m.brand !== null && !plain(m.brand)) throw new Bad("media");
+  const json = JSON.stringify(m);
+  if (new TextEncoder().encode(json).length > MEDIA_BYTES) throw new Bad("size", 413);
+  return json;
+}
+
+async function draftMedia(c, id) {
+  if (!Object.hasOwn(c.body, "media")) throw new Bad("media");
+  const json = c.body.media === null ? null : mediaIn(c.body.media);
+  const set = json === null ? "json_remove(meta, '$.media')" : "json_set(meta, '$.media', json(?))";
+  const r = await c.env.DB.prepare(`UPDATE drafts SET meta = ${set}
+    WHERE id = ? AND user_id = ? AND site = ? AND created_at >= datetime('now', ?)`)
+    .bind(...(json === null ? [] : [json]), id, c.user.id, c.site, KEEP).run();
+  if (!r.meta?.changes) throw new Bad("not_found", 404);
+  return ok(c, { media: json === null ? null : JSON.parse(json) });
 }
 
 // Başkasının ya da başka sitenin taslağı yokmuş gibi 404

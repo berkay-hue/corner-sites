@@ -913,8 +913,38 @@ export function stockPhoto(p) {
     photographer: str(p.photographer, 120), photographer_url: stockLink(p.photographer_url), url: stockLink(p.url), src,
   };
 }
+// 26.11 ?type=video → Pexels video araması (STOCK_VIDEO_URL; aynı anahtar, aynı plan kapısı, aynı su/st/sa sayaçları ve iade).
+// stockVideo yalnız videos.pexels.com mp4 dosyalarını geçirir; 720p/1080p (kısa kenar) içinden hedef orana (orientation;
+// yoksa videonun kendi oranı) en yakın olan seçilir, eşitlikte 1080p. Poster yalnız images.pexels.com. Yanıt {videos} döner.
+export const STOCK_VIDEO_URL = "https://api.pexels.com/videos/search";
+const STOCK_TYPES = ["photo", "video"];
+const STOCK_RATIO = { landscape: 16 / 9, portrait: 9 / 16, square: 1 };
+const stockVidSrc = u => typeof u === "string" && /^https:\/\/videos\.pexels\.com\/[^\s"'<>\\]+$/.test(u) ? u : null;
+export function stockVideo(v, orientation) {
+  if (!v || typeof v !== "object" || !Number.isFinite(v.id) || !Array.isArray(v.video_files)) return null;
+  const W = Number(v.width) || 0, H = Number(v.height) || 0;
+  const want = STOCK_RATIO[orientation] || (W && H ? W / H : 9 / 16);
+  const files = v.video_files.filter(f => f && typeof f === "object" && stockVidSrc(f.link)
+    && (!f.file_type || f.file_type === "video/mp4") && Number(f.width) > 0 && Number(f.height) > 0);
+  const short = f => Math.min(Number(f.width), Number(f.height));
+  const off = f => Math.abs(Math.log(Number(f.width) / Number(f.height) / want));
+  const hd = files.filter(f => short(f) === 720 || short(f) === 1080);
+  // 720/1080 yoksa kısa kenarı ≤ 1080 olan en büyük dosya (4K indirmesi tarayıcıyı yorar), o da yoksa video düşer
+  const pool = hd.length ? hd : files.filter(f => short(f) <= 1080).sort((a, b) => short(b) - short(a)).slice(0, 1);
+  const f = pool.sort((a, b) => off(a) - off(b) || short(b) - short(a))[0];
+  if (!f) return null;
+  const str = (x, m) => typeof x === "string" ? x.slice(0, m) : "";
+  const user = v.user && typeof v.user === "object" ? v.user : {};
+  return {
+    id: v.id, width: W, height: H, duration: Number(v.duration) || 0, poster: stockSrc(v.image), url: stockLink(v.url),
+    user: str(user.name, 120), user_url: stockLink(user.url),
+    src: f.link, file: { width: Number(f.width), height: Number(f.height), quality: str(f.quality, 10), fps: Number(f.fps) || 0 },
+  };
+}
 async function stockRoute(c) {
   const { env, db, origin, ip, query, io } = c;
+  const type = query.get("type") || "photo";
+  if (!STOCK_TYPES.includes(type)) return fail("bad_input", 400, origin, { field: "type" });
   const q = (query.get("q") || "").normalize("NFC").replace(/[\u0000-\u001f\u007f]+/g, " ").replace(/\s+/g, " ").trim();
   if (!q || cp(q) > 100) return fail("bad_input", 400, origin, { field: "q" });
   const o = query.get("orientation");
@@ -945,7 +975,7 @@ async function stockRoute(c) {
   ];
   const r = await reserve(db, day, items);
   if (!r.ok) return fail("limit", 429, origin, { scope: r.failed.includes("user") ? "user" : r.failed.includes("ip") ? "ip" : "global" });
-  const u = new URL(STOCK_URL);
+  const u = new URL(type === "video" ? STOCK_VIDEO_URL : STOCK_URL);
   u.searchParams.set("query", q);
   u.searchParams.set("per_page", String(STOCK_PER_PAGE));
   u.searchParams.set("page", String(page));
@@ -969,6 +999,12 @@ async function stockRoute(c) {
   } catch (e) {
     console.log("stock", e?.name || "error");
     return iade("upstream", 502);
+  }
+  if (type === "video") {
+    if (!data || !Array.isArray(data.videos)) return iade("upstream", 502);
+    const videos = data.videos.slice(0, STOCK_PER_PAGE).map(v => stockVideo(v, o)).filter(Boolean);
+    const total = Number.isFinite(data.total_results) ? data.total_results : videos.length;
+    return json({ ok: true, type, videos, page, per_page: STOCK_PER_PAGE, total_results: total, next: Boolean(data.next_page) && page < 100, ...(trial && { stock_trial: trialView(trial) }) }, 200, origin);
   }
   if (!data || !Array.isArray(data.photos)) return iade("upstream", 502);
   const photos = data.photos.slice(0, STOCK_PER_PAGE).map(stockPhoto).filter(Boolean);
