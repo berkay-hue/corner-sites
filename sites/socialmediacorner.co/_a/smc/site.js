@@ -197,3 +197,36 @@
     b.addEventListener('click', reopen);
   });
 })();
+
+/* Fiyatlar: Stüdyo planlarında Aylık/Yıllık seçici. JS yoksa seçici gizli kalır; aylık fiyat ve aylık "Satın al" bağlantısı görünür. */
+(function () {
+  var gruplar = document.querySelectorAll('[data-pl-donem]');
+  if (!gruplar.length) return;
+  var sec = function (d) {
+    [].forEach.call(document.querySelectorAll('[data-donem]'), function (el) { el.hidden = el.getAttribute('data-donem') !== d; });
+    [].forEach.call(document.querySelectorAll('[data-pl-donem] [data-secim]'), function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-secim') === d)); });
+  };
+  [].forEach.call(gruplar, function (g) {
+    g.hidden = false;
+    g.addEventListener('click', function (e) {
+      var b = e.target && e.target.closest ? e.target.closest('[data-secim]') : null;
+      if (b) sec(b.getAttribute('data-secim'));
+    });
+  });
+})();
+
+/* İletişim formu: ?konu=… (ör. Fiyatlar'daki "Satın al") Konu alanını doldurur. Yalnız düz metin: denetim karakterleri
+   atılır, uzunluk alanın maxlength'iyle (en çok 150) sınırlanır, değer .value ile yazılır (HTML olarak hiç yorumlanmaz). */
+(function () {
+  var f = document.querySelector('form[data-sk-form]');
+  if (!f) return;
+  var inp = f.querySelector('#cf-subject') || f.querySelector('[data-sk-label="Konu"]');
+  if (!inp || inp.value) return;
+  var k = null;
+  try { k = new URLSearchParams(window.location.search).get('konu'); } catch (e) { return; }
+  if (!k) return;
+  k = k.replace(/[\u0000-\u001F\u007F-\u009F\u2028\u2029]/g, ' ').replace(/\s+/g, ' ').trim();
+  var max = parseInt(inp.getAttribute('maxlength'), 10);
+  k = k.slice(0, Math.min(max > 0 ? max : 150, 150)).trim();
+  if (k) inp.value = k;
+})();
