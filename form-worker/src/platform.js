@@ -688,6 +688,10 @@ async function deleteAccount(c) {
   add(["brand_voice"], q("DELETE FROM brand_voice WHERE user_id = ?", id));
   add(["drafts"], q("DELETE FROM drafts WHERE user_id = ?", id));
   add(["gen_month"], q("DELETE FROM gen_month WHERE user_id = ?", id));
+  // 27.11 seslendirme hakları (gen_usage, kalıcı satırlar: aylık "ses:YYYY-MM" ve ek bakiye "ses_ek"; günlük sayaçlar 2 günde silinir).
+  // Aynı ay satırında kullanıcı/ay karakter ("c:u:<id>", kind sc) ve harcanan ek ("e:u:<id>", kind sx) de durur.
+  add(["gen_usage"], q("DELETE FROM gen_usage WHERE key = ? AND (day = 'ses_ek' OR day GLOB 'ses:*')", "u:" + id));
+  add(["gen_usage"], q("DELETE FROM gen_usage WHERE key IN (?, ?) AND day GLOB 'ses:*'", "c:u:" + id, "e:u:" + id));
   add(["cms_posts"], q("DELETE FROM cms_posts WHERE user_id = ?", id));
   add(["cms_sites"], q("DELETE FROM cms_sites WHERE user_id = ?", id));
   // Yeni üye bildirimi (register: site + '/kayit' + fields içinde ["E-posta", email])
@@ -1441,7 +1445,7 @@ const adminSnap = adminRoute(async (c, id) => {
 // Kullanıcı site başına (users.site, oturum u.site = ? ile çözülür): başka sitenin yöneticisi burada oturum açamaz, her sorgu
 // c.site ile süzülür. Form gönderileri smc'nin iki alanından (src/sites.js submitSites); IP maskeli, user agent hiç seçilmez.
 // Uçlar yalnız izin listesi olan sitede (ACCT, src/sites.js APP_ROUTES); brandcorner.co'nun GET admin'i APP'te, değişmedi.
-const SMC_ADMIN_PAGE = 50, LIMIT_MAX = 100000;
+const SMC_ADMIN_PAGE = 50, LIMIT_MAX = 100000, SES_MAX = 100;
 const smcMonth = () => new Date(Date.now() + 3 * 3600e3).toISOString().slice(0, 7); // gen_month ayı (UTC+3, src/generate.js genDay)
 const smcDay = back => new Date(Date.now() + 3 * 3600e3 - back * 864e5).toISOString().slice(0, 10);
 // ?before=<son id> imleci; boşsa ilk sayfa
@@ -1548,8 +1552,9 @@ const smcAdminJobs = adminRoute(async c => {
   return ok(c, { jobs: page, events, next });
 });
 
-// Gövde: {plan: demo|basic|pro|enterprise, limits?: {linkedin_blog, video_gorsel, cms_sites?}}. Enterprise'ta limits zorunlu (1..100000 tam sayı;
-// A14 cms_sites isteğe bağlı, yoksa plans.js varsayılanı 1; ek site iletişimle buradan verilir),
+// Gövde: {plan: demo|basic|pro|enterprise, limits?: {linkedin_blog, video_gorsel, cms_sites?, seslendirme?}}. Enterprise'ta limits zorunlu (1..100000 tam sayı;
+// A14 cms_sites isteğe bağlı, yoksa plans.js varsayılanı 1; ek site iletişimle buradan verilir; 27.11 seslendirme isteğe bağlı 0..100,
+// yoksa Pro'nun ayda 6'sı),
 // diğerlerinde verilirse 400 bad_limits; plan_limits enterprise dışında NULL. Hedef bu sitenin kullanıcısı değilse 404.
 // A15 demo: deneme created_at + 14 günden sayılır (yeniden demo vermek süreyi uzatmaz); basic|pro|enterprise deneme sınırını kaldırır.
 // Plan gerçekten değişiyorsa perm_log'a 'plan:<plan>' satırı (değişiklikten önce, aynı batch'te; perm_log yoksa günlüksüz).
@@ -1559,10 +1564,12 @@ const smcAdminPlan = adminRoute(async (c, id) => {
   let limits = null;
   if (b.plan === "enterprise") {
     const l = b.limits;
-    need(l && typeof l === "object" && !Array.isArray(l) && Object.keys(l).every(k => k === "linkedin_blog" || k === "video_gorsel" || k === "cms_sites"), "bad_limits", 400);
+    need(l && typeof l === "object" && !Array.isArray(l) && Object.keys(l).every(k => k === "linkedin_blog" || k === "video_gorsel" || k === "cms_sites" || k === "seslendirme"), "bad_limits", 400);
     const keys = ["linkedin_blog", "video_gorsel", ...(l.cms_sites === undefined ? [] : ["cms_sites"])];
     need(keys.every(k => Number.isSafeInteger(l[k]) && l[k] > 0 && l[k] <= LIMIT_MAX), "bad_limits", 400);
-    limits = JSON.stringify(Object.fromEntries(keys.map(k => [k, l[k]])));
+    const ses = l.seslendirme === undefined ? [] : ["seslendirme"];
+    need(ses.every(k => Number.isSafeInteger(l[k]) && l[k] >= 0 && l[k] <= SES_MAX), "bad_limits", 400);
+    limits = JSON.stringify(Object.fromEntries([...keys, ...ses].map(k => [k, l[k]])));
   } else need(b.limits === undefined || b.limits === null, "bad_limits", 400);
   need(await siteUser(c, id), "not_found", 404);
   const log = env.DB.prepare(`INSERT INTO perm_log (actor_id, user_id, perm, granted) SELECT ?, ?, 'plan:' || ?, 1

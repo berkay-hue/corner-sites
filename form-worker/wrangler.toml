@@ -50,11 +50,25 @@ GEN_IP_PER_DAY = "10"
 # A15: 1 = /gen/* yalnız girişli kullanıcıya (ziyaretçi 401 login_required; /gen/quota left 0); ziyaretçi hakkı GEN_PER_DAY o zaman etkisiz.
 GEN_LOGIN_REQUIRED = "1"
 GEN_MODEL = "claude-sonnet-5-5"
-# Seslendirme (POST /gen/tts, ElevenLabs flash v2.5 = karakter başına 0,5 kredi). 27.11 Berkay ücretli plana geçti
-# (~100 bin kredi/ay ≈ 200 bin karakter): aylık global karakter bütçesi %10 paylı 180000. Kullanıcı başına günlük istek
-# (her biri en çok 1500 karakter) tavanı 60 — kötüye kullanımda tek kişinin krediyi bitirmemesi için; değiştirmek için deploy.
-GEN_TTS_CHARS_PER_MONTH = "180000"
+# Seslendirme (POST /gen/tts, ElevenLabs eleven_multilingual_v2 = karakter başına 1 kredi; Türkçe vurgu flash'tan iyi).
+# 27.11 Berkay ElevenLabs Creator planında (121 bin kredi/ay, 192 kbps): aylık global karakter bütçesi %10 paylı 108000.
+# Kullanıcı başına günlük istek (her biri en çok 1500 karakter) tavanı 60. Hak sistemi (plans.js seslendirme): bir
+# "seslendirme hakkı" 24 saatlik rid oturumu, rid başına en çok GEN_TTS_RID_CHARS karakter; kullanıcı başına aylık karakter
+# tavanı (plan seslendirme + ek hak) × GEN_TTS_CHARS_PER_HAK (kodda 2500). Ücretsiz ses örneği kullanıcı başına günde
+# GEN_TTS_SAMPLE_PER_DAY, tüm kullanıcılar için günde GEN_TTS_SAMPLE_GLOBAL_PER_DAY ve ayda GEN_TTS_SAMPLE_CHARS_PER_MONTH
+# karakter (ödenmiş seslendirmenin bütçesini yemesin). Çıkış biçimi kodda mp3_44100_192; 128'e dönmek için
+# ELEVENLABS_FORMAT = "mp3_44100_128". Ses kimlikleri ELEVENLABS_VOICES secret'ı ile değişir (deploy'suz); değerler için deploy.
+GEN_TTS_CHARS_PER_MONTH = "108000"
 GEN_TTS_USER_PER_DAY = "60"
+GEN_TTS_RID_CHARS = "6000"
+GEN_TTS_SAMPLE_PER_DAY = "30"
+GEN_TTS_SAMPLE_GLOBAL_PER_DAY = "150"
+GEN_TTS_SAMPLE_CHARS_PER_MONTH = "10000"
+# Stok medya araması (POST /gen/stock): 27.11 E5 sahne başına İngilizce q ile arama artar; saatlik global tavan (Pexels
+# saatlik kotasının altında kalsın diye) ve kullanıcı başı saatlik tavan (GEN_STOCK_USER_PER_HOUR, kodda varsayılan 40);
+# deneme (demo) aramalarının hepsi birlikte saatte en çok GEN_STOCK_TRIAL_PER_HOUR (global tavanın bir kısmı Pro'ya kalsın).
+GEN_STOCK_PER_HOUR = "180"
+GEN_STOCK_TRIAL_PER_HOUR = "40"
 # Yayın kuyruğu (src/publish.js: /publish/* uçları ve 5 dakikalık cron). "1" yapmadan ÖNCE migrations/0016_publish.sql
 # uygulanmalı. "0" iken uçlar 503 not_ready döner, cron dalı D1'e ve dış API'ye dokunmaz. PUBLISH_SITES ve
 # PUBLISH_PLATFORMS virgüllü izin listeleri (ör. "brandcorner.co" ve "linkedin,instagram"); boşsa hiçbir iş kiralanmaz,

@@ -362,6 +362,23 @@ test("deneme: demo/basic günlük arama tavanı GEN_STOCK_TRIAL_PER_DAY (varsay�
   assert.equal((await k.call("?q=b", { auth: BEARER("demo") })).status, 429);
 });
 
+test("F8: deneme aramaları birlikte saatlik tavanda (GEN_STOCK_TRIAL_PER_HOUR, varsayılan 40) → 429 scope trial per hour; pro etkilenmez, reddedilen Pexels'e gitmez", async () => {
+  const s = setup({ env: { GEN_STOCK_TRIAL_PER_HOUR: "2", GEN_STOCK_IP_PER_DAY: "50" } });
+  assert.equal((await s.call("?q=a", { auth: BEARER("demo") })).status, 200);
+  assert.equal((await s.call("?q=b", { auth: BEARER("basic") })).status, 200);
+  const l = await s.call("?q=c", { auth: BEARER("demo") });
+  assert.deepEqual([l.status, l.body.error, l.body.scope, l.body.per], [429, "limit", "trial", "hour"]);
+  const l2 = await s.call("?q=d", { auth: BEARER("basic") });
+  assert.deepEqual([l2.status, l2.body.scope], [429, "trial"]);
+  assert.equal(s.calls.length, 2);
+  for (const q of ["e", "f", "g"]) assert.equal((await s.call("?q=" + q, { auth: BEARER("pro") })).status, 200, q);
+  assert.equal(s.usage("sd").reduce((t, n) => t + n, 0), 2);
+  // varsayılan 40: 40 deneme araması geçer, 41. trial
+  const v = setup({ env: { GEN_STOCK_IP_PER_DAY: "500", GEN_STOCK_TRIAL_PER_DAY: "500", GEN_STOCK_USER_PER_DAY: "500", GEN_STOCK_USER_PER_HOUR: "500", GEN_STOCK_PER_HOUR: "500" } });
+  for (let i = 0; i < 40; i++) assert.equal((await v.call("?q=x" + i, { auth: BEARER("demo") })).status, 200, String(i));
+  assert.equal((await v.call("?q=son", { auth: BEARER("demo") })).body.scope, "trial");
+});
+
 test("deneme: pro/enterprise use sınırsız (sayaç yok, ok unlimited); arama 200", async () => {
   const s = setup();
   for (let i = 0; i < 5; i++) {
@@ -680,4 +697,24 @@ test("type=video plan kapısı ve sınırlar fotoğrafla aynı: oturumsuz 401, d
   assert.equal(s.calls.length, 3);
   const none = setup({ fetch: videoFetch(), env: { PEXELS_API_KEY: "" } });
   assert.deepEqual([(await none.call("?type=video&q=kedi")).status, none.calls.length], [503, 0]);
+});
+
+test("E5 (27.11) saatlik tavan: kullanıcı GEN_STOCK_USER_PER_HOUR → 429 scope user per hour; global GEN_STOCK_PER_HOUR → scope global per hour; günlük 429'da per yok; reddedilen sayaçlar iade", async () => {
+  const s = setup({ env: { GEN_STOCK_USER_PER_HOUR: "2", GEN_STOCK_PER_HOUR: "3" } });
+  assert.equal((await s.call("?q=a")).status, 200);
+  assert.equal((await s.call("?q=b", { ip: "198.51.100.9" })).status, 200);
+  const u = await s.call("?q=c", { ip: "192.0.2.44" });
+  assert.deepEqual([u.status, u.body.error, u.body.scope, u.body.per], [429, "limit", "user", "hour"]);
+  assert.equal((await s.call("?q=d", { auth: BEARER("enterprise") })).status, 200);
+  const g = await s.call("?q=e", { auth: BEARER("enterprise"), ip: "198.51.100.9" });
+  assert.deepEqual([g.status, g.body.scope, g.body.per], [429, "global", "hour"]);
+  assert.equal(s.calls.length, 3);
+  assert.deepEqual(s.usage("sh"), [3]);
+  assert.deepEqual(s.usage("sk").sort(), [1, 2]);
+  assert.deepEqual(s.usage("su").sort(), [1, 2]);
+  // günlük kullanıcı tavanı: per alanı yok; varsayılan saatlik tavanlar (180/40) günlük sınırları gölgelemez
+  const d = setup({ env: { GEN_STOCK_USER_PER_DAY: "1" } });
+  assert.equal((await d.call("?q=a")).status, 200);
+  const l = await d.call("?q=b");
+  assert.deepEqual([l.status, l.body.scope, l.body.per], [429, "user", undefined]);
 });

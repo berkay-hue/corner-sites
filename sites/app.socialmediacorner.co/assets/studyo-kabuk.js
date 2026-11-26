@@ -89,6 +89,8 @@ function ayBilgi(){var k=cfg&&AY_TUR[cfg.yol],a=k&&D.ay&&D.ay[k];if(!a||typeof a
   return {kalan:Math.max(0,a.limit-a.used),limit:a.limit,ad:AY_AD[k]}}
 function hakAl(r){if(!r)return;if(typeof r.left==='number'){D.left=Math.max(0,r.left);D.hakBilinmez=false}if(typeof r.cap==='number'&&r.cap>0)D.cap=r.cap;if(typeof r.reset_at==='string')D.reset=r.reset_at;if(/^(anon|ip|global|plan|user)$/.test(r.scope||''))D.hakScope=r.scope;if(typeof r.stock==='boolean')D.stock=r.stock;
   if(typeof r.plan==='string'){D.plan=r.plan;if(r.plan==='anon')D.ay=null}stokDenemeAl(r.stock_trial);if(r.month&&typeof r.month==='object')D.ay=r.month;
+  /* seslendirme hakkı (girişliyken /gen/quota): {limit,used,ek,kalan,reset_at} */
+  if(r.seslendirme&&typeof r.seslendirme==='object'&&typeof r.seslendirme.kalan==='number')D.ses=r.seslendirme;else if(r.plan==='anon')D.ses=null;
   if(r.login_required===true)D.giris=true;else if(typeof r.plan==='string'&&r.plan!=='anon')D.giris=false;
   if(typeof r.trial_ended==='boolean')D.dBitti=r.trial_ended;if(typeof r.trial_ends_at==='string')D.dSon=r.trial_ends_at;
   var a=D.plan&&D.plan!=='anon'?ayBilgi():null;if(a&&typeof D.left==='number'&&a.kalan<=D.left){D.left=a.kalan;D.hakScope='plan'}}
@@ -113,7 +115,7 @@ function al(yol,ms,dis){
   if(!window.fetch||!API)return Promise.reject({kod:'ag'});
   var ac=dis||(window.AbortController?new AbortController():null),tm=ac&&ms?setTimeout(function(){ac.abort()},ms):null,o={method:'GET',credentials:'omit',cache:'no-store'};
   if(ac)o.signal=ac.signal;var tk=oturumJeton();if(tk)o.headers={authorization:'Bearer '+tk};
-  return fetch(API+yol,o).then(function(r){clearTimeout(tm);return r.json().then(function(j){if(r.ok&&j&&j.ok!==false)return j;j=j||{};throw {kod:j.error||'genel',scope:j.scope,need:j.need,trial_used:j.trial_used,trial_ended:j.trial_ended,stock_trial:j.stock_trial}},function(){throw {kod:'genel'}})},
+  return fetch(API+yol,o).then(function(r){clearTimeout(tm);return r.json().then(function(j){if(r.ok&&j&&j.ok!==false)return j;j=j||{};throw {kod:j.error||'genel',scope:j.scope,per:j.per,need:j.need,trial_used:j.trial_used,trial_ended:j.trial_ended,stock_trial:j.stock_trial}},function(){throw {kod:'genel'}})},
     function(e){clearTimeout(tm);throw {kod:e&&e.name==='AbortError'?'zaman':'ag'}});
 }
 function olay(kind,src){if(!D.acik||!API)return;var b={anon:anonAl(),kind:kind};if(src)b.src=src;try{post('/gen/event',b,8000,true).then(null,function(){})}catch(e){}}
@@ -624,7 +626,8 @@ function stokHataMetni(e){
   if(k==='not_ready')return T('Görsel arama şu an kullanılamıyor.','Image search isn’t available right now.');
   if(k==='login_required')return T('Görsel aramak için giriş yap.','Sign in to search images.');
   if(k==='plan')return e.trial_used?DENEME_BITTI+'.':T('Görsel arama Pro ve Enterprise planlarında var.','Image search comes with the Pro and Enterprise plans.');
-  if(k==='limit')return e.scope==='global'?T('Görsel arama bugün çok yoğun. Biraz sonra tekrar dene.','Image search is very busy today. Try again a little later.'):T('Bugünkü görsel arama hakkın doldu; yarın yenilenir.','You’ve used today’s image searches; they renew tomorrow.');
+  if(k==='limit'&&e.per==='hour')return T('Bu saatlik görsel arama sınırı doldu; biraz sonra tekrar dene.','This hour’s image search limit is reached; try again a little later.');
+  if(k==='limit')return e.scope==='trial'?T('Deneme görsel aramaları şu an çok yoğun. Biraz sonra tekrar dene ya da giriş yap.','Trial image search is very busy right now. Try again a little later or sign in.'):e.scope==='global'?T('Görsel arama bugün çok yoğun. Biraz sonra tekrar dene.','Image search is very busy today. Try again a little later.'):T('Bugünkü görsel arama hakkın doldu; yarın yenilenir.','You’ve used today’s image searches; they renew tomorrow.');
   if(k==='bad_input')return T('Aramayı 1 ile 100 karakter arasında yaz.','Keep the search between 1 and 100 characters.');
   return T('Görseller yüklenemedi. Bağlantını kontrol edip tekrar dene.','Couldn’t load images. Check your connection and try again.');
 }
@@ -772,7 +775,7 @@ window.Studyo={
   kaydet:function(c){cfg=c;if(c.hedefMax==null)c.hedefMax=0},
   uret:uret,
   refine:function(q){return post('/gen/refine',q,30000).then(function(r){hakAl(r);hakYaz();kayitNot(r,true);var a=r&&r.drafts&&r.drafts[0];return {text:a&&typeof a.text==='string'?a.text:null}})},
-  hak:function(){return {left:D.left,cap:D.cap,reset:D.reset,scope:D.hakScope,bilinmez:D.hakBilinmez,plan:D.plan||null,ay:D.ay||null}},
+  hak:function(){return {left:D.left,cap:D.cap,reset:D.reset,scope:D.hakScope,bilinmez:D.hakBilinmez,plan:D.plan||null,ay:D.ay||null,ses:D.ses||null}},
   stok:stokAra,
   /* 25.11: deneme görselini harca; ok → {stock_trial:{limit,used}} ya da {unlimited:true} */
   stokKullan:function(id){return post('/gen/stock/use',id?{id:id}:{},10000).then(function(r){if(r&&r.stock_trial){stokDenemeAl(r.stock_trial);if(r.stock_trial.used>=r.stock_trial.limit)D.stock=false}return r},function(e){if(e&&e.stock_trial)stokDenemeAl(e.stock_trial);if(e&&e.trial_used)D.stock=false;throw e})},

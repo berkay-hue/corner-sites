@@ -292,7 +292,7 @@ test("/gen/quota: girişli plan + month + cap (kullanıcı günlük); anonimde p
   await gen(s, "video", auth("basic"));
   const q = await s.call("/gen/quota", { anon: ANON }, auth("basic"));
   assert.equal(q.status, 200);
-  assert.deepEqual(Object.keys(q.body).sort(), ["cap", "charged", "left", "month", "ok", "plan", "reset_at", "scope", "stock", "stock_trial"]);
+  assert.deepEqual(Object.keys(q.body).sort(), ["cap", "charged", "left", "month", "ok", "plan", "reset_at", "scope", "seslendirme", "stock", "stock_trial"]);
   // A13: basic aylık 8/2 günlük 40'tan dar → left = iki türün büyük kalanı (8-3=5), scope plan; cap yine günlük tavan
   // 25.11: basic'in kullanılmamış Pexels deneme hakkı → stock true, stock_trial {limit 1, used 0}
   assert.deepEqual([q.body.plan, q.body.stock, q.body.cap, q.body.left, q.body.scope], ["basic", true, 40, 5, "plan"]);
@@ -301,9 +301,18 @@ test("/gen/quota: girişli plan + month + cap (kullanıcı günlük); anonimde p
   const p = await s.call("/gen/quota", { anon: ANON }, auth("pro"));
   assert.deepEqual([p.body.plan, p.body.stock, p.body.month.linkedin_blog.limit, p.body.month.video_gorsel.limit], ["pro", true, 40, 12]);
   assert.equal(p.body.stock_trial, undefined);
+  // 27.11 seslendirme hakkı: basic 1, pro 6; aylık sayaç + ek bakiye; reset_at sonraki ayın 1'i 00:00 İstanbul
+  const { sesAy, sesResetAt } = await import("./generate.js");
+  assert.deepEqual(q.body.seslendirme, { limit: 1, used: 0, ek: 0, kalan: 1, reset_at: sesResetAt() });
+  s.db.prepare("INSERT INTO gen_usage (day, key, kind, n) VALUES (?, 'u:2', 'ss', 4), ('ses_ek', 'u:2', 'se', 3)").run(sesAy());
+  const p2 = await s.call("/gen/quota", { anon: ANON }, auth("pro"));
+  assert.deepEqual(p2.body.seslendirme, { limit: 6, used: 4, ek: 3, kalan: 5, reset_at: sesResetAt() });
+  const e = await s.call("/gen/quota", { anon: ANON }, auth("ent"));
+  assert.equal(e.body.seslendirme.limit, 6);
   const n = await s.call("/gen/quota", { anon: ANON });
   assert.deepEqual(Object.keys(n.body).sort(), ["cap", "charged", "left", "ok", "plan", "reset_at", "scope", "stock"]);
   assert.deepEqual([n.body.plan, n.body.stock, n.body.left, n.body.cap, n.body.scope], ["anon", false, 3, 3, "anon"]);
+  assert.equal(n.body.seslendirme, undefined);
 });
 
 test("ACCOUNTS kapalı, jeton geçersiz ya da 0018 yok → anonim akış (anon/IP günlük sayaçlar, gen_month yok)", async () => {

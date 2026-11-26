@@ -21,7 +21,7 @@
 // günlük hakları (GEN_PER_DAY) bu bayrakla fiilen kullanılmaz. demo planı (src/plans.js): aylık değil deneme boyunca TOPLAM
 // (planCounts: created_at ayından bu yana gen_month toplamı, ay dönümünde sıfırlanmaz); deneme bitince üretim/refine
 // 403 trial_ended; /gen/quota demo'da trial_ends_at + trial_ended taşır (bittiyse left 0).
-// W2 (26.11): POST /gen/tts (ElevenLabs seslendirme, audio/mpeg) + GET /gen/tts/sesler; ayrıntı ttsRoute üstünde.
+// W2 (26.11) + 27.11: POST /gen/tts (ElevenLabs seslendirme, audio/mpeg; hak/rid/örnek) + GET /gen/tts/sesler; ayrıntı ttsRoute üstünde.
 import {
   SYSTEM_GEN, SYSTEM_REFINE, SYSTEM_IG_CAPTION, SYSTEM_IG_REELS, SYSTEM_IG_CAPTION_REFINE, SYSTEM_IG_REELS_REFINE, SCHEMA, SCHEMA_REELS,
   SYSTEM_BLOG, SYSTEM_VIDEO, SCHEMA_BLOG, SCHEMA_VIDEO, BLOG_LENGTHS, VIDEO_KINDS, VIDEO_LENGTHS, STUDIO_MAX, withStyle, userBlog, userVideo,
@@ -31,7 +31,7 @@ import {
 import { makeLlm, LlmError, SPECS, videoSpec } from "./llm.js";
 import { platformSite, bearerToken, sessionUser } from "./platform.js";
 import { siteConf } from "./sites.js";
-import { MONTH_KIND, KIND_NAME, planLimits, trialMonth } from "./plans.js";
+import { MONTH_KIND, KIND_NAME, planLimits, trialMonth, SES_EK } from "./plans.js";
 
 export const genEnabled = env => env?.GEN_ENABLED === "1" && Boolean(env.ANTHROPIC_API_KEY && env.GEN_SALT && env.TURNSTILE_SECRET);
 
@@ -487,7 +487,7 @@ async function blog(c) {
   return produce(c, v, blogRequest(v), undefined, { platform: "blog", topic: v.topic, max: MAX.topic, meta: pickMeta({ kind: "blog", tone: v.tone, sector: v.sector, lang: v.lang, length: v.length, style: v.style ? true : null }) });
 }
 
-// A8 video/carousel: tek taslak, en çok 14 sahne × (70+120) + 700 açıklama ≈ 1500 token; 2500 pay bırakır
+// A8 video/carousel: tek taslak, en çok 14 sahne × (70+120+~15 q) + 700 açıklama ≈ 1700 token; 2500 pay bırakır
 async function video(c) {
   const { field, v } = validateVideo(c.body);
   if (field) return fail("bad_input", 400, c.origin, { field });
@@ -859,7 +859,12 @@ async function quotaRoute(c) {
       const n = await counts(db, day, { u: uK, all: allK });
       const t = await stockTrial(c, a);
       const stock = Boolean(env.PEXELS_API_KEY) && (a.P.stock || Boolean(t && t.used < t.limit));
-      return json({ ok: true, charged: false, ...planQuota(L, int(env.GEN_USER_PER_DAY, 40), a.P, n, m), stock, ...(t && { stock_trial: trialView(t) }) }, 200, origin);
+      // 27.11 seslendirme hakkı {limit, used, ek, kalan, reset_at}: yalnız POST /gen/tts uç listesinde olan sitede
+      let ses = null;
+      if (siteConf(a.site).routes?.includes("POST /gen/tts")) {
+        try { ses = await sesDurum(db, a.user.id, a.P); } catch (e) { if (!noTable(e)) throw e; }
+      }
+      return json({ ok: true, charged: false, ...planQuota(L, int(env.GEN_USER_PER_DAY, 40), a.P, n, m), stock, ...(t && { stock_trial: trialView(t) }), ...(ses && { seslendirme: ses }) }, 200, origin);
     }
   }
   const [anonK, ipK, allK] = await Promise.all([keyOf(env, day, "anon", body.anon), keyOf(env, day, "ip", ipPrefix(ip)), keyOf(env, day, "all")]);
@@ -894,8 +899,9 @@ async function event(c) {
 // (stock_trial) kullanılmamışsa arama açık, kullanıldıysa 403 plan {need:"pro", trial_used:true}. Arama hak düşürmez; kullanıcı, IP ve günlük
 // toplam sayaçla sınırlı (su / st / sa). lang=tr|en → Pexels locale (tr-TR / en-US): Türkçe konularda daha iyi sonuç.
 // Yanıt ince: yalnız kimlik, boyut, alt, fotoğrafçı, Pexels sayfası ve src.medium/large/large2x (yalnız images.pexels.com);
-// üst akış hatası ayrıntısız 502; Pexels'in kendi oran sınırı (429) → 429 limit {scope:"global"}. Üst akış başarısızsa üç sayaç
-// iade edilir ("Tekrar dene" hak yemez). Günlük toplam varsayılanı STOCK_DAY_MAX: Pexels varsayılan kotası 200/saat, 20.000/ay;
+// üst akış hatası ayrıntısız 502; Pexels'in kendi oran sınırı (429) → 429 limit {scope:"global"}. Üst akış başarısızsa sayaçlar
+// iade edilir ("Tekrar dene" hak yemez). Günlük toplam varsayılanı STOCK_DAY_MAX: Pexels varsayılan kotası 200/saat, 20.000/ay
+// (27.11: saatlik sh/sk sayaçları da var, bkz. stockRoute; 429 yanıtında saatlik tavansa per:"hour");
 // cms blog kapakları da aynı anahtar ve aynı "sa" sayacıyla çalışır (600 × 30 = 18.000 < 20.000).
 export const STOCK_URL = "https://api.pexels.com/v1/search";
 const STOCK_ORIENT = ["landscape", "portrait", "square"];
@@ -967,23 +973,36 @@ async function stockRoute(c) {
     if (trial.used >= trial.limit) return fail("plan", 403, origin, { need: "pro", trial_used: true, stock_trial: trialView(trial) });
   }
   const day = genDay();
-  const [uK, ipK, allK] = await Promise.all([keyOf(env, day, "su", String(a.user.id)), keyOf(env, day, "st", ipPrefix(ip)), keyOf(env, day, "sa", "global")]);
+  // 27.11 E5: sahne başına İngilizce q ile arama sayısı artar → saatlik global 'sh' (GEN_STOCK_PER_HOUR, 180) ve kullanıcı başı
+  // saatlik 'sk' (GEN_STOCK_USER_PER_HOUR, 40) tavanı; saat İstanbul saatine göre "00".."23", günlük sayaçlar aynen kalır.
+  // Deneme aramaları ayrıca hepsi birlikte saatlik 'sd' (GEN_STOCK_TRIAL_PER_HOUR, 40) alt tavanında: demo hesaplar 'sh'yi
+  // doldurup Pro'nun sahne aramasını o saat durduramaz (aşım 429 scope "trial", per "hour").
+  const hour = new Date(Date.now() + OFFSET).toISOString().slice(11, 13);
+  const [uK, ipK, allK, hK, ukK, tdK] = await Promise.all([keyOf(env, day, "su", String(a.user.id)), keyOf(env, day, "st", ipPrefix(ip)), keyOf(env, day, "sa", "global"),
+    keyOf(env, day, "sh", "global|" + hour), keyOf(env, day, "sk", `${a.user.id}|${hour}`), trial ? keyOf(env, day, "sd", "trial|" + hour) : null]);
   const items = [
     // deneme kullanıcısı (demo/basic) hak harcanana kadar arayabilir; ücretsiz hesaplar Pro'nun paylaştığı günlük toplamı
     // tüketmesin diye günlük arama tavanı GEN_STOCK_TRIAL_PER_DAY (varsayılan 20) ile daraltılır
     { name: "user", kind: "su", key: uK, inc: 1, max: trial ? Math.min(int(env.GEN_STOCK_USER_PER_DAY, 100), int(env.GEN_STOCK_TRIAL_PER_DAY, 20)) : int(env.GEN_STOCK_USER_PER_DAY, 100) },
     { name: "ip", kind: "st", key: ipK, inc: 1, max: int(env.GEN_STOCK_IP_PER_DAY, 120) },
     { name: "all", kind: "sa", key: allK, inc: 1, max: int(env.GEN_STOCK_PER_DAY, STOCK_DAY_MAX) },
+    { name: "hour", kind: "sh", key: hK, inc: 1, max: int(env.GEN_STOCK_PER_HOUR, 180) },
+    { name: "uhour", kind: "sk", key: ukK, inc: 1, max: int(env.GEN_STOCK_USER_PER_HOUR, 40) },
+    ...(trial ? [{ name: "trial_hour", kind: "sd", key: tdK, inc: 1, max: int(env.GEN_STOCK_TRIAL_PER_HOUR, 40) }] : []),
   ];
   const r = await reserve(db, day, items);
-  if (!r.ok) return fail("limit", 429, origin, { scope: r.failed.includes("user") ? "user" : r.failed.includes("ip") ? "ip" : "global" });
+  if (!r.ok) {
+    const f = r.failed;
+    return fail("limit", 429, origin, { scope: f.includes("user") || f.includes("uhour") ? "user" : f.includes("ip") ? "ip" : f.includes("trial_hour") ? "trial" : "global",
+      ...(f.includes("hour") || f.includes("uhour") || f.includes("trial_hour") ? { per: "hour" } : {}) });
+  }
   const u = new URL(type === "video" ? STOCK_VIDEO_URL : STOCK_URL);
   u.searchParams.set("query", q);
   u.searchParams.set("per_page", String(STOCK_PER_PAGE));
   u.searchParams.set("page", String(page));
   if (o) u.searchParams.set("orientation", o);
   if (lg) u.searchParams.set("locale", STOCK_LOCALE[lg]);
-  // üst akış başarısız: üç sayaç iade (iade yazılamazsa yanıt değişmez), sonra hata
+  // üst akış başarısız: tüm sayaçlar iade (iade yazılamazsa yanıt değişmez), sonra hata
   const iade = async (code, status, extra) => {
     try { await db.batch(decr(db, day, items)); } catch (e) { console.log("stock iade", e?.message?.slice(0, 80)); }
     return fail(code, status, origin, extra);
@@ -1082,37 +1101,103 @@ async function stockUseRoute(c) {
   return json({ ok: true, charged: false, stock_trial: { limit: t.limit, used: Number(ptRow.n) } }, 200, origin);
 }
 
-// W2 (26.11) seslendirme: POST /gen/tts {metin, ses} → ElevenLabs REST (mp3_44100_128), yanıt audio/mpeg.
+// W2 (26.11) + 27.11 seslendirme: POST /gen/tts → ElevenLabs REST, yanıt audio/mpeg.
 // Secret ELEVENLABS_API_KEY (wrangler secret; yoksa 503 {hata:"tts_kapali"}); anahtar yalnız "Text to Speech" izinli olmalı.
-// Model ELEVENLABS_MODEL (var, isteğe bağlı; varsayılan eleven_flash_v2_5 = karakter başına 0,5 kredi). Ses yalnız TTS_VOICES
-// beyaz listesinden: dışarıya {id, dil, ad, cinsiyet} gider, ElevenLabs voice_id ('el') yalnız sunucuda kalır. Gövde JSON
-// (kaçış derdi yok), language_code sesin dilinden (multilingual_v2 desteklemez → o modelde gönderilmez), sayı/tarih okunuşu
-// için apply_text_normalization "on". Metin en çok TTS_MAX (1500) karakter (aşarsa 400 metin_uzun).
+// Model ELEVENLABS_MODEL (var, isteğe bağlı; varsayılan eleven_multilingual_v2 = Türkçe destekli, karakter başına 1 kredi).
+// Biçim ELEVENLABS_FORMAT yalnız TTS_FORMATS'tan (yoksa mp3_44100_192: Creator planı; 128'e var ile geri alınır). Gövde JSON (kaçış derdi yok),
+// language_code sesin dilinden (multilingual_v2 desteklemez → o modelde gönderilmez), voice_settings sabit (TTS_SETTINGS),
+// apply_text_normalization "on". Metin en çok TTS_MAX (1500) karakter (aşarsa 400 metin_uzun).
+// Ses yuvaları TTS_TABLE: dışarıya {id, dil, ad, cinsiyet, yerel} gider, ElevenLabs voice_id ('el' / override) yalnız sunucuda.
+// 'el' = SESLER.md (27.11) ile seçilip hesabın My Voices'ına eklenmiş Voice Library sesleri (yerel: true = sesin ana dili yuvanın
+// dili) + en-US-Anlatici (Alicia, varsayılan sesler, çok dilli); el null olan yuva ELEVENLABS_VOICES ile açılana dek listede GİZLİ. ELEVENLABS_VOICES (secret; deploy gerekmez) JSON: {"<yuva>":"<voice_id>"} ya da {"<yuva>":{"id":"<voice_id>",
+// "ad":"Ayşe"}}; id biçimi bozuk girdi tümden, ad bozuksa yalnız ad yok sayılır; JSON bozuksa hiçbiri. Eski kimlikler (TTS_ALIAS:
+// tr-TR-Sarah …, fr-FR-Kadin, SESLER.md adları tr-TR-Kadin1 / de-DE …) istekte ve ELEVENLABS_VOICES'ta yuvaya çevrilir (aynı yuvada
+// yeni anahtar kazanır); tanınmayan anahtar atlanır ve loglanır. yerel = tabloda yerel ya da override var.
 // Oturum şart (Bearer; GEN_LOGIN_REQUIRED=1 iken yönlendirici zaten 401 verir, kapalıyken de burada 401). Göç yok: sayaçlar
-// gen_usage'ta — kullanıcı başına günlük istek 'tu' (GEN_TTS_USER_PER_DAY, varsayılan 60), global günlük istek 'ta'
-// (GEN_TTS_PER_DAY, 600), global AYLIK karakter bütçesi 'tc' (GEN_TTS_CHARS_PER_MONTH, varsayılan 18000: ücretsiz plan ayda
-// 10 bin kredi ≈ flash'ta 20 bin karakter; ücretli plana geçince var ile yükselt) — 'tc' satırının day'i "tts:YYYY-MM"
-// (tarih biçimli değil → genCleanup silmez, ayda bir satır). ElevenLabs hatası/zaman aşımı → üç sayaç iade, 502
-// {hata:"tts_hata"}. GET /gen/tts/sesler oturumsuz: {ok, acik, sesler}; acik yalnız secret'ın VAR olup olmadığı (değer
-// dönmez). İki uç src/sites.js APP_ROUTES'ta; POST /gen/tts yalnız uç listesinde "POST /gen/tts" olan sitenin oturumuyla çalışır.
-// Sesler ElevenLabs hazır (premade) kütüphanesinden; çok dilli modeller Türkçeyi aynı sesle okur. ElevenLabs hazır sesleri
-// 31.12.2026'da kaldırıyor → ELEVENLABS_VOICES (var ya da secret; secret ise deploy gerekmez) JSON ile kimlik başına voice_id
-// değiştirilir: {"tr-TR-Sarah":"<voice_id>",...}. Bilinmeyen kimlik / biçimi bozuk değer yok sayılır (tablodaki kalır);
-// JSON bozuksa hiçbiri uygulanmaz. Dışarıya giden ses listesi (id/ad) değişmez.
+// gen_usage'ta — kullanıcı/gün istek 'tu' (GEN_TTS_USER_PER_DAY 60), global/gün istek 'ta' (GEN_TTS_PER_DAY 600), global AYLIK
+// karakter 'tc' (GEN_TTS_CHARS_PER_MONTH, varsayılan 108000: ElevenLabs Creator 121k kredi/ay, multilingual 1 kredi/karakter,
+// %10 pay; day "tts:YYYY-MM"); kullanıcı başına AYLIK karakter 'sc' (day "ses:YYYY-MM", key "c:u:<id>", tavan
+// GEN_TTS_USER_CHARS_PER_MONTH ya da (plan seslendirme + ek bakiye, en az 1) × GEN_TTS_CHARS_PER_HAK (2500); aşım 429 scope
+// "user_month").
+// Hak sistemi (27.11, plans.js seslendirme): 1 hak = bir videonun tüm sahneleri. Gövde {metin, ses, rid?, yeni?} ya da
+// {ornek:true, ses}.
+//  - ornek:true → "Dinle": metin sunucudaki TTS_ORNEK[dil] (gövdedeki metin yok sayılır), hak harcanmaz, rid yok; günlük
+//    kullanıcı başına GEN_TTS_SAMPLE_PER_DAY (30) 'to' sayacı (aşım 429 tts_limit scope "ornek"). Örnekler ödenmiş işin global
+//    'ta' sayacını yemez: ayrı global/gün 'tg' (GEN_TTS_SAMPLE_GLOBAL_PER_DAY 150, aşım scope "ornek_global") ve aylık örnek
+//    karakter alt tavanı 'tk' (GEN_TTS_SAMPLE_CHARS_PER_MONTH 10000, day "tts:YYYY-MM"; aşım scope "ornek_global"); karakterleri
+//    yine 'tc'ye sayılır (gerçek kredi), ama tc'nin en çok ~%9'unu yiyebilir. Demo da dinleyebilir (BRIEF kararı).
+//  - rid yok + yeni:true → hak düşer (önce aylık: day "ses:YYYY-MM" key "u:<id>" kind 'ss' koşullu artış ≤ plan seslendirme;
+//    bitmişse ek bakiye: day "ses_ek" key "u:<id>" kind 'se' n-1), yeni imzalı rid (24 saat) üretilir. İkisi de yoksa 402
+//    ses_hak_yok {kalan:0, plan, ek_paket}. rid yok + yeni yok → 400 hak_onay_gerek (yanlışlıkla hak yakmayı önler).
+//  - rid var → hak düşmez; rid HMAC(GEN_SALT) imzalı, kullanıcıya bağlı (başka uid / bozuk → 400 rid_gecersiz; süresi geçti →
+//    409 ses_oturum_bitti {neden:"sure"}); rid başına en çok GEN_TTS_RID_CHARS (6000) karakter 'sr' (aşım 409 {neden:"karakter"}).
+//  ElevenLabs hatası/zaman aşımı → sayaçlar ve bu istekte düşen hak iade, yeni rid verilmez, 502 {hata:"tts_hata", neden?}.
+//  Hak düşerken D1 hatası → sayaçlar iade, 503 {hata:"tts_hata", neden:"diger"} (402 ses_hak_yok DEĞİL; satın almaya yönlendirmez).
+//  Başarı başlıkları: x-ses-rid (yeni ya da mevcut rid), x-ses-kalan (aylık kalan + ek), access-control-expose-headers.
+// GET /gen/tts/sesler oturumsuz: {ok, acik, sesler}; acik yalnız secret'ın VAR olup olmadığı (değer dönmez). İki uç src/sites.js
+// APP_ROUTES'ta; POST /gen/tts yalnız uç listesinde "POST /gen/tts" olan sitenin oturumuyla çalışır.
 const TTS_TABLE = [
-  { id: "tr-TR-Sarah", dil: "tr-TR", ad: "Sarah", cinsiyet: "kadin", el: "EXAVITQu4vr4xnSDxMaL" },
-  { id: "tr-TR-Adam", dil: "tr-TR", ad: "Adam", cinsiyet: "erkek", el: "pNInz6obpgDQGcFmaJgB" },
-  { id: "en-US-Alice", dil: "en-US", ad: "Alice", cinsiyet: "kadin", el: "Xb7hH8MSUJpSbSDYk0k2" },
-  { id: "en-US-George", dil: "en-US", ad: "George", cinsiyet: "erkek", el: "JBFqnCBsd6RMkjVDRZzb" },
+  { id: "tr-TR-Kadin", dil: "tr-TR", ad: "Derya", cinsiyet: "kadin", el: "NNn9dv8zq2kUo7d3JSGG", yerel: true },
+  { id: "tr-TR-Erkek", dil: "tr-TR", ad: "Adam", cinsiyet: "erkek", el: "J17lijyP1BHYcM7ld0Rg", yerel: true },
+  { id: "tr-TR-KadinB", dil: "tr-TR", ad: "Duygu", cinsiyet: "kadin", el: "MzfWWOj9g3sIKex1YFMV", yerel: true },
+  { id: "tr-TR-ErkekB", dil: "tr-TR", ad: "Doğa", cinsiyet: "erkek", el: "IuRRIAcbQK5AQk1XevPj", yerel: true },
+  { id: "en-US-Kadin", dil: "en-US", ad: "Hope", cinsiyet: "kadin", el: "tnSpp4vdxKPjI9w0GnoV", yerel: true },
+  { id: "en-US-Erkek", dil: "en-US", ad: "Mark", cinsiyet: "erkek", el: "UgBBYS2sOqTuMpoF3BR0", yerel: true },
+  { id: "en-US-Anlatici", dil: "en-US", ad: "Alicia", cinsiyet: "kadin", el: "BFd5oBc2DDna33pSi4Gf" },
+  { id: "en-GB-Erkek", dil: "en-GB", ad: "Christopher", cinsiyet: "erkek", el: "G17SuINrv2H9FC6nvetn", yerel: true },
+  { id: "de-DE-Kadin", dil: "de-DE", ad: "Lea", cinsiyet: "kadin", el: "7eVMgwCnXydb3CikjV7a", yerel: true },
+  { id: "es-ES-Erkek", dil: "es-ES", ad: "David", cinsiyet: "erkek", el: "Nh2zY9kknu6z4pZy6FhD", yerel: true },
+  { id: "fr-FR-Erkek", dil: "fr-FR", ad: "Nicolas", cinsiyet: "erkek", el: "aQROLel5sQbj1vuIVi6B", yerel: true },
+  { id: "ar-SA-Erkek", dil: "ar-SA", ad: "Mazen", cinsiyet: "erkek", el: "rPNcQ53R703tTmtue1AT", yerel: true },
 ];
-export const TTS_VOICES = Object.freeze(TTS_TABLE.map(({ el, ...v }) => Object.freeze(v)));
-const TTS_EL = new Map(TTS_TABLE.map(v => [v.id, v.el]));
+// eski kayıtlı projelerin ses kimlikleri ve SESLER.md'deki ELEVENLABS_VOICES anahtarları → yuva (istemcide de aynı tablo)
+export const TTS_ALIAS = Object.freeze({
+  "tr-TR-Sarah": "tr-TR-Kadin", "tr-TR-Adam": "tr-TR-Erkek", "en-US-Alice": "en-US-Kadin", "en-US-George": "en-GB-Erkek", "fr-FR-Kadin": "fr-FR-Erkek",
+  "tr-TR-Kadin1": "tr-TR-Kadin", "tr-TR-Kadin2": "tr-TR-KadinB", "tr-TR-Erkek1": "tr-TR-Erkek", "tr-TR-Erkek2": "tr-TR-ErkekB",
+  "de-DE": "de-DE-Kadin", "es-ES": "es-ES-Erkek", "fr-FR": "fr-FR-Erkek", "ar-SA": "ar-SA-Erkek",
+});
+// bütün yuvalar (gizliler dahil), yalnız dışa açık alanlar
+export const TTS_VOICES = Object.freeze(TTS_TABLE.map(({ el, yerel, ...v }) => Object.freeze(v)));
+const TTS_SLOT = new Map(TTS_TABLE.map(v => [v.id, v]));
 const TTS_VID = /^[A-Za-z0-9]{10,40}$/;
-export const ttsVoiceId = (env, id) => {
+const TTS_AD = /^[\p{L} .'-]{1,24}$/u;
+const ttsAlias = id => typeof id === "string" && Object.hasOwn(TTS_ALIAS, id) ? TTS_ALIAS[id] : id;
+// ELEVENLABS_VOICES'ta tanınmayan anahtar / bozuk id: isolate başına bir kez log (değer yazılmaz, yalnız anahtar adı)
+const ttsUyarildi = new Set();
+const ttsUyar = (k, neden) => { const m = neden + ":" + String(k).slice(0, 40); if (ttsUyarildi.has(m) || ttsUyarildi.size > 50) return; ttsUyarildi.add(m); console.log("ELEVENLABS_VOICES atlandı", m); };
+// ELEVENLABS_VOICES → Map(yuva → {id, ad?}); eski anahtarlar önce, yeni anahtar aynı yuvada üstüne yazar
+export function ttsOverrides(env) {
+  const out = new Map();
   let o = null;
-  try { o = env.ELEVENLABS_VOICES ? JSON.parse(String(env.ELEVENLABS_VOICES)) : null; } catch { o = null; }
-  const x = o && typeof o === "object" && !Array.isArray(o) && Object.hasOwn(o, id) ? o[id] : null;
-  return typeof x === "string" && TTS_VID.test(x) ? x : TTS_EL.get(id);
+  try { o = env?.ELEVENLABS_VOICES ? JSON.parse(String(env.ELEVENLABS_VOICES)) : null; } catch { o = null; }
+  if (!o || typeof o !== "object" || Array.isArray(o)) return out;
+  const keys = Object.keys(o).sort((a, b) => Number(Object.hasOwn(TTS_ALIAS, b)) - Number(Object.hasOwn(TTS_ALIAS, a)));
+  for (const k of keys) {
+    const slot = ttsAlias(k);
+    if (!TTS_SLOT.has(slot)) { ttsUyar(k, "yuva_yok"); continue; }
+    const x = o[k];
+    const id = typeof x === "string" ? x : x && typeof x === "object" && !Array.isArray(x) ? x.id : null;
+    if (typeof id !== "string" || !TTS_VID.test(id)) { ttsUyar(k, "id_bozuk"); continue; }
+    const ad = x && typeof x === "object" && typeof x.ad === "string" && TTS_AD.test(x.ad.normalize("NFC").trim()) ? x.ad.normalize("NFC").trim() : null;
+    out.set(slot, { id, ...(ad && { ad }) });
+  }
+  return out;
+}
+// açık yuvalar (voice_id'si olan) + sunucu içi vid; dışarıya vid'siz ttsSesler gider
+function ttsSlots(env) {
+  const ov = ttsOverrides(env);
+  return TTS_TABLE.map(t => {
+    const o = ov.get(t.id);
+    const vid = o?.id || t.el;
+    return vid ? { id: t.id, dil: t.dil, ad: o?.ad || t.ad, cinsiyet: t.cinsiyet, yerel: Boolean(o) || t.yerel === true, vid } : null;
+  }).filter(Boolean);
+}
+export const ttsSesler = env => ttsSlots(env).map(({ vid, ...v }) => v);
+// yuva (ya da eski kimlik) → voice_id; bilinmeyen yuva undefined, kapalı yuva null
+export const ttsVoiceId = (env, id) => {
+  const slot = ttsAlias(id);
+  if (typeof slot !== "string" || !TTS_SLOT.has(slot)) return undefined;
+  return ttsOverrides(env).get(slot)?.id ?? TTS_SLOT.get(slot).el;
 };
 // ElevenLabs hata kodu → kısa neden (yanıtta "neden"; anahtar/kimlik dönmez): ses_yok = voice_id kalktı (ELEVENLABS_VOICES ile
 // değiştir), kredi = kredi/kota bitti, anahtar = geçersiz/izinsiz anahtar, yogun = 429, diger = geri kalanı.
@@ -1126,23 +1211,99 @@ export const ttsNeden = (status, code) => {
 };
 export const TTS_MAX = 1500;
 const TTS_TIMEOUT = 20000;
-const TTS_FORMAT = "mp3_44100_128";
-export const TTS_MODEL_DEFAULT = "eleven_flash_v2_5";
+export const TTS_FORMATS = Object.freeze(["mp3_44100_128", "mp3_44100_192"]);
+export const TTS_FORMAT_DEFAULT = "mp3_44100_192";
+export const ttsFormat = env => TTS_FORMATS.includes(env?.ELEVENLABS_FORMAT) ? env.ELEVENLABS_FORMAT : TTS_FORMAT_DEFAULT;
+export const TTS_MODEL_DEFAULT = "eleven_multilingual_v2";
 // model adı URL'ye değil gövdeye girer; yine de yalnız eleven_* biçimi (yanlış var → varsayılan)
 export const ttsModel = env => /^eleven_[a-z0-9_]{2,40}$/.test(String(env.ELEVENLABS_MODEL || "")) ? env.ELEVENLABS_MODEL : TTS_MODEL_DEFAULT;
+export const TTS_SETTINGS = Object.freeze({ stability: 0.5, similarity_boost: 0.75, style: 0, use_speaker_boost: true });
+// "Dinle" örnek metni (dil öneki → metin); istemci metin göndermez
+export const TTS_ORNEK = Object.freeze({
+  tr: "Merhaba! Bu ses videonuzdaki sahneleri böyle seslendirecek.",
+  en: "Hi! This is how this voice will narrate the scenes in your video.",
+  de: "Hallo! So wird diese Stimme die Szenen in Ihrem Video sprechen.",
+  es: "¡Hola! Así narrará esta voz las escenas de tu vídeo.",
+  fr: "Bonjour ! Voici comment cette voix racontera les scènes de votre vidéo.",
+  ar: "مرحبًا! هكذا سيقرأ هذا الصوت مشاهد الفيديو الخاص بك.",
+});
 const ttsOn = env => Boolean(env.ELEVENLABS_API_KEY);
 const ttsFail = (hata, status, origin, extra) => fail(hata, status, origin, { hata, ...extra });
 export const ttsBody = (metin, v, model) => ({
   text: metin,
   model_id: model,
   ...(model !== "eleven_multilingual_v2" && { language_code: v.dil.slice(0, 2) }),
+  voice_settings: { ...TTS_SETTINGS },
   apply_text_normalization: "on",
 });
 // Metin: NFC; kontrol karakterleri (satır sonu ve sekme dışı) boşluk; kenar boşluğu kırpılır.
-const ttsText = v => typeof v === "string" ? v.normalize("NFC").replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f\ufffe\uffff]/g, " ").trim() : null;
+const ttsText = v => typeof v === "string" ? v.normalize("NFC").replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f￾￿]/g, " ").trim() : null;
+
+// Seslendirme oturumu (rid): b64u("uid.verildiGun.exp.rastgele16") + "." + b64u(HMAC-SHA256(GEN_SALT, "ses-rid|"+payload)) ilk 22.
+// exp saniye (verildiği an + 24 saat). Kişisel veri taşımaz (uid sayı); istemci proje kaydında saklar.
+export const RID_TTL = 24 * 3600;
+const b64u = bytes => btoa(String.fromCharCode(...bytes)).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+const unb64u = s => { try { return new TextDecoder("utf-8", { fatal: true }).decode(Uint8Array.from(atob(s.replace(/-/g, "+").replace(/_/g, "/")), ch => ch.charCodeAt(0))); } catch { return null; } };
+async function ridSig(env, payload) {
+  const k = await crypto.subtle.importKey("raw", new TextEncoder().encode(String(env.GEN_SALT)), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
+  return b64u(new Uint8Array(await crypto.subtle.sign("HMAC", k, new TextEncoder().encode("ses-rid|" + payload)))).slice(0, 22);
+}
+const sameStr = (a, b) => { if (a.length !== b.length) return false; let d = 0; for (let i = 0; i < a.length; i++) d |= a.charCodeAt(i) ^ b.charCodeAt(i); return d === 0; };
+export async function ridYap(env, uid, now = Date.now()) {
+  const r = [...crypto.getRandomValues(new Uint8Array(8))].map(x => x.toString(16).padStart(2, "0")).join("");
+  const day = genDay(now);
+  const payload = b64u(new TextEncoder().encode(`${uid}.${day}.${Math.floor(now / 1000) + RID_TTL}.${r}`));
+  return { rid: payload + "." + await ridSig(env, payload), day };
+}
+// → {ok:true, day, exp} | {hata:"rid_gecersiz"} | {hata:"sure"}
+export async function ridCoz(env, rid, uid, now = Date.now()) {
+  const bad = { hata: "rid_gecersiz" };
+  if (typeof rid !== "string" || rid.length > 200 || !/^[A-Za-z0-9_-]{8,160}\.[A-Za-z0-9_-]{22}$/.test(rid)) return bad;
+  const [payload, sig] = rid.split(".");
+  if (!sameStr(await ridSig(env, payload), sig)) return bad;
+  const p = unb64u(payload)?.split(".");
+  if (!p || p.length !== 4 || p[0] !== String(uid) || !/^\d{4}-\d{2}-\d{2}$/.test(p[1]) || !/^\d{1,12}$/.test(p[2]) || !/^[0-9a-f]{16}$/.test(p[3])) return bad;
+  if (Number(p[2]) * 1000 <= now) return { hata: "sure" };
+  return { ok: true, day: p[1], exp: Number(p[2]) };
+}
+
+// Seslendirme hakkı durumu: {limit, used, ek, kalan, reset_at}. limit = plan seslendirme (demo denemesi bittiyse 0).
+// reset_at = sonraki ayın 1'i 00:00 Europe/Istanbul (UTC+3 sabit).
+const sesLimit = P => P?.trial_ended ? 0 : P?.seslendirme ?? 0;
+export const sesAy = (now = Date.now()) => "ses:" + genDay(now).slice(0, 7);
+export function sesResetAt(now = Date.now()) {
+  const d = genDay(now);
+  return new Date(Date.UTC(+d.slice(0, 4), +d.slice(5, 7), 1) - OFFSET).toISOString();
+}
+export async function sesDurum(db, uid, P, now = Date.now()) {
+  const ay = sesAy(now);
+  const { results } = await db.prepare("SELECT day, n FROM gen_usage WHERE key = ? AND day IN (?, 'ses_ek')").bind("u:" + uid, ay).all();
+  let used = 0, ek = 0;
+  for (const r of results || []) { if (r.day === ay) used = Number(r.n) || 0; else ek = Number(r.n) || 0; }
+  const limit = sesLimit(P);
+  return { limit, used, ek, kalan: Math.max(0, limit - used) + ek, reset_at: sesResetAt(now) };
+}
+const SES_AY_UP = "INSERT INTO gen_usage (day, key, kind, n) VALUES (?, ?, 'ss', 1) ON CONFLICT(day, key) DO UPDATE SET n = gen_usage.n + 1 WHERE gen_usage.n + 1 <= ? RETURNING n";
+const SES_EK_DOWN = "UPDATE gen_usage SET n = n - 1 WHERE day = 'ses_ek' AND key = ? AND n >= 1 RETURNING n";
+const SES_AY_IADE = "UPDATE gen_usage SET n = n - 1 WHERE day = ? AND key = ? AND n >= 1";
+const SES_EK_IADE = "INSERT INTO gen_usage (day, key, kind, n) VALUES ('ses_ek', ?, 'se', 1) ON CONFLICT(day, key) DO UPDATE SET n = gen_usage.n + 1";
+// bu ay harcanan ek hak sayısı (kullanıcı/ay karakter tavanını ek hak harcandıkça küçültmemek için): day "ses:YYYY-MM", key "e:u:<id>"
+const SES_EK_SAY = "INSERT INTO gen_usage (day, key, kind, n) VALUES (?, ?, 'sx', 1) ON CONFLICT(day, key) DO UPDATE SET n = gen_usage.n + 1";
+// kullanıcı/ay karakter tavanı: env sabiti ya da (plan seslendirme + ek bakiye + bu ay harcanan ek) × GEN_TTS_CHARS_PER_HAK; en az 1 hak.
+// Okuma hatasında ek 0 sayılır (tavan küçük kalır; yalnız ek alanı etkiler) ve loglanır.
+async function sesKarakterTavan(env, db, uid, P, ay) {
+  if (env.GEN_TTS_USER_CHARS_PER_MONTH) return int(env.GEN_TTS_USER_CHARS_PER_MONTH, 15000);
+  const perHak = int(env.GEN_TTS_CHARS_PER_HAK, 2500);
+  let ek = 0;
+  try {
+    const { results } = await db.prepare("SELECT day, key, n FROM gen_usage WHERE (key = ? AND day = 'ses_ek') OR (key = ? AND day = ?)").bind("u:" + uid, "e:u:" + uid, ay).all();
+    for (const r of results || []) ek += Number(r.n) || 0;
+  } catch (e) { console.log("tts tavan", e?.message?.slice(0, 80)); }
+  return Math.max(1, sesLimit(P) + ek) * perHak;
+}
 
 function ttsVoicesRoute(c) {
-  return json({ ok: true, acik: ttsOn(c.env), sesler: TTS_VOICES.map(v => ({ ...v })) }, 200, c.origin);
+  return json({ ok: true, acik: ttsOn(c.env), sesler: ttsSesler(c.env) }, 200, c.origin);
 }
 
 async function ttsRoute(c) {
@@ -1150,30 +1311,88 @@ async function ttsRoute(c) {
   if (!ttsOn(env)) return ttsFail("tts_kapali", 503, origin);
   const a = await account(c);
   if (!a || !siteConf(a.site).routes?.includes("POST /gen/tts")) return ttsFail("login_required", 401, origin);
-  const metin = ttsText(body?.metin);
-  if (!metin) return ttsFail("metin_bos", 400, origin, { field: "metin" });
-  const n = cp(metin);
-  if (n > TTS_MAX) return ttsFail("metin_uzun", 400, origin, { field: "metin", max: TTS_MAX });
-  const v = TTS_VOICES.find(x => x.id === body?.ses);
+  const ornek = body?.ornek === true;
+  let metin = null;
+  if (!ornek) {
+    metin = ttsText(body?.metin);
+    if (!metin) return ttsFail("metin_bos", 400, origin, { field: "metin" });
+    if (cp(metin) > TTS_MAX) return ttsFail("metin_uzun", 400, origin, { field: "metin", max: TTS_MAX });
+  }
+  const sid = ttsAlias(body?.ses);
+  const v = typeof sid === "string" ? ttsSlots(env).find(x => x.id === sid) : null;
   if (!v) return ttsFail("ses_gecersiz", 400, origin, { field: "ses" });
+  if (ornek) metin = TTS_ORNEK[v.dil.slice(0, 2)] || TTS_ORNEK.en;
+  const n = cp(metin);
+  const uid = a.user.id;
   const day = genDay(), month = "tts:" + day.slice(0, 7);
-  const [uK, allK, cK] = await Promise.all([keyOf(env, day, "tu", String(a.user.id)), keyOf(env, day, "ta", "global"), keyOf(env, month, "tc", "global")]);
+  // seslendirme oturumu: mevcut rid doğrulanır ya da (yalnız yeni:true) yeni rid; örnek dinlemede rid yok
+  let rid = null, ridDay = null, yeni = false;
+  if (!ornek) {
+    const given = body?.rid;
+    if (given !== undefined && given !== null && given !== "") {
+      const r = await ridCoz(env, given, uid);
+      if (r.hata === "sure") return ttsFail("ses_oturum_bitti", 409, origin, { neden: "sure" });
+      if (!r.ok) return ttsFail("rid_gecersiz", 400, origin, { field: "rid" });
+      rid = given; ridDay = r.day;
+    } else if (body?.yeni === true) {
+      ({ rid, day: ridDay } = await ridYap(env, uid));
+      yeni = true;
+    } else return ttsFail("hak_onay_gerek", 400, origin);
+  }
+  const uKey = "u:" + uid, ay = sesAy();
+  const [uK, allK, cK, oK, gK, kK] = await Promise.all([keyOf(env, day, "tu", String(uid)), ornek ? null : keyOf(env, day, "ta", "global"), keyOf(env, month, "tc", "global"),
+    ornek ? keyOf(env, day, "to", String(uid)) : rid ? sha(rid).then(h => "r:" + h.slice(0, 32)) : null,
+    ornek ? keyOf(env, day, "tg", "global") : null, ornek ? keyOf(env, month, "tk", "global") : null]);
   const items = [
     { name: "user", kind: "tu", key: uK, inc: 1, max: int(env.GEN_TTS_USER_PER_DAY, 60) },
-    { name: "all", kind: "ta", key: allK, inc: 1, max: int(env.GEN_TTS_PER_DAY, 600) },
-    { name: "chars", kind: "tc", key: cK, inc: n, max: int(env.GEN_TTS_CHARS_PER_MONTH, 18000), day: month },
+    { name: "chars", kind: "tc", key: cK, inc: n, max: int(env.GEN_TTS_CHARS_PER_MONTH, 108000), day: month },
+    // örnek ("Dinle") ödenmiş işin global günlük 'ta' sayacını yemez; kendi global/gün ve aylık karakter alt tavanı var
+    ...(ornek ? [
+      { name: "ornek", kind: "to", key: oK, inc: 1, max: int(env.GEN_TTS_SAMPLE_PER_DAY, 30) },
+      { name: "ornek_global", kind: "tg", key: gK, inc: 1, max: int(env.GEN_TTS_SAMPLE_GLOBAL_PER_DAY, 150) },
+      { name: "ornek_ay", kind: "tk", key: kK, inc: n, max: int(env.GEN_TTS_SAMPLE_CHARS_PER_MONTH, 10000), day: month },
+    ] : [
+      { name: "all", kind: "ta", key: allK, inc: 1, max: int(env.GEN_TTS_PER_DAY, 600) },
+      { name: "rid", kind: "sr", key: oK, inc: n, max: int(env.GEN_TTS_RID_CHARS, 6000), day: ridDay },
+      { name: "user_month", kind: "sc", key: "c:" + uKey, inc: n, max: await sesKarakterTavan(env, db, uid, a.P, ay), day: ay },
+    ]),
   ];
   const r = await reserve(db, day, items);
-  if (!r.ok) return ttsFail("tts_limit", 429, origin, { scope: r.failed.includes("user") ? "user" : r.failed.includes("chars") ? "month" : "global" });
-  // ElevenLabs başarısız: üç sayaç iade (iade yazılamazsa yanıt değişmez), sonra 502
+  if (!r.ok) {
+    const f = r.failed;
+    if (f.includes("rid")) return ttsFail("ses_oturum_bitti", 409, origin, { neden: "karakter" });
+    const scope = f.includes("user") ? "user" : f.includes("user_month") ? "user_month" : f.includes("ornek") ? "ornek"
+      : f.includes("ornek_global") || f.includes("ornek_ay") ? "ornek_global" : f.includes("chars") ? "month" : "global";
+    return ttsFail("tts_limit", 429, origin, { scope });
+  }
+  // hak düşme (yalnız yeni oturum): önce aylık (koşullu artış, eşzamanlı isteklerde tavanı aşmaz), yoksa ek bakiye.
+  // D1 hatası "hakkın bitti" (402) diye gösterilmez: sayaçlar iade, 503 tts_hata (yeniden dene).
+  let kaynak = null, hakHata = false;
+  if (yeni) {
+    try {
+      const lim = sesLimit(a.P);
+      if (lim > 0 && await db.prepare(SES_AY_UP).bind(ay, uKey, lim).first()) kaynak = "ay";
+      else if (await db.prepare(SES_EK_DOWN).bind(uKey).first()) kaynak = "ek";
+    } catch (e) { hakHata = true; console.log("tts hak", e?.message?.slice(0, 80)); }
+    if (kaynak === "ek") { try { await db.prepare(SES_EK_SAY).bind(ay, "e:" + uKey).run(); } catch (e) { console.log("tts ek say", e?.message?.slice(0, 80)); } }
+    if (!kaynak) {
+      try { await db.batch(decr(db, day, items)); } catch (e) { console.log("tts iade", e?.message?.slice(0, 80)); }
+      if (hakHata) return ttsFail("tts_hata", 503, origin, { neden: "diger" });
+      return ttsFail("ses_hak_yok", 402, origin, { kalan: 0, plan: a.P?.plan ?? null, ek_paket: { ...SES_EK } });
+    }
+  }
+  // ElevenLabs başarısız: sayaçlar + bu istekte düşen hak iade (iade yazılamazsa yanıt değişmez); yeni rid verilmez
   const iade = async neden => {
-    try { await db.batch(decr(db, day, items)); } catch (e) { console.log("tts iade", e?.message?.slice(0, 80)); }
+    const back = decr(db, day, items);
+    if (kaynak === "ay") back.push(db.prepare(SES_AY_IADE).bind(ay, uKey));
+    if (kaynak === "ek") back.push(db.prepare(SES_EK_IADE).bind(uKey), db.prepare(SES_AY_IADE).bind(ay, "e:" + uKey));
+    try { await db.batch(back); } catch (e) { console.log("tts iade", e?.message?.slice(0, 80)); }
     return ttsFail("tts_hata", 502, origin, neden ? { neden } : undefined);
   };
   let audio;
   try {
     const get = io.fetch; // ayrık çağrı (Illegal invocation)
-    const res = await get(`https://api.elevenlabs.io/v1/text-to-speech/${ttsVoiceId(env, v.id)}?output_format=${TTS_FORMAT}`, {
+    const res = await get(`https://api.elevenlabs.io/v1/text-to-speech/${v.vid}?output_format=${ttsFormat(env)}`, {
       method: "POST",
       headers: { "xi-api-key": env.ELEVENLABS_API_KEY, "Content-Type": "application/json", Accept: "audio/mpeg", "User-Agent": "corner-forms-tts" },
       body: JSON.stringify(ttsBody(metin, v, ttsModel(env))),
@@ -1192,10 +1411,13 @@ async function ttsRoute(c) {
     return iade();
   }
   if (!audio || !audio.byteLength) return iade();
-  return new Response(audio, {
-    status: 200,
-    headers: { "content-type": "audio/mpeg", "cache-control": "no-store", ...(origin && { "access-control-allow-origin": origin, vary: "Origin" }) },
-  });
+  const headers = { "content-type": "audio/mpeg", "cache-control": "no-store", ...(origin && { "access-control-allow-origin": origin, vary: "Origin" }) };
+  if (rid) {
+    headers["x-ses-rid"] = rid;
+    try { headers["x-ses-kalan"] = String((await sesDurum(db, uid, a.P)).kalan); } catch (e) { console.log("tts kalan", e?.message?.slice(0, 80)); }
+    headers["access-control-expose-headers"] = "x-ses-rid, x-ses-kalan";
+  }
+  return new Response(audio, { status: 200, headers });
 }
 
 // [ad, işleyici, yöntem (yoksa POST)]

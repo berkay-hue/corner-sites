@@ -4,7 +4,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import vm from "node:vm";
-import { PLANS, MONTH_KIND, KIND_NAME, planOf, planLimits, ENTERPRISE_CMS_SITES, CMS_FREQS, ENTERPRISE_CMS_PER_WEEK } from "./plans.js";
+import { PLANS, MONTH_KIND, KIND_NAME, planOf, planLimits, ENTERPRISE_CMS_SITES, CMS_FREQS, ENTERPRISE_CMS_PER_WEEK, SES_EK } from "./plans.js";
 
 const SRC = readFileSync(new URL("../../sites/app.socialmediacorner.co/assets/plans.js", import.meta.url), "utf8");
 const site = () => { const window = {}; vm.runInNewContext(SRC, { window }); return window.SMC_PLANS; };
@@ -20,7 +20,8 @@ test("plans.js ↔ PLANS: basic/pro aylık sayılar ve Pexels erişimi aynı", (
   assert.equal(S.enterprise.pro_dahil, true);
   assert.equal(S.enterprise.sozlesme, true);
   assert.equal(PLANS.enterprise.stock, true);
-  assert.deepEqual(Object.keys(S).sort(), Object.keys(PLANS).sort());
+  // seslendirme_ek plan değil, ek paket bilgisi (SES_EK)
+  assert.deepEqual(Object.keys(S).filter(k => k !== "seslendirme_ek").sort(), Object.keys(PLANS).sort());
 });
 
 test("26.11: Enterprise'da içeriği kullanıcı hazırlar — ekip_hazirlar false (worker ve site aynı), planLimits'e girmez", () => {
@@ -54,12 +55,12 @@ test("planOf / planLimits: 0018 yok → null, bilinmeyen → basic, enterprise p
   assert.equal(planOf({ plan: "gold" }), "basic");
   assert.equal(planOf({ plan: "toString" }), "basic");
   assert.equal(planLimits({ id: 1 }), null);
-  assert.deepEqual(planLimits({ plan: "basic" }), { plan: "basic", linkedin_blog: 8, video_gorsel: 2, stock: false, stock_trial: 1, cms_sites: 0, cms_per_week: 0 });
-  assert.deepEqual(planLimits({ plan: "pro" }), { plan: "pro", linkedin_blog: 40, video_gorsel: 12, stock: true, stock_trial: 0, cms_sites: 1, cms_per_week: 3 });
-  assert.deepEqual(planLimits({ plan: "enterprise", plan_limits: '{"linkedin_blog":500,"video_gorsel":120}' }), { plan: "enterprise", linkedin_blog: 500, video_gorsel: 120, stock: true, stock_trial: 0, cms_sites: 1, cms_per_week: 7 });
-  assert.deepEqual(planLimits({ plan: "enterprise", plan_limits: '{"linkedin_blog":0,"video_gorsel":"9"}' }), { plan: "enterprise", linkedin_blog: 40, video_gorsel: 12, stock: true, stock_trial: 0, cms_sites: 1, cms_per_week: 7 });
-  assert.deepEqual(planLimits({ plan: "enterprise", plan_limits: "{bozuk" }), { plan: "enterprise", linkedin_blog: 40, video_gorsel: 12, stock: true, stock_trial: 0, cms_sites: 1, cms_per_week: 7 });
-  assert.deepEqual(planLimits({ plan: "enterprise", plan_limits: null }), { plan: "enterprise", linkedin_blog: 40, video_gorsel: 12, stock: true, stock_trial: 0, cms_sites: 1, cms_per_week: 7 });
+  assert.deepEqual(planLimits({ plan: "basic" }), { plan: "basic", linkedin_blog: 8, video_gorsel: 2, stock: false, stock_trial: 1, cms_sites: 0, cms_per_week: 0, seslendirme: 1 });
+  assert.deepEqual(planLimits({ plan: "pro" }), { plan: "pro", linkedin_blog: 40, video_gorsel: 12, stock: true, stock_trial: 0, cms_sites: 1, cms_per_week: 3, seslendirme: 6 });
+  assert.deepEqual(planLimits({ plan: "enterprise", plan_limits: '{"linkedin_blog":500,"video_gorsel":120}' }), { plan: "enterprise", linkedin_blog: 500, video_gorsel: 120, stock: true, stock_trial: 0, cms_sites: 1, cms_per_week: 7, seslendirme: 6 });
+  assert.deepEqual(planLimits({ plan: "enterprise", plan_limits: '{"linkedin_blog":0,"video_gorsel":"9"}' }), { plan: "enterprise", linkedin_blog: 40, video_gorsel: 12, stock: true, stock_trial: 0, cms_sites: 1, cms_per_week: 7, seslendirme: 6 });
+  assert.deepEqual(planLimits({ plan: "enterprise", plan_limits: "{bozuk" }), { plan: "enterprise", linkedin_blog: 40, video_gorsel: 12, stock: true, stock_trial: 0, cms_sites: 1, cms_per_week: 7, seslendirme: 6 });
+  assert.deepEqual(planLimits({ plan: "enterprise", plan_limits: null }), { plan: "enterprise", linkedin_blog: 40, video_gorsel: 12, stock: true, stock_trial: 0, cms_sites: 1, cms_per_week: 7, seslendirme: 6 });
   assert.equal(planLimits({ plan: "enterprise", plan_limits: '{"linkedin_blog":5,"video_gorsel":5,"cms_sites":25}' }).cms_sites, 25);
   assert.deepEqual(MONTH_KIND, { linkedin: "lb", blog: "lb", video: "vg", instagram: "vg" });
   assert.deepEqual(KIND_NAME, { lb: "linkedin_blog", vg: "video_gorsel" });
@@ -100,4 +101,26 @@ test("Pexels deneme (25.11): demo/basic 1 ömür boyu deneme görseli, pro/enter
   const d = planLimits({ plan: "demo", created_at: "2026-11-01 00:00:00" });
   assert.deepEqual([d.stock, d.stock_trial], [false, 1]);
   assert.equal(planLimits({ plan: "enterprise" }).stock_trial, 0);
+});
+
+test("seslendirme (27.11): demo 0, basic 1, pro 6; enterprise plan_limits (0 geçerli, eksik/geçersiz → 6); ek paket 6 hak 299 TL / $7; worker ve site aynı", () => {
+  const S = site();
+  assert.deepEqual([PLANS.demo.seslendirme, PLANS.basic.seslendirme, PLANS.pro.seslendirme, PLANS.enterprise.seslendirme], [0, 1, 6, null]);
+  for (const p of ["demo", "basic", "pro"]) assert.equal(S[p].seslendirme, PLANS[p].seslendirme, `${p} seslendirme`);
+  assert.equal(S.enterprise.seslendirme, "teklif");
+  assert.deepEqual({ ...S.seslendirme_ek }, { ...SES_EK });
+  assert.deepEqual(SES_EK, { adet: 6, tl: 299, usd: 7 });
+  assert.ok(Object.isFrozen(SES_EK));
+  assert.equal(planLimits({ plan: "demo", created_at: "2026-11-01 00:00:00" }).seslendirme, 0);
+  const e = v => planLimits({ plan: "enterprise", plan_limits: v }).seslendirme;
+  assert.equal(e('{"seslendirme":0}'), 0);
+  assert.equal(e('{"seslendirme":10}'), 10);
+  assert.equal(e('{"linkedin_blog":5}'), 6);
+  assert.equal(e(null), 6);
+  for (const bad of ['{"seslendirme":-1}', '{"seslendirme":"3"}', '{"seslendirme":1.5}', '{"seslendirme":1001}', "{bozuk"]) assert.equal(e(bad), 6, bad);
+  for (const p of ["basic", "pro"]) {
+    const m = SRC.match(new RegExp(`\\b${p}:\\{[^}]*seslendirme:(\\d+)`));
+    assert.ok(m, `${p} seslendirme satırı bulunamadı`);
+    assert.equal(Number(m[1]), PLANS[p].seslendirme);
+  }
 });

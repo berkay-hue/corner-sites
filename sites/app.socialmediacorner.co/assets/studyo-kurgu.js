@@ -10,6 +10,14 @@ var T=S.T,$=S.$,el=S.el,d=document,EN=S.dil()==='en';
 var kok=$('#studyo-medya');if(!kok)return;
 var MOD=kok.getAttribute('data-mod')==='gorsel'?'gorsel':'video',VID=MOD==='video';
 var AZ=S.azHareket();
+/* E1·G: çerez şeridi (panel.js .ckb, html.ckb-acik) açıkken yapışkan önizleme kartı şeridin üstünde biter; --cerez-h CSS'te düşülür */
+(function(){var r=d.documentElement,ro=null,izli=null;
+  function olc(){var b=d.querySelector('.ckb'),h=b&&!b.hidden&&r.classList.contains('ckb-acik')?Math.ceil(b.getBoundingClientRect().height+24):0;
+    r.style.setProperty('--cerez-h',h+'px');
+    if(b&&b!==izli&&window.ResizeObserver){if(ro)ro.disconnect();ro=new ResizeObserver(olc);ro.observe(b);izli=b}}
+  if(window.MutationObserver)new MutationObserver(olc).observe(r,{attributes:true,attributeFilter:['class']});
+  window.addEventListener('resize',olc);olc();
+})();
 var TK='smc-kurgu-'+MOD,TURLER=['image/png','image/jpeg','image/webp'],MAXB=5*1024*1024,MAXS=30,UZ_MET=70,UZ_ALT=120,UZ_ACK=2200;
 var NS='http://www.w3.org/2000/svg';
 var IK={
@@ -24,7 +32,8 @@ var IK={
   arama:'M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM20 20l-4.2-4.2',
   kilit:'M7 11V8a5 5 0 0 1 10 0v3M5 11h14v10H5zM12 15v2',
   buyut:'M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5',kucult:'M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5',
-  ses:'M4 9h4l5-4v14l-5-4H4zM16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11'
+  ses:'M4 9h4l5-4v14l-5-4H4zM16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11',
+  sesKapali:'M4 9h4l5-4v14l-5-4H4zM16 9l6 6M22 9l-6 6'
 };
 
 function ikon(ad,cls){
@@ -77,7 +86,7 @@ function boyut(cv,aspect,cssW,tavan){
 }
 function senkron(){
   var t=S.medya&&S.medya.taslak;if(!t||!st)return;
-  t.scenes=st.sahneler.map(function(s){return {text:s.text,sub:s.sub,secs:VID?s.secs:0}});
+  t.scenes=st.sahneler.map(function(s){var o={text:s.text,sub:s.sub,secs:VID?s.secs:0};if(VID&&s.q)o.q=s.q;return o});
   t.caption=st.aciklama;
 }
 function slug(){
@@ -108,14 +117,26 @@ function durumKur(det){
   var ps=!!(tr.palette&&bul(M.palettes,tr.palette));
   /* kayıtlı medya her zaman bir palet taşır (şablonun varsayılanı dahil): varsayılansa "seçildi" sayma */
   if(ps&&md&&typeof md==='object'&&tr.palette===tplO(tp).palette)ps=false;
-  var sah=(Array.isArray(t.scenes)?t.scenes:[]).slice(0,MAXS).map(function(s){s=s||{};return {text:String(s.text||''),sub:String(s.sub||''),secs:VID?kis(s.secs>0?s.secs:3.5):0}});
+  var sah=(Array.isArray(t.scenes)?t.scenes:[]).slice(0,MAXS).map(function(s){s=s||{};return {text:String(s.text||''),sub:String(s.sub||''),secs:VID?kis(s.secs>0?s.secs:3.5):0,q:VID?qOk(s.q):''}});
   if(!sah.length)sah=[{text:'',sub:'',secs:VID?3.5:0}];
   /* F2: seslendirme tercihi yalnız {acik,id} olarak kayıtlı medyadan gelir; ses dosyası hiçbir yere yazılmaz */
-  var sv=md&&typeof md==='object'&&md.ses&&typeof md.ses==='object'?md.ses:null,sid=sv&&typeof sv.id==='string'?sv.id:'';
-  return {taslak:t,ses:{acik:!!(VID&&sv&&sv.acik===true),id:sesGecerli(sid)?sid:SES.liste[0].id,geri:!!(VID&&sv&&sv.acik===true)},sahneler:sah,aciklama:String(t.caption||''),
+  /* B·4: imzalı seslendirme oturumu (rid, 24 sa) da kayıtta durur; süresi geçmişse atılır. Eski ses kimlikleri ALIAS ile yeni yuvaya döner. */
+  var sv=md&&typeof md==='object'&&md.ses&&typeof md.ses==='object'?md.ses:null,sid=sv&&typeof sv.id==='string'?(SES_ALIAS[sv.id]||sv.id):'';
+  var rid=sv&&typeof sv.rid==='string'&&RID_RE.test(sv.rid)?sv.rid:'',rs=rid&&typeof sv.ridSon==='number'&&sv.ridSon>Date.now()?sv.ridSon:0;
+  return {taslak:t,ses:{acik:!!(VID&&sv&&sv.acik===true),id:TTS_ID.test(sid)?sid:sesVarsayilan(),geri:!!(VID&&sv&&sv.acik===true),rid:rs?rid:'',ridSon:rs,yeniden:!!(rid&&!rs)},sahneler:sah,aciklama:String(t.caption||''),
     t:{template:tp,aspect:as,palette:ps?tr.palette:'',paletSecildi:ps,vurgu:/^#[0-9a-f]{6}$/i.test(tr.vurgu||'')?tr.vurgu.toLowerCase():'',
       ad:typeof tr.ad==='string'&&tr.ad?tr.ad:String((det.marka&&det.marka.name)||'').slice(0,60),kulp:typeof tr.kulp==='string'?tr.kulp.slice(0,40):''},
-    oynat:null,slayt:0,iptal:null,mesgul:false,basla:[0],toplam:0,surukle:false};
+    q:VID?qOk(t.q):'',oynat:null,slayt:0,iptal:null,mesgul:false,basla:[0],toplam:0,surukle:false};
+}
+/* E5: taslağın İngilizce stok sorgusu (sunucu llm qOk ile aynı süzgeç); ekranda gösterilmez, yalnız aramaya gider */
+var Q_RE=/^[A-Za-z0-9 ,'&-]{2,60}$/;
+function qOk(v){v=typeof v==='string'?v.replace(/\s+/g,' ').trim():'';return Q_RE.test(v)?v:''}
+/* sahne metninden ilk 4 anlamlı kelime (q yoksa seçicinin ön değeri) */
+var DURAK={};('ve ile bir bu şu o için da de mi ne çok gibi daha en her ama veya ya hem kadar sonra önce olan olarak nasıl neden artık bile siz sen biz ben size sana bize bizim sizin senin '+
+  'the a an and or of to in on for with is are be your you it this that our we how why what from at by as not no more most').split(' ').forEach(function(w){DURAK[w]=1});
+function ilk4(t){
+  var w=String(t||'').replace(/\*/g,' ').toLocaleLowerCase(EN?'en':'tr').split(/[\s.,;:!?…"“”'’‘()\[\]{}\/|#@+=<>–—-]+/);
+  return w.filter(function(x){return x.length>=3&&!DURAK[x]&&!/^\d+$/.test(x)}).slice(0,4).join(' ');
 }
 
 /* ================= DÜZENLEYİCİ ================= */
@@ -140,7 +161,7 @@ function kur(det){
   pn.appendChild(grup('tasarim',T('Tasarım','Design'),tasarimKur(),true));
   pn.appendChild(grup('marka',T('Marka','Brand'),markaKur(),genis));
   pn.appendChild(grup('sahne',VID?T('Sahneler','Scenes'):T('Slaytlar','Slides'),sahnelerKur(),genis));
-  if(VID){var sg=grup('ses',T('AI seslendirme','AI voiceover'),sesKur(),genis||st.ses.acik);sg.hidden=true;R.sesGrup=sg;pn.appendChild(sg);seslerAl().then(function(){if(st&&R.sesGrup===sg)sesYaz()})}
+  if(VID){var sg=grup('ses',T('AI seslendirme','AI voiceover'),sesKur(),genis||st.ses.acik);sg.hidden=true;R.sesGrup=sg;pn.appendChild(sg);seslerAl().then(function(){if(st&&R.sesGrup===sg){sesYaz();if(st.ses.acik&&st.ses.geri)sesOto('geri')}})}
   var ac=aciklamaKur(arac);pn.appendChild(grup('aciklama',T('Gönderi açıklaması','Post caption'),ac,false));
 
   var yer=kok.querySelector('.st-motor-yer');if(yer)yer.hidden=true;
@@ -172,7 +193,7 @@ function sahneKur(){
   var cer=el('div','kr-cerceve');cer.setAttribute('aria-busy','true');R.cerceve=cer;
   cer.appendChild(el('span','isk kr-isk'));
   var cv=el('canvas','kr-tuval');cv.tabIndex=0;cv.setAttribute('role','img');R.tuval=cv;
-  cv.addEventListener('keydown',tusla);cv.setAttribute('aria-keyshortcuts','F');
+  cv.addEventListener('keydown',tusla);cv.setAttribute('aria-keyshortcuts',VID?'F M':'F');
   cv.addEventListener('click',function(){if(VID)oynatDurdur()});
   cer.appendChild(cv);
   if(VID){
@@ -187,13 +208,17 @@ function sahneKur(){
   if(VID){
     var o=dugme('btn-cizgi kr-ikon-d',null,null,T('Oynat','Play'));o.addEventListener('click',oynatDurdur);R.oyn=o;kn.appendChild(o);
     var r=el('input','kr-kaydir');r.type='range';r.min='0';r.step='0.05';r.value='0';r.max=String(st.toplam||1);r.setAttribute('aria-label',T('Önizleme konumu','Preview position'));
-    r.addEventListener('pointerdown',function(){st.surukle=true});
-    r.addEventListener('pointerup',function(){st.surukle=false});
-    r.addEventListener('pointercancel',function(){st.surukle=false});
+    /* E4: sürüklerken duraklat (ses kaynakları susar), bırakınca oynuyorsa devam */
+    r.addEventListener('pointerdown',function(){st.surukle=true;st.surCal=!!(st.oynat&&st.oynat.playing);if(st.surCal){st.oynat.pause();oynatYaz()}});
+    var birak=function(){st.surukle=false;if(st.surCal&&st.oynat){st.surCal=false;sesDur2();st.oynat.resume();oynatYaz()}};
+    r.addEventListener('pointerup',birak);
+    r.addEventListener('pointercancel',birak);
     r.addEventListener('input',function(){if(st.oynat){st.oynat.seek(+r.value);zamanda(+r.value,st.toplam,true)}});
     r.addEventListener('keydown',function(e){if(e.key===' '){e.preventDefault();oynatDurdur()}});
     R.kaydir=r;kn.appendChild(r);
     R.saat=el('span','kr-saat','0:00 / 0:00');R.saat.setAttribute('aria-hidden','true');kn.appendChild(R.saat);
+    var sb=dugme('btn-cizgi kr-ikon-d kr-sessiz',null,null,T('Sessiz (M)','Mute (M)'));sb.setAttribute('aria-pressed','false');sb.setAttribute('aria-keyshortcuts','M');
+    sb.addEventListener('click',sessizDegis);R.sesB=sb;kn.appendChild(sb);
   }else{
     var g=dugme('btn-cizgi kr-ikon-d','geri',null,T('Önceki slayt','Previous slide'));g.addEventListener('click',function(){if(!pasifMi(g))slaytGit(st.slayt-1)});R.onceki=g;kn.appendChild(g);
     R.noktalar=el('div','kr-noktalar');R.noktalar.setAttribute('role','group');R.noktalar.setAttribute('aria-label',T('Slaytlar','Slides'));kn.appendChild(R.noktalar);
@@ -219,6 +244,7 @@ function tuvalEtiket(){
 }
 function tusla(e){
   if((e.key==='f'||e.key==='F')&&!e.metaKey&&!e.ctrlKey&&!e.altKey){e.preventDefault();tamDegis();return}
+  if(VID&&(e.key==='m'||e.key==='M')&&!e.metaKey&&!e.ctrlKey&&!e.altKey){e.preventDefault();sessizDegis();return}
   if(e.key===' '||e.key==='Spacebar'){if(VID){e.preventDefault();oynatDurdur()}return}
   if(e.key==='ArrowRight'||e.key==='ArrowLeft'){
     e.preventDefault();var y=e.key==='ArrowRight'?1:-1;
@@ -264,16 +290,37 @@ function tamYaz(on){
   var bu=st;requestAnimationFrame(function(){if(!st||st!==bu)return;if(st.oynat)st.oynat.resize();else slaytCiz()});
 }
 function tamOlay(){if(R.sar&&!(R.dlg&&R.dlg.open))tamYaz(tamEl()===R.sar)}
-d.addEventListener('fullscreenchange',tamOlay);d.addEventListener('webkitfullscreenchange',tamOlay);
+d.addEventListener('fullscreenchange',tamOlay);
+/* E4: sekme gizlenince önizleme durur (ses arka planda çalmasın) */
+d.addEventListener('visibilitychange',function(){if(d.hidden&&st&&st.oynat&&st.oynat.playing){st.oynat.pause();oynatYaz()}});d.addEventListener('webkitfullscreenchange',tamOlay);
 
 /* video oynatıcı */
 var sonSn=-1,sonTop=-1,sonI=-1;
 function oynaticiKur(){
   sonSn=sonTop=sonI=-1;
   if(!VID){slaytCiz();return}
-  st.oynat=M.play(R.tuval,proje(),{autoplay:!AZ,loop:true,onTime:function(t,top){zamanda(t,top)}});
+  /* E4: iOS sessiz anahtarı açıkken de önizleme sesi çalsın */
+  if(navigator.audioSession){try{navigator.audioSession.type='playback'}catch(e){}}
+  /* ses varken döngü yok: sonda durur, büyük düğme "Tekrar oynat" (motor loop/onEnd'i her karede okur) */
+  st.oynOpts={autoplay:!AZ,loop:!sesVarMi(),muted:sessizMi(),onTime:function(t,top){zamanda(t,top)},onEnd:function(){if(R.buyuk)R.buyuk.setAttribute('data-yazi',T('Tekrar oynat','Play again'));oynatYaz()}};
+  st.oynat=M.play(R.tuval,proje(),st.oynOpts);
   if(AZ){st.oynat.seek(oturan(0))}
-  oynatYaz();
+  oynatYaz();sessizYaz();
+}
+function sesVarMi(){return !!(VID&&st&&st.ses&&st.ses.acik&&st.sahneler.some(function(s){return !!sesTampon(s)}))}
+var SESSIZ_K='smc-onz-sessiz';
+function sessizMi(){try{return localStorage.getItem(SESSIZ_K)==='1'}catch(e){return false}}
+function sessizDegis(){
+  if(!st||!st.oynat)return;
+  var x=!st.oynat.muted;st.oynat.mute(x);if(st.oynOpts)st.oynOpts.muted=x;
+  try{if(x)localStorage.setItem(SESSIZ_K,'1');else localStorage.removeItem(SESSIZ_K)}catch(e){}
+  if(!x)sesCtx();
+  sessizYaz();S.durum(x?T('Önizleme sessiz.','Preview muted.'):T('Önizleme sesli.','Preview sound on.'));
+}
+function sessizYaz(){
+  var b=R.sesB;if(!b)return;var x=!!(st&&st.oynat&&st.oynat.muted);
+  b.textContent='';b.appendChild(ikon(x?'sesKapali':'ses'));b.setAttribute('aria-pressed',x?'true':'false');
+  b.title=x?T('Sesi aç (M)','Unmute (M)'):T('Sessiz (M)','Mute (M)');
 }
 function zamanda(t,top,zorla){
   if(!R.kaydir)return;
@@ -286,7 +333,14 @@ function zamanda(t,top,zorla){
 }
 function oynatDurdur(){
   if(!st||!st.oynat||st.mesgul)return;
-  if(st.oynat.playing)st.oynat.pause();else st.oynat.resume();
+  if(st.oynat.playing)st.oynat.pause();
+  else{
+    /* E4: ses bağlamı jest içinde uyanır; hâlâ askıdaysa ipucu */
+    sesDur2();var c=sesVarMi()&&!st.oynat.muted?sesCtx():null;
+    if(R.buyuk)R.buyuk.removeAttribute('data-yazi');
+    st.oynat.resume();
+    if(c)setTimeout(function(){if(c.state!=='running'&&st&&st.oynat&&st.oynat.playing){var m=T('Sesi açmak için dokun','Tap to turn on sound');S.toast(m);if(R.sesB)R.sesB.title=m}},350);
+  }
   oynatYaz();
 }
 function oynatYaz(){
@@ -297,7 +351,7 @@ function oynatYaz(){
   R.cerceve.classList.toggle('oynuyor',p);
 }
 function sahneyeGit(i){
-  if(!st.oynat)return;
+  if(!st.oynat)return;sesDur2();
   if(st.oynat.playing)st.oynat.seek(st.basla[i]||0);else st.oynat.seek(oturan(i));
   zamanda(st.oynat.time,st.toplam,true);
 }
@@ -446,12 +500,31 @@ function hepsiAktar(){
    Ses yalnız bu sekmenin belleğinde durur (anahtar: ses|metin); kayda yalnız {acik,id} yazılır. Dönüşte "Sesi yeniden oluştur".
    Sahne süresi sese göre uzar: secs = max(secs, ses + 0,4) (motor sınırı 15 sn). */
 var API_T=(function(){var m=d.querySelector('meta[name="api-base"]');return m?String(m.getAttribute('content')||'').replace(/\/+$/,''):''})();
-var TTS_MAX=1500,TTS_ID=/^[a-z]{2}-[A-Z]{2}-[A-Za-z]{2,30}$/;
-var SES={durum:'bilinmiyor',uretildi:false,P:null,iptal:null,dinle:null,dinleKaynak:null,tampon:{},
-  liste:EN?[{id:'en-US-Alice',ad:'Alice',cinsiyet:'kadin'},{id:'en-US-George',ad:'George',cinsiyet:'erkek'}]
-          :[{id:'tr-TR-Sarah',ad:'Sarah',cinsiyet:'kadin'},{id:'tr-TR-Adam',ad:'Adam',cinsiyet:'erkek'}]};
+var TTS_MAX=1500,TTS_ID=/^[a-z]{2}-[A-Z]{2}-[A-Za-z]{2,30}$/,RID_RE=/^[A-Za-z0-9_-]{8,160}\.[A-Za-z0-9_-]{22}$/,RID_OM=24*3600*1000-5*60*1000;
+/* E3: liste sunucudan gelir (dile göre yuvalar); uç yoksa arayüz dilinin iki varsayılan yuvası. Eski kimlikler yeni yuvaya döner. */
+var SES={durum:'bilinmiyor',uretildi:false,P:null,iptal:null,dinle:null,dinleKaynak:null,tampon:{},oto:0,
+  liste:EN?[{id:'en-US-Kadin',dil:'en',ad:'Hope',cinsiyet:'kadin',yerel:true},{id:'en-US-Erkek',dil:'en',ad:'Mark',cinsiyet:'erkek',yerel:true}]
+          :[{id:'tr-TR-Kadin',dil:'tr',ad:'Derya',cinsiyet:'kadin',yerel:true},{id:'tr-TR-Erkek',dil:'tr',ad:'Adam',cinsiyet:'erkek',yerel:true}]};
+var SES_ALIAS={'tr-TR-Sarah':'tr-TR-Kadin','tr-TR-Adam':'tr-TR-Erkek','en-US-Alice':'en-US-Kadin','en-US-George':'en-GB-Erkek','fr-FR-Kadin':'fr-FR-Erkek'};
+var SES_GRUP={tr:'Türkçe',en:'English',de:'Deutsch',es:'Español',fr:'Français',ar:'العربية'};
+var SES_DIL=EN?{tr:'Turkish',en:'English',de:'German',es:'Spanish',fr:'French',ar:'Arabic'}:{tr:'Türkçe',en:'İngilizce',de:'Almanca',es:'İspanyolca',fr:'Fransızca',ar:'Arapça'};
 function sesGecerli(id){return SES.liste.some(function(v){return v.id===id})}
-function sesAdi(v){return v.ad+' ('+(v.cinsiyet==='erkek'?T('erkek','male'):T('kadın','female'))+')'}
+function sesDili(v){return v.dil||String(v.id).slice(0,2)}
+function sesAdi(v){return v.ad+' ('+(v.cinsiyet==='erkek'?T('erkek','male'):T('kadın','female'))+(v.yerel===false?T(', çok dilli',', multilingual'):'')+')'}
+/* varsayılan: arayüz dilinin kadın sesi → aynı dilden ilk ses → listedeki ilk ses */
+function sesVarsayilan(){
+  var h=EN?'en-US-Kadin':'tr-TR-Kadin';if(sesGecerli(h))return h;
+  var on=EN?'en':'tr';for(var i=0;i<SES.liste.length;i++)if(sesDili(SES.liste[i])===on)return SES.liste[i].id;
+  return SES.liste[0].id;
+}
+function ridGecerli(){return !!(st&&st.ses&&st.ses.rid&&st.ses.ridSon>Date.now())}
+/* kalan hak (KB /gen/quota → S.hak().ses); x-ses-kalan gelince önce aylık, sonra ek haktan düşülür */
+function sesHakBilgi(){var h=S.hak&&S.hak();return h&&h.ses&&typeof h.ses.kalan==='number'?h.ses:null}
+function sesKalanYaz(k){
+  var s=sesHakBilgi();if(!s||!(k>=0))return;
+  var fark=s.kalan-k;if(fark>0){var ana=Math.max(0,(s.limit||0)-(s.used||0)),al=Math.min(fark,ana);s.used=(s.used||0)+al;s.ek=Math.max(0,(s.ek||0)-(fark-al))}
+  s.kalan=k;
+}
 function sesBul(id){return bul(SES.liste,id)||SES.liste[0]}
 /* okunacak metin: ekran metni + alt satır; vurgu yıldızları atılır, boşluklar sadeleşir, 1500 kod noktasına kırpılır */
 function sesMetni(s){
@@ -472,8 +545,8 @@ function seslerAl(){
   if(ac)o.signal=ac.signal;
   SES.P=fetch(API_T+'/gen/tts/sesler',o).then(function(r){clearTimeout(tm);return r.ok?r.json().then(null,function(){return null}):null},function(){clearTimeout(tm);return null}).then(function(j){
     if(!j||j.ok===false||typeof j.acik!=='boolean'){SES.durum='yok';return}
-    var on=EN?'en-':'tr-',l=(Array.isArray(j.sesler)?j.sesler:[]).filter(function(v){return v&&typeof v.id==='string'&&TTS_ID.test(v.id)&&v.id.indexOf(on)===0}).slice(0,8)
-      .map(function(v){return {id:v.id,ad:typeof v.ad==='string'&&v.ad?v.ad.slice(0,30):v.id.split('-')[2],cinsiyet:v.cinsiyet==='erkek'?'erkek':'kadin'}});
+    var l=(Array.isArray(j.sesler)?j.sesler:[]).filter(function(v){return v&&typeof v.id==='string'&&TTS_ID.test(v.id)}).slice(0,12)
+      .map(function(v){return {id:v.id,dil:v.id.slice(0,2),ad:typeof v.ad==='string'&&v.ad?v.ad.slice(0,30):v.id.split('-')[2],cinsiyet:v.cinsiyet==='erkek'?'erkek':'kadin',yerel:v.yerel===true}});
     if(l.length)SES.liste=l;
     SES.durum=j.acik?'acik':'kapali';
   });
@@ -481,6 +554,7 @@ function seslerAl(){
 }
 function sesKur(){
   var ic=el('div','kr-ses'),id='kr-'+MOD+'-ses';
+  R.sesHak=el('p','kr-ses-hak');R.sesHak.hidden=true;ic.appendChild(R.sesHak);
   var sat=el('div','kr-ses-ac');
   var cb=el('input','kr-ses-kutu');cb.type='checkbox';cb.id=id+'-ac';cb.checked=!!st.ses.acik;cb.disabled=true;cb.setAttribute('aria-describedby',id+'-not');R.sesAc=cb;
   var lb=el('label','kr-ses-l',T('Sahneleri AI sesiyle seslendir','Read the scenes with an AI voice'));lb.htmlFor=cb.id;
@@ -489,15 +563,19 @@ function sesKur(){
   var sl=el('label','st-etiket kr-ses-etiket',T('Ses','Voice'));sl.htmlFor=id+'-sec';ay.appendChild(sl);
   var ss=el('div','kr-ses-sat');
   var sec=el('select','st-girdi kr-ses-sec');sec.id=id+'-sec';R.sesSec=sec;ss.appendChild(sec);
-  var dn=dugme('btn-cizgi btn-kucuk kr-ses-dinle','oynat',T('Dinle','Listen'),T('Seçili sesten kısa örnek dinle','Play a short sample of the selected voice'));dn.setAttribute('aria-pressed','false');R.sesDinle=dn;ss.appendChild(dn);
+  var dn=dugme('btn-cizgi btn-kucuk kr-ses-dinle','oynat',T('Dinle (ücretsiz)','Listen (free)'),T('Seçili sesten kısa örnek dinle','Play a short sample of the selected voice'));dn.setAttribute('aria-pressed','false');R.sesDinle=dn;ss.appendChild(dn);
   ay.appendChild(ss);
-  var ob=dugme('btn-ana btn-kucuk kr-ses-olustur','ses',T('Seslendirmeyi oluştur','Create voiceover'));R.sesOlustur=ob;ay.appendChild(ob);
+  var dl=el('p','not not-uyari kr-ses-dilnot');dl.hidden=true;R.sesDilNot=dl;ay.appendChild(dl);
+  var kl=el('div','kr-ses-kilit');R.sesKilit=kl;
+  var ob=dugme('btn-ana btn-kucuk kr-ses-olustur','ses',T('Seslendir (1 hak)','Voice it (1 credit)'));R.sesOlustur=ob;kl.appendChild(ob);
+  R.sesHakNot=el('p','ipucu kr-ses-haknot','');kl.appendChild(R.sesHakNot);ay.appendChild(kl);
+  ay.appendChild(sesPanelKur());
   var il=el('div','kr-ses-ilerleme');il.hidden=true;R.sesIl=il;
   var iu=el('div','kr-kayit-ust');R.sesSay=el('span','kr-ses-say','');iu.appendChild(R.sesSay);
   var ip=dugme('btn-hafif btn-kucuk','kapat',T('İptal','Cancel'),T('Seslendirmeyi iptal et','Cancel the voiceover'));ip.addEventListener('click',function(){if(SES.iptal)SES.iptal.abort()});iu.appendChild(ip);il.appendChild(iu);
   var bar=el('div','st-ilerleme kr-cubuk');bar.setAttribute('role','progressbar');bar.setAttribute('aria-valuemin','0');bar.setAttribute('aria-valuemax','100');bar.setAttribute('aria-valuenow','0');
   bar.setAttribute('aria-label',T('Seslendirme','Voiceover'));R.sesBar=bar;R.sesBarIc=el('span');bar.appendChild(R.sesBarIc);il.appendChild(bar);ay.appendChild(il);
-  ay.appendChild(el('p','ipucu',T('Her sahnenin metni seçtiğin sesle okunur; sahne gerekirse sese göre uzar (en çok 15 sn). Ses MP4’e eklenir, yalnız bu sekmede tutulur.','Each scene’s text is read in the voice you pick; a scene grows to fit its audio if needed (up to 15 s). The audio goes into the MP4 and stays only in this tab.')));
+  ay.appendChild(el('p','ipucu',T('Her sahnenin metni seçtiğin sesle okunur; sahne gerekirse sese göre uzar (en çok 15 sn). Bir video 1 hak kullanır; 24 saat içinde ses ve metin değişiklikleri ek hak harcamaz. Ses MP4’e eklenir, yalnız bu sekmede tutulur.','Each scene’s text is read in the voice you pick; a scene grows to fit its audio if needed (up to 15 s). One video uses 1 credit; voice and text changes within 24 hours don’t use another. The audio goes into the MP4 and stays only in this tab.')));
   ic.appendChild(ay);
   var nt=el('p','not kr-ses-not');nt.id=id+'-not';nt.setAttribute('aria-live','polite');R.sesNot=nt;ic.appendChild(nt);
   cb.addEventListener('change',function(){
@@ -505,15 +583,48 @@ function sesKur(){
     st.ses.acik=cb.checked;st.ses.geri=false;
     if(!cb.checked){sesDur();sesNot('');guncelle();S.durum(T('Seslendirme kapatıldı.','Voiceover turned off.'));return}
     sesCtx();guncelle();
-    if(sesEksik().length)sesOlustur();
+    sesOto('ac');
   });
   sec.addEventListener('change',function(){
     if(!sesGecerli(sec.value))return;
     sesDur();st.ses.id=sec.value;sesNot('');guncelle();
+    sesOto('ses');
   });
   dn.addEventListener('click',function(){if(!pasifMi(dn))sesDinle()});
   ob.addEventListener('click',function(){if(!pasifMi(ob)){sesCtx();sesOlustur()}});
   return ic;
+}
+/* B·4: hak bitti paneli — plana göre Pro bağlantısı + herkese ek paket talebi (ödeme akışı yok; hak elle eklenir) */
+function sesPanelKur(){
+  var p=el('div','kr-ses-panel');p.hidden=true;p.setAttribute('role','status');R.sesPanel=p;
+  R.sesPanelB=el('p','kr-ses-panel-b',T('Bu ayın seslendirme hakların bitti.','You’ve used this month’s voiceover credits.'));p.appendChild(R.sesPanelB);
+  var sa=el('div','kr-ses-panel-sat');
+  var pro=el('a','btn btn-cizgi btn-kucuk kr-ses-pro',T('Pro’ya geç (ayda 6)','Go Pro (6 a month)'));pro.href=EN?'/en/pricing':'/fiyatlar';R.sesPro=pro;sa.appendChild(pro);
+  var ek=el('a','btn btn-ana btn-kucuk kr-ses-ek',T('Ek hak al (+6 video · 299 TL)','Get extra credits (+6 videos · $7)'));
+  ek.href=EN?'https://socialmediacorner.co/en/contact?konu=Extra%20voiceover%20pack%20(%2B6)#form':'https://socialmediacorner.co/iletisim?konu=Ek%20seslendirme%20paketi%20(%2B6)#form';
+  ek.target='_blank';ek.rel='noopener';R.sesEk=ek;sa.appendChild(ek);p.appendChild(sa);
+  p.appendChild(R.sesPanelIp=el('p','ipucu',T('Ödeme sonrası hakların 1 iş günü içinde hesabına eklenir. Ses örneklerini dinlemek ücretsiz.','Credits are added to your account within 1 business day of payment. Listening to voice samples is free.')));
+  return p;
+}
+function sesHakYaz(){
+  if(!R.sesHak)return;
+  var s=sesHakBilgi();
+  if(!s||typeof s.limit!=='number'){R.sesHak.hidden=true;R.sesHak.textContent='';return}
+  var ana=Math.max(0,s.limit-(s.used||0)),ek=s.ek||0;
+  /* F10: planında seslendirme yoksa (demo/ücretsiz, limit 0) "0/0 hak" yerine planı söyle */
+  if(s.limit===0&&!ek){R.sesHak.textContent=T('Seslendirme Basic ve Pro planlarda · ses örnekleri ücretsiz','Voiceover comes with Basic and Pro · voice samples are free');R.sesHak.hidden=false;return}
+  R.sesHak.textContent=T('Bu ay: '+ana+'/'+s.limit+' seslendirme hakkı'+(ek?' · Ek: '+ek:''),'This month: '+ana+'/'+s.limit+' voiceover credits'+(ek?' · Extra: '+ek:''));
+  R.sesHak.hidden=false;
+}
+/* E2: değişiklikte kendiliğinden yeniden seslendirme — yalnız geçerli rid varsa (hak harcamaz); yoksa düğme + not */
+function sesOto(neden){
+  clearTimeout(SES.oto);SES.oto=0;
+  if(!st||!VID||SES.durum!=='acik'||!st.ses.acik)return;
+  if(!sesEksik().length){sesYaz();return}
+  /* oturum yoksa otomatik ÜRETME: sesYaz düğmeyi "Seslendir (1 hak)" yapar ve notu yazar */
+  if(!ridGecerli()){if(!R.sesNot.classList.contains('not-hata'))sesNot('');sesYaz();return}
+  var bu=st;
+  SES.oto=setTimeout(function(){SES.oto=0;if(st===bu&&st.ses.acik&&ridGecerli()&&!SES.iptal)sesOlustur()},neden==='metin'?1200:600);
 }
 /* kullanıcı jesti içinde önizleme ses bağlamını uyandır */
 function sesCtx(){var c=M&&M.audioContext&&M.audioContext();if(c&&c.state!=='running'){try{c.resume()}catch(e){}}return c}
@@ -524,12 +635,12 @@ function sesNot(m,tur,giris){
 }
 function sesIlerle(k,n){
   var y=n?Math.round(k/n*100):0;
-  R.sesSay.textContent=T(k+' / '+n+' sahne seslendirildi',k+' / '+n+' scenes voiced');
+  R.sesSay.textContent=T('Seslendiriliyor '+k+'/'+n+'…','Voicing '+k+'/'+n+'…');
   R.sesBar.setAttribute('aria-valuenow',String(y));R.sesBar.setAttribute('aria-valuetext',T(k+' / '+n+' sahne',k+' of '+n+' scenes'));R.sesBarIc.style.width=y+'%';
 }
 function sesOzet(){
   if(SES.durum==='kapali')return T('yakında','coming soon');
-  if(!st.ses.acik)return T('kapalı','off');
+  if(!st.ses.acik)return T('kapalı (sessiz)','off (silent)');
   var v=sesBul(st.ses.id),n=sesSayi(),e=sesEksik().length;
   return v.ad+' · '+(SES.iptal?T('hazırlanıyor','creating'):!n?T('metin yok','no text'):e?T('ses yok','no audio'):T('hazır','ready'));
 }
@@ -537,25 +648,56 @@ function sesYaz(){
   if(!R.sesAc||!st)return;
   var du=SES.durum,acik=du==='acik';
   if(R.sesGrup)R.sesGrup.hidden=!(acik||du==='kapali');
-  if(!sesGecerli(st.ses.id))st.ses.id=SES.liste[0].id;
-  if(R.sesSec.options.length!==SES.liste.length||(R.sesSec.options[0]&&R.sesSec.options[0].value!==SES.liste[0].id)){
-    R.sesSec.textContent='';SES.liste.forEach(function(v){var o=el('option',null,sesAdi(v));o.value=v.id;R.sesSec.appendChild(o)});
+  if(du!=='bilinmiyor'&&!sesGecerli(st.ses.id))st.ses.id=sesVarsayilan();
+  var ank=SES.liste.map(function(v){return v.id+(v.yerel?'+':'')}).join(',');
+  if(R.sesSec.getAttribute('data-liste')!==ank){
+    /* E3: dile göre gruplu liste; arayüz dili önce */
+    R.sesSec.textContent='';R.sesSec.setAttribute('data-liste',ank);
+    var gr={},sira=EN?['en','tr','de','es','fr','ar']:['tr','en','de','es','fr','ar'];
+    SES.liste.forEach(function(v){var dl=sesDili(v);if(!gr[dl]){gr[dl]=el('optgroup');gr[dl].label=SES_GRUP[dl]||dl;if(sira.indexOf(dl)<0)sira.push(dl)}var o=el('option',null,sesAdi(v));o.value=v.id;gr[dl].appendChild(o)});
+    sira.forEach(function(dl){if(gr[dl])R.sesSec.appendChild(gr[dl])});
   }
   R.sesSec.value=st.ses.id;
+  sesHakYaz();
+  if(R.sesDilNot){
+    var sv=sesBul(st.ses.id),vd=sesDili(sv),md=EN?'en':'tr';
+    /* F11: metnin dilini bilmiyoruz (arayüz dili ≠ metin dili); yalnız sesin dilini söyle */
+    var dm=acik&&st.ses.acik&&vd!==md?T('Bu ses '+(SES_DIL[vd]||vd)+' konuşur; metnin dili farklıysa telaffuz bozulabilir.','This voice speaks '+(SES_DIL[vd]||vd)+'; if your text is in another language, pronunciation may suffer.'):'';
+    if(R.sesDilNot.textContent!==dm)R.sesDilNot.textContent=dm;R.sesDilNot.hidden=!dm;
+  }
   R.sesAc.disabled=!acik;R.sesAc.checked=acik&&!!st.ses.acik;
   R.sesAyar.hidden=!(acik&&st.ses.acik);
   var is=!!SES.iptal,n=sesSayi(),e=sesEksik().length;
   R.sesSec.disabled=is;pasif(R.sesDinle,is||!acik);
   R.sesIl.hidden=!is;
-  var ob=R.sesOlustur,sp=ob.querySelector('span');
-  if(sp)sp.textContent=st.ses.geri||SES.uretildi||(e&&e<n)?T('Sesi yeniden oluştur','Regenerate audio'):T('Seslendirmeyi oluştur','Create voiceover');
-  ob.hidden=is||!e;pasif(ob,is||!e);
+  var ob=R.sesOlustur,sp=ob.querySelector('span'),rg=ridGecerli(),hb=sesHakBilgi();
+  /* hak yoksa (ve oturum yoksa) düğme yerine hak bitti paneli */
+  var bitti=!rg&&(SES.hakYok||(hb&&hb.kalan<=0));
+  if(sp)sp.textContent=rg?T('Sesi güncelle','Update audio'):st.ses.yeniden?T('Yeniden seslendir (1 hak)','Voice again (1 credit)'):T('Seslendir (1 hak)','Voice it (1 credit)');
+  ob.hidden=is||!e||bitti;pasif(ob,is||!e||bitti);
+  if(R.sesKilit)R.sesKilit.hidden=ob.hidden;
+  if(R.sesHakNot){R.sesHakNot.textContent=rg?T('Bu videonun seslendirme oturumu açık; değişiklikler hak harcamaz.','This video’s voiceover session is open; changes don’t use credits.'):T('1 hak kullanır','Uses 1 credit')+(hb?' · '+T('kalan '+hb.kalan,hb.kalan+' left'):'')}
+  if(R.sesPanel){
+    R.sesPanel.hidden=!(acik&&st.ses.acik&&bitti&&e&&!is);
+    if(!R.sesPanel.hidden){
+      var pl=(hb&&hb.plan)||SES.hakPlan||(S.hak&&S.hak().plan)||'';
+      R.sesPro.hidden=pl==='pro'||pl==='enterprise';
+      var plansiz=pl==='demo'||pl==='free';
+      R.sesPro.textContent=plansiz?T('Basic ve Pro planlarda (Pro’da ayda 6)','On Basic and Pro (6 a month on Pro)'):T('Pro’ya geç (ayda 6)','Go Pro (6 a month)');
+      /* F10: hiç hakkı olmayan planda "hakların bitti" + ek paket yanıltıcı; planı söyle, ek düğmesini gizle */
+      if(R.sesPanelB)R.sesPanelB.textContent=plansiz?T('Seslendirme Basic ve Pro planlarda. Ses örneklerini dinlemek ücretsiz.','Voiceover comes with Basic and Pro. Listening to voice samples is free.'):T('Bu ayın seslendirme hakların bitti.','You’ve used this month’s voiceover credits.');
+      if(R.sesEk)R.sesEk.hidden=plansiz;
+      if(R.sesPanelIp)R.sesPanelIp.hidden=plansiz;
+    }
+  }
   if(du==='kapali'){if(R.sesNot.textContent!==T('Seslendirme yakında.','Voiceover coming soon.'))sesNot(T('Seslendirme yakında.','Voiceover coming soon.'))}
   else if(acik&&st.ses.acik&&!is&&!R.sesNot.classList.contains('not-hata')&&!R.sesNot.classList.contains('not-uyari')){
     var m=!n?T('Seslendirilecek metin yok; sahnelere metin yaz.','There’s no text to read; add text to your scenes.')
-      :st.ses.geri&&e?T('Ses bu sekmede yok (kaydedilmez). “Sesi yeniden oluştur” ile tekrar hazırla.','The audio isn’t in this tab (it isn’t saved). Use “Regenerate audio” to create it again.')
+      :st.ses.geri&&e?(rg?T('Ses bu sekmede yok (kaydedilmez); oturum açık, hak harcamadan yeniden hazırlanıyor.','The audio isn’t in this tab (it isn’t saved); the session is open, so it’s being recreated without using a credit.'):T('Ses bu sekmede yok (kaydedilmez). Yeniden seslendirmek 1 hak kullanır.','The audio isn’t in this tab (it isn’t saved). Voicing it again uses 1 credit.'))
+      :e&&bitti?''
+      :e&&!rg?(st.ses.yeniden?T('Bu videonun seslendirme oturumu bitti; yeniden seslendirme 1 hak kullanır.','This video’s voiceover session has ended; voicing it again uses 1 credit.'):T('Seslendirmek için düğmeye bas — 1 hak kullanır.','Press to voice — uses 1 credit.'))
       :e?T(e+' sahnenin sesi güncel değil.',e===1?'1 scene’s audio is out of date.':e+' scenes’ audio is out of date.')
-      :T('Ses hazır · '+n+' sahne. Önizleme ve MP4 sesli.','Audio ready · '+n+(n===1?' scene':' scenes')+'. Preview and MP4 include it.');
+      :T('Sesli önizleme hazır — ▶ ile dinle. MP4 de sesli iner.','Voiced preview ready — press ▶ to listen. The MP4 includes it too.');
     if(R.sesNot.textContent!==m)sesNot(m,e?'':'ok');
   }
   if(R.oz_ses)R.oz_ses.textContent=sesOzet();
@@ -565,7 +707,17 @@ function sesHata(e,i){
   if(k==='tts_kapali')return T('Seslendirme yakında.','Voiceover coming soon.');
   if(k==='not_ready')return T('Seslendirme şu an kullanılamıyor. Biraz sonra tekrar dene.','Voiceover isn’t available right now. Try again a little later.');
   if(k==='login_required')return T('Seslendirme için giriş yap.','Sign in to use voiceover.');
-  if(k==='tts_limit')return e.scope==='user'?T('Bugünkü seslendirme hakkın doldu; yarın yenilenir.','You’ve used today’s voiceovers; they renew tomorrow.'):T('Seslendirme şu an çok yoğun. Biraz sonra tekrar dene.','Voiceover is very busy right now. Try again a little later.');
+  if(k==='tts_limit')return e.scope==='user'?T('Bugünkü sahne sesi sınırına ulaştın; yarın yenilenir.','You’ve hit today’s scene-audio limit; it renews tomorrow.'):e.scope==='month'?T('Bu ayın toplam seslendirme kotası doldu.','This month’s total voiceover quota is used up.'):e.scope==='ornek'?T('Bugünkü ücretsiz ses örneği sınırına ulaştın; yarın yenilenir.','You’ve hit today’s free voice-sample limit; it renews tomorrow.'):e.scope==='user_month'?T('Bu ayki seslendirme karakter sınırına ulaştın.','You’ve reached this month’s voiceover character limit.'):e.scope==='ornek_global'?T('Ses örnekleri şu an çok yoğun. Biraz sonra tekrar dene.','Voice samples are very busy right now. Try again a little later.'):T('Seslendirme şu an çok yoğun. Biraz sonra tekrar dene.','Voiceover is very busy right now. Try again a little later.');
+  if(k==='ses_hak_yok')return e.plan==='demo'||e.plan==='free'?T('Seslendirme Basic ve Pro planlarda.','Voiceover comes with Basic and Pro.'):T('Bu ayın seslendirme hakların bitti.','You’ve used this month’s voiceover credits.');
+  if(k==='ses_oturum_bitti'||k==='rid_gecersiz')return T('Bu videonun seslendirme oturumu bitti; yeniden seslendirme 1 hak kullanır.','This video’s voiceover session has ended; voicing it again uses 1 credit.');
+  if(k==='tts_hata'){var nd=e.neden;
+    if(nd==='ses_yok')return T('Bu ses artık sunulmuyor, başka ses seç.','This voice is no longer offered; pick another one.');
+    if(nd==='kredi')return T('Seslendirme servisi bu ay doldu; yöneticiye bildirildi.','The voiceover service is used up for this month; the admin has been notified.');
+    if(nd==='anahtar')return T('Seslendirme yapılandırması hatalı (yönetici).','Voiceover is misconfigured (admin).');
+    if(nd==='yogun')return T('Servis yoğun, birkaç saniye sonra tekrar dene.','The service is busy; try again in a few seconds.');
+    return T('Ses alınamadı, tekrar dene.','Couldn’t get the audio; try again.');
+  }
+  if(k==='coz')return T('Ses çözülemedi (tarayıcı).','The audio couldn’t be decoded (browser).');
   if(k==='metin_uzun'||k==='too_large')return T((i!=null?tekil(i)+' metni':'Metin')+' seslendirme için çok uzun; kısalt.',(i!=null?tekil(i)+' text':'The text')+' is too long for voiceover; shorten it.');
   if(k==='metin_bos')return T((i!=null?tekil(i)+' için ':'')+'okunacak metin yok.','There’s no text to read'+(i!=null?' for '+tekil(i).toLowerCase():'')+'.');
   if(k==='ses_gecersiz')return T('Bu ses kullanılamıyor; başka bir ses seç.','This voice isn’t available; pick another one.');
@@ -573,15 +725,18 @@ function sesHata(e,i){
   return T('Ses oluşturulamadı. Tekrar dene.','Couldn’t create the audio. Try again.');
 }
 /* tek istek: mp3 → AudioBuffer; dış iptal + 30 sn zaman aşımı */
-function ttsIste(metin,id,tk,dis){
+function ttsIste(govde,tk,dis){
   var ac=new AbortController(),zm=false,tm=setTimeout(function(){zm=true;ac.abort()},30000),bag=function(){ac.abort()};
   if(dis){if(dis.aborted)ac.abort();else dis.addEventListener('abort',bag)}
   var bit=function(){clearTimeout(tm);if(dis)dis.removeEventListener('abort',bag)};
-  return fetch(API_T+'/gen/tts',{method:'POST',headers:{'content-type':'application/json',authorization:'Bearer '+tk},body:JSON.stringify({metin:metin,ses:id}),credentials:'omit',cache:'no-store',signal:ac.signal}).then(function(r){
+  return fetch(API_T+'/gen/tts',{method:'POST',headers:{'content-type':'application/json',authorization:'Bearer '+tk},body:JSON.stringify(govde),credentials:'omit',cache:'no-store',signal:ac.signal}).then(function(r){
     var ct=String(r.headers.get('content-type')||'');
-    if(r.ok&&!/json/i.test(ct))return r.arrayBuffer();
-    return r.json().then(function(j){j=j||{};throw {kod:String(j.error||j.hata||'genel'),scope:j.scope,max:j.max}},function(e){if(e&&e.kod)throw e;throw {kod:'genel'}});
-  },function(){throw {kod:dis&&dis.aborted?'iptal':zm?'zaman':'ag'}}).then(function(ab){bit();if(!ab||!ab.byteLength)throw {kod:'tts_hata'};return sesCoz(ab)},function(e){bit();if(dis&&dis.aborted)throw {kod:'iptal'};throw e});
+    if(r.ok&&!/json/i.test(ct)){
+      var rid=String(r.headers.get('x-ses-rid')||''),kh=r.headers.get('x-ses-kalan'),kl=kh!=null&&/^\d+$/.test(kh)?+kh:null;
+      return r.arrayBuffer().then(function(ab){return {ab:ab,rid:RID_RE.test(rid)?rid:'',kalan:kl}});
+    }
+    return r.json().then(function(j){j=j||{};throw {kod:String(j.error||j.hata||'genel'),scope:j.scope,max:j.max,neden:j.neden,kalan:j.kalan,ek_paket:j.ek_paket,plan:j.plan,field:j.field}},function(e){if(e&&e.kod)throw e;throw {kod:'genel'}});
+  },function(){throw {kod:dis&&dis.aborted?'iptal':zm?'zaman':'ag'}}).then(function(x){bit();if(!x||!x.ab||!x.ab.byteLength)throw {kod:'tts_hata'};return sesCoz(x.ab).then(function(b){return {b:b,rid:x.rid,kalan:x.kalan}})},function(e){bit();if(dis&&dis.aborted)throw {kod:'iptal'};throw e});
 }
 function sesCoz(ab){
   var c=M.audioContext&&M.audioContext();
@@ -605,14 +760,25 @@ function sesOlustur(){
   var is=sesEksik().map(function(i){var s=st.sahneler[i];return {s:s,m:sesMetni(s)}});
   if(!is.length){sesYaz();return}
   if(st.oynat&&st.oynat.playing){st.oynat.pause();oynatYaz()}
-  var ac=new AbortController(),bu=st,id=st.ses.id,n=is.length,k=0,uzun=[],ilkHata=null;
+  clearTimeout(SES.oto);SES.oto=0;
+  if(!ridGecerli()){st.ses.rid='';st.ses.ridSon=0}
+  var ac=new AbortController(),bu=st,id=st.ses.id,n=is.length,k=0,uzun=[],ilkHata=null,denenen={};
+  is.forEach(function(x){denenen[id+'|'+x.m]=1});
   SES.iptal=ac;sesNot('');sesIlerle(0,n);sesYaz();
   S.durum(T(n+' sahne seslendiriliyor…','Voicing '+n+(n===1?' scene…':' scenes…')));
   var z=Promise.resolve();
   is.forEach(function(x){z=z.then(function(){
     if(ac.signal.aborted||st!==bu)throw {kod:'iptal'};
-    return ttsIste(x.m,id,tk,ac.signal).then(function(b){
+    /* B·4: geçerli rid yoksa ilk istek yeni oturum açar (1 hak); sonrakiler aynı rid ile hak harcamaz */
+    var yeni=!bu.ses.rid,gv={metin:x.m,ses:id};if(yeni)gv.yeni=true;else gv.rid=bu.ses.rid;
+    return ttsIste(gv,tk,ac.signal).then(function(o){
+      if(o.kalan!=null){sesKalanYaz(o.kalan);sesHakYaz()}
+      if(yeni){
+        if(!o.rid)throw {kod:'tts_hata'};
+        bu.ses.rid=o.rid;bu.ses.ridSon=Date.now()+RID_OM;bu.ses.yeniden=false;SES.hakYok=false;kayitZamanla();
+      }
       if(st!==bu)throw {kod:'iptal'};
+      var b=o.b;
       SES.tampon[id+'|'+x.m]=b;SES.uretildi=true;k++;
       var i=st.sahneler.indexOf(x.s);
       if(i>=0&&sesMetni(x.s)===x.m){
@@ -635,14 +801,25 @@ function sesOlustur(){
     var m;
     if(ilkHata){m=sesHata(ilkHata.e,ilkHata.i);sesNot(m,'uyari')}
     else if(uzun.length){m=T(uzun.map(function(i){return tekil(i)}).join(', ')+' sesi 15 sn’yi aşıyor ve sonu kesilir; metni kısalt.',uzun.map(function(i){return tekil(i)}).join(', ')+' audio runs past 15 s and gets cut; shorten the text.');sesNot(m,'uyari')}
-    else{m=T('Seslendirme hazır.','Voiceover ready.');S.toast(m)}
+    else{m=T('Sesli önizleme hazır — ▶ ile dinle','Voiced preview ready — press ▶ to listen');sesNot('');S.toast(m)}
     S.durum(m);
+    /* E4: başa sar, büyük düğme "Sesli oynat ▶" */
+    if(st.oynat){try{st.oynat.pause();st.oynat.seek(0)}catch(x){}zamanda(0,st.toplam,true);if(R.buyuk)R.buyuk.setAttribute('data-yazi',T('Sesli oynat ▶','Play with sound ▶'));oynatYaz()}
   },function(e){
     if(st!==bu)return;
     if(e&&e.kod==='iptal'){if(!st.ses.acik)return;sesNot(T('Seslendirme iptal edildi; hazır olan sahnelerin sesi duruyor.','Voiceover cancelled; scenes already voiced keep their audio.'));S.durum(T('Seslendirme iptal edildi.','Voiceover cancelled.'));return}
     if(e&&e.kod==='tts_kapali'){SES.durum='kapali';st.ses.acik=false;sesNot(sesHata(e));guncelle();S.durum(sesHata(e));return}
+    if(e&&e.kod==='ses_hak_yok'){SES.hakYok=true;if(e.plan)SES.hakPlan=String(e.plan);if(typeof e.kalan==='number')sesKalanYaz(e.kalan);sesNot('');S.durum(sesHata(e));return}
+    if(e&&e.kod==='hak_onay_gerek'){bu.ses.rid='';bu.ses.ridSon=0;sesNot('');S.durum(T('Seslendirmek için düğmeye bas — 1 hak kullanır.','Press to voice — uses 1 credit.'));return}
+    if(e&&(e.kod==='ses_oturum_bitti'||e.kod==='rid_gecersiz')){bu.ses.rid='';bu.ses.ridSon=0;bu.ses.yeniden=true;sesNot('');S.durum(sesHata(e));return}
     var m=sesHata(e,e&&e.i);sesNot(m,e&&e.kod==='login_required'?'uyari':'hata',e&&e.kod==='login_required');S.durum(m);
-  }).then(function(){if(SES.iptal===ac)SES.iptal=null;if(st===bu){sesYaz();ozetYaz();kayitZamanla()}});
+  }).then(function(){
+    if(SES.iptal===ac)SES.iptal=null;
+    if(st===bu){sesYaz();ozetYaz();kayitZamanla();
+      /* üretim sürerken değişen metin/ses: bu turda denenmemiş eksik varsa (oturum açıkken) bir kez daha */
+      if(st.ses.acik&&ridGecerli()&&sesEksik().some(function(i){return !denenen[st.ses.id+'|'+sesMetni(st.sahneler[i])]}))sesOto('metin');
+    }
+  });
 }
 /* "Dinle": seçili sesten kısa örnek (bellekte saklanır; ikinci basış durdurur) */
 function sesDinle(){
@@ -660,8 +837,9 @@ function sesDinle(){
   var tk=S.oturumJeton&&S.oturumJeton();
   if(!tk){sesNot(sesHata({kod:'login_required'}),'uyari',true);return}
   var ac=new AbortController();SES.dinle=ac;dinleYaz(true);
-  var ornek=EN?'Hi, I’m '+v.ad+'. This is how your video will sound.':'Merhaba, ben '+v.ad+'. Videon bu sesle seslendirilecek.';
-  ttsIste(ornek,id,tk,ac.signal).then(function(b){
+  /* B·4: örnek ücretsiz — metin gönderilmez, sunucu sabit örnek cümleyi okur */
+  ttsIste({ornek:true,ses:id},tk,ac.signal).then(function(o){
+    var b=o.b;
     if(SES.dinle!==ac)return;SES.dinle=null;SES.tampon[k]=b;if(st&&st.ses.id===id)cal(b);else dinleYaz(false);
   },function(e){
     if(SES.dinle!==ac)return;SES.dinle=null;dinleYaz(false);if(e&&e.kod==='iptal')return;
@@ -675,7 +853,7 @@ function sesDur2(){
   dinleYaz(false);
 }
 function dinleYaz(x){
-  var b=R.sesDinle;if(!b)return;b.textContent='';b.appendChild(ikon(x?'dur':'oynat',x?'':'ikon-dolu'));b.appendChild(el('span',null,x?T('Durdur','Stop'):T('Dinle','Listen')));
+  var b=R.sesDinle;if(!b)return;b.textContent='';b.appendChild(ikon(x?'dur':'oynat',x?'':'ikon-dolu'));b.appendChild(el('span',null,x?T('Durdur','Stop'):T('Dinle (ücretsiz)','Listen (free)')));
   var e=x?T('Örneği durdur','Stop the sample'):T('Seçili sesten kısa örnek dinle','Play a short sample of the selected voice');b.setAttribute('aria-label',e);b.title=e;b.setAttribute('aria-pressed',x?'true':'false');
 }
 
@@ -705,7 +883,7 @@ function ozetYaz(){
 function guncelle(o){
   o=o||{};baslangiclar();senkron();
   if(o.yapi){seritKur();noktaKur()}
-  if(st.oynat){st.oynat.setProject(proje());zamanda(st.oynat.time,st.toplam,true)}else slaytCiz();
+  if(st.oynat){if(st.oynOpts)st.oynOpts.loop=!sesVarMi();st.oynat.setProject(proje());zamanda(st.oynat.time,st.toplam,true)}else slaytCiz();
   ozetYaz();kucuklerZamanla();
   if(o.tercih)tercihYaz();
   kayitZamanla();
@@ -847,6 +1025,7 @@ function medyaAl(){
   var foto=[],ids={},vid=[],vids={};
   var sah=st.sahneler.slice(0,30).map(function(s){
     var o={text:kirp(s.text,2000),sub:kirp(s.sub,2000),secs:VID?s.secs:0},g=s.gorsel||s.bekleyen,v=s.video&&s.video.hazir?s.video:s.vbekleyen;
+    if(VID&&s.q)o.q=s.q;
     if(v&&pxVid(v.src)){
       var vk=String(v.id!=null?v.id:v.src);
       if(vids[vk]==null&&vid.length<12){
@@ -877,7 +1056,7 @@ function medyaAl(){
   if(vid.length)m.videos=vid;
   if(marka.logo||marka.arka)m.yerel={logo:!!marka.logo,arka:!!marka.arka};
   /* F2: yalnız tercih (açık mı, hangi ses); ses verisi asla kayda girmez */
-  if(VID&&st.ses&&(st.ses.acik||st.ses.id!==SES.liste[0].id))m.ses={acik:!!st.ses.acik,id:st.ses.id};
+  if(VID&&st.ses&&(st.ses.acik||st.ses.id!==sesVarsayilan()||ridGecerli())){m.ses={acik:!!st.ses.acik,id:st.ses.id};if(ridGecerli()){m.ses.rid=st.ses.rid;m.ses.ridSon=st.ses.ridSon}}
   /* küçültme sırası: alt → açıklama → alt yazılar → sondaki sahneler */
   if(boyutB(m)>MB_HEDEF)foto.forEach(function(f){delete f.alt});
   if(boyutB(m)>MB_HEDEF){var fz=boyutB(m)-MB_HEDEF;m.caption=m.caption.slice(0,Math.max(0,m.caption.length-fz))}
@@ -897,7 +1076,7 @@ var sonDet=null;
 function sonVer(m){
   if(!m||typeof m!=='object'||Array.isArray(m)||!sonDet||!window.SmcMotor)return;
   var dr={};var t0=sonDet.draft||{};for(var k in t0)if(Object.prototype.hasOwnProperty.call(t0,k))dr[k]=t0[k];
-  if(Array.isArray(m.scenes)&&m.scenes.length)dr.scenes=m.scenes.slice(0,MAXS).map(function(x){x=x||{};return {text:String(x.text||''),sub:String(x.sub||''),secs:Number(x.secs)||0}});
+  if(Array.isArray(m.scenes)&&m.scenes.length)dr.scenes=m.scenes.slice(0,MAXS).map(function(x){x=x||{};var o={text:String(x.text||''),sub:String(x.sub||''),secs:Number(x.secs)||0},q=qOk(x.q);if(q)o.q=q;return o});
   /* açıklama yalnız boyut sınırında kırpıldıysa (taslağın başı + kayıt sınıra yakın) taslaktaki tam metin kalır; kullanıcı kısalttıysa kayıttaki geçer */
   if(typeof m.caption==='string'){var dc=String(dr.caption||'');if(!(dc.length>m.caption.length&&dc.indexOf(m.caption)===0&&boyutB(m)>MB_HEDEF-400))dr.caption=m.caption}
   var det2={kind:sonDet.kind,mod:sonDet.mod,draft:dr,body:sonDet.body,lang:sonDet.lang,marka:sonDet.marka,geri:true,medya:m};
@@ -1059,7 +1238,7 @@ function yaziAlani(i,tur,etiket,deger,oneri,max,satir,yaz){
   var tz=0;
   ta.addEventListener('input',function(){yaz(ta.value);sayacYaz(ta,say,oneri);
     if(tur==='m'&&R.kareler&&R.kareler[i])R.kareler[i].setAttribute('aria-label',tekil(i)+(ta.value?': '+ta.value.replace(/\*/g,'').slice(0,60):''));
-    clearTimeout(tz);tz=setTimeout(function(){guncelle()},60)});
+    clearTimeout(tz);tz=setTimeout(function(){guncelle();if(VID&&st&&st.ses&&st.ses.acik)sesOto('metin')},60)});
   k.appendChild(ta);sayacYaz(ta,say,oneri);
   return k;
 }
@@ -1134,6 +1313,12 @@ function videoSatir(s,i){
   else k.appendChild(ikon('oynat','ikon-dolu'));
   k.appendChild(vidKunye(v));
   var ar=el('div','kr-gorsel-arac');
+  /* E5: elle değiştirme (seçici Video sekmesiyle açılır) ve aynı aramanın sıradaki klibi */
+  if(stokVar()){
+    var dg=dugme('btn-hafif kr-gorsel-degis','resim',T('Değiştir','Change'));dg.appendChild(el('span','sr',' · '+tekil(i)));dg.setAttribute('aria-haspopup','dialog');
+    dg.addEventListener('click',function(){alakasizKapat();secici(i,dg,'video')});ar.appendChild(dg);
+  }
+  var o=st.oto;if(o&&o.videolar&&o.videolar.length>1&&S.stokDurum&&S.stokDurum()==='acik')ar.appendChild(baskaVideo(s,i));
   var kl=dugme('btn-hafif kr-gorsel-kaldir','kapat',T('Kaldır','Remove'));kl.appendChild(el('span','sr',' · '+tekil(i)));
   kl.addEventListener('click',function(){
     var x=st.sahneler[i];if(!x||!x.video)return;
@@ -1141,8 +1326,22 @@ function videoSatir(s,i){
     if(stokVar())gorselYenile(i,'.kr-gorsel-ekle,.kr-gorsel-kaldir');else gorselTumu(i);guncelle();
     S.durum(T(tekil(i)+' videosu kaldırıldı.',tekil(i)+' video removed.'));
   });
-  ar.appendChild(kl);k.appendChild(ar);
+  ar.appendChild(kl);k.appendChild(ar);alakasizEkle(k,i);
   return k;
+}
+/* E5: "Alakasız mı?" notu — otomatik eklenen medyanın ilk sahnesinde bir kez; kapatınca (ya da Değiştir/Başka'ya basınca) bir daha çıkmaz */
+var ALAKA_K='smc-alakasiz-not';
+function alakasizGoruldu(){try{return localStorage.getItem(ALAKA_K)==='1'}catch(e){return false}}
+function alakasizKapat(){try{localStorage.setItem(ALAKA_K,'1')}catch(e){}var n=R.liste&&R.liste.querySelector('.kr-alakasiz');if(n)n.remove()}
+function alakasizEkle(k,i){
+  if(!VID||!st||alakasizGoruldu())return;
+  var ilk=-1;for(var j=0;j<st.sahneler.length;j++){var x=st.sahneler[j];if(x.oto&&(x.video||x.gorsel)){ilk=j;break}}
+  if(ilk!==i)return;
+  /* tek not: klipler sırasız yüklenir, daha önce başka satıra konmuş not kalmasın */
+  var es=R.liste&&R.liste.querySelector('.kr-alakasiz');if(es)es.remove();
+  var n=el('div','kr-alakasiz');n.appendChild(el('span',null,T('Alakasız mı? Değiştir’e bas.','Not a fit? Press Change.')));
+  var b=dugme('btn-hafif kr-ikon-d','kapat',null,T('Notu kapat','Dismiss note'));b.addEventListener('click',function(){var li=b.closest('li,[data-i]');alakasizKapat();var f=li&&li.querySelector('.kr-gorsel-degis');if(f)f.focus()});
+  n.appendChild(b);k.insertBefore(n,k.firstChild);
 }
 /* kilit satırı tek: görselsiz ilk sahnede (deneme görseli 1. sahnedeyse 2. sahne neden eklenemediğini söyler) */
 function ilkBos(){for(var k=0;k<st.sahneler.length;k++)if(!st.sahneler[k].gorsel)return k;return -1}
@@ -1159,11 +1358,12 @@ function gorselSatir(s,i){
   if(!s.gorsel&&gTercih()==='yok')return null;
   var k=el('div','kr-so-gorsel');
   if(!s.gorsel){
-    var b=dugme('btn-cizgi kr-gorsel-ekle','resim',T('Görsel ekle','Add image'));
+    var mv=vidSekmeVar();
+    var b=dugme('btn-cizgi kr-gorsel-ekle','resim',mv?T('Medya ekle','Add media'):T('Görsel ekle','Add image'));
     b.appendChild(el('span','sr',T(' · '+tekil(i),' · '+tekil(i))));
     b.setAttribute('aria-haspopup','dialog');
     b.addEventListener('click',function(){secici(i,b)});
-    k.appendChild(b);k.appendChild(el('span','ipucu kr-gorsel-ipucu',T('İsteğe bağlı · Pexels fotoğrafları','Optional · photos from Pexels')));
+    k.appendChild(b);k.appendChild(el('span','ipucu kr-gorsel-ipucu',mv?T('İsteğe bağlı · Pexels video ve fotoğrafları','Optional · videos and photos from Pexels'):T('İsteğe bağlı · Pexels fotoğrafları','Optional · photos from Pexels')));
     return k;
   }
   var g=s.gorsel;k.classList.add('kr-so-gorsel-var');
@@ -1171,7 +1371,7 @@ function gorselSatir(s,i){
   k.appendChild(kunye(g));
   var ar=el('div','kr-gorsel-arac');
   var dg=dugme('btn-hafif kr-gorsel-degis','resim',T('Değiştir','Change'));dg.appendChild(el('span','sr',' · '+tekil(i)));dg.setAttribute('aria-haspopup','dialog');
-  dg.addEventListener('click',function(){secici(i,dg)});
+  dg.addEventListener('click',function(){alakasizKapat();secici(i,dg,'foto')});
   var kl=dugme('btn-hafif kr-gorsel-kaldir','kapat',T('Kaldır','Remove'));kl.appendChild(el('span','sr',' · '+tekil(i)));
   kl.addEventListener('click',function(){
     st.sahneler[i].gorsel=null;st.sahneler[i].bekleyen=null;st.sahneler[i].elle=true;if(stokVar())gorselYenile(i,'.kr-gorsel-ekle');else gorselTumu(i);guncelle();
@@ -1181,7 +1381,7 @@ function gorselSatir(s,i){
   if(stokVar())ar.appendChild(dg);
   /* Pro: otomatik aramanın listesinden sıradaki fotoğraf (çağrı yok); deneme planında yok */
   var o=st.oto;if(o&&o.fotolar&&o.fotolar.length>1&&S.stokDurum&&S.stokDurum()==='acik')ar.appendChild(baskaDugme(s,i));
-  ar.appendChild(kl);k.appendChild(ar);
+  ar.appendChild(kl);k.appendChild(ar);alakasizEkle(k,i);
   return k;
 }
 /* tüm görsel satırları; i verilirse odak o satırın eklemesine/kilit bağlantısına (yoksa metnine) */
@@ -1208,6 +1408,7 @@ function stokHata(e){
   if(k==='not_ready')return T('Görsel arama şu an kullanılamıyor.','Image search isn’t available right now.');
   if(k==='login_required')return T('Görsel aramak için giriş yap.','Sign in to search images.');
   if(k==='plan')return e.trial_used?DENEME_BITTI+'.':T('Görsel arama Pro ve Enterprise planlarında var.','Image search comes with the Pro and Enterprise plans.');
+  if(k==='limit'&&e.per==='hour')return T('Bu saatlik görsel arama sınırı doldu; biraz sonra tekrar dene.','This hour’s image search limit is reached; try again a little later.');
   if(k==='limit')return e.scope==='global'?T('Görsel arama bugün çok yoğun. Biraz sonra tekrar dene.','Image search is very busy today. Try again a little later.'):T('Bugünkü görsel arama hakkın doldu; yarın yenilenir.','You’ve used today’s image searches; they renew tomorrow.');
   if(k==='bad_input')return T('Aramayı 1 ile 100 karakter arasında yaz.','Keep the search between 1 and 100 characters.');
   return T('Görseller yüklenemedi. Bağlantını kontrol edip tekrar dene.','Couldn’t load images. Check your connection and try again.');
@@ -1222,6 +1423,12 @@ function seciciKur(){
   /* 25.11: Demo/Basic deneme başlığı; secici() her açılışta doldurur/gizler */
   x.deneme=el('div','kr-stok-deneme');x.deneme.hidden=true;x.denemeB=el('p','kr-stok-deneme-b');x.deneme.appendChild(x.denemeB);
   x.deneme.appendChild(el('p','ipucu',T('Seçtiğin fotoğraf bu hakkı kullanır; Pro’da sınırsız.','The photo you pick uses it; unlimited on Pro.')));ic.appendChild(x.deneme);
+  /* E5: Video / Fotoğraf sekmesi (yalnız video sayfasında, Pro) */
+  x.sekme=el('div','kr-stok-sekme');x.sekme.setAttribute('role','group');x.sekme.setAttribute('aria-label',T('Medya türü','Media type'));x.sekme.hidden=true;
+  x.sV=el('button',null,T('Video','Video'));x.sV.type='button';x.sF=el('button',null,T('Fotoğraf','Photo'));x.sF.type='button';
+  x.sekme.appendChild(x.sV);x.sekme.appendChild(x.sF);ic.appendChild(x.sekme);x.tur='foto';x.qEn='';
+  x.sV.addEventListener('click',function(){if(x.tur!=='video'){turSec('video');ara(1)}});
+  x.sF.addEventListener('click',function(){if(x.tur!=='foto'){turSec('foto');ara(1)}});
   var f=el('form','kr-stok-ara');f.setAttribute('role','search');f.setAttribute('data-sk-noform','');f.noValidate=true;
   var l=el('label','sr',T('Görsel ara','Search images'));l.htmlFor='kr-stok-q';f.appendChild(l);
   var q=el('input','st-girdi kr-stok-q');q.type='search';q.id='kr-stok-q';q.maxLength=100;q.autocomplete='off';q.spellcheck=false;q.placeholder=T('Örn. kahve, ofis, deniz','e.g. coffee, office, sea');f.appendChild(q);
@@ -1238,7 +1445,7 @@ function seciciKur(){
   x.daha=dugme('btn-cizgi kr-stok-daha',null,T('Daha fazla göster','Show more'));x.daha.hidden=true;ic.appendChild(x.daha);
   var alt=el('div','kr-stok-alt');
   x.vazgec=dugme('btn-hafif kr-stok-vazgec',null,T('Görselsiz devam','Continue without an image'));alt.appendChild(x.vazgec);
-  var pk=el('p','kr-stok-pexels');pk.appendChild(d.createTextNode(T('Fotoğraflar ','Photos provided by ')));pk.appendChild(dis(el('a'),PX,'Pexels'));if(!EN)pk.appendChild(d.createTextNode(' sağlıyor'));
+  var pk=el('p','kr-stok-pexels');x.pkM=el('span',null,T('Fotoğraflar ','Photos provided by '));pk.appendChild(x.pkM);pk.appendChild(dis(el('a'),PX,'Pexels'));if(!EN)pk.appendChild(d.createTextNode(' sağlıyor'));
   alt.appendChild(pk);ic.appendChild(alt);
   d.body.appendChild(dlg);
   x.dlg=dlg;x.h=h;x.q=q;x.f=f;x.ac=null;x.sira=0;x.sonuc=[];x.sayfa=1;x.sonraki=false;x.onbellek={};x.i=0;x.acan=null;x.odak=null;
@@ -1249,7 +1456,7 @@ function seciciKur(){
   }
   x.kapat=kapat;
   kp.addEventListener('click',kapat);
-  x.vazgec.addEventListener('click',function(){var yok=!(st&&st.sahneler[x.i]&&st.sahneler[x.i].gorsel);kapat();if(yok)S.durum(T('Görsel eklenmedi; sahne görselsiz kalır.','No image added; the scene stays without one.'))});
+  x.vazgec.addEventListener('click',function(){var sx=st&&st.sahneler[x.i],yok=!(sx&&(sx.gorsel||sx.video&&sx.video.hazir));kapat();if(yok)S.durum(T('Görsel eklenmedi; sahne görselsiz kalır.','No image added; the scene stays without one.'))});
   dlg.addEventListener('close',kapandi);
   dlg.addEventListener('keydown',function(e){
     if(e.key==='Escape'&&!dlg.close){e.preventDefault();kapat();return}
@@ -1273,6 +1480,16 @@ function seciciKur(){
   });
   SK=x;return x;
 }
+function vidSekmeVar(){return !!(VID&&typeof S.stok==='function'&&stokVar()&&denemeDurum()!=='var')}
+function turSec(t){
+  var x=SK;x.tur=t==='video'?'video':'foto';var v=x.tur==='video';
+  x.sV.setAttribute('aria-pressed',v?'true':'false');x.sF.setAttribute('aria-pressed',v?'false':'true');
+  x.h.textContent=v?T('Video seç','Choose a video'):T('Görsel seç','Choose an image');
+  x.pkM.textContent=v?T('Videolar ','Videos provided by '):T('Fotoğraflar ','Photos provided by ');
+  if(x.ac){try{x.ac.abort()}catch(e){}x.ac=null}x.sira++;
+  x.izgara.textContent='';x.sonuc=[];x.sayfa=1;x.daha.hidden=true;seciciDurum('');
+}
+function sure(n){n=Math.round(+n||0);return Math.floor(n/60)+':'+('0'+n%60).slice(-2)}
 function odakla(b,j){b.forEach(function(z,k){z.tabIndex=k===j?0:-1});if(b[j])b[j].focus()}
 function seciciDurum(tur,m){
   var x=SK;x.hata.hidden=tur!=='hata';x.bos.hidden=tur!=='bos';
@@ -1287,21 +1504,22 @@ function iskelet(){
 function ara(sayfa){
   var x=SK,qq=x.q.value.trim();
   if(!qq){x.q.focus();seciciDurum('bos',T('Aramak için bir kelime yaz.','Type a word to search.'));x.izgara.textContent='';x.daha.hidden=true;return}
-  var yon=stokYonu(),an=qq.toLocaleLowerCase(EN?'en':'tr')+'|'+yon+'|'+sayfa;
+  var vid=x.tur==='video',lg=x.qEn&&qq===x.qEn?'en':(EN?'en':'tr');
+  var yon=stokYonu(),an=(vid?'v|':'')+qq.toLocaleLowerCase(EN?'en':'tr')+'|'+yon+'|'+sayfa+'|'+lg;
   if(x.ac){try{x.ac.abort()}catch(e){}}
   var sira=++x.sira,ac=window.AbortController?new AbortController():null;x.ac=ac;
   seciciDurum('');x.daha.hidden=true;
   if(sayfa===1){x.sonuc=[];iskelet()}else{pasif(x.daha,true);x.daha.hidden=false;x.daha.setAttribute('aria-busy','true')}
-  x.durum.textContent=T('Görseller yükleniyor…','Loading images…');
-  var pr=x.onbellek[an]?Promise.resolve(x.onbellek[an]):S.stok('q='+encodeURIComponent(qq)+'&orientation='+yon+'&page='+sayfa+'&lang='+(EN?'en':'tr'),ac);
+  x.durum.textContent=vid?T('Videolar yükleniyor…','Loading videos…'):T('Görseller yükleniyor…','Loading images…');
+  var pr=x.onbellek[an]?Promise.resolve(x.onbellek[an]):S.stok((vid?'type=video&':'')+'q='+encodeURIComponent(qq)+'&orientation='+yon+'&page='+sayfa+'&lang='+lg,ac);
   pr.then(function(r){
     if(sira!==x.sira)return;x.ac=null;x.onbellek[an]=r;
-    var ph=Array.isArray(r.photos)?r.photos:[],ilkYeni=x.sonuc.length;
+    var ph=vid?(Array.isArray(r.videos)?r.videos.filter(vidGecerli):[]):Array.isArray(r.photos)?r.photos:[],ilkYeni=x.sonuc.length;
     x.sonuc=x.sonuc.concat(ph);x.sayfa=sayfa;x.sonraki=!!r.next&&sayfa<100;
     izgaraYaz(ilkYeni,sayfa>1);
     x.daha.hidden=!x.sonraki;pasif(x.daha,false);x.daha.removeAttribute('aria-busy');
-    if(!x.sonuc.length){seciciDurum('bos',T('“'+qq+'” için fotoğraf bulunamadı.','No photos found for “'+qq+'”.'));x.durum.textContent=T('Sonuç yok.','No results.')}
-    else x.durum.textContent=EN?x.sonuc.length+' photos shown. Use the arrow keys to move between them.':x.sonuc.length+' fotoğraf gösteriliyor. Aralarında oklarla gezinebilirsin.';
+    if(!x.sonuc.length){seciciDurum('bos',vid?T('“'+qq+'” için video bulunamadı.','No videos found for “'+qq+'”.'):T('“'+qq+'” için fotoğraf bulunamadı.','No photos found for “'+qq+'”.'));x.durum.textContent=T('Sonuç yok.','No results.')}
+    else x.durum.textContent=EN?x.sonuc.length+(vid?' videos':' photos')+' shown. Use the arrow keys to move between them.':x.sonuc.length+(vid?' video':' fotoğraf')+' gösteriliyor. Aralarında oklarla gezinebilirsin.';
   },function(e){
     if(sira!==x.sira)return;x.ac=null;
     if(e&&e.kod==='not_ready'){S.D.stock=false;stokYayin()}
@@ -1333,6 +1551,15 @@ function izgaraYaz(ilkYeni,ekle){
   x.izgara.setAttribute('data-yon',stokYonu());
   x.sonuc.slice(ilkYeni).forEach(function(p,k){
     var j=ilkYeni+k,b=el('button','kr-stok-foto');b.type='button';b.tabIndex=-1;
+    if(x.tur==='video'){
+      var vu=String(p.user||'Pexels'),du=+(p.duration||p.dur)||0;
+      b.setAttribute('aria-label',T('Video · '+sure(du)+' · '+vu,'Video · '+sure(du)+' · by '+vu));
+      var vi=el('img');vi.alt='';vi.loading='lazy';vi.decoding='async';if(pxSrc(p.poster))vi.src=p.poster;b.appendChild(vi);
+      if(du>0){var sr=el('span','kr-stok-sure',sure(du));sr.setAttribute('aria-hidden','true');b.appendChild(sr)}
+      b.appendChild(el('span','kr-stok-ad',vu));
+      b.addEventListener('click',function(){vidSec(p,b)});
+      x.izgara.appendChild(b);return;
+    }
     var ad=String(p.photographer||'Pexels'),alt=String(p.alt||'').trim();
     b.setAttribute('aria-label',(alt||T('Fotoğraf','Photo'))+T(' · Fotoğraf: '+ad,' · Photo by '+ad));
     var im=el('img');im.alt='';im.loading='lazy';im.decoding='async';im.src=(p.src&&(p.src.medium||p.src.large))||'';b.appendChild(im);
@@ -1382,7 +1609,7 @@ function sec(p,b){
     });
   };
   function ekle(sessiz){
-    if(s.video){vidBirak(s.video.el);s.video=null}s.gorsel=gorselNesne(p,im);s.elle=true;
+    if(s.video){vidBirak(s.video.el);s.video=null}s.gorsel=gorselNesne(p,im);s.elle=true;s.oto=false;
     /* deneme hakkı bittiyse (kabuk stock=false yaptı) tüm satırlar yeniden çizilir: ötekiler kilide döner */
     function satirlar(){if(stokVar())gorselYenile(i);else stokYayin(true)}
     if(sessiz){satirlar();guncelle();S.durum(T(tekil(i)+' için deneme görseli eklendi.','Trial image added to '+tekil(i).toLowerCase()+'.'));return}
@@ -1398,18 +1625,38 @@ function sec(p,b){
   };
   im.src=u;
 }
-function secici(i,tetik){
+/* E5: seçicide video seçimi — klip açılır (CORS/bozuk ise eklenmez), sahneye konur, elle seçildi sayılır */
+function vidSec(v,b){
+  var x=SK,i=x.i,s=st&&st.sahneler[i];if(!s||b.getAttribute('aria-busy')==='true')return;
+  b.setAttribute('aria-busy','true');b.classList.add('kr-stok-yukleniyor');x.durum.textContent=T('Video yükleniyor…','Loading the video…');
+  var sira=x.sira;
+  vidAc(v.src,function(ve){
+    b.removeAttribute('aria-busy');b.classList.remove('kr-stok-yukleniyor');
+    if(sira!==x.sira||!st||st.sahneler[i]!==s){vidBirak(ve);return}
+    if(!ve){var m=T('Bu video yüklenemedi; başka birini seç.','This video couldn’t load; pick another one.');x.durum.textContent=m;S.toast(m);return}
+    s.gorsel=null;s.bekleyen=null;s.vbekleyen=null;s.elle=true;s.oto=false;vidKoy(s,v,ve);
+    x.odak=null;var li=R.liste.querySelector('[data-i="'+i+'"]');x.odak=li&&(li.querySelector('.kr-gorsel-degis')||li.querySelector('.kr-gorsel-kaldir'));
+    x.kapat();guncelle();sahneyeGit(i);
+    S.durum(T(tekil(i)+' için video eklendi. Video: '+(v.user||'Pexels')+' (Pexels).','Video added to '+tekil(i).toLowerCase()+'. Video by '+(v.user||'Pexels')+' on Pexels.'));
+  });
+}
+function secici(i,tetik,tur){
   if(!st||!st.sahneler[i])return;
   var x=seciciKur(),s=st.sahneler[i];x.i=i;x.acan=tetik;x.odak=null;
-  var on=st.konu||aramaMetni(st.taslak&&st.taslak.title)||aramaMetni(s.text)||aramaMetni(s.sub);
+  /* E5: video sayfasında Video/Fotoğraf sekmesi; varsayılan: satırın türü, yoksa formdaki tercih */
+  var vs=vidSekmeVar();x.sekme.hidden=!vs;
+  turSec(vs?(tur||(s.video&&s.video.hazir?'video':s.gorsel?'foto':gTercih()==='video'?'video':'foto')):'foto');
+  /* ön değer: sahnenin İngilizce q'su, yoksa sahne metninin ilk 4 anlamlı kelimesi (video sayfası) */
+  x.qEn=VID&&s.q?s.q:'';
+  var sq=VID?(s.q||ilk4(s.text)||ilk4(s.sub)):'';
+  var on=sq||st.konu||aramaMetni(st.taslak&&st.taslak.title)||aramaMetni(s.text)||aramaMetni(s.sub);
   /* ön değerin kaynağı kipe göre söylenir: konu varsa videonun/karuselin konusu, yoksa içerik; boşsa hiç anılmaz */
-  var kay=!on?'':st.konu?(VID?T('Arama kutusu videonun konusuyla dolu; istersen değiştir. ','The search starts with your video’s topic; change it if you like. '):T('Arama kutusu karuselin konusuyla dolu; istersen değiştir. ','The search starts with your carousel’s topic; change it if you like. ')):T('Arama kutusu içerikten dolduruldu; istersen değiştir. ','The search is prefilled from your content; change it if you like. ');
-  x.hedef.textContent=T(tekil(i)+' için arka plan. '+kay+'Sen seçmedikçe görsel eklenmez.','Background for '+tekil(i).toLowerCase()+'. '+kay+'Nothing is added unless you pick a photo.');
-  x.vazgec.textContent=s.gorsel?T('Vazgeç','Cancel'):T('Görselsiz devam','Continue without an image');
+  var kay=!on?'':sq?T('Arama kutusu bu sahneden dolduruldu; istersen değiştir. ','The search is prefilled from this scene; change it if you like. '):st.konu?(VID?T('Arama kutusu videonun konusuyla dolu; istersen değiştir. ','The search starts with your video’s topic; change it if you like. '):T('Arama kutusu karuselin konusuyla dolu; istersen değiştir. ','The search starts with your carousel’s topic; change it if you like. ')):T('Arama kutusu içerikten dolduruldu; istersen değiştir. ','The search is prefilled from your content; change it if you like. ');
+  x.hedef.textContent=vs?T(tekil(i)+' için arka plan. '+kay+'Sen seçmedikçe değişmez.','Background for '+tekil(i).toLowerCase()+'. '+kay+'Nothing changes unless you pick one.'):T(tekil(i)+' için arka plan. '+kay+'Sen seçmedikçe görsel eklenmez.','Background for '+tekil(i).toLowerCase()+'. '+kay+'Nothing is added unless you pick a photo.');
+  x.vazgec.textContent=s.gorsel||s.video&&s.video.hazir?T('Vazgeç','Cancel'):T('Görselsiz devam','Continue without an image');
   var dn=denemeDurum()==='var';x.deneme.hidden=!dn;
   if(dn){var kl=denemeKalan();x.denemeB.textContent=T(kl+' deneme görseli hakkın var','You have '+kl+' trial image'+(kl===1?'':'s'))}
   x.q.value=on;
-  x.izgara.textContent='';x.sonuc=[];x.sayfa=1;x.daha.hidden=true;seciciDurum('');
   if(x.dlg.showModal){if(!x.dlg.open)x.dlg.showModal()}else x.dlg.setAttribute('open','');
   x.q.focus();x.q.select();
   if(x.q.value)ara(1);else seciciDurum('bos',T('Aramak için bir kelime yaz.','Type a word to search.'));
@@ -1423,7 +1670,7 @@ function stokYayin(zorla){
   if(v!=='acik'&&SK&&SK.dlg.open){/* açık seçici hatayı gösterir; kapatınca satırlar güncellenir */}
   gorselTumu();
 }
-d.addEventListener('studyo:hak',function(){gHak=true;stokYayin()});
+d.addEventListener('studyo:hak',function(){gHak=true;stokYayin();var s=sesHakBilgi();if(s&&s.kalan>0)SES.hakYok=false;if(st&&R.sesAc)sesYaz()});
 
 /* ---- 25.11: Görselli otomatik doldurma (OTO) ----
    Taslak hazır olunca (Görselli + stok 'acik' ya da 'deneme') konuyla tek S.stokOtomatik araması; liste sayfada tutulur
@@ -1626,28 +1873,69 @@ function vidAc(src,cb){
 }
 function vidKoy(s,v,ve){
   if(s.video&&s.video.el!==ve)vidBirak(s.video.el);
+  (s.vgor||(s.vgor={}))[String(v.id)]=1;
   s.video={el:ve,hazir:true,id:v.id,src:v.src,poster:pxSrc(v.poster)?v.poster:'',w:+(v.w||v.width)||0,h:+(v.h||v.height)||0,dur:+(v.dur||v.duration)||0,
     user:String(v.user||''),user_url:pxSayfa(v.user_url)?v.user_url:'',url:pxSayfa(v.url)?v.url:PX};
   var i=st?st.sahneler.indexOf(s):-1;if(i>=0)gorselYenile(i);
 }
 function vidYukMetni(o){return o.tek?T('Deneme videosu ekleniyor…','Adding the trial video…'):T('Video klipleri ekleniyor…','Adding video clips…')}
-/* sıradaki klip: bozuk, yükleniyor ve bir sahnede kullanılan dışında; hepsi kullanıldıysa yinelenebilir */
-function vidSiradaki(o){
-  var a=o.videolar||[],n=a.length,kul={},k,j,v,id;
-  st.sahneler.forEach(function(s){if(s.video)kul[String(s.video.id)]=1});
-  for(k=0;k<n;k++){j=(o.vsira+k)%n;v=a[j];id=String(v.id);if(o.vbozuk[id]||o.vayrilan[id]||kul[id])continue;o.vsira=j+1;return v}
-  for(k=0;k<n;k++){j=(o.vsira+k)%n;v=a[j];id=String(v.id);if(o.vbozuk[id])continue;o.vsira=j+1;return v}
-  return null;
+/* E5: sahnenin aday listesi — kendi q'sunun sonuçları → yedek sorgular (taslak q, konu) → öteki sonuçlar; tekil */
+function vidAday(o,s){
+  var a=[],gor={},vq=o.vq||{};
+  function ek(l){(l||[]).forEach(function(v){var id=String(v.id);if(!gor[id]){gor[id]=1;a.push(v)}})}
+  if(s&&s.q)ek(vq[s.q.toLowerCase()]);(o.vyed||[]).forEach(function(k){ek(vq[k])});ek(o.videolar);
+  return a;
 }
-function vidYukle(o,cb){
-  var v=vidSiradaki(o);if(!v){cb(null,null);return}
+/* sıradaki klip: bozuk, yükleniyor (öteki sahneye ayrıldı), bir sahnede kullanılan ve bu sahnede daha önce gösterilen dışında.
+   Süresi sahneden uzun olan klip öne alınır. Tekrar yok: uygun klip kalmadıysa null (sahne fotoğrafa düşer). */
+function vidSiradaki(o,s){
+  var a=vidAday(o,s),kul={},gr=s&&s.vgor||{},sn=s&&+s.secs||0,yedek=null,k,v,id,du;
+  st.sahneler.forEach(function(x){if(x.video)kul[String(x.video.id)]=1});
+  for(k=0;k<a.length;k++){
+    v=a[k];id=String(v.id);if(o.vbozuk[id]||o.vayrilan[id]||kul[id]||gr[id])continue;
+    du=+(v.duration||v.dur)||0;if(!(sn>0)||!(du>0)||du>=sn)return v;if(!yedek)yedek=v;
+  }
+  return yedek;
+}
+function vidYukle(o,s,cb){
+  var v=vidSiradaki(o,s);if(!v){cb(null,null);return}
   var id=String(v.id);o.vayrilan[id]=true;
   vidAc(v.src,function(ve){
     delete o.vayrilan[id];
     if(!otoGecerli(o)){vidBirak(ve);return}
     if(ve){cb(v,ve);return}
-    o.vbozuk[id]=true;vidYukle(o,cb);
+    o.vbozuk[id]=true;vidYukle(o,s,cb);
   });
+}
+/* E5: arama sırası — sahnelerin q'ları (tekil), sonra taslak q'su, sonra konu; taslak başına en çok 6 arama */
+function vidSorgular(o){
+  var sq=[],yed=[],gor={};
+  function ek(a,q,lg){q=String(q||'').trim();if(!q)return;var k=q.toLowerCase();if(gor[k])return;gor[k]=1;a.push({q:q,k:k,lg:lg})}
+  (o.tek?st.sahneler.slice(0,1):st.sahneler).forEach(function(s){if(!s.elle&&!s.video&&!s.gorsel)ek(sq,s.q,'en')});
+  ek(yed,st.q,'en');ek(yed,st.konu||aramaMetni(st.taslak&&st.taslak.title),EN?'en':'tr');
+  return {hep:sq.slice(0,Math.max(0,6-yed.length)).concat(yed),yed:yed.map(function(x){return x.k})};
+}
+/* Pro: aynı aramaların sıradaki klibi (yeni arama yok); bu sahnede gösterilenler tekrar gelmez */
+function baskaVideo(s,i){
+  var b=dugme('btn-hafif kr-gorsel-baska','tekrar',T('Başka video','Another video'));b.appendChild(el('span','sr',' · '+tekil(i)));
+  b.addEventListener('click',function(){
+    var o=st&&st.oto;if(!o||!o.videolar||pasifMi(b)||!s.video||st.sahneler[i]!==s)return;
+    alakasizKapat();pasif(b,true);b.setAttribute('aria-busy','true');S.durum(T('Başka video yükleniyor…','Loading another video…'));
+    function bitir(m){pasif(b,false);b.removeAttribute('aria-busy');if(m)S.durum(m)}
+    (function dene(){
+      var v=vidSiradaki(o,s);
+      if(!v){bitir(T('Başka uygun video kalmadı; “Değiştir” ile kendin ara.','No other suitable video left; use “Change” to search yourself.'));return}
+      var id=String(v.id);o.vayrilan[id]=true;
+      vidAc(v.src,function(ve){
+        delete o.vayrilan[id];
+        if(!st||st.oto!==o||st.sahneler[i]!==s){vidBirak(ve);return}
+        if(!ve){o.vbozuk[id]=true;dene();return}
+        s.gorsel=null;s.bekleyen=null;s.elle=true;vidKoy(s,v,ve);gorselYenile(i,'.kr-gorsel-baska');guncelle();
+        S.durum(T(tekil(i)+' için başka video eklendi. Video: '+(v.user||'Pexels')+' (Pexels).','Another video added to '+tekil(i).toLowerCase()+'. Video by '+(v.user||'Pexels')+' on Pexels.'));
+      });
+    })();
+  });
+  return b;
 }
 /* fotoğrafa düşüş: kalan sahneler foto akışıyla dolar; not foto akışı bitince de görünür kalır */
 function vidYedek(o,m){
@@ -1658,17 +1946,20 @@ function vidYedek(o,m){
 function vidAra(o){
   if(!otoGecerli(o))return null;
   if(o.videolar)return vidDagit(o);
-  var q=st.konu||aramaMetni(st.taslak&&st.taslak.title),m=vidYukMetni(o),n=otoNot('',m);S.durum(m);
-  if(!q)return vidYedek(o,T('Konu boş olduğu için video aranmadı; sahnelere fotoğraf ekleniyor.','No topic to search videos for; adding photos to the scenes instead.'));
-  o.ac=window.AbortController?new AbortController():null;
-  S.stok('type=video&q='+encodeURIComponent(q)+'&orientation='+stokYonu()+'&page=1&lang='+(EN?'en':'tr'),o.ac).then(function(r){
-    if(!otoGecerli(o))return;o.ac=null;
-    var a=(r&&Array.isArray(r.videos)?r.videos:[]).filter(vidGecerli);
-    if(!a.length){vidYedek(o,T('Bu konu için uygun video bulunamadı; sahnelere fotoğraf eklendi.','No suitable video was found for this topic; photos were added to the scenes instead.'));return}
-    o.videolar=a.slice();vidDagit(o);
-  },function(e){
-    if(!otoGecerli(o))return;o.ac=null;
-    vidYedek(o,T('Video araması şu an yapılamadı; sahnelere fotoğraf eklendi.','Video search isn’t available right now; photos were added to the scenes instead.'));
+  var sg=vidSorgular(o),m=vidYukMetni(o),n=otoNot('',m);S.durum(m);
+  if(!sg.hep.length)return vidYedek(o,T('Konu boş olduğu için video aranmadı; sahnelere fotoğraf ekleniyor.','No topic to search videos for; adding photos to the scenes instead.'));
+  var ac=window.AbortController?new AbortController():null,vq={},hata=0;o.ac=ac;
+  Promise.all(sg.hep.map(function(x){
+    return S.stok('type=video&q='+encodeURIComponent(x.q)+'&orientation='+stokYonu()+'&page=1&lang='+x.lg,ac).then(function(r){
+      vq[x.k]=(r&&Array.isArray(r.videos)?r.videos:[]).filter(vidGecerli);
+    },function(){hata++});
+  })).then(function(){
+    if(!otoGecerli(o)||o.ac!==ac)return;o.ac=null;
+    var hep=[],gor={};sg.hep.forEach(function(x){(vq[x.k]||[]).forEach(function(v){var id=String(v.id);if(!gor[id]){gor[id]=1;hep.push(v)}})});
+    if(!hep.length){
+      vidYedek(o,hata===sg.hep.length?T('Video araması şu an yapılamadı; sahnelere fotoğraf eklendi.','Video search isn’t available right now; photos were added to the scenes instead.')
+        :T('Bu konu için uygun video bulunamadı; sahnelere fotoğraf eklendi.','No suitable video was found for this topic; photos were added to the scenes instead.'));return}
+    o.vq=vq;o.vyed=sg.yed;o.videolar=hep;vidDagit(o);
   });
   return n;
 }
@@ -1679,9 +1970,9 @@ function vidDagit(o){
   var m=vidYukMetni(o),n=otoNot('',m);S.durum(m);
   var kalan=hedef.length,eklenen=0,olmadi=0,zam=0;
   hedef.forEach(function(s){
-    vidYukle(o,function(v,ve){
+    vidYukle(o,s,function(v,ve){
       if(!v)olmadi++;
-      else if(st.sahneler.indexOf(s)>=0&&!s.video&&!s.gorsel&&!s.elle){vidKoy(s,v,ve);s.oto=true;eklenen++;clearTimeout(zam);zam=setTimeout(function(){if(st===o.st)guncelle()},120)}
+      else if(st.sahneler.indexOf(s)>=0&&!s.video&&!s.gorsel&&!s.elle){s.oto=true;vidKoy(s,v,ve);eklenen++;clearTimeout(zam);zam=setTimeout(function(){if(st===o.st)guncelle()},120)}
       else vidBirak(ve);
       if(--kalan===0)vidBitti(o,eklenen,olmadi);
     });
@@ -1706,7 +1997,7 @@ function vidDeneme(o){
       o.harciyor=false;gYaz();
       if(ok){
         var yer=!!st&&st===o.st&&st.sahneler.indexOf(s)>=0&&!s.gorsel&&!s.video;
-        if(yer){vidKoy(s,v,ve);s.oto=true}else vidBirak(ve);
+        if(yer){s.oto=true;vidKoy(s,v,ve)}else vidBirak(ve);
         o.secilen=o.secilenIm=null;stokYayin(true);
         if(!otoGecerli(o))return;
         otoTemiz(o);if(yer){guncelle();S.durum(T('İlk sahneye deneme videosu eklendi. ','Trial video added to the first scene. ')+DENEME_BITTI+'.')}
@@ -1721,7 +2012,7 @@ function vidDeneme(o){
   }
   /* Tekrar dene: aynı klip (aynı id yeniden harcanmaz) */
   if(o.secilen&&o.secilenIm){harca(o.secilen,o.secilenIm);return n}
-  vidYukle(o,function(v,ve){
+  vidYukle(o,s,function(v,ve){
     if(!v){vidYedek(o,T('Deneme videosu yüklenemedi; ilk sahneye fotoğraf ekleniyor.','Couldn’t load the trial video; adding a photo to the first scene instead.'));return}
     o.secilen=v;o.secilenIm=ve;harca(v,ve);
   });

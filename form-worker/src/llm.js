@@ -62,6 +62,14 @@ export function videoSpec(kind, length) {
   };
 }
 
+// 27.11 E5: sahnenin (ve taslağın yedek) İngilizce stok arama sorgusu q. NFC, boşluklar tekleşir; yalnız ASCII harf/rakam ve
+// boşluk , ' & - ile 2–60 karakter, en çok 6 kelime. Geçmezse "" (taslak reddedilmez; istemci taslak q'suna / konuya düşer).
+export const qOk = v => {
+  if (typeof v !== "string") return "";
+  const q = v.normalize("NFC").replace(/\s+/g, " ").trim();
+  return /^[A-Za-z0-9 ,'&-]{2,60}$/.test(q) && q.split(" ").length <= 6 ? q : "";
+};
+
 export class LlmError extends Error {
   constructor(kind, why, usage) {
     super(`${kind}: ${why}`);
@@ -133,7 +141,10 @@ export function parse(data, count, angle, spec = SPECS.li) {
   const drafts = d.map(x => {
     const o = { angle: x.angle };
     for (const k of fields) o[k] = x[k].trim();
-    if (scenes) o.scenes = x.scenes.map(s => ({ text: s.text.trim(), sub: s.sub.trim(), secs: s.secs }));
+    if (scenes) {
+      o.scenes = x.scenes.map(s => ({ text: s.text.trim(), sub: s.sub.trim(), secs: s.secs, q: qOk(s.q) }));
+      o.q = qOk(x.q);
+    }
     return o;
   });
   if (drafts.some(x => fields.some(k => len(x[k]) > max[k]) || !angles.includes(x.angle))) throw new LlmError("fail", "length_or_angle", usage);
@@ -186,7 +197,8 @@ function fakeStudio(spec) {
   const secs = i => (video ? Math.floor(L / n) + (i >= n - (L % n) ? 1 : 0) : 0);
   return {
     angle: spec.kind, title: `ÖRNEK ${video ? "video" : "carousel"} taslağı`,
-    scenes: Array.from({ length: n }, (_, i) => ({ text: i === 0 ? "ÖRNEK kanca" : i === n - 1 ? "ÖRNEK çağrı" : `ÖRNEK sahne ${i + 1}`, sub: i === 0 ? "" : "Sahte sağlayıcıdan geldi.", secs: secs(i) })),
+    q: "office desk laptop",
+    scenes: Array.from({ length: n }, (_, i) => ({ text: i === 0 ? "ÖRNEK kanca" : i === n - 1 ? "ÖRNEK çağrı" : `ÖRNEK sahne ${i + 1}`, sub: i === 0 ? "" : "Sahte sağlayıcıdan geldi.", secs: secs(i), q: ["hands typing on keyboard", "team meeting whiteboard", "city skyline at night", "coffee cup on desk"][i % 4] })),
     caption: "ÖRNEK açıklama. Bu metin sahte sağlayıcıdan geldi; gerçek model çağrılmadı.\n\n#örnek #taslak #deneme",
   };
 }
