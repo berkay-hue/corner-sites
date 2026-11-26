@@ -77,17 +77,13 @@ test("c) ?v=: değişen css/js her HTML'de (TR + en/) tek ve güncel sürüm", (
     "studyo-blog.js": "ap9", "studyo-linkedin.js": "ap9", "smc-ses.js": "ap9", "smc-ses-hazir.js": "ap9",
     "smc-hesap.js": "ap9", "ust-hesap.js": "ap9", "studyo-hesap.css": "ap9",
   };
-  // GEÇİCİ: fiyatlar.html / en/pricing.html ayrı dalda (f/smc-fiyat-*) değişiyor; o dal birleşince ap9'a çekilip bu istisna silinir.
-  const fiyatEski = { "studyo.css": "gs3", "studyo-kabuk.js": "ak3", "ust-hesap.js": "bt2", "studyo-hesap.css": "bt1" };
-  const fiyatSayfa = (p) => /(^|[\\/])(fiyatlar|pricing)\.html$/.test(p);
   const sayi = {};
   for (const p of htmller()) {
     const h = readFileSync(p, "utf8");
     for (const [ad, v] of Object.entries(beklenen)) {
       const re = new RegExp(`/assets/${ad.replace(/\./g, "\\.")}(\\?v=([A-Za-z0-9._-]+))?["']`, "g");
       for (const m of h.matchAll(re)) {
-        const izin = fiyatSayfa(p) && fiyatEski[ad] ? [v, fiyatEski[ad]] : [v];
-        assert.ok(izin.includes(m[2]), `${p.slice(APP.length)}: ${ad}?v=${m[2] || "(yok)"}`);
+        assert.equal(m[2], v, `${p.slice(APP.length)}: ${ad}?v=${m[2] || "(yok)"}`);
         sayi[ad] = (sayi[ad] || 0) + 1;
       }
     }
