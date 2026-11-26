@@ -234,6 +234,8 @@ Lead maliyeti düşük ama lead’lerin çoğu ideal müşteri profilinin dış�
 
 Bu hesap aynı zamanda ölçeklenme kararını da verir: Kabul edilebilir maliyetin altında kalan bir kanalda hacmi artırmak, marjinal maliyet tavana yaklaşana kadar mantıklıdır.
 
+Lead maliyetinin kabul edilebilir olup olmadığı, sonunda müşteri edinme maliyetiyle müşterinin ömür boyu değeri arasındaki orana bağlıdır. Bu oranı ve geri ödeme sürenizi hesaplamak için ücretsiz [CAC / LTV Hesaplayıcı](/araclar/cac-ltv-hesaplayici) aracını kullanabilirsiniz.
+
 ## Lead maliyetini düşürmenin pratik yolları
 
 Maliyeti düşürmenin iki yolu vardır: paydaki harcamayı azaltmak ya da paydadaki sonucu artırmak. B2B’de ikincisi genellikle daha etkilidir.

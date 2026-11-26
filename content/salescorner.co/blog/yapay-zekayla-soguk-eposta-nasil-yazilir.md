@@ -130,6 +130,8 @@ Konu satırı, e-postanın açılıp açılmayacağını belirleyen ilk filtre. 
 
 Yapay zekadan her segment için 5-10 konu satırı üretmesini isteyin, en iyi 2-3 tanesini seçin ve bunları A/B testine sokun.
 
+Yazdığınız konu satırını uzunluk, kişiselleştirme ve spam riski açısından puanlamak için ücretsiz [Konu Satırı Puanlayıcı](/araclar/konu-satiri-puanlayici) aracını kullanabilirsiniz.
+
 ## E-Posta Dizisi Kurgusu: Tek E-Posta Yetmez
 
 Soğuk e-postaya gelen yanıtların önemli bir kısmı ilk mesajdan değil, takip mesajlarından gelir. Alıcı ilk e-postayı görmüş ama o an cevap verecek vakti bulamamış olabilir. Bu yüzden her kampanyayı bir **dizi (sequence)** olarak planlayın. Tipik bir 4 adımlı dizi şöyle kurgulanabilir:
@@ -165,6 +167,8 @@ Yapay zekayla e-posta üretim hızınız arttıkça, gönderim altyapısına dah
 - **Link ve görsel kullanımını azaltın.** İlk e-postada link, görsel ve ek dosyadan kaçınmak teslim edilebilirliği destekler.
 
 Yapay zekanın burada dolaylı bir katkısı da var: Her e-postanın metni birbirinden farklı olduğu için, tamamen aynı içeriğin toplu gönderiminden kaynaklanan kalıp tespitine takılma riski azalır.
+
+E-postanızı göndermeden önce [Soğuk E-posta Denetleyici](/araclar/soguk-eposta-denetleyici) ile kontrol edebilir, yeni bir domain kullanıyorsanız gönderim hacmini [Domain Isınma Planlayıcı](/araclar/domain-isinma-planlayici) ile kademeli olarak artırabilirsiniz.
 
 ## Sık Yapılan Hatalar
 

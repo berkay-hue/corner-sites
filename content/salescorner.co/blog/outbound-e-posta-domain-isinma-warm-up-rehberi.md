@@ -130,6 +130,8 @@ Aşağıdaki plan, Google Workspace veya Microsoft 365 üzerinde açılmış yen
 - Kutu başına günlük 30-50 toplam e-postada sabitleyin.
 - **Isınmayı kapatmayın.** Arka planda düşük hacimli ısınma trafiğini devam ettirmek itibarın korunmasına yardım eder.
 
+Bu planı domain yaşınıza, kutu sayınıza ve hedef günlük hacminize göre gün gün bir takvime dökmek için ücretsiz [Domain Isınma Planlayıcı](/araclar/domain-isinma-planlayici) aracını kullanabilirsiniz.
+
 ## Kutu başına günlük kaç e-posta gönderilmeli?
 
 Isınmış bir kutu için güvenli bölge, günlük **30-50 soğuk e-posta** aralığıdır. Teknik olarak daha fazlasını göndermek mümkündür. Ancak outbound'da amaç maksimum gönderim değil, maksimum gelen kutusu oranıdır. Hacim ihtiyacınız arttığında kutu başına hacmi değil, **kutu ve domain sayısını** artırın.
@@ -217,6 +219,8 @@ Teknik altyapı ve hacim doğru olsa bile içerik ve davranış hataları teslim
 - Her e-postada kolay bir **çıkış seçeneği** sunun. "Bu konu sizin için uygun değilse belirtmeniz yeterli" gibi bir cümle, spam butonuna basılmasından çok daha iyidir.
 
 Yasal tarafı da unutmayın. Türkiye'de soğuk e-posta gönderirken veri işleme ve ticari ileti kuralları geçerlidir. Gönderim stratejinizi kurmadan önce [KVKK'ya uygun B2B soğuk e-postanın yasal sınırlarını](/blog/kvkk-uyumlu-soguk-eposta-yasal-sinirlar) gözden geçirmenizi öneririz.
+
+Göndermeden önce metninizi spam tetikleyici kelimeler, uzunluk ve bağlantı sayısı açısından kontrol etmek için [Soğuk E-posta Denetleyici](/araclar/soguk-eposta-denetleyici) aracından yararlanabilirsiniz.
 
 ## Domain itibarı düştüyse ne yapmalı?
 

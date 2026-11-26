@@ -164,6 +164,8 @@ Bu tür akışları kod yazmadan kurmak mümkündür. [n8n ile B2B satış otoma
 
 Bounce oranını kampanya bitince değil, gönderim sırasında izleyin. Örnek bir alarm kuralı şöyle olabilir: **"Bir kampanyada ilk 100 gönderimde bounce oranı yüzde 3'ü geçerse kampanyayı otomatik duraklat ve sorumluya bildirim gönder."** Böylece sorunlu bir liste, domaininize ciddi zarar vermeden yakalanır.
 
+Yeni bir domain ya da kutu ile başlıyorsanız günlük gönderim hacmini haftalara yaymak için ücretsiz [Domain Isınma Planlayıcı](/araclar/domain-isinma-planlayici) aracını, metninizi göndermeden önce kontrol etmek için [Soğuk E-posta Denetleyici](/araclar/soguk-eposta-denetleyici) aracını kullanabilirsiniz.
+
 ## Örnek senaryo: 2.000 kişilik bir liste nasıl temizlenir?
 
 Bir yazılım şirketinin, Türkiye'deki üretim firmalarının operasyon yöneticilerine ulaşmak için 2.000 kişilik bir liste hazırladığını düşünelim. Aşağıdaki rakamlar süreci göstermek için verilmiş varsayımsal bir örnektir.

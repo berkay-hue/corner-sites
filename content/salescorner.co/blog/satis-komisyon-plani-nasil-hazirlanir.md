@@ -182,6 +182,8 @@ Aşağıdaki örnek, yeni müşteri kazanımından sorumlu bir AE için hazırla
 
 Bu tabloyu plan belgesine aynen koyun. Temsilci kendi durumunu dakikalar içinde hesaplayabilmelidir.
 
+Kendi kota, taban maaş ve kademe oranlarınızla bu örneği yeniden hesaplamak için ücretsiz [Satış Komisyonu Hesaplayıcı](/araclar/komisyon-hesaplayici) aracını kullanabilirsiniz.
+
 ## SDR komisyonu nasıl kurgulanmalı?
 
 SDR'lar anlaşmayı kendileri kapatmadığı için ciro bazlı komisyon onlar için doğru araç değildir. Bunun yerine kontrol edebildikleri ama kaliteyi de içeren bir metrik seçilmelidir.
