@@ -21,7 +21,7 @@
 // günlük hakları (GEN_PER_DAY) bu bayrakla fiilen kullanılmaz. demo planı (src/plans.js): aylık değil deneme boyunca TOPLAM
 // (planCounts: created_at ayından bu yana gen_month toplamı, ay dönümünde sıfırlanmaz); deneme bitince üretim/refine
 // 403 trial_ended; /gen/quota demo'da trial_ends_at + trial_ended taşır (bittiyse left 0).
-// W2 (26.11): POST /gen/tts (Azure Speech seslendirme, audio/mpeg) + GET /gen/tts/sesler; ayrıntı ttsRoute üstünde.
+// W2 (26.11): POST /gen/tts (ElevenLabs seslendirme, audio/mpeg) + GET /gen/tts/sesler; ayrıntı ttsRoute üstünde.
 import {
   SYSTEM_GEN, SYSTEM_REFINE, SYSTEM_IG_CAPTION, SYSTEM_IG_REELS, SYSTEM_IG_CAPTION_REFINE, SYSTEM_IG_REELS_REFINE, SCHEMA, SCHEMA_REELS,
   SYSTEM_BLOG, SYSTEM_VIDEO, SCHEMA_BLOG, SCHEMA_VIDEO, BLOG_LENGTHS, VIDEO_KINDS, VIDEO_LENGTHS, STUDIO_MAX, withStyle, userBlog, userVideo,
@@ -1082,32 +1082,43 @@ async function stockUseRoute(c) {
   return json({ ok: true, charged: false, stock_trial: { limit: t.limit, used: Number(ptRow.n) } }, 200, origin);
 }
 
-// W2 (26.11) seslendirme: POST /gen/tts {metin, ses} → Azure Speech REST (audio-24khz-48kbitrate-mono-mp3), yanıt audio/mpeg.
-// Secret'lar AZURE_SPEECH_KEY + AZURE_SPEECH_REGION (wrangler secret; biri yoksa 503 {hata:"tts_kapali"}). Ses yalnız TTS_VOICES
-// beyaz listesinden; SSML xml:lang sesten türetilir, metin XML kaçışlı, en çok TTS_MAX (1500) karakter (aşarsa 400 metin_uzun).
+// W2 (26.11) seslendirme: POST /gen/tts {metin, ses} → ElevenLabs REST (mp3_44100_128), yanıt audio/mpeg.
+// Secret ELEVENLABS_API_KEY (wrangler secret; yoksa 503 {hata:"tts_kapali"}); anahtar yalnız "Text to Speech" izinli olmalı.
+// Model ELEVENLABS_MODEL (var, isteğe bağlı; varsayılan eleven_flash_v2_5 = karakter başına 0,5 kredi). Ses yalnız TTS_VOICES
+// beyaz listesinden: dışarıya {id, dil, ad, cinsiyet} gider, ElevenLabs voice_id ('el') yalnız sunucuda kalır. Gövde JSON
+// (kaçış derdi yok), language_code sesin dilinden (multilingual_v2 desteklemez → o modelde gönderilmez), sayı/tarih okunuşu
+// için apply_text_normalization "on". Metin en çok TTS_MAX (1500) karakter (aşarsa 400 metin_uzun).
 // Oturum şart (Bearer; GEN_LOGIN_REQUIRED=1 iken yönlendirici zaten 401 verir, kapalıyken de burada 401). Göç yok: sayaçlar
-// gen_usage'ta yeni türlerle — kullanıcı başına günlük istek 'tu' (GEN_TTS_USER_PER_DAY, varsayılan 60), global günlük istek
-// 'ta' (GEN_TTS_PER_DAY, 600), global AYLIK karakter bütçesi 'tc' (GEN_TTS_CHARS_PER_MONTH, 450000; Azure F0 ayda 500 bin
-// karakter ücretsiz) — 'tc' satırının day'i "tts:YYYY-MM" (tarih biçimli değil → genCleanup silmez, ayda bir satır).
-// Azure hatası/zaman aşımı → üç sayaç iade, 502 {hata:"tts_hata"}. GET /gen/tts/sesler oturumsuz: {ok, acik, sesler}; acik yalnız
-// iki secret'ın VAR olup olmadığı (değer dönmez). İki uç src/sites.js APP_ROUTES'ta; POST /gen/tts yalnız uç listesinde
-// "POST /gen/tts" olan sitenin oturumuyla çalışır.
-export const TTS_VOICES = Object.freeze([
-  Object.freeze({ id: "tr-TR-EmelNeural", dil: "tr-TR", ad: "Emel", cinsiyet: "kadin" }),
-  Object.freeze({ id: "tr-TR-AhmetNeural", dil: "tr-TR", ad: "Ahmet", cinsiyet: "erkek" }),
-  Object.freeze({ id: "en-US-JennyNeural", dil: "en-US", ad: "Jenny", cinsiyet: "kadin" }),
-  Object.freeze({ id: "en-US-GuyNeural", dil: "en-US", ad: "Guy", cinsiyet: "erkek" }),
-]);
+// gen_usage'ta — kullanıcı başına günlük istek 'tu' (GEN_TTS_USER_PER_DAY, varsayılan 60), global günlük istek 'ta'
+// (GEN_TTS_PER_DAY, 600), global AYLIK karakter bütçesi 'tc' (GEN_TTS_CHARS_PER_MONTH, varsayılan 18000: ücretsiz plan ayda
+// 10 bin kredi ≈ flash'ta 20 bin karakter; ücretli plana geçince var ile yükselt) — 'tc' satırının day'i "tts:YYYY-MM"
+// (tarih biçimli değil → genCleanup silmez, ayda bir satır). ElevenLabs hatası/zaman aşımı → üç sayaç iade, 502
+// {hata:"tts_hata"}. GET /gen/tts/sesler oturumsuz: {ok, acik, sesler}; acik yalnız secret'ın VAR olup olmadığı (değer
+// dönmez). İki uç src/sites.js APP_ROUTES'ta; POST /gen/tts yalnız uç listesinde "POST /gen/tts" olan sitenin oturumuyla çalışır.
+// Sesler ElevenLabs hazır (premade) kütüphanesinden; çok dilli modeller Türkçeyi aynı sesle okur.
+const TTS_TABLE = [
+  { id: "tr-TR-Sarah", dil: "tr-TR", ad: "Sarah", cinsiyet: "kadin", el: "EXAVITQu4vr4xnSDxMaL" },
+  { id: "tr-TR-Adam", dil: "tr-TR", ad: "Adam", cinsiyet: "erkek", el: "pNInz6obpgDQGcFmaJgB" },
+  { id: "en-US-Alice", dil: "en-US", ad: "Alice", cinsiyet: "kadin", el: "Xb7hH8MSUJpSbSDYk0k2" },
+  { id: "en-US-George", dil: "en-US", ad: "George", cinsiyet: "erkek", el: "JBFqnCBsd6RMkjVDRZzb" },
+];
+export const TTS_VOICES = Object.freeze(TTS_TABLE.map(({ el, ...v }) => Object.freeze(v)));
+const TTS_EL = new Map(TTS_TABLE.map(v => [v.id, v.el]));
 export const TTS_MAX = 1500;
 const TTS_TIMEOUT = 20000;
-const TTS_FORMAT = "audio-24khz-48kbitrate-mono-mp3";
-// bölge yalnız küçük harf/rakam (URL'ye girer: başka ana makineye yönlendirme olmasın)
-const ttsOn = env => Boolean(env.AZURE_SPEECH_KEY && env.AZURE_SPEECH_REGION && /^[a-z0-9]{2,40}$/.test(String(env.AZURE_SPEECH_REGION)));
+const TTS_FORMAT = "mp3_44100_128";
+export const TTS_MODEL_DEFAULT = "eleven_flash_v2_5";
+// model adı URL'ye değil gövdeye girer; yine de yalnız eleven_* biçimi (yanlış var → varsayılan)
+export const ttsModel = env => /^eleven_[a-z0-9_]{2,40}$/.test(String(env.ELEVENLABS_MODEL || "")) ? env.ELEVENLABS_MODEL : TTS_MODEL_DEFAULT;
+const ttsOn = env => Boolean(env.ELEVENLABS_API_KEY);
 const ttsFail = (hata, status, origin, extra) => fail(hata, status, origin, { hata, ...extra });
-const XML_ESC = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&apos;" };
-export const xmlEscape = s => String(s).replace(/[&<>"']/g, ch => XML_ESC[ch]);
-export const ttsSsml = (metin, v) => `<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='${v.dil}'><voice name='${v.id}'>${xmlEscape(metin)}</voice></speak>`;
-// Metin: NFC; XML 1.0'da geçersiz kontrol karakterleri (satır sonu ve sekme dışı) boşluk; kenar boşluğu kırpılır.
+export const ttsBody = (metin, v, model) => ({
+  text: metin,
+  model_id: model,
+  ...(model !== "eleven_multilingual_v2" && { language_code: v.dil.slice(0, 2) }),
+  apply_text_normalization: "on",
+});
+// Metin: NFC; kontrol karakterleri (satır sonu ve sekme dışı) boşluk; kenar boşluğu kırpılır.
 const ttsText = v => typeof v === "string" ? v.normalize("NFC").replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f\ufffe\uffff]/g, " ").trim() : null;
 
 function ttsVoicesRoute(c) {
@@ -1130,11 +1141,11 @@ async function ttsRoute(c) {
   const items = [
     { name: "user", kind: "tu", key: uK, inc: 1, max: int(env.GEN_TTS_USER_PER_DAY, 60) },
     { name: "all", kind: "ta", key: allK, inc: 1, max: int(env.GEN_TTS_PER_DAY, 600) },
-    { name: "chars", kind: "tc", key: cK, inc: n, max: int(env.GEN_TTS_CHARS_PER_MONTH, 450000), day: month },
+    { name: "chars", kind: "tc", key: cK, inc: n, max: int(env.GEN_TTS_CHARS_PER_MONTH, 18000), day: month },
   ];
   const r = await reserve(db, day, items);
   if (!r.ok) return ttsFail("tts_limit", 429, origin, { scope: r.failed.includes("user") ? "user" : r.failed.includes("chars") ? "month" : "global" });
-  // Azure başarısız: üç sayaç iade (iade yazılamazsa yanıt değişmez), sonra 502
+  // ElevenLabs başarısız: üç sayaç iade (iade yazılamazsa yanıt değişmez), sonra 502
   const iade = async () => {
     try { await db.batch(decr(db, day, items)); } catch (e) { console.log("tts iade", e?.message?.slice(0, 80)); }
     return ttsFail("tts_hata", 502, origin);
@@ -1142,10 +1153,10 @@ async function ttsRoute(c) {
   let audio;
   try {
     const get = io.fetch; // ayrık çağrı (Illegal invocation)
-    const res = await get(`https://${env.AZURE_SPEECH_REGION}.tts.speech.microsoft.com/cognitiveservices/v1`, {
+    const res = await get(`https://api.elevenlabs.io/v1/text-to-speech/${TTS_EL.get(v.id)}?output_format=${TTS_FORMAT}`, {
       method: "POST",
-      headers: { "Ocp-Apim-Subscription-Key": env.AZURE_SPEECH_KEY, "Content-Type": "application/ssml+xml", "X-Microsoft-OutputFormat": TTS_FORMAT, "User-Agent": "corner-forms-tts" },
-      body: ttsSsml(metin, v),
+      headers: { "xi-api-key": env.ELEVENLABS_API_KEY, "Content-Type": "application/json", Accept: "audio/mpeg", "User-Agent": "corner-forms-tts" },
+      body: JSON.stringify(ttsBody(metin, v, ttsModel(env))),
       signal: AbortSignal.timeout(TTS_TIMEOUT),
     });
     if (!res.ok) { console.log("tts", res.status); return iade(); }

@@ -446,10 +446,10 @@ function hepsiAktar(){
    Ses yalnız bu sekmenin belleğinde durur (anahtar: ses|metin); kayda yalnız {acik,id} yazılır. Dönüşte "Sesi yeniden oluştur".
    Sahne süresi sese göre uzar: secs = max(secs, ses + 0,4) (motor sınırı 15 sn). */
 var API_T=(function(){var m=d.querySelector('meta[name="api-base"]');return m?String(m.getAttribute('content')||'').replace(/\/+$/,''):''})();
-var TTS_MAX=1500,TTS_ID=/^[a-z]{2}-[A-Z]{2}-[A-Za-z]{2,30}Neural$/;
+var TTS_MAX=1500,TTS_ID=/^[a-z]{2}-[A-Z]{2}-[A-Za-z]{2,30}$/;
 var SES={durum:'bilinmiyor',uretildi:false,P:null,iptal:null,dinle:null,dinleKaynak:null,tampon:{},
-  liste:EN?[{id:'en-US-JennyNeural',ad:'Jenny',cinsiyet:'kadin'},{id:'en-US-GuyNeural',ad:'Guy',cinsiyet:'erkek'}]
-          :[{id:'tr-TR-EmelNeural',ad:'Emel',cinsiyet:'kadin'},{id:'tr-TR-AhmetNeural',ad:'Ahmet',cinsiyet:'erkek'}]};
+  liste:EN?[{id:'en-US-Alice',ad:'Alice',cinsiyet:'kadin'},{id:'en-US-George',ad:'George',cinsiyet:'erkek'}]
+          :[{id:'tr-TR-Sarah',ad:'Sarah',cinsiyet:'kadin'},{id:'tr-TR-Adam',ad:'Adam',cinsiyet:'erkek'}]};
 function sesGecerli(id){return SES.liste.some(function(v){return v.id===id})}
 function sesAdi(v){return v.ad+' ('+(v.cinsiyet==='erkek'?T('erkek','male'):T('kadın','female'))+')'}
 function sesBul(id){return bul(SES.liste,id)||SES.liste[0]}
@@ -473,7 +473,7 @@ function seslerAl(){
   SES.P=fetch(API_T+'/gen/tts/sesler',o).then(function(r){clearTimeout(tm);return r.ok?r.json().then(null,function(){return null}):null},function(){clearTimeout(tm);return null}).then(function(j){
     if(!j||j.ok===false||typeof j.acik!=='boolean'){SES.durum='yok';return}
     var on=EN?'en-':'tr-',l=(Array.isArray(j.sesler)?j.sesler:[]).filter(function(v){return v&&typeof v.id==='string'&&TTS_ID.test(v.id)&&v.id.indexOf(on)===0}).slice(0,8)
-      .map(function(v){return {id:v.id,ad:typeof v.ad==='string'&&v.ad?v.ad.slice(0,30):v.id.split('-')[2].replace(/Neural$/,''),cinsiyet:v.cinsiyet==='erkek'?'erkek':'kadin'}});
+      .map(function(v){return {id:v.id,ad:typeof v.ad==='string'&&v.ad?v.ad.slice(0,30):v.id.split('-')[2],cinsiyet:v.cinsiyet==='erkek'?'erkek':'kadin'}});
     if(l.length)SES.liste=l;
     SES.durum=j.acik?'acik':'kapali';
   });

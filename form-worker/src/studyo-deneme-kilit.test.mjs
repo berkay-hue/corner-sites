@@ -73,7 +73,7 @@ test("a) css: meşgulken seçili çip seçili görünür (dashed disabled kural�
 
 test("c) ?v=: değişen css/js her HTML'de (TR + en/) tek ve güncel sürüm", () => {
   const beklenen = {
-    "studyo.css": "ap10", "studyo-kabuk.js": "ap9", "studyo-kurgu.js": "ap10", "studyo-medya.js": "ap9", "studyo-motor.js": "ap10",
+    "studyo.css": "ap10", "studyo-kabuk.js": "ap9", "studyo-kurgu.js": "ap11", "studyo-medya.js": "ap9", "studyo-motor.js": "ap10",
     "studyo-blog.js": "ap9", "studyo-linkedin.js": "ap9", "smc-ses.js": "ap9", "smc-ses-hazir.js": "ap9",
     "smc-hesap.js": "ap9", "ust-hesap.js": "ap9", "studyo-hesap.css": "ap9",
   };
