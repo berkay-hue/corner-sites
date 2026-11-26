@@ -1493,6 +1493,11 @@ async function rtRakip(c, since, budget) {
   out.items = p.items.filter(x => x.t >= since && x.t <= now && x.link && !seen.has(x.link) && seen.add(x.link))
     .sort((a, b) => b.t - a.t).slice(0, p.kind === "rss" || p.kind === "atom" ? 15 : 10)
     .map(x => ({ title: x.title, link: /^https?:\/\//i.test(x.link) ? x.link : "", tarih: new Date(x.t).toISOString().slice(0, 10) }));
+  // Dönemde yeni içerik yoksa panel kaynaktaki son içerikleri gösterir (rapora/yoruma/e-postaya girmez); tarihsizler sonda.
+  const eski = new Set();
+  out.onceki = p.items.filter(x => x.t < since && /^https?:\/\//i.test(x.link || "") && !eski.has(x.link) && eski.add(x.link))
+    .sort((a, b) => b.t - a.t).slice(0, 5)
+    .map(x => ({ title: x.title, link: x.link, tarih: x.t ? new Date(x.t).toISOString().slice(0, 10) : "" }));
   return out;
 }
 // LinkedIn şirket sayfası sunucu isteğine 403 verir; gönderiler Google araması (Serper) ile bulunur.
@@ -1622,7 +1627,7 @@ async function rtCalis(env, b) {
     }
   }
   return { success: true, status: "ok", gun, count: rows.length, yorum_html: yorum, mail,
-    rakipler: res.map(r => ({ firma: r.firma, ok: r.ok, kaynak: r.kaynak, feed_url: r.feed_url, error: r.error, toplam: r.toplam, tarihsiz: r.tarihsiz, son: r.son, ...(r.kaynak === "LinkedIn" ? { ham: r.ham, tani: r.tani, onceki: r.onceki || [] } : {}), items: r.items })) };
+    rakipler: res.map(r => ({ firma: r.firma, ok: r.ok, kaynak: r.kaynak, feed_url: r.feed_url, error: r.error, toplam: r.toplam, tarihsiz: r.tarihsiz, son: r.son, site: r.site || "", onceki: r.onceki || [], ...(r.kaynak === "LinkedIn" ? { ham: r.ham, tani: r.tani } : {}), items: r.items })) };
 }
 
 // ---------- Sales Corner SaaS paneli (app.salescorner.co, /api/app/*) ----------
@@ -1889,11 +1894,18 @@ const TAKIP_NEDEN = {
   calisiyor: "Bu takip şu anda çalışıyor, birkaç dakika sonra sonucu görürsünüz.",
   erken: "Bu takip son 20 saat içinde çalıştı. Haftalık takip otomatik devam ediyor.",
 };
+// toplam = kaynakta taranan kayıt sayısı (yeni değil); yeni içerik = items. Panelde kaynağa gitme bağlantısı için url saklanır.
+const takipKaynakUrl = r => {
+  const f = /^https?:\/\//i.test(r.feed_url || "") ? r.feed_url : "", s = /^https?:\/\//i.test(r.site || "") ? r.site : "";
+  if (r.kaynak === "LinkedIn") return f ? f.replace(/\/?$/, "/") + "posts/" : "";
+  return r.kaynak === "blog sayfası" ? f || s : s || f;
+};
 function takipOzet(s) {
+  const kisa = l => (l || []).slice(0, 8).map(x => ({ title: str(x.title, 160), link: str(x.link, 600), tarih: str(x.tarih, 40) }));
   return {
     tarih: new Date().toISOString(), gun: s.gun, count: s.count, yorum_html: str(s.yorum_html, 20000), mail: s.mail,
     rakipler: (s.rakipler || []).map(r => ({ firma: str(r.firma, 80), ok: !!r.ok, kaynak: str(r.kaynak, 40), error: str(r.error, 300), toplam: Number(r.toplam) || 0,
-      items: (r.items || []).slice(0, 15).map(x => ({ title: str(x.title, 300), link: str(x.link, 600), tarih: str(x.tarih, 40) })) })),
+      url: str(takipKaynakUrl(r), 600), items: kisa(r.items), onceki: kisa(r.onceki).slice(0, 5) })),
   };
 }
 async function takipYap(env, is, token) {
@@ -2093,7 +2105,7 @@ function dhPlanlar(planlar) {
     return k === "takip" ? (v < 0 ? "sınırsız firma takibi" : `${v} firma takibi`) : (v < 0 ? `sınırsız ${ad}` : `ayda ${v} ${ad}`);
   }).join(" · ");
   return `<h3 style="font-size:16px;margin:20px 0 6px">Planlar</h3>` + ps.map(p => `<div style="border:1px solid #e5e5ea;border-radius:10px;padding:12px 14px;margin:8px 0">`
-    + `<div style="font-weight:700;font-size:15px">${rtEsc(str(p.ad, 40))} <span style="color:#3b4cca">₺${Number(p.aylik_tl).toLocaleString("tr-TR")}/ay</span> <span style="color:#888;font-weight:400;font-size:12px">KDV hariç</span></div>`
+    + `<div style="font-weight:700;font-size:15px">${rtEsc(str(p.ad, 40))} <span style="color:#3b4cca">₺${Number(p.aylik_tl).toLocaleString("tr-TR")}${Number(p.koltuk) > 1 ? "/ay" : "/kullanıcı/ay"}</span> <span style="color:#888;font-weight:400;font-size:12px">KDV hariç</span></div>`
     + `<div style="color:#555;font-size:13px;margin-top:2px">${rtEsc(kota(p.kota))}${Number(p.koltuk) > 1 ? ` · ${Number(p.koltuk)} kullanıcı` : ""}</div></div>`).join("")
     + `<p style="color:#555;font-size:13px;margin:6px 0 0">Yıllık faturalamada %20 indirim var. Şirketinize özel kurulum için Özel AI paketine teklif alabilirsiniz.</p>`;
 }
@@ -2201,12 +2213,13 @@ async function bildirimCikis(req, sub) {
 const EKIP_NEDEN = {
   uye: "Başka bir ekibin üyesisiniz; davet gönderemezsiniz.",
   sure: "Planınızın süresi dolmuş. Davet göndermek için planınızı yenileyin.",
-  plan: "Ekip daveti Profesyonel (3 kişi) ve Ekip (5 kişi) planlarında var.",
+  plan: "Ekip daveti Profesyonel (kullanıcı başına fiyat) ve Ekip (5 kullanıcı dahil) planlarında var.",
   email: "Geçerli bir e-posta adresi girin.",
   kendi: "Kendinizi davet edemezsiniz.",
   var: "Bu adrese zaten bir davet gönderilmiş ya da kişi ekibinizde.",
   koltuk: "Planınızdaki kullanıcı sınırına ulaştınız. Bekleyen bir daveti iptal edebilir ya da planınızı yükseltebilirsiniz.",
   gunluk: "Bugün için davet sınırına ulaştınız. Yarın tekrar deneyin.",
+  pro_koltuk: "Profesyonel planda fiyat kullanıcı başınadır. Davet için ek Profesyonel kullanıcı ekleyin ya da Ekip planına geçin (5 kullanıcı dahil).",
 };
 function ekipMailHtml(sahip, link) {
   const kim = [str(sahip.ad, 60).trim(), str(sahip.sirket, 80).trim()].filter(Boolean);
@@ -4434,7 +4447,7 @@ return [{ json: {
   toplanti_tarihi: body.toplanti_tarihi || today,
   toplanti_saati:  body.toplanti_saati || '',
   toplanti_konusu: body.toplanti_konusu || 'Hizmet Sunumu',
-  bildirim_email:  body.bildirim_email || 'berkay@saascorner.co',
+  bildirim_email:  body.bildirim_email || '',
   _skip: false,
   _event_id: '',
   satici: (function (v) {
@@ -4718,7 +4731,7 @@ return [{ json: {
   form: formStr,
   clients: clientsStr,
   client_match: clientMatchStr,
-  bildirim_email: form.bildirim_email || 'berkay@saascorner.co',
+  bildirim_email: form.bildirim_email || '',
   li_person: '{}', li_posts: '[]', li_co: '{}',
   satici_urunler: satUrun,
   gemini_body: geminiBody
@@ -10746,14 +10759,14 @@ return {
     status: 'success'
   }
 };
-})()}},"cred":null},"Send a message":{"name":"Send a message","t":"gmail","p":{"sendTo":__X(function($json,$,$input,$env,$execution,$binary,$itemIndex,$now,$node){return "berkay@saascorner.co"+__t(()=>($('Bot Protection').first().json.recipient_email ? ', ' + $('Bot Protection').first().json.recipient_email : ''
-))}),"subject":"Hazır Sekans","message":__X(function($json,$,$input,$env,$execution,$binary,$itemIndex,$now,$node){return "<!DOCTYPE html> <html> <head>   <meta charset=\"UTF-8\"> </head> <body style=\"margin: 0; padding: 0; background-color: #f3f4f6;\"> <div style=\"font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 640px; margin: 0 auto; background-color: #f9fafb; padding: 20px;\">    <!-- Header -->   <div style=\"background: linear-gradient(135deg, #6366F1, #8B5CF6); border-radius: 12px 12px 0 0; padding: 30px 25px; text-align: center;\">     <h1 style=\"color: #ffffff; margin: 0; font-size: 22px; font-weight: 700;\">SAAS CORNER</h1>     <p style=\"color: #c7d2fe; margin: 8px 0 0; font-size: 13px;\">Sekans Yazımı — Otomatik Rapor</p>   </div>    <!-- Main Content -->   <div style=\"background-color: #ffffff; padding: 30px 25px; border-left: 1px solid #e5e7eb; border-right: 1px solid #e5e7eb;\">     <h2 style=\"color: #1f2937; margin: 0 0 20px; font-size: 18px;\">🎯 "+__t(()=>($json.company
-))+" için rapor hazır!</h2>      <p style=\"color: #4b5563; font-size: 14px; line-height: 1.6; margin: 0 0 20px;\">       Merhaba Berkay,<br><br>       <strong>"+__t(()=>($json.company
+})()}},"cred":null},"Send a message":{"name":"Send a message","t":"gmail","p":{"sendTo":__X(function($json,$,$input,$env,$execution,$binary,$itemIndex,$now,$node){return __t(()=>($('Bot Protection').first().json.recipient_email || ''
+))}),"subject":"Hazır Sekans","message":__X(function($json,$,$input,$env,$execution,$binary,$itemIndex,$now,$node){return "<!DOCTYPE html> <html> <head>   <meta charset=\"UTF-8\"> </head> <body style=\"margin: 0; padding: 0; background-color: #f3f4f6;\"> <div style=\"font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 640px; margin: 0 auto; background-color: #f9fafb; padding: 20px;\">    <!-- Header -->   <div style=\"background: linear-gradient(135deg, #6366F1, #8B5CF6); border-radius: 12px 12px 0 0; padding: 30px 25px; text-align: center;\">     <h1 style=\"color: #ffffff; margin: 0; font-size: 22px; font-weight: 700;\">SALES CORNER</h1>     <p style=\"color: #c7d2fe; margin: 8px 0 0; font-size: 13px;\">Sekans Yazımı — Otomatik Rapor</p>   </div>    <!-- Main Content -->   <div style=\"background-color: #ffffff; padding: 30px 25px; border-left: 1px solid #e5e7eb; border-right: 1px solid #e5e7eb;\">     <h2 style=\"color: #1f2937; margin: 0 0 20px; font-size: 18px;\">🎯 "+__t(()=>($json.company
+))+" için rapor hazır!</h2>      <p style=\"color: #4b5563; font-size: 14px; line-height: 1.6; margin: 0 0 20px;\">       Merhaba"+__t(()=>{const n=String($('Bot Protection').first().json.writer_name||'').replace(/[<>&"]/g,'').trim();return n?' '+n:'';})+",<br><br>       <strong>"+__t(()=>($json.company
 ))+"</strong> firması için ses kaydı analizi ve sekans yazımı tamamlandı. Sunum otomatik olarak Google Slides'ta oluşturuldu.     </p>      <!-- Info Cards -->     <table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" style=\"margin-bottom: 24px;\">       <tr>         <td style=\"background-color: #f0fdf4; border-left: 4px solid #10b981; padding: 12px 16px; border-radius: 6px; width: 48%;\">           <span style=\"color: #065f46; font-size: 11px; font-weight: 600; text-transform: uppercase;\">Şirket</span><br>           <span style=\"color: #1f2937; font-size: 14px; font-weight: 500;\">"+__t(()=>($json.company
 ))+"</span>         </td>         <td style=\"width: 4%;\"></td>         <td style=\"background-color: #eef2ff; border-left: 4px solid #6366f1; padding: 12px 16px; border-radius: 6px; width: 48%;\">           <span style=\"color: #4338ca; font-size: 11px; font-weight: 600; text-transform: uppercase;\">Durum</span><br>           <span style=\"color: #1f2937; font-size: 14px; font-weight: 500;\">✅ Tamamlandı</span>         </td>       </tr>     </table>      <!-- CTA Button -->     <div style=\"text-align: center; margin: 28px 0;\">       <a href=\""+__t(()=>($json.presentationUrl
 ))+"\" style=\"background: linear-gradient(135deg, #6366F1, #8B5CF6); color: #ffffff; text-decoration: none; padding: 14px 32px; border-radius: 8px; font-size: 15px; font-weight: 600; display: inline-block;\">         📊 Sunumu Görüntüle       </a>     </div>      <!-- Links -->     <div style=\"background-color: #f9fafb; border-radius: 8px; padding: 16px; margin-top: 16px;\">       <p style=\"color: #6b7280; font-size: 12px; margin: 0 0 8px;\">🔗 Hızlı Linkler:</p>       <p style=\"margin: 0; font-size: 13px;\">         <a href=\""+__t(()=>($json.presentationUrl
 ))+"\" style=\"color: #6366f1; text-decoration: none;\">Düzenleme Linki</a>         &nbsp;•&nbsp;         <a href=\""+__t(()=>($json.presentationViewUrl
-))+"\" style=\"color: #6366f1; text-decoration: none;\">Sunum Modu</a>       </p>     </div>   </div>    <!-- Footer -->   <div style=\"background-color: #1e1b4b; border-radius: 0 0 12px 12px; padding: 20px 25px; text-align: center;\">     <p style=\"color: #9ca3af; font-size: 11px; margin: 0;\">SAAS Corner • saascorner.co</p>     <p style=\"color: #6b7280; font-size: 10px; margin: 6px 0 0;\">Bu mail otomatik olarak oluşturulmuştur.</p>   </div>  </div> </body> </html>"}),"options":{}},"cred":"gmailOAuth2"},"If":{"name":"If","t":"if","p":{"conditions":{"options":{"caseSensitive":true,"leftValue":"","typeValidation":"strict","version":3},"conditions":[{"id":"d237f9f9-9e60-42e1-843d-4bcf14d97e58","leftValue":__X(function($json,$,$input,$env,$execution,$binary,$itemIndex,$now,$node){try{return ($json.error.status
+))+"\" style=\"color: #6366f1; text-decoration: none;\">Sunum Modu</a>       </p>     </div>   </div>    <!-- Footer -->   <div style=\"background-color: #1e1b4b; border-radius: 0 0 12px 12px; padding: 20px 25px; text-align: center;\">     <p style=\"color: #9ca3af; font-size: 11px; margin: 0;\">Sales Corner • salescorner.co</p>     <p style=\"color: #6b7280; font-size: 10px; margin: 6px 0 0;\">Bu mail otomatik olarak oluşturulmuştur.</p>   </div>  </div> </body> </html>"}),"options":{}},"cred":"gmailOAuth2"},"If":{"name":"If","t":"if","p":{"conditions":{"options":{"caseSensitive":true,"leftValue":"","typeValidation":"strict","version":3},"conditions":[{"id":"d237f9f9-9e60-42e1-843d-4bcf14d97e58","leftValue":__X(function($json,$,$input,$env,$execution,$binary,$itemIndex,$now,$node){try{return ($json.error.status
 )}catch(e){return undefined}}),"rightValue":403,"operator":{"type":"number","operation":"equals"}}],"combinator":"and"},"options":{}},"cred":null},"HTTP Request1":{"name":"HTTP Request1","t":"httpRequest","p":{"url":__X(function($json,$,$input,$env,$execution,$binary,$itemIndex,$now,$node){return "https://api.scraperapi.com?api_key=__ENV_SCRAPERAPI_KEY__&url="+__t(()=>($('Bot Protection').item.json.domain
 ))}),"options":{}},"cred":null},"Bot Protection":{"name":"Bot Protection","t":"code","p":{"code":async function($input,$,$json,$env,$execution,$itemIndex,helpers,Buffer,items,$node){return (async()=>{
 // Bot Protection & Input Validation v5
@@ -10798,7 +10811,7 @@ return {
     source_type: sourceType,
     pdf_text: pdfText,
     source_notes: sourceNotes,
-    writer_name: clean(body.writer_name) || 'Berkay',
+    writer_name: clean(body.writer_name) || '',
     recipient_email: clean(body.recipient_email),
     _validated: true,
     _timestamp: new Date().toISOString()
@@ -11947,9 +11960,9 @@ const data = $input.item.json;
 const bizimFirma = $('5. Profili Parse Et').first().json;
 
 const safeJoin = (arr, separator = ', ') => {
-  return Array.isArray(arr) ? arr.join(separator) : (arr || 'N/A');
+  return Array.isArray(arr) ? arr.join(separator) : (arr || '');
 };
-const safe = (value, fallback = 'N/A') => value || fallback;
+const safe = (value, fallback = '') => value || fallback;
 
 let prompt = `Sen 10 yıllık rakip analizi, GTM stratejisi ve satış battlecard uzmanı olarak KAPSAMLI bir karşılaştırmalı rapor hazırlayacaksın. Çıktı yönetim kurulu seviyesinde net, kanıt odaklı ve aksiyona dönük olmalı.
 
@@ -12044,7 +12057,7 @@ JSON formatında DETAYLI ver (\`\`\`json code block kullan):
       "sektor": "Sektör",
       "ana_hizmetler": "Ana hizmetler",
       "deger_onerisi": "Değer önerisi",
-      "pazar_payi": "Pazar payı veya N/A",
+      "pazar_payi": "Pazar payı; veri yoksa boş dize",
       "temel_guclu_yonler": "En önemli güçlü yönlerin özeti",
       "musteri_segmenti": "Rakibin hedef müşteri segmenti"
     }
@@ -12054,19 +12067,19 @@ JSON formatında DETAYLI ver (\`\`\`json code block kullan):
     "cms": "Kullandığı CMS (WordPress/Webflow/Custom vb.)",
     "hosting": "Hosting altyapısı",
     "analytics": "Analytics araçları",
-    "crm": "CRM sistemi veya N/A",
-    "chat": "Canlı destek / chatbot aracı veya N/A",
-    "email_marketing": "E-posta pazarlama aracı veya N/A",
-    "otomasyon": "Kullandığı otomasyon araçları veya N/A",
+    "crm": "CRM sistemi; veri yoksa boş dize",
+    "chat": "Canlı destek / chatbot aracı; veri yoksa boş dize",
+    "email_marketing": "E-posta pazarlama aracı; veri yoksa boş dize",
+    "otomasyon": "Kullandığı otomasyon araçları; veri yoksa boş dize",
     "site_hizi": "Sayfa hızı değerlendirmesi",
     "mobil_uyum": "Mobil uyumluluk durumu",
     "guvenlik": "SSL, güvenlik önlemleri"
   },
 
   "rakip_organizasyon": {
-    "calisan_sayisi": "Toplam çalışan veya N/A",
+    "calisan_sayisi": "Toplam çalışan; veri yoksa boş dize",
     "departman_dagilimi": "Satış, Mühendislik, Pazarlama vs. tahmini dağılım",
-    "yonetim_kadrosu": "Bilinen yönetim kadrosu veya N/A",
+    "yonetim_kadrosu": "Bilinen yönetim kadrosu; veri yoksa boş dize",
     "ise_alim_trendi": "Aktif iş ilanları, büyüme sinyalleri",
     "lokasyonlar": "Ofis lokasyonları",
     "sirket_kulturu": "LinkedIn/web üzerinden gözlemlenen şirket kültürü"
@@ -12245,12 +12258,12 @@ JSON formatında DETAYLI ver (\`\`\`json code block kullan):
   },
 
   "stratejik_scorecard": [
-    {"kriter": "Konumlandırma", "bizim_skor": "X/10", "rakip_skor": "X/10", "avantaj": "Biz/Rakip/Beraber", "yorum": "Kısa kanıtlı yorum"},
-    {"kriter": "Dijital görünürlük", "bizim_skor": "X/10", "rakip_skor": "X/10", "avantaj": "Biz/Rakip/Beraber", "yorum": "Kısa kanıtlı yorum"},
-    {"kriter": "Güven kanıtı", "bizim_skor": "X/10", "rakip_skor": "X/10", "avantaj": "Biz/Rakip/Beraber", "yorum": "Kısa kanıtlı yorum"},
-    {"kriter": "Fiyat/değer", "bizim_skor": "X/10", "rakip_skor": "X/10", "avantaj": "Biz/Rakip/Beraber", "yorum": "Kısa kanıtlı yorum"},
-    {"kriter": "Satış hunisi", "bizim_skor": "X/10", "rakip_skor": "X/10", "avantaj": "Biz/Rakip/Beraber", "yorum": "Kısa kanıtlı yorum"},
-    {"kriter": "Müşteri itibarı", "bizim_skor": "X/10", "rakip_skor": "X/10", "avantaj": "Biz/Rakip/Beraber", "yorum": "Kısa kanıtlı yorum"}
+    {"kriter": "Konumlandırma", "bizim_skor": "X/10", "rakip_skor": "X/10", "avantaj": "Biz/Rakip/Beraber", "yorum": "Kısa kanıtlı yorum", "gerekce": "Bu puanın 1-2 cümlelik somut nedeni", "gelistirme_onerisi": "Puanı yükseltmek için 1-2 cümlelik uygulanabilir öneri"},
+    {"kriter": "Dijital görünürlük", "bizim_skor": "X/10", "rakip_skor": "X/10", "avantaj": "Biz/Rakip/Beraber", "yorum": "Kısa kanıtlı yorum", "gerekce": "Bu puanın 1-2 cümlelik somut nedeni", "gelistirme_onerisi": "Puanı yükseltmek için 1-2 cümlelik uygulanabilir öneri"},
+    {"kriter": "Güven kanıtı", "bizim_skor": "X/10", "rakip_skor": "X/10", "avantaj": "Biz/Rakip/Beraber", "yorum": "Kısa kanıtlı yorum", "gerekce": "Bu puanın 1-2 cümlelik somut nedeni", "gelistirme_onerisi": "Puanı yükseltmek için 1-2 cümlelik uygulanabilir öneri"},
+    {"kriter": "Fiyat/değer", "bizim_skor": "X/10", "rakip_skor": "X/10", "avantaj": "Biz/Rakip/Beraber", "yorum": "Kısa kanıtlı yorum", "gerekce": "Bu puanın 1-2 cümlelik somut nedeni", "gelistirme_onerisi": "Puanı yükseltmek için 1-2 cümlelik uygulanabilir öneri"},
+    {"kriter": "Satış hunisi", "bizim_skor": "X/10", "rakip_skor": "X/10", "avantaj": "Biz/Rakip/Beraber", "yorum": "Kısa kanıtlı yorum", "gerekce": "Bu puanın 1-2 cümlelik somut nedeni", "gelistirme_onerisi": "Puanı yükseltmek için 1-2 cümlelik uygulanabilir öneri"},
+    {"kriter": "Müşteri itibarı", "bizim_skor": "X/10", "rakip_skor": "X/10", "avantaj": "Biz/Rakip/Beraber", "yorum": "Kısa kanıtlı yorum", "gerekce": "Bu puanın 1-2 cümlelik somut nedeni", "gelistirme_onerisi": "Puanı yükseltmek için 1-2 cümlelik uygulanabilir öneri"}
   ],
 
   "sales_battlecard": {
@@ -12290,10 +12303,10 @@ JSON formatında DETAYLI ver (\`\`\`json code block kullan):
 
 📋 VERİ KURALLARI:
 ✅ Yukarıdaki GERÇEK verileri ve ScrapingBee ile gelen iki taraf site sinyallerini kullan, hiçbir şey uydurma
-✅ "N/A" görülen yerlerde tahminde bulunma
+✅ Hiçbir alana N/A, n/a, bilinmiyor yazma; veri yoksa alanı boş dizi/boş dize bırak; tahmin edebiliyorsan 'tahmini' diye belirt
 ✅ Her öneri somut ve aksiyona dönüştürülebilir olmalı
 ✅ SWOT her kadran en az 5 madde
-✅ Aksiyon planı en az 8 aksiyon\n✅ Stratejik scorecard en az 6 kriter\n✅ Sales battlecard somut itiraz cevapları içermeli\n✅ Source audit en az 2 kritik iddia içermeli
+✅ Aksiyon planı en az 8 aksiyon\n✅ Stratejik scorecard en az 6 kriter; her kriterde "gerekce" (puanın somut nedeni) ve "gelistirme_onerisi" (puanı yükseltecek uygulanabilir adım) dolu olsun\n✅ Sales battlecard somut itiraz cevapları içermeli\n✅ Source audit en az 2 kritik iddia içermeli
 ✅ KPI en az 6 metrik
 
 ✂️ UZUNLUK VE CÜMLE KURALLARI (rapor sunuma dönüşür, kutular sabit boyuttadır):
@@ -12303,6 +12316,7 @@ JSON formatında DETAYLI ver (\`\`\`json code block kullan):
 ✅ Tablo hücreleri (bizim, rakip, hedef, siklik, teknoloji ve karşılaştırma değerleri): en fazla 120 karakter
 ✅ Profil özetleri ve firma profili alanları: her biri en fazla 160 karakterlik cümleler, toplam en fazla 4 cümle
 ✅ "detay" alanları: en fazla 160 karakter; "aciklama" alanları: en fazla 140 karakter
+✅ "gerekce" ve "gelistirme_onerisi": her biri 1-2 tam cümle, en fazla 160 karakter
 ✅ "itiraz" ve "cevap": her biri en fazla 90 karakter; "ozet_mesaj" ve "rakibe_karsi_ana_mesaj": en fazla 120 karakter
 ✅ Liste maddeleri (aksiyon, adım, karar, koşul, sinyal, soru): her biri en fazla 110 karakterlik tek cümle
 ✅ "rakip_adi" ve "firma_adi" alanlarına kısa marka adını yaz (parantez içi açıklama, unvan veya şirket türü eki ekleme)
@@ -12310,7 +12324,7 @@ JSON formatında DETAYLI ver (\`\`\`json code block kullan):
 📄 FORMAT KURALLARI:
 ✅ SADECE JSON ver, açıklama ekleme
 ✅ JSON'ı \`\`\`json code block içinde ver
-✅ Tüm field'ları doldur, boş bırakma
+✅ Veri olan her alanı doldur; veri yoksa uydurma, alanı boş dize veya boş dizi bırak
 
 ⚠️ UYARI: Eğer yanıtında Çince veya başka dil karakterleri varsa, YANLIŞ YAPIYORSUN! Sadece Latin alfabesi + Türkçe karakterler (ğüşıöçİĞÜŞÖÇ) kullan!`;
 
@@ -12387,7 +12401,7 @@ if (!parsed) {
 return { rapor: parsed };
 
 })()}},"cred":null},"15. Slides Data Builder":{"name":"15. Slides Data Builder","t":"code","p":{"code":async function($input,$,$json,$env,$execution,$itemIndex,helpers,Buffer,items,$node){return (async()=>{
-// 15. Slides Data Builder — v8 SAAS Corner şablonu (açık krem tema, 33 slayt)
+// 15. Slides Data Builder — v8 SAAS Corner şablonu (açık krem tema; slayt sayısı veriye göre, 2. sayfa içindekiler)
 const R = ($input.first().json && $input.first().json.rapor) || {};
 const es=R.executive_summary||{}, fp=R.firma_profilleri||{}, dk=R.detayli_karsilastirma||{};
 const swot=R.swot_analizi||{}, so=R.stratejik_oneriler||{}, ip=R.izleme_plani||{}, sonuc=R.sonuc_ve_tavsiyeler||{};
@@ -12399,21 +12413,24 @@ const sa=Array.isArray(R.source_audit)?R.source_audit:[];
 const biz=fp.bizim||{}, rak=fp.rakip||{};
 const hk=dk.hizmet_kapsami||{}, hp=dk.hedef_pazar||{}, fy=dk.fiyatlandirma||{}, md=dk.musteri_deneyimi||{}, dv=dk.dijital_varlik||{};
 
-const DATE = es.rapor_tarihi || new Date().toLocaleDateString("sv-SE", { timeZone: "Europe/Istanbul" });
-const RIVAL = String(es.rakip_adi || "Rakip");
-const BRAND = String(es.bizim_firma || "Firmamiz");
+// Boş sayılanlar: null, "", boş dizi, "N/A", "n/a", "(N/A)", "bilinmiyor", "yok", "-", "—"
+const __bos = (v) => { if (v == null) return true; if (typeof v === "object") return Array.isArray(v) ? !v.some(x => !__bos(x)) : false; const s = String(v).trim(); return !s || /^\(?\s*(?:n\s*\/\s*a|na|null|undefined|none|yok|veri yok|bilinmiyor|belirtilmemiş|-+|—|–)\s*\)?\.?$/i.test(s); };
+const DATE = (!__bos(es.rapor_tarihi) && es.rapor_tarihi) || new Date().toLocaleDateString("sv-SE", { timeZone: "Europe/Istanbul" });
+const RIVAL = String(__bos(es.rakip_adi) ? "Rakip" : es.rakip_adi);
+const BRAND = String(__bos(es.bizim_firma) ? "Firmamız" : es.bizim_firma);
 // Başlık/sütun için kısa ad: parantez içi açıklama ve şirket türü ekleri atılır ("Leodessa (LeoDessa Satış Geliştirme...)" → "Leodessa")
 const __kisaAd = (s) => { const o = String(s || "").trim(); let k = o.replace(/\s*[\(\[][^\)\]]*(?:[\)\]]|$)/g, " ").split(/\s+[–—|]\s+|\s+-\s+/)[0];
   k = k.replace(/\b(?:A\.?\s?Ş\.?|Ltd\.?|Şti\.?|San\.?|Tic\.?|Inc\.?|LLC|GmbH|Corp\.?|Co\.?)(?=\s|$)/gi, " ").replace(/\s+(?:ve|&)\s*$/i, "").replace(/[\s,.;:–\-]+$/, "").replace(/\s{2,}/g, " ").trim();
   if (k.length > 26) { const w = k.split(" "); let r = ""; for (const x of w) { if ((r + " " + x).trim().length > 26) break; r = (r + " " + x).trim(); } k = r || k.slice(0, 26); }
   return k || o.slice(0, 26) || "Rakip"; };
 const RIVAL_S = __kisaAd(RIVAL), BRAND_S = __kisaAd(BRAND);
-const TOTAL = 33;
 
-const safe = (v, fb) => (v === 0 ? "0" : (v || fb || "N/A"));
-const arr = (a) => Array.isArray(a) ? a.filter(x => x !== undefined && x !== null && String(x).trim() !== "") : [];
+const safe = (v, fb) => (v === 0 ? "0" : (__bos(v) ? (fb === undefined ? "" : fb) : v));
+// Türkçe büyük harf: i → İ (toUpperCase "İÇINDEKILER" yazıyordu)
+const __buyuk = (s) => String(s == null ? "" : s).replace(/i/g, "İ").toUpperCase();
+const arr = (a) => Array.isArray(a) ? a.filter(x => !__bos(x)) : [];
 // Kısaltma asla "…" ile bitmez: tam cümlede (yoksa virgülde) kesip noktayla kapatır
-const cut = (v, n) => __cumleKes(String(safe(v, " ")), n || 1600);
+const cut = (v, n) => { if (v !== 0 && __bos(v)) return ""; const s = Array.isArray(v) ? arr(v).map(x => typeof x === "object" ? asText(x) : String(x)).join(", ") : (typeof v === "object" ? asText(v) : String(v)); return s.trim() ? String(__cumleKes(s, n || 1600)).trim() : ""; };
 const asText = (it, keys) => { if (typeof it !== "object" || it === null) return String(it); for (const k of (keys||[])) { if (it[k]) return String(it[k]); } const vs = Object.values(it).filter(x => typeof x === "string"); return vs[0] || ""; };
 function score10(s){ const m = String(s==null?"":s).match(/(\d+(?:[.,]\d+)?)/); if(!m) return 0; let n=parseFloat(m[1].replace(",",".")); if(n>10 && n<=100) n=n/10; if(n>10)n=10; if(n<0)n=0; return n; }
 function threatPct(t){ t=String(t||"").toLowerCase(); if(t.indexOf("kritik")>-1)return 1; if(t.indexOf("çok")>-1||t.indexOf("cok")>-1)return .9; if(t.indexOf("yüksek")>-1||t.indexOf("yuksek")>-1)return .72; if(t.indexOf("orta")>-1)return .5; if(t.indexOf("minimal")>-1)return .15; if(t.indexOf("düşük")>-1||t.indexOf("dusuk")>-1)return .3; return .5; }
@@ -12463,7 +12480,7 @@ const round = (sid,x,y,w,h,fill,alpha,outline)=>shape(sid,"ROUND_RECTANGLE",x,y,
 const oval = (sid,x,y,w,h,fill,alpha,outline)=>shape(sid,"ELLIPSE",x,y,w,h,fill,alpha,outline);
 
 function text(sid,x,y,w,h,str,size,color,o){ o=o||{};
-  let t=(str===0?"0":(str||"")); t=String(t); if(t.length===0)t=" "; if(t.length>1900)t=t.slice(0,1900);
+  let t=(str===0?"0":(str||"")); t=String(t); if(!t.trim()) return null; if(t.length>1900)t=t.slice(0,1900);
   if(size<20 && TXT.has(color)) color=TXT.get(color);
   if(!o.noFit){ [t,size]=__fitTxt(t,size,w,h,{ font:(o.font||FB), bold:o.bold, ls:(o.ls||100), para:(o.spaceBelow||0), indent:(o.indent||0), grow:o.grow, maxFs:o.maxFs, strict:!!o.strict, min:o.min }); if(!t.trim())t=" "; }
   const id=ID();
@@ -12479,9 +12496,9 @@ function text(sid,x,y,w,h,str,size,color,o){ o=o||{};
   if(o.valign){ REQ.push({ updateShapeProperties:{ objectId:id, shapeProperties:{ contentAlignment:o.valign }, fields:"contentAlignment" } }); }
   return id; }
 function bullets(sid,x,y,w,h,items,size,color,o){ o=o||{};
-  const a=arr(items); const t=a.length? a.map(z=>__cumleKes(String(z),400)).join("\n") : " ";
-  const id=text(sid,x,y,w,h,t,size,color,{ font:(o.font||FB), ls:(o.ls||118), spaceBelow:(o.spaceBelow!==undefined?o.spaceBelow:5), bold:o.bold, align:o.align, indent:(a.length?0.3:0) });
-  if(a.length){ REQ.push({ createParagraphBullets:{ objectId:id, textRange:{ type:"ALL" }, bulletPreset:(o.preset||"BULLET_DISC_CIRCLE_SQUARE") } }); }
+  const a=arr(items).map(z=>String(__cumleKes(typeof z==="object"?asText(z):String(z),400)).trim()).filter(z=>z&&!__bos(z)); if(!a.length) return null; const t=a.join("\n");
+  const id=text(sid,x,y,w,h,t,size,color,{ font:(o.font||FB), ls:(o.ls||118), spaceBelow:(o.spaceBelow!==undefined?o.spaceBelow:5), bold:o.bold, align:o.align, indent:0.3 });
+  if(id){ REQ.push({ createParagraphBullets:{ objectId:id, textRange:{ type:"ALL" }, bulletPreset:(o.preset||"BULLET_DISC_CIRCLE_SQUARE") } }); }
   return id; }
 
 // ---- components ----
@@ -12499,7 +12516,7 @@ function logo(sid,x,y,fs){ fs=fs||9; const L=__logoBox(fs/72*6.1, fs/72*6.1*178/
   REQ.push({ createImage:{ objectId:ID(), url:L.url, elementProperties:{ pageObjectId:sid, size:{ width:{magnitude:E(w),unit:"EMU"}, height:{magnitude:E(h),unit:"EMU"} }, transform:{ scaleX:1, scaleY:1, translateX:E(x), translateY:E(y), unit:"EMU" } } } }); }
 function header(sid,kicker,title){
   logo(sid,0.55,0.3,9);
-  text(sid,1.55,0.36,6.4,0.22,String(kicker||"").toUpperCase(),8,C.muted,{bold:true,font:FH});
+  text(sid,1.55,0.36,6.4,0.22,__buyuk(kicker),8,C.muted,{bold:true,font:FH});
   text(sid,0.55,0.74,8.0,0.52,title,19,C.dark,{bold:true,font:FH});
   text(sid,8.15,0.3,1.3,0.24,"Sayfa "+("0"+SID.length).slice(-2),8.5,C.muted,{align:"END",font:FH});
 }
@@ -12510,13 +12527,13 @@ function footer(sid){
 function panel(sid,x,y,w,h,fill){ return round(sid,x,y,w,h,(fill||C.panel),1,{color:C.line,w:1}); }
 function cardHead(sid,x,y,w,label,accent){
   rect(sid,x,y+0.02,0.16,0.18,(accent||C.gold));
-  text(sid,x+0.26,y-0.04,w-0.4,0.3,String(label).toUpperCase(),10,(accent||C.gold),{bold:true,font:FH});
+  text(sid,x+0.26,y-0.04,w-0.4,0.3,__buyuk(label),10,(accent||C.gold),{bold:true,font:FH});
 }
 function chip(sid,x,y,w,h,label,fg,bg){ round(sid,x,y,w,h,bg,1,null); text(sid,x,y,w,h,label,8.5,fg,{bold:true,align:"CENTER",valign:"MIDDLE",font:FH}); }
 function miniBar(sid,x,y,w,h,pct,color){ round(sid,x,y,w,h,C.panel2,1,null); const fw=Math.max(0.06,w*Math.max(0,Math.min(1,pct))); round(sid,x,y,fw,h,color,1,null); }
 function stat(sid,x,y,w,h,value,label,accent){ panel(sid,x,y,w,h); rect(sid,x,y+0.1,0.06,h-0.2,(accent||C.gold));
   // Etiket üstte, değer altında kalan alana sığdırılır (üst üste binme olmasın)
-  text(sid,x+0.2,y+0.05,w-0.32,0.2,String(label).toUpperCase(),7,C.muted,{font:FH,bold:true});
+  text(sid,x+0.2,y+0.05,w-0.32,0.2,__buyuk(label),7,C.muted,{font:FH,bold:true});
   text(sid,x+0.2,y+0.24,w-0.32,Math.max(0.24,h-0.28),value,13,C.white,{bold:true,valign:"MIDDLE",font:FH}); }
 function vsBadge(sid,x,y){ oval(sid,x,y,0.62,0.62,C.gold,1,null); text(sid,x,y,0.62,0.62,"VS",13,C.dark,{bold:true,align:"CENTER",valign:"MIDDLE",font:FH}); }
 function duo(sid,y,h,lt,lbody,rt,rbody,lc,rc){
@@ -12532,8 +12549,8 @@ function duo(sid,y,h,lt,lbody,rt,rbody,lc,rc){
   text(sid,5.38,y+0.56,3.95,bh,rb,fs,C.ice,{ls:114,font:FB,min:fs});
 }
 // Tablo: tüm gövde hücreleri tek punto (tabloFs), başlık satırı da tek punto
-function tabloFs(rows,ws,head){ const it=[]; rows.forEach(r=>r.forEach((c,i)=>{ if(ws[i]) it.push({text:cut(c,420),fs:head?9:8.6,w:ws[i]-0.24,h:head?0.46:0.5,font:head?FH:FB,bold:!!head,ls:106}); })); return __ortakFs(it,{ls:106}); }
-function trow(sid,y,cells,ws,head,alt,fs){ let x=0.55; const h=head?0.46:0.5; const tot=ws.reduce((a,b)=>a+b,0);
+function tabloFs(rows,ws,head,rh){ const it=[]; rows.forEach(r=>r.forEach((c,i)=>{ if(ws[i]) it.push({text:cut(c,420),fs:head?9:8.6,w:ws[i]-0.24,h:head?0.46:(rh||0.5),font:head?FH:FB,bold:!!head,ls:106}); })); return __ortakFs(it,{ls:106}); }
+function trow(sid,y,cells,ws,head,alt,fs,rh){ let x=0.55; const h=rh||(head?0.46:0.5); const tot=ws.reduce((a,b)=>a+b,0);
   if(head){ round(sid,x,y,tot,h,C.panel2,1,null); } else if(alt){ rect(sid,x,y,tot,h,C.panel,0.6); }
   const f=fs||(head?9:8.6);
   cells.forEach((c,i)=>{ text(sid,x+0.14,y,ws[i]-0.24,h,cut(c,420),f,head?C.gold:C.ice,{bold:!!head,valign:"MIDDLE",font:head?FH:FB,ls:106,min:(fs?f:undefined)}); x+=ws[i]; });
@@ -12541,7 +12558,17 @@ function trow(sid,y,cells,ws,head,alt,fs){ let x=0.55; const h=head?0.46:0.5; co
 // Kardeş kutular (aynı boyutlu): hepsine sığan ortak punto
 function ofs(texts,fs,w,h,o){ o=o||{}; return __ortakFs(texts.map(t=>({text:t,fs:fs,w:w,h:h,font:o.font||FB,bold:!!o.bold})),{ls:o.ls||104}); }
 
-// ════════ SLIDE 1 — KAPAK ════════
+// ---- boş veri yardımcıları: boş alan/kart/satır çizilmez, "Etiket: " tek başına kalmaz ----
+const pick = (...vs) => { for (const v of vs) if (!__bos(v)) return v; return ""; };
+const lbl = (l, v) => { const x = String(safe(v, "")); return x.trim() === "" ? "" : l + ": " + x; };
+const J = (parts, sep) => parts.filter(x => x != null && String(x).trim() !== "").join(sep === undefined ? "\n" : sep);
+const __dolu = (v) => Array.isArray(v) ? v.some(__dolu) : (v && typeof v === "object") ? Object.values(v).some(__dolu) : !__bos(v);
+const has = (...vs) => vs.some(__dolu);
+// Bölüm slaytı: başlık + alt bilgi + içindekiler kaydı (sayfa no gerçek sıradan gelir)
+const TOC = [];
+function sec(kicker, title) { const id = newSlide(C.bg); header(id, kicker, title); footer(id); TOC.push({ t: title, p: SID.length }); return id; }
+
+// ════════ KAPAK ════════
 let s=newSlide(C.bg);
 oval(s,6.9,0.9,2.6,2.6,C.gold,0.9,null); oval(s,7.75,2.75,1.3,1.3,C.us,0.85,null);
 logo(s,0.6,0.42,11);
@@ -12555,182 +12582,167 @@ text(s,0.6,4.08,6.6,0.28,"Çift taraflı web verisi + AI destekli stratejik isti
 text(s,0.6,4.72,6,0.26,"Hazırlayan: "+BRAND_S,10,C.dark,{bold:true,font:FH});
 text(s,0.6,4.98,6,0.26,"Tarih : "+DATE+"   ·   GİZLİ",10,C.dark,{font:FH});
 
-// ════════ SLIDE 2 — YÖNETİCİ ÖZETİ ════════
-s=newSlide(C.bg); header(s,"Genel Değerlendirme","Yönetici Özeti"); footer(s);
-panel(s,0.55,1.5,5.55,1.7); cardHead(s,0.75,1.66,5.2,"Rakip Profili",C.them);
-text(s,0.78,2.04,5.1,1.1,cut(es.rakip_profil_ozeti,520),9.5,C.ice,{ls:116,font:FB});
-const tp=threatPct(es.tehdit_seviyesi); const tc=(tp>=.85?C.red:tp>=.6?C.orange:tp>=.4?C.gold:C.green);
-panel(s,6.35,1.5,3.1,1.7); cardHead(s,6.55,1.66,2.8,"Tehdit Seviyesi",tc);
-text(s,6.55,2.0,2.7,0.48,safe(es.tehdit_seviyesi),18,C.white,{bold:true,font:FH,valign:"MIDDLE"});
-miniBar(s,6.55,2.56,2.6,0.16,tp,tc);
-text(s,6.55,2.8,2.7,0.3,"Önem: "+safe(es.onem_derecesi),9,C.muted,{font:FB});
-panel(s,0.55,3.32,8.9,1.08); cardHead(s,0.75,3.44,8.5,"Stratejik Değerlendirme",C.gold);
-text(s,0.78,3.74,8.6,0.62,cut(es.genel_degerlendirme,640),9.5,C.ice,{ls:114,font:FB});
-stat(s,0.55,4.5,2.86,0.68,safe(es.bizim_sektor),"Sektör",C.us);
-stat(s,3.57,4.5,2.86,0.68,safe(dq.genel_guven_skoru),"Veri Güven Skoru",C.blue);
-stat(s,6.59,4.5,2.86,0.68,safe(es.onem_derecesi),"Önem Derecesi",C.gold);
+// ════════ İÇİNDEKİLER (2. sayfa; maddeler en sonda gerçek slaytlardan yazılır) ════════
+const tocId=newSlide(C.bg); header(tocId,"İçindekiler","Rapor Akışı"); footer(tocId);
 
-// ════════ SLIDE 3 — İÇİNDEKİLER ════════
-s=newSlide(C.bg); header(s,"İçindekiler","Rapor Akışı"); footer(s);
-const agenda=["Yönetici Özeti","Stratejik Scorecard","Firma Profilleri","Rakip — Kurumsal","Rakip — Ürün & Hizmet","Rakip — Teknoloji","Rakip — Organizasyon","Detaylı Karşılaştırma","Pazar & Müşteri","Dijital Varlık","SEO & Trafik","Sosyal Medya","İçerik & Brand Voice","Teknoloji Stack","Fiyatlandırma","Müşteri Deneyimi","Müşteri Yolculuğu","SWOT Analizi","Konumlandırma Haritası","Sales Battlecard","Neden Biz?","Stratejik Öneriler","Yol Haritası","Aksiyon Planı","KPI & İzleme","Risk Değerlendirmesi","Sonuç & Tavsiyeler","Metodoloji"];
-agenda.forEach((it,i)=>{ const col=i<14?0:1; const row=col===0?i:i-14; const x=col===0?0.6:5.0; const y=1.55+row*0.255;
-  text(s,x,y,0.5,0.24,("0"+(i+1)).slice(-2),9,C.gold,{bold:true,font:FH});
-  text(s,x+0.5,y,3.9,0.24,it,9.5,C.ice,{font:FB}); });
+// ════════ YÖNETİCİ ÖZETİ (her zaman) ════════
+s=sec("Genel Değerlendirme","Yönetici Özeti");
+{ const rp=cut(es.rakip_profil_ozeti,520), tsv=String(safe(es.tehdit_seviyesi,"")), tac=cut(es.tehdit_aciklamasi,120), gd=cut(es.genel_degerlendirme,640);
+  const st=[[safe(es.bizim_sektor,""),"Sektör",C.us],[safe(dq.genel_guven_skoru,""),"Veri Güven Skoru",C.blue],[safe(es.onem_derecesi,""),"Önem Derecesi",C.gold]].filter(x=>String(x[0]).trim()!=="");
+  let y=1.5;
+  if(rp||tsv||tac){ const tw2=(tsv||tac)?(rp?3.1:8.9):0, rw=rp?(tw2?5.55:8.9):0;
+    if(rp){ panel(s,0.55,y,rw,1.7); cardHead(s,0.75,y+0.16,rw-0.35,"Rakip Profili",C.them); text(s,0.78,y+0.54,rw-0.45,1.1,rp,9.5,C.ice,{ls:116,font:FB}); }
+    if(tw2){ const x=rp?6.35:0.55, tp=threatPct(tsv), tc=(tp>=.85?C.red:tp>=.6?C.orange:tp>=.4?C.gold:C.green);
+      panel(s,x,y,tw2,1.7); cardHead(s,x+0.2,y+0.16,tw2-0.3,"Tehdit Seviyesi",tc);
+      if(tsv){ text(s,x+0.2,y+0.5,tw2-0.4,0.42,tsv,18,C.white,{bold:true,font:FH,valign:"MIDDLE"}); miniBar(s,x+0.2,y+0.98,tw2-0.5,0.14,tp,tc); }
+      if(tac) text(s,x+0.2,tsv?y+1.16:y+0.5,tw2-0.4,tsv?0.5:1.1,tac,8,C.muted,{font:FB,ls:106}); }
+    y+=1.82; }
+  if(gd){ panel(s,0.55,y,8.9,1.08); cardHead(s,0.75,y+0.12,8.5,"Stratejik Değerlendirme",C.gold); text(s,0.78,y+0.42,8.6,0.62,gd,9.5,C.ice,{ls:114,font:FB}); y+=1.18; }
+  if(st.length){ const w=(8.9-(st.length-1)*0.16)/st.length; st.forEach((x,i)=>stat(s,0.55+i*(w+0.16),y,w,0.68,x[0],x[1],x[2])); }
+  if(!rp&&!tsv&&!tac&&!gd&&!st.length){ panel(s,0.55,1.6,8.9,1.0); text(s,0.8,1.6,8.4,1.0,"Bu rapor için özet verisi oluşmadı.",11,C.muted,{font:FB,valign:"MIDDLE"}); } }
 
-// ════════ SLIDE 4 — FİRMA PROFİLLERİ ════════
-s=newSlide(C.bg); header(s,"Firma Profilleri","Yan Yana Karşılaştırma"); footer(s);
-panel(s,0.55,1.5,4.3,3.6); rect(s,0.55,1.5,4.3,0.5,C.us);
-text(s,0.78,1.5,4.0,0.5,BRAND_S+"  (Biz)",12,C.dark,{bold:true,valign:"MIDDLE",font:FH});
-const usRows=[["Website",safe(biz.website||es.bizim_website)],["Sektör",safe(biz.sektor||es.bizim_sektor)],["Hizmetler",safe(biz.ana_hizmetler||es.bizim_hizmetler)],["Değer Önerisi",safe(biz.deger_onerisi||es.bizim_deger_onerisi)],["Müşteri Segmenti",safe(biz.musteri_segmenti)],["Pazar Payı",safe(biz.pazar_payi)]];
-const thRows=[["Website",safe(rak.website||es.rakip_website)],["Sektör",safe(rak.sektor)],["Hizmetler",safe(rak.ana_hizmetler)],["Değer Önerisi",safe(rak.deger_onerisi)],["Müşteri Segmenti",safe(rak.musteri_segmenti)],["Güçlü Yönler",safe(rak.temel_guclu_yonler)]];
-// İki profil kartının tüm değerleri tek punto
-const pfFs=ofs(usRows.concat(thRows).map(r=>cut(r[1],150)),8.5,2.5,0.42);
-usRows.forEach((r,i)=>{ const y=2.18+i*0.47; text(s,0.78,y,1.45,0.42,r[0],8,C.us,{bold:true,font:FH}); text(s,2.2,y,2.5,0.42,cut(r[1],150),pfFs,C.ice,{font:FB,ls:104,min:pfFs}); });
-vsBadge(s,4.69,3.0);
-panel(s,5.15,1.5,4.3,3.6); rect(s,5.15,1.5,4.3,0.5,C.them);
-text(s,5.38,1.5,4.0,0.5,RIVAL_S+"  (Rakip)",12,C.dark,{bold:true,valign:"MIDDLE",font:FH});
-thRows.forEach((r,i)=>{ const y=2.18+i*0.47; text(s,5.38,y,1.45,0.42,r[0],8,C.them,{bold:true,font:FH}); text(s,6.8,y,2.5,0.42,cut(r[1],150),pfFs,C.ice,{font:FB,ls:104,min:pfFs}); });
-
-// ════════ SLIDE 5 — STRATEJİK SCORECARD ════════
-s=newSlide(C.bg); header(s,"Stratejik Scorecard","Çok Kriterli Puanlama"); footer(s);
-chip(s,3.15,1.37,1.0,0.22,"BİZ",C.dark,C.us); chip(s,4.25,1.37,1.0,0.22,"RAKİP",C.paper,C.them);
-const scRows=sc.slice(0,5).map(r=>({k:safe(r.kriter),u:score10(r.bizim_skor),t:score10(r.rakip_skor),av:safe(r.avantaj,"")}));
+// ════════ STRATEJİK SCORECARD ════════
+const scR=sc.filter(r=>r&&typeof r==="object"&&!__bos(r.kriter)).slice(0,6);
+const scRows=scR.filter(r=>!__bos(r.bizim_skor)||!__bos(r.rakip_skor)).map(r=>({k:safe(r.kriter),u:score10(r.bizim_skor),t:score10(r.rakip_skor),av:String(safe(r.avantaj,""))}));
 if(scRows.length){
-  let uSum=0,tSum=0;
-  scRows.forEach((r,i)=>{ const y=1.62+i*0.56; uSum+=r.u; tSum+=r.t;
-    text(s,0.6,y,2.45,0.5,r.k,9,C.ice,{bold:true,valign:"MIDDLE",font:FB});
+  s=sec("Çok Kriterli Puanlama","Stratejik Scorecard");
+  chip(s,3.15,1.37,1.0,0.22,"BİZ",C.dark,C.us); chip(s,4.25,1.37,1.0,0.22,"RAKİP",C.paper,C.them);
+  const st=Math.min(0.56,2.82/scRows.length); let uSum=0,tSum=0;
+  scRows.forEach((r,i)=>{ const y=1.62+i*st; uSum+=r.u; tSum+=r.t;
+    text(s,0.6,y,2.45,Math.min(0.5,st),r.k,9,C.ice,{bold:true,valign:"MIDDLE",font:FB});
     miniBar(s,3.15,y+0.05,3.35,0.14,r.u/10,C.us); text(s,6.56,y-0.01,0.5,0.26,r.u.toFixed(1),9,C.us,{bold:true,font:FH});
     miniBar(s,3.15,y+0.25,3.35,0.14,r.t/10,C.them); text(s,6.56,y+0.19,0.5,0.26,r.t.toFixed(1),9,C.them,{bold:true,font:FH});
-    chip(s,7.2,y+0.05,2.2,0.3,(r.av||"-"),(avColor(r.av)===C.muted?C.paper:C.dark),avColor(r.av));
+    if(r.av.trim()) chip(s,7.2,y+0.05,2.2,0.3,r.av,(avColor(r.av)===C.muted?C.paper:C.dark),avColor(r.av));
   });
   const ua=uSum/scRows.length, ta=tSum/scRows.length;
   panel(s,0.55,4.5,8.9,0.66);
   text(s,0.78,4.5,3,0.66,"GENEL ORTALAMA",10,C.gold,{bold:true,valign:"MIDDLE",font:FH});
   text(s,3.5,4.5,2.6,0.66,"Biz  "+ua.toFixed(1)+" / 10",12,C.us,{bold:true,valign:"MIDDLE",font:FH});
   text(s,6.1,4.5,3.2,0.66,"Rakip  "+ta.toFixed(1)+" / 10",12,C.them,{bold:true,valign:"MIDDLE",font:FH});
-} else {
-  panel(s,0.55,1.6,8.9,3.4);
-  text(s,0.8,1.9,8.4,3.0,"Tehdit Seviyesi: "+safe(es.tehdit_seviyesi)+"\nÖnem: "+safe(es.onem_derecesi)+"\n\n"+cut(es.tehdit_aciklamasi,900),11,C.ice,{ls:124,font:FB});
 }
 
-// ════════ SLIDE 6 — RAKİP KURUMSAL ════════
-s=newSlide(C.bg); header(s,"Rakip Detay","Kurumsal Profil — "+RIVAL_S); footer(s);
-const corp=[["Website",safe(rak.website||es.rakip_website)],["Sektör",safe(rak.sektor)],["Değer Önerisi",safe(rak.deger_onerisi)],["Hizmetler",safe(rak.ana_hizmetler)],["Müşteri Segmenti",safe(rak.musteri_segmenti)],["Pazar Payı",safe(rak.pazar_payi)]];
-const corpFs=ofs(corp.map(r=>cut(r[1],260)),9.5,4.05,0.52,{ls:112});
-corp.forEach((r,i)=>{ const col=i%2; const rw=Math.floor(i/2); const x=col===0?0.55:5.05; const y=1.55+rw*1.12; panel(s,x,y,4.4,0.98); rect(s,x,y+0.12,0.06,0.74,C.them); text(s,x+0.2,y+0.14,4.0,0.24,r[0].toUpperCase(),8.5,C.them,{bold:true,font:FH}); text(s,x+0.2,y+0.4,4.05,0.52,cut(r[1],260),corpFs,C.ice,{font:FB,ls:112,min:corpFs}); });
+// ════════ PUAN GEREKÇELERİ VE GELİŞTİRME ÖNERİLERİ ════════
+const grR=scR.map(r=>[String(safe(r.kriter)),cut(r.gerekce,200),cut(r.gelistirme_onerisi,200)]).filter(r=>r[1]||r[2]);
+if(grR.length){
+  s=sec("Stratejik Scorecard","Puan Gerekçeleri ve Geliştirme Önerileri");
+  const gw=[1.7,3.6,3.6], gh=["Kriter","Neden bu puan","Geliştirme önerisi"];
+  trow(s,1.5,gh,gw,true,false,tabloFs([gh],gw,true));
+  const rh=Math.min(0.72,3.2/grR.length), gFs=tabloFs(grR,gw,false,rh);
+  grR.forEach((r,i)=>trow(s,1.98+i*rh,r,gw,false,i%2===0,gFs,rh));
+}
 
-// ════════ SLIDE 7 — RAKİP ÜRÜN & HİZMET ════════
-s=newSlide(C.bg); header(s,"Rakip Detay","Ürün & Hizmet"); footer(s);
-duo(s,1.5,1.65,"Rakibin Güçlü Hizmetleri",safe(hk.rakip_guclu),"Rakibin Zayıf Alanları",safe(hk.rakip_zayif),C.them,C.orange);
-duo(s,3.35,1.65,"Bizim Güçlü Hizmetlerimiz",safe(hk.bizim_guclu),"Bizim Geliştirme Alanlarımız",safe(hk.bizim_zayif),C.us,C.blue);
+// ════════ FİRMA PROFİLLERİ (eski "Kurumsal Profil" bu slayta katıldı) ════════
+const usRows=[["Website",pick(biz.website,es.bizim_website)],["Sektör",pick(biz.sektor,es.bizim_sektor)],["Hizmetler",pick(biz.ana_hizmetler,es.bizim_hizmetler)],["Değer Önerisi",pick(biz.deger_onerisi,es.bizim_deger_onerisi)],["Müşteri Segmenti",biz.musteri_segmenti],["Pazar Payı",biz.pazar_payi]].map(r=>[r[0],cut(r[1],150)]).filter(r=>r[1]);
+const thRows=[["Website",pick(rak.website,es.rakip_website)],["Sektör",rak.sektor],["Hizmetler",rak.ana_hizmetler],["Değer Önerisi",rak.deger_onerisi],["Müşteri Segmenti",rak.musteri_segmenti],["Pazar Payı",rak.pazar_payi],["Güçlü Yönler",rak.temel_guclu_yonler]].map(r=>[r[0],cut(r[1],150)]).filter(r=>r[1]);
+if(usRows.length||thRows.length){
+  s=sec("Yan Yana Karşılaştırma","Firma Profilleri");
+  const n=Math.max(usRows.length,thRows.length), st=Math.min(0.47,2.86/n), vh=st-0.05;
+  const pfFs=ofs(usRows.concat(thRows).map(r=>r[1]),8.5,2.6,vh);
+  panel(s,0.55,1.5,4.3,3.6); rect(s,0.55,1.5,4.3,0.5,C.us);
+  text(s,0.78,1.5,4.0,0.5,BRAND_S+"  (Biz)",12,C.dark,{bold:true,valign:"MIDDLE",font:FH});
+  usRows.forEach((r,i)=>{ const y=2.18+i*st; text(s,0.78,y,1.3,vh,r[0],8,C.us,{bold:true,font:FH}); text(s,2.1,y,2.6,vh,r[1],pfFs,C.ice,{font:FB,ls:104,min:pfFs}); });
+  vsBadge(s,4.69,3.0);
+  panel(s,5.15,1.5,4.3,3.6); rect(s,5.15,1.5,4.3,0.5,C.them);
+  text(s,5.38,1.5,4.0,0.5,RIVAL_S+"  (Rakip)",12,C.dark,{bold:true,valign:"MIDDLE",font:FH});
+  thRows.forEach((r,i)=>{ const y=2.18+i*st; text(s,5.38,y,1.3,vh,r[0],8,C.them,{bold:true,font:FH}); text(s,6.7,y,2.6,vh,r[1],pfFs,C.ice,{font:FB,ls:104,min:pfFs}); });
+}
 
-// ════════ SLIDE 8 — RAKİP TEKNOLOJİ ════════
-s=newSlide(C.bg); header(s,"Rakip Detay","Teknoloji Altyapısı"); footer(s);
-const tech=[["CMS",safe(rTek.cms)],["Hosting",safe(rTek.hosting)],["Analytics",safe(rTek.analytics)],["CRM",safe(rTek.crm)],["Canlı Destek",safe(rTek.chat)],["E-posta Pzl.",safe(rTek.email_marketing)],["Site Hızı",safe(rTek.site_hizi)],["Güvenlik",safe(rTek.guvenlik)]];
-const techFs=ofs(tech.map(r=>cut(r[1],120)),9,2.25,0.52);
-tech.forEach((r,i)=>{ const col=i%2; const rw=Math.floor(i/2); const x=col===0?0.55:5.05; const y=1.5+rw*0.84; panel(s,x,y,4.4,0.72); rect(s,x,y+0.1,0.06,0.52,C.purple); text(s,x+0.2,y+0.1,1.9,0.52,r[0].toUpperCase(),8.5,C.purple,{bold:true,valign:"MIDDLE",font:FH}); text(s,x+2.0,y+0.1,2.25,0.52,cut(r[1],120),techFs,C.ice,{valign:"MIDDLE",font:FB,ls:104,min:techFs}); });
+// ════════ ÜRÜN & HİZMET ════════
+{ const d1=has(hk.rakip_guclu,hk.rakip_zayif), d2=has(hk.bizim_guclu,hk.bizim_zayif);
+  if(d1||d2){ s=sec("Hizmet Kapsamı","Ürün & Hizmet");
+    const h=(d1&&d2)?1.65:3.5; let y=1.5;
+    if(d1){ duo(s,y,h,"Rakibin Güçlü Hizmetleri",hk.rakip_guclu,"Rakibin Zayıf Alanları",hk.rakip_zayif,C.them,C.orange); y=3.35; }
+    if(d2){ duo(s,y,h,"Bizim Güçlü Hizmetlerimiz",hk.bizim_guclu,"Bizim Geliştirme Alanlarımız",hk.bizim_zayif,C.us,C.blue); } } }
 
-// ════════ SLIDE 9 — RAKİP ORGANİZASYON ════════
-s=newSlide(C.bg); header(s,"Rakip Organizasyon",RIVAL_S); footer(s);
-const org=[["Çalışan Sayısı",safe(rOrg.calisan_sayisi)],["Lokasyonlar",safe(rOrg.lokasyonlar)],["Departman Dağılımı",safe(rOrg.departman_dagilimi)],["Yönetim Kadrosu",safe(rOrg.yonetim_kadrosu)],["İşe Alım Trendi",safe(rOrg.ise_alim_trendi)],["Şirket Kültürü",safe(rOrg.sirket_kulturu)]];
-const orgFs=ofs(org.map(r=>cut(r[1],260)),9.5,4.05,0.52,{ls:112});
-org.forEach((r,i)=>{ const col=i%2; const rw=Math.floor(i/2); const x=col===0?0.55:5.05; const y=1.55+rw*1.12; panel(s,x,y,4.4,0.98); rect(s,x,y+0.12,0.06,0.74,C.us); text(s,x+0.2,y+0.14,4.0,0.24,r[0].toUpperCase(),8.5,C.us,{bold:true,font:FH}); text(s,x+0.2,y+0.4,4.05,0.52,cut(r[1],260),orgFs,C.ice,{font:FB,ls:112,min:orgFs}); });
+// ════════ RAKİP ORGANİZASYON ════════
+const org=[["Çalışan Sayısı",rOrg.calisan_sayisi],["Lokasyonlar",rOrg.lokasyonlar],["Departman Dağılımı",rOrg.departman_dagilimi],["Yönetim Kadrosu",rOrg.yonetim_kadrosu],["İşe Alım Trendi",rOrg.ise_alim_trendi],["Şirket Kültürü",rOrg.sirket_kulturu]].map(r=>[r[0],cut(r[1],260)]).filter(r=>r[1]);
+if(org.length){
+  s=sec("Rakip Detay","Organizasyon — "+RIVAL_S);
+  const orgFs=ofs(org.map(r=>r[1]),9.5,4.05,0.52,{ls:112});
+  org.forEach((r,i)=>{ const col=i%2; const rw=Math.floor(i/2); const x=col===0?0.55:5.05; const y=1.55+rw*1.12; panel(s,x,y,4.4,0.98); rect(s,x,y+0.12,0.06,0.74,C.us); text(s,x+0.2,y+0.14,4.0,0.24,__buyuk(r[0]),8.5,C.us,{bold:true,font:FH}); text(s,x+0.2,y+0.4,4.05,0.52,r[1],orgFs,C.ice,{font:FB,ls:112,min:orgFs}); });
+}
 
-// ════════ SLIDE 10 — DETAYLI KARŞILAŞTIRMA ════════
-s=newSlide(C.bg); header(s,"Detaylı Karşılaştırma","Kriter Bazlı"); footer(s);
-const cw=[2.0,3.45,3.45];
-const headC=["Kriter",BRAND_S,RIVAL_S];
-trow(s,1.5,headC,cw,true,false,tabloFs([headC],cw,true));
-const rowsC=[["Hizmet Kapsamı",safe(hk.bizim_guclu),safe(hk.rakip_guclu)],["Geliştirme Alanları",safe(hk.bizim_zayif),safe(hk.rakip_zayif)],["Hedef Pazar",safe(hp.bizim_odak),safe(hp.rakip_odak)],["Fiyatlandırma",safe(fy.bizim_pozisyon),safe(fy.rakip_pozisyon)],["Müşteri Deneyimi",safe(md.bizim_durum),safe(md.rakip_durum)],["Dijital Varlık",safe(dv.seo_karsilastirma),safe(dv.sosyal_medya_karsilastirma)]].map(r=>r.map(c=>cut(c,300)));
-const cFs=tabloFs(rowsC,cw,false);
-rowsC.forEach((r,i)=>trow(s,2.04+i*0.52,r,cw,false,i%2===0,cFs));
+// ════════ DETAYLI KARŞILAŞTIRMA ════════
+const rowsC=[["Hizmet Kapsamı",hk.bizim_guclu,hk.rakip_guclu],["Geliştirme Alanları",hk.bizim_zayif,hk.rakip_zayif],["Hedef Pazar",hp.bizim_odak,hp.rakip_odak],["Fiyatlandırma",fy.bizim_pozisyon,fy.rakip_pozisyon],["Müşteri Deneyimi",md.bizim_durum,md.rakip_durum],["İletişim Tonu",ibv.bizim_ton,ibv.rakip_ton]].map(r=>[r[0],cut(r[1],300),cut(r[2],300)]).filter(r=>r[1]||r[2]);
+if(rowsC.length){
+  s=sec("Kriter Bazlı","Detaylı Karşılaştırma");
+  const cw=[2.0,3.45,3.45], headC=["Kriter",BRAND_S,RIVAL_S];
+  trow(s,1.5,headC,cw,true,false,tabloFs([headC],cw,true));
+  const cFs=tabloFs(rowsC,cw,false);
+  rowsC.forEach((r,i)=>trow(s,2.04+i*0.52,r,cw,false,i%2===0,cFs));
+}
 
-// ════════ SLIDE 11 — PAZAR & MÜŞTERİ ════════
-s=newSlide(C.bg); header(s,"Pazar & Müşteri","Segment Analizi"); footer(s);
-duo(s,1.5,1.7,"Bizim Avantajlı Segmentler",safe(hp.bizim_avantajli_segmentler),"Rakibin Dominant Segmentleri",safe(hp.rakip_dominant_segmentler),C.us,C.them);
-panel(s,0.55,3.4,8.9,1.5); cardHead(s,0.75,3.55,8.5,"Fiyat & Değer Karşılaştırma",C.gold);
-text(s,0.78,3.95,8.6,0.95,"Fiyat farkı: "+safe(fy.fiyat_farki)+"\n"+cut(fy.deger_karsilastirma,520),9.5,C.ice,{ls:116,font:FB});
+// ════════ PAZAR & MÜŞTERİ (fiyat paneli Fiyatlandırma slaytında) ════════
+{ const dS=has(hp.bizim_avantajli_segmentler,hp.rakip_dominant_segmentler), oS=cut(hp.ortak_segmentler,520);
+  if(dS||oS){ s=sec("Segment Analizi","Pazar & Müşteri");
+    if(dS) duo(s,1.5,oS?1.7:3.5,"Bizim Avantajlı Segmentler",hp.bizim_avantajli_segmentler,"Rakibin Dominant Segmentleri",hp.rakip_dominant_segmentler,C.us,C.them);
+    if(oS){ const y=dS?3.4:1.5, ph=dS?1.5:3.5; panel(s,0.55,y,8.9,ph); cardHead(s,0.75,y+0.15,8.5,"Ortak Segmentler",C.gold); text(s,0.78,y+0.52,8.6,ph-0.6,oS,9.5,C.ice,{ls:116,font:FB}); } } }
 
-// ════════ SLIDE 12 — DİJİTAL VARLIK ════════
-s=newSlide(C.bg); header(s,"Dijital Varlık","Online Görünürlük"); footer(s);
-const dsec=[["SEO Karşılaştırma",safe(dv.seo_karsilastirma),C.us],["Sosyal Medya",safe(dv.sosyal_medya_karsilastirma),C.blue],["İçerik Stratejisi",safe(dv.icerik_stratejisi),C.gold]];
-const dFs=ofs(dsec.map(d=>cut(d[1],620)),9.3,8.5,0.66,{ls:112});
-dsec.forEach((d,i)=>{ const y=1.5+i*1.2; panel(s,0.55,y,8.9,1.1); rect(s,0.55,y+0.12,0.07,0.86,d[2]); text(s,0.8,y+0.12,8,0.26,d[0].toUpperCase(),10,d[2],{bold:true,font:FH}); text(s,0.8,y+0.4,8.5,0.66,cut(d[1],620),dFs,C.ice,{ls:112,font:FB,min:dFs}); });
+// ════════ SEO & SOSYAL MEDYA (eski Dijital Varlık + SEO + Sosyal tek slayt) ════════
+if(has(dv.seo_karsilastirma,dv.sosyal_medya_karsilastirma)){
+  s=sec("Online Görünürlük","SEO & Sosyal Medya");
+  duo(s,1.5,3.55,"SEO & Organik Trafik",dv.seo_karsilastirma,"Sosyal Medya",dv.sosyal_medya_karsilastirma,C.us,C.blue);
+}
 
-// ════════ SLIDE 13 — SEO & TRAFİK ════════
-s=newSlide(C.bg); header(s,"SEO & Trafik","Organik Görünürlük"); footer(s);
-panel(s,0.55,1.5,8.9,3.5); cardHead(s,0.78,1.66,8.4,"SEO Analizi",C.us);
-text(s,0.8,2.12,8.6,2.8,cut(dv.seo_karsilastirma,1700),10.5,C.ice,{ls:122,font:FB,grow:1.45,maxFs:14.5});
+// ════════ İÇERİK & BRAND VOICE ════════
+{ const ibB=J([lbl("Türler",ibv.bizim_icerik_turleri),lbl("Sıklık",ibv.bizim_paylasim_sikligi)]), ibR=J([lbl("Türler",ibv.rakip_icerik_turleri),lbl("Sıklık",ibv.rakip_paylasim_sikligi)]);
+  const icT=J([cut(dv.icerik_stratejisi,320),cut(ibv.icerik_kalitesi_karsilastirma,320)]), icF=arr(ibv.icerik_firsatlari).slice(0,3);
+  if(ibB||ibR||icT||icF.length){ s=sec("İletişim ve İçerik","İçerik & Brand Voice"); let y=1.5;
+    if(ibB||ibR){ duo(s,1.5,(icT||icF.length)?1.4:3.5,BRAND_S,ibB,RIVAL_S,ibR,C.us,C.them); y=3.02; }
+    if(icT||icF.length){ const ph=5.12-y; panel(s,0.55,y,8.9,ph); cardHead(s,0.75,y+0.14,8.5,"İçerik Stratejisi & Fırsatlar",C.gold);
+      const by=y+0.48, bh=ph-0.54;
+      if(icT&&icF.length){ const th=bh*0.46; text(s,0.78,by,8.6,th,icT,9.3,C.ice,{ls:110,font:FB}); bullets(s,0.78,by+th+0.04,8.6,bh-th-0.04,icF,9,C.ice,{}); }
+      else if(icT) text(s,0.78,by,8.6,bh,icT,9.5,C.ice,{ls:112,font:FB});
+      else bullets(s,0.78,by,8.6,bh,icF,9,C.ice,{}); } } }
 
-// ════════ SLIDE 14 — SOSYAL MEDYA ════════
-s=newSlide(C.bg); header(s,"Sosyal Medya","Platform Karşılaştırması"); footer(s);
-panel(s,0.55,1.5,8.9,3.5); cardHead(s,0.78,1.66,8.4,"Sosyal Medya Analizi",C.blue);
-text(s,0.8,2.12,8.6,2.8,cut(dv.sosyal_medya_karsilastirma,1700),10.5,C.ice,{ls:122,font:FB,grow:1.45,maxFs:14.5});
+// ════════ TEKNOLOJİ ALTYAPISI (eski Rakip Teknoloji + Teknoloji Stack) ════════
+{ const tkRows=[["CMS","cms","cms"],["Analytics","analytics","analytics"],["CRM","crm","crm"],["Otomasyon","otomasyon","otomasyon"],["Site Perf.","site_performans","site_hizi"]].map(([l,k,rk])=>{ const r=tKar[k]||{}; return [l,cut(r.bizim,200),cut(pick(r.rakip,rTek[rk]),200),cut(r.avantaj,80)]; }).filter(r=>r[1]||r[2]);
+  const usedSH=__bos((tKar.site_performans||{}).rakip)&&!__bos(rTek.site_hizi);
+  const ext=J([["Hosting",rTek.hosting],["Canlı destek",rTek.chat],["E-posta pazarlama",rTek.email_marketing],["Mobil uyum",rTek.mobil_uyum],["Güvenlik",rTek.guvenlik],["Site hızı",usedSH?"":rTek.site_hizi]].map(r=>lbl(r[0],cut(r[1],90))));
+  const gen=cut(tKar.genel_degerlendirme,360);
+  if(tkRows.length||ext||gen){ s=sec("Altyapı Karşılaştırması","Teknoloji Altyapısı");
+    let y=1.5;
+    if(tkRows.length){ const tw=[1.7,2.7,2.7,1.8], headT=["Alan",BRAND_S,RIVAL_S,"Avantaj"];
+      trow(s,1.5,headT,tw,true,false,tabloFs([headT],tw,true),0.42);
+      const tFs=tabloFs(tkRows,tw,false,0.4);
+      tkRows.forEach((r,i)=>trow(s,1.96+i*0.4,r,tw,false,i%2===0,tFs,0.4));
+      y=1.96+tkRows.length*0.4+0.1; }
+    const ph=5.2-y, pans=[gen&&["Genel Değerlendirme",gen,C.gold],ext&&["Rakipte Ek Altyapı",ext,C.purple]].filter(Boolean);
+    pans.forEach((p,i)=>{ const two=pans.length===2, w=two?4.37:8.9, x=two&&i?5.08:0.55; panel(s,x,y,w,ph); cardHead(s,x+0.2,y+0.12,w-0.32,p[0],p[2]); text(s,x+0.23,y+0.42,w-0.36,ph-0.48,p[1],8.5,C.ice,{ls:108,font:FB}); }); } }
 
-// ════════ SLIDE 15 — İÇERİK & BRAND VOICE ════════
-s=newSlide(C.bg); header(s,"İçerik & Brand Voice","İletişim Tonu"); footer(s);
-duo(s,1.5,1.4,"Biz — "+safe(ibv.bizim_ton),"Türler: "+safe(ibv.bizim_icerik_turleri)+"\nSıklık: "+safe(ibv.bizim_paylasim_sikligi),"Rakip — "+safe(ibv.rakip_ton),"Türler: "+safe(ibv.rakip_icerik_turleri)+"\nSıklık: "+safe(ibv.rakip_paylasim_sikligi),C.us,C.them);
-panel(s,0.55,3.02,8.9,2.1); cardHead(s,0.75,3.16,8.5,"İçerik Kalitesi & Fırsatlar",C.gold);
-text(s,0.78,3.5,8.6,0.52,cut(ibv.icerik_kalitesi_karsilastirma,340),9.3,C.ice,{ls:110,font:FB});
-bullets(s,0.78,4.04,8.6,1.04,arr(ibv.icerik_firsatlari).slice(0,3),9,C.ice,{});
+// ════════ FİYATLANDIRMA ════════
+{ const dF=has(fy.bizim_pozisyon,fy.rakip_pozisyon), fyT=J([lbl("Fiyat farkı",fy.fiyat_farki),cut(fy.deger_karsilastirma,460)]);
+  if(dF||fyT){ s=sec("Fiyat Stratejisi","Fiyatlandırma"); let y=1.5;
+    if(dF){ duo(s,1.5,fyT?2.0:3.5,BRAND_S,fy.bizim_pozisyon,RIVAL_S,fy.rakip_pozisyon,C.us,C.them); y=3.7; }
+    if(fyT){ const ph=dF?1.4:3.5; panel(s,0.55,y,8.9,ph); cardHead(s,0.75,y+0.15,8.5,"Değer Karşılaştırma",C.gold); text(s,0.78,y+0.5,8.6,ph-0.58,fyT,9.3,C.ice,{ls:112,font:FB}); } } }
 
-// ════════ SLIDE 16 — TEKNOLOJİ STACK ════════
-s=newSlide(C.bg); header(s,"Teknoloji Stack","Altyapı Karşılaştırması"); footer(s);
-const tw=[1.7,2.7,2.7,1.8];
-const headT=["Alan",BRAND_S,RIVAL_S,"Avantaj"];
-trow(s,1.5,headT,tw,true,false,tabloFs([headT],tw,true));
-const rowsT=["cms","analytics","crm","otomasyon","site_performans"].map(k=>{ const r=tKar[k]||{}; return [k==="site_performans"?"SİTE PERF.":k.toUpperCase(),safe(r.bizim),safe(r.rakip),safe(r.avantaj)]; });
-const tFs=tabloFs(rowsT,tw,false);
-rowsT.forEach((r,i)=>trow(s,1.98+i*0.5,r,tw,false,i%2===0,tFs));
-panel(s,0.55,4.56,8.9,0.62); text(s,0.78,4.58,8.5,0.58,"Genel: "+cut(tKar.genel_degerlendirme,360),8.5,C.muted,{valign:"MIDDLE",font:FB});
+// ════════ MÜŞTERİ DENEYİMİ ════════
+{ const dM=has(md.bizim_durum,md.rakip_durum), kf=arr(md.kritik_farklar).slice(0,4);
+  if(dM||kf.length){ s=sec("Online İtibar","Müşteri Deneyimi"); let y=1.5;
+    if(dM){ duo(s,1.5,kf.length?1.45:3.5,BRAND_S,md.bizim_durum,RIVAL_S,md.rakip_durum,C.us,C.them); y=3.07; }
+    if(kf.length){ const ph=5.12-y; panel(s,0.55,y,8.9,ph); cardHead(s,0.75,y+0.14,8.5,"Kritik Farklar",C.orange); bullets(s,0.78,y+0.49,8.6,ph-0.55,kf,9.3,C.ice,{}); } } }
 
-// ════════ SLIDE 17 — FİYATLANDIRMA ════════
-s=newSlide(C.bg); header(s,"Fiyatlandırma","Fiyat Stratejisi"); footer(s);
-duo(s,1.5,2.0,BRAND_S,safe(fy.bizim_pozisyon),RIVAL_S,safe(fy.rakip_pozisyon),C.us,C.them);
-panel(s,0.55,3.7,8.9,1.2); cardHead(s,0.75,3.85,8.5,"Değer Karşılaştırma",C.gold);
-text(s,0.78,4.22,8.6,0.6,"Fiyat farkı: "+safe(fy.fiyat_farki)+"   ·   "+cut(fy.deger_karsilastirma,460),9.3,C.ice,{ls:112,font:FB});
+// ════════ MÜŞTERİ YOLCULUĞU ════════
+{ const stages=[["Farkındalık","farkindalik",C.us],["Değerlendirme","degerlendirme",C.blue],["Satın Alma","satin_alma",C.gold],["Sadakat","sadakat",C.green]].map(st=>{ const r=myol[st[1]]||{}; return [st[0],cut(r.bizim,260),cut(r.rakip,260),cut(r.avantaj,70),st[2]]; }).filter(r=>r[1]||r[2]||r[3]);
+  if(stages.length){ s=sec("Farkındalık → Sadakat","Müşteri Yolculuğu");
+    text(s,2.05,1.45,2.85,0.24,BRAND_S,9,C.us,{bold:true,font:FH}); text(s,4.98,1.45,2.85,0.24,RIVAL_S,9,C.them,{bold:true,font:FH}); text(s,7.88,1.45,1.5,0.24,"Avantaj",9,C.gold,{bold:true,align:"END",font:FH});
+    const yolFs=ofs(stages.flatMap(r=>[r[1],r[2]]),8.3,2.85,0.6), avFs=ofs(stages.map(r=>r[3]),8,1.5,0.6,{font:FH,bold:true});
+    stages.forEach((r,i)=>{ const y=1.75+i*0.82; panel(s,0.55,y,8.9,0.72); rect(s,0.55,y+0.1,0.07,0.52,r[4]); text(s,0.74,y+0.1,1.45,0.52,r[0],8.5,r[4],{bold:true,valign:"MIDDLE",font:FH}); text(s,2.05,y+0.06,2.85,0.6,r[1],yolFs,C.ice,{font:FB,ls:104,strict:true,min:yolFs}); text(s,4.98,y+0.06,2.85,0.6,r[2],yolFs,C.ice,{font:FB,ls:104,strict:true,min:yolFs}); text(s,7.88,y+0.06,1.5,0.6,r[3],avFs,C.gold,{bold:true,valign:"MIDDLE",align:"END",font:FH,strict:true,min:avFs}); }); } }
 
-// ════════ SLIDE 18 — MÜŞTERİ DENEYİMİ ════════
-s=newSlide(C.bg); header(s,"Müşteri Deneyimi","Online İtibar"); footer(s);
-duo(s,1.5,1.45,BRAND_S,safe(md.bizim_durum),RIVAL_S,safe(md.rakip_durum),C.us,C.them);
-panel(s,0.55,3.07,8.9,2.05); cardHead(s,0.75,3.21,8.5,"Kritik Farklar",C.orange);
-bullets(s,0.78,3.56,8.6,1.5,arr(md.kritik_farklar).slice(0,4),9.3,C.ice,{});
+// ════════ SWOT (Özet slaytı kaldırıldı; iki detay slaytı tüm maddeleri taşır) ════════
+const swI=(list,k1,tag)=>arr(list).map(g=>{ const o=(typeof g==="object"&&g); const t=String(o?safe(g[k1],""):safe(asText(g),"")).trim(), tg=String(o?safe(g[tag],""):"").trim(); return [t?(t+(tg?"  ["+tg+"]":"")):"",o?cut(g.detay,240):""]; }).filter(r=>r[0]||r[1]).slice(0,5);
+function swotSlayt(baslik,L,R){
+  if(!L[1].length&&!R[1].length) return;
+  s=sec("SWOT Analizi",baslik);
+  const T=ofs(L[1].concat(R[1]).map(r=>r[0]),9,4.0,0.22,{font:FH,bold:true}), D=ofs(L[1].concat(R[1]).map(r=>r[1]),8.3,4.0,0.4);
+  [[L,0.55],[R,5.13]].forEach(([q,x])=>{ if(!q[1].length) return; panel(s,x,1.5,4.32,3.55); cardHead(s,x+0.2,1.66,4.0,q[0],q[2]);
+    q[1].forEach((r,i)=>{ const y=2.06+i*0.6; text(s,x+0.23,y,4.0,0.22,r[0],T,q[2],{bold:true,font:FH,min:T}); text(s,x+0.23,y+0.2,4.0,0.4,r[1],D,C.ice,{font:FB,ls:104,min:D}); }); });
+}
+swotSlayt("Güçlü & Zayıf Yönler",["Güçlü Yönler",swI(swot.guclu_yonler,"alan","puan"),C.green],["Zayıf Yönler",swI(swot.zayif_yonler,"alan","aciliyet"),C.red]);
+swotSlayt("Fırsatlar & Tehditler",["Fırsatlar",swI(swot.firsatlar,"firsat","potansiyel_etki"),C.gold],["Tehditler",swI(swot.tehditler,"tehdit","olasilik"),C.orange]);
 
-// ════════ SLIDE 19 — MÜŞTERİ YOLCULUĞU ════════
-s=newSlide(C.bg); header(s,"Müşteri Yolculuğu","Farkındalık → Sadakat"); footer(s);
-text(s,2.05,1.45,2.85,0.24,BRAND_S,9,C.us,{bold:true,font:FH}); text(s,4.98,1.45,2.85,0.24,RIVAL_S,9,C.them,{bold:true,font:FH}); text(s,7.88,1.45,1.5,0.24,"Avantaj",9,C.gold,{bold:true,align:"END",font:FH});
-const stages=[["Farkındalık","farkindalik",C.us],["Değerlendirme","degerlendirme",C.blue],["Satın Alma","satin_alma",C.gold],["Sadakat","sadakat",C.green]];
-const yolFs=ofs(stages.flatMap(st=>{ const r=myol[st[1]]||{}; return [cut(r.bizim,260),cut(r.rakip,260)]; }),8.3,2.85,0.6);
-const avFs=ofs(stages.map(st=>cut((myol[st[1]]||{}).avantaj,70)),8,1.5,0.6,{font:FH,bold:true});
-stages.forEach((st,i)=>{ const y=1.75+i*0.82; const r=myol[st[1]]||{}; panel(s,0.55,y,8.9,0.72); rect(s,0.55,y+0.1,0.07,0.52,st[2]); text(s,0.74,y+0.1,1.45,0.52,st[0],8.5,st[2],{bold:true,valign:"MIDDLE",font:FH}); text(s,2.05,y+0.06,2.85,0.6,cut(r.bizim,260),yolFs,C.ice,{font:FB,ls:104,strict:true,min:yolFs}); text(s,4.98,y+0.06,2.85,0.6,cut(r.rakip,260),yolFs,C.ice,{font:FB,ls:104,strict:true,min:yolFs}); text(s,7.88,y+0.06,1.5,0.6,cut(r.avantaj,70),avFs,C.gold,{bold:true,valign:"MIDDLE",align:"END",font:FH,strict:true,min:avFs}); });
-
-// ════════ SLIDE 20 — SWOT ÖZET ════════
-s=newSlide(C.bg); header(s,"SWOT Analizi",BRAND_S+" Perspektifi"); footer(s);
-const quad=[["GÜÇLÜ YÖNLER",arr(swot.guclu_yonler),C.green,0.55,1.5,"alan"],["ZAYIF YÖNLER",arr(swot.zayif_yonler),C.red,5.13,1.5,"alan"],["FIRSATLAR",arr(swot.firsatlar),C.gold,0.55,3.36,"firsat"],["TEHDİTLER",arr(swot.tehditler),C.orange,5.13,3.36,"tehdit"]];
-quad.forEach(q=>{ panel(s,q[3],q[4],4.32,1.74); rect(s,q[3],q[4]+0.12,0.07,1.5,q[2]); text(s,q[3]+0.26,q[4]+0.12,4.0,0.26,q[0],10.5,q[2],{bold:true,font:FH}); bullets(s,q[3]+0.26,q[4]+0.46,3.9,1.2,q[1].slice(0,4).map(it=>asText(it,[q[5],"alan","firsat","tehdit"])),8.5,C.ice,{}); });
-
-// ════════ SLIDE 21 — SWOT DETAY (G/Z) ════════
-s=newSlide(C.bg); header(s,"SWOT Detay","Güçlü & Zayıf Yönler"); footer(s);
-panel(s,0.55,1.5,4.32,3.55); cardHead(s,0.75,1.66,4.0,"Güçlü Yönler",C.green);
-const swG=arr(swot.guclu_yonler).slice(0,5).map(g=>{ const o=(typeof g==="object"&&g); return [(o?safe(g.alan):asText(g))+((o&&g.puan)?"  ["+g.puan+"]":""),o?cut(g.detay,240):""]; });
-const swZ=arr(swot.zayif_yonler).slice(0,5).map(z=>{ const o=(typeof z==="object"&&z); return [(o?safe(z.alan):asText(z))+((o&&z.aciliyet)?"  ["+z.aciliyet+"]":""),o?cut(z.detay,240):""]; });
-const sw1T=ofs(swG.concat(swZ).map(r=>r[0]),9,4.0,0.22,{font:FH,bold:true}), sw1D=ofs(swG.concat(swZ).map(r=>r[1]),8.3,4.0,0.4);
-swG.forEach((r,i)=>{ const y=2.06+i*0.6; text(s,0.78,y,4.0,0.22,r[0],sw1T,C.green,{bold:true,font:FH,min:sw1T}); text(s,0.78,y+0.2,4.0,0.4,r[1],sw1D,C.ice,{font:FB,ls:104,min:sw1D}); });
-panel(s,5.13,1.5,4.32,3.55); cardHead(s,5.33,1.66,4.0,"Zayıf Yönler",C.red);
-swZ.forEach((r,i)=>{ const y=2.06+i*0.6; text(s,5.36,y,4.0,0.22,r[0],sw1T,C.red,{bold:true,font:FH,min:sw1T}); text(s,5.36,y+0.2,4.0,0.4,r[1],sw1D,C.ice,{font:FB,ls:104,min:sw1D}); });
-
-// ════════ SLIDE 22 — SWOT DETAY (F/T) ════════
-s=newSlide(C.bg); header(s,"SWOT Detay","Fırsatlar & Tehditler"); footer(s);
-panel(s,0.55,1.5,4.32,3.55); cardHead(s,0.75,1.66,4.0,"Fırsatlar",C.gold);
-const swF=arr(swot.firsatlar).slice(0,5).map(g=>{ const o=(typeof g==="object"&&g); return [(o?safe(g.firsat):asText(g))+((o&&g.potansiyel_etki)?"  ["+g.potansiyel_etki+"]":""),o?cut(g.detay,240):""]; });
-const swT=arr(swot.tehditler).slice(0,5).map(t=>{ const o=(typeof t==="object"&&t); return [(o?safe(t.tehdit):asText(t))+((o&&t.olasilik)?"  ["+t.olasilik+"]":""),o?cut(t.detay,240):""]; });
-const sw2T=ofs(swF.concat(swT).map(r=>r[0]),9,4.0,0.22,{font:FH,bold:true}), sw2D=ofs(swF.concat(swT).map(r=>r[1]),8.3,4.0,0.4);
-swF.forEach((r,i)=>{ const y=2.06+i*0.6; text(s,0.78,y,4.0,0.22,r[0],sw2T,C.gold,{bold:true,font:FH,min:sw2T}); text(s,0.78,y+0.2,4.0,0.4,r[1],sw2D,C.ice,{font:FB,ls:104,min:sw2D}); });
-panel(s,5.13,1.5,4.32,3.55); cardHead(s,5.33,1.66,4.0,"Tehditler",C.orange);
-swT.forEach((r,i)=>{ const y=2.06+i*0.6; text(s,5.36,y,4.0,0.22,r[0],sw2T,C.orange,{bold:true,font:FH,min:sw2T}); text(s,5.36,y+0.2,4.0,0.4,r[1],sw2D,C.ice,{font:FB,ls:104,min:sw2D}); });
-
-// ════════ SLIDE 23 — KONUMLANDIRMA HARİTASI ════════
-s=newSlide(C.bg); header(s,"Konumlandırma Haritası","Rekabet Alanı"); footer(s);
+// ════════ KONUMLANDIRMA HARİTASI ════════
+s=sec("Rekabet Alanı","Konumlandırma Haritası");
 panel(s,1.3,1.5,7.4,3.35);
 rect(s,5.0,1.62,0.012,3.1,C.line); rect(s,1.45,3.16,7.1,0.012,C.line);
 text(s,5.08,1.56,2,0.2,"Güçlü Dijital ↑",7.5,C.muted,{font:FB});
@@ -12741,69 +12753,70 @@ oval(s,6.0,3.45,1.0,1.0,C.them,0.45,null); text(s,5.6,4.5,1.8,0.22,RIVAL_S,8,C.t
 oval(s,3.1,2.5,0.9,0.9,C.us,0.5,null); text(s,2.55,3.42,2.0,0.22,BRAND_S+" (Bugün)",7.5,C.us,{bold:true,align:"CENTER",font:FH});
 oval(s,4.25,1.85,1.0,1.0,C.gold,0.3,null); text(s,5.32,2.24,1.9,0.22,BRAND_S+" (Hedef)",7.5,C.gold,{bold:true,font:FH});
 
-// ════════ SLIDE 24 — SALES BATTLECARD ════════
-s=newSlide(C.bg); header(s,"Sales Battlecard","Satış Rehberi"); footer(s);
-panel(s,0.55,1.5,8.9,0.95); cardHead(s,0.75,1.62,8.5,"Rakibe Karşı Ana Mesaj",C.gold);
-text(s,0.78,1.92,8.6,0.5,cut(battle.rakibe_karsi_ana_mesaj,300),10,C.white,{bold:true,font:FB});
-panel(s,0.55,2.58,4.32,2.5); cardHead(s,0.75,2.72,4.0,"Kazanma Koşulları",C.green);
-bullets(s,0.78,3.1,3.95,1.92,arr(battle.kazanma_kosullari).slice(0,5),8.7,C.ice,{});
-panel(s,5.13,2.58,4.32,2.5); cardHead(s,5.33,2.72,4.0,"İtiraz → Cevap",C.us);
-const objc=Array.isArray(battle.itiraz_cevaplari)?battle.itiraz_cevaplari.slice(0,4):[];
-bullets(s,5.36,3.1,3.95,1.92,objc.map(o=>safe(o.itiraz)+" → "+safe(o.cevap)),8.5,C.ice,{});
+// ════════ SALES BATTLECARD ════════
+{ const bcM=cut(battle.rakibe_karsi_ana_mesaj,300), bcK=arr(battle.kazanma_kosullari).slice(0,5);
+  const bcO=(Array.isArray(battle.itiraz_cevaplari)?battle.itiraz_cevaplari:[]).filter(o=>o&&typeof o==="object"&&!__bos(o.itiraz)&&!__bos(o.cevap)).slice(0,4).map(o=>safe(o.itiraz)+" → "+safe(o.cevap));
+  if(bcM||bcK.length||bcO.length){ s=sec("Satış Rehberi","Sales Battlecard"); let y=1.5;
+    if(bcM){ panel(s,0.55,1.5,8.9,0.95); cardHead(s,0.75,1.62,8.5,"Rakibe Karşı Ana Mesaj",C.gold); text(s,0.78,1.92,8.6,0.5,bcM,10,C.white,{bold:true,font:FB}); y=2.58; }
+    const ph=5.08-y, cols=[bcK.length&&["Kazanma Koşulları",bcK,C.green,8.7],bcO.length&&["İtiraz → Cevap",bcO,C.us,8.5]].filter(Boolean);
+    cols.forEach((c,i)=>{ const two=cols.length===2, w=two?4.32:8.9, x=two&&i?5.13:0.55; panel(s,x,y,w,ph); cardHead(s,x+0.2,y+0.14,w-0.32,c[0],c[2]); bullets(s,x+0.23,y+0.52,w-0.37,ph-0.58,c[1],c[3],C.ice,{}); }); } }
 
-// ════════ SLIDE 25 — NEDEN BİZ ════════
-s=newSlide(C.bg); header(s,"Neden Biz?","Rekabet Avantajı"); footer(s);
-round(s,0.55,1.5,8.9,0.72,C.gold,1,null); text(s,0.75,1.5,8.5,0.72,safe(nBiz.ana_baslik,"Neden "+BRAND_S+"?"),15,C.dark,{bold:true,valign:"MIDDLE",align:"CENTER",font:FH});
-const nbR=arr(nBiz.rekabet_avantajlari).slice(0,4).map(a=>{ const o=(typeof a==="object"&&a); return [o?safe(a.avantaj):asText(a),o?cut(a.aciklama,260):""]; });
-const nbT=ofs(nbR.map(r=>r[0]),9.5,3.4,0.42,{font:FH,bold:true}), nbD=ofs(nbR.map(r=>r[1]),8.6,4.7,0.42);
-nbR.forEach((r,i)=>{ const y=2.42+i*0.62; panel(s,0.55,y,8.9,0.54); oval(s,0.7,y+0.1,0.34,0.34,[C.us,C.green,C.blue,C.gold][i],1,null); text(s,0.7,y+0.1,0.34,0.34,String(i+1),11,C.dark,{bold:true,align:"CENTER",valign:"MIDDLE",font:FH}); text(s,1.2,y+0.06,3.4,0.42,r[0],nbT,C.gold,{bold:true,valign:"MIDDLE",font:FH,min:nbT}); text(s,4.6,y+0.06,4.7,0.42,r[1],nbD,C.ice,{valign:"MIDDLE",font:FB,ls:104,min:nbD}); });
-text(s,0.6,4.88,8.8,0.4,cut(nBiz.ozet_mesaj,260),8.5,C.muted,{align:"CENTER",valign:"MIDDLE",italic:true,font:FB});
+// ════════ NEDEN BİZ ════════
+{ const nbR=arr(nBiz.rekabet_avantajlari).map(a=>{ const o=(typeof a==="object"&&a); return [String(o?safe(a.avantaj,""):safe(asText(a),"")),o?cut(a.aciklama,260):""]; }).filter(r=>r[0].trim()||r[1]).slice(0,4);
+  const nbO=cut(nBiz.ozet_mesaj,260);
+  if(nbR.length||nbO){ s=sec("Rekabet Avantajı","Neden Biz?");
+    round(s,0.55,1.5,8.9,0.72,C.gold,1,null); text(s,0.75,1.5,8.5,0.72,safe(nBiz.ana_baslik,"Neden "+BRAND_S+"?"),15,C.dark,{bold:true,valign:"MIDDLE",align:"CENTER",font:FH});
+    const nbT=ofs(nbR.map(r=>r[0]),9.5,3.4,0.42,{font:FH,bold:true}), nbD=ofs(nbR.map(r=>r[1]),8.6,4.7,0.42);
+    nbR.forEach((r,i)=>{ const y=2.42+i*0.62; panel(s,0.55,y,8.9,0.54); oval(s,0.7,y+0.1,0.34,0.34,[C.us,C.green,C.blue,C.gold][i],1,null); text(s,0.7,y+0.1,0.34,0.34,String(i+1),11,C.dark,{bold:true,align:"CENTER",valign:"MIDDLE",font:FH}); text(s,1.2,y+0.06,3.4,0.42,r[0],nbT,C.gold,{bold:true,valign:"MIDDLE",font:FH,min:nbT}); text(s,4.6,y+0.06,4.7,0.42,r[1],nbD,C.ice,{valign:"MIDDLE",font:FB,ls:104,min:nbD}); });
+    if(nbO) text(s,0.6,nbR.length?4.88:2.4,8.8,nbR.length?0.4:1.0,nbO,8.5,C.muted,{align:"CENTER",valign:"MIDDLE",italic:true,font:FB}); } }
 
-// ════════ SLIDE 26 — STRATEJİK ÖNERİLER ════════
-s=newSlide(C.bg); header(s,"Stratejik Öneriler","Genel Strateji"); footer(s);
-panel(s,0.55,1.5,8.9,0.95); cardHead(s,0.75,1.62,8.5,"Genel Strateji",C.gold); text(s,0.78,1.9,8.6,0.52,cut(so.genel_strateji,330),9,C.ice,{ls:106,font:FB,strict:true});
-const tl=[["Kısa Vade (0-3 Ay)",arr(so.kisa_vade),C.green],["Orta Vade (3-12 Ay)",arr(so.orta_vade),C.gold],["Uzun Vade (12+ Ay)",arr(so.uzun_vade),C.blue]];
-tl.forEach((t,i)=>{ const y=2.56+i*0.86; panel(s,0.55,y,8.9,0.78); rect(s,0.55,y+0.1,0.07,0.58,t[2]); text(s,0.78,y+0.08,3.5,0.24,t[0],9.5,t[2],{bold:true,font:FH}); text(s,0.78,y+0.3,8.6,0.46,t[1].slice(0,2).map(it=>"• "+(typeof it==="object"?(safe(it.oneri)+(it.detay?": "+cut(it.detay,95):"")):cut(it,140))).join("\n"),8.2,C.ice,{ls:102,font:FB,strict:true}); });
+// ════════ STRATEJİK ÖNERİLER & YOL HARİTASI (iki slayt birleşti) ════════
+{ const soG=cut(so.genel_strateji,330);
+  const soIt=it=>(it&&typeof it==="object")?J([cut(it.oneri,100),cut(it.detay,110)]):cut(it,140);
+  const soC=[["KISA VADE","0-3 Ay",so.kisa_vade,C.green],["ORTA VADE","3-12 Ay",so.orta_vade,C.gold],["UZUN VADE","12+ Ay",so.uzun_vade,C.blue]].map(c=>[c[0],c[1],arr(c[2]).map(soIt).filter(x=>x).slice(0,3),c[3]]).filter(c=>c[2].length);
+  if(soG||soC.length){ s=sec("Kısa / Orta / Uzun Vade","Stratejik Öneriler & Yol Haritası"); let y=1.5;
+    if(soG){ panel(s,0.55,1.5,8.9,0.95); cardHead(s,0.75,1.62,8.5,"Genel Strateji",C.gold); text(s,0.78,1.9,8.6,0.52,soG,9,C.ice,{ls:106,font:FB,strict:true}); y=2.58; }
+    const k=soC.length;
+    if(k){ const gap=0.15, w=(8.9-gap*(k-1))/k, ph=5.15-y, n=Math.max(...soC.map(c=>c[2].length)), ih=(ph-0.7)/n;
+      const f=ofs(soC.flatMap(c=>c[2]),8.2,w-0.62,ih-0.04,{ls:102});
+      soC.forEach((c,i)=>{ const x=0.55+i*(w+gap); panel(s,x,y,w,ph); rect(s,x,y,w,0.56,c[3]); text(s,x+0.16,y,w-0.3,0.34,c[0],11,C.dark,{bold:true,valign:"MIDDLE",font:FH}); text(s,x+0.16,y+0.3,w-0.3,0.24,c[1],8.5,C.dark,{valign:"MIDDLE",font:FB});
+        c[2].forEach((it,j)=>{ const yy=y+0.66+j*ih; oval(s,x+0.16,yy+0.02,0.26,0.26,c[3],1,null); text(s,x+0.16,yy+0.02,0.26,0.26,String(j+1),8,C.dark,{bold:true,align:"CENTER",valign:"MIDDLE",font:FH}); text(s,x+0.5,yy,w-0.62,ih-0.04,it,f,C.ice,{font:FB,ls:102,min:f}); }); }); } } }
 
-// ════════ SLIDE 27 — YOL HARİTASI ════════
-s=newSlide(C.bg); header(s,"Yol Haritası","Kısa / Orta / Uzun Vade"); footer(s);
-const rm=[["KISA VADE","0-3 Ay",arr(so.kisa_vade),C.green],["ORTA VADE","3-12 Ay",arr(so.orta_vade),C.gold],["UZUN VADE","12+ Ay",arr(so.uzun_vade),C.blue]];
-const rmFs=ofs(rm.flatMap(r=>r[2].slice(0,5).map(it=>cut(typeof it==="object"?safe(it.oneri):it,130))),8.2,2.18,0.5,{ls:102});
-rm.forEach((r,i)=>{ const x=0.55+i*3.0; panel(s,x,1.5,2.8,3.55); rect(s,x,1.5,2.8,0.6,r[3]); text(s,x+0.16,1.5,2.5,0.34,r[0],11,C.dark,{bold:true,valign:"MIDDLE",font:FH}); text(s,x+0.16,1.82,2.5,0.24,r[1],8.5,C.dark,{valign:"MIDDLE",font:FB}); r[2].slice(0,5).forEach((it,j)=>{ const y=2.32+j*0.54; oval(s,x+0.16,y+0.02,0.26,0.26,r[3],1,null); text(s,x+0.16,y+0.02,0.26,0.26,String(j+1),8,C.dark,{bold:true,align:"CENTER",valign:"MIDDLE",font:FH}); text(s,x+0.5,y,2.18,0.5,cut(typeof it==="object"?safe(it.oneri):it,130),rmFs,C.ice,{font:FB,ls:102,min:rmFs}); }); });
+// ════════ AKSİYON PLANI ════════
+{ const apR=ap.filter(a=>a&&typeof a==="object"&&!__bos(a.aksiyon)).slice(0,6);
+  if(apR.length){ s=sec("Önceliklendirilmiş","Aksiyon Planı");
+    const apFs=ofs(apR.map(a=>cut(a.aksiyon,200)),9.3,5.55,0.42,{font:FH,bold:true});
+    apR.forEach((a,i)=>{ const y=1.5+i*0.6; const pr=String(safe(a.oncelik,"")).trim(); const pc=(pr.indexOf("Kritik")>-1?C.red:(pr.indexOf("Yüksek")>-1||pr.indexOf("Yuksek")>-1)?C.gold:C.blue);
+      panel(s,0.55,y,8.9,0.52); oval(s,0.7,y+0.1,0.32,0.32,pc,1,null); text(s,0.7,y+0.1,0.32,0.32,String(i+1),10,C.dark,{bold:true,align:"CENTER",valign:"MIDDLE",font:FH});
+      text(s,1.18,y+0.05,5.55,0.42,cut(a.aksiyon,200),apFs,C.white,{bold:true,valign:"MIDDLE",font:FH,min:apFs});
+      if(pr) chip(s,6.82,y+0.12,1.05,0.28,pr,C.dark,pc);
+      const su=lbl("Süre",a.sure); if(su) text(s,7.95,y+0.05,1.45,0.42,su,8,C.muted,{valign:"MIDDLE",align:"END",font:FB}); }); } }
 
-// ════════ SLIDE 28 — AKSİYON PLANI ════════
-s=newSlide(C.bg); header(s,"Aksiyon Planı","Önceliklendirilmiş"); footer(s);
-if(ap.length){ const apFs=ofs(ap.slice(0,6).map(a=>cut(a.aksiyon,200)),9.3,5.55,0.42,{font:FH,bold:true}); ap.slice(0,6).forEach((a,i)=>{ const y=1.5+i*0.6; const pr=String(a.oncelik||""); const pc=(pr.indexOf("Kritik")>-1?C.red:(pr.indexOf("Yüksek")>-1||pr.indexOf("Yuksek")>-1)?C.gold:C.blue); panel(s,0.55,y,8.9,0.52); oval(s,0.7,y+0.1,0.32,0.32,pc,1,null); text(s,0.7,y+0.1,0.32,0.32,String(i+1),10,C.dark,{bold:true,align:"CENTER",valign:"MIDDLE",font:FH}); text(s,1.18,y+0.05,5.55,0.42,cut(a.aksiyon,200),apFs,C.white,{bold:true,valign:"MIDDLE",font:FH,min:apFs}); chip(s,6.82,y+0.12,1.05,0.28,(pr||"-"),C.dark,pc); text(s,7.95,y+0.05,1.45,0.42,"Süre: "+safe(a.sure),8,C.muted,{valign:"MIDDLE",align:"END",font:FB}); }); }
-else { panel(s,0.55,1.6,8.9,3.0); text(s,0.8,1.9,8.4,2.5,"Aksiyon planı verisi bulunamadı.",11,C.muted,{font:FB}); }
+// ════════ KPI & İZLEME ════════
+{ const kR=arr(ip.kpi_listesi).filter(k=>k&&typeof k==="object"&&!__bos(k.metrik)).slice(0,5).map(k=>[String(safe(k.metrik)),String(safe(k.hedef,"")),String(safe(k.siklik,""))]);
+  const ri=ip.rakip_izleme||{}, riT=J([arr(ri.izlenecek_alanlar).slice(0,5).join("  ·  "),lbl("Sıklık",ri.izleme_sikligi),lbl("Araçlar",ri.izleme_araclari)],"   |   ");
+  if(kR.length||riT){ s=sec("Ölçüm Metrikleri","KPI & İzleme"); let y=1.5;
+    if(kR.length){ const kw=[4.7,2.7,1.5]; trow(s,1.5,["Metrik","Hedef","Sıklık"],kw,true); const kFs=tabloFs(kR,kw,false); kR.forEach((r,i)=>trow(s,1.98+i*0.5,r,kw,false,i%2===0,kFs)); y=1.98+kR.length*0.5+0.08; }
+    if(riT){ const ph=Math.min(1.2,5.2-y); panel(s,0.55,y,8.9,ph); text(s,0.78,y+0.02,8.5,ph-0.04,"Rakip izleme: "+riT,8.3,C.muted,{valign:"MIDDLE",font:FB}); } } }
 
-// ════════ SLIDE 29 — KPI & İZLEME ════════
-s=newSlide(C.bg); header(s,"KPI & İzleme","Ölçüm Metrikleri"); footer(s);
-const kw=[4.7,2.7,1.5]; trow(s,1.5,["Metrik","Hedef","Sıklık"],kw,true);
-const rowsK=arr(ip.kpi_listesi).slice(0,5).map(k=>[safe(k.metrik),safe(k.hedef),safe(k.siklik)]); const kFs=tabloFs(rowsK,kw,false);
-rowsK.forEach((r,i)=>trow(s,1.98+i*0.5,r,kw,false,i%2===0,kFs));
-const ri=ip.rakip_izleme||{}; panel(s,0.55,4.56,8.9,0.62); text(s,0.78,4.58,8.5,0.58,"Rakip izleme: "+arr(ri.izlenecek_alanlar).slice(0,5).join("  ·  "),8.3,C.muted,{valign:"MIDDLE",font:FB});
+// ════════ SONUÇ & TAVSİYELER (risk kutusu eski Risk slaytından) ════════
+{ const snO=cut(sonuc.ozet,640), snK=arr(sonuc.kritik_kararlar).slice(0,5), snA=arr(sonuc.sonraki_adimlar).slice(0,5), snR=cut(sonuc.risk_degerlendirmesi,300);
+  if(snO||snK.length||snA.length||snR){ s=sec("Yönetici Kapanışı","Sonuç & Tavsiyeler"); let y=1.5;
+    if(snO){ panel(s,0.55,1.5,8.9,1.1); cardHead(s,0.75,1.62,8.5,"Özet",C.gold); text(s,0.78,1.92,8.6,0.64,snO,9.5,C.ice,{ls:116,font:FB}); y=2.72; }
+    const cols=[snK.length&&["Kritik Kararlar",snK,C.us,9],snA.length&&["Sonraki Adımlar",snA,C.green,8.6]].filter(Boolean);
+    if(cols.length){ const ph=(snR?4.4:5.14)-y; cols.forEach((c,i)=>{ const two=cols.length===2, w=two?(i?3.85:4.9):8.9, x=two&&i?5.6:0.55; panel(s,x,y,w,ph); cardHead(s,x+0.2,y+0.14,w-0.35,c[0],c[2]); bullets(s,x+0.23,y+0.5,w-0.35,ph-0.54,c[1],c[3],C.ice,{}); }); }
+    if(snR){ const ry=cols.length?4.5:y, rh=cols.length?0.64:Math.min(1.2,5.14-y); round(s,0.55,ry,8.9,rh,C.themDk,0.22,{color:C.red,w:1}); text(s,0.78,ry+0.02,8.6,rh-0.04,"RİSK: "+snR,8.6,C.red,{bold:true,valign:"MIDDLE",font:FB,strict:true}); } } }
 
-// ════════ SLIDE 30 — RİSK ════════
-s=newSlide(C.bg); header(s,"Risk Değerlendirmesi","Tehdit & Savunma"); footer(s);
-const rkD=ofs(arr(swot.tehditler).slice(0,4).map(t=>(typeof t==="object"&&t)?cut(t.detay,260):""),8.3,7.0,0.36);
-arr(swot.tehditler).slice(0,4).forEach((t,i)=>{ const y=1.5+i*0.74; const o=(typeof t==="object"&&t); panel(s,0.55,y,8.9,0.66); rect(s,0.55,y+0.1,0.07,0.46,C.red); text(s,0.78,y+0.06,6.8,0.24,o?safe(t.tehdit):asText(t),9.3,C.red,{bold:true,font:FH}); text(s,0.78,y+0.28,7.0,0.36,o?cut(t.detay,260):"",rkD,C.ice,{font:FB,ls:104,min:rkD}); if(o&&t.olasilik){ chip(s,7.95,y+0.16,1.45,0.3,String(t.olasilik),C.dark,C.orange); } });
-round(s,0.55,4.5,8.9,0.64,C.themDk,0.22,{color:C.red,w:1}); text(s,0.78,4.52,8.6,0.6,"RİSK: "+cut(sonuc.risk_degerlendirmesi,300),8.6,C.red,{bold:true,valign:"MIDDLE",font:FB,strict:true});
+// ════════ METODOLOJİ (her zaman) ════════
+s=sec("Kanıt Kalitesi & Kapsam","Metodoloji");
+{ const kk=J([lbl("Güven skoru",dq.genel_guven_skoru),lbl("Belirsiz",arr(dq.belirsiz_alanlar).slice(0,2).join(", "))],"  ·  ");
+  const meth=[["Çift Taraflı Web Verisi","Hem bizim hem rakip site doğrudan çekim ve Claude web_fetch ile okunarak (gerekirse yedek tarayıcı) içerik, meta, CTA, fiyat ve sosyal sinyaller çıkarıldı."],["Arama Motoru Araştırması","Şirket, ürün, yorum, fiyat, LinkedIn ve case study aramaları yapıldı."],["Müşteri Yorum Analizi","Google, Trustpilot, Şikayetvar ve sektör platformları tarandı."],["LinkedIn & Organizasyon","Takipçi, çalışan, işe alım ve büyüme sinyalleri değerlendirildi."],["AI Sentez","Gemini 2.5 ile çok aşamalı analiz ve karşılaştırma."],["Kanıt Kalitesi",kk]].filter(m=>String(m[1]).trim());
+  const mFs=ofs(meth.map(m=>cut(m[1],240)),8.6,4.05,0.5,{ls:108});
+  meth.forEach((m,i)=>{ const col=i%2; const rw=Math.floor(i/2); const x=col===0?0.55:5.05; const y=1.5+rw*1.12; panel(s,x,y,4.4,0.98); rect(s,x,y+0.12,0.06,0.74,C.gold); text(s,x+0.2,y+0.14,4.0,0.24,__buyuk(m[0]),8.5,C.gold,{bold:true,font:FH}); text(s,x+0.2,y+0.42,4.05,0.5,cut(m[1],240),mFs,C.ice,{font:FB,ls:108,min:mFs}); });
+  const at=sa.filter(a=>a&&typeof a==="object"&&!__bos(a.iddia)).slice(0,2).map((a,i)=>{ const g=String(safe(a.guven,"")).trim(); return (i+1)+". "+safe(a.iddia)+(g?" ["+g+"]":""); }).join("   |   ");
+  text(s,0.55,5.06,8.9,0.18,at||("Kaynak: kamuya açık web verileri + AI · Tarih: "+DATE),7,C.muted,{align:"CENTER",font:FB}); }
 
-// ════════ SLIDE 31 — SONUÇ ════════
-s=newSlide(C.bg); header(s,"Sonuç & Tavsiyeler","Yönetici Kapanışı"); footer(s);
-panel(s,0.55,1.5,8.9,1.1); cardHead(s,0.75,1.62,8.5,"Özet",C.gold); text(s,0.78,1.92,8.6,0.64,cut(sonuc.ozet,640),9.5,C.ice,{ls:116,font:FB});
-panel(s,0.55,2.72,4.9,2.42); cardHead(s,0.75,2.86,4.6,"Kritik Kararlar",C.us); bullets(s,0.78,3.22,4.55,1.88,(arr(sonuc.kritik_kararlar).length?arr(sonuc.kritik_kararlar):arr(sonuc.sonraki_adimlar)).slice(0,5),9,C.ice,{});
-panel(s,5.6,2.72,3.85,2.42); cardHead(s,5.8,2.86,3.5,"Sonraki Adımlar",C.green); bullets(s,5.8,3.22,3.55,1.88,arr(sonuc.sonraki_adimlar).slice(0,5),8.6,C.ice,{});
-
-// ════════ SLIDE 32 — METODOLOJİ ════════
-s=newSlide(C.bg); header(s,"Metodoloji","Kanıt Kalitesi & Kapsam"); footer(s);
-const meth=[["Çift Taraflı Web Verisi","Hem bizim hem rakip site doğrudan çekim ve Claude web_fetch ile okunarak (gerekirse yedek tarayıcı) içerik, meta, CTA, fiyat ve sosyal sinyaller çıkarıldı."],["Arama Motoru Araştırması","Şirket, ürün, yorum, fiyat, LinkedIn ve case study aramaları yapıldı."],["Müşteri Yorum Analizi","Google, Trustpilot, Şikayetvar ve sektör platformları tarandı."],["LinkedIn & Organizasyon","Takipçi, çalışan, işe alım ve büyüme sinyalleri değerlendirildi."],["AI Sentez","Gemini 2.5 ile çok aşamalı analiz ve karşılaştırma."],["Kanıt Kalitesi","Güven skoru: "+safe(dq.genel_guven_skoru)+"  ·  Belirsiz: "+arr(dq.belirsiz_alanlar).slice(0,2).join(", ")]];
-const mFs=ofs(meth.map(m=>cut(m[1],240)),8.6,4.05,0.5,{ls:108});
-meth.forEach((m,i)=>{ const col=i%2; const rw=Math.floor(i/2); const x=col===0?0.55:5.05; const y=1.5+rw*1.12; panel(s,x,y,4.4,0.98); rect(s,x,y+0.12,0.06,0.74,C.gold); text(s,x+0.2,y+0.14,4.0,0.24,m[0].toUpperCase(),8.5,C.gold,{bold:true,font:FH}); text(s,x+0.2,y+0.42,4.05,0.5,cut(m[1],240),mFs,C.ice,{font:FB,ls:108,min:mFs}); });
-const at=sa.slice(0,2).map((a,i)=>(i+1)+". "+safe(a.iddia)+" ["+safe(a.guven)+"]").join("   |   ");
-text(s,0.55,5.06,8.9,0.18,at||("Kaynak: kamuya açık web verileri + AI · Tarih: "+DATE),7,C.muted,{align:"CENTER",font:FB});
-
-// ════════ SLIDE 33 — KAPANIŞ (şablondaki iletişim sayfası) ════════
+// ════════ KAPANIŞ (şablondaki iletişim sayfası; içindekilere girmez) ════════
 s=newSlide(C.bg); logo(s,0.55,0.3,9);
 text(s,8.15,0.3,1.3,0.24,"Sayfa "+("0"+SID.length).slice(-2),8.5,C.muted,{align:"END",font:FH});
 text(s,0.55,1.55,8.6,1.3,"Sorularınız için bizimle iletişime geçin.",30,C.dark,{font:FH,ls:104});
@@ -12813,6 +12826,13 @@ rect(s,0.55,3.25,8.9,0.012,C.dark);
   text(s,x+0.55,3.5,2.3,0.26,c[0],12,C.dark,{bold:true,font:FH}); text(s,x+0.55,3.78,2.3,0.26,c[1],10,C.muted,{font:FB}); });
 text(s,0.55,4.7,8.9,0.3,RIVAL_S+" rakip analizi  ·  GİZLİ  ·  salescorner.co",8,C.muted,{font:FH});
 
+// ════════ İÇİNDEKİLER MADDELERİ: gerçek slayt başlıkları + sayfa no (atlanan slayt yazılmaz; uzun liste iki sütun) ════════
+{ const n=TOC.length, two=n>12, rows=two?Math.ceil(n/2):n, rh=Math.min(0.3,3.5/Math.max(1,rows)), cw2=two?4.2:8.4;
+  const tf=ofs(TOC.map(e=>e.t),9.5,cw2-0.55,rh,{});
+  TOC.forEach((e,i)=>{ const col=(two&&i>=rows)?1:0, r=col?i-rows:i, x=col?5.0:0.6, y=1.55+r*rh;
+    text(tocId,x,y,0.5,rh,("0"+e.p).slice(-2),9,C.gold,{bold:true,font:FH,valign:"MIDDLE"});
+    text(tocId,x+0.5,y,cw2-0.55,rh,e.t,tf,C.ice,{font:FB,valign:"MIDDLE",min:tf}); }); }
+
 // ════════ ÇIKTI ════════
 return { json: {
   requests: REQ,
@@ -12820,8 +12840,8 @@ return { json: {
   company: RIVAL,
   slideCount: SID.length,
   slideIds: SID,
-  tehdit_seviyesi: safe(es.tehdit_seviyesi),
-  onem_derecesi: safe(es.onem_derecesi)
+  tehdit_seviyesi: String(safe(es.tehdit_seviyesi,"")),
+  onem_derecesi: String(safe(es.onem_derecesi,""))
 }};
 
 })()}},"cred":null},"16. Create Slides":{"name":"16. Create Slides","t":"httpRequest","p":{"method":"POST","url":"https://slides.googleapis.com/v1/presentations","authentication":"predefinedCredentialType","nodeCredentialType":"googleSlidesOAuth2Api","sendBody":true,"specifyBody":"json","jsonBody":__X(function($json,$,$input,$env,$execution,$binary,$itemIndex,$now,$node){return "{\n\"title\": \""+__t(()=>($json.presentationTitle
@@ -12854,8 +12874,8 @@ return { json: {
   slides_pdf_url: 'https://docs.google.com/presentation/d/' + presentationId + '/export/pdf',
   rakip_adi: company,
   slideCount: slideCount,
-  tehdit_seviyesi: builderData.tehdit_seviyesi || 'N/A',
-  onem_derecesi: builderData.onem_derecesi || 'N/A',
+  tehdit_seviyesi: builderData.tehdit_seviyesi || '',
+  onem_derecesi: builderData.onem_derecesi || '',
   message: company + ' için ' + slideCount + " slide'lık ScrapingBee destekli PRO v6 raporu oluşturuldu!",
   generated_at: new Date().toISOString(),
   email_to: vars.email_to || '',
@@ -12878,8 +12898,8 @@ return {
 <div style="background:#fff7e6;border-left:4px solid #F5B841;padding:16px;border-radius:0 8px 8px 0;margin:20px 0">
 <p style="margin:0;color:#333"><strong>Rakip:</strong> ${data.rakip_adi}</p>
 <p style="margin:8px 0 0;color:#333"><strong>Slide sayısı:</strong> ${data.slideCount}</p>
-<p style="margin:8px 0 0;color:#333"><strong>Tehdit seviyesi:</strong> ${data.tehdit_seviyesi}</p>
-<p style="margin:8px 0 0;color:#333"><strong>Önem derecesi:</strong> ${data.onem_derecesi}</p></div>
+${data.tehdit_seviyesi && !/^\s*(n\/?a|-|—)?\s*$/i.test(data.tehdit_seviyesi) ? `<p style="margin:8px 0 0;color:#333"><strong>Tehdit seviyesi:</strong> ${data.tehdit_seviyesi}</p>` : ''}
+${data.onem_derecesi && !/^\s*(n\/?a|-|—)?\s*$/i.test(data.onem_derecesi) ? `<p style="margin:8px 0 0;color:#333"><strong>Önem derecesi:</strong> ${data.onem_derecesi}</p>` : ''}</div>
 <div style="text-align:center;margin:28px 0">
 <a href="${data.slides_url}" style="background:#111827;color:#fff;padding:14px 30px;text-decoration:none;border-radius:8px;font-weight:700;font-size:15px;display:inline-block">Raporu aç</a></div>
 <div style="text-align:center">
