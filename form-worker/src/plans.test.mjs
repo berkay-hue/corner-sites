@@ -23,6 +23,15 @@ test("plans.js ↔ PLANS: basic/pro aylık sayılar ve Pexels erişimi aynı", (
   assert.deepEqual(Object.keys(S).sort(), Object.keys(PLANS).sort());
 });
 
+test("26.11: Enterprise'da içeriği kullanıcı hazırlar — ekip_hazirlar false (worker ve site aynı), planLimits'e girmez", () => {
+  const S = site();
+  assert.equal(S.enterprise.ekip_hazirlar, false);
+  assert.equal(PLANS.enterprise.ekip_hazirlar, false);
+  assert.equal(S.enterprise.ekip_hazirlar, PLANS.enterprise.ekip_hazirlar);
+  assert.ok(!("ekip_hazirlar" in planLimits({ plan: "enterprise" })));
+  for (const p of ["demo", "basic", "pro"]) assert.ok(!("ekip_hazirlar" in S[p]) && !("ekip_hazirlar" in PLANS[p]), p);
+});
+
 test("plans.js metnindeki sayılar regex ile de aynı (değerlendirme dışı yedek denetim)", () => {
   for (const p of ["basic", "pro"]) {
     const m = SRC.match(new RegExp(`\\b${p}:\\{linkedin_blog:(\\d+),video_gorsel:(\\d+)[^}]*pexels:(true|false)`));

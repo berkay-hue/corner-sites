@@ -22,13 +22,16 @@ export const APP_ROUTES = Object.freeze([
   "POST /auth/register", "POST /auth/login", "POST /auth/logout", "GET /auth/me", "POST /auth/forgot", "POST /auth/reset",
   "GET /app/profile", "POST /app/profile",
   "GET /app/connections", "POST /app/connect", "POST /app/connect/finish", "POST /app/disconnect",
-  "GET /app/voice", "PUT /app/voice", "GET /app/drafts", "GET /app/drafts/:id", "POST /app/drafts/:id/delete", "GET /app/export", "POST /app/account/delete",
+  "GET /app/voice", "PUT /app/voice", "GET /app/drafts", "GET /app/drafts/:id", "POST /app/drafts/:id/delete", "POST /app/drafts/:id/media", "GET /app/export", "POST /app/account/delete",
   "GET /app/admin", "GET /app/admin/users", "GET /app/admin/submissions", "GET /app/admin/drafts", "GET /app/admin/jobs", "POST /app/admin/:id/plan",
   // A14 otomatik blog yazarı (src/cms.js CMS_ROUTES; CMS_ENABLED kapalı ya da 0019 yoksa 503 not_ready)
   "GET /app/cms", "GET /app/cmsposts", "POST /app/cms/probe", "POST /app/cms/connect", "POST /app/cms/:id/settings", "POST /app/cms/:id/run",
   "POST /app/cms/:id/pause", "POST /app/cms/:id/resume", "POST /app/cms/:id/disconnect", "POST /app/cmsposts/:id/retry", "POST /app/cmsoauth/start",
   "POST /app/cmsoauth/finish", "POST /app/cmsposts/:id/view", "POST /app/cmsposts/:id/edit", "POST /app/cmsposts/:id/skip",
   "POST /app/cmsposts/:id/now", "POST /app/cmsposts/:id/reschedule",
+  // W2 seslendirme (src/generate.js ttsRoute): /gen/* yönlendiricisi bu listeye bakmaz; ttsRoute oturumun sitesinde
+  // "POST /gen/tts" arar (brandcorner.co'da yok → 401). Ses listesi oturumsuz.
+  "POST /gen/tts", "GET /gen/tts/sesler",
 ]);
 
 export const SITES = {
