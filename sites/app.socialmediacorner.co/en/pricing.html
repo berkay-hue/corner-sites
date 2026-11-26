@@ -20,6 +20,7 @@
 <link rel="stylesheet" href="/assets/studyo.css?v=gs3">
 <link rel="stylesheet" href="/assets/studyo-hesap.css?v=bt1">
 <link rel="stylesheet" href="/assets/panel.css?v=ak1">
+<link rel="stylesheet" href="/assets/fiyat-plan.css?v=fp1">
 </head>
 <body class="hs-govde">
 <a class="atla" href="#icerik">Skip to content</a>
@@ -38,14 +39,26 @@
   <div class="pl-bas">
     <p class="ust-etiket">Plans</p>
     <h1>Pick the plan that fits your team</h1>
-    <p class="giris-p">Every plan comes with a monthly draft allowance. Sign up for a 14-day free trial: 4 LinkedIn and blog drafts, 1 video and image draft, 1 brand voice, 1 Pexels trial image. Then continue on Basic; move to Pro when your brands or volume grow, or to Enterprise when you want us to handle the content.</p>
+    <p class="giris-p">Every plan comes with a monthly draft allowance. Sign up for a 14-day free trial: 4 LinkedIn and blog drafts, 1 video and image draft, 1 brand voice, 1 Pexels trial image. Then continue on Basic; move to Pro when your brands or volume grow, or to Enterprise when you need higher limits.</p>
   </div>
+
+  <div class="pl-donem" role="group" aria-label="Billing period" data-pl-donem hidden>
+    <button type="button" class="pl-donem-d" data-secim="ay" aria-pressed="true">Monthly</button>
+    <button type="button" class="pl-donem-d" data-secim="yil" aria-pressed="false">Yearly <span class="pl-indirim">Save 15%</span></button>
+  </div>
+  <p class="pl-kdv">All prices include VAT. Save 15% when you pay yearly.</p>
 
   <ul class="pl-kartlar">
     <li class="sheet pl-kart">
       <div class="pl-ust">
         <h2 id="pl-basic">Basic</h2>
         <p>For one brand and steady content.</p>
+      </div>
+      <div class="pl-fiyat">
+        <p class="pl-tutar" data-donem="ay"><strong>$39</strong>/mo</p>
+        <p class="pl-tutar" data-donem="yil" hidden><strong>$397</strong>/yr</p>
+        <p class="pl-fiyat-alt" data-donem="ay">VAT included · billed monthly</p>
+        <p class="pl-fiyat-alt" data-donem="yil" hidden>VAT included · about $33 a month</p>
       </div>
       <ul class="pl-liste">
           <li class="pl-var"><svg class="ikon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>8 LinkedIn and blog drafts a month</span></li>
@@ -55,13 +68,21 @@
           <li class="pl-var"><svg class="ikon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Pexels image picker: 1 trial image <span class="pl-et pl-et-pro">Unlimited on Pro</span></span></li>
           <li class="pl-yok"><svg class="ikon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 12h12"/></svg><span>Publish queue</span></li>
       </ul>
-      <a class="btn btn-cizgi" href="/en/hesap/register">Sign up</a>
+      <a class="btn btn-cizgi" data-donem="ay" href="https://socialmediacorner.co/en/contact?konu=Basic%20%E2%80%93%20Monthly#form" aria-label="Buy: Basic, monthly">Buy</a>
+      <a class="btn btn-cizgi" data-donem="yil" hidden href="https://socialmediacorner.co/en/contact?konu=Basic%20%E2%80%93%20Yearly#form" aria-label="Buy: Basic, yearly">Buy</a>
+      <a class="bag pl-dene" href="/en/hesap/register">or start a 14-day free trial</a>
     </li>
     <li class="sheet pl-kart pl-kart-one">
       <div class="pl-ust">
         <p class="pl-isaret">Recommended</p>
         <h2 id="pl-pro">Pro</h2>
         <p>For several brands or a busy content calendar.</p>
+      </div>
+      <div class="pl-fiyat">
+        <p class="pl-tutar" data-donem="ay"><strong>$79</strong>/mo</p>
+        <p class="pl-tutar" data-donem="yil" hidden><strong>$805</strong>/yr</p>
+        <p class="pl-fiyat-alt" data-donem="ay">VAT included · billed monthly</p>
+        <p class="pl-fiyat-alt" data-donem="yil" hidden>VAT included · about $67 a month</p>
       </div>
       <ul class="pl-liste">
           <li class="pl-var"><svg class="ikon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>40 LinkedIn and blog drafts a month</span></li>
@@ -73,20 +94,26 @@
           <li class="pl-sonra"><svg class="ikon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg><span>Automatic posting <span class="pl-et pl-et-yakinda">Coming soon</span></span></li>
       </ul>
         <p class="pl-alt-not">The publish queue and automatic posting open once LinkedIn and Meta approval is complete.</p>
-      <a class="btn btn-ana" href="/en/hesap/register?plan=pro">Start with Pro</a>
+      <a class="btn btn-ana" data-donem="ay" href="https://socialmediacorner.co/en/contact?konu=Pro%20%E2%80%93%20Monthly#form" aria-label="Buy: Pro, monthly">Buy</a>
+      <a class="btn btn-ana" data-donem="yil" hidden href="https://socialmediacorner.co/en/contact?konu=Pro%20%E2%80%93%20Yearly#form" aria-label="Buy: Pro, yearly">Buy</a>
+      <a class="bag pl-dene" href="/en/hesap/register?plan=pro">or start a 14-day free trial</a>
     </li>
     <li class="sheet pl-kart">
       <div class="pl-ust">
         <h2 id="pl-enterprise">Enterprise</h2>
         <p>For agencies and in-house teams.</p>
       </div>
+      <div class="pl-fiyat">
+        <p class="pl-tutar"><strong>Custom pricing</strong></p>
+        <p class="pl-fiyat-alt">We prepare a quote for your needs</p>
+      </div>
       <ul class="pl-liste">
           <li class="pl-var"><svg class="ikon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Everything in Pro</span></li>
-          <li class="pl-var"><svg class="ikon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Daily blog autopilot posts <span class="pl-et pl-et-pro">Enterprise only</span></span></li>
-          <li class="pl-var"><svg class="ikon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Allowances set by agreement</span></li>
-          <li class="pl-var"><svg class="ikon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Our team prepares and approves your content</span></li>
+          <li class="pl-var"><svg class="ikon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Higher limits: drafts, brand voices, sites and blog frequency</span></li>
+          <li class="pl-var"><svg class="ikon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Limits set by quote</span></li>
+          <li class="pl-var"><svg class="ikon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>You prepare content in Studio</span></li>
       </ul>
-      <a class="btn btn-cizgi" href="https://socialmediacorner.co/en/contact#form">Get a quote</a>
+      <a class="btn btn-cizgi" href="https://socialmediacorner.co/en/contact?konu=Enterprise#form">Get a quote</a>
     </li>
   </ul>
   <p class="pl-not">Create an account to use Studio; your first 14 days are a free trial (4 LinkedIn and blog, 1 video and image, 1 brand voice, 1 Pexels trial image). <a class="bag" href="/en/hesap/register">Sign up</a></p>
@@ -101,15 +128,17 @@
           <tr><th scope="col">Feature</th><th scope="col">Basic</th><th scope="col" class="pl-sutun-one">Pro</th><th scope="col">Enterprise</th></tr>
         </thead>
         <tbody>
-          <tr><th scope="row">LinkedIn and blog drafts</th><td>8 a month</td><td class="pl-sutun-one">40 a month</td><td>By agreement</td></tr>
-          <tr><th scope="row">Video and image drafts</th><td>2 a month</td><td class="pl-sutun-one">12 a month</td><td>By agreement</td></tr>
-          <tr><th scope="row">Brand voices</th><td>1</td><td class="pl-sutun-one">3</td><td>By agreement</td></tr>
-          <tr><th scope="row">Blog autopilot: connected sites</th><td><span class="pl-h pl-yok"><svg class="ikon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 12h12"/></svg>No</span></td><td class="pl-sutun-one">1 (contact us for more)</td><td>1 (contact us for more)</td></tr>
-          <tr><th scope="row">Blog autopilot frequency</th><td><span class="pl-h pl-yok"><svg class="ikon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 12h12"/></svg>No</span></td><td class="pl-sutun-one">Up to 3 a week</td><td><strong>Daily</strong></td></tr>
+          <tr><th scope="row">Monthly price (VAT included)</th><td>$39</td><td class="pl-sutun-one">$79</td><td>Get a quote</td></tr>
+          <tr><th scope="row">Yearly price (VAT included, 15% off)</th><td>$397 (≈$33 a month)</td><td class="pl-sutun-one">$805 (≈$67 a month)</td><td>Get a quote</td></tr>
+          <tr><th scope="row">LinkedIn and blog drafts</th><td>8 a month</td><td class="pl-sutun-one">40 a month</td><td><a class="bag" href="https://socialmediacorner.co/en/contact?konu=Enterprise#form">Contact us for a quote</a></td></tr>
+          <tr><th scope="row">Video and image drafts</th><td>2 a month</td><td class="pl-sutun-one">12 a month</td><td><a class="bag" href="https://socialmediacorner.co/en/contact?konu=Enterprise#form">Contact us for a quote</a></td></tr>
+          <tr><th scope="row">Brand voices</th><td>1</td><td class="pl-sutun-one">3</td><td><a class="bag" href="https://socialmediacorner.co/en/contact?konu=Enterprise#form">Contact us for a quote</a></td></tr>
+          <tr><th scope="row">Blog autopilot: connected sites</th><td><span class="pl-h pl-yok"><svg class="ikon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 12h12"/></svg>No</span></td><td class="pl-sutun-one">1 (contact us for more)</td><td><a class="bag" href="https://socialmediacorner.co/en/contact?konu=Enterprise#form">Contact us for a quote</a></td></tr>
+          <tr><th scope="row">Blog autopilot frequency</th><td><span class="pl-h pl-yok"><svg class="ikon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 12h12"/></svg>No</span></td><td class="pl-sutun-one">Up to 3 a week</td><td><a class="bag" href="https://socialmediacorner.co/en/contact?konu=Enterprise#form">Contact us for a quote</a></td></tr>
           <tr><th scope="row">Pexels image picker</th><td><span class="pl-h pl-var"><svg class="ikon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>1 trial image</span></td><td class="pl-sutun-one"><span class="pl-h pl-var"><svg class="ikon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Yes</span></td><td><span class="pl-h pl-var"><svg class="ikon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Yes</span></td></tr>
           <tr><th scope="row">Publish queue</th><td><span class="pl-h pl-yok"><svg class="ikon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 12h12"/></svg>No</span></td><td class="pl-sutun-one"><span class="pl-h pl-sonra"><svg class="ikon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>Coming soon</span></td><td><span class="pl-h pl-sonra"><svg class="ikon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>Coming soon</span></td></tr>
           <tr><th scope="row">Automatic posting</th><td><span class="pl-h pl-yok"><svg class="ikon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 12h12"/></svg>No</span></td><td class="pl-sutun-one"><span class="pl-h pl-sonra"><svg class="ikon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>Coming soon</span></td><td><span class="pl-h pl-sonra"><svg class="ikon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>Coming soon</span></td></tr>
-          <tr><th scope="row">Who prepares content</th><td>You</td><td class="pl-sutun-one">You</td><td>Our team prepares and approves</td></tr>
+          <tr><th scope="row">Who prepares content</th><td>You</td><td class="pl-sutun-one">You</td><td>You</td></tr>
         </tbody>
       </table>
     </div>
@@ -130,5 +159,6 @@
 <script src="/assets/studyo-kabuk.js?v=ak3" defer></script>
 <script src="/assets/ust-hesap.js?v=bt2" defer></script>
 <script src="/assets/plans.js?v=px2" defer></script>
+<script src="/assets/fiyat-plan.js?v=fp1" defer></script>
 </body>
 </html>

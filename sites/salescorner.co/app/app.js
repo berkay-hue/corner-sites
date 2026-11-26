@@ -2445,19 +2445,38 @@ function tkHtml(h) {
   }).join("");
   return walk(doc.body.firstChild || doc.body);
 }
-function tkSonuc(s) {
+// Kaynağın insan için açılacak adresi: kayıtlı url yoksa (eski sonuç) takipteki rakip ayarından bulunur
+function tkKaynakUrl(r, cfg) {
+  const u = safeUrl(r.url);
+  if (u) return u;
+  const c = (Array.isArray(cfg) ? cfg : []).find(x => x && x.firma === r.firma) || {};
+  if (r.kaynak === "LinkedIn") { const l = safeUrl(c.linkedin); return l ? l.replace(/\/?$/, "/") + "posts/" : ""; }
+  return safeUrl(c.site) || safeUrl(c.feed);
+}
+function tkListe(l) {
+  return `<ul class="tk-items">${l.slice(0, 8).map(x => { const u = safeUrl(x.link); return `<li>${u ? `<a href="${esc(u)}" target="_blank" rel="noopener">${esc(x.title || u)}</a>` : esc(x.title || "")}${x.tarih ? ` <span class="tk-mute">· ${fmtD(x.tarih)}</span>` : ""}</li>`; }).join("")}</ul>`;
+}
+// r.toplam kaynakta taranan kayıt sayısıdır; "yeni içerik" yalnız dönem içindeki items'tan sayılır
+function tkSonuc(s, cfg) {
   if (!s) return `<p class="tk-mute">Henüz tarama yapılmadı. İlk tarama planlanan saatte otomatik çalışır.</p>`;
   if (s.hata) return msg("err", `Son tarama tamamlanamadı: ${esc(s.hata)}`);
-  const rk = Array.isArray(s.rakipler) ? s.rakipler : [];
+  const rk = Array.isArray(s.rakipler) ? s.rakipler : [], gun = Number(s.gun) || 7;
   return `${s.yorum_html ? `<div class="tk-yorum">${tkHtml(s.yorum_html)}</div>` : ""}
   ${rk.map(r => {
-    const it = Array.isArray(r.items) ? r.items : [];
-    return `<div class="tk-rk"><div class="row" style="justify-content:flex-start;gap:8px"><b>${esc(r.firma || "Rakip")}</b>
-      ${r.ok === false ? `<span class="pill bad">Okunamadı</span>` : `<span class="pill">${esc(String(r.toplam ?? it.length))} yeni içerik</span>`}${r.kaynak ? `<span class="tk-mute" style="font-size:12.5px">${esc(r.kaynak)}</span>` : ""}</div>
+    const it = Array.isArray(r.items) ? r.items : [], on = Array.isArray(r.onceki) ? r.onceki : [];
+    const ku = tkKaynakUrl(r, cfg), n = Number(r.toplam) || 0;
+    const bos = `Son ${gun} günde yeni paylaşım yok.`;
+    const govde = r.ok === false ? ""
+      : it.length ? tkListe(it)
+      : on.length ? `<p class="tk-mute" style="font-size:13px">${bos} Kaynaktaki son içerikler:</p>${tkListe(on)}`
+      : n ? `<p class="tk-mute" style="font-size:13px">${bos} Kaynakta ${esc(String(n))} içerik tarandı; son içerikler bir sonraki taramadan itibaren burada listelenecek.</p>`
+      : `<p class="tk-mute" style="font-size:13px">${bos}</p>`;
+    return `<div class="tk-rk"><div class="row" style="justify-content:flex-start;gap:8px;flex-wrap:wrap"><b>${esc(r.firma || "Rakip")}</b>
+      ${r.ok === false ? `<span class="pill bad">Okunamadı</span>` : `<span class="pill${it.length ? " ok" : ""}">${it.length ? `${esc(String(it.length))} yeni içerik` : "Yeni içerik yok"}</span>`}${r.kaynak ? `<span class="tk-mute" style="font-size:12.5px">${esc(r.kaynak)}</span>` : ""}${ku ? `<a class="btn btn-g btn-s" style="margin-left:auto" href="${esc(ku)}" target="_blank" rel="noopener">${it.length || on.length ? "Kaynağı aç" : "İçeriklere git"}</a>` : ""}</div>
       ${r.error ? `<p class="tk-mute" style="font-size:13px">${esc(r.error)}</p>` : ""}
-      ${it.length ? `<ul class="tk-items">${it.slice(0, 8).map(x => { const u = safeUrl(x.link); return `<li>${u ? `<a href="${esc(u)}" target="_blank" rel="noopener">${esc(x.title || u)}</a>` : esc(x.title || "")}${x.tarih ? ` <span class="tk-mute">· ${fmtD(x.tarih)}</span>` : ""}</li>`; }).join("")}</ul>` : r.ok === false ? "" : `<p class="tk-mute" style="font-size:13px">Bu hafta yeni paylaşım yok.</p>`}</div>`;
+      ${govde}</div>`;
   }).join("")}
-  ${s.tarih ? `<p class="tk-mute" style="font-size:12.5px">Tarama: ${fmtDT(s.tarih)}${s.mail ? " · Özet e-postanıza gönderildi" : ""}</p>` : ""}`;
+  ${s.tarih ? `<p class="tk-mute" style="font-size:12.5px">Tarama: ${fmtDT(s.tarih)}${s.mail === "E-posta gönderildi." ? " · Özet e-postanıza gönderildi" : ""}</p>` : ""}`;
 }
 function tkKart(t) {
   const rk = Array.isArray(t.rakipler) ? t.rakipler : [];
@@ -2471,7 +2490,7 @@ function tkKart(t) {
       ${sil ? `<span style="font-size:14px">Bu firmanın takibi silinsin mi?</span><span class="row" style="gap:8px"><button type="button" class="btn btn-s" data-tk-silok style="background:var(--bad);color:#fff">Evet, sil</button><button type="button" class="btn btn-g btn-s" data-tk-silno>Vazgeç</button></span>`
       : `<span class="row" style="gap:8px;justify-content:flex-start"><button type="button" class="btn btn-p btn-s" data-tk-run${durum("takip").neden === "sure" || durum("takip").neden === "plan" || t.calisiyor ? " disabled" : ""}>Şimdi tara</button><button type="button" class="btn btn-g btn-s" data-tk-edit>Düzenle</button></span><button type="button" class="linkbtn" data-tk-sil style="color:var(--bad)">Sil</button>`}
     </div>
-    <details class="tk-son"><summary>Son tarama sonucu</summary><div class="tk-body">${tkSonuc(t.son_sonuc)}</div></details>
+    <details class="tk-son"><summary>Son tarama sonucu${t.son_sonuc && (t.son_sonuc.tarih || t.son_calisma) ? `<span class="tk-mute" style="float:right;font-weight:400;font-size:12.5px">${fmtDT(t.son_sonuc.tarih || t.son_calisma)}</span>` : ""}</summary><div class="tk-body">${tkSonuc(t.son_sonuc, t.rakipler)}</div></details>
     ${fyBolum(t)}
   </article>`;
 }
@@ -2537,7 +2556,7 @@ function pageTakip() {
       busy(el, true, "Taranıyor…"); delete TK.run[id];
       const r = await api("/api/app/takip/calistir", { id });
       if (r.success) {
-        TK.run[id] = { kind: "ok", html: "Tarama tamamlandı. Sonuç aşağıda; özet e-postanıza da gönderildi." }; await loadTK();
+        TK.run[id] = { kind: "ok", html: r.takip && r.takip.mail !== "E-posta gönderildi." ? `Tarama tamamlandı. Sonuç aşağıda${r.takip.count ? "." : "; son 7 günde yeni içerik olmadığı için e-posta gönderilmedi."}` : "Tarama tamamlandı. Sonuç aşağıda; özet e-postanıza da gönderildi." }; await loadTK();
         const tt = (TK.list || []).find(x => x.id === id);
         if (tt && tt.son_sonuc && !tt.son_sonuc.hata) gecmisKaydet("takip", { title: tt.firma }, tt.son_sonuc);
       }

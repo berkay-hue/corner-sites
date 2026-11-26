@@ -1493,6 +1493,11 @@ async function rtRakip(c, since, budget) {
   out.items = p.items.filter(x => x.t >= since && x.t <= now && x.link && !seen.has(x.link) && seen.add(x.link))
     .sort((a, b) => b.t - a.t).slice(0, p.kind === "rss" || p.kind === "atom" ? 15 : 10)
     .map(x => ({ title: x.title, link: /^https?:\/\//i.test(x.link) ? x.link : "", tarih: new Date(x.t).toISOString().slice(0, 10) }));
+  // Dönemde yeni içerik yoksa panel kaynaktaki son içerikleri gösterir (rapora/yoruma/e-postaya girmez); tarihsizler sonda.
+  const eski = new Set();
+  out.onceki = p.items.filter(x => x.t < since && /^https?:\/\//i.test(x.link || "") && !eski.has(x.link) && eski.add(x.link))
+    .sort((a, b) => b.t - a.t).slice(0, 5)
+    .map(x => ({ title: x.title, link: x.link, tarih: x.t ? new Date(x.t).toISOString().slice(0, 10) : "" }));
   return out;
 }
 // LinkedIn şirket sayfası sunucu isteğine 403 verir; gönderiler Google araması (Serper) ile bulunur.
@@ -1622,7 +1627,7 @@ async function rtCalis(env, b) {
     }
   }
   return { success: true, status: "ok", gun, count: rows.length, yorum_html: yorum, mail,
-    rakipler: res.map(r => ({ firma: r.firma, ok: r.ok, kaynak: r.kaynak, feed_url: r.feed_url, error: r.error, toplam: r.toplam, tarihsiz: r.tarihsiz, son: r.son, ...(r.kaynak === "LinkedIn" ? { ham: r.ham, tani: r.tani, onceki: r.onceki || [] } : {}), items: r.items })) };
+    rakipler: res.map(r => ({ firma: r.firma, ok: r.ok, kaynak: r.kaynak, feed_url: r.feed_url, error: r.error, toplam: r.toplam, tarihsiz: r.tarihsiz, son: r.son, site: r.site || "", onceki: r.onceki || [], ...(r.kaynak === "LinkedIn" ? { ham: r.ham, tani: r.tani } : {}), items: r.items })) };
 }
 
 // ---------- Sales Corner SaaS paneli (app.salescorner.co, /api/app/*) ----------
@@ -1889,11 +1894,18 @@ const TAKIP_NEDEN = {
   calisiyor: "Bu takip şu anda çalışıyor, birkaç dakika sonra sonucu görürsünüz.",
   erken: "Bu takip son 20 saat içinde çalıştı. Haftalık takip otomatik devam ediyor.",
 };
+// toplam = kaynakta taranan kayıt sayısı (yeni değil); yeni içerik = items. Panelde kaynağa gitme bağlantısı için url saklanır.
+const takipKaynakUrl = r => {
+  const f = /^https?:\/\//i.test(r.feed_url || "") ? r.feed_url : "", s = /^https?:\/\//i.test(r.site || "") ? r.site : "";
+  if (r.kaynak === "LinkedIn") return f ? f.replace(/\/?$/, "/") + "posts/" : "";
+  return r.kaynak === "blog sayfası" ? f || s : s || f;
+};
 function takipOzet(s) {
+  const kisa = l => (l || []).slice(0, 8).map(x => ({ title: str(x.title, 160), link: str(x.link, 600), tarih: str(x.tarih, 40) }));
   return {
     tarih: new Date().toISOString(), gun: s.gun, count: s.count, yorum_html: str(s.yorum_html, 20000), mail: s.mail,
     rakipler: (s.rakipler || []).map(r => ({ firma: str(r.firma, 80), ok: !!r.ok, kaynak: str(r.kaynak, 40), error: str(r.error, 300), toplam: Number(r.toplam) || 0,
-      items: (r.items || []).slice(0, 15).map(x => ({ title: str(x.title, 300), link: str(x.link, 600), tarih: str(x.tarih, 40) })) })),
+      url: str(takipKaynakUrl(r), 600), items: kisa(r.items), onceki: kisa(r.onceki).slice(0, 5) })),
   };
 }
 async function takipYap(env, is, token) {

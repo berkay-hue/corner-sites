@@ -1,0 +1,16 @@
+/* Planlar sayfası: fiyat, KDV notu, Aylık/Yıllık seçici. Yalnız fiyatlar.html ve en/pricing.html yükler. */
+.pl-donem[hidden],[data-donem][hidden]{display:none!important}
+.pl-donem{display:flex;gap:4px;width:max-content;max-width:100%;margin:0 auto var(--s2);padding:4px;border:1px solid var(--line);border-radius:var(--r-hap);background:var(--surface)}
+.pl-donem-d{display:inline-flex;align-items:center;justify-content:center;gap:var(--s2);min-height:var(--dokunma,44px);padding:0 var(--g2);border:0;border-radius:var(--r-hap);background:transparent;color:var(--ink2);font:700 .9375rem/1.2 var(--govde);cursor:pointer}
+.pl-donem-d:hover{color:var(--ink)}
+.pl-donem-d[aria-pressed="true"]{background:var(--accent);color:var(--on-accent)}
+.pl-donem-d:focus-visible{outline:var(--odak-kalin) solid var(--focus);outline-offset:var(--odak-aralik)}
+.pl-indirim{padding:1px 8px;border-radius:var(--r-hap);background:var(--accent-soft);color:var(--accent-strong);font:700 .75rem/1.4 var(--govde);white-space:nowrap}
+.pl-kdv{max-width:720px;margin:0 auto var(--g3);color:var(--ink2);font:var(--f-ipucu);text-align:center}
+.pl-fiyat{display:grid;gap:2px}
+.pl-tutar{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px;color:var(--ink2);font-weight:600}
+.pl-tutar strong{color:var(--ink);font:800 2rem/1.1 var(--baslik);letter-spacing:-.02em}
+.pl-fiyat-alt{color:var(--ink2);font:var(--f-ipucu)}
+.pl-kart .pl-dene{align-self:center;margin-top:calc(var(--s2) * -1);font:var(--f-ipucu)}
+@media (max-width:400px){.pl-donem-d{padding:0 var(--s3)}}
+@media (forced-colors:active){.pl-donem-d[aria-pressed="true"]{forced-color-adjust:none;background:Highlight;color:HighlightText}}
