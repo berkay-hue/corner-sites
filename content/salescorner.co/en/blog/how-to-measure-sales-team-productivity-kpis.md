@@ -57,7 +57,7 @@ Instead of setting activity targets arbitrarily, work backward from your outcome
 - Reply-to-meeting rate: 40% → 200 positive or neutral replies needed
 - Contact-to-reply rate: 5% → 4,000 contacts need to be reached
 
-For a team of two SDRs, this works out to a target of roughly 2,000 contacts per person per month, or about 500 per week. These figures are for illustration only. When you run the calculation with your own historical data, your targets become both realistic and defensible.
+For a team of two SDRs, this works out to a target of roughly 2,000 contacts per person per month, or about 500 per week. These figures are for illustration only. When you run the calculation with your own historical data, your targets become both realistic and defensible. For role-based daily benchmarks, see [how many calls and emails a sales rep should make per day](/blog/how-many-calls-emails-per-day-sales-rep).
 
 ## What are the conversion and pipeline KPIs?
 

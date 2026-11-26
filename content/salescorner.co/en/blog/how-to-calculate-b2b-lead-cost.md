@@ -232,7 +232,7 @@ A "good" lead cost depends not on your industry but on **your own unit economics
 
 An important caveat: CAC includes not only lead generation costs but also **the cost of the sales team that closes the deal**. You need to subtract closing costs from this ceiling. If closing accounts for half of CAC, the per-opportunity budget available for lead generation drops to roughly 26,000 TL. In the example above, every channel except trade shows stays below this limit.
 
-This calculation also informs your scaling decisions. For a channel that stays below the acceptable cost, increasing volume makes sense until the marginal cost approaches the ceiling.
+This calculation also informs your scaling decisions. For a channel that stays below the acceptable cost, increasing volume makes sense until the marginal cost approaches the ceiling. To check lead cost against customer value, use our [CAC and LTV calculator](/en/tools/cac-ltv-calculator).
 
 ## Practical ways to reduce lead cost
 

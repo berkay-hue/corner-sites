@@ -194,7 +194,7 @@ To make this concrete, let's consider a fictional but realistic scenario. An SME
 
 **What changed?** Time to first contact is now a measured figure rather than a guess. The sales manager can see which opportunity is with whom and at what stage from a single screen. Post-proposal follow-ups have become systematic. Reps no longer have to wonder every morning, "Who should I call today?" In a setup like this, the most valuable gain is often not the individual automations but **making the sales process visible for the first time**.
 
-## How much does it cost?
+## How much does a CRM-free setup cost?
 
 The cost of CRM-free automation consists of three items:
 

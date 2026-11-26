@@ -2,7 +2,7 @@
 title: "KVKK-Compliant B2B Cold Email: The Legal Boundaries"
 description: "Learn how B2B cold email can comply with KVKK and Turkish commercial electronic message rules, with examples of legitimate interest and opt-out options."
 date: "2026-10-13"
-updated: "2026-10-16"
+updated: "2026-11-26"
 category: "Outbound"
 image: "https://images.pexels.com/photos/1181370/pexels-photo-1181370.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
 imageAlt: "KVKK-Compliant B2B Cold Email: The Legal Boundaries"
@@ -108,7 +108,7 @@ Even if you're sending under the merchant/tradesperson exemption, **exercising t
 
 The **Message Management System (İYS)** is the system where consents and opt-outs for commercial electronic messages are managed centrally. Service providers' obligation to register with İYS, and how opt-outs submitted via İYS should be checked for messages sent to merchant/tradesperson recipients, are subject to detailed rules depending on sending volume and channel. Clarify your own situation with your legal advisor. Also make it part of your process to regularly sync opt-out records from İYS into your suppression list.
 
-There's a deadline obligation on the KVKK side as well. When a data subject asks "What data do you hold about me?" or "Delete my data," you must resolve the request **within 30 days at the latest**. To keep these requests from getting lost in a sales rep's inbox, it's important to route them through a dedicated email address or form and keep a record of them.
+There's a deadline obligation on the KVKK side as well. When a data subject asks "What data do you hold about me?" or "Delete my data," you must resolve the request **within 30 days at the latest**. To keep these requests from getting lost in a sales rep's inbox, it's important to route them through a dedicated email address or form and keep a record of them. If you also reach merchants on WhatsApp, the rules there are covered in [WhatsApp B2B sales and commercial message consent](/blog/whatsapp-b2b-sales-commercial-message-consent).
 
 ## Data Sources, Enrichment and Cross-Border Transfers
 

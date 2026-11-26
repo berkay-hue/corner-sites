@@ -120,7 +120,7 @@ The purpose of the call to action isn't to make a sale; it's to start a conversa
 
 Questions like these make it easy to answer "yes," "no" or "reach out to this person." Remember, replies like "not right now" or "the right person is so-and-so" are valuable too. They improve your list and lay the groundwork for your next touchpoint. Save the meeting request for the step after the first positive reply.
 
-## How many follow-up emails should you send?
+## Is weak follow-up behind your low reply rate?
 
 This is one of the most frequently asked questions, and it sits at the heart of the sixth mistake.
 
@@ -132,13 +132,7 @@ At the other extreme is aggressive follow-up: five emails, three days apart, eac
 
 **How to fix it**
 
-A sample 4-5 step sequence could look like this:
-
-1. **Day 1: First email.** Trigger, problem hypothesis and a light question.
-2. **Days 3-4: Short follow-up.** A 2-3 sentence note in the same thread that offers a new angle. For example, a different problem or a brief summary of your approach.
-3. **Days 7-8: Value-driven content.** A short observation, checklist or useful resource specific to the recipient's industry.
-4. **Days 12-14: Different channel.** A LinkedIn connection request or short message. A phone call, if appropriate.
-5. **Days 18-21: Breakup email.** A polite goodbye in the tone of "I'll assume this isn't a priority for you right now; let me know if I'm wrong."
+Spread 4-6 touches over two to three weeks, each adding a new angle, and end with a polite breakup email. For exact step counts and intervals, see [how many steps and what intervals a B2B outbound email sequence needs](/blog/outbound-email-sequence-steps-timing).
 
 Every follow-up email should stand on its own and add something new to the previous message. Empty "just checking in" follow-ups are the weakest link in the sequence.
 

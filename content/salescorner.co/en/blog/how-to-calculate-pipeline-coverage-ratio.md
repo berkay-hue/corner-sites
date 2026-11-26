@@ -65,6 +65,8 @@ The formula may be simple, but the reliability of the calculation depends on whi
 
 7. **Break it down.** Run the same calculation by rep, segment, product, and source (inbound/outbound/partner). That's the only way to see that a single rep or segment has a serious gap while overall coverage looks healthy.
 
+To see the pipeline, leads and meetings your target requires, try our free [sales target and pipeline calculator](/en/tools/sales-target-calculator).
+
 ## Numerical example: A B2B software team's quarterly calculation
 
 Let's consider a hypothetical B2B SaaS company. It has a three-person sales team, and we're in the sixth week of the quarter.

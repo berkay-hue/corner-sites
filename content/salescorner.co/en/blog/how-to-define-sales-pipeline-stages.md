@@ -2,7 +2,7 @@
 title: "How to Define Sales Pipeline Stages: Examples"
 description: "Learn how to define B2B sales pipeline stages, set clear exit criteria for each stage, and avoid common mistakes, with practical examples."
 date: "2026-10-12"
-updated: "2026-10-16"
+updated: "2026-11-26"
 category: "Pipeline"
 image: "https://images.pexels.com/photos/8555771/pexels-photo-8555771.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
 imageAlt: "How to Define Sales Pipeline Stages: Examples"
@@ -163,7 +163,7 @@ The third scenario is a team selling a low-to-mid-priced product to SMBs, with m
 
 The key point in this model is that most stage transitions depend on **in-product behavior**. This makes automation almost essential. When product data flows into the CRM, the opportunity stage can be updated without rep intervention.
 
-## Probabilities and Weighted Pipeline: A Worked Example
+## Validating Stage Probabilities with Real Data
 
 Let's look at the practical benefit of assigning probabilities to stages with a simple calculation. Suppose the SaaS company in Example 1 has the following opportunities in its pipeline:
 
@@ -173,7 +173,7 @@ Let's look at the practical benefit of assigning probabilities to stages with a 
 - 5 opportunities in Stage 4 × 100,000 TL × 60% = **300,000 TL**
 - 3 opportunities in Stage 5 × 100,000 TL × 80% = **240,000 TL**
 
-While the total raw pipeline appears to be 4,800,000 TL, **the weighted pipeline is 1,300,000 TL**. The forecast presented to the board should be based on this second figure, or better yet, on a version filtered to opportunities with close dates in the current quarter.
+The raw pipeline appears to be 4,800,000 TL, while the weighted value is 1,300,000 TL. To turn these weighted values into a number you can commit to, see [how to build a realistic sales forecast from your pipeline](/blog/sales-forecasting-from-pipeline).
 
 Now imagine you look at actual data a quarter later. Say only 7 of the 30 opportunities that entered Stage 3 were won. That puts the real probability at roughly 23%, not the 40% you assumed. This gap points to one of two things. Either you need to lower the probability, or the entry criteria for the demo stage are too loose and unqualified opportunities are being pushed into demos. More often than not, the right answer is to **tighten the criteria**.
 

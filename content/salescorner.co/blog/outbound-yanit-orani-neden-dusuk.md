@@ -1,6 +1,6 @@
 ---
 title: "Outbound Yanıt Oranı Neden Düşük? 7 Yaygın Hata"
-description: "Outbound kampanyanızda yanıt oranı neden düşük? Hedefleme, mesaj ve takip dizisindeki en sık 7 hatayı ve somut örneklerle çözüm yollarını anlatıyoruz."
+description: "Outbound kampanyanızda yanıt oranı neden düşük? Hedefleme, teslim edilebilirlik ve mesajdaki en sık 7 hatayı ve somut örneklerle çözüm yollarını anlatıyoruz."
 date: "2026-10-21"
 category: "Outbound"
 image: "https://images.pexels.com/photos/5716032/pexels-photo-5716032.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
@@ -57,7 +57,7 @@ Doğru şirketleri seçmiş olabilirsiniz, ama e-posta adresleri geçersizse ya 
 3. **Tazelik kuralı koyun.** Örneğin 90 günden eski kayıtları yeniden doğrulamadan diziye almayın.
 4. **Tek bir doğru kaynak belirleyin.** Verinin CRM'de mi, prospecting aracında mı, yoksa bir tabloda mı "doğru" kabul edileceğine karar verin ve senkronizasyonu otomatikleştirin.
 
-Prospecting tarafında [Apollo.io](https://get.apollo.io/679irkzm35ya) gibi veritabanları, unvan, sektör ve şirket büyüklüğü filtreleriyle liste oluşturmayı ve iletişim bilgisi bulmayı hızlandırır. Yine de hiçbir veritabanı yüzde yüz güncel değildir. Doğrulama ve zenginleştirme katmanını atlamamak gerekir. Türkiye pazarına özel yöntemler için [B2B veri zenginleştirmenin nasıl yapılacağını anlatan Türkiye rehberimiz](/blog/b2b-veri-zenginlestirme-nasil-yapilir) iyi bir başlangıç noktası olur.
+Prospecting tarafında [Apollo.io](https://get.apollo.io/679irkzm35ya) gibi veritabanları, unvan, sektör ve şirket büyüklüğü filtreleriyle liste oluşturmayı ve iletişim bilgisi bulmayı hızlandırır. Yine de hiçbir veritabanı yüzde yüz güncel değildir. Doğrulama ve zenginleştirme katmanını atlamamak gerekir. Türkiye pazarına özel yöntemler için [B2B veri zenginleştirmenin nasıl yapılacağını anlatan Türkiye rehberimiz](/blog/b2b-veri-zenginlestirme-nasil-yapilir) iyi bir başlangıç noktası olur. Listeyi göndermeden önce doğrulamak için [e-posta bounce oranını düşürme adımlarına](/blog/eposta-bounce-orani-nasil-dusurulur) göz atın.
 
 ## Hata 3: Teslim edilebilirliği hafife almak
 
@@ -72,7 +72,7 @@ Birçok ekip düşük yanıt oranını mesaj metnine bağlar. Oysa e-postaların
 
 1. **Ana alan adınızı koruyun.** Soğuk e-posta için ana alan adınıza benzeyen ayrı bir alan adı kullanın. Örneğin ana alan adınız sirketiniz.com ise outbound için sirketiniz.co ya da sirketinizhq.com gibi bir alternatif tercih edilebilir. Böylece olası bir itibar sorunu kurumsal e-postanızı etkilemez.
 2. **Teknik kimlik doğrulamayı tamamlayın.** SPF, DKIM ve DMARC kayıtlarının doğru yapılandırıldığından emin olun. Bu üçü eksikse büyük e-posta sağlayıcıları mesajlarınıza şüpheyle yaklaşır.
-3. **Hesapları ısıtın.** Yeni bir gelen kutusundan ilk gün yüzlerce e-posta göndermeyin. Günde 10-20 e-postayla başlayıp birkaç hafta içinde kademeli olarak artırmak yaygın ve güvenli bir yaklaşımdır.
+3. **Hesapları ısıtın.** Yeni bir gelen kutusundan ilk gün yüzlerce e-posta göndermeyin. Haftalık ısınma planı için [yeni domaini adım adım ısıtma rehberimize](/blog/outbound-e-posta-domain-isinma-warm-up-rehberi) bakın.
 4. **Hesap başına makul bir limit belirleyin.** Pek çok ekip hesap başına günlük 30-50 soğuk e-postayı güvenli bir üst sınır olarak kullanır. Daha fazla hacim gerekiyorsa tek hesabı zorlamak yerine birden fazla gelen kutusuna yayın.
 5. **İçeriği sade tutun.** İlk e-postada görsel, ek, çok sayıda link ve takip pikseli kullanmaktan kaçının. Düz metne yakın e-postalar hem daha kişisel görünür hem filtrelere daha az takılır.
 6. **Bounce ve şikâyet oranlarını izleyin.** Bu oranlar yükselmeye başladığında gönderimi durdurun ve nedenini bulun.
@@ -120,7 +120,7 @@ Bu e-posta 70 kelime civarındadır. Alıcıyla ilgili gerçek bir gözlem içer
 
 Bu tür sorular "evet", "hayır" ya da "şu kişiye yazın" yanıtlarının hepsini kolaylaştırır. Unutmayın, "şu an değil" ya da "doğru kişi şu" yanıtları da değerlidir. Hem listenizi iyileştirir hem de bir sonraki temasın zeminini hazırlar. Toplantı talebini ise ilk olumlu yanıttan sonraki adıma saklayın.
 
-## Kaç takip e-postası gönderilmeli?
+## Takip eksikliği yanıt oranını nasıl düşürür?
 
 Bu, en sık sorulan sorulardan biri ve altıncı hatanın da kalbinde yer alıyor.
 
@@ -132,13 +132,7 @@ Diğer uçta ise agresif takip var: Üç gün arayla, her seferinde "Bir önceki
 
 **Nasıl düzeltilir?**
 
-Örnek bir 4-5 adımlı dizi şöyle kurgulanabilir:
-
-1. **1. gün: İlk e-posta.** Tetikleyici, problem hipotezi ve hafif bir soru.
-2. **3-4. gün: Kısa takip.** Aynı başlık zincirinde, 2-3 cümlelik ve yeni bir açı sunan bir not. Örneğin farklı bir problem ya da kısa bir yaklaşım özeti.
-3. **7-8. gün: Değer odaklı içerik.** Alıcının sektörüne özel kısa bir gözlem, kontrol listesi ya da faydalı bir kaynak.
-4. **12-14. gün: Farklı kanal.** LinkedIn'de bağlantı isteği veya kısa bir mesaj. Uygunsa telefon.
-5. **18-21. gün: Kapanış e-postası.** "Bu konuyu sizin için şu an öncelik değil diye varsayıyorum, yanılıyorsam haber verin" tonunda, kibar bir veda.
+Adım sayısı ve aralıklar için [B2B outbound e-posta dizisinin kaç adım ve hangi aralıklarla kurulacağını anlattığımız rehbere](/blog/outbound-eposta-dizisi-kac-adim-olmali) bakın.
 
 Her takip e-postası kendi başına anlam taşımalı ve bir önceki mesaja yeni bir şey eklemelidir. "Sadece kontrol ediyorum" türü boş takipler, dizinin en zayıf halkasıdır.
 

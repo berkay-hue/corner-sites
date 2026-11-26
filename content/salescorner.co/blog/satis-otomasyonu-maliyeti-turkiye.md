@@ -31,7 +31,7 @@ Gerçekçi bir bütçe, aşağıdaki kalemlerin her birini ayrı ayrı ele alır
 
 ### 1. CRM ve pipeline yönetimi
 
-Otomasyonun merkezinde genellikle bir CRM bulunur. Kullanıcı başına aylık ücretler, giriş seviyesindeki paketlerde birkaç on dolardan başlar. Gelişmiş otomasyon, özel alanlar ve raporlama içeren paketlerde ise kullanıcı başına aylık yüz doları aşabilir. Burada sık yapılan hata, otomasyon özelliklerine ihtiyaç duyulduğu için tüm ekibi en pahalı pakete taşımaktır. Oysa otomasyonların bir kısmı CRM dışında, harici bir iş akışı aracıyla daha ucuza kurulabilir.
+Otomasyonun merkezinde genellikle bir CRM bulunur. Kullanıcı başına aylık ücretler, giriş seviyesindeki paketlerde birkaç on dolardan başlar. Gelişmiş otomasyon, özel alanlar ve raporlama içeren paketlerde ise kullanıcı başına aylık yüz doları aşabilir. Burada sık yapılan hata, otomasyon özelliklerine ihtiyaç duyulduğu için tüm ekibi en pahalı pakete taşımaktır. Oysa otomasyonların bir kısmı CRM dışında, harici bir iş akışı aracıyla daha ucuza kurulabilir. Hangi işin CRM'de, hangisinin otomasyon katmanında kalacağını [CRM ile satış otomasyonu arasındaki farkı anlattığımız yazıda](/blog/crm-ile-satis-otomasyonu-farki-nedir) ele aldık.
 
 ### 2. Veri ve iletişim bilgisi
 
@@ -106,7 +106,7 @@ Kurucunun da satışa dahil olduğu, ayda birkaç yüz potansiyel müşteriye ul
 - **Toplam araç maliyeti: yaklaşık aylık 150–500 dolar**
 - Kurulum: Kendiniz kurarsanız birkaç haftalık yarı zamanlı emek; dışarıdan alırsanız tek seferlik bir proje bedeli
 
-Bu ölçekte en büyük risk, çok fazla araç alıp hiçbirini tam kullanmamaktır. Tek bir net iş akışıyla (örneğin "lead listesi → zenginleştirme → kişiselleştirilmiş e-posta dizisi") başlamak bütçeyi korur.
+Bu ölçekte en büyük risk, çok fazla araç alıp hiçbirini tam kullanmamaktır. Tek bir net iş akışıyla (örneğin "lead listesi → zenginleştirme → kişiselleştirilmiş e-posta dizisi") başlamak bütçeyi korur. Henüz CRM'iniz yoksa [CRM kullanmadan Google Sheets ve n8n ile otomasyon kurma rehberimiz](/blog/crm-olmadan-satis-otomasyonu-nasil-kurulur) daha düşük maliyetli bir başlangıç sunar.
 
 ### Senaryo 2: 5–10 kişilik satış ekibi, yapılandırılmış outbound
 
@@ -138,6 +138,8 @@ Bu ölçekte araç maliyetinden çok, verinin tutarlılığı ve süreç standar
 ## Kendiniz kurmak mı, ajansla çalışmak mı, hizmet satın almak mı?
 
 Üç modelin maliyet yapısı birbirinden oldukça farklıdır.
+
+Üç modeli maliyet, kontrol, hız ve veri sahipliğine göre [ajans mı, araç mı karşılaştırmamızda](/karsilastirma/ajans-mi-arac-mi) karar ağacıyla karşılaştırdık.
 
 **1. İçeride kurmak:** Lisans ve araç maliyeti dışında görünür bir harcama yoktur, ancak gizli maliyet büyüktür: teknik bilgiye sahip bir çalışanın haftalarca bu işe ayırdığı zaman, deneme-yanılma süresi ve o kişi ayrıldığında sistemin sahipsiz kalma riski. Teknik yetkinliği olan ve süreci sahiplenecek biri varsa mantıklıdır.
 

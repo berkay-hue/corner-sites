@@ -194,7 +194,7 @@ Somutlaştırmak için kurgusal ama gerçekçi bir senaryo düşünelim. Bursa'd
 
 **Ne değişti?** İlk temas süresi artık tahmin değil, ölçülen bir rakam. Satış müdürü hangi fırsatın kimde ve hangi aşamada beklediğini tek ekrandan görüyor. Teklif sonrası takipler sistematik hale geldi. Temsilcilerin her sabah "Bugün kimi aramalıyım?" diye düşünmesine gerek kalmadı. Bu tür bir yapıda kazanılan en değerli şey çoğu zaman tek tek otomasyonlar değil, **satış sürecinin ilk kez görünür hale gelmesidir**.
 
-## Maliyeti ne kadar?
+## CRM'siz yapının aylık maliyeti
 
 CRM'siz otomasyonun maliyeti üç kalemden oluşur:
 

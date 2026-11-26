@@ -1,8 +1,8 @@
 ---
 title: "n8n ile B2B Satış Otomasyonu: Başlangıç Rehberi"
-description: "n8n ile B2B satış otomasyonu: lead toplama, CRM senkronizasyonu, takip e-postaları ve AI katmanı için adım adım rehber."
+description: "n8n ile B2B satış otomasyonu: lead toplama, CRM senkronizasyonu, takip e-postaları ve AI katmanını kuracağınız iş akışları için adım adım başlangıç rehberi."
 date: "2026-10-11"
-updated: "2026-10-16"
+updated: "2026-11-26"
 category: "Otomasyon"
 image: "https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
 imageAlt: "n8n ile B2B satış otomasyonu"
@@ -24,9 +24,9 @@ Satış ekipleri açısından n8n'i öne çıkaran üç özellik var:
 - **Veri kontrolü:** Kendi sunucunuzda (self-hosted) çalıştırabildiğiniz için müşteri verisi üçüncü bir otomasyon platformunda tutulmak zorunda değil.
 - **AI node'ları:** Büyük dil modellerini akışın içine bir adım olarak yerleştirip sınıflandırma, özetleme ve metin üretimi yaptırabilirsiniz.
 
-## Satışta Hangi Süreçlerle Başlamalı?
+## n8n ile İlk Kurulacak 5 Satış Akışı
 
-Her şeyi aynı anda otomatikleştirmeye çalışmak, otomasyon projelerinin en sık yarım kalma nedeni. Başlangıç için şu üç kriteri taşıyan süreçleri seçin: **sık tekrar ediyor**, **kuralları net** ve **hata maliyeti düşük**. Bu kriterlere en iyi uyan satış süreçleri şunlar:
+Her şeyi aynı anda otomatikleştirmeye çalışmak, otomasyon projelerinin en sık yarım kalma nedeni. Hangi süreci önce otomatikleştireceğinize karar vermek için [etki ve uygulama maliyetine göre satış otomasyonu önceliklendirme rehberimize](/blog/satis-otomasyonu-nereden-baslamali) bakın. Aşağıda n8n'de en hızlı kurulan beş akış var:
 
 1. **Lead yakalama ve CRM'e yazma:** Web formu, LinkedIn formu ya da etkinlik listesinden gelen kişiyi otomatik olarak CRM'e kaydetmek, mükerrer kayıtları birleştirmek.
 2. **Veri zenginleştirme:** Kayıttaki şirket alan adından sektör, çalışan sayısı ve konum gibi bilgileri tamamlamak.

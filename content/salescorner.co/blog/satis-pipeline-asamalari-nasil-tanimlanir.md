@@ -1,8 +1,8 @@
 ---
 title: "Satış Pipeline Aşamaları Nasıl Tanımlanır? Örnekler"
-description: "B2B satış pipeline aşamalarını nasıl tanımlarsınız? Her aşamanın çıkış kriterleri ve sık yapılan hatalar örneklerle."
+description: "Satış pipeline aşamaları nasıl tanımlanır? B2B pipeline'da her aşamanın giriş ve çıkış kriterleri, örnek aşama listesi ve sık yapılan hatalar örneklerle."
 date: "2026-10-12"
-updated: "2026-10-16"
+updated: "2026-11-26"
 category: "Pipeline"
 image: "https://images.pexels.com/photos/8555771/pexels-photo-8555771.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
 imageAlt: "Satış Pipeline Aşamaları Nasıl Tanımlanır? Örnekler"
@@ -163,7 +163,7 @@ Bu modelde maksimum bekleme süreleri daha uzundur. Örneğin "Satın Alma ve Hu
 
 Bu modelde dikkat edilmesi gereken nokta, aşama geçişlerinin büyük kısmının **ürün içi davranışa** bağlı olmasıdır. Bu da otomasyonu neredeyse zorunlu kılar. Ürün verisi CRM'e aktığında fırsat aşaması temsilci müdahalesi olmadan güncellenebilir.
 
-## Olasılıklar ve Ağırlıklı Pipeline: Rakamlarla Bir Örnek
+## Aşama Olasılıklarını Gerçek Veriyle Doğrulamak
 
 Aşamalara olasılık atamanın pratik faydasını basit bir hesapla görelim. Örnek 1'deki SaaS şirketinin pipeline'ında şu fırsatlar olsun:
 
@@ -173,7 +173,7 @@ Aşamalara olasılık atamanın pratik faydasını basit bir hesapla görelim. �
 - Aşama 4'te 5 fırsat × 100.000 TL × %60 = **300.000 TL**
 - Aşama 5'te 3 fırsat × 100.000 TL × %80 = **240.000 TL**
 
-Toplam ham pipeline 4.800.000 TL görünürken, **ağırlıklı pipeline 1.300.000 TL**'dir. Yönetim kuruluna sunulacak tahmin bu ikinci rakama, hatta kapanış tarihleri bu çeyreğe düşen fırsatlara göre filtrelenmiş haline dayanmalıdır.
+Ham pipeline 4.800.000 TL görünürken ağırlıklı değer 1.300.000 TL'dir. Bu olasılıklarla ağırlıklı pipeline ve çeyreklik tahmin çıkarmak için [pipeline verisinden gerçekçi satış tahmini yapma rehberimize](/blog/satis-tahmini-nasil-yapilir) bakın.
 
 Bir çeyrek sonra gerçek verilere baktığınızı düşünün. Aşama 3'e giren 30 fırsattan yalnızca 7'si kazanılmış olsun. Bu durumda gerçek olasılık yaklaşık %23'tür, varsaydığınız %40 değil. Bu fark iki şeyden birine işaret eder. Ya olasılığı düşürmeniz gerekir ya da demo aşamasının giriş kriteri çok gevşektir ve nitelenmemiş fırsatlar demoya alınıyordur. Çoğu zaman doğru cevap, **kriteri sıkılaştırmaktır**.
 

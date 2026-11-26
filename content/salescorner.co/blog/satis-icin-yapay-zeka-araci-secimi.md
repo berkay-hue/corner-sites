@@ -54,7 +54,7 @@ Küresel veri sağlayıcılarının çoğu Kuzey Amerika ve Batı Avrupa'da gü�
 
 Örneğin bir araç 50 kişiden 40'ını buluyor ama bunların 12'sinin unvanı eskiyse, gerçek kullanılabilir veri 28 kişidir. Diğer araç 32 kişi bulup hepsinde doğru bilgi veriyorsa, ikinci araç daha az "görünse" de daha değerlidir.
 
-Prospecting tarafında [Apollo.io](https://get.apollo.io/679irkzm35ya) gibi geniş veritabanına sahip platformlar iyi bir başlangıç noktası olabilir; ancak Türkiye pazarında tek kaynağa güvenmek yerine birden fazla sağlayıcıyı katmanlı biçimde kullanmak genellikle daha iyi sonuç verir. Bu yaklaşımın ayrıntılarını [Türkiye pazarında B2B veri zenginleştirme](/blog/b2b-veri-zenginlestirme-nasil-yapilir) rehberimizde adım adım anlattık.
+Prospecting tarafında [Apollo.io](https://get.apollo.io/679irkzm35ya) gibi geniş veritabanına sahip platformlar iyi bir başlangıç noktası olabilir; ancak Türkiye pazarında tek kaynağa güvenmek yerine birden fazla sağlayıcıyı katmanlı biçimde kullanmak genellikle daha iyi sonuç verir. Bu yaklaşımın ayrıntılarını [Türkiye pazarında B2B veri zenginleştirme](/blog/b2b-veri-zenginlestirme-nasil-yapilir) rehberimizde adım adım anlattık. Apollo ile Sales Corner arasındaki farkı (veritabanı ya da AI modüller) [Apollo.io alternatifi karşılaştırmamızda](/karsilastirma/apollo-alternatifi) ayrıntılı anlattık.
 
 ## 3. Kriter: Mevcut sistemlerinizle entegre çalışıyor mu?
 
@@ -85,7 +85,7 @@ Satın alma öncesinde güvenlik ve hukuk tarafıyla birlikte şunları kontrol 
 - **Erişim yetkileri nasıl yönetiliyor?** Rol bazlı yetkilendirme, tek oturum açma (SSO) ve işlem kayıtları (audit log) var mı?
 - **Silme talebi nasıl karşılanıyor?** Bir kişi verisinin silinmesini istediğinde, kaydı tüm entegre sistemlerden kaldırabiliyor musunuz?
 
-Görüşme kaydı yapan araçlarda ayrıca karşı tarafın kayıttan haberdar edilmesi ve aydınlatma yükümlülüğü gündeme gelir. Soğuk e-posta gönderen araçlar içinse ticari elektronik ileti mevzuatı ve ret hakkının nasıl sağlandığı önemlidir. Bu konudaki sınırları [KVKK'ya uygun B2B soğuk e-posta](/blog/kvkk-uyumlu-soguk-eposta-yasal-sinirlar) yazımızda ayrıntılı ele aldık. Elbette bu bilgiler hukuki danışmanlığın yerini tutmaz; nihai değerlendirmeyi hukuk ekibinizle yapın.
+Görüşme kaydı yapan araçlarda ayrıca karşı tarafın kayıttan haberdar edilmesi ve aydınlatma yükümlülüğü gündeme gelir. Soğuk e-posta gönderen araçlar içinse ticari elektronik ileti mevzuatı ve ret hakkının nasıl sağlandığı önemlidir. Bu konudaki sınırları [KVKK'ya uygun B2B soğuk e-posta](/blog/kvkk-uyumlu-soguk-eposta-yasal-sinirlar) yazımızda ayrıntılı ele aldık. Yurt dışı aktarım, aydınlatma ve görüşme kayıtları risklerinin ayrıntısı için [satışta yapay zeka kullanırken KVKK risklerini anlattığımız kontrol listesine](/blog/satista-yapay-zeka-kvkk-riskleri) bakın. Elbette bu bilgiler hukuki danışmanlığın yerini tutmaz; nihai değerlendirmeyi hukuk ekibinizle yapın.
 
 ## 5. Kriter: Maliyeti ne kadar ve gerçekten geri dönüyor mu?
 

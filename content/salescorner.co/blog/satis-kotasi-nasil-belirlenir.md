@@ -129,7 +129,7 @@ Belirlediğiniz kotanın ne kadar pipeline ve lead gerektirdiğini görmek için
 
 Kota yalnızca bir gelir rakamı değildir. Aynı zamanda tersine çevrildiğinde bir **pipeline ihtiyaç planıdır.** Örneğimizdeki ekibin 12 milyon TL'ye ulaşması için yılda yaklaşık 80 anlaşma ve %20 dönüşümle 400 civarında nitelikli fırsat gerekir. Toplantıdan nitelikli fırsata dönüşüm %50 ise bu, yaklaşık 800 ilk görüşme anlamına gelir.
 
-Bu tersine hesap size şunu söyler: Kotanın tutması için SDR ekibinin, pazarlamanın ve outbound kampanyaların hangi hacmi üretmesi gerektiğini önceden bilmelisiniz. Pipeline'ın hangi hızla gelire dönüştüğünü görmek için [pipeline hızı hesaplama rehberimizdeki](/blog/pipeline-hizi-nasil-hesaplanir) formülü kota planınızla birlikte kullanabilirsiniz.
+Bu tersine hesap size şunu söyler: Kotanın tutması için SDR ekibinin, pazarlamanın ve outbound kampanyaların hangi hacmi üretmesi gerektiğini önceden bilmelisiniz. Pipeline'ın hangi hızla gelire dönüştüğünü görmek için [pipeline hızı hesaplama rehberimizdeki](/blog/pipeline-hizi-nasil-hesaplanir) formülü kota planınızla birlikte kullanabilirsiniz. Kota için ne kadar pipeline gerektiğini kazanma oranınızdan hesaplamak için [pipeline coverage oranını hesaplama rehberimize](/blog/pipeline-coverage-orani-nasil-hesaplanir) bakın.
 
 Hedeflenen fırsat hacmini iç kaynaklarla üretmek zorsa, dışarıdan destek almak da bir seçenektir. Örneğin grubumuzdaki [SAAS Corner, B2B SaaS şirketlerine outbound satış ve lead generation hizmeti](https://saascorner.co) sunarak pipeline açığını kapatmaya odaklanır.
 
@@ -163,11 +163,7 @@ Kota tek başına bir anlam taşımaz. Temsilcinin hedefe ulaştığında kazana
 
 Oran çok düşükse satış maliyetiniz gelire göre fazla yüksek demektir. Oran çok yüksekse temsilciden ya ulaşılamaz bir hedef bekliyorsunuz ya da piyasanın altında ücret ödüyorsunuz. İki durum da yetenek kaybına yol açar.
 
-Prim yapısında dikkat edilmesi gereken noktalar:
-
-- **Hızlandırıcılar:** Kota %100'ü aştığında prim oranının artması, en iyi performans gösterenleri elde tutar.
-- **Tavan koymaktan kaçının:** Prim tavanı, temsilcinin büyük anlaşmaları sonraki döneme kaydırmasına neden olabilir.
-- **Eşik değer:** Kotanın belirli bir yüzdesinin (örneğin %50) altında prim ödenmemesi, minimum performans standardı oluşturur.
+OTE dağılımı, oran hızlandırıcıları, eşik ve tavan kararları ile örnek hesaplar için [B2B satış komisyon planı hazırlama rehberimize](/blog/satis-komisyon-plani-nasil-hazirlanir) bakın.
 
 ## Aktivite kotaları ne zaman mantıklıdır?
 

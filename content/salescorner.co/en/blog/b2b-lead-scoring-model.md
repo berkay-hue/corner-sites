@@ -2,7 +2,7 @@
 title: "How to Do B2B Lead Scoring: A Step-by-Step Model"
 description: "How to build a B2B lead scoring model? A practical guide for sales teams in Türkiye, with scoring criteria, a sample table and CRM implementation steps."
 date: "2026-10-14"
-updated: "2026-10-16"
+updated: "2026-11-26"
 category: "Lead Generation"
 image: "https://images.pexels.com/photos/7876672/pexels-photo-7876672.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
 imageAlt: "How to Do B2B Lead Scoring: A Step-by-Step Model"
@@ -183,7 +183,7 @@ Sample thresholds:
 - Fit score of 70 or higher: high fit
 - Engagement score of 50 or higher: high engagement
 
-Group B leads are the biggest opportunity for outbound teams. They're the right companies, but they don't know you yet. The quality of the messages you send to this group directly determines conversion. In [our article on writing cold emails with AI](/blog/how-to-write-cold-emails-with-ai), we covered in detail how to craft scalable yet personal messages for these leads. To generate these sequences automatically from your product video, PDF or website, you can use our [Sequence Writer tool](/en/#otomasyonlar) (Turkish interface).
+Group B leads are the biggest opportunity for outbound teams. They're the right companies, but they don't know you yet. The quality of the messages you send to this group directly determines conversion. In [our article on writing cold emails with AI](/blog/how-to-write-cold-emails-with-ai), we covered in detail how to craft scalable yet personal messages for these leads. To generate these sequences automatically from your product video, PDF or website, you can use our [Sequence Writer tool](/en/#otomasyonlar) (Turkish interface). To qualify the opportunities that cross the threshold, try our [BANT and MEDDIC scorecard](/en/tools/bant-meddic-scorecard).
 
 ## Step 7: Feed the Model with Data Enrichment
 

@@ -121,7 +121,7 @@ Commit toplamı 2,8 milyon TL, commit artı best case toplamı 4,5 milyon TL ç�
 
 90 günlük bir çeyrekte bu, yaklaşık 4,75 milyon TL'lik bir gelir üretim kapasitesine karşılık gelir. Bu rakam bir tahmin değil, mevcut pipeline'ın sürdürülebilir üretim gücüdür. Ağırlıklı tahmininiz bunun çok üzerindeyse büyük ihtimalle aşırı iyimsersiniz; çok altındaysa ya pipeline'da sorunlu fırsatlar var ya da zamanlama varsayımlarınız fazla temkinli.
 
-Satış hızının dört bileşeni aynı zamanda büyüme kaldıraçlarınızı da gösterir: Daha fazla fırsat, daha yüksek ortalama tutar, daha iyi kazanma oranı veya daha kısa döngü. Bu metrikleri düzenli izlemek için [satış ekibi verimliliğini ölçmeye yönelik KPI rehberimizden](/blog/satis-ekibi-verimlilik-kpi-rehberi) yararlanabilirsiniz.
+Satış hızının dört bileşeni aynı zamanda büyüme kaldıraçlarınızı da gösterir: Daha fazla fırsat, daha yüksek ortalama tutar, daha iyi kazanma oranı veya daha kısa döngü. Bu metrikleri düzenli izlemek için [satış ekibi verimliliğini ölçmeye yönelik KPI rehberimizden](/blog/satis-ekibi-verimlilik-kpi-rehberi) yararlanabilirsiniz. Formülün bileşenleri ve segment bazlı hesap için [pipeline hızı nasıl hesaplanır rehberimize](/blog/pipeline-hizi-nasil-hesaplanir) bakın.
 
 ### 8. Senaryolarla raporlayın
 
@@ -133,15 +133,9 @@ Yönetime tek bir rakam sunmak yerine bir aralık sunun:
 
 Örneğimizde bu aralık yaklaşık 2,5 milyon ile 4,5 milyon TL arasında, gerçekçi beklenti ise 3,4 milyon TL'dir. Bu çerçeve yönetimin kaynak planlaması yapmasını kolaylaştırır ve "tahmin tuttu mu, tutmadı mı" tartışmasını daha verimli hale getirir.
 
-## Pipeline coverage ne kadar olmalı?
+## Tahmini coverage ile sağlama yapmak
 
-Sık duyulan "pipeline hedefin 3 katı olmalı" kuralı bir başlangıç noktasıdır, ama evrensel değildir. Doğru coverage oranı sizin kazanma oranınıza bağlıdır:
-
-**Gerekli coverage = 1 / Kazanma oranı**
-
-- Kazanma oranınız yüzde 33 ise yaklaşık 3 kat coverage yeterlidir.
-- Kazanma oranınız yüzde 20 ise 5 kat coverage gerekir.
-- Kazanma oranınız yüzde 40 ise 2,5 kat yetebilir.
+Ağırlıklı tahmininiz kalan hedef açığını karşılamıyorsa sorun çoğu zaman pipeline hacmindedir. Gerekli katsayıyı kendi kazanma oranınızla hesaplamak için [pipeline coverage oranını hesaplama ve ideal oranı belirleme rehberimize](/blog/pipeline-coverage-orani-nasil-hesaplanir) bakın.
 
 Coverage'ı toplam hedef yerine **kalan açık** üzerinden hesaplamak daha anlamlıdır. Örneğin çeyreğin ortasında 3 milyon TL'lik hedef açığınız varsa ve bu dönem kapanabilecek fırsatlardaki kazanma oranınız yüzde 30 ise, en az 10 milyon TL'lik zamanlaması uygun pipeline'a ihtiyacınız vardır.
 
