@@ -16,7 +16,7 @@ registerHooks({
   },
 });
 
-const { generate, genDay, TTS_VOICES, TTS_MAX, TTS_MODEL_DEFAULT, ttsModel } = await import("./generate.js");
+const { generate, genDay, TTS_VOICES, TTS_MAX, TTS_MODEL_DEFAULT, ttsModel, ttsVoiceId, ttsNeden } = await import("./generate.js");
 const { APP_ROUTES, SITES } = await import("./sites.js");
 
 const SCHEMA = readFileSync(new URL("../schema.sql", import.meta.url), "utf8");
@@ -218,6 +218,49 @@ test("ElevenLabs hatası (5xx, 401, 422, 429, ağ hatası, boş gövde) → 502 
   assert.equal((await s.tts()).status, 502);
   assert.equal((await s.tts()).status, 200);
   assert.equal(s.usage("tu")[0].n, 1);
+});
+
+test("ELEVENLABS_VOICES: kimlik başına voice_id değişir; bozuk JSON/biçim/bilinmeyen kimlik yok sayılır; liste aynı kalır", async () => {
+  const yeni = "NEWvoice0123456789ab";
+  const s = setup({ env: { ELEVENLABS_VOICES: JSON.stringify({ "tr-TR-Sarah": yeni, "tr-TR-Adam": "../x", "xx-XX-Yok": yeni }) } });
+  assert.equal((await s.tts({ metin: "Merhaba", ses: "tr-TR-Sarah" })).status, 200);
+  assert.equal((await s.tts({ metin: "Merhaba", ses: "tr-TR-Adam" })).status, 200);
+  assert.equal(s.calls[0].url, EL + yeni + "?output_format=mp3_44100_128");
+  assert.equal(s.calls[1].url, EL + VID["tr-TR-Adam"] + "?output_format=mp3_44100_128");
+  // yeni kimlik beyaz listeye eklenmez; dışarıya voice_id sızmaz
+  assert.equal((await s.tts({ metin: "x", ses: "xx-XX-Yok" })).status, 400);
+  const v = await s.voices();
+  assert.ok(!v.text.includes(yeni));
+  for (const bad of [undefined, "", "{", "[]", "null", '"x"', JSON.stringify({ "tr-TR-Sarah": 5 }), JSON.stringify({ "tr-TR-Sarah": "a b c d e f g h i j" }), JSON.stringify({ "tr-TR-Sarah": "short" })])
+    assert.equal(ttsVoiceId({ ELEVENLABS_VOICES: bad }, "tr-TR-Sarah"), VID["tr-TR-Sarah"], String(bad));
+  assert.equal(ttsVoiceId({ ELEVENLABS_VOICES: "{}" }, "toString"), undefined);
+});
+
+test("ElevenLabs hata gövdesi → neden (ses_yok/kredi/anahtar/yogun/diger); anahtar ve voice_id yanıtta yok", async () => {
+  const cases = [
+    [{ status: 404, body: JSON.stringify({ detail: { type: "not_found", code: "voice_not_found", message: "m" } }) }, "ses_yok"],
+    [{ status: 402, body: JSON.stringify({ detail: { code: "insufficient_credits" } }) }, "kredi"],
+    [{ status: 401, body: JSON.stringify({ detail: { status: "quota_exceeded", message: "m" } }) }, "kredi"],
+    [{ status: 401, body: JSON.stringify({ detail: { code: "invalid_api_key" } }) }, "anahtar"],
+    [{ status: 403, body: "x" }, "anahtar"],
+    [{ status: 429, body: JSON.stringify({ detail: { code: "concurrent_limit_exceeded" } }) }, "yogun"],
+    [{ status: 422, body: "x" }, "diger"],
+    [{ status: 500, body: "" }, "diger"],
+  ];
+  for (const [rep, neden] of cases) {
+    const s = setup({ fetch: fakeFetch(() => rep) });
+    const r = await s.tts();
+    assert.equal(r.status, 502);
+    assert.equal(r.body.hata, "tts_hata");
+    assert.equal(r.body.neden, neden, rep.status + " " + rep.body);
+    const t = JSON.stringify(r.body);
+    assert.ok(!t.includes(KEY) && !t.includes(VID["tr-TR-Sarah"]));
+    for (const k of ["tu", "ta", "tc"]) assert.deepEqual(s.usage(k).map(x => x.n), [0], k);
+  }
+  // ağ hatası / boş ses: neden yok
+  const s = setup({ fetch: fakeFetch(() => new Error("ağ")) });
+  assert.equal((await s.tts()).body.neden, undefined);
+  assert.equal(ttsNeden(404, ""), "ses_yok");
 });
 
 test("metin JSON gövdede aynen gider: tırnak/etiket kaçışsız ama gövde dışına çıkamaz; kontrol karakteri boşluk olur", async () => {

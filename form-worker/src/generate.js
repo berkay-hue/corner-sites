@@ -1095,7 +1095,10 @@ async function stockUseRoute(c) {
 // (tarih biçimli değil → genCleanup silmez, ayda bir satır). ElevenLabs hatası/zaman aşımı → üç sayaç iade, 502
 // {hata:"tts_hata"}. GET /gen/tts/sesler oturumsuz: {ok, acik, sesler}; acik yalnız secret'ın VAR olup olmadığı (değer
 // dönmez). İki uç src/sites.js APP_ROUTES'ta; POST /gen/tts yalnız uç listesinde "POST /gen/tts" olan sitenin oturumuyla çalışır.
-// Sesler ElevenLabs hazır (premade) kütüphanesinden; çok dilli modeller Türkçeyi aynı sesle okur.
+// Sesler ElevenLabs hazır (premade) kütüphanesinden; çok dilli modeller Türkçeyi aynı sesle okur. ElevenLabs hazır sesleri
+// 31.12.2026'da kaldırıyor → ELEVENLABS_VOICES (var ya da secret; secret ise deploy gerekmez) JSON ile kimlik başına voice_id
+// değiştirilir: {"tr-TR-Sarah":"<voice_id>",...}. Bilinmeyen kimlik / biçimi bozuk değer yok sayılır (tablodaki kalır);
+// JSON bozuksa hiçbiri uygulanmaz. Dışarıya giden ses listesi (id/ad) değişmez.
 const TTS_TABLE = [
   { id: "tr-TR-Sarah", dil: "tr-TR", ad: "Sarah", cinsiyet: "kadin", el: "EXAVITQu4vr4xnSDxMaL" },
   { id: "tr-TR-Adam", dil: "tr-TR", ad: "Adam", cinsiyet: "erkek", el: "pNInz6obpgDQGcFmaJgB" },
@@ -1104,6 +1107,23 @@ const TTS_TABLE = [
 ];
 export const TTS_VOICES = Object.freeze(TTS_TABLE.map(({ el, ...v }) => Object.freeze(v)));
 const TTS_EL = new Map(TTS_TABLE.map(v => [v.id, v.el]));
+const TTS_VID = /^[A-Za-z0-9]{10,40}$/;
+export const ttsVoiceId = (env, id) => {
+  let o = null;
+  try { o = env.ELEVENLABS_VOICES ? JSON.parse(String(env.ELEVENLABS_VOICES)) : null; } catch { o = null; }
+  const x = o && typeof o === "object" && !Array.isArray(o) && Object.hasOwn(o, id) ? o[id] : null;
+  return typeof x === "string" && TTS_VID.test(x) ? x : TTS_EL.get(id);
+};
+// ElevenLabs hata kodu → kısa neden (yanıtta "neden"; anahtar/kimlik dönmez): ses_yok = voice_id kalktı (ELEVENLABS_VOICES ile
+// değiştir), kredi = kredi/kota bitti, anahtar = geçersiz/izinsiz anahtar, yogun = 429, diger = geri kalanı.
+export const ttsNeden = (status, code) => {
+  const k = String(code || "");
+  if (status === 404 || /voice_not_found/.test(k)) return "ses_yok";
+  if (status === 402 || /insufficient_credits|quota_exceeded/.test(k)) return "kredi";
+  if (status === 401 || status === 403) return "anahtar";
+  if (status === 429) return "yogun";
+  return "diger";
+};
 export const TTS_MAX = 1500;
 const TTS_TIMEOUT = 20000;
 const TTS_FORMAT = "mp3_44100_128";
@@ -1146,20 +1166,26 @@ async function ttsRoute(c) {
   const r = await reserve(db, day, items);
   if (!r.ok) return ttsFail("tts_limit", 429, origin, { scope: r.failed.includes("user") ? "user" : r.failed.includes("chars") ? "month" : "global" });
   // ElevenLabs başarısız: üç sayaç iade (iade yazılamazsa yanıt değişmez), sonra 502
-  const iade = async () => {
+  const iade = async neden => {
     try { await db.batch(decr(db, day, items)); } catch (e) { console.log("tts iade", e?.message?.slice(0, 80)); }
-    return ttsFail("tts_hata", 502, origin);
+    return ttsFail("tts_hata", 502, origin, neden ? { neden } : undefined);
   };
   let audio;
   try {
     const get = io.fetch; // ayrık çağrı (Illegal invocation)
-    const res = await get(`https://api.elevenlabs.io/v1/text-to-speech/${TTS_EL.get(v.id)}?output_format=${TTS_FORMAT}`, {
+    const res = await get(`https://api.elevenlabs.io/v1/text-to-speech/${ttsVoiceId(env, v.id)}?output_format=${TTS_FORMAT}`, {
       method: "POST",
       headers: { "xi-api-key": env.ELEVENLABS_API_KEY, "Content-Type": "application/json", Accept: "audio/mpeg", "User-Agent": "corner-forms-tts" },
       body: JSON.stringify(ttsBody(metin, v, ttsModel(env))),
       signal: AbortSignal.timeout(TTS_TIMEOUT),
     });
-    if (!res.ok) { console.log("tts", res.status); return iade(); }
+    if (!res.ok) {
+      let code = "";
+      try { const j = await res.json(); code = j?.detail?.code || j?.detail?.status || j?.detail?.type || ""; } catch { /* gövde JSON değil */ }
+      const neden = ttsNeden(res.status, code);
+      console.log("tts", res.status, String(code).slice(0, 40), neden);
+      return iade(neden);
+    }
     audio = await res.arrayBuffer();
   } catch (e) {
     console.log("tts", e?.name || "error");
