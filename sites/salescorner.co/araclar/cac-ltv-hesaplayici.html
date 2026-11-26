@@ -1,0 +1,606 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('consent','default',{ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',analytics_storage:'denied',functionality_storage:'granted',security_storage:'granted',wait_for_update:500});gtag('set','ads_data_redaction',true);try{(function(c){if(c)gtag('consent','update',c)})(JSON.parse(localStorage.getItem('sc_consent')||'null'))}catch(e){}</script><script src="/cerez.js?v=2" defer></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CAC ve LTV Hesaplayıcı (Ücretsiz) | Sales Corner</title>
+<meta name="description" content="Satış ve pazarlama harcamanızı, yeni müşteri sayısını, ARPA, brüt marj ve churn oranını girin; CAC, LTV, LTV:CAC oranı ve geri ödeme süresini hesaplayın.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://salescorner.co/araclar/cac-ltv-hesaplayici">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Sales Corner">
+<meta property="og:locale" content="tr_TR">
+<meta property="og:url" content="https://salescorner.co/araclar/cac-ltv-hesaplayici">
+<meta property="og:title" content="CAC ve LTV Hesaplayıcı (Ücretsiz) | Sales Corner">
+<meta property="og:description" content="Satış ve pazarlama harcamanızı, yeni müşteri sayısını, ARPA, brüt marj ve churn oranını girin; CAC, LTV, LTV:CAC oranı ve geri ödeme süresini hesaplayın.">
+<meta property="og:image" content="https://salescorner.co/_a/fr/images/QsZeR1PwkpsroRGMVChksNhoE.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="CAC ve LTV Hesaplayıcı (Ücretsiz) | Sales Corner">
+<meta name="twitter:description" content="Satış ve pazarlama harcamanızı, yeni müşteri sayısını, ARPA, brüt marj ve churn oranını girin; CAC, LTV, LTV:CAC oranı ve geri ödeme süresini hesaplayın.">
+<meta name="twitter:image" content="https://salescorner.co/_a/fr/images/QsZeR1PwkpsroRGMVChksNhoE.png">
+<link rel="alternate" hreflang="tr" href="https://salescorner.co/araclar/cac-ltv-hesaplayici">
+<link href="/_a/fr/images/yaO2oRoUboEyRi1HXwHDHwBe1Q.webp" rel="icon">
+<link rel="apple-touch-icon" href="/_a/fr/images/CVipIegf1b4aKtLR23J6oqBRk.png">
+<link rel="preload" href="/_a/fr/assets/GrgcKwrN6d3Uz8EwcLHZxwEfC4.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/_a/fonts.css">
+<style data-lp>html,body{margin:0;padding:0;box-sizing:border-box}
+:root{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+*{box-sizing:border-box;-webkit-font-smoothing:inherit}
+h1,h2,h3,h4,h5,h6,p,figure{margin:0}
+body,input,textarea,select,button{font-family:sans-serif;font-size:12px}
+html,body{background:#fbfbfe!important}
+.lp{--bg:#fbfbfe;--ink:#0b1020;--ink2:#1e2540;--mute:#5b6478;--soft:#646d80;--line:#e6e8f1;--card:#fff;--acc:#5b5bd6;--acc2:#7c3aed;--cy:#0891b2;--pk:#db2777;--acc-soft:#eef0ff;--ok:#16a34a;--r:20px;--sh:0 1px 2px rgba(16,24,40,.04),0 6px 24px rgba(16,24,40,.06);--sh-l:0 24px 60px -20px rgba(55,48,163,.28);
+  color:var(--ink);background:var(--bg);font:16px/1.6 Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:clip;position:relative}
+.lp *,.lp *::before,.lp *::after{box-sizing:border-box}
+.lp a{color:inherit;text-decoration:none}
+.lp p a,.lp .faq a{color:var(--acc);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px}
+.lp img{max-width:100%;height:auto;display:block}
+.lp h1,.lp h2,.lp h3,.lp h4{margin:0;color:var(--ink);letter-spacing:-.02em;line-height:1.12;font-weight:750}
+.lp p{margin:0}
+.lp button{font:inherit;color:inherit;cursor:pointer}
+.lp :focus-visible{outline:2.5px solid var(--acc);outline-offset:3px;border-radius:8px}
+.lp [data-sk-reveal]{--sk-from:translateY(18px)}
+.lp .wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+.lp .skip{position:absolute;left:-9999px;top:8px;z-index:100;background:var(--ink);color:#fff;padding:10px 14px;border-radius:10px}
+.lp .skip:focus{left:12px}
+.lp .grad{background:linear-gradient(100deg,var(--acc) 0%,var(--acc2) 45%,var(--cy) 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:var(--acc)}
+.lp .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:11px 20px;border-radius:12px;font-weight:650;font-size:15px;line-height:1.2;border:1px solid transparent;transition:transform .15s,box-shadow .2s,background .2s,border-color .2s;white-space:nowrap}
+.lp .btn:hover{transform:translateY(-1px)}
+.lp .btn-p{background:var(--ink);color:#fff;box-shadow:0 8px 20px -8px rgba(11,16,32,.55)}
+.lp .btn-p:hover{background:#1b2240}
+.lp .btn-a{background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;box-shadow:0 10px 24px -10px rgba(91,91,214,.8)}
+.lp .btn-g{background:#fff;border-color:var(--line);color:var(--ink)}
+.lp .btn-g:hover{border-color:#c9cde0;box-shadow:var(--sh)}
+.lp .btn-l{font-size:16px;padding:14px 24px;min-height:52px;border-radius:14px}
+.lp .hdr{position:sticky;top:0;z-index:40;background:rgba(251,251,254,.78);backdrop-filter:saturate(180%) blur(14px);-webkit-backdrop-filter:saturate(180%) blur(14px);border-bottom:1px solid transparent;transition:border-color .2s,box-shadow .2s}
+.lp .hdr.sc{border-bottom-color:var(--line);box-shadow:0 4px 20px -12px rgba(16,24,40,.18)}
+.lp .hdr-in{display:flex;align-items:center;gap:20px;height:68px}
+.lp .logo img{height:38px;width:auto}
+.lp .nav{display:flex;gap:4px;margin-left:12px}
+.lp .nav a{padding:8px 12px;border-radius:10px;color:var(--ink2);font-weight:550;font-size:14.5px}
+.lp .nav a:hover{background:#eef0f7;color:var(--ink)}
+.lp .hdr-cta{margin-left:auto;display:flex;gap:8px;align-items:center}
+.lp .hdr-cta .btn{min-height:40px;padding:9px 16px;font-size:14.5px}
+.lp .burger{display:none;width:44px;height:44px;border-radius:12px;border:1px solid var(--line);background:#fff;align-items:center;justify-content:center}
+.lp .burger span,.lp .burger span::before,.lp .burger span::after{display:block;width:18px;height:2px;background:var(--ink);border-radius:2px;position:relative;transition:transform .2s,background .2s}
+.lp .burger span::before,.lp .burger span::after{content:"";position:absolute;left:0}
+.lp .burger span::before{top:-6px}
+.lp .burger span::after{top:6px}
+.lp .hdr.open .burger span{background:transparent}
+.lp .hdr.open .burger span::before{transform:translateY(6px) rotate(45deg)}
+.lp .hdr.open .burger span::after{transform:translateY(-6px) rotate(-45deg)}
+.lp .mnav{display:none}
+.lp .pill{display:inline-flex;align-items:center;gap:8px;padding:6px 14px 6px 8px;border-radius:999px;background:#fff;border:1px solid var(--line);box-shadow:var(--sh);font-size:13px;font-weight:600;color:var(--ink2)}
+.lp .pill i{width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,var(--acc),var(--cy));display:grid;place-items:center;color:#fff;font-style:normal;font-size:12px}
+.lp .lead{font-size:clamp(16.5px,1.6vw,18.5px);color:var(--mute);max-width:600px}
+.lp .ctas{display:flex;gap:12px;flex-wrap:wrap;margin-top:30px}
+.lp .trial{display:inline-flex;align-items:center;gap:10px;margin-top:22px;padding:8px 14px 8px 10px;border-radius:12px;background:linear-gradient(90deg,#ecfdf3,#eef0ff);border:1px solid #d6f5e3;color:var(--ink2);font-size:14px;flex-wrap:wrap}
+.lp .trial::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 4px rgba(22,163,74,.15)}
+.lp .trial b{color:#14532d}
+.lp .trial span{color:var(--mute)}
+.lp .trial em{font-style:normal;color:var(--acc);font-weight:650;display:inline-flex;align-items:center;gap:4px}
+.lp .trial:hover{border-color:#b7ebcc}
+.lp .faq{max-width:820px;margin:0 auto;display:grid;gap:12px}
+.lp .faq details{background:#fff;border:1px solid var(--line);border-radius:16px;padding:0 22px;box-shadow:0 1px 2px rgba(16,24,40,.04);transition:border-color .2s,box-shadow .2s}
+.lp .faq details[open]{border-color:#d4d7f5;box-shadow:var(--sh)}
+.lp .faq summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:20px 0;font-weight:650;font-size:17px;color:var(--ink)}
+.lp .faq summary::-webkit-details-marker{display:none}
+.lp .faq summary::after{content:"+";flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--acc-soft);color:var(--acc);font-size:18px;font-weight:700;transition:transform .2s}
+.lp .faq details[open] summary::after{transform:rotate(45deg)}
+.lp .faq details p{padding:0 0 20px;color:var(--mute);font-size:16px}
+.lp .ftr{margin-top:40px;border-top:1px solid var(--line);background:#fff;padding:64px 0 96px}
+.lp .ftr-g{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:40px}
+.lp .ftr .logo img{height:44px}
+.lp .ftr-g > div > p{margin-top:14px;color:var(--mute);font-size:14.5px;max-width:320px}
+.lp .soc{display:flex;gap:8px;margin-top:18px}
+.lp .soc a{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;border:1px solid var(--line);color:var(--ink2);transition:all .15s}
+.lp .soc a:hover{color:var(--acc);border-color:#c7c8ff;background:var(--acc-soft)}
+.lp .ftr h4{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--soft);margin-bottom:14px;font-weight:700}
+.lp .ftr ul{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.lp .ftr ul a{color:var(--ink2);font-size:14.5px}
+.lp .ftr ul a:hover{color:var(--acc)}
+.lp .legal{margin-top:48px;padding-top:24px;border-top:1px solid var(--line);font-size:13.5px;color:var(--mute);line-height:2}
+.lp .legal a{color:var(--mute)}
+.lp .legal a:hover{color:var(--acc)}
+.lp .legal .sep{display:inline-block;margin:0 6px;color:#c6cbd8}
+.lp .grp{margin-top:44px;padding:26px;border-radius:22px;background:linear-gradient(135deg,#f7f7ff,#f3fbfd 55%,#fdf4f9);border:1px solid var(--line)}
+.lp .grp-h{display:flex;align-items:center;flex-wrap:wrap;gap:8px 14px;margin-bottom:16px}
+.lp .grp-h h4{margin:0}
+.lp .grp-h p{margin:0;color:var(--mute);font-size:13.5px}
+.lp .grp-g{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
+.lp .grp-g a{position:relative;display:flex;flex-direction:column;gap:3px;padding:14px 16px 14px 18px;border-radius:16px;background:#fff;border:1px solid var(--line);color:var(--ink);text-decoration:none;overflow:hidden;transition:transform .2s,box-shadow .2s,border-color .2s}
+.lp .grp-g a::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--c)}
+.lp .grp-g a:hover{transform:translateY(-2px);box-shadow:var(--sh);border-color:#d9dbf3}
+.lp .grp-g b{font-size:14.5px;font-weight:700;letter-spacing:-.01em}
+.lp .grp-g b::after{content:" ↗";color:var(--c);font-weight:600}
+.lp .grp-g span{color:var(--mute);font-size:12.5px;line-height:1.4}
+.lp .grp-g small{color:var(--soft);font-size:12px;font-weight:600}
+@media (max-width:1080px){.lp .grp-g{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:640px){.lp .grp{padding:20px 16px}
+.lp .grp-g{grid-template-columns:1fr 1fr;gap:10px}
+.lp .grp-g a{padding:12px 12px 12px 15px}}
+.lp .sec{padding:88px 0}
+.lp .sec-h{text-align:center;max-width:720px;margin:0 auto 40px}
+.lp .sec-h h2{font-size:clamp(28px,3.6vw,42px)}
+.lp .eb{display:inline-block;padding:6px 12px;border-radius:999px;background:var(--acc-soft);color:var(--acc);font-size:12.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:14px}
+.lp .tint{background:linear-gradient(180deg,#f3f4ff 0%,#fbfbfe 100%)}
+@media (prefers-reduced-motion:reduce){.lp *{animation:none!important;transition:none!important}}
+@media (max-width:1080px){.lp .nav{display:none}
+.lp .burger{display:inline-flex}
+.lp .hdr-cta .btn-p{display:none}
+.lp .mnav{display:none;flex-direction:column;gap:4px;padding:8px 24px 20px;border-top:1px solid var(--line);background:#fff}
+.lp .hdr.open .mnav{display:flex}
+.lp .mnav a{padding:12px 6px;font-weight:600;color:var(--ink2);border-bottom:1px solid #f1f2f7}
+.lp .mnav .btn{margin-top:12px;border-bottom:0;color:#fff;padding:12px 20px}
+.lp .ftr-g{grid-template-columns:1fr 1fr}}
+@media (max-width:640px){.lp .wrap{padding:0 16px}
+.lp .mnav{padding:8px 16px 20px}
+.lp .hdr-in{height:62px;gap:10px}
+.lp .logo img{height:32px}
+.lp .hdr-cta .btn{padding:8px 12px}
+.lp .trial{font-size:13px}
+.lp .sec{padding:60px 0}
+.lp .faq details{padding:0 16px}
+.lp .ftr-g{grid-template-columns:1fr}
+.lp .ftr{padding-bottom:110px}}
+.lp .hdr-trial{display:none}
+@media (max-width:1080px){.lp .hdr-cta .hdr-trial{display:inline-flex}}
+@media (max-width:479px){.lp .hdr-cta .hdr-trial{display:none}}
+.lp .hdr-cta .hdr-trial{display:inline-flex!important}
+@media (max-width:479px){.lp .hdr-cta .btn-g{font-size:0;gap:0;padding:8px 10px}.lp .hdr-cta .hdr-trial{font-size:13px;padding:8px 10px}}
+@media (max-width:359px){.lp .hdr-cta .btn-g{display:none}}
+.lp .logo{flex-shrink:0}
+.lp .nav a,.lp .nav summary{white-space:nowrap}
+@media (min-width:1081px){.lp .hdr .wrap{max-width:1300px}.lp .hdr-in{gap:12px}.lp .nav{gap:0;margin-left:4px}.lp .nav a,.lp .nav .dd>summary{padding:8px 9px;font-size:14px}.lp .hdr-cta{gap:6px}.lp .hdr-cta .btn{padding:9px 13px;font-size:14px;min-height:42px}}
+@media (max-width:420px){.lp .logo img{height:26px}.lp .hdr-in{gap:6px}.lp .hdr-cta{gap:4px}.lp .hdr-cta .hdr-trial{font-size:12.5px;padding:8px 9px}.lp .hdr-cta .btn-g{padding:8px 9px}}
+@media (min-width:1081px) and (max-width:1279px){.lp .hdr-cta .btn-g{font-size:0;gap:0;padding:9px 11px}.lp .nav a,.lp .nav .dd>summary{padding:8px 7px;font-size:13.5px}}
+@media (min-width:1081px) and (max-width:1179px){.lp .hdr .wrap{padding:0 16px}.lp .hdr-in{gap:8px}}
+
+.lp .tl{max-width:860px;margin:0 auto;padding:8px 24px 72px}
+.lp .tl .bc{display:flex;flex-wrap:wrap;gap:2px 8px;margin:28px 0 0;font-size:14px;color:var(--mute)}
+.lp .tl .bc a{color:var(--mute);min-height:24px;display:inline-flex;align-items:center;text-decoration:none}
+.lp .tl .bc a:hover{color:var(--acc)}
+.lp .tl h1{font-size:clamp(30px,6vw,44px);line-height:1.12;margin:14px 0 12px}
+.lp .tl h2{font-size:clamp(20px,2.6vw,24px);margin:44px 0 12px}
+.lp .tl h3{font-size:17px;margin:22px 0 8px}
+.lp .tl p{margin:0 0 14px;color:var(--ink2)}
+.lp .tl .lead{font-size:clamp(16.5px,1.6vw,18.5px);color:var(--mute);max-width:680px;margin:0 0 8px}
+.lp .tl ul,.lp .tl ol{padding-left:22px;margin:0 0 16px;color:var(--ink2)}
+.lp .tl li{margin:5px 0}
+.lp .tl p a,.lp .tl li a{color:var(--acc);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px}
+.lp .tl .d{color:var(--mute);font-size:14px}
+.lp .tool{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);padding:26px 26px 20px;margin:32px 0}
+.lp .tool h2{margin-top:0}
+.lp .tl .f{display:flex;flex-direction:column;gap:6px;margin:0 0 16px;min-width:0}
+.lp .tl .f label,.lp .tl fieldset legend{font-weight:650;font-size:15px;line-height:1.4;color:var(--ink2)}
+.lp .tl fieldset{border:0;padding:0;margin:0 0 16px;min-width:0}
+.lp .tl .h{color:var(--mute);font-size:13.5px;line-height:1.5;margin:0}
+.lp .tl .err{color:#dc2626;font-size:13px;line-height:1.5;margin:0}
+.lp .tl input[type=text],.lp .tl textarea,.lp .tl select{font:inherit;color:var(--ink);background:#f8f9fd;border:1.5px solid #848da3;border-radius:12px;padding:12px 14px;min-height:46px;width:100%;max-width:100%;transition:border-color .15s,box-shadow .15s,background .15s}
+.lp .tl textarea{min-height:220px;resize:vertical;line-height:1.6}
+.lp .tl input[type=text]:hover,.lp .tl textarea:hover{border-color:#5b6478}
+.lp .tl input[type=text]:focus,.lp .tl textarea:focus,.lp .tl select:focus{outline:2px solid var(--acc);outline-offset:1px;border-color:var(--acc);background:#fff;box-shadow:0 0 0 4px rgba(91,91,214,.14)}
+.lp .tl ::placeholder{color:#6b7385}
+.lp .tl input[aria-invalid=true]{border-color:#dc2626}
+.lp .tl .g2{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:0 18px}
+.lp .tl .rad{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:6px}
+.lp .tl .rad label{display:inline-flex;align-items:center;gap:8px;min-height:44px;font-weight:500}
+.lp .tl .rad input{width:20px;height:20px;accent-color:var(--acc);margin:0}
+.lp .tl .chips{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 4px}
+.lp .tl .chips button{font-size:14px;line-height:1.3;color:var(--ink2);background:#fff;border:1px solid #c9cde0;border-radius:999px;padding:8px 14px;min-height:44px;text-align:left;transition:border-color .15s,background .15s}
+.lp .tl .chips button:hover{border-color:var(--acc);background:var(--acc-soft);color:var(--ink)}
+.lp .tl .sbox{display:flex;align-items:center;gap:18px;margin:8px 0 6px}
+.lp .tl .big{font-size:48px;font-weight:750;line-height:1;letter-spacing:-.02em;color:var(--ink);font-variant-numeric:tabular-nums}
+.lp .tl .big small{font-size:16px;color:var(--mute);font-weight:500}
+.lp .tl .sbox>div:last-child{flex:1;min-width:0}.lp .tl .sbox b{font-size:18px}
+.lp .tl .meter{height:10px;border-radius:6px;background:#eceef5;margin-top:8px;overflow:hidden}
+.lp .tl .meter i{display:block;height:100%;width:0;border-radius:6px;background:linear-gradient(90deg,var(--acc),var(--acc2));transition:width .25s}
+.lp .tl .meter i.ok{background:#22c55e}.lp .tl .meter i.warn{background:#eab308}.lp .tl .meter i.bad{background:#ef4444}
+.lp .tl .ok{color:#15803d}.lp .tl .warn{color:#b45309}.lp .tl .bad{color:#dc2626}.lp .tl .acc{color:var(--acc)}
+.lp .tl .crit{list-style:none;padding:0;margin:0}
+.lp .tl .crit li{padding:10px 0 10px 24px;margin:0;border-top:1px solid var(--line);position:relative;color:var(--ink2)}
+.lp .tl .crit li::before{content:"";position:absolute;left:2px;top:19px;width:10px;height:10px;border-radius:50%;background:#9aa1b2}
+.lp .tl .crit li.ok::before{background:#22c55e}.lp .tl .crit li.warn::before{background:#eab308}.lp .tl .crit li.bad::before{background:#ef4444}
+.lp .tl .crit li b{color:var(--ink)}.lp .tl .crit li.ok,.lp .tl .crit li.warn,.lp .tl .crit li.bad{color:var(--ink2)}
+.lp .tl .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin:12px 0}
+.lp .tl .kpi{border:1px solid var(--line);border-radius:14px;padding:12px 14px;background:#f8f9fd;min-width:0}
+.lp .tl .kpi b{display:block;font-size:22px;line-height:1.25;color:var(--ink);font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.lp .tl .kpi span{color:var(--mute);font-size:13px;line-height:1.4;display:block}
+.lp .tl .kpi.ok b{color:#15803d}.lp .tl .kpi.bad b{color:#dc2626}.lp .tl .kpi.acc b{color:var(--acc)}
+.lp .tl .tw{overflow-x:auto;margin:8px 0}
+.lp .tl table{border-collapse:collapse;width:100%;font-size:14px;font-variant-numeric:tabular-nums;color:var(--ink2)}
+.lp .tl caption{text-align:left;padding:0 0 6px}
+.lp .tl th,.lp .tl td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+.lp .tl th[scope=row],.lp .tl thead th:first-child{text-align:left;white-space:normal}
+.lp .tl thead th{color:var(--mute);font-weight:600}
+.lp .tl .hb{display:grid;grid-template-columns:minmax(110px,160px) 1fr auto;gap:10px;align-items:center;font-size:14px;margin:6px 0;color:var(--ink2)}
+.lp .tl .hbw{background:#eceef5;border-radius:6px;height:14px;overflow:hidden}
+.lp .tl .hbw i{display:block;height:100%;background:linear-gradient(90deg,var(--acc),var(--acc2));border-radius:6px}
+.lp .tl .pv{display:grid;gap:10px}
+.lp .tl .pv>div{border:1px solid var(--line);border-radius:12px;padding:10px 14px;background:#f8f9fd}
+.lp .tl .pv p{margin:2px 0 0;font-weight:600;overflow-wrap:anywhere;color:var(--ink)}
+.lp .tl .live{min-height:1.7em;color:var(--mute);font-size:14px;margin:8px 0 0}
+.lp .tl details.as{margin:4px 0 16px}
+.lp .tl details.as summary{cursor:pointer;min-height:44px;display:flex;align-items:center;font-weight:650;color:var(--acc)}
+.lp .tl .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin:28px 0}
+.lp .tl .card{display:flex;flex-direction:column;gap:6px;border:1px solid var(--line);border-radius:var(--r);padding:22px;background:var(--card);box-shadow:var(--sh);text-decoration:none;color:var(--ink);transition:border-color .2s,transform .15s,box-shadow .2s}
+.lp .tl .card:hover{border-color:#c9cde0;transform:translateY(-2px);box-shadow:var(--sh-l)}
+.lp .tl .card b{font-size:17.5px;line-height:1.35}
+.lp .tl .card span{color:var(--mute);font-size:14.5px;line-height:1.55}
+.lp .tl .card em{font-style:normal;color:var(--acc);font-weight:650;font-size:14.5px;margin-top:auto;padding-top:6px}
+.lp .tl .rel{padding-left:22px}
+.lp .tl .faq{margin:0;max-width:none}
+.lp .tl .faq summary b{font-weight:650}
+.lp .tl .faq details p{margin:0}
+.lp .tl .son{border:1px solid #d4d7f5;border-radius:var(--r);padding:12px 28px 8px;margin-top:56px;background:linear-gradient(135deg,#eef0ff,#f5f0ff)}
+.lp .tl .son h2{margin-top:22px}
+.lp .tl .son .ctas{margin:20px 0 22px;align-items:center}
+#sonuc[data-bos] .dolu{display:none}
+@media (max-width:640px){.lp .tl{padding:4px 16px 56px}}
+@media (max-width:480px){.lp .tool{padding:18px 14px}.lp .tl .big{font-size:40px}.lp .tl .hb{grid-template-columns:96px 1fr auto;font-size:13px}.lp .tl th,.lp .tl td{padding:8px 6px}.lp .tl .son{padding:8px 18px 4px}}
+.lp .tl .ucta{margin-top:28px;border:1px solid #d4d7f5;border-radius:16px;padding:20px 22px;background:linear-gradient(135deg,#eef0ff,#f5f0ff)}
+.lp .tl .ucta h3{margin:0 0 6px;font-size:18px;line-height:1.35;color:var(--ink)}
+.lp .tl .ucta p{margin:0 0 12px;font-size:14.5px;line-height:1.55}
+.lp .tl .ucta ul{list-style:none;padding:0;margin:0 0 16px;display:grid;gap:8px}
+.lp .tl .ucta li{position:relative;margin:0;padding-left:24px;font-size:14.5px;line-height:1.5}
+.lp .tl .ucta li::before{content:"";position:absolute;left:3px;top:.42em;width:10px;height:5px;border-left:2px solid var(--acc);border-bottom:2px solid var(--acc);transform:rotate(-45deg)}
+.lp .tl .ucta li b{color:var(--ink)}
+.lp .tl .uc-b{display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px}
+.lp .tl .uc-b .btn{white-space:normal;text-align:center}
+.lp .tl .uc-b .uc-g{color:var(--acc);font-weight:600;font-size:14.5px;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px}
+.lp .tl .ucta .uc-n{margin:12px 0 0;color:var(--mute);font-size:13px}
+@media (max-width:479px){.lp .tl .ucta{padding:18px 16px}.lp .tl .uc-b .btn{width:100%}}
+.lp .tl .kpi.warn b{color:#b45309}
+.lp .tl .uyari{margin:10px 0;padding:12px 14px;border:1px solid #f3d38a;border-left:4px solid #eab308;border-radius:12px;background:#fffbeb;color:#713f12;font-size:14.5px}
+.lp .tl .kr{border:1px solid var(--line);border-radius:14px;padding:10px 14px 4px;margin:0 0 12px;background:#f8f9fd}
+.lp .tl .krh{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.lp .tl .krx{background:none;border:0;padding:0 4px;min-height:44px;color:var(--acc);font:inherit;font-size:14px;font-weight:600;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.lp .tl .krg{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:0 12px}
+.lp .tl .krb{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:4px 0 0}
+.lp .tl .krb .btn[disabled]{opacity:.5;cursor:not-allowed}
+.lp .tl tr.kt th,.lp .tl tr.kt td{font-weight:700;color:var(--ink)}
+</style>
+<style data-dd>.dd{position:relative}.dd>summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:5px;min-height:44px;white-space:nowrap}.dd>summary::-webkit-details-marker{display:none}.dd>summary::after{content:"";width:6px;height:6px;border-right:1.6px solid currentColor;border-bottom:1.6px solid currentColor;transform:translateY(-2px) rotate(45deg);transition:transform .15s}.dd[open]>summary::after{transform:translateY(1px) rotate(-135deg)}.ddp{position:absolute;top:100%;left:0;z-index:60;width:290px;display:flex;flex-direction:column;padding:6px;border-radius:12px}.dd .ddp a{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:1px;min-height:44px;margin:0;padding:7px 12px;border-radius:8px;font-weight:600;font-size:14.5px;line-height:1.35;white-space:normal;text-decoration:none}.dd .ddp a small{font-weight:400;font-size:12.5px}.dd .ddp a.dd-all{border-top:1px solid;border-radius:0 0 8px 8px;margin-top:4px}.nav .dd>summary{padding:8px 12px;min-height:0;border-radius:10px;color:var(--ink2);font-weight:550;font-size:14.5px}.nav .dd>summary:hover,.nav .dd[open]>summary{background:#eef0f7;color:var(--ink)}.nav .dd .ddp{top:calc(100% + 2px);background:#fff;border:1px solid var(--line);box-shadow:0 16px 40px rgba(11,16,32,.14)}.nav .dd .ddp a{color:var(--ink)}.nav .dd .ddp a small{color:var(--mute)}.nav .dd .ddp a:hover,.nav .dd .ddp a:focus-visible{background:#eef0f7}.nav .dd .ddp a.dd-all{border-color:var(--line);color:var(--ink2)}.nav .dd .ddp a::after{display:none}.mdd>summary{list-style:none;cursor:pointer;padding:12px 6px;font-weight:600;color:var(--ink2);border-bottom:1px solid #f1f2f7;display:flex;justify-content:space-between;align-items:center}.mdd>summary::-webkit-details-marker{display:none}.mdd>summary::after{content:"";width:7px;height:7px;border-right:1.8px solid currentColor;border-bottom:1.8px solid currentColor;transform:translateY(-2px) rotate(45deg);margin-right:4px}.mdd[open]>summary::after{transform:translateY(2px) rotate(-135deg)}.mnav .mdd a{display:block;padding:11px 6px 11px 20px;font-weight:500}@media(min-width:861px){.nav .dd .ddp{width:min(560px,calc(100vw - 32px));display:grid;grid-template-columns:1fr 1fr;left:50%;transform:translateX(-50%)}.nav .dd .ddp a.dd-all{grid-column:1/-1}}
+</style></head>
+<body>
+<div class="lp"><a class="skip" href="#icerik">İçeriğe geç</a><header class="hdr"><div class="wrap hdr-in"><a class="logo" href="/" aria-label="Sales Corner"><img src="/img/sales-corner-logo.png" width="495" height="178" alt="Sales Corner"></a><nav class="nav" aria-label="Ana menü"><a href="/#otomasyonlar">Otomasyonlar</a><a href="/#mimari">Mimari</a><a href="/#fiyatlar">Fiyatlar</a><a href="/#custom">Custom</a><a href="/#tech">Tech Stack</a><a href="/blog">Blog</a><details class="dd"><summary>Ücretsiz araçlar</summary><div class="ddp"><a href="/araclar/konu-satiri-puanlayici">Konu satırı puanlayıcı<small>Açılma oranı için 0–100 puan</small></a><a href="/araclar/soguk-eposta-denetleyici">Soğuk e-posta denetleyici<small>Uzunluk ve okunabilirlik kontrolü</small></a><a href="/araclar/satis-hedefi-hesaplayici">Satış hedefi hesaplayıcı<small>Lead, toplantı ve teklif sayısı</small></a><a href="/araclar/satis-roi-hesaplayici">Zaman ve ROI hesaplayıcı<small>Otomasyonun kazandırdığı saat ve TL</small></a><a href="/araclar/linkedin-boolean-olusturucu">LinkedIn Boolean oluşturucu<small>LinkedIn, Navigator ve X-ray sorgusu</small></a><a href="/araclar/domain-isinma-planlayici">Domain ısınma planlayıcı<small>Gün gün warm-up takvimi, CSV</small></a><a href="/araclar/komisyon-hesaplayici">Komisyon hesaplayıcı<small>Komisyon, OTE ve kazanç hesabı</small></a><a href="/araclar/bant-meddic-puan-karti">BANT / MEDDIC puan kartı<small>Fırsatı BANT/MEDDIC ile puanlayın</small></a><a href="/araclar/cac-ltv-hesaplayici">CAC / LTV hesaplayıcı<small>CAC, LTV ve geri ödeme süresi</small></a><a class="dd-all" href="/araclar">Tüm ücretsiz araçlar →</a></div></details></nav><div class="hdr-cta"><a class="btn btn-g" href="https://app.salescorner.co/#/giris"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><path d="M10 17l5-5-5-5M15 12H3"/></svg>Giriş</a><a class="btn btn-p" href="/iletisim">Görüşme planla</a><a class="btn btn-a hdr-trial" href="https://app.salescorner.co/#/kayit">14 gün ücretsiz deneme</a><button type="button" class="burger" aria-expanded="false" aria-controls="mnav" aria-label="Menüyü aç"><span></span></button></div></div><nav class="mnav" id="mnav" aria-label="Mobil menü"><a href="/#otomasyonlar">Otomasyonlar</a><a href="/#mimari">Mimari</a><a href="/#fiyatlar">Fiyatlar</a><a href="/#custom">Custom</a><a href="/#tech">Tech Stack</a><a href="/blog">Blog</a><details class="mdd"><summary>Ücretsiz araçlar</summary><a href="/araclar/konu-satiri-puanlayici">Konu satırı puanlayıcı</a><a href="/araclar/soguk-eposta-denetleyici">Soğuk e-posta denetleyici</a><a href="/araclar/satis-hedefi-hesaplayici">Satış hedefi hesaplayıcı</a><a href="/araclar/satis-roi-hesaplayici">Zaman ve ROI hesaplayıcı</a><a href="/araclar/linkedin-boolean-olusturucu">LinkedIn Boolean oluşturucu</a><a href="/araclar/domain-isinma-planlayici">Domain ısınma planlayıcı</a><a href="/araclar/komisyon-hesaplayici">Komisyon hesaplayıcı</a><a href="/araclar/bant-meddic-puan-karti">BANT / MEDDIC puan kartı</a><a href="/araclar/cac-ltv-hesaplayici">CAC / LTV hesaplayıcı</a><a href="/araclar">Tüm ücretsiz araçlar →</a></details><a class="btn btn-p" href="/iletisim">Görüşme planla</a><a class="btn btn-a" href="https://app.salescorner.co/#/kayit">14 gün ücretsiz deneme</a></nav></header>
+<main id="icerik" class="tl">
+<nav class="bc" aria-label="Sayfa konumu"><a href="/">Ana sayfa</a><span aria-hidden="true">›</span><a href="/araclar">Ücretsiz araçlar</a><span aria-hidden="true">›</span><span aria-current="page">CAC / LTV hesaplayıcı</span></nav>
+<h1>CAC / LTV hesaplayıcı (B2B SaaS ve hizmet)</h1>
+<p class="lead"><b>Bir dönemdeki satış ve pazarlama harcamanızı, kazandığınız yeni müşteri sayısını, müşteri başı aylık gelirinizi, brüt kâr marjınızı ve aylık müşteri kaybınızı girin; CAC, LTV, LTV:CAC oranı, CAC geri ödeme süresi ve ortalama müşteri ömrü anında hesaplanır.</b> İsterseniz harcamayı kanallara bölüp kanal bazında CAC'ı da görebilirsiniz.</p>
+<section class="tool" aria-labelledby="arac-h"><h2 id="arac-h">Değerlerinizi girin</h2>
+<form id="f" novalidate><div class="g2">
+<div class="f"><label for="harcama">Dönemdeki satış + pazarlama harcaması (TL)</label><input id="harcama" name="harcama" type="text" inputmode="decimal" value="450.000" autocomplete="off" aria-describedby="harcama-h harcama-e"><span class="h" id="harcama-h">Maaş ve primler, reklam, araçlar, etkinlik ve dış hizmetler dahil</span><span class="err" id="harcama-e" hidden></span></div>
+<div class="f"><label for="musteri">Aynı dönemde kazanılan yeni müşteri</label><input id="musteri" name="musteri" type="text" inputmode="numeric" value="12" autocomplete="off" aria-describedby="musteri-h musteri-e"><span class="h" id="musteri-h">Yalnız yeni müşteriler; yenilemeler ve ek satışlar hariç</span><span class="err" id="musteri-e" hidden></span></div>
+<div class="f"><label for="arpa">Müşteri başı aylık gelir, ARPA (TL)</label><input id="arpa" name="arpa" type="text" inputmode="decimal" value="6.000" autocomplete="off" aria-describedby="arpa-h arpa-e"><span class="h" id="arpa-h">Abonelik ya da aylık hizmet bedeli ortalaması, KDV hariç</span><span class="err" id="arpa-e" hidden></span></div>
+<div class="f"><label for="marj">Brüt kâr marjı (%)</label><input id="marj" name="marj" type="text" inputmode="decimal" value="70" autocomplete="off" aria-describedby="marj-h marj-e"><span class="h" id="marj-h">Gelirden hizmeti sunmanın doğrudan maliyeti düşüldükten sonra kalan pay</span><span class="err" id="marj-e" hidden></span></div>
+<div class="f"><label for="churn">Aylık müşteri kaybı, churn (%)</label><input id="churn" name="churn" type="text" inputmode="decimal" value="3" autocomplete="off" aria-describedby="churn-h churn-e"><span class="h" id="churn-h">Ay başındaki müşterilerin yüzde kaçı ay içinde ayrılıyor?</span><span class="err" id="churn-e" hidden></span></div>
+</div>
+<details class="as" id="kanal-d"><summary>Kanal kırılımı ekle (isteğe bağlı)</summary><p class="h">En fazla 4 kanal için o kanala giden harcamayı ve kanaldan gelen yeni müşteri sayısını girin. Boş bırakılan satırlar hesaba katılmaz.</p>
+<div id="kanallar"></div>
+<p class="krb"><button type="button" class="btn btn-g" id="kanal-ekle">+ Kanal ekle</button><span class="h" id="kanal-not" aria-live="polite"></span></p>
+</details></form>
+<div id="sonuc"><p id="ozet" class="live" aria-live="polite"></p><div class="dolu">
+<h3>LTV:CAC oranı</h3>
+<div class="sbox"><div class="big" id="oran">–</div><div><b id="oran-et"></b><div class="meter" aria-hidden="true"><i id="oran-m"></i></div><p class="h" id="oran-h"></p></div></div>
+<p class="uyari" id="uyari" hidden></p>
+<h3>Birim ekonomisi</h3><div id="kpi" class="kpis"></div>
+<h3>Yorum</h3><ul id="icgoru" class="crit"></ul>
+<div id="kanal-s" hidden><h3>Kanal bazında CAC</h3><div class="tw"><table><caption class="d">Kanal bazında harcama, yeni müşteri, CAC ve LTV:CAC</caption><thead><tr><th scope="col">Kanal</th><th scope="col">Harcama</th><th scope="col">Müşteri</th><th scope="col">CAC</th><th scope="col">LTV:CAC</th></tr></thead><tbody id="kanal-t"></tbody></table></div><p class="h">LTV:CAC sütunu, yukarıdaki genel LTV değeriyle hesaplanır.</p><ul id="kanal-y" class="crit"></ul></div>
+<p class="h">Sonuçlar girdiğiniz ortalamalara dayanan bir tahmindir. Basit LTV formülü churn'ün sabit kaldığını varsayar; ek satış, fiyat artışı ve paranın zaman değeri hesaba katılmaz.</p><aside class="ucta" aria-labelledby="ucta-h"><h3 id="ucta-h">Daha detaylı analiz için ücretsiz hesap oluşturun</h3><p>CAC'ın önemli bir kalemi temsilcilerin araştırma, yazışma ve hazırlığa harcadığı zamandır. Sales Corner hesabınızda bu işlerin bir kısmını şu modüller üstlenir:</p><ul><li><b>Sekans Yazarı:</b> Hedef firmaya özel cold call senaryosu ve LinkedIn mesaj sekansı yazar</li><li><b>Toplantı Briefingi:</b> Görüşme öncesi firmayı ve kişiyi araştırır, fırsat puanı ve briefing sunumu çıkarır</li><li><b>Rakip Analizi:</b> Rakip sitelerini tarar, güçlü ve zayıf yönleri karşılaştırıp hazır sunum çıkarır</li></ul><div class="uc-b"><a class="btn btn-a" href="https://app.salescorner.co/#/kayit">Ücretsiz hesap oluştur<span aria-hidden="true">→</span></a><a class="uc-g" href="https://app.salescorner.co/#/giris">Hesabım var, giriş yap</a></div><p class="uc-n">14 gün ücretsiz deneme · Kredi kartı gerekmez.</p></aside></div></div>
+<noscript><p class="warn">Bu hesaplayıcı tarayıcınızda JavaScript ile çalışır; sonuçları görmek için JavaScript'i açın.</p></noscript></section>
+<h2>Hesaplama nasıl yapılıyor?</h2>
+<p>Hesaplayıcı, B2B abonelik ve tekrarlayan hizmet işlerinde en sık kullanılan basit birim ekonomisi formüllerini uygular:</p>
+<ol><li><b>CAC (müşteri edinme maliyeti)</b> = dönemdeki satış + pazarlama harcaması ÷ aynı dönemde kazanılan yeni müşteri</li><li><b>Aylık brüt kâr / müşteri</b> = ARPA × brüt kâr marjı</li><li><b>Ortalama müşteri ömrü (ay)</b> = 1 ÷ aylık churn</li><li><b>LTV (müşteri yaşam boyu değeri)</b> = ARPA × marj ÷ churn</li><li><b>LTV:CAC oranı</b> = LTV ÷ CAC</li><li><b>CAC geri ödeme süresi (ay)</b> = CAC ÷ (ARPA × marj)</li></ol>
+<p>Varsayılan değerler temsili, kurgusal bir örnektir: bir çeyrekte 450.000 TL harcayıp 12 yeni müşteri kazanan, müşteri başına ayda 6.000 TL gelir alan, %70 brüt marjla çalışan ve her ay müşterilerinin %3'ünü kaybeden bir şirket. Bu şirketin CAC'ı 37.500 TL, müşteri başı aylık brüt kârı 4.200 TL'dir. Müşteriler ortalama 33,3 ay kalır, LTV yaklaşık 140.000 TL olur ve LTV:CAC oranı 3,7'ye çıkar. Bir müşterinin edinme maliyetini brüt kârla geri ödemesi yaklaşık 8,9 ay sürer.</p>
+<p>LTV'de gelir yerine brüt kâr kullanılır, çünkü müşteriye hizmet vermenin doğrudan maliyeti (SaaS'ta barındırma, destek ve kurulum; hizmet işlerinde teslim ekibinin zamanı) edinme maliyetini karşılayacak paradan düşer. Marjı atlayıp yalnız gelirle hesaplamak, oranı olduğundan iyi gösterir.</p>
+<h2>Girdileri doğru toplamak</h2>
+<h3>CAC'a neler girer?</h3>
+<p>Yeni müşteri kazanmak için yapılan bütün harcamalar: satış ve pazarlama ekibinin maaşı, primi ve işveren maliyetleri, reklam bütçesi, satış ve pazarlama araçlarının abonelikleri, etkinlik ve fuar giderleri, içerik üretimi ve dışarıdan alınan hizmetler. Yalnız reklam harcamasıyla hesaplanan "ücretli CAC" daha düşük çıkar ama gerçek maliyeti gizler. Mevcut müşterilere yönelik hesap yönetimi ve yenileme çalışmalarını ise ayırmaya çalışın; bunlar yeni müşteri edinmenin değil elde tutmanın maliyetidir.</p>
+<p>Harcama ve müşteri sayısı aynı dönemden gelmeli. Satış döngünüz uzunsa bu ayın harcaması birkaç ay sonra müşteriye döner; böyle durumlarda tek ay yerine son 3–6 ayın toplamlarını kullanmak sonucu dengeler.</p>
+<h3>ARPA, marj ve churn</h3>
+<p>ARPA, aktif müşterilerin aylık ortalama geliridir; yıllık sözleşme yapıyorsanız yıllık bedeli 12'ye bölün. Hizmet işlerinde aylık retainer bedeli ya da sözleşme süresine yayılmış proje geliri kullanılabilir. Churn için ay başındaki müşteri sayısına, o ay ayrılan müşterileri oranlayın. Yalnızca yıllık kayıp oranını biliyorsanız aylık değere çevirin: yıllık %30 kayıp, aylık yaklaşık %2,9'a denk gelir. Hesaplayıcı tersini de gösterir: girdiğiniz aylık churn'ün yıllık karşılığı yorum bölümünde yer alır.</p>
+<h2>Sonuçları nasıl yorumlamalı?</h2>
+<p>LTV:CAC için yaygın kabul gören eşik <b>3:1</b>'dir: bir müşteriden edinme maliyetinin en az üç katı brüt kâr bekleniyorsa edinme modeli sağlıklı sayılır. 1'in altındaki bir oran, her yeni müşterinin şirkete para kaybettirdiği anlamına gelir; 1 ile 3 arası, işin döndüğünü ama büyümeyi finanse edecek pay bırakmadığını gösterir. Oran çok yüksekse (örneğin 5'in üzerinde) bu da bir işarettir: büyümeye yeterince yatırım yapmıyor olabilirsiniz.</p>
+<p>Geri ödeme süresi nakit akışını anlatır. Oran iyi olsa bile geri ödeme 18–24 ay sürüyorsa her yeni müşteri uzun süre nakit bağlar. SaaS'ta sık kullanılan bir başparmak kuralı, geri ödemenin 12 ayın altında kalmasıdır. Geri ödeme süresi ortalama müşteri ömründen uzunsa müşteriler maliyetlerini çıkarmadan ayrılıyor demektir; hesaplayıcı bu durumda sizi uyarır.</p>
+<h2>Hizmet işletmelerinde CAC ve LTV</h2>
+<p>Formüller yalnız yazılım şirketleri için değildir. Aylık retainer, bakım sözleşmesi ya da tekrarlayan danışmanlık bedeliyle çalışan bir hizmet işletmesi de aynı mantıkla hesap yapabilir. ARPA yerine müşteri başı aylık sözleşme bedelini, churn yerine her ay sonlanan sözleşmelerin oranını girin. Asıl fark brüt marjdadır: hizmet işlerinde müşteriye teslim edilen işin maliyeti çoğunlukla ekibin zamanıdır. Teslim ekibinin maaşı, dış kaynak ve proje araçları düşüldükten sonra kalan payı marj olarak kullanın; bu oran yazılımdaki kadar yüksek olmadığı için aynı CAC ile LTV:CAC daha düşük çıkar.</p>
+<p>Proje bazlı çalışıyorsanız ve müşteriler tekrar gelmiyorsa aylık churn kavramı anlamını yitirir. Bu durumda müşterinin ortalama kaç ay boyunca iş verdiğini ve aylık ortalama ödemesini kullanarak ömrü elle tahmin edebilir, churn alanına 1 ÷ ömür değerini yüzde olarak girebilirsiniz (örneğin ortalama 10 aylık ilişki için %10).</p>
+<h2>Oranı iyileştirmenin iki yolu</h2>
+<p>LTV:CAC oranı iki kaldıraçla değişir. Birincisi CAC'tır: daha nitelikli hedef listesi, ideal müşteri profiline uymayan fırsatlarda erken vazgeçmek ve temsilcinin araştırma ile yazışmaya harcadığı zamanı azaltmak, aynı harcamayla daha fazla müşteri kazandırır. İkincisi LTV'dir: churn'ü düşürmek oranı doğrudan büyütür, çünkü aylık kaybı %3'ten %2'ye indirmek müşteri ömrünü 33 aydan 50 aya çıkarır. Fiyat artışı ve brüt marjı iyileştirmek de LTV'yi yükseltir. Hesaplayıcıda değerleri tek tek değiştirerek hangi kaldıracın sizin için daha etkili olduğunu görebilirsiniz.</p>
+<h2>Sınırlar ve ipuçları</h2>
+<ul><li><b>Churn %0 ise LTV hesaplanamaz.</b> Ömür sonsuz çıkar; hiç müşteri kaybetmediyseniz bu genellikle verinin kısa olduğunu gösterir. Muhafazakâr bir alt değerle (örneğin %1) hesaplayın.</li><li><b>Küçük sayılar yanıltır.</b> Bir çeyrekte 3–5 müşteri kazanan bir ekipte tek bir büyük anlaşma CAC'ı yarıya indirebilir. Uzun dönemli ortalamaları kullanın.</li><li><b>Segmentleri karıştırmayın.</b> Kurumsal ve KOBİ müşterilerin ARPA'sı, churn'ü ve CAC'ı çok farklıdır; tek bir ortalama ikisini de yanlış gösterir. Hesabı segment başına ayrı yapın.</li><li><b>Ek satış dahil değildir.</b> Mevcut müşterilerden gelen genişleme gelirini ayrı izleyin; LTV'yi şişirmemek için bu basit formüle eklemeyin.</li><li><b>Kanal CAC'ı ortak giderleri görmez.</b> Kanallara bölünmeyen maaş ve araç giderleri toplam CAC'ta kalır; kanal karşılaştırması için iyidir, toplam maliyet için değil.</li></ul>
+<h2>Kanal kırılımı nasıl kullanılır?</h2>
+<p>"Kanal kırılımı ekle" bölümünde LinkedIn outbound, soğuk e-posta, Google Ads ya da etkinlikler gibi en fazla dört kanal için harcamayı ve o kanaldan gelen yeni müşteri sayısını girin. Tablo her kanalın CAC'ını ve genel LTV'ye göre LTV:CAC oranını gösterir. Bir kanalın CAC'ı yüksekse önce o kanaldaki lead maliyetine ve dönüşüm oranlarına bakın; <a href="/blog/b2b-lead-maliyeti-nasil-hesaplanir">B2B lead maliyeti rehberi</a> kanal bazında maliyeti nasıl ayıracağınızı adım adım anlatır.</p>
+<h2>İlgili rehberler</h2><ul class="rel"><li><a href="/blog/b2b-lead-maliyeti-nasil-hesaplanir">B2B lead maliyeti nasıl hesaplanır? Kanal bazlı rehber</a></li><li><a href="/blog/satis-otomasyonu-maliyeti-turkiye">Türkiye'de satış otomasyonu maliyeti</a></li><li><a href="/blog/satis-ekibi-verimlilik-kpi-rehberi">Satış ekibi verimlilik KPI rehberi</a></li><li><a href="/blog/ideal-musteri-profili-icp-nasil-belirlenir">İdeal müşteri profili (ICP) nasıl belirlenir?</a></li><li><a href="/blog/kayip-firsat-analizi-nasil-yapilir">Kayıp fırsat analizi nasıl yapılır?</a></li><li><a href="/blog/b2b-satis-dongusu-kac-gun-surer">B2B satış döngüsü kaç gün sürer?</a></li></ul>
+<h2>Diğer ücretsiz araçlar</h2><ul class="rel"><li><a href="/araclar/satis-roi-hesaplayici">Satış ekibi zaman ve ROI hesaplayıcı</a>: Araştırma, e-posta yazımı ve toplantı hazırlığına giden saatleri girin; otomasyonla geri kazanılan zamanı ve getiriyi görün.</li><li><a href="/araclar/satis-hedefi-hesaplayici">Satış hedefi ve pipeline hesaplayıcı</a>: Aylık gelir hedefinize ulaşmak için kaç lead, toplantı ve teklif gerektiğini huni oranlarınızla hesaplayın.</li><li><a href="/araclar">Tüm ücretsiz satış araçları</a></li></ul>
+<h2>Sık sorulan sorular</h2><div class="faq"><details><summary><b>LTV:CAC oranı kaç olmalı?</b></summary><p>Yaygın kabul gören eşik 3:1'dir. 1'in altı her yeni müşterinin zarar ettirdiğini, 1 ile 3 arası dikkat edilmesi gerektiğini, 3 ve üzeri sağlıklı bir edinme modelini gösterir. Oran çok yüksekse büyümeye yeterince yatırım yapmıyor olabilirsiniz.</p></details><details><summary><b>CAC hesabına hangi giderler dahil edilmeli?</b></summary><p>Yeni müşteri kazanmaya yönelik tüm satış ve pazarlama giderleri: ekip maaşları, primler ve işveren maliyetleri, reklam, araç abonelikleri, etkinlikler ve dış hizmetler. Mevcut müşterilerin yenileme ve hesap yönetimi giderlerini ayrı tutun.</p></details><details><summary><b>Churn %0 ise LTV neden hesaplanmıyor?</b></summary><p>LTV, aylık brüt kârın churn'e bölünmesiyle bulunur; churn sıfırsa müşteri ömrü ve LTV sonsuz çıkar. Hiç müşteri kaybetmediyseniz verinin kısa olduğunu varsayın ve %1 gibi muhafazakâr bir değerle hesaplayın.</p></details><details><summary><b>CAC geri ödeme süresi nasıl hesaplanır?</b></summary><p>CAC'ı müşteri başı aylık brüt kâra (ARPA × brüt kâr marjı) bölün. Örneğin 37.500 TL CAC ve 4.200 TL aylık brüt kârla geri ödeme yaklaşık 8,9 ay sürer.</p></details><details><summary><b>Hizmet işletmeleri de bu hesaplayıcıyı kullanabilir mi?</b></summary><p>Evet. Aylık retainer ya da tekrarlayan sözleşmeyle çalışan danışmanlık ve hizmet işlerinde ARPA olarak aylık sözleşme bedelini, brüt marj olarak teslim ekibinin maliyeti düşüldükten sonra kalan payı, churn olarak aylık sözleşme sonlandırma oranını girin.</p></details><details><summary><b>Girdiğim değerler kaydediliyor mu?</b></summary><p>Hayır. Hesaplama tamamen tarayıcınızda yapılır; değerler sunucuya gönderilmez ve üyelik gerekmez.</p></details></div>
+<section class="son" aria-labelledby="son-baslik"><h2 id="son-baslik">Sales Corner ile edinme maliyetinizi düşürün</h2><p>CAC'ı düşürmenin bir yolu, aynı ekiple daha fazla nitelikli görüşme yapmaktır. Sales Corner panelinde <a href="/sekans-yazari">e-posta sekansı yazarı</a> yazım süresini, <a href="/briefing">toplantı brifingi</a> görüşme hazırlığını, <a href="/rakip-analizi">rakip analizi</a> ve <a href="/rakip-takip">rakip takibi</a> araştırma süresini kısaltır. Bu sürenin TL karşılığını <a href="/araclar/satis-roi-hesaplayici">zaman ve ROI hesaplayıcısıyla</a> görebilir, SaaS ekipleri için kullanım örneklerini <a href="/sektor/saas">SaaS sektör sayfamızda</a> inceleyebilirsiniz. <a href="/#fiyatlar">Planları inceleyin</a>.</p><div class="ctas"><a class="btn btn-a btn-l" href="https://app.salescorner.co/#/kayit">14 gün ücretsiz dene<span aria-hidden="true">→</span></a><span class="d">Kredi kartı gerekmez.</span></div></section>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","@id":"https://salescorner.co/araclar/cac-ltv-hesaplayici#app","name":"CAC / LTV hesaplayıcı","url":"https://salescorner.co/araclar/cac-ltv-hesaplayici","description":"B2B SaaS ve hizmet işletmeleri için CAC, LTV, LTV:CAC oranı, CAC geri ödeme süresi ve ortalama müşteri ömrünü hesaplayan ücretsiz araç. İsteğe bağlı kanal bazında CAC kırılımı sunar.","applicationCategory":"BusinessApplication","operatingSystem":"Web","browserRequirements":"JavaScript gerektirir","inLanguage":"tr","isAccessibleForFree":true,"featureList":["CAC (müşteri edinme maliyeti) hesaplama","LTV (müşteri yaşam boyu değeri) hesaplama","LTV:CAC oranı ve renkli yorum","CAC geri ödeme süresi","Ortalama müşteri ömrü","En fazla 4 kanal için kanal bazında CAC"],"offers":{"@type":"Offer","price":"0","priceCurrency":"TRY"},"provider":{"@id":"https://salescorner.co/#org"},"isPartOf":{"@id":"https://salescorner.co/#website"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","@id":"https://salescorner.co/araclar/cac-ltv-hesaplayici#faq","mainEntity":[{"@type":"Question","name":"LTV:CAC oranı kaç olmalı?","acceptedAnswer":{"@type":"Answer","text":"Yaygın kabul gören eşik 3:1'dir. 1'in altı her yeni müşterinin zarar ettirdiğini, 1 ile 3 arası dikkat edilmesi gerektiğini, 3 ve üzeri sağlıklı bir edinme modelini gösterir. Oran çok yüksekse büyümeye yeterince yatırım yapmıyor olabilirsiniz."}},{"@type":"Question","name":"CAC hesabına hangi giderler dahil edilmeli?","acceptedAnswer":{"@type":"Answer","text":"Yeni müşteri kazanmaya yönelik tüm satış ve pazarlama giderleri: ekip maaşları, primler ve işveren maliyetleri, reklam, araç abonelikleri, etkinlikler ve dış hizmetler. Mevcut müşterilerin yenileme ve hesap yönetimi giderlerini ayrı tutun."}},{"@type":"Question","name":"Churn %0 ise LTV neden hesaplanmıyor?","acceptedAnswer":{"@type":"Answer","text":"LTV, aylık brüt kârın churn'e bölünmesiyle bulunur; churn sıfırsa müşteri ömrü ve LTV sonsuz çıkar. Hiç müşteri kaybetmediyseniz verinin kısa olduğunu varsayın ve %1 gibi muhafazakâr bir değerle hesaplayın."}},{"@type":"Question","name":"CAC geri ödeme süresi nasıl hesaplanır?","acceptedAnswer":{"@type":"Answer","text":"CAC'ı müşteri başı aylık brüt kâra (ARPA × brüt kâr marjı) bölün. Örneğin 37.500 TL CAC ve 4.200 TL aylık brüt kârla geri ödeme yaklaşık 8,9 ay sürer."}},{"@type":"Question","name":"Hizmet işletmeleri de bu hesaplayıcıyı kullanabilir mi?","acceptedAnswer":{"@type":"Answer","text":"Evet. Aylık retainer ya da tekrarlayan sözleşmeyle çalışan danışmanlık ve hizmet işlerinde ARPA olarak aylık sözleşme bedelini, brüt marj olarak teslim ekibinin maliyeti düşüldükten sonra kalan payı, churn olarak aylık sözleşme sonlandırma oranını girin."}},{"@type":"Question","name":"Girdiğim değerler kaydediliyor mu?","acceptedAnswer":{"@type":"Answer","text":"Hayır. Hesaplama tamamen tarayıcınızda yapılır; değerler sunucuya gönderilmez ve üyelik gerekmez."}}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Ana sayfa","item":"https://salescorner.co/"},{"@type":"ListItem","position":2,"name":"Ücretsiz araçlar","item":"https://salescorner.co/araclar"},{"@type":"ListItem","position":3,"name":"CAC / LTV hesaplayıcı","item":"https://salescorner.co/araclar/cac-ltv-hesaplayici"}]}</script>
+</main>
+<footer class="ftr"><div class="wrap"><div class="ftr-g"><div><a class="logo" href="/" aria-label="Sales Corner"><img src="/img/sales-corner-logo.png" width="495" height="178" alt="Sales Corner" loading="lazy"></a><p>AI + n8n ile B2B satış süreçlerini otomatikleştiriyoruz. Lead generation'dan satış analizine kadar her şey.</p><div class="soc"><a href="https://www.linkedin.com/company/saascorner" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg></a><a href="https://www.instagram.com/saascorner.co" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a><a href="mailto:info@saascorner.co" aria-label="Email"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 5L2 7"/></svg></a></div></div><div><h4>Otomasyonlar</h4><ul><li><a href="/#otomasyonlar">Live Sales Coach</a></li><li><a href="/#otomasyonlar">Conversation IQ</a></li><li><a href="/#otomasyonlar">Briefing Studio</a></li><li><a href="/#otomasyonlar">Rakip Radarı</a></li><li><a href="/#otomasyonlar">Content Engine</a></li></ul></div><div><h4>Şirket</h4><ul><li><a href="/#mimari">Mimari</a></li><li><a href="/#fiyatlar">Fiyatlar</a></li><li><a href="/#custom">Custom çözüm</a></li><li><a href="/#tech">Tech stack</a></li><li><a href="/blog">Blog</a></li><li><a href="/sektor">Sektörler</a></li><li><a href="/ozellikler">Özellikler</a></li><li><a href="/karsilastirma">Karşılaştırmalar</a></li><li><a href="/araclar">Ücretsiz araçlar</a></li><li><a href="https://salescorner.co/iletisim">İletişim</a></li></ul></div><div><h4>İletişim</h4><ul><li><a href="mailto:info@saascorner.co">info@saascorner.co</a></li><li><a href="https://salescorner.co">salescorner.co</a></li><li><a href="https://app.salescorner.co/#/giris">Panele giriş</a></li><li><a href="https://salescorner.co/iletisim">Görüşme planla →</a></li></ul></div></div><nav class="grp" aria-label="Corner Group şirketleri"><div class="grp-h"><h4>Corner Group şirketleri</h4><p>Sales Corner, Corner Group çatısı altındaki kardeş markalarıyla birlikte çalışır.</p></div><div class="grp-g"><a href="https://cornergroup.co/" target="_blank" rel="noopener" style="--c:#0b1020"><b>Corner Group</b><span>B2B büyüme ekosistemi</span><small>cornergroup.co</small></a><a href="https://saascorner.co/" target="_blank" rel="noopener" style="--c:#5b5bd6"><b>SAAS Corner</b><span>B2B müşteri bulma</span><small>saascorner.co</small></a><a href="https://crmcorner.co/" target="_blank" rel="noopener" style="--c:#0891b2"><b>CRM Corner</b><span>CRM ve süreç otomasyonu</span><small>crmcorner.co</small></a><a href="https://socialmediacorner.co/" target="_blank" rel="noopener" style="--c:#db2777"><b>Social Media Corner</b><span>Sosyal medya yönetimi</span><small>socialmediacorner.co</small></a><a href="https://brandcorner.co/" target="_blank" rel="noopener" style="--c:#16a34a"><b>Brand Corner</b><span>Influencer marketing/CRM platformu</span><small>brandcorner.co</small></a></div></nav><div class="legal">© 2026 Sales Corner — bir <a href="https://cornergroup.co/">Corner Group</a> şirketi<span class="sep">·</span><a href="/hizmetler">Hizmetler</a><span class="sep">·</span><a href="/hakkimizda">Hakkımızda</a><span class="sep">·</span><a href="/kvkk">KVKK</a><span class="sep">·</span><a href="/gizlilik-politikasi">Gizlilik</a><span class="sep">·</span><a href="/kullanim-kosullari">Koşullar</a><span class="sep">·</span><a href="/cerez-politikasi">Çerez Politikası</a><span class="sep">·</span><a href="/kvkk-basvuru-formu">Başvuru Formu</a><span class="sep">·</span><a href="#cerez-ayarlari" data-cerez-ayar>Çerez ayarları</a></div></div></footer></div><script>
+(function(){
+var h=document.querySelector('.lp .hdr'),b=h&&h.querySelector('.burger');
+if(b){var st=function(o){h.classList.toggle('open',o);b.setAttribute('aria-expanded',o?'true':'false')};
+ b.addEventListener('click',function(){st(!h.classList.contains('open'))});
+ h.querySelectorAll('.mnav a').forEach(function(a){a.addEventListener('click',function(){st(false)})});
+ document.addEventListener('keydown',function(e){if(e.key==='Escape'&&h.classList.contains('open')){st(false);b.focus()}});
+ h.addEventListener('focusout',function(e){if(h.classList.contains('open')&&e.relatedTarget&&!h.contains(e.relatedTarget))st(false)});}
+function sc(){if(h)h.classList.toggle('sc',window.scrollY>8)}sc();window.addEventListener('scroll',sc,{passive:true});
+})();
+</script>
+<script>
+(function () {
+'use strict';
+var $ = function (id) { return document.getElementById(id); };
+var nf0 = new Intl.NumberFormat('tr-TR', { maximumFractionDigits: 0 });
+var nf1 = new Intl.NumberFormat('tr-TR', { maximumFractionDigits: 1 });
+function tl(n) { return nf0.format(Math.round(n)) + ' TL'; }
+function num(v) {
+  var s = String(v == null ? '' : v).replace(/\s|₺|%|tl/gi, '');
+  if (!s) return NaN;
+  if (s.indexOf(',') > -1 && s.indexOf('.') > -1) s = s.replace(/\./g, '').replace(',', '.');
+  else if (s.indexOf(',') > -1) s = s.replace(',', '.');
+  else if (/^\d{1,3}(\.\d{3})+$/.test(s)) s = s.replace(/\./g, '');
+  if (!/^\d*\.?\d+$/.test(s)) return NaN;
+  return parseFloat(s);
+}
+function hata(el, er, msg) {
+  if (msg) {
+    el.setAttribute('aria-invalid', 'true');
+    if (er) { er.textContent = msg; er.hidden = false; }
+  } else {
+    el.removeAttribute('aria-invalid');
+    if (er) { er.textContent = ''; er.hidden = true; }
+  }
+}
+function read(id, min, max, tam, bosMsg, minMsg) {
+  var el = $(id), er = $(id + '-e'), v = num(el.value), msg = '';
+  if (!String(el.value).trim()) msg = bosMsg || 'Bu alan boş bırakılamaz.';
+  else if (isNaN(v)) msg = 'Lütfen bir sayı girin.';
+  else if (v < min && minMsg) msg = minMsg;
+  else if (v < min || v > max) msg = nf1.format(min) + ' ile ' + nf1.format(max) + ' arasında bir değer girin.';
+  else if (tam && Math.floor(v) !== v) msg = 'Tam sayı girin.';
+  hata(el, er, msg);
+  return msg ? null : v;
+}
+function deb(fn, ms) { var t; return function () { clearTimeout(t); t = setTimeout(fn, ms); }; }
+function el(tag, cls, text) {
+  var e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (text != null) e.textContent = text;
+  return e;
+}
+function clear(node) { while (node.firstChild) node.removeChild(node.firstChild); }
+function list(node, items) {
+  clear(node);
+  items.forEach(function (it) {
+    var li = el('li', it.c || '');
+    if (it.b) { li.appendChild(el('b', '', it.b)); li.appendChild(document.createTextNode(' ')); }
+    li.appendChild(document.createTextNode(it.t));
+    node.appendChild(li);
+  });
+}
+function kpis(node, items) {
+  clear(node);
+  items.forEach(function (it) {
+    var d = el('div', 'kpi' + (it.c ? ' ' + it.c : ''));
+    d.appendChild(el('b', '', it.v));
+    d.appendChild(el('span', '', it.l));
+    node.appendChild(d);
+  });
+}
+function fmtBlur(inp) {
+  inp.addEventListener('blur', function () {
+    var v = num(this.value);
+    if (!isNaN(v) && v >= 1000) this.value = nf0.format(v);
+  });
+}
+function oranSinif(r) { return r < 1 ? 'bad' : (r < 3 ? 'warn' : 'ok'); }
+function oranEt(r) { return r < 1 ? 'Kötü' : (r < 3 ? 'Dikkat' : 'Sağlıklı'); }
+function oranTxt(r) { return nf1.format(r) + ':1'; }
+function ay(n) { return nf1.format(n) + ' ay'; }
+
+var RF = ['harcama', 'musteri', 'arpa', 'marj', 'churn'];
+var MAXK = 4;
+var sayac = 0;
+var duyur = deb(function () { $('ozet').textContent = $('ozet').getAttribute('data-metin') || ''; }, 800);
+
+function kanalAlan(row, ad, etiket, ph, mod) {
+  sayac++;
+  var id = 'k' + sayac + '-' + ad;
+  var d = el('div', 'f');
+  var lb = el('label', '', etiket); lb.setAttribute('for', id);
+  var inp = el('input'); inp.id = id; inp.type = 'text'; inp.autocomplete = 'off';
+  inp.setAttribute('data-k', ad);
+  if (mod) inp.setAttribute('inputmode', mod);
+  if (ph) inp.placeholder = ph;
+  var er = el('span', 'err'); er.id = id + '-e'; er.hidden = true;
+  inp.setAttribute('aria-describedby', er.id);
+  d.appendChild(lb); d.appendChild(inp); d.appendChild(er);
+  inp.addEventListener('input', hesapla);
+  if (ad === 'harcama') fmtBlur(inp);
+  row.appendChild(d);
+  return inp;
+}
+var PH = ['Örn. LinkedIn outbound', 'Örn. Google Ads', 'Örn. Soğuk e-posta', 'Örn. Etkinlik'];
+function kanalEkle(odak) {
+  var kap = $('kanallar');
+  if (kap.children.length >= MAXK) return;
+  var row = el('div', 'kr'); row.setAttribute('role', 'group');
+  var hd = el('div', 'krh');
+  var ttl = el('b', 'krt');
+  sayac++; ttl.id = 'kt' + sayac;
+  row.setAttribute('aria-labelledby', ttl.id);
+  var x = el('button', 'krx', 'Kaldır'); x.type = 'button';
+  hd.appendChild(ttl); hd.appendChild(x);
+  row.appendChild(hd);
+  var g = el('div', 'krg');
+  var i1 = kanalAlan(g, 'ad', 'Kanal adı', PH[kap.children.length] || 'Kanal adı', '');
+  kanalAlan(g, 'harcama', 'Harcama (TL)', 'Örn. 120.000', 'decimal');
+  kanalAlan(g, 'musteri', 'Yeni müşteri', 'Örn. 4', 'numeric');
+  row.appendChild(g);
+  x.addEventListener('click', function () {
+    var sonraki = row.nextElementSibling || row.previousElementSibling;
+    kap.removeChild(row);
+    numarala();
+    hesapla();
+    if (sonraki) sonraki.querySelector('input').focus(); else $('kanal-ekle').focus();
+  });
+  kap.appendChild(row);
+  numarala();
+  if (odak) i1.focus();
+}
+function numarala() {
+  var rows = $('kanallar').children, n = rows.length;
+  Array.prototype.forEach.call(rows, function (r, i) {
+    r.querySelector('.krt').textContent = 'Kanal ' + (i + 1);
+    r.querySelector('.krx').setAttribute('aria-label', 'Kanal ' + (i + 1) + ' satırını kaldır');
+  });
+  var b = $('kanal-ekle');
+  b.disabled = n >= MAXK;
+  $('kanal-not').textContent = n >= MAXK ? 'En fazla ' + MAXK + ' kanal eklenebilir.' : '';
+}
+
+function kanallariOku() {
+  var out = [], hatali = false;
+  Array.prototype.forEach.call($('kanallar').children, function (r, i) {
+    var ad = r.querySelector('[data-k="ad"]'), h = r.querySelector('[data-k="harcama"]'), m = r.querySelector('[data-k="musteri"]');
+    var adV = ad.value.trim(), hS = h.value.trim(), mS = m.value.trim();
+    var hE = $(h.id + '-e'), mE = $(m.id + '-e');
+    if (!adV && !hS && !mS) { hata(h, hE, ''); hata(m, mE, ''); return; }
+    var hv = num(hS), mv = num(mS), hm = '', mm = '';
+    if (!hS) hm = 'Bu kanalın harcamasını girin.';
+    else if (isNaN(hv)) hm = 'Lütfen bir sayı girin.';
+    if (!mS) mm = 'Bu kanaldan gelen müşteri sayısını girin.';
+    else if (isNaN(mv)) mm = 'Lütfen bir sayı girin.';
+    else if (Math.floor(mv) !== mv) mm = 'Tam sayı girin.';
+    hata(h, hE, hm); hata(m, mE, mm);
+    if (hm || mm) { hatali = true; return; }
+    out.push({ ad: adV || ('Kanal ' + (i + 1)), h: hv, m: mv });
+  });
+  return { k: out, hatali: hatali };
+}
+
+function hesapla() {
+  var v = {
+    harcama: read('harcama', 1, 1e12, false, 'Dönemdeki satış ve pazarlama harcamasını girin.'),
+    musteri: read('musteri', 1, 1e7, true, 'Yeni müşteri sayısını girin.', 'En az 1 yeni müşteri girin; 0 müşteriyle CAC tanımsızdır.'),
+    arpa: read('arpa', 1, 1e10, false, 'Müşteri başı aylık geliri girin.'),
+    marj: read('marj', 1, 100, false, 'Brüt kâr marjını girin.'),
+    churn: read('churn', 0, 100, false, 'Aylık churn oranını girin (hiç kayıp yoksa 0).')
+  };
+  var K = kanallariOku();
+  var bad = RF.filter(function (k) { return v[k] === null; });
+  var res = $('sonuc');
+  if (bad.length) {
+    res.setAttribute('data-bos', '1');
+    $('ozet').setAttribute('data-metin', 'Hesaplama için işaretli alanları düzeltin.');
+    $('ozet').textContent = 'Hesaplama için işaretli alanları düzeltin.';
+    return;
+  }
+  res.removeAttribute('data-bos');
+  var c = v.churn / 100, m = v.marj / 100;
+  var cac = v.harcama / v.musteri;
+  var bk = v.arpa * m;
+  var payback = cac / bk;
+  var sifir = c === 0;
+  var omur = sifir ? Infinity : 1 / c;
+  var ltv = sifir ? Infinity : bk / c;
+  var oran = sifir ? Infinity : ltv / cac;
+  var uy = $('uyari');
+  var items = [{ v: tl(cac), l: 'CAC: yeni müşteri başına edinme maliyeti' }];
+  var ic = [];
+  var msg;
+  if (sifir) {
+    $('oran').textContent = '–';
+    $('oran-et').textContent = 'Hesaplanamadı';
+    $('oran-m').className = ''; $('oran-m').style.width = '0';
+    $('oran-h').textContent = 'Churn %0 olduğunda LTV sonsuz çıkar.';
+    uy.textContent = 'Aylık churn %0 girildi: müşteri ömrü ve LTV sonsuz çıkacağı için LTV ve LTV:CAC hesaplanmadı. Gerçekçi bir değer girin; hiç müşteri kaybetmediyseniz %0,5 ya da %1 gibi muhafazakâr bir oran kullanın.';
+    uy.hidden = false;
+    items.push({ v: '–', l: 'LTV: müşteri yaşam boyu değeri (churn %0)', c: 'warn' });
+    items.push({ v: ay(payback), l: 'CAC geri ödeme süresi', c: payback <= 12 ? 'ok' : (payback <= 24 ? 'warn' : 'bad') });
+    items.push({ v: '–', l: 'ortalama müşteri ömrü (churn %0)', c: 'warn' });
+    items.push({ v: tl(bk), l: 'müşteri başı aylık brüt kâr' });
+    msg = 'CAC ' + tl(cac) + ', geri ödeme ' + ay(payback) + '. Churn %0 olduğu için LTV hesaplanmadı; gerçekçi bir churn değeri girin.';
+  } else {
+    uy.hidden = true; uy.textContent = '';
+    var sn = oranSinif(oran);
+    $('oran').textContent = oranTxt(oran);
+    $('oran-et').textContent = oranEt(oran);
+    $('oran-m').className = sn;
+    $('oran-m').style.width = Math.max(2, Math.min(oran / 5, 1) * 100) + '%';
+    $('oran-h').textContent = 'Yaygın kabul gören eşik: 1\'in altı kötü, 1–3 arası dikkat, 3 ve üzeri sağlıklı.';
+    items.push({ v: tl(ltv), l: 'LTV: müşteri yaşam boyu değeri (brüt kâr)' });
+    items.push({ v: ay(payback), l: 'CAC geri ödeme süresi', c: payback > omur ? 'bad' : (payback <= 12 ? 'ok' : 'warn') });
+    items.push({ v: ay(omur), l: 'ortalama müşteri ömrü' });
+    items.push({ v: tl(bk), l: 'müşteri başı aylık brüt kâr' });
+    if (oran < 1) ic.push({ c: 'bad', b: 'LTV:CAC (' + oranTxt(oran) + '):', t: 'Bir müşteriden beklenen brüt kâr, onu kazanma maliyetini karşılamıyor. Her yeni müşteri zarar ettiriyor; önce CAC\'ı düşürmeye ya da churn\'ü azaltmaya odaklanın.' });
+    else if (oran < 3) ic.push({ c: 'warn', b: 'LTV:CAC (' + oranTxt(oran) + '):', t: 'Edinme maliyeti karşılanıyor ama yaygın kabul gören 3:1 eşiğinin altındasınız. 3:1 için CAC\'ın en fazla ' + tl(ltv / 3) + ' olması gerekir.' });
+    else ic.push({ c: 'ok', b: 'LTV:CAC (' + oranTxt(oran) + '):', t: oran > 5 ? 'Yaygın kabul gören 3:1 eşiğinin üzerindesiniz. Oran 5\'in üzerindeyse büyümeye yeterince yatırım yapmıyor olabilirsiniz; ek kanal denemeleri için alan var.' : 'Yaygın kabul gören 3:1 eşiğinin üzerindesiniz; edinme modeli sağlıklı görünüyor.' });
+    if (payback > omur) ic.push({ c: 'bad', b: 'Geri ödeme:', t: 'Geri ödeme süresi (' + ay(payback) + ') ortalama müşteri ömründen (' + ay(omur) + ') uzun. Müşteriler ortalamada edinme maliyetini çıkarmadan ayrılıyor.' });
+    else if (payback <= 12) ic.push({ c: 'ok', b: 'Geri ödeme:', t: 'Edinme maliyeti ' + ay(payback) + ' içinde brüt kârla geri dönüyor; SaaS\'ta sık kullanılan 12 aylık başparmak kuralının içinde.' });
+    else ic.push({ c: 'warn', b: 'Geri ödeme:', t: 'Edinme maliyetinin geri dönmesi ' + ay(payback) + ' sürüyor; sık kullanılan 12 aylık başparmak kuralının üzerinde. Her yeni müşteri uzun süre nakit bağlar.' });
+    var yil = (1 - Math.pow(1 - c, 12)) * 100;
+    ic.push({ b: 'Yıllık churn:', t: 'Aylık %' + nf1.format(v.churn) + ' müşteri kaybı, yıllık bazda yaklaşık %' + nf1.format(yil) + ' kayba denk gelir.' });
+    msg = 'CAC ' + tl(cac) + ', LTV ' + tl(ltv) + ', LTV:CAC ' + oranTxt(oran) + ' (' + oranEt(oran).toLowerCase() + '). Geri ödeme ' + ay(payback) + ', ortalama müşteri ömrü ' + ay(omur) + '.';
+  }
+  kpis($('kpi'), items);
+  list($('icgoru'), ic);
+  kanalCiz(K, v, cac, ltv, sifir);
+  if (K.hatali) msg += ' Kanal kırılımında işaretli alanları düzeltin.';
+  $('ozet').setAttribute('data-metin', msg);
+  duyur();
+}
+
+function kanalCiz(K, v, cac, ltv, sifir) {
+  var box = $('kanal-s'), tb = $('kanal-t'), y = [];
+  clear(tb);
+  if (!K.k.length) { box.hidden = true; clear($('kanal-y')); return; }
+  box.hidden = false;
+  var th = 0, tm = 0, enIyi = null;
+  function satir(ad, h, mu, toplam) {
+    var tr = el('tr');
+    var a = el('th', '', ad); a.setAttribute('scope', 'row'); tr.appendChild(a);
+    tr.appendChild(el('td', '', tl(h)));
+    tr.appendChild(el('td', '', nf0.format(mu)));
+    if (mu > 0) {
+      var kc = h / mu;
+      tr.appendChild(el('td', '', tl(kc)));
+      if (sifir) tr.appendChild(el('td', '', '–'));
+      else { var r = ltv / kc; tr.appendChild(el('td', oranSinif(r), oranTxt(r) + ' · ' + oranEt(r))); }
+    } else {
+      tr.appendChild(el('td', 'warn', 'Müşteri yok'));
+      tr.appendChild(el('td', '', '–'));
+    }
+    if (toplam) tr.className = 'kt';
+    tb.appendChild(tr);
+  }
+  K.k.forEach(function (k) {
+    th += k.h; tm += k.m;
+    satir(k.ad, k.h, k.m, false);
+    if (k.m > 0 && (!enIyi || k.h / k.m < enIyi.h / enIyi.m)) enIyi = k;
+  });
+  if (K.k.length > 1) satir('Kanallar toplamı', th, tm, true);
+  K.k.forEach(function (k) { if (k.m === 0 && k.h > 0) y.push({ c: 'bad', b: k.ad + ':', t: tl(k.h) + ' harcandı ama bu dönemde müşteri gelmedi. Satış döngüsü uzunsa sonraki dönemleri de izleyin.' }); });
+  if (enIyi && K.k.length > 1) y.push({ c: 'ok', b: 'En düşük CAC:', t: enIyi.ad + ' (' + tl(enIyi.h / enIyi.m) + '). Genel CAC ' + tl(cac) + '.' });
+  if (th > v.harcama + 0.5) y.push({ c: 'warn', b: 'Toplam harcama:', t: 'Kanal harcamalarının toplamı (' + tl(th) + ') yukarıdaki dönem harcamasını (' + tl(v.harcama) + ') aşıyor; değerleri kontrol edin.' });
+  else if (th < v.harcama - 0.5) y.push({ b: 'Ortak giderler:', t: tl(v.harcama - th) + ' kanallara bölünmedi (maaş, araçlar gibi ortak giderler). Kanal CAC\'ları bu payı içermez; bu yüzden genel CAC\'tan düşük görünebilir.' });
+  if (tm > v.musteri) y.push({ c: 'warn', b: 'Müşteri sayısı:', t: 'Kanallardan gelen müşteri toplamı (' + nf0.format(tm) + ') yukarıdaki yeni müşteri sayısını (' + nf0.format(v.musteri) + ') aşıyor; bir müşteri birden çok kanala yazılmış olabilir.' });
+  list($('kanal-y'), y);
+}
+
+RF.forEach(function (id) { $(id).addEventListener('input', hesapla); });
+fmtBlur($('harcama')); fmtBlur($('arpa'));
+$('kanal-ekle').addEventListener('click', function () { kanalEkle(true); hesapla(); });
+$('f').addEventListener('submit', function (ev) { ev.preventDefault(); hesapla(); });
+kanalEkle(false); kanalEkle(false);
+hesapla();
+
+})();
+</script>
+<script>(function(){var d=document.querySelectorAll("details.dd");if(!d.length)return;var hv=window.matchMedia&&matchMedia("(hover:hover) and (pointer:fine)").matches;d.forEach(function(x){if(hv){x.addEventListener("mouseenter",function(){x.open=true});x.addEventListener("mouseleave",function(){x.open=false});x.querySelector("summary").addEventListener("click",function(e){if(e.detail>0){e.preventDefault();x.open=true}})}});document.addEventListener("click",function(e){d.forEach(function(x){if(x.open&&!x.contains(e.target))x.open=false})});document.addEventListener("keydown",function(e){if(e.key==="Escape")d.forEach(function(x){if(x.open){x.open=false;x.querySelector("summary").focus()}})})})();</script></body></html>

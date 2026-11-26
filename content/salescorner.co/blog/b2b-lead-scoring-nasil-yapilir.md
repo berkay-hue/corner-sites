@@ -185,6 +185,8 @@ Puanlar tek başına bir şey ifade etmez. Önemli olan her puan aralığının 
 
 B grubundaki lead'ler, outbound ekiplerin en büyük fırsatıdır. Doğru şirkettirler ama henüz sizi tanımamaktadırlar. Bu gruba gönderilecek mesajların kalitesi dönüşümü doğrudan belirler. [Yapay zekayla soğuk e-posta yazmayı anlattığımız yazıda](/blog/yapay-zekayla-soguk-eposta-nasil-yazilir) bu lead'ler için ölçeklenebilir ama kişisel mesajların nasıl hazırlanacağını detaylıca ele aldık. Bu dizileri ürün videonuz, PDF dokümanınız veya web sitenizden otomatik üretmek için [Sekans Yazarı aracını](/#otomasyonlar) kullanabilirsiniz.
 
+Fırsatları BANT veya MEDDIC kriterlerine göre 0–3 arası puanlayıp nitelik seviyesini ve en zayıf kriterleri görmek için ücretsiz [BANT / MEDDIC Fırsat Puan Kartı](/araclar/bant-meddic-puan-karti) aracını kullanabilirsiniz.
+
 ## Adım 7: Veri Zenginleştirmeyle Modeli Besleyin
 
 Fit skorunun doğruluğu, elinizdeki verinin eksiksizliğine bağlıdır. Bir form doldurulduğunda genellikle yalnızca ad, e-posta ve şirket adı gelir. Sektör, çalışan sayısı, unvan ve teknoloji bilgisi eksik kalır. Bu eksik alanlar sıfır puan alırsa iyi bir lead haksız yere düşük skorlanır.

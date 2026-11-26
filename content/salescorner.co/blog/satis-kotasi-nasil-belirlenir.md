@@ -123,6 +123,8 @@ Hiçbir ekipte tüm temsilciler kotasının tamamını tutturmaz. Bu nedenle tem
 
 Bir sağlama daha yapalım: 2.790.000 ÷ 150.000 = 18,6 anlaşma. %20 kazanma oranıyla bu, yılda yaklaşık 93 nitelikli fırsat, yani ayda 7,75 fırsat demektir. Bu sayı, temsilcinin yönetebildiği 8 fırsatlık kapasitenin içinde kalıyor. Ancak temsilcinin önüne gerçekten bu kadar fırsat gelebilmesi için pipeline üretiminin de planlanması gerekir.
 
+Belirlediğiniz kotanın ne kadar pipeline ve lead gerektirdiğini görmek için [Satış Hedefi Hesaplayıcı](/araclar/satis-hedefi-hesaplayici), kotaya bağlı prim tutarlarını denemek için [Satış Komisyonu Hesaplayıcı](/araclar/komisyon-hesaplayici) araçlarını kullanabilirsiniz.
+
 ## Kotayı pipeline ve lead üretimine nasıl bağlarsınız?
 
 Kota yalnızca bir gelir rakamı değildir. Aynı zamanda tersine çevrildiğinde bir **pipeline ihtiyaç planıdır.** Örneğimizdeki ekibin 12 milyon TL'ye ulaşması için yılda yaklaşık 80 anlaşma ve %20 dönüşümle 400 civarında nitelikli fırsat gerekir. Toplantıdan nitelikli fırsata dönüşüm %50 ise bu, yaklaşık 800 ilk görüşme anlamına gelir.

@@ -176,6 +176,8 @@ Varsayalım ki 4 SDR'lık bir ekibiniz var ve her biri günde ortalama 2 saatini
 
 Ancak asıl değer, serbest kalan 112 saatin nereye gittiğidir. Bu süre daha fazla görüşmeye, daha iyi hazırlanmış toplantılara ve takip disiplinine dönüşüyorsa, gelir tarafındaki etki zaman tasarrufundan çok daha büyük olur. Bunu ölçebilmek için otomasyondan önce ve sonra aynı metrikleri takip etmeniz gerekir: kişi başı haftalık görüşme sayısı, yanıt oranı, toplantıya dönüşme oranı ve pipeline'a eklenen fırsat değeri. Hangi metrikleri izleyeceğinizi [satış ekibi verimliliğini ölçmeye yönelik KPI rehberimizde](/blog/satis-ekibi-verimlilik-kpi-rehberi) bulabilirsiniz.
 
+Kendi ekip büyüklüğünüz ve maliyetlerinizle yaklaşık geri dönüşü görmek için ücretsiz [Satış Ekibi Zaman ve ROI Hesaplayıcı](/araclar/satis-roi-hesaplayici), müşteri edinme maliyetinizi kontrol etmek için [CAC / LTV Hesaplayıcı](/araclar/cac-ltv-hesaplayici) araçlarını kullanabilirsiniz.
+
 ## Satış otomasyonu bütçesini adım adım nasıl planlarsınız?
 
 1. **Mevcut durumu ölçün.** Ekibin haftalık zamanının nereye gittiğini bir veya iki hafta boyunca kaydedin. Tekrarlayan, kural tabanlı işleri işaretleyin.

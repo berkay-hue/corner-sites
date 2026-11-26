@@ -104,6 +104,8 @@ Sorgunuzun döndürdüğü sonuç sayısı, hassasiyeti hakkında fikir verir. K
 
 Bu döngüyü iki üç kez tekrarlamak, ilk taslak sorguyu ciddi ölçüde iyileştirir.
 
+Unvanları, zorunlu ve hariç tutulacak kelimeleri girip LinkedIn, Sales Navigator ve Google X-ray için hazır bir sorgu üretmek için ücretsiz [LinkedIn Boolean Arama Oluşturucu](/araclar/linkedin-boolean-olusturucu) aracını deneyebilirsiniz.
+
 ## Türkiye pazarı için hazır Boolean sorgu örnekleri
 
 Aşağıdaki sorgular başlangıç noktası olarak tasarlandı. Kendi ICP'nize göre uyarlayın.

@@ -65,6 +65,8 @@ Formül basit olsa da hesaplamanın güvenilirliği, hangi fırsatları dahil et
 
 7. **Kırılımlara ayırın.** Aynı hesabı temsilci, segment, ürün ve kaynak (inbound/outbound/partner) bazında da yapın. Toplam coverage sağlıklı görünürken tek bir temsilcinin veya segmentin ciddi açık verdiğini ancak böyle görebilirsiniz.
 
+Hesabı elle yapmak yerine aylık gelir hedefinizi, ortalama anlaşma büyüklüğünüzü ve huni dönüşüm oranlarınızı girip gereken lead, toplantı ve teklif sayısını ve pipeline kapsamasını saniyeler içinde görmek için ücretsiz [Satış Hedefi Hesaplayıcı](/araclar/satis-hedefi-hesaplayici) aracını kullanabilirsiniz.
+
 ## Sayısal örnek: Bir B2B yazılım ekibinin çeyrek hesabı
 
 Varsayımsal bir B2B SaaS şirketi düşünelim. Üç kişilik bir satış ekibi var ve çeyreğin altıncı haftasındayız.
@@ -209,6 +211,8 @@ Manuel coverage hesabı, CRM'den haftalık rapor çekip tabloda işlemekten ibar
 - **Yapay zeka destekli risk skorlaması:** E-posta yanıt sıklığı, toplantı katılımı ve karar verici etkileşimi gibi sinyallerle fırsatların gerçek kazanma olasılığının tahmin edilmesi. Bu yaklaşım, aşama bazlı sabit olasılıklardan daha isabetli bir ağırlıklı coverage hesaplamaya yardımcı olabilir.
 
 Bu otomasyonların değeri yalnızca zaman kazandırması değildir. Coverage'ı "çeyrek sonunda bakılan bir rakam" olmaktan çıkarıp her hafta yönetilen bir göstergeye dönüştürmesidir.
+
+Pipeline'ı besleyecek kanalların maliyetini de hesaba katmak isterseniz [CAC / LTV Hesaplayıcı](/araclar/cac-ltv-hesaplayici) ile müşteri edinme maliyetinizi ve geri ödeme sürenizi aynı çerçevede görebilirsiniz.
 
 ## Sık sorulan sorular
 
