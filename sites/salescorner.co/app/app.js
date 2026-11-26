@@ -67,7 +67,7 @@ const STEPS = {
 const EST = { rakip: 240, sekans: 150, seo: 45, briefing: 120, fireflies: 60 };
 const estDk = k => `${Math.round(EST[k] / 60) || 1}–${Math.ceil((EST[k] * 1.6) / 60)}`;
 const PLAN_FALLBACK = [
-  { kod: "deneme", ad: "Deneme (14 gün)", aylik_tl: 0, koltuk: 1, kota: { rakip: 0, sekans: 1, seo: 1, briefing: 1, fireflies: 1, takip: 1 } },
+  { kod: "deneme", ad: "Deneme (14 gün)", aylik_tl: 0, koltuk: 1, kota: { rakip: 0, sekans: 5, seo: 5, briefing: 5, fireflies: 3, takip: 1 } },
   { kod: "baslangic", ad: "Başlangıç", aylik_tl: 1490, koltuk: 1, kota: { rakip: 1, sekans: 3, seo: 2, briefing: 2, takip: 1 } },
   { kod: "profesyonel", ad: "Profesyonel", aylik_tl: 3490, koltuk: 1, kota: { rakip: 4, sekans: 15, seo: 8, briefing: 10, fireflies: 4, takip: 3 } },
   { kod: "ekip", ad: "Ekip", aylik_tl: 8990, koltuk: 5, kota: { rakip: 15, sekans: 60, seo: 30, briefing: 40, fireflies: 20, takip: 10 } },
