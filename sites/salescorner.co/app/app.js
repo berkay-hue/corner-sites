@@ -50,7 +50,7 @@ const ic = (k, z) => ico(P[k], z);
 // ---------- Modüller ----------
 const MODS = [
   { k: "rakip", ad: "Rakip Analizi", ic: ic("target"), bg: "#eef0ff", d: "Rakip sitelerinizi tarar, güçlü/zayıf yönleri karşılaştırır ve hazır bir sunum çıkarır." },
-  { k: "sekans", ad: "Sekans Yazarı", ic: ic("pen"), bg: "#fdf2f8", d: "Hedef firmaya özel cold call senaryosu ve LinkedIn mesaj sekansı yazar." },
+  { k: "sekans", ad: "Sekans Yazarı", ic: ic("pen"), bg: "#fdf2f8", d: "Firmanız için cold call senaryosu ve LinkedIn mesaj sekansı yazar." },
   { k: "seo", ad: "SEO Analizi", ic: ic("trend"), bg: "#ecfdf3", d: "SEO puanı, eksikler, anahtar kelime hacimleri ve hazır içerik önerisi." },
   { k: "briefing", ad: "Toplantı Briefingi", ic: ic("clip"), bg: "#fffbeb", d: "Görüşme öncesi firma ve kişi araştırması, fırsat puanı ve briefing sunumu." },
   { k: "fireflies", ad: "Toplantı Analizi", ic: ic("mic"), bg: "#f0f9ff", d: "Fireflies kayıtlarınızı satış koçu gözüyle puanlar; itirazlar, BANT ve takip e-postası." },
@@ -67,16 +67,16 @@ const STEPS = {
 const EST = { rakip: 240, sekans: 150, seo: 45, briefing: 120, fireflies: 60 };
 const estDk = k => `${Math.round(EST[k] / 60) || 1}–${Math.ceil((EST[k] * 1.6) / 60)}`;
 const PLAN_FALLBACK = [
-  { kod: "deneme", ad: "Deneme (14 gün)", aylik_tl: 0, koltuk: 1, kota: { rakip: 1, sekans: 1, seo: 1, briefing: 1, fireflies: 1, takip: 1 } },
+  { kod: "deneme", ad: "Deneme (14 gün)", aylik_tl: 0, koltuk: 1, kota: { rakip: 0, sekans: 1, seo: 1, briefing: 1, fireflies: 1, takip: 1 } },
   { kod: "baslangic", ad: "Başlangıç", aylik_tl: 1490, koltuk: 1, kota: { rakip: 1, sekans: 3, seo: 2, briefing: 2, takip: 1 } },
-  { kod: "profesyonel", ad: "Profesyonel", aylik_tl: 3490, koltuk: 3, kota: { rakip: 4, sekans: 15, seo: 8, briefing: 10, fireflies: 4, takip: 3 } },
+  { kod: "profesyonel", ad: "Profesyonel", aylik_tl: 3490, koltuk: 1, kota: { rakip: 4, sekans: 15, seo: 8, briefing: 10, fireflies: 4, takip: 3 } },
   { kod: "ekip", ad: "Ekip", aylik_tl: 8990, koltuk: 5, kota: { rakip: 15, sekans: 60, seo: 30, briefing: 40, fireflies: 20, takip: 10 } },
   { kod: "ozel", ad: "Özel AI", aylik_tl: null, koltuk: 0, kota: { rakip: -1, sekans: -1, seo: -1, briefing: -1, fireflies: -1, takip: -1 } },
 ];
 const PLAN_META = {
   baslangic: { d: "Tek başına satış yapanlar için temel araçlar." },
-  profesyonel: { d: "Aktif satış yapan profesyoneller için tam paket.", hot: true, ek: ["3 kullanıcıya kadar", "Sunumlarda kendi logonuz"] },
-  ekip: { d: "Satış ekipleri için yüksek kota.", ek: ["5 kullanıcıya kadar", "Öncelikli destek", "Sunumlarda kendi logonuz"] },
+  profesyonel: { d: "Aktif satış yapan profesyoneller için tam paket.", hot: true, ek: ["Kullanıcı başına fiyat; ekip arkadaşı için ek kullanıcı", "Sunumlarda kendi logonuz"] },
+  ekip: { d: "Satış ekipleri için yüksek kota.", ek: ["5 kullanıcı dahil", "Öncelikli destek", "Sunumlarda kendi logonuz"] },
   ozel: { d: "Şirketinize özel kurulan yapay zekâ altyapısı." },
 };
 
@@ -250,13 +250,129 @@ const JOBS = {};
 }
 function saveJobs() {
   const o = {};
-  for (const k of Object.keys(STATUS)) if (JOBS[k] && !JOBS[k].sync) o[k] = JOBS[k];
+  for (const k of Object.keys(STATUS)) if (JOBS[k] && !JOBS[k].sync && !JOBS[k].gecmis) o[k] = JOBS[k];
   store.set("jobs", o);
 }
 function addHist(e) {
   const h = store.get("hist", []);
   h.unshift({ ...e, at: Date.now() });
   store.set("hist", h.slice(0, 12));
+}
+// ---------- Geçmiş (son 3 gün, hesaba bağlı) ----------
+// Başarılı her çıktı bir kez app_gecmis_kaydet ile saklanır; sunucu son 3 günü listeler.
+// Geçmiş içeriği yalnız bellekte tutulur (localStorage'a yazılmaz), çıkışta temizlenir.
+const GM_MODS = new Set(["rakip", "sekans", "seo", "briefing", "fireflies", "takip"]);
+const GM_MAX = 1.5 * 1024 * 1024;
+let GECMIS = {}, GM_OTO = {}, GM_UID = "", GM_TK = null, GM_ACILIYOR = {};
+function gecmisSifirla() {
+  GECMIS = {}; GM_OTO = {}; GM_UID = ""; GM_TK = null; GM_ACILIYOR = {};
+  for (const k of Object.keys(JOBS)) if (JOBS[k] && JOBS[k].gecmis) delete JOBS[k];
+}
+// Oturum değiştiyse önceki kullanıcının listesi kullanılmaz
+function gmUid() { const u = S.session?.user?.id || ""; if (u !== GM_UID) { gecmisSifirla(); GM_UID = u; } return u; }
+// Geçmiş uçları henüz yoksa genel "kurulum" ekranı tetiklenmesin
+async function gmRpc(fn, args) { const s = S.setupErr; try { return await rpc(fn, args); } finally { S.setupErr = s; } }
+const gmBaslik = s => Array.from(String(s ?? "").replace(/\s+/g, " ").trim()).slice(0, 200).join("") || "Çalışma";
+async function gecmisKaydet(k, j, veri) {
+  if (!GM_MODS.has(k) || !j || j.kaydedildi || j.gecmis || veri == null || !S.session) return;
+  j.kaydedildi = true;
+  try {
+    const boyut = new TextEncoder().encode(JSON.stringify(veri)).length;
+    if (boyut > GM_MAX) { console.warn("Geçmiş kaydı atlandı (içerik 1,5 MB üstü)", k, boyut); return; }
+    const uid = gmUid();
+    await gmRpc("app_gecmis_kaydet", { p_modul: k, p_baslik: gmBaslik(j.title), p_veri: veri });
+    if (GM_UID !== uid) return;
+  } catch (err) { console.warn("Geçmiş kaydedilemedi", k, err); return; }
+  delete GECMIS[k]; delete GECMIS["*"];
+  if (route === k) gecmisYukle(k); else if (route === "panel") panelGecmis();
+}
+// k: modül ya da "*" (tüm modüller). Aynı anda tek istek; hata olursa bir sonraki çağrı yeniden dener.
+function gecmisListe(k) {
+  gmUid();
+  let c = GECMIS[k];
+  if (c && !c.err) return c.p;
+  c = GECMIS[k] = { list: null, err: false };
+  c.p = gmRpc("app_gecmis_liste", { p_modul: k === "*" ? null : k })
+    .then(r => { c.list = (Array.isArray(r) ? r : []).filter(x => x && x.id != null && GM_MODS.has(x.modul) && (k === "*" || x.modul === k)); return c; })
+    .catch(err => { console.warn("Geçmiş alınamadı", err); c.err = true; return c; });
+  return c.p;
+}
+function gecmisKutu(k) {
+  const v = k === "takip" && GM_TK ? `<div class="tk-body" style="margin-top:14px;border-top:1px solid var(--line);padding-top:14px">
+    <div class="row" style="margin-bottom:8px"><b>${esc(GM_TK.baslik || "Rakip takibi")} <span class="tk-mute" style="font-weight:400;font-size:13px">· ${esc(fmtDT(GM_TK.olusturma))}</span></b><button type="button" class="linkbtn" data-gecmis-kapat>Kapat</button></div>
+    ${tkSonuc(GM_TK.veri)}</div>` : "";
+  return `<section class="card pad" id="gecmis" data-gm="${esc(k)}" style="margin-top:18px" aria-label="Geçmiş (son 3 gün)">
+    <h3 style="font-size:16px;margin-bottom:10px">Geçmiş (son 3 gün)</h3><div data-gm-list>${gmListeHtml(k, GECMIS[k])}</div>${v}</section>`;
+}
+function gmListeHtml(k, c) {
+  if (!c || (!c.list && !c.err)) return `<div class="spin s" aria-label="Yükleniyor"></div>`;
+  if (c.err) return `<p class="tk-mute" style="font-size:13.5px">Geçmiş şu an yüklenemedi. <button type="button" class="linkbtn" data-gecmis-yenile="${esc(k)}">Tekrar dene</button></p>`;
+  if (!c.list.length) return `<p class="tk-mute" style="font-size:13.5px">Son 3 günde kayıt yok.</p>`;
+  const acik = k === "takip" ? GM_TK && GM_TK.id : JOBS[k]?.gecmis && JOBS[k].gecmisId;
+  return `<ul style="list-style:none;margin:0;padding:0;display:grid;gap:8px">${c.list.slice(0, 30).map(x => {
+    const on = acik != null && String(acik) === String(x.id);
+    return `<li style="display:flex;flex-wrap:wrap;gap:4px 8px;align-items:baseline"><button type="button" class="linkbtn" data-gecmis-ac="${esc(x.id)}" data-gecmis-mod="${esc(x.modul)}" style="text-align:left${on ? ";font-weight:700" : ""}"${on ? ' aria-current="true"' : ""}>${esc(x.baslik || "Çalışma")}</button><span class="tk-mute" style="font-size:13px">${esc(fmtDT(x.olusturma))}</span></li>`;
+  }).join("")}</ul>`;
+}
+async function gecmisYukle(k) {
+  const box = document.getElementById("gecmis");
+  if (!box || box.dataset.gm !== k) return;
+  const c = await gecmisListe(k);
+  if (route !== k || GECMIS[k] !== c || document.getElementById("gecmis") !== box) return;
+  const el = box.querySelector("[data-gm-list]");
+  if (el) el.innerHTML = gmListeHtml(k, c);
+  // İş yokken son kayıt kendiliğinden açılır (sayfa başına bir kez; "Yeni çalışma" sonrası açılmaz)
+  if (!c.err && c.list.length && !GM_OTO[k] && !JOBS[k] && k !== "takip" && !(k === "briefing" && BRF_SEKME === "toplu")) {
+    GM_OTO[k] = true;
+    gecmisAc(k, c.list[0].id, { oto: true });
+  }
+}
+async function gecmisAc(k, id, o = {}) {
+  if (!GM_MODS.has(k) || id == null || id === "") return;
+  if (JOBS[k]?.state === "run") { if (!o.oto) toast("Süren çalışma bitince geçmişi açabilirsiniz."); return; }
+  const x = [...(GECMIS[k]?.list || []), ...(GECMIS["*"]?.list || [])].find(y => String(y.id) === String(id));
+  const from = route, uid = gmUid(), tok = {};
+  GM_ACILIYOR[k] = tok;
+  busy(o.btn, true, "Açılıyor…");
+  let v = null;
+  try { v = await gmRpc("app_gecmis_getir", { p_id: x ? x.id : id }); } catch (err) { console.warn("Geçmiş kaydı alınamadı", err); v = undefined; }
+  if (o.btn && o.btn.isConnected) busy(o.btn, false);
+  if (GM_ACILIYOR[k] !== tok || GM_UID !== uid || route !== from) return;
+  delete GM_ACILIYOR[k];
+  if (!v || typeof v !== "object" || v.modul !== k || v.veri == null) {
+    if (!o.oto) toast(v === undefined ? "Kayıt şu an açılamadı. Lütfen tekrar deneyin." : "Bu kayıt artık yok; son 3 günün dışında kalmış olabilir.");
+    if (v !== undefined) { delete GECMIS[k]; delete GECMIS["*"]; if (route === k) gecmisYukle(k); else if (route === "panel") panelGecmis(); }
+    return;
+  }
+  // Beklerken kullanıcı yeni bir çalışma başlattıysa ekrandaki iş ezilmez
+  if (JOBS[k] && (o.oto || JOBS[k].state === "run")) return;
+  GM_OTO[k] = true;
+  if (k === "takip") GM_TK = { id: v.id, baslik: v.baslik, olusturma: v.olusturma, veri: v.veri };
+  else {
+    if (k === "briefing" && BRF_SEKME === "toplu") { BRF_SEKME = "tek"; store.set("brf_sekme", "tek"); }
+    JOBS[k] = { state: "done", res: v.veri, title: v.baslik, gecmis: true, gecmisId: v.id, t0: Date.parse(v.olusturma) || Date.now(), kaydedildi: true };
+    saveJobs();
+  }
+  if (from !== k) return go(k);
+  render();
+  if (!o.oto) document.getElementById(k === "takip" ? "gecmis" : "out")?.scrollIntoView({ block: "start", behavior: "smooth" });
+}
+// Panel "Son çalışmalarınız": hesaptaki son 3 gün; alınamazsa bu cihazdaki kısa liste gösterilir
+function panelGecmisHtml(c) {
+  if (!c || (!c.list && !c.err)) return "";
+  const bas = `<h2 style="margin:30px 0 12px">Son çalışmalarınız</h2><div class="card scroll-x"><table class="tbl"><thead><tr><th>Araç</th><th>Konu</th><th>Tarih</th><th></th></tr></thead><tbody>`;
+  if (c.err) {
+    const hist = store.get("hist", []);
+    return hist.length ? `${bas}${hist.map(h => `<tr><td>${MOD[h.k] ? esc(MOD[h.k].ad) : ""}</td><td>${esc(h.title)}</td><td>${esc(fmtDT(h.at))}</td><td style="text-align:right">${safeUrl(h.url) ? `<a class="btn btn-g btn-s" href="${esc(safeUrl(h.url))}" target="_blank" rel="noopener">Aç ↗</a>` : ""}</td></tr>`).join("")}</tbody></table></div>` : "";
+  }
+  return c.list.length ? `${bas}${c.list.slice(0, 12).map(x => `<tr><td>${MOD[x.modul] ? esc(MOD[x.modul].ad) : ""}</td><td>${esc(x.baslik || "Çalışma")}</td><td>${esc(fmtDT(x.olusturma))}</td><td style="text-align:right"><button type="button" class="btn btn-g btn-s" data-gecmis-ac="${esc(x.id)}" data-gecmis-mod="${esc(x.modul)}">Aç</button></td></tr>`).join("")}</tbody></table></div>` : "";
+}
+async function panelGecmis() {
+  const box = document.getElementById("son-gecmis");
+  if (!box) return;
+  const c = await gecmisListe("*");
+  if (route !== "panel" || GECMIS["*"] !== c || document.getElementById("son-gecmis") !== box) return;
+  box.innerHTML = panelGecmisHtml(c);
 }
 const polling = {};
 async function poll(k) {
@@ -275,6 +391,7 @@ async function poll(k) {
       j.state = "done"; j.res = r;
       const url = safeUrl(k === "rakip" ? r.slides_view_url || r.slides_url : r.presentationViewUrl || r.presentationUrl || r.publicUrl);
       if (url) addHist({ k, title: j.title, url });
+      gecmisKaydet(k, j, r);
     } else if (!r || http >= 500) {
       if (++fails > 4) { j.state = "err"; j.err = (r && (r.message || r.error)) || "Durum bilgisi alınamadı. Lütfen tekrar deneyin."; }
     } else if (r.success === false || r.status === "error" || r.status === "failed") {
@@ -328,6 +445,8 @@ async function startSync(k, path, body, title, onDone) {
     applyKota(k, res.kota);
     job.state = "done"; job.res = res;
     if (onDone) onDone(res);
+    const { kota, ...veri } = res;
+    gecmisKaydet(k, job, veri);
     toast(`${MOD[k].ad} hazır ✓`);
   } else { job.state = "err"; job.err = res.message; job.neden = res.neden; }
   if (route === k || $app.querySelector(".shell")) render();
@@ -444,7 +563,8 @@ async function resend(email) {
 function denemeOzet() {
   const deneme = (S.planlar || PLAN_FALLBACK).find(p => p.kod === "deneme") || PLAN_FALLBACK[0];
   const q = deneme.kota || {};
-  return `Denemede bütün araçlar açık: ${MODS.filter(m => q[m.k]).map(m => m.k === "takip" ? `${q[m.k]} firma için rakip takibi` : `${q[m.k]} ${kucuk(m.ad)}`).join(", ")}.`;
+  const acik = MODS.filter(m => q[m.k]).map(m => m.k === "takip" ? `${q[m.k]} firma için rakip takibi` : `${q[m.k]} ${kucuk(m.ad)}`);
+  return `Denemede: ${acik.join(", ")}.${q.rakip ? "" : " Rakip Analizi deneme planında yok; Başlangıç ve üstü planlarda."}`;
 }
 async function pageKayit() {
   authLayout(`<h2>14 gün ücretsiz deneyin</h2><p class="sub">Kredi kartı gerekmez. Dakikalar içinde ilk analizinizi alın.</p>${tabs("kayit")}
@@ -591,9 +711,8 @@ function pagePanel() {
     <div class="meter" aria-hidden="true" style="margin-top:10px;max-width:320px"><i style="width:${(dolu / FIRMA_ALAN.length) * 100}%"></i></div></div><a class="btn btn-p" href="#/hesap">Profili doldur</a></div>` : "";
   let banner = "";
   if (!b.aktif) banner = `<div class="banner end"><div><b>${esc(NEDEN.sure())}</b><br><span>Araçları kullanmaya devam etmek için bir plan seçin; verileriniz ve geçmişiniz korunur.</span></div><a class="btn btn-p" href="#/fiyatlar">Planları gör</a></div>`;
-  else if (b.plan === "deneme") banner = `<div class="banner trial"><div><b>Ücretsiz denemenizin bitmesine ${kalan} gün kaldı.</b><br><span>Bütün araçları deneyin; devam etmek istediğinizde size uygun planı seçin.</span></div><a class="btn btn-g" href="#/fiyatlar">Planları gör</a></div>`;
+  else if (b.plan === "deneme") banner = `<div class="banner trial"><div><b>Ücretsiz denemenizin bitmesine ${kalan} gün kaldı.</b><br><span>Rakip Analizi deneme planında yok; Başlangıç ve üstü planlarda açılır. Devam etmek istediğinizde size uygun planı seçin.</span></div><a class="btn btn-g" href="#/fiyatlar">Planları gör</a></div>`;
   const run = MODS.filter(m => JOBS[m.k]?.state === "run");
-  const hist = store.get("hist", []);
   const card = m => {
     const d = durum(m.k), lim = d.lim, pct = lim > 0 ? Math.min(100, (d.kul / lim) * 100) : 0;
     const tk = m.k === "takip";
@@ -618,10 +737,8 @@ function pagePanel() {
   </div>
   <div class="cards">${MODS.map(card).join("")}</div>
   <a class="card oz-teaser" href="#/ozel"><div><span class="pill acc">Size özel</span><h3>Hazır araçların ötesine geçin</h3><p>HTML sorgusu, canlı satış destek eklentisi, keyword scanner, CRM entegrasyonu… Ekibinize özel otomasyonları biz geliştirelim.</p></div><div class="oz-mini" aria-hidden="true">${OZ_KAT.slice(0, 4).map(x => `<span><i>${x.ic}</i>${esc(x.ad)}</span>`).join("")}</div><span class="btn btn-p">Paketleri gör →</span></a>
-  ${hist.length ? `<h2 style="margin:30px 0 12px">Son çalışmalarınız <span class="pill" style="vertical-align:middle">bu cihaz</span></h2>
-  <div class="card scroll-x"><table class="tbl"><thead><tr><th>Araç</th><th>Konu</th><th>Tarih</th><th></th></tr></thead><tbody>
-  ${hist.map(h => `<tr><td>${MOD[h.k] ? esc(MOD[h.k].ad) : ""}</td><td>${esc(h.title)}</td><td>${fmtDT(h.at)}</td><td style="text-align:right">${safeUrl(h.url) ? `<a class="btn btn-g btn-s" href="${esc(safeUrl(h.url))}" target="_blank" rel="noopener">Aç ↗</a>` : ""}</td></tr>`).join("")}
-  </tbody></table></div>` : ""}`);
+  <div id="son-gecmis">${panelGecmisHtml(GECMIS["*"])}</div>`);
+  panelGecmis();
 }
 
 // ---------- Size özel ----------
@@ -720,15 +837,17 @@ function quota(k) {
 function toolShell(k, form, intro) {
   const m = MOD[k];
   shell(`${ph(esc(m.ad), esc(intro || m.d))}${gate(k)}
-  <div class="tool"><div class="card pad">${form}${quota(k)}</div><section class="card out" id="out" aria-live="polite"></section></div>`);
+  <div class="tool"><div class="card pad">${form}${quota(k)}</div><section class="card out" id="out" aria-live="polite"></section></div>
+  ${gecmisKutu(k)}`);
   renderJob(k);
+  gecmisYukle(k);
   const f = document.getElementById("f");
   if (f && !durum(k).ok) f.querySelectorAll("[type=submit]").forEach(b => (b.disabled = true));
   if (f && JOBS[k]?.state === "run") f.querySelectorAll("[type=submit]").forEach(b => { b.disabled = true; b.textContent = "Hazırlanıyor…"; });
 }
 const EMPTY = {
   rakip: ["", "Rakip analiziniz burada görünecek", "Firmanızı ve 1–5 rakibi girin. Yapay zekâ siteleri tarar; konumlandırma, fiyat, mesaj ve fırsatları karşılaştıran bir Google Slides sunumu hazırlar."],
-  sekans: ["", "Sekansınız burada görünecek", "Hedef firmanın sitesini ya da elinizdeki dokümanı verin; cold call senaryosu ve çok adımlı LinkedIn mesajları hazırlansın."],
+  sekans: ["", "Sekansınız burada görünecek", "Firmanızın sitesini ya da elinizdeki dokümanı verin; cold call senaryosu ve çok adımlı LinkedIn mesajları hazırlansın."],
   seo: ["", "SEO raporunuz burada görünecek", "Bir sayfa adresi girin; SEO puanı, eksikler, anahtar kelime hacimleri ve yayına hazır içerik önerisi çıkarılsın."],
   briefing: ["", "Briefingeniz burada görünecek", "Görüşeceğiniz firma ve kişiyi girin; toplantıdan önce okuyacağınız araştırma ve fırsat puanı hazırlansın."],
   fireflies: ["", "Toplantı analizi burada görünecek", "Soldan bir toplantı seçip analiz edin: puan, itirazlar, BANT ve takip e-postası."],
@@ -754,6 +873,7 @@ function renderJob(k) {
     return;
   }
   out.innerHTML = RESULT[k](j) + "";
+  if (j.gecmis) (out.querySelector(".res-h .row") || out.querySelector(".res-h"))?.insertAdjacentHTML("beforeend", `<span class="pill" title="Geçmişten açıldı">Geçmiş · ${esc(fmtDT(j.t0))}</span>`);
   out.querySelector(".res-h")?.insertAdjacentHTML("beforeend", again);
   out.querySelector(".res-b")?.insertAdjacentHTML("beforeend", paySec(k) + klasorSec(k));
 }
@@ -808,7 +928,7 @@ const RESULT = {
   rakip: j => {
     const r = j.res || {};
     return `${resHead("Rakip analizi hazır", r.slideCount ? `<span class="pill acc">${esc(r.slideCount)} slayt</span>` : "")}
-    <div class="res-b"><div class="sec">${kv([["Analiz", j.title], ["Öne çıkan rakip", r.rakip_adi], ["Süre", mmss(((j.res && r.elapsed_seconds) || (Date.now() - j.t0) / 1000))]])}</div>
+    <div class="res-b"><div class="sec">${kv([["Analiz", j.title], ["Öne çıkan rakip", r.rakip_adi], ["Süre", r.elapsed_seconds ? mmss(r.elapsed_seconds) : j.gecmis ? "" : mmss((Date.now() - j.t0) / 1000)]])}</div>
     <div class="sec"><h4>Sunum</h4><div class="row" style="justify-content:flex-start">${linkBtn(r.slides_view_url, "Sunumu aç", "btn-p")}${linkBtn(r.slides_pdf_url, "PDF indir")}${linkBtn(r.slides_url, "Google Slides'ta düzenle")}</div></div>
     <p style="color:var(--mute);font-size:13.5px">Sunum Google Slides'ta oluşturuldu; düzenleyip müşterinizle paylaşabilirsiniz.</p></div>`;
   },
@@ -860,17 +980,17 @@ const PAY_MD = {
       !steps.length && !/\/api\/rapor/.test(link) ? mdLink(link, "Sekans dokümanını aç") : "") };
   },
   seo: j => {
-    const r = (j.res && j.res.sonuc) || {}, sc = r.seo_score || {}, pi = r.page_info || {}, g = r.generated_content || {}, c = g.content || {};
-    const kw = Array.isArray(r.keywords && r.keywords.table) ? r.keywords.table.slice(0, 25) : [];
+    const r = seoTemiz((j.res && j.res.sonuc) || {}) || {}, sc = r.seo_score || {}, pi = r.page_info || {}, g = r.generated_content || {}, c = g.content || {};
+    const kw = seoKw(r.keywords);
     let host = ""; try { host = new URL(r.url).hostname; } catch {}
     return { b: `SEO raporu${host ? " — " + host : ""}`, m: mdJoin(
       mdKv([["Adres", r.url], ["SEO puanı", mdSkor(sc.total, sc.level ? " · " + sc.level : "")]]),
       mdSec("Sayfa", mdKv([["Başlık", pi.title || "Başlık yok"], ["Meta açıklama", pi.meta_description || "Meta açıklama yok"], ["H1", pi.h1]])),
       mdSec("Düzeltilmesi gerekenler", mdList(r.issues)),
-      mdSec("Anahtar kelimeler", kw.map(t => `- **${mdLine(t.keyword)}** — hacim ${mdLine(t.volume) || "—"}, rekabet ${mdLine(t.competition) || "—"}${t.intent ? ", niyet " + mdLine(t.intent) : ""}`).join("\n")),
+      mdSec("Anahtar kelimeler", kw.map(t => { const ek = [["hacim", t.volume], ["rekabet", t.competition], ["niyet", t.intent]].filter(x => x[1] != null && mdLine(asText(x[1]))).map(([a, v]) => a + " " + mdLine(asText(v))).join(", "); return `- **${mdLine(asText(t.keyword))}**${ek ? " — " + ek : ""}`; }).join("\n")),
       mdSec("Hazır içerik önerisi", mdKv([["SEO başlığı", g.seo_title], ["Meta açıklama", g.meta_description], ["URL", g.slug ? "/" + String(g.slug).replace(/^\//, "") : ""]])),
-      c.intro || (c.sections || []).length ? mdSec("Makale taslağı", mdJoin(c.intro, ...(Array.isArray(c.sections) ? c.sections : []).map(s => `### ${mdLine(s && s.h2)}\n\n${mdT(s && s.content)}`),
-        Array.isArray(c.faq) && c.faq.length ? `### Sık sorulan sorular\n\n${c.faq.map(q => `**${mdLine(q && q.question)}**\n${mdT(q && q.answer)}`).join("\n\n")}` : "", c.conclusion)) : "") };
+      c.intro || (Array.isArray(c.sections) && c.sections.length) ? mdSec("Makale taslağı", mdJoin(c.intro, ...(Array.isArray(c.sections) ? c.sections : []).filter(s => s && (s.h2 || s.content)).map(s => mdJoin(s.h2 ? `### ${mdLine(s.h2)}` : "", mdT(s.content))),
+        Array.isArray(c.faq) && c.faq.some(q => q && q.question) ? `### Sık sorulan sorular\n\n${c.faq.filter(q => q && q.question).map(q => mdJoin(`**${mdLine(q.question)}**`, mdT(q.answer))).join("\n\n")}` : "", c.conclusion)) : "") };
   },
   briefing: j => {
     const r = (j.res && j.res.sonuc) || {};
@@ -1226,12 +1346,12 @@ function ekipBolum() {
       ? `<form id="ekip-f" data-sk-noform style="margin-top:14px"><div class="f"><label for="ekip-em">Ekip arkadaşınızın e-postası</label><input class="in" id="ekip-em" type="email" maxlength="254" autocomplete="off" required></div>
           <button class="btn btn-p btn-s" type="submit">Davet gönder</button></form>`
       : !o.v.aktif ? `<div style="margin-top:12px">${msg("warn", "Planınızın süresi dolduğu için ekip şu an pasif. Planı yenilediğinizde ekip arkadaşlarınız yeniden kullanabilir.")}</div>`
-      : dolu >= k ? `<p style="color:var(--mute);font-size:14px;margin-top:12px">Ekip dolu. Yeni biri için bir kullanıcıyı çıkarın ya da bekleyen bir daveti iptal edin.</p>` : "";
+      : dolu >= k ? `<p style="color:var(--mute);font-size:14px;margin-top:12px">${o.v.kisi_basi ? "Tüm kullanıcılarınız dolu. Yeni kullanıcı için ek Profesyonel kullanıcı ekleyin ya da Ekip planına geçin (5 kullanıcı dahil)." : "Ekip dolu. Yeni biri için bir kullanıcıyı çıkarın ya da bekleyen bir daveti iptal edin."}</p>${o.v.kisi_basi ? `<a class="btn btn-g btn-s" href="#/fiyatlar" style="margin-top:10px">Planları gör</a>` : ""}` : "";
     body = `<p style="color:var(--mute);font-size:14px;margin-bottom:12px">${esc(o.v.plan_ad || "Planınız")} ile toplam ${k} kullanıcı (siz + ${k - 1} davet). Ekip arkadaşlarınızın kullanımı planınızın aylık hakkından düşer.</p>
       <div class="box" style="margin-bottom:8px"><div class="row" style="flex-wrap:nowrap"><div style="min-width:0"><b>Siz</b><div style="color:var(--mute);font-size:13px;margin-top:2px;overflow-wrap:anywhere">${esc(S.ben?.email || "")}</div></div><span class="pill acc">Ekip sahibi</span></div></div>
       ${ls.map(satir).join("")}${form}`;
   } else {
-    body = `<p style="color:var(--mute);font-size:14px">${o.v.plan === "ozel" ? "Özel planınızda ekip kullanıcıları için bizimle iletişime geçin." : "Profesyonel planda 3 kişiye kadar, Ekip planında 5 kişiye kadar kullanıcı ekleyebilirsiniz. Ekip arkadaşlarınız aynı plan hakkını ve ortak klasörü kullanır."}</p>
+    body = `<p style="color:var(--mute);font-size:14px">${o.v.plan === "ozel" ? "Özel planınızda ekip kullanıcıları için bizimle iletişime geçin." : o.v.plan === "profesyonel" ? "Profesyonel planda fiyat kullanıcı başınadır. Ekip arkadaşı eklemek için ek Profesyonel kullanıcı ekleyin ya da Ekip planına geçin (5 kullanıcı dahil). Ekip arkadaşlarınız aynı plan hakkını ve ortak klasörü kullanır." : "Başlangıç ve Profesyonel planlarda fiyat kullanıcı başınadır. Ekip planında 5 kullanıcı dahildir. Ekip arkadaşlarınız aynı plan hakkını ve ortak klasörü kullanır."}</p>
       ${o.v.plan === "ozel" ? "" : `<a class="btn btn-g btn-s" href="#/fiyatlar" style="margin-top:12px">Planları gör</a>`}`;
   }
   return `<section class="card pad" id="ekip-bolum"><div class="row" style="margin-bottom:10px"><h3>Ekip</h3>${pill}</div><div id="ekm">${not}</div>${body}</section>`;
@@ -1324,11 +1444,11 @@ function pageSekans() {
   const b = S.ben;
   let src = "website";
   toolShell("sekans", `<form id="f" data-sk-noform>
-    <div class="f"><label for="cn">Hedef firma</label><input class="in" id="cn" required maxlength="150" placeholder="Firma adı"></div>
+    <div class="f"><label for="cn">Firmanız</label><input class="in" id="cn" required maxlength="150" placeholder="Firmanızın adı"></div>
     <div class="f"><label>Kaynak</label><div class="tabs" role="tablist" style="margin:0"><button type="button" role="tab" aria-selected="true" data-src="website">Web sitesi</button><button type="button" role="tab" aria-selected="false" data-src="pdf">Metin / doküman</button></div></div>
-    <div class="f" data-pane="website"><label for="dm">Firmanın web sitesi</label><input class="in" id="dm" inputmode="url" placeholder="hedeffirma.com"></div>
+    <div class="f" data-pane="website"><label for="dm">Firmanızın web sitesi</label><input class="in" id="dm" inputmode="url" placeholder="firmaniz.com"></div>
     <div class="f" data-pane="pdf" hidden><label for="tx">Doküman metni</label><textarea class="in" id="tx" maxlength="6000" placeholder="Sunum, teklif ya da PDF metnini buraya yapıştırın"></textarea><span class="hint"><span id="txn">0</span> / 6000 karakter</span></div>
-    <div class="f"><label for="nt">Notlar <span class="hint">(isteğe bağlı)</span></label><textarea class="in" id="nt" maxlength="3000" placeholder="Ne satıyorsunuz, kime ulaşmak istiyorsunuz, ton tercihi…"></textarea><span class="hint">Hedef firma kendi firmanızsa <a href="#/hesap">firma profilinizdeki</a> bilgiler otomatik eklenir.</span></div>
+    <div class="f"><label for="nt">Notlar <span class="hint">(isteğe bağlı)</span></label><textarea class="in" id="nt" maxlength="3000" placeholder="Ne satıyorsunuz, kime ulaşmak istiyorsunuz, ton tercihi…"></textarea><span class="hint"><a href="#/hesap">Firma profilinizdeki</a> bilgiler otomatik eklenir.</span></div>
     <div class="f"><label for="wn">İmzada görünecek ad</label><input class="in" id="wn" maxlength="100" value="${esc(b.ad || "")}" required></div>
     <div class="f"><label style="display:flex;gap:8px;align-items:center;font-weight:500"><input type="checkbox" id="mail" checked> Sonucu e-postama da gönder</label></div>
     <div id="m"></div>
@@ -1344,7 +1464,7 @@ function pageSekans() {
   f.onsubmit = async e => {
     e.preventDefault();
     const body = { company_name: f.cn.value.trim(), source_type: src, source_notes: f.nt.value.trim(), writer_name: f.wn.value.trim(), eposta: f.mail.checked };
-    if (src === "website") { body.domain = normUrl(f.dm.value); if (!body.domain) return setMsg("m", "err", "Firmanın web sitesini girin (ör. hedeffirma.com)."); }
+    if (src === "website") { body.domain = normUrl(f.dm.value); if (!body.domain) return setMsg("m", "err", "Firmanızın web sitesini girin (ör. firmaniz.com)."); }
     else { body.pdf_text = f.tx.value.trim(); if (body.pdf_text.length < 80) return setMsg("m", "err", "Doküman metni çok kısa; en az birkaç paragraf yapıştırın."); }
     const btn = f.querySelector("[type=submit]");
     busy(btn, true, "Başlatılıyor…"); setMsg("m");
@@ -1522,23 +1642,42 @@ function pageSeo() {
   };
 }
 const asText = v => (v == null ? "" : typeof v === "string" || typeof v === "number" ? String(v) : v.message || v.issue || v.title || v.text || v.description || JSON.stringify(v));
-function seoResult(r) {
+// SEO aracında hacim kaynağı yok; yapay zekâ bilinmeyen alanlara "N/A", "-" vb. yazıyor. Bu değerler boş sayılır,
+// boş alan/satır/sütun gösterilmez. Asıl veri (j.res) değiştirilmez; temizlenmiş kopya döner.
+const seoBos = v => v == null || (typeof v === "string" && /^\s*(n\/?a|-+|—|–|null|undefined)?\s*$/i.test(v));
+function seoTemiz(v, d = 0) {
+  if (seoBos(v)) return undefined;
+  if (d > 8 || typeof v !== "object") return v;
+  if (Array.isArray(v)) return v.map(x => seoTemiz(x, d + 1)).filter(x => x !== undefined && !(x && typeof x === "object" && !Array.isArray(x) && !Object.keys(x).length));
+  const o = {};
+  for (const [k, x] of Object.entries(v)) { const y = seoTemiz(x, d + 1); if (y !== undefined) o[k] = y; }
+  return o;
+}
+const SEO_KOL = [["keyword", "Anahtar kelime"], ["volume", "Hacim"], ["competition", "Rekabet"], ["intent", "Niyet"]];
+const seoKw = kw => (Array.isArray(kw && kw.table) ? kw.table : []).filter(t => t && typeof t === "object" && !seoBos(t.keyword) && String(t.keyword).trim()).slice(0, 25);
+function seoResult(r0) {
+  const r = seoTemiz(r0) || {};
   const sc = r.seo_score || {}, br = sc.breakdown || {}, pi = r.page_info || {}, kw = r.keywords || {}, g = r.generated_content || {};
   const tot = Number(sc.total);
   const pill = Number.isFinite(tot) ? `<span class="pill ${tot >= 70 ? "ok" : tot >= 45 ? "warn" : "bad"}">${tot}/100${sc.level ? " · " + esc(sc.level) : ""}</span>` : "";
   const lbl = { title_quality: "Başlık", meta_desc_quality: "Meta açıklama", h1_quality: "H1", content_depth: "İçerik derinliği", keyword_density: "Anahtar kelime", bonus_points: "Bonus" };
   const issues = (Array.isArray(r.issues) ? r.issues : []).map(asText).filter(Boolean);
-  const table = Array.isArray(kw.table) ? kw.table.slice(0, 25) : [];
+  const table = seoKw(kw);
+  const kol = SEO_KOL.filter(([k], i) => !i || table.some(t => t[k] != null && String(asText(t[k])).trim()));
   const c = g.content || {};
+  const bolum = (Array.isArray(c.sections) ? c.sections : []).filter(x => x && (x.h2 || x.content));
+  const sss = (Array.isArray(c.faq) ? c.faq : []).filter(q => q && q.question);
+  const puan = Object.keys(lbl).filter(k => br[k] != null).map(k => [lbl[k], br[k]]);
+  const meta = [["SEO başlığı", g.seo_title], ["Meta açıklama", g.meta_description], ["URL", g.slug ? "/" + String(g.slug).replace(/^\//, "") : ""]].filter(x => x[1] != null && String(x[1]).trim());
   return `${resHead("SEO raporu" + (r.url ? " — " + (() => { try { return new URL(r.url).hostname; } catch { return ""; } })() : ""), pill)}
   <div class="res-b">
-    <div class="sec"><h4>Puan dağılımı</h4>${kv(Object.keys(lbl).filter(k => br[k] != null).map(k => [lbl[k], br[k]]))}</div>
+    ${puan.length ? `<div class="sec"><h4>Puan dağılımı</h4>${kv(puan)}</div>` : ""}
     <div class="sec"><h4>Sayfa</h4><div class="box"><b>${esc(pi.title || "Başlık yok")}</b><p style="color:var(--mute);margin-top:4px">${esc(pi.meta_description || "Meta açıklama yok")}</p>${pi.h1 ? `<p style="margin-top:6px;font-size:13.5px">H1: ${esc(pi.h1)}</p>` : ""}</div></div>
     ${issues.length ? `<div class="sec"><h4>Düzeltilmesi gerekenler (${issues.length})</h4><ul style="margin:0;padding-left:20px;display:grid;gap:6px">${issues.map(i => `<li>${esc(i)}</li>`).join("")}</ul></div>` : ""}
-    ${table.length ? `<div class="sec"><h4>Anahtar kelimeler</h4><div class="card scroll-x" style="box-shadow:none"><table class="tbl"><thead><tr><th>Anahtar kelime</th><th>Hacim</th><th>Rekabet</th><th>Niyet</th></tr></thead><tbody>${table.map(t => `<tr><td>${esc(t.keyword)}</td><td>${esc(t.volume)}</td><td>${esc(t.competition)}</td><td>${esc(t.intent)}</td></tr>`).join("")}</tbody></table></div></div>` : ""}
-    ${g.seo_title || c.intro ? `<div class="sec"><h4>Hazır içerik önerisi</h4>
-      <div class="box"><button class="btn btn-g btn-s copy" data-copy-el="seo-meta">Kopyala</button><div id="seo-meta" class="pre"><b>SEO başlığı:</b> ${esc(g.seo_title)}\n<b>Meta açıklama:</b> ${esc(g.meta_description)}${g.slug ? `\n<b>URL:</b> /${esc(String(g.slug).replace(/^\//, ""))}` : ""}</div></div>
-      ${c.intro || (c.sections || []).length ? `<details class="box"><summary style="cursor:pointer;font-weight:600">Makale taslağını göster</summary><div id="seo-art" class="md" style="margin-top:12px">${c.intro ? `<p>${esc(c.intro)}</p>` : ""}${(c.sections || []).map(s => `<h3>${esc(s.h2)}</h3><p class="pre">${esc(s.content)}</p>`).join("")}${(c.faq || []).length ? `<h3>Sık sorulan sorular</h3>${c.faq.map(q => `<p><b>${esc(q.question)}</b><br>${esc(q.answer)}</p>`).join("")}` : ""}${c.conclusion ? `<p>${esc(c.conclusion)}</p>` : ""}</div><button class="btn btn-g btn-s" data-copy-el="seo-art" style="margin-top:8px">Taslağı kopyala</button></details>` : ""}
+    ${table.length ? `<div class="sec"><h4>Anahtar kelimeler</h4><div class="card scroll-x" style="box-shadow:none"><table class="tbl"><thead><tr>${kol.map(([, a]) => `<th>${a}</th>`).join("")}</tr></thead><tbody>${table.map(t => `<tr>${kol.map(([k]) => `<td>${esc(t[k] == null ? "" : asText(t[k]))}</td>`).join("")}</tr>`).join("")}</tbody></table></div></div>` : ""}
+    ${meta.length || c.intro || bolum.length ? `<div class="sec"><h4>Hazır içerik önerisi</h4>
+      ${meta.length ? `<div class="box"><button class="btn btn-g btn-s copy" data-copy-el="seo-meta">Kopyala</button><div id="seo-meta" class="pre">${meta.map(([a, v]) => `<b>${a}:</b> ${esc(asText(v))}`).join("\n")}</div></div>` : ""}
+      ${c.intro || bolum.length ? `<details class="box"><summary style="cursor:pointer;font-weight:600">Makale taslağını göster</summary><div id="seo-art" class="md" style="margin-top:12px">${c.intro ? `<p>${esc(c.intro)}</p>` : ""}${bolum.map(s => `${s.h2 ? `<h3>${esc(s.h2)}</h3>` : ""}${s.content ? `<p class="pre">${esc(s.content)}</p>` : ""}`).join("")}${sss.length ? `<h3>Sık sorulan sorular</h3>${sss.map(q => `<p><b>${esc(q.question)}</b>${q.answer ? `<br>${esc(q.answer)}` : ""}</p>`).join("")}` : ""}${c.conclusion ? `<p>${esc(c.conclusion)}</p>` : ""}</div><button class="btn btn-g btn-s" data-copy-el="seo-art" style="margin-top:8px">Taslağı kopyala</button></details>` : ""}
     </div>` : ""}
     ${r.html_report ? `<div class="sec"><h4>Tam rapor</h4><div class="row" style="justify-content:flex-start"><button class="btn btn-g btn-s" id="seo-show">Raporu göster</button><button class="btn btn-g btn-s" id="seo-dl">HTML indir</button></div><div id="seo-frame"></div></div>` : ""}
   </div>`;
@@ -1757,6 +1896,7 @@ async function tbBasari(t, r, res) {
   r.st = "ok"; r.err = "";
   const url = safeUrl(r.son.presentationViewUrl || r.son.presentationUrl);
   if (url) addHist({ k: "briefing", title: `${r.firma}${r.kisi ? " · " + r.kisi : ""}`, url });
+  gecmisKaydet("briefing", { title: `${r.firma}${r.kisi ? " · " + r.kisi : ""}` }, { success: true, sonuc: s });
   await tbKlasor(t, r);
 }
 async function tbCalistir() {
@@ -2177,7 +2317,7 @@ async function pageFiyatlar() {
       <ul><li>Bütün araçlar, sınırsız kullanım</li><li>CRM entegrasyonu (HubSpot, Pipedrive, Salesforce…)</li><li>Şirketinize özel kişisel AI asistan</li><li>Kendi süreçlerinize göre iş akışları</li><li>Sunumlarda kendi logonuz</li><li>Özel hesap yöneticisi</li></ul>${cta}</div>`;
     const m = Number(p.aylik_tl) || 0, fiyat = y ? Math.round((m * 0.8) / 10) * 10 : m;
     return `<div class="card plan${meta.hot ? " hot" : ""}">${meta.hot ? `<span class="pill acc tag">En çok tercih edilen</span>` : ""}<h3>${esc(p.ad)}</h3><p>${esc(meta.d || "")}</p>
-      <div class="price"><b>₺${fmtN(fiyat)}</b><span>/ay${y ? " · yıllık" : ""}</span></div>
+      <div class="price"><b>₺${fmtN(fiyat)}</b><span>${Number(p.koltuk) > 1 ? `/ay · ${fmtN(p.koltuk)} kullanıcı` : "/kullanıcı/ay"}${y ? " · yıllık" : ""}</span></div>
       ${y ? `<span style="font-size:12.5px;color:var(--mute);margin-top:-8px">Yıllık ₺${fmtN(fiyat * 12)} (KDV hariç)</span>` : `<span style="font-size:12.5px;color:var(--mute);margin-top:-8px">KDV hariç</span>`}
       <ul>${MODS.map(x => satir(p.kota, x.k)).join("")}${(meta.ek || []).map(t => `<li>${esc(t)}</li>`).join("")}</ul>${cta}</div>`;
   };
@@ -2359,7 +2499,9 @@ function pageTakip() {
     ${dolu && !kapali ? msg("warn", `${ic("info", 16)}<span>${esc(NEDEN.kota("takip"))} Yeni firma eklemek için bir takibi silin ya da <a href="#/fiyatlar">planınızı yükseltin →</a></span>`) : ""}
     ${TK.edit ? tkForm(TK.edit.id ? TK.edit : null) : ""}
     ${liste}
-    <p class="tk-mute" style="font-size:13px;margin-top:16px">Her firma haftada bir otomatik taranır. İsterseniz “Şimdi tara” ile elle de başlatabilirsiniz (firma başına 20 saatte bir).</p>`);
+    <p class="tk-mute" style="font-size:13px;margin-top:16px">Her firma haftada bir otomatik taranır. İsterseniz “Şimdi tara” ile elle de başlatabilirsiniz (firma başına 20 saatte bir).</p>
+    ${gecmisKutu("takip")}`);
+  gecmisYukle("takip");
   const main = document.querySelector(".main");
   main.onclick = async e => {
     const el = e.target.closest("[data-tk-new],[data-tk-edit],[data-tk-sil],[data-tk-silno],[data-tk-silok],[data-tk-run],[data-tk-yenile],[data-fy-duz],[data-fy-vaz],[data-fy-sil],[data-fy-silno],[data-fy-silok]");
@@ -2394,7 +2536,11 @@ function pageTakip() {
     } else if (el.hasAttribute("data-tk-run")) {
       busy(el, true, "Taranıyor…"); delete TK.run[id];
       const r = await api("/api/app/takip/calistir", { id });
-      if (r.success) { TK.run[id] = { kind: "ok", html: "Tarama tamamlandı. Sonuç aşağıda; özet e-postanıza da gönderildi." }; await loadTK(); }
+      if (r.success) {
+        TK.run[id] = { kind: "ok", html: "Tarama tamamlandı. Sonuç aşağıda; özet e-postanıza da gönderildi." }; await loadTK();
+        const tt = (TK.list || []).find(x => x.id === id);
+        if (tt && tt.son_sonuc && !tt.son_sonuc.hata) gecmisKaydet("takip", { title: tt.firma }, tt.son_sonuc);
+      }
       else TK.run[id] = { kind: r.neden === "erken" ? "warn" : "err", html: esc(r.message || "Tarama başlatılamadı.") + (r.ne_zaman ? ` Bir sonraki elle tarama: <b>${fmtDT(r.ne_zaman)}</b>.` : "") };
       if (route === "takip") { render(); document.querySelector(`[data-tk-id="${CSS.escape(id)}"] details`)?.setAttribute("open", ""); }
     }
@@ -2828,7 +2974,7 @@ document.addEventListener("click", e => {
   if (e.target.closest("a[data-teklif]")) try { sessionStorage.setItem("sc_app_ret", location.pathname + location.hash); } catch {}
 });
 document.addEventListener("click", async e => {
-  const t = e.target.closest("[data-go],[data-eye],[data-side],[data-menu],[data-logout],[data-firma-yenile],[data-copy],[data-copy-el],[data-reset],[data-exp],[data-paylas],[data-pay-kapat],[data-pay-yenile],.nav a,#seo-show,#seo-dl");
+  const t = e.target.closest("[data-go],[data-eye],[data-side],[data-menu],[data-logout],[data-firma-yenile],[data-copy],[data-copy-el],[data-reset],[data-exp],[data-paylas],[data-pay-kapat],[data-pay-yenile],[data-gecmis-ac],[data-gecmis-yenile],[data-gecmis-kapat],.nav a,#seo-show,#seo-dl");
   if (!t) return;
   if (t.dataset.go) { e.preventDefault(); go(t.dataset.go); }
   else if (t.dataset.eye) { const i = document.getElementById(t.dataset.eye); const show = i.type === "password"; i.type = show ? "text" : "password"; t.textContent = show ? "Gizle" : "Göster"; t.setAttribute("aria-label", show ? "Şifreyi gizle" : "Şifreyi göster"); }
@@ -2838,7 +2984,7 @@ document.addEventListener("click", async e => {
     sh.classList.remove("open");
   }
   else if (t.hasAttribute("data-menu")) document.getElementById("shell")?.classList.toggle("open");
-  else if (t.hasAttribute("data-logout")) { tbSifirla(true); await sb.auth.signOut(); S.session = null; S.ben = null; FIRMA = { v: undefined, yuk: false, err: "" }; LOGO_YENI = null; BILD = { v: undefined, yuk: false }; ADM = { rows: null, err: "", q: "" }; FF = { list: null, err: "", sel: "" }; TK = { list: null, err: "", edit: null, sil: "", run: {} }; PAY = { list: null, err: "", yuk: false }; EKIP = ekipBos(); KLASOR = klasorBos(); DAVET = { sonuc: null }; go("giris"); }
+  else if (t.hasAttribute("data-logout")) { tbSifirla(true); await sb.auth.signOut(); S.session = null; S.ben = null; FIRMA = { v: undefined, yuk: false, err: "" }; LOGO_YENI = null; BILD = { v: undefined, yuk: false }; ADM = { rows: null, err: "", q: "" }; FF = { list: null, err: "", sel: "" }; TK = { list: null, err: "", edit: null, sil: "", run: {} }; PAY = { list: null, err: "", yuk: false }; EKIP = ekipBos(); KLASOR = klasorBos(); DAVET = { sonuc: null }; gecmisSifirla(); go("giris"); }
   else if (t.hasAttribute("data-firma-yenile")) { FIRMA = { v: undefined, yuk: false, err: "" }; render(); }
   else if (t.dataset.paylas) paylas(t.dataset.paylas, t);
   else if (t.dataset.payKapat) payKapat(t.dataset.payKapat, t);
@@ -2848,7 +2994,10 @@ document.addEventListener("click", async e => {
     try { await navigator.clipboard.writeText(txt); toast("Kopyalandı ✓"); } catch { toast("Kopyalanamadı; metni seçip kopyalayın."); }
   }
   else if (t.dataset.exp) skExport(t.dataset.exp);
-  else if (t.dataset.reset) { const k = t.dataset.reset; delete JOBS[k]; saveJobs(); render(); }
+  else if (t.dataset.reset) { const k = t.dataset.reset; delete JOBS[k]; GM_OTO[k] = true; saveJobs(); render(); }
+  else if (t.dataset.gecmisAc) gecmisAc(t.dataset.gecmisMod, t.dataset.gecmisAc, { btn: t });
+  else if (t.dataset.gecmisYenile) { const k = t.dataset.gecmisYenile; delete GECMIS[k]; if (k === "*") panelGecmis(); else { const el = document.querySelector("#gecmis [data-gm-list]"); if (el) el.innerHTML = gmListeHtml(k); gecmisYukle(k); } }
+  else if (t.hasAttribute("data-gecmis-kapat")) { GM_TK = null; render(); }
   else if (t.matches(".nav a")) document.getElementById("shell")?.classList.remove("open");
   else if (t.id === "seo-show" || t.id === "seo-dl") {
     const html = JOBS.seo?.res?.sonuc?.html_report;
@@ -2875,7 +3024,7 @@ document.addEventListener("keydown", e => { if (e.key === "Escape") document.get
 sb.auth.onAuthStateChange((ev, session) => {
   S.session = session;
   if (ev === "PASSWORD_RECOVERY") { S.recovery = true; setTimeout(() => go("yeni-sifre"), 0); }
-  if (ev === "SIGNED_OUT") { tbSifirla(false); S.ben = null; FIRMA = { v: undefined, yuk: false, err: "" }; LOGO_YENI = null; BILD = { v: undefined, yuk: false }; PAY = { list: null, err: "", yuk: false }; EKIP = ekipBos(); KLASOR = klasorBos(); DAVET = { sonuc: null }; if (route &&!AUTH_ROUTES.has(route)) setTimeout(render, 0); }
+  if (ev === "SIGNED_OUT") { tbSifirla(false); S.ben = null; FIRMA = { v: undefined, yuk: false, err: "" }; LOGO_YENI = null; BILD = { v: undefined, yuk: false }; PAY = { list: null, err: "", yuk: false }; EKIP = ekipBos(); KLASOR = klasorBos(); DAVET = { sonuc: null }; gecmisSifirla(); if (route &&!AUTH_ROUTES.has(route)) setTimeout(render, 0); }
 });
 {
   const { data } = await sb.auth.getSession();
