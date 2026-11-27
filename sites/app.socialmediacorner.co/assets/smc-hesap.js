@@ -149,7 +149,7 @@ var dil=root.getAttribute('lang')==='en'?'en':'tr';
 var SAYFA=body.getAttribute('data-sayfa')||'';
 var KORUMALI=body.hasAttribute('data-korumali');
 var T0=Date.now();
-var YOL={giris:['/hesap/giris','/en/hesap/login'],kayit:['/hesap/kayit','/en/hesap/register'],kurulum:['/hesap/kurulum','/en/hesap/setup'],baglantilar:['/hesap/baglantilar','/en/hesap/connections'],gecmis:['/hesap/gecmis','/en/hesap/history'],ayarlar:['/hesap/ayarlar','/en/hesap/settings'],kuyruk:['/yayin-kuyrugu','/en/publish-queue'],'blog-otomatik':['/blog-otomatik','/en/blog-autopilot']};
+var YOL={giris:['/hesap/giris','/en/hesap/login'],kayit:['/hesap/kayit','/en/hesap/register'],kurulum:['/hesap/kurulum','/en/hesap/setup'],baglantilar:['/hesap/baglantilar','/en/hesap/connections'],gecmis:['/hesap/gecmis','/en/hesap/history'],ayarlar:['/hesap/ayarlar','/en/hesap/settings'],kuyruk:['/yayin-kuyrugu','/en/publish-queue'],'blog-otomatik':['/blog-otomatik','/en/blog-autopilot'],chatbot:['/chatbot','/en/chatbot']};
 var ACIK_SAYFA=/\/(giris|kayit|sifre-unuttum|sifre-yenile|login|register|forgot-password|reset-password)$/;
 var TOKEN_RE=/^[A-Za-z0-9_-]{43}$/,R_RE=/^\/(en\/?)?(hesap\/[a-z-]+|video|gorsel|visual|blog|blog-otomatik|blog-autopilot|yayin-kuyrugu|publish-queue|seo-analizi|seo-analysis|chatbot)?$/,EPOSTA=/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 var meta=d.querySelector('meta[name="api-base"]');
@@ -888,6 +888,7 @@ function yukle(){
   else if(SAYFA==='baglantilar'){if(/[?&]cms(_bilet)?=/.test(location.search)){location.replace(yol('blog-otomatik')+location.search);return}baglarYukle()}
   else if(SAYFA==='gecmis')gecmisYukle();
   else if(SAYFA==='blog-otomatik'){ekran('ana');cmsBasla()}
+  else if(SAYFA==='chatbot'){ekran('ana');if(typeof window.smcBotBasla==='function')window.smcBotBasla({istek:istek,bildir:bildir,genelHata:genelHata,mesgul:mesgul,bosMu:bosMu,dlgAc:dlgAc,ORNEK:ORNEK,dil:dil,kullanici:KULLANICI})}
   else if(SAYFA==='admin'){if(ORNEK||!KULLANICI||KULLANICI.admin!==true||typeof window.smcAdminBasla!=='function'){ekran('yok',true);return}
     window.smcAdminBasla({istek:istek,ekran:ekran,bildir:bildir,genelHata:genelHata,hataGoster:hataGoster,mesgul:mesgul,bosMu:bosMu})}
   else ekran('ana');

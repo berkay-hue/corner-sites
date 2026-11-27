@@ -199,7 +199,9 @@ export async function startOAuth(env, userId, p, { api, origin, site, user }) {
     ).bind(await sha256(state), userId, p, `${returnBase(env, origin, site)}${backPath(site, user?.lang)}`, redirect,
       verifier && await encrypt(env, verifier), `+${STATE_MINUTES} minutes`),
   ]);
-  return authorizeUrl(env, p, state, redirect, verifier && await pkceChallenge(verifier), writeScope(env, site, p));
+  // Ek kapsamlar (yayın yazma + chatbot DM) yalnız Instagram'da birlikte olabilir; IG ayırıcısı ","
+  const extra = [writeScope(env, site, p), botScope(env, site, p)].filter(Boolean).join(",") || null;
+  return authorizeUrl(env, p, state, redirect, verifier && await pkceChallenge(verifier), extra);
 }
 
 // Yayın kuyruğunun yazma kapsamları (publish.js kapı 4: kira SQL'i ve onay bunları token'ın scope'unda arar). OAuth bunları
@@ -211,6 +213,15 @@ export function writeScope(env, site, p) {
   if (!Object.hasOwn(WRITE_SCOPE, p) || String(env?.PUBLISH_ENABLED ?? "") !== "1") return null;
   const list = v => String(v ?? "").split(",").map(x => x.trim().toLowerCase()).filter(Boolean);
   return list(env.PUBLISH_SITES).includes(site) && list(env.PUBLISH_PLATFORMS).includes(p) ? WRITE_SCOPE[p] : null;
+}
+
+// Chatbot Instagram DM kapsamı (src/chatbot-ig.js §8: kanal açma ve webhook cevabı token'ın scope'unda bunu arar). Yalnız
+// app.socialmediacorner.co'da ve BOT_ENABLED + BOT_IG_ENABLED "1" iken istenir; kapalıyken izin ekranı değişmez. Açmadan önce
+// izin Meta'da onaylı olmalı (App Review: instagram_business_manage_messages). Mevcut bağlı hesaplar izni yeniden bağlayınca alır.
+export const BOT_DM_SCOPE = "instagram_business_manage_messages";
+export function botScope(env, site, p) {
+  return p === "instagram" && site === "app.socialmediacorner.co" && env?.BOT_ENABLED === "1" && env?.BOT_IG_ENABLED === "1"
+    ? BOT_DM_SCOPE : null;
 }
 // Token'ın scope metninde (virgül ya da boşluk ayrılı) yazma kapsamı var mı
 export const hasWriteScope = (scope, p) =>

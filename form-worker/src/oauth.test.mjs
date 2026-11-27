@@ -3885,7 +3885,7 @@ const ADMIN_OK = ["GET admin", "GET admin/users", "GET admin/submissions", "GET 
 const { CMS_ROUTES } = await import("./cms.js");
 const CMS_OK = Object.keys(CMS_ROUTES);
 // W2: /gen/tts seslendirme uçları (/app/ öneki almaz)
-const GEN_OK = ["POST /gen/tts", "GET /gen/tts/sesler"];
+const GEN_OK = ["POST /gen/tts", "GET /gen/tts/sesler", "GET /gen/bot"];
 // "POST campaigns/:id/apply" → ["POST", "/app/campaigns/7/apply"]
 const appPath = k => { const [method, p] = k.split(" "); return [method, `/app/${p.replace(":id", "7")}`]; };
 const bodyFor = method => (method === "GET" ? undefined : {});

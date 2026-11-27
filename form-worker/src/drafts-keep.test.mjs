@@ -19,6 +19,7 @@ globalThis.fetch = async () => { throw new Error("gerçek ağ çağrısı yasak"
 const { keepDays, cleanup, DRAFT_KEEP_DAYS, CMS_DONE_STATES } = await import("./platform.js");
 const { genCleanup } = await import("./generate.js");
 const { ytRetention } = await import("./oauth.js");
+const { botCleanup } = await import("./chatbot.js");
 
 const read = p => readFileSync(new URL(p, import.meta.url), "utf8");
 const SCHEMA = read("../schema.sql");
@@ -133,10 +134,10 @@ test("A15: saatlik cron D1 bütçesi: sabit ifadeler index.js'deki düşümle ay
   const dusum = m[1].match(/\d+/g).map(Number);
   const db = freshDb();
   const say = async fn => { const c = { n: 0 }; await fn({ DB: d1(db, c) }); return c.n; };
-  const gercek = [await say(cleanup), await say(ytRetention), await say(genCleanup), await say(keepDays)];
-  assert.deepEqual(dusum, gercek, "index.js düşümü: cleanup, ytRetention, genCleanup, keepDays");
+  const gercek = [await say(cleanup), await say(ytRetention), await say(genCleanup), await say(keepDays), await say(botCleanup)];
+  assert.deepEqual(dusum, gercek, "index.js düşümü: cleanup, ytRetention, genCleanup, keepDays, botCleanup");
   const sabit = 1 + gercek.reduce((a, b) => a + b, 0);
-  assert.equal(sabit, 14);
+  assert.equal(sabit, 18);
   // bekleyen e-posta yokken senkrona kalan pay + sabitler = 50
   assert.equal(sabit + (50 - sabit), 50);
   assert.ok(50 - sabit > 0);

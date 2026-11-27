@@ -8,6 +8,7 @@ import { metricsEnabled } from "./metrics.js";
 import { generate, genCleanup } from "./generate.js";
 import { publish, publishTick, PUBLISH_CRON } from "./publish.js";
 import { cmsTick, cmsOAuthCallback } from "./cms.js";
+import { chatbot, botCleanup } from "./chatbot.js";
 
 const MAX_FIELDS = 30, MAX_LEN = 5000, RATE = 5; // 10 dakikada IP başına en fazla RATE gönderim
 
@@ -30,6 +31,11 @@ export default {
   async fetch(req, env, ctx) {
     const url = new URL(req.url);
     const origin = allowedOrigin(env, req.headers.get("origin"));
+    // Chatbot (src/chatbot.js): web widget'ı /bot/w/* (müşteri sitelerinden; Origin'i botun web_alanlar listesiyle kendisi
+    // denetler, OPTIONS ve CORS başlıklarını kendisi verir) ve Instagram DM webhook'u /bot/ig/webhook (Meta sunucusu, Origin
+    // yok, X-Hub-Signature-256 ile korunur). Genel OPTIONS'tan ÖNCE: widget origin'leri ALLOWED_HOSTS'ta değil.
+    // ctx şart: webhook 200'ü hemen döner, işi ctx.waitUntil içinde yapar.
+    if (url.pathname.startsWith("/bot/")) return chatbot(req, url, env, origin, ctx);
     if (req.method === "OPTIONS") return new Response(null, {
       status: origin ? 204 : 403,
       headers: origin ? { "access-control-allow-origin": origin, "access-control-allow-methods": "GET, POST, PUT", "access-control-allow-headers": "content-type, authorization", "access-control-max-age": "86400", vary: "Origin" } : {},
@@ -42,6 +48,8 @@ export default {
     if (cmsCb) return cmsOAuthCallback(req, env, cmsCb[1]);
     // Sosyal hesap bağlama dönüşü (src/oauth.js): sağlayıcı yönlendirmesinde Origin yok, platform() dışında
     if (url.pathname.startsWith("/oauth/")) return oauthCallback(req, url, env);
+    // Chatbot paneli (src/chatbot.js): /gen/bot ve /gen/bot/…; generate()'ten ÖNCE (yoksa 404). BOT_ENABLED kapalıyken 503 not_ready
+    if (url.pathname === "/gen/bot" || url.pathname.startsWith("/gen/bot/")) return chatbot(req, url, env, origin, ctx);
     // app.socialmediacorner.co taslak üretimi (src/generate.js); GEN_ENABLED kapalıyken 503 not_ready
     if (url.pathname.startsWith("/gen/")) return generate(req, url, env, origin, ctx);
     // Onaylı gönderilerin yayın kuyruğu (src/publish.js); PUBLISH_ENABLED kapalıyken 503 not_ready, D1'e dokunmaz
@@ -92,12 +100,15 @@ export default {
     try { await genCleanup(env); } catch (e) { console.log("gen cleanup", e?.message?.slice(0, 80)); }
     // 3 gün saklama (src/platform.js keepDays): eski taslaklar silinir, son durumdaki blog yazılarının gövdesi boşaltılır
     try { await keepDays(env); } catch (e) { console.log("keep days", e?.message?.slice(0, 80)); }
+    // Chatbot saklama (src/chatbot.js botCleanup, 4 ifade): 90 günden eski mesaj/konuşma, 365 günden eski lead,
+    // 13 aydan eski bot:YYYY-MM kota satırları. 0022 uygulanmadan "no such table" sessizce yutulur.
+    try { await botCleanup(env); } catch (e) { console.log("bot cleanup", e?.message?.slice(0, 80)); }
     // Günlük metrik senkronu (src/oauth.js syncDue), METRICS_ENABLED "1" ise. Ücretsiz plan çağrı başına 50 alt
     // istek ve 50 D1 sorgusu veriyor; gönderilen her e-postayı bir istek sayıp kalanı senkrona bırakıyoruz. D1'de
     // bekleyen listesi (1), e-posta başına işaret (1), cleanup (4 ifade), YouTube saklama (5 ifade),
-    // taslak sayaç temizliği (2 ifade) ve 3 gün saklama (2 ifade) düşülür.
+    // taslak sayaç temizliği (2 ifade), 3 gün saklama (2 ifade) ve chatbot saklama (4 ifade) düşülür.
     if (metricsEnabled(env)) {
-      const d1 = 50 - 1 - results.length - 4 - 5 - 2 - 2;
+      const d1 = 50 - 1 - results.length - 4 - 5 - 2 - 2 - 4;
       try { await syncDue(env, fetch, { budget: 40 - results.length, d1 }); } catch (e) { console.log("sync", e?.message?.slice(0, 80)); }
     }
   },
