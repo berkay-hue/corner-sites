@@ -75,7 +75,7 @@ test("c) ?v=: değişen css/js her HTML'de (TR + en/) tek ve güncel sürüm", (
   const beklenen = {
     "studyo.css": "ap13", "studyo-kabuk.js": "ap13", "studyo-kurgu.js": "ap13", "studyo-medya.js": "ap9", "studyo-motor.js": "ap10",
     "studyo-blog.js": "ap9", "studyo-linkedin.js": "ap9", "smc-ses.js": "ap9", "smc-ses-hazir.js": "ap9",
-    "smc-hesap.js": "ap13", "ust-hesap.js": "ap9", "studyo-hesap.css": "ap9",
+    "smc-hesap.js": "ap14", "ust-hesap.js": "ap9", "studyo-hesap.css": "ap9",
   };
   const sayi = {};
   for (const p of htmller()) {

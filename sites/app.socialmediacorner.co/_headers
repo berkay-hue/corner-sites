@@ -21,3 +21,10 @@
 /en/hesap/*
   X-Robots-Tag: noindex, nofollow
   Cache-Control: no-store
+
+# Chatbot web widget'ı (w/sohbet.js): müşteri sitelerinden yüklenir; gömme kodu sabit, sürüm parametresiz → kısa önbellek
+/w/*
+  Cache-Control: public, max-age=300
+  Access-Control-Allow-Origin: *
+  Cross-Origin-Resource-Policy: cross-origin
+  X-Robots-Tag: noindex

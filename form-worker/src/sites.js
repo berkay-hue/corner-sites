@@ -32,6 +32,9 @@ export const APP_ROUTES = Object.freeze([
   // W2 seslendirme (src/generate.js ttsRoute): /gen/* yönlendiricisi bu listeye bakmaz; ttsRoute oturumun sitesinde
   // "POST /gen/tts" arar (brandcorner.co'da yok → 401). Ses listesi oturumsuz.
   "POST /gen/tts", "GET /gen/tts/sesler",
+  // Chatbot paneli (src/chatbot.js botHesap): /gen/bot yönlendiricisi bu listeye bakmaz; oturumun sitesinde "GET /gen/bot"
+  // arar (yoksa 404 not_found). Alt yollar (/gen/bot/:id/…) aynı kapıdan geçer, tek satır yeter. /bot/* oturumsuz, listede yok.
+  "GET /gen/bot",
 ]);
 
 export const SITES = {
