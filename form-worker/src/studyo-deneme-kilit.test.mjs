@@ -73,7 +73,7 @@ test("a) css: meşgulken seçili çip seçili görünür (dashed disabled kural�
 
 test("c) ?v=: değişen css/js her HTML'de (TR + en/) tek ve güncel sürüm", () => {
   const beklenen = {
-    "studyo.css": "ap14", "studyo-kabuk.js": "ap13", "studyo-kurgu.js": "ap13", "studyo-medya.js": "ap9", "studyo-motor.js": "ap10",
+    "studyo.css": "ap15", "studyo-kabuk.js": "ap14", "studyo-kurgu.js": "ap14", "studyo-medya.js": "ap9", "studyo-motor.js": "ap10",
     "studyo-blog.js": "ap9", "studyo-linkedin.js": "ap9", "smc-ses.js": "ap9", "smc-ses-hazir.js": "ap9",
     "smc-hesap.js": "ap14", "ust-hesap.js": "ap9", "studyo-hesap.css": "ap9",
   };
@@ -97,10 +97,17 @@ test("c) ?v=: değişen css/js her HTML'de (TR + en/) tek ve güncel sürüm", (
   assert.equal(sayi["smc-ses-hazir.js"], 8);
 });
 
-test("css: video modunda .st-izgara esnek sütunu align-items:stretch (start kalırsa container-type:inline-size olan .st-onizle 0px'e çöker)", () => {
-  const m = CSS.match(/body\[data-studyo=video\] \.st-izgara,body\[data-studyo=video\] \.st-izgara:has\(#studyo-medya\)\{([^}]*)\}/);
-  assert.ok(m, "video .st-izgara kuralı yok");
+test("css: video ve görsel modunda .st-izgara esnek sütunu align-items:stretch (start kalırsa container-type:inline-size olan .st-onizle 0px'e çöker)", () => {
+  const m = CSS.match(/body:is\(\[data-studyo=video\],\[data-studyo=gorsel\]\) \.st-izgara,body:is\(\[data-studyo=video\],\[data-studyo=gorsel\]\) \.st-izgara:has\(#studyo-medya\)\{([^}]*)\}/);
+  assert.ok(m, "video/görsel .st-izgara kuralı yok");
   assert.match(m[1], /display:flex/);
   assert.match(m[1], /flex-direction:column/);
   assert.match(m[1], /align-items:stretch/);
+});
+
+test("görsel sayfaları video düzenini kullanır: body data-studyo=gorsel (TR + en)", () => {
+  for (const f of ["gorsel.html", "en/visual.html"]) {
+    const h = readFileSync(APP + f, "utf8");
+    assert.match(h, /<body data-studyo="gorsel">/, f);
+  }
 });
