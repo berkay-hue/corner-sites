@@ -3880,7 +3880,7 @@ const APP_OK = ["GET profile", "POST profile", "GET connections", "POST connect"
 // A5-3 hesap bölümleri: yalnız app izin listesinde; brandcorner.co'da APP'te yok (404)
 const ACCT_OK = ["GET voice", "PUT voice", "GET drafts", "GET drafts/:id", "POST drafts/:id/delete", "POST drafts/:id/media", "GET export", "POST account/delete"];
 // A13 smc yönetimi: izin listesinde, kapı işleyicide (yönetici olmayana 404, src/smc-admin.test.mjs); brandcorner'ın admin/:id/* uçları yok
-const ADMIN_OK = ["GET admin", "GET admin/users", "GET admin/submissions", "GET admin/drafts", "GET admin/jobs", "POST admin/:id/plan"];
+const ADMIN_OK = ["GET admin", "GET admin/users", "GET admin/submissions", "GET admin/drafts", "GET admin/jobs", "POST admin/:id/plan", "POST admin/:id/ses-ek"];
 // A14 otomatik blog yazarı (src/cms.js CMS_ROUTES): yalnız app izin listesinde
 const { CMS_ROUTES } = await import("./cms.js");
 const CMS_OK = Object.keys(CMS_ROUTES);

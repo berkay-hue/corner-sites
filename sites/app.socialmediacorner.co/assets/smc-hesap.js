@@ -151,7 +151,7 @@ var KORUMALI=body.hasAttribute('data-korumali');
 var T0=Date.now();
 var YOL={giris:['/hesap/giris','/en/hesap/login'],kayit:['/hesap/kayit','/en/hesap/register'],kurulum:['/hesap/kurulum','/en/hesap/setup'],baglantilar:['/hesap/baglantilar','/en/hesap/connections'],gecmis:['/hesap/gecmis','/en/hesap/history'],ayarlar:['/hesap/ayarlar','/en/hesap/settings'],kuyruk:['/yayin-kuyrugu','/en/publish-queue'],'blog-otomatik':['/blog-otomatik','/en/blog-autopilot']};
 var ACIK_SAYFA=/\/(giris|kayit|sifre-unuttum|sifre-yenile|login|register|forgot-password|reset-password)$/;
-var TOKEN_RE=/^[A-Za-z0-9_-]{43}$/,R_RE=/^\/(en\/?)?(hesap\/[a-z-]+|video|gorsel|visual|blog|blog-otomatik|blog-autopilot|yayin-kuyrugu|publish-queue)?$/,EPOSTA=/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+var TOKEN_RE=/^[A-Za-z0-9_-]{43}$/,R_RE=/^\/(en\/?)?(hesap\/[a-z-]+|video|gorsel|visual|blog|blog-otomatik|blog-autopilot|yayin-kuyrugu|publish-queue|seo-analizi|seo-analysis|chatbot)?$/,EPOSTA=/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 var meta=d.querySelector('meta[name="api-base"]');
 var API=((meta&&meta.getAttribute('content'))||'').trim().replace(/\/+$/,'');
 var MOCKHOST=/^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname)||/\.pages\.dev$/.test(location.hostname);

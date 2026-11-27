@@ -13,9 +13,11 @@ import { metricsEnabled, accountMetrics, linkMetrics, parseAudience } from "./me
 import { NICHE_LIST } from "./classify.js";
 import { authHosts, previewSite, resetPath, siteConf, siteRoles, roleAllowed, routeAllowed } from "./sites.js";
 import { TR as TR_FOLD } from "./gen-prompt.js";
-import { PLANS, KIND_NAME, planLimits } from "./plans.js";
+import { PLANS, KIND_NAME, planLimits, SES_EK } from "./plans.js";
 // Döngü: cms.js → generate.js → platform.js. CMS_ROUTES modül tepesinde okunmaz/yayılmaz (TDZ); yalnız istek anında bakılır.
 import { CMS_ROUTES, siteOut } from "./cms.js";
+// sesDurum yalnız istek anında çağrılır (döngü yukarıdaki gibi; generate.js zaten cms.js üzerinden yüklenmiş olur)
+import { sesDurum } from "./generate.js";
 
 const ROLES = ["brand", "influencer", "agency"];
 const PLATFORMS = LISTED; // instagram, tiktok, youtube, x, linkedin, twitch (profil ve bağlantı listesi aynı)
@@ -55,7 +57,8 @@ export async function platform(req, url, env, origin, deliver) {
   const c = { env, origin, api: url.origin, site, deliver, ip:req.headers.get("cf-connecting-ip") || "", body: {}, query: Object.fromEntries(url.searchParams) };
   try {
     const route = `${req.method} ${url.pathname.replace(/\/+$/, "")}`;
-    const m = route.match(/^(GET|POST|PUT) \/app\/([a-z]+)(?:\/(\d+))?(?:\/([a-z]+))?$/);
+    // son parça tireli olabilir (27.11 admin/:id/ses-ek)
+    const m = route.match(/^(GET|POST|PUT) \/app\/([a-z]+)(?:\/(\d+))?(?:\/([a-z]+(?:-[a-z]+)*))?$/);
     const key = m && `${m[2]}${m[3] ? "/:id" : ""}${m[4] ? "/" + m[4] : ""}`; // APP anahtarının yol kısmı
     // Sitenin uç izin listesi (src/sites.js routes; brandcorner.co'da yok): listede olmayan uç oturuma ve gövdeye bakılmadan 404
     if (!routeAllowed(site, m ? `${m[1]} /app/${key}` : route)) throw new Bad("not_found", 404);
@@ -434,6 +437,7 @@ const ACCT = {
   "GET admin/drafts": c => smcAdminDrafts(c),
   "GET admin/jobs": c => smcAdminJobs(c),
   "POST admin/:id/plan": (c, id) => smcAdminPlan(c, id),
+  "POST admin/:id/ses-ek": (c, id) => smcAdminSesEk(c, id),
 };
 
 // A14 otomatik blog yazarı (src/cms.js): uçlar yalnız izin listeli sitede (ACCT gibi), kendi kapısı (CMS_ENABLED, 503) ile.
@@ -1466,10 +1470,13 @@ export const maskIp = ip => {
 };
 const submitSites = c => JSON.stringify(siteConf(c.site).submitSites || [c.site]);
 
-const smcUserOut = u => ({
-  id: u.id, email: u.email, name: u.name, plan: u.plan, plan_limits: jsonOr(u.plan_limits, null), limits: planLimits(u),
+// generate.js sesLimit ile aynı: aylık plan seslendirme hakkı, demo denemesi bittiyse 0
+const sesLimitOf = L => L?.trial_ended ? 0 : L?.seslendirme ?? 0;
+const smcUserOut = (u, L = planLimits(u)) => ({
+  id: u.id, email: u.email, name: u.name, plan: u.plan, plan_limits: jsonOr(u.plan_limits, null), limits: L,
   created_at: u.created_at, last_login: u.last_login, drafts: u.drafts, month: { linkedin_blog: u.lb || 0, video_gorsel: u.vg || 0 },
   cms: u.cms || { sites: 0, aktif: 0, duraklatildi: 0, hata: 0 },
+  ses: { used_month: u.ses_ay || 0, extra: u.ses_ek || 0, limit_month: sesLimitOf(L) },
   ...(u.admin && { admin: true }),
 });
 async function smcUsers(c, before) {
@@ -1489,14 +1496,19 @@ async function smcUsers(c, before) {
       SUM(state = 'duraklatildi') duraklatildi, SUM(state = 'hata') hata FROM cms_sites WHERE site = ? AND state != 'kaldirildi'
       AND user_id IN (${ids.map(() => "?").join(",")}) GROUP BY user_id`, c.site, ...ids)).map(r => [r.user_id, r]));
     for (const u of page) { const r = cms.get(u.id); if (r) u.cms = { sites: r.sites, aktif: r.aktif || 0, duraklatildi: r.duraklatildi || 0, hata: r.hata || 0 }; }
+    // 27.11 seslendirme: bu ay harcanan (ses:YYYY-MM 'ss') ve ek bakiye (ses_ek 'se'); gen_usage yoksa 0
+    const ses = await listOr(c.env, `SELECT day, key, n FROM gen_usage WHERE day IN (?, 'ses_ek') AND key IN (${ids.map(() => "?").join(",")})`,
+      "ses:" + month, ...ids.map(i => "u:" + i));
+    const byKey = new Map(page.map(u => ["u:" + u.id, u]));
+    for (const r of ses) { const u = byKey.get(r.key); if (u) u[r.day === "ses_ek" ? "ses_ek" : "ses_ay"] = Number(r.n) || 0; }
   }
-  return { users: page.map(smcUserOut), next };
+  return { users: page.map(u => smcUserOut(u)), next };
 }
 
 // Panelin ilk isteği: kullanıcıların ilk sayfası, plan dağılımı, bu ayın sayaç toplamı, son 30 günün gen_daily'si, plan geçmişi
 const smcAdminHome = adminRoute(async c => {
   const { env, site } = c, month = smcMonth();
-  const [users, plans, monthTotals, daily, planLog] = await Promise.all([
+  const [users, plans, monthTotals, daily, planLog, sesLog] = await Promise.all([
     smcUsers(c, null),
     listAll(env, "SELECT plan, COUNT(*) n FROM users WHERE site = ? GROUP BY plan ORDER BY plan", site),
     listAll(env, `SELECT g.kind, SUM(g.n) n, COUNT(DISTINCT g.user_id) users FROM gen_month g JOIN users u ON u.id = g.user_id AND u.site = ?
@@ -1507,12 +1519,16 @@ const smcAdminHome = adminRoute(async c => {
     listOr(env, `SELECT l.id, l.at, l.actor_id, a.email actor_email, l.user_id, u.email, substr(l.perm, 6) plan
       FROM perm_log l JOIN users u ON u.id = l.user_id AND u.site = ? LEFT JOIN users a ON a.id = l.actor_id
       WHERE l.perm LIKE 'plan:%' ORDER BY l.id DESC LIMIT 100`, site),
+    // 27.11 ek seslendirme hakları (smcAdminSesEk 'ses_ek:+<n>'); n eklenen hak
+    listOr(env, `SELECT l.id, l.at, l.actor_id, a.email actor_email, l.user_id, u.email, CAST(substr(l.perm, 9) AS INTEGER) n
+      FROM perm_log l JOIN users u ON u.id = l.user_id AND u.site = ? LEFT JOIN users a ON a.id = l.actor_id
+      WHERE substr(l.perm, 1, 8) = 'ses_ek:+' ORDER BY l.id DESC LIMIT 100`, site),
   ]);
   return ok(c, {
     month, ...users,
     plans: Object.fromEntries(plans.map(r => [r.plan, r.n])),
     gen_month: Object.fromEntries(monthTotals.map(r => [KIND_NAME[r.kind] || r.kind, { n: r.n, users: r.users }])),
-    gen_daily: daily, plan_log: planLog,
+    gen_daily: daily, plan_log: planLog, ses_log: sesLog,
   });
 });
 
@@ -1578,4 +1594,24 @@ const smcAdminPlan = adminRoute(async (c, id) => {
   await batchOr(env, "perm_log", ed => ed ? [log, change] : [change]);
   const u = await env.DB.prepare("SELECT plan, plan_limits, created_at FROM users WHERE id = ? AND site = ?").bind(id, c.site).first();
   return ok(c, { user_id: id, plan: u.plan, plan_limits: jsonOr(u.plan_limits, null), limits: planLimits(u) });
+});
+
+// 27.11 ek seslendirme hakkı (elle SQL yerine): gövde {n} tam sayı 1..60 (yoksa 6 = bir ek paket, plans.js SES_EK); dışı 400 bad_n.
+// Hedef bu sitenin kullanıcısı değilse 404. gen_usage ('ses_ek', 'u:<id>', 'se') bakiyesine eklenir (TTS önce aylık hakkı, bitince
+// bunu düşer; src/generate.js sesDurum). perm_log'a 'ses_ek:+<n>' satırı (aynı batch'te; perm_log yoksa günlüksüz).
+// Dönüş {user_id, ses: {plan, used_month, extra, kalan}}: plan = aylık plan hakkı; kalan kullanıcının gördüğüyle aynı.
+const SES_EK_MAX = 60;
+const smcAdminSesEk = adminRoute(async (c, id) => {
+  const { env } = c, b = c.body;
+  need(b && typeof b === "object" && !Array.isArray(b), "bad_n", 400);
+  const n = b.n === undefined ? SES_EK.adet : b.n;
+  need(Number.isSafeInteger(n) && n >= 1 && n <= SES_EK_MAX, "bad_n", 400);
+  const u = await env.DB.prepare("SELECT plan, plan_limits, created_at FROM users WHERE id = ? AND site = ?").bind(id, c.site).first();
+  need(u, "not_found", 404);
+  const log = env.DB.prepare("INSERT INTO perm_log (actor_id, user_id, perm, granted) VALUES (?, ?, ?, 1)").bind(c.user.id, id, "ses_ek:+" + n);
+  const add = env.DB.prepare(`INSERT INTO gen_usage (day, key, kind, n) VALUES ('ses_ek', ?, 'se', ?)
+    ON CONFLICT(day, key) DO UPDATE SET n = gen_usage.n + excluded.n`).bind("u:" + id, n);
+  await batchOr(env, "perm_log", ed => ed ? [log, add] : [add]);
+  const s = await sesDurum(env.DB, id, planLimits(u));
+  return ok(c, { user_id: id, ses: { plan: s.limit, used_month: s.used, extra: s.ek, kalan: s.kalan } });
 });
