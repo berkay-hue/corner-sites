@@ -83,7 +83,7 @@ PUBLISH_PER_RUN = "3"
 # "1": canlı app.socialmediacorner.co da eklenir (A13'te açıldı; 0015..0018 uygulanmış olmalı, etkisi wrangler deploy ile).
 ACCOUNTS_ENABLED = "1"
 # Chatbot (src/chatbot.js): panel /gen/bot + web widget /bot/w/*; 0022 uygulanıp bağlama bitince "1"
-BOT_ENABLED = "0"
+BOT_ENABLED = "1"
 # Chatbot Instagram DM (src/chatbot-ig.js): webhook /bot/ig/webhook; Meta App Review + secret'lar + webhook ayarı bitince "1"
 BOT_IG_ENABLED = "0"
 # A14 otomatik blog yazarı (src/cms.js: /app/cms*, /oauth/cms/<p>/callback, */5 cron'da publishTick'ten sonra cmsTick).
