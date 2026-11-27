@@ -73,9 +73,9 @@ test("a) css: meşgulken seçili çip seçili görünür (dashed disabled kural�
 
 test("c) ?v=: değişen css/js her HTML'de (TR + en/) tek ve güncel sürüm", () => {
   const beklenen = {
-    "studyo.css": "ap11", "studyo-kabuk.js": "ap10", "studyo-kurgu.js": "ap12", "studyo-medya.js": "ap9", "studyo-motor.js": "ap10",
+    "studyo.css": "ap13", "studyo-kabuk.js": "ap13", "studyo-kurgu.js": "ap13", "studyo-medya.js": "ap9", "studyo-motor.js": "ap10",
     "studyo-blog.js": "ap9", "studyo-linkedin.js": "ap9", "smc-ses.js": "ap9", "smc-ses-hazir.js": "ap9",
-    "smc-hesap.js": "ap9", "ust-hesap.js": "ap9", "studyo-hesap.css": "ap9",
+    "smc-hesap.js": "ap13", "ust-hesap.js": "ap9", "studyo-hesap.css": "ap9",
   };
   const sayi = {};
   for (const p of htmller()) {
@@ -89,7 +89,7 @@ test("c) ?v=: değişen css/js her HTML'de (TR + en/) tek ve güncel sürüm", (
     }
   }
   assert.ok(sayi["studyo.css"] >= 31, `studyo.css ${sayi["studyo.css"]} sayfada`);
-  assert.equal(sayi["studyo-kabuk.js"], 12);
+  assert.equal(sayi["studyo-kabuk.js"], 14);
   assert.equal(sayi["studyo-kurgu.js"], 4);
   assert.equal(sayi["studyo-motor.js"], 6);
   assert.equal(sayi["studyo-medya.js"], 4);

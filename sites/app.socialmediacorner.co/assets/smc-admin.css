@@ -24,3 +24,5 @@
 .ad-plan .alt-sira{display:flex;flex-wrap:wrap;gap:var(--s2);align-items:center}
 .ad-hata{min-height:1.5em;color:var(--danger);font:var(--f-ipucu)}
 @media (max-width:479px){.ad-ozet{grid-template-columns:1fr 1fr}}
+.ad-ses-hizli{display:flex;flex-wrap:wrap;gap:var(--s2);margin:0 0 var(--s2)}
+.ad-islem{display:flex;flex-wrap:wrap;gap:var(--s2)}

@@ -71,7 +71,7 @@ function setup(db = freshDb(), extra = {}) {
 
 const fail = r => [r.status, r.body.error];
 const ROUTES = [["GET", "/app/admin"], ["GET", "/app/admin/users"], ["GET", "/app/admin/submissions"], ["GET", "/app/admin/drafts"],
-  ["GET", "/app/admin/jobs"], ["POST", "/app/admin/2/plan"]];
+  ["GET", "/app/admin/jobs"], ["POST", "/app/admin/2/plan"], ["POST", "/app/admin/2/ses-ek"]];
 
 test("A13: izin listesinde yönetim uçları var; brandcorner'ın admin/:id/* uçları yok", () => {
   for (const [m, p] of ROUTES) assert.ok(APP_ROUTES.includes(`${m} ${p.replace("/2/", "/:id/")}`), p);
@@ -331,4 +331,64 @@ test("27.11 deleteAccount: kullanıcının ses:YYYY-MM ve ses_ek satırları sil
   const rows = db.prepare("SELECT day, key FROM gen_usage").all().map(x => `${x.day}|${x.key}`).sort();
   assert.deepEqual(rows, [`${TODAY}|u:2`, `ses:${MONTH}|u:3`, "ses_ek|u:3", "ses_ek|u:22"].sort());
   assert.equal(db.prepare("SELECT COUNT(*) AS n FROM users WHERE id = 2").get().n, 0);
+});
+
+test("27.11 ek seslendirme hakkı: n 1..60 (yoksa 6), site kapsamı, gen_usage ses_ek'e eklenir, perm_log, kullanıcı listesinde ses", async () => {
+  const { db, call } = setup();
+  const post = (id, body) => call("POST", `/app/admin/${id}/ses-ek`, { token: tok("A"), body });
+  // yönetici olmayana 404 (gövde geçerli olsa da)
+  for (const t of [tok("M"), tok("B"), undefined]) assert.deepEqual(fail(await call("POST", "/app/admin/2/ses-ek", { token: t, body: { n: 6 } })), [404, "not_found"]);
+  for (const n of [0, -1, 61, 1.5, "6", null, true, [6], 1e20]) assert.deepEqual(fail(await post(2, { n })), [400, "bad_n"], JSON.stringify(n));
+  // nesne olmayan gövde ayrıştırıcıda düşer (json)
+  for (const body of [null, [6], "6"]) assert.deepEqual(fail(await post(2, body)), [400, "json"], JSON.stringify(body));
+  // başka sitenin ya da olmayan kullanıcı 404
+  assert.deepEqual(fail(await post(5, { n: 6 })), [404, "not_found"]);
+  assert.deepEqual(fail(await post(999, { n: 6 })), [404, "not_found"]);
+  const ek = uid => db.prepare("SELECT kind, n FROM gen_usage WHERE day = 'ses_ek' AND key = ?").get("u:" + uid);
+  assert.equal(ek(2), undefined);
+  assert.equal(ek(5), undefined);
+  // bu ay 1 hak harcanmış basic kullanıcı (ayda 1)
+  db.prepare("INSERT INTO gen_usage (day, key, kind, n) VALUES (?, 'u:2', 'ss', 1)").run(`ses:${MONTH}`);
+  let r = await post(2, {});
+  assert.equal(r.status, 200, JSON.stringify(r.body));
+  assert.deepEqual(r.body, { ok: true, user_id: 2, ses: { plan: 1, used_month: 1, extra: 6, kalan: 6 } });
+  r = await post(2, { n: 6 });
+  assert.deepEqual(r.body.ses, { plan: 1, used_month: 1, extra: 12, kalan: 12 });
+  assert.deepEqual({ ...ek(2) }, { kind: "se", n: 12 });
+  r = await post(3, { n: 60 });
+  assert.deepEqual(r.body.ses, { plan: 1, used_month: 0, extra: 60, kalan: 61 });
+  const logs = db.prepare("SELECT actor_id, user_id, perm, granted FROM perm_log ORDER BY id").all().map(x => ({ ...x }));
+  assert.deepEqual(logs, [
+    { actor_id: 1, user_id: 2, perm: "ses_ek:+6", granted: 1 }, { actor_id: 1, user_id: 2, perm: "ses_ek:+6", granted: 1 },
+    { actor_id: 1, user_id: 3, perm: "ses_ek:+60", granted: 1 },
+  ]);
+  // liste ve özet
+  const u = await call("GET", "/app/admin/users", { token: tok("A") });
+  assert.deepEqual(u.body.users.map(x => [x.id, x.ses]), [
+    [3, { used_month: 0, extra: 60, limit_month: 1 }], [2, { used_month: 1, extra: 12, limit_month: 1 }], [1, { used_month: 0, extra: 0, limit_month: 1 }],
+  ]);
+  await call("POST", "/app/admin/2/plan", { token: tok("A"), body: { plan: "pro" } });
+  const h = await call("GET", "/app/admin", { token: tok("A") });
+  assert.deepEqual(h.body.users.find(x => x.id === 2).ses, { used_month: 1, extra: 12, limit_month: 6 });
+  assert.deepEqual(h.body.ses_log.map(l => [l.email, l.n, l.actor_email]), [["ikinci@ornek.test", 60, "yonetici@ornek.test"], ["uye@ornek.test", 6, "yonetici@ornek.test"], ["uye@ornek.test", 6, "yonetici@ornek.test"]]);
+  assert.deepEqual(h.body.plan_log.map(l => l.plan), ["pro"]);
+});
+
+test("27.11 ek seslendirme hakkı: perm_log yoksa günlüksüz eklenir; gen_usage yoksa liste 0, uç 503", async () => {
+  const db = freshDb();
+  db.exec("DROP TABLE perm_log");
+  const { call } = setup(db);
+  try {
+    const r = await call("POST", "/app/admin/2/ses-ek", { token: tok("A"), body: { n: 12 } });
+    assert.equal(r.status, 200, JSON.stringify(r.body));
+    assert.equal(r.body.ses.extra, 12);
+  } finally { delete MISSING.perm_log; }
+  const db2 = freshDb();
+  db2.exec("DROP TABLE gen_usage");
+  const s2 = setup(db2);
+  const u = await s2.call("GET", "/app/admin/users", { token: tok("A") });
+  assert.equal(u.status, 200, JSON.stringify(u.body));
+  assert.ok(u.body.users.every(x => x.ses.used_month === 0 && x.ses.extra === 0));
+  assert.deepEqual(fail(await s2.call("POST", "/app/admin/2/ses-ek", { token: tok("A"), body: { n: 6 } })), [503, "not_ready"]);
+  assert.equal(s2.db.prepare("SELECT COUNT(*) n FROM perm_log").get().n, 0);
 });

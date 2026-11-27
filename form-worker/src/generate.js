@@ -29,6 +29,7 @@ import {
   clean, fold, neutralize, banMatch, userGen, userRefine, userIg, userIgRefine,
 } from "./gen-prompt.js";
 import { makeLlm, LlmError, SPECS, videoSpec } from "./llm.js";
+import { seoRoute } from "./seo.js";
 import { platformSite, bearerToken, sessionUser } from "./platform.js";
 import { siteConf } from "./sites.js";
 import { MONTH_KIND, KIND_NAME, planLimits, trialMonth, SES_EK } from "./plans.js";
@@ -44,7 +45,7 @@ const DAILY = new Set(["ok", "fail", "refused", "busy", "refine_ok", "tok_in", "
 export const GEN_UNITS = 3, REFINE_UNITS = 1, MIN_T = 1500, EV_PER_DAY = 30;
 // ISTEM-IG §3.2 madde 1: /gen/instagram gövdesi 8 KB (marka sesi)
 // A8: linkedin/blog/video 12 KB (3000 karakterlik style, Türkçe 2 bayt/karakter + öbür alanlar sığsın)
-const BODY_MAX = { linkedin: 12288, blog: 12288, video: 12288, instagram: 8192, refine: 16384, quota: 4096, event: 4096, stock_use: 1024, tts: 8192 };
+const BODY_MAX = { linkedin: 12288, blog: 12288, video: 12288, instagram: 8192, refine: 16384, quota: 4096, event: 4096, stock_use: 1024, tts: 8192, seo: 4096 };
 const LLM_ERR = { busy: ["llm_busy", 503], limit: ["llm_limit", 503], fail: ["llm_fail", 502], refusal: ["refused", 422] };
 
 const json = (body, status, origin) => new Response(status === 204 ? null : JSON.stringify(body), {
@@ -1421,7 +1422,7 @@ async function ttsRoute(c) {
 }
 
 // [ad, işleyici, yöntem (yoksa POST)]
-const ROUTES = { "/gen/stock": ["stock", stockRoute, "GET"], "/gen/stock/use": ["stock_use", stockUseRoute], "/gen/tts": ["tts", ttsRoute], "/gen/tts/sesler": ["tts_voices", ttsVoicesRoute, "GET"], "/gen/linkedin": ["linkedin", linkedin], "/gen/instagram": ["instagram", instagram], "/gen/blog": ["blog", blog], "/gen/video": ["video", video], "/gen/refine": ["refine", refine], "/gen/quota": ["quota", quotaRoute], "/gen/event": ["event", event] };
+const ROUTES = { "/gen/stock": ["stock", stockRoute, "GET"], "/gen/stock/use": ["stock_use", stockUseRoute], "/gen/tts": ["tts", ttsRoute], "/gen/tts/sesler": ["tts_voices", ttsVoicesRoute, "GET"], "/gen/linkedin": ["linkedin", linkedin], "/gen/instagram": ["instagram", instagram], "/gen/blog": ["blog", blog], "/gen/video": ["video", video], "/gen/refine": ["refine", refine], "/gen/quota": ["quota", quotaRoute], "/gen/event": ["event", event], "/gen/seo": ["seo", seoRoute] };
 
 export async function generate(req, url, env, origin, ctx, io = {}) {
   const route = ROUTES[url.pathname];

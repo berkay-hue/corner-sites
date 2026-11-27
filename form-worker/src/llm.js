@@ -159,7 +159,8 @@ export function parse(data, count, angle, spec = SPECS.li) {
   return { drafts, usage, stop, model: String(data.model || "") };
 }
 
-async function call(env, f, { system, user, schema, maxTokens, count, angle, spec, timeout }) {
+// istek + tek yeniden deneme (call ve llmJson ortak); hata LlmError olarak fırlar
+async function send(env, f, { system, user, schema, maxTokens, timeout }) {
   const T = timeout || TIMEOUT;
   const body = JSON.stringify({
     model: env.GEN_MODEL,
@@ -181,9 +182,30 @@ async function call(env, f, { system, user, schema, maxTokens, count, angle, spe
   const ms = Date.now() - t0;
   if (r.retry) { console.log("gen llm busy", r.why, ms); throw new LlmError("busy", r.why); }
   if (r.err) { console.log("gen llm", r.err, r.why, ms); throw new LlmError(r.err, r.why); }
-  const out = parse(r.data, count, angle, spec);
+  return { data: r.data, ms };
+}
+
+async function call(env, f, { system, user, schema, maxTokens, count, angle, spec, timeout }) {
+  const { data, ms } = await send(env, f, { system, user, schema, maxTokens, timeout });
+  const out = parse(data, count, angle, spec);
   console.log("gen llm ok", out.model, ms, out.usage.input_tokens, out.usage.output_tokens);
   return out;
+}
+
+// Genel JSON çağrısı (SEO analizi, seo.js): aynı deneme/yeniden deneme ve hata türleri; alan denetimi çağıranda.
+export async function llmJson(env, f, { system, user, schema, maxTokens, timeout }) {
+  const { data, ms } = await send(env, f, { system, user, schema, maxTokens, timeout });
+  const usage = { input_tokens: Number(data?.usage?.input_tokens) || 0, output_tokens: Number(data?.usage?.output_tokens) || 0 };
+  const stop = data?.stop_reason;
+  if (stop === "refusal") throw new LlmError("refusal", "stop_reason", usage);
+  if (stop !== "end_turn") throw new LlmError("fail", `stop ${String(stop).slice(0, 30)}`, usage);
+  const block = Array.isArray(data.content) ? data.content.find(b => b?.type === "text") : null;
+  let obj;
+  try { obj = JSON.parse(block.text); } catch { throw new LlmError("fail", "json", usage); }
+  if (!obj || typeof obj !== "object" || Array.isArray(obj)) throw new LlmError("fail", "shape", usage);
+  const model = String(data.model || "");
+  console.log("gen llm ok", model, ms, usage.input_tokens, usage.output_tokens);
+  return { obj, usage, model };
 }
 
 // Yalnız yerel geliştirme: GEN_PROVIDER=fake, DEV_ORIGINS de tanımlıysa (canlıda DEV_ORIGINS yok).

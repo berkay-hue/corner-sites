@@ -8,7 +8,7 @@ function $$(s,k){return Array.prototype.slice.call((k||d).querySelectorAll(s))}
 function el(tag,cls,txt){var e=d.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=String(txt);return e}
 var PLAN_AD={demo:'Demo',basic:'Basic',pro:'Pro',enterprise:'Enterprise'};
 var DURUM={taslak:'Taslak',onay_bekliyor:'Onay bekliyor',planlandi:'Planlandı',yayinlaniyor:'Yayınlanıyor',yayinlandi:'Yayınlandı',basarisiz:'Başarısız',kontrol:'Kontrol',iptal:'İptal'};
-var HATA={bad_plan:'Geçersiz plan.',bad_limits:'Enterprise için iki kotayı da 1 ile 100000 arasında tam sayı olarak yaz.',not_found:'Kullanıcı bulunamadı.'};
+var HATA={bad_plan:'Geçersiz plan.',bad_limits:'Enterprise için iki kotayı da 1 ile 100000 arasında tam sayı olarak yaz.',not_found:'Kullanıcı bulunamadı.',bad_n:'1 ile 60 arasında tam sayı yaz.'};
 function sayi(n){return (n==null||n==='')?'—':Number(n).toLocaleString('tr-TR')}
 /* D1 zamanları "YYYY-MM-DD HH:MM:SS" (UTC); İstanbul saatiyle gösterilir */
 function zaman(s){
@@ -29,6 +29,8 @@ function planMetin(u){
 }
 /* demo hakkı deneme boyunca toplam; satırdaki sayaç yalnız bu ayı gösterir */
 function kotaU(u,k){var t=kota(u.month&&u.month[k],u.limits&&u.limits[k]);return u.plan==='demo'?t+' · bu ay':t}
+/* 27.11 seslendirme: ses {used_month, extra, limit_month} → "2/6 · +6 ek" */
+function sesMetin(u){var s=u.ses;if(!s)return '—';var t=sayi(s.used_month||0)+'/'+sayi(s.limit_month||0);return Number(s.extra)>0?t+' · +'+sayi(s.extra)+' ek':t}
 
 /* tablo: kolonlar [{b:başlık, s:sınıf, v:function(satır)->metin|Node}] */
 function tablo(kap,kol,satirlar,bosMetin){
@@ -84,6 +86,12 @@ window.smcAdminBasla=function(api){
       {b:'Yeni plan',v:function(r){return PLAN_AD[r.plan]||r.plan}},
       {b:'Değiştiren',s:'ad-eposta',v:function(r){return r.actor_email||(r.actor_id==null?'—':'#'+r.actor_id)}}
     ],j.plan_log||[],'Henüz plan değişikliği yok.');
+    tablo($('#ad-seslog'),[
+      {b:'Zaman',v:function(r){return zaman(r.at)}},
+      {b:'Kullanıcı',s:'ad-eposta',v:function(r){return r.email}},
+      {b:'Eklenen hak',s:'ad-sayi',v:function(r){return '+'+sayi(r.n)}},
+      {b:'Veren',s:'ad-eposta',v:function(r){return r.actor_email||(r.actor_id==null?'—':'#'+r.actor_id)}}
+    ],j.ses_log||[],'Henüz ek seslendirme hakkı verilmedi.');
   }
 
   /* ---- kullanıcılar ---- */
@@ -93,13 +101,17 @@ window.smcAdminBasla=function(api){
     {b:'Plan',v:planMetin},
     {b:'LinkedIn ve blog (ay)',s:'ad-sayi',v:function(u){return kotaU(u,'linkedin_blog')}},
     {b:'Video ve görsel (ay)',s:'ad-sayi',v:function(u){return kotaU(u,'video_gorsel')}},
+    {b:'Seslendirme',s:'ad-sayi',v:sesMetin},
     {b:'Taslak',s:'ad-sayi',v:function(u){return sayi(u.drafts)}},
     /* A14: cms {sites,aktif,duraklatildi,hata} (kaldırılanlar hariç); alan yoksa ya da site yoksa boş */
     {b:'Blog sitesi',s:'ad-sayi',v:function(u){var c=u.cms;if(!c||!(Number(c.sites)>0))return '';
       var t='CMS '+sayi(c.sites);if(Number(c.duraklatildi)>0)t+=' · '+sayi(c.duraklatildi)+' duraklatıldı';if(Number(c.hata)>0)t+=' · '+sayi(c.hata)+' hata';return t}},
     {b:'Kayıt',v:function(u){return zaman(u.created_at)}},
     {b:'Son oturum',v:function(u){return zaman(u.last_login)}},
-    {b:'İşlem',v:function(u){var b=el('button','btn btn-cizgi btn-kucuk','Planı değiştir');b.type='button';b.setAttribute('aria-label','Planı değiştir: '+u.email);b.addEventListener('click',function(){planAc(u.id)});return b}}
+    {b:'İşlem',v:function(u){
+      var w=el('div','ad-islem'),b=el('button','btn btn-cizgi btn-kucuk','Planı değiştir');b.type='button';b.setAttribute('aria-label','Planı değiştir: '+u.email);b.addEventListener('click',function(){planAc(u.id,b)});
+      var e=el('button','btn btn-cizgi btn-kucuk','Ek hak ver');e.type='button';e.setAttribute('aria-label','Ek seslendirme hakkı ver: '+u.email);e.setAttribute('data-ses-ac',String(u.id));e.addEventListener('click',function(){sesAc(u.id,e)});
+      w.appendChild(b);w.appendChild(e);return w}}
   ];
   function kullaniciCiz(liste,ekle){
     liste.forEach(function(u){kullanicilar[u.id]=u});
@@ -111,16 +123,18 @@ window.smcAdminBasla=function(api){
   /* ---- plan formu ---- */
   var f=$('#f-plan'),sec=$('#plan-sec'),lb=$('#plan-lb'),vg=$('#plan-vg'),ph=$('#plan-hata');
   function entGoster(){var e=sec.value==='enterprise';$$('[data-ent]',f).forEach(function(x){x.hidden=!e})}
-  function planAc(id){
-    var u=kullanicilar[id];if(!u)return;secili=id;
+  var planDon=null;
+  function planAc(id,tetik){
+    var u=kullanicilar[id];if(!u)return;secili=id;planDon=tetik||null;sesKapat(false);
     $('#plan-kim').textContent=u.email;
     sec.value=PLAN_AD[u.plan]?u.plan:'basic';
     var l=u.limits||{};lb.value=u.plan==='enterprise'&&l.linkedin_blog?l.linkedin_blog:'';vg.value=u.plan==='enterprise'&&l.video_gorsel?l.video_gorsel:'';
     ph.textContent='';entGoster();f.hidden=false;$('#plan-baslik').focus();
   }
-  function planKapat(){f.hidden=true;secili=null;ph.textContent=''}
+  function planKapat(odak){f.hidden=true;secili=null;ph.textContent='';if(odak&&planDon&&d.contains(planDon))planDon.focus();planDon=null}
   sec.addEventListener('change',entGoster);
-  $('#plan-vazgec').addEventListener('click',planKapat);
+  $('#plan-vazgec').addEventListener('click',function(){planKapat(true)});
+  f.addEventListener('keydown',function(e){if(e.key==='Escape'){e.preventDefault();planKapat(true)}});
   f.addEventListener('submit',function(e){
     e.preventDefault();
     var b=$('button[type="submit"]',f);if(bosMu(b)||secili==null)return;
@@ -135,13 +149,58 @@ window.smcAdminBasla=function(api){
     istek('/app/admin/'+encodeURIComponent(id)+'/plan','POST',g).then(function(j){
       bitir();
       if(j._s===200){
-        var u=kullanicilar[id];if(u){u.plan=j.plan;u.plan_limits=j.plan_limits;u.limits=j.limits}
+        var u=kullanicilar[id];if(u){u.plan=j.plan;u.plan_limits=j.plan_limits;u.limits=j.limits;
+          /* seslendirme aylık hakkı plana bağlı (demo bittiyse 0) */
+          if(u.ses&&j.limits)u.ses.limit_month=j.limits.trial_ended?0:(Number(j.limits.seslendirme)||0)}
         yenidenCiz();planKapat();delete yuklendi.ozet;
         bildir('Plan güncellendi: {e} → {p}.','ok',{e:u?u.email:'#'+id,p:PLAN_AD[j.plan]||j.plan});
         return;
       }
       if(j._s===400||(j._s===404&&j.error==='not_found')){ph.textContent=HATA[j.error]||('Kaydedilemedi (Kod: '+(j.error||j._s)+').');return}
       if(j._s===503&&j.error==='not_ready'){ph.textContent='Plan sütunları henüz yok (0018 göçü uygulanmalı).';return}
+      genelHata(j);
+    });
+  });
+
+  /* ---- 27.11 ek seslendirme hakkı formu: POST /app/admin/:id/ses-ek {n} (1..60) ---- */
+  var fs=$('#f-ses'),sn=$('#ses-n'),sh=$('#ses-hata'),sesId=null,sesDon=null;
+  function sesN(){var n=Number(sn.value);return sn.value!==''&&Number.isInteger(n)&&n>=1&&n<=60?n:null}
+  function sesNot(){var n=sesN();$('#ses-not').textContent=n?'Bu kullanıcıya '+n+' ek seslendirme hakkı eklenecek (ücretli ek paket: 6 hak = 299 TL / 7 $).':HATA.bad_n}
+  function sesAc(id,tetik){
+    var u=kullanicilar[id];if(!u)return;
+    if(!f.hidden)planKapat(false);
+    sesId=id;sesDon=tetik||null;
+    $('#ses-kim').textContent=u.email;sn.value='6';sh.textContent='';sesNot();
+    fs.hidden=false;$('#ses-baslik').focus();
+  }
+  /* odak: kapanınca tetikleyen düğmeye; tablo yeniden çizildiyse aynı kullanıcının yeni düğmesine */
+  function sesKapat(odak){
+    if(fs.hidden)return;
+    var id=sesId;fs.hidden=true;sesId=null;sh.textContent='';
+    if(odak){var b=sesDon&&d.contains(sesDon)?sesDon:$('[data-ses-ac="'+id+'"]');if(b)b.focus()}
+    sesDon=null;
+  }
+  sn.addEventListener('input',sesNot);
+  $$('[data-ses-n]',fs).forEach(function(b){b.addEventListener('click',function(){sn.value=b.getAttribute('data-ses-n');sh.textContent='';sesNot();sn.focus()})});
+  $('#ses-vazgec').addEventListener('click',function(){sesKapat(true)});
+  fs.addEventListener('keydown',function(e){if(e.key==='Escape'){e.preventDefault();sesKapat(true)}});
+  fs.addEventListener('submit',function(e){
+    e.preventDefault();
+    var b=$('button[type="submit"]',fs);if(bosMu(b)||sesId==null)return;
+    var n=sesN();if(!n){sh.textContent=HATA.bad_n;sn.focus();return}
+    sh.textContent='';
+    var bitir=mesgul(b,'Ekleniyor…'),id=sesId;
+    istek('/app/admin/'+encodeURIComponent(id)+'/ses-ek','POST',{n:n}).then(function(j){
+      bitir();
+      if(j._s===200){
+        var u=kullanicilar[id],s=j.ses||{};
+        if(u)u.ses={used_month:s.used_month||0,extra:s.extra||0,limit_month:s.plan||0};
+        yenidenCiz();sesKapat(true);delete yuklendi.ozet;
+        bildir('Ek hak eklendi: {e} (+{n}, toplam ek {t})','ok',{e:u?u.email:'#'+id,n:String(n),t:String(s.extra||0)});
+        return;
+      }
+      if(j._s===400||(j._s===404&&j.error==='not_found')){sh.textContent=HATA[j.error]||('Eklenemedi (Kod: '+(j.error||j._s)+').');return}
+      if(j._s===503&&j.error==='not_ready'){sh.textContent='Seslendirme sayacı tablosu (gen_usage) henüz yok.';return}
       genelHata(j);
     });
   });
