@@ -269,6 +269,15 @@
       const runGeo = runs.map(function (r) {
         const f = ln.items[r.a], g = ln.items[r.b], an = anims[r.a];
         const p = deco ? clamp(deco.prog(f), 0, 1) : 0;
+        if (o.marker) {
+          // İşaretçi: genişlik harflerin gerçek mürekkep sınırından (yan boşluk ve son harf aralığı banda taşmaz).
+          ctx.font = fontOf(lay.o, true, s);
+          const mf = ctx.measureText(f.t), mg = r.a === r.b ? mf : ctx.measureText(g.t);
+          const a0 = f.x - (isFinite(mf.actualBoundingBoxLeft) ? mf.actualBoundingBoxLeft : 0);
+          const a1 = g.x + (isFinite(mg.actualBoundingBoxRight) && mg.actualBoundingBoxRight > 0 ? mg.actualBoundingBoxRight : g.w - lay.ls);
+          const mp = s * 0.06;
+          return { r: r, p: p, x0: lx + a0 + an.dx - mp, w: a1 - a0 + mp * 2, dy: an.dy, a: an.a };
+        }
         const padX = o.pill ? (lay.o.hlPad || 0.1) * s : s * 0.04;
         const x0 = lx + f.x + an.dx - padX, w = g.x + g.w - f.x - lay.ls + padX * 2;
         return { r: r, p: p, x0: x0, w: w, dy: an.dy, a: an.a };
@@ -278,7 +287,7 @@
         ctx.globalAlpha = base * Math.min(1, R.a);
         ctx.fillStyle = deco.fill;
         if (o.pill) { rr(ctx, R.x0, bl + R.dy - s * 0.88, R.w * R.p, s * 1.1, s * 0.12); ctx.fill(); }
-        else { ctx.fillRect(R.x0, bl + R.dy - s * 0.36, R.w * R.p, s * 0.42); }
+        else { rr(ctx, R.x0, bl + R.dy - s * 0.6, R.w * R.p, s * 0.72, s * 0.1); ctx.fill(); }
       });
       let lastF = '';
       ln.items.forEach(function (it, q) {
@@ -675,7 +684,7 @@
       const cw = P.aspect === '16:9' ? Math.min(S.w * 0.8, 1340) : S.w;
       const cx = (P.W - cw) / 2, pad = P.aspect === '9:16' ? 68 : 60, iw = cw - pad * 2;
       const areaTop = S.y + 20, areaBot = S.b - 96, areaH = areaBot - areaTop;
-      const hasBrand = !!(P.brand.name || P.brand.handle || P.logo), brandH = hasBrand ? 58 + 56 : 0, dotsH = P.showProgress ? 12 + 56 : 0;
+      const hasBrand = !!(P.brand.name || P.brand.handle || P.logo), brandH = hasBrand ? 72 + 50 : 0, dotsH = P.showProgress ? 16 + 54 : 0;
       const sub = sc.sub ? fit(tokenize(sc.sub, false, P.lang, false), { fam: 'sans', weight: 500, maxSize: 36, minSize: 26, lh: 1.42, maxW: iw, maxH: areaH * 0.26, maxLines: 5 }) : null;
       const subH = sub ? sub.height + 38 : 0;
       const head = fit(tokenize(sc.text, false, P.lang, P.autoHl), { fam: P.font, weight: P.font === 'serif' ? 700 : 800, maxSize: bySize(P, { '9:16': 112, '1:1': 92, '4:5': 100, '16:9': 112 }), minSize: 42, lh: 1.1, ls: -0.02, maxW: iw, maxH: areaH - pad * 2 - brandH - dotsH - subH, maxLines: 8, balance: true, cap: capOf(P.font) });
@@ -700,7 +709,7 @@
       ctx.fillStyle = css(P.bg); rr(ctx, L.cx, L.cy, L.cw, L.ch, 44); ctx.fill();
       ctx.restore();
       let y = L.ty;
-      if (L.hasBrand) { brand(ctx, P, L.cx + L.pad, y, { h: 58, color: P.fg, maxW: L.cw - L.pad * 2 - 80 }); y += L.brandH; }
+      if (L.hasBrand) { brand(ctx, P, L.cx + L.pad, y, { h: 72, color: P.fg, maxW: L.cw - L.pad * 2 - 80 }); y += L.brandH; }
       const n = head.count, st = Math.min(0.045, 0.6 / Math.max(1, n));
       drawText(ctx, head, L.cx + L.pad, y, {
         color: css(P.fg),
@@ -711,7 +720,7 @@
         const k = prog(t, t0 + 0.2 + n * st, 0.7, E.outCubic);
         ctx.save(); ctx.globalAlpha *= k * 0.72; drawText(ctx, L.sub, L.cx + L.pad, y + head.height + 38 + (1 - k) * 18, { color: css(P.fg) }); ctx.restore();
       }
-      if (P.showProgress) dots(ctx, L.cx + L.pad, L.cy + L.ch - L.pad + 2, a.n, a.idx, 1, -1, css(P.accentInk), css(P.fg, 0.16), 12, 'left');
+      if (P.showProgress) dots(ctx, L.cx + L.pad, L.cy + L.ch - L.pad + 2, a.n, a.idx, 1, -1, css(P.accentInk), css(P.fg, 0.16), 16, 'left');
       ctx.restore();
     },
     chrome: function (ctx, P, c) {
