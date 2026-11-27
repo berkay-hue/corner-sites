@@ -892,7 +892,7 @@ dialog.kr-stok-dlg{width:min(760px,calc(100% - var(--g3)))}
    tam kip (sonuç yok): ortada tek sütun (≤720px) · kompakt kip (sonuç/yükleniyor): yapışkan özet çubuğu + form çekmecede
    (masaüstü sağdan, mobilde alttan sayfa) · tek sayfa kaydırması (önizleme kartı yapışkan değil) · Medyayı değiştir penceresi */
 body[data-studyo=video] .st-brif,body[data-studyo=video] .st-cek-bas,body[data-studyo=video] .st-cek-perde{display:none}
-body[data-studyo=video] .st-izgara,body[data-studyo=video] .st-izgara:has(#studyo-medya){display:flex;flex-direction:column;gap:var(--g3);max-width:720px;margin-inline:auto}
+body[data-studyo=video] .st-izgara,body[data-studyo=video] .st-izgara:has(#studyo-medya){display:flex;flex-direction:column;align-items:stretch;gap:var(--g3);max-width:720px;margin-inline:auto}
 body[data-studyo=video] .st-bas{max-width:720px;margin-inline:auto}
 body[data-studyo=video] .st-izgara>*{min-width:0}
 body[data-studyo=video][data-kip=kompakt] .st-izgara,body[data-studyo=video][data-kip=kompakt] .st-izgara:has(#studyo-medya),body[data-studyo=video][data-kip=kompakt] .st-bas{max-width:960px}
