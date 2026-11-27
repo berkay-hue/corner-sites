@@ -210,11 +210,11 @@ function goster(v,odak){
 }
 function azHareket(){return !!(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)}
 
-/* ---- Video paneli (yalnız body[data-studyo=video]): iki durum.
+/* ---- Video ve görsel paneli (body[data-studyo=video|gorsel]): iki durum.
    tam: sonuçtan önce tek sütun (form + boş durum). kompakt: sonuç (ya da üretim) varken üstte yapışkan özet çubuğu (brif),
    form yerinde kalır ama çekmeceye döner (masaüstü sağ panel, telefonda alt sayfa). Form DOM'da taşınmaz (Turnstile iframe'i yenilenmesin);
    kapalı çekmece inert + visibility:hidden (display:none değil: Turnstile canlı kalır). Esc, perde, Kapat ve Geri kapatır; odak tetikleyene döner. */
-var VK=!!(d.body&&d.body.getAttribute('data-studyo')==='video'),kip='',kipGor='',brifEl=null,
+var SM=d.body&&d.body.getAttribute('data-studyo'),VK=SM==='video'||SM==='gorsel',VG=SM==='gorsel',kip='',kipGor='',brifEl=null,
     cek={acik:false,inert:[],tetik:null,gecmis:false,ts:false,perde:null};
 function kipYaz(){
   if(!VK||!form)return;
@@ -226,12 +226,14 @@ function kipYaz(){
   brifYaz();
 }
 function brifEtiket(ad,v){
-  var i=v!=null&&/^[\w:.-]{1,12}$/.test(String(v))?$('input[name="'+ad+'"][value="'+v+'"]',form):$('input[name="'+ad+'"]:checked',form);
+  var hs=form.querySelectorAll('input[name="'+ad+'"]'),i=null,j;
+  if(v!=null)for(j=0;j<hs.length;j++)if(hs[j].value===String(v)){i=hs[j];break}
+  if(!i)i=$('input[name="'+ad+'"]:checked',form);
   if(!i)return '';var l=$('label[for="'+i.id+'"]',form);if(!l)return i.value;
   var a=$('.st-gorsel-ad',l);return ((a&&a.textContent)||l.getAttribute('data-kisa')||(l.firstChild&&l.firstChild.textContent)||l.textContent||'').trim()}
 function brifKur(){
   if(!VK||!form||brifEl)return;var iz=$('.st-izgara');if(!iz||!iz.parentNode)return;
-  brifEl=el('section','st-brif');brifEl.setAttribute('aria-label',T('Video özeti','Video brief'));
+  brifEl=el('section','st-brif');brifEl.setAttribute('aria-label',VG?T('Karusel özeti','Carousel brief'):T('Video özeti','Video brief'));
   var ic=el('div','st-brif-ic'),bil=el('div','st-brif-bilgi');
   var kn=el('p','st-brif-konu');kn.id='brif-konu';
   var cl=el('ul','st-brif-cip');cl.id='brif-cip';cl.setAttribute('aria-label',T('Ayarlar','Settings'));
@@ -250,7 +252,7 @@ function brifKur(){
   if(window.ResizeObserver)new ResizeObserver(function(){root.style.setProperty('--brif-h',(brifEl.offsetHeight||0)+'px')}).observe(brifEl);
   form.addEventListener('change',brifYaz);konu.addEventListener('input',brifYaz);
   /* çekmece başlığı formun başında (yalnız kompakt kipte görünür; CSS) */
-  var bas=el('div','st-cek-bas'),h=el('h2','st-cek-baslik',T('Videoyu düzenle','Edit video'));h.id='cek-baslik';h.tabIndex=-1;
+  var bas=el('div','st-cek-bas'),h=el('h2','st-cek-baslik',VG?T('Karuseli düzenle','Edit carousel'):T('Videoyu düzenle','Edit video'));h.id='cek-baslik';h.tabIndex=-1;
   var x=el('button','btn btn-cizgi btn-kucuk st-cek-kapat',T('Kapat','Close'));x.type='button';x.id='cek-kapat';
   x.addEventListener('click',function(){cekKapat()});
   bas.appendChild(h);bas.appendChild(x);form.insertBefore(bas,form.firstChild);
@@ -263,9 +265,10 @@ function brifYaz(){
   var q=D.view==='yuk'?D.sonGovde:(D.son&&D.son.q),kt=(q&&typeof q.topic==='string'&&q.topic)||konuDeger();
   var kn=$('#brif-konu');kn.textContent=kt?(Array.from(kt).length>140?Array.from(kt).slice(0,139).join('')+'…':kt):T('Konu yok','No topic');kn.title=kt||'';
   var cl=$('#brif-cip');cl.textContent='';
-  [[T('Süre','Length'),brifEtiket('length',q&&q.length)],[T('Oran','Ratio'),brifEtiket('kr_oran')],[T('Görsel','Visuals'),brifEtiket('scene_images')]].forEach(function(c){
+  (VG?[[T('Kart','Slides'),brifEtiket('length',q&&q.length)],[T('Sektör','Sector'),brifEtiket('sector',q&&q.sector)],[T('Görsel','Visuals'),brifEtiket('scene_images')]]
+     :[[T('Süre','Length'),brifEtiket('length',q&&q.length)],[T('Oran','Ratio'),brifEtiket('kr_oran')],[T('Görsel','Visuals'),brifEtiket('scene_images')]]).forEach(function(c){
     if(!c[1])return;var li=el('li','st-brif-c');li.appendChild(el('span','sr',c[0]+': '));li.appendChild(d.createTextNode(c[1]));cl.appendChild(li)});
-  var dg=$('#brif-degisti');if(dg)dg.hidden=!(q&&D.view!=='yuk'&&((typeof q.topic==='string'&&konuDeger()&&konuDeger()!==q.topic)||(q.length!=null&&secili('length')&&secili('length')!==String(q.length))));
+  var dg=$('#brif-degisti');if(dg)dg.hidden=!(q&&D.view!=='yuk'&&((typeof q.topic==='string'&&konuDeger()&&konuDeger()!==q.topic)||(q.length!=null&&secili('length')&&secili('length')!==String(q.length))||(typeof q.sector==='string'&&secili('sector')&&secili('sector')!==q.sector)));
   var yu=$('#brif-yeniden');if(yu){if(D.mesgul)yu.setAttribute('aria-disabled','true');else yu.removeAttribute('aria-disabled')}
 }
 /* kendi history.back()'imiz eşzamansız: o gelmeden yeni çekmece/pencere açılırsa bayat popstate onu kapatmasın.

@@ -236,19 +236,19 @@ function sahneKur(){
   var bt=dugme('btn-cizgi kr-ikon-d kr-buyut-d','buyut',null,T('Tam ekran','Full screen'));bt.setAttribute('aria-keyshortcuts','F');
   bt.addEventListener('click',tamDegis);R.buyutB=bt;kn.appendChild(bt);
   sar.appendChild(kn);
-  if(VID)k.appendChild(eylemKur());
+  k.appendChild(eylemKur());
 
   var sr=el('ol','kr-serit');sr.setAttribute('aria-label',VID?T('Sahnelere git','Go to scene'):T('Slaytlara git','Go to slide'));R.serit=sr;k.appendChild(sr);
   seritKur();if(!VID)noktaKur();
   if(VID)k.appendChild(aktarKur());
   return k;
 }
-/* video: oynatıcının hemen altındaki ana eylemler — Medyayı değiştir (birincil), Oran, İndir (MP4) */
+/* oynatıcının hemen altındaki ana eylemler — Medyayı değiştir (birincil), Oran, İndir (video: MP4; görsel: tüm slaytlar) */
 var ORAN_AD={'9:16':['Dikey','Vertical'],'1:1':['Kare','Square'],'4:5':['Portre','Portrait'],'16:9':['Yatay','Landscape']};
 function eylemKur(){
-  var ey=el('div','kr-eylem');ey.setAttribute('role','group');ey.setAttribute('aria-label',T('Video eylemleri','Video actions'));R.eylem=ey;
+  var ey=el('div','kr-eylem');ey.setAttribute('role','group');ey.setAttribute('aria-label',VID?T('Video eylemleri','Video actions'):T('Karusel eylemleri','Carousel actions'));R.eylem=ey;
   var db=dugme('btn-ana kr-degis-ac','resim',T('Medyayı değiştir','Swap media'));db.setAttribute('aria-haspopup','dialog');db.setAttribute('aria-controls','kr-degis');
-  db.addEventListener('click',function(){degisAc(st.oynat?sahneNo(st.oynat.time):0,db)});R.degisB=db;ey.appendChild(db);
+  db.addEventListener('click',function(){degisAc(VID?(st.oynat?sahneNo(st.oynat.time):0):st.slayt,db)});R.degisB=db;ey.appendChild(db);
   var ok=el('div','kr-oran-k'),id='kr-'+MOD+'-oran-sec';
   var ol=el('label','kr-oran-l',T('Oran','Ratio'));ol.htmlFor=id;ok.appendChild(ol);
   var se=el('select','st-girdi kr-oran-sec');se.id=id;
@@ -432,7 +432,7 @@ function kucukler(){
 /* ---- dışa aktarma ---- */
 function aktarKur(){
   var k=el('section','kr-aktar');k.setAttribute('aria-labelledby','kr-aktar-h-'+MOD);
-  var h=el('h3','kr-aktar-h',VID?T('Diğer indirmeler','More downloads'):T('Dışa aktar','Export'));h.id='kr-aktar-h-'+MOD;k.appendChild(h);
+  var h=el('h3','kr-aktar-h',T('Diğer indirmeler','More downloads'));h.id='kr-aktar-h-'+MOD;k.appendChild(h);
   var f=M.videoFormat(),dg=el('div','kr-aktar-d');
   if(VID){
     var etk=f&&f.ext==='mp4'?T('İndir (MP4)','Download (MP4)'):T('İndir (WebM)','Download (WebM)');
@@ -442,7 +442,7 @@ function aktarKur(){
     var pb=dugme('btn-cizgi','indir',T('Bu kareyi PNG indir','Download this frame as PNG'));R.pngB=pb;
     pb.addEventListener('click',function(){if(!pasifMi(pb))pngAktar()});dg.appendChild(pb);
   }else{
-    var hb=dugme('btn-ana kr-aktar-ana','indir',T('Tüm slaytları indir','Download all slides'));R.hepsiB=hb;hb.addEventListener('click',function(){if(!pasifMi(hb))hepsiAktar()});dg.appendChild(hb);
+    var hb=dugme('btn-cizgi kr-indir-d','indir',T('Tüm slaytları indir','Download all slides'));R.hepsiB=hb;hb.addEventListener('click',function(){if(!pasifMi(hb))hepsiAktar()});(R.eylem||dg).appendChild(hb);
     var sb=dugme('btn-cizgi','resim',T('Bu slaytı PNG indir','Download this slide as PNG'));R.pngB=sb;
     sb.addEventListener('click',function(){if(!pasifMi(sb))pngAktar()});dg.appendChild(sb);
   }
@@ -1005,7 +1005,7 @@ function oranCipYaz(a){
   if(R&&R.oranSel&&R.oranSel.value!==a)R.oranSel.value=a;
   if(!OC)return;
   OC.querySelectorAll('input[name="kr_oran"]').forEach(function(i){i.checked=i.value===a});
-  if(VID&&S.brif)S.brif();
+  if(S.brif)S.brif();
 }
 function kirpNot(){
   if(!R.kirpNot||!st)return;
